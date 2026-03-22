@@ -355,8 +355,10 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
         "box-shadow:0 8px 32px rgba(0,0,0,.35);}",
         ".ticket-card.all-hit{background:rgba(57,255,110,0.06);border-color:rgba(57,255,110,.42);"
         "box-shadow:0 0 28px rgba(57,255,110,.14),0 8px 32px rgba(0,0,0,.3);}",
-        ".ticket-card.card-missed{background:rgba(255,77,77,0.06);border-color:rgba(255,77,77,.42);"
-        "box-shadow:0 0 28px rgba(255,77,77,.12),0 8px 32px rgba(0,0,0,.3);}",
+        ".ticket-card.card-missed{background:rgba(255,77,77,0.06);border:1px solid rgba(255,77,77,0.35);"
+        "box-shadow:0 0 24px rgba(255,77,77,0.12),0 0 1px rgba(255,77,77,0.4),0 8px 32px rgba(0,0,0,.28);position:relative;}",
+        ".ticket-card.card-missed::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:#ff4d4d;"
+        "box-shadow:0 0 14px rgba(255,77,77,0.45);z-index:2;border-radius:14px 14px 0 0;pointer-events:none;}",
         ".thdr{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;padding:18px clamp(14px,2vw,24px);border-bottom:1px solid var(--glass-bd);"
         "background:rgba(0,0,0,.18);backdrop-filter:blur(12px);}",
         ".thdr .tn{font-size:clamp(24px,2.8vw,32px);font-family:'Bebas Neue',sans-serif;letter-spacing:2px;color:var(--gold);}",
@@ -367,15 +369,27 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
         ".banner.hit{color:var(--green);border-color:rgba(57,255,110,.45);box-shadow:0 0 16px rgba(57,255,110,.15);}",
         ".banner.miss{color:var(--red);border-color:rgba(255,77,77,.5);box-shadow:0 0 16px rgba(255,77,77,.12);}",
         ".banner.pend{color:var(--pending);border-color:rgba(255,255,255,.12);}",
+        "@keyframes missRowPulse{0%,100%{box-shadow:0 0 0 1px rgba(255,77,77,0.4),inset 0 0 20px rgba(255,77,77,0.06);}"
+        "50%{box-shadow:0 0 0 2px rgba(255,77,77,0.65),0 0 22px rgba(255,77,77,0.18),inset 0 0 26px rgba(255,77,77,0.09);}}",
         ".legrow{font-family:'Share Tech Mono',monospace;display:grid;"
-        "grid-template-columns:52px 92px minmax(120px,1fr) 44px minmax(240px,1.45fr) minmax(108px,1fr) minmax(96px,1fr) minmax(76px,.85fr);gap:12px;"
+        "grid-template-columns:56px 92px minmax(120px,1fr) 44px minmax(240px,1.45fr) minmax(108px,1fr) minmax(96px,1fr) minmax(76px,.85fr);gap:12px;"
         "align-items:center;padding:14px clamp(14px,2vw,22px);font-size:clamp(13px,1.45vw,16px);line-height:1.35;"
         "border-bottom:1px solid rgba(255,255,255,.06);border-left:3px solid transparent;}",
         ".legrow:last-child{border-bottom:none;}",
         ".legrow.leg-hit{background:rgba(57,255,110,0.04);border-left-color:var(--green);}",
-        ".legrow.leg-miss{background:rgba(255,77,77,0.10);border-left:3px solid var(--red);}",
-        ".legrow.leg-miss .pl-miss{color:var(--red);text-shadow:0 0 12px rgba(255,77,77,0.7);}",
-        ".legrow.leg-miss .badge.miss{text-shadow:0 0 16px rgba(255,77,77,.85),0 0 28px rgba(255,77,77,.45);}",
+        ".legrow.leg-miss{background:rgba(255,77,77,0.10);border-left:4px solid #ff4d4d;"
+        "box-shadow:0 0 0 1px rgba(255,77,77,0.4),inset 0 0 20px rgba(255,77,77,0.06);"
+        "animation:missRowPulse 2.2s ease-in-out infinite;}",
+        ".legrow.leg-miss .pl-miss{color:#ff4d4d;font-weight:700;"
+        "text-shadow:0 0 16px rgba(255,77,77,0.8),0 0 32px rgba(255,77,77,0.4);}",
+        ".legrow.leg-miss .pl-line{display:flex;align-items:center;flex-wrap:wrap;gap:8px;}",
+        ".miss-tag{font-family:'Bebas Neue',sans-serif;display:inline-flex;align-items:center;"
+        "background:rgba(255,77,77,0.15);border:1px solid #ff4d4d;color:#ff4d4d;font-size:9px;"
+        "letter-spacing:2px;padding:2px 8px;border-radius:20px;line-height:1;vertical-align:middle;}",
+        ".legrow.leg-miss .badge.miss{width:44px;height:44px;min-width:44px;border-radius:12px;display:flex;align-items:center;"
+        "justify-content:center;font-size:clamp(22px,2.5vw,28px);line-height:1;background:rgba(255,77,77,0.25);"
+        "border:2px solid #ff4d4d;box-shadow:0 0 12px rgba(255,77,77,0.6);color:#ff4d4d;text-shadow:none;}",
+        ".legrow.leg-miss .leg-extra.val-miss{color:#ff4d4d;font-weight:700;}",
         ".legrow.leg-pend{background:transparent;border-left-color:transparent;}",
         ".legrow.leg-pend .pl-pend,.legrow.leg-pend .meta-muted{color:var(--pending)!important;}",
         ".legrow.leg-pend .pill{background:rgba(255,255,255,0.04)!important;border-color:rgba(255,255,255,0.1)!important;color:var(--pending)!important;}",
@@ -395,8 +409,8 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
         ".dir-under{color:var(--gold);font-weight:700;}",
         ".meta-muted{font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:clamp(11px,1.2vw,13px);margin-top:3px;}",
         ".slate-kicker{font-family:'Share Tech Mono',monospace;font-size:clamp(11px,1.2vw,13px);letter-spacing:3px;color:var(--muted);margin-bottom:10px;}",
-        ".pl-hit,.pl-miss,.pl-pend{font-size:1em;font-weight:600;}",
-        "@media(max-width:900px){.legrow{grid-template-columns:48px 80px 1fr;gap:10px;padding:12px;font-size:14px;}.leg-extra{display:none;}"
+        ".pl-hit,.pl-pend{font-size:1em;font-weight:600;}",
+        "@media(max-width:900px){.legrow{grid-template-columns:52px 80px 1fr;gap:10px;padding:12px;font-size:14px;}.leg-extra{display:none;}"
         ".stats-bar{padding:14px 16px;}.sum-val{font-size:22px;}}",
         "</style>",
         "</head>",
@@ -499,7 +513,6 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
                 edge = leg.get("edge")
                 dir_cls = "dir-over" if d == "OVER" else "dir-under" if d == "UNDER" else ""
 
-                act_cls = "pl-hit" if lg == "HIT" else "pl-miss" if lg == "MISS" else "pl-pend"
                 if lg == "HIT":
                     row_cls = "legrow leg-hit"
                 elif lg == "MISS":
@@ -508,10 +521,26 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
                     row_cls = "legrow leg-pend"
                 sym = "✓" if lg == "HIT" else "✗" if lg == "MISS" else "·"
 
+                if lg == "MISS":
+                    pl_html = (
+                        f'<div class="{plcls} pl-line">'
+                        f'<span class="pl-name">{player}</span>'
+                        '<span class="miss-tag" aria-label="Missed leg">MISSED</span></div>'
+                    )
+                else:
+                    pl_html = f'<div class="{plcls}">{player}</div>'
+
+                if lg == "MISS":
+                    act_div_cls = "leg-extra val-miss"
+                elif lg == "HIT":
+                    act_div_cls = "leg-extra pl-hit"
+                else:
+                    act_div_cls = "leg-extra pl-pend"
+
                 parts.append(f'<div class="{row_cls}">')
                 parts.append(f'<div class="badge {bcls}">{sym}</div>')
                 parts.append(f'<div><span class="pill {sp_class}">{esc(sk)}</span></div>')
-                parts.append(f'<div class="{plcls}">{player}</div>')
+                parts.append(pl_html)
                 parts.append(f'<div class="tier">{esc(tier)}</div>')
                 parts.append(
                     f'<div><div>{ptype}</div><div class="meta-muted">{team} vs {opp}</div></div>'
@@ -519,7 +548,7 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
                 parts.append(
                     f'<div class="leg-extra">{_fmt_num(lf)} <span class="{dir_cls}">{esc(d)}</span></div>'
                 )
-                parts.append(f'<div class="leg-extra {act_cls}">{_fmt_num(act)}</div>')
+                parts.append(f'<div class="{act_div_cls}">{_fmt_num(act)}</div>')
                 parts.append(f'<div class="leg-extra">{_fmt_num(edge)}</div>')
                 parts.append("</div>")
 
