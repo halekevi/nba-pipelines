@@ -1,0 +1,544 @@
+#!/usr/bin/env python3
+"""
+Build ticket_eval_{date}.html (+ ticket_eval_latest.html) for the Grades UI.
+Reads ticket JSON and sport step8/graded workbooks, matches legs to actuals, writes self-contained HTML.
+"""
+from __future__ import annotations
+
+import argparse
+import html
+import json
+import re
+from datetime import date, timedelta
+from pathlib import Path
+from typing import Any
+
+import pandas as pd
+
+REPO_ROOT = Path(__file__).resolve().parent
+TEMPLATES_DIR = REPO_ROOT / "ui_runner" / "templates"
+
+# Ticket JSON search order
+DATED_TICKET_JSON = "combined_slate_tickets_{date}.json"
+FALLBACK_TICKET_JSON = TEMPLATES_DIR / "tickets_latest.json"
+
+# Graded / slate workbooks (first existing path wins per sport)
+SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
+    "NBA": [
+        REPO_ROOT / "NbaPropPipelineA" / "step8_all_direction_clean.xlsx",
+        REPO_ROOT / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
+    ],
+    "CBB": [
+        REPO_ROOT / "cbb2" / "step6_ranked_cbb.xlsx",
+        REPO_ROOT / "CBB" / "step6_ranked_cbb.xlsx",
+    ],
+    "NHL": [
+        REPO_ROOT / "NHL" / "step8_nhl_direction_clean.xlsx",
+        REPO_ROOT / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
+    ],
+    "SOCCER": [
+        REPO_ROOT / "Soccer" / "step8_soccer_direction_clean.xlsx",
+        REPO_ROOT / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
+    ],
+}
+
+
+def _norm_header(s: str) -> str:
+    return re.sub(r"\s+", " ", str(s).strip().lower())
+
+
+def _canon_player(row: dict[str, Any]) -> str:
+    for k in ("player", "athlete", "name"):
+        v = row.get(k)
+        if v is not None and str(v).strip():
+            return str(v).strip()
+    return ""
+
+
+def _canon_prop(row: dict[str, Any]) -> str:
+    for k in ("prop_type", "prop type", "prop", "prop_display", "stat_type"):
+        v = row.get(k)
+        if v is not None and str(v).strip():
+            return str(v).strip()
+    return ""
+
+
+def _canon_direction(row: dict[str, Any]) -> str:
+    for k in ("direction", "bet_direction", "final_bet_direction", "pick direction"):
+        v = row.get(k)
+        if v is not None and str(v).strip():
+            return str(v).strip().upper()
+    return ""
+
+
+def _canon_line(row: dict[str, Any]) -> float | None:
+    for k in ("line", "line_num"):
+        v = row.get(k)
+        if v is None or (isinstance(v, float) and pd.isna(v)):
+            continue
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            continue
+    return None
+
+
+def _canon_actual(row: dict[str, Any]) -> float | None:
+    for k in ("actual", "actual_value", "act", "result_value", "stat_actual", "final_stat"):
+        v = row.get(k)
+        if v is None or (isinstance(v, float) and pd.isna(v)):
+            continue
+        if isinstance(v, str) and not v.strip():
+            continue
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            continue
+    return None
+
+
+def _canon_grade_raw(row: dict[str, Any]) -> str:
+    for k in ("grade", "result", "outcome", "leg_result"):
+        v = row.get(k)
+        if v is None or (isinstance(v, float) and pd.isna(v)):
+            continue
+        s = str(v).strip().upper()
+        if s:
+            return s
+    return ""
+
+
+def _normalize_workbook_rows(path: Path) -> list[dict[str, Any]]:
+    """Load all sheets; normalize headers to lowercase single-space keys."""
+    xl = pd.ExcelFile(path)
+    out: list[dict[str, Any]] = []
+    for sheet in xl.sheet_names:
+        df = pd.read_excel(path, sheet_name=sheet)
+        if df.empty:
+            continue
+        df.columns = [_norm_header(c) for c in df.columns]
+        out.extend(df.to_dict(orient="records"))
+    return out
+
+
+def _leg_grade(
+    actual: float | None,
+    line: float | None,
+    direction: str,
+    grade_col: str,
+) -> str:
+    g = (grade_col or "").strip().upper()
+    if g in ("HIT", "WIN", "W", "1", "TRUE", "YES"):
+        return "HIT"
+    if g in ("MISS", "LOSS", "L", "0", "FALSE", "NO"):
+        return "MISS"
+    if g in ("VOID", "PUSH", "N/A", "NA"):
+        return "PENDING"
+    if actual is None or line is None:
+        return "PENDING"
+    d = direction.upper()
+    if d == "OVER" and actual >= line:
+        return "HIT"
+    if d == "UNDER" and actual <= line:
+        return "HIT"
+    return "MISS"
+
+
+def _pick_type_tier(pick_type: str) -> str:
+    p = (pick_type or "").strip().lower()
+    if "goblin" in p:
+        return "G"
+    if "demon" in p:
+        return "D"
+    if "standard" in p:
+        return "S"
+    return (pick_type[:1].upper() if pick_type else "?")
+
+
+def _sport_key(sport: str) -> str:
+    s = (sport or "").strip().upper()
+    if s in ("NBA", "CBB", "NHL"):
+        return s
+    if s in ("SOCCER", "SOC", "MLS", "EPL"):
+        return "SOCCER"
+    return s
+
+
+def _load_actuals_index() -> tuple[dict[tuple[str, str, str], dict], dict[tuple[str, str], list[dict]]]:
+    """Triple-key -> row dict (last wins); pair-key -> list of rows for fallback."""
+    triple: dict[tuple[str, str, str], dict] = {}
+    pair_buckets: dict[tuple[str, str], list[dict]] = {}
+
+    for sport, paths in SPORT_XLSX_CANDIDATES.items():
+        src = next((p for p in paths if p.is_file()), None)
+        if not src:
+            continue
+        try:
+            rows = _normalize_workbook_rows(src)
+        except Exception:
+            continue
+        for raw in rows:
+            pl = _canon_player(raw).lower()
+            pt = _canon_prop(raw).lower()
+            dr = _canon_direction(raw)
+            if not pl or not pt:
+                continue
+            row = {
+                "player_lower": pl,
+                "prop_lower": pt,
+                "direction": dr,
+                "line": _canon_line(raw),
+                "actual": _canon_actual(raw),
+                "grade_raw": _canon_grade_raw(raw),
+            }
+            key3 = (pl, pt, dr)
+            triple[key3] = row
+            pair_buckets.setdefault((pl, pt), []).append(row)
+
+    return triple, pair_buckets
+
+
+def _match_leg_to_row(
+    leg: dict[str, Any],
+    triple: dict[tuple[str, str, str], dict],
+    pair_buckets: dict[tuple[str, str], list[dict]],
+) -> dict | None:
+    pl = str(leg.get("player") or "").strip().lower()
+    pt = str(leg.get("prop_type") or "").strip().lower()
+    dr = str(leg.get("direction") or "").strip().upper()
+    if not pl or not pt:
+        return None
+    hit = triple.get((pl, pt, dr))
+    if hit:
+        return hit
+    cands = pair_buckets.get((pl, pt))
+    if not cands:
+        return None
+    for r in cands:
+        if r["direction"] == dr:
+            return r
+    if len(cands) == 1:
+        return cands[0]
+    for r in cands:
+        if r["direction"] == dr or not r["direction"]:
+            return r
+    return cands[0]
+
+
+def _find_ticket_json(arg_date: str) -> Path | None:
+    p1 = REPO_ROOT / DATED_TICKET_JSON.format(date=arg_date)
+    if p1.is_file():
+        return p1
+    if FALLBACK_TICKET_JSON.is_file():
+        return FALLBACK_TICKET_JSON
+    return None
+
+
+def _load_tickets(path: Path) -> dict[str, Any]:
+    with path.open(encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _fmt_num(x: Any) -> str:
+    if x is None:
+        return "—"
+    if isinstance(x, (int, float)):
+        if isinstance(x, float) and x == int(x):
+            return str(int(x))
+        return f"{x:g}"
+    return html.escape(str(x))
+
+
+def _build_html(payload: dict[str, Any], arg_date: str) -> str:
+    groups = payload.get("groups") or []
+    triple, pair_buckets = _load_actuals_index()
+
+    all_legs: list[tuple[dict, dict | None, str]] = []
+    tickets_flat: list[dict] = []
+
+    for g in groups:
+        gname = str(g.get("group_name") or "Group")
+        for t in g.get("tickets") or []:
+            t["_group_name"] = gname
+            tickets_flat.append(t)
+            for leg in t.get("legs") or []:
+                row = _match_leg_to_row(leg, triple, pair_buckets)
+                line = leg.get("line")
+                try:
+                    line_f = float(line) if line is not None else None
+                except (TypeError, ValueError):
+                    line_f = None
+                direction = str(leg.get("direction") or "").strip().upper()
+                actual = row["actual"] if row else None
+                graw = row["grade_raw"] if row else ""
+                if row and row.get("line") is not None and line_f is None:
+                    line_f = row["line"]
+                grade = _leg_grade(actual, line_f, direction, graw)
+                all_legs.append((leg, row, grade))
+
+    total_legs = len(all_legs)
+    hits = sum(1 for _, _, g in all_legs if g == "HIT")
+    misses = sum(1 for _, _, g in all_legs if g == "MISS")
+    pending = sum(1 for _, _, g in all_legs if g == "PENDING")
+    decided = hits + misses
+    leg_pct = (100.0 * hits / decided) if decided else 0.0
+
+    perfect = 0
+    with_misses = 0
+    for t in tickets_flat:
+        legs = t.get("legs") or []
+        gs = []
+        for leg in legs:
+            row = _match_leg_to_row(leg, triple, pair_buckets)
+            try:
+                lf = float(leg.get("line"))
+            except (TypeError, ValueError):
+                lf = None
+            d = str(leg.get("direction") or "").strip().upper()
+            act = row["actual"] if row else None
+            gr = row["grade_raw"] if row else ""
+            if row and row.get("line") is not None and lf is None:
+                lf = row["line"]
+            g = _leg_grade(act, lf, d, gr)
+            gs.append(g)
+        if not gs:
+            continue
+        if all(x == "HIT" for x in gs):
+            perfect += 1
+        if any(x == "MISS" for x in gs):
+            with_misses += 1
+
+    # ── HTML
+    esc = html.escape
+    json_date = esc(str(payload.get("date") or arg_date))
+
+    sport_colors_css = """
+.sport-nba{background:rgba(200,255,0,.15);color:#c8ff00;border:1px solid rgba(200,255,0,.35);}
+.sport-cbb{background:rgba(0,229,255,.12);color:#00e5ff;border:1px solid rgba(0,229,255,.35);}
+.sport-nhl{background:rgba(186,130,255,.14);color:#d4a5ff;border:1px solid rgba(186,130,255,.4);}
+.sport-soccer{background:rgba(255,200,80,.14);color:#ffc850;border:1px solid rgba(255,200,80,.38);}
+.sport-default{background:rgba(255,255,255,.06);color:#aaa;}
+"""
+
+    parts: list[str] = [
+        "<!DOCTYPE html>",
+        '<html lang="en">',
+        "<head>",
+        '<meta charset="UTF-8"/>',
+        '<meta name="viewport" content="width=device-width, initial-scale=1.0"/>',
+        f"<title>Ticket Eval — {json_date}</title>",
+        '<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>',
+        "<style>",
+        ":root{--bg:#05050f;--accent:#c8ff00;--green:#39ff6e;--red:#ff4d4d;--cyan:#00e5ff;--muted:#8892a6;--card:#0c0c18;}",
+        "*{box-sizing:border-box;margin:0;padding:0;}",
+        "body{font-family:'Share Tech Mono',monospace;background:var(--bg);color:#e8ecff;min-height:100vh;padding-bottom:48px;}",
+        "h1,h2,.bebas{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;}",
+        ".sticky-top{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(5,5,15,.97),rgba(5,5,15,.88));"
+        "backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08);padding:14px 24px;}",
+        ".sum-row{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:center;max-width:1200px;margin:0 auto;}",
+        ".sum-item{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:72px;}",
+        ".sum-val{font-size:20px;font-weight:700;color:var(--accent);}",
+        ".sum-lab{font-size:9px;letter-spacing:2px;color:var(--muted);}",
+        ".wrap{max-width:1180px;margin:0 auto;padding:20px 18px 0;}",
+        ".sec{margin-top:36px;}",
+        ".sec-head{font-size:28px;color:var(--accent);margin-bottom:16px;text-shadow:0 0 24px rgba(200,255,0,.25);}",
+        ".ticket-card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:14px;margin-bottom:18px;overflow:hidden;",
+        "box-shadow:0 8px 32px rgba(0,0,0,.45);}",
+        ".ticket-card.all-hit{box-shadow:0 0 28px rgba(57,255,110,.18),0 8px 32px rgba(0,0,0,.4);border-color:rgba(57,255,110,.25);}",
+        ".thdr{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06);",
+        "background:rgba(255,255,255,.02);}",
+        ".thdr .tn{font-size:22px;color:#fff;}",
+        ".thdr .tg{font-size:11px;color:var(--muted);letter-spacing:1px;}",
+        ".payout{font-size:12px;color:var(--cyan);}",
+        ".banner{font-size:11px;letter-spacing:2px;padding:4px 12px;border-radius:8px;font-weight:700;}",
+        ".banner.hit{background:rgba(57,255,110,.12);color:var(--green);border:1px solid rgba(57,255,110,.35);}",
+        ".banner.miss{background:rgba(255,77,77,.12);color:var(--red);border:1px solid rgba(255,77,77,.35);}",
+        ".banner.pend{background:rgba(136,146,166,.12);color:var(--muted);border:1px solid rgba(255,255,255,.12);}",
+        ".legrow{display:grid;grid-template-columns:44px 72px 1fr 36px minmax(200px,1.2fr) 100px 90px 70px;gap:8px;",
+        "align-items:center;padding:10px 14px;font-size:11px;border-bottom:1px solid rgba(255,255,255,.04);}",
+        ".legrow:last-child{border-bottom:none;}",
+        ".legrow.miss-leg{background:rgba(255,77,77,.06);box-shadow:inset 4px 0 12px rgba(255,77,77,.35);}",
+        ".badge{font-size:26px;line-height:1;text-align:center;}",
+        ".badge.hit{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.6);}",
+        ".badge.miss{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.55);}",
+        ".badge.pend{color:#666;}",
+        ".pill{font-size:9px;letter-spacing:1px;padding:3px 8px;border-radius:999px;text-transform:uppercase;}",
+        sport_colors_css,
+        ".tier{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;",
+        "font-weight:800;font-size:12px;background:rgba(200,255,0,.1);color:var(--accent);border:1px solid rgba(200,255,0,.25);}",
+        ".pl-hit{color:var(--green);text-shadow:0 0 8px rgba(57,255,110,.4);}",
+        ".pl-miss{color:var(--red);text-shadow:0 0 10px rgba(255,77,77,.55);}",
+        ".pl-pend{color:#8892a6;}",
+        ".dir-over{color:#c8ff00;}",
+        ".dir-under{color:var(--cyan);}",
+        ".meta-muted{color:var(--muted);font-size:10px;}",
+        "@media(max-width:900px){.legrow{grid-template-columns:40px 64px 1fr;}.leg-extra{display:none;}}",
+        "</style>",
+        "</head>",
+        "<body>",
+        '<div class="sticky-top">',
+        '<div class="sum-row">',
+        f'<div class="sum-item"><div class="sum-val">{leg_pct:.1f}%</div><div class="sum-lab">LEG HIT RATE</div></div>',
+        f'<div class="sum-item"><div class="sum-val" style="color:var(--green)">{hits}</div><div class="sum-lab">HITS</div></div>',
+        f'<div class="sum-item"><div class="sum-val" style="color:var(--red)">{misses}</div><div class="sum-lab">MISSES</div></div>',
+        f'<div class="sum-item"><div class="sum-val" style="color:#8892a6">{pending}</div><div class="sum-lab">PENDING</div></div>',
+        f'<div class="sum-item"><div class="sum-val">{perfect}</div><div class="sum-lab">PERFECT TICKETS</div></div>',
+        f'<div class="sum-item"><div class="sum-val">{with_misses}</div><div class="sum-lab">TIX W/ MISS</div></div>',
+        f'<div class="sum-item"><div class="sum-val" style="font-size:14px;color:var(--muted)">{total_legs}</div><div class="sum-lab">TOTAL LEGS</div></div>',
+        "</div></div>",
+        '<div class="wrap">',
+        f'<p style="font-size:10px;letter-spacing:3px;color:var(--muted);margin-bottom:8px;">SLATE DATE · {json_date}</p>',
+    ]
+
+    for g in groups:
+        gname = str(g.get("group_name") or "Group")
+        parts.append(f'<section class="sec"><h2 class="sec-head bebas">{esc(gname)}</h2>')
+        for t in g.get("tickets") or []:
+            tno = t.get("ticket_no", "?")
+            pp = t.get("power_payout")
+            fp = t.get("flex_payout")
+            legs = t.get("legs") or []
+            leg_grades: list[str] = []
+            for leg in legs:
+                row = _match_leg_to_row(leg, triple, pair_buckets)
+                try:
+                    lf = float(leg.get("line"))
+                except (TypeError, ValueError):
+                    lf = None
+                d = str(leg.get("direction") or "").strip().upper()
+                act = row["actual"] if row else None
+                gr = row["grade_raw"] if row else ""
+                if row and row.get("line") is not None and lf is None:
+                    lf = row["line"]
+                leg_grades.append(_leg_grade(act, lf, d, gr))
+
+            h = leg_grades.count("HIT")
+            m = leg_grades.count("MISS")
+            pnd = leg_grades.count("PENDING")
+            n = len(leg_grades)
+
+            if pnd > 0:
+                banner_cls, banner_txt = "pend", "PENDING"
+            elif m == 0 and n > 0:
+                banner_cls, banner_txt = "hit", "ALL HIT"
+            else:
+                banner_cls, banner_txt = "miss", f"MISSED {m}"
+
+            card_cls = "ticket-card" + (" all-hit" if banner_txt == "ALL HIT" else "")
+
+            parts.append(f'<article class="{card_cls}">')
+            parts.append('<div class="thdr">')
+            parts.append(f'<span class="tn bebas">#{esc(str(tno))}</span>')
+            parts.append(f'<span class="tg">{esc(gname)}</span>')
+            parts.append(f'<span class="tg">{h}✓ {m}✗ / {n}</span>')
+            parts.append(f'<span class="payout">PWR {_fmt_num(pp)}× · FLEX {_fmt_num(fp)}×</span>')
+            parts.append(f'<span class="banner {banner_cls}">{esc(banner_txt)}</span>')
+            parts.append("</div>")
+
+            for leg, lg in zip(legs, leg_grades):
+                row = _match_leg_to_row(leg, triple, pair_buckets)
+                try:
+                    lf = float(leg.get("line"))
+                except (TypeError, ValueError):
+                    lf = None
+                d = str(leg.get("direction") or "").strip().upper()
+                act = row["actual"] if row else None
+                gr = row["grade_raw"] if row else ""
+                if row and row.get("line") is not None and lf is None:
+                    lf = row["line"]
+
+                if lg == "HIT":
+                    bcls, plcls = "hit", "pl-hit"
+                elif lg == "MISS":
+                    bcls, plcls = "miss", "pl-miss"
+                else:
+                    bcls, plcls = "pend", "pl-pend"
+
+                sk = _sport_key(str(leg.get("sport") or ""))
+                sp_class = {
+                    "NBA": "sport-nba",
+                    "CBB": "sport-cbb",
+                    "NHL": "sport-nhl",
+                    "SOCCER": "sport-soccer",
+                }.get(sk, "sport-default")
+
+                tier = _pick_type_tier(str(leg.get("pick_type") or ""))
+                team = esc(str(leg.get("team") or ""))
+                opp = esc(str(leg.get("opp") or ""))
+                ptype = esc(str(leg.get("prop_type") or ""))
+                player = esc(str(leg.get("player") or ""))
+                edge = leg.get("edge")
+                dir_cls = "dir-over" if d == "OVER" else "dir-under" if d == "UNDER" else ""
+
+                act_cls = "pl-hit" if lg == "HIT" else "pl-miss" if lg == "MISS" else "pl-pend"
+                row_cls = "legrow" + (" miss-leg" if lg == "MISS" else "")
+                sym = "✓" if lg == "HIT" else "✗" if lg == "MISS" else "·"
+
+                parts.append(f'<div class="{row_cls}">')
+                parts.append(f'<div class="badge {bcls}">{sym}</div>')
+                parts.append(f'<div><span class="pill {sp_class}">{esc(sk)}</span></div>')
+                parts.append(f'<div class="{plcls}">{player}</div>')
+                parts.append(f'<div class="tier">{esc(tier)}</div>')
+                parts.append(
+                    f'<div><div>{ptype}</div><div class="meta-muted">{team} vs {opp}</div></div>'
+                )
+                parts.append(
+                    f'<div class="leg-extra">{_fmt_num(lf)} <span class="{dir_cls}">{esc(d)}</span></div>'
+                )
+                parts.append(f'<div class="leg-extra {act_cls}">{_fmt_num(act)}</div>')
+                parts.append(f'<div class="leg-extra">{_fmt_num(edge)}</div>')
+                parts.append("</div>")
+
+            parts.append("</article>")
+        parts.append("</section>")
+
+    parts.append("</div></body></html>")
+    return "\n".join(parts)
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description="Build ticket_eval HTML for Grades UI.")
+    ap.add_argument(
+        "--date",
+        default="",
+        help="Slate date YYYY-MM-DD (default: yesterday local)",
+    )
+    args = ap.parse_args()
+    if args.date:
+        arg_date = args.date.strip()
+        if not re.match(r"^\d{4}-\d{2}-\d{2}$", arg_date):
+            print("ERROR: --date must be YYYY-MM-DD")
+            return 1
+    else:
+        arg_date = (date.today() - timedelta(days=1)).isoformat()
+
+    tpath = _find_ticket_json(arg_date)
+    if not tpath:
+        print("ERROR: No ticket JSON found (combined_slate_tickets_{date}.json or tickets_latest.json).")
+        return 1
+
+    try:
+        payload = _load_tickets(tpath)
+    except Exception as e:
+        print(f"ERROR: Failed to read ticket JSON: {e}")
+        return 1
+
+    html_out = _build_html(payload, arg_date)
+    TEMPLATES_DIR.mkdir(parents=True, exist_ok=True)
+    dated_name = f"ticket_eval_{arg_date}.html"
+    out_dated = TEMPLATES_DIR / dated_name
+    out_latest = TEMPLATES_DIR / "ticket_eval_latest.html"
+    try:
+        out_dated.write_text(html_out, encoding="utf-8")
+        out_latest.write_text(html_out, encoding="utf-8")
+    except OSError as e:
+        print(f"ERROR: Write failed: {e}")
+        return 1
+
+    print(f"Wrote {out_dated}")
+    print(f"Wrote {out_latest}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

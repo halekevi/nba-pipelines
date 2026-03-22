@@ -241,6 +241,11 @@ function Run-Combined {
         Copy-Item $CombinedOut (Join-Path $OutDir "combined_slate_tickets_$Date.xlsx") -Force -ErrorAction SilentlyContinue
         Remove-Item $CombinedOut -Force -ErrorAction SilentlyContinue
         Write-Host "  Saved -> $(Join-Path $OutDir "combined_slate_tickets_$Date.xlsx")" -ForegroundColor Green
+        py -3.14 (Join-Path $Root "build_ticket_eval.py") --date $Date
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "Ticket eval build failed"
+            exit 1
+        }
         Run-GitPush
     } else {
         Write-Host "  Combined FAILED" -ForegroundColor Red
@@ -273,7 +278,7 @@ if ($CombinedOnly) {
 if ($WNBAOnly) {
     Write-Host "[ WNBA PIPELINE ]" -ForegroundColor Magenta
     Write-Host "  Delegating to run_wnba_pipeline.ps1 ..." -ForegroundColor DarkGray
-    & (Join-Path $Root "run_wnba_pipeline.ps1") -Date $Date
+    & (Join-Path $Root "scripts\run_wnba_pipeline.ps1") -Date $Date
     Print-Done
     exit
 }
@@ -351,14 +356,16 @@ if ($SoccerOnly) {
 if ($CBBOnly) {
     Write-Host "[ CBB PIPELINE ]" -ForegroundColor Magenta
     Write-Host ""
+    # CBB pipeline ends at step6 — no step7/step8 in this sport
     $CBBOutDir = Join-Path $CBBDir "outputs\$Date"
     if (-not (Test-Path $CBBOutDir)) { New-Item -ItemType Directory -Force -Path $CBBOutDir | Out-Null }
     $ok = $true
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "CBB Step 1 - Fetch PrizePicks"      $CBBDir ".\scripts\pipeline\step1_pp_cbb_scraper.py"      "--out outputs\$Date\step1_cbb.csv" } } else { Write-Host "  [CBB] Skipping step1 fetch -- using existing outputs\$Date\step1_cbb.csv" -ForegroundColor DarkGray }
     if ($ok) { $ok = Run-Step "CBB Step 2 - Normalize"               $CBBDir ".\scripts\pipeline\step2_normalize.py"                            "--input outputs\$Date\step1_cbb.csv --output outputs\$Date\step2_cbb.csv" }
-    if ($ok) { $ok = Run-Step "CBB Step 3 - Attach Defense Rankings" $CBBDir ".\scripts\pipeline\step3b_attach_def_rankings.py"                 "--input outputs\$Date\step2_cbb.csv --output outputs\$Date\step3b_with_def_rankings_cbb.csv" }
-    if ($ok) { $ok = Run-Step "CBB Step 5b - Boxscore Stats"         $CBBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input outputs\$Date\step3b_with_def_rankings_cbb.csv --output outputs\$Date\step5b_cbb.csv --cache data\cache\cbb_boxscore_cache.csv --days 90 --workers 4" }
-    if ($ok) { $ok = Run-Step "CBB Step 6 - Rank Props"              $CBBDir ".\scripts\pipeline\step6_rank_props_cbb.py"                       "--input outputs\$Date\step5b_cbb.csv --output outputs\$Date\step6_ranked_cbb.xlsx --cache data\cache\cbb_boxscore_cache.csv" }
+    if ($ok) { $ok = Run-Step "CBB Step 3 - Attach Defense Rankings" $CBBDir ".\scripts\pipeline\step3b_attach_def_rankings.py"                 "--input outputs\$Date\step2_cbb.csv --defense data\reference\cbb_def_rankings.csv --output outputs\$Date\step3b_with_def_rankings_cbb.csv" }
+    if ($ok) { $ok = Run-Step "CBB Step 4 - Attach ESPN IDs"         $CBBDir ".\scripts\pipeline\step5a_attach_espn_ids.py"                     "--input outputs\$Date\step3b_with_def_rankings_cbb.csv --output outputs\$Date\step3_cbb.csv --master data/reference/ncaa_mbb_athletes_master.csv" }
+    if ($ok) { $ok = Run-Step "CBB Step 5 - Boxscore Stats"          $CBBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input outputs\$Date\step3_cbb.csv --output outputs\$Date\step5b_cbb.csv --cache data\cache\cbb_boxscore_cache.csv --days 90 --workers 4" }
+    if ($ok) { $ok = Run-Step "CBB Step 6 - Rank Props"              $CBBDir ".\scripts\pipeline\step6_rank_props_cbb.py"                       "--input outputs\$Date\step5b_cbb.csv --output outputs\$Date\step6_ranked_cbb.xlsx --date $Date --cache data\cache\cbb_boxscore_cache.csv" }
     if ($ok) { Copy-Item "$CBBDir\outputs\$Date\step6_ranked_cbb.xlsx" "$CBBDir\step6_ranked_cbb.xlsx" -Force }
     Write-Host ""
     if ($ok) { Write-Host "  CBB complete." -ForegroundColor Green } else { Write-Host "  CBB FAILED." -ForegroundColor Red }
@@ -493,11 +500,13 @@ $CBBJob = Start-Job -ScriptBlock {
     $ok = $true
     $CBBOutDir = Join-Path $CBBDir "outputs\$Date"
     if (-not (Test-Path $CBBOutDir)) { New-Item -ItemType Directory -Force -Path $CBBOutDir | Out-Null }
+    # CBB pipeline ends at step6 — no step7/step8 in this sport
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "CBB Step 1 - Fetch PrizePicks" $CBBDir ".\scripts\pipeline\step1_pp_cbb_scraper.py" "--out outputs\$Date\step1_cbb.csv" } } else { Write-Output "[CBB] Skipping step1 fetch" }
     if ($ok) { $ok = Run-Step-Job "CBB Step 2 - Normalize"               $CBBDir ".\scripts\pipeline\step2_normalize.py"                            "--input outputs\$Date\step1_cbb.csv --output outputs\$Date\step2_cbb.csv" }
-    if ($ok) { $ok = Run-Step-Job "CBB Step 3 - Attach Defense Rankings" $CBBDir ".\scripts\pipeline\step3b_attach_def_rankings.py"                 "--input outputs\$Date\step2_cbb.csv --output outputs\$Date\step3b_with_def_rankings_cbb.csv" }
-    if ($ok) { $ok = Run-Step-Job "CBB Step 5b - Boxscore Stats"         $CBBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input outputs\$Date\step3b_with_def_rankings_cbb.csv --output outputs\$Date\step5b_cbb.csv --cache data\cache\cbb_boxscore_cache.csv --days 90 --workers 4" }
-    if ($ok) { $ok = Run-Step-Job "CBB Step 6 - Rank Props"              $CBBDir ".\scripts\pipeline\step6_rank_props_cbb.py"                       "--input outputs\$Date\step5b_cbb.csv --output outputs\$Date\step6_ranked_cbb.xlsx --cache data\cache\cbb_boxscore_cache.csv" }
+    if ($ok) { $ok = Run-Step-Job "CBB Step 3 - Attach Defense Rankings" $CBBDir ".\scripts\pipeline\step3b_attach_def_rankings.py"                 "--input outputs\$Date\step2_cbb.csv --defense data\reference\cbb_def_rankings.csv --output outputs\$Date\step3b_with_def_rankings_cbb.csv" }
+    if ($ok) { $ok = Run-Step-Job "CBB Step 4 - Attach ESPN IDs"         $CBBDir ".\scripts\pipeline\step5a_attach_espn_ids.py"                     "--input outputs\$Date\step3b_with_def_rankings_cbb.csv --output outputs\$Date\step3_cbb.csv --master data/reference/ncaa_mbb_athletes_master.csv" }
+    if ($ok) { $ok = Run-Step-Job "CBB Step 5 - Boxscore Stats"          $CBBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input outputs\$Date\step3_cbb.csv --output outputs\$Date\step5b_cbb.csv --cache data\cache\cbb_boxscore_cache.csv --days 90 --workers 4" }
+    if ($ok) { $ok = Run-Step-Job "CBB Step 6 - Rank Props"              $CBBDir ".\scripts\pipeline\step6_rank_props_cbb.py"                       "--input outputs\$Date\step5b_cbb.csv --output outputs\$Date\step6_ranked_cbb.xlsx --date $Date --cache data\cache\cbb_boxscore_cache.csv" }
     if ($ok) { Copy-Item "$CBBDir\outputs\$Date\step6_ranked_cbb.xlsx" "$CBBDir\step6_ranked_cbb.xlsx" -Force }
     return $ok
 } -ArgumentList $CBBDir, $SkipFetch, $Date

@@ -33,6 +33,7 @@ param(
     [switch]$SkipFetch,
     [switch]$RefreshCache,
     [switch]$ForceAll,
+    [switch]$SkipPush,
     [int]$CacheAgeDays = 7
 )
 
@@ -150,31 +151,36 @@ function Run-Step {
 
 # -- Helper: git push templates -----------------------------------------------
 function Run-GitPush {
-    Write-Host ""
-    Write-Host "[ GIT ] Pushing updated templates to GitHub..." -ForegroundColor Cyan
-    Push-Location $Root
-    try {
-        git add "ui_runner/templates/tickets_latest.html" `
-                "ui_runner/templates/tickets_latest.json" `
-                "ui_runner/templates/slate_latest.json" `
-                "ui_runner/templates/slate_eval_$Date.html" `
-                "ui_runner/templates/ticket_eval_$Date.html" 2>&1 | Out-Null
-        $msg       = "chore: pipeline update $Date $(Get-Date -Format 'HH:mm')"
-        $commitOut = git commit -m $msg 2>&1
-        if ($LASTEXITCODE -eq 0) {
-            $pushOut = git push origin main 2>&1
-            foreach ($line in $pushOut) { Write-Host "    $line" -ForegroundColor DarkGray }
-            Write-Host "  OK - Pushed to GitHub" -ForegroundColor Green
-            "$Date $(Get-Date -Format 'HH:mm:ss') - PUSHED: $msg" | Out-File -FilePath (Join-Path $Root "git_push_log.txt") -Append -Encoding utf8
-        } else {
-            Write-Host "  (no changes to push)" -ForegroundColor DarkGray
-            "$Date $(Get-Date -Format 'HH:mm:ss') - NO CHANGES" | Out-File -FilePath (Join-Path $Root "git_push_log.txt") -Append -Encoding utf8
+    if (-not $SkipPush) {
+        Write-Host ""
+        Write-Host "[ GIT ] Pushing updated templates to GitHub..." -ForegroundColor Cyan
+        Push-Location $Root
+        try {
+            git add "ui_runner/templates/tickets_latest.html" `
+                    "ui_runner/templates/tickets_latest.json" `
+                    "ui_runner/templates/slate_latest.json" `
+                    "ui_runner/templates/slate_eval_$Date.html" `
+                    "ui_runner/templates/ticket_eval_$Date.html" 2>&1 | Out-Null
+            $msg       = "chore: pipeline update $Date $(Get-Date -Format 'HH:mm')"
+            $commitOut = git commit -m $msg 2>&1
+            if ($LASTEXITCODE -eq 0) {
+                $pushOut = git push origin main 2>&1
+                foreach ($line in $pushOut) { Write-Host "    $line" -ForegroundColor DarkGray }
+                Write-Host "  OK - Pushed to GitHub" -ForegroundColor Green
+                "$Date $(Get-Date -Format 'HH:mm:ss') - PUSHED: $msg" | Out-File -FilePath (Join-Path $Root "git_push_log.txt") -Append -Encoding utf8
+            } else {
+                Write-Host "  (no changes to push)" -ForegroundColor DarkGray
+                "$Date $(Get-Date -Format 'HH:mm:ss') - NO CHANGES" | Out-File -FilePath (Join-Path $Root "git_push_log.txt") -Append -Encoding utf8
+            }
+        } catch {
+            Write-Host "  Git push failed: $_" -ForegroundColor Yellow
+            "$Date $(Get-Date -Format 'HH:mm:ss') - PUSH FAILED: $_" | Out-File -FilePath (Join-Path $Root "git_push_log.txt") -Append -Encoding utf8
+        } finally {
+            Pop-Location
         }
-    } catch {
-        Write-Host "  Git push failed: $_" -ForegroundColor Yellow
-        "$Date $(Get-Date -Format 'HH:mm:ss') - PUSH FAILED: $_" | Out-File -FilePath (Join-Path $Root "git_push_log.txt") -Append -Encoding utf8
-    } finally {
-        Pop-Location
+    } else {
+        Write-Host "Git push skipped (controlled by caller)" `
+            -ForegroundColor DarkGray
     }
 }
 
@@ -214,6 +220,11 @@ function Run-Combined {
         Copy-Item $CombinedOut (Join-Path $OutDir "combined_slate_tickets_$Date.xlsx") -Force -ErrorAction SilentlyContinue
         Remove-Item $CombinedOut -Force -ErrorAction SilentlyContinue
         Write-Host "  Saved -> $(Join-Path $OutDir "combined_slate_tickets_$Date.xlsx")" -ForegroundColor Green
+        py -3.14 (Join-Path $Root "build_ticket_eval.py") --date $Date
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error "Ticket eval build failed"
+            exit 1
+        }
         Run-GitPush
     } else {
         Write-Host "  Combined FAILED" -ForegroundColor Red
@@ -249,7 +260,7 @@ if ($WNBAOnly) {
     Init-Progress 1 "PropOracle WNBA Delegation"
     Write-Host "[ WNBA PIPELINE ]" -ForegroundColor Magenta
     Write-Host "  Delegating to run_wnba_pipeline.ps1 ..." -ForegroundColor DarkGray
-    & (Join-Path $Root "run_wnba_pipeline.ps1") -Date $Date
+    & (Join-Path $Root "scripts\run_wnba_pipeline.ps1") -Date $Date
     Advance-Progress "WNBA delegated run" ($LASTEXITCODE -eq 0)
     Print-Done
     exit
@@ -258,6 +269,9 @@ if ($WNBAOnly) {
 # =============================================================================
 #  NHL ONLY
 # =============================================================================
+# NOTE: Refresh NHL defense data before running pipeline with:
+#   py -3.14 NHL\scripts\nhl_defense_report.py --season 20252026
+# This writes NHL\nhl_defense_summary.csv (optional reference; step3 can also use DB or live API).
 if ($NHLOnly) {
     $nhlSteps = if ($SkipFetch) { 8 } else { 9 }
     Init-Progress $nhlSteps "PropOracle NHL Pipeline"
@@ -272,6 +286,18 @@ if ($NHLOnly) {
     if ($ok) { $ok = Run-Step "NHL Step 6 - Team Role Context"  $NHLDir ".\scripts\step6_team_role_context_nhl.py"      "--input step5_nhl_hit_rates.csv --output step6_nhl_role_context.csv" }
     if ($ok) { $ok = Run-Step "NHL Step 7 - Rank Props"         $NHLDir ".\scripts\step7_rank_props_nhl.py"             "--input step6_nhl_role_context.csv --output step7_nhl_ranked.xlsx" }
     if ($ok) { $ok = Run-Step "NHL Step 8 - Direction Context"  $NHLDir ".\scripts\step8_add_direction_context_nhl.py"  "--input step7_nhl_ranked.xlsx --output step8_nhl_direction_clean.xlsx" }
+    if ($ok) {
+        $NHLDateDir = Join-Path $Root "outputs\$Date"
+        if (-not (Test-Path $NHLDateDir)) {
+            New-Item -ItemType Directory -Path $NHLDateDir -Force | Out-Null
+        }
+        $NHLStep8Src = Join-Path $NHLDir "step8_nhl_direction_clean.xlsx"
+        $NHLStep8Dst = Join-Path $NHLDateDir "step8_nhl_direction_clean_$Date.xlsx"
+        if (Test-Path $NHLStep8Src) {
+            Copy-Item $NHLStep8Src $NHLStep8Dst -Force
+            Write-Host "  [NHL] Copied step8 workbook for grader: $NHLStep8Dst" -ForegroundColor DarkGray
+        }
+    }
     Write-Host ""
     if ($ok) { Write-Host "  NHL complete." -ForegroundColor Green } else { Write-Host "  NHL FAILED." -ForegroundColor Red }
     if ($ok) { Run-Combined "after NHL" }
@@ -329,7 +355,7 @@ if ($SoccerOnly) {
 }
 
 # =============================================================================
-#  CBB ONLY
+#  CBB ONLY  (pipeline ends at step6 — no step7/step8 for CBB)
 # =============================================================================
 if ($CBBOnly) {
     $cbbSteps = if ($SkipFetch) { 6 } else { 7 }
@@ -464,8 +490,9 @@ $NBAJob = Start-Job -ScriptBlock {
 } -ArgumentList $NBADir, $Date, $OddsApiKey, $SkipFetch
 
 # -- CBB Job ------------------------------------------------------------------
+# CBB pipeline ends at step6 — no step7/step8 in this sport
 $CBBJob = Start-Job -ScriptBlock {
-    param($CBBDir, $SkipFetch)
+    param($CBBDir, $Date, $SkipFetch)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
     function Run-Step-Job {
         param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
@@ -489,11 +516,11 @@ $CBBJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "CBB Step 5 - Boxscore Stats"          $CBBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input step3_cbb.csv --output step5b_cbb.csv" }
     if ($ok) { $ok = Run-Step-Job "CBB Step 6 - Rank Props"              $CBBDir ".\scripts\pipeline\step6_rank_props_cbb.py"                       "--input step5b_cbb.csv --output step6_ranked_cbb.xlsx --date $Date" }
     return $ok
-} -ArgumentList $CBBDir, $SkipFetch
+} -ArgumentList $CBBDir, $Date, $SkipFetch
 
 # -- NHL Job ------------------------------------------------------------------
 $NHLJob = Start-Job -ScriptBlock {
-    param($NHLDir, $SkipFetch)
+    param($NHLDir, $SkipFetch, $Root, $Date)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
     function Run-Step-Job {
         param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
@@ -518,8 +545,20 @@ $NHLJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "NHL Step 6 - Team Role Context"  $NHLDir ".\scripts\step6_team_role_context_nhl.py"      "--input step5_nhl_hit_rates.csv --output step6_nhl_role_context.csv" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 7 - Rank Props"         $NHLDir ".\scripts\step7_rank_props_nhl.py"             "--input step6_nhl_role_context.csv --output step7_nhl_ranked.xlsx" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 8 - Direction Context"  $NHLDir ".\scripts\step8_add_direction_context_nhl.py"  "--input step7_nhl_ranked.xlsx --output step8_nhl_direction_clean.xlsx" }
+    if ($ok) {
+        $NHLDateDir = Join-Path $Root "outputs\$Date"
+        if (-not (Test-Path $NHLDateDir)) {
+            New-Item -ItemType Directory -Path $NHLDateDir -Force | Out-Null
+        }
+        $NHLStep8Src = Join-Path $NHLDir "step8_nhl_direction_clean.xlsx"
+        $NHLStep8Dst = Join-Path $NHLDateDir "step8_nhl_direction_clean_$Date.xlsx"
+        if (Test-Path $NHLStep8Src) {
+            Copy-Item $NHLStep8Src $NHLStep8Dst -Force
+            Write-Output "[NHL] Copied step8 for grader: $NHLStep8Dst"
+        }
+    }
     return $ok
-} -ArgumentList $NHLDir, $SkipFetch
+} -ArgumentList $NHLDir, $SkipFetch, $Root, $Date
 
 # -- Soccer Job ---------------------------------------------------------------
 $SoccerJob = Start-Job -ScriptBlock {

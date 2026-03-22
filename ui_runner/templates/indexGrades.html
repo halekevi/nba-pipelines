@@ -128,9 +128,6 @@ body{font-family:'Share Tech Mono',monospace;background:#05050f;color:var(--text
 .tab-icon{width:18px;height:18px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;}
 .tab-btn.active .tab-icon{filter:drop-shadow(0 0 6px var(--accent));}
 
-/* date-bar hidden for ticket tab */
-.date-bar.hidden{display:none;}
-
 @media(max-width:768px){
   .snav{padding:0 16px;}
   .snav-name{display:none;}
@@ -756,6 +753,12 @@ body{
     <div class="empty-sub">No grade report exists for this date. Run <code>run_grader.ps1</code> to generate one, or select a different date above.</div>
     <div class="empty-hint">Expected: slate_eval_<span id="empty-date"></span>.html</div>
   </div>
+  <div class="empty-state" id="ticket-empty-state" style="display:none;">
+    <div class="empty-icon">🎟</div>
+    <div class="empty-title">No Ticket Evaluation</div>
+    <div class="empty-sub">No ticket evaluation page exists for this date. Run <code>build_ticket_eval.py</code> after the pipeline (or <code>run_pipeline.ps1</code>), or pick another date.</div>
+    <div class="empty-hint">Expected: ticket_eval_<span id="ticket-empty-date"></span>.html</div>
+  </div>
   <iframe class="grade-frame loading" id="grade-frame" src="about:blank" title="Grade Report"></iframe>
   <iframe class="grade-frame" id="ticket-frame" src="about:blank" title="Ticket Evaluation" style="display:none;"></iframe>
 </div>
@@ -782,27 +785,51 @@ function switchTab(tab) {
   document.getElementById('tab-tickets').classList.toggle('active', tab === 'tickets');
   document.getElementById('grade-frame').style.display   = tab === 'slate'   ? 'block' : 'none';
   document.getElementById('ticket-frame').style.display  = tab === 'tickets' ? 'block' : 'none';
-  document.querySelector('.date-bar').classList.toggle('hidden', tab === 'tickets');
-  // Load ticket eval iframe on first open
-  if(tab === 'tickets') {
-    const tf = document.getElementById('ticket-frame');
-    if(tf.src === 'about:blank' || tf.src === '') {
-      // Try to load for current date
-      const ds = document.getElementById('date-jump').value || yesterdayStr();
-      loadTicketEval(ds);
-    }
+  document.getElementById('ticket-empty-state').style.display = 'none';
+
+  if (tab === 'tickets') {
+    document.getElementById('load-overlay').classList.add('hidden');
+    document.getElementById('empty-state').style.display = 'none';
+    const ds = currentDateStr || document.getElementById('date-jump').value || yesterdayStr();
+    loadTicketEval(ds);
+  } else {
+    document.getElementById('empty-state').style.display = slateReportMissing ? 'flex' : 'none';
   }
 }
 
-function loadTicketEval(dateStr) {
-  const tf = document.getElementById('ticket-frame');
+async function probeTicketEval(dateStr) {
   const url = TICKET_EVAL_URL_TEMPLATE.replace('{date}', dateStr);
+  try {
+    const res = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
+    return res.ok;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function loadTicketEval(dateStr) {
+  if (!dateStr) return;
+  const tf = document.getElementById('ticket-frame');
+  const tEmpty = document.getElementById('ticket-empty-state');
+  const url = TICKET_EVAL_URL_TEMPLATE.replace('{date}', dateStr);
+  const ok = await probeTicketEval(dateStr);
+  if (!ok) {
+    tf.style.display = 'none';
+    tEmpty.style.display = 'flex';
+    document.getElementById('ticket-empty-date').textContent = dateStr;
+    tf.src = 'about:blank';
+    return;
+  }
+  tEmpty.style.display = 'none';
+  tf.style.display = 'block';
   tf.src = url;
 }
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
 let availableDates = [];  // sorted ascending
 let currentDateIdx = -1;
+let currentDateStr = '';
+let slateReportMissing = false;
 
 // ─── DATE HELPERS ─────────────────────────────────────────────────────────────
 function toDateStr(d){
@@ -887,6 +914,7 @@ function loadDate(dateStr){
   const idx = availableDates.indexOf(dateStr);
   if(idx === -1 && !dateStr) return;
   currentDateIdx = idx;
+  currentDateStr = dateStr;
 
   const frame = document.getElementById('grade-frame');
   const overlay = document.getElementById('load-overlay');
@@ -928,18 +956,24 @@ function loadDate(dateStr){
   // Use a short timeout to detect 404s via probe
   probeDate(dateStr).then(exists => {
     if(!exists){
+      slateReportMissing = true;
       frame.src = 'about:blank';
       overlay.classList.add('hidden');
       frame.classList.remove('loading');
       emptyState.style.display = 'flex';
       document.getElementById('empty-date').textContent = dateStr;
     } else {
+      slateReportMissing = false;
       frame.src = url;
     }
   });
 
   // Update jump input
   document.getElementById('date-jump').value = dateStr;
+
+  if (activeTab === 'tickets') {
+    loadTicketEval(dateStr);
+  }
 }
 
 // ─── DATE NAV ─────────────────────────────────────────────────────────────────
