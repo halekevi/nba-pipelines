@@ -2,6 +2,8 @@
 """
 cbb_step5b_attach_boxscore_stats.py  (upgraded)
 ------------------------------------------------
+Canonical copy: CBB/scripts/pipeline/step5b_attach_boxscore_stats.py — prefer that for new runs.
+
 Mirrors NBA step4 logic exactly.
 
 Improvements over original:

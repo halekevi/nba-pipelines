@@ -262,13 +262,18 @@ class SoccerAnalytics:
     @staticmethod
     def identify_league_edges(graded_df: pd.DataFrame) -> pd.DataFrame:
         """Find league-specific prop edges."""
-        
-        league_stats = graded_df.groupby("league").agg({
-            "result": lambda x: (x == "HIT").sum() / len(x[x.isin(["HIT", "MISS"])]),
-            "confidence_score": "mean",
-            "edge": "mean"
-        }).round(3)
-        
+        def _safe_hit_rate(series: pd.Series) -> float:
+            decided = series[series.isin(["HIT", "MISS"])]
+            if len(decided) == 0:
+                return np.nan
+            return (decided == "HIT").mean()
+
+        league_stats = graded_df.groupby("league").agg(
+            result=("result", _safe_hit_rate),
+            confidence_score=("confidence_score", "mean"),
+            edge=("edge", "mean"),
+        ).round(3)
+
         league_stats.columns = ["hit_rate", "avg_confidence", "avg_edge"]
         return league_stats
     
@@ -296,6 +301,10 @@ class SoccerAnalytics:
                         "recommendation": "STRONG" if hit_rate >= 0.75 else "MODERATE",
                     })
         
+        if not plays:
+            return pd.DataFrame(
+                columns=["position", "league", "prop_type", "hit_rate", "games", "avg_edge", "recommendation"]
+            )
         return pd.DataFrame(plays).sort_values("hit_rate", ascending=False)
     
     @staticmethod
@@ -337,6 +346,10 @@ class SoccerAnalytics:
                 "confidence": 70,
             })
         
+        if not recommendations:
+            return pd.DataFrame(
+                columns=["type", "position", "league", "prop_type", "reason", "action", "confidence"]
+            )
         return pd.DataFrame(recommendations).sort_values("confidence", ascending=False)
 
 

@@ -55,9 +55,11 @@ def fetch_json(url: str, retries: int = 3) -> dict:
             time.sleep(1.5 ** attempt)
 
 
-def get_game_log_values(nhl_id: str, stat_norm: str, role: str, season: str, max_games: int = 30) -> list[float]:
-    """Fetch raw game-by-game values for a player+stat."""
-    url = f"{NHL_WEB}/player/{nhl_id}/game-log/{season}/2"
+def _get_game_log_values_one(nhl_id: str, stat_norm: str, role: str, season: str, max_games: int = 30) -> list[float]:
+    """Fetch raw game-by-game values for a single player id + stat."""
+    if not (nhl_id or "").strip().isdigit():
+        return []
+    url = f"{NHL_WEB}/player/{nhl_id.strip()}/game-log/{season}/2"
     data = fetch_json(url)
     games = data.get("gameLog", [])[:max_games]
 
@@ -119,6 +121,38 @@ def get_game_log_values(nhl_id: str, stat_norm: str, role: str, season: str, max
             values.append(0.0)
 
     return values
+
+
+def _average_game_logs(series_list: list[list[float]], max_games: int) -> list[float]:
+    """Pairwise average across players for aligned game indices (same index = recent games)."""
+    nonempty = [s for s in series_list if s]
+    if not nonempty:
+        return []
+    if len(nonempty) == 1:
+        return nonempty[0][:max_games]
+    n_games = min(len(s) for s in nonempty)
+    n_games = min(n_games, max_games)
+    return [
+        sum(nonempty[j][i] for j in range(len(nonempty))) / len(nonempty)
+        for i in range(n_games)
+    ]
+
+
+def get_game_log_values(nhl_id: str, stat_norm: str, role: str, season: str, max_games: int = 30) -> list[float]:
+    """
+    Fetch game-by-game values for this prop. Combo props use pipe-separated IDs;
+    each player is fetched separately and values are averaged per game index.
+    """
+    raw = (nhl_id or "").strip()
+    if "|" in raw:
+        parts = [p.strip() for p in raw.split("|") if p.strip()]
+        per_player: list[list[float]] = []
+        for pid in parts:
+            vals = _get_game_log_values_one(pid, stat_norm, role, season, max_games)
+            if vals:
+                per_player.append(vals)
+        return _average_game_logs(per_player, max_games)
+    return _get_game_log_values_one(raw, stat_norm, role, season, max_games)
 
 
 def compute_hit_rate(values: list[float], line: float, window: int | None = None) -> tuple[float, int, int]:

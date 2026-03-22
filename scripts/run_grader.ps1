@@ -16,6 +16,7 @@ $CBBFullGraderScript = Join-Path $Root "scripts\grading\grade_cbb_full_slate.py"
 $NHLAdvancedGraderScript = Join-Path $Root "scripts\nhl_grader_advanced.py"
 $SoccerAdvancedGraderScript = Join-Path $Root "scripts\soccer_grader_advanced.py"
 $BuildGradesHtmlScript = Join-Path $Root "scripts\grading\build_grades_html.py"
+$NBABacktestScript = Join-Path $Root "NBA\scripts\backtest_nba.py"
 
 $NBAGradedFile = Join-Path $DateDir "graded_nba_$Date.xlsx"
 $CBBGradedFile = Join-Path $DateDir "graded_cbb_$Date.xlsx"
@@ -29,7 +30,8 @@ function Run-Py {
         [string]$Name,
         [string]$WorkingDir,
         [string]$ScriptPath,
-        [string[]]$ScriptArgs
+        [string[]]$ScriptArgs,
+        [switch]$PreferPy314
     )
 
     Write-Host "`n=== Running $Name ===" -ForegroundColor Cyan
@@ -42,16 +44,18 @@ function Run-Py {
     Push-Location $WorkingDir
 
     try {
+        $env:PYTHONUTF8 = "1"
+        $env:PYTHONIOENCODING = "utf-8"
+        if ($PreferPy314 -and (Get-Command py -ErrorAction SilentlyContinue)) {
+            $pyArgs = @("-3.14", $ScriptPath) + $ScriptArgs
+            & py -X utf8 @pyArgs
+        }
         # Use python first to avoid py launcher version prompts.
-        if (Get-Command python -ErrorAction SilentlyContinue) {
-            $env:PYTHONUTF8 = "1"
-            $env:PYTHONIOENCODING = "utf-8"
+        elseif (Get-Command python -ErrorAction SilentlyContinue) {
             $pyArgs = @($ScriptPath) + $ScriptArgs
             & python -X utf8 @pyArgs
         }
         elseif (Get-Command py -ErrorAction SilentlyContinue) {
-            $env:PYTHONUTF8 = "1"
-            $env:PYTHONIOENCODING = "utf-8"
             $pyArgs = @("-3", $ScriptPath) + $ScriptArgs
             & py -X utf8 @pyArgs
         }
@@ -156,6 +160,12 @@ $SoccerSlateFile = Resolve-FirstExisting @(
     (Join-Path $Root "Soccer\outputs\step8_soccer_direction_clean.xlsx"),
     (Join-Path $Root "Soccer\step8_soccer_direction_clean.xlsx")
 )
+if ($SoccerSlateFile -and (Test-Path $SoccerSlateFile)) {
+    Write-Host "Soccer slate resolved to: $SoccerSlateFile" -ForegroundColor DarkGray
+}
+else {
+    Write-Host "Soccer slate: not found (tried outputs\$Date\, Soccer\outputs\, Soccer\)" -ForegroundColor Yellow
+}
 
 if ((Test-Path $NBAActuals) -and (Test-Path $NBASlateFile) -and (Test-Path $SlateGraderScript)) {
     Run-Py "Grade NBA Slate" $Root $SlateGraderScript @(
@@ -165,6 +175,23 @@ if ((Test-Path $NBAActuals) -and (Test-Path $NBASlateFile) -and (Test-Path $Slat
         "--output", $NBAGradedFile,
         "--date", $Date
     )
+
+    if (Test-Path $NBABacktestScript) {
+        Run-Py "Backtest NBA (Daily)" $Root $NBABacktestScript @(
+            "--slate", $NBASlateFile,
+            "--actuals", $NBAActuals,
+            "--out-dir", (Join-Path $Root "NBA\data\outputs")
+        )
+
+        Run-Py "Backtest NBA (All Historical Actuals)" $Root $NBABacktestScript @(
+            "--slate", $NBASlateFile,
+            "--out-dir", (Join-Path $Root "NBA\data\outputs"),
+            "--batch-actuals-glob", "**/actuals_nba*.csv"
+        )
+    }
+    else {
+        Write-Host "Skipping NBA backtest (script not found: $NBABacktestScript)." -ForegroundColor Yellow
+    }
 }
 else {
     Write-Host "Skipping NBA slate grading (missing slate/actuals/grader)." -ForegroundColor Yellow
@@ -203,12 +230,21 @@ else {
 }
 
 if ((Test-Path $SoccerActuals) -and $SoccerSlateFile -and (Test-Path $SoccerSlateFile) -and (Test-Path $SoccerAdvancedGraderScript)) {
+    if (-not (Test-Path $DateDir)) {
+        New-Item -ItemType Directory -Path $DateDir -Force | Out-Null
+    }
     Run-Py "Grade Soccer Slate" $Root $SoccerAdvancedGraderScript @(
         "--date", $Date,
         "--actuals", $SoccerActuals,
         "--slate", $SoccerSlateFile,
         "--output-dir", $DateDir
-    )
+    ) -PreferPy314
+    if (-not (Test-Path $SoccerGradedFile)) {
+        Write-Warning "Soccer grading produced no output file — check soccer_grader_advanced.py for errors"
+    }
+    else {
+        Write-Host "Soccer grading complete: $SoccerGradedFile" -ForegroundColor Green
+    }
 }
 else {
     Write-Host "Skipping Soccer grading (missing slate/actuals/grader)." -ForegroundColor Yellow
@@ -251,12 +287,19 @@ elseif (-not (Test-Path $CombinedTicketGrader)) {
     Write-Host "Combined ticket grader script not found!" -ForegroundColor Red
 }
 else {
-    Run-Py "Combined Ticket Grader" $Root $CombinedTicketGrader @(
+    $GraderArgs = @(
         "--tickets", $TicketsFile,
         "--nba_actuals", $NBAActuals,
         "--cbb_actuals", $CBBActuals,
         "--out", (Join-Path $DateDir "combined_tickets_graded_$Date.xlsx")
     )
+    if (Test-Path $NHLActuals) {
+        $GraderArgs += @("--nhl_actuals", $NHLActuals)
+    }
+    if (Test-Path $SoccerActuals) {
+        $GraderArgs += @("--soccer_actuals", $SoccerActuals)
+    }
+    Run-Py "Combined Ticket Grader" $Root $CombinedTicketGrader $GraderArgs
 }
 
 Write-Host "`n✅ DONE." -ForegroundColor Green

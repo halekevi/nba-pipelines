@@ -17,13 +17,175 @@ Usage:
 
 import argparse
 import csv
+import json
+import re
 import subprocess
 import sys
+from pathlib import Path
+import joblib
+import numpy as np
+import pandas as pd
 try:
     from tqdm import tqdm as _tqdm
 except ImportError:
     subprocess.check_call([sys.executable, "-m", "pip", "install", "tqdm", "--break-system-packages", "-q"])
     from tqdm import tqdm as _tqdm
+
+# ── Player consistency (data/cache/player_consistency.db) ────────────────────
+
+
+def _repo_root_pc_nhl() -> Path:
+    here = Path(__file__).resolve()
+    for anc in here.parents:
+        if (anc / "scripts" / "build_player_consistency.py").is_file():
+            return anc
+    return here.parents[2]
+
+
+def _load_bpc_pc_nhl():
+    root = _repo_root_pc_nhl()
+    sd = str(root / "scripts")
+    if sd not in sys.path:
+        sys.path.insert(0, sd)
+    import build_player_consistency as bpc  # noqa: E402
+
+    return bpc
+
+
+_bpc_pc_nhl_mod = None
+
+
+def _bpc_pc_nhl():
+    global _bpc_pc_nhl_mod
+    if _bpc_pc_nhl_mod is None:
+        try:
+            _bpc_pc_nhl_mod = _load_bpc_pc_nhl()
+        except Exception:
+            _bpc_pc_nhl_mod = False
+    return _bpc_pc_nhl_mod
+
+
+def _normalize_prop_type(raw: str) -> str:
+    m = _bpc_pc_nhl()
+    if not m:
+        return str(raw or "").strip()
+    return m._normalize_prop_type(str(raw), "NHL")
+
+
+def _get_line_bucket(prop_type: str, line: float, sport: str) -> str:
+    m = _bpc_pc_nhl()
+    if not m:
+        return "<5"
+    try:
+        ln = float(line)
+    except (TypeError, ValueError):
+        ln = 0.0
+    return m.get_line_bucket(prop_type, ln, sport)
+
+
+def _get_consistency_grade(player: str, sport: str, prop_type: str, direction: str, line: float) -> str:
+    import sqlite3
+
+    repo_root = _repo_root_pc_nhl()
+    db_path = repo_root / "data" / "cache" / "player_consistency.db"
+    if not db_path.exists():
+        return "?"
+
+    prop_type = _normalize_prop_type(prop_type)
+    direction = direction.upper().strip()
+    bucket = _get_line_bucket(prop_type, line, sport)
+
+    try:
+        conn = sqlite3.connect(str(db_path))
+        cur = conn.cursor()
+        cur.execute(
+            """
+            SELECT grade, grade_locked, games_since_F
+            FROM player_consistency
+            WHERE player_name = ?
+              AND sport = ?
+              AND prop_type = ?
+              AND direction = ?
+              AND line_bucket = ?
+        """,
+            (player, sport, prop_type, direction, bucket),
+        )
+        row = cur.fetchone()
+        conn.close()
+        if row:
+            grade, locked, games_since_F = row
+            return grade or "?"
+        return "?"
+    except Exception:
+        return "?"
+
+
+def _pc_grade_cache_nhl(sport: str) -> dict:
+    import sqlite3
+
+    dbp = _repo_root_pc_nhl() / "data" / "cache" / "player_consistency.db"
+    if not dbp.is_file():
+        return {}
+    try:
+        conn = sqlite3.connect(str(dbp))
+        cur = conn.execute(
+            "SELECT player_name, sport, prop_type, direction, line_bucket, grade FROM player_consistency WHERE sport = ?",
+            (sport,),
+        )
+        d = {(a, b, c, d0, e): (g if g else "?") for a, b, c, d0, e, g in cur.fetchall()}
+        conn.close()
+        return d
+    except Exception:
+        return {}
+
+
+def _apply_consistency_grade_scores_nhl(df: pd.DataFrame) -> None:
+    sport = "NHL"
+    grade_multiplier = {
+        "S": 1.25,
+        "A": 1.15,
+        "B": 1.05,
+        "C": 1.00,
+        "D": 0.80,
+        "F": 0.00,
+        "?": 0.95,
+    }
+    cache = _pc_grade_cache_nhl(sport)
+    pc = next((c for c in ("player_name", "player_norm", "player") if c in df.columns), None)
+    prop_col = next((c for c in ("stat_norm", "prop_type") if c in df.columns), None)
+    if "recommended_side" in df.columns:
+        dir_col = "recommended_side"
+    elif "bet_direction" in df.columns:
+        dir_col = "bet_direction"
+    else:
+        dir_col = None
+    line_col = next((c for c in ("line_score", "line") if c in df.columns), None)
+    if pc is None or prop_col is None or dir_col is None or line_col is None:
+        df["consistency_grade"] = "?"
+        df["consistency_multiplier"] = 0.95
+        df["final_score"] = _to_num(df.get("final_score", pd.Series(np.nan, index=df.index))) * 0.95
+        return
+
+    players = df[pc].astype(str).str.strip()
+    prop_raw = df[prop_col].astype(str)
+    dirs = df[dir_col].astype(str).str.strip().str.upper()
+    linev = _to_num(df[line_col]).fillna(0.0)
+    grades: list[str] = []
+    for i in range(len(df)):
+        ptype = _normalize_prop_type(prop_raw.iloc[i])
+        try:
+            ln = float(linev.iloc[i])
+        except (TypeError, ValueError):
+            ln = 0.0
+        bkt = _get_line_bucket(ptype, ln, sport)
+        g = cache.get((players.iloc[i], sport, ptype, dirs.iloc[i], bkt), "?")
+        grades.append(g)
+    gser = pd.Series(grades, index=df.index)
+    mult = gser.map(lambda x: grade_multiplier.get(x, 0.95)).astype(float)
+    df["consistency_grade"] = gser
+    df["consistency_multiplier"] = mult
+    df["final_score"] = _to_num(df["final_score"]).astype(float) * mult
+
 
 # ── Head-to-Head (H2H) utility ────────────────────────────────────────────────
 def _attach_h2h(df: "pd.DataFrame", cache_path: str, sport: str,
@@ -140,7 +302,7 @@ STAT_STABILITY = {
     "blocked_shots": 1.05,
     "goals":         0.82,   # highest variance in hockey
     "goals_allowed": 0.85,
-    "fantasy_score": 0.95,
+    "fantasy_score": 0.88,
 }
 
 # Defense tier adjustments for OVER hit rate
@@ -171,6 +333,21 @@ PP_TIER_BOOST = {
 
 HOME_BOOST = 0.01
 MIN_SAMPLE = 5  # Minimum games to be rankable
+
+
+def _repo_root_ml_nhl() -> Path:
+    return Path(__file__).resolve().parents[2]
+
+
+_sd_ml_nhl = str(_repo_root_ml_nhl() / "scripts")
+if _sd_ml_nhl not in sys.path:
+    sys.path.insert(0, _sd_ml_nhl)
+try:
+    from ml_blend_weight import load_ml_blend_weight  # noqa: E402
+
+    ML_BLEND_WEIGHT = float(load_ml_blend_weight(_repo_root_ml_nhl(), "nhl"))
+except Exception:
+    ML_BLEND_WEIGHT = 0.30
 
 
 def install_openpyxl():
@@ -243,6 +420,231 @@ def assign_tier(score: float, sample: float) -> str:
         return "D"
 
 
+def _to_num(s: pd.Series) -> pd.Series:
+    return pd.to_numeric(s, errors="coerce")
+
+
+def _first_present_nhl_ml(df: pd.DataFrame, options: list[str]) -> str | None:
+    lookup = {str(c).lower(): c for c in df.columns}
+    for c in options:
+        if str(c).lower() in lookup:
+            return lookup[str(c).lower()]
+    return None
+
+
+def _nhl_ml_pick_col(df: pd.DataFrame, names: tuple[str, ...]) -> pd.Series:
+    idx = df.index
+    for n in names:
+        if n in df.columns:
+            return df[n]
+    return pd.Series(np.nan, index=idx)
+
+
+def _normalize_nhl_prop_ml(raw: str) -> str:
+    x = str(raw or "").strip().lower()
+    xc = re.sub(r"\s+", "", x)
+    if not x:
+        return "unknown"
+    if ("goalie" in x and "save" in x) or "saves" in x:
+        return "saves"
+    if "faceoff" in x:
+        return "faceoffs"
+    if "blocked" in x:
+        return "blocked_shots"
+    if "shot" in x or "sog" in x or xc == "shots":
+        return "shots"
+    if "assist" in x:
+        return "assists"
+    if "goal" in x and "against" not in x:
+        return "goals"
+    if "point" in x and "goal" not in x:
+        return "points"
+    if "toi" in x or "time on ice" in x or "time_on" in xc:
+        return "toi"
+    if "hit" in x and "blocked" not in x:
+        return "hits"
+    return re.sub(r"[^a-z0-9]+", "_", x).strip("_") or "unknown"
+
+
+def _nhl_ml_defense_tier_4(df: pd.DataFrame) -> pd.Series:
+    dt = _first_present_nhl_ml(df, ["def_tier", "defense_tier", "DEF_TIER"])
+    if dt:
+        s = df[dt].astype(str).str.strip().str.lower()
+        return pd.Series(
+            np.where(
+                s.str.contains("weak"),
+                0,
+                np.where(
+                    s.str.contains("avg|average"),
+                    1,
+                    np.where(
+                        s.str.contains("good|solid|above"),
+                        2,
+                        np.where(s.str.contains("elite|strong"), 3, 1),
+                    ),
+                ),
+            ),
+            index=df.index,
+        ).astype(float)
+    rk = _first_present_nhl_ml(df, ["def_rank", "opp_def_rank"])
+    if rk:
+        r = _to_num(df[rk]).fillna(16.0)
+        return pd.Series(
+            np.where(r <= 5, 3, np.where(r <= 10, 2, np.where(r <= 20, 1, 0))),
+            index=df.index,
+        ).astype(float)
+    return pd.Series(1.0, index=df.index)
+
+
+def _nhl_ml_pp_unit(df: pd.DataFrame) -> pd.Series:
+    pp_col = _first_present_nhl_ml(df, ["pp_unit", "pp_tier", "PP Tier"])
+    if not pp_col:
+        return pd.Series(0.0, index=df.index)
+    s = df[pp_col].astype(str).str.strip().str.upper()
+    return pd.Series(
+        np.where(s.str.contains("PP1"), 2.0, np.where(s.str.contains("PP2"), 1.0, 0.0)),
+        index=df.index,
+    )
+
+
+def _nhl_ml_goalie_confirmed(df: pd.DataFrame) -> pd.Series:
+    gc = _first_present_nhl_ml(df, ["goalie_confirmed", "Goalie Confirmed"])
+    if not gc:
+        return pd.Series(0.0, index=df.index)
+    s = df[gc].astype(str).str.strip().str.lower()
+    return pd.Series(
+        np.where(s.isin(["1", "1.0", "true", "yes", "confirmed"]), 1.0, 0.0),
+        index=df.index,
+    )
+
+
+def _nhl_ml_is_home(df: pd.DataFrame) -> pd.Series:
+    hc = _first_present_nhl_ml(df, ["is_home", "home_away"])
+    if not hc:
+        return pd.Series(0.5, index=df.index)
+    ih = df[hc].astype(str).str.strip()
+    return pd.Series(
+        np.where(ih.isin(["1", "1.0", "true", "True", "HOME", "home"]), 1.0, 0.0),
+        index=df.index,
+    )
+
+
+def _build_nhl_ml_X(df: pd.DataFrame, model_features: list[str]) -> pd.DataFrame:
+    idx = df.index
+    hr5 = _to_num(
+        _nhl_ml_pick_col(
+            df,
+            ("hit_rate_over_L5", "hit_rate_l5", "hr_L5", "hr_last5", "over_L5"),
+        )
+    )
+    hr10 = _to_num(
+        _nhl_ml_pick_col(
+            df,
+            (
+                "composite_hit_rate",
+                "hit_rate_over_L10",
+                "hit_rate_l10",
+                "hr_L10",
+                "hr_last10",
+            ),
+        )
+    )
+    hr20 = _to_num(
+        _nhl_ml_pick_col(df, ("hit_rate_over_L20", "hit_rate_l20", "hr_L20", "hr_last20"))
+    )
+
+    def _scale_hit_pct(s: pd.Series) -> pd.Series:
+        if s.notna().any() and s.dropna().median() > 1.0:
+            return s / 100.0
+        return s
+
+    hr5, hr10, hr20 = _scale_hit_pct(hr5), _scale_hit_pct(hr10), _scale_hit_pct(hr20)
+    hr5 = hr5.fillna(hr10).fillna(0.5)
+    hr10 = hr10.fillna(0.5)
+    hr20 = hr20.fillna(hr10).fillna(0.5)
+
+    line = _to_num(_nhl_ml_pick_col(df, ("line", "line_score", "Line"))).fillna(0.0)
+    edge = _to_num(df.get("edge", pd.Series(np.nan, index=idx))).fillna(0.0)
+    pick = df.get("pick_type", pd.Series("Standard", index=idx)).astype(str).str.lower()
+    tier_num = pd.Series(
+        np.where(pick.str.contains("gob"), 2, np.where(pick.str.contains("dem"), 0, 1)),
+        index=idx,
+    )
+    dir_num = pd.Series(
+        np.where(
+            df.get("recommended_side", pd.Series("OVER", index=idx))
+            .astype(str)
+            .str.upper()
+            .eq("OVER"),
+            1,
+            0,
+        ),
+        index=idx,
+    )
+    prop_raw = df.get("stat_norm", df.get("prop_type", pd.Series("unknown", index=idx)))
+    prop_norm = prop_raw.astype(str).map(_normalize_nhl_prop_ml)
+    dummies = pd.get_dummies(prop_norm, prefix="prop", dtype=float)
+
+    base = pd.DataFrame(
+        {
+            "edge": edge,
+            "hit_rate_l5": hr5,
+            "hit_rate_l10": hr10,
+            "hit_rate_l20": hr20,
+            "line": line,
+            "direction": _to_num(dir_num).fillna(0.0),
+            "tier": _to_num(tier_num).fillna(1.0),
+            "defense_tier": _nhl_ml_defense_tier_4(df).fillna(1.0),
+            "pp_unit": _nhl_ml_pp_unit(df),
+            "toi_minutes": _to_num(
+                _nhl_ml_pick_col(
+                    df,
+                    ("toi_per_game_api", "toi_minutes", "toi_avg_L10", "Time On Ice"),
+                )
+            ).fillna(0.0),
+            "goalie_confirmed": _nhl_ml_goalie_confirmed(df),
+            "is_home": _nhl_ml_is_home(df),
+        },
+        index=idx,
+    )
+    return pd.concat([base, dummies], axis=1).reindex(columns=model_features, fill_value=0.0)
+
+
+def _apply_ml_blend(df: pd.DataFrame) -> tuple[pd.Series, pd.Series, pd.Series]:
+    root = Path(__file__).resolve().parents[2]
+    model_path = root / "models" / "prop_model_nhl.pkl"
+    feat_path = root / "models" / "prop_model_nhl_features.json"
+    existing_score = _to_num(df.get("prop_score", pd.Series(np.nan, index=df.index))).fillna(0.0)
+    if not (model_path.exists() and feat_path.exists()):
+        print(f"⚠️  NHL ML model missing at {model_path} — skipping ML blend")
+        return pd.Series(np.nan, index=df.index), pd.Series(np.nan, index=df.index), existing_score
+    try:
+        model = joblib.load(model_path)
+        model_features = json.loads(feat_path.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"⚠️  Failed loading NHL ML model: {e} — skipping ML blend")
+        return pd.Series(np.nan, index=df.index), pd.Series(np.nan, index=df.index), existing_score
+
+    try:
+        from ml_blend_weight import load_ml_blend_weight as _load_nhl_blend
+
+        blend_w = float(_load_nhl_blend(root, "nhl"))
+    except Exception:
+        blend_w = float(ML_BLEND_WEIGHT)
+
+    try:
+        X = _build_nhl_ml_X(df, model_features)
+        ml_prob = pd.Series(model.predict_proba(X)[:, 1], index=df.index, dtype=float)
+    except Exception as e:
+        print(f"⚠️  NHL ML inference failed: {e} — skipping ML blend")
+        return pd.Series(np.nan, index=df.index), pd.Series(np.nan, index=df.index), existing_score
+
+    ml_edge = ml_prob - 0.5
+    final_score = (1.0 - blend_w) * existing_score + blend_w * ml_edge
+    print(f"✅ NHL ML blend applied (weight={blend_w:.2f})")
+    return ml_prob, ml_edge, final_score
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", default="step6_nhl_role_context.csv")
@@ -262,12 +664,42 @@ def main():
     scored = []
     for row in _tqdm(rows, desc="  Scoring props", unit="prop"):
         prop_score = score_prop(row)
-        sample = safe_float(row.get("sample_L10", 0))
-        tier = assign_tier(prop_score, sample)
         row["prop_score"] = prop_score
-        row["tier"] = tier
         scored.append(row)
+    scored_df = pd.DataFrame(scored)
+    scored_df["ml_prob"], scored_df["ml_edge"], scored_df["final_score"] = _apply_ml_blend(scored_df)
+    _apply_consistency_grade_scores_nhl(scored_df)
 
+    # Game script risk adjustment
+    from datetime import datetime, timezone
+
+    _sd_gs = str(_repo_root_pc_nhl() / "scripts")
+    if _sd_gs not in sys.path:
+        sys.path.insert(0, _sd_gs)
+    from game_script_risk import get_game_script_multiplier  # noqa: E402
+
+    _fallback_gd = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    _gmults: list[float] = []
+    _gnotes: list[str] = []
+    for _i in range(len(scored_df)):
+        _r = scored_df.iloc[_i]
+        _gs = str(_r.get("game_start", "") or "").strip()
+        _gd = _gs[:10] if len(_gs) >= 10 and _gs[4] == "-" else _fallback_gd
+        _tm = str(_r.get("team", "") or "").strip()
+        _pt = str(_r.get("stat_norm", _r.get("stat_type", "")) or "").strip()
+        _gm, _gn = get_game_script_multiplier(_tm, "NHL", _pt, _gd)
+        _gmults.append(round(float(_gm), 3))
+        _gnotes.append(_gn)
+    scored_df["game_script_mult"] = _gmults
+    scored_df["game_script_note"] = _gnotes
+    scored_df["final_score"] = _to_num(scored_df["final_score"]).astype(float) * pd.Series(_gmults, dtype=float).values
+
+    scored_df["prop_score"] = _to_num(scored_df["final_score"]).fillna(_to_num(scored_df["prop_score"]).fillna(0.0))
+    scored_df["tier"] = scored_df.apply(
+        lambda r: assign_tier(safe_float(r.get("prop_score", 0)), safe_float(r.get("sample_L10", 0))),
+        axis=1,
+    )
+    scored = scored_df.to_dict("records")
     scored.sort(key=lambda x: -safe_float(x.get("prop_score", 0)))
 
     # ── Pass Demons through; only drop neg-edge Goblins to audit sheet ──────────

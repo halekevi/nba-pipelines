@@ -14,7 +14,15 @@ param(
 )
 
 $ErrorActionPreference = "Continue"
-$Root    = Split-Path -Parent $MyInvocation.MyCommand.Definition  # PropOracle root
+# Repo root when this file lives under ...\scripts\; otherwise treat script directory as root.
+$ScriptPath = $MyInvocation.MyCommand.Path
+if (-not $ScriptPath) { $ScriptPath = $PSCommandPath }
+$ScriptDir  = Split-Path -Parent $ScriptPath
+if ((Split-Path -Leaf $ScriptDir) -eq "scripts") {
+    $Root = Split-Path -Parent $ScriptDir
+} else {
+    $Root = $ScriptDir
+}
 $WNBADir = "$Root\WNBA"
 $OutRoot = "$Root\outputs"
 

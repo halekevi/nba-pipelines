@@ -309,15 +309,54 @@ def get_vals_soccer(con: sqlite3.Connection, espn_player_id: str,
     expr = _resolve_prop(prop_norm, "soccer")
     if not expr:
         return []
+    # Normalize ID (CSV float strings like "12345.0")
+    eid = str(espn_player_id or "").strip()
+    if eid.endswith(".0") and eid[:-2].isdigit():
+        eid = eid[:-2]
+
     # Primary: lookup by ESPN player ID
     vals = _query_vals(con, "soccer",
-                       "espn_player_id = ?", expr, (str(espn_player_id),), n)
-    # Fallback: name-based lookup for FBref-sourced rows
+                       "espn_player_id = ?", expr, (eid,), n)
+
+    # Fallback 1: exact name match (DB often uses a different ID space than PrizePicks cache)
+    if not vals and player_name:
+        norm = player_name.strip().lower()
+        vals = _query_vals(con, "soccer",
+                           "lower(player) = ?", expr, (norm,), n)
+
+    # Fallback 2: legacy FBref rows (subset of name match; kept for explicitness)
     if not vals and player_name:
         norm = player_name.strip().lower()
         vals = _query_vals(con, "soccer",
                            "lower(player) = ? AND espn_player_id LIKE 'fbref_%'",
                            expr, (norm,), n)
+
+    # Fallback 3: NFKD accent-normalized name (DB ASCII vs slate accented)
+    if not vals and player_name:
+        norm_ascii = _nfkd_norm(player_name)
+        norm_lower = player_name.strip().lower()
+        if norm_ascii and norm_ascii != norm_lower:
+            try:
+                parts = norm_ascii.split()
+                if len(parts) >= 2:
+                    first, last = parts[0], parts[-1]
+                    sql = f"""
+                        SELECT player, {expr} AS val
+                        FROM soccer
+                        WHERE lower(player) LIKE ?
+                          AND lower(player) LIKE ?
+                          AND {expr} IS NOT NULL
+                        ORDER BY game_date DESC
+                        LIMIT ?
+                    """
+                    rows = con.execute(sql, (f"{first}%", f"%{last}", n * 8)).fetchall()
+                    vals = [
+                        float(r[1]) for r in rows
+                        if r[1] is not None and _nfkd_norm(str(r[0])) == norm_ascii
+                    ][:n]
+            except Exception:
+                vals = []
+
     return vals
 
 
@@ -475,6 +514,8 @@ def attach_stats(
             player_name = str(row.get("player", "")).strip()
             if sport in ("nba", "cbb") and player_name:
                 vals = get_fn(con, raw_id, prop, n, player_name=player_name)
+            elif sport == "soccer" and player_name:
+                vals = get_fn(con, raw_id, prop, n, player_name=player_name)
             else:
                 vals = get_fn(con, raw_id, prop, n)
 
@@ -522,8 +563,9 @@ def attach_stats(
                 slate.at[idx, "min_last5_avg"] = fmt_num(min_avg)
 
         if sport == "soccer" and not is_combo:
-            min_avg  = get_avg_minutes_soccer(con, raw_id, n=5)
-            pass_avg = get_avg_passes_soccer(con, raw_id, n=5)
+            pname = str(row.get("player", "")).strip()
+            min_avg  = get_avg_minutes_soccer(con, raw_id, n=5, player_name=pname)
+            pass_avg = get_avg_passes_soccer(con, raw_id, n=5, player_name=pname)
             if min_avg  is not None: slate.at[idx, "avg_minutes"] = fmt_num(min_avg)
             if pass_avg is not None: slate.at[idx, "avg_passes"]  = fmt_num(pass_avg)
 

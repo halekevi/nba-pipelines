@@ -127,6 +127,8 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "stat_last10_avg",
         # ── Schedule / context ───────────────────────────────────────────────
         "avg_minutes",
+        "game_script_mult",
+        "game_script_note",
     ]
     keep  = [c for c in keep if c in df2.columns]
     clean = df2[keep].copy()
@@ -168,6 +170,8 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "stat_g7": "G7", "stat_g8": "G8", "stat_g9": "G9", "stat_g10": "G10",
         # Context
         "avg_minutes": "Avg Min",
+        "game_script_mult": "Game Script Mult",
+        "game_script_note": "Game Script Note",
     }
     clean = clean.rename(columns=rename)
 

@@ -53,12 +53,16 @@ def safe_float(x, default=0.0) -> float:
         return default
 
 
-def fmt_pct(val) -> str:
-    """Format a 0-1 float as a percentage string, e.g. 0.733 -> '73.3%'"""
-    f = safe_float(val)
-    if f == 0.0 and (val is None or str(val).strip() == ""):
+def hr_output(val):
+    """Write hit rates as raw 0-1 floats (4 decimals) for XLSX/CSV; empty if missing."""
+    if val is None:
         return ""
-    return f"{f * 100:.1f}%"
+    if isinstance(val, str) and val.strip() == "":
+        return ""
+    try:
+        return round(float(val), 4)
+    except (TypeError, ValueError):
+        return ""
 
 
 def fmt_num(val, digits=2) -> str:
@@ -118,6 +122,8 @@ COLUMN_ALIASES = {
     "toi_avg_L10":      ["toi_avg_L10"],
     "toi_per_game_api": ["toi_per_game_api"],
     "game_start":       ["game_start"],
+    "game_script_mult": ["game_script_mult"],
+    "game_script_note": ["game_script_note"],
 }
 
 
@@ -220,12 +226,12 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         "prop_type":        r("prop_type"),
         "line":             fmt_num(r("line"), 1),
         "direction":        direction,
-        # Hit rates (direction-adjusted)
-        "composite_hr":     fmt_pct(composite_hr_adj),
-        "hr_L5":            fmt_pct(hr_L5_adj),
-        "hr_L10":           fmt_pct(hr_L10_adj),
-        "hr_L20":           fmt_pct(hr_L20_adj),
-        "hr_season":        fmt_pct(hr_season_adj),
+        # Hit rates (direction-adjusted) — raw 0-1 floats for step9 / Excel
+        "composite_hr":     hr_output(composite_hr_adj),
+        "hr_L5":            hr_output(hr_L5_adj),
+        "hr_L10":           hr_output(hr_L10_adj),
+        "hr_L20":           hr_output(hr_L20_adj),
+        "hr_season":        hr_output(hr_season_adj),
         "sample_L5":        r("sample_L5"),
         "hit_L5":           hit_L5_display,
         "sample_L10":       r("sample_L10"),
@@ -269,6 +275,12 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         "pick_type":        r("pick_type"),
         # Game info
         "game_start":       r("game_start"),
+        "game_script_mult": (
+            fmt_num(raw.get("game_script_mult"), 3)
+            if raw.get("game_script_mult") not in (None, "")
+            else ""
+        ),
+        "game_script_note": str(raw.get("game_script_note", "") or ""),
     }
 
 
@@ -357,7 +369,13 @@ def main():
     args = ap.parse_args()
 
     wb = openpyxl.load_workbook(args.input, read_only=True, data_only=True)
-    ws = wb.active
+    if "All Props" in wb.sheetnames:
+        ws = wb["All Props"]
+    else:
+        ws = wb.active
+        print(
+            f"WARNING: 'All Props' sheet not found, reading active sheet: {ws.title}"
+        )
     raw_headers = []
     raw_rows = []
     for r_i, row in enumerate(ws.iter_rows(values_only=True), start=1):

@@ -17,13 +17,166 @@ Run:
 from __future__ import annotations
 
 import argparse
+import json
 import sys
+from pathlib import Path
+
+import joblib
 import numpy as np
 import pandas as pd
 
 
 def _to_num(s):
     return pd.to_numeric(s, errors="coerce")
+
+
+# --- Player consistency (data/cache/player_consistency.db) ---
+import sys as _sys_pc_soc
+
+
+def _repo_root_pc_soc() -> Path:
+    here = Path(__file__).resolve()
+    for anc in here.parents:
+        if (anc / "scripts" / "build_player_consistency.py").is_file():
+            return anc
+    return here.parents[2]
+
+
+def _load_bpc_pc_soc():
+    root = _repo_root_pc_soc()
+    sd = str(root / "scripts")
+    if sd not in _sys_pc_soc.path:
+        _sys_pc_soc.path.insert(0, sd)
+    import build_player_consistency as bpc  # noqa: E402
+
+    return bpc
+
+
+_bpc_pc_soc_mod = None
+
+
+def _bpc_pc_soc():
+    global _bpc_pc_soc_mod
+    if _bpc_pc_soc_mod is None:
+        try:
+            _bpc_pc_soc_mod = _load_bpc_pc_soc()
+        except Exception:
+            _bpc_pc_soc_mod = False
+    return _bpc_pc_soc_mod
+
+
+def _normalize_prop_type(raw: str) -> str:
+    m = _bpc_pc_soc()
+    if not m:
+        return str(raw or "").strip()
+    return m._normalize_prop_type(str(raw), "Soccer")
+
+
+def _get_line_bucket(prop_type: str, line: float, sport: str) -> str:
+    m = _bpc_pc_soc()
+    if not m:
+        return "<5"
+    try:
+        ln = float(line)
+    except (TypeError, ValueError):
+        ln = 0.0
+    return m.get_line_bucket(prop_type, ln, sport)
+
+
+def _get_consistency_grade(player: str, sport: str, prop_type: str, direction: str, line: float) -> str:
+    import sqlite3
+
+    repo_root = _repo_root_pc_soc()
+    db_path = repo_root / "data" / "cache" / "player_consistency.db"
+    if not db_path.exists():
+        return "?"
+
+    prop_type = _normalize_prop_type(prop_type)
+    direction = direction.upper().strip()
+    bucket = _get_line_bucket(prop_type, line, sport)
+
+    try:
+        conn = sqlite3.connect(str(db_path))
+        cur = conn.cursor()
+        cur.execute(
+            """
+            SELECT grade, grade_locked, games_since_F
+            FROM player_consistency
+            WHERE player_name = ?
+              AND sport = ?
+              AND prop_type = ?
+              AND direction = ?
+              AND line_bucket = ?
+        """,
+            (player, sport, prop_type, direction, bucket),
+        )
+        row = cur.fetchone()
+        conn.close()
+        if row:
+            grade, locked, games_since_F = row
+            return grade or "?"
+        return "?"
+    except Exception:
+        return "?"
+
+
+def _pc_grade_cache_soc(sport: str) -> dict:
+    import sqlite3
+
+    dbp = _repo_root_pc_soc() / "data" / "cache" / "player_consistency.db"
+    if not dbp.is_file():
+        return {}
+    try:
+        conn = sqlite3.connect(str(dbp))
+        cur = conn.execute(
+            "SELECT player_name, sport, prop_type, direction, line_bucket, grade FROM player_consistency WHERE sport = ?",
+            (sport,),
+        )
+        d = {(a, b, c, d0, e): (g if g else "?") for a, b, c, d0, e, g in cur.fetchall()}
+        conn.close()
+        return d
+    except Exception:
+        return {}
+
+
+def _apply_consistency_grade_scores_soc(out: pd.DataFrame, sport: str) -> None:
+    grade_multiplier = {
+        "S": 1.25,
+        "A": 1.15,
+        "B": 1.05,
+        "C": 1.00,
+        "D": 0.80,
+        "F": 0.00,
+        "?": 0.95,
+    }
+    cache = _pc_grade_cache_soc(sport)
+    pc = next((c for c in ("player_norm", "player", "pp_player", "player_name") if c in out.columns), None)
+    prop_col = "prop_norm" if "prop_norm" in out.columns else ("prop_type" if "prop_type" in out.columns else None)
+    if pc is None or prop_col is None or "bet_direction" not in out.columns or "line" not in out.columns:
+        out["consistency_grade"] = "?"
+        out["consistency_multiplier"] = 0.95
+        out["final_score"] = _to_num(out.get("final_score", pd.Series(np.nan, index=out.index))) * 0.95
+        return
+
+    players = out[pc].astype(str).str.strip()
+    prop_raw = out[prop_col].astype(str)
+    dirs = out["bet_direction"].astype(str).str.strip().str.upper()
+    linev = _to_num(out["line"]).fillna(0.0)
+    grades: list[str] = []
+    for i in range(len(out)):
+        ptype = _normalize_prop_type(prop_raw.iloc[i])
+        try:
+            ln = float(linev.iloc[i])
+        except (TypeError, ValueError):
+            ln = 0.0
+        bkt = _get_line_bucket(ptype, ln, sport)
+        g = cache.get((players.iloc[i], sport, ptype, dirs.iloc[i], bkt), "?")
+        grades.append(g)
+    gser = pd.Series(grades, index=out.index)
+    mult = gser.map(lambda x: grade_multiplier.get(x, 0.95)).astype(float)
+    out["consistency_grade"] = gser
+    out["consistency_multiplier"] = mult
+    out["final_score"] = _to_num(out["final_score"]).astype(float) * mult
 
 
 def _norm_pick_type(x: str) -> str:
@@ -366,6 +519,96 @@ def _def_adjustment(row: pd.Series, n_teams: int = 15) -> float:
     return float((rank - mid) / mid * 0.06)
 
 
+def _repo_root_ml_soc() -> Path:
+    return Path(__file__).resolve().parents[2]
+
+
+_sd_ml_soc = str(_repo_root_ml_soc() / "scripts")
+if _sd_ml_soc not in sys.path:
+    sys.path.insert(0, _sd_ml_soc)
+try:
+    from ml_blend_weight import load_ml_blend_weight  # noqa: E402
+
+    ML_BLEND_WEIGHT = float(load_ml_blend_weight(_repo_root_ml_soc(), "soccer"))
+except Exception:
+    ML_BLEND_WEIGHT = 0.30
+
+
+def _ml_defense_tier_series(out: pd.DataFrame, n_teams: int) -> pd.Series:
+    if "def_tier" in out.columns:
+        s = out["def_tier"].astype(str).str.strip().str.lower()
+        return pd.Series(
+            np.where(
+                s.str.contains("weak"),
+                0,
+                np.where(
+                    s.str.contains("avg|average|mid"),
+                    1,
+                    np.where(s.str.contains("elite|strong|solid|above"), 2, 1),
+                ),
+            ),
+            index=out.index,
+        )
+    if "OVERALL_DEF_RANK" in out.columns:
+        r = _to_num(out["OVERALL_DEF_RANK"]).fillna((n_teams + 1) / 2.0)
+        return pd.Series(np.where(r <= max(1, n_teams * 0.33), 2, np.where(r <= max(2, n_teams * 0.66), 1, 0)), index=out.index)
+    return pd.Series(1, index=out.index)
+
+
+def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, n_teams: int) -> tuple[pd.Series, pd.Series, pd.Series]:
+    root = Path(__file__).resolve().parents[2]
+    model_path = root / "models" / "prop_model_soccer.pkl"
+    feat_path = root / "models" / "prop_model_soccer_features.json"
+    if not (model_path.exists() and feat_path.exists()):
+        print(f"⚠️  Soccer ML model missing at {model_path} — skipping ML blend")
+        return pd.Series(np.nan, index=out.index), pd.Series(np.nan, index=out.index), existing_score.copy()
+
+    try:
+        model = joblib.load(model_path)
+        model_features = json.loads(feat_path.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"⚠️  Failed loading Soccer ML model: {e} — skipping ML blend")
+        return pd.Series(np.nan, index=out.index), pd.Series(np.nan, index=out.index), existing_score.copy()
+
+    try:
+        from ml_blend_weight import load_ml_blend_weight as _load_soc_blend
+
+        blend_w = float(_load_soc_blend(root, "soccer"))
+    except Exception:
+        blend_w = float(ML_BLEND_WEIGHT)
+
+    pick = out.get("pick_type", pd.Series("Standard", index=out.index)).astype(str).str.lower()
+    tier_num = pd.Series(np.where(pick.str.contains("gob"), 2, np.where(pick.str.contains("dem"), 0, 1)), index=out.index)
+    dir_num = pd.Series(
+        np.where(out.get("bet_direction", pd.Series("OVER", index=out.index)).astype(str).str.upper().eq("OVER"), 1, 0),
+        index=out.index,
+    )
+    prop_norm = out.get("prop_norm", out.get("prop_type", pd.Series("unknown", index=out.index))).astype(str).str.lower().str.strip()
+    prop_dummies = pd.get_dummies(prop_norm, prefix="prop", dtype=float)
+    X_base = pd.DataFrame(
+        {
+            "edge": _to_num(out.get("edge", pd.Series(np.nan, index=out.index))).fillna(0.0),
+            "hit_rate_l10": _to_num(out.get("line_hit_rate", pd.Series(np.nan, index=out.index))).fillna(0.5),
+            "defense_tier": _to_num(_ml_defense_tier_series(out, n_teams)).fillna(1.0),
+            "tier": _to_num(tier_num).fillna(1.0),
+            "intel_shr_z": _to_num(out.get("intel_shr_z", pd.Series(np.nan, index=out.index))).fillna(0.0),
+            "direction": _to_num(dir_num).fillna(0.0),
+        },
+        index=out.index,
+    )
+    X = pd.concat([X_base, prop_dummies], axis=1).reindex(columns=model_features, fill_value=0.0)
+    try:
+        ml_prob = pd.Series(model.predict_proba(X)[:, 1], index=out.index, dtype=float)
+    except Exception as e:
+        print(f"⚠️  Soccer ML inference failed: {e} — skipping ML blend")
+        return pd.Series(np.nan, index=out.index), pd.Series(np.nan, index=out.index), existing_score.copy()
+
+    ml_edge = ml_prob - 0.5
+    final_score = (1.0 - blend_w) * existing_score + blend_w * ml_edge
+    print(f"✅ Soccer ML blend applied (weight={blend_w:.2f})")
+    return ml_prob, ml_edge, final_score
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--input",  required=True)
@@ -441,6 +684,33 @@ def main() -> None:
 
     out["edge_dr"]          = out["edge"].apply(_edge_transform)
     out["line_hit_rate"]    = out.apply(_line_hit_rate_from_row, axis=1)
+    # When step4/step5 can't attach enough game logs, keep downstream flows alive by
+    # seeding hit-rate columns from calibrated prop priors (instead of leaving all NaN).
+    missing_hr = pd.to_numeric(out["line_hit_rate"], errors="coerce").isna()
+    if missing_hr.any():
+        prior_fallback = out.apply(
+            lambda r: _prop_hit_rate_prior(
+                r.get("prop_norm", ""),
+                str(r.get("bet_direction", "OVER")).upper(),
+                str(r.get("pick_type", "Standard")),
+                float(r.get("deviation_level", 0) or 0),
+            ),
+            axis=1,
+        )
+        out.loc[missing_hr, "line_hit_rate"] = prior_fallback[missing_hr]
+
+    # Ensure step8/combined have a usable "Hit Rate (5g)/(10g)" surface even when
+    # historical stat_g* windows are sparse.
+    if "line_hit_rate_over_ou_5" not in out.columns:
+        out["line_hit_rate_over_ou_5"] = np.nan
+    if "line_hit_rate_over_ou_10" not in out.columns:
+        out["line_hit_rate_over_ou_10"] = np.nan
+    out["line_hit_rate_over_ou_5"] = pd.to_numeric(
+        out["line_hit_rate_over_ou_5"], errors="coerce"
+    ).fillna(pd.to_numeric(out["line_hit_rate"], errors="coerce"))
+    out["line_hit_rate_over_ou_10"] = pd.to_numeric(
+        out["line_hit_rate_over_ou_10"], errors="coerce"
+    ).fillna(pd.to_numeric(out["line_hit_rate"], errors="coerce"))
     out["minutes_certainty"] = out.apply(_minutes_certainty, axis=1)
     out["prop_weight"]      = out["prop_norm"].astype(str).apply(_prop_weight)
     out["reliability_mult"] = out["pick_type"].astype(str).apply(_reliability_mult)
@@ -562,6 +832,42 @@ def main() -> None:
     score = score.where(elig_mask, np.nan)
 
     out["rank_score"] = score
+    out["ml_prob"], out["ml_edge"], out["final_score"] = _apply_ml_blend(out, out["rank_score"], args.n_teams)
+    _apply_consistency_grade_scores_soc(out, "Soccer")
+
+    # Game script risk adjustment
+    from datetime import datetime, timezone
+
+    _repo_gs = _repo_root_pc_soc()
+    _sd_gs = str(_repo_gs / "scripts")
+    if _sd_gs not in sys.path:
+        sys.path.insert(0, _sd_gs)
+    from game_script_risk import get_game_script_multiplier  # noqa: E402
+
+    _fallback_gd = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    if "start_time" in out.columns:
+        _st = out["start_time"].astype(str).str.strip()
+        _dp = _st.str[:10]
+        _gd_series = _dp.where(_dp.str.match(r"^\d{4}-\d{2}-\d{2}$"), _fallback_gd)
+    else:
+        _gd_series = pd.Series([_fallback_gd] * len(out), index=out.index)
+    _team_col = next((c for c in ("team", "Team") if c in out.columns), "team")
+    _prop_gs = "prop_norm" if "prop_norm" in out.columns else "prop_type"
+    _gmults: list[float] = []
+    _gnotes: list[str] = []
+    for _i in range(len(out)):
+        _r = out.iloc[_i]
+        _gd = str(_gd_series.iloc[_i])
+        _tm = str(_r.get(_team_col, "") or "").strip()
+        _pt = str(_r.get(_prop_gs, "") or "").strip()
+        _gm, _gn = get_game_script_multiplier(_tm, "Soccer", _pt, _gd)
+        _gmults.append(round(float(_gm), 3))
+        _gnotes.append(_gn)
+    out["game_script_mult"] = _gmults
+    out["game_script_note"] = _gnotes
+    out["final_score"] = _to_num(out["final_score"]).astype(float) * pd.Series(_gmults, dtype=float).values
+
+    out["rank_score"] = out["final_score"]
     out["tier"]       = out.apply(
         lambda r: _tier_from_score_by_picktype(r["rank_score"], str(r.get("pick_type", "Standard"))),
         axis=1

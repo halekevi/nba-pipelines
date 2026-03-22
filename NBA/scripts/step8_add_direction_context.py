@@ -122,6 +122,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         'stat_last10_avg',
         'h2h_avg', 'h2h_over_rate', 'h2h_games_vs_opp', 'h2h_last_stat',
         'b2b_flag', 'days_rest', 'game_total', 'spread',
+        'game_script_mult', 'game_script_note',
     ]
     # only keep cols that exist
     keep = [c for c in keep if c in df2.columns]
@@ -178,6 +179,8 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         'days_rest': 'Days Rest',
         'game_total':'Game Total',
         'spread':    'Spread',
+        'game_script_mult': 'Game Script Mult',
+        'game_script_note': 'Game Script Note',
     }
     clean = clean.rename(columns=rename)
 
@@ -211,13 +214,27 @@ def main() -> None:
     if "start_time" in out.columns:
         target_date = (args.date or datetime.now().strftime("%Y-%m-%d")).strip()
         start_dt = pd.to_datetime(out["start_time"], errors="coerce")
-        keep_mask = start_dt.dt.strftime("%Y-%m-%d").eq(target_date)
+        start_dates = start_dt.dt.strftime("%Y-%m-%d")
+        keep_mask = start_dates.eq(target_date)
         kept = int(keep_mask.sum())
         total = len(out)
+        if kept == 0:
+            # Fallback to latest available slate date so pipeline does not emit empty NBA outputs
+            available_dates = start_dates[start_dates.notna() & (start_dates != "NaT")]
+            if len(available_dates):
+                fallback_date = available_dates.max()
+                keep_mask = start_dates.eq(fallback_date)
+                kept = int(keep_mask.sum())
+                print(
+                    f"[DateFilter] No rows for {target_date}; "
+                    f"falling back to latest available date {fallback_date} ({kept} rows)"
+                )
+            else:
+                print(f"[DateFilter] No parseable start_time values; keeping all {total} rows")
+                keep_mask = pd.Series(True, index=out.index)
+        else:
+            print(f"[DateFilter] Kept {kept}/{total} rows for {target_date} (dropped {total - kept} rows)")
         out = out.loc[keep_mask].copy()
-        print(f"[DateFilter] Kept {kept}/{total} rows for {target_date} (dropped {total - kept} rows)")
-        if out.empty:
-            print("⚠️ Date filter returned no rows; writing empty outputs.")
 
     if "edge" not in out.columns:
         proj = pd.to_numeric(out.get("projection", ""), errors="coerce")

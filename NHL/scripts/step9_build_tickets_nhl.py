@@ -41,7 +41,10 @@ def read_xlsx(path: str) -> list[dict]:
         install("openpyxl")
         import openpyxl
     wb = openpyxl.load_workbook(path)
-    ws = wb.active
+    if "All Props" in wb.sheetnames:
+        ws = wb["All Props"]
+    else:
+        ws = wb.active
     headers = [str(c.value or "") for c in ws[1]]
     rows = []
     for row in ws.iter_rows(min_row=2, values_only=True):
@@ -51,14 +54,42 @@ def read_xlsx(path: str) -> list[dict]:
 
 
 def safe_float(val, default=0.0) -> float:
+    if val is None:
+        return default
+    s = str(val).strip().rstrip("%")
+    if s == "":
+        return default
     try:
-        return float(str(val).replace("%", "") if val else default)
-    except Exception:
+        return float(s)
+    except ValueError:
+        return default
+
+
+def safe_hit_rate(val, default=0.0) -> float:
+    """Parse 0-1 hit rate; supports '73.3%', 73.3 (legacy scale), or 0.733."""
+    if val is None:
+        return default
+    s = str(val).strip()
+    had_pct = s.endswith("%")
+    s = s.rstrip("%").strip()
+    if s == "":
+        return default
+    try:
+        f = float(s)
+        if had_pct or f > 1.0:
+            f = f / 100.0
+        return f
+    except ValueError:
         return default
 
 
 def is_valid_leg(row: dict) -> bool:
-    composite = safe_float(row.get("Composite Hit Rate", row.get("composite_hit_rate", 0)))
+    composite = safe_hit_rate(
+        row.get(
+            "Composite Hit Rate",
+            row.get("composite_hit_rate", row.get("composite_hr", 0)),
+        )
+    )
     side = str(row.get("Recommended Side", row.get("recommended_side", "OVER"))).upper().strip()
     # composite_hit_rate is always the OVER rate — flip for UNDER bets
     direction_hr = composite if side == "OVER" else 1.0 - composite
@@ -80,7 +111,12 @@ def ticket_diversity(legs: list[dict]) -> bool:
 
 
 def leg_score(row: dict) -> float:
-    composite = safe_float(row.get("Composite Hit Rate", row.get("composite_hit_rate", 0)))
+    composite = safe_hit_rate(
+        row.get(
+            "Composite Hit Rate",
+            row.get("composite_hit_rate", row.get("composite_hr", 0)),
+        )
+    )
     side = str(row.get("Recommended Side", row.get("recommended_side", "OVER"))).upper().strip()
     direction_hr = composite if side == "OVER" else 1.0 - composite
     prop_score = safe_float(row.get("Prop Score", row.get("prop_score", 0)))
@@ -93,7 +129,12 @@ def format_leg(row: dict) -> str:
     line = row.get("Line Score", row.get("line_score", ""))
     side = row.get("Recommended Side", row.get("recommended_side", "OVER"))
     opp = row.get("Opponent", row.get("opponent", ""))
-    composite = safe_float(row.get("Composite Hit Rate", row.get("composite_hit_rate", 0)))
+    composite = safe_hit_rate(
+        row.get(
+            "Composite Hit Rate",
+            row.get("composite_hit_rate", row.get("composite_hr", 0)),
+        )
+    )
     tier = row.get("Tier", row.get("tier", ""))
     return f"[{tier}] {name} {side} {line} {stat} vs {opp} (HR:{composite:.2f})"
 
@@ -102,7 +143,12 @@ def ticket_confidence(legs: list[dict]) -> float:
     """Combined geometric-mean-style confidence for a ticket."""
     prod = 1.0
     for leg in legs:
-        c = safe_float(leg.get("Composite Hit Rate", leg.get("composite_hit_rate", 0)))
+        c = safe_hit_rate(
+            leg.get(
+                "Composite Hit Rate",
+                leg.get("composite_hit_rate", leg.get("composite_hr", 0)),
+            )
+        )
         side = str(leg.get("Recommended Side", leg.get("recommended_side", "OVER"))).upper().strip()
         direction_hr = c if side == "OVER" else 1.0 - c
         prod *= max(direction_hr, 0.001)  # guard against zero

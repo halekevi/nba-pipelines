@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+r"""
 combined_ticket_grader_UPDATED.py
 ================================
 Full analytics grader for the output of combined_slate_tickets.py, with **dynamic payout modifiers**
@@ -19,9 +19,14 @@ Key upgrade vs v1:
 
 Outputs:
 - SUMMARY (key metrics)
+- ANALYSIS_INSIGHTS (readable takeaways from the slate)
 - TICKET_RESULTS (one row per ticket per mode)
 - LEG_RESULTS (one row per leg, with HIT/MISS/PUSH/NO_ACTUAL)
+- LEG_BY_* breakdowns (prop, sport, direction, pick type, sheet)
+- TICKET_DEEP_DIVE (per-ticket leg mix + outcomes)
 - Analytics tabs per mode (ROI by sheet/legs/sports/pick_types)
+- ML_* (optional): RandomForest leg hit model, feature importance, filter simulation
+  (exploratory — trained on the same graded slate; use for patterns, not live edge claims)
 
 Usage (PowerShell):
   py -3.14 .\\combined_ticket_grader_UPDATED.py `
@@ -59,10 +64,12 @@ import json
 import re
 import unicodedata
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+from openpyxl.utils import get_column_letter
 
 
 # -----------------------------
@@ -94,6 +101,15 @@ def strip_norm(s: str) -> str:
     s = s.strip().lower()
     s = re.sub(r"\s+", " ", s)
     return s
+
+
+def pick_category_from_cell(pick_type: str) -> str:
+    s = strip_norm(pick_type or "")
+    if "goblin" in s:
+        return "Goblin"
+    if "demon" in s:
+        return "Demon"
+    return "Standard"
 
 
 def nhl_player_aliases(player: str) -> List[str]:
@@ -508,6 +524,376 @@ def build_summary_kv(overall: dict) -> pd.DataFrame:
     return pd.DataFrame([{"metric": k, "value": v} for k, v in overall.items()])
 
 
+# --- Extra breakdown tables -------------------------------------------------
+
+def _leg_segment_hit_rate(legs_df: pd.DataFrame, group_cols: List[str]) -> pd.DataFrame:
+    b = legs_df[legs_df["leg_result"].isin(["HIT", "MISS"])].copy()
+    if b.empty:
+        return pd.DataFrame(columns=group_cols + ["graded_legs", "hits", "leg_hit_rate"])
+    b["is_hit"] = (b["leg_result"] == "HIT").astype(int)
+    g = (
+        b.groupby(group_cols, dropna=False, as_index=False)
+        .agg(graded_legs=("is_hit", "count"), hits=("is_hit", "sum"), leg_hit_rate=("is_hit", "mean"))
+    )
+    g["leg_hit_rate"] = g["leg_hit_rate"].round(4)
+    g["misses"] = g["graded_legs"] - g["hits"]
+    return g.sort_values("graded_legs", ascending=False).reset_index(drop=True)
+
+
+def build_leg_breakdown_tables(legs_df: pd.DataFrame) -> Dict[str, pd.DataFrame]:
+    df = legs_df.copy()
+    df["pick_cat"] = df["pick_type"].astype(str).map(pick_category_from_cell)
+    out: Dict[str, pd.DataFrame] = {
+        "LEG_BY_PROP_SPORT": _leg_segment_hit_rate(df, ["sport", "prop_norm"]),
+        "LEG_BY_PROP": _leg_segment_hit_rate(df, ["prop_norm"]),
+        "LEG_BY_SPORT": _leg_segment_hit_rate(df, ["sport"]),
+        "LEG_BY_DIR": _leg_segment_hit_rate(df, ["dir"]),
+        "LEG_BY_PICK_CAT": _leg_segment_hit_rate(df, ["pick_cat"]),
+        "LEG_BY_SHEET": _leg_segment_hit_rate(df, ["sheet"]),
+        "LEG_BY_SPORT_PICK": _leg_segment_hit_rate(df, ["sport", "pick_cat"]),
+    }
+    noa = legs_df["leg_result"].eq("NO_ACTUAL").groupby(legs_df["sport"]).sum().reset_index(name="no_actual_legs")
+    noa = noa.sort_values("no_actual_legs", ascending=False)
+    out["LEG_NO_ACTUAL_BY_SPORT"] = noa
+    return out
+
+
+def build_ticket_deep_dive(ticket_results: pd.DataFrame, legs_df: pd.DataFrame) -> pd.DataFrame:
+    """One row per ticket_id + mode with compact leg outcome string and mix stats."""
+    leg_order = legs_df.sort_values(["ticket_id", "leg_no"])
+    pieces = []
+    for tid, g in leg_order.groupby("ticket_id"):
+        props = "|".join(g["prop_norm"].astype(str).head(6).tolist())
+        if len(g) > 6:
+            props += "|..."
+        res = "".join(
+            {"HIT": "W", "MISS": "L", "PUSH": "P", "NO_ACTUAL": "?"}.get(x, "?")
+            for x in g["leg_result"].tolist()
+        )
+        pieces.append(
+            {
+                "ticket_id": tid,
+                "sheet": g["sheet"].iloc[0],
+                "ticket_no": int(g["ticket_no"].iloc[0]) if pd.notna(g["ticket_no"].iloc[0]) else "",
+                "n_legs": len(g),
+                "n_hit": int((g["leg_result"] == "HIT").sum()),
+                "n_miss": int((g["leg_result"] == "MISS").sum()),
+                "n_push": int((g["leg_result"] == "PUSH").sum()),
+                "n_no_actual": int((g["leg_result"] == "NO_ACTUAL").sum()),
+                "sports_mix": ",".join(sorted({str(s) for s in g["sport"].tolist() if str(s).strip()})),
+                "pick_mix": ",".join(sorted({pick_category_from_cell(x) for x in g["pick_type"].tolist()})),
+                "result_chain": res,
+                "props_sample": props,
+            }
+        )
+    deep = pd.DataFrame(pieces)
+    if deep.empty:
+        return deep
+    tr = ticket_results.copy()
+    deep_m = deep.drop(columns=[c for c in ("sheet", "ticket_no") if c in deep.columns], errors="ignore")
+    return tr.merge(deep_m, on="ticket_id", how="left")
+
+
+def build_analysis_insights(
+    overall: dict,
+    ticket_results: pd.DataFrame,
+    leg_breakdowns: Dict[str, pd.DataFrame],
+) -> pd.DataFrame:
+    rows: List[Dict[str, str]] = []
+    for mode in ("power", "flex"):
+        roi_k = f"{mode}_roi"
+        if roi_k not in overall:
+            continue
+        rows.append(
+            {
+                "topic": f"{mode.upper()} summary",
+                "detail": (
+                    f"ROI {overall.get(roi_k, '')} | profit ${overall.get(mode + '_profit', '')} "
+                    f"on ${overall.get(mode + '_staked', '')} staked | "
+                    f"win/cash rate {overall.get(mode + '_win_rate', '')} / {overall.get(mode + '_cash_rate', '')}"
+                ),
+            }
+        )
+
+    sub = ticket_results[ticket_results["payout_status"] != "NO_ACTUAL"].copy()
+    if not sub.empty:
+        best = (
+            sub.groupby(["mode", "sheet"], as_index=False)["profit"]
+            .sum()
+            .sort_values(["mode", "profit"], ascending=[True, False])
+        )
+        for mode in best["mode"].unique():
+            top = best[best["mode"] == mode].head(3)
+            for _, r in top.iterrows():
+                rows.append(
+                    {
+                        "topic": f"Top ticket sheets ({mode})",
+                        "detail": f"{r['sheet']}: total profit ${float(r['profit']):.2f}",
+                    }
+                )
+
+    by_prop = leg_breakdowns.get("LEG_BY_PROP_SPORT", pd.DataFrame())
+    if by_prop is not None and not by_prop.empty and "graded_legs" in by_prop.columns:
+        enough = by_prop[by_prop["graded_legs"] >= 8].copy()
+        if not enough.empty:
+            worst = enough.nsmallest(3, "leg_hit_rate")
+            best = enough.nlargest(3, "leg_hit_rate")
+            for _, r in worst.iterrows():
+                rows.append(
+                    {
+                        "topic": "Leg segments to review (low hit%, n>=8)",
+                        "detail": f"{r['sport']} {r['prop_norm']}: hit rate {float(r['leg_hit_rate']):.1%} "
+                        f"({int(r['hits'])}/{int(r['graded_legs'])})",
+                    }
+                )
+            for _, r in best.iterrows():
+                rows.append(
+                    {
+                        "topic": "Leg segments that hit (n>=8)",
+                        "detail": f"{r['sport']} {r['prop_norm']}: hit rate {float(r['leg_hit_rate']):.1%}",
+                    }
+                )
+
+    rows.append(
+        {
+            "topic": "How to use ML tabs",
+            "detail": (
+                "ML_* uses RandomForest on graded legs (HIT vs MISS) for sport/prop/direction/pick mix. "
+                "ML_FILTER_SIM_* compares ROI if you only kept tickets with above-median model leg strength — "
+                "same-day only; combine with historical exports before changing ticket rules."
+            ),
+        }
+    )
+    return pd.DataFrame(rows)
+
+
+# --- Excel styling ----------------------------------------------------------
+
+_HDR_FILL = PatternFill(start_color="1C2833", end_color="1C2833", fill_type="solid")
+_HDR_FONT = Font(color="FFFFFF", bold=True, size=10)
+_THIN = Side(style="thin", color="CCCCCC")
+_CELL_BORDER = Border(left=_THIN, right=_THIN, top=_THIN, bottom=_THIN)
+_HIT_FILL = PatternFill(start_color="27AE60", end_color="27AE60", fill_type="solid")
+_MISS_FILL = PatternFill(start_color="C0392B", end_color="C0392B", fill_type="solid")
+_PUSH_FILL = PatternFill(start_color="F39C12", end_color="F39C12", fill_type="solid")
+_NA_FILL = PatternFill(start_color="BDC3C7", end_color="BDC3C7", fill_type="solid")
+_PROFIT_POS = PatternFill(start_color="D5F5E3", end_color="D5F5E3", fill_type="solid")
+_PROFIT_NEG = PatternFill(start_color="FADBD8", end_color="FADBD8", fill_type="solid")
+
+
+def _header_cell(ws, row: int, col: int):
+    cell = ws.cell(row=row, column=col)
+    cell.fill = _HDR_FILL
+    cell.font = _HDR_FONT
+    cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+    cell.border = _CELL_BORDER
+
+
+def _col_index_by_header(ws, name: str, header_row: int = 1) -> Optional[int]:
+    for c in range(1, ws.max_column + 1):
+        v = ws.cell(row=header_row, column=c).value
+        if v is not None and str(v).strip() == str(name).strip():
+            return c
+    return None
+
+
+def apply_graded_workbook_styles(wb) -> None:
+    """Bold headers, freeze panes, borders, column widths, conditional leg/profit colors."""
+    for ws in wb.worksheets:
+        if ws.max_row < 1 or ws.max_column < 1:
+            continue
+        ws.freeze_panes = "A2"
+        ws.row_dimensions[1].height = 28
+
+        for c in range(1, ws.max_column + 1):
+            _header_cell(ws, 1, c)
+            letter = get_column_letter(c)
+            maxlen = len(str(ws.cell(1, c).value or ""))
+            for r in range(2, min(ws.max_row + 1, 500)):
+                maxlen = max(maxlen, len(str(ws.cell(r, c).value or "")))
+            ws.column_dimensions[letter].width = float(min(max(maxlen + 2, 9), 52))
+
+        for r in range(2, ws.max_row + 1):
+            for c in range(1, ws.max_column + 1):
+                ws.cell(r, c).border = _CELL_BORDER
+                ws.cell(r, c).alignment = Alignment(vertical="center", wrap_text=False)
+
+        title = ws.title
+        if title == "TICKET_RESULTS":
+            pc = _col_index_by_header(ws, "profit")
+            if pc:
+                for r in range(2, ws.max_row + 1):
+                    cell = ws.cell(r, pc)
+                    try:
+                        v = float(cell.value)
+                    except (TypeError, ValueError):
+                        continue
+                    cell.number_format = "#,##0.00"
+                    if v > 0:
+                        cell.fill = _PROFIT_POS
+                    elif v < 0:
+                        cell.fill = _PROFIT_NEG
+        elif title == "LEG_RESULTS":
+            lc = _col_index_by_header(ws, "leg_result")
+            if lc:
+                for r in range(2, ws.max_row + 1):
+                    cell = ws.cell(r, lc)
+                    lr = str(cell.value or "").upper().strip()
+                    if lr == "HIT":
+                        cell.fill = _HIT_FILL
+                        cell.font = Font(color="FFFFFF", bold=True, size=10)
+                    elif lr == "MISS":
+                        cell.fill = _MISS_FILL
+                        cell.font = Font(color="FFFFFF", bold=True, size=10)
+                    elif lr == "PUSH":
+                        cell.fill = _PUSH_FILL
+                        cell.font = Font(color="000000", bold=True, size=10)
+                    elif lr == "NO_ACTUAL":
+                        cell.fill = _NA_FILL
+        elif title == "ANALYSIS_INSIGHTS":
+            for r in range(2, ws.max_row + 1):
+                ws.cell(r, 1).alignment = Alignment(wrap_text=True, vertical="top")
+                ws.cell(r, 2).alignment = Alignment(wrap_text=True, vertical="top")
+            ws.column_dimensions["A"].width = 28
+            ws.column_dimensions["B"].width = 90
+
+
+# --- ML (exploratory) -------------------------------------------------------
+
+def run_ml_profit_layers(
+    legs_df: pd.DataFrame,
+    ticket_results: pd.DataFrame,
+    min_graded_legs: int = 40,
+    random_state: int = 42,
+) -> Dict[str, Any]:
+    """
+    Train a leg-level hit classifier and simulate ticket filtering by mean predicted leg hit prob.
+    In-sample on this workbook only — for discovery, not production edge.
+    """
+    out: Dict[str, Any] = {"sheets": {}, "meta": []}
+    try:
+        from sklearn.ensemble import RandomForestClassifier
+        from sklearn.model_selection import cross_val_score
+    except ImportError:
+        out["sheets"]["ML_SKIPPED"] = pd.DataFrame(
+            [{"reason": "scikit-learn not installed (pip install scikit-learn)"}]
+        )
+        return out
+
+    train = legs_df[legs_df["leg_result"].isin(["HIT", "MISS"])].copy()
+    if len(train) < min_graded_legs:
+        out["sheets"]["ML_SKIPPED"] = pd.DataFrame(
+            [{"reason": f"Only {len(train)} graded legs (need {min_graded_legs}+ for stable ML)"}]
+        )
+        return out
+
+    train["pick_cat"] = train["pick_type"].astype(str).map(pick_category_from_cell)
+    top_props = train["prop_norm"].value_counts().head(14).index.tolist()
+    train["prop_bucket"] = train["prop_norm"].where(train["prop_norm"].isin(top_props), "other")
+
+    feat_cols = ["sport", "prop_bucket", "dir", "pick_cat"]
+    X = pd.get_dummies(train[feat_cols].fillna(""), drop_first=False)
+    y = (train["leg_result"] == "HIT").astype(int).values
+
+    n_splits = min(5, max(2, len(train) // 25))
+    rf = RandomForestClassifier(
+        n_estimators=120,
+        max_depth=10,
+        min_samples_leaf=4,
+        random_state=random_state,
+        class_weight="balanced_subsample",
+        n_jobs=1,
+    )
+    rf.fit(X.values, y)
+    cv_acc = cross_val_score(rf, X.values, y, cv=n_splits, scoring="accuracy")
+    try:
+        cv_auc = cross_val_score(rf, X.values, y, cv=n_splits, scoring="roc_auc")
+    except ValueError:
+        cv_auc = np.array([np.nan])
+
+    imp = pd.DataFrame({"feature": X.columns, "importance": rf.feature_importances_})
+    imp = imp.sort_values("importance", ascending=False).reset_index(drop=True)
+    imp["importance_pct"] = (imp["importance"] / imp["importance"].sum() * 100).round(2)
+    out["sheets"]["ML_FEATURE_IMPORTANCE"] = imp
+
+    out["sheets"]["ML_MODEL_META"] = pd.DataFrame(
+        [
+            {"metric": "cv_accuracy_mean", "value": round(float(np.mean(cv_acc)), 4)},
+            {"metric": "cv_accuracy_std", "value": round(float(np.std(cv_acc)), 4)},
+            {"metric": "cv_roc_auc_mean", "value": round(float(np.mean(cv_auc)), 4)},
+            {"metric": "graded_legs", "value": len(train)},
+            {"metric": "n_splits", "value": n_splits},
+            {
+                "metric": "note",
+                "value": "Trained on this slate only; use rolling history for real policy changes.",
+            },
+        ]
+    )
+
+    # Predict per leg, aggregate to ticket
+    full = legs_df.copy()
+    full["pick_cat"] = full["pick_type"].astype(str).map(pick_category_from_cell)
+    full["prop_bucket"] = full["prop_norm"].where(full["prop_norm"].isin(top_props), "other")
+    X_full = pd.get_dummies(full[feat_cols].fillna(""), drop_first=False)
+    X_full = X_full.reindex(columns=X.columns, fill_value=0)
+    full["ml_p_hit"] = rf.predict_proba(X_full.values)[:, 1]
+
+    ticket_strength = full.groupby("ticket_id", as_index=False).agg(
+        ml_avg_leg_hit_prob=("ml_p_hit", "mean"),
+        ml_min_leg_hit_prob=("ml_p_hit", "min"),
+    )
+    tr_enriched = ticket_results.merge(ticket_strength, on="ticket_id", how="left")
+
+    sim_rows = []
+    for mode in tr_enriched["mode"].dropna().unique():
+        m = tr_enriched[tr_enriched["mode"] == mode].copy()
+        el = m[m["payout_status"] != "NO_ACTUAL"]
+        if el.empty or el["ml_avg_leg_hit_prob"].isna().all():
+            continue
+        med = el["ml_avg_leg_hit_prob"].median()
+        base_profit = float(el["profit"].sum())
+        base_stake = float(el["stake"].sum())
+        filt = el[el["ml_avg_leg_hit_prob"] >= med]
+        sim_rows.append(
+            {
+                "mode": mode,
+                "filter": f"ml_avg_leg_hit_prob >= median ({med:.3f})",
+                "tickets_all": int(len(el)),
+                "tickets_kept": int(len(filt)),
+                "staked_all": base_stake,
+                "staked_filtered": float(filt["stake"].sum()),
+                "profit_all": base_profit,
+                "profit_filtered": float(filt["profit"].sum()),
+                "roi_all": round(base_profit / base_stake, 4) if base_stake > 0 else 0.0,
+                "roi_filtered": round(float(filt["profit"].sum()) / float(filt["stake"].sum()), 4)
+                if float(filt["stake"].sum()) > 0
+                else 0.0,
+            }
+        )
+    out["sheets"]["ML_FILTER_SIM"] = pd.DataFrame(sim_rows)
+
+    # Actionable-ish: which one-hot features associate with higher hit rate in raw data
+    lift_rows = []
+    base_rate = float(y.mean())
+    for col in X.columns:
+        mask = X[col].values.astype(bool)
+        if mask.sum() < 8:
+            continue
+        hr = float(y[mask].mean())
+        lift_rows.append(
+            {
+                "segment": col,
+                "n_legs": int(mask.sum()),
+                "hit_rate": round(hr, 4),
+                "lift_vs_baseline": round((hr - base_rate) / max(base_rate, 0.01), 4),
+            }
+        )
+    lift_df = pd.DataFrame(lift_rows).sort_values("lift_vs_baseline", ascending=False)
+    out["sheets"]["ML_SEGMENT_LIFT"] = lift_df.head(40).reset_index(drop=True)
+
+    return out
+
+
 # -----------------------------
 # Main
 # -----------------------------
@@ -522,6 +908,8 @@ def main():
     ap.add_argument("--mode", choices=["power", "flex", "both"], default="both")
     ap.add_argument("--stake", type=float, default=20.0)
     ap.add_argument("--payouts_json", default="", help="Optional JSON override for base payouts + modifiers")
+    ap.add_argument("--no-ml", action="store_true", help="Skip ML analysis sheets (faster)")
+    ap.add_argument("--ml-min-legs", type=int, default=40, help="Min graded legs to run ML (default 40)")
     args = ap.parse_args()
 
     global POWER_BASE, FLEX_BASE, GOBLIN_POWER, GOBLIN_FLEX, DEMON_POWER, DEMON_FLEX
@@ -675,12 +1063,35 @@ def main():
 
     summary_kv = build_summary_kv(overall)
 
+    leg_breakdowns = build_leg_breakdown_tables(legs_df)
+    insights_df = build_analysis_insights(overall, ticket_results, leg_breakdowns)
+    deep_df = build_ticket_deep_dive(ticket_results, legs_df)
+
+    ml_pack: Dict[str, Any] = {}
+    if not args.no_ml:
+        ml_pack = run_ml_profit_layers(
+            legs_df,
+            ticket_results,
+            min_graded_legs=int(args.ml_min_legs),
+        )
+
     with pd.ExcelWriter(out_xlsx, engine="openpyxl") as xw:
         summary_kv.to_excel(xw, index=False, sheet_name="SUMMARY")
+        insights_df.to_excel(xw, index=False, sheet_name="ANALYSIS_INSIGHTS")
         ticket_results.to_excel(xw, index=False, sheet_name="TICKET_RESULTS")
         legs_df.to_excel(xw, index=False, sheet_name="LEG_RESULTS")
+        if deep_df is not None and not deep_df.empty:
+            deep_df.to_excel(xw, index=False, sheet_name="TICKET_DEEP_DIVE")
+        for name, tab in leg_breakdowns.items():
+            if tab is not None and not tab.empty:
+                tab.to_excel(xw, index=False, sheet_name=str(name)[:31])
+        if not args.no_ml:
+            for name, tab in ml_pack.get("sheets", {}).items():
+                if tab is not None and not tab.empty:
+                    tab.to_excel(xw, index=False, sheet_name=str(name)[:31])
         for name, tab in tables.items():
-            tab.to_excel(xw, index=False, sheet_name=name[:31])
+            tab.to_excel(xw, index=False, sheet_name=str(name)[:31])
+        apply_graded_workbook_styles(xw.book)
 
     # Keep this ASCII-only so the script runs in non-UTF8 consoles.
     print(f"Wrote graded workbook -> {out_xlsx}")

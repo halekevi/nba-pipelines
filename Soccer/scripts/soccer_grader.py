@@ -47,16 +47,21 @@ except Exception:
 # ── DB path resolution ────────────────────────────────────────────────────────
 _here = Path(__file__).resolve().parent
 DB_PATH = None
-for _ in range(6):
-    candidate = _here.parent / "NBA" / "data" / "cache" / "proporacle_ref.db"
-    if candidate.exists():
-        DB_PATH = candidate
+_c = _here
+for _ in range(12):
+    for rel in (
+        ("data", "cache", "proporacle_ref.db"),
+        ("NBA", "data", "cache", "proporacle_ref.db"),
+    ):
+        cand = _c.joinpath(*rel)
+        if cand.exists():
+            DB_PATH = cand
+            break
+    if DB_PATH:
         break
-    candidate2 = _here / "NBA" / "data" / "cache" / "proporacle_ref.db"
-    if candidate2.exists():
-        DB_PATH = candidate2
+    if _c.parent == _c:
         break
-    _here = _here.parent
+    _c = _c.parent
 
 # ── Prop → DB column ──────────────────────────────────────────────────────────
 PROP_TO_DB: dict[str, str] = {
@@ -68,9 +73,6 @@ PROP_TO_DB: dict[str, str] = {
     "goal+assist":                          "g + a",
     "goalie saves":                         "sv",
     "goalkeeper saves":                     "sv",
-    "goals allowed":                        "sv",
-    "goals allowed (combo)":                "sv",
-    "goals allowed in first 30 minutes":    "sv",
     "fouls":                                "fc",
     # Combo
     "shots (combo)":                        "sh",
@@ -82,6 +84,8 @@ UNSUPPORTED = {
     "tackles", "passes attempted", "passes attempted (combo)",
     "key passes", "shots assisted", "attempted dribbles",
     "clearances", "crosses", "yellow cards",
+    # proporacle_ref soccer table has no goals-conceded column; do not grade vs saves (sv).
+    "goals allowed", "goals allowed (combo)", "goals allowed in first 30 minutes",
 }
 
 # ── Colours ───────────────────────────────────────────────────────────────────

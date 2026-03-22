@@ -79,7 +79,7 @@ foreach ($f in $all) {
     $canonical = Join-Path $Root "combined_slate_tickets_$date.xlsx"
 
     Write-Host ""
-    Write-Host "[$idx/$n] $date  ←  $($f.FullName)" -ForegroundColor Cyan
+    Write-Host "[$idx/$n] $date  <-  $($f.FullName)" -ForegroundColor Cyan
 
     try {
         Copy-Item -LiteralPath $f.FullName -Destination $canonical -Force

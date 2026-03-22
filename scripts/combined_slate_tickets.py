@@ -9,7 +9,7 @@ Outputs:
   - tickets_latest.json / tickets_latest.html (web-friendly, static)
   - docs/tickets_latest.json / docs/tickets_latest.html (for GitHub Pages /docs)
 
-Sheets: SUMMARY, Full Slate, NBA Slate, CBB Slate,
+Sheets: SUMMARY, Full Slate (reordered + STRONG/LEAN/RISK + pace beside Def Tier), NBA Slate, CBB Slate,
         NBA 3/4/5/6-Leg tickets (Goblin/Standard/Demon/Mix),
         CBB 3/4/5/6-Leg tickets, Combined 3/4/5/6-Leg tickets,
         Cross-sport Standard Mix, Cross-sport Goblin Mix
@@ -41,6 +41,27 @@ import pandas as pd
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
+
+# Repo root = parent of scripts/ (this file lives in scripts/)
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+DEFAULT_NBA_PATH = os.path.join(REPO_ROOT, "NBA", "data", "outputs", "step8_all_direction_clean.xlsx")
+DEFAULT_CBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_cbb.xlsx")
+_soccer_root = os.path.join(REPO_ROOT, "Soccer", "step8_soccer_direction_clean.xlsx")
+_soccer_outputs = os.path.join(REPO_ROOT, "Soccer", "outputs", "step8_soccer_direction_clean.xlsx")
+if os.path.exists(_soccer_root) and os.path.exists(_soccer_outputs):
+    DEFAULT_SOCCER_PATH = (
+        _soccer_root
+        if os.path.getsize(_soccer_root) >= os.path.getsize(_soccer_outputs)
+        else _soccer_outputs
+    )
+elif os.path.exists(_soccer_root):
+    DEFAULT_SOCCER_PATH = _soccer_root
+elif os.path.exists(_soccer_outputs):
+    DEFAULT_SOCCER_PATH = _soccer_outputs
+else:
+    DEFAULT_SOCCER_PATH = _soccer_root
+DEFAULT_NHL_PATH = os.path.join(REPO_ROOT, "NHL", "step8_nhl_direction_clean.xlsx")
+DEFAULT_WEB_OUTDIR = os.path.join(REPO_ROOT, "ui_runner", "templates")
 
 
 # ── Color palette ─────────────────────────────────────────────────────────────
@@ -303,6 +324,18 @@ def pct_cell(ws, r, c, val):
     return cell
 
 
+def _signal_float(v):
+    """Parse numeric for bet-signal / context scoring (shared HTML + Excel)."""
+    try:
+        if v is None or v == "":
+            return None
+        if isinstance(v, float) and np.isnan(v):
+            return None
+        return float(v)
+    except Exception:
+        return None
+
+
 def win_prob(hit_rates, _n_legs: int) -> float:
     vals = []
     for h in hit_rates:
@@ -354,12 +387,21 @@ def _find_most_recent_by_filename(root_dir: str, filename: str) -> Optional[str]
     return matches[0][1]
 
 
+def _is_plain_filename(raw: str) -> bool:
+    """True if `raw` is a single filename with no directory or drive (safe for repo-wide search)."""
+    r = os.path.expanduser(raw.strip().strip('"').strip("'"))
+    return os.path.dirname(r) == ""
+
+
 def resolve_input_path(path: str, fallback_filename: Optional[str] = None) -> str:
     """
     Tries:
     1) exact path as provided
-    2) relative to script directory
-    3) recursive search — picks most recently modified, skips archive/old_* dirs
+    2) relative to repo root (parent of scripts/)
+    3) relative to script directory
+    4) recursive search — only if `path` is a plain filename (no folders); picks most recent
+       under repo root then scripts/, skips archive/old_* dirs. Never substitutes a different
+       basename when the user gave an explicit relative/absolute path that is missing.
     """
     if not path:
         raise FileNotFoundError("Empty input path.")
@@ -370,19 +412,47 @@ def resolve_input_path(path: str, fallback_filename: Optional[str] = None) -> st
         return p
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
+    repo_root = os.path.abspath(os.path.join(script_dir, ".."))
+
+    p_repo = os.path.abspath(os.path.join(repo_root, raw))
+    if os.path.exists(p_repo):
+        return p_repo
+
     p2 = os.path.abspath(os.path.join(script_dir, raw))
     if os.path.exists(p2):
         return p2
 
+    if not _is_plain_filename(raw):
+        filename = os.path.basename(raw)
+        raise FileNotFoundError(
+            f"Could not find file: {path}\nTried:\n- {p}\n- {p_repo}\n- {p2}\n"
+            f"(no recursive search — path includes a directory and file is missing)"
+        )
+
     filename = fallback_filename or os.path.basename(raw)
-    found = _find_most_recent_by_filename(script_dir, filename)
-    if found and os.path.exists(found):
-        print(f"  [resolve] Fallback found (most recent): {found}")
-        return os.path.abspath(found)
+    for root in (repo_root, script_dir):
+        found = _find_most_recent_by_filename(root, filename)
+        if found and os.path.exists(found):
+            print(f"  [resolve] Fallback found (most recent under {root}): {found}")
+            return os.path.abspath(found)
 
     raise FileNotFoundError(
-        f"Could not find file: {path}\nTried:\n- {p}\n- {p2}\n- recursive search for: {filename}"
+        f"Could not find file: {path}\nTried:\n- {p}\n- {p_repo}\n- {p2}\n- recursive search for: {filename}"
     )
+
+
+# Columns expected after each loader normalizes (shared slate / attach_standard_refs)
+_SLATE_CORE_COLS = (
+    "tier", "rank_score", "player", "team", "opp", "prop_type", "pick_type",
+    "line", "direction", "hit_rate", "edge", "game_time",
+)
+
+
+def _load_audit_row(sport: str, path: str, df: pd.DataFrame) -> None:
+    pe = os.path.isfile(_norm_path(path.strip())) if (path or "").strip() else False
+    miss = [c for c in _SLATE_CORE_COLS if c not in df.columns]
+    miss_s = ",".join(miss) if miss else "(none)"
+    print(f"  [audit {sport}] file_exists={'Y' if pe else 'N'} rows={len(df)} missing_core_cols={miss_s}")
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -746,72 +816,18 @@ def write_web_outputs(payload, outdir: str):
         except Exception:
             return ""
 
-    def _to_float(v):
-        try:
-            if v is None or v == "":
-                return None
-            return float(v)
-        except Exception:
-            return None
-
     def direction_signal(leg: dict):
         """
         User-facing decision helper.
         Returns (signal_html, reason_text) based on available context.
         """
-        sport = str(leg.get("sport", "")).upper()
-        direction = str(leg.get("direction", "")).upper()
-        def_tier = str(leg.get("def_tier", "")).upper().strip()
-        pace_tier = str(leg.get("pace_tier", "")).upper().strip()
-        l5o = _to_float(leg.get("l5_over"))
-        l5u = _to_float(leg.get("l5_under"))
-        l5_sample = int(round((l5o or 0) + (l5u or 0)))
-
-        # Explicit context score if pipeline already provides it
-        explicit_score = _to_float(leg.get("context_score"))
-        score = int(round(explicit_score)) if explicit_score is not None else 0
-        reasons = []
-
-        if explicit_score is None:
-            # Build a simple transparent score from known NBA findings.
-            if l5_sample >= 5:
-                score += 1
-                reasons.append("enough recent sample")
-
-            over_def_good = def_tier in {"WEAK", "AVG", "ABOVE AVG", "AVERAGE"}
-            under_def_good = def_tier in {"ELITE", "SOLID"}
-            if (direction == "OVER" and over_def_good) or (direction == "UNDER" and under_def_good):
-                score += 1
-                reasons.append(f"defense supports {direction}")
-
-            over_pace_good = pace_tier == "FAST"
-            under_pace_good = pace_tier in {"NORMAL", "SLOW"}
-            if (direction == "OVER" and over_pace_good) or (direction == "UNDER" and under_pace_good):
-                score += 1
-                reasons.append(f"pace supports {direction}")
-        else:
-            reasons.append(f"context score {int(round(explicit_score))}")
-            if l5_sample > 0:
-                reasons.append(f"L5 sample {l5_sample}")
-
-        # Fallback for non-NBA or sparse context
-        if sport != "NBA" and not reasons:
-            hr = _to_float(leg.get("hit_rate")) or 0.0
-            edge = _to_float(leg.get("edge")) or 0.0
-            if hr >= 0.62 and edge > 0:
-                score = 2
-                reasons.append("strong model profile")
-            elif hr >= 0.55:
-                score = 1
-                reasons.append("model lean")
-            else:
-                reasons.append("model-only read")
-
+        score, reasons = compute_bet_signal_core(leg)
+        joined = " + ".join(reasons) if reasons else ""
         if score >= 3:
-            return "<span class='sig-strong'>STRONG</span>", " + ".join(reasons) or "aligned context"
+            return "<span class='sig-strong'>STRONG</span>", joined or "aligned context"
         if score >= 2:
-            return "<span class='sig-lean'>LEAN</span>", " + ".join(reasons) or "partial context"
-        return "<span class='sig-risk'>RISKY</span>", " + ".join(reasons) or "limited context support"
+            return "<span class='sig-lean'>LEAN</span>", joined or "partial context"
+        return "<span class='sig-risk'>RISKY</span>", joined or "limited context support"
 
     # ── HTML ───────────────────────────────────────────────────────────────────
     filters = payload.get("filters", {})
@@ -1409,6 +1425,8 @@ def load_nba(path: str) -> pd.DataFrame:
             "Def Tier": "def_tier",
             "Pace Tier": "pace_tier",
             "pace_tier": "pace_tier",
+            "Context Score": "context_score",
+            "context_score": "context_score",
             "Min Tier": "min_tier",
             "Shot Role": "shot_role",
             "Usage Role": "usage_role",
@@ -1426,6 +1444,10 @@ def load_nba(path: str) -> pd.DataFrame:
             "B2B":          "b2b_flag",
             "CV%":          "cv_pct",
             "Opp vs Avg%":  "opp_vs_avg_pct",
+            "Game Script Mult": "game_script_mult",
+            "Game Script Note": "game_script_note",
+            "game_script_mult": "game_script_mult",
+            "game_script_note": "game_script_note",
         }
     )
 
@@ -1575,13 +1597,23 @@ def load_cbb(path: str) -> pd.DataFrame:
 
 # ── Load & normalize NHL ──────────────────────────────────────────────────────
 def load_nhl(path: str) -> pd.DataFrame:
-    path = resolve_input_path(path, fallback_filename="step8_nhl_direction_clean.xlsx")
+    raw = (path or "").strip()
+    if not raw:
+        return pd.DataFrame()
+
+    try:
+        path = resolve_input_path(raw, fallback_filename="step8_nhl_direction_clean.xlsx")
+    except FileNotFoundError:
+        print("  [load_nhl] NHL file not found — skipping NHL")
+        return pd.DataFrame()
 
     xl = pd.ExcelFile(path, engine="openpyxl")
     sheet = "NHL" if "NHL" in xl.sheet_names else ("ALL" if "ALL" in xl.sheet_names else xl.sheet_names[0])
     df = pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
 
     df = df.rename(columns={
+        "Game Script Mult": "game_script_mult",
+        "Game Script Note": "game_script_note",
         "player_name":        "player",
         "position":           "pos",
         "stat_type":          "prop_type",
@@ -1590,6 +1622,7 @@ def load_nhl(path: str) -> pd.DataFrame:
         "composite_hit_rate": "hit_rate",
         "Composite Hit Rate": "hit_rate",
         "composite_hr":       "hit_rate",
+        "hr_L10":             "hit_rate_over_L10",
         "avg_L5":             "l5_avg",
         "avg_season":         "season_avg",
         "def_tier":           "def_tier",
@@ -1703,7 +1736,11 @@ def load_soccer(path: str) -> pd.DataFrame:
         "Direction":        "direction",
         "Edge":             "edge",
         "Projection":       "projection",
+        "ESPN ID":          "espn_player_id",
         "Hit Rate (5g)":    "hit_rate",
+        # Kept separate so we can coalesce into hit_rate when 5g is blank (common when
+        # Soccer step5/7 line-hit columns aren't populated yet).
+        "Hit Rate (10g)":   "_soccer_hit10",
         "Last 5 Avg":       "l5_avg",
         "Season Avg":       "season_avg",
         "L5 Over":          "l5_over",
@@ -1730,6 +1767,12 @@ def load_soccer(path: str) -> pd.DataFrame:
         "prop_score":         "rank_score",
         "game_start":         "game_time",
         "opponent":           "opp",
+        "line_hit_rate_over_ou_5":  "hit_rate",
+        "line_hit_rate_over_ou_10": "_soccer_hit10",
+        "Game Script Mult": "game_script_mult",
+        "Game Script Note": "game_script_note",
+        "game_script_mult": "game_script_mult",
+        "game_script_note": "game_script_note",
     })
 
     if "opp" not in df.columns:
@@ -1758,11 +1801,49 @@ def load_soccer(path: str) -> pd.DataFrame:
     else:
         df["tier"] = "C"
 
-    for col in ["rank_score", "hit_rate", "line"]:
+    if "hit_rate" not in df.columns:
+        df["hit_rate"] = np.nan
+
+    for col in ["rank_score", "hit_rate", "line", "_soccer_hit10"]:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    # Prefer L5 hit rate, then L10, when either is present.
+    if "_soccer_hit10" in df.columns:
+        df["hit_rate"] = df["hit_rate"].combine_first(df["_soccer_hit10"])
+        df.drop(columns=["_soccer_hit10"], inplace=True)
+
+    # Normalize hit_rate to 0–1 (handles "62%" or 62.0 from spreadsheets)
+    if "hit_rate" in df.columns and df["hit_rate"].notna().any():
+        hr = df["hit_rate"]
+        if hr.dtype == object:
+            hr = hr.astype(str).str.replace("%", "", regex=False).str.strip()
+            hr = pd.to_numeric(hr, errors="coerce")
+        else:
+            hr = pd.to_numeric(hr, errors="coerce")
+        if hr.dropna().max() is not None and hr.dropna().max() > 1.5:
+            hr = hr / 100.0
+        df["hit_rate"] = hr
+
+    # Still no usable hit rate (common on current Soccer pipeline when game logs are empty).
+    # Use a mild rank_score-based proxy so tier/rank ticket gates still run; re-run step5 when HRs exist.
+    hr_series = pd.to_numeric(df["hit_rate"], errors="coerce")
+    if hr_series.notna().sum() == 0:
+        rs = pd.to_numeric(df.get("rank_score", 0), errors="coerce").fillna(0.0)
+        q25, q75 = float(rs.quantile(0.25)), float(rs.quantile(0.75))
+        span = (q75 - q25) + 1e-6
+        proxy = 0.54 + ((rs - q25) / span).clip(lower=0.0, upper=1.0) * 0.12
+        df["hit_rate"] = proxy.clip(0.50, 0.68)
+        print(
+            "  [load_soccer] NOTE: Hit Rate (5g)/(10g) empty - using rank_score proxy for ticket eligibility. "
+            "Fix Soccer step5 line-hit output when possible."
+        )
+
     if "edge" not in df.columns:
         df["edge"] = 0.0
+
+    if "espn_player_id" in df.columns:
+        df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
 
     df = df[df["line"].notna() & (df["line"] >= 0)]
     df = df.astype(object).where(df.notna(), other=None)
@@ -1799,6 +1880,7 @@ def build_combined_slate(nba: pd.DataFrame, cbb: pd.DataFrame, nhl: pd.DataFrame
         "l5_under",
         "def_tier",
         "pace_tier",
+        "context_score",
         "min_tier",
         "shot_role",
         "usage_role",
@@ -1913,6 +1995,79 @@ def apply_nba_context_confidence_filter(
             f"(score < {min_context_score}, min_l5_sample={min_l5_sample})"
         )
     return out
+
+
+def compute_bet_signal_core(leg: dict) -> tuple[int, list[str]]:
+    """
+    Context score 0–3+ and human reasons; same rules as web direction_signal().
+    """
+    sport = str(leg.get("sport", "") or "").upper()
+    direction = str(leg.get("direction", "") or "").upper()
+    def_tier = str(leg.get("def_tier", "") or "").upper().strip()
+    pace_tier = str(leg.get("pace_tier", "") or "").upper().strip()
+    l5o = _signal_float(leg.get("l5_over"))
+    l5u = _signal_float(leg.get("l5_under"))
+    l5_sample = int(round((l5o or 0) + (l5u or 0)))
+
+    explicit_score = _signal_float(leg.get("context_score"))
+    score = int(round(explicit_score)) if explicit_score is not None else 0
+    reasons: list[str] = []
+
+    if explicit_score is None:
+        if l5_sample >= 5:
+            score += 1
+            reasons.append("enough recent sample")
+
+        over_def_good = def_tier in {"WEAK", "AVG", "ABOVE AVG", "AVERAGE"}
+        under_def_good = def_tier in {"ELITE", "SOLID"}
+        if (direction == "OVER" and over_def_good) or (direction == "UNDER" and under_def_good):
+            score += 1
+            reasons.append(f"defense supports {direction}")
+
+        over_pace_good = pace_tier == "FAST"
+        under_pace_good = pace_tier in {"NORMAL", "SLOW"}
+        if (direction == "OVER" and over_pace_good) or (direction == "UNDER" and under_pace_good):
+            score += 1
+            reasons.append(f"pace supports {direction}")
+    else:
+        reasons.append(f"context score {int(round(explicit_score))}")
+        if l5_sample > 0:
+            reasons.append(f"L5 sample {l5_sample}")
+
+    if sport != "NBA" and not reasons:
+        hr = _signal_float(leg.get("hit_rate")) or 0.0
+        edge = _signal_float(leg.get("edge")) or 0.0
+        if hr >= 0.62 and edge > 0:
+            score = 2
+            reasons.append("strong model profile")
+        elif hr >= 0.55:
+            score = 1
+            reasons.append("model lean")
+        else:
+            reasons.append("model-only read")
+
+    return score, reasons
+
+
+def excel_signal_columns_from_leg(leg: dict) -> dict[str, str]:
+    score, _ = compute_bet_signal_core(leg)
+    return {
+        "bet_strong": "Y" if score >= 3 else "",
+        "bet_lean": "Y" if score == 2 else "",
+        "bet_risk": "LOW" if score >= 3 else ("MED" if score == 2 else "HIGH"),
+    }
+
+
+def apply_full_slate_signal_columns(df: pd.DataFrame) -> pd.DataFrame:
+    if df is None or df.empty:
+        return df
+    out = df.copy()
+
+    def _one(row: pd.Series) -> pd.Series:
+        return pd.Series(excel_signal_columns_from_leg(row.to_dict()))
+
+    sig = out.apply(_one, axis=1)
+    return pd.concat([out, sig], axis=1)
 
 
 # ── Build tickets ──────────────────────────────────────────────────────────────
@@ -2476,25 +2631,143 @@ SLATE_HDRS = [
     "Game Time",
 ]
 
+_SLATE_HDR_BY_COL = dict(zip(SLATE_COLS, SLATE_HDRS))
+_SLATE_WIDTH_BY_COL = dict(zip(SLATE_COLS, SLATE_WIDTHS))
 
-def write_slate_sheet(wb, df, sheet_name, bg_hdr, sport_label=""):
+# Full Slate only: scan order, pace + STRONG/LEAN/RISK beside Def Tier (per-sport sheets keep SLATE_COLS).
+FULL_SLATE_EXTRA_HDRS = {
+    "pace_tier": "Pace Tier",
+    "bet_strong": "STRONG",
+    "bet_lean": "LEAN",
+    "bet_risk": "RISK",
+    "game_script_mult": "Game Script",
+    "game_script_note": "Script Note",
+}
+FULL_SLATE_EXTRA_WIDTHS = {
+    "pace_tier": 10,
+    "bet_strong": 9,
+    "bet_lean": 7,
+    "bet_risk": 9,
+    "game_script_mult": 12,
+    "game_script_note": 42,
+}
+
+FULL_SLATE_COLS = [
+    "sport",
+    "tier",
+    "rank_score",
+    "player",
+    "team",
+    "opp",
+    "game_time",
+    "team_seed",
+    "team_region",
+    "team_ap_rank",
+    "opp_seed",
+    "opp_region",
+    "opp_ap_rank",
+    "ncaa_rank",
+    "prop_type",
+    "pick_type",
+    "line",
+    "direction",
+    "edge",
+    "projection",
+    "hit_rate",
+    "l5_avg",
+    "season_avg",
+    "l5_over",
+    "l5_under",
+    "def_tier",
+    "pace_tier",
+    "bet_strong",
+    "bet_lean",
+    "bet_risk",
+    "min_tier",
+    "shot_role",
+    "usage_role",
+    "h2h_avg",
+    "h2h_over_rate",
+    "h2h_games",
+    "h2h_last",
+    "b2b_flag",
+    "cv_pct",
+    "opp_vs_avg_pct",
+    "game_script_mult",
+    "game_script_note",
+]
+
+
+def _slate_hdr_for(col: str) -> str:
+    if col in FULL_SLATE_EXTRA_HDRS:
+        return FULL_SLATE_EXTRA_HDRS[col]
+    return _SLATE_HDR_BY_COL.get(col, col.replace("_", " ").title())
+
+
+def _slate_width_for(col: str) -> int:
+    if col in FULL_SLATE_EXTRA_WIDTHS:
+        return FULL_SLATE_EXTRA_WIDTHS[col]
+    return _SLATE_WIDTH_BY_COL.get(col, 11)
+
+
+def full_slate_column_order(df: pd.DataFrame) -> List[str]:
+    """Preferred Full Slate order first, then legacy slate columns, then any extras."""
+    seen: set[str] = set()
+    out: List[str] = []
+    for c in FULL_SLATE_COLS:
+        if c in df.columns and c not in seen:
+            out.append(c)
+            seen.add(c)
+    for c in SLATE_COLS:
+        if c in df.columns and c not in seen:
+            out.append(c)
+            seen.add(c)
+    for c in df.columns:
+        if c not in seen:
+            out.append(c)
+            seen.add(c)
+    return out
+
+
+def write_slate_sheet(
+    wb,
+    df,
+    sheet_name,
+    bg_hdr,
+    sport_label="",
+    *,
+    column_order: Optional[List[str]] = None,
+    full_slate_visual: bool = False,
+):
     ws = wb.create_sheet(sheet_name)
-    cols = [c for c in SLATE_COLS if c in df.columns]
-    hdrs = [SLATE_HDRS[SLATE_COLS.index(c)] for c in cols]
-    widths = [SLATE_WIDTHS[SLATE_COLS.index(c)] for c in cols]
+    if column_order is not None:
+        cols = [c for c in column_order if c in df.columns]
+    else:
+        cols = [c for c in SLATE_COLS if c in df.columns]
+    hdrs = [_slate_hdr_for(c) for c in cols]
+    widths = [_slate_width_for(c) for c in cols]
     sw(ws, widths)
-    ws.row_dimensions[1].height = 22
+    hdr_h = 28 if full_slate_visual else 22
+    hdr_sz = 10 if full_slate_visual else 9
+    ws.row_dimensions[1].height = hdr_h
     for ci, h in enumerate(hdrs, 1):
-        hc(ws, 1, ci, h, bg=bg_hdr)
+        hc(ws, 1, ci, h, bg=bg_hdr, sz=hdr_sz)
     ws.freeze_panes = "A2"
 
     for ri, row in enumerate(df[cols].itertuples(index=False), 2):
+        if full_slate_visual:
+            ws.row_dimensions[ri].height = 19
         bg = C["alt"] if ri % 2 == 0 else C["white"]
         sp = getattr(row, "sport", "")
-        if sp == "NBA":
+        spu = str(sp).upper() if sp else ""
+        if spu == "NBA":
             bg_row = C["nba"] if ri % 2 == 0 else C["white"]
-        elif sp == "CBB":
+        elif spu == "CBB":
             bg_row = C["cbb"] if ri % 2 == 0 else C["white"]
+        elif spu == "NHL":
+            bg_row = C["nhl"] if ri % 2 == 0 else C["white"]
+        elif spu == "SOCCER":
+            bg_row = C["soccer"] if ri % 2 == 0 else C["white"]
         else:
             bg_row = bg
 
@@ -2515,10 +2788,38 @@ def write_slate_sheet(wb, df, sheet_name, bg_hdr, sport_label=""):
                 dbg = C["over"] if str(val).upper() == "OVER" else C["under"]
                 dc(ws, ri, ci, val, bg=dbg, bold=True)
             elif col == "sport":
-                sbg = C["hdr_nba"] if val == "NBA" else C["hdr_cbb"]
+                vu = str(val).upper() if val else ""
+                if vu == "NBA":
+                    sbg = C["hdr_nba"]
+                elif vu == "CBB":
+                    sbg = C["hdr_cbb"]
+                elif vu == "NHL":
+                    sbg = C["hdr_nhl"]
+                elif vu == "SOCCER":
+                    sbg = C["hdr_soccer"]
+                else:
+                    sbg = C["hdr"]
                 dc(ws, ri, ci, val, bg=sbg, bold=True, fc="FFFFFF")
             elif col == "player":
                 dc(ws, ri, ci, val, bg=bg_row, align="left", bold=True)
+            elif col == "def_tier" and full_slate_visual:
+                dc(ws, ri, ci, val, bg=bg_row, align="center", bold=True)
+            elif col == "pace_tier" and full_slate_visual:
+                dc(ws, ri, ci, val, bg=bg_row, align="center", bold=(val != ""))
+            elif col == "bet_strong" and str(val).upper() == "Y":
+                dc(ws, ri, ci, "Y", bg=C["hit"], bold=True, fc="FFFFFF", align="center")
+            elif col == "bet_lean" and str(val).upper() == "Y":
+                dc(ws, ri, ci, "Y", bg=C["gold"], bold=True, fc="000000", align="center")
+            elif col == "bet_risk":
+                vs = str(val).upper()
+                if vs == "LOW":
+                    dc(ws, ri, ci, val, bg=C["hit"], bold=True, fc="FFFFFF", align="center")
+                elif vs == "MED":
+                    dc(ws, ri, ci, val, bg=C["push"], bold=True, fc="000000", align="center")
+                elif vs == "HIGH":
+                    dc(ws, ri, ci, val, bg=C["miss"], bold=True, fc="FFFFFF", align="center")
+                else:
+                    dc(ws, ri, ci, val, bg=bg_row, align="center")
             elif col in ("h2h_over_rate", "opp_vs_avg_pct"):
                 cell = dc(ws, ri, ci, val if val != "" else "", bg=bg_row, align="center")
                 if val != "":
@@ -2549,6 +2850,44 @@ def write_slate_sheet(wb, df, sheet_name, bg_hdr, sport_label=""):
                 except Exception:
                     dc(ws, ri, ci, str(val)[:16], bg=bg_row)
                 continue
+            elif col == "edge" and full_slate_visual and val != "":
+                try:
+                    ev = float(val)
+                    dc(ws, ri, ci, round(ev, 2), bg=bg_row, align="center", bold=True, fmt="0.00")
+                except Exception:
+                    dc(ws, ri, ci, val, bg=bg_row, align="center")
+            elif col == "game_script_mult" and full_slate_visual:
+                fv = None
+                try:
+                    if val != "" and val is not None:
+                        fv = float(val)
+                except (TypeError, ValueError):
+                    fv = None
+                fill_gs = bg_row
+                fc_gs = "000000"
+                if fv is not None:
+                    if fv >= 1.03:
+                        fill_gs = C["hit"]
+                        fc_gs = "FFFFFF"
+                    elif fv < 0.90:
+                        fill_gs = C["miss"]
+                        fc_gs = "FFFFFF"
+                    elif 0.90 <= fv <= 0.96:
+                        fill_gs = C["push"]
+                        fc_gs = "000000"
+                dc(
+                    ws,
+                    ri,
+                    ci,
+                    round(fv, 3) if fv is not None else "",
+                    bg=fill_gs,
+                    align="center",
+                    bold=(fv is not None),
+                    fc=fc_gs,
+                    fmt="0.000" if fv is not None else None,
+                )
+            elif col == "game_script_note" and full_slate_visual:
+                dc(ws, ri, ci, val, bg=bg_row, align="left")
             else:
                 dc(ws, ri, ci, val, bg=bg_row, align="center")
 
@@ -2858,12 +3197,32 @@ def write_summary(wb, nba, cbb, combined, all_ticket_groups, date_str, threshold
 # ── Main ──────────────────────────────────────────────────────────────────────
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--nba", required=True, help="NBA step8_all_direction_clean.xlsx")
-    ap.add_argument("--cbb", required=True, help="CBB step6_ranked_cbb.xlsx")
-    ap.add_argument("--nhl", default="", help="NHL step8_nhl_direction_clean.xlsx (optional)")
-    ap.add_argument("--soccer", default="", help="Soccer step8_soccer_direction_clean.xlsx (optional)")
+    ap.add_argument(
+        "--nba",
+        default="",
+        help=f"NBA step8_all_direction_clean.xlsx (default: {DEFAULT_NBA_PATH})",
+    )
+    ap.add_argument(
+        "--cbb",
+        default="",
+        help=f"CBB step6_ranked_cbb.xlsx (default: {DEFAULT_CBB_PATH})",
+    )
+    ap.add_argument(
+        "--nhl",
+        default=DEFAULT_NHL_PATH,
+        help=f"NHL step8 (default: {DEFAULT_NHL_PATH})",
+    )
+    ap.add_argument(
+        "--soccer",
+        default="",
+        help=f"Soccer step8 (default: {DEFAULT_SOCCER_PATH})",
+    )
     ap.add_argument("--output", default="")
-    ap.add_argument("--date", default=datetime.now().strftime("%Y-%m-%d"))
+    ap.add_argument(
+        "--date",
+        default=datetime.now().strftime("%Y-%m-%d"),
+        help="Slate date YYYY-MM-DD, or 'today' / 'now'",
+    )
     ap.add_argument("--tiers", default="A,B,C", help="Comma-separated tiers e.g. A,B")
     ap.add_argument("--min-hit-rate", type=float, default=0.55, dest="min_hit_rate")
     ap.add_argument("--min-edge", type=float, default=0.0, dest="min_edge")
@@ -2881,10 +3240,27 @@ def main():
 
     # Web outputs
     ap.add_argument("--write-web", action="store_true", help="Write tickets_latest.html/json for GitHub Pages")
-    ap.add_argument("--web-outdir", default=r"..\ui_runner\templates",help="Folder to write tickets_latest.html/json")
+    ap.add_argument(
+        "--web-outdir",
+        default=DEFAULT_WEB_OUTDIR,
+        help="Folder to write tickets_latest.html/json",
+    )
     ap.add_argument("--also-root", action="store_true", help="Also write tickets_latest.* in repo root")
 
     args = ap.parse_args()
+
+    ds = str(args.date).strip().lower()
+    if ds in ("today", "now"):
+        args.date = datetime.now().strftime("%Y-%m-%d")
+
+    if not str(args.nba).strip():
+        args.nba = DEFAULT_NBA_PATH
+    if not str(args.cbb).strip():
+        args.cbb = DEFAULT_CBB_PATH
+    if not str(args.nhl).strip():
+        args.nhl = DEFAULT_NHL_PATH
+    if not str(args.soccer).strip():
+        args.soccer = DEFAULT_SOCCER_PATH
 
     if not args.output:
         args.output = f"combined_slate_tickets_{args.date}.xlsx"
@@ -2905,29 +3281,37 @@ def main():
     print(f"Loading NBA slate from {args.nba}...")
     nba = load_nba(args.nba)
     print(f"  {len(nba)} NBA props loaded")
+    _load_audit_row("NBA", args.nba, nba)
 
+    print(f"Loading CBB slate from {args.cbb}...")
     cbb = load_cbb(args.cbb)
     print(f"  {len(cbb)} CBB props loaded")
+    _load_audit_row("CBB", args.cbb, cbb)
 
     nhl = None
-    if args.nhl:
+    if str(args.nhl).strip():
         try:
             nhl = load_nhl(args.nhl)
-            nhl = attach_standard_refs(nhl)
-            print(f"  {len(nhl)} NHL props loaded")
+            if nhl is not None and not nhl.empty:
+                nhl = attach_standard_refs(nhl)
+                print(f"  {len(nhl)} NHL props loaded")
+                _load_audit_row("NHL", args.nhl, nhl)
         except Exception as e:
             print(f"  WARNING: Could not load NHL file: {e}")
             nhl = None
 
     soccer = None
-    if args.soccer:
+    if str(args.soccer).strip():
         try:
             soccer = load_soccer(args.soccer)
             soccer = attach_standard_refs(soccer)
             print(f"  {len(soccer)} Soccer props loaded")
+            _load_audit_row("Soccer", args.soccer, soccer)
         except Exception as e:
             print(f"  WARNING: Could not load Soccer file: {e}")
             soccer = None
+    else:
+        print("  [Soccer] skipped (empty --soccer)")
 
     # ✅ Attach Standard sibling refs AFTER normalized columns exist
     nba = attach_standard_refs(nba)
@@ -2940,6 +3324,11 @@ def main():
     combined = attach_standard_refs(combined)
 
     print(f"  {len(combined)} total props")
+    for s in ("NBA", "CBB", "Soccer"):
+        n_s = int((combined["sport"] == s).sum()) if "sport" in combined.columns else 0
+        print(f"  Full Slate rows — {s}: {n_s}")
+    if nhl is not None and len(nhl) > 0:
+        print(f"  Full Slate rows — NHL: {len(nhl)}")
 
     # ── CBB Goblin rank floor ─────────────────────────────────────────────────
     # CBB Goblin hits at ~55-58% vs NBA Goblin at ~67%.
@@ -3039,17 +3428,21 @@ def main():
     if len(combo_pool) >= 3:
         all_ticket_groups += gen_tickets(combo_pool, "COMBO", C["hdr_mix"], "COMBO")
 
-    # Cross-sport Standard Mix (enforce mix)
+    # Cross-sport Standard Mix (enforce mix) — NBA + CBB + Soccer when available
     nba_std = pool(nba, ["Standard"])
     cbb_std = pool(cbb, ["Standard"])
-    std_mix_pool = pd.concat([nba_std, cbb_std], ignore_index=True).sort_values("rank_score", ascending=False)
+    mix_parts = [nba_std, cbb_std]
+    if soccer is not None and len(soccer) > 0:
+        mix_parts.append(pool(soccer, ["Standard"]))
+    std_mix_pool = pd.concat(mix_parts, ignore_index=True).sort_values("rank_score", ascending=False)
     if len(std_mix_pool) >= 3:
         print("Generating cross-sport Standard Mix tickets...")
         for n in leg_sizes:
             tickets = build_tickets(std_mix_pool, n, args.max_tickets, require_mix=True)
             if tickets:
                 sheet_name = f"MIX Standard {n}-Leg"[:31]
-                write_ticket_sheet(wb, tickets, sheet_name, C["hdr_mix"], label="NBA+CBB Standard")
+                mix_lbl = "NBA+CBB+Soccer Standard" if (soccer is not None and len(soccer) > 0) else "NBA+CBB Standard"
+                write_ticket_sheet(wb, tickets, sheet_name, C["hdr_mix"], label=mix_lbl)
                 all_ticket_groups.append((sheet_name, tickets, C["mix"]))
                 print(f"  {sheet_name}: {len(tickets)} tickets")
 
@@ -3059,7 +3452,16 @@ def main():
     # MIX Goblin sheets are no longer generated.
 
     print("Writing slate sheets...")
-    write_slate_sheet(wb, combined, "Full Slate", C["hdr"], "ALL")
+    full_slate_df = apply_full_slate_signal_columns(combined.copy())
+    write_slate_sheet(
+        wb,
+        full_slate_df,
+        "Full Slate",
+        C["hdr"],
+        "ALL",
+        column_order=full_slate_column_order(full_slate_df),
+        full_slate_visual=True,
+    )
     write_slate_sheet(wb, nba, "NBA Slate", C["hdr_nba"], "NBA")
     write_slate_sheet(wb, cbb, "CBB Slate", C["hdr_cbb"], "CBB")
     if nhl is not None and len(nhl) > 0:

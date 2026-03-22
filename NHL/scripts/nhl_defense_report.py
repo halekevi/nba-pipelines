@@ -40,7 +40,7 @@ import argparse
 import json
 import time
 import urllib.request
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any
 
 import numpy as np
@@ -49,6 +49,10 @@ import pandas as pd
 NHL_API   = "https://api.nhle.com/stats/rest/en"
 NHL_WEB   = "https://api-web.nhle.com/v1"
 HEADERS   = {"User-Agent": "Mozilla/5.0", "Accept": "application/json"}
+
+_today_season = date.today()
+_start_year = _today_season.year if _today_season.month >= 10 else _today_season.year - 1
+DEFAULT_SEASON = f"{_start_year}{_start_year + 1}"
 
 # Known NHL team abbreviation fixes (rare edge cases)
 TEAM_ALIAS_FIX = {
@@ -278,11 +282,12 @@ def print_leaders(df: pd.DataFrame, topn: int) -> None:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--season",  default="20242025",
-                    help="Season ID, e.g. 20242025")
+    ap.add_argument("--season",  default=DEFAULT_SEASON,
+                    help="Season ID, e.g. 20252026 (default: current season from date)")
     ap.add_argument("--out",     default="nhl_defense_summary.csv")
     ap.add_argument("--top",     type=int, default=10)
     args = ap.parse_args()
+    print(f"NHL defense report: season {args.season}")
 
     df = pull_team_stats(season=args.season)
 

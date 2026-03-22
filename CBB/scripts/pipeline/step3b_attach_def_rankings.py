@@ -142,7 +142,16 @@ ABBR_TO_SR = {
     'TTU':  'Texas Tech',
     'UNI':  'Northern Iowa',
     'UCI':  'UC Irvine',
-    'UNCW': 'North Carolina-Wilmington',
+    # Primary value should match cbb_def_rankings.csv sr_name ("UNC Wilmington");
+    # ABBR_ALTERNATES still lists legacy spellings.
+    'UNCW': 'UNC Wilmington',
+}
+
+# PrizePicks sometimes ships only one side of a game (blank pp_opp_team for all rows).
+# Map affected pp_game_id -> opponent's PrizePicks team abbr (must exist in ABBR_TO_SR).
+PP_GAME_ID_FALLBACK_OPP_ABBR = {
+    "145397": "GW",   # New Mexico vs George Washington (NIT 2026-03-22)
+    "145399": "CAL",  # Saint Joseph's vs California (NIT 2026-03-21/22)
 }
 
 
@@ -271,6 +280,11 @@ def main():
 
     for _, row in df.iterrows():
         abbr = norm_key(row.get(opp_col, "")) if opp_col else ""
+        if not abbr and "pp_game_id" in df.columns:
+            _gid = str(row.get("pp_game_id", "")).strip()
+            _fb = PP_GAME_ID_FALLBACK_OPP_ABBR.get(_gid, "")
+            if _fb:
+                abbr = norm_key(_fb)
         sr   = abbr_map.get(abbr, "")
         payload = by_sr.get(sr) if sr else None
 
@@ -310,6 +324,24 @@ def main():
     df["opp_def_tier"]     = opp_tiers
     df["def_tier"]         = opp_tiers
     df["OVERALL_DEF_RANK"] = opp_ranks
+
+    _rank_num = pd.to_numeric(df["OVERALL_DEF_RANK"], errors="coerce")
+    miss_mask = _rank_num.isna()
+    if miss_mask.any():
+        _opp_col = "opp_team_abbr" if "opp_team_abbr" in df.columns else None
+        if _opp_col:
+            _unmatched = (
+                df.loc[miss_mask, _opp_col]
+                .dropna()
+                .astype(str)
+                .str.strip()
+            )
+            _unmatched = _unmatched[_unmatched.ne("")].unique()
+            if len(_unmatched) > 0:
+                print(
+                    f"WARNING: {len(_unmatched)} teams unmatched in defense "
+                    f"rankings: {_unmatched}"
+                )
 
     df.to_csv(args.output, index=False)
     print(f"✅ Defense attached. Output={args.output} | rows={len(df)} | missing_def_rows={misses}")

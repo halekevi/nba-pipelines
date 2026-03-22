@@ -68,7 +68,7 @@ _PROP_WEIGHTS = {
     "pa":                    1.01,
     "ra":                    1.02,
     "pra":                   0.99,
-    "fantasy":               1.00,
+    "fantasy":               0.91,
 }
 
 def _prop_weight(prop_norm: str) -> float:
@@ -79,7 +79,7 @@ def _prop_weight(prop_norm: str) -> float:
 
 _PROP_HIT_RATE_PRIOR = {
     "stl":    0.697,
-    "fantasy":0.674,
+    "fantasy":0.595,
     "fg3m":   0.623,
     "reb":    0.617,
     "ra":     0.600,
@@ -139,7 +139,7 @@ _PLAYER_PREFIX_BY_PROP = {
     "fg3a":"fg3a","fg3m":"fg3m","fta":"fta","ftm":"ftm",
 }
 
-_COMBO_CORRECTIONS = {"pr":1.05,"pa":1.06,"ra":1.08,"pra":1.07,"fantasy":1.15}
+_COMBO_CORRECTIONS = {"pr":1.05,"pa":1.06,"ra":1.08,"pra":1.07,"fantasy":1.04}
 
 def _get_player_avg(row: pd.Series, prefix: str, window: str) -> float:
     candidates = {

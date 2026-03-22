@@ -38,9 +38,12 @@ def fetch_json(url: str) -> dict:
         return {}
 
 
-def get_player_summary(nhl_id: str) -> dict:
-    """Get player landing page summary: current team, position, TOI info."""
-    url = f"{NHL_WEB}/player/{nhl_id}/landing"
+def get_player_summary_single(nhl_id: str) -> dict:
+    """Get player landing page summary for one numeric NHL player id."""
+    pid = (nhl_id or "").strip()
+    if not pid.isdigit():
+        return {}
+    url = f"{NHL_WEB}/player/{pid}/landing"
     data = fetch_json(url)
     if not data:
         return {}
@@ -51,7 +54,6 @@ def get_player_summary(nhl_id: str) -> dict:
     current = nhl_seasons[-1] if nhl_seasons else {}
 
     pos = data.get("position", "")
-    draft = data.get("draftDetails", {})
 
     summary = {
         "position_code": pos,
@@ -68,6 +70,62 @@ def get_player_summary(nhl_id: str) -> dict:
         "plus_minus": current.get("plusMinus", 0) or 0,
     }
     return summary
+
+
+def merge_player_summaries(summaries: list[dict]) -> dict:
+    """Average numeric season fields; keep position/team from first successful summary."""
+    if not summaries:
+        return {}
+    if len(summaries) == 1:
+        return summaries[0]
+
+    first = summaries[0]
+    num_keys = [
+        "pp_goals", "pp_points", "es_goals", "es_points", "gp",
+        "goals_season", "assists_season", "points_season", "plus_minus",
+    ]
+    out: dict = {}
+    for k in num_keys:
+        vals = [int(s.get(k, 0) or 0) for s in summaries]
+        out[k] = int(round(sum(vals) / len(vals)))
+
+    mins = [toi_to_minutes(s.get("toi_per_game", "")) for s in summaries]
+    mins = [m for m in mins if m > 0]
+    if mins:
+        am = sum(mins) / len(mins)
+        mi = int(am)
+        sec = int(round((am - mi) * 60))
+        if sec >= 60:
+            mi += sec // 60
+            sec %= 60
+        out["toi_per_game"] = f"{mi}:{sec:02d}"
+    else:
+        out["toi_per_game"] = first.get("toi_per_game", "") or ""
+
+    out["position_code"] = next(
+        (s.get("position_code", "") for s in summaries if s.get("position_code")),
+        first.get("position_code", ""),
+    )
+    out["current_team_id"] = next(
+        (s.get("current_team_id", "") for s in summaries if s.get("current_team_id")),
+        first.get("current_team_id", ""),
+    )
+    return out
+
+
+def get_player_summary(nhl_id: str) -> dict:
+    """Landing summary; combo IDs fetch each player and merge."""
+    raw = (nhl_id or "").strip()
+    if "|" in raw:
+        parts = [p.strip() for p in raw.split("|") if p.strip() and p.isdigit()]
+        subs = [get_player_summary_single(pid) for pid in parts]
+        subs = [s for s in subs if s]
+        if not subs:
+            return {}
+        if len(subs) == 1:
+            return subs[0]
+        return merge_player_summaries(subs)
+    return get_player_summary_single(raw)
 
 
 def toi_to_minutes(toi_str: str) -> float:

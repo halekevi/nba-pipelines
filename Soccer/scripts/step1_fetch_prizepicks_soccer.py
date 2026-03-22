@@ -7,6 +7,7 @@ determined by player/game data inside the response, not separate API endpoints.
 Usage:
     py step1_fetch_prizepicks_soccer.py --output s1_soccer_props.csv
     py step1_fetch_prizepicks_soccer.py --include_halves --output s1_soccer_props.csv
+    py step1_fetch_prizepicks_soccer.py --league_id 82 --output s1_soccer_props.csv
 """
 
 import argparse
@@ -161,9 +162,16 @@ def main():
                     help="Also fetch SOCCER1H and SOCCER2H boards")
     ap.add_argument("--include_season",  action="store_true",
                     help="Also fetch SOCCERSZN board")
+    ap.add_argument("--league_id", default=None, metavar="ID",
+                    help="Primary board PrizePicks league_id (default 82). "
+                         "Half/season extras still come from --include_halves / --include_season.")
     args = ap.parse_args()
 
-    boards_to_fetch = {"82": "SOCCER"}
+    primary_id = str(args.league_id).strip() if args.league_id is not None else "82"
+    if not primary_id.isdigit():
+        print(f"❌ --league_id must be numeric, got {args.league_id!r}")
+        sys.exit(2)
+    boards_to_fetch = {primary_id: "SOCCER"}
     if args.include_halves:
         boards_to_fetch["242"] = "SOCCER1H"
         boards_to_fetch["243"] = "SOCCER2H"

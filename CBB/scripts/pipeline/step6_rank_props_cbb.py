@@ -18,16 +18,28 @@ Output: step6_ranked_props_cbb.xlsx + optional CSV
 from __future__ import annotations
 
 import argparse
+import json
 import math
-from typing import Optional
+import sys
+from typing import Dict, Optional
 from datetime import datetime
+from pathlib import Path
 
+import joblib
 import numpy as np
 import pandas as pd
 
 # ── Head-to-Head (H2H) utility ────────────────────────────────────────────────
-def _attach_h2h(df: "pd.DataFrame", cache_path: str, sport: str,
-                player_col: str, opp_col: str, prop_col: str, line_col: str) -> "pd.DataFrame":
+def _attach_h2h(
+    df: "pd.DataFrame",
+    cache_path: str,
+    sport: str,
+    player_col: str,
+    opp_col: str,
+    prop_col: str,
+    line_col: str,
+    tid_to_abbr: Optional[Dict[str, str]] = None,
+) -> "pd.DataFrame":
     """
     Attach H2H stats per row using the boxscore cache (step5b format).
     Cache columns: player_norm, opp_team_abbr, game_date, PTS, REB, AST, STL, BLK, TO, 3PM, MIN
@@ -46,14 +58,39 @@ def _attach_h2h(df: "pd.DataFrame", cache_path: str, sport: str,
     df["h2h_last"]      = np.nan
 
     if not cache_path or not os.path.exists(cache_path):
+        print(f"  [H2H] cache: {os.path.abspath(cache_path)}  exists=False — skipping")
         return df
 
     try:
         cache = pd.read_csv(cache_path, low_memory=False)
     except Exception:
+        print(f"  [H2H] cache: {os.path.abspath(cache_path)}  read failed — skipping")
         return df
 
+    print(f"  [H2H] cache: {os.path.abspath(cache_path)}  exists=True")
+
     cache.columns = [c.lower().strip() for c in cache.columns]
+
+    # data/cache CSVs from older step5b runs may omit opp_team_abbr; align with step5b Phase 3 backfill.
+    tmap = tid_to_abbr if tid_to_abbr is not None else {}
+    if "opp_team_id" in cache.columns:
+        if "opp_team_abbr" not in cache.columns:
+            cache["opp_team_abbr"] = ""
+        oid = cache["opp_team_id"].astype(str).str.strip()
+        ab0 = cache["opp_team_abbr"].astype(str).str.strip()
+        blank_opp = ab0.eq("") | ab0.str.lower().isin(["nan", "none"])
+        if blank_opp.any():
+            def _oid_to_abbr(x: str) -> str:
+                x = str(x).strip()
+                if not x or x.lower() in ("", "nan", "none"):
+                    return ""
+                return str(tmap.get(x, x))
+
+            mapped = oid.map(_oid_to_abbr)
+            cache = cache.copy()
+            cache.loc[blank_opp, "opp_team_abbr"] = mapped.loc[blank_opp].astype(str).values
+
+    print(f"  [H2H] cache rows={len(cache):,}  cols={list(cache.columns)[:12]}{'...' if len(cache.columns) > 12 else ''}")
 
     # Need player, opponent, and stat columns
     p_col = next((c for c in ["player_norm","player_name","player","name"] if c in cache.columns), None)
@@ -92,12 +129,27 @@ def _attach_h2h(df: "pd.DataFrame", cache_path: str, sport: str,
              "fantasy": pts + 1.2*reb + 1.5*ast + 3*stl + 3*blk - tov}
         return m.get(p)
 
-    # Build lookup: (player_norm, opp_norm) -> list of cache rows
+    # Reverse map: opponent abbr (lower) -> ESPN team_id for rows on this slate
+    abbr_to_tid: Dict[str, str] = {}
+    if tid_to_abbr:
+        for tid, ab in tid_to_abbr.items():
+            k = str(ab).strip().lower()
+            if k and str(tid).strip().lower() not in ("", "nan"):
+                abbr_to_tid[k] = str(tid).strip()
+
+    # (player_norm, opp_abbr_norm) -> cache rows; also (player_norm, opp_team_id) for numeric cache opps
     lookup: dict = {}
+    lookup_oid: dict = {}
+    oid_key_col = "opp_team_id" if "opp_team_id" in cache.columns else None
     for _, row in cache.iterrows():
-        pk = (_norm(row.get(p_col, "")), _norm(row.get(o_col, "")))
-        if pk[0] and pk[1]:
-            lookup.setdefault(pk, []).append(row)
+        pn = _norm(row.get(p_col, ""))
+        oa = _norm(row.get(o_col, ""))
+        if pn and oa:
+            lookup.setdefault((pn, oa), []).append(row)
+        if oid_key_col and pn:
+            oid = str(row.get(oid_key_col, "")).strip()
+            if oid and oid.lower() not in ("", "nan", "none"):
+                lookup_oid.setdefault((pn, oid), []).append(row)
 
     matched = 0
     for idx, r in df.iterrows():
@@ -111,6 +163,10 @@ def _attach_h2h(df: "pd.DataFrame", cache_path: str, sport: str,
             line_f = None
 
         entries = lookup.get((player, opp), [])
+        if not entries and abbr_to_tid:
+            oid = abbr_to_tid.get(opp, "")
+            if oid:
+                entries = lookup_oid.get((player, oid), [])
         if not entries:
             continue
 
@@ -138,7 +194,7 @@ def _attach_h2h(df: "pd.DataFrame", cache_path: str, sport: str,
         df.at[idx, "h2h_over_rate"] = over_rate
         df.at[idx, "h2h_last"]      = last
 
-    print(f"  H2H: {matched}/{len(df)} rows matched")
+    print(f"  [H2H] matched {matched}/{len(df)} slate rows (player+opp keys vs boxscore cache)")
     return df
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -146,6 +202,155 @@ def _attach_h2h(df: "pd.DataFrame", cache_path: str, sport: str,
 
 def _to_num(s):
     return pd.to_numeric(s, errors="coerce")
+
+
+# ── Player consistency (data/cache/player_consistency.db) ──────────────────────
+import sys as _sys_pc_cbb
+
+
+def _repo_root_pc_cbb() -> Path:
+    here = Path(__file__).resolve()
+    for anc in here.parents:
+        if (anc / "scripts" / "build_player_consistency.py").is_file():
+            return anc
+    return here.parents[3]
+
+
+def _load_bpc_pc_cbb():
+    root = _repo_root_pc_cbb()
+    sd = str(root / "scripts")
+    if sd not in _sys_pc_cbb.path:
+        _sys_pc_cbb.path.insert(0, sd)
+    import build_player_consistency as bpc  # noqa: E402
+
+    return bpc
+
+
+_bpc_pc_cbb_mod = None
+
+
+def _bpc_pc_cbb():
+    global _bpc_pc_cbb_mod
+    if _bpc_pc_cbb_mod is None:
+        try:
+            _bpc_pc_cbb_mod = _load_bpc_pc_cbb()
+        except Exception:
+            _bpc_pc_cbb_mod = False
+    return _bpc_pc_cbb_mod
+
+
+def _normalize_prop_type(raw: str) -> str:
+    m = _bpc_pc_cbb()
+    if not m:
+        return str(raw or "").strip()
+    return m._normalize_prop_type(str(raw), "CBB")
+
+
+def _get_line_bucket(prop_type: str, line: float, sport: str) -> str:
+    m = _bpc_pc_cbb()
+    if not m:
+        return "<5"
+    try:
+        ln = float(line)
+    except (TypeError, ValueError):
+        ln = 0.0
+    return m.get_line_bucket(prop_type, ln, sport)
+
+
+def _get_consistency_grade(player: str, sport: str, prop_type: str, direction: str, line: float) -> str:
+    import sqlite3
+
+    repo_root = _repo_root_pc_cbb()
+    db_path = repo_root / "data" / "cache" / "player_consistency.db"
+    if not db_path.exists():
+        return "?"
+
+    prop_type = _normalize_prop_type(prop_type)
+    direction = direction.upper().strip()
+    bucket = _get_line_bucket(prop_type, line, sport)
+
+    try:
+        conn = sqlite3.connect(str(db_path))
+        cur = conn.cursor()
+        cur.execute(
+            """
+            SELECT grade, grade_locked, games_since_F
+            FROM player_consistency
+            WHERE player_name = ?
+              AND sport = ?
+              AND prop_type = ?
+              AND direction = ?
+              AND line_bucket = ?
+        """,
+            (player, sport, prop_type, direction, bucket),
+        )
+        row = cur.fetchone()
+        conn.close()
+        if row:
+            grade, locked, games_since_F = row
+            return grade or "?"
+        return "?"
+    except Exception:
+        return "?"
+
+
+def _pc_grade_cache_cbb(sport: str) -> dict:
+    import sqlite3
+
+    dbp = _repo_root_pc_cbb() / "data" / "cache" / "player_consistency.db"
+    if not dbp.is_file():
+        return {}
+    try:
+        conn = sqlite3.connect(str(dbp))
+        cur = conn.execute(
+            "SELECT player_name, sport, prop_type, direction, line_bucket, grade FROM player_consistency WHERE sport = ?",
+            (sport,),
+        )
+        d = {(a, b, c, d0, e): (g if g else "?") for a, b, c, d0, e, g in cur.fetchall()}
+        conn.close()
+        return d
+    except Exception:
+        return {}
+
+
+def _apply_consistency_grade_scores_cbb(out: pd.DataFrame, sport: str) -> None:
+    grade_multiplier = {
+        "S": 1.25,
+        "A": 1.15,
+        "B": 1.05,
+        "C": 1.00,
+        "D": 0.80,
+        "F": 0.00,
+        "?": 0.95,
+    }
+    cache = _pc_grade_cache_cbb(sport)
+    pc = next((c for c in ("player_norm", "player", "pp_player", "player_name") if c in out.columns), None)
+    prop_col = "prop_norm" if "prop_norm" in out.columns else ("prop_type" if "prop_type" in out.columns else None)
+    if pc is None or prop_col is None or "bet_direction" not in out.columns or "line" not in out.columns:
+        out["consistency_grade"] = "?"
+        out["consistency_multiplier"] = 0.95
+        out["final_score"] = _to_num(out.get("final_score", pd.Series(np.nan, index=out.index))) * 0.95
+        return
+
+    players = out[pc].astype(str).str.strip()
+    prop_raw = out[prop_col].astype(str)
+    dirs = out["bet_direction"].astype(str).str.strip().str.upper()
+    linev = _to_num(out["line"]).fillna(0.0)
+    grades: list[str] = []
+    for i in range(len(out)):
+        ptype = _normalize_prop_type(prop_raw.iloc[i])
+        try:
+            ln = float(linev.iloc[i])
+        except (TypeError, ValueError):
+            ln = 0.0
+        bkt = _get_line_bucket(ptype, ln, sport)
+        g = cache.get((players.iloc[i], sport, ptype, dirs.iloc[i], bkt), "?")
+        grades.append(g)
+    gser = pd.Series(grades, index=out.index)
+    mult = gser.map(lambda x: grade_multiplier.get(x, 0.95)).astype(float)
+    out["consistency_grade"] = gser
+    out["consistency_multiplier"] = mult
+    out["final_score"] = _to_num(out["final_score"]).astype(float) * mult
 
 
 def _norm_pick_type(x: str) -> str:
@@ -167,7 +372,7 @@ _PROP_WEIGHTS = {
     "fg2a":  0.92, "fgm":   0.99, "fga":   0.99,
     "ftm":   1.01, "fta":   0.98, "tov":   0.94,
     "pf":    0.85, "pr":    1.01, "pa":    1.01,
-    "pra":   0.99, "ra":    1.02, "fantasy": 1.00,
+    "pra":   0.99, "ra":    1.02, "fantasy": 0.93,
 }
 
 def _prop_weight(prop_norm: str) -> float:
@@ -176,7 +381,7 @@ def _prop_weight(prop_norm: str) -> float:
 
 # ── Bayesian prior hit rates (same as NBA step7) ──────────────────────────────
 _PROP_HIT_RATE_PRIOR = {
-    "stl": 0.697, "fantasy": 0.674,
+    "stl": 0.697, "fantasy": 0.60,
     "fg3m": 0.623, "reb": 0.617, "ast": 0.593,
     "ftm": 0.583, "pr": 0.568,  "pts": 0.566,
     "stocks": 0.547, "blk": 0.545, "pra": 0.545,
@@ -206,6 +411,39 @@ def _reliability_mult(pick_type: str) -> float:
 
 
 
+def rank_to_tier(rank, n_teams):
+    """Map numeric defense rank to tier using percentile bands (rank 1 = best)."""
+    try:
+        r = float(rank)
+        nt = float(n_teams)
+        if nt <= 0 or np.isnan(r) or np.isnan(nt):
+            return ""
+    except (TypeError, ValueError):
+        return ""
+    pct = r / nt
+    if pct <= 0.25:
+        return "elite"
+    elif pct <= 0.50:
+        return "good"
+    elif pct <= 0.75:
+        return "average"
+    else:
+        return "weak"
+
+
+def _infer_cbb_n_teams(out: pd.DataFrame) -> float:
+    col = next(
+        (c for c in ["OVERALL_DEF_RANK", "OPP_OVERALL_DEF_RANK", "opp_def_rank"] if c in out.columns),
+        None,
+    )
+    if not col:
+        return 362.0
+    mx = _to_num(out[col]).max()
+    if pd.isna(mx):
+        return 362.0
+    return 362.0 if float(mx) > 40 else 30.0
+
+
 def _edge_transform(edge: float, cap=3.0, power=0.85) -> float:
     if np.isnan(edge): return np.nan
     s = 1.0 if edge >= 0 else -1.0
@@ -228,6 +466,144 @@ def _tier(score: float, eligible_scores=None) -> str:
     return "D"
 
 
+def _repo_root_ml_cbb() -> Path:
+    return Path(__file__).resolve().parents[3]
+
+
+_sd_ml_cbb = str(_repo_root_ml_cbb() / "scripts")
+if _sd_ml_cbb not in sys.path:
+    sys.path.insert(0, _sd_ml_cbb)
+try:
+    from ml_blend_weight import load_ml_blend_weight  # noqa: E402
+
+    ML_BLEND_WEIGHT = float(load_ml_blend_weight(_repo_root_ml_cbb(), "cbb"))
+except Exception:
+    ML_BLEND_WEIGHT = 0.30
+
+
+def _ml_defense_tier_series(out: pd.DataFrame, n_teams: float) -> pd.Series:
+    """Numeric defense toughness for ML features — always from rank quartiles, not CSV tier text."""
+    col = next(
+        (c for c in ["OVERALL_DEF_RANK", "OPP_OVERALL_DEF_RANK", "opp_def_rank"] if c in out.columns),
+        None,
+    )
+    if not col:
+        return pd.Series(1, index=out.index)
+
+    def _to_ml_tier(r):
+        if pd.isna(r):
+            return 1.0
+        lbl = rank_to_tier(float(r), float(n_teams))
+        if lbl == "weak":
+            return 0.0
+        if lbl == "average":
+            return 1.0
+        if lbl in ("good", "elite"):
+            return 2.0
+        return 1.0
+
+    return _to_num(out[col]).apply(_to_ml_tier)
+
+
+def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series) -> tuple[pd.Series, pd.Series, pd.Series]:
+    root = Path(__file__).resolve().parents[3]
+    model_path = root / "models" / "prop_model_cbb.pkl"
+    feat_path = root / "models" / "prop_model_cbb_features.json"
+    if not (model_path.exists() and feat_path.exists()):
+        print(f"⚠️  CBB ML model missing at {model_path} — skipping ML blend")
+        return pd.Series(np.nan, index=out.index), pd.Series(np.nan, index=out.index), existing_score.copy()
+
+    try:
+        model = joblib.load(model_path)
+        model_features = json.loads(feat_path.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"⚠️  Failed loading CBB ML model: {e} — skipping ML blend")
+        return pd.Series(np.nan, index=out.index), pd.Series(np.nan, index=out.index), existing_score.copy()
+
+    try:
+        from ml_blend_weight import load_ml_blend_weight as _load_cbb_blend
+
+        blend_w = float(_load_cbb_blend(root, "cbb"))
+    except Exception:
+        blend_w = float(ML_BLEND_WEIGHT)
+
+    pick = out.get("pick_type", pd.Series("Standard", index=out.index)).astype(str).str.lower()
+    tier_num = pd.Series(np.where(pick.str.contains("gob"), 2, np.where(pick.str.contains("dem"), 0, 1)), index=out.index)
+    dir_num = pd.Series(
+        np.where(out.get("bet_direction", pd.Series("OVER", index=out.index)).astype(str).str.upper().eq("OVER"), 1, 0),
+        index=out.index,
+    )
+    prop_norm = out.get("prop_norm", out.get("prop_type", pd.Series("unknown", index=out.index))).astype(str).str.lower().str.strip()
+    prop_dummies = pd.get_dummies(prop_norm, prefix="prop", dtype=float)
+    X_base = pd.DataFrame(
+        {
+            "edge": _to_num(out.get("edge", pd.Series(np.nan, index=out.index))).fillna(0.0),
+            "hit_rate_l10": _to_num(out.get("line_hit_rate", pd.Series(np.nan, index=out.index))).fillna(0.5),
+            "defense_tier": _to_num(
+                _ml_defense_tier_series(out, _infer_cbb_n_teams(out))
+            ).fillna(1.0),
+            "tier": _to_num(tier_num).fillna(1.0),
+            "intel_shr_z": _to_num(out.get("intel_shr_z", pd.Series(np.nan, index=out.index))).fillna(0.0),
+            "direction": _to_num(dir_num).fillna(0.0),
+        },
+        index=out.index,
+    )
+    X = pd.concat([X_base, prop_dummies], axis=1).reindex(columns=model_features, fill_value=0.0)
+    try:
+        ml_prob = pd.Series(model.predict_proba(X)[:, 1], index=out.index, dtype=float)
+    except Exception as e:
+        print(f"⚠️  CBB ML inference failed: {e} — skipping ML blend")
+        return pd.Series(np.nan, index=out.index), pd.Series(np.nan, index=out.index), existing_score.copy()
+
+    ml_edge = ml_prob - 0.5
+    final_score = (1.0 - blend_w) * existing_score + blend_w * ml_edge
+    print(f"✅ CBB ML blend applied (weight={blend_w:.2f})")
+    return ml_prob, ml_edge, final_score
+
+
+def _pick_cbb_boxscore_cache(explicit: str, input_csv: str) -> str:
+    """Prefer the largest on-disk CBB boxscore CSV so H2H sees full history (two-cache layout)."""
+    import os
+    from pathlib import Path
+
+    root = Path(input_csv).resolve().parent
+    cands: list[Path] = []
+    if explicit and str(explicit).strip():
+        ep = Path(explicit)
+        cands.append(ep if ep.is_absolute() else (root / ep))
+    cands.append(root / "data" / "cache" / "cbb_boxscore_cache.csv")
+    cands.append(root / "cbb_boxscore_cache.csv")
+    seen: set[str] = set()
+    uniq: list[Path] = []
+    for p in cands:
+        try:
+            rp = str(p.resolve())
+        except OSError:
+            continue
+        if rp not in seen:
+            seen.add(rp)
+            uniq.append(p)
+    existing = [p for p in uniq if p.is_file()]
+    if not existing:
+        return (explicit or "").strip()
+    if len(existing) == 1:
+        return str(existing[0])
+    best = max(existing, key=lambda p: p.stat().st_size)
+    chosen = str(best)
+    exp_res = ""
+    if explicit and str(explicit).strip():
+        try:
+            exp_res = str((root / explicit).resolve()) if not Path(explicit).is_absolute() else str(Path(explicit).resolve())
+        except OSError:
+            exp_res = str(explicit)
+    if exp_res and str(best.resolve()) != exp_res:
+        print(
+            f"  [H2H] Using largest boxscore cache ({best.stat().st_size:,} bytes): {chosen}"
+            f"  (override {explicit})"
+        )
+    return chosen
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--input",      required=True)
@@ -240,8 +616,19 @@ def main():
     df = pd.read_csv(args.input, dtype=str).fillna("")
     print(f"→ Loaded: {args.input} | rows={len(df)}")
 
+    slate_game_date = (args.date or datetime.now().strftime("%Y-%m-%d")).strip()
+
+    # Full-slate ESPN team_id -> PP abbr (needed to backfill opp_team_abbr in boxscore cache for H2H).
+    tid_to_abbr_for_h2h: Dict[str, str] = {}
+    if "team_id" in df.columns and "team_abbr" in df.columns:
+        for _, r in df.iterrows():
+            tid = str(r.get("team_id", "")).strip()
+            abbr = str(r.get("team_abbr", "")).strip()
+            if tid and abbr and tid.lower() != "nan":
+                tid_to_abbr_for_h2h[tid] = abbr
+
     if "start_time" in df.columns:
-        target_date = (args.date or datetime.now().strftime("%Y-%m-%d")).strip()
+        target_date = slate_game_date
         start_dt = pd.to_datetime(df["start_time"], errors="coerce")
         keep_mask = start_dt.dt.strftime("%Y-%m-%d").eq(target_date)
         kept = int(keep_mask.sum())
@@ -256,6 +643,11 @@ def main():
          df.get("status3", pd.Series([""] * len(df))).astype(str).str.upper().eq("OK")
 
     out = df.copy()
+
+    if "line" not in out.columns:
+        raise ValueError(
+            f"step6: 'line' column missing. Available columns: {out.columns.tolist()}"
+        )
 
     line_num = _to_num(out["line"])
 
@@ -320,21 +712,12 @@ def main():
         max_rank = def_rank_num.max()
         n_teams  = 362.0 if max_rank > 40 else 30.0
         mid_rank = (n_teams + 1.0) / 2.0
-        # Derive def_tier from rank if not already set
-        def _rank_to_tier(r):
-            try:
-                r = float(r)
-                if r <= 72:    return "Elite"
-                elif r <= 144: return "Above Avg"
-                elif r <= 252: return "Avg"
-                else:          return "Weak"
-            except (TypeError, ValueError):
-                return ""
-        _dt = out["def_tier"] if "def_tier" in out.columns else pd.Series([], dtype=str)
-        _dt_empty = _dt.isna() | (_dt.astype(str).str.strip() == "")
-        if "def_tier" not in out.columns or _dt_empty.all():
-            out["def_tier"]     = def_rank_num.apply(_rank_to_tier)
-            out["opp_def_tier"] = out["def_tier"]
+        nt = int(n_teams) if not pd.isna(n_teams) else 362
+        tier_strs = def_rank_num.apply(
+            lambda r: rank_to_tier(r, nt) if pd.notna(r) else ""
+        )
+        out["def_tier"] = tier_strs
+        out["opp_def_tier"] = tier_strs
     else:
         def_rank_num = pd.Series([np.nan] * len(out), index=out.index)
         n_teams  = 362.0
@@ -458,6 +841,41 @@ def main():
     score = raw_score.where(elig_mask, other=np.nan)
 
     out["rank_score"] = score
+    out["ml_prob"], out["ml_edge"], out["final_score"] = _apply_ml_blend(out, out["rank_score"])
+    _apply_consistency_grade_scores_cbb(out, "CBB")
+
+    # Game script risk adjustment
+    _root_gs = Path(__file__).resolve().parents[3]
+    _sd_gs = str(_root_gs / "scripts")
+    if _sd_gs not in sys.path:
+        sys.path.insert(0, _sd_gs)
+    from game_script_risk import get_game_script_multiplier  # noqa: E402
+
+    if "start_time" in out.columns:
+        _st = out["start_time"].astype(str).str.strip()
+        _dp = _st.str[:10]
+        _gd_series = _dp.where(_dp.str.match(r"^\d{4}-\d{2}-\d{2}$"), slate_game_date)
+    else:
+        _gd_series = pd.Series([slate_game_date] * len(out), index=out.index)
+    _team_col = next((c for c in ("team", "pp_team", "Team") if c in out.columns), "team")
+    _prop_gs = "prop_norm" if "prop_norm" in out.columns else "prop_type"
+    _gmults: list[float] = []
+    _gnotes: list[str] = []
+    for _i in range(len(out)):
+        _r = out.iloc[_i]
+        _gd = str(_gd_series.iloc[_i])
+        _tm = str(_r.get(_team_col, "") or "").strip()
+        _pt = str(_r.get(_prop_gs, "") or "").strip()
+        _gm, _gn = get_game_script_multiplier(_tm, "CBB", _pt, _gd)
+        _gmults.append(round(float(_gm), 3))
+        _gnotes.append(_gn)
+    out["game_script_mult"] = _gmults
+    out["game_script_note"] = _gnotes
+    out["final_score"] = pd.to_numeric(out["final_score"], errors="coerce").astype(float) * pd.Series(
+        _gmults, dtype=float
+    ).values
+
+    out["rank_score"] = out["final_score"]
     out["tier"]       = out["rank_score"].apply(
         lambda x: _tier(x) if not (isinstance(x, float) and np.isnan(x)) else "D")
 
@@ -476,16 +894,26 @@ def main():
     drop_mask_final = out["void_reason"].isin(["DROPPED_DEMON_AUDIT", "DROPPED_NEG_EDGE_GOBDEM"])
     dropped_df  = out[drop_mask_final].copy()
     out_active  = out[~drop_mask_final].copy()
-    out_sorted  = out_active.sort_values("rank_score", ascending=False, na_position="last")
+    out_sorted  = out_active.sort_values("final_score", ascending=False, na_position="last")
     elig_sorted = elig_mask.reindex(out_sorted.index).fillna(False)
 
     # ── Head-to-Head stats ───────────────────────────────────────────────────
     player_col = next((c for c in ["player_norm","player","pp_player","player_name"] if c in out.columns), "")
-    opp_col    = next((c for c in ["pp_opp_team","opp_team_abbr","opp_team","opp"] if c in out.columns), "")
+    # Prefer opp_team_abbr to match boxscore cache keys (pp_opp_team can differ in formatting).
+    opp_col    = next((c for c in ["opp_team_abbr","pp_opp_team","opp_team","opp"] if c in out.columns), "")
     prop_col   = next((c for c in ["prop_norm","prop_type"] if c in out.columns), "prop_norm")
     if player_col and opp_col:
-        out = _attach_h2h(out, args.cache, "cbb", player_col, opp_col, prop_col, "line")
-        print(f"  H2H: {(out['h2h_games'] > 0).sum()}/{len(out)} rows matched")
+        cache_for_h2h = _pick_cbb_boxscore_cache(args.cache, args.input)
+        out = _attach_h2h(
+            out,
+            cache_for_h2h,
+            "cbb",
+            player_col,
+            opp_col,
+            prop_col,
+            "line",
+            tid_to_abbr=tid_to_abbr_for_h2h,
+        )
 
     # ── Write Excel ───────────────────────────────────────────────────────────
     with pd.ExcelWriter(args.output, engine="openpyxl") as xw:

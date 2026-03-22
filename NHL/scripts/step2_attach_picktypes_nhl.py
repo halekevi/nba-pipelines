@@ -354,6 +354,9 @@ def main():
             time.sleep(max(0.0, args.sleep))
 
         row["nhl_player_id"] = nhl_id
+        is_combo = "|" in (nhl_id or "")
+        row["combo_prop"] = "True" if is_combo else "False"
+        row["combo_player_ids"] = nhl_id if is_combo else ""
         results.append(row)
 
     if new_lookups > 0:

@@ -32,9 +32,21 @@ desktop.ini
 *.env
 
 # Databases
+# Includes data/cache/synthetic_graded.db (large generated synthetic graded store)
 *.db
 *.sqlite
 *.sqlite3
+
+# SQLite databases — local only, not synced to OneDrive
+data/cache/*.db
+data/cache/*.db-wal
+data/cache/*.db-shm
+
+# Fetch error log — local only
+logs/fetch_errors.log
+
+# Synthetic preview CSVs — local only
+outputs/synthetic/preview_*.csv
 
 # Archives
 *.zip
@@ -51,6 +63,7 @@ ResultFiles/
 **/outputs/
 **/ResultFiles/
 grades/
+models/
 
 # Generated html/json artifacts if you don't want tracked
 # Uncomment these if they should stay local only
