@@ -16,7 +16,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden;}
-body{font-family:'Share Tech Mono',monospace;background:#05050f;color:var(--text);display:flex;flex-direction:column;}
+body{font-family:'Share Tech Mono',monospace;background:#05050f;color:var(--text);display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;}
+.grades-body{flex:1;display:flex;flex-direction:column;min-height:0;}
 
 /* brain logo */
 .brain-wrap{position:relative;width:46px;height:46px;flex-shrink:0;}
@@ -101,7 +102,7 @@ body{font-family:'Share Tech Mono',monospace;background:#05050f;color:var(--text
 .date-go-btn:hover{background:rgba(212,175,55,.12);border-color:rgba(212,175,55,.6);}
 
 /* iframe container */
-.iframe-shell{flex:1;position:relative;overflow:hidden;}
+.iframe-shell{flex:1;min-height:0;position:relative;overflow:hidden;}
 .grade-frame{width:100%;height:100%;border:none;display:block;transition:opacity .25s;}
 .grade-frame.loading{opacity:0;}
 
@@ -183,7 +184,7 @@ body::before{
 .grades-kicker{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,0.04);backdrop-filter:blur(8px) saturate(180%);border:1px solid rgba(255,255,255,0.09);font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.62);text-transform:uppercase;margin-bottom:14px;}
 .grades-title{font-family:'Bebas Neue',sans-serif;font-size:58px;line-height:.92;letter-spacing:3px;color:var(--text);}
 .grades-stat{padding:16px;border-radius:18px;background:rgba(255,255,255,0.04);backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);border:1px solid rgba(255,255,255,0.09);box-shadow:0 4px 18px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.06);}
-.iframe-shell{background:rgba(255,255,255,0.02);backdrop-filter:blur(8px) saturate(180%);}
+.iframe-shell{background:rgba(255,255,255,0.02);backdrop-filter:blur(8px) saturate(180%);min-height:0;}
 .load-overlay{background:rgba(4,6,14,0.88);backdrop-filter:blur(20px) saturate(180%);}
 .empty-state{background:rgba(4,6,14,0.5);}
 @media(max-width:860px){.grades-hero-grid{grid-template-columns:1fr;}.snav{padding:0 18px;}.date-bar{padding:0 16px;}}
@@ -690,28 +691,7 @@ body{
   </div>
 </nav>
 
-<div class="grades-hero">
-  <div class="grades-hero-grid">
-    <div>
-      <div class="grades-kicker">Performance review · slate intelligence</div>
-      <div class="grades-title">Grades that feel like a <span>real product</span></div>
-      <div class="grades-sub">This refresh gives the grades experience more authority: stronger hierarchy, cleaner controls, better framing around report dates, and a premium shell for both slate and ticket evaluation views.</div>
-    </div>
-    <div class="grades-meta">
-      <div class="gmeta-card">
-        <div class="gmeta-label">Mode</div>
-        <div class="gmeta-value accent">Review Hub</div>
-        <div class="gmeta-sub">One place to scan slate and ticket outcomes by date.</div>
-      </div>
-      <div class="gmeta-card">
-        <div class="gmeta-label">Focus</div>
-        <div class="gmeta-value cyan">Cleaner Readability</div>
-        <div class="gmeta-sub">A less cluttered shell makes the embedded report feel intentional.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
+<!-- Date + tabs directly under nav so they are never clipped below the hero (short viewports / overflow:hidden). -->
 <!-- ═══════════════════════ DATE BAR ═══════════════════════ -->
 <div class="date-bar">
   <span class="date-bar-label">REPORT DATE</span>
@@ -740,6 +720,29 @@ body{
   </button>
 </div>
 
+<div class="grades-body">
+<div class="grades-hero">
+  <div class="grades-hero-grid">
+    <div>
+      <div class="grades-kicker">Performance review · slate intelligence</div>
+      <div class="grades-title">Grades that feel like a <span>real product</span></div>
+      <div class="grades-sub">This refresh gives the grades experience more authority: stronger hierarchy, cleaner controls, better framing around report dates, and a premium shell for both slate and ticket evaluation views.</div>
+    </div>
+    <div class="grades-meta">
+      <div class="gmeta-card">
+        <div class="gmeta-label">Mode</div>
+        <div class="gmeta-value accent">Review Hub</div>
+        <div class="gmeta-sub">One place to scan slate and ticket outcomes by date.</div>
+      </div>
+      <div class="gmeta-card">
+        <div class="gmeta-label">Focus</div>
+        <div class="gmeta-value cyan">Cleaner Readability</div>
+        <div class="gmeta-sub">A less cluttered shell makes the embedded report feel intentional.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════════════ IFRAME SHELL ═══════════════════════ -->
 <div class="iframe-shell">
   <div class="load-overlay" id="load-overlay">
@@ -762,6 +765,7 @@ body{
   <iframe class="grade-frame loading" id="grade-frame" src="about:blank" title="Grade Report"></iframe>
   <iframe class="grade-frame" id="ticket-frame" src="about:blank" title="Ticket Evaluation" style="display:none;"></iframe>
 </div>
+</div><!-- /.grades-body -->
 
 <script>
 // ─── CONFIG ──────────────────────────────────────────────────────────────────

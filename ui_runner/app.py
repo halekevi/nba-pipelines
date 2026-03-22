@@ -26,7 +26,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 
-from flask import Flask, jsonify, render_template, request, send_from_directory, abort
+from flask import Flask, jsonify, render_template, request, send_from_directory, abort, make_response
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Paths
@@ -47,10 +47,11 @@ NBA_FLAG      = NBA_DIR / "RUN_COMPLETE.flag"
 NBA_SLATE     = NBA_DIR / "step8_all_direction_clean.xlsx"
 NBA_TICKETS   = NBA_DIR / "best_tickets.xlsx"
 CBB_SLATE     = CBB_DIR / "step6_ranked_cbb.xlsx"
-NHL_SLATE     = NHL_DIR / "outputs" / "step8_nhl_direction_clean.xlsx"
-NHL_TICKETS   = NHL_DIR / "outputs" / "nhl_best_tickets.xlsx"
-SOCCER_SLATE  = SOCCER_DIR / "outputs" / "step8_soccer_direction_clean.xlsx"
-SOCCER_TICKETS= SOCCER_DIR / "outputs" / "soccer_best_tickets.xlsx"
+# Same paths as scripts/run_pipeline.ps1 (sport root, not sport/outputs/)
+NHL_SLATE     = NHL_DIR / "step8_nhl_direction_clean.xlsx"
+NHL_TICKETS   = NHL_DIR / "nhl_best_tickets.xlsx"
+SOCCER_SLATE  = SOCCER_DIR / "step8_soccer_direction_clean.xlsx"
+SOCCER_TICKETS= SOCCER_DIR / "soccer_best_tickets.xlsx"
 COMBINED_OUT  = BASE_DIR  # combined_slate_tickets_YYYY-MM-DD.xlsx lives here
 
 app = Flask(
@@ -291,10 +292,14 @@ def page_payout():
 
 @app.get("/grades")
 def page_grades():
-    return render_template("indexGrades.html")
+    r = make_response(render_template("indexGrades.html"))
+    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    return r
 
 
-@app.get("/grades/slate_eval_<date>.html")
+@app.route("/grades/slate_eval_<date>.html", methods=("GET", "HEAD"))
 def serve_grade_report(date: str):
     """Serve individual slate_eval_YYYY-MM-DD.html files for the grades iframe."""
     fname = f"slate_eval_{date}.html"
@@ -313,7 +318,7 @@ def serve_grade_report(date: str):
     abort(404)
 
 
-@app.get("/grades/ticket_eval_<date>.html")
+@app.route("/grades/ticket_eval_<date>.html", methods=("GET", "HEAD"))
 def serve_ticket_eval_report(date: str):
     """Serve individual ticket_eval_YYYY-MM-DD.html files for the ticket evaluation iframe."""
     fname = f"ticket_eval_{date}.html"
