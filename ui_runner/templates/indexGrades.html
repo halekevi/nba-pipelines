@@ -759,7 +759,7 @@ body{
   <div class="empty-state" id="ticket-empty-state" style="display:none;">
     <div class="empty-icon">🎟</div>
     <div class="empty-title">No Ticket Evaluation</div>
-    <div class="empty-sub">No ticket evaluation page exists for this date. Run <code>build_ticket_eval.py</code> after the pipeline (or <code>run_pipeline.ps1</code>), or pick another date.</div>
+    <div class="empty-sub">No ticket evaluation page exists for this date <strong>on the deployed site</strong>. Run <code>build_ticket_eval.py --date YYYY-MM-DD</code> after the pipeline, then <strong>commit and push</strong> <code>ui_runner/templates/ticket_eval_YYYY-MM-DD.html</code> so Railway (or any host) can serve it—or pick a date that already has that file in git.</div>
     <div class="empty-hint">Expected: ticket_eval_<span id="ticket-empty-date"></span>.html</div>
   </div>
   <iframe class="grade-frame loading" id="grade-frame" src="about:blank" title="Grade Report"></iframe>
