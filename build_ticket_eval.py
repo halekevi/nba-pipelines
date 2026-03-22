@@ -164,6 +164,111 @@ def _sport_key(sport: str) -> str:
     return s
 
 
+def _graded_outputs_dir(arg_date: str) -> Path:
+    return REPO_ROOT / "outputs" / arg_date
+
+
+def _debug_list_outputs_graded(arg_date: str) -> list[Path]:
+    d = _graded_outputs_dir(arg_date)
+    if not d.is_dir():
+        return []
+    return sorted(d.glob("graded_*.xlsx"))
+
+
+def _debug_sheet_headers(path: Path, max_sheets: int = 3) -> list[tuple[str, list[str]]]:
+    """Per sheet: (sheet_name, normalized column names)."""
+    out: list[tuple[str, list[str]]] = []
+    try:
+        xl = pd.ExcelFile(path)
+    except Exception as e:
+        return [("<<read_error>>", [str(e)])]
+    for i, sh in enumerate(xl.sheet_names):
+        if i >= max_sheets:
+            out.append(("...", [f"(+{len(xl.sheet_names) - max_sheets} more sheets)"]))
+            break
+        try:
+            df = pd.read_excel(path, sheet_name=sh, nrows=0)
+            cols = [_norm_header(c) for c in df.columns]
+        except Exception as e:
+            cols = [f"<<{e}>>"]
+        out.append((sh, cols))
+    return out
+
+
+def debug_report(arg_date: str, payload: dict[str, Any], tpath: Path) -> None:
+    """Print why legs may not match (JSON date vs CLI, xlsx paths, headers, sample legs)."""
+    print("\n=== build_ticket_eval.py --debug ===\n")
+    print(f"CLI --date:     {arg_date}")
+    print(f"Ticket JSON:    {tpath}")
+    print(f"JSON \"date\":   {payload.get('date')!r}")
+    if str(payload.get("date") or "").strip() != arg_date:
+        print(
+            "  ! Mismatch: ticket payload date differs from --date; legs are still matched against"
+            " STATIC pipeline workbooks (see below), not per-date outputs unless we add that."
+        )
+    out_dir = _graded_outputs_dir(arg_date)
+    og = _debug_list_outputs_graded(arg_date)
+    print(f"\noutputs/{arg_date}/ graded_*.xlsx:")
+    if not out_dir.is_dir():
+        print(f"  (folder missing: {out_dir})")
+    elif not og:
+        print("  (none found)")
+    else:
+        for p in og:
+            print(f"  - {p.relative_to(REPO_ROOT)}")
+    print("\nWorkbooks used for matching (first existing path per sport; NOT date-specific today):")
+    for sport, paths in SPORT_XLSX_CANDIDATES.items():
+        src = next((p for p in paths if p.is_file()), None)
+        if not src:
+            print(f"  {sport}: (no file at any candidate path)")
+            for p in paths:
+                print(f"       tried: {p.relative_to(REPO_ROOT)}")
+            continue
+        print(f"  {sport}: {src.relative_to(REPO_ROOT)}")
+        for sh, cols in _debug_sheet_headers(src):
+            preview = cols[:24]
+            extra = f" ...(+{len(cols) - 24})" if len(cols) > 24 else ""
+            print(f"       sheet {sh!r}: {preview}{extra}")
+
+    triple, pair_buckets = _load_actuals_index()
+    print(f"\nIndex: {len(triple):,} triple-keys (player+prop+direction), {len(pair_buckets):,} player+prop buckets")
+
+    groups = payload.get("groups") or []
+    legs_sample: list[dict[str, Any]] = []
+    for g in groups:
+        for t in g.get("tickets") or []:
+            for leg in t.get("legs") or []:
+                legs_sample.append(leg)
+                if len(legs_sample) >= 8:
+                    break
+            if len(legs_sample) >= 8:
+                break
+        if len(legs_sample) >= 8:
+            break
+
+    print("\nSample legs (match against index above):")
+    for i, leg in enumerate(legs_sample, 1):
+        pl = str(leg.get("player") or "").strip().lower()
+        pt = str(leg.get("prop_type") or "").strip().lower()
+        dr = str(leg.get("direction") or "").strip().upper()
+        row = _match_leg_to_row(leg, triple, pair_buckets)
+        st = "MATCH" if row else "NO MATCH -> PENDING"
+        print(f"  {i}. player={pl!r} prop_type={pt!r} direction={dr!r} -> {st}")
+        if row:
+            print(
+                f"      actual={row.get('actual')!r} line={row.get('line')!r} "
+                f"grade_raw={row.get('grade_raw')!r} dir_in_row={row.get('direction')!r}"
+            )
+    total = sum(len(t.get("legs") or []) for g in groups for t in g.get("tickets") or [])
+    print(f"\nTotal legs in JSON: {total}")
+    print(
+        "\nNote: This script currently loads actuals only from SPORT_XLSX_CANDIDATES (repo pipeline paths)."
+        f"\n      It does NOT read outputs/{arg_date}/graded_*.xlsx yet; if your grades live there only,"
+        "\n      matches will fail until that path is wired in."
+    )
+    print("=== end debug ===\n")
+
+
 def _load_actuals_index() -> tuple[dict[tuple[str, str, str], dict], dict[tuple[str, str], list[dict]]]:
     """Triple-key -> row dict (last wins); pair-key -> list of rows for fallback."""
     triple: dict[tuple[str, str, str], dict] = {}
@@ -566,6 +671,11 @@ def main() -> int:
         default="",
         help="Slate date YYYY-MM-DD (default: yesterday local)",
     )
+    ap.add_argument(
+        "--debug",
+        action="store_true",
+        help="Print ticket JSON path, payload date, outputs/graded files, Excel headers, sample leg matches; then build.",
+    )
     args = ap.parse_args()
     if args.date:
         arg_date = args.date.strip()
@@ -585,6 +695,9 @@ def main() -> int:
     except Exception as e:
         print(f"ERROR: Failed to read ticket JSON: {e}")
         return 1
+
+    if args.debug:
+        debug_report(arg_date, payload, tpath)
 
     html_out = _build_html(payload, arg_date)
     TEMPLATES_DIR.mkdir(parents=True, exist_ok=True)
