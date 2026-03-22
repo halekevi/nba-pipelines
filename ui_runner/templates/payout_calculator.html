@@ -284,6 +284,22 @@ canvas{width:100%!important;max-height:220px;}
 .hint{font-size:10px;color:var(--muted);line-height:1.7;margin-bottom:16px;padding:10px 14px;background:rgba(255,255,255,0.03);backdrop-filter:blur(8px) saturate(180%);border:1px solid rgba(255,255,255,0.08);border-radius:10px;}
 .sub-lbl{font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:6px;display:block;text-transform:uppercase;}
 .mono{font-family:'Share Tech Mono',monospace;}
+.import-panel{background:rgba(255,255,255,0.035);backdrop-filter:blur(18px) saturate(170%);-webkit-backdrop-filter:blur(18px) saturate(170%);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 16px;margin-bottom:18px;box-shadow:0 6px 24px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.05);}
+.import-panel-title{font-size:9px;letter-spacing:2.5px;color:var(--muted);margin-bottom:10px;}
+.import-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+.btn-glass-sm{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;padding:8px 18px;border-radius:10px;cursor:pointer;border:1px solid rgba(212,175,55,0.28);background:rgba(212,175,55,.08);color:var(--accent);backdrop-filter:blur(10px) saturate(180%);transition:all .15s;}
+.btn-glass-sm:hover{border-color:var(--accent);box-shadow:0 0 18px rgba(212,175,55,.12);}
+.btn-glass-sm.secondary{border-color:rgba(127,199,217,.28);background:rgba(127,199,217,.06);color:var(--std);}
+.btn-glass-sm.secondary:hover{border-color:var(--std);box-shadow:0 0 18px rgba(127,199,217,.1);}
+.paste-msg{font-size:11px;line-height:1.6;margin-top:10px;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);}
+.paste-msg.err{border-color:rgba(255,127,159,.35);background:rgba(255,127,159,.06);color:var(--red);}
+.paste-msg.ok{border-color:rgba(159,216,167,.35);background:rgba(159,216,167,.06);color:var(--green);}
+.modal-overlay{position:fixed;inset:0;z-index:400;background:rgba(5,5,15,0.72);backdrop-filter:blur(12px) saturate(150%);display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-card{max-width:520px;width:100%;max-height:85vh;overflow:auto;background:rgba(22,22,30,0.92);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:22px 24px;box-shadow:0 20px 60px rgba(0,0,0,0.55),inset 0 1px 0 rgba(255,255,255,0.06);}
+.modal-card h3{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin-bottom:12px;color:var(--accent);}
+.modal-card pre{font-size:10px;line-height:1.5;color:var(--muted);white-space:pre-wrap;word-break:break-word;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px;max-height:220px;overflow:auto;margin:12px 0;}
+.modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+.hidden-file{position:absolute;width:0;height:0;opacity:0;pointer-events:none;}
 
 @media(max-width:768px){
   .result-grid{grid-template-columns:repeat(2,1fr);}
@@ -407,6 +423,8 @@ nav{display:flex;align-items:center;gap:16px;padding:14px 0 20px;border-bottom:1
 [data-theme="light"] .chart-wrap,
 [data-theme="light"] .insight-item,
 [data-theme="light"] .bucket-card,
+[data-theme="light"] .import-panel,
+[data-theme="light"] .modal-card,
 [data-theme="light"] .expand-stat,
 [data-theme="light"] .streak-card,
 [data-theme="light"] .pt-opt,
@@ -494,6 +512,7 @@ nav{display:flex;align-items:center;gap:16px;padding:14px 0 20px;border-bottom:1
 [data-theme="light"] .field input,
 [data-theme="light"] .field select,
 [data-theme="light"] .leg-input,
+[data-theme="light"] .big-input,
 [data-theme="light"] .date-input {
   background:rgba(255,255,255,0.7) !important;
   border-color:rgba(0,0,0,0.12) !important;
@@ -870,6 +889,14 @@ body::before{
   <div class="card accent">
     <div class="card-title">💰 Slip Builder + EV</div>
     <p class="hint">Build leg by leg. Choose a pick type, enter the <strong>Standard Line</strong> and the <strong>Goblin / Demon line</strong>, set estimated hit probability. EV calculated against the actual multiplier PrizePicks shows you.</p>
+    <div class="import-panel" id="import-panel">
+      <div class="import-panel-title">IMPORT FROM SCREENSHOT</div>
+      <div class="import-actions">
+        <button type="button" class="btn-glass-sm" id="btn-screenshot" onclick="document.getElementById('screenshot-file').click()">UPLOAD SCREENSHOT</button>
+        <span style="font-size:10px;color:var(--muted);letter-spacing:1px">Or paste an image with Ctrl+V on this tab (Claude vision)</span>
+      </div>
+      <input type="file" id="screenshot-file" class="hidden-file" accept="image/*" onchange="onScreenshotFile(this.files)"/>
+    </div>
     <div class="form-grid" style="margin-bottom:16px">
       <div class="field"><label>PLATFORM</label>
         <select id="calc-platform"><option value="prizepicks">PrizePicks</option><option value="underdog">Underdog Fantasy</option></select>
@@ -889,8 +916,8 @@ body::before{
     </div>
     <div class="section-divider" style="margin-top:20px">ACTUAL PAYOUT</div>
     <div class="form-grid">
-      <div class="field"><label>PAYOUT MULTIPLIER SHOWN (×)</label><input id="calc-mult" type="number" step="0.01" placeholder="e.g. 8.5 — enter what PrizePicks shows"/></div>
-      <div class="field"><label>STAKE ($)</label><input id="calc-stake" type="number" step="1" value="10"/></div>
+      <div class="field"><label>PAYOUT MULTIPLIER SHOWN (×)</label><input id="calc-mult" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 8.5 — enter what PrizePicks shows"/></div>
+      <div class="field"><label>STAKE ($)</label><input id="calc-stake" type="text" inputmode="decimal" autocomplete="off" value="10"/></div>
     </div>
     <div class="btn-row">
       <button class="btn btn-accent" onclick="runCalc()">▶ Calculate EV</button>
@@ -931,8 +958,8 @@ body::before{
     </div>
     <div class="section-divider">PAYOUT</div>
     <div class="form-grid">
-      <div class="field"><label>BASE PAYOUT (all-standard, same leg count)</label><input id="log-base-mult" type="number" step="0.01" placeholder="Auto" readonly style="opacity:.6"/></div>
-      <div class="field"><label>ACTUAL PAYOUT SHOWN ON APP</label><input id="log-actual-mult" type="number" step="0.01" placeholder="e.g. 4.2" oninput="refreshLogSummary()"/></div>
+      <div class="field"><label>BASE PAYOUT (all-standard, same leg count)</label><input id="log-base-mult" type="text" inputmode="decimal" placeholder="Auto" readonly style="opacity:.6"/></div>
+      <div class="field"><label>ACTUAL PAYOUT SHOWN ON APP</label><input id="log-actual-mult" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 4.2"/></div>
     </div>
     <div id="log-ticket-summary" style="display:none;margin-top:14px;padding:12px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;font-size:11px;line-height:2;color:var(--muted)"></div>
     <div class="btn-row">
@@ -1040,6 +1067,18 @@ body::before{
 
 </div><!-- /app -->
 
+<div id="modal-overlay" class="modal-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="if(event.target===this)closePickModal()">
+  <div class="modal-card" onclick="event.stopPropagation()">
+    <h3 id="modal-title">Confirm imported picks</h3>
+    <p style="font-size:11px;color:var(--muted);line-height:1.6">Review JSON below. Apply replaces current calculator legs.</p>
+    <pre id="modal-picks-json"></pre>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-accent" onclick="confirmApplyImportedPicks()">Apply to calculator</button>
+      <button type="button" class="btn btn-ghost" onclick="closePickModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const PP_BASE   = {2:3,3:6,4:10,5:20,6:37.5};
 const STORE_KEY = 'proporacle_payout_log_v5';
@@ -1083,8 +1122,19 @@ function toggleLeg(id){const l=calcLegs.find(l=>l.id===id);if(l){l.open=!l.open;
 function changeType(id,type){const l=calcLegs.find(l=>l.id===id);if(l){l.type=type;l.playedLine='';l.hitProb=type==='goblin'?68:type==='demon'?32:52;renderCalcLegs();}}
 function updateCF(id,field,val){
   const l=calcLegs.find(l=>l.id===id);if(!l)return;
-  l[field]=field==='hitProb'?parseInt(val)||50:val;
-  if(field==='stdLine'||field==='playedLine'){const s=parseFloat(l.stdLine),p=parseFloat(l.playedLine);if(!isNaN(s)&&!isNaN(p)&&l.playedLine)l.type=autoClassify(s,p);}
+  if(field==='hitProb'){l.hitProb=parseInt(val,10)||50;const pv=document.getElementById('pv-'+id);if(pv)pv.textContent=l.hitProb+'%';return;}
+  l[field]=val;
+  renderCalcLegs();
+}
+function patchCF(id,field,val){const l=calcLegs.find(l=>l.id===id);if(!l)return;l[field]=val;}
+function blurCFPlayer(id){renderCalcLegs();}
+function blurCalcLine(id,field,el){
+  const l=calcLegs.find(l=>l.id===id);if(!l)return;
+  const raw=String(el.value||'').trim().replace(/,/g,'');
+  if(raw===''||raw==='-'||raw==='.'||raw==='-.'){l[field]='';}
+  else{const n=parseFloat(raw);l[field]=isNaN(n)?raw:String(n);}
+  const s=parseFloat(l.stdLine),p=parseFloat(l.playedLine);
+  if(!isNaN(s)&&!isNaN(p)&&l.playedLine!=='')l.type=autoClassify(s,p);
   renderCalcLegs();
 }
 
@@ -1116,7 +1166,7 @@ function renderCalcLegs(){
       </div>
       <div class="leg-body">
         <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-bottom:14px">
-          <div><span class="sub-lbl">PLAYER NAME</span><input class="leg-input" type="text" placeholder="e.g. Tyrese Haliburton" value="${leg.player}" oninput="updateCF(${leg.id},'player',this.value)"/></div>
+          <div><span class="sub-lbl">PLAYER NAME</span><input class="leg-input" type="text" placeholder="e.g. Tyrese Haliburton" value="${leg.player}" oninput="patchCF(${leg.id},'player',this.value)" onblur="blurCFPlayer(${leg.id})"/></div>
           <div><span class="sub-lbl">SPORT</span><select class="leg-input" onchange="updateCF(${leg.id},'sport',this.value)">${sportSel}</select></div>
           <div><span class="sub-lbl">PROP</span><select class="leg-input" onchange="updateCF(${leg.id},'prop',this.value)">${propSel}</select></div>
         </div>
@@ -1130,19 +1180,19 @@ function renderCalcLegs(){
         <div class="line-compare" style="margin-top:6px">
           <div class="line-box lb-std">
             <div class="line-box-lbl"><div class="line-dot ld-std"></div>Standard Line</div>
-            <input class="big-input" type="number" step="0.5" placeholder="20.5" value="${leg.stdLine}" oninput="updateCF(${leg.id},'stdLine',this.value)"/>
+            <input class="big-input" type="text" inputmode="decimal" autocomplete="off" placeholder="20.5" value="${leg.stdLine}" oninput="patchCF(${leg.id},'stdLine',this.value)" onblur="blurCalcLine(${leg.id},'stdLine',this)"/>
             <div style="font-size:9px;color:var(--muted);margin-top:4px">Market line from PrizePicks</div>
           </div>
           <div class="line-box ${isS?'lb-dim':isG?'lb-gob':'lb-dem'}">
             <div class="line-box-lbl"><div class="line-dot ${isG?'ld-gob':'ld-dem'}"></div>${isG?'Goblin Line':isD?'Demon Line':'Played Line'}</div>
-            <input class="big-input" type="number" step="0.5" placeholder="${isG?'16.5 (lower)':isD?'26.5 (higher)':'N/A'}" value="${leg.playedLine}" ${isS?'disabled':''} oninput="updateCF(${leg.id},'playedLine',this.value)"/>
+            <input class="big-input" type="text" inputmode="decimal" autocomplete="off" placeholder="${isG?'16.5 (lower)':isD?'26.5 (higher)':'N/A'}" value="${leg.playedLine}" ${isS?'disabled':''} oninput="patchCF(${leg.id},'playedLine',this.value)" onblur="blurCalcLine(${leg.id},'playedLine',this)"/>
             <div style="margin-top:4px">${deltaPill||`<span style="font-size:9px;color:var(--muted)">${isS?'Same as standard':isG?'Move line down':'Move line up'}</span>`}</div>
           </div>
         </div>
         <span class="sub-lbl">ESTIMATED HIT PROBABILITY</span>
         <div class="prob-wrap" style="margin-top:6px">
           <div class="prob-head"><span class="prob-lbl">HOW LIKELY IS THIS LEG TO HIT?</span><span class="prob-val" id="pv-${leg.id}">${leg.hitProb}%</span></div>
-          <input class="prob-slider t-${badge}" type="range" min="5" max="99" value="${leg.hitProb}" oninput="updateCF(${leg.id},'hitProb',parseInt(this.value));document.getElementById('pv-${leg.id}').textContent=this.value+'%'"/>
+          <input class="prob-slider t-${badge}" type="range" min="5" max="99" value="${leg.hitProb}" oninput="updateCF(${leg.id},'hitProb',this.value)"/>
           <div class="prob-ticks"><span>5% (longshot)</span><span>50% (coin flip)</span><span>99% (lock)</span></div>
         </div>
       </div>
@@ -1179,9 +1229,19 @@ function addLogLeg(type){logLegs.push({id:++logCounter,type,player:'',sport:'NBA
 function removeLogLeg(id){logLegs=logLegs.filter(l=>l.id!==id);renderLogLegs();refreshLogSummary();}
 function updateLF(id,field,val){
   const l=logLegs.find(l=>l.id===id);if(!l)return;l[field]=val;
-  if(field==='stdLine'||field==='playedLine'){const s=parseFloat(l.stdLine),p=parseFloat(l.playedLine);if(!isNaN(s)&&!isNaN(p))l.type=autoClassify(s,p);}
   renderLogLegs();refreshLogSummary();
 }
+function patchLF(id,field,val){const l=logLegs.find(l=>l.id===id);if(!l)return;l[field]=val;}
+function blurLFLine(id,field,el){
+  const l=logLegs.find(l=>l.id===id);if(!l)return;
+  const raw=String(el.value||'').trim().replace(/,/g,'');
+  if(raw===''||raw==='-'||raw==='.'||raw==='-.'){l[field]='';}
+  else{const n=parseFloat(raw);l[field]=isNaN(n)?raw:String(n);}
+  const s=parseFloat(l.stdLine),p=parseFloat(l.playedLine);
+  if(!isNaN(s)&&!isNaN(p))l.type=autoClassify(s,p);
+  renderLogLegs();refreshLogSummary();
+}
+function blurLFPlayer(id){renderLogLegs();refreshLogSummary();}
 function clearLogForm(){logLegs=[];logCounter=0;renderLogLegs();document.getElementById('log-base-mult').value='';document.getElementById('log-actual-mult').value='';document.getElementById('log-ticket-summary').style.display='none';document.getElementById('log-leg-summary').textContent='';}
 
 function renderLogLegs(){
@@ -1204,11 +1264,11 @@ function renderLogLegs(){
         <div style="display:flex;align-items:center;gap:8px;">${bktHtml}<button class="leg-remove" onclick="removeLogLeg(${leg.id})">✕</button></div>
       </div>
       <div class="form-grid-5">
-        <div class="field"><label>PLAYER</label><input class="leg-input" type="text" placeholder="e.g. Tari Eason" value="${leg.player}" oninput="updateLF(${leg.id},'player',this.value)"/></div>
+        <div class="field"><label>PLAYER</label><input class="leg-input" type="text" placeholder="e.g. Tari Eason" value="${leg.player}" oninput="patchLF(${leg.id},'player',this.value)" onblur="blurLFPlayer(${leg.id})"/></div>
         <div class="field"><label>SPORT</label><select class="leg-input" onchange="updateLF(${leg.id},'sport',this.value)">${ss(leg.sport)}</select></div>
         <div class="field"><label>PROP</label><select class="leg-input" onchange="updateLF(${leg.id},'prop',this.value)">${ps(leg.prop)}</select></div>
-        <div class="field"><label style="color:var(--std)">⭐ STD LINE</label><input class="leg-input" type="number" step="0.5" placeholder="20.5" value="${leg.stdLine}" oninput="updateLF(${leg.id},'stdLine',this.value)" style="color:var(--std)"/></div>
-        <div class="field"><label style="color:${ac}">${leg.type==='goblin'?'🎃 GOBLIN':leg.type==='demon'?'😈 DEMON':'PLAYED'} LINE</label><input class="leg-input" type="number" step="0.5" value="${leg.playedLine}" ${leg.type==='standard'&&!leg.playedLine?'disabled':''} oninput="updateLF(${leg.id},'playedLine',this.value)" style="color:${ac}"/></div>
+        <div class="field"><label style="color:var(--std)">⭐ STD LINE</label><input class="leg-input" type="text" inputmode="decimal" autocomplete="off" placeholder="20.5" value="${leg.stdLine}" oninput="patchLF(${leg.id},'stdLine',this.value)" onblur="blurLFLine(${leg.id},'stdLine',this)" style="color:var(--std)"/></div>
+        <div class="field"><label style="color:${ac}">${leg.type==='goblin'?'🎃 GOBLIN':leg.type==='demon'?'😈 DEMON':'PLAYED'} LINE</label><input class="leg-input" type="text" inputmode="decimal" autocomplete="off" value="${leg.playedLine}" ${leg.type==='standard'&&!leg.playedLine?'disabled':''} oninput="patchLF(${leg.id},'playedLine',this.value)" onblur="blurLFLine(${leg.id},'playedLine',this)" style="color:${ac}"/></div>
       </div>
       <div style="margin-top:8px;font-size:10px;color:var(--muted);letter-spacing:1px">Δ / Δ% → ${dHtml}</div>
     </div>`;
@@ -1338,12 +1398,199 @@ function renderInsights(go,de){
   el.innerHTML=ins.join('');
 }
 
+/* ─── SCREENSHOT IMPORT (Anthropic vision, browser fetch) ─── */
+let _pendingImportedPicks=null;
+
+const VISION_PROMPT=
+  "This is a PrizePicks ticket screenshot. Extract all picks and return ONLY a JSON array like:\n"+
+  "[\n"+
+  "  {\n"+
+  "    \"player\": \"Ja Morant\",\n"+
+  "    \"prop\": \"Points\",\n"+
+  "    \"line\": 24.5,\n"+
+  "    \"direction\": \"OVER\",\n"+
+  "    \"pick_type\": \"Goblin\"\n"+
+  "  }\n"+
+  "]\n"+
+  "Include pick_type if visible (Goblin/Demon/Standard). Return only the JSON, no other text.";
+
+function stripVisionFence(t){
+  let s=String(t||'').trim();
+  if(s.startsWith('```')){
+    s=s.replace(/^```[a-zA-Z0-9]*\s*/,'').replace(/\s*```\s*$/,'');
+  }
+  return s.trim();
+}
+
+function mapPickType(s){
+  const t=String(s||'').toLowerCase();
+  if(t.includes('goblin'))return'goblin';
+  if(t.includes('demon'))return'demon';
+  return'standard';
+}
+function nearestProp(stat){
+  const st=String(stat||'').trim();
+  if(!st)return'Other';
+  const low=st.toLowerCase();
+  for(const p of PROP_OPTS){if(p.toLowerCase()===low)return p;}
+  if(/\bpts\s*\+\s*reb\s*\+\s*ast\b/i.test(st)||/points.*rebounds.*assists/i.test(st))return'Pts+Reb+Ast';
+  if(/point/i.test(low)&&!/3/.test(low)&&!/three/i.test(low))return'Points';
+  if(/rebound/i.test(low))return'Rebounds';
+  if(/assist/i.test(low))return'Assists';
+  if(/3/.test(low)&&/pt/i.test(low))return'3-PT Made';
+  if(/pra/i.test(low))return'Pts+Reb+Ast';
+  return'Other';
+}
+function applyPicksToCalc(picks){
+  if(!Array.isArray(picks)||!picks.length)return;
+  calcLegs=[];
+  calcCounter=0;
+  picks.forEach(p=>{
+    const type=mapPickType(p.pick_type||p.pickType||'standard');
+    const line=Number(p.line);
+    if(isNaN(line))return;
+    const prop=nearestProp(p.prop||p.stat||'');
+    const player=String(p.player||'').trim();
+    const std=line;
+    const played=type==='standard'?'':String(line);
+    calcLegs.push({
+      id:++calcCounter,
+      type,
+      player,
+      sport:'NBA',
+      prop,
+      stdLine:String(std),
+      playedLine:played,
+      hitProb:type==='goblin'?68:type==='demon'?32:52,
+      open:true,
+    });
+  });
+  renderCalcLegs();
+  document.getElementById('calc-results').style.display='none';
+}
+function blurDecimalField(el,opts){
+  const raw=String(el.value||'').trim().replace(/,/g,'');
+  if(opts.allowEmpty&&raw==='')return;
+  const n=parseFloat(raw);
+  if(isNaN(n))return;
+  let x=n;
+  if(opts.min!=null)x=Math.max(opts.min,x);
+  if(opts.max!=null)x=Math.min(opts.max,x);
+  el.value=opts.asInt?String(Math.round(x)):String(x);
+}
+function bindTopDecimals(){
+  const m=document.getElementById('calc-mult');
+  const s=document.getElementById('calc-stake');
+  const a=document.getElementById('log-actual-mult');
+  if(m)m.addEventListener('blur',()=>blurDecimalField(m,{min:0.01,max:1e6,allowEmpty:true}));
+  if(s)s.addEventListener('blur',()=>blurDecimalField(s,{min:0.01,max:1e6}));
+  if(a)a.addEventListener('blur',()=>{blurDecimalField(a,{min:0.01,max:1e6,allowEmpty:true});refreshLogSummary();});
+}
+function fileToBase64(file){
+  return new Promise((resolve,reject)=>{
+    const r=new FileReader();
+    r.onload=()=>{
+      const s=String(r.result||'');
+      const i=s.indexOf(',');
+      resolve({rawBase64:i>=0?s.slice(i+1):s,mediaType:file.type&&file.type.startsWith('image/')?file.type:'image/jpeg'});
+    };
+    r.onerror=()=>reject(new Error('read'));
+    r.readAsDataURL(file);
+  });
+}
+async function onScreenshotFile(fileList){
+  const f=fileList&&fileList[0];
+  if(!f)return;
+  try{
+    const {rawBase64,mediaType}=await fileToBase64(f);
+    await sendScreenshotToVision(rawBase64,mediaType);
+  }catch{
+    alert('Could not read image file.');
+  }
+  document.getElementById('screenshot-file').value='';
+}
+async function sendScreenshotToVision(rawBase64,mediaType){
+  const overlay=document.getElementById('modal-overlay');
+  const mt=(mediaType&&String(mediaType).startsWith('image/'))?mediaType:'image/jpeg';
+  try{
+    const response=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{
+          role:'user',
+          content:[
+            {type:'image',source:{type:'base64',media_type:mt,data:rawBase64}},
+            {type:'text',text:VISION_PROMPT},
+          ],
+        }],
+      }),
+    });
+    const out=await response.json().catch(()=>({}));
+    if(!response.ok){
+      const msg=(out&&out.error&&out.error.message)||out.message||('HTTP '+response.status);
+      alert('Screenshot import failed: '+msg);
+      return;
+    }
+    const textParts=[];
+    for(const block of out.content||[]){
+      if(block&&block.type==='text')textParts.push(block.text||'');
+    }
+    const rawText=textParts.join('').trim();
+    const cleaned=stripVisionFence(rawText);
+    let picks;
+    try{
+      picks=JSON.parse(cleaned);
+    }catch(e){
+      alert('Could not parse JSON from model. Try a clearer screenshot.\n'+String(e.message||e));
+      return;
+    }
+    if(!Array.isArray(picks)||!picks.length){
+      alert('Model did not return a non-empty JSON array.');
+      return;
+    }
+    _pendingImportedPicks=picks;
+    document.getElementById('modal-picks-json').textContent=JSON.stringify(picks,null,2);
+    overlay.style.display='flex';
+  }catch{
+    alert('Screenshot import failed (network or CORS).');
+  }
+}
+function closePickModal(){
+  document.getElementById('modal-overlay').style.display='none';
+  _pendingImportedPicks=null;
+}
+function confirmApplyImportedPicks(){
+  if(_pendingImportedPicks)applyPicksToCalc(_pendingImportedPicks);
+  closePickModal();
+  switchTab('calc',document.querySelector('.tab-btn'));
+}
+document.addEventListener('paste',e=>{
+  const tab=document.getElementById('tab-calc');
+  if(!tab||!tab.classList.contains('active'))return;
+  const items=e.clipboardData&&e.clipboardData.items;
+  if(!items)return;
+  for(let i=0;i<items.length;i++){
+    if(items[i].type&&items[i].type.indexOf('image')===0){
+      const f=items[i].getAsFile();
+      if(f){
+        e.preventDefault();
+        fileToBase64(f).then(({rawBase64,mediaType})=>sendScreenshotToVision(rawBase64,mediaType)).catch(()=>{});
+      }
+      break;
+    }
+  }
+});
+
 /* ─── INIT ─── */
 addCalcLeg('standard');
 addCalcLeg('goblin');
 updateLogCount();
 renderLogTable();
 renderLogLegs();
+bindTopDecimals();
 </script>
 
 <script>
