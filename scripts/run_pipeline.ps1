@@ -220,6 +220,15 @@ function Run-Combined {
         Copy-Item $CombinedOut (Join-Path $OutDir "combined_slate_tickets_$Date.xlsx") -Force -ErrorAction SilentlyContinue
         Remove-Item $CombinedOut -Force -ErrorAction SilentlyContinue
         Write-Host "  Saved -> $(Join-Path $OutDir "combined_slate_tickets_$Date.xlsx")" -ForegroundColor Green
+
+        # Save dated snapshot of tickets JSON for historical ticket eval
+        $TicketsJson = Join-Path $Root "combined_slate_tickets_$Date.json"
+        $LatestJson  = Join-Path $Root "ui_runner\templates\tickets_latest.json"
+        if (!(Test-Path $TicketsJson) -and (Test-Path $LatestJson)) {
+            Copy-Item $LatestJson $TicketsJson
+            Write-Host "[INFO] Saved tickets snapshot: combined_slate_tickets_$Date.json"
+        }
+
         py -3.14 (Join-Path $Root "build_ticket_eval.py") --date $Date
         if ($LASTEXITCODE -ne 0) {
             Write-Error "Ticket eval build failed"

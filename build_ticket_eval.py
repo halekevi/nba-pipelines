@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Build ticket_eval_{date}.html (+ ticket_eval_latest.html) for the Grades UI.
-Reads ticket JSON and sport step8/graded workbooks, matches legs to actuals, writes self-contained HTML.
+Reads ticket JSON (or combined_slate_tickets_{date}.xlsx) and sport step8/graded workbooks,
+matches legs to actuals, writes self-contained HTML.
 """
 from __future__ import annotations
 
@@ -18,9 +19,24 @@ import pandas as pd
 REPO_ROOT = Path(__file__).resolve().parent
 TEMPLATES_DIR = REPO_ROOT / "ui_runner" / "templates"
 
-# Ticket JSON search order
+# Ticket source search order: dated JSON → dated xlsx (repo root) → tickets_latest.json
 DATED_TICKET_JSON = "combined_slate_tickets_{date}.json"
 FALLBACK_TICKET_JSON = TEMPLATES_DIR / "tickets_latest.json"
+
+_XLSX_HDR_TO_LEG_FIELD: dict[str, str] = {
+    "player": "player",
+    "team": "team",
+    "opp": "opp",
+    "prop": "prop_type",
+    "pick type": "pick_type",
+    "line": "line",
+    "dir": "direction",
+    "edge": "edge",
+    "hit rate": "hit_rate",
+    "l5 avg": "l5_avg",
+    "szn avg": "season_avg",
+    "sport": "sport",
+}
 
 # Graded / slate workbooks (first existing path wins per sport)
 SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
@@ -199,8 +215,8 @@ def debug_report(arg_date: str, payload: dict[str, Any], tpath: Path) -> None:
     """Print why legs may not match (JSON date vs CLI, xlsx paths, headers, sample legs)."""
     print("\n=== build_ticket_eval.py --debug ===\n")
     print(f"CLI --date:     {arg_date}")
-    print(f"Ticket JSON:    {tpath}")
-    print(f"JSON \"date\":   {payload.get('date')!r}")
+    print(f"Ticket source:  {tpath}")
+    print(f"Payload \"date\": {payload.get('date')!r}")
     if str(payload.get("date") or "").strip() != arg_date:
         print(
             "  ! Mismatch: ticket payload date differs from --date; legs are still matched against"
@@ -330,16 +346,227 @@ def _match_leg_to_row(
     return cands[0]
 
 
-def _find_ticket_json(arg_date: str) -> Path | None:
+def find_ticket_json(arg_date: str) -> Path | None:
+    """Resolve ticket file: dated JSON → dated xlsx at repo root → tickets_latest.json."""
     p1 = REPO_ROOT / DATED_TICKET_JSON.format(date=arg_date)
     if p1.is_file():
         return p1
+    px = REPO_ROOT / f"combined_slate_tickets_{arg_date}.xlsx"
+    if px.is_file():
+        return px
     if FALLBACK_TICKET_JSON.is_file():
+        print(
+            f"[WARN] No dated ticket file found for {arg_date} — falling back to "
+            "tickets_latest.json (legs will not match this date's actual slate)",
+            flush=True,
+        )
         return FALLBACK_TICKET_JSON
     return None
 
 
-def _load_tickets(path: Path) -> dict[str, Any]:
+def _player_initials(name: str) -> str:
+    parts = str(name or "").strip().split()
+    if not parts:
+        return ""
+    if len(parts) == 1:
+        return parts[0][:1].upper()
+    return (parts[0][:1] + parts[-1][:1]).upper()
+
+
+def _clean_team_abbr(s: str) -> str:
+    s = str(s or "").strip()
+    if not s:
+        return ""
+    return re.sub(r"\s*\([^)]*\)\s*$", "", s).strip()
+
+
+def _parse_ticket_banner(s: str) -> tuple[float, float, int]:
+    m_no = re.search(r"Ticket\s*#?\s*(\d+)", s, re.I)
+    ticket_no = int(m_no.group(1)) if m_no else 1
+    m_pow = re.search(r"Power:\s*([\d.]+)\s*x", s, re.I)
+    m_flex = re.search(r"Flex:\s*([\d.]+)\s*x", s, re.I)
+    power = float(m_pow.group(1)) if m_pow else 0.0
+    flex = float(m_flex.group(1)) if m_flex else 0.0
+    return power, flex, ticket_no
+
+
+def _ticket_header_colmap(row: tuple[Any, ...]) -> dict[int, str]:
+    out: dict[int, str] = {}
+    for i, cell in enumerate(row):
+        key = _norm_header(cell)
+        field = _XLSX_HDR_TO_LEG_FIELD.get(key)
+        if field:
+            out[i] = field
+    return out
+
+
+def _row_has_values(row: tuple[Any, ...]) -> bool:
+    return any(str(c or "").strip() for c in row)
+
+
+def _coerce_hit_rate_cell(v: Any) -> float | None:
+    if v is None or (isinstance(v, str) and not v.strip()):
+        return None
+    if isinstance(v, (int, float)) and not (isinstance(v, float) and pd.isna(v)):
+        f = float(v)
+    else:
+        s = str(v).strip().rstrip("%")
+        try:
+            f = float(s)
+        except (TypeError, ValueError):
+            return None
+    if f > 1.0:
+        f = f / 100.0
+    return f
+
+
+def _coerce_line_cell(v: Any) -> float | None:
+    if v is None or (isinstance(v, str) and not v.strip()):
+        return None
+    if isinstance(v, (int, float)) and not (isinstance(v, float) and pd.isna(v)):
+        return float(v)
+    try:
+        return float(str(v).strip())
+    except (TypeError, ValueError):
+        return None
+
+
+def _coerce_edge_cell(v: Any) -> float:
+    if v is None or v == "":
+        return 0.0
+    if isinstance(v, (int, float)) and not (isinstance(v, float) and pd.isna(v)):
+        return float(v)
+    try:
+        return float(str(v).strip())
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _leg_from_xlsx_row(row: tuple[Any, ...], colmap: dict[int, str]) -> dict[str, Any] | None:
+    leg: dict[str, Any] = {}
+    for ci, field in colmap.items():
+        if ci >= len(row):
+            continue
+        val = row[ci]
+        if field == "player":
+            leg["player"] = str(val or "").strip()
+        elif field == "team":
+            leg["team"] = _clean_team_abbr(str(val or ""))
+        elif field == "opp":
+            leg["opp"] = _clean_team_abbr(str(val or ""))
+        elif field == "prop_type":
+            leg["prop_type"] = str(val or "").strip()
+        elif field == "pick_type":
+            leg["pick_type"] = str(val or "").strip()
+        elif field == "line":
+            leg["line"] = _coerce_line_cell(val)
+        elif field == "direction":
+            leg["direction"] = str(val or "").strip().upper()
+        elif field == "edge":
+            leg["edge"] = _coerce_edge_cell(val)
+        elif field == "hit_rate":
+            leg["hit_rate"] = _coerce_hit_rate_cell(val)
+        elif field == "l5_avg":
+            x = _coerce_line_cell(val)
+            leg["l5_avg"] = x
+        elif field == "season_avg":
+            x = _coerce_line_cell(val)
+            leg["season_avg"] = x
+        elif field == "sport":
+            leg["sport"] = str(val or "").strip().upper()
+    if not leg.get("player"):
+        return None
+    leg["initials"] = _player_initials(str(leg.get("player") or ""))
+    return leg
+
+
+def _skip_xlsx_ticket_sheet(sheet_name: str) -> bool:
+    n = sheet_name.strip().lower()
+    if n == "summary":
+        return True
+    if "slate" in n:
+        return True
+    return False
+
+
+def _parse_ticket_sheet(ws: Any) -> list[dict[str, Any]]:
+    current: dict[str, Any] | None = None
+    colmap: dict[int, str] = {}
+    expect_header = False
+    tickets: list[dict[str, Any]] = []
+
+    for row in ws.iter_rows(values_only=True):
+        if row is None:
+            continue
+        r0 = row[0] if row else None
+        s0 = str(r0 or "").strip()
+        is_banner = (
+            s0
+            and "ticket #" in s0.lower()
+            and ("power:" in s0.lower() or "flex:" in s0.lower())
+        )
+        if is_banner:
+            if current is not None and current.get("legs"):
+                tickets.append(current)
+            pow_v, flex_v, tno = _parse_ticket_banner(s0)
+            current = {
+                "ticket_no": tno,
+                "power_payout": pow_v,
+                "flex_payout": flex_v,
+                "legs": [],
+            }
+            expect_header = True
+            continue
+
+        if expect_header:
+            colmap = _ticket_header_colmap(row)
+            expect_header = False
+            continue
+
+        if current is None or not colmap:
+            continue
+
+        if not _row_has_values(row):
+            continue
+
+        leg = _leg_from_xlsx_row(row, colmap)
+        if leg:
+            current["legs"].append(leg)
+
+    if current is not None and current.get("legs"):
+        tickets.append(current)
+
+    return tickets
+
+
+def _load_tickets_from_xlsx(path: Path, arg_date: str) -> dict[str, Any]:
+    try:
+        from openpyxl import load_workbook
+    except ImportError as e:
+        raise ImportError(
+            "openpyxl is required to read combined_slate_tickets_*.xlsx; "
+            "install with: pip install openpyxl"
+        ) from e
+
+    groups: list[dict[str, Any]] = []
+    wb = load_workbook(path, read_only=True, data_only=True)
+    try:
+        for sheet_name in wb.sheetnames:
+            if _skip_xlsx_ticket_sheet(sheet_name):
+                continue
+            ws = wb[sheet_name]
+            tix = _parse_ticket_sheet(ws)
+            if tix:
+                groups.append({"group_name": sheet_name, "tickets": tix})
+    finally:
+        wb.close()
+
+    return {"date": arg_date, "groups": groups}
+
+
+def _load_tickets(path: Path, arg_date: str) -> dict[str, Any]:
+    if path.suffix.lower() == ".xlsx":
+        return _load_tickets_from_xlsx(path, arg_date)
     with path.open(encoding="utf-8") as f:
         return json.load(f)
 
@@ -685,15 +912,18 @@ def main() -> int:
     else:
         arg_date = (date.today() - timedelta(days=1)).isoformat()
 
-    tpath = _find_ticket_json(arg_date)
+    tpath = find_ticket_json(arg_date)
     if not tpath:
-        print("ERROR: No ticket JSON found (combined_slate_tickets_{date}.json or tickets_latest.json).")
+        print(
+            "ERROR: No ticket file found (combined_slate_tickets_{date}.json, "
+            "combined_slate_tickets_{date}.xlsx, or ui_runner/templates/tickets_latest.json)."
+        )
         return 1
 
     try:
-        payload = _load_tickets(tpath)
+        payload = _load_tickets(tpath, arg_date)
     except Exception as e:
-        print(f"ERROR: Failed to read ticket JSON: {e}")
+        print(f"ERROR: Failed to read ticket file: {e}")
         return 1
 
     if args.debug:
