@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 
 // ── Data ────────────────────────────────────────────────────────────────────
 const DEFAULT_POWER_BASE = { 2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 37.5 };
@@ -14,7 +14,31 @@ const DEFAULT_GOBLIN_FLEX  = { 1: 0.8,  2: 0.72,  3: 0.6 };
 const DEFAULT_DEMON_POWER  = { 1: 1.627, 2: 2.4,  3: 2.72 };
 const DEFAULT_DEMON_FLEX   = { 1: 1.6,  2: 1.52,  3: 1.56 };
 const SETTINGS_KEY = "pp_payout_calc_settings_v2";
+const TICKET_LOG_KEY = "po_ticket_log_v1";
 const LEG_TYPES = ["Standard","Goblin -1","Goblin -2","Goblin -3","Demon +1","Demon +2","Demon +3"];
+const LOGGER_SPORTS = ["NBA", "CBB", "Soccer", "NHL", "Mixed"];
+const LOGGER_PROP_TYPES = [
+  "Points", "Rebounds", "Assists", "PRA", "Pts+Asts", "Pts+Rebs", "Rebs+Asts", "Threes", "Steals", "Blocks",
+  "Turnovers", "Fantasy Score", "FTA", "FG Attempted", "Goalie Saves", "Shots", "Shots on Target", "Goals",
+  "Passes", "Tackles",
+];
+const LOGGER_RESULTS = ["PENDING", "WON", "LOST", "PUSH", "REFUNDED"];
+
+function todayISODate() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function newLogLeg(tier = "Standard") {
+  return { player: "", prop: "Points", line: "", direction: "OVER", tier, hit_rate: 0.52 };
+}
+
+function genLogId() {
+  return Math.random().toString(36).substr(2, 9);
+}
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 const r2 = x => Math.round(Number(x) * 100) / 100;
@@ -112,7 +136,49 @@ const S = {
   th:       { padding: "11px 14px", textAlign: "center", fontFamily: mono, color: C.muted, borderBottom: `1px solid ${C.border}`, fontSize: 10, letterSpacing: "1.5px", whiteSpace: "nowrap", background: C.surface2 },
   td:       { padding: "12px 14px", borderBottom: "1px solid rgba(255,255,255,.04)" },
   flexCard: { background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 12, padding: "14px 18px", minWidth: 120 },
+  logRowFlex: { display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8, marginBottom: 8, background: C.surface2, borderRadius: 10, padding: "8px 10px", border: `1px solid ${C.border}` },
+  logPlayerInp: { background: C.bg, color: C.text, border: `1px solid ${C.border2}`, borderRadius: 7, padding: "6px 8px", fontSize: 13, outline: "none", fontFamily: mono, fontWeight: 500, minWidth: 0, width: "100%" },
+  logHitInp: { background: C.bg, color: C.muted, border: `1px solid ${C.border}`, borderRadius: 6, padding: "4px 4px", fontSize: 11, outline: "none", fontFamily: mono, width: 50, flexShrink: 0, textAlign: "center" },
+  logSelSm: { background: C.bg, border: `1px solid ${C.border2}`, borderRadius: 7, padding: "5px 6px", fontSize: 11, cursor: "pointer", outline: "none", fontFamily: mono, color: C.text, maxWidth: "100%" },
+  logLineInp: { background: C.bg, color: C.text, border: `1px solid ${C.border2}`, borderRadius: 7, padding: "5px 6px", fontSize: 12, outline: "none", fontFamily: mono, width: "100%", maxWidth: 64 },
+  logDirWrap: { display: "flex", gap: 4, flexShrink: 0 },
+  logBtnGreen: { width: "100%", padding: "12px 16px", background: C.green, color: "#fff", border: "none", borderRadius: 10, cursor: "pointer", fontFamily: syne, fontSize: 14, fontWeight: 700, marginTop: 12, transition: "opacity .15s" },
+  logFlash: (visible) => ({ fontFamily: mono, fontSize: 12, color: C.green, textAlign: "center", marginTop: 10, opacity: visible ? 1 : 0, transition: "opacity .35s ease", minHeight: 18 }),
+  logFilterRow: { display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", marginBottom: 12 },
+  logFilterLbl: { fontFamily: mono, fontSize: 9, color: C.muted, letterSpacing: "1.5px" },
+  logCard: { background: C.surface2, border: `1px solid ${C.border}`, borderRadius: 12, marginBottom: 10, overflow: "hidden" },
+  logCardHead: { display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10, padding: "12px 14px", cursor: "pointer", justifyContent: "space-between" },
+  logCardBody: { borderTop: `1px solid ${C.border}`, padding: "12px 14px", background: "rgba(0,0,0,.12)" },
+  logExportBtn: { background: C.surface3, border: `1px solid ${C.border2}`, color: C.text, borderRadius: 8, padding: "8px 14px", cursor: "pointer", fontFamily: mono, fontSize: 11, fontWeight: 500 },
+  logSportRow: { fontFamily: mono, fontSize: 10, color: C.muted, marginBottom: 4, lineHeight: 1.4 },
+  logComboRow: { fontFamily: mono, fontSize: 10, color: C.muted, marginTop: 6, lineHeight: 1.5 },
+  logFieldLbl: { fontFamily: mono, fontSize: 9, color: C.muted, letterSpacing: "1.2px", marginBottom: 6 },
+  logPreviewBox: { background: "rgba(255,255,255,.03)", border: `1px solid ${C.border}`, borderRadius: 10, padding: "10px 12px", marginTop: 10, fontFamily: mono, fontSize: 12, color: C.text, lineHeight: 1.6 },
+  logDashGrid: { display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: 10, marginBottom: 12 },
 };
+
+function resultBadgeColors(res) {
+  switch (res) {
+    case "WON": return { bg: "rgba(34,197,94,.15)", border: "rgba(34,197,94,.35)", color: C.green };
+    case "LOST": return { bg: "rgba(239,68,68,.12)", border: "rgba(239,68,68,.28)", color: C.red };
+    case "PUSH": return { bg: "rgba(245,158,11,.12)", border: "rgba(245,158,11,.28)", color: C.gold };
+    case "REFUNDED": return { bg: "rgba(59,130,246,.12)", border: "rgba(59,130,246,.28)", color: C.blue };
+    default: return { bg: "rgba(113,113,122,.12)", border: "rgba(113,113,122,.25)", color: C.muted };
+  }
+}
+
+function resolveActualPayout({ result, ticketType, powerWin, flexWin, stake, payoutOverride }) {
+  const st = Math.max(0, Number(stake) || 0);
+  if (result === "PENDING") return null;
+  if (result === "WON") {
+    const o = payoutOverride;
+    if (o !== null && o !== undefined && String(o).trim() !== "" && !isNaN(Number(o))) return r2(Number(o));
+    return r2(ticketType === "flex" ? flexWin : powerWin);
+  }
+  if (result === "LOST") return 0;
+  if (result === "PUSH" || result === "REFUNDED") return r2(st);
+  return null;
+}
 
 // ── Component ────────────────────────────────────────────────────────────────
 export default function PayoutCalculator() {
@@ -132,6 +198,29 @@ export default function PayoutCalculator() {
   const [demonPower, setDemonPower]   = useState(DEFAULT_DEMON_POWER);
   const [demonFlex, setDemonFlex]     = useState(DEFAULT_DEMON_FLEX);
 
+  const [tickets, setTickets] = useState(() => {
+    try {
+      const raw = localStorage.getItem(TICKET_LOG_KEY);
+      if (!raw) return [];
+      const p = JSON.parse(raw);
+      return Array.isArray(p) ? p : [];
+    } catch { return []; }
+  });
+  const [logDate, setLogDate] = useState(() => todayISODate());
+  const [logSport, setLogSport] = useState("NBA");
+  const [logTicketType, setLogTicketType] = useState("power");
+  const [logLegs, setLogLegs] = useState(() => [newLogLeg(), newLogLeg()]);
+  const [logFormResult, setLogFormResult] = useState("PENDING");
+  const [logFormActualPayout, setLogFormActualPayout] = useState("");
+  const [logSuccess, setLogSuccess] = useState(false);
+  const [expandedLogIds, setExpandedLogIds] = useState({});
+  const [editingLogId, setEditingLogId] = useState(null);
+  const [editLogResult, setEditLogResult] = useState("PENDING");
+  const [editLogPayout, setEditLogPayout] = useState("");
+  const [filterSport, setFilterSport] = useState("All");
+  const [filterResult, setFilterResult] = useState("All");
+  const [filterDateRange, setFilterDateRange] = useState("all");
+
   useEffect(() => {
     try {
       const s = JSON.parse(localStorage.getItem(SETTINGS_KEY));
@@ -145,6 +234,16 @@ export default function PayoutCalculator() {
     } catch {}
   }, []);
 
+  useEffect(() => {
+    try { localStorage.setItem(TICKET_LOG_KEY, JSON.stringify(tickets)); } catch {}
+  }, [tickets]);
+
+  useEffect(() => {
+    if (!logSuccess) return;
+    const t = setTimeout(() => setLogSuccess(false), 2000);
+    return () => clearTimeout(t);
+  }, [logSuccess]);
+
   const mods = { goblinPower, goblinFlex, demonPower, demonFlex };
   const tables = { powerBase, flexBase };
 
@@ -156,6 +255,242 @@ export default function PayoutCalculator() {
     exactFlex:  parseFloat(exactFlex) || 0,
     tables, mods,
   }), [legs, stake, mode, exactPower, exactFlex, powerBase, flexBase, goblinPower, goblinFlex, demonPower, demonFlex]);
+
+  const logCalcResult = useMemo(() => calcPayouts({
+    legs: logLegs.map(l => l.tier),
+    stake: Math.max(1, Number(stake) || 10),
+    mode,
+    exactPower: parseFloat(exactPower) || 0,
+    exactFlex: parseFloat(exactFlex) || 0,
+    tables, mods,
+  }), [logLegs, stake, mode, exactPower, exactFlex, powerBase, flexBase, goblinPower, goblinFlex, demonPower, demonFlex]);
+
+  const logWinProb = useMemo(() => {
+    const ps = logLegs.map(l => {
+      const x = Number(l.hit_rate);
+      if (Number.isFinite(x) && x > 0 && x <= 1) return x;
+      return 0.52;
+    });
+    return ps.reduce((a, b) => a * b, 1);
+  }, [logLegs]);
+
+  const logEv = useMemo(() => {
+    const st = Math.max(1, Number(stake) || 10);
+    if (!logCalcResult) return { ev: 0, roiPct: 0 };
+    const ev = r2(logWinProb * logCalcResult.powerWin - st);
+    const roiPct = st > 0 ? r2((ev / st) * 100) : 0;
+    return { ev, roiPct };
+  }, [logWinProb, logCalcResult, stake]);
+
+  const filteredTickets = useMemo(() => {
+    const now = new Date();
+    const cutoff = (days) => {
+      const d = new Date(now);
+      d.setDate(d.getDate() - days);
+      return d.toISOString().slice(0, 10);
+    };
+    let minD = null;
+    if (filterDateRange === "7") minD = cutoff(7);
+    else if (filterDateRange === "30") minD = cutoff(30);
+    let list = [...tickets];
+    if (filterSport !== "All") list = list.filter(t => t.sport === filterSport);
+    if (filterResult !== "All") list = list.filter(t => t.result === filterResult);
+    if (minD) list = list.filter(t => (t.date || "") >= minD);
+    list.sort((a, b) => String(b.logged_at || "").localeCompare(String(a.logged_at || "")));
+    return list;
+  }, [tickets, filterSport, filterResult, filterDateRange]);
+
+  const dashStats = useMemo(() => {
+    const total = filteredTickets.length;
+    const won = filteredTickets.filter(t => t.result === "WON").length;
+    const lost = filteredTickets.filter(t => t.result === "LOST").length;
+    const wrDenom = won + lost;
+    const winRate = wrDenom > 0 ? r2((won / wrDenom) * 100) : 0;
+    const totalStaked = filteredTickets.reduce((s, t) => s + (Number(t.stake) || 0), 0);
+    const net = filteredTickets.reduce((s, t) => {
+      if (t.result === "PENDING") return s;
+      const ap = t.actual_payout != null ? Number(t.actual_payout) : 0;
+      return s + (ap - (Number(t.stake) || 0));
+    }, 0);
+    const roi = totalStaked > 0 ? r2((net / totalStaked) * 100) : 0;
+    return { total, winRate, totalStaked: r2(totalStaked), net: r2(net), roi, won, lost };
+  }, [filteredTickets]);
+
+  const sportBreakdown = useMemo(() => {
+    const by = {};
+    for (const t of filteredTickets) {
+      const sp = t.sport || "Mixed";
+      if (!by[sp]) by[sp] = { n: 0, won: 0, lost: 0, net: 0 };
+      by[sp].n++;
+      if (t.result === "WON") by[sp].won++;
+      if (t.result === "LOST") by[sp].lost++;
+      if (t.result !== "PENDING") {
+        const ap = t.actual_payout != null ? Number(t.actual_payout) : 0;
+        by[sp].net += ap - (Number(t.stake) || 0);
+      }
+    }
+    return Object.entries(by).map(([sport, v]) => {
+      const wd = v.won + v.lost;
+      const wr = wd > 0 ? r2((v.won / wd) * 100) : 0;
+      return { sport, n: v.n, won: v.won, lost: v.lost, wr, net: r2(v.net) };
+    });
+  }, [filteredTickets]);
+
+  const comboBestWorst = useMemo(() => {
+    const map = {};
+    for (const t of filteredTickets) {
+      if (t.result !== "WON" && t.result !== "LOST") continue;
+      for (const leg of t.legs || []) {
+        const pl = (leg.player || "").trim();
+        if (!pl) continue;
+        const prop = leg.prop || "";
+        const k = `${pl.toLowerCase()}|${prop}`;
+        if (!map[k]) map[k] = { wins: 0, losses: 0, label: `${pl} · ${prop}` };
+        if (t.result === "WON") map[k].wins++;
+        else map[k].losses++;
+      }
+    }
+    const combos = Object.values(map)
+      .filter(c => c.wins + c.losses >= 3)
+      .map(c => ({
+        ...c,
+        rate: (c.wins + c.losses) > 0 ? r2((c.wins / (c.wins + c.losses)) * 100) : 0,
+        n: c.wins + c.losses,
+      }));
+    combos.sort((a, b) => b.rate - a.rate || b.n - a.n);
+    const best = combos[0] || null;
+    const worst = combos.length ? combos[combos.length - 1] : null;
+    return { best, worst };
+  }, [filteredTickets]);
+
+  const logTicket = useCallback(() => {
+    const st = Math.max(1, Number(stake) || 10);
+    if (!logCalcResult) return;
+    if (logLegs.length < 2 || logLegs.length > 6) return;
+    const winProb = logWinProb;
+    const evVal = r2(winProb * logCalcResult.powerWin - st);
+    const roiVal = st > 0 ? r2((evVal / st) * 100) : 0;
+    const ap = resolveActualPayout({
+      result: logFormResult,
+      ticketType: logTicketType,
+      powerWin: logCalcResult.powerWin,
+      flexWin: logCalcResult.flexWin,
+      stake: st,
+      payoutOverride: logFormActualPayout,
+    });
+    const entry = {
+      id: genLogId(),
+      date: logDate,
+      sport: logSport,
+      ticket_type: logTicketType,
+      stake: st,
+      result: logFormResult,
+      actual_payout: ap,
+      power_mult: logCalcResult.powerMult,
+      power_win: logCalcResult.powerWin,
+      flex_mult: logCalcResult.flexMult,
+      flex_win: logCalcResult.flexWin,
+      win_prob: r2(winProb),
+      ev: evVal,
+      roi: roiVal,
+      legs: logLegs.map(l => {
+        const hr = Number(l.hit_rate);
+        const hitOk = Number.isFinite(hr) ? r2(Math.min(1, Math.max(0, hr))) : 0.52;
+        let lineVal = null;
+        if (l.line !== "" && l.line != null && !isNaN(parseFloat(l.line))) lineVal = r2(parseFloat(l.line));
+        return {
+          player: l.player,
+          prop: l.prop,
+          line: lineVal,
+          direction: l.direction,
+          tier: l.tier,
+          hit_rate: hitOk,
+          result: null,
+        };
+      }),
+      logged_at: new Date().toISOString(),
+    };
+    setTickets(prev => [entry, ...prev]);
+    setLogDate(todayISODate());
+    setLogSport("NBA");
+    setLogTicketType("power");
+    setLogLegs([newLogLeg(), newLogLeg()]);
+    setLogFormResult("PENDING");
+    setLogFormActualPayout("");
+    setLogSuccess(true);
+  }, [logCalcResult, logLegs, stake, logDate, logSport, logTicketType, logFormResult, logFormActualPayout, logWinProb]);
+
+  const logThisFromBuilder = useCallback(() => {
+    setLogLegs(legs.map(tier => newLogLeg(tier)));
+    setLogTicketType("power");
+    setTab("logger");
+  }, [legs]);
+
+  const exportCsv = useCallback(() => {
+    const headers = ["date", "sport", "ticket_type", "stake", "legs", "result", "payout", "net", "ev", "win_prob", "roi"];
+    for (let i = 1; i <= 6; i++) {
+      headers.push(`leg${i}_player`, `leg${i}_prop`, `leg${i}_line`, `leg${i}_dir`, `leg${i}_tier`);
+    }
+    const rows = filteredTickets.map(t => {
+      const ap = t.actual_payout != null ? t.actual_payout : "";
+      const net = t.result === "PENDING" ? "" : r2((Number(ap) || 0) - (Number(t.stake) || 0));
+      const legStr = (t.legs || []).length;
+      const cells = [t.date, t.sport, t.ticket_type, t.stake, legStr, t.result, ap, net, t.ev, t.win_prob, t.roi];
+      for (let i = 0; i < 6; i++) {
+        const L = (t.legs || [])[i];
+        if (L) cells.push(L.player, L.prop, L.line != null ? L.line : "", L.direction, L.tier);
+        else cells.push("", "", "", "", "");
+      }
+      return cells.map(c => {
+        const s = String(c ?? "");
+        if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+        return s;
+      }).join(",");
+    });
+    const bom = "\uFEFF";
+    const csv = bom + [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `po_ticket_log_${todayISODate()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [filteredTickets]);
+
+  const saveEditLog = useCallback(() => {
+    if (!editingLogId) return;
+    setTickets(prev => prev.map(t => {
+      if (t.id !== editingLogId) return t;
+      const ap = resolveActualPayout({
+        result: editLogResult,
+        ticketType: t.ticket_type,
+        powerWin: t.power_win,
+        flexWin: t.flex_win,
+        stake: t.stake,
+        payoutOverride: editLogPayout,
+      });
+      return { ...t, result: editLogResult, actual_payout: ap };
+    }));
+    setEditingLogId(null);
+  }, [editingLogId, editLogResult, editLogPayout]);
+
+  const startEditLog = useCallback((t) => {
+    setEditingLogId(t.id);
+    setEditLogResult(t.result);
+    setEditLogPayout(t.actual_payout != null ? String(t.actual_payout) : "");
+    setExpandedLogIds(p => ({ ...p, [t.id]: true }));
+  }, []);
+
+  const deleteTicket = useCallback((id) => {
+    setTickets(prev => prev.filter(t => t.id !== id));
+    setExpandedLogIds(p => { const q = { ...p }; delete q[id]; return q; });
+    setEditingLogId(e => (e === id ? null : e));
+  }, []);
+
+  const toggleExpandLog = useCallback((id) => {
+    setExpandedLogIds(p => ({ ...p, [id]: !p[id] }));
+  }, []);
 
   const badgeCounts = useMemo(() => {
     const c = { Standard: 0, Goblin: 0, Demon: 0 };
@@ -196,7 +531,7 @@ export default function PayoutCalculator() {
 
       {/* TABS */}
       <div style={S.tabs}>
-        {[["builder","🏗 BUILDER"],["reference","📊 REFERENCE"]].map(([id,label]) => (
+        {[["builder","🏗 BUILDER"],["logger","📋 LOGGER"],["reference","📊 REFERENCE"]].map(([id,label]) => (
           <button key={id} style={S.tabBtn(tab === id)} onClick={() => setTab(id)}>{label}</button>
         ))}
       </div>
@@ -373,7 +708,238 @@ export default function PayoutCalculator() {
                       </div>
                     </div>
                   )}
+
+                  <button type="button" onClick={logThisFromBuilder} style={{ width: "100%", padding: "11px 16px", marginTop: 18, background: C.surface3, color: C.text, border: `1px solid ${C.border2}`, borderRadius: 10, cursor: "pointer", fontFamily: syne, fontSize: 13, fontWeight: 700, transition: "opacity .15s" }}>
+                    📋 LOG THIS TICKET
+                  </button>
                 </>
+              )}
+            </div>
+          </div>
+        )}
+
+        {tab === "logger" && (
+          <div style={S.grid2}>
+            <div>
+              <div style={S.secLabel}>LOG · NEW TICKET</div>
+
+              <div style={{ marginBottom: 12 }}>
+                <div style={S.logFieldLbl}>DATE</div>
+                <input type="date" value={logDate} onChange={e => setLogDate(e.target.value)}
+                  style={{ ...S.input, width: "100%", maxWidth: 220 }} />
+              </div>
+
+              <div style={{ marginBottom: 12 }}>
+                <div style={S.logFieldLbl}>STAKE ($)</div>
+                <input type="number" min={1} value={stake} onChange={e => setStake(e.target.value)}
+                  style={{ ...S.input, width: "100%", maxWidth: 200 }} />
+              </div>
+
+              <div style={{ marginBottom: 12 }}>
+                <div style={S.logFieldLbl}>SPORT</div>
+                <select value={logSport} onChange={e => setLogSport(e.target.value)} style={{ ...S.input, width: "100%", maxWidth: 220, cursor: "pointer" }}>
+                  {LOGGER_SPORTS.map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </div>
+
+              <div style={{ marginBottom: 12 }}>
+                <div style={S.logFieldLbl}>TICKET TYPE</div>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  {[["power", "Power Play"], ["flex", "Flex Play"]].map(([v, lab]) => (
+                    <button key={v} type="button" onClick={() => setLogTicketType(v)} style={S.smallBtn(logTicketType === v)}>{lab}</button>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{ marginBottom: 8 }}>
+                <div style={S.logFieldLbl}>LEGS ({logLegs.length})</div>
+                {logLegs.map((leg, i) => (
+                  <div key={i} style={S.logRowFlex}>
+                    <span style={{ ...S.legNum, width: 52 }}>LEG {i + 1}</span>
+                    <div style={{ flex: "1 1 200px", minWidth: 160 }}>
+                      <input placeholder="Player" value={leg.player} onChange={e => setLogLegs(p => p.map((x, j) => j === i ? { ...x, player: e.target.value } : x))} style={S.logPlayerInp} />
+                    </div>
+                    <select value={leg.prop} onChange={e => setLogLegs(p => p.map((x, j) => j === i ? { ...x, prop: e.target.value } : x))} style={{ ...S.logSelSm, flex: "1 1 100px", minWidth: 100 }}>
+                      {LOGGER_PROP_TYPES.map(pt => <option key={pt} value={pt}>{pt}</option>)}
+                    </select>
+                    <input type="text" inputMode="decimal" placeholder="Line" value={leg.line} onChange={e => setLogLegs(p => p.map((x, j) => j === i ? { ...x, line: e.target.value } : x))} style={S.logLineInp} />
+                    <div style={S.logDirWrap}>
+                      {["OVER", "UNDER"].map(d => (
+                        <button key={d} type="button" onClick={() => setLogLegs(p => p.map((x, j) => j === i ? { ...x, direction: d } : x))} style={S.smallBtn(leg.direction === d)}>{d}</button>
+                      ))}
+                    </div>
+                    <select value={leg.tier} onChange={e => setLogLegs(p => p.map((x, j) => j === i ? { ...x, tier: e.target.value } : x))} style={{ ...S.logSelSm, flex: "0 1 130px", minWidth: 120 }}>
+                      {LEG_TYPES.map(t => <option key={t} value={t}>{legEmoji(t)} {t}</option>)}
+                    </select>
+                    <input type="number" step="0.01" min={0} max={1} title="Hit rate" value={leg.hit_rate} onChange={e => setLogLegs(p => p.map((x, j) => j === i ? { ...x, hit_rate: e.target.value } : x))} style={S.logHitInp} />
+                    <button type="button" style={S.rmBtn} onClick={() => { if (logLegs.length > 2) setLogLegs(p => p.filter((_, j) => j !== i)); }}>×</button>
+                  </div>
+                ))}
+                {logLegs.length < 6 && (
+                  <button type="button" style={S.addBtn} onClick={() => setLogLegs(p => [...p, newLogLeg()])}>+ ADD LEG</button>
+                )}
+              </div>
+
+              <div style={S.logPreviewBox}>
+                <div style={{ color: C.muted, fontSize: 10, letterSpacing: "1.5px", marginBottom: 6 }}>PAYOUT PREVIEW</div>
+                {!logCalcResult ? (
+                  <span style={{ color: C.dim }}>Add at least 2 legs</span>
+                ) : (
+                  <>
+                    <div>Power Play: <span style={{ color: C.blue }}>{logCalcResult.powerMult}x</span> → win <span style={{ color: C.green }}>${money(logCalcResult.powerWin)}</span></div>
+                    <div>Flex Play: <span style={{ color: C.purple }}>{logCalcResult.flexMult}x</span> → win <span style={{ color: C.green }}>${money(logCalcResult.flexWin)}</span></div>
+                  </>
+                )}
+              </div>
+
+              <div style={{ marginTop: 14 }}>
+                <div style={S.logFieldLbl}>RESULT</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {LOGGER_RESULTS.map(r => (
+                    <button key={r} type="button" onClick={() => setLogFormResult(r)} style={S.smallBtn(logFormResult === r)}>{r}</button>
+                  ))}
+                </div>
+              </div>
+
+              {logFormResult === "WON" && (
+                <div style={{ marginTop: 10 }}>
+                  <div style={S.logFieldLbl}>ACTUAL PAYOUT ($) — optional override</div>
+                  <input value={logFormActualPayout} onChange={e => setLogFormActualPayout(e.target.value)} placeholder={`Default ${logTicketType === "flex" ? money(logCalcResult?.flexWin ?? 0) : money(logCalcResult?.powerWin ?? 0)}`}
+                    style={{ ...S.input, width: "100%", maxWidth: 200 }} />
+                </div>
+              )}
+
+              <div style={{ marginTop: 14, ...S.logPreviewBox }}>
+                <div style={{ color: C.muted, fontSize: 10, letterSpacing: "1.5px", marginBottom: 8 }}>EV SUMMARY (POWER WIN)</div>
+                <div>Win probability: <span style={{ color: C.text }}>{(logWinProb * 100).toFixed(2)}%</span></div>
+                <div>Expected value: <span style={{ color: C.green }}>${money(logEv.ev)}</span></div>
+                <div>ROI: <span style={{ color: C.gold }}>{logEv.roiPct}%</span></div>
+              </div>
+
+              <button type="button" onClick={logTicket} disabled={!logCalcResult} style={{ ...S.logBtnGreen, opacity: logCalcResult ? 1 : 0.45, cursor: logCalcResult ? "pointer" : "not-allowed" }}>
+                LOG TICKET
+              </button>
+              <div style={S.logFlash(logSuccess)}>Ticket logged ✓</div>
+            </div>
+
+            <div>
+              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 14 }}>
+                <div style={S.secLabel}>HISTORY · STATS</div>
+                <button type="button" onClick={exportCsv} style={S.logExportBtn}>📤 EXPORT CSV</button>
+              </div>
+
+              <div style={S.logDashGrid}>
+                <div style={S.metBox}><div style={S.metLabel}>TICKETS</div><div style={S.metVal(C.text, 22)}>{dashStats.total}</div></div>
+                <div style={S.metBox}><div style={S.metLabel}>WIN RATE</div><div style={S.metVal(C.blue, 22)}>{dashStats.won + dashStats.lost > 0 ? `${dashStats.winRate}%` : "—"}</div><div style={S.metSub}>{dashStats.won}W / {dashStats.lost}L</div></div>
+                <div style={S.metBox}><div style={S.metLabel}>TOTAL STAKED</div><div style={S.metVal(C.gold, 20)}>${money(dashStats.totalStaked)}</div></div>
+                <div style={S.metBox}><div style={S.metLabel}>NET P&amp;L</div><div style={S.metVal(dashStats.net >= 0 ? C.green : C.red, 20)}>${money(dashStats.net)}</div></div>
+                <div style={S.metBox}><div style={S.metLabel}>ROI</div><div style={S.metVal(C.purple, 22)}>{dashStats.totalStaked > 0 ? `${dashStats.roi}%` : "—"}</div></div>
+              </div>
+
+              {sportBreakdown.length > 0 && (
+                <div style={{ marginBottom: 12 }}>
+                  <div style={{ ...S.logFieldLbl, marginBottom: 6 }}>BY SPORT</div>
+                  {sportBreakdown.map(row => (
+                    <div key={row.sport} style={S.logSportRow}>
+                      {row.sport}: {row.n} tickets · {row.won + row.lost > 0 ? `${row.wr}% WR` : "—"} · ${money(row.net)} net
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div style={{ marginBottom: 14 }}>
+                <div style={{ ...S.logFieldLbl, marginBottom: 6 }}>LEG COMBOS (3+ DECIDED)</div>
+                {comboBestWorst.best ? (
+                  <div style={S.logComboRow}>
+                    <span style={{ color: C.green }}>Most reliable:</span> {comboBestWorst.best.label} · {comboBestWorst.best.rate}% ({comboBestWorst.best.wins}W / {comboBestWorst.best.losses}L)
+                  </div>
+                ) : (
+                  <div style={S.logComboRow}>Most reliable: —</div>
+                )}
+                {comboBestWorst.worst && comboBestWorst.worst !== comboBestWorst.best ? (
+                  <div style={S.logComboRow}>
+                    <span style={{ color: C.red }}>Least reliable:</span> {comboBestWorst.worst.label} · {comboBestWorst.worst.rate}% ({comboBestWorst.worst.wins}W / {comboBestWorst.worst.losses}L)
+                  </div>
+                ) : (
+                  <div style={S.logComboRow}>Least reliable: —</div>
+                )}
+              </div>
+
+              <div style={S.logFilterRow}>
+                <span style={S.logFilterLbl}>SPORT</span>
+                {["All", ...LOGGER_SPORTS].map(s => (
+                  <button key={s} type="button" onClick={() => setFilterSport(s)} style={S.smallBtn(filterSport === s)}>{s}</button>
+                ))}
+              </div>
+              <div style={S.logFilterRow}>
+                <span style={S.logFilterLbl}>RESULT</span>
+                {["All", "WON", "LOST", "PENDING"].map(s => (
+                  <button key={s} type="button" onClick={() => setFilterResult(s)} style={S.smallBtn(filterResult === s)}>{s}</button>
+                ))}
+              </div>
+              <div style={{ ...S.logFilterRow, marginBottom: 16 }}>
+                <span style={S.logFilterLbl}>DATE</span>
+                {[["7", "Last 7 days"], ["30", "Last 30 days"], ["all", "All time"]].map(([v, lab]) => (
+                  <button key={v} type="button" onClick={() => setFilterDateRange(v)} style={S.smallBtn(filterDateRange === v)}>{lab}</button>
+                ))}
+              </div>
+
+              {filteredTickets.length === 0 ? (
+                <div style={{ color: C.dim, fontFamily: mono, fontSize: 12, padding: "24px 0", textAlign: "center" }}>No tickets match filters</div>
+              ) : (
+                filteredTickets.map(t => {
+                  const rb = resultBadgeColors(t.result);
+                  const exp = !!expandedLogIds[t.id];
+                  const payoutLabel = t.result === "PENDING" ? "—" : `$${money(t.actual_payout != null ? t.actual_payout : 0)}`;
+                  return (
+                    <div key={t.id} style={S.logCard}>
+                      <div role="button" tabIndex={0} onClick={() => toggleExpandLog(t.id)} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleExpandLog(t.id); } }} style={S.logCardHead}>
+                        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10, flex: 1 }}>
+                          <span style={{ fontFamily: mono, fontSize: 12, color: C.text }}>{t.date}</span>
+                          <span style={{ fontFamily: mono, fontSize: 11, color: C.muted }}>{t.sport}</span>
+                          <span style={{ fontFamily: mono, fontSize: 11, color: C.gold }}>${money(t.stake)}</span>
+                          <span style={S.badge(rb.bg, rb.border, rb.color)}>{t.result}</span>
+                          <span style={{ fontFamily: syne, fontSize: 14, fontWeight: 700, color: C.green }}>{payoutLabel}</span>
+                        </div>
+                        <span style={{ fontFamily: mono, fontSize: 11, color: C.muted }}>{exp ? "▼" : "▶"}</span>
+                      </div>
+                      {exp && (
+                        <div style={S.logCardBody}>
+                          {(t.legs || []).map((L, li) => (
+                            <div key={li} style={{ fontFamily: mono, fontSize: 11, color: C.text, marginBottom: 6 }}>
+                              {L.player || "—"} · {L.prop} · {L.line != null ? L.line : "—"} · {L.direction} · {L.tier}
+                            </div>
+                          ))}
+                          <div style={{ fontFamily: mono, fontSize: 10, color: C.muted, marginTop: 8 }}>
+                            EV at log: ${money(t.ev)} · Win prob: {(Number(t.win_prob) * 100).toFixed(2)}% · ROI (est): {t.roi}%
+                          </div>
+
+                          {editingLogId === t.id ? (
+                            <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${C.border}` }}>
+                              <div style={S.logFieldLbl}>EDIT RESULT</div>
+                              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 8 }}>
+                                {LOGGER_RESULTS.map(r => (
+                                  <button key={r} type="button" onClick={() => setEditLogResult(r)} style={S.smallBtn(editLogResult === r)}>{r}</button>
+                                ))}
+                              </div>
+                              <div style={S.logFieldLbl}>ACTUAL PAYOUT ($)</div>
+                              <input value={editLogPayout} onChange={e => setEditLogPayout(e.target.value)} style={{ ...S.input, width: "100%", maxWidth: 200, marginBottom: 8 }} />
+                              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                                <button type="button" onClick={saveEditLog} style={S.smallBtn(true)}>Save</button>
+                                <button type="button" onClick={() => setEditingLogId(null)} style={S.smallBtn(false)}>Cancel</button>
+                              </div>
+                            </div>
+                          ) : (
+                            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12 }}>
+                              <button type="button" onClick={e => { e.stopPropagation(); startEditLog(t); }} style={S.smallBtn(false)}>Edit result</button>
+                              <button type="button" onClick={e => { e.stopPropagation(); deleteTicket(t.id); }} style={{ ...S.rmBtn, fontFamily: mono, fontSize: 11 }}>Delete</button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })
               )}
             </div>
           </div>
