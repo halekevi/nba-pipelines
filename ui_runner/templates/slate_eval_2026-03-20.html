@@ -24,6 +24,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Share Tech Mono',monospace;background:transparent;color:var(--text);min-height:100vh;padding-bottom:60px}
+h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif}
 body::before{content:'';position:fixed;top:-20%;left:-10%;width:55%;height:55%;background:radial-gradient(ellipse,rgba(212,160,23,.07) 0%,transparent 70%);pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;bottom:-20%;right:-10%;width:50%;height:50%;background:radial-gradient(ellipse,rgba(0,229,255,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
 header,.main{position:relative;z-index:1}
@@ -45,7 +46,7 @@ border:1px solid var(--glass-bd);border-radius:999px;padding:8px 16px;letter-spa
 .sport-header-line{flex:1;min-width:80px;height:1px;background:rgba(255,255,255,0.08)}
 .sport-meta-count{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted2)}
 .sport-section{margin-bottom:48px}
-.section-label{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:3px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.section-label{font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--muted);letter-spacing:3px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
 .stat-grid{display:grid;gap:14px;margin-bottom:24px}
 .stat-grid-4{grid-template-columns:repeat(4,1fr)}
@@ -60,14 +61,14 @@ box-shadow:0 4px 24px rgba(0,0,0,.22)}
 .stat-card.amber::before{background:linear-gradient(90deg,var(--gold),transparent)}
 .stat-card.red::before{background:linear-gradient(90deg,var(--red),transparent)}
 .stat-card.purple::before{background:linear-gradient(90deg,var(--purple),transparent)}
-.stat-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2.5px;margin-bottom:8px}
+.stat-label{font-family:'Bebas Neue',sans-serif;font-size:9px;color:var(--muted);letter-spacing:2.5px;margin-bottom:8px}
 .stat-val{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;line-height:1}
-.stat-sub{font-size:12px;color:var(--muted2);margin-top:5px}
+.stat-sub{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted2);margin-top:5px}
 .stat-sub strong{font-weight:700}
 .table-wrap{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
 border:1px solid var(--glass-bd);border-radius:14px;overflow:hidden;margin-bottom:20px;box-shadow:0 4px 24px rgba(0,0,0,.18)}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);padding:10px 14px;text-align:left;
+table{width:100%;border-collapse:collapse;font-size:13px;font-family:'Share Tech Mono',monospace}
+th{font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:var(--muted);padding:10px 14px;text-align:left;
 background:rgba(0,0,0,0.22);backdrop-filter:blur(12px);border-bottom:1px solid var(--glass-bd);white-space:nowrap}
 th.right{text-align:right}
 td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:middle}
@@ -78,7 +79,7 @@ td.right{text-align:right}td.mono{font-family:'Share Tech Mono',monospace;font-s
 .rate-bar-bg{flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
 .rate-bar-fill{height:100%;border-radius:3px;transition:width .4s}
 .rate-num{font-family:'Share Tech Mono',monospace;font-size:12px;width:44px;text-align:right;flex-shrink:0}
-.chip{display:inline-block;border-radius:8px;padding:3px 10px;font-size:11px;font-weight:700;font-family:'Share Tech Mono',monospace;letter-spacing:.5px;
+.chip{display:inline-block;border-radius:8px;padding:3px 10px;font-size:11px;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:.5px;
 background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid var(--glass-bd)}
 .chip-a{background:rgba(57,255,110,.08);color:var(--green);border-color:rgba(57,255,110,.28)}
 .chip-b{background:rgba(0,229,255,.08);color:var(--cyan);border-color:rgba(0,229,255,.28)}
@@ -92,7 +93,7 @@ background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid va
 .insight-card{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);border-radius:12px;padding:14px 16px;box-shadow:0 4px 20px rgba(0,0,0,.15)}
 .insight-icon{font-size:22px;margin-bottom:8px}
 .insight-title{font-weight:700;font-size:13px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:var(--gold)}
-.insight-body{font-size:12px;color:var(--muted2);line-height:1.6}
+.insight-body{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted2);line-height:1.6}
 .insight-body strong{color:var(--text)}
 tr.player-hit td{background:rgba(57,255,110,0.04)}
 tr.player-hit td:first-child{border-left:3px solid var(--green)}
@@ -105,7 +106,7 @@ tr.player-warn td:first-child{border-left:3px solid var(--gold)}
 .alert-red{background:rgba(255,77,77,.08);border-color:rgba(255,77,77,.35)}
 .alert-green{background:rgba(57,255,110,.08);border-color:rgba(57,255,110,.32)}
 .alert-amber{background:rgba(240,165,0,.08);border-color:rgba(240,165,0,.32)}
-.alert-title{font-weight:700;margin-bottom:4px}
+.alert-title{font-family:'Bebas Neue',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;margin-bottom:4px}
 .sub-dir{display:inline-block;margin-right:8px}
 .muted-note{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);padding:14px;text-align:center}
 .footer-gen{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);text-align:center;margin-top:40px;letter-spacing:1.5px}
@@ -846,7 +847,7 @@ td.muted{color:var(--muted2)}
     </div></div>
   </div>
   <div class="footer-gen">
-    GENERATED 2026-03-22 09:27 &nbsp;·&nbsp; graded_nba_2026-03-20.xlsx &nbsp;·&nbsp; graded_cbb_2026-03-20.xlsx &nbsp;·&nbsp; graded_nhl_2026-03-20.xlsx &nbsp;·&nbsp; graded_soccer_2026-03-20.xlsx
+    GENERATED 2026-03-22 09:36 &nbsp;·&nbsp; graded_nba_2026-03-20.xlsx &nbsp;·&nbsp; graded_cbb_2026-03-20.xlsx &nbsp;·&nbsp; graded_nhl_2026-03-20.xlsx &nbsp;·&nbsp; graded_soccer_2026-03-20.xlsx
   </div>
 </div>
 </body>

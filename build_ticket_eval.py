@@ -333,21 +333,22 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
         "--glass:rgba(255,255,255,0.03);--glass-bd:rgba(255,255,255,0.08);}",
         "*{box-sizing:border-box;margin:0;padding:0;}",
         "body{font-family:'Share Tech Mono',monospace;background:transparent;color:rgba(232,236,255,.95);min-height:100vh;padding-bottom:48px;}",
-        "h1,h2,.bebas{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}",
+        "h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}",
+        ".bebas{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}",
         ".stats-bar{position:sticky;top:0;z-index:50;margin:0 auto 16px;max-width:1200px;padding:14px 22px;"
         "background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);"
         "border:1px solid var(--glass-bd);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.35);}",
         ".sum-row{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:center;}",
         ".sum-item{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:72px;}",
-        ".sum-val{font-size:20px;font-weight:700;color:var(--gold);text-shadow:0 0 20px rgba(240,165,0,.25);}",
+        ".sum-val{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700;color:var(--gold);text-shadow:0 0 20px rgba(240,165,0,.25);}",
         ".sum-val.green{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.35);}",
         ".sum-val.red{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.35);}",
         ".sum-val.pend{color:var(--pending);text-shadow:none;}",
-        ".sum-lab{font-size:9px;letter-spacing:2px;color:var(--muted);}",
+        ".sum-lab{font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:2px;color:var(--muted);}",
         ".wrap{max-width:1180px;margin:0 auto;padding:8px 18px 0;}",
         ".sec{margin-top:32px;}",
-        ".sec-head{font-size:28px;color:var(--gold);margin-bottom:6px;padding-bottom:12px;border-bottom:1px solid var(--glass-bd);"
-        "text-shadow:0 0 24px rgba(240,165,0,.2);}",
+        ".sec-head{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);margin-bottom:6px;padding-bottom:12px;"
+        "border-bottom:1px solid var(--glass-bd);letter-spacing:3px;text-shadow:0 0 24px rgba(240,165,0,.2);}",
         ".ticket-card{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);"
         "border:1px solid var(--glass-bd);border-radius:12px;margin-bottom:18px;overflow:hidden;"
         "box-shadow:0 8px 32px rgba(0,0,0,.35);}",
@@ -358,14 +359,14 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
         ".thdr{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--glass-bd);"
         "background:rgba(0,0,0,.18);backdrop-filter:blur(12px);}",
         ".thdr .tn{font-size:22px;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;color:var(--gold);}",
-        ".thdr .tg{font-size:11px;color:var(--muted);letter-spacing:1px;}",
-        ".payout{font-size:12px;color:var(--cyan);}",
-        ".banner{font-size:10px;letter-spacing:2px;padding:6px 14px;border-radius:999px;font-weight:700;"
+        ".thdr .tg{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px;}",
+        ".payout{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--cyan);}",
+        ".banner{font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;padding:6px 14px;border-radius:999px;font-weight:700;"
         "background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);}",
         ".banner.hit{color:var(--green);border-color:rgba(57,255,110,.45);box-shadow:0 0 16px rgba(57,255,110,.15);}",
         ".banner.miss{color:var(--red);border-color:rgba(255,77,77,.5);box-shadow:0 0 16px rgba(255,77,77,.12);}",
         ".banner.pend{color:var(--pending);border-color:rgba(255,255,255,.12);}",
-        ".legrow{display:grid;grid-template-columns:44px 72px 1fr 36px minmax(200px,1.2fr) 100px 90px 70px;gap:8px;"
+        ".legrow{font-family:'Share Tech Mono',monospace;display:grid;grid-template-columns:44px 72px 1fr 36px minmax(200px,1.2fr) 100px 90px 70px;gap:8px;"
         "align-items:center;padding:10px 14px;font-size:11px;border-bottom:1px solid rgba(255,255,255,.06);border-left:3px solid transparent;}",
         ".legrow:last-child{border-bottom:none;}",
         ".legrow.leg-hit{background:rgba(57,255,110,0.04);border-left-color:var(--green);}",
@@ -379,17 +380,18 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
         ".badge.hit{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.6);}",
         ".badge.miss{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.55);}",
         ".badge.pend{color:var(--pending);text-shadow:none;}",
-        ".pill{font-size:9px;letter-spacing:1px;padding:3px 8px;border-radius:999px;text-transform:uppercase;}",
+        ".pill{font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:1px;padding:3px 8px;border-radius:999px;text-transform:uppercase;}",
         sport_colors_css,
-        ".tier{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;"
-        "font-weight:800;font-size:12px;background:rgba(255,255,255,0.05);color:var(--gold);"
+        ".tier{font-family:'Bebas Neue',sans-serif;width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;"
+        "font-weight:800;font-size:12px;letter-spacing:0;background:rgba(255,255,255,0.05);color:var(--gold);"
         "border:1px solid var(--glass-bd);backdrop-filter:blur(12px);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);}",
         ".pl-hit{color:var(--green);text-shadow:0 0 8px rgba(57,255,110,.4);}",
         ".pl-miss{color:var(--red);}",
         ".pl-pend{color:var(--pending);}",
         ".dir-over{color:var(--cyan);}",
         ".dir-under{color:var(--gold);}",
-        ".meta-muted{color:var(--muted);font-size:10px;}",
+        ".meta-muted{font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:10px;}",
+        ".slate-kicker{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);margin-bottom:8px;}",
         "@media(max-width:900px){.legrow{grid-template-columns:40px 64px 1fr;}.leg-extra{display:none;}}",
         "</style>",
         "</head>",
@@ -405,7 +407,7 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
         f'<div class="sum-item"><div class="sum-val" style="font-size:14px">{total_legs}</div><div class="sum-lab">TOTAL LEGS</div></div>',
         "</div></div>",
         '<div class="wrap">',
-        f'<p style="font-size:10px;letter-spacing:3px;color:var(--muted);margin-bottom:8px;">SLATE DATE · {json_date}</p>',
+        f'<p class="slate-kicker">SLATE DATE · {json_date}</p>',
     ]
 
     for g in groups:
