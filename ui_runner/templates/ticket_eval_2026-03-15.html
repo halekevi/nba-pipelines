@@ -3,2488 +3,1823 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Ticket Eval — MAR 16, 2026</title>
+<title>Ticket Eval — 2026-03-22</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+:root{--gold:#f0a500;--gold2:#d4a017;--green:#39ff6e;--red:#ff4d4d;--cyan:#00e5ff;--pending:#666;--muted:#94a3b8;--glass:rgba(255,255,255,0.03);--glass-bd:rgba(255,255,255,0.08);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Share Tech Mono',monospace;background:transparent;color:rgba(232,236,255,.95);min-height:100vh;padding-bottom:48px;}
+h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
+.bebas{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
+.stats-bar{position:sticky;top:0;z-index:50;margin:0 auto 18px;width:100%;max-width:min(1520px,96vw);padding:18px clamp(16px,2.5vw,32px);background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid var(--glass-bd);border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.35);}
+.sum-row{display:flex;flex-wrap:wrap;gap:18px 36px;align-items:center;justify-content:center;}
+.sum-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:88px;}
+.sum-val{font-family:'Share Tech Mono',monospace;font-size:clamp(22px,2.6vw,30px);font-weight:700;color:var(--gold);text-shadow:0 0 20px rgba(240,165,0,.25);}
+.sum-val.green{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.35);}
+.sum-val.red{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.35);}
+.sum-val.pend{color:var(--pending);text-shadow:none;}
+.sum-val-sm{font-size:clamp(18px,2.1vw,24px)!important;}
+.sum-lab{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2.2px;color:var(--muted);text-align:center;line-height:1.2;max-width:11em;}
+.wrap{width:100%;max-width:min(1520px,96vw);margin:0 auto;padding:10px clamp(14px,2.5vw,32px) 0;}
+.sec{margin-top:36px;}
+.sec-head{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,3.2vw,40px);color:var(--gold);margin-bottom:8px;padding-bottom:14px;border-bottom:1px solid var(--glass-bd);letter-spacing:3px;text-shadow:0 0 24px rgba(240,165,0,.2);}
+.ticket-card{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid var(--glass-bd);border-radius:14px;margin-bottom:22px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.35);}
+.ticket-card.all-hit{background:rgba(57,255,110,0.06);border-color:rgba(57,255,110,.42);box-shadow:0 0 28px rgba(57,255,110,.14),0 8px 32px rgba(0,0,0,.3);}
+.ticket-card.card-missed{background:rgba(255,77,77,0.06);border-color:rgba(255,77,77,.42);box-shadow:0 0 28px rgba(255,77,77,.12),0 8px 32px rgba(0,0,0,.3);}
+.thdr{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;padding:18px clamp(14px,2vw,24px);border-bottom:1px solid var(--glass-bd);background:rgba(0,0,0,.18);backdrop-filter:blur(12px);}
+.thdr .tn{font-size:clamp(24px,2.8vw,32px);font-family:'Bebas Neue',sans-serif;letter-spacing:2px;color:var(--gold);}
+.thdr .tg{font-family:'Share Tech Mono',monospace;font-size:clamp(12px,1.35vw,15px);color:var(--muted);letter-spacing:0.5px;line-height:1.35;}
+.payout{font-family:'Share Tech Mono',monospace;font-size:clamp(13px,1.4vw,16px);color:var(--cyan);}
+.banner{font-family:'Bebas Neue',sans-serif;font-size:clamp(11px,1.2vw,13px);letter-spacing:2px;padding:8px 18px;border-radius:999px;font-weight:700;background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);}
+.banner.hit{color:var(--green);border-color:rgba(57,255,110,.45);box-shadow:0 0 16px rgba(57,255,110,.15);}
+.banner.miss{color:var(--red);border-color:rgba(255,77,77,.5);box-shadow:0 0 16px rgba(255,77,77,.12);}
+.banner.pend{color:var(--pending);border-color:rgba(255,255,255,.12);}
+.legrow{font-family:'Share Tech Mono',monospace;display:grid;grid-template-columns:52px 92px minmax(120px,1fr) 44px minmax(240px,1.45fr) minmax(108px,1fr) minmax(96px,1fr) minmax(76px,.85fr);gap:12px;align-items:center;padding:14px clamp(14px,2vw,22px);font-size:clamp(13px,1.45vw,16px);line-height:1.35;border-bottom:1px solid rgba(255,255,255,.06);border-left:3px solid transparent;}
+.legrow:last-child{border-bottom:none;}
+.legrow.leg-hit{background:rgba(57,255,110,0.04);border-left-color:var(--green);}
+.legrow.leg-miss{background:rgba(255,77,77,0.10);border-left:3px solid var(--red);}
+.legrow.leg-miss .pl-miss{color:var(--red);text-shadow:0 0 12px rgba(255,77,77,0.7);}
+.legrow.leg-miss .badge.miss{text-shadow:0 0 16px rgba(255,77,77,.85),0 0 28px rgba(255,77,77,.45);}
+.legrow.leg-pend{background:transparent;border-left-color:transparent;}
+.legrow.leg-pend .pl-pend,.legrow.leg-pend .meta-muted{color:var(--pending)!important;}
+.legrow.leg-pend .pill{background:rgba(255,255,255,0.04)!important;border-color:rgba(255,255,255,0.1)!important;color:var(--pending)!important;}
+.badge{font-size:clamp(28px,3.2vw,36px);line-height:1;text-align:center;}
+.badge.hit{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.6);}
+.badge.miss{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.55);}
+.badge.pend{color:var(--pending);text-shadow:none;}
+.pill{font-family:'Bebas Neue',sans-serif;font-size:clamp(10px,1.1vw,12px);letter-spacing:1.2px;padding:5px 12px;border-radius:999px;text-transform:uppercase;}
 
-:root {
-  --accent: #00d9ff;
-  --green: #6ee7b7;
-  --red: #fca5a5;
-  --amber: #fcd34d;
-  --blue: #93c5fd;
-  --slate-50: #f8fafc;
-  --slate-100: #f1f5f9;
-  --slate-200: #e2e8f0;
-  --slate-400: #94a3b8;
-  --slate-600: #475569;
-  --slate-700: #334155;
-  --slate-800: #1e293b;
-  --slate-900: #0f172a;
-}
+.sport-nba{background:rgba(212,160,23,.12);color:#f0a500;border:1px solid rgba(212,160,23,.35);}
+.sport-cbb{background:rgba(0,229,255,.10);color:#00e5ff;border:1px solid rgba(0,229,255,.32);}
+.sport-nhl{background:rgba(186,130,255,.12);color:#c4a5ff;border:1px solid rgba(186,130,255,.38);}
+.sport-soccer{background:rgba(240,165,0,.10);color:#e8b84a;border:1px solid rgba(240,165,0,.34);}
+.sport-default{background:rgba(255,255,255,.04);color:#888;border:1px solid rgba(255,255,255,.1);}
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: var(--slate-900);
-  color: var(--slate-100);
-  line-height: 1.5;
-  overflow-x: hidden;
-}
-
-a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; }
-
-header {
-  background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(30,41,59,0.95));
-  border-bottom: 2px solid var(--accent);
-  padding: 20px;
-  text-align: center;
-}
-
-.logo-title {
-  font-size: 28px;
-  font-weight: bold;
-  color: var(--accent);
-  letter-spacing: 2px;
-}
-
-.logo-sub {
-  font-size: 12px;
-  color: var(--slate-400);
-  margin-top: 4px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.date-badge {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  padding: 6px 12px;
-  background: var(--slate-700);
-  border: 1px solid var(--slate-600);
-  border-radius: 4px;
-  font-size: 12px;
-  color: var(--slate-300);
-}
-
-.main {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.section {
-  margin-bottom: 30px;
-}
-
-.section-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--accent);
-  margin-bottom: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-bottom: 2px solid var(--accent);
-  padding-bottom: 8px;
-}
-
-.kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.kpi-card {
-  background: var(--slate-800);
-  border: 1px solid var(--slate-700);
-  border-radius: 6px;
-  padding: 12px;
-  text-align: center;
-}
-
-.kpi-val {
-  font-size: 20px;
-  font-weight: bold;
-  color: var(--accent);
-  margin-bottom: 4px;
-}
-
-.kpi-label {
-  font-size: 11px;
-  color: var(--slate-400);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.table-wrapper {
-  overflow-x: auto;
-  background: var(--slate-800);
-  border: 1px solid var(--slate-700);
-  border-radius: 6px;
-  margin-bottom: 20px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
-}
-
-th {
-  background: var(--slate-700);
-  padding: 10px;
-  text-align: left;
-  font-weight: 600;
-  color: var(--accent);
-  border-bottom: 1px solid var(--slate-600);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-td {
-  padding: 8px 10px;
-  border-bottom: 1px solid var(--slate-700);
-}
-
-tr:last-child td {
-  border-bottom: none;
-}
-
-tr:hover {
-  background: rgba(0, 217, 255, 0.05);
-}
-
-.badge {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 3px;
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.outcome-hit {
-  background: rgba(110, 231, 183, 0.15);
-  color: #6ee7b7;
-}
-
-.outcome-miss {
-  background: rgba(252, 165, 165, 0.15);
-  color: #fca5a5;
-}
-
-.outcome-push {
-  background: rgba(252, 211, 77, 0.15);
-  color: #fcd34d;
-}
-
-.outcome-void {
-  background: rgba(148, 163, 184, 0.15);
-  color: var(--slate-400);
-}
-
-.chip {
-  display: inline-block;
-  padding: 3px 7px;
-  border-radius: 3px;
-  font-size: 10px;
-  font-weight: 500;
-}
-
-.chip-a { background: rgba(110, 231, 183, 0.2); color: #6ee7b7; }
-.chip-b { background: rgba(0, 217, 255, 0.2); color: var(--accent); }
-.chip-c { background: rgba(252, 211, 77, 0.2); color: #fcd34d; }
-.chip-d { background: rgba(148, 163, 184, 0.2); color: var(--slate-400); }
-
-.num { font-family: 'Courier New', monospace; }
-
-.footer {
-  text-align: center;
-  padding: 20px;
-  color: var(--slate-400);
-  font-size: 11px;
-  border-top: 1px solid var(--slate-700);
-  margin-top: 40px;
-}
-
-.ticket-row {
-  cursor: pointer;
-  user-select: none;
-}
-
-.ticket-row.winner {
-  background: rgba(110, 231, 183, 0.08);
-}
-
-.ticket-row.winner:hover {
-  background: rgba(110, 231, 183, 0.15);
-}
-
-.profit {
-  font-weight: 600;
-}
-
-.profit.positive {
-  color: #6ee7b7;
-}
-
-.profit.negative {
-  color: #fca5a5;
-}
-
-.profit.breakeven {
-  color: var(--slate-400);
-}
+.tier{font-family:'Bebas Neue',sans-serif;width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:clamp(13px,1.4vw,15px);letter-spacing:0;background:rgba(255,255,255,0.05);color:var(--gold);border:1px solid var(--glass-bd);backdrop-filter:blur(12px);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);}
+.pl-hit{color:var(--green);text-shadow:0 0 8px rgba(57,255,110,.4);}
+.pl-miss{color:var(--red);}
+.pl-pend{color:var(--pending);}
+.dir-over{color:var(--cyan);font-weight:700;}
+.dir-under{color:var(--gold);font-weight:700;}
+.meta-muted{font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:clamp(11px,1.2vw,13px);margin-top:3px;}
+.slate-kicker{font-family:'Share Tech Mono',monospace;font-size:clamp(11px,1.2vw,13px);letter-spacing:3px;color:var(--muted);margin-bottom:10px;}
+.pl-hit,.pl-miss,.pl-pend{font-size:1em;font-weight:600;}
+@media(max-width:900px){.legrow{grid-template-columns:48px 80px 1fr;gap:10px;padding:12px;font-size:14px;}.leg-extra{display:none;}.stats-bar{padding:14px 16px;}.sum-val{font-size:22px;}}
 </style>
 </head>
 <body>
-
-<header>
-  <div class="logo-title">TICKET EVALUATION</div>
-  <div class="logo-sub">MAR 16, 2026</div>
-  <div class="date-badge">📅 MAR 16, 2026</div>
-</header>
-
-<div class="main">
-  
-    <div class="section">
-      <div class="section-title">📊 Overview</div>
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-val">174</div>
-          <div class="kpi-label">Total Tickets</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-val">11</div>
-          <div class="kpi-label">Winners</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-val">6.3%</div>
-          <div class="kpi-label">Win Rate</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-val">$4200.00</div>
-          <div class="kpi-label">Net Profit</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-val">1.2%</div>
-          <div class="kpi-label">ROI</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-val">$3480.00</div>
-          <div class="kpi-label">Total Staked</div>
-        </div>
-      </div>
-    </div>
-    
-  
-    <div class="section">
-      <div class="section-title">🎫 Ticket Results</div>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Sheet</th>
-              <th>#</th>
-              <th>Legs</th>
-              <th>H/M/N</th>
-              <th>Stake</th>
-              <th>Payout</th>
-              <th>Profit</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            
-        <tr class="ticket-row winner">
-          <td>CBB Mix Mix 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">3/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$120.00</td>
-          <td><span class='profit positive'>$100.00</span></td>
-          <td><span class="badge outcome-void">WIN</span></td>
-        </tr>
-        
-        <tr class="ticket-row winner">
-          <td>CBB Mix Mix 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">3/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$120.00</td>
-          <td><span class='profit positive'>$100.00</span></td>
-          <td><span class="badge outcome-void">WIN</span></td>
-        </tr>
-        
-        <tr class="ticket-row winner">
-          <td>CBB Mix Mix 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">4/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$200.00</td>
-          <td><span class='profit positive'>$180.00</span></td>
-          <td><span class="badge outcome-void">WIN</span></td>
-        </tr>
-        
-        <tr class="ticket-row winner">
-          <td>CBB Mix Mix 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">4/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$200.00</td>
-          <td><span class='profit positive'>$180.00</span></td>
-          <td><span class="badge outcome-void">WIN</span></td>
-        </tr>
-        
-        <tr class="ticket-row winner">
-          <td>CBB Mix Mix 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">5/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$400.00</td>
-          <td><span class='profit positive'>$380.00</span></td>
-          <td><span class="badge outcome-void">WIN</span></td>
-        </tr>
-        
-        <tr class="ticket-row winner">
-          <td>CBB Mix Mix 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">5/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$400.00</td>
-          <td><span class='profit positive'>$380.00</span></td>
-          <td><span class="badge outcome-void">WIN</span></td>
-        </tr>
-        
-        <tr class="ticket-row winner">
-          <td>CBB Mix Mix 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">6/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$750.00</td>
-          <td><span class='profit positive'>$730.00</span></td>
-          <td><span class="badge outcome-void">WIN</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Mix Mix 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">5/1/0</td>
-          <td class="num">$20.00</td>
-          <td>$0.00</td>
-          <td><span class='profit negative'>$-20.00</span></td>
-          <td><span class="badge outcome-void">LOSE</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Standard 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">2/1/0</td>
-          <td class="num">$20.00</td>
-          <td>$0.00</td>
-          <td><span class='profit negative'>$-20.00</span></td>
-          <td><span class="badge outcome-void">LOSE</span></td>
-        </tr>
-        
-        <tr class="ticket-row winner">
-          <td>CBB Standard 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">2/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$60.00</td>
-          <td><span class='profit positive'>$40.00</span></td>
-          <td><span class="badge outcome-void">WIN</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Standard 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">3/1/0</td>
-          <td class="num">$20.00</td>
-          <td>$0.00</td>
-          <td><span class='profit negative'>$-20.00</span></td>
-          <td><span class="badge outcome-void">LOSE</span></td>
-        </tr>
-        
-        <tr class="ticket-row winner">
-          <td>CBB Standard 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">3/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$120.00</td>
-          <td><span class='profit positive'>$100.00</span></td>
-          <td><span class="badge outcome-void">WIN</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Standard 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">4/1/0</td>
-          <td class="num">$20.00</td>
-          <td>$0.00</td>
-          <td><span class='profit negative'>$-20.00</span></td>
-          <td><span class="badge outcome-void">LOSE</span></td>
-        </tr>
-        
-        <tr class="ticket-row winner">
-          <td>CBB Standard 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">4/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$200.00</td>
-          <td><span class='profit positive'>$180.00</span></td>
-          <td><span class="badge outcome-void">WIN</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Standard 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">5/1/0</td>
-          <td class="num">$20.00</td>
-          <td>$0.00</td>
-          <td><span class='profit negative'>$-20.00</span></td>
-          <td><span class="badge outcome-void">LOSE</span></td>
-        </tr>
-        
-        <tr class="ticket-row winner">
-          <td>CBB Standard 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">5/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$400.00</td>
-          <td><span class='profit positive'>$380.00</span></td>
-          <td><span class="badge outcome-void">WIN</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>COMBO Mix 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>COMBO Mix 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>COMBO Mix 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>COMBO Mix 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>COMBO Mix 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>COMBO Mix 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>COMBO Mix 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>COMBO Mix 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>MIX Standard 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">1/0/2</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>MIX Standard 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">1/0/2</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>MIX Standard 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">1/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>MIX Standard 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">1/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>MIX Standard 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">1/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>MIX Standard 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">1/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>MIX Standard 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">1/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>MIX Standard 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">1/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NBA Standard 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NBA Standard 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NBA Standard 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NBA Standard 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NBA Standard 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NBA Standard 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NBA Standard 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NBA Standard 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Goblin 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Goblin 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Goblin 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Goblin 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Goblin 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Goblin 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Goblin 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Goblin 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Mix Mix 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Mix Mix 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Mix Mix 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Mix Mix 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Mix Mix 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Mix Mix 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Mix Mix 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Mix Mix 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Standard 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Standard 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Standard 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Standard 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Standard 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Standard 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Standard 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Standard 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Goblin 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Goblin 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Goblin 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Goblin 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Goblin 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Goblin 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Goblin 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Goblin 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Mix Mix 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Mix Mix 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Mix Mix 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Mix Mix 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Mix Mix 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Mix Mix 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Mix Mix 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Mix Mix 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Standard 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Standard 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Standard 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Standard 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Standard 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Standard 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Standard 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Mix Mix 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">3/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$60.00</td>
-          <td><span class='profit positive'>$40.00</span></td>
-          <td><span class="badge outcome-void">CASH</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Mix Mix 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">3/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$60.00</td>
-          <td><span class='profit positive'>$40.00</span></td>
-          <td><span class="badge outcome-void">CASH</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Mix Mix 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">4/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$120.00</td>
-          <td><span class='profit positive'>$100.00</span></td>
-          <td><span class="badge outcome-void">CASH</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Mix Mix 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">4/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$120.00</td>
-          <td><span class='profit positive'>$100.00</span></td>
-          <td><span class="badge outcome-void">CASH</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Mix Mix 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">5/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$200.00</td>
-          <td><span class='profit positive'>$180.00</span></td>
-          <td><span class="badge outcome-void">CASH</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Mix Mix 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">5/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$200.00</td>
-          <td><span class='profit positive'>$180.00</span></td>
-          <td><span class="badge outcome-void">CASH</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Mix Mix 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">6/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$500.00</td>
-          <td><span class='profit positive'>$480.00</span></td>
-          <td><span class="badge outcome-void">CASH</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Mix Mix 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">5/1/0</td>
-          <td class="num">$20.00</td>
-          <td>$40.00</td>
-          <td><span class='profit positive'>$20.00</span></td>
-          <td><span class="badge outcome-void">CASH</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Standard 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">2/1/0</td>
-          <td class="num">$20.00</td>
-          <td>$20.00</td>
-          <td><span class='profit breakeven'>$0.00</span></td>
-          <td><span class="badge outcome-void">CASH</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Standard 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">2/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$60.00</td>
-          <td><span class='profit positive'>$40.00</span></td>
-          <td><span class="badge outcome-void">CASH</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Standard 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">3/1/0</td>
-          <td class="num">$20.00</td>
-          <td>$30.00</td>
-          <td><span class='profit positive'>$10.00</span></td>
-          <td><span class="badge outcome-void">CASH</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Standard 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">3/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$60.00</td>
-          <td><span class='profit positive'>$40.00</span></td>
-          <td><span class="badge outcome-void">CASH</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Standard 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">4/1/0</td>
-          <td class="num">$20.00</td>
-          <td>$40.00</td>
-          <td><span class='profit positive'>$20.00</span></td>
-          <td><span class="badge outcome-void">CASH</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Standard 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">4/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$120.00</td>
-          <td><span class='profit positive'>$100.00</span></td>
-          <td><span class="badge outcome-void">CASH</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Standard 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">5/1/0</td>
-          <td class="num">$20.00</td>
-          <td>$40.00</td>
-          <td><span class='profit positive'>$20.00</span></td>
-          <td><span class="badge outcome-void">CASH</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>CBB Standard 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">5/0/0</td>
-          <td class="num">$20.00</td>
-          <td>$200.00</td>
-          <td><span class='profit positive'>$180.00</span></td>
-          <td><span class="badge outcome-void">CASH</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>COMBO Mix 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>COMBO Mix 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>COMBO Mix 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>COMBO Mix 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>COMBO Mix 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>COMBO Mix 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>COMBO Mix 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>COMBO Mix 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>MIX Standard 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">1/0/2</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>MIX Standard 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">1/0/2</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>MIX Standard 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">1/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>MIX Standard 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">1/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>MIX Standard 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">1/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>MIX Standard 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">1/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>MIX Standard 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">1/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>MIX Standard 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">1/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NBA Standard 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NBA Standard 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NBA Standard 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NBA Standard 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NBA Standard 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NBA Standard 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NBA Standard 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NBA Standard 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Goblin 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Goblin 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Goblin 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Goblin 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Goblin 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Goblin 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Goblin 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Goblin 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Mix Mix 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Mix Mix 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Mix Mix 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Mix Mix 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Mix Mix 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Mix Mix 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Mix Mix 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Mix Mix 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Standard 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Standard 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Standard 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Standard 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Standard 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Standard 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Standard 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>NHL Standard 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Goblin 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Goblin 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Goblin 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Goblin 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Goblin 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Goblin 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Goblin 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Goblin 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Mix Mix 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Mix Mix 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Mix Mix 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Mix Mix 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Mix Mix 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Mix Mix 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Mix Mix 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Mix Mix 6-Leg</td>
-          <td class="num">3</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Standard 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Standard 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td class="num">0/0/3</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Standard 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Standard 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td class="num">0/0/4</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Standard 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Standard 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">5</td>
-          <td class="num">0/0/5</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr class="ticket-row">
-          <td>Soccer Standard 6-Leg</td>
-          <td class="num">2</td>
-          <td class="num">6</td>
-          <td class="num">0/0/6</td>
-          <td class="num">$20.00</td>
-          <td>—</td>
-          <td>—</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-          </tbody>
-        </table>
-      </div>
-    </div>
-    
-  
-    <div class="section">
-      <div class="section-title">🦵 Leg Details (Sample)</div>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Sheet</th>
-              <th>Ticket</th>
-              <th>Leg</th>
-              <th>Player</th>
-              <th>Prop</th>
-              <th>Dir</th>
-              <th>Line</th>
-              <th>Actual</th>
-              <th>Result</th>
-            </tr>
-          </thead>
-          <tbody>
-            
-        <tr>
-          <td>NBA Standard 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">1</td>
-          <td>Jrue Holiday</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">30.5</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">2</td>
-          <td>Brandon Williams</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">22.0</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 3-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td>Jalen Brunson</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">43.0</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">1</td>
-          <td>James Harden</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">40.0</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">2</td>
-          <td>Karl-Anthony Towns</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">41.0</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 3-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td>Jrue Holiday</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">30.5</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">1</td>
-          <td>James Harden</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">40.0</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">2</td>
-          <td>Karl-Anthony Towns</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">41.0</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td>Jrue Holiday</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">30.5</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 4-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td>Brandon Williams</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">22.0</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">1</td>
-          <td>Jrue Holiday</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">30.5</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">2</td>
-          <td>Brandon Williams</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">22.0</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">3</td>
-          <td>Jalen Brunson</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">43.0</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 4-Leg</td>
-          <td class="num">3</td>
-          <td class="num">4</td>
-          <td>Jerami Grant</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">27.0</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">1</td>
-          <td>Karl-Anthony Towns</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">41.0</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">2</td>
-          <td>Jrue Holiday</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">30.5</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">3</td>
-          <td>Brandon Williams</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">22.0</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">4</td>
-          <td>Jalen Brunson</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">43.0</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 5-Leg</td>
-          <td class="num">2</td>
-          <td class="num">5</td>
-          <td>Jerami Grant</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">27.0</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-        <tr>
-          <td>NBA Standard 5-Leg</td>
-          <td class="num">3</td>
-          <td class="num">1</td>
-          <td>Jrue Holiday</td>
-          <td>fantasy</td>
-          <td>OVER</td>
-          <td class="num">30.5</td>
-          <td class="num">nan</td>
-          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
-        </tr>
-        
-          </tbody>
-        </table>
-      </div>
-    </div>
-    
-  <div class="footer">Generated 2026-03-16 05:51:37 — combined_tickets_graded_2026-03-15.xlsx</div>
+<div class="stats-bar">
+<div class="sum-row">
+<div class="sum-item"><div class="sum-val">0.0%</div><div class="sum-lab">LEG HIT RATE</div></div>
+<div class="sum-item"><div class="sum-val green">0</div><div class="sum-lab">HITS</div></div>
+<div class="sum-item"><div class="sum-val red">0</div><div class="sum-lab">MISSES</div></div>
+<div class="sum-item"><div class="sum-val pend">138</div><div class="sum-lab">PENDING</div></div>
+<div class="sum-item"><div class="sum-val">0</div><div class="sum-lab">PERFECT TICKETS</div></div>
+<div class="sum-item"><div class="sum-val">0</div><div class="sum-lab">TIX W/ MISS</div></div>
+<div class="sum-item"><div class="sum-val sum-val-sm">138</div><div class="sum-lab">TOTAL LEGS</div></div>
+</div></div>
+<div class="wrap">
+<p class="slate-kicker">SLATE DATE · 2026-03-22</p>
+<section class="sec"><h2 class="sec-head bebas">FINAL 6-Leg (NBA Std+Gob)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 6-Leg (NBA Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 6</span>
+<span class="payout">PWR 37.5× · FLEX 25×</span>
+<span class="banner pend">PENDING</span>
 </div>
-
-</body>
-</html>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Peyton Watson</div>
+<div class="tier">S</div>
+<div><div>Points</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">8.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">10.8</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Mitchell Robinson</div>
+<div class="tier">S</div>
+<div><div>Turnovers</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.9</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Christian Braun</div>
+<div class="tier">G</div>
+<div><div>Assists</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.65</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Jalen Brunson</div>
+<div class="tier">G</div>
+<div><div>Steals</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Mikal Bridges</div>
+<div class="tier">G</div>
+<div><div>Rebounds</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">2</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Karl-Anthony Towns</div>
+<div class="tier">G</div>
+<div><div>Assists</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.95</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 5-Leg (NBA Std+Gob)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 5-Leg (NBA Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 5</span>
+<span class="payout">PWR 20× · FLEX 10×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Peyton Watson</div>
+<div class="tier">S</div>
+<div><div>Points</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">8.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">10.8</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Mitchell Robinson</div>
+<div class="tier">S</div>
+<div><div>Turnovers</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.9</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Christian Braun</div>
+<div class="tier">G</div>
+<div><div>Assists</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.65</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Jalen Brunson</div>
+<div class="tier">G</div>
+<div><div>Steals</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Mikal Bridges</div>
+<div class="tier">G</div>
+<div><div>Rebounds</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">2</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 4-Leg (NBA Std+Gob)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 4-Leg (NBA Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 4</span>
+<span class="payout">PWR 10× · FLEX 6×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Peyton Watson</div>
+<div class="tier">S</div>
+<div><div>Points</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">8.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">10.8</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Mitchell Robinson</div>
+<div class="tier">S</div>
+<div><div>Turnovers</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.9</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Christian Braun</div>
+<div class="tier">G</div>
+<div><div>Assists</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.65</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Jalen Brunson</div>
+<div class="tier">G</div>
+<div><div>Steals</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 3-Leg MIX (NBA Std+Gob)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 3-Leg MIX (NBA Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 3</span>
+<span class="payout">PWR 6× · FLEX 3×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Peyton Watson</div>
+<div class="tier">S</div>
+<div><div>Points</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">8.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">10.8</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Christian Braun</div>
+<div class="tier">G</div>
+<div><div>Assists</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.65</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Jalen Brunson</div>
+<div class="tier">G</div>
+<div><div>Steals</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+</article>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#2</span>
+<span class="tg">FINAL 3-Leg MIX (NBA Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 3</span>
+<span class="payout">PWR 6× · FLEX 3×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Peyton Watson</div>
+<div class="tier">S</div>
+<div><div>Pts+Rebs</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">13.07</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Christian Braun</div>
+<div class="tier">G</div>
+<div><div>Assists</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.65</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Jalen Brunson</div>
+<div class="tier">G</div>
+<div><div>Steals</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 3-Leg STANDARD ONLY (NBA)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 3-Leg STANDARD ONLY (NBA)</span>
+<span class="tg">0✓ 0✗ / 3</span>
+<span class="payout">PWR 6× · FLEX 3×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Peyton Watson</div>
+<div class="tier">S</div>
+<div><div>Points</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">8.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">10.8</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Mitchell Robinson</div>
+<div class="tier">S</div>
+<div><div>Turnovers</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.9</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Robert Williams</div>
+<div class="tier">S</div>
+<div><div>Rebounds</div><div class="meta-muted">POR vs DEN</div></div>
+<div class="leg-extra">6.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">3.35</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 6-Leg (CBB Std+Gob)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 6-Leg (CBB Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 6</span>
+<span class="payout">PWR 15× · FLEX 10×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Dylan Darling</div>
+<div class="tier">S</div>
+<div><div>Pts+Rebs</div><div class="meta-muted">SJU vs KU</div></div>
+<div class="leg-extra">11.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">-3.3538</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Dillon Mitchell</div>
+<div class="tier">S</div>
+<div><div>Pts+Rebs</div><div class="meta-muted">SJU vs KU</div></div>
+<div class="leg-extra">16.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">-4.1452</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Alex Condon</div>
+<div class="tier">G</div>
+<div><div>Points</div><div class="meta-muted">FLA vs IOWA</div></div>
+<div class="leg-extra">9.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">7.856</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Jaylen Petty</div>
+<div class="tier">G</div>
+<div><div>Points</div><div class="meta-muted">TTU vs ALA</div></div>
+<div class="leg-extra">9.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">3.5948</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Trey Kaufman-Renn</div>
+<div class="tier">S</div>
+<div><div>Pts+Rebs</div><div class="meta-muted">PUR vs MIA</div></div>
+<div class="leg-extra">25.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">-4.427</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Braden Smith</div>
+<div class="tier">S</div>
+<div><div>Points</div><div class="meta-muted">PUR vs MIA</div></div>
+<div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">-3.8362</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 5-Leg (CBB Std+Gob)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 5-Leg (CBB Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 5</span>
+<span class="payout">PWR 8× · FLEX 4×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Dylan Darling</div>
+<div class="tier">S</div>
+<div><div>Pts+Rebs</div><div class="meta-muted">SJU vs KU</div></div>
+<div class="leg-extra">11.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">-3.3538</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Dillon Mitchell</div>
+<div class="tier">S</div>
+<div><div>Pts+Rebs</div><div class="meta-muted">SJU vs KU</div></div>
+<div class="leg-extra">16.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">-4.1452</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Alex Condon</div>
+<div class="tier">G</div>
+<div><div>Points</div><div class="meta-muted">FLA vs IOWA</div></div>
+<div class="leg-extra">9.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">7.856</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Jaylen Petty</div>
+<div class="tier">G</div>
+<div><div>Points</div><div class="meta-muted">TTU vs ALA</div></div>
+<div class="leg-extra">9.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">3.5948</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Trey Kaufman-Renn</div>
+<div class="tier">S</div>
+<div><div>Pts+Rebs</div><div class="meta-muted">PUR vs MIA</div></div>
+<div class="leg-extra">25.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">-4.427</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 4-Leg (CBB Std+Gob)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 4-Leg (CBB Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 4</span>
+<span class="payout">PWR 4× · FLEX 2.4×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Dylan Darling</div>
+<div class="tier">S</div>
+<div><div>Pts+Rebs</div><div class="meta-muted">SJU vs KU</div></div>
+<div class="leg-extra">11.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">-3.3538</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Dillon Mitchell</div>
+<div class="tier">S</div>
+<div><div>Pts+Rebs</div><div class="meta-muted">SJU vs KU</div></div>
+<div class="leg-extra">16.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">-4.1452</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Alex Condon</div>
+<div class="tier">G</div>
+<div><div>Points</div><div class="meta-muted">FLA vs IOWA</div></div>
+<div class="leg-extra">9.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">7.856</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Jaylen Petty</div>
+<div class="tier">G</div>
+<div><div>Points</div><div class="meta-muted">TTU vs ALA</div></div>
+<div class="leg-extra">9.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">3.5948</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 3-Leg MIX (CBB Std+Gob)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 3-Leg MIX (CBB Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 3</span>
+<span class="payout">PWR 2.4× · FLEX 1.2×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Dylan Darling</div>
+<div class="tier">S</div>
+<div><div>Pts+Rebs</div><div class="meta-muted">SJU vs KU</div></div>
+<div class="leg-extra">11.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">-3.3538</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Alex Condon</div>
+<div class="tier">G</div>
+<div><div>Points</div><div class="meta-muted">FLA vs IOWA</div></div>
+<div class="leg-extra">9.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">7.856</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Dillon Mitchell</div>
+<div class="tier">S</div>
+<div><div>Pts+Rebs</div><div class="meta-muted">SJU vs KU</div></div>
+<div class="leg-extra">16.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">-4.1452</div>
+</div>
+</article>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#2</span>
+<span class="tg">FINAL 3-Leg MIX (CBB Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 3</span>
+<span class="payout">PWR 6× · FLEX 3×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Dillon Mitchell</div>
+<div class="tier">S</div>
+<div><div>Pts+Rebs</div><div class="meta-muted">SJU vs KU</div></div>
+<div class="leg-extra">16.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">-4.1452</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Jaylen Petty</div>
+<div class="tier">G</div>
+<div><div>Points</div><div class="meta-muted">TTU vs ALA</div></div>
+<div class="leg-extra">9.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">3.5948</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Dylan Darling</div>
+<div class="tier">S</div>
+<div><div>Points</div><div class="meta-muted">SJU vs KU</div></div>
+<div class="leg-extra">8.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">-2.9008</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 3-Leg STANDARD ONLY (CBB)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 3-Leg STANDARD ONLY (CBB)</span>
+<span class="tg">0✓ 0✗ / 3</span>
+<span class="payout">PWR 6× · FLEX 3×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Dylan Darling</div>
+<div class="tier">S</div>
+<div><div>Pts+Rebs</div><div class="meta-muted">SJU vs KU</div></div>
+<div class="leg-extra">11.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">-3.3538</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Dillon Mitchell</div>
+<div class="tier">S</div>
+<div><div>Pts+Rebs</div><div class="meta-muted">SJU vs KU</div></div>
+<div class="leg-extra">16.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">-4.1452</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-cbb">CBB</span></div>
+<div class="pl-pend">Trey Kaufman-Renn</div>
+<div class="tier">S</div>
+<div><div>Pts+Rebs</div><div class="meta-muted">PUR vs MIA</div></div>
+<div class="leg-extra">25.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">-4.427</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 6-Leg SPORT MIX (NBA+CBB)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 6-Leg SPORT MIX (NBA+CBB)</span>
+<span class="tg">0✓ 0✗ / 6</span>
+<span class="payout">PWR 37.5× · FLEX 25×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Peyton Watson</div>
+<div class="tier">S</div>
+<div><div>Points</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">8.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">10.8</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Mitchell Robinson</div>
+<div class="tier">S</div>
+<div><div>Turnovers</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.9</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Christian Braun</div>
+<div class="tier">G</div>
+<div><div>Assists</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.65</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Jalen Brunson</div>
+<div class="tier">G</div>
+<div><div>Steals</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Mikal Bridges</div>
+<div class="tier">G</div>
+<div><div>Rebounds</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">2</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Karl-Anthony Towns</div>
+<div class="tier">G</div>
+<div><div>Assists</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.95</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 5-Leg SPORT MIX (NBA+CBB)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 5-Leg SPORT MIX (NBA+CBB)</span>
+<span class="tg">0✓ 0✗ / 5</span>
+<span class="payout">PWR 20× · FLEX 10×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Peyton Watson</div>
+<div class="tier">S</div>
+<div><div>Points</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">8.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">10.8</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Mitchell Robinson</div>
+<div class="tier">S</div>
+<div><div>Turnovers</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.9</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Christian Braun</div>
+<div class="tier">G</div>
+<div><div>Assists</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.65</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Jalen Brunson</div>
+<div class="tier">G</div>
+<div><div>Steals</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Mikal Bridges</div>
+<div class="tier">G</div>
+<div><div>Rebounds</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">2</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 4-Leg SPORT MIX (NBA+CBB)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 4-Leg SPORT MIX (NBA+CBB)</span>
+<span class="tg">0✓ 0✗ / 4</span>
+<span class="payout">PWR 10× · FLEX 6×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Peyton Watson</div>
+<div class="tier">S</div>
+<div><div>Points</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">8.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">10.8</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Mitchell Robinson</div>
+<div class="tier">S</div>
+<div><div>Turnovers</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.9</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Christian Braun</div>
+<div class="tier">G</div>
+<div><div>Assists</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.65</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Jalen Brunson</div>
+<div class="tier">G</div>
+<div><div>Steals</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 3-Leg SPORT MIX (NBA+CBB)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 3-Leg SPORT MIX (NBA+CBB)</span>
+<span class="tg">0✓ 0✗ / 3</span>
+<span class="payout">PWR 6× · FLEX 3×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Peyton Watson</div>
+<div class="tier">S</div>
+<div><div>Points</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">8.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">10.8</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Christian Braun</div>
+<div class="tier">G</div>
+<div><div>Assists</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.65</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Jalen Brunson</div>
+<div class="tier">G</div>
+<div><div>Steals</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+</article>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#2</span>
+<span class="tg">FINAL 3-Leg SPORT MIX (NBA+CBB)</span>
+<span class="tg">0✓ 0✗ / 3</span>
+<span class="payout">PWR 6× · FLEX 3×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Peyton Watson</div>
+<div class="tier">S</div>
+<div><div>Pts+Rebs</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">13.07</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Christian Braun</div>
+<div class="tier">G</div>
+<div><div>Assists</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.65</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Jalen Brunson</div>
+<div class="tier">G</div>
+<div><div>Steals</div><div class="meta-muted">NYK vs WAS</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 6-Leg (NHL Std+Gob)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 6-Leg (NHL Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 6</span>
+<span class="payout">PWR 37.5× · FLEX 25×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Rasmus Andersson</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">VGK vs DAL</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Kris Letang</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">PIT vs CAR</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Parker Wotherspoon</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">PIT vs CAR</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Ian Cole</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">UTA vs LA</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Mikey Anderson</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">LA vs UTA</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Ryan McDonagh</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">TB vs CGY</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 5-Leg (NHL Std+Gob)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 5-Leg (NHL Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 5</span>
+<span class="payout">PWR 20× · FLEX 10×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Rasmus Andersson</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">VGK vs DAL</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Kris Letang</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">PIT vs CAR</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Parker Wotherspoon</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">PIT vs CAR</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Ian Cole</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">UTA vs LA</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Mikey Anderson</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">LA vs UTA</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 4-Leg (NHL Std+Gob)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 4-Leg (NHL Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 4</span>
+<span class="payout">PWR 10× · FLEX 6×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Rasmus Andersson</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">VGK vs DAL</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Kris Letang</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">PIT vs CAR</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Parker Wotherspoon</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">PIT vs CAR</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Ian Cole</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">UTA vs LA</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 3-Leg MIX (NHL Std+Gob)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 3-Leg MIX (NHL Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 3</span>
+<span class="payout">PWR 6× · FLEX 3×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Rasmus Andersson</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">VGK vs DAL</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Kris Letang</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">PIT vs CAR</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Parker Wotherspoon</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">PIT vs CAR</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+</article>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#2</span>
+<span class="tg">FINAL 3-Leg MIX (NHL Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 3</span>
+<span class="payout">PWR 6× · FLEX 3×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Kris Letang</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">PIT vs CAR</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Parker Wotherspoon</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">PIT vs CAR</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Ian Cole</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">UTA vs LA</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 3-Leg STANDARD ONLY (NHL)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 3-Leg STANDARD ONLY (NHL)</span>
+<span class="tg">0✓ 0✗ / 3</span>
+<span class="payout">PWR 6× · FLEX 3×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Rasmus Andersson</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">VGK vs DAL</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Kris Letang</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">PIT vs CAR</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nhl">NHL</span></div>
+<div class="pl-pend">Parker Wotherspoon</div>
+<div class="tier">S</div>
+<div><div>blocked_shots</div><div class="meta-muted">PIT vs CAR</div></div>
+<div class="leg-extra">1.5 <span class="dir-under">UNDER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.5</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 6-Leg (Soccer Std+Gob)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 6-Leg (Soccer Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 6</span>
+<span class="payout">PWR 37.5× · FLEX 25×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Dominik Greif</div>
+<div class="tier">S</div>
+<div><div>Passes Attempted</div><div class="meta-muted">LYON vs MONACO</div></div>
+<div class="leg-extra">32.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Mory Diaw</div>
+<div class="tier">S</div>
+<div><div>Goalie Saves</div><div class="meta-muted">LE HAVRE vs PARIS</div></div>
+<div class="leg-extra">3 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Estéban Lepaul</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Yassir Zabiri</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Brice Samba</div>
+<div class="tier">G</div>
+<div><div>Goalie Saves</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Mathys Silistre</div>
+<div class="tier">G</div>
+<div><div>Goalie Saves</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 5-Leg (Soccer Std+Gob)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 5-Leg (Soccer Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 5</span>
+<span class="payout">PWR 20× · FLEX 10×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Dominik Greif</div>
+<div class="tier">S</div>
+<div><div>Passes Attempted</div><div class="meta-muted">LYON vs MONACO</div></div>
+<div class="leg-extra">32.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Mory Diaw</div>
+<div class="tier">S</div>
+<div><div>Goalie Saves</div><div class="meta-muted">LE HAVRE vs PARIS</div></div>
+<div class="leg-extra">3 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Estéban Lepaul</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Yassir Zabiri</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Brice Samba</div>
+<div class="tier">G</div>
+<div><div>Goalie Saves</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 4-Leg (Soccer Std+Gob)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 4-Leg (Soccer Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 4</span>
+<span class="payout">PWR 10× · FLEX 6×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Dominik Greif</div>
+<div class="tier">S</div>
+<div><div>Passes Attempted</div><div class="meta-muted">LYON vs MONACO</div></div>
+<div class="leg-extra">32.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Mory Diaw</div>
+<div class="tier">S</div>
+<div><div>Goalie Saves</div><div class="meta-muted">LE HAVRE vs PARIS</div></div>
+<div class="leg-extra">3 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Estéban Lepaul</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Yassir Zabiri</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 3-Leg MIX (Soccer Std+Gob)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 3-Leg MIX (Soccer Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 3</span>
+<span class="payout">PWR 6× · FLEX 3×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Dominik Greif</div>
+<div class="tier">S</div>
+<div><div>Passes Attempted</div><div class="meta-muted">LYON vs MONACO</div></div>
+<div class="leg-extra">32.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Estéban Lepaul</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Yassir Zabiri</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+</article>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#2</span>
+<span class="tg">FINAL 3-Leg MIX (Soccer Std+Gob)</span>
+<span class="tg">0✓ 0✗ / 3</span>
+<span class="payout">PWR 6× · FLEX 3×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Mory Diaw</div>
+<div class="tier">S</div>
+<div><div>Goalie Saves</div><div class="meta-muted">LE HAVRE vs PARIS</div></div>
+<div class="leg-extra">3 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Yassir Zabiri</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Mathys Silistre</div>
+<div class="tier">G</div>
+<div><div>Goalie Saves</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 3-Leg STANDARD ONLY (Soccer)</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 3-Leg STANDARD ONLY (Soccer)</span>
+<span class="tg">0✓ 0✗ / 3</span>
+<span class="payout">PWR 6× · FLEX 3×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Dominik Greif</div>
+<div class="tier">S</div>
+<div><div>Passes Attempted</div><div class="meta-muted">LYON vs MONACO</div></div>
+<div class="leg-extra">32.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Mory Diaw</div>
+<div class="tier">S</div>
+<div><div>Goalie Saves</div><div class="meta-muted">LE HAVRE vs PARIS</div></div>
+<div class="leg-extra">3 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Endrick</div>
+<div class="tier">S</div>
+<div><div>Passes Attempted</div><div class="meta-muted">LYON vs MONACO</div></div>
+<div class="leg-extra">21.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 6-Leg ALL-SPORT MIX</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 6-Leg ALL-SPORT MIX</span>
+<span class="tg">0✓ 0✗ / 6</span>
+<span class="payout">PWR 37.5× · FLEX 25×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Dominik Greif</div>
+<div class="tier">S</div>
+<div><div>Passes Attempted</div><div class="meta-muted">LYON vs MONACO</div></div>
+<div class="leg-extra">32.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Peyton Watson</div>
+<div class="tier">S</div>
+<div><div>Points</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">8.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">10.8</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Yassir Zabiri</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Estéban Lepaul</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Brice Samba</div>
+<div class="tier">G</div>
+<div><div>Goalie Saves</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Mathys Silistre</div>
+<div class="tier">G</div>
+<div><div>Goalie Saves</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 5-Leg ALL-SPORT MIX</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 5-Leg ALL-SPORT MIX</span>
+<span class="tg">0✓ 0✗ / 5</span>
+<span class="payout">PWR 20× · FLEX 10×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Dominik Greif</div>
+<div class="tier">S</div>
+<div><div>Passes Attempted</div><div class="meta-muted">LYON vs MONACO</div></div>
+<div class="leg-extra">32.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Peyton Watson</div>
+<div class="tier">S</div>
+<div><div>Points</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">8.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">10.8</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Yassir Zabiri</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Estéban Lepaul</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Brice Samba</div>
+<div class="tier">G</div>
+<div><div>Goalie Saves</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 4-Leg ALL-SPORT MIX</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 4-Leg ALL-SPORT MIX</span>
+<span class="tg">0✓ 0✗ / 4</span>
+<span class="payout">PWR 10× · FLEX 6×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Dominik Greif</div>
+<div class="tier">S</div>
+<div><div>Passes Attempted</div><div class="meta-muted">LYON vs MONACO</div></div>
+<div class="leg-extra">32.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Peyton Watson</div>
+<div class="tier">S</div>
+<div><div>Points</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">8.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">10.8</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Yassir Zabiri</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Estéban Lepaul</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">FINAL 3-Leg ALL-SPORT MIX</h2>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">FINAL 3-Leg ALL-SPORT MIX</span>
+<span class="tg">0✓ 0✗ / 3</span>
+<span class="payout">PWR 6× · FLEX 3×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Dominik Greif</div>
+<div class="tier">S</div>
+<div><div>Passes Attempted</div><div class="meta-muted">LYON vs MONACO</div></div>
+<div class="leg-extra">32.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Yassir Zabiri</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Estéban Lepaul</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+</article>
+<article class="ticket-card">
+<div class="thdr">
+<span class="tn bebas">#2</span>
+<span class="tg">FINAL 3-Leg ALL-SPORT MIX</span>
+<span class="tg">0✓ 0✗ / 3</span>
+<span class="payout">PWR 6× · FLEX 3×</span>
+<span class="banner pend">PENDING</span>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba">NBA</span></div>
+<div class="pl-pend">Peyton Watson</div>
+<div class="tier">S</div>
+<div><div>Points</div><div class="meta-muted">DEN vs POR</div></div>
+<div class="leg-extra">8.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">10.8</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Estéban Lepaul</div>
+<div class="tier">G</div>
+<div><div>Shots</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.5</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-soccer">SOCCER</span></div>
+<div class="pl-pend">Mathys Silistre</div>
+<div class="tier">G</div>
+<div><div>Goalie Saves</div><div class="meta-muted">RENNES vs METZ</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1</div>
+</div>
+</article>
+</section>
+</div></body></html>
