@@ -78,13 +78,13 @@ def pct_f(v: Any) -> float:
 def rate_color(f: float) -> str:
     """CSS color variable for a hit-rate float 0-100."""
     if f >= 65: return "var(--green)"
-    if f >= 58: return "#6ee7b7"
-    if f >= 50: return "var(--amber)"
+    if f >= 58: return "#5ef598"
+    if f >= 50: return "var(--gold)"
     return "var(--red)"
 
 def rate_bar_html(f: float) -> str:
     col = rate_color(f)
-    txt = "#fca5a5" if f < 50 else ("#fcd34d" if f < 58 else "#6ee7b7")
+    txt = "var(--red)" if f < 50 else ("var(--gold)" if f < 58 else "var(--green)")
     return (f'<div class="rate-cell">'
             f'<div class="rate-bar-bg"><div class="rate-bar-fill" style="width:{min(f,100):.1f}%;background:{col}"></div></div>'
             f'<div class="rate-num" style="color:{txt}">{f:.1f}%</div>'
@@ -297,10 +297,10 @@ def tier_row(tier: str, agg: dict, extra: str = "") -> str:
     dir_html = ""
     if over_pct != "—":
         col = "var(--green)" if pct_f(over_pct) >= 55 else "var(--red)"
-        dir_html += f'<span style="color:{col};font-size:10px;margin-right:8px">▲ {over_pct}</span>'
+        dir_html += f'<span style="color:var(--cyan);font-size:10px;margin-right:8px">▲ </span><span style="color:{col};font-size:10px;margin-right:8px">{over_pct}</span>'
     if under_pct != "—":
-        col = "var(--green)" if pct_f(under_pct) >= 55 else "var(--amber)"
-        dir_html += f'<span style="color:{col};font-size:10px">▼ {under_pct}</span>'
+        col = "var(--green)" if pct_f(under_pct) >= 55 else "var(--red)"
+        dir_html += f'<span style="color:var(--gold);font-size:10px">▼ </span><span style="color:{col};font-size:10px">{under_pct}</span>'
     tier_lbl = f"TIER {tier.upper()}"
     return f"""<tr class="{row_cls}">
       <td><span class="chip {chip_cls}">{tier_lbl}</span>
@@ -318,7 +318,8 @@ def prop_type_table(data: list[dict], label: str, min_decided: int = 10) -> str:
         return f'<div class="muted-note">No prop types with ≥{min_decided} decided.</div>'
     rows_html = ""
     for d in filtered:
-        rows_html += f"""<tr>
+        row_cls = "player-hit" if d["hit_rate"] >= 55 else ("player-miss" if d["hit_rate"] < 48 else "player-warn")
+        rows_html += f"""<tr class="{row_cls}">
           <td class="mono">{h(d['key'])}</td>
           <td class="right mono">{fmt_num(d['decided'])}</td>
           <td class="right mono pos">{fmt_num(d['hits'])}</td>
@@ -419,7 +420,7 @@ def def_tier_table(rows: list[dict]) -> str:
 #  SPORT SECTION BUILDER
 # ══════════════════════════════════════════════════════════════════════════════
 
-def build_sport_section(rows: list[dict], sport: str, color: str, icon: str) -> str:
+def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
     if not rows:
         return ""
 
@@ -446,7 +447,7 @@ def build_sport_section(rows: list[dict], sport: str, color: str, icon: str) -> 
       </div>
       <div class="stat-card blue">
         <div class="stat-label">TOTAL PROPS</div>
-        <div class="stat-val" style="color:#60a5fa">{total_label}</div>
+        <div class="stat-val" style="color:var(--cyan)">{total_label}</div>
         <div class="stat-sub"><strong>{fmt_num(stats['voids'])}</strong> voids ({void_pct})</div>
       </div>
       <div class="stat-card amber">
@@ -475,10 +476,10 @@ def build_sport_section(rows: list[dict], sport: str, color: str, icon: str) -> 
     std_dir_html = ""
     if std_over["decided"] > 0:
         col = "var(--green)" if std_over["hit_rate"] >= 55 else "var(--red)"
-        std_dir_html += f'<div style="font-size:10px;color:var(--muted2);margin-top:4px"><div class="sub-dir"><span style="color:{col};font-size:10px">▲ OVER</span> {pct(std_over["hit_rate"])} ({fmt_num(std_over["decided"])} dec)</div>'
+        std_dir_html += f'<div style="font-size:10px;color:var(--muted2);margin-top:4px"><div class="sub-dir"><span style="color:var(--cyan);font-size:10px">▲ OVER</span> <span style="color:{col}">{pct(std_over["hit_rate"])}</span> ({fmt_num(std_over["decided"])} dec)</div>'
     if std_under["decided"] > 0:
-        col = "var(--green)" if std_under["hit_rate"] >= 55 else "var(--amber)"
-        std_dir_html += f'<div class="sub-dir"><span style="color:{col};font-size:10px">▼ UNDER</span> {pct(std_under["hit_rate"])} ({fmt_num(std_under["decided"])} dec)</div></div>'
+        col = "var(--green)" if std_under["hit_rate"] >= 55 else "var(--red)"
+        std_dir_html += f'<div class="sub-dir"><span style="color:var(--gold);font-size:10px">▼ UNDER</span> <span style="color:{col}">{pct(std_under["hit_rate"])}</span> ({fmt_num(std_under["decided"])} dec)</div></div>'
 
     pick_table = f"""<div class="table-wrap"><table>
       <thead><tr><th>TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th><th>HIT RATE</th></tr></thead>
@@ -577,9 +578,9 @@ def build_sport_section(rows: list[dict], sport: str, color: str, icon: str) -> 
 
     return f"""<div class="sport-section">
     <div class="sport-header">
-      <div class="sport-label" style="color:{color}">{icon} {sport}</div>
+      <div class="sport-label">{icon} {sport}</div>
       <div class="sport-header-line"></div>
-      <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted2)">{total_label} TOTAL PROPS</div>
+      <div class="sport-meta-count">{total_label} TOTAL PROPS</div>
     </div>
 
     {kpi_html}
@@ -669,7 +670,7 @@ def build_takeaways(nba_rows: list[dict], cbb_rows: list[dict]) -> str:
 
     return f"""<div class="sport-section">
     <div class="sport-header">
-      <div class="sport-label" style="color:#8b5cf6">📋 TAKEAWAYS</div>
+      <div class="sport-label">📋 TAKEAWAYS</div>
       <div class="sport-header-line"></div>
     </div>
     {alerts_html}
@@ -722,79 +723,110 @@ def find_graded_file(sport: str, date_str: str) -> Path | None:
 NAV_HTML = ""
 
 CSS = """
-:root{--bg:#070a10;--bg2:#0c1018;--bg3:#111722;--border:#1c2333;--bd2:#243044;--text:#e8edf5;--muted:#4a5568;--muted2:#6b7a94;--blue:#3b82f6;--green:#10b981;--amber:#f59e0b;--red:#ef4444;--purple:#8b5cf6;}
+:root{
+  --glass:rgba(255,255,255,0.03);
+  --glass-bd:rgba(255,255,255,0.08);
+  --bg:transparent;
+  --text:rgba(232,236,255,0.95);
+  --muted:#94a3b8;
+  --muted2:rgba(255,255,255,0.48);
+  --gold:#f0a500;
+  --gold2:#d4a017;
+  --cyan:#00e5ff;
+  --green:#39ff6e;
+  --amber:#e8b84a;
+  --red:#ff4d4d;
+  --purple:#c4a5ff;
+  --pending:#666;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:60px}
-body::before{content:'';position:fixed;top:-20%;left:-10%;width:55%;height:55%;background:radial-gradient(ellipse,rgba(59,130,246,.04) 0%,transparent 70%);pointer-events:none}
-body::after{content:'';position:fixed;bottom:-20%;right:-10%;width:50%;height:50%;background:radial-gradient(ellipse,rgba(16,185,129,.03) 0%,transparent 70%);pointer-events:none}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
+body{font-family:'Share Tech Mono',monospace;background:transparent;color:var(--text);min-height:100vh;padding-bottom:60px}
+body::before{content:'';position:fixed;top:-20%;left:-10%;width:55%;height:55%;background:radial-gradient(ellipse,rgba(212,160,23,.07) 0%,transparent 70%);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;bottom:-20%;right:-10%;width:50%;height:50%;background:radial-gradient(ellipse,rgba(0,229,255,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
+header,.main{position:relative;z-index:1}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:rgba(255,255,255,0.04)}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.14);border-radius:4px}
 
-header{background:rgba(7,10,16,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:18px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+header{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+border:1px solid var(--glass-bd);border-radius:0 0 18px 18px;margin:0 12px;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+box-shadow:0 8px 32px rgba(0,0,0,.28)}
 .logo{display:flex;align-items:center;gap:14px}
-.logo-icon{width:186px;height:186px;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(212,175,55,0.45))}
-.logo-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;background:linear-gradient(135deg,#fff 40%,#94a3b8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.logo-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2.5px;margin-top:2px}
-.date-badge{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted2);background:var(--bg3);border:1px solid var(--bd2);border-radius:8px;padding:6px 14px;letter-spacing:1px}
-.main{max-width:1100px;margin:0 auto;padding:28px 20px}
-.sport-header{display:flex;align-items:center;gap:14px;margin-bottom:22px}
-.sport-label{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;line-height:1}
-.sport-header-line{flex:1;height:1px;background:linear-gradient(90deg,var(--bd2),transparent)}
+.logo-icon{width:120px;height:120px;object-fit:contain;display:block;filter:drop-shadow(0 0 8px rgba(212,160,23,0.45))}
+@media(max-width:768px){.logo-icon{width:80px;height:80px}}
+.logo-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;background:linear-gradient(to bottom,#f0a500,#d4a017,#f7e08a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo-sub{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2.5px;margin-top:2px}
+.date-badge{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted2);background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+border:1px solid var(--glass-bd);border-radius:999px;padding:8px 16px;letter-spacing:1.5px}
+.main{max-width:1100px;margin:0 auto;padding:24px 20px}
+.sport-header{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.sport-label{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;line-height:1;color:var(--gold);text-shadow:0 0 28px rgba(240,165,0,.18)}
+.sport-header-line{flex:1;min-width:80px;height:1px;background:rgba(255,255,255,0.08)}
+.sport-meta-count{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted2)}
 .sport-section{margin-bottom:48px}
-.section-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:3px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.section-label{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:3px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
 .stat-grid{display:grid;gap:14px;margin-bottom:24px}
 .stat-grid-4{grid-template-columns:repeat(4,1fr)}
 .stat-grid-2{grid-template-columns:repeat(2,1fr)}
-.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px 18px;position:relative;overflow:hidden;transition:border-color .2s}
-.stat-card:hover{border-color:var(--bd2)}
+.stat-card{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+border:1px solid var(--glass-bd);border-radius:14px;padding:16px 18px;position:relative;overflow:hidden;transition:border-color .2s,box-shadow .2s;
+box-shadow:0 4px 24px rgba(0,0,0,.22)}
+.stat-card:hover{border-color:rgba(255,255,255,0.12);box-shadow:0 8px 32px rgba(0,0,0,.28)}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
 .stat-card.green::before{background:linear-gradient(90deg,var(--green),transparent)}
-.stat-card.blue::before{background:linear-gradient(90deg,var(--blue),transparent)}
-.stat-card.amber::before{background:linear-gradient(90deg,var(--amber),transparent)}
+.stat-card.blue::before{background:linear-gradient(90deg,var(--cyan),transparent)}
+.stat-card.amber::before{background:linear-gradient(90deg,var(--gold),transparent)}
 .stat-card.red::before{background:linear-gradient(90deg,var(--red),transparent)}
 .stat-card.purple::before{background:linear-gradient(90deg,var(--purple),transparent)}
-.stat-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2.5px;margin-bottom:8px}
-.stat-val{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:1px;line-height:1}
+.stat-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2.5px;margin-bottom:8px}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;line-height:1}
 .stat-sub{font-size:12px;color:var(--muted2);margin-top:5px}
 .stat-sub strong{font-weight:700}
-.table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:20px}
+.table-wrap{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+border:1px solid var(--glass-bd);border-radius:14px;overflow:hidden;margin-bottom:20px;box-shadow:0 4px 24px rgba(0,0,0,.18)}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);padding:10px 14px;text-align:left;background:var(--bg3);border-bottom:1px solid var(--border);white-space:nowrap}
+th{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);padding:10px 14px;text-align:left;
+background:rgba(0,0,0,0.22);backdrop-filter:blur(12px);border-bottom:1px solid var(--glass-bd);white-space:nowrap}
 th.right{text-align:right}
-td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
+td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(255,255,255,.015)}
-td.right{text-align:right}td.mono{font-family:'DM Mono',monospace;font-size:12px}
+tr:hover td{background:rgba(255,255,255,.04)}
+td.right{text-align:right}td.mono{font-family:'Share Tech Mono',monospace;font-size:12px}
 .rate-cell{display:flex;align-items:center;gap:10px}
-.rate-bar-bg{flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.rate-bar-bg{flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
 .rate-bar-fill{height:100%;border-radius:3px;transition:width .4s}
-.rate-num{font-family:'DM Mono',monospace;font-size:12px;width:44px;text-align:right;flex-shrink:0}
-.chip{display:inline-block;border-radius:6px;padding:2px 9px;font-size:11px;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:.5px}
-.chip-a{background:rgba(16,185,129,.12);color:#6ee7b7;border:1px solid rgba(16,185,129,.25)}
-.chip-b{background:rgba(59,130,246,.12);color:#93c5fd;border:1px solid rgba(59,130,246,.25)}
-.chip-c{background:rgba(245,158,11,.12);color:#fcd34d;border:1px solid rgba(245,158,11,.25)}
-.chip-d{background:rgba(100,116,139,.12);color:#94a3b8;border:1px solid rgba(100,116,139,.25)}
-.chip-goblin{background:rgba(139,92,246,.15);color:#c4b5fd;border:1px solid rgba(139,92,246,.3)}
-.chip-demon{background:rgba(239,68,68,.12);color:#fca5a5;border:1px solid rgba(239,68,68,.25)}
-.chip-std{background:rgba(59,130,246,.12);color:#93c5fd;border:1px solid rgba(59,130,246,.25)}
+.rate-num{font-family:'Share Tech Mono',monospace;font-size:12px;width:44px;text-align:right;flex-shrink:0}
+.chip{display:inline-block;border-radius:8px;padding:3px 10px;font-size:11px;font-weight:700;font-family:'Share Tech Mono',monospace;letter-spacing:.5px;
+background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid var(--glass-bd)}
+.chip-a{background:rgba(57,255,110,.08);color:var(--green);border-color:rgba(57,255,110,.28)}
+.chip-b{background:rgba(0,229,255,.08);color:var(--cyan);border-color:rgba(0,229,255,.28)}
+.chip-c{background:rgba(240,165,0,.08);color:var(--gold);border-color:rgba(240,165,0,.3)}
+.chip-d{background:rgba(255,255,255,.04);color:var(--muted);border-color:var(--glass-bd)}
+.chip-goblin{background:rgba(196,165,255,.10);color:var(--purple);border-color:rgba(196,165,255,.32)}
+.chip-demon{background:rgba(255,77,77,.10);color:var(--red);border-color:rgba(255,77,77,.32)}
+.chip-std{background:rgba(0,229,255,.08);color:var(--cyan);border-color:rgba(0,229,255,.25)}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
 .insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
-.insight-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.insight-card{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);border-radius:12px;padding:14px 16px;box-shadow:0 4px 20px rgba(0,0,0,.15)}
 .insight-icon{font-size:22px;margin-bottom:8px}
-.insight-title{font-weight:700;font-size:13px;margin-bottom:6px}
+.insight-title{font-weight:700;font-size:13px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:var(--gold)}
 .insight-body{font-size:12px;color:var(--muted2);line-height:1.6}
 .insight-body strong{color:var(--text)}
-.player-hit td:first-child{border-left:3px solid var(--green)}
-.player-miss td:first-child{border-left:3px solid var(--red)}
-.player-warn td:first-child{border-left:3px solid var(--amber)}
+tr.player-hit td{background:rgba(57,255,110,0.04)}
+tr.player-hit td:first-child{border-left:3px solid var(--green)}
+tr.player-miss td{background:rgba(255,77,77,0.08)}
+tr.player-miss td:first-child{border-left:3px solid var(--red)}
+tr.player-warn td{background:rgba(240,165,0,0.06)}
+tr.player-warn td:first-child{border-left:3px solid var(--gold)}
 .pos{color:var(--green);font-weight:700}.neg{color:var(--red);font-weight:700}.neu{color:var(--muted2)}
-.alert{border-radius:12px;padding:14px 18px;margin-bottom:20px;border:1px solid;font-size:13px;line-height:1.6}
-.alert-red{background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.25)}
-.alert-green{background:rgba(16,185,129,.06);border-color:rgba(16,185,129,.25)}
-.alert-amber{background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.25)}
+.alert{border-radius:12px;padding:14px 18px;margin-bottom:20px;border:1px solid;font-size:13px;line-height:1.6;backdrop-filter:blur(16px)}
+.alert-red{background:rgba(255,77,77,.08);border-color:rgba(255,77,77,.35)}
+.alert-green{background:rgba(57,255,110,.08);border-color:rgba(57,255,110,.32)}
+.alert-amber{background:rgba(240,165,0,.08);border-color:rgba(240,165,0,.32)}
 .alert-title{font-weight:700;margin-bottom:4px}
 .sub-dir{display:inline-block;margin-right:8px}
-.muted-note{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);padding:14px;text-align:center}
+.muted-note{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);padding:14px;text-align:center}
+.footer-gen{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);text-align:center;margin-top:40px;letter-spacing:1.5px}
+td.muted{color:var(--muted2)}
 @media(max-width:768px){.stat-grid-4,.stat-grid-2{grid-template-columns:repeat(2,1fr)}.two-col,.insight-grid{grid-template-columns:1fr}}
 """
 
@@ -815,10 +847,10 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
 
     nhl_rows    = nhl_rows    or []
     soccer_rows = soccer_rows or []
-    nba_section    = build_sport_section(nba_rows,    "NBA",    "#3b82f6", "🏀") if nba_rows    else ""
-    cbb_section    = build_sport_section(cbb_rows,    "CBB",    "#8b5cf6", "🎓") if cbb_rows    else ""
-    nhl_section    = build_sport_section(nhl_rows,    "NHL",    "#06b6d4", "🏒") if nhl_rows    else ""
-    soccer_section = build_sport_section(soccer_rows, "Soccer", "#10b981", "⚽") if soccer_rows else ""
+    nba_section    = build_sport_section(nba_rows,    "NBA",    "🏀") if nba_rows    else ""
+    cbb_section    = build_sport_section(cbb_rows,    "CBB",    "🎓") if cbb_rows    else ""
+    nhl_section    = build_sport_section(nhl_rows,    "NHL",    "🏒") if nhl_rows    else ""
+    soccer_section = build_sport_section(soccer_rows, "Soccer", "⚽") if soccer_rows else ""
     takeaways   = build_takeaways(nba_rows, cbb_rows)
 
     sources = []
@@ -829,11 +861,11 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
     source_line = " &nbsp;·&nbsp; ".join(h(s) for s in sources)
 
     if not nba_section and not cbb_section and not nhl_section and not soccer_section:
-        body_content = """<div style="text-align:center;padding:60px 20px;font-family:'DM Mono',monospace">
+        body_content = """<div style="text-align:center;padding:60px 20px;font-family:'Share Tech Mono',monospace">
           <div style="font-size:32px;margin-bottom:16px">📭</div>
-          <div style="font-size:18px;color:#94a3b8">No graded data found for this date.</div>
-          <div style="font-size:13px;color:#4a5568;margin-top:8px">
-            Run <code>run_grader.ps1 --date {date_str}</code> to generate grades.
+          <div style="font-size:18px;color:rgba(255,255,255,0.55)">No graded data found for this date.</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:8px">
+            Run <code style="color:var(--cyan)">run_grader.ps1 --date {date_str}</code> to generate grades.
           </div>
         </div>""".replace("{date_str}", date_str)
     else:
@@ -845,7 +877,7 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Slate Eval — {h(display_date)}</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <style>{CSS}</style>
 </head>
 <body>
@@ -861,7 +893,7 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
 </header>
 <div class="main">
 {body_content}
-  <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);text-align:center;margin-top:40px;letter-spacing:1.5px">
+  <div class="footer-gen">
     GENERATED {h(generated)} &nbsp;·&nbsp; {source_line}
   </div>
 </div>
@@ -889,6 +921,11 @@ def main() -> None:
                         help="Path to soccer_graded_*.xlsx")
     parser.add_argument("--out",  type=str, default="",
                         help="Output path or directory (default: next to this script)")
+    parser.add_argument(
+        "--allow-empty",
+        action="store_true",
+        help="Write slate_eval even when no graded xlsx files exist (empty / no-data UI).",
+    )
     args = parser.parse_args()
 
     # Resolve date
@@ -949,8 +986,11 @@ def main() -> None:
             print(f"  Auto-detected Soccer: {soccer_path}")
 
     if not nba_path and not cbb_path and not nhl_path and not soccer_path:
-        print("  ERROR: No graded files found. Specify --nba/--cbb/--nhl/--soccer.")
-        sys.exit(1)
+        if args.allow_empty:
+            print("  NOTE: No graded files; emitting empty slate eval (--allow-empty).")
+        else:
+            print("  ERROR: No graded files found. Specify --nba/--cbb/--nhl/--soccer.")
+            sys.exit(1)
 
     # Load rows
     nba_rows: list[dict] = []

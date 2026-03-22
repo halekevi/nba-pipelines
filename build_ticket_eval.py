@@ -313,11 +313,11 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
     json_date = esc(str(payload.get("date") or arg_date))
 
     sport_colors_css = """
-.sport-nba{background:rgba(200,255,0,.15);color:#c8ff00;border:1px solid rgba(200,255,0,.35);}
-.sport-cbb{background:rgba(0,229,255,.12);color:#00e5ff;border:1px solid rgba(0,229,255,.35);}
-.sport-nhl{background:rgba(186,130,255,.14);color:#d4a5ff;border:1px solid rgba(186,130,255,.4);}
-.sport-soccer{background:rgba(255,200,80,.14);color:#ffc850;border:1px solid rgba(255,200,80,.38);}
-.sport-default{background:rgba(255,255,255,.06);color:#aaa;}
+.sport-nba{background:rgba(212,160,23,.12);color:#f0a500;border:1px solid rgba(212,160,23,.35);}
+.sport-cbb{background:rgba(0,229,255,.10);color:#00e5ff;border:1px solid rgba(0,229,255,.32);}
+.sport-nhl{background:rgba(186,130,255,.12);color:#c4a5ff;border:1px solid rgba(186,130,255,.38);}
+.sport-soccer{background:rgba(240,165,0,.10);color:#e8b84a;border:1px solid rgba(240,165,0,.34);}
+.sport-default{background:rgba(255,255,255,.04);color:#888;border:1px solid rgba(255,255,255,.1);}
 """
 
     parts: list[str] = [
@@ -329,62 +329,80 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
         f"<title>Ticket Eval — {json_date}</title>",
         '<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>',
         "<style>",
-        ":root{--bg:#05050f;--accent:#c8ff00;--green:#39ff6e;--red:#ff4d4d;--cyan:#00e5ff;--muted:#8892a6;--card:#0c0c18;}",
+        ":root{--gold:#f0a500;--gold2:#d4a017;--green:#39ff6e;--red:#ff4d4d;--cyan:#00e5ff;--pending:#666;--muted:#94a3b8;"
+        "--glass:rgba(255,255,255,0.03);--glass-bd:rgba(255,255,255,0.08);}",
         "*{box-sizing:border-box;margin:0;padding:0;}",
-        "body{font-family:'Share Tech Mono',monospace;background:var(--bg);color:#e8ecff;min-height:100vh;padding-bottom:48px;}",
-        "h1,h2,.bebas{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;}",
-        ".sticky-top{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(5,5,15,.97),rgba(5,5,15,.88));"
-        "backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08);padding:14px 24px;}",
-        ".sum-row{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:center;max-width:1200px;margin:0 auto;}",
+        "body{font-family:'Share Tech Mono',monospace;background:transparent;color:rgba(232,236,255,.95);min-height:100vh;padding-bottom:48px;}",
+        "h1,h2,.bebas{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}",
+        ".stats-bar{position:sticky;top:0;z-index:50;margin:0 auto 16px;max-width:1200px;padding:14px 22px;"
+        "background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);"
+        "border:1px solid var(--glass-bd);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.35);}",
+        ".sum-row{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:center;}",
         ".sum-item{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:72px;}",
-        ".sum-val{font-size:20px;font-weight:700;color:var(--accent);}",
+        ".sum-val{font-size:20px;font-weight:700;color:var(--gold);text-shadow:0 0 20px rgba(240,165,0,.25);}",
+        ".sum-val.green{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.35);}",
+        ".sum-val.red{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.35);}",
+        ".sum-val.pend{color:var(--pending);text-shadow:none;}",
         ".sum-lab{font-size:9px;letter-spacing:2px;color:var(--muted);}",
-        ".wrap{max-width:1180px;margin:0 auto;padding:20px 18px 0;}",
-        ".sec{margin-top:36px;}",
-        ".sec-head{font-size:28px;color:var(--accent);margin-bottom:16px;text-shadow:0 0 24px rgba(200,255,0,.25);}",
-        ".ticket-card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:14px;margin-bottom:18px;overflow:hidden;",
-        "box-shadow:0 8px 32px rgba(0,0,0,.45);}",
-        ".ticket-card.all-hit{box-shadow:0 0 28px rgba(57,255,110,.18),0 8px 32px rgba(0,0,0,.4);border-color:rgba(57,255,110,.25);}",
-        ".thdr{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06);",
-        "background:rgba(255,255,255,.02);}",
-        ".thdr .tn{font-size:22px;color:#fff;}",
+        ".wrap{max-width:1180px;margin:0 auto;padding:8px 18px 0;}",
+        ".sec{margin-top:32px;}",
+        ".sec-head{font-size:28px;color:var(--gold);margin-bottom:6px;padding-bottom:12px;border-bottom:1px solid var(--glass-bd);"
+        "text-shadow:0 0 24px rgba(240,165,0,.2);}",
+        ".ticket-card{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);"
+        "border:1px solid var(--glass-bd);border-radius:12px;margin-bottom:18px;overflow:hidden;"
+        "box-shadow:0 8px 32px rgba(0,0,0,.35);}",
+        ".ticket-card.all-hit{background:rgba(57,255,110,0.06);border-color:rgba(57,255,110,.42);"
+        "box-shadow:0 0 28px rgba(57,255,110,.14),0 8px 32px rgba(0,0,0,.3);}",
+        ".ticket-card.card-missed{background:rgba(255,77,77,0.06);border-color:rgba(255,77,77,.42);"
+        "box-shadow:0 0 28px rgba(255,77,77,.12),0 8px 32px rgba(0,0,0,.3);}",
+        ".thdr{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--glass-bd);"
+        "background:rgba(0,0,0,.18);backdrop-filter:blur(12px);}",
+        ".thdr .tn{font-size:22px;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;color:var(--gold);}",
         ".thdr .tg{font-size:11px;color:var(--muted);letter-spacing:1px;}",
         ".payout{font-size:12px;color:var(--cyan);}",
-        ".banner{font-size:11px;letter-spacing:2px;padding:4px 12px;border-radius:8px;font-weight:700;}",
-        ".banner.hit{background:rgba(57,255,110,.12);color:var(--green);border:1px solid rgba(57,255,110,.35);}",
-        ".banner.miss{background:rgba(255,77,77,.12);color:var(--red);border:1px solid rgba(255,77,77,.35);}",
-        ".banner.pend{background:rgba(136,146,166,.12);color:var(--muted);border:1px solid rgba(255,255,255,.12);}",
-        ".legrow{display:grid;grid-template-columns:44px 72px 1fr 36px minmax(200px,1.2fr) 100px 90px 70px;gap:8px;",
-        "align-items:center;padding:10px 14px;font-size:11px;border-bottom:1px solid rgba(255,255,255,.04);}",
+        ".banner{font-size:10px;letter-spacing:2px;padding:6px 14px;border-radius:999px;font-weight:700;"
+        "background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);}",
+        ".banner.hit{color:var(--green);border-color:rgba(57,255,110,.45);box-shadow:0 0 16px rgba(57,255,110,.15);}",
+        ".banner.miss{color:var(--red);border-color:rgba(255,77,77,.5);box-shadow:0 0 16px rgba(255,77,77,.12);}",
+        ".banner.pend{color:var(--pending);border-color:rgba(255,255,255,.12);}",
+        ".legrow{display:grid;grid-template-columns:44px 72px 1fr 36px minmax(200px,1.2fr) 100px 90px 70px;gap:8px;"
+        "align-items:center;padding:10px 14px;font-size:11px;border-bottom:1px solid rgba(255,255,255,.06);border-left:3px solid transparent;}",
         ".legrow:last-child{border-bottom:none;}",
-        ".legrow.miss-leg{background:rgba(255,77,77,.06);box-shadow:inset 4px 0 12px rgba(255,77,77,.35);}",
+        ".legrow.leg-hit{background:rgba(57,255,110,0.04);border-left-color:var(--green);}",
+        ".legrow.leg-miss{background:rgba(255,77,77,0.10);border-left:3px solid var(--red);}",
+        ".legrow.leg-miss .pl-miss{color:var(--red);text-shadow:0 0 12px rgba(255,77,77,0.7);}",
+        ".legrow.leg-miss .badge.miss{text-shadow:0 0 16px rgba(255,77,77,.85),0 0 28px rgba(255,77,77,.45);}",
+        ".legrow.leg-pend{background:transparent;border-left-color:transparent;}",
+        ".legrow.leg-pend .pl-pend,.legrow.leg-pend .meta-muted{color:var(--pending)!important;}",
+        ".legrow.leg-pend .pill{background:rgba(255,255,255,0.04)!important;border-color:rgba(255,255,255,0.1)!important;color:var(--pending)!important;}",
         ".badge{font-size:26px;line-height:1;text-align:center;}",
         ".badge.hit{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.6);}",
         ".badge.miss{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.55);}",
-        ".badge.pend{color:#666;}",
+        ".badge.pend{color:var(--pending);text-shadow:none;}",
         ".pill{font-size:9px;letter-spacing:1px;padding:3px 8px;border-radius:999px;text-transform:uppercase;}",
         sport_colors_css,
-        ".tier{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;",
-        "font-weight:800;font-size:12px;background:rgba(200,255,0,.1);color:var(--accent);border:1px solid rgba(200,255,0,.25);}",
+        ".tier{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;"
+        "font-weight:800;font-size:12px;background:rgba(255,255,255,0.05);color:var(--gold);"
+        "border:1px solid var(--glass-bd);backdrop-filter:blur(12px);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);}",
         ".pl-hit{color:var(--green);text-shadow:0 0 8px rgba(57,255,110,.4);}",
-        ".pl-miss{color:var(--red);text-shadow:0 0 10px rgba(255,77,77,.55);}",
-        ".pl-pend{color:#8892a6;}",
-        ".dir-over{color:#c8ff00;}",
-        ".dir-under{color:var(--cyan);}",
+        ".pl-miss{color:var(--red);}",
+        ".pl-pend{color:var(--pending);}",
+        ".dir-over{color:var(--cyan);}",
+        ".dir-under{color:var(--gold);}",
         ".meta-muted{color:var(--muted);font-size:10px;}",
         "@media(max-width:900px){.legrow{grid-template-columns:40px 64px 1fr;}.leg-extra{display:none;}}",
         "</style>",
         "</head>",
         "<body>",
-        '<div class="sticky-top">',
+        '<div class="stats-bar">',
         '<div class="sum-row">',
         f'<div class="sum-item"><div class="sum-val">{leg_pct:.1f}%</div><div class="sum-lab">LEG HIT RATE</div></div>',
-        f'<div class="sum-item"><div class="sum-val" style="color:var(--green)">{hits}</div><div class="sum-lab">HITS</div></div>',
-        f'<div class="sum-item"><div class="sum-val" style="color:var(--red)">{misses}</div><div class="sum-lab">MISSES</div></div>',
-        f'<div class="sum-item"><div class="sum-val" style="color:#8892a6">{pending}</div><div class="sum-lab">PENDING</div></div>',
+        f'<div class="sum-item"><div class="sum-val green">{hits}</div><div class="sum-lab">HITS</div></div>',
+        f'<div class="sum-item"><div class="sum-val red">{misses}</div><div class="sum-lab">MISSES</div></div>',
+        f'<div class="sum-item"><div class="sum-val pend">{pending}</div><div class="sum-lab">PENDING</div></div>',
         f'<div class="sum-item"><div class="sum-val">{perfect}</div><div class="sum-lab">PERFECT TICKETS</div></div>',
         f'<div class="sum-item"><div class="sum-val">{with_misses}</div><div class="sum-lab">TIX W/ MISS</div></div>',
-        f'<div class="sum-item"><div class="sum-val" style="font-size:14px;color:var(--muted)">{total_legs}</div><div class="sum-lab">TOTAL LEGS</div></div>',
+        f'<div class="sum-item"><div class="sum-val" style="font-size:14px">{total_legs}</div><div class="sum-lab">TOTAL LEGS</div></div>',
         "</div></div>",
         '<div class="wrap">',
         f'<p style="font-size:10px;letter-spacing:3px;color:var(--muted);margin-bottom:8px;">SLATE DATE · {json_date}</p>',
@@ -424,7 +442,11 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
             else:
                 banner_cls, banner_txt = "miss", f"MISSED {m}"
 
-            card_cls = "ticket-card" + (" all-hit" if banner_txt == "ALL HIT" else "")
+            card_cls = "ticket-card"
+            if banner_txt == "ALL HIT":
+                card_cls += " all-hit"
+            elif banner_cls == "miss":
+                card_cls += " card-missed"
 
             parts.append(f'<article class="{card_cls}">')
             parts.append('<div class="thdr">')
@@ -471,7 +493,12 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
                 dir_cls = "dir-over" if d == "OVER" else "dir-under" if d == "UNDER" else ""
 
                 act_cls = "pl-hit" if lg == "HIT" else "pl-miss" if lg == "MISS" else "pl-pend"
-                row_cls = "legrow" + (" miss-leg" if lg == "MISS" else "")
+                if lg == "HIT":
+                    row_cls = "legrow leg-hit"
+                elif lg == "MISS":
+                    row_cls = "legrow leg-miss"
+                else:
+                    row_cls = "legrow leg-pend"
                 sym = "✓" if lg == "HIT" else "✗" if lg == "MISS" else "·"
 
                 parts.append(f'<div class="{row_cls}">')
