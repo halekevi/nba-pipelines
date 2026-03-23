@@ -372,7 +372,7 @@ _PROP_WEIGHTS = {
     "fg2a":  0.92, "fgm":   0.99, "fga":   0.99,
     "ftm":   1.01, "fta":   0.98, "tov":   0.94,
     "pf":    0.85, "pr":    1.01, "pa":    1.01,
-    "pra":   0.99, "ra":    1.02, "fantasy": 0.93,
+    "pra":   0.99, "ra":    1.02, "fantasy": 0.75,
 }
 
 def _prop_weight(prop_norm: str) -> float:
@@ -381,7 +381,7 @@ def _prop_weight(prop_norm: str) -> float:
 
 # ── Bayesian prior hit rates (same as NBA step7) ──────────────────────────────
 _PROP_HIT_RATE_PRIOR = {
-    "stl": 0.697, "fantasy": 0.60,
+    "stl": 0.697, "fantasy": 0.54,
     "fg3m": 0.623, "reb": 0.617, "ast": 0.593,
     "ftm": 0.583, "pr": 0.568,  "pts": 0.566,
     "stocks": 0.547, "blk": 0.545, "pra": 0.545,
@@ -394,7 +394,7 @@ def _prop_hr_prior(prop_norm: str, direction: str) -> float:
     key = str(prop_norm).lower().strip()
     base = _PROP_HIT_RATE_PRIOR.get(key, 0.545)
     if direction == "UNDER":
-        if key == "fantasy":     return 0.371
+        if key == "fantasy":     return 0.340
         if key in ("fga","fg2a"): return 0.645
         if key == "reb":          return 0.591
         if key in ("pts","pr","pra"): return 0.540
@@ -505,12 +505,27 @@ def _ml_defense_tier_series(out: pd.DataFrame, n_teams: float) -> pd.Series:
     return _to_num(out[col]).apply(_to_ml_tier)
 
 
-def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series) -> tuple[pd.Series, pd.Series, pd.Series]:
+def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, source_hint: str = "") -> tuple[pd.Series, pd.Series, pd.Series]:
     root = Path(__file__).resolve().parents[3]
-    model_path = root / "models" / "prop_model_cbb.pkl"
-    feat_path = root / "models" / "prop_model_cbb_features.json"
-    if not (model_path.exists() and feat_path.exists()):
-        print(f"⚠️  CBB ML model missing at {model_path} — skipping ML blend")
+    source_key = str(source_hint).lower()
+    model_keys = ["cbb"]
+    if "wcbb" in source_key:
+        model_keys = ["wcbb", "cbb"]
+
+    model_path = None
+    feat_path = None
+    model_key_used = "cbb"
+    for mk in model_keys:
+        mp = root / "models" / f"prop_model_{mk}.pkl"
+        fp = root / "models" / f"prop_model_{mk}_features.json"
+        if mp.exists() and fp.exists():
+            model_path = mp
+            feat_path = fp
+            model_key_used = mk
+            break
+
+    if model_path is None or feat_path is None:
+        print(f"⚠️  CBB/WCBB ML model missing for keys {model_keys} — skipping ML blend")
         return pd.Series(np.nan, index=out.index), pd.Series(np.nan, index=out.index), existing_score.copy()
 
     try:
@@ -523,7 +538,7 @@ def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series) -> tuple[pd.Se
     try:
         from ml_blend_weight import load_ml_blend_weight as _load_cbb_blend
 
-        blend_w = float(_load_cbb_blend(root, "cbb"))
+        blend_w = float(_load_cbb_blend(root, model_key_used))
     except Exception:
         blend_w = float(ML_BLEND_WEIGHT)
 
@@ -557,7 +572,7 @@ def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series) -> tuple[pd.Se
 
     ml_edge = ml_prob - 0.5
     final_score = (1.0 - blend_w) * existing_score + blend_w * ml_edge
-    print(f"✅ CBB ML blend applied (weight={blend_w:.2f})")
+    print(f"✅ CBB ML blend applied (model={model_key_used}, weight={blend_w:.2f})")
     return ml_prob, ml_edge, final_score
 
 
@@ -881,7 +896,7 @@ def main():
     score = raw_score.where(elig_mask, other=np.nan)
 
     out["rank_score"] = score
-    out["ml_prob"], out["ml_edge"], out["final_score"] = _apply_ml_blend(out, out["rank_score"])
+    out["ml_prob"], out["ml_edge"], out["final_score"] = _apply_ml_blend(out, out["rank_score"], args.input)
     _apply_consistency_grade_scores_cbb(out, "CBB")
 
     # Game script risk adjustment

@@ -205,7 +205,7 @@ def _norm_pick_type_series(s: pd.Series) -> pd.Series:
 # Fantasy pulled down (2026-03): 1.08 + 15% combo correction + high OVER prior stacked and
 # over-ranked fantasy vs singles/combos in the slate.
 _PROP_WEIGHTS = {
-    "fantasy": 0.910,
+    "fantasy": 0.750,
     "pts": 1.000,
     "pr": 1.000,
     "reb": 1.000,
@@ -239,7 +239,7 @@ _PROP_WEIGHTS = {
 # Used in prop_hr_z scoring signal. Old values were based on season-long prior;
 # these reflect actual pipeline output hit rates by prop type OVER direction.
 _PROP_HR_PRIOR_OVER = {
-    "fantasy": 0.595,
+    "fantasy": 0.560,
     "pts": 0.580,
     "pr": 0.565,
     "reb": 0.580,
@@ -292,7 +292,7 @@ _PROP_HR_PRIOR_UNDER_OVERRIDE = {
     "pts": 0.541,
     "pr": 0.541,
     "pra": 0.537,
-    "fantasy": 0.288,
+    "fantasy": 0.330,
     "pf": 0.518,
     "personalfouls": 0.518,
 }
@@ -324,7 +324,7 @@ _PLAYER_PREFIX_BY_PROP = {
     "fg3a": "fg3a", "fg3m": "fg3m", "fta": "fta", "ftm": "ftm",
 }
 
-_COMBO_CORRECTIONS = {"pr": 1.05, "pa": 1.06, "ra": 1.08, "pra": 1.07, "fantasy": 1.04}
+_COMBO_CORRECTIONS = {"pr": 1.05, "pa": 1.06, "ra": 1.08, "pra": 1.07, "fantasy": 0.92}
 
 def _edge_transform_series(edge: pd.Series, cap: float = 3.0, power: float = 0.85) -> pd.Series:
     """Vectorized power-transform with sign preservation."""
@@ -530,13 +530,29 @@ def _build_nba_ml_X(out: pd.DataFrame, model_features: list[str]) -> pd.DataFram
     return X.reindex(columns=model_features, fill_value=0.0)
 
 
-def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series) -> tuple[pd.Series, pd.Series, pd.Series]:
+def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, source_hint: str = "") -> tuple[pd.Series, pd.Series, pd.Series]:
     root = Path(__file__).resolve().parents[2]
-    model_path = root / "models" / "prop_model_nba.pkl"
-    feat_path = root / "models" / "prop_model_nba_features.json"
+    source_key = str(source_hint).lower()
+    model_keys = ["nba"]
+    if "nba1h" in source_key:
+        model_keys = ["nba1h", "nba"]
+    elif "nba1q" in source_key:
+        model_keys = ["nba1q", "nba"]
 
-    if not (model_path.exists() and feat_path.exists()):
-        print(f"⚠️  ML model not found at {model_path} — skipping ML blend")
+    model_path = None
+    feat_path = None
+    model_key_used = "nba"
+    for mk in model_keys:
+        mp = root / "models" / f"prop_model_{mk}.pkl"
+        fp = root / "models" / f"prop_model_{mk}_features.json"
+        if mp.exists() and fp.exists():
+            model_path = mp
+            feat_path = fp
+            model_key_used = mk
+            break
+
+    if model_path is None or feat_path is None:
+        print(f"⚠️  ML model not found for keys {model_keys} — skipping ML blend")
         return (
             pd.Series(np.nan, index=out.index),
             pd.Series(np.nan, index=out.index),
@@ -557,7 +573,7 @@ def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series) -> tuple[pd.Se
     try:
         from ml_blend_weight import load_ml_blend_weight as _load_nba_blend
 
-        blend_w = float(_load_nba_blend(root, "nba"))
+        blend_w = float(_load_nba_blend(root, model_key_used))
     except Exception:
         blend_w = float(ML_BLEND_WEIGHT)
 
@@ -574,7 +590,7 @@ def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series) -> tuple[pd.Se
 
     ml_edge = ml_prob - 0.5
     final_score = (1.0 - blend_w) * existing_score + blend_w * ml_edge
-    print(f"✅ NBA ML blend applied (weight={blend_w:.2f})")
+    print(f"✅ NBA ML blend applied (model={model_key_used}, weight={blend_w:.2f})")
     return ml_prob, ml_edge, final_score
 
 def _write_xlsx_openpyxl(output_path: str, out: pd.DataFrame, elig_mask: pd.Series) -> None:
@@ -1020,7 +1036,7 @@ def main() -> None:
     score = score.where(elig_mask, np.nan)
 
     out["rank_score"] = score
-    out["ml_prob"], out["ml_edge"], out["final_score"] = _apply_ml_blend(out, out["rank_score"])
+    out["ml_prob"], out["ml_edge"], out["final_score"] = _apply_ml_blend(out, out["rank_score"], args.input)
     _apply_consistency_grade_scores(out, "NBA")
 
     # Game script risk adjustment
