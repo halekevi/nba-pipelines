@@ -52,11 +52,14 @@ def thin_border():
 
 
 def write_sheet(wb, name: str, data: pd.DataFrame, tab_color: str = HEADER_COLOR) -> None:
-    if data.empty:
-        return
     ws = wb.create_sheet(name)
     ws.sheet_properties.tabColor = tab_color
     headers = list(data.columns)
+
+    # Keep workbook valid even when slate is empty.
+    if not headers:
+        ws.cell(row=1, column=1, value="No columns")
+        return
 
     for ci, h in enumerate(headers, 1):
         cell = ws.cell(row=1, column=ci, value=h)

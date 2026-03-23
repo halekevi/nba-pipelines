@@ -334,7 +334,7 @@ if ($MLBOnly) {
     if ($ok) { $ok = Run-Step "MLB Step 5 - Line Hit Rates"     $MLBDir ".\step5_add_line_hit_rates_mlb.py"     "--input step4_mlb_with_stats.csv --output step5_mlb_hit_rates.csv" }
     if ($ok) { $ok = Run-Step "MLB Step 6 - Team Role Context"  $MLBDir ".\step6_team_role_context_mlb.py"      "--input step5_mlb_hit_rates.csv --output step6_mlb_role_context.csv" }
     if ($ok) { $ok = Run-Step "MLB Step 7 - Rank Props"         $MLBDir ".\step7_rank_props_mlb.py"             "--input step6_mlb_role_context.csv --output step7_mlb_ranked.xlsx" }
-    if ($ok) { $ok = Run-Step "MLB Step 8 - Direction Context"  $MLBDir ".\step8_add_direction_context_mlb.py"  "--input step7_mlb_ranked.xlsx --output step8_mlb_direction_clean.xlsx" }
+    if ($ok) { $ok = Run-Step "MLB Step 8 - Direction Context"  $MLBDir ".\step8_add_direction_context_mlb.py"  "--input step7_mlb_ranked.xlsx --output step8_mlb_direction.csv --xlsx step8_mlb_direction_clean.xlsx" }
     Write-Host ""
     if ($ok) { Write-Host "  MLB complete." -ForegroundColor Green } else { Write-Host "  MLB FAILED." -ForegroundColor Red }
     if ($ok) { Run-Combined "after MLB" }
