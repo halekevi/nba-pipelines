@@ -85,6 +85,17 @@ dist/
 *.webp
 *.gif
 
+# Browser/session runtime artifacts (never commit)
+browser_session/
+browser_session_harvest2/
+chrome_cdp_profile/
+
+# One-off exported design snapshots
+ui_runner/static/Logo Design Request.html
+ui_runner/static/Logo Design Request2.html
+ui_runner/static/Logo Design Request_files/
+ui_runner/static/Logo Design Request2_files/
+
 # Docs/temp/patch leftovers
 
 git_push_log.txt
