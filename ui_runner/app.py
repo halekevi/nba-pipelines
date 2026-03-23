@@ -42,10 +42,11 @@ ARCHIVE_DIR   = TEMPLATES_DIR / "archive"
 STATIC_DIR    = UI_DIR / "static"
 
 # Pipeline output paths (used by status + slate endpoints)
-NBA_DIR       = BASE_DIR / "NbaPropPipelineA"
-CBB_DIR       = BASE_DIR / "cbb2"
+NBA_DIR       = BASE_DIR / "NBA"
+CBB_DIR       = BASE_DIR / "CBB"
 NHL_DIR       = BASE_DIR / "NHL"
 SOCCER_DIR    = BASE_DIR / "Soccer"
+MLB_DIR       = BASE_DIR / "MLB"
 NBA_FLAG      = NBA_DIR / "RUN_COMPLETE.flag"
 NBA_SLATE     = NBA_DIR / "step8_all_direction_clean.xlsx"
 NBA_TICKETS   = NBA_DIR / "best_tickets.xlsx"
@@ -55,6 +56,8 @@ NHL_SLATE     = NHL_DIR / "step8_nhl_direction_clean.xlsx"
 NHL_TICKETS   = NHL_DIR / "nhl_best_tickets.xlsx"
 SOCCER_SLATE  = SOCCER_DIR / "step8_soccer_direction_clean.xlsx"
 SOCCER_TICKETS= SOCCER_DIR / "soccer_best_tickets.xlsx"
+MLB_SLATE     = MLB_DIR / "step8_mlb_direction_clean.xlsx"
+MLB_TICKETS   = MLB_DIR / "mlb_best_tickets.xlsx"
 COMBINED_OUT  = BASE_DIR  # combined_slate_tickets_YYYY-MM-DD.xlsx lives here
 
 app = Flask(
@@ -372,6 +375,10 @@ def api_pipeline_status():
         "soccer": {
             "slate":   _file_info(SOCCER_SLATE),
             "tickets": _file_info(SOCCER_TICKETS),
+        },
+        "mlb": {
+            "slate":   _file_info(MLB_SLATE),
+            "tickets": _file_info(MLB_TICKETS),
         },
         "combined": {
             "slate": _file_info(combined_path) if combined_path else {"exists": False},

@@ -160,6 +160,7 @@ body::after{content:'';position:fixed;inset:0;
 .scard-icon.cbb{background:rgba(127,199,217,.1);border:1px solid rgba(127,199,217,.2);}
 .scard-icon.nhl{background:rgba(183,168,255,.1);border:1px solid rgba(183,168,255,.2);}
 .scard-icon.soccer{background:rgba(125,255,203,.1);border:1px solid rgba(125,255,203,.2);}
+.scard-icon.mlb{background:rgba(255,121,121,.1);border:1px solid rgba(255,121,121,.22);}
 .scard-icon.combined{background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.2);}
 .scard-body{flex:1;}
 .scard-title{font-size:9px;font-family:"Inter",sans-serif;font-weight:600;color:var(--muted);letter-spacing:2.5px;margin-bottom:6px;text-transform:uppercase;}
@@ -206,6 +207,7 @@ body::after{content:'';position:fixed;inset:0;
 .sp-cbb{background:rgba(127,199,217,.12);color:var(--cyan);border:1px solid rgba(127,199,217,.25);}
 .sp-nhl{background:rgba(183,168,255,.12);color:var(--purple);border:1px solid rgba(183,168,255,.25);}
 .sp-soccer{background:rgba(125,255,203,.12);color:var(--green);border:1px solid rgba(125,255,203,.25);}
+.sp-mlb{background:rgba(255,121,121,.12);color:#ff8c8c;border:1px solid rgba(255,121,121,.26);}
 .edge-pick{font-size:9px;font-family:"Inter",sans-serif;font-weight:600;padding:3px 8px;border-radius:10px;letter-spacing:.5px;display:inline-block;}
 .pick-goblin{background:rgba(183,168,255,.12);color:var(--purple);border:1px solid rgba(183,168,255,.25);}
 .pick-standard{background:rgba(127,199,217,.12);color:var(--cyan);border:1px solid rgba(127,199,217,.25);}
@@ -1015,6 +1017,22 @@ body::before{
         <span class="scard-toggle">▾</span>
       </div>
 
+      <div class="scard loading" id="sc-mlb" onclick="toggleSlatePanel('mlb')">
+        <div class="scard-icon mlb">
+          <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#ff8c8c" stroke-width="1.5">
+            <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+            <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+          </svg>
+        </div>
+        <div class="scard-body">
+          <div class="scard-title">MLB SLATE</div>
+          <div class="scard-val" id="sc-mlb-val">Checking...</div>
+          <div class="scard-sub" id="sc-mlb-sub"></div>
+        </div>
+        <span class="sbadge loading" id="sc-mlb-badge">—</span>
+        <span class="scard-toggle">▾</span>
+      </div>
+
       <div class="scard loading" id="sc-combined">
         <div class="scard-icon combined">
           <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5">
@@ -1150,6 +1168,36 @@ body::before{
           <th onclick="sortSlate('soccer','game_time')">TIME</th>
         </tr></thead>
         <tbody id="stb-soccer"></tbody>
+      </table></div>
+    </div>
+
+    <div class="slate-expand" id="sp-mlb">
+      <div class="slate-toolbar">
+        <input class="slate-filter-input" type="text" placeholder="Filter player / prop…" oninput="filterSlate('mlb',this.value)" id="sf-mlb"/>
+        <button class="slate-filter-btn" id="sfb-mlb-over" onclick="toggleDirFilter('mlb','OVER',this)">▲ OVER</button>
+        <button class="slate-filter-btn" id="sfb-mlb-under" onclick="toggleDirFilter('mlb','UNDER',this)">▼ UNDER</button>
+        <button class="slate-filter-btn" id="sfb-mlb-goblin" onclick="togglePickFilter('mlb','Goblin',this)">Goblin</button>
+        <button class="slate-filter-btn" id="sfb-mlb-standard" onclick="togglePickFilter('mlb','Standard',this)">Standard</button>
+        <span class="slate-row-count" id="src-mlb"></span>
+      </div>
+      <div class="slate-table-wrap"><table class="slate-table" id="st-mlb">
+        <thead><tr>
+          <th onclick="sortSlate('mlb','tier')">TIER</th>
+          <th onclick="sortSlate('mlb','rank_score')">RANK</th>
+          <th onclick="sortSlate('mlb','player')">PLAYER</th>
+          <th onclick="sortSlate('mlb','team')">TEAM</th>
+          <th onclick="sortSlate('mlb','opp')">OPP</th>
+          <th onclick="sortSlate('mlb','prop')">PROP</th>
+          <th onclick="sortSlate('mlb','pick_type')">TYPE</th>
+          <th onclick="sortSlate('mlb','line')">LINE</th>
+          <th onclick="sortSlate('mlb','dir')">DIR</th>
+          <th onclick="sortSlate('mlb','edge')">EDGE</th>
+          <th onclick="sortSlate('mlb','hit_rate')">HIT%</th>
+          <th onclick="sortSlate('mlb','l5_over')">L5 O</th>
+          <th onclick="sortSlate('mlb','l5_under')">L5 U</th>
+          <th onclick="sortSlate('mlb','game_time')">TIME</th>
+        </tr></thead>
+        <tbody id="stb-mlb"></tbody>
       </table></div>
     </div>
 
@@ -1336,6 +1384,7 @@ async function refreshStatus() {
     applyStatusCard("cbb",      d.cbb?.slate,      "CBB Slate");
     applyStatusCard("nhl",      d.nhl?.slate,      "NHL Slate");
     applyStatusCard("soccer",   d.soccer?.slate,   "Soccer Slate");
+    applyStatusCard("mlb",      d.mlb?.slate,      "MLB Slate");
     applyStatusCard("combined", d.combined?.slate, "Combined Tickets");
   } catch {}
 }
@@ -1637,7 +1686,7 @@ const RENDER_SCHEDULED = {};
 const RENDER_TOKEN = {};
 const MOBILE_TABLE_QUERY = window.matchMedia('(max-width: 900px)');
 
-const SPORTS = ['nba','cbb','nhl','soccer'];
+const SPORTS = ['nba','cbb','nhl','soccer','mlb'];
 SPORTS.forEach(s => {
   SLATE_STATE[s] = { sortKey: 'rank_score', sortDir: -1, search: '', dir: null, pick: null };
 });

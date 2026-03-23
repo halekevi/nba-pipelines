@@ -46,6 +46,10 @@ from openpyxl.utils import get_column_letter
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 DEFAULT_NBA_PATH = os.path.join(REPO_ROOT, "NBA", "data", "outputs", "step8_all_direction_clean.xlsx")
 DEFAULT_CBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_cbb.xlsx")
+DEFAULT_NBA1H_PATH = os.path.join(REPO_ROOT, "NBA", "step8_nba1h_direction_clean.xlsx")
+DEFAULT_NBA1Q_PATH = os.path.join(REPO_ROOT, "NBA", "step8_nba1q_direction_clean.xlsx")
+DEFAULT_WCBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_wcbb.xlsx")
+DEFAULT_MLB_PATH = os.path.join(REPO_ROOT, "MLB", "step8_mlb_direction_clean.xlsx")
 _soccer_root = os.path.join(REPO_ROOT, "Soccer", "step8_soccer_direction_clean.xlsx")
 _soccer_outputs = os.path.join(REPO_ROOT, "Soccer", "outputs", "step8_soccer_direction_clean.xlsx")
 if os.path.exists(_soccer_root) and os.path.exists(_soccer_outputs):
@@ -453,6 +457,105 @@ def _load_audit_row(sport: str, path: str, df: pd.DataFrame) -> None:
     miss = [c for c in _SLATE_CORE_COLS if c not in df.columns]
     miss_s = ",".join(miss) if miss else "(none)"
     print(f"  [audit {sport}] file_exists={'Y' if pe else 'N'} rows={len(df)} missing_core_cols={miss_s}")
+
+
+def _extract_game_dates(game_time: pd.Series, target_year: int) -> pd.Series:
+    """
+    Build canonical YYYY-MM-DD game dates from mixed game_time formats:
+    - ISO timestamps (e.g. 2026-03-23T19:00:00-04:00)
+    - MM/DD HH:MMAM/PM (e.g. 03/23 07:00PM)
+    """
+    s = game_time.astype(str).fillna("").str.strip()
+    out = pd.Series(pd.NA, index=s.index, dtype="object")
+
+    # ISO-like or full datetime strings that already include a year.
+    iso_like = s.str.match(r"^\d{4}[-/]\d{1,2}[-/]\d{1,2}", na=False)
+    dt_iso = pd.to_datetime(s.where(iso_like, None), errors="coerce")
+    iso_mask = iso_like & dt_iso.notna()
+    if iso_mask.any():
+        out.loc[iso_mask] = dt_iso.loc[iso_mask].dt.strftime("%Y-%m-%d")
+
+    # MM/DD fallback strings used in slate sheets.
+    mmdd = s.str.extract(r"^\s*(\d{1,2})/(\d{1,2})(?:\b|[\sT])")
+    mm_mask = mmdd[0].notna() & out.isna()
+    if mm_mask.any():
+        m = pd.to_numeric(mmdd.loc[mm_mask, 0], errors="coerce")
+        d = pd.to_numeric(mmdd.loc[mm_mask, 1], errors="coerce")
+        built = pd.to_datetime(
+            {"year": target_year, "month": m, "day": d},
+            errors="coerce",
+        )
+        ok = built.notna()
+        if ok.any():
+            out.loc[mm_mask[mm_mask].index[ok]] = built.loc[ok].dt.strftime("%Y-%m-%d")
+
+    return out
+
+
+def enforce_target_date(
+    df: pd.DataFrame,
+    sport: str,
+    target_date: str,
+    allow_cross_date_fallback: bool = False,
+) -> pd.DataFrame:
+    """
+    Strict date behavior by default:
+    - keep only rows matching target_date
+    - if none, return empty (sport skipped)
+    Optional fallback mode:
+    - choose largest upcoming date (>= target) and tie-break by nearest date.
+    """
+    if df is None or df.empty:
+        print(f"  [{sport} date] no rows to filter")
+        return df
+    if "game_time" not in df.columns:
+        print(f"  [{sport} date] missing game_time column; keeping {len(df)} rows")
+        return df
+
+    out = df.copy()
+    target_year = int(str(target_date)[:4])
+    out["game_date"] = _extract_game_dates(out["game_time"], target_year)
+
+    counts = out["game_date"].value_counts(dropna=True)
+    if not counts.empty:
+        top = ", ".join([f"{str(k)}={int(v)}" for k, v in counts.head(5).items()])
+        print(f"  [{sport} date] available: {top}")
+    else:
+        print(f"  [{sport} date] no parseable game_date values; keeping {len(out)} rows")
+        return out
+
+    keep_mask = out["game_date"].eq(target_date)
+    kept = int(keep_mask.sum())
+    total = len(out)
+
+    if kept == 0 and allow_cross_date_fallback:
+        avail = [str(d) for d in counts.index.tolist() if str(d)]
+        if avail:
+            target_dt = pd.to_datetime(target_date, errors="coerce")
+            candidates = [d for d in avail if d >= target_date] or avail
+
+            def _key(d: str):
+                c = int(counts.get(d, 0))
+                dd = pd.to_datetime(d, errors="coerce")
+                dist = abs((dd - target_dt).days) if pd.notna(dd) and pd.notna(target_dt) else 999999
+                return (-c, dist, d)
+
+            chosen = sorted(candidates, key=_key)[0]
+            keep_mask = out["game_date"].eq(chosen)
+            kept = int(keep_mask.sum())
+            print(
+                f"  [{sport} date] no rows for {target_date}; "
+                f"fallback enabled -> using {chosen} ({kept} rows)"
+            )
+
+    filtered = out.loc[keep_mask].copy()
+    dropped = total - len(filtered)
+    print(f"  [{sport} date] kept {len(filtered)}/{total}, dropped {dropped}")
+
+    if filtered.empty:
+        print(f"  [{sport} date] WARNING: sport skipped for target date {target_date}")
+
+    return filtered
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -1851,7 +1954,16 @@ def load_soccer(path: str) -> pd.DataFrame:
 
 
 # ── Merge to full slate ────────────────────────────────────────────────────────
-def build_combined_slate(nba: pd.DataFrame, cbb: pd.DataFrame, nhl: pd.DataFrame = None, soccer: pd.DataFrame = None) -> pd.DataFrame:
+def build_combined_slate(
+    nba: pd.DataFrame,
+    cbb: pd.DataFrame,
+    nhl: pd.DataFrame = None,
+    soccer: pd.DataFrame = None,
+    nba1h: pd.DataFrame = None,
+    nba1q: pd.DataFrame = None,
+    wcbb: pd.DataFrame = None,
+    mlb: pd.DataFrame = None,
+) -> pd.DataFrame:
     keep = [
         "sport",
         "tier",
@@ -1867,6 +1979,7 @@ def build_combined_slate(nba: pd.DataFrame, cbb: pd.DataFrame, nhl: pd.DataFrame
         "opp_ap_rank",
         "ncaa_rank",
         "game_time",
+        "game_date",
         "prop_type",
         "pick_type",
         "line",
@@ -1899,6 +2012,14 @@ def build_combined_slate(nba: pd.DataFrame, cbb: pd.DataFrame, nhl: pd.DataFrame
         frames.append(safe_keep(nhl, keep))
     if soccer is not None and len(soccer) > 0:
         frames.append(safe_keep(soccer, keep))
+    if nba1h is not None and len(nba1h) > 0:
+        frames.append(safe_keep(nba1h, keep))
+    if nba1q is not None and len(nba1q) > 0:
+        frames.append(safe_keep(nba1q, keep))
+    if wcbb is not None and len(wcbb) > 0:
+        frames.append(safe_keep(wcbb, keep))
+    if mlb is not None and len(mlb) > 0:
+        frames.append(safe_keep(mlb, keep))
     combined = pd.concat(frames, ignore_index=True)
 
     if "rank_score" in combined.columns:
@@ -3217,6 +3338,26 @@ def main():
         default="",
         help=f"Soccer step8 (default: {DEFAULT_SOCCER_PATH})",
     )
+    ap.add_argument(
+        "--mlb",
+        default="",
+        help=f"MLB step8 (default: {DEFAULT_MLB_PATH})",
+    )
+    ap.add_argument(
+        "--nba1h",
+        default="",
+        help=f"NBA1H step8 (default: {DEFAULT_NBA1H_PATH})",
+    )
+    ap.add_argument(
+        "--nba1q",
+        default="",
+        help=f"NBA1Q step8 (default: {DEFAULT_NBA1Q_PATH})",
+    )
+    ap.add_argument(
+        "--wcbb",
+        default="",
+        help=f"WCBB step6 (default: {DEFAULT_WCBB_PATH})",
+    )
     ap.add_argument("--output", default="")
     ap.add_argument(
         "--date",
@@ -3237,6 +3378,11 @@ def main():
                     help="Minimum NBA context score for Standard picks")
     ap.add_argument("--context-min-l5-sample", type=int, default=5, dest="context_min_l5_sample",
                     help="Minimum (L5 over+under) sample size for NBA context filter")
+    ap.add_argument(
+        "--allow-cross-date-fallback",
+        action="store_true",
+        help="Allow non-target game dates when target date has zero rows (default: strict target-date only).",
+    )
 
     # Web outputs
     ap.add_argument("--write-web", action="store_true", help="Write tickets_latest.html/json for GitHub Pages")
@@ -3261,6 +3407,14 @@ def main():
         args.nhl = DEFAULT_NHL_PATH
     if not str(args.soccer).strip():
         args.soccer = DEFAULT_SOCCER_PATH
+    if not str(args.mlb).strip():
+        args.mlb = DEFAULT_MLB_PATH
+    if not str(args.nba1h).strip():
+        args.nba1h = DEFAULT_NBA1H_PATH
+    if not str(args.nba1q).strip():
+        args.nba1q = DEFAULT_NBA1Q_PATH
+    if not str(args.wcbb).strip():
+        args.wcbb = DEFAULT_WCBB_PATH
 
     if not args.output:
         args.output = f"combined_slate_tickets_{args.date}.xlsx"
@@ -3280,11 +3434,17 @@ def main():
 
     print(f"Loading NBA slate from {args.nba}...")
     nba = load_nba(args.nba)
+    nba = enforce_target_date(
+        nba, "NBA", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+    )
     print(f"  {len(nba)} NBA props loaded")
     _load_audit_row("NBA", args.nba, nba)
 
     print(f"Loading CBB slate from {args.cbb}...")
     cbb = load_cbb(args.cbb)
+    cbb = enforce_target_date(
+        cbb, "CBB", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+    )
     print(f"  {len(cbb)} CBB props loaded")
     _load_audit_row("CBB", args.cbb, cbb)
 
@@ -3293,6 +3453,9 @@ def main():
         try:
             nhl = load_nhl(args.nhl)
             if nhl is not None and not nhl.empty:
+                nhl = enforce_target_date(
+                    nhl, "NHL", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+                )
                 nhl = attach_standard_refs(nhl)
                 print(f"  {len(nhl)} NHL props loaded")
                 _load_audit_row("NHL", args.nhl, nhl)
@@ -3304,6 +3467,9 @@ def main():
     if str(args.soccer).strip():
         try:
             soccer = load_soccer(args.soccer)
+            soccer = enforce_target_date(
+                soccer, "Soccer", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+            )
             soccer = attach_standard_refs(soccer)
             print(f"  {len(soccer)} Soccer props loaded")
             _load_audit_row("Soccer", args.soccer, soccer)
@@ -3313,22 +3479,89 @@ def main():
     else:
         print("  [Soccer] skipped (empty --soccer)")
 
+    mlb = None
+    if str(args.mlb).strip():
+        try:
+            mlb = load_nba(args.mlb)
+            mlb["sport"] = "MLB"
+            mlb = enforce_target_date(
+                mlb, "MLB", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+            )
+            mlb = attach_standard_refs(mlb)
+            print(f"  {len(mlb)} MLB props loaded")
+            _load_audit_row("MLB", args.mlb, mlb)
+        except Exception as e:
+            print(f"  WARNING: Could not load MLB file: {e}")
+            mlb = None
+    else:
+        print("  [MLB] skipped (empty --mlb)")
+
+    nba1h = None
+    if str(args.nba1h).strip():
+        try:
+            nba1h = load_nba(args.nba1h)
+            nba1h["sport"] = "NBA1H"
+            nba1h = enforce_target_date(
+                nba1h, "NBA1H", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+            )
+            nba1h = attach_standard_refs(nba1h)
+            print(f"  {len(nba1h)} NBA1H props loaded")
+            _load_audit_row("NBA1H", args.nba1h, nba1h)
+        except Exception as e:
+            print(f"  WARNING: Could not load NBA1H file: {e}")
+            nba1h = None
+    else:
+        print("  [NBA1H] skipped (empty --nba1h)")
+
+    nba1q = None
+    if str(args.nba1q).strip():
+        try:
+            nba1q = load_nba(args.nba1q)
+            nba1q["sport"] = "NBA1Q"
+            nba1q = enforce_target_date(
+                nba1q, "NBA1Q", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+            )
+            nba1q = attach_standard_refs(nba1q)
+            print(f"  {len(nba1q)} NBA1Q props loaded")
+            _load_audit_row("NBA1Q", args.nba1q, nba1q)
+        except Exception as e:
+            print(f"  WARNING: Could not load NBA1Q file: {e}")
+            nba1q = None
+    else:
+        print("  [NBA1Q] skipped (empty --nba1q)")
+
+    wcbb = None
+    if str(args.wcbb).strip():
+        try:
+            wcbb = load_cbb(args.wcbb)
+            wcbb["sport"] = "WCBB"
+            wcbb = enforce_target_date(
+                wcbb, "WCBB", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+            )
+            wcbb = attach_standard_refs(wcbb)
+            print(f"  {len(wcbb)} WCBB props loaded")
+            _load_audit_row("WCBB", args.wcbb, wcbb)
+        except Exception as e:
+            print(f"  WARNING: Could not load WCBB file: {e}")
+            wcbb = None
+    else:
+        print("  [WCBB] skipped (empty --wcbb)")
+
     # ✅ Attach Standard sibling refs AFTER normalized columns exist
     nba = attach_standard_refs(nba)
     cbb = attach_standard_refs(cbb)
 
     print("Building combined slate...")
-    combined = build_combined_slate(nba, cbb, nhl, soccer)
+    combined = build_combined_slate(nba, cbb, nhl, soccer, nba1h, nba1q, wcbb, mlb)
 
     # ✅ Attach Standard refs for combined too
     combined = attach_standard_refs(combined)
 
     print(f"  {len(combined)} total props")
-    for s in ("NBA", "CBB", "Soccer"):
+    for s in ("NBA", "CBB", "NHL", "Soccer", "MLB", "NBA1H", "NBA1Q", "WCBB"):
         n_s = int((combined["sport"] == s).sum()) if "sport" in combined.columns else 0
-        print(f"  Full Slate rows — {s}: {n_s}")
-    if nhl is not None and len(nhl) > 0:
-        print(f"  Full Slate rows — NHL: {len(nhl)}")
+        if n_s > 0:
+            print(f"  Full Slate rows — {s}: {n_s}")
 
     # ── CBB Goblin rank floor ─────────────────────────────────────────────────
     # CBB Goblin hits at ~55-58% vs NBA Goblin at ~67%.
@@ -3340,7 +3573,7 @@ def main():
         sport = str(df["sport"].iloc[0]).upper() if "sport" in df.columns and len(df) > 0 else ""
         # Apply tighter rank floor specifically for CBB Goblin
         effective_min_rank = args.min_rank
-        if sport == "CBB" and pt is not None and pt == ["Goblin"]:
+        if sport in ("CBB", "WCBB") and pt is not None and pt == ["Goblin"]:
             effective_min_rank = max(args.min_rank or 0, CBB_GOBLIN_MIN_RANK)
         base = filter_eligible(
             df,
@@ -3452,6 +3685,27 @@ def main():
     # MIX Goblin sheets are no longer generated.
 
     print("Writing slate sheets...")
+    # Strict-mode guardrail: fail if mixed dates survived filtering.
+    if not args.allow_cross_date_fallback:
+        to_check = [
+            ("NBA", nba),
+            ("CBB", cbb),
+            ("NHL", nhl),
+            ("Soccer", soccer),
+            ("Combined", combined),
+        ]
+        mixed = []
+        for label, sdf in to_check:
+            if sdf is None or len(sdf) == 0 or "game_date" not in sdf.columns:
+                continue
+            bad = sdf[sdf["game_date"].astype(str) != args.date]
+            if len(bad) > 0:
+                cts = bad["game_date"].astype(str).value_counts().to_dict()
+                mixed.append((label, cts))
+        if mixed:
+            msg = "; ".join([f"{lbl}: {cts}" for lbl, cts in mixed])
+            raise ValueError(f"Strict date mode violation for target {args.date}: {msg}")
+
     full_slate_df = apply_full_slate_signal_columns(combined.copy())
     write_slate_sheet(
         wb,

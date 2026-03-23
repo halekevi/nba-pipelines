@@ -227,9 +227,14 @@ def _pick_odds_provider(odds_list: list[dict[str, Any]] | None) -> dict[str, Any
     if not odds_list:
         return None
     for o in odds_list:
+        if not isinstance(o, dict):
+            continue
         if o.get("spread") is not None or o.get("overUnder") is not None:
             return o
-    return odds_list[0]
+    for o in odds_list:
+        if isinstance(o, dict):
+            return o
+    return None
 
 
 def parse_games_for_sport(sport: str, payload: dict[str, Any], game_date: str) -> list[dict[str, Any]]:

@@ -3,7 +3,7 @@
   "pipelines": {
     "nba": {
       "label": "NBA Pipeline",
-      "workdir": "NbaPropPipelineA",
+      "workdir": "NBA",
       "commands": [
         {
           "id": "nba_step1",
@@ -11,7 +11,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step1_fetch_prizepicks_api.py",
+            ".\\scripts\\step1_fetch_prizepicks_api.py",
             "--league_id",
             "7",
             "--game_mode",
@@ -38,7 +38,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step2_attach_picktypes.py",
+            ".\\scripts\\step2_attach_picktypes.py",
             "--input",
             "step1_pp_props_today.csv",
             "--output",
@@ -51,11 +51,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step3_attach_defense.py",
+            ".\\scripts\\step3_attach_defense.py",
             "--input",
             "step2_with_picktypes.csv",
             "--defense",
-            ".\\defense_team_summary.csv",
+            "data\\cache\\defense_team_summary.csv",
             "--output",
             "step3_with_defense.csv"
           ]
@@ -66,7 +66,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step4_attach_player_stats_espn_cache.py",
+            ".\\scripts\\step4_attach_player_stats_espn_cache.py",
             "--slate",
             "step3_with_defense.csv",
             "--out",
@@ -103,7 +103,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step5_add_line_hit_rates.py",
+            ".\\scripts\\step5_add_line_hit_rates.py",
             "--input",
             "step4_with_stats.csv",
             "--output",
@@ -116,7 +116,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step6_team_role_context.py",
+            ".\\scripts\\step6_team_role_context.py",
             "--input",
             "step5_with_hit_rates.csv",
             "--output",
@@ -129,7 +129,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step7_rank_props.py",
+            ".\\scripts\\step7_rank_props.py",
             "--input",
             "step6_with_team_role_context.csv",
             "--output",
@@ -142,7 +142,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step8_add_direction_context.py",
+            ".\\scripts\\step8_add_direction_context.py",
             "--input",
             "step7_ranked_props.xlsx",
             "--sheet",
@@ -157,7 +157,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step9_build_tickets.py",
+            ".\\scripts\\step9_build_tickets.py",
             "--input",
             "step8_all_direction_clean.xlsx",
             "--output",
@@ -212,7 +212,7 @@
     },
     "cbb": {
       "label": "CBB Pipeline",
-      "workdir": "cbb2",
+      "workdir": "CBB",
       "commands": [
         {
           "id": "cbb_step1",
@@ -329,7 +329,7 @@
             "-3.14",
             ".\\scripts\\combined_slate_tickets.py",
             "--nba",
-            "NbaPropPipelineA\\step8_all_direction_clean.xlsx",
+            "NBA\\step8_all_direction_clean.xlsx",
             "--cbb",
             "CBB2\\step6_ranked_cbb.xlsx",
             "--nhl",
@@ -667,6 +667,7 @@
             "py",
             "-3.14",
             ".\\step1_fetch_prizepicks_mlb.py",
+            "--gentle",
             "--output",
             "step1_mlb_props.csv"
           ]
@@ -822,6 +823,439 @@
             "-File",
             "..\\run_pipeline.ps1",
             "-MLBOnly"
+          ]
+        }
+      ]
+    },
+    "wcbb": {
+      "label": "WCBB Pipeline",
+      "workdir": "CBB",
+      "commands": [
+        {
+          "id": "wcbb_step1",
+          "label": "Step 1 — Fetch PrizePicks (WCBB)",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\pp_cbb_scraper.py",
+            "--league_id",
+            "176",
+            "--out",
+            "step1_wcbb.csv"
+          ]
+        },
+        {
+          "id": "wcbb_step2",
+          "label": "Step 2 — Normalize (WCBB)",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\cbb_step2_normalize.py",
+            "--input",
+            "step1_wcbb.csv",
+            "--output",
+            "step2_wcbb.csv"
+          ]
+        },
+        {
+          "id": "wcbb_step3",
+          "label": "Step 3 — Attach Defense Rankings (WCBB)",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\cbb_step3b_attach_def_rankings.py",
+            "--input",
+            "step2_wcbb.csv",
+            "--output",
+            "step3b_with_def_rankings_wcbb.csv"
+          ]
+        },
+        {
+          "id": "wcbb_step4",
+          "label": "Step 4 — Attach ESPN IDs (WCBB)",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\step5_attach_espn_ids.py",
+            "--input",
+            "step3b_with_def_rankings_wcbb.csv",
+            "--output",
+            "step3_wcbb.csv",
+            "--master",
+            "data/ncaa_mbb_athletes_master.csv"
+          ]
+        },
+        {
+          "id": "wcbb_step5",
+          "label": "Step 5 — Boxscore Stats (WCBB)",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\cbb_step5b_attach_boxscore_stats.py",
+            "--input",
+            "step3_wcbb.csv",
+            "--output",
+            "step5b_wcbb.csv",
+            "--workers",
+            "4"
+          ]
+        },
+        {
+          "id": "wcbb_step6",
+          "label": "Step 6 — Rank Props (WCBB)",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\cbb_step6_rank_props.py",
+            "--input",
+            "step5b_wcbb.csv",
+            "--output",
+            "step6_ranked_wcbb.xlsx"
+          ]
+        },
+        {
+          "id": "wcbb_full",
+          "label": "WCBB Full Pipeline (Steps 1-6)",
+          "cmd_chain": [
+            "wcbb_step1",
+            "wcbb_step2",
+            "wcbb_step3",
+            "wcbb_step4",
+            "wcbb_step5",
+            "wcbb_step6"
+          ]
+        },
+        {
+          "id": "wcbb_stats_only",
+          "label": "WCBB Steps 4-6 (Stats + Rank)",
+          "cmd_chain": [
+            "wcbb_step4",
+            "wcbb_step5",
+            "wcbb_step6"
+          ]
+        }
+      ]
+    },
+    "nba1h": {
+      "label": "NBA 1H Pipeline",
+      "workdir": "NBA",
+      "commands": [
+        {
+          "id": "nba1h_step1",
+          "label": "Step 1 — Fetch PrizePicks (NBA1H)",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step1_fetch_prizepicks_api.py",
+            "--league_id",
+            "84",
+            "--game_mode",
+            "pickem",
+            "--per_page",
+            "250",
+            "--max_pages",
+            "5",
+            "--sleep",
+            "2.0",
+            "--cooldown_seconds",
+            "90",
+            "--max_cooldowns",
+            "3",
+            "--jitter_seconds",
+            "10.0",
+            "--output",
+            "step1_nba1h_props.csv"
+          ]
+        },
+        {
+          "id": "nba1h_step2",
+          "label": "Step 2 — Attach Pick Types",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step2_attach_picktypes.py",
+            "--input",
+            "step1_nba1h_props.csv",
+            "--output",
+            "step2_nba1h_picktypes.csv"
+          ]
+        },
+        {
+          "id": "nba1h_step3",
+          "label": "Step 3 — Attach Defense",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step3_attach_defense.py",
+            "--input",
+            "step2_nba1h_picktypes.csv",
+            "--defense",
+            "data\\cache\\defense_team_summary.csv",
+            "--output",
+            "step3_nba1h_with_defense.csv"
+          ]
+        },
+        {
+          "id": "nba1h_step4",
+          "label": "Step 4 — Player Stats (ESPN)",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step4_attach_player_stats_espn_cache.py",
+            "--slate",
+            "step3_nba1h_with_defense.csv",
+            "--out",
+            "step4_nba1h_with_stats.csv",
+            "--date",
+            "{TODAY}"
+          ]
+        },
+        {
+          "id": "nba1h_step5",
+          "label": "Step 5 — Line Hit Rates",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step5_add_line_hit_rates.py",
+            "--input",
+            "step4_nba1h_with_stats.csv",
+            "--output",
+            "step5_nba1h_with_hit_rates.csv"
+          ]
+        },
+        {
+          "id": "nba1h_step6",
+          "label": "Step 6 — Team Role Context",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step6_team_role_context.py",
+            "--input",
+            "step5_nba1h_with_hit_rates.csv",
+            "--output",
+            "step6_nba1h_with_team_role_context.csv"
+          ]
+        },
+        {
+          "id": "nba1h_step7",
+          "label": "Step 7 — Rank Props",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step7_rank_props.py",
+            "--input",
+            "step6_nba1h_with_team_role_context.csv",
+            "--output",
+            "step7_nba1h_ranked_props.xlsx"
+          ]
+        },
+        {
+          "id": "nba1h_step8",
+          "label": "Step 8 — Direction Context",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step8_add_direction_context.py",
+            "--input",
+            "step7_nba1h_ranked_props.xlsx",
+            "--sheet",
+            "ALL",
+            "--output",
+            "step8_nba1h_direction_clean.xlsx"
+          ]
+        },
+        {
+          "id": "nba1h_step9",
+          "label": "Step 9 — Build Tickets",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step9_build_tickets.py",
+            "--input",
+            "step8_nba1h_direction_clean.xlsx",
+            "--output",
+            "best_tickets_nba1h.xlsx",
+            "--min_hit_rate",
+            "0.8",
+            "--legs",
+            "2,3,4"
+          ]
+        },
+        {
+          "id": "nba1h_full",
+          "label": "NBA1H Full Pipeline (Steps 1-9)",
+          "cmd_chain": [
+            "nba1h_step1",
+            "nba1h_step2",
+            "nba1h_step3",
+            "nba1h_step4",
+            "nba1h_step5",
+            "nba1h_step6",
+            "nba1h_step7",
+            "nba1h_step8",
+            "nba1h_step9"
+          ]
+        }
+      ]
+    },
+    "nba1q": {
+      "label": "NBA 1Q Pipeline",
+      "workdir": "NBA",
+      "commands": [
+        {
+          "id": "nba1q_step1",
+          "label": "Step 1 — Fetch PrizePicks (NBA1Q)",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step1_fetch_prizepicks_api.py",
+            "--league_id",
+            "192",
+            "--game_mode",
+            "pickem",
+            "--per_page",
+            "250",
+            "--max_pages",
+            "5",
+            "--sleep",
+            "2.0",
+            "--cooldown_seconds",
+            "90",
+            "--max_cooldowns",
+            "3",
+            "--jitter_seconds",
+            "10.0",
+            "--output",
+            "step1_nba1q_props.csv"
+          ]
+        },
+        {
+          "id": "nba1q_step2",
+          "label": "Step 2 — Attach Pick Types",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step2_attach_picktypes.py",
+            "--input",
+            "step1_nba1q_props.csv",
+            "--output",
+            "step2_nba1q_picktypes.csv"
+          ]
+        },
+        {
+          "id": "nba1q_step3",
+          "label": "Step 3 — Attach Defense",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step3_attach_defense.py",
+            "--input",
+            "step2_nba1q_picktypes.csv",
+            "--defense",
+            "data\\cache\\defense_team_summary.csv",
+            "--output",
+            "step3_nba1q_with_defense.csv"
+          ]
+        },
+        {
+          "id": "nba1q_step4",
+          "label": "Step 4 — Player Stats (ESPN)",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step4_attach_player_stats_espn_cache.py",
+            "--slate",
+            "step3_nba1q_with_defense.csv",
+            "--out",
+            "step4_nba1q_with_stats.csv",
+            "--date",
+            "{TODAY}"
+          ]
+        },
+        {
+          "id": "nba1q_step5",
+          "label": "Step 5 — Line Hit Rates",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step5_add_line_hit_rates.py",
+            "--input",
+            "step4_nba1q_with_stats.csv",
+            "--output",
+            "step5_nba1q_with_hit_rates.csv"
+          ]
+        },
+        {
+          "id": "nba1q_step6",
+          "label": "Step 6 — Team Role Context",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step6_team_role_context.py",
+            "--input",
+            "step5_nba1q_with_hit_rates.csv",
+            "--output",
+            "step6_nba1q_with_team_role_context.csv"
+          ]
+        },
+        {
+          "id": "nba1q_step7",
+          "label": "Step 7 — Rank Props",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step7_rank_props.py",
+            "--input",
+            "step6_nba1q_with_team_role_context.csv",
+            "--output",
+            "step7_nba1q_ranked_props.xlsx"
+          ]
+        },
+        {
+          "id": "nba1q_step8",
+          "label": "Step 8 — Direction Context",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step8_add_direction_context.py",
+            "--input",
+            "step7_nba1q_ranked_props.xlsx",
+            "--sheet",
+            "ALL",
+            "--output",
+            "step8_nba1q_direction_clean.xlsx"
+          ]
+        },
+        {
+          "id": "nba1q_step9",
+          "label": "Step 9 — Build Tickets",
+          "cmd": [
+            "py",
+            "-3.14",
+            ".\\scripts\\step9_build_tickets.py",
+            "--input",
+            "step8_nba1q_direction_clean.xlsx",
+            "--output",
+            "best_tickets_nba1q.xlsx",
+            "--min_hit_rate",
+            "0.8",
+            "--legs",
+            "2,3,4"
+          ]
+        },
+        {
+          "id": "nba1q_full",
+          "label": "NBA1Q Full Pipeline (Steps 1-9)",
+          "cmd_chain": [
+            "nba1q_step1",
+            "nba1q_step2",
+            "nba1q_step3",
+            "nba1q_step4",
+            "nba1q_step5",
+            "nba1q_step6",
+            "nba1q_step7",
+            "nba1q_step8",
+            "nba1q_step9"
           ]
         }
       ]

@@ -200,6 +200,9 @@ function Run-Combined {
     $nhlFile    = "$NHLDir\step8_nhl_direction_clean.xlsx"
     $soccerFile = "$SoccerDir\step8_soccer_direction_clean.xlsx"
     $mlbFile    = "$MLBDir\step8_mlb_direction_clean.xlsx"
+    $nba1hFile  = "$Root\NBA\step8_nba1h_direction_clean.xlsx"
+    $nba1qFile  = "$Root\NBA\step8_nba1q_direction_clean.xlsx"
+    $wcbbFile   = "$Root\CBB\step6_ranked_wcbb.xlsx"
 
     if (-not (Test-Path $nbaFile)) { Write-Host "  WARNING: NBA step8 not found -- skipping combined" -ForegroundColor Yellow; return $false }
     if (-not (Test-Path $cbbFile)) { Write-Host "  WARNING: CBB step6 not found -- skipping combined" -ForegroundColor Yellow; return $false }
@@ -211,6 +214,9 @@ function Run-Combined {
     if (Test-Path $nhlFile)    { $CombinedArgs += " --nhl `"$nhlFile`"";       Write-Host "  [+] NHL"    -ForegroundColor DarkGray }
     if (Test-Path $soccerFile) { $CombinedArgs += " --soccer `"$soccerFile`""; Write-Host "  [+] Soccer" -ForegroundColor DarkGray }
     if (Test-Path $mlbFile)    { $CombinedArgs += " --mlb `"$mlbFile`"";       Write-Host "  [+] MLB"    -ForegroundColor DarkGray }
+    if (Test-Path $nba1hFile)  { $CombinedArgs += " --nba1h `"$nba1hFile`"";   Write-Host "  [+] NBA1H"  -ForegroundColor DarkGray }
+    if (Test-Path $nba1qFile)  { $CombinedArgs += " --nba1q `"$nba1qFile`"";   Write-Host "  [+] NBA1Q"  -ForegroundColor DarkGray }
+    if (Test-Path $wcbbFile)   { $CombinedArgs += " --wcbb `"$wcbbFile`"";     Write-Host "  [+] WCBB"   -ForegroundColor DarkGray }
 
     $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --max-tickets 3 --write-web --web-outdir `"$WebOutDir`""
 
@@ -625,6 +631,20 @@ $SoccerSuccess = Test-Path (Join-Path $SoccerDir "step8_soccer_direction_clean.x
 
 Remove-Job $allJobs -Force -ErrorAction SilentlyContinue
 if ($NBASuccess) { New-Item -ItemType File -Force -Path (Join-Path $NBADir "RUN_COMPLETE.flag") | Out-Null }
+
+if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force -Path $OutDir | Out-Null }
+if (Test-Path "$Root\NBA\step8_nba1h_direction_clean.xlsx") {
+    Copy-Item "$Root\NBA\step8_nba1h_direction_clean.xlsx" "$OutDir\step8_nba1h_direction_clean_$Date.xlsx" -Force
+    Write-Host "  Archived NBA1H slate -> $OutDir\step8_nba1h_direction_clean_$Date.xlsx" -ForegroundColor DarkGray
+}
+if (Test-Path "$Root\NBA\step8_nba1q_direction_clean.xlsx") {
+    Copy-Item "$Root\NBA\step8_nba1q_direction_clean.xlsx" "$OutDir\step8_nba1q_direction_clean_$Date.xlsx" -Force
+    Write-Host "  Archived NBA1Q slate -> $OutDir\step8_nba1q_direction_clean_$Date.xlsx" -ForegroundColor DarkGray
+}
+if (Test-Path "$Root\CBB\step6_ranked_wcbb.xlsx") {
+    Copy-Item "$Root\CBB\step6_ranked_wcbb.xlsx" "$OutDir\step6_ranked_wcbb_$Date.xlsx" -Force
+    Write-Host "  Archived WCBB slate -> $OutDir\step6_ranked_wcbb_$Date.xlsx" -ForegroundColor DarkGray
+}
 
 Write-Host ""
 @(

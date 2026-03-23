@@ -41,11 +41,11 @@ _XLSX_HDR_TO_LEG_FIELD: dict[str, str] = {
 # Graded / slate workbooks (first existing path wins per sport)
 SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
     "NBA": [
-        REPO_ROOT / "NbaPropPipelineA" / "step8_all_direction_clean.xlsx",
+        REPO_ROOT / "NBA" / "step8_all_direction_clean.xlsx",
         REPO_ROOT / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
     ],
     "CBB": [
-        REPO_ROOT / "cbb2" / "step6_ranked_cbb.xlsx",
+        REPO_ROOT / "CBB" / "step6_ranked_cbb.xlsx",
         REPO_ROOT / "CBB" / "step6_ranked_cbb.xlsx",
     ],
     "NHL": [

@@ -170,8 +170,11 @@ $YesterdayOut = Join-Path $Root "outputs\$Yesterday"
 $ArchiveDir = Join-Path $YesterdayOut "archive"
 $archiveFiles = @(
     (Join-Path $YesterdayOut "step8_nba_direction_clean_$Yesterday.xlsx"),
+    (Join-Path $YesterdayOut "step8_nba1h_direction_clean_$Yesterday.xlsx"),
+    (Join-Path $YesterdayOut "step8_nba1q_direction_clean_$Yesterday.xlsx"),
     (Join-Path $YesterdayOut "step8_soccer_direction_clean_$Yesterday.xlsx"),
-    (Join-Path $YesterdayOut "step8_nhl_direction_clean_$Yesterday.xlsx")
+    (Join-Path $YesterdayOut "step8_nhl_direction_clean_$Yesterday.xlsx"),
+    (Join-Path $YesterdayOut "step6_ranked_wcbb_$Yesterday.xlsx")
 )
 if (-not (Test-Path $YesterdayOut)) {
     Write-Log "STEP B - Archive yesterday: SKIP (no folder outputs\$Yesterday)"
@@ -371,8 +374,11 @@ else {
         git -C $Root add -- "outputs/$Today/" "ui_runner/templates/"
         $optionalAdds = @(
             "NBA\data\outputs\step8_all_direction_clean.xlsx",
+            "NBA\step8_nba1h_direction_clean.xlsx",
+            "NBA\step8_nba1q_direction_clean.xlsx",
             "Soccer\outputs\step8_soccer_direction_clean.xlsx",
             "CBB\step6_ranked_cbb.xlsx",
+            "CBB\step6_ranked_wcbb.xlsx",
             "NHL\step8_nhl_direction_clean.xlsx"
         )
         foreach ($rel in $optionalAdds) {

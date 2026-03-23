@@ -370,6 +370,10 @@ def lookup_actual(sport: str, player: str, team: str, prop_norm: str,
                   nhl_lpt=None, nhl_lp=None,
                   soccer_lpt=None, soccer_lp=None) -> float:
     sport = (sport or "").upper()
+    if sport in ("NBA1H", "NBA1Q"):
+        sport = "NBA"
+    elif sport == "WCBB":
+        sport = "CBB"
     player_n = strip_norm(player)
     team_n = strip_norm(team)
     if sport == "NBA":

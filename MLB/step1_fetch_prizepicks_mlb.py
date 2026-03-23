@@ -147,6 +147,8 @@ def fetch_pages(
     jitter_seconds: float,
     max_403_retries: int = 3,
     forbidden_backoff_base: float = 15.0,
+    rotate_ua_on_403: bool = True,
+    warmup_on_403: bool = True,
 ) -> Tuple[List[dict], List[dict]]:
     all_data: List[dict] = []
     all_included: List[dict] = []
@@ -219,9 +221,11 @@ def fetch_pages(
                 backoff = forbidden_backoff_base * (2 ** (forbidden_retries - 1)) + random.uniform(2, 8)
                 print(f"⏸️  403 retry {forbidden_retries}/{max_403_retries}: sleeping {backoff:.1f}s...")
                 time.sleep(backoff)
-                ua      = random.choice(USER_AGENTS)
+                if rotate_ua_on_403:
+                    ua = random.choice(USER_AGENTS)
                 headers = _make_headers(ua)
-                _warm_session(session, ua)
+                if warmup_on_403:
+                    _warm_session(session, ua)
                 continue
 
             if r.status_code >= 500:
@@ -334,12 +338,29 @@ def main():
     ap.add_argument("--max_cooldowns",    type=int,   default=2)
     ap.add_argument("--jitter_seconds",   type=float, default=7.0)
     ap.add_argument("--max_403_retries",  type=int,   default=3)
+    ap.add_argument("--gentle",           action="store_true", help="Use conservative request pacing to reduce 403/rate-limit pressure")
     ap.add_argument("--min_rows",         type=int,   default=30)
     ap.add_argument("--min_teams",        type=int,   default=2)
     ap.add_argument("--all_props",        action="store_true", help="Keep all prop types unfiltered")
     args = ap.parse_args()
 
+    rotate_ua_on_403 = True
+    warmup_on_403 = True
+    if args.gentle:
+        # Gentler fetch profile: fewer total requests + longer spacing.
+        args.per_page = min(args.per_page, 100)
+        args.max_pages = min(args.max_pages, 4)
+        args.sleep = max(args.sleep, 4.0)
+        args.cooldown_seconds = max(args.cooldown_seconds, 180.0)
+        args.max_cooldowns = min(args.max_cooldowns, 1)
+        args.jitter_seconds = max(args.jitter_seconds, 20.0)
+        args.max_403_retries = min(args.max_403_retries, 1)
+        rotate_ua_on_403 = False
+        warmup_on_403 = False
+
     print(f"📡 Fetching PrizePicks MLB | league_id={args.league_id}")
+    if args.gentle:
+        print("  🕊️ Gentle mode enabled (slower, fewer requests)")
 
     data, included = fetch_pages(
         league_id=args.league_id,
@@ -351,6 +372,8 @@ def main():
         max_cooldowns=args.max_cooldowns,
         jitter_seconds=args.jitter_seconds,
         max_403_retries=args.max_403_retries,
+        rotate_ua_on_403=rotate_ua_on_403,
+        warmup_on_403=warmup_on_403,
     )
 
     if not data:

@@ -22,6 +22,9 @@ $NBAGradedFile = Join-Path $DateDir "graded_nba_$Date.xlsx"
 $CBBGradedFile = Join-Path $DateDir "graded_cbb_$Date.xlsx"
 $NHLGradedFile = Join-Path $DateDir "graded_nhl_$Date.xlsx"
 $SoccerGradedFile = Join-Path $DateDir "graded_soccer_$Date.xlsx"
+$NBA1HGradedFile = Join-Path $DateDir "graded_nba1h_$Date.xlsx"
+$NBA1QGradedFile = Join-Path $DateDir "graded_nba1q_$Date.xlsx"
+$WCBBGradedFile = Join-Path $DateDir "graded_wcbb_$Date.xlsx"
 $EvalHtmlFile = Join-Path $DateDir "slate_eval_$Date.html"
 $TemplatesDir = Join-Path $Root "ui_runner\templates"
 
@@ -160,6 +163,18 @@ $SoccerSlateFile = Resolve-FirstExisting @(
     (Join-Path $Root "Soccer\outputs\step8_soccer_direction_clean.xlsx"),
     (Join-Path $Root "Soccer\step8_soccer_direction_clean.xlsx")
 )
+$NBA1HSlateFile = Resolve-FirstExisting @(
+    (Join-Path $DateDir "step8_nba1h_direction_clean_$Date.xlsx"),
+    (Join-Path $Root "NBA\step8_nba1h_direction_clean.xlsx")
+)
+$NBA1QSlateFile = Resolve-FirstExisting @(
+    (Join-Path $DateDir "step8_nba1q_direction_clean_$Date.xlsx"),
+    (Join-Path $Root "NBA\step8_nba1q_direction_clean.xlsx")
+)
+$WCBBSlateFile = Resolve-FirstExisting @(
+    (Join-Path $DateDir "step6_ranked_wcbb_$Date.xlsx"),
+    (Join-Path $Root "CBB\step6_ranked_wcbb.xlsx")
+)
 if ($SoccerSlateFile -and (Test-Path $SoccerSlateFile)) {
     Write-Host "Soccer slate resolved to: $SoccerSlateFile" -ForegroundColor DarkGray
 }
@@ -248,6 +263,45 @@ if ((Test-Path $SoccerActuals) -and $SoccerSlateFile -and (Test-Path $SoccerSlat
 }
 else {
     Write-Host "Skipping Soccer grading (missing slate/actuals/grader)." -ForegroundColor Yellow
+}
+
+if ((Test-Path $NBAActuals) -and $NBA1HSlateFile -and (Test-Path $NBA1HSlateFile) -and (Test-Path $SlateGraderScript)) {
+    Run-Py "Grade NBA1H Slate" $Root $SlateGraderScript @(
+        "--sport", "NBA",
+        "--slate", $NBA1HSlateFile,
+        "--actuals", $NBAActuals,
+        "--output", $NBA1HGradedFile,
+        "--date", $Date
+    )
+}
+else {
+    Write-Host "Skipping NBA1H grading (missing slate/actuals/grader)." -ForegroundColor Yellow
+}
+
+if ((Test-Path $NBAActuals) -and $NBA1QSlateFile -and (Test-Path $NBA1QSlateFile) -and (Test-Path $SlateGraderScript)) {
+    Run-Py "Grade NBA1Q Slate" $Root $SlateGraderScript @(
+        "--sport", "NBA",
+        "--slate", $NBA1QSlateFile,
+        "--actuals", $NBAActuals,
+        "--output", $NBA1QGradedFile,
+        "--date", $Date
+    )
+}
+else {
+    Write-Host "Skipping NBA1Q grading (missing slate/actuals/grader)." -ForegroundColor Yellow
+}
+
+if ((Test-Path $CBBActuals) -and $WCBBSlateFile -and (Test-Path $WCBBSlateFile) -and (Test-Path $SlateGraderScript)) {
+    Run-Py "Grade WCBB Slate" $Root $SlateGraderScript @(
+        "--sport", "CBB",
+        "--slate", $WCBBSlateFile,
+        "--actuals", $CBBActuals,
+        "--output", $WCBBGradedFile,
+        "--date", $Date
+    )
+}
+else {
+    Write-Host "Skipping WCBB grading (missing slate/actuals/grader)." -ForegroundColor Yellow
 }
 
 if (Test-Path $BuildGradesHtmlScript) {

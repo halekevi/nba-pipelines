@@ -221,6 +221,9 @@ function Run-Combined {
     $nhlFile    = "$NHLDir\outputs\step8_nhl_direction_clean.xlsx"
     $soccerFile = "$SoccerDir\outputs\step8_soccer_direction_clean.xlsx"
     $mlbFile    = "$MLBDir\step8_mlb_direction_clean.xlsx"
+    $nba1hFile  = "$Root\NBA\step8_nba1h_direction_clean.xlsx"
+    $nba1qFile  = "$Root\NBA\step8_nba1q_direction_clean.xlsx"
+    $wcbbFile   = "$Root\CBB\step6_ranked_wcbb.xlsx"
 
     if (-not (Test-Path $nbaFile)) { Write-Host "  WARNING: NBA step8 not found -- skipping combined" -ForegroundColor Yellow; return $false }
     if (-not (Test-Path $cbbFile)) { Write-Host "  WARNING: CBB step6 not found -- skipping combined" -ForegroundColor Yellow; return $false }
@@ -232,6 +235,9 @@ function Run-Combined {
     if (Test-Path $nhlFile)    { $CombinedArgs += " --nhl `"$nhlFile`"";       Write-Host "  [+] NHL"    -ForegroundColor DarkGray }
     if (Test-Path $soccerFile) { $CombinedArgs += " --soccer `"$soccerFile`""; Write-Host "  [+] Soccer" -ForegroundColor DarkGray }
     if (Test-Path $mlbFile)    { $CombinedArgs += " --mlb `"$mlbFile`"";       Write-Host "  [+] MLB"    -ForegroundColor DarkGray }
+    if (Test-Path $nba1hFile)  { $CombinedArgs += " --nba1h `"$nba1hFile`"";   Write-Host "  [+] NBA1H"  -ForegroundColor DarkGray }
+    if (Test-Path $nba1qFile)  { $CombinedArgs += " --nba1q `"$nba1qFile`"";   Write-Host "  [+] NBA1Q"  -ForegroundColor DarkGray }
+    if (Test-Path $wcbbFile)   { $CombinedArgs += " --wcbb `"$wcbbFile`"";     Write-Host "  [+] WCBB"   -ForegroundColor DarkGray }
 
     $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --max-tickets 3 --write-web --web-outdir `"$WebOutDir`""
 
@@ -321,7 +327,7 @@ if ($MLBOnly) {
     Write-Host "[ MLB PIPELINE ]" -ForegroundColor Magenta
     Write-Host ""
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "MLB Step 1 - Fetch PrizePicks" $MLBDir ".\step1_fetch_prizepicks_mlb.py" "--output step1_mlb_props.csv" } } else { Write-Host "  [MLB] Skipping step1 fetch -- using existing step1_mlb_props.csv" -ForegroundColor DarkGray }
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "MLB Step 1 - Fetch PrizePicks" $MLBDir ".\step1_fetch_prizepicks_mlb.py" "--gentle --output step1_mlb_props.csv" } } else { Write-Host "  [MLB] Skipping step1 fetch -- using existing step1_mlb_props.csv" -ForegroundColor DarkGray }
     if ($ok) { $ok = Run-Step "MLB Step 2 - Attach Pick Types"  $MLBDir ".\step2_attach_picktypes_mlb.py"       "--input step1_mlb_props.csv --output step2_mlb_picktypes.csv" }
     if ($ok) { $ok = Run-Step "MLB Step 3 - Attach Defense"     $MLBDir ".\step3_attach_defense_mlb.py"         "--input step2_mlb_picktypes.csv --defense mlb_defense_summary.csv --output step3_mlb_with_defense.csv" }
     if ($ok) { $ok = Run-Step "MLB Step 4 - Player Stats"       $MLBDir ".\step4_attach_player_stats_mlb.py"    "--input step3_mlb_with_defense.csv --cache mlb_stats_cache.csv --output step4_mlb_with_stats.csv --season 2025" }
@@ -615,6 +621,18 @@ if ($CBBSuccess) {
 if ($SoccerSuccess) {
     Copy-Item "$SoccerDir\outputs\step8_soccer_direction_clean.xlsx" "$OutDir\step8_soccer_direction_clean_$Date.xlsx" -Force
     Write-Host "  Archived Soccer slate -> $OutDir\step8_soccer_direction_clean_$Date.xlsx" -ForegroundColor DarkGray
+}
+if (Test-Path "$Root\NBA\step8_nba1h_direction_clean.xlsx") {
+    Copy-Item "$Root\NBA\step8_nba1h_direction_clean.xlsx" "$OutDir\step8_nba1h_direction_clean_$Date.xlsx" -Force
+    Write-Host "  Archived NBA1H slate -> $OutDir\step8_nba1h_direction_clean_$Date.xlsx" -ForegroundColor DarkGray
+}
+if (Test-Path "$Root\NBA\step8_nba1q_direction_clean.xlsx") {
+    Copy-Item "$Root\NBA\step8_nba1q_direction_clean.xlsx" "$OutDir\step8_nba1q_direction_clean_$Date.xlsx" -Force
+    Write-Host "  Archived NBA1Q slate -> $OutDir\step8_nba1q_direction_clean_$Date.xlsx" -ForegroundColor DarkGray
+}
+if (Test-Path "$Root\CBB\step6_ranked_wcbb.xlsx") {
+    Copy-Item "$Root\CBB\step6_ranked_wcbb.xlsx" "$OutDir\step6_ranked_wcbb_$Date.xlsx" -Force
+    Write-Host "  Archived WCBB slate -> $OutDir\step6_ranked_wcbb_$Date.xlsx" -ForegroundColor DarkGray
 }
 
 Write-Host ""
