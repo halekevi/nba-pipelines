@@ -319,6 +319,15 @@ body{
   .status-row{grid-template-columns:1fr!important;}
   .slate-table-wrap{padding:0 10px 12px;}
 }
+@media(max-width:900px) and (orientation:portrait){
+  .shell{padding:16px 10px 18px;}
+  .slate-panel-wrap{border-radius:14px;}
+}
+@media(max-width:900px) and (orientation:landscape){
+  .shell{padding:12px 10px 14px;}
+  .hero{padding:14px 14px 12px;}
+  .hero-title{font-size:38px;letter-spacing:1px;}
+}
 
 
 /* ── Theme toggle button ── */
@@ -902,6 +911,41 @@ body::before{
   .edge-neg{color:var(--amber);}
   @media(max-width:768px){.slate-panel-header-row{grid-template-columns:repeat(2,1fr)!important;}}
   @media(max-width:480px){.slate-panel-header-row{grid-template-columns:1fr!important;}}
+  @media(max-width:900px){
+    .slate-table-wrap{
+      max-height:58vh;
+      overscroll-behavior:contain;
+      padding:0 10px 12px;
+    }
+    .slate-table{
+      min-width:980px;
+      font-size:10px;
+    }
+    .slate-table th{
+      font-size:8px;
+      letter-spacing:1.2px;
+      padding:7px 8px;
+    }
+    .slate-table td{padding:6px 8px;}
+    .slate-toolbar{row-gap:6px;}
+    .slate-row-count{margin-left:0;width:100%;}
+  }
+  @media(max-width:900px) and (orientation:landscape){
+    .slate-panel-header-row{grid-template-columns:repeat(3,1fr)!important;}
+    .slate-table-wrap{max-height:52vh;}
+    .slate-table{min-width:900px;}
+    .slate-filter-input{max-width:240px;}
+  }
+  @media(max-width:900px) and (orientation:portrait){
+    .slate-panel-header-row{grid-template-columns:1fr!important;}
+    .scard{
+      border-right:none;
+      border-bottom:1px solid rgba(255,255,255,0.06);
+    }
+    .scard:last-child{border-bottom:none;}
+    .slate-table-wrap{max-height:62vh;}
+    .slate-table{min-width:1040px;}
+  }
   </style>
 
   <div class="slate-panel-wrap">
@@ -1870,6 +1914,8 @@ document.querySelector('.theme-switch')?.addEventListener('click', () => {
 <script>
 /* Mouse-tracking glow on all glass cards */
 (function(){
+  const disableFx = window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;
+  if (disableFx) return;
   const SELECTORS = [
     '.ticket', '.card', '.group', '.edge-card',
     '.scard', '.qcard', '.hero-stat', '.streak-card',
@@ -1877,6 +1923,8 @@ document.querySelector('.theme-switch')?.addEventListener('click', () => {
     '.grades-stat', '.grades-hero'
   ];
   function attachGlow(el) {
+    if (el.dataset.glowBound === '1') return;
+    el.dataset.glowBound = '1';
     el.classList.add('mouse-glow');
     el.addEventListener('mousemove', e => {
       const r = el.getBoundingClientRect();
@@ -1895,12 +1943,17 @@ document.querySelector('.theme-switch')?.addEventListener('click', () => {
   } else {
     initGlow();
   }
-  // Re-run periodically to catch dynamically rendered cards
-  setInterval(() => {
-    SELECTORS.forEach(sel =>
-      document.querySelectorAll(sel + ':not(.mouse-glow)').forEach(attachGlow)
-    );
-  }, 2000);
+  let queued = false;
+  const queueInit = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      initGlow();
+    });
+  };
+  const obs = new MutationObserver(queueInit);
+  obs.observe(document.body, { childList: true, subtree: true });
 })();
 </script>
 
@@ -1908,6 +1961,8 @@ document.querySelector('.theme-switch')?.addEventListener('click', () => {
 <script>
 /* Chromatic aberration border on primary glass surfaces */
 (function(){
+  const disableFx = window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;
+  if (disableFx) return;
   const CA_SELS = [
     '.ticket', '.card', '.group', '.hero',
     '.edge-card', '.qcard', '.grades-hero',
@@ -1925,13 +1980,17 @@ document.querySelector('.theme-switch')?.addEventListener('click', () => {
   } else {
     initCA();
   }
-  setInterval(() => {
-    CA_SELS.forEach(sel =>
-      document.querySelectorAll(sel + ':not(.ca-border)').forEach(el => {
-        el.classList.add('ca-border');
-      })
-    );
-  }, 2000);
+  let queued = false;
+  const queueInit = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      initCA();
+    });
+  };
+  const obs = new MutationObserver(queueInit);
+  obs.observe(document.body, { childList: true, subtree: true });
 })();
 </script>
 

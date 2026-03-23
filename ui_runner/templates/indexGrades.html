@@ -1104,6 +1104,8 @@ if (hamG && mobG) {
 <script>
 /* Mouse-tracking glow on all glass cards */
 (function(){
+  const disableFx = window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;
+  if (disableFx) return;
   const SELECTORS = [
     '.ticket', '.card', '.group', '.edge-card',
     '.scard', '.qcard', '.hero-stat', '.streak-card',
@@ -1111,6 +1113,8 @@ if (hamG && mobG) {
     '.grades-stat', '.grades-hero', '.gmeta-card', '.date-bar', '.tabs-bar'
   ];
   function attachGlow(el) {
+    if (el.dataset.glowBound === '1') return;
+    el.dataset.glowBound = '1';
     el.classList.add('mouse-glow');
     el.addEventListener('mousemove', e => {
       const r = el.getBoundingClientRect();
@@ -1129,12 +1133,17 @@ if (hamG && mobG) {
   } else {
     initGlow();
   }
-  // Re-run periodically to catch dynamically rendered cards
-  setInterval(() => {
-    SELECTORS.forEach(sel =>
-      document.querySelectorAll(sel + ':not(.mouse-glow)').forEach(attachGlow)
-    );
-  }, 2000);
+  let queued = false;
+  const queueInit = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      initGlow();
+    });
+  };
+  const obs = new MutationObserver(queueInit);
+  obs.observe(document.body, { childList: true, subtree: true });
 })();
 </script>
 
@@ -1142,6 +1151,8 @@ if (hamG && mobG) {
 <script>
 /* Chromatic aberration border on primary glass surfaces */
 (function(){
+  const disableFx = window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;
+  if (disableFx) return;
   const CA_SELS = [
     '.ticket', '.card', '.group', '.hero',
     '.edge-card', '.qcard', '.grades-hero',
@@ -1159,13 +1170,17 @@ if (hamG && mobG) {
   } else {
     initCA();
   }
-  setInterval(() => {
-    CA_SELS.forEach(sel =>
-      document.querySelectorAll(sel + ':not(.ca-border)').forEach(el => {
-        el.classList.add('ca-border');
-      })
-    );
-  }, 2000);
+  let queued = false;
+  const queueInit = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      initCA();
+    });
+  };
+  const obs = new MutationObserver(queueInit);
+  obs.observe(document.body, { childList: true, subtree: true });
 })();
 </script>
 

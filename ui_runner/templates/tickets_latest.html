@@ -12028,6 +12028,8 @@ html[data-theme="light"] .ticket{
 </div><!-- #app -->
 <script>
 (() => {
+  const disableFx = window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;
+  if (disableFx) return;
   document.querySelectorAll('.group,.ticket,.filter-pill,.kpi').forEach(el => {
     el.classList.add('ca-border');
     el.classList.add('mouse-glow');
