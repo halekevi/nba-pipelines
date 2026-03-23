@@ -84,7 +84,16 @@ def _canon_player(row: dict[str, Any]) -> str:
 
 
 def _canon_prop(row: dict[str, Any]) -> str:
-    for k in ("prop_type", "prop type", "prop", "prop_display", "stat_type"):
+    for k in (
+        "prop_type",
+        "prop type",
+        "prop_type_norm",
+        "prop_norm",
+        "prop_label",
+        "prop",
+        "prop_display",
+        "stat_type",
+    ):
         v = row.get(k)
         if v is not None and str(v).strip():
             return str(v).strip()
@@ -298,8 +307,13 @@ def _graded_xlsx_in_outputs_date(arg_date: str) -> list[Path]:
     found: set[Path] = set()
     for pat in ("graded_*.xlsx", "*_graded_*.xlsx"):
         for p in d.glob(pat):
-            if p.is_file():
-                found.add(p)
+            if not p.is_file():
+                continue
+            low = p.name.lower()
+            # Avoid matching combined_tickets_graded_*.xlsx from *_graded_* glob (not a sport slate).
+            if "combined_tickets_graded" in low:
+                continue
+            found.add(p)
     return sorted(found, key=lambda x: x.name.lower())
 
 
@@ -539,13 +553,21 @@ def debug_report(arg_date: str, payload: dict[str, Any], tpath: Path) -> None:
 
 
 def find_ticket_json(arg_date: str) -> Path | None:
-    """Resolve ticket file: dated JSON → dated xlsx at repo root → tickets_latest.json."""
+    """Resolve ticket file: dated JSON → dated xlsx at repo root → outputs/<date>/ → fallback."""
     p1 = REPO_ROOT / DATED_TICKET_JSON.format(date=arg_date)
     if p1.is_file():
         return p1
     px = REPO_ROOT / f"combined_slate_tickets_{arg_date}.xlsx"
     if px.is_file():
         return px
+    # Daily pipeline writes combined tickets under outputs/YYYY-MM-DD/ (not always copied to root).
+    out_dir = REPO_ROOT / "outputs" / arg_date
+    p_out = out_dir / f"combined_slate_tickets_{arg_date}.xlsx"
+    if p_out.is_file():
+        return p_out
+    p_out_strict = out_dir / f"combined_slate_tickets_{arg_date}.strict.xlsx"
+    if p_out_strict.is_file():
+        return p_out_strict
     if FALLBACK_TICKET_JSON.is_file():
         print(
             f"[WARN] No dated ticket file found for {arg_date} — falling back to "
