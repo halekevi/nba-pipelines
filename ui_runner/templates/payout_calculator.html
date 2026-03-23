@@ -1398,7 +1398,7 @@ function renderInsights(go,de){
   el.innerHTML=ins.join('');
 }
 
-/* ─── SCREENSHOT IMPORT (Anthropic vision, browser fetch) ─── */
+/* ─── SCREENSHOT IMPORT (Gemini vision via same-origin /api/vision/screenshot) ─── */
 let _pendingImportedPicks=null;
 
 const VISION_PROMPT=
@@ -1513,24 +1513,21 @@ async function sendScreenshotToVision(rawBase64,mediaType){
   const overlay=document.getElementById('modal-overlay');
   const mt=(mediaType&&String(mediaType).startsWith('image/'))?mediaType:'image/jpeg';
   try{
-    const response=await fetch('https://api.anthropic.com/v1/messages',{
+    const response=await fetch('/api/vision/screenshot',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        messages:[{
-          role:'user',
-          content:[
-            {type:'image',source:{type:'base64',media_type:mt,data:rawBase64}},
-            {type:'text',text:VISION_PROMPT},
-          ],
-        }],
+        image_base64:rawBase64,
+        media_type:mt,
+        prompt:VISION_PROMPT,
       }),
     });
     const out=await response.json().catch(()=>({}));
     if(!response.ok){
-      const msg=(out&&out.error&&out.error.message)||out.message||('HTTP '+response.status);
+      let msg='HTTP '+response.status;
+      if(out&&typeof out.error==='string')msg=out.error;
+      else if(out&&out.error&&out.error.message)msg=out.error.message;
+      else if(out&&out.message)msg=out.message;
       alert('Screenshot import failed: '+msg);
       return;
     }

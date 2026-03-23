@@ -21,6 +21,9 @@ import time
 import uuid
 import threading
 import subprocess
+import urllib.error
+import urllib.request
+from urllib.parse import quote
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Any
@@ -592,6 +595,111 @@ def api_slate_sport():
         return jsonify(data)
     except Exception as e:
         return jsonify({"error": str(e), "sports": {}}), 500
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# API: Screenshot → Google Gemini vision (server proxy; key in GOOGLE_API_KEY).
+#
+# Get a free Gemini API key at: https://aistudio.google.com/apikey
+# Set in Railway dashboard: GOOGLE_API_KEY = your key
+# Set locally: $env:GOOGLE_API_KEY = "your key"
+#
+# Optional: $env:GEMINI_VISION_MODEL = "gemini-2.5-flash"   # override default model id
+#
+# Quota errors ("free_tier ... limit: 0" or RESOURCE_EXHAUSTED):
+#   - Prefer a current model (default: gemini-2.5-flash-lite). Deprecated models
+#     like gemini-2.0-flash may show zero free-tier quota.
+#   - In Google Cloud Console, enable "Generative Language API" for the key's project.
+#   - AI Studio → check usage: https://ai.google.dev/gemini-api/docs/rate-limits
+# ──────────────────────────────────────────────────────────────────────────────
+_DEFAULT_GEMINI_VISION_MODEL = "gemini-2.5-flash-lite"
+
+
+@app.post("/api/vision/screenshot")
+def api_vision_screenshot():
+    key = (os.environ.get("GOOGLE_API_KEY") or "").strip()
+    if not key:
+        return jsonify({"error": "GOOGLE_API_KEY not set"}), 503
+
+    model_id = (os.environ.get("GEMINI_VISION_MODEL") or "").strip() or _DEFAULT_GEMINI_VISION_MODEL
+    _mid_ok = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._-")
+    if not model_id or not all(c in _mid_ok for c in model_id):
+        model_id = _DEFAULT_GEMINI_VISION_MODEL
+
+    payload = request.get_json(force=True, silent=True) or {}
+    image_base64 = payload.get("image_base64")
+    media_type = payload.get("media_type") or "image/jpeg"
+    prompt = payload.get("prompt")
+
+    if not image_base64 or not isinstance(image_base64, str):
+        return jsonify({"error": "missing image_base64"}), 400
+    if not prompt or not isinstance(prompt, str):
+        return jsonify({"error": "missing prompt"}), 400
+    if not isinstance(media_type, str):
+        media_type = "image/jpeg"
+
+    gemini_body = {
+        "contents": [
+            {
+                "parts": [
+                    {
+                        "inline_data": {
+                            "mime_type": media_type,
+                            "data": image_base64,
+                        }
+                    },
+                    {"text": prompt},
+                ]
+            }
+        ]
+    }
+
+    url = (
+        f"https://generativelanguage.googleapis.com/v1beta/models/{model_id}:generateContent"
+        f"?key={quote(key, safe='')}"
+    )
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(gemini_body).encode("utf-8"),
+        method="POST",
+        headers={"Content-Type": "application/json"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=120) as resp:
+            raw = json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        err_body = e.read().decode("utf-8")
+        try:
+            err_json = json.loads(err_body)
+            return app.response_class(
+                response=json.dumps(err_json),
+                status=e.code,
+                mimetype="application/json",
+            )
+        except json.JSONDecodeError:
+            return jsonify({"error": err_body or e.reason}), e.code
+    except urllib.error.URLError as e:
+        return jsonify({"error": f"Upstream request failed: {e.reason}"}), 502
+    except Exception as e:
+        return jsonify({"error": str(e)}), 502
+
+    text_chunks: List[str] = []
+    for cand in raw.get("candidates") or []:
+        content = cand.get("content") or {}
+        for part in content.get("parts") or []:
+            t = part.get("text")
+            if isinstance(t, str) and t:
+                text_chunks.append(t)
+    merged = "".join(text_chunks).strip()
+    if not merged:
+        return jsonify({"error": "No text returned from Gemini (empty candidates)"}), 502
+
+    normalized = {"content": [{"type": "text", "text": merged}]}
+    return app.response_class(
+        response=json.dumps(normalized),
+        status=200,
+        mimetype="application/json",
+    )
 
 
 if __name__ == "__main__":
