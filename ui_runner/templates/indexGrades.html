@@ -209,6 +209,32 @@ body::after{
   html,body{height:auto;overflow:auto;}
   .iframe-shell{min-height:60vh;}
 }
+@media(max-width:900px){
+  .date-bar,.tabs-bar{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-x:contain;
+  }
+  .date-pills{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+}
+@media(max-width:900px) and (orientation:portrait){
+  html,body{height:auto;overflow:auto;}
+  .grades-body{margin:0 .6rem .8rem;}
+  .grades-hero{padding:18px 14px;border-radius:16px;}
+  .tabs-bar{padding:8px 10px;}
+  .tab-btn{padding:9px 14px;font-size:9px;letter-spacing:1.4px;}
+  .iframe-shell{min-height:62vh;}
+}
+@media(max-width:900px) and (orientation:landscape){
+  html,body{height:auto;overflow:auto;}
+  .grades-body{margin:0 .7rem .8rem;}
+  .grades-hero{padding:14px 16px;border-radius:14px;}
+  .grades-title{font-size:34px;letter-spacing:1.5px;}
+  .date-bar{height:46px;padding:0 12px;gap:10px;}
+  .tabs-bar{padding:6px 8px;}
+  .tab-btn{padding:8px 12px;font-size:9px;letter-spacing:1.2px;}
+  .iframe-shell{min-height:56vh;}
+}
 
 /* Hero + meta — glass hero matching home */
 .grades-body{margin:0 1rem 1rem;}

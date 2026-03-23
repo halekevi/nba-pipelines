@@ -191,6 +191,29 @@ html[data-theme="light"] .ticket{
   .kpi-row{gap:10px;}
   th,td{padding:6px 6px;font-size:11px;}
 }
+@media(max-width:900px){
+  #app{padding:0 12px 18px;}
+  .hero{margin:18px 0 14px;}
+  .group{padding:14px;border-radius:12px;}
+  .ticket-body{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-x:contain;
+  }
+  .ticket-body table{min-width:920px;}
+}
+@media(max-width:900px) and (orientation:portrait){
+  nav{padding:8px 0 10px;}
+  .nav-links{width:100%;margin-left:0;gap:6px;}
+  .nav-links a{padding:6px 10px;font-size:12px;}
+}
+@media(max-width:900px) and (orientation:landscape){
+  #app{padding:0 10px 14px;}
+  nav{padding:6px 0 8px;}
+  .hero h1{font-size:clamp(26px,4vw,36px);}
+  .meta{font-size:11px;}
+  .ticket-body table{min-width:860px;}
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
