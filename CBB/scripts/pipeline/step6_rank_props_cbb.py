@@ -612,6 +612,7 @@ def main():
     ap.add_argument("--cache", default="cbb_boxscore_cache.csv", help="Path to CBB boxscore cache CSV")
     ap.add_argument("--date", default="", help="Filter to YYYY-MM-DD using start_time")
     args = ap.parse_args()
+    Path(args.output).parent.mkdir(parents=True, exist_ok=True)
 
     df = pd.read_csv(args.input, dtype=str).fillna("")
     print(f"→ Loaded: {args.input} | rows={len(df)}")
@@ -629,14 +630,53 @@ def main():
 
     if "start_time" in df.columns:
         target_date = slate_game_date
-        start_dt = pd.to_datetime(df["start_time"], errors="coerce")
-        keep_mask = start_dt.dt.strftime("%Y-%m-%d").eq(target_date)
-        kept = int(keep_mask.sum())
         total = len(df)
+        start_dt = pd.to_datetime(df["start_time"], errors="coerce")
+        start_dates = start_dt.dt.strftime("%Y-%m-%d")
+        keep_mask = start_dates.eq(target_date)
+        kept = int(keep_mask.sum())
+        if kept == 0:
+            counts = start_dates.value_counts(dropna=True)
+            avail = [str(d) for d in counts.index.tolist() if str(d)]
+            if avail:
+                candidate_dates = [d for d in avail if d >= target_date] or avail
+                target_dt = pd.to_datetime(target_date, errors="coerce")
+
+                def _sort_key(d: str):
+                    # Prefer largest slate first; break ties by nearest date.
+                    c = int(counts.get(d, 0))
+                    dd = pd.to_datetime(d, errors="coerce")
+                    if pd.isna(target_dt) or pd.isna(dd):
+                        dist = 999999
+                    else:
+                        dist = abs((dd - target_dt).days)
+                    return (-c, dist, d)
+
+                fallback_date = sorted(candidate_dates, key=_sort_key)[0]
+                keep_mask = start_dates.eq(fallback_date)
+                kept = int(keep_mask.sum())
+                print(
+                    f"[DateFilter] No rows for {target_date}; "
+                    f"falling back to largest available slate date {fallback_date} "
+                    f"({kept} rows)."
+                )
         df = df.loc[keep_mask].copy()
-        print(f"[DateFilter] Kept {kept}/{total} rows for {target_date} (dropped {total - kept} rows)")
+        picked_date = target_date if kept and target_date in set(start_dates[keep_mask].dropna()) else (
+            start_dates[keep_mask].dropna().iloc[0] if kept else target_date
+        )
+        print(f"[DateFilter] Kept {kept}/{total} rows for {picked_date} (dropped {total - kept} rows)")
         if df.empty:
             print("⚠️ Date filter returned no rows; writing empty outputs.")
+            # Graceful no-slate day: produce empty artifacts and exit 0 so
+            # parallel orchestrators can continue other sports.
+            with pd.ExcelWriter(args.output, engine="openpyxl") as xw:
+                df.to_excel(xw, index=False, sheet_name="ALL")
+                df.to_excel(xw, index=False, sheet_name="ELIGIBLE")
+            if args.output_csv:
+                df.to_csv(args.output_csv, index=False)
+                print(f"✅ Saved CSV → {args.output_csv}")
+            print(f"✅ Saved empty no-slate workbook → {args.output}")
+            return
 
     # Only rank OK rows
     ok = df["stat_status"].astype(str).str.upper().eq("OK") if "stat_status" in df.columns else \
