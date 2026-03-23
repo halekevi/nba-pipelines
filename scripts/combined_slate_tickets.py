@@ -778,7 +778,7 @@ def ticket_groups_to_payload(all_ticket_groups, date_str, thresholds):
     return payload
 
 
-def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir: str):
+def write_slate_json(nba, cbb, nhl, soccer, mlb, nba1h, nba1q, wcbb, date_str, outdir: str):
     """Write full per-sport ranked slate to slate_latest.json for the web UI."""
     import math
 
@@ -825,9 +825,13 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir: str):
         "date": date_str,
         "sports": {
             "nba":    df_to_rows(nba,    "nba"),
+            "nba1h":  df_to_rows(nba1h,  "nba1h"),
+            "nba1q":  df_to_rows(nba1q,  "nba1q"),
             "cbb":    df_to_rows(cbb,    "cbb"),
+            "wcbb":   df_to_rows(wcbb,   "wcbb"),
             "nhl":    df_to_rows(nhl,    "nhl"),
             "soccer": df_to_rows(soccer, "soccer"),
+            "mlb":    df_to_rows(mlb,    "mlb"),
         }
     }
 
@@ -3750,7 +3754,7 @@ def main():
         )
         payload = ticket_groups_to_payload(final_groups, args.date, thresholds)
         write_web_outputs(payload, args.web_outdir)
-        write_slate_json(nba, cbb, nhl, soccer, args.date, args.web_outdir)
+        write_slate_json(nba, cbb, nhl, soccer, mlb, nba1h, nba1q, wcbb, args.date, args.web_outdir)
         if args.also_root:
             write_web_outputs(payload, outdir=".")
         print("[OK] Web outputs complete (FINAL only).")

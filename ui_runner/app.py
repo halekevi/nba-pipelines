@@ -275,6 +275,37 @@ def _file_info(path: Path) -> dict:
     }
 
 
+def _slate_counts() -> tuple[dict[str, int], dict]:
+    """
+    Return ({sport_key: row_count}, file_info_for_slate_latest_json).
+    """
+    path = TEMPLATES_DIR / "slate_latest.json"
+    info = _file_info(path)
+    if not info.get("exists"):
+        return {}, info
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        sports = payload.get("sports") or {}
+        counts = {str(k).lower(): len(v or []) for k, v in sports.items()}
+        return counts, info
+    except Exception:
+        return {}, info
+
+
+def _file_info_with_slate_fallback(path: Path, sport_key: str, counts: dict[str, int], fallback_info: dict) -> dict:
+    direct = _file_info(path)
+    if direct.get("exists"):
+        return direct
+    count = int(counts.get(sport_key.lower(), 0))
+    if count > 0:
+        return {
+            "exists": True,
+            "modified": fallback_info.get("modified"),
+            "size_kb": fallback_info.get("size_kb"),
+        }
+    return direct
+
+
 # ──────────────────────────────────────────────────────────────────────────────
 # Pages
 # ──────────────────────────────────────────────────────────────────────────────
@@ -359,6 +390,7 @@ def serve_ticket_eval_report(date: str):
 @app.get("/api/pipeline/status")
 def api_pipeline_status():
     today = datetime.now().strftime("%Y-%m-%d")
+    slate_counts, slate_json_info = _slate_counts()
     combined_path = next(
         iter(sorted(BASE_DIR.glob(f"combined_slate_tickets_{today}*.xlsx"), reverse=True)),
         None
@@ -366,30 +398,30 @@ def api_pipeline_status():
     return jsonify({
         "nba": {
             "run_complete_flag": NBA_FLAG.exists(),
-            "slate":   _file_info(NBA_SLATE),
+            "slate":   _file_info_with_slate_fallback(NBA_SLATE, "nba", slate_counts, slate_json_info),
             "tickets": _file_info(NBA_TICKETS),
         },
         "nba1h": {
-            "slate":   _file_info(NBA1H_SLATE),
+            "slate":   _file_info_with_slate_fallback(NBA1H_SLATE, "nba1h", slate_counts, slate_json_info),
             "tickets": _file_info(NBA1H_TICKETS),
         },
         "nba1q": {
-            "slate":   _file_info(NBA1Q_SLATE),
+            "slate":   _file_info_with_slate_fallback(NBA1Q_SLATE, "nba1q", slate_counts, slate_json_info),
             "tickets": _file_info(NBA1Q_TICKETS),
         },
         "cbb": {
-            "slate": _file_info(CBB_SLATE),
+            "slate": _file_info_with_slate_fallback(CBB_SLATE, "cbb", slate_counts, slate_json_info),
         },
         "nhl": {
-            "slate":   _file_info(NHL_SLATE),
+            "slate":   _file_info_with_slate_fallback(NHL_SLATE, "nhl", slate_counts, slate_json_info),
             "tickets": _file_info(NHL_TICKETS),
         },
         "soccer": {
-            "slate":   _file_info(SOCCER_SLATE),
+            "slate":   _file_info_with_slate_fallback(SOCCER_SLATE, "soccer", slate_counts, slate_json_info),
             "tickets": _file_info(SOCCER_TICKETS),
         },
         "mlb": {
-            "slate":   _file_info(MLB_SLATE),
+            "slate":   _file_info_with_slate_fallback(MLB_SLATE, "mlb", slate_counts, slate_json_info),
             "tickets": _file_info(MLB_TICKETS),
         },
         "combined": {
