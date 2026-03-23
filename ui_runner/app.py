@@ -290,7 +290,11 @@ def page_tickets():
 
 @app.get("/payout")
 def page_payout():
-    return render_template("payout_calculator.html")
+    r = make_response(render_template("payout_calculator.html"))
+    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    return r
 
 
 @app.get("/grades")

@@ -1512,8 +1512,9 @@ async function onScreenshotFile(fileList){
 async function sendScreenshotToVision(rawBase64,mediaType){
   const overlay=document.getElementById('modal-overlay');
   const mt=(mediaType&&String(mediaType).startsWith('image/'))?mediaType:'image/jpeg';
+  const visionUrl=new URL('/api/vision/screenshot',window.location.origin).href;
   try{
-    const response=await fetch('/api/vision/screenshot',{
+    const response=await fetch(visionUrl,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
@@ -1551,8 +1552,10 @@ async function sendScreenshotToVision(rawBase64,mediaType){
     _pendingImportedPicks=picks;
     document.getElementById('modal-picks-json').textContent=JSON.stringify(picks,null,2);
     overlay.style.display='flex';
-  }catch{
-    alert('Screenshot import failed (network or CORS).');
+  }catch(err){
+    const hint=' If you upgraded the server, hard-refresh this page (Ctrl+Shift+R) so the browser is not using an old cached payout page.';
+    const detail=(err&&err.message)?String(err.message):String(err||'network error');
+    alert('Screenshot import failed: '+detail+'.'+hint);
   }
 }
 function closePickModal(){
