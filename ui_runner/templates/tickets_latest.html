@@ -28,7 +28,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;}
 #app{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:0 20px 24px;}
 
 /* nav */
-.snav{position:sticky;top:1rem;z-index:200;background:rgba(20,20,20,0.6);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid rgba(212,175,55,0.15);box-shadow:0 1px 0 rgba(255,255,255,0.04),0 8px 32px rgba(0,0,0,0.4);padding:0 40px;display:flex;align-items:center;height:72px;gap:0;margin:1rem;border-radius:20px;width:calc(100vw - 2rem);margin-left:calc(50% - 50vw + 1rem);margin-right:calc(50% - 50vw + 1rem);}
+.snav{position:sticky;top:1rem;z-index:200;background:rgba(20,20,20,0.6);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid rgba(212,175,55,0.15);box-shadow:0 1px 0 rgba(255,255,255,0.04),0 8px 32px rgba(0,0,0,0.4);padding:0 40px;display:flex;align-items:center;height:72px;gap:0;margin:1rem;border-radius:20px;}
 .nav-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,#c6ff00 15%,#7fc7d9 40%,#8f7ab8 65%,#c6ff00 85%,transparent 100%);opacity:.7;animation:accentShift 6s ease-in-out infinite alternate;}
 @keyframes accentShift{from{opacity:.5;filter:hue-rotate(0deg);}to{opacity:.9;filter:hue-rotate(20deg);}}
 .snav-brand{display:flex;align-items:center;gap:14px;text-decoration:none;margin-right:48px;flex-shrink:0;}
@@ -233,8 +233,6 @@ html[data-theme="light"] .ticket{
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
 </head>
 <body>
-<div id="app">
-
 <nav class="snav prop-nav">
   <div class="nav-accent"></div>
   <a class="snav-brand" href="/">
@@ -260,6 +258,7 @@ html[data-theme="light"] .ticket{
   <a href="/grades">Grades</a>
   <a href="/payout">Payouts</a>
 </div>
+<div id="app">
 
 <div class="hero">
   <div>
