@@ -28,14 +28,46 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;}
 #app{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:0 20px 24px;}
 
 /* nav */
-nav{display:flex;align-items:center;gap:16px;padding:10px 0 12px;border-bottom:1px solid rgba(196,166,107,.22);flex-wrap:wrap;position:sticky;top:0;z-index:220;background:rgba(7,10,19,0.90);backdrop-filter:blur(22px) saturate(180%);}
-.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
-.brain-wrap{display:none;}
-.nav-logo::before{
-  content:"";width:64px;height:40px;flex:0 0 64px;border-radius:10px;
-  background:url('/static/hybrid-logo.png?v=20260320a') center/contain no-repeat;
-  filter:drop-shadow(0 6px 14px rgba(0,0,0,.35));
-}
+.snav{position:sticky;top:1rem;z-index:200;background:rgba(20,20,20,0.6);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid rgba(212,175,55,0.15);box-shadow:0 1px 0 rgba(255,255,255,0.04),0 8px 32px rgba(0,0,0,0.4);padding:0 40px;display:flex;align-items:center;height:72px;gap:0;margin:1rem;border-radius:20px;}
+.nav-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,#c6ff00 15%,#7fc7d9 40%,#8f7ab8 65%,#c6ff00 85%,transparent 100%);opacity:.7;animation:accentShift 6s ease-in-out infinite alternate;}
+@keyframes accentShift{from{opacity:.5;filter:hue-rotate(0deg);}to{opacity:.9;filter:hue-rotate(20deg);}}
+.snav-brand{display:flex;align-items:center;gap:14px;text-decoration:none;margin-right:48px;flex-shrink:0;}
+.hybrid-logo{display:flex;align-items:center;gap:10px;}
+.logo-icon{width:182px;height:182px;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(212,175,55,0.45));}
+.nav-brand{font-family:'Inter',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px;line-height:1;text-transform:none;color:var(--text);display:flex;align-items:baseline;}
+.nav-brand .oracle-upper{text-transform:uppercase;font-weight:800;color:#d4af37;}
+.snav-links{display:flex;align-items:stretch;list-style:none;flex:1;gap:4px;}
+.snav-links li a{display:flex;align-items:center;gap:10px;padding:0 20px;height:72px;font-family:"Inter",sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#7a9ac8;text-decoration:none;border-bottom:2px solid transparent;transition:color .2s,border-color .2s,background .2s;position:relative;}
+.snav-links li a:hover{color:var(--text);background:rgba(255,255,255,.02);}
+.snav-links li a.active{color:var(--accent);border-bottom-color:var(--accent);}
+.snav-links li a.active::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent),0 0 24px rgba(212,175,55,.5);}
+.snav-links li:nth-child(1) a:hover{color:#7fc7d9;}
+.snav-links li:nth-child(2) a:hover{color:var(--accent);}
+.snav-links li:nth-child(3) a:hover{color:#8f7ab8;}
+.snav-links li:nth-child(4) a:hover{color:#9fd8a7;}
+.ni{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .2s, box-shadow .2s;}
+.snav-links li a:hover .ni{transform:scale(1.1) translateY(-1px);}
+.ni-ctrl {background:rgba(127,199,217,.08); border:1px solid rgba(127,199,217,.2); color:#7fc7d9;}
+.ni-tick {background:rgba(183,168,255,.08);border:1px solid rgba(183,168,255,.2);color:#8f7ab8;}
+.ni-grade{background:rgba(0,255,170,.08); border:1px solid rgba(0,255,170,.2);  color:#9fd8a7;}
+.ni-pay  {background:rgba(255,192,107,.08); border:1px solid rgba(255,192,107,.2);  color:#c89a4a;}
+.snav-links li a:hover .ni-ctrl {box-shadow:0 0 10px rgba(127,199,217,.25);}
+.snav-links li a:hover .ni-tick {box-shadow:0 0 10px rgba(183,168,255,.25);}
+.snav-links li a:hover .ni-grade{box-shadow:0 0 10px rgba(0,255,170,.25);}
+.snav-links li a:hover .ni-pay  {box-shadow:0 0 10px rgba(255,192,107,.25);}
+.snav-right{display:flex;align-items:center;gap:16px;margin-left:auto;}
+.live-pill{font-family:"Inter",sans-serif;font-weight:600;font-size:10px;letter-spacing:1.5px;padding:6px 16px;border-radius:100px;border:1px solid rgba(46,204,113,.3);color:#9fd8a7;background:rgba(46,204,113,.06);display:flex;align-items:center;gap:8px;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#9fd8a7;box-shadow:0 0 8px #9fd8a7;animation:blink 2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:8px;border:1px solid rgba(255,255,255,0.09);border-radius:8px;background:rgba(255,255,255,0.04);backdrop-filter:blur(10px) saturate(180%);}
+.hamburger span{display:block;width:18px;height:2px;background:var(--muted);border-radius:2px;transition:all .25s;}
+.hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+.mobile-menu{display:none;position:fixed;top:72px;left:0;right:0;background:rgba(5,5,15,.98);backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--border);z-index:199;padding:12px 0;}
+.mobile-menu.open{display:block;}
+.mobile-menu a{display:flex;align-items:center;gap:12px;padding:12px 24px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-decoration:none;border-left:3px solid transparent;transition:all .15s;}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(212,175,55,.04);}
 .brain-slate{position:absolute;inset:0;border-radius:7px;background:linear-gradient(145deg,#12122a 0%,#080818 100%);border:1px solid #252545;animation:slateBreak 3.5s ease-in-out infinite;}
 .brain-slate::before{content:'';position:absolute;inset:0;background:linear-gradient(to bottom right,transparent 47%,#c8ff0044 49%,transparent 51%),linear-gradient(to bottom left,transparent 44%,#c8ff0022 46%,transparent 48%),linear-gradient(to right,transparent 30%,#00e5ff22 31%,transparent 33%);border-radius:7px;animation:crackGlow 3.5s ease-in-out infinite;}
 @keyframes slateBreak{0%,100%{transform:scale(1);box-shadow:0 0 0px #c8ff0000;}48%{transform:scale(1.06) rotate(-0.5deg);box-shadow:0 0 24px #c8ff0055;}50%{transform:scale(1.10) rotate(0.5deg);box-shadow:0 0 40px #c8ff0088;}52%{transform:scale(1.06) rotate(-0.3deg);box-shadow:0 0 24px #c8ff0055;}}
@@ -80,10 +112,6 @@ nav{display:flex;align-items:center;gap:16px;padding:10px 0 12px;border-bottom:1
 @keyframes bsparkFly{0%,47%{opacity:0;transform:translate(0,0) scale(0);}50%{opacity:1;transform:translate(0,0) scale(1);}75%{opacity:0.5;}95%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0.2);}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0);}}
 .brand{font-family:'Inter',sans-serif;font-size:34px;font-weight:700;letter-spacing:-0.5px;color:#ffffff;line-height:1;text-shadow:0 1px 10px rgba(0,0,0,.35);}
 .brand span{color:var(--accent);font-weight:800;}
-.nav-links{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
-.nav-links a{color:#aaa;text-decoration:none;font-size:13px;padding:6px 14px;border-radius:6px;border:1px solid transparent;transition:all .2s;}
-.nav-links a:hover{color:var(--text);border-color:var(--border);}
-.nav-links a.active{color:var(--accent);border-color:var(--accent);background:rgba(225,188,101,.10);}
 /* player graph expand */
 .leg-row{cursor:pointer;transition:background .15s;}
 .leg-row:hover{background:rgba(200,255,0,.04);}
@@ -147,9 +175,9 @@ html[data-theme="light"] body::before{
     radial-gradient(980px 640px at 108% -8%, rgba(255,227,190,.72) 0%, transparent 54%);
 }
 html[data-theme="light"] body::after{display:none;}
-html[data-theme="light"] nav{
+html[data-theme="light"] .snav{
   background:rgba(255,255,255,.84);
-  border-bottom:1px solid rgba(196,166,107,.24);
+  border:1px solid rgba(196,166,107,.24);
 }
 html[data-theme="light"] .filter-pill,
 html[data-theme="light"] .group,
@@ -191,6 +219,15 @@ html[data-theme="light"] .ticket{
   .kpi-row{gap:10px;}
   th,td{padding:6px 6px;font-size:11px;}
 }
+@media(max-width:900px){
+  .snav{top:0;margin:0;border-radius:0;padding:0 14px;height:auto;min-height:64px;}
+  .nav-accent{border-radius:0;}
+  .snav-links{display:none!important;}
+  .hamburger{display:flex;margin-left:auto;}
+  .live-pill{display:none;}
+  .logo-icon{width:96px;height:96px;}
+  .mobile-menu{top:72px;}
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
@@ -198,94 +235,31 @@ html[data-theme="light"] .ticket{
 <body>
 <div id="app">
 
-<nav>
-  <a class="nav-logo" href="/">
-    <div class="brain-wrap">
-      <div class="brain-slate"></div>
-      <div class="brain-pulse-ring"></div>
-      <div class="brain-pulse-ring"></div>
-      <div class="brain-pulse-ring"></div>
-      <div class="brain-pulse-ring"></div>
-      <div class="bspark lg"></div><div class="bspark md"></div>
-      <div class="bspark sm"></div><div class="bspark lg"></div>
-      <div class="bspark cy"></div><div class="bspark md"></div>
-      <div class="bspark sm"></div><div class="bspark lg"></div>
-      <div class="bspark cy"></div><div class="bspark md"></div>
-      <div class="bspark lg"></div><div class="bspark sm"></div>
-      <div class="bspark cy"></div><div class="bspark sm"></div>
-      <div class="bspark md"></div><div class="bspark cy"></div>
-      <div class="bspark sm"></div><div class="bspark md"></div>
-      <div class="bspark lg"></div><div class="bspark wh"></div>
-      <svg class="brain-svg" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="lgL" x1="6" y1="6" x2="25" y2="44" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#c8ff00" stop-opacity="0.35"/>
-            <stop offset="60%" stop-color="#c8ff00" stop-opacity="0.12"/>
-            <stop offset="100%" stop-color="#c8ff00" stop-opacity="0.06"/>
-          </linearGradient>
-          <linearGradient id="lgR" x1="44" y1="6" x2="25" y2="44" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.35"/>
-            <stop offset="60%" stop-color="#00e5ff" stop-opacity="0.12"/>
-            <stop offset="100%" stop-color="#00e5ff" stop-opacity="0.06"/>
-          </linearGradient>
-          <filter id="nglow"><feGaussianBlur stdDeviation="0.8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        </defs>
-        <path d="M25 7 C22 7 18 8 15 10 C12 12 10 15 9 18 C8 21 8.5 24 9 26 C7.5 27.5 7 30 7.5 32.5 C8 35 10 37.5 13 39 C15 40 17 40 19 39.5 C20.5 39 22 38 23 37 L23 9 C23.5 8 24 7.5 25 7Z" fill="url(#lgL)" stroke="#c8ff00" stroke-width="0.9"/>
-        <path d="M15 10 C13 11 11 13 11 15 C11 17 12.5 18.5 14 18" stroke="#c8ff00" stroke-width="0.7" stroke-linecap="round" fill="none" opacity="0.6"/>
-        <path d="M9 19 C10.5 18 12 19 13.5 18"    stroke="#c8ff00" stroke-width="0.75" stroke-linecap="round" fill="none" opacity="0.8"/>
-        <path d="M8.5 23 C10 22 12 23 13.5 22"    stroke="#c8ff00" stroke-width="0.75" stroke-linecap="round" fill="none" opacity="0.8"/>
-        <path d="M8 27 C9.5 26 11.5 27 13 26.5"   stroke="#c8ff00" stroke-width="0.7"  stroke-linecap="round" fill="none" opacity="0.7"/>
-        <path d="M8.5 31 C10 30.5 12 31 13.5 30.5" stroke="#c8ff00" stroke-width="0.7" stroke-linecap="round" fill="none" opacity="0.7"/>
-        <path d="M10 35 C11.5 34.5 13.5 35 15 34.5" stroke="#c8ff00" stroke-width="0.65" stroke-linecap="round" fill="none" opacity="0.55"/>
-        <path d="M16 14 C17 13.5 18.5 14 19.5 13.5"  stroke="#c8ff00" stroke-width="0.6" stroke-linecap="round" fill="none" opacity="0.5"/>
-        <path d="M15.5 20 C17 19.5 18.5 20 20 19.5"  stroke="#c8ff00" stroke-width="0.6" stroke-linecap="round" fill="none" opacity="0.5"/>
-        <path d="M15 27 C16.5 26.5 18 27 19.5 26.5"  stroke="#c8ff00" stroke-width="0.6" stroke-linecap="round" fill="none" opacity="0.5"/>
-        <path d="M15 33 C16.5 32.5 18.5 33 20 32.5"  stroke="#c8ff00" stroke-width="0.6" stroke-linecap="round" fill="none" opacity="0.5"/>
-        <path d="M25 7 C28 7 32 8 35 10 C38 12 40 15 41 18 C42 21 41.5 24 41 26 C42.5 27.5 43 30 42.5 32.5 C42 35 40 37.5 37 39 C35 40 33 40 31 39.5 C29.5 39 28 38 27 37 L27 9 C26.5 8 26 7.5 25 7Z" fill="url(#lgR)" stroke="#00e5ff" stroke-width="0.9"/>
-        <path d="M35 10 C37 11 39 13 39 15 C39 17 37.5 18.5 36 18" stroke="#00e5ff" stroke-width="0.7" stroke-linecap="round" fill="none" opacity="0.6"/>
-        <path d="M41 19 C39.5 18 38 19 36.5 18"      stroke="#00e5ff" stroke-width="0.75" stroke-linecap="round" fill="none" opacity="0.8"/>
-        <path d="M41.5 23 C40 22 38 23 36.5 22"      stroke="#00e5ff" stroke-width="0.75" stroke-linecap="round" fill="none" opacity="0.8"/>
-        <path d="M42 27 C40.5 26 38.5 27 37 26.5"    stroke="#00e5ff" stroke-width="0.7"  stroke-linecap="round" fill="none" opacity="0.7"/>
-        <path d="M41.5 31 C40 30.5 38 31 36.5 30.5"  stroke="#00e5ff" stroke-width="0.7"  stroke-linecap="round" fill="none" opacity="0.7"/>
-        <path d="M40 35 C38.5 34.5 36.5 35 35 34.5"  stroke="#00e5ff" stroke-width="0.65" stroke-linecap="round" fill="none" opacity="0.55"/>
-        <path d="M34 14 C33 13.5 31.5 14 30.5 13.5"  stroke="#00e5ff" stroke-width="0.6" stroke-linecap="round" fill="none" opacity="0.5"/>
-        <path d="M34.5 20 C33 19.5 31.5 20 30 19.5"  stroke="#00e5ff" stroke-width="0.6" stroke-linecap="round" fill="none" opacity="0.5"/>
-        <path d="M35 27 C33.5 26.5 32 27 30.5 26.5"  stroke="#00e5ff" stroke-width="0.6" stroke-linecap="round" fill="none" opacity="0.5"/>
-        <path d="M35 33 C33.5 32.5 31.5 33 30 32.5"  stroke="#00e5ff" stroke-width="0.6" stroke-linecap="round" fill="none" opacity="0.5"/>
-        <line x1="25" y1="8" x2="25" y2="38" stroke="#ffffff22" stroke-width="0.6" stroke-dasharray="2.5,2"/>
-        <circle cx="13" cy="16" r="1.4" fill="#c8ff00" filter="url(#nglow)"><animate attributeName="opacity" values="1;0.15;1" dur="1.7s" repeatCount="indefinite"/><animate attributeName="r" values="1.4;0.9;1.4" dur="1.7s" repeatCount="indefinite"/></circle>
-        <circle cx="11" cy="22" r="1.2" fill="#c8ff00" filter="url(#nglow)"><animate attributeName="opacity" values="0.8;0.1;0.8" dur="2.2s" repeatCount="indefinite" begin="0.3s"/></circle>
-        <circle cx="12" cy="28.5" r="1.3" fill="#c8ff00" filter="url(#nglow)"><animate attributeName="opacity" values="0.9;0.2;0.9" dur="1.9s" repeatCount="indefinite" begin="0.6s"/></circle>
-        <circle cx="15" cy="34.5" r="1.1" fill="#c8ff00" filter="url(#nglow)"><animate attributeName="opacity" values="0.7;0.1;0.7" dur="2.4s" repeatCount="indefinite" begin="0.9s"/></circle>
-        <circle cx="19" cy="18" r="1.0" fill="#c8ff00" filter="url(#nglow)"><animate attributeName="opacity" values="0.6;0.1;0.6" dur="2.0s" repeatCount="indefinite" begin="1.1s"/></circle>
-        <circle cx="18" cy="30" r="1.0" fill="#c8ff00" filter="url(#nglow)"><animate attributeName="opacity" values="0.7;0.15;0.7" dur="1.6s" repeatCount="indefinite" begin="0.5s"/></circle>
-        <circle cx="37" cy="16" r="1.4" fill="#00e5ff" filter="url(#nglow)"><animate attributeName="opacity" values="1;0.15;1" dur="2.0s" repeatCount="indefinite" begin="0.2s"/><animate attributeName="r" values="1.4;0.9;1.4" dur="2.0s" repeatCount="indefinite" begin="0.2s"/></circle>
-        <circle cx="39" cy="22" r="1.2" fill="#00e5ff" filter="url(#nglow)"><animate attributeName="opacity" values="0.8;0.1;0.8" dur="1.8s" repeatCount="indefinite" begin="0.5s"/></circle>
-        <circle cx="38" cy="28.5" r="1.3" fill="#00e5ff" filter="url(#nglow)"><animate attributeName="opacity" values="0.9;0.2;0.9" dur="2.3s" repeatCount="indefinite" begin="0.8s"/></circle>
-        <circle cx="35" cy="34.5" r="1.1" fill="#00e5ff" filter="url(#nglow)"><animate attributeName="opacity" values="0.7;0.1;0.7" dur="1.7s" repeatCount="indefinite" begin="1.0s"/></circle>
-        <circle cx="31" cy="18" r="1.0" fill="#00e5ff" filter="url(#nglow)"><animate attributeName="opacity" values="0.6;0.1;0.6" dur="2.1s" repeatCount="indefinite" begin="1.2s"/></circle>
-        <circle cx="32" cy="30" r="1.0" fill="#00e5ff" filter="url(#nglow)"><animate attributeName="opacity" values="0.7;0.15;0.7" dur="1.5s" repeatCount="indefinite" begin="0.4s"/></circle>
-        <line x1="13" y1="16" x2="37" y2="16" stroke="#c8ff0030" stroke-width="0.6"><animate attributeName="opacity" values="0.2;0.9;0.2" dur="1.7s" repeatCount="indefinite"/></line>
-        <line x1="11" y1="22" x2="39" y2="22" stroke="#00e5ff30" stroke-width="0.6"><animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.2s" repeatCount="indefinite" begin="0.4s"/></line>
-        <line x1="12" y1="28.5" x2="38" y2="28.5" stroke="#c8ff0030" stroke-width="0.6"><animate attributeName="opacity" values="0.2;0.8;0.2" dur="1.9s" repeatCount="indefinite" begin="0.7s"/></line>
-        <line x1="15" y1="34.5" x2="35" y2="34.5" stroke="#00e5ff30" stroke-width="0.6"><animate attributeName="opacity" values="0.2;0.8;0.2" dur="2.4s" repeatCount="indefinite" begin="1.0s"/></line>
-        <line x1="13" y1="16" x2="39" y2="22" stroke="#c8ff0018" stroke-width="0.5"><animate attributeName="opacity" values="0;0.6;0" dur="2.5s" repeatCount="indefinite" begin="0.3s"/></line>
-        <line x1="11" y1="22" x2="38" y2="28.5" stroke="#00e5ff18" stroke-width="0.5"><animate attributeName="opacity" values="0;0.6;0" dur="2.1s" repeatCount="indefinite" begin="0.8s"/></line>
-        <line x1="19" y1="18" x2="31" y2="18" stroke="#ffffff18" stroke-width="0.5"><animate attributeName="opacity" values="0;0.7;0" dur="1.6s" repeatCount="indefinite" begin="1.1s"/></line>
-        <line x1="18" y1="30" x2="32" y2="30" stroke="#ffffff18" stroke-width="0.5"><animate attributeName="opacity" values="0;0.7;0" dur="2.0s" repeatCount="indefinite" begin="0.5s"/></line>
-        <path d="M22 38 C22 40.5 23 43 25 43 C27 43 28 40.5 28 38" stroke="#c8ff0066" stroke-width="0.9" fill="none" stroke-linecap="round"/>
-        <line x1="25" y1="38" x2="25" y2="43" stroke="#00e5ff55" stroke-width="0.7" stroke-dasharray="1.5,1.5"/>
-      </svg>
+<nav class="snav prop-nav">
+  <div class="nav-accent"></div>
+  <a class="snav-brand" href="/">
+    <div class="hybrid-logo">
+      <img src="/static/proporacle-logo-v3.png?v=20260320b" alt="PropORACLE logo" class="logo-icon">
+      <span class="nav-brand">Prop<span class="oracle-upper">ORACLE</span></span>
     </div>
-    <div><div class="brand">Prop<span>ORACLE</span></div></div>
   </a>
-  <div class="nav-links">
-    <a href="/">Home</a>
-    <a href="/tickets" class="active">Tickets</a>
-    <a href="/grades">Grades</a>
-    <a href="/payout">Payouts</a>
+  <ul class="snav-links">
+    <li><a href="/"><span class="ni ni-ctrl"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L1 5.5V13h4V9h4v4h4V5.5L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/></svg></span> Home</a></li>
+    <li><a href="/tickets" class="active"><span class="ni ni-tick"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="3" width="11" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 6h11" stroke="currentColor" stroke-width="1" stroke-dasharray="2 1.5"/><circle cx="4" cy="9" r="1" fill="currentColor"/><circle cx="7" cy="9" r="1" fill="currentColor"/><circle cx="10" cy="9" r="1" fill="currentColor"/></svg></span> Tickets</a></li>
+    <li><a href="/grades"><span class="ni ni-grade"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 10.5L5.5 7l2.5 2.5L11 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect x="1.5" y="1.5" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/></svg></span> Grades</a></li>
+    <li><a href="/payout"><span class="ni ni-pay"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 3.5v7M5 5.5c0-.8.9-1.5 2-1.5s2 .7 2 1.5-1 1.3-2 1.5-2 .7-2 1.5.9 1.5 2 1.5 2-.7 2-1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span> Payouts</a></li>
+  </ul>
+  <div class="snav-right">
+    <div class="live-pill"><div class="live-dot"></div>PROPORACLE &nbsp;·&nbsp; LIVE</div>
   </div>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
 </nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/">Home</a>
+  <a href="/tickets" class="active">Tickets</a>
+  <a href="/grades">Grades</a>
+  <a href="/payout">Payouts</a>
+</div>
 
 <div class="hero">
   <div>
@@ -6435,6 +6409,11 @@ html[data-theme="light"] .ticket{
     });
   });
 })();
+</script>
+<script>
+const ham2=document.getElementById('hamburger'), mob2=document.getElementById('mobile-menu');
+if(ham2) ham2.addEventListener('click',()=>{ ham2.classList.toggle('open'); mob2.classList.toggle('open'); });
+document.addEventListener('click',e=>{ if(ham2&&mob2&&!ham2.contains(e.target)&&!mob2.contains(e.target)){ham2.classList.remove('open');mob2.classList.remove('open');} });
 </script>
 </body>
 </html>
