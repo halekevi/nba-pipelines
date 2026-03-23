@@ -940,6 +940,11 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
         "justify-content:center;font-size:clamp(22px,2.5vw,28px);line-height:1;background:rgba(255,77,77,0.25);"
         "border:2px solid #ff4d4d;box-shadow:0 0 12px rgba(255,77,77,0.6);color:#ff4d4d;text-shadow:none;}",
         ".legrow.leg-miss .leg-extra.val-miss{color:#ff4d4d;font-weight:700;}",
+        ".legrow.leg-miss .miss-leg-cell{color:#ff5c5c!important;font-weight:700;}",
+        ".legrow.leg-miss .leg-prop-col.miss-leg-cell > div:first-child{color:#ff7a7a!important;font-weight:800;}",
+        ".legrow.leg-miss .leg-prop-col .meta-muted{color:rgba(255,170,170,.95)!important;font-weight:600;}",
+        ".legrow.leg-miss .miss-leg-cell .dir-over,.legrow.leg-miss .miss-leg-cell .dir-under{color:#ffc9c9!important;font-weight:800;}",
+        ".legrow.leg-miss > div:nth-child(2) .pill{box-shadow:0 0 0 1px rgba(255,90,90,.55),0 0 12px rgba(255,60,60,.2);}",
         ".legrow.leg-pend{background:transparent;border-left-color:transparent;}",
         ".legrow.leg-pend .pl-pend,.legrow.leg-pend .meta-muted{color:var(--pending)!important;}",
         ".legrow.leg-pend .pill{background:rgba(255,255,255,0.04)!important;border-color:rgba(255,255,255,0.1)!important;color:var(--pending)!important;}",
@@ -1079,9 +1084,11 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
                     row_cls = "legrow leg-pend"
                 sym = "✓" if lg == "HIT" else "✗" if lg == "MISS" else "·"
 
+                miss_cell = " miss-leg-cell" if lg == "MISS" else ""
+
                 if lg == "MISS":
                     pl_html = (
-                        f'<div class="{plcls} pl-line">'
+                        f'<div class="{plcls} pl-line{miss_cell}">'
                         f'<span class="pl-name">{player}</span>'
                         '<span class="miss-tag" aria-label="Missed leg">MISSED</span></div>'
                     )
@@ -1099,15 +1106,16 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
                 parts.append(f'<div class="badge {bcls}">{sym}</div>')
                 parts.append(f'<div><span class="pill {sp_class}">{esc(sk)}</span></div>')
                 parts.append(pl_html)
-                parts.append(f'<div class="tier">{esc(tier)}</div>')
+                parts.append(f'<div class="tier{miss_cell}">{esc(tier)}</div>')
                 parts.append(
-                    f'<div><div>{ptype}</div><div class="meta-muted">{team} vs {opp}</div></div>'
+                    f'<div class="leg-prop-col{miss_cell}"><div>{ptype}</div>'
+                    f'<div class="meta-muted">{team} vs {opp}</div></div>'
                 )
                 parts.append(
-                    f'<div class="leg-extra">{_fmt_num(lf)} <span class="{dir_cls}">{esc(d)}</span></div>'
+                    f'<div class="leg-extra{miss_cell}">{_fmt_num(lf)} <span class="{dir_cls}">{esc(d)}</span></div>'
                 )
-                parts.append(f'<div class="{act_div_cls}">{_fmt_num(act)}</div>')
-                parts.append(f'<div class="leg-extra">{_fmt_num(edge)}</div>')
+                parts.append(f'<div class="{act_div_cls}{miss_cell}">{_fmt_num(act)}</div>')
+                parts.append(f'<div class="leg-extra{miss_cell}">{_fmt_num(edge)}</div>')
                 parts.append("</div>")
 
             parts.append("</article>")

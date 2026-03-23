@@ -45,6 +45,11 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .miss-tag{font-family:'Bebas Neue',sans-serif;display:inline-flex;align-items:center;background:rgba(255,77,77,0.15);border:1px solid #ff4d4d;color:#ff4d4d;font-size:9px;letter-spacing:2px;padding:2px 8px;border-radius:20px;line-height:1;vertical-align:middle;}
 .legrow.leg-miss .badge.miss{width:44px;height:44px;min-width:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(22px,2.5vw,28px);line-height:1;background:rgba(255,77,77,0.25);border:2px solid #ff4d4d;box-shadow:0 0 12px rgba(255,77,77,0.6);color:#ff4d4d;text-shadow:none;}
 .legrow.leg-miss .leg-extra.val-miss{color:#ff4d4d;font-weight:700;}
+.legrow.leg-miss .miss-leg-cell{color:#ff5c5c!important;font-weight:700;}
+.legrow.leg-miss .leg-prop-col.miss-leg-cell > div:first-child{color:#ff7a7a!important;font-weight:800;}
+.legrow.leg-miss .leg-prop-col .meta-muted{color:rgba(255,170,170,.95)!important;font-weight:600;}
+.legrow.leg-miss .miss-leg-cell .dir-over,.legrow.leg-miss .miss-leg-cell .dir-under{color:#ffc9c9!important;font-weight:800;}
+.legrow.leg-miss > div:nth-child(2) .pill{box-shadow:0 0 0 1px rgba(255,90,90,.55),0 0 12px rgba(255,60,60,.2);}
 .legrow.leg-pend{background:transparent;border-left-color:transparent;}
 .legrow.leg-pend .pl-pend,.legrow.leg-pend .meta-muted{color:var(--pending)!important;}
 .legrow.leg-pend .pill{background:rgba(255,255,255,0.04)!important;border-color:rgba(255,255,255,0.1)!important;color:var(--pending)!important;}
@@ -55,9 +60,13 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .pill{font-family:'Bebas Neue',sans-serif;font-size:clamp(10px,1.1vw,12px);letter-spacing:1.2px;padding:5px 12px;border-radius:999px;text-transform:uppercase;}
 
 .sport-nba{background:rgba(212,160,23,.12);color:#f0a500;border:1px solid rgba(212,160,23,.35);}
+.sport-nba1h{background:rgba(255,155,86,.12);color:#ffb27d;border:1px solid rgba(255,155,86,.32);}
+.sport-nba1q{background:rgba(255,214,102,.12);color:#ffd87a;border:1px solid rgba(255,214,102,.32);}
 .sport-cbb{background:rgba(0,229,255,.10);color:#00e5ff;border:1px solid rgba(0,229,255,.32);}
+.sport-wcbb{background:rgba(127,199,217,.10);color:#9fd8e8;border:1px solid rgba(127,199,217,.32);}
 .sport-nhl{background:rgba(186,130,255,.12);color:#c4a5ff;border:1px solid rgba(186,130,255,.38);}
 .sport-soccer{background:rgba(240,165,0,.10);color:#e8b84a;border:1px solid rgba(240,165,0,.34);}
+.sport-mlb{background:rgba(255,121,121,.12);color:#ff9a9a;border:1px solid rgba(255,121,121,.32);}
 .sport-default{background:rgba(255,255,255,.04);color:#888;border:1px solid rgba(255,255,255,.1);}
 
 .tier{font-family:'Bebas Neue',sans-serif;width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:clamp(13px,1.4vw,15px);letter-spacing:0;background:rgba(255,255,255,0.05);color:var(--gold);border:1px solid var(--glass-bd);backdrop-filter:blur(12px);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);}
@@ -85,6 +94,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 </div></div>
 <div class="wrap">
 <p class="slate-kicker">SLATE DATE · 2026-03-09</p>
+<p class="meta-muted" style="margin:6px 0 14px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — until a graded file exists) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-03-09/graded_*.xlsx</code>.</p>
 <section class="sec"><h2 class="sec-head bebas">CBB Standard 3-Leg</h2>
 <article class="ticket-card">
 <div class="thdr">
@@ -99,7 +109,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Dra Gibbs-Lawhorn</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">UNLV vs WYO</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">UNLV vs WYO</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-3.5</div>
@@ -109,7 +119,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9628</div>
@@ -119,7 +129,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Elijah Price</div>
 <div class="tier">S</div>
-<div><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
+<div class="leg-prop-col"><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
 <div class="leg-extra">12.5 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.2628</div>
@@ -138,7 +148,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9628</div>
@@ -148,7 +158,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Elijah Price</div>
 <div class="tier">S</div>
-<div><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
+<div class="leg-prop-col"><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
 <div class="leg-extra">12.5 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.2628</div>
@@ -158,7 +168,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -177,7 +187,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Elijah Price</div>
 <div class="tier">S</div>
-<div><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
+<div class="leg-prop-col"><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
 <div class="leg-extra">12.5 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.2628</div>
@@ -187,7 +197,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -197,7 +207,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -218,7 +228,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Dra Gibbs-Lawhorn</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">UNLV vs WYO</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">UNLV vs WYO</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-3.5</div>
@@ -228,7 +238,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9628</div>
@@ -238,7 +248,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Elijah Price</div>
 <div class="tier">S</div>
-<div><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
+<div class="leg-prop-col"><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
 <div class="leg-extra">12.5 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.2628</div>
@@ -248,7 +258,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -267,7 +277,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Elijah Price</div>
 <div class="tier">S</div>
-<div><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
+<div class="leg-prop-col"><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
 <div class="leg-extra">12.5 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.2628</div>
@@ -277,7 +287,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -287,7 +297,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -297,7 +307,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Tre Singleton</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
 <div class="leg-extra">15.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-4.6272</div>
@@ -316,7 +326,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9628</div>
@@ -326,7 +336,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Elijah Price</div>
 <div class="tier">S</div>
-<div><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
+<div class="leg-prop-col"><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
 <div class="leg-extra">12.5 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.2628</div>
@@ -336,7 +346,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -346,7 +356,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -367,7 +377,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Dra Gibbs-Lawhorn</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">UNLV vs WYO</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">UNLV vs WYO</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-3.5</div>
@@ -377,7 +387,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9628</div>
@@ -387,7 +397,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -397,7 +407,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -407,7 +417,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Tre Singleton</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
 <div class="leg-extra">15.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-4.6272</div>
@@ -426,7 +436,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9628</div>
@@ -436,7 +446,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -446,7 +456,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -456,7 +466,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Tre Singleton</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
 <div class="leg-extra">15.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-4.6272</div>
@@ -466,7 +476,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Alden Applewhite</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
 <div class="leg-extra">20 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.814</div>
@@ -485,7 +495,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -495,7 +505,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -505,7 +515,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Tre Singleton</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
 <div class="leg-extra">15.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-4.6272</div>
@@ -515,7 +525,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Alden Applewhite</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
 <div class="leg-extra">20 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.814</div>
@@ -525,7 +535,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs+Asts</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs+Asts</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.4924</div>
@@ -546,7 +556,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Dra Gibbs-Lawhorn</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">UNLV vs WYO</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">UNLV vs WYO</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-3.5</div>
@@ -556,7 +566,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9628</div>
@@ -566,7 +576,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -576,7 +586,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -586,7 +596,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Tre Singleton</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
 <div class="leg-extra">15.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-4.6272</div>
@@ -596,7 +606,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Alden Applewhite</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
 <div class="leg-extra">20 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.814</div>
@@ -615,7 +625,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9628</div>
@@ -625,7 +635,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -635,7 +645,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -645,7 +655,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Tre Singleton</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
 <div class="leg-extra">15.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-4.6272</div>
@@ -655,7 +665,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Alden Applewhite</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
 <div class="leg-extra">20 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.814</div>
@@ -665,7 +675,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">DJ Smith</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">CAMP vs MONM</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">CAMP vs MONM</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -684,7 +694,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -694,7 +704,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -704,7 +714,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Tre Singleton</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
 <div class="leg-extra">15.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-4.6272</div>
@@ -714,7 +724,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Alden Applewhite</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
 <div class="leg-extra">20 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.814</div>
@@ -724,7 +734,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">DJ Smith</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">CAMP vs MONM</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">CAMP vs MONM</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -734,7 +744,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Dillan Shaw</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">15.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.899</div>
@@ -755,7 +765,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Dra Gibbs-Lawhorn</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">UNLV vs WYO</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">UNLV vs WYO</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-3.5</div>
@@ -765,7 +775,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9628</div>
@@ -775,7 +785,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Elijah Price</div>
 <div class="tier">S</div>
-<div><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
+<div class="leg-prop-col"><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
 <div class="leg-extra">12.5 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.2628</div>
@@ -794,7 +804,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9628</div>
@@ -804,7 +814,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Elijah Price</div>
 <div class="tier">S</div>
-<div><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
+<div class="leg-prop-col"><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
 <div class="leg-extra">12.5 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.2628</div>
@@ -814,7 +824,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -833,7 +843,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Elijah Price</div>
 <div class="tier">S</div>
-<div><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
+<div class="leg-prop-col"><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
 <div class="leg-extra">12.5 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.2628</div>
@@ -843,7 +853,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -853,7 +863,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -874,7 +884,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Dra Gibbs-Lawhorn</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">UNLV vs WYO</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">UNLV vs WYO</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-3.5</div>
@@ -884,7 +894,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9628</div>
@@ -894,7 +904,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Elijah Price</div>
 <div class="tier">S</div>
-<div><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
+<div class="leg-prop-col"><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
 <div class="leg-extra">12.5 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.2628</div>
@@ -904,7 +914,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -923,7 +933,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Elijah Price</div>
 <div class="tier">S</div>
-<div><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
+<div class="leg-prop-col"><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
 <div class="leg-extra">12.5 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.2628</div>
@@ -933,7 +943,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -943,7 +953,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -953,7 +963,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Tre Singleton</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
 <div class="leg-extra">15.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-4.6272</div>
@@ -972,7 +982,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9628</div>
@@ -982,7 +992,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Elijah Price</div>
 <div class="tier">S</div>
-<div><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
+<div class="leg-prop-col"><div>Points</div><div class="meta-muted">NEV vs AFA</div></div>
 <div class="leg-extra">12.5 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.2628</div>
@@ -992,7 +1002,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -1002,7 +1012,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -1023,7 +1033,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Dra Gibbs-Lawhorn</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">UNLV vs WYO</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">UNLV vs WYO</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-3.5</div>
@@ -1033,7 +1043,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9628</div>
@@ -1043,7 +1053,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -1053,7 +1063,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -1063,7 +1073,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Tre Singleton</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
 <div class="leg-extra">15.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-4.6272</div>
@@ -1082,7 +1092,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9628</div>
@@ -1092,7 +1102,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -1102,7 +1112,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -1112,7 +1122,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Tre Singleton</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
 <div class="leg-extra">15.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-4.6272</div>
@@ -1122,7 +1132,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Alden Applewhite</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
 <div class="leg-extra">20 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.814</div>
@@ -1141,7 +1151,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -1151,7 +1161,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -1161,7 +1171,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Tre Singleton</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
 <div class="leg-extra">15.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-4.6272</div>
@@ -1171,7 +1181,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Alden Applewhite</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
 <div class="leg-extra">20 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.814</div>
@@ -1181,7 +1191,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs+Asts</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs+Asts</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.4924</div>
@@ -1202,7 +1212,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Dra Gibbs-Lawhorn</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">UNLV vs WYO</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">UNLV vs WYO</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-3.5</div>
@@ -1212,7 +1222,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9628</div>
@@ -1222,7 +1232,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -1232,7 +1242,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -1242,7 +1252,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Tre Singleton</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
 <div class="leg-extra">15.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-4.6272</div>
@@ -1252,7 +1262,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Alden Applewhite</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
 <div class="leg-extra">20 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.814</div>
@@ -1271,7 +1281,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Seydou Traore</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">UTAH vs CIN</div></div>
 <div class="leg-extra">12.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9628</div>
@@ -1281,7 +1291,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -1291,7 +1301,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -1301,7 +1311,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Tre Singleton</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
 <div class="leg-extra">15.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-4.6272</div>
@@ -1311,7 +1321,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Alden Applewhite</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
 <div class="leg-extra">20 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.814</div>
@@ -1321,7 +1331,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">DJ Smith</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">CAMP vs MONM</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">CAMP vs MONM</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -1340,7 +1350,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Benny Gealer</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">STAN vs PITT</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -1350,7 +1360,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Harry Wessels</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">14.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.9328</div>
@@ -1360,7 +1370,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Tre Singleton</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">NW vs </div></div>
 <div class="leg-extra">15.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-4.6272</div>
@@ -1370,7 +1380,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Alden Applewhite</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">GASO vs TROY</div></div>
 <div class="leg-extra">20 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.814</div>
@@ -1380,7 +1390,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">DJ Smith</div>
 <div class="tier">S</div>
-<div><div>3-PT Made</div><div class="meta-muted">CAMP vs MONM</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">CAMP vs MONM</div></div>
 <div class="leg-extra">2.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.5</div>
@@ -1390,7 +1400,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div><span class="pill sport-cbb">CBB</span></div>
 <div class="pl-pend">Dillan Shaw</div>
 <div class="tier">S</div>
-<div><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
+<div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">SMC vs SCU</div></div>
 <div class="leg-extra">15.5 <span class="dir-under">UNDER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-2.899</div>
