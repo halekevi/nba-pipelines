@@ -871,7 +871,16 @@ body::before{
   .slate-sort-sel{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:10px;padding:5px 10px;outline:none;cursor:pointer;}
   .slate-row-count{font-size:10px;color:var(--muted);letter-spacing:1px;margin-left:auto;}
   /* table */
-  .slate-table-wrap{overflow-x:auto;max-height:420px;overflow-y:auto;padding:0 18px 18px;}
+  .slate-table-wrap{
+    overflow-x:auto;
+    max-height:420px;
+    overflow-y:auto;
+    padding:0 18px 18px;
+    -webkit-overflow-scrolling:touch;
+    will-change:transform;
+    transform:translateZ(0);
+    contain:paint;
+  }
   .slate-table{width:100%;border-collapse:collapse;font-size:11px;font-family:'Inter',sans-serif;}
   .slate-table th{position:sticky;top:0;z-index:2;background:rgba(4,6,16,0.9);backdrop-filter:blur(12px) saturate(180%);-webkit-backdrop-filter:blur(12px) saturate(180%);padding:8px 10px;font-size:9px;letter-spacing:1.5px;color:var(--cyan);font-weight:700;text-align:left;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,0.07);cursor:pointer;user-select:none;transition:color .15s;}
   .slate-table th:hover{color:var(--text);}
@@ -1220,35 +1229,41 @@ function getPD(name, line) {
 }
 
 async function loadSlateData() {
-  try {
-    const res = await fetch("/api/slate");
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const d = await res.json();
-    ALL_SLATE = (d.picks || []).map(p => ({
-      sport: p.sport, initials: p.initials, player: p.player,
-      prop: p.prop, line: p.line, pick: p.pick,
-      dir: p.dir, hit: p.hit, edge: p.edge,
-      l5_over: p.l5_over, l5_under: p.l5_under,
-      l10_over: p.l10_over, l10_under: p.l10_under,
-      l5_avg: p.l5_avg, season_avg: p.season_avg,
-    }));
-    for (const p of (d.picks || [])) {
-      if (p.player && !PLAYER_DATA[p.player]) {
-        const avg = p.l5_avg ?? p.season_avg ?? p.line;
-        const spread = p.line * 0.35;
-        let s = 0;
-        for (let c of p.player) s = (s * 31 + c.charCodeAt(0)) % 1000;
-        PLAYER_DATA[p.player] = Array.from({length: 10}, (_, i) => {
-          s = (s * 9301 + 49297) % 233280;
-          return Math.max(0, Math.round((avg + ((s / 233280) - 0.5) * spread * 2) * 4) / 4);
-        });
+  if (slateDataPromise) return slateDataPromise;
+  slateDataPromise = (async () => {
+    try {
+      const res = await fetch("/api/slate");
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const d = await res.json();
+      ALL_SLATE = (d.picks || []).map(p => ({
+        sport: p.sport, initials: p.initials, player: p.player,
+        prop: p.prop, line: p.line, pick: p.pick,
+        dir: p.dir, hit: p.hit, edge: p.edge,
+        l5_over: p.l5_over, l5_under: p.l5_under,
+        l10_over: p.l10_over, l10_under: p.l10_under,
+        l5_avg: p.l5_avg, season_avg: p.season_avg,
+      }));
+      for (const p of (d.picks || [])) {
+        if (p.player && !PLAYER_DATA[p.player]) {
+          const avg = p.l5_avg ?? p.season_avg ?? p.line;
+          const spread = p.line * 0.35;
+          let s = 0;
+          for (let c of p.player) s = (s * 31 + c.charCodeAt(0)) % 1000;
+          PLAYER_DATA[p.player] = Array.from({length: 10}, (_, i) => {
+            s = (s * 9301 + 49297) % 233280;
+            return Math.max(0, Math.round((avg + ((s / 233280) - 0.5) * spread * 2) * 4) / 4);
+          });
+        }
       }
+      if (d.date) { const el = document.getElementById("slate-date"); if (el) el.textContent = d.date; }
+    } catch (err) {
+      console.warn("loadSlateData failed:", err);
     }
-    if (d.date) { const el = document.getElementById("slate-date"); if (el) el.textContent = d.date; }
-  } catch (err) { console.warn("loadSlateData failed:", err); }
-  renderEdges();
-  renderStreaks();
-  await buildSlateDataFromAllSlate();
+    renderEdges();
+    renderStreaks();
+    await buildSlateDataFromAllSlate();
+  })();
+  return slateDataPromise;
 }
 
 function applyStatusCard(id, info, label) {
@@ -1574,6 +1589,9 @@ document.head.insertAdjacentHTML("beforeend",`<style>
 // ── Slate Panel expand / sort / filter ───────────────────
 const SLATE_DATA  = {};   // raw rows per sport
 const SLATE_STATE = {};   // sort + filter state per sport
+const RENDER_SCHEDULED = {};
+const RENDER_TOKEN = {};
+const MOBILE_TABLE_QUERY = window.matchMedia('(max-width: 900px)');
 
 const SPORTS = ['nba','cbb','nhl','soccer'];
 SPORTS.forEach(s => {
@@ -1581,6 +1599,16 @@ SPORTS.forEach(s => {
 });
 
 let openSlatePanel = null;
+let slateDataPromise = null;
+
+function scheduleRenderSlateTable(sport) {
+  if (RENDER_SCHEDULED[sport]) return;
+  RENDER_SCHEDULED[sport] = true;
+  requestAnimationFrame(() => {
+    RENDER_SCHEDULED[sport] = false;
+    renderSlateTable(sport);
+  });
+}
 
 function toggleSlatePanel(sport) {
   const panel = document.getElementById(`sp-${sport}`);
@@ -1603,7 +1631,7 @@ function toggleSlatePanel(sport) {
     card.classList.add('active');
     openSlatePanel = sport;
     if (!SLATE_DATA[sport]) loadSlateSport(sport);
-    else renderSlateTable(sport);
+    else scheduleRenderSlateTable(sport);
   }
 }
 
@@ -1620,8 +1648,6 @@ async function buildSlateDataFromAllSlate() {
             SLATE_DATA[s] = d.sports[s]; // always overwrite with full slate
           }
         });
-        // re-render open panel now that full data is loaded
-        if (openSlatePanel && SLATE_DATA[openSlatePanel]) renderSlateTable(openSlatePanel);
       }
     }
   } catch(e) { console.warn('slate-sport failed, using tickets data:', e); }
@@ -1660,20 +1686,20 @@ async function buildSlateDataFromAllSlate() {
       if (!cur.includes('props')) sub.textContent = (cur ? cur + '  ·  ' : '') + `${n} props`;
     }
   });
-  if (openSlatePanel) renderSlateTable(openSlatePanel);
+  if (openSlatePanel) scheduleRenderSlateTable(openSlatePanel);
 }
 
 async function loadSlatePicks() {
   // No-op: data comes from buildSlateDataFromAllSlate() after loadSlateData()
-  if (openSlatePanel && SLATE_DATA[openSlatePanel]) renderSlateTable(openSlatePanel);
+  if (openSlatePanel && SLATE_DATA[openSlatePanel]) scheduleRenderSlateTable(openSlatePanel);
 }
 
 function loadSlateSport(sport) {
-  if (SLATE_DATA[sport] && SLATE_DATA[sport].length) { renderSlateTable(sport); return; }
+  if (SLATE_DATA[sport] && SLATE_DATA[sport].length) { scheduleRenderSlateTable(sport); return; }
   const tbody = document.getElementById(`stb-${sport}`);
   if (tbody) tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;padding:20px;color:var(--muted);letter-spacing:1px;font-size:10px;">LOADING…</td></tr>`;
   // wait for loadSlateData to finish then re-render
-  loadSlateData().then(() => renderSlateTable(sport));
+  loadSlateData().then(() => scheduleRenderSlateTable(sport));
 }
 
 function renderSlateTable(sport) {
@@ -1681,6 +1707,8 @@ function renderSlateTable(sport) {
   const state = SLATE_STATE[sport];
   const tbody = document.getElementById(`stb-${sport}`);
   const countEl = document.getElementById(`src-${sport}`);
+  const token = (RENDER_TOKEN[sport] || 0) + 1;
+  RENDER_TOKEN[sport] = token;
   if (!tbody) return;
 
   let filtered = rows.filter(r => {
@@ -1718,7 +1746,7 @@ function renderSlateTable(sport) {
     return;
   }
 
-  tbody.innerHTML = filtered.map(r => {
+  const rowHtml = (r) => {
     const isOver = r.dir === 'OVER';
     const dirCls = isOver ? 'dir-over' : 'dir-under';
     const dirSym = isOver ? '▲' : '▼';
@@ -1747,19 +1775,36 @@ function renderSlateTable(sport) {
       <td style="color:var(--amber);font-family:'Share Tech Mono',monospace;">${l5u}</td>
       <td style="color:var(--muted2);font-size:10px;">${timeStr}</td>
     </tr>`;
-  }).join('');
+  };
+
+  const chunkSize = MOBILE_TABLE_QUERY.matches ? 30 : 100;
+  if (filtered.length <= chunkSize) {
+    tbody.innerHTML = filtered.map(rowHtml).join('');
+    return;
+  }
+
+  tbody.innerHTML = '';
+  let idx = 0;
+  const renderChunk = () => {
+    if (RENDER_TOKEN[sport] !== token) return; // stale render
+    const chunk = filtered.slice(idx, idx + chunkSize).map(rowHtml).join('');
+    tbody.insertAdjacentHTML('beforeend', chunk);
+    idx += chunkSize;
+    if (idx < filtered.length) requestAnimationFrame(renderChunk);
+  };
+  requestAnimationFrame(renderChunk);
 }
 
 function sortSlate(sport, key) {
   const s = SLATE_STATE[sport];
   if (s.sortKey === key) s.sortDir *= -1;
   else { s.sortKey = key; s.sortDir = -1; }
-  renderSlateTable(sport);
+  scheduleRenderSlateTable(sport);
 }
 
 function filterSlate(sport, val) {
   SLATE_STATE[sport].search = val;
-  renderSlateTable(sport);
+  scheduleRenderSlateTable(sport);
 }
 
 function toggleDirFilter(sport, dir, btn) {
@@ -1771,7 +1816,7 @@ function toggleDirFilter(sport, dir, btn) {
     document.getElementById(`sfb-${sport}-under`)?.classList.remove('on');
     btn.classList.add('on');
   }
-  renderSlateTable(sport);
+  scheduleRenderSlateTable(sport);
 }
 
 function togglePickFilter(sport, pick, btn) {
@@ -1783,7 +1828,7 @@ function togglePickFilter(sport, pick, btn) {
     document.getElementById(`sfb-${sport}-standard`)?.classList.remove('on');
     btn.classList.add('on');
   }
-  renderSlateTable(sport);
+  scheduleRenderSlateTable(sport);
 }
 
 // Data loaded dynamically — loadSlateData() populates ALL_SLATE then calls buildSlateDataFromAllSlate()
