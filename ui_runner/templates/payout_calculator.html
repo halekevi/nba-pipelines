@@ -892,8 +892,8 @@ body::before{
     <div class="import-panel" id="import-panel">
       <div class="import-panel-title">IMPORT FROM SCREENSHOT</div>
       <div class="import-actions">
-        <button type="button" class="btn-glass-sm" id="btn-screenshot" onclick="document.getElementById('screenshot-file').click()">UPLOAD SCREENSHOT</button>
-        <span style="font-size:10px;color:var(--muted);letter-spacing:1px">Or paste an image with Ctrl+V on this tab (Claude vision)</span>
+        <button type="button" class="btn-glass-sm" id="btn-screenshot" onclick="_screenshotImportTarget='calc';document.getElementById('screenshot-file').click()">UPLOAD SCREENSHOT</button>
+        <span style="font-size:10px;color:var(--muted);letter-spacing:1px">Or paste an image with Ctrl+V on this tab (Gemini vision)</span>
       </div>
       <input type="file" id="screenshot-file" class="hidden-file" accept="image/*" onchange="onScreenshotFile(this.files)"/>
     </div>
@@ -941,11 +941,18 @@ body::before{
 <div id="tab-log" class="tab-panel">
   <div class="card accent">
     <div class="card-title">🎟 Log a Full Ticket</div>
-    <p class="hint">Log every leg with its <strong>standard line</strong> and <strong>played line</strong>. Type auto-classifies from the delta. The delta% per leg (played ÷ standard) is the key variable.</p>
+    <p class="hint">Log every leg with its <strong>standard line</strong> and <strong>played line</strong>. Type auto-classifies from the delta. The delta% per leg (played ÷ standard) is the key variable. Your draft is saved automatically in this browser.</p>
+    <div class="import-panel" id="import-panel-log">
+      <div class="import-panel-title">IMPORT FROM SCREENSHOT</div>
+      <div class="import-actions">
+        <button type="button" class="btn-glass-sm" onclick="_screenshotImportTarget='log';document.getElementById('screenshot-file').click()">UPLOAD SCREENSHOT</button>
+        <span style="font-size:10px;color:var(--muted);letter-spacing:1px">Or paste an image with Ctrl+V on this tab (Gemini vision)</span>
+      </div>
+    </div>
     <div class="form-grid-3" style="margin-bottom:16px">
-      <div class="field"><label>PLATFORM</label><select id="log-platform"><option>PrizePicks</option><option>Underdog Fantasy</option><option>Sleeper</option></select></div>
-      <div class="field"><label>SLIP TYPE</label><select id="log-slip-type"><option>Power Play</option><option>Flex Play</option></select></div>
-      <div class="field"><label>DATE</label><input id="log-date" type="date"/></div>
+      <div class="field"><label>PLATFORM</label><select id="log-platform" onchange="scheduleLogDraftSave()"><option>PrizePicks</option><option>Underdog Fantasy</option><option>Sleeper</option></select></div>
+      <div class="field"><label>SLIP TYPE</label><select id="log-slip-type" onchange="scheduleLogDraftSave()"><option>Power Play</option><option>Flex Play</option></select></div>
+      <div class="field"><label>DATE</label><input id="log-date" type="date" onchange="scheduleLogDraftSave()"></div>
     </div>
     <div class="section-divider">TICKET LEGS <span id="log-leg-summary" style="color:var(--muted);font-size:10px;margin-left:8px"></span></div>
     <div id="log-leg-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
@@ -1070,10 +1077,11 @@ body::before{
 <div id="modal-overlay" class="modal-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="if(event.target===this)closePickModal()">
   <div class="modal-card" onclick="event.stopPropagation()">
     <h3 id="modal-title">Confirm imported picks</h3>
-    <p style="font-size:11px;color:var(--muted);line-height:1.6">Review JSON below. Apply replaces current calculator legs.</p>
+    <p style="font-size:11px;color:var(--muted);line-height:1.6">Review JSON below. Apply replaces legs on the tab you chose (or pick either destination).</p>
     <pre id="modal-picks-json"></pre>
-    <div class="modal-actions">
-      <button type="button" class="btn btn-accent" onclick="confirmApplyImportedPicks()">Apply to calculator</button>
+    <div class="modal-actions" style="flex-wrap:wrap;gap:8px">
+      <button type="button" class="btn btn-accent" onclick="confirmApplyImportedPicksCalc()">Apply to Calculator</button>
+      <button type="button" class="btn btn-accent" onclick="confirmApplyImportedPicksLog()">Apply to Log Lines</button>
       <button type="button" class="btn btn-ghost" onclick="closePickModal()">Cancel</button>
     </div>
   </div>
@@ -1082,6 +1090,7 @@ body::before{
 <script>
 const PP_BASE   = {2:3,3:6,4:10,5:20,6:37.5};
 const STORE_KEY = 'proporacle_payout_log_v5';
+const LOG_DRAFT_KEY = 'proporacle_payout_log_draft_v1';
 const PROP_OPTS = ['Points','Rebounds','Assists','Pts+Reb+Ast','Pts+Reb','Pts+Ast','3-PT Made','Steals','Blocks','Turnovers','Fantasy Score','Other'];
 const SPORT_OPTS= ['NBA','CBB','NFL','MLB','WNBA','Soccer','Other'];
 
@@ -1096,6 +1105,11 @@ function switchTab(id,btn){
   btn.classList.add('active');
   if(id==='patterns')renderPatterns();
   if(id==='log'){renderLogTable();updateLogCount();}
+}
+function goTab(id){
+  const order=['calc','log','patterns','ref'],i=order.indexOf(id);
+  const btns=document.querySelectorAll('.tab-bar .tab-btn');
+  if(i>=0&&btns[i])switchTab(id,btns[i]);
 }
 
 function getDeltaPct(s,p){if(!s||!p||s===0)return null;return Math.round((p/s)*1000)/1000;}
@@ -1224,6 +1238,42 @@ function runCalc(){
 /* ─── LOG ─── */
 let logLegs=[],logCounter=0;
 document.getElementById('log-date').value=new Date().toISOString().slice(0,10);
+let _logDraftTimer=null;
+function saveLogDraft(){
+  try{
+    const am=String(document.getElementById('log-actual-mult').value||'').trim();
+    if(!logLegs.length&&!am){localStorage.removeItem(LOG_DRAFT_KEY);return;}
+    localStorage.setItem(LOG_DRAFT_KEY,JSON.stringify({
+      logLegs,logCounter,
+      platform:document.getElementById('log-platform').value,
+      slipType:document.getElementById('log-slip-type').value,
+      date:document.getElementById('log-date').value,
+      actualMult:String(document.getElementById('log-actual-mult').value||''),
+    }));
+  }catch{}
+}
+function scheduleLogDraftSave(){
+  clearTimeout(_logDraftTimer);
+  _logDraftTimer=setTimeout(saveLogDraft,350);
+}
+function loadLogDraft(){
+  try{
+    const r=localStorage.getItem(LOG_DRAFT_KEY);
+    if(!r)return;
+    const o=JSON.parse(r);
+    if(!o||typeof o!=='object')return;
+    if(Array.isArray(o.logLegs)){
+      logLegs=o.logLegs;
+      logCounter=Number(o.logCounter)||0;
+      if(!logCounter&&logLegs.length)logCounter=Math.max(...logLegs.map(l=>Number(l.id)||0),0);
+    }
+    const pf=document.getElementById('log-platform'),sf=document.getElementById('log-slip-type');
+    if(o.platform&&pf){const opt=[...pf.options].find(x=>x.value===o.platform||x.text===o.platform);if(opt)pf.value=opt.value;}
+    if(o.slipType&&sf){const opt=[...sf.options].find(x=>x.value===o.slipType||x.text===o.slipType);if(opt)sf.value=opt.value;}
+    if(o.date)document.getElementById('log-date').value=o.date;
+    if(o.actualMult!=null)document.getElementById('log-actual-mult').value=String(o.actualMult);
+  }catch{}
+}
 
 function addLogLeg(type){logLegs.push({id:++logCounter,type,player:'',sport:'NBA',prop:'Points',stdLine:'',playedLine:''});renderLogLegs();refreshLogSummary();}
 function removeLogLeg(id){logLegs=logLegs.filter(l=>l.id!==id);renderLogLegs();refreshLogSummary();}
@@ -1242,11 +1292,16 @@ function blurLFLine(id,field,el){
   renderLogLegs();refreshLogSummary();
 }
 function blurLFPlayer(id){renderLogLegs();refreshLogSummary();}
-function clearLogForm(){logLegs=[];logCounter=0;renderLogLegs();document.getElementById('log-base-mult').value='';document.getElementById('log-actual-mult').value='';document.getElementById('log-ticket-summary').style.display='none';document.getElementById('log-leg-summary').textContent='';}
+function clearLogForm(){
+  logLegs=[];logCounter=0;renderLogLegs();
+  document.getElementById('log-base-mult').value='';document.getElementById('log-actual-mult').value='';
+  document.getElementById('log-ticket-summary').style.display='none';document.getElementById('log-leg-summary').textContent='';
+  try{localStorage.removeItem(LOG_DRAFT_KEY);}catch{}
+}
 
 function renderLogLegs(){
   const c=document.getElementById('log-leg-list');
-  if(!logLegs.length){c.innerHTML='<div style="font-size:11px;color:var(--muted);padding:10px 0">No legs added yet.</div>';return;}
+  if(!logLegs.length){c.innerHTML='<div style="font-size:11px;color:var(--muted);padding:10px 0">No legs added yet.</div>';scheduleLogDraftSave();return;}
   const ss=cur=>SPORT_OPTS.map(s=>`<option${s===cur?' selected':''}>${s}</option>`).join('');
   const ps=cur=>PROP_OPTS.map(p=>`<option${p===cur?' selected':''}>${p}</option>`).join('');
   c.innerHTML=logLegs.map((leg,i)=>{
@@ -1273,6 +1328,7 @@ function renderLogLegs(){
       <div style="margin-top:8px;font-size:10px;color:var(--muted);letter-spacing:1px">Δ / Δ% → ${dHtml}</div>
     </div>`;
   }).join('');
+  scheduleLogDraftSave();
 }
 
 function refreshLogSummary(){
@@ -1288,6 +1344,7 @@ function refreshLogSummary(){
   let pl='';if(bm&&am){const sh=((am/bm)-1)*100;pl=`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">Base: <strong>${bm}x</strong> → Actual: <strong style="color:${sCol(sh)}">${am}x</strong> · <span style="color:${sCol(sh)}">${sh>=0?'+':''}${sh.toFixed(1)}%</span> vs all-standard</div>`;}
   sEl.style.display='block';
   sEl.innerHTML=`<div style="font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:8px">TICKET PREVIEW — ${n}-LEG SLIP</div>${ll}${pl}`;
+  scheduleLogDraftSave();
 }
 
 function logTicket(){
@@ -1400,6 +1457,7 @@ function renderInsights(go,de){
 
 /* ─── SCREENSHOT IMPORT (Gemini vision via same-origin /api/vision/screenshot) ─── */
 let _pendingImportedPicks=null;
+var _screenshotImportTarget='calc';
 
 const VISION_PROMPT=
   "This is a PrizePicks ticket screenshot. Extract all picks and return ONLY a JSON array like:\n"+
@@ -1467,6 +1525,23 @@ function applyPicksToCalc(picks){
   });
   renderCalcLegs();
   document.getElementById('calc-results').style.display='none';
+}
+function applyPicksToLog(picks){
+  if(!Array.isArray(picks)||!picks.length)return;
+  logLegs=[];
+  logCounter=0;
+  picks.forEach(p=>{
+    const type=mapPickType(p.pick_type||p.pickType||'standard');
+    const line=Number(p.line);
+    if(isNaN(line))return;
+    const prop=nearestProp(p.prop||p.stat||'');
+    const player=String(p.player||'').trim();
+    const std=String(line);
+    const played=type==='standard'?'':String(line);
+    logLegs.push({id:++logCounter,type,player,sport:'NBA',prop,stdLine:std,playedLine:played});
+  });
+  renderLogLegs();
+  refreshLogSummary();
 }
 function blurDecimalField(el,opts){
   const raw=String(el.value||'').trim().replace(/,/g,'');
@@ -1562,14 +1637,22 @@ function closePickModal(){
   document.getElementById('modal-overlay').style.display='none';
   _pendingImportedPicks=null;
 }
-function confirmApplyImportedPicks(){
+function confirmApplyImportedPicksCalc(){
   if(_pendingImportedPicks)applyPicksToCalc(_pendingImportedPicks);
   closePickModal();
-  switchTab('calc',document.querySelector('.tab-btn'));
+  goTab('calc');
+}
+function confirmApplyImportedPicksLog(){
+  if(_pendingImportedPicks)applyPicksToLog(_pendingImportedPicks);
+  closePickModal();
+  goTab('log');
 }
 document.addEventListener('paste',e=>{
-  const tab=document.getElementById('tab-calc');
-  if(!tab||!tab.classList.contains('active'))return;
+  const tCalc=document.getElementById('tab-calc'),tLog=document.getElementById('tab-log');
+  const onCalc=tCalc&&tCalc.classList.contains('active');
+  const onLog=tLog&&tLog.classList.contains('active');
+  if(!onCalc&&!onLog)return;
+  _screenshotImportTarget=onLog?'log':'calc';
   const items=e.clipboardData&&e.clipboardData.items;
   if(!items)return;
   for(let i=0;i<items.length;i++){
@@ -1589,7 +1672,9 @@ addCalcLeg('standard');
 addCalcLeg('goblin');
 updateLogCount();
 renderLogTable();
+loadLogDraft();
 renderLogLegs();
+refreshLogSummary();
 bindTopDecimals();
 </script>
 
