@@ -49,7 +49,11 @@ SOCCER_DIR    = BASE_DIR / "Soccer"
 MLB_DIR       = BASE_DIR / "MLB"
 NBA_FLAG      = NBA_DIR / "RUN_COMPLETE.flag"
 NBA_SLATE     = NBA_DIR / "step8_all_direction_clean.xlsx"
+NBA1H_SLATE   = NBA_DIR / "step8_nba1h_direction_clean.xlsx"
+NBA1Q_SLATE   = NBA_DIR / "step8_nba1q_direction_clean.xlsx"
 NBA_TICKETS   = NBA_DIR / "best_tickets.xlsx"
+NBA1H_TICKETS = NBA_DIR / "best_tickets_nba1h.xlsx"
+NBA1Q_TICKETS = NBA_DIR / "best_tickets_nba1q.xlsx"
 CBB_SLATE     = CBB_DIR / "step6_ranked_cbb.xlsx"
 # Same paths as scripts/run_pipeline.ps1 (sport root, not sport/outputs/)
 NHL_SLATE     = NHL_DIR / "step8_nhl_direction_clean.xlsx"
@@ -364,6 +368,14 @@ def api_pipeline_status():
             "run_complete_flag": NBA_FLAG.exists(),
             "slate":   _file_info(NBA_SLATE),
             "tickets": _file_info(NBA_TICKETS),
+        },
+        "nba1h": {
+            "slate":   _file_info(NBA1H_SLATE),
+            "tickets": _file_info(NBA1H_TICKETS),
+        },
+        "nba1q": {
+            "slate":   _file_info(NBA1Q_SLATE),
+            "tickets": _file_info(NBA1Q_TICKETS),
         },
         "cbb": {
             "slate": _file_info(CBB_SLATE),
