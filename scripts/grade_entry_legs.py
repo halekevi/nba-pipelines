@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import re
 import sqlite3
+import sys
 import unicodedata
 from datetime import datetime, timezone
 from difflib import get_close_matches
@@ -19,12 +20,12 @@ if str(_scripts_dir) not in sys.path:
     sys.path.insert(0, str(_scripts_dir))
 from ensure_local_cache import ensure_local_cache
 
-ensure_local_cache(str(Path(__file__).resolve().parents[1]))
+_cache_dir = Path(ensure_local_cache(str(Path(__file__).resolve().parents[1])))
 
 import build_player_consistency as bpc
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-HIST_DB = REPO_ROOT / "data" / "cache" / "historical_actuals.db"
+HIST_DB = _cache_dir / "historical_actuals.db"
 
 
 def _now_iso() -> str:

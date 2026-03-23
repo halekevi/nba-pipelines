@@ -112,7 +112,19 @@ def _canon_line(row: dict[str, Any]) -> float | None:
 
 
 def _canon_actual(row: dict[str, Any]) -> float | None:
-    for k in ("actual", "actual_value", "act", "result_value", "stat_actual", "final_stat"):
+    for k in (
+        "actual",
+        "actual_value",
+        "act",
+        "result_value",
+        "stat_actual",
+        "final_stat",
+        "box",
+        "box_score",
+        "game_stat",
+        "stat",
+        "final",
+    ):
         v = row.get(k)
         if v is None or (isinstance(v, float) and pd.isna(v)):
             continue
@@ -125,13 +137,50 @@ def _canon_actual(row: dict[str, Any]) -> float | None:
     return None
 
 
+def _cell_looks_like_grade_outcome(s: str) -> bool:
+    """
+    True if a workbook cell is probably HIT/MISS/etc., not a numeric game stat.
+    Prevents columns named 'result' that hold 14.0 from forcing the wrong path.
+    """
+    u = str(s).strip().upper()
+    if not u or u in (".", "-", "—"):
+        return False
+    if u in (
+        "HIT",
+        "WIN",
+        "W",
+        "MISS",
+        "LOSS",
+        "L",
+        "VOID",
+        "PUSH",
+        "PENDING",
+        "N/A",
+        "NA",
+        "TBD",
+        "OPEN",
+        "TRUE",
+        "FALSE",
+        "YES",
+        "NO",
+        "0",
+        "1",
+    ):
+        return True
+    if re.fullmatch(r"-?\d+\.?\d*", u):
+        return False
+    if len(u) <= 16 and re.fullmatch(r"[A-Z][A-Z0-9_/-]*", u):
+        return True
+    return False
+
+
 def _canon_grade_raw(row: dict[str, Any]) -> str:
-    for k in ("grade", "result", "outcome", "leg_result"):
+    for k in ("grade", "leg_result", "outcome", "result"):
         v = row.get(k)
         if v is None or (isinstance(v, float) and pd.isna(v)):
             continue
         s = str(v).strip().upper()
-        if s:
+        if s and _cell_looks_like_grade_outcome(s):
             return s
     return ""
 
@@ -241,7 +290,73 @@ def _ingest_workbook_rows_into_index(
         pair_buckets.setdefault((pl, pt), []).append(row)
 
 
-def _load_actuals_indices() -> dict[str, tuple[dict[tuple[str, str, str], dict], dict[tuple[str, str], list[dict]]]]:
+def _graded_xlsx_in_outputs_date(arg_date: str) -> list[Path]:
+    """Graded slates dropped next to other daily artifacts: outputs/YYYY-MM-DD/*.xlsx."""
+    d = REPO_ROOT / "outputs" / arg_date
+    if not d.is_dir():
+        return []
+    found: set[Path] = set()
+    for pat in ("graded_*.xlsx", "*_graded_*.xlsx"):
+        for p in d.glob(pat):
+            if p.is_file():
+                found.add(p)
+    return sorted(found, key=lambda x: x.name.lower())
+
+
+def _sport_buckets_for_graded_filename(path: Path) -> list[str]:
+    """
+    Map a graded workbook name to one or more SPORT_XLSX_CANDIDATES keys.
+    Unknown names return [] (skipped).
+    """
+    n = path.name.lower()
+    s = path.stem.lower()
+    if "mlb" in n:
+        return ["MLB"]
+    if "nhl" in n:
+        return ["NHL"]
+    if "soccer" in n or s.startswith("soccer_graded"):
+        return ["SOCCER"]
+    if "wcbb" in n or "wcbb" in s:
+        return ["WCBB"]
+    if "cbb" in n or "cbb" in s or "ncaab" in n:
+        return ["CBB"]
+    if "nba1h" in n or "nba_1h" in n:
+        return ["NBA1H"]
+    if "nba1q" in n or "nba_1q" in n:
+        return ["NBA1Q"]
+    if "nba" in n:
+        return ["NBA"]
+    return []
+
+
+def _merge_graded_workbooks_into_indices(
+    indices: dict[str, tuple[dict[tuple[str, str, str], dict], dict[tuple[str, str], list[dict]]]],
+    graded_paths: list[Path],
+) -> int:
+    """
+    Overlay rows from dated graded exports so Actual / Result columns populate ticket eval.
+    Returns number of workbook files successfully merged.
+    """
+    merged = 0
+    for path in graded_paths:
+        buckets = _sport_buckets_for_graded_filename(path)
+        if not buckets:
+            continue
+        try:
+            rows = _normalize_workbook_rows(path)
+        except Exception:
+            continue
+        if not rows:
+            continue
+        for bkt in buckets:
+            trip, pairs = indices.get(bkt, ({}, {}))
+            _ingest_workbook_rows_into_index(rows, trip, pairs)
+            indices[bkt] = (trip, pairs)
+        merged += 1
+    return merged
+
+
+def _load_actuals_indices(arg_date: str | None = None) -> dict[str, tuple[dict[tuple[str, str, str], dict], dict[tuple[str, str], list[dict]]]]:
     """Per sport-bucket indices (NBA1H separate from NBA, etc.)."""
     out: dict[str, tuple[dict, dict]] = {}
     for bucket, paths in SPORT_XLSX_CANDIDATES.items():
@@ -258,6 +373,10 @@ def _load_actuals_indices() -> dict[str, tuple[dict[tuple[str, str, str], dict],
             continue
         _ingest_workbook_rows_into_index(rows, triple, pair_buckets)
         out[bucket] = (triple, pair_buckets)
+
+    if arg_date and re.match(r"^\d{4}-\d{2}-\d{2}$", arg_date):
+        graded = _graded_xlsx_in_outputs_date(arg_date)
+        _merge_graded_workbooks_into_indices(out, graded)
     return out
 
 
@@ -366,7 +485,15 @@ def debug_report(arg_date: str, payload: dict[str, Any], tpath: Path) -> None:
             extra = f" ...(+{len(cols) - 24})" if len(cols) > 24 else ""
             print(f"       sheet {sh!r}: {preview}{extra}")
 
-    indices = _load_actuals_indices()
+    indices = _load_actuals_indices(arg_date)
+    gpaths = _graded_xlsx_in_outputs_date(arg_date)
+    print(f"\noutputs/{arg_date}/ graded workbook(s) merged into indices:")
+    if not gpaths:
+        print("  (none — add graded_nba_{date}.xlsx, graded_nhl_{date}.xlsx, cbb_graded_{date}.xlsx, etc.)")
+    else:
+        for p in gpaths:
+            bk = ", ".join(_sport_buckets_for_graded_filename(p)) or "?"
+            print(f"  - {p.relative_to(REPO_ROOT)}  → buckets [{bk}]")
     total_triples = sum(len(t) for t, _ in indices.values())
     total_pairs = sum(len(p) for _, p in indices.values())
     print(f"\nIndex (all buckets): {total_triples:,} triple-keys, {total_pairs:,} player+prop buckets (sum per sport)")
@@ -405,9 +532,8 @@ def debug_report(arg_date: str, payload: dict[str, Any], tpath: Path) -> None:
     total = sum(len(t.get("legs") or []) for g in groups for t in g.get("tickets") or [])
     print(f"\nTotal legs in JSON: {total}")
     print(
-        "\nNote: This script currently loads actuals only from SPORT_XLSX_CANDIDATES (repo pipeline paths)."
-        f"\n      It does NOT read outputs/{arg_date}/graded_*.xlsx yet; if your grades live there only,"
-        "\n      matches will fail until that path is wired in."
+        "\nNote: Base rows come from SPORT_XLSX_CANDIDATES (pre-game step8 slates)."
+        f"\n      Same-day graded files under outputs/{arg_date}/ are merged on top when present."
     )
     print("=== end debug ===\n")
 
@@ -649,7 +775,7 @@ def _fmt_num(x: Any) -> str:
 
 def _build_html(payload: dict[str, Any], arg_date: str) -> str:
     groups = payload.get("groups") or []
-    indices = _load_actuals_indices()
+    indices = _load_actuals_indices(arg_date)
 
     all_legs: list[tuple[dict, dict | None, str]] = []
     tickets_flat: list[dict] = []
@@ -829,6 +955,10 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
         "</div></div>",
         '<div class="wrap">',
         f'<p class="slate-kicker">SLATE DATE · {json_date}</p>',
+        '<p class="meta-muted" style="margin:6px 0 14px;line-height:1.5">'
+        "Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — until a graded file exists) · "
+        f"<strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/{json_date}/graded_*.xlsx</code>."
+        "</p>",
     ]
 
     for g in groups:

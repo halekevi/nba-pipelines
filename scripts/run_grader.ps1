@@ -17,6 +17,8 @@ $NHLAdvancedGraderScript = Join-Path $Root "scripts\nhl_grader_advanced.py"
 $SoccerAdvancedGraderScript = Join-Path $Root "scripts\soccer_grader_advanced.py"
 $BuildGradesHtmlScript = Join-Path $Root "scripts\grading\build_grades_html.py"
 $NBABacktestScript = Join-Path $Root "NBA\scripts\backtest_nba.py"
+$TicketEvalBuilderScript = Join-Path $Root "build_ticket_eval.py"
+$EntryLegGraderScript = Join-Path $Root "scripts\grade_entry_legs.py"
 
 $NBAGradedFile = Join-Path $DateDir "graded_nba_$Date.xlsx"
 $CBBGradedFile = Join-Path $DateDir "graded_cbb_$Date.xlsx"
@@ -326,6 +328,16 @@ else {
 }
 
 # =============================
+# Backfill MyTicketPerformance entry_legs using cached historical actuals
+# =============================
+if (Test-Path $EntryLegGraderScript) {
+    Run-Py "Backfill Entry Legs (DB)" $Root $EntryLegGraderScript @()
+}
+else {
+    Write-Host "Skipping entry leg backfill (grade_entry_legs.py not found)." -ForegroundColor Yellow
+}
+
+# =============================
 # Run Combined Ticket Grader
 # =============================
 if (-not (Test-Path $TicketsFile)) {
@@ -354,6 +366,18 @@ else {
         $GraderArgs += @("--soccer_actuals", $SoccerActuals)
     }
     Run-Py "Combined Ticket Grader" $Root $CombinedTicketGrader $GraderArgs
+}
+
+# =============================
+# Build Ticket Eval HTML for Grades tab
+# =============================
+if (Test-Path $TicketEvalBuilderScript) {
+    Run-Py "Build Ticket Eval HTML" $Root $TicketEvalBuilderScript @(
+        "--date", $Date
+    )
+}
+else {
+    Write-Host "Skipping ticket eval build (build_ticket_eval.py not found)." -ForegroundColor Yellow
 }
 
 Write-Host "`n✅ DONE." -ForegroundColor Green
