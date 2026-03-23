@@ -205,96 +205,96 @@ def _norm_pick_type_series(s: pd.Series) -> pd.Series:
 # Fantasy pulled down (2026-03): 1.08 + 15% combo correction + high OVER prior stacked and
 # over-ranked fantasy vs singles/combos in the slate.
 _PROP_WEIGHTS = {
-    "fantasy":             0.91,  # was 1.08 — blend with pack, not top-heavy
-    "pts":                 1.03,  # 58.1% — slight lower, was 1.03
-    "pr":                  1.03,  # 56.6% — was 1.01
-    "reb":                 1.02,  # 55.3% — was 1.06
-    "ra":                  1.02,  # 54.9% — was 1.02
-    "pra":                 1.03,  # 54.8% — was 0.99
-    "pa":                  1.02,  # 54.2% — was 1.01
-    "ast":                 1.01,  # 53.0% — was 1.05
-    "fg2a":                1.03,  # 52.8% — was 0.92 (minor raise)
-    "fga":                 1.03,  # 52.2% — was 0.99
-    "pf":                  0.97,  # 52.0% — was 0.85 (raise — undervalued)
-    "personalfouls":       0.97,
-    "tov":                 0.96,  # 51.6% — was 0.94
-    "fgm":                 0.95,  # 51.2% — was 0.99
-    "fg3a":                0.97,  # 50.9% — was 0.88 (minor raise)
-    "3ptattempted":        0.97,
-    "twopointersattempted":0.98,
-    "ftm":                 0.94,  # 50.2% — was 1.01
-    "freethrowsmade":      0.94,
-    "stocks":              0.92,  # 49.2% — was 1.04
-    "stl":                 0.92,  # 49.1% — was 1.08 (big drop)
-    "fg2m":                0.95,  # 49.1% — was 1.01
-    "twopointersmade":     0.95,
-    "fta":                 0.94,  # 48.6% — was 0.98
-    "freethrowsattempted": 0.94,
-    "fg3m":                0.90,  # 47.8% — was 1.03 (big drop)
-    "3ptmade":             0.90,
-    "blk":                 0.80,  # 38.7% — worst OVER prop, was 1.02
+    "fantasy": 0.910,
+    "pts": 1.000,
+    "pr": 1.000,
+    "reb": 1.000,
+    "ra": 1.000,
+    "pra": 1.000,
+    "pa": 1.000,
+    "ast": 1.000,
+    "fg2a": 1.030,
+    "fga": 1.030,
+    "pf": 0.970,
+    "personalfouls": 0.970,
+    "tov": 1.000,
+    "fgm": 0.950,
+    "fg3a": 0.970,
+    "3ptattempted": 0.970,
+    "twopointersattempted": 0.980,
+    "ftm": 0.940,
+    "freethrowsmade": 0.940,
+    "stocks": 0.920,
+    "stl": 1.000,
+    "fg2m": 0.950,
+    "twopointersmade": 0.950,
+    "fta": 1.000,
+    "freethrowsattempted": 0.940,
+    "fg3m": 0.900,
+    "3ptmade": 0.900,
+    "blk": 0.800,
 }
 
 # Hit rate priors — calibrated from 9-day graded data (2026-03-06 → 2026-03-14)
 # Used in prop_hr_z scoring signal. Old values were based on season-long prior;
 # these reflect actual pipeline output hit rates by prop type OVER direction.
 _PROP_HR_PRIOR_OVER = {
-    "fantasy":             0.595,  # was 0.700 — less z-score lift for fantasy OVER
-    "pts":                 0.580,  # actual 59.4%, was 0.566
-    "pr":                  0.565,  # actual 57.6%, was 0.568
-    "reb":                 0.580,  # actual 56.1%, was 0.617 (lowered)
-    "ra":                  0.555,  # actual 54.8%, was 0.600 (lowered)
-    "ast":                 0.555,  # actual 53.2%, was 0.593 (lowered)
-    "fga":                 0.510,  # actual 50.0%, was 0.558 (lowered)
-    "pra":                 0.545,  # actual 54.9%, was 0.545
-    "pa":                  0.550,  # actual 54.8%, was 0.557
-    "fgm":                 0.510,  # actual 50.8%, was 0.519
-    "fg2m":                0.510,  # actual 49.1%, was 0.528
-    "twopointersmade":     0.510,
-    "fg2a":                0.520,  # actual 52.8%, unchanged
-    "twopointersattempted":0.520,
-    "tov":                 0.500,  # actual 49.8%, was 0.484 (slight raise)
-    "pf":                  0.510,  # actual 52.0%, was 0.424 (significant raise)
-    "personalfouls":       0.510,
-    "fg3a":                0.490,  # actual 51.3%, was 0.444 (raise)
-    "3ptattempted":        0.490,
-    "stocks":              0.510,  # actual 48.4%, was 0.547 (lowered)
-    "stl":                 0.530,  # actual 48.1%, was 0.697 (major drop — UNDER is the signal)
-    "fg3m":                0.520,  # actual 47.0%, was 0.623 (major drop)
-    "3ptmade":             0.520,
-    "ftm":                 0.510,  # actual 48.0%, was 0.583 (lowered)
-    "freethrowsmade":      0.510,
-    "fta":                 0.460,  # actual 42.0%, was 0.545 (lowered)
+    "fantasy": 0.595,
+    "pts": 0.580,
+    "pr": 0.565,
+    "reb": 0.580,
+    "ra": 0.479,
+    "ast": 0.555,
+    "fga": 0.510,
+    "pra": 0.545,
+    "pa": 0.550,
+    "fgm": 0.510,
+    "fg2m": 0.510,
+    "twopointersmade": 0.510,
+    "fg2a": 0.520,
+    "twopointersattempted": 0.520,
+    "tov": 0.423,
+    "pf": 0.510,
+    "personalfouls": 0.510,
+    "fg3a": 0.490,
+    "3ptattempted": 0.490,
+    "stocks": 0.510,
+    "stl": 0.530,
+    "fg3m": 0.520,
+    "3ptmade": 0.520,
+    "ftm": 0.510,
+    "freethrowsmade": 0.510,
+    "fta": 0.442,
     "freethrowsattempted": 0.460,
-    "blk":                 0.420,  # actual 38.3%, was 0.545 (major drop)
+    "blk": 0.356,
 }
 
 # UNDER overrides — calibrated from 9-day graded data.
 # These are props where the UNDER signal is meaningfully different from (1 - OVER prior).
 # Key insight: Steals/3PM/FTA/Blks+Stls UNDER are the best Standard signals in the dataset.
 _PROP_HR_PRIOR_UNDER_OVERRIDE = {
-    "stl":                 0.667,  # actual 66.7% UNDER — was 0.303, massive raise
-    "fg3m":                0.580,  # actual 60.0% UNDER — was 0.377
-    "3ptmade":             0.580,
-    "stocks":              0.580,  # actual 60.0% UNDER — was 0.453
-    "fta":                 0.580,  # actual 59.3% UNDER — was 0.455
+    "stl": 0.667,
+    "fg3m": 0.600,
+    "3ptmade": 0.580,
+    "stocks": 0.580,
+    "fta": 0.559,
     "freethrowsattempted": 0.580,
-    "ra":                  0.540,  # actual 55.7% UNDER — was 0.400
-    "ftm":                 0.545,  # actual 55.2% UNDER — was 0.417
-    "freethrowsmade":      0.545,
-    "ast":                 0.515,  # actual 50.4% UNDER — was 0.407
-    "tov":                 0.590,  # actual 60.4% UNDER — was 0.516
-    "fga":                 0.545,  # actual 54.0% UNDER — was 0.645 (lowered)
-    "fg2a":                0.545,  # actual 48.4% UNDER — was 0.645 (lowered)
-    "twopointersattempted":0.480,
-    "reb":                 0.495,  # actual 49.5% UNDER — was 0.591 (lowered)
-    "pa":                  0.515,  # actual 51.2% UNDER — was 0.590 (lowered)
-    "pts":                 0.492,  # actual 49.2% UNDER — was 0.540 (lowered)
-    "pr":                  0.506,  # actual 50.6% UNDER — was 0.540 (lowered)
-    "pra":                 0.535,  # actual 53.5% UNDER — was 0.540
-    "fantasy":             0.288,  # actual 28.8% UNDER — hard near-block, was 0.371
-    "pf":                  0.518,  # actual 51.8% UNDER — was derived
-    "personalfouls":       0.518,
+    "ra": 0.521,
+    "ftm": 0.545,
+    "freethrowsmade": 0.545,
+    "ast": 0.527,
+    "tov": 0.578,
+    "fga": 0.545,
+    "fg2a": 0.545,
+    "twopointersattempted": 0.480,
+    "reb": 0.529,
+    "pa": 0.550,
+    "pts": 0.541,
+    "pr": 0.541,
+    "pra": 0.537,
+    "fantasy": 0.288,
+    "pf": 0.518,
+    "personalfouls": 0.518,
 }
 
 _RELIABILITY_MAP = {
