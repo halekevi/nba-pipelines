@@ -38,15 +38,24 @@ _XLSX_HDR_TO_LEG_FIELD: dict[str, str] = {
     "sport": "sport",
 }
 
-# Graded / slate workbooks (first existing path wins per sport)
+# Slate workbooks per sport bucket (first existing file wins within that bucket).
+# Ticket legs with sport NBA1H / NBA1Q / WCBB must match rows from these files, not full-game NBA/CBB only.
 SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
     "NBA": [
         REPO_ROOT / "NBA" / "step8_all_direction_clean.xlsx",
         REPO_ROOT / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
     ],
+    "NBA1H": [
+        REPO_ROOT / "NBA" / "step8_nba1h_direction_clean.xlsx",
+    ],
+    "NBA1Q": [
+        REPO_ROOT / "NBA" / "step8_nba1q_direction_clean.xlsx",
+    ],
     "CBB": [
         REPO_ROOT / "CBB" / "step6_ranked_cbb.xlsx",
-        REPO_ROOT / "CBB" / "step6_ranked_cbb.xlsx",
+    ],
+    "WCBB": [
+        REPO_ROOT / "CBB" / "step6_ranked_wcbb.xlsx",
     ],
     "NHL": [
         REPO_ROOT / "NHL" / "step8_nhl_direction_clean.xlsx",
@@ -55,6 +64,9 @@ SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
     "SOCCER": [
         REPO_ROOT / "Soccer" / "step8_soccer_direction_clean.xlsx",
         REPO_ROOT / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
+    ],
+    "MLB": [
+        REPO_ROOT / "MLB" / "step8_mlb_direction_clean.xlsx",
     ],
 }
 
@@ -172,12 +184,120 @@ def _pick_type_tier(pick_type: str) -> str:
 
 
 def _sport_key(sport: str) -> str:
-    s = (sport or "").strip().upper()
-    if s in ("NBA", "CBB", "NHL"):
-        return s
-    if s in ("SOCCER", "SOC", "MLS", "EPL"):
+    """Normalize for display / CSS (keep variant labels visible)."""
+    s = (sport or "").strip().upper().replace(" ", "")
+    if s in ("SOC", "MLS", "EPL"):
         return "SOCCER"
     return s
+
+
+def _leg_match_buckets(sport: str) -> list[str]:
+    """
+    Order matters: try variant-specific slate first, then parent sport fallback.
+    """
+    s = (sport or "").strip().upper().replace(" ", "").replace("-", "")
+    if s in ("NBA1H", "NBA_1H"):
+        return ["NBA1H", "NBA"]
+    if s in ("NBA1Q", "NBA_1Q"):
+        return ["NBA1Q", "NBA"]
+    if s == "WCBB":
+        return ["WCBB", "CBB"]
+    if s in ("SOC", "MLS", "EPL"):
+        return ["SOCCER"]
+    if s in ("NBA", "WNBA"):
+        return ["NBA"]
+    if s == "CBB":
+        return ["CBB"]
+    if s == "NHL":
+        return ["NHL"]
+    if s == "SOCCER":
+        return ["SOCCER"]
+    if s == "MLB":
+        return ["MLB"]
+    return [s, "NBA", "CBB"]
+
+
+def _ingest_workbook_rows_into_index(
+    rows: list[dict[str, Any]],
+    triple: dict[tuple[str, str, str], dict],
+    pair_buckets: dict[tuple[str, str], list[dict]],
+) -> None:
+    for raw in rows:
+        pl = _canon_player(raw).lower()
+        pt = _canon_prop(raw).lower()
+        dr = _canon_direction(raw)
+        if not pl or not pt:
+            continue
+        row = {
+            "player_lower": pl,
+            "prop_lower": pt,
+            "direction": dr,
+            "line": _canon_line(raw),
+            "actual": _canon_actual(raw),
+            "grade_raw": _canon_grade_raw(raw),
+        }
+        key3 = (pl, pt, dr)
+        triple[key3] = row
+        pair_buckets.setdefault((pl, pt), []).append(row)
+
+
+def _load_actuals_indices() -> dict[str, tuple[dict[tuple[str, str, str], dict], dict[tuple[str, str], list[dict]]]]:
+    """Per sport-bucket indices (NBA1H separate from NBA, etc.)."""
+    out: dict[str, tuple[dict, dict]] = {}
+    for bucket, paths in SPORT_XLSX_CANDIDATES.items():
+        triple: dict[tuple[str, str, str], dict] = {}
+        pair_buckets: dict[tuple[str, str], list[dict]] = {}
+        src = next((p for p in paths if p.is_file()), None)
+        if not src:
+            out[bucket] = (triple, pair_buckets)
+            continue
+        try:
+            rows = _normalize_workbook_rows(src)
+        except Exception:
+            out[bucket] = (triple, pair_buckets)
+            continue
+        _ingest_workbook_rows_into_index(rows, triple, pair_buckets)
+        out[bucket] = (triple, pair_buckets)
+    return out
+
+
+def _match_leg_in_index(
+    leg: dict[str, Any],
+    triple: dict[tuple[str, str, str], dict],
+    pair_buckets: dict[tuple[str, str], list[dict]],
+) -> dict | None:
+    pl = str(leg.get("player") or "").strip().lower()
+    pt = str(leg.get("prop_type") or "").strip().lower()
+    dr = str(leg.get("direction") or "").strip().upper()
+    if not pl or not pt:
+        return None
+    hit = triple.get((pl, pt, dr))
+    if hit:
+        return hit
+    cands = pair_buckets.get((pl, pt))
+    if not cands:
+        return None
+    for r in cands:
+        if r["direction"] == dr:
+            return r
+    if len(cands) == 1:
+        return cands[0]
+    for r in cands:
+        if r["direction"] == dr or not r["direction"]:
+            return r
+    return cands[0]
+
+
+def _match_leg_to_row_multi(
+    leg: dict[str, Any],
+    indices: dict[str, tuple[dict, dict]],
+) -> dict | None:
+    for bkt in _leg_match_buckets(str(leg.get("sport") or "")):
+        trip, pairs = indices.get(bkt, ({}, {}))
+        row = _match_leg_in_index(leg, trip, pairs)
+        if row:
+            return row
+    return None
 
 
 def _graded_outputs_dir(arg_date: str) -> Path:
@@ -246,8 +366,13 @@ def debug_report(arg_date: str, payload: dict[str, Any], tpath: Path) -> None:
             extra = f" ...(+{len(cols) - 24})" if len(cols) > 24 else ""
             print(f"       sheet {sh!r}: {preview}{extra}")
 
-    triple, pair_buckets = _load_actuals_index()
-    print(f"\nIndex: {len(triple):,} triple-keys (player+prop+direction), {len(pair_buckets):,} player+prop buckets")
+    indices = _load_actuals_indices()
+    total_triples = sum(len(t) for t, _ in indices.values())
+    total_pairs = sum(len(p) for _, p in indices.values())
+    print(f"\nIndex (all buckets): {total_triples:,} triple-keys, {total_pairs:,} player+prop buckets (sum per sport)")
+    for bkt, (tr, pr) in indices.items():
+        if tr or pr:
+            print(f"  {bkt}: {len(tr):,} triples, {len(pr):,} pair-buckets")
 
     groups = payload.get("groups") or []
     legs_sample: list[dict[str, Any]] = []
@@ -267,9 +392,11 @@ def debug_report(arg_date: str, payload: dict[str, Any], tpath: Path) -> None:
         pl = str(leg.get("player") or "").strip().lower()
         pt = str(leg.get("prop_type") or "").strip().lower()
         dr = str(leg.get("direction") or "").strip().upper()
-        row = _match_leg_to_row(leg, triple, pair_buckets)
+        row = _match_leg_to_row_multi(leg, indices)
         st = "MATCH" if row else "NO MATCH -> PENDING"
-        print(f"  {i}. player={pl!r} prop_type={pt!r} direction={dr!r} -> {st}")
+        sp = str(leg.get("sport") or "")
+        bk = " → ".join(_leg_match_buckets(sp))
+        print(f"  {i}. sport={sp!r} buckets=[{bk}] player={pl!r} prop_type={pt!r} direction={dr!r} -> {st}")
         if row:
             print(
                 f"      actual={row.get('actual')!r} line={row.get('line')!r} "
@@ -283,67 +410,6 @@ def debug_report(arg_date: str, payload: dict[str, Any], tpath: Path) -> None:
         "\n      matches will fail until that path is wired in."
     )
     print("=== end debug ===\n")
-
-
-def _load_actuals_index() -> tuple[dict[tuple[str, str, str], dict], dict[tuple[str, str], list[dict]]]:
-    """Triple-key -> row dict (last wins); pair-key -> list of rows for fallback."""
-    triple: dict[tuple[str, str, str], dict] = {}
-    pair_buckets: dict[tuple[str, str], list[dict]] = {}
-
-    for sport, paths in SPORT_XLSX_CANDIDATES.items():
-        src = next((p for p in paths if p.is_file()), None)
-        if not src:
-            continue
-        try:
-            rows = _normalize_workbook_rows(src)
-        except Exception:
-            continue
-        for raw in rows:
-            pl = _canon_player(raw).lower()
-            pt = _canon_prop(raw).lower()
-            dr = _canon_direction(raw)
-            if not pl or not pt:
-                continue
-            row = {
-                "player_lower": pl,
-                "prop_lower": pt,
-                "direction": dr,
-                "line": _canon_line(raw),
-                "actual": _canon_actual(raw),
-                "grade_raw": _canon_grade_raw(raw),
-            }
-            key3 = (pl, pt, dr)
-            triple[key3] = row
-            pair_buckets.setdefault((pl, pt), []).append(row)
-
-    return triple, pair_buckets
-
-
-def _match_leg_to_row(
-    leg: dict[str, Any],
-    triple: dict[tuple[str, str, str], dict],
-    pair_buckets: dict[tuple[str, str], list[dict]],
-) -> dict | None:
-    pl = str(leg.get("player") or "").strip().lower()
-    pt = str(leg.get("prop_type") or "").strip().lower()
-    dr = str(leg.get("direction") or "").strip().upper()
-    if not pl or not pt:
-        return None
-    hit = triple.get((pl, pt, dr))
-    if hit:
-        return hit
-    cands = pair_buckets.get((pl, pt))
-    if not cands:
-        return None
-    for r in cands:
-        if r["direction"] == dr:
-            return r
-    if len(cands) == 1:
-        return cands[0]
-    for r in cands:
-        if r["direction"] == dr or not r["direction"]:
-            return r
-    return cands[0]
 
 
 def find_ticket_json(arg_date: str) -> Path | None:
@@ -583,7 +649,7 @@ def _fmt_num(x: Any) -> str:
 
 def _build_html(payload: dict[str, Any], arg_date: str) -> str:
     groups = payload.get("groups") or []
-    triple, pair_buckets = _load_actuals_index()
+    indices = _load_actuals_indices()
 
     all_legs: list[tuple[dict, dict | None, str]] = []
     tickets_flat: list[dict] = []
@@ -594,7 +660,7 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
             t["_group_name"] = gname
             tickets_flat.append(t)
             for leg in t.get("legs") or []:
-                row = _match_leg_to_row(leg, triple, pair_buckets)
+                row = _match_leg_to_row_multi(leg, indices)
                 line = leg.get("line")
                 try:
                     line_f = float(line) if line is not None else None
@@ -621,7 +687,7 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
         legs = t.get("legs") or []
         gs = []
         for leg in legs:
-            row = _match_leg_to_row(leg, triple, pair_buckets)
+            row = _match_leg_to_row_multi(leg, indices)
             try:
                 lf = float(leg.get("line"))
             except (TypeError, ValueError):
@@ -646,9 +712,13 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
 
     sport_colors_css = """
 .sport-nba{background:rgba(212,160,23,.12);color:#f0a500;border:1px solid rgba(212,160,23,.35);}
+.sport-nba1h{background:rgba(255,155,86,.12);color:#ffb27d;border:1px solid rgba(255,155,86,.32);}
+.sport-nba1q{background:rgba(255,214,102,.12);color:#ffd87a;border:1px solid rgba(255,214,102,.32);}
 .sport-cbb{background:rgba(0,229,255,.10);color:#00e5ff;border:1px solid rgba(0,229,255,.32);}
+.sport-wcbb{background:rgba(127,199,217,.10);color:#9fd8e8;border:1px solid rgba(127,199,217,.32);}
 .sport-nhl{background:rgba(186,130,255,.12);color:#c4a5ff;border:1px solid rgba(186,130,255,.38);}
 .sport-soccer{background:rgba(240,165,0,.10);color:#e8b84a;border:1px solid rgba(240,165,0,.34);}
+.sport-mlb{background:rgba(255,121,121,.12);color:#ff9a9a;border:1px solid rgba(255,121,121,.32);}
 .sport-default{background:rgba(255,255,255,.04);color:#888;border:1px solid rgba(255,255,255,.1);}
 """
 
@@ -771,7 +841,7 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
             legs = t.get("legs") or []
             leg_grades: list[str] = []
             for leg in legs:
-                row = _match_leg_to_row(leg, triple, pair_buckets)
+                row = _match_leg_to_row_multi(leg, indices)
                 try:
                     lf = float(leg.get("line"))
                 except (TypeError, ValueError):
@@ -811,7 +881,7 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
             parts.append("</div>")
 
             for leg, lg in zip(legs, leg_grades):
-                row = _match_leg_to_row(leg, triple, pair_buckets)
+                row = _match_leg_to_row_multi(leg, indices)
                 try:
                     lf = float(leg.get("line"))
                 except (TypeError, ValueError):
@@ -832,9 +902,13 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
                 sk = _sport_key(str(leg.get("sport") or ""))
                 sp_class = {
                     "NBA": "sport-nba",
+                    "NBA1H": "sport-nba1h",
+                    "NBA1Q": "sport-nba1q",
                     "CBB": "sport-cbb",
+                    "WCBB": "sport-wcbb",
                     "NHL": "sport-nhl",
                     "SOCCER": "sport-soccer",
+                    "MLB": "sport-mlb",
                 }.get(sk, "sport-default")
 
                 tier = _pick_type_tier(str(leg.get("pick_type") or ""))
