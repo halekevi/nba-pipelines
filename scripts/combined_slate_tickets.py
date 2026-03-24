@@ -10,9 +10,8 @@ Outputs:
   - docs/tickets_latest.json / docs/tickets_latest.html (for GitHub Pages /docs)
 
 Sheets: SUMMARY, Full Slate (reordered + STRONG/LEAN/RISK + pace beside Def Tier), NBA Slate, CBB Slate,
-        NBA 3/4/5/6-Leg tickets (Goblin/Standard/Demon/Mix),
-        CBB 3/4/5/6-Leg tickets, Combined 3/4/5/6-Leg tickets,
-        Cross-sport Standard Mix, Cross-sport Goblin Mix
+        2–6-Leg tickets per sport (Goblin / Standard / Std+Gob mix / full Mix — Demon never on tickets),
+        COMBO and cross-sport Standard / Std+Gob / Goblin mixes
 
 NEW (Web):
 - Adds player headshot thumbnails when an ID is available:
@@ -3324,7 +3323,12 @@ def main():
     ap.add_argument("--min-hit-rate", type=float, default=0.55, dest="min_hit_rate")
     ap.add_argument("--min-edge", type=float, default=0.0, dest="min_edge")
     ap.add_argument("--min-rank", type=float, default=None, dest="min_rank")
-    ap.add_argument("--pick-types", default="Goblin,Standard,Demon", dest="pick_types")  # Demon kept for Flex sheets; filtered out of 5/6-leg Power by build_tickets
+    ap.add_argument(
+        "--pick-types",
+        default="Goblin,Standard",
+        dest="pick_types",
+        help="Comma-separated pick types for ticket eligibility. Demon is never used on tickets (slate rows unchanged).",
+    )
     ap.add_argument("--max-tickets", type=int, default=20, dest="max_tickets")
     ap.add_argument("--use-context-filter", action="store_true", dest="use_context_filter", default=True,
                     help="Apply NBA direction+defense+pace context confidence filter")
@@ -3377,6 +3381,7 @@ def main():
 
     tiers = [t.strip() for t in args.tiers.split(",") if t.strip()]
     pick_types = [p.strip() for p in args.pick_types.split(",") if p.strip()]
+    ticket_pick_types = [p for p in pick_types if p != "Demon"]
     thresholds = {
         "tiers": args.tiers,
         "min_hit_rate": args.min_hit_rate,
@@ -3527,9 +3532,12 @@ def main():
 
     def pool(df, pt=None):
         sport = str(df["sport"].iloc[0]).upper() if "sport" in df.columns and len(df) > 0 else ""
+        effective_pt = pt if pt is not None else ticket_pick_types
+        if effective_pt is not None and len(effective_pt) == 0:
+            return df.iloc[0:0].copy()
         # Apply tighter rank floor specifically for CBB Goblin
         effective_min_rank = args.min_rank
-        if sport in ("CBB", "WCBB") and pt is not None and pt == ["Goblin"]:
+        if sport in ("CBB", "WCBB") and effective_pt is not None and effective_pt == ["Goblin"]:
             effective_min_rank = max(args.min_rank or 0, CBB_GOBLIN_MIN_RANK)
         base = filter_eligible(
             df,
@@ -3537,7 +3545,7 @@ def main():
             args.min_edge,
             effective_min_rank,
             tiers if tiers else None,
-            pt if pt is not None else pick_types,
+            effective_pt,
         )
         return apply_nba_context_confidence_filter(
             base,
@@ -3606,7 +3614,7 @@ def main():
             return None
         return out.sort_values("rank_score", ascending=False, na_position="last")
 
-    for pt in ["Goblin", "Standard", "Demon"]:
+    for pt in ticket_pick_types:
         pt_pool = pool(nba, [pt])
         if len(pt_pool) >= MIN_TICKET_POOL:
             all_ticket_groups += gen_tickets(pt_pool, "NBA", C["hdr_nba"], "NBA", pt)
@@ -3618,7 +3626,7 @@ def main():
     if len(nba_sg) >= MIN_TICKET_POOL:
         all_ticket_groups += gen_std_gob_mixed(nba_sg, "NBA", C["hdr_nba"], "NBA")
 
-    for pt in ["Goblin", "Standard", "Demon"]:
+    for pt in ticket_pick_types:
         pt_pool = pool(cbb, [pt])
         if len(pt_pool) >= MIN_TICKET_POOL:
             all_ticket_groups += gen_tickets(pt_pool, "CBB", C["hdr_cbb"], "CBB", pt)
@@ -3633,7 +3641,7 @@ def main():
     if nhl is not None and len(nhl) > 0:
         nhl_pool = pool(nhl)
         if len(nhl_pool) >= MIN_TICKET_POOL:
-            for pt in ["Goblin", "Standard", "Demon"]:
+            for pt in ticket_pick_types:
                 pt_pool = pool(nhl, [pt])
                 if len(pt_pool) >= MIN_TICKET_POOL:
                     all_ticket_groups += gen_tickets(pt_pool, "NHL", C["hdr_nhl"], "NHL", pt)
@@ -3645,7 +3653,7 @@ def main():
     if soccer is not None and len(soccer) > 0:
         soccer_pool = pool(soccer)
         if len(soccer_pool) >= MIN_TICKET_POOL:
-            for pt in ["Goblin", "Standard", "Demon"]:
+            for pt in ticket_pick_types:
                 pt_pool = pool(soccer, [pt])
                 if len(pt_pool) >= MIN_TICKET_POOL:
                     all_ticket_groups += gen_tickets(pt_pool, "Soccer", C["hdr_soccer"], "Soccer", pt)
