@@ -123,8 +123,17 @@ DEMON_MAX_BOOST:      float = 2.50        # single-leg multiplier cap (2.5×)
 
 # Min EV threshold for a ticket to be included in output.
 # ev = est_win_prob × adj_power_payout.  ev < 1.0 means expected loss.
-# Set slightly above 1.0 for a small profit margin cushion.
-MIN_TICKET_EV: float = 1.05              # ← tune me (1.0 = break-even)
+# Shorter slips use a lower bar so the web/workbook are not empty when payouts are modest.
+MIN_TICKET_EV_DEFAULT: float = 1.05
+MIN_TICKET_EV_BY_LEGS: dict = {
+    2: 0.93,
+    3: 1.00,
+    4: 1.02,
+}
+
+
+def min_ev_for_ticket(n_legs: int) -> float:
+    return MIN_TICKET_EV_BY_LEGS.get(int(n_legs), MIN_TICKET_EV_DEFAULT)
 
 # 2026 NCAA tournament + AP Top 25 metadata (CBB enrichment).
 # Keys follow abbreviations used in our CBB files.
@@ -2344,7 +2353,7 @@ def build_tickets(pool: pd.DataFrame, n_legs: int, max_tickets=20, require_mix=F
 
                 # EV gate: skip tickets with negative expected value
                 ev_power = ep * adj_power
-                if ev_power < MIN_TICKET_EV:
+                if ev_power < min_ev_for_ticket(n_legs):
                     continue
 
                 tickets.append(
@@ -2463,7 +2472,7 @@ def build_mixed_picktype_tickets(pool_df: pd.DataFrame, n_legs: int, max_tickets
 
                 # EV gate
                 ev_power = ep * adj_power
-                if ev_power < MIN_TICKET_EV:
+                if ev_power < min_ev_for_ticket(n_legs):
                     std_start = min(std_start + 1, max(len(std) - 1, 0))
                     if len(gob) > 0:
                         gob_start = min(gob_start + 1, max(len(gob) - 1, 0))
@@ -3387,7 +3396,8 @@ def main():
         "min_hit_rate": args.min_hit_rate,
         "min_edge": args.min_edge,
         "min_rank": args.min_rank,
-        "pick_types": args.pick_types,
+        # What actually feeds ticket builders (Demon never on tickets)
+        "pick_types": ",".join(ticket_pick_types) if ticket_pick_types else "Goblin,Standard",
         "context_filter": args.use_context_filter,
         "context_min_score": args.context_min_score,
         "context_min_l5_sample": args.context_min_l5_sample,
@@ -3779,6 +3789,14 @@ def main():
             min_edge=thresholds.get("min_edge", 2.0),
             min_rank=thresholds.get("min_rank", 5.0),
         )
+        n_final = sum(len(t[1]) for t in final_groups if t[1])
+        if n_final == 0 and all_ticket_groups:
+            wb_slips = sum(len(t[1]) for t in all_ticket_groups if t[1])
+            print(
+                f"  NOTE: FINAL web groups are empty ({n_final} slips); "
+                f"falling back to workbook groups ({wb_slips} slips) for tickets_latest."
+            )
+            final_groups = [(n, t, bg) for (n, t, bg) in all_ticket_groups if t]
         payload = ticket_groups_to_payload(final_groups, args.date, thresholds)
         write_web_outputs(payload, args.web_outdir)
         write_slate_json(nba, cbb, nhl, soccer, mlb, nba1h, nba1q, wcbb, args.date, args.web_outdir)
