@@ -18,6 +18,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .sum-val.green{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.35);}
 .sum-val.red{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.35);}
 .sum-val.pend{color:var(--pending);text-shadow:none;}
+.sum-val.void{color:var(--gold2);text-shadow:none;}
 .sum-val-sm{font-size:clamp(18px,2.1vw,24px)!important;}
 .sum-lab{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2.2px;color:var(--muted);text-align:center;line-height:1.2;max-width:11em;}
 .wrap{width:100%;max-width:min(1520px,96vw);margin:0 auto;padding:10px clamp(14px,2.5vw,32px) 0;}
@@ -35,6 +36,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .banner.hit{color:var(--green);border-color:rgba(57,255,110,.45);box-shadow:0 0 16px rgba(57,255,110,.15);}
 .banner.miss{color:var(--red);border-color:rgba(255,77,77,.5);box-shadow:0 0 16px rgba(255,77,77,.12);}
 .banner.pend{color:var(--pending);border-color:rgba(255,255,255,.12);}
+.banner.void{color:var(--gold2);border-color:rgba(240,165,0,.35);}
 @keyframes missRowPulse{0%,100%{box-shadow:0 0 0 1px rgba(255,77,77,0.4),inset 0 0 20px rgba(255,77,77,0.06);}50%{box-shadow:0 0 0 2px rgba(255,77,77,0.65),0 0 22px rgba(255,77,77,0.18),inset 0 0 26px rgba(255,77,77,0.09);}}
 .legrow{font-family:'Share Tech Mono',monospace;display:grid;grid-template-columns:56px 92px minmax(120px,1fr) 44px minmax(240px,1.45fr) minmax(108px,1fr) minmax(96px,1fr) minmax(76px,.85fr);gap:12px;align-items:center;padding:14px clamp(14px,2vw,22px);font-size:clamp(13px,1.45vw,16px);line-height:1.35;border-bottom:1px solid rgba(255,255,255,.06);border-left:3px solid transparent;}
 .legrow:last-child{border-bottom:none;}
@@ -53,10 +55,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .legrow.leg-pend{background:transparent;border-left-color:transparent;}
 .legrow.leg-pend .pl-pend,.legrow.leg-pend .meta-muted{color:var(--pending)!important;}
 .legrow.leg-pend .pill{background:rgba(255,255,255,0.04)!important;border-color:rgba(255,255,255,0.1)!important;color:var(--pending)!important;}
+.legrow.leg-void{background:rgba(240,165,0,0.04);border-left-color:rgba(240,165,0,.55);}
+.legrow.leg-void .pl-void,.legrow.leg-void .meta-muted{color:var(--gold2)!important;}
+.legrow.leg-void .pill{background:rgba(240,165,0,0.07)!important;border-color:rgba(240,165,0,0.28)!important;color:var(--gold2)!important;}
 .badge{font-size:clamp(28px,3.2vw,36px);line-height:1;text-align:center;}
 .badge.hit{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.6);}
 .badge.miss{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.55);}
 .badge.pend{color:var(--pending);text-shadow:none;}
+.badge.void{color:var(--gold2);text-shadow:none;}
 .pill{font-family:'Bebas Neue',sans-serif;font-size:clamp(10px,1.1vw,12px);letter-spacing:1.2px;padding:5px 12px;border-radius:999px;text-transform:uppercase;}
 
 .sport-nba{background:rgba(212,160,23,.12);color:#f0a500;border:1px solid rgba(212,160,23,.35);}
@@ -73,6 +79,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .pl-hit{color:var(--green);text-shadow:0 0 8px rgba(57,255,110,.4);}
 .pl-miss{color:var(--red);}
 .pl-pend{color:var(--pending);}
+.pl-void{color:var(--gold2);}
 .dir-over{color:var(--cyan);font-weight:700;}
 .dir-under{color:var(--gold);font-weight:700;}
 .meta-muted{font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:clamp(11px,1.2vw,13px);margin-top:3px;}
@@ -87,7 +94,8 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="sum-item"><div class="sum-val">0.0%</div><div class="sum-lab">LEG HIT RATE</div></div>
 <div class="sum-item"><div class="sum-val green">0</div><div class="sum-lab">HITS</div></div>
 <div class="sum-item"><div class="sum-val red">0</div><div class="sum-lab">MISSES</div></div>
-<div class="sum-item"><div class="sum-val pend">114</div><div class="sum-lab">PENDING</div></div>
+<div class="sum-item"><div class="sum-val void">0</div><div class="sum-lab">VOID/PUSH</div></div>
+<div class="sum-item"><div class="sum-val pend">114</div><div class="sum-lab">UNGRADED</div></div>
 <div class="sum-item"><div class="sum-val">0</div><div class="sum-lab">PERFECT TICKETS</div></div>
 <div class="sum-item"><div class="sum-val">0</div><div class="sum-lab">TIX W/ MISS</div></div>
 <div class="sum-item"><div class="sum-val sum-val-sm">114</div><div class="sum-lab">TOTAL LEGS</div></div>
@@ -102,7 +110,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 6-Leg (NBA Std+Gob)</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 30.75× · FLEX 20.5×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -173,7 +181,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 5-Leg (NBA Std+Gob)</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -234,7 +242,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 4-Leg (NBA Std+Gob)</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -285,7 +293,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 3-Leg MIX (NBA Std+Gob)</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 6× · FLEX 3×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -324,7 +332,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 3-Leg MIX (NBA Std+Gob)</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 6× · FLEX 3×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -365,7 +373,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 3-Leg STANDARD ONLY (NBA)</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 6× · FLEX 3×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -406,7 +414,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 6-Leg (CBB Std+Gob)</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 20.62× · FLEX 13.75×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -477,7 +485,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 5-Leg (CBB Std+Gob)</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 11× · FLEX 5.5×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -538,7 +546,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 4-Leg (CBB Std+Gob)</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 5.5× · FLEX 3.3×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -589,7 +597,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 3-Leg MIX (CBB Std+Gob)</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 3.3× · FLEX 1.65×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -628,7 +636,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 3-Leg MIX (CBB Std+Gob)</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 3.3× · FLEX 1.65×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -669,7 +677,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 3-Leg STANDARD ONLY (CBB)</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 6× · FLEX 3×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -710,7 +718,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 6-Leg SPORT MIX (NBA+CBB)</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 30.75× · FLEX 20.5×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -781,7 +789,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 5-Leg SPORT MIX (NBA+CBB)</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -842,7 +850,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 4-Leg SPORT MIX (NBA+CBB)</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -893,7 +901,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 3-Leg SPORT MIX (NBA+CBB)</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 6× · FLEX 3×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -932,7 +940,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 3-Leg SPORT MIX (NBA+CBB)</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 6× · FLEX 3×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -973,7 +981,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 6-Leg (NHL Std+Gob)</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 37.5× · FLEX 25×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -1044,7 +1052,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 5-Leg (NHL Std+Gob)</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -1105,7 +1113,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 4-Leg (NHL Std+Gob)</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -1156,7 +1164,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 3-Leg MIX (NHL Std+Gob)</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 6× · FLEX 3×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -1195,7 +1203,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 3-Leg MIX (NHL Std+Gob)</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 6× · FLEX 3×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -1236,7 +1244,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 3-Leg STANDARD ONLY (NHL)</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 6× · FLEX 3×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -1277,7 +1285,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 6-Leg ALL-SPORT MIX</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 30.75× · FLEX 20.5×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -1348,7 +1356,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 5-Leg ALL-SPORT MIX</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -1409,7 +1417,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 4-Leg ALL-SPORT MIX</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -1460,7 +1468,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 3-Leg ALL-SPORT MIX</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 6× · FLEX 3×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -1499,7 +1507,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">FINAL 3-Leg ALL-SPORT MIX</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 6× · FLEX 3×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>

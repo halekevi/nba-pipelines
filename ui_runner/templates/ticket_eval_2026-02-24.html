@@ -18,6 +18,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .sum-val.green{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.35);}
 .sum-val.red{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.35);}
 .sum-val.pend{color:var(--pending);text-shadow:none;}
+.sum-val.void{color:var(--gold2);text-shadow:none;}
 .sum-val-sm{font-size:clamp(18px,2.1vw,24px)!important;}
 .sum-lab{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2.2px;color:var(--muted);text-align:center;line-height:1.2;max-width:11em;}
 .wrap{width:100%;max-width:min(1520px,96vw);margin:0 auto;padding:10px clamp(14px,2.5vw,32px) 0;}
@@ -35,6 +36,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .banner.hit{color:var(--green);border-color:rgba(57,255,110,.45);box-shadow:0 0 16px rgba(57,255,110,.15);}
 .banner.miss{color:var(--red);border-color:rgba(255,77,77,.5);box-shadow:0 0 16px rgba(255,77,77,.12);}
 .banner.pend{color:var(--pending);border-color:rgba(255,255,255,.12);}
+.banner.void{color:var(--gold2);border-color:rgba(240,165,0,.35);}
 @keyframes missRowPulse{0%,100%{box-shadow:0 0 0 1px rgba(255,77,77,0.4),inset 0 0 20px rgba(255,77,77,0.06);}50%{box-shadow:0 0 0 2px rgba(255,77,77,0.65),0 0 22px rgba(255,77,77,0.18),inset 0 0 26px rgba(255,77,77,0.09);}}
 .legrow{font-family:'Share Tech Mono',monospace;display:grid;grid-template-columns:56px 92px minmax(120px,1fr) 44px minmax(240px,1.45fr) minmax(108px,1fr) minmax(96px,1fr) minmax(76px,.85fr);gap:12px;align-items:center;padding:14px clamp(14px,2vw,22px);font-size:clamp(13px,1.45vw,16px);line-height:1.35;border-bottom:1px solid rgba(255,255,255,.06);border-left:3px solid transparent;}
 .legrow:last-child{border-bottom:none;}
@@ -53,10 +55,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .legrow.leg-pend{background:transparent;border-left-color:transparent;}
 .legrow.leg-pend .pl-pend,.legrow.leg-pend .meta-muted{color:var(--pending)!important;}
 .legrow.leg-pend .pill{background:rgba(255,255,255,0.04)!important;border-color:rgba(255,255,255,0.1)!important;color:var(--pending)!important;}
+.legrow.leg-void{background:rgba(240,165,0,0.04);border-left-color:rgba(240,165,0,.55);}
+.legrow.leg-void .pl-void,.legrow.leg-void .meta-muted{color:var(--gold2)!important;}
+.legrow.leg-void .pill{background:rgba(240,165,0,0.07)!important;border-color:rgba(240,165,0,0.28)!important;color:var(--gold2)!important;}
 .badge{font-size:clamp(28px,3.2vw,36px);line-height:1;text-align:center;}
 .badge.hit{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.6);}
 .badge.miss{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.55);}
 .badge.pend{color:var(--pending);text-shadow:none;}
+.badge.void{color:var(--gold2);text-shadow:none;}
 .pill{font-family:'Bebas Neue',sans-serif;font-size:clamp(10px,1.1vw,12px);letter-spacing:1.2px;padding:5px 12px;border-radius:999px;text-transform:uppercase;}
 
 .sport-nba{background:rgba(212,160,23,.12);color:#f0a500;border:1px solid rgba(212,160,23,.35);}
@@ -73,6 +79,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .pl-hit{color:var(--green);text-shadow:0 0 8px rgba(57,255,110,.4);}
 .pl-miss{color:var(--red);}
 .pl-pend{color:var(--pending);}
+.pl-void{color:var(--gold2);}
 .dir-over{color:var(--cyan);font-weight:700;}
 .dir-under{color:var(--gold);font-weight:700;}
 .meta-muted{font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:clamp(11px,1.2vw,13px);margin-top:3px;}
@@ -87,7 +94,8 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="sum-item"><div class="sum-val">23.8%</div><div class="sum-lab">LEG HIT RATE</div></div>
 <div class="sum-item"><div class="sum-val green">30</div><div class="sum-lab">HITS</div></div>
 <div class="sum-item"><div class="sum-val red">96</div><div class="sum-lab">MISSES</div></div>
-<div class="sum-item"><div class="sum-val pend">468</div><div class="sum-lab">PENDING</div></div>
+<div class="sum-item"><div class="sum-val void">232</div><div class="sum-lab">VOID/PUSH</div></div>
+<div class="sum-item"><div class="sum-val pend">236</div><div class="sum-lab">UNGRADED</div></div>
 <div class="sum-item"><div class="sum-val">0</div><div class="sum-lab">PERFECT TICKETS</div></div>
 <div class="sum-item"><div class="sum-val">51</div><div class="sum-lab">TIX W/ MISS</div></div>
 <div class="sum-item"><div class="sum-val sum-val-sm">594</div><div class="sum-lab">TOTAL LEGS</div></div>
@@ -102,36 +110,36 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">NBA Goblin 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">4.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
 </article>
@@ -141,36 +149,36 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">NBA Goblin 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
 </article>
@@ -180,36 +188,36 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">NBA Goblin 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 </article>
@@ -221,46 +229,46 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">NBA Goblin 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">4.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
 </article>
@@ -270,85 +278,85 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">NBA Goblin 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#3</span>
 <span class="tg">NBA Goblin 4-Leg</span>
 <span class="tg">0✓ 1✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 <div class="legrow leg-miss">
@@ -370,105 +378,105 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">NBA Goblin 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">4.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#2</span>
 <span class="tg">NBA Goblin 5-Leg</span>
 <span class="tg">0✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 <div class="legrow leg-miss">
@@ -482,42 +490,42 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra miss-leg-cell">4.92</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#3</span>
 <span class="tg">NBA Goblin 5-Leg</span>
 <span class="tg">0✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 <div class="legrow leg-miss">
@@ -530,75 +538,75 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">6</div>
 <div class="leg-extra miss-leg-cell">4.92</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">3.04</div>
 </div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">NBA Goblin 6-Leg</h2>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">NBA Goblin 6-Leg</span>
 <span class="tg">0✓ 1✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">4.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 <div class="legrow leg-miss">
@@ -612,42 +620,42 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra miss-leg-cell">4.92</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#2</span>
 <span class="tg">NBA Goblin 6-Leg</span>
 <span class="tg">0✓ 1✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 <div class="legrow leg-miss">
@@ -660,43 +668,43 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">6</div>
 <div class="leg-extra miss-leg-cell">4.92</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">3.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Joel Embiid</div>
+<div class="pl-void">Joel Embiid</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">PHI vs IND</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">5</div>
+<div class="leg-extra pl-void">5</div>
 <div class="leg-extra">2.72</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#3</span>
 <span class="tg">NBA Goblin 6-Leg</span>
 <span class="tg">0✓ 2✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 2</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
 <div class="legrow leg-miss">
@@ -709,14 +717,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">3</div>
 <div class="leg-extra miss-leg-cell">3</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 <div class="legrow leg-miss">
@@ -729,24 +737,24 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">6</div>
 <div class="leg-extra miss-leg-cell">4.92</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">3.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Joel Embiid</div>
+<div class="pl-void">Joel Embiid</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">PHI vs IND</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">5</div>
+<div class="leg-extra pl-void">5</div>
 <div class="leg-extra">2.72</div>
 </div>
 </article>
@@ -791,22 +799,22 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra">16.34</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#2</span>
 <span class="tg">NBA Standard 3-Leg</span>
 <span class="tg">1✓ 1✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">15.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">8.9</div>
 </div>
 <div class="legrow leg-miss">
@@ -920,22 +928,22 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra miss-leg-cell">3.92</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#2</span>
 <span class="tg">NBA Standard 4-Leg</span>
 <span class="tg">1✓ 2✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 2</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">15.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">8.9</div>
 </div>
 <div class="legrow leg-miss">
@@ -1079,22 +1087,22 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra miss-leg-cell">7.35</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#2</span>
 <span class="tg">NBA Standard 5-Leg</span>
 <span class="tg">1✓ 3✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 3</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">15.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">8.9</div>
 </div>
 <div class="legrow leg-miss">
@@ -1268,22 +1276,22 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra">15.51</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#2</span>
 <span class="tg">NBA Standard 6-Leg</span>
 <span class="tg">2✓ 3✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 3</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">15.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">8.9</div>
 </div>
 <div class="legrow leg-miss">
@@ -1414,65 +1422,65 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">NBA Demon 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">0</div>
+<div class="leg-extra pl-void">0</div>
 <div class="leg-extra">2.66</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Grant Williams</div>
+<div class="pl-void">Grant Williams</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">3</div>
+<div class="leg-extra pl-void">3</div>
 <div class="leg-extra">1.88</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">0</div>
+<div class="leg-extra pl-void">0</div>
 <div class="leg-extra">0.97</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#2</span>
 <span class="tg">NBA Demon 3-Leg</span>
 <span class="tg">0✓ 1✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Grant Williams</div>
+<div class="pl-void">Grant Williams</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">3</div>
+<div class="leg-extra pl-void">3</div>
 <div class="leg-extra">1.88</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">0</div>
+<div class="leg-extra pl-void">0</div>
 <div class="leg-extra">0.97</div>
 </div>
 <div class="legrow leg-miss">
@@ -1486,22 +1494,22 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra miss-leg-cell">8.67</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#3</span>
 <span class="tg">NBA Demon 3-Leg</span>
 <span class="tg">0✓ 1✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">0</div>
+<div class="leg-extra pl-void">0</div>
 <div class="leg-extra">0.97</div>
 </div>
 <div class="legrow leg-miss">
@@ -1514,14 +1522,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">17</div>
 <div class="leg-extra miss-leg-cell">8.67</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Joel Embiid</div>
+<div class="pl-void">Joel Embiid</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">PHI vs IND</div></div>
 <div class="leg-extra">29.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">3.96</div>
 </div>
 </article>
@@ -1533,75 +1541,75 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">NBA Demon 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">0</div>
+<div class="leg-extra pl-void">0</div>
 <div class="leg-extra">2.66</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Grant Williams</div>
+<div class="pl-void">Grant Williams</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">3</div>
+<div class="leg-extra pl-void">3</div>
 <div class="leg-extra">1.88</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">0</div>
+<div class="leg-extra pl-void">0</div>
 <div class="leg-extra">0.97</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Joel Embiid</div>
+<div class="pl-void">Joel Embiid</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">PHI vs IND</div></div>
 <div class="leg-extra">29.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">3.96</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#2</span>
 <span class="tg">NBA Demon 4-Leg</span>
 <span class="tg">0✓ 1✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Grant Williams</div>
+<div class="pl-void">Grant Williams</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">3</div>
+<div class="leg-extra pl-void">3</div>
 <div class="leg-extra">1.88</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">0</div>
+<div class="leg-extra pl-void">0</div>
 <div class="leg-extra">0.97</div>
 </div>
 <div class="legrow leg-miss">
@@ -1614,33 +1622,33 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">17</div>
 <div class="leg-extra miss-leg-cell">8.67</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Joel Embiid</div>
+<div class="pl-void">Joel Embiid</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">PHI vs IND</div></div>
 <div class="leg-extra">29.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">3.96</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#3</span>
 <span class="tg">NBA Demon 4-Leg</span>
 <span class="tg">0✓ 2✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 2</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">0</div>
+<div class="leg-extra pl-void">0</div>
 <div class="leg-extra">0.97</div>
 </div>
 <div class="legrow leg-miss">
@@ -1653,14 +1661,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">17</div>
 <div class="leg-extra miss-leg-cell">8.67</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Joel Embiid</div>
+<div class="pl-void">Joel Embiid</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">PHI vs IND</div></div>
 <div class="leg-extra">29.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">3.96</div>
 </div>
 <div class="legrow leg-miss">
@@ -1682,85 +1690,85 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">NBA Demon 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">0</div>
+<div class="leg-extra pl-void">0</div>
 <div class="leg-extra">2.66</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Grant Williams</div>
+<div class="pl-void">Grant Williams</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">3</div>
+<div class="leg-extra pl-void">3</div>
 <div class="leg-extra">1.88</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">0</div>
+<div class="leg-extra pl-void">0</div>
 <div class="leg-extra">0.97</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Joel Embiid</div>
+<div class="pl-void">Joel Embiid</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">PHI vs IND</div></div>
 <div class="leg-extra">29.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">3.96</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Nikola Vučević</div>
+<div class="pl-void">Nikola Vučević</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">BOS vs PHX</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.26</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#2</span>
 <span class="tg">NBA Demon 5-Leg</span>
 <span class="tg">0✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Grant Williams</div>
+<div class="pl-void">Grant Williams</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">3</div>
+<div class="leg-extra pl-void">3</div>
 <div class="leg-extra">1.88</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">0</div>
+<div class="leg-extra pl-void">0</div>
 <div class="leg-extra">0.97</div>
 </div>
 <div class="legrow leg-miss">
@@ -1773,43 +1781,43 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">17</div>
 <div class="leg-extra miss-leg-cell">8.67</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Joel Embiid</div>
+<div class="pl-void">Joel Embiid</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">PHI vs IND</div></div>
 <div class="leg-extra">29.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">3.96</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Nikola Vučević</div>
+<div class="pl-void">Nikola Vučević</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">BOS vs PHX</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.26</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#3</span>
 <span class="tg">NBA Demon 5-Leg</span>
 <span class="tg">0✓ 2✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 2</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">0</div>
+<div class="leg-extra pl-void">0</div>
 <div class="leg-extra">0.97</div>
 </div>
 <div class="legrow leg-miss">
@@ -1822,14 +1830,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">17</div>
 <div class="leg-extra miss-leg-cell">8.67</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Joel Embiid</div>
+<div class="pl-void">Joel Embiid</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">PHI vs IND</div></div>
 <div class="leg-extra">29.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">3.96</div>
 </div>
 <div class="legrow leg-miss">
@@ -1842,14 +1850,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">6</div>
 <div class="leg-extra miss-leg-cell">2.92</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Nikola Vučević</div>
+<div class="pl-void">Nikola Vučević</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">BOS vs PHX</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.26</div>
 </div>
 </article>
@@ -1861,56 +1869,56 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">NBA Demon 6-Leg</span>
 <span class="tg">1✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">0</div>
+<div class="leg-extra pl-void">0</div>
 <div class="leg-extra">2.66</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Grant Williams</div>
+<div class="pl-void">Grant Williams</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">3</div>
+<div class="leg-extra pl-void">3</div>
 <div class="leg-extra">1.88</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">0</div>
+<div class="leg-extra pl-void">0</div>
 <div class="leg-extra">0.97</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Joel Embiid</div>
+<div class="pl-void">Joel Embiid</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">PHI vs IND</div></div>
 <div class="leg-extra">29.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">3.96</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Nikola Vučević</div>
+<div class="pl-void">Nikola Vučević</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">BOS vs PHX</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.26</div>
 </div>
 <div class="legrow leg-hit">
@@ -1924,32 +1932,32 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra">2.89</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#2</span>
 <span class="tg">NBA Demon 6-Leg</span>
 <span class="tg">1✓ 1✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Grant Williams</div>
+<div class="pl-void">Grant Williams</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">3</div>
+<div class="leg-extra pl-void">3</div>
 <div class="leg-extra">1.88</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">0</div>
+<div class="leg-extra pl-void">0</div>
 <div class="leg-extra">0.97</div>
 </div>
 <div class="legrow leg-miss">
@@ -1962,24 +1970,24 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">17</div>
 <div class="leg-extra miss-leg-cell">8.67</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Joel Embiid</div>
+<div class="pl-void">Joel Embiid</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">PHI vs IND</div></div>
 <div class="leg-extra">29.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">3.96</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Nikola Vučević</div>
+<div class="pl-void">Nikola Vučević</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">BOS vs PHX</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.26</div>
 </div>
 <div class="legrow leg-hit">
@@ -1993,22 +2001,22 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra">2.89</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#3</span>
 <span class="tg">NBA Demon 6-Leg</span>
 <span class="tg">1✓ 2✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 2</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Free Throws Made</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">0</div>
+<div class="leg-extra pl-void">0</div>
 <div class="leg-extra">0.97</div>
 </div>
 <div class="legrow leg-miss">
@@ -2021,14 +2029,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">17</div>
 <div class="leg-extra miss-leg-cell">8.67</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Joel Embiid</div>
+<div class="pl-void">Joel Embiid</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">PHI vs IND</div></div>
 <div class="leg-extra">29.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">3.96</div>
 </div>
 <div class="legrow leg-miss">
@@ -2041,14 +2049,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">6</div>
 <div class="leg-extra miss-leg-cell">2.92</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Nikola Vučević</div>
+<div class="pl-void">Nikola Vučević</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">BOS vs PHX</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">2.26</div>
 </div>
 <div class="legrow leg-hit">
@@ -2070,36 +2078,36 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">NBA Mix Mix 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">4.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
 </article>
@@ -2109,36 +2117,36 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">NBA Mix Mix 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
 </article>
@@ -2148,36 +2156,36 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">NBA Mix Mix 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 </article>
@@ -2189,46 +2197,46 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">NBA Mix Mix 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">4.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
 </article>
@@ -2238,85 +2246,85 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">NBA Mix Mix 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#3</span>
 <span class="tg">NBA Mix Mix 4-Leg</span>
 <span class="tg">0✓ 1✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 <div class="legrow leg-miss">
@@ -2338,105 +2346,105 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">NBA Mix Mix 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">4.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#2</span>
 <span class="tg">NBA Mix Mix 5-Leg</span>
 <span class="tg">0✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 <div class="legrow leg-miss">
@@ -2450,42 +2458,42 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra miss-leg-cell">4.92</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#3</span>
 <span class="tg">NBA Mix Mix 5-Leg</span>
 <span class="tg">0✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 <div class="legrow leg-miss">
@@ -2498,75 +2506,75 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">6</div>
 <div class="leg-extra miss-leg-cell">4.92</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">3.04</div>
 </div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">NBA Mix Mix 6-Leg</h2>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">NBA Mix Mix 6-Leg</span>
 <span class="tg">0✓ 1✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">4.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 <div class="legrow leg-miss">
@@ -2580,42 +2588,42 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra miss-leg-cell">4.92</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#2</span>
 <span class="tg">NBA Mix Mix 6-Leg</span>
 <span class="tg">0✓ 1✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 <div class="legrow leg-miss">
@@ -2628,43 +2636,43 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">6</div>
 <div class="leg-extra miss-leg-cell">4.92</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">3.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Joel Embiid</div>
+<div class="pl-void">Joel Embiid</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">PHI vs IND</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">5</div>
+<div class="leg-extra pl-void">5</div>
 <div class="leg-extra">2.72</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#3</span>
 <span class="tg">NBA Mix Mix 6-Leg</span>
 <span class="tg">0✓ 2✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 2</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
 <div class="legrow leg-miss">
@@ -2677,14 +2685,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">3</div>
 <div class="leg-extra miss-leg-cell">3</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 <div class="legrow leg-miss">
@@ -2697,24 +2705,24 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">6</div>
 <div class="leg-extra miss-leg-cell">4.92</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">3.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Joel Embiid</div>
+<div class="pl-void">Joel Embiid</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">PHI vs IND</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">5</div>
+<div class="leg-extra pl-void">5</div>
 <div class="leg-extra">2.72</div>
 </div>
 </article>
@@ -2726,7 +2734,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Goblin 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -2765,7 +2773,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Goblin 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -2804,7 +2812,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Goblin 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -2845,7 +2853,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Goblin 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -2894,7 +2902,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Goblin 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -2943,7 +2951,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Goblin 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -2994,7 +3002,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Goblin 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3053,7 +3061,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Goblin 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3112,7 +3120,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Goblin 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3173,7 +3181,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Goblin 6-Leg</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3242,7 +3250,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Goblin 6-Leg</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3311,7 +3319,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Goblin 6-Leg</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3382,7 +3390,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Standard 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3421,7 +3429,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Standard 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3460,7 +3468,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Standard 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3501,7 +3509,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Standard 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3550,7 +3558,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Standard 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3599,7 +3607,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Standard 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3650,7 +3658,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Standard 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3709,7 +3717,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Standard 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3768,7 +3776,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Standard 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3829,7 +3837,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Standard 6-Leg</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3898,7 +3906,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Standard 6-Leg</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -3967,7 +3975,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Standard 6-Leg</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -4038,16 +4046,16 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Demon 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-cbb">CBB</span></div>
-<div class="pl-pend">Tre Carroll</div>
+<div class="pl-void">Tre Carroll</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Turnovers</div><div class="meta-muted">XAV vs PROV</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1</div>
 </div>
 <div class="legrow leg-pend">
@@ -4077,7 +4085,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Demon 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -4116,7 +4124,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Demon 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -4157,16 +4165,16 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Demon 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-cbb">CBB</span></div>
-<div class="pl-pend">Tre Carroll</div>
+<div class="pl-void">Tre Carroll</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Turnovers</div><div class="meta-muted">XAV vs PROV</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1</div>
 </div>
 <div class="legrow leg-pend">
@@ -4206,7 +4214,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Demon 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -4255,7 +4263,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Demon 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -4306,16 +4314,16 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Demon 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-cbb">CBB</span></div>
-<div class="pl-pend">Tre Carroll</div>
+<div class="pl-void">Tre Carroll</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Turnovers</div><div class="meta-muted">XAV vs PROV</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1</div>
 </div>
 <div class="legrow leg-pend">
@@ -4365,7 +4373,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Demon 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -4424,7 +4432,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Demon 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -4485,16 +4493,16 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Demon 6-Leg</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-cbb">CBB</span></div>
-<div class="pl-pend">Tre Carroll</div>
+<div class="pl-void">Tre Carroll</div>
 <div class="tier">D</div>
 <div class="leg-prop-col"><div>Turnovers</div><div class="meta-muted">XAV vs PROV</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1</div>
 </div>
 <div class="legrow leg-pend">
@@ -4554,7 +4562,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Demon 6-Leg</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -4623,7 +4631,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Demon 6-Leg</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -4694,7 +4702,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Mix Mix 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -4733,7 +4741,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Mix Mix 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -4772,7 +4780,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Mix Mix 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -4813,7 +4821,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Mix Mix 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -4862,7 +4870,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Mix Mix 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -4911,7 +4919,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Mix Mix 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -4962,7 +4970,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Mix Mix 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -5021,7 +5029,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Mix Mix 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -5080,7 +5088,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Mix Mix 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -5141,7 +5149,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Mix Mix 6-Leg</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -5210,7 +5218,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Mix Mix 6-Leg</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -5279,7 +5287,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">CBB Mix Mix 6-Leg</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -5350,36 +5358,36 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">COMBO Mix 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">4.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
 </article>
@@ -5389,36 +5397,36 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">COMBO Mix 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
 </article>
@@ -5428,36 +5436,36 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">COMBO Mix 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">5.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">9.5</div>
 </div>
 </article>
@@ -5469,46 +5477,46 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">COMBO Mix 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">4.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
 </article>
@@ -5518,46 +5526,46 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">COMBO Mix 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">5.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">9.5</div>
 </div>
 </article>
@@ -5567,46 +5575,46 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">COMBO Mix 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">5.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">9.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">3.04</div>
 </div>
 </article>
@@ -5618,105 +5626,105 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">COMBO Mix 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">4.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">5.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">9.5</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#2</span>
 <span class="tg">COMBO Mix 5-Leg</span>
 <span class="tg">0✓ 1✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">5.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">9.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">3.04</div>
 </div>
 <div class="legrow leg-miss">
@@ -5730,13 +5738,13 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra miss-leg-cell">4.92</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#3</span>
 <span class="tg">COMBO Mix 5-Leg</span>
 <span class="tg">0✓ 2✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 2</span>
 </div>
 <div class="legrow leg-miss">
 <div class="badge miss">✗</div>
@@ -5748,34 +5756,34 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">3</div>
 <div class="leg-extra miss-leg-cell">3</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">5.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">9.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">3.04</div>
 </div>
 <div class="legrow leg-miss">
@@ -5791,62 +5799,62 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">COMBO Mix 6-Leg</h2>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">COMBO Mix 6-Leg</span>
 <span class="tg">0✓ 1✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">4.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">5.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">9.5</div>
 </div>
 <div class="legrow leg-miss">
@@ -5860,52 +5868,52 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra miss-leg-cell">4.92</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#2</span>
 <span class="tg">COMBO Mix 6-Leg</span>
 <span class="tg">0✓ 1✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 1</span>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">5.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">9.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">3.04</div>
 </div>
 <div class="legrow leg-miss">
@@ -5918,24 +5926,24 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">6</div>
 <div class="leg-extra miss-leg-cell">4.92</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Joel Embiid</div>
+<div class="pl-void">Joel Embiid</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">PHI vs IND</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">5</div>
+<div class="leg-extra pl-void">5</div>
 <div class="leg-extra">2.72</div>
 </div>
 </article>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#3</span>
 <span class="tg">COMBO Mix 6-Leg</span>
 <span class="tg">0✓ 2✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner miss">MISSED 2</span>
 </div>
 <div class="legrow leg-miss">
 <div class="badge miss">✗</div>
@@ -5947,34 +5955,34 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">3</div>
 <div class="leg-extra miss-leg-cell">3</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">5.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">9.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">3.04</div>
 </div>
 <div class="legrow leg-miss">
@@ -5987,14 +5995,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">6</div>
 <div class="leg-extra miss-leg-cell">4.92</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Joel Embiid</div>
+<div class="pl-void">Joel Embiid</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Assists</div><div class="meta-muted">PHI vs IND</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">5</div>
+<div class="leg-extra pl-void">5</div>
 <div class="leg-extra">2.72</div>
 </div>
 </article>
@@ -6006,7 +6014,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Standard 3-Leg</span>
 <span class="tg">0✓ 2✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6045,7 +6053,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Standard 3-Leg</span>
 <span class="tg">0✓ 1✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6057,14 +6065,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.6665</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">15.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">8.9</div>
 </div>
 <div class="legrow leg-miss">
@@ -6084,7 +6092,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Standard 3-Leg</span>
 <span class="tg">0✓ 2✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6125,7 +6133,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Standard 4-Leg</span>
 <span class="tg">1✓ 2✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6174,7 +6182,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Standard 4-Leg</span>
 <span class="tg">1✓ 1✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6186,14 +6194,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.6665</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">15.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">8.9</div>
 </div>
 <div class="legrow leg-miss">
@@ -6223,7 +6231,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Standard 4-Leg</span>
 <span class="tg">1✓ 2✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6274,7 +6282,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Standard 5-Leg</span>
 <span class="tg">1✓ 3✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6333,7 +6341,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Standard 5-Leg</span>
 <span class="tg">1✓ 2✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6345,14 +6353,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.6665</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">15.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">8.9</div>
 </div>
 <div class="legrow leg-miss">
@@ -6392,7 +6400,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Standard 5-Leg</span>
 <span class="tg">1✓ 3✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6453,7 +6461,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Standard 6-Leg</span>
 <span class="tg">2✓ 3✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6522,7 +6530,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Standard 6-Leg</span>
 <span class="tg">2✓ 2✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6534,14 +6542,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.6665</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">15.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">8.9</div>
 </div>
 <div class="legrow leg-miss">
@@ -6591,7 +6599,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Standard 6-Leg</span>
 <span class="tg">2✓ 3✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6662,7 +6670,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Goblin 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6674,24 +6682,24 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">4.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
 </article>
@@ -6701,7 +6709,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Goblin 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6713,24 +6721,24 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
 </article>
@@ -6740,7 +6748,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Goblin 3-Leg</span>
 <span class="tg">0✓ 0✗ / 3</span>
 <span class="payout">PWR 4.37× · FLEX 1.73×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6752,24 +6760,24 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
 </article>
@@ -6781,7 +6789,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Goblin 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6793,34 +6801,34 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">4.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
 </article>
@@ -6830,7 +6838,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Goblin 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6842,34 +6850,34 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
 </article>
@@ -6879,7 +6887,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Goblin 4-Leg</span>
 <span class="tg">0✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6891,34 +6899,34 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 </article>
@@ -6930,7 +6938,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Goblin 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -6942,44 +6950,44 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">4.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
 </article>
@@ -6989,7 +6997,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Goblin 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -7001,44 +7009,44 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 </article>
@@ -7048,7 +7056,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Goblin 5-Leg</span>
 <span class="tg">0✓ 0✗ / 5</span>
 <span class="payout">PWR 20× · FLEX 10×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -7060,44 +7068,44 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">3.04</div>
 </div>
 </article>
@@ -7109,7 +7117,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Goblin 6-Leg</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -7121,54 +7129,54 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">4.04</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Sion James</div>
+<div class="pl-void">Sion James</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">2.62</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
 </article>
@@ -7178,7 +7186,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Goblin 6-Leg</span>
 <span class="tg">0✓ 1✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -7190,44 +7198,44 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">4.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Coby White</div>
+<div class="pl-void">Coby White</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">13</div>
+<div class="leg-extra pl-void">13</div>
 <div class="leg-extra">12.9</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">3.04</div>
 </div>
 <div class="legrow leg-miss">
@@ -7247,7 +7255,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="tg">MIX Goblin 6-Leg</span>
 <span class="tg">0✓ 2✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 16×</span>
-<span class="banner pend">PENDING</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
@@ -7269,34 +7277,34 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="leg-extra val-miss miss-leg-cell">3</div>
 <div class="leg-extra miss-leg-cell">3</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Gui Santos</div>
+<div class="pl-void">Gui Santos</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Steals</div><div class="meta-muted">GSW vs NOP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">2</div>
+<div class="leg-extra pl-void">2</div>
 <div class="leg-extra">1.16</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Jonathan Kuminga</div>
+<div class="pl-void">Jonathan Kuminga</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">ATL vs WAS</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">27</div>
+<div class="leg-extra pl-void">27</div>
 <div class="leg-extra">7.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Ryan Kalkbrenner</div>
+<div class="pl-void">Ryan Kalkbrenner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">CHA vs CHI</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">1</div>
+<div class="leg-extra pl-void">1</div>
 <div class="leg-extra">3.04</div>
 </div>
 <div class="legrow leg-miss">
