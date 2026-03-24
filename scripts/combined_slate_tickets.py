@@ -1263,7 +1263,7 @@ html[data-theme="light"] .ticket{
   <strong>min_edge:</strong> {filters.get('min_edge',0)} &nbsp;
   <strong>min_rank:</strong> {filters.get('min_rank','None')} &nbsp;
   <strong>pick_types:</strong> {filters.get('pick_types','ALL')}
-  &nbsp;&nbsp;<a href="tickets_latest.json" style="color:var(--cyan);">⬇ JSON</a>
+  &nbsp;&nbsp;<a href="/tickets_latest.json" style="color:var(--cyan);">⬇ JSON</a>
 </div>
 <div class="filter-pill" style="margin-top:-12px;">
   Quick read: <strong>STRONG</strong> means direction aligns with context (defense + pace + sample), <strong>LEAN</strong> means partial alignment, <strong>RISKY</strong> means weak context support.

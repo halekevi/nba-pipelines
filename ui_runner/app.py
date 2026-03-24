@@ -314,15 +314,35 @@ def home():
     return render_template("index.html", config=load_config())
 
 
+def _no_store_headers(resp):
+    resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    resp.headers["Pragma"] = "no-cache"
+    resp.headers["Expires"] = "0"
+    return resp
+
+
+@app.get("/tickets_latest.json")
+def serve_tickets_latest_json():
+    """Expose JSON at site root so the link on /tickets works (relative URLs break under /tickets)."""
+    path = TEMPLATES_DIR / "tickets_latest.json"
+    if not path.exists():
+        abort(404)
+    return _no_store_headers(
+        send_from_directory(str(TEMPLATES_DIR), "tickets_latest.json", mimetype="application/json")
+    )
+
+
 @app.get("/tickets")
 def page_tickets():
     """
     Render tickets HTML from tickets_latest.json on every request so Railway/UI
     never serves a stale static HTML shell that omits ticket groups.
+    Falls back to bundled tickets_latest.html if the renderer import fails (e.g. slim deps).
     """
     import importlib.util
 
     json_path = TEMPLATES_DIR / "tickets_latest.json"
+    html_static = TEMPLATES_DIR / "tickets_latest.html"
     if not json_path.exists():
         return "tickets_latest.json not found. Run the pipeline with --write-web first.", 404
     try:
@@ -331,19 +351,26 @@ def page_tickets():
         return f"Invalid tickets_latest.json: {e}", 500
 
     cst_path = BASE_DIR / "scripts" / "combined_slate_tickets.py"
-    if not cst_path.exists():
-        return "scripts/combined_slate_tickets.py not found in repo.", 500
-    spec = importlib.util.spec_from_file_location("combined_slate_tickets", cst_path)
-    if spec is None or spec.loader is None:
-        return "Could not load combined_slate_tickets module.", 500
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    html = mod.render_tickets_html(payload)
-    r = make_response(html)
-    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
-    r.headers["Pragma"] = "no-cache"
-    r.headers["Expires"] = "0"
-    return r
+    try:
+        if not cst_path.exists():
+            raise FileNotFoundError("scripts/combined_slate_tickets.py not in repo")
+        spec = importlib.util.spec_from_file_location("combined_slate_tickets", cst_path)
+        if spec is None or spec.loader is None:
+            raise RuntimeError("could not load combined_slate_tickets spec")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        html = mod.render_tickets_html(payload)
+    except Exception:
+        if html_static.exists():
+            return _no_store_headers(
+                send_from_directory(str(TEMPLATES_DIR), "tickets_latest.html")
+            )
+        return (
+            "Could not render tickets (import/renderer error) and tickets_latest.html is missing.",
+            500,
+        )
+
+    return _no_store_headers(make_response(html))
 
 
 @app.get("/payout")
