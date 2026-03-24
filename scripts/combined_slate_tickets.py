@@ -204,6 +204,7 @@ def calc_adjusted_payout(base_payout: float, legs: list) -> float:
 # Min hit rate required per leg depending on ticket length
 # Longer tickets need higher floor because win prob = product of all hit rates
 LEG_MIN_HIT_RATE = {
+    2: 0.55,   # 2-leg
     3: 0.58,   # 3-leg: 0.58^3 = 19.5% win prob floor
     4: 0.62,   # 4-leg: 0.62^4 = 14.8% win prob floor
     5: 0.65,   # 5-leg: 0.65^5 = 11.6% win prob floor
@@ -212,6 +213,7 @@ LEG_MIN_HIT_RATE = {
 
 # Min tier per leg count for Power mode tickets
 POWER_MIN_TIER = {
+    2: ["A", "B", "C", "D"],
     3: ["A", "B", "C"],   # 3-leg power: Tier A/B/C ok
     4: ["A", "B", "C"],   # 4-leg power: Tier A/B/C ok
     5: ["A", "B"],         # 5-leg power: Tier A/B only
@@ -220,11 +222,16 @@ POWER_MIN_TIER = {
 
 # Cap fantasy-score concentration per ticket so slips are more diversified.
 MAX_FANTASY_LEGS = {
+    2: 1,
     3: 1,
     4: 2,
     5: 2,
     6: 2,
 }
+
+# Ticket leg counts written to workbook + FINAL web payload
+TICKET_LEG_SIZES = [2, 3, 4, 5, 6]
+MIN_TICKET_POOL = min(TICKET_LEG_SIZES)
 
 
 def _is_fantasy_prop(row: pd.Series) -> bool:
@@ -2504,181 +2511,120 @@ def build_final_web_ticket_groups(nba_pool: pd.DataFrame, cbb_pool: pd.DataFrame
             mask &= df["rank_score"].fillna(-99) >= min_rank
         return df[mask].copy()
 
-    # ── NBA groups ─────────────────────────────────────────────────────────────
+    def _split_sg(df_f: pd.DataFrame):
+        if df_f is None or len(df_f) == 0:
+            empty = pd.DataFrame()
+            return empty, empty, empty
+        if "pick_type" not in df_f.columns:
+            return df_f.copy(), df_f.copy(), df_f.iloc[0:0].copy()
+        mix = df_f[df_f["pick_type"].isin(["Standard", "Goblin"])].copy()
+        std = df_f[df_f["pick_type"] == "Standard"].copy()
+        gob = df_f[df_f["pick_type"] == "Goblin"].copy()
+        return mix, std, gob
+
+    def _min_std_mixed(n: int) -> int:
+        return 2 if n >= 4 else 1
+
+    def _sort_rank(df: pd.DataFrame) -> pd.DataFrame:
+        if df is None or len(df) == 0 or "rank_score" not in df.columns:
+            return df
+        return df.sort_values("rank_score", ascending=False, na_position="last")
+
     nba_filtered = apply_filters(nba_pool)
-    nba_mix = nba_filtered[nba_filtered["pick_type"].isin(["Standard", "Goblin"])].copy()
-    nba_std = nba_filtered[nba_filtered["pick_type"].isin(["Standard"])].copy()
+    nba_mix, nba_std, nba_gob = _split_sg(nba_filtered)
 
     groups = []
 
-    if len(nba_mix) >= 6:
-        t6 = build_mixed_picktype_tickets(nba_mix, 6, max_tickets=1, min_standard=2)
-        if t6:
-            groups.append(("FINAL 6-Leg (NBA Std+Gob)", t6, None))
+    def _add_mixed_std_gob(sub: pd.DataFrame, label: str):
+        for n in TICKET_LEG_SIZES:
+            if len(sub) < n:
+                continue
+            mt = 2 if n == 3 else 1
+            tix = build_mixed_picktype_tickets(sub, n, max_tickets=mt, min_standard=_min_std_mixed(n))
+            if tix:
+                groups.append((f"FINAL {n}-Leg (Std+Gob {label})", tix, None))
 
-    if len(nba_mix) >= 5:
-        t5 = build_mixed_picktype_tickets(nba_mix, 5, max_tickets=1, min_standard=2)
-        if t5:
-            groups.append(("FINAL 5-Leg (NBA Std+Gob)", t5, None))
+    def _add_std_only(sub: pd.DataFrame, label: str):
+        for n in TICKET_LEG_SIZES:
+            if len(sub) < n:
+                continue
+            tix = build_tickets(sub, n, max_tickets=1)
+            if tix:
+                groups.append((f"FINAL {n}-Leg STANDARD ONLY ({label})", tix, None))
 
-    if len(nba_mix) >= 4:
-        t4 = build_mixed_picktype_tickets(nba_mix, 4, max_tickets=1, min_standard=2)
-        if t4:
-            groups.append(("FINAL 4-Leg (NBA Std+Gob)", t4, None))
+    def _add_gob_only(sub: pd.DataFrame, label: str):
+        for n in TICKET_LEG_SIZES:
+            if len(sub) < n:
+                continue
+            tix = build_tickets(sub, n, max_tickets=1)
+            if tix:
+                groups.append((f"FINAL {n}-Leg GOBLIN ONLY ({label})", tix, None))
 
-    if len(nba_mix) >= 3:
-        t3 = build_mixed_picktype_tickets(nba_mix, 3, max_tickets=2, min_standard=1)
-        if t3:
-            groups.append(("FINAL 3-Leg MIX (NBA Std+Gob)", t3, None))
+    _add_mixed_std_gob(nba_mix, "NBA")
+    _add_std_only(nba_std, "NBA")
+    _add_gob_only(nba_gob, "NBA")
 
-    if len(nba_std) >= 3:
-        groups.append(("FINAL 3-Leg STANDARD ONLY (NBA)", build_tickets(nba_std, 3, max_tickets=1), None))
-
-    # ── CBB groups ─────────────────────────────────────────────────────────────
+    cbb_mix = cbb_std = cbb_gob = pd.DataFrame()
     if cbb_pool is not None and len(cbb_pool):
-        cbb_filtered = apply_filters(cbb_pool)
-        cbb_mix = cbb_filtered[cbb_filtered["pick_type"].isin(["Standard", "Goblin"])].copy() \
-            if "pick_type" in cbb_filtered.columns else cbb_filtered.copy()
-        cbb_std = cbb_filtered[cbb_filtered["pick_type"].isin(["Standard"])].copy() \
-            if "pick_type" in cbb_filtered.columns else cbb_filtered.copy()
+        cbb_f = apply_filters(cbb_pool)
+        cbb_mix, cbb_std, cbb_gob = _split_sg(cbb_f)
+        _add_mixed_std_gob(cbb_mix, "CBB")
+        _add_std_only(cbb_std, "CBB")
+        _add_gob_only(cbb_gob, "CBB")
+        combo_ncaa = pd.concat([nba_mix, cbb_mix], ignore_index=True)
+        _add_mixed_std_gob(combo_ncaa, "NBA+CBB")
+        _add_std_only(pd.concat([nba_std, cbb_std], ignore_index=True), "NBA+CBB")
+        if len(nba_gob) or len(cbb_gob):
+            _add_gob_only(pd.concat([nba_gob, cbb_gob], ignore_index=True), "NBA+CBB")
 
-        if len(cbb_mix) >= 6:
-            t6 = build_mixed_picktype_tickets(cbb_mix, 6, max_tickets=1, min_standard=2)
-            if t6:
-                groups.append(("FINAL 6-Leg (CBB Std+Gob)", t6, None))
-
-        if len(cbb_mix) >= 5:
-            t5 = build_mixed_picktype_tickets(cbb_mix, 5, max_tickets=1, min_standard=2)
-            if t5:
-                groups.append(("FINAL 5-Leg (CBB Std+Gob)", t5, None))
-
-        if len(cbb_mix) >= 4:
-            t4 = build_mixed_picktype_tickets(cbb_mix, 4, max_tickets=1, min_standard=2)
-            if t4:
-                groups.append(("FINAL 4-Leg (CBB Std+Gob)", t4, None))
-
-        if len(cbb_mix) >= 3:
-            t3 = build_mixed_picktype_tickets(cbb_mix, 3, max_tickets=2, min_standard=1)
-            if t3:
-                groups.append(("FINAL 3-Leg MIX (CBB Std+Gob)", t3, None))
-
-        if len(cbb_std) >= 3:
-            groups.append(("FINAL 3-Leg STANDARD ONLY (CBB)", build_tickets(cbb_std, 3, max_tickets=1), None))
-
-    # ── NBA + CBB SPORT MIX groups ─────────────────────────────────────────────
-    if cbb_pool is not None and len(cbb_pool):
-        cbb_filtered = apply_filters(cbb_pool)
-        cbb_mix_combo = cbb_filtered[cbb_filtered["pick_type"].isin(["Standard", "Goblin"])].copy() \
-            if "pick_type" in cbb_filtered.columns else cbb_filtered.copy()
-        combo = pd.concat([nba_mix, cbb_mix_combo], ignore_index=True)
-
-        if len(combo) >= 6:
-            t6 = build_mixed_picktype_tickets(combo, 6, max_tickets=1, min_standard=2)
-            if t6:
-                groups.append(("FINAL 6-Leg SPORT MIX (NBA+CBB)", t6, None))
-
-        if len(combo) >= 5:
-            t5 = build_mixed_picktype_tickets(combo, 5, max_tickets=1, min_standard=2)
-            if t5:
-                groups.append(("FINAL 5-Leg SPORT MIX (NBA+CBB)", t5, None))
-
-        if len(combo) >= 4:
-            t4 = build_mixed_picktype_tickets(combo, 4, max_tickets=1, min_standard=2)
-            if t4:
-                groups.append(("FINAL 4-Leg SPORT MIX (NBA+CBB)", t4, None))
-
-        if len(combo) >= 3:
-            t3 = build_mixed_picktype_tickets(combo, 3, max_tickets=2, min_standard=1)
-            if t3:
-                groups.append(("FINAL 3-Leg SPORT MIX (NBA+CBB)", t3, None))
-
-    # ── NHL groups ─────────────────────────────────────────────────────────────
+    nhl_mix = nhl_std = nhl_gob = pd.DataFrame()
     if nhl_pool is not None and len(nhl_pool):
         nhl_f = apply_filters(nhl_pool)
-        nhl_mix = nhl_f[nhl_f["pick_type"].isin(["Standard", "Goblin"])].copy() \
-            if "pick_type" in nhl_f.columns else nhl_f.copy()
-        nhl_std = nhl_f[nhl_f["pick_type"] == "Standard"].copy() \
-            if "pick_type" in nhl_f.columns else nhl_f.copy()
+        nhl_mix, nhl_std, nhl_gob = _split_sg(nhl_f)
+        _add_mixed_std_gob(nhl_mix, "NHL")
+        _add_std_only(nhl_std, "NHL")
+        _add_gob_only(nhl_gob, "NHL")
 
-        if len(nhl_mix) >= 6:
-            t6 = build_mixed_picktype_tickets(nhl_mix, 6, max_tickets=1, min_standard=2)
-            if t6:
-                groups.append(("FINAL 6-Leg (NHL Std+Gob)", t6, None))
-        if len(nhl_mix) >= 5:
-            t5 = build_mixed_picktype_tickets(nhl_mix, 5, max_tickets=1, min_standard=2)
-            if t5:
-                groups.append(("FINAL 5-Leg (NHL Std+Gob)", t5, None))
-        if len(nhl_mix) >= 4:
-            t4 = build_mixed_picktype_tickets(nhl_mix, 4, max_tickets=1, min_standard=2)
-            if t4:
-                groups.append(("FINAL 4-Leg (NHL Std+Gob)", t4, None))
-        if len(nhl_mix) >= 3:
-            t3 = build_mixed_picktype_tickets(nhl_mix, 3, max_tickets=2, min_standard=1)
-            if t3:
-                groups.append(("FINAL 3-Leg MIX (NHL Std+Gob)", t3, None))
-        if len(nhl_std) >= 3:
-            groups.append(("FINAL 3-Leg STANDARD ONLY (NHL)", build_tickets(nhl_std, 3, max_tickets=1), None))
-
-    # ── Soccer groups ──────────────────────────────────────────────────────────
+    soc_mix = soc_std = soc_gob = pd.DataFrame()
     if soccer_pool is not None and len(soccer_pool):
         soc_f = apply_filters(soccer_pool)
-        soc_mix = soc_f[soc_f["pick_type"].isin(["Standard", "Goblin"])].copy() \
-            if "pick_type" in soc_f.columns else soc_f.copy()
-        soc_std = soc_f[soc_f["pick_type"] == "Standard"].copy() \
-            if "pick_type" in soc_f.columns else soc_f.copy()
+        soc_mix, soc_std, soc_gob = _split_sg(soc_f)
+        _add_mixed_std_gob(soc_mix, "Soccer")
+        _add_std_only(soc_std, "Soccer")
+        _add_gob_only(soc_gob, "Soccer")
 
-        if len(soc_mix) >= 6:
-            t6 = build_mixed_picktype_tickets(soc_mix, 6, max_tickets=1, min_standard=2)
-            if t6:
-                groups.append(("FINAL 6-Leg (Soccer Std+Gob)", t6, None))
-        if len(soc_mix) >= 5:
-            t5 = build_mixed_picktype_tickets(soc_mix, 5, max_tickets=1, min_standard=2)
-            if t5:
-                groups.append(("FINAL 5-Leg (Soccer Std+Gob)", t5, None))
-        if len(soc_mix) >= 4:
-            t4 = build_mixed_picktype_tickets(soc_mix, 4, max_tickets=1, min_standard=2)
-            if t4:
-                groups.append(("FINAL 4-Leg (Soccer Std+Gob)", t4, None))
-        if len(soc_mix) >= 3:
-            t3 = build_mixed_picktype_tickets(soc_mix, 3, max_tickets=2, min_standard=1)
-            if t3:
-                groups.append(("FINAL 3-Leg MIX (Soccer Std+Gob)", t3, None))
-        if len(soc_std) >= 3:
-            groups.append(("FINAL 3-Leg STANDARD ONLY (Soccer)", build_tickets(soc_std, 3, max_tickets=1), None))
+    mix_frames = [f for f in (nba_mix, cbb_mix, nhl_mix, soc_mix) if len(f) > 0]
+    if mix_frames:
+        all_sg = _sort_rank(pd.concat(mix_frames, ignore_index=True))
+        if "sport" in all_sg.columns and all_sg["sport"].nunique() >= 2:
+            for n in TICKET_LEG_SIZES:
+                if len(all_sg) < n:
+                    continue
+                tix = build_tickets(all_sg, n, max_tickets=2 if n == 3 else 1, require_mix=True)
+                if tix:
+                    groups.append((f"FINAL {n}-Leg CROSS-SPORT (Std+Gob best)", tix, None))
 
-    # ── All-sport cross-sport MIX ──────────────────────────────────────────────
-    extra_frames = []
-    if nhl_pool is not None and len(nhl_pool):
-        nhl_f2 = apply_filters(nhl_pool)
-        extra_frames.append(nhl_f2[nhl_f2["pick_type"].isin(["Standard", "Goblin"])].copy()
-                            if "pick_type" in nhl_f2.columns else nhl_f2.copy())
-    if soccer_pool is not None and len(soccer_pool):
-        soc_f2 = apply_filters(soccer_pool)
-        extra_frames.append(soc_f2[soc_f2["pick_type"].isin(["Standard", "Goblin"])].copy()
-                            if "pick_type" in soc_f2.columns else soc_f2.copy())
+    gob_frames = [f for f in (nba_gob, cbb_gob, nhl_gob, soc_gob) if len(f) > 0]
+    if gob_frames:
+        all_gob = _sort_rank(pd.concat(gob_frames, ignore_index=True))
+        if "sport" in all_gob.columns and all_gob["sport"].nunique() >= 2:
+            for n in TICKET_LEG_SIZES:
+                if len(all_gob) < n:
+                    continue
+                tix = build_tickets(all_gob, n, max_tickets=2 if n == 3 else 1, require_mix=True)
+                if tix:
+                    groups.append((f"FINAL {n}-Leg CROSS-SPORT (Goblin best)", tix, None))
 
-    if extra_frames and cbb_pool is not None and len(cbb_pool):
-        cbb_f3 = apply_filters(cbb_pool)
-        cbb_m3 = cbb_f3[cbb_f3["pick_type"].isin(["Standard", "Goblin"])].copy() \
-            if "pick_type" in cbb_f3.columns else cbb_f3.copy()
-        all_sport_combo = pd.concat([nba_mix, cbb_m3] + extra_frames, ignore_index=True)
-
-        if len(all_sport_combo) >= 6:
-            t6 = build_mixed_picktype_tickets(all_sport_combo, 6, max_tickets=1, min_standard=2)
-            if t6:
-                groups.append(("FINAL 6-Leg ALL-SPORT MIX", t6, None))
-        if len(all_sport_combo) >= 5:
-            t5 = build_mixed_picktype_tickets(all_sport_combo, 5, max_tickets=1, min_standard=2)
-            if t5:
-                groups.append(("FINAL 5-Leg ALL-SPORT MIX", t5, None))
-        if len(all_sport_combo) >= 4:
-            t4 = build_mixed_picktype_tickets(all_sport_combo, 4, max_tickets=1, min_standard=2)
-            if t4:
-                groups.append(("FINAL 4-Leg ALL-SPORT MIX", t4, None))
-        if len(all_sport_combo) >= 3:
-            t3 = build_mixed_picktype_tickets(all_sport_combo, 3, max_tickets=2, min_standard=1)
-            if t3:
-                groups.append(("FINAL 3-Leg ALL-SPORT MIX", t3, None))
+    std_frames = [f for f in (nba_std, cbb_std, nhl_std, soc_std) if len(f) > 0]
+    if std_frames:
+        all_std = _sort_rank(pd.concat(std_frames, ignore_index=True))
+        if "sport" in all_std.columns and all_std["sport"].nunique() >= 2:
+            for n in TICKET_LEG_SIZES:
+                if len(all_std) < n:
+                    continue
+                tix = build_tickets(all_std, n, max_tickets=2 if n == 3 else 1, require_mix=True)
+                if tix:
+                    groups.append((f"FINAL {n}-Leg CROSS-SPORT (Standard best)", tix, None))
 
     return groups
 
@@ -3611,88 +3557,155 @@ def main():
     wb.remove(wb.active)
 
     all_ticket_groups = []
-    leg_sizes = [3, 4, 5, 6]
-
-    def gen_tickets(pool_df, sport_label, bg_hdr, sport_prefix, pick_type_filter=None):
+    def gen_tickets(pool_df, sport_label, bg_hdr, sport_prefix, pick_type_filter=None, require_mix=False):
         rows_out = []
-        for n in leg_sizes:
-            sub_pool = pool_df if pick_type_filter is None else pool_df[pool_df["pick_type"].isin([pick_type_filter])]
-            tickets = build_tickets(sub_pool, n, args.max_tickets)
+        for n in TICKET_LEG_SIZES:
+            if pick_type_filter is None:
+                sub_pool = pool_df
+            elif isinstance(pick_type_filter, list):
+                sub_pool = pool_df[pool_df["pick_type"].isin(pick_type_filter)]
+            else:
+                sub_pool = pool_df[pool_df["pick_type"].isin([pick_type_filter])]
+            tickets = build_tickets(sub_pool, n, args.max_tickets, require_mix=require_mix)
             if tickets:
-                pt_label = pick_type_filter or "Mix"
-                sheet_name = f"{sport_prefix} {pt_label} {n}-Leg"[:31] if pick_type_filter else f"{sport_prefix} Mix {n}-Leg"[:31]
+                if isinstance(pick_type_filter, list):
+                    pt_label = "StdGob" if set(pick_type_filter) == {"Standard", "Goblin"} else "+".join(pick_type_filter)
+                else:
+                    pt_label = pick_type_filter or "Mix"
+                sheet_name = (
+                    f"{sport_prefix} {pt_label} {n}-Leg"[:31]
+                    if pick_type_filter
+                    else f"{sport_prefix} Mix {n}-Leg"[:31]
+                )
                 write_ticket_sheet(wb, tickets, sheet_name, bg_hdr, label=f"{sport_label} {pt_label}")
                 rows_out.append((sheet_name, tickets, None))
                 print(f"  {sheet_name}: {len(tickets)} tickets")
         return rows_out
 
-    # NBA tickets by pick type
+    def gen_std_gob_mixed(pool_df, sport_label, bg_hdr, sport_prefix):
+        rows_out = []
+        for n in TICKET_LEG_SIZES:
+            if len(pool_df) < n:
+                continue
+            max_t = 2 if n == 3 else 1
+            min_std = 2 if n >= 4 else 1
+            tickets = build_mixed_picktype_tickets(pool_df, n, max_tickets=max_t, min_standard=min_std)
+            if tickets:
+                sheet_name = f"{sport_prefix} S+G {n}-Leg"[:31]
+                write_ticket_sheet(wb, tickets, sheet_name, bg_hdr, label=f"{sport_label} Std+Gob")
+                rows_out.append((sheet_name, tickets, None))
+                print(f"  {sheet_name}: {len(tickets)} tickets")
+        return rows_out
+
+    def cross_sport_pool(frames):
+        parts = [f for f in frames if f is not None and len(f) > 0]
+        if len(parts) < 2:
+            return None
+        out = pd.concat(parts, ignore_index=True)
+        if "sport" not in out.columns or out["sport"].nunique() < 2:
+            return None
+        return out.sort_values("rank_score", ascending=False, na_position="last")
+
     for pt in ["Goblin", "Standard", "Demon"]:
         pt_pool = pool(nba, [pt])
-        if len(pt_pool) >= 3:
+        if len(pt_pool) >= MIN_TICKET_POOL:
             all_ticket_groups += gen_tickets(pt_pool, "NBA", C["hdr_nba"], "NBA", pt)
 
-    # NBA Mix
-    if len(nba_pool) >= 3:
+    if len(nba_pool) >= MIN_TICKET_POOL:
         all_ticket_groups += gen_tickets(nba_pool, "NBA", C["hdr_nba"], "NBA Mix")
 
-    # CBB tickets by pick type
+    nba_sg = pool(nba, ["Standard", "Goblin"])
+    if len(nba_sg) >= MIN_TICKET_POOL:
+        all_ticket_groups += gen_std_gob_mixed(nba_sg, "NBA", C["hdr_nba"], "NBA")
+
     for pt in ["Goblin", "Standard", "Demon"]:
         pt_pool = pool(cbb, [pt])
-        if len(pt_pool) >= 3:
+        if len(pt_pool) >= MIN_TICKET_POOL:
             all_ticket_groups += gen_tickets(pt_pool, "CBB", C["hdr_cbb"], "CBB", pt)
 
-    # CBB Mix
-    if len(cbb_pool) >= 3:
+    if len(cbb_pool) >= MIN_TICKET_POOL:
         all_ticket_groups += gen_tickets(cbb_pool, "CBB", C["hdr_cbb"], "CBB Mix")
 
+    cbb_sg = pool(cbb, ["Standard", "Goblin"])
+    if len(cbb_sg) >= MIN_TICKET_POOL:
+        all_ticket_groups += gen_std_gob_mixed(cbb_sg, "CBB", C["hdr_cbb"], "CBB")
 
-    # NHL tickets
     if nhl is not None and len(nhl) > 0:
         nhl_pool = pool(nhl)
-        if len(nhl_pool) >= 3:
+        if len(nhl_pool) >= MIN_TICKET_POOL:
             for pt in ["Goblin", "Standard", "Demon"]:
                 pt_pool = pool(nhl, [pt])
-                if len(pt_pool) >= 3:
+                if len(pt_pool) >= MIN_TICKET_POOL:
                     all_ticket_groups += gen_tickets(pt_pool, "NHL", C["hdr_nhl"], "NHL", pt)
             all_ticket_groups += gen_tickets(nhl_pool, "NHL", C["hdr_nhl"], "NHL Mix")
+            nhl_sg = pool(nhl, ["Standard", "Goblin"])
+            if len(nhl_sg) >= MIN_TICKET_POOL:
+                all_ticket_groups += gen_std_gob_mixed(nhl_sg, "NHL", C["hdr_nhl"], "NHL")
 
-    # Soccer tickets
     if soccer is not None and len(soccer) > 0:
         soccer_pool = pool(soccer)
-        if len(soccer_pool) >= 3:
+        if len(soccer_pool) >= MIN_TICKET_POOL:
             for pt in ["Goblin", "Standard", "Demon"]:
                 pt_pool = pool(soccer, [pt])
-                if len(pt_pool) >= 3:
+                if len(pt_pool) >= MIN_TICKET_POOL:
                     all_ticket_groups += gen_tickets(pt_pool, "Soccer", C["hdr_soccer"], "Soccer", pt)
             all_ticket_groups += gen_tickets(soccer_pool, "Soccer", C["hdr_soccer"], "Soccer Mix")
+            soc_sg = pool(soccer, ["Standard", "Goblin"])
+            if len(soc_sg) >= MIN_TICKET_POOL:
+                all_ticket_groups += gen_std_gob_mixed(soc_sg, "Soccer", C["hdr_soccer"], "Soccer")
 
-    # Combined NBA+CBB tickets (all pick types mixed)
-    if len(combo_pool) >= 3:
+    if len(combo_pool) >= MIN_TICKET_POOL:
         all_ticket_groups += gen_tickets(combo_pool, "COMBO", C["hdr_mix"], "COMBO")
 
-    # Cross-sport Standard Mix (enforce mix) — NBA + CBB + Soccer when available
-    nba_std = pool(nba, ["Standard"])
-    cbb_std = pool(cbb, ["Standard"])
-    mix_parts = [nba_std, cbb_std]
+    nba_std_x = pool(nba, ["Standard"])
+    cbb_std_x = pool(cbb, ["Standard"])
+    std_parts = [nba_std_x, cbb_std_x]
+    if nhl is not None and len(nhl) > 0:
+        std_parts.append(pool(nhl, ["Standard"]))
     if soccer is not None and len(soccer) > 0:
-        mix_parts.append(pool(soccer, ["Standard"]))
-    std_mix_pool = pd.concat(mix_parts, ignore_index=True).sort_values("rank_score", ascending=False)
-    if len(std_mix_pool) >= 3:
+        std_parts.append(pool(soccer, ["Standard"]))
+    std_mix_pool = cross_sport_pool(std_parts)
+    if std_mix_pool is not None and len(std_mix_pool) >= MIN_TICKET_POOL:
         print("Generating cross-sport Standard Mix tickets...")
-        for n in leg_sizes:
+        for n in TICKET_LEG_SIZES:
             tickets = build_tickets(std_mix_pool, n, args.max_tickets, require_mix=True)
             if tickets:
-                sheet_name = f"MIX Standard {n}-Leg"[:31]
-                mix_lbl = "NBA+CBB+Soccer Standard" if (soccer is not None and len(soccer) > 0) else "NBA+CBB Standard"
-                write_ticket_sheet(wb, tickets, sheet_name, C["hdr_mix"], label=mix_lbl)
+                sheet_name = f"MIX Std {n}-Leg"[:31]
+                write_ticket_sheet(wb, tickets, sheet_name, C["hdr_mix"], label="Cross-sport Standard")
                 all_ticket_groups.append((sheet_name, tickets, C["mix"]))
                 print(f"  {sheet_name}: {len(tickets)} tickets")
 
-    # Cross-sport Goblin Mix — RETIRED
-    # Data showed 0% win rate across all dates. NBA Goblin (67%) and CBB Goblin (55%)
-    # dilute each other in multi-leg tickets. Pure NBA Goblin sheets outperform.
-    # MIX Goblin sheets are no longer generated.
+    sg_parts = [pool(nba, ["Standard", "Goblin"]), pool(cbb, ["Standard", "Goblin"])]
+    if nhl is not None and len(nhl) > 0:
+        sg_parts.append(pool(nhl, ["Standard", "Goblin"]))
+    if soccer is not None and len(soccer) > 0:
+        sg_parts.append(pool(soccer, ["Standard", "Goblin"]))
+    sg_cross = cross_sport_pool(sg_parts)
+    if sg_cross is not None and len(sg_cross) >= MIN_TICKET_POOL:
+        print("Generating cross-sport Std+Gob best-rank tickets...")
+        for n in TICKET_LEG_SIZES:
+            tickets = build_tickets(sg_cross, n, args.max_tickets, require_mix=True)
+            if tickets:
+                sheet_name = f"MIX ALL SG {n}-Leg"[:31]
+                write_ticket_sheet(wb, tickets, sheet_name, C["hdr_mix"], label="Cross-sport Std+Gob")
+                all_ticket_groups.append((sheet_name, tickets, C["mix"]))
+                print(f"  {sheet_name}: {len(tickets)} tickets")
+
+    gob_parts = [pool(nba, ["Goblin"]), pool(cbb, ["Goblin"])]
+    if nhl is not None and len(nhl) > 0:
+        gob_parts.append(pool(nhl, ["Goblin"]))
+    if soccer is not None and len(soccer) > 0:
+        gob_parts.append(pool(soccer, ["Goblin"]))
+    gob_cross = cross_sport_pool(gob_parts)
+    if gob_cross is not None and len(gob_cross) >= MIN_TICKET_POOL:
+        print("Generating cross-sport Goblin Mix tickets...")
+        for n in TICKET_LEG_SIZES:
+            tickets = build_tickets(gob_cross, n, args.max_tickets, require_mix=True)
+            if tickets:
+                sheet_name = f"MIX Gob {n}-Leg"[:31]
+                write_ticket_sheet(wb, tickets, sheet_name, C["hdr_mix"], label="Cross-sport Goblin")
+                all_ticket_groups.append((sheet_name, tickets, C["mix"]))
+                print(f"  {sheet_name}: {len(tickets)} tickets")
 
     print("Writing slate sheets...")
     # Strict-mode guardrail: fail if mixed dates survived filtering.
