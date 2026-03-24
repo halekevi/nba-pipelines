@@ -615,6 +615,16 @@ def main() -> None:
     ap.add_argument("--output", required=True)
     ap.add_argument("--n_teams", type=int, default=15, help="Number of teams in defense file")
     ap.add_argument("--cache", default="", help="Path to Soccer boxscore cache CSV")
+    ap.add_argument(
+        "--injuries-csv",
+        default="",
+        help="injuries_soccer_*.csv (optional; populate manually or from your feed)",
+    )
+    ap.add_argument(
+        "--slate-date",
+        default="",
+        help="YYYY-MM-DD; auto-load outputs/<date>/injuries_soccer_<date>.csv if injuries-csv omitted",
+    )
     args = ap.parse_args()
 
     print(f"→ Loading: {args.input}")
@@ -866,6 +876,22 @@ def main() -> None:
     out["game_script_mult"] = _gmults
     out["game_script_note"] = _gnotes
     out["final_score"] = _to_num(out["final_score"]).astype(float) * pd.Series(_gmults, dtype=float).values
+
+    _repo_soc_inj = _repo_root_pc_soc()
+    _sd_soc_inj = str(_repo_soc_inj / "scripts")
+    if _sd_soc_inj not in sys.path:
+        sys.path.insert(0, _sd_soc_inj)
+    from espn_injuries import auto_injuries_csv_from_outputs, penalty_series_for_slate  # noqa: E402
+
+    _inj_soc_path = str(args.injuries_csv or "").strip()
+    if not _inj_soc_path and str(getattr(args, "slate_date", "") or "").strip():
+        _csp = auto_injuries_csv_from_outputs(_repo_soc_inj, str(args.slate_date).strip(), "SOCCER")
+        _inj_soc_path = str(_csp) if _csp else ""
+    if _inj_soc_path:
+        _p_soc_col = next((c for c in ("player", "player_norm", "pp_player") if c in out.columns), "player")
+        _t_soc_col = next((c for c in ("team", "pp_team", "Team") if c in out.columns), "team")
+        _pen_soc = penalty_series_for_slate(out, _p_soc_col, _t_soc_col, "SOCCER", _inj_soc_path)
+        out["final_score"] = _to_num(out["final_score"]).astype(float) + _pen_soc.values
 
     out["rank_score"] = out["final_score"]
     out["tier"]       = out.apply(

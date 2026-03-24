@@ -651,6 +651,16 @@ def main():
     parser.add_argument("--output", default="step7_nhl_ranked.xlsx")
     parser.add_argument("--min-sample", type=int, default=MIN_SAMPLE)
     parser.add_argument("--cache", default="", help="Path to NHL boxscore cache CSV")
+    parser.add_argument(
+        "--injuries-csv",
+        default="",
+        help="injuries_nhl_*.csv (optional rank penalty from ESPN reports)",
+    )
+    parser.add_argument(
+        "--slate-date",
+        default="",
+        help="YYYY-MM-DD; auto-load outputs/<date>/injuries_nhl_<date>.csv if injuries-csv omitted",
+    )
     args = parser.parse_args()
 
     try:
@@ -693,6 +703,23 @@ def main():
     scored_df["game_script_mult"] = _gmults
     scored_df["game_script_note"] = _gnotes
     scored_df["final_score"] = _to_num(scored_df["final_score"]).astype(float) * pd.Series(_gmults, dtype=float).values
+
+    _nhl_sd_inj = str(_repo_root_pc_nhl() / "scripts")
+    if _nhl_sd_inj not in sys.path:
+        sys.path.insert(0, _nhl_sd_inj)
+    from espn_injuries import auto_injuries_csv_from_outputs, penalty_series_for_slate  # noqa: E402
+
+    _inj_nhl_path = str(args.injuries_csv or "").strip()
+    if not _inj_nhl_path and str(getattr(args, "slate_date", "") or "").strip():
+        _cnhl = auto_injuries_csv_from_outputs(_repo_root_pc_nhl(), str(args.slate_date).strip(), "NHL")
+        _inj_nhl_path = str(_cnhl) if _cnhl else ""
+    if _inj_nhl_path:
+        _pc_nhl = next(
+            (c for c in ("player_name", "player_norm", "player") if c in scored_df.columns),
+            "player",
+        )
+        _pen_nhl = penalty_series_for_slate(scored_df, _pc_nhl, "team", "NHL", _inj_nhl_path)
+        scored_df["final_score"] = _to_num(scored_df["final_score"]).astype(float) + _pen_nhl.values
 
     scored_df["prop_score"] = _to_num(scored_df["final_score"]).fillna(_to_num(scored_df["prop_score"]).fillna(0.0))
     scored_df["tier"] = scored_df.apply(

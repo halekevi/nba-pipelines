@@ -444,7 +444,9 @@ def fetch_sport(sport_path, date_str, window=2):
         print(f"    -> {len(rows)} stat rows")
 
     if not all_rows:
-        return pd.DataFrame()
+        # Distinguish "no games on slate" vs "games not final yet" for downstream stubs.
+        reason = "no_games" if len(events) == 0 else "pending"
+        return pd.DataFrame(), reason
 
     df = pd.DataFrame(all_rows)
 
@@ -455,7 +457,7 @@ def fetch_sport(sport_path, date_str, window=2):
             .drop_duplicates(subset=['player', 'team', 'prop_type'], keep='first'))
 
     print(f"\n  Total: {len(df)} player-prop actuals across {len(graded_event_ids)} games")
-    return df
+    return df, "ok"
 
 
 
@@ -1065,6 +1067,22 @@ def fetch_soccer(date_str):
     return df
 
 
+def _export_injuries_sidecar(args) -> None:
+    """Write ESPN injury report CSV beside actuals (NBA/CBB/NHL only)."""
+    if args.sport not in ("NBA", "CBB", "NHL"):
+        return
+    try:
+        from espn_injuries import injuries_csv_path_for_actuals, write_injuries_for_date
+    except ImportError:
+        return
+    try:
+        outp = injuries_csv_path_for_actuals(args.output, args.sport)
+        n = write_injuries_for_date(args.sport, args.date, outp)
+        print(f"  Injury report saved -> {outp}  ({n} rows)")
+    except Exception as e:
+        print(f"  WARNING: injury export failed: {e}")
+
+
 # ── Main ─────────────────────────────────────────────────────────────────────
 def main():
     ap = argparse.ArgumentParser()
@@ -1082,20 +1100,31 @@ def main():
 
     print(f"\n=== {args.sport} actuals for {args.date} ===\n")
 
+    empty_reason = "pending"
     if args.sport == 'NHL':
         df = fetch_nhl(args.date)
     elif args.sport == 'Soccer':
         df = fetch_soccer(args.date)
     else:
         sport_path = 'nba' if args.sport == 'NBA' else 'mens-college-basketball'
-        df = fetch_sport(sport_path, args.date, window=args.window)
+        df, empty_reason = fetch_sport(sport_path, args.date, window=args.window)
 
     if df.empty:
+        # Zero NBA/CBB games on the calendar: write header-only CSV so combined_ticket_grader
+        # and run_grader.ps1 can still run (CBB off-days are common in March).
+        if empty_reason == "no_games" and args.sport in ("NBA", "CBB"):
+            stub = pd.DataFrame(columns=["player", "team", "prop_type", "actual"])
+            stub.to_csv(args.output, index=False)
+            print(f"\nNo games scheduled — wrote empty actuals stub -> {args.output}")
+            _export_injuries_sidecar(args)
+            return
+        _export_injuries_sidecar(args)
         print("\nNo actuals fetched — games may not be final yet.")
         print("Try again after all games have finished (usually safe by 1am ET).")
         return
 
     df.to_csv(args.output, index=False)
+    _export_injuries_sidecar(args)
     print(f"\nSaved -> {args.output}  ({len(df)} rows)")
     print(f"\nProp types extracted: {sorted(df['prop_type'].unique().tolist())}")
 

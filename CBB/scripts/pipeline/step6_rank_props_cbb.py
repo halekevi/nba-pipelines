@@ -626,6 +626,11 @@ def main():
     ap.add_argument("--output_csv", default="")
     ap.add_argument("--cache", default="cbb_boxscore_cache.csv", help="Path to CBB boxscore cache CSV")
     ap.add_argument("--date", default="", help="Filter to YYYY-MM-DD using start_time")
+    ap.add_argument(
+        "--injuries-csv",
+        default="",
+        help="injuries_cbb_*.csv (optional). If empty and --date set, tries outputs/<date>/injuries_cbb_<date>.csv",
+    )
     args = ap.parse_args()
     Path(args.output).parent.mkdir(parents=True, exist_ok=True)
 
@@ -866,6 +871,24 @@ def main():
     avg_vs_line = pd.Series([_avg_vs_line(i) for i in range(len(out))], index=out.index)
     out["avg_vs_line"] = avg_vs_line
 
+    _repo_cbb = Path(__file__).resolve().parents[3]
+    _sd_cbb = _repo_cbb / "scripts"
+    if str(_sd_cbb) not in sys.path:
+        sys.path.insert(0, str(_sd_cbb))
+    from espn_injuries import auto_injuries_csv_from_outputs, penalty_series_for_slate  # noqa: E402
+
+    _inj_cbb_path = str(args.injuries_csv or "").strip()
+    if not _inj_cbb_path and slate_game_date:
+        _cand_c = auto_injuries_csv_from_outputs(_repo_cbb, slate_game_date, "CBB")
+        _inj_cbb_path = str(_cand_c) if _cand_c else ""
+    _player_inj = next((c for c in ("player", "player_name", "pp_player") if c in out.columns), "player")
+    _team_inj = next((c for c in ("team", "team_abbr", "pp_team") if c in out.columns), "team")
+    _inj_pen_cbb = (
+        penalty_series_for_slate(out, _player_inj, _team_inj, "CBB", _inj_cbb_path)
+        if _inj_cbb_path
+        else pd.Series(0.0, index=out.index)
+    )
+
     # ── Composite score (mirrors NBA step7) ─────────────────────────────────
     prop_norm_col = out.get("prop_norm", out.get("prop_type", pd.Series([""] * len(out)))).astype(str)
     prop_w   = prop_norm_col.apply(_prop_weight)
@@ -890,7 +913,7 @@ def main():
         + def_signal                   * 0.15
         + hr_signal.fillna(0)          * 0.15
         + prior_signal                 * 0.15
-    ) * prop_w * rel_mult
+    ) * prop_w * rel_mult + _inj_pen_cbb.reindex(out.index).fillna(0.0)
 
     # Zero out ineligible rows
     score = raw_score.where(elig_mask, other=np.nan)

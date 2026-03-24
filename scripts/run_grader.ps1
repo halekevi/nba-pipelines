@@ -52,8 +52,8 @@ function Run-Py {
         $env:PYTHONUTF8 = "1"
         $env:PYTHONIOENCODING = "utf-8"
         if ($PreferPy314 -and (Get-Command py -ErrorAction SilentlyContinue)) {
-            $pyArgs = @("-3.14", $ScriptPath) + $ScriptArgs
-            & py -X utf8 @pyArgs
+            $pyArgs = @("-3.14", "-X", "utf8", $ScriptPath) + $ScriptArgs
+            & py @pyArgs
         }
         # Use python first to avoid py launcher version prompts.
         elseif (Get-Command python -ErrorAction SilentlyContinue) {
@@ -257,7 +257,7 @@ if ((Test-Path $SoccerActuals) -and $SoccerSlateFile -and (Test-Path $SoccerSlat
         "--output-dir", $DateDir
     ) -PreferPy314
     if (-not (Test-Path $SoccerGradedFile)) {
-        Write-Warning "Soccer grading produced no output file — check soccer_grader_advanced.py for errors"
+        Write-Warning "Soccer grading produced no output file - check soccer_grader_advanced.py for errors"
     }
     else {
         Write-Host "Soccer grading complete: $SoccerGradedFile" -ForegroundColor Green
@@ -365,6 +365,14 @@ else {
     if (Test-Path $SoccerActuals) {
         $GraderArgs += @("--soccer_actuals", $SoccerActuals)
     }
+    $InjNBA = Join-Path $DateDir "injuries_nba_$Date.csv"
+    $InjCBB = Join-Path $DateDir "injuries_cbb_$Date.csv"
+    $InjNHL = Join-Path $DateDir "injuries_nhl_$Date.csv"
+    $InjSoc = Join-Path $DateDir "injuries_soccer_$Date.csv"
+    if (Test-Path $InjNBA) { $GraderArgs += @("--nba_injuries", $InjNBA) }
+    if (Test-Path $InjCBB) { $GraderArgs += @("--cbb_injuries", $InjCBB) }
+    if (Test-Path $InjNHL) { $GraderArgs += @("--nhl_injuries", $InjNHL) }
+    if (Test-Path $InjSoc) { $GraderArgs += @("--soccer_injuries", $InjSoc) }
     Run-Py "Combined Ticket Grader" $Root $CombinedTicketGrader $GraderArgs
 }
 
@@ -380,6 +388,7 @@ else {
     Write-Host "Skipping ticket eval build (build_ticket_eval.py not found)." -ForegroundColor Yellow
 }
 
-Write-Host "`n✅ DONE." -ForegroundColor Green
+Write-Host ""
+Write-Host "DONE." -ForegroundColor Green
 
 

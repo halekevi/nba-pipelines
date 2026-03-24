@@ -625,6 +625,16 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--input",  default="step6_with_team_role_context.csv")
     ap.add_argument("--output", default="step7_ranked_props.xlsx")
+    ap.add_argument(
+        "--injuries-csv",
+        default="",
+        help="injuries_nba_*.csv from fetch_actuals (optional rank_score penalty)",
+    )
+    ap.add_argument(
+        "--slate-date",
+        default="",
+        help="YYYY-MM-DD; if set with empty injuries-csv, load outputs/<date>/injuries_nba_<date>.csv",
+    )
     args = ap.parse_args()
 
     print(f"→ Loading: {args.input}")
@@ -1010,6 +1020,22 @@ def main() -> None:
     blowout_penalty= np.where(out.get("blowout_risk", pd.Series(False, index=out.index)).astype(str).str.lower() == "true", -0.10, 0.0)
     low_total_pen  = np.where(out.get("low_total_flag", pd.Series(False, index=out.index)).astype(str).str.lower() == "true", -0.10, 0.0)
 
+    _repo_inj = Path(__file__).resolve().parents[2]
+    _sd_inj = _repo_inj / "scripts"
+    if str(_sd_inj) not in _sys_pc.path:
+        _sys_pc.path.insert(0, str(_sd_inj))
+    from espn_injuries import auto_injuries_csv_from_outputs, penalty_series_for_slate  # noqa: E402
+
+    _inj_path = str(args.injuries_csv or "").strip()
+    if not _inj_path and str(getattr(args, "slate_date", "") or "").strip():
+        _cand = auto_injuries_csv_from_outputs(_repo_inj, str(args.slate_date).strip(), "NBA")
+        _inj_path = str(_cand) if _cand else ""
+    _inj_pen = (
+        penalty_series_for_slate(out, "player", "team", "NBA", _inj_path)
+        if _inj_path
+        else pd.Series(0.0, index=out.index)
+    )
+
     # Pace z-score (direction-aware — already in out["pace_adj"] but score via z for scale)
     out["pace_z"] = zcol(out["pace_adj"], direction_aware=True)
 
@@ -1027,6 +1053,7 @@ def main() -> None:
         + pd.Series(b2b_penalty,     index=out.index)
         + pd.Series(blowout_penalty, index=out.index)
         + pd.Series(low_total_pen,   index=out.index)
+        + _inj_pen.reindex(out.index).fillna(0.0)
     )
     score = (
         score

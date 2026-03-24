@@ -21,7 +21,7 @@ Outputs:
 - SUMMARY (key metrics)
 - ANALYSIS_INSIGHTS (readable takeaways from the slate)
 - TICKET_RESULTS (one row per ticket per mode)
-- LEG_RESULTS (one row per leg, with HIT/MISS/PUSH/NO_ACTUAL)
+- LEG_RESULTS (one row per leg, with HIT/MISS/PUSH/VOID/NO_ACTUAL)
 - LEG_BY_* breakdowns (prop, sport, direction, pick type, sheet)
 - TICKET_DEEP_DIVE (per-ticket leg mix + outcomes)
 - Analytics tabs per mode (ROI by sheet/legs/sports/pick_types)
@@ -64,7 +64,7 @@ import json
 import re
 import unicodedata
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 import numpy as np
 import pandas as pd
@@ -469,6 +469,7 @@ def leg_modifiers(leg_types: List[str]) -> Tuple[float, float]:
 
 def compute_ticket_payout(stake: float, mode: str,
                           legs: int, hits: int, misses: int, pushes: int, no_actual: int,
+                          voids: int,
                           power_mod: float, flex_mod: float) -> Tuple[float, str, float]:
     """
     Returns (payout_amount, payout_status, applied_multiplier).
@@ -477,12 +478,13 @@ def compute_ticket_payout(stake: float, mode: str,
     if no_actual > 0:
         return np.nan, "NO_ACTUAL", np.nan
 
-    effective_legs = legs - pushes
+    # Voided / DNP legs drop off the ticket (same bookkeeping as push for leg count).
+    effective_legs = legs - pushes - int(voids or 0)
     if effective_legs <= 1:
         return stake, "REFUND", 1.0
 
     if mode == "power":
-        if misses == 0:
+        if misses == 0 and int(hits or 0) == effective_legs:
             base = float(POWER_BASE.get(effective_legs, 0.0))
             mult = float(round(base * power_mod, 4))
             payout = stake * mult
@@ -571,7 +573,7 @@ def build_ticket_deep_dive(ticket_results: pd.DataFrame, legs_df: pd.DataFrame) 
         if len(g) > 6:
             props += "|..."
         res = "".join(
-            {"HIT": "W", "MISS": "L", "PUSH": "P", "NO_ACTUAL": "?"}.get(x, "?")
+            {"HIT": "W", "MISS": "L", "PUSH": "P", "VOID": "V", "NO_ACTUAL": "?"}.get(x, "?")
             for x in g["leg_result"].tolist()
         )
         pieces.append(
@@ -583,6 +585,7 @@ def build_ticket_deep_dive(ticket_results: pd.DataFrame, legs_df: pd.DataFrame) 
                 "n_hit": int((g["leg_result"] == "HIT").sum()),
                 "n_miss": int((g["leg_result"] == "MISS").sum()),
                 "n_push": int((g["leg_result"] == "PUSH").sum()),
+                "n_void": int((g["leg_result"] == "VOID").sum()),
                 "n_no_actual": int((g["leg_result"] == "NO_ACTUAL").sum()),
                 "sports_mix": ",".join(sorted({str(s) for s in g["sport"].tolist() if str(s).strip()})),
                 "pick_mix": ",".join(sorted({pick_category_from_cell(x) for x in g["pick_type"].tolist()})),
@@ -681,6 +684,7 @@ _HIT_FILL = PatternFill(start_color="27AE60", end_color="27AE60", fill_type="sol
 _MISS_FILL = PatternFill(start_color="C0392B", end_color="C0392B", fill_type="solid")
 _PUSH_FILL = PatternFill(start_color="F39C12", end_color="F39C12", fill_type="solid")
 _NA_FILL = PatternFill(start_color="BDC3C7", end_color="BDC3C7", fill_type="solid")
+_VOID_FILL = PatternFill(start_color="AED6F1", end_color="AED6F1", fill_type="solid")
 _PROFIT_POS = PatternFill(start_color="D5F5E3", end_color="D5F5E3", fill_type="solid")
 _PROFIT_NEG = PatternFill(start_color="FADBD8", end_color="FADBD8", fill_type="solid")
 
@@ -908,6 +912,10 @@ def main():
     ap.add_argument("--cbb_actuals", required=True, help="actuals_cbb_YYYY-MM-DD.csv")
     ap.add_argument("--nhl_actuals", default="", help="actuals_nhl_YYYY-MM-DD.csv (optional, for NHL legs)")
     ap.add_argument("--soccer_actuals", default="", help="actuals_soccer_YYYY-MM-DD.csv (optional, for Soccer legs)")
+    ap.add_argument("--nba_injuries", default="", help="injuries_nba CSV (optional; defaults next to nba actuals)")
+    ap.add_argument("--cbb_injuries", default="", help="injuries_cbb CSV (optional)")
+    ap.add_argument("--nhl_injuries", default="", help="injuries_nhl CSV (optional)")
+    ap.add_argument("--soccer_injuries", default="", help="injuries_soccer CSV (optional; manual / future fetch)")
     ap.add_argument("--out", default="", help="Output graded workbook (default: <tickets>_GRADED.xlsx)")
     ap.add_argument("--mode", choices=["power", "flex", "both"], default="both")
     ap.add_argument("--stake", type=float, default=20.0)
@@ -956,6 +964,28 @@ def main():
         soccer_act = prep_actuals(soccer_csv, "SOCCER")
         soccer_lp, soccer_lpt = build_lookup(soccer_act)
 
+    from espn_injuries import (  # noqa: E402
+        canon_team_abbr as _inj_canon_team,
+        injuries_csv_path_for_actuals,
+        load_injury_void_keys,
+    )
+
+    def _inj_csv(explicit: str, act_csv: Path, sport: str) -> Path:
+        if explicit and str(explicit).strip():
+            return Path(str(explicit).strip())
+        return injuries_csv_path_for_actuals(act_csv, sport)
+
+    nba_void = load_injury_void_keys(_inj_csv(args.nba_injuries, nba_csv, "NBA"), "NBA")
+    cbb_void = load_injury_void_keys(_inj_csv(args.cbb_injuries, cbb_csv, "CBB"), "CBB")
+    nhl_void: Set[Tuple[str, str]] = set()
+    if args.nhl_actuals:
+        nhl_void = load_injury_void_keys(_inj_csv(args.nhl_injuries, Path(args.nhl_actuals), "NHL"), "NHL")
+    soccer_void: Set[Tuple[str, str]] = set()
+    if args.soccer_actuals:
+        soccer_void = load_injury_void_keys(
+            _inj_csv(args.soccer_injuries, Path(args.soccer_actuals), "SOCCER"), "SOCCER"
+        )
+
     # ticket sheets
     xls = pd.ExcelFile(tickets_xlsx)
     ticket_sheets = [s for s in xls.sheet_names if re.search(r"\b\d-?Leg\b", s, re.IGNORECASE)]
@@ -984,6 +1014,31 @@ def main():
     )
     legs_df["leg_result"] = legs_df.apply(lambda r: grade_leg(r["dir"], r["line"], r["actual"]), axis=1)
 
+    def _injury_void_leg(row: pd.Series) -> str:
+        if row["leg_result"] != "NO_ACTUAL":
+            return row["leg_result"]
+        sp = str(row["sport"] or "").upper().strip()
+        pl = strip_norm(row["player"])
+        if sp in ("NBA", "NBA1H", "NBA1Q"):
+            tm = _inj_canon_team("NBA", row["team"])
+            if pl and tm and (pl, tm) in nba_void:
+                return "VOID"
+        elif sp in ("CBB", "WCBB"):
+            tm = _inj_canon_team("CBB", row["team"])
+            if pl and tm and (pl, tm) in cbb_void:
+                return "VOID"
+        elif sp == "NHL":
+            tm = _inj_canon_team("NHL", row["team"])
+            if pl and tm and (pl, tm) in nhl_void:
+                return "VOID"
+        elif sp == "SOCCER":
+            tm = _inj_canon_team("SOCCER", row["team"])
+            if pl and tm and (pl, tm) in soccer_void:
+                return "VOID"
+        return row["leg_result"]
+
+    legs_df["leg_result"] = legs_df.apply(_injury_void_leg, axis=1)
+
     # per-ticket modifiers
     mods_df = (legs_df.groupby("ticket_id", as_index=False)
                .agg(
@@ -1002,9 +1057,10 @@ def main():
             hits=("leg_result", lambda s: int((s == "HIT").sum())),
             misses=("leg_result", lambda s: int((s == "MISS").sum())),
             pushes=("leg_result", lambda s: int((s == "PUSH").sum())),
+            voids=("leg_result", lambda s: int((s == "VOID").sum())),
             no_actual=("leg_result", lambda s: int((s == "NO_ACTUAL").sum())),
         ))
-    ticket_base["effective_legs"] = ticket_base["legs"] - ticket_base["pushes"]
+    ticket_base["effective_legs"] = ticket_base["legs"] - ticket_base["pushes"] - ticket_base["voids"]
     ticket_base["stake"] = float(args.stake)
     ticket_base = ticket_base.merge(mods_df[["ticket_id", "sports", "pick_types", "tiers", "power_mod", "flex_mod"]], on="ticket_id", how="left")
 
@@ -1024,6 +1080,7 @@ def main():
                 misses=int(r["misses"]),
                 pushes=int(r["pushes"]),
                 no_actual=int(r["no_actual"]),
+                voids=int(r["voids"]),
                 power_mod=float(r["power_mod"]),
                 flex_mod=float(r["flex_mod"]),
             )
