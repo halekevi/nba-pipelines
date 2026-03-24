@@ -509,8 +509,11 @@ def enforce_target_date(
         print(f"  [{sport} date] no rows to filter")
         return df
     if "game_time" not in df.columns:
-        print(f"  [{sport} date] missing game_time column; keeping {len(df)} rows")
-        return df
+        if allow_cross_date_fallback:
+            print(f"  [{sport} date] missing game_time column; fallback enabled -> keeping {len(df)} rows")
+            return df
+        print(f"  [{sport} date] missing game_time column; strict mode -> skipping {sport}")
+        return df.iloc[0:0].copy()
 
     out = df.copy()
     target_year = int(str(target_date)[:4])
@@ -521,8 +524,11 @@ def enforce_target_date(
         top = ", ".join([f"{str(k)}={int(v)}" for k, v in counts.head(5).items()])
         print(f"  [{sport} date] available: {top}")
     else:
-        print(f"  [{sport} date] no parseable game_date values; keeping {len(out)} rows")
-        return out
+        if allow_cross_date_fallback:
+            print(f"  [{sport} date] no parseable game_date values; fallback enabled -> keeping {len(out)} rows")
+            return out
+        print(f"  [{sport} date] no parseable game_date values; strict mode -> skipping {sport}")
+        return out.iloc[0:0].copy()
 
     keep_mask = out["game_date"].eq(target_date)
     kept = int(keep_mask.sum())

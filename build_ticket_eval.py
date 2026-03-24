@@ -219,9 +219,9 @@ def _leg_grade(
     if g in ("MISS", "LOSS", "L", "0", "FALSE", "NO"):
         return "MISS"
     if g in ("VOID", "PUSH", "N/A", "NA"):
-        return "PENDING"
+        return "VOID"
     if actual is None or line is None:
-        return "PENDING"
+        return "UNGRADED"
     d = direction.upper()
     if d == "OVER" and actual >= line:
         return "HIT"
@@ -534,7 +534,7 @@ def debug_report(arg_date: str, payload: dict[str, Any], tpath: Path) -> None:
         pt = str(leg.get("prop_type") or "").strip().lower()
         dr = str(leg.get("direction") or "").strip().upper()
         row = _match_leg_to_row_multi(leg, indices)
-        st = "MATCH" if row else "NO MATCH -> PENDING"
+        st = "MATCH" if row else "NO MATCH -> UNGRADED"
         sp = str(leg.get("sport") or "")
         bk = " → ".join(_leg_match_buckets(sp))
         print(f"  {i}. sport={sp!r} buckets=[{bk}] player={pl!r} prop_type={pt!r} direction={dr!r} -> {st}")
@@ -825,7 +825,8 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
     total_legs = len(all_legs)
     hits = sum(1 for _, _, g in all_legs if g == "HIT")
     misses = sum(1 for _, _, g in all_legs if g == "MISS")
-    pending = sum(1 for _, _, g in all_legs if g == "PENDING")
+    voids = sum(1 for _, _, g in all_legs if g == "VOID")
+    ungraded = sum(1 for _, _, g in all_legs if g == "UNGRADED")
     decided = hits + misses
     leg_pct = (100.0 * hits / decided) if decided else 0.0
 
@@ -894,6 +895,7 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
         ".sum-val.green{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.35);}",
         ".sum-val.red{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.35);}",
         ".sum-val.pend{color:var(--pending);text-shadow:none;}",
+        ".sum-val.void{color:var(--gold2);text-shadow:none;}",
         ".sum-val-sm{font-size:clamp(18px,2.1vw,24px)!important;}",
         ".sum-lab{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2.2px;color:var(--muted);text-align:center;line-height:1.2;max-width:11em;}",
         ".wrap{width:100%;max-width:min(1520px,96vw);margin:0 auto;padding:10px clamp(14px,2.5vw,32px) 0;}",
@@ -919,6 +921,7 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
         ".banner.hit{color:var(--green);border-color:rgba(57,255,110,.45);box-shadow:0 0 16px rgba(57,255,110,.15);}",
         ".banner.miss{color:var(--red);border-color:rgba(255,77,77,.5);box-shadow:0 0 16px rgba(255,77,77,.12);}",
         ".banner.pend{color:var(--pending);border-color:rgba(255,255,255,.12);}",
+        ".banner.void{color:var(--gold2);border-color:rgba(240,165,0,.35);}",
         "@keyframes missRowPulse{0%,100%{box-shadow:0 0 0 1px rgba(255,77,77,0.4),inset 0 0 20px rgba(255,77,77,0.06);}"
         "50%{box-shadow:0 0 0 2px rgba(255,77,77,0.65),0 0 22px rgba(255,77,77,0.18),inset 0 0 26px rgba(255,77,77,0.09);}}",
         ".legrow{font-family:'Share Tech Mono',monospace;display:grid;"
@@ -948,10 +951,14 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
         ".legrow.leg-pend{background:transparent;border-left-color:transparent;}",
         ".legrow.leg-pend .pl-pend,.legrow.leg-pend .meta-muted{color:var(--pending)!important;}",
         ".legrow.leg-pend .pill{background:rgba(255,255,255,0.04)!important;border-color:rgba(255,255,255,0.1)!important;color:var(--pending)!important;}",
+        ".legrow.leg-void{background:rgba(240,165,0,0.04);border-left-color:rgba(240,165,0,.55);}",
+        ".legrow.leg-void .pl-void,.legrow.leg-void .meta-muted{color:var(--gold2)!important;}",
+        ".legrow.leg-void .pill{background:rgba(240,165,0,0.07)!important;border-color:rgba(240,165,0,0.28)!important;color:var(--gold2)!important;}",
         ".badge{font-size:clamp(28px,3.2vw,36px);line-height:1;text-align:center;}",
         ".badge.hit{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.6);}",
         ".badge.miss{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.55);}",
         ".badge.pend{color:var(--pending);text-shadow:none;}",
+        ".badge.void{color:var(--gold2);text-shadow:none;}",
         ".pill{font-family:'Bebas Neue',sans-serif;font-size:clamp(10px,1.1vw,12px);letter-spacing:1.2px;padding:5px 12px;border-radius:999px;text-transform:uppercase;}",
         sport_colors_css,
         ".tier{font-family:'Bebas Neue',sans-serif;width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;"
@@ -960,6 +967,7 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
         ".pl-hit{color:var(--green);text-shadow:0 0 8px rgba(57,255,110,.4);}",
         ".pl-miss{color:var(--red);}",
         ".pl-pend{color:var(--pending);}",
+        ".pl-void{color:var(--gold2);}",
         ".dir-over{color:var(--cyan);font-weight:700;}",
         ".dir-under{color:var(--gold);font-weight:700;}",
         ".meta-muted{font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:clamp(11px,1.2vw,13px);margin-top:3px;}",
@@ -975,7 +983,8 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
         f'<div class="sum-item"><div class="sum-val">{leg_pct:.1f}%</div><div class="sum-lab">LEG HIT RATE</div></div>',
         f'<div class="sum-item"><div class="sum-val green">{hits}</div><div class="sum-lab">HITS</div></div>',
         f'<div class="sum-item"><div class="sum-val red">{misses}</div><div class="sum-lab">MISSES</div></div>',
-        f'<div class="sum-item"><div class="sum-val pend">{pending}</div><div class="sum-lab">PENDING</div></div>',
+        f'<div class="sum-item"><div class="sum-val void">{voids}</div><div class="sum-lab">VOID/PUSH</div></div>',
+        f'<div class="sum-item"><div class="sum-val pend">{ungraded}</div><div class="sum-lab">UNGRADED</div></div>',
         f'<div class="sum-item"><div class="sum-val">{perfect}</div><div class="sum-lab">PERFECT TICKETS</div></div>',
         f'<div class="sum-item"><div class="sum-val">{with_misses}</div><div class="sum-lab">TIX W/ MISS</div></div>',
         f'<div class="sum-item"><div class="sum-val sum-val-sm">{total_legs}</div><div class="sum-lab">TOTAL LEGS</div></div>',
@@ -1012,11 +1021,14 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
 
             h = leg_grades.count("HIT")
             m = leg_grades.count("MISS")
-            pnd = leg_grades.count("PENDING")
+            pnd = leg_grades.count("UNGRADED")
+            vct = leg_grades.count("VOID")
             n = len(leg_grades)
 
             if pnd > 0:
-                banner_cls, banner_txt = "pend", "PENDING"
+                banner_cls, banner_txt = "pend", "UNGRADED"
+            elif vct > 0 and m == 0:
+                banner_cls, banner_txt = "void", "VOID/PUSH"
             elif m == 0 and n > 0:
                 banner_cls, banner_txt = "hit", "ALL HIT"
             else:
@@ -1053,6 +1065,8 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
                     bcls, plcls = "hit", "pl-hit"
                 elif lg == "MISS":
                     bcls, plcls = "miss", "pl-miss"
+                elif lg == "VOID":
+                    bcls, plcls = "void", "pl-void"
                 else:
                     bcls, plcls = "pend", "pl-pend"
 
@@ -1080,9 +1094,11 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
                     row_cls = "legrow leg-hit"
                 elif lg == "MISS":
                     row_cls = "legrow leg-miss"
+                elif lg == "VOID":
+                    row_cls = "legrow leg-void"
                 else:
                     row_cls = "legrow leg-pend"
-                sym = "✓" if lg == "HIT" else "✗" if lg == "MISS" else "·"
+                sym = "✓" if lg == "HIT" else "✗" if lg == "MISS" else "○" if lg == "VOID" else "·"
 
                 miss_cell = " miss-leg-cell" if lg == "MISS" else ""
 
@@ -1099,6 +1115,8 @@ def _build_html(payload: dict[str, Any], arg_date: str) -> str:
                     act_div_cls = "leg-extra val-miss"
                 elif lg == "HIT":
                     act_div_cls = "leg-extra pl-hit"
+                elif lg == "VOID":
+                    act_div_cls = "leg-extra pl-void"
                 else:
                     act_div_cls = "leg-extra pl-pend"
 
