@@ -316,14 +316,34 @@ def home():
 
 @app.get("/tickets")
 def page_tickets():
-    target = TEMPLATES_DIR / "tickets_latest.html"
-    if target.exists():
-        response = send_from_directory(str(TEMPLATES_DIR), "tickets_latest.html")
-        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
-        response.headers["Pragma"] = "no-cache"
-        response.headers["Expires"] = "0"
-        return response
-    return "tickets_latest.html not found. Run the pipeline first.", 404
+    """
+    Render tickets HTML from tickets_latest.json on every request so Railway/UI
+    never serves a stale static HTML shell that omits ticket groups.
+    """
+    import importlib.util
+
+    json_path = TEMPLATES_DIR / "tickets_latest.json"
+    if not json_path.exists():
+        return "tickets_latest.json not found. Run the pipeline with --write-web first.", 404
+    try:
+        payload = json.loads(json_path.read_text(encoding="utf-8-sig"))
+    except Exception as e:
+        return f"Invalid tickets_latest.json: {e}", 500
+
+    cst_path = BASE_DIR / "scripts" / "combined_slate_tickets.py"
+    if not cst_path.exists():
+        return "scripts/combined_slate_tickets.py not found in repo.", 500
+    spec = importlib.util.spec_from_file_location("combined_slate_tickets", cst_path)
+    if spec is None or spec.loader is None:
+        return "Could not load combined_slate_tickets module.", 500
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    html = mod.render_tickets_html(payload)
+    r = make_response(html)
+    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    return r
 
 
 @app.get("/payout")
@@ -591,6 +611,19 @@ def api_jobs():
 # ──────────────────────────────────────────────────────────────────────────────
 # Main
 # ──────────────────────────────────────────────────────────────────────────────
+
+@app.get("/api/tickets-latest")
+def api_tickets_latest():
+    """Full tickets payload (groups, filters, date) for debugging and clients."""
+    json_path = TEMPLATES_DIR / "tickets_latest.json"
+    if not json_path.exists():
+        return jsonify({"error": "tickets_latest.json not found", "groups": []}), 404
+    try:
+        data = json.loads(json_path.read_text(encoding="utf-8-sig"))
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({"error": str(e), "groups": []}), 500
+
 
 # API: Slate picks - deduped unique picks from tickets_latest.json
 @app.get("/api/slate")

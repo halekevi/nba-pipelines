@@ -864,10 +864,8 @@ def write_slate_json(nba, cbb, nhl, soccer, mlb, nba1h, nba1q, wcbb, date_str, o
     print(f"  slate_latest.json -> {out_path}  ({sum(len(v) for v in payload['sports'].values())} props)")
 
 
-def write_web_outputs(payload, outdir: str):
-    os.makedirs(outdir, exist_ok=True)
-    json_path = os.path.join(outdir, "tickets_latest.json")
-    html_path = os.path.join(outdir, "tickets_latest.html")
+def render_tickets_html(payload: dict) -> str:
+    """Build full tickets page HTML from the same structure as tickets_latest.json."""
 
     def fmt_pct(x) -> str:
         try:
@@ -896,9 +894,6 @@ def write_web_outputs(payload, outdir: str):
             return f"{xf:.2f}".rstrip("0").rstrip(".")
         except Exception:
             return str(x) if x is not None else ""
-
-    with open(json_path, "w", encoding="utf-8") as f:
-        json.dump(payload, f, indent=2, ensure_ascii=False)
 
     # ── helpers ────────────────────────────────────────────────────────────────
     def hit_color(x) -> str:
@@ -1275,6 +1270,13 @@ html[data-theme="light"] .ticket{
 </div>
 """)
 
+    if not payload.get("groups"):
+        html_parts.append("""
+<div class="filter-pill" style="margin-top:-12px;border-color:rgba(201,106,116,.35);color:#d4b5b8;">
+  <strong>No tickets in this JSON.</strong> Run the combined slate ticket script with <code>--write-web</code> after building slates, or relax filters. Download JSON (link above) to confirm <code>groups</code> is non-empty.
+</div>
+""")
+
     for g in payload.get("groups", []):
         html_parts.append(f"""
 <div class="group">
@@ -1513,10 +1515,18 @@ html[data-theme="light"] .ticket{
 </body>
 </html>""")
 
-    html_str = "\n".join(html_parts)
+    return "\n".join(html_parts)
+
+
+def write_web_outputs(payload, outdir: str):
+    os.makedirs(outdir, exist_ok=True)
+    json_path = os.path.join(outdir, "tickets_latest.json")
+    html_path = os.path.join(outdir, "tickets_latest.html")
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2, ensure_ascii=False)
+    html_str = render_tickets_html(payload)
     with open(html_path, "w", encoding="utf-8") as f:
         f.write(html_str)
-
     print(f"[OK] Web JSON  -> {json_path}")
     print(f"[OK] Web HTML  -> {html_path}")
 
