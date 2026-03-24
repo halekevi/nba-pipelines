@@ -1,0 +1,34 @@
+proj_id,player_id,cbb_player_key,player,player_norm,team_abbr,opp_team_abbr,pp_team,pp_opp_team,pos,prop_type,prop_norm,pick_type,line,start_time,pp_game_id,league_id,team,stat_type,odds_type,duration,line_num
+10808524,224295,hannah hidalgo|ND,Hannah Hidalgo,hannah hidalgo,ND,OSU,ND,OSU,G,Points,pts,Demon,29.5,2026-03-23T16:00:00.000-04:00,146288,176,ND,Points,demon,Full,29.5
+10807017,224295,hannah hidalgo|ND,Hannah Hidalgo,hannah hidalgo,ND,OSU,ND,OSU,G,Points,pts,Demon,26.5,2026-03-23T16:00:00.000-04:00,146288,176,ND,Points,demon,Full,26.5
+10807000,226901,jaloni cambridge|OSU,Jaloni Cambridge,jaloni cambridge,OSU,ND,OSU,ND,G,Points,pts,Demon,24.5,2026-03-23T16:00:00.000-04:00,146288,176,OSU,Points,demon,Full,24.5
+10808526,224295,hannah hidalgo|ND,Hannah Hidalgo,hannah hidalgo,ND,OSU,ND,OSU,G,Points,pts,Goblin,19.5,2026-03-23T16:00:00.000-04:00,146288,176,ND,Points,goblin,Full,19.5
+10807001,224288,chance gray|OSU,Chance Gray,chance gray,OSU,ND,OSU,ND,G,Points,pts,Demon,16.5,2026-03-23T16:00:00.000-04:00,146288,176,OSU,Points,demon,Full,16.5
+10807018,280152,cassandre prosper|ND,Cassandre Prosper,cassandre prosper,ND,OSU,ND,OSU,G,Points,pts,Demon,15.5,2026-03-23T16:00:00.000-04:00,146288,176,ND,Points,demon,Full,15.5
+10807019,309447,iyana moore|ND,Iyana Moore,iyana moore,ND,OSU,ND,OSU,G,Points,pts,Demon,13.5,2026-03-23T16:00:00.000-04:00,146288,176,ND,Points,demon,Full,13.5
+10808845,232538,azzi fudd|CONN,Azzi Fudd,azzi fudd,CONN,,CONN,,G,Points,pts,Demon,24.5,2026-03-23T18:00:00.000-04:00,146290,176,CONN,Points,demon,Full,24.5
+10808848,224015,sarah strong|CONN,Sarah Strong,sarah strong,CONN,,CONN,,F,Points,pts,Demon,24.5,2026-03-23T18:00:00.000-04:00,146290,176,CONN,Points,demon,Full,24.5
+10808844,232538,azzi fudd|CONN,Azzi Fudd,azzi fudd,CONN,,CONN,,G,Points,pts,Demon,19.5,2026-03-23T18:00:00.000-04:00,146290,176,CONN,Points,demon,Full,19.5
+10808847,224015,sarah strong|CONN,Sarah Strong,sarah strong,CONN,,CONN,,F,Points,pts,Demon,19.5,2026-03-23T18:00:00.000-04:00,146290,176,CONN,Points,demon,Full,19.5
+10808843,232538,azzi fudd|CONN,Azzi Fudd,azzi fudd,CONN,,CONN,,G,Points,pts,Goblin,14.5,2026-03-23T18:00:00.000-04:00,146290,176,CONN,Points,goblin,Full,14.5
+10808846,224015,sarah strong|CONN,Sarah Strong,sarah strong,CONN,,CONN,,F,Points,pts,Goblin,14.5,2026-03-23T18:00:00.000-04:00,146290,176,CONN,Points,goblin,Full,14.5
+10810180,276430,ta niya latson|SCAR,Ta'Niya Latson,ta niya latson,SCAR,USC,SCAR,USC,G,Pts+Rebs+Asts,pra,Goblin,22.5,2026-03-23T20:00:00.000-04:00,146292,176,SCAR,Pts+Rebs+Asts,goblin,Full,22.5
+10808108,227076,joyce edwards|SCAR,Joyce Edwards,joyce edwards,SCAR,USC,SCAR,USC,F,Points,pts,Demon,20.5,2026-03-23T20:00:00.000-04:00,146292,176,SCAR,Points,demon,Full,20.5
+10809106,276430,ta niya latson|SCAR,Ta'Niya Latson,ta niya latson,SCAR,USC,SCAR,USC,G,Points,pts,Demon,19.5,2026-03-23T20:00:00.000-04:00,146292,176,SCAR,Points,demon,Full,19.5
+10808107,276911,jazzy davidson|USC,Jazzy Davidson,jazzy davidson,USC,SCAR,USC,SCAR,G,Points,pts,Demon,17.5,2026-03-23T20:00:00.000-04:00,146292,176,USC,Points,demon,Full,17.5
+10808109,278447,kara dunn|USC,Kara Dunn,kara dunn,USC,SCAR,USC,SCAR,G,Points,pts,Demon,14.5,2026-03-23T20:00:00.000-04:00,146292,176,USC,Points,demon,Full,14.5
+10809105,276430,ta niya latson|SCAR,Ta'Niya Latson,ta niya latson,SCAR,USC,SCAR,USC,G,Points,pts,Demon,14.5,2026-03-23T20:00:00.000-04:00,146292,176,SCAR,Points,demon,Full,14.5
+10808110,276431,madina okot|SCAR,Madina Okot,madina okot,SCAR,USC,SCAR,USC,C,Points,pts,Demon,13.5,2026-03-23T20:00:00.000-04:00,146292,176,SCAR,Points,demon,Full,13.5
+10808112,277703,tessa johnson|SCAR,Tessa Johnson,tessa johnson,SCAR,USC,SCAR,USC,G,Points,pts,Demon,13.5,2026-03-23T20:00:00.000-04:00,146292,176,SCAR,Points,demon,Full,13.5
+10810185,224708,lauren betts|UCLA,Lauren Betts,lauren betts,UCLA,,UCLA,,C,Pts+Rebs+Asts,pra,Goblin,30.5,2026-03-23T22:00:00.000-04:00,146293,176,UCLA,Pts+Rebs+Asts,goblin,Full,30.5
+10810184,224709,kiki rice|UCLA,Kiki Rice,kiki rice,UCLA,,UCLA,,G,Pts+Rebs+Asts,pra,Goblin,27.5,2026-03-23T22:00:00.000-04:00,146293,176,UCLA,Pts+Rebs+Asts,goblin,Full,27.5
+10809446,224709,kiki rice|UCLA,Kiki Rice,kiki rice,UCLA,,UCLA,,G,Points,pts,Demon,24.5,2026-03-23T22:00:00.000-04:00,146293,176,UCLA,Points,demon,Full,24.5
+10809447,224708,lauren betts|UCLA,Lauren Betts,lauren betts,UCLA,,UCLA,,C,Points,pts,Demon,24.5,2026-03-23T22:00:00.000-04:00,146293,176,UCLA,Points,demon,Full,24.5
+10808118,224708,lauren betts|UCLA,Lauren Betts,lauren betts,UCLA,,UCLA,,C,Points,pts,Demon,19.5,2026-03-23T22:00:00.000-04:00,146293,176,UCLA,Points,demon,Full,19.5
+10809445,224709,kiki rice|UCLA,Kiki Rice,kiki rice,UCLA,,UCLA,,G,Points,pts,Demon,19.5,2026-03-23T22:00:00.000-04:00,146293,176,UCLA,Points,demon,Full,19.5
+10809738,232534,gabriela jaquez|UCLA,Gabriela Jaquez,gabriela jaquez,UCLA,,UCLA,,G,Pts+Rebs+Asts,pra,Goblin,19.5,2026-03-23T22:00:00.000-04:00,146293,176,UCLA,Pts+Rebs+Asts,goblin,Full,19.5
+10808116,224709,kiki rice|UCLA,Kiki Rice,kiki rice,UCLA,,UCLA,,G,Points,pts,Goblin,16.5,2026-03-23T22:00:00.000-04:00,146293,176,UCLA,Points,goblin,Full,16.5
+10809443,232534,gabriela jaquez|UCLA,Gabriela Jaquez,gabriela jaquez,UCLA,,UCLA,,G,Points,pts,Demon,14.5,2026-03-23T22:00:00.000-04:00,146293,176,UCLA,Points,demon,Full,14.5
+10809448,224708,lauren betts|UCLA,Lauren Betts,lauren betts,UCLA,,UCLA,,C,Points,pts,Goblin,14.5,2026-03-23T22:00:00.000-04:00,146293,176,UCLA,Points,goblin,Full,14.5
+10810183,224709,kiki rice|UCLA,Kiki Rice,kiki rice,UCLA,,UCLA,,G,Points,pts,Goblin,14.5,2026-03-23T22:00:00.000-04:00,146293,176,UCLA,Points,goblin,Full,14.5
+10809444,232534,gabriela jaquez|UCLA,Gabriela Jaquez,gabriela jaquez,UCLA,,UCLA,,G,Points,pts,Goblin,9.5,2026-03-23T22:00:00.000-04:00,146293,176,UCLA,Points,goblin,Full,9.5
