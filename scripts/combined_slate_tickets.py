@@ -3786,13 +3786,18 @@ def main():
     print(f"\n[OK] Saved -> {args.output}")
     print(f"   Sheets ({len(wb.sheetnames)}): {wb.sheetnames}")
 
-    # Web output (FINAL only)
+    # Web output — same slips as the Excel workbook (all sports / sheet groups).
+    # FINAL-only groups are a stricter subset; the site should show what the combined file built.
     if args.write_web:
-        print("\nWriting GitHub Pages web outputs (FINAL tickets only)...")
-        nhl_pool_web   = pool(nhl)    if nhl    is not None and len(nhl)    > 0 else None
-        soccer_pool_web= pool(soccer) if soccer is not None and len(soccer) > 0 else None
+        print("\nWriting web tickets_latest.json / .html...")
+        workbook_web = [(n, t, bg) for (n, t, bg) in all_ticket_groups if t]
+        n_wb = sum(len(t) for _, t, _ in workbook_web)
+
+        nhl_pool_web = pool(nhl) if nhl is not None and len(nhl) > 0 else None
+        soccer_pool_web = pool(soccer) if soccer is not None and len(soccer) > 0 else None
         final_groups = build_final_web_ticket_groups(
-            nba_pool, cbb_pool,
+            nba_pool,
+            cbb_pool,
             nhl_pool=nhl_pool_web,
             soccer_pool=soccer_pool_web,
             min_hit_rate=thresholds.get("min_hit_rate", 0.70),
@@ -3800,19 +3805,24 @@ def main():
             min_rank=thresholds.get("min_rank", 5.0),
         )
         n_final = sum(len(t[1]) for t in final_groups if t[1])
-        if n_final == 0 and all_ticket_groups:
-            wb_slips = sum(len(t[1]) for t in all_ticket_groups if t[1])
-            print(
-                f"  NOTE: FINAL web groups are empty ({n_final} slips); "
-                f"falling back to workbook groups ({wb_slips} slips) for tickets_latest."
-            )
-            final_groups = [(n, t, bg) for (n, t, bg) in all_ticket_groups if t]
-        payload = ticket_groups_to_payload(final_groups, args.date, thresholds)
+        final_web = [(n, t, bg) for (n, t, bg) in final_groups if t]
+
+        if n_wb > 0:
+            web_source = workbook_web
+            print(f"  Web payload: {len(web_source)} groups, {n_wb} slips (workbook — all sports).")
+        elif n_final > 0:
+            web_source = final_web
+            print(f"  Web payload: {len(web_source)} groups, {n_final} slips (FINAL-only fallback).")
+        else:
+            web_source = []
+            print("  WARNING: No tickets for web (workbook and FINAL both empty).")
+
+        payload = ticket_groups_to_payload(web_source, args.date, thresholds)
         write_web_outputs(payload, args.web_outdir)
         write_slate_json(nba, cbb, nhl, soccer, mlb, nba1h, nba1q, wcbb, args.date, args.web_outdir)
         if args.also_root:
             write_web_outputs(payload, outdir=".")
-        print("[OK] Web outputs complete (FINAL only).")
+        print("[OK] Web outputs complete.")
 
 
 if __name__ == "__main__":
