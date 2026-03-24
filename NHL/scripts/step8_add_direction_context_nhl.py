@@ -366,6 +366,11 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--input",  required=True, help="Step 7 ranked XLSX")
     ap.add_argument("--output", default="step8_nhl_direction.csv")
+    ap.add_argument(
+        "--date",
+        default="",
+        help="Target slate date YYYY-MM-DD (default: local today; matches run_pipeline --Date)",
+    )
     args = ap.parse_args()
 
     wb = openpyxl.load_workbook(args.input, read_only=True, data_only=True)
@@ -395,12 +400,15 @@ def main():
 
     display_rows = [build_display_row(r, available_cols) for r in _tqdm(raw_rows, desc="  Building display rows", unit="prop")]
 
-    # ── Date filter: keep only today's games ──────────────────────────────────
-    today_local = date.today()
-    today_str   = today_local.isoformat()  # e.g. "2026-03-12"
+    # ── Date filter: keep only target slate date games ───────────────────────
+    ds = str(args.date).strip()[:10] if args.date and str(args.date).strip() else ""
+    target_local = (
+        datetime.strptime(ds, "%Y-%m-%d").date() if ds else date.today()
+    )
+    target_str = target_local.isoformat()
     before_filter = len(display_rows)
 
-    def _is_today(gs) -> bool:
+    def _is_target_date(gs) -> bool:
         """
         Accept game_start as a datetime object, a timezone-aware string, or a
         plain date string.  Always compare against the *local* calendar date so
@@ -416,7 +424,7 @@ def main():
                     local_date = gs.astimezone().date()
                 else:
                     local_date = gs.date()
-                return local_date == today_local
+                return local_date == target_local
             # String path
             gs_str = str(gs).strip()
             if not gs_str:
@@ -431,18 +439,18 @@ def main():
                 try:
                     dt = datetime.strptime(gs_str[:25], fmt)
                     if dt.tzinfo is not None:
-                        return dt.astimezone().date() == today_local
-                    return dt.date() == today_local
+                        return dt.astimezone().date() == target_local
+                    return dt.date() == target_local
                 except ValueError:
                     continue
             # Fallback: plain date prefix comparison
-            return gs_str[:10] == today_str
+            return gs_str[:10] == target_str
         except Exception:
             return False
 
-    display_rows = [r for r in display_rows if _is_today(r.get("game_start", ""))]
+    display_rows = [r for r in display_rows if _is_target_date(r.get("game_start", ""))]
     dropped = before_filter - len(display_rows)
-    print(f"[DateFilter] Kept {len(display_rows)}/{before_filter} rows for {today_str} (dropped {dropped} future/past rows)")
+    print(f"[DateFilter] Kept {len(display_rows)}/{before_filter} rows for {target_str} (dropped {dropped} future/past rows)")
 
     display_rows.sort(
         key=lambda r: int(r.get("rank") or 9999)

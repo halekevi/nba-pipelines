@@ -227,9 +227,25 @@ def main() -> None:
             except Exception:
                 return ""
         df["_et_date"] = df["start_time"].apply(_to_et_date)
-        df = df[df["_et_date"] == target_str].drop(columns="_et_date")
+        mask = df["_et_date"] == target_str
+        if not mask.any():
+            ed = df["_et_date"].astype(str)
+            ok = ed.str.len() >= 10
+            future = ed[ok & (ed >= target_str)]
+            if future.empty:
+                fallback = ed[ok]
+                pick = str(fallback.mode().iloc[0]) if len(fallback) else target_str
+            else:
+                pick = str(future.min())
+            if pick != target_str:
+                print(
+                    f"[DateFilter] Kept 0/{before_filter} for {target_str} ET; "
+                    f"using nearest slate date {pick} (>= target)"
+                )
+            mask = df["_et_date"] == pick
+        df = df.loc[mask].drop(columns="_et_date")
         dropped = before_filter - len(df)
-        print(f"[DateFilter] Kept {len(df)}/{before_filter} rows for {target_str} ET (dropped {dropped} rows)")
+        print(f"[DateFilter] Kept {len(df)}/{before_filter} rows for slate ET (dropped {dropped} rows)")
     else:
         print("[DateFilter] WARNING: no start_time column — skipping date filter")
 

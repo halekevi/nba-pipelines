@@ -10,8 +10,8 @@ Outputs:
   - docs/tickets_latest.json / docs/tickets_latest.html (for GitHub Pages /docs)
 
 Sheets: SUMMARY, Full Slate (reordered + STRONG/LEAN/RISK + pace beside Def Tier), NBA Slate, CBB Slate,
-        2–6-Leg tickets per sport (Goblin / Standard / Std+Gob mix / full Mix — Demon never on tickets),
-        COMBO and cross-sport Standard / Std+Gob / Goblin mixes
+        2–6-Leg tickets per sport (Goblin / Standard / Std+Gob mix),
+        cross-sport Standard / Std+Gob / Goblin mixes
 
 NEW (Web):
 - Adds player headshot thumbnails when an ID is available:
@@ -94,6 +94,14 @@ C = {
     "hdr_nhl": "1A3A5C",
     "hdr_soccer": "1A5C2E",
     "soccer": "EAFBF1",
+    "hdr_wcbb": "4A235A",
+    "hdr_mlb": "922B21",
+    "hdr_nba1q": "1F618D",
+    "hdr_nba1h": "117A65",
+    "wcbb": "F5EEF8",
+    "mlb": "FDEDEC",
+    "nba1q": "D6EAF8",
+    "nba1h": "D5F5E3",
     "mix": "F5EEF8",
     "gold": "F9E79F",
 }
@@ -519,6 +527,8 @@ def enforce_target_date(
     - if none, return empty (sport skipped)
     Optional fallback mode:
     - choose largest upcoming date (>= target) and tie-break by nearest date.
+    Soccer: always applies that fallback when the target date has zero rows (PP slate often
+    rolls to the next ET calendar day before US sports).
     """
     if df is None or df.empty:
         print(f"  [{sport} date] no rows to filter")
@@ -549,7 +559,8 @@ def enforce_target_date(
     kept = int(keep_mask.sum())
     total = len(out)
 
-    if kept == 0 and allow_cross_date_fallback:
+    use_date_fallback = allow_cross_date_fallback or (sport == "Soccer")
+    if kept == 0 and use_date_fallback:
         avail = [str(d) for d in counts.index.tolist() if str(d)]
         if avail:
             target_dt = pd.to_datetime(target_date, errors="coerce")
@@ -566,7 +577,7 @@ def enforce_target_date(
             kept = int(keep_mask.sum())
             print(
                 f"  [{sport} date] no rows for {target_date}; "
-                f"fallback enabled -> using {chosen} ({kept} rows)"
+                f"date fallback -> using {chosen} ({kept} rows)"
             )
 
     filtered = out.loc[keep_mask].copy()
@@ -799,13 +810,19 @@ def ticket_groups_to_payload(all_ticket_groups, date_str, thresholds):
     return payload
 
 
-def write_slate_json(nba, cbb, nhl, soccer, mlb, nba1h, nba1q, wcbb, date_str, outdir: str):
+def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
+                     wcbb=None, mlb=None, nba1q=None, nba1h=None):
     """Write full per-sport ranked slate to slate_latest.json for the web UI."""
     import math
 
     def safe(v):
         if v is None:
             return None
+        try:
+            if pd.isna(v):
+                return None
+        except (TypeError, ValueError):
+            pass
         try:
             if isinstance(v, float) and math.isnan(v):
                 return None
@@ -846,13 +863,13 @@ def write_slate_json(nba, cbb, nhl, soccer, mlb, nba1h, nba1q, wcbb, date_str, o
         "date": date_str,
         "sports": {
             "nba":    df_to_rows(nba,    "nba"),
-            "nba1h":  df_to_rows(nba1h,  "nba1h"),
-            "nba1q":  df_to_rows(nba1q,  "nba1q"),
             "cbb":    df_to_rows(cbb,    "cbb"),
-            "wcbb":   df_to_rows(wcbb,   "wcbb"),
             "nhl":    df_to_rows(nhl,    "nhl"),
             "soccer": df_to_rows(soccer, "soccer"),
+            "wcbb":   df_to_rows(wcbb,   "wcbb"),
             "mlb":    df_to_rows(mlb,    "mlb"),
+            "nba1q":  df_to_rows(nba1q,  "nba1q"),
+            "nba1h":  df_to_rows(nba1h,  "nba1h"),
         }
     }
 
@@ -1988,16 +2005,564 @@ def load_soccer(path: str) -> pd.DataFrame:
     return df
 
 
+def load_wcbb(path: str) -> pd.DataFrame:
+    path = resolve_input_path(path, fallback_filename="step8_wcbb_direction_clean.xlsx")
+
+    xl = pd.ExcelFile(path, engine="openpyxl")
+    sheet = "Soccer" if "Soccer" in xl.sheet_names else (
+        "ALL" if "ALL" in xl.sheet_names else xl.sheet_names[0])
+    df = pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
+
+    df = df.rename(columns={
+        # title-case (from step8 clean xlsx)
+        "Player":           "player",
+        "Tier":             "tier",
+        "Rank Score":       "rank_score",
+        "Pos":              "pos",
+        "Team":             "team",
+        "Opp":              "opp",
+        "Game Time":        "game_time",
+        "Prop":             "prop_type",
+        "Pick Type":        "pick_type",
+        "Line":             "line",
+        "Direction":        "direction",
+        "Edge":             "edge",
+        "Projection":       "projection",
+        "ESPN ID":          "espn_player_id",
+        "Hit Rate (5g)":    "hit_rate",
+        # Kept separate so we can coalesce into hit_rate when 5g is blank (common when
+        # Soccer step5/7 line-hit columns aren't populated yet).
+        "Hit Rate (10g)":   "_soccer_hit10",
+        "Last 5 Avg":       "l5_avg",
+        "Season Avg":       "season_avg",
+        "L5 Over":          "l5_over",
+        "L5 Under":         "l5_under",
+        "Def Rank":         "def_rank",
+        "Def Tier":         "def_tier",
+        "Min Tier":         "min_tier",
+        "Shot Role":        "shot_role",
+        "Usage Role":       "usage_role",
+        "League":           "league",
+        "Pos Group":        "position_group",
+        "Void Reason":      "void_reason",
+        # snake_case fallbacks
+        "player_name":        "player",
+        "stat_type":          "prop_type",
+        "stat_norm":          "prop_type",
+        "line_score":         "line",
+        "recommended_side":   "direction",
+        "composite_hit_rate": "hit_rate",
+        "avg_L5":             "l5_avg",
+        "avg_season":         "season_avg",
+        "def_tier":           "def_tier",
+        "def_rank":           "def_rank",
+        "prop_score":         "rank_score",
+        "game_start":         "game_time",
+        "opponent":           "opp",
+        "line_hit_rate_over_ou_5":  "hit_rate",
+        "line_hit_rate_over_ou_10": "_soccer_hit10",
+        "Game Script Mult": "game_script_mult",
+        "Game Script Note": "game_script_note",
+        "game_script_mult": "game_script_mult",
+        "game_script_note": "game_script_note",
+    })
+
+    if "opp" not in df.columns:
+        df["opp"] = ""
+
+    df = df.loc[:, ~df.columns.duplicated()].copy()
+    df["sport"] = "WCBB"
+
+    def _norm_pick(x):
+        t = str(x).strip().lower() if x else ""
+        if "gob" in t: return "Goblin"
+        if "dem" in t: return "Demon"
+        return "Standard"
+
+    if "pick_type" not in df.columns:
+        df["pick_type"] = "Standard"
+    df["pick_type"] = df["pick_type"].apply(_norm_pick)
+
+    if "direction" in df.columns:
+        df["direction"] = df["direction"].astype(str).str.upper()
+    else:
+        df["direction"] = "OVER"
+
+    if "tier" in df.columns:
+        df["tier"] = df["tier"].astype(str).str.upper()
+    else:
+        df["tier"] = "C"
+
+    if "hit_rate" not in df.columns:
+        df["hit_rate"] = np.nan
+
+    for col in ["rank_score", "hit_rate", "line", "_soccer_hit10"]:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    # Prefer L5 hit rate, then L10, when either is present.
+    if "_soccer_hit10" in df.columns:
+        df["hit_rate"] = df["hit_rate"].combine_first(df["_soccer_hit10"])
+        df.drop(columns=["_soccer_hit10"], inplace=True)
+
+    # Normalize hit_rate to 0–1 (handles "62%" or 62.0 from spreadsheets)
+    if "hit_rate" in df.columns and df["hit_rate"].notna().any():
+        hr = df["hit_rate"]
+        if hr.dtype == object:
+            hr = hr.astype(str).str.replace("%", "", regex=False).str.strip()
+            hr = pd.to_numeric(hr, errors="coerce")
+        else:
+            hr = pd.to_numeric(hr, errors="coerce")
+        if hr.dropna().max() is not None and hr.dropna().max() > 1.5:
+            hr = hr / 100.0
+        df["hit_rate"] = hr
+
+    # Still no usable hit rate (common on current Soccer pipeline when game logs are empty).
+    # Use a mild rank_score-based proxy so tier/rank ticket gates still run; re-run step5 when HRs exist.
+    hr_series = pd.to_numeric(df["hit_rate"], errors="coerce")
+    if hr_series.notna().sum() == 0:
+        rs = pd.to_numeric(df.get("rank_score", 0), errors="coerce").fillna(0.0)
+        q25, q75 = float(rs.quantile(0.25)), float(rs.quantile(0.75))
+        span = (q75 - q25) + 1e-6
+        proxy = 0.54 + ((rs - q25) / span).clip(lower=0.0, upper=1.0) * 0.12
+        df["hit_rate"] = proxy.clip(0.50, 0.68)
+        print(
+            "  [load_soccer] NOTE: Hit Rate (5g)/(10g) empty - using rank_score proxy for ticket eligibility. "
+            "Fix Soccer step5 line-hit output when possible."
+        )
+
+    if "edge" not in df.columns:
+        df["edge"] = 0.0
+
+    if "espn_player_id" in df.columns:
+        df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
+
+    df = df[df["line"].notna() & (df["line"] >= 0)]
+    df = df.astype(object).where(df.notna(), other=None)
+    return df
+
+
+def load_mlb(path: str) -> pd.DataFrame:
+    path = resolve_input_path(path, fallback_filename="step8_mlb_direction_clean.xlsx")
+
+    xl = pd.ExcelFile(path, engine="openpyxl")
+    sheet = "Soccer" if "Soccer" in xl.sheet_names else (
+        "ALL" if "ALL" in xl.sheet_names else xl.sheet_names[0])
+    df = pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
+
+    df = df.rename(columns={
+        # title-case (from step8 clean xlsx)
+        "Player":           "player",
+        "Tier":             "tier",
+        "Rank Score":       "rank_score",
+        "Pos":              "pos",
+        "Team":             "team",
+        "Opp":              "opp",
+        "Game Time":        "game_time",
+        "Prop":             "prop_type",
+        "Pick Type":        "pick_type",
+        "Line":             "line",
+        "Direction":        "direction",
+        "Edge":             "edge",
+        "Projection":       "projection",
+        "ESPN ID":          "espn_player_id",
+        "Hit Rate (5g)":    "hit_rate",
+        # Kept separate so we can coalesce into hit_rate when 5g is blank (common when
+        # Soccer step5/7 line-hit columns aren't populated yet).
+        "Hit Rate (10g)":   "_soccer_hit10",
+        "Last 5 Avg":       "l5_avg",
+        "Season Avg":       "season_avg",
+        "L5 Over":          "l5_over",
+        "L5 Under":         "l5_under",
+        "Def Rank":         "def_rank",
+        "Def Tier":         "def_tier",
+        "Min Tier":         "min_tier",
+        "Shot Role":        "shot_role",
+        "Usage Role":       "usage_role",
+        "League":           "league",
+        "Pos Group":        "position_group",
+        "Void Reason":      "void_reason",
+        # snake_case fallbacks
+        "player_name":        "player",
+        "stat_type":          "prop_type",
+        "stat_norm":          "prop_type",
+        "line_score":         "line",
+        "recommended_side":   "direction",
+        "composite_hit_rate": "hit_rate",
+        "avg_L5":             "l5_avg",
+        "avg_season":         "season_avg",
+        "def_tier":           "def_tier",
+        "def_rank":           "def_rank",
+        "prop_score":         "rank_score",
+        "game_start":         "game_time",
+        "opponent":           "opp",
+        "line_hit_rate_over_ou_5":  "hit_rate",
+        "line_hit_rate_over_ou_10": "_soccer_hit10",
+        "Game Script Mult": "game_script_mult",
+        "Game Script Note": "game_script_note",
+        "game_script_mult": "game_script_mult",
+        "game_script_note": "game_script_note",
+    })
+
+    if "opp" not in df.columns:
+        df["opp"] = ""
+
+    df = df.loc[:, ~df.columns.duplicated()].copy()
+    df["sport"] = "MLB"
+
+    def _norm_pick(x):
+        t = str(x).strip().lower() if x else ""
+        if "gob" in t: return "Goblin"
+        if "dem" in t: return "Demon"
+        return "Standard"
+
+    if "pick_type" not in df.columns:
+        df["pick_type"] = "Standard"
+    df["pick_type"] = df["pick_type"].apply(_norm_pick)
+
+    if "direction" in df.columns:
+        df["direction"] = df["direction"].astype(str).str.upper()
+    else:
+        df["direction"] = "OVER"
+
+    if "tier" in df.columns:
+        df["tier"] = df["tier"].astype(str).str.upper()
+    else:
+        df["tier"] = "C"
+
+    if "hit_rate" not in df.columns:
+        df["hit_rate"] = np.nan
+
+    for col in ["rank_score", "hit_rate", "line", "_soccer_hit10"]:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    # Prefer L5 hit rate, then L10, when either is present.
+    if "_soccer_hit10" in df.columns:
+        df["hit_rate"] = df["hit_rate"].combine_first(df["_soccer_hit10"])
+        df.drop(columns=["_soccer_hit10"], inplace=True)
+
+    # Normalize hit_rate to 0–1 (handles "62%" or 62.0 from spreadsheets)
+    if "hit_rate" in df.columns and df["hit_rate"].notna().any():
+        hr = df["hit_rate"]
+        if hr.dtype == object:
+            hr = hr.astype(str).str.replace("%", "", regex=False).str.strip()
+            hr = pd.to_numeric(hr, errors="coerce")
+        else:
+            hr = pd.to_numeric(hr, errors="coerce")
+        if hr.dropna().max() is not None and hr.dropna().max() > 1.5:
+            hr = hr / 100.0
+        df["hit_rate"] = hr
+
+    # Still no usable hit rate (common on current Soccer pipeline when game logs are empty).
+    # Use a mild rank_score-based proxy so tier/rank ticket gates still run; re-run step5 when HRs exist.
+    hr_series = pd.to_numeric(df["hit_rate"], errors="coerce")
+    if hr_series.notna().sum() == 0:
+        rs = pd.to_numeric(df.get("rank_score", 0), errors="coerce").fillna(0.0)
+        q25, q75 = float(rs.quantile(0.25)), float(rs.quantile(0.75))
+        span = (q75 - q25) + 1e-6
+        proxy = 0.54 + ((rs - q25) / span).clip(lower=0.0, upper=1.0) * 0.12
+        df["hit_rate"] = proxy.clip(0.50, 0.68)
+        print(
+            "  [load_soccer] NOTE: Hit Rate (5g)/(10g) empty - using rank_score proxy for ticket eligibility. "
+            "Fix Soccer step5 line-hit output when possible."
+        )
+
+    if "edge" not in df.columns:
+        df["edge"] = 0.0
+
+    if "espn_player_id" in df.columns:
+        df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
+
+    df = df[df["line"].notna() & (df["line"] >= 0)]
+    df = df.astype(object).where(df.notna(), other=None)
+    return df
+
+
+def load_nba1q(path: str) -> pd.DataFrame:
+    path = resolve_input_path(path, fallback_filename="step8_nba1q_direction_clean.xlsx")
+
+    xl = pd.ExcelFile(path, engine="openpyxl")
+    sheet = "Soccer" if "Soccer" in xl.sheet_names else (
+        "ALL" if "ALL" in xl.sheet_names else xl.sheet_names[0])
+    df = pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
+
+    df = df.rename(columns={
+        # title-case (from step8 clean xlsx)
+        "Player":           "player",
+        "Tier":             "tier",
+        "Rank Score":       "rank_score",
+        "Pos":              "pos",
+        "Team":             "team",
+        "Opp":              "opp",
+        "Game Time":        "game_time",
+        "Prop":             "prop_type",
+        "Pick Type":        "pick_type",
+        "Line":             "line",
+        "Direction":        "direction",
+        "Edge":             "edge",
+        "Projection":       "projection",
+        "ESPN ID":          "espn_player_id",
+        "Hit Rate (5g)":    "hit_rate",
+        # Kept separate so we can coalesce into hit_rate when 5g is blank (common when
+        # Soccer step5/7 line-hit columns aren't populated yet).
+        "Hit Rate (10g)":   "_soccer_hit10",
+        "Last 5 Avg":       "l5_avg",
+        "Season Avg":       "season_avg",
+        "L5 Over":          "l5_over",
+        "L5 Under":         "l5_under",
+        "Def Rank":         "def_rank",
+        "Def Tier":         "def_tier",
+        "Min Tier":         "min_tier",
+        "Shot Role":        "shot_role",
+        "Usage Role":       "usage_role",
+        "League":           "league",
+        "Pos Group":        "position_group",
+        "Void Reason":      "void_reason",
+        # snake_case fallbacks
+        "player_name":        "player",
+        "stat_type":          "prop_type",
+        "stat_norm":          "prop_type",
+        "line_score":         "line",
+        "recommended_side":   "direction",
+        "composite_hit_rate": "hit_rate",
+        "avg_L5":             "l5_avg",
+        "avg_season":         "season_avg",
+        "def_tier":           "def_tier",
+        "def_rank":           "def_rank",
+        "prop_score":         "rank_score",
+        "game_start":         "game_time",
+        "opponent":           "opp",
+        "line_hit_rate_over_ou_5":  "hit_rate",
+        "line_hit_rate_over_ou_10": "_soccer_hit10",
+        "Game Script Mult": "game_script_mult",
+        "Game Script Note": "game_script_note",
+        "game_script_mult": "game_script_mult",
+        "game_script_note": "game_script_note",
+    })
+
+    if "opp" not in df.columns:
+        df["opp"] = ""
+
+    df = df.loc[:, ~df.columns.duplicated()].copy()
+    df["sport"] = "NBA1Q"
+
+    def _norm_pick(x):
+        t = str(x).strip().lower() if x else ""
+        if "gob" in t: return "Goblin"
+        if "dem" in t: return "Demon"
+        return "Standard"
+
+    if "pick_type" not in df.columns:
+        df["pick_type"] = "Standard"
+    df["pick_type"] = df["pick_type"].apply(_norm_pick)
+
+    if "direction" in df.columns:
+        df["direction"] = df["direction"].astype(str).str.upper()
+    else:
+        df["direction"] = "OVER"
+
+    if "tier" in df.columns:
+        df["tier"] = df["tier"].astype(str).str.upper()
+    else:
+        df["tier"] = "C"
+
+    if "hit_rate" not in df.columns:
+        df["hit_rate"] = np.nan
+
+    for col in ["rank_score", "hit_rate", "line", "_soccer_hit10"]:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    # Prefer L5 hit rate, then L10, when either is present.
+    if "_soccer_hit10" in df.columns:
+        df["hit_rate"] = df["hit_rate"].combine_first(df["_soccer_hit10"])
+        df.drop(columns=["_soccer_hit10"], inplace=True)
+
+    # Normalize hit_rate to 0–1 (handles "62%" or 62.0 from spreadsheets)
+    if "hit_rate" in df.columns and df["hit_rate"].notna().any():
+        hr = df["hit_rate"]
+        if hr.dtype == object:
+            hr = hr.astype(str).str.replace("%", "", regex=False).str.strip()
+            hr = pd.to_numeric(hr, errors="coerce")
+        else:
+            hr = pd.to_numeric(hr, errors="coerce")
+        if hr.dropna().max() is not None and hr.dropna().max() > 1.5:
+            hr = hr / 100.0
+        df["hit_rate"] = hr
+
+    # Still no usable hit rate (common on current Soccer pipeline when game logs are empty).
+    # Use a mild rank_score-based proxy so tier/rank ticket gates still run; re-run step5 when HRs exist.
+    hr_series = pd.to_numeric(df["hit_rate"], errors="coerce")
+    if hr_series.notna().sum() == 0:
+        rs = pd.to_numeric(df.get("rank_score", 0), errors="coerce").fillna(0.0)
+        q25, q75 = float(rs.quantile(0.25)), float(rs.quantile(0.75))
+        span = (q75 - q25) + 1e-6
+        proxy = 0.54 + ((rs - q25) / span).clip(lower=0.0, upper=1.0) * 0.12
+        df["hit_rate"] = proxy.clip(0.50, 0.68)
+        print(
+            "  [load_soccer] NOTE: Hit Rate (5g)/(10g) empty - using rank_score proxy for ticket eligibility. "
+            "Fix Soccer step5 line-hit output when possible."
+        )
+
+    if "edge" not in df.columns:
+        df["edge"] = 0.0
+
+    if "espn_player_id" in df.columns:
+        df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
+
+    df = df[df["line"].notna() & (df["line"] >= 0)]
+    df = df.astype(object).where(df.notna(), other=None)
+    return df
+
+
+def load_nba1h(path: str) -> pd.DataFrame:
+    path = resolve_input_path(path, fallback_filename="step8_nba1h_direction_clean.xlsx")
+
+    xl = pd.ExcelFile(path, engine="openpyxl")
+    sheet = "Soccer" if "Soccer" in xl.sheet_names else (
+        "ALL" if "ALL" in xl.sheet_names else xl.sheet_names[0])
+    df = pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
+
+    df = df.rename(columns={
+        # title-case (from step8 clean xlsx)
+        "Player":           "player",
+        "Tier":             "tier",
+        "Rank Score":       "rank_score",
+        "Pos":              "pos",
+        "Team":             "team",
+        "Opp":              "opp",
+        "Game Time":        "game_time",
+        "Prop":             "prop_type",
+        "Pick Type":        "pick_type",
+        "Line":             "line",
+        "Direction":        "direction",
+        "Edge":             "edge",
+        "Projection":       "projection",
+        "ESPN ID":          "espn_player_id",
+        "Hit Rate (5g)":    "hit_rate",
+        # Kept separate so we can coalesce into hit_rate when 5g is blank (common when
+        # Soccer step5/7 line-hit columns aren't populated yet).
+        "Hit Rate (10g)":   "_soccer_hit10",
+        "Last 5 Avg":       "l5_avg",
+        "Season Avg":       "season_avg",
+        "L5 Over":          "l5_over",
+        "L5 Under":         "l5_under",
+        "Def Rank":         "def_rank",
+        "Def Tier":         "def_tier",
+        "Min Tier":         "min_tier",
+        "Shot Role":        "shot_role",
+        "Usage Role":       "usage_role",
+        "League":           "league",
+        "Pos Group":        "position_group",
+        "Void Reason":      "void_reason",
+        # snake_case fallbacks
+        "player_name":        "player",
+        "stat_type":          "prop_type",
+        "stat_norm":          "prop_type",
+        "line_score":         "line",
+        "recommended_side":   "direction",
+        "composite_hit_rate": "hit_rate",
+        "avg_L5":             "l5_avg",
+        "avg_season":         "season_avg",
+        "def_tier":           "def_tier",
+        "def_rank":           "def_rank",
+        "prop_score":         "rank_score",
+        "game_start":         "game_time",
+        "opponent":           "opp",
+        "line_hit_rate_over_ou_5":  "hit_rate",
+        "line_hit_rate_over_ou_10": "_soccer_hit10",
+        "Game Script Mult": "game_script_mult",
+        "Game Script Note": "game_script_note",
+        "game_script_mult": "game_script_mult",
+        "game_script_note": "game_script_note",
+    })
+
+    if "opp" not in df.columns:
+        df["opp"] = ""
+
+    df = df.loc[:, ~df.columns.duplicated()].copy()
+    df["sport"] = "NBA1H"
+
+    def _norm_pick(x):
+        t = str(x).strip().lower() if x else ""
+        if "gob" in t: return "Goblin"
+        if "dem" in t: return "Demon"
+        return "Standard"
+
+    if "pick_type" not in df.columns:
+        df["pick_type"] = "Standard"
+    df["pick_type"] = df["pick_type"].apply(_norm_pick)
+
+    if "direction" in df.columns:
+        df["direction"] = df["direction"].astype(str).str.upper()
+    else:
+        df["direction"] = "OVER"
+
+    if "tier" in df.columns:
+        df["tier"] = df["tier"].astype(str).str.upper()
+    else:
+        df["tier"] = "C"
+
+    if "hit_rate" not in df.columns:
+        df["hit_rate"] = np.nan
+
+    for col in ["rank_score", "hit_rate", "line", "_soccer_hit10"]:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    # Prefer L5 hit rate, then L10, when either is present.
+    if "_soccer_hit10" in df.columns:
+        df["hit_rate"] = df["hit_rate"].combine_first(df["_soccer_hit10"])
+        df.drop(columns=["_soccer_hit10"], inplace=True)
+
+    # Normalize hit_rate to 0–1 (handles "62%" or 62.0 from spreadsheets)
+    if "hit_rate" in df.columns and df["hit_rate"].notna().any():
+        hr = df["hit_rate"]
+        if hr.dtype == object:
+            hr = hr.astype(str).str.replace("%", "", regex=False).str.strip()
+            hr = pd.to_numeric(hr, errors="coerce")
+        else:
+            hr = pd.to_numeric(hr, errors="coerce")
+        if hr.dropna().max() is not None and hr.dropna().max() > 1.5:
+            hr = hr / 100.0
+        df["hit_rate"] = hr
+
+    # Still no usable hit rate (common on current Soccer pipeline when game logs are empty).
+    # Use a mild rank_score-based proxy so tier/rank ticket gates still run; re-run step5 when HRs exist.
+    hr_series = pd.to_numeric(df["hit_rate"], errors="coerce")
+    if hr_series.notna().sum() == 0:
+        rs = pd.to_numeric(df.get("rank_score", 0), errors="coerce").fillna(0.0)
+        q25, q75 = float(rs.quantile(0.25)), float(rs.quantile(0.75))
+        span = (q75 - q25) + 1e-6
+        proxy = 0.54 + ((rs - q25) / span).clip(lower=0.0, upper=1.0) * 0.12
+        df["hit_rate"] = proxy.clip(0.50, 0.68)
+        print(
+            "  [load_soccer] NOTE: Hit Rate (5g)/(10g) empty - using rank_score proxy for ticket eligibility. "
+            "Fix Soccer step5 line-hit output when possible."
+        )
+
+    if "edge" not in df.columns:
+        df["edge"] = 0.0
+
+    if "espn_player_id" in df.columns:
+        df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
+
+    df = df[df["line"].notna() & (df["line"] >= 0)]
+    df = df.astype(object).where(df.notna(), other=None)
+    return df
+
+
 # ── Merge to full slate ────────────────────────────────────────────────────────
 def build_combined_slate(
     nba: pd.DataFrame,
     cbb: pd.DataFrame,
     nhl: pd.DataFrame = None,
     soccer: pd.DataFrame = None,
-    nba1h: pd.DataFrame = None,
-    nba1q: pd.DataFrame = None,
     wcbb: pd.DataFrame = None,
     mlb: pd.DataFrame = None,
+    nba1q: pd.DataFrame = None,
+    nba1h: pd.DataFrame = None,
 ) -> pd.DataFrame:
     keep = [
         "sport",
@@ -2047,14 +2612,14 @@ def build_combined_slate(
         frames.append(safe_keep(nhl, keep))
     if soccer is not None and len(soccer) > 0:
         frames.append(safe_keep(soccer, keep))
-    if nba1h is not None and len(nba1h) > 0:
-        frames.append(safe_keep(nba1h, keep))
-    if nba1q is not None and len(nba1q) > 0:
-        frames.append(safe_keep(nba1q, keep))
     if wcbb is not None and len(wcbb) > 0:
         frames.append(safe_keep(wcbb, keep))
     if mlb is not None and len(mlb) > 0:
         frames.append(safe_keep(mlb, keep))
+    if nba1q is not None and len(nba1q) > 0:
+        frames.append(safe_keep(nba1q, keep))
+    if nba1h is not None and len(nba1h) > 0:
+        frames.append(safe_keep(nba1h, keep))
     combined = pd.concat(frames, ignore_index=True)
 
     if "rank_score" in combined.columns:
@@ -2234,7 +2799,6 @@ def build_tickets(pool: pd.DataFrame, n_legs: int, max_tickets=20, require_mix=F
     Key improvements vs original:
     - Per-leg min hit rate floor (longer tickets require higher floor)
     - Tier floor per leg count for longer tickets (5/6-leg = Tier A/B only)
-    - Demon legs soft-filtered: excluded from 5/6-leg tickets, capped at 1 in 3/4-leg
     - Tickets sorted by est_win_prob DESC then avg_rank_score (optimises for actual wins)
     - require_mix still enforced for cross-sport sheets
     """
@@ -2252,10 +2816,6 @@ def build_tickets(pool: pd.DataFrame, n_legs: int, max_tickets=20, require_mix=F
     # Apply tier floor for 5/6-leg tickets
     if n_legs >= 5 and "tier" in pool.columns:
         pool = pool[pool["tier"].isin(ok_tiers)].copy()
-
-    # For 5/6-leg tickets: remove Demon legs entirely (38% hit rate kills these)
-    if n_legs >= 5 and "pick_type" in pool.columns:
-        pool = pool[pool["pick_type"] != "Demon"].copy()
 
     pool = pool.reset_index(drop=True)
 
@@ -2305,12 +2865,6 @@ def build_tickets(pool: pd.DataFrame, n_legs: int, max_tickets=20, require_mix=F
                 player = str(row.get("player", "")).strip().lower()
                 if player and player not in ticket_players:
 
-                    # Cap Demon legs at 1 per 3/4-leg ticket
-                    if n_legs <= 4 and "pick_type" in row.index:
-                        demon_count = sum(1 for r in ticket_rows
-                                          if str(r.get("pick_type", "")) == "Demon")
-                        if str(row.get("pick_type", "")) == "Demon" and demon_count >= 1:
-                            continue
                     if _is_fantasy_prop(row) and fantasy_count >= max_fantasy:
                         continue
 
@@ -3183,7 +3737,8 @@ def write_ticket_sheet(wb, tickets, sheet_name, bg_hdr, label=""):
 
 
 # ── Write SUMMARY sheet ───────────────────────────────────────────────────────
-def write_summary(wb, nba, cbb, combined, all_ticket_groups, date_str, thresholds, nhl=None, soccer=None):
+def write_summary(wb, nba, cbb, combined, all_ticket_groups, date_str, thresholds,
+                  nhl=None, soccer=None, wcbb=None, mlb=None, nba1q=None, nba1h=None):
     ws = wb.create_sheet("SUMMARY", 0)
     sw(ws, [28, 14, 10, 10, 10, 10, 10, 12, 18])
 
@@ -3246,6 +3801,18 @@ def write_summary(wb, nba, cbb, combined, all_ticket_groups, date_str, threshold
     if soccer is not None and len(soccer) > 0:
         elig_soc = len(soccer[soccer.get("tier", "").isin(["A", "B"])]) if "tier" in soccer.columns else 0
         row = stat_row(row, "Soccer Props", len(soccer), elig_soc, C["soccer"])
+    if wcbb is not None and len(wcbb) > 0:
+        elig_wcbb = len(wcbb[wcbb["tier"].isin(["A", "B"])]) if "tier" in wcbb.columns else 0
+        row = stat_row(row, "WCBB Props", len(wcbb), elig_wcbb, C["wcbb"])
+    if mlb is not None and len(mlb) > 0:
+        elig_mlb = len(mlb[mlb["tier"].isin(["A", "B"])]) if "tier" in mlb.columns else 0
+        row = stat_row(row, "MLB Props", len(mlb), elig_mlb, C["mlb"])
+    if nba1q is not None and len(nba1q) > 0:
+        elig_nba1q = len(nba1q[nba1q["tier"].isin(["A", "B"])]) if "tier" in nba1q.columns else 0
+        row = stat_row(row, "NBA1Q Props", len(nba1q), elig_nba1q, C["nba1q"])
+    if nba1h is not None and len(nba1h) > 0:
+        elig_nba1h = len(nba1h[nba1h["tier"].isin(["A", "B"])]) if "tier" in nba1h.columns else 0
+        row = stat_row(row, "NBA1H Props", len(nba1h), elig_nba1h, C["nba1h"])
     row = stat_row(row, "Combined Slate", len(combined), elig_all)
     row += 1
 
@@ -3312,26 +3879,10 @@ def main():
         default="",
         help=f"Soccer step8 (default: {DEFAULT_SOCCER_PATH})",
     )
-    ap.add_argument(
-        "--mlb",
-        default="",
-        help=f"MLB step8 (default: {DEFAULT_MLB_PATH})",
-    )
-    ap.add_argument(
-        "--nba1h",
-        default="",
-        help=f"NBA1H step8 (default: {DEFAULT_NBA1H_PATH})",
-    )
-    ap.add_argument(
-        "--nba1q",
-        default="",
-        help=f"NBA1Q step8 (default: {DEFAULT_NBA1Q_PATH})",
-    )
-    ap.add_argument(
-        "--wcbb",
-        default="",
-        help=f"WCBB step6 (default: {DEFAULT_WCBB_PATH})",
-    )
+    ap.add_argument("--wcbb", default="", help="WCBB step8 direction clean xlsx (optional)")
+    ap.add_argument("--mlb", default="", help="MLB step8 direction clean xlsx (optional)")
+    ap.add_argument("--nba1q", default="", help="NBA 1st Quarter step8 direction clean xlsx (optional)")
+    ap.add_argument("--nba1h", default="", help="NBA 1st Half step8 direction clean xlsx (optional)")
     ap.add_argument("--output", default="")
     ap.add_argument(
         "--date",
@@ -3346,7 +3897,7 @@ def main():
         "--pick-types",
         default="Goblin,Standard",
         dest="pick_types",
-        help="Comma-separated pick types for ticket eligibility. Demon is never used on tickets (slate rows unchanged).",
+        help="Comma-separated pick types for ticket eligibility (Demon excluded from tickets).",
     )
     ap.add_argument("--max-tickets", type=int, default=20, dest="max_tickets")
     ap.add_argument("--use-context-filter", action="store_true", dest="use_context_filter", default=True,
@@ -3386,14 +3937,6 @@ def main():
         args.nhl = DEFAULT_NHL_PATH
     if not str(args.soccer).strip():
         args.soccer = DEFAULT_SOCCER_PATH
-    if not str(args.mlb).strip():
-        args.mlb = DEFAULT_MLB_PATH
-    if not str(args.nba1h).strip():
-        args.nba1h = DEFAULT_NBA1H_PATH
-    if not str(args.nba1q).strip():
-        args.nba1q = DEFAULT_NBA1Q_PATH
-    if not str(args.wcbb).strip():
-        args.wcbb = DEFAULT_WCBB_PATH
 
     if not args.output:
         args.output = f"combined_slate_tickets_{args.date}.xlsx"
@@ -3460,80 +4003,80 @@ def main():
     else:
         print("  [Soccer] skipped (empty --soccer)")
 
-    mlb = None
-    if str(args.mlb).strip():
-        try:
-            mlb = load_nba(args.mlb)
-            mlb["sport"] = "MLB"
-            mlb = enforce_target_date(
-                mlb, "MLB", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
-            )
-            mlb = attach_standard_refs(mlb)
-            print(f"  {len(mlb)} MLB props loaded")
-            _load_audit_row("MLB", args.mlb, mlb)
-        except Exception as e:
-            print(f"  WARNING: Could not load MLB file: {e}")
-            mlb = None
-    else:
-        print("  [MLB] skipped (empty --mlb)")
-
-    nba1h = None
-    if str(args.nba1h).strip():
-        try:
-            nba1h = load_nba(args.nba1h)
-            nba1h["sport"] = "NBA1H"
-            nba1h = enforce_target_date(
-                nba1h, "NBA1H", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
-            )
-            nba1h = attach_standard_refs(nba1h)
-            print(f"  {len(nba1h)} NBA1H props loaded")
-            _load_audit_row("NBA1H", args.nba1h, nba1h)
-        except Exception as e:
-            print(f"  WARNING: Could not load NBA1H file: {e}")
-            nba1h = None
-    else:
-        print("  [NBA1H] skipped (empty --nba1h)")
-
-    nba1q = None
-    if str(args.nba1q).strip():
-        try:
-            nba1q = load_nba(args.nba1q)
-            nba1q["sport"] = "NBA1Q"
-            nba1q = enforce_target_date(
-                nba1q, "NBA1Q", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
-            )
-            nba1q = attach_standard_refs(nba1q)
-            print(f"  {len(nba1q)} NBA1Q props loaded")
-            _load_audit_row("NBA1Q", args.nba1q, nba1q)
-        except Exception as e:
-            print(f"  WARNING: Could not load NBA1Q file: {e}")
-            nba1q = None
-    else:
-        print("  [NBA1Q] skipped (empty --nba1q)")
-
     wcbb = None
-    if str(args.wcbb).strip():
+    if args.wcbb:
         try:
-            wcbb = load_cbb(args.wcbb)
-            wcbb["sport"] = "WCBB"
-            wcbb = enforce_target_date(
-                wcbb, "WCBB", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
-            )
+            wcbb = load_wcbb(args.wcbb)
             wcbb = attach_standard_refs(wcbb)
             print(f"  {len(wcbb)} WCBB props loaded")
-            _load_audit_row("WCBB", args.wcbb, wcbb)
         except Exception as e:
             print(f"  WARNING: Could not load WCBB file: {e}")
             wcbb = None
-    else:
-        print("  [WCBB] skipped (empty --wcbb)")
+
+    mlb = None
+    if args.mlb:
+        try:
+            mlb = load_mlb(args.mlb)
+            mlb = attach_standard_refs(mlb)
+            print(f"  {len(mlb)} MLB props loaded")
+        except Exception as e:
+            print(f"  WARNING: Could not load MLB file: {e}")
+            mlb = None
+
+    nba1q = None
+    if args.nba1q:
+        try:
+            nba1q = load_nba1q(args.nba1q)
+            nba1q = attach_standard_refs(nba1q)
+            print(f"  {len(nba1q)} NBA1Q props loaded")
+        except Exception as e:
+            print(f"  WARNING: Could not load NBA1Q file: {e}")
+            nba1q = None
+
+    nba1h = None
+    if args.nba1h:
+        try:
+            nba1h = load_nba1h(args.nba1h)
+            nba1h = attach_standard_refs(nba1h)
+            print(f"  {len(nba1h)} NBA1H props loaded")
+        except Exception as e:
+            print(f"  WARNING: Could not load NBA1H file: {e}")
+            nba1h = None
 
     # ✅ Attach Standard sibling refs AFTER normalized columns exist
     nba = attach_standard_refs(nba)
     cbb = attach_standard_refs(cbb)
 
+    def drop_stale_rows(df, target_date, sport_label):
+        if df is None or df.empty:
+            return df
+        if "game_date" not in df.columns:
+            return df
+        dated = df["game_date"].notna()
+        gd_str = df["game_date"].astype(str).str[:10]
+        td = str(target_date).strip()[:10]
+        # Soccer boards often span several upcoming ET days; drop only rows clearly before the pipeline target.
+        if sport_label == "Soccer":
+            stale = dated & (gd_str < td)
+        else:
+            stale = dated & (gd_str != td)
+        n_stale = int(stale.sum())
+        if n_stale > 0:
+            print(f"  [date-filter] {sport_label}: dropped {n_stale} stale-dated rows (target slate {td})")
+        return df[~stale].copy()
+
+    nba = drop_stale_rows(nba, args.date, "NBA")
+    cbb = drop_stale_rows(cbb, args.date, "CBB")
+    nhl = drop_stale_rows(nhl, args.date, "NHL")
+    soccer = drop_stale_rows(soccer, args.date, "Soccer")
+    wcbb = drop_stale_rows(wcbb, args.date, "WCBB")
+    mlb = drop_stale_rows(mlb, args.date, "MLB")
+    nba1q = drop_stale_rows(nba1q, args.date, "NBA1Q")
+    nba1h = drop_stale_rows(nba1h, args.date, "NBA1H")
+
     print("Building combined slate...")
-    combined = build_combined_slate(nba, cbb, nhl, soccer, nba1h, nba1q, wcbb, mlb)
+    combined = build_combined_slate(nba, cbb, nhl, soccer,
+                                    wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h)
 
     # ✅ Attach Standard refs for combined too
     combined = attach_standard_refs(combined)
@@ -3585,159 +4128,177 @@ def main():
     wb.remove(wb.active)
 
     all_ticket_groups = []
-    def gen_tickets(pool_df, sport_label, bg_hdr, sport_prefix, pick_type_filter=None, require_mix=False):
+    leg_sizes = [2, 3, 4, 5, 6]
+
+    def gen_tickets(pool_df, sport_label, bg_hdr, sport_prefix, pick_type_filter=None):
         rows_out = []
-        for n in TICKET_LEG_SIZES:
-            if pick_type_filter is None:
-                sub_pool = pool_df
-            elif isinstance(pick_type_filter, list):
-                sub_pool = pool_df[pool_df["pick_type"].isin(pick_type_filter)]
-            else:
-                sub_pool = pool_df[pool_df["pick_type"].isin([pick_type_filter])]
-            tickets = build_tickets(sub_pool, n, args.max_tickets, require_mix=require_mix)
+        for n in leg_sizes:
+            sub_pool = pool_df if pick_type_filter is None else pool_df[pool_df["pick_type"].isin([pick_type_filter])]
+            tickets = build_tickets(sub_pool, n, args.max_tickets)
             if tickets:
-                if isinstance(pick_type_filter, list):
-                    pt_label = "StdGob" if set(pick_type_filter) == {"Standard", "Goblin"} else "+".join(pick_type_filter)
-                else:
-                    pt_label = pick_type_filter or "Mix"
-                sheet_name = (
-                    f"{sport_prefix} {pt_label} {n}-Leg"[:31]
-                    if pick_type_filter
-                    else f"{sport_prefix} Mix {n}-Leg"[:31]
-                )
+                pt_label = pick_type_filter if pick_type_filter else "Std+Gob"
+                sheet_name = f"{sport_prefix} {pt_label} {n}-Leg"[:31]
                 write_ticket_sheet(wb, tickets, sheet_name, bg_hdr, label=f"{sport_label} {pt_label}")
                 rows_out.append((sheet_name, tickets, None))
                 print(f"  {sheet_name}: {len(tickets)} tickets")
         return rows_out
 
-    def gen_std_gob_mixed(pool_df, sport_label, bg_hdr, sport_prefix):
-        rows_out = []
-        for n in TICKET_LEG_SIZES:
-            if len(pool_df) < n:
-                continue
-            max_t = 2 if n == 3 else 1
-            min_std = 2 if n >= 4 else 1
-            tickets = build_mixed_picktype_tickets(pool_df, n, max_tickets=max_t, min_standard=min_std)
-            if tickets:
-                sheet_name = f"{sport_prefix} S+G {n}-Leg"[:31]
-                write_ticket_sheet(wb, tickets, sheet_name, bg_hdr, label=f"{sport_label} Std+Gob")
-                rows_out.append((sheet_name, tickets, None))
-                print(f"  {sheet_name}: {len(tickets)} tickets")
-        return rows_out
+    # ── NBA ────────────────────────────────────────────────────────────────────────
+    nba_std = pool(nba, ["Standard"])
+    nba_gob = pool(nba, ["Goblin"])
+    nba_mix_pool = pd.concat([nba_std, nba_gob], ignore_index=True).sort_values("rank_score", ascending=False)
+    if len(nba_std) >= 2:
+        all_ticket_groups += gen_tickets(nba_std, "NBA", C["hdr_nba"], "NBA", "Standard")
+    if len(nba_gob) >= 2:
+        all_ticket_groups += gen_tickets(nba_gob, "NBA", C["hdr_nba"], "NBA", "Goblin")
+    if len(nba_mix_pool) >= 2:
+        all_ticket_groups += gen_tickets(nba_mix_pool, "NBA", C["hdr_nba"], "NBA")
 
-    def cross_sport_pool(frames):
-        parts = [f for f in frames if f is not None and len(f) > 0]
-        if len(parts) < 2:
-            return None
-        out = pd.concat(parts, ignore_index=True)
-        if "sport" not in out.columns or out["sport"].nunique() < 2:
-            return None
-        return out.sort_values("rank_score", ascending=False, na_position="last")
+    # ── CBB ────────────────────────────────────────────────────────────────────────
+    cbb_std = pool(cbb, ["Standard"])
+    cbb_gob = pool(cbb, ["Goblin"])
+    cbb_mix_pool = pd.concat([cbb_std, cbb_gob], ignore_index=True).sort_values("rank_score", ascending=False)
+    if len(cbb_std) >= 2:
+        all_ticket_groups += gen_tickets(cbb_std, "CBB", C["hdr_cbb"], "CBB", "Standard")
+    if len(cbb_gob) >= 2:
+        all_ticket_groups += gen_tickets(cbb_gob, "CBB", C["hdr_cbb"], "CBB", "Goblin")
+    if len(cbb_mix_pool) >= 2:
+        all_ticket_groups += gen_tickets(cbb_mix_pool, "CBB", C["hdr_cbb"], "CBB")
 
-    for pt in ticket_pick_types:
-        pt_pool = pool(nba, [pt])
-        if len(pt_pool) >= MIN_TICKET_POOL:
-            all_ticket_groups += gen_tickets(pt_pool, "NBA", C["hdr_nba"], "NBA", pt)
-
-    if len(nba_pool) >= MIN_TICKET_POOL:
-        all_ticket_groups += gen_tickets(nba_pool, "NBA", C["hdr_nba"], "NBA Mix")
-
-    nba_sg = pool(nba, ["Standard", "Goblin"])
-    if len(nba_sg) >= MIN_TICKET_POOL:
-        all_ticket_groups += gen_std_gob_mixed(nba_sg, "NBA", C["hdr_nba"], "NBA")
-
-    for pt in ticket_pick_types:
-        pt_pool = pool(cbb, [pt])
-        if len(pt_pool) >= MIN_TICKET_POOL:
-            all_ticket_groups += gen_tickets(pt_pool, "CBB", C["hdr_cbb"], "CBB", pt)
-
-    if len(cbb_pool) >= MIN_TICKET_POOL:
-        all_ticket_groups += gen_tickets(cbb_pool, "CBB", C["hdr_cbb"], "CBB Mix")
-
-    cbb_sg = pool(cbb, ["Standard", "Goblin"])
-    if len(cbb_sg) >= MIN_TICKET_POOL:
-        all_ticket_groups += gen_std_gob_mixed(cbb_sg, "CBB", C["hdr_cbb"], "CBB")
-
+    # ── NHL ────────────────────────────────────────────────────────────────────────
     if nhl is not None and len(nhl) > 0:
-        nhl_pool = pool(nhl)
-        if len(nhl_pool) >= MIN_TICKET_POOL:
-            for pt in ticket_pick_types:
-                pt_pool = pool(nhl, [pt])
-                if len(pt_pool) >= MIN_TICKET_POOL:
-                    all_ticket_groups += gen_tickets(pt_pool, "NHL", C["hdr_nhl"], "NHL", pt)
-            all_ticket_groups += gen_tickets(nhl_pool, "NHL", C["hdr_nhl"], "NHL Mix")
-            nhl_sg = pool(nhl, ["Standard", "Goblin"])
-            if len(nhl_sg) >= MIN_TICKET_POOL:
-                all_ticket_groups += gen_std_gob_mixed(nhl_sg, "NHL", C["hdr_nhl"], "NHL")
+        nhl_std = pool(nhl, ["Standard"])
+        nhl_gob = pool(nhl, ["Goblin"])
+        nhl_mix_pool = pd.concat([nhl_std, nhl_gob], ignore_index=True).sort_values("rank_score", ascending=False)
+        if len(nhl_std) >= 2:
+            all_ticket_groups += gen_tickets(nhl_std, "NHL", C["hdr_nhl"], "NHL", "Standard")
+        if len(nhl_gob) >= 2:
+            all_ticket_groups += gen_tickets(nhl_gob, "NHL", C["hdr_nhl"], "NHL", "Goblin")
+        if len(nhl_mix_pool) >= 2:
+            all_ticket_groups += gen_tickets(nhl_mix_pool, "NHL", C["hdr_nhl"], "NHL")
 
+    # ── Soccer ─────────────────────────────────────────────────────────────────────
     if soccer is not None and len(soccer) > 0:
-        soccer_pool = pool(soccer)
-        if len(soccer_pool) >= MIN_TICKET_POOL:
-            for pt in ticket_pick_types:
-                pt_pool = pool(soccer, [pt])
-                if len(pt_pool) >= MIN_TICKET_POOL:
-                    all_ticket_groups += gen_tickets(pt_pool, "Soccer", C["hdr_soccer"], "Soccer", pt)
-            all_ticket_groups += gen_tickets(soccer_pool, "Soccer", C["hdr_soccer"], "Soccer Mix")
-            soc_sg = pool(soccer, ["Standard", "Goblin"])
-            if len(soc_sg) >= MIN_TICKET_POOL:
-                all_ticket_groups += gen_std_gob_mixed(soc_sg, "Soccer", C["hdr_soccer"], "Soccer")
+        soc_std = pool(soccer, ["Standard"])
+        soc_gob = pool(soccer, ["Goblin"])
+        soc_mix_pool = pd.concat([soc_std, soc_gob], ignore_index=True).sort_values("rank_score", ascending=False)
+        if len(soc_std) >= 2:
+            all_ticket_groups += gen_tickets(soc_std, "Soccer", C["hdr_soccer"], "Soccer", "Standard")
+        if len(soc_gob) >= 2:
+            all_ticket_groups += gen_tickets(soc_gob, "Soccer", C["hdr_soccer"], "Soccer", "Goblin")
+        if len(soc_mix_pool) >= 2:
+            all_ticket_groups += gen_tickets(soc_mix_pool, "Soccer", C["hdr_soccer"], "Soccer")
 
-    if len(combo_pool) >= MIN_TICKET_POOL:
-        all_ticket_groups += gen_tickets(combo_pool, "COMBO", C["hdr_mix"], "COMBO")
+    # ── WCBB ───────────────────────────────────────────────────────────────────────
+    if wcbb is not None and len(wcbb) > 0:
+        wcbb_std = pool(wcbb, ["Standard"])
+        wcbb_gob = pool(wcbb, ["Goblin"])
+        wcbb_mix_pool = pd.concat([wcbb_std, wcbb_gob], ignore_index=True).sort_values("rank_score", ascending=False)
+        if len(wcbb_std) >= 2:
+            all_ticket_groups += gen_tickets(wcbb_std, "WCBB", C["hdr_wcbb"], "WCBB", "Standard")
+        if len(wcbb_gob) >= 2:
+            all_ticket_groups += gen_tickets(wcbb_gob, "WCBB", C["hdr_wcbb"], "WCBB", "Goblin")
+        if len(wcbb_mix_pool) >= 2:
+            all_ticket_groups += gen_tickets(wcbb_mix_pool, "WCBB", C["hdr_wcbb"], "WCBB")
 
-    nba_std_x = pool(nba, ["Standard"])
-    cbb_std_x = pool(cbb, ["Standard"])
-    std_parts = [nba_std_x, cbb_std_x]
-    if nhl is not None and len(nhl) > 0:
-        std_parts.append(pool(nhl, ["Standard"]))
-    if soccer is not None and len(soccer) > 0:
-        std_parts.append(pool(soccer, ["Standard"]))
-    std_mix_pool = cross_sport_pool(std_parts)
-    if std_mix_pool is not None and len(std_mix_pool) >= MIN_TICKET_POOL:
-        print("Generating cross-sport Standard Mix tickets...")
-        for n in TICKET_LEG_SIZES:
-            tickets = build_tickets(std_mix_pool, n, args.max_tickets, require_mix=True)
+    # ── MLB ────────────────────────────────────────────────────────────────────────
+    if mlb is not None and len(mlb) > 0:
+        mlb_std = pool(mlb, ["Standard"])
+        mlb_gob = pool(mlb, ["Goblin"])
+        mlb_mix_pool = pd.concat([mlb_std, mlb_gob], ignore_index=True).sort_values("rank_score", ascending=False)
+        if len(mlb_std) >= 2:
+            all_ticket_groups += gen_tickets(mlb_std, "MLB", C["hdr_mlb"], "MLB", "Standard")
+        if len(mlb_gob) >= 2:
+            all_ticket_groups += gen_tickets(mlb_gob, "MLB", C["hdr_mlb"], "MLB", "Goblin")
+        if len(mlb_mix_pool) >= 2:
+            all_ticket_groups += gen_tickets(mlb_mix_pool, "MLB", C["hdr_mlb"], "MLB")
+
+    # ── NBA1Q ──────────────────────────────────────────────────────────────────────
+    if nba1q is not None and len(nba1q) > 0:
+        nba1q_std = pool(nba1q, ["Standard"])
+        nba1q_gob = pool(nba1q, ["Goblin"])
+        nba1q_mix_pool = pd.concat([nba1q_std, nba1q_gob], ignore_index=True).sort_values("rank_score", ascending=False)
+        if len(nba1q_std) >= 2:
+            all_ticket_groups += gen_tickets(nba1q_std, "NBA1Q", C["hdr_nba1q"], "NBA1Q", "Standard")
+        if len(nba1q_gob) >= 2:
+            all_ticket_groups += gen_tickets(nba1q_gob, "NBA1Q", C["hdr_nba1q"], "NBA1Q", "Goblin")
+        if len(nba1q_mix_pool) >= 2:
+            all_ticket_groups += gen_tickets(nba1q_mix_pool, "NBA1Q", C["hdr_nba1q"], "NBA1Q")
+
+    # ── NBA1H ──────────────────────────────────────────────────────────────────────
+    if nba1h is not None and len(nba1h) > 0:
+        nba1h_std = pool(nba1h, ["Standard"])
+        nba1h_gob = pool(nba1h, ["Goblin"])
+        nba1h_mix_pool = pd.concat([nba1h_std, nba1h_gob], ignore_index=True).sort_values("rank_score", ascending=False)
+        if len(nba1h_std) >= 2:
+            all_ticket_groups += gen_tickets(nba1h_std, "NBA1H", C["hdr_nba1h"], "NBA1H", "Standard")
+        if len(nba1h_gob) >= 2:
+            all_ticket_groups += gen_tickets(nba1h_gob, "NBA1H", C["hdr_nba1h"], "NBA1H", "Goblin")
+        if len(nba1h_mix_pool) >= 2:
+            all_ticket_groups += gen_tickets(nba1h_mix_pool, "NBA1H", C["hdr_nba1h"], "NBA1H")
+
+    # ── Cross-sport Standard Only ──────────────────────────────────────────────────
+    all_sports_std = pd.concat([
+        pool(nba, ["Standard"]), pool(cbb, ["Standard"]),
+        *([] if nhl is None else [pool(nhl, ["Standard"])]),
+        *([] if soccer is None else [pool(soccer, ["Standard"])]),
+        *([] if wcbb is None else [pool(wcbb, ["Standard"])]),
+        *([] if mlb is None else [pool(mlb, ["Standard"])]),
+        *([] if nba1q is None else [pool(nba1q, ["Standard"])]),
+        *([] if nba1h is None else [pool(nba1h, ["Standard"])]),
+    ], ignore_index=True).sort_values("rank_score", ascending=False)
+    if len(all_sports_std) >= 2:
+        for n in leg_sizes:
+            tickets = build_tickets(all_sports_std, n, args.max_tickets, require_mix=True)
             if tickets:
-                sheet_name = f"MIX Std {n}-Leg"[:31]
-                write_ticket_sheet(wb, tickets, sheet_name, C["hdr_mix"], label="Cross-sport Standard")
+                sheet_name = f"XSPORT Std {n}-Leg"[:31]
+                write_ticket_sheet(wb, tickets, sheet_name, C["hdr_mix"], label="Cross-Sport Standard")
                 all_ticket_groups.append((sheet_name, tickets, C["mix"]))
                 print(f"  {sheet_name}: {len(tickets)} tickets")
 
-    sg_parts = [pool(nba, ["Standard", "Goblin"]), pool(cbb, ["Standard", "Goblin"])]
-    if nhl is not None and len(nhl) > 0:
-        sg_parts.append(pool(nhl, ["Standard", "Goblin"]))
-    if soccer is not None and len(soccer) > 0:
-        sg_parts.append(pool(soccer, ["Standard", "Goblin"]))
-    sg_cross = cross_sport_pool(sg_parts)
-    if sg_cross is not None and len(sg_cross) >= MIN_TICKET_POOL:
-        print("Generating cross-sport Std+Gob best-rank tickets...")
-        for n in TICKET_LEG_SIZES:
-            tickets = build_tickets(sg_cross, n, args.max_tickets, require_mix=True)
+    # ── Cross-sport Goblin Only ────────────────────────────────────────────────────
+    all_sports_gob = pd.concat([
+        pool(nba, ["Goblin"]), pool(cbb, ["Goblin"]),
+        *([] if nhl is None else [pool(nhl, ["Goblin"])]),
+        *([] if soccer is None else [pool(soccer, ["Goblin"])]),
+        *([] if wcbb is None else [pool(wcbb, ["Goblin"])]),
+        *([] if mlb is None else [pool(mlb, ["Goblin"])]),
+        *([] if nba1q is None else [pool(nba1q, ["Goblin"])]),
+        *([] if nba1h is None else [pool(nba1h, ["Goblin"])]),
+    ], ignore_index=True).sort_values("rank_score", ascending=False)
+    if len(all_sports_gob) >= 2:
+        for n in leg_sizes:
+            tickets = build_tickets(all_sports_gob, n, args.max_tickets, require_mix=True)
             if tickets:
-                sheet_name = f"MIX ALL SG {n}-Leg"[:31]
-                write_ticket_sheet(wb, tickets, sheet_name, C["hdr_mix"], label="Cross-sport Std+Gob")
+                sheet_name = f"XSPORT Gob {n}-Leg"[:31]
+                write_ticket_sheet(wb, tickets, sheet_name, C["hdr_mix"], label="Cross-Sport Goblin")
                 all_ticket_groups.append((sheet_name, tickets, C["mix"]))
                 print(f"  {sheet_name}: {len(tickets)} tickets")
 
-    gob_parts = [pool(nba, ["Goblin"]), pool(cbb, ["Goblin"])]
-    if nhl is not None and len(nhl) > 0:
-        gob_parts.append(pool(nhl, ["Goblin"]))
-    if soccer is not None and len(soccer) > 0:
-        gob_parts.append(pool(soccer, ["Goblin"]))
-    gob_cross = cross_sport_pool(gob_parts)
-    if gob_cross is not None and len(gob_cross) >= MIN_TICKET_POOL:
-        print("Generating cross-sport Goblin Mix tickets...")
-        for n in TICKET_LEG_SIZES:
-            tickets = build_tickets(gob_cross, n, args.max_tickets, require_mix=True)
+    # ── Cross-sport Std+Gob Mix ────────────────────────────────────────────────────
+    all_sports_mix = pd.concat([
+        pool(nba), pool(cbb),
+        *([] if nhl is None else [pool(nhl)]),
+        *([] if soccer is None else [pool(soccer)]),
+        *([] if wcbb is None else [pool(wcbb)]),
+        *([] if mlb is None else [pool(mlb)]),
+        *([] if nba1q is None else [pool(nba1q)]),
+        *([] if nba1h is None else [pool(nba1h)]),
+    ], ignore_index=True).sort_values("rank_score", ascending=False)
+    all_sports_mix = all_sports_mix[all_sports_mix["pick_type"].isin(["Standard", "Goblin"])]
+    if len(all_sports_mix) >= 2:
+        for n in leg_sizes:
+            tickets = build_tickets(all_sports_mix, n, args.max_tickets, require_mix=True)
             if tickets:
-                sheet_name = f"MIX Gob {n}-Leg"[:31]
-                write_ticket_sheet(wb, tickets, sheet_name, C["hdr_mix"], label="Cross-sport Goblin")
+                sheet_name = f"XSPORT Mix {n}-Leg"[:31]
+                write_ticket_sheet(wb, tickets, sheet_name, C["hdr_mix"], label="Cross-Sport Std+Gob")
                 all_ticket_groups.append((sheet_name, tickets, C["mix"]))
                 print(f"  {sheet_name}: {len(tickets)} tickets")
 
     print("Writing slate sheets...")
     # Strict-mode guardrail: fail if mixed dates survived filtering.
     if not args.allow_cross_date_fallback:
+        td = str(args.date).strip()[:10]
         to_check = [
             ("NBA", nba),
             ("CBB", cbb),
@@ -3749,9 +4310,18 @@ def main():
         for label, sdf in to_check:
             if sdf is None or len(sdf) == 0 or "game_date" not in sdf.columns:
                 continue
-            bad = sdf[sdf["game_date"].astype(str) != args.date]
+            dated = sdf["game_date"].notna()
+            gd = sdf["game_date"].astype(str).str[:10]
+            if label == "Soccer":
+                bad = sdf[dated & (gd < td)]
+            elif label == "Combined" and "sport" in sdf.columns:
+                su = sdf["sport"].astype(str).str.upper()
+                is_soc = su == "SOCCER"
+                bad = sdf[dated & ((gd < td) | (~is_soc & (gd != td)))]
+            else:
+                bad = sdf[dated & (gd != td)]
             if len(bad) > 0:
-                cts = bad["game_date"].astype(str).value_counts().to_dict()
+                cts = bad["game_date"].astype(str).str[:10].value_counts().to_dict()
                 mixed.append((label, cts))
         if mixed:
             msg = "; ".join([f"{lbl}: {cts}" for lbl, cts in mixed])
@@ -3773,11 +4343,23 @@ def main():
         write_slate_sheet(wb, nhl, "NHL Slate", C["hdr_nhl"], "NHL")
     if soccer is not None and len(soccer) > 0:
         write_slate_sheet(wb, soccer, "Soccer Slate", C["hdr_soccer"], "Soccer")
+    if wcbb is not None and len(wcbb) > 0:
+        write_slate_sheet(wb, wcbb, "WCBB Slate", C["hdr_wcbb"], "WCBB")
+    if mlb is not None and len(mlb) > 0:
+        write_slate_sheet(wb, mlb, "MLB Slate", C["hdr_mlb"], "MLB")
+    if nba1q is not None and len(nba1q) > 0:
+        write_slate_sheet(wb, nba1q, "NBA1Q Slate", C["hdr_nba1q"], "NBA1Q")
+    if nba1h is not None and len(nba1h) > 0:
+        write_slate_sheet(wb, nba1h, "NBA1H Slate", C["hdr_nba1h"], "NBA1H")
 
-    write_summary(wb, nba, cbb, combined, all_ticket_groups, args.date, thresholds, nhl=nhl, soccer=soccer)
+    write_summary(wb, nba, cbb, combined, all_ticket_groups, args.date, thresholds,
+                  nhl=nhl, soccer=soccer, wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h)
 
     # Reorder: put SUMMARY + slate sheets at the front
-    desired_first = ["SUMMARY", "Full Slate", "NBA Slate", "CBB Slate", "NHL Slate", "Soccer Slate"]
+    desired_first = [
+        "SUMMARY", "Full Slate", "NBA Slate", "CBB Slate", "NHL Slate", "Soccer Slate",
+        "WCBB Slate", "MLB Slate", "NBA1Q Slate", "NBA1H Slate",
+    ]
     for sname in reversed(desired_first):
         if sname in wb.sheetnames:
             wb.move_sheet(wb[sname], offset=-(len(wb.sheetnames) - 1))
@@ -3786,43 +4368,35 @@ def main():
     print(f"\n[OK] Saved -> {args.output}")
     print(f"   Sheets ({len(wb.sheetnames)}): {wb.sheetnames}")
 
-    # Web output — same slips as the Excel workbook (all sports / sheet groups).
-    # FINAL-only groups are a stricter subset; the site should show what the combined file built.
     if args.write_web:
-        print("\nWriting web tickets_latest.json / .html...")
-        workbook_web = [(n, t, bg) for (n, t, bg) in all_ticket_groups if t]
-        n_wb = sum(len(t) for _, t, _ in workbook_web)
-
-        nhl_pool_web = pool(nhl) if nhl is not None and len(nhl) > 0 else None
-        soccer_pool_web = pool(soccer) if soccer is not None and len(soccer) > 0 else None
-        final_groups = build_final_web_ticket_groups(
-            nba_pool,
-            cbb_pool,
-            nhl_pool=nhl_pool_web,
-            soccer_pool=soccer_pool_web,
-            min_hit_rate=thresholds.get("min_hit_rate", 0.70),
-            min_edge=thresholds.get("min_edge", 2.0),
-            min_rank=thresholds.get("min_rank", 5.0),
-        )
-        n_final = sum(len(t[1]) for t in final_groups if t[1])
-        final_web = [(n, t, bg) for (n, t, bg) in final_groups if t]
-
-        if n_wb > 0:
-            web_source = workbook_web
-            print(f"  Web payload: {len(web_source)} groups, {n_wb} slips (workbook — all sports).")
-        elif n_final > 0:
-            web_source = final_web
-            print(f"  Web payload: {len(web_source)} groups, {n_final} slips (FINAL-only fallback).")
+        print("\nWriting web outputs...")
+        if all_ticket_groups:
+            payload = ticket_groups_to_payload(all_ticket_groups, args.date, thresholds)
+            n_groups = len(payload["groups"])
+            n_slips = sum(len(g["tickets"]) for g in payload["groups"])
+            print(f"  Web payload: {n_groups} groups, {n_slips} slips (workbook — all sports).")
         else:
-            web_source = []
-            print("  WARNING: No tickets for web (workbook and FINAL both empty).")
-
-        payload = ticket_groups_to_payload(web_source, args.date, thresholds)
+            print("  WARNING: workbook produced 0 groups — falling back to FINAL builder.")
+            nhl_pool_web = pool(nhl) if nhl is not None and len(nhl) > 0 else None
+            soccer_pool_web = pool(soccer) if soccer is not None and len(soccer) > 0 else None
+            final_groups = build_final_web_ticket_groups(
+                nba_pool, cbb_pool,
+                nhl_pool=nhl_pool_web,
+                soccer_pool=soccer_pool_web,
+                min_hit_rate=thresholds.get("min_hit_rate", 0.70),
+                min_edge=thresholds.get("min_edge", 2.0),
+                min_rank=thresholds.get("min_rank", 5.0),
+            )
+            payload = ticket_groups_to_payload(final_groups, args.date, thresholds)
+            n_groups = len(payload["groups"])
+            n_slips = sum(len(g["tickets"]) for g in payload["groups"])
+            print(f"  Web payload: {n_groups} groups, {n_slips} slips (FINAL fallback).")
         write_web_outputs(payload, args.web_outdir)
-        write_slate_json(nba, cbb, nhl, soccer, mlb, nba1h, nba1q, wcbb, args.date, args.web_outdir)
+        write_slate_json(nba, cbb, nhl, soccer, args.date, args.web_outdir,
+                         wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h)
         if args.also_root:
             write_web_outputs(payload, outdir=".")
-        print("[OK] Web outputs complete.")
+        print("✅ Web outputs complete.")
 
 
 if __name__ == "__main__":
