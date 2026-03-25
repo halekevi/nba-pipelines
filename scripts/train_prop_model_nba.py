@@ -2,11 +2,13 @@
 """
 Train NBA prop ML model for NBA/scripts/step7_rank_props.py inference.
 
-Loads graded_nba_*.xlsx (plus synthetic), builds feature matrix, trains XGBoost,
-saves models/prop_model_nba.pkl, prop_model_nba_features.json, prop_model_nba_blend_weight.json.
+Loads graded workbooks (full slate `graded_nba_*.xlsx`, or `graded_nba1q_*.xlsx` /
+`graded_nba1h_*.xlsx` when `--segment` is set), builds feature matrix, trains XGBoost,
+and saves `models/prop_model_{segment}.pkl` plus features / blend / calibrator sidecars.
 """
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import sqlite3
@@ -50,13 +52,40 @@ from ensure_local_cache import ensure_local_cache
 ensure_local_cache(str(ROOT))
 SYNTHETIC_DB = ROOT / "data" / "cache" / "synthetic_graded.db"
 MODEL_DIR = ROOT / "models"
+
+SEGMENT_KEY = "nba"
+SYNTHETIC_SPORT = "NBA"
+DATE_RE = re.compile(r"graded_nba_(?:synthetic_)?(\d{4}-\d{2}-\d{2})\.xlsx$", re.I)
 MODEL_PATH = MODEL_DIR / "prop_model_nba.pkl"
 FEATURES_PATH = MODEL_DIR / "prop_model_nba_features.json"
 BLEND_PATH = MODEL_DIR / "prop_model_nba_blend_weight.json"
 CALIB_PATH = MODEL_DIR / "prop_model_nba_calibrator.pkl"
 METRICS_PATH = MODEL_DIR / "prop_model_nba_metrics.json"
 
-DATE_RE = re.compile(r"graded_nba_(?:synthetic_)?(\d{4}-\d{2}-\d{2})\.xlsx$", re.I)
+
+def apply_segment(segment: str) -> None:
+    """Apply training segment (nba | nba1q | nba1h): model output names + graded filename regex."""
+    global SEGMENT_KEY, SYNTHETIC_SPORT, DATE_RE
+    global MODEL_PATH, FEATURES_PATH, BLEND_PATH, CALIB_PATH, METRICS_PATH
+    s = (segment or "nba").strip().lower()
+    if s not in ("nba", "nba1q", "nba1h"):
+        raise ValueError(f"Unknown segment {segment!r}; expected nba, nba1q, or nba1h")
+    SEGMENT_KEY = s
+    MODEL_PATH = MODEL_DIR / f"prop_model_{s}.pkl"
+    FEATURES_PATH = MODEL_DIR / f"prop_model_{s}_features.json"
+    BLEND_PATH = MODEL_DIR / f"prop_model_{s}_blend_weight.json"
+    CALIB_PATH = MODEL_DIR / f"prop_model_{s}_calibrator.pkl"
+    METRICS_PATH = MODEL_DIR / f"prop_model_{s}_metrics.json"
+    sport_map = {"nba": "NBA", "nba1q": "NBA1Q", "nba1h": "NBA1H"}
+    SYNTHETIC_SPORT = sport_map[s]
+    if s == "nba":
+        DATE_RE = re.compile(r"graded_nba_(?:synthetic_)?(\d{4}-\d{2}-\d{2})\.xlsx$", re.I)
+    elif s == "nba1q":
+        DATE_RE = re.compile(r"graded_nba1q_(?:synthetic_)?(\d{4}-\d{2}-\d{2})\.xlsx$", re.I)
+    else:
+        DATE_RE = re.compile(r"graded_nba1h_(?:synthetic_)?(\d{4}-\d{2}-\d{2})\.xlsx$", re.I)
+SYNTHETIC_RATIO_CAP = 1.0  # max synthetic rows = real_rows * this cap
+REAL_ONLY_MODE = True      # baseline: train on real graded rows only
 
 
 def blend_weight_for_n(n: int) -> float:
@@ -82,13 +111,23 @@ def _to_num(s: pd.Series) -> pd.Series:
 def _collect_nba_graded_files() -> list[tuple[Path, bool]]:
     """Return (path, is_synthetic) pairs — synthetic props come from SQLite, not Excel."""
     out: list[tuple[Path, bool]] = []
+    if SEGMENT_KEY == "nba1q":
+        patterns = ("graded_nba1q*.xlsx",)
+    elif SEGMENT_KEY == "nba1h":
+        patterns = ("graded_nba1h*.xlsx",)
+    else:
+        patterns = ("graded_nba*.xlsx",)
     for base in (ROOT / "outputs", ROOT / "NBA", ROOT / "NBA" / "outputs"):
         if not base.is_dir():
             continue
-        for p in base.rglob("graded_nba*.xlsx"):
-            if "synthetic" in str(p).lower() or "synthetic" in p.parts:
-                continue
-            out.append((p, False))
+        for pat in patterns:
+            for p in base.rglob(pat):
+                if "synthetic" in str(p).lower() or "synthetic" in p.parts:
+                    continue
+                ln = p.name.lower()
+                if SEGMENT_KEY == "nba" and ("nba1q" in ln or "nba1h" in ln):
+                    continue
+                out.append((p, False))
     uniq: dict[str, tuple[Path, bool]] = {}
     for p, syn in out:
         try:
@@ -295,20 +334,33 @@ def normalize_nba_prop(raw: str) -> str:
 
 def _audit_and_load() -> pd.DataFrame:
     files = _collect_nba_graded_files()
-    frames: list[pd.DataFrame] = []
+    real_frames: list[pd.DataFrame] = []
     for p, syn in files:
         block = _load_one_workbook(p, syn)
         if block is not None:
-            frames.append(block)
-    syn_raw = load_synthetic_training_data("NBA", str(SYNTHETIC_DB))
-    if not syn_raw.empty:
-        frames.append(_nba_synthetic_to_workbook_like(syn_raw))
-    if not frames:
+            real_frames.append(block)
+    if not real_frames:
         raise FileNotFoundError(
-            "No graded_nba*.xlsx under outputs/ or NBA/ (non-synthetic), and no rows in "
-            "data/cache/synthetic_graded.db for NBA."
+            f"No graded workbooks for segment {SEGMENT_KEY!r} under outputs/ or NBA/ (non-synthetic)."
         )
-    df = pd.concat(frames, ignore_index=True)
+    real_df = pd.concat(real_frames, ignore_index=True)
+    n_real = len(real_df)
+
+    syn_raw = load_synthetic_training_data(SYNTHETIC_SPORT, str(SYNTHETIC_DB))
+    if REAL_ONLY_MODE or syn_raw.empty:
+        df = real_df
+        n_syn_used = 0
+    else:
+        syn_df = _nba_synthetic_to_workbook_like(syn_raw)
+        n_syn_cap = int(n_real * SYNTHETIC_RATIO_CAP)
+        if n_syn_cap <= 0:
+            syn_df = syn_df.iloc[0:0].copy()
+        elif len(syn_df) > n_syn_cap:
+            syn_df = syn_df.sample(n=n_syn_cap, random_state=42)
+        n_syn_used = len(syn_df)
+        df = pd.concat([real_df, syn_df], ignore_index=True)
+
+    print(f"Training mix — real: {n_real:,}  synthetic: {n_syn_used:,}  total: {len(df):,}")
     print(f"-> Total rows (all sources): {len(df)}")
     print(f"-> Columns ({len(df.columns)}): {list(df.columns)}")
     hit_col = _first_present(df, ["result", "outcome", "grade"])
@@ -341,7 +393,17 @@ def _audit_and_load() -> pd.DataFrame:
 
 
 def main() -> None:
-    print("=== NBA graded data audit ===\n")
+    ap = argparse.ArgumentParser(description="Train NBA / NBA1Q / NBA1H prop ML models.")
+    ap.add_argument(
+        "--segment",
+        choices=["nba", "nba1q", "nba1h"],
+        default="nba",
+        help="Graded workbook family and models/prop_model_<segment>.* output names.",
+    )
+    args = ap.parse_args()
+    apply_segment(args.segment)
+
+    print(f"=== {SEGMENT_KEY.upper()} graded data audit ===\n")
     df = _audit_and_load()
 
     hit_col = _first_present(df, ["result", "outcome", "grade"])
@@ -437,7 +499,7 @@ def main() -> None:
     bw = blend_weight_for_n(n)
     if n < 200:
         print(
-            f"\nWARNING: Only {n} decided rows for NBA — model will be trained but accuracy may be low.\n"
+            f"\nWARNING: Only {n} decided rows for {SEGMENT_KEY.upper()} — model will be trained but accuracy may be low.\n"
             "Recommend waiting for more graded history before using ML blend in production.\n"
             f"Proceeding with ML_BLEND_WEIGHT = {bw}\n"
         )
@@ -568,7 +630,7 @@ def main() -> None:
         encoding="utf-8",
     )
 
-    print("NBA Model Training Complete")
+    print(f"{SEGMENT_KEY.upper()} model training complete")
     print("-----------------------------")
     print(f"  Training rows:    {len(X_train)}")
     print(f"  Calibration rows: {len(X_cal)}")

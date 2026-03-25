@@ -1653,6 +1653,7 @@ def load_nba(path: str) -> pd.DataFrame:
             "Direction": "direction",
             "Edge": "edge",
             "Projection": "projection",
+            "ML Prob": "ml_prob",
             "Hit Rate (5g)": "hit_rate",
             "Last 5 Avg": "l5_avg",
             "Season Avg": "season_avg",
@@ -2228,7 +2229,7 @@ def load_mlb(path: str) -> pd.DataFrame:
     path = resolve_input_path(path, fallback_filename="step8_mlb_direction_clean.xlsx")
 
     xl = pd.ExcelFile(path, engine="openpyxl")
-    sheet = "Soccer" if "Soccer" in xl.sheet_names else (
+    sheet = "MLB" if "MLB" in xl.sheet_names else (
         "ALL" if "ALL" in xl.sheet_names else xl.sheet_names[0])
     df = pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
 
@@ -2292,6 +2293,18 @@ def load_mlb(path: str) -> pd.DataFrame:
     df = df.loc[:, ~df.columns.duplicated()].copy()
     df["sport"] = "MLB"
 
+    # Ensure ml_prob is numeric and always present for downstream leg scoring.
+    if "ml_prob" not in df.columns:
+        df["ml_prob"] = np.nan
+    df["ml_prob"] = pd.to_numeric(df["ml_prob"], errors="coerce")
+
+    # Derive L5 game sample size from over+under counts when available.
+    if "l5_games" not in df.columns:
+        l5o = pd.to_numeric(df.get("l5_over", np.nan), errors="coerce")
+        l5u = pd.to_numeric(df.get("l5_under", np.nan), errors="coerce")
+        derived = l5o.add(l5u, fill_value=0)
+        df["l5_games"] = derived.where(derived > 0, np.nan)
+
     def _norm_pick(x):
         t = str(x).strip().lower() if x else ""
         if "gob" in t: return "Goblin"
@@ -2346,7 +2359,7 @@ def load_mlb(path: str) -> pd.DataFrame:
         proxy = 0.54 + ((rs - q25) / span).clip(lower=0.0, upper=1.0) * 0.12
         df["hit_rate"] = proxy.clip(0.50, 0.68)
         print(
-            "  [load_soccer] NOTE: Hit Rate (5g)/(10g) empty - using rank_score proxy for ticket eligibility. "
+            "  [load_mlb] NOTE: Hit Rate (5g)/(10g) empty - using rank_score proxy for ticket eligibility. "
             "Fix Soccer step5 line-hit output when possible."
         )
 
@@ -2365,7 +2378,7 @@ def load_nba1q(path: str) -> pd.DataFrame:
     path = resolve_input_path(path, fallback_filename="step8_nba1q_direction_clean.xlsx")
 
     xl = pd.ExcelFile(path, engine="openpyxl")
-    sheet = "Soccer" if "Soccer" in xl.sheet_names else (
+    sheet = "NBA1Q" if "NBA1Q" in xl.sheet_names else (
         "ALL" if "ALL" in xl.sheet_names else xl.sheet_names[0])
     df = pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
 
@@ -2385,6 +2398,7 @@ def load_nba1q(path: str) -> pd.DataFrame:
         "Edge":             "edge",
         "Projection":       "projection",
         "ESPN ID":          "espn_player_id",
+        "ML Prob":          "ml_prob",
         "Hit Rate (5g)":    "hit_rate",
         # Kept separate so we can coalesce into hit_rate when 5g is blank (common when
         # Soccer step5/7 line-hit columns aren't populated yet).
@@ -2429,6 +2443,18 @@ def load_nba1q(path: str) -> pd.DataFrame:
     df = df.loc[:, ~df.columns.duplicated()].copy()
     df["sport"] = "NBA1Q"
 
+    # Ensure ml_prob is numeric and always present for downstream leg scoring.
+    if "ml_prob" not in df.columns:
+        df["ml_prob"] = np.nan
+    df["ml_prob"] = pd.to_numeric(df["ml_prob"], errors="coerce")
+
+    # Derive L5 game sample size from over+under counts when available.
+    if "l5_games" not in df.columns:
+        l5o = pd.to_numeric(df.get("l5_over", np.nan), errors="coerce")
+        l5u = pd.to_numeric(df.get("l5_under", np.nan), errors="coerce")
+        derived = l5o.add(l5u, fill_value=0)
+        df["l5_games"] = derived.where(derived > 0, np.nan)
+
     def _norm_pick(x):
         t = str(x).strip().lower() if x else ""
         if "gob" in t: return "Goblin"
@@ -2483,7 +2509,7 @@ def load_nba1q(path: str) -> pd.DataFrame:
         proxy = 0.54 + ((rs - q25) / span).clip(lower=0.0, upper=1.0) * 0.12
         df["hit_rate"] = proxy.clip(0.50, 0.68)
         print(
-            "  [load_soccer] NOTE: Hit Rate (5g)/(10g) empty - using rank_score proxy for ticket eligibility. "
+            "  [load_nba1q] NOTE: Hit Rate (5g)/(10g) empty - using rank_score proxy for ticket eligibility. "
             "Fix Soccer step5 line-hit output when possible."
         )
 
@@ -2502,7 +2528,7 @@ def load_nba1h(path: str) -> pd.DataFrame:
     path = resolve_input_path(path, fallback_filename="step8_nba1h_direction_clean.xlsx")
 
     xl = pd.ExcelFile(path, engine="openpyxl")
-    sheet = "Soccer" if "Soccer" in xl.sheet_names else (
+    sheet = "NBA1H" if "NBA1H" in xl.sheet_names else (
         "ALL" if "ALL" in xl.sheet_names else xl.sheet_names[0])
     df = pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
 
@@ -2522,6 +2548,7 @@ def load_nba1h(path: str) -> pd.DataFrame:
         "Edge":             "edge",
         "Projection":       "projection",
         "ESPN ID":          "espn_player_id",
+        "ML Prob":          "ml_prob",
         "Hit Rate (5g)":    "hit_rate",
         # Kept separate so we can coalesce into hit_rate when 5g is blank (common when
         # Soccer step5/7 line-hit columns aren't populated yet).
@@ -2566,6 +2593,18 @@ def load_nba1h(path: str) -> pd.DataFrame:
     df = df.loc[:, ~df.columns.duplicated()].copy()
     df["sport"] = "NBA1H"
 
+    # Ensure ml_prob is numeric and always present for downstream leg scoring.
+    if "ml_prob" not in df.columns:
+        df["ml_prob"] = np.nan
+    df["ml_prob"] = pd.to_numeric(df["ml_prob"], errors="coerce")
+
+    # Derive L5 game sample size from over+under counts when available.
+    if "l5_games" not in df.columns:
+        l5o = pd.to_numeric(df.get("l5_over", np.nan), errors="coerce")
+        l5u = pd.to_numeric(df.get("l5_under", np.nan), errors="coerce")
+        derived = l5o.add(l5u, fill_value=0)
+        df["l5_games"] = derived.where(derived > 0, np.nan)
+
     def _norm_pick(x):
         t = str(x).strip().lower() if x else ""
         if "gob" in t: return "Goblin"
@@ -2620,7 +2659,7 @@ def load_nba1h(path: str) -> pd.DataFrame:
         proxy = 0.54 + ((rs - q25) / span).clip(lower=0.0, upper=1.0) * 0.12
         df["hit_rate"] = proxy.clip(0.50, 0.68)
         print(
-            "  [load_soccer] NOTE: Hit Rate (5g)/(10g) empty - using rank_score proxy for ticket eligibility. "
+            "  [load_nba1h] NOTE: Hit Rate (5g)/(10g) empty - using rank_score proxy for ticket eligibility. "
             "Fix Soccer step5 line-hit output when possible."
         )
 
@@ -4555,7 +4594,8 @@ def main():
                          wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h)
         if args.also_root:
             write_web_outputs(payload, outdir=".")
-        print("✅ Web outputs complete.")
+        # Avoid Windows console codepage issues with unicode checkmarks.
+        print("[OK] Web outputs complete.")
 
 
 if __name__ == "__main__":

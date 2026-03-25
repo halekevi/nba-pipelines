@@ -105,6 +105,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         'prop_type', 'pick_type', 'line',
         'final_bet_direction',
         'edge', 'projection',
+        'ml_prob',
         'line_hit_rate_over_ou_5',
         'stat_last5_avg', 'stat_season_avg',
         'last5_over', 'last5_under',
@@ -128,9 +129,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
     keep = [c for c in keep if c in df2.columns]
     clean = df2[keep].copy()
 
-    for col in ['rank_score', 'edge', 'projection', 'line_hit_rate_over_ou_5']:
+    for col in ['rank_score', 'edge', 'projection', 'ml_prob', 'line_hit_rate_over_ou_5']:
         if col in clean.columns:
-            clean[col] = pd.to_numeric(clean[col], errors='coerce').round(2)
+            clean[col] = pd.to_numeric(clean[col], errors='coerce').round(4 if col == 'ml_prob' else 2)
     for col in ['stat_last5_avg', 'stat_season_avg']:
         if col in clean.columns:
             clean[col] = pd.to_numeric(clean[col], errors='coerce').round(1)
@@ -148,6 +149,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         'prop_type': 'Prop', 'pick_type': 'Pick Type', 'line': 'Line',
         'final_bet_direction': 'Direction',
         'edge': 'Edge', 'projection': 'Projection',
+        'ml_prob': 'ML Prob',
         'line_hit_rate_over_ou_5': 'Hit Rate (5g)',
         'stat_last5_avg': 'Last 5 Avg', 'stat_season_avg': 'Season Avg',
         'last5_over': 'L5 Over', 'last5_under': 'L5 Under',
