@@ -225,6 +225,61 @@ body::after{
 [data-theme='light'] .pill{border-color:rgba(0,0,0,0.15)!important;}
 [data-theme='light'] .banner.pend{color:rgba(0,0,0,0.4);border-color:rgba(0,0,0,0.12);}
 
+/* Light: nav chrome + semantics (matches index.html — variables alone are not enough for .snav glass) */
+[data-theme='light']{
+  --accent:#4b6f96;
+  --cyan:#2c7fb8;
+  --green:#2e7f7a;
+  --amber:#8f7396;
+  --red:#b5687e;
+  --purple:#6f84bf;
+  --muted:rgba(23,43,64,0.52);
+  --muted2:rgba(23,43,64,0.34);
+  --text:rgba(14,36,58,0.90);
+}
+[data-theme='light'] .snav,
+[data-theme='light'] nav{
+  background:rgba(255,255,255,0.72)!important;
+  border:1px solid rgba(0,0,0,0.08)!important;
+  box-shadow:0 1px 0 rgba(255,255,255,0.9),0 4px 20px rgba(0,0,0,0.08)!important;
+}
+[data-theme='light'] .snav-links li a,
+[data-theme='light'] .nav-links a{
+  color:rgba(0,0,0,0.48)!important;
+}
+[data-theme='light'] .snav-links li a:hover,
+[data-theme='light'] .nav-links a:hover{
+  color:rgba(0,0,0,0.80)!important;
+  background:rgba(0,0,0,0.04)!important;
+}
+[data-theme='light'] .snav-links li a.active,
+[data-theme='light'] .nav-links a.active{
+  color:var(--accent)!important;
+  background:rgba(75,111,150,0.08)!important;
+  border-color:rgba(75,111,150,0.25)!important;
+}
+[data-theme='light'] .live-pill{
+  background:rgba(255,255,255,0.62)!important;
+  border-color:rgba(26,140,69,0.30)!important;
+  color:var(--green)!important;
+}
+[data-theme='light'] .hamburger{
+  background:rgba(255,255,255,0.62)!important;
+  border-color:rgba(0,0,0,0.10)!important;
+}
+[data-theme='light'] .hamburger span{background:rgba(0,0,0,0.55)!important;}
+[data-theme='light'] .mobile-menu{
+  background:rgba(245,248,255,0.96)!important;
+  border-bottom-color:rgba(0,0,0,0.08)!important;
+}
+[data-theme='light'] .mobile-menu a{color:rgba(0,0,0,0.55)!important;}
+[data-theme='light'] .mobile-menu a:hover,
+[data-theme='light'] .mobile-menu a.active{
+  color:var(--accent)!important;
+  background:rgba(75,111,150,0.05)!important;
+  border-left-color:var(--accent)!important;
+}
+
 /* ── Mobile ── */
 @media(max-width:768px){
   .snav{padding:0 16px;margin:.5rem;}
