@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import re
 import sqlite3
+from datetime import datetime, timezone
 import subprocess
 import sys
 from pathlib import Path
@@ -21,12 +22,16 @@ import pandas as pd
 
 try:
     from sklearn.metrics import brier_score_loss, roc_auc_score
+    from sklearn.isotonic import IsotonicRegression
+    from sklearn.linear_model import LogisticRegression
     from sklearn.model_selection import train_test_split
 except ImportError:
     subprocess.check_call(
         [sys.executable, "-m", "pip", "install", "scikit-learn", "--break-system-packages", "-q"]
     )
     from sklearn.metrics import brier_score_loss, roc_auc_score
+    from sklearn.isotonic import IsotonicRegression
+    from sklearn.linear_model import LogisticRegression
     from sklearn.model_selection import train_test_split
 
 try:
@@ -49,6 +54,8 @@ MODEL_DIR = ROOT / "models"
 MODEL_PATH = MODEL_DIR / "prop_model_nhl.pkl"
 FEATURES_PATH = MODEL_DIR / "prop_model_nhl_features.json"
 BLEND_PATH = MODEL_DIR / "prop_model_nhl_blend_weight.json"
+CALIB_PATH = MODEL_DIR / "prop_model_nhl_calibrator.pkl"
+METRICS_PATH = MODEL_DIR / "prop_model_nhl_metrics.json"
 LATEST_TEST_RESULTS_PATH = ROOT / "NHL" / "data" / "outputs" / "latest_nhl_test_results.xlsx"
 METADATA_PATH = MODEL_DIR / "prop_model_nhl_metadata.json"
 
@@ -603,8 +610,17 @@ def main() -> None:
     y = train["hit"].astype(int)
 
     strat = y if y.nunique() > 1 else None
-    X_train, X_test, y_train, y_test, sw_train, _sw_test = train_test_split(
+    X_train_all, X_test, y_train_all, y_test, sw_train_all, _sw_test = train_test_split(
         X, y, sw, test_size=0.20, random_state=42, stratify=strat
+    )
+    strat_train = y_train_all if y_train_all.nunique() > 1 else None
+    X_train, X_cal, y_train, y_cal, sw_train, _sw_cal = train_test_split(
+        X_train_all,
+        y_train_all,
+        sw_train_all,
+        test_size=0.20,
+        random_state=42,
+        stratify=strat_train,
     )
 
     if n < 500:
@@ -629,25 +645,75 @@ def main() -> None:
     model.fit(X_train, y_train, sample_weight=sw_train)
 
     proba = model.predict_proba(X_test)[:, 1]
+    cal_input = model.predict_proba(X_cal)[:, 1]
+    calibrator = None
+    calibration_type = "none"
+    try:
+        if len(X_cal) >= 1000:
+            calibrator = IsotonicRegression(out_of_bounds="clip")
+            calibrator.fit(cal_input, y_cal)
+            calibration_type = "isotonic"
+        else:
+            calibrator = LogisticRegression()
+            calibrator.fit(cal_input.reshape(-1, 1), y_cal)
+            calibration_type = "sigmoid"
+    except Exception:
+        calibrator = None
+        calibration_type = "none"
+
     try:
         auc = roc_auc_score(y_test, proba) if y_test.nunique() > 1 else float("nan")
     except Exception:
         auc = float("nan")
     try:
-        brier = brier_score_loss(y_test, proba)
+        brier_raw = brier_score_loss(y_test, proba)
     except Exception:
-        brier = float("nan")
-    y_pred = (proba >= 0.5).astype(int)
+        brier_raw = float("nan")
+    proba_cal_test = np.asarray(proba, dtype=float).copy()
+    if calibrator is not None:
+        try:
+            if hasattr(calibrator, "predict_proba"):
+                proba_cal_test = calibrator.predict_proba(proba_cal_test.reshape(-1, 1))[:, 1]
+            else:
+                proba_cal_test = calibrator.predict(proba_cal_test)
+        except Exception:
+            proba_cal_test = np.asarray(proba, dtype=float)
+    try:
+        brier_calibrated = brier_score_loss(y_test, proba_cal_test)
+    except Exception:
+        brier_calibrated = float("nan")
+    y_pred = (proba_cal_test >= 0.5).astype(int)
+    ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     feats = list(X.columns)
     fi = pd.Series(model.feature_importances_, index=feats).sort_values(ascending=False)
-    top5 = fi.head(5)
 
     MODEL_DIR.mkdir(parents=True, exist_ok=True)
     LATEST_TEST_RESULTS_PATH.parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(model, MODEL_PATH)
     FEATURES_PATH.write_text(json.dumps(feats, indent=2), encoding="utf-8")
     BLEND_PATH.write_text(json.dumps({"blend_weight": bw}, indent=2), encoding="utf-8")
+    if calibrator is not None:
+        joblib.dump(calibrator, CALIB_PATH)
+    elif CALIB_PATH.exists():
+        CALIB_PATH.unlink()
+    METRICS_PATH.write_text(
+        json.dumps(
+            {
+                "auc": None if np.isnan(auc) else float(auc),
+                "brier_raw": None if np.isnan(brier_raw) else float(brier_raw),
+                "brier_calibrated": None if np.isnan(brier_calibrated) else float(brier_calibrated),
+                "calibration_type": calibration_type,
+                "n_train": int(len(X_train)),
+                "n_cal": int(len(X_cal)),
+                "n_test": int(len(X_test)),
+                "real_only_mode": REAL_ONLY_MODE,
+                "timestamp": ts,
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
     metadata = {
         "model": "prop_model_nhl",
         "notes": [
@@ -660,13 +726,16 @@ def main() -> None:
             "UNDER": under_n,
         },
         "training_rows_balanced": int(n),
+        "calibration_rows": int(len(X_cal)),
         "test_rows_random_split": int(len(X_test)),
         "roc_auc": None if np.isnan(auc) else float(auc),
-        "brier_score": None if np.isnan(brier) else float(brier),
+        "brier_raw": None if np.isnan(brier_raw) else float(brier_raw),
+        "brier_calibrated": None if np.isnan(brier_calibrated) else float(brier_calibrated),
+        "calibration_type": calibration_type,
     }
     METADATA_PATH.write_text(json.dumps(metadata, indent=2), encoding="utf-8")
     test_export = train.loc[X_test.index].copy()
-    test_export["ml_prob"] = proba
+    test_export["ml_prob"] = proba_cal_test
     test_export["prediction"] = y_pred
     test_export["is_win"] = y_test.values
     test_export["source_date"] = test_export["source_date"].dt.strftime("%Y-%m-%d")
@@ -675,9 +744,12 @@ def main() -> None:
     print("NHL Model Training Complete")
     print("-----------------------------")
     print(f"  Training rows:    {len(X_train)}")
+    print(f"  Calibration rows: {len(X_cal)}")
     print(f"  Test rows:        {len(X_test)}")
     print(f"  ROC-AUC:          {auc:.4f}" if not np.isnan(auc) else "  ROC-AUC:          n/a")
-    print(f"  Brier score:      {brier:.4f}" if not np.isnan(brier) else "  Brier score:      n/a")
+    print(f"  Brier (raw):      {brier_raw:.4f}" if not np.isnan(brier_raw) else "  Brier (raw):      n/a")
+    print(f"  Brier (cal test): {brier_calibrated:.4f}" if not np.isnan(brier_calibrated) else "  Brier (cal test): n/a")
+    print(f"  Calibration:      {calibration_type}")
     print(f"  Blend weight:     {bw:.2f}")
     print("\n  Top 20 features:")
     for i, (k, v) in enumerate(fi.head(20).items(), 1):
@@ -685,6 +757,9 @@ def main() -> None:
     print(f"\n  Saved: {MODEL_PATH}")
     print(f"  Saved: {FEATURES_PATH}")
     print(f"  Saved: {BLEND_PATH}")
+    if calibrator is not None:
+        print(f"  Saved: {CALIB_PATH}")
+    print(f"  Saved: {METRICS_PATH}")
     print(f"  Saved: {METADATA_PATH}")
     print(f"  Saved: {LATEST_TEST_RESULTS_PATH}")
 

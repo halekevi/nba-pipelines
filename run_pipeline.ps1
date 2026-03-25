@@ -30,6 +30,7 @@ param(
     [switch]$SoccerOnly,
     [switch]$WNBAOnly,
     [switch]$CombinedOnly,
+    [switch]$SkipCombined,
     [switch]$SkipFetch,
     [switch]$RefreshCache,
     [switch]$ForceAll,
@@ -37,6 +38,20 @@ param(
 )
 
 $ErrorActionPreference = "Continue"
+
+# -- ENV CHECK (helps debug scheduled task context) -----------------------------
+Write-Host "=== ENV CHECK ===" -ForegroundColor DarkGray
+Write-Host "LOCALAPPDATA: $env:LOCALAPPDATA" -ForegroundColor DarkGray
+Write-Host "USERPROFILE:  $env:USERPROFILE" -ForegroundColor DarkGray
+Write-Host "USERNAME:     $env:USERNAME" -ForegroundColor DarkGray
+Write-Host "SESSION:      $env:SESSIONNAME" -ForegroundColor DarkGray
+try {
+    $resolvedCache = py -3.14 -c "from scripts.ensure_local_cache import ensure_local_cache; print(ensure_local_cache())"
+    Write-Host "cache_dir:    $resolvedCache" -ForegroundColor DarkGray
+} catch {
+    Write-Host "cache_dir:    (error resolving via ensure_local_cache)" -ForegroundColor DarkGray
+}
+Write-Host "=================" -ForegroundColor DarkGray
 
 # -- Date ---------------------------------------------------------------------
 if (-not $Date) {
@@ -239,7 +254,7 @@ function Run-Combined {
     if (Test-Path $nba1qFile)  { $CombinedArgs += " --nba1q `"$nba1qFile`"";   Write-Host "  [+] NBA1Q"  -ForegroundColor DarkGray }
     if (Test-Path $wcbbFile)   { $CombinedArgs += " --wcbb `"$wcbbFile`"";     Write-Host "  [+] WCBB"   -ForegroundColor DarkGray }
 
-    $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --max-tickets 3 --write-web --web-outdir `"$WebOutDir`""
+    $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --max-tickets 3 --min-hit-rate 0.58 --write-web --web-outdir `"$WebOutDir`""
 
     $okC = Run-Step "Combined Slate + Tickets" $Root ".\scripts\combined_slate_tickets.py" $CombinedArgs
 
@@ -278,6 +293,34 @@ function Print-Done {
     Write-Host ""
 }
 
+# -- Helper: train prop ML models when primary .pkl is missing ----------------
+function Ensure-PropModels {
+    Write-Host "[ MODELS ] Checking prop_model_*.pkl (see models/README.md)..." -ForegroundColor Cyan
+    $modelsDir = Join-Path $Root "models"
+    if (-not (Test-Path $modelsDir)) { New-Item -ItemType Directory -Force -Path $modelsDir | Out-Null }
+    $trainers = @(
+        @{ Pkl = "prop_model_nba.pkl";     Script = ".\scripts\train_prop_model_nba.py" },
+        @{ Pkl = "prop_model_nba1q.pkl";  Script = ".\scripts\train_prop_model_nba1q.py" },
+        @{ Pkl = "prop_model_nba1h.pkl";  Script = ".\scripts\train_prop_model_nba1h.py" },
+        @{ Pkl = "prop_model_cbb.pkl";    Script = ".\scripts\train_prop_model_cbb.py" },
+        @{ Pkl = "prop_model_nhl.pkl";    Script = ".\scripts\train_prop_model_nhl.py" },
+        @{ Pkl = "prop_model_soccer.pkl"; Script = ".\scripts\train_prop_model_soccer.py" }
+    )
+    foreach ($t in $trainers) {
+        $p = Join-Path $modelsDir $t.Pkl
+        if (-not (Test-Path $p)) {
+            Write-Host "  [MODELS] Missing $($t.Pkl) -> $($t.Script)" -ForegroundColor Yellow
+            $okM = Run-Step "Train ML $($t.Pkl)" $Root $t.Script ""
+            if (-not $okM) {
+                Write-Host "  [MODELS] WARNING: training failed — ML blend may be skipped for this sport." -ForegroundColor Red
+            }
+        } else {
+            Write-Host "  [MODELS] OK $($t.Pkl)" -ForegroundColor DarkGray
+        }
+    }
+    Write-Host ""
+}
+
 # =============================================================================
 #  COMBINED ONLY  -- picks up every sport already on disk
 # =============================================================================
@@ -304,6 +347,7 @@ if ($WNBAOnly) {
 if ($NHLOnly) {
     Write-Host "[ NHL PIPELINE ]" -ForegroundColor Magenta
     Write-Host ""
+    Ensure-PropModels
     $ok = $true
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "NHL Step 1 - Fetch PrizePicks" $NHLDir ".\scripts\step1_fetch_prizepicks_nhl.py"         "--output step1_nhl_props.csv" } } else { Write-Host "  [NHL] Skipping step1 fetch -- using existing step1_nhl_props.csv" -ForegroundColor DarkGray }
     if ($ok) { $ok = Run-Step "NHL Step 2 - Attach Pick Types"  $NHLDir ".\scripts\step2_attach_picktypes_nhl.py"       "--input step1_nhl_props.csv --output step2_nhl_picktypes.csv" }
@@ -313,9 +357,14 @@ if ($NHLOnly) {
     if ($ok) { $ok = Run-Step "NHL Step 6 - Team Role Context"  $NHLDir ".\scripts\step6_team_role_context_nhl.py"      "--input step5_nhl_hit_rates.csv --output step6_nhl_role_context.csv" }
     if ($ok) { $ok = Run-Step "NHL Step 7 - Rank Props"         $NHLDir ".\scripts\step7_rank_props_nhl.py"             "--input step6_nhl_role_context.csv --output step7_nhl_ranked.xlsx --slate-date $Date" }
     if ($ok) { $ok = Run-Step "NHL Step 8 - Direction Context"  $NHLDir ".\scripts\step8_add_direction_context_nhl.py"  "--input step7_nhl_ranked.xlsx --output step8_nhl_direction_clean.xlsx --date $Date" }
+    if ($ok) {
+        if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force -Path $OutDir | Out-Null }
+        Copy-Item "$NHLDir\step8_nhl_direction_clean.xlsx" "$OutDir\step8_nhl_direction_clean_$Date.xlsx" -Force
+        Write-Host "  Archived NHL slate -> $OutDir\step8_nhl_direction_clean_$Date.xlsx" -ForegroundColor DarkGray
+    }
     Write-Host ""
     if ($ok) { Write-Host "  NHL complete." -ForegroundColor Green } else { Write-Host "  NHL FAILED." -ForegroundColor Red }
-    if ($ok) { Run-Combined "after NHL" }
+    if ($ok -and -not $SkipCombined) { Run-Combined "after NHL" }
     Print-Done
     exit
 }
@@ -340,9 +389,14 @@ if ($MLBOnly) {
     if ($ok -and (Test-Path "$MLBDir\outputs\step8_mlb_direction_clean.xlsx")) {
         Copy-Item "$MLBDir\outputs\step8_mlb_direction_clean.xlsx" "$MLBDir\step8_mlb_direction_clean.xlsx" -Force
     }
+    if ($ok -and (Test-Path "$MLBDir\step8_mlb_direction_clean.xlsx")) {
+        if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force -Path $OutDir | Out-Null }
+        Copy-Item "$MLBDir\step8_mlb_direction_clean.xlsx" "$OutDir\step8_mlb_direction_clean_$Date.xlsx" -Force
+        Write-Host "  Archived MLB slate -> $OutDir\step8_mlb_direction_clean_$Date.xlsx" -ForegroundColor DarkGray
+    }
     Write-Host ""
     if ($ok) { Write-Host "  MLB complete." -ForegroundColor Green } else { Write-Host "  MLB FAILED." -ForegroundColor Red }
-    if ($ok) { Run-Combined "after MLB" }
+    if ($ok -and -not $SkipCombined) { Run-Combined "after MLB" }
     Print-Done
     exit
 }
@@ -353,6 +407,7 @@ if ($MLBOnly) {
 if ($SoccerOnly) {
     Write-Host "[ SOCCER PIPELINE ]" -ForegroundColor Magenta
     Write-Host ""
+    Ensure-PropModels
     $ok = $true
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "Soccer Step 1 - Fetch PrizePicks" $SoccerDir ".\scripts\step1_fetch_prizepicks_soccer.py" "--output outputs\step1_soccer_props.csv" } } else { Write-Host "  [Soccer] Skipping step1 fetch -- using existing outputs\step1_soccer_props.csv" -ForegroundColor DarkGray }
     if ($ok) { $ok = Run-Step "Soccer Step 2 - Attach Pick Types"  $SoccerDir ".\scripts\step2_attach_picktypes_soccer.py"       "--input outputs\step1_soccer_props.csv --output outputs\step2_soccer_picktypes.csv" }
@@ -363,9 +418,14 @@ if ($SoccerOnly) {
     if ($ok) { $ok = Run-Step "Soccer Step 6 - Team Role Context"  $SoccerDir ".\scripts\step6_team_role_context_soccer.py"      "--input outputs\step5_soccer_hit_rates.csv --output outputs\step6_soccer_role_context.csv" }
     if ($ok) { $ok = Run-Step "Soccer Step 7 - Rank Props"         $SoccerDir ".\scripts\step7_rank_props_soccer.py"             "--input outputs\step6_soccer_role_context.csv --output outputs\step7_soccer_ranked.xlsx --n_teams 15 --slate-date $Date" }
     if ($ok) { $ok = Run-Step "Soccer Step 8 - Direction Context"  $SoccerDir ".\scripts\step8_add_direction_context_soccer.py"  "--input outputs\step7_soccer_ranked.xlsx --sheet ALL --output outputs\step8_soccer_direction.csv --xlsx outputs\step8_soccer_direction_clean.xlsx --date $Date" }
+    if ($ok) {
+        if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force -Path $OutDir | Out-Null }
+        Copy-Item "$SoccerDir\outputs\step8_soccer_direction_clean.xlsx" "$OutDir\step8_soccer_direction_clean_$Date.xlsx" -Force
+        Write-Host "  Archived Soccer slate -> $OutDir\step8_soccer_direction_clean_$Date.xlsx" -ForegroundColor DarkGray
+    }
     Write-Host ""
     if ($ok) { Write-Host "  Soccer complete." -ForegroundColor Green } else { Write-Host "  Soccer FAILED." -ForegroundColor Red }
-    if ($ok) { Run-Combined "after Soccer" }
+    if ($ok -and -not $SkipCombined) { Run-Combined "after Soccer" }
     Print-Done
     exit
 }
@@ -376,6 +436,7 @@ if ($SoccerOnly) {
 if ($CBBOnly) {
     Write-Host "[ CBB PIPELINE ]" -ForegroundColor Magenta
     Write-Host ""
+    Ensure-PropModels
     # CBB pipeline ends at step6 — no step7/step8 in this sport
     $CBBOutDir = Join-Path $CBBDir "outputs\$Date"
     if (-not (Test-Path $CBBOutDir)) { New-Item -ItemType Directory -Force -Path $CBBOutDir | Out-Null }
@@ -387,9 +448,14 @@ if ($CBBOnly) {
     if ($ok) { $ok = Run-Step "CBB Step 5 - Boxscore Stats"          $CBBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input outputs\$Date\step3_cbb.csv --output outputs\$Date\step5b_cbb.csv --cache data\cache\cbb_boxscore_cache.csv --days 90 --workers 4" }
     if ($ok) { $ok = Run-Step "CBB Step 6 - Rank Props"              $CBBDir ".\scripts\pipeline\step6_rank_props_cbb.py"                       "--input outputs\$Date\step5b_cbb.csv --output outputs\$Date\step6_ranked_cbb.xlsx --date $Date --cache data\cache\cbb_boxscore_cache.csv" }
     if ($ok) { Copy-Item "$CBBDir\outputs\$Date\step6_ranked_cbb.xlsx" "$CBBDir\step6_ranked_cbb.xlsx" -Force }
+    if ($ok) {
+        if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force -Path $OutDir | Out-Null }
+        Copy-Item "$CBBDir\outputs\$Date\step6_ranked_cbb.xlsx" "$OutDir\step6_ranked_cbb_$Date.xlsx" -Force -ErrorAction SilentlyContinue
+        Write-Host "  Archived CBB slate -> $OutDir\step6_ranked_cbb_$Date.xlsx" -ForegroundColor DarkGray
+    }
     Write-Host ""
     if ($ok) { Write-Host "  CBB complete." -ForegroundColor Green } else { Write-Host "  CBB FAILED." -ForegroundColor Red }
-    if ($ok) { Run-Combined "after CBB" }
+    if ($ok -and -not $SkipCombined) { Run-Combined "after CBB" }
     Print-Done
     exit
 }
@@ -400,6 +466,7 @@ if ($CBBOnly) {
 if ($NBAOnly) {
     Write-Host "[ NBA PIPELINE ]" -ForegroundColor Magenta
     Write-Host ""
+    Ensure-PropModels
 
     if (Test-Path (Join-Path $NBADir "RUN_COMPLETE.flag")) { Remove-Item (Join-Path $NBADir "RUN_COMPLETE.flag") -Force }
 
@@ -433,9 +500,14 @@ if ($NBAOnly) {
     if ($ok) { $ok = Run-Step "NBA Step 8 - Direction Context"       $NBADir ".\scripts\step8_add_direction_context.py"         "--input data\outputs\step7_ranked_props.xlsx --sheet ALL --output data\outputs\step8_all_direction.csv --date $Date" }
 
     if ($ok) { New-Item -ItemType File -Force -Path (Join-Path $NBADir "RUN_COMPLETE.flag") | Out-Null }
+    if ($ok) {
+        if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force -Path $OutDir | Out-Null }
+        Copy-Item "$NBADir\data\outputs\step8_all_direction_clean.xlsx" "$OutDir\step8_nba_direction_clean_$Date.xlsx" -Force
+        Write-Host "  Archived NBA slate -> $OutDir\step8_nba_direction_clean_$Date.xlsx" -ForegroundColor DarkGray
+    }
     Write-Host ""
     if ($ok) { Write-Host "  NBA complete." -ForegroundColor Green } else { Write-Host "  NBA FAILED." -ForegroundColor Red }
-    if ($ok) { Run-Combined "after NBA" }
+    if ($ok -and -not $SkipCombined) { Run-Combined "after NBA" }
     Print-Done
     exit
 }
@@ -452,6 +524,8 @@ if ($RefreshCache) {
 } else {
     Check-AutoRefreshCache
 }
+
+Ensure-PropModels
 
 if (Test-Path (Join-Path $NBADir "RUN_COMPLETE.flag")) { Remove-Item (Join-Path $NBADir "RUN_COMPLETE.flag") -Force }
 
@@ -659,5 +733,5 @@ Write-Host ""
     else        { Write-Host "  $($_.Name) FAILED."  -ForegroundColor Red   }
 }
 
-Run-Combined "full parallel run"
+if (-not $SkipCombined) { Run-Combined "full parallel run" }
 Print-Done

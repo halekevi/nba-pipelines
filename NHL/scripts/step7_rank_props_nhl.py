@@ -626,6 +626,14 @@ def _apply_ml_blend(df: pd.DataFrame) -> tuple[pd.Series, pd.Series, pd.Series]:
         print(f"⚠️  Failed loading NHL ML model: {e} — skipping ML blend")
         return pd.Series(np.nan, index=df.index), pd.Series(np.nan, index=df.index), existing_score
 
+    calibrator = None
+    calib_path = root / "models" / "prop_model_nhl_calibrator.pkl"
+    try:
+        if calib_path.exists():
+            calibrator = joblib.load(calib_path)
+    except Exception:
+        calibrator = None
+
     try:
         from ml_blend_weight import load_ml_blend_weight as _load_nhl_blend
 
@@ -635,7 +643,18 @@ def _apply_ml_blend(df: pd.DataFrame) -> tuple[pd.Series, pd.Series, pd.Series]:
 
     try:
         X = _build_nhl_ml_X(df, model_features)
-        ml_prob = pd.Series(model.predict_proba(X)[:, 1], index=df.index, dtype=float)
+        raw_prob = pd.Series(model.predict_proba(X)[:, 1], index=df.index, dtype=float)
+        if calibrator is not None:
+            try:
+                if hasattr(calibrator, "predict_proba"):
+                    cal_vals = calibrator.predict_proba(raw_prob.values.reshape(-1, 1))[:, 1]
+                else:
+                    cal_vals = calibrator.predict(raw_prob.values)
+                ml_prob = pd.Series(cal_vals, index=df.index, dtype=float).clip(0.001, 0.999)
+            except Exception:
+                ml_prob = raw_prob
+        else:
+            ml_prob = raw_prob
     except Exception as e:
         print(f"⚠️  NHL ML inference failed: {e} — skipping ML blend")
         return pd.Series(np.nan, index=df.index), pd.Series(np.nan, index=df.index), existing_score

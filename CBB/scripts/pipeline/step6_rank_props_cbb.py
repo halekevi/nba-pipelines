@@ -535,6 +535,14 @@ def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, source_hint: s
         print(f"⚠️  Failed loading CBB ML model: {e} — skipping ML blend")
         return pd.Series(np.nan, index=out.index), pd.Series(np.nan, index=out.index), existing_score.copy()
 
+    calibrator = None
+    calib_path = root / "models" / f"prop_model_{model_key_used}_calibrator.pkl"
+    try:
+        if calib_path.exists():
+            calibrator = joblib.load(calib_path)
+    except Exception:
+        calibrator = None
+
     try:
         from ml_blend_weight import load_ml_blend_weight as _load_cbb_blend
 
@@ -565,7 +573,18 @@ def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, source_hint: s
     )
     X = pd.concat([X_base, prop_dummies], axis=1).reindex(columns=model_features, fill_value=0.0)
     try:
-        ml_prob = pd.Series(model.predict_proba(X)[:, 1], index=out.index, dtype=float)
+        raw_prob = pd.Series(model.predict_proba(X)[:, 1], index=out.index, dtype=float)
+        if calibrator is not None:
+            try:
+                if hasattr(calibrator, "predict_proba"):
+                    cal_vals = calibrator.predict_proba(raw_prob.values.reshape(-1, 1))[:, 1]
+                else:
+                    cal_vals = calibrator.predict(raw_prob.values)
+                ml_prob = pd.Series(cal_vals, index=out.index, dtype=float).clip(0.001, 0.999)
+            except Exception:
+                ml_prob = raw_prob
+        else:
+            ml_prob = raw_prob
     except Exception as e:
         print(f"⚠️  CBB ML inference failed: {e} — skipping ML blend")
         return pd.Series(np.nan, index=out.index), pd.Series(np.nan, index=out.index), existing_score.copy()

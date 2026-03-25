@@ -16,6 +16,7 @@ from __future__ import annotations
 import json
 import re
 import sqlite3
+from datetime import datetime, timezone
 import subprocess
 import sys
 from pathlib import Path
@@ -27,12 +28,16 @@ import pandas as pd
 
 try:
     from sklearn.metrics import brier_score_loss, roc_auc_score
+    from sklearn.isotonic import IsotonicRegression
+    from sklearn.linear_model import LogisticRegression
     from sklearn.model_selection import train_test_split
 except ImportError:
     subprocess.check_call(
         [sys.executable, "-m", "pip", "install", "scikit-learn", "--break-system-packages", "-q"]
     )
     from sklearn.metrics import brier_score_loss, roc_auc_score
+    from sklearn.isotonic import IsotonicRegression
+    from sklearn.linear_model import LogisticRegression
     from sklearn.model_selection import train_test_split
 
 try:
@@ -56,6 +61,11 @@ MODEL_DIR = ROOT / "models"
 MODEL_PATH = MODEL_DIR / "prop_model_cbb.pkl"
 FEATURES_PATH = MODEL_DIR / "prop_model_cbb_features.json"
 BLEND_PATH = MODEL_DIR / "prop_model_cbb_blend_weight.json"
+CALIB_PATH = MODEL_DIR / "prop_model_cbb_calibrator.pkl"
+METRICS_PATH = MODEL_DIR / "prop_model_cbb_metrics.json"
+
+SYNTHETIC_RATIO_CAP = 1.0
+REAL_ONLY_MODE = True
 
 DATE_RE = re.compile(r"graded_(?:props_)?cbb_(\d{4}-\d{2}-\d{2})\.xlsx$", re.I)
 
@@ -132,6 +142,7 @@ def _cbb_synthetic_to_workbook_like(syn: pd.DataFrame) -> pd.DataFrame:
             "direction": syn["direction"],
             "Pick Type": syn["tier"] if "tier" in syn.columns else pd.Series("Standard", index=idx),
             "_source_file": "synthetic_graded.db",
+            "_synthetic": 1,
             "_source_date": syn["game_date"].astype(str) if "game_date" in syn.columns else "",
             "_weight": syn["_weight"],
         },
@@ -228,8 +239,42 @@ def _load_cbb_frame(path: Path) -> pd.DataFrame | None:
     df = pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
     df = df.copy()
     df["_source_file"] = str(path)
+    df["_synthetic"] = 0
+    df["_weight"] = 1.0
     m = DATE_RE.search(path.name)
     df["_source_date"] = m.group(1) if m else ""
+    return df
+
+
+def _audit_and_load_cbb() -> pd.DataFrame:
+    files = _collect_cbb_graded_files()
+    real_frames: list[pd.DataFrame] = []
+    for p in files:
+        block = _load_cbb_frame(p)
+        if block is not None:
+            real_frames.append(block)
+    if not real_frames:
+        raise FileNotFoundError(
+            "No graded_cbb*.xlsx / graded_props_cbb*.xlsx under outputs/ or CBB/ (non-synthetic)."
+        )
+    real_df = pd.concat(real_frames, ignore_index=True)
+    n_real = len(real_df)
+
+    syn_raw = load_synthetic_training_data("CBB", str(SYNTHETIC_DB))
+    if REAL_ONLY_MODE or syn_raw.empty:
+        df = real_df
+        n_syn_used = 0
+    else:
+        syn_df = _cbb_synthetic_to_workbook_like(syn_raw)
+        n_syn_cap = int(n_real * SYNTHETIC_RATIO_CAP)
+        if n_syn_cap <= 0:
+            syn_df = syn_df.iloc[0:0].copy()
+        elif len(syn_df) > n_syn_cap:
+            syn_df = syn_df.sample(n=n_syn_cap, random_state=42)
+        n_syn_used = len(syn_df)
+        df = pd.concat([real_df, syn_df], ignore_index=True)
+
+    print(f"Training mix — real: {n_real:,}  synthetic: {n_syn_used:,}  total: {len(df):,}")
     return df
 
 
@@ -257,21 +302,8 @@ def _direction_num(raw: pd.Series) -> pd.Series:
 
 
 def main() -> None:
-    print("-> Collecting CBB graded workbooks...")
-    files = _collect_cbb_graded_files()
-    frames: list[pd.DataFrame] = []
-    for p in files:
-        block = _load_cbb_frame(p)
-        if block is not None:
-            frames.append(block)
-    syn_raw = load_synthetic_training_data("CBB", str(SYNTHETIC_DB))
-    if not syn_raw.empty:
-        frames.append(_cbb_synthetic_to_workbook_like(syn_raw))
-    if not frames:
-        raise FileNotFoundError(
-            "No graded_cbb*.xlsx / graded_props_cbb*.xlsx and no CBB rows in data/cache/synthetic_graded.db."
-        )
-    df = pd.concat(frames, ignore_index=True)
+    print("=== CBB graded data ===\n")
+    df = _audit_and_load_cbb()
     print(f"-> Combined raw rows: {len(df)}")
     print(f"-> Columns ({len(df.columns)}): {list(df.columns)}")
 
@@ -358,48 +390,134 @@ def main() -> None:
     y = train["hit"].astype(int)
 
     strat = y if y.nunique() > 1 else None
-    sw = (
-        pd.to_numeric(df.loc[train.index, "_weight"], errors="coerce").fillna(1.0).to_numpy()
-        if "_weight" in df.columns
-        else np.ones(len(train))
-    )
-    X_train, X_test, y_train, y_test, sw_train, _sw_test = train_test_split(
+    if "_weight" in df.columns:
+        sw = pd.to_numeric(df.loc[train.index, "_weight"], errors="coerce").fillna(1.0).to_numpy()
+    else:
+        sw = np.where(df.loc[train.index, "_synthetic"].to_numpy() > 0, 0.7, 1.0)
+
+    X_train_all, X_test, y_train_all, y_test, sw_train_all, _sw_test = train_test_split(
         X, y, sw, test_size=0.20, random_state=42, stratify=strat
     )
-
-    model = XGBClassifier(
-        n_estimators=300,
-        max_depth=4,
-        learning_rate=0.05,
-        subsample=0.9,
-        colsample_bytree=0.9,
-        objective="binary:logistic",
-        eval_metric="logloss",
+    strat_train = y_train_all if y_train_all.nunique() > 1 else None
+    X_train, X_cal, y_train, y_cal, sw_train, _sw_cal = train_test_split(
+        X_train_all,
+        y_train_all,
+        sw_train_all,
+        test_size=0.20,
         random_state=42,
+        stratify=strat_train,
     )
+
+    if n < 500:
+        model = XGBClassifier(
+            n_estimators=50,
+            max_depth=3,
+            learning_rate=0.1,
+            subsample=0.8,
+            random_state=42,
+            eval_metric="logloss",
+        )
+    else:
+        model = XGBClassifier(
+            n_estimators=100,
+            max_depth=4,
+            learning_rate=0.05,
+            subsample=0.8,
+            colsample_bytree=0.8,
+            random_state=42,
+            eval_metric="logloss",
+        )
     model.fit(X_train, y_train, sample_weight=sw_train)
 
     proba = model.predict_proba(X_test)[:, 1]
-    auc = roc_auc_score(y_test, proba)
-    brier = brier_score_loss(y_test, proba)
+    cal_input = model.predict_proba(X_cal)[:, 1]
+    calibrator = None
+    calibration_type = "none"
+    try:
+        if len(X_cal) >= 1000:
+            calibrator = IsotonicRegression(out_of_bounds="clip")
+            calibrator.fit(cal_input, y_cal)
+            calibration_type = "isotonic"
+        else:
+            calibrator = LogisticRegression()
+            calibrator.fit(cal_input.reshape(-1, 1), y_cal)
+            calibration_type = "sigmoid"
+    except Exception:
+        calibrator = None
+        calibration_type = "none"
+
+    try:
+        auc = roc_auc_score(y_test, proba) if y_test.nunique() > 1 else float("nan")
+    except Exception:
+        auc = float("nan")
+    try:
+        brier_raw = brier_score_loss(y_test, proba)
+    except Exception:
+        brier_raw = float("nan")
+    proba_cal_test = np.asarray(proba, dtype=float).copy()
+    if calibrator is not None:
+        try:
+            if hasattr(calibrator, "predict_proba"):
+                proba_cal_test = calibrator.predict_proba(proba_cal_test.reshape(-1, 1))[:, 1]
+            else:
+                proba_cal_test = calibrator.predict(proba_cal_test)
+        except Exception:
+            proba_cal_test = np.asarray(proba, dtype=float)
+    try:
+        brier_calibrated = brier_score_loss(y_test, proba_cal_test)
+    except Exception:
+        brier_calibrated = float("nan")
 
     feats = list(X.columns)
     fi = pd.Series(model.feature_importances_, index=feats).sort_values(ascending=False)
     top5 = fi.head(5)
+    ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     MODEL_DIR.mkdir(parents=True, exist_ok=True)
     joblib.dump(model, MODEL_PATH)
     FEATURES_PATH.write_text(json.dumps(feats, indent=2), encoding="utf-8")
     BLEND_PATH.write_text(json.dumps({"blend_weight": bw}, indent=2), encoding="utf-8")
+    if calibrator is not None:
+        joblib.dump(calibrator, CALIB_PATH)
+    elif CALIB_PATH.exists():
+        CALIB_PATH.unlink()
+    METRICS_PATH.write_text(
+        json.dumps(
+            {
+                "auc": None if np.isnan(auc) else float(auc),
+                "brier_raw": None if np.isnan(brier_raw) else float(brier_raw),
+                "brier_calibrated": None if np.isnan(brier_calibrated) else float(brier_calibrated),
+                "calibration_type": calibration_type,
+                "n_train": int(len(X_train)),
+                "n_cal": int(len(X_cal)),
+                "n_test": int(len(X_test)),
+                "real_only_mode": REAL_ONLY_MODE,
+                "timestamp": ts,
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
 
-    print(f"Saved model: {MODEL_PATH}")
-    print(f"Saved features: {FEATURES_PATH}")
-    print(f"Saved blend weight: {BLEND_PATH}")
-    print(f"Test ROC-AUC: {auc:.4f}")
-    print(f"Brier score: {brier:.4f}")
-    print("Top 5 feature importances:")
+    print("CBB model training complete")
+    print("-----------------------------")
+    print(f"  Training rows:    {len(X_train)}")
+    print(f"  Calibration rows: {len(X_cal)}")
+    print(f"  Test rows:        {len(X_test)}")
+    print(f"  ROC-AUC:          {auc:.4f}" if not np.isnan(auc) else "  ROC-AUC:          n/a")
+    print(f"  Brier (raw):      {brier_raw:.4f}" if not np.isnan(brier_raw) else "  Brier (raw):      n/a")
+    print(f"  Brier (cal test): {brier_calibrated:.4f}" if not np.isnan(brier_calibrated) else "  Brier (cal test): n/a")
+    print(f"  Blend weight:     {bw:.2f}")
+    print(f"  Calibration:      {calibration_type}")
+    print("\n  Top 5 features:")
     for k, v in top5.items():
         print(f"  - {k}: {v:.6f}")
+    print(f"\n  Saved: {MODEL_PATH}")
+    print(f"  Saved: {FEATURES_PATH}")
+    print(f"  Saved: {BLEND_PATH}")
+    if calibrator is not None:
+        print(f"  Saved: {CALIB_PATH}")
+    print(f"  Saved: {METRICS_PATH}")
 
 
 if __name__ == "__main__":
