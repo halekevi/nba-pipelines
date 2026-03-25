@@ -72,6 +72,108 @@ SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
     ],
 }
 
+# Navbar + light/dark theme for tickets_latest.html / ticket_eval_*.html (matches main site shell).
+_TICKETS_NAV_THEME_CSS = """/* ── Nav ── */
+.snav{position:sticky;top:1rem;z-index:200;background:rgba(5,5,15,0.85);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid rgba(212,175,55,0.15);box-shadow:0 1px 0 rgba(255,255,255,0.04),0 8px 32px rgba(0,0,0,0.4);padding:0 40px;display:flex;align-items:center;height:72px;gap:0;margin:1rem;border-radius:20px;}
+.nav-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,#c6ff00 15%,#00e5ff 40%,#b7a8ff 65%,#c6ff00 85%,transparent 100%);opacity:.7;border-radius:20px 20px 0 0;}
+.snav-brand{display:flex;align-items:center;gap:14px;text-decoration:none;margin-right:48px;flex-shrink:0;}
+.logo-icon{width:120px;height:40px;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(212,175,55,0.45));}
+.nav-brand{font-family:'Inter',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px;color:#e8e8f0;display:flex;align-items:baseline;}
+.oracle-upper{text-transform:uppercase;font-weight:800;color:#d4af37;}
+.gold-shimmer{background:linear-gradient(90deg,#d4af37,#f0d060,#d4af37);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% auto;animation:shimmer 3s linear infinite;}
+@keyframes shimmer{to{background-position:200% center;}}
+.snav-links{display:flex;align-items:stretch;list-style:none;flex:1;gap:4px;}
+.snav-links li a{display:flex;align-items:center;gap:10px;padding:0 20px;height:72px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#7a9ac8;text-decoration:none;border-bottom:2px solid transparent;transition:color .2s,border-color .2s,background .2s;position:relative;}
+.snav-links li a:hover{color:#e8e8f0;background:rgba(255,255,255,.02);}
+.snav-links li a.active{color:#d4af37;border-bottom-color:#d4af37;}
+.snav-links li a.active::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:#d4af37;box-shadow:0 0 12px #d4af37;}
+.snav-right{display:flex;align-items:center;gap:16px;margin-left:auto;}
+.live-pill{display:flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:#7a9ac8;padding:6px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#39ff6e;box-shadow:0 0 8px #39ff6e;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:8px;border:1px solid rgba(255,255,255,0.09);border-radius:8px;background:rgba(255,255,255,0.04);}
+.hamburger span{display:block;width:18px;height:2px;background:#94a3b8;border-radius:2px;transition:all .25s;}
+.mobile-menu{display:none;position:fixed;top:88px;left:0;right:0;background:rgba(5,5,15,.98);backdrop-filter:blur(20px);border-bottom:1px solid rgba(212,175,55,0.15);z-index:199;padding:12px 0;}
+.mobile-menu.open{display:block;}
+.mobile-menu a{display:flex;align-items:center;gap:12px;padding:12px 24px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#94a3b8;text-decoration:none;border-left:3px solid transparent;transition:all .15s;}
+.mobile-menu a:hover,.mobile-menu a.active{color:#d4af37;border-left-color:#d4af37;}
+.theme-toggle{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);cursor:pointer;font-size:16px;transition:background .2s,border-color .2s,transform .15s;flex-shrink:0;}
+.theme-toggle:hover{background:rgba(255,255,255,0.13);border-color:rgba(255,255,255,0.22);transform:scale(1.08);}
+[data-theme="light"] body{background:#f0f2f8;color:#1a1a2e;}
+[data-theme="light"] .snav{background:rgba(255,255,255,0.85);border-color:rgba(0,0,0,0.1);}
+[data-theme="light"] .stats-bar{background:rgba(255,255,255,0.5);border-color:rgba(0,0,0,0.1);}
+[data-theme="light"] .ticket-card{background:rgba(255,255,255,0.6);border-color:rgba(0,0,0,0.1);}
+[data-theme="light"] .legrow{color:#1a1a2e;}
+[data-theme="light"] .meta-muted{color:#555;}
+[data-theme="light"] .sum-val{color:#b8860b;}
+[data-theme="light"] .sec-head{color:#b8860b;}
+[data-theme="light"] .theme-toggle{background:rgba(0,0,0,0.06);border-color:rgba(0,0,0,0.12);}
+@media(max-width:768px){.snav{padding:0 16px;margin:.5rem;}.snav-links{display:none;}.hamburger{display:flex;}.snav-brand{margin-right:0;}}
+"""
+
+_TICKETS_NAV_HTML = """<nav class="snav">
+  <div class="nav-accent"></div>
+  <a class="snav-brand" href="/">
+    <img src="/static/proporacle-logo-v3.png?v=20260320b" alt="PropORACLE" class="logo-icon">
+    <span class="nav-brand">Prop<span class="oracle-upper gold-shimmer">ORACLE</span></span>
+  </a>
+  <ul class="snav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/tickets" class="active">Tickets</a></li>
+    <li><a href="/grades">Grades</a></li>
+    <li><a href="/payout">Payouts</a></li>
+  </ul>
+  <div class="snav-right">
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()"
+            title="Toggle light/dark mode" aria-label="Toggle theme">
+      <span class="tt-moon">🌙</span>
+      <span class="tt-sun" style="display:none">☀️</span>
+    </button>
+    <div class="live-pill"><div class="live-dot"></div>LIVE</div>
+  </div>
+  <button class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/">🏠 Home</a>
+  <a href="/tickets" class="active">🎟 Tickets</a>
+  <a href="/grades">✏️ Grades</a>
+  <a href="/payout">💰 Payouts</a>
+</div>"""
+
+_TICKETS_THEME_JS = """<script>
+(function(){
+  const saved = localStorage.getItem('proporacle-theme') || 'dark';
+  applyTheme(saved);
+})();
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('proporacle-theme', theme);
+  localStorage.setItem('theme', theme);
+  const moon = document.getElementById('theme-toggle')?.querySelector('.tt-moon');
+  const sun  = document.getElementById('theme-toggle')?.querySelector('.tt-sun');
+  if (moon) moon.style.display = theme === 'dark' ? '' : 'none';
+  if (sun)  sun.style.display  = theme === 'dark' ? 'none' : '';
+}
+function toggleTheme() {
+  const curr = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(curr === 'dark' ? 'light' : 'dark');
+}
+const ham = document.getElementById('hamburger');
+const mob = document.getElementById('mobile-menu');
+if (ham) ham.addEventListener('click', () => {
+  ham.classList.toggle('open');
+  mob.classList.toggle('open');
+});
+document.addEventListener('click', e => {
+  if (ham && mob && !ham.contains(e.target) && !mob.contains(e.target)) {
+    ham.classList.remove('open');
+    mob.classList.remove('open');
+  }
+});
+</script>"""
+
 
 def _dated_candidates(date_str: str) -> dict[str, list[Path]]:
     """
@@ -1002,17 +1104,18 @@ def _build_html(
 
     parts: list[str] = [
         "<!DOCTYPE html>",
-        '<html lang="en">',
+        '<html lang="en" data-theme="dark">',
         "<head>",
         '<meta charset="UTF-8"/>',
         '<meta name="viewport" content="width=device-width, initial-scale=1.0"/>',
         f"<title>Ticket Eval — {json_date}</title>",
-        '<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>',
+        '<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@600;700;800&display=swap" rel="stylesheet"/>',
         "<style>",
         ":root{--gold:#f0a500;--gold2:#d4a017;--green:#39ff6e;--red:#ff4d4d;--cyan:#00e5ff;--pending:#666;--muted:#94a3b8;"
         "--glass:rgba(255,255,255,0.03);--glass-bd:rgba(255,255,255,0.08);}",
+        _TICKETS_NAV_THEME_CSS,
         "*{box-sizing:border-box;margin:0;padding:0;}",
-        "body{font-family:'Share Tech Mono',monospace;background:transparent;color:rgba(232,236,255,.95);min-height:100vh;padding-bottom:48px;}",
+        "body{font-family:'Share Tech Mono',monospace;background:transparent;color:rgba(232,236,255,.95);min-height:100vh;padding-top:16px;padding-bottom:48px;}",
         "h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}",
         ".bebas{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}",
         ".stats-bar{position:sticky;top:0;z-index:50;margin:0 auto 18px;width:100%;max-width:min(1520px,96vw);padding:18px clamp(16px,2.5vw,32px);"
@@ -1107,6 +1210,7 @@ def _build_html(
         "</style>",
         "</head>",
         "<body>",
+        _TICKETS_NAV_HTML,
         '<div class="stats-bar">',
         '<div class="sum-row">',
         f'<div class="sum-item"><div class="sum-val">{leg_pct:.1f}%</div><div class="sum-lab">LEG HIT RATE</div></div>',
@@ -1268,7 +1372,9 @@ def _build_html(
             parts.append("</article>")
         parts.append("</section>")
 
-    parts.append("</div></body></html>")
+    parts.append("</div>")
+    parts.append(_TICKETS_THEME_JS)
+    parts.append("</body></html>")
     return "\n".join(parts)
 
 
