@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import re
 from datetime import datetime, timezone
@@ -108,10 +109,41 @@ C = {
 
 PAYOUT = {
     2: {"power": 3.0,  "flex": 3.0},
-    3: {"power": 6.0,  "flex": 3.0},   # Updated: power=6x, flex=3x
+    3: {"power": 6.0,  "flex": 3.0},
     4: {"power": 10.0, "flex": 6.0},
     5: {"power": 20.0, "flex": 10.0},
-    6: {"power": 37.5, "flex": 25.0},  # Updated: power=37.5x, flex=25x
+    6: {"power": 37.5, "flex": 25.0},
+}
+
+# Props excluded from ticket pools based on empirical hit rates below break-even
+# Blocked Shots NBA: 41.9% overall, too low for any ticket
+# Combo props: small sample, unreliable
+# NHL OVER props: 21.5% hit rate — never use OVER direction in NHL tickets
+NBA_EXCLUDED_PROPS = {
+    "blocked shots", "3-pt attempted", "fg attempted",
+    "free throws attempted", "two pointers attempted",
+    "defensive rebounds", "offensive rebounds",
+    "dunks", "quarters with 5+ points", "quarters with 3+ points",
+    "points - 1st 3 minutes", "assists - 1st 3 minutes", "rebounds - 1st 3 minutes",
+    "assists (combo)", "points (combo)", "rebounds (combo)", "3-pt made (combo)",
+}
+
+CBB_EXCLUDED_PROPS = {
+    "fantasy",  # 0% hit rate — grader schema issue
+    "points (combo)",
+}
+
+NHL_EXCLUDED_PROPS = {
+    "shots on goal",    # 23.7% hit rate — worst NHL prop
+    "goals",            # 36.1% overall
+    "assists",          # 36.8% overall
+    "plus/minus",       # 39.9% overall
+}
+
+SOCCER_EXCLUDED_PROPS = {
+    "passes attempted",  # 0% hit rate
+    "assists",           # 5.6% hit rate
+    "goals",             # 9.7% hit rate
 }
 
 # ── Goblin / Demon payout adjustment ─────────────────────────────────────────
@@ -132,12 +164,19 @@ DEMON_MAX_BOOST:      float = 2.50        # single-leg multiplier cap (2.5×)
 # Min EV threshold for a ticket to be included in output.
 # ev = est_win_prob × adj_power_payout.  ev < 1.0 means expected loss.
 # Shorter slips use a lower bar so the web/workbook are not empty when payouts are modest.
-MIN_TICKET_EV_DEFAULT: float = 1.05
+MIN_TICKET_EV_DEFAULT: float = 1.20
 MIN_TICKET_EV_BY_LEGS: dict = {
     2: 0.93,
     3: 1.00,
     4: 1.02,
 }
+
+LEG_PROB_FLOOR = 0.35
+LEG_PROB_CAP = 0.72
+TICKET_PROB_FLOOR = 1e-6
+TICKET_PROB_CAP = 0.999
+RANK_SCORE_SIGMOID_SCALE = 0.4
+DEFAULT_LEG_PROB_FALLBACK = 0.50
 
 
 def min_ev_for_ticket(n_legs: int) -> float:
@@ -220,18 +259,18 @@ def calc_adjusted_payout(base_payout: float, legs: list) -> float:
 # Min hit rate required per leg depending on ticket length
 # Longer tickets need higher floor because win prob = product of all hit rates
 LEG_MIN_HIT_RATE = {
-    2: 0.55,   # 2-leg
-    3: 0.58,   # 3-leg: 0.58^3 = 19.5% win prob floor
-    4: 0.62,   # 4-leg: 0.62^4 = 14.8% win prob floor
-    5: 0.65,   # 5-leg: 0.65^5 = 11.6% win prob floor
-    6: 0.68,   # 6-leg: 0.68^6 = 9.8% win prob floor
+    2: 0.60,
+    3: 0.62,
+    4: 0.64,
+    5: 0.66,
+    6: 0.68,
 }
 
 # Min tier per leg count for Power mode tickets
 POWER_MIN_TIER = {
-    2: ["A", "B", "C", "D"],
+    2: ["A", "B", "C"],
     3: ["A", "B", "C"],   # 3-leg power: Tier A/B/C ok
-    4: ["A", "B", "C"],   # 4-leg power: Tier A/B/C ok
+    4: ["A", "B"],
     5: ["A", "B"],         # 5-leg power: Tier A/B only
     6: ["A", "B"],         # 6-leg power: Tier A/B only
 }
@@ -363,20 +402,58 @@ def _signal_float(v):
         return None
 
 
-def win_prob(hit_rates, _n_legs: int) -> float:
+def _clip_prob(p: float) -> float:
+    if p is None or not np.isfinite(p):
+        return DEFAULT_LEG_PROB_FALLBACK
+    return float(np.clip(float(p), LEG_PROB_FLOOR, LEG_PROB_CAP))
+
+
+def _rank_score_to_prob(rank_score: float) -> float:
+    if rank_score is None or not np.isfinite(rank_score):
+        return DEFAULT_LEG_PROB_FALLBACK
+    prob = 1.0 / (1.0 + math.exp(-float(rank_score) * RANK_SCORE_SIGMOID_SCALE))
+    return _clip_prob(prob)
+
+
+def _resolve_leg_prob(row: pd.Series) -> tuple[float, str]:
+    mlp = pd.to_numeric(row.get("ml_prob"), errors="coerce")
+    if pd.notna(mlp) and 0.0 < float(mlp) < 1.0:
+        return float(mlp), "ml_prob"
+
+    hr = pd.to_numeric(row.get("hit_rate"), errors="coerce")
+    if pd.notna(hr):
+        hr_val = float(hr)
+        if 1.0 < hr_val <= 100.0:
+            hr_val = hr_val / 100.0
+        if 0.0 < hr_val < 1.0:
+            n = pd.to_numeric(row.get("l5_games", row.get("sample_n", 5)), errors="coerce")
+            if pd.isna(n) or float(n) <= 0:
+                n = 5.0
+            prior = 0.55
+            hit_rate_shrunk = (hr_val * float(n) + prior * 5.0) / (float(n) + 5.0)
+            return float(hit_rate_shrunk), "hit_rate"
+
+    rs = pd.to_numeric(row.get("rank_score"), errors="coerce")
+    if pd.notna(rs):
+        return _rank_score_to_prob(float(rs)), "rank_score"
+
+    return DEFAULT_LEG_PROB_FALLBACK, "fallback_const"
+
+
+def win_prob(leg_probs, _n_legs: int) -> float:
     vals = []
-    for h in hit_rates:
+    for p in leg_probs:
         try:
-            if h is None:
+            if p is None:
                 continue
-            if isinstance(h, float) and np.isnan(h):
+            if isinstance(p, float) and np.isnan(p):
                 continue
-            vals.append(float(h))
+            vals.append(_clip_prob(float(p)))
         except Exception:
             continue
     if not vals:
-        return 0.0
-    return float(np.prod(vals))
+        return TICKET_PROB_FLOOR
+    return float(np.clip(np.prod(vals), TICKET_PROB_FLOOR, TICKET_PROB_CAP))
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -593,15 +670,16 @@ def enforce_target_date(
 # ──────────────────────────────────────────────────────────────────────────────
 # Web outputs (static HTML + JSON) + player images
 # ──────────────────────────────────────────────────────────────────────────────
-def _safe_float(x):
+def _safe_float(x, default=None):
     try:
         if x is None:
-            return None
+            return default
         if isinstance(x, float) and np.isnan(x):
-            return None
-        return float(x)
+            return default
+        f = float(x)
+        return f if np.isfinite(f) else default
     except Exception:
-        return None
+        return default
 
 
 def _clean_id(x) -> str:
@@ -776,6 +854,7 @@ def ticket_groups_to_payload(all_ticket_groups, date_str, thresholds):
                     "standard_projection": _safe_float(gv("standard_projection")),
                     "line_discount_vs_standard": _safe_float(gv("line_discount_vs_standard")),
                     "hit_rate": _safe_float(gv("hit_rate")),
+                    "ml_prob": _safe_float(gv("ml_prob")),
                     "rank_score": _safe_float(gv("rank_score")),
                     "game_time": str(gv("game_time") or ""),
                     "nba_player_id": gv("nba_player_id"),
@@ -798,6 +877,9 @@ def ticket_groups_to_payload(all_ticket_groups, date_str, thresholds):
                     "pace_tier": str(gv("pace_tier") or gv("Pace Tier") or ""),
                     "context_score": _safe_float(gv("context_score")),
                 }
+                leg_prob_used, leg_prob_source = _resolve_leg_prob(pd.Series(leg))
+                leg["leg_prob_used"] = _safe_float(leg_prob_used)
+                leg["leg_prob_source"] = leg_prob_source
                 leg["image_url"] = compute_image_url(leg)
                 leg["initials"] = player_initials(leg.get("player", ""))
 
@@ -2587,6 +2669,7 @@ def build_combined_slate(
         "edge",
         "projection",
         "hit_rate",
+        "ml_prob",
         "l5_avg",
         "season_avg",
         "l5_over",
@@ -2605,7 +2688,7 @@ def build_combined_slate(
 
     def safe_keep(df, cols):
         df = df.loc[:, ~df.columns.duplicated()].copy()
-        return df[[c for c in cols if c in df.columns]].copy()
+        return df.reindex(columns=cols).copy()
 
     frames = [safe_keep(nba, keep), safe_keep(cbb, keep)]
     if nhl is not None and len(nhl) > 0:
@@ -2626,6 +2709,8 @@ def build_combined_slate(
         combined["rank_score"] = pd.to_numeric(combined["rank_score"], errors="coerce")
     if "hit_rate" in combined.columns:
         combined["hit_rate"] = pd.to_numeric(combined["hit_rate"], errors="coerce")
+    if "ml_prob" in combined.columns:
+        combined["ml_prob"] = pd.to_numeric(combined["ml_prob"], errors="coerce")
     if "edge" in combined.columns:
         combined["edge"] = pd.to_numeric(combined["edge"], errors="coerce")
 
@@ -2903,12 +2988,16 @@ def build_tickets(pool: pd.DataFrame, n_legs: int, max_tickets=20, require_mix=F
             if key not in [t["key"] for t in tickets]:
                 hrs = []
                 rss = []
+                prob_srcs = []
                 for r in ticket_rows:
                     hrs.append(float(r.get("hit_rate", 0.5) or 0.5))
                     rss.append(float(r.get("rank_score", 0) or 0))
+                    _p, _src = _resolve_leg_prob(r)
+                    prob_srcs.append(_src)
                 avg_hr = float(np.mean(hrs)) if hrs else 0.0
                 avg_rs = float(np.mean(rss)) if rss else 0.0
-                ep = win_prob(hrs, n_legs)
+                leg_probs = [_resolve_leg_prob(r)[0] for r in ticket_rows]
+                ep = win_prob(leg_probs, n_legs)
                 pout = PAYOUT.get(n_legs, {"power": 0, "flex": 0})
 
                 # Adjust payouts for Goblin (reduces) and Demon (boosts)
@@ -2933,6 +3022,7 @@ def build_tickets(pool: pd.DataFrame, n_legs: int, max_tickets=20, require_mix=F
                         "payout_multiplier": round(adj_power / pout["power"], 4) if pout["power"] else 1.0,
                         "ev_power": round(ev_power, 4),
                         "n_legs": n_legs,
+                        "leg_prob_sources": ",".join(sorted(set(prob_srcs))),
                     }
                 )
 
@@ -3025,9 +3115,15 @@ def build_mixed_picktype_tickets(pool_df: pd.DataFrame, n_legs: int, max_tickets
             if std_count >= min_standard:
                 hrs = [float(x.get("hit_rate", 0.5) or 0.5) for x in legs]
                 rss = [float(x.get("rank_score", 0) or 0) for x in legs]
+                leg_probs = []
+                prob_srcs = []
+                for x in legs:
+                    _p, _src = _resolve_leg_prob(x)
+                    leg_probs.append(_p)
+                    prob_srcs.append(_src)
                 avg_hr = float(np.mean(hrs)) if hrs else 0.0
                 avg_rs = float(np.mean(rss)) if rss else 0.0
-                ep = win_prob(hrs, n_legs)
+                ep = win_prob(leg_probs, n_legs)
                 pout = PAYOUT.get(n_legs, {"power": 0, "flex": 0})
 
                 # Adjust payouts for Goblin/Demon legs
@@ -3057,6 +3153,7 @@ def build_mixed_picktype_tickets(pool_df: pd.DataFrame, n_legs: int, max_tickets
                             "payout_multiplier": round(adj_power / pout["power"], 4) if pout["power"] else 1.0,
                             "ev_power": round(ev_power, 4),
                             "n_legs": n_legs,
+                            "leg_prob_sources": ",".join(sorted(set(prob_srcs))),
                         }
                     )
 
@@ -3899,7 +3996,7 @@ def main():
         dest="pick_types",
         help="Comma-separated pick types for ticket eligibility (Demon excluded from tickets).",
     )
-    ap.add_argument("--max-tickets", type=int, default=20, dest="max_tickets")
+    ap.add_argument("--max-tickets", type=int, default=3, dest="max_tickets")
     ap.add_argument("--use-context-filter", action="store_true", dest="use_context_filter", default=True,
                     help="Apply NBA direction+defense+pace context confidence filter")
     ap.add_argument("--no-context-filter", action="store_false", dest="use_context_filter",
@@ -4094,27 +4191,77 @@ def main():
     CBB_GOBLIN_MIN_RANK = 5.0   # tune this up/down based on graded results
 
     def pool(df, pt=None):
+        if df is None or len(df) == 0:
+            return df
+
         sport = str(df["sport"].iloc[0]).upper() if "sport" in df.columns and len(df) > 0 else ""
-        effective_pt = pt if pt is not None else ticket_pick_types
-        if effective_pt is not None and len(effective_pt) == 0:
-            return df.iloc[0:0].copy()
-        # Apply tighter rank floor specifically for CBB Goblin
+
+        # Sport-specific prop exclusions
+        excluded = set()
+        if sport == "NBA":
+            excluded = NBA_EXCLUDED_PROPS
+        elif sport == "CBB":
+            excluded = CBB_EXCLUDED_PROPS
+        elif sport == "NHL":
+            excluded = NHL_EXCLUDED_PROPS
+        elif sport == "SOCCER":
+            excluded = SOCCER_EXCLUDED_PROPS
+
+        filtered_df = df.copy()
+        if excluded and "prop_type" in filtered_df.columns:
+            filtered_df = filtered_df[
+                ~filtered_df["prop_type"].astype(str).str.lower().isin(excluded)
+            ]
+
+        # Sport-specific hit rate floors based on empirical data
+        effective_min_hit = args.min_hit_rate
+
+        if pt == ["Goblin"]:
+            if sport == "NBA":
+                effective_min_hit = max(args.min_hit_rate, 0.62)   # NBA Goblin: 64.3% overall
+            elif sport == "CBB":
+                effective_min_hit = max(args.min_hit_rate, 0.58)   # CBB Goblin: 61.9%
+            elif sport == "NHL":
+                effective_min_hit = max(args.min_hit_rate, 0.38)   # NHL Goblin is weak (40%)
+            else:
+                effective_min_hit = max(args.min_hit_rate, 0.55)
+
+        elif pt == ["Standard"]:
+            if sport == "NBA":
+                effective_min_hit = max(args.min_hit_rate, 0.50)   # NBA Standard: 50.7% — only Tier A viable
+            elif sport == "CBB":
+                effective_min_hit = max(args.min_hit_rate, 0.50)   # CBB Standard: 51.6%
+            elif sport == "NHL":
+                effective_min_hit = max(args.min_hit_rate, 0.65)   # NHL Standard: 67.9% — very strong
+            else:
+                effective_min_hit = max(args.min_hit_rate, 0.50)
+
+        # Direction filter: NHL OVER props are only 21.5% — exclude from NHL pools
+        if sport == "NHL" and "direction" in filtered_df.columns:
+            filtered_df = filtered_df[
+                filtered_df["direction"].astype(str).str.upper() != "OVER"
+            ]
+
+        # Tier floor: exclude Tier D from all pools
+        effective_tiers = [t for t in (tiers if tiers else ["A", "B", "C", "D"]) if t != "D"]
+
+        # CBB Goblin rank floor
         effective_min_rank = args.min_rank
-        if sport in ("CBB", "WCBB") and effective_pt is not None and effective_pt == ["Goblin"]:
+        if sport == "CBB" and pt is not None and pt == ["Goblin"]:
             effective_min_rank = max(args.min_rank or 0, CBB_GOBLIN_MIN_RANK)
-        base = filter_eligible(
-            df,
-            args.min_hit_rate,
+
+        # Exclude Demon from all pools
+        effective_pick_types = pt if pt is not None else [
+            p for p in (pick_types if pick_types else ["Goblin", "Standard"]) if p != "Demon"
+        ]
+
+        return filter_eligible(
+            filtered_df,
+            effective_min_hit,
             args.min_edge,
             effective_min_rank,
-            tiers if tiers else None,
-            effective_pt,
-        )
-        return apply_nba_context_confidence_filter(
-            base,
-            enabled=args.use_context_filter,
-            min_context_score=args.context_min_score,
-            min_l5_sample=args.context_min_l5_sample,
+            effective_tiers,
+            effective_pick_types,
         )
 
     nba_pool = pool(nba)
@@ -4129,11 +4276,23 @@ def main():
 
     all_ticket_groups = []
     leg_sizes = [2, 3, 4, 5, 6]
+    # CBB hits 49-55% -- 5/6-leg tickets are -47% to -52% ROI, cap at 4 legs
+    cbb_leg_sizes = [2, 3, 4]
+    # NHL Standard UNDER is very strong but small sample -- cap at 4 legs until more data
+    nhl_leg_sizes = [2, 3, 4]
+    # Soccer overall hit rate 23.9% -- 2/3-leg only until grader schema is fixed
+    soccer_leg_sizes = [2, 3]
+    # Cross-sport mixes: conservative until more graded data
+    xsport_leg_sizes = [2, 3, 4]
 
-    def gen_tickets(pool_df, sport_label, bg_hdr, sport_prefix, pick_type_filter=None):
+    def gen_tickets(pool_df, sport_label, bg_hdr, sport_prefix, pick_type_filter=None, leg_sizes_override=None):
         rows_out = []
-        for n in leg_sizes:
+        sizes = leg_sizes_override if leg_sizes_override is not None else leg_sizes
+        for n in sizes:
             sub_pool = pool_df if pick_type_filter is None else pool_df[pool_df["pick_type"].isin([pick_type_filter])]
+            # For 4+ leg tickets enforce Tier A/B only
+            if n >= 4 and "tier" in sub_pool.columns:
+                sub_pool = sub_pool[sub_pool["tier"].isin(["A", "B"])]
             tickets = build_tickets(sub_pool, n, args.max_tickets)
             if tickets:
                 pt_label = pick_type_filter if pick_type_filter else "Std+Gob"
@@ -4159,11 +4318,11 @@ def main():
     cbb_gob = pool(cbb, ["Goblin"])
     cbb_mix_pool = pd.concat([cbb_std, cbb_gob], ignore_index=True).sort_values("rank_score", ascending=False)
     if len(cbb_std) >= 2:
-        all_ticket_groups += gen_tickets(cbb_std, "CBB", C["hdr_cbb"], "CBB", "Standard")
+        all_ticket_groups += gen_tickets(cbb_std, "CBB", C["hdr_cbb"], "CBB", "Standard", leg_sizes_override=cbb_leg_sizes)
     if len(cbb_gob) >= 2:
-        all_ticket_groups += gen_tickets(cbb_gob, "CBB", C["hdr_cbb"], "CBB", "Goblin")
+        all_ticket_groups += gen_tickets(cbb_gob, "CBB", C["hdr_cbb"], "CBB", "Goblin", leg_sizes_override=cbb_leg_sizes)
     if len(cbb_mix_pool) >= 2:
-        all_ticket_groups += gen_tickets(cbb_mix_pool, "CBB", C["hdr_cbb"], "CBB")
+        all_ticket_groups += gen_tickets(cbb_mix_pool, "CBB", C["hdr_cbb"], "CBB", leg_sizes_override=cbb_leg_sizes)
 
     # ── NHL ────────────────────────────────────────────────────────────────────────
     if nhl is not None and len(nhl) > 0:
@@ -4171,11 +4330,11 @@ def main():
         nhl_gob = pool(nhl, ["Goblin"])
         nhl_mix_pool = pd.concat([nhl_std, nhl_gob], ignore_index=True).sort_values("rank_score", ascending=False)
         if len(nhl_std) >= 2:
-            all_ticket_groups += gen_tickets(nhl_std, "NHL", C["hdr_nhl"], "NHL", "Standard")
+            all_ticket_groups += gen_tickets(nhl_std, "NHL", C["hdr_nhl"], "NHL", "Standard", leg_sizes_override=nhl_leg_sizes)
         if len(nhl_gob) >= 2:
-            all_ticket_groups += gen_tickets(nhl_gob, "NHL", C["hdr_nhl"], "NHL", "Goblin")
+            all_ticket_groups += gen_tickets(nhl_gob, "NHL", C["hdr_nhl"], "NHL", "Goblin", leg_sizes_override=nhl_leg_sizes)
         if len(nhl_mix_pool) >= 2:
-            all_ticket_groups += gen_tickets(nhl_mix_pool, "NHL", C["hdr_nhl"], "NHL")
+            all_ticket_groups += gen_tickets(nhl_mix_pool, "NHL", C["hdr_nhl"], "NHL", leg_sizes_override=nhl_leg_sizes)
 
     # ── Soccer ─────────────────────────────────────────────────────────────────────
     if soccer is not None and len(soccer) > 0:
@@ -4183,11 +4342,11 @@ def main():
         soc_gob = pool(soccer, ["Goblin"])
         soc_mix_pool = pd.concat([soc_std, soc_gob], ignore_index=True).sort_values("rank_score", ascending=False)
         if len(soc_std) >= 2:
-            all_ticket_groups += gen_tickets(soc_std, "Soccer", C["hdr_soccer"], "Soccer", "Standard")
+            all_ticket_groups += gen_tickets(soc_std, "Soccer", C["hdr_soccer"], "Soccer", "Standard", leg_sizes_override=soccer_leg_sizes)
         if len(soc_gob) >= 2:
-            all_ticket_groups += gen_tickets(soc_gob, "Soccer", C["hdr_soccer"], "Soccer", "Goblin")
+            all_ticket_groups += gen_tickets(soc_gob, "Soccer", C["hdr_soccer"], "Soccer", "Goblin", leg_sizes_override=soccer_leg_sizes)
         if len(soc_mix_pool) >= 2:
-            all_ticket_groups += gen_tickets(soc_mix_pool, "Soccer", C["hdr_soccer"], "Soccer")
+            all_ticket_groups += gen_tickets(soc_mix_pool, "Soccer", C["hdr_soccer"], "Soccer", leg_sizes_override=soccer_leg_sizes)
 
     # ── WCBB ───────────────────────────────────────────────────────────────────────
     if wcbb is not None and len(wcbb) > 0:
@@ -4248,7 +4407,7 @@ def main():
         *([] if nba1h is None else [pool(nba1h, ["Standard"])]),
     ], ignore_index=True).sort_values("rank_score", ascending=False)
     if len(all_sports_std) >= 2:
-        for n in leg_sizes:
+        for n in xsport_leg_sizes:
             tickets = build_tickets(all_sports_std, n, args.max_tickets, require_mix=True)
             if tickets:
                 sheet_name = f"XSPORT Std {n}-Leg"[:31]
@@ -4267,7 +4426,7 @@ def main():
         *([] if nba1h is None else [pool(nba1h, ["Goblin"])]),
     ], ignore_index=True).sort_values("rank_score", ascending=False)
     if len(all_sports_gob) >= 2:
-        for n in leg_sizes:
+        for n in xsport_leg_sizes:
             tickets = build_tickets(all_sports_gob, n, args.max_tickets, require_mix=True)
             if tickets:
                 sheet_name = f"XSPORT Gob {n}-Leg"[:31]
@@ -4287,7 +4446,7 @@ def main():
     ], ignore_index=True).sort_values("rank_score", ascending=False)
     all_sports_mix = all_sports_mix[all_sports_mix["pick_type"].isin(["Standard", "Goblin"])]
     if len(all_sports_mix) >= 2:
-        for n in leg_sizes:
+        for n in xsport_leg_sizes:
             tickets = build_tickets(all_sports_mix, n, args.max_tickets, require_mix=True)
             if tickets:
                 sheet_name = f"XSPORT Mix {n}-Leg"[:31]
