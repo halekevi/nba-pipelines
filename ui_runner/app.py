@@ -98,6 +98,21 @@ def load_config() -> dict:
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8-sig"))
 
 
+_json_file_cache: dict[str, dict[str, Any]] = {}
+
+
+def read_json_cached(path: Path, ttl: float = 60.0) -> Any:
+    """Load JSON from disk with a short in-process TTL (template payloads written by pipeline)."""
+    key = str(path.resolve())
+    now = time.time()
+    entry = _json_file_cache.get(key)
+    if entry is not None and now - entry["ts"] <= ttl:
+        return entry["data"]
+    data = json.loads(path.read_text(encoding="utf-8-sig"))
+    _json_file_cache[key] = {"data": data, "ts": now}
+    return data
+
+
 def safe_tail(lines: List[str], max_lines: int = 2500) -> List[str]:
     return lines if len(lines) <= max_lines else lines[-max_lines:]
 
@@ -284,7 +299,7 @@ def _slate_counts() -> tuple[dict[str, int], dict]:
     if not info.get("exists"):
         return {}, info
     try:
-        payload = json.loads(path.read_text(encoding="utf-8"))
+        payload = read_json_cached(path)
         sports = payload.get("sports") or {}
         counts = {str(k).lower(): len(v or []) for k, v in sports.items()}
         return counts, info
@@ -314,6 +329,12 @@ def home():
     return render_template("index.html", config=load_config())
 
 
+@app.get("/ping")
+def ping():
+    """Lightweight health check for uptime pingers (no DB / no template work)."""
+    return "ok", 200
+
+
 def _no_store_headers(resp):
     resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
     resp.headers["Pragma"] = "no-cache"
@@ -335,18 +356,21 @@ def serve_tickets_latest_json():
 @app.get("/tickets")
 def page_tickets():
     """
-    Render tickets HTML from tickets_latest.json on every request so Railway/UI
-    never serves a stale static HTML shell that omits ticket groups.
-    Falls back to bundled tickets_latest.html if the renderer import fails (e.g. slim deps).
+    Prefer static tickets_latest.html from build_ticket_eval.py (graded legs, pipeline step).
+    If missing, render from tickets_latest.json via combined_slate_tickets.render_tickets_html (dev / pre-eval).
     """
     import importlib.util
 
     json_path = TEMPLATES_DIR / "tickets_latest.json"
     html_static = TEMPLATES_DIR / "tickets_latest.html"
+    if html_static.exists():
+        return _no_store_headers(
+            send_from_directory(str(TEMPLATES_DIR), "tickets_latest.html")
+        )
     if not json_path.exists():
         return "tickets_latest.json not found. Run the pipeline with --write-web first.", 404
     try:
-        payload = json.loads(json_path.read_text(encoding="utf-8-sig"))
+        payload = read_json_cached(json_path)
     except Exception as e:
         return f"Invalid tickets_latest.json: {e}", 500
 
@@ -361,12 +385,9 @@ def page_tickets():
         spec.loader.exec_module(mod)
         html = mod.render_tickets_html(payload)
     except Exception:
-        if html_static.exists():
-            return _no_store_headers(
-                send_from_directory(str(TEMPLATES_DIR), "tickets_latest.html")
-            )
         return (
-            "Could not render tickets (import/renderer error) and tickets_latest.html is missing.",
+            "Could not render tickets (import/renderer error). Add tickets_latest.html (build_ticket_eval.py) "
+            "or fix combined_slate_tickets import.",
             500,
         )
 
@@ -646,7 +667,7 @@ def api_tickets_latest():
     if not json_path.exists():
         return jsonify({"error": "tickets_latest.json not found", "groups": []}), 404
     try:
-        data = json.loads(json_path.read_text(encoding="utf-8-sig"))
+        data = read_json_cached(json_path)
         return jsonify(data)
     except Exception as e:
         return jsonify({"error": str(e), "groups": []}), 500
@@ -655,12 +676,11 @@ def api_tickets_latest():
 # API: Slate picks - deduped unique picks from tickets_latest.json
 @app.get("/api/slate")
 def api_slate():
-    import json as _json
     json_path = TEMPLATES_DIR / "tickets_latest.json"
     if not json_path.exists():
         return jsonify({"picks": [], "generated_at": None, "date": None})
     try:
-        data = _json.loads(json_path.read_text(encoding="utf-8-sig"))
+        data = read_json_cached(json_path)
         seen = set()
         picks = []
         for group in (data.get("groups") or []):
@@ -701,12 +721,11 @@ def api_slate():
 # ──────────────────────────────────────────────────────────────────────────────
 @app.get("/api/slate-sport")
 def api_slate_sport():
-    import json as _json
     slate_path = TEMPLATES_DIR / "slate_latest.json"
     if not slate_path.exists():
         return jsonify({"error": "slate_latest.json not found — run pipeline first", "sports": {}}), 404
     try:
-        data = _json.loads(slate_path.read_text(encoding="utf-8-sig"))
+        data = read_json_cached(slate_path)
         return jsonify(data)
     except Exception as e:
         return jsonify({"error": str(e), "sports": {}}), 500

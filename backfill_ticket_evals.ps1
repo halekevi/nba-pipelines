@@ -57,7 +57,7 @@ $failed = 0
 $n = $targetDates.Count
 $idx = 0
 $templatesDir = Join-Path $Root "ui_runner/templates"
-$latestPath = Join-Path $templatesDir "ticket_eval_latest.html"
+$latestPath = Join-Path $templatesDir "tickets_latest.html"
 $savedLatest = $null
 if ($KeepLatest -and (Test-Path -LiteralPath $latestPath)) {
     try {
@@ -81,13 +81,13 @@ foreach ($d in $targetDates) {
     $success++
 }
 
-# Preserve current ticket_eval_latest.html if requested.
+# Preserve current tickets_latest.html if requested.
 if ($KeepLatest -and $savedLatest -ne $null) {
     try {
         Set-Content -LiteralPath $latestPath -Value $savedLatest -Encoding UTF8
-        Write-Host "[INFO] Restored previous ticket_eval_latest.html (--KeepLatest)." -ForegroundColor DarkGray
+        Write-Host "[INFO] Restored previous tickets_latest.html (--KeepLatest)." -ForegroundColor DarkGray
     } catch {
-        Write-Host "[WARN] Could not restore prior ticket_eval_latest.html" -ForegroundColor Yellow
+        Write-Host "[WARN] Could not restore prior tickets_latest.html" -ForegroundColor Yellow
     }
 }
 

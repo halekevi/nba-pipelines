@@ -1,8 +1,14 @@
 """
 build_tickets_html.py
 =====================
-Converts combined_slate_tickets_*.xlsx into a styled tickets_latest.html
-and saves it to ui_runner/docs/tickets_latest.html.
+DEPRECATED — do not use for production tickets UI.
+
+The pipeline writes tickets_latest.json via combined_slate_tickets.py --write-web, then
+build_ticket_eval.py (repo root) emits graded ui_runner/templates/tickets_latest.html.
+
+This script remains for one-off debugging from a combined_slate *.xlsx only.
+
+Legacy: converts combined_slate_tickets_*.xlsx into HTML under ui_runner/templates/.
 
 Usage:
     py -3.14 build_tickets_html.py

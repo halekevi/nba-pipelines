@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """
-Build ticket_eval_{date}.html (+ ticket_eval_latest.html) for the Grades UI.
+Build ticket_eval_{date}.html (dated archive for /grades) and tickets_latest.html (main /tickets page).
 Reads ticket JSON (or combined_slate_tickets_{date}.xlsx) and sport step8/graded workbooks,
 matches legs to actuals, writes self-contained HTML.
+
+Run after combined_slate_tickets.py --write-web (JSON only) so tickets_latest.html includes grades.
 """
 from __future__ import annotations
 
@@ -69,6 +71,33 @@ SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
         REPO_ROOT / "MLB" / "step8_mlb_direction_clean.xlsx",
     ],
 }
+
+
+def _dated_candidates(date_str: str) -> dict[str, list[Path]]:
+    """
+    Returns a copy of SPORT_XLSX_CANDIDATES with dated archive paths prepended
+    for each sport bucket. Dated paths follow the naming convention used by
+    run_pipeline.ps1 archive step. Only paths that actually exist are prepended.
+    """
+    dated_dir = REPO_ROOT / "outputs" / date_str
+    dated_map = {
+        "NBA": dated_dir / f"step8_nba_direction_clean_{date_str}.xlsx",
+        "NBA1H": dated_dir / f"step8_nba1h_direction_clean_{date_str}.xlsx",
+        "NBA1Q": dated_dir / f"step8_nba1q_direction_clean_{date_str}.xlsx",
+        "CBB": dated_dir / f"step6_ranked_cbb_{date_str}.xlsx",
+        "WCBB": dated_dir / f"step6_ranked_wcbb_{date_str}.xlsx",
+        "NHL": dated_dir / f"step8_nhl_direction_clean_{date_str}.xlsx",
+        "SOCCER": dated_dir / f"step8_soccer_direction_clean_{date_str}.xlsx",
+        "MLB": dated_dir / f"step8_mlb_direction_clean_{date_str}.xlsx",
+    }
+    result: dict[str, list[Path]] = {}
+    for bucket, live_paths in SPORT_XLSX_CANDIDATES.items():
+        dated_path = dated_map.get(bucket)
+        if dated_path and dated_path.is_file():
+            result[bucket] = [dated_path] + list(live_paths)
+        else:
+            result[bucket] = list(live_paths)
+    return result
 
 
 def _norm_header(s: str) -> str:
@@ -370,10 +399,13 @@ def _merge_graded_workbooks_into_indices(
     return merged
 
 
-def _load_actuals_indices(arg_date: str | None = None) -> dict[str, tuple[dict[tuple[str, str, str], dict], dict[tuple[str, str], list[dict]]]]:
+def _load_actuals_indices(
+    sport_candidates: dict[str, list[Path]],
+    arg_date: str | None = None,
+) -> dict[str, tuple[dict[tuple[str, str, str], dict], dict[tuple[str, str], list[dict]]]]:
     """Per sport-bucket indices (NBA1H separate from NBA, etc.)."""
     out: dict[str, tuple[dict, dict]] = {}
-    for bucket, paths in SPORT_XLSX_CANDIDATES.items():
+    for bucket, paths in sport_candidates.items():
         triple: dict[tuple[str, str, str], dict] = {}
         pair_buckets: dict[tuple[str, str], list[dict]] = {}
         src = next((p for p in paths if p.is_file()), None)
@@ -391,6 +423,94 @@ def _load_actuals_indices(arg_date: str | None = None) -> dict[str, tuple[dict[t
     if arg_date and re.match(r"^\d{4}-\d{2}-\d{2}$", arg_date):
         graded = _graded_xlsx_in_outputs_date(arg_date)
         _merge_graded_workbooks_into_indices(out, graded)
+
+        graded_dir = REPO_ROOT / "outputs" / arg_date
+        if graded_dir.is_dir():
+            sport_to_bucket = {
+                "nba": "NBA",
+                "cbb": "CBB",
+                "nhl": "NHL",
+                "soccer": "SOCCER",
+                "wcbb": "WCBB",
+                "mlb": "MLB",
+                "nba1h": "NBA1H",
+                "nba1q": "NBA1Q",
+            }
+            for graded_file in sorted(graded_dir.glob(f"graded_*_{arg_date}.xlsx")):
+                m = re.match(r"^graded_(.+)_(\d{4}-\d{2}-\d{2})$", graded_file.stem)
+                if not m:
+                    continue
+                sport_tag = m.group(1).lower()
+                bucket = sport_to_bucket.get(sport_tag)
+                if bucket is None:
+                    continue
+                try:
+                    xl = pd.ExcelFile(graded_file, engine="openpyxl")
+                    sheet_priority = ["Box Raw", "Props", "Graded"]
+                    sheet_to_use = next(
+                        (s for s in sheet_priority if s in xl.sheet_names),
+                        xl.sheet_names[0],
+                    )
+                    gdf = xl.parse(sheet_to_use)
+                    gdf.columns = [str(c).lower().strip() for c in gdf.columns]
+                    pcol = next((c for c in gdf.columns if c == "player"), None)
+                    propcol = next(
+                        (c for c in gdf.columns if c in ("prop", "prop_type", "stat")),
+                        None,
+                    )
+                    dircol = next(
+                        (c for c in gdf.columns if c in ("direction", "dir", "side")),
+                        None,
+                    )
+                    resultcol = next(
+                        (c for c in gdf.columns if c in ("result", "grade", "outcome", "grade_raw")),
+                        None,
+                    )
+                    actualcol = next(
+                        (
+                            c
+                            for c in gdf.columns
+                            if c in ("actual", "actual_value", "result_value")
+                        ),
+                        None,
+                    )
+                    if pcol is None or propcol is None:
+                        continue
+                    trip, pairs = out.get(bucket, ({}, {}))
+                    for _, grow in gdf.iterrows():
+                        raw: dict[str, Any] = {
+                            "player": grow[pcol],
+                            "prop_type": grow[propcol],
+                        }
+                        if dircol and pd.notna(grow.get(dircol)):
+                            raw["direction"] = grow[dircol]
+                        if "line" in gdf.columns and pd.notna(grow.get("line")):
+                            raw["line"] = grow["line"]
+                        if actualcol and pd.notna(grow.get(actualcol)):
+                            raw["actual"] = grow[actualcol]
+                        if resultcol and pd.notna(grow.get(resultcol)):
+                            raw["grade"] = grow[resultcol]
+                        pl = _canon_player(raw).lower()
+                        pt = _canon_prop(raw).lower()
+                        dr = _canon_direction(raw)
+                        if not pl or not pt:
+                            continue
+                        key3 = (pl, pt, dr)
+                        if key3 in trip:
+                            continue
+                        row_out = {
+                            "player_lower": pl,
+                            "prop_lower": pt,
+                            "direction": dr,
+                            "line": _canon_line(raw),
+                            "actual": _canon_actual(raw),
+                            "grade_raw": _canon_grade_raw(raw),
+                        }
+                        trip[key3] = row_out
+                        pairs.setdefault((pl, pt), []).append(row_out)
+                    out[bucket] = (trip, pairs)
+                except Exception:
+                    continue
     return out
 
 
@@ -464,7 +584,12 @@ def _debug_sheet_headers(path: Path, max_sheets: int = 3) -> list[tuple[str, lis
     return out
 
 
-def debug_report(arg_date: str, payload: dict[str, Any], tpath: Path) -> None:
+def debug_report(
+    arg_date: str,
+    payload: dict[str, Any],
+    tpath: Path,
+    sport_candidates: dict[str, list[Path]],
+) -> None:
     """Print why legs may not match (JSON date vs CLI, xlsx paths, headers, sample legs)."""
     print("\n=== build_ticket_eval.py --debug ===\n")
     print(f"CLI --date:     {arg_date}")
@@ -486,7 +611,7 @@ def debug_report(arg_date: str, payload: dict[str, Any], tpath: Path) -> None:
         for p in og:
             print(f"  - {p.relative_to(REPO_ROOT)}")
     print("\nWorkbooks used for matching (first existing path per sport; NOT date-specific today):")
-    for sport, paths in SPORT_XLSX_CANDIDATES.items():
+    for sport, paths in sport_candidates.items():
         src = next((p for p in paths if p.is_file()), None)
         if not src:
             print(f"  {sport}: (no file at any candidate path)")
@@ -499,7 +624,7 @@ def debug_report(arg_date: str, payload: dict[str, Any], tpath: Path) -> None:
             extra = f" ...(+{len(cols) - 24})" if len(cols) > 24 else ""
             print(f"       sheet {sh!r}: {preview}{extra}")
 
-    indices = _load_actuals_indices(arg_date)
+    indices = _load_actuals_indices(sport_candidates, arg_date)
     gpaths = _graded_xlsx_in_outputs_date(arg_date)
     print(f"\noutputs/{arg_date}/ graded workbook(s) merged into indices:")
     if not gpaths:
@@ -795,9 +920,13 @@ def _fmt_num(x: Any) -> str:
     return html.escape(str(x))
 
 
-def _build_html(payload: dict[str, Any], arg_date: str) -> str:
+def _build_html(
+    payload: dict[str, Any],
+    arg_date: str,
+    sport_candidates: dict[str, list[Path]],
+) -> str:
     groups = payload.get("groups") or []
-    indices = _load_actuals_indices(arg_date)
+    indices = _load_actuals_indices(sport_candidates, arg_date)
 
     all_legs: list[tuple[dict, dict | None, str]] = []
     tickets_flat: list[dict] = []
@@ -1164,6 +1293,8 @@ def main() -> int:
     else:
         arg_date = (date.today() - timedelta(days=1)).isoformat()
 
+    sport_candidates = _dated_candidates(arg_date)
+
     tpath = find_ticket_json(arg_date)
     if not tpath:
         print(
@@ -1179,13 +1310,13 @@ def main() -> int:
         return 1
 
     if args.debug:
-        debug_report(arg_date, payload, tpath)
+        debug_report(arg_date, payload, tpath, sport_candidates)
 
-    html_out = _build_html(payload, arg_date)
+    html_out = _build_html(payload, arg_date, sport_candidates)
     TEMPLATES_DIR.mkdir(parents=True, exist_ok=True)
     dated_name = f"ticket_eval_{arg_date}.html"
     out_dated = TEMPLATES_DIR / dated_name
-    out_latest = TEMPLATES_DIR / "ticket_eval_latest.html"
+    out_latest = TEMPLATES_DIR / "tickets_latest.html"
     try:
         out_dated.write_text(html_out, encoding="utf-8")
         out_latest.write_text(html_out, encoding="utf-8")
@@ -1194,7 +1325,7 @@ def main() -> int:
         return 1
 
     print(f"Wrote {out_dated}")
-    print(f"Wrote {out_latest}")
+    print(f"Wrote {out_latest} (main tickets page)")
     return 0
 
 

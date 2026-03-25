@@ -6,8 +6,7 @@ Combined NBA + CBB + NHL + Soccer Slate & Ticket Generator
 Merges NBA (step8_all_direction_clean.xlsx) and CBB (step6_ranked_cbb.xlsx ELIGIBLE)
 Outputs:
   - combined_slate_tickets_YYYY-MM-DD.xlsx
-  - tickets_latest.json / tickets_latest.html (web-friendly, static)
-  - docs/tickets_latest.json / docs/tickets_latest.html (for GitHub Pages /docs)
+  - tickets_latest.json (web); graded tickets_latest.html is produced by build_ticket_eval.py after this step
 
 Sheets: SUMMARY, Full Slate (reordered + STRONG/LEAN/RISK + pace beside Def Tier), NBA Slate, CBB Slate,
         2–6-Leg tickets per sport (Goblin / Standard / Std+Gob mix),
@@ -1618,16 +1617,13 @@ html[data-theme="light"] .ticket{
 
 
 def write_web_outputs(payload, outdir: str):
+    """Write tickets_latest.json only; run build_ticket_eval.py to emit graded tickets_latest.html."""
     os.makedirs(outdir, exist_ok=True)
     json_path = os.path.join(outdir, "tickets_latest.json")
-    html_path = os.path.join(outdir, "tickets_latest.html")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
-    html_str = render_tickets_html(payload)
-    with open(html_path, "w", encoding="utf-8") as f:
-        f.write(html_str)
     print(f"[OK] Web JSON  -> {json_path}")
-    print(f"[OK] Web HTML  -> {html_path}")
+    print("  (HTML) Run: py -3.14 build_ticket_eval.py --date <YYYY-MM-DD>  -> tickets_latest.html")
 
 
 # ── Load & normalize NBA ───────────────────────────────────────────────────────
@@ -4051,13 +4047,21 @@ def main():
     )
 
     # Web outputs
-    ap.add_argument("--write-web", action="store_true", help="Write tickets_latest.html/json for GitHub Pages")
+    ap.add_argument(
+        "--write-web",
+        action="store_true",
+        help="Write tickets_latest.json for web/Railway (graded HTML via build_ticket_eval.py)",
+    )
     ap.add_argument(
         "--web-outdir",
         default=DEFAULT_WEB_OUTDIR,
-        help="Folder to write tickets_latest.html/json",
+        help="Folder to write tickets_latest.json (+ slate_latest.json)",
     )
-    ap.add_argument("--also-root", action="store_true", help="Also write tickets_latest.* in repo root")
+    ap.add_argument(
+        "--also-root",
+        action="store_true",
+        help="Also write tickets_latest.json in repo root (HTML only from build_ticket_eval.py)",
+    )
 
     args = ap.parse_args()
 
