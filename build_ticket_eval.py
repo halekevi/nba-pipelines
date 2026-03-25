@@ -280,6 +280,29 @@ body::after{
   border-left-color:var(--accent)!important;
 }
 
+/* Ticket page: collapsible sport / cross-sport buckets */
+.ticket-bucket{margin-bottom:18px;border-radius:16px;border:1px solid var(--glass-bd);background:rgba(255,255,255,0.025);overflow:hidden;backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);}
+.ticket-bucket > summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:14px 18px;font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,2.6vw,30px);letter-spacing:2px;color:var(--gold);user-select:none;}
+.ticket-bucket > summary::-webkit-details-marker{display:none}
+.ticket-bucket > summary::after{content:'▸';font-size:16px;opacity:.55;transition:transform .2s ease;color:var(--muted);flex-shrink:0;}
+.ticket-bucket[open] > summary::after{transform:rotate(90deg)}
+.ticket-bucket-meta{font-family:'Share Tech Mono',monospace;font-size:clamp(11px,1.1vw,13px);letter-spacing:.6px;font-weight:400;color:var(--muted);text-align:right;max-width:100%;}
+.ticket-bucket-body{padding:4px 12px 16px;}
+.ticket-bucket.sb-nba{border-left:4px solid rgba(240,165,0,.8);}
+.ticket-bucket.sb-nba1h{border-left:4px solid rgba(255,155,86,.85);}
+.ticket-bucket.sb-nba1q{border-left:4px solid rgba(255,214,102,.85);}
+.ticket-bucket.sb-cbb{border-left:4px solid rgba(0,229,255,.65);}
+.ticket-bucket.sb-wcbb{border-left:4px solid rgba(159,216,232,.75);}
+.ticket-bucket.sb-nhl{border-left:4px solid rgba(196,165,255,.8);}
+.ticket-bucket.sb-soccer{border-left:4px solid rgba(232,184,74,.8);}
+.ticket-bucket.sb-mlb{border-left:4px solid rgba(255,154,154,.8);}
+.ticket-bucket.sb-xsport{border-left:4px solid rgba(183,168,255,.85);}
+.ticket-bucket.sb-default{border-left:4px solid rgba(255,255,255,.2);}
+[data-theme='light'] .ticket-bucket{background:rgba(255,255,255,0.52);border-color:rgba(0,0,0,0.1);box-shadow:0 2px 16px rgba(0,0,0,0.06);}
+[data-theme='light'] .ticket-bucket > summary{color:#b8860b;}
+[data-theme='light'] .ticket-bucket-meta{color:rgba(0,0,0,0.45);}
+[data-theme='light'] .ticket-bucket.sb-default{border-left-color:rgba(0,0,0,0.15);}
+
 /* ── Mobile ── */
 @media(max-width:768px){
   .snav{padding:0 16px;margin:.5rem;}
@@ -563,6 +586,44 @@ def _sport_key(sport: str) -> str:
     if s in ("SOC", "MLS", "EPL"):
         return "SOCCER"
     return s
+
+
+def _ticket_group_bucket(group_name: str) -> str:
+    """Bucket for collapsible UI: sport prefix from sheet title, or Cross-sport for XSPORT*."""
+    n = (group_name or "").strip()
+    if not n:
+        return "Other"
+    if n.upper().startswith("XSPORT"):
+        return "Cross-sport"
+    return n.split()[0] or "Other"
+
+
+def _ticket_bucket_skin_class(bucket: str) -> str:
+    if bucket == "Cross-sport":
+        return "sb-xsport"
+    sk = _sport_key(bucket)
+    return {
+        "NBA": "sb-nba",
+        "NBA1H": "sb-nba1h",
+        "NBA1Q": "sb-nba1q",
+        "CBB": "sb-cbb",
+        "WCBB": "sb-wcbb",
+        "NHL": "sb-nhl",
+        "SOCCER": "sb-soccer",
+        "MLB": "sb-mlb",
+    }.get(sk, "sb-default")
+
+
+def _bucket_ticket_groups(groups: list[dict[str, Any]]) -> list[tuple[str, list[dict[str, Any]]]]:
+    order: list[str] = []
+    m: dict[str, list[dict[str, Any]]] = {}
+    for g in groups:
+        key = _ticket_group_bucket(str(g.get("group_name") or ""))
+        if key not in m:
+            m[key] = []
+            order.append(key)
+        m[key].append(g)
+    return [(k, m[k]) for k in order]
 
 
 def _leg_match_buckets(sport: str) -> list[str]:
@@ -1409,147 +1470,166 @@ def _build_html(
         "</p>",
     ]
 
-    for g in groups:
-        gname = str(g.get("group_name") or "Group")
-        parts.append(f'<section class="sec"><h2 class="sec-head bebas">{esc(gname)}</h2>')
-        for t in g.get("tickets") or []:
-            tno = t.get("ticket_no", "?")
-            pp = t.get("power_payout")
-            fp = t.get("flex_payout")
-            legs = t.get("legs") or []
-            leg_grades: list[str] = []
-            for leg in legs:
-                row = _match_leg_to_row_multi(leg, indices)
-                try:
-                    lf = float(leg.get("line"))
-                except (TypeError, ValueError):
-                    lf = None
-                d = str(leg.get("direction") or "").strip().upper()
-                act = row["actual"] if row else None
-                gr = row["grade_raw"] if row else ""
-                if row and row.get("line") is not None and lf is None:
-                    lf = row["line"]
-                leg_grades.append(_leg_grade(act, lf, d, gr))
+    bucketed = _bucket_ticket_groups(groups)
+    use_buckets = len(bucketed) > 1
 
-            h = leg_grades.count("HIT")
-            m = leg_grades.count("MISS")
-            pnd = leg_grades.count("UNGRADED")
-            vct = leg_grades.count("VOID")
-            n = len(leg_grades)
+    for bi, (bkey, grplist) in enumerate(bucketed):
+        ntix = sum(len(x.get("tickets") or []) for x in grplist)
+        nsec = len(grplist)
+        if use_buckets:
+            skin = _ticket_bucket_skin_class(bkey)
+            open_attr = " open" if bi == 0 else ""
+            parts.append(f'<details class="ticket-bucket {skin}"{open_attr}>')
+            parts.append(
+                f'<summary><span>{esc(bkey)}</span>'
+                f'<span class="ticket-bucket-meta">{nsec} sections · {ntix} tickets</span></summary>'
+            )
+            parts.append('<div class="ticket-bucket-body">')
 
-            if pnd > 0:
-                banner_cls, banner_txt = "pend", "UNGRADED"
-            elif vct > 0 and m == 0:
-                banner_cls, banner_txt = "void", "VOID/PUSH"
-            elif m == 0 and n > 0:
-                banner_cls, banner_txt = "hit", "ALL HIT"
-            else:
-                banner_cls, banner_txt = "miss", f"MISSED {m}"
+        for g in grplist:
+            gname = str(g.get("group_name") or "Group")
+            parts.append(f'<section class="sec"><h2 class="sec-head bebas">{esc(gname)}</h2>')
+            for t in g.get("tickets") or []:
+                tno = t.get("ticket_no", "?")
+                pp = t.get("power_payout")
+                fp = t.get("flex_payout")
+                legs = t.get("legs") or []
+                leg_grades: list[str] = []
+                for leg in legs:
+                    row = _match_leg_to_row_multi(leg, indices)
+                    try:
+                        lf = float(leg.get("line"))
+                    except (TypeError, ValueError):
+                        lf = None
+                    d = str(leg.get("direction") or "").strip().upper()
+                    act = row["actual"] if row else None
+                    gr = row["grade_raw"] if row else ""
+                    if row and row.get("line") is not None and lf is None:
+                        lf = row["line"]
+                    leg_grades.append(_leg_grade(act, lf, d, gr))
 
-            card_cls = "ticket-card"
-            if banner_txt == "ALL HIT":
-                card_cls += " all-hit"
-            elif banner_cls == "miss":
-                card_cls += " card-missed"
+                h = leg_grades.count("HIT")
+                m = leg_grades.count("MISS")
+                pnd = leg_grades.count("UNGRADED")
+                vct = leg_grades.count("VOID")
+                n = len(leg_grades)
 
-            parts.append(f'<article class="{card_cls}">')
-            parts.append('<div class="thdr">')
-            parts.append(f'<span class="tn bebas">#{esc(str(tno))}</span>')
-            parts.append(f'<span class="tg">{esc(gname)}</span>')
-            parts.append(f'<span class="tg">{h}✓ {m}✗ / {n}</span>')
-            parts.append(f'<span class="payout">PWR {_fmt_num(pp)}× · FLEX {_fmt_num(fp)}×</span>')
-            parts.append(f'<span class="banner {banner_cls}">{esc(banner_txt)}</span>')
-            parts.append("</div>")
-
-            for leg, lg in zip(legs, leg_grades):
-                row = _match_leg_to_row_multi(leg, indices)
-                try:
-                    lf = float(leg.get("line"))
-                except (TypeError, ValueError):
-                    lf = None
-                d = str(leg.get("direction") or "").strip().upper()
-                act = row["actual"] if row else None
-                gr = row["grade_raw"] if row else ""
-                if row and row.get("line") is not None and lf is None:
-                    lf = row["line"]
-
-                if lg == "HIT":
-                    bcls, plcls = "hit", "pl-hit"
-                elif lg == "MISS":
-                    bcls, plcls = "miss", "pl-miss"
-                elif lg == "VOID":
-                    bcls, plcls = "void", "pl-void"
+                if pnd > 0:
+                    banner_cls, banner_txt = "pend", "UNGRADED"
+                elif vct > 0 and m == 0:
+                    banner_cls, banner_txt = "void", "VOID/PUSH"
+                elif m == 0 and n > 0:
+                    banner_cls, banner_txt = "hit", "ALL HIT"
                 else:
-                    bcls, plcls = "pend", "pl-pend"
+                    banner_cls, banner_txt = "miss", f"MISSED {m}"
 
-                sk = _sport_key(str(leg.get("sport") or ""))
-                sp_class = {
-                    "NBA": "sport-nba",
-                    "NBA1H": "sport-nba1h",
-                    "NBA1Q": "sport-nba1q",
-                    "CBB": "sport-cbb",
-                    "WCBB": "sport-wcbb",
-                    "NHL": "sport-nhl",
-                    "SOCCER": "sport-soccer",
-                    "MLB": "sport-mlb",
-                }.get(sk, "sport-default")
+                card_cls = "ticket-card"
+                if banner_txt == "ALL HIT":
+                    card_cls += " all-hit"
+                elif banner_cls == "miss":
+                    card_cls += " card-missed"
 
-                tier = _pick_type_tier(str(leg.get("pick_type") or ""))
-                team = esc(str(leg.get("team") or ""))
-                opp = esc(str(leg.get("opp") or ""))
-                ptype = esc(str(leg.get("prop_type") or ""))
-                player = esc(str(leg.get("player") or ""))
-                edge = leg.get("edge")
-                dir_cls = "dir-over" if d == "OVER" else "dir-under" if d == "UNDER" else ""
-
-                if lg == "HIT":
-                    row_cls = "legrow leg-hit"
-                elif lg == "MISS":
-                    row_cls = "legrow leg-miss"
-                elif lg == "VOID":
-                    row_cls = "legrow leg-void"
-                else:
-                    row_cls = "legrow leg-pend"
-                sym = "✓" if lg == "HIT" else "✗" if lg == "MISS" else "○" if lg == "VOID" else "·"
-
-                miss_cell = " miss-leg-cell" if lg == "MISS" else ""
-
-                if lg == "MISS":
-                    pl_html = (
-                        f'<div class="{plcls} pl-line{miss_cell}">'
-                        f'<span class="pl-name">{player}</span>'
-                        '<span class="miss-tag" aria-label="Missed leg">MISSED</span></div>'
-                    )
-                else:
-                    pl_html = f'<div class="{plcls}">{player}</div>'
-
-                if lg == "MISS":
-                    act_div_cls = "leg-extra val-miss"
-                elif lg == "HIT":
-                    act_div_cls = "leg-extra pl-hit"
-                elif lg == "VOID":
-                    act_div_cls = "leg-extra pl-void"
-                else:
-                    act_div_cls = "leg-extra pl-pend"
-
-                parts.append(f'<div class="{row_cls}">')
-                parts.append(f'<div class="badge {bcls}">{sym}</div>')
-                parts.append(f'<div><span class="pill {sp_class}">{esc(sk)}</span></div>')
-                parts.append(pl_html)
-                parts.append(f'<div class="tier{miss_cell}">{esc(tier)}</div>')
-                parts.append(
-                    f'<div class="leg-prop-col{miss_cell}"><div>{ptype}</div>'
-                    f'<div class="meta-muted">{team} vs {opp}</div></div>'
-                )
-                parts.append(
-                    f'<div class="leg-extra{miss_cell}">{_fmt_num(lf)} <span class="{dir_cls}">{esc(d)}</span></div>'
-                )
-                parts.append(f'<div class="{act_div_cls}{miss_cell}">{_fmt_num(act)}</div>')
-                parts.append(f'<div class="leg-extra{miss_cell}">{_fmt_num(edge)}</div>')
+                parts.append(f'<article class="{card_cls}">')
+                parts.append('<div class="thdr">')
+                parts.append(f'<span class="tn bebas">#{esc(str(tno))}</span>')
+                parts.append(f'<span class="tg">{esc(gname)}</span>')
+                parts.append(f'<span class="tg">{h}✓ {m}✗ / {n}</span>')
+                parts.append(f'<span class="payout">PWR {_fmt_num(pp)}× · FLEX {_fmt_num(fp)}×</span>')
+                parts.append(f'<span class="banner {banner_cls}">{esc(banner_txt)}</span>')
                 parts.append("</div>")
 
-            parts.append("</article>")
-        parts.append("</section>")
+                for leg, lg in zip(legs, leg_grades):
+                    row = _match_leg_to_row_multi(leg, indices)
+                    try:
+                        lf = float(leg.get("line"))
+                    except (TypeError, ValueError):
+                        lf = None
+                    d = str(leg.get("direction") or "").strip().upper()
+                    act = row["actual"] if row else None
+                    gr = row["grade_raw"] if row else ""
+                    if row and row.get("line") is not None and lf is None:
+                        lf = row["line"]
+
+                    if lg == "HIT":
+                        bcls, plcls = "hit", "pl-hit"
+                    elif lg == "MISS":
+                        bcls, plcls = "miss", "pl-miss"
+                    elif lg == "VOID":
+                        bcls, plcls = "void", "pl-void"
+                    else:
+                        bcls, plcls = "pend", "pl-pend"
+
+                    sk = _sport_key(str(leg.get("sport") or ""))
+                    sp_class = {
+                        "NBA": "sport-nba",
+                        "NBA1H": "sport-nba1h",
+                        "NBA1Q": "sport-nba1q",
+                        "CBB": "sport-cbb",
+                        "WCBB": "sport-wcbb",
+                        "NHL": "sport-nhl",
+                        "SOCCER": "sport-soccer",
+                        "MLB": "sport-mlb",
+                    }.get(sk, "sport-default")
+
+                    tier = _pick_type_tier(str(leg.get("pick_type") or ""))
+                    team = esc(str(leg.get("team") or ""))
+                    opp = esc(str(leg.get("opp") or ""))
+                    ptype = esc(str(leg.get("prop_type") or ""))
+                    player = esc(str(leg.get("player") or ""))
+                    edge = leg.get("edge")
+                    dir_cls = "dir-over" if d == "OVER" else "dir-under" if d == "UNDER" else ""
+
+                    if lg == "HIT":
+                        row_cls = "legrow leg-hit"
+                    elif lg == "MISS":
+                        row_cls = "legrow leg-miss"
+                    elif lg == "VOID":
+                        row_cls = "legrow leg-void"
+                    else:
+                        row_cls = "legrow leg-pend"
+                    sym = "✓" if lg == "HIT" else "✗" if lg == "MISS" else "○" if lg == "VOID" else "·"
+
+                    miss_cell = " miss-leg-cell" if lg == "MISS" else ""
+
+                    if lg == "MISS":
+                        pl_html = (
+                            f'<div class="{plcls} pl-line{miss_cell}">'
+                            f'<span class="pl-name">{player}</span>'
+                            '<span class="miss-tag" aria-label="Missed leg">MISSED</span></div>'
+                        )
+                    else:
+                        pl_html = f'<div class="{plcls}">{player}</div>'
+
+                    if lg == "MISS":
+                        act_div_cls = "leg-extra val-miss"
+                    elif lg == "HIT":
+                        act_div_cls = "leg-extra pl-hit"
+                    elif lg == "VOID":
+                        act_div_cls = "leg-extra pl-void"
+                    else:
+                        act_div_cls = "leg-extra pl-pend"
+
+                    parts.append(f'<div class="{row_cls}">')
+                    parts.append(f'<div class="badge {bcls}">{sym}</div>')
+                    parts.append(f'<div><span class="pill {sp_class}">{esc(sk)}</span></div>')
+                    parts.append(pl_html)
+                    parts.append(f'<div class="tier{miss_cell}">{esc(tier)}</div>')
+                    parts.append(
+                        f'<div class="leg-prop-col{miss_cell}"><div>{ptype}</div>'
+                        f'<div class="meta-muted">{team} vs {opp}</div></div>'
+                    )
+                    parts.append(
+                        f'<div class="leg-extra{miss_cell}">{_fmt_num(lf)} <span class="{dir_cls}">{esc(d)}</span></div>'
+                    )
+                    parts.append(f'<div class="{act_div_cls}{miss_cell}">{_fmt_num(act)}</div>')
+                    parts.append(f'<div class="leg-extra{miss_cell}">{_fmt_num(edge)}</div>')
+                    parts.append("</div>")
+
+                parts.append("</article>")
+            parts.append("</section>")
+
+        if use_buckets:
+            parts.append("</div></details>")
 
     parts.append("</div>")
     parts.append(_TICKETS_THEME_JS)

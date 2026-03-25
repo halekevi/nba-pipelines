@@ -213,6 +213,29 @@ body::after{
   border-left-color:var(--accent)!important;
 }
 
+/* Ticket page: collapsible sport / cross-sport buckets */
+.ticket-bucket{margin-bottom:18px;border-radius:16px;border:1px solid var(--glass-bd);background:rgba(255,255,255,0.025);overflow:hidden;backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);}
+.ticket-bucket > summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:14px 18px;font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,2.6vw,30px);letter-spacing:2px;color:var(--gold);user-select:none;}
+.ticket-bucket > summary::-webkit-details-marker{display:none}
+.ticket-bucket > summary::after{content:'▸';font-size:16px;opacity:.55;transition:transform .2s ease;color:var(--muted);flex-shrink:0;}
+.ticket-bucket[open] > summary::after{transform:rotate(90deg)}
+.ticket-bucket-meta{font-family:'Share Tech Mono',monospace;font-size:clamp(11px,1.1vw,13px);letter-spacing:.6px;font-weight:400;color:var(--muted);text-align:right;max-width:100%;}
+.ticket-bucket-body{padding:4px 12px 16px;}
+.ticket-bucket.sb-nba{border-left:4px solid rgba(240,165,0,.8);}
+.ticket-bucket.sb-nba1h{border-left:4px solid rgba(255,155,86,.85);}
+.ticket-bucket.sb-nba1q{border-left:4px solid rgba(255,214,102,.85);}
+.ticket-bucket.sb-cbb{border-left:4px solid rgba(0,229,255,.65);}
+.ticket-bucket.sb-wcbb{border-left:4px solid rgba(159,216,232,.75);}
+.ticket-bucket.sb-nhl{border-left:4px solid rgba(196,165,255,.8);}
+.ticket-bucket.sb-soccer{border-left:4px solid rgba(232,184,74,.8);}
+.ticket-bucket.sb-mlb{border-left:4px solid rgba(255,154,154,.8);}
+.ticket-bucket.sb-xsport{border-left:4px solid rgba(183,168,255,.85);}
+.ticket-bucket.sb-default{border-left:4px solid rgba(255,255,255,.2);}
+[data-theme='light'] .ticket-bucket{background:rgba(255,255,255,0.52);border-color:rgba(0,0,0,0.1);box-shadow:0 2px 16px rgba(0,0,0,0.06);}
+[data-theme='light'] .ticket-bucket > summary{color:#b8860b;}
+[data-theme='light'] .ticket-bucket-meta{color:rgba(0,0,0,0.45);}
+[data-theme='light'] .ticket-bucket.sb-default{border-left-color:rgba(0,0,0,0.15);}
+
 /* ── Mobile ── */
 @media(max-width:768px){
   .snav{padding:0 16px;margin:.5rem;}
@@ -351,6 +374,9 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="wrap">
 <p class="slate-kicker">SLATE DATE · 2026-03-25</p>
 <p class="meta-muted" style="margin:6px 0 14px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — until a graded file exists) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-03-25/graded_*.xlsx</code>.</p>
+<details class="ticket-bucket sb-nba" open>
+<summary><span>NBA</span><span class="ticket-bucket-meta">5 sections · 15 tickets</span></summary>
+<div class="ticket-bucket-body">
 <section class="sec"><h2 class="sec-head bebas">NBA Standard 2-Leg</h2>
 <article class="ticket-card">
 <div class="thdr">
@@ -1096,6 +1122,10 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 </div>
 </article>
 </section>
+</div></details>
+<details class="ticket-bucket sb-cbb">
+<summary><span>CBB</span><span class="ticket-bucket-meta">4 sections · 12 tickets</span></summary>
+<div class="ticket-bucket-body">
 <section class="sec"><h2 class="sec-head bebas">CBB Standard 2-Leg</h2>
 <article class="ticket-card">
 <div class="thdr">
@@ -1512,6 +1542,10 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 </div>
 </article>
 </section>
+</div></details>
+<details class="ticket-bucket sb-nhl">
+<summary><span>NHL</span><span class="ticket-bucket-meta">6 sections · 18 tickets</span></summary>
+<div class="ticket-bucket-body">
 <section class="sec"><h2 class="sec-head bebas">NHL Standard 2-Leg</h2>
 <article class="ticket-card">
 <div class="thdr">
@@ -2226,6 +2260,10 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 </div>
 </article>
 </section>
+</div></details>
+<details class="ticket-bucket sb-soccer">
+<summary><span>Soccer</span><span class="ticket-bucket-meta">2 sections · 6 tickets</span></summary>
+<div class="ticket-bucket-body">
 <section class="sec"><h2 class="sec-head bebas">Soccer Standard 2-Leg</h2>
 <article class="ticket-card">
 <div class="thdr">
@@ -2404,6 +2442,10 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 </div>
 </article>
 </section>
+</div></details>
+<details class="ticket-bucket sb-nba1q">
+<summary><span>NBA1Q</span><span class="ticket-bucket-meta">15 sections · 45 tickets</span></summary>
+<div class="ticket-bucket-body">
 <section class="sec"><h2 class="sec-head bebas">NBA1Q Standard 2-Leg</h2>
 <article class="ticket-card">
 <div class="thdr">
@@ -4639,6 +4681,10 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 </div>
 </article>
 </section>
+</div></details>
+<details class="ticket-bucket sb-nba1h">
+<summary><span>NBA1H</span><span class="ticket-bucket-meta">10 sections · 30 tickets</span></summary>
+<div class="ticket-bucket-body">
 <section class="sec"><h2 class="sec-head bebas">NBA1H Standard 2-Leg</h2>
 <article class="ticket-card">
 <div class="thdr">
@@ -6129,6 +6175,10 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 </div>
 </article>
 </section>
+</div></details>
+<details class="ticket-bucket sb-xsport">
+<summary><span>Cross-sport</span><span class="ticket-bucket-meta">1 sections · 1 tickets</span></summary>
+<div class="ticket-bucket-body">
 <section class="sec"><h2 class="sec-head bebas">XSPORT Gob 2-Leg</h2>
 <article class="ticket-card">
 <div class="thdr">
@@ -6160,6 +6210,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 </div>
 </article>
 </section>
+</div></details>
 </div>
 <script>
 (function(){
