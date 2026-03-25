@@ -254,6 +254,21 @@ class NHLGrader:
         return confidence
 
 
+def _resolve_direction_from_slate_row(slate_row: pd.Series) -> str:
+    """
+    Canonical direction fallback for NHL grading:
+      final_bet_direction -> bet_direction -> direction -> recommended_side -> OVER
+    """
+    for col in ("final_bet_direction", "bet_direction", "direction", "recommended_side"):
+        if col in slate_row.index:
+            raw = slate_row.get(col)
+            if pd.notna(raw):
+                v = str(raw).strip().upper()
+                if v in ("OVER", "UNDER"):
+                    return v
+    return "OVER"
+
+
 # ── ADVANCED ANALYTICS ────────────────────────────────────────────────────────
 
 class NHLAnalytics:
@@ -442,7 +457,7 @@ def main() -> None:
         opp_team = slate_row.get("opponent", slate_row.get("opp_team", ""))
         prop_type = slate_row.get("prop_type", "")
         line = pd.to_numeric(slate_row.get("line"), errors="coerce")
-        direction = slate_row.get("final_bet_direction", "OVER")
+        direction = _resolve_direction_from_slate_row(slate_row)
         tier = slate_row.get("tier", "D")
         
         # Determine player type
@@ -478,6 +493,7 @@ def main() -> None:
             "line": line,
             "actual": actual,
             "direction": direction,
+            "bet_direction": direction,
             "tier": tier,
             "player_type": player_type,
             "result": result,

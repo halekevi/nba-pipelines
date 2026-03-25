@@ -440,6 +440,16 @@ def _nhl_ml_pick_col(df: pd.DataFrame, names: tuple[str, ...]) -> pd.Series:
     return pd.Series(np.nan, index=idx)
 
 
+def _nhl_ml_final_direction(df: pd.DataFrame) -> pd.Series:
+    bt = _nhl_ml_pick_col(df, ("bet_direction",))
+    dr = _nhl_ml_pick_col(df, ("direction",))
+    rs = _nhl_ml_pick_col(df, ("recommended_side",))
+    out = bt.fillna(dr).fillna(rs)
+    out = out.astype(str).str.strip().str.upper()
+    out = out.replace({"NAN": np.nan, "NONE": np.nan, "NULL": np.nan, "": np.nan})
+    return out.fillna("OVER")
+
+
 def _normalize_nhl_prop_ml(raw: str) -> str:
     x = str(raw or "").strip().lower()
     xc = re.sub(r"\s+", "", x)
@@ -570,17 +580,8 @@ def _build_nhl_ml_X(df: pd.DataFrame, model_features: list[str]) -> pd.DataFrame
         np.where(pick.str.contains("gob"), 2, np.where(pick.str.contains("dem"), 0, 1)),
         index=idx,
     )
-    dir_num = pd.Series(
-        np.where(
-            df.get("recommended_side", pd.Series("OVER", index=idx))
-            .astype(str)
-            .str.upper()
-            .eq("OVER"),
-            1,
-            0,
-        ),
-        index=idx,
-    )
+    final_direction = _nhl_ml_final_direction(df)
+    dir_num = pd.Series(np.where(final_direction.eq("OVER"), 1, 0), index=idx)
     prop_raw = df.get("stat_norm", df.get("prop_type", pd.Series("unknown", index=idx)))
     prop_norm = prop_raw.astype(str).map(_normalize_nhl_prop_ml)
     dummies = pd.get_dummies(prop_norm, prefix="prop", dtype=float)

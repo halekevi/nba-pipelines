@@ -49,8 +49,12 @@ MODEL_DIR = ROOT / "models"
 MODEL_PATH = MODEL_DIR / "prop_model_nhl.pkl"
 FEATURES_PATH = MODEL_DIR / "prop_model_nhl_features.json"
 BLEND_PATH = MODEL_DIR / "prop_model_nhl_blend_weight.json"
+LATEST_TEST_RESULTS_PATH = ROOT / "NHL" / "data" / "outputs" / "latest_nhl_test_results.xlsx"
+METADATA_PATH = MODEL_DIR / "prop_model_nhl_metadata.json"
 
 DATE_RE = re.compile(r"graded_nhl_(?:synthetic_)?(\d{4}-\d{2}-\d{2})\.xlsx$", re.I)
+SYNTHETIC_RATIO_CAP = 1.0  # max synthetic rows = real_rows * this cap
+REAL_ONLY_MODE = True      # baseline: train on real graded rows only
 
 
 def blend_weight_for_n(n: int) -> float:
@@ -71,6 +75,52 @@ def _first_present(df: pd.DataFrame, options: Iterable[str]) -> str | None:
 
 def _to_num(s: pd.Series) -> pd.Series:
     return pd.to_numeric(s, errors="coerce")
+
+
+def _norm_cat(s: pd.Series) -> pd.Series:
+    return s.astype(str).str.strip().str.upper()
+
+
+def _final_direction_series(df: pd.DataFrame, index: pd.Index | None = None) -> pd.Series:
+    """
+    Canonical direction with fallback:
+      bet_direction -> direction -> recommended_side -> OVER
+    """
+    idx = index if index is not None else df.index
+    bt = df["bet_direction"] if "bet_direction" in df.columns else pd.Series(np.nan, index=idx)
+    dr = df["direction"] if "direction" in df.columns else pd.Series(np.nan, index=idx)
+    rs = (
+        df["recommended_side"]
+        if "recommended_side" in df.columns
+        else pd.Series(np.nan, index=idx)
+    )
+    out = bt.reindex(idx).copy()
+    out = out.fillna(dr.reindex(idx))
+    out = out.fillna(rs.reindex(idx))
+    out = _norm_cat(out).replace({"NAN": np.nan, "NONE": np.nan, "NULL": np.nan, "": np.nan})
+    return out.fillna("OVER")
+
+
+def _pick_direction_col(df: pd.DataFrame, decided_mask: pd.Series) -> str | None:
+    """
+    Prefer direction columns that contain both OVER and UNDER on decided rows.
+    Falls back to first available candidate.
+    """
+    cands = ["bet_direction", "direction", "recommended_side"]
+    best = None
+    best_score = -1
+    for c in cands:
+        if c not in df.columns:
+            continue
+        s = _norm_cat(df[c])
+        d = s[decided_mask]
+        over = int((d == "OVER").sum())
+        under = int((d == "UNDER").sum())
+        score = min(over, under)
+        if score > best_score:
+            best_score = score
+            best = c
+    return best
 
 
 def _collect_nhl_graded_files() -> list[tuple[Path, bool]]:
@@ -243,6 +293,12 @@ def _goalie_conf_num(raw: pd.Series) -> pd.Series:
     )
 
 
+def _tier_letter_num(raw: pd.Series) -> pd.Series:
+    s = raw.astype(str).str.strip().str.upper()
+    m = {"A": 4.0, "B": 3.0, "C": 2.0, "D": 1.0}
+    return s.map(lambda x: m.get(x, 2.0)).astype(float)
+
+
 def normalize_nhl_prop(raw: str) -> str:
     x = str(raw or "").strip().lower()
     xc = re.sub(r"\s+", "", x)
@@ -271,20 +327,39 @@ def normalize_nhl_prop(raw: str) -> str:
 
 def _audit_and_load() -> pd.DataFrame:
     files = _collect_nhl_graded_files()
-    frames: list[pd.DataFrame] = []
+    real_frames: list[pd.DataFrame] = []
     for p, syn in files:
         block = _load_one_workbook(p, syn)
         if block is not None:
-            frames.append(block)
-    syn_raw = load_synthetic_training_data("NHL", str(SYNTHETIC_DB))
-    if not syn_raw.empty:
-        frames.append(_nhl_synthetic_to_workbook_like(syn_raw))
-    if not frames:
+            real_frames.append(block)
+    if not real_frames:
         raise FileNotFoundError(
-            "No graded_nhl*.xlsx under outputs/ or NHL/ (non-synthetic), and no NHL rows in "
-            "data/cache/synthetic_graded.db."
+            "No graded_nhl*.xlsx under outputs/ or NHL/ (non-synthetic)."
         )
-    df = pd.concat(frames, ignore_index=True)
+    real_df = pd.concat(real_frames, ignore_index=True)
+    n_real = len(real_df)
+
+    syn_raw = load_synthetic_training_data("NHL", str(SYNTHETIC_DB))
+    if REAL_ONLY_MODE or syn_raw.empty:
+        df = real_df
+        n_syn_used = 0
+    else:
+        syn_df = _nhl_synthetic_to_workbook_like(syn_raw)
+        n_syn_cap = int(n_real * SYNTHETIC_RATIO_CAP)
+        if n_syn_cap <= 0:
+            syn_df = syn_df.iloc[0:0].copy()
+        elif len(syn_df) > n_syn_cap:
+            syn_df = syn_df.sample(n=n_syn_cap, random_state=42)
+        n_syn_used = len(syn_df)
+        df = pd.concat([real_df, syn_df], ignore_index=True)
+
+    # Categorical normalization before any downstream feature engineering.
+    for col in ("pick_type", "direction", "prop_type", "player", "bet_direction"):
+        if col in df.columns:
+            df[col] = _norm_cat(df[col])
+    df["final_direction"] = _final_direction_series(df)
+
+    print(f"Training mix — real: {n_real:,}  synthetic: {n_syn_used:,}  total: {len(df):,}")
     print(f"-> Total rows (all sources): {len(df)}")
     print(f"-> Columns ({len(df.columns)}): {list(df.columns)}")
     hit_col = _first_present(df, ["result", "outcome", "grade"])
@@ -304,10 +379,9 @@ def _audit_and_load() -> pd.DataFrame:
         print("-> Hit rate by prop_type (top 15):")
         g = sub.groupby(sub[pc].astype(str), dropna=False)["_hit"].mean().sort_values(ascending=False)
         print(g.head(15).to_string())
-    dc = _first_present(sub, ["recommended_side", "direction", "bet_direction"])
-    if dc:
+    if "final_direction" in sub.columns:
         print("-> Hit rate by direction:")
-        print(sub.groupby(sub[dc].astype(str).str.upper())["_hit"].mean().to_string())
+        print(sub.groupby(sub["final_direction"])["_hit"].mean().to_string())
     tc = _first_present(sub, ["pick_type", "Pick Type", "tier"])
     if tc:
         print("-> Hit rate by tier/pick_type:")
@@ -339,20 +413,33 @@ def main() -> None:
         ],
     )
     hr20 = _first_present(df, ["hit_rate_over_L20", "hit_rate_l20", "hr_L20", "hr_last20"])
+    hr_season = _first_present(
+        df,
+        ["season_hit_rate", "hit_rate_season", "hr_season", "sample_season_hit_rate"],
+    )
     pick_col = _first_present(df, ["pick_type", "Pick Type"])
-    prop_col = _first_present(df, ["stat_norm", "prop_type", "stat_type", "Prop"])
-    dir_col = _first_present(df, ["recommended_side", "bet_direction", "direction"])
+    prop_col = _first_present(df, ["prop_type_norm", "stat_norm", "prop_type", "stat_type", "Prop"])
+    # Build canonical direction to prevent null bet_direction gaps on latest dates.
+    df["final_direction"] = _final_direction_series(df)
     line_col = _first_present(df, ["line", "line_score", "Line"])
     pp_col = _first_present(df, ["pp_unit", "pp_tier", "PP Tier"])
-    toi_col = _first_present(df, ["toi_per_game_api", "toi_minutes", "toi_avg_L10", "Time On Ice"])
+    toi_col = _first_present(
+        df,
+        ["projected_toi", "toi_per_game_api", "toi_avg_L10", "toi_minutes", "Time On Ice"],
+    )
     gc_col = _first_present(df, ["goalie_confirmed", "Goalie Confirmed"])
     home_col = _first_present(df, ["is_home", "home_away"])
+    edge2_col = _first_present(df, ["EDGE", "edge"])
+    rank_col = _first_present(df, ["RANK", "rank_score", "rank"])
+    tier_col = _first_present(df, ["tier", "Tier"])
+    def_tier_col = _first_present(df, ["def_tier", "defense_tier", "DEF_TIER"])
+    pace_col = _first_present(df, ["pace_factor", "pace", "game_script_mult"])
 
-    if prop_col is None or dir_col is None:
-        raise RuntimeError(f"Missing prop or direction. Columns: {list(df.columns)}")
+    if prop_col is None:
+        raise RuntimeError(f"Missing prop column. Columns: {list(df.columns)}")
 
     train = pd.DataFrame(index=df.index)
-    train["edge"] = _to_num(df[edge_col])
+    train["edge"] = _to_num(df[edge2_col or edge_col])
     train["hit_rate_l5"] = _to_num(df[hr5]) if hr5 else np.nan
     train["hit_rate_l10"] = _to_num(df[hr10]) if hr10 else np.nan
     train["hit_rate_l20"] = _to_num(df[hr20]) if hr20 else np.nan
@@ -361,29 +448,112 @@ def main() -> None:
         if col.notna().any() and col.dropna().median() > 1.0:
             train[c] = col / 100.0
     train["line"] = _to_num(df[line_col]) if line_col else np.nan
-    train["direction"] = _direction_num(df[dir_col]).astype(int)
-    train["tier"] = _pick_type_tier_num(df[pick_col]) if pick_col else 1
+    train["direction_raw"] = _norm_cat(df["final_direction"])
+    train["direction"] = _direction_num(train["direction_raw"]).astype(int)
+    train["tier"] = _tier_letter_num(df[tier_col]) if tier_col else 2.0
+    train["pick_tier_num"] = _pick_type_tier_num(df[pick_col]) if pick_col else 1.0
     train["defense_tier"] = _defense_tier_4(df)
+    if def_tier_col:
+        train["def_tier_raw"] = _norm_cat(df[def_tier_col])
+    else:
+        train["def_tier_raw"] = "AVG"
     train["pp_unit"] = _pp_unit_num(df[pp_col]) if pp_col else 0.0
-    train["toi_minutes"] = _to_num(df[toi_col]) if toi_col else np.nan
+    # Safety: only use projected/pre-game TOI. Drop if source looks like actual boxscore TOI.
+    if toi_col and ("actual" not in str(toi_col).lower()):
+        train["toi_minutes"] = _to_num(df[toi_col])
+    else:
+        train["toi_minutes"] = np.nan
+        if toi_col:
+            print(f"  [hygiene] Dropping TOI feature '{toi_col}' (looks post-event/actual).")
     train["goalie_confirmed"] = _goalie_conf_num(df[gc_col]) if gc_col else 0.0
     if home_col:
         ih = df[home_col].astype(str).str.strip()
         train["is_home"] = np.where(ih.isin(["1", "1.0", "true", "True", "HOME", "home"]), 1.0, 0.0)
     else:
         train["is_home"] = np.nan
-    train["prop_type"] = df[prop_col].astype(str).map(normalize_nhl_prop)
+    train["pace_factor"] = _to_num(df[pace_col]) if pace_col else np.nan
+    train["rank"] = _to_num(df[rank_col]) if rank_col else np.nan
+    if prop_col:
+        prop_raw = _norm_cat(df[prop_col])
+    else:
+        prop_raw = pd.Series("UNKNOWN", index=df.index)
+    train["prop_type"] = prop_raw.map(normalize_nhl_prop).astype(str).str.strip().str.upper()
     train["hit"] = _map_hit(df[hit_col])
+    train["source_date"] = pd.to_datetime(df["_source_date"], errors="coerce")
 
+    # Strictly keep decided rows only.
     train = train[train["hit"].isin([0.0, 1.0])].copy()
     train["hit"] = train["hit"].astype(int)
     train = train.dropna(subset=["edge"])
+
+    # Drop rows with missing canonical prop type if strongly skewed.
+    prop_missing = train["prop_type"].isin(["", "NAN", "NONE", "UNKNOWN"])
+    known = train.loc[~prop_missing]
+    missing = train.loc[prop_missing]
+    if len(known) > 0 and len(missing) > 0:
+        hr_known = float(known["hit"].mean())
+        hr_missing = float(missing["hit"].mean())
+        if abs(hr_missing - hr_known) >= 0.08:
+            print(
+                f"  [hygiene] Dropping {len(missing)} UNKNOWN/NAN prop rows "
+                f"(hit skew {hr_missing:.3f} vs known {hr_known:.3f})"
+            )
+            train = known.copy()
     train["hit_rate_l5"] = train["hit_rate_l5"].fillna(train["hit_rate_l10"]).fillna(0.5)
     train["hit_rate_l10"] = train["hit_rate_l10"].fillna(0.5)
     train["hit_rate_l20"] = train["hit_rate_l20"].fillna(train["hit_rate_l10"]).fillna(0.5)
+    train["season_hit_rate"] = _to_num(df[hr_season]).reindex(train.index) if hr_season else np.nan
+    if "season_hit_rate" in train.columns:
+        c = train["season_hit_rate"]
+        if c.notna().any() and c.dropna().median() > 1.0:
+            train["season_hit_rate"] = c / 100.0
+    train["season_hit_rate"] = train["season_hit_rate"].fillna(train["hit_rate_l20"]).fillna(0.5)
+    train["trend_delta"] = train["hit_rate_l5"] - train["season_hit_rate"]
     train["line"] = train["line"].fillna(0.0)
     train["toi_minutes"] = train["toi_minutes"].fillna(0.0)
     train["is_home"] = train["is_home"].fillna(0.5)
+    train["pace_factor"] = train["pace_factor"].fillna(0.0)
+    train["rank"] = train["rank"].fillna(0.0)
+
+    # Normalize pick types for diagnostics and features.
+    if pick_col:
+        pick_norm = _norm_cat(df[pick_col])
+    else:
+        pick_norm = pd.Series("STANDARD", index=df.index)
+    train["pick_type_norm"] = pick_norm.reindex(train.index).fillna("STANDARD")
+
+    over_n = int((train["direction_raw"] == "OVER").sum())
+    under_n = int((train["direction_raw"] == "UNDER").sum())
+    print(f"  [hygiene] Direction counts (decided): OVER={over_n} UNDER={under_n}")
+    if over_n == 0 or under_n == 0:
+        print("  [hygiene] WARNING: direction imbalance remains after normalization.")
+    print("  [hygiene] PICK_TYPE hit rates:")
+    print(
+        train.groupby("pick_type_norm")["hit"]
+        .agg(["count", "mean"])
+        .sort_values("count", ascending=False)
+        .to_string()
+    )
+
+    # Strict 50/50 directional balancing.
+    over_df = train[train["direction_raw"] == "OVER"].copy()
+    under_df = train[train["direction_raw"] == "UNDER"].copy()
+    if len(over_df) and len(under_df):
+        minority_n = min(len(over_df), len(under_df))
+        over_bal = over_df.sample(n=minority_n, random_state=42) if len(over_df) > minority_n else over_df
+        under_bal = under_df.sample(n=minority_n, random_state=42) if len(under_df) > minority_n else under_df
+        train = pd.concat([over_bal, under_bal], ignore_index=False).sample(frac=1.0, random_state=42)
+        print(f"  [hygiene] Balanced directions to 1:1 -> OVER={minority_n} UNDER={minority_n}")
+    else:
+        print("  [hygiene] WARNING: could not 1:1 balance directions (one side missing).")
+
+    print("  [hygiene] Bias check (balanced):")
+    print(
+        train.groupby("pick_type_norm")["hit"]
+        .agg(["count", "mean"])
+        .sort_values("count", ascending=False)
+        .to_string()
+    )
 
     if "_weight" in df.columns:
         sw = pd.to_numeric(df.loc[train.index, "_weight"], errors="coerce").fillna(1.0).to_numpy()
@@ -410,18 +580,26 @@ def main() -> None:
         "hit_rate_l5",
         "hit_rate_l10",
         "hit_rate_l20",
+        "season_hit_rate",
+        "trend_delta",
         "line",
         "direction",
         "tier",
+        "pick_tier_num",
+        "rank",
         "defense_tier",
         "pp_unit",
+        "pace_factor",
         "toi_minutes",
         "goalie_confirmed",
         "is_home",
     ]
     X_base = train[base_cols].copy().fillna(0.0)
     X_prop = pd.get_dummies(train["prop_type"], prefix="prop", dtype=float)
-    X = pd.concat([X_base, X_prop], axis=1).fillna(0.0)
+    X_pick = pd.get_dummies(train["pick_type_norm"], prefix="pick", dtype=float)
+    X = pd.concat([X_base, X_prop, X_pick], axis=1).fillna(0.0)
+    # Strict feature pruning: drop missingness artifacts.
+    X = X[[c for c in X.columns if c != "prop_nan"]]
     y = train["hit"].astype(int)
 
     strat = y if y.nunique() > 1 else None
@@ -459,15 +637,40 @@ def main() -> None:
         brier = brier_score_loss(y_test, proba)
     except Exception:
         brier = float("nan")
+    y_pred = (proba >= 0.5).astype(int)
 
     feats = list(X.columns)
     fi = pd.Series(model.feature_importances_, index=feats).sort_values(ascending=False)
     top5 = fi.head(5)
 
     MODEL_DIR.mkdir(parents=True, exist_ok=True)
+    LATEST_TEST_RESULTS_PATH.parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(model, MODEL_PATH)
     FEATURES_PATH.write_text(json.dumps(feats, indent=2), encoding="utf-8")
     BLEND_PATH.write_text(json.dumps({"blend_weight": bw}, indent=2), encoding="utf-8")
+    metadata = {
+        "model": "prop_model_nhl",
+        "notes": [
+            "Direction uses final_direction fallback: bet_direction -> direction -> recommended_side -> OVER.",
+            "Recent slates may be OVER-heavy by design due to upstream selection/enforcement.",
+            "Calibrate and evaluate by direction to monitor class imbalance drift over time.",
+        ],
+        "direction_counts_decided": {
+            "OVER": over_n,
+            "UNDER": under_n,
+        },
+        "training_rows_balanced": int(n),
+        "test_rows_random_split": int(len(X_test)),
+        "roc_auc": None if np.isnan(auc) else float(auc),
+        "brier_score": None if np.isnan(brier) else float(brier),
+    }
+    METADATA_PATH.write_text(json.dumps(metadata, indent=2), encoding="utf-8")
+    test_export = train.loc[X_test.index].copy()
+    test_export["ml_prob"] = proba
+    test_export["prediction"] = y_pred
+    test_export["is_win"] = y_test.values
+    test_export["source_date"] = test_export["source_date"].dt.strftime("%Y-%m-%d")
+    test_export.to_excel(LATEST_TEST_RESULTS_PATH, index=False)
 
     print("NHL Model Training Complete")
     print("-----------------------------")
@@ -476,12 +679,14 @@ def main() -> None:
     print(f"  ROC-AUC:          {auc:.4f}" if not np.isnan(auc) else "  ROC-AUC:          n/a")
     print(f"  Brier score:      {brier:.4f}" if not np.isnan(brier) else "  Brier score:      n/a")
     print(f"  Blend weight:     {bw:.2f}")
-    print("\n  Top 5 features:")
-    for i, (k, v) in enumerate(top5.items(), 1):
+    print("\n  Top 20 features:")
+    for i, (k, v) in enumerate(fi.head(20).items(), 1):
         print(f"  {i}. {k:<28} {v:.6f}")
     print(f"\n  Saved: {MODEL_PATH}")
     print(f"  Saved: {FEATURES_PATH}")
     print(f"  Saved: {BLEND_PATH}")
+    print(f"  Saved: {METADATA_PATH}")
+    print(f"  Saved: {LATEST_TEST_RESULTS_PATH}")
 
 
 if __name__ == "__main__":
