@@ -307,12 +307,12 @@ function Ensure-PropModels {
         @{ Pkl = "prop_model_soccer.pkl"; Script = ".\scripts\train_prop_model_soccer.py" }
     )
     foreach ($t in $trainers) {
-        $p = Join-Path $modelsDir $t.Pkl
-        if (-not (Test-Path $p)) {
+        $pklPath = Join-Path $modelsDir $t.Pkl
+        if (-not (Test-Path $pklPath)) {
             Write-Host "  [MODELS] Missing $($t.Pkl) -> $($t.Script)" -ForegroundColor Yellow
             $okM = Run-Step "Train ML $($t.Pkl)" $Root $t.Script ""
             if (-not $okM) {
-                Write-Host "  [MODELS] WARNING: training failed — ML blend may be skipped for this sport." -ForegroundColor Red
+                Write-Host "  [MODELS] WARNING: training failed - ML blend may be skipped for this sport." -ForegroundColor Red
             }
         } else {
             Write-Host "  [MODELS] OK $($t.Pkl)" -ForegroundColor DarkGray
