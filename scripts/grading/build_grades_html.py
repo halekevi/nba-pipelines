@@ -428,6 +428,7 @@ def def_tier_table(rows: list[dict]) -> str:
 
     detail_rows_pt = ""
     detail_rows_tier = ""
+    detail_rows_std_dir = ""
     for d in dt_agg:
         if d["decided"] == 0:
             continue
@@ -439,6 +440,18 @@ def def_tier_table(rows: list[dict]) -> str:
         gob = pick_type_stats(sub, "goblin")
         std = pick_type_stats(sub, "standard")
         dem = pick_type_stats(sub, "demon")
+        std_over_rows = [
+            r for r in sub
+            if "standard" in str(r.get("Pick Type", "")).lower()
+            and str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "OVER"
+        ]
+        std_under_rows = [
+            r for r in sub
+            if "standard" in str(r.get("Pick Type", "")).lower()
+            and str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "UNDER"
+        ]
+        std_over = overall_stats(std_over_rows) if std_over_rows else {"decided": 0, "hit_rate": 0}
+        std_under = overall_stats(std_under_rows) if std_under_rows else {"decided": 0, "hit_rate": 0}
 
         detail_rows_pt += f"""<tr>
           <td><strong>{h(d["key"])}</strong></td>
@@ -456,9 +469,14 @@ def def_tier_table(rows: list[dict]) -> str:
           <td><strong>{h(d["key"])}</strong></td>
           {''.join(t_cells)}
         </tr>"""
+        detail_rows_std_dir += f"""<tr>
+          <td><strong>{h(d["key"])}</strong></td>
+          <td class="mono">{_stats_cell(std_over)}</td>
+          <td class="mono">{_stats_cell(std_under)}</td>
+        </tr>"""
 
     detail_tables = ""
-    if detail_rows_pt or detail_rows_tier:
+    if detail_rows_pt or detail_rows_tier or detail_rows_std_dir:
         detail_tables = f"""<div class="two-col" style="margin-top:12px">
       <div>
         <div class="section-label">DEF TIER BREAKDOWN — BY PICK TYPE</div>
@@ -474,6 +492,13 @@ def def_tier_table(rows: list[dict]) -> str:
           <tbody>{detail_rows_tier}</tbody>
         </table></div>
       </div>
+    </div>
+    <div style="margin-top:12px">
+      <div class="section-label">DEF TIER BREAKDOWN — STANDARD (OVER/UNDER)</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>DEF TIER</th><th>STANDARD OVER</th><th>STANDARD UNDER</th></tr></thead>
+        <tbody>{detail_rows_std_dir}</tbody>
+      </table></div>
     </div>"""
 
     return f"""<div class="section-label">HIT RATE BY OPPONENT DEFENSIVE TIER</div>
