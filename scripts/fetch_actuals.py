@@ -1110,17 +1110,16 @@ def main():
         df, empty_reason = fetch_sport(sport_path, args.date, window=args.window)
 
     if df.empty:
-        # Zero NBA/CBB games on the calendar: write header-only CSV so combined_ticket_grader
-        # and run_grader.ps1 can still run (CBB off-days are common in March).
-        if empty_reason == "no_games" and args.sport in ("NBA", "CBB"):
-            stub = pd.DataFrame(columns=["player", "team", "prop_type", "actual"])
-            stub.to_csv(args.output, index=False)
-            print(f"\nNo games scheduled — wrote empty actuals stub -> {args.output}")
-            _export_injuries_sidecar(args)
-            return
+        # Always write a header-only stub so downstream grading never skips due to
+        # missing files on pre-final slates or true off-days.
+        stub = pd.DataFrame(columns=["player", "team", "prop_type", "actual"])
+        stub.to_csv(args.output, index=False)
         _export_injuries_sidecar(args)
-        print("\nNo actuals fetched — games may not be final yet.")
-        print("Try again after all games have finished (usually safe by 1am ET).")
+        if empty_reason == "no_games":
+            print(f"\nNo games scheduled — wrote empty actuals stub -> {args.output}")
+        else:
+            print(f"\nNo actuals fetched yet — wrote empty actuals stub -> {args.output}")
+            print("Games may not be final yet; rerun after completion for decided grades.")
         return
 
     df.to_csv(args.output, index=False)
