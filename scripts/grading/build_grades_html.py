@@ -332,61 +332,86 @@ def prop_type_table(data: list[dict], label: str, min_decided: int = 10) -> str:
 
 
 def player_table(rows: list[dict], top: bool, min_decided: int = 5, limit: int = 8) -> str:
-    """Build top/worst player performer table."""
-    player_data: dict[str, dict] = {}
+    """Build top/worst player+prop+direction consistency table."""
+    line_data: dict[tuple[str, str, str], dict] = {}
     for r in rows:
         player = str(r.get("Player","") or "").strip()
         team   = str(r.get("Team","") or r.get("Sport","") or "").strip()
-        if not player or player.lower() in ("none","nan",""): continue
-        if player not in player_data:
-            player_data[player] = {"team": team, "hits":0, "misses":0, "decided":0}
+        prop   = str(r.get("Prop Type","") or r.get("Prop","") or "Unknown Prop").strip()
+        side   = str(r.get("Dir","") or r.get("Direction","") or "—").strip().upper()
+        if side not in ("OVER", "UNDER"):
+            side = "—"
+        if not player or player.lower() in ("none","nan",""):
+            continue
+        key = (player, prop, side)
+        if key not in line_data:
+            line_data[key] = {"team": team, "hits":0, "misses":0, "decided":0}
         result = str(r.get("Result","") or r.get("Grade","") or "").strip().upper()
         if result in ("HIT","WIN","1","TRUE","YES","W"):
-            player_data[player]["hits"]    += 1
-            player_data[player]["decided"] += 1
+            line_data[key]["hits"]    += 1
+            line_data[key]["decided"] += 1
         elif result in ("MISS","LOSS","0","FALSE","NO","L"):
-            player_data[player]["misses"]  += 1
-            player_data[player]["decided"] += 1
+            line_data[key]["misses"]  += 1
+            line_data[key]["decided"] += 1
 
     # fallback: pre-aggregated
-    if not any(v["decided"] > 0 for v in player_data.values()):
-        player_data2: dict[str, dict] = {}
+    if not any(v["decided"] > 0 for v in line_data.values()):
+        line_data2: dict[tuple[str, str, str], dict] = {}
         for r in rows:
             player = str(r.get("Player","") or "").strip()
             team   = str(r.get("Team","") or "").strip()
-            if not player or player.lower() in ("none","nan",""): continue
-            if player not in player_data2:
-                player_data2[player] = {"team": team, "hits":0, "misses":0, "decided":0}
-            player_data2[player]["hits"]    += safe_int(r.get("Hits",0))
-            player_data2[player]["misses"]  += safe_int(r.get("Misses",0))
-            player_data2[player]["decided"] += safe_int(r.get("Decided",0))
-        player_data = player_data2
+            prop   = str(r.get("Prop Type","") or r.get("Prop","") or "Unknown Prop").strip()
+            side   = str(r.get("Dir","") or r.get("Direction","") or "—").strip().upper()
+            if side not in ("OVER", "UNDER"):
+                side = "—"
+            if not player or player.lower() in ("none","nan",""):
+                continue
+            key = (player, prop, side)
+            if key not in line_data2:
+                line_data2[key] = {"team": team, "hits":0, "misses":0, "decided":0}
+            line_data2[key]["hits"]    += safe_int(r.get("Hits",0))
+            line_data2[key]["misses"]  += safe_int(r.get("Misses",0))
+            line_data2[key]["decided"] += safe_int(r.get("Decided",0))
+        line_data = line_data2
 
     candidates = []
-    for name, v in player_data.items():
+    for (name, prop, side), v in line_data.items():
         d = v["decided"]
-        if d < min_decided: continue
+        if d < min_decided:
+            continue
         hr = v["hits"]/d*100
-        candidates.append({"name":name,"team":v["team"],"hits":v["hits"],"misses":v["misses"],"decided":d,"hit_rate":hr})
+        candidates.append({
+            "name":name,"team":v["team"],"prop":prop,"side":side,
+            "hits":v["hits"],"misses":v["misses"],"decided":d,"hit_rate":hr,
+            "inconsistency":abs(hr - 50.0),
+        })
 
     if not candidates:
-        return f'<div class="muted-note">No players with ≥{min_decided} decided props.</div>'
+        return f'<div class="muted-note">No player-prop lines with ≥{min_decided} decided props.</div>'
 
-    candidates.sort(key=lambda x: x["hit_rate"], reverse=top)
+    if top:
+        # Most consistent winners: strongest hit rate with useful sample.
+        candidates.sort(key=lambda x: (x["hit_rate"], x["decided"]), reverse=True)
+    else:
+        # Most inconsistent: closest to coin-flip first, with larger sample.
+        candidates.sort(key=lambda x: (x["inconsistency"], -x["decided"]))
     candidates = candidates[:limit]
 
     rows_html = ""
     for c in candidates:
-        col = "var(--green)" if c["hit_rate"] >= 55 else "var(--red)"
+        side_color = "var(--cyan)" if c["side"] == "OVER" else ("var(--gold)" if c["side"] == "UNDER" else "var(--muted)")
+        line_lbl = f'{h(c["side"])} {h(c["prop"])}' if c["side"] != "—" else h(c["prop"])
         rows_html += f"""<tr>
           <td><strong>{h(c['name'])}</strong></td>
           <td class="mono muted">{h(c['team'])}</td>
+          <td class="mono" style="color:{side_color}">{line_lbl}</td>
+          <td class="right mono">{fmt_num(c['decided'])}</td>
           <td class="right mono pos">{fmt_num(c['hits'])}</td>
           <td class="right mono neg">{fmt_num(c['misses'])}</td>
           <td>{rate_bar_html(c['hit_rate'])}</td>
         </tr>"""
     return f"""<div class="table-wrap"><table>
-      <thead><tr><th>PLAYER</th><th>TEAM</th><th class="right">H</th><th class="right">M</th><th>RATE</th></tr></thead>
+      <thead><tr><th>PLAYER</th><th>TEAM</th><th>LINE</th><th class="right">DEC</th><th class="right">H</th><th class="right">M</th><th>RATE</th></tr></thead>
       <tbody>{rows_html}</tbody>
     </table></div>"""
 
@@ -689,16 +714,16 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
         </div>"""
 
     # ── Player Leaderboards ────────────────────────────────────────────────────
-    top_players   = player_table(rows, top=True,  min_decided=5, limit=8)
-    worst_players = player_table(rows, top=False, min_decided=5, limit=8)
+    top_players   = player_table(rows, top=True,  min_decided=3, limit=8)
+    worst_players = player_table(rows, top=False, min_decided=3, limit=8)
 
     player_section = f"""<div class="two-col">
       <div>
-        <div class="section-label">🏆 TOP {sport} PERFORMERS</div>
+        <div class="section-label">🏆 MOST CONSISTENT WINNERS (PLAYER + PROP LINE)</div>
         {top_players}
       </div>
       <div>
-        <div class="section-label">💀 WORST {sport} PERFORMERS</div>
+        <div class="section-label">💀 MOST INCONSISTENT LINES (PLAYER + PROP LINE)</div>
         {worst_players}
       </div>
     </div>"""
