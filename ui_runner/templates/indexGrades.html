@@ -885,6 +885,149 @@ body::after{
 const REPORT_URL_TEMPLATE = '/grades/slate_eval_{date}.html';
 const TICKET_EVAL_URL_TEMPLATE = '/grades/ticket_eval_{date}.html';
 
+function ensureFrameCollapseCss(doc) {
+  if (!doc || doc.getElementById('grades-collapsible-sport-style')) return;
+  const style = doc.createElement('style');
+  style.id = 'grades-collapsible-sport-style';
+  style.textContent = `
+    .grades-sport-bucket{
+      margin:0 0 20px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      overflow:hidden;
+      background:rgba(255,255,255,.02);
+    }
+    .grades-sport-bucket > summary{
+      cursor:pointer;
+      list-style:none;
+      padding:10px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      font-family:'Bebas Neue',sans-serif;
+      letter-spacing:1.6px;
+      font-size:22px;
+      color:inherit;
+      background:rgba(255,255,255,.02);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .grades-sport-bucket > summary::-webkit-details-marker{display:none;}
+    .grades-sport-bucket > summary::marker{display:none;content:'';}
+    .grades-sport-bucket > summary::after{
+      content:'▸';
+      font-size:13px;
+      opacity:.7;
+      transition:transform .2s ease;
+      pointer-events:none;
+    }
+    .grades-sport-bucket[open] > summary::after{transform:rotate(90deg);}
+    .grades-sport-bucket-body{padding:0;}
+    .grades-sport-meta{
+      font-family:'Share Tech Mono',monospace;
+      font-size:10px;
+      letter-spacing:1px;
+      opacity:.72;
+    }
+  `;
+  (doc.head || doc.documentElement).appendChild(style);
+}
+
+function collapseSportsInSlateFrame(frame) {
+  const doc = frame?.contentDocument;
+  if (!doc) return;
+  ensureFrameCollapseCss(doc);
+  const sections = Array.from(doc.querySelectorAll('.sport-section')).filter(
+    el => !el.closest('.grades-sport-bucket')
+  );
+  if (!sections.length) return;
+  const firstMain = doc.querySelector('.main');
+  if (!firstMain) return;
+
+  sections.forEach((sec, idx) => {
+    const sportLabel =
+      sec.querySelector('.sport-label')?.textContent?.trim() ||
+      sec.querySelector('.sport-header')?.textContent?.trim() ||
+      `Sport ${idx + 1}`;
+    const meta = sec.querySelector('.sport-meta-count')?.textContent?.trim() || '';
+
+    const details = doc.createElement('details');
+    details.className = 'grades-sport-bucket';
+    if (idx === 0) details.open = true;
+
+    const summary = doc.createElement('summary');
+    const title = doc.createElement('span');
+    title.textContent = sportLabel;
+    summary.appendChild(title);
+    const metaEl = doc.createElement('span');
+    metaEl.className = 'grades-sport-meta';
+    metaEl.textContent = meta;
+    summary.appendChild(metaEl);
+    details.appendChild(summary);
+
+    const body = doc.createElement('div');
+    body.className = 'grades-sport-bucket-body';
+    details.appendChild(body);
+
+    sec.parentNode.insertBefore(details, sec);
+    body.appendChild(sec);
+  });
+}
+
+function collapseSportsInTicketFrame(frame) {
+  const doc = frame?.contentDocument;
+  if (!doc) return;
+  ensureFrameCollapseCss(doc);
+
+  // Newer ticket eval pages already have bucket details.
+  if (doc.querySelector('.ticket-bucket')) return;
+
+  const wrap = doc.querySelector('.wrap');
+  if (!wrap) return;
+  const sections = Array.from(wrap.querySelectorAll(':scope > section.sec')).filter(
+    el => !el.closest('.grades-sport-bucket')
+  );
+  if (!sections.length) return;
+
+  const groups = new Map();
+  sections.forEach(sec => {
+    const head = sec.querySelector('.sec-head')?.textContent?.trim() || 'Other';
+    const isCross = head.toUpperCase().startsWith('XSPORT');
+    const key = isCross ? 'Cross-sport' : (head.split(/\s+/)[0] || 'Other');
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(sec);
+  });
+
+  const firstSec = sections[0];
+  if (!firstSec || !firstSec.parentNode) return;
+
+  let idx = 0;
+  groups.forEach((groupSecs, key) => {
+    const details = doc.createElement('details');
+    details.className = 'grades-sport-bucket';
+    if (idx === 0) details.open = true;
+    idx += 1;
+
+    const summary = doc.createElement('summary');
+    const title = doc.createElement('span');
+    title.textContent = key;
+    summary.appendChild(title);
+    const metaEl = doc.createElement('span');
+    metaEl.className = 'grades-sport-meta';
+    const ticketCount = groupSecs.reduce((n, sec) => n + sec.querySelectorAll('article.ticket-card').length, 0);
+    metaEl.textContent = `${groupSecs.length} sections · ${ticketCount} tickets`;
+    summary.appendChild(metaEl);
+    details.appendChild(summary);
+
+    const body = doc.createElement('div');
+    body.className = 'grades-sport-bucket-body';
+    details.appendChild(body);
+
+    firstSec.parentNode.insertBefore(details, firstSec);
+    groupSecs.forEach(sec => body.appendChild(sec));
+  });
+}
+
 // ─── TAB SWITCHING ────────────────────────────────────────────────────────────
 let activeTab = 'slate';
 function refreshControlsSummary() {
@@ -938,6 +1081,9 @@ async function loadTicketEval(dateStr) {
   }
   tEmpty.style.display = 'none';
   tf.style.display = 'block';
+  tf.onload = function(){
+    try { collapseSportsInTicketFrame(tf); } catch(_e) {}
+  };
   tf.src = url;
 }
 
@@ -1054,6 +1200,7 @@ function loadDate(dateStr){
       if(!doc || !doc.body || doc.body.innerHTML.trim().length < 100){
         throw new Error('empty');
       }
+      try { collapseSportsInSlateFrame(frame); } catch(_e) {}
       overlay.classList.add('hidden');
       frame.classList.remove('loading');
     } catch(e) {
