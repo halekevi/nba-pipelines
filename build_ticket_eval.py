@@ -41,6 +41,13 @@ _XLSX_HDR_TO_LEG_FIELD: dict[str, str] = {
     "sport": "sport",
 }
 
+DEF_COL_ALIASES = ["Def Tier", "OPP_DEF_TIER", "opp_def_tier", "def_tier", "DEF_TIER", "Defense Tier"]
+PICK_COL_ALIASES = ["Pick Type", "PICK_TYPE", "pick_type", "PickType"]
+TIER_COL_ALIASES = ["Tier", "TIER", "tier"]
+PROP_COL_ALIASES = ["Prop", "PROP", "prop", "PROP_TYPE", "Prop Type"]
+LINE_COL_ALIASES = ["Line", "LINE", "line"]
+DIR_COL_ALIASES = ["Dir", "DIR", "dir", "Direction", "DIRECTION"]
+
 # Slate workbooks per sport bucket (first existing file wins within that bucket).
 # Ticket legs with sport NBA1H / NBA1Q / WCBB must match rows from these files, not full-game NBA/CBB only.
 SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
@@ -1090,6 +1097,15 @@ def _player_initials(name: str) -> str:
     return (parts[0][:1] + parts[-1][:1]).upper()
 
 
+def resolve_col(df: pd.DataFrame, aliases: list[str]) -> str:
+    norm = {str(c).strip().lower(): str(c) for c in df.columns}
+    for a in aliases:
+        key = str(a).strip().lower()
+        if key in norm:
+            return norm[key]
+    raise KeyError(f"None of {aliases} found in columns: {list(df.columns)}")
+
+
 def _clean_team_abbr(s: str) -> str:
     s = str(s or "").strip()
     if not s:
@@ -1109,6 +1125,38 @@ def _parse_ticket_banner(s: str) -> tuple[float, float, int]:
 
 def _ticket_header_colmap(row: tuple[Any, ...]) -> dict[int, str]:
     out: dict[int, str] = {}
+    headers = [str(c or "").strip() for c in row]
+    hdf = pd.DataFrame(columns=headers)
+    header_idx = {str(c).strip().lower(): i for i, c in enumerate(headers)}
+
+    required_aliases = {
+        "pick_type": PICK_COL_ALIASES,
+        "prop_type": PROP_COL_ALIASES,
+        "line": LINE_COL_ALIASES,
+        "direction": DIR_COL_ALIASES,
+    }
+    optional_aliases = {
+        "tier": TIER_COL_ALIASES,
+        "def_tier": DEF_COL_ALIASES,
+    }
+
+    for field_name, aliases in required_aliases.items():
+        try:
+            resolved = resolve_col(hdf, aliases)
+            idx = header_idx.get(str(resolved).strip().lower())
+            if idx is not None:
+                out[idx] = field_name
+        except KeyError:
+            pass
+    for field_name, aliases in optional_aliases.items():
+        try:
+            resolved = resolve_col(hdf, aliases)
+            idx = header_idx.get(str(resolved).strip().lower())
+            if idx is not None:
+                out[idx] = field_name
+        except KeyError:
+            pass
+
     for i, cell in enumerate(row):
         key = _norm_header(cell)
         field = _XLSX_HDR_TO_LEG_FIELD.get(key)
