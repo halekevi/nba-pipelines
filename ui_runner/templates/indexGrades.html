@@ -203,6 +203,7 @@ body::after{
   .date-bar{margin-left:10px;margin-right:10px;overflow-x:auto;}
   .tabs-bar{margin-left:10px;margin-right:10px;}
   .grades-hero-wrap{margin-left:0;margin-right:0;}
+  .grades-controls-wrap{margin-left:12px;margin-right:12px;}
   .grades-hero{padding:14px 12px;}
   .mobile-menu{top:72px;}
 }
@@ -221,6 +222,7 @@ body::after{
 @media(max-width:900px) and (orientation:portrait){
   html,body{height:auto;overflow:auto;}
   .grades-body{margin:0 .6rem .8rem;}
+  .grades-controls-wrap{margin-left:.6rem;margin-right:.6rem;}
   .grades-hero{padding:14px 12px;}
   .tabs-bar{padding:8px 10px;}
   .tab-btn{padding:9px 14px;font-size:9px;letter-spacing:1.4px;}
@@ -229,6 +231,7 @@ body::after{
 @media(max-width:900px) and (orientation:landscape){
   html,body{height:auto;overflow:auto;}
   .grades-body{margin:0 .7rem .8rem;}
+  .grades-controls-wrap{margin-left:.7rem;margin-right:.7rem;}
   .grades-hero{padding:12px 14px;}
   .grades-title{font-size:34px;letter-spacing:1.5px;}
   .date-bar{height:46px;padding:0 12px;gap:10px;}
@@ -236,6 +239,29 @@ body::after{
   .tab-btn{padding:8px 12px;font-size:9px;letter-spacing:1.2px;}
   .iframe-shell{min-height:56vh;}
 }
+
+/* Collapsible date + tabs (same interaction model as About grades) */
+.grades-controls-wrap{
+  flex-shrink:0;margin:6px 1rem 0;border:1px solid var(--glass-panel-border);border-radius:14px;
+  background:rgba(255,255,255,0.025);backdrop-filter:blur(16px) saturate(180%);
+  box-shadow:var(--glass-shadow);overflow:hidden;
+}
+.grades-controls-wrap>summary{
+  cursor:pointer;list-style:none;position:relative;padding:10px 36px 10px 14px;
+  display:flex;flex-direction:column;align-items:stretch;gap:4px;
+}
+.grades-controls-wrap>summary::-webkit-details-marker{display:none;}
+.grades-controls-wrap>summary::after{
+  content:'▾';position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  font-size:12px;color:var(--accent-gold);transition:transform .2s;
+}
+.grades-controls-wrap[open]>summary::after{transform:translateY(-50%) rotate(-180deg);}
+.gc-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;}
+.gc-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--accent-gold);line-height:1.1;}
+.gc-live{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--cyan);opacity:.92;}
+.gc-hint{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.6px;color:var(--muted2);font-weight:400;text-transform:none;line-height:1.35;}
+.grades-controls-inner{padding:0 12px 12px;display:flex;flex-direction:column;gap:4px;}
+.grades-controls-inner .date-bar,.grades-controls-inner .tabs-bar{margin:0;width:100%;box-sizing:border-box;}
 
 /* Hero collapsed by default — maximizes iframe for ticket/slate reports */
 .grades-body{margin:0 1rem .35rem;}
@@ -695,9 +721,17 @@ body::after{
 }
 [data-theme="light"] .grades-hero-wrap,
 [data-theme="light"] .grades-hero,
-[data-theme="light"] .gmeta-card{
+[data-theme="light"] .gmeta-card,
+[data-theme="light"] .grades-controls-wrap{
   border-color:rgba(196,166,107,0.22) !important;
 }
+[data-theme="light"] .grades-controls-wrap{
+  background:rgba(255,255,255,0.55) !important;
+  box-shadow:0 4px 24px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9) !important;
+}
+[data-theme="light"] .gc-title{color:#8b6914 !important;}
+[data-theme="light"] .gc-live{color:#1a6b7a !important;}
+[data-theme="light"] .gc-hint{color:rgba(0,0,0,0.45) !important;}
 
 </style>
 </head>
@@ -747,34 +781,41 @@ body::after{
 
 <div class="grades-page">
 
-<!-- Date + tabs directly under nav so they are never clipped below the hero (short viewports / overflow:hidden). -->
-<!-- ═══════════════════════ DATE BAR ═══════════════════════ -->
-<div class="date-bar">
-  <span class="date-bar-label">REPORT DATE</span>
-  <button class="date-nav-btn" id="btn-prev" title="Previous date" onclick="stepDate(-1)">&#8249;</button>
-  <div class="date-pills" id="date-pills">
-    <!-- Pills injected by JS -->
-  </div>
-  <button class="date-nav-btn" id="btn-next" title="Next date" onclick="stepDate(1)">&#8250;</button>
-  <div class="date-sep"></div>
-  <div class="date-bar-right">
-    <div class="date-input-wrap">
-      <span class="date-input-label">JUMP TO</span>
-      <input type="date" class="date-input" id="date-jump" />
-      <button class="date-go-btn" onclick="jumpToDate()">GO</button>
+<details class="grades-controls-wrap" open>
+  <summary>
+    <div class="gc-row">
+      <span class="gc-title">Report controls</span>
+      <span class="gc-live" id="grades-controls-live" aria-live="polite"></span>
+    </div>
+    <span class="gc-hint">Report date, jump-to, and Slate vs Tickets — collapse for a taller iframe</span>
+  </summary>
+  <div class="grades-controls-inner">
+    <div class="date-bar">
+      <span class="date-bar-label">REPORT DATE</span>
+      <button class="date-nav-btn" id="btn-prev" title="Previous date" onclick="stepDate(-1)">&#8249;</button>
+      <div class="date-pills" id="date-pills">
+        <!-- Pills injected by JS -->
+      </div>
+      <button class="date-nav-btn" id="btn-next" title="Next date" onclick="stepDate(1)">&#8250;</button>
+      <div class="date-sep"></div>
+      <div class="date-bar-right">
+        <div class="date-input-wrap">
+          <span class="date-input-label">JUMP TO</span>
+          <input type="date" class="date-input" id="date-jump" />
+          <button class="date-go-btn" onclick="jumpToDate()">GO</button>
+        </div>
+      </div>
+    </div>
+    <div class="tabs-bar">
+      <button class="tab-btn active" id="tab-slate" onclick="switchTab('slate')">
+        <span class="tab-icon">📋</span>SLATE EVALUATION
+      </button>
+      <button class="tab-btn" id="tab-tickets" onclick="switchTab('tickets')">
+        <span class="tab-icon">🎟</span>TICKET EVALUATION
+      </button>
     </div>
   </div>
-</div>
-
-<!-- ═══════════════════════ TABS ═══════════════════════ -->
-<div class="tabs-bar">
-  <button class="tab-btn active" id="tab-slate" onclick="switchTab('slate')">
-    <span class="tab-icon">📋</span>SLATE EVALUATION
-  </button>
-  <button class="tab-btn" id="tab-tickets" onclick="switchTab('tickets')">
-    <span class="tab-icon">🎟</span>TICKET EVALUATION
-  </button>
-</div>
+</details>
 
 <div class="grades-body">
 <details class="grades-hero-wrap">
@@ -843,6 +884,13 @@ const TICKET_EVAL_URL_TEMPLATE = '/grades/ticket_eval_{date}.html';
 
 // ─── TAB SWITCHING ────────────────────────────────────────────────────────────
 let activeTab = 'slate';
+function refreshControlsSummary() {
+  const el = document.getElementById('grades-controls-live');
+  if (!el) return;
+  const ds = currentDateStr || document.getElementById('date-jump')?.value || '';
+  const tab = activeTab === 'tickets' ? 'Tickets' : 'Slate';
+  el.textContent = ds ? `${ds} · ${tab}` : tab;
+}
 function switchTab(tab) {
   activeTab = tab;
   document.getElementById('tab-slate').classList.toggle('active', tab === 'slate');
@@ -859,6 +907,7 @@ function switchTab(tab) {
   } else {
     document.getElementById('empty-state').style.display = slateReportMissing ? 'flex' : 'none';
   }
+  refreshControlsSummary();
 }
 
 async function probeTicketEval(dateStr) {
@@ -1038,6 +1087,7 @@ function loadDate(dateStr){
   if (activeTab === 'tickets') {
     loadTicketEval(dateStr);
   }
+  refreshControlsSummary();
 }
 
 // ─── DATE NAV ─────────────────────────────────────────────────────────────────
@@ -1127,7 +1177,7 @@ if (hamG && mobG) {
     '.ticket', '.card', '.group', '.edge-card',
     '.scard', '.qcard', '.hero-stat', '.streak-card',
     '.result-item', '.pp-cell', '.stat-mini', '.leg-card',
-    '.grades-stat', '.grades-hero', '.gmeta-card', '.date-bar', '.tabs-bar'
+    '.grades-stat', '.grades-hero', '.gmeta-card', '.date-bar', '.tabs-bar', '.grades-controls-wrap'
   ];
   function attachGlow(el) {
     if (el.dataset.glowBound === '1') return;
@@ -1173,7 +1223,7 @@ if (hamG && mobG) {
   const CA_SELS = [
     '.ticket', '.card', '.group', '.hero',
     '.edge-card', '.qcard', '.grades-hero',
-    '.hero-stat', '.result-item', '.gmeta-card', '.date-bar', '.tabs-bar'
+    '.hero-stat', '.result-item', '.gmeta-card', '.date-bar', '.tabs-bar', '.grades-controls-wrap'
   ];
   function initCA() {
     CA_SELS.forEach(sel =>
