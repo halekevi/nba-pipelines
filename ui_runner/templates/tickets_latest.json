@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-26 22:02:34 UTC",
+  "generated_at": "2026-03-26 22:11:21 UTC",
   "date": "2026-03-26",
   "filters": {
     "tiers": "A,B,C,D",
@@ -28,6 +28,7 @@
           "base_power_payout": 3.0,
           "payout_multiplier": 0.73,
           "ev_power": 1.1529,
+          "kelly_units": 0.03,
           "legs": [
             {
               "sport": "NBA",
@@ -133,6 +134,7 @@
           "base_power_payout": 6.0,
           "payout_multiplier": 0.4017,
           "ev_power": 1.001,
+          "kelly_units": 0.0,
           "legs": [
             {
               "sport": "NBA",
@@ -280,6 +282,7 @@
           "base_power_payout": 3.0,
           "payout_multiplier": 0.1833,
           "ev_power": 0.1843,
+          "kelly_units": 0.0,
           "legs": [
             {
               "sport": "CBB",
@@ -385,6 +388,7 @@
           "base_power_payout": 6.0,
           "payout_multiplier": 0.1183,
           "ev_power": 0.1355,
+          "kelly_units": 0.0,
           "legs": [
             {
               "sport": "CBB",
@@ -532,6 +536,7 @@
           "base_power_payout": 3.0,
           "payout_multiplier": 1.0,
           "ev_power": 2.1675,
+          "kelly_units": 0.15,
           "legs": [
             {
               "sport": "NBA1Q",
@@ -637,6 +642,7 @@
           "base_power_payout": 6.0,
           "payout_multiplier": 1.0,
           "ev_power": 3.6847,
+          "kelly_units": 0.13,
           "legs": [
             {
               "sport": "NBA1Q",
@@ -784,6 +790,7 @@
           "base_power_payout": 3.0,
           "payout_multiplier": 1.0,
           "ev_power": 2.1675,
+          "kelly_units": 0.15,
           "legs": [
             {
               "sport": "NBA1H",
