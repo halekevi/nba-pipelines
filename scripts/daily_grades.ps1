@@ -12,9 +12,10 @@ param(
     [string]$Date = ""
 )
 
-$ROOT     = "C:\Users\halek\OneDrive\Desktop\Vision Board\PropOracle\PropOracle"
-$GRADING  = "$ROOT\scripts\grading"
-$TEMPLATES = "$ROOT\ui_runner\templates"
+# Resolve repo root from this script location so path changes don't break runs.
+$ROOT = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+$GRADING = Join-Path $ROOT "scripts\grading"
+$TEMPLATES = Join-Path $ROOT "ui_runner\templates"
 
 if ($Date -eq "") {
     $Date = (Get-Date).AddDays(-1).ToString("yyyy-MM-dd")
@@ -27,13 +28,12 @@ Write-Host "============================================" -ForegroundColor Cyan
 
 # ── Step 1: Build HTML ────────────────────────────────────────
 Write-Host "`n[1/2] Building HTML ..." -ForegroundColor Yellow
-Set-Location $GRADING
-
-py -3 build_grades_html.py --date $Date --out $TEMPLATES
+Set-Location $ROOT
+py -3.14 "$GRADING\build_grades_html.py" --date $Date --out $TEMPLATES
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "`n  ERROR: HTML build failed. Check that graded files exist in:" -ForegroundColor Red
-    Write-Host "  $ROOT\outputs\$Date\" -ForegroundColor Red
+    Write-Host "  $(Join-Path $ROOT "outputs\$Date\")" -ForegroundColor Red
     exit 1
 }
 
