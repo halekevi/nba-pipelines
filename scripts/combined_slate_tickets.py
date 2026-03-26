@@ -2853,6 +2853,17 @@ def build_single_structure_ticket(
     if is_power:
         df = df[~prop_norm.isin(TIER3_PROPS)].copy()
 
+    # Keep generator aligned with ticket_eval render filters so tickets do not
+    # collapse into partials during HTML rendering.
+    if "direction" in df.columns and "line" in df.columns and "prop_type" in df.columns:
+        ddir = df["direction"].astype(str).str.strip().str.upper()
+        dprop = df["prop_type"].apply(_norm_prop_label)
+        dline = pd.to_numeric(df["line"], errors="coerce")
+        line_ok = pd.Series([True] * len(df), index=df.index)
+        line_ok &= ~((dprop == "points") & (ddir == "OVER") & (dline < 8.0))
+        line_ok &= ~((dprop == "rebounds") & (ddir == "OVER") & (dline < 2.5))
+        df = df[line_ok].copy()
+
     dts = _def_tier_value(df)
     pre_def = len(df)
     df = df[dts.isin(allowed_def)].copy()

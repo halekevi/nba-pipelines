@@ -1371,10 +1371,23 @@ def _filter_payload_groups(payload: dict[str, Any]) -> dict[str, Any]:
         gname = str(g.get("group_name") or "Group")
         if not _group_is_allowed(gname):
             continue
+        gl = gname.strip().lower()
+        min_legs = 0
+        if "power play 2-leg" in gl:
+            min_legs = 2
+        elif "flex 3-leg" in gl:
+            min_legs = 3
         filtered_tickets: list[dict[str, Any]] = []
         for t in g.get("tickets") or []:
             legs = [leg for leg in (t.get("legs") or []) if _leg_allowed_for_render(gname, leg)]
             if not legs:
+                continue
+            if min_legs and len(legs) < min_legs:
+                print(
+                    f"[WARN] Dropping partial ticket in {gname}: "
+                    f"{len(legs)} legs < required {min_legs}",
+                    flush=True,
+                )
                 continue
             t2 = dict(t)
             t2["legs"] = legs
