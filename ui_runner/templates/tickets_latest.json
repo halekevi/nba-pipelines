@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-26 22:26:19 UTC",
+  "generated_at": "2026-03-26 22:56:44 UTC",
   "date": "2026-03-26",
   "filters": {
     "tiers": "A,B,C,D",
@@ -29,6 +29,7 @@
           "payout_multiplier": 0.73,
           "ev_power": 1.1529,
           "kelly_units": 0.03,
+          "has_data_warning": false,
           "legs": [
             {
               "sport": "NBA",
@@ -67,6 +68,7 @@
               "def_tier": "Weak",
               "pace_tier": "",
               "context_score": null,
+              "data_warning": null,
               "leg_prob_used": 0.789,
               "leg_prob_source": "ml_prob",
               "image_url": null,
@@ -109,6 +111,7 @@
               "def_tier": "Weak",
               "pace_tier": "",
               "context_score": null,
+              "data_warning": null,
               "leg_prob_used": 0.7098,
               "leg_prob_source": "ml_prob",
               "image_url": null,
@@ -135,6 +138,7 @@
           "payout_multiplier": 0.4017,
           "ev_power": 1.001,
           "kelly_units": 0.0,
+          "has_data_warning": false,
           "legs": [
             {
               "sport": "NBA",
@@ -173,6 +177,7 @@
               "def_tier": "Weak",
               "pace_tier": "",
               "context_score": null,
+              "data_warning": null,
               "leg_prob_used": 0.789,
               "leg_prob_source": "ml_prob",
               "image_url": null,
@@ -215,6 +220,7 @@
               "def_tier": "Above Avg",
               "pace_tier": "",
               "context_score": null,
+              "data_warning": null,
               "leg_prob_used": 0.789,
               "leg_prob_source": "ml_prob",
               "image_url": null,
@@ -257,6 +263,7 @@
               "def_tier": "Weak",
               "pace_tier": "",
               "context_score": null,
+              "data_warning": null,
               "leg_prob_used": 0.7098,
               "leg_prob_source": "ml_prob",
               "image_url": null,
@@ -283,6 +290,7 @@
           "payout_multiplier": 0.1833,
           "ev_power": 0.1843,
           "kelly_units": 0.0,
+          "has_data_warning": false,
           "legs": [
             {
               "sport": "CBB",
@@ -321,6 +329,7 @@
               "def_tier": "weak",
               "pace_tier": "",
               "context_score": null,
+              "data_warning": null,
               "leg_prob_used": 0.6060606241226196,
               "leg_prob_source": "ml_prob",
               "image_url": "https://a.espncdn.com/i/headshots/mens-college-basketball/players/full/279710.png",
@@ -363,6 +372,7 @@
               "def_tier": "weak",
               "pace_tier": "",
               "context_score": null,
+              "data_warning": null,
               "leg_prob_used": 0.5880681872367859,
               "leg_prob_source": "ml_prob",
               "image_url": "https://a.espncdn.com/i/headshots/mens-college-basketball/players/full/287004.png",
@@ -389,6 +399,7 @@
           "payout_multiplier": 0.1183,
           "ev_power": 0.1355,
           "kelly_units": 0.0,
+          "has_data_warning": false,
           "legs": [
             {
               "sport": "CBB",
@@ -427,6 +438,7 @@
               "def_tier": "weak",
               "pace_tier": "",
               "context_score": null,
+              "data_warning": null,
               "leg_prob_used": 0.6060606241226196,
               "leg_prob_source": "ml_prob",
               "image_url": "https://a.espncdn.com/i/headshots/mens-college-basketball/players/full/279710.png",
@@ -469,6 +481,7 @@
               "def_tier": "weak",
               "pace_tier": "",
               "context_score": null,
+              "data_warning": null,
               "leg_prob_used": 0.5880681872367859,
               "leg_prob_source": "ml_prob",
               "image_url": "https://a.espncdn.com/i/headshots/mens-college-basketball/players/full/287004.png",
@@ -511,6 +524,7 @@
               "def_tier": "weak",
               "pace_tier": "",
               "context_score": null,
+              "data_warning": null,
               "leg_prob_used": 0.6060606241226196,
               "leg_prob_source": "ml_prob",
               "image_url": "https://a.espncdn.com/i/headshots/mens-college-basketball/players/full/287583.png",
@@ -537,6 +551,7 @@
           "payout_multiplier": 1.0,
           "ev_power": 2.1675,
           "kelly_units": 0.15,
+          "has_data_warning": true,
           "legs": [
             {
               "sport": "NBA1Q",
@@ -575,6 +590,7 @@
               "def_tier": "Avg",
               "pace_tier": "",
               "context_score": null,
+              "data_warning": "LIMITED_Q1_HISTORY",
               "leg_prob_used": 0.85,
               "leg_prob_source": "ml_prob",
               "image_url": null,
@@ -617,6 +633,7 @@
               "def_tier": "Weak",
               "pace_tier": "",
               "context_score": null,
+              "data_warning": "LIMITED_Q1_HISTORY",
               "leg_prob_used": 0.85,
               "leg_prob_source": "ml_prob",
               "image_url": null,
@@ -643,6 +660,7 @@
           "payout_multiplier": 1.0,
           "ev_power": 3.6847,
           "kelly_units": 0.13,
+          "has_data_warning": true,
           "legs": [
             {
               "sport": "NBA1Q",
@@ -681,6 +699,7 @@
               "def_tier": "Avg",
               "pace_tier": "",
               "context_score": null,
+              "data_warning": "LIMITED_Q1_HISTORY",
               "leg_prob_used": 0.85,
               "leg_prob_source": "ml_prob",
               "image_url": null,
@@ -723,6 +742,7 @@
               "def_tier": "Weak",
               "pace_tier": "",
               "context_score": null,
+              "data_warning": "LIMITED_Q1_HISTORY",
               "leg_prob_used": 0.85,
               "leg_prob_source": "ml_prob",
               "image_url": null,
@@ -765,6 +785,7 @@
               "def_tier": "Above Avg",
               "pace_tier": "",
               "context_score": null,
+              "data_warning": "LIMITED_Q1_HISTORY",
               "leg_prob_used": 0.85,
               "leg_prob_source": "ml_prob",
               "image_url": null,
@@ -791,6 +812,7 @@
           "payout_multiplier": 1.0,
           "ev_power": 2.1675,
           "kelly_units": 0.15,
+          "has_data_warning": false,
           "legs": [
             {
               "sport": "NBA1H",
@@ -829,6 +851,7 @@
               "def_tier": "Weak",
               "pace_tier": "",
               "context_score": null,
+              "data_warning": null,
               "leg_prob_used": 0.85,
               "leg_prob_source": "ml_prob",
               "image_url": null,
@@ -871,6 +894,7 @@
               "def_tier": "Weak",
               "pace_tier": "",
               "context_score": null,
+              "data_warning": null,
               "leg_prob_used": 0.85,
               "leg_prob_source": "ml_prob",
               "image_url": null,
