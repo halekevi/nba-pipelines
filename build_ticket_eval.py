@@ -1338,7 +1338,7 @@ def _load_tickets(path: Path, arg_date: str) -> dict[str, Any]:
 
 def _group_is_allowed(group_name: str) -> bool:
     n = str(group_name or "").strip()
-    m = re.match(r"^([A-Za-z0-9]+)\s+(Power Play 2-Leg|Flex 3-Leg)$", n)
+    m = re.match(r"^([A-Za-z0-9]+)\s+(Power Play 2-Leg|Flex 3-Leg|Standard 2-Leg)$", n)
     if not m:
         return False
     sport = m.group(1).strip().upper()
@@ -1381,6 +1381,8 @@ def _filter_payload_groups(payload: dict[str, Any], debug: bool = False) -> dict
             min_legs = 2
         elif "flex 3-leg" in gl:
             min_legs = 3
+        elif "standard 2-leg" in gl:
+            min_legs = 2
         filtered_tickets: list[dict[str, Any]] = []
         for t in g.get("tickets") or []:
             legs: list[dict[str, Any]] = []

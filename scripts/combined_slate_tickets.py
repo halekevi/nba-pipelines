@@ -2831,14 +2831,22 @@ def build_single_structure_ticket(
         return None
 
     is_power = structure == "power"
-    n_legs = 2 if is_power else 3
-    allowed_tiers = {"A", "B"} if is_power else {"A", "B", "C"}
-    allowed_def = POWER_PLAY_DEF_ALLOWED if is_power else FLEX_DEF_ALLOWED
-    q = 0.70 if is_power else 0.50  # top 30% / top 50%
+    is_flex = structure == "flex"
+    is_standard = structure == "standard"
+    if not (is_power or is_flex or is_standard):
+        return None
+
+    n_legs = 2 if (is_power or is_standard) else 3
+    allowed_tiers = {"A", "B"} if (is_power or is_standard) else {"A", "B", "C"}
+    allowed_def = POWER_PLAY_DEF_ALLOWED if (is_power or is_standard) else FLEX_DEF_ALLOWED
+    q = 0.70 if (is_power or is_standard) else 0.50  # top 30% / top 50%
 
     df = pool_df.copy()
     if "pick_type" in df.columns:
-        df = df[df["pick_type"].astype(str).str.strip().str.lower() == "goblin"]
+        if is_standard:
+            df = df[df["pick_type"].astype(str).str.strip().str.lower() == "standard"]
+        else:
+            df = df[df["pick_type"].astype(str).str.strip().str.lower() == "goblin"]
     if "tier" in df.columns:
         df = df[df["tier"].astype(str).str.upper().isin(allowed_tiers)]
 
@@ -2850,8 +2858,12 @@ def build_single_structure_ticket(
         counters["ban_list_filtered_count"] += int((excl_mask & ~fantasy_mask).sum())
     df = df[~excl_mask].copy()
 
-    if is_power:
-        df = df[~prop_norm.isin(TIER3_PROPS)].copy()
+    if is_power or is_standard:
+        df_prop_norm = df["prop_type"].apply(_norm_prop_label) if "prop_type" in df.columns else pd.Series([""] * len(df))
+        df = df[~df_prop_norm.isin(TIER3_PROPS)].copy()
+        # Explicitly block steals from Power Play and Standard 2-leg tickets.
+        df_prop_norm = df["prop_type"].apply(_norm_prop_label) if "prop_type" in df.columns else pd.Series([""] * len(df))
+        df = df[~df_prop_norm.eq("steals")].copy()
 
     # Keep generator aligned with ticket_eval render filters so tickets do not
     # collapse into partials during HTML rendering.
@@ -2884,7 +2896,10 @@ def build_single_structure_ticket(
     over_df = df[dirs == "OVER"].copy()
     under_df = df[dirs == "UNDER"].copy()
 
-    if is_power:
+    if is_standard:
+        # Standard: OVER only.
+        cand = over_df.copy()
+    elif is_power:
         # Power: OVER only unless not enough OVER legs.
         cand = over_df if len(over_df) >= n_legs else pd.concat([over_df, under_df], ignore_index=True)
     else:
@@ -2903,7 +2918,10 @@ def build_single_structure_ticket(
     cand = cand.copy()
     cand["__over_pref"] = cand.get("direction", "").astype(str).str.upper().eq("OVER").astype(int)
     cand["__score"] = pd.to_numeric(cand.get("rank_score", 0), errors="coerce").fillna(0.0) + cand["prop_type"].apply(_prop_priority_bonus)
-    cand = cand.sort_values(["__over_pref", "__score"], ascending=[False, False], na_position="last")
+    if is_standard:
+        cand = cand.sort_values(["__over_pref", "rank_score"], ascending=[False, False], na_position="last")
+    else:
+        cand = cand.sort_values(["__over_pref", "__score"], ascending=[False, False], na_position="last")
 
     # pick top unique-player legs
     chosen = []
@@ -2954,7 +2972,7 @@ def build_single_structure_ticket(
         "ev_power": round(ep * adj_power, 4),
         "n_legs": n_legs,
         "expected_win_rate": expected_win_rate,
-        "ticket_type": "Power Play" if is_power else "Flex",
+        "ticket_type": "Standard" if is_standard else ("Power Play" if is_power else "Flex"),
         "sport": sport_label,
     }
 
@@ -4523,8 +4541,9 @@ def main():
 
         p_ticket = build_single_structure_ticket(sport_df, sport_label, "power", counters=counters)
         f_ticket = build_single_structure_ticket(sport_df, sport_label, "flex", counters=counters)
+        s_ticket = build_single_structure_ticket(sport_df, sport_label, "standard", counters=counters)
 
-        if p_ticket is None and f_ticket is None:
+        if p_ticket is None and f_ticket is None and s_ticket is None:
             print(f"  WARNING: {sport_label} skipped (<2 eligible legs after strict filters).")
             return
 
@@ -4551,6 +4570,18 @@ def main():
         else:
             print(f"  WARNING: {sport_label} Flex 3-Leg unavailable (strict filters).")
             generated_tickets.setdefault(sport_label, {})["flex"] = None
+
+        if s_ticket is not None:
+            sname = f"{prefix} Standard 2-Leg"[:31]
+            write_ticket_sheet(wb, [s_ticket], sname, bg_hdr, label=f"{sport_label} Standard")
+            all_ticket_groups.append((sname, [s_ticket], None))
+            print(f"  {sname}: 1 ticket")
+            generated_tickets.setdefault(sport_label, {})["standard"] = {
+                "legs": [str(x.get("prop_type", "")) for x in s_ticket.get("rows", [])]
+            }
+        else:
+            print(f"  WARNING: {sport_label} Standard 2-Leg unavailable (strict filters).")
+            generated_tickets.setdefault(sport_label, {})["standard"] = None
 
     add_structured_sport_tickets(pool(nba), "NBA", C["hdr_nba"], "NBA")
     add_structured_sport_tickets(pool(cbb), "CBB", C["hdr_cbb"], "CBB")
@@ -4671,9 +4702,11 @@ def main():
     for sport, tickets in generated_tickets.items():
         pp = tickets.get("power_play")
         fl = tickets.get("flex")
+        st = tickets.get("standard")
         pp_legs = " + ".join(pp["legs"]) if pp else "SKIPPED"
         fl_legs = " + ".join(fl["legs"]) if fl else "SKIPPED"
-        print(f"[TICKETS] {sport}: Power Play ({pp_legs}) | Flex ({fl_legs})")
+        st_legs = " + ".join(st["legs"]) if st else "SKIPPED"
+        print(f"[TICKETS] {sport}: Power Play ({pp_legs}) | Flex ({fl_legs}) | Standard ({st_legs})")
 
     print(f"[TICKETS] Fantasy Score excluded : {int(counters['fantasy_excluded_count'])} props removed")
     print(f"[TICKETS] Def tier filtered      : {int(counters['def_tier_filtered_count'])} props removed")
