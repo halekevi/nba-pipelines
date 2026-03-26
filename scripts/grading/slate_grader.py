@@ -14,6 +14,7 @@ from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 import argparse
 import os
+import re
 from datetime import datetime
 
 def _def_rank_bucket(x):
@@ -207,6 +208,15 @@ def norm_prop_key(p) -> str:
     s = " ".join(s.split())
     return PROP_NORM_MAP.get(s, s)
 
+
+def norm_player_key(p) -> str:
+    s = str(p).lower().strip().replace(".", " ")
+    s = re.sub(r"\s+", " ", s)
+    parts = [x for x in s.split(" ") if x]
+    suffixes = {"jr", "sr", "ii", "iii", "iv", "v"}
+    parts = [x for x in parts if x not in suffixes]
+    return " ".join(parts)
+
 def _alias_cols(df):
     for alias,canon in [('DEF_TIER','def_tier'),('minutes_tier','minutes_tier'),
                          ('shot_role','shot_role'),('usage_role','usage_role')]:
@@ -318,7 +328,7 @@ def load_cbb(path: str) -> pd.DataFrame:
         df["tier"] = ""
 
     # Standardized key used to join actuals
-    df["player_key"] = df["player"].astype(str).str.lower().str.strip() + "|" + df["prop_type_norm"].apply(norm_prop_key)
+    df["player_key"] = df["player"].astype(str).apply(norm_player_key) + "|" + df["prop_type_norm"].apply(norm_prop_key)
     return df
 
 def _split_combo_players(player_str: str) -> list[str]:
@@ -334,7 +344,7 @@ def _split_combo_players(player_str: str) -> list[str]:
 def apply_actuals(df, actuals_path):
     act = pd.read_csv(actuals_path)
     act["player_key"] = (
-        act["player"].astype(str).str.lower().str.strip()
+        act["player"].astype(str).apply(norm_player_key)
         + "|"
         + act["prop_type"].fillna("").astype(str).apply(norm_prop_key)
     )
@@ -344,7 +354,7 @@ def apply_actuals(df, actuals_path):
     }
 
     df["player_key"] = (
-        df["player"].astype(str).str.lower().str.strip()
+        df["player"].astype(str).apply(norm_player_key)
         + "|"
         + df["prop_type_norm"].fillna("").astype(str).apply(norm_prop_key)
     )
@@ -383,7 +393,7 @@ def apply_actuals(df, actuals_path):
                 vals = []
                 ok = True
                 for p in parts:
-                    k2 = p.lower().strip() + "|" + base_prop
+                    k2 = norm_player_key(p) + "|" + base_prop
                     v = act_map.get(k2, np.nan)
                     if pd.isna(v):
                         ok = False
