@@ -1346,6 +1346,10 @@ def _group_is_allowed(group_name: str) -> bool:
 
 
 def _leg_allowed_for_render(group_name: str, leg: dict[str, Any]) -> bool:
+    return _leg_drop_reason(group_name, leg) is None
+
+
+def _leg_drop_reason(group_name: str, leg: dict[str, Any]) -> str | None:
     prop = str(leg.get("prop_type") or "").strip().lower()
     direction = str(leg.get("direction") or "").strip().upper()
     line = leg.get("line")
@@ -1357,15 +1361,15 @@ def _leg_allowed_for_render(group_name: str, leg: dict[str, Any]) -> bool:
     is_power = "power play 2-leg" in str(group_name or "").strip().lower()
 
     if prop == "rebounds" and direction == "OVER" and (line_f is None or line_f < 2.5):
-        return False
+        return "rebounds_over_min_line"
     if prop == "points" and direction == "OVER" and (line_f is None or line_f < 8.0):
-        return False
+        return "points_over_min_line"
     if prop == "steals" and is_power:
-        return False
-    return True
+        return "steals_not_allowed_in_power_play"
+    return None
 
 
-def _filter_payload_groups(payload: dict[str, Any]) -> dict[str, Any]:
+def _filter_payload_groups(payload: dict[str, Any], debug: bool = False) -> dict[str, Any]:
     out_groups: list[dict[str, Any]] = []
     for g in payload.get("groups") or []:
         gname = str(g.get("group_name") or "Group")
@@ -1379,7 +1383,19 @@ def _filter_payload_groups(payload: dict[str, Any]) -> dict[str, Any]:
             min_legs = 3
         filtered_tickets: list[dict[str, Any]] = []
         for t in g.get("tickets") or []:
-            legs = [leg for leg in (t.get("legs") or []) if _leg_allowed_for_render(gname, leg)]
+            legs: list[dict[str, Any]] = []
+            for leg in (t.get("legs") or []):
+                reason = _leg_drop_reason(gname, leg)
+                if reason is not None:
+                    if debug:
+                        print(
+                            f"[DEBUG] Drop leg in {gname}: "
+                            f"{leg.get('player')} | {leg.get('prop_type')} {leg.get('line')} "
+                            f"{leg.get('direction')} | reason={reason}",
+                            flush=True,
+                        )
+                    continue
+                legs.append(leg)
             if not legs:
                 continue
             if min_legs and len(legs) < min_legs:
@@ -1808,7 +1824,7 @@ def main() -> int:
 
     try:
         payload = _load_tickets(tpath, arg_date)
-        payload = _filter_payload_groups(payload)
+        payload = _filter_payload_groups(payload, debug=bool(args.debug))
     except Exception as e:
         print(f"ERROR: Failed to read ticket file: {e}")
         return 1
