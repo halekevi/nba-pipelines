@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Build NBA period-specific actuals from ESPN play-by-play.
+Build NBA period-specific actuals, preferring NBA.com official stats.
 
 Outputs use the same schema as fetch_actuals.py:
   player, team, prop_type, actual (+ raw stat columns)
@@ -13,7 +13,6 @@ Examples:
 from __future__ import annotations
 
 import argparse
-import re
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -28,10 +27,113 @@ from fetch_actuals import (
 )
 
 CORE_PBP_URL = "https://cdn.espn.com/core/nba/playbyplay?gameId={event_id}&xhr=1"
+NBA_SCOREBOARD_URL = "https://stats.nba.com/stats/scoreboardv2"
+NBA_BOXSCORE_URL = "https://stats.nba.com/stats/boxscoretraditionalv2"
 
 
 def _default_date_str() -> str:
     return (date.today() - timedelta(days=1)).isoformat()
+
+
+def _nba_headers() -> dict[str, str]:
+    return {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+        ),
+        "Accept": "application/json, text/plain, */*",
+        "Referer": "https://www.nba.com/",
+        "Origin": "https://www.nba.com",
+        "x-nba-stats-origin": "stats",
+        "x-nba-stats-token": "true",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Connection": "keep-alive",
+    }
+
+
+def _req_json(url: str, params: dict, headers: dict[str, str], timeout: int = 30, retries: int = 2) -> dict:
+    last_err: Exception | None = None
+    for _ in range(retries + 1):
+        try:
+            r = requests.get(url, params=params, headers=headers, timeout=timeout)
+            r.raise_for_status()
+            return r.json() or {}
+        except Exception as e:
+            last_err = e
+    if last_err:
+        raise last_err
+    return {}
+
+
+def _nba_game_ids_for_date(date_str: str) -> list[str]:
+    mm, dd, yyyy = date_str.split("-")[1], date_str.split("-")[2], date_str.split("-")[0]
+    params = {"DayOffset": 0, "GameDate": f"{mm}/{dd}/{yyyy}", "LeagueID": "00"}
+    payload = _req_json(NBA_SCOREBOARD_URL, params=params, headers=_nba_headers(), timeout=35, retries=2)
+    result_sets = payload.get("resultSets") or []
+    for rs in result_sets:
+        if str(rs.get("name")) == "GameHeader":
+            headers = rs.get("headers") or []
+            rows = rs.get("rowSet") or []
+            try:
+                i_gid = headers.index("GAME_ID")
+            except ValueError:
+                return []
+            out = []
+            for row in rows:
+                gid = str(row[i_gid]).strip()
+                if gid:
+                    out.append(gid)
+            return sorted(set(out))
+    return []
+
+
+def _nba_boxscore_period_rows(game_id: str, start_period: int, end_period: int) -> list[dict]:
+    params = {
+        "GameID": game_id,
+        "StartPeriod": start_period,
+        "EndPeriod": end_period,
+        "StartRange": 0,
+        "EndRange": 0,
+        "RangeType": 0,
+    }
+    payload = _req_json(NBA_BOXSCORE_URL, params=params, headers=_nba_headers(), timeout=45, retries=1)
+    result_sets = payload.get("resultSets") or []
+    player_rs = next((x for x in result_sets if str(x.get("name")) == "PlayerStats"), None)
+    if not player_rs:
+        return []
+
+    headers = player_rs.get("headers") or []
+    rows = player_rs.get("rowSet") or []
+    if not headers or not rows:
+        return []
+
+    idx = {h: i for i, h in enumerate(headers)}
+    out: list[dict] = []
+    for row in rows:
+        player_name = str(row[idx.get("PLAYER_NAME", -1)]).strip() if "PLAYER_NAME" in idx else ""
+        team_raw = str(row[idx.get("TEAM_ABBREVIATION", -1)]).strip().upper() if "TEAM_ABBREVIATION" in idx else ""
+        if not player_name or not team_raw:
+            continue
+        team_abbr = ESPN_TO_SLATE_ABBREV.get(team_raw, team_raw)
+        stat_map = {
+            "PTS": float(row[idx["PTS"]]) if "PTS" in idx and str(row[idx["PTS"]]).strip() else 0.0,
+            "REB": float(row[idx["REB"]]) if "REB" in idx and str(row[idx["REB"]]).strip() else 0.0,
+            "AST": float(row[idx["AST"]]) if "AST" in idx and str(row[idx["AST"]]).strip() else 0.0,
+            "BLK": float(row[idx["BLK"]]) if "BLK" in idx and str(row[idx["BLK"]]).strip() else 0.0,
+            "STL": float(row[idx["STL"]]) if "STL" in idx and str(row[idx["STL"]]).strip() else 0.0,
+            "TO": float(row[idx["TO"]]) if "TO" in idx and str(row[idx["TO"]]).strip() else 0.0,
+            "FGM": float(row[idx["FGM"]]) if "FGM" in idx and str(row[idx["FGM"]]).strip() else 0.0,
+            "FGA": float(row[idx["FGA"]]) if "FGA" in idx and str(row[idx["FGA"]]).strip() else 0.0,
+            "3PM": float(row[idx["FG3M"]]) if "FG3M" in idx and str(row[idx["FG3M"]]).strip() else 0.0,
+            "3PA": float(row[idx["FG3A"]]) if "FG3A" in idx and str(row[idx["FG3A"]]).strip() else 0.0,
+            "FTM": float(row[idx["FTM"]]) if "FTM" in idx and str(row[idx["FTM"]]).strip() else 0.0,
+            "FTA": float(row[idx["FTA"]]) if "FTA" in idx and str(row[idx["FTA"]]).strip() else 0.0,
+            "OREB": float(row[idx["OREB"]]) if "OREB" in idx and str(row[idx["OREB"]]).strip() else 0.0,
+            "DREB": float(row[idx["DREB"]]) if "DREB" in idx and str(row[idx["DREB"]]).strip() else 0.0,
+            "MIN": float(row[idx["MIN"]]) if "MIN" in idx and str(row[idx["MIN"]]).strip() else 0.0,
+        }
+        out.extend(parse_stats(player_name, team_abbr, stat_map))
+    return out
 
 
 def _add_stat(stats_by_player: dict[str, dict[str, float]], aid: str, key: str, val: float = 1.0) -> None:
@@ -158,23 +260,30 @@ def main() -> None:
     ap.add_argument("--output", required=True, help="Output CSV path")
     args = ap.parse_args()
 
-    max_period = 1 if args.segment == "1Q" else 2
-    # fetch_events_for_date prefixes "basketball/" internally for hoops sports.
-    events = fetch_events_for_date("nba", args.date, is_cbb=False)
-    if not events:
-        outp = Path(args.output)
-        outp.parent.mkdir(parents=True, exist_ok=True)
-        pd.DataFrame(columns=["player", "team", "prop_type", "actual"]).to_csv(outp, index=False)
-        print(f"No NBA events found for {args.date} - wrote stub -> {outp}")
-        return
-
     all_rows: list[dict] = []
-    event_ids = sorted({str((e or {}).get("id", "")).strip() for e in events if (e or {}).get("id")})
-    for eid in event_ids:
+    start_period, end_period = (1, 1) if args.segment == "1Q" else (1, 2)
+    nba_ids: list[str] = []
+    try:
+        nba_ids = _nba_game_ids_for_date(args.date)
+    except Exception as e:
+        print(f"WARNING: NBA.com scoreboard fetch failed; will try ESPN fallback: {e}")
+
+    for gid in nba_ids:
         try:
-            all_rows.extend(_parse_game_period_stats(eid, max_period=max_period))
+            all_rows.extend(_nba_boxscore_period_rows(gid, start_period=start_period, end_period=end_period))
         except Exception as e:
-            print(f"WARNING: failed period parse for event {eid}: {e}")
+            print(f"WARNING: NBA.com boxscore parse failed for game {gid}: {e}")
+
+    # Fallback to ESPN play-by-play if NBA.com could not provide rows.
+    if not all_rows:
+        max_period = end_period
+        events = fetch_events_for_date("nba", args.date, is_cbb=False)
+        event_ids = sorted({str((e or {}).get("id", "")).strip() for e in events if (e or {}).get("id")})
+        for eid in event_ids:
+            try:
+                all_rows.extend(_parse_game_period_stats(eid, max_period=max_period))
+            except Exception as e:
+                print(f"WARNING: ESPN period parse failed for event {eid}: {e}")
 
     df = pd.DataFrame(all_rows)
     if df.empty:
