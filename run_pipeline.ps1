@@ -256,7 +256,20 @@ function Run-Combined {
 
     $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --max-tickets 3 --min-hit-rate 0.58 --write-web --web-outdir `"$WebOutDir`""
 
-    $okC = Run-Step "Combined Slate + Tickets" $Root ".\scripts\combined_slate_tickets.py" $CombinedArgs
+    Write-Host "`n[STEP 8] Building tickets..." -ForegroundColor Cyan
+    Push-Location $Root
+    try {
+        $cmd = "py -3.14 .\scripts\combined_slate_tickets.py $CombinedArgs"
+        $ticketOutput = Invoke-Expression "$cmd 2>&1"
+        $ticketOutput | ForEach-Object { Write-Host $_ }
+        $ticketOutput | Where-Object { $_ -match '^\[TICKETS\]' } | ForEach-Object {
+            Write-Host $_ -ForegroundColor Green
+        }
+        $okC = ($LASTEXITCODE -eq 0)
+    } finally {
+        Pop-Location
+    }
+    Write-Host "[STEP 8] Tickets complete." -ForegroundColor Cyan
 
     if ($okC) {
         Copy-Item $CombinedOut (Join-Path $OutDir "combined_slate_tickets_$Date.xlsx") -Force -ErrorAction SilentlyContinue

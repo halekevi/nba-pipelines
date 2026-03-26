@@ -118,14 +118,16 @@ PAYOUT = {
 # Blocked Shots NBA: 41.9% overall, too low for any ticket
 # Combo props: small sample, unreliable
 # NHL OVER props: 21.5% hit rate — never use OVER direction in NHL tickets
-EXCLUDED_PROPS = {"fantasy score", "fantasy_score", "fantasy"}
-
-NEVER_INCLUDE_PROPS = {
+# Fantasy Score is excluded from ticket generation pending data integrity
+# validation. It remains in all grade/ranking outputs so hit rates can be
+# monitored. Remove from this set once validated.
+TICKET_EXCLUDED_PROPS = {
+    "fantasy score", "fantasy_score", "fantasy",
     "fg attempted",
+    "fg made",
     "personal fouls",
     "blks+stls",
     "two pointers attempted",
-    "fg made",
 }
 
 TIER1_PROPS = {"points", "pts+rebs+asts", "pts+rebs", "pts+asts", "rebounds"}
@@ -2798,7 +2800,7 @@ def filter_eligible(df: pd.DataFrame, min_hit_rate=0.55, min_edge=0.0, min_rank=
     mask = pd.Series([True] * len(df), index=df.index)
     if "prop_type" in df.columns:
         prop_norm = df["prop_type"].apply(_norm_prop_label)
-        mask &= ~prop_norm.isin(EXCLUDED_PROPS | NEVER_INCLUDE_PROPS)
+        mask &= ~prop_norm.isin(TICKET_EXCLUDED_PROPS)
     # Always exclude NO_PROJECTION_OR_LINE rows from tickets (no line = can't bet)
     if "void_reason" in df.columns:
         void_str = df["void_reason"].astype(str).str.strip()
@@ -2820,6 +2822,7 @@ def build_single_structure_ticket(
     pool_df: pd.DataFrame,
     sport_label: str,
     structure: str,
+    counters: dict | None = None,
 ) -> dict | None:
     """
     Build exactly one best ticket for a sport+structure.
@@ -2840,13 +2843,21 @@ def build_single_structure_ticket(
         df = df[df["tier"].astype(str).str.upper().isin(allowed_tiers)]
 
     prop_norm = df["prop_type"].apply(_norm_prop_label) if "prop_type" in df.columns else pd.Series([""] * len(df))
-    df = df[~prop_norm.isin(EXCLUDED_PROPS | NEVER_INCLUDE_PROPS)].copy()
+    excl_mask = prop_norm.isin(TICKET_EXCLUDED_PROPS)
+    if counters is not None:
+        fantasy_mask = prop_norm.str.contains("fantasy", na=False)
+        counters["fantasy_excluded_count"] += int((excl_mask & fantasy_mask).sum())
+        counters["ban_list_filtered_count"] += int((excl_mask & ~fantasy_mask).sum())
+    df = df[~excl_mask].copy()
 
     if is_power:
         df = df[~prop_norm.isin(TIER3_PROPS)].copy()
 
     dts = _def_tier_value(df)
+    pre_def = len(df)
     df = df[dts.isin(allowed_def)].copy()
+    if counters is not None:
+        counters["def_tier_filtered_count"] += int(pre_def - len(df))
     if df.empty:
         return None
 
@@ -2875,6 +2886,8 @@ def build_single_structure_ticket(
 
     if cand.empty:
         return None
+    if counters is not None:
+        counters["total_eligible_count"] += int(len(cand))
 
     cand = cand.copy()
     cand["__over_pref"] = cand.get("direction", "").astype(str).str.upper().eq("OVER").astype(int)
@@ -4480,14 +4493,25 @@ def main():
     wb.remove(wb.active)
 
     all_ticket_groups = []
+    fantasy_excluded_count = 0
+    def_tier_filtered_count = 0
+    ban_list_filtered_count = 0
+    total_eligible_count = 0
+    generated_tickets: dict = {}
+    counters = {
+        "fantasy_excluded_count": fantasy_excluded_count,
+        "def_tier_filtered_count": def_tier_filtered_count,
+        "ban_list_filtered_count": ban_list_filtered_count,
+        "total_eligible_count": total_eligible_count,
+    }
 
     def add_structured_sport_tickets(sport_df: pd.DataFrame, sport_label: str, bg_hdr: str, prefix: str):
         if sport_df is None or sport_df.empty:
             print(f"  WARNING: {sport_label} skipped (empty pool).")
             return
 
-        p_ticket = build_single_structure_ticket(sport_df, sport_label, "power")
-        f_ticket = build_single_structure_ticket(sport_df, sport_label, "flex")
+        p_ticket = build_single_structure_ticket(sport_df, sport_label, "power", counters=counters)
+        f_ticket = build_single_structure_ticket(sport_df, sport_label, "flex", counters=counters)
 
         if p_ticket is None and f_ticket is None:
             print(f"  WARNING: {sport_label} skipped (<2 eligible legs after strict filters).")
@@ -4498,16 +4522,24 @@ def main():
             write_ticket_sheet(wb, [p_ticket], sname, bg_hdr, label=f"{sport_label} Power Play")
             all_ticket_groups.append((sname, [p_ticket], None))
             print(f"  {sname}: 1 ticket")
+            generated_tickets.setdefault(sport_label, {})["power_play"] = {
+                "legs": [str(x.get("prop_type", "")) for x in p_ticket.get("rows", [])]
+            }
         else:
             print(f"  WARNING: {sport_label} Power Play 2-Leg unavailable (strict filters).")
+            generated_tickets.setdefault(sport_label, {})["power_play"] = None
 
         if f_ticket is not None:
             sname = f"{prefix} Flex 3-Leg"[:31]
             write_ticket_sheet(wb, [f_ticket], sname, bg_hdr, label=f"{sport_label} Flex")
             all_ticket_groups.append((sname, [f_ticket], None))
             print(f"  {sname}: 1 ticket")
+            generated_tickets.setdefault(sport_label, {})["flex"] = {
+                "legs": [str(x.get("prop_type", "")) for x in f_ticket.get("rows", [])]
+            }
         else:
             print(f"  WARNING: {sport_label} Flex 3-Leg unavailable (strict filters).")
+            generated_tickets.setdefault(sport_label, {})["flex"] = None
 
     add_structured_sport_tickets(pool(nba), "NBA", C["hdr_nba"], "NBA")
     add_structured_sport_tickets(pool(cbb), "CBB", C["hdr_cbb"], "CBB")
@@ -4619,6 +4651,20 @@ def main():
             write_web_outputs(payload, outdir=".")
         # Avoid Windows console codepage issues with unicode checkmarks.
         print("[OK] Web outputs complete.")
+
+    print("\n[TICKETS] -- SUMMARY -----------------------------------------")
+    for sport, tickets in generated_tickets.items():
+        pp = tickets.get("power_play")
+        fl = tickets.get("flex")
+        pp_legs = " + ".join(pp["legs"]) if pp else "SKIPPED"
+        fl_legs = " + ".join(fl["legs"]) if fl else "SKIPPED"
+        print(f"[TICKETS] {sport}: Power Play ({pp_legs}) | Flex ({fl_legs})")
+
+    print(f"[TICKETS] Fantasy Score excluded : {int(counters['fantasy_excluded_count'])} props removed")
+    print(f"[TICKETS] Def tier filtered      : {int(counters['def_tier_filtered_count'])} props removed")
+    print(f"[TICKETS] Prop ban list filtered : {int(counters['ban_list_filtered_count'])} props removed")
+    print(f"[TICKETS] Total eligible props   : {int(counters['total_eligible_count'])} props used")
+    print("[TICKETS] ----------------------------------------------------")
 
 
 if __name__ == "__main__":
