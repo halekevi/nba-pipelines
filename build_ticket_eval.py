@@ -1027,7 +1027,7 @@ def debug_report(
     else:
         for p in gpaths:
             bk = ", ".join(_sport_buckets_for_graded_filename(p)) or "?"
-            print(f"  - {p.relative_to(REPO_ROOT)}  → buckets [{bk}]")
+            print(f"  - {p.relative_to(REPO_ROOT)}  -> buckets [{bk}]")
     total_triples = sum(len(t) for t, _ in indices.values())
     total_pairs = sum(len(p) for _, p in indices.values())
     print(f"\nIndex (all buckets): {total_triples:,} triple-keys, {total_pairs:,} player+prop buckets (sum per sport)")
@@ -1056,7 +1056,7 @@ def debug_report(
         row = _match_leg_to_row_multi(leg, indices)
         st = "MATCH" if row else "NO MATCH -> UNGRADED"
         sp = str(leg.get("sport") or "")
-        bk = " → ".join(_leg_match_buckets(sp))
+        bk = " -> ".join(_leg_match_buckets(sp))
         print(f"  {i}. sport={sp!r} buckets=[{bk}] player={pl!r} prop_type={pt!r} direction={dr!r} -> {st}")
         if row:
             print(
