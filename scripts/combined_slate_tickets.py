@@ -4547,6 +4547,10 @@ def main():
         add_structured_sport_tickets(pool(nhl), "NHL", C["hdr_nhl"], "NHL")
     if soccer is not None and len(soccer) > 0:
         add_structured_sport_tickets(pool(soccer), "Soccer", C["hdr_soccer"], "Soccer")
+    if nba1q is not None and len(nba1q) > 0:
+        add_structured_sport_tickets(pool(nba1q), "NBA1Q", C["hdr_nba1q"], "NBA1Q")
+    if nba1h is not None and len(nba1h) > 0:
+        add_structured_sport_tickets(pool(nba1h), "NBA1H", C["hdr_nba1h"], "NBA1H")
 
     print("Writing slate sheets...")
     # Strict-mode guardrail: fail if mixed dates survived filtering.

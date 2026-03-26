@@ -21,9 +21,10 @@ import pandas as pd
 REPO_ROOT = Path(__file__).resolve().parent
 TEMPLATES_DIR = REPO_ROOT / "ui_runner" / "templates"
 
-# Ticket source search order: dated JSON → dated xlsx (repo root) → tickets_latest.json
+# Ticket source search order: combined_slate_tickets_{date}.xlsx only.
 DATED_TICKET_JSON = "combined_slate_tickets_{date}.json"
 FALLBACK_TICKET_JSON = TEMPLATES_DIR / "tickets_latest.json"
+ALLOWED_TICKET_SPORTS = {"NBA", "CBB", "NHL", "SOCCER", "MLB", "WCBB"}
 
 _XLSX_HDR_TO_LEG_FIELD: dict[str, str] = {
     "player": "player",
@@ -1065,10 +1066,7 @@ def debug_report(
 
 
 def find_ticket_json(arg_date: str) -> Path | None:
-    """Resolve ticket file: dated JSON → dated xlsx at repo root → outputs/<date>/ → fallback."""
-    p1 = REPO_ROOT / DATED_TICKET_JSON.format(date=arg_date)
-    if p1.is_file():
-        return p1
+    """Resolve ticket file from combined_slate_tickets_{date}.xlsx only."""
     px = REPO_ROOT / f"combined_slate_tickets_{arg_date}.xlsx"
     if px.is_file():
         return px
@@ -1080,13 +1078,6 @@ def find_ticket_json(arg_date: str) -> Path | None:
     p_out_strict = out_dir / f"combined_slate_tickets_{arg_date}.strict.xlsx"
     if p_out_strict.is_file():
         return p_out_strict
-    if FALLBACK_TICKET_JSON.is_file():
-        print(
-            f"[WARN] No dated ticket file found for {arg_date} — falling back to "
-            "tickets_latest.json (legs will not match this date's actual slate)",
-            flush=True,
-        )
-        return FALLBACK_TICKET_JSON
     return None
 
 
@@ -1295,6 +1286,54 @@ def _load_tickets(path: Path, arg_date: str) -> dict[str, Any]:
         return _load_tickets_from_xlsx(path, arg_date)
     with path.open(encoding="utf-8") as f:
         return json.load(f)
+
+
+def _group_is_allowed(group_name: str) -> bool:
+    n = str(group_name or "").strip()
+    m = re.match(r"^([A-Za-z0-9]+)\s+(Power Play 2-Leg|Flex 3-Leg)$", n)
+    if not m:
+        return False
+    sport = m.group(1).strip().upper()
+    return sport in ALLOWED_TICKET_SPORTS
+
+
+def _leg_allowed_for_render(group_name: str, leg: dict[str, Any]) -> bool:
+    prop = str(leg.get("prop_type") or "").strip().lower()
+    direction = str(leg.get("direction") or "").strip().upper()
+    line = leg.get("line")
+    try:
+        line_f = float(line) if line is not None else None
+    except (TypeError, ValueError):
+        line_f = None
+
+    is_power = "power play 2-leg" in str(group_name or "").strip().lower()
+
+    if prop == "rebounds" and direction == "OVER" and (line_f is None or line_f < 2.5):
+        return False
+    if prop == "points" and direction == "OVER" and (line_f is None or line_f < 8.0):
+        return False
+    if prop == "steals" and is_power:
+        return False
+    return True
+
+
+def _filter_payload_groups(payload: dict[str, Any]) -> dict[str, Any]:
+    out_groups: list[dict[str, Any]] = []
+    for g in payload.get("groups") or []:
+        gname = str(g.get("group_name") or "Group")
+        if not _group_is_allowed(gname):
+            continue
+        filtered_tickets: list[dict[str, Any]] = []
+        for t in g.get("tickets") or []:
+            legs = [leg for leg in (t.get("legs") or []) if _leg_allowed_for_render(gname, leg)]
+            if not legs:
+                continue
+            t2 = dict(t)
+            t2["legs"] = legs
+            filtered_tickets.append(t2)
+        if filtered_tickets:
+            out_groups.append({"group_name": gname, "tickets": filtered_tickets})
+    return {"date": payload.get("date"), "groups": out_groups}
 
 
 def _fmt_num(x: Any) -> str:
@@ -1702,13 +1741,13 @@ def main() -> int:
     tpath = find_ticket_json(arg_date)
     if not tpath:
         print(
-            "ERROR: No ticket file found (combined_slate_tickets_{date}.json, "
-            "combined_slate_tickets_{date}.xlsx, or ui_runner/templates/tickets_latest.json)."
+            "ERROR: No ticket file found (combined_slate_tickets_{date}.xlsx)."
         )
         return 1
 
     try:
         payload = _load_tickets(tpath, arg_date)
+        payload = _filter_payload_groups(payload)
     except Exception as e:
         print(f"ERROR: Failed to read ticket file: {e}")
         return 1
