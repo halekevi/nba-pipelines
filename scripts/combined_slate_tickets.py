@@ -118,6 +118,24 @@ PAYOUT = {
 # Blocked Shots NBA: 41.9% overall, too low for any ticket
 # Combo props: small sample, unreliable
 # NHL OVER props: 21.5% hit rate — never use OVER direction in NHL tickets
+EXCLUDED_PROPS = {"fantasy score", "fantasy_score", "fantasy"}
+
+NEVER_INCLUDE_PROPS = {
+    "fg attempted",
+    "personal fouls",
+    "blks+stls",
+    "two pointers attempted",
+    "fg made",
+}
+
+TIER1_PROPS = {"points", "pts+rebs+asts", "pts+rebs", "pts+asts", "rebounds"}
+TIER2_PROPS = {"assists", "3-pt made", "rebs+asts"}
+TIER3_PROPS = {"steals", "blocked shots", "turnovers", "free throws made"}
+
+POWER_PLAY_DEF_ALLOWED = {"avg", "weak"}
+FLEX_DEF_ALLOWED = {"avg", "weak", "above avg"}
+UNDER_ALLOWED_PROPS = {"free throws attempted", "turnovers"}
+
 NBA_EXCLUDED_PROPS = {
     "blocked shots", "3-pt attempted", "fg attempted",
     "free throws attempted", "two pointers attempted",
@@ -128,7 +146,7 @@ NBA_EXCLUDED_PROPS = {
 }
 
 CBB_EXCLUDED_PROPS = {
-    "fantasy",  # 0% hit rate — grader schema issue
+    "fantasy",
     "points (combo)",
 }
 
@@ -144,6 +162,28 @@ SOCCER_EXCLUDED_PROPS = {
     "assists",           # 5.6% hit rate
     "goals",             # 9.7% hit rate
 }
+
+
+def _norm_prop_label(v: object) -> str:
+    s = str(v or "").strip().lower()
+    s = re.sub(r"\s+", " ", s)
+    return s
+
+
+def _prop_priority_bonus(v: object) -> float:
+    p = _norm_prop_label(v)
+    if p in TIER1_PROPS:
+        return 0.10
+    if p in TIER3_PROPS:
+        return -0.10
+    return 0.0
+
+
+def _def_tier_value(df: pd.DataFrame) -> pd.Series:
+    for c in ("opp_def_tier", "def_tier", "OPP_DEF_TIER", "DEF_TIER"):
+        if c in df.columns:
+            return df[c].astype(str).str.strip().str.lower()
+    return pd.Series([""] * len(df), index=df.index)
 
 # ── Goblin / Demon payout adjustment ─────────────────────────────────────────
 # Goblin: line moved in your favor → REDUCES payout LINEARLY per unit of
@@ -2757,8 +2797,8 @@ def build_combined_slate(
 def filter_eligible(df: pd.DataFrame, min_hit_rate=0.55, min_edge=0.0, min_rank=None, tiers=None, pick_types=None):
     mask = pd.Series([True] * len(df), index=df.index)
     if "prop_type" in df.columns:
-        # Temporarily exclude all fantasy-score props from tickets.
-        mask &= ~df["prop_type"].astype(str).str.contains("fantasy", case=False, na=False)
+        prop_norm = df["prop_type"].apply(_norm_prop_label)
+        mask &= ~prop_norm.isin(EXCLUDED_PROPS | NEVER_INCLUDE_PROPS)
     # Always exclude NO_PROJECTION_OR_LINE rows from tickets (no line = can't bet)
     if "void_reason" in df.columns:
         void_str = df["void_reason"].astype(str).str.strip()
@@ -2774,6 +2814,125 @@ def filter_eligible(df: pd.DataFrame, min_hit_rate=0.55, min_edge=0.0, min_rank=
     if pick_types and "pick_type" in df.columns:
         mask &= df["pick_type"].isin(pick_types)
     return df[mask].copy()
+
+
+def build_single_structure_ticket(
+    pool_df: pd.DataFrame,
+    sport_label: str,
+    structure: str,
+) -> dict | None:
+    """
+    Build exactly one best ticket for a sport+structure.
+    """
+    if pool_df is None or pool_df.empty:
+        return None
+
+    is_power = structure == "power"
+    n_legs = 2 if is_power else 3
+    allowed_tiers = {"A", "B"} if is_power else {"A", "B", "C"}
+    allowed_def = POWER_PLAY_DEF_ALLOWED if is_power else FLEX_DEF_ALLOWED
+    q = 0.70 if is_power else 0.50  # top 30% / top 50%
+
+    df = pool_df.copy()
+    if "pick_type" in df.columns:
+        df = df[df["pick_type"].astype(str).str.strip().str.lower() == "goblin"]
+    if "tier" in df.columns:
+        df = df[df["tier"].astype(str).str.upper().isin(allowed_tiers)]
+
+    prop_norm = df["prop_type"].apply(_norm_prop_label) if "prop_type" in df.columns else pd.Series([""] * len(df))
+    df = df[~prop_norm.isin(EXCLUDED_PROPS | NEVER_INCLUDE_PROPS)].copy()
+
+    if is_power:
+        df = df[~prop_norm.isin(TIER3_PROPS)].copy()
+
+    dts = _def_tier_value(df)
+    df = df[dts.isin(allowed_def)].copy()
+    if df.empty:
+        return None
+
+    if "rank_score" in df.columns and len(df) > 0:
+        rs = pd.to_numeric(df["rank_score"], errors="coerce")
+        cutoff = float(rs.quantile(q))
+        df = df[rs >= cutoff].copy()
+    if df.empty:
+        return None
+
+    # Direction rules
+    dirs = df.get("direction", pd.Series([""] * len(df), index=df.index)).astype(str).str.upper().str.strip()
+    over_df = df[dirs == "OVER"].copy()
+    under_df = df[dirs == "UNDER"].copy()
+
+    if is_power:
+        # Power: OVER only unless not enough OVER legs.
+        cand = over_df if len(over_df) >= n_legs else pd.concat([over_df, under_df], ignore_index=True)
+    else:
+        # Flex: UNDER only for explicitly allowed props and strong hit-rate history.
+        if not under_df.empty:
+            up = under_df["prop_type"].apply(_norm_prop_label)
+            uhr = pd.to_numeric(under_df.get("hit_rate", 0), errors="coerce").fillna(0.0)
+            under_df = under_df[(up.isin(UNDER_ALLOWED_PROPS)) & (uhr >= 0.65)].copy()
+        cand = pd.concat([over_df, under_df], ignore_index=True)
+
+    if cand.empty:
+        return None
+
+    cand = cand.copy()
+    cand["__over_pref"] = cand.get("direction", "").astype(str).str.upper().eq("OVER").astype(int)
+    cand["__score"] = pd.to_numeric(cand.get("rank_score", 0), errors="coerce").fillna(0.0) + cand["prop_type"].apply(_prop_priority_bonus)
+    cand = cand.sort_values(["__over_pref", "__score"], ascending=[False, False], na_position="last")
+
+    # pick top unique-player legs
+    chosen = []
+    used_players = set()
+    for _, r in cand.iterrows():
+        p = str(r.get("player", "")).strip().lower()
+        if not p or p in used_players:
+            continue
+        chosen.append(r)
+        used_players.add(p)
+        if len(chosen) == n_legs:
+            break
+    if len(chosen) < n_legs:
+        return None
+
+    rows = [x.to_dict() for x in chosen]
+    leg_probs, hrs, rss = [], [], []
+    for r in rows:
+        _p, _src = _resolve_leg_prob(r)
+        leg_probs.append(_p)
+        hrs.append(float(r.get("hit_rate", 0.5) or 0.5))
+        rss.append(float(r.get("rank_score", 0.0) or 0.0))
+    ep = win_prob(leg_probs, n_legs)
+    payout = PAYOUT.get(n_legs, {"power": 0, "flex": 0})
+    pwr = payout["power"]
+    flx = payout["flex"]
+    adj_power = calc_adjusted_payout(pwr, rows)
+    adj_flex = calc_adjusted_payout(flx, rows)
+
+    # Requested expected-win metadata
+    tiers = [str(r.get("tier", "")).upper() for r in rows]
+    defs = [_norm_prop_label(r.get("def_tier", r.get("opp_def_tier", ""))) for r in rows]
+    if all(t in {"A", "B"} for t in tiers) and all(d in {"avg", "weak"} for d in defs):
+        expected_win_rate = 0.78
+    else:
+        expected_win_rate = 0.68
+
+    return {
+        "key": frozenset((str(r.get("player", "")) + "|" + str(r.get("prop_type", ""))).strip() for r in rows),
+        "rows": rows,
+        "avg_hit_rate": float(np.mean(hrs)) if hrs else 0.0,
+        "avg_rank_score": float(np.mean(rss)) if rss else 0.0,
+        "est_win_prob": ep,
+        "power_payout": adj_power,
+        "flex_payout": adj_flex,
+        "base_power_payout": pwr,
+        "payout_multiplier": round(adj_power / pwr, 4) if pwr else 1.0,
+        "ev_power": round(ep * adj_power, 4),
+        "n_legs": n_legs,
+        "expected_win_rate": expected_win_rate,
+        "ticket_type": "Power Play" if is_power else "Flex",
+        "sport": sport_label,
+    }
 
 
 def apply_nba_context_confidence_filter(
@@ -3749,15 +3908,18 @@ def write_ticket_sheet(wb, tickets, sheet_name, bg_hdr, label=""):
         base_pout  = ticket.get("base_power_payout", pout)
         pay_mult   = ticket.get("payout_multiplier", 1.0)
         ev_pow     = ticket.get("ev_power", round(ep * pout, 4))
+        exp_wr     = ticket.get("expected_win_rate", None)
+        ttype      = ticket.get("ticket_type", "")
         mult_label = (
             f"  ·  Payout Mult: {pay_mult:.2f}x (base {base_pout}x → adj {pout}x)"
             if abs(pay_mult - 1.0) > 0.001 else ""
         )
+        wr_label = f"  ·  Expected Win Rate: {float(exp_wr):.0%}" if exp_wr is not None else ""
         banner = (
-            f"  Ticket #{ti}  ·  {n}-Leg {label}  ·  "
+            f"  Ticket #{ti}  ·  {n}-Leg {label} {ttype}  ·  "
             f"Power: {pout}x (${cost:.0f} to win $100)  ·  Flex: {fout}x  ·  "
             f"Avg Hit Rate: {avg_hr:.0%}  ·  Est Win Prob: {ep:.0%}  ·  EV: {ev_pow:.2f}  ·  "
-            f"Avg Rank Score: {avg_rs:.2f}{mult_label}"
+            f"Avg Rank Score: {avg_rs:.2f}{wr_label}{mult_label}"
         )
         ws.merge_cells(start_row=ri, start_column=1, end_row=ri, end_column=len(TICKET_COLS))
         hc(ws, ri, 1, banner, bg=bg_hdr, sz=9, align="left")
@@ -4318,184 +4480,41 @@ def main():
     wb.remove(wb.active)
 
     all_ticket_groups = []
-    leg_sizes = [2, 3, 4, 5, 6]
-    # CBB hits 49-55% -- 5/6-leg tickets are -47% to -52% ROI, cap at 4 legs
-    cbb_leg_sizes = [2, 3, 4]
-    # NHL Standard UNDER is very strong but small sample -- cap at 4 legs until more data
-    nhl_leg_sizes = [2, 3, 4]
-    # Soccer overall hit rate 23.9% -- 2/3-leg only until grader schema is fixed
-    soccer_leg_sizes = [2, 3]
-    # Cross-sport mixes: conservative until more graded data
-    xsport_leg_sizes = [2, 3, 4]
 
-    def gen_tickets(pool_df, sport_label, bg_hdr, sport_prefix, pick_type_filter=None, leg_sizes_override=None):
-        rows_out = []
-        sizes = leg_sizes_override if leg_sizes_override is not None else leg_sizes
-        for n in sizes:
-            sub_pool = pool_df if pick_type_filter is None else pool_df[pool_df["pick_type"].isin([pick_type_filter])]
-            # For 4+ leg tickets enforce Tier A/B only
-            if n >= 4 and "tier" in sub_pool.columns:
-                sub_pool = sub_pool[sub_pool["tier"].isin(["A", "B"])]
-            tickets = build_tickets(sub_pool, n, args.max_tickets)
-            if tickets:
-                pt_label = pick_type_filter if pick_type_filter else "Std+Gob"
-                sheet_name = f"{sport_prefix} {pt_label} {n}-Leg"[:31]
-                write_ticket_sheet(wb, tickets, sheet_name, bg_hdr, label=f"{sport_label} {pt_label}")
-                rows_out.append((sheet_name, tickets, None))
-                print(f"  {sheet_name}: {len(tickets)} tickets")
-        return rows_out
+    def add_structured_sport_tickets(sport_df: pd.DataFrame, sport_label: str, bg_hdr: str, prefix: str):
+        if sport_df is None or sport_df.empty:
+            print(f"  WARNING: {sport_label} skipped (empty pool).")
+            return
 
-    # ── NBA ────────────────────────────────────────────────────────────────────────
-    nba_std = pool(nba, ["Standard"])
-    nba_gob = pool(nba, ["Goblin"])
-    nba_mix_pool = pd.concat([nba_std, nba_gob], ignore_index=True).sort_values("rank_score", ascending=False)
-    if len(nba_std) >= 2:
-        all_ticket_groups += gen_tickets(nba_std, "NBA", C["hdr_nba"], "NBA", "Standard")
-    if len(nba_gob) >= 2:
-        all_ticket_groups += gen_tickets(nba_gob, "NBA", C["hdr_nba"], "NBA", "Goblin")
-    if len(nba_mix_pool) >= 2:
-        all_ticket_groups += gen_tickets(nba_mix_pool, "NBA", C["hdr_nba"], "NBA")
+        p_ticket = build_single_structure_ticket(sport_df, sport_label, "power")
+        f_ticket = build_single_structure_ticket(sport_df, sport_label, "flex")
 
-    # ── CBB ────────────────────────────────────────────────────────────────────────
-    cbb_std = pool(cbb, ["Standard"])
-    cbb_gob = pool(cbb, ["Goblin"])
-    cbb_mix_pool = pd.concat([cbb_std, cbb_gob], ignore_index=True).sort_values("rank_score", ascending=False)
-    if len(cbb_std) >= 2:
-        all_ticket_groups += gen_tickets(cbb_std, "CBB", C["hdr_cbb"], "CBB", "Standard", leg_sizes_override=cbb_leg_sizes)
-    if len(cbb_gob) >= 2:
-        all_ticket_groups += gen_tickets(cbb_gob, "CBB", C["hdr_cbb"], "CBB", "Goblin", leg_sizes_override=cbb_leg_sizes)
-    if len(cbb_mix_pool) >= 2:
-        all_ticket_groups += gen_tickets(cbb_mix_pool, "CBB", C["hdr_cbb"], "CBB", leg_sizes_override=cbb_leg_sizes)
+        if p_ticket is None and f_ticket is None:
+            print(f"  WARNING: {sport_label} skipped (<2 eligible legs after strict filters).")
+            return
 
-    # ── NHL ────────────────────────────────────────────────────────────────────────
+        if p_ticket is not None:
+            sname = f"{prefix} Power Play 2-Leg"[:31]
+            write_ticket_sheet(wb, [p_ticket], sname, bg_hdr, label=f"{sport_label} Power Play")
+            all_ticket_groups.append((sname, [p_ticket], None))
+            print(f"  {sname}: 1 ticket")
+        else:
+            print(f"  WARNING: {sport_label} Power Play 2-Leg unavailable (strict filters).")
+
+        if f_ticket is not None:
+            sname = f"{prefix} Flex 3-Leg"[:31]
+            write_ticket_sheet(wb, [f_ticket], sname, bg_hdr, label=f"{sport_label} Flex")
+            all_ticket_groups.append((sname, [f_ticket], None))
+            print(f"  {sname}: 1 ticket")
+        else:
+            print(f"  WARNING: {sport_label} Flex 3-Leg unavailable (strict filters).")
+
+    add_structured_sport_tickets(pool(nba), "NBA", C["hdr_nba"], "NBA")
+    add_structured_sport_tickets(pool(cbb), "CBB", C["hdr_cbb"], "CBB")
     if nhl is not None and len(nhl) > 0:
-        nhl_std = pool(nhl, ["Standard"])
-        nhl_gob = pool(nhl, ["Goblin"])
-        nhl_mix_pool = pd.concat([nhl_std, nhl_gob], ignore_index=True).sort_values("rank_score", ascending=False)
-        if len(nhl_std) >= 2:
-            all_ticket_groups += gen_tickets(nhl_std, "NHL", C["hdr_nhl"], "NHL", "Standard", leg_sizes_override=nhl_leg_sizes)
-        if len(nhl_gob) >= 2:
-            all_ticket_groups += gen_tickets(nhl_gob, "NHL", C["hdr_nhl"], "NHL", "Goblin", leg_sizes_override=nhl_leg_sizes)
-        if len(nhl_mix_pool) >= 2:
-            all_ticket_groups += gen_tickets(nhl_mix_pool, "NHL", C["hdr_nhl"], "NHL", leg_sizes_override=nhl_leg_sizes)
-
-    # ── Soccer ─────────────────────────────────────────────────────────────────────
+        add_structured_sport_tickets(pool(nhl), "NHL", C["hdr_nhl"], "NHL")
     if soccer is not None and len(soccer) > 0:
-        soc_std = pool(soccer, ["Standard"])
-        soc_gob = pool(soccer, ["Goblin"])
-        soc_mix_pool = pd.concat([soc_std, soc_gob], ignore_index=True).sort_values("rank_score", ascending=False)
-        if len(soc_std) >= 2:
-            all_ticket_groups += gen_tickets(soc_std, "Soccer", C["hdr_soccer"], "Soccer", "Standard", leg_sizes_override=soccer_leg_sizes)
-        if len(soc_gob) >= 2:
-            all_ticket_groups += gen_tickets(soc_gob, "Soccer", C["hdr_soccer"], "Soccer", "Goblin", leg_sizes_override=soccer_leg_sizes)
-        if len(soc_mix_pool) >= 2:
-            all_ticket_groups += gen_tickets(soc_mix_pool, "Soccer", C["hdr_soccer"], "Soccer", leg_sizes_override=soccer_leg_sizes)
-
-    # ── WCBB ───────────────────────────────────────────────────────────────────────
-    if wcbb is not None and len(wcbb) > 0:
-        wcbb_std = pool(wcbb, ["Standard"])
-        wcbb_gob = pool(wcbb, ["Goblin"])
-        wcbb_mix_pool = pd.concat([wcbb_std, wcbb_gob], ignore_index=True).sort_values("rank_score", ascending=False)
-        if len(wcbb_std) >= 2:
-            all_ticket_groups += gen_tickets(wcbb_std, "WCBB", C["hdr_wcbb"], "WCBB", "Standard")
-        if len(wcbb_gob) >= 2:
-            all_ticket_groups += gen_tickets(wcbb_gob, "WCBB", C["hdr_wcbb"], "WCBB", "Goblin")
-        if len(wcbb_mix_pool) >= 2:
-            all_ticket_groups += gen_tickets(wcbb_mix_pool, "WCBB", C["hdr_wcbb"], "WCBB")
-
-    # ── MLB ────────────────────────────────────────────────────────────────────────
-    if mlb is not None and len(mlb) > 0:
-        mlb_std = pool(mlb, ["Standard"])
-        mlb_gob = pool(mlb, ["Goblin"])
-        mlb_mix_pool = pd.concat([mlb_std, mlb_gob], ignore_index=True).sort_values("rank_score", ascending=False)
-        if len(mlb_std) >= 2:
-            all_ticket_groups += gen_tickets(mlb_std, "MLB", C["hdr_mlb"], "MLB", "Standard")
-        if len(mlb_gob) >= 2:
-            all_ticket_groups += gen_tickets(mlb_gob, "MLB", C["hdr_mlb"], "MLB", "Goblin")
-        if len(mlb_mix_pool) >= 2:
-            all_ticket_groups += gen_tickets(mlb_mix_pool, "MLB", C["hdr_mlb"], "MLB")
-
-    # ── NBA1Q ──────────────────────────────────────────────────────────────────────
-    if nba1q is not None and len(nba1q) > 0:
-        nba1q_std = pool(nba1q, ["Standard"])
-        nba1q_gob = pool(nba1q, ["Goblin"])
-        nba1q_mix_pool = pd.concat([nba1q_std, nba1q_gob], ignore_index=True).sort_values("rank_score", ascending=False)
-        if len(nba1q_std) >= 2:
-            all_ticket_groups += gen_tickets(nba1q_std, "NBA1Q", C["hdr_nba1q"], "NBA1Q", "Standard")
-        if len(nba1q_gob) >= 2:
-            all_ticket_groups += gen_tickets(nba1q_gob, "NBA1Q", C["hdr_nba1q"], "NBA1Q", "Goblin")
-        if len(nba1q_mix_pool) >= 2:
-            all_ticket_groups += gen_tickets(nba1q_mix_pool, "NBA1Q", C["hdr_nba1q"], "NBA1Q")
-
-    # ── NBA1H ──────────────────────────────────────────────────────────────────────
-    if nba1h is not None and len(nba1h) > 0:
-        nba1h_std = pool(nba1h, ["Standard"])
-        nba1h_gob = pool(nba1h, ["Goblin"])
-        nba1h_mix_pool = pd.concat([nba1h_std, nba1h_gob], ignore_index=True).sort_values("rank_score", ascending=False)
-        if len(nba1h_std) >= 2:
-            all_ticket_groups += gen_tickets(nba1h_std, "NBA1H", C["hdr_nba1h"], "NBA1H", "Standard")
-        if len(nba1h_gob) >= 2:
-            all_ticket_groups += gen_tickets(nba1h_gob, "NBA1H", C["hdr_nba1h"], "NBA1H", "Goblin")
-        if len(nba1h_mix_pool) >= 2:
-            all_ticket_groups += gen_tickets(nba1h_mix_pool, "NBA1H", C["hdr_nba1h"], "NBA1H")
-
-    # ── Cross-sport Standard Only ──────────────────────────────────────────────────
-    all_sports_std = pd.concat([
-        pool(nba, ["Standard"]), pool(cbb, ["Standard"]),
-        *([] if nhl is None else [pool(nhl, ["Standard"])]),
-        *([] if soccer is None else [pool(soccer, ["Standard"])]),
-        *([] if wcbb is None else [pool(wcbb, ["Standard"])]),
-        *([] if mlb is None else [pool(mlb, ["Standard"])]),
-        *([] if nba1q is None else [pool(nba1q, ["Standard"])]),
-        *([] if nba1h is None else [pool(nba1h, ["Standard"])]),
-    ], ignore_index=True).sort_values("rank_score", ascending=False)
-    if len(all_sports_std) >= 2:
-        for n in xsport_leg_sizes:
-            tickets = build_tickets(all_sports_std, n, args.max_tickets, require_mix=True)
-            if tickets:
-                sheet_name = f"XSPORT Std {n}-Leg"[:31]
-                write_ticket_sheet(wb, tickets, sheet_name, C["hdr_mix"], label="Cross-Sport Standard")
-                all_ticket_groups.append((sheet_name, tickets, C["mix"]))
-                print(f"  {sheet_name}: {len(tickets)} tickets")
-
-    # ── Cross-sport Goblin Only ────────────────────────────────────────────────────
-    all_sports_gob = pd.concat([
-        pool(nba, ["Goblin"]), pool(cbb, ["Goblin"]),
-        *([] if nhl is None else [pool(nhl, ["Goblin"])]),
-        *([] if soccer is None else [pool(soccer, ["Goblin"])]),
-        *([] if wcbb is None else [pool(wcbb, ["Goblin"])]),
-        *([] if mlb is None else [pool(mlb, ["Goblin"])]),
-        *([] if nba1q is None else [pool(nba1q, ["Goblin"])]),
-        *([] if nba1h is None else [pool(nba1h, ["Goblin"])]),
-    ], ignore_index=True).sort_values("rank_score", ascending=False)
-    if len(all_sports_gob) >= 2:
-        for n in xsport_leg_sizes:
-            tickets = build_tickets(all_sports_gob, n, args.max_tickets, require_mix=True)
-            if tickets:
-                sheet_name = f"XSPORT Gob {n}-Leg"[:31]
-                write_ticket_sheet(wb, tickets, sheet_name, C["hdr_mix"], label="Cross-Sport Goblin")
-                all_ticket_groups.append((sheet_name, tickets, C["mix"]))
-                print(f"  {sheet_name}: {len(tickets)} tickets")
-
-    # ── Cross-sport Std+Gob Mix ────────────────────────────────────────────────────
-    all_sports_mix = pd.concat([
-        pool(nba), pool(cbb),
-        *([] if nhl is None else [pool(nhl)]),
-        *([] if soccer is None else [pool(soccer)]),
-        *([] if wcbb is None else [pool(wcbb)]),
-        *([] if mlb is None else [pool(mlb)]),
-        *([] if nba1q is None else [pool(nba1q)]),
-        *([] if nba1h is None else [pool(nba1h)]),
-    ], ignore_index=True).sort_values("rank_score", ascending=False)
-    all_sports_mix = all_sports_mix[all_sports_mix["pick_type"].isin(["Standard", "Goblin"])]
-    if len(all_sports_mix) >= 2:
-        for n in xsport_leg_sizes:
-            tickets = build_tickets(all_sports_mix, n, args.max_tickets, require_mix=True)
-            if tickets:
-                sheet_name = f"XSPORT Mix {n}-Leg"[:31]
-                write_ticket_sheet(wb, tickets, sheet_name, C["hdr_mix"], label="Cross-Sport Std+Gob")
-                all_ticket_groups.append((sheet_name, tickets, C["mix"]))
-                print(f"  {sheet_name}: {len(tickets)} tickets")
+        add_structured_sport_tickets(pool(soccer), "Soccer", C["hdr_soccer"], "Soccer")
 
     print("Writing slate sheets...")
     # Strict-mode guardrail: fail if mixed dates survived filtering.
