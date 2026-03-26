@@ -7,10 +7,13 @@ $DateDir = Join-Path $Root "outputs\$Date"
 
 $TicketsFile = Join-Path $DateDir "combined_slate_tickets_$Date.xlsx"
 $NBAActuals  = Join-Path $DateDir "actuals_nba_$Date.csv"
+$NBA1HActuals = Join-Path $DateDir "actuals_nba1h_$Date.csv"
+$NBA1QActuals = Join-Path $DateDir "actuals_nba1q_$Date.csv"
 $CBBActuals  = Join-Path $DateDir "actuals_cbb_$Date.csv"
 $NHLActuals  = Join-Path $DateDir "actuals_nhl_$Date.csv"
 $SoccerActuals  = Join-Path $DateDir "actuals_soccer_$Date.csv"
 $FetchActualsScript = Join-Path $Root "scripts\fetch_actuals.py"
+$FetchNBAPeriodActualsScript = Join-Path $Root "scripts\fetch_nba_period_actuals.py"
 $SlateGraderScript = Join-Path $Root "scripts\grading\slate_grader.py"
 $CBBFullGraderScript = Join-Path $Root "scripts\grading\grade_cbb_full_slate.py"
 $NHLAdvancedGraderScript = Join-Path $Root "scripts\nhl_grader_advanced.py"
@@ -136,6 +139,22 @@ if (Test-Path $FetchActualsScript) {
         "--date", $Date,
         "--output", $SoccerActuals
     )
+
+    if (Test-Path $FetchNBAPeriodActualsScript) {
+        Run-Py "Fetch NBA 1H Actuals" $Root $FetchNBAPeriodActualsScript @(
+            "--date", $Date,
+            "--segment", "1H",
+            "--output", $NBA1HActuals
+        )
+        Run-Py "Fetch NBA 1Q Actuals" $Root $FetchNBAPeriodActualsScript @(
+            "--date", $Date,
+            "--segment", "1Q",
+            "--output", $NBA1QActuals
+        )
+    }
+    else {
+        Write-Host "NBA period actuals script not found: $FetchNBAPeriodActualsScript" -ForegroundColor Yellow
+    }
 }
 else {
     Write-Host "Fetch actuals script not found: $FetchActualsScript" -ForegroundColor Yellow
@@ -267,11 +286,12 @@ else {
     Write-Host "Skipping Soccer grading (missing slate/actuals/grader)." -ForegroundColor Yellow
 }
 
-if ((Test-Path $NBAActuals) -and $NBA1HSlateFile -and (Test-Path $NBA1HSlateFile) -and (Test-Path $SlateGraderScript)) {
+if ($NBA1HSlateFile -and (Test-Path $NBA1HSlateFile) -and (Test-Path $SlateGraderScript) -and ((Test-Path $NBA1HActuals) -or (Test-Path $NBAActuals))) {
+    $NBA1HActualsForGrade = if (Test-Path $NBA1HActuals) { $NBA1HActuals } else { $NBAActuals }
     Run-Py "Grade NBA1H Slate" $Root $SlateGraderScript @(
         "--sport", "NBA",
         "--slate", $NBA1HSlateFile,
-        "--actuals", $NBAActuals,
+        "--actuals", $NBA1HActualsForGrade,
         "--output", $NBA1HGradedFile,
         "--date", $Date
     )
@@ -280,11 +300,12 @@ else {
     Write-Host "Skipping NBA1H grading (missing slate/actuals/grader)." -ForegroundColor Yellow
 }
 
-if ((Test-Path $NBAActuals) -and $NBA1QSlateFile -and (Test-Path $NBA1QSlateFile) -and (Test-Path $SlateGraderScript)) {
+if ($NBA1QSlateFile -and (Test-Path $NBA1QSlateFile) -and (Test-Path $SlateGraderScript) -and ((Test-Path $NBA1QActuals) -or (Test-Path $NBAActuals))) {
+    $NBA1QActualsForGrade = if (Test-Path $NBA1QActuals) { $NBA1QActuals } else { $NBAActuals }
     Run-Py "Grade NBA1Q Slate" $Root $SlateGraderScript @(
         "--sport", "NBA",
         "--slate", $NBA1QSlateFile,
-        "--actuals", $NBAActuals,
+        "--actuals", $NBA1QActualsForGrade,
         "--output", $NBA1QGradedFile,
         "--date", $Date
     )
@@ -359,6 +380,12 @@ else {
         "--cbb_actuals", $CBBActuals,
         "--out", (Join-Path $DateDir "combined_tickets_graded_$Date.xlsx")
     )
+    if (Test-Path $NBA1HActuals) {
+        $GraderArgs += @("--nba1h_actuals", $NBA1HActuals)
+    }
+    if (Test-Path $NBA1QActuals) {
+        $GraderArgs += @("--nba1q_actuals", $NBA1QActuals)
+    }
     if (Test-Path $NHLActuals) {
         $GraderArgs += @("--nhl_actuals", $NHLActuals)
     }

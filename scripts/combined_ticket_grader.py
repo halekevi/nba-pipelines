@@ -367,15 +367,38 @@ def build_lookup(act: pd.DataFrame):
 def lookup_actual(sport: str, player: str, team: str, prop_norm: str,
                   nba_lpt, nba_lp,
                   cbb_lpt, cbb_lp,
+                  nba1h_lpt=None, nba1h_lp=None,
+                  nba1q_lpt=None, nba1q_lp=None,
                   nhl_lpt=None, nhl_lp=None,
                   soccer_lpt=None, soccer_lp=None) -> float:
     sport = (sport or "").upper()
-    if sport in ("NBA1H", "NBA1Q"):
-        sport = "NBA"
-    elif sport == "WCBB":
+    if sport == "WCBB":
         sport = "CBB"
     player_n = strip_norm(player)
     team_n = strip_norm(team)
+
+    if sport == "NBA1H":
+        if nba1h_lpt is not None and nba1h_lp is not None:
+            key2 = (player_n, team_n, prop_norm)
+            if key2 in nba1h_lpt:
+                return float(nba1h_lpt[key2][0]["actual"])
+            key1 = (player_n, prop_norm)
+            if key1 in nba1h_lp:
+                return float(nba1h_lp[key1][0]["actual"])
+        # Fallback to full-game NBA when period actuals are unavailable.
+        sport = "NBA"
+
+    if sport == "NBA1Q":
+        if nba1q_lpt is not None and nba1q_lp is not None:
+            key2 = (player_n, team_n, prop_norm)
+            if key2 in nba1q_lpt:
+                return float(nba1q_lpt[key2][0]["actual"])
+            key1 = (player_n, prop_norm)
+            if key1 in nba1q_lp:
+                return float(nba1q_lp[key1][0]["actual"])
+        # Fallback to full-game NBA when period actuals are unavailable.
+        sport = "NBA"
+
     if sport == "NBA":
         key2 = (player_n, team_n, prop_norm)
         if key2 in nba_lpt:
@@ -909,6 +932,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--tickets", required=True, help="combined_slate_tickets_YYYY-MM-DD.xlsx")
     ap.add_argument("--nba_actuals", required=True, help="actuals_nba_YYYY-MM-DD.csv")
+    ap.add_argument("--nba1h_actuals", default="", help="actuals_nba1h_YYYY-MM-DD.csv (optional)")
+    ap.add_argument("--nba1q_actuals", default="", help="actuals_nba1q_YYYY-MM-DD.csv (optional)")
     ap.add_argument("--cbb_actuals", required=True, help="actuals_cbb_YYYY-MM-DD.csv")
     ap.add_argument("--nhl_actuals", default="", help="actuals_nhl_YYYY-MM-DD.csv (optional, for NHL legs)")
     ap.add_argument("--soccer_actuals", default="", help="actuals_soccer_YYYY-MM-DD.csv (optional, for Soccer legs)")
@@ -952,6 +977,16 @@ def main():
     cbb_act = prep_actuals(cbb_csv, "CBB")
     nba_lp, nba_lpt = build_lookup(nba_act)
     cbb_lp, cbb_lpt = build_lookup(cbb_act)
+    nba1h_lp = nba1h_lpt = None
+    nba1q_lp = nba1q_lpt = None
+    if args.nba1h_actuals:
+        nba1h_csv = Path(args.nba1h_actuals)
+        nba1h_act = prep_actuals(nba1h_csv, "NBA1H")
+        nba1h_lp, nba1h_lpt = build_lookup(nba1h_act)
+    if args.nba1q_actuals:
+        nba1q_csv = Path(args.nba1q_actuals)
+        nba1q_act = prep_actuals(nba1q_csv, "NBA1Q")
+        nba1q_lp, nba1q_lpt = build_lookup(nba1q_act)
 
     nhl_lp = nhl_lpt = None
     soccer_lp = soccer_lpt = None
@@ -1007,6 +1042,8 @@ def main():
             r["sport"], r["player"], r["team"], r["prop_norm"],
             nba_lpt, nba_lp,
             cbb_lpt, cbb_lp,
+            nba1h_lpt=nba1h_lpt, nba1h_lp=nba1h_lp,
+            nba1q_lpt=nba1q_lpt, nba1q_lp=nba1q_lp,
             nhl_lpt=nhl_lpt, nhl_lp=nhl_lp,
             soccer_lpt=soccer_lpt, soccer_lp=soccer_lp
         ),
