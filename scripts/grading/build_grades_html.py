@@ -409,11 +409,79 @@ def def_tier_table(rows: list[dict]) -> str:
         </tr>"""
     if not rows_html:
         return ""
+    # Breakdown matrices inside each defense tier (pick type + ticket tier)
+    def _norm_def_tier(x: str) -> str:
+        return (
+            str(x or "")
+            .lower()
+            .replace("🟢", "")
+            .replace("🟡", "")
+            .replace("🔴", "")
+            .strip()
+        )
+
+    def _stats_cell(s: dict[str, float]) -> str:
+        if not s or s.get("decided", 0) == 0:
+            return "—"
+        col = rate_color(s.get("hit_rate", 0))
+        return f'<span style="color:{col};font-weight:700">{pct(s["hit_rate"])}</span> <span class="muted-note" style="font-size:10px;padding:0">({fmt_num(s["decided"])})</span>'
+
+    detail_rows_pt = ""
+    detail_rows_tier = ""
+    for d in dt_agg:
+        if d["decided"] == 0:
+            continue
+        dkey = _norm_def_tier(d["key"])
+        sub = [r for r in rows if _norm_def_tier(r.get("Def Tier", "")) == dkey]
+        if not sub:
+            continue
+
+        gob = pick_type_stats(sub, "goblin")
+        std = pick_type_stats(sub, "standard")
+        dem = pick_type_stats(sub, "demon")
+
+        detail_rows_pt += f"""<tr>
+          <td><strong>{h(d["key"])}</strong></td>
+          <td class="mono">{_stats_cell(gob)}</td>
+          <td class="mono">{_stats_cell(std)}</td>
+          <td class="mono">{_stats_cell(dem)}</td>
+        </tr>"""
+
+        t_cells = []
+        for t in ("A", "B", "C", "D"):
+            t_rows = [r for r in sub if str(r.get("Tier", "") or "").strip().upper() == t]
+            t_stats = overall_stats(t_rows) if t_rows else {"decided": 0, "hit_rate": 0}
+            t_cells.append(f'<td class="mono">{_stats_cell(t_stats)}</td>')
+        detail_rows_tier += f"""<tr>
+          <td><strong>{h(d["key"])}</strong></td>
+          {''.join(t_cells)}
+        </tr>"""
+
+    detail_tables = ""
+    if detail_rows_pt or detail_rows_tier:
+        detail_tables = f"""<div class="two-col" style="margin-top:12px">
+      <div>
+        <div class="section-label">DEF TIER BREAKDOWN — BY PICK TYPE</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>DEF TIER</th><th>GOBLIN</th><th>STANDARD</th><th>DEMON</th></tr></thead>
+          <tbody>{detail_rows_pt}</tbody>
+        </table></div>
+      </div>
+      <div>
+        <div class="section-label">DEF TIER BREAKDOWN — BY TIER (A/B/C/D)</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>DEF TIER</th><th>TIER A</th><th>TIER B</th><th>TIER C</th><th>TIER D</th></tr></thead>
+          <tbody>{detail_rows_tier}</tbody>
+        </table></div>
+      </div>
+    </div>"""
+
     return f"""<div class="section-label">HIT RATE BY OPPONENT DEFENSIVE TIER</div>
     <div class="table-wrap" style="margin-bottom:20px"><table>
       <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
       <tbody>{rows_html}</tbody>
-    </table></div>"""
+    </table></div>
+    {detail_tables}"""
 
 
 # ══════════════════════════════════════════════════════════════════════════════
