@@ -742,21 +742,21 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
           <div><div class="section-label">VS AVG/WEAK DEF — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if _norm_def_tier_for_split(r.get("Def Tier","")) in ("avg","average","weak","very weak")], min_decided=5)}</div>
         </div>"""
 
-        prop_section = f"""<div class="two-col">
-          <div>
-            <div class="section-label">TOP PROP TYPES BY HIT RATE (≥10 DECIDED)</div>
-            {top_prop_tbl}
-          </div>
-          <div>
-            <div class="section-label">WORST PROP TYPES (≥10 DECIDED)</div>
-            {worst_prop_tbl}
-          </div>
-        </div>
-        <div class="section-label">PROP TYPE BREAKDOWNS</div>
+        prop_section = f"""<div class="section-label">PROP TYPE BREAKDOWNS</div>
         {by_picktype}
         {by_dir}
         {by_tier}
-        {by_def}"""
+        {by_def}
+        <div class="two-col">
+          <div>
+            <div class="section-label">OVERALL TOP PROP TYPES BY HIT RATE (≥10 DECIDED)</div>
+            {top_prop_tbl}
+          </div>
+          <div>
+            <div class="section-label">OVERALL WORST PROP TYPES (≥10 DECIDED)</div>
+            {worst_prop_tbl}
+          </div>
+        </div>"""
 
     # ── Player Leaderboards ────────────────────────────────────────────────────
     top_players   = player_table(rows, top=True,  min_decided=3, limit=8)
