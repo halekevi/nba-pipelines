@@ -251,6 +251,19 @@ body::after{content:'';position:fixed;inset:0;
 .sub-header{font-size:10px;font-family:"Inter",sans-serif;font-weight:700;letter-spacing:2px;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
 .sub-header .sh-line{flex:1;height:1px;display:block;margin-left:8px;}
 
+/* collapsible home categories */
+.home-cat{margin:0 0 24px;border:1px solid rgba(255,255,255,.08);border-radius:18px;background:rgba(255,255,255,.02);backdrop-filter:blur(16px) saturate(170%);-webkit-backdrop-filter:blur(16px) saturate(170%);box-shadow:0 8px 30px rgba(0,0,0,.28);overflow:hidden;}
+.home-cat>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:var(--text);}
+.home-cat>summary::-webkit-details-marker{display:none;}
+.home-cat>summary::marker{display:none;content:'';}
+.home-cat>summary::after{content:'▸';font-size:14px;color:var(--muted);transition:transform .2s ease;pointer-events:none;}
+.home-cat[open]>summary::after{transform:rotate(90deg);}
+.home-cat-title span{color:var(--accent);}
+.home-cat-body{padding:12px 14px 14px;}
+.home-cat-flat{margin-bottom:0!important;}
+[data-theme="light"] .home-cat{background:rgba(255,255,255,.62);border-color:rgba(0,0,0,.1);box-shadow:0 4px 20px rgba(0,0,0,.08);}
+[data-theme="light"] .home-cat>summary{color:rgba(0,0,0,.82);}
+
 /* modal tab */
 .modal-tab{flex:1;background:none;border:none;border-bottom:2px solid transparent;padding:10px;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted);cursor:pointer;transition:all .15s;}
 .modal-tab:hover{color:var(--text);}
@@ -872,6 +885,9 @@ body::before{
   </div>
 
   <!-- SLATE STATUS CARDS -->
+  <details class="home-cat" open>
+    <summary><span class="home-cat-title">Slate <span>Explorer</span></span></summary>
+    <div class="home-cat-body">
   <style>
   /* ── Slate card expandable panel ── */
   .slate-panel-wrap{background:rgba(255,255,255,0.025);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px;box-shadow:0 8px 36px rgba(0,0,0,0.4);}
@@ -1305,9 +1321,14 @@ body::before{
     </div>
 
   </div><!-- /slate-panel-wrap -->
+    </div>
+  </details>
 
   <!-- QUICK NAV CARDS -->
-  <div class="quick-grid">
+  <details class="home-cat">
+    <summary><span class="home-cat-title">Quick <span>Actions</span></span></summary>
+    <div class="home-cat-body">
+  <div class="quick-grid home-cat-flat">
     <a class="qcard qc" href="/tickets">
       <span class="qcard-arrow">↗</span>
       <div class="qcard-icon-wrap">🎟</div>
@@ -1327,9 +1348,14 @@ body::before{
       <div class="qcard-desc">Ticket slip builder</div>
     </a>
   </div>
+    </div>
+  </details>
 
   <!-- TOP EDGES -->
-  <div style="margin-bottom:40px;">
+  <details class="home-cat" open>
+    <summary><span class="home-cat-title">Top <span>Edges</span></span></summary>
+    <div class="home-cat-body">
+  <div class="home-cat-flat" style="margin-bottom:40px;">
     <div class="sec-header">
       <div class="sec-title">Top <span style="color:var(--accent)">Edges</span></div>
       <div class="sec-line"></div>
@@ -1359,9 +1385,14 @@ body::before{
     </div>
     <div id="under-edges" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;"></div>
   </div>
+    </div>
+  </details>
 
   <!-- L5 STREAKS -->
-  <div style="margin-bottom:40px;">
+  <details class="home-cat">
+    <summary><span class="home-cat-title">L5 <span>Streaks</span></span></summary>
+    <div class="home-cat-body">
+  <div class="home-cat-flat" style="margin-bottom:40px;">
     <div class="sec-header">
       <div class="sec-title">L5 <span style="color:var(--accent)">Streaks</span></div>
       <div class="sec-line"></div>
@@ -1380,9 +1411,14 @@ body::before{
     </div>
     <div id="l5-under-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;"></div>
   </div>
+    </div>
+  </details>
 
   <!-- L10 STREAKS -->
-  <div style="margin-bottom:40px;">
+  <details class="home-cat">
+    <summary><span class="home-cat-title">L10 <span>Streaks</span></span></summary>
+    <div class="home-cat-body">
+  <div class="home-cat-flat" style="margin-bottom:40px;">
     <div class="sec-header">
       <div class="sec-title">L10 <span style="color:var(--accent)">Streaks</span></div>
       <div class="sec-line"></div>
@@ -1401,6 +1437,8 @@ body::before{
     </div>
     <div id="l10-under-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;"></div>
   </div>
+    </div>
+  </details>
 
 </div>
 
