@@ -429,6 +429,7 @@ def def_tier_table(rows: list[dict]) -> str:
     detail_rows_pt = ""
     detail_rows_tier = ""
     detail_rows_std_dir = ""
+    picktype_by_tier: dict[str, list[dict]] = {"goblin": [], "standard": [], "demon": []}
     for d in dt_agg:
         if d["decided"] == 0:
             continue
@@ -459,6 +460,9 @@ def def_tier_table(rows: list[dict]) -> str:
           <td class="mono">{_stats_cell(std)}</td>
           <td class="mono">{_stats_cell(dem)}</td>
         </tr>"""
+        picktype_by_tier["goblin"].append({"def_tier": d["key"], **gob})
+        picktype_by_tier["standard"].append({"def_tier": d["key"], **std})
+        picktype_by_tier["demon"].append({"def_tier": d["key"], **dem})
 
         t_cells = []
         for t in ("A", "B", "C", "D"):
@@ -477,6 +481,35 @@ def def_tier_table(rows: list[dict]) -> str:
 
     detail_tables = ""
     if detail_rows_pt or detail_rows_tier or detail_rows_std_dir:
+        def _picktype_sorted_table(kind: str, label: str) -> str:
+            rows_k = [x for x in picktype_by_tier.get(kind, []) if x.get("decided", 0) > 0]
+            if not rows_k:
+                return ""
+            rows_k.sort(key=lambda x: (x.get("hit_rate", 0), x.get("decided", 0)), reverse=True)
+            body = ""
+            for r in rows_k:
+                hr = float(r.get("hit_rate", 0))
+                row_cls = "player-hit" if hr >= 55 else ("player-miss" if hr < 48 else "player-warn")
+                body += f"""<tr class="{row_cls}">
+          <td><strong>{h(str(r.get("def_tier", "")))}</strong></td>
+          <td class="right mono">{fmt_num(r.get("decided", 0))}</td>
+          <td class="right mono pos">{fmt_num(r.get("hits", 0))}</td>
+          <td>{rate_bar_html(hr)}</td>
+        </tr>"""
+            return f"""<div>
+        <div class="section-label">DEF TIER BREAKDOWN — {label} (SORTED)</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
+          <tbody>{body}</tbody>
+        </table></div>
+      </div>"""
+
+        split_picktype_tables = f"""<div class="three-col" style="margin-top:12px">
+      {_picktype_sorted_table("goblin", "GOBLIN")}
+      {_picktype_sorted_table("standard", "STANDARD")}
+      {_picktype_sorted_table("demon", "DEMON")}
+    </div>"""
+
         detail_tables = f"""<div class="two-col" style="margin-top:12px">
       <div>
         <div class="section-label">DEF TIER BREAKDOWN — BY PICK TYPE</div>
@@ -499,7 +532,8 @@ def def_tier_table(rows: list[dict]) -> str:
         <thead><tr><th>DEF TIER</th><th>STANDARD OVER</th><th>STANDARD UNDER</th></tr></thead>
         <tbody>{detail_rows_std_dir}</tbody>
       </table></div>
-    </div>"""
+    </div>
+    {split_picktype_tables}"""
 
     return f"""<div class="section-label">HIT RATE BY OPPONENT DEFENSIVE TIER</div>
     <div class="table-wrap" style="margin-bottom:20px"><table>
@@ -899,6 +933,7 @@ background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid va
 .chip-demon{background:rgba(255,77,77,.10);color:var(--red);border-color:rgba(255,77,77,.32)}
 .chip-std{background:rgba(0,229,255,.08);color:var(--cyan);border-color:rgba(0,229,255,.25)}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.three-col{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:20px}
 .insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
 .insight-card{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);border-radius:12px;padding:14px 16px;box-shadow:0 4px 20px rgba(0,0,0,.15)}
 .insight-icon{font-size:22px;margin-bottom:8px}
@@ -921,7 +956,7 @@ tr.player-warn td:first-child{border-left:3px solid var(--gold)}
 .muted-note{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);padding:14px;text-align:center}
 .footer-gen{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);text-align:center;margin-top:40px;letter-spacing:1.5px}
 td.muted{color:var(--muted2)}
-@media(max-width:768px){.stat-grid-4,.stat-grid-2{grid-template-columns:repeat(2,1fr)}.two-col,.insight-grid{grid-template-columns:1fr}}
+@media(max-width:768px){.stat-grid-4,.stat-grid-2{grid-template-columns:repeat(2,1fr)}.two-col,.three-col,.insight-grid{grid-template-columns:1fr}}
 """
 
 
