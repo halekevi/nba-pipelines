@@ -690,6 +690,17 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
     def_section = def_tier_table(rows)
 
     # ── Prop Types ─────────────────────────────────────────────────────────────
+    def _prop_table_for_subset(sub_rows: list[dict], min_decided: int = 5, limit: int = 8) -> str:
+        if not sub_rows:
+            return '<div class="muted-note">No rows for this split.</div>'
+        p_agg = build_agg_from_rows(sub_rows, "Prop Type")
+        if not p_agg:
+            p_agg = build_agg_from_rows(sub_rows, "Prop")
+        p_agg = [p for p in p_agg if p.get("decided", 0) >= min_decided]
+        p_agg.sort(key=lambda x: x.get("hit_rate", 0), reverse=True)
+        p_agg = p_agg[:limit]
+        return prop_type_table(p_agg, "PROP TYPE", min_decided=0) if p_agg else f'<div class="muted-note">No prop types with ≥{min_decided} decided.</div>'
+
     prop_agg = build_agg_from_rows(rows, "Prop Type")
     if not prop_agg:
         prop_agg = build_agg_from_rows(rows, "Prop")
@@ -702,6 +713,35 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
 
     prop_section = ""
     if top_props or worst_props:
+        # Split charts the user asked for: tier / pick type / over-under / vs def tier
+        by_picktype = f"""<div class="three-col">
+          <div><div class="section-label">STANDARD — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if "standard" in str(r.get("Pick Type","") or "").lower()], min_decided=5)}</div>
+          <div><div class="section-label">GOBLIN — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if "goblin" in str(r.get("Pick Type","") or "").lower()], min_decided=5)}</div>
+          <div><div class="section-label">DEMON — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if "demon" in str(r.get("Pick Type","") or "").lower()], min_decided=5)}</div>
+        </div>"""
+
+        by_dir = f"""<div class="two-col">
+          <div><div class="section-label">OVER — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if str(r.get("Dir","") or r.get("Direction","")).strip().upper() == "OVER"], min_decided=5)}</div>
+          <div><div class="section-label">UNDER — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if str(r.get("Dir","") or r.get("Direction","")).strip().upper() == "UNDER"], min_decided=5)}</div>
+        </div>"""
+
+        by_tier = f"""<div class="two-col">
+          <div><div class="section-label">TIER A — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if str(r.get("Tier","") or "").strip().upper() == "A"], min_decided=5)}</div>
+          <div><div class="section-label">TIER B — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if str(r.get("Tier","") or "").strip().upper() == "B"], min_decided=5)}</div>
+        </div>
+        <div class="two-col">
+          <div><div class="section-label">TIER C — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if str(r.get("Tier","") or "").strip().upper() == "C"], min_decided=5)}</div>
+          <div><div class="section-label">TIER D — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if str(r.get("Tier","") or "").strip().upper() == "D"], min_decided=5)}</div>
+        </div>"""
+
+        def _norm_def_tier_for_split(x: str) -> str:
+            return str(x or "").lower().replace("🟢","").replace("🟡","").replace("🔴","").strip()
+
+        by_def = f"""<div class="two-col">
+          <div><div class="section-label">VS ELITE/ABOVE AVG DEF — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if _norm_def_tier_for_split(r.get("Def Tier","")) in ("elite","above avg")], min_decided=5)}</div>
+          <div><div class="section-label">VS AVG/WEAK DEF — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if _norm_def_tier_for_split(r.get("Def Tier","")) in ("avg","average","weak","very weak")], min_decided=5)}</div>
+        </div>"""
+
         prop_section = f"""<div class="two-col">
           <div>
             <div class="section-label">TOP PROP TYPES BY HIT RATE (≥10 DECIDED)</div>
@@ -711,7 +751,12 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
             <div class="section-label">WORST PROP TYPES (≥10 DECIDED)</div>
             {worst_prop_tbl}
           </div>
-        </div>"""
+        </div>
+        <div class="section-label">PROP TYPE BREAKDOWNS</div>
+        {by_picktype}
+        {by_dir}
+        {by_tier}
+        {by_def}"""
 
     # ── Player Leaderboards ────────────────────────────────────────────────────
     top_players   = player_table(rows, top=True,  min_decided=3, limit=8)
