@@ -978,16 +978,16 @@ function collapseSportsInTicketFrame(frame) {
   const doc = frame?.contentDocument;
   if (!doc) return;
   ensureFrameCollapseCss(doc);
-
-  // Newer ticket eval pages already have bucket details.
-  if (doc.querySelector('.ticket-bucket')) return;
-
   const wrap = doc.querySelector('.wrap');
   if (!wrap) return;
-  const sections = Array.from(wrap.querySelectorAll(':scope > section.sec')).filter(
-    el => !el.closest('.grades-sport-bucket')
-  );
+
+  // Always regroup by actual section headers, regardless of pre-existing wrappers.
+  const sections = Array.from(wrap.querySelectorAll('section.sec'));
   if (!sections.length) return;
+
+  // Remove any prior bucket wrappers injected by this page or embedded report.
+  wrap.querySelectorAll(':scope > details.grades-sport-bucket, :scope > details.ticket-bucket')
+      .forEach(el => el.remove());
 
   const groups = new Map();
   sections.forEach(sec => {
@@ -998,8 +998,12 @@ function collapseSportsInTicketFrame(frame) {
     groups.get(key).push(sec);
   });
 
-  const firstSec = sections[0];
-  if (!firstSec || !firstSec.parentNode) return;
+  // Reinsert after intro/meta copy if present.
+  const intro = wrap.querySelector(':scope > p.meta-muted');
+  let anchor = intro ? intro.nextSibling : wrap.firstChild;
+
+  // Detach all sections before rebuilding.
+  sections.forEach(sec => sec.parentNode && sec.parentNode.removeChild(sec));
 
   let idx = 0;
   groups.forEach((groupSecs, key) => {
@@ -1023,7 +1027,8 @@ function collapseSportsInTicketFrame(frame) {
     body.className = 'grades-sport-bucket-body';
     details.appendChild(body);
 
-    firstSec.parentNode.insertBefore(details, firstSec);
+    if (anchor) wrap.insertBefore(details, anchor);
+    else wrap.appendChild(details);
     groupSecs.forEach(sec => body.appendChild(sec));
   });
 }
