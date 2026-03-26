@@ -103,6 +103,20 @@ def strip_norm(s: str) -> str:
     return s
 
 
+def player_norm(s: str) -> str:
+    """
+    Normalize player names for cross-source matching.
+    Examples: "Jabari Smith" ~= "Jabari Smith Jr."
+    """
+    p = strip_norm(s)
+    p = p.replace(".", " ")
+    p = re.sub(r"\s+", " ", p).strip()
+    parts = [x for x in p.split(" ") if x]
+    suffixes = {"jr", "sr", "ii", "iii", "iv", "v"}
+    parts = [x for x in parts if x not in suffixes]
+    return " ".join(parts)
+
+
 def pick_category_from_cell(pick_type: str) -> str:
     s = strip_norm(pick_type or "")
     if "goblin" in s:
@@ -347,7 +361,7 @@ def prep_actuals(csv_path: Path, sport_label: str) -> pd.DataFrame:
     df["actual"] = pd.to_numeric(df["actual"], errors="coerce")
     df = df.dropna(subset=["actual"]).copy()
 
-    df["player_norm"] = df["player"].map(strip_norm)
+    df["player_norm"] = df["player"].map(player_norm)
     df["team_norm"] = df["team"].map(strip_norm)
     df["prop_norm"] = df["prop_type"].map(prop_norm_from_actual)
     return df
@@ -374,7 +388,7 @@ def lookup_actual(sport: str, player: str, team: str, prop_norm: str,
     sport = (sport or "").upper()
     if sport == "WCBB":
         sport = "CBB"
-    player_n = strip_norm(player)
+    player_n = player_norm(player)
     team_n = strip_norm(team)
 
     if sport == "NBA1H":

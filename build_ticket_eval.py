@@ -445,6 +445,14 @@ def _norm_header(s: str) -> str:
     return re.sub(r"\s+", " ", str(s).strip().lower())
 
 
+def _norm_player_name(s: str) -> str:
+    p = str(s or "").strip().lower().replace(".", " ")
+    p = re.sub(r"\s+", " ", p)
+    suffixes = {"jr", "sr", "ii", "iii", "iv", "v"}
+    parts = [x for x in p.split(" ") if x and x not in suffixes]
+    return " ".join(parts)
+
+
 def _canon_player(row: dict[str, Any]) -> str:
     for k in ("player", "athlete", "name"):
         v = row.get(k)
@@ -689,7 +697,7 @@ def _ingest_workbook_rows_into_index(
     pair_buckets: dict[tuple[str, str], list[dict]],
 ) -> None:
     for raw in rows:
-        pl = _canon_player(raw).lower()
+        pl = _norm_player_name(_canon_player(raw))
         pt = _canon_prop(raw).lower()
         dr = _canon_direction(raw)
         if not pl or not pt:
@@ -869,7 +877,7 @@ def _load_actuals_indices(
                             raw["actual"] = grow[actualcol]
                         if resultcol and pd.notna(grow.get(resultcol)):
                             raw["grade"] = grow[resultcol]
-                        pl = _canon_player(raw).lower()
+                        pl = _norm_player_name(_canon_player(raw))
                         pt = _canon_prop(raw).lower()
                         dr = _canon_direction(raw)
                         if not pl or not pt:
@@ -898,7 +906,7 @@ def _match_leg_in_index(
     triple: dict[tuple[str, str, str], dict],
     pair_buckets: dict[tuple[str, str], list[dict]],
 ) -> dict | None:
-    pl = str(leg.get("player") or "").strip().lower()
+    pl = _norm_player_name(leg.get("player") or "")
     pt = str(leg.get("prop_type") or "").strip().lower()
     dr = str(leg.get("direction") or "").strip().upper()
     if not pl or not pt:
@@ -1034,7 +1042,7 @@ def debug_report(
 
     print("\nSample legs (match against index above):")
     for i, leg in enumerate(legs_sample, 1):
-        pl = str(leg.get("player") or "").strip().lower()
+        pl = _norm_player_name(leg.get("player") or "")
         pt = str(leg.get("prop_type") or "").strip().lower()
         dr = str(leg.get("direction") or "").strip().upper()
         row = _match_leg_to_row_multi(leg, indices)
