@@ -4,9 +4,10 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>PropOracle — Home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap');
 :root{
   /* Hybrid liquid-glass palette */
   --bg-main:#050505;
@@ -89,7 +90,7 @@ body::after{content:'';position:fixed;inset:0;
 @keyframes accentShift{from{opacity:.5;filter:hue-rotate(0deg);}to{opacity:.9;filter:hue-rotate(20deg);}}
 .snav-brand{display:flex;align-items:center;gap:14px;text-decoration:none;margin-right:48px;flex-shrink:0;}
 .hybrid-logo{display:flex;align-items:center;gap:10px;}
-.logo-icon{width:182px;height:182px;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(212,175,55,0.45));}
+.logo-icon{width:44px;height:44px;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(212,175,55,0.45));}
 .nav-brand{font-family:'Inter',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px;line-height:1;text-transform:none;color:var(--text-primary);display:flex;align-items:baseline;}
 .nav-brand .p-lower{text-transform:lowercase;}
 .nav-brand .oracle-upper{text-transform:uppercase;font-weight:800;color:var(--accent-gold);}
@@ -123,7 +124,7 @@ body::after{content:'';position:fixed;inset:0;
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
 /* hamburger */
-.hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:8px;border:1px solid rgba(255,255,255,0.09);border-radius:8px;background:rgba(255,255,255,0.04);backdrop-filter:blur(10px) saturate(180%);}
+.hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:8px;min-width:44px;min-height:44px;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.09);border-radius:8px;background:rgba(255,255,255,0.04);backdrop-filter:blur(10px) saturate(180%);}
 .hamburger span{display:block;width:18px;height:2px;background:var(--muted);border-radius:2px;transition:all .25s;}
 .hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
 .hamburger.open span:nth-child(2){opacity:0;}
@@ -285,6 +286,16 @@ body::after{content:'';position:fixed;inset:0;
   .status-row{grid-template-columns:1fr!important;}
 }
 
+/* Reduce GPU-heavy blur on small screens */
+@media(max-width:640px){
+  .snav,.mobile-menu{backdrop-filter:blur(14px) saturate(150%)!important;-webkit-backdrop-filter:blur(14px) saturate(150%)!important;}
+  .glass-card,.hero,.home-cat,.scard,.qcard,.edge-card{backdrop-filter:blur(10px) saturate(140%)!important;-webkit-backdrop-filter:blur(10px) saturate(140%)!important;}
+}
+/* Respect reduced-motion preference */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
+}
+
 /* ==== Glass UI system ==== */
 body{
   background:
@@ -331,7 +342,7 @@ body{
 @media(max-width:900px){
   .shell{padding:18px 12px 22px;}
   .snav{margin:0;border-radius:0;padding:0 12px;height:auto;min-height:64px;top:0;}
-  .snav-brand .logo-icon{width:120px;height:120px;}
+  .snav-brand .logo-icon{width:36px;height:36px;}
   .snav-links{display:none;}
   .hamburger{display:flex;margin-left:auto;}
   .quick-grid{grid-template-columns:1fr;gap:10px;}

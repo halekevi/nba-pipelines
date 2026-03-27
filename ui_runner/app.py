@@ -16,6 +16,8 @@ if sys.platform == "win32":
     except AttributeError:
         pass
 
+import gzip
+import io
 import json
 import time
 import uuid
@@ -69,6 +71,42 @@ app = Flask(
     template_folder=str(TEMPLATES_DIR),
     static_folder=str(STATIC_DIR) if STATIC_DIR.exists() else None,
 )
+
+# ── Response compression + static caching ─────────────────────────────────────
+_COMPRESSIBLE = ("text/", "application/json", "application/javascript")
+_STATIC_EXTS  = (".css", ".js", ".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg", ".ico", ".woff", ".woff2")
+
+@app.after_request
+def post_process_response(response):
+    # Long-lived cache for static assets (images, CSS, JS)
+    if request.path.startswith("/static/") and any(request.path.endswith(e) for e in _STATIC_EXTS):
+        if "Cache-Control" not in response.headers:
+            response.headers["Cache-Control"] = "public, max-age=86400"
+
+    # Gzip compress eligible text responses
+    if (
+        response.direct_passthrough
+        or response.status_code < 200
+        or response.status_code >= 300
+        or "Content-Encoding" in response.headers
+        or not any(t in response.content_type for t in _COMPRESSIBLE)
+        or "gzip" not in request.headers.get("Accept-Encoding", "")
+    ):
+        return response
+    data = response.get_data()
+    if len(data) < 500:
+        return response
+    buf = io.BytesIO()
+    with gzip.GzipFile(mode="wb", fileobj=buf, compresslevel=6) as gz:
+        gz.write(data)
+    compressed = buf.getvalue()
+    if len(compressed) >= len(data):
+        return response
+    response.set_data(compressed)
+    response.headers["Content-Encoding"] = "gzip"
+    response.headers["Content-Length"]   = len(compressed)
+    response.headers["Vary"]             = "Accept-Encoding"
+    return response
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Job Model
