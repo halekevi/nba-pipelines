@@ -242,6 +242,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 289548,5176077,2329,joshua ingram,LEH,name_team,2026-03-16
 289549,5176076,2329,nasir whitlock,LEH,name_team,2026-03-16
 289923,5176153,245,marcus hill,TXAM,name_only,2026-03-16
+290164,5311842,2294,tate sage,IOWA,name_team,2026-03-27
 290206,5313031,2608,dillan shaw,SMC,name_team,2026-03-16
 290367,5196946,194,amare bynum,OSU,name_team,2026-03-16
 290562,5037876,2628,micah robinson,TCU,name_team,2026-03-16
@@ -372,6 +373,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 309672,4703411,127,trey fort,MSU,name_team,2026-03-24
 309673,5144124,150,nikolas khamenia,DUKE,name_team,2026-03-24
 309863,5101798,127,cam ward,MSU,name_team,2026-03-25
+310287,5186456,12,dwayne aristode,ARIZ,name_team,2026-03-27
 88130,5105837,194,bruce thornton,OSU,name_team,2026-03-16
 88238,5105853,2509,fletcher loyer,PUR,name_team,2026-03-15
 88458,4698719,8,trevon brazile,ARK,name_team,2026-03-15

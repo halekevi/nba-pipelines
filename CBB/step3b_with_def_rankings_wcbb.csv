@@ -13,7 +13,8 @@ proj_id,player_id,cbb_player_key,player,player_norm,team_abbr,opp_team_abbr,pp_t
 10858985,280152,cassandre prosper|ND,Cassandre Prosper,cassandre prosper,ND,VAN,ND,VAN,G,Points,pts,Demon,14.5,2026-03-27T14:30:00.000-04:00,146671,176,ND,Points,demon,Full,14.5,183,73.7,Avg,Avg,183
 10858992,309447,iyana moore|ND,Iyana Moore,iyana moore,ND,VAN,ND,VAN,G,Points,pts,Demon,14.5,2026-03-27T14:30:00.000-04:00,146671,176,ND,Points,demon,Full,14.5,183,73.7,Avg,Avg,183
 10858994,276416,sacha washington|VAN,Sacha Washington,sacha washington,VAN,ND,VAN,ND,F,Points,pts,Demon,14.5,2026-03-27T14:30:00.000-04:00,146671,176,VAN,Points,demon,Full,14.5,168,73.41,Avg,Avg,168
-10858952,281036,aubrey galvan|VAN,Aubrey Galvan,aubrey galvan,VAN,ND,VAN,ND,G,Points,pts,Goblin,13.5,2026-03-27T14:30:00.000-04:00,146671,176,VAN,Points,goblin,Full,13.5,168,73.41,Avg,Avg,168
+10866661,281036,aubrey galvan|VAN,Aubrey Galvan,aubrey galvan,VAN,ND,VAN,ND,G,Points,pts,Standard,13.5,2026-03-27T14:30:00.000-04:00,146671,176,VAN,Points,standard,Full,13.5,168,73.41,Avg,Avg,168
+10866700,280152,cassandre prosper|ND,Cassandre Prosper,cassandre prosper,ND,VAN,ND,VAN,G,Points,pts,Standard,12.5,2026-03-27T14:30:00.000-04:00,146671,176,ND,Points,standard,Full,12.5,183,73.7,Avg,Avg,183
 10858851,281036,aubrey galvan|VAN,Aubrey Galvan,aubrey galvan,VAN,ND,VAN,ND,G,Points,pts,Goblin,11.5,2026-03-27T14:30:00.000-04:00,146671,176,VAN,Points,goblin,Full,11.5,168,73.41,Avg,Avg,168
 10858983,280152,cassandre prosper|ND,Cassandre Prosper,cassandre prosper,ND,VAN,ND,VAN,G,Points,pts,Goblin,11.5,2026-03-27T14:30:00.000-04:00,146671,176,ND,Points,goblin,Full,11.5,183,73.7,Avg,Avg,183
 10858958,286735,justine pissott|VAN,Justine Pissott,justine pissott,VAN,ND,VAN,ND,G-F,Points,pts,Goblin,9.5,2026-03-27T14:30:00.000-04:00,146671,176,VAN,Points,goblin,Full,9.5,168,73.41,Avg,Avg,168

@@ -111,12 +111,8 @@ NBA/data/cache/schedule_cache_*.csv
 NBA/game_context_cache_*.csv
 NBA/schedule_cache_*.csv
 
-# weird temp file
-$null
-
-# NBA cache files
-NBA/archive/schedule_cache_*.csv
-NBA/data/cache/game_context_cache_*.csv
-NBA/data/cache/schedule_cache_*.csv
-NBA/game_context_cache_*.csv
-NBA/schedule_cache_*.csv
+# Railway slate files — tracked at sport root so the Railway app gets fresh data on every push
+!NBA/step8_all_direction_clean.xlsx
+!NHL/step8_nhl_direction_clean.xlsx
+!Soccer/step8_soccer_direction_clean.xlsx
+!MLB/step8_mlb_direction_clean.xlsx

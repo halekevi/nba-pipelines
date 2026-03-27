@@ -362,6 +362,28 @@ if ($script:PipelineFailed) {
 }
 
 # =============================================================================
+# STEP D2 — Copy step8 clean slates to sport root folders (Railway reads these)
+# =============================================================================
+Write-Log "STEP D2 - Copy Railway slate files to sport roots: START"
+$railwayCopies = @(
+    @{ Src = "NBA\data\outputs\step8_all_direction_clean.xlsx"; Dst = "NBA\step8_all_direction_clean.xlsx" },
+    @{ Src = "Soccer\outputs\step8_soccer_direction_clean.xlsx"; Dst = "Soccer\step8_soccer_direction_clean.xlsx" },
+    @{ Src = "MLB\outputs\step8_mlb_direction_clean.xlsx"; Dst = "MLB\step8_mlb_direction_clean.xlsx" }
+)
+foreach ($rc in $railwayCopies) {
+    $srcPath = Join-Path $Root $rc.Src
+    $dstPath = Join-Path $Root $rc.Dst
+    if (Test-Path $srcPath) {
+        Copy-Item -LiteralPath $srcPath -Destination $dstPath -Force
+        Write-Log "STEP D2 - Copied $($rc.Src) -> $($rc.Dst)"
+    }
+    else {
+        Write-Log "STEP D2 - SKIP (source missing): $($rc.Src)"
+    }
+}
+Write-Log "STEP D2 - Copy Railway slate files to sport roots: OK"
+
+# =============================================================================
 # STEP E — Git commit + push
 # =============================================================================
 if ($SkipPush) {
@@ -426,10 +448,11 @@ else {
 
         git -C $Root add -- "outputs/$Today/" "ui_runner/templates/"
         $optionalAdds = @(
-            "NBA\data\outputs\step8_all_direction_clean.xlsx",
+            "NBA\step8_all_direction_clean.xlsx",
             "NBA\step8_nba1h_direction_clean.xlsx",
             "NBA\step8_nba1q_direction_clean.xlsx",
-            "Soccer\outputs\step8_soccer_direction_clean.xlsx",
+            "Soccer\step8_soccer_direction_clean.xlsx",
+            "MLB\step8_mlb_direction_clean.xlsx",
             "CBB\step6_ranked_cbb.xlsx",
             "CBB\step6_ranked_wcbb.xlsx",
             "NHL\step8_nhl_direction_clean.xlsx"
