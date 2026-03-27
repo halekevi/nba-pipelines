@@ -1014,26 +1014,10 @@ def main() -> None:
     out["intel_cons_z"] = zcol(pd.Series(intel_cons_raw, index=out.index))
 
     # ── FINAL SCORE ───────────────────────────────────────────────────────────
-    # Scoring weight rationale (from 9-day calibration, 19,461 decided props):
-    #
-    # SIGNAL            CORR    OLD WT  NEW WT  NOTES
-    # edge_adj_dr       0.132   0.85    0.90    signed edge — best single predictor
-    #                                           now also bakes in pace + opp_prop_adj
-    # intel_shr_z       —       0.70    0.85    season hit rate at this line — strong
-    # line_hit_z        0.148   0.85    0.80    recent hit rate — reliable
-    # avg_vs_line_z     —       0.75    0.70    avg vs line — useful but noisy
-    # def_rank_z        —       0.80    0.60    overall defense rank
-    # prop_hr_z         —       0.50    0.55    calibrated priors
-    # intel_def_z       —       0.40    0.35    opp generosity — lowered: now also in
-    #                                           projection via opp_prop_adj (double-count risk)
-    # intel_cons_z      —       0.25    0.25    consistency — unchanged
-    # pace_z            —       NEW     0.20    game pace signal (from game_total)
-    # min_z             —       0.25    0.20    minutes certainty — minor
-    #
-    # Context penalties (flat, not z-scored):
-    # b2b_penalty       -0.20   on player's own team B2B flag
-    # blowout_penalty   -0.10   blowout risk games
-    # low_total_pen     -0.10   low total games
+    # Edge > Rank > L5 hierarchy:
+    # 1) edge_adj_dr is primary driver
+    # 2) structural/context factors are secondary rank stabilizers
+    # 3) L5/L10 style signals act only as bounded confidence modifiers
 
     b2b_penalty    = np.where(out.get("b2b_flag",    pd.Series(False, index=out.index)).astype(str).str.lower() == "true", -0.20, 0.0)
     blowout_penalty= np.where(out.get("blowout_risk", pd.Series(False, index=out.index)).astype(str).str.lower() == "true", -0.10, 0.0)
@@ -1058,31 +1042,43 @@ def main() -> None:
     # Pace z-score (direction-aware — already in out["pace_adj"] but score via z for scale)
     out["pace_z"] = zcol(out["pace_adj"], direction_aware=True)
 
-    score = (
-        _to_num(out["edge_adj_dr"]).fillna(0.0)      * 0.90   # best predictor; now includes pace+opp
-        + _to_num(out["intel_shr_z"]).fillna(0.0)   * 0.85   # season hit rate at this line
-        + _to_num(out["line_hit_z"]).fillna(0.0)     * 0.80   # recent hit rate
-        + _to_num(out["avg_vs_line_z"]).fillna(0.0)  * 0.70   # avg vs line
-        + _to_num(out["def_rank_z"]).fillna(0.0)     * 0.60   # overall defense rank
-        + _to_num(out["prop_hr_z"]).fillna(0.0)      * 0.55   # calibrated priors
-        + _to_num(out["intel_def_z"]).fillna(0.0)   * 0.35   # lowered: opp allowance now in proj
-        + _to_num(out["intel_cons_z"]).fillna(0.0)  * 0.25   # consistency
-        + _to_num(out["pace_z"]).fillna(0.0)         * 0.20   # NEW: game pace signal
-        + _to_num(out["min_z"]).fillna(0.0)          * 0.20   # minutes certainty
-        + pd.Series(b2b_penalty,     index=out.index)
+    edge_core = _to_num(out["edge_adj_dr"]).fillna(0.0)
+    rank_support = (
+        _to_num(out["def_rank_z"]).fillna(0.0)   * 0.38
+        + _to_num(out["prop_hr_z"]).fillna(0.0) * 0.30
+        + _to_num(out["intel_def_z"]).fillna(0.0) * 0.20
+        + _to_num(out["intel_cons_z"]).fillna(0.0) * 0.16
+        + _to_num(out["pace_z"]).fillna(0.0) * 0.12
+        + _to_num(out["min_z"]).fillna(0.0) * 0.10
+        + pd.Series(b2b_penalty, index=out.index)
         + pd.Series(blowout_penalty, index=out.index)
-        + pd.Series(low_total_pen,   index=out.index)
+        + pd.Series(low_total_pen, index=out.index)
         + _inj_pen.reindex(out.index).fillna(0.0)
     )
-    score = (
-        score
+
+    # L5/L10 support is bounded and cannot dominate edge/rank.
+    l5_support_signal = (
+        _to_num(out["line_hit_z"]).fillna(0.0) * 0.60
+        + _to_num(out["avg_vs_line_z"]).fillna(0.0) * 0.40
+    )
+    l5_support_mod = np.clip(0.08 * l5_support_signal, -0.12, 0.12)
+
+    base_raw = (edge_core * 1.20) + (rank_support * 0.35)
+    score_raw = base_raw * (1.0 + l5_support_mod)
+    score_raw = (
+        score_raw
         * _to_num(out["prop_weight"]).fillna(1.0)
         * _to_num(out["reliability_mult"]).fillna(1.0)
     )
-    score = score.where(elig_mask, np.nan)
 
-    out["rank_score"] = score
-    out["ml_prob"], out["ml_edge"], out["final_score"] = _apply_ml_blend(out, out["rank_score"], args.input)
+    # Hard edge gate: only keep positive adjusted-edge rows in rank ordering.
+    edge_gate = _to_num(out["edge_adj"]).fillna(-999.0) > 0.0
+    score_raw = score_raw.where(elig_mask & edge_gate, np.nan)
+
+    out["l5_support_mod"] = pd.Series(l5_support_mod, index=out.index)
+    out["rank_score_raw"] = score_raw
+    out["rank_score"] = out["rank_score_raw"]
+    out["ml_prob"], out["ml_edge"], out["final_score"] = _apply_ml_blend(out, out["rank_score_raw"], args.input)
     _apply_consistency_grade_scores(out, "NBA")
 
     # Game script risk adjustment
@@ -1116,8 +1112,9 @@ def main() -> None:
     out["game_script_mult"] = _gmults
     out["game_script_note"] = _gnotes
     out["final_score"] = _to_num(out["final_score"]).astype(float) * pd.Series(_gmults, dtype=float).values
-
-    out["rank_score"] = out["final_score"]
+    out["rank_score_final"] = out["final_score"]
+    # Keep downstream compatibility: rank_score remains the final ranking value.
+    out["rank_score"] = out["rank_score_final"]
     out["tier"] = pd.Series(
         _tier_from_score_series(_to_num(out["rank_score"])), index=out.index
     )
