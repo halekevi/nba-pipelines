@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-27 01:42:57 UTC",
+  "generated_at": "2026-03-27 02:24:53 UTC",
   "date": "2026-03-26",
   "filters": {
     "tiers": "A,B,C,D",
@@ -22,13 +22,13 @@
           "ticket_no": 1,
           "avg_hit_rate": 1.0,
           "avg_rank_score": 4.37,
-          "est_win_prob": 0.44610162139256065,
+          "est_win_prob": 0.5264302679999999,
           "power_payout": 2.19,
           "flex_payout": 2.19,
           "base_power_payout": 3.0,
           "payout_multiplier": 0.73,
-          "ev_power": 0.977,
-          "kelly_units": 0.0,
+          "ev_power": 1.1529,
+          "kelly_units": 0.03,
           "has_data_warning": false,
           "legs": [
             {
@@ -69,8 +69,8 @@
               "pace_tier": "",
               "context_score": null,
               "data_warning": null,
-              "leg_prob_used": 0.702138068199835,
-              "leg_prob_source": "edge",
+              "leg_prob_used": 0.789,
+              "leg_prob_source": "ml_prob",
               "image_url": null,
               "initials": "DB"
             },
@@ -112,8 +112,8 @@
               "pace_tier": "",
               "context_score": null,
               "data_warning": null,
-              "leg_prob_used": 0.6759015277259407,
-              "leg_prob_source": "edge",
+              "leg_prob_used": 0.7098,
+              "leg_prob_source": "ml_prob",
               "image_url": null,
               "initials": "PB"
             }
@@ -131,12 +131,12 @@
           "ticket_no": 1,
           "avg_hit_rate": 1.0,
           "avg_rank_score": 4.306666666666667,
-          "est_win_prob": 0.35688129711404853,
+          "est_win_prob": 0.415353481452,
           "power_payout": 2.41,
           "flex_payout": 1.2,
           "base_power_payout": 6.0,
           "payout_multiplier": 0.4017,
-          "ev_power": 0.8601,
+          "ev_power": 1.001,
           "kelly_units": 0.0,
           "has_data_warning": false,
           "legs": [
@@ -178,8 +178,8 @@
               "pace_tier": "",
               "context_score": null,
               "data_warning": null,
-              "leg_prob_used": 0.702138068199835,
-              "leg_prob_source": "edge",
+              "leg_prob_used": 0.789,
+              "leg_prob_source": "ml_prob",
               "image_url": null,
               "initials": "DB"
             },
@@ -221,8 +221,8 @@
               "pace_tier": "",
               "context_score": null,
               "data_warning": null,
-              "leg_prob_used": 0.8,
-              "leg_prob_source": "edge",
+              "leg_prob_used": 0.789,
+              "leg_prob_source": "ml_prob",
               "image_url": null,
               "initials": "JH"
             },
@@ -264,8 +264,8 @@
               "pace_tier": "",
               "context_score": null,
               "data_warning": null,
-              "leg_prob_used": 0.6759015277259407,
-              "leg_prob_source": "edge",
+              "leg_prob_used": 0.7098,
+              "leg_prob_source": "ml_prob",
               "image_url": null,
               "initials": "PB"
             }
@@ -283,12 +283,12 @@
           "ticket_no": 1,
           "avg_hit_rate": 0.7,
           "avg_rank_score": 0.864428907305683,
-          "est_win_prob": 0.5277284223954412,
+          "est_win_prob": 0.33502067422838094,
           "power_payout": 0.55,
           "flex_payout": 0.55,
           "base_power_payout": 3.0,
           "payout_multiplier": 0.1833,
-          "ev_power": 0.2903,
+          "ev_power": 0.1843,
           "kelly_units": 0.0,
           "has_data_warning": false,
           "legs": [
@@ -330,8 +330,8 @@
               "pace_tier": "",
               "context_score": null,
               "data_warning": null,
-              "leg_prob_used": 0.7539887164489479,
-              "leg_prob_source": "edge",
+              "leg_prob_used": 0.6060606241226196,
+              "leg_prob_source": "ml_prob",
               "image_url": "https://a.espncdn.com/i/headshots/mens-college-basketball/players/full/279710.png",
               "initials": "KP"
             },
@@ -373,8 +373,8 @@
               "pace_tier": "",
               "context_score": null,
               "data_warning": null,
-              "leg_prob_used": 0.6921478598842637,
-              "leg_prob_source": "edge",
+              "leg_prob_used": 0.5880681872367859,
+              "leg_prob_source": "ml_prob",
               "image_url": "https://a.espncdn.com/i/headshots/mens-college-basketball/players/full/287004.png",
               "initials": "MK"
             }
@@ -392,12 +392,12 @@
           "ticket_no": 1,
           "avg_hit_rate": 0.7166666666666667,
           "avg_rank_score": 0.844035404329628,
-          "est_win_prob": 0.3527145107787148,
+          "est_win_prob": 0.19086026858182337,
           "power_payout": 0.71,
           "flex_payout": 0.35,
           "base_power_payout": 6.0,
           "payout_multiplier": 0.1183,
-          "ev_power": 0.2504,
+          "ev_power": 0.1355,
           "kelly_units": 0.0,
           "has_data_warning": false,
           "legs": [
@@ -439,8 +439,8 @@
               "pace_tier": "",
               "context_score": null,
               "data_warning": null,
-              "leg_prob_used": 0.7539887164489479,
-              "leg_prob_source": "edge",
+              "leg_prob_used": 0.6060606241226196,
+              "leg_prob_source": "ml_prob",
               "image_url": "https://a.espncdn.com/i/headshots/mens-college-basketball/players/full/279710.png",
               "initials": "KP"
             },
@@ -482,8 +482,8 @@
               "pace_tier": "",
               "context_score": null,
               "data_warning": null,
-              "leg_prob_used": 0.6921478598842637,
-              "leg_prob_source": "edge",
+              "leg_prob_used": 0.5880681872367859,
+              "leg_prob_source": "ml_prob",
               "image_url": "https://a.espncdn.com/i/headshots/mens-college-basketball/players/full/287004.png",
               "initials": "MK"
             },
@@ -525,8 +525,8 @@
               "pace_tier": "",
               "context_score": null,
               "data_warning": null,
-              "leg_prob_used": 0.676667760492348,
-              "leg_prob_source": "edge",
+              "leg_prob_used": 0.6060606241226196,
+              "leg_prob_source": "ml_prob",
               "image_url": "https://a.espncdn.com/i/headshots/mens-college-basketball/players/full/287583.png",
               "initials": "IK"
             }
@@ -544,13 +544,13 @@
           "ticket_no": 1,
           "avg_hit_rate": 0.9,
           "avg_rank_score": 2.575,
-          "est_win_prob": 0.6400000000000001,
+          "est_win_prob": 0.7224999999999999,
           "power_payout": 3.0,
           "flex_payout": 3.0,
           "base_power_payout": 3.0,
           "payout_multiplier": 1.0,
-          "ev_power": 1.92,
-          "kelly_units": 0.12,
+          "ev_power": 2.1675,
+          "kelly_units": 0.15,
           "has_data_warning": true,
           "legs": [
             {
@@ -591,8 +591,8 @@
               "pace_tier": "",
               "context_score": null,
               "data_warning": "LIMITED_Q1_HISTORY",
-              "leg_prob_used": 0.8,
-              "leg_prob_source": "edge",
+              "leg_prob_used": 0.85,
+              "leg_prob_source": "ml_prob",
               "image_url": null,
               "initials": "IH"
             },
@@ -634,8 +634,8 @@
               "pace_tier": "",
               "context_score": null,
               "data_warning": "LIMITED_Q1_HISTORY",
-              "leg_prob_used": 0.8,
-              "leg_prob_source": "edge",
+              "leg_prob_used": 0.85,
+              "leg_prob_source": "ml_prob",
               "image_url": null,
               "initials": "AS"
             }
@@ -653,13 +653,13 @@
           "ticket_no": 1,
           "avg_hit_rate": 0.9333333333333332,
           "avg_rank_score": 2.5233333333333334,
-          "est_win_prob": 0.5120000000000001,
+          "est_win_prob": 0.6141249999999999,
           "power_payout": 6.0,
           "flex_payout": 3.0,
           "base_power_payout": 6.0,
           "payout_multiplier": 1.0,
-          "ev_power": 3.072,
-          "kelly_units": 0.1,
+          "ev_power": 3.6847,
+          "kelly_units": 0.13,
           "has_data_warning": true,
           "legs": [
             {
@@ -700,8 +700,8 @@
               "pace_tier": "",
               "context_score": null,
               "data_warning": "LIMITED_Q1_HISTORY",
-              "leg_prob_used": 0.8,
-              "leg_prob_source": "edge",
+              "leg_prob_used": 0.85,
+              "leg_prob_source": "ml_prob",
               "image_url": null,
               "initials": "IH"
             },
@@ -743,8 +743,8 @@
               "pace_tier": "",
               "context_score": null,
               "data_warning": "LIMITED_Q1_HISTORY",
-              "leg_prob_used": 0.8,
-              "leg_prob_source": "edge",
+              "leg_prob_used": 0.85,
+              "leg_prob_source": "ml_prob",
               "image_url": null,
               "initials": "AS"
             },
@@ -786,8 +786,8 @@
               "pace_tier": "",
               "context_score": null,
               "data_warning": "LIMITED_Q1_HISTORY",
-              "leg_prob_used": 0.8,
-              "leg_prob_source": "edge",
+              "leg_prob_used": 0.85,
+              "leg_prob_source": "ml_prob",
               "image_url": null,
               "initials": "JD"
             }
@@ -805,13 +805,13 @@
           "ticket_no": 1,
           "avg_hit_rate": 1.0,
           "avg_rank_score": 2.9450000000000003,
-          "est_win_prob": 0.6400000000000001,
+          "est_win_prob": 0.7224999999999999,
           "power_payout": 3.0,
           "flex_payout": 3.0,
           "base_power_payout": 3.0,
           "payout_multiplier": 1.0,
-          "ev_power": 1.92,
-          "kelly_units": 0.12,
+          "ev_power": 2.1675,
+          "kelly_units": 0.15,
           "has_data_warning": false,
           "legs": [
             {
@@ -852,8 +852,8 @@
               "pace_tier": "",
               "context_score": null,
               "data_warning": null,
-              "leg_prob_used": 0.8,
-              "leg_prob_source": "edge",
+              "leg_prob_used": 0.85,
+              "leg_prob_source": "ml_prob",
               "image_url": null,
               "initials": "AT"
             },
@@ -895,8 +895,8 @@
               "pace_tier": "",
               "context_score": null,
               "data_warning": null,
-              "leg_prob_used": 0.8,
-              "leg_prob_source": "edge",
+              "leg_prob_used": 0.85,
+              "leg_prob_source": "ml_prob",
               "image_url": null,
               "initials": "NA"
             }
