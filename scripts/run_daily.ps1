@@ -23,7 +23,9 @@ param(
     [string]$Date = "",
     [string]$GradeDate = "",
     [string]$OddsApiKey = "",
-    [switch]$ForceAll
+    [switch]$ForceAll,
+    [switch]$AllowMissingSlates,
+    [int]$A1TimeoutMinutes = 30
 )
 
 $ErrorActionPreference = "Continue"
@@ -57,6 +59,26 @@ function Write-Log([string]$Message) {
     $line | Tee-Object -FilePath $LogFile -Append
 }
 
+function Get-MissingTodaySlateOutputs([string]$RunDate) {
+    $outDir = Join-Path $Root "outputs\$RunDate"
+    $required = @(
+        "step8_nba_direction_clean_$RunDate.xlsx",
+        "step8_nba1h_direction_clean_$RunDate.xlsx",
+        "step8_nba1q_direction_clean_$RunDate.xlsx",
+        "step6_ranked_cbb_$RunDate.xlsx",
+        "step6_ranked_wcbb_$RunDate.xlsx",
+        "step8_nhl_direction_clean_$RunDate.xlsx",
+        "step8_soccer_direction_clean_$RunDate.xlsx",
+        "step8_mlb_direction_clean_$RunDate.xlsx"
+    )
+    $missing = @()
+    foreach ($name in $required) {
+        $p = Join-Path $outDir $name
+        if (-not (Test-Path $p)) { $missing += $name }
+    }
+    return $missing
+}
+
 # Python / UTF-8
 $env:PYTHONUTF8 = "1"
 $env:PYTHONIOENCODING = "utf-8"
@@ -76,14 +98,30 @@ if (-not $SkipFetch) {
     # or move the repo / DB to a non-synced location.
     Push-Location $Root
     try {
-        & py -3.14 $fetchScript --refresh-current
-        $fe = $LASTEXITCODE
-        if ($fe -ne 0) {
-            Write-Warning "fetch_historical_actuals.py exited $fe — continuing (see logs\fetch_errors.log)"
-            Write-Log "STEP A1 - Historical actuals refresh: WARN (exit $fe)"
+        # Run in a child process so daily cannot hang forever in A1.
+        $a1Proc = Start-Process -FilePath "py" `
+            -ArgumentList @("-3.14", "-u", $fetchScript, "--refresh-current") `
+            -NoNewWindow -PassThru
+
+        $waitSec = [Math]::Max(60, $A1TimeoutMinutes * 60)
+        $a1Finished = $a1Proc.WaitForExit($waitSec * 1000)
+        if (-not $a1Finished) {
+            Write-Warning "fetch_historical_actuals.py exceeded timeout (${A1TimeoutMinutes}m) — continuing"
+            Write-Log "STEP A1 - Historical actuals refresh: WARN (timeout ${A1TimeoutMinutes}m)"
+            try {
+                Stop-Process -Id $a1Proc.Id -Force -ErrorAction SilentlyContinue
+            }
+            catch { }
         }
         else {
-            Write-Log "STEP A1 - Historical actuals refresh: OK"
+            $fe = $a1Proc.ExitCode
+            if ($fe -ne 0) {
+                Write-Warning "fetch_historical_actuals.py exited $fe — continuing (see logs\fetch_errors.log)"
+                Write-Log "STEP A1 - Historical actuals refresh: WARN (exit $fe)"
+            }
+            else {
+                Write-Log "STEP A1 - Historical actuals refresh: OK"
+            }
         }
     }
     catch {
@@ -236,9 +274,8 @@ if (-not $SkipPipeline) {
     if ($EffectiveOddsKey) {
         $pipeArgs += @("-OddsApiKey", $EffectiveOddsKey)
     }
-    if ($ForceAll) {
-        $pipeArgs += "-ForceAll"
-    }
+    # Always force a fresh, full slate build during daily runs.
+    $pipeArgs += "-ForceAll"
     $pipeArgs += "-SkipCombined"
     $pipeArgs += "-SkipPush"
     Push-Location $Root
@@ -258,6 +295,17 @@ if (-not $SkipPipeline) {
         }
         else {
             Write-Log "STEP C - Pipeline ($Today): OK"
+            if (-not $AllowMissingSlates) {
+                $missingToday = Get-MissingTodaySlateOutputs -RunDate $Today
+                if ($missingToday.Count -gt 0) {
+                    $script:PipelineFailed = $true
+                    Write-Log "STEP C - Pipeline ($Today): FAILED (missing outputs: $($missingToday -join ', '))"
+                    Write-Host "Pipeline finished, but required today outputs are missing:" -ForegroundColor Red
+                    foreach ($m in $missingToday) {
+                        Write-Host "  - $m" -ForegroundColor Red
+                    }
+                }
+            }
         }
     }
     catch {

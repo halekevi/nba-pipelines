@@ -36,8 +36,8 @@ import numpy as np
 import pandas as pd
 import requests
 
-# Ensure <repo>/PropOracle is on sys.path so we can import PropOracle-level helpers.
-_PROPORACLE_ROOT = Path(__file__).resolve().parents[1]
+# Ensure repo root is on sys.path so top-level helpers import from any cwd.
+_PROPORACLE_ROOT = Path(__file__).resolve().parents[2]
 if str(_PROPORACLE_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROPORACLE_ROOT))
 

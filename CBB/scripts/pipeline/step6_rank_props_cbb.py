@@ -673,6 +673,7 @@ def main():
         print(f"⚠️ usage redistribution skipped: {e}")
 
     slate_game_date = (args.date or datetime.now().strftime("%Y-%m-%d")).strip()
+    is_wcbb_slate = "wcbb" in str(args.input).lower()
 
     # Full-slate ESPN team_id -> PP abbr (needed to backfill opp_team_abbr in boxscore cache for H2H).
     tid_to_abbr_for_h2h: Dict[str, str] = {}
@@ -736,6 +737,8 @@ def main():
     # Only rank OK rows
     ok = df["stat_status"].astype(str).str.upper().eq("OK") if "stat_status" in df.columns else \
          df.get("status3", pd.Series([""] * len(df))).astype(str).str.upper().eq("OK")
+    if is_wcbb_slate:
+        ok = pd.Series(True, index=df.index)
 
     out = df.copy()
 
@@ -761,7 +764,11 @@ def main():
     proj = pd.Series([blend_proj(i) for i in range(len(out))], index=out.index)
     out["projection"] = proj
     if "usage_boost_proj" in out.columns:
-        out["projection"] = _to_num(out["projection"]).fillna(0.0) + _to_num(out["usage_boost_proj"]).fillna(0.0)
+        # Preserve NaN projection when no base stat history exists.
+        out["projection"] = _to_num(out["projection"]) + _to_num(out["usage_boost_proj"]).fillna(0.0)
+    if is_wcbb_slate:
+        # Keep WCBB rankable even when upstream stat windows are sparse.
+        out["projection"] = _to_num(out["projection"]).where(_to_num(out["projection"]).notna(), line_num)
 
     # ── Edge ────────────────────────────────────────────────────────────────
     out["edge"]     = _to_num(out["projection"]) - line_num
@@ -779,17 +786,19 @@ def main():
     eligible   = pd.Series(True,  index=out.index)
     void_reason= pd.Series("",    index=out.index)
 
-    miss = line_num.isna() | proj.isna()
+    miss = line_num.isna() | _to_num(out["projection"]).isna()
     eligible.loc[miss]   = False
     void_reason.loc[miss] = "NO_PROJECTION_OR_LINE"
 
     # Drop Demon entirely + neg-edge Goblin to audit sheet (not eligible)
+    # WCBB can have much thinner markets; keep these rows in active sheets.
     is_demon     = pick_type.apply(lambda x: _norm_pick_type(x) == "Demon")
     goblin_neg   = pick_type.apply(lambda x: _norm_pick_type(x) == "Goblin") & (out.get("edge", pd.Series(0.0, index=out.index)).pipe(lambda s: pd.to_numeric(s, errors="coerce")).fillna(0) < 0)
-    drop_mask    = is_demon | goblin_neg
+    drop_mask    = pd.Series(False, index=out.index) if is_wcbb_slate else (is_demon | goblin_neg)
     eligible.loc[drop_mask]    = False
-    void_reason.loc[is_demon]  = "DROPPED_DEMON_AUDIT"
-    void_reason.loc[goblin_neg & ~is_demon] = "DROPPED_NEG_EDGE_GOBDEM"
+    if not is_wcbb_slate:
+        void_reason.loc[is_demon]  = "DROPPED_DEMON_AUDIT"
+        void_reason.loc[goblin_neg & ~is_demon] = "DROPPED_NEG_EDGE_GOBDEM"
 
     # also mark non-OK rows ineligible
     eligible.loc[~ok] = False
@@ -884,6 +893,21 @@ def main():
         return np.nan
 
     line_hit_rate = pd.Series([blend_hr(i) for i in range(len(out))], index=out.index)
+    if is_wcbb_slate:
+        _pn = out.get("prop_norm", out.get("prop_type", pd.Series([""] * len(out), index=out.index))).astype(str)
+        _dirs = out["bet_direction"].astype(str).str.upper()
+        _pri_over = _pn.apply(lambda p: _prop_hr_prior(p, "OVER"))
+        _pri_under = _pn.apply(lambda p: _prop_hr_prior(p, "UNDER"))
+        _pri = pd.Series(np.where(_dirs.eq("UNDER"), _pri_under, _pri_over), index=out.index, dtype=float)
+        line_hit_rate = line_hit_rate.fillna(_pri)
+        if "line_hit_rate_over_ou_5" in out.columns:
+            out["line_hit_rate_over_ou_5"] = _to_num(out["line_hit_rate_over_ou_5"]).fillna(_pri_over)
+        if "line_hit_rate_over_ou_10" in out.columns:
+            out["line_hit_rate_over_ou_10"] = _to_num(out["line_hit_rate_over_ou_10"]).fillna(_pri_over)
+        if "line_hit_rate_under_ou_5" in out.columns:
+            out["line_hit_rate_under_ou_5"] = _to_num(out["line_hit_rate_under_ou_5"]).fillna(_pri_under)
+        if "line_hit_rate_under_ou_10" in out.columns:
+            out["line_hit_rate_under_ou_10"] = _to_num(out["line_hit_rate_under_ou_10"]).fillna(_pri_under)
     out["line_hit_rate"] = line_hit_rate
 
     # ── Avg vs line (direction-aware) ────────────────────────────────────────

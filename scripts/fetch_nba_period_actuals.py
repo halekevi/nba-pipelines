@@ -69,7 +69,8 @@ def _req_json(url: str, params: dict, headers: dict[str, str], timeout: int = 30
 def _nba_game_ids_for_date(date_str: str) -> list[str]:
     mm, dd, yyyy = date_str.split("-")[1], date_str.split("-")[2], date_str.split("-")[0]
     params = {"DayOffset": 0, "GameDate": f"{mm}/{dd}/{yyyy}", "LeagueID": "00"}
-    payload = _req_json(NBA_SCOREBOARD_URL, params=params, headers=_nba_headers(), timeout=35, retries=2)
+    # Keep this short so backfills quickly fall back to ESPN when NBA.com stalls.
+    payload = _req_json(NBA_SCOREBOARD_URL, params=params, headers=_nba_headers(), timeout=8, retries=0)
     result_sets = payload.get("resultSets") or []
     for rs in result_sets:
         if str(rs.get("name")) == "GameHeader":

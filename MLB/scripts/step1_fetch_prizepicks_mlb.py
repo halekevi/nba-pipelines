@@ -1,19 +1,18 @@
 #!/usr/bin/env python3
 """
-step1_fetch_prizepicks_mlb.py  (MLB Pipeline)
+step1_fetch_prizepicks_mlb.py  (MLB Pipeline — Playwright intercept edition)
 
-Fetches MLB PrizePicks projections from the public API.
-League ID: 2 (MLB)
+Lets the real PrizePicks app make its own API requests and intercepts the response.
+No cookies, no headers, no 403 — the browser IS a real user.
 
-Trackable prop types:
-  Hitter: Hits, Total Bases, Home Runs, RBI, Runs, Walks,
-          Stolen Bases, Fantasy Score, Hits+Runs+RBI
-  Pitcher: Strikeouts, Pitching Outs, Hits Allowed,
-           Earned Runs, Walks Allowed
+First-time setup (run once):
+    pip install playwright --break-system-packages
+    playwright install chromium
 
-Run:
-  py -3.14 step1_fetch_prizepicks_mlb.py
-  py -3.14 step1_fetch_prizepicks_mlb.py --output step1_mlb_props.csv
+Usage:
+    py -3.14 step1_fetch_prizepicks_mlb.py
+    py -3.14 step1_fetch_prizepicks_mlb.py --output step1_mlb_props.csv
+    py -3.14 step1_fetch_prizepicks_mlb.py --timeout 60
 """
 
 from __future__ import annotations
@@ -21,26 +20,22 @@ from __future__ import annotations
 import argparse
 import json
 import re
-import time
-import random
 import sys
+import time
 from pathlib import Path
-from typing import Any, Dict, List, Tuple, Set
+from typing import Any, Dict, List, Tuple
 
 import pandas as pd
-import requests
 
-# Ensure <repo>/PropOracle is on sys.path so we can import PropOracle-level helpers.
-_PROPORACLE_ROOT = Path(__file__).resolve().parents[1]
+# Ensure repo root is on sys.path so top-level helpers import from any cwd.
+_PROPORACLE_ROOT = Path(__file__).resolve().parents[2]
 if str(_PROPORACLE_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROPORACLE_ROOT))
 
 from scripts.db_utils import log_pipeline_health
 
-API_URL    = "https://api.prizepicks.com/projections"
-WARMUP_URL = "https://api.prizepicks.com/leagues"
-
 MLB_LEAGUE_ID = "2"
+BOARD_URL     = f"https://app.prizepicks.com/board?league_id={MLB_LEAGUE_ID}"
 
 TRACKABLE_PROPS = {
     # Hitter
@@ -74,45 +69,16 @@ TRACKABLE_PROPS = {
     "inningspitched",
 }
 
-USER_AGENTS = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0",
-]
-
 PICKTYPE_MAP = {"standard": "Standard", "goblin": "Goblin", "demon": "Demon"}
 
-
-def _make_headers(ua: str) -> dict:
-    return {
-        "User-Agent": ua,
-        "Accept": "application/json, text/plain, */*",
-        "Accept-Language": "en-US,en;q=0.9",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Origin": "https://app.prizepicks.com",
-        "Referer": "https://app.prizepicks.com/board",
-        "Sec-Ch-Ua": '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
-        "Sec-Ch-Ua-Mobile": "?0",
-        "Sec-Ch-Ua-Platform": '"Windows"',
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "same-site",
-        "Connection": "keep-alive",
-        "Cache-Control": "no-cache",
-        "Pragma": "no-cache",
-    }
+EMPTY_COLS = [
+    "projection_id", "pp_projection_id", "player_id", "pp_game_id", "start_time",
+    "player", "image_url", "pos", "team", "opp_team", "pp_home_team", "pp_away_team",
+    "prop_type", "line", "pick_type",
+]
 
 
-def _warm_session(session: requests.Session, ua: str) -> None:
-    try:
-        r = session.get(WARMUP_URL, headers=_make_headers(ua), timeout=15)
-        print(f"  🌐 Session warmed ({r.status_code})")
-        time.sleep(random.uniform(1.5, 3.0))
-    except Exception as e:
-        print(f"  ⚠️ Warmup failed: {e} — continuing")
-
+# ─── helpers ──────────────────────────────────────────────────────────────────
 
 def _safe_get(d: dict, path: List[str], default=""):
     cur: Any = d
@@ -137,147 +103,41 @@ def _included_index(included: List[dict]) -> Dict[Tuple[str, str], dict]:
     return idx
 
 
-def fetch_pages(
-    league_id: str,
-    game_mode: str,
-    per_page: int,
-    max_pages: int,
-    sleep: float,
-    cooldown_seconds: float,
-    max_cooldowns: int,
-    jitter_seconds: float,
-    max_403_retries: int = 3,
-    forbidden_backoff_base: float = 15.0,
-    rotate_ua_on_403: bool = True,
-    warmup_on_403: bool = True,
-) -> Tuple[List[dict], List[dict]]:
-    all_data: List[dict] = []
-    all_included: List[dict] = []
-    cooldowns_used = 0
-    forbidden_retries = 0
-    stop_paging = False
-    seen_ids: Set[str] = set()
-
-    session = requests.Session()
-    ua      = random.choice(USER_AGENTS)
-    headers = _make_headers(ua)
-    _warm_session(session, ua)
-
-    for page in range(1, max_pages + 1):
-        if stop_paging:
-            break
-        params = {
-            "league_id":    str(league_id),
-            "game_mode":    str(game_mode),
-            "per_page":     int(per_page),
-            "page":         int(page),
-            "page[number]": int(page),
-            "page[size]":   int(per_page),
-        }
-        for attempt in range(1, 9):
-            try:
-                r = session.get(API_URL, headers=headers, params=params, timeout=30)
-            except Exception as e:
-                if attempt >= 8:
-                    log_pipeline_health(
-                        "mlb.step1_fetch_prizepicks",
-                        "request_failed",
-                        extra={"error": f"{type(e).__name__}: {e}", "page": page},
-                        start=Path(__file__),
-                    )
-                    stop_paging = True
-                    break
-                time.sleep(2.0 * attempt)
-                continue
-
-            if r.status_code == 429:
-                cooldowns_used += 1
-                if cooldowns_used > max_cooldowns:
-                    print(f"🛑 429 persists after {max_cooldowns} cooldowns. Stopping early.")
-                    log_pipeline_health(
-                        "mlb.step1_fetch_prizepicks",
-                        "rate_limited",
-                        extra={"cooldowns_used": cooldowns_used, "max_cooldowns": max_cooldowns},
-                        start=Path(__file__),
-                    )
-                    stop_paging = True
-                    break
-                sleep_s = cooldown_seconds + random.uniform(0, jitter_seconds)
-                print(f"⏸️  429 cooldown {cooldowns_used}/{max_cooldowns}: sleeping {sleep_s:.1f}s...")
-                time.sleep(sleep_s)
-                continue
-
-            if r.status_code == 403:
-                forbidden_retries += 1
-                if forbidden_retries > max_403_retries:
-                    print(f"🛑 403 persists. Stopping early.")
-                    log_pipeline_health(
-                        "mlb.step1_fetch_prizepicks",
-                        "forbidden",
-                        extra={"forbidden_retries": forbidden_retries, "max_403_retries": max_403_retries},
-                        start=Path(__file__),
-                    )
-                    stop_paging = True
-                    break
-                backoff = forbidden_backoff_base * (2 ** (forbidden_retries - 1)) + random.uniform(2, 8)
-                print(f"⏸️  403 retry {forbidden_retries}/{max_403_retries}: sleeping {backoff:.1f}s...")
-                time.sleep(backoff)
-                if rotate_ua_on_403:
-                    ua = random.choice(USER_AGENTS)
-                headers = _make_headers(ua)
-                if warmup_on_403:
-                    _warm_session(session, ua)
-                continue
-
-            if r.status_code >= 500:
-                time.sleep(5.0 * attempt)
-                continue
-
-            r.raise_for_status()
-            j         = r.json()
-            page_data = j.get("data") or []
-            page_new  = [x for x in page_data if str(x.get("id", "")) not in seen_ids]
-
-            if not page_new:
-                print(f"  Page {page}: 0 new rows — stopping pagination")
-                stop_paging = True
-                break
-
-            for x in page_new:
-                seen_ids.add(str(x.get("id", "")))
-            all_data.extend(page_new)
-            all_included.extend(j.get("included") or [])
-            print(f"  Page {page}: +{len(page_new)} rows (total={len(all_data)})")
-            time.sleep(sleep + random.uniform(0, 0.5))
-            break
-
-    session.close()
-    return all_data, all_included
-
-
 def parse_rows(data: List[dict], included: List[dict]) -> List[dict]:
-    inc  = _included_index(included)
-    rows: List[dict] = []
+    idx  = _included_index(included)
+    rows = []
 
-    for d in data:
-        if not isinstance(d, dict):
+    for item in data:
+        if item.get("type") != "projection":
             continue
-        pid   = str(d.get("id", "")).strip()
-        attrs = d.get("attributes") or {}
-        rel   = d.get("relationships") or {}
 
-        line      = attrs.get("line_score", attrs.get("line"))
-        prop_type = str(attrs.get("stat_type", attrs.get("projection_type", attrs.get("name", "")))).strip()
-        odds_type = str(attrs.get("odds_type", "")).strip().lower()
-        pick_type = PICKTYPE_MAP.get(odds_type, "Standard")
+        attrs    = item.get("attributes") or {}
+        rels     = item.get("relationships") or {}
+        pid      = str(item.get("id", "")).strip()
 
-        player_id   = _safe_get(rel, ["new_player", "data", "id"], "")
-        player_type = _safe_get(rel, ["new_player", "data", "type"], "new_player")
-        game_id     = _safe_get(rel, ["new_game", "data", "id"], "") or _safe_get(rel, ["game", "data", "id"], "")
-        game_type   = _safe_get(rel, ["new_game", "data", "type"], "") or _safe_get(rel, ["game", "data", "type"], "")
+        prop_type_raw = str(attrs.get("stat_type", "") or attrs.get("prop_type", "")).strip()
+        prop_type     = prop_type_raw.lower()
+        line          = attrs.get("line_score") or attrs.get("line") or ""
+        pick_type_raw = str(attrs.get("pick_type", "standard") or "standard").lower()
+        pick_type     = PICKTYPE_MAP.get(pick_type_raw, pick_type_raw.capitalize())
 
-        player_obj = inc.get((player_type, str(player_id))) if player_id else None
-        game_obj   = inc.get((game_type,   str(game_id)))   if game_id and game_type else None
+        # resolve player
+        player_rel = rels.get("new_player") or rels.get("player") or {}
+        player_id  = ""
+        player_obj = None
+        pd_data    = player_rel.get("data") or {}
+        if isinstance(pd_data, dict):
+            player_id  = str(pd_data.get("id", "")).strip()
+            player_obj = idx.get(("new_player", player_id)) or idx.get(("player", player_id))
+
+        # resolve game
+        game_rel = rels.get("game") or rels.get("projection_game") or {}
+        game_id  = ""
+        game_obj = None
+        gd_data  = game_rel.get("data") or {}
+        if isinstance(gd_data, dict):
+            game_id  = str(gd_data.get("id", "")).strip()
+            game_obj = idx.get(("game", game_id))
 
         player_name = pos = team = image_url = ""
         if isinstance(player_obj, dict):
@@ -302,7 +162,7 @@ def parse_rows(data: List[dict], included: List[dict]) -> List[dict]:
             opp_team = away if team == home else (home if team == away else "")
         else:
             desc = str(attrs.get("description", "") or "")
-            m = re.search(r"\bvs\.?\s+([A-Za-z]{2,4})\b", desc)
+            m    = re.search(r"\bvs\.?\s+([A-Za-z]{2,4})\b", desc)
             if m:
                 opp_team = _norm_team(m.group(1))
 
@@ -319,7 +179,7 @@ def parse_rows(data: List[dict], included: List[dict]) -> List[dict]:
             "opp_team":         opp_team,
             "pp_home_team":     home,
             "pp_away_team":     away,
-            "prop_type":        prop_type,
+            "prop_type":        prop_type_raw,   # keep original casing for downstream
             "line":             line,
             "pick_type":        pick_type,
         })
@@ -327,130 +187,317 @@ def parse_rows(data: List[dict], included: List[dict]) -> List[dict]:
     return rows
 
 
+# ─── Playwright fetch ──────────────────────────────────────────────────────────
+
+def fetch_via_playwright(timeout_s: int = 45, manual_window: int = 30) -> Tuple[List[dict], List[dict]]:
+    """
+    Launch a visible Chromium window, navigate to the MLB board, and intercept
+    ANY prizepicks API response that contains projection data.
+
+    Broad intercept: captures /projections, /boards, /offers, graphql, or any
+    api.prizepicks.com endpoint returning a list of projection-like objects.
+
+    Prints all matched response URLs for debugging.
+    Gives a manual_window-second window at the start for user interaction
+    (cookie banners, geo prompts, etc.) before auto-scroll triggers.
+    """
+    from playwright.sync_api import sync_playwright
+
+    captured: dict = {}
+    done = False
+    seen_urls: list = []
+
+    # Broad patterns — anything on api.prizepicks.com that returns projection data
+    CAPTURE_PATTERNS = [
+        "api.prizepicks.com/projections",
+        "api.prizepicks.com/boards",
+        "api.prizepicks.com/offers",
+        "api.prizepicks.com/graphql",
+        "api.prizepicks.com/v1/projections",
+        "api.prizepicks.com/v2/projections",
+    ]
+
+    def _try_extract_projections(j: dict) -> Tuple[List[dict], List[dict]]:
+        """Try multiple known shapes to extract (data, included) projection lists."""
+        # Shape 1: standard JSONAPI  {"data": [...], "included": [...]}
+        if isinstance(j.get("data"), list):
+            data = j["data"]
+            # filter to projection-type items if typed
+            proj = [x for x in data if isinstance(x, dict) and x.get("type") == "projection"]
+            if not proj:
+                proj = data  # untyped — take all, parse_rows will skip non-projections
+            if proj:
+                return proj, j.get("included") or []
+
+        # Shape 2: {"projections": [...]}
+        if isinstance(j.get("projections"), list) and j["projections"]:
+            return j["projections"], j.get("included") or []
+
+        # Shape 3: graphql {"data": {"projections": {"edges": [...]}}}
+        gql_data = j.get("data") if isinstance(j.get("data"), dict) else {}
+        for key in ("projections", "board", "offers"):
+            node = gql_data.get(key)
+            if isinstance(node, dict):
+                edges = node.get("edges") or node.get("nodes") or []
+                items = [e.get("node", e) for e in edges if isinstance(e, dict)]
+                if items:
+                    return items, []
+            if isinstance(node, list) and node:
+                return node, []
+
+        return [], []
+
+    def handle_response(response):
+        nonlocal done
+        if done:
+            return
+        url = response.url
+
+        # Log ALL api.prizepicks.com responses for debugging
+        if "api.prizepicks.com" in url or "prizepicks.com/api" in url:
+            status = response.status
+            seen_urls.append(f"  [{status}] {url}")
+            print(f"  🔍 PP response: [{status}] {url}")
+
+            if status != 200:
+                return
+
+            # Check if it matches any of our capture patterns
+            if not any(pat in url for pat in CAPTURE_PATTERNS):
+                return
+
+            try:
+                j = response.json()
+            except Exception:
+                print(f"       └─ not JSON, skipping")
+                return
+
+            # Only accept responses for MLB (league_id=2)
+            if "league_id=2" not in url and "league_id=2" not in response.url:
+                print(f"       └─ skipping (not league_id=2)")
+                return
+
+            data, included = _try_extract_projections(j)
+            if data:
+                captured["data"]     = data
+                captured["included"] = included
+                done = True
+                print(f"  ✓ Captured {len(data)} items from {url}")
+
+    PROFILE_DIR = Path.home() / ".pp_browser_profile"
+    use_profile = PROFILE_DIR.exists()
+
+    LAUNCH_ARGS = [
+        "--no-sandbox",
+        "--disable-blink-features=AutomationControlled",
+        "--start-maximized",
+        "--disable-infobars",
+        "--disable-dev-shm-usage",
+        "--no-first-run",
+        "--no-default-browser-check",
+        "--window-size=1920,1080",
+    ]
+    CTX_KWARGS = dict(
+        user_agent=(
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/122.0.0.0 Safari/537.36"
+        ),
+        locale="en-US",
+        timezone_id="America/New_York",
+        geolocation={"latitude": 40.7128, "longitude": -74.0060},
+        permissions=["geolocation", "notifications"],
+        color_scheme="dark",
+    )
+
+    # playwright-stealth patches ~30 automation fingerprint signals DataDome checks
+    try:
+        from playwright_stealth import stealth_sync
+        use_stealth = True
+        print("  🛡️  playwright-stealth loaded")
+    except ImportError:
+        use_stealth = False
+        print("  ⚠️  playwright-stealth not found — install with: pip install playwright-stealth")
+
+    with sync_playwright() as p:
+        if use_profile:
+            print(f"🌐 Launching Chrome with saved profile...")
+            context = p.chromium.launch_persistent_context(
+                user_data_dir=str(PROFILE_DIR),
+                headless=False,
+                args=LAUNCH_ARGS,
+                **CTX_KWARGS,
+            )
+            browser = None
+        else:
+            print("🌐 Launching Chrome (no saved profile — run setup_prizepicks_profile.py once)...")
+            browser = p.chromium.launch(headless=False, args=LAUNCH_ARGS)
+            context = browser.new_context(viewport=None, **CTX_KWARGS)
+
+        page = context.new_page()
+
+        # Apply stealth BEFORE navigation — patches webdriver, plugins, languages,
+        # chrome runtime, permissions API, iframe contentWindow, and ~25 more signals
+        if use_stealth:
+            stealth_sync(page)
+
+        page.on("response", handle_response)
+
+        print(f"  Loading {BOARD_URL}")
+        try:
+            page.goto(BOARD_URL, timeout=30_000, wait_until="domcontentloaded")
+            # Extra wait for MLB-specific projections to load after NBA default
+            time.sleep(4)
+        except Exception as e:
+            print(f"  ⚠️  Page load timeout (continuing): {e}")
+
+        # Phase 1: manual interaction window — let user dismiss banners/prompts
+        if manual_window > 0:
+            print(f"\n  ⏳ Manual window: {manual_window}s — dismiss any popups if needed...")
+            deadline_manual = time.time() + manual_window
+            while not done and time.time() < deadline_manual:
+                time.sleep(1)
+
+        if done:
+            context.close()
+            if browser:
+                browser.close()
+            return captured.get("data", []), captured.get("included", [])
+
+        # Phase 2: auto-scroll triggers to nudge lazy API calls
+        print("  ⚙️  Auto-triggering: clicking board + scrolling...")
+        triggers = [
+            "window.scrollBy(0, 300)",
+            "window.scrollBy(0, 600)",
+            "document.body.click()",
+            "window.scrollBy(0, -300)",
+            "window.dispatchEvent(new Event('resize'))",
+        ]
+        deadline = time.time() + (timeout_s - manual_window)
+        trigger_idx = 0
+        while not done and time.time() < deadline:
+            if trigger_idx < len(triggers):
+                try:
+                    page.evaluate(triggers[trigger_idx])
+                    trigger_idx += 1
+                except Exception:
+                    pass
+                time.sleep(2)
+            else:
+                time.sleep(1)
+
+        if not done and seen_urls:
+            print("\n  📋 All PrizePicks API calls seen (none had projection data):")
+            for u in seen_urls:
+                print(u)
+        elif not done:
+            print("\n  ⚠️  No api.prizepicks.com calls detected at all.")
+            print("       PrizePicks may be blocking the browser fingerprint or CDN-caching the board.")
+
+        context.close()
+        if browser:
+            browser.close()
+
+    return captured.get("data", []), captured.get("included", [])
+
+
 def load_payload_from_file(path: str) -> Tuple[List[dict], List[dict]]:
-    """
-    Load saved PrizePicks API payload from local JSON.
-    Expected shape: {"data": [...], "included": [...]}
-    """
     with open(path, "r", encoding="utf-8") as f:
         raw = json.load(f)
     if not isinstance(raw, dict):
         return [], []
-    data = raw.get("data") or []
+    data     = raw.get("data") or []
     included = raw.get("included") or []
-    if not isinstance(data, list):
-        data = []
-    if not isinstance(included, list):
-        included = []
-    return data, included
+    return (data if isinstance(data, list) else []), (included if isinstance(included, list) else [])
 
+
+# ─── main ─────────────────────────────────────────────────────────────────────
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--output",           default="step1_mlb_props.csv")
-    ap.add_argument("--from-file",        default="", help="Load raw PrizePicks JSON from file instead of live API")
-    ap.add_argument("--league_id",        default=MLB_LEAGUE_ID)
-    ap.add_argument("--game_mode",        default="pickem")
-    ap.add_argument("--per_page",         type=int,   default=250)
-    ap.add_argument("--max_pages",        type=int,   default=20)
-    ap.add_argument("--sleep",            type=float, default=1.2)
-    ap.add_argument("--cooldown_seconds", type=float, default=60.0)
-    ap.add_argument("--max_cooldowns",    type=int,   default=2)
-    ap.add_argument("--jitter_seconds",   type=float, default=7.0)
-    ap.add_argument("--max_403_retries",  type=int,   default=3)
-    ap.add_argument("--gentle",           action="store_true", help="Use conservative request pacing to reduce 403/rate-limit pressure")
-    ap.add_argument("--min_rows",         type=int,   default=30)
-    ap.add_argument("--min_teams",        type=int,   default=2)
-    ap.add_argument("--all_props",        action="store_true", help="Keep all prop types unfiltered")
-    args = ap.parse_args()
+    ap = ap = argparse.ArgumentParser()
+    ap.add_argument("--output",        default="step1_mlb_props.csv")
+    ap.add_argument("--from-file",     default="",   help="Load raw PrizePicks JSON from file instead of live fetch")
+    ap.add_argument("--timeout",       type=int, default=75,  help="Total seconds to wait per attempt (default 75)")
+    ap.add_argument("--manual_window", type=int, default=30,  help="Seconds before auto-scroll triggers (default 30)")
+    ap.add_argument("--retries",       type=int, default=1,   help="Extra browser launch attempts on miss (default 1)")
+    ap.add_argument("--retry_delay",   type=int, default=8,   help="Seconds to wait between retry attempts (default 8)")
+    ap.add_argument("--min_rows",      type=int, default=30)
+    ap.add_argument("--min_teams",     type=int, default=2)
+    ap.add_argument("--all_props",     action="store_true",   help="Keep all prop types unfiltered")
+    # Compat aliases used by run_pipeline.ps1
+    ap.add_argument("--gentle",        action="store_true",   help="(compat) no-op, accepted for pipeline compat")
+    ap.add_argument("--manual-seconds",type=int, default=None, help="(compat) alias for --manual_window")
+    args     = ap.parse_args()
+    # resolve alias
+    if args.manual_seconds is not None:
+        args.manual_window = args.manual_seconds
+    out_path = Path(args.output)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    rotate_ua_on_403 = True
-    warmup_on_403 = True
-    if args.gentle:
-        # Gentler fetch profile: fewer total requests + longer spacing.
-        args.per_page = min(args.per_page, 100)
-        args.max_pages = min(args.max_pages, 4)
-        args.sleep = max(args.sleep, 4.0)
-        args.cooldown_seconds = max(args.cooldown_seconds, 180.0)
-        args.max_cooldowns = min(args.max_cooldowns, 1)
-        args.jitter_seconds = max(args.jitter_seconds, 20.0)
-        args.max_403_retries = min(args.max_403_retries, 1)
-        rotate_ua_on_403 = False
-        warmup_on_403 = False
+    # ── Fetch (with retry) ────────────────────────────────────────────────────
+    data: list = []
+    included: list = []
 
     if args.from_file:
-        print(f"[step1] Loading PrizePicks MLB payload from file: {args.from_file}")
+        print(f"[step1] Loading MLB payload from file: {args.from_file}")
         data, included = load_payload_from_file(args.from_file)
     else:
-        print(f"[step1] Fetching PrizePicks MLB | league_id={args.league_id}")
-        if args.gentle:
-            print("  Gentle mode enabled (slower, fewer requests)")
-        data, included = fetch_pages(
-            league_id=args.league_id,
-            game_mode=args.game_mode,
-            per_page=args.per_page,
-            max_pages=args.max_pages,
-            sleep=args.sleep,
-            cooldown_seconds=args.cooldown_seconds,
-            max_cooldowns=args.max_cooldowns,
-            jitter_seconds=args.jitter_seconds,
-            max_403_retries=args.max_403_retries,
-            rotate_ua_on_403=rotate_ua_on_403,
-            warmup_on_403=warmup_on_403,
-        )
+        max_attempts = 1 + max(0, args.retries)
+        for attempt in range(1, max_attempts + 1):
+            if attempt > 1:
+                print(f"\n🔄 Retry {attempt - 1}/{args.retries} — relaunching browser in {args.retry_delay}s...")
+                time.sleep(args.retry_delay)
+            print(f"[step1] Fetching PrizePicks MLB via browser intercept | league_id={MLB_LEAGUE_ID} | attempt {attempt}/{max_attempts}")
+            data, included = fetch_via_playwright(
+                timeout_s=args.timeout,
+                manual_window=args.manual_window if attempt == 1 else 0,
+            )
+            if data:
+                print(f"  ✅ Captured on attempt {attempt}")
+                break
+            print(f"  ⚠️  Attempt {attempt} missed intercept.")
 
+    # ── Empty guard ────────────────────────────────────────────────────────────
     if not data:
-        cols = ["projection_id", "pp_projection_id", "player_id", "pp_game_id", "start_time",
-                "player", "image_url", "pos", "team", "opp_team", "pp_home_team", "pp_away_team",
-                "prop_type", "line", "pick_type"]
-        pd.DataFrame(columns=cols).to_csv(args.output, index=False)
-        print("❌ No projections fetched. Wrote empty CSV.")
+        pd.DataFrame(columns=EMPTY_COLS).to_csv(out_path, index=False)
+        print("❌ No projections intercepted after all attempts. Wrote empty CSV.")
         log_pipeline_health(
             "mlb.step1_fetch_prizepicks",
             "no_projections",
-            extra={"league_id": args.league_id, "game_mode": args.game_mode},
+            extra={"league_id": MLB_LEAGUE_ID, "method": "playwright_intercept", "attempts": max_attempts},
             start=Path(__file__),
         )
-        return
+        sys.exit(1)
 
+    # ── Parse ──────────────────────────────────────────────────────────────────
     rows = parse_rows(data, included)
     df   = pd.DataFrame(rows).fillna("")
     df["line"] = pd.to_numeric(df["line"], errors="coerce")
 
-    # ── Bouncer: reject junk rows ─────────────────────────────────────────────
+    # Bouncer: remove junk rows
     required = ["projection_id", "player", "team", "prop_type"]
     for c in required:
         if c not in df.columns:
-            log_pipeline_health(
-                "mlb.step1_fetch_prizepicks",
-                "missing_required_columns",
-                extra={"missing": c, "cols": list(df.columns)},
-                start=Path(__file__),
-            )
-            df.to_csv(args.output, index=False, encoding="utf-8-sig")
-            return
+            print(f"⚠️  Missing required column: {c}")
+            df.to_csv(out_path, index=False, encoding="utf-8-sig")
+            sys.exit(1)
 
     before_bounce = len(df)
     df = df[df["projection_id"].astype(str).str.strip() != ""].copy()
-    df = df[df["player"].astype(str).str.strip() != ""].copy()
-    df = df[df["team"].astype(str).str.strip() != ""].copy()
-    # No negative lines; NaN allowed (some props can be missing)
+    df = df[df["player"].astype(str).str.strip()        != ""].copy()
+    df = df[df["team"].astype(str).str.strip()          != ""].copy()
     df = df[(df["line"].isna()) | (df["line"] >= 0)].copy()
     bounced = before_bounce - len(df)
     if bounced:
         print(f"  🧹 Bouncer: removed {bounced} junk rows")
-        log_pipeline_health(
-            "mlb.step1_fetch_prizepicks",
-            "bouncer_removed_rows",
-            extra={"removed": bounced, "before": before_bounce, "after": len(df)},
-            start=Path(__file__),
-        )
 
+    # Dedupe
     before = len(df)
     df = df.drop_duplicates(subset=["projection_id"], keep="first").reset_index(drop=True)
     if before != len(df):
         print(f"  Deduped: {before} → {len(df)}")
 
+    # Prop filter
     if not args.all_props:
         mask    = df["prop_type"].str.lower().str.replace(" ", "").isin(
             {p.replace(" ", "") for p in TRACKABLE_PROPS}
@@ -460,7 +507,7 @@ def main():
         if dropped:
             print(f"  Filtered out {dropped} non-trackable props (use --all_props to keep all)")
 
-    df.to_csv(args.output, index=False, encoding="utf-8-sig")
+    df.to_csv(out_path, index=False, encoding="utf-8-sig")
 
     rows_n  = len(df)
     teams_n = df["team"].astype(str).nunique()
@@ -475,9 +522,10 @@ def main():
         log_pipeline_health(
             "mlb.step1_fetch_prizepicks",
             "board_too_small",
-            extra={"rows": rows_n, "teams": teams_n, "min_rows": args.min_rows, "min_teams": args.min_teams},
+            extra={"rows": rows_n, "teams": teams_n},
             start=Path(__file__),
         )
+        sys.exit(1)
     else:
         print("\n✅ BOARD_OK")
 
@@ -485,6 +533,8 @@ def main():
 if __name__ == "__main__":
     try:
         main()
+    except SystemExit:
+        raise
     except Exception as e:
         log_pipeline_health(
             "mlb.step1_fetch_prizepicks",
@@ -493,3 +543,4 @@ if __name__ == "__main__":
             start=Path(__file__),
         )
         print(f"[step1] MLB failed (logged). {type(e).__name__}: {e}")
+        sys.exit(1)

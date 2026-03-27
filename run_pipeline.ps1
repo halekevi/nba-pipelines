@@ -221,6 +221,26 @@ function Run-GitPush {
     }
 }
 
+# -- Helper: pick a valid MLB clean slate path ---------------------------------
+function Resolve-MLBCleanSlateFile {
+    param([string]$MLBDir)
+    $candidates = @(
+        (Join-Path $MLBDir "outputs\step8_mlb_direction_clean.xlsx"),
+        (Join-Path $MLBDir "scripts\step8_mlb_direction_clean.xlsx"),
+        (Join-Path $MLBDir "step8_mlb_direction_clean.xlsx")
+    )
+    foreach ($p in $candidates) {
+        if (Test-Path $p) {
+            try {
+                $len = (Get-Item $p).Length
+                # Empty/placeholder workbooks are tiny (~5KB); require meaningful size.
+                if ($len -ge 10240) { return $p }
+            } catch { }
+        }
+    }
+    return $null
+}
+
 # -- Helper: run combined, auto-detect all sports on disk ---------------------
 function Run-Combined {
     param([string]$Reason = "")
@@ -252,7 +272,7 @@ function Run-Combined {
     $cbbFile    = "$CBBDir\step6_ranked_cbb.xlsx"
     $nhlFile    = "$NHLDir\step8_nhl_direction_clean.xlsx"
     $soccerFile = "$SoccerDir\outputs\step8_soccer_direction_clean.xlsx"
-    $mlbFile    = "$MLBDir\step8_mlb_direction_clean.xlsx"
+    $mlbFile    = Resolve-MLBCleanSlateFile -MLBDir $MLBDir
     $nba1hFile  = "$Root\NBA\step8_nba1h_direction_clean.xlsx"
     $nba1qFile  = "$Root\NBA\step8_nba1q_direction_clean.xlsx"
     $wcbbFile   = "$Root\CBB\step6_ranked_wcbb.xlsx"
@@ -266,7 +286,7 @@ function Run-Combined {
 
     if (Test-Path $nhlFile)    { $CombinedArgs += " --nhl `"$nhlFile`"";       Write-Host "  [+] NHL"    -ForegroundColor DarkGray }
     if (Test-Path $soccerFile) { $CombinedArgs += " --soccer `"$soccerFile`""; Write-Host "  [+] Soccer" -ForegroundColor DarkGray }
-    if (Test-Path $mlbFile)    { $CombinedArgs += " --mlb `"$mlbFile`"";       Write-Host "  [+] MLB"    -ForegroundColor DarkGray }
+    if ($mlbFile)              { $CombinedArgs += " --mlb `"$mlbFile`"";       Write-Host "  [+] MLB"    -ForegroundColor DarkGray }
     if (Test-Path $nba1hFile)  { $CombinedArgs += " --nba1h `"$nba1hFile`"";   Write-Host "  [+] NBA1H"  -ForegroundColor DarkGray }
     if (Test-Path $nba1qFile)  { $CombinedArgs += " --nba1q `"$nba1qFile`"";   Write-Host "  [+] NBA1Q"  -ForegroundColor DarkGray }
     if (Test-Path $wcbbFile)   { $CombinedArgs += " --wcbb `"$wcbbFile`"";     Write-Host "  [+] WCBB"   -ForegroundColor DarkGray }
@@ -407,10 +427,10 @@ if ($MLBOnly) {
     Write-Host ""
     $ok = $true
     if (-not $SkipFetch) {
-        if ($ok) { $ok = Run-Step "MLB Step 1 - Fetch PrizePicks" $MLBDir ".\scripts\step1_fetch_prizepicks_mlb.py" "--gentle --output outputs\step1_mlb_props.csv" }
+        if ($ok) { $ok = Run-Step "MLB Step 1 - Fetch PrizePicks" $MLBDir ".\scripts\step1_fetch_prizepicks_mlb.py" "--gentle --timeout 90 --output outputs\step1_mlb_props.csv" }
     } else { Write-Host "  [MLB] Skipping step1 fetch -- using existing outputs\step1_mlb_props.csv" -ForegroundColor DarkGray }
     if ($ok) { $ok = Run-Step "MLB Step 2 - Attach Pick Types"  $MLBDir ".\scripts\step2_attach_picktypes_mlb.py"       "--input outputs\step1_mlb_props.csv --output outputs\step2_mlb_picktypes.csv" }
-    if ($ok) { $ok = Run-Step "MLB Step 3 - Attach Defense"     $MLBDir ".\scripts\step3_attach_defense_mlb.py"         "--input outputs\step2_mlb_picktypes.csv --defense outputs\mlb_defense_summary.csv --output outputs\step3_mlb_with_defense.csv" }
+    if ($ok) { $ok = Run-Step "MLB Step 3 - Attach Defense"     $MLBDir ".\scripts\step3_attach_defense_mlb.py"         "--input outputs\step2_mlb_picktypes.csv --defense mlb_defense_summary.csv --output outputs\step3_mlb_with_defense.csv" }
     if ($ok) { $ok = Run-Step "MLB Step 4 - Player Stats"       $MLBDir ".\scripts\step4_attach_player_stats_mlb.py"    "--input outputs\step3_mlb_with_defense.csv --cache outputs\mlb_stats_cache.csv --output outputs\step4_mlb_with_stats.csv --season 2025" }
     if ($ok) { $ok = Run-Step "MLB Step 5 - Line Hit Rates"     $MLBDir ".\scripts\step5_add_line_hit_rates_mlb.py"     "--input outputs\step4_mlb_with_stats.csv --output outputs\step5_mlb_hit_rates.csv" }
     if ($ok) { $ok = Run-Step "MLB Step 6 - Team Role Context"  $MLBDir ".\scripts\step6_team_role_context_mlb.py"      "--input outputs\step5_mlb_hit_rates.csv --output outputs\step6_mlb_role_context.csv" }
@@ -423,6 +443,15 @@ if ($MLBOnly) {
         if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force -Path $OutDir | Out-Null }
         Copy-Item "$MLBDir\step8_mlb_direction_clean.xlsx" "$OutDir\step8_mlb_direction_clean_$Date.xlsx" -Force
         Write-Host "  Archived MLB slate -> $OutDir\step8_mlb_direction_clean_$Date.xlsx" -ForegroundColor DarkGray
+    } elseif (-not $ok) {
+        # Fallback: if live MLB fetch is blocked (e.g. 403), publish last known-good slate for today's dated output.
+        $mlbFallback = Resolve-MLBCleanSlateFile -MLBDir $MLBDir
+        if ($mlbFallback) {
+            if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force -Path $OutDir | Out-Null }
+            Copy-Item $mlbFallback "$OutDir\step8_mlb_direction_clean_$Date.xlsx" -Force
+            Write-Host "  MLB fallback snapshot used -> $OutDir\step8_mlb_direction_clean_$Date.xlsx" -ForegroundColor Yellow
+            Write-Host "  Source: $mlbFallback" -ForegroundColor DarkGray
+        }
     }
     Write-Host ""
     if ($ok) { Write-Host "  MLB complete." -ForegroundColor Green } else { Write-Host "  MLB FAILED." -ForegroundColor Red }
@@ -477,7 +506,14 @@ if ($CBBOnly) {
     if ($ok) { $ok = Run-Step "CBB Step 4 - Attach ESPN IDs"         $CBBDir ".\scripts\pipeline\step5a_attach_espn_ids.py"                     "--input outputs\$Date\step3b_with_def_rankings_cbb.csv --output outputs\$Date\step3_cbb.csv --master data/reference/ncaa_mbb_athletes_master.csv" }
     if ($ok) { $ok = Run-Step "CBB Step 5 - Boxscore Stats"          $CBBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input outputs\$Date\step3_cbb.csv --output outputs\$Date\step5b_cbb.csv --cache data\cache\cbb_boxscore_cache.csv --days 90 --workers 4" }
     if ($ok) { $ok = Run-Step "CBB Step 6 - Rank Props"              $CBBDir ".\scripts\pipeline\step6_rank_props_cbb.py"                       "--input outputs\$Date\step5b_cbb.csv --output outputs\$Date\step6_ranked_cbb.xlsx --date $Date --cache data\cache\cbb_boxscore_cache.csv" }
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "WCBB Step 1 - Fetch PrizePicks"      $CBBDir ".\scripts\pipeline\step1_pp_cbb_scraper.py"      "--league_id 176 --out step1_wcbb.csv" } } else { Write-Host "  [WCBB] Skipping step1 fetch -- using existing step1_wcbb.csv" -ForegroundColor DarkGray }
+    if ($ok) { $ok = Run-Step "WCBB Step 2 - Normalize"               $CBBDir ".\scripts\pipeline\step2_normalize.py"                            "--input step1_wcbb.csv --output step2_wcbb.csv" }
+    if ($ok) { $ok = Run-Step "WCBB Step 3 - Attach Defense Rankings" $CBBDir ".\scripts\pipeline\step3b_attach_def_rankings.py"                 "--input step2_wcbb.csv --defense data\reference\cbb_def_rankings.csv --output step3b_with_def_rankings_wcbb.csv" }
+    if ($ok) { $ok = Run-Step "WCBB Step 4 - Attach ESPN IDs"         $CBBDir ".\scripts\pipeline\step5a_attach_espn_ids.py"                     "--input step3b_with_def_rankings_wcbb.csv --output step3_wcbb.csv --master data/reference/ncaa_mbb_athletes_master.csv" }
+    if ($ok) { $ok = Run-Step "WCBB Step 5 - Boxscore Stats"          $CBBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input step3_wcbb.csv --output step5b_wcbb.csv --cache data\cache\wcbb_boxscore_cache.csv --days 21 --workers 4 --league womens-college-basketball" }
+    if ($ok) { $ok = Run-Step "WCBB Step 6 - Rank Props"              $CBBDir ".\scripts\pipeline\step6_rank_props_cbb.py"                       "--input step5b_wcbb.csv --output step6_ranked_wcbb.xlsx --date $Date --cache data\cache\wcbb_boxscore_cache.csv" }
     if ($ok) { Copy-Item "$CBBDir\outputs\$Date\step6_ranked_cbb.xlsx" "$CBBDir\step6_ranked_cbb.xlsx" -Force }
+    if ($ok -and (Test-Path "$CBBDir\step6_ranked_wcbb.xlsx")) { Copy-Item "$CBBDir\step6_ranked_wcbb.xlsx" "$OutDir\step6_ranked_wcbb_$Date.xlsx" -Force -ErrorAction SilentlyContinue }
     if ($ok) {
         if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force -Path $OutDir | Out-Null }
         Copy-Item "$CBBDir\outputs\$Date\step6_ranked_cbb.xlsx" "$OutDir\step6_ranked_cbb_$Date.xlsx" -Force -ErrorAction SilentlyContinue
@@ -631,6 +667,12 @@ $CBBJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "CBB Step 4 - Attach ESPN IDs"         $CBBDir ".\scripts\pipeline\step5a_attach_espn_ids.py"                     "--input outputs\$Date\step3b_with_def_rankings_cbb.csv --output outputs\$Date\step3_cbb.csv --master data/reference/ncaa_mbb_athletes_master.csv" }
     if ($ok) { $ok = Run-Step-Job "CBB Step 5 - Boxscore Stats"          $CBBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input outputs\$Date\step3_cbb.csv --output outputs\$Date\step5b_cbb.csv --cache data\cache\cbb_boxscore_cache.csv --days 90 --workers 4" }
     if ($ok) { $ok = Run-Step-Job "CBB Step 6 - Rank Props"              $CBBDir ".\scripts\pipeline\step6_rank_props_cbb.py"                       "--input outputs\$Date\step5b_cbb.csv --output outputs\$Date\step6_ranked_cbb.xlsx --date $Date --cache data\cache\cbb_boxscore_cache.csv" }
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "WCBB Step 1 - Fetch PrizePicks" $CBBDir ".\scripts\pipeline\step1_pp_cbb_scraper.py" "--league_id 176 --out step1_wcbb.csv" } } else { Write-Output "[WCBB] Skipping step1 fetch" }
+    if ($ok) { $ok = Run-Step-Job "WCBB Step 2 - Normalize"               $CBBDir ".\scripts\pipeline\step2_normalize.py"                            "--input step1_wcbb.csv --output step2_wcbb.csv" }
+    if ($ok) { $ok = Run-Step-Job "WCBB Step 3 - Attach Defense Rankings" $CBBDir ".\scripts\pipeline\step3b_attach_def_rankings.py"                 "--input step2_wcbb.csv --defense data\reference\cbb_def_rankings.csv --output step3b_with_def_rankings_wcbb.csv" }
+    if ($ok) { $ok = Run-Step-Job "WCBB Step 4 - Attach ESPN IDs"         $CBBDir ".\scripts\pipeline\step5a_attach_espn_ids.py"                     "--input step3b_with_def_rankings_wcbb.csv --output step3_wcbb.csv --master data/reference/ncaa_mbb_athletes_master.csv" }
+    if ($ok) { $ok = Run-Step-Job "WCBB Step 5 - Boxscore Stats"          $CBBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input step3_wcbb.csv --output step5b_wcbb.csv --cache data\cache\wcbb_boxscore_cache.csv --days 21 --workers 4 --league womens-college-basketball" }
+    if ($ok) { $ok = Run-Step-Job "WCBB Step 6 - Rank Props"              $CBBDir ".\scripts\pipeline\step6_rank_props_cbb.py"                       "--input step5b_wcbb.csv --output step6_ranked_wcbb.xlsx --date $Date --cache data\cache\wcbb_boxscore_cache.csv" }
     if ($ok) { Copy-Item "$CBBDir\outputs\$Date\step6_ranked_cbb.xlsx" "$CBBDir\step6_ranked_cbb.xlsx" -Force }
     return $ok
 } -ArgumentList $CBBDir, $SkipFetch, $Date
@@ -735,8 +777,9 @@ if ($NHLSuccess) {
     Copy-Item "$NHLDir\step8_nhl_direction_clean.xlsx" "$OutDir\step8_nhl_direction_clean_$Date.xlsx" -Force
     Write-Host "  Archived NHL slate -> $OutDir\step8_nhl_direction_clean_$Date.xlsx" -ForegroundColor DarkGray
 }
-if (Test-Path "$MLBDir\step8_mlb_direction_clean.xlsx") {
-    Copy-Item "$MLBDir\step8_mlb_direction_clean.xlsx" "$OutDir\step8_mlb_direction_clean_$Date.xlsx" -Force
+ $mlbArchiveSource = Resolve-MLBCleanSlateFile -MLBDir $MLBDir
+if ($mlbArchiveSource) {
+    Copy-Item $mlbArchiveSource "$OutDir\step8_mlb_direction_clean_$Date.xlsx" -Force
     Write-Host "  Archived MLB slate -> $OutDir\step8_mlb_direction_clean_$Date.xlsx" -ForegroundColor DarkGray
 }
 if (Test-Path "$Root\NBA\step8_nba1h_direction_clean.xlsx") {

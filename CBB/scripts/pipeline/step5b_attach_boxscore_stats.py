@@ -40,8 +40,9 @@ if str(_PROPORACLE_ROOT) not in sys.path:
 from scripts.db_utils import log_pipeline_health
 
 HEADERS = {"User-Agent": "Mozilla/5.0", "Accept": "application/json, text/plain, */*"}
-ESPN_SCOREBOARD_URL = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard"
-ESPN_SUMMARY_URL    = "https://site.web.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/summary"
+ESPN_SCOREBOARD_URL = "https://site.api.espn.com/apis/site/v2/sports/basketball/{league}/scoreboard"
+ESPN_SUMMARY_URL    = "https://site.web.api.espn.com/apis/site/v2/sports/basketball/{league}/summary"
+ESPN_LEAGUE = "mens-college-basketball"
 
 
 def norm(s: str) -> str:
@@ -79,7 +80,7 @@ def date_range(end_date: dt.date, days_back: int) -> List[str]:
 
 
 def pull_scoreboard(d: str) -> dict:
-    return request_json(ESPN_SCOREBOARD_URL,
+    return request_json(ESPN_SCOREBOARD_URL.format(league=ESPN_LEAGUE),
                         params={"dates": d, "groups": "50", "limit": "500"},
                         sleep=0.10) or {}
 
@@ -107,7 +108,7 @@ def extract_events(sb: dict) -> List[Tuple[str, str, str, str]]:
 
 
 def pull_summary(eid: str) -> dict:
-    return request_json(ESPN_SUMMARY_URL, params={"event": eid}, sleep=0.08) or {}
+    return request_json(ESPN_SUMMARY_URL.format(league=ESPN_LEAGUE), params={"event": eid}, sleep=0.08) or {}
 
 
 def parse_min(x) -> float:
@@ -428,10 +429,24 @@ def main():
     ap.add_argument("--workers",  type=int, default=4)
     ap.add_argument("--cache",    default="cbb_boxscore_cache.csv",
                     help="Persistent cache CSV path (default: cbb_boxscore_cache.csv)")
+    ap.add_argument(
+        "--league",
+        default="auto",
+        choices=["auto", "mens-college-basketball", "womens-college-basketball"],
+        help="ESPN league slug for scoreboard/summary fetches (default: auto by wcbb in paths).",
+    )
     ap.add_argument("--no_cache", action="store_true",
                     help="Ignore existing cache and force full refresh")
     args = ap.parse_args()
     cache_path = "" if args.no_cache else args.cache
+
+    global ESPN_LEAGUE
+    if args.league == "auto":
+        hint = f"{args.input} {args.output} {cache_path}".lower()
+        ESPN_LEAGUE = "womens-college-basketball" if "wcbb" in hint else "mens-college-basketball"
+    else:
+        ESPN_LEAGUE = args.league
+    print(f"-> ESPN league: {ESPN_LEAGUE}")
 
     print("→ Loading:", args.input)
     try:
