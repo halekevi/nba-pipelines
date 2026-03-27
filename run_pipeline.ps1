@@ -34,6 +34,7 @@ param(
     [switch]$SkipFetch,
     [switch]$RefreshCache,
     [switch]$ForceAll,
+    [switch]$DQWarnOnly,
     [int]$CacheAgeDays = 7
 )
 
@@ -227,6 +228,22 @@ function Run-Combined {
     $label = if ($Reason) { "[ COMBINED SLATE -- $Reason ]" } else { "[ COMBINED SLATE ]" }
     Write-Host $label -ForegroundColor Magenta
     Write-Host ""
+
+    # Validate upstream sport outputs before building combined slate.
+    $dqScript = Join-Path $Root "scripts\validate_pipeline_outputs.py"
+    if (Test-Path $dqScript) {
+        Write-Host "  [DQ] Validating upstream pipeline outputs..." -ForegroundColor Cyan
+        $dqCmd = "py -3.14 `"$dqScript`" --date $Date --repo-root `"$Root`""
+        if ($DQWarnOnly) { $dqCmd += " --warn-only" }
+        $dqOut = Invoke-Expression "$dqCmd 2>&1"
+        foreach ($line in $dqOut) { Write-Host "    $line" -ForegroundColor DarkGray }
+        if ($LASTEXITCODE -ne 0 -and -not $DQWarnOnly) {
+            Write-Host "  [DQ] FAILED. Fix upstream pipeline data gaps before combine." -ForegroundColor Red
+            return $false
+        }
+    } else {
+        Write-Host "  [DQ] Validator script missing, skipping upstream data-quality gate." -ForegroundColor Yellow
+    }
 
     # Clean up any stale root-level combined_slate_tickets files from previous runs
     Get-ChildItem -Path $Root -Filter "combined_slate_tickets_*.xlsx" | Remove-Item -Force -ErrorAction SilentlyContinue

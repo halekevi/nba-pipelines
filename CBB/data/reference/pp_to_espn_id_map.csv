@@ -29,6 +29,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 218833,5106272,248,milos uzan,HOU,name_team,2026-03-16
 218858,4702784,97,j vonne hadley,LOU,name_team,2026-03-16
 218886,5176758,154,tre von spillers,WAKE,name_team,2026-03-22
+218887,5105836,130,roddy gayle,MICH,name_team,2026-03-24
 218954,5101658,2509,gicarri harris,PUR,name_team,2026-03-16
 219001,5174955,2608,paulius murauskas,SMC,name_team,2026-03-16
 219002,4711255,127,jeremy fears,MSU,name_team,2026-03-16
@@ -56,6 +57,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 222301,4684276,333,aden holloway,ALA,name_team,2026-03-16
 223139,5108059,2006,tavari johnson,AKR,name_team,2026-03-16
 223158,4702962,2603,justice ajogbor,JOES,name_team,2026-03-21
+223416,4873089,2,tahaad pettiford,AUB,name_team,2026-03-25
 223419,5105841,2633,felix okpara,TENN,name_team,2026-03-20
 223432,4838721,238,tyler nickel,VAN,name_team,2026-03-15
 223601,5105794,26,skyy clark,UCLA,name_team,2026-03-16
@@ -72,6 +74,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 228296,5107174,43,nick townsend,YALE,name_team,2026-03-15
 229866,5240980,2608,mikey lewis,SMC,name_team,2026-03-16
 230288,5105809,41,tarris reed,CONN,name_team,2026-03-16
+230386,5176354,2287,chase walker,ILST,name_team,2026-03-25
 230387,5176352,2287,johnny kinziger,ILST,name_team,2026-03-22
 230584,5182573,2634,aaron nkrumah,TNST,name_team,2026-03-16
 230586,5242985,2634,travis harper,TNST,name_team,2026-03-16
@@ -114,6 +117,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 276868,5241364,2294,bennett stirtz,IOWA,name_team,2026-03-16
 276869,5176283,2294,cam manyawu,IOWA,name_team,2026-03-16
 277427,5177301,2305,melvin council,KU,name_team,2026-03-16
+277595,5075625,2,keyshawn hall,AUB,name_team,2026-03-25
 277634,5311832,356,david mirkovic,ILL,name_team,2026-03-16
 277635,5176150,356,jake davis,ILL,name_team,2026-03-16
 277636,5254165,356,keaton wagler,ILL,name_team,2026-03-16
@@ -123,6 +127,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 277955,5175368,2670,lazar djokovic,VCU,name_team,2026-03-15
 277969,4873184,333,aiden sherrell,ALA,name_team,2026-03-16
 277970,5106283,2599,dillon mitchell,SJU,name_team,2026-03-16
+277971,4709141,333,houston mallette,ALA,name_team,2026-03-24
 277986,4683758,258,malik thomas,UVA,name_team,2026-03-16
 277998,5311846,258,thijs de ridder,UVA,name_team,2026-03-21
 278036,5060684,2116,jordan burks,UCF,name_team,2026-03-16
@@ -156,6 +161,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 279263,5241342,2547,brayden maldonado,SEA,name_team,2026-03-22
 279335,5107830,2547,maleek arington,SEA,name_team,2026-03-22
 279336,5177716,2547,will heimbrodt,SEA,name_team,2026-03-22
+279463,5174636,2603,dasear haskins,JOES,name_team,2026-03-24
 279548,5174973,2509,oscar cluff,PUR,name_team,2026-03-15
 279710,5041953,12,koa peat,ARIZ,name_team,2026-03-16
 279765,4873203,2294,cooper koch,IOWA,name_team,2026-03-16
@@ -177,6 +183,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 280352,5254338,167,jake hall,UNM,name_team,2026-03-21
 280353,5315585,167,tomislav buljan,UNM,name_team,2026-03-21
 280466,5101809,2390,shelton henderson,MIA,name_team,2026-03-16
+280478,5311502,2,elyjah freeman,AUB,name_team,2026-03-25
 280519,5109790,194,christoph tilly,OSU,name_team,2026-03-16
 280679,5239713,2670,brandon jennings,VCU,name_team,2026-03-15
 280680,4701030,2670,jadrian tracey,VCU,name_team,2026-03-15
@@ -205,6 +212,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 282248,5105658,2599,dylan darling,SJU,name_team,2026-03-16
 282286,5175007,356,andrej stojakovic,ILL,name_team,2026-03-16
 282451,5105538,2439,kimani hamilton,UNLV,name_team,2026-03-22
+282488,5176314,2,kevin overton,AUB,name_team,2026-03-25
 282541,4711259,2439,dra gibbs lawhorn,UNLV,name_team,2026-03-22
 282542,4703899,2439,howie fleming,UNLV,name_team,2026-03-22
 282694,5242130,2335,brett decker,LIB,name_team,2026-03-21
@@ -258,7 +266,9 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 292389,5242127,97,adrian wooley,LOU,name_team,2026-03-20
 292402,5221321,2641,jaylen petty,TTU,name_team,2026-03-16
 292417,4432196,142,jayden stone,MIZZ,name_only,2026-03-20
+294185,5105855,251,camden heide,TEX,name_team,2026-03-24
 295086,5313914,2440,vaughn weems,NEV,name_team,2026-03-21
+295291,5119063,2440,kaleb lowery,NEV,name_team,2026-03-24
 295348,5176787,2250,emmanuel innocenti,GONZ,name_team,2026-03-16
 295349,4683147,2250,jalen warley,GONZ,name_team,2026-03-20
 296048,5196913,2250,davis fogle,GONZ,name_team,2026-03-16
@@ -283,6 +293,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 302110,5174574,2168,jaiun simon,DAY,name_team,2026-03-15
 302119,4433625,238,jalen washington,VAN,name_team,2026-03-15
 302123,5061581,2641,luke bamgboye,TTU,name_team,2026-03-16
+302973,4895753,41,jayden ross,CONN,name_team,2026-03-24
 303393,5312035,2509,omer mayer,PUR,name_team,2026-03-15
 303537,4685687,2633,jaylen carey,TENN,name_team,2026-03-20
 304346,5102618,2509,jack benter,PUR,name_team,2026-03-20
@@ -358,6 +369,9 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 308941,5152656,2641,josiah moseley,TTU,name_team,2026-03-21
 309281,4703912,66,nate heise,ISU,name_team,2026-03-24
 309452,5144139,333,london jemison,ALA,name_team,2026-03-24
+309672,4703411,127,trey fort,MSU,name_team,2026-03-24
+309673,5144124,150,nikolas khamenia,DUKE,name_team,2026-03-24
+309863,5101798,127,cam ward,MSU,name_team,2026-03-25
 88130,5105837,194,bruce thornton,OSU,name_team,2026-03-16
 88238,5105853,2509,fletcher loyer,PUR,name_team,2026-03-15
 88458,4698719,8,trevon brazile,ARK,name_team,2026-03-15

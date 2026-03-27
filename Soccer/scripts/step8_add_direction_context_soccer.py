@@ -22,6 +22,11 @@ from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
+
 
 def _norm_pick_type(x: str) -> str:
     t = (str(x) if x is not None else "").strip().lower()
@@ -204,7 +209,7 @@ def main() -> None:
     ap.add_argument("--date",   default="", help="YYYY-MM-DD target date (default: today ET)")
     args = ap.parse_args()
 
-    print(f"→ Loading: {args.input} (sheet={args.sheet})")
+    print(f"Loading: {args.input} (sheet={args.sheet})")
     df  = pd.read_excel(args.input, sheet_name=args.sheet, dtype=str).fillna("")
 
     if df.empty:
@@ -251,6 +256,34 @@ def main() -> None:
 
     out = df.copy()
 
+    # Backfill opponent labels from game context when opp_team is missing.
+    # Many soccer rows share pp_game_id; if each game has exactly two teams,
+    # infer each row's opponent as the "other" team in that game.
+    if "opp_team" in out.columns and "pp_game_id" in out.columns and "team" in out.columns:
+        opp_blank = out["opp_team"].astype(str).str.strip().isin(["", "nan", "None", "null"])
+        if opp_blank.any():
+            game_team_map = (
+                out.loc[:, ["pp_game_id", "team"]]
+                .astype(str)
+                .assign(team=lambda x: x["team"].str.strip(), pp_game_id=lambda x: x["pp_game_id"].str.strip())
+                .groupby("pp_game_id")["team"]
+                .apply(lambda s: sorted({t for t in s.tolist() if t and t.lower() not in ("nan", "none", "null")}))
+                .to_dict()
+            )
+            inferred = []
+            for _, r in out.loc[opp_blank, ["pp_game_id", "team"]].iterrows():
+                gid = str(r.get("pp_game_id", "")).strip()
+                team = str(r.get("team", "")).strip()
+                teams = game_team_map.get(gid, [])
+                if len(teams) == 2 and team in teams:
+                    inferred.append(teams[0] if teams[1] == team else teams[1])
+                else:
+                    inferred.append("")
+            out.loc[opp_blank, "opp_team"] = inferred
+            # Keep non-empty placeholder for unresolved rows so downstream views are explicit.
+            still_blank = out["opp_team"].astype(str).str.strip().isin(["", "nan", "None", "null"])
+            out.loc[still_blank, "opp_team"] = "UNKNOWN_OPP"
+
     if "edge" not in out.columns:
         proj = pd.to_numeric(out.get("projection", ""), errors="coerce")
         line = pd.to_numeric(out.get("line",        ""), errors="coerce")
@@ -260,7 +293,6 @@ def main() -> None:
     abs_edge = edge.abs()
 
     pick_type = out.get("pick_type", "Standard").astype(str).apply(_norm_pick_type)
-    forced    = pick_type.isin(["Goblin", "Demon"])
 
     # BUG FIX: edge >= 0 is False for NaN, which wrongly assigns UNDER to rows
     # with no projection. Use explicit NaN check.
@@ -277,6 +309,50 @@ def main() -> None:
         np.where(has_edge & (abs_edge < 0.03), "MODEL_TIEBREAK_DIFF<0.03", ""),
         index=out.index
     )
+
+    # Standard-only tie-break: when edge is effectively zero, use L5 side signal.
+    # This preserves Goblin/Demon OVER-only behavior while allowing true Standard UNDERS.
+    std_mask = pick_type.eq("Standard")
+    tie_mask = std_mask & has_edge & (abs_edge < 0.03)
+    if tie_mask.any():
+        l5_over = pd.to_numeric(out.get("last5_over", np.nan), errors="coerce")
+        l5_under = pd.to_numeric(out.get("last5_under", np.nan), errors="coerce")
+        hr5 = pd.to_numeric(out.get("line_hit_rate_over_ou_5", np.nan), errors="coerce")
+
+        under_from_l5 = tie_mask & l5_under.notna() & l5_over.notna() & (l5_under > l5_over)
+        over_from_l5 = tie_mask & l5_under.notna() & l5_over.notna() & (l5_over > l5_under)
+        unresolved = tie_mask & ~(under_from_l5 | over_from_l5)
+        under_from_hr = unresolved & hr5.notna() & (hr5 < 0.50)
+        over_from_hr = unresolved & ~(under_from_hr)
+
+        final_dir = final_dir.where(~under_from_l5, "UNDER")
+        final_dir = final_dir.where(~over_from_l5, "OVER")
+        final_dir = final_dir.where(~under_from_hr, "UNDER")
+        final_dir = final_dir.where(~over_from_hr, "OVER")
+
+        reason = reason.where(~under_from_l5, "STANDARD_TIEBREAK_L5_UNDER")
+        reason = reason.where(~over_from_l5, "STANDARD_TIEBREAK_L5_OVER")
+        reason = reason.where(~under_from_hr, "STANDARD_TIEBREAK_HR5_UNDER")
+        reason = reason.where(~over_from_hr, "STANDARD_TIEBREAK_HR5_OVER")
+
+    # Additional Standard-only force from Last 5 Avg vs current line:
+    # If we actually have stat_last5_avg and it is clearly UNDER the PP line,
+    # flip to UNDER even if the edge model is near-zero.
+    # (Helps cases where passes-attempted last5 stats exist but edge still ~0.)
+    std_force = std_mask.copy()
+    last5_avg = pd.to_numeric(out.get("stat_last5_avg", np.nan), errors="coerce")
+    linev = pd.to_numeric(out.get("line", np.nan), errors="coerce")
+    last5_known = last5_avg.notna() & linev.notna()
+    force_under = std_force & last5_known & (last5_avg < (linev - 1e-9))
+    force_over  = std_force & last5_known & (last5_avg > (linev + 1e-9))
+    if force_under.any():
+        final_dir = final_dir.where(~force_under, "UNDER")
+        reason = reason.where(~force_under, "STANDARD_L5AVG_UNDER")
+    if force_over.any():
+        final_dir = final_dir.where(~force_over, "OVER")
+        reason = reason.where(~force_over, "STANDARD_L5AVG_OVER")
+
+    forced    = pick_type.isin(["Goblin", "Demon"])
     final_dir = final_dir.where(~forced, "OVER")
     reason    = reason.where(~forced, "FORCED_OVER_ONLY_GOB_DEM")
 

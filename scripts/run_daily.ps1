@@ -70,6 +70,10 @@ Write-Log "======== Daily run start (Today=$Today, Yesterday=$Yesterday) =======
 if (-not $SkipFetch) {
     Write-Log "STEP A1 - Historical actuals refresh: START"
     $fetchScript = Join-Path $Root "scripts\fetch_historical_actuals.py"
+    # NOTE: historical_actuals.db can be locked by OneDrive sync since this repo lives under OneDrive.
+    # scripts\fetch_historical_actuals.py currently does NOT accept a --db override, so we can't redirect
+    # the DB path from here without changing that script. If you hit "database is locked", pause OneDrive
+    # or move the repo / DB to a non-synced location.
     Push-Location $Root
     try {
         & py -3.14 $fetchScript --refresh-current
@@ -227,7 +231,7 @@ if (-not $SkipPipeline) {
     }
 
     Write-Log "STEP C - Pipeline ($Today): START"
-    $pipeScript = Join-Path $Root "scripts\run_pipeline.ps1"
+    $pipeScript = Join-Path $Root "run_pipeline.ps1"
     $pipeArgs = @("-File", $pipeScript, "-Date", $Today)
     if ($EffectiveOddsKey) {
         $pipeArgs += @("-OddsApiKey", $EffectiveOddsKey)
@@ -235,6 +239,7 @@ if (-not $SkipPipeline) {
     if ($ForceAll) {
         $pipeArgs += "-ForceAll"
     }
+    $pipeArgs += "-SkipCombined"
     $pipeArgs += "-SkipPush"
     Push-Location $Root
     try {
@@ -246,7 +251,7 @@ if (-not $SkipPipeline) {
             Write-Log "STEP C - Pipeline ($Today): FAILED (pwsh exit $pe)"
             Write-Host "Pipeline reported failure (exit $pe)." -ForegroundColor Red
         }
-        elseif (-not (Test-Path $combinedToday)) {
+        elseif (-not $SkipPipeline -and -not (Test-Path $combinedToday) -and -not ($pipeArgs -contains "-SkipCombined")) {
             $script:PipelineFailed = $true
             Write-Log "STEP C - Pipeline ($Today): FAILED (missing $combinedToday)"
             Write-Host "Pipeline finished but combined slate not found under outputs\$Today\" -ForegroundColor Red
@@ -274,28 +279,28 @@ else {
 if ($script:PipelineFailed) {
     Write-Log "STEP D - Combined slate: SKIPPED (pipeline failed)"
     Write-Host "Skipping combined slate — fix pipeline first." -ForegroundColor Yellow
-}
-else {
+} elseif ($SkipPipeline -and -not (Test-Path (Join-Path $Root "outputs\$Today\combined_slate_tickets_$Today.xlsx"))) {
+    Write-Log "STEP D - Combined slate: SKIPPED (-SkipPipeline and no existing combined output)"
+    Write-Host "Skipping combined slate — pipeline was skipped and no existing output found." -ForegroundColor Yellow
+} else {
     Write-Log "STEP D - Combined slate: START"
     $todayOutDir = Join-Path $Root "outputs\$Today"
     if (-not (Test-Path $todayOutDir)) {
         New-Item -ItemType Directory -Path $todayOutDir -Force | Out-Null
     }
     $combinedOut = Join-Path $todayOutDir "combined_slate_tickets_$Today.xlsx"
-    $combinedScript = Join-Path $Root "scripts\combined_slate_tickets.py"
     Push-Location $Root
     try {
-        & py -3.14 $combinedScript --date $Today --write-web --output $combinedOut
+        $pipeScript = Join-Path $Root "run_pipeline.ps1"
+        & pwsh -NoProfile -File $pipeScript -Date $Today -CombinedOnly
         $ce = $LASTEXITCODE
         if ($ce -ne 0) {
-            Write-Log "STEP D - Combined slate: FAILED (py exit $ce)"
-            Write-Warning "Combined slate script failed (exit $ce)"
-        }
-        elseif (-not (Test-Path $combinedOut)) {
+            Write-Log "STEP D - Combined slate: FAILED (pwsh exit $ce)"
+            Write-Warning "Combined slate failed (exit $ce)"
+        } elseif (-not (Test-Path $combinedOut)) {
             Write-Log "STEP D - Combined slate: FAILED (output missing)"
             Write-Warning "Combined output missing — expected $combinedOut"
-        }
-        else {
+        } else {
             Write-Log "STEP D - Combined slate: OK"
         }
     }

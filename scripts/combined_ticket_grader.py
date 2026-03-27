@@ -60,6 +60,8 @@ JSON schema (example):
 from __future__ import annotations
 
 import argparse
+import csv
+from datetime import datetime, timezone
 import json
 import re
 import unicodedata
@@ -70,6 +72,8 @@ import numpy as np
 import pandas as pd
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
+
+ROOT = Path(__file__).resolve().parent.parent
 
 
 # -----------------------------
@@ -269,6 +273,7 @@ def parse_ticket_sheet(tickets_xlsx: Path, sheet_name: str) -> pd.DataFrame:
     idx_pick_type = col_idx.get("pick type", 5)
     idx_def_tier = col_idx.get("def tier", 15)
     idx_sport = col_idx.get("sport", 22)
+    idx_ml_prob = col_idx.get("ml prob", None)
 
     rows = []
     i = 0
@@ -317,6 +322,7 @@ def parse_ticket_sheet(tickets_xlsx: Path, sheet_name: str) -> pd.DataFrame:
             pick_type = df.iloc[k, idx_pick_type] if df.shape[1] > idx_pick_type else ""
             tier = df.iloc[k, idx_def_tier] if df.shape[1] > idx_def_tier else ""
             sport = df.iloc[k, idx_sport] if df.shape[1] > idx_sport else ""
+            ml_prob = df.iloc[k, idx_ml_prob] if (idx_ml_prob is not None and df.shape[1] > idx_ml_prob) else np.nan
 
             line_num = pd.to_numeric(line, errors="coerce")
             if pd.isna(line_num):
@@ -340,6 +346,7 @@ def parse_ticket_sheet(tickets_xlsx: Path, sheet_name: str) -> pd.DataFrame:
                 "pick_type": str(pick_type) if not pd.isna(pick_type) else "",
                 "leg_type": leg_type,
                 "tier": str(tier) if not pd.isna(tier) else "",
+                "ml_prob": pd.to_numeric(ml_prob, errors="coerce"),
             })
             k += 1
 
@@ -367,6 +374,67 @@ def prep_actuals(csv_path: Path, sport_label: str) -> pd.DataFrame:
     return df
 
 
+def _append_grade_latency_row(
+    repo_root: Path, date_str: str, sport: str, actuals_path: Path, grade_ts: datetime
+) -> None:
+    out_dir = repo_root / "outputs"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    log_path = out_dir / "grade_latency_log.csv"
+    try:
+        age_min = round((grade_ts.timestamp() - actuals_path.stat().st_mtime) / 60.0, 1)
+    except Exception:
+        age_min = ""
+
+    write_header = not log_path.exists()
+    with log_path.open("a", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(
+            f,
+            fieldnames=["date", "sport", "grade_timestamp", "actuals_file_age_minutes"],
+        )
+        if write_header:
+            w.writeheader()
+        w.writerow(
+            {
+                "date": date_str,
+                "sport": sport,
+                "grade_timestamp": grade_ts.isoformat(),
+                "actuals_file_age_minutes": age_min,
+            }
+        )
+
+
+def build_leg_contribution_report(graded_tickets: list[dict]) -> pd.DataFrame:
+    records: list[dict] = []
+    for t in graded_tickets:
+        # Ticket-level result in this grader is payout_status (WIN/CASH/LOSE/NO_ACTUAL/REFUND)
+        if str(t.get("result", "")).upper() not in {"LOSS", "LOSE"}:
+            continue
+        for leg in (t.get("legs") or []):
+            if str(leg.get("leg_result", "")).upper() != "MISS":
+                continue
+            records.append(
+                {
+                    "sport": leg.get("sport"),
+                    "prop_type": leg.get("prop_type"),
+                    "pick_type": leg.get("pick_type"),
+                    "ml_prob": leg.get("ml_prob"),
+                    "tickets_killed": 1,
+                }
+            )
+    if not records:
+        return pd.DataFrame(columns=["sport", "prop_type", "pick_type", "tickets_killed", "avg_ml_prob"])
+    df = pd.DataFrame(records)
+    df["ml_prob"] = pd.to_numeric(df["ml_prob"], errors="coerce")
+    out = (
+        df.groupby(["sport", "prop_type", "pick_type"], dropna=False)
+        .agg(tickets_killed=("tickets_killed", "sum"), avg_ml_prob=("ml_prob", "mean"))
+        .sort_values(["tickets_killed", "avg_ml_prob"], ascending=[False, False])
+        .reset_index()
+    )
+    out["avg_ml_prob"] = out["avg_ml_prob"].round(4)
+    return out
+
+
 def build_lookup(act: pd.DataFrame):
     by_player_prop: Dict[Tuple[str, str], List[dict]] = {}
     by_player_team_prop: Dict[Tuple[str, str, str], List[dict]] = {}
@@ -376,6 +444,48 @@ def build_lookup(act: pd.DataFrame):
         by_player_prop.setdefault(key1, []).append(r.to_dict())
         by_player_team_prop.setdefault(key2, []).append(r.to_dict())
     return by_player_prop, by_player_team_prop
+
+
+def _load_ticket_json_leg_probs(repo_root: Path, tickets_xlsx: Path) -> dict[tuple[str, int, int], float]:
+    """
+    Best-effort loader for ml_prob/leg_prob_used from a JSON snapshot produced by combined_slate_tickets.py.
+    Returns mapping: (sheet_name/group_name, ticket_no, leg_no) -> ml_prob.
+    """
+    stem = tickets_xlsx.stem
+    m = re.search(r"(\d{4}-\d{2}-\d{2})", stem)
+    date_str = m.group(1) if m else ""
+    candidates: list[Path] = []
+    if date_str:
+        candidates.append(repo_root / f"combined_slate_tickets_{date_str}.json")
+    candidates.append(tickets_xlsx.with_suffix(".json"))
+
+    json_path = next((p for p in candidates if p.exists()), None)
+    if json_path is None:
+        return {}
+    try:
+        payload = json.loads(json_path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+    out: dict[tuple[str, int, int], float] = {}
+    for g in (payload.get("groups") or []):
+        sheet = str(g.get("group_name") or "")
+        for t in (g.get("tickets") or []):
+            try:
+                tno = int(t.get("ticket_no"))
+            except Exception:
+                continue
+            for i, leg in enumerate((t.get("legs") or []), start=1):
+                v = leg.get("ml_prob", None)
+                if v is None:
+                    v = leg.get("leg_prob_used", None)
+                try:
+                    fv = float(v)
+                except Exception:
+                    continue
+                if 0.0 < fv < 1.0:
+                    out[(sheet, tno, i)] = fv
+    return out
 
 
 def lookup_actual(sport: str, player: str, team: str, prop_norm: str,
@@ -1013,6 +1123,21 @@ def main():
         soccer_act = prep_actuals(soccer_csv, "SOCCER")
         soccer_lp, soccer_lpt = build_lookup(soccer_act)
 
+    # Grade latency tracker (one row per actuals file)
+    grade_ts = datetime.now(timezone.utc)
+    m = re.search(r"_(\d{4}-\d{2}-\d{2})", str(nba_csv.name))
+    grade_date = m.group(1) if m else grade_ts.strftime("%Y-%m-%d")
+    _append_grade_latency_row(ROOT, grade_date, "NBA", nba_csv, grade_ts)
+    _append_grade_latency_row(ROOT, grade_date, "CBB", cbb_csv, grade_ts)
+    if args.nba1h_actuals:
+        _append_grade_latency_row(ROOT, grade_date, "NBA1H", Path(args.nba1h_actuals), grade_ts)
+    if args.nba1q_actuals:
+        _append_grade_latency_row(ROOT, grade_date, "NBA1Q", Path(args.nba1q_actuals), grade_ts)
+    if args.nhl_actuals:
+        _append_grade_latency_row(ROOT, grade_date, "NHL", Path(args.nhl_actuals), grade_ts)
+    if args.soccer_actuals:
+        _append_grade_latency_row(ROOT, grade_date, "SOCCER", Path(args.soccer_actuals), grade_ts)
+
     from espn_injuries import (  # noqa: E402
         canon_team_abbr as _inj_canon_team,
         injuries_csv_path_for_actuals,
@@ -1089,6 +1214,18 @@ def main():
         return row["leg_result"]
 
     legs_df["leg_result"] = legs_df.apply(_injury_void_leg, axis=1)
+
+    # Enrich leg-level ML probability from JSON snapshot (when not present in XLSX).
+    # This keeps Killer Legs avg_ml_prob meaningful even if the workbook layout changes.
+    if "ml_prob" not in legs_df.columns:
+        legs_df["ml_prob"] = np.nan
+    need_fill = pd.to_numeric(legs_df["ml_prob"], errors="coerce").isna()
+    if need_fill.any():
+        prob_map = _load_ticket_json_leg_probs(ROOT, tickets_xlsx)
+        if prob_map:
+            def _lookup_prob(r):
+                return prob_map.get((str(r.get("sheet") or ""), int(r.get("ticket_no")), int(r.get("leg_no"))), np.nan)
+            legs_df.loc[need_fill, "ml_prob"] = legs_df.loc[need_fill].apply(_lookup_prob, axis=1)
 
     # per-ticket modifiers
     mods_df = (legs_df.groupby("ticket_id", as_index=False)
@@ -1179,6 +1316,27 @@ def main():
     insights_df = build_analysis_insights(overall, ticket_results, leg_breakdowns)
     deep_df = build_ticket_deep_dive(ticket_results, legs_df)
 
+    # Killer legs report (loss drivers)
+    graded_tickets: list[dict] = []
+    legs_by_ticket = {k: g for k, g in legs_df.groupby("ticket_id")}
+    for _, tr in ticket_results.iterrows():
+        tid = tr.get("ticket_id")
+        legs = []
+        g = legs_by_ticket.get(tid)
+        if g is not None:
+            for _, lr in g.iterrows():
+                legs.append(
+                    {
+                        "sport": lr.get("sport"),
+                        "prop_type": lr.get("prop_norm") or lr.get("prop"),
+                        "pick_type": lr.get("pick_type"),
+                        "ml_prob": lr.get("ml_prob"),
+                        "leg_result": lr.get("leg_result"),
+                    }
+                )
+        graded_tickets.append({"result": tr.get("payout_status"), "legs": legs})
+    killer_df = build_leg_contribution_report(graded_tickets)
+
     ml_pack: Dict[str, Any] = {}
     if not args.no_ml:
         ml_pack = run_ml_profit_layers(
@@ -1192,6 +1350,8 @@ def main():
         insights_df.to_excel(xw, index=False, sheet_name="ANALYSIS_INSIGHTS")
         ticket_results.to_excel(xw, index=False, sheet_name="TICKET_RESULTS")
         legs_df.to_excel(xw, index=False, sheet_name="LEG_RESULTS")
+        # Always write the sheet (even empty) so it is visible/stable for downstream tooling.
+        killer_df.to_excel(xw, index=False, sheet_name="Killer Legs")
         if deep_df is not None and not deep_df.empty:
             deep_df.to_excel(xw, index=False, sheet_name="TICKET_DEEP_DIVE")
         for name, tab in leg_breakdowns.items():

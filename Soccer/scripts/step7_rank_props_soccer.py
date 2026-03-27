@@ -648,6 +648,20 @@ def main() -> None:
 
     print(f"→ Loading: {args.input}")
     out = pd.read_csv(args.input, low_memory=False, encoding="utf-8-sig").fillna("")
+    _repo_usage = Path(__file__).resolve().parents[2]
+    _sd_usage = str(_repo_usage / "scripts")
+    if _sd_usage not in sys.path:
+        sys.path.insert(0, _sd_usage)
+    try:
+        from usage_redistribution import apply_usage_redistribution  # noqa: E402
+        run_date = (
+            str(out["game_date"].dropna().iloc[0])[:10]
+            if "game_date" in out.columns and not out["game_date"].dropna().empty
+            else pd.Timestamp.today().strftime("%Y-%m-%d")
+        )
+        out = apply_usage_redistribution(out, sport="Soccer", date=run_date, repo_root=str(_repo_usage))
+    except Exception as e:
+        print(f"⚠️ usage redistribution skipped: {e}")
 
     if out.empty:
         print("❌ [PropOracle-Soccer-S7] Empty input from S6 — aborting.")
@@ -682,6 +696,8 @@ def main() -> None:
     line_num = _to_num(out["line"])
     proj     = out.apply(_projection_from_row, axis=1)
     out["projection"] = proj
+    if "usage_boost_proj" in out.columns:
+        out["projection"] = _to_num(out["projection"]).fillna(0.0) + _to_num(out["usage_boost_proj"]).fillna(0.0)
     out["edge"]       = proj - line_num
     out["abs_edge"]   = out["edge"].abs()
 
@@ -843,6 +859,9 @@ def main() -> None:
         + out["prop_hr_z"].astype(float).fillna(0.0)     * 0.50
         + out["min_z"].astype(float).fillna(0.0)         * 0.25
     )
+    usage_bonus = np.clip(_to_num(out.get("usage_boost", pd.Series(0.0, index=out.index))).fillna(0.0) * 5.0, 0.0, 0.5)
+    out["usage_bonus"] = usage_bonus
+    score = score + usage_bonus
     score = (
         score
         * out["prop_weight"].astype(float).fillna(1.0)

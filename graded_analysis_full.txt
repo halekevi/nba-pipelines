@@ -1,0 +1,422 @@
+<string>:20: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+<string>:20: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+<string>:33: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  skipped outputs\synthetic\graded_nba_synthetic_2023-24.xlsx: "No such keys(s): 'io.excel.zip.reader'"
+
+========== NBA | 60742 rows (post-exclusion) | overall hit rate: 50.4% ==========
+
+  [PROP TYPE] (col='prop_type_norm')
+                        hit_rate  hits  total
+prop_type_norm                               
+Fantasy Score           0.656318   909   1385
+Turnovers               0.532331   354    665
+Personal Fouls          0.525046   283    539
+Rebounds                0.524110  1576   3007
+Pts+Rebs                0.520697  1912   3672
+Assists                 0.519749  1158   2228
+Two Pointers Made       0.518519   252    486
+Two Pointers Attempted  0.517007   228    441
+FG Made                 0.506667   228    450
+Free Throws Made        0.506276   242    478
+Points                  0.502965  2375   4722
+Rebs+Asts               0.502594  1744   3470
+Pts+Rebs+Asts           0.497750  2212   4444
+3-PT Made               0.494118   840   1700
+FG Attempted            0.491667   236    480
+Steals                  0.485581   623   1283
+Pts+Asts                0.485327  1505   3101
+3-PT Attempted          0.482289   177    367
+Blks+Stls               0.475212   393    827
+Free Throws Attempted   0.405458   208    513
+Blocked Shots           0.396104   244    616
+
+  [PICK TYPE (Goblin/Std/Demon)] (col='pick_type')
+           hit_rate   hits  total
+pick_type                        
+Goblin     0.642825  11333  17630
+Standard   0.396214   4291  10830
+Demon      0.323511   2075   6414
+
+  [DIRECTION (Over/Under)] (col='bet_direction')
+               hit_rate   hits  total
+bet_direction                        
+OVER           0.516035  15705  30434
+UNDER          0.449099   1994   4440
+
+  [TIER (A/B/C/D)] (col='tier')
+          hit_rate   hits  total
+tier                            
+A         0.673785   4449   6603
+B         0.605751   1601   2643
+C         0.570488   1473   2582
+Demon     0.500000   4320   8640
+Goblin    0.500000   4320   8640
+Standard  0.500000   4294   8588
+D         0.441552  10176  23046
+
+  [USAGE ROLE] (col='usage_role')
+            hit_rate  hits  total
+usage_role                       
+PRIMARY     0.532855  7647  14351
+SECONDARY   0.512989  5628  10971
+SUPPORT     0.505075  2289   4532
+UNKNOWN     0.425299  2135   5020
+
+  [MINUTES TIER] (col='minutes_tier')
+              hit_rate  hits  total
+minutes_tier                       
+HIGH          0.527090  6557  12440
+MEDIUM        0.517768  7839  15140
+LOW           0.513632  1168   2274
+UNKNOWN       0.425299  2135   5020
+
+  [DEF TIER] (col='def_tier')
+           hit_rate  hits  total
+def_tier                        
+Weak       0.524594  4010   7644
+Above Avg  0.524360  4585   8744
+Elite      0.495513  4362   8803
+Avg        0.489773  4741   9680
+
+  [SHOT ROLE] (col='shot_role')
+           hit_rate  hits  total
+shot_role                       
+HIGH_VOL   0.524623  7958  15169
+MID_VOL    0.521137  5868  11260
+LOW_VOL    0.507445  1738   3425
+UNKNOWN    0.425299  2135   5020
+
+  [PICK TYPE x TIER CROSS-TAB]
+pick_type tier  hit_rate  hits  total
+   Goblin    A  0.701713  3851   5488
+   Goblin    B  0.650884  1251   1922
+   Goblin    D  0.609713  5185   8504
+   Goblin    C  0.609557  1046   1716
+ Standard    A  0.533395   575   1078
+ Standard    C  0.503439   366    727
+ Standard    B  0.492980   316    641
+    Demon    C  0.438849    61    139
+ Standard    D  0.361880  3034   8384
+    Demon    D  0.317798  1957   6158
+
+  [PICK TYPE x PROP TYPE CROSS-TAB]
+pick_type         prop_type_norm  hit_rate  hits  total
+   Goblin          Fantasy Score  0.817143   429    525
+   Goblin                 Points  0.666428  1860   2791
+   Goblin                Assists  0.657210   834   1269
+   Goblin               Pts+Rebs  0.655848  1273   1941
+   Goblin              3-PT Made  0.653722   606    927
+   Goblin               Rebounds  0.650171  1143   1758
+   Goblin               Pts+Asts  0.647651   965   1490
+   Goblin      Two Pointers Made  0.632653   124    196
+   Goblin                 Steals  0.629630   493    783
+   Goblin              Rebs+Asts  0.627229  1161   1851
+   Goblin          Pts+Rebs+Asts  0.615417  1445   2348
+ Standard          Fantasy Score  0.610586   323    529
+   Goblin                FG Made  0.592593    64    108
+   Goblin              Blks+Stls  0.589691   286    485
+   Goblin          Blocked Shots  0.584211   111    190
+   Goblin         Personal Fouls  0.573991   128    223
+   Goblin              Turnovers  0.572347   178    311
+ Standard              Turnovers  0.571429   140    245
+   Goblin       Free Throws Made  0.560345    65    116
+ Standard         Personal Fouls  0.544872    85    156
+   Goblin         3-PT Attempted  0.520325    64    123
+ Standard       Free Throws Made  0.510823   118    231
+ Standard Two Pointers Attempted  0.505263   144    285
+ Standard                FG Made  0.500000   134    268
+ Standard         3-PT Attempted  0.494318    87    176
+ Standard           FG Attempted  0.483721   208    430
+    Demon          Fantasy Score  0.474320   157    331
+ Standard      Two Pointers Made  0.452632    86    190
+    Demon       Free Throws Made  0.450382    59    131
+    Demon         Personal Fouls  0.437500    70    160
+    Demon  Free Throws Attempted  0.423077    44    104
+    Demon      Two Pointers Made  0.420000    42    100
+ Standard          Pts+Rebs+Asts  0.400806   497   1240
+ Standard              3-PT Made  0.400000    80    200
+ Standard               Pts+Rebs  0.399383   518   1297
+ Standard              Rebs+Asts  0.385442   323    838
+ Standard               Rebounds  0.377261   292    774
+ Standard  Free Throws Attempted  0.366972   120    327
+ Standard               Pts+Asts  0.355132   429   1208
+ Standard                Assists  0.351456   181    515
+ Standard          Blocked Shots  0.340000    34    100
+    Demon              Rebs+Asts  0.332907   260    781
+    Demon              Turnovers  0.330275    36    109
+    Demon                Assists  0.322072   143    444
+    Demon          Pts+Rebs+Asts  0.315421   270    856
+    Demon              Blks+Stls  0.313187    57    182
+ Standard              Blks+Stls  0.312500    50    160
+    Demon          Blocked Shots  0.303681    99    326
+ Standard                 Steals  0.298701    69    231
+    Demon               Rebounds  0.296842   141    475
+    Demon                 Points  0.283433   142    501
+    Demon               Pts+Rebs  0.278802   121    434
+    Demon               Pts+Asts  0.275434   111    403
+    Demon              3-PT Made  0.268761   154    573
+ Standard                 Points  0.260839   373   1430
+    Demon                 Steals  0.226766    61    269
+
+========== CBB | 24962 rows (post-exclusion) | overall hit rate: 37.2% ==========
+
+  [PROP TYPE] (col='prop_type_norm')
+                hit_rate  hits  total
+prop_type_norm                       
+ast             0.563008   277    492
+stl             0.529940   177    334
+reb             0.507480   441    869
+pts             0.498597   711   1426
+ra              0.492837   172    349
+tov             0.486239   106    218
+blk             0.486239    53    109
+fg3m            0.485246   148    305
+pr              0.468153   294    628
+pra             0.457210   390    853
+pa              0.453465   229    505
+
+  [PICK TYPE (Goblin/Std/Demon)] (col='pick_type')
+           hit_rate  hits  total
+pick_type                       
+Goblin     0.493934  4071   8242
+Standard   0.409896  4051   9883
+Demon      0.170689  1167   6837
+
+  [DIRECTION (Over/Under)] (col='bet_direction')
+               hit_rate  hits  total
+bet_direction                       
+UNDER          0.420680  2315   5503
+OVER           0.358395  6974  19459
+
+  [TIER (A/B/C/D)] (col='tier')
+      hit_rate  hits  total
+tier                       
+A     0.519133  1126   2169
+B     0.498328  1341   2691
+C     0.458735  4091   8918
+D     0.244188  2731  11184
+
+  [USAGE ROLE] -- column not found
+
+  [MINUTES TIER] -- column not found
+
+  [DEF TIER] (col='def_tier')
+           hit_rate  hits  total
+def_tier                        
+weak       0.613636    81    132
+good       0.561611   237    422
+average    0.530303    70    132
+elite      0.510386   516   1011
+Avg        0.503696   477    947
+Weak       0.494888   242    489
+Above Avg  0.487387   541   1110
+Elite      0.442065   702   1588
+
+  [SHOT ROLE] -- column not found
+
+  [PICK TYPE x TIER CROSS-TAB]
+pick_type tier  hit_rate  hits  total
+   Goblin    A  0.550664   788   1431
+   Goblin    B  0.538295   745   1384
+   Goblin    C  0.509581  1835   3601
+ Standard    A  0.457995   338    738
+ Standard    B  0.456006   596   1307
+ Standard    C  0.429786  2225   5177
+   Goblin    D  0.384995   703   1826
+ Standard    D  0.335212   892   2661
+    Demon    C  0.221429    31    140
+    Demon    D  0.169628  1136   6697
+
+  [PICK TYPE x PROP TYPE CROSS-TAB]
+pick_type prop_type_norm  hit_rate  hits  total
+   Goblin            ast  0.586705   203    346
+   Goblin             pr  0.580357    65    112
+   Goblin            stl  0.567797   134    236
+   Goblin            pts  0.559165   482    862
+   Goblin            reb  0.547535   311    568
+   Goblin           fg3m  0.531100   111    209
+ Standard            ast  0.506849    74    146
+   Goblin            tov  0.500000    60    120
+ Standard             ra  0.488889   154    315
+   Goblin            pra  0.479651   165    344
+ Standard             pa  0.458159   219    478
+ Standard             pr  0.443798   229    516
+ Standard            pra  0.442043   225    509
+ Standard            reb  0.431894   130    301
+ Standard            pts  0.406028   229    564
+  skipped outputs\synthetic\graded_nhl_synthetic_2025-26.xlsx: "No such keys(s): 'io.excel.zip.reader'"
+
+========== NHL | 281351 rows (post-exclusion) | overall hit rate: 48.0% ==========
+
+  [PROP TYPE] (col='prop_type_norm')
+                   hit_rate  hits  total
+prop_type_norm                          
+Time On Ice        0.653409   115    176
+Power Play Points  0.596737   512    858
+Hits               0.548193    91    166
+Blocked Shots      0.489489   163    333
+Points             0.399095  1058   2651
+Plus/Minus         0.398876   284    712
+Assists            0.367890   802   2180
+Goals              0.361383   627   1735
+Shots On Goal      0.236610   645   2726
+
+  [PICK TYPE (Goblin/Std/Demon)] (col='pick_type')
+           hit_rate  hits  total
+pick_type                       
+Standard   0.726263  1438   1980
+Demon      0.630986   224    355
+Goblin     0.600834   432    719
+standard   0.542029   374    690
+demon      0.246657  1771   7180
+goblin     0.193314   133    688
+
+  [DIRECTION (Over/Under)] (col='bet_direction')
+               hit_rate  hits  total
+bet_direction                       
+UNDER          0.755114  2621   3471
+OVER           0.215084  1751   8141
+
+  [TIER (A/B/C/D)] (col='tier')
+          hit_rate   hits  total
+tier                            
+Standard  0.500000  42771  85542
+Goblin    0.500000  43368  86736
+Demon     0.500000  43368  86736
+A         0.458999   2183   4756
+B         0.402200    512   1273
+C         0.319296    417   1306
+D         0.155979   2340  15002
+
+  [USAGE ROLE] -- column not found
+
+  [MINUTES TIER] -- column not found
+
+  [DEF TIER] (col='def_tier')
+          hit_rate  hits  total
+def_tier                       
+WEAK      0.304499   873   2867
+AVERAGE   0.282917   578   2043
+ELITE     0.280576   507   1807
+SOLID     0.261190   496   1899
+
+  [SHOT ROLE] -- column not found
+
+  [PICK TYPE x TIER CROSS-TAB]
+pick_type tier  hit_rate  hits  total
+ Standard    A  0.743442  1162   1563
+    demon    A  0.666667   204    306
+ Standard    B  0.661871   276    417
+    Demon    C  0.637555   146    229
+    Demon    D  0.619048    78    126
+   Goblin    A  0.600834   432    719
+ standard    A  0.585185   237    405
+ standard    B  0.510345    74    145
+ standard    C  0.443548    55    124
+    demon    B  0.414141    82    198
+    demon    C  0.298942   113    378
+   goblin    B  0.233645    25    107
+    demon    D  0.217847  1372   6298
+   goblin    A  0.174721    94    538
+
+  [PICK TYPE x PROP TYPE CROSS-TAB]
+Empty DataFrame
+Columns: [pick_type, prop_type, hit_rate, hits, total]
+Index: []
+
+========== SOCCER | 57098 rows (post-exclusion) | overall hit rate: 3.4% ==========
+
+  [PROP TYPE] (col='prop_type_norm')
+                    hit_rate  hits  total
+prop_type_norm                           
+Shots Assisted      0.166667    19    114
+Goals Allowed       0.138655    33    238
+Shots On Target     0.087681   637   7265
+Attempted Dribbles  0.078125    10    128
+Goalie Saves        0.074222    93   1253
+Goal + Assist       0.048379   200   4134
+Tackles             0.046647   176   3773
+Fouls               0.042666   249   5836
+Shots               0.039722   417  10498
+Goals               0.014527    61   4199
+Assists             0.011758    39   3317
+Passes Attempted    0.000000     0    509
+
+  [PICK TYPE (Goblin/Std/Demon)] (col='pick_type')
+           hit_rate  hits  total
+pick_type                       
+goblin     0.284740   334   1173
+standard   0.153684    73    475
+demon      0.106203   755   7109
+Standard   0.040750    50   1227
+Goblin     0.040257   244   6061
+Demon      0.018914   481  25431
+
+  [DIRECTION (Over/Under)] (col='bet_direction')
+               hit_rate  hits  total
+bet_direction                       
+UNDER          0.138365    44    318
+OVER           0.045993  1893  41158
+
+  [TIER (A/B/C/D)] (col='tier')
+      hit_rate  hits  total
+tier                       
+A     0.067754   814  12014
+B     0.042872   160   3732
+C     0.039270   127   3234
+D     0.021932   836  38118
+
+  [USAGE ROLE] (col='usage role')
+            hit_rate  hits  total
+usage role                       
+FRINGE      0.153084   278   1816
+UNKNOWN     0.014949    37   2475
+
+  [MINUTES TIER] (col='minutes_tier')
+              hit_rate  hits  total
+minutes_tier                       
+LOW           0.201439    28    139
+HIGH          0.132093  1115   8441
+MEDIUM        0.107345    19    177
+UNKNOWN       0.023687   775  32719
+
+  [DEF TIER] (col='def_tier')
+           hit_rate  hits  total
+def_tier                        
+Above Avg  0.048790   131   2685
+Elite      0.032395   130   4013
+Avg        0.007271    55   7564
+Weak       0.000000     0   2876
+
+  [SHOT ROLE] (col='shot role')
+           hit_rate  hits  total
+shot role                       
+MID_VOL    0.139665    25    179
+LOW_VOL    0.076364    21    275
+UNKNOWN    0.067887   256   3771
+
+  [PICK TYPE x TIER CROSS-TAB]
+pick_type tier  hit_rate  hits  total
+   goblin    A  0.344288   220    639
+   goblin    D  0.211350   108    511
+ standard    D  0.186441    33    177
+ standard    A  0.185185    20    108
+    demon    A  0.174425   296   1697
+ standard    B  0.115385    12    104
+ Standard    B  0.101351    15    148
+    demon    B  0.090216    71    787
+    demon    D  0.086164   350   4062
+    demon    C  0.067496    38    563
+   Goblin    A  0.050381   172   3414
+   Goblin    B  0.042857     6    140
+    Demon    C  0.031164    79   2535
+ Standard    A  0.029076    28    963
+   Goblin    D  0.026411    66   2499
+    Demon    B  0.019763    50   2530
+    Demon    D  0.018058   274  15173
+    Demon    A  0.015020    78   5193
+
+  [PICK TYPE x PROP TYPE CROSS-TAB]
+Empty DataFrame
+Columns: [pick_type, prop_type, hit_rate, hits, total]
+Index: []

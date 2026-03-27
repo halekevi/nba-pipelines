@@ -664,6 +664,26 @@ def main() -> None:
     for col in df.select_dtypes(include=['object']).columns:
         df[col] = df[col].astype(str)
     out = df.copy()
+    _repo_usage = Path(__file__).resolve().parents[2]
+    _sd_usage = str(_repo_usage / "scripts")
+    if _sd_usage not in _sys_pc.path:
+        _sys_pc.path.insert(0, _sd_usage)
+    try:
+        from usage_redistribution import apply_usage_redistribution  # noqa: E402
+        run_date = (
+            str(out["game_date"].dropna().iloc[0])[:10]
+            if "game_date" in out.columns and not out["game_date"].dropna().empty
+            else pd.Timestamp.today().strftime("%Y-%m-%d")
+        )
+        sport_for_usage = "NBA"
+        _hint = str(args.input or "").lower()
+        if "nba1q" in _hint:
+            sport_for_usage = "NBA1Q"
+        elif "nba1h" in _hint:
+            sport_for_usage = "NBA1H"
+        out = apply_usage_redistribution(out, sport=sport_for_usage, date=run_date, repo_root=str(_repo_usage))
+    except Exception as e:
+        print(f"⚠️  usage redistribution skipped: {e}")
 
     for col, default in [("line", ""), ("pick_type", "Standard"), ("prop_norm", "")]:
         if col not in out.columns:
@@ -733,6 +753,8 @@ def main() -> None:
     corr = prop_norm_s.map(lambda x: _COMBO_CORRECTIONS.get(x, 1.0)).values
     proj = pd.Series(proj_raw * corr, index=out.index)
     out["projection"] = proj
+    if "usage_boost_proj" in out.columns:
+        out["projection"] = _to_num(out["projection"]).fillna(0.0) + _to_num(out["usage_boost_proj"]).fillna(0.0)
 
     out["edge"]     = proj - line_num
     out["abs_edge"] = out["edge"].abs()
@@ -1063,7 +1085,9 @@ def main() -> None:
     )
     l5_support_mod = np.clip(0.08 * l5_support_signal, -0.12, 0.12)
 
-    base_raw = (edge_core * 1.20) + (rank_support * 0.35)
+    usage_bonus = np.clip(_to_num(out.get("usage_boost", pd.Series(0.0, index=out.index))).fillna(0.0) * 5.0, 0.0, 0.5)
+    out["usage_bonus"] = usage_bonus
+    base_raw = (edge_core * 1.20) + (rank_support * 0.35) + usage_bonus
     score_raw = base_raw * (1.0 + l5_support_mod)
     score_raw = (
         score_raw

@@ -9,11 +9,13 @@ and saves `models/prop_model_{segment}.pkl` plus features / blend / calibrator s
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import re
 import sqlite3
 import subprocess
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable
 
@@ -23,17 +25,13 @@ import pandas as pd
 
 try:
     from sklearn.metrics import brier_score_loss, roc_auc_score
-    from sklearn.isotonic import IsotonicRegression
-    from sklearn.linear_model import LogisticRegression
-    from sklearn.model_selection import train_test_split
+    from sklearn.calibration import CalibratedClassifierCV
 except ImportError:
     subprocess.check_call(
         [sys.executable, "-m", "pip", "install", "scikit-learn", "--break-system-packages", "-q"]
     )
     from sklearn.metrics import brier_score_loss, roc_auc_score
-    from sklearn.isotonic import IsotonicRegression
-    from sklearn.linear_model import LogisticRegression
-    from sklearn.model_selection import train_test_split
+    from sklearn.calibration import CalibratedClassifierCV
 
 try:
     from xgboost import XGBClassifier
@@ -106,6 +104,15 @@ def _first_present(df: pd.DataFrame, options: Iterable[str]) -> str | None:
 
 def _to_num(s: pd.Series) -> pd.Series:
     return pd.to_numeric(s, errors="coerce")
+
+
+def _chrono_split_idx(df: pd.DataFrame, date_col: str | None) -> pd.Index:
+    if date_col and date_col in df.columns:
+        dd = pd.to_datetime(df[date_col], errors="coerce")
+        if dd.notna().any():
+            return dd.sort_values().index
+    print("⚠️  [ML] No usable date column found — using index order (no shuffle).")
+    return df.index
 
 
 def _collect_nba_graded_files() -> list[tuple[Path, bool]]:
@@ -530,22 +537,21 @@ def main() -> None:
     X = pd.concat([X_base, X_prop], axis=1).fillna(0.0)
     y = train["hit"].astype(int)
 
-    strat = y if y.nunique() > 1 else None
-    X_train_all, X_test, y_train_all, y_test, sw_train_all, _sw_test = train_test_split(
-        X, y, sw, test_size=0.20, random_state=42, stratify=strat
-    )
-    strat_train = y_train_all if y_train_all.nunique() > 1 else None
-    X_train, X_cal, y_train, y_cal, sw_train, _sw_cal = train_test_split(
-        X_train_all,
-        y_train_all,
-        sw_train_all,
-        test_size=0.20,
-        random_state=42,
-        stratify=strat_train,
-    )
+    # Chronological split to avoid temporal leakage
+    date_col = _first_present(train, ["game_date", "date", "_source_date", "slate_date"])
+    if date_col:
+        print(f"-> Using temporal split on: {date_col}")
+    order = _chrono_split_idx(train, date_col)
+    Xo = X.loc[order]
+    yo = y.loc[order]
+    swo = sw.loc[order]
+    split_idx = int(len(Xo) * 0.80)
+    X_train, X_test = Xo.iloc[:split_idx], Xo.iloc[split_idx:]
+    y_train, y_test = yo.iloc[:split_idx], yo.iloc[split_idx:]
+    sw_train, _sw_test = swo.iloc[:split_idx], swo.iloc[split_idx:]
 
     if n < 500:
-        model = XGBClassifier(
+        base_model = XGBClassifier(
             n_estimators=50,
             max_depth=3,
             learning_rate=0.1,
@@ -554,7 +560,7 @@ def main() -> None:
             eval_metric="logloss",
         )
     else:
-        model = XGBClassifier(
+        base_model = XGBClassifier(
             n_estimators=100,
             max_depth=4,
             learning_rate=0.05,
@@ -563,28 +569,10 @@ def main() -> None:
             random_state=42,
             eval_metric="logloss",
         )
+    model = CalibratedClassifierCV(base_model, method="isotonic", cv=5)
     model.fit(X_train, y_train, sample_weight=sw_train)
 
     proba = model.predict_proba(X_test)[:, 1]
-    cal_input = model.predict_proba(X_cal)[:, 1]
-    calibrator = None
-    calibration_type = "none"
-    cal_probs = cal_input.copy()
-    try:
-        if len(X_cal) >= 1000:
-            calibrator = IsotonicRegression(out_of_bounds="clip")
-            calibrator.fit(cal_input, y_cal)
-            cal_probs = calibrator.predict(cal_input)
-            calibration_type = "isotonic"
-        else:
-            calibrator = LogisticRegression()
-            calibrator.fit(cal_input.reshape(-1, 1), y_cal)
-            cal_probs = calibrator.predict_proba(cal_input.reshape(-1, 1))[:, 1]
-            calibration_type = "sigmoid"
-    except Exception:
-        calibrator = None
-        calibration_type = "none"
-        cal_probs = cal_input.copy()
 
     try:
         auc = roc_auc_score(y_test, proba) if y_test.nunique() > 1 else float("nan")
@@ -594,35 +582,33 @@ def main() -> None:
         brier = brier_score_loss(y_test, proba)
     except Exception:
         brier = float("nan")
-    try:
-        brier_raw_cal = brier_score_loss(y_cal, cal_input)
-    except Exception:
-        brier_raw_cal = float("nan")
-    try:
-        brier_cal = brier_score_loss(y_cal, cal_probs)
-    except Exception:
-        brier_cal = float("nan")
 
     feats = list(X.columns)
-    fi = pd.Series(model.feature_importances_, index=feats).sort_values(ascending=False)
-    top5 = fi.head(5)
+    base_est = None
+    try:
+        if hasattr(model, "calibrated_classifiers_") and model.calibrated_classifiers_:
+            base_est = getattr(model.calibrated_classifiers_[0], "estimator", None)
+    except Exception:
+        base_est = None
+    fi = None
+    top5 = None
+    if base_est is not None and hasattr(base_est, "feature_importances_"):
+        fi = (
+            pd.Series(getattr(base_est, "feature_importances_"), index=feats)
+            .sort_values(ascending=False)
+        )
+        top5 = fi.head(5)
 
     MODEL_DIR.mkdir(parents=True, exist_ok=True)
     joblib.dump(model, MODEL_PATH)
     FEATURES_PATH.write_text(json.dumps(feats, indent=2), encoding="utf-8")
     BLEND_PATH.write_text(json.dumps({"blend_weight": bw}, indent=2), encoding="utf-8")
-    if calibrator is not None:
-        joblib.dump(calibrator, CALIB_PATH)
     METRICS_PATH.write_text(
         json.dumps(
             {
                 "auc_test": None if np.isnan(auc) else float(auc),
                 "brier_test_raw": None if np.isnan(brier) else float(brier),
-                "calibration_type": calibration_type,
-                "brier_calibration_raw": None if np.isnan(brier_raw_cal) else float(brier_raw_cal),
-                "brier_calibration_calibrated": None if np.isnan(brier_cal) else float(brier_cal),
                 "n_train": int(len(X_train)),
-                "n_calibration": int(len(X_cal)),
                 "n_test": int(len(X_test)),
             },
             indent=2,
@@ -630,25 +616,48 @@ def main() -> None:
         encoding="utf-8",
     )
 
+    # Training log (repo-level)
+    log_path = MODEL_DIR / "training_log.csv"
+    row = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "sport": SEGMENT_KEY,
+        "n_train": int(len(X_train)),
+        "n_test": int(len(X_test)),
+        "auc": None if np.isnan(auc) else round(float(auc), 4),
+        "brier": None if np.isnan(brier) else round(float(brier), 4),
+        "n_features": int(len(feats)),
+        "model_path": str(MODEL_PATH),
+    }
+    write_header = not log_path.exists()
+    with log_path.open("a", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(
+            f,
+            fieldnames=["timestamp", "sport", "n_train", "n_test", "auc", "brier", "n_features", "model_path"],
+        )
+        if write_header:
+            w.writeheader()
+        w.writerow(row)
+
+    # Feature importance log
+    if fi is not None:
+        imp_path = MODEL_DIR / f"prop_model_{SEGMENT_KEY}_feature_importance.json"
+        imp = {str(k): float(v) for k, v in fi.to_dict().items()}
+        imp_path.write_text(json.dumps(imp, indent=2), encoding="utf-8")
+
     print(f"{SEGMENT_KEY.upper()} model training complete")
     print("-----------------------------")
     print(f"  Training rows:    {len(X_train)}")
-    print(f"  Calibration rows: {len(X_cal)}")
     print(f"  Test rows:        {len(X_test)}")
     print(f"  ROC-AUC:          {auc:.4f}" if not np.isnan(auc) else "  ROC-AUC:          n/a")
     print(f"  Brier score:      {brier:.4f}" if not np.isnan(brier) else "  Brier score:      n/a")
     print(f"  Blend weight:     {bw:.2f}")
-    print(f"  Calibration:      {calibration_type}")
-    print(f"  Brier (cal raw):  {brier_raw_cal:.4f}" if not np.isnan(brier_raw_cal) else "  Brier (cal raw):  n/a")
-    print(f"  Brier (cal cal):  {brier_cal:.4f}" if not np.isnan(brier_cal) else "  Brier (cal cal):  n/a")
-    print("\n  Top 5 features:")
-    for i, (k, v) in enumerate(top5.items(), 1):
-        print(f"  {i}. {k:<28} {v:.6f}")
+    if top5 is not None:
+        print("\n  Top 5 features:")
+        for i, (k, v) in enumerate(top5.items(), 1):
+            print(f"  {i}. {k:<28} {v:.6f}")
     print(f"\n  Saved: {MODEL_PATH}")
     print(f"  Saved: {FEATURES_PATH}")
     print(f"  Saved: {BLEND_PATH}")
-    if calibrator is not None:
-        print(f"  Saved: {CALIB_PATH}")
     print(f"  Saved: {METRICS_PATH}")
 
 

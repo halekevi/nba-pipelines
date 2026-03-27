@@ -690,10 +690,31 @@ def main():
         import openpyxl
 
     rows = read_csv(args.input)
+    try:
+        _repo_usage = Path(__file__).resolve().parents[2]
+        _sd_usage = str(_repo_usage / "scripts")
+        if _sd_usage not in sys.path:
+            sys.path.insert(0, _sd_usage)
+        from usage_redistribution import apply_usage_redistribution  # noqa: E402
+        _run_date = str(args.slate_date or pd.Timestamp.today().strftime("%Y-%m-%d"))[:10]
+        _df_usage = pd.DataFrame(rows)
+        _df_usage = apply_usage_redistribution(_df_usage, sport="NHL", date=_run_date, repo_root=str(_repo_usage))
+        if "usage_boost_proj" in _df_usage.columns and "edge" in _df_usage.columns:
+            _df_usage["edge"] = pd.to_numeric(_df_usage["edge"], errors="coerce").fillna(0.0) + pd.to_numeric(
+                _df_usage["usage_boost_proj"], errors="coerce"
+            ).fillna(0.0)
+        rows = _df_usage.to_dict("records")
+    except Exception as e:
+        print(f"⚠️ usage redistribution skipped: {e}")
 
     scored = []
     for row in _tqdm(rows, desc="  Scoring props", unit="prop"):
         prop_score = score_prop(row)
+        try:
+            usage_bonus = float(np.clip(float(row.get("usage_boost", 0.0) or 0.0) * 5.0, 0.0, 0.5))
+        except Exception:
+            usage_bonus = 0.0
+        prop_score = float(prop_score) + usage_bonus
         row["prop_score"] = prop_score
         scored.append(row)
     scored_df = pd.DataFrame(scored)

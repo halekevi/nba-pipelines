@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import csv
 import json
 import sqlite3
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable
 
 import joblib
 import numpy as np
 import pandas as pd
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.metrics import brier_score_loss, roc_auc_score
-from sklearn.model_selection import train_test_split
 from xgboost import XGBClassifier
 
 
@@ -73,6 +75,27 @@ def _first_present(df: pd.DataFrame, options: Iterable[str]) -> str | None:
 
 def _to_num(s: pd.Series) -> pd.Series:
     return pd.to_numeric(s, errors="coerce")
+
+
+def _chrono_split(
+    df_raw: pd.DataFrame, X: pd.DataFrame, y: pd.Series, date_col: str | None
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+    """
+    80/20 chronological split (no shuffling).
+    If date_col is missing or unparsable, falls back to index order and prints a warning.
+    """
+    if date_col and date_col in df_raw.columns:
+        dd = pd.to_datetime(df_raw.loc[X.index, date_col], errors="coerce")
+        if dd.notna().any():
+            order = dd.sort_values().index
+            Xo = X.loc[order]
+            yo = y.loc[order]
+            split_idx = int(len(Xo) * 0.80)
+            return Xo.iloc[:split_idx], Xo.iloc[split_idx:], yo.iloc[:split_idx], yo.iloc[split_idx:]
+
+    print("⚠️  [ML] No usable date column found — using index order 80/20 split (no shuffle).")
+    split_idx = int(len(X) * 0.80)
+    return X.iloc[:split_idx], X.iloc[split_idx:], y.iloc[:split_idx], y.iloc[split_idx:]
 
 
 def _map_defense_tier(raw: pd.Series) -> pd.Series:
@@ -206,11 +229,14 @@ def main() -> None:
     X = pd.concat([X_base, X_prop], axis=1).fillna(0.0)
     y = train["hit"].astype(int)
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.20, random_state=42, stratify=y
-    )
+    # Prefer chronological split to avoid temporal leakage.
+    date_col = _first_present(df, ["game_date", "date", "_source_date", "slate_date"])
+    if date_col:
+        print(f"→ Using temporal split on column: {date_col}")
+    X_train, X_test, y_train, y_test = _chrono_split(df, X, y, date_col)
+    print(f"→ Split: {len(X_train)} train / {len(X_test)} test")
 
-    model = XGBClassifier(
+    base_model = XGBClassifier(
         n_estimators=300,
         max_depth=4,
         learning_rate=0.05,
@@ -220,6 +246,7 @@ def main() -> None:
         eval_metric="logloss",
         random_state=42,
     )
+    model = CalibratedClassifierCV(base_model, method="isotonic", cv=5)
     model.fit(X_train, y_train)
 
     proba = model.predict_proba(X_test)[:, 1]
@@ -227,20 +254,63 @@ def main() -> None:
     brier = brier_score_loss(y_test, proba)
 
     feats = list(X.columns)
-    fi = pd.Series(model.feature_importances_, index=feats).sort_values(ascending=False)
-    top5 = fi.head(5)
+    # Feature importances come from the underlying estimator (calibrated wrapper has none).
+    base_est = None
+    try:
+        if hasattr(model, "calibrated_classifiers_") and model.calibrated_classifiers_:
+            base_est = getattr(model.calibrated_classifiers_[0], "estimator", None)
+    except Exception:
+        base_est = None
+    fi = None
+    top5 = None
+    if base_est is not None and hasattr(base_est, "feature_importances_"):
+        fi = (
+            pd.Series(getattr(base_est, "feature_importances_"), index=feats)
+            .sort_values(ascending=False)
+        )
+        top5 = fi.head(5)
 
     MODEL_DIR.mkdir(parents=True, exist_ok=True)
     joblib.dump(model, MODEL_PATH)
     FEATURES_PATH.write_text(json.dumps(feats, indent=2), encoding="utf-8")
 
+    # Training log (for decay monitoring)
+    sport = MODEL_PATH.stem.replace("prop_model_", "")
+    log_path = MODEL_DIR / "training_log.csv"
+    row = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "sport": sport,
+        "n_train": int(len(X_train)),
+        "n_test": int(len(X_test)),
+        "auc": round(float(auc), 4),
+        "brier": round(float(brier), 4),
+        "n_features": int(len(feats)),
+        "model_path": str(MODEL_PATH),
+    }
+    write_header = not log_path.exists()
+    with log_path.open("a", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(
+            f,
+            fieldnames=["timestamp", "sport", "n_train", "n_test", "auc", "brier", "n_features", "model_path"],
+        )
+        if write_header:
+            w.writeheader()
+        w.writerow(row)
+
+    # Feature importance log (from base estimator)
+    if fi is not None:
+        imp = {str(k): float(v) for k, v in fi.to_dict().items()}
+        imp_path = MODEL_DIR / f"prop_model_{sport}_feature_importance.json"
+        imp_path.write_text(json.dumps(imp, indent=2), encoding="utf-8")
+
     print(f"✅ Saved model: {MODEL_PATH}")
     print(f"✅ Saved features: {FEATURES_PATH}")
     print(f"📈 Test AUC: {auc:.4f}")
     print(f"📉 Brier score: {brier:.4f}")
-    print("⭐ Top 5 features:")
-    for k, v in top5.items():
-        print(f"  - {k}: {v:.6f}")
+    if top5 is not None:
+        print("⭐ Top 5 features:")
+        for k, v in top5.items():
+            print(f"  - {k}: {v:.6f}")
 
 
 if __name__ == "__main__":

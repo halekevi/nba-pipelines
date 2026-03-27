@@ -11,21 +11,21 @@ Melbourne City FC,MELBOURNE CITY,A-League,21,28.0,1.333,,0,6,0,7,5,Above Avg
 Brisbane Roar,BRISBANE,A-League,22,29.0,1.318,,0,6,0,10,4,Above Avg
 Perth Glory,PERTH,A-League,22,35.0,1.591,,0,6,0,11,10,Weak
 Western Sydney Wanderers,WSW,A-League,22,34.0,1.545,,0,5,0,11,9,Avg
-Boca Juniors,BOCA JUNIORS,Argentina,11,7.0,0.636,,0,4,0,2,5,Elite
+Boca Juniors,BOCA JUNIORS,Argentina,11,7.0,0.636,,0,4,0,2,4,Elite
 Estudiantes de La Plata,ESTUDIANTES,Argentina,11,5.0,0.455,,0,6,0,2,2,Elite
 Independiente,INDEPENDIENTE,Argentina,11,15.0,1.364,,0,3,0,3,25,Weak
 Lanús,LANÚS,Argentina,10,12.0,1.2,,0,5,0,2,24,Weak
 Newell's Old Boys,NEWELL'S,Argentina,11,22.0,2.0,,0,1,0,7,30,Weak
-San Lorenzo,SAN LORENZO,Argentina,10,11.0,1.1,,0,3,0,3,20,Avg
+San Lorenzo,SAN LORENZO,Argentina,11,12.0,1.091,,0,3,0,3,17,Avg
 Talleres (Córdoba),TALLERES,Argentina,11,10.0,0.909,,0,5,0,3,13,Above Avg
 Unión (Santa Fe),UNIÓN,Argentina,11,12.0,1.091,,0,4,0,3,17,Avg
 Vélez Sarsfield,VÉLEZ,Argentina,11,6.0,0.545,,0,6,0,1,3,Elite
 Instituto (Córdoba),INSTITUTO,Argentina,11,15.0,1.364,,0,3,0,6,25,Weak
-Platense,PLATENSE,Argentina,11,7.0,0.636,,0,3,0,3,5,Elite
+Platense,PLATENSE,Argentina,11,7.0,0.636,,0,3,0,3,4,Elite
 Defensa y Justicia,DEF Y JUSTICIA,Argentina,11,8.0,0.727,,0,4,0,0,7,Elite
 Gimnasia (Mendoza),GIMNASIA (MENDOZA),Argentina,11,13.0,1.182,,0,2,0,6,22,Avg
 Central Córdoba (Santiago del Estero),CENTRAL CÓRDOBA,Argentina,11,12.0,1.091,,0,3,0,5,17,Avg
-Deportivo Riestra,RIESTRA,Argentina,10,6.0,0.6,,0,0,0,4,4,Elite
+Deportivo Riestra,RIESTRA,Argentina,11,7.0,0.636,,0,0,0,4,4,Elite
 Argentinos Juniors,ARGENTINOS,Argentina,9,4.0,0.444,,0,3,0,1,1,Elite
 Belgrano (Córdoba),BELGRANO,Argentina,11,9.0,0.818,,0,5,0,2,8,Elite
 Gimnasia La Plata,GELP,Argentina,11,15.0,1.364,,0,4,0,5,25,Weak
@@ -35,7 +35,7 @@ River Plate,RIVER,Argentina,11,9.0,0.818,,0,6,0,3,8,Elite
 Rosario Central,ROSARIO,Argentina,11,9.0,0.818,,0,5,0,3,8,Elite
 Banfield,BANFIELD,Argentina,11,13.0,1.182,,0,4,0,6,22,Avg
 Tigre,TIGRE,Argentina,11,10.0,0.909,,0,4,0,2,13,Above Avg
-Aldosivi,ALDOSIVI,Argentina,10,11.0,1.1,,0,0,0,5,20,Avg
+Aldosivi,ALDOSIVI,Argentina,10,11.0,1.1,,0,0,0,5,21,Avg
 Independiente Rivadavia,INDEPENDIENTE RIVADAVIA,Argentina,11,12.0,1.091,,0,7,0,2,17,Avg
 Atlético Tucumán,ATLETICO TUCUMAN,Argentina,11,16.0,1.455,,0,2,0,6,28,Weak
 Barracas Central,BARRACAS,Argentina,11,9.0,0.818,,0,4,0,3,8,Elite
@@ -227,22 +227,22 @@ LAFC,LAFC,MLS,5,0.0,0.0,,0,4,0,0,1,Elite
 Austin FC,AUSTIN,MLS,5,7.0,1.4,,0,1,0,2,11,Above Avg
 St. Louis CITY SC,ST. LOUIS,MLS,5,7.0,1.4,,0,1,0,3,11,Above Avg
 San Diego FC,SAN DIEGO,MLS,5,5.0,1.0,,0,3,0,0,7,Elite
-Angel City FC,ANGEL CITY,NWSL,2,1.0,0.5,,0,2,0,0,1,Avg
-Houston Dash,HOUSTON DASH,NWSL,2,0.0,0.0,,0,2,0,0,1,Avg
-Portland Thorns FC,THORNS,NWSL,2,0.0,0.0,,0,2,0,0,1,Avg
-North Carolina Courage,NC COURAGE,NWSL,2,1.0,0.5,,0,1,0,0,1,Avg
-Gotham FC,GOTHAM,NWSL,2,0.0,0.0,,0,1,0,0,1,Avg
-Kansas City Current,KC CURRENT,NWSL,2,3.0,1.5,,0,1,0,1,1,Avg
-San Diego Wave FC,SD WAVE,NWSL,2,2.0,1.0,,0,1,0,1,1,Avg
-Bay FC,BAY FC,NWSL,2,4.0,2.0,,0,1,0,1,1,Avg
-Seattle Reign FC,SEATTLE REIGN,NWSL,2,3.0,1.5,,0,1,0,1,1,Avg
-Chicago Stars FC,CHICAGO STARS,NWSL,2,5.0,2.5,,0,1,0,1,1,Avg
-Racing Louisville FC,LOUISVILLE,NWSL,2,4.0,2.0,,0,0,0,1,1,Avg
-Orlando Pride,ORLANDO PRIDE,NWSL,2,3.0,1.5,,0,0,0,1,1,Avg
-Denver Summit FC,DENVER SUMMIT,NWSL,2,3.0,1.5,,0,0,0,1,1,Avg
-Washington Spirit,SPIRIT,NWSL,2,3.0,1.5,,0,0,0,1,1,Avg
-Utah Royals,UTAH ROYALS,NWSL,2,4.0,2.0,,0,0,0,2,1,Avg
-Boston Legacy FC,BOSTON LEGACY,NWSL,2,4.0,2.0,,0,0,0,2,1,Avg
+Angel City FC,ANGEL CITY,NWSL,2,1.0,0.5,,0,2,0,0,6,Avg
+Houston Dash,HOUSTON DASH,NWSL,2,0.0,0.0,,0,2,0,0,6,Avg
+San Diego Wave FC,SD WAVE,NWSL,3,3.0,1.0,,0,2,0,1,2,Elite
+Seattle Reign FC,SEATTLE REIGN,NWSL,3,3.0,1.0,,0,2,0,1,2,Elite
+Portland Thorns FC,THORNS,NWSL,3,3.0,1.0,,0,2,0,1,2,Elite
+Orlando Pride,ORLANDO PRIDE,NWSL,3,3.0,1.0,,0,1,0,1,2,Elite
+Denver Summit FC,DENVER SUMMIT,NWSL,3,3.0,1.0,,0,1,0,1,2,Elite
+North Carolina Courage,NC COURAGE,NWSL,2,1.0,0.5,,0,1,0,0,6,Avg
+Gotham FC,GOTHAM,NWSL,3,2.0,0.667,,0,1,0,1,1,Elite
+Bay FC,BAY FC,NWSL,2,4.0,2.0,,0,1,0,1,6,Avg
+Kansas City Current,KC CURRENT,NWSL,3,6.0,2.0,,0,1,0,2,9,Weak
+Chicago Stars FC,CHICAGO STARS,NWSL,3,8.0,2.667,,0,1,0,2,10,Weak
+Washington Spirit,SPIRIT,NWSL,3,4.0,1.333,,0,0,0,1,7,Avg
+Racing Louisville FC,LOUISVILLE,NWSL,2,4.0,2.0,,0,0,0,1,6,Avg
+Utah Royals,UTAH ROYALS,NWSL,3,5.0,1.667,,0,0,0,2,8,Avg
+Boston Legacy FC,BOSTON LEGACY,NWSL,2,4.0,2.0,,0,0,0,2,6,Avg
 FC Porto,FC PORTO,Primeira Liga,27,11.0,0.407,,0,23,0,1,1,Elite
 Sporting CP,SPORTING CP,Primeira Liga,26,15.0,0.577,,0,20,0,1,2,Elite
 Benfica,BENFICA,Primeira Liga,27,17.0,0.63,,0,19,0,0,3,Elite
@@ -293,6 +293,20 @@ Cremonese,CREMONESE,Serie A,30,44.0,1.467,,0,6,0,15,16,Weak
 Lecce,LECCE,Serie A,30,40.0,1.333,,0,7,0,17,11,Avg
 Hellas Verona,VERONA,Serie A,30,52.0,1.733,,0,3,0,18,18,Weak
 Pisa,PISA,Serie A,30,54.0,1.8,,0,2,0,16,20,Weak
+Olympiacos,OLYMPIACOS,Super League Greece,26,11.0,0.423,,0,17,0,2,1,Elite
+Panathinaikos,PANATHINAIKOS,Super League Greece,26,26.0,1.0,,0,14,0,5,4,Above Avg
+PAOK Salonika,PAOK SALONIKA,Super League Greece,26,17.0,0.654,,0,17,0,3,2,Elite
+AEK Athens,AEK,Super League Greece,26,17.0,0.654,,0,18,0,2,2,Elite
+OFI Crete,OFI CRETE,Super League Greece,0,0.0,0.0,,0,0,0,0,6,Avg
+Levadiakos,LEVADIAKOS,Super League Greece,0,0.0,0.0,,0,0,0,0,6,Avg
+Aris,ARIS,Super League Greece,0,0.0,0.0,,0,0,0,0,6,Avg
+Volos NFC,VOLOS NFC,Super League Greece,0,0.0,0.0,,0,0,0,0,6,Avg
+Atromitos,ATROMITOS,Super League Greece,26,30.0,1.154,,0,7,0,11,5,Above Avg
+Asteras Tripoli,ASTERAS TRIPOLI,Super League Greece,26,41.0,1.577,,0,3,0,15,8,Avg
+Larissa FC,LARISSA,Super League Greece,26,39.0,1.5,,0,4,0,11,7,Avg
+Panetolikos,PANETOLIKOS,Super League Greece,26,38.0,1.462,,0,7,0,14,6,Avg
+Kifisia,KIFISIA,Super League Greece,26,42.0,1.615,,0,6,0,11,9,Weak
+Panserraikos FC,PANSERRAIKOS,Super League Greece,26,55.0,2.115,,0,4,0,17,10,Weak
 Galatasaray,GALATASARAY,Süper Lig,26,18.0,0.692,,0,20,0,2,1,Elite
 Fenerbahce,FENERBAHCE,Süper Lig,27,28.0,1.037,,0,17,0,1,3,Elite
 Trabzonspor,TRABZONSPOR,Süper Lig,27,29.0,1.074,,0,18,0,3,4,Elite

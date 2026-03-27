@@ -1241,6 +1241,7 @@ def _leg_from_xlsx_row(row: tuple[Any, ...], colmap: dict[int, str]) -> dict[str
             leg["sport"] = str(val or "").strip().upper()
     if not leg.get("player"):
         return None
+    leg["data_warning"] = "LIMITED_Q1_HISTORY" if str(leg.get("sport") or "").upper() == "NBA1Q" else None
     leg["initials"] = _player_initials(str(leg.get("player") or ""))
     return leg
 
@@ -1297,6 +1298,7 @@ def _parse_ticket_sheet(ws: Any) -> list[dict[str, Any]]:
         leg = _leg_from_xlsx_row(row, colmap)
         if leg:
             current["legs"].append(leg)
+            current["has_data_warning"] = bool(current.get("has_data_warning")) or bool(leg.get("data_warning"))
 
     if current is not None and current.get("legs"):
         tickets.append(current)
@@ -1543,6 +1545,9 @@ def _build_html(
         ".ticket-card{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);"
         "border:1px solid var(--glass-bd);border-radius:14px;margin-bottom:22px;overflow:hidden;"
         "box-shadow:0 8px 32px rgba(0,0,0,.35);}",
+        ".ticket-card.card-warning{border-color:rgba(240,165,0,.55);box-shadow:0 0 0 1px rgba(240,165,0,.22),0 8px 32px rgba(0,0,0,.35);}",
+        ".ticket-warning-note{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.4px;color:#ffd87a;"
+        "background:rgba(240,165,0,.08);border-top:1px solid rgba(240,165,0,.3);padding:8px 14px;}",
         ".ticket-card.all-hit{background:rgba(57,255,110,0.06);border-color:rgba(57,255,110,.42);"
         "box-shadow:0 0 28px rgba(57,255,110,.14),0 8px 32px rgba(0,0,0,.3);}",
         ".ticket-card.card-missed{background:rgba(255,77,77,0.06);border:1px solid rgba(255,77,77,0.35);"
@@ -1611,6 +1616,9 @@ def _build_html(
         ".meta-muted{font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:clamp(11px,1.2vw,13px);margin-top:3px;}",
         ".slate-kicker{font-family:'Share Tech Mono',monospace;font-size:clamp(11px,1.2vw,13px);letter-spacing:3px;color:var(--muted);margin-bottom:10px;}",
         ".pl-hit,.pl-pend{font-size:1em;font-weight:600;}",
+        ".warning-chip{display:inline-flex;align-items:center;margin-left:8px;padding:2px 8px;border-radius:999px;"
+        "border:1px solid rgba(240,165,0,.4);background:rgba(240,165,0,.12);color:#ffd87a;"
+        "font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.6px;cursor:help;}",
         "</style>",
         "</head>",
         "<body>",
@@ -1652,6 +1660,7 @@ def _build_html(
 
         for g in grplist:
             gname = str(g.get("group_name") or "Group")
+            is_nba1q_group = gname.strip().upper().startswith("NBA1Q ")
             parts.append(f'<section class="sec"><h2 class="sec-head bebas">{esc(gname)}</h2>')
             for t in g.get("tickets") or []:
                 tno = t.get("ticket_no", "?")
@@ -1692,6 +1701,13 @@ def _build_html(
                     card_cls += " all-hit"
                 elif banner_cls == "miss":
                     card_cls += " card-missed"
+                has_data_warning = bool(t.get("has_data_warning")) or any(
+                    bool((leg or {}).get("data_warning")) for leg in legs
+                )
+                if is_nba1q_group:
+                    has_data_warning = True
+                if has_data_warning:
+                    card_cls += " card-warning"
 
                 parts.append(f'<article class="{card_cls}">')
                 parts.append('<div class="thdr">')
@@ -1756,13 +1772,23 @@ def _build_html(
                     miss_cell = " miss-leg-cell" if lg == "MISS" else ""
 
                     if lg == "MISS":
+                        warning = leg.get("data_warning") or ("LIMITED_Q1_HISTORY" if is_nba1q_group else None)
+                        warning_chip = (
+                            '<span class="warning-chip" title="NBA1Q stats based on limited Q1 history — use with caution">⚠ Limited Data</span>'
+                            if warning else ""
+                        )
                         pl_html = (
                             f'<div class="{plcls} pl-line{miss_cell}">'
-                            f'<span class="pl-name">{player}</span>'
+                            f'<span class="pl-name">{player}{warning_chip}</span>'
                             '<span class="miss-tag" aria-label="Missed leg">MISSED</span></div>'
                         )
                     else:
-                        pl_html = f'<div class="{plcls}">{player}</div>'
+                        warning = leg.get("data_warning") or ("LIMITED_Q1_HISTORY" if is_nba1q_group else None)
+                        warning_chip = (
+                            '<span class="warning-chip" title="NBA1Q stats based on limited Q1 history — use with caution">⚠ Limited Data</span>'
+                            if warning else ""
+                        )
+                        pl_html = f'<div class="{plcls}">{player}{warning_chip}</div>'
 
                     if lg == "MISS":
                         act_div_cls = "leg-extra val-miss"
@@ -1790,6 +1816,8 @@ def _build_html(
                     parts.append("</div>")
 
                 parts.append("</article>")
+                if has_data_warning:
+                    parts.append('<div class="ticket-warning-note">⚠ NBA1Q stats based on limited Q1 history - use with caution</div>')
             parts.append("</section>")
 
         if use_buckets:

@@ -80,6 +80,8 @@ SOCCER_LEAGUES = [
     ("fra.1",          "Ligue 1"),
     ("usa.1",          "MLS"),
     ("uefa.champions", "UCL"),
+    ("uefa.nations",   "UEFA Nations League"),
+    ("fifa.worldq.uefa", "FIFA World Cup Qualifying - UEFA"),
     ("arg.1",          "Argentina"),
     ("bra.1",          "Brasileirao"),
     ("mex.1",          "Liga MX"),

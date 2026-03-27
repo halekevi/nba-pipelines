@@ -228,6 +228,8 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         "direction":        direction,
         # Hit rates (direction-adjusted) — raw 0-1 floats for step9 / Excel
         "composite_hr":     hr_output(composite_hr_adj),
+        # Canonical alias used by upstream validators and cross-sport tooling.
+        "hit_rate":         hr_output(composite_hr_adj),
         "hr_L5":            hr_output(hr_L5_adj),
         "hr_L10":           hr_output(hr_L10_adj),
         "hr_L20":           hr_output(hr_L20_adj),

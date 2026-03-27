@@ -40,6 +40,7 @@ import pandas as pd
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
+from usage_redistribution import apply_usage_redistribution
 
 # Repo root = parent of scripts/ (this file lives in scripts/)
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
@@ -134,8 +135,6 @@ TIER1_PROPS = {"points", "pts+rebs+asts", "pts+rebs", "pts+asts", "rebounds"}
 TIER2_PROPS = {"assists", "3-pt made", "rebs+asts"}
 TIER3_PROPS = {"steals", "blocked shots", "turnovers", "free throws made"}
 
-POWER_PLAY_DEF_ALLOWED = {"avg", "weak"}
-FLEX_DEF_ALLOWED = {"avg", "weak", "above avg"}
 UNDER_ALLOWED_PROPS = {"free throws attempted", "turnovers"}
 
 NBA_EXCLUDED_PROPS = {
@@ -180,12 +179,6 @@ def _prop_priority_bonus(v: object) -> float:
         return -0.10
     return 0.0
 
-
-def _def_tier_value(df: pd.DataFrame) -> pd.Series:
-    for c in ("opp_def_tier", "def_tier", "OPP_DEF_TIER", "DEF_TIER"):
-        if c in df.columns:
-            return df[c].astype(str).str.strip().str.lower()
-    return pd.Series([""] * len(df), index=df.index)
 
 # ── Goblin / Demon payout adjustment ─────────────────────────────────────────
 # Goblin: line moved in your favor → REDUCES payout LINEARLY per unit of
@@ -996,6 +989,8 @@ def ticket_groups_to_payload(all_ticket_groups, date_str, thresholds):
                     "def_tier": str(gv("def_tier") or gv("Def Tier") or ""),
                     "pace_tier": str(gv("pace_tier") or gv("Pace Tier") or ""),
                     "context_score": _safe_float(gv("context_score")),
+                    "usage_boost": _safe_float(gv("usage_boost")),
+                    "usage_boost_reason": str(gv("usage_boost_reason") or ""),
                 }
                 leg["data_warning"] = "LIMITED_Q1_HISTORY" if str(leg.get("sport", "")).upper() == "NBA1Q" else None
                 leg_prob_used, leg_prob_source = _resolve_leg_prob(pd.Series(leg))
@@ -2984,7 +2979,6 @@ def build_single_structure_ticket(
 
     n_legs = 2 if (is_power or is_standard) else 3
     allowed_tiers = {"A", "B"} if (is_power or is_standard) else {"A", "B", "C"}
-    allowed_def = POWER_PLAY_DEF_ALLOWED if (is_power or is_standard) else FLEX_DEF_ALLOWED
     q = 0.70 if (is_power or is_standard) else 0.50  # top 30% / top 50%
 
     df = pool_df.copy()
@@ -3021,14 +3015,6 @@ def build_single_structure_ticket(
         line_ok &= ~((dprop == "points") & (ddir == "OVER") & (dline < 8.0))
         line_ok &= ~((dprop == "rebounds") & (ddir == "OVER") & (dline < 2.5))
         df = df[line_ok].copy()
-
-    dts = _def_tier_value(df)
-    pre_def = len(df)
-    df = df[dts.isin(allowed_def)].copy()
-    if counters is not None:
-        counters["def_tier_filtered_count"] += int(pre_def - len(df))
-    if df.empty:
-        return None
 
     if "rank_score" in df.columns and len(df) > 0:
         rs = pd.to_numeric(df["rank_score"], errors="coerce")
@@ -4565,6 +4551,16 @@ def main():
     mlb = drop_stale_rows(mlb, args.date, "MLB")
     nba1q = drop_stale_rows(nba1q, args.date, "NBA1Q")
     nba1h = drop_stale_rows(nba1h, args.date, "NBA1H")
+
+    # Apply teammate-absence usage redistribution before ticket eligibility filtering.
+    nba = apply_usage_redistribution(nba, "NBA", args.date, REPO_ROOT)
+    cbb = apply_usage_redistribution(cbb, "CBB", args.date, REPO_ROOT)
+    wcbb = apply_usage_redistribution(wcbb, "WCBB", args.date, REPO_ROOT) if wcbb is not None else wcbb
+    nhl = apply_usage_redistribution(nhl, "NHL", args.date, REPO_ROOT) if nhl is not None else nhl
+    soccer = apply_usage_redistribution(soccer, "Soccer", args.date, REPO_ROOT) if soccer is not None else soccer
+    mlb = apply_usage_redistribution(mlb, "MLB", args.date, REPO_ROOT) if mlb is not None else mlb
+    nba1q = apply_usage_redistribution(nba1q, "NBA1Q", args.date, REPO_ROOT) if nba1q is not None else nba1q
+    nba1h = apply_usage_redistribution(nba1h, "NBA1H", args.date, REPO_ROOT) if nba1h is not None else nba1h
 
     print("Building combined slate...")
     combined = build_combined_slate(nba, cbb, nhl, soccer,

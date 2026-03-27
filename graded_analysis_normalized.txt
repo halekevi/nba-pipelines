@@ -1,0 +1,420 @@
+<string>:27: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+<string>:27: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+<string>:42: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  skipped outputs\synthetic\graded_nba_synthetic_2023-24.xlsx: "No such keys(s): 'io.excel.zip.reader'"
+
+========== NBA | 58382 gradeable rows | overall hit rate: 52.5% ==========
+
+  [PROP TYPE]
+                        hit_rate  hits  total
+prop_type_norm                               
+FANTASY SCORE           0.660131   909   1377
+POINTS                  0.580827  2375   4089
+PTS+REBS                0.560868  1912   3409
+REBOUNDS                0.557481  1576   2827
+ASSISTS                 0.556463  1158   2081
+PTS+ASTS                0.541757  1505   2778
+REBS+ASTS               0.536781  1744   3249
+TURNOVERS               0.532331   354    665
+STEALS                  0.529312   623   1177
+PERSONAL FOULS          0.525046   283    539
+PTS+REBS+ASTS           0.525042  2212   4213
+TWO POINTERS MADE       0.518519   252    486
+TWO POINTERS ATTEMPTED  0.517007   228    441
+BLKS+STLS               0.513055   393    766
+3-PT MADE               0.511883   840   1641
+FG MADE                 0.506667   228    450
+FREE THROWS MADE        0.506276   242    478
+FREE THROWS ATTEMPTED   0.495238   208    420
+FG ATTEMPTED            0.491667   236    480
+3-PT ATTEMPTED          0.482289   177    367
+BLOCKED SHOTS           0.419966   244    581
+
+  [PICK TYPE]
+           hit_rate   hits  total
+pick_type                        
+GOBLIN     0.642825  11333  17630
+STANDARD   0.506612   4291   8470
+DEMON      0.323511   2075   6414
+
+  [DIRECTION]
+               hit_rate   hits  total
+bet_direction                        
+OVER           0.549164  15705  28598
+UNDER          0.509193   1994   3916
+
+  [TIER]
+          hit_rate   hits  total
+tier                            
+A         0.673785   4449   6603
+B         0.605751   1601   2643
+C         0.570488   1473   2582
+DEMON     0.500000   4320   8640
+GOBLIN    0.500000   4320   8640
+STANDARD  0.500000   4294   8588
+D         0.491927  10176  20686
+
+  [USAGE ROLE]
+            hit_rate  hits  total
+usage_role                       
+PRIMARY     0.572209  7647  13364
+SECONDARY   0.561677  5628  10020
+SUPPORT     0.556934  2289   4110
+UNKNOWN     0.425299  2135   5020
+
+  [MINUTES TIER]
+              hit_rate  hits  total
+minutes_tier                       
+LOW           0.576505  1168   2026
+HIGH          0.568986  6557  11524
+MEDIUM        0.562177  7839  13944
+UNKNOWN       0.425299  2135   5020
+
+  [DEF TIER]
+           hit_rate  hits  total
+def_tier                        
+WEAK       0.567989  4010   7060
+ABOVE AVG  0.563475  4585   8137
+ELITE      0.527959  4362   8262
+AVG        0.523752  4741   9052
+
+  [SHOT ROLE]
+           hit_rate  hits  total
+shot_role                       
+HIGH_VOL   0.569079  7958  13984
+MID_VOL    0.566300  5868  10362
+LOW_VOL    0.552097  1738   3148
+UNKNOWN    0.425299  2135   5020
+
+  [PICK TYPE x TIER]
+pick_type tier  hit_rate  hits  total
+   GOBLIN    A  0.701713  3851   5488
+   GOBLIN    B  0.650884  1251   1922
+   GOBLIN    D  0.609713  5185   8504
+   GOBLIN    C  0.609557  1046   1716
+ STANDARD    A  0.533395   575   1078
+ STANDARD    D  0.503652  3034   6024
+ STANDARD    C  0.503439   366    727
+ STANDARD    B  0.492980   316    641
+    DEMON    C  0.438849    61    139
+    DEMON    D  0.317798  1957   6158
+
+  [PICK TYPE x PROP TYPE]
+pick_type         prop_type_norm  hit_rate  hits  total
+   GOBLIN          FANTASY SCORE  0.817143   429    525
+   GOBLIN                 POINTS  0.666428  1860   2791
+   GOBLIN                ASSISTS  0.657210   834   1269
+   GOBLIN               PTS+REBS  0.655848  1273   1941
+   GOBLIN              3-PT MADE  0.653722   606    927
+   GOBLIN               REBOUNDS  0.650171  1143   1758
+   GOBLIN               PTS+ASTS  0.647651   965   1490
+   GOBLIN      TWO POINTERS MADE  0.632653   124    196
+   GOBLIN                 STEALS  0.629630   493    783
+   GOBLIN              REBS+ASTS  0.627229  1161   1851
+ STANDARD          FANTASY SCORE  0.619962   323    521
+   GOBLIN          PTS+REBS+ASTS  0.615417  1445   2348
+   GOBLIN                FG MADE  0.592593    64    108
+   GOBLIN              BLKS+STLS  0.589691   286    485
+   GOBLIN          BLOCKED SHOTS  0.584211   111    190
+   GOBLIN         PERSONAL FOULS  0.573991   128    223
+   GOBLIN              TURNOVERS  0.572347   178    311
+ STANDARD              TURNOVERS  0.571429   140    245
+ STANDARD              3-PT MADE  0.567376    80    141
+   GOBLIN       FREE THROWS MADE  0.560345    65    116
+ STANDARD                 STEALS  0.552000    69    125
+ STANDARD         PERSONAL FOULS  0.544872    85    156
+ STANDARD              REBS+ASTS  0.523501   323    617
+   GOBLIN         3-PT ATTEMPTED  0.520325    64    123
+ STANDARD  FREE THROWS ATTEMPTED  0.512821   120    234
+ STANDARD       FREE THROWS MADE  0.510823   118    231
+ STANDARD TWO POINTERS ATTEMPTED  0.505263   144    285
+ STANDARD               PTS+REBS  0.500967   518   1034
+ STANDARD                FG MADE  0.500000   134    268
+ STANDARD         3-PT ATTEMPTED  0.494318    87    176
+ STANDARD          PTS+REBS+ASTS  0.492567   497   1009
+ STANDARD                ASSISTS  0.491848   181    368
+ STANDARD               REBOUNDS  0.491582   292    594
+ STANDARD               PTS+ASTS  0.484746   429    885
+ STANDARD           FG ATTEMPTED  0.483721   208    430
+    DEMON          FANTASY SCORE  0.474320   157    331
+ STANDARD                 POINTS  0.468005   373    797
+ STANDARD      TWO POINTERS MADE  0.452632    86    190
+    DEMON       FREE THROWS MADE  0.450382    59    131
+    DEMON         PERSONAL FOULS  0.437500    70    160
+    DEMON  FREE THROWS ATTEMPTED  0.423077    44    104
+    DEMON      TWO POINTERS MADE  0.420000    42    100
+    DEMON              REBS+ASTS  0.332907   260    781
+    DEMON              TURNOVERS  0.330275    36    109
+    DEMON                ASSISTS  0.322072   143    444
+    DEMON          PTS+REBS+ASTS  0.315421   270    856
+    DEMON              BLKS+STLS  0.313187    57    182
+    DEMON          BLOCKED SHOTS  0.303681    99    326
+    DEMON               REBOUNDS  0.296842   141    475
+    DEMON                 POINTS  0.283433   142    501
+    DEMON               PTS+REBS  0.278802   121    434
+    DEMON               PTS+ASTS  0.275434   111    403
+    DEMON              3-PT MADE  0.268761   154    573
+    DEMON                 STEALS  0.226766    61    269
+
+  [PICK TYPE x TIER x DIRECTION]
+pick_type tier bet_direction  hit_rate  hits  total
+   GOBLIN    A          OVER  0.701713  3851   5488
+   GOBLIN    B          OVER  0.650884  1251   1922
+   GOBLIN    D          OVER  0.609713  5185   8504
+   GOBLIN    C          OVER  0.609557  1046   1716
+ STANDARD    A          OVER  0.579158   289    499
+ STANDARD    D         UNDER  0.514972  1393   2705
+ STANDARD    C          OVER  0.504785   211    418
+ STANDARD    C         UNDER  0.501618   155    309
+ STANDARD    B         UNDER  0.495356   160    323
+ STANDARD    D          OVER  0.494426  1641   3319
+ STANDARD    A         UNDER  0.493955   286    579
+ STANDARD    B          OVER  0.490566   156    318
+    DEMON    C          OVER  0.438849    61    139
+    DEMON    D          OVER  0.317798  1957   6158
+
+========== CBB | 19186 gradeable rows | overall hit rate: 48.4% ==========
+
+  [PROP TYPE]
+                hit_rate  hits  total
+prop_type_norm                       
+AST             0.622472   277    445
+STL             0.614583   177    288
+REB             0.586436   441    752
+FG3M            0.571429   148    259
+PTS             0.563391   711   1262
+RA              0.551282   172    312
+TOV             0.538071   106    197
+PR              0.525000   294    560
+PA              0.519274   229    441
+PRA             0.510471   390    764
+
+  [PICK TYPE]
+           hit_rate  hits  total
+pick_type                       
+GOBLIN     0.619163  4071   6575
+STANDARD   0.515526  4051   7858
+DEMON      0.245529  1167   4753
+
+  [DIRECTION]
+               hit_rate  hits  total
+bet_direction                       
+UNDER          0.547152  2315   4231
+OVER           0.466332  6974  14955
+
+  [TIER]
+      hit_rate  hits  total
+tier                       
+A     0.623132  1126   1807
+B     0.596796  1341   2247
+C     0.556220  4091   7355
+D     0.351164  2731   7777
+
+  [DEF TIER]
+           hit_rate  hits  total
+def_tier                        
+AVG        0.595506   477    801
+ABOVE AVG  0.588683   541    919
+GOOD       0.561611   237    422
+WEAK       0.546531   323    591
+ELITE      0.536092  1218   2272
+AVERAGE    0.530303    70    132
+
+  [PICK TYPE x TIER]
+pick_type tier  hit_rate  hits  total
+   GOBLIN    A  0.658312   788   1197
+   GOBLIN    B  0.655233   745   1137
+   GOBLIN    C  0.605012  1835   3033
+   GOBLIN    D  0.581954   703   1208
+ STANDARD    A  0.554098   338    610
+ STANDARD    B  0.536937   596   1110
+ STANDARD    C  0.526129  2225   4229
+ STANDARD    D  0.467260   892   1909
+    DEMON    D  0.243777  1136   4660
+
+  [PICK TYPE x PROP TYPE]
+pick_type prop_type_norm  hit_rate  hits  total
+   GOBLIN            AST  0.652733   203    311
+   GOBLIN           FG3M  0.641618   111    173
+   GOBLIN            STL  0.641148   134    209
+   GOBLIN             PR  0.637255    65    102
+   GOBLIN            PTS  0.628422   482    767
+   GOBLIN            REB  0.625755   311    497
+ STANDARD            AST  0.552239    74    134
+ STANDARD             RA  0.550000   154    280
+   GOBLIN            TOV  0.545455    60    110
+   GOBLIN            PRA  0.523810   165    315
+ STANDARD             PA  0.518957   219    422
+ STANDARD            REB  0.509804   130    255
+ STANDARD            PRA  0.501114   225    449
+ STANDARD             PR  0.500000   229    458
+ STANDARD            PTS  0.462626   229    495
+
+  [PICK TYPE x TIER x DIRECTION]
+pick_type tier bet_direction  hit_rate  hits  total
+   GOBLIN    A          OVER  0.658312   788   1197
+   GOBLIN    B          OVER  0.655233   745   1137
+   GOBLIN    C          OVER  0.605012  1835   3033
+ STANDARD    A         UNDER  0.583333   245    420
+   GOBLIN    D          OVER  0.581954   703   1208
+ STANDARD    B         UNDER  0.559947   425    759
+ STANDARD    C         UNDER  0.550576  1339   2432
+ STANDARD    D         UNDER  0.493548   306    620
+ STANDARD    C          OVER  0.493044   886   1797
+ STANDARD    A          OVER  0.489474    93    190
+ STANDARD    B          OVER  0.487179   171    351
+ STANDARD    D          OVER  0.454616   586   1289
+    DEMON    D          OVER  0.243777  1136   4660
+  skipped outputs\synthetic\graded_nhl_synthetic_2025-26.xlsx: "No such keys(s): 'io.excel.zip.reader'"
+
+========== NHL | 275245 gradeable rows | overall hit rate: 49.0% ==========
+
+  [PROP TYPE]
+                   hit_rate  hits  total
+prop_type_norm                          
+TIME ON ICE        0.653409   115    176
+POWER PLAY POINTS  0.596737   512    858
+HITS               0.548193    91    166
+BLOCKED SHOTS      0.489489   163    333
+POINTS             0.399095  1058   2651
+PLUS/MINUS         0.398876   284    712
+ASSISTS            0.367890   802   2180
+GOALS              0.361383   627   1735
+SHOTS ON GOAL      0.236610   645   2726
+
+  [PICK TYPE]
+           hit_rate  hits  total
+pick_type                       
+STANDARD   0.678652  1812   2670
+GOBLIN     0.401564   565   1407
+DEMON      0.264764  1995   7535
+
+  [DIRECTION]
+               hit_rate  hits  total
+bet_direction                       
+UNDER          0.755114  2621   3471
+OVER           0.215084  1751   8141
+
+  [TIER]
+          hit_rate   hits  total
+tier                            
+A         0.572065   2183   3816
+GOBLIN    0.500000  43368  86736
+DEMON     0.500000  43368  86736
+STANDARD  0.500000  42771  85542
+B         0.492782    512   1039
+C         0.421638    417    989
+D         0.225282   2340  10387
+
+  [DEF TIER]
+          hit_rate  hits  total
+def_tier                       
+WEAK      0.304499   873   2867
+AVERAGE   0.282917   578   2043
+ELITE     0.280576   507   1807
+SOLID     0.261190   496   1899
+
+  [PICK TYPE x TIER]
+pick_type tier  hit_rate  hits  total
+ STANDARD    A  0.710874  1399   1968
+    DEMON    A  0.666667   204    306
+ STANDARD    B  0.622776   350    562
+ STANDARD    C  0.443548    55    124
+    DEMON    C  0.426689   259    607
+   GOBLIN    A  0.418457   526   1257
+    DEMON    B  0.414141    82    198
+   GOBLIN    B  0.233645    25    107
+    DEMON    D  0.225716  1450   6424
+
+  [PICK TYPE x PROP TYPE]
+Empty DataFrame
+Columns: [pick_type, prop_type, hit_rate, hits, total]
+Index: []
+
+  [PICK TYPE x TIER x DIRECTION]
+Empty DataFrame
+Columns: [pick_type, tier, direction, hit_rate, hits, total]
+Index: []
+
+========== SOCCER | 8094 gradeable rows | overall hit rate: 23.9% ==========
+
+  [PROP TYPE]
+                  hit_rate  hits  total
+prop_type_norm                         
+SHOTS ON TARGET   0.450495   637   1414
+GOALIE SAVES      0.301948    93    308
+FOULS             0.297136   249    838
+GOAL + ASSIST     0.229358   200    872
+TACKLES           0.209774   176    839
+SHOTS             0.187163   417   2228
+GOALS             0.096519    61    632
+ASSISTS           0.055714    39    700
+PASSES ATTEMPTED  0.000000     0    112
+
+  [PICK TYPE]
+           hit_rate  hits  total
+pick_type                       
+GOBLIN     0.419753   578   1377
+STANDARD   0.317829   123    387
+DEMON      0.195261  1236   6330
+
+  [DIRECTION]
+               hit_rate  hits  total
+bet_direction                       
+OVER           0.235624  1893   8034
+
+  [TIER]
+      hit_rate  hits  total
+tier                       
+A     0.356705   814   2282
+B     0.245023   160    653
+C     0.228007   127    557
+D     0.181660   836   4602
+
+  [USAGE ROLE]
+            hit_rate  hits  total
+usage role                       
+FRINGE      0.313063   278    888
+UNKNOWN     0.211429    37    175
+
+  [MINUTES TIER]
+              hit_rate  hits  total
+minutes_tier                       
+UNKNOWN       0.252525   775   3069
+HIGH          0.229897  1115   4850
+
+  [DEF TIER]
+           hit_rate  hits  total
+def_tier                        
+ABOVE AVG  0.259406   131    505
+AVG        0.225410    55    244
+ELITE      0.219224   130    593
+
+  [SHOT ROLE]
+           hit_rate  hits  total
+shot role                       
+UNKNOWN    0.315271   256    812
+MID_VOL    0.250000    25    100
+LOW_VOL    0.190909    21    110
+
+  [PICK TYPE x TIER]
+pick_type tier  hit_rate  hits  total
+   GOBLIN    A  0.518519   392    756
+ STANDARD    D  0.345455    38    110
+ STANDARD    A  0.342857    48    140
+   GOBLIN    D  0.293919   174    592
+    DEMON    A  0.269841   374   1386
+ STANDARD    B  0.267327    27    101
+    DEMON    B  0.231358   121    523
+    DEMON    C  0.224568   117    521
+    DEMON    D  0.160000   624   3900
+
+  [PICK TYPE x PROP TYPE]
+Empty DataFrame
+Columns: [pick_type, prop_type, hit_rate, hits, total]
+Index: []
+
+  [PICK TYPE x TIER x DIRECTION]
+Empty DataFrame
+Columns: [pick_type, tier, direction, hit_rate, hits, total]
+Index: []

@@ -29,6 +29,11 @@ import joblib
 import numpy as np
 import pandas as pd
 
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
+
 # ── Head-to-Head (H2H) utility ────────────────────────────────────────────────
 def _attach_h2h(
     df: "pd.DataFrame",
@@ -655,6 +660,17 @@ def main():
 
     df = pd.read_csv(args.input, dtype=str).fillna("")
     print(f"→ Loaded: {args.input} | rows={len(df)}")
+    _repo_usage = Path(__file__).resolve().parents[3]
+    _sd_usage = str(_repo_usage / "scripts")
+    if _sd_usage not in sys.path:
+        sys.path.insert(0, _sd_usage)
+    try:
+        from usage_redistribution import apply_usage_redistribution  # noqa: E402
+        _sport_usage = "WCBB" if "wcbb" in str(args.input).lower() else "CBB"
+        _run_date = str(args.date or datetime.now().strftime("%Y-%m-%d"))[:10]
+        df = apply_usage_redistribution(df, sport=_sport_usage, date=_run_date, repo_root=str(_repo_usage))
+    except Exception as e:
+        print(f"⚠️ usage redistribution skipped: {e}")
 
     slate_game_date = (args.date or datetime.now().strftime("%Y-%m-%d")).strip()
 
@@ -744,9 +760,11 @@ def main():
 
     proj = pd.Series([blend_proj(i) for i in range(len(out))], index=out.index)
     out["projection"] = proj
+    if "usage_boost_proj" in out.columns:
+        out["projection"] = _to_num(out["projection"]).fillna(0.0) + _to_num(out["usage_boost_proj"]).fillna(0.0)
 
     # ── Edge ────────────────────────────────────────────────────────────────
-    out["edge"]     = proj - line_num
+    out["edge"]     = _to_num(out["projection"]) - line_num
     out["abs_edge"] = out["edge"].abs()
 
     # ── Direction / eligibility ──────────────────────────────────────────────
@@ -933,6 +951,9 @@ def main():
         + hr_signal.fillna(0)          * 0.15
         + prior_signal                 * 0.15
     ) * prop_w * rel_mult + _inj_pen_cbb.reindex(out.index).fillna(0.0)
+    usage_bonus = np.clip(_to_num(out.get("usage_boost", pd.Series(0.0, index=out.index))).fillna(0.0) * 5.0, 0.0, 0.5)
+    out["usage_bonus"] = usage_bonus
+    raw_score = raw_score + usage_bonus
 
     # Zero out ineligible rows
     score = raw_score.where(elig_mask, other=np.nan)
@@ -975,6 +996,23 @@ def main():
     out["rank_score"] = out["final_score"]
     out["tier"]       = out["rank_score"].apply(
         lambda x: _tier(x) if not (isinstance(x, float) and np.isnan(x)) else "D")
+
+    # Canonical fields for cross-sport quality checks and combined tooling.
+    if "opp" not in out.columns:
+        for alt in ("opp_team_abbr", "pp_opp_team", "opp_team"):
+            if alt in out.columns:
+                out["opp"] = out[alt]
+                break
+    if "opp" not in out.columns:
+        out["opp"] = ""
+
+    if "hit_rate" not in out.columns:
+        for alt in ("line_hit_rate", "line_hit_rate_over_ou_5", "line_hit_rate_over_ou_10"):
+            if alt in out.columns:
+                out["hit_rate"] = _to_num(out[alt])
+                break
+    if "hit_rate" not in out.columns:
+        out["hit_rate"] = np.nan
 
     # ── Final bet direction (step8-style logic inline) ────────────────────────
     final_dir = np.where(forced.eq(1), "OVER",

@@ -381,7 +381,7 @@
             "Bypass",
             "-File",
             "run_pipeline.ps1",
-            "-IncludeNHL"
+            "-NHLOnly"
           ]
         },
         {
@@ -393,7 +393,7 @@
             "Bypass",
             "-File",
             "run_pipeline.ps1",
-            "-IncludeMLB"
+            "-MLBOnly"
           ]
         },
         {
@@ -405,7 +405,7 @@
             "Bypass",
             "-File",
             "run_pipeline.ps1",
-            "-IncludeSoccer"
+            "-SoccerOnly"
           ]
         },
         {
@@ -416,10 +416,7 @@
             "-ExecutionPolicy",
             "Bypass",
             "-File",
-            "run_pipeline.ps1",
-            "-IncludeNHL",
-            "-IncludeMLB",
-            "-IncludeSoccer"
+            "run_pipeline.ps1"
           ]
         }
       ]
@@ -666,10 +663,10 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step1_fetch_prizepicks_mlb.py",
+            ".\\scripts\\step1_fetch_prizepicks_mlb.py",
             "--gentle",
             "--output",
-            "step1_mlb_props.csv"
+            "outputs\\step1_mlb_props.csv"
           ]
         },
         {
@@ -678,11 +675,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step2_attach_picktypes_mlb.py",
+            ".\\scripts\\step2_attach_picktypes_mlb.py",
             "--input",
-            "step1_mlb_props.csv",
+            "outputs\\step1_mlb_props.csv",
             "--output",
-            "step2_mlb_picktypes.csv"
+            "outputs\\step2_mlb_picktypes.csv"
           ]
         },
         {
@@ -691,13 +688,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step3_attach_defense_mlb.py",
+            ".\\scripts\\step3_attach_defense_mlb.py",
             "--input",
-            "step2_mlb_picktypes.csv",
+            "outputs\\step2_mlb_picktypes.csv",
             "--defense",
-            "mlb_defense_summary.csv",
+            "outputs\\mlb_defense_summary.csv",
             "--output",
-            "step3_mlb_with_defense.csv"
+            "outputs\\step3_mlb_with_defense.csv"
           ]
         },
         {
@@ -706,13 +703,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step4_attach_player_stats_mlb.py",
+            ".\\scripts\\step4_attach_player_stats_mlb.py",
             "--input",
-            "step3_mlb_with_defense.csv",
+            "outputs\\step3_mlb_with_defense.csv",
             "--cache",
-            "mlb_stats_cache.csv",
+            "outputs\\mlb_stats_cache.csv",
             "--output",
-            "step4_mlb_with_stats.csv",
+            "outputs\\step4_mlb_with_stats.csv",
             "--season",
             "2025"
           ]
@@ -723,11 +720,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step5_add_line_hit_rates_mlb.py",
+            ".\\scripts\\step5_add_line_hit_rates_mlb.py",
             "--input",
-            "step4_mlb_with_stats.csv",
+            "outputs\\step4_mlb_with_stats.csv",
             "--output",
-            "step5_mlb_hit_rates.csv"
+            "outputs\\step5_mlb_hit_rates.csv"
           ]
         },
         {
@@ -736,11 +733,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step6_team_role_context_mlb.py",
+            ".\\scripts\\step6_team_role_context_mlb.py",
             "--input",
-            "step5_mlb_hit_rates.csv",
+            "outputs\\step5_mlb_hit_rates.csv",
             "--output",
-            "step6_mlb_role_context.csv"
+            "outputs\\step6_mlb_role_context.csv"
           ]
         },
         {
@@ -749,11 +746,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step7_rank_props_mlb.py",
+            ".\\scripts\\step7_rank_props_mlb.py",
             "--input",
-            "step6_mlb_role_context.csv",
+            "outputs\\step6_mlb_role_context.csv",
             "--output",
-            "step7_mlb_ranked.xlsx"
+            "outputs\\step7_mlb_ranked.xlsx"
           ]
         },
         {
@@ -762,33 +759,18 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step8_add_direction_context_mlb.py",
+            ".\\scripts\\step8_add_direction_context_mlb.py",
             "--input",
-            "step7_mlb_ranked.xlsx",
+            "outputs\\step7_mlb_ranked.xlsx",
             "--output",
-            "step8_mlb_direction.csv"
-          ]
-        },
-        {
-          "id": "mlb_step9",
-          "label": "Step 9 — Build Tickets",
-          "cmd": [
-            "py",
-            "-3.14",
-            ".\\step9_build_tickets_mlb.py",
-            "--input",
-            "step8_mlb_direction_clean.xlsx",
-            "--output",
-            "mlb_best_tickets.xlsx",
-            "--min_hit_rate",
-            "0.65",
-            "--legs",
-            "2,3,4"
+            "outputs\\step8_mlb_direction.csv",
+            "--xlsx",
+            "outputs\\step8_mlb_direction_clean.xlsx"
           ]
         },
         {
           "id": "mlb_full",
-          "label": "MLB Full Pipeline (Steps 1-9)",
+          "label": "MLB Full Pipeline (Steps 1-8)",
           "cmd_chain": [
             "mlb_step1",
             "mlb_step2",
@@ -797,20 +779,18 @@
             "mlb_step5",
             "mlb_step6",
             "mlb_step7",
-            "mlb_step8",
-            "mlb_step9"
+            "mlb_step8"
           ]
         },
         {
           "id": "mlb_stats_only",
-          "label": "MLB Steps 4-9 (Stats + Rank)",
+          "label": "MLB Steps 4-8 (Stats + Rank)",
           "cmd_chain": [
             "mlb_step4",
             "mlb_step5",
             "mlb_step6",
             "mlb_step7",
-            "mlb_step8",
-            "mlb_step9"
+            "mlb_step8"
           ]
         },
         {
@@ -1092,8 +1072,7 @@
             "nba1h_step5",
             "nba1h_step6",
             "nba1h_step7",
-            "nba1h_step8",
-            "nba1h_step9"
+            "nba1h_step8"
           ]
         }
       ]
@@ -1254,8 +1233,7 @@
             "nba1q_step5",
             "nba1q_step6",
             "nba1q_step7",
-            "nba1q_step8",
-            "nba1q_step9"
+            "nba1q_step8"
           ]
         }
       ]
