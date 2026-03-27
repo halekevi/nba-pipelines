@@ -1506,7 +1506,7 @@ async function loadSlateData() {
     }
     renderEdges();
     renderStreaks();
-    await buildSlateDataFromAllSlate();
+    // buildSlateDataFromAllSlate() (2.2 MB fetch) is deferred until user opens a sport panel
   })();
   return slateDataPromise;
 }
@@ -1866,6 +1866,7 @@ SPORTS.forEach(s => {
 
 let openSlatePanel = null;
 let slateDataPromise = null;
+let _slateSportPromise = null; // lazy: only fetches /api/slate-sport when a panel is first opened
 
 function scheduleRenderSlateTable(sport) {
   if (RENDER_SCHEDULED[sport]) return;
@@ -1964,8 +1965,11 @@ function loadSlateSport(sport) {
   if (SLATE_DATA[sport] && SLATE_DATA[sport].length) { scheduleRenderSlateTable(sport); return; }
   const tbody = document.getElementById(`stb-${sport}`);
   if (tbody) tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;padding:20px;color:var(--muted);letter-spacing:1px;font-size:10px;">LOADING…</td></tr>`;
-  // wait for loadSlateData to finish then re-render
-  loadSlateData().then(() => scheduleRenderSlateTable(sport));
+  // Lazy: fetch the 2.2 MB slate-sport payload only on first panel open
+  if (!_slateSportPromise) {
+    _slateSportPromise = loadSlateData().then(() => buildSlateDataFromAllSlate());
+  }
+  _slateSportPromise.then(() => scheduleRenderSlateTable(sport));
 }
 
 function renderSlateTable(sport) {

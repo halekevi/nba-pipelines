@@ -1,1 +1,1 @@
-web: gunicorn ui_runner.app:app --workers=2 --threads=4 --timeout=120
+web: gunicorn ui_runner.app:app --bind 0.0.0.0:$PORT --workers=2 --threads=4 --worker-class=gthread --timeout=120

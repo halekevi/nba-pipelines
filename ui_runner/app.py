@@ -130,17 +130,24 @@ LOCK = threading.Lock()
 # ──────────────────────────────────────────────────────────────────────────────
 # Helpers
 # ──────────────────────────────────────────────────────────────────────────────
+_config_cache: Optional[dict] = None
+
+
 def load_config() -> dict:
+    global _config_cache
+    if _config_cache is not None:
+        return _config_cache
     if not CONFIG_PATH.exists():
         raise FileNotFoundError(f"commands.json not found at: {CONFIG_PATH}")
-    return json.loads(CONFIG_PATH.read_text(encoding="utf-8-sig"))
+    _config_cache = json.loads(CONFIG_PATH.read_text(encoding="utf-8-sig"))
+    return _config_cache
 
 
 _json_file_cache: dict[str, dict[str, Any]] = {}
 
 
-def read_json_cached(path: Path, ttl: float = 60.0) -> Any:
-    """Load JSON from disk with a short in-process TTL (template payloads written by pipeline)."""
+def read_json_cached(path: Path, ttl: float = 300.0) -> Any:
+    """Load JSON from disk with an in-process TTL (template payloads written by pipeline)."""
     key = str(path.resolve())
     now = time.time()
     entry = _json_file_cache.get(key)
@@ -149,6 +156,45 @@ def read_json_cached(path: Path, ttl: float = 60.0) -> Any:
     data = json.loads(path.read_text(encoding="utf-8-sig"))
     _json_file_cache[key] = {"data": data, "ts": now}
     return data
+
+
+# ── Pre-serialized + pre-gzipped response cache ───────────────────────────────
+# Avoids re-serializing and re-compressing large payloads on every request.
+_gz_cache: dict[str, tuple[bytes, float]] = {}
+_GZ_CACHE_LOCK = threading.Lock()
+
+
+def _gz_json_response(key: str, build_fn, ttl: float = 300.0):
+    """
+    Call build_fn() once per TTL, serialize+gzip the result, serve from cache after.
+    Handles both gzip-capable and plain clients.
+    """
+    now = time.time()
+    gz_bytes = None
+    with _GZ_CACHE_LOCK:
+        entry = _gz_cache.get(key)
+        if entry and now - entry[1] < ttl:
+            gz_bytes = entry[0]
+
+    if gz_bytes is None:
+        data = build_fn()
+        raw  = json.dumps(data, separators=(",", ":")).encode("utf-8")
+        buf  = io.BytesIO()
+        with gzip.GzipFile(mode="wb", fileobj=buf, compresslevel=6) as f:
+            f.write(raw)
+        gz_bytes = buf.getvalue()
+        with _GZ_CACHE_LOCK:
+            _gz_cache[key] = (gz_bytes, time.time())
+
+    if "gzip" in request.headers.get("Accept-Encoding", ""):
+        resp = app.response_class(gz_bytes, status=200, mimetype="application/json")
+        resp.headers["Content-Encoding"] = "gzip"
+        resp.headers["Content-Length"]   = len(gz_bytes)
+        resp.headers["Vary"]             = "Accept-Encoding"
+        return resp
+    # Non-gzip client: decompress inline (rare — all modern browsers support gzip)
+    with gzip.GzipFile(fileobj=io.BytesIO(gz_bytes)) as f:
+        return app.response_class(f.read(), status=200, mimetype="application/json")
 
 
 def safe_tail(lines: List[str], max_lines: int = 2500) -> List[str]:
@@ -717,7 +763,8 @@ def api_slate():
     json_path = TEMPLATES_DIR / "tickets_latest.json"
     if not json_path.exists():
         return jsonify({"picks": [], "generated_at": None, "date": None})
-    try:
+
+    def _build_picks():
         data = read_json_cached(json_path)
         seen = set()
         picks = []
@@ -746,7 +793,10 @@ def api_slate():
                         "season_avg": leg.get("season_avg"),
                     })
         picks.sort(key=lambda p: abs(p["edge"]), reverse=True)
-        return jsonify({"picks": picks, "generated_at": data.get("generated_at"), "date": data.get("date")})
+        return {"picks": picks, "generated_at": data.get("generated_at"), "date": data.get("date")}
+
+    try:
+        return _gz_json_response("slate-picks", _build_picks, ttl=300.0)
     except Exception as e:
         return jsonify({"error": str(e), "picks": []}), 500
 
@@ -763,8 +813,7 @@ def api_slate_sport():
     if not slate_path.exists():
         return jsonify({"error": "slate_latest.json not found — run pipeline first", "sports": {}}), 404
     try:
-        data = read_json_cached(slate_path)
-        return jsonify(data)
+        return _gz_json_response("slate-sport", lambda: read_json_cached(slate_path), ttl=300.0)
     except Exception as e:
         return jsonify({"error": str(e), "sports": {}}), 500
 
