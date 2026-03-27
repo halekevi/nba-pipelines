@@ -7,6 +7,7 @@ Outputs use the same schema as fetch_actuals.py:
 
 Examples:
   py -3.14 scripts/fetch_nba_period_actuals.py --date 2026-03-25 --segment 1Q --output outputs/2026-03-25/actuals_nba1q_2026-03-25.csv
+  py -3.14 scripts/fetch_nba_period_actuals.py --date 2026-03-25 --segment 2Q --output outputs/2026-03-25/actuals_nba2q_2026-03-25.csv
   py -3.14 scripts/fetch_nba_period_actuals.py --date 2026-03-25 --segment 1H --output outputs/2026-03-25/actuals_nba1h_2026-03-25.csv
 """
 
@@ -256,12 +257,17 @@ def _parse_game_period_stats(event_id: str, max_period: int) -> list[dict]:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--date", default=_default_date_str(), help="YYYY-MM-DD (default: yesterday)")
-    ap.add_argument("--segment", choices=["1Q", "1H"], required=True, help="Target period segment")
+    ap.add_argument("--segment", choices=["1Q", "2Q", "1H"], required=True, help="Target period segment")
     ap.add_argument("--output", required=True, help="Output CSV path")
     args = ap.parse_args()
 
     all_rows: list[dict] = []
-    start_period, end_period = (1, 1) if args.segment == "1Q" else (1, 2)
+    if args.segment == "1Q":
+        start_period, end_period = (1, 1)
+    elif args.segment == "2Q":
+        start_period, end_period = (2, 2)
+    else:
+        start_period, end_period = (1, 2)
     nba_ids: list[str] = []
     try:
         nba_ids = _nba_game_ids_for_date(args.date)

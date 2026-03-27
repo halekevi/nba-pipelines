@@ -38,6 +38,7 @@ def main():
     ap.add_argument("--slate",    default="step3_with_defense.csv")
     ap.add_argument("--out",      default="step4_with_stats.csv")
     ap.add_argument("--date",     default="",   help="Slate date YYYY-MM-DD (informational)")
+    ap.add_argument("--segment",  default="",   help="Optional period segment hint (e.g. 1Q)")
     ap.add_argument("--n",        type=int, default=10, help="Max games to pull per player")
     ap.add_argument("--id-col",   default="ESPN_ATHLETE_ID",
                     help="Column containing ESPN athlete ID (default: ESPN_ATHLETE_ID)")
@@ -190,8 +191,29 @@ def main():
             print(f"  NO_ID players ({len(no_id)}): {sorted(no_id)}")
         id_col = "ESPN_ATHLETE_ID"
 
-    print(f"\n→ Attaching NBA stats from DB (id_col={id_col}, n={args.n})...")
-    slate, counts = attach_stats(slate, "nba", con, id_col=id_col, n=args.n)
+    slate_name = str(Path(args.slate).name).lower()
+    segment = str(args.segment or "").strip().upper()
+    is_nba1q = ("nba1q" in slate_name) or ("nba1q" in str(args.out).lower()) or (segment == "1Q")
+    is_nba1h = ("nba1h" in slate_name) or ("nba1h" in str(args.out).lower()) or (segment == "1H")
+    sport_key = "nba1q" if is_nba1q else ("nba1h" if is_nba1h else "nba")
+    if "data_source" not in slate.columns:
+        slate["data_source"] = ""
+
+    print(f"\n→ Attaching {sport_key.upper()} stats from DB (id_col={id_col}, n={args.n})...")
+    slate, counts = attach_stats(slate, sport_key, con, id_col=id_col, n=args.n)
+    if is_nba1q:
+        # Explicit marker for sparse period history.
+        status = slate.get("stat_status", pd.Series([""] * len(slate)))
+        sparse_mask = status.astype(str).isin(["NO_DATA", "INSUFFICIENT_GAMES"])
+        slate.loc[sparse_mask, "data_source"] = "insufficient_q1_history"
+        slate.loc[~sparse_mask, "data_source"] = "nba1q_db"
+    elif is_nba1h:
+        status = slate.get("stat_status", pd.Series([""] * len(slate)))
+        sparse_mask = status.astype(str).isin(["NO_DATA", "INSUFFICIENT_GAMES"])
+        slate.loc[sparse_mask, "data_source"] = "insufficient_1h_history"
+        slate.loc[~sparse_mask, "data_source"] = "nba1h_db"
+    else:
+        slate["data_source"] = slate["data_source"].replace("", "nba_db")
 
     slate.to_csv(args.out, index=False, encoding="utf-8-sig")
     print(f"\n✅ Saved → {args.out}  ({len(slate)} rows)")

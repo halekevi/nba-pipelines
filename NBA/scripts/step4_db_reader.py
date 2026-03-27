@@ -41,6 +41,7 @@ import pandas as pd
 # ── Default DB path ────────────────────────────────────────────────────────────
 _HERE = Path(__file__).resolve().parent
 DB_PATH = _HERE.parent / "data" / "cache" / "proporacle_ref.db"
+MIN_SAMPLE_FOR_TICKET = 4
 
 
 def open_db(db_path: Optional[Path] = None) -> sqlite3.Connection:
@@ -254,6 +255,205 @@ def get_vals_nba(con: sqlite3.Connection, espn_id: str,
     return vals
 
 
+def _norm_nba1q_prop(prop_norm: str) -> str:
+    """
+    Normalize slate prop labels to nba1q table prop_type values.
+    """
+    p = str(prop_norm or "").lower().strip().replace("(combo)", "").strip()
+    mapping = {
+        "points": "points",
+        "pts": "points",
+        "rebounds": "rebounds",
+        "reb": "rebounds",
+        "assists": "assists",
+        "ast": "assists",
+        "steals": "steals",
+        "stl": "steals",
+        "blocks": "blocked shots",
+        "blk": "blocked shots",
+        "turnovers": "turnovers",
+        "tov": "turnovers",
+        "to": "turnovers",
+        "fgm": "fg made",
+        "fg made": "fg made",
+        "fga": "fg attempted",
+        "fg attempted": "fg attempted",
+        "fg3m": "3-pt made",
+        "3pm": "3-pt made",
+        "3-pt made": "3-pt made",
+        "3pt made": "3-pt made",
+        "fg3a": "3-pt attempted",
+        "3pa": "3-pt attempted",
+        "3-pt attempted": "3-pt attempted",
+        "3pt attempted": "3-pt attempted",
+        "fg2m": "two pointers made",
+        "twopointersmade": "two pointers made",
+        "two pointers made": "two pointers made",
+        "fg2a": "two pointers attempted",
+        "twopointersattempted": "two pointers attempted",
+        "two pointers attempted": "two pointers attempted",
+        "ftm": "free throws made",
+        "free throws made": "free throws made",
+        "fta": "free throws attempted",
+        "free throws attempted": "free throws attempted",
+        "pra": "pts+rebs+asts",
+        "pts+reb+ast": "pts+rebs+asts",
+        "pts+rebs+asts": "pts+rebs+asts",
+        "pr": "pts+rebs",
+        "pts+reb": "pts+rebs",
+        "pts+rebs": "pts+rebs",
+        "pa": "pts+asts",
+        "pts+ast": "pts+asts",
+        "pts+asts": "pts+asts",
+        "ra": "rebs+asts",
+        "reb+ast": "rebs+asts",
+        "rebs+asts": "rebs+asts",
+        "blks+stls": "blks+stls",
+        "bs": "blks+stls",
+        "fantasy": "fantasy score",
+        "fantasy score": "fantasy score",
+    }
+    return mapping.get(p, p)
+
+
+def get_vals_nba_period(
+    con: sqlite3.Connection,
+    espn_id: str,
+    prop_norm: str,
+    n: int = 10,
+    player_name: str = "",
+    segment: str = "1Q",
+) -> List[float]:
+    """
+    Period-scoped history lookup from nba1q table by segment (1Q/1H).
+    Requires at least MIN_SAMPLE_FOR_TICKET rows to be considered usable.
+    """
+    prop_key = _norm_nba1q_prop(prop_norm)
+    if not prop_key:
+        return []
+    try:
+        vals = []
+        if str(espn_id or "").strip():
+            rows = con.execute(
+                """
+                SELECT actual
+                FROM nba1q
+                WHERE espn_player_id = ?
+                  AND lower(prop_type) = ?
+                  AND segment = ?
+                  AND actual IS NOT NULL
+                ORDER BY game_date DESC
+                LIMIT ?
+                """,
+                (str(espn_id).strip(), prop_key, str(segment).strip().upper(), int(n)),
+            ).fetchall()
+            vals = [float(r[0]) for r in rows if r[0] is not None]
+        if not vals and player_name:
+            rows = con.execute(
+                """
+                SELECT actual
+                FROM nba1q
+                WHERE lower(player) = ?
+                  AND lower(prop_type) = ?
+                  AND segment = ?
+                  AND actual IS NOT NULL
+                ORDER BY game_date DESC
+                LIMIT ?
+                """,
+                (str(player_name).strip().lower(), prop_key, str(segment).strip().upper(), int(n)),
+            ).fetchall()
+            vals = [float(r[0]) for r in rows if r[0] is not None]
+        return vals
+    except Exception:
+        return []
+
+
+def get_vals_nba1q(
+    con: sqlite3.Connection,
+    espn_id: str,
+    prop_norm: str,
+    n: int = 10,
+    player_name: str = "",
+) -> List[float]:
+    return get_vals_nba_period(
+        con,
+        espn_id,
+        prop_norm,
+        n=n,
+        player_name=player_name,
+        segment="1Q",
+    )
+
+
+def get_vals_nba1h(
+    con: sqlite3.Connection,
+    espn_id: str,
+    prop_norm: str,
+    n: int = 10,
+    player_name: str = "",
+) -> List[float]:
+    """
+    Build 1H history from quarter-level data:
+      1H actual = 1Q actual + 2Q actual (same game_date/player/prop_type)
+    Falls back to explicit segment='1H' rows when quarter-pair data is unavailable.
+    """
+    prop_key = _norm_nba1q_prop(prop_norm)
+    if not prop_key:
+        return []
+    try:
+        vals: List[float] = []
+        if str(espn_id or "").strip():
+            rows = con.execute(
+                """
+                SELECT game_date, SUM(actual) AS first_half_actual
+                FROM nba1q
+                WHERE espn_player_id = ?
+                  AND lower(prop_type) = ?
+                  AND segment IN ('1Q', '2Q')
+                  AND actual IS NOT NULL
+                GROUP BY game_date
+                HAVING COUNT(DISTINCT segment) >= 1
+                ORDER BY game_date DESC
+                LIMIT ?
+                """,
+                (str(espn_id).strip(), prop_key, int(n)),
+            ).fetchall()
+            vals = [float(r[1]) for r in rows if r[1] is not None]
+
+        if not vals and player_name:
+            rows = con.execute(
+                """
+                SELECT game_date, SUM(actual) AS first_half_actual
+                FROM nba1q
+                WHERE lower(player) = ?
+                  AND lower(prop_type) = ?
+                  AND segment IN ('1Q', '2Q')
+                  AND actual IS NOT NULL
+                GROUP BY game_date
+                HAVING COUNT(DISTINCT segment) >= 1
+                ORDER BY game_date DESC
+                LIMIT ?
+                """,
+                (str(player_name).strip().lower(), prop_key, int(n)),
+            ).fetchall()
+            vals = [float(r[1]) for r in rows if r[1] is not None]
+
+        # Backward compatibility if DB contains explicit 1H segment rows.
+        if not vals:
+            vals = get_vals_nba_period(
+                con,
+                espn_id,
+                prop_norm,
+                n=n,
+                player_name=player_name,
+                segment="1H",
+            )
+
+        return vals
+    except Exception:
+        return []
+
+
 def get_vals_cbb(con: sqlite3.Connection, espn_id: str,
                   prop_norm: str, n: int = 10) -> List[float]:
     expr = _resolve_prop(prop_norm, "cbb")
@@ -370,7 +570,7 @@ def fmt_num(x) -> str:
 # ── Main attach function ───────────────────────────────────────────────────────
 def attach_stats(
     slate: pd.DataFrame,
-    sport: str,                   # "nba" | "cbb" | "nhl" | "soccer"
+    sport: str,                   # "nba" | "nba1q" | "nba1h" | "cbb" | "nhl" | "soccer"
     con: sqlite3.Connection,
     id_col: str,                  # column with player ID (espn_id or player name for NHL)
     prop_col: str = "prop_norm",
@@ -389,13 +589,15 @@ def attach_stats(
     # Determine which get_fn to use
     _get_fns = {
         "nba":    get_vals_nba,
+        "nba1q":  get_vals_nba1q,
+        "nba1h":  get_vals_nba1h,
         "cbb":    get_vals_cbb,
         "nhl":    get_vals_nhl,
         "soccer": get_vals_soccer,
     }
     get_fn = _get_fns.get(sport)
     if get_fn is None:
-        raise ValueError(f"Unknown sport: {sport}. Must be one of: nba, cbb, nhl, soccer")
+        raise ValueError(f"Unknown sport: {sport}. Must be one of: nba, nba1q, nba1h, cbb, nhl, soccer")
 
     # Ensure output columns exist
     stat_cols = [f"stat_g{i}" for i in range(1, n + 1)]
@@ -406,7 +608,7 @@ def attach_stats(
         "line_hit_rate_over_ou_10", "line_hit_rate_under_ou_10",
         "stat_status",
     ]
-    if sport in ("nba", "cbb"):
+    if sport in ("nba", "nba1q", "nba1h", "cbb"):
         out_cols.append("min_last5_avg")
     if sport == "soccer":
         out_cols += ["avg_minutes", "avg_passes"]
@@ -429,8 +631,9 @@ def attach_stats(
         except Exception:
             line = np.nan
 
-        # Check prop is supported
-        if not _resolve_prop(prop, sport):
+        # Check prop is supported. Period slates (NBA1Q/NBA1H) share NBA prop taxonomy.
+        support_sport = "nba" if sport in ("nba1q", "nba1h") else sport
+        if not _resolve_prop(prop, support_sport):
             slate.at[idx, "stat_status"] = "UNSUPPORTED_PROP"
             status_counts["UNSUPPORTED_PROP"] += 1
             continue
@@ -450,7 +653,7 @@ def attach_stats(
             vals = get_vals_combo(get_fn, con, ids, prop, n)
         else:
             player_name = str(row.get("player", "")).strip()
-            if sport in ("nba", "cbb") and player_name:
+            if sport in ("nba", "nba1q", "nba1h", "cbb") and player_name:
                 vals = get_fn(con, raw_id, prop, n, player_name=player_name)
             else:
                 vals = get_fn(con, raw_id, prop, n)

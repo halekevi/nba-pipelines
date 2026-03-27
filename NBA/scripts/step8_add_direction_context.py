@@ -17,6 +17,7 @@ Run:
 from __future__ import annotations
 
 import argparse
+import sys
 import numpy as np
 import pandas as pd
 from openpyxl import Workbook
@@ -24,6 +25,11 @@ from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 import os
 from datetime import datetime
+
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
 
 def _norm_pick_type(x: str) -> str:
     t = (str(x) if x is not None else "").strip().lower()
@@ -95,9 +101,143 @@ def write_sheet(wb, name, data):
     ws.freeze_panes = 'A2'
     ws.auto_filter.ref = f"A1:{get_column_letter(len(headers))}1"
 
-def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
+def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
     df2 = df.copy()
     df2['game_time'] = pd.to_datetime(df2.get('start_time', ''), errors='coerce').dt.strftime('%-I:%M %p')
+    hint = (source_hint or "").lower()
+    is_period_slate = ("nba1q" in hint) or ("nba1h" in hint)
+
+    def _num(s: pd.Series) -> pd.Series:
+        return pd.to_numeric(s, errors='coerce')
+
+    def _blank_mask(s: pd.Series) -> pd.Series:
+        t = s.astype(str).str.strip().str.lower()
+        return s.isna() | t.isin(["", "nan", "none", "null", "nat"])
+
+    def _fill_from(col: str, *fallback_cols: str):
+        if col not in df2.columns:
+            df2[col] = np.nan
+        # Avoid dtype setitem issues when fallback source is string-typed.
+        df2[col] = df2[col].astype(object)
+        base = df2[col]
+        miss = _blank_mask(base)
+        for fc in fallback_cols:
+            if fc not in df2.columns:
+                continue
+            cand = df2[fc]
+            use = miss & (~_blank_mask(cand))
+            if use.any():
+                df2.loc[use, col] = cand[use]
+                miss = _blank_mask(df2[col])
+
+    # Intel/H2H fallback fills (best-effort) so clean output is less sparse.
+    _fill_from('intel_season_avg', 'stat_season_avg')
+    _fill_from('intel_l5_avg', 'stat_last5_avg')
+    _fill_from('intel_l10_avg', 'stat_last10_avg')
+    # For period slates (NBA1Q/NBA1H), avoid full-game proxy backfills.
+    if not is_period_slate:
+        _fill_from('intel_season_games', 'opp_games_played')
+        _fill_from('intel_opp_vs_league_pct', 'opp_vs_avg_pct')
+        _fill_from('h2h_games_vs_opp', 'h2h_games')
+        _fill_from('h2h_avg', 'h2h_last_stat')
+        _fill_from('h2h_last_stat', 'h2h_avg')
+
+    if 'h2h_games_vs_opp' not in df2.columns:
+        df2['h2h_games_vs_opp'] = np.nan
+    m = _blank_mask(df2['h2h_games_vs_opp'])
+    if (not is_period_slate) and m.any() and 'h2h_last_stat' in df2.columns:
+        last_num = _num(df2['h2h_last_stat'])
+        # If we have at least one H2H stat point, mark minimum sample as 1 game.
+        df2.loc[m & last_num.notna(), 'h2h_games_vs_opp'] = 1.0
+
+    if 'h2h_over_rate' not in df2.columns:
+        df2['h2h_over_rate'] = np.nan
+    else:
+        df2['h2h_over_rate'] = pd.to_numeric(df2['h2h_over_rate'], errors='coerce')
+    m = _blank_mask(df2['h2h_over_rate'])
+    if (not is_period_slate) and m.any() and {'h2h_last_stat', 'line'}.issubset(df2.columns):
+        hlast = _num(df2['h2h_last_stat'])
+        line = _num(df2['line'])
+        # One-game fallback proxy: 1.0 if last H2H beat line, else 0.0.
+        proxy = np.where(hlast.notna() & line.notna(), (hlast > line).astype(float), np.nan)
+        df2.loc[m, 'h2h_over_rate'] = proxy[m]
+
+    # Keep percent-like value in 0-1 range for consistency with existing export.
+    if 'h2h_over_rate' in df2.columns:
+        h2h_or = _num(df2['h2h_over_rate'])
+        df2['h2h_over_rate'] = np.where(h2h_or > 1.0, h2h_or / 100.0, h2h_or)
+
+    if 'intel_l5_vs_season' not in df2.columns:
+        df2['intel_l5_vs_season'] = np.nan
+    else:
+        df2['intel_l5_vs_season'] = pd.to_numeric(df2['intel_l5_vs_season'], errors='coerce')
+    m = _blank_mask(df2['intel_l5_vs_season'])
+    if m.any() and {'intel_l5_avg', 'intel_season_avg'}.issubset(df2.columns):
+        l5 = _num(df2['intel_l5_avg'])
+        ss = _num(df2['intel_season_avg'])
+        df2.loc[m, 'intel_l5_vs_season'] = (l5 - ss)[m]
+
+    if 'intel_season_hit_rate' not in df2.columns:
+        df2['intel_season_hit_rate'] = np.nan
+    else:
+        df2['intel_season_hit_rate'] = pd.to_numeric(df2['intel_season_hit_rate'], errors='coerce')
+    m = _blank_mask(df2['intel_season_hit_rate'])
+    if m.any() and (not is_period_slate):
+        for fc in ('line_hit_rate', 'line_hit_rate_over_ou_10', 'line_hit_rate_over_ou_5'):
+            if fc not in df2.columns:
+                continue
+            cand = _num(df2[fc])
+            # Convert 0-1 style rates to 0-100 for Intel Season Hit%
+            cand = np.where(cand <= 1.0, cand * 100.0, cand)
+            use = m & pd.notna(cand)
+            if np.any(use):
+                df2.loc[use, 'intel_season_hit_rate'] = cand[use]
+                m = _blank_mask(df2['intel_season_hit_rate'])
+
+    if 'intel_cushion' not in df2.columns:
+        df2['intel_cushion'] = np.nan
+    else:
+        df2['intel_cushion'] = pd.to_numeric(df2['intel_cushion'], errors='coerce')
+    m = _blank_mask(df2['intel_cushion'])
+    if m.any() and {'projection', 'line'}.issubset(df2.columns) and (not is_period_slate):
+        proj = _num(df2['projection'])
+        line = _num(df2['line'])
+        df2.loc[m, 'intel_cushion'] = (proj - line)[m]
+
+    if 'intel_cv_pct' not in df2.columns:
+        df2['intel_cv_pct'] = np.nan
+    else:
+        df2['intel_cv_pct'] = pd.to_numeric(df2['intel_cv_pct'], errors='coerce')
+    m = _blank_mask(df2['intel_cv_pct'])
+    gcols = [c for c in [f"stat_g{i}" for i in range(1, 11)] if c in df2.columns]
+    if m.any() and gcols:
+        g = df2[gcols].apply(pd.to_numeric, errors='coerce')
+        mean = g.mean(axis=1)
+        std = g.std(axis=1, ddof=0)
+        cv = np.where(mean.abs() > 1e-9, (std / mean.abs()) * 100.0, np.nan)
+        df2.loc[m, 'intel_cv_pct'] = cv[m]
+
+    # Period-safe L5 over/under + hit-rate rebuild from G1-G5.
+    if is_period_slate:
+        g5_cols = [c for c in ("stat_g1", "stat_g2", "stat_g3", "stat_g4", "stat_g5") if c in df2.columns]
+        if g5_cols and "line" in df2.columns:
+            g5 = df2[g5_cols].apply(pd.to_numeric, errors="coerce")
+            line = _num(df2["line"])
+            valid_n = g5.notna().sum(axis=1)
+            over_n = g5.gt(line, axis=0).sum(axis=1)
+            under_n = g5.lt(line, axis=0).sum(axis=1)
+            has_hist = valid_n > 0
+
+            for c in ("last5_over", "last5_under", "line_hit_rate_over_ou_5", "line_hit_rate_under_ou_5"):
+                if c not in df2.columns:
+                    df2[c] = np.nan
+                else:
+                    df2[c] = pd.to_numeric(df2[c], errors="coerce").astype(object)
+
+            df2.loc[has_hist, "last5_over"] = over_n[has_hist]
+            df2.loc[has_hist, "last5_under"] = under_n[has_hist]
+            df2.loc[has_hist, "line_hit_rate_over_ou_5"] = (over_n[has_hist] / valid_n[has_hist]).round(4)
+            df2.loc[has_hist, "line_hit_rate_under_ou_5"] = (under_n[has_hist] / valid_n[has_hist]).round(4)
 
     keep = [
         'tier', 'rank_score',
@@ -125,8 +265,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
         'b2b_flag', 'days_rest', 'game_total', 'spread',
         'game_script_mult', 'game_script_note',
     ]
-    # only keep cols that exist
-    keep = [c for c in keep if c in df2.columns]
+    # Force full schema so NBA1Q/NBA1H clean outputs match NBA Step 8 columns.
+    for c in keep:
+        if c not in df2.columns:
+            df2[c] = np.nan
     clean = df2[keep].copy()
 
     for col in ['rank_score', 'edge', 'projection', 'ml_prob', 'line_hit_rate_over_ou_5']:
@@ -211,6 +353,39 @@ def main() -> None:
 
     out = df.copy()
 
+    # Backfill opponent labels when opp_team is missing.
+    if "opp_team" in out.columns and "team" in out.columns:
+        opp_blank = out["opp_team"].astype(str).str.strip().isin(["", "nan", "None", "null"])
+        if opp_blank.any():
+            if "pp_game_id" in out.columns:
+                game_team_map = (
+                    out.loc[:, ["pp_game_id", "team"]]
+                    .astype(str)
+                    .assign(team=lambda x: x["team"].str.strip(), pp_game_id=lambda x: x["pp_game_id"].str.strip())
+                    .groupby("pp_game_id")["team"]
+                    .apply(lambda s: sorted({t for t in s.tolist() if t and t.lower() not in ("nan", "none", "null")}))
+                    .to_dict()
+                )
+                inferred = []
+                for _, r in out.loc[opp_blank, ["pp_game_id", "team"]].iterrows():
+                    gid = str(r.get("pp_game_id", "")).strip()
+                    team = str(r.get("team", "")).strip()
+                    teams = game_team_map.get(gid, [])
+                    if len(teams) == 2 and team in teams:
+                        inferred.append(teams[0] if teams[1] == team else teams[1])
+                    else:
+                        inferred.append("")
+                out.loc[opp_blank, "opp_team"] = inferred
+
+            still_blank = out["opp_team"].astype(str).str.strip().isin(["", "nan", "None", "null"])
+            # Fallback for combo rows where team carries matchup text like "DET/NOP".
+            if still_blank.any():
+                tm = out.loc[still_blank, "team"].astype(str).str.strip()
+                has_pair = tm.str.contains("/", regex=False)
+                out.loc[still_blank[still_blank].index[has_pair], "opp_team"] = tm[has_pair]
+            still_blank = out["opp_team"].astype(str).str.strip().isin(["", "nan", "None", "null"])
+            out.loc[still_blank, "opp_team"] = "UNKNOWN_OPP"
+
     # Keep only rows for target slate date when start_time is available.
     # This prevents stale historical slates from leaking into today's output.
     if "start_time" in out.columns:
@@ -271,7 +446,7 @@ def main() -> None:
 
     # Save clean XLSX
     xlsx_path = args.xlsx if args.xlsx else args.output.replace(".csv", "_clean.xlsx")
-    build_clean_xlsx(out, xlsx_path)
+    build_clean_xlsx(out, xlsx_path, source_hint=args.input)
 
 if __name__ == "__main__":
     main()

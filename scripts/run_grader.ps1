@@ -9,11 +9,13 @@ $TicketsFile = Join-Path $DateDir "combined_slate_tickets_$Date.xlsx"
 $NBAActuals  = Join-Path $DateDir "actuals_nba_$Date.csv"
 $NBA1HActuals = Join-Path $DateDir "actuals_nba1h_$Date.csv"
 $NBA1QActuals = Join-Path $DateDir "actuals_nba1q_$Date.csv"
+$NBA2QActuals = Join-Path $DateDir "actuals_nba2q_$Date.csv"
 $CBBActuals  = Join-Path $DateDir "actuals_cbb_$Date.csv"
 $NHLActuals  = Join-Path $DateDir "actuals_nhl_$Date.csv"
 $SoccerActuals  = Join-Path $DateDir "actuals_soccer_$Date.csv"
 $FetchActualsScript = Join-Path $Root "scripts\fetch_actuals.py"
 $FetchNBAPeriodActualsScript = Join-Path $Root "scripts\fetch_nba_period_actuals.py"
+$BuildNBA1QHistoryScript = Join-Path $Root "scripts\build_nba1q_history_db.py"
 $SlateGraderScript = Join-Path $Root "scripts\grading\slate_grader.py"
 $CBBFullGraderScript = Join-Path $Root "scripts\grading\grade_cbb_full_slate.py"
 $NHLAdvancedGraderScript = Join-Path $Root "scripts\nhl_grader_advanced.py"
@@ -151,6 +153,18 @@ if (Test-Path $FetchActualsScript) {
             "--segment", "1Q",
             "--output", $NBA1QActuals
         )
+        Run-Py "Fetch NBA 2Q Actuals" $Root $FetchNBAPeriodActualsScript @(
+            "--date", $Date,
+            "--segment", "2Q",
+            "--output", $NBA2QActuals
+        )
+        if (Test-Path $BuildNBA1QHistoryScript) {
+            Write-Host "[NBA1Q DB] Appending Q1/Q2 actuals to proporacle_ref.db..." -ForegroundColor Yellow
+            Run-Py "Build NBA1Q History DB" $Root $BuildNBA1QHistoryScript @()
+        }
+        else {
+            Write-Host "[NBA1Q DB] Script not found: $BuildNBA1QHistoryScript" -ForegroundColor Yellow
+        }
     }
     else {
         Write-Host "NBA period actuals script not found: $FetchNBAPeriodActualsScript" -ForegroundColor Yellow
@@ -417,5 +431,43 @@ else {
 
 Write-Host ""
 Write-Host "DONE." -ForegroundColor Green
+
+# =============================
+# Auto-retrain trigger (weekly)
+# =============================
+$TrainingLog = Join-Path $Root "models\\training_log.csv"
+$ShouldRetrain = $false
+if (-not (Test-Path $TrainingLog)) {
+    $ShouldRetrain = $true
+}
+else {
+    try {
+        $last = (Import-Csv $TrainingLog | Select-Object -Last 1)
+        if ($null -eq $last -or -not $last.timestamp) {
+            $ShouldRetrain = $true
+        }
+        else {
+            $lastTs = [datetime]$last.timestamp
+            $days = ((Get-Date) - $lastTs).TotalDays
+            if ($days -ge 7) { $ShouldRetrain = $true }
+        }
+    }
+    catch {
+        $ShouldRetrain = $true
+    }
+}
+
+if ($ShouldRetrain) {
+    Write-Host "`n[AUTO-RETRAIN] Triggered (7+ days since last training, or no log)." -ForegroundColor Cyan
+    $trainScripts = Get-ChildItem -Path (Join-Path $Root "scripts") -Filter "train_prop_model_*.py" | Sort-Object Name
+    foreach ($s in $trainScripts) {
+        Write-Host "[AUTO-RETRAIN] Running $($s.Name)..." -ForegroundColor Cyan
+        Run-Py "Auto-Retrain $($s.BaseName)" $Root $s.FullName @()
+    }
+    Write-Host "[AUTO-RETRAIN] Complete." -ForegroundColor Green
+}
+else {
+    Write-Host "`n[AUTO-RETRAIN] Skipping (trained within last 7 days)." -ForegroundColor DarkGray
+}
 
 
