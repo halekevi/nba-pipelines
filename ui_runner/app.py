@@ -29,7 +29,7 @@ from urllib.parse import quote
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Any
-from datetime import datetime
+from datetime import date, datetime, timedelta
 
 from flask import Flask, jsonify, render_template, request, send_from_directory, abort, make_response
 
@@ -149,6 +149,10 @@ _json_file_cache: dict[str, dict[str, Any]] = {}
 # Set in Railway env vars:
 #   TICKETS_JSON_URL = https://raw.githubusercontent.com/halekevi/PropORACLE/main/ui_runner/templates/tickets_latest.json
 #   SLATE_JSON_URL   = https://raw.githubusercontent.com/halekevi/PropORACLE/main/ui_runner/templates/slate_latest.json
+#   PIPELINE_JSON_TTL_SEC = 90   # optional; lower = pick up JSON URL changes sooner (default 300)
+#
+# On Railway, the Docker image often has OLD .xlsx mtimes while your repo JSON is current. Set SLATE_JSON_URL
+# (and TICKETS_JSON_URL) to raw GitHub URLs so the API + status cards use generated_at from JSON instead of Excel.
 _TICKETS_JSON_URL = os.environ.get("TICKETS_JSON_URL", "").strip()
 _SLATE_JSON_URL   = os.environ.get("SLATE_JSON_URL", "").strip()
 
@@ -158,9 +162,14 @@ if _TICKETS_JSON_URL:
 if _SLATE_JSON_URL:
     _DATA_FILE_URL_MAP["slate_latest.json"] = _SLATE_JSON_URL
 
+# Shorter TTL on Railway (e.g. 60–120) so SLATE_JSON_URL / TICKETS_JSON_URL pick up pushes quickly.
+_PIPELINE_JSON_TTL = float(os.environ.get("PIPELINE_JSON_TTL_SEC", "300"))
 
-def read_json_cached(path: Path, ttl: float = 300.0) -> Any:
+
+def read_json_cached(path: Path, ttl: float | None = None) -> Any:
     """Load JSON from disk (or remote URL) with an in-process TTL."""
+    if ttl is None:
+        ttl = _PIPELINE_JSON_TTL
     key = str(path.resolve())
     now = time.time()
     entry = _json_file_cache.get(key)
@@ -175,7 +184,8 @@ def read_json_cached(path: Path, ttl: float = 300.0) -> Any:
             _json_file_cache[key] = {"data": data, "ts": now}
             return data
         except Exception:
-            pass  # fall through to disk read
+            if not path.exists():
+                raise
     data = json.loads(path.read_text(encoding="utf-8-sig"))
     _json_file_cache[key] = {"data": data, "ts": now}
     return data
@@ -403,33 +413,81 @@ def _file_info(path: Path) -> dict:
     }
 
 
+def _mtime_ts(mod_str: str | None) -> float:
+    if not mod_str or len(mod_str) < 19:
+        return 0.0
+    try:
+        return datetime.strptime(mod_str[:19], "%Y-%m-%d %H:%M:%S").timestamp()
+    except ValueError:
+        return 0.0
+
+
+def _payload_timestamp_meta(payload: dict | None) -> tuple[float | None, str | None]:
+    """Parse generated_at / date from slate or tickets JSON (authoritative build time on Railway)."""
+    if not isinstance(payload, dict):
+        return None, None
+    ga = (payload.get("generated_at") or "").strip()
+    if ga:
+        core = ga.replace(" UTC", "").strip()
+        prefix = core[:19].replace("T", " ")
+        try:
+            dt = datetime.strptime(prefix, "%Y-%m-%d %H:%M:%S")
+            return dt.timestamp(), dt.strftime("%Y-%m-%d %H:%M:%S")
+        except ValueError:
+            pass
+    ds = (payload.get("date") or "").strip()[:10]
+    if len(ds) == 10:
+        try:
+            dt = datetime.strptime(ds, "%Y-%m-%d")
+            return dt.timestamp(), dt.strftime("%Y-%m-%d %H:%M:%S")
+        except ValueError:
+            pass
+    return None, None
+
+
 def _slate_counts() -> tuple[dict[str, int], dict]:
     """
-    Return ({sport_key: row_count}, file_info_for_slate_latest_json).
+    Return ({sport_key: row_count}, file_info for slate_latest.json on disk, if present).
+    Counts load from disk or SLATE_JSON_URL even when the template file is absent (Railway).
     """
     path = TEMPLATES_DIR / "slate_latest.json"
-    info = _file_info(path)
-    if not info.get("exists"):
-        return {}, info
+    disk_info = _file_info(path)
     try:
         payload = read_json_cached(path)
-        sports = payload.get("sports") or {}
-        counts = {str(k).lower(): len(v or []) for k, v in sports.items()}
-        return counts, info
     except Exception:
-        return {}, info
+        return {}, disk_info
+    sports = payload.get("sports") or {}
+    counts = {str(k).lower(): len(v or []) for k, v in sports.items()}
+    return counts, disk_info
 
 
-def _file_info_with_slate_fallback(path: Path, sport_key: str, counts: dict[str, int], fallback_info: dict) -> dict:
+def _sport_slate_status(
+    path: Path,
+    sport_key: str,
+    counts: dict[str, int],
+    slate_disk_info: dict,
+    json_ts: float | None,
+    json_disp: str | None,
+) -> dict:
+    """
+    Prefer slate_latest.json generated_at over baked-in Excel mtimes when JSON is newer
+    (Docker/Railway images ship stale .xlsx from last deploy).
+    """
+    key = sport_key.lower()
+    cnt = int(counts.get(key, 0))
+    if key == "cbb":
+        cnt += int(counts.get("wcbb", 0))
+
     direct = _file_info(path)
     if direct.get("exists"):
+        if json_ts is not None and json_disp and json_ts > _mtime_ts(direct.get("modified")):
+            return {**direct, "modified": json_disp}
         return direct
-    count = int(counts.get(sport_key.lower(), 0))
-    if count > 0:
+    if cnt > 0:
         return {
             "exists": True,
-            "modified": fallback_info.get("modified"),
-            "size_kb": fallback_info.get("size_kb"),
+            "modified": json_disp or slate_disk_info.get("modified"),
+            "size_kb": slate_disk_info.get("size_kb"),
         }
     return direct
 
@@ -573,49 +631,82 @@ def serve_ticket_eval_report(date: str):
 # ──────────────────────────────────────────────────────────────────────────────
 @app.get("/api/pipeline/status")
 def api_pipeline_status():
-    today = datetime.now().strftime("%Y-%m-%d")
-    slate_counts, slate_json_info = _slate_counts()
-    combined_path = next(
-        iter(sorted(
-            list(BASE_DIR.glob(f"combined_slate_tickets_{today}*.xlsx")) +
-            list((BASE_DIR / "outputs" / today).glob(f"combined_slate_tickets_{today}*.xlsx")),
-            reverse=True
-        )),
-        None
+    slate_counts, slate_disk_info = _slate_counts()
+
+    slate_payload: dict | None = None
+    tickets_payload: dict | None = None
+    try:
+        slate_payload = read_json_cached(TEMPLATES_DIR / "slate_latest.json")
+    except Exception:
+        pass
+    try:
+        tickets_payload = read_json_cached(TEMPLATES_DIR / "tickets_latest.json")
+    except Exception:
+        pass
+
+    slate_js_ts, slate_js_disp = _payload_timestamp_meta(slate_payload)
+    tik_js_ts, tik_js_disp = _payload_timestamp_meta(tickets_payload)
+
+    combined_candidates: list[Path] = []
+    for i in range(7):
+        d = (date.today() - timedelta(days=i)).strftime("%Y-%m-%d")
+        out_d = BASE_DIR / "outputs" / d
+        combined_candidates.extend(BASE_DIR.glob(f"combined_slate_tickets_{d}*.xlsx"))
+        combined_candidates.extend(BASE_DIR.glob(f"combined_slate_tickets_{d}*.json"))
+        if out_d.is_dir():
+            combined_candidates.extend(out_d.glob(f"combined_slate_tickets_{d}*.xlsx"))
+            combined_candidates.extend(out_d.glob(f"combined_slate_tickets_{d}*.json"))
+    combined_path = (
+        max(combined_candidates, key=lambda p: p.stat().st_mtime) if combined_candidates else None
     )
+    combined_slate = _file_info(combined_path) if combined_path else {"exists": False}
+    if combined_slate.get("exists"):
+        if tik_js_ts and tik_js_disp and tik_js_ts > _mtime_ts(combined_slate.get("modified")):
+            combined_slate = {**combined_slate, "modified": tik_js_disp}
+    elif tickets_payload and (tickets_payload.get("groups") or []):
+        if tik_js_disp:
+            approx_kb = round(len(json.dumps(tickets_payload)) / 1024, 1)
+            combined_slate = {
+                "exists": True,
+                "modified": tik_js_disp,
+                "size_kb": approx_kb,
+            }
+
     return jsonify({
         "nba": {
             "run_complete_flag": NBA_FLAG.exists(),
-            "slate":   _file_info_with_slate_fallback(NBA_SLATE, "nba", slate_counts, slate_json_info),
+            "slate":   _sport_slate_status(NBA_SLATE, "nba", slate_counts, slate_disk_info, slate_js_ts, slate_js_disp),
             "tickets": _file_info(NBA_TICKETS),
         },
         "nba1h": {
-            "slate":   _file_info_with_slate_fallback(NBA1H_SLATE, "nba1h", slate_counts, slate_json_info),
+            "slate":   _sport_slate_status(NBA1H_SLATE, "nba1h", slate_counts, slate_disk_info, slate_js_ts, slate_js_disp),
             "tickets": _file_info(NBA1H_TICKETS),
         },
         "nba1q": {
-            "slate":   _file_info_with_slate_fallback(NBA1Q_SLATE, "nba1q", slate_counts, slate_json_info),
+            "slate":   _sport_slate_status(NBA1Q_SLATE, "nba1q", slate_counts, slate_disk_info, slate_js_ts, slate_js_disp),
             "tickets": _file_info(NBA1Q_TICKETS),
         },
         "cbb": {
-            "slate": _file_info_with_slate_fallback(CBB_SLATE, "cbb", slate_counts, slate_json_info),
+            "slate": _sport_slate_status(CBB_SLATE, "cbb", slate_counts, slate_disk_info, slate_js_ts, slate_js_disp),
         },
         "nhl": {
-            "slate":   _file_info_with_slate_fallback(NHL_SLATE, "nhl", slate_counts, slate_json_info),
+            "slate":   _sport_slate_status(NHL_SLATE, "nhl", slate_counts, slate_disk_info, slate_js_ts, slate_js_disp),
             "tickets": _file_info(NHL_TICKETS),
         },
         "soccer": {
-            "slate":   _file_info_with_slate_fallback(SOCCER_SLATE, "soccer", slate_counts, slate_json_info),
+            "slate":   _sport_slate_status(SOCCER_SLATE, "soccer", slate_counts, slate_disk_info, slate_js_ts, slate_js_disp),
             "tickets": _file_info(SOCCER_TICKETS),
         },
         "mlb": {
-            "slate":   _file_info_with_slate_fallback(MLB_SLATE, "mlb", slate_counts, slate_json_info),
+            "slate":   _sport_slate_status(MLB_SLATE, "mlb", slate_counts, slate_disk_info, slate_js_ts, slate_js_disp),
             "tickets": _file_info(MLB_TICKETS),
         },
         "combined": {
-            "slate": _file_info(combined_path) if combined_path else {"exists": False},
+            "slate": combined_slate,
         },
         "as_of": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "slate_json_source": "remote" if _SLATE_JSON_URL else "disk",
+        "tickets_json_source": "remote" if _TICKETS_JSON_URL else "disk",
     })
 
 

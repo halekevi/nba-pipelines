@@ -868,6 +868,7 @@ body::before{
         <div class="hero-meta">
           <span>Real-time prop board</span>
           <span>Multi-sport intelligence</span>
+          <span id="slate-date" title="Slate date (updates from API when loaded)">—</span>
           <span id="clock">--:--:--</span>
         </div>
       </div>
@@ -1471,6 +1472,22 @@ body::before{
 </div>
 
 <script>
+// ── Slate date (local calendar; API overwrites with JSON `date` when present) ──
+function formatSlateDateDisplay(isoYmd) {
+  let dt;
+  if (isoYmd && typeof isoYmd === "string" && isoYmd.length >= 10) {
+    const [y, m, d] = isoYmd.slice(0, 10).split("-").map(Number);
+    dt = new Date(y, m - 1, d);
+  } else {
+    dt = new Date();
+  }
+  return dt.toLocaleDateString("en-US", { month: "numeric", day: "numeric", year: "numeric" });
+}
+(function initSlateDatePill() {
+  const el = document.getElementById("slate-date");
+  if (el) el.textContent = formatSlateDateDisplay();
+})();
+
 // ── Clock ──────────────────────────────────────────────────
 setInterval(()=>{ document.getElementById("clock").textContent = new Date().toLocaleTimeString(); }, 1000);
 document.getElementById("clock").textContent = new Date().toLocaleTimeString();
@@ -1516,7 +1533,10 @@ async function loadSlateData() {
           });
         }
       }
-      if (d.date) { const el = document.getElementById("slate-date"); if (el) el.textContent = d.date; }
+      if (d.date) {
+        const el = document.getElementById("slate-date");
+        if (el) el.textContent = formatSlateDateDisplay(d.date);
+      }
     } catch (err) {
       console.warn("loadSlateData failed:", err);
     }
@@ -1537,12 +1557,13 @@ function applyStatusCard(id, info, label) {
     card.classList.add("loading"); badge.classList.add("loading");
     val.textContent="Not Yet Run"; sub.textContent="Run pipeline to generate"; badge.textContent="PENDING"; return;
   }
-  const today=new Date().toISOString().slice(0,10);
+  const _d=new Date();
+  const today=`${_d.getFullYear()}-${String(_d.getMonth()+1).padStart(2,'0')}-${String(_d.getDate()).padStart(2,'0')}`;
   const fresh=info.modified&&info.modified.startsWith(today);
   const cls=fresh?"fresh":"stale";
   card.classList.add(cls); badge.classList.add(cls);
-  val.textContent=label||info.modified;
-  sub.textContent=`${info.modified}  ·  ${info.size_kb} KB`;
+  val.textContent=info.modified||'—';
+  sub.textContent=`${label ? label + '  ·  ' : ''}${info.size_kb} KB`;
   badge.textContent=fresh?"FRESH":"STALE";
 }
 
@@ -1930,8 +1951,13 @@ async function buildSlateDataFromAllSlate() {
       const d = await res.json();
       if (d.sports) {
         SPORTS.forEach(s => {
-          if (d.sports[s] && d.sports[s].length) {
-            SLATE_DATA[s] = d.sports[s]; // always overwrite with full slate
+          if (s === 'cbb') {
+            const men = d.sports.cbb || [];
+            const wom = d.sports.wcbb || [];
+            const merged = [...men, ...wom];
+            if (merged.length) SLATE_DATA[s] = merged;
+          } else if (d.sports[s] && d.sports[s].length) {
+            SLATE_DATA[s] = d.sports[s];
           }
         });
       }
@@ -1942,7 +1968,11 @@ async function buildSlateDataFromAllSlate() {
   SPORTS.forEach(s => {
     if (SLATE_DATA[s] && SLATE_DATA[s].length) return;
     SLATE_DATA[s] = ALL_SLATE
-      .filter(p => (p.sport || '').toLowerCase() === s)
+      .filter(p => {
+        const sp = (p.sport || '').toLowerCase();
+        if (s === 'cbb') return sp === 'cbb' || sp === 'wcbb';
+        return sp === s;
+      })
       .map(p => ({
         tier:      null,
         rank_score: p.edge != null ? Math.abs(p.edge) : null,
@@ -2153,6 +2183,21 @@ async function loadSlateExcel() {
             if (!cur.includes('props')) sub.textContent = (cur ? cur + '  ·  ' : '') + `${n} props`;
           }
         });
+        // Match slate-sport behavior: one CBB explorer = men's + women's sheets
+        const cbbR = SLATE_DATA.cbb, wcbbR = SLATE_DATA.wcbb;
+        const cbbC = SLATE_COLS.cbb, wcbbC = SLATE_COLS.wcbb;
+        if (cbbR && wcbbR && cbbC && wcbbC && cbbC.length === wcbbC.length
+            && cbbC.every((c, i) => c === wcbbC[i])) {
+          SLATE_DATA.cbb = cbbR.concat(wcbbR);
+          const subCbb = document.getElementById('sc-cbb-sub');
+          if (subCbb) {
+            const n = SLATE_DATA.cbb.length;
+            const cur = subCbb.textContent || '';
+            subCbb.textContent = cur.includes('props')
+              ? cur.replace(/\d+ props/, `${n} props`)
+              : (cur ? cur + '  ·  ' : '') + `${n} props`;
+          }
+        }
         scheduleRenderSlateTable('combined');
         if (openSlatePanel && SLATE_COLS[openSlatePanel] && openSlatePanel !== 'combined') {
           scheduleRenderSlateTable(openSlatePanel);
