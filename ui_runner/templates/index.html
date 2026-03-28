@@ -624,6 +624,7 @@ body{
   border-color:rgba(75,111,150,0.30) !important;
   color:var(--accent) !important;
 }
+[data-theme="light"] .slate-time-cell{color:rgba(18,22,32,.92)!important;}
 /* Date/tabs bars */
 [data-theme="light"] .date-bar,
 [data-theme="light"] .tabs-bar {
@@ -1061,8 +1062,12 @@ body::before{
   .tier-D{background:rgba(255,127,159,.1);color:var(--red);border:1px solid rgba(255,127,159,.2);}
   .dir-over{color:var(--green);font-weight:700;}
   .dir-under{color:var(--amber);font-weight:700;}
+  .slate-pick-type-cell{font-family:'Share Tech Mono',monospace;font-size:14px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
   .pick-goblin-cell{color:var(--purple);}
   .pick-standard-cell{color:var(--cyan);}
+  .pick-demon-cell{color:var(--amber);}
+  .slate-rank-cell{color:var(--accent);font-family:'Share Tech Mono',monospace;font-weight:700;}
+  .slate-time-cell{color:rgba(255,255,255,.95)!important;font-family:'Share Tech Mono',monospace;font-size:14px;font-weight:600;letter-spacing:.02em;}
   .edge-pos{color:var(--green);}
   .edge-neg{color:var(--amber);}
   @media(max-width:768px){.slate-panel-header-row{grid-template-columns:repeat(2,1fr)!important;}}
@@ -2194,26 +2199,27 @@ function renderSlateTable(sport) {
     const edgeStr = r.edge != null ? (r.edge >= 0 ? '+' : '') + r.edge.toFixed(2) : '—';
     const hitStr  = r.hit_rate != null ? Math.round(r.hit_rate * 100) + '%' : '—';
     const tierCls = `tier-${r.tier || 'D'}`;
-    const pickCls = r.pick_type === 'Goblin' ? 'pick-goblin-cell' : 'pick-standard-cell';
+    const pickNorm = String(r.pick_type || '').trim().toLowerCase();
+    const pickCls = pickNorm === 'goblin' ? 'pick-goblin-cell' : pickNorm === 'demon' ? 'pick-demon-cell' : 'pick-standard-cell';
     const l5o = r.l5_over  != null ? r.l5_over  : '—';
     const l5u = r.l5_under != null ? r.l5_under : '—';
     const rankStr = r.rank_score != null ? r.rank_score.toFixed(2) : '—';
     const timeStr = (r.game_time || '').replace('03/13 ','') || '—';
     return `<tr>
       <td><span class="tier-badge ${tierCls}">${r.tier || '?'}</span></td>
-      <td style="color:var(--accent);font-family:'Share Tech Mono',monospace;">${rankStr}</td>
+      <td class="slate-rank-cell">${rankStr}</td>
       <td style="color:var(--text);font-weight:600;max-width:140px;overflow:hidden;text-overflow:ellipsis;">${r.player || '—'}</td>
       <td style="color:var(--muted);">${r.team || '—'}</td>
       <td style="color:var(--muted);">${r.opp  || '—'}</td>
       <td style="color:var(--text);">${r.prop || '—'}</td>
-      <td class="${pickCls}" style="font-family:'Share Tech Mono',monospace;font-size:10px;">${r.pick_type || '—'}</td>
+      <td class="slate-pick-type-cell ${pickCls}">${r.pick_type || '—'}</td>
       <td style="font-family:'Share Tech Mono',monospace;">${r.line != null ? r.line : '—'}</td>
       <td class="${dirCls}">${dirSym} ${r.dir || '—'}</td>
       <td class="${edgeCls}" style="font-family:'Share Tech Mono',monospace;font-weight:700;">${edgeStr}</td>
       <td style="color:var(--cyan);font-family:'Share Tech Mono',monospace;">${hitStr}</td>
       <td style="color:var(--green);font-family:'Share Tech Mono',monospace;">${l5o}</td>
       <td style="color:var(--amber);font-family:'Share Tech Mono',monospace;">${l5u}</td>
-      <td style="color:var(--muted2);font-size:10px;">${timeStr}</td>
+      <td class="slate-time-cell">${timeStr}</td>
     </tr>`;
   };
 
@@ -2329,6 +2335,8 @@ function renderSlateTableDynamic(sport) {
   const ci = name => cols.indexOf(name);
   const dirIdx    = ci('Dir') >= 0 ? ci('Dir') : ci('Direction');
   const pickIdx   = ci('Pick Type') >= 0 ? ci('Pick Type') : ci('Pick');
+  const rankIdx   = ci('Rank Score') >= 0 ? ci('Rank Score') : ci('Rank');
+  const timeIdx   = ci('Game Time') >= 0 ? ci('Game Time') : ci('Time');
   const playerIdx = ci('Player');
   const propIdx   = ci('Prop') >= 0 ? ci('Prop') : ci('Stat');
   const teamIdx   = ci('Team');
@@ -2375,6 +2383,13 @@ function renderSlateTableDynamic(sport) {
     return v || '—';
   };
 
+  const pickTypeCls = (raw) => {
+    const pl = String(raw || '').trim().toLowerCase();
+    if (pl === 'goblin') return 'pick-goblin-cell';
+    if (pl === 'demon') return 'pick-demon-cell';
+    return 'pick-standard-cell';
+  };
+
   const rowHtml = (row) => {
     const cells = cols.map((c, i) => {
       const val = row[i];
@@ -2386,6 +2401,12 @@ function renderSlateTableDynamic(sport) {
         const disp = !isNaN(n) ? (n >= 0 ? '+' : '') + n.toFixed(2) : vStr;
         return `<td class="${cls}" style="font-family:'Share Tech Mono',monospace;font-weight:700;">${disp}</td>`;
       }
+      if (pickIdx >= 0 && i === pickIdx) {
+        const pc = pickTypeCls(val);
+        return `<td class="slate-pick-type-cell ${pc}">${vStr}</td>`;
+      }
+      if (rankIdx >= 0 && i === rankIdx) return `<td class="slate-rank-cell">${vStr}</td>`;
+      if (timeIdx >= 0 && i === timeIdx) return `<td class="slate-time-cell">${vStr}</td>`;
       if (i === playerIdx) return `<td style="font-weight:600;max-width:140px;overflow:hidden;text-overflow:ellipsis;">${vStr}</td>`;
       return `<td>${vStr}</td>`;
     }).join('');
