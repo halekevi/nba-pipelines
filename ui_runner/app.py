@@ -73,7 +73,7 @@ app = Flask(
 )
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-03-28-slate-cards-3"
+_UI_BUILD_ID = "2026-03-28-railway-json-bust-4"
 
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
@@ -153,7 +153,8 @@ _json_file_cache: dict[str, dict[str, Any]] = {}
 # Optional on Railway — auto-defaults apply when RAILWAY_* is set (see below).
 #   TICKETS_JSON_URL = https://raw.githubusercontent.com/halekevi/PropORACLE/main/ui_runner/templates/tickets_latest.json
 #   SLATE_JSON_URL   = https://raw.githubusercontent.com/halekevi/PropORACLE/main/ui_runner/templates/slate_latest.json
-#   PIPELINE_JSON_TTL_SEC = 90   # optional; on Railway default is 120 if unset
+#   PIPELINE_JSON_TTL_SEC = 45   # optional; on Railway default is 60 if unset (fresher slates)
+#   GITHUB_JSON_FETCH_BUST = 0   # set to 0 to disable ?nocache= on raw GitHub fetches (not recommended)
 #   DISABLE_AUTO_GITHUB_JSON = 1  # opt out of Railway → GitHub raw auto URLs
 #   PROPORACLE_RAW_JSON_BASE = https://raw.githubusercontent.com/USER/REPO/BRANCH/ui_runner/templates
 #
@@ -196,9 +197,21 @@ def _template_json_available(filename: str) -> bool:
 
 
 if _running_on_railway() and "PIPELINE_JSON_TTL_SEC" not in os.environ:
-    _PIPELINE_JSON_TTL = 120.0
+    _PIPELINE_JSON_TTL = 60.0
 else:
     _PIPELINE_JSON_TTL = float(os.environ.get("PIPELINE_JSON_TTL_SEC", "300"))
+
+
+def _github_raw_fetch_url(url: str) -> str:
+    """
+    raw.githubusercontent.com is often cached at the edge; client Cache-Control is ignored.
+    Append a unique query param on each HTTP fetch so new pipeline commits are visible quickly.
+    """
+    if os.environ.get("GITHUB_JSON_FETCH_BUST", "1").strip() in ("0", "false", "no"):
+        return url
+    sep = "&" if "?" in url else "?"
+    return f"{url}{sep}nocache={int(time.time() * 1000)}"
+
 
 def read_json_cached(path: Path, ttl: float | None = None) -> Any:
     """Load JSON from disk (or remote URL) with an in-process TTL."""
@@ -212,8 +225,15 @@ def read_json_cached(path: Path, ttl: float | None = None) -> Any:
     url = _DATA_FILE_URL_MAP.get(path.name)
     if url:
         try:
-            req = urllib.request.Request(url, headers={"Cache-Control": "no-cache"})
-            with urllib.request.urlopen(req, timeout=10) as resp:
+            fetch_url = _github_raw_fetch_url(url)
+            req = urllib.request.Request(
+                fetch_url,
+                headers={
+                    "Cache-Control": "no-cache",
+                    "Pragma": "no-cache",
+                },
+            )
+            with urllib.request.urlopen(req, timeout=25) as resp:
                 data = json.loads(resp.read().decode("utf-8"))
             _json_file_cache[key] = {"data": data, "ts": now}
             return data
