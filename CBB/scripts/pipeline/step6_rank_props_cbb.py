@@ -979,8 +979,14 @@ def main():
     out["usage_bonus"] = usage_bonus
     raw_score = raw_score + usage_bonus
 
-    # Zero out ineligible rows
-    score = raw_score.where(elig_mask, other=np.nan)
+    # Direction-aware edge gate (same idea as NBA step7): rank_score only when the
+    # play-side adjusted edge is positive. Raw edge_adj = proj - line is negative for
+    # good UNDERs; edge_adj_dr already flips sign for UNDER.
+    _eadr = pd.to_numeric(out["edge_adj_dr"], errors="coerce").fillna(-999.0)
+    _is_dem = pick_type.apply(lambda x: _norm_pick_type(x) == "Demon")
+    _edge_ok = (_eadr > 0.0) | _is_dem
+    # Zero out ineligible rows or non-favorable-edge rows (Demon exempt — scored on other signals)
+    score = raw_score.where(elig_mask & _edge_ok, other=np.nan)
 
     out["rank_score"] = score
     out["ml_prob"], out["ml_edge"], out["final_score"] = _apply_ml_blend(out, out["rank_score"], args.input)

@@ -2,6 +2,9 @@
 Step 7 — Rank + Tier NHL Props
 Scores each prop using a composite model and assigns A/B/C/D tier.
 
+Goblin audit drop uses play-side edge: UNDER rows flip raw edge so a good under
+is not treated as neg-edge solely because projection - line < 0.
+
 Scoring model:
   - composite_hit_rate (primary signal, weighted by stat stability)
   - defense tier (opponent difficulty)
@@ -780,9 +783,18 @@ def main():
     active  = []
     dropped = []
     for row in scored:
-        pt    = _norm_pt(row.get("pick_type", ""))
-        edge  = safe_float(row.get("edge", 0))
-        if pt == "Goblin" and edge < 0:
+        pt = _norm_pt(row.get("pick_type", ""))
+        edge = safe_float(row.get("edge", 0))
+        # Goblin lines are usually easy OVERs, but if the sheet recommends UNDER,
+        # raw edge = proj - line is negative when the under is good — use play-side edge.
+        rec = str(
+            row.get("recommended_side")
+            or row.get("bet_direction")
+            or row.get("direction")
+            or "OVER"
+        ).upper().strip()
+        edge_for_play = -edge if rec == "UNDER" else edge
+        if pt == "Goblin" and edge_for_play < 0:
             row["void_reason"] = "DROPPED_NEG_EDGE_GOBLIN"
             dropped.append(row)
         else:

@@ -877,7 +877,10 @@ def main() -> None:
     score = score.where(has_real_stats, score * 0.60)
     out["has_real_stats"] = has_real_stats.astype(int)
 
-    score = score.where(elig_mask, np.nan)
+    # Direction-aware edge gate (matches NBA step7). Demons exempt — edge component is zeroed above.
+    _eadr = pd.to_numeric(out["edge_adj_dr"], errors="coerce").fillna(-999.0)
+    _is_dem = out["pick_type"].astype(str).str.lower().str.contains("dem")
+    score = score.where(elig_mask & ((_eadr > 0.0) | _is_dem), np.nan)
 
     out["rank_score"] = score
     out["ml_prob"], out["ml_edge"], out["final_score"] = _apply_ml_blend(out, out["rank_score"], args.n_teams)

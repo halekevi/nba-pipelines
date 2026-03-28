@@ -370,7 +370,10 @@ def main() -> None:
         * out["prop_weight"].astype(float).fillna(1.0)
         * out["reliability_mult"].astype(float).fillna(1.0)
     )
-    score = score.where(elig_mask, np.nan)
+    # Direction-aware edge gate (matches NBA step7): good UNDERs have edge_adj < 0 but edge_adj_dr > 0.
+    _eadr = pd.to_numeric(out["edge_adj_dr"], errors="coerce").fillna(-999.0)
+    _is_dem = out["pick_type"].astype(str).str.lower().str.contains("dem")
+    score = score.where(elig_mask & ((_eadr > 0.0) | _is_dem), np.nan)
 
     out["rank_score"] = score
     out["tier"]       = out["rank_score"].apply(_tier_from_score)

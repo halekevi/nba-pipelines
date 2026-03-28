@@ -6,6 +6,11 @@ PERF: All 12 .apply() calls and 2 row-by-row list comprehensions replaced with
       vectorized pandas/NumPy operations. Estimated 3-4x faster on 8,000+ row slates.
       Excel write engine switched from openpyxl → xlsxwriter (~5x faster write).
 
+PATCH (2026-03-28):
+- Hard edge gate now uses edge_adj_dr (direction-aware), not raw edge_adj.
+  Previously UNDER plays with projection below line had edge_adj < 0 and were
+  stripped of rank_score / tier despite strong under signals.
+
 PATCH (2026-02-26):
 - Fix edge_adj_dr to be direction-aware: UNDERs now get a positive edge
   contribution when projection < line.
@@ -1095,8 +1100,10 @@ def main() -> None:
         * _to_num(out["reliability_mult"]).fillna(1.0)
     )
 
-    # Hard edge gate: only keep positive adjusted-edge rows in rank ordering.
-    edge_gate = _to_num(out["edge_adj"]).fillna(-999.0) > 0.0
+    # Hard edge gate: keep rows where edge favors the play (same sign as edge_adj_dr).
+    # Raw edge_adj = projection_adj - line is >0 for OVER-style math only; UNDER wins
+    # when projection is below line, so edge_adj < 0 even for excellent unders.
+    edge_gate = _to_num(out["edge_adj_dr"]).fillna(-999.0) > 0.0
     score_raw = score_raw.where(elig_mask & edge_gate, np.nan)
 
     out["l5_support_mod"] = pd.Series(l5_support_mod, index=out.index)
