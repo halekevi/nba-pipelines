@@ -17,4 +17,5 @@ COPY . /app
 # Railway injects PORT at runtime
 EXPOSE 8080
 
-CMD ["sh", "-c", "exec gunicorn ui_runner.app:app --bind 0.0.0.0:${PORT:-8080} --workers=2 --threads=4 --worker-class=gthread --timeout=120"]
+# Keep in sync with railway.toml / Procfile: workers=2 OOM'd on large slate JSON; logs → Railway dashboard.
+CMD ["sh", "-c", "exec python -m gunicorn ui_runner.app:app --bind 0.0.0.0:${PORT:-8080} --workers=1 --threads=4 --worker-class=gthread --timeout=180 --access-logfile - --error-logfile -"]
