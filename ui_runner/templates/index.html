@@ -1943,22 +1943,38 @@ function toggleSlatePanel(sport) {
   }
 }
 
-// ── Populate SLATE_DATA — tries full Excel endpoint, falls back to tickets ────
+// ── Populate SLATE_DATA — tries full slate endpoint, falls back to tickets ────
+function _sportKeyNorm(sp) {
+  const x = String(sp || '').trim().toLowerCase().replace(/\s+/g, '');
+  if (x === 'nba1h' || x === 'nba_1h') return 'nba1h';
+  if (x === 'nba1q' || x === 'nba_1q') return 'nba1q';
+  return x;
+}
+
 async function buildSlateDataFromAllSlate() {
-  // Try full slate endpoint first
+  // Try full slate endpoint first (authoritative per-sport rows for cards)
   try {
     const res = await fetch('/api/slate-sport', {cache: 'no-store'});
     if (res.ok) {
       const d = await res.json();
-      if (d.sports) {
+      const raw = d.sports;
+      if (raw && typeof raw === 'object') {
+        const sportsLc = {};
+        Object.keys(raw).forEach(k => {
+          sportsLc[String(k).toLowerCase()] = raw[k];
+        });
         SPORTS.forEach(s => {
           if (s === 'cbb') {
-            const men = d.sports.cbb || [];
-            const wom = d.sports.wcbb || [];
+            const men = sportsLc.cbb || [];
+            const wom = sportsLc.wcbb || [];
             const merged = [...men, ...wom];
-            if (merged.length) SLATE_DATA[s] = merged;
-          } else if (d.sports[s] && d.sports[s].length) {
-            SLATE_DATA[s] = d.sports[s];
+            if (merged.length) {
+              delete SLATE_COLS[s];
+              SLATE_DATA[s] = merged;
+            }
+          } else if (sportsLc[s] && sportsLc[s].length) {
+            delete SLATE_COLS[s];
+            SLATE_DATA[s] = sportsLc[s];
           }
         });
       }
@@ -1968,9 +1984,10 @@ async function buildSlateDataFromAllSlate() {
   // Fall back to ALL_SLATE (tickets data) for any sport not populated above
   SPORTS.forEach(s => {
     if (SLATE_DATA[s] && SLATE_DATA[s].length) return;
+    delete SLATE_COLS[s];
     SLATE_DATA[s] = ALL_SLATE
       .filter(p => {
-        const sp = (p.sport || '').toLowerCase();
+        const sp = _sportKeyNorm(p.sport);
         if (s === 'cbb') return sp === 'cbb' || sp === 'wcbb';
         return sp === s;
       })
@@ -1995,6 +2012,7 @@ async function buildSlateDataFromAllSlate() {
 
   // Sort each sport by edge desc, update count badges
   SPORTS.forEach(s => {
+    if (!Array.isArray(SLATE_DATA[s])) SLATE_DATA[s] = [];
     SLATE_DATA[s].sort((a,b) => Math.abs(b.edge||0) - Math.abs(a.edge||0));
     const sub = document.getElementById(`sc-${s}-sub`);
     if (sub && SLATE_DATA[s].length) {
@@ -2024,6 +2042,11 @@ function loadSlateSport(sport) {
 }
 
 function renderSlateTable(sport) {
+  const rowsPre = SLATE_DATA[sport] || [];
+  // Excel "combined" path uses array rows + SLATE_COLS; JSON slate uses plain objects
+  if (SLATE_COLS[sport] && rowsPre.length && typeof rowsPre[0] === 'object' && !Array.isArray(rowsPre[0])) {
+    delete SLATE_COLS[sport];
+  }
   if (SLATE_COLS[sport]) { renderSlateTableDynamic(sport); return; }
   const rows  = SLATE_DATA[sport] || [];
   const state = SLATE_STATE[sport];
@@ -2163,46 +2186,23 @@ async function loadSlateExcel() {
       .then(r => r.json())
       .then(d => {
         if (!d.sheets) return;
-        // Populate combined and per-sport from Excel
-        const sports_map = { combined: 'Full Slate key', nba: 'nba', nba1h: 'nba1h', nba1q: 'nba1q',
-                             cbb: 'cbb', nhl: 'nhl', soccer: 'soccer', mlb: 'mlb' };
-        Object.entries(d.sheets).forEach(([key, sheet]) => {
-          if (!sheet || !sheet.columns || !sheet.rows) return;
-          SLATE_COLS[key] = sheet.columns;
-          SLATE_DATA[key] = sheet.rows;
-          if (key !== 'combined') {
-            // Ensure SLATE_STATE exists for per-sport dynamic sheets
-            if (!SLATE_STATE[key]) SLATE_STATE[key] = { sortKey: null, sortDir: -1, search: '', dir: null, pick: null };
-            const sortDefault = sheet.columns.includes('Rank Score') ? 'Rank Score'
-                              : sheet.columns.includes('Edge') ? 'Edge' : null;
-            SLATE_STATE[key].sortKey = sortDefault;
-          }
-          const sub = document.getElementById(`sc-${key}-sub`);
-          if (sub && sheet.rows.length) {
-            const n = sheet.rows.length;
-            const cur = sub.textContent || '';
-            if (!cur.includes('props')) sub.textContent = (cur ? cur + '  ·  ' : '') + `${n} props`;
-          }
-        });
-        // Match slate-sport behavior: one CBB explorer = men's + women's sheets
-        const cbbR = SLATE_DATA.cbb, wcbbR = SLATE_DATA.wcbb;
-        const cbbC = SLATE_COLS.cbb, wcbbC = SLATE_COLS.wcbb;
-        if (cbbR && wcbbR && cbbC && wcbbC && cbbC.length === wcbbC.length
-            && cbbC.every((c, i) => c === wcbbC[i])) {
-          SLATE_DATA.cbb = cbbR.concat(wcbbR);
-          const subCbb = document.getElementById('sc-cbb-sub');
-          if (subCbb) {
-            const n = SLATE_DATA.cbb.length;
-            const cur = subCbb.textContent || '';
-            subCbb.textContent = cur.includes('props')
-              ? cur.replace(/\d+ props/, `${n} props`)
-              : (cur ? cur + '  ·  ' : '') + `${n} props`;
-          }
+        // Only the Full Slate ("combined") table uses Excel row format. Per-sport cards use
+        // /api/slate-sport (objects + fixed columns); filling nba/nhl/... here used to set
+        // SLATE_COLS and block the JSON fetch, breaking sort/view after opening Combined first.
+        const combinedSheet = d.sheets.combined;
+        if (!combinedSheet || !combinedSheet.columns || !combinedSheet.rows) {
+          if (tbody) tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;padding:20px;color:var(--muted2);font-size:10px;">NO COMBINED SHEET (run pipeline or open a sport tab for props)</td></tr>`;
+          return;
+        }
+        SLATE_COLS.combined = combinedSheet.columns;
+        SLATE_DATA.combined = combinedSheet.rows;
+        const sub = document.getElementById('sc-combined-sub');
+        if (sub && combinedSheet.rows.length) {
+          const n = combinedSheet.rows.length;
+          const cur = sub.textContent || '';
+          if (!cur.includes('props')) sub.textContent = (cur ? cur + '  ·  ' : '') + `${n} props`;
         }
         scheduleRenderSlateTable('combined');
-        if (openSlatePanel && SLATE_COLS[openSlatePanel] && openSlatePanel !== 'combined') {
-          scheduleRenderSlateTable(openSlatePanel);
-        }
       })
       .catch(e => {
         console.warn('slate-excel failed:', e);
