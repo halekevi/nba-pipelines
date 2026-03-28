@@ -75,7 +75,7 @@ app = Flask(
 )
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-03-28-outputs-slates-6"
+_UI_BUILD_ID = "2026-03-28-ticket-eval-slate-7"
 
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
@@ -160,6 +160,8 @@ _json_file_cache: dict[str, dict[str, Any]] = {}
 #   DISABLE_AUTO_GITHUB_JSON = 1  # opt out of Railway → GitHub raw auto URLs
 #   PROPORACLE_RAW_JSON_BASE = https://raw.githubusercontent.com/USER/REPO/BRANCH/ui_runner/templates
 #   PROPORACLE_SLATE_DATE = 2026-03-28   # optional; prefer outputs/THIS_DATE/ step8_*_THIS_DATE.xlsx
+#   SLATE_SPORT_SOURCE = auto|slate_latest|ticket_eval   # auto prefers ticket_eval_slate_latest.json when non-empty
+#   TICKET_EVAL_SLATE_JSON_URL = https://.../ticket_eval_slate_latest.json
 #
 # On Railway, baked-in .xlsx mtimes are often old while main-branch JSON is current. We default missing URLs to
 # raw GitHub so /api/pipeline/status and slate endpoints stay fresh without manual env setup.
@@ -179,6 +181,7 @@ _JSON_BASE_DEFAULT = (
 
 _TICKETS_JSON_URL = os.environ.get("TICKETS_JSON_URL", "").strip()
 _SLATE_JSON_URL = os.environ.get("SLATE_JSON_URL", "").strip()
+_TICKET_EVAL_SLATE_JSON_URL = os.environ.get("TICKET_EVAL_SLATE_JSON_URL", "").strip()
 
 if not os.environ.get("DISABLE_AUTO_GITHUB_JSON", "").strip() and _running_on_railway():
     _base = os.environ.get("PROPORACLE_RAW_JSON_BASE", _JSON_BASE_DEFAULT).rstrip("/")
@@ -186,12 +189,16 @@ if not os.environ.get("DISABLE_AUTO_GITHUB_JSON", "").strip() and _running_on_ra
         _SLATE_JSON_URL = f"{_base}/slate_latest.json"
     if not _TICKETS_JSON_URL:
         _TICKETS_JSON_URL = f"{_base}/tickets_latest.json"
+    if not _TICKET_EVAL_SLATE_JSON_URL:
+        _TICKET_EVAL_SLATE_JSON_URL = f"{_base}/ticket_eval_slate_latest.json"
 
 _DATA_FILE_URL_MAP: dict[str, str] = {}
 if _TICKETS_JSON_URL:
     _DATA_FILE_URL_MAP["tickets_latest.json"] = _TICKETS_JSON_URL
 if _SLATE_JSON_URL:
     _DATA_FILE_URL_MAP["slate_latest.json"] = _SLATE_JSON_URL
+if _TICKET_EVAL_SLATE_JSON_URL:
+    _DATA_FILE_URL_MAP["ticket_eval_slate_latest.json"] = _TICKET_EVAL_SLATE_JSON_URL
 
 
 def _template_json_available(filename: str) -> bool:
@@ -559,15 +566,56 @@ def _resolve_outputs_artifact(
     return OUTPUTS_ROOT / d0 / filename_fmt.format(d=d0)
 
 
+def _count_slate_sport_rows(payload: dict) -> int:
+    return sum(len(v or []) for v in (payload.get("sports") or {}).values())
+
+
+def _selected_slate_sport_payload() -> dict:
+    """
+    Home slate explorer (/api/slate-sport): ticket_eval_slate_latest.json (from build_ticket_eval.py,
+    same legs as window.SLATE_DATA) when SLATE_SPORT_SOURCE=auto and that file has rows; else slate_latest.json.
+    """
+    src = os.environ.get("SLATE_SPORT_SOURCE", "auto").strip().lower()
+    te_name = "ticket_eval_slate_latest.json"
+    sl_name = "slate_latest.json"
+
+    def _load(name: str) -> dict | None:
+        if not _template_json_available(name):
+            return None
+        try:
+            return read_json_cached(TEMPLATES_DIR / name)
+        except Exception:
+            return None
+
+    if src == "slate_latest":
+        d = _load(sl_name)
+        if not d:
+            raise ValueError("slate_latest.json unavailable")
+        return d
+    if src == "ticket_eval":
+        d = _load(te_name)
+        if not d:
+            raise ValueError("ticket_eval_slate_latest.json unavailable")
+        return d
+
+    te = _load(te_name)
+    if te and _count_slate_sport_rows(te) > 0:
+        return te
+    d = _load(sl_name)
+    if not d:
+        raise ValueError("no slate json available")
+    return d
+
+
 def _slate_counts() -> tuple[dict[str, int], dict]:
     """
     Return ({sport_key: row_count}, file_info for slate_latest.json on disk, if present).
-    Counts load from disk or SLATE_JSON_URL even when the template file is absent (Railway).
+    Counts follow the same source as /api/slate-sport when possible.
     """
     path = TEMPLATES_DIR / "slate_latest.json"
     disk_info = _file_info(path)
     try:
-        payload = read_json_cached(path)
+        payload = _selected_slate_sport_payload()
     except Exception:
         return {}, disk_info
     sports = payload.get("sports") or {}
@@ -633,6 +681,10 @@ def ping():
             "ui_build_id": _UI_BUILD_ID,
             "railway": _running_on_railway(),
             "slate_json_remote": bool(_DATA_FILE_URL_MAP.get("slate_latest.json")),
+            "ticket_eval_slate_json_remote": bool(
+                _DATA_FILE_URL_MAP.get("ticket_eval_slate_latest.json")
+            ),
+            "slate_sport_source": os.environ.get("SLATE_SPORT_SOURCE", "auto").strip() or "auto",
             "tickets_json_remote": bool(_DATA_FILE_URL_MAP.get("tickets_latest.json")),
             "deploy_git_sha": (os.environ.get("RAILWAY_GIT_COMMIT_SHA") or os.environ.get("GIT_COMMIT") or "")[:40],
         })
@@ -648,6 +700,10 @@ def api_build():
         "ui_build_id": _UI_BUILD_ID,
         "railway": _running_on_railway(),
         "slate_json_remote": bool(_DATA_FILE_URL_MAP.get("slate_latest.json")),
+        "ticket_eval_slate_json_remote": bool(
+            _DATA_FILE_URL_MAP.get("ticket_eval_slate_latest.json")
+        ),
+        "slate_sport_source": os.environ.get("SLATE_SPORT_SOURCE", "auto").strip() or "auto",
         "tickets_json_remote": bool(_DATA_FILE_URL_MAP.get("tickets_latest.json")),
         "deploy_git_sha": (os.environ.get("RAILWAY_GIT_COMMIT_SHA") or os.environ.get("GIT_COMMIT") or "")[:40],
     })
@@ -794,10 +850,19 @@ def api_pipeline_status():
     except Exception:
         pass
 
+    te_payload: dict | None = None
+    try:
+        if _template_json_available("ticket_eval_slate_latest.json"):
+            te_payload = read_json_cached(TEMPLATES_DIR / "ticket_eval_slate_latest.json")
+    except Exception:
+        pass
+
     slate_js_ts, slate_js_disp = _payload_timestamp_meta(slate_payload)
     tik_js_ts, tik_js_disp = _payload_timestamp_meta(tickets_payload)
+    te_js_ts, te_js_disp = _payload_timestamp_meta(te_payload)
     status_js_ts, status_js_disp = _fresher_meta(
-        (slate_js_ts, slate_js_disp), (tik_js_ts, tik_js_disp)
+        _fresher_meta((slate_js_ts, slate_js_disp), (tik_js_ts, tik_js_disp)),
+        (te_js_ts, te_js_disp),
     )
 
     _pref_d = (tickets_payload or {}).get("date") or (slate_payload or {}).get("date")
@@ -878,6 +943,10 @@ def api_pipeline_status():
         "upstream_data_quality": _file_info(udq_p),
         "as_of": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "slate_json_source": "remote" if bool(_DATA_FILE_URL_MAP.get("slate_latest.json")) else "disk",
+        "ticket_eval_slate_source": "remote"
+        if bool(_DATA_FILE_URL_MAP.get("ticket_eval_slate_latest.json"))
+        else "disk",
+        "slate_sport_source": os.environ.get("SLATE_SPORT_SOURCE", "auto").strip() or "auto",
         "tickets_json_source": "remote" if bool(_DATA_FILE_URL_MAP.get("tickets_latest.json")) else "disk",
         "railway_auto_github_json": bool(_running_on_railway() and not os.environ.get("DISABLE_AUTO_GITHUB_JSON", "").strip()),
         "deploy_git_sha": (os.environ.get("RAILWAY_GIT_COMMIT_SHA") or os.environ.get("GIT_COMMIT") or "")[:40],
@@ -1113,12 +1182,23 @@ def api_slate():
 # ──────────────────────────────────────────────────────────────────────────────
 @app.get("/api/slate-sport")
 def api_slate_sport():
-    slate_path = TEMPLATES_DIR / "slate_latest.json"
-    if not _template_json_available("slate_latest.json"):
-        return jsonify({"error": "slate_latest.json not found — run pipeline first", "sports": {}}), 404
+    if not (
+        _template_json_available("slate_latest.json")
+        or _template_json_available("ticket_eval_slate_latest.json")
+    ):
+        return jsonify(
+            {
+                "error": "No slate JSON — run pipeline (slate_latest.json) or build_ticket_eval.py (ticket_eval_slate_latest.json)",
+                "sports": {},
+            }
+        ), 404
+    try:
+        _selected_slate_sport_payload()
+    except ValueError as e:
+        return jsonify({"error": str(e), "sports": {}}), 404
     try:
         return _gz_json_response(
-            "slate-sport", lambda: read_json_cached(slate_path), ttl=_PIPELINE_JSON_TTL
+            "slate-sport", lambda: _selected_slate_sport_payload(), ttl=_PIPELINE_JSON_TTL
         )
     except Exception as e:
         return jsonify({"error": str(e), "sports": {}}), 500

@@ -4,6 +4,9 @@ Build ticket_eval_{date}.html (dated archive for /grades) and tickets_latest.htm
 Reads ticket JSON (or combined_slate_tickets_{date}.xlsx) and sport step8/graded workbooks,
 matches legs to actuals, writes self-contained HTML.
 
+Also writes ticket_eval_slate_latest.json — same legs as window.SLATE_DATA in the HTML — so the home
+page /api/slate-sport slate cards can match the ticket eval builder (when SLATE_SPORT_SOURCE=auto).
+
 Run after combined_slate_tickets.py --write-web (JSON only) so tickets_latest.html includes grades.
 """
 from __future__ import annotations
@@ -12,7 +15,7 @@ import argparse
 import html
 import json
 import re
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -20,6 +23,7 @@ import pandas as pd
 
 REPO_ROOT = Path(__file__).resolve().parent
 TEMPLATES_DIR = REPO_ROOT / "ui_runner" / "templates"
+TICKET_EVAL_SLATE_JSON = TEMPLATES_DIR / "ticket_eval_slate_latest.json"
 
 # Ticket source search order: combined_slate_tickets_{date}.xlsx only.
 DATED_TICKET_JSON = "combined_slate_tickets_{date}.json"
@@ -1427,6 +1431,89 @@ def _fmt_num(x: Any) -> str:
     return html.escape(str(x))
 
 
+def _sport_bucket_slate(sport: Any) -> str:
+    """Lowercase sport key for slate_latest.json-style buckets (matches home /api/slate-sport)."""
+    x = str(sport or "").strip().upper().replace(" ", "")
+    aliases = {
+        "NBA": "nba",
+        "NBA1H": "nba1h",
+        "NBA1Q": "nba1q",
+        "CBB": "cbb",
+        "WCBB": "wcbb",
+        "NHL": "nhl",
+        "SOCCER": "soccer",
+        "MLB": "mlb",
+    }
+    return aliases.get(x, x.lower() if x else "unknown")
+
+
+def _leg_to_slate_explorer_row(leg: dict[str, Any]) -> dict[str, Any]:
+    """Map ticket leg (same shape as window.SLATE_DATA) to index.html slate table row."""
+    edge = leg.get("edge")
+    try:
+        edge_f = float(edge) if edge is not None else None
+    except (TypeError, ValueError):
+        edge_f = None
+    hr = leg.get("hit_rate")
+    try:
+        hr_f = float(hr) if hr is not None and hr != "" else None
+    except (TypeError, ValueError):
+        hr_f = None
+    rs = leg.get("rank_score")
+    try:
+        rs_f = float(rs) if rs is not None else None
+    except (TypeError, ValueError):
+        rs_f = None
+    if rs_f is None and edge_f is not None:
+        rs_f = abs(edge_f)
+    direction = str(leg.get("direction") or leg.get("dir") or "").strip().upper()
+    return {
+        "tier": leg.get("tier"),
+        "rank_score": rs_f,
+        "player": leg.get("player") or "",
+        "team": leg.get("team") or "",
+        "opp": leg.get("opp") or "",
+        "prop": leg.get("prop_type") or leg.get("prop") or "",
+        "pick_type": leg.get("pick_type") or "",
+        "line": leg.get("line"),
+        "dir": direction,
+        "edge": edge_f,
+        "hit_rate": hr_f,
+        "l5_avg": leg.get("l5_avg"),
+        "l5_over": leg.get("l5_over"),
+        "l5_under": leg.get("l5_under"),
+        "game_time": str(leg.get("game_time") or ""),
+    }
+
+
+def _manual_props_to_ticket_eval_slate_payload(
+    manual_props: list[dict[str, Any]], slate_date: str
+) -> dict[str, Any]:
+    sports: dict[str, list[dict[str, Any]]] = {}
+    for leg in manual_props:
+        if not isinstance(leg, dict):
+            continue
+        key = _sport_bucket_slate(leg.get("sport"))
+        sports.setdefault(key, []).append(_leg_to_slate_explorer_row(leg))
+    return {
+        "date": slate_date[:10],
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
+        "source": "ticket_eval",
+        "sports": sports,
+    }
+
+
+def write_ticket_eval_slate_json(manual_props: list[dict[str, Any]], slate_date: str) -> Path:
+    """Same props embedded as window.SLATE_DATA — written for /api/slate-sport on the home UI."""
+    payload = _manual_props_to_ticket_eval_slate_payload(manual_props, slate_date)
+    TICKET_EVAL_SLATE_JSON.parent.mkdir(parents=True, exist_ok=True)
+    TICKET_EVAL_SLATE_JSON.write_text(
+        json.dumps(payload, ensure_ascii=False, separators=(",", ":"), default=str),
+        encoding="utf-8",
+    )
+    return TICKET_EVAL_SLATE_JSON
+
+
 def _build_html(
     payload: dict[str, Any],
     arg_date: str,
@@ -1469,6 +1556,12 @@ def _build_html(
     # Manual Ticket Builder uses the per-leg model fields from tickets_latest.json.
     # We flatten all legs into a single array and embed it into the HTML as window.SLATE_DATA.
     manual_props: list[dict[str, Any]] = [leg for leg, _, _ in all_legs if isinstance(leg, dict)]
+    slate_date_str = str(payload.get("date") or arg_date)[:10]
+    try:
+        te_path = write_ticket_eval_slate_json(manual_props, slate_date_str)
+        print(f"  {te_path.name} -> home slate cards (/api/slate-sport when SLATE_SPORT_SOURCE=auto)")
+    except OSError as e:
+        print(f"  WARN: could not write ticket_eval_slate_latest.json: {e}")
     manual_props_json = json.dumps(manual_props, ensure_ascii=False)
     # Avoid prematurely terminating the <script> tag if any string contains "</".
     manual_props_json = manual_props_json.replace("</", "<\\/")
