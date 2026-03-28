@@ -1982,6 +1982,8 @@ def load_nhl(path: str) -> pd.DataFrame:
         "prop_score":         "rank_score",
         "game_start":         "game_time",
     })
+    # Deduplicate columns immediately after rename — multiple source cols may map to same target
+    df = df.loc[:, ~df.columns.duplicated()].copy()
 
     # Fallback: derive hit_rate from hit_rate_over_L10 if still missing
     if "hit_rate" not in df.columns or df["hit_rate"].isna().all():

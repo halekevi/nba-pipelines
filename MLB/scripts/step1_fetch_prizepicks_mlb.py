@@ -130,14 +130,10 @@ def parse_rows(data: List[dict], included: List[dict]) -> List[dict]:
             player_id  = str(pd_data.get("id", "")).strip()
             player_obj = idx.get(("new_player", player_id)) or idx.get(("player", player_id))
 
-        # resolve game
-        game_rel = rels.get("game") or rels.get("projection_game") or {}
-        game_id  = ""
-        game_obj = None
-        gd_data  = game_rel.get("data") or {}
-        if isinstance(gd_data, dict):
-            game_id  = str(gd_data.get("id", "")).strip()
-            game_obj = idx.get(("game", game_id))
+        # resolve game — try new_game first (PrizePicks current API), fall back to game
+        game_id   = _safe_get(rels, ["new_game", "data", "id"], "") or _safe_get(rels, ["game", "data", "id"], "")
+        game_type = _safe_get(rels, ["new_game", "data", "type"], "") or _safe_get(rels, ["game", "data", "type"], "")
+        game_obj  = idx.get((str(game_type), str(game_id))) if game_id and game_type else None
 
         player_name = pos = team = image_url = ""
         if isinstance(player_obj, dict):
@@ -304,8 +300,8 @@ def fetch_via_playwright(timeout_s: int = 45, manual_window: int = 30) -> Tuple[
             "Chrome/122.0.0.0 Safari/537.36"
         ),
         locale="en-US",
-        timezone_id="America/New_York",
-        geolocation={"latitude": 40.7128, "longitude": -74.0060},
+        timezone_id="America/Chicago",
+        geolocation={"latitude": 29.7604, "longitude": -95.3698},  # Houston, TX
         permissions=["geolocation", "notifications"],
         color_scheme="dark",
     )
