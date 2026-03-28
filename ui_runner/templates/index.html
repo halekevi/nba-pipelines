@@ -1493,7 +1493,7 @@ async function loadSlateData() {
   if (slateDataPromise) return slateDataPromise;
   slateDataPromise = (async () => {
     try {
-      const res = await fetch("/api/slate");
+      const res = await fetch("/api/slate", {cache: 'no-store'});
       if (!res.ok) throw new Error("HTTP " + res.status);
       const d = await res.json();
       ALL_SLATE = (d.picks || []).map(p => ({
@@ -1563,7 +1563,7 @@ function sportDisplayLabel(rawSport) {
 
 async function refreshStatus() {
   try {
-    const res=await fetch("/api/pipeline/status"); if(!res.ok) return;
+    const res=await fetch("/api/pipeline/status", {cache:'no-store'}); if(!res.ok) return;
     const d=await res.json();
     applyStatusCard("nba",      d.nba?.slate,      "NBA Slate");
     applyStatusCard("nba1h",    d.nba1h?.slate,    "NBA 1H Slate");
@@ -1925,7 +1925,7 @@ function toggleSlatePanel(sport) {
 async function buildSlateDataFromAllSlate() {
   // Try full slate endpoint first
   try {
-    const res = await fetch('/api/slate-sport');
+    const res = await fetch('/api/slate-sport', {cache: 'no-store'});
     if (res.ok) {
       const d = await res.json();
       if (d.sports) {
@@ -2128,7 +2128,7 @@ async function loadSlateExcel() {
   if (SLATE_COLS['combined'] && SLATE_DATA['combined']) { scheduleRenderSlateTable('combined'); return; }
   if (tbody) tbody.innerHTML = `<tr><td style="text-align:center;padding:20px;color:var(--muted);letter-spacing:1px;font-size:10px;">LOADING…</td></tr>`;
   if (!_slateExcelPromise) {
-    _slateExcelPromise = fetch('/api/slate-excel')
+    _slateExcelPromise = fetch('/api/slate-excel', {cache: 'no-store'})
       .then(r => r.json())
       .then(d => {
         if (!d.sheets) return;
