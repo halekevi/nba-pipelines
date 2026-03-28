@@ -73,7 +73,7 @@ app = Flask(
 )
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-03-28-railway-json-bust-4"
+_UI_BUILD_ID = "2026-03-28-railway-deploy-check-5"
 
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
@@ -565,7 +565,14 @@ def _sport_slate_status(
 # ──────────────────────────────────────────────────────────────────────────────
 @app.get("/")
 def home():
-    resp = make_response(render_template("index.html", config=load_config()))
+    resp = make_response(
+        render_template(
+            "index.html",
+            config=load_config(),
+            ui_build_id=_UI_BUILD_ID,
+            deploy_git_sha=(os.environ.get("RAILWAY_GIT_COMMIT_SHA") or os.environ.get("GIT_COMMIT") or "")[:40],
+        )
+    )
     resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
     resp.headers["Pragma"] = "no-cache"
     return resp
