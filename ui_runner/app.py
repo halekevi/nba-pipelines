@@ -191,7 +191,7 @@ else:
     _PIPELINE_JSON_TTL = float(os.environ.get("PIPELINE_JSON_TTL_SEC", "300"))
 
 # Bump when you need to confirm Railway is running the latest ui_runner (see GET /api/build).
-_UI_BUILD_ID = "2026-03-28-slate-remote-v2"
+_UI_BUILD_ID = "2026-03-28-slate-remote-v3"
 
 
 def read_json_cached(path: Path, ttl: float | None = None) -> Any:
@@ -533,7 +533,18 @@ def home():
 
 @app.get("/ping")
 def ping():
-    """Lightweight health check for uptime pingers (no DB / no template work)."""
+    """Lightweight health check. Use /ping?json=1 for deploy metadata (same as /api/build)."""
+    if request.args.get("json") == "1":
+        r = jsonify({
+            "ok": True,
+            "ui_build_id": _UI_BUILD_ID,
+            "railway": _running_on_railway(),
+            "slate_json_remote": bool(_DATA_FILE_URL_MAP.get("slate_latest.json")),
+            "tickets_json_remote": bool(_DATA_FILE_URL_MAP.get("tickets_latest.json")),
+            "deploy_git_sha": (os.environ.get("RAILWAY_GIT_COMMIT_SHA") or os.environ.get("GIT_COMMIT") or "")[:40],
+        })
+        r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        return r
     return "ok", 200
 
 
