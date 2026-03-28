@@ -145,14 +145,37 @@ def load_config() -> dict:
 
 _json_file_cache: dict[str, dict[str, Any]] = {}
 
+# If set, fetch data from these URLs instead of baked-in files (avoids Docker layer cache).
+# Set in Railway env vars:
+#   TICKETS_JSON_URL = https://raw.githubusercontent.com/halekevi/PropORACLE/main/ui_runner/templates/tickets_latest.json
+#   SLATE_JSON_URL   = https://raw.githubusercontent.com/halekevi/PropORACLE/main/ui_runner/templates/slate_latest.json
+_TICKETS_JSON_URL = os.environ.get("TICKETS_JSON_URL", "").strip()
+_SLATE_JSON_URL   = os.environ.get("SLATE_JSON_URL", "").strip()
+
+_DATA_FILE_URL_MAP: dict[str, str] = {}
+if _TICKETS_JSON_URL:
+    _DATA_FILE_URL_MAP["tickets_latest.json"] = _TICKETS_JSON_URL
+if _SLATE_JSON_URL:
+    _DATA_FILE_URL_MAP["slate_latest.json"] = _SLATE_JSON_URL
+
 
 def read_json_cached(path: Path, ttl: float = 300.0) -> Any:
-    """Load JSON from disk with an in-process TTL (template payloads written by pipeline)."""
+    """Load JSON from disk (or remote URL) with an in-process TTL."""
     key = str(path.resolve())
     now = time.time()
     entry = _json_file_cache.get(key)
     if entry is not None and now - entry["ts"] <= ttl:
         return entry["data"]
+    url = _DATA_FILE_URL_MAP.get(path.name)
+    if url:
+        try:
+            req = urllib.request.Request(url, headers={"Cache-Control": "no-cache"})
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+            _json_file_cache[key] = {"data": data, "ts": now}
+            return data
+        except Exception:
+            pass  # fall through to disk read
     data = json.loads(path.read_text(encoding="utf-8-sig"))
     _json_file_cache[key] = {"data": data, "ts": now}
     return data
