@@ -16,6 +16,7 @@
 builder = "NIXPACKS"
 
 [deploy]
-startCommand = "gunicorn ui_runner.app:app --bind 0.0.0.0:$PORT --workers=2 --threads=4 --worker-class=gthread --timeout=120"
+# workers=1: large slate JSON + gzip cache; two processes doubled RAM and OOM risk on small plans.
+startCommand = "gunicorn ui_runner.app:app --bind 0.0.0.0:$PORT --workers=1 --threads=4 --worker-class=gthread --timeout=120"
 healthcheckPath = "/ping"
 healthcheckTimeout = 120

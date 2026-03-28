@@ -75,7 +75,7 @@ app = Flask(
 )
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-03-28-slate-sport-auto-slate-latest-1"
+_UI_BUILD_ID = "2026-03-28-gz-cache-lock-workers1-1"
 
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
@@ -150,6 +150,7 @@ def load_config() -> dict:
 
 
 _json_file_cache: dict[str, dict[str, Any]] = {}
+_JSON_FILE_CACHE_LOCK = threading.Lock()
 
 # If set, fetch data from these URLs instead of baked-in files (avoids Docker layer cache).
 # Optional on Railway — auto-defaults apply when RAILWAY_* is set (see below).
@@ -229,30 +230,32 @@ def read_json_cached(path: Path, ttl: float | None = None) -> Any:
         ttl = _PIPELINE_JSON_TTL
     key = str(path.resolve())
     now = time.time()
-    entry = _json_file_cache.get(key)
-    if entry is not None and now - entry["ts"] <= ttl:
-        return entry["data"]
-    url = _DATA_FILE_URL_MAP.get(path.name)
-    if url:
-        try:
-            fetch_url = _github_raw_fetch_url(url)
-            req = urllib.request.Request(
-                fetch_url,
-                headers={
-                    "Cache-Control": "no-cache",
-                    "Pragma": "no-cache",
-                },
-            )
-            with urllib.request.urlopen(req, timeout=25) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
-            _json_file_cache[key] = {"data": data, "ts": now}
-            return data
-        except Exception:
-            if not path.exists():
-                raise
-    data = json.loads(path.read_text(encoding="utf-8-sig"))
-    _json_file_cache[key] = {"data": data, "ts": now}
-    return data
+    with _JSON_FILE_CACHE_LOCK:
+        entry = _json_file_cache.get(key)
+        if entry is not None and now - entry["ts"] <= ttl:
+            return entry["data"]
+
+        url = _DATA_FILE_URL_MAP.get(path.name)
+        if url:
+            try:
+                fetch_url = _github_raw_fetch_url(url)
+                req = urllib.request.Request(
+                    fetch_url,
+                    headers={
+                        "Cache-Control": "no-cache",
+                        "Pragma": "no-cache",
+                    },
+                )
+                with urllib.request.urlopen(req, timeout=25) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                _json_file_cache[key] = {"data": data, "ts": time.time()}
+                return data
+            except Exception:
+                if not path.exists():
+                    raise
+        data = json.loads(path.read_text(encoding="utf-8-sig"))
+        _json_file_cache[key] = {"data": data, "ts": time.time()}
+        return data
 
 
 # ── Pre-serialized + pre-gzipped response cache ───────────────────────────────
@@ -265,22 +268,23 @@ def _gz_json_response(key: str, build_fn, ttl: float = 300.0):
     """
     Call build_fn() once per TTL, serialize+gzip the result, serve from cache after.
     Handles both gzip-capable and plain clients.
+
+    Build must run under the same lock as the cache check: with gthread, several
+    threads could otherwise miss cache together and each load multi‑MB JSON → OOM
+    (Railway 502 / worker SIGKILL).
     """
     now = time.time()
-    gz_bytes = None
     with _GZ_CACHE_LOCK:
         entry = _gz_cache.get(key)
         if entry and now - entry[1] < ttl:
             gz_bytes = entry[0]
-
-    if gz_bytes is None:
-        data = build_fn()
-        raw  = json.dumps(data, separators=(",", ":")).encode("utf-8")
-        buf  = io.BytesIO()
-        with gzip.GzipFile(mode="wb", fileobj=buf, compresslevel=6) as f:
-            f.write(raw)
-        gz_bytes = buf.getvalue()
-        with _GZ_CACHE_LOCK:
+        else:
+            data = build_fn()
+            raw = json.dumps(data, separators=(",", ":")).encode("utf-8")
+            buf = io.BytesIO()
+            with gzip.GzipFile(mode="wb", fileobj=buf, compresslevel=6) as f:
+                f.write(raw)
+            gz_bytes = buf.getvalue()
             _gz_cache[key] = (gz_bytes, time.time())
 
     _NO_CACHE = "no-store, no-cache, must-revalidate, max-age=0"
