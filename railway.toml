@@ -1,0 +1,12 @@
+# https://docs.railway.com/guides/config-as-code
+# Forces Docker build from repo root so SlateIQ always runs ui_runner.app:app (not a stale Nixpacks guess).
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+healthcheckPath = "/ping"
+healthcheckTimeout = 120
+# If you set a custom "Start Command" in the Railway UI, it overrides Dockerfile CMD.
+# Clear it (or match the Dockerfile CMD) so SlateIQ runs: gunicorn ui_runner.app:app ...

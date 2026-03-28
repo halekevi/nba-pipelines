@@ -72,12 +72,16 @@ app = Flask(
     static_folder=str(STATIC_DIR) if STATIC_DIR.exists() else None,
 )
 
+# Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
+_UI_BUILD_ID = "2026-03-28-docker-railway-1"
+
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
 _STATIC_EXTS  = (".css", ".js", ".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg", ".ico", ".woff", ".woff2")
 
 @app.after_request
 def post_process_response(response):
+    response.headers.setdefault("X-PropOracle-Build", _UI_BUILD_ID)
     # Long-lived cache for static assets (images, CSS, JS)
     if request.path.startswith("/static/") and any(request.path.endswith(e) for e in _STATIC_EXTS):
         if "Cache-Control" not in response.headers:
@@ -189,10 +193,6 @@ if _running_on_railway() and "PIPELINE_JSON_TTL_SEC" not in os.environ:
     _PIPELINE_JSON_TTL = 120.0
 else:
     _PIPELINE_JSON_TTL = float(os.environ.get("PIPELINE_JSON_TTL_SEC", "300"))
-
-# Bump when you need to confirm Railway is running the latest ui_runner (see GET /api/build).
-_UI_BUILD_ID = "2026-03-28-slate-remote-v3"
-
 
 def read_json_cached(path: Path, ttl: float | None = None) -> Any:
     """Load JSON from disk (or remote URL) with an in-process TTL."""

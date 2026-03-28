@@ -1,0 +1,12 @@
+.git
+.github
+**/__pycache__
+**/*.pyc
+**/.venv
+**/venv
+.env
+.env.*
+*.db
+*.sqlite
+Thumbs.db
+.claude
