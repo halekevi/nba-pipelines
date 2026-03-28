@@ -75,7 +75,7 @@ app = Flask(
 )
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-03-28-ticket-eval-slate-7"
+_UI_BUILD_ID = "2026-03-28-slate-display-date-8"
 
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
@@ -1128,6 +1128,37 @@ def api_tickets_latest():
         return resp
     except Exception as e:
         return jsonify({"error": str(e), "groups": []}), 500
+
+
+@app.get("/api/slate-display-date")
+def api_slate_display_date():
+    """
+    Max YYYY-MM-DD among tickets_latest, slate_latest, ticket_eval_slate_latest, and the
+    active /api/slate-sport payload — avoids hero pill stuck on 3/27 when another file is 3/28.
+    """
+    candidates: list[str] = []
+    for name in ("tickets_latest.json", "slate_latest.json", "ticket_eval_slate_latest.json"):
+        if not _template_json_available(name):
+            continue
+        try:
+            data = read_json_cached(TEMPLATES_DIR / name)
+            ds = str((data or {}).get("date") or "").strip()[:10]
+            if len(ds) == 10 and ds[4] == "-" and ds[7] == "-":
+                candidates.append(ds)
+        except Exception:
+            continue
+    try:
+        sp = _selected_slate_sport_payload()
+        ds = str((sp or {}).get("date") or "").strip()[:10]
+        if len(ds) == 10:
+            candidates.append(ds)
+    except Exception:
+        pass
+    best = max(candidates) if candidates else None
+    r = jsonify({"date": best})
+    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    return r
 
 
 # API: Slate picks - deduped unique picks from tickets_latest.json

@@ -1474,7 +1474,7 @@ body::before{
 </div>
 
 <script>
-// ── Slate date (local calendar; API overwrites with JSON `date` when present) ──
+// ── Slate date: server picks latest date across all slate JSON (not only /api/slate) ──
 function formatSlateDateDisplay(isoYmd) {
   let dt;
   if (isoYmd && typeof isoYmd === "string" && isoYmd.length >= 10) {
@@ -1485,9 +1485,18 @@ function formatSlateDateDisplay(isoYmd) {
   }
   return dt.toLocaleDateString("en-US", { month: "numeric", day: "numeric", year: "numeric" });
 }
-(function initSlateDatePill() {
-  const el = document.getElementById("slate-date");
-  if (el) el.textContent = formatSlateDateDisplay();
+async function applyHeroSlateDate() {
+  try {
+    const res = await fetch("/api/slate-display-date", { cache: "no-store" });
+    if (!res.ok) return;
+    const j = await res.json();
+    if (!j || !j.date) return;
+    const el = document.getElementById("slate-date");
+    if (el) el.textContent = formatSlateDateDisplay(j.date);
+  } catch (e) {}
+}
+(async function initSlateDatePill() {
+  await applyHeroSlateDate();
 })();
 
 // ── Clock ──────────────────────────────────────────────────
@@ -1535,13 +1544,10 @@ async function loadSlateData() {
           });
         }
       }
-      if (d.date) {
-        const el = document.getElementById("slate-date");
-        if (el) el.textContent = formatSlateDateDisplay(d.date);
-      }
     } catch (err) {
       console.warn("loadSlateData failed:", err);
     }
+    await applyHeroSlateDate();
     renderEdges();
     renderStreaks();
     // buildSlateDataFromAllSlate() (2.2 MB fetch) is deferred until user opens a sport panel
