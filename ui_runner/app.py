@@ -576,7 +576,11 @@ def api_pipeline_status():
     today = datetime.now().strftime("%Y-%m-%d")
     slate_counts, slate_json_info = _slate_counts()
     combined_path = next(
-        iter(sorted(BASE_DIR.glob(f"combined_slate_tickets_{today}*.xlsx"), reverse=True)),
+        iter(sorted(
+            list(BASE_DIR.glob(f"combined_slate_tickets_{today}*.xlsx")) +
+            list((BASE_DIR / "outputs" / today).glob(f"combined_slate_tickets_{today}*.xlsx")),
+            reverse=True
+        )),
         None
     )
     return jsonify({
