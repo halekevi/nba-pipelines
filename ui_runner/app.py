@@ -416,7 +416,10 @@ def _file_info_with_slate_fallback(path: Path, sport_key: str, counts: dict[str,
 # ──────────────────────────────────────────────────────────────────────────────
 @app.get("/")
 def home():
-    return render_template("index.html", config=load_config())
+    resp = make_response(render_template("index.html", config=load_config()))
+    resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    resp.headers["Pragma"] = "no-cache"
+    return resp
 
 
 @app.get("/ping")
