@@ -57,6 +57,7 @@ NBA_TICKETS   = NBA_DIR / "best_tickets.xlsx"
 NBA1H_TICKETS = NBA_DIR / "best_tickets_nba1h.xlsx"
 NBA1Q_TICKETS = NBA_DIR / "best_tickets_nba1q.xlsx"
 CBB_SLATE     = CBB_DIR / "step6_ranked_cbb.xlsx"
+WCBB_SLATE    = CBB_DIR / "step6_ranked_wcbb.xlsx"
 # Same paths as scripts/run_pipeline.ps1 (sport root, not sport/outputs/)
 NHL_SLATE     = NHL_DIR / "step8_nhl_direction_clean.xlsx"
 NHL_TICKETS   = NHL_DIR / "nhl_best_tickets.xlsx"
@@ -64,7 +65,8 @@ SOCCER_SLATE  = SOCCER_DIR / "step8_soccer_direction_clean.xlsx"
 SOCCER_TICKETS= SOCCER_DIR / "soccer_best_tickets.xlsx"
 MLB_SLATE     = MLB_DIR / "step8_mlb_direction_clean.xlsx"
 MLB_TICKETS   = MLB_DIR / "mlb_best_tickets.xlsx"
-COMBINED_OUT  = BASE_DIR  # combined_slate_tickets_YYYY-MM-DD.xlsx lives here
+COMBINED_OUT  = BASE_DIR  # combined_slate_tickets_YYYY-MM-DD.xlsx may live here or under outputs/
+OUTPUTS_ROOT  = BASE_DIR / "outputs"
 
 app = Flask(
     __name__,
@@ -73,7 +75,7 @@ app = Flask(
 )
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-03-28-railway-deploy-check-5"
+_UI_BUILD_ID = "2026-03-28-outputs-slates-6"
 
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
@@ -157,6 +159,7 @@ _json_file_cache: dict[str, dict[str, Any]] = {}
 #   GITHUB_JSON_FETCH_BUST = 0   # set to 0 to disable ?nocache= on raw GitHub fetches (not recommended)
 #   DISABLE_AUTO_GITHUB_JSON = 1  # opt out of Railway → GitHub raw auto URLs
 #   PROPORACLE_RAW_JSON_BASE = https://raw.githubusercontent.com/USER/REPO/BRANCH/ui_runner/templates
+#   PROPORACLE_SLATE_DATE = 2026-03-28   # optional; prefer outputs/THIS_DATE/ step8_*_THIS_DATE.xlsx
 #
 # On Railway, baked-in .xlsx mtimes are often old while main-branch JSON is current. We default missing URLs to
 # raw GitHub so /api/pipeline/status and slate endpoints stay fresh without manual env setup.
@@ -513,6 +516,49 @@ def _fresher_meta(
     return at, ad
 
 
+def _slate_day_candidates(preferred_date: str | None) -> list[str]:
+    """
+    Newest-first YYYY-MM-DD list: optional tickets/slate date, env override, then rolling days.
+    Used to find outputs/{date}/step8_*_{date}.xlsx style artifacts.
+    """
+    seen: set[str] = set()
+    out: list[str] = []
+
+    def _add(d: str) -> None:
+        d = (d or "").strip()[:10]
+        if len(d) == 10 and d not in seen:
+            seen.add(d)
+            out.append(d)
+
+    _add(os.environ.get("PROPORACLE_SLATE_DATE", "").strip() or "")
+    _add(preferred_date or "")
+    for i in range(14):
+        _add((date.today() - timedelta(days=i)).strftime("%Y-%m-%d"))
+    return out
+
+
+def _resolve_outputs_artifact(
+    days: list[str],
+    filename_fmt: str,
+    *legacy: Path,
+) -> Path:
+    """
+    Prefer outputs/{{d}}/filename_fmt.format(d=d), then first existing legacy path.
+    filename_fmt example: step8_nba_direction_clean_{d}.xlsx
+    """
+    for d in days:
+        p = OUTPUTS_ROOT / d / filename_fmt.format(d=d)
+        if p.exists():
+            return p
+    for leg in legacy:
+        if leg.exists():
+            return leg
+    if legacy:
+        return legacy[0]
+    d0 = days[0] if days else date.today().strftime("%Y-%m-%d")
+    return OUTPUTS_ROOT / d0 / filename_fmt.format(d=d0)
+
+
 def _slate_counts() -> tuple[dict[str, int], dict]:
     """
     Return ({sport_key: row_count}, file_info for slate_latest.json on disk, if present).
@@ -754,9 +800,23 @@ def api_pipeline_status():
         (slate_js_ts, slate_js_disp), (tik_js_ts, tik_js_disp)
     )
 
+    _pref_d = (tickets_payload or {}).get("date") or (slate_payload or {}).get("date")
+    days = _slate_day_candidates(str(_pref_d)[:10] if _pref_d else None)
+
+    nba_slate_p = _resolve_outputs_artifact(
+        days, "step8_nba_direction_clean_{d}.xlsx", NBA_SLATE, NBA_DIR / "step8_nba_direction_clean.xlsx"
+    )
+    nba1h_slate_p = _resolve_outputs_artifact(days, "step8_nba1h_direction_clean_{d}.xlsx", NBA1H_SLATE)
+    nba1q_slate_p = _resolve_outputs_artifact(days, "step8_nba1q_direction_clean_{d}.xlsx", NBA1Q_SLATE)
+    cbb_slate_p = _resolve_outputs_artifact(days, "step6_ranked_cbb_{d}.xlsx", CBB_SLATE)
+    wcbb_slate_p = _resolve_outputs_artifact(days, "step6_ranked_wcbb_{d}.xlsx", WCBB_SLATE)
+    nhl_slate_p = _resolve_outputs_artifact(days, "step8_nhl_direction_clean_{d}.xlsx", NHL_SLATE)
+    soccer_slate_p = _resolve_outputs_artifact(days, "step8_soccer_direction_clean_{d}.xlsx", SOCCER_SLATE)
+    mlb_slate_p = _resolve_outputs_artifact(days, "step8_mlb_direction_clean_{d}.xlsx", MLB_SLATE)
+    udq_p = _resolve_outputs_artifact(days, "upstream_data_quality_{d}.csv")
+
     combined_candidates: list[Path] = []
-    for i in range(7):
-        d = (date.today() - timedelta(days=i)).strftime("%Y-%m-%d")
+    for d in days:
         out_d = BASE_DIR / "outputs" / d
         combined_candidates.extend(BASE_DIR.glob(f"combined_slate_tickets_{d}*.xlsx"))
         combined_candidates.extend(BASE_DIR.glob(f"combined_slate_tickets_{d}*.json"))
@@ -782,35 +842,40 @@ def api_pipeline_status():
     return jsonify({
         "nba": {
             "run_complete_flag": NBA_FLAG.exists(),
-            "slate":   _sport_slate_status(NBA_SLATE, "nba", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
+            "slate":   _sport_slate_status(nba_slate_p, "nba", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
             "tickets": _file_info(NBA_TICKETS),
         },
         "nba1h": {
-            "slate":   _sport_slate_status(NBA1H_SLATE, "nba1h", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
+            "slate":   _sport_slate_status(nba1h_slate_p, "nba1h", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
             "tickets": _file_info(NBA1H_TICKETS),
         },
         "nba1q": {
-            "slate":   _sport_slate_status(NBA1Q_SLATE, "nba1q", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
+            "slate":   _sport_slate_status(nba1q_slate_p, "nba1q", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
             "tickets": _file_info(NBA1Q_TICKETS),
         },
         "cbb": {
-            "slate": _sport_slate_status(CBB_SLATE, "cbb", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
+            "slate": _sport_slate_status(cbb_slate_p, "cbb", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
+        },
+        "wcbb": {
+            "slate": _sport_slate_status(wcbb_slate_p, "wcbb", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
         },
         "nhl": {
-            "slate":   _sport_slate_status(NHL_SLATE, "nhl", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
+            "slate":   _sport_slate_status(nhl_slate_p, "nhl", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
             "tickets": _file_info(NHL_TICKETS),
         },
         "soccer": {
-            "slate":   _sport_slate_status(SOCCER_SLATE, "soccer", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
+            "slate":   _sport_slate_status(soccer_slate_p, "soccer", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
             "tickets": _file_info(SOCCER_TICKETS),
         },
         "mlb": {
-            "slate":   _sport_slate_status(MLB_SLATE, "mlb", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
+            "slate":   _sport_slate_status(mlb_slate_p, "mlb", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
             "tickets": _file_info(MLB_TICKETS),
         },
         "combined": {
             "slate": combined_slate,
         },
+        "pipeline_outputs_date": days[0] if days else None,
+        "upstream_data_quality": _file_info(udq_p),
         "as_of": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "slate_json_source": "remote" if bool(_DATA_FILE_URL_MAP.get("slate_latest.json")) else "disk",
         "tickets_json_source": "remote" if bool(_DATA_FILE_URL_MAP.get("tickets_latest.json")) else "disk",
@@ -1063,15 +1128,30 @@ def api_slate_sport():
 def api_slate_excel():
     """Return all sheets from the combined Excel with non-blank columns only."""
     import openpyxl
-    from datetime import date, timedelta
 
     def _find_excel():
-        for i in range(7):
-            d = (date.today() - timedelta(days=i)).strftime("%Y-%m-%d")
-            for p in (
-                BASE_DIR / "outputs" / d / f"combined_slate_tickets_{d}.xlsx",
+        try:
+            tj = read_json_cached(TEMPLATES_DIR / "tickets_latest.json")
+            pref = str((tj or {}).get("date") or "")[:10]
+        except Exception:
+            pref = ""
+        for d in _slate_day_candidates(pref if len(pref) == 10 else None):
+            out_d = BASE_DIR / "outputs" / d
+            candidates = [
+                out_d / f"combined_slate_tickets_{d}.xlsx",
                 COMBINED_OUT / f"combined_slate_tickets_{d}.xlsx",
-            ):
+            ]
+            seen: set[Path] = set(candidates)
+            if out_d.is_dir():
+                for g in out_d.glob(f"combined_slate_tickets_{d}*.xlsx"):
+                    if g not in seen:
+                        seen.add(g)
+                        candidates.append(g)
+            for g in BASE_DIR.glob(f"combined_slate_tickets_{d}*.xlsx"):
+                if g not in seen:
+                    seen.add(g)
+                    candidates.append(g)
+            for p in candidates:
                 if p.exists():
                     return p, d
         return None, None
