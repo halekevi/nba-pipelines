@@ -1,7 +1,6 @@
 # https://docs.railway.com/guides/config-as-code
 #
-# Docker builds were failing (large COPY / context); Nixpacks + explicit start matches your
-# last successful "Daily slate" runtime (python 3.13) but runs the correct module: ui_runner.app:app
+# Nixpacks (default) + Dockerfile (optional): both use scripts/railway_gunicorn.sh → ui_runner.app:app.
 #
 # If the live site never updates after git push:
 #   - Railway → this service → Settings → Source: repo halekevi/PropORACLE, branch main

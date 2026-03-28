@@ -1,0 +1,4 @@
+# Nixpacks reads this when building. Keeps start aligned with railway.toml + Dockerfile.
+# https://nixpacks.com/docs/configuration/file
+[start]
+cmd = "sh scripts/railway_gunicorn.sh"
