@@ -1,6 +1,6 @@
-# PropOracle — SlateIQ web UI (Flask). Build from REPO ROOT so `ui_runner` is a package.
-# Railway: set builder to Dockerfile (railway.toml) or remove custom start command that overrides this image.
-FROM python:3.12-slim-bookworm
+# PropOracle — SlateIQ web UI (Flask). Optional local/CI image; Railway uses Nixpacks (see railway.toml).
+# Build from REPO ROOT. .dockerignore keeps this small — huge sport CSV trees are omitted.
+FROM python:3.13-slim-bookworm
 
 WORKDIR /app
 
@@ -9,10 +9,9 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONUTF8=1
 ENV PYTHONIOENCODING=utf-8
 
-COPY ui_runner/requirements.txt /tmp/ui-requirements.txt
-RUN pip install --no-cache-dir -r /tmp/ui-requirements.txt
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
-# Full repo (templates, static NBA/NHL paths for status fallbacks, etc.)
 COPY . /app
 
 # Railway injects PORT at runtime

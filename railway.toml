@@ -1,12 +1,14 @@
 # https://docs.railway.com/guides/config-as-code
-# Forces Docker build from repo root so SlateIQ always runs ui_runner.app:app (not a stale Nixpacks guess).
+#
+# Docker builds were failing (large COPY / context); Nixpacks + explicit start matches your
+# last successful "Daily slate" runtime (python 3.13) but runs the correct module: ui_runner.app:app
+#
+# In Railway UI: clear any custom "Start Command" if it fights this file, or leave blank.
 
 [build]
-builder = "DOCKERFILE"
-dockerfilePath = "Dockerfile"
+builder = "NIXPACKS"
 
 [deploy]
+startCommand = "gunicorn ui_runner.app:app --bind 0.0.0.0:$PORT --workers=2 --threads=4 --worker-class=gthread --timeout=120"
 healthcheckPath = "/ping"
 healthcheckTimeout = 120
-# If you set a custom "Start Command" in the Railway UI, it overrides Dockerfile CMD.
-# Clear it (or match the Dockerfile CMD) so SlateIQ runs: gunicorn ui_runner.app:app ...

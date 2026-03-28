@@ -10,3 +10,18 @@
 *.sqlite
 Thumbs.db
 .claude
+logs/
+
+# Slim image: SlateIQ reads slate/tickets JSON from GitHub on Railway; skip multi‑GB pipeline trees.
+outputs/
+**/outputs/
+**/cache/
+NBA/data/
+CBB/data/
+NHL/cache/
+Soccer/cache/
+MLB/data/
+data/cache/
+_archive/
+docs/
+*.zip
