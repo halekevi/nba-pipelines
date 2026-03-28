@@ -201,6 +201,8 @@ def fetch_via_playwright(timeout_s: int = 45, manual_window: int = 30) -> Tuple[
 
     captured: dict = {}
     done = False
+    have_projections = False
+    projections_time: float = 0.0
     seen_urls: list = []
 
     # Broad patterns — anything on api.prizepicks.com that returns projection data
@@ -212,6 +214,7 @@ def fetch_via_playwright(timeout_s: int = 45, manual_window: int = 30) -> Tuple[
         "api.prizepicks.com/v1/projections",
         "api.prizepicks.com/v2/projections",
     ]
+    GAME_PATTERN = "api.prizepicks.com/games"
 
     def _try_extract_projections(j: dict) -> Tuple[List[dict], List[dict]]:
         """Try multiple known shapes to extract (data, included) projection lists."""
@@ -244,9 +247,7 @@ def fetch_via_playwright(timeout_s: int = 45, manual_window: int = 30) -> Tuple[
         return [], []
 
     def handle_response(response):
-        nonlocal done
-        if done:
-            return
+        nonlocal have_projections, projections_time
         url = response.url
 
         # Log ALL api.prizepicks.com responses for debugging
@@ -258,26 +259,38 @@ def fetch_via_playwright(timeout_s: int = 45, manual_window: int = 30) -> Tuple[
             if status != 200:
                 return
 
-            # Check if it matches any of our capture patterns
-            if not any(pat in url for pat in CAPTURE_PATTERNS):
-                return
-
             try:
                 j = response.json()
             except Exception:
                 print(f"       └─ not JSON, skipping")
                 return
 
-            # Only accept responses for MLB (league_id=2)
+            # Capture game objects from the separate /games endpoint (PrizePicks loads
+            # home/away team data here, NOT as included sideloads in /projections).
+            if GAME_PATTERN in url and isinstance(j.get("data"), list):
+                game_objs = [x for x in j["data"] if isinstance(x, dict)
+                             and x.get("type") in ("game", "new_game", "scheduled_game")]
+                if not game_objs:
+                    game_objs = [x for x in j["data"] if isinstance(x, dict) and x.get("id")]
+                if game_objs:
+                    captured.setdefault("included", []).extend(game_objs)
+                    print(f"  ✓ Captured {len(game_objs)} game objects from /games")
+                return
+
+            # Only accept projection responses with league_id=2
+            if not any(pat in url for pat in CAPTURE_PATTERNS):
+                return
             if "league_id=2" not in url and "league_id=2" not in response.url:
                 print(f"       └─ skipping (not league_id=2)")
                 return
 
             data, included = _try_extract_projections(j)
             if data:
-                captured["data"]     = data
-                captured["included"] = included
-                done = True
+                captured["data"] = data
+                captured.setdefault("included", [])
+                captured["included"].extend(included)
+                have_projections = True
+                projections_time = time.time()
                 print(f"  ✓ Captured {len(data)} items from {url}")
 
     PROFILE_DIR = Path.home() / ".pp_browser_profile"
@@ -347,14 +360,28 @@ def fetch_via_playwright(timeout_s: int = 45, manual_window: int = 30) -> Tuple[
         except Exception as e:
             print(f"  ⚠️  Page load timeout (continuing): {e}")
 
+        GAMES_GRACE = 6.0  # seconds to wait after projections for /games response
+
+        def _capture_complete() -> bool:
+            """True once we have projections + either game objects or grace period expired."""
+            if not have_projections:
+                return False
+            elapsed = time.time() - projections_time
+            have_games = any(
+                obj.get("type") in ("game", "new_game", "scheduled_game") or
+                ("home_team" in (obj.get("attributes") or {}))
+                for obj in captured.get("included", [])
+            )
+            return have_games or elapsed >= GAMES_GRACE
+
         # Phase 1: manual interaction window — let user dismiss banners/prompts
         if manual_window > 0:
             print(f"\n  ⏳ Manual window: {manual_window}s — dismiss any popups if needed...")
             deadline_manual = time.time() + manual_window
-            while not done and time.time() < deadline_manual:
+            while not _capture_complete() and time.time() < deadline_manual:
                 time.sleep(1)
 
-        if done:
+        if _capture_complete():
             context.close()
             if browser:
                 browser.close()
@@ -371,7 +398,7 @@ def fetch_via_playwright(timeout_s: int = 45, manual_window: int = 30) -> Tuple[
         ]
         deadline = time.time() + (timeout_s - manual_window)
         trigger_idx = 0
-        while not done and time.time() < deadline:
+        while not _capture_complete() and time.time() < deadline:
             if trigger_idx < len(triggers):
                 try:
                     page.evaluate(triggers[trigger_idx])
@@ -382,11 +409,11 @@ def fetch_via_playwright(timeout_s: int = 45, manual_window: int = 30) -> Tuple[
             else:
                 time.sleep(1)
 
-        if not done and seen_urls:
+        if not have_projections and seen_urls:
             print("\n  📋 All PrizePicks API calls seen (none had projection data):")
             for u in seen_urls:
                 print(u)
-        elif not done:
+        elif not have_projections:
             print("\n  ⚠️  No api.prizepicks.com calls detected at all.")
             print("       PrizePicks may be blocking the browser fingerprint or CDN-caching the board.")
 
@@ -469,6 +496,31 @@ def main():
     rows = parse_rows(data, included)
     df   = pd.DataFrame(rows).fillna("")
     df["line"] = pd.to_numeric(df["line"], errors="coerce")
+
+    # Derive opp_team from game_id groupings when game obj lacks home/away fields.
+    # PrizePicks /games endpoint returns lineup data, not team codes, so we infer
+    # the opponent as the other team sharing the same pp_game_id.
+    # Normalize pp_game_id to string for consistent joining.
+    df["pp_game_id"] = df["pp_game_id"].astype(str).str.strip()
+    if "opp_team" in df.columns and "pp_game_id" in df.columns and "team" in df.columns:
+        # For each game_id, collect the unique teams
+        teams_per_game = (
+            df[df["pp_game_id"].ne("") & df["team"].astype(str).str.strip().ne("")]
+            .groupby("pp_game_id")["team"]
+            .apply(lambda s: sorted(s.unique()))
+            .reset_index()
+        )
+        teams_per_game.columns = ["pp_game_id", "_teams"]
+        # Only consider games with exactly 2 teams
+        two_team = teams_per_game[teams_per_game["_teams"].apply(len) == 2].copy()
+        two_team["_team_a"] = two_team["_teams"].apply(lambda t: t[0])
+        two_team["_team_b"] = two_team["_teams"].apply(lambda t: t[1])
+
+        df = df.merge(two_team[["pp_game_id", "_team_a", "_team_b"]], on="pp_game_id", how="left")
+        needs_opp = df["opp_team"].astype(str).str.strip().eq("")
+        df.loc[needs_opp & (df["team"] == df["_team_a"]), "opp_team"] = df["_team_b"]
+        df.loc[needs_opp & (df["team"] == df["_team_b"]), "opp_team"] = df["_team_a"]
+        df = df.drop(columns=["_team_a", "_team_b", "_teams"], errors="ignore")
 
     # Bouncer: remove junk rows
     required = ["projection_id", "player", "team", "prop_type"]
