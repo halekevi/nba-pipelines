@@ -146,15 +146,36 @@ def load_config() -> dict:
 _json_file_cache: dict[str, dict[str, Any]] = {}
 
 # If set, fetch data from these URLs instead of baked-in files (avoids Docker layer cache).
-# Set in Railway env vars:
+# Optional on Railway — auto-defaults apply when RAILWAY_* is set (see below).
 #   TICKETS_JSON_URL = https://raw.githubusercontent.com/halekevi/PropORACLE/main/ui_runner/templates/tickets_latest.json
 #   SLATE_JSON_URL   = https://raw.githubusercontent.com/halekevi/PropORACLE/main/ui_runner/templates/slate_latest.json
-#   PIPELINE_JSON_TTL_SEC = 90   # optional; lower = pick up JSON URL changes sooner (default 300)
+#   PIPELINE_JSON_TTL_SEC = 90   # optional; on Railway default is 120 if unset
+#   DISABLE_AUTO_GITHUB_JSON = 1  # opt out of Railway → GitHub raw auto URLs
+#   PROPORACLE_RAW_JSON_BASE = https://raw.githubusercontent.com/USER/REPO/BRANCH/ui_runner/templates
 #
-# On Railway, the Docker image often has OLD .xlsx mtimes while your repo JSON is current. Set SLATE_JSON_URL
-# (and TICKETS_JSON_URL) to raw GitHub URLs so the API + status cards use generated_at from JSON instead of Excel.
+# On Railway, baked-in .xlsx mtimes are often old while main-branch JSON is current. We default missing URLs to
+# raw GitHub so /api/pipeline/status and slate endpoints stay fresh without manual env setup.
+def _running_on_railway() -> bool:
+    return bool(
+        os.environ.get("RAILWAY_ENVIRONMENT")
+        or os.environ.get("RAILWAY_SERVICE_ID")
+        or os.environ.get("RAILWAY_PROJECT_ID")
+    )
+
+
+_JSON_BASE_DEFAULT = (
+    "https://raw.githubusercontent.com/halekevi/PropORACLE/main/ui_runner/templates"
+)
+
 _TICKETS_JSON_URL = os.environ.get("TICKETS_JSON_URL", "").strip()
-_SLATE_JSON_URL   = os.environ.get("SLATE_JSON_URL", "").strip()
+_SLATE_JSON_URL = os.environ.get("SLATE_JSON_URL", "").strip()
+
+if not os.environ.get("DISABLE_AUTO_GITHUB_JSON", "").strip() and _running_on_railway():
+    _base = os.environ.get("PROPORACLE_RAW_JSON_BASE", _JSON_BASE_DEFAULT).rstrip("/")
+    if not _SLATE_JSON_URL:
+        _SLATE_JSON_URL = f"{_base}/slate_latest.json"
+    if not _TICKETS_JSON_URL:
+        _TICKETS_JSON_URL = f"{_base}/tickets_latest.json"
 
 _DATA_FILE_URL_MAP: dict[str, str] = {}
 if _TICKETS_JSON_URL:
@@ -162,8 +183,10 @@ if _TICKETS_JSON_URL:
 if _SLATE_JSON_URL:
     _DATA_FILE_URL_MAP["slate_latest.json"] = _SLATE_JSON_URL
 
-# Shorter TTL on Railway (e.g. 60–120) so SLATE_JSON_URL / TICKETS_JSON_URL pick up pushes quickly.
-_PIPELINE_JSON_TTL = float(os.environ.get("PIPELINE_JSON_TTL_SEC", "300"))
+if _running_on_railway() and "PIPELINE_JSON_TTL_SEC" not in os.environ:
+    _PIPELINE_JSON_TTL = 120.0
+else:
+    _PIPELINE_JSON_TTL = float(os.environ.get("PIPELINE_JSON_TTL_SEC", "300"))
 
 
 def read_json_cached(path: Path, ttl: float | None = None) -> Any:
@@ -705,8 +728,10 @@ def api_pipeline_status():
             "slate": combined_slate,
         },
         "as_of": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "slate_json_source": "remote" if _SLATE_JSON_URL else "disk",
-        "tickets_json_source": "remote" if _TICKETS_JSON_URL else "disk",
+        "slate_json_source": "remote" if bool(_DATA_FILE_URL_MAP.get("slate_latest.json")) else "disk",
+        "tickets_json_source": "remote" if bool(_DATA_FILE_URL_MAP.get("tickets_latest.json")) else "disk",
+        "railway_auto_github_json": bool(_running_on_railway() and not os.environ.get("DISABLE_AUTO_GITHUB_JSON", "").strip()),
+        "deploy_git_sha": (os.environ.get("RAILWAY_GIT_COMMIT_SHA") or os.environ.get("GIT_COMMIT") or "")[:40],
     })
 
 
