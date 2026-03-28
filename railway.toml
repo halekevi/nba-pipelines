@@ -5,10 +5,11 @@
 #
 # If the live site never updates after git push:
 #   - Railway → this service → Settings → Source: repo halekevi/PropORACLE, branch main
-#   - Settings → Root Directory: leave EMPTY (repo root, not ui_runner/)
-#   - Settings → Custom Start Command: leave EMPTY so startCommand below is used
-#     If you see "No module named 'main'" you had gunicorn main:app — repo root main.py now supports that.
-#     Prefer: sh scripts/railway_gunicorn.sh  OR  gunicorn ui_runner.app:app ...
+#   - Settings → Root Directory: leave EMPTY (repo root) for scripts/ + railway_gunicorn.sh.
+#     If Root Directory is `ui_runner`, Nixpacks still often runs `gunicorn main:app` — use ui_runner/main.py shim.
+#   - Settings → Custom Start Command: leave EMPTY so startCommand below is used, OR set explicitly:
+#     sh scripts/railway_gunicorn.sh
+#     If root is ui_runner only: gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 4 --worker-class gthread --timeout 180
 #   - Settings → Watch Paths: leave empty (watch whole repo) or include ui_runner/**
 #   - Deployments: confirm latest deploy shows the same commit as GitHub main (not Failed/Crashed)
 #
