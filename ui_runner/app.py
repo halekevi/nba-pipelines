@@ -853,6 +853,69 @@ def api_slate_sport():
         return jsonify({"error": str(e), "sports": {}}), 500
 
 
+@app.get("/api/slate-excel")
+def api_slate_excel():
+    """Return all sheets from the combined Excel with non-blank columns only."""
+    import openpyxl
+    from datetime import date, timedelta
+
+    def _find_excel():
+        for i in range(7):
+            d = (date.today() - timedelta(days=i)).strftime("%Y-%m-%d")
+            p = BASE_DIR / "outputs" / d / f"combined_slate_tickets_{d}.xlsx"
+            if p.exists():
+                return p, d
+        return None, None
+
+    def _build():
+        path, run_date = _find_excel()
+        if path is None:
+            return {"error": "combined slate Excel not found", "sheets": {}, "date": None}
+        sheet_map = {
+            "Full Slate":  "combined",
+            "NBA Slate":   "nba",
+            "NBA1H Slate": "nba1h",
+            "NBA1Q Slate": "nba1q",
+            "CBB Slate":   "cbb",
+            "NHL Slate":   "nhl",
+            "Soccer Slate":"soccer",
+            "WCBB Slate":  "wcbb",
+            "MLB Slate":   "mlb",
+        }
+        wb = openpyxl.load_workbook(str(path), read_only=True, data_only=True)
+        result: dict[str, Any] = {}
+        for sheet_name, key in sheet_map.items():
+            if sheet_name not in wb.sheetnames:
+                continue
+            ws = wb[sheet_name]
+            all_rows = list(ws.iter_rows(values_only=True))
+            if not all_rows:
+                continue
+            headers = [str(h) if h is not None else "" for h in all_rows[0]]
+            data_rows = all_rows[1:]
+            # keep only columns with ≥1 non-null value in first 100 rows
+            non_blank = [
+                i for i, h in enumerate(headers)
+                if h and any(r[i] is not None for r in data_rows[:100])
+            ]
+            columns = [headers[i] for i in non_blank]
+            rows = []
+            for r in data_rows:
+                row = []
+                for i in non_blank:
+                    v = r[i]
+                    row.append(str(v) if hasattr(v, "isoformat") else v)
+                rows.append(row)
+            result[key] = {"columns": columns, "rows": rows}
+        wb.close()
+        return {"sheets": result, "date": run_date}
+
+    try:
+        return _gz_json_response("slate-excel", _build, ttl=300.0)
+    except Exception as e:
+        return jsonify({"error": str(e), "sheets": {}}), 500
+
+
 # ──────────────────────────────────────────────────────────────────────────────
 # API: Screenshot → Google Gemini vision (server proxy; key in GOOGLE_API_KEY).
 #

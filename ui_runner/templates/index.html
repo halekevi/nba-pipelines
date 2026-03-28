@@ -1104,7 +1104,7 @@ body::before{
         <span class="scard-toggle">▾</span>
       </div>
 
-      <div class="scard loading" id="sc-combined">
+      <div class="scard loading" id="sc-combined" onclick="toggleSlatePanel('combined')" style="cursor:pointer">
         <div class="scard-icon combined">
           <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5">
             <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
@@ -1329,6 +1329,22 @@ body::before{
           <th onclick="sortSlate('mlb','game_time')">TIME</th>
         </tr></thead>
         <tbody id="stb-mlb"></tbody>
+      </table></div>
+    </div>
+
+    <!-- COMBINED SLATE PANEL -->
+    <div class="slate-expand" id="sp-combined">
+      <div class="slate-toolbar">
+        <input class="slate-filter-input" type="text" placeholder="Filter player / prop / sport…" oninput="filterSlate('combined',this.value)" id="sf-combined"/>
+        <button class="slate-filter-btn" id="sfb-combined-over"     onclick="toggleDirFilter('combined','OVER',this)">▲ OVER</button>
+        <button class="slate-filter-btn" id="sfb-combined-under"    onclick="toggleDirFilter('combined','UNDER',this)">▼ UNDER</button>
+        <button class="slate-filter-btn" id="sfb-combined-goblin"   onclick="togglePickFilter('combined','Goblin',this)">Goblin</button>
+        <button class="slate-filter-btn" id="sfb-combined-standard" onclick="togglePickFilter('combined','Standard',this)">Standard</button>
+        <span class="slate-row-count" id="src-combined"></span>
+      </div>
+      <div class="slate-table-wrap"><table class="slate-table" id="st-combined">
+        <thead><tr><th style="color:var(--muted2);">Loading…</th></tr></thead>
+        <tbody id="stb-combined"></tbody>
       </table></div>
     </div>
 
@@ -1863,10 +1879,13 @@ const SPORTS = ['nba','nba1h','nba1q','cbb','nhl','soccer','mlb'];
 SPORTS.forEach(s => {
   SLATE_STATE[s] = { sortKey: 'rank_score', sortDir: -1, search: '', dir: null, pick: null };
 });
+SLATE_STATE['combined'] = { sortKey: 'Rank Score', sortDir: -1, search: '', dir: null, pick: null };
 
+const SLATE_COLS = {};  // sport -> array of column names from Excel
 let openSlatePanel = null;
 let slateDataPromise = null;
 let _slateSportPromise = null; // lazy: only fetches /api/slate-sport when a panel is first opened
+let _slateExcelPromise = null; // lazy: only fetches /api/slate-excel when combined panel is first opened
 
 function scheduleRenderSlateTable(sport) {
   if (RENDER_SCHEDULED[sport]) return;
@@ -1962,6 +1981,7 @@ async function loadSlatePicks() {
 }
 
 function loadSlateSport(sport) {
+  if (sport === 'combined') { loadSlateExcel(); return; }
   if (SLATE_DATA[sport] && SLATE_DATA[sport].length) { scheduleRenderSlateTable(sport); return; }
   const tbody = document.getElementById(`stb-${sport}`);
   if (tbody) tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;padding:20px;color:var(--muted);letter-spacing:1px;font-size:10px;">LOADING…</td></tr>`;
@@ -1973,6 +1993,7 @@ function loadSlateSport(sport) {
 }
 
 function renderSlateTable(sport) {
+  if (SLATE_COLS[sport]) { renderSlateTableDynamic(sport); return; }
   const rows  = SLATE_DATA[sport] || [];
   const state = SLATE_STATE[sport];
   const tbody = document.getElementById(`stb-${sport}`);
@@ -2098,6 +2119,158 @@ function togglePickFilter(sport, pick, btn) {
     document.getElementById(`sfb-${sport}-standard`)?.classList.remove('on');
     btn.classList.add('on');
   }
+  scheduleRenderSlateTable(sport);
+}
+
+// ── Combined Slate Excel endpoint ─────────────────────────────────────────────
+async function loadSlateExcel() {
+  const tbody = document.getElementById('stb-combined');
+  if (SLATE_COLS['combined'] && SLATE_DATA['combined']) { scheduleRenderSlateTable('combined'); return; }
+  if (tbody) tbody.innerHTML = `<tr><td style="text-align:center;padding:20px;color:var(--muted);letter-spacing:1px;font-size:10px;">LOADING…</td></tr>`;
+  if (!_slateExcelPromise) {
+    _slateExcelPromise = fetch('/api/slate-excel')
+      .then(r => r.json())
+      .then(d => {
+        if (!d.sheets) return;
+        // Populate combined and per-sport from Excel
+        const sports_map = { combined: 'Full Slate key', nba: 'nba', nba1h: 'nba1h', nba1q: 'nba1q',
+                             cbb: 'cbb', nhl: 'nhl', soccer: 'soccer', mlb: 'mlb' };
+        Object.entries(d.sheets).forEach(([key, sheet]) => {
+          if (!sheet || !sheet.columns || !sheet.rows) return;
+          SLATE_COLS[key] = sheet.columns;
+          SLATE_DATA[key] = sheet.rows;
+          if (key !== 'combined') {
+            // Ensure SLATE_STATE exists for per-sport dynamic sheets
+            if (!SLATE_STATE[key]) SLATE_STATE[key] = { sortKey: null, sortDir: -1, search: '', dir: null, pick: null };
+            const sortDefault = sheet.columns.includes('Rank Score') ? 'Rank Score'
+                              : sheet.columns.includes('Edge') ? 'Edge' : null;
+            SLATE_STATE[key].sortKey = sortDefault;
+          }
+          const sub = document.getElementById(`sc-${key}-sub`);
+          if (sub && sheet.rows.length) {
+            const n = sheet.rows.length;
+            const cur = sub.textContent || '';
+            if (!cur.includes('props')) sub.textContent = (cur ? cur + '  ·  ' : '') + `${n} props`;
+          }
+        });
+        scheduleRenderSlateTable('combined');
+        if (openSlatePanel && SLATE_COLS[openSlatePanel] && openSlatePanel !== 'combined') {
+          scheduleRenderSlateTable(openSlatePanel);
+        }
+      })
+      .catch(e => {
+        console.warn('slate-excel failed:', e);
+        if (tbody) tbody.innerHTML = `<tr><td style="text-align:center;padding:20px;color:var(--red);font-size:10px;">FAILED TO LOAD EXCEL DATA</td></tr>`;
+      });
+  }
+  await _slateExcelPromise;
+}
+
+function renderSlateTableDynamic(sport) {
+  const cols  = SLATE_COLS[sport] || [];
+  const allRows = SLATE_DATA[sport] || [];
+  const state = SLATE_STATE[sport] || {};
+  const tbody = document.getElementById(`stb-${sport}`);
+  const thead = document.querySelector(`#st-${sport} thead`);
+  const countEl = document.getElementById(`src-${sport}`);
+  if (!tbody) return;
+
+  // Build header if needed
+  if (thead) {
+    thead.innerHTML = '<tr>' + cols.map(c => {
+      const active = state.sortKey === c;
+      const cls = active ? (state.sortDir > 0 ? 'sort-asc' : 'sort-desc') : '';
+      return `<th class="${cls}" onclick="sortSlateDynamic('${sport}','${c.replace(/'/g,"\\'")}')">${c}</th>`;
+    }).join('') + '</tr>';
+  }
+
+  // Determine column index helpers
+  const ci = name => cols.indexOf(name);
+  const dirIdx    = ci('Dir') >= 0 ? ci('Dir') : ci('Direction');
+  const pickIdx   = ci('Pick Type') >= 0 ? ci('Pick Type') : ci('Pick');
+  const playerIdx = ci('Player');
+  const propIdx   = ci('Prop') >= 0 ? ci('Prop') : ci('Stat');
+  const teamIdx   = ci('Team');
+
+  // Filter
+  let filtered = allRows.filter(row => {
+    if (state.search) {
+      const q = state.search.toLowerCase();
+      const haystack = [playerIdx, propIdx, teamIdx].filter(i => i >= 0).map(i => String(row[i] || '').toLowerCase()).join(' ');
+      if (!haystack.includes(q)) return false;
+    }
+    if (state.dir  && dirIdx  >= 0 && String(row[dirIdx]  || '') !== state.dir)  return false;
+    if (state.pick && pickIdx >= 0 && String(row[pickIdx] || '') !== state.pick) return false;
+    return true;
+  });
+
+  // Sort
+  if (state.sortKey) {
+    const si = ci(state.sortKey);
+    if (si >= 0) {
+      filtered.sort((a, b) => {
+        let av = a[si], bv = b[si];
+        const an = parseFloat(av), bn = parseFloat(bv);
+        if (!isNaN(an) && !isNaN(bn)) return state.sortDir * (an - bn);
+        if (av == null) av = ''; if (bv == null) bv = '';
+        return state.sortDir * String(av).localeCompare(String(bv));
+      });
+    }
+  }
+
+  if (countEl) countEl.textContent = `${filtered.length} / ${allRows.length} PROPS`;
+
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="${cols.length}" style="text-align:center;padding:20px;color:var(--muted2);font-size:10px;letter-spacing:1px;">NO MATCHING PROPS</td></tr>`;
+    return;
+  }
+
+  // Render rows — colour certain columns
+  const edgeIdx = ci('Edge');
+  const dirColored = (val) => {
+    const v = String(val || '');
+    if (v === 'OVER') return `<span class="dir-over">▲ OVER</span>`;
+    if (v === 'UNDER') return `<span class="dir-under">▼ UNDER</span>`;
+    return v || '—';
+  };
+
+  const rowHtml = (row) => {
+    const cells = cols.map((c, i) => {
+      const val = row[i];
+      const vStr = val == null || val === 'None' ? '—' : String(val);
+      if (i === dirIdx) return `<td>${dirColored(val)}</td>`;
+      if (i === edgeIdx) {
+        const n = parseFloat(val);
+        const cls = !isNaN(n) ? (n >= 0 ? 'edge-pos' : 'edge-neg') : '';
+        const disp = !isNaN(n) ? (n >= 0 ? '+' : '') + n.toFixed(2) : vStr;
+        return `<td class="${cls}" style="font-family:'Share Tech Mono',monospace;font-weight:700;">${disp}</td>`;
+      }
+      if (i === playerIdx) return `<td style="font-weight:600;max-width:140px;overflow:hidden;text-overflow:ellipsis;">${vStr}</td>`;
+      return `<td>${vStr}</td>`;
+    }).join('');
+    return `<tr>${cells}</tr>`;
+  };
+
+  const token = (RENDER_TOKEN[sport] || 0) + 1;
+  RENDER_TOKEN[sport] = token;
+  const chunkSize = MOBILE_TABLE_QUERY.matches ? 30 : 100;
+  if (filtered.length <= chunkSize) { tbody.innerHTML = filtered.map(rowHtml).join(''); return; }
+  tbody.innerHTML = '';
+  let idx = 0;
+  const renderChunk = () => {
+    if (RENDER_TOKEN[sport] !== token) return;
+    tbody.insertAdjacentHTML('beforeend', filtered.slice(idx, idx + chunkSize).map(rowHtml).join(''));
+    idx += chunkSize;
+    if (idx < filtered.length) requestAnimationFrame(renderChunk);
+  };
+  requestAnimationFrame(renderChunk);
+}
+
+function sortSlateDynamic(sport, key) {
+  const s = SLATE_STATE[sport];
+  if (!s) return;
+  if (s.sortKey === key) s.sortDir *= -1;
+  else { s.sortKey = key; s.sortDir = -1; }
   scheduleRenderSlateTable(sport);
 }
 
