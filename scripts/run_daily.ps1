@@ -340,7 +340,7 @@ if ($script:PipelineFailed) {
     Push-Location $Root
     try {
         $pipeScript = Join-Path $Root "run_pipeline.ps1"
-        & pwsh -NoProfile -File $pipeScript -Date $Today -CombinedOnly
+        & pwsh -NoProfile -File $pipeScript -Date $Today -CombinedOnly -DQWarnOnly
         $ce = $LASTEXITCODE
         if ($ce -ne 0) {
             Write-Log "STEP D - Combined slate: FAILED (pwsh exit $ce)"

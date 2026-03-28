@@ -498,9 +498,12 @@ def main() -> None:
     train["consistency_grade"] = train["consistency_grade"].fillna(2.0)
 
     if "_weight" in df.columns:
-        sw = pd.to_numeric(df.loc[train.index, "_weight"], errors="coerce").fillna(1.0).to_numpy()
+        sw = pd.to_numeric(df.loc[train.index, "_weight"], errors="coerce").fillna(1.0)
     else:
-        sw = np.where(df.loc[train.index, "_synthetic"].to_numpy() > 0, 0.7, 1.0)
+        sw = pd.Series(
+            np.where(df.loc[train.index, "_synthetic"].to_numpy() > 0, 0.7, 1.0),
+            index=train.index,
+        )
 
     n = len(train)
     bw = blend_weight_for_n(n)
