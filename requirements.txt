@@ -1,2 +1,2 @@
-# Railway / Nixpacks installs from repo root — delegate to SlateIQ (Flask) stack.
+# Railway / Nixpacks installs from repo root — delegate to propOracle UI (Flask) stack.
 -r ui_runner/requirements.txt

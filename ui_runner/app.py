@@ -189,6 +189,12 @@ if _TICKETS_JSON_URL:
 if _SLATE_JSON_URL:
     _DATA_FILE_URL_MAP["slate_latest.json"] = _SLATE_JSON_URL
 
+
+def _template_json_available(filename: str) -> bool:
+    """True if JSON can be loaded from disk or from a configured remote URL (Railway)."""
+    return (TEMPLATES_DIR / filename).exists() or bool(_DATA_FILE_URL_MAP.get(filename))
+
+
 if _running_on_railway() and "PIPELINE_JSON_TTL_SEC" not in os.environ:
     _PIPELINE_JSON_TTL = 120.0
 else:
@@ -550,7 +556,7 @@ def ping():
 
 @app.get("/api/build")
 def api_build():
-    """Confirm which PropOracle UI revision is deployed (Railway / CI debugging)."""
+    """Confirm which propOracle UI revision is deployed (Railway / CI debugging)."""
     r = jsonify({
         "ui_build_id": _UI_BUILD_ID,
         "railway": _running_on_railway(),
@@ -930,7 +936,7 @@ def api_jobs():
 def api_tickets_latest():
     """Full tickets payload (groups, filters, date) for debugging and clients."""
     json_path = TEMPLATES_DIR / "tickets_latest.json"
-    if not json_path.exists():
+    if not _template_json_available("tickets_latest.json"):
         return jsonify({"error": "tickets_latest.json not found", "groups": []}), 404
     try:
         data = read_json_cached(json_path)
@@ -946,7 +952,7 @@ def api_tickets_latest():
 @app.get("/api/slate")
 def api_slate():
     json_path = TEMPLATES_DIR / "tickets_latest.json"
-    if not json_path.exists():
+    if not _template_json_available("tickets_latest.json"):
         return jsonify({"picks": [], "generated_at": None, "date": None})
 
     def _build_picks():
@@ -981,7 +987,7 @@ def api_slate():
         return {"picks": picks, "generated_at": data.get("generated_at"), "date": data.get("date")}
 
     try:
-        return _gz_json_response("slate-picks", _build_picks, ttl=300.0)
+        return _gz_json_response("slate-picks", _build_picks, ttl=_PIPELINE_JSON_TTL)
     except Exception as e:
         return jsonify({"error": str(e), "picks": []}), 500
 
@@ -995,10 +1001,12 @@ def api_slate():
 @app.get("/api/slate-sport")
 def api_slate_sport():
     slate_path = TEMPLATES_DIR / "slate_latest.json"
-    if not slate_path.exists():
+    if not _template_json_available("slate_latest.json"):
         return jsonify({"error": "slate_latest.json not found — run pipeline first", "sports": {}}), 404
     try:
-        return _gz_json_response("slate-sport", lambda: read_json_cached(slate_path), ttl=300.0)
+        return _gz_json_response(
+            "slate-sport", lambda: read_json_cached(slate_path), ttl=_PIPELINE_JSON_TTL
+        )
     except Exception as e:
         return jsonify({"error": str(e), "sports": {}}), 500
 
@@ -1012,9 +1020,12 @@ def api_slate_excel():
     def _find_excel():
         for i in range(7):
             d = (date.today() - timedelta(days=i)).strftime("%Y-%m-%d")
-            p = BASE_DIR / "outputs" / d / f"combined_slate_tickets_{d}.xlsx"
-            if p.exists():
-                return p, d
+            for p in (
+                BASE_DIR / "outputs" / d / f"combined_slate_tickets_{d}.xlsx",
+                COMBINED_OUT / f"combined_slate_tickets_{d}.xlsx",
+            ):
+                if p.exists():
+                    return p, d
         return None, None
 
     def _build():
@@ -1061,7 +1072,7 @@ def api_slate_excel():
         return {"sheets": result, "date": run_date}
 
     try:
-        return _gz_json_response("slate-excel", _build, ttl=300.0)
+        return _gz_json_response("slate-excel", _build, ttl=_PIPELINE_JSON_TTL)
     except Exception as e:
         return jsonify({"error": str(e), "sheets": {}}), 500
 

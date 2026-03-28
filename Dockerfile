@@ -1,4 +1,4 @@
-# PropOracle — SlateIQ web UI (Flask). Optional local/CI image; Railway uses Nixpacks (see railway.toml).
+# propOracle web UI (Flask). Optional local/CI image; Railway uses Nixpacks (see railway.toml).
 # Build from REPO ROOT. .dockerignore keeps this small — huge sport CSV trees are omitted.
 FROM python:3.13-slim-bookworm
 

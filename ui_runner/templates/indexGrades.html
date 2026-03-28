@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>PropOracle — Grades</title>
+<title>propOracle — Grades</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap');
@@ -83,7 +83,9 @@ body::after{
 .hybrid-logo{display:flex;align-items:center;gap:10px;}
 .logo-icon{width:48px;height:48px;object-fit:contain;display:block;filter:drop-shadow(0 0 8px rgba(212,160,23,0.5));}
 .nav-brand{font-family:'Inter',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px;line-height:1;color:var(--text-primary);display:flex;align-items:baseline;}
+.nav-brand .p-lower{text-transform:lowercase;}
 .nav-brand .oracle-upper{text-transform:uppercase;font-weight:800;}
+.nav-brand .oracle-word{font-weight:800;color:var(--accent-gold);}
 .snav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;margin-right:40px;flex-shrink:0;}
 .snav-links{display:flex;align-items:stretch;list-style:none;flex:1;gap:4px;}
 .snav-links li a{display:flex;align-items:center;gap:10px;padding:0 18px;height:72px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#7a9ac8;text-decoration:none;border-bottom:2px solid transparent;transition:color .2s,border-color .2s,background .2s;position:relative;}
@@ -754,8 +756,8 @@ body::after{
   <div class="nav-accent"></div>
   <a class="snav-brand" href="/">
     <div class="hybrid-logo">
-      <img src="/static/proporacle-logo-v3.png?v=20260320b" alt="PropORACLE logo" class="logo-icon"/>
-      <span class="nav-brand">Prop<span class="oracle-upper gold-shimmer">ORACLE</span></span>
+      <img src="/static/proporacle-logo-v3.png?v=20260320b" alt="propOracle logo" class="logo-icon"/>
+      <span class="nav-brand"><span class="p-lower">prop</span><span class="oracle-word gold-shimmer">Oracle</span></span>
     </div>
   </a>
   <ul class="snav-links">
@@ -769,7 +771,7 @@ body::after{
       <span class="tt-icon tt-moon">🌙</span>
       <span class="tt-icon tt-sun" style="display:none">☀️</span>
     </button>
-    <div class="live-pill"><div class="live-dot"></div>PROPORACLE &nbsp;·&nbsp; GRADES</div>
+    <div class="live-pill"><div class="live-dot"></div>propOracle &nbsp;·&nbsp; GRADES</div>
   </div>
   <button class="hamburger" id="hamburger" type="button" aria-label="Open menu"><span></span><span></span><span></span></button>
 </nav>

@@ -784,7 +784,7 @@ def build_html(xlsx_path: Path) -> str:
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>PropOracle — Tickets {display_date}</title>
+<title>propOracle — Tickets {display_date}</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <style>{CSS}</style>
 </head>
@@ -827,7 +827,7 @@ def build_html(xlsx_path: Path) -> str:
         <line x1="12" y1="28.5" x2="38" y2="28.5" stroke="#c8ff0030" stroke-width="0.6"><animate attributeName="opacity" values="0.2;0.8;0.2" dur="1.9s" repeatCount="indefinite" begin="0.7s"/></line>
       </svg>
     </div>
-    <span class="snav-name">Slate<span>IQ</span></span>
+    <span class="nav-brand" style="font-family:'Inter',sans-serif;font-size:22px;font-weight:700;"><span style="text-transform:lowercase;">prop</span><span style="font-weight:800;color:#d4af37;">Oracle</span></span>
   </a>
   <ul class="snav-links">
     <li><a href="/">Home</a></li>
@@ -850,7 +850,7 @@ def build_html(xlsx_path: Path) -> str:
 </div>
 
 <div class="page-header">
-  <div class="page-title">PROPORACLE TICKETS</div>
+  <div class="page-title">propOracle TICKETS</div>
   <div class="page-subtitle">MULTI-SPORT PROP INTELLIGENCE · NBA · CBB · NHL · SOCCER</div>
   <div class="page-meta">
     <span class="date-chip">📅 {display_date}</span>
@@ -912,7 +912,7 @@ def build_html(xlsx_path: Path) -> str:
   {combo_section}
   {mix_section}
 
-  <div class="footer">PROPORACLE &nbsp;·&nbsp; GENERATED {generated} &nbsp;·&nbsp; {h(xlsx_path.name)}</div>
+  <div class="footer">propOracle &nbsp;·&nbsp; GENERATED {generated} &nbsp;·&nbsp; {h(xlsx_path.name)}</div>
 </div>
 
 <button class="back-top" id="back-top" onclick="window.scrollTo({{top:0,behavior:'smooth'}})">↑</button>
