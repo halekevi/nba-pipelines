@@ -29,7 +29,7 @@ from urllib.parse import quote
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Any
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 
 from flask import Flask, jsonify, render_template, request, send_from_directory, abort, make_response
 
@@ -73,7 +73,7 @@ app = Flask(
 )
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-03-28-docker-railway-1"
+_UI_BUILD_ID = "2026-03-28-slate-meta-2"
 
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
@@ -472,11 +472,25 @@ def _payload_timestamp_meta(payload: dict | None) -> tuple[float | None, str | N
     ds = (payload.get("date") or "").strip()[:10]
     if len(ds) == 10:
         try:
-            dt = datetime.strptime(ds, "%Y-%m-%d")
+            dt = datetime.strptime(ds, "%Y-%m-%d").replace(tzinfo=timezone.utc)
             return dt.timestamp(), dt.strftime("%Y-%m-%d %H:%M:%S")
         except ValueError:
             pass
     return None, None
+
+
+def _fresher_meta(
+    a: tuple[float | None, str | None],
+    b: tuple[float | None, str | None],
+) -> tuple[float | None, str | None]:
+    """Use whichever payload (slate vs tickets) has the newer timestamp for status UI."""
+    at, ad = a
+    bt, bd = b
+    av = float(at or 0.0)
+    bv = float(bt or 0.0)
+    if bv > av:
+        return bt, bd
+    return at, ad
 
 
 def _slate_counts() -> tuple[dict[str, int], dict]:
@@ -579,11 +593,15 @@ def _no_store_headers(resp):
 def serve_tickets_latest_json():
     """Expose JSON at site root so the link on /tickets works (relative URLs break under /tickets)."""
     path = TEMPLATES_DIR / "tickets_latest.json"
-    if not path.exists():
+    if not _template_json_available("tickets_latest.json"):
         abort(404)
-    return _no_store_headers(
-        send_from_directory(str(TEMPLATES_DIR), "tickets_latest.json", mimetype="application/json")
-    )
+    try:
+        data = read_json_cached(path)
+    except Exception:
+        abort(404)
+    r = jsonify(data)
+    r.headers["Content-Type"] = "application/json; charset=utf-8"
+    return _no_store_headers(r)
 
 
 @app.get("/tickets")
@@ -705,6 +723,9 @@ def api_pipeline_status():
 
     slate_js_ts, slate_js_disp = _payload_timestamp_meta(slate_payload)
     tik_js_ts, tik_js_disp = _payload_timestamp_meta(tickets_payload)
+    status_js_ts, status_js_disp = _fresher_meta(
+        (slate_js_ts, slate_js_disp), (tik_js_ts, tik_js_disp)
+    )
 
     combined_candidates: list[Path] = []
     for i in range(7):
@@ -734,30 +755,30 @@ def api_pipeline_status():
     return jsonify({
         "nba": {
             "run_complete_flag": NBA_FLAG.exists(),
-            "slate":   _sport_slate_status(NBA_SLATE, "nba", slate_counts, slate_disk_info, slate_js_ts, slate_js_disp),
+            "slate":   _sport_slate_status(NBA_SLATE, "nba", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
             "tickets": _file_info(NBA_TICKETS),
         },
         "nba1h": {
-            "slate":   _sport_slate_status(NBA1H_SLATE, "nba1h", slate_counts, slate_disk_info, slate_js_ts, slate_js_disp),
+            "slate":   _sport_slate_status(NBA1H_SLATE, "nba1h", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
             "tickets": _file_info(NBA1H_TICKETS),
         },
         "nba1q": {
-            "slate":   _sport_slate_status(NBA1Q_SLATE, "nba1q", slate_counts, slate_disk_info, slate_js_ts, slate_js_disp),
+            "slate":   _sport_slate_status(NBA1Q_SLATE, "nba1q", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
             "tickets": _file_info(NBA1Q_TICKETS),
         },
         "cbb": {
-            "slate": _sport_slate_status(CBB_SLATE, "cbb", slate_counts, slate_disk_info, slate_js_ts, slate_js_disp),
+            "slate": _sport_slate_status(CBB_SLATE, "cbb", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
         },
         "nhl": {
-            "slate":   _sport_slate_status(NHL_SLATE, "nhl", slate_counts, slate_disk_info, slate_js_ts, slate_js_disp),
+            "slate":   _sport_slate_status(NHL_SLATE, "nhl", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
             "tickets": _file_info(NHL_TICKETS),
         },
         "soccer": {
-            "slate":   _sport_slate_status(SOCCER_SLATE, "soccer", slate_counts, slate_disk_info, slate_js_ts, slate_js_disp),
+            "slate":   _sport_slate_status(SOCCER_SLATE, "soccer", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
             "tickets": _file_info(SOCCER_TICKETS),
         },
         "mlb": {
-            "slate":   _sport_slate_status(MLB_SLATE, "mlb", slate_counts, slate_disk_info, slate_js_ts, slate_js_disp),
+            "slate":   _sport_slate_status(MLB_SLATE, "mlb", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
             "tickets": _file_info(MLB_TICKETS),
         },
         "combined": {

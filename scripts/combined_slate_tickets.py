@@ -1060,6 +1060,7 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
 
     payload = {
         "date": date_str,
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
         "sports": {
             "nba":    df_to_rows(nba,    "nba"),
             "cbb":    df_to_rows(cbb,    "cbb"),
