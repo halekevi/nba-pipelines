@@ -75,7 +75,7 @@ app = Flask(
 )
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-03-28-slate-display-date-8"
+_UI_BUILD_ID = "2026-03-28-slate-sport-auto-slate-latest-1"
 
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
@@ -160,7 +160,7 @@ _json_file_cache: dict[str, dict[str, Any]] = {}
 #   DISABLE_AUTO_GITHUB_JSON = 1  # opt out of Railway → GitHub raw auto URLs
 #   PROPORACLE_RAW_JSON_BASE = https://raw.githubusercontent.com/USER/REPO/BRANCH/ui_runner/templates
 #   PROPORACLE_SLATE_DATE = 2026-03-28   # optional; prefer outputs/THIS_DATE/ step8_*_THIS_DATE.xlsx
-#   SLATE_SPORT_SOURCE = auto|slate_latest|ticket_eval   # auto prefers ticket_eval_slate_latest.json when non-empty
+#   SLATE_SPORT_SOURCE = auto|slate_latest|ticket_eval   # auto prefers slate_latest.json (full slate); ticket_eval = eval subset only
 #   TICKET_EVAL_SLATE_JSON_URL = https://.../ticket_eval_slate_latest.json
 #
 # On Railway, baked-in .xlsx mtimes are often old while main-branch JSON is current. We default missing URLs to
@@ -572,8 +572,12 @@ def _count_slate_sport_rows(payload: dict) -> int:
 
 def _selected_slate_sport_payload() -> dict:
     """
-    Home slate explorer (/api/slate-sport): ticket_eval_slate_latest.json (from build_ticket_eval.py,
-    same legs as window.SLATE_DATA) when SLATE_SPORT_SOURCE=auto and that file has rows; else slate_latest.json.
+    Home slate explorer (/api/slate-sport).
+
+    - slate_latest: full per-sport grids from the pipeline (use for explorer).
+    - ticket_eval: small subset aligned with ticket HTML (use when forcing eval-only).
+    - auto: prefer slate_latest whenever it has rows so every sport panel (NHL, 1H, …) fills;
+      ticket_eval alone only lists a few sports/legs and left most panels empty.
     """
     src = os.environ.get("SLATE_SPORT_SOURCE", "auto").strip().lower()
     te_name = "ticket_eval_slate_latest.json"
@@ -598,13 +602,15 @@ def _selected_slate_sport_payload() -> dict:
             raise ValueError("ticket_eval_slate_latest.json unavailable")
         return d
 
+    sl = _load(sl_name)
+    if sl and _count_slate_sport_rows(sl) > 0:
+        return sl
     te = _load(te_name)
     if te and _count_slate_sport_rows(te) > 0:
         return te
-    d = _load(sl_name)
-    if not d:
-        raise ValueError("no slate json available")
-    return d
+    if sl:
+        return sl
+    raise ValueError("no slate json available")
 
 
 def _slate_counts() -> tuple[dict[str, int], dict]:
