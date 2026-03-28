@@ -1,2 +1,3 @@
 # Normalize combined slate script to LF so diffs stay readable on Windows.
 scripts/combined_slate_tickets.py text eol=lf
+scripts/railway_gunicorn.sh text eol=lf

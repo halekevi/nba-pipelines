@@ -17,7 +17,7 @@ builder = "NIXPACKS"
 
 [deploy]
 # workers=1: large slate JSON + gzip cache; two processes doubled RAM and OOM risk on small plans.
-# If you use Dockerfile on Railway, update Dockerfile CMD too (it overrides this when Docker builder is selected).
-startCommand = "python -m gunicorn ui_runner.app:app --bind 0.0.0.0:$PORT --workers=1 --threads=4 --worker-class=gthread --timeout=180 --access-logfile - --error-logfile -"
+# Shared with Dockerfile via scripts/railway_gunicorn.sh (import self-test + gunicorn).
+startCommand = "sh scripts/railway_gunicorn.sh"
 healthcheckPath = "/ping"
 healthcheckTimeout = 180
