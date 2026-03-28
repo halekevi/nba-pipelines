@@ -984,6 +984,8 @@ def ticket_groups_to_payload(all_ticket_groups, date_str, thresholds):
                     "intel_l5_vs_season":      _safe_float(gv("intel_l5_vs_season")),
                     "l5_over": _safe_float(gv("l5_over") or gv("L5 Over") or gv("line_hits_over_5")),
                     "l5_under": _safe_float(gv("l5_under") or gv("L5 Under") or gv("line_hits_under_5")),
+                    "l5_side_hits": _safe_float(gv("l5_side_hits")),
+                    "l5_consistency": _safe_float(gv("l5_consistency")),
                     "l10_over": _safe_float(gv("l10_over") or gv("L10 Over") or gv("hit_rate_over_L10") or gv("over_L10")),
                     "l10_under": _safe_float(gv("l10_under") or gv("L10 Under") or gv("hit_rate_under_L10") or gv("under_L10")),
                     "def_tier": str(gv("def_tier") or gv("Def Tier") or ""),
@@ -1054,6 +1056,8 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
                 "l5_avg":     g("l5_avg"),
                 "l5_over":    g("l5_over"),
                 "l5_under":   g("l5_under"),
+                "l5_side_hits": g("l5_side_hits"),
+                "l5_consistency": g("l5_consistency"),
                 "game_time":  str(g("game_time") or ""),
             })
         return rows
@@ -2060,6 +2064,18 @@ def load_nhl(path: str) -> pd.DataFrame:
         if dropped > 0:
             print(f"  [load_nhl] Dropped {dropped} unreliable faceoff props")
 
+    # Last-5 game counts vs line (step8 raw cols) → slate L5 Over / L5 Under
+    if "over_L5_raw" in df.columns:
+        df["l5_over"] = pd.to_numeric(df["over_L5_raw"], errors="coerce")
+    elif "l5_over" not in df.columns:
+        df["l5_over"] = np.nan
+    if "under_L5_raw" in df.columns:
+        df["l5_under"] = pd.to_numeric(df["under_L5_raw"], errors="coerce")
+    elif "l5_under" not in df.columns:
+        df["l5_under"] = np.nan
+
+    df = add_l5_play_side_columns(df)
+
     df = df[df["line"].notna() & (df["line"] > 0)]
     # Convert all pandas NA/NaT to None so openpyxl can handle them
     df = df.astype(object).where(df.notna(), other=None)
@@ -2849,6 +2865,35 @@ def load_nba1h(path: str) -> pd.DataFrame:
     return df
 
 
+def add_l5_play_side_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    For each row: L5 hits on the recommended side (over vs under vs line) and
+    hits / (l5_over + l5_under) when that sample size is known (>0).
+    """
+    if df is None or df.empty:
+        return df
+    out = df.copy()
+    lo = pd.to_numeric(out.get("l5_over"), errors="coerce")
+    lu = pd.to_numeric(out.get("l5_under"), errors="coerce")
+    if "direction" not in out.columns:
+        out["l5_side_hits"] = np.nan
+        out["l5_consistency"] = np.nan
+        return out
+    d = out["direction"].astype(str).str.strip().str.upper()
+    lo_a = lo.to_numpy(dtype=float, copy=True)
+    lu_a = lu.to_numpy(dtype=float, copy=True)
+    hits = np.select(
+        [d.eq("OVER").to_numpy(), d.eq("UNDER").to_numpy()],
+        [lo_a, lu_a],
+        default=np.nan,
+    )
+    out["l5_side_hits"] = hits
+    denom = lo_a + lu_a
+    denom = np.where(denom > 0, denom, np.nan)
+    out["l5_consistency"] = hits / denom
+    return out
+
+
 # ── Merge to full slate ────────────────────────────────────────────────────────
 def build_combined_slate(
     nba: pd.DataFrame,
@@ -2929,6 +2974,8 @@ def build_combined_slate(
         combined["ml_prob"] = pd.to_numeric(combined["ml_prob"], errors="coerce")
     if "edge" in combined.columns:
         combined["edge"] = pd.to_numeric(combined["edge"], errors="coerce")
+
+    combined = add_l5_play_side_columns(combined)
 
     combined = combined.sort_values("rank_score", ascending=False, na_position="last").reset_index(drop=True)
     return combined
@@ -3676,6 +3723,8 @@ SLATE_COLS = [
     "season_avg",
     "l5_over",
     "l5_under",
+    "l5_side_hits",
+    "l5_consistency",
     "l10_over",
     "l10_under",
     "def_tier",
@@ -3691,7 +3740,7 @@ SLATE_COLS = [
     "opp_vs_avg_pct",
     "game_time",
 ]
-SLATE_WIDTHS = [6, 5, 10, 20, 6, 6, 7, 10, 8, 7, 10, 8, 10, 18, 10, 6, 8, 7, 10, 10, 8, 10, 7, 7, 8, 8, 10, 9, 10, 10, 8, 9, 8, 10, 7, 8, 10, 16]
+SLATE_WIDTHS = [6, 5, 10, 20, 6, 6, 7, 10, 8, 7, 10, 8, 10, 18, 10, 6, 8, 7, 10, 10, 8, 10, 7, 7, 9, 10, 8, 8, 10, 9, 10, 10, 8, 9, 8, 10, 7, 8, 10, 16]
 SLATE_HDRS = [
     "Sport",
     "Tier",
@@ -3717,6 +3766,8 @@ SLATE_HDRS = [
     "Szn Avg",
     "L5 Over",
     "L5 Under",
+    "L5 Side Hits",
+    "L5 Match %",
     "L10 Over",
     "L10 Under",
     "Def Tier",
@@ -3744,6 +3795,8 @@ FULL_SLATE_EXTRA_HDRS = {
     "bet_risk": "RISK",
     "game_script_mult": "Game Script",
     "game_script_note": "Script Note",
+    "l5_side_hits": "L5 Side Hits",
+    "l5_consistency": "L5 Match %",
 }
 FULL_SLATE_EXTRA_WIDTHS = {
     "pace_tier": 10,
@@ -3752,6 +3805,8 @@ FULL_SLATE_EXTRA_WIDTHS = {
     "bet_risk": 9,
     "game_script_mult": 12,
     "game_script_note": 42,
+    "l5_side_hits": 9,
+    "l5_consistency": 10,
 }
 
 FULL_SLATE_COLS = [
@@ -3780,6 +3835,8 @@ FULL_SLATE_COLS = [
     "season_avg",
     "l5_over",
     "l5_under",
+    "l5_side_hits",
+    "l5_consistency",
     "l10_over",
     "l10_under",
     "def_tier",
@@ -3924,6 +3981,14 @@ def write_slate_sheet(
                     dc(ws, ri, ci, val, bg=C["miss"], bold=True, fc="FFFFFF", align="center")
                 else:
                     dc(ws, ri, ci, val, bg=bg_row, align="center")
+            elif col == "l5_side_hits" and val != "":
+                try:
+                    dc(ws, ri, ci, int(round(float(val))), bg=bg_row, align="center", fmt="0")
+                except (TypeError, ValueError):
+                    dc(ws, ri, ci, val, bg=bg_row, align="center")
+            elif col == "l5_consistency":
+                pct_cell(ws, ri, ci, val if val != "" else np.nan)
+                continue
             elif col in ("h2h_over_rate", "opp_vs_avg_pct"):
                 cell = dc(ws, ri, ci, val if val != "" else "", bg=bg_row, align="center")
                 if val != "":
