@@ -186,15 +186,21 @@ def _gz_json_response(key: str, build_fn, ttl: float = 300.0):
         with _GZ_CACHE_LOCK:
             _gz_cache[key] = (gz_bytes, time.time())
 
+    _NO_CACHE = "no-store, no-cache, must-revalidate, max-age=0"
     if "gzip" in request.headers.get("Accept-Encoding", ""):
         resp = app.response_class(gz_bytes, status=200, mimetype="application/json")
         resp.headers["Content-Encoding"] = "gzip"
         resp.headers["Content-Length"]   = len(gz_bytes)
         resp.headers["Vary"]             = "Accept-Encoding"
+        resp.headers["Cache-Control"]    = _NO_CACHE
+        resp.headers["Pragma"]           = "no-cache"
         return resp
     # Non-gzip client: decompress inline (rare — all modern browsers support gzip)
     with gzip.GzipFile(fileobj=io.BytesIO(gz_bytes)) as f:
-        return app.response_class(f.read(), status=200, mimetype="application/json")
+        resp = app.response_class(f.read(), status=200, mimetype="application/json")
+        resp.headers["Cache-Control"] = _NO_CACHE
+        resp.headers["Pragma"]        = "no-cache"
+        return resp
 
 
 def safe_tail(lines: List[str], max_lines: int = 2500) -> List[str]:
@@ -752,7 +758,10 @@ def api_tickets_latest():
         return jsonify({"error": "tickets_latest.json not found", "groups": []}), 404
     try:
         data = read_json_cached(json_path)
-        return jsonify(data)
+        resp = jsonify(data)
+        resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        resp.headers["Pragma"] = "no-cache"
+        return resp
     except Exception as e:
         return jsonify({"error": str(e), "groups": []}), 500
 
