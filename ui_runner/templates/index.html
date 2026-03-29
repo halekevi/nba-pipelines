@@ -253,8 +253,8 @@ body::after{content:'';position:fixed;inset:0;
 .edge-card:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(0,0,0,0.45);}
 .edge-card:hover.over{border-color:var(--accent-gold);}
 .edge-card:hover.under{border-color:rgba(255,192,107,.22);}
-.edge-card-top{display:flex;align-items:center;gap:14px;padding:16px 18px;}
-.edge-avatar{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:17px;flex-shrink:0;}
+.edge-card-top{display:flex;align-items:center;gap:10px;padding:12px 14px;}
+.edge-avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:16px;flex-shrink:0;}
 .edge-avatar.over{background:rgba(125,255,203,.1);border:1px solid rgba(125,255,203,.25);color:var(--green);}
 .edge-avatar.under{background:rgba(255,192,107,.1);border:1px solid rgba(255,192,107,.25);color:var(--amber);}
 .edge-info{flex:1;min-width:0;}
@@ -272,12 +272,12 @@ body::after{content:'';position:fixed;inset:0;
 .edge-pick{font-size:9px;font-family:"Inter",sans-serif;font-weight:600;padding:3px 8px;border-radius:10px;letter-spacing:.5px;display:inline-block;}
 .pick-goblin{background:rgba(183,168,255,.12);color:var(--purple);border:1px solid rgba(183,168,255,.25);}
 .pick-standard{background:rgba(127,199,217,.12);color:var(--cyan);border:1px solid rgba(127,199,217,.25);}
-.edge-val{text-align:right;flex-shrink:0;}
-.edge-num{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;}
+.edge-val{text-align:right;flex-shrink:0;max-width:52px;overflow:hidden;}
+.edge-num{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.5px;white-space:nowrap;}
 .edge-num.over{color:var(--green);}
 .edge-num.under{color:var(--amber);}
-.edge-hr{font-size:11px;color:var(--muted);margin-top:3px;font-weight:500;}
-.edge-line-badge{font-size:11px;color:var(--muted);font-family:"Inter",sans-serif;font-weight:500;}
+.edge-hr{font-size:10px;color:var(--muted);margin-top:2px;font-weight:500;white-space:nowrap;}
+.edge-line-badge{font-size:10px;color:var(--muted);font-family:"Inter",sans-serif;font-weight:500;white-space:nowrap;}
 
 /* expand panel */
 .edge-expand{display:none;border-top:1px solid rgba(255,255,255,.06);padding:16px 18px;background:rgba(8,8,22,.6);}
@@ -293,9 +293,9 @@ body::after{content:'';position:fixed;inset:0;
 .expand-proj-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#2ecc71,#c8ff00);transition:width .6s ease;}
 .expand-proj-marker{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.3);}
 .expand-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;}
-.expand-stat{background:rgba(255,255,255,0.04);backdrop-filter:blur(10px) saturate(180%);-webkit-backdrop-filter:blur(10px) saturate(180%);border:1px solid rgba(255,255,255,0.09);border-radius:12px;padding:10px;text-align:center;}
+.expand-stat{background:rgba(255,255,255,0.04);backdrop-filter:blur(10px) saturate(180%);-webkit-backdrop-filter:blur(10px) saturate(180%);border:1px solid rgba(255,255,255,0.09);border-radius:12px;padding:10px;text-align:center;overflow:hidden;min-width:0;}
 .expand-stat-lbl{font-size:9px;font-family:"Inter",sans-serif;font-weight:600;color:var(--muted);letter-spacing:1.5px;margin-bottom:4px;}
-.expand-stat-val{font-family:'Bebas Neue',sans-serif;font-size:24px;}
+.expand-stat-val{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.8vw,22px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
 /* section header */
 .sec-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
@@ -386,7 +386,7 @@ body{
 .qcard-icon-wrap{font-size:28px;}
 .edge-avatar{width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);}
 .edge-expand{background:rgba(0,0,0,.25);border-top:1px solid rgba(255,255,255,.06);}
-.expand-stat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px;text-align:center;backdrop-filter:blur(10px) saturate(180%);}
+.expand-stat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px;text-align:center;backdrop-filter:blur(10px) saturate(180%);overflow:hidden;min-width:0;}
 .streak-card{background:rgba(255,255,255,.028)!important;backdrop-filter:blur(18px) saturate(160%)!important;-webkit-backdrop-filter:blur(18px) saturate(160%)!important;border-radius:16px!important;}
 @media(max-width:1080px){.hero-title{font-size:70px;}.hero-panel{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(max-width:720px){
@@ -1843,7 +1843,7 @@ function buildEdgeCard(p, idx) {
       <div class="expand-stats">
         <div class="expand-stat"><div class="expand-stat-lbl">HIT RATE</div><div class="expand-stat-val" style="color:${hitColor}">${p.hit}%</div></div>
         <div class="expand-stat"><div class="expand-stat-lbl">EDGE</div><div class="expand-stat-val" style="color:var(--accent)">${es}${p.edge.toFixed(2)}</div></div>
-        <div class="expand-stat"><div class="expand-stat-lbl">PICK TYPE</div><div class="expand-stat-val" style="color:var(--cyan);font-size:18px;">${p.pick}</div></div>
+        <div class="expand-stat"><div class="expand-stat-lbl">PICK TYPE</div><div class="expand-stat-val" style="color:var(--cyan);font-size:clamp(11px,1.3vw,15px);">${p.pick}</div></div>
       </div>
     </div>`;
   div.querySelector(".edge-card-top").addEventListener("click",()=>toggleEdge(idx,p));
