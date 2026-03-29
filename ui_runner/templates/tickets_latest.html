@@ -96,8 +96,6 @@ body::after{
 .hybrid-logo{display:flex;align-items:center;gap:10px;}
 .logo-icon{width:182px;height:60px;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(212,175,55,0.45));}
 .nav-brand{font-family:'Inter',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px;line-height:1;color:var(--text-primary);display:flex;align-items:baseline;}
-.nav-brand .p-lower{text-transform:lowercase;}
-.nav-brand .oracle-word{font-weight:800;color:var(--accent-gold);}
 .oracle-upper{text-transform:uppercase;font-weight:800;color:var(--accent-gold);}
 .gold-shimmer{background:linear-gradient(to bottom,#d4af37,#f7ef8a);-webkit-background-clip:text;background-clip:text;color:transparent;}
 .snav-links{display:flex;align-items:stretch;list-style:none;flex:1;gap:4px;}
@@ -340,7 +338,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
   <div class="nav-accent"></div>
   <a class="snav-brand" href="/">
     <img src="/static/proporacle-logo-v3.png?v=20260320b" alt="PropORACLE" class="logo-icon">
-    <span class="nav-brand"><span class="p-lower">prop</span><span class="oracle-word gold-shimmer">Oracle</span></span>
+    <span class="nav-brand">Prop<span class="oracle-upper gold-shimmer">ORACLE</span></span>
   </a>
   <ul class="snav-links">
     <li><a href="/">Home</a></li>
@@ -372,17 +370,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="sum-item"><div class="sum-val green">0</div><div class="sum-lab">HITS</div></div>
 <div class="sum-item"><div class="sum-val red">0</div><div class="sum-lab">MISSES</div></div>
 <div class="sum-item"><div class="sum-val void">0</div><div class="sum-lab">VOID/PUSH</div></div>
-<div class="sum-item"><div class="sum-val pend">12</div><div class="sum-lab">UNGRADED</div></div>
+<div class="sum-item"><div class="sum-val pend">5</div><div class="sum-lab">UNGRADED</div></div>
 <div class="sum-item"><div class="sum-val">0</div><div class="sum-lab">PERFECT TICKETS</div></div>
 <div class="sum-item"><div class="sum-val">0</div><div class="sum-lab">TIX W/ MISS</div></div>
-<div class="sum-item"><div class="sum-val sum-val-sm">12</div><div class="sum-lab">TOTAL LEGS</div></div>
+<div class="sum-item"><div class="sum-val sum-val-sm">5</div><div class="sum-lab">TOTAL LEGS</div></div>
 </div></div>
 <div class="wrap">
 <p class="slate-kicker">SLATE DATE · 2026-03-28</p>
 <p class="meta-muted" style="margin:6px 0 14px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — until a graded file exists) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-03-28/graded_*.xlsx</code>.</p>
-<details class="ticket-bucket sb-nba" open>
-<summary><span>NBA</span><span class="ticket-bucket-meta">2 sections · 2 tickets</span></summary>
-<div class="ticket-bucket-body">
 <section class="sec"><h2 class="sec-head bebas">NBA Power Play 2-Leg</h2>
 <article class="ticket-card">
 <div class="thdr">
@@ -395,22 +390,22 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Kelly Oubre</div>
+<div class="pl-pend">Rasheer Fleming</div>
 <div class="tier">G</div>
-<div class="leg-prop-col"><div>Assists</div><div class="meta-muted">PHI vs CHA</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">PHX vs UTA</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">1.8</div>
+<div class="leg-extra">1.05</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Isaac Okoro</div>
+<div class="pl-pend">Jordan Goodwin</div>
 <div class="tier">G</div>
-<div class="leg-prop-col"><div>Assists</div><div class="meta-muted">CHI vs MEM</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">PHX vs UTA</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">1</div>
+<div class="leg-extra">0.9</div>
 </div>
 </article>
 </section>
@@ -426,147 +421,35 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Kelly Oubre</div>
+<div class="pl-pend">Rasheer Fleming</div>
 <div class="tier">G</div>
-<div class="leg-prop-col"><div>Assists</div><div class="meta-muted">PHI vs CHA</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">PHX vs UTA</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">1.8</div>
+<div class="leg-extra">1.05</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Isaac Okoro</div>
+<div class="pl-pend">Jordan Goodwin</div>
 <div class="tier">G</div>
-<div class="leg-prop-col"><div>Assists</div><div class="meta-muted">CHI vs MEM</div></div>
+<div class="leg-prop-col"><div>3-PT Made</div><div class="meta-muted">PHX vs UTA</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">1</div>
+<div class="leg-extra">0.9</div>
 </div>
 <div class="legrow leg-pend">
 <div class="badge pend">·</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Paul George</div>
+<div class="pl-pend">Oso Ighodaro</div>
 <div class="tier">G</div>
-<div class="leg-prop-col"><div>Steals</div><div class="meta-muted">PHI vs CHA</div></div>
-<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-prop-col"><div>Assists</div><div class="meta-muted">PHX vs UTA</div></div>
+<div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1.85</div>
 </div>
 </article>
 </section>
-</div></details>
-<details class="ticket-bucket sb-cbb">
-<summary><span>CBB</span><span class="ticket-bucket-meta">2 sections · 2 tickets</span></summary>
-<div class="ticket-bucket-body">
-<section class="sec"><h2 class="sec-head bebas">CBB Power Play 2-Leg</h2>
-<article class="ticket-card">
-<div class="thdr">
-<span class="tn bebas">#1</span>
-<span class="tg">CBB Power Play 2-Leg</span>
-<span class="tg">0✓ 0✗ / 2</span>
-<span class="payout">PWR 1.2× · FLEX 1.2×</span>
-<span class="banner pend">UNGRADED</span>
-</div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
-<div><span class="pill sport-cbb">CBB</span></div>
-<div class="pl-pend">Keaton Wagler</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">ILL vs IOWA</div></div>
-<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">2.9916</div>
-</div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
-<div><span class="pill sport-cbb">CBB</span></div>
-<div class="pl-pend">David Mirkovic</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Points</div><div class="meta-muted">ILL vs IOWA</div></div>
-<div class="leg-extra">9.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">7.2534</div>
-</div>
-</article>
-</section>
-<section class="sec"><h2 class="sec-head bebas">CBB Flex 3-Leg</h2>
-<article class="ticket-card">
-<div class="thdr">
-<span class="tn bebas">#1</span>
-<span class="tg">CBB Flex 3-Leg</span>
-<span class="tg">0✓ 0✗ / 3</span>
-<span class="payout">PWR 0.96× · FLEX 0.48×</span>
-<span class="banner pend">UNGRADED</span>
-</div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
-<div><span class="pill sport-cbb">CBB</span></div>
-<div class="pl-pend">Keaton Wagler</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">ILL vs IOWA</div></div>
-<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">2.9916</div>
-</div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
-<div><span class="pill sport-cbb">CBB</span></div>
-<div class="pl-pend">David Mirkovic</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Points</div><div class="meta-muted">ILL vs IOWA</div></div>
-<div class="leg-extra">9.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">7.2534</div>
-</div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
-<div><span class="pill sport-cbb">CBB</span></div>
-<div class="pl-pend">Jaden Bradley</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Points</div><div class="meta-muted">ARIZ vs PUR</div></div>
-<div class="leg-extra">9.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">3.5958</div>
-</div>
-</article>
-</section>
-</div></details>
-<details class="ticket-bucket sb-soccer">
-<summary><span>Soccer</span><span class="ticket-bucket-meta">1 sections · 1 tickets</span></summary>
-<div class="ticket-bucket-body">
-<section class="sec"><h2 class="sec-head bebas">Soccer Standard 2-Leg</h2>
-<article class="ticket-card">
-<div class="thdr">
-<span class="tn bebas">#1</span>
-<span class="tg">Soccer Standard 2-Leg</span>
-<span class="tg">0✓ 0✗ / 2</span>
-<span class="payout">PWR 3× · FLEX 3×</span>
-<span class="banner pend">UNGRADED</span>
-</div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
-<div><span class="pill sport-soccer">SOCCER</span></div>
-<div class="pl-pend">Morgan Messner</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Goalie Saves</div><div class="meta-muted">THORNS vs UNKNOWN_OPP</div></div>
-<div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0</div>
-</div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
-<div><span class="pill sport-soccer">SOCCER</span></div>
-<div class="pl-pend">Lorena</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Goalie Saves</div><div class="meta-muted">KC CURRENT vs UNKNOWN_OPP</div></div>
-<div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">0</div>
-</div>
-</article>
-</section>
-</div></details>
 
 <style>
   /* Manual Ticket Builder additions (kept isolated so existing UI stays intact) */
@@ -850,7 +733,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 </details>
 
 <script>
-  window.SLATE_DATA = [{"pick_type": "Goblin", "prop_type": "Assists", "line": 0.5, "direction": "OVER", "player": "Kelly Oubre", "team": "PHI", "opp": "CHA", "edge": 1.8, "hit_rate": 1.0, "l5_avg": 2.2, "season_avg": 2.4, "sport": "NBA", "data_warning": null, "initials": "KO"}, {"pick_type": "Goblin", "prop_type": "Assists", "line": 0.5, "direction": "OVER", "player": "Isaac Okoro", "team": "CHI", "opp": "MEM", "edge": 1.0, "hit_rate": 0.8, "l5_avg": 1.4, "season_avg": 1.6, "sport": "NBA", "data_warning": null, "initials": "IO"}, {"pick_type": "Goblin", "prop_type": "Assists", "line": 0.5, "direction": "OVER", "player": "Kelly Oubre", "team": "PHI", "opp": "CHA", "edge": 1.8, "hit_rate": 1.0, "l5_avg": 2.2, "season_avg": 2.4, "sport": "NBA", "data_warning": null, "initials": "KO"}, {"pick_type": "Goblin", "prop_type": "Assists", "line": 0.5, "direction": "OVER", "player": "Isaac Okoro", "team": "CHI", "opp": "MEM", "edge": 1.0, "hit_rate": 0.8, "l5_avg": 1.4, "season_avg": 1.6, "sport": "NBA", "data_warning": null, "initials": "IO"}, {"pick_type": "Goblin", "prop_type": "Steals", "line": 0.5, "direction": "OVER", "player": "Paul George", "team": "PHI", "opp": "CHA", "edge": 1.85, "hit_rate": 1.0, "l5_avg": 2.6, "season_avg": 2.1, "sport": "NBA", "data_warning": null, "initials": "PG"}, {"pick_type": "Goblin", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Keaton Wagler", "team": "ILL", "opp": "IOWA", "edge": 2.991599999999999, "hit_rate": 0.8500000000000001, "l5_avg": 5.6, "season_avg": 5.208, "sport": "CBB", "data_warning": null, "initials": "KW"}, {"pick_type": "Goblin", "prop_type": "Points", "line": 9.5, "direction": "OVER", "player": "David Mirkovic", "team": "ILL", "opp": "IOWA", "edge": 7.253399999999999, "hit_rate": 0.8, "l5_avg": 18.2, "season_avg": 13.667, "sport": "CBB", "data_warning": null, "initials": "DM"}, {"pick_type": "Goblin", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Keaton Wagler", "team": "ILL", "opp": "IOWA", "edge": 2.991599999999999, "hit_rate": 0.8500000000000001, "l5_avg": 5.6, "season_avg": 5.208, "sport": "CBB", "data_warning": null, "initials": "KW"}, {"pick_type": "Goblin", "prop_type": "Points", "line": 9.5, "direction": "OVER", "player": "David Mirkovic", "team": "ILL", "opp": "IOWA", "edge": 7.253399999999999, "hit_rate": 0.8, "l5_avg": 18.2, "season_avg": 13.667, "sport": "CBB", "data_warning": null, "initials": "DM"}, {"pick_type": "Goblin", "prop_type": "Points", "line": 9.5, "direction": "OVER", "player": "Jaden Bradley", "team": "ARIZ", "opp": "PUR", "edge": 3.595800000000001, "hit_rate": 0.75, "l5_avg": 13.4, "season_avg": 12.929, "sport": "CBB", "data_warning": null, "initials": "JB"}, {"pick_type": "Standard", "prop_type": "Goalie Saves", "line": 3.5, "direction": "OVER", "player": "Morgan Messner", "team": "THORNS", "opp": "UNKNOWN_OPP", "edge": 0.0, "hit_rate": 0.6, "l5_avg": 3.5, "season_avg": 3.5, "sport": "SOCCER", "data_warning": null, "initials": "MM"}, {"pick_type": "Standard", "prop_type": "Goalie Saves", "line": 2.5, "direction": "OVER", "player": "Lorena", "team": "KC CURRENT", "opp": "UNKNOWN_OPP", "edge": 0.0, "hit_rate": 0.6, "l5_avg": 2.5, "season_avg": 2.5, "sport": "SOCCER", "data_warning": null, "initials": "L"}];
+  window.SLATE_DATA = [{"pick_type": "Goblin", "prop_type": "3-PT Made", "line": 0.5, "direction": "OVER", "player": "Rasheer Fleming", "team": "PHX", "opp": "UTA", "edge": 1.05, "hit_rate": 0.8, "l5_avg": 1.6, "season_avg": 1.5, "sport": "NBA", "data_warning": null, "initials": "RF"}, {"pick_type": "Goblin", "prop_type": "3-PT Made", "line": 0.5, "direction": "OVER", "player": "Jordan Goodwin", "team": "PHX", "opp": "UTA", "edge": 0.9, "hit_rate": 0.8, "l5_avg": 1.4, "season_avg": 1.4, "sport": "NBA", "data_warning": null, "initials": "JG"}, {"pick_type": "Goblin", "prop_type": "3-PT Made", "line": 0.5, "direction": "OVER", "player": "Rasheer Fleming", "team": "PHX", "opp": "UTA", "edge": 1.05, "hit_rate": 0.8, "l5_avg": 1.6, "season_avg": 1.5, "sport": "NBA", "data_warning": null, "initials": "RF"}, {"pick_type": "Goblin", "prop_type": "3-PT Made", "line": 0.5, "direction": "OVER", "player": "Jordan Goodwin", "team": "PHX", "opp": "UTA", "edge": 0.9, "hit_rate": 0.8, "l5_avg": 1.4, "season_avg": 1.4, "sport": "NBA", "data_warning": null, "initials": "JG"}, {"pick_type": "Goblin", "prop_type": "Assists", "line": 1.5, "direction": "OVER", "player": "Oso Ighodaro", "team": "PHX", "opp": "UTA", "edge": 1.85, "hit_rate": 0.6, "l5_avg": 3.2, "season_avg": 3.5, "sport": "NBA", "data_warning": null, "initials": "OI"}];
 </script>
 
 <script>
