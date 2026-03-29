@@ -124,13 +124,13 @@ def _safe_float(x):
     return float(v) if not pd.isna(v) else np.nan
 
 
-# ── WNBA tier thresholds (adjusted down from NBA due to smaller slate sizes) ──
+# ── WNBA tier thresholds (aligned with NBA recalibration 2026-03-28) ──
 
 def _tier_from_score(score: float) -> str:
     if np.isnan(score): return "D"
-    if score >= 2.00:   return "A"   # NBA=2.50
-    if score >= 1.40:   return "B"   # NBA=1.75
-    if score >= 0.85:   return "C"   # NBA=1.10
+    if score >= 1.25:   return "A"
+    if score >= 0.75:   return "B"
+    if score >= 0.40:   return "C"
     return "D"
 
 

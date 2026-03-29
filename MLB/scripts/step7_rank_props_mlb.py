@@ -128,9 +128,9 @@ def _edge_transform(edge: float, cap: float = 3.0, power: float = 0.85) -> float
 
 def _tier_from_score(score: float) -> str:
     if np.isnan(score): return "D"
-    if score >= 2.50:   return "A"
-    if score >= 1.75:   return "B"
-    if score >= 1.10:   return "C"
+    if score >= 1.25:   return "A"
+    if score >= 0.75:   return "B"
+    if score >= 0.40:   return "C"
     return "D"
 
 

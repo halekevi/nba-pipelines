@@ -413,9 +413,9 @@ def score_prop(row: dict) -> float:
 def assign_tier(score: float, sample: float) -> str:
     if sample < MIN_SAMPLE:
         return "D"
-    if score >= 0.68:
+    if score >= 0.78:
         return "A"
-    elif score >= 0.60:
+    elif score >= 0.65:
         return "B"
     elif score >= 0.50:
         return "C"

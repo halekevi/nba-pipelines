@@ -458,16 +458,16 @@ def _edge_transform(edge: float, cap=3.0, power=0.85) -> float:
 def _tier(score: float, eligible_scores=None) -> str:
     """Assign tier based on rank_score.
     Thresholds calibrated to actual CBB score distribution:
-      scores range ~-1.2 to +1.6, median ~-0.42
-      A = top ~5%  (score >= 0.96)
-      B = top ~10% (score >= 0.68)
-      C = top ~25% (score >= 0.13)
+      scores range ~0 to +0.86, recalibrated 2026-03-28
+      A = top ~15% (score >= 0.70)
+      B = top ~35% (score >= 0.50)
+      C = top ~60% (score >= 0.30)
       D = everything else
     """
     if np.isnan(score): return "D"
-    if score >= 0.96:  return "A"
-    if score >= 0.68:  return "B"
-    if score >= 0.13:  return "C"
+    if score >= 0.70:  return "A"
+    if score >= 0.50:  return "B"
+    if score >= 0.30:  return "C"
     return "D"
 
 

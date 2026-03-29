@@ -338,9 +338,9 @@ def _edge_transform_series(edge: pd.Series, cap: float = 3.0, power: float = 0.8
     return sign * (clipped ** power)
 
 def _tier_from_score_series(score: pd.Series) -> pd.Series:
-    return np.where(score >= 2.50, "A",
-           np.where(score >= 1.75, "B",
-           np.where(score >= 1.10, "C", "D")))
+    return np.where(score >= 1.25, "A",
+           np.where(score >= 0.75, "B",
+           np.where(score >= 0.40, "C", "D")))
 
 
 def _defense_tier_feature(out: pd.DataFrame) -> pd.Series:

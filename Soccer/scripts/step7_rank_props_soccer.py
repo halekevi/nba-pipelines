@@ -382,14 +382,12 @@ def _edge_transform(edge: float, cap: float = 3.0, power: float = 0.85) -> float
 def _tier_from_score(score: float) -> str:
     """
     Tier thresholds calibrated for soccer pipeline.
-    Note: when many rows lack ESPN IDs/stats, most eligible rows will have
-    partial signals. Thresholds are intentionally modest so A/B/C tiers
-    still populate when data is partially available.
+    Recalibrated 2026-03-28 based on actual score distribution (max ~1.84).
     """
     if np.isnan(score): return "D"
-    if score >= 1.20:   return "A"
-    if score >= 0.50:   return "B"
-    if score >= 0.10:   return "C"
+    if score >= 1.60:   return "A"
+    if score >= 1.20:   return "B"
+    if score >= 0.80:   return "C"
     return "D"
 
 
