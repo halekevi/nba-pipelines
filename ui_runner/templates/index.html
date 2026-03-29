@@ -155,7 +155,7 @@ body::after{content:'';position:fixed;inset:0;
   .edge-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));}
 }
 .edge-grid{display:grid;gap:clamp(6px,1vw,10px);grid-template-columns:repeat(auto-fill,minmax(min(100%,180px),1fr));margin-bottom:14px;}
-.edge-grid{display:grid;gap:clamp(8px,1.5vw,14px);grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));margin-bottom:14px;}
+.edge-grid{display:grid;gap:clamp(8px,1.5vw,14px);grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));margin-bottom:14px;}
 .edge-grid--under{margin-bottom:0;}
 .streak-grid{display:grid;gap:clamp(8px,1.5vw,12px);grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));margin-bottom:18px;}
 .edge-source-note{font-size:11px;color:var(--muted2);line-height:1.45;max-width:70ch;margin:-6px 0 16px;letter-spacing:.02em;}
@@ -258,8 +258,8 @@ body::after{content:'';position:fixed;inset:0;
 .edge-avatar.over{background:rgba(125,255,203,.1);border:1px solid rgba(125,255,203,.25);color:var(--green);}
 .edge-avatar.under{background:rgba(255,192,107,.1);border:1px solid rgba(255,192,107,.25);color:var(--amber);}
 .edge-info{flex:1;min-width:0;}
-.edge-name{font-size:clamp(13px,1.35vw,15px);font-weight:600;color:var(--text);line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.2px;}
-.edge-prop{font-size:clamp(10px,1.1vw,12px);color:var(--muted);margin-top:4px;letter-spacing:0;font-family:"Inter",sans-serif;line-height:1.35;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.edge-name{font-size:clamp(13px,1.35vw,15px);font-weight:600;color:var(--text);line-height:1.25;white-space:normal;word-break:break-word;letter-spacing:-0.2px;}
+.edge-prop{font-size:clamp(10px,1.1vw,12px);color:var(--muted);margin-top:4px;letter-spacing:0;font-family:"Inter",sans-serif;line-height:1.35;white-space:normal;word-break:break-word;}
 .edge-tags{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;}
 .edge-sport{font-size:9px;font-family:"Inter",sans-serif;font-weight:600;padding:3px 8px;border-radius:10px;letter-spacing:.5px;display:inline-block;}
 .sp-nba{background:rgba(255,192,107,.12);color:var(--amber);border:1px solid rgba(255,192,107,.25);}
@@ -272,7 +272,7 @@ body::after{content:'';position:fixed;inset:0;
 .edge-pick{font-size:9px;font-family:"Inter",sans-serif;font-weight:600;padding:3px 8px;border-radius:10px;letter-spacing:.5px;display:inline-block;}
 .pick-goblin{background:rgba(183,168,255,.12);color:var(--purple);border:1px solid rgba(183,168,255,.25);}
 .pick-standard{background:rgba(127,199,217,.12);color:var(--cyan);border:1px solid rgba(127,199,217,.25);}
-.edge-val{text-align:right;flex-shrink:0;max-width:52px;overflow:hidden;}
+.edge-val{text-align:right;flex-shrink:0;max-width:72px;overflow:visible;}
 .edge-num{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.5px;white-space:nowrap;}
 .edge-num.over{color:var(--green);}
 .edge-num.under{color:var(--amber);}
