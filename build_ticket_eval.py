@@ -593,6 +593,12 @@ def _normalize_workbook_rows(path: Path) -> list[dict[str, Any]]:
         if df.empty:
             continue
         df.columns = [_norm_header(c) for c in df.columns]
+        # Skip styled title/summary sheets — their first column header is a long
+        # title string (e.g. "CBB SLATE GRADE  |  2026-03-27  |  Generated ...").
+        # Real data sheets have short, clean column names.
+        first_col = df.columns[0] if len(df.columns) else ""
+        if len(first_col) > 40 or "|" in first_col:
+            continue
         out.extend(df.to_dict(orient="records"))
     return out
 
@@ -710,7 +716,7 @@ def _ingest_workbook_rows_into_index(
 ) -> None:
     for raw in rows:
         pl = _norm_player_name(_canon_player(raw))
-        pt = _canon_prop(raw).lower()
+        pt = _norm_prop_type(_canon_prop(raw))
         dr = _canon_direction(raw)
         if not pl or not pt:
             continue
@@ -854,11 +860,11 @@ def _load_actuals_indices(
                     gdf.columns = [str(c).lower().strip() for c in gdf.columns]
                     pcol = next((c for c in gdf.columns if c == "player"), None)
                     propcol = next(
-                        (c for c in gdf.columns if c in ("prop", "prop_type", "stat")),
+                        (c for c in gdf.columns if c in ("prop", "prop_type", "prop_type_norm", "stat", "stat_type")),
                         None,
                     )
                     dircol = next(
-                        (c for c in gdf.columns if c in ("direction", "dir", "side")),
+                        (c for c in gdf.columns if c in ("direction", "bet_direction", "final_bet_direction", "dir", "side")),
                         None,
                     )
                     resultcol = next(
@@ -890,7 +896,7 @@ def _load_actuals_indices(
                         if resultcol and pd.notna(grow.get(resultcol)):
                             raw["grade"] = grow[resultcol]
                         pl = _norm_player_name(_canon_player(raw))
-                        pt = _canon_prop(raw).lower()
+                        pt = _norm_prop_type(_canon_prop(raw))
                         dr = _canon_direction(raw)
                         if not pl or not pt:
                             continue
@@ -913,13 +919,47 @@ def _load_actuals_indices(
     return out
 
 
+# CBB graded workbook (Box Raw sheet) uses abbreviated prop_type_norm values.
+# Map them to the full names used in ticket JSON legs so matching works.
+_PROP_TYPE_ALIASES: dict[str, str] = {
+    # abbreviated → full (ticket JSON uses full names)
+    "pts":                   "points",
+    "reb":                   "rebounds",
+    "ast":                   "assists",
+    "blk":                   "blocked shots",
+    "stl":                   "steals",
+    "to":                    "turnovers",
+    "pr":                    "pts+rebs",
+    "pa":                    "pts+asts",
+    "ra":                    "rebs+asts",
+    "pra":                   "pts+rebs+asts",
+    # also normalise common full-name variants so reverse lookups work
+    "pts+rebs+asts":         "pts+rebs+asts",
+    "pts+rebs":              "pts+rebs",
+    "pts+asts":              "pts+asts",
+    "rebs+asts":             "rebs+asts",
+    "points+rebounds+assists": "pts+rebs+asts",
+    "points+rebounds":       "pts+rebs",
+    "points+assists":        "pts+asts",
+    "rebounds+assists":      "rebs+asts",
+    # fantasy / combo labels seen in actuals CSV
+    "fantasy score":         "fantasy score",
+    "pts+rebs+asts":         "pts+rebs+asts",
+}
+
+def _norm_prop_type(raw: str) -> str:
+    """Lowercase + strip, then apply alias map so abbreviated and full names match."""
+    s = raw.strip().lower()
+    return _PROP_TYPE_ALIASES.get(s, s)
+
+
 def _match_leg_in_index(
     leg: dict[str, Any],
     triple: dict[tuple[str, str, str], dict],
     pair_buckets: dict[tuple[str, str], list[dict]],
 ) -> dict | None:
     pl = _norm_player_name(leg.get("player") or "")
-    pt = str(leg.get("prop_type") or "").strip().lower()
+    pt = _norm_prop_type(str(leg.get("prop_type") or ""))
     dr = str(leg.get("direction") or "").strip().upper()
     if not pl or not pt:
         return None
