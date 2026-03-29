@@ -300,6 +300,25 @@ else {
     Write-Host "Skipping Soccer grading (missing slate/actuals/grader)." -ForegroundColor Yellow
 }
 
+$MLBActuals   = Join-Path $DateDir "actuals_mlb_$Date.csv"
+$MLBSlateFile = Resolve-FirstExisting @(
+    (Join-Path $DateDir "step8_mlb_direction_clean_$Date.xlsx"),
+    (Join-Path $Root "MLB\step8_mlb_direction_clean.xlsx")
+)
+$MLBGradedFile = Join-Path $DateDir "graded_mlb_$Date.xlsx"
+if ((Test-Path $MLBActuals) -and $MLBSlateFile -and (Test-Path $MLBSlateFile)) {
+    Run-Py "Grade MLB Slate" $Root "scripts\nhl_soccer_grader.py" @(
+        "--sport", "MLB",
+        "--date", $Date,
+        "--actuals", $MLBActuals,
+        "--slate", $MLBSlateFile,
+        "--output-dir", $DateDir
+    )
+}
+else {
+    Write-Host "Skipping MLB grading (missing slate/actuals)." -ForegroundColor Yellow
+}
+
 if ($NBA1HSlateFile -and (Test-Path $NBA1HSlateFile) -and (Test-Path $SlateGraderScript) -and ((Test-Path $NBA1HActuals) -or (Test-Path $NBAActuals))) {
     $NBA1HActualsForGrade = if (Test-Path $NBA1HActuals) { $NBA1HActuals } else { $NBAActuals }
     Run-Py "Grade NBA1H Slate" $Root $SlateGraderScript @(
@@ -466,8 +485,3 @@ if ($ShouldRetrain) {
     }
     Write-Host "[AUTO-RETRAIN] Complete." -ForegroundColor Green
 }
-else {
-    Write-Host "`n[AUTO-RETRAIN] Skipping (trained within last 7 days)." -ForegroundColor DarkGray
-}
-
-
