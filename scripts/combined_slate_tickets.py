@@ -3031,8 +3031,13 @@ def build_single_structure_ticket(
     allowed_tiers = {"A", "B"} if (is_power or is_standard) else {"A", "B", "C"}
     q = 0.70 if (is_power or is_standard) else 0.50  # top 30% / top 50%
 
+    # NHL and Soccer don't use Goblin/Standard split — all props are Standard.
+    # Skip pick_type filtering for these sports so Power/Flex can use Standard props.
+    sport_up = sport_label.upper()
+    skip_picktype_filter = sport_up in ("NHL", "SOCCER", "SOCCER")
+
     df = pool_df.copy()
-    if "pick_type" in df.columns:
+    if "pick_type" in df.columns and not skip_picktype_filter:
         if is_standard:
             df = df[df["pick_type"].astype(str).str.strip().str.lower() == "standard"]
         else:

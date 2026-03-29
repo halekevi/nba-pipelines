@@ -18,6 +18,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 186449,4702484,333,latrell wrightsell,ALA,name_team,2026-03-16
 189533,5109789,2541,jake ensminger,SCU,name_team,2026-03-16
 218019,4432243,251,tramon mark,TEX,name_team,2026-03-20
+218054,4711256,150,caleb foster,DUKE,name_team,2026-03-28
 218061,5106270,96,otega oweh,UK,name_team,2026-03-20
 218102,4917097,139,robbie avila,SLU,name_team,2026-03-20
 218489,4683777,8,d j wagner,ARK,name_team,2026-03-16
@@ -329,6 +330,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 306341,5107768,70,isaiah brickner,IDHO,name_team,2026-03-16
 306832,5313941,2439,walter brown,UNLV,name_team,2026-03-22
 306856,5239554,222,malachi palmer,VILL,name_team,2026-03-16
+306900,5105337,150,maliq brown,DUKE,name_team,2026-03-28
 306934,5107274,258,jacari white,UVA,name_team,2026-03-21
 307153,5142709,2390,dante allen,MIA,name_team,2026-03-16
 307168,5176187,338,frankquon sherman,KENN,name_team,2026-03-16

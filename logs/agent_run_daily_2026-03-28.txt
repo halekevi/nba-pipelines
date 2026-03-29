@@ -1,0 +1,408 @@
+[14:26:13] ======== Daily run start (Today=2026-03-28, Yesterday=2026-03-27) ========
+[14:26:13] STEP A1 - Historical actuals refresh: SKIPPED (-SkipFetch)
+Grader already run for 2026-03-27 ΓÇö skipping
+[14:26:13] STEP A - Grader (2026-03-27): SKIPPED (graded_nba exists)
+[14:26:13] STEP A2 - Player consistency build: START
+Player consistency build complete.
+  Sources: real
+  Players updated: 0
+  Cells updated: 0
+  Grade S: 0 cells
+  Grade A: 0 cells
+  Grade B: 0 cells
+  Grade C: 0 cells
+  Grade D: 0 cells
+  Grade F: 0 cells (BLACKLISTED)
+  Grade ?: 0 cells (insufficient sample)
+  Database: C:\Users\halek\OneDrive\Desktop\PropORACLE\data\cache\player_consistency.db
+[14:26:18] STEP A2 - Player consistency build: OK
+[14:26:18] STEP B - Archive yesterday (2026-03-27): OK
+[14:26:18] STEP C0 - Fetch game lines
+  NBA: 6 games fetched (2026-03-28)
+  CBB: 2 games fetched (2026-03-28)
+  NHL: 15 games fetched (2026-03-28)
+  Soccer: 0 games fetched (2026-03-28)
+  Spreads available: 23/23 games
+  Totals available: 23/23 games
+  DB: C:\Users\halek\OneDrive\Desktop\PropORACLE\data\cache\game_lines.db
+[14:26:20] STEP C0 - Fetch game lines: OK
+[14:26:20] STEP C - Pipeline (2026-03-28): START
+=== ENV CHECK ===
+LOCALAPPDATA: C:\Users\halek\AppData\Local
+USERPROFILE:  C:\Users\halek
+USERNAME:     halek
+SESSION:      Console
+cache_dir:    C:\Users\halek\AppData\Local\PropORACLE\cache
+=================
+  [Date] Using specified date: 2026-03-28
+
+======================================================
+  PROP PIPELINE  -- 2026-03-28 -- 14:26:21
+======================================================
+
+[ MODELS ] Checking prop_model_*.pkl (see models/README.md)...
+  [MODELS] OK prop_model_nba.pkl
+  [MODELS] OK prop_model_nba1q.pkl
+  [MODELS] OK prop_model_nba1h.pkl
+  [MODELS] OK prop_model_cbb.pkl
+  [MODELS] OK prop_model_nhl.pkl
+  [MODELS] OK prop_model_soccer.pkl
+
+[ PARALLEL PIPELINE: NBA + NBA1H + NBA1Q + CBB + WCBB + NHL + Soccer + MLB ]
+
+  Starting all pipelines simultaneously...
+
+  [Waiting for all pipelines to finish...]
+
+    [MLB] --> MLB Step 8 - Direction Context
+            CMD: py -3.14 ".\scripts\step8_add_direction_context_mlb.py" --input outputs\step7_mlb_ranked.xlsx --output outputs\step8_mlb_direction.csv --xlsx outputs\step8_mlb_direction_clean.xlsx
+            ╬ô├Ñ├å Loading: outputs\step7_mlb_ranked.xlsx (sheet=ALL)
+    [MLB] FAILED: MLB Step 8 - Direction Context (exit 1)
+    False
+    [CBB] --> WCBB Step 6 - Rank Props
+            CMD: py -3.14 ".\scripts\pipeline\step6_rank_props_cbb.py" --input step5b_wcbb.csv --output step6_ranked_wcbb.xlsx --date 2026-03-28 --cache data\cache\wcbb_boxscore_cache.csv
+            ╬ô├Ñ├å Loaded: step5b_wcbb.csv | rows=90
+            [DateFilter] Kept 90/90 rows for 2026-03-28 (dropped 0 rows)
+            ╬ô┬ú├á CBB ML blend applied (model=cbb, weight=0.30)
+              [H2H] Using largest boxscore cache (11,411,002 bytes): C:\Users\halek\OneDrive\Desktop\PropORACLE\CBB\cbb_boxscore_cache.csv  (override data\cache\wcbb_boxscore_cache.csv)
+              [H2H] cache: C:\Users\halek\OneDrive\Desktop\PropORACLE\CBB\cbb_boxscore_cache.csv  exists=True
+              [H2H] cache rows=129,592  cols=['team_id', 'opp_team_id', 'player_norm', 'espn_athlete_id', 'game_date', 'event_id', 'min', 'pts', 'reb', 'ast', 'stl', 'blk']...
+              [H2H] matched 0/90 slate rows (player+opp keys vs boxscore cache)
+            ╬ô┬ú├á Saved ╬ô├Ñ├å step6_ranked_wcbb.xlsx
+            ALL rows (active) : 90
+            DROPPED rows      : 0  (Demon + neg-edge Goblin, audit only)
+            Tier breakdown:
+            tier
+            D    90
+            
+            Void reasons (active):
+            (none)
+    [CBB] OK: WCBB Step 6 - Rank Props
+    True
+    [NHL] --> NHL Step 8 - Direction Context
+            CMD: py -3.14 ".\scripts\step8_add_direction_context_nhl.py" --input step7_nhl_ranked.xlsx --output step8_nhl_direction_clean.xlsx --date 2026-03-28
+            Loaded 2993 props from step7_nhl_ranked.xlsx
+            Upstream columns (92): ['away_team', 'combo_player_ids', 'combo_prop', 'composite_hit_rate', 'consistency_grade', 'consistency_multiplier', 'def_rank', 'def_tier', 'description', 'edge', 'fetched_at', 'final_score', 'game_id', 'game_script_mult', 'game_script_note', 'game_start', 'goals_per_game', 'hit_rate_over_L10', 'hit_rate_over_L20', 'hit_rate_over_L5', 'hit_rate_over_season', 'home_team', 'is_home', 'is_promo', 'last5_hit_rate', 'last5_over', 'last5_push', 'last5_under', 'line_hit_rate_over_ou_10', 'line_hit_rate_over_ou_5', 'line_hit_rate_under_ou_10', 'line_hit_rate_under_ou_5', 'line_score', 'ml_edge', 'ml_prob', 'nhl_player_id', 'opp_gaa', 'opp_gf_per_game', 'opp_gp', 'opp_pk_pct', 'opp_pp_pct', 'opp_saa', 'opp_sf_per_game', 'opponent', 'over_L10', 'over_L20', 'over_L5', 'pick_type', 'player_id', 'player_name', 'player_role', 'position', 'position_code', 'position_group', 'pp_pts_per_game', 'pp_tier', 'prop_score', 'pts_per_game', 'rank', 'recommended_side', 'sample_L10', 'sample_L20', 'sample_L5', 'sample_season', 'scoring_tier', 'stat_g1', 'stat_g10', 'stat_g2', 'stat_g3', 'stat_g4', 'stat_g5', 'stat_g6', 'stat_g7', 'stat_g8', 'stat_g9', 'stat_last10_avg', 'stat_last5_avg', 'stat_norm', 'stat_season_avg', 'stat_status', 'stat_type', 'team', 'tier', 'toi_per_game_api', 'under_L10', 'under_L20', 'under_L5', 'usage_boost', 'usage_boost_proj', 'usage_boost_reason', 'usage_boost_source', '\ufeffprojection_id']
+            
+            [DateFilter] Kept 2993/2993 rows for 2026-03-28 (dropped 0 future/past rows)
+            XLSX saved -> step8_nhl_direction_clean.xlsx
+            CSV saved -> step8_nhl_direction_clean.csv
+            
+            Tier breakdown: {'A': 82, 'B': 29, 'C': 96, 'D': 2786}
+            
+            =================================================================
+            A-TIER PICKS (82 total)
+            =================================================================
+              [A] #  1  Brady Tkachuk              UNDER   3.5  Hits                  vs TB    |  ELITE         ELITE  
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  3.5  Gap:        |  score=0.88400
+              [A] #  2  Anze Kopitar               UNDER  11.0  Faceoffs Won          vs UTA   |  SECONDARY     ELITE  
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line: 11.0  Gap:        |  score=0.86041
+              [A] #  3  Elias Lindholm             UNDER   9.5  Faceoffs Won          vs MIN   |  SECONDARY     ELITE  
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  9.5  Gap:        |  score=0.85232
+              [A] #  4  Dylan Larkin               UNDER  10.0  Faceoffs Won          vs PHI   |  SECONDARY     SOLID  
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line: 10.0  Gap:        |  score=0.84711
+              [A] #  5  Jeremy Lauzon              UNDER   4.0  Hits                  vs WSH   |  SHUTDOWN      ELITE  
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  4.0  Gap:        |  score=0.84711
+              [A] #  6  Sam Bennett                UNDER   7.5  Faceoffs Won          vs NYI   |  SECONDARY     ELITE  
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  7.5  Gap:        |  score=0.84579
+              [A] #  7  Nick Suzuki                UNDER   9.5  Faceoffs Won          vs NSH   |  ELITE         WEAK   
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  9.5  Gap:        |  score=0.84047
+              [A] #  8  Alex Laferriere            UNDER   3.0  Hits                  vs UTA   |  DEPTH         ELITE  
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  3.0  Gap:        |  score=0.83943
+              [A] #  9  Brock Nelson               UNDER   8.5  Faceoffs Won          vs WPG   |  SECONDARY     AVERAGE
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  8.5  Gap:        |  score=0.83381
+              [A] # 10  Keegan Kolesar             UNDER   3.0  Hits                  vs WSH   |  SHUTDOWN      ELITE  
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  3.0  Gap:        |  score=0.83278
+              [A] # 11  Connor Clifton             UNDER   4.0  Hits                  vs DAL   |  SHUTDOWN      ELITE  
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  4.0  Gap:        |  score=0.83271
+              [A] # 12  Tanner Jeannot             UNDER   3.0  Hits                  vs MIN   |  DEPTH         ELITE  
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  3.0  Gap:        |  score=0.83170
+              [A] # 13  Mark Kastelic              UNDER   3.0  Hits                  vs MIN   |  DEPTH         ELITE  
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  3.0  Gap:        |  score=0.83170
+              [A] # 14  Nico Hischier              UNDER  12.0  Faceoffs Won          vs CAR   |  SECONDARY     SOLID  
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line: 12.0  Gap:        |  score=0.82618
+              [A] # 15  Samuel Helenius            UNDER   3.0  Hits                  vs UTA   |  SHUTDOWN      ELITE  
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  3.0  Gap:        |  score=0.82613
+              [A] # 16  Jeff Malott                UNDER   2.5  Hits                  vs UTA   |  SHUTDOWN      ELITE  
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  2.5  Gap:        |  score=0.82613
+              [A] # 17  Yakov Trenin               UNDER   4.5  Hits                  vs BOS   |  DEPTH         AVERAGE
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  4.5  Gap:        |  score=0.82051
+              [A] # 18  Christian Dvorak           UNDER   8.5  Faceoffs Won          vs DET   |  SECONDARY     SOLID  
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  8.5  Gap:        |  score=0.81964
+              [A] # 19  Kiefer Sherwood            UNDER   4.5  Hits                  vs CBJ   |  DEPTH         AVERAGE
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  4.5  Gap:        |  score=0.81310
+              [A] # 20  Ryan O'Reilly              UNDER   8.5  Faceoffs Won          vs MTL   |  ELITE         WEAK   
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  8.5  Gap:        |  score=0.81310
+              [A] # 21  Beck Malenstyn             UNDER   3.0  Hits                  vs SEA   |  SHUTDOWN      SOLID  
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  3.0  Gap:        |  score=0.81283
+              [A] # 22  Bo Horvat                  UNDER   9.5  Faceoffs Won          vs FLA   |  SECONDARY     WEAK   
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  9.5  Gap:        |  score=0.80721
+              [A] # 23  Jordan Staal               UNDER  10.0  Faceoffs Won          vs NJ    |  DEPTH         SOLID  
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line: 10.0  Gap:        |  score=0.80721
+              [A] # 24  Alexander Wennberg         UNDER   9.5  Faceoffs Won          vs CBJ   |  SECONDARY     AVERAGE
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  9.5  Gap:        |  score=0.80657
+              [A] # 25  John Tavares               UNDER  10.5  Faceoffs Won          vs STL   |  SECONDARY     AVERAGE
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line: 10.5  Gap:        |  score=0.80657
+            
+            =================================================================
+            B-TIER PICKS (29 total)
+            =================================================================
+              [B] # 83  Jacob Trouba               UNDER   1.5  Blocked Shots         vs EDM   |  DEPTH         WEAK   
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  1.5  Gap:        |  score=0.67887
+              [B] # 84  Martin Necas               UNDER   2.5  Shots On Goal         vs WPG   |  ELITE         AVERAGE
+                   Composite HR: 0.6692  |  L5:   0.8  L10:   0.6  L20:  0.55  Szn:0.5667  |  AvgL10:       Line:  2.5  Gap:        |  score=0.67285
+              [B] # 85  Erik Gudbranson            UNDER   1.5  Blocked Shots         vs SJ    |  SHUTDOWN      WEAK   
+                   Composite HR:    1.0  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   1.0  |  AvgL10:       Line:  1.5  Gap:        |  score=0.67243
+              [B] # 86  Wyatt Johnston             OVER    1.5  Shots On Goal         vs PIT   |  ELITE         SOLID  
+                   Composite HR: 0.9292  |  L5:   1.0  L10:   0.9  L20:  0.85  Szn:0.8667  |  AvgL10:       Line:  1.5  Gap:        |  score=0.66418
+              [B] # 87  Darren Raddysh             OVER    1.5  Shots On Goal         vs OTT   |  ELITE         AVERAGE
+                   Composite HR: 0.9367  |  L5:   1.0  L10:   0.9  L20:   0.9  Szn:0.8667  |  AvgL10:       Line:  1.5  Gap:        |  score=0.66311
+              [B] # 88  Dawson Mercer              OVER    0.5  Shots On Goal         vs CAR   |  DEPTH         SOLID  
+                   Composite HR: 0.9858  |  L5:   1.0  L10:   1.0  L20:  0.95  Szn:0.9333  |  AvgL10:       Line:  0.5  Gap:        |  score=0.66151
+              [B] # 89  Kirill Kaprizov            UNDER   3.5  Shots On Goal         vs BOS   |  ELITE         AVERAGE
+                   Composite HR: 0.6317  |  L5:   0.6  L10:   0.7  L20:   0.6  Szn:0.5667  |  AvgL10:       Line:  3.5  Gap:        |  score=0.65822
+              [B] # 90  David Pastrnak             UNDER  22.5  Time On Ice           vs MIN   |  ELITE         ELITE  
+                   Composite HR: 0.6333  |  L5:   0.8  L10:   0.5  L20:   0.5  Szn:0.6333  |  AvgL10:       Line: 22.5  Gap:        |  score=0.65184
+              [B] # 91  Devon Toews                OVER    0.5  Shots On Goal         vs WPG   |  DEPTH         AVERAGE
+                   Composite HR:   0.99  |  L5:   1.0  L10:   1.0  L20:   1.0  Szn:   0.9  |  AvgL10:       Line:  0.5  Gap:        |  score=0.64961
+              [B] # 92  Rasmus Dahlin              UNDER  23.8  Time On Ice           vs SEA   |  ELITE         SOLID  
+                   Composite HR: 0.6692  |  L5:   0.8  L10:   0.7  L20:  0.45  Szn:0.3667  |  AvgL10:       Line: 23.8  Gap:        |  score=0.64708
+              [B] # 93  Patrick Kane               OVER    1.5  Shots On Goal         vs PHI   |  SECONDARY     SOLID  
+                   Composite HR: 0.9508  |  L5:   1.0  L10:   1.0  L20:  0.85  Szn:0.7333  |  AvgL10:       Line:  1.5  Gap:        |  score=0.64702
+              [B] # 94  Rickard Rakell             UNDER   2.5  Shots On Goal         vs DAL   |  SECONDARY     ELITE  
+                   Composite HR:  0.625  |  L5:   0.6  L10:   0.7  L20:   0.6  Szn:   0.5  |  AvgL10:       Line:  2.5  Gap:        |  score=0.64017
+              [B] # 95  Brandon Hagel              UNDER   2.5  Shots On Goal         vs OTT   |  ELITE         AVERAGE
+                   Composite HR: 0.6283  |  L5:   0.6  L10:   0.7  L20:   0.6  Szn:0.5333  |  AvgL10:       Line:  2.5  Gap:        |  score=0.62910
+              [B] # 96  Adrian Kempe               UNDER   2.5  Shots On Goal         vs UTA   |  SECONDARY     ELITE  
+                   Composite HR:   0.64  |  L5:   0.8  L10:   0.6  L20:   0.4  Szn:   0.5  |  AvgL10:       Line:  2.5  Gap:        |  score=0.62501
+              [B] # 97  Roman Josi                 UNDER   2.5  Shots On Goal         vs MTL   |  SECONDARY     WEAK   
+                   Composite HR: 0.6833  |  L5:   0.8  L10:   0.7  L20:   0.5  Szn:0.4333  |  AvgL10:       Line:  2.5  Gap:        |  score=0.62407
+              [B] # 98  Matthew Schaefer           OVER    2.5  Shots On Goal         vs FLA   |  SECONDARY     WEAK   
+                   Composite HR: 0.8658  |  L5:   1.0  L10:   0.9  L20:  0.65  Szn:0.5333  |  AvgL10:       Line:  2.5  Gap:        |  score=0.62361
+              [B] # 99  Nazem Kadri                OVER    1.5  Shots On Goal         vs WPG   |  SECONDARY     AVERAGE
+                   Composite HR: 0.9225  |  L5:   1.0  L10:   0.9  L20:  0.85  Szn:   0.8  |  AvgL10:       Line:  1.5  Gap:        |  score=0.62300
+              [B] #100  Connor McDavid             UNDER  23.5  Time On Ice           vs ANA   |  ELITE         WEAK   
+                   Composite HR: 0.6625  |  L5:   0.8  L10:   0.6  L20:  0.55  Szn:   0.5  |  AvgL10:       Line: 23.5  Gap:        |  score=0.62268
+              [B] #101  David Pastrnak             OVER    0.5  Points                vs MIN   |  ELITE         ELITE  
+                   Composite HR: 0.9533  |  L5:   1.0  L10:   1.0  L20:   0.8  Szn:0.8333  |  AvgL10:       Line:  0.5  Gap:        |  score=0.62252
+              [B] #102  Noah Hanifin               UNDER   1.5  Shots On Goal         vs WSH   |  DEPTH         ELITE  
+                   Composite HR:  0.715  |  L5:   0.8  L10:   0.7  L20:   0.6  Szn:   0.6  |  AvgL10:       Line:  1.5  Gap:        |  score=0.62020
+              [B] #103  Darren Raddysh             OVER    2.5  Shots On Goal         vs OTT   |  ELITE         AVERAGE
+                   Composite HR: 0.8767  |  L5:   1.0  L10:   0.8  L20:   0.8  Szn:0.7667  |  AvgL10:       Line:  2.5  Gap:        |  score=0.61842
+              [B] #104  Alex Newhook               OVER    0.5  Shots On Goal         vs NSH   |  SECONDARY     WEAK   
+                   Composite HR: 0.8767  |  L5:   1.0  L10:   0.8  L20:   0.8  Szn:0.7667  |  AvgL10:       Line:  0.5  Gap:        |  score=0.61842
+              [B] #105  Rasmus Dahlin              UNDER   2.5  Shots On Goal         vs SEA   |  ELITE         SOLID  
+                   Composite HR: 0.6108  |  L5:   0.6  L10:   0.6  L20:  0.65  Szn:0.6333  |  AvgL10:       Line:  2.5  Gap:        |  score=0.61656
+              [B] #106  Jordan Spence              UNDER   1.5  Shots On Goal         vs TB    |  DEPTH         ELITE  
+                   Composite HR: 0.7258  |  L5:   0.8  L10:   0.7  L20:  0.65  Szn:0.6333  |  AvgL10:       Line:  1.5  Gap:        |  score=0.61114
+              [B] #107  Jack Eichel                UNDER   0.5  Assists               vs WSH   |  ELITE         ELITE  
+                   Composite HR: 0.7433  |  L5:   0.8  L10:   0.8  L20:   0.6  Szn:0.5333  |  AvgL10:       Line:  0.5  Gap:        |  score=0.60812
+    [NHL] OK: NHL Step 8 - Direction Context
+    True
+    [NBA1H] Starting period pipeline...
+    [NBA1H] complete.
+    [NBA1Q] Starting period pipeline...
+    [NBA1Q] complete.
+    [NBA] --> NBA Step 8 - Direction Context
+            CMD: py -3.14 ".\scripts\step8_add_direction_context.py" --input data\outputs\step7_ranked_props.xlsx --sheet ALL --output data\outputs\step8_all_direction.csv --date 2026-03-28
+            ╬ô├Ñ├å Loading: data\outputs\step7_ranked_props.xlsx (sheet=ALL)
+            [DateFilter] Kept 2116/2302 rows for 2026-03-28 (dropped 186 rows)
+            ╬ô┬ú├á Saved ╬ô├Ñ├å data\outputs\step8_all_direction.csv
+            final_bet_direction counts:
+            final_bet_direction
+            OVER     1883
+            UNDER     233
+            tier counts:
+            tier
+            D    2040
+            C      56
+            B      20
+            Γëí╞Æ├┤├¿ Clean XLSX saved ╬ô├Ñ├å data\outputs\step8_all_direction_clean.xlsx
+    [NBA] OK: NBA Step 8 - Direction Context
+    True
+    [SOCCER] --> Soccer Step 8 - Direction Context
+            CMD: py -3.14 ".\scripts\step8_add_direction_context_soccer.py" --input outputs\step7_soccer_ranked.xlsx --sheet ALL --output outputs\step8_soccer_direction.csv --xlsx outputs\step8_soccer_direction_clean.xlsx --date 2026-03-28
+            Loading: outputs\step7_soccer_ranked.xlsx (sheet=ALL)
+            [DateFilter] Kept 118/1101 rows for slate ET (dropped 983 rows)
+            ╬ô┬ú├á Saved ╬ô├Ñ├å outputs\step8_soccer_direction.csv
+            final_bet_direction counts:
+            final_bet_direction
+            OVER    118
+            tier counts:
+            tier
+            C    76
+            B    25
+            A    16
+            D     1
+            Γëí╞Æ├┤├¿ Clean XLSX saved ╬ô├Ñ├å outputs\step8_soccer_direction_clean.xlsx
+    [SOCCER] OK: Soccer Step 8 - Direction Context
+    True
+  Archived NBA slate -> C:\Users\halek\OneDrive\Desktop\PropORACLE\outputs\2026-03-28\step8_nba_direction_clean_2026-03-28.xlsx
+  Archived CBB slate -> C:\Users\halek\OneDrive\Desktop\PropORACLE\outputs\2026-03-28\step6_ranked_cbb_2026-03-28.xlsx
+  Archived Soccer slate -> C:\Users\halek\OneDrive\Desktop\PropORACLE\outputs\2026-03-28\step8_soccer_direction_clean_2026-03-28.xlsx
+  Archived NHL slate -> C:\Users\halek\OneDrive\Desktop\PropORACLE\outputs\2026-03-28\step8_nhl_direction_clean_2026-03-28.xlsx
+  Archived MLB slate -> C:\Users\halek\OneDrive\Desktop\PropORACLE\outputs\2026-03-28\step8_mlb_direction_clean_2026-03-28.xlsx
+  Archived NBA1H slate -> C:\Users\halek\OneDrive\Desktop\PropORACLE\outputs\2026-03-28\step8_nba1h_direction_clean_2026-03-28.xlsx
+  Archived NBA1Q slate -> C:\Users\halek\OneDrive\Desktop\PropORACLE\outputs\2026-03-28\step8_nba1q_direction_clean_2026-03-28.xlsx
+  Archived WCBB slate -> C:\Users\halek\OneDrive\Desktop\PropORACLE\outputs\2026-03-28\step6_ranked_wcbb_2026-03-28.xlsx
+
+  NBA complete.
+  NBA1H complete.
+  NBA1Q complete.
+  CBB complete.
+  WCBB complete.
+  NHL complete.
+  Soccer complete.
+  MLB complete.
+======================================================
+  DONE  -- Elapsed: 07:56
+======================================================
+
+[14:34:17] STEP C - Pipeline (2026-03-28): OK
+[14:34:17] STEP D - Combined slate: START
+=== ENV CHECK ===
+LOCALAPPDATA: C:\Users\halek\AppData\Local
+USERPROFILE:  C:\Users\halek
+USERNAME:     halek
+SESSION:      Console
+cache_dir:    C:\Users\halek\AppData\Local\PropORACLE\cache
+=================
+  [Date] Using specified date: 2026-03-28
+
+======================================================
+  PROP PIPELINE  -- 2026-03-28 -- 14:34:17
+======================================================
+
+
+[ COMBINED SLATE -- from existing outputs ]
+
+  [DQ] Validating upstream pipeline outputs...
+    [DQ NBA] PASS rows=2116 path=C:\Users\halek\OneDrive\Desktop\PropORACLE\NBA\data\outputs\step8_all_direction_clean.xlsx
+    [DQ CBB] PASS rows=381 path=C:\Users\halek\OneDrive\Desktop\PropORACLE\CBB\outputs\2026-03-28\step6_ranked_cbb.xlsx
+    [DQ NHL] PASS rows=2993 path=C:\Users\halek\OneDrive\Desktop\PropORACLE\NHL\step8_nhl_direction_clean.xlsx
+    [DQ Soccer] PASS rows=118 path=C:\Users\halek\OneDrive\Desktop\PropORACLE\Soccer\outputs\step8_soccer_direction_clean.xlsx
+    [DQ MLB] FAIL rows=1678 path=C:\Users\halek\OneDrive\Desktop\PropORACLE\MLB\step8_mlb_direction_clean.xlsx
+      - blank_rate>0.1:opp=1.000
+    [DQ NBA1Q] PASS rows=286 path=C:\Users\halek\OneDrive\Desktop\PropORACLE\NBA\step8_nba1q_direction_clean.xlsx
+    [DQ NBA1H] PASS rows=50 path=C:\Users\halek\OneDrive\Desktop\PropORACLE\NBA\step8_nba1h_direction_clean.xlsx
+    [DQ WCBB] PASS rows=90 path=C:\Users\halek\OneDrive\Desktop\PropORACLE\CBB\step6_ranked_wcbb.xlsx
+    [DQ] JSON -> C:\Users\halek\OneDrive\Desktop\PropORACLE\outputs\2026-03-28\upstream_data_quality_2026-03-28.json
+    [DQ] CSV  -> C:\Users\halek\OneDrive\Desktop\PropORACLE\outputs\2026-03-28\upstream_data_quality_2026-03-28.csv
+    [DQ] WARN-ONLY mode; continuing despite failures.
+  [+] NHL
+  [+] Soccer
+  [+] MLB
+  [+] NBA1H
+  [+] NBA1Q
+  [+] WCBB
+
+[STEP 8] Building tickets...
+Loading NBA slate from C:\Users\halek\OneDrive\Desktop\PropORACLE\NBA\data\outputs\step8_all_direction_clean.xlsx...
+  [load_nba] Dropped 124 '1st 3 Min' props
+  [NBA date] available: 2026-03-28=1781
+  [NBA date] kept 1781/1781, dropped 0
+  1781 NBA props loaded
+  [audit NBA] file_exists=Y rows=1781 missing_core_cols=(none)
+Loading CBB slate from C:\Users\halek\OneDrive\Desktop\PropORACLE\CBB\step6_ranked_cbb.xlsx...
+  [CBB date] available: 2026-03-28=381
+  [CBB date] kept 381/381, dropped 0
+  381 CBB props loaded
+  [audit CBB] file_exists=Y rows=381 missing_core_cols=(none)
+  [load_nhl] Dropped 17 unreliable faceoff props
+  [NHL date] available: 2026-03-28=2976
+  [NHL date] kept 2976/2976, dropped 0
+  2976 NHL props loaded
+  [audit NHL] file_exists=Y rows=2976 missing_core_cols=(none)
+  [Soccer date] available: 2026-03-28=118
+  [Soccer date] kept 118/118, dropped 0
+  118 Soccer props loaded
+  [audit Soccer] file_exists=Y rows=118 missing_core_cols=(none)
+  90 WCBB props loaded
+  1678 MLB props loaded
+  286 NBA1Q props loaded
+  50 NBA1H props loaded
+Building combined slate...
+  7360 total props
+  Full Slate rows ΓÇö NBA: 1781
+  Full Slate rows ΓÇö CBB: 381
+  Full Slate rows ΓÇö NHL: 2976
+  Full Slate rows ΓÇö Soccer: 118
+  Full Slate rows ΓÇö MLB: 1678
+  Full Slate rows ΓÇö NBA1H: 50
+  Full Slate rows ΓÇö NBA1Q: 286
+  Full Slate rows ΓÇö WCBB: 90
+  NBA eligible: 69 | CBB eligible: 202 | Combined: 719
+  CBB Goblin rank floor: 5.0 (NBA uses global floor: None)
+Generating tickets + workbook...
+  NBA Power Play 2-Leg: 1 ticket
+  NBA Flex 3-Leg: 1 ticket
+  WARNING: NBA Standard 2-Leg unavailable (strict filters).
+  CBB Power Play 2-Leg: 1 ticket
+  CBB Flex 3-Leg: 1 ticket
+  WARNING: CBB Standard 2-Leg unavailable (strict filters).
+  WARNING: NHL skipped (<2 eligible legs after strict filters).
+  WARNING: Soccer Power Play 2-Leg unavailable (strict filters).
+  WARNING: Soccer Flex 3-Leg unavailable (strict filters).
+  Soccer Standard 2-Leg: 1 ticket
+  WARNING: NBA1Q skipped (<2 eligible legs after strict filters).
+  WARNING: NBA1H skipped (empty pool).
+Writing slate sheets...
+
+[OK] Saved -> C:\Users\halek\OneDrive\Desktop\PropORACLE\combined_slate_tickets_2026-03-28.xlsx
+   Sheets (15): ['Full Slate', 'NBA Slate', 'CBB Slate', 'NHL Slate', 'Soccer Slate', 'WCBB Slate', 'MLB Slate', 'NBA1Q Slate', 'NBA1H Slate', 'SUMMARY', 'NBA Power Play 2-Leg', 'NBA Flex 3-Leg', 'CBB Power Play 2-Leg', 'CBB Flex 3-Leg', 'Soccer Standard 2-Leg']
+
+Writing web outputs...
+  Web payload: 5 groups, 5 slips (workbook ΓÇö all sports).
+[OK] Web JSON  -> C:\Users\halek\OneDrive\Desktop\PropORACLE\ui_runner\templates\tickets_latest.json
+  (HTML) Run: py -3.14 build_ticket_eval.py --date <YYYY-MM-DD>  -> tickets_latest.html
+  slate_latest.json -> C:\Users\halek\OneDrive\Desktop\PropORACLE\ui_runner\templates\slate_latest.json  (7360 props)
+[OK] Web outputs complete.
+
+[TICKETS] -- SUMMARY -----------------------------------------
+[TICKETS] NBA: Power Play (Assists + Assists) | Flex (Assists + Assists + Steals) | Standard (SKIPPED)
+[TICKETS] CBB: Power Play (Rebounds + Points) | Flex (Rebounds + Points + Points) | Standard (SKIPPED)
+[TICKETS] Soccer: Power Play (SKIPPED) | Flex (SKIPPED) | Standard (Goalie Saves + Goalie Saves)
+[TICKETS] Fantasy Score excluded : 0 props removed
+[TICKETS] Def tier filtered      : 0 props removed
+[TICKETS] Prop ban list filtered : 0 props removed
+[TICKETS] Total eligible props   : 100 props used
+[TICKETS] ----------------------------------------------------
+[TICKETS] -- SUMMARY -----------------------------------------
+[TICKETS] NBA: Power Play (Assists + Assists) | Flex (Assists + Assists + Steals) | Standard (SKIPPED)
+[TICKETS] CBB: Power Play (Rebounds + Points) | Flex (Rebounds + Points + Points) | Standard (SKIPPED)
+[TICKETS] Soccer: Power Play (SKIPPED) | Flex (SKIPPED) | Standard (Goalie Saves + Goalie Saves)
+[TICKETS] Fantasy Score excluded : 0 props removed
+[TICKETS] Def tier filtered      : 0 props removed
+[TICKETS] Prop ban list filtered : 0 props removed
+[TICKETS] Total eligible props   : 100 props used
+[TICKETS] ----------------------------------------------------
+[STEP 8] Tickets complete.
+  Saved -> C:\Users\halek\OneDrive\Desktop\PropORACLE\outputs\2026-03-28\combined_slate_tickets_2026-03-28.xlsx
+[INFO] Saved tickets snapshot: combined_slate_tickets_2026-03-28.json
+Wrote C:\Users\halek\OneDrive\Desktop\PropORACLE\ui_runner\templates\ticket_eval_2026-03-28.html
+Wrote C:\Users\halek\OneDrive\Desktop\PropORACLE\ui_runner\templates\tickets_latest.html (main tickets page)
+
+[ GIT ] Pushing updated templates to GitHub...
+    staged: ui_runner/templates/tickets_latest.html
+    staged: ui_runner/templates/tickets_latest.json
+    staged: ui_runner/templates/slate_latest.json
+    staged: ui_runner/templates/ticket_eval_2026-03-28.html
+  Committed. Pushing to origin/main...
+    To https://github.com/halekevi/PropORACLE.git
+       f0dc243..254726d  main -> main
+  OK - Pushed to GitHub -> Railway will redeploy
+
+True
+======================================================
+  DONE  -- Elapsed: 00:59
+======================================================
+
+[14:35:16] STEP D - Combined slate: OK
+[14:35:16] STEP D2 - Copy Railway slate files to sport roots: START
+[14:35:16] STEP D2 - Copied NBA\data\outputs\step8_all_direction_clean.xlsx -> NBA\step8_all_direction_clean.xlsx
+[14:35:16] STEP D2 - Copied Soccer\outputs\step8_soccer_direction_clean.xlsx -> Soccer\step8_soccer_direction_clean.xlsx
+[14:35:16] STEP D2 - Copied MLB\outputs\step8_mlb_direction_clean.xlsx -> MLB\step8_mlb_direction_clean.xlsx
+[14:35:16] STEP D2 - Copy Railway slate files to sport roots: OK
+[14:35:16] STEP E - Git push: SKIPPED (-SkipPush)
+[14:35:16] Daily run complete. Duration: 9m 3s
+[14:35:16] ======== Daily run end ========

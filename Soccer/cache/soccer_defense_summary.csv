@@ -228,21 +228,21 @@ Austin FC,AUSTIN,MLS,5,7.0,1.4,,0,1,0,2,11,Above Avg
 St. Louis CITY SC,ST. LOUIS,MLS,5,7.0,1.4,,0,1,0,3,11,Above Avg
 San Diego FC,SAN DIEGO,MLS,5,5.0,1.0,,0,3,0,0,7,Elite
 Angel City FC,ANGEL CITY,NWSL,3,2.0,0.667,,0,3,0,0,1,Elite
+Portland Thorns FC,THORNS,NWSL,4,3.0,0.75,,0,3,0,1,4,Above Avg
 Houston Dash,HOUSTON DASH,NWSL,3,2.0,0.667,,0,2,0,1,1,Elite
-San Diego Wave FC,SD WAVE,NWSL,3,3.0,1.0,,0,2,0,1,4,Above Avg
-Seattle Reign FC,SEATTLE REIGN,NWSL,3,3.0,1.0,,0,2,0,1,4,Above Avg
-Portland Thorns FC,THORNS,NWSL,3,3.0,1.0,,0,2,0,1,4,Above Avg
-Orlando Pride,ORLANDO PRIDE,NWSL,3,3.0,1.0,,0,1,0,1,4,Above Avg
-Denver Summit FC,DENVER SUMMIT,NWSL,3,3.0,1.0,,0,1,0,1,4,Above Avg
-North Carolina Courage,NC COURAGE,NWSL,2,1.0,0.5,,0,1,0,0,6,Avg
+San Diego Wave FC,SD WAVE,NWSL,3,3.0,1.0,,0,2,0,1,6,Above Avg
+Seattle Reign FC,SEATTLE REIGN,NWSL,3,3.0,1.0,,0,2,0,1,6,Above Avg
+Denver Summit FC,DENVER SUMMIT,NWSL,4,3.0,0.75,,0,1,0,1,4,Above Avg
+Orlando Pride,ORLANDO PRIDE,NWSL,3,3.0,1.0,,0,1,0,1,6,Above Avg
+North Carolina Courage,NC COURAGE,NWSL,2,1.0,0.5,,0,1,0,0,7,Avg
+Utah Royals,UTAH ROYALS,NWSL,4,6.0,1.5,,0,1,0,2,10,Avg
 Gotham FC,GOTHAM,NWSL,3,2.0,0.667,,0,1,0,1,1,Elite
-Bay FC,BAY FC,NWSL,2,4.0,2.0,,0,1,0,1,6,Avg
-Kansas City Current,KC CURRENT,NWSL,3,6.0,2.0,,0,1,0,2,11,Weak
-Chicago Stars FC,CHICAGO STARS,NWSL,3,8.0,2.667,,0,1,0,2,12,Weak
-Washington Spirit,SPIRIT,NWSL,3,4.0,1.333,,0,0,0,1,9,Avg
-Racing Louisville FC,LOUISVILLE,NWSL,2,4.0,2.0,,0,0,0,1,6,Avg
-Utah Royals,UTAH ROYALS,NWSL,3,5.0,1.667,,0,0,0,2,10,Weak
-Boston Legacy FC,BOSTON LEGACY,NWSL,2,4.0,2.0,,0,0,0,2,6,Avg
+Bay FC,BAY FC,NWSL,2,4.0,2.0,,0,1,0,1,7,Avg
+Washington Spirit,SPIRIT,NWSL,4,4.0,1.0,,0,0,0,1,6,Above Avg
+Kansas City Current,KC CURRENT,NWSL,4,8.0,2.0,,0,1,0,3,11,Weak
+Chicago Stars FC,CHICAGO STARS,NWSL,3,8.0,2.667,,0,1,0,2,13,Weak
+Racing Louisville FC,LOUISVILLE,NWSL,2,4.0,2.0,,0,0,0,1,7,Avg
+Boston Legacy FC,BOSTON LEGACY,NWSL,3,6.0,2.0,,0,0,0,3,11,Weak
 FC Porto,FC PORTO,Primeira Liga,27,11.0,0.407,,0,23,0,1,1,Elite
 Sporting CP,SPORTING CP,Primeira Liga,26,15.0,0.577,,0,20,0,1,2,Elite
 Benfica,BENFICA,Primeira Liga,27,17.0,0.63,,0,19,0,0,3,Elite
@@ -361,15 +361,15 @@ Eintracht Frankfurt,FRANKFURT,UCL,8,21.0,2.625,,0,1,0,6,32,Weak
 Slavia Prague,SLAVIA PRAGUE,UCL,8,19.0,2.375,,0,0,0,5,31,Weak
 Villarreal,VILLARREAL,UCL,8,18.0,2.25,,0,0,0,7,30,Weak
 Kairat Almaty,KAIRAT ALMATY,UCL,8,22.0,2.75,,0,0,0,7,36,Weak
-Manchester City,MAN CITY,WSL,18,15.0,0.833,,0,15,0,2,2,Elite
-Manchester United,MAN UNITED,WSL,18,17.0,0.944,,0,11,0,2,4,Above Avg
-Chelsea,CHELSEA,WSL,18,15.0,0.833,,0,11,0,3,2,Elite
-Arsenal,ARSENAL,WSL,16,10.0,0.625,,0,10,0,1,1,Elite
-Tottenham Hotspur,SPURS,WSL,18,31.0,1.722,,0,9,0,7,9,Avg
-Everton,EVERTON,WSL,18,29.0,1.611,,0,6,0,10,7,Avg
-London City Lionesses,LONDON CITY LIONESSES,WSL,18,30.0,1.667,,0,6,0,10,8,Avg
+Manchester City,MAN CITY,WSL,19,15.0,0.789,,0,16,0,2,2,Elite
+Arsenal,ARSENAL,WSL,17,12.0,0.706,,0,11,0,1,1,Elite
+Manchester United,MAN UNITED,WSL,19,20.0,1.053,,0,11,0,3,4,Above Avg
+Chelsea,CHELSEA,WSL,18,15.0,0.833,,0,11,0,3,3,Elite
+Tottenham Hotspur,SPURS,WSL,19,36.0,1.895,,0,9,0,8,9,Avg
+Everton,EVERTON,WSL,19,32.0,1.684,,0,6,0,11,8,Avg
+London City Lionesses,LONDON CITY LIONESSES,WSL,18,30.0,1.667,,0,6,0,10,7,Avg
 Aston Villa,ASTON VILLA,WSL,18,37.0,2.056,,0,5,0,8,10,Weak
 Brighton & Hove Albion,BRIGHTON,WSL,17,22.0,1.294,,0,5,0,9,5,Above Avg
-Liverpool,LIVERPOOL,WSL,18,27.0,1.5,,0,3,0,10,6,Above Avg
+Liverpool,LIVERPOOL,WSL,19,29.0,1.526,,0,4,0,10,6,Above Avg
 West Ham United,WEST HAM,WSL,18,40.0,2.222,,0,3,0,12,12,Weak
 Leicester City,LEICESTER,WSL,17,35.0,2.059,,0,2,0,12,11,Weak
