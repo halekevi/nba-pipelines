@@ -506,7 +506,8 @@ def main():
         two_team["_team_b"] = two_team["_teams"].apply(lambda t: t[1])
 
         df = df.merge(two_team[["pp_game_id", "_team_a", "_team_b"]], on="pp_game_id", how="left")
-        needs_opp = df["opp_team"].astype(str).str.strip().eq("")
+        # fillna("") before eq("") so NaN values (str-cast to "nan") are treated as missing
+        needs_opp = df["opp_team"].fillna("").astype(str).str.strip().eq("")
         df.loc[needs_opp & (df["team"] == df["_team_a"]), "opp_team"] = df["_team_b"]
         df.loc[needs_opp & (df["team"] == df["_team_b"]), "opp_team"] = df["_team_a"]
         df = df.drop(columns=["_team_a", "_team_b", "_teams"], errors="ignore")
