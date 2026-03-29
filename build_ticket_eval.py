@@ -728,7 +728,12 @@ def _ingest_workbook_rows_into_index(
             "actual": _canon_actual(raw),
             "grade_raw": _canon_grade_raw(raw),
         }
-        key3 = (pl, pt, dr)
+        # Include line in the triple key so multiple lines for the same
+        # player+prop+direction (e.g. Cameron Boozer reb 7.5 OVER vs 10.5 OVER)
+        # don't collide and overwrite each other.
+        line_val = row["line"]
+        line_key = round(float(line_val), 2) if line_val is not None else None
+        key3 = (pl, pt, dr, line_key)
         triple[key3] = row
         pair_buckets.setdefault((pl, pt), []).append(row)
 
@@ -900,9 +905,6 @@ def _load_actuals_indices(
                         dr = _canon_direction(raw)
                         if not pl or not pt:
                             continue
-                        key3 = (pl, pt, dr)
-                        if key3 in trip:
-                            continue
                         row_out = {
                             "player_lower": pl,
                             "prop_lower": pt,
@@ -911,7 +913,11 @@ def _load_actuals_indices(
                             "actual": _canon_actual(raw),
                             "grade_raw": _canon_grade_raw(raw),
                         }
-                        trip[key3] = row_out
+                        line_val = row_out["line"]
+                        line_key = round(float(line_val), 2) if line_val is not None else None
+                        key3 = (pl, pt, dr, line_key)
+                        if key3 not in trip:
+                            trip[key3] = row_out
                         pairs.setdefault((pl, pt), []).append(row_out)
                     out[bucket] = (trip, pairs)
                 except Exception:
@@ -963,15 +969,40 @@ def _match_leg_in_index(
     dr = str(leg.get("direction") or "").strip().upper()
     if not pl or not pt:
         return None
-    hit = triple.get((pl, pt, dr))
+
+    try:
+        leg_line = float(leg.get("line"))
+    except (TypeError, ValueError):
+        leg_line = None
+
+    # Try exact 4-tuple (player, prop, direction, line) — most specific.
+    if leg_line is not None:
+        line_key = round(leg_line, 2)
+        hit = triple.get((pl, pt, dr, line_key))
+        if hit:
+            return hit
+
+    # Try 3-tuple without line (legacy / no-line rows).
+    hit = triple.get((pl, pt, dr, None))
     if hit:
         return hit
+
     cands = pair_buckets.get((pl, pt))
     if not cands:
         return None
+
+    # Pass 1: direction + line exact match (most precise).
+    if leg_line is not None:
+        for r in cands:
+            if r["direction"] == dr and r.get("line") is not None:
+                if abs(float(r["line"]) - leg_line) < 0.01:
+                    return r
+
+    # Pass 2: direction match only.
     for r in cands:
         if r["direction"] == dr:
             return r
+
     if len(cands) == 1:
         return cands[0]
     for r in cands:

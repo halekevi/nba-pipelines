@@ -11,7 +11,9 @@ import re
 import sqlite3
 import sys
 import time
+import threading
 import unicodedata
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -1055,6 +1057,12 @@ def main() -> None:
         action="store_true",
         help="With --spreads, re-fetch even when a sport-date row already exists in game_lines.db",
     )
+    ap.add_argument(
+        "--workers",
+        type=int,
+        default=12,
+        help="Parallel fetch workers (default: 12; max: 20). Higher = faster but more ESPN load.",
+    )
     args = ap.parse_args()
 
     if args.spreads:
@@ -1089,29 +1097,58 @@ def main() -> None:
         current = current_season_code()
         players_fetched = 0
         games_stored = 0
-        idx = 0
         sport_order = ("NBA", "CBB", "NHL", "Soccer")
         if args.sport:
             sport_order = (args.sport,)
+
+        # ── Parallel fetch with per-thread SQLite connections ──────────────────
+        # Each worker opens its own connection so there's no shared-state risk.
+        # A print lock keeps console output readable.
+        _print_lock = threading.Lock()
+        workers = max(1, min(getattr(args, "workers", 12), 20))
+
+        def _fetch_one(sp: str, player: str, i: int, total: int) -> tuple[int, str]:
+            """Worker: open own DB connection, fetch, commit, close."""
+            try:
+                wconn = sqlite3.connect(str(DB_PATH), timeout=30)
+                try:
+                    n, line = fetch_player_sport(
+                        wconn, player, sp, seasons,
+                        args.refresh_current, args.since
+                    )
+                    return n, line
+                finally:
+                    wconn.close()
+            except Exception as ex:
+                _log_error(f"fetch_player_sport {sp} {player!r}: {ex}")
+                return 0, f"WARNING: Fetch failed for {player} (details in {ERROR_LOG.name})"
+
         for sp in sport_order:
             plist = sorted(by_sport.get(sp, set()))
             if not plist:
                 continue
-            print(f"\nFetching {sp}: {len(plist)} players across {len(seasons)} seasons...")
-            for i, player in enumerate(plist, start=1):
-                idx += 1
-                try:
-                    n, line = fetch_player_sport(
-                        conn, player, sp, seasons, args.refresh_current, args.since
-                    )
+            print(f"\nFetching {sp}: {len(plist)} players across {len(seasons)} seasons "
+                  f"(workers={workers})...")
+            total = len(plist)
+            completed = 0
+
+            with ThreadPoolExecutor(max_workers=workers) as exe:
+                futures = {
+                    exe.submit(_fetch_one, sp, player, i + 1, total): (i + 1, player)
+                    for i, player in enumerate(plist)
+                }
+                for fut in as_completed(futures):
+                    i, player = futures[fut]
+                    completed += 1
+                    try:
+                        n, line = fut.result()
+                    except Exception as ex:
+                        n, line = 0, f"WARNING: Fetch failed for {player}: {ex}"
                     if n > 0:
                         players_fetched += 1
                     games_stored += n
-                    print(f"  [{i}/{len(plist)}] {line}")
-                except Exception as ex:
-                    _log_error(f"fetch_player_sport {sp} {player!r}: {ex}")
-                    print(f"  [{i}/{len(plist)}] WARNING: Fetch failed for {player} (details in {ERROR_LOG.name})")
-                time.sleep(0.5)
+                    with _print_lock:
+                        print(f"  [{completed}/{total}] {line}")
 
         summ = summarize_db(conn)
         err_after = ERROR_LOG.read_text(encoding="utf-8").count("\n") if ERROR_LOG.is_file() else 0
