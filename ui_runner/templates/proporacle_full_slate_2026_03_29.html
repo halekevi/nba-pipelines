@@ -1,0 +1,247 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;align-items:center}
+.sport-btn{padding:5px 12px;font-size:12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);transition:all 0.1s}
+.sport-btn.active{background:var(--color-text-primary);color:var(--color-background-primary);border-color:var(--color-text-primary)}
+.sport-btn:hover:not(.active){background:var(--color-background-secondary)}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.filter-row select{font-size:12px;padding:4px 8px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans)}
+.filter-row input{font-size:12px;padding:4px 8px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);width:160px}
+.count-bar{display:flex;gap:16px;margin-bottom:12px;font-size:12px;flex-wrap:wrap}
+.stat-pill{background:var(--color-background-secondary);padding:4px 10px;border-radius:var(--border-radius-md);color:var(--color-text-secondary)}
+.stat-pill strong{color:var(--color-text-primary)}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{text-align:left;padding:5px 8px;font-size:10px;font-weight:500;color:var(--color-text-secondary);border-bottom:0.5px solid var(--color-border-tertiary);white-space:nowrap;text-transform:uppercase;letter-spacing:0.04em;cursor:pointer;user-select:none}
+th:hover{color:var(--color-text-primary)}
+th.sorted-asc::after{content:' ↑'}
+th.sorted-desc::after{content:' ↓'}
+td{padding:5px 8px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);white-space:nowrap;vertical-align:middle}
+tr:hover td{background:var(--color-background-secondary)}
+.badge{display:inline-block;padding:1px 6px;border-radius:var(--border-radius-md);font-size:10px;font-weight:500}
+.b-A{background:#EAF3DE;color:#3B6D11}
+.b-B{background:#E6F1FB;color:#185FA5}
+.b-C{background:#FAEEDA;color:#854F0B}
+.b-D{background:#F1EFE8;color:#5F5E5A}
+.b-OVER{background:#E6F1FB;color:#185FA5}
+.b-UNDER{background:#FAEEDA;color:#854F0B}
+.b-Goblin,.b-goblin{background:#EEEDFE;color:#3C3489}
+.b-Standard,.b-standard{background:#F1EFE8;color:#5F5E5A}
+.b-Demon,.b-demon{background:#FAECE7;color:#993C1D}
+.pos-e{color:#27AE60;font-weight:500}
+.pos-n{color:#E74C3C;font-weight:500}
+.pg-bar{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12px;color:var(--color-text-secondary)}
+.pg-btn{padding:3px 10px;font-size:11px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans)}
+.pg-btn:hover{background:var(--color-background-secondary)}
+.pg-btn:disabled{opacity:0.4;cursor:default}
+.summ-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.summ-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px}
+.summ-sport{font-size:10px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px}
+.summ-total{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.summ-sub{font-size:10px;color:var(--color-text-secondary);margin-top:2px}
+</style>
+
+<div style="padding:0 0 1rem">
+
+<div class="summ-grid" id="summ-grid"></div>
+
+<div class="ctrl" id="sport-btns"></div>
+
+<div class="filter-row">
+  <select id="tier-sel"><option value="">All tiers</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+  <select id="pick-sel"><option value="">All pick types</option><option value="Goblin">Goblin</option><option value="Standard">Standard</option><option value="Demon">Demon</option></select>
+  <select id="dir-sel"><option value="">Both directions</option><option value="OVER">OVER</option><option value="UNDER">UNDER</option></select>
+  <input id="search" placeholder="Search player / team / prop..." />
+</div>
+
+<div class="count-bar" id="count-bar"></div>
+
+<div class="tbl-wrap">
+<table id="main-tbl">
+  <thead><tr>
+    <th data-col="3" class="sorted-desc">Player</th>
+    <th data-col="0">Sport</th>
+    <th data-col="1">Tier</th>
+    <th data-col="2">Rank</th>
+    <th data-col="4">Team</th>
+    <th data-col="5">Opp</th>
+    <th data-col="6">Time</th>
+    <th data-col="7">Prop</th>
+    <th data-col="8">Type</th>
+    <th data-col="9">Line</th>
+    <th data-col="10">Dir</th>
+    <th data-col="11">Edge</th>
+    <th data-col="12">L5 HR</th>
+    <th data-col="13">L5 Avg</th>
+    <th data-col="14">L5 Ov</th>
+    <th data-col="15">L5 Un</th>
+    <th data-col="17">Def Tier</th>
+    <th data-col="18">Min</th>
+    <th data-col="23">Proj</th>
+  </tr></thead>
+  <tbody id="main-tbody"></tbody>
+</table>
+</div>
+
+<div class="pg-bar">
+  <button class="pg-btn" id="pg-prev">← Prev</button>
+  <span id="pg-info"></span>
+  <button class="pg-btn" id="pg-next">Next →</button>
+  <select id="pg-size" style="font-size:11px;padding:3px 6px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary)">
+    <option value="50">50 / page</option>
+    <option value="100">100 / page</option>
+    <option value="200">200 / page</option>
+  </select>
+</div>
+
+</div>
+
+<script>
+const RAW = {"rows":[[\"MLB\",\"A\",5.66,\"George Springer\",\"TOR\",\"ATH\",\"03/29 01:37PM\",\"Total Bases\",\"Standard\",0.5,\"OVER\",2.3,0.8,2.8,4.0,1.0,4.0,null,\"HIGH\",null,null,null,\"HIGH\",2.8],[\"MLB\",\"A\",5.02,\"Jesús Luzardo\",\"PHI\",\"TEX\",\"03/29 01:35PM\",\"Pitcher Strikeouts\",\"Standard\",5.5,\"OVER\",2.7,1.0,8.2,5.0,0.0,5.0,null,\"HIGH\",null,null,null,\"HIGH\",8.2],[\"MLB\",\"A\",4.97,\"Joey Cantillo\",\"CLE\",\"SEA\",\"03/28 09:40PM\",\"Pitching Outs\",\"Standard\",12.5,\"OVER\",4.9,1.0,17.4,5.0,0.0,5.0,null,\"HIGH\",null,null,null,\"HIGH\",17.4],[\"NBA1Q\",\"A\",2.72,\"Reed Sheppard\",\"HOU\",\"NOP\",\"03/29 07:00PM\",\"Points\",\"Goblin\",0.5,\"OVER\",4.7,1.0,5.2,5.0,0.0,5.0,\"Weak\",\"UNKNOWN\",\"SUPPORT\",0.9,null,\"MED\",5.2],[\"NBA\",\"A\",2.69,\"Derrick Jones\",\"LAC\",\"MIL\",\"03/29 03:30PM\",\"Assists\",\"Goblin\",0.5,\"OVER\",1.75,0.8,2.4,4.0,1.0,4.0,\"Avg\",\"MEDIUM\",\"PRIMARY\",0.721,null,\"MED\",2.2],[\"NBA\",\"A\",2.59,\"Toumani Camara\",\"POR\",\"WAS\",\"03/29 06:00PM\",\"Free Throws Made\",\"Goblin\",0.5,\"OVER\",1.4,0.8,2.4,4.0,1.0,4.0,\"Weak\",\"HIGH\",\"PRIMARY\",0.71,null,\"MED\",1.9],[\"NBA\",\"A\",2.55,\"Ziaire Williams\",\"BKN\",\"SAC\",\"03/29 06:00PM\",\"Steals\",\"Goblin\",0.5,\"OVER\",1.95,1.0,2.8,5.0,0.0,5.0,\"Weak\",\"MEDIUM\",\"SECONDARY\",0.71,null,\"MED\",2.5],[\"NBA\",\"A\",2.45,\"Kris Dunn\",\"LAC\",\"MIL\",\"03/29 03:30PM\",\"Steals\",\"Goblin\",0.5,\"OVER\",1.75,1.0,2.2,5.0,0.0,5.0,\"Avg\",\"MEDIUM\",\"SECONDARY\",0.71,null,\"MED\",2.2],[\"NBA\",\"A\",2.44,\"Scoot Henderson\",\"POR\",\"WAS\",\"03/29 06:00PM\",\"Steals\",\"Goblin\",0.5,\"OVER\",1.25,0.8,2.2,4.0,1.0,4.0,\"Weak\",\"MEDIUM\",\"SECONDARY\",0.71,null,\"MED\",1.8],[\"NBA\",\"A\",2.29,\"Brook Lopez\",\"LAC\",\"MIL\",\"03/29 03:30PM\",\"3-PT Made\",\"Goblin\",0.5,\"OVER\",1.6,0.8,2.6,4.0,1.0,4.0,\"Avg\",\"MEDIUM\",\"PRIMARY\",0.71,null,\"MED\",2.1],[\"NBA\",\"A\",2.26,\"Andrew Wiggins\",\"MIA\",\"IND\",\"03/29 05:00PM\",\"3-PT Made\",\"Goblin\",0.5,\"OVER\",1.25,0.8,1.4,4.0,1.0,4.0,\"Weak\",\"MEDIUM\",\"SECONDARY\",0.71,null,\"MED\",1.8],[\"CBB\",\"A\",0.86,\"Cayden Boozer\",\"DUKE\",\"CONN\",\"03/29 05:05PM\",\"Points\",\"Goblin\",5.5,\"OVER\",5.92,0.95,13.4,5.0,0.0,5.0,\"elite\",null,null,0.673,null,\"HIGH\",11.4],[\"CBB\",\"A\",0.85,\"Cameron Boozer\",\"DUKE\",\"CONN\",\"03/29 05:05PM\",\"Rebounds\",\"Goblin\",7.5,\"OVER\",3.55,1.0,11.2,5.0,0.0,5.0,\"elite\",null,null,0.673,null,\"HIGH\",11.0],[\"NHL\",\"A\",0.84,\"Noah Dobson\",\"MTL\",\"CAR\",\"03/29 05:00PM\",\"blocked_shots\",\"Standard\",2.5,\"UNDER\",0.5,1.0,null,0.0,5.0,5.0,\"SOLID\",null,null,null,null,\"MED\",null],[\"NHL\",\"A\",0.8,\"Roman Josi\",\"NSH\",\"TB\",\"03/29 05:00PM\",\"blocked_shots\",\"Standard\",1.5,\"UNDER\",0.5,1.0,null,0.0,5.0,5.0,\"ELITE\",null,null,null,null,\"MED\",null],[\"Soccer\",\"A\",4.36,\"Kevin Viveros\",\"ATHLETICO PR\",\"UNKNOWN_OPP\",\"03/29 06:30PM\",\"Shots On Target\",\"Goblin\",0.5,\"OVER\",1.0,0.75,1.5,3.0,1.0,3.0,null,\"HIGH\",\"FRINGE\",null,null,\"MED\",1.5]],"summary":{"NBA":{"t":2780,"a":54,"b":182,"g":1617,"s":770,"d":393,"ov":2409,"un":371},"CBB":{"t":355,"a":22,"b":74,"g":201,"s":154,"d":0,"ov":330,"un":25},"NHL":{"t":1179,"a":3,"b":13,"g":92,"s":65,"d":1022,"ov":1146,"un":33},"Soccer":{"t":244,"a":63,"b":7,"g":19,"s":28,"d":197,"ov":244,"un":0},"MLB":{"t":1651,"a":695,"b":117,"g":0,"s":1651,"d":0,"ov":441,"un":1210},"NBA1Q":{"t":467,"a":69,"b":69,"g":201,"s":82,"d":184,"ov":443,"un":24},"NBA1H":{"t":51,"a":2,"b":12,"g":0,"s":51,"d":0,"ov":31,"un":20},"WCBB":{"t":27,"a":2,"b":1,"g":10,"s":0,"d":17,"ov":27,"un":0}},"date":"2026-03-29"};
+
+const COLS=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,23];
+let allRows=RAW.rows;
+let filtered=allRows.slice();
+let sport='ALL';
+let sortCol=2;
+let sortDir=-1;
+let page=0;
+let pageSize=50;
+
+const SPORTS=['ALL','NBA','NBA1Q','NBA1H','CBB','WCBB','NHL','Soccer','MLB'];
+const SC=RAW.summary;
+
+function buildSumm(){
+  const g=document.getElementById('summ-grid');
+  const sp=['NBA','CBB','NHL','Soccer','MLB','NBA1Q'];
+  g.innerHTML=sp.map(s=>{
+    const d=SC[s]||{};
+    return`<div class="summ-card">
+      <div class="summ-sport">${s}</div>
+      <div class="summ-total">${(d.t||0).toLocaleString()}</div>
+      <div class="summ-sub">A:${d.a||0} B:${d.b||0} · G:${d.g||0} S:${d.s||0} D:${d.d||0}</div>
+    </div>`;
+  }).join('');
+}
+
+function buildSportBtns(){
+  const c=document.getElementById('sport-btns');
+  c.innerHTML=SPORTS.map(s=>`<button class="sport-btn${s===sport?' active':''}" onclick="setSport('${s}')">${s}</button>`).join('');
+}
+
+function setSport(s){sport=s;page=0;applyFilters();}
+window.setSport=setSport;
+
+function applyFilters(){
+  const tier=document.getElementById('tier-sel').value;
+  const pick=document.getElementById('pick-sel').value;
+  const dir=document.getElementById('dir-sel').value;
+  const q=(document.getElementById('search').value||'').toLowerCase().trim();
+  filtered=allRows.filter(r=>{
+    if(sport!=='ALL'&&r[0]!==sport) return false;
+    if(tier&&r[1]!==tier) return false;
+    if(pick){const p=(r[8]||'').toLowerCase();if(!p.includes(pick.toLowerCase()))return false;}
+    if(dir&&r[10]!==dir) return false;
+    if(q){const hay=(r[3]||'')+(r[4]||'')+(r[5]||'')+(r[7]||'');if(!hay.toLowerCase().includes(q))return false;}
+    return true;
+  });
+  doSort();
+  page=0;
+  render();
+  buildSportBtns();
+}
+
+function doSort(){
+  filtered.sort((a,b)=>{
+    let av=a[sortCol],bv=b[sortCol];
+    if(av==null)av=sortDir>0?Infinity:-Infinity;
+    if(bv==null)bv=sortDir>0?Infinity:-Infinity;
+    if(typeof av==='string') return sortDir*av.localeCompare(bv);
+    return sortDir*(av-bv);
+  });
+}
+
+function render(){
+  const total=filtered.length;
+  const pages=Math.ceil(total/pageSize);
+  if(page>=pages)page=Math.max(0,pages-1);
+  const start=page*pageSize;
+  const slice=filtered.slice(start,start+pageSize);
+
+  const tbody=document.getElementById('main-tbody');
+  tbody.innerHTML=slice.map(r=>{
+    const edge=r[11]!=null?r[11]:null;
+    const ec=edge!=null?(edge>0?'pos-e':'pos-n'):'';
+    const es=edge!=null?((edge>=0?'+':'')+edge.toFixed(2)):'—';
+    const hr=r[12]!=null?Math.round(r[12]*100)+'%':'—';
+    const hrBg=r[12]!=null?(r[12]>=0.65?'#27AE60':r[12]>=0.5?'#F39C12':'#E74C3C'):null;
+    const hrStyle=hrBg?`style="color:${hrBg};font-weight:500"`:'';
+    const proj=r[23]!=null?r[23].toFixed(1):'—';
+    const l5a=r[13]!=null?r[13].toFixed(1):'—';
+    const rank=r[2]!=null?r[2].toFixed(2):'—';
+    const type=r[8]||'';
+    const typeKey=type.charAt(0).toUpperCase()+type.slice(1).toLowerCase();
+    return`<tr>
+      <td style="font-weight:500;max-width:130px;overflow:hidden;text-overflow:ellipsis">${r[3]||''}</td>
+      <td style="color:var(--color-text-secondary)">${r[0]||''}</td>
+      <td><span class="badge b-${r[1]}">${r[1]||''}</span></td>
+      <td style="font-variant-numeric:tabular-nums;color:var(--color-text-secondary)">${rank}</td>
+      <td style="color:var(--color-text-secondary)">${r[4]||''}</td>
+      <td style="color:var(--color-text-secondary)">${r[5]||'—'}</td>
+      <td style="color:var(--color-text-secondary);font-size:10px">${(r[6]||'').replace('03/29 ','').replace('03/28 ','')}</td>
+      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis">${r[7]||''}</td>
+      <td><span class="badge b-${typeKey}">${typeKey}</span></td>
+      <td style="font-variant-numeric:tabular-nums">${r[9]!=null?r[9]:''}</td>
+      <td><span class="badge b-${r[10]||''}">${r[10]||''}</span></td>
+      <td class="${ec}" style="font-variant-numeric:tabular-nums">${es}</td>
+      <td ${hrStyle}>${hr}</td>
+      <td style="font-variant-numeric:tabular-nums;color:var(--color-text-secondary)">${l5a}</td>
+      <td style="font-variant-numeric:tabular-nums;color:var(--color-text-secondary)">${r[14]!=null?r[14].toFixed(0):'—'}</td>
+      <td style="font-variant-numeric:tabular-nums;color:var(--color-text-secondary)">${r[15]!=null?r[15].toFixed(0):'—'}</td>
+      <td style="color:var(--color-text-secondary);font-size:10px">${r[17]||'—'}</td>
+      <td style="color:var(--color-text-secondary);font-size:10px">${r[18]||'—'}</td>
+      <td style="font-variant-numeric:tabular-nums;color:var(--color-text-secondary)">${proj}</td>
+    </tr>`;
+  }).join('');
+
+  const hc=document.getElementById('count-bar');
+  const hits=filtered.filter(r=>r[11]!=null&&r[11]>0).length;
+  hc.innerHTML=`
+    <span class="stat-pill"><strong>${total.toLocaleString()}</strong> props shown</span>
+    <span class="stat-pill"><strong>${filtered.filter(r=>r[1]==='A').length}</strong> Tier A</span>
+    <span class="stat-pill"><strong>${filtered.filter(r=>r[1]==='B').length}</strong> Tier B</span>
+    <span class="stat-pill"><strong>${hits}</strong> positive edge</span>
+  `;
+
+  document.getElementById('pg-info').textContent=`Page ${page+1} of ${pages||1} (${start+1}–${Math.min(start+pageSize,total)} of ${total})`;
+  document.getElementById('pg-prev').disabled=page===0;
+  document.getElementById('pg-next').disabled=page>=pages-1;
+
+  document.querySelectorAll('th[data-col]').forEach(th=>{
+    const c=parseInt(th.dataset.col);
+    th.classList.remove('sorted-asc','sorted-desc');
+    if(c===sortCol) th.classList.add(sortDir>0?'sorted-asc':'sorted-desc');
+  });
+}
+
+document.querySelectorAll('th[data-col]').forEach(th=>{
+  th.addEventListener('click',()=>{
+    const c=parseInt(th.dataset.col);
+    if(c===sortCol)sortDir*=-1;else{sortCol=c;sortDir=-1;}
+    doSort();render();
+  });
+});
+
+document.getElementById('pg-prev').addEventListener('click',()=>{page--;render();});
+document.getElementById('pg-next').addEventListener('click',()=>{page++;render();});
+document.getElementById('pg-size').addEventListener('change',e=>{pageSize=parseInt(e.target.value);page=0;render();});
+['tier-sel','pick-sel','dir-sel'].forEach(id=>document.getElementById(id).addEventListener('change',applyFilters));
+document.getElementById('search').addEventListener('input',applyFilters);
+
+buildSumm();
+buildSportBtns();
+doSort();
+render();
+</script>
