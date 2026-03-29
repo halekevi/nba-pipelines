@@ -837,7 +837,7 @@ $MLBJob = Start-Job -ScriptBlock {
         } finally { Pop-Location }
     }
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "MLB Step 1 - Fetch PrizePicks" $MLBDir ".\scripts\step1_fetch_prizepicks_mlb.py" "--timeout 90 --retries 2 --output outputs\step1_mlb_props.csv" } } else { Write-Output "[MLB] Skipping step1 fetch" }
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "MLB Step 1 - Fetch PrizePicks" $MLBDir ".\scripts\step1_fetch_prizepicks_mlb.py" "--gentle --timeout 90 --retries 2 --output outputs\\step1_mlb_props.csv" } } else { Write-Output "[MLB] Skipping step1 fetch" }
     if ($ok) { $ok = Run-Step-Job "MLB Step 2 - Attach Pick Types"  $MLBDir ".\scripts\step2_attach_picktypes_mlb.py"       "--input outputs\step1_mlb_props.csv --output outputs\step2_mlb_picktypes.csv" }
     if ($ok) { $ok = Run-Step-Job "MLB Step 3 - Attach Defense"     $MLBDir ".\scripts\step3_attach_defense_mlb.py"         "--input outputs\step2_mlb_picktypes.csv --defense mlb_defense_summary.csv --output outputs\step3_mlb_with_defense.csv" }
     if ($ok) { $ok = Run-Step-Job "MLB Step 4 - Player Stats"       $MLBDir ".\scripts\step4_attach_player_stats_mlb.py"    "--input outputs\step3_mlb_with_defense.csv --cache outputs\mlb_stats_cache.csv --output outputs\step4_mlb_with_stats.csv --season 2025" }
@@ -926,3 +926,4 @@ Write-Host ""
 
 if (-not $SkipCombined) { Run-Combined "full parallel run" }
 Print-Done
+

@@ -100,8 +100,37 @@ SOCCER_SLATE_MAP = {
     "Direction":           "bet_direction",
     "Final Bet Direction": "bet_direction",
 }
+MLB_SLATE_MAP = {
+    # Title Case (what step8_mlb_direction_clean.xlsx actually has)
+    "Player":           "player",
+    "Team":             "team",
+    "Opp":              "opp_team",
+    "Tier":             "tier",
+    "Def Rank":         "def_rank",
+    "Line":             "line",
+    "Prop":             "prop_type_norm",
+    "Direction":        "bet_direction",
+    "Edge":             "edge",
+    "Rank Score":       "rank_score",
+    "Hit Rate (5g)":    "hit_rate_raw",
+    "Last 5 Avg":       "avg_L5",
+    "Season Avg":       "avg_season",
+    "L5 Over":          "over_L5_raw",
+    "L5 Under":         "under_L5_raw",
+    "Pick Type":        "pick_type",
+    "Min Tier":         "minutes_tier",
+    "Projection":       "projection",
+    "Pos":              "position_group",
+    "Player Type":      "player_type",
+    "Bat Order":        "bat_order",
+    "Pitcher Role":     "pitcher_role",
+    "Game Time":        "game_time",
+    "Void Reason":      "void_reason_slate",
+}
 
 # Actuals CSVs: what columns to look for player name and stat value
+
+
 ACTUALS_PLAYER_COLS  = ["player","player_name","name","Player","athlete_name"]
 ACTUALS_VALUE_COLS   = ["actual","value","stat","result_value","actual_value",
                         "stat_value","fantasy_points","actual_stat"]
@@ -167,9 +196,9 @@ def load_slate(path: Path, sport: str, grade_date: str = None) -> pd.DataFrame:
 
     df.columns = [c.strip() for c in df.columns]
 
-    col_map = NHL_SLATE_MAP if sport == "NHL" else SOCCER_SLATE_MAP
+    col_map = NHL_SLATE_MAP if sport == "NHL" else MLB_SLATE_MAP if sport == "MLB" else SOCCER_SLATE_MAP
 
-    if sport == "SOCCER":
+    if sport in ("SOCCER", "MLB"):
         original_cols = list(df.columns)
         df = df.rename(columns={k: v for k, v in col_map.items() if k in df.columns})
         mapped   = [f"{k}->{v}" for k, v in col_map.items() if k in original_cols]
@@ -853,7 +882,7 @@ def save_graded(df: pd.DataFrame, out_path: Path, sport: str, date_str: str):
 # ── CLI ────────────────────────────────────────────────────────────────────────
 def main():
     ap = argparse.ArgumentParser(description="Grade NHL/Soccer slates against actuals")
-    ap.add_argument("--sport",      required=True, choices=["NHL","Soccer","SOCCER","nhl","soccer"])
+    ap.add_argument("--sport",      required=True, choices=['NHL','Soccer','SOCCER','nhl','soccer','MLB','mlb'])
     ap.add_argument("--date",       required=True)
     ap.add_argument("--slate",      required=True)
     ap.add_argument("--actuals",    required=True)
@@ -867,7 +896,7 @@ def main():
     out_dir  = Path(args.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    sport_lower = "soccer" if sport=="SOCCER" else "nhl"
+    sport_lower = sport.lower()
     out_path = out_dir / f"graded_{sport_lower}_{date_str}.xlsx"
 
     print(f"\n  [{sport} GRADER]  {date_str}")

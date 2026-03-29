@@ -252,7 +252,11 @@ def parse_ticket_sheet(tickets_xlsx: Path, sheet_name: str) -> pd.DataFrame:
     if df.empty:
         return pd.DataFrame()
 
+    # If ticket header is in the column name (not a data row), inject it as row 0
     first_col = df.columns[0]
+    if isinstance(first_col, str) and TICKET_RE.search(first_col):
+        header_row = pd.DataFrame([[first_col] + [None] * (len(df.columns) - 1)], columns=df.columns)
+        df = pd.concat([header_row, df], ignore_index=True)
     df = df.copy()
     df.rename(columns={first_col: "ticket_header"}, inplace=True)
 

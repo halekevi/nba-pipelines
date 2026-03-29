@@ -281,6 +281,7 @@ class NHLAnalytics:
         consistent = []
         
         # Group by player + opponent + prop type
+        if graded_df.empty: return pd.DataFrame()
         for (player, opp, prop), group in graded_df.groupby(["player", "opponent", "prop_type"]):
             valid = group[group["result"].isin(["HIT", "MISS"])]
             if len(valid) >= min_games:
@@ -454,7 +455,7 @@ def main() -> None:
     for _, slate_row in slate.iterrows():
         player = slate_row.get("player", "")
         team = slate_row.get("team", "")
-        opp_team = slate_row.get("opponent", slate_row.get("opp_team", ""))
+        opp_team = slate_row.get("opponent", slate_row.get("opp_team", slate_row.get("opp", "")))
         prop_type = slate_row.get("prop_type", "")
         line = pd.to_numeric(slate_row.get("line"), errors="coerce")
         direction = _resolve_direction_from_slate_row(slate_row)
@@ -507,6 +508,12 @@ def main() -> None:
     
     graded_df = pd.DataFrame(graded)
     print(f"  Graded: {len(graded_df)} props")
+    if graded_df.empty:
+        print("  No props graded -- skipping analytics")
+        xlsx_path = output_dir / f"graded_nhl_{args.date}.xlsx"
+        pd.DataFrame().to_excel(xlsx_path, sheet_name="GRADED", index=False)
+        print(f"  Saved empty graded file -> {xlsx_path}")
+        exit(0)
     
     # ── ADVANCED ANALYTICS ────────────────────────────────────────────────
     print("[NHL Grader] Running advanced analytics...")
@@ -540,3 +547,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
