@@ -95,7 +95,7 @@ def parse_rows(data: list, included: list) -> list:
                 "position": player_info.get("position", ""),
                 "stat_type": attrs.get("stat_type", ""),
                 "line_score": attrs.get("line_score", ""),
-                "pick_type": attrs.get("pick_type", attrs.get("odds_type", "")),
+                "pick_type": attrs.get("odds_type") or attrs.get("pick_type") or "",
                 "is_promo": attrs.get("is_promo", False),
                 "description": attrs.get("description", ""),
                 "away_team": game_info.get("away_team", ""),

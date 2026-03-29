@@ -189,7 +189,8 @@ def parse_rows(data: List[dict], included: List[dict]) -> List[dict]:
         prop_type_raw = str(attrs.get("stat_type", "") or attrs.get("prop_type", "")).strip()
         prop_type     = prop_type_raw.lower()
         line          = attrs.get("line_score") or attrs.get("line") or ""
-        pick_type_raw = str(attrs.get("pick_type", "standard") or "standard").lower()
+        # PrizePicks API uses "odds_type" (new) — fall back to "pick_type" (legacy)
+        pick_type_raw = str(attrs.get("odds_type") or attrs.get("pick_type") or "standard").strip().lower()
         pick_type     = PICKTYPE_MAP.get(pick_type_raw, pick_type_raw.capitalize())
 
         # resolve player
