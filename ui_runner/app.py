@@ -1250,35 +1250,8 @@ def api_slate_excel():
     """Return all sheets from the combined Excel with non-blank columns only."""
     import openpyxl
 
-    def _find_excel():
-        try:
-            tj = read_json_cached(TEMPLATES_DIR / "tickets_latest.json")
-            pref = str((tj or {}).get("date") or "")[:10]
-        except Exception:
-            pref = ""
-        for d in _slate_day_candidates(pref if len(pref) == 10 else None):
-            out_d = BASE_DIR / "outputs" / d
-            candidates = [
-                out_d / f"combined_slate_tickets_{d}.xlsx",
-                COMBINED_OUT / f"combined_slate_tickets_{d}.xlsx",
-            ]
-            seen: set[Path] = set(candidates)
-            if out_d.is_dir():
-                for g in out_d.glob(f"combined_slate_tickets_{d}*.xlsx"):
-                    if g not in seen:
-                        seen.add(g)
-                        candidates.append(g)
-            for g in BASE_DIR.glob(f"combined_slate_tickets_{d}*.xlsx"):
-                if g not in seen:
-                    seen.add(g)
-                    candidates.append(g)
-            for p in candidates:
-                if p.exists():
-                    return p, d
-        return None, None
-
     def _build():
-        path, run_date = _find_excel()
+        path, run_date = _find_combined_excel()
         if path is None:
             return {"error": "combined slate Excel not found", "sheets": {}, "date": None}
         sheet_map = {
@@ -1324,6 +1297,97 @@ def api_slate_excel():
         return _gz_json_response("slate-excel", _build, ttl=_PIPELINE_JSON_TTL)
     except Exception as e:
         return jsonify({"error": str(e), "sheets": {}}), 500
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# API: Full Slate — filterable rows from the "Full Slate" sheet of the combined
+#      tickets xlsx.  Query params: sport=NBA, tier=A, pick_type=Goblin, dir=OVER
+#      Returns: { date, columns, rows }  (rows are compact value arrays)
+# ──────────────────────────────────────────────────────────────────────────────
+@app.route("/api/full-slate")
+def api_full_slate():
+    # Re-use the same file-finder used by /api/slate-excel
+    path, run_date = _find_combined_excel()
+    if path is None:
+        return jsonify({"error": "combined slate Excel not found", "date": None, "columns": [], "rows": []}), 404
+
+    try:
+        import pandas as pd
+        df = pd.read_excel(str(path), sheet_name="Full Slate", dtype=object, engine="openpyxl")
+    except Exception as e:
+        return jsonify({"error": f"Could not read Full Slate sheet: {e}", "date": run_date, "columns": [], "rows": []}), 500
+
+    # Normalise column names for filter matching (strip whitespace)
+    df.columns = [str(c).strip() for c in df.columns]
+
+    # Query-param filters — case-insensitive substring match on Sport/Tier/Pick Type/Direction
+    sport    = request.args.get("sport", "").strip().upper()
+    tier     = request.args.get("tier", "").strip().upper()
+    pick_type= request.args.get("pick_type", "").strip().lower()
+    direction= request.args.get("dir", "").strip().upper()
+
+    col_map = {c.upper(): c for c in df.columns}
+    def _filter(col_key: str, value: str):
+        nonlocal df
+        col = col_map.get(col_key)
+        if col and value:
+            df = df[df[col].astype(str).str.strip().str.upper() == value]
+
+    _filter("SPORT",     sport)
+    _filter("TIER",      tier)
+    _filter("DIRECTION", direction)
+    if pick_type:
+        col = col_map.get("PICK TYPE")
+        if col:
+            df = df[df[col].astype(str).str.strip().str.lower() == pick_type]
+
+    # Replace NaN with None for JSON serialisation
+    df = df.where(df.notna(), other=None)
+
+    columns = list(df.columns)
+    rows = df.values.tolist()
+    # Convert any remaining non-JSON-serialisable values (dates, etc.)
+    import math
+    def _clean(v):
+        if v is None:
+            return None
+        if isinstance(v, float) and math.isnan(v):
+            return None
+        if hasattr(v, "isoformat"):
+            return v.isoformat()
+        return v
+    rows = [[_clean(v) for v in row] for row in rows]
+
+    resp = jsonify({"date": run_date, "columns": columns, "rows": rows})
+    resp.headers["Cache-Control"] = "no-store"
+    return resp
+
+
+def _find_combined_excel() -> "tuple[Path | None, str | None]":
+    """Return (path, date_str) for the most recent combined_slate_tickets_*.xlsx."""
+    try:
+        tj = read_json_cached(TEMPLATES_DIR / "tickets_latest.json")
+        pref = str((tj or {}).get("date") or "")[:10]
+    except Exception:
+        pref = ""
+    for d in _slate_day_candidates(pref if len(pref) == 10 else None):
+        out_d = BASE_DIR / "outputs" / d
+        candidates: list[Path] = [
+            out_d / f"combined_slate_tickets_{d}.xlsx",
+            COMBINED_OUT / f"combined_slate_tickets_{d}.xlsx",
+        ]
+        seen: set[Path] = set(candidates)
+        if out_d.is_dir():
+            for g in out_d.glob(f"combined_slate_tickets_{d}*.xlsx"):
+                if g not in seen:
+                    seen.add(g); candidates.append(g)
+        for g in BASE_DIR.glob(f"combined_slate_tickets_{d}*.xlsx"):
+            if g not in seen:
+                seen.add(g); candidates.append(g)
+        for p in candidates:
+            if p.exists():
+                return p, d
+    return None, None
 
 
 # ──────────────────────────────────────────────────────────────────────────────
