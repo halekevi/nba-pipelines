@@ -21,7 +21,9 @@ CHROME_PROFILE = Path(os.environ["LOCALAPPDATA"]) / "Google/Chrome/User Data"
 PP_PROFILE_DIR = Path.home() / ".pp_browser_profile"
 
 COPY_TARGETS = [
-    "Default/Cookies",
+    "Default/Network/Cookies",           # Chrome 96+ moved cookies here
+    "Default/Network/Cookies-journal",
+    "Default/Cookies",                   # legacy fallback (older Chrome)
     "Default/Cookies-journal",
     "Default/Local Storage",
     "Default/Session Storage",
@@ -72,7 +74,10 @@ def copy_profile():
 
 
 def verify_profile():
-    cookie_db = PP_PROFILE_DIR / "Default/Cookies"
+    # Check new path first (Chrome 96+), fall back to legacy
+    cookie_db = PP_PROFILE_DIR / "Default/Network/Cookies"
+    if not cookie_db.exists():
+        cookie_db = PP_PROFILE_DIR / "Default/Cookies"
     if not cookie_db.exists():
         print("⚠️  Cookies file missing from copied profile.")
         return

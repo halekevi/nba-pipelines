@@ -86,14 +86,12 @@ PROFILE_DIR = Path.home() / ".pp_browser_profile"
 LAUNCH_ARGS = [
     "--no-sandbox",
     "--disable-blink-features=AutomationControlled",
+    "--start-maximized",
     "--disable-infobars",
     "--disable-dev-shm-usage",
     "--no-first-run",
     "--no-default-browser-check",
     "--window-size=1920,1080",
-    # Headless-specific: avoid GPU errors in unattended context
-    "--disable-gpu",
-    "--disable-software-rasterizer",
 ]
 
 CTX_KWARGS = dict(
@@ -361,17 +359,17 @@ def fetch_via_playwright(timeout_s: int = 90) -> Tuple[List[dict], List[dict]]:
 
     with sync_playwright() as p:
         if use_profile:
-            print(f"🌐 Launching headless Chromium with saved profile: {PROFILE_DIR}")
+            print(f"🌐 Launching Chromium with saved profile: {PROFILE_DIR}")
             context = p.chromium.launch_persistent_context(
                 user_data_dir=str(PROFILE_DIR),
-                headless=True,          # ← fully unattended, no window
+                headless=False,         # visible browser — bypasses DataDome fingerprinting
                 args=LAUNCH_ARGS,
                 **CTX_KWARGS,
             )
             browser = None
         else:
-            print("🌐 Launching headless Chromium (no saved profile)...")
-            browser  = p.chromium.launch(headless=True, args=LAUNCH_ARGS)
+            print("🌐 Launching Chromium (no saved profile)...")
+            browser  = p.chromium.launch(headless=False, args=LAUNCH_ARGS)
             context  = browser.new_context(viewport={"width": 1920, "height": 1080}, **CTX_KWARGS)
 
         page = context.new_page()
