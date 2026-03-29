@@ -1,0 +1,28 @@
+proj_id,player_id,cbb_player_key,player,player_norm,team_abbr,opp_team_abbr,pp_team,pp_opp_team,pos,prop_type,prop_norm,pick_type,line,start_time,pp_game_id,league_id,team,stat_type,odds_type,duration,line_num,opp_def_rank,opp_def_ppg,opp_def_tier,def_tier,OVERALL_DEF_RANK
+10915913,224295,hannah hidalgo|ND,Hannah Hidalgo,hannah hidalgo,ND,CONN,ND,CONN,G,Points,pts,Demon,29.5,2026-03-29T13:00:00.000-04:00,147723,176,ND,Points,demon,Full,29.5,19,66.0,Elite,Elite,19
+10915939,232538,azzi fudd|CONN,Azzi Fudd,azzi fudd,CONN,ND,CONN,ND,G,Points,pts,Demon,24.5,2026-03-29T13:00:00.000-04:00,147723,176,CONN,Points,demon,Full,24.5,168,73.41,Avg,Avg,168
+10915947,224295,hannah hidalgo|ND,Hannah Hidalgo,hannah hidalgo,ND,CONN,ND,CONN,G,Points,pts,Demon,24.5,2026-03-29T13:00:00.000-04:00,147723,176,ND,Points,demon,Full,24.5,19,66.0,Elite,Elite,19
+10915949,224015,sarah strong|CONN,Sarah Strong,sarah strong,CONN,ND,CONN,ND,F,Points,pts,Demon,24.5,2026-03-29T13:00:00.000-04:00,147723,176,CONN,Points,demon,Full,24.5,168,73.41,Avg,Avg,168
+10915938,232538,azzi fudd|CONN,Azzi Fudd,azzi fudd,CONN,ND,CONN,ND,G,Points,pts,Demon,19.5,2026-03-29T13:00:00.000-04:00,147723,176,CONN,Points,demon,Full,19.5,168,73.41,Avg,Avg,168
+10915943,309970,blanca quinonez|CONN,Blanca Quiñonez,blanca quinonez,CONN,ND,CONN,ND,F,Points,pts,Demon,19.5,2026-03-29T13:00:00.000-04:00,147723,176,CONN,Points,demon,Full,19.5,168,73.41,Avg,Avg,168
+10915946,224295,hannah hidalgo|ND,Hannah Hidalgo,hannah hidalgo,ND,CONN,ND,CONN,G,Points,pts,Goblin,19.5,2026-03-29T13:00:00.000-04:00,147723,176,ND,Points,goblin,Full,19.5,19,66.0,Elite,Elite,19
+10915937,232538,azzi fudd|CONN,Azzi Fudd,azzi fudd,CONN,ND,CONN,ND,G,Points,pts,Goblin,14.5,2026-03-29T13:00:00.000-04:00,147723,176,CONN,Points,goblin,Full,14.5,168,73.41,Avg,Avg,168
+10915942,309970,blanca quinonez|CONN,Blanca Quiñonez,blanca quinonez,CONN,ND,CONN,ND,F,Points,pts,Demon,14.5,2026-03-29T13:00:00.000-04:00,147723,176,CONN,Points,demon,Full,14.5,168,73.41,Avg,Avg,168
+10915945,280152,cassandre prosper|ND,Cassandre Prosper,cassandre prosper,ND,CONN,ND,CONN,G,Points,pts,Demon,14.5,2026-03-29T13:00:00.000-04:00,147723,176,ND,Points,demon,Full,14.5,19,66.0,Elite,Elite,19
+10915948,224015,sarah strong|CONN,Sarah Strong,sarah strong,CONN,ND,CONN,ND,F,Points,pts,Goblin,14.5,2026-03-29T13:00:00.000-04:00,147723,176,CONN,Points,goblin,Full,14.5,168,73.41,Avg,Avg,168
+10915940,309970,blanca quinonez|CONN,Blanca Quiñonez,blanca quinonez,CONN,ND,CONN,ND,F,Points,pts,Goblin,9.5,2026-03-29T13:00:00.000-04:00,147723,176,CONN,Points,goblin,Full,9.5,168,73.41,Avg,Avg,168
+10915944,280152,cassandre prosper|ND,Cassandre Prosper,cassandre prosper,ND,CONN,ND,CONN,G,Points,pts,Goblin,9.5,2026-03-29T13:00:00.000-04:00,147723,176,ND,Points,goblin,Full,9.5,19,66.0,Elite,Elite,19
+10916064,224708,lauren betts|UCLA,Lauren Betts,lauren betts,UCLA,DUKE,UCLA,DUKE,C,Points,pts,Demon,24.5,2026-03-29T15:00:00.000-04:00,147724,176,UCLA,Points,demon,Full,24.5,3,63.15,Elite,Elite,3
+10916067,233301,toby fournier|DUKE,Toby Fournier,toby fournier,DUKE,UCLA,DUKE,UCLA,F,Points,pts,Demon,24.5,2026-03-29T15:00:00.000-04:00,147724,176,DUKE,Points,demon,Full,24.5,121,71.78,Above Avg,Above Avg,121
+10916054,224921,ashlon jackson|DUKE,Ashlon Jackson,ashlon jackson,DUKE,UCLA,DUKE,UCLA,G,Points,pts,Demon,19.5,2026-03-29T15:00:00.000-04:00,147724,176,DUKE,Points,demon,Full,19.5,121,71.78,Above Avg,Above Avg,121
+10916061,224709,kiki rice|UCLA,Kiki Rice,kiki rice,UCLA,DUKE,UCLA,DUKE,G,Points,pts,Demon,19.5,2026-03-29T15:00:00.000-04:00,147724,176,UCLA,Points,demon,Full,19.5,3,63.15,Elite,Elite,3
+10916063,224708,lauren betts|UCLA,Lauren Betts,lauren betts,UCLA,DUKE,UCLA,DUKE,C,Points,pts,Demon,19.5,2026-03-29T15:00:00.000-04:00,147724,176,UCLA,Points,demon,Full,19.5,3,63.15,Elite,Elite,3
+10916066,233301,toby fournier|DUKE,Toby Fournier,toby fournier,DUKE,UCLA,DUKE,UCLA,F,Points,pts,Demon,19.5,2026-03-29T15:00:00.000-04:00,147724,176,DUKE,Points,demon,Full,19.5,121,71.78,Above Avg,Above Avg,121
+10916053,224921,ashlon jackson|DUKE,Ashlon Jackson,ashlon jackson,DUKE,UCLA,DUKE,UCLA,G,Points,pts,Demon,14.5,2026-03-29T15:00:00.000-04:00,147724,176,DUKE,Points,demon,Full,14.5,121,71.78,Above Avg,Above Avg,121
+10916056,232534,gabriela jaquez|UCLA,Gabriela Jaquez,gabriela jaquez,UCLA,DUKE,UCLA,DUKE,G,Points,pts,Demon,14.5,2026-03-29T15:00:00.000-04:00,147724,176,UCLA,Points,demon,Full,14.5,3,63.15,Elite,Elite,3
+10916059,276427,gianna kneepkens|UCLA,Gianna Kneepkens,gianna kneepkens,UCLA,DUKE,UCLA,DUKE,G,Points,pts,Demon,14.5,2026-03-29T15:00:00.000-04:00,147724,176,UCLA,Points,demon,Full,14.5,3,63.15,Elite,Elite,3
+10916062,224708,lauren betts|UCLA,Lauren Betts,lauren betts,UCLA,DUKE,UCLA,DUKE,C,Points,pts,Goblin,14.5,2026-03-29T15:00:00.000-04:00,147724,176,UCLA,Points,goblin,Full,14.5,3,63.15,Elite,Elite,3
+10916065,233301,toby fournier|DUKE,Toby Fournier,toby fournier,DUKE,UCLA,DUKE,UCLA,F,Points,pts,Goblin,14.5,2026-03-29T15:00:00.000-04:00,147724,176,DUKE,Points,goblin,Full,14.5,121,71.78,Above Avg,Above Avg,121
+10916052,224921,ashlon jackson|DUKE,Ashlon Jackson,ashlon jackson,DUKE,UCLA,DUKE,UCLA,G,Points,pts,Goblin,9.5,2026-03-29T15:00:00.000-04:00,147724,176,DUKE,Points,goblin,Full,9.5,121,71.78,Above Avg,Above Avg,121
+10916055,232534,gabriela jaquez|UCLA,Gabriela Jaquez,gabriela jaquez,UCLA,DUKE,UCLA,DUKE,G,Points,pts,Goblin,9.5,2026-03-29T15:00:00.000-04:00,147724,176,UCLA,Points,goblin,Full,9.5,3,63.15,Elite,Elite,3
+10916058,276427,gianna kneepkens|UCLA,Gianna Kneepkens,gianna kneepkens,UCLA,DUKE,UCLA,DUKE,G,Points,pts,Goblin,9.5,2026-03-29T15:00:00.000-04:00,147724,176,UCLA,Points,goblin,Full,9.5,3,63.15,Elite,Elite,3
