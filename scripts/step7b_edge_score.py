@@ -12,6 +12,7 @@ import joblib
 import numpy as np
 import pandas as pd
 
+import edge_ml_bundle  # noqa: F401 — EdgeCalibratedModel pickle root
 from edge_feature_engineering import FEATURE_COLUMNS, build_feature_vector
 
 SCRIPT_NAME = "step7b_edge_score"

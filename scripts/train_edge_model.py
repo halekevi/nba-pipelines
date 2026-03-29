@@ -11,7 +11,7 @@ from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
-from sklearn.calibration import CalibratedClassifierCV
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import train_test_split
 from xgboost import XGBClassifier
@@ -21,6 +21,7 @@ from edge_feature_engineering import (
     build_feature_vector,
     fill_minutes_cv_median_by_sport,
 )
+from edge_ml_bundle import EdgeCalibratedModel
 
 SCRIPT_NAME = "train_edge_model"
 
@@ -30,10 +31,36 @@ def _repo_root() -> Path:
 
 
 def _hit_column(df: pd.DataFrame) -> pd.Series | None:
-    for c in ("hit", "result", "graded"):
-        if c in df.columns:
-            s = pd.to_numeric(df[c], errors="coerce")
-            return s
+    """Resolve binary hit labels (0/1). Handles numeric columns and HIT/MISS/VOID text (graded exports)."""
+    candidates = ("hit", "Hit", "HIT", "result", "graded", "leg_result", "leg_hit")
+    for c in candidates:
+        if c not in df.columns:
+            continue
+        s = df[c]
+        num = pd.to_numeric(s, errors="coerce")
+        if num.notna().sum() >= max(3, int(len(df) * 0.2)):
+            return num
+        up = s.astype(str).str.strip().str.upper()
+        arr = np.full(len(df), np.nan, dtype=float)
+        arr = np.where(up.isin(["HIT", "WIN", "W", "1", "TRUE", "YES"]), 1.0, arr)
+        arr = np.where(up.isin(["MISS", "LOSS", "L", "0", "FALSE", "NO"]), 0.0, arr)
+        ser = pd.Series(arr, index=df.index)
+        if ser.notna().sum() >= max(3, int(len(df) * 0.05)):
+            return ser
+    for c in df.columns:
+        cl = str(c).lower()
+        if cl in ("hit", "result", "graded") or cl.endswith("_hit") or cl == "leg_result":
+            s = df[c]
+            num = pd.to_numeric(s, errors="coerce")
+            if num.notna().sum() >= max(3, int(len(df) * 0.2)):
+                return num
+            up = s.astype(str).str.strip().str.upper()
+            arr = np.full(len(df), np.nan, dtype=float)
+            arr = np.where(up.isin(["HIT", "WIN", "W", "1", "TRUE", "YES"]), 1.0, arr)
+            arr = np.where(up.isin(["MISS", "LOSS", "L", "0", "FALSE", "NO"]), 0.0, arr)
+            ser = pd.Series(arr, index=df.index)
+            if ser.notna().sum() >= max(3, int(len(df) * 0.05)):
+                return ser
     return None
 
 
@@ -44,9 +71,46 @@ def _norm_sport_folder(name: str) -> str | None:
     return None
 
 
-def _discover_graded_files(root: Path) -> list[tuple[str, Path]]:
+def _infer_sport_from_graded_filename(path: Path) -> str | None:
+    """Map graded_*.xlsx names to unified training sport codes."""
+    n = path.name.lower()
+    if "graded_nhl" in n:
+        return "NHL"
+    if "graded_mlb" in n:
+        return "MLB"
+    if "graded_soccer" in n:
+        return "SOCCER"
+    if "graded_wcbb" in n or "graded_cbb" in n:
+        return "CBB"
+    if "graded_nba1h" in n or "graded_nba1q" in n or "graded_nba" in n:
+        return "NBA"
+    return None
+
+
+def _should_skip_graded_path(path: Path, include_synthetic: bool) -> bool:
+    parts = {p.lower() for p in path.parts}
+    if ".venv" in parts or "node_modules" in parts or ".git" in parts:
+        return True
+    if not include_synthetic and "synthetic" in parts:
+        return True
+    return False
+
+
+def _discover_graded_files(root: Path, *, recursive_outputs: bool, include_synthetic: bool) -> list[tuple[str | None, Path]]:
+    """Return (sport_hint or None, path). None = infer from file contents or name when loading."""
+    seen: set[Path] = set()
+    out: list[tuple[str | None, Path]] = []
+
+    def add(sp_key: str | None, p: Path) -> None:
+        if not p.is_file() or _should_skip_graded_path(p, include_synthetic):
+            return
+        r = p.resolve()
+        if r in seen:
+            return
+        seen.add(r)
+        out.append((sp_key, p))
+
     sports = ("NBA", "CBB", "NHL", "Soccer", "MLB")
-    out: list[tuple[str, Path]] = []
     for sp in sports:
         sp_key = "SOCCER" if sp.lower() == "soccer" else sp.upper()
         dirs = [
@@ -55,19 +119,40 @@ def _discover_graded_files(root: Path) -> list[tuple[str, Path]]:
             root / "outputs" / "graded",
             root / "outputs",
         ]
-        seen: set[Path] = set()
         for d in dirs:
             if not d.is_dir():
                 continue
             for pat in ("*graded*.csv", "*graded*.xlsx"):
                 for p in d.glob(pat):
-                    if p.is_file() and p.resolve() not in seen:
-                        seen.add(p.resolve())
-                        out.append((sp_key, p))
+                    add(sp_key, p)
             for p in d.glob("combined_tickets_graded_*.xlsx"):
-                if p.is_file() and p.resolve() not in seen:
-                    seen.add(p.resolve())
-                    out.append((sp_key, p))
+                add(sp_key, p)
+
+    out_dir = root / "outputs"
+    if recursive_outputs and out_dir.is_dir():
+        for p in out_dir.rglob("*graded*.xlsx"):
+            inferred = _infer_sport_from_graded_filename(p)
+            add(inferred, p)
+        for p in out_dir.rglob("*graded*.csv"):
+            inferred = _infer_sport_from_graded_filename(p)
+            add(inferred, p)
+        for p in out_dir.rglob("combined_tickets_graded_*.xlsx"):
+            add(None, p)
+
+    extra_roots = [
+        root / "NBA" / "data" / "outputs",
+        root / "data" / "outputs",
+    ]
+    for er in extra_roots:
+        if not er.is_dir():
+            continue
+        for p in er.rglob("*graded*.xlsx"):
+            inferred = _infer_sport_from_graded_filename(p)
+            add(inferred or "NBA", p)
+        for p in er.rglob("*graded*.csv"):
+            inferred = _infer_sport_from_graded_filename(p)
+            add(inferred or "NBA", p)
+
     return out
 
 
@@ -77,23 +162,121 @@ def _read_table(path: Path, sport_hint: str) -> pd.DataFrame | None:
             return pd.read_csv(path, low_memory=False, encoding="utf-8-sig")
         if path.suffix.lower() in (".xlsx", ".xlsm"):
             xl = pd.ExcelFile(path)
-            sheet = xl.sheet_names[0]
-            for cand in (sport_hint, sport_hint.upper(), sport_hint.lower(), "Sheet1", "ALL"):
+            skip_sheets = {
+                "summary",
+                "by pick type",
+                "by tier",
+                "prop type x direction",
+                "by direction",
+                "by minutes tier",
+                "by def tier",
+                "by def rank",
+                "by player role",
+                "by shot role",
+                "void reasons",
+            }
+            preferred = [
+                "GRADED",
+                "graded",
+                "Box Raw",
+                "box raw",
+                "ALL",
+                "All",
+                "ELIGIBLE",
+                sport_hint,
+                sport_hint.upper(),
+                sport_hint.lower(),
+                "Sheet1",
+            ]
+            for cand in preferred:
                 if cand and cand in xl.sheet_names:
-                    sheet = cand
-                    break
-            return pd.read_excel(path, sheet_name=sheet)
+                    df = pd.read_excel(path, sheet_name=cand, engine="openpyxl")
+                    if len(df) > 0 and len(df.columns) > 0:
+                        return df
+            for sn in xl.sheet_names:
+                if str(sn).strip().lower() in skip_sheets:
+                    continue
+                df = pd.read_excel(path, sheet_name=sn, engine="openpyxl")
+                if len(df) > 0 and len(df.columns) > 0:
+                    if _hit_column(df) is not None:
+                        return df
+            for sn in xl.sheet_names:
+                df = pd.read_excel(path, sheet_name=sn, engine="openpyxl")
+                if len(df) > 0 and len(df.columns) > 0:
+                    return df
+            return None
     except Exception as e:
         print(f"  [WARN] Failed to read {path}: {e}")
     return None
 
 
-def load_all_graded(root: Path) -> pd.DataFrame:
+def _dedupe_graded_rows(df: pd.DataFrame) -> tuple[pd.DataFrame, int]:
+    """Drop duplicate prop rows across dated exports (keep last). Returns (df, n_removed)."""
+    n0 = len(df)
+    colmap = {str(c).lower(): c for c in df.columns}
+
+    def col(*names: str) -> pd.Series | None:
+        for n in names:
+            if n in df.columns:
+                return df[n]
+            if n.lower() in colmap:
+                return df[colmap[n.lower()]]
+        return None
+
+    sport = col("sport")
+    player = col("player_name", "player", "pp_player", "Player")
+    gdate = col("game_date", "slate_date", "date", "start_time", "Game Date")
+    prop = col("prop_type", "prop_norm", "stat_norm", "stat_type")
+    line = col("line", "line_score")
+    direc = col("bet_direction", "recommended_side", "direction", "final_bet_direction")
+    if sport is None or player is None or gdate is None or prop is None or line is None or direc is None:
+        return df, 0
+
+    tmp = df.copy()
+    tmp["_dk_sport"] = sport.astype(str).str.strip().str.upper()
+    tmp["_dk_player"] = player.astype(str).str.strip().str.lower()
+    tmp["_dk_gd"] = pd.to_datetime(gdate, errors="coerce").dt.strftime("%Y-%m-%d")
+    tmp["_dk_prop"] = prop.astype(str).str.strip().str.lower()
+    tmp["_dk_line"] = pd.to_numeric(line, errors="coerce").astype(str)
+    tmp["_dk_dir"] = direc.astype(str).str.strip().str.upper()
+    tmp["_dk_key"] = list(
+        zip(
+            tmp["_dk_sport"],
+            tmp["_dk_player"],
+            tmp["_dk_gd"],
+            tmp["_dk_prop"],
+            tmp["_dk_line"],
+            tmp["_dk_dir"],
+        )
+    )
+    tmp = tmp.sort_values("_source_path", kind="mergesort", na_position="last")
+    tmp = tmp.drop_duplicates(subset=["_dk_key"], keep="last")
+    tmp = tmp.drop(
+        columns=["_dk_sport", "_dk_player", "_dk_gd", "_dk_prop", "_dk_line", "_dk_dir", "_dk_key"],
+        errors="ignore",
+    )
+    return tmp.reset_index(drop=True), n0 - len(tmp)
+
+
+def load_all_graded(
+    root: Path,
+    *,
+    recursive_outputs: bool = True,
+    dedupe: bool = True,
+    include_synthetic: bool = False,
+) -> pd.DataFrame:
     rows: list[pd.DataFrame] = []
     per_file_log: list[str] = []
-    for sp_hint, path in _discover_graded_files(root):
-        df = _read_table(path, sp_hint)
+    for sp_hint, path in _discover_graded_files(
+        root, recursive_outputs=recursive_outputs, include_synthetic=include_synthetic
+    ):
+        hint = sp_hint or _infer_sport_from_graded_filename(path) or "NBA"
+        df = _read_table(path, hint)
         if df is None or df.empty:
+            per_file_log.append(f"  skip (empty): {path}")
+            continue
+        if "combined_tickets_graded" in path.name.lower() and "sport" not in df.columns:
+            per_file_log.append(f"  skip (combined file without sport column): {path}")
             continue
         hit = _hit_column(df)
         if hit is None:
@@ -105,12 +288,11 @@ def load_all_graded(root: Path) -> pd.DataFrame:
         if "sport" not in df.columns:
             parts = [p for p in path.parts if _norm_sport_folder(p)]
             if parts:
-                df["sport"] = _norm_sport_folder(parts[0]) or sp_hint
+                df["sport"] = _norm_sport_folder(parts[0]) or hint
             else:
-                df["sport"] = sp_hint
+                df["sport"] = hint
         else:
-            df["sport"] = df["sport"].astype(str).str.strip().str.upper()
-            df["sport"] = df["sport"].replace({"SOC": "SOCCER", "SOCCER": "SOCCER"})
+            df["sport"] = _sanitize_sport_with_hint(df["sport"], hint)
         df["_source_path"] = str(path)
         rows.append(df)
         per_file_log.append(f"  loaded {len(df)} rows from {path} (sport={df['sport'].iloc[0]})")
@@ -118,12 +300,31 @@ def load_all_graded(root: Path) -> pd.DataFrame:
         print(line)
     if not rows:
         return pd.DataFrame()
-    return pd.concat(rows, ignore_index=True)
+    merged = pd.concat(rows, ignore_index=True)
+    if dedupe and len(merged) > 0 and "_source_path" in merged.columns:
+        merged, removed = _dedupe_graded_rows(merged)
+        if removed:
+            print(f"\n  [dedupe] removed {removed} duplicate rows (same sport/player/date/prop/line/dir)")
+    return merged
 
 
 def _normalize_sport_series(s: pd.Series) -> pd.Series:
     m = s.astype(str).str.strip().str.upper()
     return m.replace({"SOC": "SOCCER", "FOOTBALL": "SOCCER"})
+
+
+_ALLOWED_TRAINING_SPORTS = frozenset({"NBA", "CBB", "NHL", "SOCCER", "MLB", "NBA1H", "NBA1Q"})
+
+
+def _sanitize_sport_with_hint(s: pd.Series, hint: str) -> pd.Series:
+    """Replace junk numeric sport codes (e.g. Excel 13.0) with filename/path hint."""
+    hint_u = str(hint or "NBA").strip().upper()
+    out = s.astype(str).str.strip().str.upper()
+    out = out.replace({"SOC": "SOCCER", "FOOTBALL": "SOCCER"})
+    num_junk = out.str.fullmatch(r"\d+\.?\d*", na=False)
+    bad = num_junk | out.isin(["", "NAN", "NONE", "NULL"]) | ~out.isin(_ALLOWED_TRAINING_SPORTS)
+    out = out.where(~bad, hint_u)
+    return out
 
 
 def _prepare_features(df: pd.DataFrame) -> pd.DataFrame:
@@ -137,12 +338,16 @@ def _prepare_features(df: pd.DataFrame) -> pd.DataFrame:
     out = pd.concat(parts, ignore_index=True)
     out = fill_minutes_cv_median_by_sport(out)
 
-    drop_m = (
-        out["composite_hit_rate"].isna()
-        & out["hit_rate_L5"].isna()
-        & out["hit_rate_L10"].isna()
+    # Graded "Box Raw" exports often omit hit-rate columns but still have edge / line / scores.
+    keep = (
+        out["composite_hit_rate"].notna()
+        | out["hit_rate_L5"].notna()
+        | out["hit_rate_L10"].notna()
+        | out["edge"].notna()
+        | out["line_score"].notna()
+        | out["prop_score"].notna()
     )
-    out = out.loc[~drop_m].copy()
+    out = out.loc[keep].copy()
 
     enc_cols = (
         "tier_encoded",
@@ -173,14 +378,40 @@ def _to_num_safe(s: pd.Series) -> pd.Series:
 def main() -> None:
     print(f"[PropORACLE-{SCRIPT_NAME}] Starting...")
     root = _repo_root()
-    ap = argparse.ArgumentParser()
+    ap = argparse.ArgumentParser(
+        description="Train edge_model_unified on all graded workbooks (including outputs/YYYY-MM-DD/)."
+    )
     ap.add_argument("--repo-root", type=Path, default=root)
+    ap.add_argument(
+        "--no-recursive-outputs",
+        action="store_true",
+        help="Only use flat outputs/ and sport folders (skip outputs/**/dated nested graded files).",
+    )
+    ap.add_argument(
+        "--no-dedupe",
+        action="store_true",
+        help="Keep duplicate rows if the same prop appears in multiple dated exports.",
+    )
+    ap.add_argument(
+        "--include-synthetic",
+        action="store_true",
+        help="Include paths under .../synthetic/ (off by default).",
+    )
     args = ap.parse_args()
     root = Path(args.repo_root).resolve()
     models_dir = root / "models"
     models_dir.mkdir(parents=True, exist_ok=True)
 
-    raw = load_all_graded(root)
+    print(
+        "  [config] recursive_outputs=%s dedupe=%s"
+        % (not args.no_recursive_outputs, not args.no_dedupe)
+    )
+    raw = load_all_graded(
+        root,
+        recursive_outputs=not args.no_recursive_outputs,
+        dedupe=not args.no_dedupe,
+        include_synthetic=args.include_synthetic,
+    )
     if raw.empty:
         print("[ERROR] No graded files with hit labels found.")
         return
@@ -245,8 +476,10 @@ def main() -> None:
     )
     model.fit(X_train, y_train, eval_set=[(X_test, y_test)], verbose=False)
 
-    calibrated = CalibratedClassifierCV(model, method="sigmoid", cv="prefit")
-    calibrated.fit(X_test, y_test)
+    p_hold = model.predict_proba(X_test)[:, 1].reshape(-1, 1)
+    platt_lr = LogisticRegression(C=1e12, max_iter=2000, random_state=42, solver="lbfgs")
+    platt_lr.fit(p_hold, y_test)
+    calibrated = EdgeCalibratedModel(model, platt_lr)
 
     prob_test = calibrated.predict_proba(X_test)[:, 1]
     auc_overall = float(roc_auc_score(y_test, prob_test))
@@ -301,17 +534,20 @@ def main() -> None:
         ar = float(np.mean(y_te[bm]))
         print(f"  bin {i + 1}: mean_p={mp:.3f} actual={ar:.3f} n={int(np.sum(bm))}")
 
-    joblib.dump(calibrated, models_dir / "edge_model_unified.pkl")
+    joblib.dump(calibrated, models_dir / "edge_model_unified.pkl", compress=3)
     (models_dir / "edge_model_features.json").write_text(
         json.dumps(FEATURE_COLUMNS, indent=2), encoding="utf-8"
     )
     meta = {
         "trained_at_utc": datetime.now(timezone.utc).isoformat(),
+        "training_rows_total": int(len(df)),
         "rows_per_sport": {str(k): int(v) for k, v in df.groupby("sport").size().items()},
         "roc_auc_overall": auc_overall,
         "roc_auc_per_sport": meta_auc,
         "scale_pos_weight": spw,
         "feature_columns": FEATURE_COLUMNS,
+        "recursive_outputs_used": not args.no_recursive_outputs,
+        "dedupe_used": not args.no_dedupe,
     }
     (models_dir / "edge_model_metadata.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
     print(f"\nSaved: edge_model_unified.pkl, edge_model_features.json, edge_model_metadata.json -> {models_dir}")
