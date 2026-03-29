@@ -26,10 +26,19 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 import numpy as np
 import pandas as pd
 import joblib
+
+for _efe_anc in Path(__file__).resolve().parents:
+    if (_efe_anc / "scripts" / "edge_feature_engineering.py").is_file():
+        _efe_sd = str(_efe_anc / "scripts")
+        if _efe_sd not in sys.path:
+            sys.path.insert(0, _efe_sd)
+        break
+from edge_feature_engineering import apply_ticket_eligibility_voids, build_feature_vector  # noqa: E402
 
 # UTF-8 safe Excel export
 try:
@@ -666,6 +675,7 @@ def main() -> None:
     )
     args = ap.parse_args()
 
+    print("[PropORACLE-step7_rank_props] Starting...")
     print(f"→ Loading: {args.input}")
     df = pd.read_csv(args.input, dtype=str, encoding="utf-8-sig", 
                      engine='python').fillna("")
@@ -902,6 +912,18 @@ def main() -> None:
         np.where(hr10.notna(), hr10, np.nan)))
     )
     out["line_hit_rate"] = pd.Series(line_hit_rate, index=out.index)
+    _lo = _to_num(hr5_over)
+    _l10 = _to_num(hr10_over)
+    if _lo.notna().any() and _lo.dropna().median() > 1.0:
+        _lo = _lo / 100.0
+        _l10 = _l10 / 100.0
+    line_hit_over_only = (_lo * 0.50 + _l10 * 0.50).where(
+        _lo.notna() & _l10.notna(), _lo.where(_lo.notna(), _l10)
+    )
+    out["composite_hit_rate"] = np.where(
+        bet_is_under, 1.0 - line_hit_over_only, line_hit_over_only
+    )
+    out["composite_hit_rate"] = pd.to_numeric(out["composite_hit_rate"], errors="coerce")
 
     # ── VECTORIZED MINUTES CERTAINTY ──────────────────────────────────────────
     _MIN_TIER_MAP = {"HIGH": 1.00, "MEDIUM": 0.90, "LOW": 0.75}
@@ -1155,6 +1177,8 @@ def main() -> None:
         _tier_from_score_series(_to_num(out["rank_score"])), index=out.index
     )
     out.loc[~elig_mask, "tier"] = "D"
+    out = build_feature_vector(out, "NBA")
+    out = apply_ticket_eligibility_voids(out, "NBA")
     out = out.sort_values(by="final_score", ascending=False, na_position="last", kind="mergesort")
 
     # Split here — after all scoring/tier columns are populated

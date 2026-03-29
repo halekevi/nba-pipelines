@@ -25,6 +25,14 @@ import joblib
 import numpy as np
 import pandas as pd
 
+for _efe_anc in Path(__file__).resolve().parents:
+    if (_efe_anc / "scripts" / "edge_feature_engineering.py").is_file():
+        _efe_sd = str(_efe_anc / "scripts")
+        if _efe_sd not in sys.path:
+            sys.path.insert(0, _efe_sd)
+        break
+from edge_feature_engineering import apply_ticket_eligibility_voids, build_feature_vector  # noqa: E402
+
 
 def _to_num(s):
     return pd.to_numeric(s, errors="coerce")
@@ -396,7 +404,7 @@ def _tier_from_score_by_picktype(score: float, pick_type: str) -> str:
     Pick-type-aware tier assignment.
     Demons have structurally lower scores (edge is zeroed, prop_hr_prior is penalized)
     so they use compressed thresholds relative to their own score distribution.
-    Goblins and Standards use standard thresholds.
+    Goblins and Standards use Soccer sport thresholds (A/B/C).
     """
     if np.isnan(score):
         return "D"
@@ -407,10 +415,12 @@ def _tier_from_score_by_picktype(score: float, pick_type: str) -> str:
         if score >= 0.10:   return "B"
         if score >= -0.10:  return "C"
         return "D"
-    # Goblin / Standard use original thresholds
-    if score >= 1.20:   return "A"
-    if score >= 0.50:   return "B"
-    if score >= 0.10:   return "C"
+    if score >= 1.60:
+        return "A"
+    if score >= 1.20:
+        return "B"
+    if score >= 0.80:
+        return "C"
     return "D"
 
 
@@ -492,6 +502,29 @@ def _line_hit_rate_from_row(row: pd.Series) -> float:
         return hr5 * 0.50 + hr10 * 0.50
     if not np.isnan(hr5):  return hr5
     if not np.isnan(hr10): return hr10
+    return np.nan
+
+
+def _line_hit_over_only_soccer_row(row: pd.Series) -> float:
+    hr5 = hr10 = np.nan
+    for c in ("line_hit_rate_over_ou_5", "line_hit_rate_over_5", "last5_hit_rate"):
+        if c in row.index:
+            v = _safe_float(row.get(c))
+            if not np.isnan(v):
+                hr5 = v
+                break
+    for c in ("line_hit_rate_over_ou_10", "line_hit_rate_over_10"):
+        if c in row.index:
+            v = _safe_float(row.get(c))
+            if not np.isnan(v):
+                hr10 = v
+                break
+    if not np.isnan(hr5) and not np.isnan(hr10):
+        return hr5 * 0.50 + hr10 * 0.50
+    if not np.isnan(hr5):
+        return hr5
+    if not np.isnan(hr10):
+        return hr10
     return np.nan
 
 
@@ -644,6 +677,7 @@ def main() -> None:
     )
     args = ap.parse_args()
 
+    print("[PropORACLE-step7_rank_props_soccer] Starting...")
     print(f"→ Loading: {args.input}")
     out = pd.read_csv(args.input, low_memory=False, encoding="utf-8-sig").fillna("")
     _repo_usage = Path(__file__).resolve().parents[2]
@@ -754,6 +788,9 @@ def main() -> None:
     out["line_hit_rate_over_ou_10"] = pd.to_numeric(
         out["line_hit_rate_over_ou_10"], errors="coerce"
     ).fillna(pd.to_numeric(out["line_hit_rate"], errors="coerce"))
+    _lho_soc = out.apply(_line_hit_over_only_soccer_row, axis=1)
+    _bu_soc = out["bet_direction"].astype(str).str.upper().str.strip().eq("UNDER")
+    out["composite_hit_rate"] = np.where(_bu_soc, 1.0 - _lho_soc, _lho_soc)
     out["minutes_certainty"] = out.apply(_minutes_certainty, axis=1)
     out["prop_weight"]      = out["prop_norm"].astype(str).apply(_prop_weight)
     out["reliability_mult"] = out["pick_type"].astype(str).apply(_reliability_mult)
@@ -937,6 +974,11 @@ def main() -> None:
         lambda r: _tier_from_score_by_picktype(r["rank_score"], str(r.get("pick_type", "Standard"))),
         axis=1
     )
+    if "recommended_side" not in out.columns:
+        out["recommended_side"] = out["bet_direction"]
+    out = build_feature_vector(out, "Soccer")
+    out = apply_ticket_eligibility_voids(out, "SOCCER")
+    elig_mask = out["eligible"].astype(int).eq(1)
 
     # ── Tier A / B sheets so step8/step9 always have a usable sheet ──
     # ── Head-to-Head stats ───────────────────────────────────────────────────

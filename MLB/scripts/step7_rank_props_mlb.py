@@ -21,6 +21,14 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+for _efe_anc in Path(__file__).resolve().parents:
+    if (_efe_anc / "scripts" / "edge_feature_engineering.py").is_file():
+        _efe_sd = str(_efe_anc / "scripts")
+        if _efe_sd not in sys.path:
+            sys.path.insert(0, _efe_sd)
+        break
+from edge_feature_engineering import apply_ticket_eligibility_voids, build_feature_vector  # noqa: E402
+
 
 def _to_num(s):
     return pd.to_numeric(s, errors="coerce")
@@ -195,6 +203,7 @@ def main() -> None:
     ap.add_argument("--n_teams", type=int, default=30)
     args = ap.parse_args()
 
+    print("[PropORACLE-step7_rank_props_mlb] Starting...")
     print(f"→ Loading: {args.input}")
     out = pd.read_csv(args.input, low_memory=False, encoding="utf-8-sig").fillna("")
     REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -276,6 +285,31 @@ def main() -> None:
 
     out["edge_dr"]           = out["edge"].apply(_edge_transform)
     out["line_hit_rate"]     = out.apply(_line_hit_rate_from_row, axis=1)
+    def _line_hit_over_only_row(row: pd.Series) -> float:
+        hr5 = hr10 = np.nan
+        for c in ("line_hit_rate_over_ou_5", "line_hit_rate_over_5", "last5_hit_rate"):
+            if c in row.index:
+                v = _safe_float(row.get(c))
+                if not np.isnan(v):
+                    hr5 = v
+                    break
+        for c in ("line_hit_rate_over_ou_10", "line_hit_rate_over_10"):
+            if c in row.index:
+                v = _safe_float(row.get(c))
+                if not np.isnan(v):
+                    hr10 = v
+                    break
+        if not np.isnan(hr5) and not np.isnan(hr10):
+            return hr5 * 0.50 + hr10 * 0.50
+        if not np.isnan(hr5):
+            return hr5
+        if not np.isnan(hr10):
+            return hr10
+        return np.nan
+
+    _lho = out.apply(_line_hit_over_only_row, axis=1)
+    _bu = out["bet_direction"].astype(str).str.upper().str.strip().eq("UNDER")
+    out["composite_hit_rate"] = np.where(_bu, 1.0 - _lho, _lho)
     out["minutes_certainty"] = out.apply(_minutes_certainty, axis=1)
     out["prop_weight"]       = out["prop_norm"].astype(str).apply(_prop_weight)
     out["reliability_mult"]  = out["pick_type"].astype(str).apply(_reliability_mult)
@@ -377,6 +411,11 @@ def main() -> None:
 
     out["rank_score"] = score
     out["tier"]       = out["rank_score"].apply(_tier_from_score)
+    if "recommended_side" not in out.columns:
+        out["recommended_side"] = out["bet_direction"]
+    out = build_feature_vector(out, "MLB")
+    out = apply_ticket_eligibility_voids(out, "MLB")
+    elig_mask = out["eligible"].astype(int).eq(1)
 
     with pd.ExcelWriter(args.output, engine="openpyxl") as w:
         out.to_excel(w, sheet_name="ALL",      index=False)

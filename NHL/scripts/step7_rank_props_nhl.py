@@ -28,6 +28,15 @@ from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
+
+for _efe_anc in Path(__file__).resolve().parents:
+    if (_efe_anc / "scripts" / "edge_feature_engineering.py").is_file():
+        _efe_sd = str(_efe_anc / "scripts")
+        if _efe_sd not in sys.path:
+            sys.path.insert(0, _efe_sd)
+        break
+from edge_feature_engineering import apply_ticket_eligibility_voids, build_feature_vector  # noqa: E402
+
 try:
     from tqdm import tqdm as _tqdm
 except ImportError:
@@ -686,6 +695,7 @@ def main():
     )
     args = parser.parse_args()
 
+    print("[PropORACLE-step7_rank_props_nhl] Starting...")
     try:
         import openpyxl
     except ImportError:
@@ -801,9 +811,6 @@ def main():
             # Demons pass through for data/tracking — excluded from tickets in combined_slate
             active.append(row)
 
-    # Add rank only on active rows
-    for i, row in enumerate(active):
-        row["rank"] = i + 1
     for row in dropped:
         row["rank"] = ""
 
@@ -821,6 +828,27 @@ def main():
             df_h2h = _attach_h2h(df_h2h, args.cache, "nhl", player_col, opp_col, prop_col, line_col)
             active = df_h2h.to_dict("records")
             print(f"  H2H: {sum(1 for r in active if r.get('h2h_games',0) > 0)}/{len(active)} rows matched")
+
+    adf = pd.DataFrame(active)
+    cr = pd.to_numeric(adf.get("composite_hit_rate", np.nan), errors="coerce")
+    if "recommended_side" in adf.columns:
+        rs_src = adf["recommended_side"]
+    elif "bet_direction" in adf.columns:
+        rs_src = adf["bet_direction"]
+    else:
+        rs_src = pd.Series(["OVER"] * len(adf))
+    rs = pd.Series(rs_src).astype(str).str.upper().str.strip()
+    adf["composite_hit_rate"] = np.where(rs.eq("UNDER"), 1.0 - cr, cr)
+    if "eligible" not in adf.columns:
+        adf["eligible"] = 1
+    if "void_reason" not in adf.columns:
+        adf["void_reason"] = ""
+    adf = build_feature_vector(adf, "NHL")
+    adf = apply_ticket_eligibility_voids(adf, "NHL")
+    adf = adf.sort_values("prop_score", ascending=False, na_position="last")
+    active = adf.reset_index(drop=True).to_dict("records")
+    for i, row in enumerate(active):
+        row["rank"] = i + 1
 
     # Write XLSX with multiple tabs
     wb = openpyxl.Workbook()

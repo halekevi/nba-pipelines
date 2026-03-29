@@ -656,6 +656,7 @@ def main():
         help="injuries_cbb_*.csv (optional). If empty and --date set, tries outputs/<date>/injuries_cbb_<date>.csv",
     )
     args = ap.parse_args()
+    print("[PropORACLE-step6_rank_props_cbb] Starting...")
     Path(args.output).parent.mkdir(parents=True, exist_ok=True)
 
     df = pd.read_csv(args.input, dtype=str).fillna("")
@@ -909,6 +910,13 @@ def main():
         if "line_hit_rate_under_ou_10" in out.columns:
             out["line_hit_rate_under_ou_10"] = _to_num(out["line_hit_rate_under_ou_10"]).fillna(_pri_under)
     out["line_hit_rate"] = line_hit_rate
+    _lo_c = _to_num(hr_over5)
+    _l10_c = _to_num(hr_over10)
+    line_hit_over_cbb = (_lo_c * 0.50 + _l10_c * 0.50).where(
+        _lo_c.notna() & _l10_c.notna(), _lo_c.where(_lo_c.notna(), _l10_c)
+    )
+    _bu_c = out["bet_direction"].astype(str).str.upper().eq("UNDER")
+    out["composite_hit_rate"] = np.where(_bu_c, 1.0 - line_hit_over_cbb, line_hit_over_cbb)
 
     # ── Avg vs line (direction-aware) ────────────────────────────────────────
     for col in ("stat_last5_avg","stat_last10_avg","stat_season_avg"):
@@ -1048,6 +1056,20 @@ def main():
     final_dir = np.where(forced.eq(1), "OVER",
                 np.where(out["edge"] >= 0, "OVER", "UNDER"))
     out["final_bet_direction"] = final_dir
+
+    for _efe_anc in Path(__file__).resolve().parents:
+        if (_efe_anc / "scripts" / "edge_feature_engineering.py").is_file():
+            _efe_sd = str(_efe_anc / "scripts")
+            if _efe_sd not in sys.path:
+                sys.path.insert(0, _efe_sd)
+            break
+    from edge_feature_engineering import apply_ticket_eligibility_voids, build_feature_vector  # noqa: E402
+
+    if "recommended_side" not in out.columns:
+        out["recommended_side"] = out["final_bet_direction"]
+    out = build_feature_vector(out, "CBB")
+    out = apply_ticket_eligibility_voids(out, "CBB")
+    elig_mask = out["eligible"].astype(int).eq(1)
 
     # ── Clean up temp columns ─────────────────────────────────────────────────
     drop_cols = [c for c in out.columns if c.startswith("_stat_")]
