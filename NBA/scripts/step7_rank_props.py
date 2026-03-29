@@ -475,10 +475,15 @@ def _build_nba_ml_X(out: pd.DataFrame, model_features: list[str]) -> pd.DataFram
     )
     dir_s = out.get("bet_direction", pd.Series("OVER", index=idx)).astype(str).str.upper().str.strip()
     direction_num = pd.Series(np.where(dir_s.eq("OVER"), 1, 0), index=idx)
+    is_under = dir_s.eq("UNDER")
 
-    hr5 = _to_num(_nba_ml_pick_col(out, ("line_hit_rate_over_ou_5", "line_hit_rate_over_5")))
-    hr10 = _to_num(_nba_ml_pick_col(out, ("line_hit_rate", "line_hit_rate_over_ou_10")))
-    hr20 = _to_num(_nba_ml_pick_col(out, ("line_hit_rate_over_ou_20", "line_hit_rate_over_20")))
+    hr5_raw = _to_num(_nba_ml_pick_col(out, ("line_hit_rate_over_ou_5", "line_hit_rate_over_5")))
+    hr10_raw = _to_num(_nba_ml_pick_col(out, ("line_hit_rate", "line_hit_rate_over_ou_10")))
+    hr20_raw = _to_num(_nba_ml_pick_col(out, ("line_hit_rate_over_ou_20", "line_hit_rate_over_20")))
+    # Invert OVER hit rates for UNDER props so "high = good signal" is preserved
+    hr5 = pd.Series(np.where(is_under, 1.0 - hr5_raw, hr5_raw), index=idx)
+    hr10 = pd.Series(np.where(is_under, 1.0 - hr10_raw, hr10_raw), index=idx)
+    hr20 = pd.Series(np.where(is_under, 1.0 - hr20_raw, hr20_raw), index=idx)
 
     def _scale_hit_pct(s: pd.Series) -> pd.Series:
         if s.notna().any() and s.dropna().median() > 1.0:
