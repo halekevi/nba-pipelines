@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 """
-step1_fetch_prizepicks_mlb.py  (MLB Pipeline — Playwright intercept edition)
+step1_fetch_prizepicks_mlb.py  (MLB Pipeline — fully automated edition)
 
-Lets the real PrizePicks app make its own API requests and intercepts the response.
-No cookies, no headers, no 403 — the browser IS a real user.
+Launches a headless Chromium using your saved ~/.pp_browser_profile so
+PrizePicks sees a real logged-in session — no manual interaction needed.
 
 First-time setup (run once):
-    pip install playwright --break-system-packages
+    pip install playwright playwright-stealth --break-system-packages
     playwright install chromium
+    py -3.14 setup_prizepicks_profile.py   ← copies your Chrome profile/cookies
+
+After that, step1 runs fully unattended in the scheduled pipeline.
 
 Usage:
     py -3.14 step1_fetch_prizepicks_mlb.py
     py -3.14 step1_fetch_prizepicks_mlb.py --output step1_mlb_props.csv
-    py -3.14 step1_fetch_prizepicks_mlb.py --timeout 60
+    py -3.14 step1_fetch_prizepicks_mlb.py --timeout 90
+    py -3.14 step1_fetch_prizepicks_mlb.py --from-file payload.json
 """
 
 from __future__ import annotations
@@ -77,6 +81,45 @@ EMPTY_COLS = [
     "prop_type", "line", "pick_type",
 ]
 
+PROFILE_DIR = Path.home() / ".pp_browser_profile"
+
+LAUNCH_ARGS = [
+    "--no-sandbox",
+    "--disable-blink-features=AutomationControlled",
+    "--disable-infobars",
+    "--disable-dev-shm-usage",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--window-size=1920,1080",
+    # Headless-specific: avoid GPU errors in unattended context
+    "--disable-gpu",
+    "--disable-software-rasterizer",
+]
+
+CTX_KWARGS = dict(
+    user_agent=(
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/122.0.0.0 Safari/537.36"
+    ),
+    locale="en-US",
+    timezone_id="America/Chicago",
+    geolocation={"latitude": 29.7604, "longitude": -95.3698},  # Houston, TX
+    permissions=["geolocation", "notifications"],
+    color_scheme="dark",
+)
+
+# PrizePicks API endpoints to intercept
+CAPTURE_PATTERNS = [
+    "api.prizepicks.com/projections",
+    "api.prizepicks.com/boards",
+    "api.prizepicks.com/offers",
+    "api.prizepicks.com/graphql",
+    "api.prizepicks.com/v1/projections",
+    "api.prizepicks.com/v2/projections",
+]
+GAME_PATTERN = "api.prizepicks.com/games"
+
 
 # ─── helpers ──────────────────────────────────────────────────────────────────
 
@@ -101,6 +144,36 @@ def _included_index(included: List[dict]) -> Dict[Tuple[str, str], dict]:
         if t and i:
             idx[(t, i)] = obj
     return idx
+
+
+def _try_extract_projections(j: dict) -> Tuple[List[dict], List[dict]]:
+    """Try multiple known PrizePicks response shapes to extract (data, included)."""
+    # Shape 1: standard JSONAPI  {"data": [...], "included": [...]}
+    if isinstance(j.get("data"), list):
+        data = j["data"]
+        proj = [x for x in data if isinstance(x, dict) and x.get("type") == "projection"]
+        if not proj:
+            proj = data  # untyped — take all; parse_rows will skip non-projections
+        if proj:
+            return proj, j.get("included") or []
+
+    # Shape 2: {"projections": [...]}
+    if isinstance(j.get("projections"), list) and j["projections"]:
+        return j["projections"], j.get("included") or []
+
+    # Shape 3: graphql {"data": {"projections": {"edges": [...]}}}
+    gql_data = j.get("data") if isinstance(j.get("data"), dict) else {}
+    for key in ("projections", "board", "offers"):
+        node = gql_data.get(key)
+        if isinstance(node, dict):
+            edges = node.get("edges") or node.get("nodes") or []
+            items = [e.get("node", e) for e in edges if isinstance(e, dict)]
+            if items:
+                return items, []
+        if isinstance(node, list) and node:
+            return node, []
+
+    return [], []
 
 
 def parse_rows(data: List[dict], included: List[dict]) -> List[dict]:
@@ -130,7 +203,7 @@ def parse_rows(data: List[dict], included: List[dict]) -> List[dict]:
             player_id  = str(pd_data.get("id", "")).strip()
             player_obj = idx.get(("new_player", player_id)) or idx.get(("player", player_id))
 
-        # resolve game — try new_game first (PrizePicks current API), fall back to game
+        # resolve game — try new_game first, fall back to game
         game_id   = _safe_get(rels, ["new_game", "data", "id"], "") or _safe_get(rels, ["game", "data", "id"], "")
         game_type = _safe_get(rels, ["new_game", "data", "type"], "") or _safe_get(rels, ["game", "data", "type"], "")
         game_obj  = idx.get((str(game_type), str(game_id))) if game_id and game_type else None
@@ -175,253 +248,12 @@ def parse_rows(data: List[dict], included: List[dict]) -> List[dict]:
             "opp_team":         opp_team,
             "pp_home_team":     home,
             "pp_away_team":     away,
-            "prop_type":        prop_type_raw,   # keep original casing for downstream
+            "prop_type":        prop_type_raw,
             "line":             line,
             "pick_type":        pick_type,
         })
 
     return rows
-
-
-# ─── Playwright fetch ──────────────────────────────────────────────────────────
-
-def fetch_via_playwright(timeout_s: int = 45, manual_window: int = 30) -> Tuple[List[dict], List[dict]]:
-    """
-    Launch a visible Chromium window, navigate to the MLB board, and intercept
-    ANY prizepicks API response that contains projection data.
-
-    Broad intercept: captures /projections, /boards, /offers, graphql, or any
-    api.prizepicks.com endpoint returning a list of projection-like objects.
-
-    Prints all matched response URLs for debugging.
-    Gives a manual_window-second window at the start for user interaction
-    (cookie banners, geo prompts, etc.) before auto-scroll triggers.
-    """
-    from playwright.sync_api import sync_playwright
-
-    captured: dict = {}
-    done = False
-    have_projections = False
-    projections_time: float = 0.0
-    seen_urls: list = []
-
-    # Broad patterns — anything on api.prizepicks.com that returns projection data
-    CAPTURE_PATTERNS = [
-        "api.prizepicks.com/projections",
-        "api.prizepicks.com/boards",
-        "api.prizepicks.com/offers",
-        "api.prizepicks.com/graphql",
-        "api.prizepicks.com/v1/projections",
-        "api.prizepicks.com/v2/projections",
-    ]
-    GAME_PATTERN = "api.prizepicks.com/games"
-
-    def _try_extract_projections(j: dict) -> Tuple[List[dict], List[dict]]:
-        """Try multiple known shapes to extract (data, included) projection lists."""
-        # Shape 1: standard JSONAPI  {"data": [...], "included": [...]}
-        if isinstance(j.get("data"), list):
-            data = j["data"]
-            # filter to projection-type items if typed
-            proj = [x for x in data if isinstance(x, dict) and x.get("type") == "projection"]
-            if not proj:
-                proj = data  # untyped — take all, parse_rows will skip non-projections
-            if proj:
-                return proj, j.get("included") or []
-
-        # Shape 2: {"projections": [...]}
-        if isinstance(j.get("projections"), list) and j["projections"]:
-            return j["projections"], j.get("included") or []
-
-        # Shape 3: graphql {"data": {"projections": {"edges": [...]}}}
-        gql_data = j.get("data") if isinstance(j.get("data"), dict) else {}
-        for key in ("projections", "board", "offers"):
-            node = gql_data.get(key)
-            if isinstance(node, dict):
-                edges = node.get("edges") or node.get("nodes") or []
-                items = [e.get("node", e) for e in edges if isinstance(e, dict)]
-                if items:
-                    return items, []
-            if isinstance(node, list) and node:
-                return node, []
-
-        return [], []
-
-    def handle_response(response):
-        nonlocal have_projections, projections_time
-        url = response.url
-
-        # Log ALL api.prizepicks.com responses for debugging
-        if "api.prizepicks.com" in url or "prizepicks.com/api" in url:
-            status = response.status
-            seen_urls.append(f"  [{status}] {url}")
-            print(f"  🔍 PP response: [{status}] {url}")
-
-            if status != 200:
-                return
-
-            try:
-                j = response.json()
-            except Exception:
-                print(f"       └─ not JSON, skipping")
-                return
-
-            # Capture game objects from the separate /games endpoint (PrizePicks loads
-            # home/away team data here, NOT as included sideloads in /projections).
-            if GAME_PATTERN in url and isinstance(j.get("data"), list):
-                game_objs = [x for x in j["data"] if isinstance(x, dict)
-                             and x.get("type") in ("game", "new_game", "scheduled_game")]
-                if not game_objs:
-                    game_objs = [x for x in j["data"] if isinstance(x, dict) and x.get("id")]
-                if game_objs:
-                    captured.setdefault("included", []).extend(game_objs)
-                    print(f"  ✓ Captured {len(game_objs)} game objects from /games")
-                return
-
-            # Only accept projection responses with league_id=2
-            if not any(pat in url for pat in CAPTURE_PATTERNS):
-                return
-            if "league_id=2" not in url and "league_id=2" not in response.url:
-                print(f"       └─ skipping (not league_id=2)")
-                return
-
-            data, included = _try_extract_projections(j)
-            if data:
-                captured["data"] = data
-                captured.setdefault("included", [])
-                captured["included"].extend(included)
-                have_projections = True
-                projections_time = time.time()
-                print(f"  ✓ Captured {len(data)} items from {url}")
-
-    PROFILE_DIR = Path.home() / ".pp_browser_profile"
-    use_profile = PROFILE_DIR.exists()
-
-    LAUNCH_ARGS = [
-        "--no-sandbox",
-        "--disable-blink-features=AutomationControlled",
-        "--start-maximized",
-        "--disable-infobars",
-        "--disable-dev-shm-usage",
-        "--no-first-run",
-        "--no-default-browser-check",
-        "--window-size=1920,1080",
-    ]
-    CTX_KWARGS = dict(
-        user_agent=(
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/122.0.0.0 Safari/537.36"
-        ),
-        locale="en-US",
-        timezone_id="America/Chicago",
-        geolocation={"latitude": 29.7604, "longitude": -95.3698},  # Houston, TX
-        permissions=["geolocation", "notifications"],
-        color_scheme="dark",
-    )
-
-    # playwright-stealth patches ~30 automation fingerprint signals DataDome checks
-    try:
-        from playwright_stealth import stealth_sync
-        use_stealth = True
-        print("  🛡️  playwright-stealth loaded")
-    except ImportError:
-        use_stealth = False
-        print("  ⚠️  playwright-stealth not found — install with: pip install playwright-stealth")
-
-    with sync_playwright() as p:
-        if use_profile:
-            print(f"🌐 Launching Chrome with saved profile...")
-            context = p.chromium.launch_persistent_context(
-                user_data_dir=str(PROFILE_DIR),
-                headless=False,
-                args=LAUNCH_ARGS,
-                **CTX_KWARGS,
-            )
-            browser = None
-        else:
-            print("🌐 Launching Chrome (no saved profile — run setup_prizepicks_profile.py once)...")
-            browser = p.chromium.launch(headless=False, args=LAUNCH_ARGS)
-            context = browser.new_context(viewport=None, **CTX_KWARGS)
-
-        page = context.new_page()
-
-        # Apply stealth BEFORE navigation — patches webdriver, plugins, languages,
-        # chrome runtime, permissions API, iframe contentWindow, and ~25 more signals
-        if use_stealth:
-            stealth_sync(page)
-
-        page.on("response", handle_response)
-
-        print(f"  Loading {BOARD_URL}")
-        try:
-            page.goto(BOARD_URL, timeout=30_000, wait_until="domcontentloaded")
-            # Extra wait for MLB-specific projections to load after NBA default
-            time.sleep(4)
-        except Exception as e:
-            print(f"  ⚠️  Page load timeout (continuing): {e}")
-
-        GAMES_GRACE = 6.0  # seconds to wait after projections for /games response
-
-        def _capture_complete() -> bool:
-            """True once we have projections + either game objects or grace period expired."""
-            if not have_projections:
-                return False
-            elapsed = time.time() - projections_time
-            have_games = any(
-                obj.get("type") in ("game", "new_game", "scheduled_game") or
-                ("home_team" in (obj.get("attributes") or {}))
-                for obj in captured.get("included", [])
-            )
-            return have_games or elapsed >= GAMES_GRACE
-
-        # Phase 1: manual interaction window — let user dismiss banners/prompts
-        if manual_window > 0:
-            print(f"\n  ⏳ Manual window: {manual_window}s — dismiss any popups if needed...")
-            deadline_manual = time.time() + manual_window
-            while not _capture_complete() and time.time() < deadline_manual:
-                time.sleep(1)
-
-        if _capture_complete():
-            context.close()
-            if browser:
-                browser.close()
-            return captured.get("data", []), captured.get("included", [])
-
-        # Phase 2: auto-scroll triggers to nudge lazy API calls
-        print("  ⚙️  Auto-triggering: clicking board + scrolling...")
-        triggers = [
-            "window.scrollBy(0, 300)",
-            "window.scrollBy(0, 600)",
-            "document.body.click()",
-            "window.scrollBy(0, -300)",
-            "window.dispatchEvent(new Event('resize'))",
-        ]
-        deadline = time.time() + (timeout_s - manual_window)
-        trigger_idx = 0
-        while not _capture_complete() and time.time() < deadline:
-            if trigger_idx < len(triggers):
-                try:
-                    page.evaluate(triggers[trigger_idx])
-                    trigger_idx += 1
-                except Exception:
-                    pass
-                time.sleep(2)
-            else:
-                time.sleep(1)
-
-        if not have_projections and seen_urls:
-            print("\n  📋 All PrizePicks API calls seen (none had projection data):")
-            for u in seen_urls:
-                print(u)
-        elif not have_projections:
-            print("\n  ⚠️  No api.prizepicks.com calls detected at all.")
-            print("       PrizePicks may be blocking the browser fingerprint or CDN-caching the board.")
-
-        context.close()
-        if browser:
-            browser.close()
-
-    return captured.get("data", []), captured.get("included", [])
 
 
 def load_payload_from_file(path: str) -> Tuple[List[dict], List[dict]]:
@@ -434,31 +266,197 @@ def load_payload_from_file(path: str) -> Tuple[List[dict], List[dict]]:
     return (data if isinstance(data, list) else []), (included if isinstance(included, list) else [])
 
 
+# ─── Playwright fetch — fully headless, no manual window ──────────────────────
+
+def fetch_via_playwright(timeout_s: int = 90) -> Tuple[List[dict], List[dict]]:
+    """
+    Launch headless Chromium using the saved ~/.pp_browser_profile so
+    PrizePicks sees a real authenticated session. No popups, no manual steps.
+
+    Strategy:
+      1. Navigate to the MLB board URL
+      2. Intercept any api.prizepicks.com response with projection data
+      3. After projections land, wait up to GAMES_GRACE seconds for /games objects
+      4. Trigger scroll/click events to nudge lazy API calls if needed
+      5. Return (data, included) — empty lists if nothing intercepted
+    """
+    from playwright.sync_api import sync_playwright
+
+    captured:          dict  = {}
+    have_projections:  bool  = False
+    projections_time:  float = 0.0
+    seen_urls:         list  = []
+
+    # playwright-stealth patches ~30 automation fingerprint signals DataDome checks
+    try:
+        from playwright_stealth import stealth_sync
+        use_stealth = True
+        print("  🛡️  playwright-stealth loaded")
+    except ImportError:
+        use_stealth = False
+        print("  ⚠️  playwright-stealth not installed — run: pip install playwright-stealth --break-system-packages")
+
+    def handle_response(response):
+        nonlocal have_projections, projections_time
+        url = response.url
+
+        if "api.prizepicks.com" in url or "prizepicks.com/api" in url:
+            status = response.status
+            seen_urls.append(f"  [{status}] {url}")
+            print(f"  🔍 PP response: [{status}] {url}")
+
+            if status != 200:
+                return
+            try:
+                j = response.json()
+            except Exception:
+                print(f"       └─ not JSON, skipping")
+                return
+
+            # Capture game objects from the /games endpoint
+            if GAME_PATTERN in url and isinstance(j.get("data"), list):
+                game_objs = [x for x in j["data"] if isinstance(x, dict)
+                             and x.get("type") in ("game", "new_game", "scheduled_game")]
+                if not game_objs:
+                    game_objs = [x for x in j["data"] if isinstance(x, dict) and x.get("id")]
+                if game_objs:
+                    captured.setdefault("included", []).extend(game_objs)
+                    print(f"  ✓ Captured {len(game_objs)} game objects from /games")
+                return
+
+            # Only accept projection responses with league_id=2 (MLB)
+            if not any(pat in url for pat in CAPTURE_PATTERNS):
+                return
+            if "league_id=2" not in url:
+                print(f"       └─ skipping (not league_id=2)")
+                return
+
+            data, included = _try_extract_projections(j)
+            if data:
+                captured["data"] = data
+                captured.setdefault("included", [])
+                captured["included"].extend(included)
+                have_projections  = True
+                projections_time  = time.time()
+                print(f"  ✓ Captured {len(data)} projections from {url}")
+
+    def _capture_complete() -> bool:
+        if not have_projections:
+            return False
+        elapsed    = time.time() - projections_time
+        have_games = any(
+            obj.get("type") in ("game", "new_game", "scheduled_game") or
+            ("home_team" in (obj.get("attributes") or {}))
+            for obj in captured.get("included", [])
+        )
+        return have_games or elapsed >= GAMES_GRACE
+
+    GAMES_GRACE = 6.0  # seconds to wait after projections for /games response
+
+    use_profile = PROFILE_DIR.exists()
+    if not use_profile:
+        print(f"  ⚠️  No saved profile found at {PROFILE_DIR}")
+        print(f"       Run: py -3.14 setup_prizepicks_profile.py")
+        print(f"       Falling back to fresh browser (may hit DataDome challenge)...")
+
+    with sync_playwright() as p:
+        if use_profile:
+            print(f"🌐 Launching headless Chromium with saved profile: {PROFILE_DIR}")
+            context = p.chromium.launch_persistent_context(
+                user_data_dir=str(PROFILE_DIR),
+                headless=True,          # ← fully unattended, no window
+                args=LAUNCH_ARGS,
+                **CTX_KWARGS,
+            )
+            browser = None
+        else:
+            print("🌐 Launching headless Chromium (no saved profile)...")
+            browser  = p.chromium.launch(headless=True, args=LAUNCH_ARGS)
+            context  = browser.new_context(viewport={"width": 1920, "height": 1080}, **CTX_KWARGS)
+
+        page = context.new_page()
+
+        if use_stealth:
+            stealth_sync(page)
+
+        page.on("response", handle_response)
+
+        print(f"  Loading {BOARD_URL}")
+        try:
+            page.goto(BOARD_URL, timeout=30_000, wait_until="domcontentloaded")
+            # Give the MLB board a moment to fire its API calls after page load
+            time.sleep(5)
+        except Exception as e:
+            print(f"  ⚠️  Page load warning (continuing): {e}")
+
+        # Auto-scroll/trigger sequence — nudges lazy API calls immediately
+        # No manual window: scheduled runs can't have human interaction
+        triggers = [
+            "window.scrollBy(0, 300)",
+            "window.scrollBy(0, 600)",
+            "document.body.click()",
+            "window.scrollBy(0, -300)",
+            "window.dispatchEvent(new Event('resize'))",
+            "window.scrollBy(0, 900)",
+            "window.scrollBy(0, 0)",
+        ]
+
+        deadline    = time.time() + timeout_s
+        trigger_idx = 0
+
+        while not _capture_complete() and time.time() < deadline:
+            if trigger_idx < len(triggers):
+                try:
+                    page.evaluate(triggers[trigger_idx])
+                    trigger_idx += 1
+                except Exception:
+                    pass
+                time.sleep(2)
+            else:
+                time.sleep(1)
+
+        if _capture_complete():
+            print("  ✅ Capture complete.")
+        elif have_projections:
+            print("  ✅ Have projections (no game objects within grace window — continuing).")
+        else:
+            if seen_urls:
+                print("\n  📋 All PrizePicks API calls seen (none had projection data):")
+                for u in seen_urls:
+                    print(u)
+            else:
+                print("\n  ⚠️  No api.prizepicks.com calls detected at all.")
+                print("       Profile may need refreshing: py -3.14 setup_prizepicks_profile.py")
+
+        context.close()
+        if browser:
+            browser.close()
+
+    return captured.get("data", []), captured.get("included", [])
+
+
 # ─── main ─────────────────────────────────────────────────────────────────────
 
 def main():
-    ap = ap = argparse.ArgumentParser()
-    ap.add_argument("--output",        default="step1_mlb_props.csv")
-    ap.add_argument("--from-file",     default="",   help="Load raw PrizePicks JSON from file instead of live fetch")
-    ap.add_argument("--timeout",       type=int, default=75,  help="Total seconds to wait per attempt (default 75)")
-    ap.add_argument("--manual_window", type=int, default=30,  help="Seconds before auto-scroll triggers (default 30)")
-    ap.add_argument("--retries",       type=int, default=1,   help="Extra browser launch attempts on miss (default 1)")
-    ap.add_argument("--retry_delay",   type=int, default=8,   help="Seconds to wait between retry attempts (default 8)")
-    ap.add_argument("--min_rows",      type=int, default=30)
-    ap.add_argument("--min_teams",     type=int, default=2)
-    ap.add_argument("--all_props",     action="store_true",   help="Keep all prop types unfiltered")
-    # Compat aliases used by run_pipeline.ps1
-    ap.add_argument("--gentle",        action="store_true",   help="(compat) no-op, accepted for pipeline compat")
-    ap.add_argument("--manual-seconds",type=int, default=None, help="(compat) alias for --manual_window")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--output",         default="step1_mlb_props.csv")
+    ap.add_argument("--from-file",      default="",   help="Load raw PrizePicks JSON from file instead of live fetch")
+    ap.add_argument("--timeout",        type=int, default=90,  help="Total seconds to wait for intercept (default 90)")
+    ap.add_argument("--retries",        type=int, default=2,   help="Extra browser launch attempts on miss (default 2)")
+    ap.add_argument("--retry_delay",    type=int, default=10,  help="Seconds to wait between retry attempts (default 10)")
+    ap.add_argument("--min_rows",       type=int, default=30)
+    ap.add_argument("--min_teams",      type=int, default=2)
+    ap.add_argument("--all_props",      action="store_true",   help="Keep all prop types unfiltered")
+    # Compat aliases — accepted silently so existing pipeline calls don't break
+    ap.add_argument("--gentle",         action="store_true",   help="(compat) no-op")
+    ap.add_argument("--manual-seconds", type=int, default=None, help="(compat) no-op — manual window removed")
+    ap.add_argument("--manual_window",  type=int, default=None, help="(compat) no-op — manual window removed")
     args     = ap.parse_args()
-    # resolve alias
-    if args.manual_seconds is not None:
-        args.manual_window = args.manual_seconds
     out_path = Path(args.output)
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # ── Fetch (with retry) ────────────────────────────────────────────────────
-    data: list = []
+    # ── Fetch ────────────────────────────────────────────────────────────────
+    data: list     = []
     included: list = []
 
     if args.from_file:
@@ -468,42 +466,35 @@ def main():
         max_attempts = 1 + max(0, args.retries)
         for attempt in range(1, max_attempts + 1):
             if attempt > 1:
-                print(f"\n🔄 Retry {attempt - 1}/{args.retries} — relaunching browser in {args.retry_delay}s...")
+                print(f"\n🔄 Retry {attempt - 1}/{args.retries} — relaunching in {args.retry_delay}s...")
                 time.sleep(args.retry_delay)
-            print(f"[step1] Fetching PrizePicks MLB via browser intercept | league_id={MLB_LEAGUE_ID} | attempt {attempt}/{max_attempts}")
-            data, included = fetch_via_playwright(
-                timeout_s=args.timeout,
-                manual_window=args.manual_window if attempt == 1 else 0,
-            )
+            print(f"[step1] MLB fetch via headless browser | league_id={MLB_LEAGUE_ID} | attempt {attempt}/{max_attempts}")
+            data, included = fetch_via_playwright(timeout_s=args.timeout)
             if data:
                 print(f"  ✅ Captured on attempt {attempt}")
                 break
             print(f"  ⚠️  Attempt {attempt} missed intercept.")
 
-    # ── Empty guard ────────────────────────────────────────────────────────────
+    # ── Empty guard ──────────────────────────────────────────────────────────
     if not data:
         pd.DataFrame(columns=EMPTY_COLS).to_csv(out_path, index=False)
         print("❌ No projections intercepted after all attempts. Wrote empty CSV.")
         log_pipeline_health(
             "mlb.step1_fetch_prizepicks",
             "no_projections",
-            extra={"league_id": MLB_LEAGUE_ID, "method": "playwright_intercept", "attempts": max_attempts},
+            extra={"league_id": MLB_LEAGUE_ID, "method": "playwright_headless", "attempts": max_attempts},
             start=Path(__file__),
         )
         sys.exit(1)
 
-    # ── Parse ──────────────────────────────────────────────────────────────────
+    # ── Parse ────────────────────────────────────────────────────────────────
     rows = parse_rows(data, included)
     df   = pd.DataFrame(rows).fillna("")
     df["line"] = pd.to_numeric(df["line"], errors="coerce")
 
-    # Derive opp_team from game_id groupings when game obj lacks home/away fields.
-    # PrizePicks /games endpoint returns lineup data, not team codes, so we infer
-    # the opponent as the other team sharing the same pp_game_id.
-    # Normalize pp_game_id to string for consistent joining.
+    # Derive opp_team from game_id groupings when game obj lacks home/away fields
     df["pp_game_id"] = df["pp_game_id"].astype(str).str.strip()
     if "opp_team" in df.columns and "pp_game_id" in df.columns and "team" in df.columns:
-        # For each game_id, collect the unique teams
         teams_per_game = (
             df[df["pp_game_id"].ne("") & df["team"].astype(str).str.strip().ne("")]
             .groupby("pp_game_id")["team"]
@@ -511,7 +502,6 @@ def main():
             .reset_index()
         )
         teams_per_game.columns = ["pp_game_id", "_teams"]
-        # Only consider games with exactly 2 teams
         two_team = teams_per_game[teams_per_game["_teams"].apply(len) == 2].copy()
         two_team["_team_a"] = two_team["_teams"].apply(lambda t: t[0])
         two_team["_team_b"] = two_team["_teams"].apply(lambda t: t[1])
