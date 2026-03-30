@@ -1874,20 +1874,11 @@ def load_nba(path: str) -> pd.DataFrame:
             df["tier"] = df["tier"].iloc[:, 0]
         df["tier"] = df["tier"].astype(str).str.upper()
 
-    # Drop voids if present — BUT keep NO_PROJECTION_OR_LINE rows so that
-    # shooting-split props (3-PT Made, Two Pointers Made, FT Made/Att, etc.)
-    # appear in slate sheets for historical hit-rate tracking.
-    # filter_eligible excludes any non-empty void_reason from auto-tickets.
+    # Keep void_reason metadata but do not prune NBA board rows here.
+    # The product requirement is to show board parity with available PP lines.
     if "void_reason" in df.columns:
         if isinstance(df["void_reason"], pd.DataFrame):
             df["void_reason"] = df["void_reason"].iloc[:, 0]
-        void_str = df["void_reason"].astype(str).str.strip()
-        keep_mask = (
-            df["void_reason"].isna()
-            | (void_str == "")
-            | (void_str == "NO_PROJECTION_OR_LINE")
-        )
-        df = df[keep_mask]
 
     # Drop "1st 3 Minutes" props — no historical data, not bettable on PrizePicks standard
     if "prop_type" in df.columns:
@@ -3046,13 +3037,16 @@ def filter_eligible(df: pd.DataFrame, min_hit_rate=0.55, min_edge=0.0, min_rank=
     if "prop_type" in df.columns:
         prop_norm = df["prop_type"].apply(_norm_prop_label)
         mask &= ~prop_norm.isin(TICKET_EXCLUDED_PROPS)
-    # Exclude voided legs from auto-tickets (slate may still list them for PP board parity).
+    # Only hard-exclude rows that truly cannot be ticketed.
     if "void_reason" in df.columns:
         vs = df["void_reason"]
         void_str = vs.astype(str).str.strip()
-        mask &= vs.isna() | void_str.eq("") | void_str.eq("nan")
+        mask &= ~void_str.eq("NO_PROJECTION_OR_LINE")
+    l5_o = pd.to_numeric(df.get("l5_over"), errors="coerce").fillna(0)
+    l5_u = pd.to_numeric(df.get("l5_under"), errors="coerce").fillna(0)
+    strong_l5 = (l5_o >= 4) | (l5_u >= 4)
     if min_hit_rate > 0 and "hit_rate" in df.columns:
-        mask &= df["hit_rate"].fillna(0) >= min_hit_rate
+        mask &= (df["hit_rate"].fillna(0) >= min_hit_rate) | strong_l5
     if min_edge > 0 and "edge" in df.columns:
         mask &= df["edge"].fillna(0) >= min_edge
     if min_rank is not None and "rank_score" in df.columns:
@@ -3083,7 +3077,7 @@ def build_single_structure_ticket(
         return None
 
     n_legs = 2 if (is_power or is_standard) else 3
-    allowed_tiers = {"A", "B"} if (is_power or is_standard) else {"A", "B", "C"}
+    allowed_tiers = {"A", "B", "C", "D"}
     q = 0.70 if (is_power or is_standard) else 0.50  # top 30% / top 50%
 
     # NHL and Soccer don't use Goblin/Standard split — all props are Standard.
