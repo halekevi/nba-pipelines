@@ -393,16 +393,43 @@ def get_vals_nba1h(
     player_name: str = "",
 ) -> List[float]:
     """
-    Build 1H history from quarter-level data:
-      1H actual = 1Q actual + 2Q actual (same game_date/player/prop_type)
-    Falls back to explicit segment='1H' rows when quarter-pair data is unavailable.
+    Build 1H history with period-safe precedence:
+      1) Explicit segment='1H' rows (authoritative when present)
+      2) segment='2Q' rows (many feeds store cumulative through halftime here)
+      3) Sum of segment='1Q' + segment='2Q' only when BOTH exist for a game_date
+
+    This avoids double counting when 2Q is already cumulative and prevents
+    one-quarter partials from being treated as full first-half history.
     """
     prop_key = _norm_nba1q_prop(prop_norm)
     if not prop_key:
         return []
     try:
         vals: List[float] = []
-        if str(espn_id or "").strip():
+
+        # 1) Explicit 1H rows (if available in the DB).
+        vals = get_vals_nba_period(
+            con,
+            espn_id,
+            prop_norm,
+            n=n,
+            player_name=player_name,
+            segment="1H",
+        )
+
+        # 2) Use 2Q rows as first-half cumulative fallback.
+        if not vals:
+            vals = get_vals_nba_period(
+                con,
+                espn_id,
+                prop_norm,
+                n=n,
+                player_name=player_name,
+                segment="2Q",
+            )
+
+        # 3) Final fallback: sum 1Q + 2Q, but only when both are present.
+        if not vals and str(espn_id or "").strip():
             rows = con.execute(
                 """
                 SELECT game_date, SUM(actual) AS first_half_actual
@@ -412,7 +439,7 @@ def get_vals_nba1h(
                   AND segment IN ('1Q', '2Q')
                   AND actual IS NOT NULL
                 GROUP BY game_date
-                HAVING COUNT(DISTINCT segment) >= 1
+                HAVING COUNT(DISTINCT segment) >= 2
                 ORDER BY game_date DESC
                 LIMIT ?
                 """,
@@ -430,24 +457,13 @@ def get_vals_nba1h(
                   AND segment IN ('1Q', '2Q')
                   AND actual IS NOT NULL
                 GROUP BY game_date
-                HAVING COUNT(DISTINCT segment) >= 1
+                HAVING COUNT(DISTINCT segment) >= 2
                 ORDER BY game_date DESC
                 LIMIT ?
                 """,
                 (str(player_name).strip().lower(), prop_key, int(n)),
             ).fetchall()
             vals = [float(r[1]) for r in rows if r[1] is not None]
-
-        # Backward compatibility if DB contains explicit 1H segment rows.
-        if not vals:
-            vals = get_vals_nba_period(
-                con,
-                espn_id,
-                prop_norm,
-                n=n,
-                player_name=player_name,
-                segment="1H",
-            )
 
         return vals
     except Exception:
