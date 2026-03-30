@@ -834,13 +834,8 @@ def main() -> None:
         "fta", "freethrowsattempted",# FT Attempted OVER 43.9%
         "stocks",                    # Blks+Stls OVER 47.5% (marginal, block for safety)
     }
-    _BLOCKED_STD_UNDER = {
-        "fantasy",                   # Fantasy Score UNDER 28.8% — worst prop in dataset
-        "pts",                       # Points UNDER 49.2% — coin flip, not worth Standard slot
-    }
-    _BLOCKED_ANY_UNDER = {
-        "reb",                       # Rebounds UNDER 49.5% overall (13.3% some days)
-    }
+    _BLOCKED_STD_UNDER = set()
+    _BLOCKED_ANY_UNDER = set()
 
     is_standard = pick_type_s == "Standard"
     is_over     = pd.Series(bet_dir, index=out.index) == "OVER"
