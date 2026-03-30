@@ -460,6 +460,7 @@ def _load_ticket_json_leg_probs(repo_root: Path, tickets_xlsx: Path) -> dict[tup
     date_str = m.group(1) if m else ""
     candidates: list[Path] = []
     if date_str:
+        candidates.append(repo_root / "outputs" / date_str / f"combined_slate_tickets_{date_str}.json")
         candidates.append(repo_root / f"combined_slate_tickets_{date_str}.json")
     candidates.append(tickets_xlsx.with_suffix(".json"))
 

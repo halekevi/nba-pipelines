@@ -194,6 +194,10 @@ def _parse_game_period_stats(event_id: str, max_period: int) -> list[dict]:
         elif "defensive rebound" in ltxt:
             _add_stat(stats_by_player, primary, "DREB", 1)
             _add_stat(stats_by_player, primary, "REB", 1)
+        elif " rebound" in ltxt and "team rebound" not in ltxt:
+            # ESPN pbp sometimes logs generic "Player rebound" (no OREB/DREB label).
+            # Count it toward total rebounds so PRA-style props don't undercount by 1.
+            _add_stat(stats_by_player, primary, "REB", 1)
 
         if "turnover" in ltxt and "team turnover" not in ltxt:
             _add_stat(stats_by_player, primary, "TO", 1)

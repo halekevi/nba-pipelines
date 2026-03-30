@@ -42,6 +42,8 @@ import pandas as pd
 _HERE = Path(__file__).resolve().parent
 DB_PATH = _HERE.parent / "data" / "cache" / "proporacle_ref.db"
 MIN_SAMPLE_FOR_TICKET = 4
+PERIOD_OVERRIDES_PATH = _HERE.parent / "data" / "reference" / "period_actual_overrides.csv"
+_PERIOD_OVERRIDES_CACHE: dict[tuple[str, str, str], List[float]] | None = None
 
 
 def open_db(db_path: Optional[Path] = None) -> sqlite3.Connection:
@@ -56,6 +58,66 @@ def open_db(db_path: Optional[Path] = None) -> sqlite3.Connection:
     con.execute("PRAGMA journal_mode=WAL;")
     con.row_factory = sqlite3.Row
     return con
+
+
+def _norm_key_text(s: str) -> str:
+    return str(s or "").strip().lower()
+
+
+def _load_period_overrides() -> dict[tuple[str, str, str], List[float]]:
+    """
+    Optional manual correction file for period-history values.
+    CSV schema:
+      sport,player,prop_norm,vals
+    where vals is newest-first pipe list (e.g. "20|16|17|27|9").
+    """
+    global _PERIOD_OVERRIDES_CACHE
+    if _PERIOD_OVERRIDES_CACHE is not None:
+        return _PERIOD_OVERRIDES_CACHE
+
+    out: dict[tuple[str, str, str], List[float]] = {}
+    if not PERIOD_OVERRIDES_PATH.exists():
+        _PERIOD_OVERRIDES_CACHE = out
+        return out
+
+    try:
+        df = pd.read_csv(PERIOD_OVERRIDES_PATH, dtype=str, encoding="utf-8-sig").fillna("")
+    except Exception:
+        _PERIOD_OVERRIDES_CACHE = out
+        return out
+
+    required = {"sport", "player", "prop_norm", "vals"}
+    if not required.issubset(set(df.columns)):
+        _PERIOD_OVERRIDES_CACHE = out
+        return out
+
+    for _, r in df.iterrows():
+        sport = _norm_key_text(r.get("sport", ""))
+        player = _norm_key_text(r.get("player", ""))
+        prop = _norm_key_text(r.get("prop_norm", ""))
+        vals_raw = str(r.get("vals", "")).strip()
+        if not (sport and player and prop and vals_raw):
+            continue
+        vals: List[float] = []
+        for tok in vals_raw.split("|"):
+            tok = tok.strip()
+            if not tok:
+                continue
+            try:
+                vals.append(float(tok))
+            except Exception:
+                continue
+        if vals:
+            out[(sport, player, prop)] = vals
+
+    _PERIOD_OVERRIDES_CACHE = out
+    return out
+
+
+def _period_override_vals(sport: str, player_name: str, prop_norm: str, n: int) -> List[float]:
+    key = (_norm_key_text(sport), _norm_key_text(player_name), _norm_key_text(prop_norm))
+    vals = _load_period_overrides().get(key) or []
+    return vals[: int(n)] if vals else []
 
 
 # ── NBA / CBB prop → DB column mapping ────────────────────────────────────────
@@ -673,6 +735,12 @@ def attach_stats(
                 vals = get_fn(con, raw_id, prop, n, player_name=player_name)
             else:
                 vals = get_fn(con, raw_id, prop, n)
+
+        # Optional manual correction layer for known period feed mismatches.
+        if sport in ("nba1q", "nba1h") and player_name:
+            override_vals = _period_override_vals(sport, player_name, prop, n)
+            if override_vals:
+                vals = override_vals
 
         if not vals:
             slate.at[idx, "stat_status"] = "NO_DATA"

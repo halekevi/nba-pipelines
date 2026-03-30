@@ -1,0 +1,91 @@
+
+=== build_ticket_eval.py --debug ===
+
+CLI --date:     2026-03-23
+Ticket source:  C:\Users\halek\OneDrive\Desktop\PropORACLE\combined_slate_tickets_2026-03-23.json
+Payload "date": '2026-03-23'
+
+outputs/2026-03-23/ graded_*.xlsx:
+  - outputs\2026-03-23\graded_cbb_2026-03-23.xlsx
+  - outputs\2026-03-23\graded_nba1h_2026-03-23.xlsx
+  - outputs\2026-03-23\graded_nba1q_2026-03-23.xlsx
+  - outputs\2026-03-23\graded_nba_2026-03-23.xlsx
+  - outputs\2026-03-23\graded_nhl_2026-03-23.xlsx
+  - outputs\2026-03-23\graded_soccer_2026-03-23.xlsx
+  - outputs\2026-03-23\graded_wcbb_2026-03-23.xlsx
+
+Workbooks used for matching (first existing path per sport; NOT date-specific today):
+  NBA: NBA\data\outputs\step8_all_direction_clean.xlsx
+       sheet 'ALL': ['tier', 'rank score', 'player', 'pos', 'team', 'opp', 'game time', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'hit rate (5g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'def rank', 'def tier', 'min tier', 'shot role', 'usage role', 'void reason'] ...(+30)
+       sheet 'Tier A': ['tier', 'rank score', 'player', 'pos', 'team', 'opp', 'game time', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'hit rate (5g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'def rank', 'def tier', 'min tier', 'shot role', 'usage role', 'void reason'] ...(+30)
+       sheet 'Tier B': ['tier', 'rank score', 'player', 'pos', 'team', 'opp', 'game time', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'hit rate (5g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'def rank', 'def tier', 'min tier', 'shot role', 'usage role', 'void reason'] ...(+30)
+       sheet '...': ['(+2 more sheets)']
+  NBA1H: NBA\step8_nba1h_direction_clean.xlsx
+       sheet 'ALL': ['tier', 'rank score', 'player', 'pos', 'team', 'opp', 'game time', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'hit rate (5g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'def rank', 'def tier', 'min tier', 'shot role', 'usage role', 'void reason'] ...(+13)
+       sheet 'Tier A': ['tier', 'rank score', 'player', 'pos', 'team', 'opp', 'game time', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'hit rate (5g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'def rank', 'def tier', 'min tier', 'shot role', 'usage role', 'void reason'] ...(+13)
+       sheet 'Tier B': ['tier', 'rank score', 'player', 'pos', 'team', 'opp', 'game time', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'hit rate (5g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'def rank', 'def tier', 'min tier', 'shot role', 'usage role', 'void reason'] ...(+13)
+       sheet '...': ['(+2 more sheets)']
+  NBA1Q: NBA\step8_nba1q_direction_clean.xlsx
+       sheet 'ALL': ['tier', 'rank score', 'player', 'pos', 'team', 'opp', 'game time', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'hit rate (5g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'def rank', 'def tier', 'min tier', 'shot role', 'usage role', 'void reason'] ...(+13)
+       sheet 'Tier A': ['tier', 'rank score', 'player', 'pos', 'team', 'opp', 'game time', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'hit rate (5g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'def rank', 'def tier', 'min tier', 'shot role', 'usage role', 'void reason'] ...(+13)
+       sheet 'Tier B': ['tier', 'rank score', 'player', 'pos', 'team', 'opp', 'game time', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'hit rate (5g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'def rank', 'def tier', 'min tier', 'shot role', 'usage role', 'void reason'] ...(+13)
+       sheet '...': ['(+2 more sheets)']
+  CBB: CBB\step6_ranked_cbb.xlsx
+       sheet 'ALL': ['proj_id', 'player_id', 'cbb_player_key', 'player', 'player_norm', 'team_abbr', 'opp_team_abbr', 'pp_team', 'pp_opp_team', 'pos', 'prop_type', 'prop_norm', 'pick_type', 'line', 'start_time', 'pp_game_id', 'league_id', 'team', 'stat_type', 'odds_type', 'duration', 'line_num', 'opp_def_rank', 'opp_def_ppg'] ...(+59)
+       sheet 'ELIGIBLE': ['proj_id', 'player_id', 'cbb_player_key', 'player', 'player_norm', 'team_abbr', 'opp_team_abbr', 'pp_team', 'pp_opp_team', 'pos', 'prop_type', 'prop_norm', 'pick_type', 'line', 'start_time', 'pp_game_id', 'league_id', 'team', 'stat_type', 'odds_type', 'duration', 'line_num', 'opp_def_rank', 'opp_def_ppg'] ...(+59)
+       sheet 'TIER_B': ['proj_id', 'player_id', 'cbb_player_key', 'player', 'player_norm', 'team_abbr', 'opp_team_abbr', 'pp_team', 'pp_opp_team', 'pos', 'prop_type', 'prop_norm', 'pick_type', 'line', 'start_time', 'pp_game_id', 'league_id', 'team', 'stat_type', 'odds_type', 'duration', 'line_num', 'opp_def_rank', 'opp_def_ppg'] ...(+59)
+       sheet '...': ['(+3 more sheets)']
+  WCBB: CBB\step6_ranked_wcbb.xlsx
+       sheet 'ALL': ['proj_id', 'player_id', 'cbb_player_key', 'player', 'player_norm', 'team_abbr', 'opp_team_abbr', 'pp_team', 'pp_opp_team', 'pos', 'prop_type', 'prop_norm', 'pick_type', 'line', 'start_time', 'pp_game_id', 'league_id', 'team', 'stat_type', 'odds_type', 'duration', 'line_num', 'opp_def_rank', 'opp_def_ppg'] ...(+28)
+       sheet 'ELIGIBLE': ['proj_id', 'player_id', 'cbb_player_key', 'player', 'player_norm', 'team_abbr', 'opp_team_abbr', 'pp_team', 'pp_opp_team', 'pos', 'prop_type', 'prop_norm', 'pick_type', 'line', 'start_time', 'pp_game_id', 'league_id', 'team', 'stat_type', 'odds_type', 'duration', 'line_num', 'opp_def_rank', 'opp_def_ppg'] ...(+28)
+       sheet 'TIER_D': ['proj_id', 'player_id', 'cbb_player_key', 'player', 'player_norm', 'team_abbr', 'opp_team_abbr', 'pp_team', 'pp_opp_team', 'pos', 'prop_type', 'prop_norm', 'pick_type', 'line', 'start_time', 'pp_game_id', 'league_id', 'team', 'stat_type', 'odds_type', 'duration', 'line_num', 'opp_def_rank', 'opp_def_ppg'] ...(+28)
+       sheet '...': ['(+1 more sheets)']
+  NHL: NHL\step8_nhl_direction_clean.xlsx
+       sheet 'All Props': ['rank', 'tier', 'player', 'team', 'opp', 'is_home', 'player_role', 'position_group', 'prop_display', 'prop_type', 'line', 'direction', 'composite_hr', 'hr_l5', 'hr_l10', 'hr_l20', 'hr_season', 'sample_l5', 'hit_l5', 'sample_l10', 'hit_l10', 'sample_l20', 'sample_season', 'avg_l5'] ...(+31)
+       sheet 'Skaters': ['rank', 'tier', 'player', 'team', 'opp', 'is_home', 'player_role', 'position_group', 'prop_display', 'prop_type', 'line', 'direction', 'composite_hr', 'hr_l5', 'hr_l10', 'hr_l20', 'hr_season', 'sample_l5', 'hit_l5', 'sample_l10', 'hit_l10', 'sample_l20', 'sample_season', 'avg_l5'] ...(+31)
+       sheet 'A-Tier Best': ['rank', 'tier', 'player', 'team', 'opp', 'is_home', 'player_role', 'position_group', 'prop_display', 'prop_type', 'line', 'direction', 'composite_hr', 'hr_l5', 'hr_l10', 'hr_l20', 'hr_season', 'sample_l5', 'hit_l5', 'sample_l10', 'hit_l10', 'sample_l20', 'sample_season', 'avg_l5'] ...(+31)
+  SOCCER: Soccer\step8_soccer_direction_clean.xlsx
+       sheet 'ALL': ['tier', 'rank score', 'player', 'pos', 'pos group', 'team', 'opp', 'league', 'game time', 'espn id', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'hit rate (5g)', 'hit rate (10g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'def rank', 'min tier'] ...(+17)
+       sheet 'Tier A': ['tier', 'rank score', 'player', 'pos', 'pos group', 'team', 'opp', 'league', 'game time', 'espn id', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'hit rate (5g)', 'hit rate (10g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'def rank', 'min tier'] ...(+17)
+       sheet 'Tier B': ['tier', 'rank score', 'player', 'pos', 'pos group', 'team', 'opp', 'league', 'game time', 'espn id', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'hit rate (5g)', 'hit rate (10g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'def rank', 'min tier'] ...(+17)
+       sheet '...': ['(+2 more sheets)']
+  MLB: MLB\step8_mlb_direction_clean.xlsx
+       sheet 'ALL': ['tier', 'rank score', 'player', 'pos', 'player type', 'team', 'opp', 'game time', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'hit rate (5g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'def rank', 'min tier', 'bat order', 'pitcher role', 'void reason']
+
+outputs/2026-03-23/ graded workbook(s) merged into indices:
+  - outputs\2026-03-23\graded_cbb_2026-03-23.xlsx  ΓåÆ buckets [CBB]
+  - outputs\2026-03-23\graded_nba1h_2026-03-23.xlsx  ΓåÆ buckets [NBA1H]
+  - outputs\2026-03-23\graded_nba1q_2026-03-23.xlsx  ΓåÆ buckets [NBA1Q]
+  - outputs\2026-03-23\graded_nba_2026-03-23.xlsx  ΓåÆ buckets [NBA]
+  - outputs\2026-03-23\graded_nhl_2026-03-23.xlsx  ΓåÆ buckets [NHL]
+  - outputs\2026-03-23\graded_soccer_2026-03-23.xlsx  ΓåÆ buckets [SOCCER]
+  - outputs\2026-03-23\graded_wcbb_2026-03-23.xlsx  ΓåÆ buckets [WCBB]
+
+Index (all buckets): 3,407 triple-keys, 3,291 player+prop buckets (sum per sport)
+  NBA: 668 triples, 607 pair-buckets
+  NBA1H: 225 triples, 225 pair-buckets
+  NBA1Q: 307 triples, 307 pair-buckets
+  CBB: 140 triples, 129 pair-buckets
+  WCBB: 30 triples, 30 pair-buckets
+  NHL: 1,793 triples, 1,749 pair-buckets
+  SOCCER: 244 triples, 244 pair-buckets
+
+Sample legs (match against index above):
+  1. sport='NBA' buckets=[NBA] player='gary payton' prop_type='points' direction='OVER' -> NO MATCH -> UNGRADED
+  2. sport='NBA' buckets=[NBA] player='bam adebayo' prop_type='points' direction='OVER' -> NO MATCH -> UNGRADED
+  3. sport='NBA' buckets=[NBA] player='jevon carter' prop_type='points' direction='OVER' -> MATCH
+      actual=2.0 line=8.5 grade_raw='MISS' dir_in_row='OVER'
+  4. sport='NBA' buckets=[NBA] player='nickeil alexander-walker' prop_type='steals' direction='OVER' -> NO MATCH -> UNGRADED
+  5. sport='NBA' buckets=[NBA] player='amen thompson' prop_type='rebounds' direction='OVER' -> NO MATCH -> UNGRADED
+  6. sport='NBA' buckets=[NBA] player='shai gilgeous-alexander' prop_type='steals' direction='OVER' -> NO MATCH -> UNGRADED
+  7. sport='NBA' buckets=[NBA] player='gary payton' prop_type='points' direction='OVER' -> NO MATCH -> UNGRADED
+  8. sport='NBA' buckets=[NBA] player='bam adebayo' prop_type='points' direction='OVER' -> NO MATCH -> UNGRADED
+
+Total legs in JSON: 138
+
+Note: Base rows come from SPORT_XLSX_CANDIDATES (pre-game step8 slates).
+      Same-day graded files under outputs/2026-03-23/ are merged on top when present.
+=== end debug ===
+
+Wrote C:\Users\halek\OneDrive\Desktop\PropORACLE\ui_runner\templates\ticket_eval_2026-03-23.html
+Wrote C:\Users\halek\OneDrive\Desktop\PropORACLE\ui_runner\templates\ticket_eval_latest.html

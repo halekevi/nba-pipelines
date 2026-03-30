@@ -265,8 +265,10 @@ function Run-Combined {
         Write-Host "  [DQ] Validator script missing, skipping upstream data-quality gate." -ForegroundColor Yellow
     }
 
-    # Clean up any stale root-level combined_slate_tickets files from previous runs
+    # Clean up stale root-level ticket artifacts from previous runs.
+    # Canonical home is outputs/<date>/, so we avoid root clutter.
     Get-ChildItem -Path $Root -Filter "combined_slate_tickets_*.xlsx" | Remove-Item -Force -ErrorAction SilentlyContinue
+    Get-ChildItem -Path $Root -Filter "combined_slate_tickets_*.json" | Remove-Item -Force -ErrorAction SilentlyContinue
 
     $nbaFile    = "$NBADir\data\outputs\step8_all_direction_clean.xlsx"
     $cbbFile    = "$CBBDir\step6_ranked_cbb.xlsx"
@@ -329,11 +331,12 @@ function Run-Combined {
         Write-Host "  Saved -> $(Join-Path $OutDir "combined_slate_tickets_$Date.xlsx")" -ForegroundColor Green
 
         # Save dated snapshot of tickets JSON for historical ticket eval (overwrite each run)
-        $TicketsJson = Join-Path $Root "combined_slate_tickets_$Date.json"
+        # Canonical location: outputs/<date>/combined_slate_tickets_<date>.json
+        $TicketsJson = Join-Path $OutDir "combined_slate_tickets_$Date.json"
         $LatestJson  = Join-Path $Root "ui_runner\templates\tickets_latest.json"
         if (Test-Path $LatestJson) {
             Copy-Item $LatestJson $TicketsJson -Force
-            Write-Host "[INFO] Saved tickets snapshot: combined_slate_tickets_$Date.json" -ForegroundColor DarkGray
+            Write-Host "[INFO] Saved tickets snapshot: $TicketsJson" -ForegroundColor DarkGray
         }
 
         py -3.14 (Join-Path $Root "build_ticket_eval.py") --date $Date
