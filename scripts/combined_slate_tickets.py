@@ -1874,10 +1874,9 @@ def load_nba(path: str) -> pd.DataFrame:
             df["tier"] = df["tier"].iloc[:, 0]
         df["tier"] = df["tier"].astype(str).str.upper()
 
-    # Drop voids if present — BUT keep NO_PROJECTION_OR_LINE rows so that
-    # shooting-split props (3-PT Made, Two Pointers Made, FT Made/Att, etc.)
-    # appear in slate sheets for historical hit-rate tracking.
-    # filter_eligible will still exclude them from tickets via tier/hit_rate filters.
+    # Drop hard voids — keep NO_PROJECTION_OR_LINE (splits tracking) and STD_OVER_EDGE_BELOW_MIN_*
+    # (PP still lists the line; step7 only disqualifies the model's standard OVER for tickets).
+    # filter_eligible excludes any remaining non-empty void_reason from auto-tickets.
     if "void_reason" in df.columns:
         if isinstance(df["void_reason"], pd.DataFrame):
             df["void_reason"] = df["void_reason"].iloc[:, 0]
@@ -1886,6 +1885,7 @@ def load_nba(path: str) -> pd.DataFrame:
             df["void_reason"].isna()
             | (void_str == "")
             | (void_str == "NO_PROJECTION_OR_LINE")
+            | void_str.str.startswith("STD_OVER_EDGE_BELOW_MIN_", na=False)
         )
         df = df[keep_mask]
 
@@ -1902,6 +1902,19 @@ def load_nba(path: str) -> pd.DataFrame:
         df["nba_player_id"] = df["nba_player_id"].apply(_clean_id)
 
     df = _apply_l5_truth_from_stat_games(df, "NBA")
+
+    # Board parity: step7 voids "standard over" when edge is below floor, but the line still
+    # exists on PrizePicks. Keep the row on the slate; exclude from tickets via filter_eligible.
+    # If L5 clearly favors the other side, show UNDER so the explorer matches how users scan PP.
+    if "void_reason" in df.columns and "direction" in df.columns:
+        vr = df["void_reason"].astype(str)
+        soft_void = vr.str.startswith("STD_OVER_EDGE_BELOW_MIN_", na=False)
+        over_dir = df["direction"].astype(str).str.upper().eq("OVER")
+        lu = pd.to_numeric(df.get("l5_under"), errors="coerce").fillna(0)
+        lo = pd.to_numeric(df.get("l5_over"), errors="coerce").fillna(0)
+        flip_u = soft_void & over_dir & (lu > lo)
+        df.loc[flip_u, "direction"] = "UNDER"
+
     return df
 
 
@@ -3046,10 +3059,11 @@ def filter_eligible(df: pd.DataFrame, min_hit_rate=0.55, min_edge=0.0, min_rank=
     if "prop_type" in df.columns:
         prop_norm = df["prop_type"].apply(_norm_prop_label)
         mask &= ~prop_norm.isin(TICKET_EXCLUDED_PROPS)
-    # Always exclude NO_PROJECTION_OR_LINE rows from tickets (no line = can't bet)
+    # Exclude voided legs from auto-tickets (slate may still list them for PP board parity).
     if "void_reason" in df.columns:
-        void_str = df["void_reason"].astype(str).str.strip()
-        mask &= ~(void_str == "NO_PROJECTION_OR_LINE")
+        vs = df["void_reason"]
+        void_str = vs.astype(str).str.strip()
+        mask &= vs.isna() | void_str.eq("") | void_str.eq("nan")
     if min_hit_rate > 0 and "hit_rate" in df.columns:
         mask &= df["hit_rate"].fillna(0) >= min_hit_rate
     if min_edge > 0 and "edge" in df.columns:
