@@ -257,6 +257,14 @@ def load_nba(path: str) -> pd.DataFrame:
     "Min Tier": "minutes_tier",
     "Shot Role": "shot_role",
     "Usage Role": "usage_role",
+    "ML Prob": "ml_prob",
+    "ml_prob": "ml_prob",
+    "ML Edge": "ml_edge",
+    "ml_edge": "ml_edge",
+    "Edge Score": "edge_score",
+    "edge_score": "edge_score",
+    "Blended Score": "blended_score",
+    "blended_score": "blended_score",
 })
     # fallback compatibility
     if "prop_type_norm" not in df.columns:
@@ -264,6 +272,13 @@ def load_nba(path: str) -> pd.DataFrame:
 
     if "bet_direction" not in df.columns and "final_bet_direction" in df.columns:
         df["bet_direction"] = df["final_bet_direction"]
+
+    if "ml_prob" in df.columns:
+        df["ml_prob"] = pd.to_numeric(df["ml_prob"], errors="coerce")
+    if "ml_edge" in df.columns:
+        df["ml_edge"] = pd.to_numeric(df["ml_edge"], errors="coerce")
+    elif "ml_prob" in df.columns:
+        df["ml_edge"] = df["ml_prob"] - 0.5
 
     # Hard fail if player still missing
     if "player" not in df.columns:
@@ -294,6 +309,14 @@ def load_cbb(path: str) -> pd.DataFrame:
         "OVERALL_DEF_RANK":    "def_rank",
         "rank_score":          "rank_score",
         "edge":                "edge",
+        "ML Prob":             "ml_prob",
+        "ml_prob":             "ml_prob",
+        "ML Edge":             "ml_edge",
+        "ml_edge":             "ml_edge",
+        "Edge Score":          "edge_score",
+        "edge_score":          "edge_score",
+        "Blended Score":       "blended_score",
+        "blended_score":       "blended_score",
     })
     # Guard against duplicate column names after renames (e.g. bet_direction).
     if df.columns.duplicated().any():
@@ -326,6 +349,16 @@ def load_cbb(path: str) -> pd.DataFrame:
         print("  ⚠️  CBB: no 'tier' column found — By Tier breakdowns will be empty. "
               "Pass step6_ranked_cbb.xlsx for full tier grading.")
         df["tier"] = ""
+
+    if "ml_prob" in df.columns:
+        df["ml_prob"] = pd.to_numeric(df["ml_prob"], errors="coerce")
+    if "ml_edge" in df.columns:
+        df["ml_edge"] = pd.to_numeric(df["ml_edge"], errors="coerce")
+    elif "ml_prob" in df.columns:
+        df["ml_edge"] = df["ml_prob"] - 0.5
+    for c in ("edge_score", "blended_score"):
+        if c in df.columns:
+            df[c] = pd.to_numeric(df[c], errors="coerce")
 
     # Standardized key used to join actuals
     df["player_key"] = df["player"].astype(str).apply(norm_player_key) + "|" + df["prop_type_norm"].apply(norm_prop_key)
@@ -567,7 +600,8 @@ def write_raw(wb,df):
     desired=['player','team','opp_team','prop_type_norm','pick_type','line',
              'bet_direction','tier','def_tier','minutes_tier','shot_role','usage_role',
              'edge','abs_edge','last5_hit_rate','last5_avg','season_avg',
-             'last5_over','last5_under','projection','rank_score',
+             'last5_over','last5_under','projection','rank_score','ml_prob','ml_edge',
+             'edge_score','blended_score',
              'actual','result','margin','void_reason_grade']
     cols=[c for c in desired if c in df.columns]
     widths={'player':22,'team':6,'opp_team':6,'prop_type_norm':20,'pick_type':10,
@@ -575,6 +609,7 @@ def write_raw(wb,df):
             'shot_role':10,'usage_role':10,'edge':8,'abs_edge':8,
             'last5_hit_rate':13,'last5_avg':10,'season_avg':12,
             'last5_over':9,'last5_under':10,'projection':12,'rank_score':12,
+            'ml_prob':10,'ml_edge':10,'edge_score':11,'blended_score':12,
             'actual':9,'result':8,'margin':8,'void_reason_grade':22}
     for ci,col in enumerate(cols,1):
         ws.column_dimensions[get_column_letter(ci)].width=widths.get(col,12)

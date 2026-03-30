@@ -30,9 +30,41 @@ except ImportError:
     stealth_sync = None
 
 
+def _apply_stealth(page: Page) -> None:
+    if stealth_sync is None:
+        return
+    try:
+        stealth_sync(page)
+    except Exception:
+        pass
+
+
+def _bind_stealth_on_new_pages(context: Any) -> None:
+    """DataDome probes new tabs; keep stealth applied."""
+    if stealth_sync is None:
+        return
+
+    def _on_page(p: Page) -> None:
+        _apply_stealth(p)
+
+    context.on("page", _on_page)
+
+
 PRIZEPICKS_URL = "https://app.prizepicks.com/"
-SESSION_DIR = Path("browser_session")
 DB_PATH = Path("MyTicketPerformance.db")
+
+
+def _default_capture_session_dir() -> Path:
+    """
+    Prefer ~/.pp_browser_profile (real Chrome cookies via setup_prizepicks_profile.py)
+    so DataDome sees a trusted session. See BROWSER_FETCH_SETUP.md.
+    """
+    pp = Path.home() / ".pp_browser_profile"
+    if (pp / "Default" / "Network" / "Cookies").exists() or (pp / "Default" / "Cookies").exists():
+        return pp
+    return Path("browser_session")
+
+
 LEGACY_DB_PATH = Path("PropOracle.db")
 DEFAULT_USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -45,6 +77,12 @@ DEFAULT_LONGITUDE = -74.0060
 DEFAULT_LOCALE = "en-US"
 DEFAULT_TIMEZONE = "America/New_York"
 GOLD = "#D4AF37"
+
+# Browser-consistent headers for api.prizepicks.com (context.request omits page cookies -> 401/403).
+PP_API_HEADERS: dict[str, str] = {
+    "accept": "application/json, text/plain, */*",
+    "referer": "https://app.prizepicks.com/",
+}
 
 
 def _console() -> Any:
@@ -888,32 +926,95 @@ def attach_response_listener(
     page.on("response", handle_response)
 
 
-def wait_for_manual_interaction(page: Page, timeout_seconds: int = 180) -> None:
+def _install_human_gate_listeners(page: Page) -> None:
     """
-    Wait until a real user clicks/keys once in the page.
-    This avoids bot-like "instant automation" behavior.
+    PrizePicks is a heavy SPA; pointer events may not hit `window`. Listen on document/body
+    and on every same-origin frame we can reach.
     """
-    page.evaluate(
-        """
-        () => {
-            if (window.__human_interacted_installed) return;
-            window.__human_interacted_installed = true;
-            window.__human_interacted = false;
-            const mark = () => {
-                window.__human_interacted = true;
-            };
-            window.addEventListener('pointerdown', mark, { once: true, capture: true });
-            window.addEventListener('keydown', mark, { once: true, capture: true });
+    hook_js = """
+    () => {
+        if (window.__po_human_local_injected) return;
+        window.__po_human_local_injected = true;
+        const topWin = window.top || window;
+        if (topWin.__human_interacted === undefined) topWin.__human_interacted = false;
+        const mark = () => {
+            try {
+                topWin.__human_interacted = true;
+            } catch (_) {}
+        };
+        const evs = ("pointerdown mousedown click touchstart keydown").split(" ");
+        const roots = [];
+        try {
+            roots.push(window);
+            roots.push(document);
+            if (document.documentElement) roots.push(document.documentElement);
+            if (document.body) roots.push(document.body);
+        } catch (_) {}
+        for (const root of roots) {
+            if (!root || !root.addEventListener) continue;
+            for (const ev of evs) {
+                try {
+                    root.addEventListener(ev, mark, { capture: true, passive: true });
+                } catch (_) {}
+            }
         }
-        """
-    )
-    print("Waiting for your first manual interaction (click or key press)...")
-    start = time.time()
-    while time.time() - start < timeout_seconds:
-        if page.evaluate("() => Boolean(window.__human_interacted)"):
-            print("Manual interaction detected. Continuing.")
+    }
+    """
+    for fr in page.frames:
+        try:
+            fr.evaluate(hook_js)
+        except Exception:
+            pass
+
+
+def wait_for_manual_interaction(
+    page: Page,
+    timeout_seconds: int = 420,
+    *,
+    prefer_terminal_prompt: bool = True,
+) -> None:
+    """
+    Prefer a terminal Enter press (reliable); fall back to in-page click detection when
+    stdin is not interactive (e.g. some IDE runners). Gives time for Press & Hold.
+    """
+    _install_human_gate_listeners(page)
+
+    if prefer_terminal_prompt and sys.stdin.isatty():
+        print(
+            "\n"
+            + "=" * 72
+            + "\n"
+            + "  BROWSER: Finish Press & Hold if you see it. You can be on Past Lineups.\n"
+            + "  TERMINAL: Press ENTER here when ready (this always works; clicks often do not).\n"
+            + "=" * 72
+            + "\n"
+        )
+        try:
+            input(">>> Press ENTER to continue <<< ")
+        except (EOFError, KeyboardInterrupt, OSError):
+            print("Could not read terminal input; falling back to in-page click detection.")
+        else:
+            print("Continuing.")
             return
-        page.wait_for_timeout(500)
+
+    print(
+        "No interactive terminal — waiting for a click in the PrizePicks window...\n"
+        "  Tip: run from PowerShell: py -3.14 -u capture_entries.py\n"
+        "  Or use --no-terminal-prompt only if you already disabled the Enter step."
+    )
+    start = time.time()
+    last_reinject = time.time()
+    while time.time() - start < timeout_seconds:
+        try:
+            if page.evaluate("() => Boolean((window.top || window).__human_interacted)"):
+                print("Manual interaction detected. Continuing.")
+                return
+        except Exception:
+            pass
+        if time.time() - last_reinject >= 3.0:
+            _install_human_gate_listeners(page)
+            last_reinject = time.time()
+        page.wait_for_timeout(400)
     print("No manual interaction detected within timeout; continuing anyway.")
 
 
@@ -1034,58 +1135,91 @@ def harvest_history(
     print("Stopped scrolling: no new entries detected for 5 consecutive scrolls.")
 
 
+def warm_up_prizepicks_session(page: Page, league_id: int = 7) -> None:
+    """
+    Load a real board after login so the SPA + DataDome see normal traffic before API pulls.
+    league_id 7 = NBA (common default). 9=NFL, 2=MLB, 12=NHL — see BROWSER_FETCH_SETUP.md.
+    """
+    print(f"Session warm-up: navigating to board league_id={league_id} (let cookies settle)...")
+    try:
+        page.wait_for_timeout(random.randint(1500, 3500))
+        page.mouse.move(random.randint(100, 500), random.randint(100, 400))
+        page.wait_for_timeout(random.randint(200, 600))
+    except Exception:
+        pass
+    board = f"https://app.prizepicks.com/board?league_id={int(league_id)}"
+    try:
+        page.goto(board, wait_until="domcontentloaded", timeout=60000)
+    except Exception as exc:
+        print(f"  [WARN] Warm-up board navigation failed: {exc}")
+        return
+    try:
+        page.wait_for_timeout(random.randint(5000, 10000))
+        page.mouse.wheel(0, random.randint(200, 600))
+        page.wait_for_timeout(random.randint(800, 1800))
+    except Exception:
+        pass
+    print("Session warm-up done.")
+
+
 def launch_persistent_context_with_fallback(playwright: Any, session_dir: Path, args: Any) -> Any:
     """
-    Launch persistent context with retries for fragile platform-specific options.
+    Prefer **system Chrome** first (matches real TLS/client fingerprint — DataDome often flags
+    bundled Chromium). Strip Playwright's default ``--enable-automation`` flag.
     """
-    base_kwargs = {
+    if stealth_sync is None:
+        print(
+            "  [TIP] Install playwright-stealth for lighter bot signals: "
+            "py -3.14 -m pip install playwright-stealth"
+        )
+
+    base_kwargs: dict[str, Any] = {
         "user_data_dir": str(session_dir.resolve()),
         "headless": False,
-        "viewport": {"width": 1400, "height": 900},
+        "viewport": {"width": 1920, "height": 1080},
         "user_agent": args.user_agent,
-        "args": ["--disable-blink-features=AutomationControlled"],
+        "args": [
+            "--no-sandbox",
+            "--disable-blink-features=AutomationControlled",
+            "--window-size=1920,1080",
+            "--disable-infobars",
+            "--disable-dev-shm-usage",
+            "--no-first-run",
+            "--no-default-browser-check",
+            "--disable-component-extensions-with-background-pages",
+        ],
+        # Critical: Playwright adds --enable-automation; DataDome treats it as a bot signal.
+        "ignore_default_args": ["--enable-automation"],
         "ignore_https_errors": True,
         "chromium_sandbox": True,
     }
+    geo_kwargs = {
+        "geolocation": {
+            "latitude": args.latitude,
+            "longitude": args.longitude,
+            "accuracy": 30,
+        },
+        "locale": args.locale,
+        "timezone_id": args.timezone_id,
+    }
+    attempts: list[tuple[str, dict[str, Any]]] = [
+        ("Google Chrome (system) + profile", {**base_kwargs, **geo_kwargs, "channel": "chrome"}),
+        ("Chromium (Playwright bundled) + profile", {**base_kwargs, **geo_kwargs}),
+        ("Chromium (minimal options)", dict(base_kwargs)),
+        ("Microsoft Edge (system) + profile", {**base_kwargs, **geo_kwargs, "channel": "msedge"}),
+    ]
     last_exc: Exception | None = None
-
-    try:
-        return playwright.chromium.launch_persistent_context(
-            **base_kwargs,
-            geolocation={
-                "latitude": args.latitude,
-                "longitude": args.longitude,
-                "accuracy": 30,
-            },
-            locale=args.locale,
-            timezone_id=args.timezone_id,
-        )
-    except Exception as exc:
-        last_exc = exc
-        print(f"Primary launch failed; retrying with safe fallback. Reason: {exc}")
-
-    # Attempt 2: bundled chromium with minimal options.
-    try:
-        return playwright.chromium.launch_persistent_context(**base_kwargs)
-    except Exception as exc:
-        last_exc = exc
-        print(f"Fallback launch failed; retrying with local Chrome channel. Reason: {exc}")
-
-    # Attempt 3: system Chrome channel.
-    try:
-        return playwright.chromium.launch_persistent_context(**base_kwargs, channel="chrome")
-    except Exception as exc:
-        last_exc = exc
-        print(f"Chrome channel launch failed; retrying with Edge channel. Reason: {exc}")
-
-    # Attempt 4: system Edge channel.
-    try:
-        return playwright.chromium.launch_persistent_context(**base_kwargs, channel="msedge")
-    except Exception as exc:
-        last_exc = exc
-        raise RuntimeError(
-            "Unable to launch any persistent browser context (bundled Chromium, Chrome, Edge)."
-        ) from last_exc
+    for label, kwargs in attempts:
+        try:
+            print(f"Browser launch: trying {label}...")
+            return playwright.chromium.launch_persistent_context(**kwargs)
+        except Exception as exc:
+            last_exc = exc
+            print(f"  failed: {exc}")
+    raise RuntimeError(
+        "Unable to launch any persistent browser (Chrome, Chromium, Edge). "
+        "Install Google Chrome, or run: py -3.14 -m playwright install chromium"
+    ) from last_exc
 
 
 def attach_over_cdp(playwright: Any, cdp_url: str) -> tuple[Any, Any, Any]:
@@ -1814,20 +1948,38 @@ def reconcile_staged_cards_to_legs(db_path: Path = DB_PATH) -> int:
     return saved
 
 
-def fetch_all_settled_pages(context: Any, on_payload: Any, max_pages: int = 200) -> int:
+def fetch_all_settled_pages(page: Page, on_payload: Any, max_pages: int = 200) -> int:
     """
-    Fetch all settled entry pages via authenticated API and feed each payload.
+    Fetch all settled entry pages via API using the page's request context (same cookies as the tab).
     """
     page_num = 1
     total_pages = 1
     fetched_pages = 0
+    retried_401_403 = False
     print("Fetching all settled pages...")
     while page_num <= total_pages and page_num <= max_pages:
         try:
-            resp = context.request.get(
-                f"https://api.prizepicks.com/v1/entries?filter=settled&page={page_num}"
+            resp = page.request.get(
+                f"https://api.prizepicks.com/v1/entries?filter=settled&page={page_num}",
+                headers=PP_API_HEADERS,
             )
             if not resp.ok:
+                if (
+                    int(resp.status) in (401, 403)
+                    and page_num == 1
+                    and not retried_401_403
+                ):
+                    retried_401_403 = True
+                    print(
+                        "  Settled API 401/403 — waiting 12s, reloading app, then retrying page 1 once..."
+                    )
+                    page.wait_for_timeout(12000)
+                    try:
+                        page.goto(PRIZEPICKS_URL, wait_until="domcontentloaded", timeout=60000)
+                    except Exception as exc:
+                        print(f"  [WARN] App reload: {exc}")
+                    page.wait_for_timeout(random.randint(4000, 8000))
+                    continue
                 print(f"Settled page {page_num} request failed with status {resp.status}.")
                 break
             payload = resp.json()
@@ -1853,38 +2005,49 @@ def trigger_entry_detail_fetches(page: Page, entry_ids: list[str]) -> None:
     if not clean_ids:
         return
     print(f"Triggering detail fetches for {len(clean_ids)} entries...")
-    page.evaluate(
-        """
-        async (ids) => {
-            for (const id of ids) {
-                try {
-                    await fetch(`https://api.prizepicks.com/v1/entries/${id}`, {
-                        credentials: "include",
-                        headers: { "accept": "application/json" },
-                    });
-                } catch (_) {
-                    // Best effort.
+    batch = 40
+    for i in range(0, len(clean_ids), batch):
+        chunk = clean_ids[i : i + batch]
+        try:
+            page.evaluate(
+                """
+                async (ids) => {
+                    for (const id of ids) {
+                        try {
+                            await fetch(`https://api.prizepicks.com/v1/entries/${id}`, {
+                                credentials: "include",
+                                headers: { "accept": "application/json" },
+                            });
+                        } catch (_) {
+                            // Best effort.
+                        }
+                    }
                 }
-            }
-        }
-        """,
-        clean_ids,
-    )
+                """,
+                chunk,
+            )
+        except Exception as exc:
+            # Navigation or tab churn destroys the execution context; API context fetch below still runs.
+            print(
+                f"  [WARN] Page-side detail prefetch batch {i // batch + 1} skipped: {exc}"
+            )
 
 
-def fetch_entry_details_via_api(context: Any, entry_ids: list[str], on_payload: Any | None = None) -> int:
+def fetch_entry_details_via_api(page: Page, entry_ids: list[str], on_payload: Any | None = None) -> int:
     """
-    Fetch per-entry details through authenticated API request context.
-    More reliable than relying only on intercepted response bodies.
+    Fetch per-entry details via page.request (inherits session cookies from the open PrizePicks tab).
     """
     clean_ids = [str(x).strip() for x in entry_ids if str(x).strip()]
     if not clean_ids:
         return 0
     fetched = 0
-    print(f"Fetching detail JSON via API context for {len(clean_ids)} entries...")
+    print(f"Fetching detail JSON via page API context for {len(clean_ids)} entries...")
     for eid in clean_ids:
         try:
-            resp = context.request.get(f"https://api.prizepicks.com/v1/entries/{eid}")
+            resp = page.request.get(
+                f"https://api.prizepicks.com/v1/entries/{eid}",
+                headers=PP_API_HEADERS,
+            )
             if not resp.ok:
                 continue
             payload = resp.json()
@@ -1955,7 +2118,7 @@ def _parse_prediction_payload(payload: Any) -> dict[str, Any]:
     }
 
 
-def fetch_predictions_and_save_legs(context: Any, db_path: Path = DB_PATH) -> int:
+def fetch_predictions_and_save_legs(page: Page, db_path: Path = DB_PATH) -> int:
     """
     Resolve prediction IDs from saved entries and store leg-level details.
     """
@@ -1969,9 +2132,15 @@ def fetch_predictions_and_save_legs(context: Any, db_path: Path = DB_PATH) -> in
     print(f"Fetching prediction details for {len(unique_prediction_ids)} IDs...")
     for pid in unique_prediction_ids:
         try:
-            resp = context.request.get(f"https://api.prizepicks.com/v1/predictions/{pid}")
+            resp = page.request.get(
+                f"https://api.prizepicks.com/v1/predictions/{pid}",
+                headers=PP_API_HEADERS,
+            )
             if not resp.ok:
-                resp = context.request.get(f"https://api.prizepicks.com/projections/{pid}")
+                resp = page.request.get(
+                    f"https://api.prizepicks.com/projections/{pid}",
+                    headers=PP_API_HEADERS,
+                )
             if not resp.ok:
                 continue
             payload = resp.json()
@@ -2080,7 +2249,6 @@ def get_entry_ids_missing_legs(db_path: Path = DB_PATH, limit: int = 2000) -> li
 
 def rehydrate_entries_via_pages(
     page: Page,
-    context: Any,
     entry_ids: list[str],
     on_payload: Any | None = None,
 ) -> int:
@@ -2116,7 +2284,10 @@ def rehydrate_entries_via_pages(
             # Primary path: direct API call is more reliable than inspector-backed response bodies.
             if not api_hydrated:
                 try:
-                    resp = context.request.get(f"https://api.prizepicks.com/v1/entries/{eid}")
+                    resp = page.request.get(
+                        f"https://api.prizepicks.com/v1/entries/{eid}",
+                        headers=PP_API_HEADERS,
+                    )
                     if resp.ok and callable(on_payload):
                         on_payload(resp.json(), f"https://api.prizepicks.com/v1/entries/{eid}")
                         api_hydrated = True
@@ -2226,8 +2397,11 @@ def main() -> int:
     )
     parser.add_argument(
         "--session-dir",
-        default=str(SESSION_DIR),
-        help="Path for persistent browser profile (default: browser_session)",
+        default=str(_default_capture_session_dir()),
+        help=(
+            "Playwright user_data_dir. Default: ~/.pp_browser_profile if cookie DB exists "
+            "(from setup_prizepicks_profile.py), else ./browser_session. See BROWSER_FETCH_SETUP.md."
+        ),
     )
     parser.add_argument(
         "--target-url",
@@ -2341,6 +2515,22 @@ def main() -> int:
         action="store_true",
         help="Skip writing the run summary CSV artifact.",
     )
+    parser.add_argument(
+        "--no-terminal-prompt",
+        action="store_true",
+        help="Skip 'Press ENTER in terminal' (use only in-page click detection; unreliable on PrizePicks SPA).",
+    )
+    parser.add_argument(
+        "--skip-session-warmup",
+        action="store_true",
+        help="Skip extra board navigation before API calls (not recommended if you see bot checks).",
+    )
+    parser.add_argument(
+        "--warmup-league-id",
+        type=int,
+        default=7,
+        help="League id for warm-up board URL (default 7=NBA). See BROWSER_FETCH_SETUP.md.",
+    )
     args = parser.parse_args()
     maybe_migrate_legacy_db(Path(args.db_path))
 
@@ -2368,14 +2558,14 @@ def main() -> int:
         else:
             session_dir.mkdir(parents=True, exist_ok=True)
             context = launch_persistent_context_with_fallback(p, session_dir, args)
+            _bind_stealth_on_new_pages(context)
             try:
                 context.grant_permissions(["geolocation"], origin="https://app.prizepicks.com")
                 context.grant_permissions(["geolocation"], origin="https://www.google.com")
             except Exception:
                 print("Could not grant geolocation permissions explicitly in this run.")
             page = context.new_page()
-            if stealth_sync is not None:
-                stealth_sync(page)
+            _apply_stealth(page)
 
             # Randomized startup delay to avoid deterministic bot timing.
             nav_delay = random.uniform(2.5, 6.5)
@@ -2394,9 +2584,12 @@ def main() -> int:
             )
             print(f"Opening {args.target_url}")
             page.goto(args.target_url, wait_until="domcontentloaded")
-            wait_for_manual_interaction(page)
-            print("Waiting 5 seconds for manual Press & Hold / challenge handling...")
-            time.sleep(5)
+            wait_for_manual_interaction(
+                page,
+                prefer_terminal_prompt=not args.no_terminal_prompt,
+            )
+            print("Waiting 8 seconds for Press & Hold / challenge handling...")
+            time.sleep(8)
 
         db_path = Path(args.db_path)
         with sqlite3.connect(db_path) as conn:
@@ -2446,10 +2639,17 @@ def main() -> int:
             on_payload=on_payload,
             discovery_mode=args.discovery_mode,
         )
+        if (
+            not args.attach_cdp
+            and not args.discovery_mode
+            and not args.skip_session_warmup
+            and not args.rehydrate_missing_legs
+        ):
+            warm_up_prizepicks_session(page, league_id=max(1, int(args.warmup_league_id)))
         if not args.discovery_mode and not args.rehydrate_missing_legs:
             trigger_entry_filters(page)
             fetch_all_settled_pages(
-                context,
+                page,
                 on_payload=on_payload,
                 max_pages=max(1, int(args.max_settled_pages)),
             )
@@ -2471,7 +2671,7 @@ def main() -> int:
                 "Rehydration target IDs: "
                 f"{len(ids)} (month={month or 'ANY'}, year={year or 'ANY'})"
             )
-            rehydrate_entries_via_pages(page, context, ids, on_payload=on_payload)
+            rehydrate_entries_via_pages(page, ids, on_payload=on_payload)
 
         if args.rehydrate_missing_legs:
             ids_missing = get_entry_ids_missing_legs(
@@ -2479,9 +2679,9 @@ def main() -> int:
                 limit=max(1, int(args.rehydrate_limit)),
             )
             print(f"Missing-leg rehydration target IDs: {len(ids_missing)}")
-            rehydrate_entries_via_pages(page, context, ids_missing, on_payload=on_payload)
+            rehydrate_entries_via_pages(page, ids_missing, on_payload=on_payload)
             # After refreshing entry raw_json, resolve prediction IDs into leg rows.
-            fetch_predictions_and_save_legs(context, db_path=db_path)
+            fetch_predictions_and_save_legs(page, db_path=db_path)
 
         if args.harvest_transaction_log_details:
             harvest_transaction_log_details(
@@ -2511,8 +2711,8 @@ def main() -> int:
                             ).fetchall()
                         ]
                     trigger_entry_detail_fetches(page, ids)
-                    fetch_entry_details_via_api(context, ids, on_payload=on_payload)
-                    fetch_predictions_and_save_legs(context, db_path=db_path)
+                    fetch_entry_details_via_api(page, ids, on_payload=on_payload)
+                    fetch_predictions_and_save_legs(page, db_path=db_path)
                     page.wait_for_timeout(5000)
             print("Harvest complete. Finalizing analytics...")
         except KeyboardInterrupt:

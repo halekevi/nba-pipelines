@@ -102,6 +102,9 @@ COLUMN_ALIASES = {
     "pp_tier":          ["pp_tier"],
     "edge":             ["edge"],
     "prop_score":       ["prop_score"],
+    "ml_prob":          ["ml_prob"],
+    "edge_score":       ["edge_score"],
+    "blended_score":    ["blended_score"],
     "tier":             ["tier"],
     "rank":             ["rank"],
     "team":             ["team"],
@@ -274,6 +277,9 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         # Model scores
         "prop_score":       fmt_num(r("prop_score"), 5),
         "edge":             fmt_num(r("edge"), 4),
+        "ml_prob":          fmt_num(r("ml_prob"), 4),
+        "edge_score":       fmt_num(r("edge_score"), 4),
+        "blended_score":    fmt_num(r("blended_score"), 4),
         "pick_type":        r("pick_type"),
         # Game info
         "game_start":       r("game_start"),

@@ -798,6 +798,7 @@ def main():
         "Sport":9,"tier":7,"rank_score":11,"player":22,"team":8,"opp":8,
         "prop_label":20,"prop_norm":14,"pick_type":10,"line":7,
         "bet_direction":10,"edge":7,"proj":8,"hit_rate":10,
+        "ml_prob":10,"ml_edge":10,"edge_score":11,"blended_score":12,
         "L5 Avg":9,"Szn Avg":9,"L5 Over":8,"L5 Under":9,
         "opp_def_tier":11,"game_time":14,"espn_athlete_id":16,
         "player_norm":20,"line_num":9,"actual_value":11,"dir_played":10,

@@ -97,6 +97,7 @@ def write_sheet(wb, name: str, data: pd.DataFrame, tab_color: str = HEADER_COLOR
         "Team": 10, "Opp": 10, "Game Time": 10,
         "Prop": 20, "Pick Type": 10, "Line": 7,
         "Direction": 9, "Edge": 7, "Projection": 10,
+        "ML Prob": 9, "Edge Score": 10, "Blended Score": 12,
         "Hit Rate (5g)": 12, "Last 5 Avg": 10, "Season Avg": 10,
         "L5 Over": 8, "L5 Under": 8,
         "Def Rank": 9, "Def Tier": 10,
@@ -121,6 +122,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "prop_type", "pick_type", "line",
         "final_bet_direction",
         "edge", "projection",
+        "ml_prob",
+        "edge_score",
+        "blended_score",
         "line_hit_rate_over_ou_5",
         "stat_last5_avg", "stat_season_avg",
         "last5_over", "last5_under",
@@ -131,9 +135,18 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     keep  = [c for c in keep if c in df2.columns]
     clean = df2[keep].copy()
 
-    for col in ["rank_score", "edge", "projection", "line_hit_rate_over_ou_5"]:
+    for col in [
+        "rank_score",
+        "edge",
+        "projection",
+        "ml_prob",
+        "edge_score",
+        "blended_score",
+        "line_hit_rate_over_ou_5",
+    ]:
         if col in clean.columns:
-            clean[col] = pd.to_numeric(clean[col], errors="coerce").round(2)
+            rnd = 4 if col in ("ml_prob", "edge_score", "blended_score") else 2
+            clean[col] = pd.to_numeric(clean[col], errors="coerce").round(rnd)
     for col in ["stat_last5_avg", "stat_season_avg"]:
         if col in clean.columns:
             clean[col] = pd.to_numeric(clean[col], errors="coerce").round(1)
@@ -152,6 +165,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "prop_type": "Prop", "pick_type": "Pick Type", "line": "Line",
         "final_bet_direction": "Direction",
         "edge": "Edge", "projection": "Projection",
+        "ml_prob": "ML Prob",
+        "edge_score": "Edge Score",
+        "blended_score": "Blended Score",
         "line_hit_rate_over_ou_5": "Hit Rate (5g)",
         "stat_last5_avg": "Last 5 Avg", "stat_season_avg": "Season Avg",
         "last5_over": "L5 Over", "last5_under": "L5 Under",

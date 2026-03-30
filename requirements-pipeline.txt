@@ -2,7 +2,9 @@
 # Install: py -m pip install -r requirements-pipeline.txt
 pandas>=2.0
 numpy
+scipy>=1.10
 requests
 openpyxl
 joblib
 scikit-learn
+matplotlib>=3.7

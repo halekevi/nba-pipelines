@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Apply unified edge model scores to step7 ranked workbook (daily, post-step7)."""
+"""Apply unified edge model scores to step7 ranked workbook (daily, post-step7).
+
+Writes ml_prob, edge_score, blended_score into the step7 xlsx (primary sheet). Run this
+before step8 / slate grading so Box Raw exports can include those columns (slate_grader
+and nhl_soccer_grader pass them through when present).
+"""
 
 from __future__ import annotations
 
@@ -17,7 +22,7 @@ from edge_feature_engineering import FEATURE_COLUMNS, build_feature_vector
 
 SCRIPT_NAME = "step7b_edge_score"
 
-SPORT_ALIASES = {"NBA", "CBB", "NHL", "SOCCER", "MLB", "SOC"}
+SPORT_ALIASES = {"NBA", "CBB", "NHL", "SOCCER", "MLB", "SOC", "NBA1H", "NBA1Q", "WCBB"}
 
 
 def _repo_root() -> Path:
@@ -28,23 +33,54 @@ def _norm_sport(s: str) -> str:
     x = str(s or "").strip().upper()
     if x == "SOC":
         return "SOCCER"
+    if x in ("NBA1H", "NBA1Q"):
+        return "NBA"
+    if x == "WCBB":
+        return "CBB"
     return x
 
 
 def resolve_step7_path(root: Path, sport: str) -> Path | None:
     sp = _norm_sport(sport)
+    raw_sp = str(sport or "").strip().upper()
     sl = sp.lower()
     candidates: list[Path] = [
         root / sp / "outputs" / f"step7_{sl}_ranked.xlsx",
         root / "NBA" / "data" / "outputs" / "step7_ranked_props.xlsx",
         root / "NBA" / "outputs" / "step7_nba_ranked.xlsx",
+        root / "NBA" / "data" / "outputs" / "step7_nba1q_ranked_props.xlsx",
+        root / "NBA" / "data" / "outputs" / "step7_nba1h_ranked_props.xlsx",
+        root / "NBA" / "step7_nba1q_ranked_props.xlsx",
+        root / "NBA" / "step7_nba1h_ranked_props.xlsx",
         root / "NHL" / f"step7_nhl_ranked.xlsx",
         root / "NHL" / "outputs" / f"step7_{sl}_ranked.xlsx",
         root / "Soccer" / "outputs" / "step7_soccer_ranked.xlsx",
+        root / "Soccer" / "step7_soccer_ranked.xlsx",
         root / "MLB" / "outputs" / "step7_mlb_ranked.xlsx",
         root / "MLB" / "scripts" / "step7_mlb_ranked.xlsx",
+        root / "MLB" / "step7_mlb_ranked.xlsx",
         root / "CBB" / "outputs" / f"step7_{sl}_ranked.xlsx",
+        root / "CBB" / "outputs" / "step6_ranked_cbb.xlsx",
+        root / "CBB" / "step6_ranked_cbb.xlsx",
     ]
+    if raw_sp == "NBA1Q":
+        candidates = [
+            root / "NBA" / "data" / "outputs" / "step7_nba1q_ranked_props.xlsx",
+            root / "NBA" / "step7_nba1q_ranked_props.xlsx",
+            *candidates,
+        ]
+    elif raw_sp == "NBA1H":
+        candidates = [
+            root / "NBA" / "data" / "outputs" / "step7_nba1h_ranked_props.xlsx",
+            root / "NBA" / "step7_nba1h_ranked_props.xlsx",
+            *candidates,
+        ]
+    elif raw_sp == "WCBB":
+        candidates = [
+            root / "CBB" / "step6_ranked_wcbb.xlsx",
+            root / "CBB" / "outputs" / "step6_ranked_wcbb.xlsx",
+            *candidates,
+        ]
     for p in candidates:
         if p.is_file():
             return p

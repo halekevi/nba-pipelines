@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
+from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -24,6 +26,42 @@ from edge_feature_engineering import (
 from edge_ml_bundle import EdgeCalibratedModel
 
 SCRIPT_NAME = "train_edge_model"
+
+_COMBINED_GRADED_DATE = re.compile(r"combined_tickets_graded_(\d{4}-\d{2}-\d{2})", re.IGNORECASE)
+
+
+def _dedupe_combined_ticket_paths(items: list[tuple[str | None, Path]]) -> tuple[list[tuple[str | None, Path]], int]:
+    """One combined_tickets_graded workbook per (parent dir, slate date): prefer exact filename, else newest mtime."""
+    combined: list[tuple[str | None, Path]] = []
+    other: list[tuple[str | None, Path]] = []
+    for it in items:
+        h, p = it
+        if "combined_tickets_graded" in p.name.lower() and p.suffix.lower() == ".xlsx":
+            if _COMBINED_GRADED_DATE.search(p.name):
+                combined.append(it)
+                continue
+        other.append(it)
+
+    groups: dict[tuple[Path, str], list[tuple[str | None, Path]]] = defaultdict(list)
+    for it in combined:
+        _h, p = it
+        m = _COMBINED_GRADED_DATE.search(p.name)
+        if m is None:
+            continue
+        key = (p.resolve().parent, m.group(1))
+        groups[key].append(it)
+
+    picked: list[tuple[str | None, Path]] = []
+    skipped = 0
+    for (_parent, date_str), group in groups.items():
+        exact = f"combined_tickets_graded_{date_str}.xlsx"
+        exact_hits = [it for it in group if it[1].name.lower() == exact.lower()]
+        candidates = exact_hits if exact_hits else group
+        best = max(candidates, key=lambda it: it[1].stat().st_mtime)
+        picked.append(best)
+        skipped += len(group) - 1
+
+    return other + picked, skipped
 
 
 def _repo_root() -> Path:
@@ -96,8 +134,10 @@ def _should_skip_graded_path(path: Path, include_synthetic: bool) -> bool:
     return False
 
 
-def _discover_graded_files(root: Path, *, recursive_outputs: bool, include_synthetic: bool) -> list[tuple[str | None, Path]]:
-    """Return (sport_hint or None, path). None = infer from file contents or name when loading."""
+def _discover_graded_files(
+    root: Path, *, recursive_outputs: bool, include_synthetic: bool
+) -> tuple[list[tuple[str | None, Path]], int]:
+    """Return ((sport_hint or None, path), n_combined_paths_skipped_by_file_dedupe)."""
     seen: set[Path] = set()
     out: list[tuple[str | None, Path]] = []
 
@@ -153,7 +193,8 @@ def _discover_graded_files(root: Path, *, recursive_outputs: bool, include_synth
             inferred = _infer_sport_from_graded_filename(p)
             add(inferred or "NBA", p)
 
-    return out
+    out, n_combined_dup = _dedupe_combined_ticket_paths(out)
+    return out, n_combined_dup
 
 
 def _read_table(path: Path, sport_hint: str) -> pd.DataFrame | None:
@@ -226,7 +267,7 @@ def _dedupe_graded_rows(df: pd.DataFrame) -> tuple[pd.DataFrame, int]:
     sport = col("sport")
     player = col("player_name", "player", "pp_player", "Player")
     gdate = col("game_date", "slate_date", "date", "start_time", "Game Date")
-    prop = col("prop_type", "prop_norm", "stat_norm", "stat_type")
+    prop = col("prop_type", "prop_type_norm", "prop_norm", "stat_norm", "stat_type")
     line = col("line", "line_score")
     direc = col("bet_direction", "recommended_side", "direction", "final_bet_direction")
     if sport is None or player is None or gdate is None or prop is None or line is None or direc is None:
@@ -264,12 +305,17 @@ def load_all_graded(
     recursive_outputs: bool = True,
     dedupe: bool = True,
     include_synthetic: bool = False,
-) -> pd.DataFrame:
+) -> tuple[pd.DataFrame, int]:
     rows: list[pd.DataFrame] = []
     per_file_log: list[str] = []
-    for sp_hint, path in _discover_graded_files(
+    discovered, n_combined_dup = _discover_graded_files(
         root, recursive_outputs=recursive_outputs, include_synthetic=include_synthetic
-    ):
+    )
+    if n_combined_dup:
+        per_file_log.append(
+            f"  [dedupe files] omitted {n_combined_dup} redundant combined_tickets_graded paths (same folder + slate date)"
+        )
+    for sp_hint, path in discovered:
         hint = sp_hint or _infer_sport_from_graded_filename(path) or "NBA"
         df = _read_table(path, hint)
         if df is None or df.empty:
@@ -299,13 +345,13 @@ def load_all_graded(
     for line in per_file_log:
         print(line)
     if not rows:
-        return pd.DataFrame()
+        return pd.DataFrame(), n_combined_dup
     merged = pd.concat(rows, ignore_index=True)
     if dedupe and len(merged) > 0 and "_source_path" in merged.columns:
         merged, removed = _dedupe_graded_rows(merged)
         if removed:
             print(f"\n  [dedupe] removed {removed} duplicate rows (same sport/player/date/prop/line/dir)")
-    return merged
+    return merged, n_combined_dup
 
 
 def _normalize_sport_series(s: pd.Series) -> pd.Series:
@@ -406,7 +452,7 @@ def main() -> None:
         "  [config] recursive_outputs=%s dedupe=%s"
         % (not args.no_recursive_outputs, not args.no_dedupe)
     )
-    raw = load_all_graded(
+    raw, n_combined_files_omitted = load_all_graded(
         root,
         recursive_outputs=not args.no_recursive_outputs,
         dedupe=not args.no_dedupe,
@@ -548,6 +594,7 @@ def main() -> None:
         "feature_columns": FEATURE_COLUMNS,
         "recursive_outputs_used": not args.no_recursive_outputs,
         "dedupe_used": not args.no_dedupe,
+        "combined_graded_file_paths_omitted": int(n_combined_files_omitted),
     }
     (models_dir / "edge_model_metadata.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
     print(f"\nSaved: edge_model_unified.pkl, edge_model_features.json, edge_model_metadata.json -> {models_dir}")

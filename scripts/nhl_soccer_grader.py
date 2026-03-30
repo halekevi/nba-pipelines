@@ -40,6 +40,14 @@ NHL_SLATE_MAP = {
     "prop_type":     "prop_type_raw",
     "edge":          "edge",
     "prop_score":    "rank_score",
+    "ml_prob":       "ml_prob",
+    "ML Prob":       "ml_prob",
+    "ml_edge":       "ml_edge",
+    "ML Edge":       "ml_edge",
+    "Edge Score":    "edge_score",
+    "edge_score":    "edge_score",
+    "Blended Score": "blended_score",
+    "blended_score": "blended_score",
     "composite_hr":  "hit_rate_raw",
     "player_role":   "player_role",
     "position_group":"position_group",
@@ -62,6 +70,8 @@ SOCCER_SLATE_MAP = {
     "edge_adj":            "edge",
     "edge":                "edge",
     "rank_score":          "rank_score",
+    "ml_prob":             "ml_prob",
+    "ml_edge":             "ml_edge",
     "line_hit_rate":       "hit_rate_raw",
     "pick_type":           "pick_type",
     "league":              "league",
@@ -88,6 +98,14 @@ SOCCER_SLATE_MAP = {
     "Edge":                "edge",
     "Edge Adj":            "edge",
     "Rank Score":          "rank_score",
+    "ML Prob":             "ml_prob",
+    "ML Edge":             "ml_edge",
+    "ml_prob":             "ml_prob",
+    "ml_edge":             "ml_edge",
+    "Edge Score":          "edge_score",
+    "edge_score":          "edge_score",
+    "Blended Score":       "blended_score",
+    "blended_score":       "blended_score",
     "Hit Rate":            "hit_rate_raw",
     "Hit Rate (5g)":       "hit_rate_raw",
     "Pick Type":           "pick_type",
@@ -112,6 +130,10 @@ MLB_SLATE_MAP = {
     "Direction":        "bet_direction",
     "Edge":             "edge",
     "Rank Score":       "rank_score",
+    "ML Prob":          "ml_prob",
+    "ML Edge":          "ml_edge",
+    "Edge Score":       "edge_score",
+    "Blended Score":    "blended_score",
     "Hit Rate (5g)":    "hit_rate_raw",
     "Last 5 Avg":       "avg_L5",
     "Season Avg":       "avg_season",
@@ -247,6 +269,16 @@ def load_slate(path: Path, sport: str, grade_date: str = None) -> pd.DataFrame:
                 return f/100 if f > 1 else f
             except: return float("nan")
         df["hit_rate"] = df["hit_rate_raw"].apply(_pct_to_f)
+
+    if "ml_prob" in df.columns:
+        df["ml_prob"] = pd.to_numeric(df["ml_prob"], errors="coerce")
+    if "ml_edge" in df.columns:
+        df["ml_edge"] = pd.to_numeric(df["ml_edge"], errors="coerce")
+    elif "ml_prob" in df.columns:
+        df["ml_edge"] = df["ml_prob"] - 0.5
+    for c in ("edge_score", "blended_score"):
+        if c in df.columns:
+            df[c] = pd.to_numeric(df[c], errors="coerce")
 
     df["Sport"] = sport
 
@@ -742,12 +774,14 @@ def save_graded(df: pd.DataFrame, out_path: Path, sport: str, date_str: str):
     ws_raw = wb.create_sheet('Box Raw')
     desired = ['player','team','opp_team','prop_type_norm','pick_type','line',
                'bet_direction','tier','def_tier','minutes_tier','position_group',
-               'edge','hit_rate','projection','rank_score',
+               'edge','hit_rate','projection','rank_score','ml_prob','ml_edge',
+               'edge_score','blended_score',
                'actual','result','margin','void_reason_grade']
     cols = [c for c in desired if c in df.columns]
     widths_map = {'player':22,'team':6,'opp_team':6,'prop_type_norm':20,'pick_type':10,
                   'line':7,'bet_direction':10,'tier':5,'def_tier':10,'minutes_tier':12,
                   'position_group':14,'edge':8,'hit_rate':10,'projection':12,'rank_score':12,
+                  'ml_prob':10,'ml_edge':10,'edge_score':11,'blended_score':12,
                   'actual':9,'result':8,'margin':8,'void_reason_grade':22}
     for ci, col in enumerate(cols, 1):
         ws_raw.column_dimensions[get_column_letter(ci)].width = widths_map.get(col, 12)

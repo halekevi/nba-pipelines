@@ -93,6 +93,7 @@ def write_sheet(wb, name, data):
         'L5 Over': 8, 'L5 Under': 8,
         'Def Rank': 9, 'Def Tier': 10,
         'Min Tier': 9, 'Shot Role': 10, 'Usage Role': 10,
+        'ML Prob': 9, 'Edge Score': 10, 'Blended Score': 12,
         'Void Reason': 20,
     }
     for ci, h in enumerate(headers, 1):
@@ -246,6 +247,8 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'final_bet_direction',
         'edge', 'projection',
         'ml_prob',
+        'edge_score',
+        'blended_score',
         'line_hit_rate_over_ou_5',
         'stat_last5_avg', 'stat_season_avg',
         'last5_over', 'last5_under',
@@ -271,9 +274,10 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
             df2[c] = np.nan
     clean = df2[keep].copy()
 
-    for col in ['rank_score', 'edge', 'projection', 'ml_prob', 'line_hit_rate_over_ou_5']:
+    for col in ['rank_score', 'edge', 'projection', 'ml_prob', 'edge_score', 'blended_score', 'line_hit_rate_over_ou_5']:
         if col in clean.columns:
-            clean[col] = pd.to_numeric(clean[col], errors='coerce').round(4 if col == 'ml_prob' else 2)
+            rnd = 4 if col in ('ml_prob', 'edge_score', 'blended_score') else 2
+            clean[col] = pd.to_numeric(clean[col], errors='coerce').round(rnd)
     for col in ['stat_last5_avg', 'stat_season_avg']:
         if col in clean.columns:
             clean[col] = pd.to_numeric(clean[col], errors='coerce').round(1)
@@ -292,6 +296,8 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'final_bet_direction': 'Direction',
         'edge': 'Edge', 'projection': 'Projection',
         'ml_prob': 'ML Prob',
+        'edge_score': 'Edge Score',
+        'blended_score': 'Blended Score',
         'line_hit_rate_over_ou_5': 'Hit Rate (5g)',
         'stat_last5_avg': 'Last 5 Avg', 'stat_season_avg': 'Season Avg',
         'last5_over': 'L5 Over', 'last5_under': 'L5 Under',
