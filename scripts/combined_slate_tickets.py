@@ -1749,6 +1749,57 @@ def write_web_outputs(payload, outdir: str):
     print("  (HTML) Run: py -3.14 build_ticket_eval.py --date <YYYY-MM-DD>  -> tickets_latest.html")
 
 
+def _apply_l5_truth_from_stat_games(df: pd.DataFrame, sport_label: str) -> pd.DataFrame:
+    """
+    Source-of-truth guardrail:
+    when stat_g1..stat_g5 are present, derive L5 Over/Under, L5 Avg, and HIT%
+    directly from those raw values so downstream UI cannot drift from game logs.
+    """
+    if df is None or df.empty:
+        return df
+
+    stat_cols = [c for c in [f"stat_g{i}" for i in range(1, 6)] if c in df.columns]
+    if not stat_cols or "line" not in df.columns:
+        return df
+
+    vals = df[stat_cols].apply(pd.to_numeric, errors="coerce")
+    line = pd.to_numeric(df["line"], errors="coerce")
+    valid_n = vals.notna().sum(axis=1)
+    use_mask = valid_n >= 3
+    if not bool(use_mask.any()):
+        return df
+
+    over = vals.gt(line, axis=0).sum(axis=1).astype(float)
+    under = vals.lt(line, axis=0).sum(axis=1).astype(float)
+    l5_avg = vals.mean(axis=1)
+    total_ou = over + under
+
+    direction = (
+        df.get("direction", pd.Series(["OVER"] * len(df), index=df.index))
+        .astype(str)
+        .str.strip()
+        .str.upper()
+    )
+    hit_over = over.divide(total_ou.where(total_ou > 0))
+    hit_under = under.divide(total_ou.where(total_ou > 0))
+    hit_dir = hit_over.where(direction.ne("UNDER"), hit_under)
+
+    if "l5_over" not in df.columns:
+        df["l5_over"] = np.nan
+    if "l5_under" not in df.columns:
+        df["l5_under"] = np.nan
+    if "l5_avg" not in df.columns:
+        df["l5_avg"] = np.nan
+    if "hit_rate" not in df.columns:
+        df["hit_rate"] = np.nan
+
+    df.loc[use_mask, "l5_over"] = over[use_mask]
+    df.loc[use_mask, "l5_under"] = under[use_mask]
+    df.loc[use_mask, "l5_avg"] = l5_avg[use_mask]
+    df.loc[use_mask, "hit_rate"] = hit_dir[use_mask]
+    return df
+
+
 # ── Load & normalize NBA ───────────────────────────────────────────────────────
 def load_nba(path: str) -> pd.DataFrame:
     path = resolve_input_path(path, fallback_filename="step8_all_direction_clean.xlsx")
@@ -1850,6 +1901,7 @@ def load_nba(path: str) -> pd.DataFrame:
     if "nba_player_id" in df.columns:
         df["nba_player_id"] = df["nba_player_id"].apply(_clean_id)
 
+    df = _apply_l5_truth_from_stat_games(df, "NBA")
     return df
 
 
@@ -2275,6 +2327,7 @@ def load_soccer(path: str) -> pd.DataFrame:
         df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
 
     df = df[df["line"].notna() & (df["line"] >= 0)]
+    df = _apply_l5_truth_from_stat_games(df, "NBA1Q")
     df = df.astype(object).where(df.notna(), other=None)
     return df
 
@@ -2412,6 +2465,7 @@ def load_wcbb(path: str) -> pd.DataFrame:
         df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
 
     df = df[df["line"].notna() & (df["line"] >= 0)]
+    df = _apply_l5_truth_from_stat_games(df, "NBA1H")
     df = df.astype(object).where(df.notna(), other=None)
     return df
 
