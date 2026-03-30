@@ -5,9 +5,10 @@
 
 .NOTES
   Order: (A1) Refresh historical game logs → (A) Grader for yesterday → (A2) consistency
-         → (B) Archive outputs\<yesterday>\ step8 copies → (C0) fetch game lines → (C) run_pipeline for today
-         → (D) combined_slate → (E) git commit/push.
-         Use -SkipFetch to skip A1. -SkipGameLines skips C0. -WeeklyAnalysis runs synthetic + full consistency rebuild after analyze_grader.
+         → (B) Archive outputs\<yesterday>\ step8 copies → (C0) fetch game lines → (C0b) rolling NBA 1Q/2Q DB sync
+         → (C) run_pipeline for today → (D) combined_slate → (E) git commit/push.
+         Use -SkipFetch to skip A1 and C0b. -SkipGameLines skips C0. -SkipPeriodHistorySync skips C0b only.
+         -WeeklyAnalysis runs synthetic + full consistency rebuild after analyze_grader.
          -MonthlyRetrain after STEP E runs all four prop ML trainers + full consistency rebuild (logs OK/FAILED, continues on failure).
   $Root = parent of scripts\ (repo root).
 #>
@@ -25,6 +26,8 @@ param(
     [string]$OddsApiKey = "",
     [switch]$ForceAll,
     [switch]$AllowMissingSlates,
+    [switch]$SkipPeriodHistorySync,
+    [int]$PeriodHistoryLookbackDays = 10,
     [int]$A1TimeoutMinutes = 30
 )
 
@@ -266,6 +269,66 @@ if (-not $SkipPipeline) {
         finally {
             Pop-Location
         }
+    }
+
+    # Rolling 1Q/2Q actuals → nba1q table (PropOracle ref DB). Fills holes if grader was skipped or
+    # the machine was offline; skips dates that already have CSVs. Safe with daily grader (idempotent).
+    if (-not $SkipFetch -and -not $SkipPeriodHistorySync -and $PeriodHistoryLookbackDays -gt 0) {
+        Write-Log "STEP C0b - NBA period history sync (lookback=$PeriodHistoryLookbackDays d): START"
+        $fetchPeriod = Join-Path $Root "scripts\fetch_nba_period_actuals.py"
+        $buildHist = Join-Path $Root "scripts\build_nba1q_history_db.py"
+        if (-not (Test-Path $fetchPeriod) -or -not (Test-Path $buildHist)) {
+            Write-Log "STEP C0b - NBA period history sync: SKIP (missing script)"
+        }
+        else {
+            $baseDay = [datetime]::ParseExact($Today, "yyyy-MM-dd", [System.Globalization.CultureInfo]::InvariantCulture)
+            $synced = 0
+            Push-Location $Root
+            try {
+                for ($off = 1; $off -le $PeriodHistoryLookbackDays; $off++) {
+                    $d = $baseDay.AddDays(-$off).ToString("yyyy-MM-dd")
+                    $dayDir = Join-Path $Root "outputs\$d"
+                    $p2 = Join-Path $dayDir "actuals_nba2q_$d.csv"
+                    $p1 = Join-Path $dayDir "actuals_nba1q_$d.csv"
+                    if ((Test-Path $p2) -and (Test-Path $p1)) { continue }
+                    if (-not (Test-Path $dayDir)) {
+                        New-Item -ItemType Directory -Path $dayDir -Force | Out-Null
+                    }
+                    Write-Host "  [C0b] Fetching NBA period actuals for $d (missing 1Q/2Q CSV)..." -ForegroundColor DarkCyan
+                    & py -3.14 $fetchPeriod --date $d --segment "2Q" --output $p2
+                    if ($LASTEXITCODE -ne 0) {
+                        Write-Warning "fetch_nba_period_actuals 2Q failed for $d (exit $LASTEXITCODE)"
+                    }
+                    & py -3.14 $fetchPeriod --date $d --segment "1Q" --output $p1
+                    if ($LASTEXITCODE -ne 0) {
+                        Write-Warning "fetch_nba_period_actuals 1Q failed for $d (exit $LASTEXITCODE)"
+                    }
+                    $synced++
+                }
+                Write-Host "  [C0b] Rebuilding nba1q history DB ($synced day(s) had fetches)..." -ForegroundColor DarkCyan
+                & py -3.14 $buildHist
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Warning "build_nba1q_history_db.py failed (exit $LASTEXITCODE) — NBA1H/NBA1Q L5 may be thin"
+                    Write-Log "STEP C0b - NBA period history sync: WARN (build_nba1q_history_db exit $LASTEXITCODE)"
+                }
+                else {
+                    Write-Log "STEP C0b - NBA period history sync: OK (filled gaps for $synced day(s))"
+                }
+            }
+            catch {
+                Write-Warning "STEP C0b exception: $_"
+                Write-Log "STEP C0b - NBA period history sync: FAILED ($($_.Exception.Message))"
+            }
+            finally {
+                Pop-Location
+            }
+        }
+    }
+    elseif ($SkipPeriodHistorySync) {
+        Write-Log "STEP C0b - NBA period history sync: SKIPPED (-SkipPeriodHistorySync)"
+    }
+    elseif ($SkipFetch) {
+        Write-Log "STEP C0b - NBA period history sync: SKIPPED (-SkipFetch)"
     }
 
     Write-Log "STEP C - Pipeline ($Today): START"
