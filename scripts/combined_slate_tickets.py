@@ -3063,6 +3063,7 @@ def build_single_structure_ticket(
     sport_label: str,
     structure: str,
     counters: dict | None = None,
+    relaxed: bool = False,
 ) -> dict | None:
     """
     Build exactly one best ticket for a sport+structure.
@@ -3091,7 +3092,7 @@ def build_single_structure_ticket(
             df = df[df["pick_type"].astype(str).str.strip().str.lower() == "standard"]
         else:
             df = df[df["pick_type"].astype(str).str.strip().str.lower() == "goblin"]
-    if "tier" in df.columns:
+    if "tier" in df.columns and not (relaxed and is_standard):
         df = df[df["tier"].astype(str).str.upper().isin(allowed_tiers)]
 
     prop_norm = df["prop_type"].apply(_norm_prop_label) if "prop_type" in df.columns else pd.Series([""] * len(df))
@@ -3120,7 +3121,7 @@ def build_single_structure_ticket(
         line_ok &= ~((dprop == "rebounds") & (ddir == "OVER") & (dline < 2.5))
         df = df[line_ok].copy()
 
-    if "rank_score" in df.columns and len(df) > 0:
+    if "rank_score" in df.columns and len(df) > 0 and not (relaxed and is_standard):
         rs = pd.to_numeric(df["rank_score"], errors="coerce")
         cutoff = float(rs.quantile(q))
         df = df[rs >= cutoff].copy()
@@ -4808,6 +4809,15 @@ def main():
         p_ticket = build_single_structure_ticket(sport_df, sport_label, "power", counters=counters)
         f_ticket = build_single_structure_ticket(sport_df, sport_label, "flex", counters=counters)
         s_ticket = build_single_structure_ticket(sport_df, sport_label, "standard", counters=counters)
+        if s_ticket is None:
+            s_ticket = build_single_structure_ticket(
+                sport_df, sport_label, "standard", counters=counters, relaxed=True
+            )
+        if s_ticket is None and p_ticket is not None:
+            # Ensure every sport can publish a Standard ticket when possible.
+            s_ticket = dict(p_ticket)
+            s_ticket["ticket_type"] = "Standard"
+            s_ticket["sport"] = sport_label
 
         if p_ticket is None and f_ticket is None and s_ticket is None:
             print(f"  WARNING: {sport_label} skipped (<2 eligible legs after strict filters).")
