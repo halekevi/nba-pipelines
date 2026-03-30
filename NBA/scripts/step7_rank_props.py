@@ -787,8 +787,32 @@ def main() -> None:
     forced = pick_type_s.isin(["Goblin", "Demon"]).astype(int)
     out["forced_over_only"] = forced
 
-    bet_dir = np.where(forced.eq(1), "OVER",
-              np.where(_to_num(out["edge"]) >= 0, "OVER", "UNDER"))
+    bet_dir = np.where(
+        forced.eq(1),
+        "OVER",
+        np.where(_to_num(out["edge"]) >= 0, "OVER", "UNDER"),
+    )
+
+    # Standard props: evaluate OVER/UNDER asymmetrically when edge is near the line.
+    # If model edge is weak but L5 split is strong (>=2 game delta on >=4 samples),
+    # let recent side tendency break ties for Standard only.
+    is_standard = pick_type_s == "Standard"
+    edge_norm_abs = _to_num(out["edge_norm"]).abs().fillna(0.0)
+    near_line = edge_norm_abs <= 0.10
+
+    l5_over_ct = _to_num(out.get("line_hits_over_5", out.get("last5_over", "")))
+    l5_under_ct = _to_num(out.get("line_hits_under_5", out.get("last5_under", "")))
+    l5_push_ct = _to_num(out.get("line_hits_push_5", out.get("last5_push", ""))).fillna(0)
+    l5_over_ct = l5_over_ct.fillna(_to_num(out.get("last5_over", ""))).fillna(0)
+    l5_under_ct = l5_under_ct.fillna(_to_num(out.get("last5_under", ""))).fillna(0)
+
+    l5_sample = l5_over_ct + l5_under_ct + l5_push_ct
+    l5_delta = (l5_over_ct - l5_under_ct).abs()
+    strong_l5 = (l5_sample >= 4) & (l5_delta >= 2)
+    can_flip = is_standard & near_line & strong_l5 & forced.eq(0)
+
+    l5_side = np.where(l5_over_ct >= l5_under_ct, "OVER", "UNDER")
+    bet_dir = np.where(can_flip, l5_side, bet_dir)
     out["bet_direction"] = bet_dir
 
     # ── ELIGIBILITY ───────────────────────────────────────────────────────────
