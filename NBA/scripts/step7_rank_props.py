@@ -837,32 +837,6 @@ def main() -> None:
     )
     eligible    = pd.Series(eligible, index=out.index)
 
-    # ── PER-PROP MINIMUM EDGE THRESHOLDS for Standard OVER ───────────────────
-    # Props need higher edge to be actionable on Standard (no line discount).
-    # Thresholds derived from edge bins where Standard OVER first crosses 55% HR.
-    _STD_OVER_MIN_EDGE = {
-        "pts":   2.0,   # Points OVER needs +2 minimum on Standard
-        "pa":    3.0,   # Pts+Asts OVER very noisy — needs +3
-        "pra":   2.5,   # Pts+Rebs+Asts OVER — needs +2.5
-        "pr":    2.0,   # Pts+Rebs OVER — needs +2
-        "ra":    1.5,   # Rebs+Asts OVER — needs +1.5
-        "ast":   1.5,   # Assists OVER — needs +1.5
-        "fg3m":  1.5,   # 3-PT Made OVER — needs +1.5
-        "3ptmade":1.5,
-    }
-    for prop_k, min_e in _STD_OVER_MIN_EDGE.items():
-        edge_too_low = (
-            is_standard & is_over
-            & (prop_norm_s == prop_k)
-            & (_to_num(out["edge"]) < min_e)
-        )
-        eligible    = np.where(edge_too_low, 0, eligible)
-        void_reason = pd.Series(
-            np.where(edge_too_low, f"STD_OVER_EDGE_BELOW_MIN_{prop_k.upper()}", void_reason),
-            index=out.index
-        )
-    eligible    = pd.Series(eligible, index=out.index)
-
     out["eligible"]    = eligible
     out["void_reason"] = void_reason
 
