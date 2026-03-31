@@ -63,14 +63,19 @@ def parse_stats(player_name, t_abbr, stat_map):
     ra  = reb + ast       if all(x is not None for x in [reb, ast])       else None
     bs  = blk + stl       if all(x is not None for x in [blk, stl])       else None
 
-    # Fantasy score (PrizePicks DK-style)
+    # PrizePicks NBA Fantasy Score:
+    # PTS*1.0 + REB*1.2 + AST*1.5 + STL*3.0 + BLK*3.0 - TOV*1.0
+    # (No 3PM bonus, no double-double bonuses.)
     fs = None
-    if all(x is not None for x in [pts, reb, ast, stl, blk, tov, fg3m]):
-        fs = (pts * 1.0 + reb * 1.25 + ast * 1.5 + stl * 2.0 + blk * 2.0
-              - tov * 0.5 + fg3m * 0.5
-              + (4.5 if pts >= 10 else 0)
-              + (6.0 if reb >= 10 else 0)
-              + (6.0 if ast >= 10 else 0))
+    if all(x is not None for x in [pts, reb, ast, stl, blk, tov]):
+        fs = (
+            pts * 1.0
+            + reb * 1.2
+            + ast * 1.5
+            + stl * 3.0
+            + blk * 3.0
+            - tov * 1.0
+        )
 
     prop_map = {
         'Points':                 pts,

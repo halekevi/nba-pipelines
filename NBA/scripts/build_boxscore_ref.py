@@ -557,12 +557,17 @@ def _parse_bball_boxscore(box: dict, event_id: str, game_date: str,
                 bs  = combo(blk, stl)
 
                 fs = None
-                if all(x is not None for x in [pts, reb, ast, stl, blk, tov, fg3m]):
-                    fs = (pts * 1.0 + reb * 1.2 + ast * 1.5 + stl * 3.0 + blk * 3.0
-                          - tov * 0.5 + fg3m * 0.5
-                          + (4.5 if pts >= 10 else 0)
-                          + (6.0 if reb >= 10 else 0)
-                          + (6.0 if ast >= 10 else 0))
+                # PrizePicks NBA Fantasy Score (must match grader/fetch actuals):
+                # PTS*1.0 + REB*1.2 + AST*1.5 + STL*3.0 + BLK*3.0 - TOV*1.0
+                if all(x is not None for x in [pts, reb, ast, stl, blk, tov]):
+                    fs = (
+                        pts * 1.0
+                        + reb * 1.2
+                        + ast * 1.5
+                        + stl * 3.0
+                        + blk * 3.0
+                        - tov * 1.0
+                    )
 
                 rows.append({
                     "game_date": game_date, "event_id": event_id,

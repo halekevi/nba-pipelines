@@ -348,19 +348,72 @@ def build_feature_vector(df: pd.DataFrame, sport: str) -> pd.DataFrame:
 
 
 def apply_ticket_eligibility_voids(df: pd.DataFrame, sport: str) -> pd.DataFrame:
-    """Set eligible=0 for ticket exclusions (Tier D, low minutes non-A, NHL OVER)."""
+    """Set eligible=0 for ticket exclusions, including NBA directional guards."""
     out = df.copy()
     if "eligible" not in out.columns:
         return out
     sp = _norm_sport(sport)
     prev = out["eligible"].astype(int).eq(1)
     tier_u = out["tier"].astype(str).str.strip().str.upper()
-    mt = pd.to_numeric(out.get("minutes_tier", 0), errors="coerce").fillna(0)
     rec = _direction_series(out)
-    void_tier_d = tier_u.eq("D")
-    void_min = (mt == 0) & (~tier_u.eq("A"))
+    pick_u = out.get("pick_type", pd.Series("", index=out.index)).astype(str).str.strip().str.upper()
+    ml_prob = _to_num(out.get("ml_prob", pd.Series(np.nan, index=out.index))).fillna(-1.0)
+    def_src = out.get("DEF_TIER", out.get("def_tier", out.get("defense_tier", pd.Series("", index=out.index))))
+    def_u = def_src.astype(str).str.strip().str.upper()
+
+    mt_raw = out.get("minutes_tier", pd.Series("", index=out.index))
+    mt_num = pd.to_numeric(mt_raw, errors="coerce")
+    mt_map = (
+        mt_raw.astype(str).str.strip().str.upper()
+        .map({"HIGH": 2.0, "MEDIUM": 1.0, "LOW": 0.0, "UNKNOWN": 0.0, "": 0.0})
+    )
+    mt = mt_num.where(mt_num.notna(), mt_map).fillna(0.0)
+
+    # Global UNDER-safe policy:
+    # Tier/minutes voids are over-side quality controls and should not auto-void UNDER picks.
+    # Apply these only to OVER across sports.
+    is_under = rec.eq("UNDER")
+
+    # Tier D is usually excluded, but for NBA OVER allow a high-confidence exception.
+    # Exception mirrors the calibrated "premium" intersection:
+    #   OVER + ml_prob Q5 (>=0.71) + Above Avg defense tier.
+    nba_over_tierd_exception = (
+        pd.Series(False, index=out.index)
+        if sp != "NBA"
+        else rec.eq("OVER") & ml_prob.ge(0.71) & def_u.str.contains("ABOVE")
+    )
+    void_tier_d = tier_u.eq("D") & ~nba_over_tierd_exception & ~is_under
+    void_min = (mt == 0) & (~tier_u.eq("A")) & ~is_under
     void_nhl_over = rec.eq("OVER") if sp == "NHL" else pd.Series(False, index=out.index)
-    comb = void_tier_d | void_min | void_nhl_over
+
+    # NBA directional guards:
+    # - Standard OVERs need stronger model confidence.
+    # - Elite defenses suppress OVER outcomes unless probability is very high.
+    # - Weak defenses hurt UNDER outcomes unless probability is very high.
+    void_std_over_ml = (
+        pd.Series(False, index=out.index)
+        if sp != "NBA"
+        else rec.eq("OVER") & pick_u.eq("STANDARD") & ml_prob.lt(0.65)
+    )
+    void_over_elite_def = (
+        pd.Series(False, index=out.index)
+        if sp != "NBA"
+        else rec.eq("OVER") & def_u.str.contains("ELITE") & ml_prob.lt(0.71)
+    )
+    void_under_weak_def = (
+        pd.Series(False, index=out.index)
+        if sp != "NBA"
+        else rec.eq("UNDER") & def_u.str.contains("WEAK") & ml_prob.lt(0.71)
+    )
+
+    comb = (
+        void_tier_d
+        | void_min
+        | void_nhl_over
+        | void_std_over_ml
+        | void_over_elite_def
+        | void_under_weak_def
+    )
     hit = prev & comb
     if not hit.any():
         return out
@@ -373,6 +426,12 @@ def apply_ticket_eligibility_voids(df: pd.DataFrame, sport: str) -> pd.DataFrame
             parts.append("VOID_TIER_D")
         if bool(void_min.iloc[i]):
             parts.append("VOID_LOW_MINUTES_NON_A")
+        if bool(void_std_over_ml.iloc[i]):
+            parts.append("VOID_STD_OVER_LOW_ML_PROB")
+        if bool(void_over_elite_def.iloc[i]):
+            parts.append("VOID_OVER_ELITE_DEF_NON_Q5")
+        if bool(void_under_weak_def.iloc[i]):
+            parts.append("VOID_UNDER_WEAK_DEF_NON_Q5")
         tags.append(";".join(parts))
     tag_ser = pd.Series(tags, index=out.index)
     vr = out["void_reason"].astype(str).fillna("")
