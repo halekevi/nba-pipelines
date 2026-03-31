@@ -10,6 +10,7 @@ ENV PYTHONUTF8=1
 ENV PYTHONIOENCODING=utf-8
 
 COPY requirements.txt /tmp/requirements.txt
+COPY ui_runner/requirements.txt /tmp/ui_runner/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 COPY . /app
