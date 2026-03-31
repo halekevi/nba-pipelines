@@ -22,9 +22,11 @@ Outputs (in your PropOracle directory):
 import pandas as pd
 import numpy as np
 import os
+from pathlib import Path
 
-CACHE_PATH = r"C:\Users\halek\OneDrive\Desktop\Vision Board\PropOracle\PropOracle\espn_boxscores_cache.csv"
-OUT_DIR    = r"C:\Users\halek\OneDrive\Desktop\Vision Board\PropOracle\PropOracle"
+REPO_ROOT = Path(__file__).resolve().parent
+CACHE_PATH = str(REPO_ROOT / "NBA" / "data" / "cache" / "espn_boxscores_cache.csv")
+OUT_DIR = str(REPO_ROOT / "NBA" / "data" / "cache")
 
 # Props we care about and their display names
 PROPS = {

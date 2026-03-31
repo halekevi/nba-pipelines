@@ -16,14 +16,16 @@ Requirements: requests, pandas  (pip install requests pandas)
 """
 
 import requests, json, time, os, glob, re
+from pathlib import Path
 from datetime import datetime, timedelta
 from collections import defaultdict
 import pandas as pd
 
 # ── CONFIG ────────────────────────────────────────────────────────────────────
 
-# Path to your graded files — adjust if needed
-GRADED_DIR = r"C:\Users\halek\OneDrive\Desktop\Vision Board\PropOracle\PropOracle"
+# Path to repo + cache outputs
+REPO_ROOT = Path(__file__).resolve().parent
+GRADED_DIR = str(REPO_ROOT)
 GRADED_GLOB = os.path.join(GRADED_DIR, "**", "*graded*.xlsx")
 
 # ESPN season dates — 2025-26 regular season
@@ -453,7 +455,7 @@ def main():
     game_ids = get_game_ids(SEASON_START, SEASON_END)
 
     # 3. Pull boxscores (with simple progress + caching)
-    cache_path = os.path.join(GRADED_DIR, "espn_boxscores_cache.csv")
+    cache_path = os.path.join(GRADED_DIR, "NBA", "data", "cache", "espn_boxscores_cache.csv")
     if os.path.exists(cache_path):
         print(f"\nLoading cached boxscores from {cache_path}")
         boxscore_df = pd.read_csv(cache_path)
@@ -481,12 +483,12 @@ def main():
     print(f"  {len(results)} player-prop-line combos analysed")
 
     # 5. Save CSV
-    csv_path = os.path.join(GRADED_DIR, "player_prop_season_hitrates.csv")
+    csv_path = os.path.join(GRADED_DIR, "NBA", "data", "cache", "player_prop_season_hitrates.csv")
     results.to_csv(csv_path, index=False)
     print(f"  CSV saved → {csv_path}")
 
     # 6. Save HTML dashboard
-    html_path = os.path.join(GRADED_DIR, "player_prop_hitrates.html")
+    html_path = os.path.join(GRADED_DIR, "NBA", "data", "cache", "player_prop_hitrates.html")
     with open(html_path, "w", encoding="utf-8") as f:
         f.write(HTML_TEMPLATE.format(rows=make_html_rows(results)))
     print(f"  HTML dashboard saved → {html_path}")
