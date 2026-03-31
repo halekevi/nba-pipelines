@@ -38,14 +38,39 @@ for _ in range(6):
         break
     _here = _here.parent
 
-# ── Prop type → DB column map ─────────────────────────────────────────────────
+# ── Prop type/prop_norm → DB column map ──────────────────────────────────────
 PROP_TO_COL = {
-    "Points":    "pts",
-    "Rebounds":  "reb",
-    "Assists":   "ast",
-    "Steals":    "stl",
-    "Blocks":    "blk",
+    # display names
+    "Points": "pts",
+    "Rebounds": "reb",
+    "Assists": "ast",
+    "Steals": "stl",
+    "Blocks": "blk",
     "Turnovers": "tov",
+    "3-Pt Made": "fg3m",
+    "Free Throws Made": "ftm",
+    "Fantasy Score": "fantasy_score",
+    "Pts+Rebs+Asts": "pra",
+    "Pts+Rebs": "pr",
+    "Pts+Asts": "pa",
+    "Rebs+Asts": "ra",
+    "Reb+Ast": "ra",
+    "Blks+Stls": "bs",
+    # prop_norm aliases
+    "pts": "pts",
+    "reb": "reb",
+    "ast": "ast",
+    "stl": "stl",
+    "blk": "blk",
+    "tov": "tov",
+    "fg3m": "fg3m",
+    "ftm": "ftm",
+    "fantasy": "fantasy_score",
+    "pra": "pra",
+    "pr": "pr",
+    "pa": "pa",
+    "ra": "ra",
+    "bs": "bs",
 }
 
 # ── Team normalization ────────────────────────────────────────────────────────
@@ -65,6 +90,12 @@ def _norm_name(n: str) -> str:
         return ""
     s = unicodedata.normalize("NFD", str(n).strip().lower())
     return "".join(c for c in s if unicodedata.category(c) != "Mn")
+
+
+def _resolve_stat_col(row: pd.Series) -> str | None:
+    pt = str(row.get("prop_type", "") or "").strip()
+    pn = str(row.get("prop_norm", "") or "").strip().lower()
+    return PROP_TO_COL.get(pt) or PROP_TO_COL.get(pn)
 
 
 # ── Core DB query ─────────────────────────────────────────────────────────────
@@ -147,6 +178,37 @@ def _compute_h2h(games: pd.DataFrame, stat_col: str, line: float) -> dict:
     return result
 
 
+def _get_recent_games(con: sqlite3.Connection, player_norm: str,
+                      stat_col: str, before_date: str = "", n: int = 10) -> pd.DataFrame:
+    """Fallback: recent games for player/stat regardless of opponent."""
+    if not player_norm or not stat_col:
+        return pd.DataFrame()
+    date_clause = "AND game_date < ?" if (before_date and len(before_date) == 10) else ""
+    params = [player_norm]
+    if date_clause:
+        params.append(before_date)
+    try:
+        rows = con.execute(
+            f"""
+            SELECT game_date, team, home_team, away_team, {stat_col}
+            FROM nba
+            WHERE lower(player) = ?
+              AND {stat_col} IS NOT NULL
+              {date_clause}
+            ORDER BY game_date DESC
+            LIMIT {int(n)}
+            """,
+            params,
+        ).fetchall()
+    except Exception:
+        return pd.DataFrame()
+    if not rows:
+        return pd.DataFrame()
+    df = pd.DataFrame(rows, columns=["game_date", "team", "home_team", "away_team", stat_col])
+    df[stat_col] = pd.to_numeric(df[stat_col], errors="coerce")
+    return df.sort_values("game_date")
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -207,7 +269,9 @@ def main() -> None:
         from tqdm import tqdm as _tqdm
 
     h2h_last_stats, h2h_last_dates, h2h_counts, h2h_avgs, h2h_over_rates = [], [], [], [], []
+    h2h_sources = []
     matched = 0
+    fallback_matched = 0
 
     for _, row in _tqdm(df.iterrows(), total=len(df), desc="S6d h2h lookup", unit="row"):
         player    = str(row.get("player", "")).strip()
@@ -216,33 +280,42 @@ def main() -> None:
         game_date = str(row.get("start_time", ""))[:10]
         line      = row.get("line", np.nan)
 
-        stat_col = PROP_TO_COL.get(prop_type, "pts")
+        stat_col = _resolve_stat_col(row)
 
-        if not player or not opp_team:
+        if not player or not opp_team or not stat_col:
             h2h_last_stats.append(np.nan)
             h2h_last_dates.append("")
             h2h_counts.append(0)
             h2h_avgs.append(np.nan)
             h2h_over_rates.append(np.nan)
+            h2h_sources.append("")
             continue
 
         games = _get_h2h_games(con, _norm_name(player), opp_team, stat_col, before_date=game_date)
+        source = "opp"
+        if games.empty:
+            games = _get_recent_games(con, _norm_name(player), stat_col, before_date=game_date, n=10)
+            source = "recent" if not games.empty else ""
         stats = _compute_h2h(games, stat_col, line)
 
         if pd.notna(stats["h2h_last_stat"]):
             matched += 1
+            if source == "recent":
+                fallback_matched += 1
 
         h2h_last_stats.append(stats["h2h_last_stat"])
         h2h_last_dates.append(stats["h2h_last_date"])
         h2h_counts.append(stats["h2h_games_vs_opp"])
         h2h_avgs.append(stats["h2h_avg"])
         h2h_over_rates.append(stats["h2h_over_rate"])
+        h2h_sources.append(source)
 
     df["h2h_last_stat"]    = h2h_last_stats
     df["h2h_last_date"]    = h2h_last_dates
     df["h2h_games_vs_opp"] = h2h_counts
     df["h2h_avg"]          = h2h_avgs
     df["h2h_over_rate"]    = h2h_over_rates
+    df["h2h_source"]       = h2h_sources
 
     con.close()
 
@@ -250,6 +323,8 @@ def main() -> None:
 
     print()
     print(f"[S6d] ✅ Matched {matched}/{len(df)} H2H combos ({100*matched/len(df):.1f}%)")
+    if fallback_matched:
+        print(f"  fallback recent-history matches: {fallback_matched}")
     print(f"  h2h_avg filled:       {df['h2h_avg'].notna().sum()}/{len(df)}")
     print(f"  h2h_over_rate filled: {df['h2h_over_rate'].notna().sum()}/{len(df)}")
     print(f"✅ Saved → {args.output}")
