@@ -137,12 +137,18 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 278038,4704078,2116,themus fulks,UCF,name_team,2026-03-16
 278046,5241667,2116,jamichael stillwell,UCF,name_team,2026-03-16
 278047,4915060,2116,john bol,UCF,name_team,2026-03-20
+278075,5095155,201,derrion reid,OKLA,name_only,2026-04-01
+278076,5106293,201,mohamed wague,OKLA,name_only,2026-04-01
+278077,4576062,201,nijel pack,OKLA,name_only,2026-04-01
+278078,5105594,201,tae davis,OKLA,name_only,2026-04-01
 278079,4700527,2250,tyon grant foster,GONZ,name_team,2026-03-16
+278080,5174633,201,xzayvier brown,OKLA,name_only,2026-04-01
 278361,5287474,150,dame sarr,DUKE,name_team,2026-03-20
 278362,5142621,248,chris cenac,HOU,name_team,2026-03-16
 278364,5149077,248,kingston flemings,HOU,name_team,2026-03-20
 278369,5093142,2633,j p estrella,TENN,name_team,2026-03-20
 278374,5239838,251,matas vokietaitis,TEX,name_team,2026-03-20
+278460,5241273,239,obi agbim,BAY,name_team,2026-04-01
 278600,5165276,61,jeremiah wilkinson,UGA,name_team,2026-03-16
 278847,5238207,96,collin chandler,UK,name_team,2026-03-20
 278850,5106261,2390,ernest udeh,MIA,name_team,2026-03-16
@@ -166,6 +172,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 279463,5174636,2603,dasear haskins,JOES,name_team,2026-03-24
 279548,5174973,2509,oscar cluff,PUR,name_team,2026-03-15
 279710,5041953,12,koa peat,ARIZ,name_team,2026-03-16
+279742,4712832,38,barrington hargress,COLO,name_team,2026-04-01
 279765,4873203,2294,cooper koch,IOWA,name_team,2026-03-16
 279766,5241366,2294,isaia howard,IOWA,name_team,2026-03-16
 279767,5241363,2294,tavion banks,IOWA,name_team,2026-03-16
@@ -244,6 +251,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 289548,5176077,2329,joshua ingram,LEH,name_team,2026-03-16
 289549,5176076,2329,nasir whitlock,LEH,name_team,2026-03-16
 289923,5176153,245,marcus hill,TXAM,name_only,2026-03-16
+289992,5243130,239,isaac williams,BAY,name_team,2026-04-01
 290164,5311842,2294,tate sage,IOWA,name_team,2026-03-27
 290206,5313031,2608,dillan shaw,SMC,name_team,2026-03-16
 290367,5196946,194,amare bynum,OSU,name_team,2026-03-16

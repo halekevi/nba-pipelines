@@ -465,6 +465,17 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
         "fantasyscore":         ["fantasypoints", "fantasy"],
     }
 
+    # Slate "Prop" strings normalize to keys like "pitcherstrikeouts" — align with actuals rows.
+    MLB_PROP_ALIASES = {
+        "pitcherstrikeouts":    ["pitcherstrikeouts", "strikeouts"],
+        "strikeouts":           ["strikeouts", "pitcherstrikeouts"],
+        "hitsrunsrbi":          ["hitsrunsrbi", "hitsrunsrbis"],
+        "hitsrunsrbis":         ["hitsrunsrbi", "hitsrunsrbis"],
+        "totalbasescomb":       ["totalbases", "totalbasescomb"],
+        "fantasyscore":         ["fantasyscore", "fantasypoints"],
+        "fantasypoints":        ["fantasypoints", "fantasyscore"],
+    }
+
     def _find_prop_match(candidates, sprop, sport):
         """Try exact prop match, then alias match. Returns matched row or None."""
         if not pr_col or not candidates:
@@ -473,9 +484,15 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
         exact = [r for r in candidates if r.get("_prop","") == sprop]
         if exact:
             return exact[0]
-        # Alias (soccer only)
+        # Alias (soccer)
         if sport == "SOCCER":
             aliases = SOCCER_PROP_ALIASES.get(sprop, [sprop])
+            alias_matches = [r for r in candidates if r.get("_prop","") in aliases]
+            if alias_matches:
+                return alias_matches[0]
+        # Alias (MLB)
+        if sport == "MLB":
+            aliases = MLB_PROP_ALIASES.get(sprop, [sprop])
             alias_matches = [r for r in candidates if r.get("_prop","") in aliases]
             if alias_matches:
                 return alias_matches[0]
@@ -508,7 +525,8 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
             matched = _find_prop_match(candidates, sprop, sport)
             if matched is None and len(candidates) == 1:
                 matched = candidates[0]
-            if matched is None and candidates:
+            # MLB often has many props per player — never guess which stat row to use.
+            elif matched is None and candidates and sport != "MLB":
                 matched = candidates[0]
 
         if matched is None or pd.isna(matched["_val"]):
@@ -544,7 +562,7 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
     total = len(slate)
     dec   = hits + misses
     rate  = f"{hits/dec*100:.1f}%" if dec else "—"
-    print(f"  Graded: {total:,} props → HIT:{hits} MISS:{misses} VOID:{voids} | Hit rate: {rate}")
+    print(f"  Graded: {total:,} props -> HIT:{hits} MISS:{misses} VOID:{voids} | Hit rate: {rate}")
     return slate
 
 def save_graded(df: pd.DataFrame, out_path: Path, sport: str, date_str: str):
@@ -910,7 +928,7 @@ def save_graded(df: pd.DataFrame, out_path: Path, sport: str, date_str: str):
                 _dc(ws_vr, ri, 2, int(cnt), bg=bg)
 
     wb.save(out_path)
-    print(f"  Saved → {out_path}  ({out_path.stat().st_size:,} bytes)")
+    print(f"  Saved -> {out_path}  ({out_path.stat().st_size:,} bytes)")
     print(f"  Sheets: {wb.sheetnames}")
 
 # ── CLI ────────────────────────────────────────────────────────────────────────
