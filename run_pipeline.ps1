@@ -16,6 +16,7 @@
 #    .\run_pipeline.ps1 -SoccerOnly -SkipFetch # Soccer steps 2-8 + Combined
 #    .\run_pipeline.ps1 -RefreshCache          # Wipe + rebuild ESPN cache before NBA
 #    .\run_pipeline.ps1 -CacheAgeDays 7        # Auto-wipe cache if older than N days
+#    .\run_pipeline.ps1 -RelaxedCombine        # Wider combine ticket pool (tiers A-D, --no-high-conviction); default is strict
 #
 #  Combined always auto-includes every sport whose step8 output exists on disk.
 #  No -Include flags needed -- just run any sport, combined picks it up.
@@ -35,6 +36,7 @@ param(
     [switch]$RefreshCache,
     [switch]$ForceAll,
     [switch]$DQWarnOnly,
+    [switch]$RelaxedCombine,
     [int]$CacheAgeDays = 7
 )
 
@@ -293,9 +295,19 @@ function Run-Combined {
     if (Test-Path $nba1qFile)  { $CombinedArgs += " --nba1q `"$nba1qFile`"";   Write-Host "  [+] NBA1Q"  -ForegroundColor DarkGray }
     if (Test-Path $wcbbFile)   { $CombinedArgs += " --wcbb `"$wcbbFile`"";     Write-Host "  [+] WCBB"   -ForegroundColor DarkGray }
 
-    $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --max-tickets 3 --min-hit-rate 0.58 --write-web --web-outdir `"$WebOutDir`""
+    # Strict ticket defaults are built into combined_slate_tickets.py (--high-conviction on by default).
+    # Structured combine emits up to five slips per sport (2L Power/Flex/Std + 3L Pwr Std + 3L Goblin); --max-tickets does not cap those sheets.
+    $tierArg = "--tiers A,B"
+    $relaxedFlag = ""
+    if ($RelaxedCombine) {
+        $tierArg = "--tiers A,B,C,D"
+        $relaxedFlag = " --no-high-conviction"
+    }
+    $q = [char]34
+    $CombinedArgs += " --date $Date --output $q$CombinedOut$q $tierArg --max-tickets 3 --min-hit-rate 0.58 --write-web --web-outdir $q$WebOutDir$q"
+    $CombinedArgs += $relaxedFlag
 
-    Write-Host "`n[STEP 8] Building tickets..." -ForegroundColor Cyan
+    Write-Host "`nSTEP 8 - Building tickets..." -ForegroundColor Cyan
     Push-Location $Root
     try {
         $cmd = "py -3.14 .\scripts\combined_slate_tickets.py $CombinedArgs"
@@ -311,7 +323,7 @@ function Run-Combined {
 
     # Retry once after a short wait if combined_slate_tickets.py failed (handles OneDrive file-lock race after pipeline)
     if (-not $okC) {
-        Write-Host "  [RETRY] combined_slate_tickets failed — waiting 15s and retrying once..." -ForegroundColor Yellow
+        Write-Host "  [RETRY] combined_slate_tickets failed - waiting 15s and retrying once..." -ForegroundColor Yellow
         Start-Sleep -Seconds 15
         Push-Location $Root
         try {
@@ -323,12 +335,13 @@ function Run-Combined {
         }
     }
 
-    Write-Host "[STEP 8] Tickets complete." -ForegroundColor Cyan
+    Write-Host "STEP 8 - Tickets complete." -ForegroundColor Cyan
 
     if ($okC) {
         Copy-Item $CombinedOut (Join-Path $OutDir "combined_slate_tickets_$Date.xlsx") -Force -ErrorAction SilentlyContinue
         Remove-Item $CombinedOut -Force -ErrorAction SilentlyContinue
-        Write-Host "  Saved -> $(Join-Path $OutDir "combined_slate_tickets_$Date.xlsx")" -ForegroundColor Green
+        $savedTickets = Join-Path $OutDir "combined_slate_tickets_$Date.xlsx"
+        Write-Host "  Saved -> $savedTickets" -ForegroundColor Green
 
         # Save dated snapshot of tickets JSON for historical ticket eval (overwrite each run)
         # Canonical location: outputs/<date>/combined_slate_tickets_<date>.json
@@ -341,7 +354,7 @@ function Run-Combined {
 
         py -3.14 (Join-Path $Root "build_ticket_eval.py") --date $Date
         if ($LASTEXITCODE -ne 0) {
-            Write-Warning "Ticket eval build failed (non-fatal) — combined slate was saved successfully"
+            Write-Warning "Ticket eval build failed (non-fatal) - combined slate was saved successfully"
         }
         Run-GitPush
     } else {

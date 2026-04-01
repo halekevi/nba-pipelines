@@ -309,6 +309,32 @@ def parse_ticket_sheet(tickets_xlsx: Path, sheet_name: str) -> pd.DataFrame:
             i += 1
             continue
 
+        # Map label row -> column index (Sport moved to col 25+ when H2H/CV columns exist; old default 22 was B2B).
+        hdr_map: dict[str, int] = {}
+        for ci in range(df.shape[1]):
+            cell = df.iloc[j, ci]
+            if isinstance(cell, str) and strip_norm(cell):
+                hdr_map[strip_norm(cell)] = ci
+
+        def _col(*names: str, fallback: int) -> int:
+            for n in names:
+                k0 = strip_norm(n)
+                if k0 in hdr_map:
+                    return hdr_map[k0]
+            return fallback
+
+        idx_player = _col("player", fallback=idx_player)
+        idx_team = _col("team", fallback=idx_team)
+        idx_prop = _col("prop", fallback=idx_prop)
+        idx_line = _col("line", fallback=idx_line)
+        idx_dir = _col("dir", fallback=idx_dir)
+        idx_pick_type = _col("pick type", fallback=idx_pick_type)
+        idx_def_tier = _col("def tier", fallback=idx_def_tier)
+        idx_sport = _col("sport", fallback=idx_sport)
+        _mp = _col("ml prob", fallback=-1)
+        if _mp >= 0:
+            idx_ml_prob = _mp
+
         k = j + 1
         leg_no = 0
         while k < len(df):

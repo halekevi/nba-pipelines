@@ -21,3 +21,4 @@ alwaysApply: false
 - Implementation preference:
   - Keep filtering/scoring deterministic and explicit.
   - Avoid ranking by hit-rate alone when edge/rank signals disagree.
+- CLI: strict pools are the default in `combined_slate_tickets.py` (`--high-conviction` defaults on; `run_pipeline.ps1` uses tiers A,B). Use `--no-high-conviction` or `-RelaxedCombine` in PowerShell for the legacy wider pool.

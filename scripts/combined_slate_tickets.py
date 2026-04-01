@@ -20,6 +20,12 @@ NEW (Web):
 - JSON includes image_url per leg.
 - More helpful file-path resolution (tries script dir + recursive search if file not found)
 
+Ticket modes (defaults are strict; no extra flag needed):
+- --high-conviction is ON by default (--no-high-conviction for legacy wider pools).
+- With strict: pool hit rate floor >= 0.70, default tiers A,B,C collapse to A,B, max 4 legs on FINAL slips,
+  stricter per-leg floors; structured 2–3 leg tickets use 0.70 leg floor unless --min-leg-hit-rate set.
+- --min-leg-hit-rate / --max-ticket-legs: optional overrides (see argparse help).
+
 HOTFIX:
 - Fixes crash when CBB "direction" becomes a DataFrame due to duplicate columns.
   We de-duplicate columns BEFORE touching df["direction"].str.upper().
@@ -306,6 +312,38 @@ LEG_MIN_HIT_RATE = {
     5: 0.66,
     6: 0.68,
 }
+
+# When --high-conviction: per-leg hit_rate floors (merged with LEG_MIN_HIT_RATE via max())
+HIGH_CONVICTION_LEG_MIN_HIT_RATE = {
+    2: 0.70,
+    3: 0.72,
+    4: 0.74,
+    5: 0.76,
+    6: 0.78,
+}
+
+
+def effective_leg_min_hit_rates(
+    high_conviction: bool,
+    override: dict[int, float] | None = None,
+) -> dict[int, float]:
+    """Per ticket length: minimum hit_rate (0–1) for each leg in build_tickets / FINAL groups."""
+    out: dict[int, float] = {}
+    for n in TICKET_LEG_SIZES:
+        base = float(LEG_MIN_HIT_RATE.get(n, 0.55))
+        if high_conviction:
+            base = max(base, float(HIGH_CONVICTION_LEG_MIN_HIT_RATE.get(n, 0.70)))
+        if override and n in override:
+            base = max(base, float(override[n]))
+        out[n] = base
+    return out
+
+
+def ticket_leg_sizes_for_max(max_legs: int) -> list:
+    m = int(max_legs)
+    if m < MIN_TICKET_POOL:
+        m = MIN_TICKET_POOL
+    return [n for n in TICKET_LEG_SIZES if n <= m]
 
 # Min tier per leg count for Power mode tickets
 POWER_MIN_TIER = {
@@ -3058,12 +3096,24 @@ def filter_eligible(df: pd.DataFrame, min_hit_rate=0.55, min_edge=0.0, min_rank=
     return df[mask].copy()
 
 
+# Per-sport ticket structures: n_legs, pick pool (goblin vs standard), and
+# direction/sort flow (power vs flex vs standard 2-leg).
+_STRUCTURE_SPECS: dict[str, dict[str, object]] = {
+    "power": {"n_legs": 2, "pool": "goblin", "flow": "power"},
+    "flex": {"n_legs": 3, "pool": "goblin", "flow": "flex"},
+    "standard": {"n_legs": 2, "pool": "standard", "flow": "standard"},
+    "power_std3": {"n_legs": 3, "pool": "standard", "flow": "power"},
+    "goblin3": {"n_legs": 3, "pool": "goblin", "flow": "power"},
+}
+
+
 def build_single_structure_ticket(
     pool_df: pd.DataFrame,
     sport_label: str,
     structure: str,
     counters: dict | None = None,
     relaxed: bool = False,
+    min_leg_hit_rate: float | None = None,
 ) -> dict | None:
     """
     Build exactly one best ticket for a sport+structure.
@@ -3071,15 +3121,15 @@ def build_single_structure_ticket(
     if pool_df is None or pool_df.empty:
         return None
 
-    is_power = structure == "power"
-    is_flex = structure == "flex"
-    is_standard = structure == "standard"
-    if not (is_power or is_flex or is_standard):
+    spec = _STRUCTURE_SPECS.get(structure)
+    if not spec:
         return None
 
-    n_legs = 2 if (is_power or is_standard) else 3
+    n_legs = int(spec["n_legs"])
+    pool_kind = str(spec["pool"])
+    flow = str(spec["flow"])
     allowed_tiers = {"A", "B", "C", "D"}
-    q = 0.70 if (is_power or is_standard) else 0.50  # top 30% / top 50%
+    q = 0.70 if flow in ("power", "standard") else 0.50  # top 30% / top 50%
 
     # NHL and Soccer don't use Goblin/Standard split — all props are Standard.
     # Skip pick_type filtering for these sports so Power/Flex can use Standard props.
@@ -3088,11 +3138,12 @@ def build_single_structure_ticket(
 
     df = pool_df.copy()
     if "pick_type" in df.columns and not skip_picktype_filter:
-        if is_standard:
-            df = df[df["pick_type"].astype(str).str.strip().str.lower() == "standard"]
+        pt = df["pick_type"].astype(str).str.strip().str.lower()
+        if pool_kind == "standard":
+            df = df[pt == "standard"]
         else:
-            df = df[df["pick_type"].astype(str).str.strip().str.lower() == "goblin"]
-    if "tier" in df.columns and not (relaxed and is_standard):
+            df = df[pt == "goblin"]
+    if "tier" in df.columns and not (relaxed and structure == "standard"):
         df = df[df["tier"].astype(str).str.upper().isin(allowed_tiers)]
 
     prop_norm = df["prop_type"].apply(_norm_prop_label) if "prop_type" in df.columns else pd.Series([""] * len(df))
@@ -3103,7 +3154,7 @@ def build_single_structure_ticket(
         counters["ban_list_filtered_count"] += int((excl_mask & ~fantasy_mask).sum())
     df = df[~excl_mask].copy()
 
-    if is_power or is_standard:
+    if flow in ("power", "standard"):
         df_prop_norm = df["prop_type"].apply(_norm_prop_label) if "prop_type" in df.columns else pd.Series([""] * len(df))
         df = df[~df_prop_norm.isin(TIER3_PROPS)].copy()
         # Explicitly block steals from Power Play and Standard 2-leg tickets.
@@ -3121,7 +3172,7 @@ def build_single_structure_ticket(
         line_ok &= ~((dprop == "rebounds") & (ddir == "OVER") & (dline < 2.5))
         df = df[line_ok].copy()
 
-    if "rank_score" in df.columns and len(df) > 0 and not (relaxed and is_standard):
+    if "rank_score" in df.columns and len(df) > 0 and not (relaxed and structure == "standard"):
         rs = pd.to_numeric(df["rank_score"], errors="coerce")
         cutoff = float(rs.quantile(q))
         df = df[rs >= cutoff].copy()
@@ -3133,10 +3184,10 @@ def build_single_structure_ticket(
     over_df = df[dirs == "OVER"].copy()
     under_df = df[dirs == "UNDER"].copy()
 
-    if is_standard:
+    if flow == "standard":
         # Standard: OVER only.
         cand = over_df.copy()
-    elif is_power:
+    elif flow == "power":
         # Power: OVER only unless not enough OVER legs.
         cand = over_df if len(over_df) >= n_legs else pd.concat([over_df, under_df], ignore_index=True)
     else:
@@ -3149,13 +3200,20 @@ def build_single_structure_ticket(
 
     if cand.empty:
         return None
+
+    if min_leg_hit_rate is not None and float(min_leg_hit_rate) > 0 and "hit_rate" in cand.columns:
+        thr = float(min_leg_hit_rate)
+        cand = cand[pd.to_numeric(cand["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
+    if cand.empty:
+        return None
+
     if counters is not None:
         counters["total_eligible_count"] += int(len(cand))
 
     cand = cand.copy()
     cand["__over_pref"] = cand.get("direction", "").astype(str).str.upper().eq("OVER").astype(int)
     cand["__score"] = pd.to_numeric(cand.get("rank_score", 0), errors="coerce").fillna(0.0) + cand["prop_type"].apply(_prop_priority_bonus)
-    if is_standard:
+    if flow == "standard":
         cand = cand.sort_values(["__over_pref", "rank_score"], ascending=[False, False], na_position="last")
     else:
         cand = cand.sort_values(["__over_pref", "__score"], ascending=[False, False], na_position="last")
@@ -3211,7 +3269,19 @@ def build_single_structure_ticket(
         "kelly_units": round(kelly_fraction(ep, adj_power, fraction=0.25), 2),
         "n_legs": n_legs,
         "expected_win_rate": expected_win_rate,
-        "ticket_type": "Standard" if is_standard else ("Power Play" if is_power else "Flex"),
+        "ticket_type": (
+            "Standard"
+            if structure == "standard"
+            else (
+                "Flex"
+                if structure == "flex"
+                else (
+                    "Power Standard 3"
+                    if structure == "power_std3"
+                    else "Goblin 3" if structure == "goblin3" else "Power Play"
+                )
+            )
+        ),
         "sport": sport_label,
     }
 
@@ -3352,7 +3422,13 @@ def apply_full_slate_signal_columns(df: pd.DataFrame) -> pd.DataFrame:
 
 
 # ── Build tickets ──────────────────────────────────────────────────────────────
-def build_tickets(pool: pd.DataFrame, n_legs: int, max_tickets=20, require_mix=False) -> list:
+def build_tickets(
+    pool: pd.DataFrame,
+    n_legs: int,
+    max_tickets=20,
+    require_mix=False,
+    leg_min_hit_by_n: dict[int, float] | None = None,
+) -> list:
     """
     Smart ticket builder with quality filters per leg count.
 
@@ -3366,7 +3442,8 @@ def build_tickets(pool: pd.DataFrame, n_legs: int, max_tickets=20, require_mix=F
     tickets = []
 
     # ── Per-leg-count quality filters ─────────────────────────────────────────
-    min_hr   = LEG_MIN_HIT_RATE.get(n_legs, 0.55)
+    _lim = leg_min_hit_by_n or LEG_MIN_HIT_RATE
+    min_hr = float(_lim.get(n_legs, LEG_MIN_HIT_RATE.get(n_legs, 0.55)))
     ok_tiers = POWER_MIN_TIER.get(n_legs, ["A", "B", "C", "D"])
 
     # Apply hit rate floor to this pool
@@ -3516,7 +3593,13 @@ def build_tickets(pool: pd.DataFrame, n_legs: int, max_tickets=20, require_mix=F
 # ──────────────────────────────────────────────────────────────────────────────
 # FINAL web groups (ONLY the ticket sets you want) + ENFORCED Std/Gob mix
 # ──────────────────────────────────────────────────────────────────────────────
-def build_mixed_picktype_tickets(pool_df: pd.DataFrame, n_legs: int, max_tickets: int, min_standard: int) -> list:
+def build_mixed_picktype_tickets(
+    pool_df: pd.DataFrame,
+    n_legs: int,
+    max_tickets: int,
+    min_standard: int,
+    min_leg_hit_rate: float | None = None,
+) -> list:
     """
     Deterministic ticket builder that enforces a minimum number of Standard legs,
     while allowing remaining legs from Standard+Goblin pool.
@@ -3531,6 +3614,11 @@ def build_mixed_picktype_tickets(pool_df: pd.DataFrame, n_legs: int, max_tickets
 
     std = pool_df[pool_df["pick_type"] == "Standard"].sort_values("rank_score", ascending=False, na_position="last")
     gob = pool_df[pool_df["pick_type"] == "Goblin"].sort_values("rank_score", ascending=False, na_position="last")
+
+    if min_leg_hit_rate is not None and min_leg_hit_rate > 0 and "hit_rate" in std.columns:
+        thr = float(min_leg_hit_rate)
+        std = std[pd.to_numeric(std["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
+        gob = gob[pd.to_numeric(gob["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
 
     if len(std) < min_standard:
         return []
@@ -3646,9 +3734,18 @@ def build_mixed_picktype_tickets(pool_df: pd.DataFrame, n_legs: int, max_tickets
     return tickets[:max_tickets]
 
 
-def build_final_web_ticket_groups(nba_pool: pd.DataFrame, cbb_pool: pd.DataFrame,
-                                   nhl_pool: pd.DataFrame = None, soccer_pool: pd.DataFrame = None,
-                                   min_hit_rate=0.70, min_edge=2.0, min_rank=5.0):
+def build_final_web_ticket_groups(
+    nba_pool: pd.DataFrame,
+    cbb_pool: pd.DataFrame,
+    nhl_pool: pd.DataFrame = None,
+    soccer_pool: pd.DataFrame = None,
+    mlb_pool: pd.DataFrame = None,
+    min_hit_rate=0.70,
+    min_edge=2.0,
+    min_rank=5.0,
+    ticket_leg_sizes: list | None = None,
+    leg_min_hit_by_n: dict[int, float] | None = None,
+):
     def apply_filters(df):
         mask = pd.Series(True, index=df.index)
         if min_hit_rate > 0 and "hit_rate" in df.columns:
@@ -3682,21 +3779,29 @@ def build_final_web_ticket_groups(nba_pool: pd.DataFrame, cbb_pool: pd.DataFrame
     nba_mix, nba_std, nba_gob = _split_sg(nba_filtered)
 
     groups = []
+    leg_sizes = ticket_leg_sizes if ticket_leg_sizes is not None else TICKET_LEG_SIZES
+
+    def _min_hr_for_n(n: int) -> float | None:
+        if not leg_min_hit_by_n:
+            return None
+        return float(leg_min_hit_by_n.get(int(n), LEG_MIN_HIT_RATE.get(int(n), 0.55)))
 
     def _add_mixed_std_gob(sub: pd.DataFrame, label: str):
-        for n in TICKET_LEG_SIZES:
+        for n in leg_sizes:
             if len(sub) < n:
                 continue
             mt = 2 if n == 3 else 1
-            tix = build_mixed_picktype_tickets(sub, n, max_tickets=mt, min_standard=_min_std_mixed(n))
+            tix = build_mixed_picktype_tickets(
+                sub, n, max_tickets=mt, min_standard=_min_std_mixed(n), min_leg_hit_rate=_min_hr_for_n(n)
+            )
             if tix:
                 groups.append((f"FINAL {n}-Leg (Std+Gob {label})", tix, None))
 
     def _add_std_only(sub: pd.DataFrame, label: str):
-        for n in TICKET_LEG_SIZES:
+        for n in leg_sizes:
             if len(sub) < n:
                 continue
-            tix = build_tickets(sub, n, max_tickets=1)
+            tix = build_tickets(sub, n, max_tickets=1, leg_min_hit_by_n=leg_min_hit_by_n)
             if tix:
                 groups.append((f"FINAL {n}-Leg STANDARD ONLY ({label})", tix, None))
 
@@ -3727,25 +3832,36 @@ def build_final_web_ticket_groups(nba_pool: pd.DataFrame, cbb_pool: pd.DataFrame
         _add_mixed_std_gob(soc_mix, "Soccer")
         _add_std_only(soc_std, "Soccer")
 
-    mix_frames = [f for f in (nba_mix, cbb_mix, nhl_mix, soc_mix) if len(f) > 0]
+    mlb_mix = mlb_std = mlb_gob = pd.DataFrame()
+    if mlb_pool is not None and len(mlb_pool):
+        mlb_f = apply_filters(mlb_pool)
+        mlb_mix, mlb_std, mlb_gob = _split_sg(mlb_f)
+        _add_mixed_std_gob(mlb_mix, "MLB")
+        _add_std_only(mlb_std, "MLB")
+
+    mix_frames = [f for f in (nba_mix, cbb_mix, nhl_mix, soc_mix, mlb_mix) if len(f) > 0]
     if mix_frames:
         all_sg = _sort_rank(pd.concat(mix_frames, ignore_index=True))
         if "sport" in all_sg.columns and all_sg["sport"].nunique() >= 2:
-            for n in TICKET_LEG_SIZES:
+            for n in leg_sizes:
                 if len(all_sg) < n:
                     continue
-                tix = build_tickets(all_sg, n, max_tickets=2 if n == 3 else 1, require_mix=True)
+                tix = build_tickets(
+                    all_sg, n, max_tickets=2 if n == 3 else 1, require_mix=True, leg_min_hit_by_n=leg_min_hit_by_n
+                )
                 if tix:
                     groups.append((f"FINAL {n}-Leg CROSS-SPORT (Std+Gob best)", tix, None))
 
-    std_frames = [f for f in (nba_std, cbb_std, nhl_std, soc_std) if len(f) > 0]
+    std_frames = [f for f in (nba_std, cbb_std, nhl_std, soc_std, mlb_std) if len(f) > 0]
     if std_frames:
         all_std = _sort_rank(pd.concat(std_frames, ignore_index=True))
         if "sport" in all_std.columns and all_std["sport"].nunique() >= 2:
-            for n in TICKET_LEG_SIZES:
+            for n in leg_sizes:
                 if len(all_std) < n:
                     continue
-                tix = build_tickets(all_std, n, max_tickets=2 if n == 3 else 1, require_mix=True)
+                tix = build_tickets(
+                    all_std, n, max_tickets=2 if n == 3 else 1, require_mix=True, leg_min_hit_by_n=leg_min_hit_by_n
+                )
                 if tix:
                     groups.append((f"FINAL {n}-Leg CROSS-SPORT (Standard best)", tix, None))
 
@@ -4228,6 +4344,8 @@ def write_ticket_sheet(wb, tickets, sheet_name, bg_hdr, label=""):
                 bg = C["nba"]
             elif sp == "CBB":
                 bg = C["cbb"]
+            elif sp == "MLB":
+                bg = C["mlb"]
 
             def gv(field):
                 return row.get(field, "")
@@ -4483,6 +4601,29 @@ def main():
         help="Slate date YYYY-MM-DD, or 'today' / 'now'",
     )
     ap.add_argument("--tiers", default="A,B,C", help="Comma-separated tiers e.g. A,B")
+    ap.add_argument(
+        "--high-conviction",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "Strict ticket pool (default: on): min pool hit rate >= 0.70; if tiers are default A,B,C, use A,B; "
+            "cap FINAL slips at 4 legs; higher per-leg floors. --no-high-conviction restores legacy behavior."
+        ),
+    )
+    ap.add_argument(
+        "--min-leg-hit-rate",
+        type=float,
+        default=None,
+        dest="min_leg_hit_rate",
+        help="Every ticket leg must have hit_rate >= this (0-1). When strict mode is on, defaults to 0.70 if omitted.",
+    )
+    ap.add_argument(
+        "--max-ticket-legs",
+        type=int,
+        default=6,
+        dest="max_ticket_legs",
+        help="FINAL / long-slip builders: max leg count (2-6). In strict mode (default), capped at 4 unless already lower.",
+    )
     ap.add_argument("--min-hit-rate", type=float, default=0.55, dest="min_hit_rate")
     ap.add_argument("--min-edge", type=float, default=0.0, dest="min_edge")
     ap.add_argument("--min-rank", type=float, default=None, dest="min_rank")
@@ -4530,6 +4671,28 @@ def main():
     if ds in ("today", "now"):
         args.date = datetime.now().strftime("%Y-%m-%d")
 
+    args.max_ticket_legs = max(2, min(6, int(args.max_ticket_legs)))
+    if args.high_conviction:
+        args.min_hit_rate = max(float(args.min_hit_rate), 0.70)
+        if str(args.tiers).strip() == "A,B,C":
+            args.tiers = "A,B"
+        args.max_ticket_legs = min(args.max_ticket_legs, 4)
+        print(
+            "[tickets] strict pool: min hit rate >= 0.70, tiers A,B when default A,B,C, "
+            f"max FINAL legs={args.max_ticket_legs} (use --no-high-conviction for legacy)"
+        )
+
+    effective_max_legs = int(args.max_ticket_legs)
+    leg_sizes_runtime = ticket_leg_sizes_for_max(effective_max_legs)
+    leg_min_override = None
+    if args.min_leg_hit_rate is not None:
+        leg_min_override = {n: float(args.min_leg_hit_rate) for n in TICKET_LEG_SIZES}
+    leg_min_hit_by_n = effective_leg_min_hit_rates(bool(args.high_conviction), leg_min_override)
+
+    structured_min_leg_hr = args.min_leg_hit_rate
+    if args.high_conviction and structured_min_leg_hr is None:
+        structured_min_leg_hr = 0.70
+
     if not str(args.nba).strip():
         args.nba = DEFAULT_NBA_PATH
     if not str(args.cbb).strip():
@@ -4555,6 +4718,11 @@ def main():
         "context_filter": args.use_context_filter,
         "context_min_score": args.context_min_score,
         "context_min_l5_sample": args.context_min_l5_sample,
+        "high_conviction": bool(args.high_conviction),
+        "min_leg_hit_rate": args.min_leg_hit_rate,
+        "structured_min_leg_hit_rate": structured_min_leg_hr,
+        "max_ticket_legs": effective_max_legs,
+        "leg_min_hit_by_n": {str(k): round(v, 4) for k, v in leg_min_hit_by_n.items()},
     }
 
     print(f"Loading NBA slate from {args.nba}...")
@@ -4780,8 +4948,10 @@ def main():
 
     nba_pool = pool(nba)
     cbb_pool = pool(cbb)
+    mlb_pool = pool(mlb)
     combo_pool = pool(combined)
-    print(f"  NBA eligible: {len(nba_pool)} | CBB eligible: {len(cbb_pool)} | Combined: {len(combo_pool)}")
+    mlb_elig = len(mlb_pool) if mlb_pool is not None else 0
+    print(f"  NBA eligible: {len(nba_pool)} | CBB eligible: {len(cbb_pool)} | MLB eligible: {mlb_elig} | Combined: {len(combo_pool)}")
     print(f"  CBB Goblin rank floor: {CBB_GOBLIN_MIN_RANK} (NBA uses global floor: {args.min_rank})")
 
     print("Generating tickets + workbook...")
@@ -4801,17 +4971,34 @@ def main():
         "total_eligible_count": total_eligible_count,
     }
 
-    def add_structured_sport_tickets(sport_df: pd.DataFrame, sport_label: str, bg_hdr: str, prefix: str):
+    def add_structured_sport_tickets(
+        sport_df: pd.DataFrame,
+        sport_label: str,
+        bg_hdr: str,
+        prefix: str,
+        min_leg_hit_rate: float | None = None,
+    ):
         if sport_df is None or sport_df.empty:
             print(f"  WARNING: {sport_label} skipped (empty pool).")
             return
 
-        p_ticket = build_single_structure_ticket(sport_df, sport_label, "power", counters=counters)
-        f_ticket = build_single_structure_ticket(sport_df, sport_label, "flex", counters=counters)
-        s_ticket = build_single_structure_ticket(sport_df, sport_label, "standard", counters=counters)
+        p_ticket = build_single_structure_ticket(
+            sport_df, sport_label, "power", counters=counters, min_leg_hit_rate=min_leg_hit_rate
+        )
+        f_ticket = build_single_structure_ticket(
+            sport_df, sport_label, "flex", counters=counters, min_leg_hit_rate=min_leg_hit_rate
+        )
+        s_ticket = build_single_structure_ticket(
+            sport_df, sport_label, "standard", counters=counters, min_leg_hit_rate=min_leg_hit_rate
+        )
         if s_ticket is None:
             s_ticket = build_single_structure_ticket(
-                sport_df, sport_label, "standard", counters=counters, relaxed=True
+                sport_df,
+                sport_label,
+                "standard",
+                counters=counters,
+                relaxed=True,
+                min_leg_hit_rate=min_leg_hit_rate,
             )
         if s_ticket is None and p_ticket is not None:
             # Ensure every sport can publish a Standard ticket when possible.
@@ -4819,7 +5006,20 @@ def main():
             s_ticket["ticket_type"] = "Standard"
             s_ticket["sport"] = sport_label
 
-        if p_ticket is None and f_ticket is None and s_ticket is None:
+        ps3_ticket = build_single_structure_ticket(
+            sport_df, sport_label, "power_std3", counters=counters, min_leg_hit_rate=min_leg_hit_rate
+        )
+        g3_ticket = build_single_structure_ticket(
+            sport_df, sport_label, "goblin3", counters=counters, min_leg_hit_rate=min_leg_hit_rate
+        )
+
+        if (
+            p_ticket is None
+            and f_ticket is None
+            and s_ticket is None
+            and ps3_ticket is None
+            and g3_ticket is None
+        ):
             print(f"  WARNING: {sport_label} skipped (<2 eligible legs after strict filters).")
             return
 
@@ -4859,16 +5059,56 @@ def main():
             print(f"  WARNING: {sport_label} Standard 2-Leg unavailable (strict filters).")
             generated_tickets.setdefault(sport_label, {})["standard"] = None
 
-    add_structured_sport_tickets(pool(nba), "NBA", C["hdr_nba"], "NBA")
-    add_structured_sport_tickets(pool(cbb), "CBB", C["hdr_cbb"], "CBB")
+        if ps3_ticket is not None:
+            sname = f"{prefix} Pwr Std 3-Leg"[:31]
+            write_ticket_sheet(wb, [ps3_ticket], sname, bg_hdr, label=f"{sport_label} Power Std 3")
+            all_ticket_groups.append((sname, [ps3_ticket], None))
+            print(f"  {sname}: 1 ticket")
+            generated_tickets.setdefault(sport_label, {})["power_std3"] = {
+                "legs": [str(x.get("prop_type", "")) for x in ps3_ticket.get("rows", [])]
+            }
+        else:
+            print(f"  WARNING: {sport_label} Power Standard 3-Leg unavailable (strict filters).")
+            generated_tickets.setdefault(sport_label, {})["power_std3"] = None
+
+        if g3_ticket is not None:
+            sname = f"{prefix} Goblin 3-Leg"[:31]
+            write_ticket_sheet(wb, [g3_ticket], sname, bg_hdr, label=f"{sport_label} Goblin 3")
+            all_ticket_groups.append((sname, [g3_ticket], None))
+            print(f"  {sname}: 1 ticket")
+            generated_tickets.setdefault(sport_label, {})["goblin3"] = {
+                "legs": [str(x.get("prop_type", "")) for x in g3_ticket.get("rows", [])]
+            }
+        else:
+            print(f"  WARNING: {sport_label} Goblin 3-Leg unavailable (strict filters).")
+            generated_tickets.setdefault(sport_label, {})["goblin3"] = None
+
+    add_structured_sport_tickets(
+        pool(nba), "NBA", C["hdr_nba"], "NBA", min_leg_hit_rate=structured_min_leg_hr
+    )
+    add_structured_sport_tickets(
+        pool(cbb), "CBB", C["hdr_cbb"], "CBB", min_leg_hit_rate=structured_min_leg_hr
+    )
     if nhl is not None and len(nhl) > 0:
-        add_structured_sport_tickets(pool(nhl), "NHL", C["hdr_nhl"], "NHL")
+        add_structured_sport_tickets(
+            pool(nhl), "NHL", C["hdr_nhl"], "NHL", min_leg_hit_rate=structured_min_leg_hr
+        )
     if soccer is not None and len(soccer) > 0:
-        add_structured_sport_tickets(pool(soccer), "Soccer", C["hdr_soccer"], "Soccer")
+        add_structured_sport_tickets(
+            pool(soccer), "Soccer", C["hdr_soccer"], "Soccer", min_leg_hit_rate=structured_min_leg_hr
+        )
+    if mlb is not None and len(mlb) > 0:
+        add_structured_sport_tickets(
+            mlb_pool, "MLB", C["hdr_mlb"], "MLB", min_leg_hit_rate=structured_min_leg_hr
+        )
     if nba1q is not None and len(nba1q) > 0:
-        add_structured_sport_tickets(pool(nba1q), "NBA1Q", C["hdr_nba1q"], "NBA1Q")
+        add_structured_sport_tickets(
+            pool(nba1q), "NBA1Q", C["hdr_nba1q"], "NBA1Q", min_leg_hit_rate=structured_min_leg_hr
+        )
     if nba1h is not None and len(nba1h) > 0:
-        add_structured_sport_tickets(pool(nba1h), "NBA1H", C["hdr_nba1h"], "NBA1H")
+        add_structured_sport_tickets(
+            pool(nba1h), "NBA1H", C["hdr_nba1h"], "NBA1H", min_leg_hit_rate=structured_min_leg_hr
+        )
 
     print("Writing slate sheets...")
     # Strict-mode guardrail: fail if mixed dates survived filtering.
@@ -4879,6 +5119,7 @@ def main():
             ("CBB", cbb),
             ("NHL", nhl),
             ("Soccer", soccer),
+            ("MLB", mlb),
             ("Combined", combined),
         ]
         mixed = []
@@ -4954,13 +5195,18 @@ def main():
             print("  WARNING: workbook produced 0 groups — falling back to FINAL builder.")
             nhl_pool_web = pool(nhl) if nhl is not None and len(nhl) > 0 else None
             soccer_pool_web = pool(soccer) if soccer is not None and len(soccer) > 0 else None
+            mlb_pool_web = mlb_pool if mlb_pool is not None and len(mlb_pool) > 0 else None
             final_groups = build_final_web_ticket_groups(
-                nba_pool, cbb_pool,
+                nba_pool,
+                cbb_pool,
                 nhl_pool=nhl_pool_web,
                 soccer_pool=soccer_pool_web,
+                mlb_pool=mlb_pool_web,
                 min_hit_rate=thresholds.get("min_hit_rate", 0.70),
                 min_edge=thresholds.get("min_edge", 2.0),
                 min_rank=thresholds.get("min_rank", 5.0),
+                ticket_leg_sizes=leg_sizes_runtime,
+                leg_min_hit_by_n=leg_min_hit_by_n,
             )
             payload = ticket_groups_to_payload(final_groups, args.date, thresholds)
             n_groups = len(payload["groups"])
@@ -4979,10 +5225,17 @@ def main():
         pp = tickets.get("power_play")
         fl = tickets.get("flex")
         st = tickets.get("standard")
+        ps3 = tickets.get("power_std3")
+        g3 = tickets.get("goblin3")
         pp_legs = " + ".join(pp["legs"]) if pp else "SKIPPED"
         fl_legs = " + ".join(fl["legs"]) if fl else "SKIPPED"
         st_legs = " + ".join(st["legs"]) if st else "SKIPPED"
-        print(f"[TICKETS] {sport}: Power Play ({pp_legs}) | Flex ({fl_legs}) | Standard ({st_legs})")
+        ps3_legs = " + ".join(ps3["legs"]) if ps3 else "SKIPPED"
+        g3_legs = " + ".join(g3["legs"]) if g3 else "SKIPPED"
+        print(
+            f"[TICKETS] {sport}: Power Play ({pp_legs}) | Flex ({fl_legs}) | Standard ({st_legs}) | "
+            f"Pwr Std 3 ({ps3_legs}) | Goblin 3 ({g3_legs})"
+        )
 
     print(f"[TICKETS] Fantasy Score excluded : {int(counters['fantasy_excluded_count'])} props removed")
     print(f"[TICKETS] Def tier filtered      : {int(counters['def_tier_filtered_count'])} props removed")
