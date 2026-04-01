@@ -1,36 +1,21 @@
 proj_id,player_id,cbb_player_key,player,player_norm,team_abbr,opp_team_abbr,pp_team,pp_opp_team,pos,prop_type,prop_norm,pick_type,line,start_time,pp_game_id,league_id,team,stat_type,odds_type,duration,line_num
-10950245,223993,olivia olson|MICH,Olivia Olson,olivia olson,MICH,TEX,MICH,TEX,G,Pts+Rebs,pr,Demon,29.5,2026-03-30T19:00:00.000-04:00,147952,176,MICH,Pts+Rebs,demon,Full,29.5
-10951584,224284,madison booker|TEX,Madison Booker,madison booker,TEX,MICH,TEX,MICH,F,Pts+Rebs,pr,Demon,29.5,2026-03-30T19:00:00.000-04:00,147952,176,TEX,Pts+Rebs,demon,Full,29.5
-10951612,224284,madison booker|TEX,Madison Booker,madison booker,TEX,MICH,TEX,MICH,F,Pts+Asts,pa,Demon,29.5,2026-03-30T19:00:00.000-04:00,147952,176,TEX,Pts+Asts,demon,Full,29.5
-10950275,223993,olivia olson|MICH,Olivia Olson,olivia olson,MICH,TEX,MICH,TEX,G,Pts+Asts,pa,Demon,24.5,2026-03-30T19:00:00.000-04:00,147952,176,MICH,Pts+Asts,demon,Full,24.5
-10950596,223992,syla swords|MICH,Syla Swords,syla swords,MICH,TEX,MICH,TEX,G,Pts+Rebs,pr,Demon,24.5,2026-03-30T19:00:00.000-04:00,147952,176,MICH,Pts+Rebs,demon,Full,24.5
-10951583,224284,madison booker|TEX,Madison Booker,madison booker,TEX,MICH,TEX,MICH,F,Pts+Rebs,pr,Goblin,24.5,2026-03-30T19:00:00.000-04:00,147952,176,TEX,Pts+Rebs,goblin,Full,24.5
-10950244,223993,olivia olson|MICH,Olivia Olson,olivia olson,MICH,TEX,MICH,TEX,G,Pts+Rebs,pr,Goblin,19.5,2026-03-30T19:00:00.000-04:00,147952,176,MICH,Pts+Rebs,goblin,Full,19.5
-10951520,280154,mila holloway|MICH,Mila Holloway,mila holloway,MICH,TEX,MICH,TEX,G,Pts+Asts,pa,Demon,19.5,2026-03-30T19:00:00.000-04:00,147952,176,MICH,Pts+Asts,demon,Full,19.5
-10951522,280154,mila holloway|MICH,Mila Holloway,mila holloway,MICH,TEX,MICH,TEX,G,Pts+Rebs,pr,Demon,19.5,2026-03-30T19:00:00.000-04:00,147952,176,MICH,Pts+Rebs,demon,Full,19.5
-10951531,223992,syla swords|MICH,Syla Swords,syla swords,MICH,TEX,MICH,TEX,G,Pts+Asts,pa,Demon,19.5,2026-03-30T19:00:00.000-04:00,147952,176,MICH,Pts+Asts,demon,Full,19.5
-10951590,310392,te yala delfosse|MICH,Te'Yala Delfosse,te yala delfosse,MICH,TEX,MICH,TEX,G-F,Pts+Rebs,pr,Demon,19.5,2026-03-30T19:00:00.000-04:00,147952,176,MICH,Pts+Rebs,demon,Full,19.5
-10951697,277707,kyla oldacre|TEX,Kyla Oldacre,kyla oldacre,TEX,MICH,TEX,MICH,C,Pts+Rebs,pr,Demon,19.5,2026-03-30T19:00:00.000-04:00,147952,176,TEX,Pts+Rebs,demon,Full,19.5
-10951704,224285,rori harmon|TEX,Rori Harmon,rori harmon,TEX,MICH,TEX,MICH,G,Pts+Asts,pa,Demon,19.5,2026-03-30T19:00:00.000-04:00,147952,176,TEX,Pts+Asts,demon,Full,19.5
-10951521,280154,mila holloway|MICH,Mila Holloway,mila holloway,MICH,TEX,MICH,TEX,G,Pts+Rebs,pr,Goblin,14.5,2026-03-30T19:00:00.000-04:00,147952,176,MICH,Pts+Rebs,goblin,Full,14.5
-10951696,277707,kyla oldacre|TEX,Kyla Oldacre,kyla oldacre,TEX,MICH,TEX,MICH,C,Pts+Rebs,pr,Goblin,14.5,2026-03-30T19:00:00.000-04:00,147952,176,TEX,Pts+Rebs,goblin,Full,14.5
-10951705,224285,rori harmon|TEX,Rori Harmon,rori harmon,TEX,MICH,TEX,MICH,G,Pts+Rebs,pr,Demon,14.5,2026-03-30T19:00:00.000-04:00,147952,176,TEX,Pts+Rebs,demon,Full,14.5
-10951745,310349,justice carlton|TEX,Justice Carlton,justice carlton,TEX,MICH,TEX,MICH,F,Pts+Rebs,pr,Demon,14.5,2026-03-30T19:00:00.000-04:00,147952,176,TEX,Pts+Rebs,demon,Full,14.5
-10951589,310392,te yala delfosse|MICH,Te'Yala Delfosse,te yala delfosse,MICH,TEX,MICH,TEX,G-F,Pts+Rebs,pr,Goblin,13.5,2026-03-30T19:00:00.000-04:00,147952,176,MICH,Pts+Rebs,goblin,Full,13.5
-10951746,310349,justice carlton|TEX,Justice Carlton,justice carlton,TEX,MICH,TEX,MICH,F,Pts+Rebs,pr,Goblin,9.5,2026-03-30T19:00:00.000-04:00,147952,176,TEX,Pts+Rebs,goblin,Full,9.5
-10951878,227076,joyce edwards|SCAR,Joyce Edwards,joyce edwards,SCAR,TCU,SCAR,TCU,F,Pts+Rebs,pr,Demon,29.5,2026-03-30T21:00:00.000-04:00,147953,176,SCAR,Pts+Rebs,demon,Full,29.5
-10952088,277386,olivia miles|TCU,Olivia Miles,olivia miles,TCU,SCAR,TCU,SCAR,G,Pts+Asts,pa,Demon,29.5,2026-03-30T21:00:00.000-04:00,147953,176,TCU,Pts+Asts,demon,Full,29.5
-10952089,277386,olivia miles|TCU,Olivia Miles,olivia miles,TCU,SCAR,TCU,SCAR,G,Pts+Rebs,pr,Demon,29.5,2026-03-30T21:00:00.000-04:00,147953,176,TCU,Pts+Rebs,demon,Full,29.5
-10952116,278451,marta suarez|TCU,Marta Suarez,marta suarez,TCU,SCAR,TCU,SCAR,F,Pts+Rebs,pr,Demon,29.5,2026-03-30T21:00:00.000-04:00,147953,176,TCU,Pts+Rebs,demon,Full,29.5
-10951877,227076,joyce edwards|SCAR,Joyce Edwards,joyce edwards,SCAR,TCU,SCAR,TCU,F,Pts+Asts,pa,Demon,24.5,2026-03-30T21:00:00.000-04:00,147953,176,SCAR,Pts+Asts,demon,Full,24.5
-10951879,227076,joyce edwards|SCAR,Joyce Edwards,joyce edwards,SCAR,TCU,SCAR,TCU,F,Pts+Rebs,pr,Goblin,24.5,2026-03-30T21:00:00.000-04:00,147953,176,SCAR,Pts+Rebs,goblin,Full,24.5
-10951958,276431,madina okot|SCAR,Madina Okot,madina okot,SCAR,TCU,SCAR,TCU,C,Pts+Rebs,pr,Demon,24.5,2026-03-30T21:00:00.000-04:00,147953,176,SCAR,Pts+Rebs,demon,Full,24.5
-10952002,276430,ta niya latson|SCAR,Ta'Niya Latson,ta niya latson,SCAR,TCU,SCAR,TCU,G,Pts+Asts,pa,Demon,24.5,2026-03-30T21:00:00.000-04:00,147953,176,SCAR,Pts+Asts,demon,Full,24.5
-10952090,277386,olivia miles|TCU,Olivia Miles,olivia miles,TCU,SCAR,TCU,SCAR,G,Pts+Rebs,pr,Goblin,24.5,2026-03-30T21:00:00.000-04:00,147953,176,TCU,Pts+Rebs,goblin,Full,24.5
-10951957,276431,madina okot|SCAR,Madina Okot,madina okot,SCAR,TCU,SCAR,TCU,C,Pts+Rebs,pr,Goblin,19.5,2026-03-30T21:00:00.000-04:00,147953,176,SCAR,Pts+Rebs,goblin,Full,19.5
-10951989,310355,raven johnson|SCAR,Raven Johnson,raven johnson,SCAR,TCU,SCAR,TCU,G,Pts+Asts,pa,Demon,19.5,2026-03-30T21:00:00.000-04:00,147953,176,SCAR,Pts+Asts,demon,Full,19.5
-10952003,276430,ta niya latson|SCAR,Ta'Niya Latson,ta niya latson,SCAR,TCU,SCAR,TCU,G,Pts+Rebs,pr,Demon,19.5,2026-03-30T21:00:00.000-04:00,147953,176,SCAR,Pts+Rebs,demon,Full,19.5
-10952114,278451,marta suarez|TCU,Marta Suarez,marta suarez,TCU,SCAR,TCU,SCAR,F,Pts+Asts,pa,Demon,19.5,2026-03-30T21:00:00.000-04:00,147953,176,TCU,Pts+Asts,demon,Full,19.5
-10952115,278451,marta suarez|TCU,Marta Suarez,marta suarez,TCU,SCAR,TCU,SCAR,F,Pts+Rebs,pr,Goblin,19.5,2026-03-30T21:00:00.000-04:00,147953,176,TCU,Pts+Rebs,goblin,Full,19.5
-10951990,310355,raven johnson|SCAR,Raven Johnson,raven johnson,SCAR,TCU,SCAR,TCU,G,Pts+Rebs,pr,Demon,14.5,2026-03-30T21:00:00.000-04:00,147953,176,SCAR,Pts+Rebs,demon,Full,14.5
-10952004,276430,ta niya latson|SCAR,Ta'Niya Latson,ta niya latson,SCAR,TCU,SCAR,TCU,G,Pts+Rebs,pr,Goblin,14.5,2026-03-30T21:00:00.000-04:00,147953,176,SCAR,Pts+Rebs,goblin,Full,14.5
+11036007,224015,sarah strong|CONN,Sarah Strong,sarah strong,CONN,SCAR,CONN,SCAR,F,Pts+Rebs,pr,Standard,24.5,2026-04-03T19:00:00.000-04:00,148432,176,CONN,Pts+Rebs,standard,Full,24.5
+11037377,227076,joyce edwards|SCAR,Joyce Edwards,joyce edwards,SCAR,CONN,SCAR,CONN,F,Pts+Rebs,pr,Standard,23.5,2026-04-03T19:00:00.000-04:00,148432,176,SCAR,Pts+Rebs,standard,Full,23.5
+11037385,276431,madina okot|SCAR,Madina Okot,madina okot,SCAR,CONN,SCAR,CONN,C,Pts+Rebs,pr,Standard,21.5,2026-04-03T19:00:00.000-04:00,148432,176,SCAR,Pts+Rebs,standard,Full,21.5
+11037369,232538,azzi fudd|CONN,Azzi Fudd,azzi fudd,CONN,SCAR,CONN,SCAR,G,3-PT Made,fg3m,Demon,4.5,2026-04-03T19:00:00.000-04:00,148432,176,CONN,3-PT Made,demon,Full,4.5
+11037368,232538,azzi fudd|CONN,Azzi Fudd,azzi fudd,CONN,SCAR,CONN,SCAR,G,3-PT Made,fg3m,Demon,3.5,2026-04-03T19:00:00.000-04:00,148432,176,CONN,3-PT Made,demon,Full,3.5
+11037392,224015,sarah strong|CONN,Sarah Strong,sarah strong,CONN,SCAR,CONN,SCAR,F,3-PT Made,fg3m,Demon,3.5,2026-04-03T19:00:00.000-04:00,148432,176,CONN,3-PT Made,demon,Full,3.5
+11037403,277703,tessa johnson|SCAR,Tessa Johnson,tessa johnson,SCAR,CONN,SCAR,CONN,G,3-PT Made,fg3m,Demon,3.5,2026-04-03T19:00:00.000-04:00,148432,176,SCAR,3-PT Made,demon,Full,3.5
+11037391,224015,sarah strong|CONN,Sarah Strong,sarah strong,CONN,SCAR,CONN,SCAR,F,3-PT Made,fg3m,Demon,2.5,2026-04-03T19:00:00.000-04:00,148432,176,CONN,3-PT Made,demon,Full,2.5
+11037404,277703,tessa johnson|SCAR,Tessa Johnson,tessa johnson,SCAR,CONN,SCAR,CONN,G,3-PT Made,fg3m,Demon,2.5,2026-04-03T19:00:00.000-04:00,148432,176,SCAR,3-PT Made,demon,Full,2.5
+11037367,232538,azzi fudd|CONN,Azzi Fudd,azzi fudd,CONN,SCAR,CONN,SCAR,G,3-PT Made,fg3m,Goblin,1.5,2026-04-03T19:00:00.000-04:00,148432,176,CONN,3-PT Made,goblin,Full,1.5
+11037390,224015,sarah strong|CONN,Sarah Strong,sarah strong,CONN,SCAR,CONN,SCAR,F,3-PT Made,fg3m,Goblin,1.5,2026-04-03T19:00:00.000-04:00,148432,176,CONN,3-PT Made,goblin,Full,1.5
+11037402,277703,tessa johnson|SCAR,Tessa Johnson,tessa johnson,SCAR,CONN,SCAR,CONN,G,3-PT Made,fg3m,Goblin,1.5,2026-04-03T19:00:00.000-04:00,148432,176,SCAR,3-PT Made,goblin,Full,1.5
+11037533,224708,lauren betts|UCLA,Lauren Betts,lauren betts,UCLA,TEX,UCLA,TEX,C,Pts+Rebs,pr,Standard,26.5,2026-04-03T21:30:00.000-04:00,148418,176,UCLA,Pts+Rebs,standard,Full,26.5
+11037540,224284,madison booker|TEX,Madison Booker,madison booker,TEX,UCLA,TEX,UCLA,F,Pts+Rebs,pr,Standard,24.5,2026-04-03T21:30:00.000-04:00,148418,176,TEX,Pts+Rebs,standard,Full,24.5
+11037525,224709,kiki rice|UCLA,Kiki Rice,kiki rice,UCLA,TEX,UCLA,TEX,G,Pts+Rebs,pr,Standard,17.5,2026-04-03T21:30:00.000-04:00,148418,176,UCLA,Pts+Rebs,standard,Full,17.5
+11037508,232534,gabriela jaquez|UCLA,Gabriela Jaquez,gabriela jaquez,UCLA,TEX,UCLA,TEX,G,Pts+Rebs,pr,Standard,15.5,2026-04-03T21:30:00.000-04:00,148418,176,UCLA,Pts+Rebs,standard,Full,15.5
+11037548,224285,rori harmon|TEX,Rori Harmon,rori harmon,TEX,UCLA,TEX,UCLA,G,Pts+Asts,pa,Standard,14.5,2026-04-03T21:30:00.000-04:00,148418,176,TEX,Pts+Asts,standard,Full,14.5
+11037515,276427,gianna kneepkens|UCLA,Gianna Kneepkens,gianna kneepkens,UCLA,TEX,UCLA,TEX,G,3-PT Made,fg3m,Demon,3.5,2026-04-03T21:30:00.000-04:00,148418,176,UCLA,3-PT Made,demon,Full,3.5
+11037514,276427,gianna kneepkens|UCLA,Gianna Kneepkens,gianna kneepkens,UCLA,TEX,UCLA,TEX,G,3-PT Made,fg3m,Demon,2.5,2026-04-03T21:30:00.000-04:00,148418,176,UCLA,3-PT Made,demon,Full,2.5
+11037513,276427,gianna kneepkens|UCLA,Gianna Kneepkens,gianna kneepkens,UCLA,TEX,UCLA,TEX,G,3-PT Made,fg3m,Goblin,1.5,2026-04-03T21:30:00.000-04:00,148418,176,UCLA,3-PT Made,goblin,Full,1.5
