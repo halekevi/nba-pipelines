@@ -55,11 +55,13 @@ import sys
 sys.stdout.reconfigure(encoding="utf-8")
 
 import argparse
+import warnings
 from pathlib import Path
 from typing import Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
+import re
 
 
 # ── SOCCER CONFIGURATION ──────────────────────────────────────────────────────
@@ -96,6 +98,184 @@ POSITION_THRESHOLDS = {
         "confidence_multiplier": 0.90,
     }
 }
+
+def _norm_soccer_player(name: str) -> str:
+    s = str(name or "").lower().strip().replace(".", " ")
+    s = re.sub(r"\s+", " ", s)
+    parts = [x for x in s.split(" ") if x]
+    for suf in ("jr", "sr", "ii", "iii", "iv", "v"):
+        if parts and parts[-1] == suf:
+            parts = parts[:-1]
+    return " ".join(parts)
+
+
+def _norm_soccer_prop(p: str) -> str:
+    return " ".join(str(p or "").lower().strip().split())
+
+
+def normalize_soccer_slate_columns(slate: pd.DataFrame) -> pd.DataFrame:
+    """
+    step8_soccer_direction_clean.xlsx uses Title Case headers (Player, Prop, …).
+    This grader historically expected lowercase keys; without this, every row
+    looks like player='' and joins fail → all VOID.
+    """
+    rename: dict[str, str] = {}
+    for c in slate.columns:
+        cs = str(c).strip()
+        low = cs.lower()
+        mapping = {
+            "player": "player",
+            "league": "league",
+            "tier": "tier",
+            "line": "line",
+            "prop": "prop_type",
+            "prop type": "prop_type",
+            "opp": "opponent",
+            "opponent": "opponent",
+            "opp team": "opponent",
+            "pos group": "position",
+            "position group": "position",
+            "pos": "position_code",
+            "direction": "final_bet_direction",
+            "final bet direction": "final_bet_direction",
+        }
+        if low in mapping:
+            rename[c] = mapping[low]
+        elif cs in ("Player", "League", "Tier", "Line", "Prop", "Opp", "Team", "Direction"):
+            mapping2 = {
+                "Player": "player",
+                "League": "league",
+                "Tier": "tier",
+                "Line": "line",
+                "Prop": "prop_type",
+                "Opp": "opponent",
+                "Team": "team",
+                "Direction": "final_bet_direction",
+            }
+            rename[c] = mapping2[cs]
+    out = slate.rename(columns=rename)
+    if "position" not in out.columns and "position_code" in out.columns:
+        out["position"] = out["position_code"]
+    elif "position" not in out.columns:
+        out["position"] = "FWD"
+    if "final_bet_direction" not in out.columns:
+        out["final_bet_direction"] = "OVER"
+    for src, dst in (("Game Time", "game_time"), ("game_start", "game_time")):
+        if src in out.columns and "game_time" not in out.columns:
+            out = out.rename(columns={src: "game_time"})
+    return out
+
+
+def filter_soccer_slate_by_date(slate: pd.DataFrame, date_str: str) -> pd.DataFrame:
+    """Keep rows for grade date so slate matches fetch_actuals day (PP can include future games)."""
+    if not date_str or slate.empty or "game_time" not in slate.columns:
+        return slate
+    try:
+        year = int(str(date_str).strip()[:4])
+    except Exception:
+        return slate
+    # PrizePicks exports often use "MM/DD h:mm AM" without year — anchor to grade year.
+    gt = slate["game_time"].astype(str).str.strip()
+    anchored = gt.where(
+        ~gt.str.match(r"^\d{1,2}/\d{1,2}\s", na=False),
+        gt + f" {year}",
+    )
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", UserWarning)
+        try:
+            ts = pd.to_datetime(anchored, errors="coerce", format="mixed")
+        except (TypeError, ValueError):
+            ts = pd.to_datetime(anchored, errors="coerce")
+    try:
+        target = pd.to_datetime(date_str).date()
+    except Exception:
+        return slate
+    mask = ts.dt.date == target
+    if not mask.any():
+        if ts.notna().sum() == 0:
+            print("[Soccer Grader] No parseable Game Time — using full slate.")
+            return slate
+        print(
+            f"[Soccer Grader] Date filter {date_str}: 0 rows on that day "
+            f"({int(ts.notna().sum())} rows had other dates) — using full slate."
+        )
+        return slate
+    print(f"[Soccer Grader] Date filter {date_str}: {int(mask.sum())}/{len(slate)} rows")
+    return slate.loc[mask].copy()
+
+
+def build_soccer_actuals_lookup(actuals: pd.DataFrame) -> dict[tuple[str, str, str], float]:
+    """
+    Key: (player_norm, prop_norm, team_upper) — team optional match.
+    """
+    lookup: dict[tuple[str, str, str], float] = {}
+    for _, r in actuals.iterrows():
+        pl = _norm_soccer_player(r.get("player", ""))
+        pr = _norm_soccer_prop(r.get("prop_type", ""))
+        tm = str(r.get("team", "") or "").strip().upper()
+        try:
+            val = float(r["actual"])
+        except (TypeError, ValueError):
+            continue
+        if not pl or not pr:
+            continue
+        lookup[(pl, pr, tm)] = val
+        lookup[(pl, pr, "")] = val
+    return lookup
+
+
+def _soccer_prop_aliases(prop_norm: str) -> list[str]:
+    """Map PrizePicks / slate labels → fetch_actuals.py prop_type strings."""
+    pr = prop_norm
+    out = [pr]
+    # Normalized keys (lowercase collapsed)
+    if pr == "passes attempted" or ("attempted" in pr and "pass" in pr):
+        out.append(_norm_soccer_prop("Passes"))
+    if "goalie" in pr and "save" in pr:
+        out.append(_norm_soccer_prop("Goalkeeper Saves"))
+    if pr == "goalkeeper saves":
+        out.append(_norm_soccer_prop("Goalkeeper Saves"))
+    if "goal" in pr and "assist" in pr and "+" in prop_norm.replace(" ", ""):
+        out.append(_norm_soccer_prop("Goal + Assist"))
+    if pr == "shots on target":
+        out.append(_norm_soccer_prop("Shots On Target"))
+    # De-dupe preserving order
+    seen: set[str] = set()
+    uniq: list[str] = []
+    for x in out:
+        if x not in seen:
+            seen.add(x)
+            uniq.append(x)
+    return uniq
+
+
+def lookup_soccer_actual(
+    lut: dict[tuple[str, str, str], float],
+    player: str,
+    prop_type: str,
+    team: str = "",
+) -> float:
+    pl = _norm_soccer_player(player)
+    raw = str(prop_type or "")
+    pr = _norm_soccer_prop(raw.replace("(combo)", "").strip())
+    tm = str(team or "").strip().upper()
+    if not pl or not pr:
+        return np.nan
+    for alt in _soccer_prop_aliases(pr):
+        k = (pl, alt, tm)
+        if k in lut:
+            return lut[k]
+        if (pl, alt, "") in lut:
+            return lut[(pl, alt, "")]
+    # Goalkeeper Saves vs Saves
+    if "goalkeeper" in pr and "save" in pr:
+        for alt in (_norm_soccer_prop("Saves"),):
+            if (pl, alt, tm) in lut:
+                return lut[(pl, alt, tm)]
+            if (pl, alt, "") in lut:
+                return lut[(pl, alt, "")]
+    return np.nan
+
 
 PROP_PRIORS = {
     "Goals": 0.49,
@@ -382,10 +562,16 @@ def main() -> None:
     print("[Soccer Grader] Loading data...")
     try:
         actuals = pd.read_csv(args.actuals, encoding="utf-8")
-        slate = pd.read_excel(args.slate)
+        xls = pd.ExcelFile(args.slate, engine="openpyxl")
+        sheet = "ALL" if "ALL" in xls.sheet_names else xls.sheet_names[0]
+        slate = pd.read_excel(args.slate, sheet_name=sheet, engine="openpyxl")
     except Exception as e:
         print(f"❌ Failed: {e}")
         sys.exit(1)
+
+    slate = normalize_soccer_slate_columns(slate)
+    slate = filter_soccer_slate_by_date(slate, args.date)
+    actuals_lut = build_soccer_actuals_lookup(actuals)
     
     opp_cache = None
     if args.opp_cache and Path(args.opp_cache).exists():
@@ -404,19 +590,15 @@ def main() -> None:
     for _, slate_row in slate.iterrows():
         player = slate_row.get("player", "")
         league = slate_row.get("league", "EPL")
-        position = slate_row.get("position", "FWD")
+        position = str(slate_row.get("position", "FWD") or "FWD").strip() or "FWD"
         opp_team = slate_row.get("opponent", "")
         prop_type = slate_row.get("prop_type", "")
+        team = str(slate_row.get("team", "") or "").strip()
         line = pd.to_numeric(slate_row.get("line"), errors="coerce")
-        direction = slate_row.get("final_bet_direction", "OVER")
+        direction = str(slate_row.get("final_bet_direction", "OVER") or "OVER").strip().upper()
         tier = slate_row.get("tier", "D")
-        
-        # Find actual
-        actual_rows = actuals[
-            (actuals["player"].str.lower() == str(player).lower()) &
-            (actuals["prop_type"].str.lower() == str(prop_type).lower())
-        ]
-        actual = actual_rows["actual"].iloc[0] if len(actual_rows) > 0 else np.nan
+
+        actual = lookup_soccer_actual(actuals_lut, player, prop_type, team)
         
         # Grade
         grader = SoccerGrader(league=league, position=position)
@@ -450,9 +632,14 @@ def main() -> None:
     
     # Analytics
     print("[Soccer Grader] Running analytics...")
-    league_edges = SoccerAnalytics.identify_league_edges(graded_df)
-    position_plays = SoccerAnalytics.identify_position_plays(graded_df)
-    recommendations = SoccerAnalytics.generate_recommendations(graded_df, position_plays)
+    if graded_df.empty:
+        league_edges = pd.DataFrame()
+        position_plays = pd.DataFrame()
+        recommendations = pd.DataFrame()
+    else:
+        league_edges = SoccerAnalytics.identify_league_edges(graded_df)
+        position_plays = SoccerAnalytics.identify_position_plays(graded_df)
+        recommendations = SoccerAnalytics.generate_recommendations(graded_df, position_plays)
     
     # Output
     print("[Soccer Grader] Saving results...")

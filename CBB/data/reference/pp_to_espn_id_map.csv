@@ -118,6 +118,10 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 276867,5177211,2294,alvaro folgueiras,IOWA,name_team,2026-03-16
 276868,5241364,2294,bennett stirtz,IOWA,name_team,2026-03-16
 276869,5176283,2294,cam manyawu,IOWA,name_team,2026-03-16
+277016,5106864,277,brenen lorient,WVU,name_team,2026-04-02
+277018,4897365,277,honor huff,WVU,name_team,2026-04-02
+277019,5177104,277,jasper floyd,WVU,name_team,2026-04-02
+277020,5107287,277,treysen eaglestaff,WVU,name_team,2026-04-02
 277427,5177301,2305,melvin council,KU,name_team,2026-03-16
 277595,5075625,2,keyshawn hall,AUB,name_team,2026-03-25
 277634,5311832,356,david mirkovic,ILL,name_team,2026-03-16
@@ -287,6 +291,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 296284,5313560,58,wes enis,USF,name_team,2026-03-15
 296782,4904928,2504,cory wells,PV,name_team,2026-03-16
 296783,5176727,2504,dontae horne,PV,name_team,2026-03-16
+297022,4702671,2287,boden skunberg,ILST,name_team,2026-04-02
 297294,5107204,62,harry rouhliadeff,HAW,name_team,2026-03-16
 297295,4701217,62,hunter erickson,HAW,name_team,2026-03-16
 297324,5196931,127,jordan scott,MSU,name_team,2026-03-16

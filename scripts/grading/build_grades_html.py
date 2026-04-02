@@ -1034,8 +1034,10 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
                nba_path: Path | None, cbb_path: Path | None,
                nhl_rows: list[dict] | None = None,
                soccer_rows: list[dict] | None = None,
+               mlb_rows: list[dict] | None = None,
                nhl_path: Path | None = None,
-               soccer_path: Path | None = None) -> str:
+               soccer_path: Path | None = None,
+               mlb_path: Path | None = None) -> str:
     try:
         d = datetime.strptime(date_str, "%Y-%m-%d")
         display_date = d.strftime("%b %d, %Y").upper()
@@ -1046,10 +1048,12 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
 
     nhl_rows    = nhl_rows    or []
     soccer_rows = soccer_rows or []
+    mlb_rows    = mlb_rows    or []
     nba_section    = build_sport_section(nba_rows,    "NBA",    "🏀") if nba_rows    else ""
     cbb_section    = build_sport_section(cbb_rows,    "CBB",    "🎓") if cbb_rows    else ""
     nhl_section    = build_sport_section(nhl_rows,    "NHL",    "🏒") if nhl_rows    else ""
     soccer_section = build_sport_section(soccer_rows, "Soccer", "⚽") if soccer_rows else ""
+    mlb_section    = build_sport_section(mlb_rows,    "MLB",    "MLB") if mlb_rows    else ""
     takeaways   = build_takeaways(nba_rows, cbb_rows)
 
     sources = []
@@ -1057,9 +1061,10 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
     if cbb_path:    sources.append(cbb_path.name)
     if nhl_path:    sources.append(nhl_path.name)
     if soccer_path: sources.append(soccer_path.name)
+    if mlb_path:    sources.append(mlb_path.name)
     source_line = " &nbsp;·&nbsp; ".join(h(s) for s in sources)
 
-    if not nba_section and not cbb_section and not nhl_section and not soccer_section:
+    if not nba_section and not cbb_section and not nhl_section and not soccer_section and not mlb_section:
         body_content = """<div style="text-align:center;padding:60px 20px;font-family:'Share Tech Mono',monospace">
           <div style="font-size:32px;margin-bottom:16px">📭</div>
           <div style="font-size:18px;color:rgba(255,255,255,0.55)">No graded data found for this date.</div>
@@ -1068,7 +1073,7 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
           </div>
         </div>""".replace("{date_str}", date_str)
     else:
-        body_content = nba_section + cbb_section + nhl_section + soccer_section + takeaways
+        body_content = nba_section + cbb_section + nhl_section + soccer_section + mlb_section + takeaways
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -1118,6 +1123,8 @@ def main() -> None:
                         help="Path to nhl_graded_*.xlsx")
     parser.add_argument("--soccer", type=str, default="",
                         help="Path to soccer_graded_*.xlsx")
+    parser.add_argument("--mlb", type=str, default="",
+                        help="Path to graded_mlb_*.xlsx")
     parser.add_argument("--out",  type=str, default="",
                         help="Output path or directory (default: next to this script)")
     parser.add_argument(
@@ -1184,11 +1191,22 @@ def main() -> None:
         if soccer_path:
             print(f"  Auto-detected Soccer: {soccer_path}")
 
-    if not nba_path and not cbb_path and not nhl_path and not soccer_path:
+    mlb_path: Path | None = None
+    if args.mlb:
+        mlb_path = Path(args.mlb).resolve()
+        if not mlb_path.exists():
+            print(f"  WARNING: MLB file not found: {mlb_path}")
+            mlb_path = None
+    else:
+        mlb_path = find_graded_file("mlb", date_str)
+        if mlb_path:
+            print(f"  Auto-detected MLB: {mlb_path}")
+
+    if not nba_path and not cbb_path and not nhl_path and not soccer_path and not mlb_path:
         if args.allow_empty:
             print("  NOTE: No graded files; emitting empty slate eval (--allow-empty).")
         else:
-            print("  ERROR: No graded files found. Specify --nba/--cbb/--nhl/--soccer.")
+            print("  ERROR: No graded files found. Specify --nba/--cbb/--nhl/--soccer/--mlb.")
             sys.exit(1)
 
     # Load rows
@@ -1215,11 +1233,17 @@ def main() -> None:
         soccer_rows = load_graded(soccer_path)
         print(f" {len(soccer_rows):,} rows")
 
+    mlb_rows: list[dict] = []
+    if mlb_path:
+        print(f"  Loading MLB: {mlb_path.name} ...", end="", flush=True)
+        mlb_rows = load_graded(mlb_path)
+        print(f" {len(mlb_rows):,} rows")
+
     # Build HTML
     print("  Building HTML ...", end="", flush=True)
     html = build_html(date_str, nba_rows, cbb_rows, nba_path, cbb_path,
-                      nhl_rows=nhl_rows, soccer_rows=soccer_rows,
-                      nhl_path=nhl_path, soccer_path=soccer_path)
+                      nhl_rows=nhl_rows, soccer_rows=soccer_rows, mlb_rows=mlb_rows,
+                      nhl_path=nhl_path, soccer_path=soccer_path, mlb_path=mlb_path)
     print(f" {len(html):,} bytes")
 
     # Resolve output path

@@ -198,12 +198,32 @@ $SoccerSlateFile = Resolve-FirstExisting @(
     (Join-Path $Root "Soccer\outputs\step8_soccer_direction_clean.xlsx"),
     (Join-Path $Root "Soccer\step8_soccer_direction_clean.xlsx")
 )
+
+# Build dated NBA1H/1Q slates from root workbook when archive missing (filters by Game Time == $Date).
+$ExtractNbaSlateScript = Join-Path $Root "scripts\extract_nba_slate_for_grade_date.py"
+$DatedNBA1HPath = Join-Path $DateDir "step8_nba1h_direction_clean_$Date.xlsx"
+$DatedNBA1QPath = Join-Path $DateDir "step8_nba1q_direction_clean_$Date.xlsx"
+$RootNBA1HPath = Join-Path $Root "NBA\step8_nba1h_direction_clean.xlsx"
+$RootNBA1QPath = Join-Path $Root "NBA\step8_nba1q_direction_clean.xlsx"
+if ((Test-Path $ExtractNbaSlateScript) -and (Test-Path $DateDir)) {
+    if (-not (Test-Path $DatedNBA1HPath) -and (Test-Path $RootNBA1HPath)) {
+        Run-Py "Extract NBA1H slate for $Date" $Root $ExtractNbaSlateScript @(
+            "--input", $RootNBA1HPath, "--output", $DatedNBA1HPath, "--grade-date", $Date
+        )
+    }
+    if (-not (Test-Path $DatedNBA1QPath) -and (Test-Path $RootNBA1QPath)) {
+        Run-Py "Extract NBA1Q slate for $Date" $Root $ExtractNbaSlateScript @(
+            "--input", $RootNBA1QPath, "--output", $DatedNBA1QPath, "--grade-date", $Date
+        )
+    }
+}
+
 $NBA1HSlateFile = Resolve-FirstExisting @(
-    (Join-Path $DateDir "step8_nba1h_direction_clean_$Date.xlsx"),
+    $DatedNBA1HPath,
     (Join-Path $Root "NBA\step8_nba1h_direction_clean.xlsx")
 )
 $NBA1QSlateFile = Resolve-FirstExisting @(
-    (Join-Path $DateDir "step8_nba1q_direction_clean_$Date.xlsx"),
+    $DatedNBA1QPath,
     (Join-Path $Root "NBA\step8_nba1q_direction_clean.xlsx")
 )
 $WCBBSlateFile = Resolve-FirstExisting @(
@@ -301,22 +321,33 @@ else {
 }
 
 $MLBActuals   = Join-Path $DateDir "actuals_mlb_$Date.csv"
-$MLBSlateFile = Resolve-FirstExisting @(
-    (Join-Path $DateDir "step8_mlb_direction_clean_$Date.xlsx"),
-    (Join-Path $Root "MLB\step8_mlb_direction_clean.xlsx")
-)
 $MLBGradedFile = Join-Path $DateDir "graded_mlb_$Date.xlsx"
-if ((Test-Path $MLBActuals) -and $MLBSlateFile -and (Test-Path $MLBSlateFile)) {
-    Run-Py "Grade MLB Slate" $Root "scripts\nhl_soccer_grader.py" @(
-        "--sport", "MLB",
+$MlbGradeDateScript = Join-Path $Root "scripts\mlb_grade_date.py"
+# mlb_grade_date.py fetches MLB Stats API actuals for slate players and runs nhl_soccer_grader (same as manual flow).
+if (Test-Path $MlbGradeDateScript) {
+    Run-Py "MLB fetch actuals + grade" $Root $MlbGradeDateScript @(
         "--date", $Date,
-        "--actuals", $MLBActuals,
-        "--slate", $MLBSlateFile,
         "--output-dir", $DateDir
     )
 }
 else {
-    Write-Host "Skipping MLB grading (missing slate/actuals)." -ForegroundColor Yellow
+    $MLBSlateFile = Resolve-FirstExisting @(
+        (Join-Path $DateDir "step8_mlb_direction_clean_$Date.xlsx"),
+        (Join-Path $Root "MLB\outputs\step8_mlb_direction_clean.xlsx"),
+        (Join-Path $Root "MLB\step8_mlb_direction_clean.xlsx")
+    )
+    if ((Test-Path $MLBActuals) -and $MLBSlateFile -and (Test-Path $MLBSlateFile)) {
+        Run-Py "Grade MLB Slate" $Root "scripts\nhl_soccer_grader.py" @(
+            "--sport", "MLB",
+            "--date", $Date,
+            "--actuals", $MLBActuals,
+            "--slate", $MLBSlateFile,
+            "--output-dir", $DateDir
+        )
+    }
+    else {
+        Write-Host "Skipping MLB grading (mlb_grade_date.py missing; no actuals/slate for fallback)." -ForegroundColor Yellow
+    }
 }
 
 if ($NBA1HSlateFile -and (Test-Path $NBA1HSlateFile) -and (Test-Path $SlateGraderScript) -and ((Test-Path $NBA1HActuals) -or (Test-Path $NBAActuals))) {
@@ -369,8 +400,9 @@ if (Test-Path $BuildGradesHtmlScript) {
     if (Test-Path $CBBGradedFile) { $HtmlArgs += @("--cbb", $CBBGradedFile) }
     if (Test-Path $NHLGradedFile) { $HtmlArgs += @("--nhl", $NHLGradedFile) }
     if (Test-Path $SoccerGradedFile) { $HtmlArgs += @("--soccer", $SoccerGradedFile) }
+    if (Test-Path $MLBGradedFile) { $HtmlArgs += @("--mlb", $MLBGradedFile) }
 
-    if (($HtmlArgs -contains "--nba") -or ($HtmlArgs -contains "--cbb") -or ($HtmlArgs -contains "--nhl") -or ($HtmlArgs -contains "--soccer")) {
+    if (($HtmlArgs -contains "--nba") -or ($HtmlArgs -contains "--cbb") -or ($HtmlArgs -contains "--nhl") -or ($HtmlArgs -contains "--soccer") -or ($HtmlArgs -contains "--mlb")) {
         Run-Py "Build Grades HTML" $Root $BuildGradesHtmlScript $HtmlArgs
     }
     else {

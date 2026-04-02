@@ -246,6 +246,7 @@ def load_nba(path: str) -> pd.DataFrame:
     "Opp": "opp_team",
     "Pos": "pos",
     "Tier": "tier",
+    "Game Time": "game_time",
     "Rank Score": "rank_score",
     "Edge": "edge",
     "Projection": "projection",
@@ -289,6 +290,48 @@ def load_nba(path: str) -> pd.DataFrame:
         + df["prop_type_norm"].apply(norm_prop_key)
     )
     return df
+
+
+def filter_nba_slate_by_grade_date(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
+    """
+    Keep only rows whose game date matches date_str (YYYY-MM-DD).
+    Stops NBA1H/NBA1Q/full NBA from grading the wrong slate when only
+    NBA\\step8_*_clean.xlsx (latest pipeline) is available.
+    """
+    if not date_str or not len(df):
+        return df
+    col = None
+    for c in ("game_time", "game_start", "fetched_at"):
+        if c in df.columns:
+            col = c
+            break
+    if not col:
+        return df
+    ts = pd.to_datetime(df[col], errors="coerce")
+    try:
+        target = pd.to_datetime(date_str).date()
+    except Exception:
+        return df
+    row_days = ts.dt.date
+    mask = row_days == target
+    if not mask.any():
+        if ts.notna().sum() == 0:
+            print(
+                f"  WARN: No parseable dates in '{col}'; cannot filter to {date_str} -- using all {len(df)} rows."
+            )
+            return df
+        print(
+            f"  WARN: Date filter {date_str} on '{col}': 0 rows match -- "
+            f"graded workbook will be empty (slate is for other day(s))."
+        )
+        print(
+            "  HINT: Use run_grader.ps1 -Date <game-day> matching Game Time in the slate, "
+            "or place that day's step8 workbook under outputs\\<date>\\ for extraction."
+        )
+        return df.loc[mask].copy()
+    print(f"  INFO: Slate date filter ({date_str}): kept {int(mask.sum())}/{len(df)} rows")
+    return df.loc[mask].copy()
+
 
 def load_cbb(path: str) -> pd.DataFrame:
     # CBB graded files sometimes have 'ALL', but sometimes just Sheet1
@@ -755,6 +798,8 @@ def main():
 
     print(f'Loading {args.sport} slate...')
     df=load_nba(args.slate) if args.sport=='NBA' else load_cbb(args.slate)
+    if args.sport == "NBA":
+        df = filter_nba_slate_by_grade_date(df, args.date)
     print(f'  {len(df)} props loaded')
 
     if args.actuals:
