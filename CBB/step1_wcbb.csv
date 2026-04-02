@@ -1,7 +1,7 @@
 proj_id,player_id,player,team,pp_team,pp_opp_team,pp_game_id,pos,stat_type,line,odds_type,start_time,league_id,duration,line_num
 11051317,224015,Sarah Strong,CONN,CONN,SCAR,148432,F,Pts+Rebs,29.5,demon,2026-04-03T19:00:00.000-04:00,176,Full,29.5
 11051799,227076,Joyce Edwards,SCAR,SCAR,CONN,148432,F,Pts+Rebs,29.5,demon,2026-04-03T19:00:00.000-04:00,176,Full,29.5
-11036007,224015,Sarah Strong,CONN,CONN,SCAR,148432,F,Pts+Rebs,24.5,standard,2026-04-03T19:00:00.000-04:00,176,Full,24.5
+11036007,224015,Sarah Strong,CONN,CONN,SCAR,148432,F,Pts+Rebs,25.5,standard,2026-04-03T19:00:00.000-04:00,176,Full,25.5
 11037376,227076,Joyce Edwards,SCAR,SCAR,CONN,148432,F,Points,24.5,demon,2026-04-03T19:00:00.000-04:00,176,Full,24.5
 11037395,224015,Sarah Strong,CONN,CONN,SCAR,148432,F,Points,24.5,demon,2026-04-03T19:00:00.000-04:00,176,Full,24.5
 11050985,232538,Azzi Fudd,CONN,CONN,SCAR,148432,G,Pts+Asts,24.5,demon,2026-04-03T19:00:00.000-04:00,176,Full,24.5

@@ -1,7 +1,7 @@
 proj_id,player_id,cbb_player_key,player,player_norm,team_abbr,opp_team_abbr,pp_team,pp_opp_team,pos,prop_type,prop_norm,pick_type,line,start_time,pp_game_id,league_id,team,stat_type,odds_type,duration,line_num
 11051317,224015,sarah strong|CONN,Sarah Strong,sarah strong,CONN,SCAR,CONN,SCAR,F,Pts+Rebs,pr,Demon,29.5,2026-04-03T19:00:00.000-04:00,148432,176,CONN,Pts+Rebs,demon,Full,29.5
 11051799,227076,joyce edwards|SCAR,Joyce Edwards,joyce edwards,SCAR,CONN,SCAR,CONN,F,Pts+Rebs,pr,Demon,29.5,2026-04-03T19:00:00.000-04:00,148432,176,SCAR,Pts+Rebs,demon,Full,29.5
-11036007,224015,sarah strong|CONN,Sarah Strong,sarah strong,CONN,SCAR,CONN,SCAR,F,Pts+Rebs,pr,Standard,24.5,2026-04-03T19:00:00.000-04:00,148432,176,CONN,Pts+Rebs,standard,Full,24.5
+11036007,224015,sarah strong|CONN,Sarah Strong,sarah strong,CONN,SCAR,CONN,SCAR,F,Pts+Rebs,pr,Standard,25.5,2026-04-03T19:00:00.000-04:00,148432,176,CONN,Pts+Rebs,standard,Full,25.5
 11037376,227076,joyce edwards|SCAR,Joyce Edwards,joyce edwards,SCAR,CONN,SCAR,CONN,F,Points,pts,Demon,24.5,2026-04-03T19:00:00.000-04:00,148432,176,SCAR,Points,demon,Full,24.5
 11037395,224015,sarah strong|CONN,Sarah Strong,sarah strong,CONN,SCAR,CONN,SCAR,F,Points,pts,Demon,24.5,2026-04-03T19:00:00.000-04:00,148432,176,CONN,Points,demon,Full,24.5
 11050985,232538,azzi fudd|CONN,Azzi Fudd,azzi fudd,CONN,SCAR,CONN,SCAR,G,Pts+Asts,pa,Demon,24.5,2026-04-03T19:00:00.000-04:00,148432,176,CONN,Pts+Asts,demon,Full,24.5
