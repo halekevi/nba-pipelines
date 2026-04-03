@@ -9,6 +9,7 @@ Usage:
   py -3 fetch_actuals.py --sport NBA   # defaults to yesterday
   py -3 fetch_actuals.py --sport NHL --date 2026-03-06
   py -3 fetch_actuals.py --sport Soccer --date 2026-03-06
+  py -3 fetch_actuals.py --sport WCBB --date 2026-04-02
 
 Fixes vs previous version:
   - CBB scoreboard now paginates through ALL pages (was capped at 200 events)
@@ -283,7 +284,7 @@ SOCCER_LEAGUES = [
     ("usa.nwsl", "NWSL"),
     ("arg.1",  "Argentina"),
     ("mex.1",  "Liga MX"),
-    ("sau.1",  "Saudi Pro League"),
+    # sau.1 (Saudi Pro League): ESPN scoreboard/summary often 400 — skip; no reliable boxscore.
     ("aus.1",  "A-League"),
     ("uefa.champions", "UCL"),
     ("uefa.europa",    "UEL"),
@@ -377,13 +378,13 @@ def fetch_events_for_date(sport_path, date_str, is_cbb=False):
 def fetch_sport(sport_path, date_str, window=2):
     from datetime import datetime as _dt, timedelta as _td
 
-    is_cbb    = 'college' in sport_path
+    is_college = "college" in sport_path
     target_dt = _dt.strptime(date_str, "%Y-%m-%d")
 
-    # CBB: optionally fetch a multi-day window (-window to +window) to catch games
+    # Men's CBB: optionally fetch a multi-day window (-window to +window) to catch games
     # ESPN indexes under adjacent dates. Pass window=0 for single-date fetch (faster,
     # recommended for same-day grading runs where the slate date is already known).
-    if is_cbb and window > 0:
+    if is_college and sport_path == "mens-college-basketball" and window > 0:
         fetch_dates = [
             (target_dt + _td(days=d)).strftime("%Y-%m-%d")
             for d in range(-window, window + 1)
@@ -392,14 +393,17 @@ def fetch_sport(sport_path, date_str, window=2):
               f"({fetch_dates[0]} → {fetch_dates[-1]})")
     else:
         fetch_dates = [date_str]
-        if is_cbb:
-            print(f"CBB mode: single-date fetch for {date_str} (--window 0)")
+        if is_college:
+            lab = "CBB" if sport_path == "mens-college-basketball" else "WCBB"
+            print(f"{lab} mode: single-date fetch for {date_str} (--window 0)")
 
     seen_ids = set()
     events   = []
     for d in fetch_dates:
         print(f"\nFetching scoreboard for {d} ...")
-        day_events = fetch_events_for_date(sport_path, d, is_cbb=is_cbb)
+        # Men's CBB needs per-conference scoreboard pages; women's uses main paginated board.
+        cbb_split = sport_path == "mens-college-basketball"
+        day_events = fetch_events_for_date(sport_path, d, is_cbb=cbb_split)
         new = 0
         for e in day_events:
             eid = str(e.get('id', '')).strip()
@@ -1074,7 +1078,7 @@ def fetch_soccer(date_str):
 
 def _export_injuries_sidecar(args) -> None:
     """Write ESPN injury report CSV beside actuals (NBA/CBB/NHL only)."""
-    if args.sport not in ("NBA", "CBB", "NHL"):
+    if args.sport not in ("NBA", "CBB", "WCBB", "NHL"):
         return
     try:
         from espn_injuries import injuries_csv_path_for_actuals, write_injuries_for_date
@@ -1091,7 +1095,7 @@ def _export_injuries_sidecar(args) -> None:
 # ── Main ─────────────────────────────────────────────────────────────────────
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--sport',  default='NBA', choices=['NBA', 'CBB', 'NHL', 'Soccer'])
+    ap.add_argument('--sport',  default='NBA', choices=['NBA', 'CBB', 'WCBB', 'NHL', 'Soccer'])
     ap.add_argument('--date',   default='', help='YYYY-MM-DD (default: yesterday)')
     ap.add_argument('--output', default='')
     ap.add_argument('--window', default=2, type=int,
@@ -1101,7 +1105,8 @@ def main():
     if not args.date:
         args.date = (date.today() - timedelta(days=1)).strftime('%Y-%m-%d')
     if not args.output:
-        args.output = f'actuals_{args.sport.lower()}_{args.date}.csv'
+        slug = "wcbb" if args.sport == "WCBB" else args.sport.lower()
+        args.output = f"actuals_{slug}_{args.date}.csv"
 
     print(f"\n=== {args.sport} actuals for {args.date} ===\n")
 
@@ -1111,7 +1116,12 @@ def main():
     elif args.sport == 'Soccer':
         df = fetch_soccer(args.date)
     else:
-        sport_path = 'nba' if args.sport == 'NBA' else 'mens-college-basketball'
+        if args.sport == "NBA":
+            sport_path = "nba"
+        elif args.sport == "CBB":
+            sport_path = "mens-college-basketball"
+        else:
+            sport_path = "womens-college-basketball" if args.sport == "WCBB" else "mens-college-basketball"
         df, empty_reason = fetch_sport(sport_path, args.date, window=args.window)
 
     if df.empty:
@@ -1149,6 +1159,10 @@ def main():
         print(f"  py -3 slate_grader.py --sport Soccer "
               f"--slate Soccer\\step8_soccer_direction_clean.xlsx "
               f"--actuals {args.output} --output soccer_graded_{args.date}.xlsx")
+    elif args.sport == "WCBB":
+        print(f"  py -3 slate_grader.py --sport CBB "
+              f"--slate CBB\\step6_ranked_wcbb.xlsx "
+              f"--actuals {args.output} --output graded_wcbb_{args.date}.xlsx")
     else:
         print(f"  py -3 grade_cbb_full_slate.py "
               f"--slate CBB\\step6_ranked_cbb.xlsx "

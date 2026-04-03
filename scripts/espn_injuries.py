@@ -190,6 +190,9 @@ def collect_injuries_raw(sport_literal: str, date_str: str) -> pd.DataFrame:
     elif lit == "CBB":
         sk = "mens-college-basketball"
         label = "CBB"
+    elif lit == "WCBB":
+        sk = "womens-college-basketball"
+        label = "WCBB"
     elif lit == "NHL":
         sk = "nhl"
         label = "NHL"
@@ -251,6 +254,7 @@ def injuries_csv_path_for_actuals(actuals_path: str | Path, sport_literal: str) 
     m = {
         "NBA": ("actuals_nba_", "injuries_nba_"),
         "CBB": ("actuals_cbb_", "injuries_cbb_"),
+        "WCBB": ("actuals_wcbb_", "injuries_wcbb_"),
         "NHL": ("actuals_nhl_", "injuries_nhl_"),
         "SOCCER": ("actuals_soccer_", "injuries_soccer_"),
     }[sport_literal.upper()]
@@ -317,9 +321,13 @@ def penalty_series_for_slate(
 def auto_injuries_csv_from_outputs(repo_root: Path, slate_date: str, sport_literal: str) -> Optional[Path]:
     """outputs/<date>/injuries_<league>_<date>.csv"""
     lit = sport_literal.upper()
-    fname = {"NBA": "injuries_nba", "CBB": "injuries_cbb", "NHL": "injuries_nhl", "SOCCER": "injuries_soccer"}.get(
-        lit
-    )
+    fname = {
+        "NBA": "injuries_nba",
+        "CBB": "injuries_cbb",
+        "WCBB": "injuries_wcbb",
+        "NHL": "injuries_nhl",
+        "SOCCER": "injuries_soccer",
+    }.get(lit)
     if not fname:
         return None
     cand = repo_root / "outputs" / slate_date / f"{fname}_{slate_date}.csv"

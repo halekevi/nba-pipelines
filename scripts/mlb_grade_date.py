@@ -58,6 +58,30 @@ def _tier_set(tiers_arg: str) -> Optional[set[str]]:
     return {t.strip().upper() for t in tiers_arg.split(",") if t.strip()}
 
 
+def _filter_mlb_slate_display_by_game_date(df: pd.DataFrame, d: str) -> pd.DataFrame:
+    """Drop slate rows whose Game Date is set and does not match the fetch/grade day."""
+    if "Game Date" not in df.columns:
+        return df
+    want = str(d).strip()[:10]
+    raw = pd.to_datetime(df["Game Date"], errors="coerce")
+    if not raw.notna().any():
+        return df
+    day = raw.dt.strftime("%Y-%m-%d")
+    ok = day == want
+    unk = raw.isna()
+    n0 = len(df)
+    out = df.loc[ok | unk].copy()
+    if len(out) == 0 and n0 > 0:
+        print(
+            f"  WARNING: Game Date filter {want} would remove all {n0} rows "
+            f"(slate has no rows for that day); using full slate"
+        )
+        return df
+    if len(out) < n0:
+        print(f"  [Slate] Game Date filter {want}: kept {len(out)}/{n0} rows")
+    return out
+
+
 def _filter_slate_display_df(df: pd.DataFrame, want: Optional[set[str]]) -> pd.DataFrame:
     """Filter clean-xlsx dataframe (Title Case columns) by Tier."""
     if not want:
@@ -308,6 +332,7 @@ def main() -> None:
         print(f"ERROR: sheet missing columns {miss}; have {list(slate_df.columns)}")
         sys.exit(1)
 
+    slate_df = _filter_mlb_slate_display_by_game_date(slate_df, d)
     slate_df = _filter_slate_display_df(slate_df, tier_want)
 
     act_df, _idm, no_id, no_game, bad_prop = _fetch_actuals_csv(

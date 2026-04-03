@@ -206,6 +206,12 @@ def main() -> None:
     print("[PropORACLE-step7_rank_props_mlb] Starting...")
     print(f"→ Loading: {args.input}")
     out = pd.read_csv(args.input, low_memory=False, encoding="utf-8-sig").fillna("")
+    # Per-row calendar date: PrizePicks CSV has start_time; some flows add game_date from MLB API.
+    _idx = out.index
+    _st = pd.to_datetime(out["start_time"], errors="coerce") if "start_time" in out.columns else pd.Series(pd.NaT, index=_idx)
+    _gd = pd.to_datetime(out["game_date"], errors="coerce") if "game_date" in out.columns else pd.Series(pd.NaT, index=_idx)
+    _merged = pd.to_datetime(_gd.where(_gd.notna(), _st), errors="coerce")
+    out["game_date"] = _merged.dt.strftime("%Y-%m-%d").fillna("")
     REPO_ROOT = Path(__file__).resolve().parents[2]
     _sd_usage = str(REPO_ROOT / "scripts")
     if _sd_usage not in sys.path:

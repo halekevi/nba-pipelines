@@ -147,6 +147,7 @@ MLB_SLATE_MAP = {
     "Bat Order":        "bat_order",
     "Pitcher Role":     "pitcher_role",
     "Game Time":        "game_time",
+    "Game Date":        "slate_game_date",
     "Void Reason":      "void_reason_slate",
 }
 
@@ -321,6 +322,27 @@ def load_slate(path: Path, sport: str, grade_date: str = None) -> pd.DataFrame:
                               f"all games on this slate are in the future")
                 except Exception as exc:
                     print(f"  [DateFilter] Could not parse '{game_time_col}': {exc} — skipping filter")
+
+    # ── MLB: keep rows for the grade calendar day when Game Date is populated ─
+    if sport == "MLB" and grade_date and "slate_game_date" in df.columns:
+        want = str(grade_date).strip()[:10]
+        raw = pd.to_datetime(df["slate_game_date"], errors="coerce")
+        if raw.notna().any():
+            day = raw.dt.strftime("%Y-%m-%d")
+            ok = day == want
+            unk = raw.isna()
+            n0 = len(df)
+            sub = df.loc[ok | unk].copy()
+            n1 = len(sub)
+            if n1 == 0 and n0 > 0:
+                print(
+                    f"  [MLB] WARNING: Date filter {want} would remove all {n0} rows; "
+                    f"keeping full slate (no rows match that calendar day)"
+                )
+            else:
+                df = sub
+                if n1 < n0:
+                    print(f"  [MLB] Date filter {want}: kept {n1}/{n0} slate rows (Game Date)")
 
     return df
 

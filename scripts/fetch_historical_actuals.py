@@ -46,6 +46,16 @@ SESSION.headers.update(
     }
 )
 
+_HTTP_CACHE_LOCK = threading.Lock()
+_NOT_FOUND_REQUESTS: set[tuple[str, tuple[tuple[str, str], ...]]] = set()
+
+# Soccer-specific aliases seen in slate sources that differ from ESPN display names.
+SOCCER_NAME_ALIASES = {
+    "virgil dijk": "virgil van dijk",
+}
+
+_SOCCER_PARTICLES = {"da", "de", "del", "della", "di", "dos", "du", "la", "le", "van", "von"}
+
 
 def _now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -90,15 +100,23 @@ def espn_season_year_param(season_code: int) -> int:
 
 
 def http_get(url: str, params: dict[str, Any] | None = None, timeout: float = 45.0) -> requests.Response | None:
+    params = params or {}
+    req_key = (url, tuple(sorted((str(k), str(v)) for k, v in params.items())))
+    with _HTTP_CACHE_LOCK:
+        if req_key in _NOT_FOUND_REQUESTS:
+            return None
     try:
-        r = SESSION.get(url, params=params or {}, timeout=timeout)
+        r = SESSION.get(url, params=params, timeout=timeout)
         if r.status_code in (429, 500, 502, 503, 504):
             time.sleep(5.0)
-            r = SESSION.get(url, params=params or {}, timeout=timeout)
+            r = SESSION.get(url, params=params, timeout=timeout)
             if r.status_code in (429, 500, 502, 503, 504):
                 _log_error(f"HTTP {r.status_code} after retry: {url} params={params}")
                 return None
         if not r.ok:
+            if r.status_code == 404:
+                with _HTTP_CACHE_LOCK:
+                    _NOT_FOUND_REQUESTS.add(req_key)
             _log_error(f"HTTP {r.status_code}: {url} params={params}")
             return None
         return r
@@ -547,6 +565,13 @@ def _score_name_match(target_norm: str, candidate_norm: str) -> float:
     return 0.0
 
 
+def _soccer_canonical_name(name: str) -> str:
+    n = normalize_player_key(name)
+    n = SOCCER_NAME_ALIASES.get(n, n)
+    toks = [t for t in n.split() if t and t not in _SOCCER_PARTICLES]
+    return " ".join(toks).strip()
+
+
 def search_site_espn_basketball_id(player_name: str, sport: str) -> tuple[str | None, str | None]:
     """
     Resolve ESPN athlete id via site.api.espn.com search.
@@ -631,7 +656,7 @@ def search_soccer_espn_id(player_name: str) -> tuple[str | None, str | None]:
         data = r.json()
     except json.JSONDecodeError:
         return None, None
-    target = normalize_player_key(player_name)
+    target = _soccer_canonical_name(player_name)
     best_id, best_name = None, None
     best = 0.0
     for it in data.get("items") or []:
@@ -643,11 +668,15 @@ def search_soccer_espn_id(player_name: str) -> tuple[str | None, str | None]:
         pid = str(it.get("id") or "")
         if not full or not pid:
             continue
-        nk = normalize_player_key(full)
-        sc = 1.0 if nk == target else 0.8 if target in nk or nk in target else 0.0
+        nk = _soccer_canonical_name(full)
+        sc = _score_name_match(target, nk)
+        if target and nk and target.split() and nk.split():
+            # Small boost when last names match exactly.
+            if target.split()[-1] == nk.split()[-1]:
+                sc += 0.08
         if sc > best:
             best, best_id, best_name = sc, pid, full
-    if best < 0.5:
+    if best < 0.45:
         return None, None
     return best_id, best_name
 

@@ -149,12 +149,23 @@ if (-not $EffectiveOddsKey -and $env:ODDS_API_KEY) {
 # STEP A — Grader for yesterday
 # =============================================================================
 if (-not $SkipGrader) {
-    $gradedMarker = Join-Path $Root "outputs\$Yesterday\graded_nba_$Yesterday.xlsx"
-    if (Test-Path $gradedMarker) {
-        Write-Host "Grader already run for $Yesterday — skipping" -ForegroundColor DarkYellow
-        Write-Log "STEP A - Grader ($Yesterday): SKIPPED (graded_nba exists)"
+    $gradedExpected = @(
+        (Join-Path $Root "outputs\$Yesterday\graded_nba_$Yesterday.xlsx"),
+        (Join-Path $Root "outputs\$Yesterday\graded_cbb_$Yesterday.xlsx"),
+        (Join-Path $Root "outputs\$Yesterday\graded_nhl_$Yesterday.xlsx"),
+        (Join-Path $Root "outputs\$Yesterday\graded_soccer_$Yesterday.xlsx"),
+        (Join-Path $Root "outputs\$Yesterday\graded_mlb_$Yesterday.xlsx")
+    )
+    $missingGraded = @($gradedExpected | Where-Object { -not (Test-Path $_) })
+    if ($missingGraded.Count -eq 0) {
+        Write-Host "Grader outputs already present for $Yesterday — skipping" -ForegroundColor DarkYellow
+        Write-Log "STEP A - Grader ($Yesterday): SKIPPED (all graded outputs present)"
     }
     else {
+        Write-Host "Grader rerun for $Yesterday (missing: $($missingGraded.Count))" -ForegroundColor DarkYellow
+        foreach ($m in $missingGraded) {
+            Write-Host "  missing -> $m" -ForegroundColor DarkYellow
+        }
         Write-Log "STEP A - Grader ($Yesterday): START"
         $graderScript = Join-Path $Root "scripts\run_grader.ps1"
         try {

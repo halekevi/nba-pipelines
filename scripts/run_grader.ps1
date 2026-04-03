@@ -11,6 +11,7 @@ $NBA1HActuals = Join-Path $DateDir "actuals_nba1h_$Date.csv"
 $NBA1QActuals = Join-Path $DateDir "actuals_nba1q_$Date.csv"
 $NBA2QActuals = Join-Path $DateDir "actuals_nba2q_$Date.csv"
 $CBBActuals  = Join-Path $DateDir "actuals_cbb_$Date.csv"
+$WCBBActuals = Join-Path $DateDir "actuals_wcbb_$Date.csv"
 $NHLActuals  = Join-Path $DateDir "actuals_nhl_$Date.csv"
 $SoccerActuals  = Join-Path $DateDir "actuals_soccer_$Date.csv"
 $FetchActualsScript = Join-Path $Root "scripts\fetch_actuals.py"
@@ -127,6 +128,13 @@ if (Test-Path $FetchActualsScript) {
         "--sport", "CBB",
         "--date", $Date,
         "--output", $CBBActuals,
+        "--window", "0"
+    )
+
+    Run-Py "Fetch WCBB Actuals" $Root $FetchActualsScript @(
+        "--sport", "WCBB",
+        "--date", $Date,
+        "--output", $WCBBActuals,
         "--window", "0"
     )
 
@@ -378,14 +386,20 @@ else {
     Write-Host "Skipping NBA1Q grading (missing slate/actuals/grader)." -ForegroundColor Yellow
 }
 
-if ((Test-Path $CBBActuals) -and $WCBBSlateFile -and (Test-Path $WCBBSlateFile) -and (Test-Path $SlateGraderScript)) {
-    Run-Py "Grade WCBB Slate" $Root $SlateGraderScript @(
-        "--sport", "CBB",
-        "--slate", $WCBBSlateFile,
-        "--actuals", $CBBActuals,
-        "--output", $WCBBGradedFile,
-        "--date", $Date
-    )
+if ($WCBBSlateFile -and (Test-Path $WCBBSlateFile) -and (Test-Path $SlateGraderScript)) {
+    $WCBBActualsForGrade = if (Test-Path $WCBBActuals) { $WCBBActuals } elseif (Test-Path $CBBActuals) { $CBBActuals } else { $null }
+    if ($WCBBActualsForGrade) {
+        Run-Py "Grade WCBB Slate" $Root $SlateGraderScript @(
+            "--sport", "CBB",
+            "--slate", $WCBBSlateFile,
+            "--actuals", $WCBBActualsForGrade,
+            "--output", $WCBBGradedFile,
+            "--date", $Date
+        )
+    }
+    else {
+        Write-Host "Skipping WCBB grading (no actuals_wcbb or actuals_cbb CSV)." -ForegroundColor Yellow
+    }
 }
 else {
     Write-Host "Skipping WCBB grading (missing slate/actuals/grader)." -ForegroundColor Yellow

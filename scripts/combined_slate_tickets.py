@@ -10,7 +10,8 @@ Outputs:
 
 Sheets: SUMMARY, Full Slate (reordered + STRONG/LEAN/RISK + pace beside Def Tier), NBA Slate, CBB Slate,
         2–6-Leg tickets per sport (Goblin / Standard / Std+Gob mix),
-        cross-sport Standard / Std+Gob / Goblin mixes
+        cross-sport Standard / Std+Gob / Goblin mixes,
+        plus up to three cross-pipeline slips (max 6 legs each): Standard-only, Goblin-only, Std+Gob mix
 
 NEW (Web):
 - Adds player headshot thumbnails when an ID is available:
@@ -120,6 +121,26 @@ PAYOUT = {
     5: {"power": 20.0, "flex": 10.0},
     6: {"power": 37.5, "flex": 25.0},
 }
+
+
+# Cross-pipeline showcase slips: PrizePicks caps at 6 legs.
+CROSS_PIPELINE_MAX_LEGS = 6
+
+
+def power_flex_payout_for_n(n_legs: int) -> tuple[float, float]:
+    """PrizePicks-style multipliers; extrapolate beyond 6 legs conservatively."""
+    n = int(n_legs)
+    if n < 2:
+        return 0.0, 0.0
+    if n in PAYOUT:
+        p = PAYOUT[n]
+        return float(p["power"]), float(p["flex"])
+    base_n = max(PAYOUT.keys())
+    base = PAYOUT[base_n]
+    extra = max(0, n - base_n)
+    power = float(base["power"]) * (1.10**extra)
+    flex = float(base["flex"]) * (1.08**extra)
+    return round(power, 2), round(flex, 2)
 
 # Props excluded from ticket pools based on empirical hit rates below break-even
 # Blocked Shots NBA: 41.9% overall, too low for any ticket
@@ -3868,6 +3889,154 @@ def build_final_web_ticket_groups(
     return groups
 
 
+def _filter_pool_cross_pick_mode(pool_df: pd.DataFrame | None, sport_label: str, mode: str) -> pd.DataFrame:
+    """
+    mode: standard | goblin | mix (Standard+Goblin only; Demon excluded when pick_type present).
+    NHL/Soccer pools have no Goblin split — all rows count as Standard for standard/mix; goblin-only skips them.
+    """
+    if pool_df is None or len(pool_df) == 0:
+        return pd.DataFrame()
+    df = pool_df.copy()
+    su = str(sport_label).upper()
+    skip_pt = su in ("NHL", "SOCCER", "SOC")
+    if "pick_type" in df.columns and not skip_pt:
+        pt = df["pick_type"].astype(str).str.strip().str.lower()
+        if mode == "standard":
+            df = df[pt == "standard"].copy()
+        elif mode == "goblin":
+            df = df[pt == "goblin"].copy()
+        elif mode == "mix":
+            df = df[pt.isin(["standard", "goblin"])].copy()
+    elif mode == "goblin" and skip_pt:
+        return pd.DataFrame()
+    return df
+
+
+def _pick_top_row_from_eligible_pool(pool_df: pd.DataFrame) -> dict | None:
+    """
+    Best single prop in a sport's eligible pool for cross-pipeline ticket.
+    Uses rank_score, else blended_score, else |ml_prob-0.5|, else confidence_score.
+    Applies global TICKET_EXCLUDED_PROPS + fantasy ban (same family as structured tickets).
+    """
+    if pool_df is None or pool_df.empty:
+        return None
+    df = pool_df.copy()
+    if "prop_type" in df.columns:
+        pn = df["prop_type"].apply(_norm_prop_label)
+        df = df[~pn.isin(TICKET_EXCLUDED_PROPS) & ~pn.str.contains("fantasy", na=False)].copy()
+    if df.empty:
+        return None
+    work = df.copy()
+    if "rank_score" in work.columns and pd.to_numeric(work["rank_score"], errors="coerce").notna().any():
+        work["_k"] = pd.to_numeric(work["rank_score"], errors="coerce")
+    elif "blended_score" in work.columns and pd.to_numeric(work["blended_score"], errors="coerce").notna().any():
+        work["_k"] = pd.to_numeric(work["blended_score"], errors="coerce")
+    elif "ml_prob" in work.columns and pd.to_numeric(work["ml_prob"], errors="coerce").notna().any():
+        work["_k"] = (pd.to_numeric(work["ml_prob"], errors="coerce") - 0.5).abs()
+    elif "confidence_score" in work.columns and pd.to_numeric(
+        work["confidence_score"], errors="coerce"
+    ).notna().any():
+        work["_k"] = pd.to_numeric(work["confidence_score"], errors="coerce")
+    else:
+        return work.iloc[0].to_dict()
+    work["_hr"] = pd.to_numeric(work.get("hit_rate"), errors="coerce").fillna(0)
+    work = work.sort_values(["_k", "_hr"], ascending=[False, False], na_position="last")
+    return work.iloc[0].to_dict()
+
+
+def _collect_cross_pipeline_rows(
+    sport_pools: list[tuple[str, pd.DataFrame | None]],
+    mode: str,
+    max_legs: int,
+) -> list[dict]:
+    """Up to max_legs legs, one per pipeline in order, after pick-mode filter."""
+    rows: list[dict] = []
+    for sport_label, pool_df in sport_pools:
+        if len(rows) >= max_legs:
+            break
+        sub = _filter_pool_cross_pick_mode(pool_df, sport_label, mode)
+        picked = _pick_top_row_from_eligible_pool(sub)
+        if not picked:
+            continue
+        d = dict(picked)
+        d["sport"] = str(sport_label).upper()
+        rows.append(d)
+    return rows
+
+
+def _finalize_cross_pipeline_ticket(rows: list[dict], ticket_type: str) -> dict | None:
+    """Build ticket dict from leg rows (min 2 legs). No extra EV gate."""
+    if len(rows) < 2:
+        return None
+    n_legs = len(rows)
+    leg_probs: list = []
+    prob_srcs: list[str] = []
+    hrs: list[float] = []
+    rss: list[float] = []
+    for r in rows:
+        _p, _src = _resolve_leg_prob(pd.Series(r))
+        leg_probs.append((_p, _src))
+        prob_srcs.append(_src)
+        hrs.append(float(r.get("hit_rate", 0.5) or 0.5))
+        rss.append(float(r.get("rank_score", 0.0) or 0.0))
+    ep = win_prob(leg_probs, n_legs)
+    ep *= _correlation_penalty(rows)
+    pwr, flx = power_flex_payout_for_n(n_legs)
+    adj_power = calc_adjusted_payout(pwr, rows)
+    adj_flex = calc_adjusted_payout(flx, rows)
+
+    tiers = [str(r.get("tier", "")).upper() for r in rows]
+    defs = [_norm_prop_label(r.get("def_tier", r.get("opp_def_tier", ""))) for r in rows]
+    if all(t in {"A", "B"} for t in tiers) and all(d in {"avg", "weak"} for d in defs):
+        expected_win_rate = 0.78
+    else:
+        expected_win_rate = 0.68
+
+    return {
+        "key": frozenset(
+            (str(r.get("player", "")) + "|" + str(r.get("prop_type", ""))).strip() for r in rows
+        ),
+        "rows": rows,
+        "avg_hit_rate": float(np.mean(hrs)) if hrs else 0.0,
+        "avg_rank_score": float(np.mean(rss)) if rss else 0.0,
+        "est_win_prob": ep,
+        "power_payout": adj_power,
+        "flex_payout": adj_flex,
+        "base_power_payout": pwr,
+        "payout_multiplier": round(adj_power / pwr, 4) if pwr else 1.0,
+        "ev_power": round(ep * adj_power, 4),
+        "kelly_units": round(kelly_fraction(ep, adj_power, fraction=0.25), 2),
+        "n_legs": n_legs,
+        "expected_win_rate": expected_win_rate,
+        "ticket_type": ticket_type,
+        "sport": "MIX",
+        "leg_prob_sources": ",".join(sorted(set(prob_srcs))),
+    }
+
+
+def build_cross_pipeline_ticket_bundle(
+    sport_pools: list[tuple[str, pd.DataFrame | None]],
+    max_legs: int = CROSS_PIPELINE_MAX_LEGS,
+) -> list[tuple[str, dict]]:
+    """
+    Up to three tickets (each ≤ max_legs, default 6):
+      Standard-only, Goblin-only, Std+Gob mix — best eligible prop per pipeline.
+    Returns [(excel_sheet_name, ticket_dict), ...].
+    """
+    specs = [
+        ("standard", "Cross-Pipeline Standard", "Cross Std All Pipe"),
+        ("goblin", "Cross-Pipeline Goblin", "Cross Gob All Pipe"),
+        ("mix", "Cross-Pipeline Mix", "Cross Mix All Pipe"),
+    ]
+    out: list[tuple[str, dict]] = []
+    for mode, ttype, sheet in specs:
+        legs = _collect_cross_pipeline_rows(sport_pools, mode, max_legs)
+        tix = _finalize_cross_pipeline_ticket(legs, ttype)
+        if tix is not None:
+            out.append((sheet[:31], tix))
+    return out
+
+
 # ── Write slate sheet ──────────────────────────────────────────────────────────
 SLATE_COLS = [
     "sport",
@@ -4346,6 +4515,16 @@ def write_ticket_sheet(wb, tickets, sheet_name, bg_hdr, label=""):
                 bg = C["cbb"]
             elif sp == "MLB":
                 bg = C["mlb"]
+            elif sp == "NHL":
+                bg = C["nhl"]
+            elif sp in ("SOCCER", "SOC"):
+                bg = C["soccer"]
+            elif sp == "WCBB":
+                bg = C["wcbb"]
+            elif sp == "NBA1Q":
+                bg = C["nba1q"]
+            elif sp == "NBA1H":
+                bg = C["nba1h"]
 
             def gv(field):
                 return row.get(field, "")
@@ -5108,6 +5287,55 @@ def main():
     if nba1h is not None and len(nba1h) > 0:
         add_structured_sport_tickets(
             pool(nba1h), "NBA1H", C["hdr_nba1h"], "NBA1H", min_leg_hit_rate=structured_min_leg_hr
+        )
+
+    _cross_pools = [
+        ("NBA", nba_pool),
+        ("CBB", cbb_pool),
+        ("WCBB", pool(wcbb) if wcbb is not None and len(wcbb) > 0 else None),
+        ("NHL", pool(nhl) if nhl is not None and len(nhl) > 0 else None),
+        ("Soccer", pool(soccer) if soccer is not None and len(soccer) > 0 else None),
+        ("MLB", mlb_pool),
+        ("NBA1Q", pool(nba1q) if nba1q is not None and len(nba1q) > 0 else None),
+        ("NBA1H", pool(nba1h) if nba1h is not None and len(nba1h) > 0 else None),
+    ]
+    cross_bundle = build_cross_pipeline_ticket_bundle(_cross_pools, max_legs=CROSS_PIPELINE_MAX_LEGS)
+    mix_keys = ("cross_pipeline_standard", "cross_pipeline_goblin", "cross_pipeline_mix")
+    generated_tickets.setdefault("MIX", {})
+    for k in mix_keys:
+        generated_tickets["MIX"][k] = None
+
+    def _mix_key_for_cross_ticket(ticket: dict) -> str:
+        ttype = str(ticket.get("ticket_type", ""))
+        if ttype == "Cross-Pipeline Standard":
+            return "cross_pipeline_standard"
+        if ttype == "Cross-Pipeline Goblin":
+            return "cross_pipeline_goblin"
+        return "cross_pipeline_mix"
+
+    if cross_bundle:
+        for xs, cross_ticket in cross_bundle:
+            write_ticket_sheet(
+                wb,
+                [cross_ticket],
+                xs,
+                C["hdr_mix"],
+                label=str(cross_ticket.get("ticket_type", "Cross-Pipeline")),
+            )
+            all_ticket_groups.append((xs, [cross_ticket], None))
+            print(
+                f"  {xs}: 1 ticket ({cross_ticket['n_legs']} legs, max {CROSS_PIPELINE_MAX_LEGS})"
+            )
+            gk = _mix_key_for_cross_ticket(cross_ticket)
+            generated_tickets["MIX"][gk] = {
+                "legs": [
+                    f"{x.get('sport', '')}:{x.get('player', '')} {x.get('prop_type', '')}"
+                    for x in cross_ticket.get("rows", [])
+                ]
+            }
+    else:
+        print(
+            "  WARNING: Cross-pipeline tickets skipped (need ≥2 pipelines with eligible props per slip)."
         )
 
     print("Writing slate sheets...")

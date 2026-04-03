@@ -51,6 +51,18 @@ def thin_border():
     return Border(left=s, right=s, top=s, bottom=s)
 
 
+def _row_game_datetimes(df: pd.DataFrame) -> pd.Series:
+    """Datetime per row for MLB slate date filtering (prefer game_date, else start_time)."""
+    idx = df.index
+    gd = pd.Series(pd.NaT, index=idx)
+    if "game_date" in df.columns:
+        gd = pd.to_datetime(df["game_date"], errors="coerce")
+    if "start_time" in df.columns:
+        st = pd.to_datetime(df["start_time"], errors="coerce")
+        gd = gd.where(gd.notna(), st)
+    return gd
+
+
 def write_sheet(wb, name: str, data: pd.DataFrame, tab_color: str = HEADER_COLOR) -> None:
     ws = wb.create_sheet(name)
     ws.sheet_properties.tabColor = tab_color
@@ -94,7 +106,7 @@ def write_sheet(wb, name: str, data: pd.DataFrame, tab_color: str = HEADER_COLOR
 
     col_widths = {
         "Tier": 6, "Rank Score": 10, "Player": 22, "Pos": 6, "Player Type": 10,
-        "Team": 10, "Opp": 10, "Game Time": 10,
+        "Team": 10, "Opp": 10, "Game Time": 10, "Game Date": 11,
         "Prop": 20, "Pick Type": 10, "Line": 7,
         "Direction": 9, "Edge": 7, "Projection": 10,
         "ML Prob": 9, "Edge Score": 10, "Blended Score": 12,
@@ -115,10 +127,13 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     df2 = df.copy()
     df2 = df2.where(pd.notna(df2), None)
     df2["game_time"] = pd.to_datetime(df2.get("start_time", ""), errors="coerce").dt.strftime("%-I:%M %p")
+    # Calendar date for same-day MLB grading (avoids grading full multi-day slate vs one day's games).
+    _gd = _row_game_datetimes(df2)
+    df2["slate_game_date"] = _gd.dt.strftime("%Y-%m-%d").where(_gd.notna(), "").fillna("")
 
     keep = [
         "tier", "rank_score",
-        "player", "pos", "player_type_norm", "team", "opp_team", "game_time",
+        "player", "pos", "player_type_norm", "team", "opp_team", "game_time", "slate_game_date",
         "prop_type", "pick_type", "line",
         "final_bet_direction",
         "edge", "projection",
@@ -162,6 +177,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "tier": "Tier", "rank_score": "Rank Score",
         "player": "Player", "pos": "Pos", "player_type_norm": "Player Type",
         "team": "Team", "opp_team": "Opp", "game_time": "Game Time",
+        "slate_game_date": "Game Date",
         "prop_type": "Prop", "pick_type": "Pick Type", "line": "Line",
         "final_bet_direction": "Direction",
         "edge": "Edge", "projection": "Projection",
@@ -197,7 +213,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         if len(hitters):  write_sheet(wb, "Hitters",  hitters,  HITTER_TAB_COLOR)
 
     wb.save(xlsx_path)
-    print(f"📊 Clean XLSX saved → {xlsx_path}")
+    print(f"Clean XLSX saved -> {xlsx_path}")
 
 
 def main() -> None:
@@ -208,10 +224,10 @@ def main() -> None:
     ap.add_argument("--xlsx",   default="MLB/scripts/step8_mlb_direction_clean.xlsx")
     args = ap.parse_args()
 
-    print(f"→ Loading: {args.input} (sheet={args.sheet})")
+    print(f"Loading: {args.input} (sheet={args.sheet})")
     df  = pd.read_excel(args.input, sheet_name=args.sheet, dtype=str).fillna("")
     if df.empty:
-        raise SystemExit("❌ [PropOracle-MLB-S8] Empty input from step7; aborting.")
+        raise SystemExit("ERROR [PropOracle-MLB-S8] Empty input from step7; aborting.")
     out = df.copy()
 
     if "edge" not in out.columns:
@@ -236,10 +252,10 @@ def main() -> None:
     out["final_dir_reason"]    = reason
 
     if out.empty:
-        raise SystemExit("❌ [PropOracle-MLB-S8] Empty output after direction step; aborting.")
+        raise SystemExit("ERROR [PropOracle-MLB-S8] Empty output after direction step; aborting.")
 
     out.to_csv(args.output, index=False, encoding="utf-8-sig")
-    print(f"✅ Saved → {args.output}")
+    print(f"Saved -> {args.output}")
     print("final_bet_direction:", pd.Series(final_dir).value_counts().to_dict())
     if "tier" in out.columns:
         print("tier:", out["tier"].value_counts().to_dict())
