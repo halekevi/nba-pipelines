@@ -98,6 +98,8 @@ ui_runner/static/Logo Design Request_files/
 ui_runner/static/Logo Design Request2_files/
 
 # Docs/temp/patch leftovers
+*.bak
+*.BROKEN_BACKUP
 
 git_push_log.txt
 patch_replacement.txt
