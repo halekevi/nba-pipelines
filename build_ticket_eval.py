@@ -679,6 +679,29 @@ def _leg_grade(
     return "UNGRADED"
 
 
+def _ticket_is_flex_play_structure(group_name: str, n_legs: int) -> bool:
+    """PrizePicks-style flex slips (3+ legs): one miss can still cash at the flex multiplier."""
+    if n_legs < 3:
+        return False
+    return "flex" in str(group_name or "").strip().lower()
+
+
+def _ticket_pays_money(group_name: str, leg_grades: list[str]) -> bool:
+    """
+    Cash outcome: power = every leg HIT; flex (sheet title contains 'Flex', 3+ legs) = at most one
+    MISS and at least n-1 HITs (e.g. 2/3 or 3/4). VOID legs are neither HIT nor MISS.
+    Caller must ensure no UNGRADED legs.
+    """
+    if not leg_grades or any(g == "UNGRADED" for g in leg_grades):
+        return False
+    n = len(leg_grades)
+    h = sum(1 for g in leg_grades if g == "HIT")
+    m = sum(1 for g in leg_grades if g == "MISS")
+    if _ticket_is_flex_play_structure(group_name, n):
+        return m <= 1 and h >= n - 1
+    return all(g == "HIT" for g in leg_grades)
+
+
 def _pick_type_tier(pick_type: str) -> str:
     p = (pick_type or "").strip().lower()
     if "goblin" in p:
@@ -1709,8 +1732,10 @@ def _build_html(
     manual_props_json = manual_props_json.replace("</", "<\\/")
 
     perfect = 0
-    with_misses = 0
+    money_wins = 0
+    money_losses = 0
     for t in tickets_flat:
+        gname = str(t.get("_group_name") or "Group")
         legs = t.get("legs") or []
         gs = []
         for leg in legs:
@@ -1730,11 +1755,17 @@ def _build_html(
             continue
         if all(x == "HIT" for x in gs):
             perfect += 1
-        if any(x == "MISS" for x in gs):
-            with_misses += 1
+        if any(x == "UNGRADED" for x in gs):
+            continue
+        if all(x == "VOID" for x in gs):
+            continue
+        if _ticket_pays_money(gname, gs):
+            money_wins += 1
+        else:
+            money_losses += 1
 
-    ticket_decided = perfect + with_misses
-    ticket_pct = (100.0 * perfect / ticket_decided) if ticket_decided else 0.0
+    ticket_decided = money_wins + money_losses
+    ticket_pct = (100.0 * money_wins / ticket_decided) if ticket_decided else 0.0
 
     # ── HTML
     esc = html.escape
@@ -1874,14 +1905,17 @@ def _build_html(
         f'<div class="sum-item"><div class="sum-val void">{voids}</div><div class="sum-lab">VOID/PUSH</div></div>',
         f'<div class="sum-item"><div class="sum-val pend">{ungraded}</div><div class="sum-lab">UNGRADED</div></div>',
         f'<div class="sum-item"><div class="sum-val">{perfect}</div><div class="sum-lab">PERFECT TICKETS</div></div>',
-        f'<div class="sum-item"><div class="sum-val">{with_misses}</div><div class="sum-lab">TIX W/ MISS</div></div>',
+        f'<div class="sum-item"><div class="sum-val green">{money_wins}</div><div class="sum-lab">PAID TIX</div></div>',
+        f'<div class="sum-item"><div class="sum-val red">{money_losses}</div><div class="sum-lab">NO PAYOUT</div></div>',
         f'<div class="sum-item"><div class="sum-val sum-val-sm">{total_legs}</div><div class="sum-lab">TOTAL LEGS</div></div>',
         "</div></div>",
         '<div class="wrap">',
         f'<p class="slate-kicker">SLATE DATE · {json_date}</p>',
         '<p class="meta-muted" style="margin:6px 0 14px;line-height:1.5">'
         "Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · "
-        f"<strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/{json_date}/graded_*.xlsx</code>."
+        f"<strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/{json_date}/graded_*.xlsx</code>. "
+        "<strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). "
+        "Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss."
         "</p>",
     ]
 

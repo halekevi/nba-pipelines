@@ -27,6 +27,8 @@ Outputs:
 - Analytics tabs per mode (ROI by sheet/legs/sports/pick_types)
 - ML_* (optional): RandomForest leg hit model, feature importance, filter simulation
   (exploratory — trained on the same graded slate; use for patterns, not live edge claims)
+- ML_CALIBRATION sheet: buckets slate ml_prob vs realized hit rate (find miscalibration before retraining).
+- --export-graded-legs-csv: append-friendly training export (stack slates, retrain step8 / leg ML offline).
 
 Usage (PowerShell):
   py -3.14 .\\combined_ticket_grader_UPDATED.py `
@@ -844,8 +846,9 @@ def build_analysis_insights(
             "topic": "How to use ML tabs",
             "detail": (
                 "ML_* uses RandomForest on graded legs (HIT vs MISS) for sport/prop/direction/pick mix. "
-                "ML_FILTER_SIM_* compares ROI if you only kept tickets with above-median model leg strength — "
-                "same-day only; combine with historical exports before changing ticket rules."
+                "ML_CALIBRATION compares bucketed ml_prob to realized hit rate (fix over/under-confidence in step8). "
+                "ML_FILTER_SIM_* compares ROI if you only kept tickets with above-median RF leg strength — "
+                "same-day only; stack --export-graded-legs-csv across dates before changing production rules."
             ),
         }
     )
@@ -944,6 +947,60 @@ def apply_graded_workbook_styles(wb) -> None:
             ws.column_dimensions["B"].width = 90
 
 
+# --- ML training export (feedback loop) --------------------------------------
+
+def export_graded_legs_for_ml_training(
+    legs_df: pd.DataFrame,
+    out_csv: Path,
+    *,
+    grade_date: str,
+    source_workbook: str,
+    append: bool = False,
+) -> None:
+    """
+    Write graded legs (+ outcomes) for offline model improvement.
+    Stack daily files into one CSV or Parquet, then retrain the pipeline that produces ml_prob on step8.
+    """
+    export = legs_df.copy()
+    export.insert(0, "grade_date", str(grade_date))
+    export.insert(1, "source_workbook", str(source_workbook))
+    out_csv = Path(out_csv)
+    out_csv.parent.mkdir(parents=True, exist_ok=True)
+    if append and out_csv.exists():
+        export.to_csv(out_csv, mode="a", header=False, index=False)
+    else:
+        export.to_csv(out_csv, index=False)
+
+
+def _ml_prob_calibration_bins(legs_df: pd.DataFrame) -> pd.DataFrame:
+    """Empirical hit rate by quantile of slate ml_prob (HIT/MISS legs only)."""
+    sub = legs_df[legs_df["leg_result"].isin(["HIT", "MISS"])].copy()
+    if sub.empty:
+        return pd.DataFrame([{"note": "no HIT/MISS legs"}])
+    mp = pd.to_numeric(sub.get("ml_prob"), errors="coerce")
+    sub = sub.assign(_mp=mp)
+    sub = sub[sub["_mp"].notna() & (sub["_mp"] > 0.0) & (sub["_mp"] < 1.0)]
+    if len(sub) < 15:
+        return pd.DataFrame(
+            [{"note": f"only {len(sub)} legs with ml_prob in (0,1); need ~15+ for bins"}]
+        )
+    sub["hit"] = (sub["leg_result"] == "HIT").astype(int)
+    nq = min(10, max(3, len(sub) // 5))
+    try:
+        sub["bin"] = pd.qcut(sub["_mp"], q=nq, duplicates="drop")
+    except ValueError:
+        return pd.DataFrame([{"note": "could not bin ml_prob (try more graded legs)"}])
+    g = (
+        sub.groupby("bin", observed=True)
+        .agg(n=("hit", "count"), pred_mean=("_mp", "mean"), hit_rate=("hit", "mean"))
+        .reset_index()
+    )
+    g["calibration_error"] = (g["hit_rate"] - g["pred_mean"]).round(4)
+    g["pred_mean"] = g["pred_mean"].round(4)
+    g["hit_rate"] = g["hit_rate"].round(4)
+    return g
+
+
 # --- ML (exploratory) -------------------------------------------------------
 
 def run_ml_profit_layers(
@@ -1012,6 +1069,10 @@ def run_ml_profit_layers(
             {
                 "metric": "note",
                 "value": "Trained on this slate only; use rolling history for real policy changes.",
+            },
+            {
+                "metric": "feedback_loop",
+                "value": "Use --export-graded-legs-csv to stack labels; tune step8 ml_prob using ML_CALIBRATION sheet.",
             },
         ]
     )
@@ -1102,6 +1163,16 @@ def main():
     ap.add_argument("--payouts_json", default="", help="Optional JSON override for base payouts + modifiers")
     ap.add_argument("--no-ml", action="store_true", help="Skip ML analysis sheets (faster)")
     ap.add_argument("--ml-min-legs", type=int, default=40, help="Min graded legs to run ML (default 40)")
+    ap.add_argument(
+        "--export-graded-legs-csv",
+        default="",
+        help="Write LEG_RESULTS-style rows+outcomes for offline retraining (path to .csv)",
+    )
+    ap.add_argument(
+        "--append-graded-legs-csv",
+        action="store_true",
+        help="Append to --export-graded-legs-csv instead of overwriting (same columns required)",
+    )
     args = ap.parse_args()
 
     global POWER_BASE, FLEX_BASE, GOBLIN_POWER, GOBLIN_FLEX, DEMON_POWER, DEMON_FLEX
@@ -1367,6 +1438,7 @@ def main():
                 )
         graded_tickets.append({"result": tr.get("payout_status"), "legs": legs})
     killer_df = build_leg_contribution_report(graded_tickets)
+    ml_calibration_df = _ml_prob_calibration_bins(legs_df)
 
     ml_pack: Dict[str, Any] = {}
     if not args.no_ml:
@@ -1381,6 +1453,7 @@ def main():
         insights_df.to_excel(xw, index=False, sheet_name="ANALYSIS_INSIGHTS")
         ticket_results.to_excel(xw, index=False, sheet_name="TICKET_RESULTS")
         legs_df.to_excel(xw, index=False, sheet_name="LEG_RESULTS")
+        ml_calibration_df.to_excel(xw, index=False, sheet_name="ML_CALIBRATION")
         # Always write the sheet (even empty) so it is visible/stable for downstream tooling.
         killer_df.to_excel(xw, index=False, sheet_name="Killer Legs")
         if deep_df is not None and not deep_df.empty:
@@ -1398,6 +1471,17 @@ def main():
 
     # Keep this ASCII-only so the script runs in non-UTF8 consoles.
     print(f"Wrote graded workbook -> {out_xlsx}")
+
+    ex = str(args.export_graded_legs_csv or "").strip()
+    if ex:
+        export_graded_legs_for_ml_training(
+            legs_df,
+            Path(ex),
+            grade_date=str(grade_date),
+            source_workbook=str(tickets_xlsx.name),
+            append=bool(args.append_graded_legs_csv),
+        )
+        print(f"Wrote graded legs training export -> {ex} (append={bool(args.append_graded_legs_csv)})")
 
 
 if __name__ == "__main__":
