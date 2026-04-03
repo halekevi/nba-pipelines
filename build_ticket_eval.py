@@ -15,6 +15,7 @@ import argparse
 import html
 import json
 import re
+import unicodedata
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -458,7 +459,12 @@ def _norm_header(s: str) -> str:
 
 
 def _norm_player_name(s: str) -> str:
-    p = str(s or "").strip().lower().replace(".", " ")
+    """Align with MLB grader _norm_name_mlb + slate_grader.norm_player_key (accents, Jr., dots)."""
+    if s is None or (isinstance(s, float) and pd.isna(s)):
+        return ""
+    t = unicodedata.normalize("NFKD", str(s).strip())
+    t = "".join(c for c in t if not unicodedata.combining(c))
+    p = t.lower().replace(".", " ")
     p = re.sub(r"\s+", " ", p)
     suffixes = {"jr", "sr", "ii", "iii", "iv", "v"}
     parts = [x for x in p.split(" ") if x and x not in suffixes]

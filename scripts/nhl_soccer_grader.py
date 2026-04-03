@@ -16,6 +16,7 @@ Usage:
 """
 from __future__ import annotations
 import argparse, sys, re
+import unicodedata
 from datetime import datetime
 from pathlib import Path
 
@@ -182,6 +183,19 @@ def _norm_name(s):
 
 def _norm_prop(s):
     return re.sub(r"[^a-z0-9]","", str(s).lower())
+
+
+def _norm_name_mlb(s) -> str:
+    """MLB keys: NFKD (Jesús→jesus) + same suffix/dot rules as slate_grader.norm_player_key."""
+    if s is None or (isinstance(s, float) and pd.isna(s)):
+        return ""
+    t = unicodedata.normalize("NFKD", str(s).strip())
+    t = "".join(c for c in t if not unicodedata.combining(c))
+    p = t.lower().replace(".", " ")
+    p = re.sub(r"\s+", " ", p)
+    suffixes = {"jr", "sr", "ii", "iii", "iv", "v"}
+    parts = [x for x in p.split(" ") if x and x not in suffixes]
+    return " ".join(parts)
 
 def load_slate(path: Path, sport: str, grade_date: str = None) -> pd.DataFrame:
     sport = sport.upper()
@@ -389,7 +403,11 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
         return slate
 
     actuals = actuals.copy()
-    actuals["_name"] = actuals[p_col].apply(_norm_name)
+    # MLB actuals CSV uses PrizePicks display names; fold accents like step2 ID resolution.
+    if sport == "MLB":
+        actuals["_name"] = actuals[p_col].apply(_norm_name_mlb)
+    else:
+        actuals["_name"] = actuals[p_col].apply(_norm_name)
     actuals["_val"]  = pd.to_numeric(actuals[v_col], errors="coerce")
     if pr_col:
         actuals["_prop"] = actuals[pr_col].apply(_norm_prop)
@@ -438,6 +456,21 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
         print(f"  [DIAG] Slate prop norms: {sample_props}")
         print(f"  [DIAG] Actuals prop norms: "
               f"{sorted(set(actuals['_prop'].tolist()))[:10] if pr_col else 'no prop col'}")
+
+    if sport == "MLB" and len(slate) > 0 and pr_col:
+        sn = slate["player"].apply(_norm_name_mlb)
+        overlap = int(sum(1 for n in sn if n in act_by_name))
+        _pc = next(
+            (c for c in ("prop_type_norm", "prop_type_raw", "prop_display") if c in slate.columns),
+            None,
+        )
+        sp = slate[_pc].apply(_norm_prop) if _pc else pd.Series(dtype=str)
+        ap_set = set(actuals["_prop"].dropna().astype(str))
+        sp_set = set(sp.dropna().astype(str)) if len(sp) else set()
+        print(
+            f"  [DIAG MLB] name key matches: {overlap}/{len(slate)} | "
+            f"slate props sample: {list(sp_set)[:6]} | actuals props sample: {sorted(ap_set)[:8]}"
+        )
 
     # ── Soccer prop alias table ───────────────────────────────────────────────
     SOCCER_PROP_ALIASES = {
@@ -493,7 +526,10 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
         "strikeouts":           ["strikeouts", "pitcherstrikeouts"],
         "hitsrunsrbi":          ["hitsrunsrbi", "hitsrunsrbis"],
         "hitsrunsrbis":         ["hitsrunsrbi", "hitsrunsrbis"],
-        "totalbasescomb":       ["totalbases", "totalbasescomb"],
+        "totalbases":           ["totalbases", "totalbasescomb", "totalbasescombo"],
+        "totalbasescomb":       ["totalbases", "totalbasescomb", "totalbasescombo"],
+        "totalbasescombo":      ["totalbases", "totalbasescomb", "totalbasescombo"],
+        "pitchingouts":         ["pitchingouts"],
         "fantasyscore":         ["fantasyscore", "fantasypoints"],
         "fantasypoints":        ["fantasypoints", "fantasyscore"],
     }
@@ -521,7 +557,7 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
         return None
 
     for idx, srow in slate.iterrows():
-        sname = _norm_name(srow.get("player",""))
+        sname = _norm_name_mlb(srow.get("player", "")) if sport == "MLB" else _norm_name(srow.get("player", ""))
         sprop = _norm_prop(srow.get("prop_type_norm", srow.get("prop_type_raw","")))
         sline = srow.get("line")
         sdir  = str(srow.get("bet_direction","")).upper()

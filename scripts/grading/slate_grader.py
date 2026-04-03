@@ -15,6 +15,7 @@ from openpyxl.utils import get_column_letter
 import argparse
 import os
 import re
+import unicodedata
 from datetime import datetime
 
 def _def_rank_bucket(x):
@@ -232,7 +233,9 @@ def norm_prop_key(p) -> str:
 
 
 def norm_player_key(p) -> str:
-    s = str(p).lower().strip().replace(".", " ")
+    t = unicodedata.normalize("NFKD", str(p).strip())
+    t = "".join(c for c in t if not unicodedata.combining(c))
+    s = t.lower().replace(".", " ")
     s = re.sub(r"\s+", " ", s)
     parts = [x for x in s.split(" ") if x]
     suffixes = {"jr", "sr", "ii", "iii", "iv", "v"}
