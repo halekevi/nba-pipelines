@@ -1,25 +1,40 @@
 "use client"
 
+import { useState, useEffect } from "react"
+
 interface HeaderProps {
   lastSync?: string
 }
 
 export function Header({ lastSync }: HeaderProps) {
-  const formatLastSync = () => {
-    if (!lastSync) return "Syncing..."
-    const date = new Date(lastSync)
-    const now = new Date()
-    const diffMs = now.getTime() - date.getTime()
-    const diffMins = Math.floor(diffMs / 60000)
-    if (diffMins < 1) return "Just now"
-    if (diffMins < 60) return `${diffMins} min ago`
-    return `${Math.floor(diffMins / 60)} hrs ago`
-  }
+  const [currentDate, setCurrentDate] = useState<string>("")
+  const [syncText, setSyncText] = useState<string>("Syncing...")
+
+  useEffect(() => {
+    // Set date only on client to avoid hydration mismatch
+    setCurrentDate(
+      new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+    )
+
+    // Calculate last sync time
+    if (lastSync) {
+      const date = new Date(lastSync)
+      const now = new Date()
+      const diffMs = now.getTime() - date.getTime()
+      const diffMins = Math.floor(diffMs / 60000)
+      if (diffMins < 1) {
+        setSyncText("Just now")
+      } else if (diffMins < 60) {
+        setSyncText(`${diffMins} min ago`)
+      } else {
+        setSyncText(`${Math.floor(diffMins / 60)} hrs ago`)
+      }
+    }
+  }, [lastSync])
 
   return (
     <header className="glass-card px-6 py-4 mb-6 flex items-center justify-between gap-4 flex-wrap">
       <div className="flex items-center gap-4">
-        {/* Logo */}
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
             <svg className="w-6 h-6 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -37,18 +52,16 @@ export function Header({ lastSync }: HeaderProps) {
       </div>
 
       <div className="flex items-center gap-4">
-        {/* Live indicator */}
         <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-status-green/10 border border-status-green/30">
           <span className="w-2 h-2 rounded-full bg-status-green animate-blink shadow-[0_0_8px_#39ff6e]" />
           <span className="text-xs font-semibold tracking-wider text-status-green uppercase">Live</span>
         </div>
 
-        {/* Last updated */}
         <div className="text-right">
           <p className="text-xs font-mono text-white/80">
-            {new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+            {currentDate || "Loading..."}
           </p>
-          <p className="text-[10px] text-muted">Last sync: {formatLastSync()}</p>
+          <p className="text-[10px] text-muted">Last sync: {syncText}</p>
         </div>
       </div>
     </header>

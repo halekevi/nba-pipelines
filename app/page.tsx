@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Header } from "@/components/header"
 import { PipelineTicker } from "@/components/pipeline-ticker"
 import { InsightsGrid } from "@/components/insights-grid"
@@ -8,7 +9,24 @@ import { GradedVault } from "@/components/graded-vault"
 import { useDashboardData } from "@/hooks/use-dashboard-data"
 
 export default function CommandCenter() {
+  const [hasMounted, setHasMounted] = useState(false)
   const { data, isLoading } = useDashboardData()
+
+  useEffect(() => {
+    setHasMounted(true)
+  }, [])
+
+  // Prevent hydration mismatch by not rendering until client is ready
+  if (!hasMounted) {
+    return (
+      <main className="relative z-10 min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="font-display text-4xl tracking-wider text-gold mb-4">PROP ORACLE</div>
+          <div className="text-sm text-muted animate-pulse">Initializing Command Center...</div>
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className="relative z-10 min-h-screen">
