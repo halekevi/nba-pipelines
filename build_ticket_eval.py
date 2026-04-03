@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import math
 import re
 import sys
 from datetime import date, datetime, timedelta, timezone
@@ -607,27 +608,50 @@ def _normalize_workbook_rows(path: Path) -> list[dict[str, Any]]:
     return out
 
 
+def _finite_line_actual(actual: float | None, line: float | None) -> bool:
+    if actual is None or line is None:
+        return False
+    try:
+        a, ln = float(actual), float(line)
+    except (TypeError, ValueError):
+        return False
+    if isinstance(a, float) and (math.isnan(a) or math.isinf(a)):
+        return False
+    if isinstance(ln, float) and (math.isnan(ln) or math.isinf(ln)):
+        return False
+    return True
+
+
 def _leg_grade(
     actual: float | None,
     line: float | None,
     direction: str,
     grade_col: str,
 ) -> str:
+    """
+    Prefer numeric grading (same margin rules as scripts/nhl_soccer_grader) when actual+line exist,
+    so stale VOID from pre-grade slates does not mask a real box score.
+    """
     g = (grade_col or "").strip().upper()
+    d = str(direction or "").strip().upper()
+
+    if _finite_line_actual(actual, line) and d in ("OVER", "UNDER"):
+        a = float(actual)  # type: ignore[arg-type]
+        ln = float(line)  # type: ignore[arg-type]
+        margin = a - ln
+        if margin == 0:
+            return "VOID"
+        if (d == "OVER" and margin > 0) or (d == "UNDER" and margin < 0):
+            return "HIT"
+        return "MISS"
+
     if g in ("HIT", "WIN", "W", "1", "TRUE", "YES"):
         return "HIT"
     if g in ("MISS", "LOSS", "L", "0", "FALSE", "NO"):
         return "MISS"
     if g in ("VOID", "PUSH", "N/A", "NA"):
         return "VOID"
-    if actual is None or line is None:
-        return "UNGRADED"
-    d = direction.upper()
-    if d == "OVER" and actual >= line:
-        return "HIT"
-    if d == "UNDER" and actual <= line:
-        return "HIT"
-    return "MISS"
+    return "UNGRADED"
 
 
 def _pick_type_tier(pick_type: str) -> str:
@@ -720,7 +744,7 @@ def _ingest_workbook_rows_into_index(
 ) -> None:
     for raw in rows:
         pl = _norm_player_name(_canon_player(raw))
-        pt = _norm_prop_type(_canon_prop(raw))
+        pt = _prop_match_key_from_display(str(_canon_prop(raw) or ""))
         dr = _canon_direction(raw)
         if not pl or not pt:
             continue
@@ -872,40 +896,14 @@ def _load_actuals_indices(
                         (c for c in gdf.columns if c in ("prop", "prop_type", "prop_type_norm", "stat", "stat_type")),
                         None,
                     )
-                    dircol = next(
-                        (c for c in gdf.columns if c in ("direction", "bet_direction", "final_bet_direction", "dir", "side")),
-                        None,
-                    )
-                    resultcol = next(
-                        (c for c in gdf.columns if c in ("result", "grade", "outcome", "grade_raw")),
-                        None,
-                    )
-                    actualcol = next(
-                        (
-                            c
-                            for c in gdf.columns
-                            if c in ("actual", "actual_value", "result_value")
-                        ),
-                        None,
-                    )
                     if pcol is None or propcol is None:
                         continue
                     trip, pairs = out.get(bucket, ({}, {}))
                     for _, grow in gdf.iterrows():
-                        raw: dict[str, Any] = {
-                            "player": grow[pcol],
-                            "prop_type": grow[propcol],
-                        }
-                        if dircol and pd.notna(grow.get(dircol)):
-                            raw["direction"] = grow[dircol]
-                        if "line" in gdf.columns and pd.notna(grow.get("line")):
-                            raw["line"] = grow["line"]
-                        if actualcol and pd.notna(grow.get(actualcol)):
-                            raw["actual"] = grow[actualcol]
-                        if resultcol and pd.notna(grow.get(resultcol)):
-                            raw["grade"] = grow[resultcol]
+                        # Full row so _canon_actual / _canon_grade_raw see every alias (box, stat, …).
+                        raw = {c: grow[c] for c in gdf.columns}
                         pl = _norm_player_name(_canon_player(raw))
-                        pt = _norm_prop_type(_canon_prop(raw))
+                        pt = _prop_match_key_from_display(str(_canon_prop(raw) or ""))
                         dr = _canon_direction(raw)
                         if not pl or not pt:
                             continue
@@ -920,8 +918,7 @@ def _load_actuals_indices(
                         line_val = row_out["line"]
                         line_key = round(float(line_val), 2) if line_val is not None else None
                         key3 = (pl, pt, dr, line_key)
-                        if key3 not in trip:
-                            trip[key3] = row_out
+                        trip[key3] = row_out
                         pairs.setdefault((pl, pt), []).append(row_out)
                     out[bucket] = (trip, pairs)
                 except Exception:
@@ -963,13 +960,23 @@ def _norm_prop_type(raw: str) -> str:
     return _PROP_TYPE_ALIASES.get(s, s)
 
 
+def _prop_match_key_from_display(raw: str) -> str:
+    """
+    Stable prop key for index lookups: alias map (CBB etc.) then alphanumeric fold like
+    nhl_soccer_grader._norm_prop so 'Total Bases' and 'totalbases' both become 'totalbases'.
+    """
+    if raw is None or not str(raw).strip():
+        return ""
+    return re.sub(r"[^a-z0-9]", "", _norm_prop_type(str(raw).strip()))
+
+
 def _match_leg_in_index(
     leg: dict[str, Any],
     triple: dict[tuple[str, str, str], dict],
     pair_buckets: dict[tuple[str, str], list[dict]],
 ) -> dict | None:
     pl = _norm_player_name(leg.get("player") or "")
-    pt = _norm_prop_type(str(leg.get("prop_type") or ""))
+    pt = _prop_match_key_from_display(str(leg.get("prop_type") or ""))
     dr = str(leg.get("direction") or "").strip().upper()
     if not pl or not pt:
         return None
