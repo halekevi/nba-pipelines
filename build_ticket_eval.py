@@ -2045,7 +2045,11 @@ def _build_html(
                         void_chip = ""
                         if lg == "VOID" and void_note:
                             vn_esc = esc(void_note)
-                            short = "Postponed" if void_note.upper() == "POSTPONED" else void_note
+                            short = (
+                                "Postponed"
+                                if void_note.upper().startswith("POSTPONED")
+                                else void_note
+                            )
                             if len(short) > 28:
                                 short = short[:25] + "…"
                             void_chip = (

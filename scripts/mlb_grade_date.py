@@ -67,12 +67,49 @@ def _mlb_team_id_to_abbr_map() -> Dict[int, str]:
     return _MLB_TEAM_ID_TO_ABBR
 
 
-def mlb_postponed_team_abbrs_for_date(iso_date: str) -> Set[str]:
-    """Team abbreviations (slate ``Team`` column) for postponed/canceled games on ``iso_date``."""
+def _postponed_void_label_from_game(game: dict) -> str:
+    """Human-readable void reason from one schedule game node (makeup date + status reason)."""
+    resched = str(game.get("rescheduleGameDate") or game.get("rescheduleDate") or "").strip()
+    if "T" in resched:
+        resched = resched.split("T", 1)[0]
+    elif len(resched) > 10:
+        resched = resched[:10]
+    reason = str((game.get("status") or {}).get("reason") or "").strip()
+    parts = ["POSTPONED"]
+    if resched:
+        parts.append(f"makeup {resched}")
+    if reason:
+        reason_short = reason[:48] + ("…" if len(reason) > 48 else "")
+        parts.append(reason_short)
+    return " · ".join(parts)
+
+
+def _team_abbrs_for_schedule_game(game: dict, idmap: Dict[int, str]) -> Set[str]:
+    abbrs: Set[str] = set()
+    for side in ("away", "home"):
+        node = (game.get("teams") or {}).get(side) or {}
+        team = node.get("team") or {}
+        for key in ("abbreviation", "fileCode", "triCode"):
+            v = team.get(key)
+            if v:
+                abbrs.add(str(v).strip().upper())
+        tid = team.get("id")
+        if tid is not None:
+            ab = idmap.get(int(tid))
+            if ab:
+                abbrs.add(ab)
+    return abbrs
+
+
+def mlb_postponed_team_labels_for_date(iso_date: str) -> Dict[str, str]:
+    """
+    For each team abbreviation on the slate ``Team`` column: void_reason_grade text when that
+    club had a postponed/canceled game on ``iso_date`` (includes makeup date from the API when present).
+    """
     try:
         import requests
     except ImportError:
-        return set()
+        return {}
     d = str(iso_date).strip()[:10]
     url = "https://statsapi.mlb.com/api/v1/schedule"
     try:
@@ -81,33 +118,35 @@ def mlb_postponed_team_abbrs_for_date(iso_date: str) -> Set[str]:
         payload = r.json()
     except Exception as exc:
         print(f"  WARNING: MLB schedule fetch failed for {d}: {exc}")
-        return set()
+        return {}
     idmap = _mlb_team_id_to_abbr_map()
-    out: Set[str] = set()
+    labels: Dict[str, str] = {}
     for day in payload.get("dates") or []:
         for g in day.get("games") or []:
             det = str((g.get("status") or {}).get("detailedState") or "").lower()
             if "postpon" not in det and "cancel" not in det:
                 continue
-            for side in ("away", "home"):
-                node = (g.get("teams") or {}).get(side) or {}
-                team = node.get("team") or {}
-                for key in ("abbreviation", "fileCode", "triCode"):
-                    v = team.get(key)
-                    if v:
-                        out.add(str(v).strip().upper())
-                tid = team.get("id")
-                if tid is not None:
-                    ab = idmap.get(int(tid))
-                    if ab:
-                        out.add(ab)
-    return out
+            label = _postponed_void_label_from_game(g)
+            for ab in _team_abbrs_for_schedule_game(g, idmap):
+                prev = labels.get(ab)
+                if prev is None:
+                    labels[ab] = label
+                    continue
+                # Prefer the richer label (makeup date) if we see multiple PPD entries.
+                if "makeup" in label and "makeup" not in prev:
+                    labels[ab] = label
+    return labels
+
+
+def mlb_postponed_team_abbrs_for_date(iso_date: str) -> Set[str]:
+    """Team abbreviations with a postponed/canceled game on ``iso_date``."""
+    return set(mlb_postponed_team_labels_for_date(iso_date).keys())
 
 
 def _apply_mlb_postponed_void_labels(graded: pd.DataFrame, iso_date: str) -> None:
-    """Mark VOID+NO_ACTUAL rows as POSTPONED when the team's game that day was PPD/canceled."""
-    teams_ppd = mlb_postponed_team_abbrs_for_date(iso_date)
-    if not teams_ppd:
+    """Mark VOID+NO_ACTUAL rows when the team's game that day was PPD/canceled (schedule API)."""
+    team_labels = mlb_postponed_team_labels_for_date(iso_date)
+    if not team_labels:
         return
     need = {"team", "result", "actual", "void_reason_grade"}
     if not need.issubset(set(graded.columns)):
@@ -122,13 +161,14 @@ def _apply_mlb_postponed_void_labels(graded: pd.DataFrame, iso_date: str) -> Non
         if act is not None and not (isinstance(act, float) and np.isnan(act)):
             continue
         t = str(graded.at[idx, "team"] or "").strip().upper()
-        if t and t in teams_ppd:
-            graded.at[idx, "void_reason_grade"] = "POSTPONED"
+        if t and t in team_labels:
+            graded.at[idx, "void_reason_grade"] = team_labels[t]
             patched += 1
     if patched:
+        sample = next(iter(team_labels.values()), "POSTPONED")
         print(
-            f"  [MLB] Set void_reason_grade=POSTPONED on {patched} leg(s) "
-            f"(postponed/canceled on {iso_date}; teams: {', '.join(sorted(teams_ppd))})"
+            f"  [MLB] Set postponed void_reason_grade on {patched} leg(s) "
+            f"({iso_date}; teams: {', '.join(sorted(team_labels))}; e.g. {sample!r})"
         )
 
 
