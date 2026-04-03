@@ -595,6 +595,25 @@ def _canon_grade_raw(row: dict[str, Any]) -> str:
     return ""
 
 
+def _canon_void_note(row: dict[str, Any]) -> str:
+    """Grader diagnostic (e.g. POSTPONED, NO_ACTUAL) from workbook row."""
+    for k in (
+        "void_reason_grade",
+        "void reason grade",
+        "void_reason",
+        "void reason",
+    ):
+        if k not in row:
+            continue
+        v = row.get(k)
+        if v is None or (isinstance(v, float) and pd.isna(v)):
+            continue
+        s = str(v).strip()
+        if s:
+            return s
+    return ""
+
+
 def _normalize_workbook_rows(path: Path) -> list[dict[str, Any]]:
     """Load all sheets; normalize headers to lowercase single-space keys."""
     xl = pd.ExcelFile(path)
@@ -761,6 +780,7 @@ def _ingest_workbook_rows_into_index(
             "line": _canon_line(raw),
             "actual": _canon_actual(raw),
             "grade_raw": _canon_grade_raw(raw),
+            "void_note": _canon_void_note(raw),
         }
         # Include line in the triple key so multiple lines for the same
         # player+prop+direction (e.g. Cameron Boozer reb 7.5 OVER vs 10.5 OVER)
@@ -858,6 +878,7 @@ def _merge_strict_graded_date_workbooks(
                     "line": _canon_line(raw),
                     "actual": _canon_actual(raw),
                     "grade_raw": _canon_grade_raw(raw),
+                    "void_note": _canon_void_note(raw),
                 }
                 line_val = row_out["line"]
                 line_key = round(float(line_val), 2) if line_val is not None else None
@@ -1858,7 +1879,7 @@ def _build_html(
         '<div class="wrap">',
         f'<p class="slate-kicker">SLATE DATE · {json_date}</p>',
         '<p class="meta-muted" style="margin:6px 0 14px;line-height:1.5">'
-        "Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — until a graded file exists) · "
+        "Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · "
         f"<strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/{json_date}/graded_*.xlsx</code>."
         "</p>",
     ]
@@ -2020,7 +2041,18 @@ def _build_html(
                             '<span class="warning-chip" title="NBA1Q stats based on limited Q1 history — use with caution">⚠ Limited Data</span>'
                             if warning else ""
                         )
-                        pl_html = f'<div class="{plcls}">{player}{warning_chip}</div>'
+                        void_note = (row.get("void_note") or "").strip() if row else ""
+                        void_chip = ""
+                        if lg == "VOID" and void_note:
+                            vn_esc = esc(void_note)
+                            short = "Postponed" if void_note.upper() == "POSTPONED" else void_note
+                            if len(short) > 28:
+                                short = short[:25] + "…"
+                            void_chip = (
+                                f'<span class="warning-chip" title="{vn_esc}">'
+                                f"{esc(short)}</span>"
+                            )
+                        pl_html = f'<div class="{plcls}">{player}{warning_chip}{void_chip}</div>'
 
                     if lg == "MISS":
                         act_div_cls = "leg-extra val-miss"

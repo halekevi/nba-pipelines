@@ -13,6 +13,11 @@ nhl_soccer_grader to produce graded_mlb_<date>.xlsx (same layout as run_grader.p
   py -3.14 scripts/mlb_grade_date.py --date yesterday --tiers A,B
 
 Requires: pandas, openpyxl, requests (already used elsewhere in the repo).
+
+Postponed / canceled games: there is no game log row for that calendar date, so actuals stay
+empty. After grading, this script queries the MLB Stats API schedule and sets
+``void_reason_grade`` to ``POSTPONED`` for VOID + NO_ACTUAL legs whose ``team`` played in a
+postponed or canceled game that day (so Excel and ticket eval show why there is no stat).
 """
 
 from __future__ import annotations
@@ -23,12 +28,108 @@ import re
 import sys
 from datetime import date, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Set, Tuple
 
 import numpy as np
 import pandas as pd
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+
+# Lazily filled: schedule entries for postponed games often omit abbreviation; resolve by team id.
+_MLB_TEAM_ID_TO_ABBR: Dict[int, str] | None = None
+
+
+def _mlb_team_id_to_abbr_map() -> Dict[int, str]:
+    global _MLB_TEAM_ID_TO_ABBR
+    if _MLB_TEAM_ID_TO_ABBR is not None:
+        return _MLB_TEAM_ID_TO_ABBR
+    try:
+        import requests
+    except ImportError:
+        _MLB_TEAM_ID_TO_ABBR = {}
+        return _MLB_TEAM_ID_TO_ABBR
+    m: Dict[int, str] = {}
+    try:
+        r = requests.get(
+            "https://statsapi.mlb.com/api/v1/teams",
+            params={"sportId": 1},
+            timeout=60,
+        )
+        r.raise_for_status()
+        for t in r.json().get("teams") or []:
+            tid = t.get("id")
+            ab = t.get("abbreviation") or t.get("fileCode") or t.get("teamCode")
+            if tid is not None and ab:
+                m[int(tid)] = str(ab).strip().upper()
+    except Exception as exc:
+        print(f"  WARNING: MLB teams lookup failed (postponed labeling): {exc}")
+    _MLB_TEAM_ID_TO_ABBR = m
+    return _MLB_TEAM_ID_TO_ABBR
+
+
+def mlb_postponed_team_abbrs_for_date(iso_date: str) -> Set[str]:
+    """Team abbreviations (slate ``Team`` column) for postponed/canceled games on ``iso_date``."""
+    try:
+        import requests
+    except ImportError:
+        return set()
+    d = str(iso_date).strip()[:10]
+    url = "https://statsapi.mlb.com/api/v1/schedule"
+    try:
+        r = requests.get(url, params={"sportId": 1, "date": d}, timeout=45)
+        r.raise_for_status()
+        payload = r.json()
+    except Exception as exc:
+        print(f"  WARNING: MLB schedule fetch failed for {d}: {exc}")
+        return set()
+    idmap = _mlb_team_id_to_abbr_map()
+    out: Set[str] = set()
+    for day in payload.get("dates") or []:
+        for g in day.get("games") or []:
+            det = str((g.get("status") or {}).get("detailedState") or "").lower()
+            if "postpon" not in det and "cancel" not in det:
+                continue
+            for side in ("away", "home"):
+                node = (g.get("teams") or {}).get(side) or {}
+                team = node.get("team") or {}
+                for key in ("abbreviation", "fileCode", "triCode"):
+                    v = team.get(key)
+                    if v:
+                        out.add(str(v).strip().upper())
+                tid = team.get("id")
+                if tid is not None:
+                    ab = idmap.get(int(tid))
+                    if ab:
+                        out.add(ab)
+    return out
+
+
+def _apply_mlb_postponed_void_labels(graded: pd.DataFrame, iso_date: str) -> None:
+    """Mark VOID+NO_ACTUAL rows as POSTPONED when the team's game that day was PPD/canceled."""
+    teams_ppd = mlb_postponed_team_abbrs_for_date(iso_date)
+    if not teams_ppd:
+        return
+    need = {"team", "result", "actual", "void_reason_grade"}
+    if not need.issubset(set(graded.columns)):
+        return
+    patched = 0
+    for idx in graded.index:
+        if str(graded.at[idx, "result"]).strip().upper() != "VOID":
+            continue
+        if str(graded.at[idx, "void_reason_grade"] or "").strip().upper() != "NO_ACTUAL":
+            continue
+        act = graded.at[idx, "actual"]
+        if act is not None and not (isinstance(act, float) and np.isnan(act)):
+            continue
+        t = str(graded.at[idx, "team"] or "").strip().upper()
+        if t and t in teams_ppd:
+            graded.at[idx, "void_reason_grade"] = "POSTPONED"
+            patched += 1
+    if patched:
+        print(
+            f"  [MLB] Set void_reason_grade=POSTPONED on {patched} leg(s) "
+            f"(postponed/canceled on {iso_date}; teams: {', '.join(sorted(teams_ppd))})"
+        )
 
 
 def grader_norm_prop(s: str) -> str:
@@ -244,6 +345,7 @@ def _run_grader(
     slate = _filter_graded_slate(slate, tier_filter)
     actuals = nsg.load_actuals(actuals_path)
     graded = nsg.grade(slate, actuals, "MLB")
+    _apply_mlb_postponed_void_labels(graded, d)
     graded_path = out_dir / f"graded_mlb_{d}.xlsx"
     if tier_filter:
         tier_tag = "-".join(sorted(tier_filter))
