@@ -145,6 +145,7 @@ body::after{
 [data-theme='light'] .ticket-card{background:rgba(255,255,255,0.65);border-color:rgba(0,0,0,0.1);box-shadow:0 4px 20px rgba(0,0,0,0.08);}
 [data-theme='light'] .thdr{background:rgba(0,0,0,0.04);}
 [data-theme='light'] .legrow{color:rgba(0,0,0,0.85);}
+[data-theme='light'] .leg-head{background:rgba(0,0,0,0.04);border-bottom-color:rgba(0,0,0,0.08);color:rgba(0,0,0,0.45);}
 [data-theme='light'] .meta-muted{color:rgba(0,0,0,0.5);}
 [data-theme='light'] .sum-val{color:#b8860b;}
 [data-theme='light'] .sum-lab{color:rgba(0,0,0,0.5);}
@@ -247,6 +248,7 @@ body::after{
 }
 @media(max-width:900px){
   .legrow{grid-template-columns:52px 80px 1fr;gap:10px;padding:12px;font-size:14px;}
+  .leg-head{display:none;}
   .leg-extra{display:none;}
   .stats-bar{padding:14px 16px;}
   .sum-val{font-size:22px;}
@@ -284,6 +286,8 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .banner.void{color:var(--gold2);border-color:rgba(240,165,0,.35);}
 @keyframes missRowPulse{0%,100%{box-shadow:0 0 0 1px rgba(255,77,77,0.4),inset 0 0 20px rgba(255,77,77,0.06);}50%{box-shadow:0 0 0 2px rgba(255,77,77,0.65),0 0 22px rgba(255,77,77,0.18),inset 0 0 26px rgba(255,77,77,0.09);}}
 .legrow{font-family:'Share Tech Mono',monospace;display:grid;grid-template-columns:56px 92px minmax(120px,1fr) 44px minmax(240px,1.45fr) minmax(108px,1fr) minmax(96px,1fr) minmax(76px,.85fr);gap:12px;align-items:center;padding:14px clamp(14px,2vw,22px);font-size:clamp(13px,1.45vw,16px);line-height:1.35;border-bottom:1px solid rgba(255,255,255,.06);border-left:3px solid transparent;}
+.leg-head{font-family:'Bebas Neue',sans-serif;display:grid;grid-template-columns:56px 92px minmax(120px,1fr) 44px minmax(240px,1.45fr) minmax(108px,1fr) minmax(96px,1fr) minmax(76px,.85fr);gap:12px;align-items:end;padding:6px clamp(14px,2vw,22px) 8px;font-size:10px;letter-spacing:2px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.12);}
+.leg-head-lab{line-height:1.2;}
 .legrow:last-child{border-bottom:none;}
 .legrow.leg-hit{background:rgba(57,255,110,0.04);border-left-color:var(--green);}
 .legrow.leg-miss{background:rgba(255,77,77,0.10);border-left:4px solid #ff4d4d;box-shadow:0 0 0 1px rgba(255,77,77,0.4),inset 0 0 20px rgba(255,77,77,0.06);animation:missRowPulse 2.2s ease-in-out infinite;}
@@ -390,6 +394,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="payout">PWR 3× · FLEX 3×</span>
 <span class="banner miss">MISSED 2</span>
 </div>
+<div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
 <div class="legrow leg-miss">
 <div class="badge miss">✗</div>
 <div><span class="pill sport-nba">NBA</span></div>
@@ -421,6 +426,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="payout">PWR 6× · FLEX 3×</span>
 <span class="banner miss">MISSED 2</span>
 </div>
+<div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
 <div class="legrow leg-hit">
 <div class="badge hit">✓</div>
 <div><span class="pill sport-nba">NBA</span></div>
@@ -462,6 +468,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="payout">PWR 3× · FLEX 3×</span>
 <span class="banner miss">MISSED 2</span>
 </div>
+<div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
 <div class="legrow leg-miss">
 <div class="badge miss">✗</div>
 <div><span class="pill sport-nba">NBA</span></div>
@@ -497,6 +504,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="payout">PWR 1.38× · FLEX 1.38×</span>
 <span class="banner miss">MISSED 1</span>
 </div>
+<div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
 <div class="legrow leg-hit">
 <div class="badge hit">✓</div>
 <div><span class="pill sport-cbb">CBB</span></div>
@@ -528,6 +536,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="payout">PWR 2.76× · FLEX 1.38×</span>
 <span class="banner miss">MISSED 1</span>
 </div>
+<div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
 <div class="legrow leg-hit">
 <div class="badge hit">✓</div>
 <div><span class="pill sport-cbb">CBB</span></div>
@@ -569,6 +578,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="payout">PWR 1.38× · FLEX 1.38×</span>
 <span class="banner miss">MISSED 1</span>
 </div>
+<div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
 <div class="legrow leg-hit">
 <div class="badge hit">✓</div>
 <div><span class="pill sport-cbb">CBB</span></div>
@@ -604,6 +614,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="payout">PWR 3× · FLEX 3×</span>
 <span class="banner miss">MISSED 1</span>
 </div>
+<div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
 <div class="legrow leg-miss">
 <div class="badge miss">✗</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
@@ -635,6 +646,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="payout">PWR 4.92× · FLEX 2.46×</span>
 <span class="banner miss">MISSED 1</span>
 </div>
+<div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
 <div class="legrow leg-miss">
 <div class="badge miss">✗</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
@@ -676,6 +688,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="payout">PWR 3× · FLEX 3×</span>
 <span class="banner miss">MISSED 1</span>
 </div>
+<div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
 <div class="legrow leg-miss">
 <div class="badge miss">✗</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
@@ -711,6 +724,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="payout">PWR 3× · FLEX 3×</span>
 <span class="banner void">VOID/PUSH</span>
 </div>
+<div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
 <div class="legrow leg-void">
 <div class="badge void">○</div>
 <div><span class="pill sport-mlb">MLB</span></div>
@@ -742,6 +756,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="payout">PWR 6× · FLEX 3×</span>
 <span class="banner void">VOID/PUSH</span>
 </div>
+<div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
 <div class="legrow leg-void">
 <div class="badge void">○</div>
 <div><span class="pill sport-mlb">MLB</span></div>
@@ -783,6 +798,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <span class="payout">PWR 3× · FLEX 3×</span>
 <span class="banner void">VOID/PUSH</span>
 </div>
+<div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
 <div class="legrow leg-void">
 <div class="badge void">○</div>
 <div><span class="pill sport-mlb">MLB</span></div>
