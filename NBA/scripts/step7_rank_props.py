@@ -525,9 +525,12 @@ def _build_nba_ml_X(out: pd.DataFrame, model_features: list[str]) -> pd.DataFram
     else:
         cg = pd.Series(2.0, index=idx)
 
+    edge_raw_ml = _to_num(out.get("edge", pd.Series(np.nan, index=idx))).fillna(0.0)
+    edge_ml = edge_raw_ml.where(~is_under, -edge_raw_ml)
+
     base = pd.DataFrame(
         {
-            "edge": _to_num(out.get("edge", pd.Series(np.nan, index=idx))).fillna(0.0),
+            "edge": edge_ml,
             "hit_rate_l5": hr5,
             "hit_rate_l10": hr10,
             "hit_rate_l20": hr20,

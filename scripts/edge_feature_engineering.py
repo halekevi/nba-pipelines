@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """
 Shared edge / ticket ML features for graded history and daily step7 outputs.
+
+The `edge` feature is play-side signed: raw (projection - line) is negated when
+bet_direction is UNDER, aligned with prop ML and ml_play_side_edge. Retrain
+edge_model_unified after changing this definition.
 """
 
 from __future__ import annotations
@@ -312,7 +316,11 @@ def build_feature_vector(df: pd.DataFrame, sport: str) -> pd.DataFrame:
     av5vl = ((avg_l5 - line_score) / ls_safe).clip(-2.0, 2.0)
     av10vl = ((avg_l10 - line_score) / ls_safe).clip(-2.0, 2.0)
 
-    edge = _to_num(_first_col(out, ("edge",)))
+    # Play-side edge: same convention as prop ML (ml_play_side_edge / step7 _build_*_ml_X).
+    # Raw slate edge is projection - line; good UNDERs are negative raw — flip so the feature
+    # aligns with "edge toward the pick". Only explicit UNDER rows flip (missing direction unchanged).
+    edge_raw = _to_num(_first_col(out, ("edge",)))
+    edge = edge_raw.where(~is_under, -edge_raw)
     prop_score = _to_num(_first_col(out, ("prop_score", "rank_score", "final_score")))
 
     sp_e = float(SPORT_ENCODING.get(sp, 0))

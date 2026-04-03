@@ -586,13 +586,16 @@ def _build_nhl_ml_X(df: pd.DataFrame, model_features: list[str]) -> pd.DataFrame
     hr20 = hr20.fillna(hr10).fillna(0.5)
 
     line = _to_num(_nhl_ml_pick_col(df, ("line", "line_score", "Line"))).fillna(0.0)
-    edge = _to_num(df.get("edge", pd.Series(np.nan, index=idx))).fillna(0.0)
     pick = df.get("pick_type", pd.Series("Standard", index=idx)).astype(str).str.lower()
     tier_num = pd.Series(
         np.where(pick.str.contains("gob"), 2, np.where(pick.str.contains("dem"), 0, 1)),
         index=idx,
     )
     final_direction = _nhl_ml_final_direction(df)
+    edge_raw = _to_num(df.get("edge", pd.Series(np.nan, index=idx))).fillna(0.0)
+    # Play-side edge (same as Goblin neg-edge audit): UNDER wins when proj < line → raw edge negative.
+    # Feeding signed edge this way matches NBA/Soccer edge_adj_dr semantics for the ML feature named "edge".
+    edge = edge_raw.where(~final_direction.eq("UNDER"), -edge_raw)
     dir_num = pd.Series(np.where(final_direction.eq("OVER"), 1, 0), index=idx)
     prop_raw = df.get("stat_norm", df.get("prop_type", pd.Series("unknown", index=idx)))
     prop_norm = prop_raw.astype(str).map(_normalize_nhl_prop_ml)

@@ -52,6 +52,8 @@ if str(_scripts_dir) not in sys.path:
     sys.path.insert(0, str(_scripts_dir))
 from ensure_local_cache import ensure_local_cache
 
+from ml_play_side_edge import play_side_edge
+
 ensure_local_cache(str(ROOT))
 SYNTHETIC_DB = ROOT / "data" / "cache" / "synthetic_graded.db"
 MODEL_DIR = ROOT / "models"
@@ -344,6 +346,7 @@ def main() -> None:
         df[prop_col].astype(str).str.lower().str.strip().map(lambda x: _PROP_NORM_MAP.get(x, x))
     )
     train["direction"] = _direction_num(df[dir_col]).astype(int)
+    train["edge"] = play_side_edge(train["edge"], train["direction"])
     train["hit"] = _map_hit(df[hit_col])
 
     train = train[train["hit"].isin([0.0, 1.0])].copy()

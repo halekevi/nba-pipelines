@@ -5,6 +5,9 @@ Train NBA prop ML model for NBA/scripts/step7_rank_props.py inference.
 Loads graded workbooks (full slate `graded_nba_*.xlsx`, or `graded_nba1q_*.xlsx` /
 `graded_nba1h_*.xlsx` when `--segment` is set), builds feature matrix, trains XGBoost,
 and saves `models/prop_model_{segment}.pkl` plus features / blend / calibrator sidecars.
+
+Training applies play-side edge (negate raw edge for UNDER) so the `edge` feature matches
+`NBA/scripts/step7_rank_props.py` inference after the 2026 direction-aware ML fix.
 """
 from __future__ import annotations
 
@@ -46,6 +49,7 @@ _scripts_dir = Path(__file__).resolve().parent
 if str(_scripts_dir) not in sys.path:
     sys.path.insert(0, str(_scripts_dir))
 from ensure_local_cache import ensure_local_cache
+from ml_play_side_edge import play_side_edge
 
 ensure_local_cache(str(ROOT))
 SYNTHETIC_DB = ROOT / "data" / "cache" / "synthetic_graded.db"
@@ -472,6 +476,7 @@ def main() -> None:
             train[c] = col / 100.0
     train["line"] = _to_num(df[line_col]) if line_col else np.nan
     train["direction"] = _direction_num(df[dir_col]).astype(int)
+    train["edge"] = play_side_edge(train["edge"], train["direction"])
     train["tier"] = _pick_type_tier_num(df[pick_col]) if pick_col else 1
     train["defense_tier"] = _defense_tier_4(df)
     train["minutes"] = _to_num(df[min_col]) if min_col else np.nan

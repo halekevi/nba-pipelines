@@ -51,6 +51,7 @@ _scripts_dir = Path(__file__).resolve().parent
 if str(_scripts_dir) not in sys.path:
     sys.path.insert(0, str(_scripts_dir))
 from ensure_local_cache import ensure_local_cache
+from ml_play_side_edge import play_side_edge
 
 ensure_local_cache(str(ROOT))
 SYNTHETIC_DB = ROOT / "data" / "cache" / "synthetic_graded.db"
@@ -355,6 +356,7 @@ def main() -> None:
     train["intel_shr_z"] = train["intel_shr_z"].fillna(0.0)
     train["prop_type"] = df[prop_col].astype(str).str.strip().str.lower()
     train["direction"] = _direction_num(df[dir_col]).astype(int)
+    train["edge"] = play_side_edge(train["edge"], train["direction"])
     train["hit"] = _map_hit(df[hit_col])
 
     train = train[train["hit"].isin([0.0, 1.0])].copy()

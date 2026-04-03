@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Train unified XGBoost edge classifier + Platt calibration on graded history."""
+"""Train unified XGBoost edge classifier + Platt calibration on graded history.
+
+Uses edge_feature_engineering.build_feature_vector(), which applies play-side edge
+(negate raw projection-line edge for explicit UNDER rows) so the `edge` feature matches
+step7b / prop ML conventions. Retrain after that convention change.
+"""
 
 from __future__ import annotations
 

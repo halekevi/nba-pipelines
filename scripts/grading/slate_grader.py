@@ -199,6 +199,28 @@ PROP_NORM_MAP={
     '3-pointers attempted':'3-pt attempted',
     '3 pointers made':'3-pt made',
     '3 pointers attempted':'3-pt attempted',
+    # NBA step7 prop_norm short codes (align with fetch_actuals Title Case → lower)
+    'fg3m':'3-pt made',
+    'fg3a':'3-pt attempted',
+    'fg2m':'two pointers made',
+    'fg2a':'two pointers attempted',
+    'fgm':'fg made',
+    'fga':'fg attempted',
+    'ftm':'free throws made',
+    'fta':'free throws attempted',
+    'oreb':'offensive rebounds',
+    'orebs':'offensive rebounds',
+    'dreb':'defensive rebounds',
+    'drebs':'defensive rebounds',
+    'pf':'personal fouls',
+    'personalfouls':'personal fouls',
+    'fantasy':'fantasy score',
+    'fantasyscore':'fantasy score',
+    'fs':'fantasy score',
+    '2ptm':'two pointers made',
+    '2pta':'two pointers attempted',
+    '2pt made':'two pointers made',
+    '2pt attempted':'two pointers attempted',
 }
 def norm_prop_key(p) -> str:
     s = str(p).lower().strip()
@@ -284,8 +306,9 @@ def load_nba(path: str) -> pd.DataFrame:
     # Hard fail if player still missing
     if "player" not in df.columns:
         raise KeyError(f"NBA slate missing 'player' column. Found columns: {list(df.columns)}")
+    # Match CBB/apply_actuals: suffix-stripped, punctuation-normalized keys reduce false NO_ACTUAL.
     df["player_key"] = (
-        df["player"].astype(str).str.lower().str.strip()
+        df["player"].astype(str).apply(norm_player_key)
         + "|"
         + df["prop_type_norm"].apply(norm_prop_key)
     )

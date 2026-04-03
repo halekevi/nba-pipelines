@@ -44,6 +44,7 @@ _scripts_dir = Path(__file__).resolve().parent
 if str(_scripts_dir) not in sys.path:
     sys.path.insert(0, str(_scripts_dir))
 from ensure_local_cache import ensure_local_cache
+from ml_play_side_edge import play_side_edge
 
 ensure_local_cache(str(ROOT))
 SYNTHETIC_DB = ROOT / "data" / "cache" / "synthetic_graded.db"
@@ -463,6 +464,7 @@ def main() -> None:
     train["line"] = _to_num(df[line_col]) if line_col else np.nan
     train["direction_raw"] = _norm_cat(df["final_direction"])
     train["direction"] = _direction_num(train["direction_raw"]).astype(int)
+    train["edge"] = play_side_edge(train["edge"], train["direction"])
     train["tier"] = _tier_letter_num(df[tier_col]) if tier_col else 2.0
     train["pick_tier_num"] = _pick_type_tier_num(df[pick_col]) if pick_col else 1.0
     train["defense_tier"] = _defense_tier_4(df)

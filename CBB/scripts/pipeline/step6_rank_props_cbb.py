@@ -484,6 +484,10 @@ try:
     ML_BLEND_WEIGHT = float(load_ml_blend_weight(_repo_root_ml_cbb(), "cbb"))
 except Exception:
     ML_BLEND_WEIGHT = 0.30
+try:
+    from ml_play_side_edge import play_side_edge  # noqa: E402
+except ImportError:
+    play_side_edge = None  # type: ignore[misc, assignment]
 
 
 def _ml_defense_tier_series(out: pd.DataFrame, n_teams: float) -> pd.Series:
@@ -557,15 +561,18 @@ def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, source_hint: s
 
     pick = out.get("pick_type", pd.Series("Standard", index=out.index)).astype(str).str.lower()
     tier_num = pd.Series(np.where(pick.str.contains("gob"), 2, np.where(pick.str.contains("dem"), 0, 1)), index=out.index)
-    dir_num = pd.Series(
-        np.where(out.get("bet_direction", pd.Series("OVER", index=out.index)).astype(str).str.upper().eq("OVER"), 1, 0),
-        index=out.index,
-    )
+    _bd_ml = out.get("bet_direction", pd.Series("OVER", index=out.index)).astype(str).str.upper().str.strip()
+    dir_num = pd.Series(np.where(_bd_ml.eq("OVER"), 1, 0), index=out.index)
+    edge_raw_ml = _to_num(out.get("edge", pd.Series(np.nan, index=out.index))).fillna(0.0)
+    if play_side_edge is not None:
+        edge_ml_cbb = play_side_edge(edge_raw_ml, dir_num)
+    else:
+        edge_ml_cbb = edge_raw_ml.where(~_bd_ml.eq("UNDER"), -edge_raw_ml)
     prop_norm = out.get("prop_norm", out.get("prop_type", pd.Series("unknown", index=out.index))).astype(str).str.lower().str.strip()
     prop_dummies = pd.get_dummies(prop_norm, prefix="prop", dtype=float)
     X_base = pd.DataFrame(
         {
-            "edge": _to_num(out.get("edge", pd.Series(np.nan, index=out.index))).fillna(0.0),
+            "edge": edge_ml_cbb,
             "hit_rate_l10": _to_num(out.get("line_hit_rate", pd.Series(np.nan, index=out.index))).fillna(0.5),
             "defense_tier": _to_num(
                 _ml_defense_tier_series(out, _infer_cbb_n_teams(out))

@@ -618,15 +618,15 @@ def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, n_teams: int) 
 
     pick = out.get("pick_type", pd.Series("Standard", index=out.index)).astype(str).str.lower()
     tier_num = pd.Series(np.where(pick.str.contains("gob"), 2, np.where(pick.str.contains("dem"), 0, 1)), index=out.index)
-    dir_num = pd.Series(
-        np.where(out.get("bet_direction", pd.Series("OVER", index=out.index)).astype(str).str.upper().eq("OVER"), 1, 0),
-        index=out.index,
-    )
+    _bd_ml = out.get("bet_direction", pd.Series("OVER", index=out.index)).astype(str).str.upper().str.strip()
+    dir_num = pd.Series(np.where(_bd_ml.eq("OVER"), 1, 0), index=out.index)
+    edge_raw_ml = _to_num(out.get("edge", pd.Series(np.nan, index=out.index))).fillna(0.0)
+    edge_ml = edge_raw_ml.where(~_bd_ml.eq("UNDER"), -edge_raw_ml)
     prop_norm = out.get("prop_norm", out.get("prop_type", pd.Series("unknown", index=out.index))).astype(str).str.lower().str.strip()
     prop_dummies = pd.get_dummies(prop_norm, prefix="prop", dtype=float)
     X_base = pd.DataFrame(
         {
-            "edge": _to_num(out.get("edge", pd.Series(np.nan, index=out.index))).fillna(0.0),
+            "edge": edge_ml,
             "hit_rate_l10": _to_num(out.get("line_hit_rate", pd.Series(np.nan, index=out.index))).fillna(0.5),
             "defense_tier": _to_num(_ml_defense_tier_series(out, n_teams)).fillna(1.0),
             "tier": _to_num(tier_num).fillna(1.0),
