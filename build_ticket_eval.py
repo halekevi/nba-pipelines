@@ -230,6 +230,7 @@ body::after{
 [data-theme='light'] .ticket-card{background:rgba(255,255,255,0.65);border-color:rgba(0,0,0,0.1);box-shadow:0 4px 20px rgba(0,0,0,0.08);}
 [data-theme='light'] .thdr{background:rgba(0,0,0,0.04);}
 [data-theme='light'] .legrow{color:rgba(0,0,0,0.85);}
+[data-theme='light'] .leg-head{background:rgba(0,0,0,0.04);border-bottom-color:rgba(0,0,0,0.08);color:rgba(0,0,0,0.45);}
 [data-theme='light'] .meta-muted{color:rgba(0,0,0,0.5);}
 [data-theme='light'] .sum-val{color:#b8860b;}
 [data-theme='light'] .sum-lab{color:rgba(0,0,0,0.5);}
@@ -332,6 +333,7 @@ body::after{
 }
 @media(max-width:900px){
   .legrow{grid-template-columns:52px 80px 1fr;gap:10px;padding:12px;font-size:14px;}
+  .leg-head{display:none;}
   .leg-extra{display:none;}
   .stats-bar{padding:14px 16px;}
   .sum-val{font-size:22px;}
@@ -1138,12 +1140,15 @@ def debug_report(
     for i, leg in enumerate(legs_sample, 1):
         pl = _norm_player_name(leg.get("player") or "")
         pt = str(leg.get("prop_type") or "").strip().lower()
+        pk = _prop_match_key_from_display(str(leg.get("prop_type") or ""))
         dr = str(leg.get("direction") or "").strip().upper()
         row = _match_leg_to_row_multi(leg, indices)
         st = "MATCH" if row else "NO MATCH -> UNGRADED"
         sp = str(leg.get("sport") or "")
         bk = " -> ".join(_leg_match_buckets(sp))
-        print(f"  {i}. sport={sp!r} buckets=[{bk}] player={pl!r} prop_type={pt!r} direction={dr!r} -> {st}")
+        print(
+            f"  {i}. sport={sp!r} buckets=[{bk}] player={pl!r} prop_key={pk!r} prop_type={pt!r} direction={dr!r} -> {st}"
+        )
         if row:
             print(
                 f"      actual={row.get('actual')!r} line={row.get('line')!r} "
@@ -1746,6 +1751,11 @@ def _build_html(
         "grid-template-columns:56px 92px minmax(120px,1fr) 44px minmax(240px,1.45fr) minmax(108px,1fr) minmax(96px,1fr) minmax(76px,.85fr);gap:12px;"
         "align-items:center;padding:14px clamp(14px,2vw,22px);font-size:clamp(13px,1.45vw,16px);line-height:1.35;"
         "border-bottom:1px solid rgba(255,255,255,.06);border-left:3px solid transparent;}",
+        ".leg-head{font-family:'Bebas Neue',sans-serif;display:grid;"
+        "grid-template-columns:56px 92px minmax(120px,1fr) 44px minmax(240px,1.45fr) minmax(108px,1fr) minmax(96px,1fr) minmax(76px,.85fr);gap:12px;"
+        "align-items:end;padding:6px clamp(14px,2vw,22px) 8px;font-size:10px;letter-spacing:2px;color:var(--muted);"
+        "border-bottom:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.12);}",
+        ".leg-head-lab{line-height:1.2;}",
         ".legrow:last-child{border-bottom:none;}",
         ".legrow.leg-hit{background:rgba(57,255,110,0.04);border-left-color:var(--green);}",
         ".legrow.leg-miss{background:rgba(255,77,77,0.10);border-left:4px solid #ff4d4d;"
@@ -1892,6 +1902,17 @@ def _build_html(
                 parts.append(f'<span class="payout">PWR {_fmt_num(pp)}× · FLEX {_fmt_num(fp)}×</span>')
                 parts.append(f'<span class="banner {banner_cls}">{esc(banner_txt)}</span>')
                 parts.append("</div>")
+                parts.append(
+                    '<div class="leg-head" aria-hidden="true">'
+                    "<div></div><div></div>"
+                    '<div class="leg-head-lab">PLAYER</div>'
+                    '<div class="leg-head-lab">T</div>'
+                    '<div class="leg-head-lab">PROP</div>'
+                    '<div class="leg-head-lab">LINE</div>'
+                    '<div class="leg-head-lab">ACTUAL</div>'
+                    '<div class="leg-head-lab">EDGE</div>'
+                    "</div>"
+                )
 
                 for leg, lg in zip(legs, leg_grades):
                     row = _match_leg_to_row_multi(leg, indices)
