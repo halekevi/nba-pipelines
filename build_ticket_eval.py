@@ -1694,8 +1694,6 @@ def _build_html(
     misses = sum(1 for _, _, g in all_legs if g == "MISS")
     voids = sum(1 for _, _, g in all_legs if g == "VOID")
     ungraded = sum(1 for _, _, g in all_legs if g == "UNGRADED")
-    decided = hits + misses
-    leg_pct = (100.0 * hits / decided) if decided else 0.0
 
     # Manual Ticket Builder uses the per-leg model fields from tickets_latest.json.
     # We flatten all legs into a single array and embed it into the HTML as window.SLATE_DATA.
@@ -1734,6 +1732,9 @@ def _build_html(
             perfect += 1
         if any(x == "MISS" for x in gs):
             with_misses += 1
+
+    ticket_decided = perfect + with_misses
+    ticket_pct = (100.0 * perfect / ticket_decided) if ticket_decided else 0.0
 
     # ── HTML
     esc = html.escape
@@ -1867,7 +1868,7 @@ def _build_html(
         _TICKETS_NAV_HTML,
         '<div class="stats-bar">',
         '<div class="sum-row">',
-        f'<div class="sum-item"><div class="sum-val">{leg_pct:.1f}%</div><div class="sum-lab">LEG HIT RATE</div></div>',
+        f'<div class="sum-item"><div class="sum-val">{ticket_pct:.1f}%</div><div class="sum-lab">TICKET HIT RATE</div></div>',
         f'<div class="sum-item"><div class="sum-val green">{hits}</div><div class="sum-lab">HITS</div></div>',
         f'<div class="sum-item"><div class="sum-val red">{misses}</div><div class="sum-lab">MISSES</div></div>',
         f'<div class="sum-item"><div class="sum-val void">{voids}</div><div class="sum-lab">VOID/PUSH</div></div>',
