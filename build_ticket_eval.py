@@ -8,6 +8,10 @@ Also writes ticket_eval_slate_latest.json — same legs as window.SLATE_DATA in 
 page /api/slate-sport slate cards can match the ticket eval builder (when SLATE_SPORT_SOURCE=auto).
 
 Run after combined_slate_tickets.py --write-web (JSON only) so tickets_latest.html includes grades.
+
+Railway / git deploy: ``outputs/`` is not in the repo. To grade MLB (and other sports) on the live site,
+drop ``graded_<sport>_<date>.xlsx`` under ``ui_runner/graded_slate/<date>/`` (same names as under
+``outputs/<date>/``), then run this script and commit the bundle + ``tickets_latest.html``.
 """
 from __future__ import annotations
 
@@ -768,9 +772,8 @@ def _ingest_workbook_rows_into_index(
         pair_buckets.setdefault((pl, pt), []).append(row)
 
 
-def _graded_xlsx_in_outputs_date(arg_date: str) -> list[Path]:
-    """Graded slates dropped next to other daily artifacts: outputs/YYYY-MM-DD/*.xlsx."""
-    d = REPO_ROOT / "outputs" / arg_date
+def _graded_xlsx_in_dir(d: Path) -> list[Path]:
+    """Graded sport workbooks in a directory (outputs date folder or ui_runner graded_slate bundle)."""
     if not d.is_dir():
         return []
     found: set[Path] = set()
@@ -779,11 +782,91 @@ def _graded_xlsx_in_outputs_date(arg_date: str) -> list[Path]:
             if not p.is_file():
                 continue
             low = p.name.lower()
-            # Avoid matching combined_tickets_graded_*.xlsx from *_graded_* glob (not a sport slate).
             if "combined_tickets_graded" in low:
                 continue
             found.add(p)
     return sorted(found, key=lambda x: x.name.lower())
+
+
+def _graded_xlsx_in_outputs_date(arg_date: str) -> list[Path]:
+    """Graded slates next to daily artifacts: outputs/YYYY-MM-DD/*.xlsx."""
+    return _graded_xlsx_in_dir(REPO_ROOT / "outputs" / arg_date)
+
+
+def _graded_slate_bundle_dir(arg_date: str) -> Path:
+    """Committed graded workbooks for deploy hosts without outputs/ (e.g. Railway)."""
+    return REPO_ROOT / "ui_runner" / "graded_slate" / arg_date
+
+
+def _merge_strict_graded_date_workbooks(
+    out: dict[str, tuple[dict, dict]],
+    graded_dir: Path,
+    arg_date: str,
+) -> None:
+    """
+    Overlay rows from graded_<sport>_<date>.xlsx (Box Raw sheet) with full-row actual/grade parsing.
+    Same file names as in outputs/<date>/.
+    """
+    if not graded_dir.is_dir():
+        return
+    sport_to_bucket = {
+        "nba": "NBA",
+        "cbb": "CBB",
+        "nhl": "NHL",
+        "soccer": "SOCCER",
+        "wcbb": "WCBB",
+        "mlb": "MLB",
+        "nba1h": "NBA1H",
+        "nba1q": "NBA1Q",
+    }
+    for graded_file in sorted(graded_dir.glob(f"graded_*_{arg_date}.xlsx")):
+        m = re.match(r"^graded_(.+)_(\d{4}-\d{2}-\d{2})$", graded_file.stem)
+        if not m:
+            continue
+        sport_tag = m.group(1).lower()
+        bucket = sport_to_bucket.get(sport_tag)
+        if bucket is None:
+            continue
+        try:
+            xl = pd.ExcelFile(graded_file, engine="openpyxl")
+            sheet_priority = ["Box Raw", "Props", "Graded"]
+            sheet_to_use = next(
+                (s for s in sheet_priority if s in xl.sheet_names),
+                xl.sheet_names[0],
+            )
+            gdf = xl.parse(sheet_to_use)
+            gdf.columns = [str(c).lower().strip() for c in gdf.columns]
+            pcol = next((c for c in gdf.columns if c == "player"), None)
+            propcol = next(
+                (c for c in gdf.columns if c in ("prop", "prop_type", "prop_type_norm", "stat", "stat_type")),
+                None,
+            )
+            if pcol is None or propcol is None:
+                continue
+            trip, pairs = out.get(bucket, ({}, {}))
+            for _, grow in gdf.iterrows():
+                raw = {c: grow[c] for c in gdf.columns}
+                pl = _norm_player_name(_canon_player(raw))
+                pt = _prop_match_key_from_display(str(_canon_prop(raw) or ""))
+                dr = _canon_direction(raw)
+                if not pl or not pt:
+                    continue
+                row_out = {
+                    "player_lower": pl,
+                    "prop_lower": pt,
+                    "direction": dr,
+                    "line": _canon_line(raw),
+                    "actual": _canon_actual(raw),
+                    "grade_raw": _canon_grade_raw(raw),
+                }
+                line_val = row_out["line"]
+                line_key = round(float(line_val), 2) if line_val is not None else None
+                key3 = (pl, pt, dr, line_key)
+                trip[key3] = row_out
+                pairs.setdefault((pl, pt), []).append(row_out)
+            out[bucket] = (trip, pairs)
+        except Exception:
+            continue
 
 
 def _sport_buckets_for_graded_filename(path: Path) -> list[str]:
@@ -861,70 +944,13 @@ def _load_actuals_indices(
         out[bucket] = (triple, pair_buckets)
 
     if arg_date and re.match(r"^\d{4}-\d{2}-\d{2}$", arg_date):
-        graded = _graded_xlsx_in_outputs_date(arg_date)
-        _merge_graded_workbooks_into_indices(out, graded)
+        bundle_dir = _graded_slate_bundle_dir(arg_date)
+        _merge_graded_workbooks_into_indices(out, _graded_xlsx_in_dir(bundle_dir))
+        _merge_strict_graded_date_workbooks(out, bundle_dir, arg_date)
 
-        graded_dir = REPO_ROOT / "outputs" / arg_date
-        if graded_dir.is_dir():
-            sport_to_bucket = {
-                "nba": "NBA",
-                "cbb": "CBB",
-                "nhl": "NHL",
-                "soccer": "SOCCER",
-                "wcbb": "WCBB",
-                "mlb": "MLB",
-                "nba1h": "NBA1H",
-                "nba1q": "NBA1Q",
-            }
-            for graded_file in sorted(graded_dir.glob(f"graded_*_{arg_date}.xlsx")):
-                m = re.match(r"^graded_(.+)_(\d{4}-\d{2}-\d{2})$", graded_file.stem)
-                if not m:
-                    continue
-                sport_tag = m.group(1).lower()
-                bucket = sport_to_bucket.get(sport_tag)
-                if bucket is None:
-                    continue
-                try:
-                    xl = pd.ExcelFile(graded_file, engine="openpyxl")
-                    sheet_priority = ["Box Raw", "Props", "Graded"]
-                    sheet_to_use = next(
-                        (s for s in sheet_priority if s in xl.sheet_names),
-                        xl.sheet_names[0],
-                    )
-                    gdf = xl.parse(sheet_to_use)
-                    gdf.columns = [str(c).lower().strip() for c in gdf.columns]
-                    pcol = next((c for c in gdf.columns if c == "player"), None)
-                    propcol = next(
-                        (c for c in gdf.columns if c in ("prop", "prop_type", "prop_type_norm", "stat", "stat_type")),
-                        None,
-                    )
-                    if pcol is None or propcol is None:
-                        continue
-                    trip, pairs = out.get(bucket, ({}, {}))
-                    for _, grow in gdf.iterrows():
-                        # Full row so _canon_actual / _canon_grade_raw see every alias (box, stat, …).
-                        raw = {c: grow[c] for c in gdf.columns}
-                        pl = _norm_player_name(_canon_player(raw))
-                        pt = _prop_match_key_from_display(str(_canon_prop(raw) or ""))
-                        dr = _canon_direction(raw)
-                        if not pl or not pt:
-                            continue
-                        row_out = {
-                            "player_lower": pl,
-                            "prop_lower": pt,
-                            "direction": dr,
-                            "line": _canon_line(raw),
-                            "actual": _canon_actual(raw),
-                            "grade_raw": _canon_grade_raw(raw),
-                        }
-                        line_val = row_out["line"]
-                        line_key = round(float(line_val), 2) if line_val is not None else None
-                        key3 = (pl, pt, dr, line_key)
-                        trip[key3] = row_out
-                        pairs.setdefault((pl, pt), []).append(row_out)
-                    out[bucket] = (trip, pairs)
-                except Exception:
-                    continue
+        outputs_dir = REPO_ROOT / "outputs" / arg_date
+        _merge_graded_workbooks_into_indices(out, _graded_xlsx_in_dir(outputs_dir))
+        _merge_strict_graded_date_workbooks(out, outputs_dir, arg_date)
     return out
 
 
@@ -1107,11 +1133,21 @@ def debug_report(
             extra = f" ...(+{len(cols) - 24})" if len(cols) > 24 else ""
             print(f"       sheet {sh!r}: {preview}{extra}")
 
+    bundle_dir = _graded_slate_bundle_dir(arg_date)
+    bpaths = _graded_xlsx_in_dir(bundle_dir)
+    print(f"\nui_runner/graded_slate/{arg_date}/ (optional; for Railway when outputs/ is absent):")
+    if not bpaths:
+        print("  (none — copy graded_*.xlsx here, then rebuild tickets_latest.html)")
+    else:
+        for p in bpaths:
+            bk = ", ".join(_sport_buckets_for_graded_filename(p)) or "?"
+            print(f"  - {p.relative_to(REPO_ROOT)}  -> buckets [{bk}]")
+
     indices = _load_actuals_indices(sport_candidates, arg_date)
     gpaths = _graded_xlsx_in_outputs_date(arg_date)
-    print(f"\noutputs/{arg_date}/ graded workbook(s) merged into indices:")
+    print(f"\noutputs/{arg_date}/ graded workbook(s) merged into indices (overrides bundle):")
     if not gpaths:
-        print("  (none — add graded_nba_{date}.xlsx, graded_nhl_{date}.xlsx, cbb_graded_{date}.xlsx, etc.)")
+        print("  (none — add graded_nba_{date}.xlsx, graded_mlb_{date}.xlsx, etc.)")
     else:
         for p in gpaths:
             bk = ", ".join(_sport_buckets_for_graded_filename(p)) or "?"
@@ -1158,7 +1194,7 @@ def debug_report(
     print(f"\nTotal legs in JSON: {total}")
     print(
         "\nNote: Base rows come from SPORT_XLSX_CANDIDATES (pre-game step8 slates)."
-        f"\n      Same-day graded files under outputs/{arg_date}/ are merged on top when present."
+        f"\n      Graded files: ui_runner/graded_slate/{arg_date}/ first, then outputs/{arg_date}/ (wins ties)."
     )
     print("=== end debug ===\n")
 
