@@ -15,7 +15,7 @@ import argparse
 import html
 import json
 import re
-import unicodedata
+import sys
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -23,6 +23,10 @@ from typing import Any
 import pandas as pd
 
 REPO_ROOT = Path(__file__).resolve().parent
+_SCRIPTS = REPO_ROOT / "scripts"
+if str(_SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(_SCRIPTS))
+from player_name_norm import fold_player_name as _fold_player_name  # noqa: E402
 TEMPLATES_DIR = REPO_ROOT / "ui_runner" / "templates"
 TICKET_EVAL_SLATE_JSON = TEMPLATES_DIR / "ticket_eval_slate_latest.json"
 
@@ -459,16 +463,10 @@ def _norm_header(s: str) -> str:
 
 
 def _norm_player_name(s: str) -> str:
-    """Align with MLB grader _norm_name_mlb + slate_grader.norm_player_key (accents, Jr., dots)."""
+    """Shared with MLB grader + slate_grader (scripts/player_name_norm.py)."""
     if s is None or (isinstance(s, float) and pd.isna(s)):
         return ""
-    t = unicodedata.normalize("NFKD", str(s).strip())
-    t = "".join(c for c in t if not unicodedata.combining(c))
-    p = t.lower().replace(".", " ")
-    p = re.sub(r"\s+", " ", p)
-    suffixes = {"jr", "sr", "ii", "iii", "iv", "v"}
-    parts = [x for x in p.split(" ") if x and x not in suffixes]
-    return " ".join(parts)
+    return _fold_player_name(s)
 
 
 def _canon_player(row: dict[str, Any]) -> str:

@@ -16,7 +16,6 @@ Usage:
 """
 from __future__ import annotations
 import argparse, sys, re
-import unicodedata
 from datetime import datetime
 from pathlib import Path
 
@@ -186,16 +185,10 @@ def _norm_prop(s):
 
 
 def _norm_name_mlb(s) -> str:
-    """MLB keys: NFKD (Jesús→jesus) + same suffix/dot rules as slate_grader.norm_player_key."""
-    if s is None or (isinstance(s, float) and pd.isna(s)):
-        return ""
-    t = unicodedata.normalize("NFKD", str(s).strip())
-    t = "".join(c for c in t if not unicodedata.combining(c))
-    p = t.lower().replace(".", " ")
-    p = re.sub(r"\s+", " ", p)
-    suffixes = {"jr", "sr", "ii", "iii", "iv", "v"}
-    parts = [x for x in p.split(" ") if x and x not in suffixes]
-    return " ".join(parts)
+    """MLB keys — same as slate_grader / build_ticket_eval (see player_name_norm)."""
+    from player_name_norm import fold_player_name
+
+    return fold_player_name(s)
 
 def load_slate(path: Path, sport: str, grade_date: str = None) -> pd.DataFrame:
     sport = sport.upper()

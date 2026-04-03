@@ -15,8 +15,15 @@ from openpyxl.utils import get_column_letter
 import argparse
 import os
 import re
-import unicodedata
+import sys
 from datetime import datetime
+from pathlib import Path
+
+_SCRIPTS_DIR = Path(__file__).resolve().parent.parent
+if str(_SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPTS_DIR))
+from player_name_norm import fold_player_name  # noqa: E402
+
 
 def _def_rank_bucket(x):
     try:
@@ -233,14 +240,7 @@ def norm_prop_key(p) -> str:
 
 
 def norm_player_key(p) -> str:
-    t = unicodedata.normalize("NFKD", str(p).strip())
-    t = "".join(c for c in t if not unicodedata.combining(c))
-    s = t.lower().replace(".", " ")
-    s = re.sub(r"\s+", " ", s)
-    parts = [x for x in s.split(" ") if x]
-    suffixes = {"jr", "sr", "ii", "iii", "iv", "v"}
-    parts = [x for x in parts if x not in suffixes]
-    return " ".join(parts)
+    return fold_player_name(p)
 
 def _alias_cols(df):
     for alias,canon in [('DEF_TIER','def_tier'),('minutes_tier','minutes_tier'),
