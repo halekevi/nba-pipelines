@@ -3,9 +3,8 @@
 step2_attach_picktypes_soccer.py  (Soccer Pipeline)
 
 Changes:
-- LEAGUE_SLUGS_FOR_ROSTER expanded to include sau.1 (Saudi Pro League),
-  eng.3, esp.2, fra.2, usa.nwsl, aus.1 — recovers ~600 previously
-  unresolved players.
+- LEAGUE_SLUGS_FOR_ROSTER includes eng.3, esp.2, fra.2, usa.nwsl, aus.1, etc.
+  (Saudi sau.1 removed: ESPN boxscore/scoreboard unreliable for grading.)
 - Roster cache auto-rebuilds after ROSTER_CACHE_MAX_AGE_DAYS (default 7).
   Pass --refresh-roster to force an immediate rebuild.
 - opp_team derived from pp_home_team/pp_away_team first; falls back to
@@ -45,8 +44,6 @@ LEAGUE_SLUGS_FOR_ROSTER = [
     "eng.2", "eng.3", "esp.2", "fra.2", "por.1", "ned.1", "tur.1", "sco.1",
     # Americas
     "usa.1", "usa.nwsl", "arg.1", "arg.2", "bra.1", "mex.1",
-    # Middle East
-    "sau.1",
     # Other
     "aus.1",
 ]

@@ -40,7 +40,6 @@ LEAGUES = [
     ("ned.1",          "Eredivisie"),
     ("por.1",          "Primeira Liga"),
     ("sco.1",          "Scottish Prem"),
-    ("sau.1",          "Saudi Pro League"),
     ("usa.nwsl",       "NWSL"),
     ("aus.1",          "A-League"),
     ("eng.w.1",        "WSL"),

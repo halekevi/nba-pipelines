@@ -214,7 +214,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         write_sheet(wb, f"Tier {tier}", subset if len(subset) else clean_eligible.head(0))
 
     wb.save(xlsx_path)
-    print(f"📊 Clean XLSX saved → {xlsx_path}")
+    print(f"Clean XLSX saved -> {xlsx_path}")
 
 
 def main() -> None:
@@ -230,7 +230,7 @@ def main() -> None:
     df  = pd.read_excel(args.input, sheet_name=args.sheet, dtype=str).fillna("")
 
     if df.empty:
-        print("❌ [PropOracle-Soccer-S8] Empty input from S7 — aborting.")
+        print("ERROR [PropOracle-Soccer-S8] Empty input from S7 — aborting.")
         sys.exit(1)
 
     # ── Date filter: keep only target date's games ───────────────────────────
@@ -377,10 +377,10 @@ def main() -> None:
     out["final_dir_reason"]    = reason
 
     out.to_csv(args.output, index=False, encoding="utf-8-sig")
-    print(f"✅ Saved → {args.output}")
+    print(f"Saved -> {args.output}")
 
     if out.empty:
-        print("❌ [PropOracle-Soccer-S8] Output is empty — aborting.")
+        print("ERROR [PropOracle-Soccer-S8] Output is empty — aborting.")
         sys.exit(1)
 
     print("final_bet_direction counts:")
@@ -394,7 +394,7 @@ def main() -> None:
     try:
         build_clean_xlsx(out, xlsx_path)
     except Exception as e:
-        print(f"⚠️  build_clean_xlsx failed: {e}")
+        print(f"WARN build_clean_xlsx failed: {e}")
         print("   Writing raw fallback xlsx so combined pipeline can proceed...")
         try:
             with pd.ExcelWriter(xlsx_path, engine="openpyxl") as w:
@@ -404,9 +404,9 @@ def main() -> None:
                     _void = out.get("void_reason", pd.Series("", index=out.index)).fillna("")
                     _elig = out[_mask & (_void == "")].copy() if _mask.any() else out.head(0)
                     _elig.to_excel(w, sheet_name=f"Tier {_tier}", index=False)
-            print(f"✅ Fallback xlsx saved → {xlsx_path}")
+            print(f"Fallback xlsx saved -> {xlsx_path}")
         except Exception as e2:
-            print(f"❌ Fallback xlsx also failed: {e2}")
+            print(f"ERROR Fallback xlsx also failed: {e2}")
 
 
 if __name__ == "__main__":
