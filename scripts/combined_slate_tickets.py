@@ -1405,6 +1405,21 @@ def render_tickets_html(payload: dict) -> str:
     gen_at  = payload.get("generated_at", "")
     date    = payload.get("date", "")
 
+    def fmt_slate_date_pretty(iso: str) -> str:
+        """M/D/YYYY from YYYY-MM-DD (no ambiguous 04-04 style)."""
+        s = (iso or "").strip()[:10]
+        if len(s) != 10 or s[4] != "-" or s[7] != "-":
+            return (iso or "").strip() or "—"
+        try:
+            y, m, d = int(s[0:4]), int(s[5:7]), int(s[8:10])
+            if not (1 <= m <= 12 and 1 <= d <= 31):
+                return iso
+            return f"{m}/{d}/{y}"
+        except (TypeError, ValueError):
+            return iso or "—"
+
+    date_pretty = fmt_slate_date_pretty(str(date))
+
     CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@600;700;800&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -1600,7 +1615,7 @@ html[data-theme="light"] .ticket{
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>propOracle — Tickets</title>
+<title>PropOracle — Tickets · {date_pretty}</title>
 <style>{CSS}</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
@@ -1700,7 +1715,7 @@ html[data-theme="light"] .ticket{
 <div class="hero">
   <div>
     <h1>🎟 Latest <span>Tickets</span></h1>
-    <div class="meta">Generated: {gen_at} &nbsp;|&nbsp; Date: {date}</div>
+    <div class="meta">Generated: {gen_at} &nbsp;|&nbsp; Slate date: <strong>{date_pretty}</strong> <span style="opacity:.72">({date})</span></div>
   </div>
 </div>
 
