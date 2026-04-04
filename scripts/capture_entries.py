@@ -71,15 +71,28 @@ def _resolve_ticket_performance_db() -> Path:
 DB_PATH = _resolve_ticket_performance_db()
 
 
+def _session_dir_has_artifacts(p: Path) -> bool:
+    try:
+        return p.is_dir() and any(p.iterdir())
+    except OSError:
+        return False
+
+
 def _default_capture_session_dir() -> Path:
     """
     Prefer ~/.pp_browser_profile (real Chrome cookies via setup_prizepicks_profile.py)
     so DataDome sees a trusted session. See docs/guides/BROWSER_FETCH_SETUP.md.
+
+    Otherwise prefer ``<repo>/local/browser_session``; if a non-empty legacy
+    ``<repo>/browser_session`` exists (older layout), use that until you move it.
     """
     pp = Path.home() / ".pp_browser_profile"
     if (pp / "Default" / "Network" / "Cookies").exists() or (pp / "Default" / "Cookies").exists():
         return pp
-    return Path("browser_session")
+    legacy = REPO_ROOT / "browser_session"
+    if _session_dir_has_artifacts(legacy):
+        return legacy
+    return REPO_ROOT / "local" / "browser_session"
 
 
 LEGACY_DB_PATH = REPO_ROOT / "PropOracle.db"
@@ -2417,7 +2430,9 @@ def main() -> int:
         default=str(_default_capture_session_dir()),
         help=(
             "Playwright user_data_dir. Default: ~/.pp_browser_profile if cookie DB exists "
-            "(from setup_prizepicks_profile.py), else ./browser_session. See docs/guides/BROWSER_FETCH_SETUP.md."
+            "(from setup_prizepicks_profile.py), else ./local/browser_session "
+            "(or ./browser_session if that folder already has data). "
+            "See docs/guides/BROWSER_FETCH_SETUP.md."
         ),
     )
     parser.add_argument(

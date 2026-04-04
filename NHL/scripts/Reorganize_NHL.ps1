@@ -4,7 +4,7 @@
 #   NHL\cache\       nhl_id_cache.csv, nhl_gamelog_cache.json, nhl_defense_summary.csv, nhl_stats_cache.csv
 #   NHL\scripts\     step*.py, bust_gamelog_cache.py, nhl_defense_report.py
 #   NHL\docs\        architecture notes (e.g. NHL_Pipeline_Architecture_v1.docx)
-#   NHL\scripts\_archive\  deprecated one-offs
+#   NHL\scripts\_archive\  deprecated one-offs (sport-local; not repo archive\legacy)
 #
 # Historical: this script used to move loose root files into the above; that layout is now enforced in-repo.
 

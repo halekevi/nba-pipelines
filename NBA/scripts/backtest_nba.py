@@ -179,7 +179,7 @@ def main() -> None:
     ap.add_argument(
         "--batch-actuals-glob",
         default="",
-        help="Optional glob for batch backtest (example: _archive/actuals_nba*.csv).",
+        help="Optional glob for batch backtest (example: archive/legacy/actuals_nba*.csv).",
     )
     args = ap.parse_args()
 

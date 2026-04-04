@@ -203,7 +203,8 @@ This is the manual escape hatch when everything else fails.
 This script (`scripts/capture_entries.py`, run from the repo root) also talks to PrizePicks. It **defaults to the same trusted profile** as step1:
 
 - **If** `~/.pp_browser_profile` exists (from `setup_prizepicks_profile.py`) **with** `Default/Network/Cookies` or `Default/Cookies`, that directory is used automatically.
-- **Otherwise** it falls back to `./browser_session` (older behaviour).
+- **Otherwise** it uses **`./local/browser_session`** (created on first use). If you still have a non-empty **`./browser_session`** at the repo root from an older setup, that path is used until you move or remove it.
+- **Optional second profile** (e.g. parallel harvest): keep a separate Playwright user data dir at **`./local/browser_session_harvest2`** and pass `--session-dir` explicitly. Both `local/` and root-level `browser_session*` folders are gitignored.
 
 Run (visible browser, **not** headless):
 

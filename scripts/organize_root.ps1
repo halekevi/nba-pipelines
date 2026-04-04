@@ -77,14 +77,14 @@ Move-File "payout_calculator.jsx"        "ui_runner\components"
 Move-File "payout_calculator_render.jsx" "ui_runner\components"
 Move-File "pipeline_dashboard.jsx"       "ui_runner\components"
 
-# ── Dev/misc files -> _archive\dev\ ──────────────────────────────────────────
+# ── Dev/misc files -> archive\legacy\dev\ ────────────────────────────────────
 Write-Host ""
-Write-Host "[ 5 ] Dev files -> _archive\dev\" -ForegroundColor Magenta
+Write-Host "[ 5 ] Dev files -> archive\legacy\dev\" -ForegroundColor Magenta
 Write-Host ""
-Move-File "GITHUB_DEPLOY.md"                      "_archive\dev"
-Move-File "powershell_cheatsheet.txt"             "_archive\dev"
-Move-File "prizepicks_payout_engine_progress.xlsx" "_archive\dev"
-Move-File "prizepicks_payout_engine_progress.md"  "_archive\dev"
+Move-File "GITHUB_DEPLOY.md"                      "archive\legacy\dev"
+Move-File "powershell_cheatsheet.txt"             "archive\legacy\dev"
+Move-File "prizepicks_payout_engine_progress.xlsx" "archive\legacy\dev"
+Move-File "prizepicks_payout_engine_progress.md"  "archive\legacy\dev"
 
 # ── Update run_pipeline.ps1 paths ────────────────────────────────────────────
 Write-Host ""
@@ -141,7 +141,7 @@ if (-not $Execute) {
     Write-Host "    .gitignore / .gitattributes" -ForegroundColor DarkGray
     Write-Host "    combined_slate_tickets_TODAY.xlsx" -ForegroundColor DarkGray
     Write-Host "    scripts\ / NBA\ / CBB\" -ForegroundColor DarkGray
-    Write-Host "    outputs\ / ui_runner\ / _archive\ / grades\" -ForegroundColor DarkGray
+    Write-Host "    outputs\ / ui_runner\ / archive\ / grades\" -ForegroundColor DarkGray
 }
 Write-Host "====================================================" -ForegroundColor Cyan
 Write-Host ""

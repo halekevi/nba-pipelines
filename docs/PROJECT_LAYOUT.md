@@ -14,6 +14,8 @@ Everything assumes the **repository root** is the working directory for `run_pip
 | `docs\guides\` | Long-form setup and status docs (e.g. `BROWSER_FETCH_SETUP.md`, `APP_SYSTEM_STATUS.md`) |
 | `archive\root-text\` | Ad hoc notes, patch snippets, and log copies moved off the repo root |
 | `archive\web_exports\` | Large standalone HTML exports (e.g. old `player_prop_hitrates.html` copies) |
+| `archive\legacy\` | Older root `_archive` tree (dev notes, sample actuals, zips, one-off scripts) — kept for reference |
+| `local\` | **Gitignored** local runtime: put Playwright fallbacks here, e.g. `local\browser_session\` and `local\browser_session_harvest2\` (optional second profile). Legacy root `browser_session*` still works and stays ignored. |
 | `data\db\` | Default location for `MyTicketPerformance.db` (ticket/entries SQLite; `*.db` is gitignored) |
 | (avoid at root) | Do not keep sport caches (`mlb_id_cache.csv` → `MLB\`, `nhl_*` → `NHL\` or `NHL\cache\`), `schedule_cache_*.csv` (→ `NBA\`), MLB step CSVs (→ `MLB\outputs\`), or ad-hoc exports — use `archive\` or sport folders |
 

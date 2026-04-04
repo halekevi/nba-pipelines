@@ -87,6 +87,7 @@ dist/
 *.gif
 
 # Browser/session runtime artifacts (never commit)
+local/
 browser_session/
 browser_session_harvest2/
 chrome_cdp_profile/
