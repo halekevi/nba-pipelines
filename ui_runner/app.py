@@ -783,9 +783,10 @@ def page_tickets():
 
     json_path = TEMPLATES_DIR / "tickets_latest.json"
     html_static = TEMPLATES_DIR / "tickets_latest.html"
+    has_json = _template_json_available("tickets_latest.json")
 
     def _render_slips_from_json() -> str | None:
-        if not _template_json_available("tickets_latest.json"):
+        if not has_json:
             return None
         payload = read_json_cached(json_path)
         cst_path = BASE_DIR / "scripts" / "combined_slate_tickets.py"
@@ -804,13 +805,22 @@ def page_tickets():
             return _no_store_headers(make_response(html))
     except Exception as e:
         current_app.logger.warning("/tickets: render from tickets_latest.json failed: %s", e)
+        if has_json:
+            return make_response(
+                (
+                    "Could not render built slips from tickets_latest.json (see server log). "
+                    f"Error: {e!s}"
+                ),
+                500,
+            )
 
-    if html_static.exists():
+    # Stale graded snapshot must not masquerade as "built tickets" when JSON exists.
+    if html_static.exists() and not has_json:
         return _no_store_headers(
             send_from_directory(str(TEMPLATES_DIR), "tickets_latest.html")
         )
 
-    if not _template_json_available("tickets_latest.json"):
+    if not has_json:
         return "tickets_latest.json not found. Run the pipeline with --write-web first.", 404
     return (
         "Could not render /tickets from tickets_latest.json. Check combined_slate_tickets.render_tickets_html "
