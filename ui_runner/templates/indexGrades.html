@@ -156,11 +156,11 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .date-go-btn{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.5px;padding:6px 16px;border-radius:12px;border:1px solid rgba(212,160,23,.35);background:rgba(212,160,23,.1);color:var(--accent-gold);cursor:pointer;transition:all .15s;}
 .date-go-btn:hover{background:rgba(212,160,23,.18);border-color:rgba(240,165,0,.55);}
 
-/* iframe shell: toolbar (date + tabs) + stage (iframes) */
+/* iframe shell: layout only — no outer “card” so slate header is the sole chrome */
 .iframe-shell{
   flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;
-  border-radius:14px;border:1px solid var(--glass-panel-border);
-  background:rgba(255,255,255,0.02);backdrop-filter:blur(12px);margin-top:0;
+  margin-top:0;border:none;border-radius:0;background:transparent;
+  box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
 }
 .iframe-shell-toolbar{
   flex-shrink:0;padding:12px 12px 10px;border-bottom:1px solid var(--glass-panel-border);
@@ -666,10 +666,13 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
     radial-gradient(ellipse at 52% 60%, rgba(198,220,255,0.28) 0%, transparent 50%),
     linear-gradient(180deg,#fdfcff 0%,#f6f8ff 48%,#eef3ff 100%) !important;
 }
-[data-theme="light"] .iframe-shell-toolbar{
-  border-color:rgba(196,166,107,0.22) !important;
+[data-theme="light"] .iframe-shell{
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
 }
 [data-theme="light"] .iframe-shell-toolbar{
+  border-color:rgba(196,166,107,0.22) !important;
   background:rgba(255,255,255,0.55) !important;
   box-shadow:0 4px 24px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9) !important;
 }
@@ -719,15 +722,19 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   }
   .date-bar,
   .tabs-bar,
-  .iframe-shell-toolbar,
-  .iframe-shell {
+  .iframe-shell-toolbar {
     background: rgba(12, 12, 22, 0.94) !important;
+  }
+  .iframe-shell {
+    background: transparent !important;
   }
   [data-theme="light"] .date-bar,
   [data-theme="light"] .tabs-bar,
-  [data-theme="light"] .iframe-shell-toolbar,
-  [data-theme="light"] .iframe-shell {
+  [data-theme="light"] .iframe-shell-toolbar {
     background: rgba(255, 255, 255, 0.94) !important;
+  }
+  [data-theme="light"] .iframe-shell {
+    background: transparent !important;
   }
 }
 
