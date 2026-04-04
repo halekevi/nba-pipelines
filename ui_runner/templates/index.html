@@ -381,10 +381,27 @@ body{
 }
 @media(max-width:900px){
   .shell{padding:18px 12px 22px;}
-  .snav{margin:0;border-radius:0;padding:0 12px;height:auto;min-height:64px;top:0;}
+  .snav{
+    margin:0;border-radius:0;padding:10px 12px;height:auto;min-height:0;top:0;
+    flex-wrap:wrap;align-items:center;row-gap:10px;column-gap:8px;
+  }
+  .snav-brand{
+    order:1;flex:1 1 auto;min-width:0;margin-right:8px;
+  }
   .snav-brand .logo-icon{width:36px;height:36px;}
   .snav-links{display:none;}
-  .hamburger{display:flex;margin-left:auto;}
+  .hamburger{
+    order:2;display:flex;margin-left:auto!important;flex-shrink:0;align-self:center;
+  }
+  .snav-right{
+    order:3;flex:1 1 100%;width:100%;min-width:0;margin-left:0!important;
+    justify-content:flex-start;align-items:center;flex-wrap:wrap;gap:10px;
+  }
+  .nav-live-cluster{flex:1 1 auto;min-width:0;max-width:100%;}
+  .nav-datetime-block{max-width:100%;}
+  .nav-sync-line{max-width:100%;}
+  /* Nav is two rows (logo+hamburger, then meta); clear full sticky height */
+  .mobile-menu{top:calc(env(safe-area-inset-top, 0px) + 118px);}
   .status-row{grid-template-columns:repeat(2,1fr)!important;gap:10px;}
   .edge-grid{grid-template-columns:1fr!important;}
   .slate-toolbar{padding:10px 10px 8px;gap:8px;}
