@@ -1672,17 +1672,71 @@ function streakHits(raw, n) {
   return Math.max(0, Math.min(n, Math.round(x)));
 }
 
-/** Synthetic last-n series aligned with UNDER hit count (curve below dashed prop line for hits). */
-function getUnderStreakSeries(name, line, n, hits) {
-  const base = getPD(name, line).slice(-n);
-  if (!Number.isFinite(hits) || hits < 0) return base;
+/** Deterministic [0,1) — stable per player index (not Math.random). */
+function streakDet01(seed, salt) {
+  const x = Math.sin(seed * 12.9898 + salt * 78.233) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+function streakQuantize(x) {
+  return Math.max(0, Math.round(Number(x) * 4) / 4);
+}
+
+/** OVER streak slice: re-center synthetic series on pipeline L5 avg so Y scale matches the line. */
+function getOverStreakSlice(p, n) {
+  const line = Number(p.line);
+  const L = Number.isFinite(line) ? line : 0;
+  const avn = Number(p.l5_avg ?? p.season_avg);
+  const avg = Number.isFinite(avn) ? avn : L;
+  return getPD(p.player, L).slice(-n).map((b) => streakQuantize(avg + (b - L) * 0.62));
+}
+
+/**
+ * Last-n values for UNDER streak cards: uses pipeline l5_avg (when present) so scale matches the prop,
+ * preserves game-to-game variance, and places the last `hits` games below the line (misses above).
+ */
+function getUnderStreakSeries(p, n, hits) {
+  const line = Number(p.line);
+  const L = Number.isFinite(line) ? line : 0;
+  const avn = Number(p.l5_avg ?? p.season_avg);
+  const avg = Number.isFinite(avn) ? avn : L;
+
+  let seed = 0;
+  for (const c of String(p.player || "")) seed = (seed * 31 + c.charCodeAt(0)) % 999983;
+
+  const base = getPD(p.player, L).slice(-n);
+  if (!Number.isFinite(hits) || hits < 0) return base.map(streakQuantize);
   const h = Math.min(n, Math.max(0, Math.round(hits)));
-  const pad = Math.max(0.06 * Math.abs(Number(line) || 0), 0.12);
-  return base.map((v, i) => {
+
+  const margin = Math.max(0.04 * (Math.abs(L) || 0.25), 0.08);
+  const qStep = 0.25;
+  const underHi = L - Math.max(margin * 0.35, qStep);
+  const underLo = Math.max(0, underHi - Math.max(0.28 * (Math.abs(L) || 0.5), 0.32));
+  const overLo = L + Math.max(margin * 0.35, qStep);
+  const overHi = overLo + Math.max(0.28 * (Math.abs(L) || 0.5), 0.32);
+  let uHi = underHi, uLo = underLo;
+  if (!(uHi > uLo) || uHi < 0) {
+    uHi = Math.max(0, L - qStep);
+    uLo = Math.max(0, uHi - Math.min(L || 0.5, 0.5));
+  }
+
+  return base.map((b, i) => {
+    const centered = avg + (b - L) * 0.62;
     const idxFromEnd = n - 1 - i;
     const wantUnder = idxFromEnd < h;
-    if (wantUnder) return Math.max(0, Math.min(v, line - pad));
-    return Math.max(0, Math.max(v, line + pad));
+    const u = streakDet01(seed, i * 19);
+    const w = streakDet01(seed, i * 19 + 503);
+
+    if (wantUnder) {
+      let v = centered;
+      if (v > uHi) v = uLo + u * (uHi - uLo);
+      else v = Math.max(uLo, Math.min(uHi, v + (w - 0.5) * margin));
+      return streakQuantize(v);
+    }
+    let v = centered;
+    if (v < overLo) v = overLo + u * (overHi - overLo);
+    else v = Math.max(overLo, Math.min(overHi, v + (w - 0.5) * margin));
+    return streakQuantize(v);
   });
 }
 
@@ -1848,8 +1902,13 @@ function makeSVG(data, line, isOver, W=260, H=100) {
 
 // ── SVG sparkline (streak cards) — premium ────────────────
 function makeSparkSVG(data, line, isOver, W=150, H=48) {
-  const pad=(Math.max(...data)-Math.min(...data))*0.2||line*0.1;
-  const mn=Math.min(...data,line)-pad, mx=Math.max(...data,line)+pad, R=mx-mn||1;
+  const dMin = Math.min(...data), dMax = Math.max(...data);
+  const span = dMax - dMin;
+  const linePad = Math.max(Math.abs(Number(line) || 0) * 0.1, 0.14);
+  let pad = span * 0.24;
+  if (!Number.isFinite(pad) || pad < linePad * 0.45) pad = linePad * 0.45;
+  if (span === 0) pad = linePad;
+  const mn = Math.min(dMin, line) - pad, mx = Math.max(dMax, line) + pad, R = mx - mn || 1;
   const px=(v,i)=>4+(i/(data.length-1))*(W-8);
   const py=v=>H-4-((v-mn)/R)*(H-10);
   const hc=isOver?'#2ecc71':'#f39c12', mc='#e74c3c';
@@ -2005,9 +2064,7 @@ function streakCard(p, n) {
   const isOver=p.dir==="OVER";
   const hits = (p.h !== undefined && p.h !== null) ? Math.min(n, Math.max(0, Math.round(p.h))) : n;
   const pct=Math.round((hits/n)*100);
-  const data = isOver
-    ? getPD(p.player, p.line).slice(-n)
-    : getUnderStreakSeries(p.player, p.line, n, hits);
+  const data = isOver ? getOverStreakSlice(p, n) : getUnderStreakSeries(p, n, hits);
   const spark=makeSparkSVG(data,p.line,isOver);
   const sc=`sp-${p.sport.toLowerCase()}`, pc=p.pick==="Goblin"?"pick-goblin":"pick-standard";
   const sportLabel = sportDisplayLabel(p.sport);
