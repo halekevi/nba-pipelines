@@ -14,6 +14,7 @@ Everything assumes the **repository root** is the working directory for `run_pip
 | `docs\guides\` | Long-form setup and status docs (e.g. `BROWSER_FETCH_SETUP.md`, `APP_SYSTEM_STATUS.md`) |
 | `archive\root-text\` | Ad hoc notes, patch snippets, and log copies moved off the repo root |
 | `data\db\` | Default location for `MyTicketPerformance.db` (ticket/entries SQLite; `*.db` is gitignored) |
+| (avoid at root) | Do not keep `schedule_cache_*.csv` (belongs under `NBA\`), `step1_mlb_props.csv` / `step2_mlb_picktypes.csv` (belongs under `MLB\outputs\`), or ad-hoc exports — use `archive\root-text\` or sport folders |
 | `outputs\<yyyy-MM-dd>\` | Dated run artifacts (copies of combined tickets, quality reports, etc.) |
 | `logs\` | Long-lived logs, `git_push_log.txt` (from optional pipeline git push), and dated debug text from `organize_project_root.ps1` |
 | `ui_runner\` | Flask app (`app.py`), static assets, HTML templates (including generated slate JSON/HTML) |
