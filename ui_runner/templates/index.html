@@ -88,8 +88,8 @@ body::after{content:'';position:fixed;inset:0;
 /* nav */
 .snav{position:sticky;top:1rem;z-index:200;background:var(--glass-bg);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid var(--glass-border);box-shadow:0 1px 0 rgba(255,255,255,0.04),0 8px 32px rgba(0,0,0,0.4);padding:0 40px;display:flex;align-items:center;height:72px;gap:0;margin:1rem;border-radius:20px;transform:translateY(0);opacity:1;transition:transform .25s ease,opacity .2s ease;}
 .snav.nav-hidden{transform:translateY(calc(-100% - 10px));opacity:.96;}
-.nav-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,var(--lime,#c6ff00) 15%,var(--cyan) 40%,var(--purple) 65%,var(--lime,#c6ff00) 85%,transparent 100%);opacity:.7;animation:accentShift 6s ease-in-out infinite alternate;}
-@keyframes accentShift{from{opacity:.5;filter:hue-rotate(0deg);}to{opacity:.9;filter:hue-rotate(20deg);}}
+.nav-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,var(--lime,#c6ff00) 15%,var(--cyan) 40%,var(--purple) 65%,var(--lime,#c6ff00) 85%,transparent 100%);opacity:.72;}
+/* accentShift (hue-rotate) removed — continuous filter animation was GPU-heavy on scroll */
 .snav-brand{display:flex;align-items:center;gap:14px;text-decoration:none;margin-right:48px;flex-shrink:0;}
 .hybrid-logo{display:flex;align-items:center;gap:10px;}
 .logo-icon{width:44px;height:44px;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(212,175,55,0.45));}
@@ -562,13 +562,13 @@ body{
   color:var(--green) !important;
 }
 /* Orbs - light mode */
-[data-theme="light"] .orb-1 {
+[data-theme="light"] .po-orb:nth-child(1) {
   background:radial-gradient(circle,rgba(137,196,255,0.14) 0%,transparent 70%) !important;
 }
-[data-theme="light"] .orb-2 {
+[data-theme="light"] .po-orb:nth-child(2) {
   background:radial-gradient(circle,rgba(169,220,255,0.11) 0%,transparent 70%) !important;
 }
-[data-theme="light"] .orb-3 {
+[data-theme="light"] .po-orb:nth-child(3) {
   background:radial-gradient(circle,rgba(173,196,255,0.08) 0%,transparent 70%) !important;
 }
 /* Tables */
@@ -679,36 +679,8 @@ nav.snav .live-pill .live-pill-brand {
   font-variant: normal !important;
 }
 
-/* ── Film Grain noise texture ── */
-@keyframes grainShift {
-  0%,100% { transform: translate(0,0); }
-  10%      { transform: translate(-1%,-1%); }
-  20%      { transform: translate(1%,0%); }
-  30%      { transform: translate(0%,1%); }
-  40%      { transform: translate(-1%,0%); }
-  50%      { transform: translate(1%,1%); }
-  60%      { transform: translate(0%,-1%); }
-  70%      { transform: translate(-1%,1%); }
-  80%      { transform: translate(1%,-1%); }
-  90%      { transform: translate(0%,0%); }
-}
-.grain-layer {
-  position: fixed;
-  inset: -50%;
-  width: 200%;
-  height: 200%;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.028;
-  animation: grainShift 0.4s steps(1) infinite;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-  background-size: 256px 256px;
-  mix-blend-mode: overlay;
-}
-[data-theme="light"] .grain-layer {
-  opacity: 0.018;
-  mix-blend-mode: multiply;
-}
+/* Film grain layer removed (was animated noise over the whole viewport). */
+.grain-layer{display:none!important;}
 
 /* ── Chromatic Aberration border ── */
 .ca-border {
@@ -780,55 +752,45 @@ nav.snav .live-pill .live-pill-brand {
   );
 }
 
-/* ── Animated Mesh Gradient body background ── */
-@property --mesh-r1 { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
-@property --mesh-r2 { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
-@property --mesh-r3 { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
-
-@keyframes meshR1 { to { --mesh-r1: 360deg; } }
-@keyframes meshR2 { to { --mesh-r2: -360deg; } }
-@keyframes meshR3 { to { --mesh-r3: 360deg; } }
-
+/* Static mesh aurora (see .mesh-bg below — rotation removed for GPU/scroll performance). */
 .mesh-bg {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  contain: strict;
+  transform: translateZ(0);
   background:
-    conic-gradient(from var(--mesh-r1) at 20% 15%,
+    conic-gradient(from 210deg at 20% 15%,
       rgba(127,199,217,0.12) 0deg,
       transparent 60deg,
       transparent 300deg,
       rgba(127,199,217,0.08) 360deg),
-    conic-gradient(from var(--mesh-r2) at 80% 20%,
+    conic-gradient(from 140deg at 80% 20%,
       rgba(212,175,55,0.10) 0deg,
       transparent 60deg,
       transparent 300deg,
       rgba(212,175,55,0.06) 360deg),
-    conic-gradient(from var(--mesh-r3) at 50% 75%,
+    conic-gradient(from 320deg at 50% 75%,
       rgba(183,168,255,0.08) 0deg,
       transparent 90deg,
       transparent 270deg,
       rgba(127,199,217,0.05) 360deg);
-  animation:
-    meshR1 28s linear infinite,
-    meshR2 36s linear infinite,
-    meshR3 44s linear infinite;
-  filter: blur(32px);
+  filter: blur(28px);
 }
 [data-theme="light"] .mesh-bg {
   background:
-    conic-gradient(from var(--mesh-r1) at 20% 15%,
+    conic-gradient(from 210deg at 20% 15%,
       rgba(137,196,255,0.10) 0deg,
       transparent 60deg,
       transparent 300deg,
       rgba(137,196,255,0.06) 360deg),
-    conic-gradient(from var(--mesh-r2) at 80% 20%,
+    conic-gradient(from 140deg at 80% 20%,
       rgba(169,220,255,0.08) 0deg,
       transparent 60deg,
       transparent 300deg,
       rgba(169,220,255,0.05) 360deg),
-    conic-gradient(from var(--mesh-r3) at 50% 75%,
+    conic-gradient(from 320deg at 50% 75%,
       rgba(173,196,255,0.06) 0deg,
       transparent 90deg,
       transparent 270deg,
@@ -876,8 +838,7 @@ body::before{
   Mobile GPUs struggle → scroll/jank. Strip expensive effects; keep layout and readability.
 */
 @media (max-width: 900px), (pointer: coarse) {
-  .orb-1,
-  .orb-2,
+  .po-orb,
   .grain-layer {
     display: none !important;
   }
@@ -885,14 +846,11 @@ body::before{
     display: none !important;
   }
   .mesh-bg {
-    animation: none !important;
-    filter: blur(12px) !important;
-    opacity: 0.75;
+    filter: blur(18px) !important;
+    opacity: 0.82;
   }
   .nav-accent {
-    animation: none !important;
-    filter: none !important;
-    opacity: 0.75;
+    opacity: 0.7;
   }
   .live-dot {
     animation: none !important;
@@ -938,14 +896,12 @@ body::before{
 </head>
 <body>
 
-<!-- Liquid Glass Orbs — provide depth for glass panels to refract -->
-<div class="orb-1" style="position:fixed;top:-15%;left:-8%;width:600px;height:600px;background:radial-gradient(circle,rgba(127,199,217,0.18) 0%,transparent 70%);filter:blur(120px);z-index:0;pointer-events:none;animation:orbDrift1 18s ease-in-out infinite alternate;"></div>
-<div class="orb-1" style="position:fixed;top:20%;right:-10%;width:700px;height:700px;background:radial-gradient(circle,rgba(212,175,55,0.10) 0%,transparent 70%);filter:blur(120px);z-index:0;pointer-events:none;animation:orbDrift2 22s ease-in-out infinite alternate;"></div>
-<div class="orb-2" style="position:fixed;bottom:5%;left:30%;width:580px;height:580px;background:radial-gradient(circle,rgba(183,168,255,0.08) 0%,transparent 70%);filter:blur(100px);z-index:0;pointer-events:none;animation:orbDrift3 26s ease-in-out infinite alternate;"></div>
+<!-- Ambient orbs — static (drift + huge blur removed; was costly during scroll/composite). -->
+<div class="po-orb" style="top:-15%;left:-8%;width:min(520px,85vw);height:min(520px,85vw);background:radial-gradient(circle,rgba(127,199,217,0.16) 0%,transparent 70%);filter:blur(72px);"></div>
+<div class="po-orb" style="top:18%;right:-10%;width:min(560px,90vw);height:min(560px,90vw);background:radial-gradient(circle,rgba(212,175,55,0.09) 0%,transparent 70%);filter:blur(72px);"></div>
+<div class="po-orb" style="bottom:4%;left:28%;width:min(480px,80vw);height:min(480px,80vw);background:radial-gradient(circle,rgba(183,168,255,0.07) 0%,transparent 70%);filter:blur(64px);"></div>
 <style>
-@keyframes orbDrift1{from{transform:translate(0,0);}to{transform:translate(60px,80px);}}
-@keyframes orbDrift2{from{transform:translate(0,0);}to{transform:translate(-50px,60px);}}
-@keyframes orbDrift3{from{transform:translate(0,0);}to{transform:translate(40px,-50px);}}
+.po-orb{position:fixed;z-index:0;pointer-events:none;contain:strict;transform:translateZ(0);}
 </style>
 <!-- Advanced optical layers -->
 <div class="mesh-bg" aria-hidden="true"></div>
@@ -2779,14 +2735,13 @@ document.querySelector('.theme-switch')?.addEventListener('click', () => {
   } else {
     initGlow();
   }
-  let queued = false;
+  let debounceT = null;
   const queueInit = () => {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(() => {
-      queued = false;
+    if (debounceT != null) window.clearTimeout(debounceT);
+    debounceT = window.setTimeout(() => {
+      debounceT = null;
       initGlow();
-    });
+    }, 400);
   };
   const obs = new MutationObserver(queueInit);
   obs.observe(document.body, { childList: true, subtree: true });
@@ -2816,14 +2771,13 @@ document.querySelector('.theme-switch')?.addEventListener('click', () => {
   } else {
     initCA();
   }
-  let queued = false;
+  let debounceT = null;
   const queueInit = () => {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(() => {
-      queued = false;
+    if (debounceT != null) window.clearTimeout(debounceT);
+    debounceT = window.setTimeout(() => {
+      debounceT = null;
       initCA();
-    });
+    }, 400);
   };
   const obs = new MutationObserver(queueInit);
   obs.observe(document.body, { childList: true, subtree: true });
