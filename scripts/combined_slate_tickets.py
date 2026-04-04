@@ -5958,5 +5958,290 @@ def main():
     print("[TICKETS] ----------------------------------------------------")
 
 
+# ── Web render helper ─────────────────────────────────────────────────────────
+
+_SPORT_ACCENT: dict[str, str] = {
+    "NBA":    "#1A5276",
+    "CBB":    "#1E8449",
+    "NHL":    "#1A3A5C",
+    "SOCCER": "#1A5C2E",
+    "MLB":    "#922B21",
+    "WCBB":   "#4A235A",
+    "NBA1Q":  "#1F618D",
+    "NBA1H":  "#117A65",
+    "CROSS":  "#6C3483",
+    "MIX":    "#6C3483",
+}
+
+_PICK_COLOR: dict[str, str] = {
+    "goblin":   "#39ff6e",
+    "demon":    "#ff4d4d",
+    "standard": "#00e5ff",
+}
+
+
+def _h(v) -> str:
+    """HTML-escape a value."""
+    import html as _html
+    return _html.escape(str(v)) if v is not None else ""
+
+
+def _pct(v, decimals: int = 0) -> str:
+    try:
+        return f"{float(v) * 100:.{decimals}f}%"
+    except (TypeError, ValueError):
+        return "—"
+
+
+def _fmt(v, decimals: int = 2, suffix: str = "") -> str:
+    try:
+        return f"{float(v):.{decimals}f}{suffix}"
+    except (TypeError, ValueError):
+        return "—"
+
+
+def _sport_accent(sport: str) -> str:
+    key = (sport or "").upper().split()[0]
+    return _SPORT_ACCENT.get(key, "#6C3483")
+
+
+def _group_sport(group_name: str) -> str:
+    """Infer sport from group name for accent colouring."""
+    name = (group_name or "").upper()
+    if name.startswith("CROSS") or name.startswith("MIX"):
+        return "CROSS"
+    for sp in ("NBA1Q", "NBA1H", "WCBB", "SOCCER", "NHL", "MLB", "CBB", "NBA"):
+        if sp in name:
+            return sp
+    return "NBA"
+
+
+def render_tickets_body_html(payload: dict) -> tuple[str, str]:
+    """
+    Render today's ticket slips from the tickets_latest.json payload.
+    Returns (body_html, page_title) for injection into tickets_built.html.
+    """
+    date_str = payload.get("date") or "Today"
+    generated_at = payload.get("generated_at") or ""
+    groups = payload.get("groups") or []
+    n_slips = sum(len(g.get("tickets") or []) for g in groups)
+    n_groups = len(groups)
+
+    page_title = f"PropOracle Tickets — {date_str}"
+
+    parts: list[str] = []
+    parts.append('<div class="tickets-built shell">')
+
+    # ── Hero ──────────────────────────────────────────────────────────────────
+    parts.append(f'''
+<div class="hero" style="margin-bottom:24px;">
+  <div class="hero-copy">
+    <div class="hero-eyebrow" style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Today&rsquo;s Picks</div>
+    <h1 class="hero-title" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,6vw,68px);letter-spacing:4px;line-height:.95;color:var(--text);">
+      PROP<span style="color:var(--accent);">ORACLE</span><br>TICKETS
+    </h1>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;gap:6px;">
+    <span style="font-family:'Share Tech Mono',monospace;font-size:clamp(18px,2vw,26px);color:rgba(255,255,255,.85);letter-spacing:.04em;">{_h(date_str)}</span>
+    <span style="font-size:11px;color:var(--muted);">{n_groups} groups &nbsp;·&nbsp; {n_slips} slips</span>
+    {(f'<span style="font-size:10px;color:var(--muted2);">Built {_h(generated_at)}</span>') if generated_at else ''}
+  </div>
+</div>''')
+
+    if not groups:
+        parts.append('<div class="filter-pill">No tickets generated for this date.</div>')
+        parts.append('</div>')
+        return "".join(parts), page_title
+
+    # ── Groups ────────────────────────────────────────────────────────────────
+    for group in groups:
+        group_name = group.get("group_name") or "Tickets"
+        n_legs = group.get("n_legs") or 0
+        power_pay = group.get("power_payout")
+        flex_pay = group.get("flex_payout")
+        tickets = group.get("tickets") or []
+        if not tickets:
+            continue
+
+        sport_key = _group_sport(group_name)
+        accent = _sport_accent(sport_key)
+
+        pay_label = ""
+        if power_pay and flex_pay and abs(float(power_pay) - float(flex_pay)) > 0.01:
+            pay_label = f"Power {_fmt(power_pay, 1)}× &nbsp;·&nbsp; Flex {_fmt(flex_pay, 1)}×"
+        elif power_pay:
+            pay_label = f"{_fmt(power_pay, 1)}×"
+
+        parts.append(f'''
+<div class="group" style="border-left:4px solid {accent};">
+  <div class="group-hdr">
+    <span class="group-title" style="color:{accent};">{_h(group_name)}</span>
+    <span class="group-meta">{n_legs}-leg{(" &nbsp;·&nbsp; " + pay_label) if pay_label else ""}</span>
+  </div>''')
+
+        for ticket in tickets:
+            ticket_no = ticket.get("ticket_no") or ""
+            win_prob = ticket.get("est_win_prob")
+            avg_hr = ticket.get("avg_hit_rate")
+            ev = ticket.get("ev_power")
+            t_power_pay = ticket.get("power_payout") or ticket.get("base_power_payout")
+            has_warn = ticket.get("has_data_warning", False)
+            legs = ticket.get("legs") or []
+
+            # Signal badge
+            if ev is not None:
+                try:
+                    ev_f = float(ev)
+                    if ev_f >= 1.40:
+                        sig_cls, sig_lbl = "sig-strong", "STRONG"
+                    elif ev_f >= 1.15:
+                        sig_cls, sig_lbl = "sig-lean", "LEAN"
+                    else:
+                        sig_cls, sig_lbl = "sig-risk", "RISKY"
+                except (TypeError, ValueError):
+                    sig_cls, sig_lbl = "sig-lean", "—"
+            else:
+                sig_cls, sig_lbl = "sig-lean", "—"
+
+            warn_html = ('<span style="font-size:10px;color:var(--amber);margin-left:auto;">⚠ data warning</span>'
+                         if has_warn else "")
+
+            parts.append(f'''
+<div class="ticket">
+  <div class="ticket-inner">
+    <div class="ticket-accent" style="background:linear-gradient(180deg,{accent},{accent}88);"></div>
+    <div class="ticket-body">
+      <div class="ticket-hdr">
+        <span class="ticket-no">#{_h(ticket_no)}</span>
+        <span class="{sig_cls}">{sig_lbl}</span>
+        {warn_html}
+      </div>
+      <div class="kpi-row">
+        <div class="kpi">
+          <div class="kpi-label">Win Prob</div>
+          <div class="kpi-val" style="color:var(--green);">{_pct(win_prob)}</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Avg HR</div>
+          <div class="kpi-val" style="color:var(--cyan);">{_pct(avg_hr)}</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">EV</div>
+          <div class="kpi-val" style="color:var(--accent);">{_fmt(ev, 2)}×</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Payout</div>
+          <div class="kpi-val">{_fmt(t_power_pay, 1)}×</div>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Sport</th>
+            <th>Prop</th>
+            <th>Line</th>
+            <th>Dir</th>
+            <th>Pick</th>
+            <th>HR</th>
+            <th>ML</th>
+            <th>Edge</th>
+            <th>Vs Def</th>
+          </tr>
+        </thead>
+        <tbody>''')
+
+            for leg in legs:
+                player = leg.get("player") or ""
+                sport = leg.get("sport") or ""
+                prop_type = leg.get("prop_type") or ""
+                line = leg.get("line")
+                std_line = leg.get("standard_line")
+                direction = (leg.get("direction") or "").upper()
+                pick_type = (leg.get("pick_type") or "").strip()
+                hit_rate = leg.get("hit_rate")
+                ml_prob = leg.get("ml_prob")
+                edge = leg.get("edge")
+                def_tier = leg.get("def_tier") or ""
+                team = leg.get("team") or ""
+                opp = leg.get("opp") or ""
+                initials = leg.get("initials") or player[:2].upper()
+
+                # Direction badge
+                dir_cls = "dir-over" if direction == "OVER" else "dir-under"
+                dir_html = f'<span class="{dir_cls}">{_h(direction)}</span>'
+
+                # Pick type badge
+                pk_lower = pick_type.lower()
+                pk_color = _PICK_COLOR.get(pk_lower, "#aaa")
+                pick_html = f'<span style="font-size:11px;font-weight:700;color:{pk_color};">{_h(pick_type)}</span>'
+
+                # Line display (show goblin discount if applicable)
+                if std_line and line and abs(float(std_line) - float(line)) >= 0.1:
+                    line_html = f'{_fmt(line, 1)} <span style="font-size:10px;color:var(--muted);text-decoration:line-through;">{_fmt(std_line, 1)}</span>'
+                else:
+                    line_html = _fmt(line, 1)
+
+                # Sport accent chip
+                s_accent = _sport_accent(sport)
+                sport_html = f'<span style="font-size:10px;font-weight:700;color:{s_accent};background:{s_accent}22;padding:2px 6px;border-radius:4px;border:1px solid {s_accent}44;">{_h(sport)}</span>'
+
+                # Avatar
+                av_html = f'<div class="avatar">{_h(initials)}</div>'
+
+                # Matchup sub-label
+                matchup = f"{team} vs {opp}" if team and opp else (team or opp)
+
+                parts.append(f'''
+          <tr class="leg-row">
+            <td>
+              <div class="pwrap">
+                {av_html}
+                <div>
+                  <div style="font-weight:600;font-size:12px;">{_h(player)}</div>
+                  <div style="font-size:10px;color:var(--muted);">{_h(matchup)}</div>
+                </div>
+              </div>
+            </td>
+            <td>{sport_html}</td>
+            <td style="color:var(--text);font-weight:500;">{_h(prop_type)}</td>
+            <td style="font-family:'Share Tech Mono',monospace;">{line_html}</td>
+            <td>{dir_html}</td>
+            <td>{pick_html}</td>
+            <td style="font-family:'Share Tech Mono',monospace;color:var(--green);">{_pct(hit_rate)}</td>
+            <td style="font-family:'Share Tech Mono',monospace;color:var(--cyan);">{_pct(ml_prob)}</td>
+            <td style="font-family:'Share Tech Mono',monospace;color:var(--accent);">{_fmt(edge, 2)}</td>
+            <td style="font-size:11px;color:var(--muted);">{_h(def_tier)}</td>
+          </tr>''')
+
+            parts.append('''
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>''')
+
+        parts.append('</div>')  # end .group
+
+    parts.append('</div>')  # end .tickets-built.shell
+
+    # Inline JS: expand/collapse leg graph rows on click
+    parts.append('''
+<script>
+(function(){
+  document.querySelectorAll('.tickets-built .leg-row').forEach(function(row){
+    row.addEventListener('click', function(){
+      var next = row.nextElementSibling;
+      if(next && next.classList.contains('leg-graph-row')){
+        next.classList.toggle('open');
+      }
+    });
+  });
+})();
+</script>''')
+
+    return "".join(parts), page_title
+
+
 if __name__ == "__main__":
     main()
