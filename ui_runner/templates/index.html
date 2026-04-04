@@ -926,7 +926,7 @@ body::before{
     </div>
   </div>
 
-  <p class="home-flow-lede" role="note"><strong style="color:var(--text);font-weight:600;">How to read this page:</strong> <em>Slate Explorer</em> for full sortable slates → expand <em>Top Edges</em> for ticket-leg highlights (by edge within each group). <em>L5 / L10 Streaks</em> use last-game counts vs the line when available. <em>Top Unders</em> sorts by <code>l5_under</code>/<code>l10_under</code> on every prop (including OVER legs), so under trends still show when tickets are over-heavy. <span class="home-jump"><a href="#slate-explorer">Jump to slate</a> · <a href="#top-edges">Jump to edges</a></span></p>
+  <p class="home-flow-lede" role="note"><strong style="color:var(--text);font-weight:600;">How to read this page:</strong> <em>Slate Explorer</em> for full sortable slates → expand <em>Top Edges</em> for ticket-leg highlights (by edge within each group). <em>L5 / L10 Streaks</em> use last-game counts vs the line when available. <em>Top Unders</em> (and Standard under edges) use <code>l5_under</code>/<code>l10_under</code> on <strong>Standard</strong> props only — Goblin is OVER-only. <span class="home-jump"><a href="#slate-explorer">Jump to slate</a> · <a href="#top-edges">Jump to edges</a></span></p>
 
   <!-- SLATE STATUS CARDS -->
   <details class="home-cat" open id="slate-explorer">
@@ -1600,6 +1600,12 @@ function resolvedUnderHits(p, n) {
   return Math.max(0, Math.min(n, n - ho));
 }
 
+/** Goblin is OVER-only in this product — exclude from under-edge and under-streak surfaces. */
+function isGoblinPick(p) {
+  const t = String(p?.pick ?? p?.pick_type ?? "").trim().toLowerCase();
+  return t === "goblin";
+}
+
 /** Deterministic [0,1) — stable per player index (not Math.random). */
 function streakDet01(seed, salt) {
   const x = Math.sin(seed * 12.9898 + salt * 78.233) * 43758.5453;
@@ -1960,7 +1966,7 @@ function switchExpandTab(idx, tab, btn) {
 
 /** UNDER edge display: Standard picks only (Goblin has no under side here). Real UNDER legs as-is; OVER legs → synthetic under card. */
 function underEdgeDisplayPick(basePick) {
-  if (String(basePick.pick || "").trim().toLowerCase() === "goblin") return null;
+  if (isGoblinPick(basePick)) return null;
 
   const dir = String(basePick.dir || "").trim().toUpperCase();
   if (dir === "UNDER") return basePick;
@@ -2003,9 +2009,8 @@ function renderEdges() {
   };
   const stdO = [], gobO = [];
   for (const p of ALL_SLATE) {
-    const pickNorm = String(p.pick || "").trim().toLowerCase();
     if (String(p.dir || "").trim().toUpperCase() === "OVER") {
-      if (pickNorm === "goblin") gobO.push(p);
+      if (isGoblinPick(p)) gobO.push(p);
       else stdO.push(p);
     }
   }
@@ -2085,10 +2090,11 @@ function renderStreaks() {
     return null;
   }
 
-  /** Under-side streaks: l{n}_under or complement of l{n}_over for every pick. */
+  /** Under-side streaks: Standard legs only; l{n}_under or complement of l{n}_over. */
   function underStreakRows(n, minHits) {
     const out = [];
     for (const p of ALL_SLATE) {
+      if (isGoblinPick(p)) continue;
       const h = resolvedUnderHits(p, n);
       if (h === null || h < 1) continue;
       if (minHits != null && h < minHits) continue;
