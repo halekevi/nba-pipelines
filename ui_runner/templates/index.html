@@ -1434,7 +1434,7 @@ body::before{
       ▼ UNDER EDGES
       <span class="sh-line" style="background:rgba(255,192,107,.2);"></span>
     </div>
-    <p class="edge-source-note" style="margin-top:-4px;">Under cards include every leg with last-5 under support (including OVER slips). <strong>Edge</strong> is still the ticket value; <strong>hit %</strong> on OVER slips reflects L5 games under the line.</p>
+    <p class="edge-source-note" style="margin-top:-4px;">Under cards mirror OVER legs: <strong>hit %</strong> is games under the line (L5 if present, else L10). <strong>0%</strong> means no unders in that sample. <strong>Edge</strong> is unchanged from the ticket; order is still by edge.</p>
     <div class="edge-bucket-label" style="color:var(--cyan);">Standard unders</div>
     <div id="under-edges-standard" class="edge-grid edge-grid--under"></div>
     <div class="edge-bucket-label" style="color:var(--purple);">Goblin unders</div>
@@ -1960,12 +1960,21 @@ function switchExpandTab(idx, tab, btn) {
   renderExpandChart(idx, p, tab);
 }
 
-/** UNDER edge display: real UNDER legs as-is; OVER legs with L5 under hits → same edge, hit% from L5-under rate. */
+/** UNDER edge display: real UNDER legs as-is; OVER legs → synthetic under card (same edge, same sort). Hit % = games under the line in L5 if available, else L10; 0% means no unders in that window (still a valid under-side read). */
 function underEdgeDisplayPick(basePick) {
-  if (basePick.dir === "UNDER") return basePick;
-  const uh = resolvedUnderHits(basePick, 5);
-  if (uh === null || uh < 1) return null;
-  return { ...basePick, dir: "UNDER", hit: Math.round((uh / 5) * 100) };
+  const dir = String(basePick.dir || "").trim().toUpperCase();
+  if (dir === "UNDER") return basePick;
+  if (dir !== "OVER") return null;
+
+  const h5 = resolvedUnderHits(basePick, 5);
+  if (h5 !== null) {
+    return { ...basePick, dir: "UNDER", hit: Math.max(0, Math.min(100, Math.round((h5 / 5) * 100))) };
+  }
+  const h10 = resolvedUnderHits(basePick, 10);
+  if (h10 !== null) {
+    return { ...basePick, dir: "UNDER", hit: Math.max(0, Math.min(100, Math.round((h10 / 10) * 100))) };
+  }
+  return null;
 }
 
 function collectUnderEdgeRows() {
@@ -1994,7 +2003,7 @@ function renderEdges() {
   const stdO = [], gobO = [];
   for (const p of ALL_SLATE) {
     const pickNorm = String(p.pick || "").trim().toLowerCase();
-    if (p.dir === "OVER") {
+    if (String(p.dir || "").trim().toUpperCase() === "OVER") {
       if (pickNorm === "goblin") gobO.push(p);
       else stdO.push(p);
     }
