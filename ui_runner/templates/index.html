@@ -253,6 +253,10 @@ body::after{content:'';position:fixed;inset:0;
   box-shadow:0 2px 12px rgba(0,0,0,.25)!important;
   margin:0!important;
   min-width:0!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  gap:10px!important;
+  padding:12px 14px!important;
 }
 #slate-panel-header-row .scard:hover{
   border-color:rgba(255,255,255,.2)!important;
@@ -985,6 +989,41 @@ body::before{
     background:rgba(255,255,255,.04);
     box-shadow:0 2px 12px rgba(0,0,0,.25);
     margin:0;
+    flex-direction:column;
+    align-items:stretch;
+    gap:10px;
+    padding:12px 14px;
+  }
+  .slate-panel-header-row .scard-head{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    min-width:0;
+  }
+  .slate-panel-header-row .scard-head .scard-icon{
+    width:36px;
+    height:36px;
+    min-height:36px;
+    border-radius:9px;
+  }
+  .slate-panel-header-row .scard-head .db-icon{width:20px;height:20px;}
+  .slate-panel-header-row .scard-head .scard-title{
+    flex:1 1 auto;
+    min-width:0;
+    margin-bottom:0;
+    text-align:left;
+    line-height:1.2;
+  }
+  .slate-panel-header-row .scard-val{
+    width:100%;
+    margin:0;
+    text-align:left;
+    font-size:clamp(17px,2.1vw,23px);
+    line-height:1.22;
+    letter-spacing:.03em;
+    white-space:pre-line;
+    word-break:break-word;
+    font-family:'Share Tech Mono',monospace;
   }
   .slate-panel-header-row .scard:hover{
     border-color:rgba(255,255,255,.2);
@@ -995,7 +1034,7 @@ body::before{
     background:rgba(212,175,55,.08);
     box-shadow:0 0 0 1px rgba(212,175,55,.2),0 4px 18px rgba(0,0,0,.35);
   }
-  .slate-panel-header-row .scard-toggle{font-size:14px;margin-left:auto;color:var(--muted);transition:transform .25s;flex-shrink:0;}
+  .slate-panel-header-row .scard-toggle{font-size:14px;color:var(--muted);transition:transform .25s;flex-shrink:0;line-height:1;}
   .slate-panel-header-row .scard.active .scard-toggle{transform:rotate(180deg);}
   /* expand area */
   .slate-expand{display:none;border-top:1px solid rgba(255,255,255,0.07);background:rgba(0,0,0,0.2);}
@@ -1105,130 +1144,122 @@ body::before{
     <div class="slate-panel-header-row" id="slate-panel-header-row">
 
       <div class="scard loading" id="sc-nba" onclick="toggleSlatePanel('nba')">
-        <div class="scard-icon nba">
-          <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#f0a500" stroke-width="1.5">
-            <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
-            <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
-          </svg>
-        </div>
-        <div class="scard-body">
+        <div class="scard-head">
+          <div class="scard-icon nba">
+            <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#f0a500" stroke-width="1.5">
+              <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+              <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+            </svg>
+          </div>
           <div class="scard-title">NBA SLATE</div>
-          <div class="scard-val" id="sc-nba-val">Checking...</div>
-          <div class="scard-sub" id="sc-nba-sub"></div>
+          <span class="sbadge loading" id="sc-nba-badge">—</span>
+          <span class="scard-toggle">▾</span>
         </div>
-        <span class="sbadge loading" id="sc-nba-badge">—</span>
-        <span class="scard-toggle">▾</span>
+        <div class="scard-val" id="sc-nba-val">Checking...</div>
       </div>
 
       <div class="scard loading" id="sc-nba1h" onclick="toggleSlatePanel('nba1h')">
-        <div class="scard-icon nba1h">
-          <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#ffb27d" stroke-width="1.5">
-            <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
-            <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
-          </svg>
-        </div>
-        <div class="scard-body">
+        <div class="scard-head">
+          <div class="scard-icon nba1h">
+            <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#ffb27d" stroke-width="1.5">
+              <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+              <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+            </svg>
+          </div>
           <div class="scard-title">NBA 1H SLATE</div>
-          <div class="scard-val" id="sc-nba1h-val">Checking...</div>
-          <div class="scard-sub" id="sc-nba1h-sub"></div>
+          <span class="sbadge loading" id="sc-nba1h-badge">—</span>
+          <span class="scard-toggle">▾</span>
         </div>
-        <span class="sbadge loading" id="sc-nba1h-badge">—</span>
-        <span class="scard-toggle">▾</span>
+        <div class="scard-val" id="sc-nba1h-val">Checking...</div>
       </div>
 
       <div class="scard loading" id="sc-nba1q" onclick="toggleSlatePanel('nba1q')">
-        <div class="scard-icon nba1q">
-          <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#ffd87a" stroke-width="1.5">
-            <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
-            <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
-          </svg>
-        </div>
-        <div class="scard-body">
+        <div class="scard-head">
+          <div class="scard-icon nba1q">
+            <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#ffd87a" stroke-width="1.5">
+              <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+              <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+            </svg>
+          </div>
           <div class="scard-title">NBA 1Q SLATE</div>
-          <div class="scard-val" id="sc-nba1q-val">Checking...</div>
-          <div class="scard-sub" id="sc-nba1q-sub"></div>
+          <span class="sbadge loading" id="sc-nba1q-badge">—</span>
+          <span class="scard-toggle">▾</span>
         </div>
-        <span class="sbadge loading" id="sc-nba1q-badge">—</span>
-        <span class="scard-toggle">▾</span>
+        <div class="scard-val" id="sc-nba1q-val">Checking...</div>
       </div>
 
       <div class="scard loading" id="sc-cbb" onclick="toggleSlatePanel('cbb')">
-        <div class="scard-icon cbb">
-          <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#7fc7d9" stroke-width="1.5">
-            <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
-            <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
-          </svg>
-        </div>
-        <div class="scard-body">
+        <div class="scard-head">
+          <div class="scard-icon cbb">
+            <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#7fc7d9" stroke-width="1.5">
+              <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+              <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+            </svg>
+          </div>
           <div class="scard-title">CBB SLATE</div>
-          <div class="scard-val" id="sc-cbb-val">Checking...</div>
-          <div class="scard-sub" id="sc-cbb-sub"></div>
+          <span class="sbadge loading" id="sc-cbb-badge">—</span>
+          <span class="scard-toggle">▾</span>
         </div>
-        <span class="sbadge loading" id="sc-cbb-badge">—</span>
-        <span class="scard-toggle">▾</span>
+        <div class="scard-val" id="sc-cbb-val">Checking...</div>
       </div>
 
       <div class="scard loading" id="sc-nhl" onclick="toggleSlatePanel('nhl')">
-        <div class="scard-icon nhl">
-          <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.5">
-            <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
-            <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
-          </svg>
-        </div>
-        <div class="scard-body">
+        <div class="scard-head">
+          <div class="scard-icon nhl">
+            <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.5">
+              <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+              <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+            </svg>
+          </div>
           <div class="scard-title">NHL SLATE</div>
-          <div class="scard-val" id="sc-nhl-val">Checking...</div>
-          <div class="scard-sub" id="sc-nhl-sub"></div>
+          <span class="sbadge loading" id="sc-nhl-badge">—</span>
+          <span class="scard-toggle">▾</span>
         </div>
-        <span class="sbadge loading" id="sc-nhl-badge">—</span>
-        <span class="scard-toggle">▾</span>
+        <div class="scard-val" id="sc-nhl-val">Checking...</div>
       </div>
 
       <div class="scard loading" id="sc-soccer" onclick="toggleSlatePanel('soccer')">
-        <div class="scard-icon soccer">
-          <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#39ff6e" stroke-width="1.5">
-            <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
-            <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
-          </svg>
-        </div>
-        <div class="scard-body">
+        <div class="scard-head">
+          <div class="scard-icon soccer">
+            <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#39ff6e" stroke-width="1.5">
+              <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+              <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+            </svg>
+          </div>
           <div class="scard-title">SOCCER SLATE</div>
-          <div class="scard-val" id="sc-soccer-val">Checking...</div>
-          <div class="scard-sub" id="sc-soccer-sub"></div>
+          <span class="sbadge loading" id="sc-soccer-badge">—</span>
+          <span class="scard-toggle">▾</span>
         </div>
-        <span class="sbadge loading" id="sc-soccer-badge">—</span>
-        <span class="scard-toggle">▾</span>
+        <div class="scard-val" id="sc-soccer-val">Checking...</div>
       </div>
 
       <div class="scard loading" id="sc-mlb" onclick="toggleSlatePanel('mlb')">
-        <div class="scard-icon mlb">
-          <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#ff8c8c" stroke-width="1.5">
-            <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
-            <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
-          </svg>
-        </div>
-        <div class="scard-body">
+        <div class="scard-head">
+          <div class="scard-icon mlb">
+            <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#ff8c8c" stroke-width="1.5">
+              <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+              <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+            </svg>
+          </div>
           <div class="scard-title">MLB SLATE</div>
-          <div class="scard-val" id="sc-mlb-val">Checking...</div>
-          <div class="scard-sub" id="sc-mlb-sub"></div>
+          <span class="sbadge loading" id="sc-mlb-badge">—</span>
+          <span class="scard-toggle">▾</span>
         </div>
-        <span class="sbadge loading" id="sc-mlb-badge">—</span>
-        <span class="scard-toggle">▾</span>
+        <div class="scard-val" id="sc-mlb-val">Checking...</div>
       </div>
 
       <div class="scard loading" id="sc-combined" onclick="toggleSlatePanel('combined')" style="cursor:pointer">
-        <div class="scard-icon combined">
-          <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5">
-            <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
-            <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
-          </svg>
-        </div>
-        <div class="scard-body">
+        <div class="scard-head">
+          <div class="scard-icon combined">
+            <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5">
+              <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+              <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+            </svg>
+          </div>
           <div class="scard-title">COMBINED</div>
-          <div class="scard-val" id="sc-combined-val">Checking...</div>
-          <div class="scard-sub" id="sc-combined-sub"></div>
+          <span class="sbadge loading" id="sc-combined-badge">—</span>
         </div>
-        <span class="sbadge loading" id="sc-combined-badge">—</span>
+        <div class="scard-val" id="sc-combined-val">Checking...</div>
       </div>
 
     </div><!-- /header-row -->
@@ -1769,24 +1800,36 @@ async function loadSlateData() {
   return slateDataPromise;
 }
 
-function applyStatusCard(id, info, label) {
-  const card=document.getElementById(`sc-${id}`), val=document.getElementById(`sc-${id}-val`),
-        sub=document.getElementById(`sc-${id}-sub`), badge=document.getElementById(`sc-${id}-badge`);
-  if (!card) return;
+/** Split pipeline modified string onto two lines: date, then time (for Slate Explorer cards). */
+function formatSlateModifiedDisplay(raw) {
+  if (!raw || typeof raw !== "string") return "—";
+  const s = raw.trim();
+  const m = s.match(/^(\d{4}-\d{2}-\d{2})[ T](\d{1,2}:\d{2}(?::\d{2})?)/);
+  if (m) return `${m[1]}\n${m[2]}`;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+  return s;
+}
+
+function applyStatusCard(id, info, _label) {
+  const card = document.getElementById(`sc-${id}`),
+        val = document.getElementById(`sc-${id}-val`),
+        badge = document.getElementById(`sc-${id}-badge`);
+  if (!card || !val || !badge) return;
   card.classList.remove("fresh","stale","missing","loading");
   badge.classList.remove("fresh","stale","missing","loading");
   if (!info || !info.exists) {
     card.classList.add("loading"); badge.classList.add("loading");
-    val.textContent="Not Yet Run"; sub.textContent="Run pipeline to generate"; badge.textContent="PENDING"; return;
+    val.textContent = "Not Yet Run";
+    badge.textContent = "PENDING";
+    return;
   }
-  const _d=new Date();
-  const today=`${_d.getFullYear()}-${String(_d.getMonth()+1).padStart(2,'0')}-${String(_d.getDate()).padStart(2,'0')}`;
-  const fresh=info.modified&&info.modified.startsWith(today);
-  const cls=fresh?"fresh":"stale";
+  const _d = new Date();
+  const today = `${_d.getFullYear()}-${String(_d.getMonth()+1).padStart(2,'0')}-${String(_d.getDate()).padStart(2,'0')}`;
+  const fresh = info.modified && info.modified.startsWith(today);
+  const cls = fresh ? "fresh" : "stale";
   card.classList.add(cls); badge.classList.add(cls);
-  val.textContent=info.modified||'—';
-  sub.textContent=`${label ? label + '  ·  ' : ''}${info.size_kb} KB`;
-  badge.textContent=fresh?"FRESH":"STALE";
+  val.textContent = formatSlateModifiedDisplay(info.modified || "—");
+  badge.textContent = fresh ? "FRESH" : "STALE";
 }
 
 function sportDisplayLabel(rawSport) {
@@ -2312,12 +2355,6 @@ async function buildSlateDataFromAllSlate() {
   SPORTS.forEach(s => {
     if (!Array.isArray(SLATE_DATA[s])) SLATE_DATA[s] = [];
     SLATE_DATA[s].sort((a,b) => Math.abs(b.edge||0) - Math.abs(a.edge||0));
-    const sub = document.getElementById(`sc-${s}-sub`);
-    if (sub && SLATE_DATA[s].length) {
-      const n = SLATE_DATA[s].length;
-      const cur = sub.textContent || '';
-      if (!cur.includes('props')) sub.textContent = (cur ? cur + '  ·  ' : '') + `${n} props`;
-    }
   });
   if (openSlatePanel) scheduleRenderSlateTable(openSlatePanel);
 }
@@ -2495,12 +2532,6 @@ async function loadSlateExcel() {
         }
         SLATE_COLS.combined = combinedSheet.columns;
         SLATE_DATA.combined = combinedSheet.rows;
-        const sub = document.getElementById('sc-combined-sub');
-        if (sub && combinedSheet.rows.length) {
-          const n = combinedSheet.rows.length;
-          const cur = sub.textContent || '';
-          if (!cur.includes('props')) sub.textContent = (cur ? cur + '  ·  ' : '') + `${n} props`;
-        }
         scheduleRenderSlateTable('combined');
       })
       .catch(e => {
