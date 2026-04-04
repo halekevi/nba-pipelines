@@ -888,7 +888,7 @@ function ensureGradesToolbarStylesInFrame(doc) {
   const link = doc.createElement('link');
   link.id = 'grades-iframe-toolbar-link';
   link.rel = 'stylesheet';
-  link.href = '/static/grades-iframe-toolbar.css?v=20260404c';
+  link.href = '/static/grades-iframe-toolbar.css?v=20260404e';
   doc.head.appendChild(link);
 }
 
@@ -953,6 +953,23 @@ function ensureFrameCollapseCss(doc) {
   const style = doc.createElement('style');
   style.id = 'grades-collapsible-sport-style';
   style.textContent = `
+    /* Older slate_eval_*.html embed .main{max-width:1100px;margin:auto} and header side margins — content
+       stays narrow while the toolbar is full width. Override only on slate-shaped documents (direct header + .main). */
+    body > header{
+      margin-left:0;
+      margin-right:0;
+      width:100%;
+      max-width:none;
+      box-sizing:border-box;
+    }
+    body > .main{
+      max-width:none;
+      width:100%;
+      margin-left:0;
+      margin-right:0;
+      box-sizing:border-box;
+      min-width:0;
+    }
     .grades-sport-bucket{
       width:100%;
       max-width:100%;
