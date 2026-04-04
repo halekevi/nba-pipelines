@@ -856,6 +856,68 @@ body::before{
   border-color:rgba(196,166,107,0.22) !important;
 }
 
+/*
+  Mobile & touch: glass UI uses many stacked backdrop-filters + full-screen blurs + animated grain/mesh.
+  Mobile GPUs struggle → scroll/jank. Strip expensive effects; keep layout and readability.
+*/
+@media (max-width: 900px), (pointer: coarse) {
+  .orb-1,
+  .orb-2,
+  .grain-layer {
+    display: none !important;
+  }
+  body::after {
+    display: none !important;
+  }
+  .mesh-bg {
+    animation: none !important;
+    filter: blur(12px) !important;
+    opacity: 0.75;
+  }
+  .nav-accent {
+    animation: none !important;
+    filter: none !important;
+    opacity: 0.75;
+  }
+  .live-dot {
+    animation: none !important;
+    opacity: 1;
+  }
+  .snav,
+  .mobile-menu,
+  .hero,
+  .home-cat,
+  .scard,
+  .edge-card,
+  .streak-card,
+  .glass-card,
+  .slate-panel-wrap,
+  .hero-eyebrow,
+  .live-pill,
+  .hamburger,
+  .expand-stat,
+  .slate-filter-input,
+  .slate-filter-btn,
+  .slate-table th {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .hero,
+  .home-cat,
+  .scard,
+  .edge-card,
+  .streak-card {
+    background: rgba(12, 12, 22, 0.92) !important;
+  }
+  [data-theme="light"] .hero,
+  [data-theme="light"] .home-cat,
+  [data-theme="light"] .scard,
+  [data-theme="light"] .edge-card,
+  [data-theme="light"] .streak-card {
+    background: rgba(255, 255, 255, 0.92) !important;
+  }
+}
+
 </style>
 </head>
 <body>
