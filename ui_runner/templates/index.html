@@ -240,8 +240,8 @@ body::after{content:'';position:fixed;inset:0;
   gap:12px!important;
   row-gap:12px!important;
   column-gap:12px!important;
-  padding:12px 14px!important;
-  background:rgba(0,0,0,.18)!important;
+  padding:0 0 14px 0!important;
+  background:transparent!important;
   align-items:stretch!important;
 }
 #slate-panel-header-row .scard{
@@ -416,8 +416,7 @@ body{
 }
 @media(max-width:900px) and (orientation:portrait){
   .shell{padding:16px 10px 18px;}
-  .slate-panel-wrap{border-radius:14px;}
-  #slate-panel-header-row{grid-template-columns:minmax(0,1fr)!important;gap:10px!important;padding:10px 12px!important;}
+  #slate-panel-header-row{grid-template-columns:minmax(0,1fr)!important;gap:10px!important;padding:0 0 10px 0!important;}
 }
 @media(max-width:900px) and (orientation:landscape){
   .shell{padding:12px 10px 14px;}
@@ -504,7 +503,6 @@ body{
 [data-theme="light"] .ticket,
 [data-theme="light"] .scard,
 [data-theme="light"] .edge-card,
-[data-theme="light"] .slate-panel-wrap,
 [data-theme="light"] .filter-pill,
 [data-theme="light"] .gstat,
 [data-theme="light"] .leg-card,
@@ -908,7 +906,6 @@ body::before{
   .edge-card,
   .streak-card,
   .glass-card,
-  .slate-panel-wrap,
   .hero-eyebrow,
   .live-pill,
   .hamburger,
@@ -1013,15 +1010,15 @@ body::before{
     <summary><span class="home-cat-title">Slate <span>Explorer</span></span></summary>
     <div class="home-cat-body">
   <style>
-  /* ── Slate card expandable panel ── */
-  .slate-panel-wrap{background:rgba(255,255,255,0.025);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-bottom:28px;box-shadow:0 8px 36px rgba(0,0,0,0.4);}
+  /* ── Slate explorer: no inner “card inside card” — tiles sit on home-cat surface ── */
+  .slate-panel-wrap{background:transparent;border:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;border-radius:0;overflow:visible;margin:0;}
   /* 8 slate tiles → two rows of four; gap + per-tile border so cards don’t blend */
   .slate-panel-header-row{
     display:grid;
     grid-template-columns:repeat(4,minmax(0,1fr));
     gap:12px;
-    padding:12px 14px;
-    background:rgba(0,0,0,.18);
+    padding:0 0 12px 0;
+    background:transparent;
   }
   .slate-panel-header-row .scard{
     cursor:pointer;
@@ -1120,7 +1117,7 @@ body::before{
     .slate-filter-input{max-width:280px;}
   }
   @media(max-width:900px) and (orientation:portrait){
-    .slate-panel-header-row{grid-template-columns:1fr!important;gap:10px;padding:10px 12px;}
+    .slate-panel-header-row{grid-template-columns:1fr!important;gap:10px;padding:0 0 10px 0;}
     .slate-table-wrap{max-height:62vh;}
     .slate-table{min-width:1160px;}
   }
