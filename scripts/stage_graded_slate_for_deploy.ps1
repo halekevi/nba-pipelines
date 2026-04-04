@@ -2,8 +2,8 @@
 <#
 .SYNOPSIS
   Copy graded_*.xlsx from outputs\<date>\ into ui_runner\graded_slate\<date>\ for git commit.
-  Railway serves tickets_latest.html from the repo; outputs/ is gitignored, so MLB (etc.) grades
-  need this bundle (or the live page stays VOID for those legs).
+  After build_ticket_eval.py, commit ticket_eval_<date>.html; outputs/ is gitignored, so MLB (etc.) grades
+  need this bundle (or the live Grades ticket view stays VOID for those legs).
 .EXAMPLE
   .\scripts\stage_graded_slate_for_deploy.ps1 -Date 2026-04-02
 #>
@@ -35,4 +35,4 @@ foreach ($f in $files) {
 
 Write-Host "Staged $($files.Count) file(s) under ui_runner\graded_slate\$Date"
 Write-Host "Next: py -3.14 scripts\build_ticket_eval.py --date $Date"
-Write-Host "Then: git add ui_runner/graded_slate/$Date ui_runner/templates/tickets_latest.html ..."
+Write-Host "Then: git add ui_runner/graded_slate/$Date ui_runner/templates/ticket_eval_$Date.html ..."

@@ -85,7 +85,7 @@ app = Flask(
 )
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-03-28-slate-tiles-head-css-1"
+_UI_BUILD_ID = "2026-04-04-tickets-json-render-deps-1"
 
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
@@ -756,6 +756,28 @@ def _no_store_headers(resp):
     return resp
 
 
+def _tickets_built_slips_missing_html() -> Any:
+    """HTML 404 when tickets_latest.json is unavailable (never serve graded tickets_latest.html here)."""
+    body = """<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PropOracle — Built tickets</title>
+<style>
+body{font-family:system-ui,-apple-system,sans-serif;background:#050505;color:#e8e8f0;max-width:720px;margin:48px auto;padding:0 24px;line-height:1.55;}
+h1{font-size:1.35rem;font-weight:700;margin-bottom:12px;}
+p{margin:0 0 14px;}
+a{color:#00e5ff;} code{background:#1a1a2e;padding:2px 7px;border-radius:4px;font-size:0.9em;}
+</style></head><body>
+<h1>Built slips not available</h1>
+<p>This page shows <strong>today&rsquo;s generated slips</strong> from <code>tickets_latest.json</code>. The file was not found on disk and no remote JSON URL is configured (on Railway, <code>TICKETS_JSON_URL</code> defaults to raw GitHub when <code>RAILWAY_*</code> env is set).</p>
+<p><strong>Graded</strong> results (actuals, hits/misses, ticket KPI bar) are under <a href="/grades">Grades</a> &rarr; Ticket evaluation — not here.</p>
+<p>Run the combined slate script with <code>--write-web</code>, commit <code>ui_runner/templates/tickets_latest.json</code>, and redeploy.</p>
+<p><a href="/">Home</a></p>
+</body></html>"""
+    r = make_response(body, 404)
+    r.headers["Content-Type"] = "text/html; charset=utf-8"
+    return r
+
+
 @app.get("/tickets_latest.json")
 def serve_tickets_latest_json():
     """Expose JSON at site root so the link on /tickets works (relative URLs break under /tickets)."""
@@ -782,7 +804,6 @@ def page_tickets():
     import importlib.util
 
     json_path = TEMPLATES_DIR / "tickets_latest.json"
-    html_static = TEMPLATES_DIR / "tickets_latest.html"
     has_json = _template_json_available("tickets_latest.json")
 
     def _render_slips_from_json() -> str | None:
@@ -792,12 +813,21 @@ def page_tickets():
         cst_path = BASE_DIR / "scripts" / "combined_slate_tickets.py"
         if not cst_path.exists():
             raise FileNotFoundError("scripts/combined_slate_tickets.py not in repo")
-        spec = importlib.util.spec_from_file_location("combined_slate_tickets", cst_path)
-        if spec is None or spec.loader is None:
-            raise RuntimeError("could not load combined_slate_tickets spec")
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        return mod.render_tickets_html(payload)
+        scripts_dir = str(BASE_DIR / "scripts")
+        path_inserted = False
+        if scripts_dir not in sys.path:
+            sys.path.insert(0, scripts_dir)
+            path_inserted = True
+        try:
+            spec = importlib.util.spec_from_file_location("combined_slate_tickets", cst_path)
+            if spec is None or spec.loader is None:
+                raise RuntimeError("could not load combined_slate_tickets spec")
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            return mod.render_tickets_html(payload)
+        finally:
+            if path_inserted and sys.path and sys.path[0] == scripts_dir:
+                sys.path.pop(0)
 
     try:
         html = _render_slips_from_json()
@@ -806,26 +836,24 @@ def page_tickets():
     except Exception as e:
         current_app.logger.warning("/tickets: render from tickets_latest.json failed: %s", e)
         if has_json:
-            return make_response(
-                (
-                    "Could not render built slips from tickets_latest.json (see server log). "
-                    f"Error: {e!s}"
-                ),
-                500,
+            return _no_store_headers(
+                make_response(
+                    (
+                        "Could not render built slips from tickets_latest.json (see server log). "
+                        f"Error: {e!s}"
+                    ),
+                    500,
+                )
             )
 
-    # Stale graded snapshot must not masquerade as "built tickets" when JSON exists.
-    if html_static.exists() and not has_json:
-        return _no_store_headers(
-            send_from_directory(str(TEMPLATES_DIR), "tickets_latest.html")
-        )
-
     if not has_json:
-        return "tickets_latest.json not found. Run the pipeline with --write-web first.", 404
-    return (
-        "Could not render /tickets from tickets_latest.json. Check combined_slate_tickets.render_tickets_html "
-        "and JSON shape.",
-        500,
+        return _no_store_headers(_tickets_built_slips_missing_html())
+    return _no_store_headers(
+        make_response(
+            "Could not render /tickets from tickets_latest.json. Check combined_slate_tickets.render_tickets_html "
+            "and JSON shape.",
+            500,
+        )
     )
 
 

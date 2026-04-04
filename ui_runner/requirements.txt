@@ -1,3 +1,6 @@
 flask==3.0.3
 gunicorn>=23.0,<26.0
 openpyxl>=3.1.0
+# Needed so /tickets can import scripts/combined_slate_tickets.py (render_tickets_html).
+numpy>=1.24,<3
+pandas>=2.0,<3
