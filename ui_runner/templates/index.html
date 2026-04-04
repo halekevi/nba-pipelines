@@ -1434,7 +1434,11 @@ body::before{
       ▼ UNDER EDGES
       <span class="sh-line" style="background:rgba(255,192,107,.2);"></span>
     </div>
-    <div id="under-edges" class="edge-grid edge-grid--under"></div>
+    <p class="edge-source-note" style="margin-top:-4px;">Under cards include every leg with last-5 under support (including OVER slips). <strong>Edge</strong> is still the ticket value; <strong>hit %</strong> on OVER slips reflects L5 games under the line.</p>
+    <div class="edge-bucket-label" style="color:var(--cyan);">Standard unders</div>
+    <div id="under-edges-standard" class="edge-grid edge-grid--under"></div>
+    <div class="edge-bucket-label" style="color:var(--purple);">Goblin unders</div>
+    <div id="under-edges-goblin" class="edge-grid edge-grid--under" style="margin-bottom:0;"></div>
   </div>
     </div>
   </details>
@@ -1871,6 +1875,8 @@ function makeSparkSVG(data, line, isOver, W=150, H=48) {
 
 // ── Top Edges — expandable cards ──────────────────────────
 let openCard = null;
+/** When an edge card shows a synthetic UNDER view, expand charts use this pick (not ALL_SLATE[idx]). */
+let EDGE_DISPLAY_PICK = {};
 
 function buildEdgeCard(p, idx) {
   const isOver=p.dir==="OVER", dc=isOver?"over":"under", es=isOver?"+":"";
@@ -1950,41 +1956,79 @@ function renderExpandChart(idx, p, tab) {
 function switchExpandTab(idx, tab, btn) {
   document.getElementById(`expand-${idx}`).querySelectorAll(".expand-tab").forEach(t=>t.classList.remove("active"));
   btn.classList.add("active");
-  renderExpandChart(idx, ALL_SLATE[idx], tab);
+  const p = EDGE_DISPLAY_PICK[idx] ?? ALL_SLATE[idx];
+  renderExpandChart(idx, p, tab);
+}
+
+/** UNDER edge display: real UNDER legs as-is; OVER legs with L5 under hits → same edge, hit% from L5-under rate. */
+function underEdgeDisplayPick(basePick) {
+  if (basePick.dir === "UNDER") return basePick;
+  const uh = resolvedUnderHits(basePick, 5);
+  if (uh === null || uh < 1) return null;
+  return { ...basePick, dir: "UNDER", hit: Math.round((uh / 5) * 100) };
+}
+
+function collectUnderEdgeRows() {
+  const rows = [];
+  for (let i = 0; i < ALL_SLATE.length; i++) {
+    const disp = underEdgeDisplayPick(ALL_SLATE[i]);
+    if (!disp) continue;
+    rows.push({ baseIdx: i, disp });
+  }
+  return rows;
 }
 
 function renderEdges() {
   const os=document.getElementById("over-edges-standard");
   const og=document.getElementById("over-edges-goblin");
-  const uc=document.getElementById("under-edges");
-  os.innerHTML=""; og.innerHTML=""; uc.innerHTML="";
+  const us=document.getElementById("under-edges-standard");
+  const ug=document.getElementById("under-edges-goblin");
+  os.innerHTML=""; og.innerHTML="";
+  if (us) us.innerHTML="";
+  if (ug) ug.innerHTML="";
+  EDGE_DISPLAY_PICK = {};
   const num = (x) => {
     const v = Number(x);
     return Number.isFinite(v) ? v : 0;
   };
-  const stdO = [], gobO = [], und = [];
+  const stdO = [], gobO = [];
   for (const p of ALL_SLATE) {
     const pickNorm = String(p.pick || "").trim().toLowerCase();
     if (p.dir === "OVER") {
       if (pickNorm === "goblin") gobO.push(p);
       else stdO.push(p);
-    } else {
-      und.push(p);
     }
   }
   const byEdgeDesc = (a, b) => num(b.edge) - num(a.edge);
   stdO.sort(byEdgeDesc);
   gobO.sort(byEdgeDesc);
-  und.sort(byEdgeDesc);
+
+  const underRows = collectUnderEdgeRows().sort((a, b) => num(b.disp.edge) - num(a.disp.edge));
+  const stdU = [], gobU = [];
+  for (const row of underRows) {
+    const pickNorm = String(row.disp.pick || "").trim().toLowerCase();
+    if (pickNorm === "goblin") gobU.push(row);
+    else stdU.push(row);
+  }
+
   const appendAll = (arr, el) => {
     for (const p of arr) {
       const idx = ALL_SLATE.indexOf(p);
       el.appendChild(buildEdgeCard(p, idx));
     }
   };
+  const appendUnderRows = (rows, el) => {
+    for (const { baseIdx, disp } of rows) {
+      if (disp !== ALL_SLATE[baseIdx]) EDGE_DISPLAY_PICK[baseIdx] = disp;
+      el.appendChild(buildEdgeCard(disp, baseIdx));
+    }
+  };
   appendAll(stdO, os);
   appendAll(gobO, og);
-  appendAll(und, uc);
+  if (us && ug) {
+    appendUnderRows(stdU, us);
+    appendUnderRows(gobU, ug);
+  }
 }
 
 // ── Streak card (shared for L5 and L10) ───────────────────

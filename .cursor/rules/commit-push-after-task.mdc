@@ -1,0 +1,21 @@
+---
+description: After completing work, commit and push when the repo has changes
+alwaysApply: true
+---
+
+# Commit and push after task completion
+
+When you finish a coding task that touched the project (edits, new files, deletes):
+
+1. Run `git status`. If there are **no** changes, stop.
+2. **Stage** all intended paths (`git add …`). Do not add secrets, `.env`, or other files the user keeps local-only.
+3. **Commit** with a clear message: what changed and why, in full sentences (not one-letter subjects).
+4. **Push** to the tracked upstream for the current branch (e.g. `git push` on `main`).
+
+**Skip** committing/pushing only if:
+
+- The user explicitly asked not to commit or push, or
+- Changes are exploratory and the user said to hold off, or
+- You only ran read-only commands and did not modify files.
+
+Do not leave a dirty working tree after a successful task unless the user asked to.
