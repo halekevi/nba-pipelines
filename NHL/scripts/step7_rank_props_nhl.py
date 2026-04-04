@@ -14,8 +14,8 @@ Scoring model:
   - home/road adjustment
 
 Usage:
-    py step7_rank_props_nhl.py --input step6_nhl_role_context.csv \
-        --output step7_nhl_ranked.xlsx
+    py step7_rank_props_nhl.py --input outputs/step6_nhl_role_context.csv \
+        --output outputs/step7_nhl_ranked.xlsx
 """
 
 import argparse
@@ -682,8 +682,8 @@ def _apply_ml_blend(df: pd.DataFrame) -> tuple[pd.Series, pd.Series, pd.Series]:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", default="step6_nhl_role_context.csv")
-    parser.add_argument("--output", default="step7_nhl_ranked.xlsx")
+    parser.add_argument("--input", default="outputs/step6_nhl_role_context.csv")
+    parser.add_argument("--output", default="outputs/step7_nhl_ranked.xlsx")
     parser.add_argument("--min-sample", type=int, default=MIN_SAMPLE)
     parser.add_argument("--cache", default="", help="Path to NHL boxscore cache CSV")
     parser.add_argument(

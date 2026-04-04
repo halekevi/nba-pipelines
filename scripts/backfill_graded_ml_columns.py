@@ -169,7 +169,7 @@ def resolve_merge_source(root: Path, sport_key: str, dates: list[str]) -> Path |
             "nba1q": root / "NBA" / "step8_nba1q_direction_clean.xlsx",
             "nba1h": root / "NBA" / "step8_nba1h_direction_clean.xlsx",
             "wnba": root / "WNBA" / "step8_wnba_direction_clean.xlsx",
-            "nhl": root / "NHL" / "step8_nhl_direction_clean.xlsx",
+            "nhl": root / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
             "soccer": root / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
             "mlb": root / "MLB" / "step8_mlb_direction_clean.xlsx",
         }

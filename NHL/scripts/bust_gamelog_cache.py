@@ -6,7 +6,7 @@ Run this ONCE before re-running step5 to force fresh fetches for:
   time_on_ice, plus/minus, power_play_points, faceoffs_won, hits
 
 Usage:
-    py bust_gamelog_cache.py --cache NHL\cache\nhl_gamelog_cache.json
+    py bust_gamelog_cache.py --cache cache\nhl_gamelog_cache.json
 """
 import argparse
 import json
@@ -15,7 +15,7 @@ STALE_STATS = {"time_on_ice", "plus/minus", "power_play_points", "faceoffs_won",
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--cache", default="nhl_gamelog_cache.json")
+    parser.add_argument("--cache", default="cache/nhl_gamelog_cache.json")
     parser.add_argument("--dry-run", action="store_true", help="Preview without writing")
     args = parser.parse_args()
 

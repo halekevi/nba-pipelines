@@ -77,7 +77,7 @@ elif os.path.exists(_soccer_outputs):
     DEFAULT_SOCCER_PATH = _soccer_outputs
 else:
     DEFAULT_SOCCER_PATH = _soccer_root
-DEFAULT_NHL_PATH = os.path.join(REPO_ROOT, "NHL", "step8_nhl_direction_clean.xlsx")
+DEFAULT_NHL_PATH = os.path.join(REPO_ROOT, "NHL", "outputs", "step8_nhl_direction_clean.xlsx")
 DEFAULT_WEB_OUTDIR = os.path.join(REPO_ROOT, "ui_runner", "templates")
 
 

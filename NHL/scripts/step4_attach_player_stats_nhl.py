@@ -7,8 +7,8 @@ The DB is populated nightly by build_boxscore_ref.py.
 
 Usage:
     py step4_attach_player_stats_nhl.py \
-        --input  step3_nhl_with_defense.csv \
-        --output step4_nhl_with_stats.csv
+        --input  outputs/step3_nhl_with_defense.csv \
+        --output outputs/step4_nhl_with_stats.csv
 
 NHL lookup is by player name (no ESPN ID in the NHL pipeline).
 The name match is exact first, then case-insensitive fallback.
@@ -40,8 +40,8 @@ from step4_db_reader import open_db, attach_stats, db_summary, DB_PATH
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--input",       default="step3_nhl_with_defense.csv")
-    ap.add_argument("--output",      default="step4_nhl_with_stats.csv")
+    ap.add_argument("--input",       default="outputs/step3_nhl_with_defense.csv")
+    ap.add_argument("--output",      default="outputs/step4_nhl_with_stats.csv")
     ap.add_argument("--cache",       default="",
                     help="Legacy arg — ignored (DB is the cache now)")
     ap.add_argument("--season",      default="",

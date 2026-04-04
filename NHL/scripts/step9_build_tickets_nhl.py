@@ -9,8 +9,8 @@ Strategy:
   - Feature 5-6 pick: longer shot high-upside ticket
 
 Usage:
-    py step9_build_tickets_nhl.py --input step8_nhl_direction_clean.xlsx \
-        --output nhl_best_tickets.xlsx
+    py step9_build_tickets_nhl.py --input outputs/step8_nhl_direction_clean.xlsx \
+        --output outputs/nhl_best_tickets.xlsx
 """
 
 import argparse
@@ -298,8 +298,8 @@ def write_tickets_xlsx(tickets: dict, output_path: str):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", default="step8_nhl_direction_clean.xlsx")
-    parser.add_argument("--output", default="nhl_best_tickets.xlsx")
+    parser.add_argument("--input", default="outputs/step8_nhl_direction_clean.xlsx")
+    parser.add_argument("--output", default="outputs/nhl_best_tickets.xlsx")
     parser.add_argument("--min-hit-rate", type=float, default=MIN_HIT_RATE)
     args = parser.parse_args()
 

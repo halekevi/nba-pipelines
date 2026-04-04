@@ -14,7 +14,7 @@ Mirrors the structure of NBA defense_report.py exactly:
 
 Usage:
   py -3 nhl_defense_report.py
-  py -3 nhl_defense_report.py --season 20242025 --out nhl_defense_summary.csv --top 10
+  py -3 nhl_defense_report.py --season 20242025 --out cache/nhl_defense_summary.csv --top 10
 
 Output columns (compatible with NHL_step3_attach_defense_nhl.py):
   team              - uppercase 3-letter abbreviation (EDM, TOR, BOS...)
@@ -41,6 +41,7 @@ import json
 import time
 import urllib.request
 from datetime import date, datetime
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -284,7 +285,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--season",  default=DEFAULT_SEASON,
                     help="Season ID, e.g. 20252026 (default: current season from date)")
-    ap.add_argument("--out",     default="nhl_defense_summary.csv")
+    ap.add_argument("--out",     default="cache/nhl_defense_summary.csv")
     ap.add_argument("--top",     type=int, default=10)
     args = ap.parse_args()
     print(f"NHL defense report: season {args.season}")
@@ -311,6 +312,7 @@ def main():
     df = df[[c for c in front if c in df.columns]]
 
     out_path = args.out
+    Path(out_path).parent.mkdir(parents=True, exist_ok=True)
     try:
         df.to_csv(out_path, index=False, encoding="utf-8-sig")
     except PermissionError:

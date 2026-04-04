@@ -24,8 +24,8 @@ Column mapping (Step 7 → Step 8 display):
   rank                 → rank
 
 Usage:
-    py step8_add_direction_context_nhl.py --input step7_nhl_ranked.xlsx \
-        --output step8_nhl_direction.csv
+    py step8_add_direction_context_nhl.py --input outputs/step7_nhl_ranked.xlsx \
+        --output outputs/step8_nhl_direction_clean.xlsx
 """
 
 import argparse
@@ -373,7 +373,7 @@ def write_xlsx(rows: list[dict], path: str):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--input",  required=True, help="Step 7 ranked XLSX")
-    ap.add_argument("--output", default="step8_nhl_direction.csv")
+    ap.add_argument("--output", default="outputs/step8_nhl_direction_clean.xlsx")
     ap.add_argument(
         "--date",
         default="",

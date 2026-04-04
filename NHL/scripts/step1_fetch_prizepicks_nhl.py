@@ -8,7 +8,7 @@ First-time setup (only needed if prizepools fails):
     playwright install chromium
 
 Usage:
-    py step1_fetch_prizepicks_nhl.py --output step1_nhl_props.csv
+    py step1_fetch_prizepicks_nhl.py --output outputs/step1_nhl_props.csv
 """
 
 import argparse
@@ -272,7 +272,7 @@ def write_csv(rows, path):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output", default="step1_nhl_props.csv")
+    parser.add_argument("--output", default="outputs/step1_nhl_props.csv")
     args = parser.parse_args()
 
     print(f"📡 Fetching PrizePicks NHL | league_id={NHL_LEAGUE_ID}")

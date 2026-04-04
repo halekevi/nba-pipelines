@@ -592,8 +592,6 @@
             "--input",
             "outputs\\step7_nhl_ranked.xlsx",
             "--output",
-            "outputs\\step8_nhl_direction.csv",
-            "--xlsx",
             "outputs\\step8_nhl_direction_clean.xlsx"
           ]
         },
@@ -603,11 +601,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step9_build_tickets_nhl.py",
+            ".\\scripts\\step9_build_tickets_nhl.py",
             "--input",
-            "step8_nhl_direction_clean.xlsx",
+            "outputs\\step8_nhl_direction_clean.xlsx",
             "--output",
-            "nhl_best_tickets.xlsx",
+            "outputs\\nhl_best_tickets.xlsx",
             "--min_hit_rate",
             "0.7",
             "--legs",

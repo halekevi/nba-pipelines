@@ -35,7 +35,7 @@ Each sport keeps its own steps, caches, and docs. **Paths are not uniform** — 
 | **NBA** | `NBA\scripts\` | `NBA\data\outputs\step*.csv`, `step7_ranked_props.xlsx` | `NBA\data\outputs\step8_all_direction_clean.xlsx` |
 | **NBA 1H / 1Q** | Same tree, separate step files | `NBA\step*_nba1h_*.csv`, `NBA\step*_nba1q_*.csv` | `NBA\step8_nba1h_direction_clean.xlsx`, `NBA\step8_nba1q_direction_clean.xlsx` |
 | **CBB** | `CBB\scripts\pipeline\` | `CBB\outputs\<date>\`, `CBB\data\cache\`, `CBB\data\reference\` | `CBB\step6_ranked_cbb.xlsx`, `CBB\step6_ranked_wcbb.xlsx` |
-| **NHL** | `NHL\scripts\` | `NHL\step*.csv`, `NHL\cache\` | `NHL\step8_nhl_direction_clean.xlsx` |
+| **NHL** | `NHL\scripts\` | `NHL\outputs\step*.csv` / `step*.xlsx`, `NHL\cache\` (IDs, gamelog JSON, defense summary) | `NHL\outputs\step8_nhl_direction_clean.xlsx` (root path kept as fallback in some tools) |
 | **MLB** | `MLB\scripts\` | `MLB\outputs\` | Resolved by `Resolve-MLBCleanSlateFile` (several fallback paths under `MLB\`) |
 | **Soccer** | `Soccer\scripts\` | `Soccer\outputs\`, `Soccer\cache\` | `Soccer\outputs\step8_soccer_direction_clean.xlsx` |
 | **WNBA** | `WNBA\` (scripts at folder root) | WNBA step files in `WNBA\` | Season-gated; see `scripts\run_wnba_pipeline.ps1` |

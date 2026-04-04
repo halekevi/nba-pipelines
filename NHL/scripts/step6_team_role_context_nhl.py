@@ -7,8 +7,8 @@ Attaches:
 - Power play context — using NHL Stats API skater splits
 
 Usage:
-    py step6_team_role_context_nhl.py --input step5_nhl_hit_rates.csv \
-        --output step6_nhl_role_context.csv
+    py step6_team_role_context_nhl.py --input outputs/step5_nhl_hit_rates.csv \
+        --output outputs/step6_nhl_role_context.csv
 """
 
 import argparse
@@ -200,8 +200,8 @@ def write_csv(rows: list[dict], path: str):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", default="step5_nhl_hit_rates.csv")
-    parser.add_argument("--output", default="step6_nhl_role_context.csv")
+    parser.add_argument("--input", default="outputs/step5_nhl_hit_rates.csv")
+    parser.add_argument("--output", default="outputs/step6_nhl_role_context.csv")
     parser.add_argument("--skip-api", action="store_true",
                         help="Skip NHL API calls and just use position from PP board")
     args = parser.parse_args()

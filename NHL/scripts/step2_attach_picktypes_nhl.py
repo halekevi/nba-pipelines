@@ -9,7 +9,7 @@ Step 2 — Normalize Props + Resolve NHL Player IDs
 - Saves persistent id cache to nhl_id_cache.csv
 
 Usage:
-    py .\step2_attach_picktypes_nhl.py --input .\step1_nhl_props.csv --output .\step2_nhl_picktypes.csv --cache .\nhl_id_cache.csv
+    py .\step2_attach_picktypes_nhl.py --input .\outputs\step1_nhl_props.csv --output .\outputs\step2_nhl_picktypes.csv --cache .\cache\nhl_id_cache.csv
 """
 
 from __future__ import annotations
@@ -266,9 +266,9 @@ def fetch_nhl_schedule_home_away(slate_date: str) -> dict:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", default="step1_nhl_props.csv")
-    parser.add_argument("--output", default="step2_nhl_picktypes.csv")
-    parser.add_argument("--cache", default="nhl_id_cache.csv")
+    parser.add_argument("--input", default="outputs/step1_nhl_props.csv")
+    parser.add_argument("--output", default="outputs/step2_nhl_picktypes.csv")
+    parser.add_argument("--cache", default="cache/nhl_id_cache.csv")
     parser.add_argument("--sleep", type=float, default=0.15, help="Delay between uncached lookups (seconds)")
     args = parser.parse_args()
 

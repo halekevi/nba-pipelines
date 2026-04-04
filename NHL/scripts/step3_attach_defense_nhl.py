@@ -6,7 +6,7 @@ For skaters: attaches opponent goals-against avg, shots-against avg, penalty kil
 For goalies: attaches opponent goals-for avg, shots-for avg, power play %
 
 Usage:
-    py step3_attach_defense_nhl.py --input step2_nhl_picktypes.csv --output step3_nhl_with_defense.csv
+    py step3_attach_defense_nhl.py --input outputs/step2_nhl_picktypes.csv --output outputs/step3_nhl_with_defense.csv
 
 NOTE: Fetches live data from the NHL Stats API (no key needed).
       Also accepts --defense <csv> to use a pre-built defense summary.
@@ -18,6 +18,7 @@ import json
 import time
 import urllib.request
 from datetime import datetime
+from pathlib import Path
 try:
     from tqdm import tqdm as _tqdm
 except ImportError:
@@ -164,8 +165,8 @@ def load_defense_csv(path: str) -> dict:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", default="step2_nhl_picktypes.csv")
-    parser.add_argument("--output", default="step3_nhl_with_defense.csv")
+    parser.add_argument("--input", default="outputs/step2_nhl_picktypes.csv")
+    parser.add_argument("--output", default="outputs/step3_nhl_with_defense.csv")
     parser.add_argument("--defense", default=None,
                         help="Optional pre-built defense summary CSV (team,opp_gaa,...)")
     args = parser.parse_args()
@@ -213,7 +214,9 @@ def main():
     def_rows = []
     for abbrev, stats in sorted(teams.items()):
         def_rows.append({"team": abbrev, **stats, **tiers.get(abbrev, {})})
-    write_csv(def_rows, "nhl_defense_summary.csv")
+    _def_csv = Path("cache") / "nhl_defense_summary.csv"
+    _def_csv.parent.mkdir(parents=True, exist_ok=True)
+    write_csv(def_rows, str(_def_csv))
 
     defense_fields = [
         "opp_gaa", "opp_saa", "opp_pk_pct",

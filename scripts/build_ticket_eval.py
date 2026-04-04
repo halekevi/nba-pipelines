@@ -82,8 +82,8 @@ SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
         REPO_ROOT / "CBB" / "step6_ranked_wcbb.xlsx",
     ],
     "NHL": [
-        REPO_ROOT / "NHL" / "step8_nhl_direction_clean.xlsx",
         REPO_ROOT / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
+        REPO_ROOT / "NHL" / "step8_nhl_direction_clean.xlsx",
     ],
     "SOCCER": [
         REPO_ROOT / "Soccer" / "step8_soccer_direction_clean.xlsx",

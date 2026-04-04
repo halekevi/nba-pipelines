@@ -59,9 +59,9 @@ NBA1H_TICKETS = NBA_DIR / "best_tickets_nba1h.xlsx"
 NBA1Q_TICKETS = NBA_DIR / "best_tickets_nba1q.xlsx"
 CBB_SLATE     = CBB_DIR / "step6_ranked_cbb.xlsx"
 WCBB_SLATE    = CBB_DIR / "step6_ranked_wcbb.xlsx"
-# Same paths as scripts/run_pipeline.ps1 (sport root, not sport/outputs/)
-NHL_SLATE     = NHL_DIR / "step8_nhl_direction_clean.xlsx"
-NHL_TICKETS   = NHL_DIR / "nhl_best_tickets.xlsx"
+# NHL pipeline writes under NHL/outputs/ (same as run_pipeline.ps1).
+NHL_SLATE     = NHL_DIR / "outputs" / "step8_nhl_direction_clean.xlsx"
+NHL_TICKETS   = NHL_DIR / "outputs" / "nhl_best_tickets.xlsx"
 SOCCER_SLATE  = SOCCER_DIR / "step8_soccer_direction_clean.xlsx"
 SOCCER_TICKETS= SOCCER_DIR / "soccer_best_tickets.xlsx"
 MLB_SLATE     = MLB_DIR / "step8_mlb_direction_clean.xlsx"

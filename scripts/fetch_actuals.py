@@ -1153,7 +1153,7 @@ def main():
               f"--actuals {args.output} --output nba_graded_{args.date}.xlsx")
     elif args.sport == 'NHL':
         print(f"  py -3 slate_grader.py --sport NHL "
-              f"--slate NHL\\step8_nhl_direction_clean.xlsx "
+              f"--slate NHL\\outputs\\step8_nhl_direction_clean.xlsx "
               f"--actuals {args.output} --output nhl_graded_{args.date}.xlsx")
     elif args.sport == 'Soccer':
         print(f"  py -3 slate_grader.py --sport Soccer "

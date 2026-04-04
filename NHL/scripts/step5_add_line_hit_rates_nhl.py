@@ -6,8 +6,8 @@ Calculates Over/Under hit rates vs the PrizePicks line using:
   - Composite hit rate (weighted blend)
 
 Usage:
-    py step5_add_line_hit_rates_nhl.py --input step4_nhl_with_stats.csv \
-        --output step5_nhl_hit_rates.csv
+    py step5_add_line_hit_rates_nhl.py --input outputs/step4_nhl_with_stats.csv \
+        --output outputs/step5_nhl_hit_rates.csv
 """
 
 import argparse
@@ -17,6 +17,7 @@ import os
 import time
 import urllib.request
 from datetime import datetime
+from pathlib import Path
 try:
     from tqdm import tqdm as _tqdm
 except ImportError:
@@ -179,7 +180,7 @@ def write_csv(rows: list[dict], path: str):
     print(f"Saved {len(rows)} rows -> {path}")
 
 
-DEFAULT_CACHE = os.path.join(os.path.dirname(__file__), "cache", "nhl_gamelog_cache.json")
+DEFAULT_CACHE = str(Path(__file__).resolve().parent.parent / "cache" / "nhl_gamelog_cache.json")
 
 
 def load_game_log_cache(path: str) -> dict:
@@ -203,8 +204,8 @@ def save_game_log_cache(cache: dict, path: str):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", default="step4_nhl_with_stats.csv")
-    parser.add_argument("--output", default="step5_nhl_hit_rates.csv")
+    parser.add_argument("--input", default="outputs/step4_nhl_with_stats.csv")
+    parser.add_argument("--output", default="outputs/step5_nhl_hit_rates.csv")
     parser.add_argument("--gamelog-cache", default=DEFAULT_CACHE,
                         help="Path to game log JSON cache (default: cache/nhl_gamelog_cache.json next to this script)")
     parser.add_argument("--season", default=current_nhl_season(),
