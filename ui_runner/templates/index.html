@@ -1434,11 +1434,9 @@ body::before{
       ▼ UNDER EDGES
       <span class="sh-line" style="background:rgba(255,192,107,.2);"></span>
     </div>
-    <p class="edge-source-note" style="margin-top:-4px;">Under cards mirror OVER legs: <strong>hit %</strong> is games under the line (L5 if present, else L10). For those, <strong>edge is −1× ticket edge</strong> (ticket edge is for OVER; the under side is the complement, usually negative). Real UNDER legs keep their ticket edge. Sorted by edge within each bucket.</p>
+    <p class="edge-source-note" style="margin-top:-4px;">Under cards mirror <strong>Standard</strong> OVER legs only (Goblin is OVER-only in this product). <strong>Hit %</strong> is games under the line (L5 if present, else L10). For those, <strong>edge is −1× ticket edge</strong>. Real Standard UNDER legs keep ticket edge. Sorted by edge.</p>
     <div class="edge-bucket-label" style="color:var(--cyan);">Standard unders</div>
-    <div id="under-edges-standard" class="edge-grid edge-grid--under"></div>
-    <div class="edge-bucket-label" style="color:var(--purple);">Goblin unders</div>
-    <div id="under-edges-goblin" class="edge-grid edge-grid--under" style="margin-bottom:0;"></div>
+    <div id="under-edges-standard" class="edge-grid edge-grid--under" style="margin-bottom:0;"></div>
   </div>
     </div>
   </details>
@@ -1960,8 +1958,10 @@ function switchExpandTab(idx, tab, btn) {
   renderExpandChart(idx, p, tab);
 }
 
-/** UNDER edge display: real UNDER legs as-is. OVER legs → synthetic under card: hit % from L5/L10 vs line; edge is negated ticket edge (ticket edge is for OVER, opposite side reads as negative under edge). */
+/** UNDER edge display: Standard picks only (Goblin has no under side here). Real UNDER legs as-is; OVER legs → synthetic under card. */
 function underEdgeDisplayPick(basePick) {
+  if (String(basePick.pick || "").trim().toLowerCase() === "goblin") return null;
+
   const dir = String(basePick.dir || "").trim().toUpperCase();
   if (dir === "UNDER") return basePick;
   if (dir !== "OVER") return null;
@@ -1994,10 +1994,8 @@ function renderEdges() {
   const os=document.getElementById("over-edges-standard");
   const og=document.getElementById("over-edges-goblin");
   const us=document.getElementById("under-edges-standard");
-  const ug=document.getElementById("under-edges-goblin");
   os.innerHTML=""; og.innerHTML="";
   if (us) us.innerHTML="";
-  if (ug) ug.innerHTML="";
   EDGE_DISPLAY_PICK = {};
   const num = (x) => {
     const v = Number(x);
@@ -2016,12 +2014,6 @@ function renderEdges() {
   gobO.sort(byEdgeDesc);
 
   const underRows = collectUnderEdgeRows().sort((a, b) => num(b.disp.edge) - num(a.disp.edge));
-  const stdU = [], gobU = [];
-  for (const row of underRows) {
-    const pickNorm = String(row.disp.pick || "").trim().toLowerCase();
-    if (pickNorm === "goblin") gobU.push(row);
-    else stdU.push(row);
-  }
 
   const appendAll = (arr, el) => {
     for (const p of arr) {
@@ -2037,10 +2029,7 @@ function renderEdges() {
   };
   appendAll(stdO, os);
   appendAll(gobO, og);
-  if (us && ug) {
-    appendUnderRows(stdU, us);
-    appendUnderRows(gobU, ug);
-  }
+  if (us) appendUnderRows(underRows, us);
 }
 
 // ── Streak card (shared for L5 and L10) ───────────────────
