@@ -498,6 +498,31 @@ Write-Host ""
 Write-Host "DONE." -ForegroundColor Green
 
 # =============================
+# Archive graded props to history DB (step_archive.py)
+# =============================
+$StepArchiveScript = Join-Path $Root "scripts\step_archive.py"
+if (Test-Path $StepArchiveScript) {
+    $ArchivePairs = @(
+        @{ Sport = "NBA";    File = $NBAGradedFile },
+        @{ Sport = "NHL";    File = $NHLGradedFile },
+        @{ Sport = "MLB";    File = $MLBGradedFile },
+        @{ Sport = "Soccer"; File = $SoccerGradedFile }
+    )
+    foreach ($pair in $ArchivePairs) {
+        if (Test-Path $pair.File) {
+            Run-Py "Archive graded ($($pair.Sport))" $Root $StepArchiveScript @(
+                "--sport", $pair.Sport,
+                "--graded", $pair.File,
+                "--date", $Date
+            )
+        }
+    }
+}
+else {
+    Write-Host "Skipping archive step (step_archive.py not found)." -ForegroundColor Yellow
+}
+
+# =============================
 # Auto-retrain trigger (weekly)
 # =============================
 $TrainingLog = Join-Path $Root "models\\training_log.csv"

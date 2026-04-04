@@ -207,6 +207,93 @@ def _apply_consistency_grade_scores(out: pd.DataFrame, sport: str) -> None:
 def _to_num(s):
     return pd.to_numeric(s, errors="coerce")
 
+
+# ── step_archive lazy import ──────────────────────────────────────────────────
+_sa_scripts_dir = str(Path(__file__).resolve().parents[2] / "scripts")
+try:
+    if _sa_scripts_dir not in sys.path:
+        sys.path.insert(0, _sa_scripts_dir)
+    from step_archive import get_bulk_stats as _sa_get_bulk
+    _HAS_ARCHIVE = True
+except Exception:
+    _HAS_ARCHIVE = False
+
+
+def _attach_archive_features(out: pd.DataFrame, sport: str, line_safe: "pd.Series") -> None:
+    """
+    Attach historical archive features to the step7 output DataFrame in-place.
+    All lookups are no-ops (columns set to NaN/None) when step_archive has no history.
+    """
+    _player_col = next(
+        (out[c] for c in ("player_name", "player", "pp_player") if c in out.columns),
+        pd.Series("", index=out.index),
+    )
+    _prop_col = next(
+        (out[c] for c in ("prop_norm", "prop_type", "stat_norm") if c in out.columns),
+        pd.Series("", index=out.index),
+    )
+    _opp_col = next(
+        (out[c] for c in ("opp_team", "opp", "opponent") if c in out.columns),
+        pd.Series("", index=out.index),
+    )
+    _dir_col = next(
+        (out[c] for c in ("bet_direction", "final_bet_direction", "direction") if c in out.columns),
+        pd.Series("OVER", index=out.index),
+    )
+
+    if _HAS_ARCHIVE:
+        try:
+            pairs = list(zip(_player_col.tolist(), _prop_col.tolist()))
+            dir_triples = [(p, pt, d) for p, pt, d in zip(_player_col, _prop_col, _dir_col)]
+            bulk = _sa_get_bulk(sport, pairs, dir_triples)
+            pstats = bulk.get("player_stats", {})
+
+            floor_p10_vals, median_act_vals, avg_win_vals, player_hr_vals = [], [], [], []
+            for player, prop_type in pairs:
+                from step_archive import _norm_player, _norm_prop
+                k = (_norm_player(player), _norm_prop(prop_type))
+                s = pstats.get(k, {})
+                floor_p10_vals.append(s.get("floor_p10"))
+                median_act_vals.append(s.get("median_actual"))
+                avg_win_vals.append(s.get("avg_win_margin"))
+                player_hr_vals.append(s.get("player_hr"))
+
+            opp_hr_vals = []
+            for opp, prop_type, direction in zip(_opp_col, _prop_col, _dir_col):
+                from step_archive import get_opp_historical_hr
+                opp_hr_vals.append(get_opp_historical_hr(sport, str(opp), str(prop_type), str(direction)))
+        except Exception:
+            n = len(out)
+            floor_p10_vals = median_act_vals = avg_win_vals = player_hr_vals = opp_hr_vals = [None] * n
+    else:
+        n = len(out)
+        floor_p10_vals = median_act_vals = avg_win_vals = player_hr_vals = opp_hr_vals = [None] * n
+
+    out["player_floor_p10"]     = floor_p10_vals
+    out["avg_win_margin"]       = avg_win_vals
+    out["player_hr_historical"] = player_hr_vals
+    out["opp_hr_historical"]    = opp_hr_vals
+
+    # floor_clears_line: 1.0 when floor > line, 0.0 when not, NaN when no history
+    _fp10 = pd.to_numeric(pd.Series(floor_p10_vals, index=out.index), errors="coerce")
+    _line = pd.to_numeric(line_safe, errors="coerce")
+    out["floor_clears_line"] = np.where(
+        _fp10.notna() & _line.notna(),
+        (_fp10 > _line).astype(float),
+        np.nan,
+    )
+
+    # line_gap: median_actual - line; dir_line_gap: direction-normalized
+    _med  = pd.to_numeric(pd.Series(median_act_vals, index=out.index), errors="coerce")
+    out["line_gap"]     = _med - _line
+    _is_under = _dir_col.astype(str).str.upper().str.strip().eq("UNDER")
+    out["dir_line_gap"] = np.where(_is_under, -out["line_gap"], out["line_gap"])
+
+    # dir_line_gap_norm: clip to [-5,+5] then scale to [0,1]; neutral 0.5 when no history
+    _dlg = pd.to_numeric(out["dir_line_gap"], errors="coerce")
+    out["dir_line_gap_norm"] = (_dlg.clip(-5.0, 5.0) + 5.0) / 10.0
+    out["dir_line_gap_norm"] = out["dir_line_gap_norm"].fillna(0.5)
+
 def _norm_pick_type_series(s: pd.Series) -> pd.Series:
     t = s.astype(str).str.strip().str.lower()
     return np.where(t.str.contains("gob"), "Goblin",
@@ -330,6 +417,15 @@ try:
     ML_BLEND_WEIGHT = float(load_ml_blend_weight(_repo_root_ml_nba(), "nba"))
 except Exception:
     ML_BLEND_WEIGHT = 0.30
+
+# ── Multi-signal blend weights (used when archive history is available) ───────
+BLEND_WEIGHTS: dict[str, float] = {
+    "ml_prob":            0.20,
+    "composite_hr":       0.35,
+    "floor_signal":       0.20,
+    "line_gap_norm":      0.15,
+    "opp_hr_historical":  0.10,
+}
 
 # -------------------- projection fallback --------------------
 
@@ -630,8 +726,37 @@ def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, source_hint: s
         )
 
     ml_edge = ml_prob - 0.5
-    final_score = (1.0 - blend_w) * existing_score + blend_w * ml_edge
-    print(f"✅ NBA ML blend applied (model={model_key_used}, weight={blend_w:.2f})")
+
+    # Multi-signal blend when archive history features are available
+    has_archive_cols = all(c in out.columns for c in ("dir_line_gap_norm", "floor_clears_line"))
+    if has_archive_cols:
+        w = BLEND_WEIGHTS
+        composite_hr = _to_num(out.get("composite_hit_rate", pd.Series(0.5, index=out.index))).fillna(0.5)
+        # floor_signal: 1.0 if floor clears line, ratio if not, 0.5 neutral when no history
+        _fcl = _to_num(out.get("floor_clears_line")).fillna(-1.0)
+        _fp10 = _to_num(out.get("player_floor_p10"))
+        _line_safe = _to_num(out.get("line", out.get("line_score", pd.Series(np.nan, index=out.index)))).replace(0, np.nan)
+        floor_signal = pd.Series(np.where(
+            _fcl.eq(1.0), 1.0,
+            np.where(_fcl.eq(0.0) & _fp10.notna() & _line_safe.notna(),
+                     (_fp10 / _line_safe).clip(0.0, 1.0), 0.5)
+        ), index=out.index)
+        lgn = _to_num(out.get("dir_line_gap_norm")).fillna(0.5)
+        opp_hr = _to_num(out.get("opp_hr_historical")).where(
+            _to_num(out.get("opp_hr_historical")).notna(), composite_hr)
+        new_blend = (
+            w["ml_prob"]           * ml_prob.clip(0, 1).fillna(0.5)
+            + w["composite_hr"]    * composite_hr.clip(0, 1)
+            + w["floor_signal"]    * floor_signal
+            + w["line_gap_norm"]   * lgn
+            + w["opp_hr_historical"] * opp_hr.clip(0, 1).fillna(0.5)
+        )
+        # Multiplicative: preserve existing_score scale, modulate ±30% by new blend signal
+        final_score = existing_score * (1.0 + 0.30 * (new_blend - 0.5))
+        print(f"✅ NBA ML blend (multi-signal, model={model_key_used}, w={blend_w:.2f})")
+    else:
+        final_score = (1.0 - blend_w) * existing_score + blend_w * ml_edge
+        print(f"✅ NBA ML blend applied (model={model_key_used}, weight={blend_w:.2f})")
     return ml_prob, ml_edge, final_score
 
 def _write_xlsx_openpyxl(output_path: str, out: pd.DataFrame, elig_mask: pd.Series) -> None:
@@ -787,6 +912,9 @@ def main() -> None:
     out["edge_norm"] = out["edge"] / line_safe
     # Magnitude-only normalized edge for ranking z-scores (direction-agnostic).
     out["edge_norm_mag"] = _to_num(out["abs_edge"]) / line_safe
+
+    # ── Historical archive features (graceful no-op when no history) ──────────
+    _attach_archive_features(out, "NBA", line_safe)
 
     # ── FORCED OVER / BET DIRECTION ───────────────────────────────────────────
     forced = pick_type_s.isin(["Goblin", "Demon"]).astype(int)

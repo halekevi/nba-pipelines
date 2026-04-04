@@ -37,6 +37,16 @@ for _efe_anc in Path(__file__).resolve().parents:
         break
 from edge_feature_engineering import apply_ticket_eligibility_voids, build_feature_vector  # noqa: E402
 
+# ── step_archive lazy import ──────────────────────────────────────────────────
+_sa_scripts_dir = str(Path(__file__).resolve().parents[2] / "scripts")
+try:
+    if _sa_scripts_dir not in sys.path:
+        sys.path.insert(0, _sa_scripts_dir)
+    from step_archive import get_bulk_stats as _sa_get_bulk, _norm_player as _sa_norm_player, _norm_prop as _sa_norm_prop, get_opp_historical_hr as _sa_get_opp_hr
+    _HAS_ARCHIVE = True
+except Exception:
+    _HAS_ARCHIVE = False
+
 try:
     from tqdm import tqdm as _tqdm
 except ImportError:
@@ -779,6 +789,51 @@ def main():
         scored_df["final_score"] = _to_num(scored_df["final_score"]).astype(float) + _pen_nhl.values
 
     scored_df["prop_score"] = _to_num(scored_df["final_score"]).fillna(_to_num(scored_df["prop_score"]).fillna(0.0))
+    # abs_edge: needed by step7b edge scorer and step8 downstream
+    if "abs_edge" not in scored_df.columns:
+        scored_df["abs_edge"] = pd.to_numeric(
+            scored_df.get("edge", pd.Series(0.0, index=scored_df.index)), errors="coerce"
+        ).abs()
+    # blended_score fallback: step7b will overwrite with edge model score if available
+    if "blended_score" not in scored_df.columns:
+        scored_df["blended_score"] = pd.to_numeric(scored_df["final_score"], errors="coerce")
+
+    # ── Historical archive features ───────────────────────────────────────────
+    _player_nhl = next((scored_df[c] for c in ("player_name", "player") if c in scored_df.columns), pd.Series("", index=scored_df.index))
+    _prop_nhl   = next((scored_df[c] for c in ("stat_norm", "prop_type") if c in scored_df.columns), pd.Series("", index=scored_df.index))
+    _opp_nhl    = next((scored_df[c] for c in ("opponent", "opp_team", "opp") if c in scored_df.columns), pd.Series("", index=scored_df.index))
+    _dir_nhl    = next((scored_df[c] for c in ("recommended_side", "direction") if c in scored_df.columns), pd.Series("UNDER", index=scored_df.index))
+    _line_nhl   = pd.to_numeric(next((scored_df[c] for c in ("line_score", "line") if c in scored_df.columns), pd.Series(np.nan, index=scored_df.index)), errors="coerce").replace(0, np.nan)
+    n_nhl = len(scored_df)
+    if _HAS_ARCHIVE:
+        try:
+            pairs_nhl = list(zip(_player_nhl.tolist(), _prop_nhl.tolist()))
+            dir_trips_nhl = [(p, pt, d) for p, pt, d in zip(_player_nhl, _prop_nhl, _dir_nhl)]
+            bulk_nhl = _sa_get_bulk("NHL", pairs_nhl, dir_trips_nhl)
+            pstats_nhl = bulk_nhl.get("player_stats", {})
+            fp10_n, med_n, awm_n, phr_n, opphr_n = [], [], [], [], []
+            for i, (pl, pt) in enumerate(pairs_nhl):
+                k = (_sa_norm_player(pl), _sa_norm_prop(pt))
+                s = pstats_nhl.get(k, {})
+                fp10_n.append(s.get("floor_p10")); med_n.append(s.get("median_actual"))
+                awm_n.append(s.get("avg_win_margin")); phr_n.append(s.get("player_hr"))
+                opphr_n.append(_sa_get_opp_hr("NHL", str(_opp_nhl.iat[i]), str(pt), str(_dir_nhl.iat[i])))
+        except Exception:
+            fp10_n = med_n = awm_n = phr_n = opphr_n = [None] * n_nhl
+    else:
+        fp10_n = med_n = awm_n = phr_n = opphr_n = [None] * n_nhl
+    scored_df["player_floor_p10"] = fp10_n; scored_df["avg_win_margin"] = awm_n
+    scored_df["player_hr_historical"] = phr_n; scored_df["opp_hr_historical"] = opphr_n
+    _fp10s_n = pd.to_numeric(pd.Series(fp10_n, index=scored_df.index), errors="coerce")
+    scored_df["floor_clears_line"] = np.where(_fp10s_n.notna() & _line_nhl.notna(), (_fp10s_n > _line_nhl).astype(float), np.nan)
+    _meds_n = pd.to_numeric(pd.Series(med_n, index=scored_df.index), errors="coerce")
+    scored_df["line_gap"] = _meds_n - _line_nhl
+    _is_under_n = _dir_nhl.astype(str).str.upper().str.strip().eq("UNDER")
+    scored_df["dir_line_gap"] = np.where(_is_under_n, -scored_df["line_gap"], scored_df["line_gap"])
+    _dlg_n = pd.to_numeric(scored_df["dir_line_gap"], errors="coerce")
+    scored_df["dir_line_gap_norm"] = (_dlg_n.clip(-5.0, 5.0) + 5.0) / 10.0
+    scored_df["dir_line_gap_norm"] = scored_df["dir_line_gap_norm"].fillna(0.5)
+
     scored_df["tier"] = scored_df.apply(
         lambda r: assign_tier(safe_float(r.get("prop_score", 0)), safe_float(r.get("sample_L10", 0))),
         axis=1,

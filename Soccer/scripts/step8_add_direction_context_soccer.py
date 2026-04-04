@@ -104,8 +104,17 @@ def write_sheet(wb, name: str, data: pd.DataFrame) -> None:
     ws.auto_filter.ref = f"A1:{get_column_letter(len(headers))}1"
 
 
+_MIN_TIER_NUM_MAP = {0: "DNP Risk", 1: "Spot", 2: "Rotation", 3: "Starter"}
+
+
 def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     df2 = df.copy()
+    # Convert numeric minutes_tier (0-3) back to human labels
+    if "minutes_tier" in df2.columns:
+        _mt_num = pd.to_numeric(df2["minutes_tier"], errors="coerce")
+        _mt_valid = _mt_num.notna()
+        if _mt_valid.any():
+            df2.loc[_mt_valid, "minutes_tier"] = _mt_num[_mt_valid].round().astype(int).map(_MIN_TIER_NUM_MAP).fillna(df2.loc[_mt_valid, "minutes_tier"])
     try:
         import platform
         _time_fmt = "%m/%d %#I:%M %p" if platform.system() == "Windows" else "%m/%d %-I:%M %p"

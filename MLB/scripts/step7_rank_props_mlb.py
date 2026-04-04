@@ -29,9 +29,59 @@ for _efe_anc in Path(__file__).resolve().parents:
         break
 from edge_feature_engineering import apply_ticket_eligibility_voids, build_feature_vector  # noqa: E402
 
+# ── step_archive lazy import ──────────────────────────────────────────────────
+_sa_scripts_dir = str(Path(__file__).resolve().parents[2] / "scripts")
+try:
+    if _sa_scripts_dir not in sys.path:
+        sys.path.insert(0, _sa_scripts_dir)
+    from step_archive import get_bulk_stats as _sa_get_bulk, _norm_player as _sa_norm_player, _norm_prop as _sa_norm_prop, get_opp_historical_hr as _sa_get_opp_hr
+    _HAS_ARCHIVE = True
+except Exception:
+    _HAS_ARCHIVE = False
+
 
 def _to_num(s):
     return pd.to_numeric(s, errors="coerce")
+
+
+def _attach_archive_features(out: pd.DataFrame, sport: str, line_series: "pd.Series") -> None:
+    """Attach step_archive historical features in-place. No-op when no history."""
+    _player = next((out[c] for c in ("player", "player_name") if c in out.columns), pd.Series("", index=out.index))
+    _prop   = next((out[c] for c in ("prop_type", "prop_norm") if c in out.columns), pd.Series("", index=out.index))
+    _opp    = next((out[c] for c in ("opp_team", "opp") if c in out.columns), pd.Series("", index=out.index))
+    _dir    = next((out[c] for c in ("bet_direction", "direction") if c in out.columns), pd.Series("OVER", index=out.index))
+    _line   = pd.to_numeric(line_series, errors="coerce")
+    n = len(out)
+
+    if _HAS_ARCHIVE:
+        try:
+            pairs = list(zip(_player.tolist(), _prop.tolist()))
+            dir_trips = [(p, pt, d) for p, pt, d in zip(_player, _prop, _dir)]
+            bulk = _sa_get_bulk(sport, pairs, dir_trips)
+            pstats = bulk.get("player_stats", {})
+            fp10, med, awm, phr, opphr = [], [], [], [], []
+            for i, (pl, pt) in enumerate(pairs):
+                k = (_sa_norm_player(pl), _sa_norm_prop(pt))
+                s = pstats.get(k, {})
+                fp10.append(s.get("floor_p10")); med.append(s.get("median_actual"))
+                awm.append(s.get("avg_win_margin")); phr.append(s.get("player_hr"))
+                opphr.append(_sa_get_opp_hr(sport, str(_opp.iat[i]), str(pt), str(_dir.iat[i])))
+        except Exception:
+            fp10 = med = awm = phr = opphr = [None] * n
+    else:
+        fp10 = med = awm = phr = opphr = [None] * n
+
+    out["player_floor_p10"] = fp10; out["avg_win_margin"] = awm
+    out["player_hr_historical"] = phr; out["opp_hr_historical"] = opphr
+    _fp10s = pd.to_numeric(pd.Series(fp10, index=out.index), errors="coerce")
+    out["floor_clears_line"] = np.where(_fp10s.notna() & _line.notna(), (_fp10s > _line).astype(float), np.nan)
+    _meds = pd.to_numeric(pd.Series(med, index=out.index), errors="coerce")
+    out["line_gap"] = _meds - _line
+    _is_under = _dir.astype(str).str.upper().str.strip().eq("UNDER")
+    out["dir_line_gap"] = np.where(_is_under, -out["line_gap"], out["line_gap"])
+    _dlg = pd.to_numeric(out["dir_line_gap"], errors="coerce")
+    out["dir_line_gap_norm"] = (_dlg.clip(-5.0, 5.0) + 5.0) / 10.0
+    out["dir_line_gap_norm"] = out["dir_line_gap_norm"].fillna(0.5)
 
 
 def _norm_pick_type(x: str) -> str:
@@ -132,6 +182,76 @@ def _edge_transform(edge: float, cap: float = 3.0, power: float = 0.85) -> float
     s = 1.0 if edge >= 0 else -1.0
     x = min(abs(edge), cap)
     return s * (x ** power)
+
+
+BLEND_WEIGHTS_MLB: dict[str, float] = {
+    "ml_prob": 0.20, "composite_hr": 0.40,
+    "floor_signal": 0.15, "line_gap_norm": 0.15, "opp_hr_historical": 0.10,
+}
+
+
+def _apply_ml_blend_mlb(out: pd.DataFrame) -> pd.DataFrame:
+    """Apply ML blend to rank_score. Graceful no-op when model is missing."""
+    import json as _json
+    root = Path(__file__).resolve().parents[2]
+    model_path = root / "models" / "prop_model_mlb.pkl"
+    feat_path  = root / "models" / "prop_model_mlb_features.json"
+    if not (model_path.exists() and feat_path.exists()):
+        out["ml_prob"] = np.nan; out["ml_edge"] = np.nan; out["final_score"] = out["rank_score"]
+        return out
+    try:
+        import joblib as _jl
+        model = _jl.load(model_path)
+        feats = _json.loads(feat_path.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"⚠️  MLB ML model load failed: {e}")
+        out["ml_prob"] = np.nan; out["ml_edge"] = np.nan; out["final_score"] = out["rank_score"]
+        return out
+    try:
+        from ml_blend_weight import load_ml_blend_weight as _lmbw
+        blend_w = float(_lmbw(root, "mlb"))
+    except Exception:
+        blend_w = 0.20
+    try:
+        missing_f = [c for c in feats if c not in out.columns]
+        for c in missing_f: out[c] = 0.0
+        X = out[feats].astype(float)
+        raw_prob = pd.Series(model.predict_proba(X)[:, 1], index=out.index, dtype=float)
+        calib_path = root / "models" / "prop_model_mlb_calibrator.pkl"
+        if calib_path.exists():
+            import joblib as _jl2
+            cal = _jl2.load(calib_path)
+            try:
+                cal_vals = cal.predict_proba(raw_prob.values.reshape(-1, 1))[:, 1] if hasattr(cal, "predict_proba") else cal.predict(raw_prob.values)
+                ml_prob = pd.Series(cal_vals, index=out.index, dtype=float).clip(0.001, 0.999)
+            except Exception: ml_prob = raw_prob
+        else:
+            ml_prob = raw_prob
+    except Exception as e:
+        print(f"⚠️  MLB ML inference failed: {e}")
+        out["ml_prob"] = np.nan; out["ml_edge"] = np.nan; out["final_score"] = out["rank_score"]
+        return out
+    out["ml_prob"] = ml_prob
+    out["ml_edge"] = ml_prob - 0.5
+    existing = _to_num(out["rank_score"]).fillna(0.0)
+    has_archive = all(c in out.columns for c in ("dir_line_gap_norm", "floor_clears_line"))
+    if has_archive:
+        w = BLEND_WEIGHTS_MLB
+        comp_hr = _to_num(out.get("composite_hit_rate", pd.Series(0.5, index=out.index))).fillna(0.5)
+        _fcl = _to_num(out.get("floor_clears_line")).fillna(-1.0)
+        _fp10 = _to_num(out.get("player_floor_p10"))
+        _ls = _to_num(out.get("line", pd.Series(np.nan, index=out.index))).replace(0, np.nan)
+        floor_sig = pd.Series(np.where(_fcl.eq(1.0), 1.0, np.where(_fcl.eq(0.0) & _fp10.notna() & _ls.notna(), (_fp10/_ls).clip(0,1), 0.5)), index=out.index)
+        lgn = _to_num(out.get("dir_line_gap_norm")).fillna(0.5)
+        opp_hr = _to_num(out.get("opp_hr_historical")).where(_to_num(out.get("opp_hr_historical")).notna(), comp_hr)
+        new_blend = w["ml_prob"]*ml_prob.clip(0,1).fillna(0.5) + w["composite_hr"]*comp_hr.clip(0,1) + w["floor_signal"]*floor_sig + w["line_gap_norm"]*lgn + w["opp_hr_historical"]*opp_hr.clip(0,1).fillna(0.5)
+        out["final_score"] = existing * (1.0 + 0.30 * (new_blend - 0.5))
+        print(f"✅ MLB ML blend (multi-signal, weight={blend_w:.2f})")
+    else:
+        out["final_score"] = (1.0 - blend_w) * existing + blend_w * out["ml_edge"]
+        print(f"✅ MLB ML blend applied (weight={blend_w:.2f})")
+    out["rank_score"] = out["final_score"].where(out["final_score"].notna(), out["rank_score"])
+    return out
 
 
 def _tier_from_score(score: float) -> str:
@@ -266,6 +386,9 @@ def main() -> None:
         out["projection"] = _to_num(out["projection"]).fillna(0.0) + _to_num(out["usage_boost_proj"]).fillna(0.0)
     out["edge"]       = _to_num(out["projection"]) - line_num
     out["abs_edge"]   = out["edge"].abs()
+
+    # ── Historical archive features ───────────────────────────────────────────
+    _attach_archive_features(out, "MLB", line_num.replace(0, np.nan))
 
     forced = out["pick_type"].apply(_forced_over_only).astype(int)
     out["forced_over_only"] = forced
@@ -416,10 +539,14 @@ def main() -> None:
     score = score.where(elig_mask & ((_eadr > 0.0) | _is_dem), np.nan)
 
     out["rank_score"] = score
-    out["tier"]       = out["rank_score"].apply(_tier_from_score)
+
+    # ── ML blend (activates when model file exists; graceful fallback otherwise) ─
+    out = build_feature_vector(out, "MLB")   # must run before ML inference
+    out = _apply_ml_blend_mlb(out)
+
+    out["tier"] = out["rank_score"].apply(_tier_from_score)
     if "recommended_side" not in out.columns:
         out["recommended_side"] = out["bet_direction"]
-    out = build_feature_vector(out, "MLB")
     out = apply_ticket_eligibility_voids(out, "MLB")
     elig_mask = out["eligible"].astype(int).eq(1)
 

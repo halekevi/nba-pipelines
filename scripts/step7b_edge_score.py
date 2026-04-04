@@ -144,8 +144,9 @@ def main() -> None:
     feats = json.loads(feat_path.read_text(encoding="utf-8"))
     missing = [c for c in feats if c not in df2.columns]
     if missing:
-        print(f"[WARN] Missing feature columns {missing[:5]}... — skip.")
-        return
+        print(f"[WARN] Missing {len(missing)} feature cols for {sp} — filling with 0.0: {missing[:8]}")
+        for col in missing:
+            df2[col] = 0.0
 
     try:
         model = joblib.load(model_path)
@@ -169,7 +170,9 @@ def main() -> None:
     df2["ml_prob"] = ml_prob
     df2["edge_score"] = edge_score.values
     df2["blended_score"] = blended.values
-    df2 = df2.sort_values("blended_score", ascending=False, na_position="last", kind="mergesort")
+    # Do not re-sort NHL — it uses explicit rank ordering in its step7 output
+    if sp.upper() != "NHL":
+        df2 = df2.sort_values("blended_score", ascending=False, na_position="last", kind="mergesort")
 
     xl_obj = pd.ExcelFile(xlsx)
     all_sheets: dict[str, pd.DataFrame] = {}

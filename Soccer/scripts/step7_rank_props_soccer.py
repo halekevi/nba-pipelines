@@ -33,9 +33,59 @@ for _efe_anc in Path(__file__).resolve().parents:
         break
 from edge_feature_engineering import apply_ticket_eligibility_voids, build_feature_vector  # noqa: E402
 
+# ── step_archive lazy import ──────────────────────────────────────────────────
+_sa_scripts_dir = str(Path(__file__).resolve().parents[2] / "scripts")
+try:
+    if _sa_scripts_dir not in sys.path:
+        sys.path.insert(0, _sa_scripts_dir)
+    from step_archive import get_bulk_stats as _sa_get_bulk, _norm_player as _sa_norm_player, _norm_prop as _sa_norm_prop, get_opp_historical_hr as _sa_get_opp_hr
+    _HAS_ARCHIVE = True
+except Exception:
+    _HAS_ARCHIVE = False
+
 
 def _to_num(s):
     return pd.to_numeric(s, errors="coerce")
+
+
+def _attach_archive_features(out: pd.DataFrame, sport: str, line_series: "pd.Series") -> None:
+    """Attach step_archive historical features in-place. No-op when no history."""
+    _player = next((out[c] for c in ("player", "player_name") if c in out.columns), pd.Series("", index=out.index))
+    _prop   = next((out[c] for c in ("prop_type", "prop_norm") if c in out.columns), pd.Series("", index=out.index))
+    _opp    = next((out[c] for c in ("opp_team", "opp") if c in out.columns), pd.Series("", index=out.index))
+    _dir    = next((out[c] for c in ("bet_direction", "direction") if c in out.columns), pd.Series("OVER", index=out.index))
+    _line   = pd.to_numeric(line_series, errors="coerce")
+    n = len(out)
+
+    if _HAS_ARCHIVE:
+        try:
+            pairs = list(zip(_player.tolist(), _prop.tolist()))
+            dir_trips = [(p, pt, d) for p, pt, d in zip(_player, _prop, _dir)]
+            bulk = _sa_get_bulk(sport, pairs, dir_trips)
+            pstats = bulk.get("player_stats", {})
+            fp10, med, awm, phr, opphr = [], [], [], [], []
+            for i, (pl, pt) in enumerate(pairs):
+                k = (_sa_norm_player(pl), _sa_norm_prop(pt))
+                s = pstats.get(k, {})
+                fp10.append(s.get("floor_p10")); med.append(s.get("median_actual"))
+                awm.append(s.get("avg_win_margin")); phr.append(s.get("player_hr"))
+                opphr.append(_sa_get_opp_hr(sport, str(_opp.iat[i]), str(pt), str(_dir.iat[i])))
+        except Exception:
+            fp10 = med = awm = phr = opphr = [None] * n
+    else:
+        fp10 = med = awm = phr = opphr = [None] * n
+
+    out["player_floor_p10"] = fp10; out["avg_win_margin"] = awm
+    out["player_hr_historical"] = phr; out["opp_hr_historical"] = opphr
+    _fp10s = pd.to_numeric(pd.Series(fp10, index=out.index), errors="coerce")
+    out["floor_clears_line"] = np.where(_fp10s.notna() & _line.notna(), (_fp10s > _line).astype(float), np.nan)
+    _meds = pd.to_numeric(pd.Series(med, index=out.index), errors="coerce")
+    out["line_gap"] = _meds - _line
+    _is_under = _dir.astype(str).str.upper().str.strip().eq("UNDER")
+    out["dir_line_gap"] = np.where(_is_under, -out["line_gap"], out["line_gap"])
+    _dlg = pd.to_numeric(out["dir_line_gap"], errors="coerce")
+    out["dir_line_gap_norm"] = (_dlg.clip(-5.0, 5.0) + 5.0) / 10.0
+    out["dir_line_gap_norm"] = out["dir_line_gap_norm"].fillna(0.5)
 
 
 # --- Player consistency (data/cache/player_consistency.db) ---
@@ -732,6 +782,9 @@ def main() -> None:
         out["projection"] = _to_num(out["projection"]).fillna(0.0) + _to_num(out["usage_boost_proj"]).fillna(0.0)
     out["edge"]       = proj - line_num
     out["abs_edge"]   = out["edge"].abs()
+
+    # ── Historical archive features ───────────────────────────────────────────
+    _attach_archive_features(out, "Soccer", line_num.replace(0, np.nan))
 
     forced = out["pick_type"].apply(_forced_over_only).astype(int)
     out["forced_over_only"] = forced

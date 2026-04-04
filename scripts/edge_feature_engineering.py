@@ -39,6 +39,13 @@ FEATURE_COLUMNS: list[str] = [
     "role_type_encoded",
     "dominance_pct",
     "specialization_rank",
+    # ── New archive-derived features (neutral fills until history accumulates) ──
+    "abs_edge",              # magnitude of play-side edge (always >= 0)
+    "floor_clears_line",     # 1.0/0.0 — historical floor vs line; NaN when no history
+    "avg_win_margin",        # avg cushion when HIT historically
+    "dir_line_gap_norm",     # normalized (median_actual - line), direction-aware, 0..1
+    "opp_hr_historical",     # opponent-specific graded hit rate
+    "player_hr_historical",  # player-specific graded hit rate on this prop type
 ]
 
 
@@ -367,6 +374,19 @@ def build_feature_vector(df: pd.DataFrame, sport: str) -> pd.DataFrame:
 
     if _stash_mt_labels is not None:
         out["minutes_tier_label"] = _stash_mt_labels
+
+    # ── New archive-derived features: pass through if already set by step7,
+    #    otherwise fill with neutral defaults so edge model inference is not broken.
+    for _new_col, _neutral in (
+        ("abs_edge",             None),    # already set above from edge_raw.abs()
+        ("floor_clears_line",    np.nan),
+        ("avg_win_margin",       np.nan),
+        ("dir_line_gap_norm",    0.5),
+        ("opp_hr_historical",    np.nan),
+        ("player_hr_historical", np.nan),
+    ):
+        if _new_col not in out.columns:
+            out[_new_col] = _neutral
 
     return out
 

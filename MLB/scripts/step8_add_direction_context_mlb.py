@@ -123,9 +123,18 @@ def write_sheet(wb, name: str, data: pd.DataFrame, tab_color: str = HEADER_COLOR
     ws.auto_filter.ref = f"A1:{get_column_letter(len(headers))}1"
 
 
+_MIN_TIER_NUM_MAP = {0: "DNP Risk", 1: "Spot", 2: "Rotation", 3: "Starter"}
+
+
 def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     df2 = df.copy()
     df2 = df2.where(pd.notna(df2), None)
+    # Convert numeric minutes_tier (0-3) back to human labels
+    if "minutes_tier" in df2.columns:
+        _mt_num = pd.to_numeric(df2["minutes_tier"], errors="coerce")
+        _mt_valid = _mt_num.notna()
+        if _mt_valid.any():
+            df2.loc[_mt_valid, "minutes_tier"] = _mt_num[_mt_valid].round().astype(int).map(_MIN_TIER_NUM_MAP).fillna(df2.loc[_mt_valid, "minutes_tier"])
     df2["game_time"] = pd.to_datetime(df2.get("start_time", ""), errors="coerce").dt.strftime("%-I:%M %p")
     # Calendar date for same-day MLB grading (avoids grading full multi-day slate vs one day's games).
     _gd = _row_game_datetimes(df2)
