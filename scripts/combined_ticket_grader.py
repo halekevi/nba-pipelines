@@ -29,6 +29,8 @@ Outputs:
   (exploratory — trained on the same graded slate; use for patterns, not live edge claims)
 - ML_CALIBRATION sheet: buckets slate ml_prob vs realized hit rate (find miscalibration before retraining).
 - --export-graded-legs-csv: append-friendly training export (stack slates, retrain step8 / leg ML offline).
+- TICKET_BACKTEST / TICKET_OBJ_DECILES + --export-graded-tickets-csv: ticket-level paid vs modeled objective (matches /tickets UI).
+- Stack CSVs and run: py scripts/backtest_ticket_objectives.py training/graded_tickets_all.csv
 
 Usage (PowerShell):
   py -3.14 .\\combined_ticket_grader_UPDATED.py `
@@ -521,6 +523,204 @@ def _load_ticket_json_leg_probs(repo_root: Path, tickets_xlsx: Path) -> dict[tup
     return out
 
 
+def _load_ticket_json_ticket_objectives(repo_root: Path, tickets_xlsx: Path) -> dict[tuple[str, int], float]:
+    """(sheet / group_name, ticket_no) -> ticket_objective_score from combined_slate JSON when present."""
+    stem = tickets_xlsx.stem
+    m = re.search(r"(\d{4}-\d{2}-\d{2})", stem)
+    date_str = m.group(1) if m else ""
+    candidates: list[Path] = []
+    if date_str:
+        candidates.append(repo_root / "outputs" / date_str / f"combined_slate_tickets_{date_str}.json")
+        candidates.append(repo_root / f"combined_slate_tickets_{date_str}.json")
+    candidates.append(tickets_xlsx.with_suffix(".json"))
+    json_path = next((p for p in candidates if p.exists()), None)
+    if json_path is None:
+        return {}
+    try:
+        payload = json.loads(json_path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    out: dict[tuple[str, int], float] = {}
+    for g in (payload.get("groups") or []):
+        sheet = str(g.get("group_name") or "")
+        for t in (g.get("tickets") or []):
+            try:
+                tno = int(t.get("ticket_no"))
+            except Exception:
+                continue
+            v = t.get("ticket_objective_score")
+            if v is None:
+                continue
+            try:
+                out[(sheet, tno)] = float(v)
+            except (TypeError, ValueError):
+                pass
+    return out
+
+
+def _import_combined_slate_ticket_math():
+    import sys
+
+    p = str(ROOT / "scripts")
+    if p not in sys.path:
+        sys.path.insert(0, p)
+    import combined_slate_tickets as cst
+
+    return cst
+
+
+def _leg_series_for_slate_prob(row: pd.Series) -> pd.Series:
+    d = row.to_dict()
+    pt = d.get("prop_type")
+    if pt is None or (isinstance(pt, float) and np.isnan(pt)) or str(pt).strip() == "":
+        d["prop_type"] = d.get("prop_norm") or d.get("prop") or ""
+    return pd.Series(d)
+
+
+def _canonical_ticket_leg_grade(leg_result: str) -> str:
+    x = str(leg_result or "").upper().strip()
+    if x == "HIT":
+        return "HIT"
+    if x == "MISS":
+        return "MISS"
+    if x in ("VOID", "PUSH"):
+        return "VOID"
+    return "UNGRADED"
+
+
+def _empirical_ticket_paid_ui(sheet: str, grades: list[str]) -> tuple[Optional[bool], bool]:
+    """
+    Align with build_ticket_eval /tickets: flex 3+ sheet -> flex cash; else all legs HIT.
+    Returns (paid_or_none, include_in_ticket_rate).
+    """
+    if not grades:
+        return None, False
+    if any(g == "UNGRADED" for g in grades):
+        return None, False
+    if all(g == "VOID" for g in grades):
+        return None, False
+    n = len(grades)
+    h = sum(1 for g in grades if g == "HIT")
+    m = sum(1 for g in grades if g == "MISS")
+    is_flex = n >= 3 and "flex" in str(sheet or "").lower()
+    if is_flex:
+        paid = m <= 1 and h >= n - 1
+    else:
+        paid = all(g == "HIT" for g in grades)
+    return paid, True
+
+
+def build_ticket_backtest_dataframe(
+    legs_df: pd.DataFrame,
+    tickets_xlsx: Path,
+    grade_date: str,
+    source_workbook: str,
+) -> pd.DataFrame:
+    """One row per ticket_id: empirical paid (UI rules), modeled objective (same math as generator)."""
+    cst = _import_combined_slate_ticket_math()
+    json_obj = _load_ticket_json_ticket_objectives(ROOT, tickets_xlsx)
+    rows_out: list[dict[str, Any]] = []
+    for tid, g in legs_df.groupby("ticket_id"):
+        g = g.sort_values("leg_no")
+        sheet = str(g.iloc[0]["sheet"])
+        tno = int(g.iloc[0]["ticket_no"])
+        leg_dicts: list[dict[str, Any]] = []
+        grades: list[str] = []
+        for _, r in g.iterrows():
+            ser = _leg_series_for_slate_prob(r)
+            leg_dicts.append(ser.to_dict())
+            grades.append(_canonical_ticket_leg_grade(str(r.get("leg_result") or "")))
+        paid, incl = _empirical_ticket_paid_ui(sheet, grades)
+        leg_probs = [cst._resolve_leg_prob(pd.Series(d)) for d in leg_dicts]
+        n = len(leg_dicts)
+        penalty = cst._correlation_penalty(leg_dicts)
+        ep = cst.win_prob(leg_probs, n) * penalty
+        fc = cst.flex_cash_prob(leg_probs) * penalty if n >= 3 else ep
+        is_flex = n >= 3 and "flex" in sheet.lower()
+        obj = float(fc if is_flex else ep)
+        jo = json_obj.get((sheet, tno))
+        if jo is None:
+            jo = np.nan
+        rows_out.append(
+            {
+                "grade_date": grade_date,
+                "source_workbook": source_workbook,
+                "ticket_id": tid,
+                "sheet": sheet,
+                "ticket_no": tno,
+                "n_legs": n,
+                "empirical_ticket_paid": (1.0 if paid else 0.0) if paid is not None else np.nan,
+                "include_in_ticket_rate": incl,
+                "modeled_ticket_objective": round(obj, 4),
+                "modeled_power_prob": round(float(ep), 4),
+                "modeled_flex_cash": round(float(fc), 4),
+                "json_ticket_objective_score": jo,
+                "slate_is_flex": is_flex,
+                "n_hit": sum(1 for x in grades if x == "HIT"),
+                "n_miss": sum(1 for x in grades if x == "MISS"),
+                "n_void": sum(1 for x in grades if x == "VOID"),
+                "n_ungraded": sum(1 for x in grades if x == "UNGRADED"),
+            }
+        )
+    return pd.DataFrame(rows_out)
+
+
+def enrich_ticket_backtest_with_payouts(ticket_bt: pd.DataFrame, ticket_results: pd.DataFrame) -> pd.DataFrame:
+    if ticket_bt.empty or ticket_results.empty or "mode" not in ticket_results.columns:
+        return ticket_bt
+    out = ticket_bt.copy()
+    for mode in ticket_results["mode"].dropna().unique():
+        m = str(mode).strip().lower()
+        sub = ticket_results[ticket_results["mode"] == mode][
+            ["ticket_id", "profit", "is_cash", "payout_status"]
+        ].copy()
+        sub = sub.rename(
+            columns={
+                "profit": f"profit_{m}",
+                "is_cash": f"is_cash_{m}",
+                "payout_status": f"payout_status_{m}",
+            }
+        )
+        out = out.merge(sub, on="ticket_id", how="left")
+    return out
+
+
+def build_ticket_objective_decile_summary(ticket_bt: pd.DataFrame) -> pd.DataFrame:
+    sub = ticket_bt[ticket_bt["include_in_ticket_rate"].astype(bool)].copy()
+    sub = sub[pd.to_numeric(sub["empirical_ticket_paid"], errors="coerce").notna()].copy()
+    if len(sub) < 5:
+        return pd.DataFrame([{"note": f"only {len(sub)} decidable tickets for decile summary"}])
+    mo = pd.to_numeric(sub["modeled_ticket_objective"], errors="coerce")
+    sub = sub.loc[mo.notna()].copy()
+    sub["modeled_ticket_objective"] = mo.loc[sub.index]
+    nq = min(10, max(3, len(sub) // 3))
+    try:
+        sub["bin"] = pd.qcut(sub["modeled_ticket_objective"], q=nq, duplicates="drop")
+    except (ValueError, TypeError):
+        return pd.DataFrame([{"note": "qcut failed — need more spread in modeled_ticket_objective"}])
+    g = (
+        sub.groupby("bin", observed=True)
+        .agg(
+            n=("empirical_ticket_paid", "count"),
+            mean_model_obj=("modeled_ticket_objective", "mean"),
+            empirical_paid_rate=("empirical_ticket_paid", "mean"),
+        )
+        .reset_index()
+    )
+    g["empirical_paid_rate"] = g["empirical_paid_rate"].round(4)
+    g["mean_model_obj"] = g["mean_model_obj"].round(4)
+    return g
+
+
+def export_graded_tickets_for_ml_training(ticket_bt: pd.DataFrame, out_csv: Path, *, append: bool = False) -> None:
+    out_csv = Path(out_csv)
+    out_csv.parent.mkdir(parents=True, exist_ok=True)
+    if append and out_csv.exists():
+        ticket_bt.to_csv(out_csv, mode="a", header=False, index=False)
+    else:
+        ticket_bt.to_csv(out_csv, index=False)
+
+
 def lookup_actual(sport: str, player: str, team: str, prop_norm: str,
                   nba_lpt, nba_lp,
                   cbb_lpt, cbb_lp,
@@ -956,12 +1156,31 @@ def export_graded_legs_for_ml_training(
     grade_date: str,
     source_workbook: str,
     append: bool = False,
+    ticket_bt: Optional[pd.DataFrame] = None,
 ) -> None:
     """
     Write graded legs (+ outcomes) for offline model improvement.
     Stack daily files into one CSV or Parquet, then retrain the pipeline that produces ml_prob on step8.
+    When ticket_bt is set, merges ticket-level paid / modeled objective onto each leg row.
     """
     export = legs_df.copy()
+    if ticket_bt is not None and not ticket_bt.empty:
+        merge_cols = [
+            "ticket_id",
+            "empirical_ticket_paid",
+            "include_in_ticket_rate",
+            "modeled_ticket_objective",
+            "modeled_power_prob",
+            "modeled_flex_cash",
+            "slate_is_flex",
+            "json_ticket_objective_score",
+        ]
+        use = [c for c in merge_cols if c in ticket_bt.columns]
+        export = export.merge(
+            ticket_bt[use].drop_duplicates(subset=["ticket_id"]),
+            on="ticket_id",
+            how="left",
+        )
     export.insert(0, "grade_date", str(grade_date))
     export.insert(1, "source_workbook", str(source_workbook))
     out_csv = Path(out_csv)
@@ -1172,6 +1391,16 @@ def main():
         "--append-graded-legs-csv",
         action="store_true",
         help="Append to --export-graded-legs-csv instead of overwriting (same columns required)",
+    )
+    ap.add_argument(
+        "--export-graded-tickets-csv",
+        default="",
+        help="Ticket-level TICKET_BACKTEST rows for stacking / backtest_ticket_objectives.py",
+    )
+    ap.add_argument(
+        "--append-graded-tickets-csv",
+        action="store_true",
+        help="Append to --export-graded-tickets-csv instead of overwriting",
     )
     args = ap.parse_args()
 
@@ -1388,6 +1617,12 @@ def main():
 
     ticket_results = pd.concat(ticket_rows, ignore_index=True)
 
+    ticket_bt_df = build_ticket_backtest_dataframe(
+        legs_df, tickets_xlsx, str(grade_date), tickets_xlsx.name
+    )
+    ticket_bt_df = enrich_ticket_backtest_with_payouts(ticket_bt_df, ticket_results)
+    ticket_obj_deciles = build_ticket_objective_decile_summary(ticket_bt_df)
+
     # overall stats
     overall = {}
     for mode in modes:
@@ -1467,6 +1702,8 @@ def main():
                     tab.to_excel(xw, index=False, sheet_name=str(name)[:31])
         for name, tab in tables.items():
             tab.to_excel(xw, index=False, sheet_name=str(name)[:31])
+        ticket_bt_df.to_excel(xw, index=False, sheet_name="TICKET_BACKTEST")
+        ticket_obj_deciles.to_excel(xw, index=False, sheet_name="TICKET_OBJ_DECILES")
         apply_graded_workbook_styles(xw.book)
 
     # Keep this ASCII-only so the script runs in non-UTF8 consoles.
@@ -1480,8 +1717,18 @@ def main():
             grade_date=str(grade_date),
             source_workbook=str(tickets_xlsx.name),
             append=bool(args.append_graded_legs_csv),
+            ticket_bt=ticket_bt_df,
         )
         print(f"Wrote graded legs training export -> {ex} (append={bool(args.append_graded_legs_csv)})")
+
+    tx = str(args.export_graded_tickets_csv or "").strip()
+    if tx:
+        export_graded_tickets_for_ml_training(
+            ticket_bt_df,
+            Path(tx),
+            append=bool(args.append_graded_tickets_csv),
+        )
+        print(f"Wrote graded tickets export -> {tx} (append={bool(args.append_graded_tickets_csv)})")
 
 
 if __name__ == "__main__":

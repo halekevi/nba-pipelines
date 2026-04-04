@@ -124,6 +124,15 @@ body::after{content:'';position:fixed;inset:0;
 .live-pill{font-family:"Inter",sans-serif;font-weight:600;font-size:10px;letter-spacing:1.5px;padding:6px 16px;border-radius:100px;border:1px solid rgba(46,204,113,.3);color:var(--green);background:rgba(46,204,113,.06);display:flex;align-items:center;gap:8px;}
 .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2s ease-in-out infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.nav-live-cluster{display:flex;align-items:center;gap:14px;flex-shrink:0;flex-wrap:wrap;}
+.nav-datetime-block{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;padding:4px 0;min-width:0;text-align:left;border-left:1px solid rgba(255,255,255,.1);padding-left:14px;margin-left:2px;}
+.nav-slate-date{font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:500;color:rgba(255,255,255,.9);letter-spacing:.02em;line-height:1.25;}
+.nav-sync-line{font-size:10px;color:var(--muted);line-height:1.35;display:flex;align-items:center;flex-wrap:wrap;gap:0;max-width:min(42vw,220px);}
+.nav-clock{font-family:'Share Tech Mono',monospace;color:rgba(255,255,255,.55);}
+.nav-sync-sep{opacity:.45;padding:0 5px;}
+[data-theme="light"] .nav-datetime-block{border-left-color:rgba(0,0,0,.1);}
+[data-theme="light"] .nav-slate-date{color:rgba(0,0,0,.88);}
+[data-theme="light"] .nav-clock{color:rgba(0,0,0,.52);}
 
 /* hamburger */
 .hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:8px;min-width:44px;min-height:44px;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.09);border-radius:8px;background:rgba(255,255,255,0.04);backdrop-filter:blur(10px) saturate(180%);}
@@ -333,6 +342,7 @@ body::after{content:'';position:fixed;inset:0;
   .hamburger{display:flex;}
   .snav-links{display:none!important;}
   .live-pill{display:none;}
+  .nav-datetime-block{border-left:none;padding-left:0;margin-left:0;}
   .snav{padding:0 16px;}
   .hero-title{font-size:42px;}
   .status-row{grid-template-columns:1fr!important;}
@@ -902,7 +912,17 @@ body::before{
   <span class="tt-icon tt-moon">🌙</span>
   <span class="tt-icon tt-sun" style="display:none">☀️</span>
 </button>
-    <div class="live-pill"><div class="live-dot"></div>propOracle &nbsp;·&nbsp; LIVE</div>
+    <div class="nav-live-cluster">
+      <div class="live-pill"><div class="live-dot"></div>propOracle &nbsp;·&nbsp; LIVE</div>
+      <div class="nav-datetime-block" title="Slate date, data freshness, local time">
+        <div class="nav-slate-date" id="slate-date">—</div>
+        <div class="nav-sync-line">
+          <span id="nav-last-sync">Last sync: —</span>
+          <span class="nav-sync-sep" aria-hidden="true">·</span>
+          <span class="nav-clock" id="clock">--:--:--</span>
+        </div>
+      </div>
+    </div>
   </div>
   <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
 </nav>
@@ -928,8 +948,6 @@ body::before{
         <div class="hero-meta">
           <span>Real-time prop board</span>
           <span>Multi-sport intelligence</span>
-          <span id="slate-date" title="Slate date (updates from API when loaded)">—</span>
-          <span id="clock">--:--:--</span>
         </div>
       </div>
       <div class="hero-panel">
@@ -1561,7 +1579,36 @@ function formatSlateDateDisplay(isoYmd) {
   } else {
     dt = new Date();
   }
-  return dt.toLocaleDateString("en-US", { month: "numeric", day: "numeric", year: "numeric" });
+  return dt.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+function parsePipelineModified(s) {
+  if (!s || typeof s !== "string") return null;
+  const t = Date.parse(s.trim().replace(" ", "T"));
+  return Number.isFinite(t) ? t : null;
+}
+function formatRelativeAgo(msAgo) {
+  if (msAgo < 0) msAgo = 0;
+  const sec = Math.floor(msAgo / 1000);
+  if (sec < 45) return "just now";
+  const min = Math.floor(sec / 60);
+  if (min < 60) return min === 1 ? "1 min ago" : `${min} mins ago`;
+  const hr = Math.floor(min / 60);
+  if (hr < 48) return hr === 1 ? "1 hr ago" : `${hr} hrs ago`;
+  const d = Math.floor(hr / 24);
+  return d === 1 ? "1 day ago" : `${d} days ago`;
+}
+function updateNavLastSyncFromPipelineStatus(d) {
+  const el = document.getElementById("nav-last-sync");
+  if (!el) return;
+  let best = 0;
+  const sports = ["combined", "nba", "nba1h", "nba1q", "cbb", "wcbb", "nhl", "soccer", "mlb"];
+  for (const k of sports) {
+    const m = d && d[k] && d[k].slate && d[k].slate.modified;
+    const t = parsePipelineModified(m);
+    if (t > best) best = t;
+  }
+  if (best > 0) el.textContent = "Last sync: " + formatRelativeAgo(Date.now() - best);
+  else el.textContent = "Last sync: —";
 }
 async function applyHeroSlateDate() {
   try {
@@ -1578,8 +1625,14 @@ async function applyHeroSlateDate() {
 })();
 
 // ── Clock ──────────────────────────────────────────────────
-setInterval(()=>{ document.getElementById("clock").textContent = new Date().toLocaleTimeString(); }, 1000);
-document.getElementById("clock").textContent = new Date().toLocaleTimeString();
+setInterval(() => {
+  const c = document.getElementById("clock");
+  if (c) c.textContent = new Date().toLocaleTimeString();
+}, 1000);
+(function initNavClock() {
+  const c = document.getElementById("clock");
+  if (c) c.textContent = new Date().toLocaleTimeString();
+})();
 
 // ── Real PLAYER_DATA (last 10 games) ──────────────────────
 let ALL_SLATE = [];
@@ -1672,6 +1725,7 @@ async function refreshStatus() {
   try {
     const res=await fetch("/api/pipeline/status", {cache:'no-store'}); if(!res.ok) return;
     const d=await res.json();
+    updateNavLastSyncFromPipelineStatus(d);
     applyStatusCard("nba",      d.nba?.slate,      "NBA Slate");
     applyStatusCard("nba1h",    d.nba1h?.slate,    "NBA 1H Slate");
     applyStatusCard("nba1q",    d.nba1q?.slate,    "NBA 1Q Slate");
