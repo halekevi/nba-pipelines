@@ -156,9 +156,26 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .date-go-btn{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.5px;padding:6px 16px;border-radius:12px;border:1px solid rgba(212,160,23,.35);background:rgba(212,160,23,.1);color:var(--accent-gold);cursor:pointer;transition:all .15s;}
 .date-go-btn:hover{background:rgba(212,160,23,.18);border-color:rgba(240,165,0,.55);}
 
-/* iframe */
-.iframe-shell{flex:1;min-height:0;position:relative;overflow:hidden;border-radius:14px;border:1px solid var(--glass-panel-border);background:rgba(255,255,255,0.02);backdrop-filter:blur(12px);margin-top:6px;}
-.grade-frame{width:100%;height:100%;border:none;display:block;transition:opacity .25s;}
+/* iframe shell: toolbar (date + tabs) + stage (iframes) */
+.iframe-shell{
+  flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;
+  border-radius:14px;border:1px solid var(--glass-panel-border);
+  background:rgba(255,255,255,0.02);backdrop-filter:blur(12px);margin-top:6px;
+}
+.iframe-shell-toolbar{
+  flex-shrink:0;padding:12px 12px 10px;border-bottom:1px solid var(--glass-panel-border);
+  display:flex;flex-direction:column;gap:8px;
+  background:rgba(255,255,255,0.02);
+}
+.iframe-shell-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.ist-title{
+  font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;
+  color:var(--accent-gold);line-height:1.1;
+}
+.gc-live{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--cyan);opacity:.92;}
+.iframe-shell-toolbar .date-bar,.iframe-shell-toolbar .tabs-bar{margin:0;width:100%;box-sizing:border-box;}
+.iframe-shell-stage{flex:1;min-height:0;position:relative;overflow:hidden;}
+.iframe-shell-stage > .grade-frame{position:absolute;inset:0;width:100%;height:100%;border:none;display:block;transition:opacity .25s;}
 .grade-frame.loading{opacity:0;}
 
 /* loading */
@@ -206,7 +223,6 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   .date-bar{margin-left:10px;margin-right:10px;overflow-x:auto;}
   .tabs-bar{margin-left:10px;margin-right:10px;}
   .grades-hero-wrap{margin-left:0;margin-right:0;}
-  .grades-controls-wrap{margin-left:12px;margin-right:12px;}
   .grades-hero{padding:14px 12px;}
 }
 @media(max-width:520px){
@@ -224,7 +240,6 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 @media(max-width:900px) and (orientation:portrait){
   html,body{height:auto;overflow:auto;}
   .grades-body{margin:0 .6rem .8rem;}
-  .grades-controls-wrap{margin-left:.6rem;margin-right:.6rem;}
   .grades-hero{padding:14px 12px;}
   .tabs-bar{padding:8px 10px;}
   .tab-btn{padding:9px 14px;font-size:9px;letter-spacing:1.4px;}
@@ -233,7 +248,6 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 @media(max-width:900px) and (orientation:landscape){
   html,body{height:auto;overflow:auto;}
   .grades-body{margin:0 .7rem .8rem;}
-  .grades-controls-wrap{margin-left:.7rem;margin-right:.7rem;}
   .grades-hero{padding:12px 14px;}
   .grades-title{font-size:34px;letter-spacing:1.5px;}
   .date-bar{height:46px;padding:0 12px;gap:10px;}
@@ -241,30 +255,6 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   .tab-btn{padding:8px 12px;font-size:9px;letter-spacing:1.2px;}
   .iframe-shell{min-height:56vh;}
 }
-
-/* Collapsible date + tabs (same interaction model as About grades) */
-.grades-controls-wrap{
-  flex-shrink:0;margin:6px 1rem 0;border:1px solid var(--glass-panel-border);border-radius:14px;
-  background:rgba(255,255,255,0.025);backdrop-filter:blur(16px) saturate(180%);
-  box-shadow:var(--glass-shadow);overflow:hidden;
-}
-.grades-controls-wrap>summary{
-  cursor:pointer;list-style:none;position:relative;z-index:2;padding:10px 36px 10px 14px;
-  display:flex;flex-direction:column;align-items:stretch;gap:4px;
-}
-.grades-controls-wrap>summary::-webkit-details-marker{display:none;}
-.grades-controls-wrap>summary::marker{display:none;content:'';}
-.grades-controls-wrap>summary::after{
-  content:'▾';position:absolute;right:14px;top:50%;transform:translateY(-50%);
-  font-size:12px;color:var(--accent-gold);transition:transform .2s;pointer-events:none;
-}
-.grades-controls-wrap[open]>summary::after{transform:translateY(-50%) rotate(-180deg);}
-.gc-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;width:100%;}
-.gc-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--accent-gold);line-height:1.1;}
-.gc-live{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--cyan);opacity:.92;}
-.gc-hint{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.6px;color:var(--muted2);font-weight:400;text-transform:none;line-height:1.35;}
-.grades-controls-inner{padding:0 12px 12px;display:flex;flex-direction:column;gap:4px;}
-.grades-controls-inner .date-bar,.grades-controls-inner .tabs-bar{margin:0;width:100%;box-sizing:border-box;}
 
 /* Hero collapsed by default — maximizes iframe for ticket/slate reports */
 .grades-body{margin:0 1rem .35rem;}
@@ -724,16 +714,15 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 [data-theme="light"] .grades-hero-wrap,
 [data-theme="light"] .grades-hero,
 [data-theme="light"] .gmeta-card,
-[data-theme="light"] .grades-controls-wrap{
+[data-theme="light"] .iframe-shell-toolbar{
   border-color:rgba(196,166,107,0.22) !important;
 }
-[data-theme="light"] .grades-controls-wrap{
+[data-theme="light"] .iframe-shell-toolbar{
   background:rgba(255,255,255,0.55) !important;
   box-shadow:0 4px 24px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9) !important;
 }
-[data-theme="light"] .gc-title{color:#8b6914 !important;}
+[data-theme="light"] .ist-title{color:#8b6914 !important;}
 [data-theme="light"] .gc-live{color:#1a6b7a !important;}
-[data-theme="light"] .gc-hint{color:rgba(0,0,0,0.45) !important;}
 
 /* Mobile / coarse pointer: reduce stacked backdrop-filter cost (scroll jank) */
 @media (max-width: 900px), (pointer: coarse) {
@@ -765,7 +754,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   .date-bar,
   .tabs-bar,
   .iframe-shell,
-  .grades-controls-wrap,
+  .iframe-shell-toolbar,
   .grades-hero-wrap,
   .gmeta-card,
   .grades-stat,
@@ -781,14 +770,14 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   }
   .date-bar,
   .tabs-bar,
-  .grades-controls-wrap,
+  .iframe-shell-toolbar,
   .grades-hero-wrap,
   .iframe-shell {
     background: rgba(12, 12, 22, 0.94) !important;
   }
   [data-theme="light"] .date-bar,
   [data-theme="light"] .tabs-bar,
-  [data-theme="light"] .grades-controls-wrap,
+  [data-theme="light"] .iframe-shell-toolbar,
   [data-theme="light"] .grades-hero-wrap,
   [data-theme="light"] .iframe-shell {
     background: rgba(255, 255, 255, 0.94) !important;
@@ -845,16 +834,39 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 
 <div class="grades-page">
 
-<details class="grades-controls-wrap" id="grades-controls-details" open>
-  <!-- summary must be phrasing-only (no div) or browsers break <details> toggle -->
-  <summary>
-    <span class="gc-row">
-      <span class="gc-title">Report controls</span>
+<div class="grades-body">
+<details class="grades-hero-wrap">
+  <summary>About grades <span class="gh-hint">Collapsed by default for maximum report space — expand for details</span></summary>
+  <div class="grades-hero">
+    <div class="grades-hero-grid">
+      <div>
+        <div class="grades-kicker">Performance review · slate intelligence</div>
+        <div class="grades-title">GRADES THAT FEEL LIKE A <span class="grades-title-gold">REAL PRODUCT</span></div>
+        <div class="grades-sub">Review slate and ticket outcomes by date. Ticket legs match against the latest pipeline step8/ranked workbooks (NBA, NBA1H, NBA1Q, CBB, WCBB, NHL, Soccer, MLB). Re-run <code style="color:var(--cyan);">python scripts/build_ticket_eval.py --date YYYY-MM-DD</code> after pipelines complete, then deploy the generated HTML.</div>
+      </div>
+      <div class="grades-meta">
+        <div class="gmeta-card">
+          <div class="gmeta-label">Mode</div>
+          <div class="gmeta-value accent">Review Hub</div>
+          <div class="gmeta-sub">Slate vs ticket tabs · pick a date in the report card.</div>
+        </div>
+        <div class="gmeta-card">
+          <div class="gmeta-label">Focus</div>
+          <div class="gmeta-value cyan">More report space</div>
+          <div class="gmeta-sub">Header stays compact until you expand this section.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</details>
+
+<!-- ═══════════════════════ IFRAME SHELL ═══════════════════════ -->
+<div class="iframe-shell">
+  <div class="iframe-shell-toolbar">
+    <div class="iframe-shell-head">
+      <span class="ist-title" id="iframe-shell-title">Slate evaluation</span>
       <span class="gc-live" id="grades-controls-live" aria-live="polite"></span>
-    </span>
-    <span class="gc-hint">Report date, jump-to, and Slate vs Tickets — collapse for a taller iframe</span>
-  </summary>
-  <div class="grades-controls-inner">
+    </div>
     <div class="date-bar">
       <span class="date-bar-label">REPORT DATE</span>
       <button class="date-nav-btn" id="btn-prev" title="Previous date" onclick="stepDate(-1)">&#8249;</button>
@@ -880,36 +892,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
       </button>
     </div>
   </div>
-</details>
-
-<div class="grades-body">
-<details class="grades-hero-wrap">
-  <summary>About grades <span class="gh-hint">Collapsed by default for maximum report space — expand for details</span></summary>
-  <div class="grades-hero">
-    <div class="grades-hero-grid">
-      <div>
-        <div class="grades-kicker">Performance review · slate intelligence</div>
-        <div class="grades-title">GRADES THAT FEEL LIKE A <span class="grades-title-gold">REAL PRODUCT</span></div>
-        <div class="grades-sub">Review slate and ticket outcomes by date. Ticket legs match against the latest pipeline step8/ranked workbooks (NBA, NBA1H, NBA1Q, CBB, WCBB, NHL, Soccer, MLB). Re-run <code style="color:var(--cyan);">python scripts/build_ticket_eval.py --date YYYY-MM-DD</code> after pipelines complete, then deploy the generated HTML.</div>
-      </div>
-      <div class="grades-meta">
-        <div class="gmeta-card">
-          <div class="gmeta-label">Mode</div>
-          <div class="gmeta-value accent">Review Hub</div>
-          <div class="gmeta-sub">Slate vs ticket tabs · pick a date above.</div>
-        </div>
-        <div class="gmeta-card">
-          <div class="gmeta-label">Focus</div>
-          <div class="gmeta-value cyan">More report space</div>
-          <div class="gmeta-sub">Header stays compact until you expand this section.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</details>
-
-<!-- ═══════════════════════ IFRAME SHELL ═══════════════════════ -->
-<div class="iframe-shell">
+  <div class="iframe-shell-stage">
   <div class="load-overlay" id="load-overlay">
     <div class="load-spinner"></div>
     <div class="load-text">LOADING GRADE REPORT</div>
@@ -918,7 +901,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   <div class="empty-state" id="empty-state" style="display:none;">
     <div class="empty-icon">📊</div>
     <div class="empty-title">No Report Found</div>
-    <div class="empty-sub">No grade report exists for this date. Run <code>run_grader.ps1</code> to generate one, or select a different date above.</div>
+    <div class="empty-sub">No grade report exists for this date. Run <code>run_grader.ps1</code> to generate one, or select a different date in the toolbar.</div>
     <div class="empty-hint">Expected: slate_eval_<span id="empty-date"></span>.html</div>
   </div>
   <div class="empty-state" id="ticket-empty-state" style="display:none;">
@@ -929,6 +912,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   </div>
   <iframe class="grade-frame loading" id="grade-frame" src="about:blank" title="Grade Report"></iframe>
   <iframe class="grade-frame" id="ticket-frame" src="about:blank" title="Ticket Evaluation" style="display:none;"></iframe>
+  </div><!-- /.iframe-shell-stage -->
 </div>
 </div><!-- /.grades-body -->
 </div><!-- /.grades-page -->
@@ -1100,6 +1084,10 @@ function collapseSportsInTicketFrame(frame) {
 let activeTab = 'slate';
 function refreshControlsSummary() {
   const el = document.getElementById('grades-controls-live');
+  const titleEl = document.getElementById('iframe-shell-title');
+  if (titleEl) {
+    titleEl.textContent = activeTab === 'tickets' ? 'Ticket evaluation' : 'Slate evaluation';
+  }
   if (!el) return;
   const ds = currentDateStr || document.getElementById('date-jump')?.value || '';
   const tab = activeTab === 'tickets' ? 'Tickets' : 'Slate';
@@ -1428,7 +1416,7 @@ if (hamG && mobG) {
     '.ticket', '.card', '.group', '.edge-card',
     '.scard', '.qcard', '.hero-stat', '.streak-card',
     '.result-item', '.pp-cell', '.stat-mini', '.leg-card',
-    '.grades-stat', '.grades-hero', '.gmeta-card', '.date-bar', '.tabs-bar', '.grades-controls-wrap'
+    '.grades-stat', '.grades-hero', '.gmeta-card', '.date-bar', '.tabs-bar', '.iframe-shell', '.iframe-shell-toolbar'
   ];
   function attachGlow(el) {
     if (el.dataset.glowBound === '1') return;
@@ -1474,7 +1462,7 @@ if (hamG && mobG) {
   const CA_SELS = [
     '.ticket', '.card', '.group', '.hero',
     '.edge-card', '.qcard', '.grades-hero',
-    '.hero-stat', '.result-item', '.gmeta-card', '.date-bar', '.tabs-bar', '.grades-controls-wrap'
+    '.hero-stat', '.result-item', '.gmeta-card', '.date-bar', '.tabs-bar', '.iframe-shell', '.iframe-shell-toolbar'
   ];
   function initCA() {
     CA_SELS.forEach(sel =>

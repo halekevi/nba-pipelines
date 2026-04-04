@@ -99,20 +99,11 @@
     margin-bottom: 0.75rem !important;
   }
 
-  .grades-controls-wrap {
-    margin-left: max(6px, env(safe-area-inset-left, 0px)) !important;
-    margin-right: max(6px, env(safe-area-inset-right, 0px)) !important;
-  }
-
-  .date-bar,
-  .tabs-bar {
-    margin-left: max(6px, env(safe-area-inset-left, 0px)) !important;
-    margin-right: max(6px, env(safe-area-inset-right, 0px)) !important;
-  }
-
-  .grades-controls-inner {
-    padding-left: max(8px, env(safe-area-inset-left, 0px)) !important;
-    padding-right: max(8px, env(safe-area-inset-right, 0px)) !important;
+  /* Report controls sit inside .iframe-shell-toolbar; gutters come from .grades-body */
+  .iframe-shell-toolbar .date-bar,
+  .iframe-shell-toolbar .tabs-bar {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 
   /* Horizontal scroll regions — momentum + no chain-scroll */
