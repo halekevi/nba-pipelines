@@ -1349,6 +1349,24 @@ function switchTab(tab) {
   refreshControlsSummary();
 }
 
+/**
+ * ticket_eval_*.html ships with a full top nav for /tickets standalone views.
+ * Inside the Grades hub iframe that nav duplicates the parent chrome — hide it.
+ */
+function applyTicketEvalGradesEmbed(doc) {
+  if (!doc || !doc.head || !doc.body) return;
+  doc.body.classList.add('ticket-eval-embed-grades');
+  if (doc.getElementById('grades-embed-ticket-nav-css')) return;
+  const st = doc.createElement('style');
+  st.id = 'grades-embed-ticket-nav-css';
+  st.setAttribute('data-from', 'grades-hub');
+  st.textContent =
+    'body.ticket-eval-embed-grades .snav,' +
+    'body.ticket-eval-embed-grades #mobile-menu{display:none!important;}' +
+    'body.ticket-eval-embed-grades .stats-bar{top:8px!important;}';
+  doc.head.appendChild(st);
+}
+
 async function probeTicketEval(dateStr) {
   const url = TICKET_EVAL_URL_TEMPLATE.replace('{date}', dateStr);
   try {
@@ -1375,6 +1393,9 @@ async function loadTicketEval(dateStr) {
   tEmpty.style.display = 'none';
   tf.style.display = 'block';
   tf.onload = function(){
+    try {
+      applyTicketEvalGradesEmbed(tf.contentDocument);
+    } catch (_e0) {}
     try {
       collapseSportsInTicketFrame(tf);
     } catch (_e) {}
