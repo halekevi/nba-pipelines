@@ -77,6 +77,21 @@ cd "C:\Users\halek\OneDrive\Desktop\PropORACLE"
 .\scripts\daily_grades.ps1 -Date 2026-03-19
 ```
 
+## Ticket eval backfill (`scripts/backfill_ticket_evals.ps1`)
+
+```powershell
+.\scripts\backfill_ticket_evals.ps1
+.\scripts\backfill_ticket_evals.ps1 -Date 2026-04-01
+```
+
+## Legacy UI patch (`scripts/patch_slateiq.ps1`)
+
+One-off index/app patcher; requires `archive\root-text\patch_replacement.txt`. Run from repo root after pulling:
+
+```powershell
+.\scripts\patch_slateiq.ps1
+```
+
 ## Register Scheduled Task (`scripts/Register_Daily_Task.ps1`)
 
 ```powershell

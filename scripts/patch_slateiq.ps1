@@ -1,10 +1,15 @@
 # PropOracle index.html + app.py patcher
-# Run from repo root: .\patch_proporacle.ps1
+# Run from repo root: .\scripts\patch_slateiq.ps1
 
-$Root      = "C:\Users\halek\OneDrive\Desktop\Vision Board\PropOracle\PropOracle"
-$indexPath = "$Root\ui_runner\templates\index.html"
-$appPath   = "$Root\ui_runner\app.py"
-$repTxt    = "$Root\patch_replacement.txt"
+$Root      = Split-Path -Parent $PSScriptRoot
+$indexPath = Join-Path $Root "ui_runner\templates\index.html"
+$appPath   = Join-Path $Root "ui_runner\app.py"
+$repTxt    = Join-Path $Root "archive\root-text\patch_replacement.txt"
+
+if (-not (Test-Path -LiteralPath $repTxt)) {
+    Write-Error "Missing $repTxt — restore patch_replacement.txt under archive\root-text\ or update path."
+    exit 1
+}
 
 # ── 1. Patch index.html ───────────────────────────────────────────────────────
 Write-Host "Patching index.html..." -ForegroundColor Cyan

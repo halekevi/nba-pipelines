@@ -15,7 +15,7 @@ param(
 )
 
 $ErrorActionPreference = "Continue"
-$Root = $PSScriptRoot
+$Root = Split-Path -Parent $PSScriptRoot
 $OutputsDir = Join-Path $Root "outputs"
 $BuildScript = Join-Path $Root "scripts\build_ticket_eval.py"
 $dateRx = [regex]::new("combined_slate_tickets_(?<d>\d{4}-\d{2}-\d{2})", [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
