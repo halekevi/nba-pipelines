@@ -1421,11 +1421,12 @@ window.loadDate = loadDate;
     return;
   }
 
-  // Default to most recent (last in sorted list)
-  const latest = found[found.length-1];
-  currentDateIdx = found.length-1;
+  // Prefer yesterday when a slate exists for it (aligns ticket eval with "yesterday" grading day)
+  const latest = found[found.length - 1];
+  const pick = found.includes(yest) ? yest : latest;
+  currentDateIdx = found.indexOf(pick);
   renderPills();
-  loadDate(latest);
+  loadDate(pick);
 })();
 </script>
 
