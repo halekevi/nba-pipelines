@@ -268,6 +268,39 @@ def pick_type_stats(rows: list[dict], pick_type: str) -> dict:
     return overall_stats(filtered)
 
 
+def rows_for_pick_type(sub_rows: list[dict], pick_type: str) -> list[dict]:
+    pt = pick_type.lower()
+    return [r for r in sub_rows if pt in str(r.get("Pick Type", "") or "").lower()]
+
+
+def over_under_lines_html(sub_rows: list[dict]) -> str:
+    """▲ OVER / ▼ UNDER hit rates for any row subset (pick type bucket, tier bucket, def tier slice, etc.)."""
+    over = overall_stats(
+        [r for r in sub_rows if str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "OVER"]
+    )
+    under = overall_stats(
+        [r for r in sub_rows if str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "UNDER"]
+    )
+    inner = ""
+    if over["decided"] > 0:
+        col = "var(--green)" if over["hit_rate"] >= 55 else "var(--red)"
+        inner += (
+            f'<div class="sub-dir"><span style="color:var(--cyan);font-size:11px">▲ OVER</span> '
+            f'<span style="color:{col}">{pct(over["hit_rate"])}</span> ({fmt_num(over["decided"])} dec)</div>'
+        )
+    if under["decided"] > 0:
+        col = "var(--green)" if under["hit_rate"] >= 55 else "var(--red)"
+        inner += (
+            f'<div class="sub-dir"><span style="color:var(--gold);font-size:11px">▼ UNDER</span> '
+            f'<span style="color:{col}">{pct(under["hit_rate"])}</span> ({fmt_num(under["decided"])} dec)</div>'
+        )
+    if not inner:
+        return ""
+    return (
+        f'<div style="font-size:11px;color:var(--muted2);margin-top:5px;line-height:1.45">{inner}</div>'
+    )
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 #  HTML FRAGMENT BUILDERS
 # ══════════════════════════════════════════════════════════════════════════════
@@ -423,11 +456,25 @@ def def_tier_table(rows: list[dict]) -> str:
     # Sort by a defined order
     order = {"elite":0,"above avg":1,"avg":2,"average":2,"weak":3,"very weak":4}
     dt_agg.sort(key=lambda x: order.get(x["key"].lower().replace("🟢","").replace("🟡","").replace("🔴","").strip(), 99))
+
+    def _norm_def_tier_early(x: str) -> str:
+        return (
+            str(x or "")
+            .lower()
+            .replace("🟢", "")
+            .replace("🟡", "")
+            .replace("🔴", "")
+            .strip()
+        )
+
     rows_html = ""
     for d in dt_agg:
         if d["decided"] == 0: continue
+        dkey0 = _norm_def_tier_early(d["key"])
+        sub_main = [r for r in rows if _norm_def_tier_early(r.get("Def Tier", "")) == dkey0]
+        ou_main = over_under_lines_html(sub_main)
         rows_html += f"""<tr class="{'player-hit' if d['hit_rate']>=55 else ('player-miss' if d['hit_rate']<48 else 'player-warn')}">
-          <td><span style="font-weight:700">{h(d['key'])}</span></td>
+          <td style="vertical-align:top"><span style="font-weight:700">{h(d['key'])}</span>{ou_main}</td>
           <td class="right mono">{fmt_num(d['decided'])}</td>
           <td class="right mono">{fmt_num(d['hits'])}</td>
           <td>{rate_bar_html(d['hit_rate'])}</td>
@@ -481,9 +528,9 @@ def def_tier_table(rows: list[dict]) -> str:
 
         detail_rows_pt += f"""<tr>
           <td><strong>{h(d["key"])}</strong></td>
-          <td class="mono">{_stats_cell(gob)}</td>
-          <td class="mono">{_stats_cell(std)}</td>
-          <td class="mono">{_stats_cell(dem)}</td>
+          <td class="mono" style="vertical-align:top">{_stats_cell(gob)}{over_under_lines_html(rows_for_pick_type(sub, "goblin"))}</td>
+          <td class="mono" style="vertical-align:top">{_stats_cell(std)}{over_under_lines_html(rows_for_pick_type(sub, "standard"))}</td>
+          <td class="mono" style="vertical-align:top">{_stats_cell(dem)}{over_under_lines_html(rows_for_pick_type(sub, "demon"))}</td>
         </tr>"""
         picktype_by_tier["goblin"].append({"def_tier": d["key"], **gob})
         picktype_by_tier["standard"].append({"def_tier": d["key"], **std})
@@ -493,7 +540,10 @@ def def_tier_table(rows: list[dict]) -> str:
         for t in ("A", "B", "C", "D"):
             t_rows = [r for r in sub if str(r.get("Tier", "") or "").strip().upper() == t]
             t_stats = overall_stats(t_rows) if t_rows else {"decided": 0, "hit_rate": 0}
-            t_cells.append(f'<td class="mono">{_stats_cell(t_stats)}</td>')
+            t_cells.append(
+                f'<td class="mono" style="vertical-align:top">{_stats_cell(t_stats)}'
+                f"{over_under_lines_html(t_rows)}</td>"
+            )
         detail_rows_tier += f"""<tr>
           <td><strong>{h(d["key"])}</strong></td>
           {''.join(t_cells)}
@@ -515,8 +565,16 @@ def def_tier_table(rows: list[dict]) -> str:
             for r in rows_k:
                 hr = float(r.get("hit_rate", 0))
                 row_cls = "player-hit" if hr >= 55 else ("player-miss" if hr < 48 else "player-warn")
+                dtk = _norm_def_tier(str(r.get("def_tier", "")))
+                slice_ou = [
+                    x
+                    for x in rows
+                    if _norm_def_tier(x.get("Def Tier", "")) == dtk
+                    and kind.lower() in str(x.get("Pick Type", "") or "").lower()
+                ]
+                ou_line = over_under_lines_html(slice_ou)
                 body += f"""<tr class="{row_cls}">
-          <td><strong>{h(str(r.get("def_tier", "")))}</strong></td>
+          <td style="vertical-align:top"><strong>{h(str(r.get("def_tier", "")))}</strong>{ou_line}</td>
           <td class="right mono">{fmt_num(r.get("decided", 0))}</td>
           <td class="right mono pos">{fmt_num(r.get("hits", 0))}</td>
           <td>{rate_bar_html(hr)}</td>
@@ -589,27 +647,20 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
     dem_s = pick_type_stats(rows, "demon")
     std_s = pick_type_stats(rows, "standard")
 
-    # Over/Under for Standard
-    std_over  = overall_stats([r for r in rows if "standard" in str(r.get("Pick Type","")).lower()
-                                and str(r.get("Dir","") or r.get("Direction","")).strip().upper() == "OVER"])
-    std_under = overall_stats([r for r in rows if "standard" in str(r.get("Pick Type","")).lower()
-                                and str(r.get("Dir","") or r.get("Direction","")).strip().upper() == "UNDER"])
-
-    std_dir_html = ""
-    if std_over["decided"] > 0:
-        col = "var(--green)" if std_over["hit_rate"] >= 55 else "var(--red)"
-        std_dir_html += f'<div style="font-size:10px;color:var(--muted2);margin-top:4px"><div class="sub-dir"><span style="color:var(--cyan);font-size:10px">▲ OVER</span> <span style="color:{col}">{pct(std_over["hit_rate"])}</span> ({fmt_num(std_over["decided"])} dec)</div>'
-    if std_under["decided"] > 0:
-        col = "var(--green)" if std_under["hit_rate"] >= 55 else "var(--red)"
-        std_dir_html += f'<div class="sub-dir"><span style="color:var(--gold);font-size:10px">▼ UNDER</span> <span style="color:{col}">{pct(std_under["hit_rate"])}</span> ({fmt_num(std_under["decided"])} dec)</div></div>'
+    gob_rows = rows_for_pick_type(rows, "goblin")
+    dem_rows = rows_for_pick_type(rows, "demon")
+    std_rows = rows_for_pick_type(rows, "standard")
+    gob_ou = over_under_lines_html(gob_rows)
+    dem_ou = over_under_lines_html(dem_rows)
+    std_ou = over_under_lines_html(std_rows)
 
     pick_table = f"""<div class="table-wrap"><table>
       <thead><tr><th>TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th><th>HIT RATE</th></tr></thead>
       <tbody>
-        {pick_type_row("Goblin","🎃", gob_s)}
-        {pick_type_row("Demon","😈",  dem_s)}
+        {pick_type_row("Goblin","🎃", gob_s, gob_ou)}
+        {pick_type_row("Demon","😈",  dem_s, dem_ou)}
         <tr>
-          <td><span class="chip chip-std">⭐ Standard</span>{std_dir_html}</td>
+          <td><span class="chip chip-std">⭐ Standard</span>{std_ou}</td>
           <td class="right mono">{fmt_num(std_s['decided'])}</td>
           <td class="right mono pos">{fmt_num(std_s['hits'])}</td>
           <td class="right mono neg">{fmt_num(std_s['misses'])}</td>
@@ -633,8 +684,9 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
         hr = t_stats["hit_rate"]
         chip_cls = {"A":"chip-a","B":"chip-b","C":"chip-c"}.get(t,"chip-d")
         row_cls  = "player-hit" if hr>=55 else ("player-miss" if hr<48 else "player-warn")
+        tier_ou = over_under_lines_html(t_rows)
         tier_rows_html += f"""<tr class="{row_cls}">
-          <td><span class="chip {chip_cls}">TIER {t}</span></td>
+          <td style="vertical-align:top"><span class="chip {chip_cls}">TIER {t}</span>{tier_ou}</td>
           <td class="right mono">{fmt_num(d)}</td>
           <td class="right mono pos">{fmt_num(h_)}</td>
           <td>{rate_bar_html(hr)}</td>
