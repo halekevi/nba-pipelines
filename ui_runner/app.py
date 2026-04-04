@@ -1223,6 +1223,20 @@ def api_slate():
         return jsonify({"picks": [], "generated_at": None, "date": None})
 
     def _build_picks():
+        def _side_hit_count(raw: object, n: int) -> int | None:
+            """Match UI streakHits: rate in [0,1] or integer count in last n games."""
+            if raw is None:
+                return None
+            try:
+                x = float(raw)
+            except (TypeError, ValueError):
+                return None
+            if x != x:  # NaN
+                return None
+            if x <= 1.0:
+                return max(0, min(n, int(round(x * n))))
+            return max(0, min(n, int(round(x))))
+
         data = read_json_cached(json_path)
         seen = set()
         picks = []
@@ -1233,6 +1247,18 @@ def api_slate():
                     if key in seen:
                         continue
                     seen.add(key)
+                    l5_over = leg.get("l5_over")
+                    l5_under = leg.get("l5_under")
+                    if l5_under is None and l5_over is not None:
+                        ho = _side_hit_count(l5_over, 5)
+                        if ho is not None:
+                            l5_under = 5 - ho
+                    l10_over = leg.get("l10_over")
+                    l10_under = leg.get("l10_under")
+                    if l10_under is None and l10_over is not None:
+                        ho = _side_hit_count(l10_over, 10)
+                        if ho is not None:
+                            l10_under = 10 - ho
                     picks.append({
                         "sport":      leg.get("sport", ""),
                         "initials":   leg.get("initials", ""),
@@ -1243,10 +1269,10 @@ def api_slate():
                         "dir":        leg.get("direction", "OVER"),
                         "hit":        round((leg.get("hit_rate") or 0) * 100),
                         "edge":       leg.get("edge") or 0,
-                        "l5_over":    leg.get("l5_over"),
-                        "l5_under":   leg.get("l5_under"),
-                        "l10_over":   leg.get("l10_over"),
-                        "l10_under":  leg.get("l10_under"),
+                        "l5_over":    l5_over,
+                        "l5_under":   l5_under,
+                        "l10_over":   l10_over,
+                        "l10_under":  l10_under,
                         "l5_avg":     leg.get("l5_avg"),
                         "season_avg": leg.get("season_avg"),
                     })
