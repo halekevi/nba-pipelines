@@ -81,6 +81,7 @@
 }
 
 .date-bar-label {
+  flex-shrink: 0;
   font-size: 12px;
   letter-spacing: 2px;
   color: var(--muted2, rgba(255, 255, 255, 0.48));
@@ -88,11 +89,14 @@
 }
 
 .date-pills {
+  flex: 1 1 0;
+  min-width: 0;
   display: flex;
   gap: 10px;
   align-items: center;
   flex-wrap: nowrap;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .date-pills::-webkit-scrollbar {
@@ -143,13 +147,14 @@
 }
 
 .date-sep {
+  flex-shrink: 0;
   width: 1px;
   height: 26px;
   background: rgba(255, 255, 255, 0.1);
-  flex-shrink: 0;
 }
 
 .date-nav-btn {
+  flex-shrink: 0;
   width: 38px;
   height: 38px;
   border-radius: 11px;
@@ -162,7 +167,6 @@
   justify-content: center;
   font-size: 17px;
   transition: all 0.15s;
-  flex-shrink: 0;
 }
 
 .date-nav-btn:hover {
@@ -177,6 +181,7 @@
 }
 
 .date-bar-right {
+  flex-shrink: 0;
   margin-left: auto;
   display: flex;
   align-items: center;

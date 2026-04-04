@@ -136,8 +136,8 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   background:var(--glass-panel);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
   border:1px solid var(--glass-panel-border);border-radius:16px;box-shadow:var(--glass-shadow);
 }
-.date-bar-label{font-size:12px;letter-spacing:2px;color:var(--muted2);white-space:nowrap;}
-.date-pills{display:flex;gap:10px;align-items:center;flex-wrap:nowrap;overflow-x:auto;}
+.date-bar-label{flex-shrink:0;font-size:12px;letter-spacing:2px;color:var(--muted2);white-space:nowrap;}
+.date-pills{flex:1 1 0;min-width:0;display:flex;gap:10px;align-items:center;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;}
 .date-pills::-webkit-scrollbar{display:none;}
 .dpill{font-size:12px;letter-spacing:1.3px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.42);cursor:pointer;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:6px;}
 .dpill:hover{color:var(--text);border-color:var(--bd2);background:rgba(255,255,255,0.07);}
@@ -145,10 +145,10 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .dpill .dpill-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:none;}
 .dpill.active .dpill-dot{display:block;box-shadow:0 0 8px var(--green);}
 .date-sep{width:1px;height:26px;background:rgba(255,255,255,0.1);flex-shrink:0;}
-.date-nav-btn{width:38px;height:38px;border-radius:11px;border:1px solid var(--glass-panel-border);background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);color:rgba(255,255,255,0.45);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;transition:all .15s;flex-shrink:0;}
+.date-nav-btn{flex-shrink:0;width:38px;height:38px;border-radius:11px;border:1px solid var(--glass-panel-border);background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);color:rgba(255,255,255,0.45);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;transition:all .15s;}
 .date-nav-btn:hover{color:var(--text);border-color:rgba(255,255,255,0.18);background:rgba(255,255,255,0.08);}
 .date-nav-btn:disabled{opacity:.3;cursor:default;}
-.date-bar-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.date-bar-right{flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:10px;}
 .date-input-wrap{display:flex;align-items:center;gap:8px;}
 .date-input-label{font-size:11px;letter-spacing:1.4px;color:var(--muted2);}
 .date-input{background:rgba(255,255,255,0.04);backdrop-filter:blur(10px);border:1px solid var(--glass-panel-border);border-radius:12px;color:var(--text);font-size:13px;padding:8px 12px;outline:none;transition:border-color .15s;width:144px;font-family:'Share Tech Mono',monospace;}
@@ -890,7 +890,7 @@ function ensureGradesToolbarStylesInFrame(doc) {
   const link = doc.createElement('link');
   link.id = 'grades-iframe-toolbar-link';
   link.rel = 'stylesheet';
-  link.href = '/static/grades-iframe-toolbar.css?v=20260404f';
+  link.href = '/static/grades-iframe-toolbar.css?v=20260404g';
   doc.head.appendChild(link);
 }
 
@@ -1280,8 +1280,8 @@ function renderPills(){
     container.innerHTML = '<span style="font-size:10px;letter-spacing:1.5px;color:var(--muted2)">NO REPORTS FOUND</span>';
     return;
   }
-  // Show most recent few dates
-  const display = availableDates.slice(-8); // show last 8
+  // Most recent dates only — keeps the row readable; use ‹ › for full history
+  const display = availableDates.slice(-4);
   display.forEach(ds => {
     const idx = availableDates.indexOf(ds);
     const pill = document.createElement('button');
@@ -1289,10 +1289,14 @@ function renderPills(){
     const isToday = ds === todayStr();
     const isYest  = ds === yesterdayStr();
     const tag = isToday ? ' · TODAY' : isYest ? ' · YESTERDAY' : '';
-    pill.innerHTML = `<span class="dpill-dot"></span>${formatLabel(ds)}${tag ? `<span style="font-size:9px;opacity:.6">${tag}</span>` : ''}`;
+    pill.innerHTML = `<span class="dpill-dot"></span>${formatLabel(ds)}${tag ? `<span style="font-size:10px;opacity:.72;white-space:nowrap">${tag}</span>` : ''}`;
     pill.dataset.date = ds;
     pill.onclick = () => loadDate(ds);
     container.appendChild(pill);
+  });
+  requestAnimationFrame(() => {
+    const active = container.querySelector('.dpill.active');
+    if (active) active.scrollIntoView({ block: 'nearest', inline: 'center' });
   });
   const bp = gradesEl('btn-prev');
   const bn = gradesEl('btn-next');
