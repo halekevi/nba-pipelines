@@ -1,6 +1,6 @@
 # ============================================================
 #  Register_Daily_Task.ps1
-#  PropOracle – Master Pipeline  (all sports, daily 8 AM)
+#  PropOracle – Master Pipeline  (all sports, daily 6:00 AM local)
 #
 #  Run ONCE from an elevated (Administrator) PowerShell prompt:
 #    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
@@ -20,13 +20,13 @@ $MasterScript   = Join-Path $PipelineRoot "run_pipeline.ps1"
 # Add -IncludeMLB when the MLB season starts.
 $DailyFlags     = "-IncludeNHL -IncludeSoccer"
 
-# Run time
-$RunHour        = 8
+# Run time (daily recurrence; Windows Task Scheduler uses local time)
+$RunHour        = 6
 $RunMinute      = 0
 
 # Task identity
 $TaskName       = "PropOracle - Master Pipeline Daily"
-$TaskDesc       = "PropOracle daily prop pipeline: NBA + CBB + NHL + Soccer + Combined at 8 AM"
+$TaskDesc       = "PropOracle daily prop pipeline: NBA + CBB + NHL + Soccer + Combined at 6:00 AM"
 # ─────────────────────────────────────────────────────────────
 
 if (-not (Test-Path $MasterScript)) {
@@ -47,7 +47,7 @@ $Settings = New-ScheduledTaskSettingsSet `
     -ExecutionTimeLimit    (New-TimeSpan -Hours 3)  `  # full multi-sport run can take a while
     -RestartCount          2                         `
     -RestartInterval       (New-TimeSpan -Minutes 15) `
-    -StartWhenAvailable                              `  # run ASAP if machine was off at 8 AM
+    -StartWhenAvailable                              `  # run ASAP if machine was off at scheduled time
     -RunOnlyIfNetworkAvailable                       `
     -MultipleInstances     IgnoreNew
 
