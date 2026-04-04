@@ -1,0 +1,308 @@
+/**
+ * Grades hub: date + slate/ticket tabs when embedded inside slate_eval iframe.
+ * Uses slate_eval CSS variables with rgba fallbacks for older files.
+ */
+.iframe-shell-toolbar {
+  flex-shrink: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.iframe-shell-toolbar--embedded {
+  padding-top: 0;
+}
+
+.iframe-shell-toolbar--embedded .iframe-shell-head {
+  display: none;
+}
+
+.iframe-shell-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ist-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 18px;
+  letter-spacing: 2px;
+  color: var(--gold2, #d4a017);
+  line-height: 1.1;
+}
+
+.gc-live {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--cyan, #00e5ff);
+  opacity: 0.92;
+}
+
+.grades-hub-toolbar-host .iframe-shell-toolbar .date-bar,
+.grades-hub-toolbar-host .iframe-shell-toolbar .tabs-bar {
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.date-bar {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0 12px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  z-index: 2;
+  font-family: "Share Tech Mono", monospace;
+  background: var(--glass, rgba(255, 255, 255, 0.03));
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-bd, rgba(255, 255, 255, 0.08));
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.date-bar-label {
+  font-size: 10px;
+  letter-spacing: 2.2px;
+  color: var(--muted2, rgba(255, 255, 255, 0.48));
+  white-space: nowrap;
+}
+
+.date-pills {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.date-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.dpill {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.42);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Share Tech Mono", monospace;
+}
+
+.dpill:hover {
+  color: var(--text, rgba(255, 255, 255, 0.95));
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.dpill.active {
+  color: var(--gold, #f0a500);
+  border-color: rgba(212, 160, 23, 0.55);
+  background: rgba(212, 160, 23, 0.15);
+  box-shadow: 0 0 16px rgba(212, 160, 23, 0.12);
+}
+
+.dpill .dpill-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--green, #39ff6e);
+  display: none;
+}
+
+.dpill.active .dpill-dot {
+  display: block;
+  box-shadow: 0 0 8px var(--green, #39ff6e);
+}
+
+.date-sep {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.date-nav-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  border: 1px solid var(--glass-bd, rgba(255, 255, 255, 0.08));
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.date-nav-btn:hover {
+  color: var(--text, #fff);
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.date-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.date-bar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.date-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.date-input-label {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: var(--muted2, rgba(255, 255, 255, 0.48));
+}
+
+.date-input {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-bd, rgba(255, 255, 255, 0.08));
+  border-radius: 10px;
+  color: var(--text, #fff);
+  font-size: 11px;
+  padding: 6px 10px;
+  outline: none;
+  width: 132px;
+  font-family: "Share Tech Mono", monospace;
+}
+
+.date-input:focus {
+  border-color: rgba(212, 160, 23, 0.45);
+}
+
+.date-go-btn {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  padding: 6px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(212, 160, 23, 0.35);
+  background: rgba(212, 160, 23, 0.1);
+  color: var(--gold, #f0a500);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.date-go-btn:hover {
+  background: rgba(212, 160, 23, 0.18);
+  border-color: rgba(240, 165, 0, 0.55);
+}
+
+.tabs-bar {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 4px 8px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  z-index: 2;
+  position: relative;
+  font-family: "Share Tech Mono", monospace;
+  background: var(--glass, rgba(255, 255, 255, 0.03));
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-bd, rgba(255, 255, 255, 0.08));
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted2, rgba(255, 255, 255, 0.48));
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  white-space: nowrap;
+  font-family: "Share Tech Mono", monospace;
+}
+
+.tab-btn:hover {
+  color: var(--text, #fff);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.tab-btn.active {
+  color: var(--gold, #f0a500);
+  border-color: rgba(212, 160, 23, 0.4);
+  background: rgba(212, 160, 23, 0.12);
+  box-shadow: 0 0 18px rgba(212, 160, 23, 0.12), inset 0 -2px 0 var(--gold2, #d4a017);
+}
+
+.tab-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.tab-btn.active .tab-icon {
+  filter: drop-shadow(0 0 8px rgba(240, 165, 0, 0.45));
+}
+
+.grades-hub-toolbar-host {
+  flex: 1 1 100%;
+  width: 100%;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--glass-bd, rgba(255, 255, 255, 0.08));
+}
+
+@media (max-width: 768px) {
+  .date-bar-right {
+    display: none;
+  }
+
+  .date-bar {
+    padding: 0 10px;
+    overflow-x: auto;
+  }
+
+  .tabs-bar {
+    padding: 6px;
+    overflow-x: auto;
+  }
+}

@@ -945,8 +945,10 @@ header,.main{position:relative;z-index:1}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:rgba(255,255,255,0.04)}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.14);border-radius:4px}
 
 header{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
-border:1px solid var(--glass-bd);border-radius:0 0 18px 18px;margin:0 12px;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+border:1px solid var(--glass-bd);border-radius:0 0 18px 18px;margin:0 12px;padding:18px 28px;display:flex;flex-direction:column;align-items:stretch;gap:0;
 box-shadow:0 8px 32px rgba(0,0,0,.28)}
+.slate-header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;width:100%}
+.grades-hub-toolbar-host{flex:1 1 100%;width:100%;min-height:0}
 .logo{display:flex;align-items:center;gap:14px}
 .logo-icon{width:120px;height:120px;object-fit:contain;display:block;filter:drop-shadow(0 0 8px rgba(212,160,23,0.45))}
 @media(max-width:768px){.logo-icon{width:80px;height:80px}}
@@ -1086,14 +1088,17 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
 </head>
 <body>
 <header>
-  <div class="logo">
-    <img src="/static/proporacle-logo-v3.png?v=20260320b" alt="PropORACLE logo" class="logo-icon"/>
-    <div>
-      <div class="logo-title">SLATE EVALUATION</div>
-      <div class="logo-sub">POST-GAME GRADE REPORT</div>
+  <div class="slate-header-top">
+    <div class="logo">
+      <img src="/static/proporacle-logo-v3.png?v=20260320b" alt="PropORACLE logo" class="logo-icon"/>
+      <div>
+        <div class="logo-title">SLATE EVALUATION</div>
+        <div class="logo-sub">POST-GAME GRADE REPORT</div>
+      </div>
     </div>
+    <div class="date-badge">📅 {h(display_date)}</div>
   </div>
-  <div class="date-badge">📅 {h(display_date)}</div>
+  <div id="proporacle-grades-toolbar-host" class="grades-hub-toolbar-host"></div>
 </header>
 <div class="main">
 {body_content}

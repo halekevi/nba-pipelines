@@ -174,6 +174,8 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 }
 .gc-live{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--cyan);opacity:.92;}
 .iframe-shell-toolbar .date-bar,.iframe-shell-toolbar .tabs-bar{margin:0;width:100%;box-sizing:border-box;}
+.grades-toolbar-parent-slot{flex-shrink:0}
+.grades-toolbar-parent-slot.grades-toolbar-parent-slot--collapsed{display:none;height:0;min-height:0;overflow:hidden;margin:0;padding:0;border:0}
 .iframe-shell-stage{flex:1;min-height:0;position:relative;overflow:hidden;}
 .iframe-shell-stage > .grade-frame{position:absolute;inset:0;width:100%;height:100%;border:none;display:block;transition:opacity .25s;}
 .grade-frame.loading{opacity:0;}
@@ -781,35 +783,37 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 
 <div class="grades-body">
 <!-- ═══════════════════════ IFRAME SHELL ═══════════════════════ -->
-<div class="iframe-shell">
-  <div class="iframe-shell-toolbar">
-    <div class="iframe-shell-head">
-      <span class="ist-title" id="iframe-shell-title">Slate evaluation</span>
-      <span class="gc-live" id="grades-controls-live" aria-live="polite"></span>
-    </div>
-    <div class="date-bar">
-      <span class="date-bar-label">REPORT DATE</span>
-      <button class="date-nav-btn" id="btn-prev" title="Previous date" onclick="stepDate(-1)">&#8249;</button>
-      <div class="date-pills" id="date-pills">
-        <!-- Pills injected by JS -->
+<div class="iframe-shell" id="grades-iframe-shell">
+  <div id="grades-toolbar-parent-slot" class="grades-toolbar-parent-slot">
+    <div class="iframe-shell-toolbar" id="iframe-shell-toolbar">
+      <div class="iframe-shell-head">
+        <span class="ist-title" id="iframe-shell-title">Slate evaluation</span>
+        <span class="gc-live" id="grades-controls-live" aria-live="polite"></span>
       </div>
-      <button class="date-nav-btn" id="btn-next" title="Next date" onclick="stepDate(1)">&#8250;</button>
-      <div class="date-sep"></div>
-      <div class="date-bar-right">
-        <div class="date-input-wrap">
-          <span class="date-input-label">JUMP TO</span>
-          <input type="date" class="date-input" id="date-jump" />
-          <button class="date-go-btn" onclick="jumpToDate()">GO</button>
+      <div class="date-bar">
+        <span class="date-bar-label">REPORT DATE</span>
+        <button type="button" class="date-nav-btn" id="btn-prev" title="Previous date" onclick="window.parent.stepDate(-1)">&#8249;</button>
+        <div class="date-pills" id="date-pills">
+          <!-- Pills injected by JS -->
+        </div>
+        <button type="button" class="date-nav-btn" id="btn-next" title="Next date" onclick="window.parent.stepDate(1)">&#8250;</button>
+        <div class="date-sep"></div>
+        <div class="date-bar-right">
+          <div class="date-input-wrap">
+            <span class="date-input-label">JUMP TO</span>
+            <input type="date" class="date-input" id="date-jump" />
+            <button type="button" class="date-go-btn" onclick="window.parent.jumpToDate()">GO</button>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="tabs-bar">
-      <button class="tab-btn active" id="tab-slate" onclick="switchTab('slate')">
-        <span class="tab-icon">📋</span>SLATE EVALUATION
-      </button>
-      <button class="tab-btn" id="tab-tickets" onclick="switchTab('tickets')">
-        <span class="tab-icon">🎟</span>TICKET EVALUATION
-      </button>
+      <div class="tabs-bar">
+        <button type="button" class="tab-btn active" id="tab-slate" onclick="window.parent.switchTab('slate')">
+          <span class="tab-icon">📋</span>SLATE EVALUATION
+        </button>
+        <button type="button" class="tab-btn" id="tab-tickets" onclick="window.parent.switchTab('tickets')">
+          <span class="tab-icon">🎟</span>TICKET EVALUATION
+        </button>
+      </div>
     </div>
   </div>
   <div class="iframe-shell-stage">
@@ -850,6 +854,92 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 //
 const REPORT_URL_TEMPLATE = '/grades/slate_eval_{date}.html';
 const TICKET_EVAL_URL_TEMPLATE = '/grades/ticket_eval_{date}.html';
+
+/** Toolbar may live in the main document or inside the slate iframe — resolve control ids. */
+function gradesEl(id) {
+  const inMain = document.getElementById(id);
+  if (inMain) return inMain;
+  const doc = document.getElementById('grade-frame')?.contentDocument;
+  return doc?.getElementById(id) || null;
+}
+
+function getOrCreateToolbarHost(doc) {
+  if (!doc) return null;
+  let host = doc.getElementById('proporacle-grades-toolbar-host');
+  if (host) return host;
+  const hdr = doc.querySelector('header');
+  if (!hdr) return null;
+  host = doc.createElement('div');
+  host.id = 'proporacle-grades-toolbar-host';
+  host.className = 'grades-hub-toolbar-host';
+  hdr.appendChild(host);
+  return host;
+}
+
+function ensureGradesToolbarStylesInFrame(doc) {
+  if (!doc || doc.getElementById('grades-iframe-toolbar-link')) return;
+  const link = doc.createElement('link');
+  link.id = 'grades-iframe-toolbar-link';
+  link.rel = 'stylesheet';
+  link.href = '/static/grades-iframe-toolbar.css?v=20260404c';
+  doc.head.appendChild(link);
+}
+
+function syncToolbarParentSlot() {
+  const slot = document.getElementById('grades-toolbar-parent-slot');
+  if (!slot) return;
+  const hasBar = !!slot.querySelector('#iframe-shell-toolbar');
+  slot.classList.toggle('grades-toolbar-parent-slot--collapsed', !hasBar);
+}
+
+function restoreGradesToolbarToParent() {
+  const slot = document.getElementById('grades-toolbar-parent-slot');
+  const toolbar = gradesEl('iframe-shell-toolbar');
+  if (!slot || !toolbar) return;
+  if (toolbar.parentElement === slot) {
+    toolbar.classList.remove('iframe-shell-toolbar--embedded');
+    syncToolbarParentSlot();
+    return;
+  }
+  try {
+    document.adoptNode(toolbar);
+    slot.appendChild(toolbar);
+    toolbar.classList.remove('iframe-shell-toolbar--embedded');
+  } catch (_e) {}
+  syncToolbarParentSlot();
+}
+
+function embedGradesToolbarInSlate(frame) {
+  if (activeTab !== 'slate') return;
+  const doc = frame?.contentDocument;
+  if (!doc || !doc.body) return;
+  const host = getOrCreateToolbarHost(doc);
+  if (!host) {
+    syncToolbarParentSlot();
+    return;
+  }
+  ensureGradesToolbarStylesInFrame(doc);
+  const toolbar = gradesEl('iframe-shell-toolbar');
+  const slot = document.getElementById('grades-toolbar-parent-slot');
+  if (!toolbar || !slot) return;
+  if (toolbar.parentElement === host) {
+    toolbar.classList.add('iframe-shell-toolbar--embedded');
+    syncToolbarParentSlot();
+    return;
+  }
+  try {
+    doc.adoptNode(toolbar);
+    host.appendChild(toolbar);
+    toolbar.classList.add('iframe-shell-toolbar--embedded');
+  } catch (_e) {
+    try {
+      document.adoptNode(toolbar);
+      slot.appendChild(toolbar);
+      toolbar.classList.remove('iframe-shell-toolbar--embedded');
+    } catch (_e2) {}
+  }
+  syncToolbarParentSlot();
+}
 
 function ensureFrameCollapseCss(doc) {
   if (!doc || doc.getElementById('grades-collapsible-sport-style')) return;
@@ -1003,20 +1093,25 @@ function collapseSportsInTicketFrame(frame) {
 // ─── TAB SWITCHING ────────────────────────────────────────────────────────────
 let activeTab = 'slate';
 function refreshControlsSummary() {
-  const el = document.getElementById('grades-controls-live');
-  const titleEl = document.getElementById('iframe-shell-title');
+  const el = gradesEl('grades-controls-live');
+  const titleEl = gradesEl('iframe-shell-title');
   if (titleEl) {
     titleEl.textContent = activeTab === 'tickets' ? 'Ticket evaluation' : 'Slate evaluation';
   }
   if (!el) return;
-  const ds = currentDateStr || document.getElementById('date-jump')?.value || '';
+  const ds = currentDateStr || gradesEl('date-jump')?.value || '';
   const tab = activeTab === 'tickets' ? 'Tickets' : 'Slate';
   el.textContent = ds ? `${ds} · ${tab}` : tab;
 }
 function switchTab(tab) {
   activeTab = tab;
-  document.getElementById('tab-slate').classList.toggle('active', tab === 'slate');
-  document.getElementById('tab-tickets').classList.toggle('active', tab === 'tickets');
+  if (tab === 'tickets') {
+    restoreGradesToolbarToParent();
+  }
+  const ts = gradesEl('tab-slate');
+  const tt = gradesEl('tab-tickets');
+  if (ts) ts.classList.toggle('active', tab === 'slate');
+  if (tt) tt.classList.toggle('active', tab === 'tickets');
   document.getElementById('grade-frame').style.display   = tab === 'slate'   ? 'block' : 'none';
   document.getElementById('ticket-frame').style.display  = tab === 'tickets' ? 'block' : 'none';
   document.getElementById('ticket-empty-state').style.display = 'none';
@@ -1024,10 +1119,13 @@ function switchTab(tab) {
   if (tab === 'tickets') {
     document.getElementById('load-overlay').classList.add('hidden');
     document.getElementById('empty-state').style.display = 'none';
-    const ds = currentDateStr || document.getElementById('date-jump').value || yesterdayStr();
+    const ds = currentDateStr || gradesEl('date-jump')?.value || yesterdayStr();
     loadTicketEval(ds);
   } else {
     document.getElementById('empty-state').style.display = slateReportMissing ? 'flex' : 'none';
+    requestAnimationFrame(() => {
+      try { embedGradesToolbarInSlate(document.getElementById('grade-frame')); } catch (_e) {}
+    });
   }
   refreshControlsSummary();
 }
@@ -1122,7 +1220,8 @@ async function discoverDates(){
 
 // ─── RENDER date pills ────────────────────────────────────────────────────────
 function renderPills(){
-  const container = document.getElementById('date-pills');
+  const container = gradesEl('date-pills');
+  if (!container) return;
   container.innerHTML = '';
   if(!availableDates.length){
     container.innerHTML = '<span style="font-size:10px;letter-spacing:1.5px;color:var(--muted2)">NO REPORTS FOUND</span>';
@@ -1142,13 +1241,15 @@ function renderPills(){
     pill.onclick = () => loadDate(ds);
     container.appendChild(pill);
   });
-  // Update nav buttons
-  document.getElementById('btn-prev').disabled = currentDateIdx <= 0;
-  document.getElementById('btn-next').disabled = currentDateIdx >= availableDates.length-1;
+  const bp = gradesEl('btn-prev');
+  const bn = gradesEl('btn-next');
+  if (bp) bp.disabled = currentDateIdx <= 0;
+  if (bn) bn.disabled = currentDateIdx >= availableDates.length - 1;
 }
 
 // ─── LOAD a date's report ─────────────────────────────────────────────────────
 function loadDate(dateStr){
+  restoreGradesToolbarToParent();
   const idx = availableDates.indexOf(dateStr);
   if(idx === -1 && !dateStr) return;
   currentDateIdx = idx;
@@ -1176,6 +1277,7 @@ function loadDate(dateStr){
       if(!doc || !doc.body || doc.body.innerHTML.trim().length < 100){
         throw new Error('empty');
       }
+      try { embedGradesToolbarInSlate(frame); } catch(_e) {}
       try { collapseSportsInSlateFrame(frame); } catch(_e) {}
       overlay.classList.add('hidden');
       frame.classList.remove('loading');
@@ -1207,8 +1309,8 @@ function loadDate(dateStr){
     }
   });
 
-  // Update jump input
-  document.getElementById('date-jump').value = dateStr;
+  const dj = gradesEl('date-jump');
+  if (dj) dj.value = dateStr;
 
   if (activeTab === 'tickets') {
     loadTicketEval(dateStr);
@@ -1224,7 +1326,8 @@ function stepDate(delta){
 }
 
 function jumpToDate(){
-  const val = document.getElementById('date-jump').value;
+  const inp = gradesEl('date-jump');
+  const val = inp?.value;
   if(!val) return;
   // Add to availableDates if not present so we can try loading it
   if(!availableDates.includes(val)){
@@ -1235,10 +1338,16 @@ function jumpToDate(){
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
+window.stepDate = stepDate;
+window.jumpToDate = jumpToDate;
+window.switchTab = switchTab;
+window.loadDate = loadDate;
+
 (async function init(){
   // Set date input default to yesterday
   const yest = yesterdayStr();
-  document.getElementById('date-jump').value = yest;
+  const dj0 = gradesEl('date-jump');
+  if (dj0) dj0.value = yest;
 
   // Show spinner while discovering
   document.getElementById('load-date-text').textContent = 'scanning...';
