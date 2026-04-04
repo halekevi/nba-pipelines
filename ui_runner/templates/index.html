@@ -1663,6 +1663,29 @@ function getPD(name, line) {
   });
 }
 
+/** Pipeline often sends L5/L10 as a rate in [0,1] (e.g. 0.8 = 4/5), not always integer counts. */
+function streakHits(raw, n) {
+  if (raw === null || raw === undefined) return null;
+  const x = Number(raw);
+  if (!Number.isFinite(x)) return null;
+  if (x <= 1) return Math.max(0, Math.min(n, Math.round(x * n)));
+  return Math.max(0, Math.min(n, Math.round(x)));
+}
+
+/** Synthetic last-n series aligned with UNDER hit count (curve below dashed prop line for hits). */
+function getUnderStreakSeries(name, line, n, hits) {
+  const base = getPD(name, line).slice(-n);
+  if (!Number.isFinite(hits) || hits < 0) return base;
+  const h = Math.min(n, Math.max(0, Math.round(hits)));
+  const pad = Math.max(0.06 * Math.abs(Number(line) || 0), 0.12);
+  return base.map((v, i) => {
+    const idxFromEnd = n - 1 - i;
+    const wantUnder = idxFromEnd < h;
+    if (wantUnder) return Math.max(0, Math.min(v, line - pad));
+    return Math.max(0, Math.max(v, line + pad));
+  });
+}
+
 async function loadSlateData() {
   if (slateDataPromise) return slateDataPromise;
   slateDataPromise = (async () => {
@@ -1980,9 +2003,11 @@ function renderEdges() {
 // ── Streak card (shared for L5 and L10) ───────────────────
 function streakCard(p, n) {
   const isOver=p.dir==="OVER";
-  const hits = (p.h !== undefined && p.h !== null) ? Math.round(p.h) : n;
+  const hits = (p.h !== undefined && p.h !== null) ? Math.min(n, Math.max(0, Math.round(p.h))) : n;
   const pct=Math.round((hits/n)*100);
-  const data=getPD(p.player,p.line).slice(-n);
+  const data = isOver
+    ? getPD(p.player, p.line).slice(-n)
+    : getUnderStreakSeries(p.player, p.line, n, hits);
   const spark=makeSparkSVG(data,p.line,isOver);
   const sc=`sp-${p.sport.toLowerCase()}`, pc=p.pick==="Goblin"?"pick-goblin":"pick-standard";
   const sportLabel = sportDisplayLabel(p.sport);
@@ -2036,9 +2061,8 @@ function renderStreaks() {
     const out = [];
     for (const p of ALL_SLATE) {
       const raw = p[key];
-      if (raw === null || raw === undefined) continue;
-      const h = Math.round(Number(raw));
-      if (!Number.isFinite(h)) continue;
+      const h = streakHits(raw, n);
+      if (h === null) continue;
       if (minHits != null && h < minHits) continue;
       out.push({ ...p, dir: "UNDER", h });
     }
@@ -2047,7 +2071,7 @@ function renderStreaks() {
   }
 
   const l5all = [...ALL_SLATE]
-    .map(p => ({...p, h: realHits(p, 5)}))
+    .map(p => ({...p, h: streakHits(realHits(p, 5), 5)}))
     .filter(p => p.h !== null)
     .sort((a, b) => b.h - a.h);
 
@@ -2055,7 +2079,7 @@ function renderStreaks() {
   const l5U = underStreakRows(5, null);
 
   const l10all = [...ALL_SLATE]
-    .map(p => ({...p, h: realHits(p, 10)}))
+    .map(p => ({...p, h: streakHits(realHits(p, 10), 10)}))
     .filter(p => p.h !== null && p.h >= 8)
     .sort((a, b) => b.h - a.h);
 
