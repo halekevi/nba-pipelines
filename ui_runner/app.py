@@ -32,7 +32,16 @@ from typing import Dict, List, Optional, Any
 from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
-from flask import Flask, jsonify, render_template, request, send_from_directory, abort, make_response
+from flask import (
+    Flask,
+    abort,
+    current_app,
+    jsonify,
+    make_response,
+    render_template,
+    request,
+    send_from_directory,
+)
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Paths
@@ -765,26 +774,21 @@ def serve_tickets_latest_json():
 @app.get("/tickets")
 def page_tickets():
     """
-    Prefer static tickets_latest.html from build_ticket_eval.py (graded legs, pipeline step).
-    If missing, render from tickets_latest.json via combined_slate_tickets.render_tickets_html (dev / pre-eval).
+    Today's built ticket slips from tickets_latest.json (combined_slate_tickets --write-web).
+
+    Graded legs, actuals, and hit/miss summaries live under Grades → Ticket evaluation
+    (static ticket_eval_YYYY-MM-DD.html from build_ticket_eval.py), not on this route.
     """
     import importlib.util
 
     json_path = TEMPLATES_DIR / "tickets_latest.json"
     html_static = TEMPLATES_DIR / "tickets_latest.html"
-    if html_static.exists():
-        return _no_store_headers(
-            send_from_directory(str(TEMPLATES_DIR), "tickets_latest.html")
-        )
-    if not json_path.exists():
-        return "tickets_latest.json not found. Run the pipeline with --write-web first.", 404
-    try:
-        payload = read_json_cached(json_path)
-    except Exception as e:
-        return f"Invalid tickets_latest.json: {e}", 500
 
-    cst_path = BASE_DIR / "scripts" / "combined_slate_tickets.py"
-    try:
+    def _render_slips_from_json() -> str | None:
+        if not _template_json_available("tickets_latest.json"):
+            return None
+        payload = read_json_cached(json_path)
+        cst_path = BASE_DIR / "scripts" / "combined_slate_tickets.py"
         if not cst_path.exists():
             raise FileNotFoundError("scripts/combined_slate_tickets.py not in repo")
         spec = importlib.util.spec_from_file_location("combined_slate_tickets", cst_path)
@@ -792,15 +796,27 @@ def page_tickets():
             raise RuntimeError("could not load combined_slate_tickets spec")
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
-        html = mod.render_tickets_html(payload)
-    except Exception:
-        return (
-            "Could not render tickets (import/renderer error). Add tickets_latest.html (build_ticket_eval.py) "
-            "or fix combined_slate_tickets import.",
-            500,
+        return mod.render_tickets_html(payload)
+
+    try:
+        html = _render_slips_from_json()
+        if html:
+            return _no_store_headers(make_response(html))
+    except Exception as e:
+        current_app.logger.warning("/tickets: render from tickets_latest.json failed: %s", e)
+
+    if html_static.exists():
+        return _no_store_headers(
+            send_from_directory(str(TEMPLATES_DIR), "tickets_latest.html")
         )
 
-    return _no_store_headers(make_response(html))
+    if not _template_json_available("tickets_latest.json"):
+        return "tickets_latest.json not found. Run the pipeline with --write-web first.", 404
+    return (
+        "Could not render /tickets from tickets_latest.json. Check combined_slate_tickets.render_tickets_html "
+        "and JSON shape.",
+        500,
+    )
 
 
 @app.get("/payout")

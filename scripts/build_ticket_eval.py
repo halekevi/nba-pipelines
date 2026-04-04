@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 """
-Build ticket_eval_{date}.html (dated archive for /grades) and tickets_latest.html (main /tickets page).
+Build ticket_eval_{date}.html for Grades → Ticket evaluation (graded legs, actuals, KPI bar).
+
 Reads ticket JSON (or combined_slate_tickets_{date}.xlsx) and sport step8/graded workbooks,
 matches legs to actuals, writes self-contained HTML.
+
+The /tickets page is rendered from tickets_latest.json (today's built slips), not from this file.
 
 Also writes ticket_eval_slate_latest.json — same legs as window.SLATE_DATA in the HTML — so the home
 page /api/slate-sport slate cards can match the ticket eval builder (when SLATE_SPORT_SOURCE=auto).
 
-Run after combined_slate_tickets.py --write-web (JSON only) so tickets_latest.html includes grades.
+Run after combined_slate_tickets.py --write-web, then this script to refresh graded HTML for that date.
 
 Railway / git deploy: ``outputs/`` is not in the repo. To grade MLB (and other sports) on the live site,
 drop ``graded_<sport>_<date>.xlsx`` under ``ui_runner/graded_slate/<date>/`` (same names as under
-``outputs/<date>/``), then run this script and commit the bundle + ``tickets_latest.html``.
+``outputs/<date>/``), then run this script and commit ``ticket_eval_<date>.html``.
 """
 from __future__ import annotations
 
@@ -94,7 +97,7 @@ SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
     ],
 }
 
-# Shell theme for tickets_latest.html / ticket_eval_* (tokens + background + nav match index.html).
+# Shell theme for ticket_eval_*.html (tokens + background + nav match index.html).
 _TICKETS_NAV_THEME_CSS = r'''/* ── CSS Variables (matches index.html) ── */
 :root{
   --bg-main:#050505;
@@ -2935,16 +2938,14 @@ def main() -> int:
     TEMPLATES_DIR.mkdir(parents=True, exist_ok=True)
     dated_name = f"ticket_eval_{arg_date}.html"
     out_dated = TEMPLATES_DIR / dated_name
-    out_latest = TEMPLATES_DIR / "tickets_latest.html"
     try:
         out_dated.write_text(html_out, encoding="utf-8")
-        out_latest.write_text(html_out, encoding="utf-8")
     except OSError as e:
         print(f"ERROR: Write failed: {e}")
         return 1
 
     print(f"Wrote {out_dated}")
-    print(f"Wrote {out_latest} (main tickets page)")
+    print("  (Serve /tickets from tickets_latest.json; graded view: Grades → Ticket evaluation.)")
     return 0
 
 

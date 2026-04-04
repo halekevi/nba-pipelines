@@ -6,7 +6,7 @@ Combined NBA + CBB + NHL + Soccer Slate & Ticket Generator
 Merges NBA (step8_all_direction_clean.xlsx) and CBB (step6_ranked_cbb.xlsx ELIGIBLE)
 Outputs:
   - combined_slate_tickets_YYYY-MM-DD.xlsx
-  - tickets_latest.json (web); graded tickets_latest.html is produced by build_ticket_eval.py after this step
+  - tickets_latest.json (web; /tickets renders from this). Graded HTML: build_ticket_eval.py → ticket_eval_<date>.html
 
 Sheets: SUMMARY, Full Slate (reordered + STRONG/LEAN/RISK + pace beside Def Tier), NBA Slate, CBB Slate,
         2–6-Leg tickets per sport (Goblin / Standard / Std+Gob mix),
@@ -1967,13 +1967,13 @@ html[data-theme="light"] .ticket{
 
 
 def write_web_outputs(payload, outdir: str):
-    """Write tickets_latest.json only; run build_ticket_eval.py to emit graded tickets_latest.html."""
+    """Write tickets_latest.json for /tickets; graded HTML is build_ticket_eval.py → ticket_eval_<date>.html."""
     os.makedirs(outdir, exist_ok=True)
     json_path = os.path.join(outdir, "tickets_latest.json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
     print(f"[OK] Web JSON  -> {json_path}")
-    print("  (HTML) Run: py -3.14 scripts/build_ticket_eval.py --date <YYYY-MM-DD>  -> tickets_latest.html")
+    print("  (Graded eval HTML) Run: py -3.14 scripts/build_ticket_eval.py --date <YYYY-MM-DD>")
 
 
 def _apply_l5_truth_from_stat_games(df: pd.DataFrame, sport_label: str) -> pd.DataFrame:

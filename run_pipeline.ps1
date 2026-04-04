@@ -151,9 +151,8 @@ function Run-GitPush {
         $logsDir = Join-Path $Root "logs"
         if (-not (Test-Path $logsDir)) { New-Item -ItemType Directory -Path $logsDir -Force | Out-Null }
         $gitPushLog = Join-Path $logsDir "git_push_log.txt"
-        # Always add the 3 core "latest" files (always rewritten by pipeline)
+        # Core latest JSON (tickets page HTML is rendered from tickets_latest.json in Flask)
         $filesToAdd = @(
-            "ui_runner/templates/tickets_latest.html",
             "ui_runner/templates/tickets_latest.json",
             "ui_runner/templates/slate_latest.json"
         )
