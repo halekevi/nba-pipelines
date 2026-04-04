@@ -1051,10 +1051,11 @@ function collapseSportsInSlateFrame(frame) {
   if (!firstMain) return;
 
   sections.forEach((sec, idx) => {
-    const sportLabel =
+    let sportLabel =
       sec.querySelector('.sport-label')?.textContent?.trim() ||
       sec.querySelector('.sport-header')?.textContent?.trim() ||
       `Sport ${idx + 1}`;
+    if (/^MLB\s+MLB$/i.test(sportLabel)) sportLabel = '⚾ MLB';
     const meta = sec.querySelector('.sport-meta-count')?.textContent?.trim() || '';
 
     const details = doc.createElement('details');

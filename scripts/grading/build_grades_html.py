@@ -576,6 +576,9 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
     if not rows:
         return ""
 
+    if sport.strip().upper() == "MLB" and (not (icon or "").strip() or (icon or "").strip().upper() == "MLB"):
+        icon = "⚾"
+
     stats  = overall_stats(rows)
     goblin = pick_type_stats(rows, "goblin")
 
