@@ -606,13 +606,15 @@ def _resolve_leg_prob(row: pd.Series) -> tuple[float, str]:
     if pd.notna(rs):
         return _clip_prob(_rank_score_to_prob(float(rs)), "rank_score"), "rank_score"
 
-    # Priority 3: edge-to-probability.
-    edge = pd.to_numeric(row.get("edge"), errors="coerce")
+    # Priority 3: edge-to-probability (magnitude — signed raw edge punishes UNDERs).
+    ae = pd.to_numeric(row.get("abs_edge"), errors="coerce")
+    edge_raw = pd.to_numeric(row.get("edge"), errors="coerce")
+    edge_mag = ae if pd.notna(ae) else (abs(float(edge_raw)) if pd.notna(edge_raw) else float("nan"))
     thresh = get_edge_threshold(
         row.get("sport", ""), row.get("prop_type", ""), row.get("pick_type", "")
     )
-    if pd.notna(edge):
-        shifted = float(edge) - float(thresh)
+    if pd.notna(edge_mag):
+        shifted = float(edge_mag) - float(thresh)
         prob = 1.0 / (1.0 + math.exp(-shifted * 0.6))
         return _clip_prob(prob, "edge"), "edge"
 
@@ -1189,6 +1191,7 @@ def ticket_groups_to_payload(all_ticket_groups, date_str, thresholds):
                     "direction": str(gv("direction") or ""),
                     "line": _safe_float(gv("line")),
                     "edge": _safe_float(gv("edge")),
+                    "abs_edge": _safe_float(gv("abs_edge")),
                     "standard_line": _safe_float(gv("standard_line")),
                     "standard_edge": _safe_float(gv("standard_edge")),
                     "standard_projection": _safe_float(gv("standard_projection")),
@@ -2109,6 +2112,7 @@ def load_nba(path: str) -> pd.DataFrame:
             "Line": "line",
             "Direction": "direction",
             "Edge": "edge",
+            "Abs Edge": "abs_edge",
             "Projection": "projection",
             "ML Prob": "ml_prob",
             "Hit Rate (5g)": "hit_rate",
@@ -2180,6 +2184,10 @@ def load_nba(path: str) -> pd.DataFrame:
         df["nba_player_id"] = df["nba_player_id"].apply(_clean_id)
 
     df = _apply_l5_truth_from_stat_games(df, "NBA")
+    if "abs_edge" not in df.columns and "edge" in df.columns:
+        df["abs_edge"] = pd.to_numeric(df["edge"], errors="coerce").abs()
+    elif "abs_edge" in df.columns:
+        df["abs_edge"] = pd.to_numeric(df["abs_edge"], errors="coerce")
     return df
 
 
@@ -3258,6 +3266,7 @@ def build_combined_slate(
         "line",
         "direction",
         "edge",
+        "abs_edge",
         "projection",
         "hit_rate",
         "ml_prob",
@@ -3306,11 +3315,24 @@ def build_combined_slate(
         combined["ml_prob"] = pd.to_numeric(combined["ml_prob"], errors="coerce")
     if "edge" in combined.columns:
         combined["edge"] = pd.to_numeric(combined["edge"], errors="coerce")
+    if "abs_edge" in combined.columns:
+        combined["abs_edge"] = pd.to_numeric(combined["abs_edge"], errors="coerce")
 
     combined = add_l5_play_side_columns(combined)
 
     combined = combined.sort_values("rank_score", ascending=False, na_position="last").reset_index(drop=True)
     return combined
+
+
+def _edge_magnitude_series(df: pd.DataFrame) -> pd.Series:
+    """Use abs_edge when present so UNDER legs are not dropped by min_edge filters."""
+    if df is None or len(df) == 0:
+        return pd.Series(dtype=float)
+    if "abs_edge" in df.columns:
+        ae = pd.to_numeric(df["abs_edge"], errors="coerce")
+        if ae.notna().any():
+            return ae
+    return pd.to_numeric(df.get("edge", np.nan), errors="coerce").abs()
 
 
 # ── Filter eligible props for tickets ─────────────────────────────────────────
@@ -3334,8 +3356,8 @@ def filter_eligible(df: pd.DataFrame, min_hit_rate=0.55, min_edge=0.0, min_rank=
     strong_l5 = (l5_o >= 4) | (l5_u >= 4)
     if min_hit_rate > 0 and "hit_rate" in df.columns:
         mask &= (df["hit_rate"].fillna(0) >= min_hit_rate) | strong_l5
-    if min_edge > 0 and "edge" in df.columns:
-        mask &= df["edge"].fillna(0) >= min_edge
+    if min_edge > 0:
+        mask &= _edge_magnitude_series(df).fillna(0) >= min_edge
     if min_rank is not None and "rank_score" in df.columns:
         mask &= df["rank_score"].fillna(-99) >= min_rank
     if tiers and "tier" in df.columns:
@@ -3666,7 +3688,8 @@ def compute_bet_signal_core(leg: dict) -> tuple[int, list[str]]:
 
     if sport != "NBA" and not reasons:
         hr = _signal_float(leg.get("hit_rate")) or 0.0
-        edge = _signal_float(leg.get("edge")) or 0.0
+        ae = _signal_float(leg.get("abs_edge"))
+        edge = ae if ae is not None else abs(_signal_float(leg.get("edge")) or 0.0)
         if hr >= 0.62 and edge > 0:
             score = 2
             reasons.append("strong model profile")
@@ -4057,8 +4080,8 @@ def build_final_web_ticket_groups(
         mask = pd.Series(True, index=df.index)
         if min_hit_rate > 0 and "hit_rate" in df.columns:
             mask &= df["hit_rate"].fillna(0) >= min_hit_rate
-        if min_edge > 0 and "edge" in df.columns:
-            mask &= df["edge"].fillna(0) >= min_edge
+        if min_edge > 0:
+            mask &= _edge_magnitude_series(df).fillna(0) >= min_edge
         if min_rank is not None and "rank_score" in df.columns:
             mask &= df["rank_score"].fillna(-99) >= min_rank
         return df[mask].copy()
