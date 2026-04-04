@@ -10,9 +10,12 @@ Everything assumes the **repository root** is the working directory for `run_pip
 |----------|------|
 | `run_pipeline.ps1` | Master multi-sport pipeline (NBA, CBB, NHL, MLB, Soccer, WNBA, combined tickets) |
 | `main.py` | WSGI shim: re-exports `app` from `ui_runner.app` |
-| `scripts\` | Shared Python utilities, graders, ML training, combined slate builder |
+| `scripts\` | Shared Python utilities, graders, ML training, combined slate builder, ticket eval (`build_ticket_eval.py`), entries harvest (`capture_entries.py`) |
+| `docs\guides\` | Long-form setup and status docs (e.g. `BROWSER_FETCH_SETUP.md`, `APP_SYSTEM_STATUS.md`) |
+| `archive\root-text\` | Ad hoc notes, patch snippets, and log copies moved off the repo root |
+| `data\db\` | Default location for `MyTicketPerformance.db` (ticket/entries SQLite; `*.db` is gitignored) |
 | `outputs\<yyyy-MM-dd>\` | Dated run artifacts (copies of combined tickets, quality reports, etc.) |
-| `logs\` | Long-lived logs; `organize_project_root.ps1` can move dated debug text here |
+| `logs\` | Long-lived logs, `git_push_log.txt` (from optional pipeline git push), and dated debug text from `organize_project_root.ps1` |
 | `ui_runner\` | Flask app (`app.py`), static assets, HTML templates (including generated slate JSON/HTML) |
 | `data\` | Small shared data (e.g. pipeline health log under `data\logs\`) |
 | `.venv\` | Optional local virtualenv (activated by `run_pipeline.ps1` if present) |
@@ -48,6 +51,9 @@ Each sport keeps its own steps, caches, and docs. **Paths are not uniform** — 
 4. **`scripts\combined_slate_tickets.py`** — CLI paths are passed from `run_pipeline.ps1`; if default behavior inside the script assumes relative paths, grep for sport folder names.
 5. **Python modules** — Search for `NBA\`, `CBB\`, `Join-Path`, and `step8` in `scripts\` and sport `scripts\` folders after any move.
 6. **External cache** — `scripts\ensure_local_cache.py` uses `%LOCALAPPDATA%\PropORACLE\cache` (independent of repo path).
+7. **Ticket DB** — `scripts\capture_entries.py` and `find_myticket_db()` helpers resolve `data\db\MyTicketPerformance.db` first, then legacy root paths.
+
+**Git metadata:** Keep `.gitignore` and `.gitattributes` at the **repository root**; do not move them into subfolders.
 
 ## UI and deployment
 

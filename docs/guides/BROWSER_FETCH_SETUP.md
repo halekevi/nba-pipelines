@@ -198,9 +198,9 @@ This is the manual escape hatch when everything else fails.
 
 ---
 
-## `capture_entries.py` — My Entries / ticket harvest
+## `scripts/capture_entries.py` — My Entries / ticket harvest
 
-This script (`capture_entries.py` at the repo root) also talks to PrizePicks. It **defaults to the same trusted profile** as step1:
+This script (`scripts/capture_entries.py`, run from the repo root) also talks to PrizePicks. It **defaults to the same trusted profile** as step1:
 
 - **If** `~/.pp_browser_profile` exists (from `setup_prizepicks_profile.py`) **with** `Default/Network/Cookies` or `Default/Cookies`, that directory is used automatically.
 - **Otherwise** it falls back to `./browser_session` (older behaviour).
@@ -209,16 +209,16 @@ Run (visible browser, **not** headless):
 
 ```powershell
 cd C:\Users\halek\OneDrive\Desktop\PropORACLE
-py -3.14 -u capture_entries.py
+py -3.14 -u scripts/capture_entries.py
 ```
 
 **Press & Hold / bot screen:** complete the challenge in the window, then **click or press a key** once when the script says it is waiting for manual interaction (up to **7 minutes** by default). If you skip that step, DataDome cookies may not attach and API calls can return **403**.
 
-If challenges keep appearing: log into PP in real Chrome, close Chrome, re-run `setup_prizepicks_profile.py`, then run `capture_entries.py` again.
+If challenges keep appearing: log into PP in real Chrome, close Chrome, re-run `setup_prizepicks_profile.py`, then run `scripts/capture_entries.py` again.
 
 **API 401 on “settled pages” / “detail fetch 0 successful”:** the harvester uses `page.request` (same cookies as the open tab), not a bare `context.request`, so pagination and `/v1/entries/{id}` / prediction calls stay authenticated after you log in.
 
-**Still seeing Press & Hold / DataDome often:** `capture_entries.py` now (1) tries **system Google Chrome** before Playwright’s bundled Chromium, (2) drops Playwright’s default **`--enable-automation`** flag, (3) applies **playwright-stealth** on every new tab if installed, (4) does a **board warm-up** (`--warmup-league-id`, default NBA `7`) before hammering the entries API. Install stealth: `py -3.14 -m pip install playwright-stealth`. Use real Chrome + refreshed `setup_prizepicks_profile.py` cookies when challenges never clear.
+**Still seeing Press & Hold / DataDome often:** `scripts/capture_entries.py` now (1) tries **system Google Chrome** before Playwright’s bundled Chromium, (2) drops Playwright’s default **`--enable-automation`** flag, (3) applies **playwright-stealth** on every new tab if installed, (4) does a **board warm-up** (`--warmup-league-id`, default NBA `7`) before hammering the entries API. Install stealth: `py -3.14 -m pip install playwright-stealth`. Use real Chrome + refreshed `setup_prizepicks_profile.py` cookies when challenges never clear.
 
 ---
 

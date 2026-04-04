@@ -1973,7 +1973,7 @@ def write_web_outputs(payload, outdir: str):
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
     print(f"[OK] Web JSON  -> {json_path}")
-    print("  (HTML) Run: py -3.14 build_ticket_eval.py --date <YYYY-MM-DD>  -> tickets_latest.html")
+    print("  (HTML) Run: py -3.14 scripts/build_ticket_eval.py --date <YYYY-MM-DD>  -> tickets_latest.html")
 
 
 def _apply_l5_truth_from_stat_games(df: pd.DataFrame, sport_label: str) -> pd.DataFrame:

@@ -45,6 +45,7 @@ def normalize_player_name(name: str) -> str:
 
 def find_myticket_db() -> Path | None:
     for p in (
+        REPO_ROOT / "data" / "db" / "MyTicketPerformance.db",
         REPO_ROOT / "MyTicketPerformance.db",
         REPO_ROOT / "data" / "MyTicketPerformance.db",
         REPO_ROOT / "data" / "cache" / "MyTicketPerformance.db",

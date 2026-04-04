@@ -34,5 +34,5 @@ foreach ($f in $files) {
 }
 
 Write-Host "Staged $($files.Count) file(s) under ui_runner\graded_slate\$Date"
-Write-Host "Next: py -3.14 build_ticket_eval.py --date $Date"
+Write-Host "Next: py -3.14 scripts\build_ticket_eval.py --date $Date"
 Write-Host "Then: git add ui_runner/graded_slate/$Date ui_runner/templates/tickets_latest.html ..."

@@ -51,13 +51,30 @@ def _bind_stealth_on_new_pages(context: Any) -> None:
 
 
 PRIZEPICKS_URL = "https://app.prizepicks.com/"
-DB_PATH = Path("MyTicketPerformance.db")
+REPO_ROOT = Path(__file__).resolve().parent.parent
+
+
+def _resolve_ticket_performance_db() -> Path:
+    for p in (
+        REPO_ROOT / "data" / "db" / "MyTicketPerformance.db",
+        REPO_ROOT / "MyTicketPerformance.db",
+        REPO_ROOT / "data" / "MyTicketPerformance.db",
+        REPO_ROOT / "data" / "cache" / "MyTicketPerformance.db",
+    ):
+        if p.is_file():
+            return p
+    out = REPO_ROOT / "data" / "db" / "MyTicketPerformance.db"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    return out
+
+
+DB_PATH = _resolve_ticket_performance_db()
 
 
 def _default_capture_session_dir() -> Path:
     """
     Prefer ~/.pp_browser_profile (real Chrome cookies via setup_prizepicks_profile.py)
-    so DataDome sees a trusted session. See BROWSER_FETCH_SETUP.md.
+    so DataDome sees a trusted session. See docs/guides/BROWSER_FETCH_SETUP.md.
     """
     pp = Path.home() / ".pp_browser_profile"
     if (pp / "Default" / "Network" / "Cookies").exists() or (pp / "Default" / "Cookies").exists():
@@ -65,7 +82,7 @@ def _default_capture_session_dir() -> Path:
     return Path("browser_session")
 
 
-LEGACY_DB_PATH = Path("PropOracle.db")
+LEGACY_DB_PATH = REPO_ROOT / "PropOracle.db"
 DEFAULT_USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
     "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -999,7 +1016,7 @@ def wait_for_manual_interaction(
 
     print(
         "No interactive terminal — waiting for a click in the PrizePicks window...\n"
-        "  Tip: run from PowerShell: py -3.14 -u capture_entries.py\n"
+        "  Tip: run from PowerShell: py -3.14 -u scripts\\capture_entries.py\n"
         "  Or use --no-terminal-prompt only if you already disabled the Enter step."
     )
     start = time.time()
@@ -1138,7 +1155,7 @@ def harvest_history(
 def warm_up_prizepicks_session(page: Page, league_id: int = 7) -> None:
     """
     Load a real board after login so the SPA + DataDome see normal traffic before API pulls.
-    league_id 7 = NBA (common default). 9=NFL, 2=MLB, 12=NHL — see BROWSER_FETCH_SETUP.md.
+    league_id 7 = NBA (common default). 9=NFL, 2=MLB, 12=NHL — see docs/guides/BROWSER_FETCH_SETUP.md.
     """
     print(f"Session warm-up: navigating to board league_id={league_id} (let cookies settle)...")
     try:
@@ -2400,7 +2417,7 @@ def main() -> int:
         default=str(_default_capture_session_dir()),
         help=(
             "Playwright user_data_dir. Default: ~/.pp_browser_profile if cookie DB exists "
-            "(from setup_prizepicks_profile.py), else ./browser_session. See BROWSER_FETCH_SETUP.md."
+            "(from setup_prizepicks_profile.py), else ./browser_session. See docs/guides/BROWSER_FETCH_SETUP.md."
         ),
     )
     parser.add_argument(
@@ -2529,7 +2546,7 @@ def main() -> int:
         "--warmup-league-id",
         type=int,
         default=7,
-        help="League id for warm-up board URL (default 7=NBA). See BROWSER_FETCH_SETUP.md.",
+        help="League id for warm-up board URL (default 7=NBA). See docs/guides/BROWSER_FETCH_SETUP.md.",
     )
     args = parser.parse_args()
     maybe_migrate_legacy_db(Path(args.db_path))

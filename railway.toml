@@ -2,7 +2,7 @@
 #
 # Tickets / MLB grades: outputs/ is not deployed. After grading locally, run
 #   pwsh scripts/stage_graded_slate_for_deploy.ps1 -Date YYYY-MM-DD
-#   py -3.14 build_ticket_eval.py --date YYYY-MM-DD
+#   py -3.14 scripts/build_ticket_eval.py --date YYYY-MM-DD
 # and commit ui_runner/graded_slate/<date>/*.xlsx + ui_runner/templates/tickets_latest.html.
 #
 # Nixpacks (default) + Dockerfile (optional): both use scripts/railway_gunicorn.sh → ui_runner.app:app.

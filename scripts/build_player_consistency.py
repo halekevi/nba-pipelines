@@ -42,6 +42,7 @@ SYNTHETIC_GRADED_DB = REPO_ROOT / "data" / "cache" / "synthetic_graded.db"
 
 def _find_myticket_performance_db() -> Path | None:
     for p in (
+        REPO_ROOT / "data" / "db" / "MyTicketPerformance.db",
         REPO_ROOT / "MyTicketPerformance.db",
         REPO_ROOT / "data" / "MyTicketPerformance.db",
         REPO_ROOT / "data" / "cache" / "MyTicketPerformance.db",

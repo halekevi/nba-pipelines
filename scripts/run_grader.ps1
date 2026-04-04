@@ -23,7 +23,7 @@ $NHLAdvancedGraderScript = Join-Path $Root "scripts\nhl_grader_advanced.py"
 $SoccerAdvancedGraderScript = Join-Path $Root "scripts\soccer_grader_advanced.py"
 $BuildGradesHtmlScript = Join-Path $Root "scripts\grading\build_grades_html.py"
 $NBABacktestScript = Join-Path $Root "NBA\scripts\backtest_nba.py"
-$TicketEvalBuilderScript = Join-Path $Root "build_ticket_eval.py"
+$TicketEvalBuilderScript = Join-Path $Root "scripts\build_ticket_eval.py"
 $EntryLegGraderScript = Join-Path $Root "scripts\grade_entry_legs.py"
 
 $NBAGradedFile = Join-Path $DateDir "graded_nba_$Date.xlsx"

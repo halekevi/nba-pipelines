@@ -127,6 +127,7 @@ def http_get(url: str, params: dict[str, Any] | None = None, timeout: float = 45
 
 def find_myticket_db() -> Path | None:
     for p in (
+        REPO_ROOT / "data" / "db" / "MyTicketPerformance.db",
         REPO_ROOT / "MyTicketPerformance.db",
         REPO_ROOT / "data" / "MyTicketPerformance.db",
         REPO_ROOT / "data" / "cache" / "MyTicketPerformance.db",

@@ -148,6 +148,9 @@ function Run-GitPush {
     Write-Host "[ GIT ] Pushing updated templates to GitHub..." -ForegroundColor Cyan
     Push-Location $Root
     try {
+        $logsDir = Join-Path $Root "logs"
+        if (-not (Test-Path $logsDir)) { New-Item -ItemType Directory -Path $logsDir -Force | Out-Null }
+        $gitPushLog = Join-Path $logsDir "git_push_log.txt"
         # Always add the 3 core "latest" files (always rewritten by pipeline)
         $filesToAdd = @(
             "ui_runner/templates/tickets_latest.html",
@@ -168,7 +171,7 @@ function Run-GitPush {
         if ($missing) {
             Write-Host "  WARNING: Missing template files, skipping push:" -ForegroundColor Yellow
             $missing | ForEach-Object { Write-Host "    - $_" -ForegroundColor Yellow }
-            "$Date $(Get-Date -Format 'HH:mm:ss') - SKIPPED (missing files: $($missing -join ', '))" | Out-File -FilePath (Join-Path $Root "git_push_log.txt") -Append -Encoding utf8
+            "$Date $(Get-Date -Format 'HH:mm:ss') - SKIPPED (missing files: $($missing -join ', '))" | Out-File -FilePath $gitPushLog -Append -Encoding utf8
             return
         }
 
@@ -189,10 +192,10 @@ function Run-GitPush {
             foreach ($line in $pushOut) { Write-Host "    $line" -ForegroundColor DarkGray }
             if ($pushExit -eq 0) {
                 Write-Host "  OK - Pushed to GitHub -> Railway will redeploy" -ForegroundColor Green
-                "$Date $(Get-Date -Format 'HH:mm:ss') - PUSHED: $msg" | Out-File -FilePath (Join-Path $Root "git_push_log.txt") -Append -Encoding utf8
+                "$Date $(Get-Date -Format 'HH:mm:ss') - PUSHED: $msg" | Out-File -FilePath $gitPushLog -Append -Encoding utf8
             } else {
                 Write-Host "  PUSH FAILED (exit $pushExit) -- check git credentials" -ForegroundColor Red
-                "$Date $(Get-Date -Format 'HH:mm:ss') - PUSH FAILED (exit $pushExit): $($pushOut -join ' | ')" | Out-File -FilePath (Join-Path $Root "git_push_log.txt") -Append -Encoding utf8
+                "$Date $(Get-Date -Format 'HH:mm:ss') - PUSH FAILED (exit $pushExit): $($pushOut -join ' | ')" | Out-File -FilePath $gitPushLog -Append -Encoding utf8
             }
         } else {
             # Nothing new to commit -- but still push in case a prior commit wasn't pushed
@@ -205,19 +208,19 @@ function Run-GitPush {
                 foreach ($line in $pushOut) { Write-Host "    $line" -ForegroundColor DarkGray }
                 if ($pushExit -eq 0) {
                     Write-Host "  OK - Flushed pending commits to GitHub" -ForegroundColor Green
-                    "$Date $(Get-Date -Format 'HH:mm:ss') - PUSHED PENDING: $($unpushed -join '; ')" | Out-File -FilePath (Join-Path $Root "git_push_log.txt") -Append -Encoding utf8
+                    "$Date $(Get-Date -Format 'HH:mm:ss') - PUSHED PENDING: $($unpushed -join '; ')" | Out-File -FilePath $gitPushLog -Append -Encoding utf8
                 } else {
                     Write-Host "  PUSH FAILED (exit $pushExit)" -ForegroundColor Red
-                    "$Date $(Get-Date -Format 'HH:mm:ss') - PUSH FAILED on pending (exit $pushExit)" | Out-File -FilePath (Join-Path $Root "git_push_log.txt") -Append -Encoding utf8
+                    "$Date $(Get-Date -Format 'HH:mm:ss') - PUSH FAILED on pending (exit $pushExit)" | Out-File -FilePath $gitPushLog -Append -Encoding utf8
                 }
             } else {
                 Write-Host "  Already up to date on origin/main." -ForegroundColor DarkGray
-                "$Date $(Get-Date -Format 'HH:mm:ss') - NO CHANGES (already up to date)" | Out-File -FilePath (Join-Path $Root "git_push_log.txt") -Append -Encoding utf8
+                "$Date $(Get-Date -Format 'HH:mm:ss') - NO CHANGES (already up to date)" | Out-File -FilePath $gitPushLog -Append -Encoding utf8
             }
         }
     } catch {
         Write-Host "  Git push exception: $_" -ForegroundColor Red
-        "$Date $(Get-Date -Format 'HH:mm:ss') - EXCEPTION: $_" | Out-File -FilePath (Join-Path $Root "git_push_log.txt") -Append -Encoding utf8
+        "$Date $(Get-Date -Format 'HH:mm:ss') - EXCEPTION: $_" | Out-File -FilePath $gitPushLog -Append -Encoding utf8
     } finally {
         Pop-Location
     }
@@ -352,7 +355,7 @@ function Run-Combined {
             Write-Host "[INFO] Saved tickets snapshot: $TicketsJson" -ForegroundColor DarkGray
         }
 
-        py -3.14 (Join-Path $Root "build_ticket_eval.py") --date $Date
+        py -3.14 (Join-Path $Root "scripts\build_ticket_eval.py") --date $Date
         if ($LASTEXITCODE -ne 0) {
             Write-Warning "Ticket eval build failed (non-fatal) - combined slate was saved successfully"
         }

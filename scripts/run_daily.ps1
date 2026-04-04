@@ -467,7 +467,7 @@ if ($SkipPush) {
 }
 else {
     Write-Log "STEP E - Git push: START"
-    $gitLog = Join-Path $Root "git_push_log.txt"
+    $gitLog = Join-Path $Root "logs\git_push_log.txt"
     Push-Location $Root
     try {
         if ($WeeklyAnalysis) {
@@ -562,7 +562,7 @@ else {
                     if ($LASTEXITCODE -ne 0) {
                         $err = if ($Error.Count -gt 0) { $Error[0].ToString() } else { "unknown" }
                         "$Today - push failed: $err" | Out-File -FilePath $gitLog -Append -Encoding utf8
-                        Write-Warning "Git push failed — logged to git_push_log.txt"
+                        Write-Warning "Git push failed — logged to logs\git_push_log.txt"
                         Write-Log "STEP E - Git push: FAILED (push exit $LASTEXITCODE)"
                     }
                     else {
@@ -572,7 +572,7 @@ else {
                 catch {
                     $err = $_.Exception.Message
                     "$Today - push failed: $err" | Out-File -FilePath $gitLog -Append -Encoding utf8
-                    Write-Warning "Git push failed — logged to git_push_log.txt"
+                    Write-Warning "Git push failed — logged to logs\git_push_log.txt"
                     Write-Log "STEP E - Git push: FAILED (exception: $err)"
                 }
             }

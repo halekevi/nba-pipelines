@@ -16,7 +16,7 @@ from sklearn.metrics import brier_score_loss, roc_auc_score
 from xgboost import XGBClassifier
 
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent
 MODEL_DIR = ROOT / "models"
 MODEL_PATH = MODEL_DIR / "prop_model_nba.pkl"
 FEATURES_PATH = MODEL_DIR / "prop_model_nba_features.json"

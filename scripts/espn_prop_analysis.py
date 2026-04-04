@@ -6,7 +6,7 @@ computes per-game stats for every player, then cross-references against
 your graded PropOracle prop data to produce true season-long hit rates.
 
 Usage (from your PropOracle directory):
-    python espn_prop_analysis.py
+    python scripts/espn_prop_analysis.py
 
 Outputs:
     player_prop_season_hitrates.csv   — full results table
@@ -24,7 +24,7 @@ import pandas as pd
 # ── CONFIG ────────────────────────────────────────────────────────────────────
 
 # Path to repo + cache outputs
-REPO_ROOT = Path(__file__).resolve().parent
+REPO_ROOT = Path(__file__).resolve().parent.parent
 GRADED_DIR = str(REPO_ROOT)
 GRADED_GLOB = os.path.join(GRADED_DIR, "**", "*graded*.xlsx")
 

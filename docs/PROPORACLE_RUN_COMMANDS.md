@@ -104,6 +104,12 @@ py -3.14 .\scripts\grading\build_grades_html.py --date 2026-03-19 --out .\ui_run
 
 # Build combined slate tickets directly
 py -3.14 .\scripts\combined_slate_tickets.py --help
+
+# Ticket evaluation HTML (after pipeline)
+py -3.14 .\scripts\build_ticket_eval.py --date 2026-04-04
+
+# PrizePicks entries harvest (browser)
+py -3.14 -u .\scripts\capture_entries.py
 ```
 
 ## Notes

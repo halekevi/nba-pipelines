@@ -5,7 +5,7 @@
   Rebuild ticket_eval_YYYY-MM-DD.html for every date that has a combined_slate_tickets workbook.
 
 .DESCRIPTION
-  Uses build_ticket_eval.py date mode directly (no temporary root copies, no auto git commit/push).
+  Uses scripts/build_ticket_eval.py date mode directly (no temporary root copies, no auto git commit/push).
   Date discovery source: outputs\**\combined_slate_tickets_*.xlsx
 #>
 
@@ -17,7 +17,7 @@ param(
 $ErrorActionPreference = "Continue"
 $Root = $PSScriptRoot
 $OutputsDir = Join-Path $Root "outputs"
-$BuildScript = Join-Path $Root "build_ticket_eval.py"
+$BuildScript = Join-Path $Root "scripts\build_ticket_eval.py"
 $dateRx = [regex]::new("combined_slate_tickets_(?<d>\d{4}-\d{2}-\d{2})", [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
 
 if (-not (Test-Path -LiteralPath $BuildScript)) {

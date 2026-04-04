@@ -196,25 +196,18 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .tab-btn.active .tab-icon{filter:drop-shadow(0 0 8px rgba(240,165,0,0.45));}
 
 @media(max-width:768px){
-  .logo-icon{width:72px;height:72px;}
   .nav-brand{font-size:18px;}
   .date-bar{margin-left:12px;margin-right:12px;padding:0 14px;gap:12px;}
   .date-bar-right{display:none;}
   .tabs-bar{margin-left:12px;margin-right:12px;padding:6px 8px;}
 }
 @media(max-width:900px){
-  .snav{top:0;margin:0;border-radius:0;padding:0 14px;height:auto;min-height:64px;}
-  .nav-accent{border-radius:0;}
-  .snav-links{display:none!important;}
-  .hamburger{display:flex;margin-left:auto;}
   .live-pill{display:none;}
-  .logo-icon{width:40px;height:40px;}
   .date-bar{margin-left:10px;margin-right:10px;overflow-x:auto;}
   .tabs-bar{margin-left:10px;margin-right:10px;}
   .grades-hero-wrap{margin-left:0;margin-right:0;}
   .grades-controls-wrap{margin-left:12px;margin-right:12px;}
   .grades-hero{padding:14px 12px;}
-  .mobile-menu{top:72px;}
 }
 @media(max-width:520px){
   html,body{height:auto;overflow:auto;}
@@ -743,7 +736,69 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 [data-theme="light"] .gc-live{color:#1a6b7a !important;}
 [data-theme="light"] .gc-hint{color:rgba(0,0,0,0.45) !important;}
 
+/* Mobile / coarse pointer: reduce stacked backdrop-filter cost (scroll jank) */
+@media (max-width: 900px), (pointer: coarse) {
+  .orb-1,
+  .orb-2,
+  .grain-layer {
+    display: none !important;
+  }
+  body::after {
+    display: none !important;
+  }
+  .mesh-bg {
+    animation: none !important;
+    filter: blur(12px) !important;
+    opacity: 0.75;
+  }
+  .nav-accent {
+    animation: none !important;
+    filter: none !important;
+    opacity: 0.75;
+  }
+  .live-dot {
+    animation: none !important;
+    opacity: 1;
+  }
+  .snav,
+  .mobile-menu,
+  .glass-card,
+  .date-bar,
+  .tabs-bar,
+  .iframe-shell,
+  .grades-controls-wrap,
+  .grades-hero-wrap,
+  .gmeta-card,
+  .grades-stat,
+  .load-overlay,
+  .empty-state,
+  .theme-toggle,
+  .hamburger,
+  .dpill,
+  .date-nav-btn,
+  .tab-btn {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .date-bar,
+  .tabs-bar,
+  .grades-controls-wrap,
+  .grades-hero-wrap,
+  .iframe-shell {
+    background: rgba(12, 12, 22, 0.94) !important;
+  }
+  [data-theme="light"] .date-bar,
+  [data-theme="light"] .tabs-bar,
+  [data-theme="light"] .grades-controls-wrap,
+  [data-theme="light"] .grades-hero-wrap,
+  [data-theme="light"] .iframe-shell {
+    background: rgba(255, 255, 255, 0.94) !important;
+  }
+}
+
 </style>
+<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260402"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260402"/>
 </head>
 <body>
 <!-- Ambient orbs — match index.html depth -->
@@ -836,7 +891,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
       <div>
         <div class="grades-kicker">Performance review · slate intelligence</div>
         <div class="grades-title">GRADES THAT FEEL LIKE A <span class="grades-title-gold">REAL PRODUCT</span></div>
-        <div class="grades-sub">Review slate and ticket outcomes by date. Ticket legs match against the latest pipeline step8/ranked workbooks (NBA, NBA1H, NBA1Q, CBB, WCBB, NHL, Soccer, MLB). Re-run <code style="color:var(--cyan);">python build_ticket_eval.py --date YYYY-MM-DD</code> after pipelines complete, then deploy the generated HTML.</div>
+        <div class="grades-sub">Review slate and ticket outcomes by date. Ticket legs match against the latest pipeline step8/ranked workbooks (NBA, NBA1H, NBA1Q, CBB, WCBB, NHL, Soccer, MLB). Re-run <code style="color:var(--cyan);">python scripts/build_ticket_eval.py --date YYYY-MM-DD</code> after pipelines complete, then deploy the generated HTML.</div>
       </div>
       <div class="grades-meta">
         <div class="gmeta-card">
@@ -870,7 +925,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   <div class="empty-state" id="ticket-empty-state" style="display:none;">
     <div class="empty-icon">🎟</div>
     <div class="empty-title">No Ticket Evaluation</div>
-    <div class="empty-sub">No ticket evaluation page exists for this date <strong>on the deployed site</strong>. Run <code>build_ticket_eval.py --date YYYY-MM-DD</code> after the pipeline, then <strong>commit and push</strong> <code>ui_runner/templates/ticket_eval_YYYY-MM-DD.html</code> so Railway (or any host) can serve it—or pick a date that already has that file in git.</div>
+    <div class="empty-sub">No ticket evaluation page exists for this date <strong>on the deployed site</strong>. Run <code>scripts/build_ticket_eval.py --date YYYY-MM-DD</code> after the pipeline, then <strong>commit and push</strong> <code>ui_runner/templates/ticket_eval_YYYY-MM-DD.html</code> so Railway (or any host) can serve it—or pick a date that already has that file in git.</div>
     <div class="empty-hint">Expected: ticket_eval_<span id="ticket-empty-date"></span>.html</div>
   </div>
   <iframe class="grade-frame loading" id="grade-frame" src="about:blank" title="Grade Report"></iframe>

@@ -24,7 +24,7 @@ import numpy as np
 import os
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent
+REPO_ROOT = Path(__file__).resolve().parent.parent
 CACHE_PATH = str(REPO_ROOT / "NBA" / "data" / "cache" / "espn_boxscores_cache.csv")
 OUT_DIR = str(REPO_ROOT / "NBA" / "data" / "cache")
 
