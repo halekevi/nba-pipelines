@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta property="og:title" content="PropOracle — Grades"/>
 <title>PropOracle — Grades</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
@@ -84,7 +85,7 @@ body::after{
 .logo-icon{width:48px;height:48px;object-fit:contain;display:block;filter:drop-shadow(0 0 8px rgba(212,160,23,0.5));}
 .nav-brand{font-family:'Inter',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px;line-height:1;color:var(--text-primary);display:flex;align-items:baseline;}
 .nav-brand .p-lower{text-transform:lowercase;}
-.nav-brand .prop-prefix{text-transform:none !important;font-variant:normal;}
+.nav-brand .brand-wordmark .wb-first{text-transform:none !important;font-variant:normal;}
 .snav-brand,.snav-brand .hybrid-logo{text-transform:none;}
 .nav-brand .oracle-upper{text-transform:uppercase;font-weight:800;}
 .nav-brand .oracle-word{font-weight:800;color:var(--accent-gold);}
@@ -114,6 +115,9 @@ body::after{
 .snav-right{display:flex;align-items:center;gap:14px;margin-left:auto;}
 .live-pill{font-family:'Inter',sans-serif;font-weight:600;font-size:10px;letter-spacing:1.5px;padding:6px 16px;border-radius:100px;border:1px solid rgba(57,255,110,.28);color:var(--green);background:rgba(4,20,10,0.55);backdrop-filter:blur(12px);display:flex;align-items:center;gap:8px;box-shadow:inset 0 0 20px rgba(57,255,110,.04);}
 .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2s ease-in-out infinite;}
+a.snav-brand .brand-wordmark .wb-first,
+a.snav-brand .brand-wordmark .oracle-word{text-transform:none !important;font-variant:normal !important;}
+nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !important;font-variant:normal !important;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 .hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:8px;border:1px solid rgba(255,255,255,0.09);border-radius:8px;background:rgba(255,255,255,0.04);backdrop-filter:blur(10px);}
 .hamburger span{display:block;width:18px;height:2px;background:var(--muted);border-radius:2px;transition:all .25s;}
@@ -754,12 +758,12 @@ body::after{
 <div class="mesh-bg" aria-hidden="true"></div>
 <div class="grain-layer" aria-hidden="true"></div>
 
-<nav class="snav prop-nav glass-card">
+<nav class="snav glass-card">
   <div class="nav-accent"></div>
   <a class="snav-brand" href="/">
     <div class="hybrid-logo">
-      <img src="/static/proporacle-logo-v3.png?v=20260320b" alt="PropOracle logo" class="logo-icon"/>
-      <span class="nav-brand"><span class="prop-prefix">Prop</span><span class="oracle-word gold-shimmer">Oracle</span></span>
+      <img src="/static/proporacle-logo-v3.png?v=20260404b" alt="PropOracle logo" class="logo-icon"/>
+      <span class="nav-brand brand-wordmark"><span class="wb-first">Prop</span><span class="oracle-word gold-shimmer">Oracle</span></span>
     </div>
   </a>
   <ul class="snav-links">
@@ -773,7 +777,7 @@ body::after{
       <span class="tt-icon tt-moon">🌙</span>
       <span class="tt-icon tt-sun" style="display:none">☀️</span>
     </button>
-    <div class="live-pill"><div class="live-dot"></div>PropOracle &nbsp;·&nbsp; GRADES</div>
+    <div class="live-pill"><div class="live-dot"></div><span class="live-pill-brand">PropOracle</span> &nbsp;·&nbsp; GRADES</div>
   </div>
   <button class="hamburger" id="hamburger" type="button" aria-label="Open menu"><span></span><span></span><span></span></button>
 </nav>

@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="proporacle-build" content="{{ ui_build_id|default('', true) }}"/>
+<meta property="og:title" content="PropOracle — Home"/>
 <title>PropOracle — Home</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,7 +95,7 @@ body::after{content:'';position:fixed;inset:0;
 .logo-icon{width:44px;height:44px;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(212,175,55,0.45));}
 .nav-brand{font-family:'Inter',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px;line-height:1;text-transform:none;color:var(--text-primary);display:flex;align-items:baseline;}
 .nav-brand .p-lower{text-transform:lowercase;}
-.nav-brand .prop-prefix{text-transform:none !important;font-variant:normal;}
+.nav-brand .brand-wordmark .wb-first{text-transform:none !important;font-variant:normal;}
 .snav-brand,.snav-brand .hybrid-logo{text-transform:none;}
 .nav-brand .oracle-upper{text-transform:uppercase;font-weight:800;color:var(--accent-gold);}
 .nav-brand .oracle-word{font-weight:800;color:var(--accent-gold);}
@@ -686,6 +687,17 @@ body{
 [data-theme="light"] .load-overlay { background:rgba(235,240,250,0.90) !important; }
 [data-theme="light"] .empty-state { background:rgba(235,240,250,0.6) !important; }
 
+/* Brand wordmark: PropOracle casing must survive theme/injected CSS */
+a.snav-brand .brand-wordmark .wb-first,
+a.snav-brand .brand-wordmark .oracle-word {
+  text-transform: none !important;
+  font-variant: normal !important;
+}
+nav.snav .live-pill,
+nav.snav .live-pill .live-pill-brand {
+  text-transform: none !important;
+  font-variant: normal !important;
+}
 
 /* ── Film Grain noise texture ── */
 @keyframes grainShift {
@@ -897,12 +909,12 @@ body::before{
 <div class="mesh-bg" aria-hidden="true"></div>
 <div class="grain-layer" aria-hidden="true"></div>
 
-<nav class="snav prop-nav glass-card">
+<nav class="snav glass-card">
   <div class="nav-accent"></div>
   <a class="snav-brand" href="/">
     <div class="hybrid-logo">
-      <img src="/static/proporacle-logo-v3.png?v=20260320b" alt="PropOracle" class="logo-icon">
-    <span class="nav-brand"><span class="prop-prefix">Prop</span><span class="oracle-word gold-shimmer">Oracle</span></span>
+      <img src="/static/proporacle-logo-v3.png?v=20260404b" alt="PropOracle" class="logo-icon">
+    <span class="nav-brand brand-wordmark"><span class="wb-first">Prop</span><span class="oracle-word gold-shimmer">Oracle</span></span>
     </div>
   </a>
   <ul class="snav-links">
@@ -916,7 +928,7 @@ body::before{
   <span class="tt-icon tt-sun" style="display:none">☀️</span>
 </button>
     <div class="nav-live-cluster">
-      <div class="live-pill"><div class="live-dot"></div>PropOracle &nbsp;·&nbsp; LIVE</div>
+      <div class="live-pill"><div class="live-dot"></div><span class="live-pill-brand">PropOracle</span> &nbsp;·&nbsp; LIVE</div>
       <div class="nav-datetime-block" title="Slate date, data freshness, local time">
         <div class="nav-slate-date" id="slate-date">—</div>
         <div class="nav-sync-line">
