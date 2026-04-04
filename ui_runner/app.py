@@ -30,6 +30,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 from datetime import date, datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 
 from flask import Flask, jsonify, render_template, request, send_from_directory, abort, make_response
 
@@ -642,8 +643,17 @@ def _sport_slate_status(
     json_disp: str | None,
 ) -> dict:
     """
-    Prefer slate_latest.json generated_at over baked-in Excel mtimes when JSON is newer
-    (Docker/Railway images ship stale .xlsx from last deploy).
+    Status row for Slate Explorer cards.
+
+    json_disp is the unified web timestamp (card_disp: slate / tickets / ticket_eval).
+
+    When this sport has rows in the live slate JSON (same source as the explorer UI), the
+    timestamp should follow the merged slate/tickets JSON build time — not the step8 Excel
+    mtime. On Railway, Excel shipped under outputs/ or from a later UTC day can be *newer*
+    than the JSON pulled from GitHub, so cards showed e.g. 2026-04-04 00:43 while COMBINED
+    still showed tickets_latest from 2026-04-03 (looked like a tomorrow slate).
+
+    If the sport is absent from JSON (cnt == 0), fall back to Excel / disk like before.
     """
     key = sport_key.lower()
     cnt = int(counts.get(key, 0))
@@ -651,6 +661,15 @@ def _sport_slate_status(
         cnt += int(counts.get("wcbb", 0))
 
     direct = _file_info(path)
+    if cnt > 0 and json_disp:
+        if direct.get("exists"):
+            return {**direct, "modified": json_disp}
+        return {
+            "exists": True,
+            "modified": json_disp,
+            "size_kb": slate_disk_info.get("size_kb"),
+        }
+
     if direct.get("exists"):
         if json_ts is not None and json_disp and json_ts > _mtime_ts(direct.get("modified")):
             return {**direct, "modified": json_disp}
@@ -874,6 +893,10 @@ def api_pipeline_status():
         _fresher_meta((slate_js_ts, slate_js_disp), (tik_js_ts, tik_js_disp)),
         (te_js_ts, te_js_disp),
     )
+    # One string for Slate Explorer cards: avoids COMBINED using only tickets while sports
+    # used a merged fresher time, or status_js_disp None while tik_js_disp is set.
+    card_disp = status_js_disp or tik_js_disp or slate_js_disp or te_js_disp
+    has_web_tickets = bool(tickets_payload and tickets_payload.get("groups"))
 
     _pref_d = (tickets_payload or {}).get("date") or (slate_payload or {}).get("date")
     days = _slate_day_candidates(str(_pref_d)[:10] if _pref_d else None)
@@ -903,47 +926,48 @@ def api_pipeline_status():
     )
     combined_slate = _file_info(combined_path) if combined_path else {"exists": False}
     if combined_slate.get("exists"):
-        if tik_js_ts and tik_js_disp and tik_js_ts > _mtime_ts(combined_slate.get("modified")):
+        if has_web_tickets and card_disp:
+            combined_slate = {**combined_slate, "modified": card_disp}
+        elif tik_js_ts and tik_js_disp and tik_js_ts > _mtime_ts(combined_slate.get("modified")):
             combined_slate = {**combined_slate, "modified": tik_js_disp}
-    elif tickets_payload and (tickets_payload.get("groups") or []):
-        if tik_js_disp:
-            approx_kb = round(len(json.dumps(tickets_payload)) / 1024, 1)
-            combined_slate = {
-                "exists": True,
-                "modified": tik_js_disp,
-                "size_kb": approx_kb,
-            }
+    elif has_web_tickets and card_disp:
+        approx_kb = round(len(json.dumps(tickets_payload)) / 1024, 1)
+        combined_slate = {
+            "exists": True,
+            "modified": card_disp,
+            "size_kb": approx_kb,
+        }
 
     return jsonify({
         "nba": {
             "run_complete_flag": NBA_FLAG.exists(),
-            "slate":   _sport_slate_status(nba_slate_p, "nba", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
+            "slate":   _sport_slate_status(nba_slate_p, "nba", slate_counts, slate_disk_info, status_js_ts, card_disp),
             "tickets": _file_info(NBA_TICKETS),
         },
         "nba1h": {
-            "slate":   _sport_slate_status(nba1h_slate_p, "nba1h", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
+            "slate":   _sport_slate_status(nba1h_slate_p, "nba1h", slate_counts, slate_disk_info, status_js_ts, card_disp),
             "tickets": _file_info(NBA1H_TICKETS),
         },
         "nba1q": {
-            "slate":   _sport_slate_status(nba1q_slate_p, "nba1q", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
+            "slate":   _sport_slate_status(nba1q_slate_p, "nba1q", slate_counts, slate_disk_info, status_js_ts, card_disp),
             "tickets": _file_info(NBA1Q_TICKETS),
         },
         "cbb": {
-            "slate": _sport_slate_status(cbb_slate_p, "cbb", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
+            "slate": _sport_slate_status(cbb_slate_p, "cbb", slate_counts, slate_disk_info, status_js_ts, card_disp),
         },
         "wcbb": {
-            "slate": _sport_slate_status(wcbb_slate_p, "wcbb", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
+            "slate": _sport_slate_status(wcbb_slate_p, "wcbb", slate_counts, slate_disk_info, status_js_ts, card_disp),
         },
         "nhl": {
-            "slate":   _sport_slate_status(nhl_slate_p, "nhl", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
+            "slate":   _sport_slate_status(nhl_slate_p, "nhl", slate_counts, slate_disk_info, status_js_ts, card_disp),
             "tickets": _file_info(NHL_TICKETS),
         },
         "soccer": {
-            "slate":   _sport_slate_status(soccer_slate_p, "soccer", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
+            "slate":   _sport_slate_status(soccer_slate_p, "soccer", slate_counts, slate_disk_info, status_js_ts, card_disp),
             "tickets": _file_info(SOCCER_TICKETS),
         },
         "mlb": {
-            "slate":   _sport_slate_status(mlb_slate_p, "mlb", slate_counts, slate_disk_info, status_js_ts, status_js_disp),
+            "slate":   _sport_slate_status(mlb_slate_p, "mlb", slate_counts, slate_disk_info, status_js_ts, card_disp),
             "tickets": _file_info(MLB_TICKETS),
         },
         "combined": {
@@ -1140,13 +1164,25 @@ def api_tickets_latest():
         return jsonify({"error": str(e), "groups": []}), 500
 
 
+def _eastern_today_ymd() -> str:
+    """Calendar date in America/New_York (US slate day for NBA/CBB)."""
+    return datetime.now(ZoneInfo("America/New_York")).date().strftime("%Y-%m-%d")
+
+
 @app.get("/api/slate-display-date")
 def api_slate_display_date():
     """
-    Max YYYY-MM-DD among tickets_latest, slate_latest, ticket_eval_slate_latest, and the
-    active /api/slate-sport payload — avoids hero pill stuck on 3/27 when another file is 3/28.
+    YYYY-MM-DD for the home/nav slate chip.
+
+    Prefer tickets_latest.json — it drives /tickets and /api/slate. Using max() across every
+    JSON allowed ticket_eval or slate_latest to advertise a *later* day (e.g. 4/4) while the
+    main slip was still 4/3.
+
+    If tickets_latest is missing or has no date, use the newest candidate that is not after
+    US Eastern \"today\"; if all are future (bad data), fall back to max(candidates).
     """
     candidates: list[str] = []
+    tickets_date: str | None = None
     for name in ("tickets_latest.json", "slate_latest.json", "ticket_eval_slate_latest.json"):
         if not _template_json_available(name):
             continue
@@ -1155,6 +1191,8 @@ def api_slate_display_date():
             ds = str((data or {}).get("date") or "").strip()[:10]
             if len(ds) == 10 and ds[4] == "-" and ds[7] == "-":
                 candidates.append(ds)
+                if name == "tickets_latest.json":
+                    tickets_date = ds
         except Exception:
             continue
     try:
@@ -1164,7 +1202,13 @@ def api_slate_display_date():
             candidates.append(ds)
     except Exception:
         pass
-    best = max(candidates) if candidates else None
+
+    et_today = _eastern_today_ymd()
+    if tickets_date:
+        best = tickets_date
+    else:
+        not_future = [c for c in candidates if c <= et_today]
+        best = max(not_future) if not_future else (max(candidates) if candidates else None)
     r = jsonify({"date": best})
     r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
     r.headers["Pragma"] = "no-cache"

@@ -96,6 +96,9 @@ body::after{
 .hybrid-logo{display:flex;align-items:center;gap:10px;}
 .logo-icon{width:182px;height:60px;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(212,175,55,0.45));}
 .nav-brand{font-family:'Inter',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px;line-height:1;color:var(--text-primary);display:flex;align-items:baseline;}
+.nav-brand .prop-prefix{text-transform:none !important;font-variant:normal;}
+.nav-brand .oracle-word{font-weight:800;color:var(--accent-gold);}
+.snav-brand,.snav-brand .hybrid-logo{text-transform:none;}
 .oracle-upper{text-transform:uppercase;font-weight:800;color:var(--accent-gold);}
 .gold-shimmer{background:linear-gradient(to bottom,#d4af37,#f7ef8a);-webkit-background-clip:text;background-clip:text;color:transparent;}
 .snav-links{display:flex;align-items:stretch;list-style:none;flex:1;gap:4px;}
@@ -342,7 +345,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
   <div class="nav-accent"></div>
   <a class="snav-brand" href="/">
     <img src="/static/proporacle-logo-v3.png?v=20260320b" alt="PropORACLE" class="logo-icon">
-    <span class="nav-brand">Prop<span class="oracle-upper gold-shimmer">ORACLE</span></span>
+    <span class="nav-brand"><span class="prop-prefix">Prop</span><span class="oracle-word gold-shimmer">Oracle</span></span>
   </a>
   <ul class="snav-links">
     <li><a href="/">Home</a></li>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>propOracle — Payout Calculator</title>
+<title>PropOracle — Payout Calculator</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@600;700;800&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -51,6 +51,8 @@ body::after{
 .logo-icon{width:182px;height:182px;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(212,175,55,0.45));}
 .nav-brand{font-family:'Inter',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px;line-height:1;text-transform:none;color:var(--text);display:flex;align-items:baseline;}
 .nav-brand .p-lower{text-transform:lowercase;}
+.nav-brand .prop-prefix{text-transform:none !important;font-variant:normal;}
+.snav-brand,.snav-brand .hybrid-logo{text-transform:none;}
 .nav-brand .oracle-upper{text-transform:uppercase;font-weight:800;color:#d4af37;}
 .nav-brand .oracle-word{font-weight:800;color:#d4af37;}
 .snav-links{display:flex;align-items:stretch;list-style:none;flex:1;gap:4px;}
@@ -856,8 +858,8 @@ body::before{
   <div class="nav-accent"></div>
   <a class="snav-brand" href="/">
     <div class="hybrid-logo">
-      <img src="/static/proporacle-logo-v3.png?v=20260320b" alt="propOracle logo" class="logo-icon">
-      <span class="nav-brand"><span class="p-lower">prop</span><span class="oracle-word">Oracle</span></span>
+      <img src="/static/proporacle-logo-v3.png?v=20260320b" alt="PropOracle logo" class="logo-icon">
+      <span class="nav-brand"><span class="prop-prefix">Prop</span><span class="oracle-word">Oracle</span></span>
     </div>
   </a>
   <ul class="snav-links">
@@ -871,7 +873,7 @@ body::before{
       <span class="tt-icon tt-moon">🌙</span>
       <span class="tt-icon tt-sun" style="display:none">☀️</span>
     </button>
-    <div class="live-pill"><div class="live-dot"></div>propOracle &nbsp;·&nbsp; LIVE</div>
+    <div class="live-pill"><div class="live-dot"></div>PropOracle &nbsp;·&nbsp; LIVE</div>
   </div>
   <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
 </nav>
