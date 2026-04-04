@@ -1018,7 +1018,7 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
     cbb_section    = build_sport_section(cbb_rows,    "CBB",    "🎓") if cbb_rows    else ""
     nhl_section    = build_sport_section(nhl_rows,    "NHL",    "🏒") if nhl_rows    else ""
     soccer_section = build_sport_section(soccer_rows, "Soccer", "⚽") if soccer_rows else ""
-    mlb_section    = build_sport_section(mlb_rows,    "MLB",    "MLB") if mlb_rows    else ""
+    mlb_section    = build_sport_section(mlb_rows,    "MLB",    "⚾") if mlb_rows    else ""
     takeaways   = build_takeaways(nba_rows, cbb_rows)
 
     if not nba_section and not cbb_section and not nhl_section and not soccer_section and not mlb_section:
