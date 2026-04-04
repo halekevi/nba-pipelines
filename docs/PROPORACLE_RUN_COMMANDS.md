@@ -5,41 +5,41 @@ This is a single reference for the most common PowerShell run commands in this r
 ## Open PowerShell in Project Root
 
 ```powershell
-cd "C:\Users\halek\OneDrive\Desktop\SlateIQ"
+cd "C:\Users\halek\OneDrive\Desktop\PropORACLE"
 ```
 
-## Main Pipeline (`scripts/run_pipeline.ps1`)
+## Main Pipeline (`run_pipeline.ps1` at repo root)
 
 ```powershell
 # Full parallel run (NBA + CBB + NHL + Soccer + Combined)
-.\scripts\run_pipeline.ps1
+.\run_pipeline.ps1
 
 # Specific date
-.\scripts\run_pipeline.ps1 -Date 2026-03-20
+.\run_pipeline.ps1 -Date 2026-03-20
 
 # Sport-only runs
-.\scripts\run_pipeline.ps1 -NBAOnly
-.\scripts\run_pipeline.ps1 -CBBOnly
-.\scripts\run_pipeline.ps1 -NHLOnly
-.\scripts\run_pipeline.ps1 -MLBOnly
-.\scripts\run_pipeline.ps1 -SoccerOnly
-.\scripts\run_pipeline.ps1 -WNBAOnly
+.\run_pipeline.ps1 -NBAOnly
+.\run_pipeline.ps1 -CBBOnly
+.\run_pipeline.ps1 -NHLOnly
+.\run_pipeline.ps1 -MLBOnly
+.\run_pipeline.ps1 -SoccerOnly
+.\run_pipeline.ps1 -WNBAOnly
 
 # Combined slate only (from existing sport outputs)
-.\scripts\run_pipeline.ps1 -CombinedOnly
+.\run_pipeline.ps1 -CombinedOnly
 
 # Skip step1 fetch for whichever sport(s) run
-.\scripts\run_pipeline.ps1 -SkipFetch
-.\scripts\run_pipeline.ps1 -NBAOnly -SkipFetch
-.\scripts\run_pipeline.ps1 -NHLOnly -SkipFetch
-.\scripts\run_pipeline.ps1 -SoccerOnly -SkipFetch
+.\run_pipeline.ps1 -SkipFetch
+.\run_pipeline.ps1 -NBAOnly -SkipFetch
+.\run_pipeline.ps1 -NHLOnly -SkipFetch
+.\run_pipeline.ps1 -SoccerOnly -SkipFetch
 
 # Cache controls (NBA ESPN cache)
-.\scripts\run_pipeline.ps1 -RefreshCache
-.\scripts\run_pipeline.ps1 -CacheAgeDays 7
+.\run_pipeline.ps1 -RefreshCache
+.\run_pipeline.ps1 -CacheAgeDays 7
 
 # Optional API key override for game context step
-.\scripts\run_pipeline.ps1 -NBAOnly -OddsApiKey "YOUR_ODDS_API_KEY"
+.\run_pipeline.ps1 -NBAOnly -OddsApiKey "YOUR_ODDS_API_KEY"
 ```
 
 ## Grader Runner (`scripts/run_grader.ps1`)
@@ -100,14 +100,15 @@ These are usually called by the PowerShell runners above:
 
 ```powershell
 # Build grade HTML directly
-py -3 .\scripts\grading\build_grades_html.py --date 2026-03-19 --out .\ui_runner\templates
+py -3.14 .\scripts\grading\build_grades_html.py --date 2026-03-19 --out .\ui_runner\templates
 
 # Build combined slate tickets directly
-py -3 .\scripts\combined_slate_tickets.py --help
+py -3.14 .\scripts\combined_slate_tickets.py --help
 ```
 
 ## Notes
 
+- Folder map and what to edit after moving files: [PROJECT_LAYOUT.md](PROJECT_LAYOUT.md).
 - Date format: `yyyy-MM-dd` is safest.
 - `-SkipFetch` assumes prior step1 output files already exist.
 - Full run auto-combines available sport outputs into final tickets.
