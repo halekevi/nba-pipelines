@@ -1434,7 +1434,7 @@ body::before{
       ▼ UNDER EDGES
       <span class="sh-line" style="background:rgba(255,192,107,.2);"></span>
     </div>
-    <p class="edge-source-note" style="margin-top:-4px;">Under cards mirror OVER legs: <strong>hit %</strong> is games under the line (L5 if present, else L10). <strong>0%</strong> means no unders in that sample. <strong>Edge</strong> is unchanged from the ticket; order is still by edge.</p>
+    <p class="edge-source-note" style="margin-top:-4px;">Under cards mirror OVER legs: <strong>hit %</strong> is games under the line (L5 if present, else L10). For those, <strong>edge is −1× ticket edge</strong> (ticket edge is for OVER; the under side is the complement, usually negative). Real UNDER legs keep their ticket edge. Sorted by edge within each bucket.</p>
     <div class="edge-bucket-label" style="color:var(--cyan);">Standard unders</div>
     <div id="under-edges-standard" class="edge-grid edge-grid--under"></div>
     <div class="edge-bucket-label" style="color:var(--purple);">Goblin unders</div>
@@ -1960,19 +1960,22 @@ function switchExpandTab(idx, tab, btn) {
   renderExpandChart(idx, p, tab);
 }
 
-/** UNDER edge display: real UNDER legs as-is; OVER legs → synthetic under card (same edge, same sort). Hit % = games under the line in L5 if available, else L10; 0% means no unders in that window (still a valid under-side read). */
+/** UNDER edge display: real UNDER legs as-is. OVER legs → synthetic under card: hit % from L5/L10 vs line; edge is negated ticket edge (ticket edge is for OVER, opposite side reads as negative under edge). */
 function underEdgeDisplayPick(basePick) {
   const dir = String(basePick.dir || "").trim().toUpperCase();
   if (dir === "UNDER") return basePick;
   if (dir !== "OVER") return null;
 
+  const eo = Number(basePick.edge);
+  const edgeUnder = Number.isFinite(eo) ? -eo : 0;
+
   const h5 = resolvedUnderHits(basePick, 5);
   if (h5 !== null) {
-    return { ...basePick, dir: "UNDER", hit: Math.max(0, Math.min(100, Math.round((h5 / 5) * 100))) };
+    return { ...basePick, dir: "UNDER", edge: edgeUnder, hit: Math.max(0, Math.min(100, Math.round((h5 / 5) * 100))) };
   }
   const h10 = resolvedUnderHits(basePick, 10);
   if (h10 !== null) {
-    return { ...basePick, dir: "UNDER", hit: Math.max(0, Math.min(100, Math.round((h10 / 10) * 100))) };
+    return { ...basePick, dir: "UNDER", edge: edgeUnder, hit: Math.max(0, Math.min(100, Math.round((h10 / 10) * 100))) };
   }
   return null;
 }
