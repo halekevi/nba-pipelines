@@ -122,6 +122,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 277018,4897365,277,honor huff,WVU,name_team,2026-04-02
 277019,5177104,277,jasper floyd,WVU,name_team,2026-04-02
 277020,5107287,277,treysen eaglestaff,WVU,name_team,2026-04-02
+277354,5105800,156,josh dix,CREI,name_team,2026-04-04
 277427,5177301,2305,melvin council,KU,name_team,2026-03-16
 277595,5075625,2,keyshawn hall,AUB,name_team,2026-03-25
 277634,5311832,356,david mirkovic,ILL,name_team,2026-03-16
@@ -154,6 +155,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 278369,5093142,2633,j p estrella,TENN,name_team,2026-03-20
 278374,5239838,251,matas vokietaitis,TEX,name_team,2026-03-20
 278460,5241273,239,obi agbim,BAY,name_team,2026-04-01
+278461,5095152,239,tounde yessoufou,BAY,name_team,2026-04-04
 278600,5165276,61,jeremiah wilkinson,UGA,name_team,2026-03-16
 278847,5238207,96,collin chandler,UK,name_team,2026-03-20
 278850,5106261,2390,ernest udeh,MIA,name_team,2026-03-16
@@ -163,6 +165,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 278917,5149115,2541,allen graves,SCU,name_team,2026-03-20
 278918,4869764,130,elliot cadeau,MICH,name_team,2026-03-15
 278924,4897209,2541,brenton knapper,SCU,name_team,2026-03-16
+278931,5106863,156,nik graves,CREI,name_team,2026-04-04
 278969,5107355,2641,donovan atwell,TTU,name_team,2026-03-20
 279058,5174665,356,zvonimir ivisic,ILL,name_team,2026-03-20
 279120,5177096,112358,greg gordon,LIU,name_team,2026-03-16
@@ -222,6 +225,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 281625,5179085,228,ace buckner,CLEM,name_team,2026-03-16
 281709,5311844,258,johann grunloh,UVA,name_team,2026-03-20
 282037,5105464,258,dallin hall,UVA,name_team,2026-03-21
+282062,4433596,277,chance moore,WVU,name_team,2026-04-04
 282245,5079838,66,blake buchanan,ISU,name_team,2026-03-16
 282248,5105658,2599,dylan darling,SJU,name_team,2026-03-16
 282286,5175007,356,andrej stojakovic,ILL,name_team,2026-03-16
@@ -310,6 +314,7 @@ pp_player_id,espn_athlete_id,team_id,player_name,team_abbr,source,updated_at
 302110,5174574,2168,jaiun simon,DAY,name_team,2026-03-15
 302119,4433625,238,jalen washington,VAN,name_team,2026-03-15
 302123,5061581,2641,luke bamgboye,TTU,name_team,2026-03-16
+302718,5107866,239,caden powell,BAY,name_team,2026-04-04
 302973,4895753,41,jayden ross,CONN,name_team,2026-03-24
 302980,5152763,41,eric reibe,CONN,name_team,2026-03-29
 303393,5312035,2509,omer mayer,PUR,name_team,2026-03-15
