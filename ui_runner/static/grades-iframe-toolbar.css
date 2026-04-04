@@ -341,3 +341,28 @@
     padding: 8px 14px;
   }
 }
+
+/* Match indexGrades.html: hide date + tab row on scroll inside slate iframe */
+.grades-scroll-hide-wrap {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.32s ease, opacity 0.26s ease, margin 0.28s ease;
+}
+.grades-scroll-hide-inner {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.iframe-shell-toolbar.bars-collapsed .grades-scroll-hide-wrap {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  pointer-events: none;
+  margin: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .grades-scroll-hide-wrap {
+    transition: none;
+  }
+}

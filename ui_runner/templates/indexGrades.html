@@ -166,6 +166,34 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   flex-shrink:0;padding:12px 12px 10px;border-bottom:1px solid var(--glass-panel-border);
   display:flex;flex-direction:column;gap:10px;
   background:rgba(255,255,255,0.02);
+  transition:padding .28s ease;
+}
+/* Date row + Slate/Ticket tabs — collapse on scroll (see setupGradesBarsScrollHide) */
+.grades-scroll-hide-wrap{
+  display:grid;
+  grid-template-rows:1fr;
+  transition:grid-template-rows .32s ease,opacity .26s ease,margin .28s ease;
+}
+.grades-scroll-hide-inner{
+  min-height:0;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.iframe-shell-toolbar.bars-collapsed .grades-scroll-hide-wrap{
+  grid-template-rows:0fr;
+  opacity:0;
+  pointer-events:none;
+  margin:0;
+}
+.iframe-shell-toolbar.bars-collapsed{
+  padding-bottom:8px;
+  gap:6px;
+}
+@media (prefers-reduced-motion:reduce){
+  .grades-scroll-hide-wrap{transition:none;}
+  .iframe-shell-toolbar{transition:none;}
 }
 .iframe-shell-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
 .ist-title{
@@ -799,29 +827,33 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
         <span class="ist-title" id="iframe-shell-title">Slate evaluation</span>
         <span class="gc-live" id="grades-controls-live" aria-live="polite"></span>
       </div>
-      <div class="date-bar">
-        <span class="date-bar-label">REPORT DATE</span>
-        <button type="button" class="date-nav-btn" id="btn-prev" title="Previous date" onclick="window.parent.stepDate(-1)">&#8249;</button>
-        <div class="date-pills" id="date-pills">
-          <!-- Pills injected by JS -->
-        </div>
-        <button type="button" class="date-nav-btn" id="btn-next" title="Next date" onclick="window.parent.stepDate(1)">&#8250;</button>
-        <div class="date-sep"></div>
-        <div class="date-bar-right">
-          <div class="date-input-wrap">
-            <span class="date-input-label">JUMP TO</span>
-            <input type="date" class="date-input" id="date-jump" />
-            <button type="button" class="date-go-btn" onclick="window.parent.jumpToDate()">GO</button>
+      <div class="grades-scroll-hide-wrap" id="grades-scroll-hide-wrap">
+        <div class="grades-scroll-hide-inner">
+          <div class="date-bar">
+            <span class="date-bar-label">REPORT DATE</span>
+            <button type="button" class="date-nav-btn" id="btn-prev" title="Previous date" onclick="window.parent.stepDate(-1)">&#8249;</button>
+            <div class="date-pills" id="date-pills">
+              <!-- Pills injected by JS -->
+            </div>
+            <button type="button" class="date-nav-btn" id="btn-next" title="Next date" onclick="window.parent.stepDate(1)">&#8250;</button>
+            <div class="date-sep"></div>
+            <div class="date-bar-right">
+              <div class="date-input-wrap">
+                <span class="date-input-label">JUMP TO</span>
+                <input type="date" class="date-input" id="date-jump" />
+                <button type="button" class="date-go-btn" onclick="window.parent.jumpToDate()">GO</button>
+              </div>
+            </div>
+          </div>
+          <div class="tabs-bar">
+            <button type="button" class="tab-btn active" id="tab-slate" onclick="window.parent.switchTab('slate')">
+              <span class="tab-icon">📋</span>SLATE EVALUATION
+            </button>
+            <button type="button" class="tab-btn" id="tab-tickets" onclick="window.parent.switchTab('tickets')">
+              <span class="tab-icon">🎟</span>TICKET EVALUATION
+            </button>
           </div>
         </div>
-      </div>
-      <div class="tabs-bar">
-        <button type="button" class="tab-btn active" id="tab-slate" onclick="window.parent.switchTab('slate')">
-          <span class="tab-icon">📋</span>SLATE EVALUATION
-        </button>
-        <button type="button" class="tab-btn" id="tab-tickets" onclick="window.parent.switchTab('tickets')">
-          <span class="tab-icon">🎟</span>TICKET EVALUATION
-        </button>
       </div>
     </div>
   </div>
@@ -864,6 +896,108 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 const REPORT_URL_TEMPLATE = '/grades/slate_eval_{date}.html';
 const TICKET_EVAL_URL_TEMPLATE = '/grades/ticket_eval_{date}.html';
 
+// ─── Hide date + Slate/Ticket bars on scroll (iframe content scrolls, not the hub body) ───
+(function () {
+  let scrollCleanups = [];
+  let lastScrollY = 0;
+  let lastActiveKey = '';
+
+  function getToolbarEl() {
+    return (
+      document.getElementById('iframe-shell-toolbar') ||
+      document.getElementById('grade-frame')?.contentDocument?.getElementById('iframe-shell-toolbar')
+    );
+  }
+
+  function activeScrollWin() {
+    const tick = document.getElementById('ticket-frame');
+    if (tick && tick.style.display !== 'none' && tick.contentWindow) {
+      return { win: tick.contentWindow, key: 't' };
+    }
+    const slate = document.getElementById('grade-frame');
+    if (slate && slate.style.display !== 'none' && slate.contentWindow) {
+      return { win: slate.contentWindow, key: 's' };
+    }
+    return { win: window, key: 'w' };
+  }
+
+  window.resetGradesBarsScrollState = function () {
+    const tb = getToolbarEl();
+    if (tb) tb.classList.remove('bars-collapsed');
+    const { win, key } = activeScrollWin();
+    lastActiveKey = key;
+    try {
+      lastScrollY = win?.scrollY || win?.pageYOffset || 0;
+    } catch (_e) {
+      lastScrollY = 0;
+    }
+    if (tb && lastScrollY >= 56) {
+      tb.classList.add('bars-collapsed');
+    }
+  };
+
+  window.setupGradesBarsScrollHide = function () {
+    scrollCleanups.forEach((fn) => {
+      try {
+        fn();
+      } catch (_e) {}
+    });
+    scrollCleanups = [];
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
+    let ticking = false;
+    const threshold = 56;
+    const minDelta = 10;
+
+    function onScrollFrame() {
+      ticking = false;
+      const toolbar = getToolbarEl();
+      if (!toolbar) return;
+      const { win, key } = activeScrollWin();
+      if (!win) return;
+      let y = 0;
+      try {
+        y = win.scrollY || win.pageYOffset || 0;
+      } catch (_e) {
+        return;
+      }
+      if (key !== lastActiveKey) {
+        lastActiveKey = key;
+        lastScrollY = y;
+      }
+      const delta = y - lastScrollY;
+      if (y < threshold || delta < -minDelta) {
+        toolbar.classList.remove('bars-collapsed');
+      } else if (delta > minDelta && y >= threshold) {
+        toolbar.classList.add('bars-collapsed');
+      }
+      lastScrollY = y;
+    }
+
+    function bindWin(win) {
+      if (!win || typeof win.addEventListener !== 'function') return;
+      const handler = () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(onScrollFrame);
+        }
+      };
+      win.addEventListener('scroll', handler, { passive: true });
+      scrollCleanups.push(() => {
+        try {
+          win.removeEventListener('scroll', handler);
+        } catch (_e) {}
+      });
+    }
+
+    bindWin(window);
+    bindWin(document.getElementById('grade-frame')?.contentWindow);
+    bindWin(document.getElementById('ticket-frame')?.contentWindow);
+  };
+})();
+
 /** Toolbar may live in the main document or inside the slate iframe — resolve control ids. */
 function gradesEl(id) {
   const inMain = document.getElementById(id);
@@ -890,7 +1024,7 @@ function ensureGradesToolbarStylesInFrame(doc) {
   const link = doc.createElement('link');
   link.id = 'grades-iframe-toolbar-link';
   link.rel = 'stylesheet';
-  link.href = '/static/grades-iframe-toolbar.css?v=20260404g';
+  link.href = '/static/grades-iframe-toolbar.css?v=20260404h';
   doc.head.appendChild(link);
 }
 
@@ -908,6 +1042,9 @@ function restoreGradesToolbarToParent() {
   if (toolbar.parentElement === slot) {
     toolbar.classList.remove('iframe-shell-toolbar--embedded');
     syncToolbarParentSlot();
+    try {
+      window.setupGradesBarsScrollHide();
+    } catch (_e0) {}
     return;
   }
   try {
@@ -916,6 +1053,9 @@ function restoreGradesToolbarToParent() {
     toolbar.classList.remove('iframe-shell-toolbar--embedded');
   } catch (_e) {}
   syncToolbarParentSlot();
+  try {
+    window.setupGradesBarsScrollHide();
+  } catch (_e1) {}
 }
 
 function embedGradesToolbarInSlate(frame) {
@@ -925,6 +1065,9 @@ function embedGradesToolbarInSlate(frame) {
   const host = getOrCreateToolbarHost(doc);
   if (!host) {
     syncToolbarParentSlot();
+    try {
+      window.setupGradesBarsScrollHide();
+    } catch (_eh) {}
     return;
   }
   ensureGradesToolbarStylesInFrame(doc);
@@ -934,6 +1077,9 @@ function embedGradesToolbarInSlate(frame) {
   if (toolbar.parentElement === host) {
     toolbar.classList.add('iframe-shell-toolbar--embedded');
     syncToolbarParentSlot();
+    try {
+      window.setupGradesBarsScrollHide();
+    } catch (_eh2) {}
     return;
   }
   try {
@@ -948,6 +1094,9 @@ function embedGradesToolbarInSlate(frame) {
     } catch (_e2) {}
   }
   syncToolbarParentSlot();
+  try {
+    window.setupGradesBarsScrollHide();
+  } catch (_e3) {}
 }
 
 function ensureFrameCollapseCss(doc) {
@@ -1169,15 +1318,32 @@ function switchTab(tab) {
   document.getElementById('ticket-frame').style.display  = tab === 'tickets' ? 'block' : 'none';
   document.getElementById('ticket-empty-state').style.display = 'none';
 
+  try {
+    window.resetGradesBarsScrollState();
+  } catch (_e) {}
+
   if (tab === 'tickets') {
     document.getElementById('load-overlay').classList.add('hidden');
     document.getElementById('empty-state').style.display = 'none';
     const ds = currentDateStr || gradesEl('date-jump')?.value || yesterdayStr();
     loadTicketEval(ds);
+    setTimeout(() => {
+      try {
+        window.setupGradesBarsScrollHide();
+      } catch (_e) {}
+    }, 0);
   } else {
     document.getElementById('empty-state').style.display = slateReportMissing ? 'flex' : 'none';
     requestAnimationFrame(() => {
-      try { embedGradesToolbarInSlate(document.getElementById('grade-frame')); } catch (_e) {}
+      try {
+        embedGradesToolbarInSlate(document.getElementById('grade-frame'));
+      } catch (_e) {}
+      try {
+        window.resetGradesBarsScrollState();
+      } catch (_e2) {}
+      try {
+        window.setupGradesBarsScrollHide();
+      } catch (_e3) {}
     });
   }
   refreshControlsSummary();
@@ -1209,7 +1375,12 @@ async function loadTicketEval(dateStr) {
   tEmpty.style.display = 'none';
   tf.style.display = 'block';
   tf.onload = function(){
-    try { collapseSportsInTicketFrame(tf); } catch(_e) {}
+    try {
+      collapseSportsInTicketFrame(tf);
+    } catch (_e) {}
+    try {
+      window.setupGradesBarsScrollHide();
+    } catch (_e2) {}
   };
   tf.src = url;
 }
@@ -1335,6 +1506,7 @@ function loadDate(dateStr){
         throw new Error('empty');
       }
       try { embedGradesToolbarInSlate(frame); } catch(_e) {}
+      try { window.setupGradesBarsScrollHide(); } catch(_e) {}
       try { collapseSportsInSlateFrame(frame); } catch(_e) {}
       overlay.classList.add('hidden');
       frame.classList.remove('loading');
@@ -1418,6 +1590,11 @@ window.loadDate = loadDate;
     currentDateIdx = 0;
     renderPills();
     loadDate(yest);
+    setTimeout(() => {
+      try {
+        window.setupGradesBarsScrollHide();
+      } catch (_e) {}
+    }, 0);
     return;
   }
 
@@ -1427,6 +1604,11 @@ window.loadDate = loadDate;
   currentDateIdx = found.indexOf(pick);
   renderPills();
   loadDate(pick);
+  setTimeout(() => {
+    try {
+      window.setupGradesBarsScrollHide();
+    } catch (_e) {}
+  }, 0);
 })();
 </script>
 
