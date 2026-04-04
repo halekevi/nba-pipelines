@@ -577,42 +577,9 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
         return ""
 
     stats  = overall_stats(rows)
-    tier_a = tier_a_stats(rows)
     goblin = pick_type_stats(rows, "goblin")
 
     total_label = fmt_num(stats["total"]) if stats["total"] > 0 else fmt_num(stats["decided"] + stats["voids"])
-
-    # ── KPI cards ──────────────────────────────────────────────────────────────
-    hr_col = rate_color(stats["hit_rate"])
-    ta_col = rate_color(tier_a["hit_rate"])
-    gb_col = rate_color(goblin["hit_rate"])
-    ta_val = pct(tier_a["hit_rate"]) if tier_a["decided"] > 0 else "—"
-    gb_val = pct(goblin["hit_rate"]) if goblin["decided"] > 0 else "—"
-    void_pct = f'{stats["voids"]/stats["total"]*100:.1f}%' if stats["total"] > 0 else "—"
-
-    kpi_html = f"""<div class="section-label">OVERALL PERFORMANCE</div>
-    <div class="stat-grid stat-grid-4" style="margin-bottom:20px">
-      <div class="stat-card green">
-        <div class="stat-label">OVERALL HIT RATE</div>
-        <div class="stat-val" style="color:{hr_col}">{pct(stats['hit_rate'])}</div>
-        <div class="stat-sub">{fmt_num(stats['hits'])} hits / {fmt_num(stats['decided'])} decided</div>
-      </div>
-      <div class="stat-card blue">
-        <div class="stat-label">TOTAL PROPS</div>
-        <div class="stat-val" style="color:var(--cyan)">{total_label}</div>
-        <div class="stat-sub"><strong>{fmt_num(stats['voids'])}</strong> voids ({void_pct})</div>
-      </div>
-      <div class="stat-card amber">
-        <div class="stat-label">TIER A HIT RATE</div>
-        <div class="stat-val" style="color:{ta_col}">{ta_val}</div>
-        <div class="stat-sub">{fmt_num(tier_a['hits'])} hits / {fmt_num(tier_a['decided'])} decided</div>
-      </div>
-      <div class="stat-card purple">
-        <div class="stat-label">GOBLIN HIT RATE</div>
-        <div class="stat-val" style="color:{gb_col}">{gb_val}</div>
-        <div class="stat-sub">{fmt_num(goblin['hits'])} hits / {fmt_num(goblin['decided'])} decided</div>
-      </div>
-    </div>"""
 
     # ── By Pick Type ───────────────────────────────────────────────────────────
     gob_s = pick_type_stats(rows, "goblin")
@@ -780,7 +747,6 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
       <div class="sport-meta-count">{total_label} TOTAL PROPS</div>
     </div>
 
-    {kpi_html}
     {two_col}
     {def_section}
     {prop_section}
@@ -937,7 +903,7 @@ CSS = """
   --pending:#666;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Share Tech Mono',monospace;background:transparent;color:var(--text);min-height:100vh;padding-bottom:60px}
+body{font-family:'Share Tech Mono',monospace;background:transparent;color:var(--text);min-height:100vh;padding-bottom:24px}
 h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif}
 body::before{content:'';position:fixed;top:-20%;left:-10%;width:55%;height:55%;background:radial-gradient(ellipse,rgba(212,160,23,.07) 0%,transparent 70%);pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;bottom:-20%;right:-10%;width:50%;height:50%;background:radial-gradient(ellipse,rgba(0,229,255,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
@@ -956,12 +922,12 @@ box-shadow:0 8px 32px rgba(0,0,0,.28)}
 .logo-sub{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2.5px;margin-top:2px}
 .date-badge{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted2);background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
 border:1px solid var(--glass-bd);border-radius:999px;padding:8px 16px;letter-spacing:1.5px}
-.main{max-width:1100px;margin:0 auto;padding:24px 20px}
+.main{max-width:none;width:100%;margin:0 12px;padding:24px 28px;box-sizing:border-box}
 .sport-header{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
 .sport-label{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;line-height:1;color:var(--gold);text-shadow:0 0 28px rgba(240,165,0,.18)}
 .sport-header-line{flex:1;min-width:80px;height:1px;background:rgba(255,255,255,0.08)}
 .sport-meta-count{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted2)}
-.sport-section{margin-bottom:48px}
+.sport-section{margin-bottom:48px;width:100%;max-width:100%;box-sizing:border-box}
 .section-label{font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--muted);letter-spacing:3px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
 .stat-grid{display:grid;gap:14px;margin-bottom:24px}
@@ -1026,7 +992,6 @@ tr.player-warn td:first-child{border-left:3px solid var(--gold)}
 .alert-title{font-family:'Bebas Neue',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;margin-bottom:4px}
 .sub-dir{display:inline-block;margin-right:8px}
 .muted-note{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);padding:14px;text-align:center}
-.footer-gen{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);text-align:center;margin-top:40px;letter-spacing:1.5px}
 td.muted{color:var(--muted2)}
 @media(max-width:768px){.stat-grid-4,.stat-grid-2{grid-template-columns:repeat(2,1fr)}.two-col,.three-col,.insight-grid{grid-template-columns:1fr}}
 """
@@ -1046,8 +1011,6 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
     except ValueError:
         display_date = date_str.upper()
 
-    generated = datetime.now().strftime("%Y-%m-%d %H:%M")
-
     nhl_rows    = nhl_rows    or []
     soccer_rows = soccer_rows or []
     mlb_rows    = mlb_rows    or []
@@ -1057,14 +1020,6 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
     soccer_section = build_sport_section(soccer_rows, "Soccer", "⚽") if soccer_rows else ""
     mlb_section    = build_sport_section(mlb_rows,    "MLB",    "MLB") if mlb_rows    else ""
     takeaways   = build_takeaways(nba_rows, cbb_rows)
-
-    sources = []
-    if nba_path:    sources.append(nba_path.name)
-    if cbb_path:    sources.append(cbb_path.name)
-    if nhl_path:    sources.append(nhl_path.name)
-    if soccer_path: sources.append(soccer_path.name)
-    if mlb_path:    sources.append(mlb_path.name)
-    source_line = " &nbsp;·&nbsp; ".join(h(s) for s in sources)
 
     if not nba_section and not cbb_section and not nhl_section and not soccer_section and not mlb_section:
         body_content = """<div style="text-align:center;padding:60px 20px;font-family:'Share Tech Mono',monospace">
@@ -1102,9 +1057,6 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
 </header>
 <div class="main">
 {body_content}
-  <div class="footer-gen">
-    GENERATED {h(generated)} &nbsp;·&nbsp; {source_line}
-  </div>
 </div>
 </body>
 </html>"""
