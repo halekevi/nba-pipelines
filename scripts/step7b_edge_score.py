@@ -156,7 +156,9 @@ def main() -> None:
     X = df2[feats].astype(float)
     ml_prob = model.predict_proba(X)[:, 1]
     edge_col = pd.to_numeric(df2.get("edge", pd.Series(0.0, index=df2.index)), errors="coerce").fillna(0.0)
-    implied_prob = 1.0 / (1.0 + np.exp(-edge_col.clip(-20, 20)))
+    abs_edge_col = pd.to_numeric(df2.get("abs_edge", pd.Series(np.nan, index=df2.index)), errors="coerce")
+    edge_mag = abs_edge_col.where(abs_edge_col.notna(), edge_col.abs()).fillna(0.0)
+    implied_prob = 1.0 / (1.0 + np.exp(-edge_mag.clip(-20, 20)))
     comp = pd.to_numeric(
         df2.get("composite_hit_rate", df2.get("line_hit_rate", pd.Series(0.5, index=df2.index))),
         errors="coerce",

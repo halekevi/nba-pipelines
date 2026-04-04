@@ -410,7 +410,33 @@ def main():
                           "blowout_risk","low_total_flag","pace_tier","odds_source","ctx_adj"]
     df = df.drop(columns=[c for c in existing_odds_cols if c in df.columns], errors="ignore")
 
-    df = df.merge(game_odds, on=["team","opp_team"], how="left")
+    df = df.merge(game_odds, on=["team", "opp_team"], how="left")
+
+    # Combo / dual-team rows (e.g. team "PHI/DET") can miss the exact (team, opp_team)
+    # pair in game_odds; backfill from any row that shares the same primary team code.
+    miss_gt = df["game_total"].isna()
+    if miss_gt.any():
+        primary = (
+            df["team"].astype(str).str.split("/").str[0].str.strip().str.upper()
+        )
+        base = df.loc[~df["game_total"].isna(), ["team", "game_total", "spread"]].copy()
+        if not base.empty:
+            base["_pt"] = base["team"].astype(str).str.split("/").str[0].str.strip().str.upper()
+            gt_by_team = base.groupby("_pt")["game_total"].first()
+            sp_by_team = base.groupby("_pt")["spread"].first()
+            idx = df.index[miss_gt]
+            df.loc[idx, "game_total"] = primary.loc[idx].map(gt_by_team)
+            df.loc[idx, "spread"] = primary.loc[idx].map(sp_by_team)
+            # Recompute derived fields where we filled totals
+            filled = miss_gt & df["game_total"].notna()
+            if filled.any():
+                gt = pd.to_numeric(df.loc[filled, "game_total"], errors="coerce")
+                sp = pd.to_numeric(df.loc[filled, "spread"], errors="coerce").fillna(0.0)
+                df.loc[filled, "implied_team_total"] = (gt / 2.0 - sp / 2.0).round(1)
+                df.loc[filled, "blowout_risk"] = sp.abs() > BLOWOUT_THRESHOLD
+                df.loc[filled, "low_total_flag"] = gt < LOW_TOTAL_THRESH
+                df.loc[filled, "pace_tier"] = gt.map(_pace_tier)
+                df.loc[filled, "odds_source"] = "live"
 
     # Fill missing flags with safe defaults
     df["blowout_risk"]   = df["blowout_risk"].fillna(False).astype(bool)

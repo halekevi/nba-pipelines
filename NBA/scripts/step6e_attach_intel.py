@@ -102,6 +102,9 @@ PROP_TO_DB = {
     "blks+stls":        "bs",
 }
 
+# Case-insensitive prop_type aliases (slate casing varies)
+_PROP_TO_DB_LOWER = {k.lower(): v for k, v in PROP_TO_DB.items()}
+
 # ── Team normalisation: pipeline → DB ────────────────────────────────────────
 TEAM_NORM = {
     "BRK": "BKN",  "PHO": "PHX",  "NOP": "NO",
@@ -127,7 +130,11 @@ def _norm_team(t: str) -> str:
 def _db_col(row: pd.Series) -> str | None:
     pt = str(row.get("prop_type", "") or "").strip()
     pn = str(row.get("prop_norm", "") or "").strip().lower()
-    return PROP_TO_DB.get(pt) or PROP_TO_DB.get(pn)
+    return (
+        PROP_TO_DB.get(pt)
+        or PROP_TO_DB.get(pn)
+        or _PROP_TO_DB_LOWER.get(pt.lower())
+    )
 
 
 # ── DB queries ────────────────────────────────────────────────────────────────
@@ -243,10 +250,16 @@ def compute_intel(row: pd.Series, con: sqlite3.Connection,
 
     # ── Opponent defense ──────────────────────────────────────────────────────
     if opp_team:
-        opp_vals = _opp_vals(con, opp_team, db_col)
+        stat_for_opp = db_col
+        opp_vals = _opp_vals(con, opp_team, stat_for_opp)
+        # 3-PT Made: some DB builds are sparse on fg3m vs opp; fg3a is a stable
+        # "3PT volume allowed" proxy aligned with opponent 3PT defense curves.
+        if not opp_vals and db_col == "fg3m":
+            stat_for_opp = "fg3a"
+            opp_vals = _opp_vals(con, opp_team, stat_for_opp)
         if opp_vals:
             opp_avg = float(np.mean(opp_vals))
-            lg_avg  = league_avgs.get(db_col)
+            lg_avg = league_avgs.get(stat_for_opp) or league_avgs.get(db_col)
             result["intel_opp_avg_allowed"] = round(opp_avg, 3)
             if lg_avg and lg_avg > 0:
                 result["intel_opp_vs_league_pct"] = round(
@@ -288,9 +301,9 @@ def main():
     db_max  = con.execute("SELECT MAX(game_date) FROM nba").fetchone()[0]
     print(f"[S6e] DB: {db_rows:,} rows | {db_min} → {db_max}")
 
-    # Pre-compute league averages once
+    # Pre-compute league averages once (include fg3a for 3PM opp-defense fallback)
     league_avgs: dict = {}
-    for col in set(PROP_TO_DB.values()):
+    for col in set(PROP_TO_DB.values()) | {"fg3a"}:
         try:
             v = con.execute(
                 f"SELECT AVG({col}) FROM nba WHERE {col} IS NOT NULL"

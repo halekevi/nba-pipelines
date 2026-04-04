@@ -289,6 +289,14 @@ def build_feature_vector(df: pd.DataFrame, sport: str) -> pd.DataFrame:
     out = df.copy()
     sp = _norm_sport(sport)
 
+    # Preserve pipeline minutes labels (HIGH/MEDIUM/LOW) before overwriting
+    # `minutes_tier` with ML numeric buckets — step8 / exports use minutes_tier_label.
+    _stash_mt_labels = None
+    if "minutes_tier" in out.columns:
+        s = out["minutes_tier"].astype(str).str.strip().str.upper()
+        if s.isin(["HIGH", "MEDIUM", "LOW", "UNKNOWN"]).any():
+            _stash_mt_labels = out["minutes_tier"].astype(str)
+
     comp = _to_num(_first_col(out, ("composite_hit_rate", "composite_hr")))
     if comp.isna().all():
         comp = _to_num(_first_col(out, ("line_hit_rate",)))
@@ -320,6 +328,11 @@ def build_feature_vector(df: pd.DataFrame, sport: str) -> pd.DataFrame:
     # Raw slate edge is projection - line; good UNDERs are negative raw — flip so the feature
     # aligns with "edge toward the pick". Only explicit UNDER rows flip (missing direction unchanged).
     edge_raw = _to_num(_first_col(out, ("edge",)))
+    abs_edge_in = _to_num(_first_col(out, ("abs_edge",)))
+    if abs_edge_in.notna().any():
+        out["abs_edge"] = abs_edge_in
+    else:
+        out["abs_edge"] = edge_raw.abs()
     edge = edge_raw.where(~is_under, -edge_raw)
     prop_score = _to_num(_first_col(out, ("prop_score", "rank_score", "final_score")))
 
@@ -351,6 +364,9 @@ def build_feature_vector(df: pd.DataFrame, sport: str) -> pd.DataFrame:
     out["role_type_encoded"] = role_e
     out["dominance_pct"] = dom
     out["specialization_rank"] = spec_rk
+
+    if _stash_mt_labels is not None:
+        out["minutes_tier_label"] = _stash_mt_labels
 
     return out
 

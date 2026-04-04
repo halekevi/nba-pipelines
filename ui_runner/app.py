@@ -42,6 +42,7 @@ from flask import (
     request,
     send_from_directory,
 )
+from markupsafe import Markup
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Paths
@@ -85,7 +86,7 @@ app = Flask(
 )
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-04-04-tickets-json-render-deps-1"
+_UI_BUILD_ID = "2026-04-04-tickets-platform-shell-1"
 
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
@@ -824,7 +825,16 @@ def page_tickets():
                 raise RuntimeError("could not load combined_slate_tickets spec")
             mod = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(mod)
-            return mod.render_tickets_html(payload)
+            body, page_title = mod.render_tickets_body_html(payload)
+            return render_template(
+                "tickets_built.html",
+                tickets_body=Markup(body),
+                page_title=page_title,
+                ui_build_id=_UI_BUILD_ID,
+                deploy_git_sha=(
+                    os.environ.get("RAILWAY_GIT_COMMIT_SHA") or os.environ.get("GIT_COMMIT") or ""
+                )[:40],
+            )
         finally:
             if path_inserted and sys.path and sys.path[0] == scripts_dir:
                 sys.path.pop(0)
@@ -850,7 +860,7 @@ def page_tickets():
         return _no_store_headers(_tickets_built_slips_missing_html())
     return _no_store_headers(
         make_response(
-            "Could not render /tickets from tickets_latest.json. Check combined_slate_tickets.render_tickets_html "
+            "Could not render /tickets from tickets_latest.json. Check combined_slate_tickets.render_tickets_body_html "
             "and JSON shape.",
             500,
         )

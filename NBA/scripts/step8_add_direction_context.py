@@ -88,7 +88,7 @@ def write_sheet(wb, name, data):
         'Tier': 6, 'Rank Score': 10, 'Player': 18, 'Pos': 6,
         'Team': 6, 'Opp': 6, 'Game Time': 10,
         'Prop': 16, 'Pick Type': 10, 'Line': 7,
-        'Direction': 9, 'Edge': 7, 'Projection': 10,
+        'Direction': 9, 'Edge': 7, 'Abs Edge': 8, 'Projection': 10,
         'Hit Rate (5g)': 12, 'Last 5 Avg': 10, 'Season Avg': 10,
         'L5 Over': 8, 'L5 Under': 8,
         'Def Rank': 9, 'Def Tier': 10,
@@ -104,6 +104,23 @@ def write_sheet(wb, name, data):
 
 def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
     df2 = df.copy()
+    # Prefer pipeline minutes labels over ML numeric buckets (0–3).
+    if "minutes_tier_label" in df2.columns:
+        lbl = df2["minutes_tier_label"].astype(str).str.strip()
+        ok = lbl.ne("") & ~lbl.str.lower().isin(["nan", "none", "null"])
+        if ok.any():
+            df2.loc[ok, "minutes_tier"] = lbl[ok]
+    else:
+        mt_num = pd.to_numeric(df2.get("minutes_tier", ""), errors="coerce")
+        _min_tier_map = {0: "DNP Risk", 1: "Spot", 2: "Rotation", 3: "Starter"}
+        m_ok = mt_num.notna()
+        if m_ok.any():
+            keys = mt_num.loc[m_ok].round().astype("Int64")
+            df2.loc[m_ok, "minutes_tier"] = keys.map(_min_tier_map).astype(str)
+
+    if "abs_edge" not in df2.columns and "edge" in df2.columns:
+        df2["abs_edge"] = pd.to_numeric(df2["edge"], errors="coerce").abs()
+
     df2['game_time'] = pd.to_datetime(df2.get('start_time', ''), errors='coerce').dt.strftime('%-I:%M %p')
     hint = (source_hint or "").lower()
     is_period_slate = ("nba1q" in hint) or ("nba1h" in hint)
@@ -245,7 +262,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'player', 'pos', 'team', 'opp_team', 'game_time',
         'prop_type', 'pick_type', 'line',
         'final_bet_direction',
-        'edge', 'projection',
+        'edge', 'abs_edge', 'projection',
         'ml_prob',
         'edge_score',
         'blended_score',
@@ -274,7 +291,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
             df2[c] = np.nan
     clean = df2[keep].copy()
 
-    for col in ['rank_score', 'edge', 'projection', 'ml_prob', 'edge_score', 'blended_score', 'line_hit_rate_over_ou_5']:
+    for col in ['rank_score', 'edge', 'abs_edge', 'projection', 'ml_prob', 'edge_score', 'blended_score', 'line_hit_rate_over_ou_5']:
         if col in clean.columns:
             rnd = 4 if col in ('ml_prob', 'edge_score', 'blended_score') else 2
             clean[col] = pd.to_numeric(clean[col], errors='coerce').round(rnd)
@@ -294,7 +311,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'player': 'Player', 'pos': 'Pos', 'team': 'Team', 'opp_team': 'Opp', 'game_time': 'Game Time',
         'prop_type': 'Prop', 'pick_type': 'Pick Type', 'line': 'Line',
         'final_bet_direction': 'Direction',
-        'edge': 'Edge', 'projection': 'Projection',
+        'edge': 'Edge', 'abs_edge': 'Abs Edge', 'projection': 'Projection',
         'ml_prob': 'ML Prob',
         'edge_score': 'Edge Score',
         'blended_score': 'Blended Score',

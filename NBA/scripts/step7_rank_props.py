@@ -785,6 +785,8 @@ def main() -> None:
     # (e.g., Fantasy Score vs Points).
     line_safe = line_num.replace(0, np.nan)
     out["edge_norm"] = out["edge"] / line_safe
+    # Magnitude-only normalized edge for ranking z-scores (direction-agnostic).
+    out["edge_norm_mag"] = _to_num(out["abs_edge"]) / line_safe
 
     # ── FORCED OVER / BET DIRECTION ───────────────────────────────────────────
     forced = pick_type_s.isin(["Goblin", "Demon"]).astype(int)
@@ -865,7 +867,8 @@ def main() -> None:
     elig_mask = eligible.eq(1)
 
     # ── VECTORIZED EDGE TRANSFORM ─────────────────────────────────────────────
-    out["edge_dr"] = _edge_transform_series(_to_num(out["edge_norm"]))
+    # Legacy magnitude transform (avoids punishing UNDER rows for negative raw edge_norm).
+    out["edge_dr"] = _edge_transform_series(_to_num(out["edge_norm_mag"]))
 
     # ── VECTORIZED LINE HIT RATE ──────────────────────────────────────────────
     # Direction-aware: pick the right column priority
@@ -1043,7 +1046,7 @@ def main() -> None:
             return (x - mu) / sd
         return result
 
-    out["edge_z"]        = zcol(out["edge_norm"],      direction_aware=True)
+    out["edge_z"]        = zcol(out["edge_norm_mag"], direction_aware=False)
     out["line_hit_z"]    = zcol(out["line_hit_rate"],   direction_aware=True)
     out["min_z"]         = zcol(out["minutes_certainty"])
     out["def_rank_z"]    = zcol(out["def_rank_signal"],  direction_aware=True)
