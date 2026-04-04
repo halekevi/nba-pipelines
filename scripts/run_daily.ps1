@@ -4,7 +4,7 @@
   Daily PropOracle run: grade yesterday, archive dated outputs, run today's full pipeline, combined slate, git push.
 
 .NOTES
-  Order: (A1) Refresh historical game logs → (A) Grader for yesterday → (A2) consistency
+  Order: (A1) Refresh historical game logs → (A) Grader for yesterday → (A1b) build_ticket_eval for yesterday → (A2) consistency
          → (B) Archive outputs\<yesterday>\ step8 copies → (C0) fetch game lines → (C0b) rolling NBA 1Q/2Q DB sync
          → (C) run_pipeline for today → (D) combined_slate → (E) git commit/push.
          Use -SkipFetch to skip A1 and C0b. -SkipGameLines skips C0. -SkipPeriodHistorySync skips C0b only.
@@ -148,6 +148,8 @@ if (-not $EffectiveOddsKey -and $env:ODDS_API_KEY) {
 # =============================================================================
 # STEP A — Grader for yesterday
 # =============================================================================
+$yesterdayCombined = Join-Path $Root "outputs\$Yesterday\combined_slate_tickets_$Yesterday.xlsx"
+$yesterdayTixGraded = Join-Path $Root "outputs\$Yesterday\combined_tickets_graded_$Yesterday.xlsx"
 if (-not $SkipGrader) {
     $gradedExpected = @(
         (Join-Path $Root "outputs\$Yesterday\graded_nba_$Yesterday.xlsx"),
@@ -157,16 +159,24 @@ if (-not $SkipGrader) {
         (Join-Path $Root "outputs\$Yesterday\graded_mlb_$Yesterday.xlsx")
     )
     $missingGraded = @($gradedExpected | Where-Object { -not (Test-Path $_) })
-    if ($missingGraded.Count -eq 0) {
+    # If we have a ticket slate but never ran combined_ticket_grader, do not skip — otherwise legs stay UNGRADED in ticket_eval HTML.
+    $needCombinedTicketWorkbook = (Test-Path $yesterdayCombined) -and -not (Test-Path $yesterdayTixGraded)
+    if ($missingGraded.Count -eq 0 -and -not $needCombinedTicketWorkbook) {
         Write-Host "Grader outputs already present for $Yesterday — skipping" -ForegroundColor DarkYellow
-        Write-Log "STEP A - Grader ($Yesterday): SKIPPED (all graded outputs present)"
+        Write-Log "STEP A - Grader ($Yesterday): SKIPPED (all graded outputs present; combined ticket workbook OK)"
     }
     else {
-        Write-Host "Grader rerun for $Yesterday (missing: $($missingGraded.Count))" -ForegroundColor DarkYellow
-        foreach ($m in $missingGraded) {
-            Write-Host "  missing -> $m" -ForegroundColor DarkYellow
+        if ($needCombinedTicketWorkbook -and $missingGraded.Count -eq 0) {
+            Write-Host "Re-running grader for $Yesterday: combined ticket graded workbook missing" -ForegroundColor DarkYellow
+            Write-Log "STEP A - Grader ($Yesterday): START (combined_tickets_graded missing)"
         }
-        Write-Log "STEP A - Grader ($Yesterday): START"
+        else {
+            Write-Host "Grader rerun for $Yesterday (missing: $($missingGraded.Count))" -ForegroundColor DarkYellow
+            foreach ($m in $missingGraded) {
+                Write-Host "  missing -> $m" -ForegroundColor DarkYellow
+            }
+            Write-Log "STEP A - Grader ($Yesterday): START"
+        }
         $graderScript = Join-Path $Root "scripts\run_grader.ps1"
         try {
             & pwsh -NoProfile -File $graderScript -Date $Yesterday
@@ -187,6 +197,45 @@ if (-not $SkipGrader) {
 }
 else {
     Write-Log "STEP A - Grader ($Yesterday): SKIPPED (-SkipGrader)"
+}
+
+# =============================================================================
+# STEP A1b — Ticket eval HTML for yesterday (always when slate exists)
+# Grades are merged from outputs/<Yesterday>/graded_*.xlsx in build_ticket_eval.py.
+# Step D only rebuilds ticket_eval for $Today, so without this pass yesterday's
+# ticket_eval_*.html can stay all-UNGRADED if STEP A skipped run_grader or the
+# eval step failed inside it.
+# =============================================================================
+$buildTicketEvalScript = Join-Path $Root "scripts\build_ticket_eval.py"
+if (Test-Path $yesterdayCombined) {
+    if (Test-Path $buildTicketEvalScript) {
+        Write-Log "STEP A1b - Ticket eval HTML ($Yesterday): START"
+        Push-Location $Root
+        try {
+            & py -3.14 -X utf8 $buildTicketEvalScript --date $Yesterday
+            $be = $LASTEXITCODE
+            if ($be -ne 0) {
+                Write-Warning "build_ticket_eval.py ($Yesterday) exited $be — yesterday's Grades tickets tab may be stale"
+                Write-Log "STEP A1b - Ticket eval HTML ($Yesterday): WARN (exit $be)"
+            }
+            else {
+                Write-Log "STEP A1b - Ticket eval HTML ($Yesterday): OK"
+            }
+        }
+        catch {
+            Write-Warning "build_ticket_eval.py ($Yesterday) threw: $_"
+            Write-Log "STEP A1b - Ticket eval HTML ($Yesterday): FAILED (exception: $($_.Exception.Message))"
+        }
+        finally {
+            Pop-Location
+        }
+    }
+    else {
+        Write-Log "STEP A1b - Ticket eval HTML ($Yesterday): SKIP (build_ticket_eval.py not found)"
+    }
+}
+else {
+    Write-Log "STEP A1b - Ticket eval HTML ($Yesterday): SKIP (no outputs\$Yesterday\combined_slate_tickets_$Yesterday.xlsx)"
 }
 
 # =============================================================================
