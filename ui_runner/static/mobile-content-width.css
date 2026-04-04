@@ -1,0 +1,133 @@
+/**
+ * Mobile: wider usable viewport, safe-area gutters, lighter scroll behavior.
+ * Load after page styles and nav-mobile-shared.css.
+ */
+@media (max-width: 900px) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body {
+    overscroll-behavior-x: none;
+  }
+
+  /* Home — shell was ~98vw + clamp padding; use full width + minimal gutter */
+  .shell {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding-left: max(8px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(8px, env(safe-area-inset-right, 0px)) !important;
+    padding-top: 14px !important;
+    padding-bottom: 20px !important;
+  }
+
+  .hero .home-flow-lede {
+    padding-left: max(8px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(8px, env(safe-area-inset-right, 0px)) !important;
+    box-sizing: border-box !important;
+  }
+
+  .slate-panel-header-row {
+    padding-left: max(8px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(8px, env(safe-area-inset-right, 0px)) !important;
+    gap: 8px !important;
+  }
+
+  .slate-table-wrap {
+    padding-left: max(4px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(4px, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  .slate-toolbar {
+    padding-left: max(8px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(8px, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  /* Tickets */
+  .wrap {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding-left: max(8px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(8px, env(safe-area-inset-right, 0px)) !important;
+    padding-top: 6px !important;
+  }
+
+  .stats-bar {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding-left: max(10px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(10px, env(safe-area-inset-right, 0px)) !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .ticket-card .thdr,
+  .ticket-card .legrow {
+    padding-left: max(10px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(10px, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  .ticket-bucket > summary {
+    padding-left: max(12px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(12px, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  /* Long ticket lists: skip layout work for off-screen cards */
+  .ticket-card {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 220px;
+  }
+
+  /* Payout */
+  #app {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding-left: max(8px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(8px, env(safe-area-inset-right, 0px)) !important;
+    padding-top: 10px !important;
+    padding-bottom: 16px !important;
+  }
+
+  /* Grades */
+  .grades-body {
+    margin-left: max(6px, env(safe-area-inset-left, 0px)) !important;
+    margin-right: max(6px, env(safe-area-inset-right, 0px)) !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .grades-controls-wrap {
+    margin-left: max(6px, env(safe-area-inset-left, 0px)) !important;
+    margin-right: max(6px, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  .date-bar,
+  .tabs-bar {
+    margin-left: max(6px, env(safe-area-inset-left, 0px)) !important;
+    margin-right: max(6px, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  .grades-controls-inner {
+    padding-left: max(8px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(8px, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  /* Horizontal scroll regions — momentum + no chain-scroll */
+  .slate-table-wrap,
+  .log-table-wrap,
+  #combo-table-wrap,
+  .date-pills,
+  .date-bar,
+  .tabs-bar {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  /* Tickets: trim top offset; keep bottom space for thumb / home indicator */
+  body.page-tickets {
+    padding-top: 8px !important;
+  }
+}

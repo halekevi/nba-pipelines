@@ -184,7 +184,28 @@ body::after{content:'';position:fixed;inset:0;
 .hero-title{font-family:'Bebas Neue',sans-serif;font-size:72px;letter-spacing:6px;line-height:.95;color:var(--text);}
 .hero-title .ht2{color:var(--accent);}
 .hero-title .prop-hero-prefix{text-transform:none;}
-.hero-copy{min-width:0;}
+.hero-copy{min-width:0;flex:0 1 auto;}
+/* “How to read this page” — sits in hero to the right on wide viewports */
+.hero .home-flow-lede{
+  margin:0;
+  flex:1 1 min(280px,100%);
+  max-width:min(56ch,100%);
+  min-width:0;
+  align-self:center;
+  position:relative;
+  z-index:1;
+  background:rgba(0,0,0,.14);
+  border-color:rgba(255,255,255,.06);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+}
+[data-theme="light"] .hero .home-flow-lede{
+  background:rgba(255,255,255,.42)!important;
+  border-color:rgba(0,0,0,.07)!important;
+  box-shadow:none!important;
+}
+@media(max-width:720px){
+  .hero .home-flow-lede{flex:1 1 100%;max-width:100%;align-self:stretch;margin-top:6px;}
+}
 
 /* status cards */
 .status-row{display:grid;gap:14px;margin-bottom:28px;}
@@ -984,9 +1005,8 @@ body::before{
         <span class="ht2">Oracle</span>
       </h1>
     </div>
+    <p class="home-flow-lede" role="note"><strong style="color:var(--text);font-weight:600;">How to read this page:</strong> <em>Slate Explorer</em> for full sortable slates → expand <em>Top Edges</em> for ticket-leg highlights (by edge within each group). <em>L5 / L10 Streaks</em> use last-game counts vs the line when available. <em>Top Unders</em> (and Standard under edges) use <code>l5_under</code>/<code>l10_under</code> on <strong>Standard</strong> props only — Goblin is OVER-only. <span class="home-jump"><a href="#slate-explorer">Jump to slate</a> · <a href="#top-edges">Jump to edges</a></span></p>
   </div>
-
-  <p class="home-flow-lede" role="note"><strong style="color:var(--text);font-weight:600;">How to read this page:</strong> <em>Slate Explorer</em> for full sortable slates → expand <em>Top Edges</em> for ticket-leg highlights (by edge within each group). <em>L5 / L10 Streaks</em> use last-game counts vs the line when available. <em>Top Unders</em> (and Standard under edges) use <code>l5_under</code>/<code>l10_under</code> on <strong>Standard</strong> props only — Goblin is OVER-only. <span class="home-jump"><a href="#slate-explorer">Jump to slate</a> · <a href="#top-edges">Jump to edges</a></span></p>
 
   <!-- SLATE STATUS CARDS -->
   <details class="home-cat" open id="slate-explorer">
