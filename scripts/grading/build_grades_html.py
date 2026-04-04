@@ -911,7 +911,7 @@ header,.main{position:relative;z-index:1}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:rgba(255,255,255,0.04)}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.14);border-radius:4px}
 
 header{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
-border:1px solid var(--glass-bd);border-radius:0 0 18px 18px;margin:0 12px;padding:18px 28px;display:flex;flex-direction:column;align-items:stretch;gap:0;
+border:1px solid var(--glass-bd);border-left:none;border-right:none;border-radius:0;padding:18px 20px;display:flex;flex-direction:column;align-items:stretch;gap:0;
 box-shadow:0 8px 32px rgba(0,0,0,.28)}
 .slate-header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;width:100%}
 .grades-hub-toolbar-host{flex:1 1 100%;width:100%;min-height:0}
@@ -922,7 +922,7 @@ box-shadow:0 8px 32px rgba(0,0,0,.28)}
 .logo-sub{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2.5px;margin-top:2px}
 .date-badge{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted2);background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
 border:1px solid var(--glass-bd);border-radius:999px;padding:8px 16px;letter-spacing:1.5px}
-.main{max-width:none;width:100%;margin:0 12px;padding:24px 28px;box-sizing:border-box}
+.main{max-width:none;width:100%;margin:0;padding:24px 20px;box-sizing:border-box}
 .sport-header{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
 .sport-label{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;line-height:1;color:var(--gold);text-shadow:0 0 28px rgba(240,165,0,.18)}
 .sport-header-line{flex:1;min-width:80px;height:1px;background:rgba(255,255,255,0.08)}

@@ -92,14 +92,14 @@
     padding-bottom: 16px !important;
   }
 
-  /* Grades */
-  .grades-body {
-    margin-left: max(6px, env(safe-area-inset-left, 0px)) !important;
-    margin-right: max(6px, env(safe-area-inset-right, 0px)) !important;
+  /* Grades — edge-to-edge slate iframe; safe-area only on notched devices */
+  body.page-grades .grades-body {
+    margin-left: env(safe-area-inset-left, 0px) !important;
+    margin-right: env(safe-area-inset-right, 0px) !important;
     margin-bottom: 0.75rem !important;
   }
 
-  /* Report controls sit inside .iframe-shell-toolbar; gutters come from .grades-body */
+  /* Report controls sit inside .iframe-shell-toolbar; slate iframe is full width on Grades */
   .iframe-shell-toolbar .date-bar,
   .iframe-shell-toolbar .tabs-bar {
     margin-left: 0 !important;
