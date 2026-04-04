@@ -914,7 +914,7 @@ header{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit
 border:1px solid var(--glass-bd);border-left:none;border-right:none;border-radius:0;padding:18px 20px;display:flex;flex-direction:column;align-items:stretch;gap:0;
 box-shadow:0 8px 32px rgba(0,0,0,.28)}
 .slate-header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;width:100%}
-.grades-hub-toolbar-host{flex:1 1 100%;width:100%;min-height:0}
+.grades-hub-toolbar-host{flex:1 1 100%;align-self:stretch;width:100%;max-width:100%;min-height:0;box-sizing:border-box}
 .logo{display:flex;align-items:center;gap:14px}
 .logo-icon{width:120px;height:120px;object-fit:contain;display:block;filter:drop-shadow(0 0 8px rgba(212,160,23,0.45))}
 @media(max-width:768px){.logo-icon{width:80px;height:80px}}
@@ -970,10 +970,10 @@ background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid va
 .chip-goblin{background:rgba(196,165,255,.10);color:var(--purple);border-color:rgba(196,165,255,.32)}
 .chip-demon{background:rgba(255,77,77,.10);color:var(--red);border-color:rgba(255,77,77,.32)}
 .chip-std{background:rgba(0,229,255,.08);color:var(--cyan);border-color:rgba(0,229,255,.25)}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
-.three-col{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:20px}
-.insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
-.insight-card{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);border-radius:12px;padding:14px 16px;box-shadow:0 4px 20px rgba(0,0,0,.15)}
+.two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-bottom:20px;width:100%;max-width:100%;box-sizing:border-box}
+.three-col{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:20px;width:100%;max-width:100%;box-sizing:border-box}
+.insight-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:24px;width:100%;max-width:100%;box-sizing:border-box;min-width:0}
+.insight-card{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);border-radius:12px;padding:14px 16px;box-shadow:0 4px 20px rgba(0,0,0,.15);min-width:0;box-sizing:border-box}
 .insight-icon{font-size:22px;margin-bottom:8px}
 .insight-title{font-weight:700;font-size:13px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:var(--gold)}
 .insight-body{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted2);line-height:1.6}

@@ -4,6 +4,10 @@
  */
 .iframe-shell-toolbar {
   flex-shrink: 0;
+  align-self: stretch;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -54,6 +58,10 @@
 
 .date-bar {
   flex-shrink: 0;
+  align-self: stretch;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   margin: 0;
   padding: 0 12px;
   height: 40px;
@@ -222,11 +230,16 @@
 
 .tabs-bar {
   flex-shrink: 0;
+  align-self: stretch;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   margin: 0;
   padding: 4px 8px;
   display: flex;
   gap: 8px;
   align-items: center;
+  justify-content: flex-start;
   z-index: 2;
   position: relative;
   font-family: "Share Tech Mono", monospace;
@@ -285,7 +298,10 @@
 
 .grades-hub-toolbar-host {
   flex: 1 1 100%;
+  align-self: stretch;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   margin-top: 12px;
   padding-top: 12px;
   border-top: 1px solid var(--glass-bd, rgba(255, 255, 255, 0.08));

@@ -988,7 +988,30 @@ function ensureFrameCollapseCss(doc) {
       pointer-events:none;
     }
     .grades-sport-bucket[open] > summary::after{transform:rotate(90deg);}
-    .grades-sport-bucket-body{padding:0;}
+    .grades-sport-bucket-body{
+      padding:0;
+      width:100%;
+      max-width:100%;
+      box-sizing:border-box;
+      min-width:0;
+    }
+    .grades-sport-bucket-body > .sport-section{
+      width:100%;
+      max-width:100%;
+      box-sizing:border-box;
+      min-width:0;
+    }
+    .grades-sport-bucket-body .insight-grid,
+    .grades-sport-bucket-body .two-col,
+    .grades-sport-bucket-body .three-col{
+      width:100%;
+      max-width:100%;
+      box-sizing:border-box;
+      min-width:0;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+    .grades-sport-bucket-body .two-col{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .grades-sport-bucket-body .insight-card{min-width:0;box-sizing:border-box;}
     .grades-sport-meta{
       font-family:'Share Tech Mono',monospace;
       font-size:10px;
