@@ -220,9 +220,9 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\pp_cbb_scraper.py",
+            ".\\scripts\\pipeline\\step1_pp_cbb_scraper.py",
             "--out",
-            "step1_cbb.csv"
+            "outputs\\{TODAY}\\step1_cbb.csv"
           ]
         },
         {
@@ -231,11 +231,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\cbb_step2_normalize.py",
+            ".\\scripts\\pipeline\\step2_normalize.py",
             "--input",
-            "step1_cbb.csv",
+            "outputs\\{TODAY}\\step1_cbb.csv",
             "--output",
-            "step2_cbb.csv"
+            "outputs\\{TODAY}\\step2_cbb.csv"
           ]
         },
         {
@@ -244,11 +244,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\cbb_step3b_attach_def_rankings.py",
+            ".\\scripts\\pipeline\\step3b_attach_def_rankings.py",
             "--input",
-            "step2_cbb.csv",
+            "outputs\\{TODAY}\\step2_cbb.csv",
+            "--defense",
+            "data\\reference\\cbb_def_rankings.csv",
             "--output",
-            "step3b_with_def_rankings_cbb.csv"
+            "outputs\\{TODAY}\\step3b_with_def_rankings_cbb.csv"
           ]
         },
         {
@@ -257,13 +259,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step5_attach_espn_ids.py",
+            ".\\scripts\\pipeline\\step5a_attach_espn_ids.py",
             "--input",
-            "step3b_with_def_rankings_cbb.csv",
+            "outputs\\{TODAY}\\step3b_with_def_rankings_cbb.csv",
             "--output",
-            "step3_cbb.csv",
+            "outputs\\{TODAY}\\step3_cbb.csv",
             "--master",
-            "data/ncaa_mbb_athletes_master.csv"
+            "data/reference/ncaa_mbb_athletes_master.csv"
           ]
         },
         {
@@ -272,11 +274,15 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\cbb_step5b_attach_boxscore_stats.py",
+            ".\\scripts\\pipeline\\step5b_attach_boxscore_stats.py",
             "--input",
-            "step3_cbb.csv",
+            "outputs\\{TODAY}\\step3_cbb.csv",
             "--output",
-            "step5b_cbb.csv",
+            "outputs\\{TODAY}\\step5b_cbb.csv",
+            "--cache",
+            "data\\cache\\cbb_boxscore_cache.csv",
+            "--days",
+            "90",
             "--workers",
             "4"
           ]
@@ -287,11 +293,15 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\cbb_step6_rank_props.py",
+            ".\\scripts\\pipeline\\step6_rank_props_cbb.py",
             "--input",
-            "step5b_cbb.csv",
+            "outputs\\{TODAY}\\step5b_cbb.csv",
             "--output",
-            "step6_ranked_cbb.xlsx"
+            "outputs\\{TODAY}\\step6_ranked_cbb.xlsx",
+            "--date",
+            "{TODAY}",
+            "--cache",
+            "data\\cache\\cbb_boxscore_cache.csv"
           ]
         },
         {
@@ -313,6 +323,18 @@
             "cbb_step4",
             "cbb_step5",
             "cbb_step6"
+          ]
+        },
+        {
+          "id": "cbb_run_script",
+          "label": "CBB + WCBB (via run_pipeline.ps1 -CBBOnly)",
+          "cmd": [
+            "powershell",
+            "-ExecutionPolicy",
+            "Bypass",
+            "-File",
+            "..\\run_pipeline.ps1",
+            "-CBBOnly"
           ]
         }
       ]
@@ -815,11 +837,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\pp_cbb_scraper.py",
+            ".\\scripts\\pipeline\\step1_pp_cbb_scraper.py",
             "--league_id",
             "176",
             "--out",
-            "step1_wcbb.csv"
+            "outputs\\{TODAY}\\step1_wcbb.csv"
           ]
         },
         {
@@ -828,11 +850,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\cbb_step2_normalize.py",
+            ".\\scripts\\pipeline\\step2_normalize.py",
             "--input",
-            "step1_wcbb.csv",
+            "outputs\\{TODAY}\\step1_wcbb.csv",
             "--output",
-            "step2_wcbb.csv"
+            "outputs\\{TODAY}\\step2_wcbb.csv"
           ]
         },
         {
@@ -841,11 +863,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\cbb_step3b_attach_def_rankings.py",
+            ".\\scripts\\pipeline\\step3b_attach_def_rankings.py",
             "--input",
-            "step2_wcbb.csv",
+            "outputs\\{TODAY}\\step2_wcbb.csv",
+            "--defense",
+            "data\\reference\\cbb_def_rankings.csv",
             "--output",
-            "step3b_with_def_rankings_wcbb.csv"
+            "outputs\\{TODAY}\\step3b_with_def_rankings_wcbb.csv"
           ]
         },
         {
@@ -854,13 +878,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step5_attach_espn_ids.py",
+            ".\\scripts\\pipeline\\step5a_attach_espn_ids.py",
             "--input",
-            "step3b_with_def_rankings_wcbb.csv",
+            "outputs\\{TODAY}\\step3b_with_def_rankings_wcbb.csv",
             "--output",
-            "step3_wcbb.csv",
+            "outputs\\{TODAY}\\step3_wcbb.csv",
             "--master",
-            "data/ncaa_mbb_athletes_master.csv"
+            "data/reference/ncaa_mbb_athletes_master.csv"
           ]
         },
         {
@@ -869,13 +893,19 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\cbb_step5b_attach_boxscore_stats.py",
+            ".\\scripts\\pipeline\\step5b_attach_boxscore_stats.py",
             "--input",
-            "step3_wcbb.csv",
+            "outputs\\{TODAY}\\step3_wcbb.csv",
             "--output",
-            "step5b_wcbb.csv",
+            "outputs\\{TODAY}\\step5b_wcbb.csv",
+            "--cache",
+            "data\\cache\\wcbb_boxscore_cache.csv",
+            "--days",
+            "21",
             "--workers",
-            "4"
+            "4",
+            "--league",
+            "womens-college-basketball"
           ]
         },
         {
@@ -884,11 +914,15 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\cbb_step6_rank_props.py",
+            ".\\scripts\\pipeline\\step6_rank_props_cbb.py",
             "--input",
-            "step5b_wcbb.csv",
+            "outputs\\{TODAY}\\step5b_wcbb.csv",
             "--output",
-            "step6_ranked_wcbb.xlsx"
+            "outputs\\{TODAY}\\step6_ranked_wcbb.xlsx",
+            "--date",
+            "{TODAY}",
+            "--cache",
+            "data\\cache\\wcbb_boxscore_cache.csv"
           ]
         },
         {
@@ -910,6 +944,18 @@
             "wcbb_step4",
             "wcbb_step5",
             "wcbb_step6"
+          ]
+        },
+        {
+          "id": "wcbb_run_script",
+          "label": "CBB + WCBB (via run_pipeline.ps1 -CBBOnly)",
+          "cmd": [
+            "powershell",
+            "-ExecutionPolicy",
+            "Bypass",
+            "-File",
+            "..\\run_pipeline.ps1",
+            "-CBBOnly"
           ]
         }
       ]

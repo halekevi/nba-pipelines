@@ -176,7 +176,7 @@ def resolve_merge_source(root: Path, sport_key: str, dates: list[str]) -> Path |
         lp = leg.get(sk)
         if lp and lp.is_file():
             return lp
-    if sk in ("cbb", "wcbb"):
+    if sk == "cbb":
         cbb_paths: list[Path] = []
         for d in dates:
             cbb_paths.extend(
@@ -185,13 +185,21 @@ def resolve_merge_source(root: Path, sport_key: str, dates: list[str]) -> Path |
                     root / "CBB" / "outputs" / d / f"step6_ranked_cbb_{d}.xlsx",
                 ]
             )
-        cbb_paths.extend(
-            [
-                root / "CBB" / "step6_ranked_cbb.xlsx",
-                root / "CBB" / "step6_ranked_wcbb.xlsx",
-            ]
-        )
+        cbb_paths.append(root / "CBB" / "step6_ranked_cbb.xlsx")
         for p in cbb_paths:
+            if p.is_file():
+                return p
+    if sk == "wcbb":
+        wcbb_paths: list[Path] = []
+        for d in dates:
+            wcbb_paths.extend(
+                [
+                    root / "CBB" / "outputs" / d / "step6_ranked_wcbb.xlsx",
+                    root / "CBB" / "outputs" / d / f"step6_ranked_wcbb_{d}.xlsx",
+                ]
+            )
+        wcbb_paths.append(root / "CBB" / "step6_ranked_wcbb.xlsx")
+        for p in wcbb_paths:
             if p.is_file():
                 return p
     return None

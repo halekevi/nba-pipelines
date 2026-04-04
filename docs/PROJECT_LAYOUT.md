@@ -34,7 +34,7 @@ Each sport keeps its own steps, caches, and docs. **Paths are not uniform** — 
 |-------|----------------|--------------------------------|--------------------------------|
 | **NBA** | `NBA\scripts\` | `NBA\data\outputs\step*.csv`, `step7_ranked_props.xlsx` | `NBA\data\outputs\step8_all_direction_clean.xlsx` |
 | **NBA 1H / 1Q** | Same tree, separate step files | `NBA\step*_nba1h_*.csv`, `NBA\step*_nba1q_*.csv` | `NBA\step8_nba1h_direction_clean.xlsx`, `NBA\step8_nba1q_direction_clean.xlsx` |
-| **CBB** | `CBB\scripts\pipeline\` | `CBB\outputs\<date>\`, `CBB\data\cache\`, `CBB\data\reference\` | `CBB\step6_ranked_cbb.xlsx`, `CBB\step6_ranked_wcbb.xlsx` |
+| **CBB / WCBB** | `CBB\scripts\pipeline\` | Dated intermediates: `CBB\outputs\<yyyy-MM-dd>\step*.csv` / `step6_*.xlsx`; caches: `CBB\data\cache\` | Latest slates copied to **`CBB\step6_ranked_cbb.xlsx`** and **`CBB\step6_ranked_wcbb.xlsx`** for combine / UI |
 | **NHL** | `NHL\scripts\` | `NHL\outputs\step*.csv` / `step*.xlsx`, `NHL\cache\` (IDs, gamelog JSON, defense summary) | `NHL\outputs\step8_nhl_direction_clean.xlsx` (root path kept as fallback in some tools) |
 | **MLB** | `MLB\scripts\` | `MLB\outputs\` | Resolved by `Resolve-MLBCleanSlateFile` (several fallback paths under `MLB\`) |
 | **Soccer** | `Soccer\scripts\` | `Soccer\outputs\`, `Soccer\cache\` | `Soccer\outputs\step8_soccer_direction_clean.xlsx` |
@@ -47,7 +47,7 @@ Each sport keeps its own steps, caches, and docs. **Paths are not uniform** — 
 | `scripts\organize_project_root.ps1` | Preview / move dated `combined_slate_tickets_*`, performance CSVs into `outputs\...`, debug text into `logs\` |
 | `scripts\organize_root.ps1` | Legacy mover: relocates *specific* filenames from root into `scripts\`, `scripts\grading\`, etc., and can patch `run_pipeline.ps1` (preview with no `-Execute`) |
 | `scripts\organize_folder.ps1` / `scripts\organize_slateiq_root.ps1` | Additional housekeeping (read headers before running) |
-| `CBB\Organize-CBB.ps1`, `NHL\Reorganize_NHL.ps1` | Sport-specific organization |
+| `CBB\scripts\Organize-CBB.ps1`, `NHL\scripts\Reorganize_NHL.ps1` | Sport-specific organization (NHL script is informational) |
 
 ## If you move directories or rename outputs
 

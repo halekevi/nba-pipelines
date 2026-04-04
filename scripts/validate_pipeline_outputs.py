@@ -171,6 +171,10 @@ def main() -> int:
     cbb_fallback = os.path.join(repo_root, "CBB", "step6_ranked_cbb.xlsx")
     cbb_path = cbb_dated if os.path.exists(cbb_dated) else cbb_fallback
 
+    wcbb_dated = os.path.join(repo_root, "CBB", "outputs", d, "step6_ranked_wcbb.xlsx")
+    wcbb_fallback = os.path.join(repo_root, "CBB", "step6_ranked_wcbb.xlsx")
+    wcbb_path = wcbb_dated if os.path.exists(wcbb_dated) else wcbb_fallback
+
     sources = [
         SourceDef("NBA", os.path.join(repo_root, "NBA", "data", "outputs", "step8_all_direction_clean.xlsx"), "ALL", True),
         SourceDef("CBB", cbb_path, "ALL", True),
@@ -179,7 +183,7 @@ def main() -> int:
         SourceDef("MLB", os.path.join(repo_root, "MLB", "step8_mlb_direction_clean.xlsx"), "ALL", False),
         SourceDef("NBA1Q", os.path.join(repo_root, "NBA", "step8_nba1q_direction_clean.xlsx"), "ALL", False),
         SourceDef("NBA1H", os.path.join(repo_root, "NBA", "step8_nba1h_direction_clean.xlsx"), "ALL", False),
-        SourceDef("WCBB", os.path.join(repo_root, "CBB", "step6_ranked_wcbb.xlsx"), "ALL", False),
+        SourceDef("WCBB", wcbb_path, "ALL", False),
     ]
 
     results = []
