@@ -990,7 +990,7 @@ body::before{
     </div>
   </div>
 
-  <p class="home-flow-lede" role="note"><strong style="color:var(--text);font-weight:600;">How to read this page:</strong> <em>Quick Actions</em> for tickets and tools → <em>Slate Explorer</em> for full sortable slates → expand <em>Top Edges</em> for ticket-leg highlights (by edge within each group). <em>L5 / L10 Streaks</em> use last-game counts vs the line when available. <span class="home-jump"><a href="#slate-explorer">Jump to slate</a> · <a href="#top-edges">Jump to edges</a></span></p>
+  <p class="home-flow-lede" role="note"><strong style="color:var(--text);font-weight:600;">How to read this page:</strong> <em>Quick Actions</em> for tickets and tools → <em>Slate Explorer</em> for full sortable slates → expand <em>Top Edges</em> for ticket-leg highlights (by edge within each group). <em>L5 / L10 Streaks</em> use last-game counts vs the line when available. <em>Top Unders</em> sorts by <code>l5_under</code>/<code>l10_under</code> on every prop (including OVER legs), so under trends still show when tickets are over-heavy. <span class="home-jump"><a href="#slate-explorer">Jump to slate</a> · <a href="#top-edges">Jump to edges</a></span></p>
 
   <!-- QUICK NAV — above the fold -->
   <details class="home-cat" open>
@@ -2030,13 +2030,29 @@ function renderStreaks() {
     return null;
   }
 
+  /** Under-side streaks: use l5_under / l10_under for EVERY pick (OVER slips still have these). */
+  function underStreakRows(n, minHits) {
+    const key = n === 5 ? "l5_under" : "l10_under";
+    const out = [];
+    for (const p of ALL_SLATE) {
+      const raw = p[key];
+      if (raw === null || raw === undefined) continue;
+      const h = Math.round(Number(raw));
+      if (!Number.isFinite(h)) continue;
+      if (minHits != null && h < minHits) continue;
+      out.push({ ...p, dir: "UNDER", h });
+    }
+    out.sort((a, b) => b.h - a.h);
+    return out;
+  }
+
   const l5all = [...ALL_SLATE]
     .map(p => ({...p, h: realHits(p, 5)}))
     .filter(p => p.h !== null)
     .sort((a, b) => b.h - a.h);
 
   const l5O = l5all.filter(p => p.dir === "OVER");
-  const l5U = l5all.filter(p => p.dir === "UNDER");
+  const l5U = underStreakRows(5, null);
 
   const l10all = [...ALL_SLATE]
     .map(p => ({...p, h: realHits(p, 10)}))
@@ -2044,14 +2060,14 @@ function renderStreaks() {
     .sort((a, b) => b.h - a.h);
 
   const l10O = l10all.filter(p => p.dir === "OVER");
-  const l10U = l10all.filter(p => p.dir === "UNDER");
+  const l10U = underStreakRows(10, 8);
 
   const none = msg => `<div style="padding:14px 0;font-size:11px;color:var(--muted2);letter-spacing:1px;">${msg}</div>`;
 
   document.getElementById("l5-over-grid").innerHTML   = l5O.length  ? l5O.map(p=>streakCard(p,5)).join("")   : none("No L5 over data on today's slate");
-  document.getElementById("l5-under-grid").innerHTML  = l5U.length  ? l5U.map(p=>streakCard(p,5)).join("")   : none("No L5 under data on today's slate");
+  document.getElementById("l5-under-grid").innerHTML  = l5U.length  ? l5U.map(p=>streakCard(p,5)).join("")   : none("No L5 under counts on today's slate (pipeline l5_under missing)");
   document.getElementById("l10-over-grid").innerHTML  = l10O.length ? l10O.map(p=>streakCard(p,10)).join("") : none("No L10 over streaks (8+/10) on today's slate");
-  document.getElementById("l10-under-grid").innerHTML = l10U.length ? l10U.map(p=>streakCard(p,10)).join("") : none("No L10 under streaks (8+/10) on today's slate");
+  document.getElementById("l10-under-grid").innerHTML = l10U.length ? l10U.map(p=>streakCard(p,10)).join("") : none("No L10 under counts 8+ on today's slate (pipeline l10_under missing)");
 }
 
 // ── Add streak-card CSS ───────────────────────────────────
