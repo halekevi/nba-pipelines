@@ -42,6 +42,83 @@ NHL_STAT_KEYWORDS = {
 }
 
 
+def _to_float(x) -> float | None:
+    if x is None:
+        return None
+    s = str(x).strip()
+    if not s:
+        return None
+    try:
+        return float(s)
+    except ValueError:
+        return None
+
+
+def _pick_type_lower(pick_type) -> str:
+    return str(pick_type or "").strip().lower()
+
+
+def enrich_standard_lines(rows: list) -> tuple[list, int]:
+    """
+    Populate standard_line and delta_pct for each row.
+
+    - Standard: standard_line from API if present, else line_score.
+    - Goblin/Demon: standard_line from API if present, else the line_score of the
+      matching Standard prop for the same player_id + stat_type (first match wins).
+    - delta_pct = line_score / standard_line (same ratio as combined_slate / grader),
+      blank when standard_line is unknown or zero.
+
+    Returns (rows, n_goblin_demon_missing_std) for logging.
+    """
+    std_lookup: dict[tuple[str, str], float] = {}
+    for r in rows:
+        if _pick_type_lower(r.get("pick_type")) != "standard":
+            continue
+        pid = str(r.get("player_id", "")).strip()
+        st = str(r.get("stat_type", "")).strip().lower()
+        if not pid or not st:
+            continue
+        ls = _to_float(r.get("line_score"))
+        if ls is None:
+            continue
+        key = (pid, st)
+        if key not in std_lookup:
+            std_lookup[key] = ls
+
+    missing_std = 0
+    for r in rows:
+        pt = _pick_type_lower(r.get("pick_type"))
+        pid = str(r.get("player_id", "")).strip()
+        st = str(r.get("stat_type", "")).strip().lower()
+        line_val = _to_float(r.get("line_score"))
+        std_val = _to_float(r.get("standard_line"))
+
+        if pt == "standard":
+            if std_val is None and line_val is not None:
+                std_val = line_val
+        elif pt in ("goblin", "demon"):
+            if std_val is None and pid and st:
+                std_val = std_lookup.get((pid, st))
+            if std_val is None:
+                missing_std += 1
+        else:
+            # Unknown odds label — treat like Standard for baseline purposes
+            if std_val is None and line_val is not None:
+                std_val = line_val
+
+        if std_val is not None:
+            r["standard_line"] = std_val
+        else:
+            r["standard_line"] = ""
+
+        if line_val is not None and std_val is not None and std_val != 0:
+            r["delta_pct"] = round(line_val / std_val, 6)
+        else:
+            r["delta_pct"] = ""
+
+    return rows, missing_std
+
+
 def is_nhl_data(rows: list) -> bool:
     """Sanity check — make sure we got hockey props not NBA."""
     if not rows:
@@ -86,6 +163,7 @@ def parse_rows(data: list, included: list) -> list:
             game_id = (rels.get("game") or rels.get("new_game") or {}).get("data", {}).get("id", "")
             player_info = players_map.get(player_id, {})
             game_info = games_map.get(game_id, {})
+            std_api = attrs.get("standard_line") or attrs.get("standard_score") or attrs.get("baseline")
 
             rows.append({
                 "projection_id": proj_id,
@@ -95,6 +173,7 @@ def parse_rows(data: list, included: list) -> list:
                 "position": player_info.get("position", ""),
                 "stat_type": attrs.get("stat_type", ""),
                 "line_score": attrs.get("line_score", ""),
+                "standard_line": std_api if std_api is not None else "",
                 "pick_type": attrs.get("odds_type") or attrs.get("pick_type") or "",
                 "is_promo": attrs.get("is_promo", False),
                 "description": attrs.get("description", ""),
@@ -297,6 +376,13 @@ def main():
     if not rows:
         print("⚠️  No NHL props found. NHL may not be active on PrizePicks today.")
         sys.exit(0)
+
+    rows, n_missing_std = enrich_standard_lines(rows)
+    if n_missing_std:
+        print(
+            f"\n⚠️  Goblin/Demon rows with no standard_line (no API field + no matching Standard prop): "
+            f"{n_missing_std} — delta_pct blank; payout curve uses factor 1.0 for those legs."
+        )
 
     stat_counts = {}
     for r in rows:

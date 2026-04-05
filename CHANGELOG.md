@@ -16,3 +16,4 @@
 - `ui_runner/app.py` — `GET /api/slate/today-tickets`, `POST /api/payout/log-observation`, `GET /api/payout/combo-table`.
 - `ui_runner/templates/payout_calculator.html` — “Import from slate JSON” for the Log Lines tab.
 - `NBA/scripts/step1_fetch_prizepicks_api.py`, `Soccer/scripts/step1_fetch_prizepicks_soccer.py`, `MLB/scripts/step1_fetch_prizepicks_mlb.py` — `standard_line` column from API when present.
+- `NHL/scripts/step1_fetch_prizepicks_nhl.py` — `standard_line` from API or matched Standard prop per player/stat; `delta_pct` = `line_score / standard_line`; warns when Goblin/Demon rows lack a baseline.
