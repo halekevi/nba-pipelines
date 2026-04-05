@@ -271,6 +271,51 @@ else {
 }
 
 # =============================================================================
+# STEP A1d — Goblin/Demon payout curve fit + combo reference JSON
+# =============================================================================
+$fitPayoutScript = Join-Path $Root "utils\fit_payout_curve.py"
+$comboTableScript = Join-Path $Root "scripts\write_combo_table_latest.py"
+Write-Log "STEP A1d - Payout curve / combo table: START"
+Push-Location $Root
+try {
+    if (Test-Path $fitPayoutScript) {
+        & py -3.14 -X utf8 $fitPayoutScript --min-obs 10
+        $fe = $LASTEXITCODE
+        if ($fe -eq 2) {
+            Write-Log "STEP A1d - fit_payout_curve: SKIP (not enough observations yet)"
+        }
+        elseif ($fe -ne 0) {
+            Write-Log "STEP A1d - fit_payout_curve: WARN (exit $fe)"
+        }
+        else {
+            Write-Log "STEP A1d - fit_payout_curve: OK"
+        }
+    }
+    else {
+        Write-Log "STEP A1d - fit_payout_curve: SKIP (script missing)"
+    }
+    if (Test-Path $comboTableScript) {
+        & py -3.14 -X utf8 $comboTableScript
+        $ce = $LASTEXITCODE
+        if ($ce -ne 0) {
+            Write-Log "STEP A1d - write_combo_table_latest: WARN (exit $ce)"
+        }
+        else {
+            Write-Log "STEP A1d - write_combo_table_latest: OK"
+        }
+    }
+    else {
+        Write-Log "STEP A1d - write_combo_table_latest: SKIP (script missing)"
+    }
+}
+catch {
+    Write-Log "STEP A1d - Payout curve / combo table: WARN ($($_.Exception.Message))"
+}
+finally {
+    Pop-Location
+}
+
+# =============================================================================
 # STEP A2 — Build player consistency after grading
 # =============================================================================
 if ($SkipConsistency) {

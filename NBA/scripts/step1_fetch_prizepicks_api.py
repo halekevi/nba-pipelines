@@ -264,6 +264,11 @@ def build_rows(data: List[dict], included: List[dict]) -> List[dict]:
         prop_type = str(attrs.get("stat_type", attrs.get("projection_type", attrs.get("name", "")))).strip()
         odds_type = str(attrs.get("odds_type", "")).strip().lower()
         pick_type = PICKTYPE_MAP.get(odds_type, "Standard")
+        std_api = attrs.get("standard_line") or attrs.get("standard_score") or attrs.get("baseline")
+        if pick_type == "Standard":
+            standard_line = std_api if std_api is not None and str(std_api).strip() != "" else line
+        else:
+            standard_line = std_api if std_api is not None else ""
 
         # Player
         player_id   = _safe_get(rel, ["new_player", "data", "id"], "") or ""
@@ -319,6 +324,7 @@ def build_rows(data: List[dict], included: List[dict]) -> List[dict]:
             "opp_team":         opp_team,
             "prop_type":        prop_type,
             "line":             line,
+            "standard_line":    standard_line,
             "pick_type":        pick_type,
             "pp_home_team":     home,
             "pp_away_team":     away,
@@ -352,7 +358,7 @@ def main() -> None:
     EMPTY_COLS = [
         "projection_id", "pp_projection_id", "player_id", "pp_game_id",
         "start_time", "player", "pos", "team", "opp_team", "prop_type",
-        "line", "pick_type", "pp_home_team", "pp_away_team", "image_url",
+        "line", "standard_line", "pick_type", "pp_home_team", "pp_away_team", "image_url",
     ]
 
     print(f"📡 PrizePicks fetch | league_id={args.league_id} | direct API (no browser)")
@@ -386,6 +392,9 @@ def main() -> None:
     rows = build_rows(data, included)
     df   = pd.DataFrame(rows).fillna("")
     df["line"] = pd.to_numeric(df["line"], errors="coerce")
+    df["standard_line"] = pd.to_numeric(df["standard_line"], errors="coerce")
+    _mstd = df["pick_type"].astype(str).str.lower().eq("standard")
+    df.loc[_mstd, "standard_line"] = df.loc[_mstd, "standard_line"].fillna(df.loc[_mstd, "line"])
 
     # Dedupe
     before = len(df)

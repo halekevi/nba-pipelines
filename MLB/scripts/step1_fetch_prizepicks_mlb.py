@@ -78,7 +78,7 @@ PICKTYPE_MAP = {"standard": "Standard", "goblin": "Goblin", "demon": "Demon"}
 EMPTY_COLS = [
     "projection_id", "pp_projection_id", "player_id", "pp_game_id", "start_time",
     "player", "image_url", "pos", "team", "opp_team", "pp_home_team", "pp_away_team",
-    "prop_type", "line", "pick_type",
+    "prop_type", "line", "standard_line", "pick_type",
 ]
 
 PROFILE_DIR = Path.home() / ".pp_browser_profile"
@@ -192,6 +192,11 @@ def parse_rows(data: List[dict], included: List[dict]) -> List[dict]:
         # PrizePicks API uses "odds_type" (new) — fall back to "pick_type" (legacy)
         pick_type_raw = str(attrs.get("odds_type") or attrs.get("pick_type") or "standard").strip().lower()
         pick_type     = PICKTYPE_MAP.get(pick_type_raw, pick_type_raw.capitalize())
+        std_api = attrs.get("standard_line") or attrs.get("standard_score") or attrs.get("baseline")
+        if pick_type == "Standard":
+            standard_line = std_api if std_api is not None and str(std_api).strip() != "" else line
+        else:
+            standard_line = std_api if std_api is not None else ""
 
         # resolve player
         player_rel = rels.get("new_player") or rels.get("player") or {}
@@ -249,6 +254,7 @@ def parse_rows(data: List[dict], included: List[dict]) -> List[dict]:
             "pp_away_team":     away,
             "prop_type":        prop_type_raw,
             "line":             line,
+            "standard_line":    standard_line,
             "pick_type":        pick_type,
         })
 
@@ -490,6 +496,9 @@ def main():
     rows = parse_rows(data, included)
     df   = pd.DataFrame(rows).fillna("")
     df["line"] = pd.to_numeric(df["line"], errors="coerce")
+    df["standard_line"] = pd.to_numeric(df["standard_line"], errors="coerce")
+    _mstd = df["pick_type"].astype(str).str.lower().eq("standard")
+    df.loc[_mstd, "standard_line"] = df.loc[_mstd, "standard_line"].fillna(df.loc[_mstd, "line"])
 
     # Derive opp_team from game_id groupings when game obj lacks home/away fields
     df["pp_game_id"] = df["pp_game_id"].astype(str).str.strip()

@@ -132,6 +132,11 @@ def build_rows(data: list, included: list, league_name: str) -> list:
         pick_type = PICKTYPE_MAP.get(odds_type, "Standard")
         prop_type = str(attrs.get("stat_type", attrs.get("name", ""))).strip()
         line      = attrs.get("line_score", attrs.get("line", ""))
+        std_api = attrs.get("standard_line") or attrs.get("standard_score") or attrs.get("baseline")
+        if pick_type == "Standard":
+            standard_line = std_api if std_api is not None and str(std_api).strip() != "" else line
+        else:
+            standard_line = std_api if std_api is not None else ""
 
         rows.append({
             "projection_id":    proj_id,
@@ -149,6 +154,7 @@ def build_rows(data: list, included: list, league_name: str) -> list:
             "pp_away_team":     away,
             "prop_type":        prop_type,
             "line":             line,
+            "standard_line":    standard_line,
             "pick_type":        pick_type,
         })
 
@@ -199,6 +205,9 @@ def main():
 
     df = pd.DataFrame(all_rows)
     df["line"] = pd.to_numeric(df["line"], errors="coerce")
+    df["standard_line"] = pd.to_numeric(df["standard_line"], errors="coerce")
+    _mstd = df["pick_type"].astype(str).str.lower().eq("standard")
+    df.loc[_mstd, "standard_line"] = df.loc[_mstd, "standard_line"].fillna(df.loc[_mstd, "line"])
     df = df.drop_duplicates(subset=["projection_id"], keep="first").reset_index(drop=True)
 
     df.to_csv(args.output, index=False, encoding="utf-8-sig")

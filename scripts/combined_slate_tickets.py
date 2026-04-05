@@ -49,6 +49,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import math
 import os
 import re
@@ -71,6 +72,13 @@ if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 from utils.kelly_staking import fractional_kelly, leg_edge_pct_for_kelly
 from utils.cbb_tourney_metadata import CBB_AP_TOP25_2026, CBB_TOURNEY_2026
+from utils.goblin_demon_multiplier import (
+    compute_ticket_ev as gd_compute_ticket_ev,
+    leg_delta_pct as gd_leg_delta_pct,
+    multiplier_summary as gd_multiplier_summary,
+)
+
+_log_slate = logging.getLogger("combined_slate_tickets")
 
 DEFAULT_NBA_PATH = os.path.join(REPO_ROOT, "NBA", "data", "outputs", "step8_all_direction_clean.xlsx")
 DEFAULT_CBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_cbb.xlsx")
@@ -508,6 +516,66 @@ def calc_adjusted_payout(base_payout: float, legs: list) -> float:
         # Standard: no change
 
     return round(base_payout * multiplier, 2)
+
+
+def enrich_ticket_curve_payouts(ticket: dict, stake_unit: float = 1.0) -> None:
+    """
+    Adds flat_multiplier, est_multiplier, mult_error, EV columns using
+    utils.goblin_demon_multiplier (delta_pct from line / standard_line per leg).
+    Mutates ticket dict in place.
+    """
+    rows = ticket.get("rows") or []
+    n = int(ticket.get("n_legs", len(rows)) or 0) or len(rows)
+    legs_payload: list[dict] = []
+    using_fb = False
+    for r in rows:
+        rd = r if isinstance(r, dict) else dict(r)
+        sl = rd.get("standard_line")
+        ln = rd.get("line")
+        dp = gd_leg_delta_pct(ln, sl)
+        pt = str(rd.get("pick_type") or "Standard")
+        pl = pt.lower()
+        if ("goblin" in pl or "demon" in pl) and dp is None:
+            using_fb = True
+        pr = rd.get("leg_prob_used")
+        if pr is None:
+            pr = rd.get("ml_prob")
+        legs_payload.append(
+            {
+                "pick_type": pt,
+                "delta_pct": dp,
+                "line": ln,
+                "standard_line": sl,
+                "prob": pr,
+            }
+        )
+    summ = gd_multiplier_summary(legs_payload, mode="power", stake=float(stake_unit))
+    flat_p = float(summ.get("flat_mult") or 0.0)
+    est_p = float(summ.get("est_mult") or flat_p)
+    mult_err = float(summ.get("mult_delta") or 0.0)
+    ticket["flat_multiplier"] = round(flat_p, 4)
+    ticket["est_multiplier"] = round(est_p, 4)
+    ticket["mult_error"] = round(mult_err, 4)
+    ticket["est_payout"] = round(est_p * float(stake_unit), 4)
+    ticket["flat_payout"] = round(flat_p * float(stake_unit), 4)
+    ticket["payout_delta"] = round(ticket["est_payout"] - ticket["flat_payout"], 4)
+    cp = summ.get("combined_prob")
+    ticket["combined_hit_prob_curve"] = cp
+    if cp is not None:
+        ticket["est_ev"] = round(gd_compute_ticket_ev(est_p, float(cp), float(stake_unit)), 4)
+        ticket["flat_ev"] = round(gd_compute_ticket_ev(flat_p, float(cp), float(stake_unit)), 4)
+    if n >= 3:
+        summ_f = gd_multiplier_summary(legs_payload, mode="flex", hits=n, stake=float(stake_unit))
+        ticket["est_multiplier_flex_nn"] = summ_f.get("est_mult")
+        ticket["flat_multiplier_flex_nn"] = summ_f.get("flat_mult")
+    ticket["using_flat_fallback"] = bool(using_fb)
+    if abs(mult_err) > 1.0:
+        _log_slate.warning(
+            "Ticket curve mult_error %.4f (>1.0 vs flat base): %s-leg slip",
+            mult_err,
+            n,
+        )
+
 
 # ── Per-leg count quality thresholds (used by smart ticket builder) ───────────
 # Min hit rate required per leg depending on ticket length
@@ -1380,7 +1448,9 @@ def compute_image_url(leg: dict) -> Optional[str]:
     return None
 
 
-def ticket_groups_to_payload(all_ticket_groups, date_str, thresholds, bankroll: float = 0.0):
+def ticket_groups_to_payload(
+    all_ticket_groups, date_str, thresholds, bankroll: float = 0.0, curve_stake_usd: float = 1.0
+):
     payload = {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
         "date": date_str,
@@ -1402,6 +1472,7 @@ def ticket_groups_to_payload(all_ticket_groups, date_str, thresholds, bankroll: 
         }
 
         for ti, t in enumerate(tickets, start=1):
+            enrich_ticket_curve_payouts(t, stake_unit=float(curve_stake_usd))
             rows = t.get("rows", [])
             slip = {
                 "ticket_no": ti,
@@ -1418,6 +1489,18 @@ def ticket_groups_to_payload(all_ticket_groups, date_str, thresholds, bankroll: 
                 "kelly_units": _safe_float(t.get("kelly_units")),
                 "correlation_multiplier": _safe_float(t.get("correlation_multiplier")),
                 "correlation_audit": list(t.get("correlation_audit") or []),
+                "flat_multiplier": _safe_float(t.get("flat_multiplier")),
+                "est_multiplier": _safe_float(t.get("est_multiplier")),
+                "mult_error": _safe_float(t.get("mult_error")),
+                "est_payout": _safe_float(t.get("est_payout")),
+                "flat_payout": _safe_float(t.get("flat_payout")),
+                "payout_delta": _safe_float(t.get("payout_delta")),
+                "est_ev": _safe_float(t.get("est_ev")),
+                "flat_ev": _safe_float(t.get("flat_ev")),
+                "combined_hit_prob_curve": _safe_float(t.get("combined_hit_prob_curve")),
+                "est_multiplier_flex_nn": _safe_float(t.get("est_multiplier_flex_nn")),
+                "flat_multiplier_flex_nn": _safe_float(t.get("flat_multiplier_flex_nn")),
+                "using_flat_fallback": bool(t.get("using_flat_fallback")),
                 "has_data_warning": False,
                 "legs": [],
             }
@@ -1427,6 +1510,7 @@ def ticket_groups_to_payload(all_ticket_groups, date_str, thresholds, bankroll: 
                 def gv(field):
                     return row.get(field, "") if isinstance(row, dict) else getattr(row, field, "")
 
+                _dpv = gd_leg_delta_pct(gv("line"), gv("standard_line"))
                 leg = {
                     "sport": str(gv("sport") or ""),
                     "player": str(gv("player") or ""),
@@ -1442,6 +1526,7 @@ def ticket_groups_to_payload(all_ticket_groups, date_str, thresholds, bankroll: 
                     "standard_edge": _safe_float(gv("standard_edge")),
                     "standard_projection": _safe_float(gv("standard_projection")),
                     "line_discount_vs_standard": _safe_float(gv("line_discount_vs_standard")),
+                    "delta_pct": round(float(_dpv), 4) if _dpv is not None else None,
                     "hit_rate": _safe_float(gv("hit_rate")),
                     "ml_prob": _safe_float(gv("ml_prob")),
                     "rank_score": _safe_float(gv("rank_score")),
@@ -1887,6 +1972,7 @@ html[data-theme="light"] .ticket{
 /* dir badges */
 .dir-over{background:rgba(0,242,255,.15);color:#00F2FF;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;}
 .dir-under{background:rgba(240,165,0,.15);color:#f0a500;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;}
+.delta-badge{font-family:'Share Tech Mono',monospace;font-size:10px;padding:2px 6px;border-radius:6px;border:1px solid;margin-left:6px;vertical-align:middle;white-space:nowrap;}
 .sig-strong{background:rgba(0,242,255,.16);color:#00F2FF;border:1px solid rgba(0,242,255,.35);padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700;display:inline-block;}
 .sig-lean{background:rgba(240,165,0,.16);color:#f0a500;border:1px solid rgba(240,165,0,.35);padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700;display:inline-block;}
 .sig-risk{background:rgba(201,106,116,.16);color:#c96a74;border:1px solid rgba(201,106,116,.35);padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700;display:inline-block;}
@@ -2069,6 +2155,21 @@ html[data-theme="light"] .ticket{
             except Exception:
                 rs_disp = "—"
 
+            em = t.get("est_multiplier")
+            fm = t.get("flat_multiplier")
+            mult_kpi = ""
+            if em is not None and fm is not None:
+                try:
+                    mult_kpi = f"""
+          <div class="kpi">
+            <div class="kpi-label">Curve est</div>
+            <div class="kpi-val" style="color:var(--accent);">{float(em):.2f}x</div>
+            <div class="kpi-label" style="margin-top:4px">Flat PP base</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--muted);">{float(fm):.2f}x</div>
+          </div>"""
+                except (TypeError, ValueError):
+                    mult_kpi = ""
+
             html_parts.append(f"""
   <div class="ticket">
     <div class="ticket-inner">
@@ -2089,7 +2190,7 @@ html[data-theme="light"] .ticket{
           <div class="kpi" style="flex:1;min-width:140px;">
             <div class="kpi-label">Win Prob</div>
             {wp_bar(wp)}
-          </div>
+          </div>{mult_kpi}
         </div>
         <table>
           <thead><tr>
@@ -2134,6 +2235,33 @@ html[data-theme="light"] .ticket{
                 dir_txt    = str(leg.get("direction") or "").upper()
                 row_id     = f"lgr-{id(leg)}-{i}"
                 sig_html, sig_reason = direction_signal(leg)
+
+                dp = leg.get("delta_pct")
+                ptl = str(leg.get("pick_type") or "").lower()
+                delta_badge = ""
+                if dp is not None:
+                    try:
+                        dpf = float(dp)
+                        bc = "#888888"
+                        if "goblin" in ptl:
+                            if dpf >= 0.9:
+                                bc = "#7dcf9a"
+                            elif dpf >= 0.7:
+                                bc = "#c89a4a"
+                            else:
+                                bc = "#e67e22"
+                        elif "demon" in ptl:
+                            if dpf <= 1.15:
+                                bc = "#e8a0a0"
+                            else:
+                                bc = "#ff3333"
+                        delta_badge = (
+                            f" <span class='delta-badge' style='border-color:{bc};color:{bc}' "
+                            f"title='played ÷ standard'>{dpf * 100:.1f}%</span>"
+                        )
+                    except (TypeError, ValueError):
+                        pass
+                pick_cell = f"{leg.get('pick_type', '')}{delta_badge}"
 
                 # stat pills
                 def _pill(label, val, fmt=None):
@@ -2242,7 +2370,7 @@ html[data-theme="light"] .ticket{
                     f"<td>{player_cell}</td>"
                     f"<td>{leg.get('prop_type','')}</td>"
                     f"<td style='color:var(--text);'>{fmt_line(leg.get('line'))}</td>"
-                    f"<td>{leg.get('pick_type','')}</td>"
+                    f"<td>{pick_cell}</td>"
                     f"<td>{min_tier}</td>"
                     f"<td>{shot_role}</td>"
                     f"<td>{usg_role}</td>"
@@ -5092,6 +5220,8 @@ TICKET_COLS = [
     "b2b_flag",
     "cv_pct",
     "opp_vs_avg_pct",
+    "standard_line",
+    "delta_pct",
     "sport",
 ]
 TICKET_HDRS = [
@@ -5120,9 +5250,11 @@ TICKET_HDRS = [
     "B2B",
     "CV%",
     "Opp vs Avg%",
+    "Std Line",
+    "Delta %",
     "Sport",
 ]
-TICKET_W = [4, 20, 6, 6, 18, 10, 6, 6, 7, 9, 8, 9, 7, 8, 8, 9, 11, 8, 10, 8, 9, 7, 7, 8, 10, 6]
+TICKET_W = [4, 20, 6, 6, 18, 10, 6, 6, 7, 9, 8, 9, 7, 8, 8, 9, 11, 8, 10, 8, 9, 7, 7, 8, 10, 8, 8, 6]
 
 
 def write_ticket_sheet(wb, tickets, sheet_name, bg_hdr, label=""):
@@ -5147,10 +5279,20 @@ def write_ticket_sheet(wb, tickets, sheet_name, bg_hdr, label=""):
         ev_pow     = ticket.get("ev_power", round(ep * pout, 4))
         exp_wr     = ticket.get("expected_win_rate", None)
         ttype      = ticket.get("ticket_type", "")
-        mult_label = (
-            f"  ·  Payout Mult: {pay_mult:.2f}x (base {base_pout}x → adj {pout}x)"
-            if abs(pay_mult - 1.0) > 0.001 else ""
-        )
+        em_curve = ticket.get("est_multiplier")
+        fm_curve = ticket.get("flat_multiplier")
+        curve_lbl = ""
+        if em_curve is not None and fm_curve is not None:
+            try:
+                curve_lbl = f"  ·  Curve est: {float(em_curve):.2f}x vs flat PP base {float(fm_curve):.2f}x"
+            except (TypeError, ValueError):
+                curve_lbl = ""
+        _pl_parts: list[str] = []
+        if abs(pay_mult - 1.0) > 0.001:
+            _pl_parts.append(f"Payout Mult: {pay_mult:.2f}x (base {base_pout}x → adj {pout}x)")
+        if curve_lbl:
+            _pl_parts.append(curve_lbl.strip())
+        mult_label = ("  ·  " + "  ·  ".join(_pl_parts)) if _pl_parts else ""
         wr_label = f"  ·  Expected Win Rate: {float(exp_wr):.0%}" if exp_wr is not None else ""
         banner = (
             f"  Ticket #{ti}  ·  {n}-Leg {label} {ttype}  ·  "
@@ -5277,10 +5419,19 @@ def write_ticket_sheet(wb, tickets, sheet_name, bg_hdr, label=""):
                     cell_opp.number_format = "0.0%"
                 except Exception:
                     pass
-            # Sport (shifted to col 26)
+            std_v = gv("standard_line")
+            try:
+                std_out = round(float(std_v), 2) if std_v != "" and std_v is not None else ""
+            except (TypeError, ValueError):
+                std_out = ""
+            dc(ws, ri, 26, std_out, bg=bg, align="center")
+            _dpx = gd_leg_delta_pct(gv("line"), gv("standard_line"))
+            dp_out = round(float(_dpx), 4) if _dpx is not None else ""
+            dc(ws, ri, 27, dp_out, bg=bg, align="center", fmt="0.0000" if dp_out != "" else None)
+            # Sport
             sv = gv("sport")
             sbg = C["hdr_nba"] if sv == "NBA" else (C["hdr_cbb"] if sv == "CBB" else C["hdr"])
-            dc(ws, ri, 26, sv, bg=sbg, bold=True, fc="FFFFFF")
+            dc(ws, ri, 28, sv, bg=sbg, bold=True, fc="FFFFFF")
             ws.row_dimensions[ri].height = 14
             ri += 1
 
@@ -5553,6 +5704,13 @@ def main():
         type=float,
         default=0.0,
         help="Optional bankroll (USD). When > 0, tickets_latest.json legs include recommended_stake_usd (fractional Kelly, utils/kelly_staking).",
+    )
+    ap.add_argument(
+        "--curve-stake-usd",
+        type=float,
+        default=1.0,
+        dest="curve_stake_usd",
+        help="Stake (USD) for est_payout / est_ev / flat_ev columns (Goblin-Demon curve); does not change Kelly stakes.",
     )
 
     args = ap.parse_args()
@@ -6262,6 +6420,10 @@ def main():
     if nba1h is not None and len(nba1h) > 0:
         write_slate_sheet(wb, nba1h, "NBA1H Slate", C["hdr_nba1h"], "NBA1H")
 
+    for _gn, _tickets, _bg in all_ticket_groups:
+        for _ti in _tickets:
+            enrich_ticket_curve_payouts(_ti, stake_unit=float(args.curve_stake_usd))
+
     write_summary(wb, nba, cbb, combined, all_ticket_groups, args.date, thresholds,
                   nhl=nhl, soccer=soccer, wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h)
 
@@ -6282,7 +6444,11 @@ def main():
         print("\nWriting web outputs...")
         if all_ticket_groups:
             payload = ticket_groups_to_payload(
-                all_ticket_groups, args.date, thresholds, bankroll=max(0.0, float(args.bankroll))
+                all_ticket_groups,
+                args.date,
+                thresholds,
+                bankroll=max(0.0, float(args.bankroll)),
+                curve_stake_usd=float(args.curve_stake_usd),
             )
             n_groups = len(payload["groups"])
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
@@ -6307,7 +6473,11 @@ def main():
                 ticket_sort_mode=str(args.ticket_candidate_sort),
             )
             payload = ticket_groups_to_payload(
-                final_groups, args.date, thresholds, bankroll=max(0.0, float(args.bankroll))
+                final_groups,
+                args.date,
+                thresholds,
+                bankroll=max(0.0, float(args.bankroll)),
+                curve_stake_usd=float(args.curve_stake_usd),
             )
             n_groups = len(payload["groups"])
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])

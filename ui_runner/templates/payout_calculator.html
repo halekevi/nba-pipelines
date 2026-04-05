@@ -967,6 +967,10 @@ body::before{
         <button type="button" class="btn-glass-sm" onclick="_screenshotImportTarget='log';document.getElementById('screenshot-file').click()">UPLOAD SCREENSHOT</button>
         <span style="font-size:10px;color:var(--muted);letter-spacing:1px">Or paste an image with Ctrl+V on this tab (Gemini vision)</span>
       </div>
+      <div class="import-actions" style="margin-top:10px">
+        <button type="button" class="btn-glass-sm" onclick="importTodayTicketsFromSlate()">📥 Import from slate JSON</button>
+        <span style="font-size:10px;color:var(--muted);letter-spacing:1px">Loads tickets_latest.json (same as /tickets). Enter actual PP multiplier, then Log.</span>
+      </div>
     </div>
     <div class="form-grid-3" style="margin-bottom:16px">
       <div class="field"><label>PLATFORM</label><select id="log-platform" onchange="scheduleLogDraftSave()"><option>PrizePicks</option><option>Underdog Fantasy</option><option>Sleeper</option></select></div>
@@ -1276,6 +1280,43 @@ function scheduleLogDraftSave(){
   clearTimeout(_logDraftTimer);
   _logDraftTimer=setTimeout(saveLogDraft,350);
 }
+async function importTodayTicketsFromSlate(){
+  try{
+    const r = await fetch('/api/slate/today-tickets');
+    const j = await r.json();
+    if(!r.ok){ showMsg('⚠ '+(j.error||'Could not load slate'),'warn'); return; }
+    const arr = j.tickets||[];
+    if(!arr.length){ showMsg('⚠ No tickets in slate JSON','warn'); return; }
+    logLegs = [];
+    for(const tix of arr){
+      for(const L of tix.legs||[]){
+        const ptRaw = String(L.pick_type||'Standard').toLowerCase();
+        let typ = 'standard';
+        if(ptRaw.includes('gob')) typ = 'goblin';
+        else if(ptRaw.includes('dem')) typ = 'demon';
+        logCounter++;
+        const rawProp = String(L.prop_type||'').trim();
+        let propOpt = 'Other';
+        for(const p of PROP_OPTS){
+          if(p.toLowerCase() === rawProp.toLowerCase()){ propOpt = p; break; }
+        }
+        logLegs.push({
+          id: logCounter, type: typ,
+          player: L.player||'',
+          sport: L.sport||'NBA',
+          prop: propOpt,
+          stdLine: L.std_line!=null&&L.std_line!==''?String(L.std_line):'',
+          playedLine: L.played_line!=null&&L.played_line!==''?String(L.played_line):''
+        });
+      }
+    }
+    if(j.date) document.getElementById('log-date').value = j.date;
+    document.getElementById('log-slip-type').value = 'Power Play';
+    renderLogLegs(); refreshLogSummary();
+    showMsg('✓ Imported '+logLegs.length+' legs from slate','good');
+  }catch(e){ showMsg('⚠ '+e,'warn'); }
+}
+
 function loadLogDraft(){
   try{
     const r=localStorage.getItem(LOG_DRAFT_KEY);

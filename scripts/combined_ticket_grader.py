@@ -67,7 +67,9 @@ import argparse
 import csv
 from datetime import datetime, timezone
 import json
+import logging
 import re
+import sys
 import unicodedata
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
@@ -78,6 +80,17 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
 ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from utils.goblin_demon_multiplier import (  # noqa: E402
+    leg_delta_pct as gd_leg_delta_pct,
+    leg_factor as gd_leg_factor,
+    load_params as gd_load_params,
+    ticket_multiplier as gd_ticket_multiplier,
+)
+
+_log = logging.getLogger("combined_ticket_grader")
 
 
 # -----------------------------
@@ -338,6 +351,7 @@ def parse_ticket_sheet(tickets_xlsx: Path, sheet_name: str) -> pd.DataFrame:
         _mp = _col("ml prob", fallback=-1)
         if _mp >= 0:
             idx_ml_prob = _mp
+        idx_std_line = _col("standard line", "std line", fallback=-1)
 
         k = j + 1
         leg_no = 0
@@ -357,6 +371,9 @@ def parse_ticket_sheet(tickets_xlsx: Path, sheet_name: str) -> pd.DataFrame:
             tier = df.iloc[k, idx_def_tier] if df.shape[1] > idx_def_tier else ""
             sport = df.iloc[k, idx_sport] if df.shape[1] > idx_sport else ""
             ml_prob = df.iloc[k, idx_ml_prob] if (idx_ml_prob is not None and df.shape[1] > idx_ml_prob) else np.nan
+            std_line = np.nan
+            if idx_std_line >= 0 and df.shape[1] > idx_std_line:
+                std_line = pd.to_numeric(df.iloc[k, idx_std_line], errors="coerce")
 
             line_num = pd.to_numeric(line, errors="coerce")
             if pd.isna(line_num):
@@ -381,6 +398,7 @@ def parse_ticket_sheet(tickets_xlsx: Path, sheet_name: str) -> pd.DataFrame:
                 "leg_type": leg_type,
                 "tier": str(tier) if not pd.isna(tier) else "",
                 "ml_prob": pd.to_numeric(ml_prob, errors="coerce"),
+                "standard_line": float(std_line) if pd.notna(std_line) else np.nan,
             })
             k += 1
 
@@ -412,6 +430,7 @@ def parse_tickets_from_combined_json(path: Path) -> pd.DataFrame:
                     continue
                 pick_type = str(leg.get("pick_type") or "")
                 tier = leg.get("min_tier") or leg.get("tier") or ""
+                std_ln = pd.to_numeric(leg.get("standard_line"), errors="coerce")
                 rows.append(
                     {
                         "sheet": sheet,
@@ -428,6 +447,7 @@ def parse_tickets_from_combined_json(path: Path) -> pd.DataFrame:
                         "leg_type": derive_leg_type(pick_type),
                         "tier": str(tier) if tier is not None else "",
                         "ml_prob": pd.to_numeric(leg.get("ml_prob"), errors="coerce"),
+                        "standard_line": float(std_ln) if pd.notna(std_ln) else np.nan,
                     }
                 )
     return pd.DataFrame(rows)
@@ -600,6 +620,73 @@ def _load_ticket_json_ticket_objectives(repo_root: Path, tickets_xlsx: Path) -> 
             except (TypeError, ValueError):
                 pass
     return out
+
+
+def _load_combined_slate_payload(repo_root: Path, tickets_path: Path) -> Optional[dict]:
+    stem = tickets_path.stem
+    m = re.search(r"(\d{4}-\d{2}-\d{2})", stem)
+    date_str = m.group(1) if m else ""
+    candidates: list[Path] = []
+    if tickets_path.suffix.lower() == ".json":
+        candidates.append(tickets_path)
+    if date_str:
+        candidates.append(repo_root / "outputs" / date_str / f"combined_slate_tickets_{date_str}.json")
+        candidates.append(repo_root / f"combined_slate_tickets_{date_str}.json")
+    candidates.append(tickets_path.with_suffix(".json"))
+    json_path = next((p for p in candidates if p.exists()), None)
+    if json_path is None:
+        return None
+    try:
+        return json.loads(json_path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
+def _standard_line_lookup_from_payload(payload: Optional[dict]) -> dict[tuple[str, int, int], float]:
+    out: dict[tuple[str, int, int], float] = {}
+    if not payload:
+        return out
+    for g in (payload.get("groups") or []):
+        sheet = str(g.get("group_name") or "")
+        for t in (g.get("tickets") or []):
+            try:
+                tno = int(t.get("ticket_no"))
+            except Exception:
+                continue
+            for i, leg in enumerate((t.get("legs") or []), start=1):
+                v = leg.get("standard_line")
+                if v is None:
+                    continue
+                try:
+                    fv = float(v)
+                except (TypeError, ValueError):
+                    continue
+                if np.isfinite(fv):
+                    out[(sheet, tno, i)] = fv
+    return out
+
+
+def merge_standard_lines_into_legs_df(
+    legs_df: pd.DataFrame, lookup: dict[tuple[str, int, int], float]
+) -> pd.DataFrame:
+    if "standard_line" not in legs_df.columns:
+        legs_df = legs_df.copy()
+        legs_df["standard_line"] = np.nan
+    sl_out: list[float] = []
+    for _, r in legs_df.iterrows():
+        k = (str(r.get("sheet") or ""), int(r.get("ticket_no")), int(r.get("leg_no")))
+        if k in lookup:
+            sl_out.append(float(lookup[k]))
+        else:
+            v = r.get("standard_line")
+            try:
+                fv = float(v)
+                sl_out.append(fv if np.isfinite(fv) else np.nan)
+            except (TypeError, ValueError):
+                sl_out.append(np.nan)
+    out_df = legs_df.copy()
+    out_df["standard_line"] = sl_out
+    return out_df
 
 
 def _import_combined_slate_ticket_math():
@@ -894,10 +981,13 @@ def leg_modifiers(leg_types: List[str]) -> Tuple[float, float]:
 def compute_ticket_payout(stake: float, mode: str,
                           legs: int, hits: int, misses: int, pushes: int, no_actual: int,
                           voids: int,
-                          power_mod: float, flex_mod: float) -> Tuple[float, str, float]:
+                          power_mod: float, flex_mod: float,
+                          power_mult_override: Optional[float] = None,
+                          flex_mult_override: Optional[float] = None) -> Tuple[float, str, float]:
     """
     Returns (payout_amount, payout_status, applied_multiplier).
     payout_amount includes stake (total returned). profit = payout - stake.
+    Optional overrides replace base*mod with an explicit multiplier (curve-based estimate).
     """
     if no_actual > 0:
         return np.nan, "NO_ACTUAL", np.nan
@@ -910,7 +1000,10 @@ def compute_ticket_payout(stake: float, mode: str,
     if mode == "power":
         if misses == 0 and int(hits or 0) == effective_legs:
             base = float(POWER_BASE.get(effective_legs, 0.0))
-            mult = float(round(base * power_mod, 4))
+            if power_mult_override is not None:
+                mult = float(round(float(power_mult_override), 4))
+            else:
+                mult = float(round(base * power_mod, 4))
             payout = stake * mult
             return payout, "WIN" if mult > 0 else "WIN_NO_MULT", mult
         return 0.0, "LOSE", 0.0
@@ -918,7 +1011,10 @@ def compute_ticket_payout(stake: float, mode: str,
     if mode == "flex":
         base_table = FLEX_BASE.get(effective_legs, {})
         base = float(base_table.get(hits, 0.0))
-        mult = float(round(base * flex_mod, 4)) if base > 0 else 0.0
+        if flex_mult_override is not None:
+            mult = float(round(float(flex_mult_override), 4)) if base > 0 else 0.0
+        else:
+            mult = float(round(base * flex_mod, 4)) if base > 0 else 0.0
         if mult == 0.0:
             return 0.0, "LOSE", 0.0
         return stake * mult, "CASH", mult
@@ -1615,6 +1711,31 @@ def main():
                 return prob_map.get((str(r.get("sheet") or ""), int(r.get("ticket_no")), int(r.get("leg_no"))), np.nan)
             legs_df.loc[need_fill, "ml_prob"] = legs_df.loc[need_fill].apply(_lookup_prob, axis=1)
 
+    _slate_payload = _load_combined_slate_payload(ROOT, tickets_path)
+    _sl_lookup = _standard_line_lookup_from_payload(_slate_payload)
+    if _sl_lookup:
+        legs_df = merge_standard_lines_into_legs_df(legs_df, _sl_lookup)
+    elif "standard_line" not in legs_df.columns:
+        legs_df["standard_line"] = np.nan
+
+    _gd_params = gd_load_params()
+
+    def _row_delta_pct(r: pd.Series) -> float:
+        v = gd_leg_delta_pct(r.get("line"), r.get("standard_line"))
+        return float(v) if v is not None else np.nan
+
+    legs_df["delta_pct"] = legs_df.apply(_row_delta_pct, axis=1)
+
+    def _row_gd_factor(r: pd.Series) -> float:
+        v = r.get("delta_pct")
+        if v is None or (isinstance(v, float) and np.isnan(v)):
+            dp = None
+        else:
+            dp = float(v)
+        return float(gd_leg_factor(dp, str(r.get("pick_type", "")), _gd_params))
+
+    legs_df["gd_leg_factor"] = legs_df.apply(_row_gd_factor, axis=1)
+
     # per-ticket modifiers
     mods_df = (legs_df.groupby("ticket_id", as_index=False)
                .agg(
@@ -1640,6 +1761,8 @@ def main():
     ticket_base["stake"] = float(args.stake)
     ticket_base = ticket_base.merge(mods_df[["ticket_id", "sports", "pick_types", "tiers", "power_mod", "flex_mod"]], on="ticket_id", how="left")
 
+    legs_by_ticket_pre = {k: g.sort_values("leg_no") for k, g in legs_df.groupby("ticket_id")}
+
     modes = ["power", "flex"] if args.mode == "both" else [args.mode]
     ticket_rows = []
     for mode in modes:
@@ -1647,9 +1770,46 @@ def main():
         payouts_out = []
         statuses = []
         mults = []
+        est_curve_mults: List[float] = []
+        flat_standard_mults: List[float] = []
+        mult_delta_std: List[float] = []
+        payouts_est: List[float] = []
         for _, r in t.iterrows():
+            tid = str(r["ticket_id"])
+            g_legs = legs_by_ticket_pre.get(tid)
+            n_eff = int(r["effective_legs"])
+            stake = float(r["stake"])
+            p_prm = gd_load_params()
+            factors: List[float] = []
+            if g_legs is not None and n_eff >= 2:
+                for _, lr in g_legs.iterrows():
+                    if str(lr.get("leg_result", "")).upper() == "VOID":
+                        continue
+                    dp = gd_leg_delta_pct(lr["line"], lr.get("standard_line"))
+                    factors.append(
+                        gd_leg_factor(dp, pick_category_from_cell(str(lr.get("pick_type", ""))), p_prm)
+                    )
+                while len(factors) > n_eff:
+                    factors.pop()
+                while len(factors) < n_eff:
+                    factors.append(1.0)
+            else:
+                factors = [1.0] * max(0, n_eff)
+
+            if n_eff >= 2:
+                if mode == "power":
+                    est_m = float(gd_ticket_multiplier(n_eff, factors[:n_eff], "power"))
+                    flat_std = float(POWER_BASE.get(n_eff, 0.0))
+                else:
+                    hi = int(r["hits"])
+                    est_m = float(gd_ticket_multiplier(n_eff, factors[:n_eff], "flex", hits=hi))
+                    flat_std = float(FLEX_BASE.get(n_eff, {}).get(hi, 0.0))
+            else:
+                est_m = 1.0 if mode == "power" else 0.0
+                flat_std = 1.0 if mode == "power" else 0.0
+
             payout_amt, status, mult = compute_ticket_payout(
-                stake=float(r["stake"]),
+                stake=stake,
                 mode=mode,
                 legs=int(r["legs"]),
                 hits=int(r["hits"]),
@@ -1663,11 +1823,43 @@ def main():
             payouts_out.append(payout_amt)
             statuses.append(status)
             mults.append(mult)
+
+            payout_e = float(payout_amt) if pd.notna(payout_amt) else np.nan
+            if mode == "power" and status in ("WIN", "WIN_NO_MULT") and np.isfinite(est_m):
+                payout_e = stake * est_m
+            elif mode == "flex" and status == "CASH" and np.isfinite(est_m):
+                payout_e = stake * est_m
+
+            if (
+                status in ("WIN", "WIN_NO_MULT", "CASH")
+                and np.isfinite(mult)
+                and np.isfinite(est_m)
+                and float(mult) > 0
+                and abs(float(mult) - est_m) / float(mult) > 0.15
+            ):
+                _log.warning(
+                    "Payout mult mismatch ticket=%s mode=%s legacy_applied=%.4f est_curve=%.4f (>15%%)",
+                    tid,
+                    mode,
+                    float(mult),
+                    est_m,
+                )
+
+            est_curve_mults.append(est_m)
+            flat_standard_mults.append(flat_std)
+            mult_delta_std.append(round(est_m - flat_std, 4))
+            payouts_est.append(payout_e)
+
         t["mode"] = mode
         t["payout_status"] = statuses
         t["applied_mult"] = mults
         t["payout"] = payouts_out
         t["profit"] = t["payout"] - t["stake"]
+        t["est_curve_mult"] = est_curve_mults
+        t["flat_standard_mult"] = flat_standard_mults
+        t["mult_delta_vs_standard"] = mult_delta_std
+        t["payout_est_curve"] = payouts_est
+        t["profit_est_curve"] = t["payout_est_curve"] - t["stake"]
         t["is_win"] = ((t["payout_status"] == "WIN") | (t["payout_status"] == "WIN_NO_MULT")).astype(int)
         t["is_cash"] = ((t["payout_status"] == "WIN") | (t["payout_status"] == "WIN_NO_MULT") | (t["payout_status"] == "CASH")).astype(int)
         ticket_rows.append(t)
@@ -1694,6 +1886,10 @@ def main():
         overall[f"{mode}_roi"] = round(float(eligible["profit"].sum() / eligible["stake"].sum()) if eligible["stake"].sum() > 0 else 0.0, 4)
         overall[f"{mode}_win_rate"] = round(float(eligible["is_win"].mean()) if len(eligible) else 0.0, 4)
         overall[f"{mode}_cash_rate"] = round(float(eligible["is_cash"].mean()) if len(eligible) else 0.0, 4)
+        pec = pd.to_numeric(eligible["profit_est_curve"], errors="coerce").fillna(0.0)
+        stk = float(eligible["stake"].sum())
+        overall[f"{mode}_profit_est_curve"] = float(pec.sum())
+        overall[f"{mode}_roi_est_curve"] = round(float(pec.sum() / stk) if stk > 0 else 0.0, 4)
 
     tables = {}
     for mode in modes:
@@ -1740,6 +1936,64 @@ def main():
             min_graded_legs=int(args.ml_min_legs),
         )
 
+    pay_acc_a = legs_df.copy()
+    pay_acc_a["pick_cat"] = pay_acc_a["pick_type"].astype(str).map(pick_category_from_cell)
+    _plc = [
+        "ticket_id",
+        "leg_no",
+        "player",
+        "sport",
+        "prop_norm",
+        "pick_cat",
+        "pick_type",
+        "standard_line",
+        "line",
+        "delta_pct",
+        "gd_leg_factor",
+        "leg_result",
+    ]
+    _plc = [c for c in _plc if c in pay_acc_a.columns]
+    pay_acc_legs = pay_acc_a[_plc].copy()
+
+    _ptc = [
+        "ticket_id",
+        "mode",
+        "sheet",
+        "ticket_no",
+        "applied_mult",
+        "est_curve_mult",
+        "flat_standard_mult",
+        "mult_delta_vs_standard",
+        "payout",
+        "payout_est_curve",
+        "profit",
+        "profit_est_curve",
+        "stake",
+        "payout_status",
+    ]
+    _ptc = [c for c in _ptc if c in ticket_results.columns]
+    pay_acc_tickets = ticket_results[_ptc].copy() if _ptc else pd.DataFrame()
+
+    n_delta_known = int(legs_df["delta_pct"].notna().sum()) if "delta_pct" in legs_df.columns else 0
+    avg_md = float(pd.to_numeric(ticket_results.get("mult_delta_vs_standard"), errors="coerce").mean())
+    summ_rows: List[Dict[str, Any]] = [
+        {"metric": "legs_with_delta_pct", "value": n_delta_known},
+        {"metric": "avg_mult_delta_vs_standard", "value": round(avg_md, 4)},
+    ]
+    for _m in modes:
+        summ_rows.append({"metric": f"{_m}_flat_roi", "value": overall.get(f"{_m}_roi")})
+        summ_rows.append({"metric": f"{_m}_est_curve_roi", "value": overall.get(f"{_m}_roi_est_curve")})
+    pay_acc_summary = pd.DataFrame(summ_rows)
+
+    if not pay_acc_tickets.empty and "applied_mult" in pay_acc_tickets.columns and "est_curve_mult" in pay_acc_tickets.columns:
+        _dff = (
+            pd.to_numeric(pay_acc_tickets["applied_mult"], errors="coerce")
+            - pd.to_numeric(pay_acc_tickets["est_curve_mult"], errors="coerce")
+        ).abs() > 1.0
+        pay_acc_warnings = pay_acc_tickets[_dff.fillna(False)].copy()
+    else:
+        pay_acc_warnings = pd.DataFrame()
+
     with pd.ExcelWriter(out_xlsx, engine="openpyxl") as xw:
         summary_kv.to_excel(xw, index=False, sheet_name="SUMMARY")
         insights_df.to_excel(xw, index=False, sheet_name="ANALYSIS_INSIGHTS")
@@ -1761,10 +2015,20 @@ def main():
             tab.to_excel(xw, index=False, sheet_name=str(name)[:31])
         ticket_bt_df.to_excel(xw, index=False, sheet_name="TICKET_BACKTEST")
         ticket_obj_deciles.to_excel(xw, index=False, sheet_name="TICKET_OBJ_DECILES")
+        pay_acc_legs.to_excel(xw, index=False, sheet_name="PAYOUT_LEG_DETAIL")
+        pay_acc_tickets.to_excel(xw, index=False, sheet_name="PAYOUT_TICKET_DETAIL")
+        pay_acc_summary.to_excel(xw, index=False, sheet_name="PAYOUT_ACCURACY")
+        if not pay_acc_warnings.empty:
+            pay_acc_warnings.to_excel(xw, index=False, sheet_name="PAYOUT_WARNINGS")
         apply_graded_workbook_styles(xw.book)
 
     # Keep this ASCII-only so the script runs in non-UTF8 consoles.
     print(f"Wrote graded workbook -> {out_xlsx}")
+    for _m in modes:
+        print(
+            f"  {_m.upper()} ROI: flat(legacy)={overall.get(_m + '_roi')} "
+            f"est_curve={overall.get(_m + '_roi_est_curve')}"
+        )
 
     ex = str(args.export_graded_legs_csv or "").strip()
     if ex:

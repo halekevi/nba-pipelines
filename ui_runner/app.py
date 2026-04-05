@@ -3,6 +3,7 @@ from __future__ import annotations
 # ──────────────────────────────────────────────────────────────────────────────
 # Windows UTF-8 fix — MUST be at the very top
 # ──────────────────────────────────────────────────────────────────────────────
+import csv
 import os
 import sys
 
@@ -95,7 +96,7 @@ app = Flask(
 )
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-04-06-mobile-nav-income"
+_UI_BUILD_ID = "2026-04-05-payout-curve-api"
 
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
@@ -1598,6 +1599,164 @@ def api_tickets_latest():
         return resp
     except Exception as e:
         return jsonify({"error": str(e), "groups": []}), 500
+
+
+@app.get("/api/slate/today-tickets")
+def api_slate_today_tickets():
+    """Tickets from tickets_latest.json for /payout import (pre-fills leg std/played lines)."""
+    if not _template_json_available("tickets_latest.json"):
+        return jsonify({"error": "tickets_latest.json not found", "tickets": []}), 404
+    try:
+        data = read_json_cached(TEMPLATES_DIR / "tickets_latest.json")
+    except Exception as e:
+        return jsonify({"error": str(e), "tickets": []}), 500
+    et = _eastern_today_ymd()
+    d_sl = str((data or {}).get("date") or "").strip()[:10]
+    tickets_out: list[dict] = []
+    for grp in (data or {}).get("groups") or []:
+        sheet = str(grp.get("group_name") or "")
+        for t in grp.get("tickets") or []:
+            legs_in = t.get("legs") or []
+            legs = []
+            for lg in legs_in:
+                std = lg.get("standard_line")
+                played = lg.get("line")
+                pt = str(lg.get("pick_type") or "Standard")
+                dp = lg.get("delta_pct")
+                legs.append(
+                    {
+                        "player": lg.get("player"),
+                        "sport": lg.get("sport"),
+                        "prop_type": lg.get("prop_type"),
+                        "pick_type": pt,
+                        "std_line": std,
+                        "played_line": played,
+                        "delta_pct": dp,
+                        "direction": lg.get("direction"),
+                        "ml_prob": lg.get("ml_prob"),
+                    }
+                )
+            tickets_out.append(
+                {
+                    "ticket_id": f"{sheet}#{t.get('ticket_no')}",
+                    "sheet": sheet,
+                    "ticket_no": t.get("ticket_no"),
+                    "n_legs": len(legs),
+                    "legs": legs,
+                    "est_mult": t.get("est_multiplier"),
+                    "flat_mult": t.get("flat_multiplier"),
+                    "combined_prob": t.get("combined_hit_prob_curve"),
+                    "est_ev": t.get("est_ev"),
+                }
+            )
+    r = jsonify(
+        {
+            "date": d_sl,
+            "eastern_today": et,
+            "tickets": tickets_out,
+        }
+    )
+    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    return r
+
+
+@app.post("/api/payout/log-observation")
+def api_payout_log_observation():
+    """Append one row to data/payout_observations.csv (server-side curve learning)."""
+    body = request.get_json(silent=True) or {}
+    csv_path = BASE_DIR / "data" / "payout_observations.csv"
+    fieldnames = [
+        "date",
+        "n_legs",
+        "slip_type",
+        "combo_label",
+        "base_mult",
+        "est_mult",
+        "actual_mult",
+        "mult_delta",
+        "stake",
+        "actual_payout",
+        "g_exp_used",
+        "d_exp_used",
+        "d_scale_used",
+        "leg_details_json",
+    ]
+    try:
+        from utils.goblin_demon_multiplier import load_params as _gd_load
+
+        prm = _gd_load()
+    except Exception:
+        prm = {"G_EXP": 1.0, "D_EXP": 1.5, "D_SCALE": 3.0}
+
+    def _f(name, default=""):
+        v = body.get(name)
+        return default if v is None else v
+
+    try:
+        actual_mult = float(_f("actual_mult", 0) or 0)
+    except (TypeError, ValueError):
+        return jsonify({"saved": False, "error": "invalid actual_mult"}), 400
+    if actual_mult <= 0:
+        return jsonify({"saved": False, "error": "actual_mult required"}), 400
+
+    try:
+        base_mult = float(_f("base_mult", 0) or 0)
+        est_mult = float(_f("est_mult", 0) or 0)
+    except (TypeError, ValueError):
+        base_mult, est_mult = 0.0, 0.0
+    mult_delta = round(actual_mult - est_mult, 4) if est_mult else ""
+
+    leg_json = _f("leg_details_json", "")
+    if isinstance(leg_json, (list, dict)):
+        leg_json = json.dumps(leg_json, ensure_ascii=False)
+
+    row = {
+        "date": str(_f("date", "")).strip(),
+        "n_legs": str(_f("n_legs", "")).strip(),
+        "slip_type": str(_f("slip_type", "power")).strip().lower(),
+        "combo_label": str(_f("combo_label", "")).strip(),
+        "base_mult": base_mult,
+        "est_mult": est_mult,
+        "actual_mult": actual_mult,
+        "mult_delta": mult_delta,
+        "stake": str(_f("stake", "")).strip(),
+        "actual_payout": str(_f("actual_payout", "")).strip(),
+        "g_exp_used": prm.get("G_EXP", ""),
+        "d_exp_used": prm.get("D_EXP", ""),
+        "d_scale_used": prm.get("D_SCALE", ""),
+        "leg_details_json": leg_json if isinstance(leg_json, str) else "",
+    }
+
+    csv_path.parent.mkdir(parents=True, exist_ok=True)
+    file_exists = csv_path.exists()
+    with csv_path.open("a", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=fieldnames)
+        if not file_exists:
+            w.writeheader()
+        w.writerow(row)
+
+    n_lines = sum(1 for _ in csv_path.open("r", encoding="utf-8")) - 1
+    warn = bool(est_mult and abs(float(actual_mult) - float(est_mult)) > 1.5)
+    return jsonify({"saved": True, "total_obs": max(0, n_lines), "mult_delta": mult_delta, "warning_large_delta": warn})
+
+
+@app.get("/api/payout/combo-table")
+def api_payout_combo_table():
+    """Static combo reference from outputs/combo_table_latest.json (run write_combo_table_latest.py)."""
+    p = BASE_DIR / "outputs" / "combo_table_latest.json"
+    if not p.is_file():
+        return jsonify(
+            {
+                "error": "combo_table_latest.json missing — run scripts/write_combo_table_latest.py",
+                "leg_counts": [],
+                "combos": [],
+            }
+        ), 404
+    try:
+        data = json.loads(p.read_text(encoding="utf-8"))
+    except Exception as e:
+        return jsonify({"error": str(e), "leg_counts": [], "combos": []}), 500
+    return jsonify(data)
 
 
 def _eastern_today_ymd() -> str:

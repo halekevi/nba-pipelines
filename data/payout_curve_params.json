@@ -1,0 +1,10 @@
+{
+  "G_EXP": 1.0,
+  "D_EXP": 1.5,
+  "D_SCALE": 3.0,
+  "observations_count": 0,
+  "last_updated": null,
+  "goblin_formula": "factor = max(0.35, min(1.0, delta_pct ^ G_EXP))",
+  "demon_formula": "factor = 1 + ((delta_pct - 1.0) ^ D_EXP) * D_SCALE",
+  "note": "Approximation. Tune G_EXP, D_EXP, D_SCALE against logged observations."
+}
