@@ -50,7 +50,10 @@ ROOT = Path(__file__).resolve().parent.parent
 _scripts_dir = Path(__file__).resolve().parent
 if str(_scripts_dir) not in sys.path:
     sys.path.insert(0, str(_scripts_dir))
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 from ensure_local_cache import ensure_local_cache
+from utils.optional_ml_context import optional_context_features
 from ml_play_side_edge import play_side_edge
 
 ensure_local_cache(str(ROOT))
@@ -363,6 +366,8 @@ def main() -> None:
     train["hit"] = train["hit"].astype(int)
     train = train.dropna(subset=["edge"])
     train["hit_rate_l10"] = train["hit_rate_l10"].fillna(0.5)
+    _ctx = optional_context_features(df).loc[train.index]
+    train = pd.concat([train, _ctx], axis=1)
 
     dates = df.loc[train.index, "_source_date"].astype(str)
     dr = dates[dates.str.match(r"\d{4}-\d{2}-\d{2}")]
@@ -391,7 +396,18 @@ def main() -> None:
         raise RuntimeError(f"Too few decided rows to train (n={n}).")
 
     X_base = train[
-        ["edge", "hit_rate_l10", "defense_tier", "tier", "intel_shr_z", "direction"]
+        [
+            "edge",
+            "hit_rate_l10",
+            "defense_tier",
+            "tier",
+            "intel_shr_z",
+            "direction",
+            "pace_percentile",
+            "days_rest",
+            "line_move_direction",
+            "is_back_to_back",
+        ]
     ].copy()
     X_prop = pd.get_dummies(train["prop_type"], prefix="prop", dtype=float)
     X = pd.concat([X_base, X_prop], axis=1).fillna(0.0)
@@ -468,6 +484,39 @@ def main() -> None:
     MODEL_DIR.mkdir(parents=True, exist_ok=True)
     joblib.dump(model, MODEL_PATH)
     FEATURES_PATH.write_text(json.dumps(feats, indent=2), encoding="utf-8")
+
+    META_MODEL_PATH = MODEL_DIR / "cbb_meta_model.pkl"
+    try:
+        tr_ordered = train.loc[order].reset_index(drop=True)
+        y_ordered = y.loc[order].reset_index(drop=True)
+        tr_train = tr_ordered.iloc[:split_idx]
+        y_tr = y_ordered.iloc[:split_idx].astype(int)
+        base_p_train = model.predict_proba(X_train)[:, 1]
+        prop_uniques = sorted(tr_train["prop_type"].astype(str).unique().tolist())
+        prop_to_i = {p: float(i) for i, p in enumerate(prop_uniques)}
+        pcodes = tr_train["prop_type"].astype(str).map(lambda x: prop_to_i.get(x, 0.0)).astype(float)
+        X_meta = np.column_stack(
+            [
+                base_p_train,
+                tr_train["edge"].to_numpy(dtype=float),
+                tr_train["defense_tier"].to_numpy(dtype=float),
+                pcodes,
+            ]
+        )
+        meta_clf = XGBClassifier(
+            n_estimators=120,
+            max_depth=3,
+            learning_rate=0.06,
+            subsample=0.85,
+            colsample_bytree=0.9,
+            random_state=42,
+            eval_metric="logloss",
+        )
+        meta_clf.fit(X_meta, y_tr)
+        joblib.dump({"model": meta_clf, "prop_uniques": prop_uniques}, META_MODEL_PATH)
+        print(f"  Saved meta ranker: {META_MODEL_PATH}")
+    except Exception as e:
+        print(f"  (meta-model skipped) {e}")
     BLEND_PATH.write_text(json.dumps({"blend_weight": bw}, indent=2), encoding="utf-8")
     METRICS_PATH.write_text(
         json.dumps(

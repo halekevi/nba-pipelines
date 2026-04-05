@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import sqlite3
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
@@ -25,6 +26,10 @@ import numpy as np
 import pandas as pd
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from utils.clv_tracker import graded_rows_to_clv_log
 _CACHE_DIR = REPO_ROOT / "data" / "cache"
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -71,6 +76,28 @@ def _ensure_schema(conn: sqlite3.Connection) -> None:
     conn.execute(
         "CREATE INDEX IF NOT EXISTS idx_ph_opp "
         "ON props_history(sport, opp_team, prop_type)"
+    )
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS clv_log (
+            id                      INTEGER PRIMARY KEY AUTOINCREMENT,
+            sport                   TEXT NOT NULL,
+            grade_date              TEXT NOT NULL,
+            prop_label              TEXT,
+            player_name             TEXT,
+            prop_type               TEXT,
+            line                    REAL,
+            direction               TEXT,
+            my_odds_implied_prob    REAL,
+            closing_implied_prob    REAL,
+            clv_delta               REAL,
+            pick_type               TEXT,
+            tier                    TEXT,
+            result                  TEXT,
+            archived_at             TEXT NOT NULL
+        )
+    """)
+    conn.execute(
+        "CREATE INDEX IF NOT EXISTS idx_clv_sport_date ON clv_log(sport, grade_date)"
     )
     conn.commit()
 
@@ -179,6 +206,38 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
     final_inserted = inserted  # approximate (total_changes is cumulative)
     print(f"[archive] {sport} {date}: inserted ~{len(rows)} rows (db: {_db_path(sport).name})")
     return len(rows)
+
+
+def archive_clv_log(sport: str, graded_df: pd.DataFrame, date: str) -> int:
+    """Append CLV rows derived from graded props (open vs close implied)."""
+    if graded_df is None or graded_df.empty:
+        return 0
+    sport_up = str(sport).strip().upper()
+    tuples = graded_rows_to_clv_log(sport_up, date, graded_df)
+    if not tuples:
+        print(f"[archive] {sport_up}: 0 CLV rows (missing implied-prob or odds columns).")
+        return 0
+    conn = _connect(sport)
+    inserted = 0
+    for row in tuples:
+        try:
+            conn.execute(
+                """
+                INSERT INTO clv_log (
+                    sport, grade_date, prop_label, player_name, prop_type, line, direction,
+                    my_odds_implied_prob, closing_implied_prob, clv_delta,
+                    pick_type, tier, result, archived_at
+                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                """,
+                row,
+            )
+            inserted += 1
+        except Exception:
+            pass
+    conn.commit()
+    conn.close()
+    print(f"[archive] {sport_up} {date}: CLV log rows appended: {inserted} (db: {_db_path(sport).name})")
+    return inserted
 
 
 # ── Query helpers — all return None gracefully when no history ────────────────
@@ -399,7 +458,8 @@ def main() -> None:
         df = pd.read_csv(str(graded_path))
 
     n = archive_graded(args.sport, df, args.date)
-    print(f"[archive] Done. Rows processed: {n}")
+    n_clv = archive_clv_log(args.sport, df, args.date)
+    print(f"[archive] Done. Graded rows processed: {n}; CLV rows: {n_clv}")
 
 
 if __name__ == "__main__":

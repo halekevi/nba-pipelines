@@ -9,6 +9,8 @@
 #    .\run_pipeline.ps1 -MLBOnly               # MLB only + Combined
 #    .\run_pipeline.ps1 -SoccerOnly            # Soccer only + Combined
 #    .\run_pipeline.ps1 -WNBAOnly              # WNBA only (season-gated)
+#    .\run_pipeline.ps1 -NFLOnly               # NFL stub step1 only (scaffold CSV)
+#    .\run_pipeline.ps1 -GolfOnly              # Golf stub steps 1–2 (scaffold CSVs)
 #    .\run_pipeline.ps1 -CombinedOnly          # Re-run combined using all existing outputs
 #    .\run_pipeline.ps1 -SkipFetch             # Skip step1 fetch for whatever sport(s) run
 #    .\run_pipeline.ps1 -NBAOnly -SkipFetch    # NBA steps 2-8 + Combined
@@ -30,6 +32,8 @@ param(
     [switch]$MLBOnly,
     [switch]$SoccerOnly,
     [switch]$WNBAOnly,
+    [switch]$NFLOnly,
+    [switch]$GolfOnly,
     [switch]$CombinedOnly,
     [switch]$SkipCombined,
     [switch]$SkipFetch,
@@ -419,6 +423,33 @@ if ($WNBAOnly) {
     Write-Host "[ WNBA PIPELINE ]" -ForegroundColor Magenta
     Write-Host "  Delegating to run_wnba_pipeline.ps1 ..." -ForegroundColor DarkGray
     & (Join-Path $Root "scripts\run_wnba_pipeline.ps1") -Date $Date
+    Print-Done
+    exit
+}
+
+# =============================================================================
+#  NFL STUB ONLY
+# =============================================================================
+if ($NFLOnly) {
+    Write-Host "[ NFL — STUB ]" -ForegroundColor Magenta
+    Write-Host "  Scaffold fetch only; no combined tickets." -ForegroundColor DarkGray
+    if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force -Path $OutDir | Out-Null }
+    $ok = Run-Step "NFL Step 1 (stub)" $Root ".\NFL\step1_fetch_props_nfl.py" "--output outputs\step1_nfl_props.csv"
+    if ($ok) { Write-Host "  NFL stub complete." -ForegroundColor Green } else { Write-Host "  NFL stub failed." -ForegroundColor Red }
+    Print-Done
+    exit
+}
+
+# =============================================================================
+#  GOLF STUB ONLY
+# =============================================================================
+if ($GolfOnly) {
+    Write-Host "[ GOLF — STUB ]" -ForegroundColor Magenta
+    if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force -Path $OutDir | Out-Null }
+    $ok = $true
+    if ($ok) { $ok = Run-Step "Golf Step 1 (stub)" $Root ".\Golf\step1_fetch_props_golf.py" "--output outputs\step1_golf_props.csv" }
+    if ($ok) { $ok = Run-Step "Golf Step 2 (stub)" $Root ".\Golf\step2_attach_golf_context.py" "--input outputs\step1_golf_props.csv --output outputs\step2_golf_context.csv" }
+    if ($ok) { Write-Host "  Golf stub complete." -ForegroundColor Green } else { Write-Host "  Golf stub failed." -ForegroundColor Red }
     Print-Done
     exit
 }

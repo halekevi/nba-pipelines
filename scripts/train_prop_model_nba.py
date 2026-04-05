@@ -63,12 +63,13 @@ FEATURES_PATH = MODEL_DIR / "prop_model_nba_features.json"
 BLEND_PATH = MODEL_DIR / "prop_model_nba_blend_weight.json"
 CALIB_PATH = MODEL_DIR / "prop_model_nba_calibrator.pkl"
 METRICS_PATH = MODEL_DIR / "prop_model_nba_metrics.json"
+META_MODEL_PATH = MODEL_DIR / "nba_meta_model.pkl"
 
 
 def apply_segment(segment: str) -> None:
     """Apply training segment (nba | nba1q | nba1h): model output names + graded filename regex."""
     global SEGMENT_KEY, SYNTHETIC_SPORT, DATE_RE
-    global MODEL_PATH, FEATURES_PATH, BLEND_PATH, CALIB_PATH, METRICS_PATH
+    global MODEL_PATH, FEATURES_PATH, BLEND_PATH, CALIB_PATH, METRICS_PATH, META_MODEL_PATH
     s = (segment or "nba").strip().lower()
     if s not in ("nba", "nba1q", "nba1h"):
         raise ValueError(f"Unknown segment {segment!r}; expected nba, nba1q, or nba1h")
@@ -78,6 +79,7 @@ def apply_segment(segment: str) -> None:
     BLEND_PATH = MODEL_DIR / f"prop_model_{s}_blend_weight.json"
     CALIB_PATH = MODEL_DIR / f"prop_model_{s}_calibrator.pkl"
     METRICS_PATH = MODEL_DIR / f"prop_model_{s}_metrics.json"
+    META_MODEL_PATH = MODEL_DIR / f"{s}_meta_model.pkl"
     sport_map = {"nba": "NBA", "nba1q": "NBA1Q", "nba1h": "NBA1H"}
     SYNTHETIC_SPORT = sport_map[s]
     if s == "nba":
@@ -461,6 +463,16 @@ def main() -> None:
     ha_col = _first_present(df, ["home_away", "home/away", "Home/Away"])
     gs_col = _first_present(df, ["game_script_mult", "Game Script Mult"])
     cg_col = _first_present(df, ["consistency_grade", "Consistency Grade"])
+    pace_col = _first_present(
+        df,
+        ["pace_percentile", "pace_pct", "Pace Percentile", "pace_vs_league_pct"],
+    )
+    rest_col = _first_present(df, ["days_rest", "rest_days", "Days Rest", "team_rest_days"])
+    lmd_col = _first_present(
+        df,
+        ["line_move_direction", "line_move_toward_over", "Line Move Direction", "line_move"],
+    )
+    b2b_col = _first_present(df, ["is_back_to_back", "b2b", "is_b2b", "back_to_back"])
 
     if prop_col is None or dir_col is None:
         raise RuntimeError(f"Missing prop or direction. Columns: {list(df.columns)}")
@@ -501,6 +513,10 @@ def main() -> None:
     train["home_away"] = train["home_away"].fillna(0.5)
     train["game_script_mult"] = train["game_script_mult"].fillna(1.0)
     train["consistency_grade"] = train["consistency_grade"].fillna(2.0)
+    train["pace_percentile"] = train["pace_percentile"].fillna(0.5)
+    train["days_rest"] = train["days_rest"].fillna(1.0)
+    train["line_move_direction"] = train["line_move_direction"].fillna(0.0)
+    train["is_back_to_back"] = train["is_back_to_back"].fillna(0.0)
 
     if "_weight" in df.columns:
         sw = pd.to_numeric(df.loc[train.index, "_weight"], errors="coerce").fillna(1.0)
@@ -539,6 +555,10 @@ def main() -> None:
         "home_away",
         "game_script_mult",
         "consistency_grade",
+        "pace_percentile",
+        "days_rest",
+        "line_move_direction",
+        "is_back_to_back",
     ]
     X_base = train[base_cols].copy().fillna(0.0)
     X_prop = pd.get_dummies(train["prop_type"], prefix="prop", dtype=float)
@@ -610,6 +630,42 @@ def main() -> None:
     MODEL_DIR.mkdir(parents=True, exist_ok=True)
     joblib.dump(model, MODEL_PATH)
     FEATURES_PATH.write_text(json.dumps(feats, indent=2), encoding="utf-8")
+
+    # Meta-model on (base_prob, edge, defense_tier, prop_code) — used as final ranking signal in step7 when present
+    try:
+        tr_ordered = train.loc[order].reset_index(drop=True)
+        y_ordered = y.loc[order].reset_index(drop=True)
+        tr_train = tr_ordered.iloc[:split_idx]
+        y_tr = y_ordered.iloc[:split_idx].astype(int)
+        base_p_train = model.predict_proba(X_train)[:, 1]
+        prop_uniques = sorted(tr_train["prop_type"].astype(str).unique().tolist())
+        prop_to_i = {p: i for i, p in enumerate(prop_uniques)}
+        pcodes = tr_train["prop_type"].astype(str).map(lambda x: prop_to_i.get(x, 0)).astype(int)
+        X_meta = np.column_stack(
+            [
+                base_p_train,
+                tr_train["edge"].to_numpy(dtype=float),
+                tr_train["defense_tier"].to_numpy(dtype=float),
+                pcodes.astype(float),
+            ]
+        )
+        meta_clf = XGBClassifier(
+            n_estimators=120,
+            max_depth=3,
+            learning_rate=0.06,
+            subsample=0.85,
+            colsample_bytree=0.9,
+            random_state=42,
+            eval_metric="logloss",
+        )
+        meta_clf.fit(X_meta, y_tr)
+        joblib.dump(
+            {"model": meta_clf, "prop_uniques": prop_uniques},
+            META_MODEL_PATH,
+        )
+        print(f"  Saved meta ranker: {META_MODEL_PATH}")
+    except Exception as e:
+        print(f"  (meta-model skipped) {e}")
     BLEND_PATH.write_text(json.dumps({"blend_weight": bw}, indent=2), encoding="utf-8")
     METRICS_PATH.write_text(
         json.dumps(

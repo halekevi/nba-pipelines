@@ -206,6 +206,16 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .grades-toolbar-parent-slot.grades-toolbar-parent-slot--collapsed{display:none;height:0;min-height:0;overflow:hidden;margin:0;padding:0;border:0}
 .iframe-shell-stage{flex:1;min-height:0;position:relative;overflow:hidden;}
 .iframe-shell-stage > .grade-frame{position:absolute;inset:0;width:100%;height:100%;border:none;display:block;transition:opacity .25s;}
+.grades-analytics-wrap{position:absolute;inset:0;overflow:auto;padding:20px 24px 36px;z-index:4;background:transparent;}
+.grades-analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;max-width:1420px;margin:0 auto;}
+.glass-insights{background:var(--glass-panel);border:1px solid var(--glass-panel-border);border-radius:16px;padding:20px 22px;box-shadow:var(--glass-shadow);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);}
+.insights-card-title{font-size:14px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:8px;}
+.insights-card-sub{font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.45;}
+.insights-table-host table{width:100%;border-collapse:collapse;font-size:13px;}
+.insights-table-host th,.insights-table-host td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);}
+.insights-table-host th{color:var(--muted2);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.06em;}
+.ins-bar-wrap{margin-top:6px;background:rgba(0,0,0,0.28);border-radius:6px;height:8px;overflow:hidden;max-width:100%;}
+.ins-bar{height:100%;background:linear-gradient(90deg,var(--cyan),var(--accent-gold));border-radius:6px;transition:width .4s ease;}
 .grade-frame.loading{opacity:0;}
 
 /* loading */
@@ -852,6 +862,9 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
             <button type="button" class="tab-btn" id="tab-tickets" onclick="window.parent.switchTab('tickets')">
               <span class="tab-icon">🎟</span>TICKET EVALUATION
             </button>
+            <button type="button" class="tab-btn" id="tab-analytics" onclick="window.parent.switchTab('analytics')">
+              <span class="tab-icon">📈</span>CLV &amp; CALIBRATION
+            </button>
           </div>
         </div>
       </div>
@@ -877,6 +890,35 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   </div>
   <iframe class="grade-frame loading" id="grade-frame" src="about:blank" title="Grade Report"></iframe>
   <iframe class="grade-frame" id="ticket-frame" src="about:blank" title="Ticket Evaluation" style="display:none;"></iframe>
+  <div id="analytics-panel" class="grades-analytics-wrap" style="display:none;" aria-label="CLV and calibration insights">
+    <div class="grades-analytics-grid">
+      <div class="insights-card glass-insights">
+        <h3 class="insights-card-title">Predicted probability vs outcome</h3>
+        <p class="insights-card-sub">Buckets from archived <code>props_history.ml_prob</code> vs graded HIT rate.</p>
+        <div id="ins-cal" class="insights-table-host"></div>
+      </div>
+      <div class="insights-card glass-insights">
+        <h3 class="insights-card-title">Average CLV by sport</h3>
+        <p class="insights-card-sub">From <code>clv_log</code> (closing − open implied), when odds columns were archived.</p>
+        <div id="ins-clv" class="insights-table-host"></div>
+      </div>
+      <div class="insights-card glass-insights">
+        <h3 class="insights-card-title">Edge magnitude vs hit rate</h3>
+        <p class="insights-card-sub">Absolute edge buckets (treats |edge| &gt; 1.5 as percentage points / 100).</p>
+        <div id="ins-edge" class="insights-table-host"></div>
+      </div>
+      <div class="insights-card glass-insights">
+        <h3 class="insights-card-title">CLV by prop type</h3>
+        <p class="insights-card-sub">Top prop types by volume in <code>clv_log</code> (per sport).</p>
+        <div id="ins-clv-prop" class="insights-table-host"></div>
+      </div>
+      <div class="insights-card glass-insights">
+        <h3 class="insights-card-title">CLV by tier</h3>
+        <p class="insights-card-sub">Archived tier labels when present on graded rows.</p>
+        <div id="ins-clv-tier" class="insights-table-host"></div>
+      </div>
+    </div>
+  </div>
   </div><!-- /.iframe-shell-stage -->
 </div>
 </div><!-- /.grades-body -->
@@ -910,6 +952,10 @@ const TICKET_EVAL_URL_TEMPLATE = '/grades/ticket_eval_{date}.html';
   }
 
   function activeScrollWin() {
+    const ap = document.getElementById('analytics-panel');
+    if (ap && ap.style.display !== 'none') {
+      return { win: window, key: 'a' };
+    }
     const tick = document.getElementById('ticket-frame');
     if (tick && tick.style.display !== 'none' && tick.contentWindow) {
       return { win: tick.contentWindow, key: 't' };
@@ -1292,17 +1338,99 @@ function collapseSportsInTicketFrame(frame) {
   });
 }
 
+// ─── GRADES INSIGHTS (CLV + calibration API) ─────────────────────────────────
+function _insightsBarPct(hitRate) {
+  if (hitRate == null || Number.isNaN(hitRate)) return 0;
+  return Math.min(100, Math.round(hitRate * 100));
+}
+
+function _renderInsightsTable(host, rows, cols) {
+  if (!host) return;
+  if (!rows || !rows.length) {
+    host.innerHTML = '<p class="insights-card-sub">No archived rows yet. Run the grader and <code>step_archive.py</code> to populate SQLite.</p>';
+    return;
+  }
+  let h = '<table><thead><tr>';
+  cols.forEach((c) => { h += `<th>${c.label}</th>`; });
+  h += '</tr></thead><tbody>';
+  rows.forEach((row) => {
+    h += '<tr>';
+    cols.forEach((c) => {
+      const v = row[c.key];
+      if (c.bar) {
+        const pct = _insightsBarPct(v);
+        h += `<td><div>${v == null ? '—' : (typeof v === 'number' ? (c.pct ? (v * 100).toFixed(1) + '%' : v.toFixed(4)) : v)}</div><div class="ins-bar-wrap"><div class="ins-bar" style="width:${pct}%"></div></div></td>`;
+      } else {
+        h += `<td>${v == null ? '—' : v}</td>`;
+      }
+    });
+    h += '</tr>';
+  });
+  h += '</tbody></table>';
+  host.innerHTML = h;
+}
+
+async function loadGradesInsights() {
+  const elCal = document.getElementById('ins-cal');
+  const elClv = document.getElementById('ins-clv');
+  const elEdge = document.getElementById('ins-edge');
+  const elClvProp = document.getElementById('ins-clv-prop');
+  const elClvTier = document.getElementById('ins-clv-tier');
+  [elCal, elClv, elEdge, elClvProp, elClvTier].forEach((el) => { if (el) el.innerHTML = '<p class="insights-card-sub">Loading…</p>'; });
+  try {
+    const res = await fetch('/api/grades/insights', { cache: 'no-cache' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const d = await res.json();
+    _renderInsightsTable(elCal, d.calibration || [], [
+      { key: 'bucket', label: 'Bucket' },
+      { key: 'n', label: 'N' },
+      { key: 'hit_rate', label: 'Hit rate', bar: true, pct: true },
+    ]);
+    _renderInsightsTable(elClv, d.clv_by_sport || [], [
+      { key: 'sport', label: 'Sport' },
+      { key: 'n', label: 'N' },
+      { key: 'avg_clv', label: 'Avg CLV (Δ implied)' },
+    ]);
+    _renderInsightsTable(elEdge, d.edge_bucket_hit_rate || [], [
+      { key: 'bucket', label: '|Edge|' },
+      { key: 'n', label: 'N' },
+      { key: 'hit_rate', label: 'Hit rate', bar: true, pct: true },
+    ]);
+    const elClvProp = document.getElementById('ins-clv-prop');
+    const elClvTier = document.getElementById('ins-clv-tier');
+    _renderInsightsTable(elClvProp, d.clv_by_prop_type || [], [
+      { key: 'sport', label: 'Sport' },
+      { key: 'prop_type', label: 'Prop' },
+      { key: 'n', label: 'N' },
+      { key: 'avg_clv', label: 'Avg CLV' },
+    ]);
+    _renderInsightsTable(elClvTier, d.clv_by_tier || [], [
+      { key: 'sport', label: 'Sport' },
+      { key: 'tier', label: 'Tier' },
+      { key: 'n', label: 'N' },
+      { key: 'avg_clv', label: 'Avg CLV' },
+    ]);
+  } catch (e) {
+    const msg = 'Could not load insights (' + (e && e.message ? e.message : e) + ').';
+    [elCal, elClv, elEdge, document.getElementById('ins-clv-prop'), document.getElementById('ins-clv-tier')].forEach((el) => { if (el) el.innerHTML = '<p class="insights-card-sub">' + msg + '</p>'; });
+  }
+}
+
 // ─── TAB SWITCHING ────────────────────────────────────────────────────────────
 let activeTab = 'slate';
 function refreshControlsSummary() {
   const el = gradesEl('grades-controls-live');
   const titleEl = gradesEl('iframe-shell-title');
   if (titleEl) {
-    titleEl.textContent = activeTab === 'tickets' ? 'Ticket evaluation' : 'Slate evaluation';
+    if (activeTab === 'tickets') titleEl.textContent = 'Ticket evaluation';
+    else if (activeTab === 'analytics') titleEl.textContent = 'CLV & calibration';
+    else titleEl.textContent = 'Slate evaluation';
   }
   if (!el) return;
   const ds = currentDateStr || gradesEl('date-jump')?.value || '';
-  const tab = activeTab === 'tickets' ? 'Tickets' : 'Slate';
+  let tab = 'Slate';
+  if (activeTab === 'tickets') tab = 'Tickets';
+  else if (activeTab === 'analytics') tab = 'Insights';
   el.textContent = ds ? `${ds} · ${tab}` : tab;
 }
 function switchTab(tab) {
@@ -1312,17 +1440,30 @@ function switchTab(tab) {
   }
   const ts = gradesEl('tab-slate');
   const tt = gradesEl('tab-tickets');
+  const ta = gradesEl('tab-analytics');
   if (ts) ts.classList.toggle('active', tab === 'slate');
   if (tt) tt.classList.toggle('active', tab === 'tickets');
+  if (ta) ta.classList.toggle('active', tab === 'analytics');
+  const ap = document.getElementById('analytics-panel');
   document.getElementById('grade-frame').style.display   = tab === 'slate'   ? 'block' : 'none';
   document.getElementById('ticket-frame').style.display  = tab === 'tickets' ? 'block' : 'none';
+  if (ap) ap.style.display = tab === 'analytics' ? 'block' : 'none';
   document.getElementById('ticket-empty-state').style.display = 'none';
 
   try {
     window.resetGradesBarsScrollState();
   } catch (_e) {}
 
-  if (tab === 'tickets') {
+  if (tab === 'analytics') {
+    document.getElementById('load-overlay').classList.add('hidden');
+    document.getElementById('empty-state').style.display = 'none';
+    loadGradesInsights();
+    setTimeout(() => {
+      try {
+        window.setupGradesBarsScrollHide();
+      } catch (_e) {}
+    }, 0);
+  } else if (tab === 'tickets') {
     document.getElementById('load-overlay').classList.add('hidden');
     document.getElementById('empty-state').style.display = 'none';
     const ds = currentDateStr || gradesEl('date-jump')?.value || yesterdayStr();

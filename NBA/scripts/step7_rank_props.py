@@ -624,6 +624,42 @@ def _build_nba_ml_X(out: pd.DataFrame, model_features: list[str]) -> pd.DataFram
     edge_raw_ml = _to_num(out.get("edge", pd.Series(np.nan, index=idx))).fillna(0.0)
     edge_ml = edge_raw_ml.where(~is_under, -edge_raw_ml)
 
+    pace_raw = _to_num(
+        _nba_ml_pick_col(out, ("pace_percentile", "pace_pct", "pace_vs_league_pct"))
+    ).fillna(0.5)
+    if pace_raw.notna().any() and float(pace_raw.dropna().median()) > 1.0:
+        pace_raw = pace_raw / 100.0
+    pace_raw = pace_raw.fillna(0.5)
+
+    days_rest_ml = _to_num(
+        _nba_ml_pick_col(out, ("days_rest", "rest_days", "team_rest_days"))
+    ).fillna(1.0)
+
+    lmd_raw = _nba_ml_pick_col(out, ("line_move_direction", "line_move_toward_over", "line_move"))
+    if lmd_raw.notna().any() and pd.api.types.is_numeric_dtype(lmd_raw):
+        line_move_direction = _to_num(lmd_raw).fillna(0.0)
+    else:
+        lm = lmd_raw.astype(str).str.lower()
+        line_move_direction = pd.Series(
+            np.where(
+                lm.str.contains(r"toward|favor|over|harder", regex=True, na=False),
+                1.0,
+                np.where(
+                    lm.str.contains(r"against|under|softer|easier", regex=True, na=False),
+                    -1.0,
+                    0.0,
+                ),
+            ),
+            index=idx,
+        )
+
+    b2b_raw = _nba_ml_pick_col(out, ("is_back_to_back", "b2b", "is_b2b"))
+    if pd.api.types.is_numeric_dtype(b2b_raw):
+        is_b2b = (_to_num(b2b_raw).fillna(0) >= 1).astype(float)
+    else:
+        bb = b2b_raw.astype(str).str.upper().str.strip()
+        is_b2b = pd.Series(np.where(bb.isin(["1", "TRUE", "Y", "YES", "T"]), 1.0, 0.0), index=idx)
+
     base = pd.DataFrame(
         {
             "edge": edge_ml,
@@ -638,6 +674,10 @@ def _build_nba_ml_X(out: pd.DataFrame, model_features: list[str]) -> pd.DataFram
             "home_away": home_away,
             "game_script_mult": gsm,
             "consistency_grade": cg,
+            "pace_percentile": pace_raw,
+            "days_rest": days_rest_ml,
+            "line_move_direction": line_move_direction,
+            "is_back_to_back": is_b2b.fillna(0.0),
         },
         index=idx,
     )
@@ -646,6 +686,47 @@ def _build_nba_ml_X(out: pd.DataFrame, model_features: list[str]) -> pd.DataFram
     dummies = pd.get_dummies(prop_norm, prefix="prop", dtype=float)
     X = pd.concat([base, dummies], axis=1)
     return X.reindex(columns=model_features, fill_value=0.0)
+
+
+def _meta_adjust_ml_prob(
+    out: pd.DataFrame,
+    base_ml_prob: pd.Series,
+    model_key_used: str,
+    root: Path,
+) -> pd.Series:
+    """When `models/{segment}_meta_model.pkl` exists, replace base ML prob with meta-model output."""
+    mp = root / "models" / f"{model_key_used}_meta_model.pkl"
+    if not mp.is_file():
+        return base_ml_prob
+    try:
+        bundle = joblib.load(mp)
+        clf = bundle["model"]
+        uniques = list(bundle.get("prop_uniques") or [])
+        pmap = {str(p): float(i) for i, p in enumerate(uniques)}
+    except Exception:
+        return base_ml_prob
+    idx = out.index
+    dir_s = out.get("bet_direction", pd.Series("OVER", index=idx)).astype(str).str.upper().str.strip()
+    is_under = dir_s.eq("UNDER")
+    edge_raw = _to_num(out.get("edge", pd.Series(np.nan, index=idx))).fillna(0.0)
+    edge_ml = edge_raw.where(~is_under, -edge_raw)
+    def_s = _nba_ml_defense_tier_4(out).fillna(1.0).to_numpy(dtype=float)
+    prop_raw = out.get("prop_norm", out.get("prop_type", pd.Series("unknown", index=idx)))
+    prop_s = prop_raw.astype(str).map(_normalize_nba_prop_ml)
+    pcodes = prop_s.map(lambda x: pmap.get(str(x), 0.0)).to_numpy(dtype=float)
+    Xmeta = np.column_stack(
+        [
+            base_ml_prob.to_numpy(dtype=float),
+            edge_ml.to_numpy(dtype=float),
+            def_s,
+            pcodes,
+        ]
+    )
+    try:
+        adj = clf.predict_proba(Xmeta)[:, 1]
+        return pd.Series(adj, index=idx, dtype=float).clip(0.001, 0.999)
+    except Exception:
+        return base_ml_prob
 
 
 def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, source_hint: str = "") -> tuple[pd.Series, pd.Series, pd.Series]:
@@ -725,6 +806,7 @@ def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, source_hint: s
             existing_score.copy(),
         )
 
+    ml_prob = _meta_adjust_ml_prob(out, ml_prob, model_key_used, root)
     ml_edge = ml_prob - 0.5
 
     # Multi-signal blend when archive history features are available

@@ -19,6 +19,7 @@ if sys.platform == "win32":
 import gzip
 import io
 import json
+import sqlite3
 import time
 import uuid
 import threading
@@ -922,6 +923,153 @@ def serve_ticket_eval_report(date: str):
         return response
     abort(404)
 
+
+def _iter_props_history_db_paths():
+    cache = BASE_DIR / "data" / "cache"
+    if not cache.is_dir():
+        return []
+    return sorted(cache.glob("*_props_history.db"))
+
+
+def _grades_insights_payload() -> dict:
+    """Calibration (ml_prob buckets), edge-bucket hit rates, CLV summary from local SQLite archives."""
+    rows_ml: list[tuple[float, float | None, str]] = []
+    for dbp in _iter_props_history_db_paths():
+        try:
+            conn = sqlite3.connect(str(dbp))
+            cur = conn.execute(
+                "SELECT ml_prob, edge, result FROM props_history "
+                "WHERE result IN ('HIT','MISS') AND ml_prob IS NOT NULL"
+            )
+            rows_ml.extend((float(r[0]), r[1], str(r[2])) for r in cur.fetchall())
+            conn.close()
+        except Exception:
+            try:
+                conn.close()
+            except Exception:
+                pass
+
+    cal_bins: list[tuple[int, int, str]] = [
+        (50, 55, "50-55%"),
+        (55, 60, "55-60%"),
+        (60, 65, "60-65%"),
+        (65, 70, "65-70%"),
+        (70, 75, "70-75%"),
+        (75, 80, "75-80%"),
+        (80, 85, "80-85%"),
+        (85, 90, "85-90%"),
+        (90, 101, "90-100%"),
+    ]
+    cal_agg = {label: {"hits": 0, "n": 0} for _lo, _hi, label in cal_bins}
+    for ml, _e, res in rows_ml:
+        pct = float(ml) * 100.0 if float(ml) <= 1.0 else float(ml)
+        pct = max(0.0, min(100.0, pct))
+        hit = 1 if res.upper() == "HIT" else 0
+        for lo, hi, label in cal_bins:
+            if lo <= pct < hi:
+                cal_agg[label]["n"] += 1
+                cal_agg[label]["hits"] += hit
+                break
+
+    calibration = []
+    for _lo, _hi, label in cal_bins:
+        v = cal_agg[label]
+        if v["n"] == 0:
+            calibration.append({"bucket": label, "n": 0, "hit_rate": None})
+        else:
+            calibration.append({"bucket": label, "n": v["n"], "hit_rate": round(v["hits"] / v["n"], 4)})
+
+    edge_bins = {"0-3%": {"hits": 0, "n": 0}, "3-6%": {"hits": 0, "n": 0}, "6%+": {"hits": 0, "n": 0}}
+    for ml, edge, res in rows_ml:
+        if edge is None:
+            continue
+        try:
+            ef = float(edge)
+        except (TypeError, ValueError):
+            continue
+        if abs(ef) > 1.5:
+            ef = ef / 100.0
+        aef = abs(ef)
+        if aef < 0.03:
+            bk = "0-3%"
+        elif aef < 0.06:
+            bk = "3-6%"
+        else:
+            bk = "6%+"
+        edge_bins[bk]["n"] += 1
+        edge_bins[bk]["hits"] += 1 if res.upper() == "HIT" else 0
+
+    edge_roi = []
+    for k, v in edge_bins.items():
+        if v["n"] == 0:
+            edge_roi.append({"bucket": k, "n": 0, "hit_rate": None})
+        else:
+            edge_roi.append({"bucket": k, "n": v["n"], "hit_rate": round(v["hits"] / v["n"], 4)})
+
+    clv_by_sport = []
+    clv_by_prop_type: list[dict] = []
+    clv_by_tier: list[dict] = []
+    for dbp in _iter_props_history_db_paths():
+        sport_key = dbp.stem.replace("_props_history", "").upper()
+        try:
+            conn = sqlite3.connect(str(dbp))
+            row = conn.execute(
+                "SELECT AVG(clv_delta), COUNT(*) FROM clv_log WHERE clv_delta IS NOT NULL"
+            ).fetchone()
+            if row and row[1] and row[0] is not None:
+                clv_by_sport.append(
+                    {"sport": sport_key, "avg_clv": round(float(row[0]), 6), "n": int(row[1])}
+                )
+            for q, key in (
+                (
+                    "SELECT prop_type, AVG(clv_delta), COUNT(*) AS n FROM clv_log "
+                    "WHERE clv_delta IS NOT NULL AND prop_type IS NOT NULL AND TRIM(prop_type) != '' "
+                    "GROUP BY prop_type ORDER BY n DESC LIMIT 12",
+                    "prop_type",
+                ),
+                (
+                    "SELECT tier, AVG(clv_delta), COUNT(*) AS n FROM clv_log "
+                    "WHERE clv_delta IS NOT NULL AND tier IS NOT NULL AND TRIM(tier) != '' "
+                    "GROUP BY tier ORDER BY n DESC LIMIT 12",
+                    "tier",
+                ),
+            ):
+                try:
+                    cur = conn.execute(q)
+                    for r in cur.fetchall():
+                        label = str(r[0])
+                        entry = {
+                            "sport": sport_key,
+                            key: label,
+                            "avg_clv": round(float(r[1]), 6) if r[1] is not None else None,
+                            "n": int(r[2]),
+                        }
+                        if key == "prop_type":
+                            clv_by_prop_type.append(entry)
+                        else:
+                            clv_by_tier.append(entry)
+                except Exception:
+                    pass
+            conn.close()
+        except Exception:
+            try:
+                conn.close()
+            except Exception:
+                pass
+
+    return {
+        "calibration": calibration,
+        "edge_bucket_hit_rate": edge_roi,
+        "clv_by_sport": clv_by_sport,
+        "clv_by_prop_type": clv_by_prop_type,
+        "clv_by_tier": clv_by_tier,
+    }
+
+
+@app.get("/api/grades/insights")
+def api_grades_insights():
+    """JSON for Grades hub: calibration, CLV by sport, edge-bucket hit rates (from props_history + clv_log)."""
+    return jsonify(_grades_insights_payload())
 
 
 # ──────────────────────────────────────────────────────────────────────────────

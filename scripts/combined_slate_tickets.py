@@ -45,6 +45,7 @@ import json
 import math
 import os
 import re
+import sys
 from datetime import datetime, timezone
 from typing import Optional, List
 
@@ -57,6 +58,10 @@ from usage_redistribution import apply_usage_redistribution
 
 # Repo root = parent of scripts/ (this file lives in scripts/)
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+if REPO_ROOT not in sys.path:
+    sys.path.insert(0, REPO_ROOT)
+from utils.kelly_staking import fractional_kelly, leg_edge_pct_for_kelly
+
 DEFAULT_NBA_PATH = os.path.join(REPO_ROOT, "NBA", "data", "outputs", "step8_all_direction_clean.xlsx")
 DEFAULT_CBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_cbb.xlsx")
 DEFAULT_NBA1H_PATH = os.path.join(REPO_ROOT, "NBA", "step8_nba1h_direction_clean.xlsx")
@@ -708,9 +713,9 @@ def _greedy_ticket_with_first_leg(cand: pd.DataFrame, n_legs: int, first_idx: in
 def _modeled_ticket_paid_score(rows: list[dict], flow: str, n_legs: int) -> tuple[float, float, float]:
     """(objective_score, ep_with_penalty, flex_cash_with_penalty). Objective = flex cash for flex n≥3 else power."""
     leg_probs = [_resolve_leg_prob(pd.Series(r)) for r in rows]
-    penalty = _correlation_penalty(rows)
-    ep = win_prob(leg_probs, n_legs) * penalty
-    flex_cash = flex_cash_prob(leg_probs) * penalty if n_legs >= 3 else ep
+    cmult, _ = _correlation_multiplier_and_audit(rows)
+    ep = win_prob(leg_probs, n_legs) * cmult
+    flex_cash = flex_cash_prob(leg_probs) * cmult if n_legs >= 3 else ep
     if flow == "flex" and n_legs >= 3:
         score = flex_cash
     else:
@@ -752,9 +757,9 @@ def _pick_best_greedy_ticket_by_paid_metric(
     return best_rows, best_score, best_ep, best_flex
 
 
-def _correlation_penalty(ticket_rows: list) -> float:
+def _same_game_density_multiplier(ticket_rows: list) -> float:
     """
-    Simple same-game correlation discount.
+    Same-game correlation discount (legacy).
     Any game with 2+ legs gets multiplied by 0.94 ** (n_same_game_legs - 1).
     """
     from collections import Counter
@@ -768,11 +773,74 @@ def _correlation_penalty(ticket_rows: list) -> float:
         keys.append("|".join(sorted([team, opp])))
 
     counts = Counter(keys)
-    penalty = 1.0
+    mult = 1.0
     for _, n in counts.items():
         if n >= 2:
-            penalty *= (0.94 ** (n - 1))
-    return float(penalty)
+            mult *= 0.94 ** (n - 1)
+    return float(mult)
+
+
+def _correlation_multiplier_and_audit(ticket_rows: list) -> tuple[float, list[str]]:
+    """
+    Ticket score multiplier + human-readable audit trail.
+    - Same-game density (0.94^(n-1) per congested game), logged as same_game_density.
+    - Same team, same game (2+ legs on one side): ×0.85 (−15%).
+    - Same player correlated stack (e.g. PTS+AST or combo props): ×1.05 (+5%), at most once per ticket.
+    """
+    audit: list[str] = []
+    mult = _same_game_density_multiplier(ticket_rows)
+    audit.append(f"same_game_density×{mult:.4f}")
+
+    from collections import defaultdict
+
+    game_team_counts: dict[str, dict[str, int]] = {}
+    for r in ticket_rows:
+        team = str(r.get("team", "")).strip().upper()
+        opp = str(r.get("opp", r.get("opp_team", ""))).strip().upper()
+        if not team or not opp:
+            continue
+        gk = "|".join(sorted([team, opp]))
+        if gk not in game_team_counts:
+            game_team_counts[gk] = defaultdict(int)
+        game_team_counts[gk][team] += 1
+    if any(any(n >= 2 for n in tc.values()) for tc in game_team_counts.values()):
+        mult *= 0.85
+        audit.append("same_team_same_game:-15%")
+
+    by_player: dict[str, set[str]] = {}
+    for r in ticket_rows:
+        pl = str(r.get("player", "")).strip().lower()
+        if not pl:
+            continue
+        tok = _norm_prop_label(r.get("prop_type", ""))
+        by_player.setdefault(pl, set()).add(tok)
+
+    for pl, pset in by_player.items():
+        if len(pset) < 2:
+            continue
+        has_pts = "points" in pset
+        has_ast = "assists" in pset
+        has_reb = "rebounds" in pset
+        combo = bool(
+            pset
+            & {
+                "pts+asts",
+                "pts+rebs",
+                "rebs+asts",
+                "pts+rebs+asts",
+            }
+        )
+        if combo or (has_pts and has_ast) or (has_pts and has_ast and has_reb):
+            mult *= 1.05
+            audit.append(f"player_correlated_stack:+5%:{pl[:28]}")
+            break
+
+    return float(mult), audit
+
+
+def _correlation_penalty(ticket_rows: list) -> float:
+    """Backward-compatible multiplier only (no audit). Used by combined_ticket_grader."""
+    return _correlation_multiplier_and_audit(ticket_rows)[0]
 
 
 def kelly_fraction(win_prob: float, payout_mult: float, fraction: float = 0.25) -> float:
@@ -1137,11 +1205,12 @@ def compute_image_url(leg: dict) -> Optional[str]:
     return None
 
 
-def ticket_groups_to_payload(all_ticket_groups, date_str, thresholds):
+def ticket_groups_to_payload(all_ticket_groups, date_str, thresholds, bankroll: float = 0.0):
     payload = {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
         "date": date_str,
         "filters": thresholds,
+        "bankroll": float(bankroll) if bankroll and bankroll > 0 else None,
         "groups": [],
     }
 
@@ -1172,6 +1241,8 @@ def ticket_groups_to_payload(all_ticket_groups, date_str, thresholds):
                 "payout_multiplier": _safe_float(t.get("payout_multiplier")),
                 "ev_power": _safe_float(t.get("ev_power")),
                 "kelly_units": _safe_float(t.get("kelly_units")),
+                "correlation_multiplier": _safe_float(t.get("correlation_multiplier")),
+                "correlation_audit": list(t.get("correlation_audit") or []),
                 "has_data_warning": False,
                 "legs": [],
             }
@@ -1230,6 +1301,17 @@ def ticket_groups_to_payload(all_ticket_groups, date_str, thresholds):
                 leg["leg_prob_source"] = leg_prob_source
                 leg["image_url"] = compute_image_url(leg)
                 leg["initials"] = player_initials(leg.get("player", ""))
+                br = float(bankroll) if bankroll and float(bankroll) > 0 else 0.0
+                if br > 0:
+                    p_raw = leg_prob_used if leg_prob_used is not None else _safe_float(gv("ml_prob"))
+                    try:
+                        p_f = float(p_raw) if p_raw is not None and not (isinstance(p_raw, float) and math.isnan(p_raw)) else 0.5
+                    except (TypeError, ValueError):
+                        p_f = 0.5
+                    e_pct = leg_edge_pct_for_kelly(_safe_float(gv("ml_prob")), _safe_float(gv("edge")))
+                    leg["recommended_stake_usd"] = fractional_kelly(e_pct, p_f, br)
+                else:
+                    leg["recommended_stake_usd"] = None
 
                 slip["legs"].append(leg)
             slip["has_data_warning"] = any(bool(x.get("data_warning")) for x in slip["legs"])
@@ -3518,9 +3600,9 @@ def build_single_structure_ticket(
         for r in rows:
             _p, _src = _resolve_leg_prob(r)
             leg_probs.append((_p, _src))
-        penalty = _correlation_penalty(rows)
-        ep = win_prob(leg_probs, n_legs) * penalty
-        flex_cash = flex_cash_prob(leg_probs) * penalty if n_legs >= 3 else ep
+        cmult, caudit = _correlation_multiplier_and_audit(rows)
+        ep = win_prob(leg_probs, n_legs) * cmult
+        flex_cash = flex_cash_prob(leg_probs) * cmult if n_legs >= 3 else ep
         obj_score = flex_cash if flow == "flex" and n_legs >= 3 else ep
     else:
         rows, obj_score, ep, flex_cash = _pick_best_greedy_ticket_by_paid_metric(
@@ -3529,6 +3611,7 @@ def build_single_structure_ticket(
         if not rows:
             return None
         leg_probs = [_resolve_leg_prob(pd.Series(r)) for r in rows]
+        cmult, caudit = _correlation_multiplier_and_audit(rows)
 
     hrs = [float(r.get("hit_rate", 0.5) or 0.5) for r in rows]
     rss = [float(r.get("rank_score", 0.0) or 0.0) for r in rows]
@@ -3570,6 +3653,8 @@ def build_single_structure_ticket(
         "kelly_units": round(kelly_fraction(ep, adj_power, fraction=0.25), 2),
         "n_legs": n_legs,
         "expected_win_rate": expected_win_rate,
+        "correlation_multiplier": cmult,
+        "correlation_audit": caudit,
         "ticket_type": (
             "Standard"
             if structure == "standard"
@@ -3857,8 +3942,8 @@ def build_tickets(
                 avg_hr = float(np.mean(hrs)) if hrs else 0.0
                 avg_rs = float(np.mean(rss)) if rss else 0.0
                 leg_probs = [_resolve_leg_prob(r) for r in ticket_rows]  # [(p, src), ...]
-                ep = win_prob(leg_probs, n_legs)
-                ep *= _correlation_penalty(ticket_rows)
+                cmult, caudit = _correlation_multiplier_and_audit(ticket_rows)
+                ep = win_prob(leg_probs, n_legs) * cmult
                 pout = PAYOUT.get(n_legs, {"power": 0, "flex": 0})
 
                 # Adjust payouts for Goblin (reduces) and Demon (boosts)
@@ -3887,6 +3972,8 @@ def build_tickets(
                         "kelly_units": round(kelly_fraction(ep, adj_power, fraction=0.25), 2),
                         "n_legs": n_legs,
                         "leg_prob_sources": ",".join(sorted(set(prob_srcs))),
+                        "correlation_multiplier": cmult,
+                        "correlation_audit": caudit,
                     }
                 )
 
@@ -4011,8 +4098,8 @@ def build_mixed_picktype_tickets(
                     prob_srcs.append(_src)
                 avg_hr = float(np.mean(hrs)) if hrs else 0.0
                 avg_rs = float(np.mean(rss)) if rss else 0.0
-                ep = win_prob(leg_probs, n_legs)
-                ep *= _correlation_penalty(legs)
+                cmult, caudit = _correlation_multiplier_and_audit(legs)
+                ep = win_prob(leg_probs, n_legs) * cmult
                 pout = PAYOUT.get(n_legs, {"power": 0, "flex": 0})
 
                 # Adjust payouts for Goblin/Demon legs
@@ -4049,6 +4136,8 @@ def build_mixed_picktype_tickets(
                             "kelly_units": round(kelly_fraction(ep, adj_power, fraction=0.25), 2),
                             "n_legs": n_legs,
                             "leg_prob_sources": ",".join(sorted(set(prob_srcs))),
+                            "correlation_multiplier": cmult,
+                            "correlation_audit": caudit,
                         }
                     )
 
@@ -4321,8 +4410,8 @@ def _finalize_cross_pipeline_ticket(rows: list[dict], ticket_type: str) -> dict 
         prob_srcs.append(_src)
         hrs.append(float(r.get("hit_rate", 0.5) or 0.5))
         rss.append(float(r.get("rank_score", 0.0) or 0.0))
-    ep = win_prob(leg_probs, n_legs)
-    ep *= _correlation_penalty(rows)
+    cmult, caudit = _correlation_multiplier_and_audit(rows)
+    ep = win_prob(leg_probs, n_legs) * cmult
     pwr, flx = power_flex_payout_for_n(n_legs)
     adj_power = calc_adjusted_payout(pwr, rows)
     adj_flex = calc_adjusted_payout(flx, rows)
@@ -4353,6 +4442,8 @@ def _finalize_cross_pipeline_ticket(rows: list[dict], ticket_type: str) -> dict 
         "ticket_type": ticket_type,
         "sport": "MIX",
         "leg_prob_sources": ",".join(sorted(set(prob_srcs))),
+        "correlation_multiplier": cmult,
+        "correlation_audit": caudit,
     }
 
 
@@ -5218,6 +5309,12 @@ def main():
         action="store_true",
         help="Also write tickets_latest.json in repo root (HTML only from build_ticket_eval.py)",
     )
+    ap.add_argument(
+        "--bankroll",
+        type=float,
+        default=0.0,
+        help="Optional bankroll (USD). When > 0, tickets_latest.json legs include recommended_stake_usd (fractional Kelly, utils/kelly_staking).",
+    )
 
     args = ap.parse_args()
 
@@ -5899,7 +5996,9 @@ def main():
     if args.write_web:
         print("\nWriting web outputs...")
         if all_ticket_groups:
-            payload = ticket_groups_to_payload(all_ticket_groups, args.date, thresholds)
+            payload = ticket_groups_to_payload(
+                all_ticket_groups, args.date, thresholds, bankroll=max(0.0, float(args.bankroll))
+            )
             n_groups = len(payload["groups"])
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
             print(f"  Web payload: {n_groups} groups, {n_slips} slips (workbook — all sports).")
@@ -5922,7 +6021,9 @@ def main():
                 prioritize_ticket_hit=bool(args.prioritize_ticket_hit),
                 ticket_sort_mode=str(args.ticket_candidate_sort),
             )
-            payload = ticket_groups_to_payload(final_groups, args.date, thresholds)
+            payload = ticket_groups_to_payload(
+                final_groups, args.date, thresholds, bankroll=max(0.0, float(args.bankroll))
+            )
             n_groups = len(payload["groups"])
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
             print(f"  Web payload: {n_groups} groups, {n_slips} slips (FINAL fallback).")

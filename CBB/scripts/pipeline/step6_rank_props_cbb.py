@@ -29,6 +29,11 @@ import joblib
 import numpy as np
 import pandas as pd
 
+_repo_root_cbb = Path(__file__).resolve().parents[3]
+if str(_repo_root_cbb) not in sys.path:
+    sys.path.insert(0, str(_repo_root_cbb))
+from utils.optional_ml_context import optional_context_features
+
 try:
     sys.stdout.reconfigure(encoding="utf-8")
 except Exception:
@@ -514,6 +519,57 @@ def _ml_defense_tier_series(out: pd.DataFrame, n_teams: float) -> pd.Series:
     return _to_num(out[col]).apply(_to_ml_tier)
 
 
+def _cbb_meta_adjust_ml_prob(
+    out: pd.DataFrame,
+    base_ml_prob: pd.Series,
+    model_key_used: str,
+    root: Path,
+) -> pd.Series:
+    mp = root / "models" / f"{model_key_used}_meta_model.pkl"
+    if not mp.is_file():
+        return base_ml_prob
+    try:
+        bundle = joblib.load(mp)
+        clf = bundle["model"]
+        uniques = list(bundle.get("prop_uniques") or [])
+        pmap = {str(p): float(i) for i, p in enumerate(uniques)}
+    except Exception:
+        return base_ml_prob
+    idx = out.index
+    _bd_ml = out.get("bet_direction", pd.Series("OVER", index=idx)).astype(str).str.upper().str.strip()
+    dir_num = pd.Series(np.where(_bd_ml.eq("OVER"), 1, 0), index=idx)
+    edge_raw_ml = _to_num(out.get("edge", pd.Series(np.nan, index=idx))).fillna(0.0)
+    if play_side_edge is not None:
+        edge_ml = play_side_edge(edge_raw_ml, dir_num)
+    else:
+        edge_ml = edge_raw_ml.where(~_bd_ml.eq("UNDER"), -edge_raw_ml)
+    def_s = (
+        _to_num(_ml_defense_tier_series(out, _infer_cbb_n_teams(out)))
+        .fillna(1.0)
+        .to_numpy(dtype=float)
+    )
+    prop_norm = (
+        out.get("prop_norm", out.get("prop_type", pd.Series("unknown", index=idx)))
+        .astype(str)
+        .str.lower()
+        .str.strip()
+    )
+    pcodes = prop_norm.map(lambda x: pmap.get(str(x), 0.0)).to_numpy(dtype=float)
+    Xmeta = np.column_stack(
+        [
+            base_ml_prob.to_numpy(dtype=float),
+            edge_ml.to_numpy(dtype=float),
+            def_s,
+            pcodes,
+        ]
+    )
+    try:
+        adj = clf.predict_proba(Xmeta)[:, 1]
+        return pd.Series(adj, index=idx, dtype=float).clip(0.001, 0.999)
+    except Exception:
+        return base_ml_prob
+
+
 def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, source_hint: str = "") -> tuple[pd.Series, pd.Series, pd.Series]:
     root = Path(__file__).resolve().parents[3]
     source_key = str(source_hint).lower()
@@ -583,6 +639,7 @@ def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, source_hint: s
         },
         index=out.index,
     )
+    X_base = pd.concat([X_base, optional_context_features(out)], axis=1)
     X = pd.concat([X_base, prop_dummies], axis=1).reindex(columns=model_features, fill_value=0.0)
     try:
         raw_prob = pd.Series(model.predict_proba(X)[:, 1], index=out.index, dtype=float)
@@ -601,6 +658,7 @@ def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, source_hint: s
         print(f"⚠️  CBB ML inference failed: {e} — skipping ML blend")
         return pd.Series(np.nan, index=out.index), pd.Series(np.nan, index=out.index), existing_score.copy()
 
+    ml_prob = _cbb_meta_adjust_ml_prob(out, ml_prob, model_key_used, root)
     ml_edge = ml_prob - 0.5
     final_score = (1.0 - blend_w) * existing_score + blend_w * ml_edge
     print(f"✅ CBB ML blend applied (model={model_key_used}, weight={blend_w:.2f})")

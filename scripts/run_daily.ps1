@@ -4,7 +4,7 @@
   Daily PropOracle run: grade yesterday, archive dated outputs, run today's full pipeline, combined slate, git push.
 
 .NOTES
-  Order: (A1) Refresh historical game logs → (A) Grader for yesterday → (A1b) build_ticket_eval for yesterday → (A2) consistency
+  Order: (A1) Refresh historical game logs → (A) Grader for yesterday → (A1b) build_ticket_eval for yesterday → (A1c) optional CLV Excel columns → (A2) consistency
          → (B) Archive outputs\<yesterday>\ step8 copies → (C0) fetch game lines → (C0b) rolling NBA 1Q/2Q DB sync
          → (C) run_pipeline for today → (D) combined_slate → (E) git commit/push.
          Use -SkipFetch to skip A1 and C0b. -SkipGameLines skips C0. -SkipPeriodHistorySync skips C0b only.
@@ -236,6 +236,29 @@ if (Test-Path $yesterdayCombined) {
 }
 else {
     Write-Log "STEP A1b - Ticket eval HTML ($Yesterday): SKIP (no outputs\$Yesterday\combined_slate_tickets_$Yesterday.xlsx)"
+}
+
+# =============================================================================
+# STEP A1c — Add CLV columns to graded workbooks (when odds columns exist)
+# =============================================================================
+$enrichClvScript = Join-Path $Root "scripts\enrich_graded_workbook_clv.py"
+$yesterdayOutDir = Join-Path $Root "outputs\$Yesterday"
+if ((Test-Path $enrichClvScript) -and (Test-Path $yesterdayOutDir)) {
+    Write-Log "STEP A1c - CLV column enrich ($Yesterday): START"
+    Push-Location $Root
+    try {
+        & py -3.14 -X utf8 $enrichClvScript --scan-dir $yesterdayOutDir
+        Write-Log "STEP A1c - CLV column enrich ($Yesterday): OK (see script log for per-file skips)"
+    }
+    catch {
+        Write-Log "STEP A1c - CLV column enrich ($Yesterday): WARN ($($_.Exception.Message))"
+    }
+    finally {
+        Pop-Location
+    }
+}
+else {
+    Write-Log "STEP A1c - CLV column enrich: SKIP (no script or outputs\$Yesterday)"
 }
 
 # =============================================================================
