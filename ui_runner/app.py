@@ -53,6 +53,8 @@ BASE_DIR      = Path(__file__).resolve().parent.parent  # repo root (one level a
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))  # monorepo bootstrap until `pip install -e .`
 
+from utils.prop_reconcile import reconcile_props_history_dict
+
 UI_DIR        = Path(__file__).resolve().parent         # all UI assets live here (ui_runner/)
 CONFIG_PATH   = UI_DIR / "commands.json"
 TEMPLATES_DIR = UI_DIR / "templates"
@@ -1131,6 +1133,8 @@ def _grades_props_payload(date_str: str) -> dict[str, Any]:
                 from_bundle = True
             except Exception:
                 props = []
+
+    props = [reconcile_props_history_dict(p) for p in props]
 
     props.sort(
         key=lambda r: (

@@ -33,6 +33,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from utils.clv_tracker import graded_rows_to_clv_log
+from utils.prop_reconcile import reconcile_result_margin_from_box_score
 _CACHE_DIR = REPO_ROOT / "data" / "cache"
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -154,34 +155,6 @@ def _row_over_under(df: pd.DataFrame, i: int) -> str:
     return ""
 
 
-def _reconcile_result_margin_from_box_score(
-    actual_raw,
-    line_raw,
-    side: str,
-    result_in: str,
-    margin_raw,
-):
-    """
-    When actual, line, and OVER/UNDER are known, set HIT/MISS/PUSH and margin from the box score.
-    Fixes VOID rows produced by any grader (eligibility void_reason, join quirks, etc.).
-    """
-    if pd.isna(actual_raw) or pd.isna(line_raw):
-        return result_in, margin_raw
-    try:
-        a = float(actual_raw)
-        ln = float(line_raw)
-    except (TypeError, ValueError):
-        return result_in, margin_raw
-    s = str(side or "").strip().upper()
-    if s not in ("OVER", "UNDER"):
-        return result_in, margin_raw
-    if abs(a - ln) < 1e-9:
-        return "PUSH", 0.0
-    if s == "OVER":
-        return ("HIT" if a > ln else "MISS"), round(a - ln, 2)
-    return ("HIT" if a < ln else "MISS"), round(ln - a, 2)
-
-
 # ── Archive ───────────────────────────────────────────────────────────────────
 
 def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
@@ -240,7 +213,7 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
         dir_out = _row_over_under(graded_df, i)
         if not dir_out:
             dir_out = str(direction.iat[i] or "").strip().upper()
-        res, mg = _reconcile_result_margin_from_box_score(
+        res, mg = reconcile_result_margin_from_box_score(
             actual.iat[i], line.iat[i], dir_out, res, margin.iat[i]
         )
         if res not in ("HIT", "MISS", "PUSH", "VOID"):

@@ -13,9 +13,14 @@ import argparse
 import json
 import re
 import sqlite3
+import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
+if str(REPO) not in sys.path:
+    sys.path.insert(0, str(REPO))
+
+from utils.prop_reconcile import reconcile_props_history_dict
 CACHE = REPO / "data" / "cache"
 OUT_DIR = REPO / "ui_runner" / "data" / "grades_props"
 
@@ -66,7 +71,8 @@ def main() -> None:
                 (date_str,),
             )
             for row in cur.fetchall():
-                props.append({k: _json_val(row[k]) for k in row.keys()})
+                item = {k: _json_val(row[k]) for k in row.keys()}
+                props.append(reconcile_props_history_dict(item))
             conn.close()
         except Exception as exc:
             print(f"[warn] {dbp.name}: {exc}")
