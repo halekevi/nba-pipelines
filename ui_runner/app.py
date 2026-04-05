@@ -90,7 +90,7 @@ app = Flask(
 )
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-04-04-tickets-platform-shell-1"
+_UI_BUILD_ID = "2026-04-04-tickets-hero-v2"
 
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")

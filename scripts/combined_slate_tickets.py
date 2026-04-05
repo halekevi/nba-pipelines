@@ -6142,7 +6142,7 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
   <div class="hero-copy">
     <div class="hero-eyebrow" style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Today&rsquo;s Picks</div>
     <h1 class="hero-title" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,56px);letter-spacing:0.06em;line-height:1.05;color:var(--text);margin:0;">
-      PROP<span class="hero-oracle-em">ORACLE</span> TICKETS
+      PROP<span class="hero-oracle-em">ORACLE</span>&nbsp;TICKETS
     </h1>
   </div>
   <div class="hero-meta-row" role="group" aria-label="Slate summary">
