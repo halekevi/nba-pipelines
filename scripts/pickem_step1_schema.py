@@ -1,4 +1,4 @@
-"""Shared PrizePicks-style step1 CSV columns for alternate books (Underdog, DraftKings, etc.)."""
+"""Shared PrizePicks-style step1 CSV columns for alternate books (Underdog, DraftKings sportsbook, etc.)."""
 
 from __future__ import annotations
 
@@ -30,3 +30,16 @@ PROVIDER_EXTRA_COLUMNS = [
 ]
 
 OUTPUT_COLUMNS = STEP1_PICKEM_COLUMNS + PROVIDER_EXTRA_COLUMNS
+
+# DraftKings sportsbook player props (separate CSV shape; merge with Underdog via outer join if needed).
+DRAFTKINGS_EXTRA_COLUMNS = [
+    "source_book",
+    "dk_event_id",
+    "dk_category",
+    "dk_subcategory",
+    "dk_market_label",
+    "dk_selection_label",
+    "dk_american_odds",
+]
+
+DK_OUTPUT_COLUMNS = STEP1_PICKEM_COLUMNS + DRAFTKINGS_EXTRA_COLUMNS
