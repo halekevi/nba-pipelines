@@ -310,6 +310,20 @@ def _alias_cols(df):
             df[canon]=df[alias]
     return df
 
+
+def _coalesce_line_from_line_score(df):
+    """Fill NaN line values from line_score (NBA/CBB exports often split these)."""
+    if "line_score" not in df.columns:
+        return df
+    ls = pd.to_numeric(df["line_score"], errors="coerce")
+    if "line" not in df.columns:
+        df["line"] = ls
+    else:
+        ln = pd.to_numeric(df["line"], errors="coerce")
+        df["line"] = ln.where(ln.notna(), ls)
+    return df
+
+
 def load_nba(path: str) -> pd.DataFrame:
     xls = pd.ExcelFile(path, engine="openpyxl")
     preferred = ["ALL", "Box Raw", "Props", "Sheet1"]
@@ -367,14 +381,7 @@ def load_nba(path: str) -> pd.DataFrame:
     elif "ml_prob" in df.columns:
         df["ml_edge"] = df["ml_prob"] - 0.5
 
-    # Prefer numeric line; fill from line_score when 'line' exists but is empty/NaN (common in exports).
-    if "line_score" in df.columns:
-        ls = pd.to_numeric(df["line_score"], errors="coerce")
-        if "line" not in df.columns:
-            df["line"] = ls
-        else:
-            ln = pd.to_numeric(df["line"], errors="coerce")
-            df["line"] = ln.where(ln.notna(), ls)
+    _coalesce_line_from_line_score(df)
 
     # Hard fail if player still missing
     if "player" not in df.columns:
@@ -436,9 +443,13 @@ def load_cbb(path: str) -> pd.DataFrame:
     if sheet != "ALL":
         print(f"⚠️ CBB: sheet 'ALL' not found in {os.path.basename(path)}. Using sheet='{sheet}'.")
     df = pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
+    df.columns = [str(c).strip() for c in df.columns]
 
     # ── FIX: rename CBB pipeline column names to grader-expected names ──────────
     df = df.rename(columns={
+        "Player":              "player",
+        "Line":                "line",
+        "Void Reason":         "void_reason",
         "opp_team_abbr":       "opp_team",
         "team_abbr":           "team",
         "prop_norm":           "prop_type_norm",   # FIX 2: use normalized prop, not verbose prop_type
@@ -498,6 +509,8 @@ def load_cbb(path: str) -> pd.DataFrame:
     for c in ("edge_score", "blended_score"):
         if c in df.columns:
             df[c] = pd.to_numeric(df[c], errors="coerce")
+
+    _coalesce_line_from_line_score(df)
 
     # Standardized key used to join actuals
     df["player_key"] = df["player"].astype(str).apply(norm_player_key) + "|" + df["prop_type_norm"].apply(norm_prop_key)
