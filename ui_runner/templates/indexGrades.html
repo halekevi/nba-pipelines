@@ -2,7 +2,9 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#050505"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta property="og:title" content="PropOracle — Grades"/>
 <title>PropOracle — Grades</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
@@ -100,6 +102,7 @@ body::after{
 .snav-links li:nth-child(2) a:hover{color:var(--accent);}
 .snav-links li:nth-child(3) a:hover{color:var(--purple);}
 .snav-links li:nth-child(4) a:hover{color:var(--green);}
+.snav-links li:nth-child(5) a:hover{color:var(--amber);}
 .ni{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .2s,box-shadow .2s;}
 .snav-links li a:hover .ni{transform:scale(1.08) translateY(-1px);}
 .ni-ctrl{background:rgba(127,199,217,.08);border:1px solid rgba(127,199,217,.2);color:var(--cyan);}
@@ -779,8 +782,8 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 }
 
 </style>
-<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260402"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260402"/>
+<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260406"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260406"/>
 </head>
 <body class="page-grades">
 <!-- Ambient orbs — match index.html depth -->
@@ -807,6 +810,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
     <li><a href="/"><span class="ni ni-ctrl"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L1 5.5V13h4V9h4v4h4V5.5L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/></svg></span> Home</a></li>
     <li><a href="/tickets"><span class="ni ni-tick"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="3" width="11" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 6h11" stroke="currentColor" stroke-width="1" stroke-dasharray="2 1.5"/><circle cx="4" cy="9" r="1" fill="currentColor"/><circle cx="7" cy="9" r="1" fill="currentColor"/><circle cx="10" cy="9" r="1" fill="currentColor"/></svg></span> Tickets</a></li>
     <li><a href="/grades" class="active"><span class="ni ni-grade"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 10.5L5.5 7l2.5 2.5L11 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect x="1.5" y="1.5" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/></svg></span> Grades</a></li>
+    <li><a href="/dashboard/income"><span class="ni ni-grade"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 11V5M5 11V2M8 11V7M11 11V4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span> Income</a></li>
     <li><a href="/payout"><span class="ni ni-pay"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 3.5v7M5 5.5c0-.8.9-1.5 2-1.5s2 .7 2 1.5-1 1.3-2 1.5-2 .7-2 1.5.9 1.5 2 1.5 2-.7 2-1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span> Payouts</a></li>
   </ul>
   <div class="snav-right">
@@ -823,6 +827,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   <a href="/">🏠 Home</a>
   <a href="/tickets">🎟 Tickets</a>
   <a href="/grades" class="active">✏️ Grades</a>
+  <a href="/dashboard/income">📈 Income</a>
   <a href="/payout">💰 Payouts</a>
 </div>
 

@@ -1,25 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="theme-color" content="#111111"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="proporacle-build" content="{{ ui_build_id|default('', true) }}"/>
   <title>PropORACLE — Income dashboard</title>
   <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260406"/>
+  <link rel="stylesheet" href="/static/mobile-content-width.css?v=20260406"/>
   <style>
-    body { font-family: system-ui, sans-serif; margin: 0; background: #111; color: #e8e8e8; }
-    header { padding: 1rem 1.5rem; border-bottom: 1px solid #333; }
-    header h1 { margin: 0; font-size: 1.1rem; font-weight: 600; }
-    header p { margin: 0.35rem 0 0; font-size: 0.85rem; color: #888; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1rem; max-width: 1400px; margin: 0 auto; }
-    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-    .panel { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 0.75rem; min-height: 320px; }
+    body.page-dashboard-income {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      margin: 0;
+      background: #111;
+      color: #e8e8e8;
+      -webkit-text-size-adjust: 100%;
+      touch-action: manipulation;
+    }
+    .income-nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
+      padding: 10px max(12px, env(safe-area-inset-left, 0px)) 10px max(12px, env(safe-area-inset-right, 0px));
+      padding-top: max(10px, env(safe-area-inset-top, 0px));
+      background: rgba(26, 26, 26, 0.96);
+      border-bottom: 1px solid #333;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .income-nav a {
+      color: #9a9a9a;
+      text-decoration: none;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      min-height: 44px;
+      box-sizing: border-box;
+      display: inline-flex;
+      align-items: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .income-nav a:hover { color: #e0e0e0; background: rgba(255, 255, 255, 0.06); }
+    .income-nav a.active { color: #d4af37; }
+    .income-header {
+      padding: 1rem max(1.5rem, env(safe-area-inset-left, 0px)) 1rem max(1.5rem, env(safe-area-inset-right, 0px));
+      border-bottom: 1px solid #333;
+    }
+    .income-header h1 { margin: 0; font-size: clamp(1rem, 4vw, 1.15rem); font-weight: 600; }
+    .income-header p { margin: 0.35rem 0 0; font-size: 0.85rem; color: #888; line-height: 1.45; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      padding: 1rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    .panel {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 0.75rem;
+      min-height: 320px;
+      box-sizing: border-box;
+    }
     .panel h2 { margin: 0 0 0.5rem; font-size: 0.95rem; color: #aaa; font-weight: 600; }
-    .warn { background: #2a2210; border-color: #665500; padding: 1rem; margin: 1rem; border-radius: 8px; color: #cb8; }
+    .warn {
+      background: #2a2210;
+      border: 1px solid #665500;
+      padding: 1rem;
+      margin: 1rem max(1rem, env(safe-area-inset-left, 0px)) 1rem max(1rem, env(safe-area-inset-right, 0px));
+      border-radius: 8px;
+      color: #cb8;
+      box-sizing: border-box;
+    }
     code { background: #222; padding: 0.1rem 0.35rem; border-radius: 4px; }
+    .panel [id^="roi"], .panel [id^="clv"], .panel [id^="cal"], .panel [id^="dd"] {
+      min-height: 260px;
+      width: 100%;
+    }
   </style>
 </head>
-<body>
-  <header>
+<body class="page-dashboard-income">
+  <nav class="income-nav" aria-label="Site">
+    <a href="/">Home</a>
+    <a href="/tickets">Tickets</a>
+    <a href="/grades">Grades</a>
+    <a href="/dashboard/income" class="active">Income</a>
+    <a href="/payout">Payouts</a>
+  </nav>
+  <header class="income-header">
     <h1>Income engine — ROI · CLV · calibration · drawdown</h1>
     <p>Not optimized for streaks or “correct legs.” See <code>DESIGN_PRINCIPLES.md</code>.</p>
   </header>
@@ -36,32 +117,45 @@
   </div>
 
   <script>
+    const plotCfg = { displayModeBar: false, responsive: true };
     const roi = {{ roi_json | safe }};
     const clv = {{ clv_json | safe }};
     const cal = {{ cal_json | safe }};
     const eq = {{ equity_json | safe }};
 
+    function resizePlots() {
+      ['roi', 'clv', 'cal', 'dd'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el && el.querySelector('.js-plotly-plot')) {
+          Plotly.Plots.resize(el);
+        }
+      });
+    }
+    window.addEventListener('resize', resizePlots);
+
     if (roi.days && roi.days.length) {
-      let cum = 0, c = [];
-      for (let i = 0; i < roi.days.length; i++) {
+      var cum = 0, c = [];
+      for (var i = 0; i < roi.days.length; i++) {
         cum += roi.pnl[i];
         c.push(cum);
       }
       Plotly.newPlot('roi', [{ x: roi.days, y: c, type: 'scatter', line: { color: '#5dade2' } }], {
-        margin: { t: 20, r: 20, b: 40, l: 50 },
+        autosize: true,
+        margin: { t: 20, r: 12, b: 40, l: 50 },
         paper_bgcolor: '#1a1a1a', plot_bgcolor: '#111',
         font: { color: '#ccc' },
         xaxis: { title: 'Day' }, yaxis: { title: 'Cum PnL' }
-      }, { displayModeBar: false });
+      }, plotCfg);
     }
 
     if (clv.buckets && clv.buckets.length) {
       Plotly.newPlot('clv', [{ x: clv.buckets, y: clv.means, type: 'bar', marker: { color: '#58d68d' } }], {
-        margin: { t: 20, r: 20, b: 80, l: 50 },
+        autosize: true,
+        margin: { t: 20, r: 12, b: 80, l: 50 },
         paper_bgcolor: '#1a1a1a', plot_bgcolor: '#111',
         font: { color: '#ccc' },
         xaxis: { title: 'EV bucket' }, yaxis: { title: 'Mean CLV (implied Δ)' }
-      }, { displayModeBar: false });
+      }, plotCfg);
     }
 
     if (cal.pred && cal.pred.length) {
@@ -69,20 +163,22 @@
         { x: cal.pred, y: cal.hit, type: 'scatter', mode: 'markers', name: 'bins', marker: { size: 10, color: '#f4d03f' } },
         { x: [0, 1], y: [0, 1], type: 'scatter', mode: 'lines', name: 'perfect', line: { dash: 'dash', color: '#666' } }
       ], {
-        margin: { t: 20, r: 20, b: 40, l: 50 },
+        autosize: true,
+        margin: { t: 20, r: 12, b: 40, l: 50 },
         paper_bgcolor: '#1a1a1a', plot_bgcolor: '#111',
         font: { color: '#ccc' },
         xaxis: { title: 'Pred mean', range: [0, 1] }, yaxis: { title: 'Hit rate', range: [0, 1] }
-      }, { displayModeBar: false });
+      }, plotCfg);
     }
 
     if (eq.days && eq.days.length) {
       Plotly.newPlot('dd', [{ x: eq.days, y: eq.dd, type: 'scatter', fill: 'tozeroy', line: { color: '#e74c3c' } }], {
-        margin: { t: 20, r: 20, b: 40, l: 50 },
+        autosize: true,
+        margin: { t: 20, r: 12, b: 40, l: 50 },
         paper_bgcolor: '#1a1a1a', plot_bgcolor: '#111',
         font: { color: '#ccc' },
         xaxis: { title: 'Day' }, yaxis: { title: 'Drawdown', tickformat: ',.1%' }
-      }, { displayModeBar: false });
+      }, plotCfg);
     }
   </script>
 </body>

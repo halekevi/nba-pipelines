@@ -90,7 +90,7 @@ app = Flask(
 )
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-04-04-tickets-hero-v2"
+_UI_BUILD_ID = "2026-04-06-mobile-nav-income"
 
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
@@ -1834,6 +1834,7 @@ def dashboard_income():
     return render_template(
         "dashboard_income.html",
         error=err,
+        ui_build_id=_UI_BUILD_ID,
         roi_json=Markup(json.dumps(roi_payload)),
         clv_json=Markup(json.dumps(clv_payload)),
         cal_json=Markup(json.dumps(cal_payload)),

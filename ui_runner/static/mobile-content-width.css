@@ -1,6 +1,7 @@
 /**
- * Mobile: wider usable viewport, safe-area gutters, lighter scroll behavior.
+ * Mobile: full-width shell, safe-area gutters, touch scrolling, form zoom fix.
  * Load after page styles and nav-mobile-shared.css.
+ * v=20260406
  */
 @media (max-width: 900px) {
   html {
@@ -9,9 +10,19 @@
 
   body {
     overscroll-behavior-x: none;
+    min-height: 100dvh;
+    min-height: -webkit-fill-available;
+    padding-bottom: max(48px, env(safe-area-inset-bottom, 0px)) !important;
   }
 
-  /* Home — shell was ~98vw + clamp padding; use full width + minimal gutter */
+  /* iOS: avoid auto-zoom on focus (inputs < 16px) */
+  input,
+  select,
+  textarea {
+    font-size: max(16px, 1rem) !important;
+  }
+
+  /* Home — shell */
   .shell {
     max-width: 100% !important;
     width: 100% !important;
@@ -54,6 +65,12 @@
     padding-top: 6px !important;
   }
 
+  #app.page-tickets {
+    max-width: 100% !important;
+    padding-left: max(6px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(6px, env(safe-area-inset-right, 0px)) !important;
+  }
+
   .stats-bar {
     max-width: 100% !important;
     width: 100% !important;
@@ -73,12 +90,22 @@
   .ticket-bucket > summary {
     padding-left: max(12px, env(safe-area-inset-left, 0px)) !important;
     padding-right: max(12px, env(safe-area-inset-right, 0px)) !important;
+    min-height: 44px !important;
+    touch-action: manipulation !important;
   }
 
-  /* Long ticket lists: skip layout work for off-screen cards */
   .ticket-card {
     content-visibility: auto;
     contain-intrinsic-size: auto 220px;
+  }
+
+  .tickets-built .graph-wrap {
+    flex-direction: column !important;
+  }
+
+  .tickets-built .graph-canvas-wrap {
+    min-width: 100% !important;
+    max-width: 100% !important;
   }
 
   /* Payout */
@@ -92,21 +119,31 @@
     padding-bottom: 16px !important;
   }
 
-  /* Grades — edge-to-edge slate iframe; safe-area only on notched devices */
+  /* Grades */
   body.page-grades .grades-body {
     margin-left: env(safe-area-inset-left, 0px) !important;
     margin-right: env(safe-area-inset-right, 0px) !important;
     margin-bottom: 0.75rem !important;
   }
 
-  /* Report controls sit inside .iframe-shell-toolbar; slate iframe is full width on Grades */
+  body.page-grades .iframe-shell,
+  body.page-grades .grades-iframe-host {
+    min-height: 50dvh !important;
+  }
+
+  body.page-grades iframe.slate-eval-frame,
+  body.page-grades #grades-iframe {
+    min-height: 55dvh !important;
+    width: 100% !important;
+  }
+
   .iframe-shell-toolbar .date-bar,
   .iframe-shell-toolbar .tabs-bar {
     margin-left: 0 !important;
     margin-right: 0 !important;
   }
 
-  /* Horizontal scroll regions — momentum + no chain-scroll */
+  /* Horizontal scroll */
   .slate-table-wrap,
   .log-table-wrap,
   #combo-table-wrap,
@@ -117,8 +154,28 @@
     overscroll-behavior-x: contain;
   }
 
-  /* Tickets: trim top offset; keep bottom space for thumb / home indicator */
   body.page-tickets {
     padding-top: 8px !important;
+  }
+
+  /* Income dashboard */
+  body.page-dashboard-income {
+    padding-left: env(safe-area-inset-left, 0px) !important;
+    padding-right: env(safe-area-inset-right, 0px) !important;
+    padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  body.page-dashboard-income .grid {
+    grid-template-columns: 1fr !important;
+    padding-left: max(0.5rem, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(0.5rem, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  body.page-dashboard-income .panel {
+    min-height: 240px !important;
+  }
+
+  body.page-dashboard-income .js-plotly-plot {
+    width: 100% !important;
   }
 }

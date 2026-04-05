@@ -58,6 +58,7 @@ body::after{
 .snav-links li:nth-child(2) a:hover{color:var(--accent);}
 .snav-links li:nth-child(3) a:hover{color:#8f7ab8;}
 .snav-links li:nth-child(4) a:hover{color:#9fd8a7;}
+.snav-links li:nth-child(5) a:hover{color:#c89a4a;}
 .ni{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .2s, box-shadow .2s;}
 .snav-links li a:hover .ni{transform:scale(1.1) translateY(-1px);}
 .ni-ctrl {background:rgba(127,199,217,.08); border:1px solid rgba(127,199,217,.2); color:#7fc7d9;}
@@ -355,6 +356,13 @@ canvas{width:100%!important;max-height:220px;}
   .calc-leg-grid{grid-template-columns:1fr;}
 }
 @media(max-width:900px){
+  nav.snav .hybrid-logo .logo-icon,
+  .snav .hybrid-logo .logo-icon{
+    width:40px!important;
+    height:40px!important;
+    max-width:44px!important;
+    max-height:44px!important;
+  }
   #app{padding:0 12px 18px;}
   .legacy-nav{padding:10px 0 10px;gap:10px;}
   .nav-logo::before{width:52px;height:52px;flex:0 0 52px;}
