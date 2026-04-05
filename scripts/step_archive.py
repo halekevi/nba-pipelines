@@ -464,8 +464,24 @@ def main() -> None:
     else:
         df = pd.read_csv(str(graded_path))
 
-    n = archive_graded(args.sport, df, args.date)
-    n_clv = archive_clv_log(args.sport, df, args.date)
+    df_used = df
+    n = archive_graded(args.sport, df_used, args.date)
+    # NBA/CBB/WCBB/MLB slate_grader workbooks: sheet 0 is Summary; prop rows live on "Box Raw".
+    if n == 0 and args.sheet is None and ext in (".xlsx", ".xlsm", ".xls"):
+        try:
+            import warnings
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                df_br = pd.read_excel(str(graded_path), sheet_name="Box Raw", engine="openpyxl")
+            if df_br is not None and not df_br.empty:
+                n2 = archive_graded(args.sport, df_br, args.date)
+                if n2 > 0:
+                    df_used = df_br
+                    n = n2
+        except Exception:
+            pass
+
+    n_clv = archive_clv_log(args.sport, df_used, args.date)
     print(f"[archive] Done. Graded rows processed: {n}; CLV rows: {n_clv}")
 
 
