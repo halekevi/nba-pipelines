@@ -117,7 +117,7 @@ def _chrono_split_idx(df: pd.DataFrame, date_col: str | None) -> pd.Index:
         dd = pd.to_datetime(df[date_col], errors="coerce")
         if dd.notna().any():
             return dd.sort_values().index
-    print("⚠️  [ML] No usable date column found — using index order (no shuffle).")
+    print("[WARN] [ML] No usable date column found -- using index order (no shuffle).")
     return df.index
 
 
@@ -500,6 +500,36 @@ def main() -> None:
     train["game_script_mult"] = _to_num(df[gs_col]) if gs_col else np.nan
     train["consistency_grade"] = _consistency_grade_num(df[cg_col]) if cg_col else np.nan
     train["prop_type"] = df[prop_col].astype(str).map(normalize_nba_prop)
+    if pace_col:
+        pp = _to_num(df[pace_col])
+        if pp.notna().any() and float(pp.dropna().median()) > 1.0:
+            pp = pp / 100.0
+        train["pace_percentile"] = pp
+    else:
+        train["pace_percentile"] = np.nan
+    train["days_rest"] = _to_num(df[rest_col]) if rest_col else np.nan
+    if lmd_col:
+        lm = df[lmd_col].astype(str).str.lower()
+        train["line_move_direction"] = np.where(
+            lm.str.contains(r"toward|favor|over|harder", regex=True),
+            1.0,
+            np.where(lm.str.contains(r"against|under|softer|easier", regex=True), -1.0, 0.0),
+        )
+    else:
+        train["line_move_direction"] = np.nan
+    if b2b_col:
+        raw_b = df[b2b_col]
+        if pd.api.types.is_numeric_dtype(raw_b):
+            train["is_back_to_back"] = (
+                pd.to_numeric(raw_b, errors="coerce").fillna(0) >= 1
+            ).astype(float)
+        else:
+            bb = raw_b.astype(str).str.upper().str.strip()
+            train["is_back_to_back"] = np.where(
+                bb.isin(["1", "TRUE", "Y", "YES", "T"]), 1.0, 0.0
+            ).astype(float)
+    else:
+        train["is_back_to_back"] = np.nan
     train["hit"] = _map_hit(df[hit_col])
 
     train = train[train["hit"].isin([0.0, 1.0])].copy()
@@ -517,6 +547,9 @@ def main() -> None:
     train["days_rest"] = train["days_rest"].fillna(1.0)
     train["line_move_direction"] = train["line_move_direction"].fillna(0.0)
     train["is_back_to_back"] = train["is_back_to_back"].fillna(0.0)
+
+    if "_source_date" in df.columns:
+        train["_source_date"] = df.loc[train.index, "_source_date"].astype(str)
 
     if "_weight" in df.columns:
         sw = pd.to_numeric(df.loc[train.index, "_weight"], errors="coerce").fillna(1.0)
@@ -638,17 +671,21 @@ def main() -> None:
         tr_train = tr_ordered.iloc[:split_idx]
         y_tr = y_ordered.iloc[:split_idx].astype(int)
         base_p_train = model.predict_proba(X_train)[:, 1]
-        prop_uniques = sorted(tr_train["prop_type"].astype(str).unique().tolist())
-        prop_to_i = {p: i for i, p in enumerate(prop_uniques)}
-        pcodes = tr_train["prop_type"].astype(str).map(lambda x: prop_to_i.get(x, 0)).astype(int)
+        prop_labels = tr_train["prop_type"].map(
+            lambda x: "unknown" if pd.isna(x) else str(x).strip().lower()
+        )
+        prop_uniques = sorted(prop_labels.unique().tolist(), key=str)
+        prop_to_i = {p: float(i) for i, p in enumerate(prop_uniques)}
+        pcodes = prop_labels.map(lambda x: prop_to_i.get(x, 0.0)).astype(float)
         X_meta = np.column_stack(
             [
-                base_p_train,
-                tr_train["edge"].to_numpy(dtype=float),
-                tr_train["defense_tier"].to_numpy(dtype=float),
-                pcodes.astype(float),
+                np.asarray(base_p_train, dtype=np.float64),
+                np.asarray(tr_train["edge"], dtype=np.float64),
+                np.asarray(tr_train["defense_tier"], dtype=np.float64),
+                np.asarray(pcodes, dtype=np.float64),
             ]
         )
+        y_meta = np.asarray(y_tr, dtype=np.int64)
         meta_clf = XGBClassifier(
             n_estimators=120,
             max_depth=3,
@@ -658,7 +695,7 @@ def main() -> None:
             random_state=42,
             eval_metric="logloss",
         )
-        meta_clf.fit(X_meta, y_tr)
+        meta_clf.fit(X_meta, y_meta)
         joblib.dump(
             {"model": meta_clf, "prop_uniques": prop_uniques},
             META_MODEL_PATH,

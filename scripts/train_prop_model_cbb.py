@@ -96,7 +96,7 @@ def _chrono_split_idx(df: pd.DataFrame, date_col: str | None) -> pd.Index:
         dd = pd.to_datetime(df[date_col], errors="coerce")
         if dd.notna().any():
             return dd.sort_values().index
-    print("⚠️  [ML] No usable date column found — using index order (no shuffle).")
+    print("[WARN] [ML] No usable date column found -- using index order (no shuffle).")
     return df.index
 
 
@@ -368,6 +368,8 @@ def main() -> None:
     train["hit_rate_l10"] = train["hit_rate_l10"].fillna(0.5)
     _ctx = optional_context_features(df).loc[train.index]
     train = pd.concat([train, _ctx], axis=1)
+    if "_source_date" in df.columns:
+        train["_source_date"] = df.loc[train.index, "_source_date"].astype(str)
 
     dates = df.loc[train.index, "_source_date"].astype(str)
     dr = dates[dates.str.match(r"\d{4}-\d{2}-\d{2}")]
@@ -492,17 +494,21 @@ def main() -> None:
         tr_train = tr_ordered.iloc[:split_idx]
         y_tr = y_ordered.iloc[:split_idx].astype(int)
         base_p_train = model.predict_proba(X_train)[:, 1]
-        prop_uniques = sorted(tr_train["prop_type"].astype(str).unique().tolist())
+        prop_labels = tr_train["prop_type"].map(
+            lambda x: "unknown" if pd.isna(x) else str(x).strip().lower()
+        )
+        prop_uniques = sorted(prop_labels.unique().tolist(), key=str)
         prop_to_i = {p: float(i) for i, p in enumerate(prop_uniques)}
-        pcodes = tr_train["prop_type"].astype(str).map(lambda x: prop_to_i.get(x, 0.0)).astype(float)
+        pcodes = prop_labels.map(lambda x: prop_to_i.get(x, 0.0)).astype(float)
         X_meta = np.column_stack(
             [
-                base_p_train,
-                tr_train["edge"].to_numpy(dtype=float),
-                tr_train["defense_tier"].to_numpy(dtype=float),
-                pcodes,
+                np.asarray(base_p_train, dtype=np.float64),
+                np.asarray(tr_train["edge"], dtype=np.float64),
+                np.asarray(tr_train["defense_tier"], dtype=np.float64),
+                np.asarray(pcodes, dtype=np.float64),
             ]
         )
+        y_meta = np.asarray(y_tr, dtype=np.int64)
         meta_clf = XGBClassifier(
             n_estimators=120,
             max_depth=3,
@@ -512,7 +518,7 @@ def main() -> None:
             random_state=42,
             eval_metric="logloss",
         )
-        meta_clf.fit(X_meta, y_tr)
+        meta_clf.fit(X_meta, y_meta)
         joblib.dump({"model": meta_clf, "prop_uniques": prop_uniques}, META_MODEL_PATH)
         print(f"  Saved meta ranker: {META_MODEL_PATH}")
     except Exception as e:
