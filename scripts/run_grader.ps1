@@ -506,6 +506,10 @@ $StepArchiveScript = Join-Path $Root "scripts\step_archive.py"
 if (Test-Path $StepArchiveScript) {
     $ArchivePairs = @(
         @{ Sport = "NBA";    File = $NBAGradedFile },
+        @{ Sport = "CBB";    File = $CBBGradedFile },
+        @{ Sport = "WCBB";   File = $WCBBGradedFile },
+        @{ Sport = "NBA1H";  File = $NBA1HGradedFile },
+        @{ Sport = "NBA1Q";  File = $NBA1QGradedFile },
         @{ Sport = "NHL";    File = $NHLGradedFile },
         @{ Sport = "MLB";    File = $MLBGradedFile },
         @{ Sport = "Soccer"; File = $SoccerGradedFile }

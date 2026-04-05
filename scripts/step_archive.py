@@ -11,6 +11,7 @@ Table: props_history (one row per graded prop-game)
 
 CLI usage (called from run_grader.ps1 after each grading run):
     py -3.14 scripts/step_archive.py --sport NBA --graded graded_nba_2026-04-04.xlsx --date 2026-04-04
+    py -3.14 scripts/step_archive.py --sport CBB --graded outputs/2026-04-04/graded_cbb_2026-04-04.xlsx --date 2026-04-04
 """
 
 from __future__ import annotations
@@ -126,7 +127,7 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
 
     Parameters
     ----------
-    sport      : "NBA" | "NHL" | "MLB" | "Soccer"
+    sport      : "NBA" | "CBB" | "WCBB" | "NBA1H" | "NBA1Q" | "NHL" | "MLB" | "Soccer"
     graded_df  : graded DataFrame — flexible column names accepted
     date       : "YYYY-MM-DD" string
 
@@ -364,7 +365,7 @@ def get_bulk_stats(sport: str,
 
     Parameters
     ----------
-    sport                : "NBA" | "NHL" | "MLB" | "Soccer"
+    sport                : "NBA" | "CBB" | "WCBB" | "NBA1H" | "NBA1Q" | "NHL" | "MLB" | "Soccer"
     player_prop_pairs    : [(player, prop_type), ...]
     direction_pairs      : [(player, prop_type, direction), ...] — same length
     n_max                : max historical rows per player+prop
@@ -437,7 +438,11 @@ def get_bulk_stats(sport: str,
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Archive graded prop outcomes to history DB.")
-    ap.add_argument("--sport",  required=True, help="Sport key: NBA, NHL, MLB, Soccer")
+    ap.add_argument(
+        "--sport",
+        required=True,
+        help="Sport key: NBA, CBB, WCBB, NBA1H, NBA1Q, NHL, MLB, Soccer",
+    )
     ap.add_argument("--graded", required=True, help="Path to graded Excel/CSV file")
     ap.add_argument("--date",   required=True, help="Grade date YYYY-MM-DD")
     ap.add_argument("--sheet",  default=None,  help="Sheet name for Excel (default: first sheet)")
