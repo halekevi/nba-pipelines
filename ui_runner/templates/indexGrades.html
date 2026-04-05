@@ -964,7 +964,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
     <div class="grades-props-inner">
       <div class="glass-insights props-eval-intro">
         <h3 class="insights-card-title">Prop evaluation</h3>
-        <p class="insights-card-sub">Every archived graded prop for the report date (hit / miss / other), from <code>props_history</code> in <code>data/cache/*_props_history.db</code> after you run the grader and archive step locally. Deployed hosts only show rows if those databases exist on the server.</p>
+        <p class="insights-card-sub">Every archived graded prop for the report date (hit / miss / other), from <code>props_history</code> in <code>data/cache/*_props_history.db</code> after you run the grader and archive step locally. The date must match the <strong>slate grade date</strong> (same <code>YYYY-MM-DD</code> as <code>outputs/&lt;date&gt;/</code>), not necessarily your PC clock. Use <strong>Jump to date</strong> if pills default to the wrong year. Deployed hosts only show rows if those databases exist on the server.</p>
         <div class="props-eval-toolbar">
           <label>Sport
             <select id="props-filter-sport" aria-label="Filter by sport">
@@ -1605,7 +1605,23 @@ async function loadGradesProps(dateStr) {
       foot.textContent = t;
     }
     if (!window._propsEvalCache.length) {
-      grid.innerHTML = '<p class="insights-card-sub">No archived props for <strong>' + escProps(dateStr) + '</strong>. After grading, run the archive step so rows are written to <code>data/cache/*_props_history.db</code> (see <code>scripts/step_archive.py</code>).</p>';
+      var hint = '';
+      try {
+        var ar = await fetch('/api/grades/archive_dates', { cache: 'no-store' });
+        if (ar.ok) {
+          var aj = await ar.json();
+          var ds = aj.dates || [];
+          var rc = aj.row_counts || {};
+          if (ds.length) {
+            var top = ds.slice(0, 8).map(function (x) {
+              var n = rc[x];
+              return escProps(x) + (n != null ? ' (' + n + ' props)' : '');
+            });
+            hint = '<p class="insights-card-sub" style="margin-top:12px">Archive has rows for other dates (newest first): <strong>' + top.join('</strong> · <strong>') + '</strong>. Use <strong>Jump to date</strong> with one of these if your slate was graded under a different calendar day or year.</p>';
+          }
+        }
+      } catch (_e) {}
+      grid.innerHTML = '<p class="insights-card-sub">No archived props for <strong>' + escProps(dateStr) + '</strong>. After grading, run the archive step so rows are written to <code>data/cache/*_props_history.db</code> (see <code>scripts/step_archive.py</code> or <code>scripts/backfill_props_archive.ps1</code>).</p>' + hint;
       var elc = document.getElementById('props-eval-counts');
       if (elc) elc.textContent = '0 props';
       return;

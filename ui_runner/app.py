@@ -1131,6 +1131,42 @@ def _grades_props_payload(date_str: str) -> dict[str, Any]:
     }
 
 
+def _grades_archive_dates_payload(max_dates: int = 40) -> dict[str, Any]:
+    """
+    Distinct grade_date values in local props_history DBs (newest first).
+    Helps the Grades UI when the report date (often browser \"yesterday\") does not match
+    archived slate dates (e.g. machine clock vs outputs/YYYY-MM-DD used when grading).
+    """
+    counts: dict[str, int] = {}
+    for dbp in _iter_props_history_db_paths():
+        conn: sqlite3.Connection | None = None
+        try:
+            conn = sqlite3.connect(str(dbp))
+            cur = conn.execute(
+                "SELECT grade_date, COUNT(*) FROM props_history GROUP BY grade_date"
+            )
+            for gd, n in cur.fetchall():
+                if not gd:
+                    continue
+                key = str(gd).strip()[:10]
+                if len(key) != 10 or key[4] != "-" or key[7] != "-":
+                    continue
+                counts[key] = counts.get(key, 0) + int(n)
+        except Exception:
+            pass
+        finally:
+            if conn is not None:
+                try:
+                    conn.close()
+                except Exception:
+                    pass
+    ordered = sorted(counts.keys(), reverse=True)[:max_dates]
+    return {
+        "dates": ordered,
+        "row_counts": {d: counts[d] for d in ordered},
+    }
+
+
 @app.get("/api/grades/insights")
 def api_grades_insights():
     """JSON for Grades hub: calibration, CLV by sport, edge-bucket hit rates (from props_history + clv_log)."""
@@ -1150,6 +1186,15 @@ def api_grades_props():
     except (TypeError, ValueError):
         return jsonify({"error": "invalid date", "props": []}), 400
     r = jsonify(_grades_props_payload(date_str))
+    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    return r
+
+
+@app.get("/api/grades/archive_dates")
+def api_grades_archive_dates():
+    """Newest grade_date keys present in data/cache/*_props_history.db (for Prop Evaluation date hints)."""
+    r = jsonify(_grades_archive_dates_payload())
     r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
     r.headers["Pragma"] = "no-cache"
     return r
