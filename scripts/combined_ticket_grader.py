@@ -86,6 +86,7 @@ if str(ROOT) not in sys.path:
 from utils.goblin_demon_multiplier import (  # noqa: E402
     leg_delta_pct as gd_leg_delta_pct,
     leg_factor as gd_leg_factor,
+    leg_payout_method as gd_leg_payout_method,
     load_params as gd_load_params,
     ticket_multiplier as gd_ticket_multiplier,
 )
@@ -803,13 +804,14 @@ def enrich_ticket_backtest_with_payouts(ticket_bt: pd.DataFrame, ticket_results:
     for mode in ticket_results["mode"].dropna().unique():
         m = str(mode).strip().lower()
         sub = ticket_results[ticket_results["mode"] == mode][
-            ["ticket_id", "profit", "is_cash", "payout_status"]
+            ["ticket_id", "profit", "is_cash", "payout_status", "payout_method"]
         ].copy()
         sub = sub.rename(
             columns={
                 "profit": f"profit_{m}",
                 "is_cash": f"is_cash_{m}",
                 "payout_status": f"payout_status_{m}",
+                "payout_method": f"payout_method_{m}",
             }
         )
         out = out.merge(sub, on="ticket_id", how="left")
@@ -1736,6 +1738,11 @@ def main():
 
     legs_df["gd_leg_factor"] = legs_df.apply(_row_gd_factor, axis=1)
 
+    legs_df["payout_method"] = legs_df.apply(
+        lambda row: gd_leg_payout_method(row.get("delta_pct"), str(row.get("pick_type", ""))),
+        axis=1,
+    )
+
     # per-ticket modifiers
     mods_df = (legs_df.groupby("ticket_id", as_index=False)
                .agg(
@@ -1774,6 +1781,7 @@ def main():
         flat_standard_mults: List[float] = []
         mult_delta_std: List[float] = []
         payouts_est: List[float] = []
+        ticket_payout_methods: List[str] = []
         for _, r in t.iterrows():
             tid = str(r["ticket_id"])
             g_legs = legs_by_ticket_pre.get(tid)
@@ -1781,10 +1789,12 @@ def main():
             stake = float(r["stake"])
             p_prm = gd_load_params()
             factors: List[float] = []
+            leg_methods: List[str] = []
             if g_legs is not None and n_eff >= 2:
                 for _, lr in g_legs.iterrows():
                     if str(lr.get("leg_result", "")).upper() == "VOID":
                         continue
+                    leg_methods.append(str(lr.get("payout_method", "curve")))
                     dp = gd_leg_delta_pct(lr["line"], lr.get("standard_line"))
                     factors.append(
                         gd_leg_factor(dp, pick_category_from_cell(str(lr.get("pick_type", ""))), p_prm)
@@ -1795,6 +1805,10 @@ def main():
                     factors.append(1.0)
             else:
                 factors = [1.0] * max(0, n_eff)
+
+            ticket_payout_methods.append(
+                "flat_fallback" if leg_methods and "flat_fallback" in leg_methods else "curve"
+            )
 
             if n_eff >= 2:
                 if mode == "power":
@@ -1860,6 +1874,7 @@ def main():
         t["mult_delta_vs_standard"] = mult_delta_std
         t["payout_est_curve"] = payouts_est
         t["profit_est_curve"] = t["payout_est_curve"] - t["stake"]
+        t["payout_method"] = ticket_payout_methods
         t["is_win"] = ((t["payout_status"] == "WIN") | (t["payout_status"] == "WIN_NO_MULT")).astype(int)
         t["is_cash"] = ((t["payout_status"] == "WIN") | (t["payout_status"] == "WIN_NO_MULT") | (t["payout_status"] == "CASH")).astype(int)
         ticket_rows.append(t)
@@ -1950,6 +1965,7 @@ def main():
         "line",
         "delta_pct",
         "gd_leg_factor",
+        "payout_method",
         "leg_result",
     ]
     _plc = [c for c in _plc if c in pay_acc_a.columns]
@@ -1970,14 +1986,21 @@ def main():
         "profit_est_curve",
         "stake",
         "payout_status",
+        "payout_method",
     ]
     _ptc = [c for c in _ptc if c in ticket_results.columns]
     pay_acc_tickets = ticket_results[_ptc].copy() if _ptc else pd.DataFrame()
 
     n_delta_known = int(legs_df["delta_pct"].notna().sum()) if "delta_pct" in legs_df.columns else 0
+    n_flat_fb = (
+        int((legs_df["payout_method"] == "flat_fallback").sum())
+        if "payout_method" in legs_df.columns
+        else 0
+    )
     avg_md = float(pd.to_numeric(ticket_results.get("mult_delta_vs_standard"), errors="coerce").mean())
     summ_rows: List[Dict[str, Any]] = [
         {"metric": "legs_with_delta_pct", "value": n_delta_known},
+        {"metric": "legs_payout_flat_fallback", "value": n_flat_fb},
         {"metric": "avg_mult_delta_vs_standard", "value": round(avg_md, 4)},
     ]
     for _m in modes:

@@ -167,6 +167,27 @@ def leg_delta_pct(played_line: Any, standard_line: Any) -> Optional[float]:
     return l / s
 
 
+def leg_payout_method(delta_pct: Any, pick_type: str) -> str:
+    """
+    How this leg's factor was chosen for grading / exports.
+
+    - ``curve``: Standard legs, or Goblin/Demon with a usable delta_pct (curve factors apply).
+    - ``flat_fallback``: Goblin/Demon with missing/invalid delta_pct; factor forced to 1.0.
+    """
+    pt_raw = (pick_type or "").strip().lower()
+    if "goblin" not in pt_raw and "demon" not in pt_raw:
+        return "curve"
+    if delta_pct is None:
+        return "flat_fallback"
+    try:
+        d = float(delta_pct)
+    except (TypeError, ValueError):
+        return "flat_fallback"
+    if not math.isfinite(d):
+        return "flat_fallback"
+    return "curve"
+
+
 def multiplier_summary(
     legs: list[dict[str, Any]],
     mode: str = "power",
