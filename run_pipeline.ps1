@@ -301,6 +301,18 @@ function Run-Combined {
     if (Test-Path $nba1qFile)  { $CombinedArgs += " --nba1q `"$nba1qFile`"";   Write-Host "  [+] NBA1Q"  -ForegroundColor DarkGray }
     if (Test-Path $wcbbFile)   { $CombinedArgs += " --wcbb `"$wcbbFile`"";     Write-Host "  [+] WCBB"   -ForegroundColor DarkGray }
 
+    # Optional cross-book lines (place fetch outputs here before combine; see scripts/combined_slate_tickets.py header).
+    $AltUd = Join-Path $OutDir "underdog_props.csv"
+    $AltDk = Join-Path $OutDir "draftkings_props_nba.csv"
+    if (Test-Path $AltUd) {
+        $CombinedArgs += " --underdog-csv `"$AltUd`""
+        Write-Host "  [+] Underdog alt lines CSV" -ForegroundColor DarkGray
+    }
+    if (Test-Path $AltDk) {
+        $CombinedArgs += " --draftkings-csv `"$AltDk`""
+        Write-Host "  [+] DraftKings NBA alt lines CSV" -ForegroundColor DarkGray
+    }
+
     # Strict ticket defaults are built into combined_slate_tickets.py (--high-conviction on by default).
     # Structured combine emits up to five slips per sport (2L Power/Flex/Std + 3L Pwr Std + 3L Goblin); --max-tickets does not cap those sheets.
     $tierArg = "--tiers A,B"

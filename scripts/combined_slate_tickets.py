@@ -8,6 +8,13 @@ Outputs:
   - combined_slate_tickets_YYYY-MM-DD.xlsx
   - tickets_latest.json (web; /tickets renders from this). Graded HTML: build_ticket_eval.py → ticket_eval_<date>.html
 
+Cross-book lines (optional):
+  Place CSVs next to the combined output, then pass --underdog-csv / --draftkings-csv (or use run_pipeline
+  when files exist under outputs/<date>/):
+    outputs/<date>/underdog_props.csv   ← fetch_underdog_pickem.py --output ...
+    outputs/<date>/draftkings_props_nba.csv ← fetch_draftkings_player_props.py --league nba -o ...
+  Join is on sport + team + normalized player + normalized prop label (best-effort; DK/UD naming differs).
+
 Sheets: SUMMARY, Full Slate (reordered + STRONG/LEAN/RISK + pace beside Def Tier), NBA Slate, CBB Slate,
         2–6-Leg tickets per sport (Goblin / Standard / Std+Gob mix),
         cross-sport Standard / Std+Gob / Goblin mixes,
@@ -46,8 +53,9 @@ import math
 import os
 import re
 import sys
+import unicodedata
 from datetime import datetime, timezone
-from typing import Optional, List
+from typing import List, Optional
 
 import numpy as np
 import pandas as pd
@@ -207,6 +215,139 @@ def _norm_prop_label(v: object) -> str:
     s = str(v or "").strip().lower()
     s = re.sub(r"\s+", " ", s)
     return s
+
+
+# NBA abbreviations sometimes differ vs other books (align to slate/step8 style).
+_CROSSBOOK_NBA_TEAM_ALIASES: dict[str, str] = {
+    "BKN": "BRK",
+    "CHA": "CHA",
+    "PHX": "PHO",
+    "GSW": "GS",
+    "NOP": "NO",
+    "NYK": "NY",
+    "SAS": "SA",
+    "UTH": "UTA",
+    "UTAH": "UTA",
+}
+
+
+def _join_sport_key(sport: object) -> str:
+    s = str(sport or "").strip().upper()
+    if s in ("NBA1Q", "NBA1H"):
+        return "NBA"
+    if s == "SOCCER":
+        return "SOCCER"
+    return s
+
+
+def _norm_player_join(v: object) -> str:
+    s = str(v or "").strip().lower()
+    s = unicodedata.normalize("NFKD", s)
+    s = "".join(c for c in s if not unicodedata.combining(c))
+    s = re.sub(r"[^a-z0-9\s]", " ", s)
+    s = re.sub(r"\s+", " ", s).strip()
+    s = re.sub(r"\b(jr|sr|ii|iii|iv|v)\b", "", s).strip()
+    return s
+
+
+def _norm_team_join(team: object, sport: object) -> str:
+    t = str(team or "").strip().upper()
+    sp = str(sport or "").strip().upper()
+    if sp in ("NBA", "NBA1Q", "NBA1H"):
+        return _CROSSBOOK_NBA_TEAM_ALIASES.get(t, t)
+    return t
+
+
+def _ud_join_sport(ud_sid: object) -> str:
+    u = str(ud_sid or "").strip().upper()
+    m = {"FIFA": "SOCCER", "MASL": "SOCCER", "UFL": "SOCCER", "EPL": "SOCCER"}
+    return m.get(u, u)
+
+
+def _load_underdog_alt_csv(path: str) -> pd.DataFrame:
+    df = pd.read_csv(path, dtype=str, encoding="utf-8-sig").fillna("")
+    if df.empty:
+        return pd.DataFrame(columns=["_js", "_jt", "_jp", "_jpr", "line_underdog"])
+    df["line"] = pd.to_numeric(df.get("line", np.nan), errors="coerce")
+    df = df[df["line"].notna()].copy()
+    df["_js"] = df["ud_sport_id"].map(_ud_join_sport)
+    df["_jt"] = df["team"].map(lambda x: str(x).strip().upper())
+    df["_jp"] = df["player"].map(_norm_player_join)
+    df["_jpr"] = df["prop_type"].map(_norm_prop_label)
+    df = df[(df["_jp"] != "") & (df["_jpr"] != "")].copy()
+    g = (
+        df.groupby(["_js", "_jt", "_jp", "_jpr"], as_index=False)["line"]
+        .mean()
+        .rename(columns={"line": "line_underdog"})
+    )
+    return g
+
+
+def _load_draftkings_alt_csv(path: str) -> pd.DataFrame:
+    df = pd.read_csv(path, dtype=str, encoding="utf-8-sig").fillna("")
+    if df.empty:
+        return pd.DataFrame(columns=["_js", "_jt", "_jp", "_jpr", "line_draftkings"])
+    df["line"] = pd.to_numeric(df.get("line", np.nan), errors="coerce")
+    df = df[df["line"].notna()].copy()
+    if "board_sport" in df.columns:
+        df["_js"] = df["board_sport"].map(lambda x: _join_sport_key(str(x).strip()))
+    else:
+        df["_js"] = ""
+    lbl = df["dk_market_label"] if "dk_market_label" in df.columns else df.get("prop_type", "")
+    df["_jpr"] = lbl.map(_norm_prop_label)
+    df["_jt"] = df["team"].map(lambda x: str(x).strip().upper())
+    df["_jp"] = df["player"].map(_norm_player_join)
+    df = df[(df["_js"] != "") & (df["_jp"] != "") & (df["_jpr"] != "")].copy()
+    g = (
+        df.groupby(["_js", "_jt", "_jp", "_jpr"], as_index=False)["line"]
+        .median()
+        .rename(columns={"line": "line_draftkings"})
+    )
+    return g
+
+
+def attach_alt_book_lines(
+    combined: pd.DataFrame,
+    *,
+    underdog_csv: str = "",
+    draftkings_csv: str = "",
+) -> pd.DataFrame:
+    """Left-merge Underdog / DraftKings numeric lines onto the combined slate (PrizePicks line stays in `line`)."""
+    out = combined.copy()
+    out["_js"] = out["sport"].map(_join_sport_key)
+    out["_jt"] = [_norm_team_join(t, s) for t, s in zip(out["team"], out["sport"])]
+    out["_jp"] = out["player"].map(_norm_player_join)
+    out["_jpr"] = out["prop_type"].map(_norm_prop_label)
+    join_on = ["_js", "_jt", "_jp", "_jpr"]
+
+    u_path = (underdog_csv or "").strip()
+    if u_path and os.path.isfile(u_path):
+        try:
+            ud = _load_underdog_alt_csv(u_path)
+            if not ud.empty:
+                out = out.merge(ud, on=join_on, how="left")
+                n = int(out["line_underdog"].notna().sum())
+                print(f"  [alt-books] Underdog lines joined: {n} / {len(out)} rows ({u_path})")
+        except Exception as e:
+            print(f"  [alt-books] WARN Underdog merge skipped: {e}")
+    if "line_underdog" not in out.columns:
+        out["line_underdog"] = np.nan
+
+    d_path = (draftkings_csv or "").strip()
+    if d_path and os.path.isfile(d_path):
+        try:
+            dk = _load_draftkings_alt_csv(d_path)
+            if not dk.empty:
+                out = out.merge(dk, on=join_on, how="left")
+                n = int(out["line_draftkings"].notna().sum())
+                print(f"  [alt-books] DraftKings lines joined: {n} / {len(out)} rows ({d_path})")
+        except Exception as e:
+            print(f"  [alt-books] WARN DraftKings merge skipped: {e}")
+    if "line_draftkings" not in out.columns:
+        out["line_draftkings"] = np.nan
+
+    out = out.drop(columns=join_on, errors="ignore")
+    return out
 
 
 def _prop_priority_bonus(v: object) -> float:
@@ -4572,6 +4713,8 @@ FULL_SLATE_EXTRA_HDRS = {
     "game_script_note": "Script Note",
     "l5_side_hits": "L5 Side Hits",
     "l5_consistency": "L5 Match %",
+    "line_underdog": "Line (UD)",
+    "line_draftkings": "Line (DK)",
 }
 FULL_SLATE_EXTRA_WIDTHS = {
     "pace_tier": 10,
@@ -4582,6 +4725,8 @@ FULL_SLATE_EXTRA_WIDTHS = {
     "game_script_note": 42,
     "l5_side_hits": 9,
     "l5_consistency": 10,
+    "line_underdog": 11,
+    "line_draftkings": 11,
 }
 
 FULL_SLATE_COLS = [
@@ -4602,6 +4747,8 @@ FULL_SLATE_COLS = [
     "prop_type",
     "pick_type",
     "line",
+    "line_underdog",
+    "line_draftkings",
     "direction",
     "edge",
     "projection",
@@ -5293,6 +5440,17 @@ def main():
         action="store_true",
         help="Allow non-target game dates when target date has zero rows (default: strict target-date only).",
     )
+    ap.add_argument(
+        "--underdog-csv",
+        default="",
+        help="Optional Underdog fetch CSV (PP-shaped). If omitted and outputs/<date>/underdog_props.csv exists, it is used.",
+    )
+    ap.add_argument(
+        "--draftkings-csv",
+        default="",
+        help="Optional DraftKings sportsbook CSV with board_sport column. "
+        "If omitted and outputs/<date>/draftkings_props_nba.csv exists, it is used.",
+    )
 
     # Web outputs
     ap.add_argument(
@@ -5367,6 +5525,16 @@ def main():
 
     if not args.output:
         args.output = f"combined_slate_tickets_{args.date}.xlsx"
+
+    _repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    _auto_ud = os.path.join(_repo_root, "outputs", args.date, "underdog_props.csv")
+    _auto_dk = os.path.join(_repo_root, "outputs", args.date, "draftkings_props_nba.csv")
+    if not str(args.underdog_csv).strip() and os.path.isfile(_auto_ud):
+        args.underdog_csv = _auto_ud
+        print(f"  [alt-books] Using Underdog CSV: {_auto_ud}")
+    if not str(args.draftkings_csv).strip() and os.path.isfile(_auto_dk):
+        args.draftkings_csv = _auto_dk
+        print(f"  [alt-books] Using DraftKings CSV: {_auto_dk}")
 
     tiers = [t.strip() for t in args.tiers.split(",") if t.strip()]
     pick_types = [p.strip() for p in args.pick_types.split(",") if p.strip()]
@@ -5525,6 +5693,12 @@ def main():
 
     # ✅ Attach Standard refs for combined too
     combined = attach_standard_refs(combined)
+
+    combined = attach_alt_book_lines(
+        combined,
+        underdog_csv=str(args.underdog_csv or ""),
+        draftkings_csv=str(args.draftkings_csv or ""),
+    )
 
     print(f"  {len(combined)} total props")
     for s in ("NBA", "CBB", "NHL", "Soccer", "MLB", "NBA1H", "NBA1Q", "WCBB"):

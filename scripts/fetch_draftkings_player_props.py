@@ -15,6 +15,8 @@ Examples:
   py -3 scripts/fetch_draftkings_player_props.py --league nba -o dk_nba_props.csv
   py -3 scripts/fetch_draftkings_player_props.py --league cbb -o dk_cbb_props.csv
   py -3 scripts/fetch_draftkings_player_props.py --league nfl --categories "Passing Props" "Rush/Rec Props" -o dk_nfl.csv
+
+NBA cross-book merge in combined_slate expects outputs/YYYY-MM-DD/draftkings_props_nba.csv by default.
   py -3 scripts/fetch_draftkings_player_props.py --list-categories --league nba
 
 Notes:
@@ -59,6 +61,18 @@ EVENT_GROUP_IDS: Dict[str, str] = {
     "mlb": "84240",
     "epl": "40253",
     "wnba": "94682",
+}
+
+# Matches combined_slate_tickets.py sport labels for cross-book joins.
+LEAGUE_KEY_TO_BOARD_SPORT: Dict[str, str] = {
+    "nba": "NBA",
+    "nhl": "NHL",
+    "nfl": "NFL",
+    "cfb": "CBB",
+    "cbb": "CBB",
+    "mlb": "MLB",
+    "epl": "Soccer",
+    "wnba": "WNBA",
 }
 
 # If --auto-categories, keep categories whose names match any of these substrings.
@@ -297,6 +311,7 @@ def _flatten_offers_for_subcategory(
     category_name: str,
     sub_name: str,
     events_by_id: Dict[str, dict],
+    board_sport: str,
 ) -> List[dict]:
     rows: List[dict] = []
     eg = payload.get("eventGroup") or {}
@@ -405,6 +420,7 @@ def _flatten_offers_for_subcategory(
                                 "pp_away_team": away_abbr,
                                 "image_url": "",
                                 "source_book": "draftkings",
+                                "board_sport": board_sport,
                                 "dk_event_id": event_id,
                                 "dk_category": category_name,
                                 "dk_subcategory": sn,
@@ -424,6 +440,7 @@ def run_fetch(
     auto_categories: bool,
     list_only: bool,
     retries: int,
+    board_sport: str,
 ) -> Tuple[List[dict], int]:
     session = _session(site_code)
     base = _base_url(site_code, event_group_id)
@@ -492,6 +509,7 @@ def run_fetch(
                 category_name=cname,
                 sub_name=sname,
                 events_by_id=events_by_id,
+                board_sport=board_sport,
             )
             all_rows.extend(rows)
             print(f"    + {sname!r} -> {len(rows)} selections")
@@ -516,6 +534,11 @@ def main() -> None:
         help="Fetch every offer category (slow; includes game lines and futures).",
     )
     ap.add_argument("--list-categories", action="store_true", help="Print category ids/names from the league root and exit")
+    ap.add_argument(
+        "--board-sport",
+        default="",
+        help="Label stored in CSV for combined_slate join (NBA, CBB, NHL, Soccer, ...). Default: inferred from --league.",
+    )
     ap.add_argument("--output", "-o", default="step1_draftkings_player_props.csv")
     ap.add_argument("--retries", type=int, default=4)
     ap.add_argument("--raw-json", default="", help="Optional path to dump the root eventgroup JSON")
@@ -532,6 +555,10 @@ def main() -> None:
         )
         sys.exit(1)
 
+    board_sport = (args.board_sport or "").strip() or LEAGUE_KEY_TO_BOARD_SPORT.get(
+        league_key, league_key.upper()
+    )
+
     if args.list_categories:
         run_fetch(
             event_group_id=eg_id,
@@ -540,6 +567,7 @@ def main() -> None:
             auto_categories=False,
             list_only=True,
             retries=args.retries,
+            board_sport=board_sport,
         )
         sys.exit(0)
 
@@ -565,6 +593,7 @@ def main() -> None:
                 auto_categories=False,
                 list_only=False,
                 retries=args.retries,
+                board_sport=board_sport,
             )
         else:
             rows, _ncat = run_fetch(
@@ -574,6 +603,7 @@ def main() -> None:
                 auto_categories=auto,
                 list_only=False,
                 retries=args.retries,
+                board_sport=board_sport,
             )
     except RuntimeError as e:
         print(f"[err] {e}", file=sys.stderr)

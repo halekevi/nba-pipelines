@@ -13,6 +13,8 @@ Examples:
   py -3 scripts/fetch_underdog_pickem.py --sport NBA --output ud_nba.csv
   py -3 scripts/fetch_underdog_pickem.py --sport NBA,NHL,MLB --output ud_multi.csv
   py -3 scripts/fetch_underdog_pickem.py --sport ALL --output ud_all.csv
+
+For combined_slate cross-book columns, save as outputs/YYYY-MM-DD/underdog_props.csv (or pass --underdog-csv).
 """
 
 from __future__ import annotations
