@@ -139,14 +139,26 @@ def write_dir_subrows(ws,ri,df,label,bg,ncols=8):
     return ri
 
 # ── Grade ─────────────────────────────────────────────────────────────────────
-def grade(row,actual):
-    if pd.isna(actual): return 'VOID','NO_ACTUAL',0
-    line=float(row.get('line',row.get('Line',0)))
-    direction=str(row.get('bet_direction',row.get('Direction','OVER'))).upper()
-    if actual==line: return 'VOID','PUSH',0
-    if direction=='OVER': result='HIT' if actual>line else 'MISS'
-    else: result='HIT' if actual<line else 'MISS'
-    return result,None,round(actual-line if direction=='OVER' else line-actual,2)
+def grade(row, actual):
+    """Return (result, void_reason_or_None, margin). Margin is NaN when ungraded."""
+    if pd.isna(actual):
+        return "VOID", "NO_ACTUAL", np.nan
+    line = pd.to_numeric(
+        row.get("line", row.get("Line", row.get("line_score", np.nan))),
+        errors="coerce",
+    )
+    if pd.isna(line):
+        return "VOID", "NO_LINE", np.nan
+    line = float(line)
+    direction = str(row.get("bet_direction", row.get("Direction", "OVER"))).upper()
+    if actual == line:
+        return "VOID", "PUSH", 0.0
+    if direction == "OVER":
+        result = "HIT" if actual > line else "MISS"
+    else:
+        result = "HIT" if actual < line else "MISS"
+    m = round(actual - line if direction == "OVER" else line - actual, 2)
+    return result, None, m
 
 PROP_NORM_MAP={
     # short code aliases (common in CBB pipeline files)
@@ -473,12 +485,10 @@ def apply_actuals(df, actuals_path):
     if unmatched_props:
         print(f"  ⚠️  Prop types in slate with NO actuals matches: {sorted(unmatched_props)}")
 
-    # Void reasons that are truly ungradeble (no line, no player, no projection)
-    SKIP_VOID_REASONS = {"NO_PROJECTION_OR_LINE"}
-    # Void reasons set upstream by pipeline logic but props still have data — grade through them.
-    # FORCED_OVER_NEG_EDGE means the ranker forced OVER despite negative edge; we still grade it
-    # so you can measure whether those props hit, while keeping the label for filtering.
-    GRADE_THROUGH_REASONS = {"FORCED_OVER_NEG_EDGE"}
+    # Upstream void_reason (NBA step7, etc.) marks eligibility / strategy filters
+    # (BLOCKED_STD_OVER_LOW_HR, DROPPED_NEG_EDGE_GOBDEM, NO_PROJECTION_OR_LINE, …).
+    # It must NOT force VOID when we have a real line + box-score actual — otherwise
+    # Prop Evaluation and archives show Actual filled but Result VOID and Margin empty.
 
     results, void_reasons, margins, actuals_out = [], [], [], []
     for _, row in df.iterrows():
@@ -508,28 +518,30 @@ def apply_actuals(df, actuals_path):
 
         void_r = row.get("void_reason", np.nan)
         void_r_str = str(void_r).strip() if pd.notna(void_r) else ""
+        upstream = void_r_str if void_r_str not in ("", "nan") else ""
 
-        if void_r_str in SKIP_VOID_REASONS:
-            # Truly ungradeble — no line/projection/player
-            results.append("VOID")
-            void_reasons.append(void_r_str)
-            margins.append(np.nan)
-        elif void_r_str in GRADE_THROUGH_REASONS:
-            # Has data — grade normally, preserve upstream reason label
-            r, vr, m = grade(row, actual)
+        r, vr, m = grade(row, actual)
+        decided = r in ("HIT", "MISS") or (
+            r == "VOID" and str(vr or "").upper() == "PUSH"
+        )
+
+        if decided:
             results.append(r)
-            void_reasons.append(void_r_str if vr is None else vr)
             margins.append(m)
-        elif pd.notna(void_r) and void_r_str not in ("", "nan"):
-            # Any other pre-existing void reason — respect it
-            results.append("VOID")
-            void_reasons.append(void_r_str)
-            margins.append(np.nan)
+            parts = [upstream] if upstream else []
+            if vr:
+                parts.append(str(vr))
+            void_reasons.append("; ".join(parts))
         else:
-            r, vr, m = grade(row, actual)
-            results.append(r)
-            void_reasons.append(vr)
-            margins.append(m)
+            results.append("VOID")
+            margins.append(np.nan)
+            tail = str(vr or "").strip()
+            if upstream and tail:
+                void_reasons.append(f"{upstream}; {tail}")
+            elif upstream:
+                void_reasons.append(upstream)
+            else:
+                void_reasons.append(tail or "NO_ACTUAL")
 
     df["actual"] = actuals_out
     df["result"] = results
