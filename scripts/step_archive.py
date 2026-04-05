@@ -256,7 +256,7 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
 
 
 def archive_clv_log(sport: str, graded_df: pd.DataFrame, date: str) -> int:
-    """Append CLV rows derived from graded props (open vs close implied)."""
+    """Replace CLV rows for this sport+grade_date, then insert from graded props (idempotent re-archive)."""
     if graded_df is None or graded_df.empty:
         return 0
     sport_up = str(sport).strip().upper()
@@ -265,6 +265,13 @@ def archive_clv_log(sport: str, graded_df: pd.DataFrame, date: str) -> int:
         print(f"[archive] {sport_up}: 0 CLV rows (missing implied-prob or odds columns).")
         return 0
     conn = _connect(sport)
+    try:
+        conn.execute(
+            "DELETE FROM clv_log WHERE sport = ? AND grade_date = ?",
+            (sport_up, date),
+        )
+    except Exception:
+        pass
     inserted = 0
     for row in tuples:
         try:
@@ -283,7 +290,7 @@ def archive_clv_log(sport: str, graded_df: pd.DataFrame, date: str) -> int:
             pass
     conn.commit()
     conn.close()
-    print(f"[archive] {sport_up} {date}: CLV log rows appended: {inserted} (db: {_db_path(sport).name})")
+    print(f"[archive] {sport_up} {date}: CLV log rows written: {inserted} (db: {_db_path(sport).name})")
     return inserted
 
 
