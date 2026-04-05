@@ -13,6 +13,7 @@ League presets use the numeric IDs from DraftKings league URLs (e.g. MLB /league
 
 Examples:
   py -3 scripts/fetch_draftkings_player_props.py --league nba -o dk_nba_props.csv
+  py -3 scripts/fetch_draftkings_player_props.py --league cbb -o dk_cbb_props.csv
   py -3 scripts/fetch_draftkings_player_props.py --league nfl --categories "Passing Props" "Rush/Rec Props" -o dk_nfl.csv
   py -3 scripts/fetch_draftkings_player_props.py --list-categories --league nba
 
@@ -54,6 +55,7 @@ EVENT_GROUP_IDS: Dict[str, str] = {
     "nhl": "42133",
     "nfl": "88808",
     "cfb": "87637",
+    "cbb": "49146",  # Men's college (ncaab) — id from DK league page; verify with --list-categories
     "mlb": "84240",
     "epl": "40253",
     "wnba": "94682",

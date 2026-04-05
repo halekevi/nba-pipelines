@@ -10,6 +10,7 @@
          Use -SkipFetch to skip A1 and C0b. -SkipGameLines skips C0. -SkipPeriodHistorySync skips C0b only.
          -WeeklyAnalysis runs synthetic + full consistency rebuild after analyze_grader.
          -MonthlyRetrain after STEP E runs all four prop ML trainers + full consistency rebuild (logs OK/FAILED, continues on failure).
+  NCAA 2026: WCBB slate not required from 2026-04-06; men's CBB not required from 2026-04-07 (see Get-MissingTodaySlateOutputs).
   $Root = parent of scripts\ (repo root).
 #>
 param(
@@ -68,12 +69,18 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
         "step8_nba_direction_clean_$RunDate.xlsx",
         "step8_nba1h_direction_clean_$RunDate.xlsx",
         "step8_nba1q_direction_clean_$RunDate.xlsx",
-        "step6_ranked_cbb_$RunDate.xlsx",
-        "step6_ranked_wcbb_$RunDate.xlsx",
         "step8_nhl_direction_clean_$RunDate.xlsx",
         "step8_soccer_direction_clean_$RunDate.xlsx",
         "step8_mlb_direction_clean_$RunDate.xlsx"
     )
+    # 2026 NCAA: WCBB title Sun Apr 5; men's title Mon Apr 6. Expect no WCBB slate from Apr 6+;
+    # no men's CBB slate from Apr 7+ — omit from required outputs so daily does not false-fail.
+    if ($RunDate -lt "2026-04-07") {
+        $required = @($required) + @("step6_ranked_cbb_$RunDate.xlsx")
+    }
+    if ($RunDate -lt "2026-04-06") {
+        $required = @($required) + @("step6_ranked_wcbb_$RunDate.xlsx")
+    }
     $missing = @()
     foreach ($name in $required) {
         $p = Join-Path $outDir $name

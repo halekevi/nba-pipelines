@@ -263,6 +263,7 @@ def min_ev_for_ticket(n_legs: int) -> float:
 
 # 2026 NCAA tournament + AP Top 25 metadata (CBB enrichment).
 # Keys follow abbreviations used in our CBB files.
+# Schedule: WCBB title Sun 2026-04-05; men's title Mon 2026-04-06 (Michigan vs UConn).
 CBB_TOURNEY_2026 = {
     "DUKE": (1, "East"), "CONN": (2, "East"), "MSU": (3, "East"), "KU": (4, "East"),
     "SJU": (5, "East"), "LOU": (6, "East"), "UCLA": (7, "East"), "OSU": (8, "East"),
