@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 """
-Build NBA period-specific actuals, preferring NBA.com official stats.
+Build basketball period-specific actuals.
+
+NBA (default): prefers NBA.com boxscoretraditionalv2 with StartPeriod/EndPeriod,
+which returns stats summed across those quarters (e.g. 1H = Q1+Q2, 2H = Q3+Q4).
+
+CBB (--sport CBB): NBA.com is not used; ESPN play-by-play is parsed for the same
+period ranges (coarser than full box; use for period props when needed).
 
 Outputs use the same schema as fetch_actuals.py:
   player, team, prop_type, actual (+ raw stat columns)
@@ -8,7 +14,11 @@ Outputs use the same schema as fetch_actuals.py:
 Examples:
   py -3.14 scripts/fetch_nba_period_actuals.py --date 2026-03-25 --segment 1Q --output outputs/2026-03-25/actuals_nba1q_2026-03-25.csv
   py -3.14 scripts/fetch_nba_period_actuals.py --date 2026-03-25 --segment 2Q --output outputs/2026-03-25/actuals_nba2q_2026-03-25.csv
+  py -3.14 scripts/fetch_nba_period_actuals.py --date 2026-03-25 --segment 3Q --output outputs/2026-03-25/actuals_nba3q_2026-03-25.csv
+  py -3.14 scripts/fetch_nba_period_actuals.py --date 2026-03-25 --segment 4Q --output outputs/2026-03-25/actuals_nba4q_2026-03-25.csv
   py -3.14 scripts/fetch_nba_period_actuals.py --date 2026-03-25 --segment 1H --output outputs/2026-03-25/actuals_nba1h_2026-03-25.csv
+  py -3.14 scripts/fetch_nba_period_actuals.py --date 2026-03-25 --segment 2H --output outputs/2026-03-25/actuals_nba2h_2026-03-25.csv
+  py -3.14 scripts/fetch_nba_period_actuals.py --sport CBB --date 2026-03-25 --segment 1H --output outputs/2026-03-25/actuals_cbb1h_2026-03-25.csv
 """
 
 from __future__ import annotations
@@ -27,9 +37,20 @@ from fetch_actuals import (
     parse_stats,
 )
 
-CORE_PBP_URL = "https://cdn.espn.com/core/nba/playbyplay?gameId={event_id}&xhr=1"
+# ESPN core XHR (same JSON shape for NBA and men's CBB).
+CORE_PBP_URL = "https://cdn.espn.com/core/{sport}/playbyplay?gameId={event_id}&xhr=1"
 NBA_SCOREBOARD_URL = "https://stats.nba.com/stats/scoreboardv2"
 NBA_BOXSCORE_URL = "https://stats.nba.com/stats/boxscoretraditionalv2"
+
+# Regulation-only halves: 2H = Q3 + Q4 (no OT in these ranges).
+SEGMENT_TO_PERIODS: dict[str, tuple[int, int]] = {
+    "1Q": (1, 1),
+    "2Q": (2, 2),
+    "3Q": (3, 3),
+    "4Q": (4, 4),
+    "1H": (1, 2),
+    "2H": (3, 4),
+}
 
 
 def _default_date_str() -> str:
@@ -160,8 +181,18 @@ def _athlete_index(gamepackage: dict) -> dict[str, tuple[str, str]]:
     return out
 
 
-def _parse_game_period_stats(event_id: str, max_period: int) -> list[dict]:
-    r = requests.get(CORE_PBP_URL.format(event_id=event_id), headers=HEADERS, timeout=25)
+def _parse_game_period_stats(
+    event_id: str,
+    start_period: int,
+    end_period: int,
+    espn_sport: str = "nba",
+) -> list[dict]:
+    """
+    Sum stats from ESPN plays whose period is in [start_period, end_period] inclusive.
+    Used as fallback for NBA when NBA.com fails, and as the primary path for CBB.
+    """
+    url = CORE_PBP_URL.format(sport=espn_sport, event_id=event_id)
+    r = requests.get(url, headers=HEADERS, timeout=25)
     r.raise_for_status()
     payload = r.json() or {}
     gp = payload.get("gamepackageJSON", {}) or {}
@@ -174,7 +205,7 @@ def _parse_game_period_stats(event_id: str, max_period: int) -> list[dict]:
 
     for play in plays:
         pnum = int((play.get("period") or {}).get("number") or 0)
-        if pnum < 1 or pnum > max_period:
+        if pnum < start_period or pnum > end_period:
             continue
 
         text = str(play.get("text", "") or "")
@@ -262,37 +293,57 @@ def _parse_game_period_stats(event_id: str, max_period: int) -> list[dict]:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--date", default=_default_date_str(), help="YYYY-MM-DD (default: yesterday)")
-    ap.add_argument("--segment", choices=["1Q", "2Q", "1H"], required=True, help="Target period segment")
+    ap.add_argument(
+        "--sport",
+        choices=["NBA", "CBB"],
+        default="NBA",
+        help="NBA uses NBA.com box scores (ESPN PBP fallback). CBB uses ESPN PBP only.",
+    )
+    ap.add_argument(
+        "--segment",
+        choices=list(SEGMENT_TO_PERIODS.keys()),
+        required=True,
+        help="Period window: single quarter or half (1H=Q1+Q2, 2H=Q3+Q4 regulation).",
+    )
     ap.add_argument("--output", required=True, help="Output CSV path")
     args = ap.parse_args()
 
+    start_period, end_period = SEGMENT_TO_PERIODS[args.segment]
     all_rows: list[dict] = []
-    if args.segment == "1Q":
-        start_period, end_period = (1, 1)
-    elif args.segment == "2Q":
-        start_period, end_period = (2, 2)
-    else:
-        start_period, end_period = (1, 2)
-    nba_ids: list[str] = []
-    try:
-        nba_ids = _nba_game_ids_for_date(args.date)
-    except Exception as e:
-        print(f"WARNING: NBA.com scoreboard fetch failed; will try ESPN fallback: {e}")
+    use_nba_com = args.sport.upper() == "NBA"
 
-    for gid in nba_ids:
+    if use_nba_com:
+        nba_ids: list[str] = []
         try:
-            all_rows.extend(_nba_boxscore_period_rows(gid, start_period=start_period, end_period=end_period))
+            nba_ids = _nba_game_ids_for_date(args.date)
         except Exception as e:
-            print(f"WARNING: NBA.com boxscore parse failed for game {gid}: {e}")
+            print(f"WARNING: NBA.com scoreboard fetch failed; will try ESPN fallback: {e}")
 
-    # Fallback to ESPN play-by-play if NBA.com could not provide rows.
+        for gid in nba_ids:
+            try:
+                all_rows.extend(
+                    _nba_boxscore_period_rows(gid, start_period=start_period, end_period=end_period)
+                )
+            except Exception as e:
+                print(f"WARNING: NBA.com boxscore parse failed for game {gid}: {e}")
+
+    # ESPN play-by-play: CBB primary; NBA fallback when NBA.com returned nothing.
     if not all_rows:
-        max_period = end_period
-        events = fetch_events_for_date("nba", args.date, is_cbb=False)
+        espn_path = "nba" if use_nba_com else "mens-college-basketball"
+        events = fetch_events_for_date(espn_path, args.date, is_cbb=(espn_path == "mens-college-basketball"))
         event_ids = sorted({str((e or {}).get("id", "")).strip() for e in events if (e or {}).get("id")})
+        label = "ESPN PBP fallback" if use_nba_com else "ESPN PBP (CBB)"
+        print(f"  {label}: {len(event_ids)} events, periods {start_period}-{end_period}")
         for eid in event_ids:
             try:
-                all_rows.extend(_parse_game_period_stats(eid, max_period=max_period))
+                all_rows.extend(
+                    _parse_game_period_stats(
+                        eid,
+                        start_period=start_period,
+                        end_period=end_period,
+                        espn_sport=espn_path,
+                    )
+                )
             except Exception as e:
                 print(f"WARNING: ESPN period parse failed for event {eid}: {e}")
 
@@ -310,7 +361,7 @@ def main() -> None:
     outp = Path(args.output)
     outp.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(outp, index=False)
-    print(f"Saved {args.segment} NBA actuals -> {outp}  ({len(df)} rows)")
+    print(f"Saved {args.sport} {args.segment} actuals -> {outp}  ({len(df)} rows)")
 
 
 if __name__ == "__main__":
