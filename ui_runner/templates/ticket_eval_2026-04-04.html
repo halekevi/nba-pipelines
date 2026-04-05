@@ -48,6 +48,9 @@
 
 /* ── Reset ── */
 *{box-sizing:border-box;margin:0;padding:0}
+html{
+  overflow-x:hidden;
+}
 
 /* ── Body + deep space background (matches index.html exactly) ── */
 body{
@@ -55,9 +58,11 @@ body{
   background:var(--bg-main);
   color:var(--text-primary);
   min-height:100vh;
-  padding-top:16px;
+  padding-top:0;
   padding-bottom:80px;
   overflow-x:hidden;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
 }
 body::before{
   content:'';position:fixed;inset:0;
@@ -88,9 +93,9 @@ body::after{
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:4px}
 
 /* ── Nav (matches index.html exactly) ── */
-.snav{position:sticky;top:1rem;z-index:200;background:var(--glass-bg);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid var(--glass-border);box-shadow:0 1px 0 rgba(255,255,255,0.04),0 8px 32px rgba(0,0,0,0.4);padding:0 40px;display:flex;align-items:center;height:72px;gap:0;margin:1rem;border-radius:20px;position:relative;transform:translateY(0);opacity:1;transition:transform .25s ease,opacity .2s ease;}
+.snav{position:sticky;top:0;z-index:200;background:var(--glass-bg);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid var(--glass-border);border-left:none;border-right:none;box-shadow:0 1px 0 rgba(255,255,255,0.04),0 8px 32px rgba(0,0,0,0.4);padding:0 40px;display:flex;align-items:center;height:72px;gap:0;margin:0 0 1rem 0;border-radius:0;transform:translateY(0);opacity:1;transition:transform .25s ease,opacity .2s ease;}
 .snav.nav-hidden{transform:translateY(calc(-100% - 10px));opacity:.96;}
-.nav-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,#c6ff00 15%,var(--cyan) 40%,var(--purple) 65%,#c6ff00 85%,transparent 100%);opacity:.7;animation:accentShift 6s ease-in-out infinite alternate;border-radius:20px 20px 0 0;}
+.nav-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,#c6ff00 15%,var(--cyan) 40%,var(--purple) 65%,#c6ff00 85%,transparent 100%);opacity:.7;animation:accentShift 6s ease-in-out infinite alternate;border-radius:0;}
 @keyframes accentShift{from{opacity:.5;filter:hue-rotate(0deg);}to{opacity:.9;filter:hue-rotate(20deg);}}
 .snav-brand{display:flex;align-items:center;gap:14px;text-decoration:none;margin-right:48px;flex-shrink:0;}
 .hybrid-logo{display:flex;align-items:center;gap:10px;}
@@ -122,7 +127,7 @@ body::after{
 .hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
 .hamburger.open span:nth-child(2){opacity:0;}
 .hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
-.mobile-menu{display:none;position:fixed;top:88px;left:0;right:0;background:rgba(5,5,15,.98);backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--border);z-index:199;padding:12px 0;}
+.mobile-menu{display:none;position:fixed;top:72px;left:0;right:0;background:rgba(5,5,15,.98);backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--border);z-index:199;padding:12px 0;}
 .mobile-menu.open{display:block;}
 .mobile-menu a{display:flex;align-items:center;gap:12px;padding:12px 24px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-decoration:none;border-left:3px solid transparent;transition:all .15s;}
 .mobile-menu a:hover,.mobile-menu a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(212,175,55,.04);}
@@ -141,7 +146,11 @@ body::after{
     linear-gradient(180deg,#f0f2f5 0%,#e8eaf0 100%);
 }
 [data-theme='light'] body::after{opacity:0.08;}
-[data-theme='light'] .stats-bar{background:rgba(255,255,255,0.6);border-color:rgba(0,0,0,0.1);box-shadow:0 4px 24px rgba(0,0,0,0.08);}
+[data-theme='light'] .stats-bar{
+  background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(248,250,252,.9)),rgba(255,255,255,0.72);
+  border-color:rgba(0,0,0,0.1);
+  box-shadow:0 4px 24px rgba(0,0,0,0.08);
+}
 [data-theme='light'] .ticket-card{background:rgba(255,255,255,0.65);border-color:rgba(0,0,0,0.1);box-shadow:0 4px 20px rgba(0,0,0,0.08);}
 [data-theme='light'] .thdr{background:rgba(0,0,0,0.04);}
 [data-theme='light'] .legrow{color:rgba(0,0,0,0.85);}
@@ -240,7 +249,7 @@ body::after{
 
 /* ── Mobile ── */
 @media(max-width:768px){
-  .snav{padding:0 16px;margin:.5rem;}
+  .snav{padding:0 16px;margin:0 0 0.75rem 0;}
   .snav-links{display:none;}
   .hamburger{display:flex;}
   .snav-brand{margin-right:0;}
@@ -256,7 +265,8 @@ body::after{
 
 h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .bebas{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
-.stats-bar{position:sticky;top:0;z-index:50;margin:0 auto 18px;width:100%;max-width:min(1520px,96vw);padding:18px clamp(16px,2.5vw,32px);background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid var(--glass-bd);border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.35);}
+.stats-bar{position:-webkit-sticky;position:sticky;top:72px;z-index:175;margin:0 auto 18px;width:100%;max-width:min(1520px,96vw);padding:18px clamp(16px,2.5vw,32px);transition:top .28s ease,box-shadow .22s ease;background:linear-gradient(180deg,rgba(10,10,18,.92),rgba(8,8,14,.88)),var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--glass-bd);border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.35);}
+.snav.nav-hidden+.stats-bar{top:8px;}
 .sum-row{display:flex;flex-wrap:wrap;gap:18px 36px;align-items:center;justify-content:center;}
 .sum-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:88px;}
 .sum-val{font-family:'Share Tech Mono',monospace;font-size:clamp(22px,2.6vw,30px);font-weight:700;color:var(--gold);text-shadow:0 0 20px rgba(240,165,0,.25);}
@@ -284,7 +294,6 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .banner.miss{color:var(--red);border-color:rgba(255,77,77,.5);box-shadow:0 0 16px rgba(255,77,77,.12);}
 .banner.pend{color:var(--pending);border-color:rgba(255,255,255,.12);}
 .banner.void{color:var(--gold2);border-color:rgba(240,165,0,.35);}
-50%{box-shadow:0 0 0 2px rgba(255,77,77,0.65),0 0 22px rgba(255,77,77,0.18),inset 0 0 26px rgba(255,77,77,0.09);}}
 .legrow{font-family:'Share Tech Mono',monospace;display:grid;grid-template-columns:56px 92px minmax(120px,1fr) 44px minmax(240px,1.45fr) minmax(108px,1fr) minmax(96px,1fr) minmax(76px,.85fr);gap:12px;align-items:center;padding:14px clamp(14px,2vw,22px);font-size:clamp(13px,1.45vw,16px);line-height:1.35;border-bottom:1px solid rgba(255,255,255,.06);border-left:3px solid transparent;}
 .leg-head{font-family:'Bebas Neue',sans-serif;display:grid;grid-template-columns:56px 92px minmax(120px,1fr) 44px minmax(240px,1.45fr) minmax(108px,1fr) minmax(96px,1fr) minmax(76px,.85fr);gap:12px;align-items:end;padding:6px clamp(14px,2vw,22px) 8px;font-size:10px;letter-spacing:2px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.12);}
 .leg-head-lab{line-height:1.2;}
@@ -370,14 +379,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 </div>
 <div class="stats-bar">
 <div class="sum-row">
-<div class="sum-item"><div class="sum-val">0.0%</div><div class="sum-lab">TICKET HIT RATE</div></div>
-<div class="sum-item"><div class="sum-val green">0</div><div class="sum-lab">HITS</div></div>
-<div class="sum-item"><div class="sum-val red">0</div><div class="sum-lab">MISSES</div></div>
-<div class="sum-item"><div class="sum-val void">0</div><div class="sum-lab">VOID/PUSH</div></div>
-<div class="sum-item"><div class="sum-val pend">28</div><div class="sum-lab">UNGRADED</div></div>
-<div class="sum-item"><div class="sum-val">0</div><div class="sum-lab">PERFECT TICKETS</div></div>
-<div class="sum-item"><div class="sum-val green">0</div><div class="sum-lab">PAID TIX</div></div>
-<div class="sum-item"><div class="sum-val red">0</div><div class="sum-lab">NO PAYOUT</div></div>
+<div class="sum-item"><div class="sum-val">50.0%</div><div class="sum-lab">TICKET HIT RATE</div></div>
+<div class="sum-item"><div class="sum-val green">19</div><div class="sum-lab">HITS</div></div>
+<div class="sum-item"><div class="sum-val red">6</div><div class="sum-lab">MISSES</div></div>
+<div class="sum-item"><div class="sum-val void">3</div><div class="sum-lab">VOID/PUSH</div></div>
+<div class="sum-item"><div class="sum-val pend">0</div><div class="sum-lab">UNGRADED</div></div>
+<div class="sum-item"><div class="sum-val">4</div><div class="sum-lab">PERFECT TICKETS</div></div>
+<div class="sum-item"><div class="sum-val green">6</div><div class="sum-lab">PAID TIX</div></div>
+<div class="sum-item"><div class="sum-val red">6</div><div class="sum-lab">NO PAYOUT</div></div>
 <div class="sum-item"><div class="sum-val sum-val-sm">28</div><div class="sum-lab">TOTAL LEGS</div></div>
 </div></div>
 <div class="wrap">
@@ -387,107 +396,107 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <summary><span>NBA</span><span class="ticket-bucket-meta">3 sections · 3 tickets</span></summary>
 <div class="ticket-bucket-body">
 <section class="sec"><h2 class="sec-head bebas">NBA Power Play 2-Leg</h2>
-<article class="ticket-card">
+<article class="ticket-card all-hit">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">NBA Power Play 2-Leg</span>
-<span class="tg">0✓ 0✗ / 2</span>
+<span class="tg">2✓ 0✗ / 2</span>
 <span class="payout">PWR 0.98× · FLEX 0.98×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="banner hit">ALL HIT</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Kevin Huerter</div>
+<div class="pl-hit">Kevin Huerter</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Asts</div><div class="meta-muted">DET vs PHI</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">11</div>
 <div class="leg-extra">8.35</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Devin Vassell</div>
+<div class="pl-hit">Devin Vassell</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">SAS vs DEN</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">5</div>
 <div class="leg-extra">2.65</div>
 </div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">NBA Flex 3-Leg</h2>
-<article class="ticket-card">
+<article class="ticket-card all-hit">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">NBA Flex 3-Leg</span>
-<span class="tg">0✓ 0✗ / 3</span>
+<span class="tg">3✓ 0✗ / 3</span>
 <span class="payout">PWR 0.79× · FLEX 0.39×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="banner hit">ALL HIT</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Kevin Huerter</div>
+<div class="pl-hit">Kevin Huerter</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Asts</div><div class="meta-muted">DET vs PHI</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">11</div>
 <div class="leg-extra">8.35</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Devin Vassell</div>
+<div class="pl-hit">Devin Vassell</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">SAS vs DEN</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">5</div>
 <div class="leg-extra">2.65</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Davion Mitchell</div>
+<div class="pl-hit">Davion Mitchell</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Rebs</div><div class="meta-muted">MIA vs WAS</div></div>
 <div class="leg-extra">9.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">16</div>
 <div class="leg-extra">4.78</div>
 </div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">NBA Standard 2-Leg</h2>
-<article class="ticket-card">
+<article class="ticket-card all-hit">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">NBA Standard 2-Leg</span>
-<span class="tg">0✓ 0✗ / 2</span>
+<span class="tg">2✓ 0✗ / 2</span>
 <span class="payout">PWR 0.98× · FLEX 0.98×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="banner hit">ALL HIT</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Kevin Huerter</div>
+<div class="pl-hit">Kevin Huerter</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pts+Asts</div><div class="meta-muted">DET vs PHI</div></div>
 <div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">11</div>
 <div class="leg-extra">8.35</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-nba">NBA</span></div>
-<div class="pl-pend">Devin Vassell</div>
+<div class="pl-hit">Devin Vassell</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Rebounds</div><div class="meta-muted">SAS vs DEN</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">5</div>
 <div class="leg-extra">2.65</div>
 </div>
 </article>
@@ -497,107 +506,107 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <summary><span>CBB</span><span class="ticket-bucket-meta">3 sections · 3 tickets</span></summary>
 <div class="ticket-bucket-body">
 <section class="sec"><h2 class="sec-head bebas">CBB Power Play 2-Leg</h2>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">CBB Power Play 2-Leg</span>
-<span class="tg">0✓ 0✗ / 2</span>
+<span class="tg">1✓ 1✗ / 2</span>
 <span class="payout">PWR 1.23× · FLEX 1.23×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="banner miss">MISSED 1</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-cbb">CBB</span></div>
-<div class="pl-pend">Nijel Pack</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Points</div><div class="meta-muted">OKLA vs BAY</div></div>
-<div class="leg-extra">15.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">3.862</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Nijel Pack</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>Points</div><div class="meta-muted">OKLA vs BAY</div></div>
+<div class="leg-extra miss-leg-cell">15.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">15</div>
+<div class="leg-extra miss-leg-cell">3.862</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-cbb">CBB</span></div>
-<div class="pl-pend">Tae Davis</div>
+<div class="pl-hit">Tae Davis</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">OKLA vs BAY</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">18</div>
 <div class="leg-extra">2.858</div>
 </div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">CBB Flex 3-Leg</h2>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">CBB Flex 3-Leg</span>
-<span class="tg">0✓ 0✗ / 3</span>
+<span class="tg">2✓ 1✗ / 3</span>
 <span class="payout">PWR 1.79× · FLEX 0.9×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="banner miss">MISSED 1</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-cbb">CBB</span></div>
-<div class="pl-pend">Nijel Pack</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Points</div><div class="meta-muted">OKLA vs BAY</div></div>
-<div class="leg-extra">15.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">3.862</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Nijel Pack</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>Points</div><div class="meta-muted">OKLA vs BAY</div></div>
+<div class="leg-extra miss-leg-cell">15.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">15</div>
+<div class="leg-extra miss-leg-cell">3.862</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-cbb">CBB</span></div>
-<div class="pl-pend">Tae Davis</div>
+<div class="pl-hit">Tae Davis</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">OKLA vs BAY</div></div>
 <div class="leg-extra">11.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">18</div>
 <div class="leg-extra">2.858</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-cbb">CBB</span></div>
-<div class="pl-pend">Derrion Reid</div>
+<div class="pl-hit">Derrion Reid</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">OKLA vs BAY</div></div>
 <div class="leg-extra">9.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">17</div>
 <div class="leg-extra">3.276</div>
 </div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">CBB Standard 2-Leg</h2>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">CBB Standard 2-Leg</span>
-<span class="tg">0✓ 0✗ / 2</span>
+<span class="tg">1✓ 1✗ / 2</span>
 <span class="payout">PWR 3× · FLEX 3×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="banner miss">MISSED 1</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-cbb">CBB</span></div>
-<div class="pl-pend">Nijel Pack</div>
-<div class="tier">S</div>
-<div class="leg-prop-col"><div>Pts+Asts</div><div class="meta-muted">OKLA vs BAY</div></div>
-<div class="leg-extra">20.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">2.064</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Nijel Pack</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Pts+Asts</div><div class="meta-muted">OKLA vs BAY</div></div>
+<div class="leg-extra miss-leg-cell">20.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">19</div>
+<div class="leg-extra miss-leg-cell">2.064</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-cbb">CBB</span></div>
-<div class="pl-pend">Josh Dix</div>
+<div class="pl-hit">Josh Dix</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Points</div><div class="meta-muted">CREI vs WVU</div></div>
 <div class="leg-extra">13.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">18</div>
 <div class="leg-extra">3.1682</div>
 </div>
 </article>
@@ -611,29 +620,29 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">Soccer Power Play 2-Leg</span>
-<span class="tg">0✓ 0✗ / 2</span>
+<span class="tg">1✓ 0✗ / 2</span>
 <span class="payout">PWR 2.73× · FLEX 2.73×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
-<div class="pl-pend">Álex Remiro</div>
+<div class="pl-hit">Álex Remiro</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Goalie Saves</div><div class="meta-muted">REAL SOCIEDAD vs LEVANTE</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">4</div>
 <div class="leg-extra">2.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
-<div class="pl-pend">Carlos Espí</div>
+<div class="pl-void">Carlos Espí</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Shots On Target</div><div class="meta-muted">LEVANTE vs REAL SOCIEDAD</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.75</div>
 </div>
 </article>
@@ -643,39 +652,39 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">Soccer Flex 3-Leg</span>
-<span class="tg">0✓ 0✗ / 3</span>
+<span class="tg">2✓ 0✗ / 3</span>
 <span class="payout">PWR 5.46× · FLEX 2.73×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
-<div class="pl-pend">Álex Remiro</div>
+<div class="pl-hit">Álex Remiro</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Goalie Saves</div><div class="meta-muted">REAL SOCIEDAD vs LEVANTE</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">4</div>
 <div class="leg-extra">2.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
-<div class="pl-pend">Carlos Espí</div>
+<div class="pl-void">Carlos Espí</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Shots On Target</div><div class="meta-muted">LEVANTE vs REAL SOCIEDAD</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.75</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
-<div class="pl-pend">Carlos Soler</div>
+<div class="pl-hit">Carlos Soler</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Shots</div><div class="meta-muted">REAL SOCIEDAD vs LEVANTE</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">1</div>
 <div class="leg-extra">0.75</div>
 </div>
 </article>
@@ -685,29 +694,29 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">Soccer Standard 2-Leg</span>
-<span class="tg">0✓ 0✗ / 2</span>
+<span class="tg">1✓ 0✗ / 2</span>
 <span class="payout">PWR 2.73× · FLEX 2.73×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="banner void">VOID/PUSH</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
-<div class="pl-pend">Álex Remiro</div>
+<div class="pl-hit">Álex Remiro</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Goalie Saves</div><div class="meta-muted">REAL SOCIEDAD vs LEVANTE</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">4</div>
 <div class="leg-extra">2.5</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-void">
+<div class="badge void">○</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
-<div class="pl-pend">Carlos Espí</div>
+<div class="pl-void">Carlos Espí</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Shots On Target</div><div class="meta-muted">LEVANTE vs REAL SOCIEDAD</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.75</div>
 </div>
 </article>
@@ -717,107 +726,107 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 <summary><span>MLB</span><span class="ticket-bucket-meta">3 sections · 3 tickets</span></summary>
 <div class="ticket-bucket-body">
 <section class="sec"><h2 class="sec-head bebas">MLB Power Play 2-Leg</h2>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">MLB Power Play 2-Leg</span>
-<span class="tg">0✓ 0✗ / 2</span>
+<span class="tg">1✓ 1✗ / 2</span>
 <span class="payout">PWR 1.65× · FLEX 1.65×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="banner miss">MISSED 1</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-mlb">MLB</span></div>
-<div class="pl-pend">Connelly Early</div>
+<div class="pl-hit">Connelly Early</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pitcher Strikeouts</div><div class="meta-muted">BOS vs CIN</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">4</div>
 <div class="leg-extra">3.75</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-mlb">MLB</span></div>
-<div class="pl-pend">George Springer</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Total Bases</div><div class="meta-muted">TOR vs ATH</div></div>
-<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">2.3</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">George Springer</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Bases</div><div class="meta-muted">TOR vs ATH</div></div>
+<div class="leg-extra miss-leg-cell">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">0</div>
+<div class="leg-extra miss-leg-cell">2.3</div>
 </div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">MLB Flex 3-Leg</h2>
-<article class="ticket-card">
+<article class="ticket-card card-missed">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">MLB Flex 3-Leg</span>
-<span class="tg">0✓ 0✗ / 3</span>
+<span class="tg">1✓ 2✗ / 3</span>
 <span class="payout">PWR 3.3× · FLEX 1.65×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="banner miss">MISSED 2</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-mlb">MLB</span></div>
-<div class="pl-pend">Connelly Early</div>
+<div class="pl-hit">Connelly Early</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Pitcher Strikeouts</div><div class="meta-muted">BOS vs CIN</div></div>
 <div class="leg-extra">3.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">4</div>
 <div class="leg-extra">3.75</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-mlb">MLB</span></div>
-<div class="pl-pend">George Springer</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Total Bases</div><div class="meta-muted">TOR vs ATH</div></div>
-<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">2.3</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">George Springer</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Bases</div><div class="meta-muted">TOR vs ATH</div></div>
+<div class="leg-extra miss-leg-cell">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">0</div>
+<div class="leg-extra miss-leg-cell">2.3</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
 <div><span class="pill sport-mlb">MLB</span></div>
-<div class="pl-pend">Daulton Varsho</div>
-<div class="tier">G</div>
-<div class="leg-prop-col"><div>Total Bases</div><div class="meta-muted">TOR vs ATH</div></div>
-<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
-<div class="leg-extra">1.5</div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Daulton Varsho</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Bases</div><div class="meta-muted">TOR vs ATH</div></div>
+<div class="leg-extra miss-leg-cell">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">0</div>
+<div class="leg-extra miss-leg-cell">1.5</div>
 </div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">MLB Standard 2-Leg</h2>
-<article class="ticket-card">
+<article class="ticket-card all-hit">
 <div class="thdr">
 <span class="tn bebas">#1</span>
 <span class="tg">MLB Standard 2-Leg</span>
-<span class="tg">0✓ 0✗ / 2</span>
+<span class="tg">2✓ 0✗ / 2</span>
 <span class="payout">PWR 3× · FLEX 3×</span>
-<span class="banner pend">UNGRADED</span>
+<span class="banner hit">ALL HIT</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-mlb">MLB</span></div>
-<div class="pl-pend">Jesús Luzardo</div>
+<div class="pl-hit">Jesús Luzardo</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Pitching Outs</div><div class="meta-muted">PHI vs TEX</div></div>
 <div class="leg-extra">17 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">20</div>
 <div class="leg-extra">3.8</div>
 </div>
-<div class="legrow leg-pend">
-<div class="badge pend">·</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
 <div><span class="pill sport-mlb">MLB</span></div>
-<div class="pl-pend">Spencer Horwitz</div>
+<div class="pl-hit">Spencer Horwitz</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>Total Bases</div><div class="meta-muted">PIT vs NYM</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra pl-hit">2</div>
 <div class="leg-extra">3.1</div>
 </div>
 </article>
