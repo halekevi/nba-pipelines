@@ -1069,10 +1069,90 @@ def _grades_insights_payload() -> dict:
     }
 
 
+def _grades_props_payload(date_str: str) -> dict[str, Any]:
+    """
+    Per-prop graded rows for the Grades hub Prop Evaluation tab.
+
+    Populated by scripts/step_archive.py into data/cache/{sport}_props_history.db
+    (gitignored). Railway and other hosts only return rows if those DBs exist on disk.
+    """
+    props: list[dict[str, Any]] = []
+    for dbp in _iter_props_history_db_paths():
+        conn: sqlite3.Connection | None = None
+        try:
+            conn = sqlite3.connect(str(dbp))
+            conn.row_factory = sqlite3.Row
+            cur = conn.execute(
+                """
+                SELECT sport, grade_date, player_name, prop_type, line, direction,
+                       actual_value, result, margin, opp_team, team, pick_type, tier, edge, ml_prob
+                FROM props_history
+                WHERE grade_date = ?
+                ORDER BY sport, player_name, prop_type, direction
+                """,
+                (date_str,),
+            )
+            for row in cur.fetchall():
+                item = {k: row[k] for k in row.keys()}
+                props.append(item)
+        except Exception:
+            pass
+        finally:
+            if conn is not None:
+                try:
+                    conn.close()
+                except Exception:
+                    pass
+
+    props.sort(
+        key=lambda r: (
+            str(r.get("sport") or "").upper(),
+            str(r.get("player_name") or "").lower(),
+            str(r.get("prop_type") or "").lower(),
+            str(r.get("direction") or "").upper(),
+        )
+    )
+    n_total = len(props)
+    n_hit = sum(1 for p in props if str(p.get("result") or "").upper() == "HIT")
+    n_miss = sum(1 for p in props if str(p.get("result") or "").upper() == "MISS")
+    cap = 8000
+    truncated = n_total > cap
+    if truncated:
+        props = props[:cap]
+    return {
+        "date": date_str,
+        "n": n_total,
+        "n_returned": len(props),
+        "n_hit": n_hit,
+        "n_miss": n_miss,
+        "n_other": max(0, n_total - n_hit - n_miss),
+        "truncated": truncated,
+        "props": props,
+    }
+
+
 @app.get("/api/grades/insights")
 def api_grades_insights():
     """JSON for Grades hub: calibration, CLV by sport, edge-bucket hit rates (from props_history + clv_log)."""
     return jsonify(_grades_insights_payload())
+
+
+@app.get("/api/grades/props")
+def api_grades_props():
+    """Graded prop rows for a report date (props_history archives)."""
+    raw = (request.args.get("date") or "").strip()
+    date_str = raw[:10]
+    if len(date_str) != 10 or date_str[4] != "-" or date_str[7] != "-":
+        return jsonify({"error": "invalid date; use YYYY-MM-DD", "props": []}), 400
+    try:
+        y, m, d = int(date_str[0:4]), int(date_str[5:7]), int(date_str[8:10])
+        datetime(y, m, d)
+    except (TypeError, ValueError):
+        return jsonify({"error": "invalid date", "props": []}), 400
+    r = jsonify(_grades_props_payload(date_str))
+    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    return r
 
 
 # ──────────────────────────────────────────────────────────────────────────────

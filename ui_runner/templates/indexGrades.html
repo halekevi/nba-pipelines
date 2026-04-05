@@ -211,6 +211,39 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .iframe-shell-stage > .grade-frame{position:absolute;inset:0;width:100%;height:100%;border:none;display:block;transition:opacity .25s;}
 .grades-analytics-wrap{position:absolute;inset:0;overflow:auto;padding:20px 24px 36px;z-index:4;background:transparent;}
 .grades-analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;max-width:1420px;margin:0 auto;}
+.grades-props-inner{max-width:1420px;margin:0 auto;}
+.props-eval-toolbar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-top:12px;margin-bottom:14px;}
+.props-eval-toolbar label{font-size:10px;letter-spacing:1.2px;color:var(--muted2);display:flex;align-items:center;gap:6px;}
+.props-eval-toolbar select,.props-eval-toolbar input[type="search"]{
+  font-family:'Share Tech Mono',monospace;font-size:12px;padding:8px 12px;border-radius:10px;
+  border:1px solid var(--glass-panel-border);background:rgba(255,255,255,0.05);color:var(--text);min-width:120px;
+}
+.props-eval-toolbar input[type="search"]{min-width:160px;flex:1 1 140px;max-width:280px;}
+.props-eval-counts{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);letter-spacing:0.5px;margin-bottom:6px;}
+.props-eval-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;padding-bottom:28px;}
+.prop-eval-card{
+  border-radius:14px;padding:14px 16px;border:1px solid var(--glass-panel-border);
+  background:rgba(255,255,255,0.035);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
+  box-shadow:var(--glass-shadow);text-align:left;transition:border-color .15s,transform .15s;
+}
+.prop-eval-card:hover{border-color:rgba(212,160,23,0.22);transform:translateY(-1px);}
+.prop-eval-card.hit{border-left:4px solid var(--green);background:rgba(57,255,110,0.05);}
+.prop-eval-card.miss{border-left:4px solid var(--red);background:rgba(255,77,77,0.07);}
+.prop-eval-card.other{border-left:4px solid var(--amber);}
+.prop-eval-result{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;margin-bottom:8px;}
+.prop-eval-result.hit{color:var(--green);}
+.prop-eval-result.miss{color:var(--red);}
+.prop-eval-result.other{color:var(--amber);}
+.prop-eval-player{font-weight:700;font-size:14px;color:var(--text-primary);line-height:1.25;margin-bottom:4px;}
+.prop-eval-meta{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);line-height:1.55;}
+.prop-eval-line{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--cyan);margin-top:8px;}
+[data-theme="light"] .prop-eval-card{background:rgba(255,255,255,0.72)!important;border-color:rgba(0,0,0,0.08)!important;}
+[data-theme="light"] .prop-eval-card.hit{background:rgba(26,140,69,.08)!important;}
+[data-theme="light"] .prop-eval-card.miss{background:rgba(204,34,0,.06)!important;}
+[data-theme="light"] .props-eval-toolbar select,
+[data-theme="light"] .props-eval-toolbar input[type="search"]{
+  background:rgba(255,255,255,0.85)!important;border-color:rgba(0,0,0,0.12)!important;color:rgba(0,0,0,0.85)!important;
+}
 .glass-insights{background:var(--glass-panel);border:1px solid var(--glass-panel-border);border-radius:16px;padding:20px 22px;box-shadow:var(--glass-shadow);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);}
 .insights-card-title{font-size:14px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:8px;}
 .insights-card-sub{font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.45;}
@@ -864,6 +897,9 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
             <button type="button" class="tab-btn active" id="tab-slate" onclick="window.parent.switchTab('slate')">
               <span class="tab-icon">📋</span>SLATE EVALUATION
             </button>
+            <button type="button" class="tab-btn" id="tab-props" onclick="window.parent.switchTab('props')">
+              <span class="tab-icon">🎯</span>PROP EVALUATION
+            </button>
             <button type="button" class="tab-btn" id="tab-tickets" onclick="window.parent.switchTab('tickets')">
               <span class="tab-icon">🎟</span>TICKET EVALUATION
             </button>
@@ -924,6 +960,35 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
       </div>
     </div>
   </div>
+  <div id="props-eval-panel" class="grades-analytics-wrap grades-props-wrap" style="display:none;" aria-label="Graded props by report date">
+    <div class="grades-props-inner">
+      <div class="glass-insights props-eval-intro">
+        <h3 class="insights-card-title">Prop evaluation</h3>
+        <p class="insights-card-sub">Every archived graded prop for the report date (hit / miss / other), from <code>props_history</code> in <code>data/cache/*_props_history.db</code> after you run the grader and archive step locally. Deployed hosts only show rows if those databases exist on the server.</p>
+        <div class="props-eval-toolbar">
+          <label>Sport
+            <select id="props-filter-sport" aria-label="Filter by sport">
+              <option value="">All sports</option>
+            </select>
+          </label>
+          <label>Result
+            <select id="props-filter-result" aria-label="Filter by result">
+              <option value="">All</option>
+              <option value="HIT">Hits</option>
+              <option value="MISS">Misses</option>
+              <option value="OTHER">Other / pending</option>
+            </select>
+          </label>
+          <label style="flex:1 1 200px;max-width:100%;">Search
+            <input type="search" id="props-filter-q" placeholder="Player, prop, team…" autocomplete="off" aria-label="Search props"/>
+          </label>
+        </div>
+        <div class="props-eval-counts" id="props-eval-counts"></div>
+      </div>
+      <div class="props-eval-grid" id="props-eval-grid"></div>
+      <p class="insights-card-sub" id="props-eval-foot" style="margin-top:8px;"></p>
+    </div>
+  </div>
   </div><!-- /.iframe-shell-stage -->
 </div>
 </div><!-- /.grades-body -->
@@ -960,6 +1025,10 @@ const TICKET_EVAL_URL_TEMPLATE = '/grades/ticket_eval_{date}.html';
     const ap = document.getElementById('analytics-panel');
     if (ap && ap.style.display !== 'none') {
       return { win: window, key: 'a' };
+    }
+    const pe = document.getElementById('props-eval-panel');
+    if (pe && pe.style.display !== 'none') {
+      return { win: window, key: 'p' };
     }
     const tick = document.getElementById('ticket-frame');
     if (tick && tick.style.display !== 'none' && tick.contentWindow) {
@@ -1421,6 +1490,140 @@ async function loadGradesInsights() {
   }
 }
 
+// ─── PROP EVALUATION (archived props_history) ─────────────────────────────────
+function escProps(s) {
+  if (s == null || s === '') return '—';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+function fmtPropsNum(v) {
+  if (v == null || v === '') return '—';
+  const n = Number(v);
+  if (!Number.isFinite(n)) return escProps(v);
+  if (Math.abs(n - Math.round(n)) < 1e-9) return String(Math.round(n));
+  const t = n.toFixed(3).replace(/\.?0+$/, '');
+  return t || '0';
+}
+function fillPropsSportFilter(rows) {
+  const sel = document.getElementById('props-filter-sport');
+  if (!sel) return;
+  const cur = sel.value;
+  const sports = [...new Set(rows.map(function (r) { return String(r.sport || '').toUpperCase(); }).filter(Boolean))].sort();
+  sel.innerHTML = '<option value="">All sports</option>' +
+    sports.map(function (s) { return '<option value="' + escProps(s) + '">' + escProps(s) + '</option>'; }).join('');
+  if (cur && sports.indexOf(cur) >= 0) sel.value = cur;
+}
+function renderPropsEvalCards(rows) {
+  const grid = document.getElementById('props-eval-grid');
+  if (!grid) return;
+  if (!rows.length) {
+    grid.innerHTML = '<p class="insights-card-sub">No props match filters.</p>';
+    return;
+  }
+  const frag = document.createDocumentFragment();
+  rows.forEach(function (r) {
+    const ru = String(r.result || '').toUpperCase();
+    var cls = 'other';
+    var rlbl = ru || '—';
+    if (ru === 'HIT') { cls = 'hit'; rlbl = 'HIT'; }
+    else if (ru === 'MISS') { cls = 'miss'; rlbl = 'MISS'; }
+    const dir = String(r.direction || '').toUpperCase();
+    const linePart = (r.line != null && r.line !== '') ? (' · Line ' + fmtPropsNum(r.line)) : '';
+    const edgeS = (r.edge != null && r.edge !== '') ? fmtPropsNum(r.edge) : '—';
+    var mlS = '—';
+    if (r.ml_prob != null && r.ml_prob !== '') {
+      var mln = Number(r.ml_prob);
+      if (Number.isFinite(mln)) {
+        mlS = (mln <= 1 ? (mln * 100).toFixed(1) + '%' : fmtPropsNum(r.ml_prob));
+      }
+    }
+    const card = document.createElement('div');
+    card.className = 'prop-eval-card ' + cls;
+    card.innerHTML =
+      '<div class="prop-eval-result ' + cls + '">' + escProps(rlbl) + '</div>' +
+      '<div class="prop-eval-player">' + escProps(r.player_name) + '</div>' +
+      '<div class="prop-eval-meta">' + escProps(r.sport) + ' · ' + escProps(r.pick_type || '') + (r.tier ? (' · Tier ' + escProps(r.tier)) : '') + '</div>' +
+      '<div class="prop-eval-line">' + escProps(r.prop_type) + ' ' + (dir === 'OVER' ? '▲' : dir === 'UNDER' ? '▼' : '') + ' ' + escProps(dir) + linePart + '</div>' +
+      '<div class="prop-eval-meta" style="margin-top:10px;">' +
+        ((r.team || r.opp_team) ? escProps([r.team, r.opp_team].filter(Boolean).join(' vs ')) : '—') +
+      '</div>' +
+      '<div class="prop-eval-meta">Edge ' + escProps(edgeS) + ' · ML ' + escProps(mlS) + '</div>' +
+      '<div class="prop-eval-meta">Actual ' + fmtPropsNum(r.actual_value) + ' · Margin ' + fmtPropsNum(r.margin) + '</div>';
+    frag.appendChild(card);
+  });
+  grid.innerHTML = '';
+  grid.appendChild(frag);
+}
+function applyPropsEvalFilters() {
+  const sport = (document.getElementById('props-filter-sport') || {}).value || '';
+  const resF = (document.getElementById('props-filter-result') || {}).value || '';
+  const q = (((document.getElementById('props-filter-q') || {}).value) || '').trim().toLowerCase();
+  const rows = window._propsEvalCache || [];
+  const filtered = rows.filter(function (r) {
+    if (sport && String(r.sport || '').toUpperCase() !== sport) return false;
+    const ru = String(r.result || '').toUpperCase();
+    if (resF === 'HIT' && ru !== 'HIT') return false;
+    if (resF === 'MISS' && ru !== 'MISS') return false;
+    if (resF === 'OTHER' && (ru === 'HIT' || ru === 'MISS')) return false;
+    if (!q) return true;
+    const hay = [r.player_name, r.prop_type, r.team, r.opp_team, r.pick_type, r.tier, r.direction]
+      .map(function (x) { return String(x || '').toLowerCase(); }).join(' ');
+    return hay.indexOf(q) >= 0;
+  });
+  renderPropsEvalCards(filtered);
+  const el = document.getElementById('props-eval-counts');
+  if (el) {
+    var extra = '';
+    if (window._propsEvalStats) {
+      extra = ' · ' + window._propsEvalStats.n_hit + ' hits, ' + window._propsEvalStats.n_miss + ' misses';
+      if (window._propsEvalStats.n > rows.length) {
+        extra += ' · ' + window._propsEvalStats.n + ' total in archive (truncated view)';
+      }
+    }
+    el.textContent = 'Showing ' + filtered.length + ' of ' + rows.length + ' loaded' + extra;
+  }
+}
+async function loadGradesProps(dateStr) {
+  const grid = document.getElementById('props-eval-grid');
+  const foot = document.getElementById('props-eval-foot');
+  if (!dateStr || !grid) return;
+  grid.innerHTML = '<p class="insights-card-sub">Loading…</p>';
+  if (foot) foot.textContent = '';
+  try {
+    const res = await fetch('/api/grades/props?date=' + encodeURIComponent(dateStr), { cache: 'no-store' });
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.error || res.statusText);
+    window._propsEvalCache = d.props || [];
+    window._propsEvalStats = { n_hit: d.n_hit, n_miss: d.n_miss, n: d.n };
+    fillPropsSportFilter(window._propsEvalCache);
+    if (foot) {
+      var t = '';
+      if (d.truncated) t += 'Showing first ' + d.n_returned + ' of ' + d.n + ' rows. ';
+      foot.textContent = t;
+    }
+    if (!window._propsEvalCache.length) {
+      grid.innerHTML = '<p class="insights-card-sub">No archived props for <strong>' + escProps(dateStr) + '</strong>. After grading, run the archive step so rows are written to <code>data/cache/*_props_history.db</code> (see <code>scripts/step_archive.py</code>).</p>';
+      var elc = document.getElementById('props-eval-counts');
+      if (elc) elc.textContent = '0 props';
+      return;
+    }
+    applyPropsEvalFilters();
+  } catch (e) {
+    grid.innerHTML = '<p class="insights-card-sub">Could not load props: ' + escProps(e.message || e) + '</p>';
+  }
+}
+(function initPropsEvalFilters() {
+  ['props-filter-sport', 'props-filter-result'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('change', applyPropsEvalFilters);
+  });
+  var qel = document.getElementById('props-filter-q');
+  if (qel) qel.addEventListener('input', applyPropsEvalFilters);
+})();
+
 // ─── TAB SWITCHING ────────────────────────────────────────────────────────────
 let activeTab = 'slate';
 function refreshControlsSummary() {
@@ -1429,6 +1632,7 @@ function refreshControlsSummary() {
   if (titleEl) {
     if (activeTab === 'tickets') titleEl.textContent = 'Ticket evaluation';
     else if (activeTab === 'analytics') titleEl.textContent = 'CLV & calibration';
+    else if (activeTab === 'props') titleEl.textContent = 'Prop evaluation';
     else titleEl.textContent = 'Slate evaluation';
   }
   if (!el) return;
@@ -1436,23 +1640,28 @@ function refreshControlsSummary() {
   let tab = 'Slate';
   if (activeTab === 'tickets') tab = 'Tickets';
   else if (activeTab === 'analytics') tab = 'Insights';
+  else if (activeTab === 'props') tab = 'Props';
   el.textContent = ds ? `${ds} · ${tab}` : tab;
 }
 function switchTab(tab) {
   activeTab = tab;
-  if (tab === 'tickets') {
+  if (tab === 'tickets' || tab === 'props') {
     restoreGradesToolbarToParent();
   }
   const ts = gradesEl('tab-slate');
+  const tp = gradesEl('tab-props');
   const tt = gradesEl('tab-tickets');
   const ta = gradesEl('tab-analytics');
   if (ts) ts.classList.toggle('active', tab === 'slate');
+  if (tp) tp.classList.toggle('active', tab === 'props');
   if (tt) tt.classList.toggle('active', tab === 'tickets');
   if (ta) ta.classList.toggle('active', tab === 'analytics');
   const ap = document.getElementById('analytics-panel');
+  const pe = document.getElementById('props-eval-panel');
   document.getElementById('grade-frame').style.display   = tab === 'slate'   ? 'block' : 'none';
   document.getElementById('ticket-frame').style.display  = tab === 'tickets' ? 'block' : 'none';
   if (ap) ap.style.display = tab === 'analytics' ? 'block' : 'none';
+  if (pe) pe.style.display = tab === 'props' ? 'block' : 'none';
   document.getElementById('ticket-empty-state').style.display = 'none';
 
   try {
@@ -1463,6 +1672,16 @@ function switchTab(tab) {
     document.getElementById('load-overlay').classList.add('hidden');
     document.getElementById('empty-state').style.display = 'none';
     loadGradesInsights();
+    setTimeout(() => {
+      try {
+        window.setupGradesBarsScrollHide();
+      } catch (_e) {}
+    }, 0);
+  } else if (tab === 'props') {
+    document.getElementById('load-overlay').classList.add('hidden');
+    document.getElementById('empty-state').style.display = 'none';
+    const ds = currentDateStr || gradesEl('date-jump')?.value || yesterdayStr();
+    loadGradesProps(ds);
     setTimeout(() => {
       try {
         window.setupGradesBarsScrollHide();
@@ -1710,6 +1929,9 @@ function loadDate(dateStr){
 
   if (activeTab === 'tickets') {
     loadTicketEval(dateStr);
+  }
+  if (activeTab === 'props') {
+    loadGradesProps(dateStr);
   }
   refreshControlsSummary();
 }
