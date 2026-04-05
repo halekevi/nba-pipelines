@@ -17,6 +17,8 @@ Fixes vs previous version:
     so the grader's stat_from_row() can look them up directly
   - 3-PT Made no longer voids as UNSUPPORTED_PROP
   - Double Double / Triple Double actuals (1.0/0.0) from PTS/REB/AST/STL/BLK >= 10 rules
+
+Quarter / half splits: scripts/fetch_nba_period_actuals.py (--segment 1Q|2Q|3Q|4Q|1H|2H; --sport CBB for college).
 """
 
 import argparse

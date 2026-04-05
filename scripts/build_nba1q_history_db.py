@@ -2,8 +2,10 @@
 """
 build_nba1q_history_db.py
 
-Consolidates outputs/**/actuals_nba1q_*.csv and actuals_nba2q_*.csv into nba1q table in:
+Consolidates outputs/**/period NBA actuals CSVs into the ``nba1q`` table in:
   NBA/data/cache/proporacle_ref.db
+
+Ingests: 1Q, 2Q, 3Q, 4Q, 1H, 2H (segment column distinguishes them).
 
 Safe to run repeatedly (INSERT OR IGNORE + unique key).
 """
@@ -18,7 +20,14 @@ import pandas as pd
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DB_PATH = REPO_ROOT / "NBA" / "data" / "cache" / "proporacle_ref.db"
-ACTUALS_GLOBS = ("actuals_nba1q_*.csv", "actuals_nba2q_*.csv")
+ACTUALS_GLOBS = (
+    "actuals_nba1q_*.csv",
+    "actuals_nba2q_*.csv",
+    "actuals_nba3q_*.csv",
+    "actuals_nba4q_*.csv",
+    "actuals_nba1h_*.csv",
+    "actuals_nba2h_*.csv",
+)
 DATE_RE = re.compile(r"(\d{4}-\d{2}-\d{2})")
 
 
@@ -67,6 +76,15 @@ def _date_from_path(path: Path) -> str:
 
 def _segment_from_path(path: Path) -> str:
     n = path.name.lower()
+    # Longer tokens first (e.g. nba2h before nba2q).
+    if "nba2h" in n:
+        return "2H"
+    if "nba1h" in n:
+        return "1H"
+    if "nba4q" in n:
+        return "4Q"
+    if "nba3q" in n:
+        return "3Q"
     if "nba2q" in n:
         return "2Q"
     return "1Q"
@@ -144,7 +162,7 @@ def main() -> None:
         files.extend(out_root.rglob(pat))
     files = sorted(files)
     if not files:
-        print("[nba1q-db] No actuals_nba1q/actuals_nba2q CSV files found under outputs/.")
+        print("[nba1q-db] No actuals_nba{1q,2q,3q,4q,1h,2h}_*.csv files found under outputs/.")
         return
 
     rows: list[dict] = []

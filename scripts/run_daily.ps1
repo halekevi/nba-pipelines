@@ -380,20 +380,25 @@ if (-not $SkipPipeline) {
                 for ($off = 1; $off -le $PeriodHistoryLookbackDays; $off++) {
                     $d = $baseDay.AddDays(-$off).ToString("yyyy-MM-dd")
                     $dayDir = Join-Path $Root "outputs\$d"
-                    $p2 = Join-Path $dayDir "actuals_nba2q_$d.csv"
-                    $p1 = Join-Path $dayDir "actuals_nba1q_$d.csv"
-                    if ((Test-Path $p2) -and (Test-Path $p1)) { continue }
+                    $periodTargets = @(
+                        @{ Seg = "1Q"; Out = (Join-Path $dayDir "actuals_nba1q_$d.csv") },
+                        @{ Seg = "2Q"; Out = (Join-Path $dayDir "actuals_nba2q_$d.csv") },
+                        @{ Seg = "3Q"; Out = (Join-Path $dayDir "actuals_nba3q_$d.csv") },
+                        @{ Seg = "4Q"; Out = (Join-Path $dayDir "actuals_nba4q_$d.csv") },
+                        @{ Seg = "1H"; Out = (Join-Path $dayDir "actuals_nba1h_$d.csv") },
+                        @{ Seg = "2H"; Out = (Join-Path $dayDir "actuals_nba2h_$d.csv") }
+                    )
+                    $missing = @($periodTargets | Where-Object { -not (Test-Path $_.Out) })
+                    if ($missing.Count -eq 0) { continue }
                     if (-not (Test-Path $dayDir)) {
                         New-Item -ItemType Directory -Path $dayDir -Force | Out-Null
                     }
-                    Write-Host "  [C0b] Fetching NBA period actuals for $d (missing 1Q/2Q CSV)..." -ForegroundColor DarkCyan
-                    & py -3.14 $fetchPeriod --date $d --segment "2Q" --output $p2
-                    if ($LASTEXITCODE -ne 0) {
-                        Write-Warning "fetch_nba_period_actuals 2Q failed for $d (exit $LASTEXITCODE)"
-                    }
-                    & py -3.14 $fetchPeriod --date $d --segment "1Q" --output $p1
-                    if ($LASTEXITCODE -ne 0) {
-                        Write-Warning "fetch_nba_period_actuals 1Q failed for $d (exit $LASTEXITCODE)"
+                    Write-Host "  [C0b] Fetching NBA period actuals for $d ($($missing.Count) segment(s) missing)..." -ForegroundColor DarkCyan
+                    foreach ($t in $missing) {
+                        & py -3.14 $fetchPeriod --date $d --segment $t.Seg --output $t.Out
+                        if ($LASTEXITCODE -ne 0) {
+                            Write-Warning "fetch_nba_period_actuals $($t.Seg) failed for $d (exit $LASTEXITCODE)"
+                        }
                     }
                     $synced++
                 }

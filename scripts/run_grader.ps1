@@ -10,8 +10,12 @@ $TicketsFileJson = Join-Path $DateDir "combined_slate_tickets_$Date.json"
 $TicketsFile = if (Test-Path $TicketsFileXlsx) { $TicketsFileXlsx } elseif (Test-Path $TicketsFileJson) { $TicketsFileJson } else { $TicketsFileXlsx }
 $NBAActuals  = Join-Path $DateDir "actuals_nba_$Date.csv"
 $NBA1HActuals = Join-Path $DateDir "actuals_nba1h_$Date.csv"
+$NBA2HActuals = Join-Path $DateDir "actuals_nba2h_$Date.csv"
 $NBA1QActuals = Join-Path $DateDir "actuals_nba1q_$Date.csv"
 $NBA2QActuals = Join-Path $DateDir "actuals_nba2q_$Date.csv"
+$NBA3QActuals = Join-Path $DateDir "actuals_nba3q_$Date.csv"
+$NBA4QActuals = Join-Path $DateDir "actuals_nba4q_$Date.csv"
+$CBB1HActuals = Join-Path $DateDir "actuals_cbb1h_$Date.csv"
 $CBBActuals  = Join-Path $DateDir "actuals_cbb_$Date.csv"
 $WCBBActuals = Join-Path $DateDir "actuals_wcbb_$Date.csv"
 $NHLActuals  = Join-Path $DateDir "actuals_nhl_$Date.csv"
@@ -167,6 +171,27 @@ if (Test-Path $FetchActualsScript) {
             "--date", $Date,
             "--segment", "2Q",
             "--output", $NBA2QActuals
+        )
+        Run-Py "Fetch NBA 3Q Actuals" $Root $FetchNBAPeriodActualsScript @(
+            "--date", $Date,
+            "--segment", "3Q",
+            "--output", $NBA3QActuals
+        )
+        Run-Py "Fetch NBA 4Q Actuals" $Root $FetchNBAPeriodActualsScript @(
+            "--date", $Date,
+            "--segment", "4Q",
+            "--output", $NBA4QActuals
+        )
+        Run-Py "Fetch NBA 2H Actuals" $Root $FetchNBAPeriodActualsScript @(
+            "--date", $Date,
+            "--segment", "2H",
+            "--output", $NBA2HActuals
+        )
+        Run-Py "Fetch CBB 1H Actuals (ESPN PBP)" $Root $FetchNBAPeriodActualsScript @(
+            "--sport", "CBB",
+            "--date", $Date,
+            "--segment", "1H",
+            "--output", $CBB1HActuals
         )
         if (Test-Path $BuildNBA1QHistoryScript) {
             Write-Host "[NBA1Q DB] Appending Q1/Q2 actuals to proporacle_ref.db..." -ForegroundColor Yellow
