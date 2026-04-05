@@ -50,6 +50,7 @@ import sys
 sys.stdout.reconfigure(encoding="utf-8")
 
 import argparse
+import re
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Tuple
@@ -66,6 +67,38 @@ try:
     HAS_MATPLOTLIB = True
 except ImportError:
     HAS_MATPLOTLIB = False
+
+_SCRIPTS_DIR = Path(__file__).resolve().parent
+if str(_SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPTS_DIR))
+from player_name_norm import fold_player_name  # noqa: E402
+
+
+def _normalize_nhl_prop_key(raw) -> str:
+    """
+    Match slate snake_case (blocked_shots) to actuals labels ("Blocked Shots", "Blocked Shots").
+    """
+    if raw is None or (isinstance(raw, float) and pd.isna(raw)):
+        return ""
+    s = str(raw).strip().lower().replace("/", "_")
+    s = re.sub(r"[^a-z0-9]+", "_", s)
+    return re.sub(r"_+", "_", s).strip("_")
+
+
+def _build_nhl_actuals_lookup(actuals_df: pd.DataFrame) -> Dict[Tuple[str, str, str], float]:
+    """(folded_player, TEAM, normalized_prop) -> actual"""
+    lut: Dict[Tuple[str, str, str], float] = {}
+    for _, row in actuals_df.iterrows():
+        pl = fold_player_name(row.get("player", ""))
+        tm = str(row.get("team", "")).strip().upper()
+        pk = _normalize_nhl_prop_key(row.get("prop_type", ""))
+        if not pl or not tm or not pk:
+            continue
+        act = pd.to_numeric(row.get("actual"), errors="coerce")
+        if pd.isna(act):
+            continue
+        lut[(pl, tm, pk)] = float(act)
+    return lut
 
 
 # ── NHL CONFIGURATION ─────────────────────────────────────────────────────────
@@ -445,6 +478,9 @@ def main() -> None:
     
     print(f"  Actuals: {len(actuals)} rows")
     print(f"  Slate: {len(slate)} rows")
+
+    actuals_lut = _build_nhl_actuals_lookup(actuals)
+    print(f"  Actuals lookup keys: {len(actuals_lut)}")
     
     # ── GRADE PROPS ───────────────────────────────────────────────────────
     print("[NHL Grader] Grading props...")
@@ -466,13 +502,13 @@ def main() -> None:
             x in str(prop_type).lower() for x in ["saves", "ga", "shutout"]
         ) else "skater"
         
-        # Find actual
-        actual_rows = actuals[
-            (actuals["player"].str.lower() == str(player).lower()) &
-            (actuals["team"].str.upper() == str(team).upper()) &
-            (actuals["prop_type"].str.lower() == str(prop_type).lower())
-        ]
-        actual = actual_rows["actual"].iloc[0] if len(actual_rows) > 0 else np.nan
+        # Find actual — slate uses snake_case props; actuals CSV uses Title Case labels
+        lk = (
+            fold_player_name(player),
+            str(team).strip().upper(),
+            _normalize_nhl_prop_key(prop_type),
+        )
+        actual = actuals_lut.get(lk, np.nan)
         
         # Grade
         result, edge, pct_of_line = grader.grade_prop(actual, line, direction, player_type)
