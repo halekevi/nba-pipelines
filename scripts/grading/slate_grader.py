@@ -139,25 +139,74 @@ def write_dir_subrows(ws,ri,df,label,bg,ncols=8):
     return ri
 
 # ── Grade ─────────────────────────────────────────────────────────────────────
+def _row_first_numeric(row, keys):
+    """
+    First non-null numeric among named columns (pandas Series or mapping).
+    Chained row.get('line', row.get('Line', ...)) is wrong for Series: if 'line'
+    exists but is NaN, .get returns NaN and never tries Line/line_score — yields
+    NO_LINE + VOID while the slate still displays a line from another column.
+    """
+    if isinstance(row, pd.Series):
+        for k in keys:
+            if k not in row.index:
+                continue
+            x = pd.to_numeric(row[k], errors="coerce")
+            if pd.notna(x):
+                return float(x)
+        return np.nan
+    for k in keys:
+        if not hasattr(row, "get"):
+            break
+        x = pd.to_numeric(row.get(k, np.nan), errors="coerce")
+        if pd.notna(x):
+            return float(x)
+    return np.nan
+
+
+def _row_bet_direction(row) -> str:
+    keys = (
+        "bet_direction",
+        "final_bet_direction",
+        "Direction",
+        "direction",
+        "recommended_side",
+    )
+    if isinstance(row, pd.Series):
+        for k in keys:
+            if k not in row.index:
+                continue
+            s = str(row[k] if row[k] is not None else "").strip().upper()
+            if s and s not in ("NAN", "NONE", "NAT", ""):
+                return s
+    elif hasattr(row, "get"):
+        for k in keys:
+            v = row.get(k)
+            s = str(v if v is not None else "").strip().upper()
+            if s and s not in ("NAN", "NONE", "NAT", ""):
+                return s
+    return "OVER"
+
+
 def grade(row, actual):
     """Return (result, void_reason_or_None, margin). Margin is NaN when ungraded."""
-    if pd.isna(actual):
+    act = pd.to_numeric(actual, errors="coerce")
+    if pd.isna(act):
         return "VOID", "NO_ACTUAL", np.nan
-    line = pd.to_numeric(
-        row.get("line", row.get("Line", row.get("line_score", np.nan))),
-        errors="coerce",
-    )
+    actual_f = float(act)
+
+    line = _row_first_numeric(row, ("line", "Line", "line_score", "LINE", "main_line"))
     if pd.isna(line):
         return "VOID", "NO_LINE", np.nan
     line = float(line)
-    direction = str(row.get("bet_direction", row.get("Direction", "OVER"))).upper()
-    if actual == line:
+
+    direction = _row_bet_direction(row)
+    if actual_f == line:
         return "VOID", "PUSH", 0.0
     if direction == "OVER":
-        result = "HIT" if actual > line else "MISS"
+        result = "HIT" if actual_f > line else "MISS"
     else:
-        result = "HIT" if actual < line else "MISS"
-    m = round(actual - line if direction == "OVER" else line - actual, 2)
+        result = "HIT" if actual_f < line else "MISS"
+    m = round(actual_f - line if direction == "OVER" else line - actual_f, 2)
     return result, None, m
 
 PROP_NORM_MAP={
@@ -317,6 +366,15 @@ def load_nba(path: str) -> pd.DataFrame:
         df["ml_edge"] = pd.to_numeric(df["ml_edge"], errors="coerce")
     elif "ml_prob" in df.columns:
         df["ml_edge"] = df["ml_prob"] - 0.5
+
+    # Prefer numeric line; fill from line_score when 'line' exists but is empty/NaN (common in exports).
+    if "line_score" in df.columns:
+        ls = pd.to_numeric(df["line_score"], errors="coerce")
+        if "line" not in df.columns:
+            df["line"] = ls
+        else:
+            ln = pd.to_numeric(df["line"], errors="coerce")
+            df["line"] = ln.where(ln.notna(), ls)
 
     # Hard fail if player still missing
     if "player" not in df.columns:
