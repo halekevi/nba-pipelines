@@ -6351,6 +6351,198 @@ def _group_sport(group_name: str) -> str:
     return "NBA"
 
 
+def _tickets_fmt_line_plain(x) -> str:
+    try:
+        if x is None:
+            return "—"
+        xf = float(x)
+        if abs(xf - round(xf)) < 1e-9:
+            return str(int(round(xf)))
+        return f"{xf:.2f}".rstrip("0").rstrip(".")
+    except (TypeError, ValueError):
+        return str(x) if x is not None else "—"
+
+
+def _tickets_hits_js_array(over_rate, n: int) -> str:
+    """JS array literal [1,0,...] or null — same reconstruction as render_tickets_html."""
+    if over_rate is None:
+        return "null"
+    try:
+        x = float(over_rate)
+    except (TypeError, ValueError):
+        return "null"
+    cnt = int(round(x * n)) if x <= 1.0 else int(round(x))
+    cnt = max(0, min(n, cnt))
+    vals = [1] * cnt + [0] * (n - cnt)
+    return str(vals)
+
+
+def _tickets_leg_graph_row_html(leg: dict, row_id: str, table_cols: int) -> str:
+    """Expandable Chart.js row for /tickets (tickets_built.html loads Chart.js)."""
+    l5_avg = leg.get("l5_avg")
+    season_avg = leg.get("season_avg")
+    l5_over = leg.get("l5_over")
+    l5_under = leg.get("l5_under")
+    l10_over = leg.get("l10_over")
+    l10_under = leg.get("l10_under")
+    line_val = leg.get("line")
+    dir_txt = str(leg.get("direction") or "").upper()
+    hr_val = leg.get("hit_rate")
+
+    def _pill(label: str, val, fmt=None) -> str:
+        if val is None:
+            return ""
+        if fmt:
+            try:
+                v = fmt(val)
+            except Exception:
+                v = str(val)
+        else:
+            v = str(val)
+        return f'<div class="gstat"><div class="gstat-label">{_h(label)}</div><div class="gstat-val">{_h(v)}</div></div>'
+
+    def _n_over(n_games: int, raw):
+        try:
+            x = float(raw)
+            k = int(round(x * n_games)) if x <= 1.0 else int(round(x))
+            k = max(0, min(n_games, k))
+            return f"{k}/{n_games}"
+        except (TypeError, ValueError):
+            return str(raw)
+
+    pills = "".join(
+        [
+            _pill("L5 Avg", l5_avg, lambda x: f"{float(x):.1f}"),
+            _pill("Season Avg", season_avg, lambda x: f"{float(x):.1f}"),
+            _pill("L5 Over", l5_over, lambda x: _n_over(5, x)),
+            _pill("L5 Under", l5_under, lambda x: _n_over(5, x)),
+            _pill("L10 Over", l10_over, lambda x: _n_over(10, x)),
+            _pill("L10 Under", l10_under, lambda x: _n_over(10, x)),
+            _pill("Hit Rate", hr_val, lambda x: f"{float(x) * 100:.0f}%"),
+        ]
+    )
+
+    l5hits = _tickets_hits_js_array(l5_under if dir_txt == "UNDER" else l5_over, 5)
+    l10hits = _tickets_hits_js_array(l10_under if dir_txt == "UNDER" else l10_over, 10)
+    chart_data = (
+        "{\n"
+        f"  line: {line_val if line_val is not None else 'null'},\n"
+        f"  l5hits: {l5hits},\n"
+        f"  l10hits: {l10hits},\n"
+        f"  l5avg: {l5_avg if l5_avg is not None else 'null'},\n"
+        f"  seasonAvg: {season_avg if season_avg is not None else 'null'},\n"
+        f"  player: {repr(leg.get('player', ''))},\n"
+        f"  prop: {repr(leg.get('prop_type', ''))},\n"
+        f"  direction: {repr(leg.get('direction', ''))}\n"
+        "}"
+    )
+
+    sub = f"{leg.get('player', '')} · {leg.get('prop_type', '')} · Line {_tickets_fmt_line_plain(line_val)}"
+    cid = "c-" + row_id
+    return f"""
+<tr class="leg-graph-row" id="{_h(row_id)}">
+  <td class="leg-graph-cell" colspan="{table_cols}">
+    <div class="graph-wrap">
+      <div style="flex:1;min-width:200px;">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;">{_h(sub)}</div>
+        <div class="graph-stats">{pills}</div>
+      </div>
+      <div class="graph-canvas-wrap">
+        <canvas class="leg-chart" id="{_h(cid)}"></canvas>
+      </div>
+    </div>
+    <script>
+    (function(){{
+      var d = {chart_data};
+      var ctx = document.getElementById({repr(cid)});
+      if(!ctx||!window.Chart) return;
+      var hits10 = d.l10hits || d.l5hits || [];
+      if (!hits10 || !hits10.length) return;
+      var labels = hits10.map((_,i)=>'G'+(i+1));
+      var barVals = hits10.map(h => h ? 1 : 0);
+      var colors = hits10.map(h=> h ? '#00F2FF' : '#c96a74');
+      new Chart(ctx, {{
+        type:'bar',
+        data:{{
+          labels: labels,
+          datasets:[{{
+            label:'Hit Timeline',
+            data: barVals,
+            backgroundColor: colors,
+            borderRadius:3,
+            borderSkipped:false
+          }}]
+        }},
+        options:{{
+          responsive:true,
+          maintainAspectRatio:false,
+          plugins:{{
+            legend:{{display:false}},
+            tooltip:{{callbacks:{{label:function(c){{return hits10[c.dataIndex] ? 'Hit' : 'Miss';}}}}}}
+          }},
+          scales:{{
+            x:{{ticks:{{color:'#888',font:{{size:10}}}},grid:{{color:'#1a1f2e'}}}},
+            y:{{
+              min: 0,
+              max: 1,
+              ticks:{{
+                stepSize: 1,
+                color:'#888',
+                font:{{size:10}},
+                callback: function(v){{ return v === 1 ? 'Hit' : 'Miss'; }}
+              }},
+              grid:{{color:'#1a1f2e'}},
+            }}
+          }}
+        }}
+      }});
+    }})();
+    </script>
+  </td>
+</tr>"""
+
+
+def _tickets_generator_filter_html(filters: dict) -> str:
+    """Human-readable ticket-builder settings (parity with legacy render_tickets_html)."""
+    if not filters:
+        return ""
+    lm = filters.get("leg_min_hit_by_n")
+    if isinstance(lm, dict) and lm:
+        try:
+            lm_s = ", ".join(
+                f"{k}:{v}" for k, v in sorted(lm.items(), key=lambda kv: int(str(kv[0])) if str(kv[0]).isdigit() else 0)
+            )
+        except Exception:
+            lm_s = str(lm)
+    else:
+        lm_s = "—"
+
+    def _disp(k: str, default: str = "—"):
+        v = filters.get(k, default)
+        if v is None:
+            return "None"
+        return v
+
+    return f'''<div class="filter-pill" style="margin-top:0;">
+  <div style="font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">Ticket generator</div>
+  Filters &rarr;
+  <strong>tiers:</strong> {_h(_disp("tiers", "ALL"))} &nbsp;
+  <strong>min_hit_rate:</strong> {_h(_disp("min_hit_rate", 0))} &nbsp;
+  <strong>min_edge:</strong> {_h(_disp("min_edge", 0))} &nbsp;
+  <strong>min_rank:</strong> {_h(_disp("min_rank", "None"))} &nbsp;
+  <strong>pick_types:</strong> {_h(_disp("pick_types", "ALL"))} &nbsp;
+  <strong>high_conviction:</strong> {_h(_disp("high_conviction", False))} &nbsp;
+  <strong>ticket_gen_starts:</strong> {_h(_disp("ticket_gen_starts", "—"))} &nbsp;
+  <strong>structured_min_leg_hit:</strong> {_h(_disp("structured_min_leg_hit_rate", "—"))} &nbsp;
+  <strong>leg_min_hit_by_n:</strong> {_h(lm_s)}
+  &nbsp;&nbsp;<a href="/tickets_latest.json" style="color:var(--cyan);">⬇ JSON</a>
+</div>
+<div class="filter-pill" style="margin-top:-12px;">
+  Slip tags use modeled <strong>EV</strong> (Power payout &times; win prob): <strong>STRONG</strong> &ge;1.40&times;, <strong>LEAN</strong> 1.15&ndash;1.40&times;, <strong>RISKY</strong> &lt;1.15&times;.
+  Tap a player row to expand the L5 / L10 hit timeline when counts exist in JSON.
+</div>'''
+
+
 def render_tickets_body_html(payload: dict) -> tuple[str, str]:
     """
     Render today's ticket slips from the tickets_latest.json payload.
@@ -6386,12 +6578,18 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
   </div>
 </div>''')
 
+    filters = payload.get("filters") or {}
+    if filters:
+        parts.append(_tickets_generator_filter_html(filters))
+
     if not groups:
         parts.append('<div class="filter-pill">No tickets generated for this date.</div>')
         parts.append('</div>')
         return "".join(parts), page_title
 
     # ── Groups ────────────────────────────────────────────────────────────────
+    leg_graph_uid = 0
+    table_cols = 10
     for group in groups:
         group_name = group.get("group_name") or "Tickets"
         n_legs = group.get("n_legs") or 0
@@ -6551,6 +6749,8 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
             <td style="font-family:'Share Tech Mono',monospace;color:var(--accent);">{_fmt(edge, 2)}</td>
             <td style="font-size:11px;color:var(--muted);">{_h(def_tier)}</td>
           </tr>''')
+                leg_graph_uid += 1
+                parts.append(_tickets_leg_graph_row_html(leg, f"lgr-{leg_graph_uid}", table_cols))
 
             parts.append('''
         </tbody>
