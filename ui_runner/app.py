@@ -19,6 +19,7 @@ if sys.platform == "win32":
 import gzip
 import io
 import json
+import re
 import sqlite3
 import time
 import uuid
@@ -57,6 +58,8 @@ CONFIG_PATH   = UI_DIR / "commands.json"
 TEMPLATES_DIR = UI_DIR / "templates"
 ARCHIVE_DIR   = TEMPLATES_DIR / "archive"
 STATIC_DIR    = UI_DIR / "static"
+# Bundled graded-prop exports for deploy hosts without data/cache/*_props_history.db (see scripts/export_grades_props_bundle.py).
+GRADES_PROPS_EXPORT_DIR = UI_DIR / "data" / "grades_props"
 
 # Pipeline output paths (used by status + slate endpoints)
 NBA_DIR       = BASE_DIR / "NBA"
@@ -1073,8 +1076,8 @@ def _grades_props_payload(date_str: str) -> dict[str, Any]:
     """
     Per-prop graded rows for the Grades hub Prop Evaluation tab.
 
-    Populated by scripts/step_archive.py into data/cache/{sport}_props_history.db
-    (gitignored). Railway and other hosts only return rows if those DBs exist on disk.
+    Primary: scripts/step_archive.py → data/cache/{sport}_props_history.db (local, gitignored).
+    Fallback: ui_runner/data/grades_props/YYYY-MM-DD.json (committed; for Railway / hosts without SQLite archives).
     """
     props: list[dict[str, Any]] = []
     for dbp in _iter_props_history_db_paths():
@@ -1104,6 +1107,17 @@ def _grades_props_payload(date_str: str) -> dict[str, Any]:
                 except Exception:
                     pass
 
+    from_bundle = False
+    if not props and GRADES_PROPS_EXPORT_DIR.is_dir():
+        bundle = GRADES_PROPS_EXPORT_DIR / f"{date_str}.json"
+        if bundle.is_file():
+            try:
+                raw = json.loads(bundle.read_text(encoding="utf-8"))
+                props = list(raw.get("props") or [])
+                from_bundle = True
+            except Exception:
+                props = []
+
     props.sort(
         key=lambda r: (
             str(r.get("sport") or "").upper(),
@@ -1119,7 +1133,7 @@ def _grades_props_payload(date_str: str) -> dict[str, Any]:
     truncated = n_total > cap
     if truncated:
         props = props[:cap]
-    return {
+    out: dict[str, Any] = {
         "date": date_str,
         "n": n_total,
         "n_returned": len(props),
@@ -1129,6 +1143,9 @@ def _grades_props_payload(date_str: str) -> dict[str, Any]:
         "truncated": truncated,
         "props": props,
     }
+    if from_bundle:
+        out["from_bundle"] = True
+    return out
 
 
 def _grades_archive_dates_payload(max_dates: int = 40) -> dict[str, Any]:
@@ -1160,6 +1177,22 @@ def _grades_archive_dates_payload(max_dates: int = 40) -> dict[str, Any]:
                     conn.close()
                 except Exception:
                     pass
+    # Bundled JSON exports (deploy)
+    if GRADES_PROPS_EXPORT_DIR.is_dir():
+        for p in sorted(GRADES_PROPS_EXPORT_DIR.glob("*.json")):
+            mm = re.fullmatch(r"(\d{4}-\d{2}-\d{2})\.json", p.name)
+            if not mm:
+                continue
+            key = mm.group(1)
+            try:
+                raw = json.loads(p.read_text(encoding="utf-8"))
+                n = len(raw.get("props") or [])
+            except Exception:
+                n = 0
+            if n <= 0:
+                continue
+            counts[key] = max(counts.get(key, 0), n)
+
     ordered = sorted(counts.keys(), reverse=True)[:max_dates]
     return {
         "dates": ordered,
