@@ -472,24 +472,67 @@ def fetch_sport(sport_path, date_str, window=2):
 
 # ── Parse NHL ESPN box score ──────────────────────────────────────────────────
 NHL_STAT_MAP = {
-    "shots_on_goal": ["SOG", "S", "SHOTS"],
+    "shots_on_goal": ["SOG", "S", "SHOTS", "SHOT"],
     "goals":         ["G", "GOALS"],
     "assists":       ["A", "ASSISTS"],
-    "points":        ["PTS", "P"],
+    "points":        ["PTS", "P", "POINTS"],
     "hits":          ["HIT", "HITS"],
-    "blocked_shots": ["BS", "BKS", "BLOCKED"],
-    "pim":           ["PIM"],
-    "plus_minus":    ["PLUSMINUS", "+/-"],
-    "power_play_points": ["PPP"],
-    "faceoffs_won":  ["FOW"],
-    "time_on_ice":   ["TOI"],
+    "blocked_shots": ["BS", "BKS", "BLOCKED", "BLK", "BLOCKS"],
+    "pim":           ["PIM", "PENALTYMINUTES"],
+    "plus_minus":    ["PLUSMINUS", "+/-", "PM"],
+    "power_play_points": ["PPP", "PPPTS", "PP", "POWERPLAYPOINTS", "PPA", "PPG"],
+    "faceoffs_won":  ["FOW", "FO", "FACEOFFS", "FW", "FOFACEOFFSWON"],
+    "time_on_ice":   ["TOI", "MIN", "TIMEONICE", "ICETIME"],
+    "saves":         ["SV", "SAVES"],
+    "goals_allowed": ["GA", "GOALSAGAINST", "GOALSALLOWED"],
 }
+
+
+def _nhl_toi_to_minutes(val):
+    """Convert ESPN/NHL TOI display (e.g. '19:42', '1:23:01') to decimal minutes."""
+    if val is None or val in ("--", "-", ""):
+        return None
+    if isinstance(val, (int, float)) and not (isinstance(val, float) and pd.isna(val)):
+        try:
+            return round(float(val), 2)
+        except (TypeError, ValueError):
+            return None
+    s = str(val).strip()
+    if not s or s in ("--", "-"):
+        return None
+    if ":" not in s:
+        try:
+            return round(float(s), 2)
+        except ValueError:
+            return None
+    parts = s.split(":")
+    try:
+        parts = [int(float(p)) for p in parts]
+    except (ValueError, TypeError):
+        return None
+    if len(parts) == 2:
+        m, sec = parts[0], parts[1]
+        return round(m + sec / 60.0, 2)
+    if len(parts) == 3:
+        h, m, sec = parts[0], parts[1], parts[2]
+        return round(h * 60 + m + sec / 60.0, 2)
+    return None
+
+
+def _nhl_stat_from_label_map(label_map: dict, key: str):
+    """Like _parse_nhl_stat but returns raw cell (string or number) for TOI etc."""
+    aliases = NHL_STAT_MAP.get(key, [key.upper()])
+    for alias in aliases:
+        norm = re.sub(r"[^A-Z0-9]", "", str(alias).upper())
+        if norm in label_map:
+            return label_map[norm]
+    return None
 
 def _parse_nhl_stat(label_map, key):
     """Look up a stat from NHL box score label map, return float or None."""
     aliases = NHL_STAT_MAP.get(key, [key.upper()])
     for alias in aliases:
-        norm = re.sub(r"[^A-Z0-9]", "", alias.upper())
+        norm = re.sub(r"[^A-Z0-9]", "", str(alias).upper())
         if norm in label_map:
             try:
                 return float(label_map[norm])
@@ -538,11 +581,56 @@ def parse_nhl_boxscore(box):
                 pm   = _parse_nhl_stat(label_map, "plus_minus")
                 ppp  = _parse_nhl_stat(label_map, "power_play_points")
                 fow  = _parse_nhl_stat(label_map, "faceoffs_won")
-                toi  = _parse_nhl_stat(label_map, "time_on_ice")
+                toi_raw = _nhl_stat_from_label_map(label_map, "time_on_ice")
+                toi  = _nhl_toi_to_minutes(toi_raw)
+                sv   = _parse_nhl_stat(label_map, "saves")
+                ga   = _parse_nhl_stat(label_map, "goals_allowed")
 
-                # Only emit rows for players with any real stats
-                if all(x is None for x in [sog, g, ast, hits]):
+                is_goalie_row = (sv is not None or ga is not None) and all(
+                    x is None for x in (sog, g, ast, hits)
+                )
+
+                # Goalie-only lines (separate ESPN stat group)
+                if is_goalie_row:
+                    if sv is not None:
+                        rows.append({
+                            "player": name,
+                            "team": t_abbr,
+                            "prop_type": "Goalie Saves",
+                            "actual": round(float(sv), 1),
+                        })
+                    if ga is not None:
+                        rows.append({
+                            "player": name,
+                            "team": t_abbr,
+                            "prop_type": "Goals Allowed",
+                            "actual": round(float(ga), 1),
+                        })
                     continue
+
+                has_skater_stat = any(
+                    x is not None for x in (sog, g, ast, hits, bs, pim, pm, ppp, fow, toi)
+                )
+                if not has_skater_stat:
+                    continue
+
+                # Dressed skaters with 0 SOG / 0 hits still need rows — ESPN often omits zeros as None
+                if sog is None:
+                    sog = 0.0
+                if g is None:
+                    g = 0.0
+                if ast is None:
+                    ast = 0.0
+                if hits is None:
+                    hits = 0.0
+                if bs is None:
+                    bs = 0.0
+                if pim is None:
+                    pim = 0.0
+                if pm is None:
+                    pm = 0.0
+                if pts is None:
+                    pts = float(g) + float(ast)
 
                 prop_map = {
                     "Shots On Goal":      sog,
@@ -563,16 +651,17 @@ def parse_nhl_boxscore(box):
                     "PPP": ppp, "FOW": fow, "TOI": toi,
                 }
                 for prop_type, actual in prop_map.items():
-                    if actual is not None:
-                        row = {
-                            "player":    name,
-                            "team":      t_abbr,
-                            "prop_type": prop_type,
-                            "actual":    round(float(actual), 1),
-                        }
-                        for col, val in raw.items():
-                            row[col] = round(float(val), 1) if val is not None else None
-                        rows.append(row)
+                    if actual is None:
+                        continue
+                    row = {
+                        "player":    name,
+                        "team":      t_abbr,
+                        "prop_type": prop_type,
+                        "actual":    round(float(actual), 1),
+                    }
+                    for col, val in raw.items():
+                        row[col] = round(float(val), 1) if val is not None else None
+                    rows.append(row)
     return rows
 
 
@@ -634,11 +723,29 @@ def fetch_nhl(date_str):
     return df
 
 
+def _nhl_api_player_name(p):
+    """Display name from NHL API player object (nested name.default or first/last)."""
+    if not isinstance(p, dict):
+        return ""
+    name = str(p.get("name", {}).get("default", "") or p.get("name", "")).strip()
+    if not name:
+        first = str(p.get("firstName", {}).get("default", "") or "").strip()
+        last = str(p.get("lastName", {}).get("default", "") or "").strip()
+        name = f"{first} {last}".strip()
+    return name
+
+
 def _nhl_player_rows_from_team_block(team_block, team_abbr):
-    """Flatten NHL API team block into prop rows for skaters."""
+    """Flatten NHL API team block into prop rows for skaters and goalies."""
     rows = []
     if not isinstance(team_block, dict):
         return rows
+
+    def _num(v):
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            return None
 
     # NHL API typically separates skaters into forwards/defensemen and goalies.
     skater_groups = []
@@ -651,19 +758,9 @@ def _nhl_player_rows_from_team_block(team_block, team_abbr):
         if not isinstance(p, dict):
             continue
 
-        name = str(p.get("name", {}).get("default", "") or p.get("name", "")).strip()
-        if not name:
-            name = str(p.get("firstName", {}).get("default", "") or "").strip()
-            last = str(p.get("lastName", {}).get("default", "") or "").strip()
-            name = f"{name} {last}".strip()
+        name = _nhl_api_player_name(p)
         if not name:
             continue
-
-        def _num(v):
-            try:
-                return float(v)
-            except (TypeError, ValueError):
-                return None
 
         g = _num(p.get("goals"))
         a = _num(p.get("assists"))
@@ -674,6 +771,11 @@ def _nhl_player_rows_from_team_block(team_block, team_abbr):
         pim = _num(p.get("pim"))
         plus_minus = _num(p.get("plusMinus"))
         fow = _num(p.get("faceoffWins") if p.get("faceoffWins") is not None else p.get("faceoffsWon"))
+        ppp = _num(p.get("powerPlayPoints"))
+        if ppp is None:
+            ppp = _num(p.get("ppPoints"))
+        toi_raw = p.get("toi") or p.get("iceTime") or p.get("timeOnIce")
+        toi_min = _nhl_toi_to_minutes(toi_raw)
 
         if pts is None and g is not None and a is not None:
             pts = g + a
@@ -688,6 +790,8 @@ def _nhl_player_rows_from_team_block(team_block, team_abbr):
             "PIM": pim,
             "Plus/Minus": plus_minus,
             "Faceoffs Won": fow,
+            "Power Play Points": ppp,
+            "Time On Ice": toi_min,
         }
         for prop_type, actual in prop_map.items():
             if actual is None:
@@ -698,13 +802,42 @@ def _nhl_player_rows_from_team_block(team_block, team_abbr):
                 "prop_type": prop_type,
                 "actual": round(float(actual), 1),
             })
+
+    for p in team_block.get("goalies", []) or []:
+        if not isinstance(p, dict):
+            continue
+        name = _nhl_api_player_name(p)
+        if not name:
+            continue
+        saves = _num(p.get("saves"))
+        ga = _num(
+            p.get("goalsAgainst")
+            if p.get("goalsAgainst") is not None
+            else p.get("goalsAllowed")
+        )
+        if saves is not None:
+            rows.append({
+                "player": name,
+                "team": team_abbr,
+                "prop_type": "Goalie Saves",
+                "actual": round(float(saves), 1),
+            })
+        if ga is not None:
+            rows.append({
+                "player": name,
+                "team": team_abbr,
+                "prop_type": "Goals Allowed",
+                "actual": round(float(ga), 1),
+            })
+
     return rows
 
 
 def fetch_nhl_api_enrichment(date_str):
     """
     Pull NHL player box stats from api-web.nhle.com and return long-format rows.
-    This is especially important for Hits and Faceoffs Won coverage.
+    Covers Hits, Faceoffs Won, Power Play Points, Time On Ice, and goalie saves / goals allowed
+    when ESPN omits or mislabels them.
     """
     out_rows = []
     try:
