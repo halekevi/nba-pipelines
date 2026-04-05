@@ -234,12 +234,18 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .prop-eval-result.hit{color:var(--green);}
 .prop-eval-result.miss{color:var(--red);}
 .prop-eval-result.other{color:var(--amber);}
+.prop-eval-stat.hit{color:var(--green);font-weight:600;}
+.prop-eval-stat.miss{color:var(--red);font-weight:600;}
+.prop-eval-stat.other{color:var(--amber);font-weight:600;}
 .prop-eval-player{font-weight:700;font-size:14px;color:var(--text-primary);line-height:1.25;margin-bottom:4px;}
 .prop-eval-meta{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);line-height:1.55;}
 .prop-eval-line{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--cyan);margin-top:8px;}
 [data-theme="light"] .prop-eval-card{background:rgba(255,255,255,0.72)!important;border-color:rgba(0,0,0,0.08)!important;}
 [data-theme="light"] .prop-eval-card.hit{background:rgba(26,140,69,.08)!important;}
 [data-theme="light"] .prop-eval-card.miss{background:rgba(204,34,0,.06)!important;}
+[data-theme="light"] .prop-eval-stat.hit{color:#0d7a3e!important;}
+[data-theme="light"] .prop-eval-stat.miss{color:#c42b18!important;}
+[data-theme="light"] .prop-eval-stat.other{color:#b8860b!important;}
 [data-theme="light"] .props-eval-toolbar select,
 [data-theme="light"] .props-eval-toolbar input[type="search"]{
   background:rgba(255,255,255,0.85)!important;border-color:rgba(0,0,0,0.12)!important;color:rgba(0,0,0,0.85)!important;
@@ -1507,6 +1513,32 @@ function fmtPropsNum(v) {
   const t = n.toFixed(3).replace(/\.?0+$/, '');
   return t || '0';
 }
+/** Title-style player display: "a.j. greer" → "A.J. Greer" */
+function formatPlayerDisplay(name) {
+  if (name == null || name === '') return '—';
+  return String(name)
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .map(function (w) {
+      if (!w) return '';
+      if (/^[a-z](\.[a-z])+\.?$/i.test(w)) {
+        var parts = w.split('.').filter(Boolean);
+        var out = parts.map(function (seg) { return seg.charAt(0).toUpperCase(); }).join('.');
+        return w.endsWith('.') ? out + '.' : out;
+      }
+      return w.charAt(0).toUpperCase() + w.slice(1);
+    })
+    .join(' ');
+}
+/** Default card order: HIT → VOID/PUSH/etc. → MISS → other */
+function propsEvalOutcomeRank(result) {
+  var ru = String(result || '').toUpperCase();
+  if (ru === 'HIT' || ru === 'WIN' || ru === 'WIN_NO_MULT') return 0;
+  if (ru === 'VOID' || ru === 'PUSH' || ru === 'CASH') return 1;
+  if (ru === 'MISS' || ru === 'LOSS' || ru === 'LOSE') return 2;
+  return 3;
+}
 function fillPropsSportFilter(rows) {
   const sel = document.getElementById('props-filter-sport');
   if (!sel) return;
@@ -1528,8 +1560,10 @@ function renderPropsEvalCards(rows) {
     const ru = String(r.result || '').toUpperCase();
     var cls = 'other';
     var rlbl = ru || '—';
-    if (ru === 'HIT') { cls = 'hit'; rlbl = 'HIT'; }
-    else if (ru === 'MISS') { cls = 'miss'; rlbl = 'MISS'; }
+    if (ru === 'HIT' || ru === 'WIN' || ru === 'WIN_NO_MULT') { cls = 'hit'; rlbl = 'HIT'; }
+    else if (ru === 'MISS' || ru === 'LOSS' || ru === 'LOSE') { cls = 'miss'; rlbl = 'MISS'; }
+    else if (ru === 'VOID') { cls = 'other'; rlbl = 'VOID'; }
+    else if (ru === 'PUSH') { cls = 'other'; rlbl = 'PUSH'; }
     const dir = String(r.direction || '').toUpperCase();
     const linePart = (r.line != null && r.line !== '') ? (' · Line ' + fmtPropsNum(r.line)) : '';
     const edgeS = (r.edge != null && r.edge !== '') ? fmtPropsNum(r.edge) : '—';
@@ -1544,14 +1578,15 @@ function renderPropsEvalCards(rows) {
     card.className = 'prop-eval-card ' + cls;
     card.innerHTML =
       '<div class="prop-eval-result ' + cls + '">' + escProps(rlbl) + '</div>' +
-      '<div class="prop-eval-player">' + escProps(r.player_name) + '</div>' +
+      '<div class="prop-eval-player">' + escProps(formatPlayerDisplay(r.player_name)) + '</div>' +
       '<div class="prop-eval-meta">' + escProps(r.sport) + ' · ' + escProps(r.pick_type || '') + (r.tier ? (' · Tier ' + escProps(r.tier)) : '') + '</div>' +
       '<div class="prop-eval-line">' + escProps(r.prop_type) + ' ' + (dir === 'OVER' ? '▲' : dir === 'UNDER' ? '▼' : '') + ' ' + escProps(dir) + linePart + '</div>' +
       '<div class="prop-eval-meta" style="margin-top:10px;">' +
         ((r.team || r.opp_team) ? escProps([r.team, r.opp_team].filter(Boolean).join(' vs ')) : '—') +
       '</div>' +
       '<div class="prop-eval-meta">Edge ' + escProps(edgeS) + ' · ML ' + escProps(mlS) + '</div>' +
-      '<div class="prop-eval-meta">Actual ' + fmtPropsNum(r.actual_value) + ' · Margin ' + fmtPropsNum(r.margin) + '</div>';
+      '<div class="prop-eval-meta">Actual <span class="prop-eval-stat ' + cls + '">' + fmtPropsNum(r.actual_value) + '</span>' +
+      ' · Margin <span class="prop-eval-stat ' + cls + '">' + fmtPropsNum(r.margin) + '</span></div>';
     frag.appendChild(card);
   });
   grid.innerHTML = '';
@@ -1572,6 +1607,12 @@ function applyPropsEvalFilters() {
     const hay = [r.player_name, r.prop_type, r.team, r.opp_team, r.pick_type, r.tier, r.direction]
       .map(function (x) { return String(x || '').toLowerCase(); }).join(' ');
     return hay.indexOf(q) >= 0;
+  });
+  filtered.sort(function (a, b) {
+    var ra = propsEvalOutcomeRank(a.result);
+    var rb = propsEvalOutcomeRank(b.result);
+    if (ra !== rb) return ra - rb;
+    return String(a.player_name || '').localeCompare(String(b.player_name || ''), undefined, { sensitivity: 'base' });
   });
   renderPropsEvalCards(filtered);
   const el = document.getElementById('props-eval-counts');
