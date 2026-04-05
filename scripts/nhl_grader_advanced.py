@@ -69,9 +69,16 @@ except ImportError:
     HAS_MATPLOTLIB = False
 
 _SCRIPTS_DIR = Path(__file__).resolve().parent
+_REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(_SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS_DIR))
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
 from player_name_norm import fold_player_name  # noqa: E402
+from utils.slate_fields import (  # noqa: E402
+    first_numeric_in_slate_row,
+    first_over_under_in_slate_row,
+)
 
 
 def _normalize_nhl_prop_key(raw) -> str:
@@ -292,14 +299,11 @@ def _resolve_direction_from_slate_row(slate_row: pd.Series) -> str:
     Canonical direction fallback for NHL grading:
       final_bet_direction -> bet_direction -> direction -> recommended_side -> OVER
     """
-    for col in ("final_bet_direction", "bet_direction", "direction", "recommended_side"):
-        if col in slate_row.index:
-            raw = slate_row.get(col)
-            if pd.notna(raw):
-                v = str(raw).strip().upper()
-                if v in ("OVER", "UNDER"):
-                    return v
-    return "OVER"
+    v = first_over_under_in_slate_row(
+        slate_row,
+        ("final_bet_direction", "bet_direction", "direction", "recommended_side", "Direction"),
+    )
+    return v if v else "OVER"
 
 
 # ── ADVANCED ANALYTICS ────────────────────────────────────────────────────────
@@ -493,7 +497,9 @@ def main() -> None:
         team = slate_row.get("team", "")
         opp_team = slate_row.get("opponent", slate_row.get("opp_team", slate_row.get("opp", "")))
         prop_type = slate_row.get("prop_type", "")
-        line = pd.to_numeric(slate_row.get("line"), errors="coerce")
+        line = first_numeric_in_slate_row(
+            slate_row, ("line", "Line", "line_score", "LINE")
+        )
         direction = _resolve_direction_from_slate_row(slate_row)
         tier = slate_row.get("tier", "D")
         

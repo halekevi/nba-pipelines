@@ -63,6 +63,11 @@ import numpy as np
 import pandas as pd
 import re
 
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from utils.slate_fields import first_numeric_in_slate_row, first_over_under_in_slate_row
+
 
 # ── SOCCER CONFIGURATION ──────────────────────────────────────────────────────
 
@@ -594,8 +599,15 @@ def main() -> None:
         opp_team = slate_row.get("opponent", "")
         prop_type = slate_row.get("prop_type", "")
         team = str(slate_row.get("team", "") or "").strip()
-        line = pd.to_numeric(slate_row.get("line"), errors="coerce")
-        direction = str(slate_row.get("final_bet_direction", "OVER") or "OVER").strip().upper()
+        line = first_numeric_in_slate_row(
+            slate_row, ("line", "Line", "line_score", "LINE")
+        )
+        direction = first_over_under_in_slate_row(
+            slate_row,
+            ("final_bet_direction", "bet_direction", "direction", "recommended_side", "Direction"),
+        )
+        if not direction:
+            direction = "OVER"
         tier = slate_row.get("tier", "D")
 
         actual = lookup_soccer_actual(actuals_lut, player, prop_type, team)

@@ -24,11 +24,18 @@ from __future__ import annotations
 
 import argparse
 import re
+import sys
 import unicodedata
+from pathlib import Path
 from typing import Optional, Tuple, Dict, Any, List
 
 import numpy as np
 import pandas as pd
+
+_REPO = Path(__file__).resolve().parent.parent.parent
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+from utils.slate_fields import first_numeric_in_slate_row, first_over_under_in_slate_row
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
@@ -375,18 +382,36 @@ def main():
         return (None, "NO_MATCH")
 
     # Grade each row
+    line_nums = []
+    dirs_played = []
     actual_values = []
     actual_statuses = []
     match_methods = []
     void_reasons = []
 
     for _, r in slate.iterrows():
-        line = to_float(r.get("line"))
-        d = str(r.get("_dir", "")).strip().upper()
+        line = first_numeric_in_slate_row(r, ("line", "line_score", "Line"))
+        if np.isnan(line):
+            line = float("nan")
+        d = first_over_under_in_slate_row(
+            r,
+            (
+                "_dir",
+                "final_bet_direction",
+                "bet_direction",
+                "direction",
+                "model_dir_5",
+                "model_dir",
+                "model_direction",
+                "Direction",
+            ),
+        )
         prop = str(r.get("prop_norm", "")).strip()
 
         # Pre-void reasons
         if np.isnan(line):
+            line_nums.append(np.nan)
+            dirs_played.append(d if d else "")
             actual_values.append(np.nan)
             actual_statuses.append("MISSING_LINE")
             match_methods.append("")
@@ -400,12 +425,16 @@ def main():
         match_methods.append(method)
 
         if arow is None:
+            line_nums.append(line)
+            dirs_played.append(d if d else "")
             actual_values.append(np.nan)
             actual_statuses.append("NO_ACTUAL_FOUND")
             void_reasons.append("NO_ACTUAL_MATCH")
             continue
 
         av = stat_from_row(arow, prop)
+        line_nums.append(line)
+        dirs_played.append(d if d else "")
         actual_values.append(av)
 
         if np.isnan(av):
@@ -419,9 +448,9 @@ def main():
                 void_reasons.append("")
 
     out = slate.copy()
-    out["line_num"]       = out["line"].apply(to_float)
+    out["line_num"]       = line_nums
     out["actual_value"]   = actual_values
-    out["dir_played"]     = out["_dir"]
+    out["dir_played"]     = dirs_played
     out["match_method"]   = match_methods
     out["actual_status"]  = actual_statuses
     out["void_reason"]    = void_reasons

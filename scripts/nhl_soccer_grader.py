@@ -25,6 +25,11 @@ try:
 except ImportError:
     print("ERROR: pip install pandas openpyxl"); sys.exit(1)
 
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from utils.slate_fields import first_numeric_in_slate_row, first_over_under_in_slate_row
+
 # ── Column maps: step8 slate → canonical graded output ────────────────────────
 # These match what build_grade_report.py's normalize() function expects
 
@@ -426,7 +431,7 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
             act_by_name[name] = []
         act_by_name[name].append(row)
 
-    hits = misses = voids = 0
+    hits = misses = voids = pushes = 0
 
     # ── SOCCER DIAGNOSTIC ────────────────────────────────────────────────────
     if sport == "SOCCER" and len(slate) > 0:
@@ -552,8 +557,15 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
     for idx, srow in slate.iterrows():
         sname = _norm_name_mlb(srow.get("player", "")) if sport == "MLB" else _norm_name(srow.get("player", ""))
         sprop = _norm_prop(srow.get("prop_type_norm", srow.get("prop_type_raw","")))
-        sline = srow.get("line")
-        sdir  = str(srow.get("bet_direction","")).upper()
+        sline = first_numeric_in_slate_row(
+            srow, ("line", "Line", "line_score", "LINE")
+        )
+        sdir = first_over_under_in_slate_row(
+            srow,
+            ("bet_direction", "final_bet_direction", "direction", "recommended_side", "Direction"),
+        )
+        if not sdir:
+            sdir = "OVER"
         s_eid = str(srow.get("espn_player_id","")).strip() if "espn_player_id" in srow.index else ""
         s_eid_valid = s_eid and s_eid not in ("", "nan", "None")
 
@@ -585,12 +597,11 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
             continue
 
         actual_val = float(matched["_val"])
-        try:
-            line_val = float(sline)
-        except (TypeError, ValueError):
+        if pd.isna(sline) or (isinstance(sline, float) and np.isnan(sline)):
             voids += 1
             slate.at[idx, "void_reason_grade"] = "NO_LINE"
             continue
+        line_val = float(sline)
 
         slate.at[idx, "actual"] = actual_val
         margin = actual_val - line_val
@@ -598,9 +609,9 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
 
         # Grade
         if margin == 0:
-            slate.at[idx, "result"] = "VOID"
+            slate.at[idx, "result"] = "PUSH"
             slate.at[idx, "void_reason_grade"] = "PUSH"
-            voids += 1
+            pushes += 1
         elif (sdir == "OVER" and margin > 0) or (sdir == "UNDER" and margin < 0):
             slate.at[idx, "result"] = "HIT"
             slate.at[idx, "void_reason_grade"] = ""
@@ -613,7 +624,10 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
     total = len(slate)
     dec   = hits + misses
     rate  = f"{hits/dec*100:.1f}%" if dec else "—"
-    print(f"  Graded: {total:,} props -> HIT:{hits} MISS:{misses} VOID:{voids} | Hit rate: {rate}")
+    print(
+        f"  Graded: {total:,} props -> HIT:{hits} MISS:{misses} PUSH:{pushes} "
+        f"unmatched/NO_LINE:{voids} | Hit rate: {rate}"
+    )
     return slate
 
 def save_graded(df: pd.DataFrame, out_path: Path, sport: str, date_str: str):

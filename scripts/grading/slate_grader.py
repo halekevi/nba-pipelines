@@ -20,9 +20,16 @@ from datetime import datetime
 from pathlib import Path
 
 _SCRIPTS_DIR = Path(__file__).resolve().parent.parent
+_REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 if str(_SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS_DIR))
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
 from player_name_norm import fold_player_name  # noqa: E402
+from utils.slate_fields import (  # noqa: E402
+    first_numeric_in_slate_row,
+    first_over_under_in_slate_row,
+)
 
 
 def _def_rank_bucket(x):
@@ -142,18 +149,10 @@ def write_dir_subrows(ws,ri,df,label,bg,ncols=8):
 def _row_first_numeric(row, keys):
     """
     First non-null numeric among named columns (pandas Series or mapping).
-    Chained row.get('line', row.get('Line', ...)) is wrong for Series: if 'line'
-    exists but is NaN, .get returns NaN and never tries Line/line_score — yields
-    NO_LINE + VOID while the slate still displays a line from another column.
+    Delegates to utils.slate_fields for Series; dict-like rows use .get chain.
     """
     if isinstance(row, pd.Series):
-        for k in keys:
-            if k not in row.index:
-                continue
-            x = pd.to_numeric(row[k], errors="coerce")
-            if pd.notna(x):
-                return float(x)
-        return np.nan
+        return first_numeric_in_slate_row(row, tuple(keys))
     for k in keys:
         if not hasattr(row, "get"):
             break
@@ -172,17 +171,13 @@ def _row_bet_direction(row) -> str:
         "recommended_side",
     )
     if isinstance(row, pd.Series):
+        v = first_over_under_in_slate_row(row, keys)
+        return v if v else "OVER"
+    if hasattr(row, "get"):
         for k in keys:
-            if k not in row.index:
-                continue
-            s = str(row[k] if row[k] is not None else "").strip().upper()
-            if s and s not in ("NAN", "NONE", "NAT", ""):
-                return s
-    elif hasattr(row, "get"):
-        for k in keys:
-            v = row.get(k)
-            s = str(v if v is not None else "").strip().upper()
-            if s and s not in ("NAN", "NONE", "NAT", ""):
+            val = row.get(k)
+            s = str(val if val is not None else "").strip().upper()
+            if s in ("OVER", "UNDER"):
                 return s
     return "OVER"
 
