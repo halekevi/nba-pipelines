@@ -389,6 +389,50 @@ def parse_ticket_sheet(tickets_xlsx: Path, sheet_name: str) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def parse_tickets_from_combined_json(path: Path) -> pd.DataFrame:
+    """
+    Load legs from combined_slate_tickets_YYYY-MM-DD.json (same payload as tickets_latest.json).
+    Used when the dated .xlsx is missing (e.g. OneDrive copy failed) but the JSON snapshot exists.
+    """
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    rows: list[dict[str, Any]] = []
+    for grp in payload.get("groups") or []:
+        sheet = str(grp.get("group_name") or "Tickets")
+        for t in grp.get("tickets") or []:
+            try:
+                ticket_no = int(t.get("ticket_no"))
+            except (TypeError, ValueError):
+                continue
+            leg_no = 0
+            for leg in t.get("legs") or []:
+                leg_no += 1
+                prop = str(leg.get("prop_type") or "")
+                line_num = pd.to_numeric(leg.get("line"), errors="coerce")
+                if pd.isna(line_num):
+                    continue
+                pick_type = str(leg.get("pick_type") or "")
+                tier = leg.get("min_tier") or leg.get("tier") or ""
+                rows.append(
+                    {
+                        "sheet": sheet,
+                        "ticket_no": ticket_no,
+                        "leg_no": leg_no,
+                        "player": str(leg.get("player") or ""),
+                        "team": str(leg.get("team") or ""),
+                        "prop": prop,
+                        "prop_norm": prop_norm_from_label(prop),
+                        "line": float(line_num),
+                        "dir": str(leg.get("direction") or "").strip().upper(),
+                        "sport": str(leg.get("sport") or "").strip().upper(),
+                        "pick_type": pick_type,
+                        "leg_type": derive_leg_type(pick_type),
+                        "tier": str(tier) if tier is not None else "",
+                        "ml_prob": pd.to_numeric(leg.get("ml_prob"), errors="coerce"),
+                    }
+                )
+    return pd.DataFrame(rows)
+
+
 # -----------------------------
 # Actuals loading + lookup
 # -----------------------------
@@ -1365,7 +1409,11 @@ def run_ml_profit_layers(
 # -----------------------------
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--tickets", required=True, help="combined_slate_tickets_YYYY-MM-DD.xlsx")
+    ap.add_argument(
+        "--tickets",
+        required=True,
+        help="combined_slate_tickets_YYYY-MM-DD.xlsx or .json (JSON when xlsx missing)",
+    )
     ap.add_argument("--nba_actuals", required=True, help="actuals_nba_YYYY-MM-DD.csv")
     ap.add_argument("--nba1h_actuals", default="", help="actuals_nba1h_YYYY-MM-DD.csv (optional)")
     ap.add_argument("--nba1q_actuals", default="", help="actuals_nba1q_YYYY-MM-DD.csv (optional)")
@@ -1422,10 +1470,13 @@ def main():
         if "demon_flex" in mods:
             DEMON_FLEX = {int(k): float(v) for k, v in mods["demon_flex"].items()}
 
-    tickets_xlsx = Path(args.tickets)
+    tickets_path = Path(args.tickets)
     nba_csv = Path(args.nba_actuals)
     cbb_csv = Path(args.cbb_actuals)
-    out_xlsx = Path(args.out) if args.out else tickets_xlsx.with_name(tickets_xlsx.stem + "_GRADED.xlsx")
+    if args.out:
+        out_xlsx = Path(args.out)
+    else:
+        out_xlsx = tickets_path.with_name(tickets_path.stem + "_GRADED.xlsx")
 
     # actuals + lookups
     nba_act = prep_actuals(nba_csv, "NBA")
@@ -1491,19 +1542,25 @@ def main():
             _inj_csv(args.soccer_injuries, Path(args.soccer_actuals), "SOCCER"), "SOCCER"
         )
 
-    # ticket sheets
-    xls = pd.ExcelFile(tickets_xlsx)
-    ticket_sheets = [s for s in xls.sheet_names if re.search(r"\b\d-?Leg\b", s, re.IGNORECASE)]
+    # ticket sheets (workbook) or JSON snapshot (same legs as --write-web output)
+    tickets_xlsx = tickets_path
+    if tickets_path.suffix.lower() == ".json":
+        legs_df = parse_tickets_from_combined_json(tickets_path)
+        if legs_df.empty:
+            raise RuntimeError("No ticket legs parsed from JSON. Check combined_slate_tickets payload.")
+    else:
+        xls = pd.ExcelFile(tickets_path)
+        ticket_sheets = [s for s in xls.sheet_names if re.search(r"\b\d-?Leg\b", s, re.IGNORECASE)]
 
-    leg_frames = []
-    for s in ticket_sheets:
-        legs = parse_ticket_sheet(tickets_xlsx, s)
-        if not legs.empty:
-            leg_frames.append(legs)
-    if not leg_frames:
-        raise RuntimeError("No ticket legs parsed. Check sheet format.")
+        leg_frames = []
+        for s in ticket_sheets:
+            legs = parse_ticket_sheet(tickets_path, s)
+            if not legs.empty:
+                leg_frames.append(legs)
+        if not leg_frames:
+            raise RuntimeError("No ticket legs parsed. Check sheet format.")
 
-    legs_df = pd.concat(leg_frames, ignore_index=True)
+        legs_df = pd.concat(leg_frames, ignore_index=True)
     legs_df["ticket_id"] = legs_df["sheet"].astype(str) + " | " + legs_df["ticket_no"].astype(str)
 
     # grade legs

@@ -5,7 +5,9 @@ param(
 $Root = Split-Path $PSScriptRoot -Parent
 $DateDir = Join-Path $Root "outputs\$Date"
 
-$TicketsFile = Join-Path $DateDir "combined_slate_tickets_$Date.xlsx"
+$TicketsFileXlsx = Join-Path $DateDir "combined_slate_tickets_$Date.xlsx"
+$TicketsFileJson = Join-Path $DateDir "combined_slate_tickets_$Date.json"
+$TicketsFile = if (Test-Path $TicketsFileXlsx) { $TicketsFileXlsx } elseif (Test-Path $TicketsFileJson) { $TicketsFileJson } else { $TicketsFileXlsx }
 $NBAActuals  = Join-Path $DateDir "actuals_nba_$Date.csv"
 $NBA1HActuals = Join-Path $DateDir "actuals_nba1h_$Date.csv"
 $NBA1QActuals = Join-Path $DateDir "actuals_nba1q_$Date.csv"
@@ -440,8 +442,8 @@ else {
 # =============================
 # Run Combined Ticket Grader
 # =============================
-if (-not (Test-Path $TicketsFile)) {
-    Write-Host "Tickets file not found: $TicketsFile" -ForegroundColor Yellow
+if (-not (Test-Path $TicketsFileXlsx) -and -not (Test-Path $TicketsFileJson)) {
+    Write-Host "Tickets file not found (no combined_slate_tickets .xlsx or .json for $Date)" -ForegroundColor Yellow
 }
 elseif (-not (Test-Path $NBAActuals)) {
     Write-Host "NBA actuals not found: $NBAActuals" -ForegroundColor Yellow

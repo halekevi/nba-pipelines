@@ -148,7 +148,9 @@ if (-not $EffectiveOddsKey -and $env:ODDS_API_KEY) {
 # =============================================================================
 # STEP A — Grader for yesterday
 # =============================================================================
-$yesterdayCombined = Join-Path $Root "outputs\$Yesterday\combined_slate_tickets_$Yesterday.xlsx"
+$yesterdayCombinedXlsx = Join-Path $Root "outputs\$Yesterday\combined_slate_tickets_$Yesterday.xlsx"
+$yesterdayCombinedJson = Join-Path $Root "outputs\$Yesterday\combined_slate_tickets_$Yesterday.json"
+$yesterdayHasTickets = (Test-Path $yesterdayCombinedXlsx) -or (Test-Path $yesterdayCombinedJson)
 $yesterdayTixGraded = Join-Path $Root "outputs\$Yesterday\combined_tickets_graded_$Yesterday.xlsx"
 if (-not $SkipGrader) {
     $gradedExpected = @(
@@ -160,14 +162,14 @@ if (-not $SkipGrader) {
     )
     $missingGraded = @($gradedExpected | Where-Object { -not (Test-Path $_) })
     # If we have a ticket slate but never ran combined_ticket_grader, do not skip — otherwise legs stay UNGRADED in ticket_eval HTML.
-    $needCombinedTicketWorkbook = (Test-Path $yesterdayCombined) -and -not (Test-Path $yesterdayTixGraded)
+    $needCombinedTicketWorkbook = $yesterdayHasTickets -and -not (Test-Path $yesterdayTixGraded)
     if ($missingGraded.Count -eq 0 -and -not $needCombinedTicketWorkbook) {
         Write-Host "Grader outputs already present for $Yesterday — skipping" -ForegroundColor DarkYellow
         Write-Log "STEP A - Grader ($Yesterday): SKIPPED (all graded outputs present; combined ticket workbook OK)"
     }
     else {
         if ($needCombinedTicketWorkbook -and $missingGraded.Count -eq 0) {
-            Write-Host "Re-running grader for $Yesterday: combined ticket graded workbook missing" -ForegroundColor DarkYellow
+            Write-Host "Re-running grader for ${Yesterday}: combined ticket graded workbook missing" -ForegroundColor DarkYellow
             Write-Log "STEP A - Grader ($Yesterday): START (combined_tickets_graded missing)"
         }
         else {
@@ -207,7 +209,7 @@ else {
 # eval step failed inside it.
 # =============================================================================
 $buildTicketEvalScript = Join-Path $Root "scripts\build_ticket_eval.py"
-if (Test-Path $yesterdayCombined) {
+if ($yesterdayHasTickets) {
     if (Test-Path $buildTicketEvalScript) {
         Write-Log "STEP A1b - Ticket eval HTML ($Yesterday): START"
         Push-Location $Root
@@ -235,7 +237,7 @@ if (Test-Path $yesterdayCombined) {
     }
 }
 else {
-    Write-Log "STEP A1b - Ticket eval HTML ($Yesterday): SKIP (no outputs\$Yesterday\combined_slate_tickets_$Yesterday.xlsx)"
+    Write-Log "STEP A1b - Ticket eval HTML ($Yesterday): SKIP (no outputs\$Yesterday\combined_slate_tickets_$Yesterday.xlsx or .json)"
 }
 
 # =============================================================================
