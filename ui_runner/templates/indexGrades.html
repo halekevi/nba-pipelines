@@ -926,7 +926,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   <div class="empty-state" id="empty-state" style="display:none;">
     <div class="empty-icon">📊</div>
     <div class="empty-title">No Report Found</div>
-    <div class="empty-sub">No grade report exists for this date. Run <code>run_grader.ps1</code> to generate one, or select a different date in the toolbar.</div>
+    <div class="empty-sub">No grade report exists for this date on the server. Locally run <code>scripts/run_grader.ps1 -Date YYYY-MM-DD</code> (or <code>scripts/grading/build_grades_html.py --date … --out ui_runner/templates</code>), then <strong>commit and push</strong> <code>ui_runner/templates/slate_eval_YYYY-MM-DD.html</code> and redeploy Railway. Use date pills or <strong>Jump to date</strong> for a day listed by <code>/api/grades/report_dates</code>.</div>
     <div class="empty-hint">Expected: slate_eval_<span id="empty-date"></span>.html</div>
   </div>
   <div class="empty-state" id="ticket-empty-state" style="display:none;">
@@ -1869,8 +1869,20 @@ async function probeDate(dateStr){
   }
 }
 
-// ─── DISCOVER available dates (look back up to 30 days) ──────────────────────
+// ─── DISCOVER available dates ─────────────────────────────────────────────────
 async function discoverDates(){
+  // Prefer server-side listing (one request, works when HEAD is flaky behind CDNs).
+  try {
+    const res = await fetch('/api/grades/report_dates', { cache: 'no-store' });
+    if (res.ok) {
+      const j = await res.json();
+      const ds = j.slate_eval_dates;
+      if (Array.isArray(ds) && ds.length) {
+        return ds.slice().sort();
+      }
+    }
+  } catch (_e) {}
+  // Fallback: probe last 30 calendar days via HEAD
   const found = [];
   const today = new Date();
   const checks = [];
@@ -1879,13 +1891,12 @@ async function discoverDates(){
     d.setDate(d.getDate() - i);
     checks.push(toDateStr(d));
   }
-  // Run in parallel batches of 5
   for(let i=0; i<checks.length; i+=5){
     const batch = checks.slice(i,i+5);
     const results = await Promise.all(batch.map(async ds => ({ds, ok: await probeDate(ds)})));
     results.forEach(r => { if(r.ok) found.push(r.ds); });
   }
-  return found.sort(); // ascending
+  return found.sort();
 }
 
 // ─── RENDER date pills ────────────────────────────────────────────────────────

@@ -1251,6 +1251,51 @@ def api_grades_archive_dates():
     return r
 
 
+_SLATE_EVAL_FN_RE = re.compile(r"^slate_eval_(\d{4}-\d{2}-\d{2})\.html$")
+_TICKET_EVAL_FN_RE = re.compile(r"^ticket_eval_(\d{4}-\d{2}-\d{2})\.html$")
+
+
+def _grade_report_dates_on_disk(which: str) -> list[str]:
+    """
+    List YYYY-MM-DD values for which static report HTML exists (templates/ or templates/archive/).
+    which: 'slate' | 'ticket'
+    """
+    pat = _SLATE_EVAL_FN_RE if which == "slate" else _TICKET_EVAL_FN_RE
+    found: set[str] = set()
+    for base in (TEMPLATES_DIR, ARCHIVE_DIR):
+        if not base.is_dir():
+            continue
+        try:
+            for p in base.iterdir():
+                if not p.is_file():
+                    continue
+                m = pat.match(p.name)
+                if m:
+                    found.add(m.group(1))
+        except OSError:
+            continue
+    return sorted(found)
+
+
+@app.get("/api/grades/report_dates")
+def api_grades_report_dates():
+    """
+    Dates that have slate_eval_*.html / ticket_eval_*.html on the server filesystem.
+
+    The Grades hub uses this so date pills work even when many parallel HEAD requests
+    fail through a CDN/proxy. Deploy must include committed files under ui_runner/templates/.
+    """
+    r = jsonify(
+        {
+            "slate_eval_dates": _grade_report_dates_on_disk("slate"),
+            "ticket_eval_dates": _grade_report_dates_on_disk("ticket"),
+        }
+    )
+    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    return r
+
+
 # ──────────────────────────────────────────────────────────────────────────────
 # NEW: Pipeline Status API
 # Returns health of all pipeline outputs so UI can show green/red indicators
