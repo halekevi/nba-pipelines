@@ -1,0 +1,15 @@
+# Default income-engine staking / risk (200 units baseline). Copy to ops or override via env.
+bankroll_units: 200
+kelly_fraction: 0.25
+max_stake_frac_per_bet: 0.02
+max_exposure_frac_per_game: 0.08
+max_exposure_frac_per_player: 0.05
+max_exposure_frac_per_sport: 0.30
+daily_loss_stop_frac: 0.05
+drawdown_warn_frac: 0.15
+drawdown_hard_stop_frac: 0.25
+drawdown_hard_stop_days: 3
+bankroll_scale_up_mult: 1.0
+bankroll_scale_up_min_roi: 0.0
+bankroll_scale_up_window_days: 60
+bankroll_scale_up_max_dd: 0.20

@@ -49,6 +49,9 @@ from markupsafe import Markup
 # Paths
 # ──────────────────────────────────────────────────────────────────────────────
 BASE_DIR      = Path(__file__).resolve().parent.parent  # repo root (one level above ui_runner/)
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))  # monorepo bootstrap until `pip install -e .`
+
 UI_DIR        = Path(__file__).resolve().parent         # all UI assets live here (ui_runner/)
 CONFIG_PATH   = UI_DIR / "commands.json"
 TEMPLATES_DIR = UI_DIR / "templates"
@@ -1774,6 +1777,67 @@ def api_vision_screenshot():
         response=json.dumps(normalized),
         status=200,
         mimetype="application/json",
+    )
+
+
+@app.get("/dashboard/income")
+def dashboard_income():
+    """
+    ROI / CLV / calibration / drawdown only — see DESIGN_PRINCIPLES.md.
+    Requires PROPORACLE_DB_PATH (or default data/cache/proporacle_income.db) with ddl.sql + views.sql applied.
+    """
+    import json
+
+    err: str | None = None
+    roi_payload = {"days": [], "pnl": []}
+    clv_payload = {"buckets": [], "means": []}
+    cal_payload = {"pred": [], "hit": []}
+    eq_payload = {"days": [], "dd": []}
+
+    try:
+        from proporacle.monitoring.dashboard_queries import (
+            fetch_calibration_bins,
+            fetch_clv_by_edge_bucket,
+            fetch_equity_drawdown,
+            fetch_roi_daily,
+            load_income_db,
+        )
+
+        conn = load_income_db()
+        try:
+            roi_rows = fetch_roi_daily(conn)
+            for r in roi_rows:
+                roi_payload["days"].append(r["bet_day"])
+                roi_payload["pnl"].append(float(r["daily_pnl"] or 0))
+
+            for r in fetch_clv_by_edge_bucket(conn):
+                clv_payload["buckets"].append(r["ev_bucket"])
+                clv_payload["means"].append(float(r["mean_clv"] or 0))
+
+            for r in fetch_calibration_bins(conn):
+                if r["pred_mean"] is not None and r["hit_rate"] is not None:
+                    cal_payload["pred"].append(float(r["pred_mean"]))
+                    cal_payload["hit"].append(float(r["hit_rate"]))
+
+            br0 = float(os.environ.get("PROPORACLE_BANKROLL_0", "200"))
+            for r in fetch_equity_drawdown(conn, bankroll_0=br0):
+                eq_payload["days"].append(r["bet_day"])
+                eq_payload["dd"].append(float(r["drawdown"]))
+        finally:
+            conn.close()
+    except Exception as e:
+        err = (
+            f"{type(e).__name__}: {e}. "
+            "Initialize DB: apply proporacle/data/schema/ddl.sql then views.sql; set PROPORACLE_DB_PATH if needed."
+        )
+
+    return render_template(
+        "dashboard_income.html",
+        error=err,
+        roi_json=Markup(json.dumps(roi_payload)),
+        clv_json=Markup(json.dumps(clv_payload)),
+        cal_json=Markup(json.dumps(cal_payload)),
+        equity_json=Markup(json.dumps(eq_payload)),
     )
 
 

@@ -31,6 +31,10 @@ desktop.ini
 .env
 .env.*
 *.env
+private/*
+!private/secrets.example
+!private/docs/
+!private/docs/**
 
 # Databases
 # Includes data/cache/synthetic_graded.db (large generated synthetic graded store)
