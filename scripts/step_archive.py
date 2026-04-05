@@ -126,11 +126,70 @@ def _norm_prop(pt) -> str:
     return str(pt or "").strip().lower().replace(" ", "_")
 
 
+def _coalesce_line_series(df: pd.DataFrame) -> pd.Series:
+    """Per-row first non-null among line / Line / line_score (not only the first column name)."""
+    keys = [k for k in ("line", "Line", "line_score") if k in df.columns]
+    if not keys:
+        return pd.Series(np.nan, index=df.index, dtype=float)
+    out = pd.to_numeric(df[keys[0]], errors="coerce")
+    for k in keys[1:]:
+        out = out.where(out.notna(), pd.to_numeric(df[k], errors="coerce"))
+    return out
+
+
+def _row_over_under(df: pd.DataFrame, i: int) -> str:
+    for k in (
+        "final_bet_direction",
+        "bet_direction",
+        "direction",
+        "recommended_side",
+        "Direction",
+    ):
+        if k not in df.columns:
+            continue
+        raw = df[k].iat[i]
+        v = str(raw if pd.notna(raw) else "").strip().upper()
+        if v in ("OVER", "UNDER"):
+            return v
+    return ""
+
+
+def _reconcile_result_margin_from_box_score(
+    actual_raw,
+    line_raw,
+    side: str,
+    result_in: str,
+    margin_raw,
+):
+    """
+    When actual, line, and OVER/UNDER are known, set HIT/MISS/PUSH and margin from the box score.
+    Fixes VOID rows produced by any grader (eligibility void_reason, join quirks, etc.).
+    """
+    if pd.isna(actual_raw) or pd.isna(line_raw):
+        return result_in, margin_raw
+    try:
+        a = float(actual_raw)
+        ln = float(line_raw)
+    except (TypeError, ValueError):
+        return result_in, margin_raw
+    s = str(side or "").strip().upper()
+    if s not in ("OVER", "UNDER"):
+        return result_in, margin_raw
+    if abs(a - ln) < 1e-9:
+        return "PUSH", 0.0
+    if s == "OVER":
+        return ("HIT" if a > ln else "MISS"), round(a - ln, 2)
+    return ("HIT" if a < ln else "MISS"), round(ln - a, 2)
+
+
 # ── Archive ───────────────────────────────────────────────────────────────────
 
 def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
     """
     Upsert graded props into data/cache/{sport}_props_history.db (same key = refresh row).
+
+    Reconciles result/margin from actual + line + side when possible so Prop Evaluation
+    stays correct across NBA/CBB/NHL/MLB/Soccer even if the graded workbook still says VOID.
 
     Parameters
     ----------
@@ -151,7 +210,7 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
 
     player   = _col_first(graded_df, ("player", "player_name", "pp_player")).map(_norm_player)
     prop     = _col_first(graded_df, ("prop_type_norm", "prop_type", "stat_norm", "prop_norm")).map(_norm_prop)
-    line     = pd.to_numeric(_col_first(graded_df, ("line", "line_score")), errors="coerce")
+    line = _coalesce_line_series(graded_df)
     direction = _col_first(graded_df, ("final_bet_direction", "bet_direction", "direction",
                                         "recommended_side")).astype(str).str.upper().str.strip()
     actual   = pd.to_numeric(_col_first(graded_df, ("actual", "actual_value")), errors="coerce")
@@ -178,6 +237,14 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
             res = "HIT"
         elif res == "LOSS":
             res = "MISS"
+        dir_out = _row_over_under(graded_df, i)
+        if not dir_out:
+            dir_out = str(direction.iat[i] or "").strip().upper()
+        res, mg = _reconcile_result_margin_from_box_score(
+            actual.iat[i], line.iat[i], dir_out, res, margin.iat[i]
+        )
+        if res not in ("HIT", "MISS", "PUSH", "VOID"):
+            continue
         vr = void_rsn.iat[i]
         if not vr or vr.lower() in ("nan", "none", "nat"):
             vr = None
@@ -185,10 +252,10 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
             sport_up, date,
             player.iat[i], prop.iat[i],
             None if pd.isna(line.iat[i]) else float(line.iat[i]),
-            direction.iat[i],
+            dir_out if dir_out else direction.iat[i],
             None if pd.isna(actual.iat[i]) else float(actual.iat[i]),
             res,
-            None if pd.isna(margin.iat[i]) else float(margin.iat[i]),
+            None if pd.isna(mg) else float(mg),
             opp.iat[i], team.iat[i], pick_type.iat[i], tier.iat[i],
             None if pd.isna(edge.iat[i]) else float(edge.iat[i]),
             None if pd.isna(ml_p.iat[i]) else float(ml_p.iat[i]),
