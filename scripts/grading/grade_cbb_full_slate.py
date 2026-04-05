@@ -100,22 +100,43 @@ _PROP_MAP = {
     "blk": "blk", "blocks": "blk",
     "tov": "tov", "to": "tov", "turnovers": "tov",
     "3pm": "3pm", "3pt": "3pm", "3ptm": "3pm", "3ptmade": "3pm", "3-pt made": "3pm", "3s": "3pm",
+    "3pts": "3pm", "made3": "3pm", "threes": "3pm", "3fgm": "3pm", "fg3m": "3pm",
+    "threepointsmade": "3pm", "threepointersmade": "3pm", "3pointsmade": "3pm", "3pointermade": "3pm",
 
-    # combos
+    # combos (spaced / PP-style names folded in norm_prop)
     "pr": "pr", "pts+reb": "pr", "pts+rebs": "pr",
+    "ptsreb": "pr", "ptsrebs": "pr", "pointsrebounds": "pr", "pointsandrebounds": "pr",
+    "ptsandrebounds": "pr", "pointsreb": "pr",
     "pa": "pa", "pts+ast": "pa", "pts+asts": "pa",
+    "ptsast": "pa", "pointsassists": "pa", "pointsandassists": "pa", "ptsandassists": "pa",
     "ra": "ra", "reb+ast": "ra", "rebs+asts": "ra",
+    "rebast": "ra", "reboundsassists": "ra", "reboundsandassists": "ra", "rebsasts": "ra",
     "pra": "pra", "pts+rebs+asts": "pra", "pts+reb+ast": "pra", "pts+reb+asts": "pra",
+    "ptsreboundsassists": "pra", "pointsreboundsassists": "pra", "ptsrebast": "pra",
     "stocks": "stocks", "stl+blk": "stocks", "blks+stls": "stocks",
+    "stlblk": "stocks", "stealsblocks": "stocks", "stealsandblocks": "stocks", "blksandstls": "stocks",
+
+    # box extras (wide actuals / ESPN)
+    "fgm": "fgm", "fgmade": "fgm", "fieldgoalsmade": "fgm", "fieldgoals": "fgm", "fg": "fgm",
+    "fga": "fga", "fieldgoalsattempted": "fga", "fieldgoalattempts": "fga", "fgatt": "fga",
+    "ftm": "ftm", "freethrowsmade": "ftm", "freethrowmade": "ftm",
+    "fta": "fta", "freethrowsattempted": "fta", "freethrowattempted": "fta",
+    "oreb": "oreb", "offensiverebounds": "oreb", "offrebounds": "oreb",
+    "dreb": "dreb", "defensiverebounds": "dreb", "defrebounds": "dreb",
+    "min": "min", "mins": "min", "minutes": "min",
 }
 
 
 def norm_prop(p: Any) -> str:
-    x = str(p or "").strip().lower()
-    x = x.replace(" ", "")
-    if "fantasy" in x:
+    raw = str(p or "").strip().lower()
+    raw_ns = re.sub(r"[\s\-_+]", "", raw)
+    if "fantasy" in raw_ns:
         return "fantasy"
-    return _PROP_MAP.get(x, str(p or "").strip().lower())
+    raw_fold = re.sub(r"[^a-z0-9]+", "", raw)
+    for cand in (raw, raw_ns, raw_fold):
+        if cand in _PROP_MAP:
+            return _PROP_MAP[cand]
+    return raw_fold if raw_fold else raw
 
 
 def _get_stat(actuals_row: pd.Series, keys: List[str]) -> float:
@@ -138,6 +159,13 @@ def stat_from_row(actuals_row: pd.Series, prop_norm: str) -> float:
     blk = _get_stat(actuals_row, ["BLK", "blk", "Blocks"])
     tov = _get_stat(actuals_row, ["TO", "tov", "Turnovers"])
     pm3 = _get_stat(actuals_row, ["3PM", "3PT", "3pm", "3PTM", "3pt_made", "3-PT Made", "FG3M", "3FGM"])
+    fgm = _get_stat(actuals_row, ["FGM", "fgm", "Field Goals Made"])
+    fga = _get_stat(actuals_row, ["FGA", "fga", "Field Goals Attempted"])
+    ftm = _get_stat(actuals_row, ["FTM", "ftm", "Free Throws Made"])
+    fta = _get_stat(actuals_row, ["FTA", "fta", "Free Throws Attempted"])
+    oreb = _get_stat(actuals_row, ["OREB", "oreb", "Offensive Rebounds"])
+    dreb = _get_stat(actuals_row, ["DREB", "dreb", "Defensive Rebounds"])
+    mins = _get_stat(actuals_row, ["MIN", "min", "minutes", "Minutes"])
 
     if p == "pts": return pts
     if p == "reb": return reb
@@ -152,6 +180,13 @@ def stat_from_row(actuals_row: pd.Series, prop_norm: str) -> float:
     if p == "ra":     return reb + ast
     if p == "pra":    return pts + reb + ast
     if p == "stocks": return stl + blk
+    if p == "fgm": return fgm
+    if p == "fga": return fga
+    if p == "ftm": return ftm
+    if p == "fta": return fta
+    if p == "oreb": return oreb
+    if p == "dreb": return dreb
+    if p == "min": return mins
     if p == "fantasy":
         # same formula you’re using now
         return pts + 1.2*reb + 1.5*ast + 3*stl + 3*blk - tov
@@ -390,7 +425,19 @@ def main():
     void_reasons = []
 
     for _, r in slate.iterrows():
-        line = first_numeric_in_slate_row(r, ("line", "line_score", "Line"))
+        line = first_numeric_in_slate_row(
+            r,
+            (
+                "line",
+                "line_score",
+                "Line",
+                "projection",
+                "Projection",
+                "proj",
+                "model_line",
+                "consensus_line",
+            ),
+        )
         if np.isnan(line):
             line = float("nan")
         d = first_over_under_in_slate_row(

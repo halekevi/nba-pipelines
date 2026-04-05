@@ -558,7 +558,18 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
         sname = _norm_name_mlb(srow.get("player", "")) if sport == "MLB" else _norm_name(srow.get("player", ""))
         sprop = _norm_prop(srow.get("prop_type_norm", srow.get("prop_type_raw","")))
         sline = first_numeric_in_slate_row(
-            srow, ("line", "Line", "line_score", "LINE")
+            srow,
+            (
+                "line",
+                "Line",
+                "line_score",
+                "LINE",
+                "projection",
+                "Projection",
+                "proj",
+                "model_line",
+                "consensus_line",
+            ),
         )
         sdir = first_over_under_in_slate_row(
             srow,

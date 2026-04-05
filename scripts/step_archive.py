@@ -127,15 +127,70 @@ def _norm_prop(pt) -> str:
     return str(pt or "").strip().lower().replace(" ", "_")
 
 
+# Order matters: prefer book line, then model / alt names seen in step8 + grader exports.
+_LINE_COALESCE_COLS = (
+    "line",
+    "Line",
+    "line_score",
+    "Line Score",
+    "projection",
+    "Projection",
+    "proj",
+    "model_line",
+    "consensus_line",
+    "pp_line",
+)
+
+
 def _coalesce_line_series(df: pd.DataFrame) -> pd.Series:
-    """Per-row first non-null among line / Line / line_score (not only the first column name)."""
-    keys = [k for k in ("line", "Line", "line_score") if k in df.columns]
+    """Per-row first non-null numeric among common line / projection column names."""
+    keys = [k for k in _LINE_COALESCE_COLS if k in df.columns]
     if not keys:
         return pd.Series(np.nan, index=df.index, dtype=float)
     out = pd.to_numeric(df[keys[0]], errors="coerce")
     for k in keys[1:]:
         out = out.where(out.notna(), pd.to_numeric(df[k], errors="coerce"))
     return out
+
+
+def _scalar_missing_for_history(x) -> bool:
+    """True if actual/line is unusable for O/U history."""
+    if x is None:
+        return True
+    if isinstance(x, str):
+        s = x.strip().lower()
+        if not s or s in ("nan", "none", "nat"):
+            return True
+        try:
+            float(s)
+            return False
+        except ValueError:
+            return True
+    try:
+        if pd.isna(x):
+            return True
+    except (ValueError, TypeError):
+        pass
+    try:
+        return bool(np.isnan(float(x)))
+    except (TypeError, ValueError):
+        return True
+
+
+def _void_row_omitted_from_props_history(res: str, actual, line, side: str) -> bool:
+    """
+    Do not persist VOID rows that were never gradeable (DNP, no box match, missing line/side).
+
+    HIT/MISS/PUSH and VOID rows with numeric actual+line+OVER/UNDER are still stored.
+    """
+    if str(res or "").strip().upper() != "VOID":
+        return False
+    s = str(side or "").strip().upper()
+    return (
+        _scalar_missing_for_history(actual)
+        or _scalar_missing_for_history(line)
+        or s not in ("OVER", "UNDER")
+    )
 
 
 def _infer_row_grade_days(df: pd.DataFrame) -> pd.Series:
@@ -222,6 +277,9 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> Tuple[int,
     Rows whose slate game day is parseable and differs from ``date`` are dropped before
     insert so mixed-date slates do not pollute props_history.
 
+    Ungradable VOID rows (missing actual or line, or no OVER/UNDER) are not written so
+    props_history stays limited to real decisions for the slate date.
+
     Parameters
     ----------
     sport      : "NBA" | "CBB" | "WCBB" | "NBA1H" | "NBA1Q" | "NHL" | "MLB" | "Soccer"
@@ -263,6 +321,7 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> Tuple[int,
     ).astype(str).str.strip()
 
     rows = []
+    n_skip_void = 0
     for i in range(len(graded_df)):
         res = result.iat[i]
         if res not in ("HIT", "MISS", "PUSH", "VOID", "WIN", "LOSS"):
@@ -283,6 +342,9 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> Tuple[int,
         vr = void_rsn.iat[i]
         if not vr or vr.lower() in ("nan", "none", "nat"):
             vr = None
+        if _void_row_omitted_from_props_history(res, actual.iat[i], line.iat[i], dir_out):
+            n_skip_void += 1
+            continue
         rows.append((
             sport_up, date,
             player.iat[i], prop.iat[i],
@@ -298,6 +360,12 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> Tuple[int,
             vr,
             now_iso,
         ))
+
+    if n_skip_void:
+        print(
+            f"[archive] {sport_up} {date}: omitted {n_skip_void} ungradable VOID row(s) "
+            f"(no actual/line/side — not stored in props_history)"
+        )
 
     if not rows:
         print(f"[archive] {sport}: 0 valid graded rows — nothing to insert.")

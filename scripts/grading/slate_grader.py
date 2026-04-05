@@ -319,6 +319,22 @@ def _coalesce_line_from_line_score(df):
     return df
 
 
+def _coalesce_line_from_projection(df):
+    """When book line is blank, use numeric projection / model line (step7 exports)."""
+    for col in ("projection", "Projection", "proj", "model_line", "consensus_line"):
+        if col not in df.columns:
+            continue
+        pv = pd.to_numeric(df[col], errors="coerce")
+        if pv.notna().sum() == 0:
+            continue
+        if "line" not in df.columns:
+            df["line"] = pv
+        else:
+            ln = pd.to_numeric(df["line"], errors="coerce")
+            df["line"] = ln.where(ln.notna(), pv)
+    return df
+
+
 def load_nba(path: str) -> pd.DataFrame:
     xls = pd.ExcelFile(path, engine="openpyxl")
     preferred = ["ALL", "Box Raw", "Props", "Sheet1"]
@@ -377,6 +393,7 @@ def load_nba(path: str) -> pd.DataFrame:
         df["ml_edge"] = df["ml_prob"] - 0.5
 
     _coalesce_line_from_line_score(df)
+    _coalesce_line_from_projection(df)
 
     # Hard fail if player still missing
     if "player" not in df.columns:
@@ -506,6 +523,7 @@ def load_cbb(path: str) -> pd.DataFrame:
             df[c] = pd.to_numeric(df[c], errors="coerce")
 
     _coalesce_line_from_line_score(df)
+    _coalesce_line_from_projection(df)
 
     # Standardized key used to join actuals
     df["player_key"] = df["player"].astype(str).apply(norm_player_key) + "|" + df["prop_type_norm"].apply(norm_prop_key)
