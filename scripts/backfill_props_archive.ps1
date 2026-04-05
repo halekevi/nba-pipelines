@@ -4,7 +4,7 @@
   Replay step_archive.py for every graded workbook under outputs/<Date>/ (Prop Evaluation data source).
 
 .DESCRIPTION
-  Writes rows into data/cache/*_props_history.db for the given grade date. Use when:
+  Upserts rows into data/cache/*_props_history.db for the given grade date. Use when:
   - You graded slates but skipped the end of run_grader.ps1, or
   - You added new archive sports (CBB/WCBB/NBA1H/NBA1Q) and want older dates populated.
 

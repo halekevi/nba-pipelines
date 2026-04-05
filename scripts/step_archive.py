@@ -130,7 +130,7 @@ def _norm_prop(pt) -> str:
 
 def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
     """
-    Append today's graded props to data/cache/{sport}_props_history.db.
+    Upsert graded props into data/cache/{sport}_props_history.db (same key = refresh row).
 
     Parameters
     ----------
@@ -140,7 +140,7 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
 
     Returns
     -------
-    Number of rows inserted (duplicates silently ignored via UNIQUE constraint).
+    Number of valid graded rows processed (each upserts one props_history row).
     """
     if graded_df is None or graded_df.empty:
         print(f"[archive] {sport}: empty graded DataFrame — nothing to archive.")
@@ -202,24 +202,56 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
         return 0
 
     conn = _connect(sport)
-    inserted = 0
-    for row in rows:
-        try:
-            conn.execute("""
+    # SQLite 3.24+: upsert so re-archiving after a re-grade refreshes result/margin/void_reason.
+    _upsert_ok = sqlite3.sqlite_version_info >= (3, 24, 0)
+    _sql_ignore = """
                 INSERT OR IGNORE INTO props_history
                 (sport, grade_date, player_name, prop_type, line, direction,
                  actual_value, result, margin, opp_team, team, pick_type, tier,
                  edge, ml_prob, composite_hr, void_reason, created_at)
                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-            """, row)
-            if conn.total_changes > inserted:
-                inserted = conn.total_changes
+    """
+    _sql_upsert = """
+                INSERT INTO props_history
+                (sport, grade_date, player_name, prop_type, line, direction,
+                 actual_value, result, margin, opp_team, team, pick_type, tier,
+                 edge, ml_prob, composite_hr, void_reason, created_at)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                ON CONFLICT(sport, grade_date, player_name, prop_type, direction)
+                DO UPDATE SET
+                  line=excluded.line,
+                  direction=excluded.direction,
+                  actual_value=excluded.actual_value,
+                  result=excluded.result,
+                  margin=excluded.margin,
+                  opp_team=excluded.opp_team,
+                  team=excluded.team,
+                  pick_type=excluded.pick_type,
+                  tier=excluded.tier,
+                  edge=excluded.edge,
+                  ml_prob=excluded.ml_prob,
+                  composite_hr=excluded.composite_hr,
+                  void_reason=excluded.void_reason,
+                  created_at=excluded.created_at
+    """
+    sql = _sql_upsert if _upsert_ok else _sql_ignore
+    for row in rows:
+        try:
+            conn.execute(sql, row)
+        except sqlite3.OperationalError:
+            if sql is _sql_upsert:
+                try:
+                    conn.execute(_sql_ignore, row)
+                except Exception:
+                    pass
+            else:
+                pass
         except Exception:
             pass
     conn.commit()
     conn.close()
-    final_inserted = inserted  # approximate (total_changes is cumulative)
-    print(f"[archive] {sport} {date}: inserted ~{len(rows)} rows (db: {_db_path(sport).name})")
+    mode = "upserted" if _upsert_ok else "inserted (no upsert on this SQLite)"
+    print(f"[archive] {sport} {date}: {mode} {len(rows)} rows (db: {_db_path(sport).name})")
     return len(rows)
 
 
