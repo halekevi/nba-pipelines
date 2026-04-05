@@ -6134,18 +6134,21 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
     parts.append('<div class="tickets-built shell">')
 
     # ── Hero ──────────────────────────────────────────────────────────────────
+    built_html = (
+        f'<span class="hero-meta-built">{_h(generated_at)}</span>' if generated_at else ""
+    )
     parts.append(f'''
-<div class="hero" style="margin-bottom:24px;">
+<div class="hero tickets-hero" style="margin-bottom:24px;">
   <div class="hero-copy">
     <div class="hero-eyebrow" style="font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Today&rsquo;s Picks</div>
-    <h1 class="hero-title" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,6vw,68px);letter-spacing:4px;line-height:.95;color:var(--text);">
-      PROP<span style="color:var(--accent);">ORACLE</span><br>TICKETS
+    <h1 class="hero-title" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,56px);letter-spacing:0.06em;line-height:1.05;color:var(--text);margin:0;">
+      PROP<span class="hero-oracle-em">ORACLE</span> TICKETS
     </h1>
   </div>
-  <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;gap:6px;">
-    <span style="font-family:'Share Tech Mono',monospace;font-size:clamp(18px,2vw,26px);color:rgba(255,255,255,.85);letter-spacing:.04em;">{_h(date_str)}</span>
-    <span style="font-size:11px;color:var(--muted);">{n_groups} groups &nbsp;·&nbsp; {n_slips} slips</span>
-    {(f'<span style="font-size:10px;color:var(--muted2);">Built {_h(generated_at)}</span>') if generated_at else ''}
+  <div class="hero-meta-row" role="group" aria-label="Slate summary">
+    <span class="hero-meta-date">{_h(date_str)}</span>
+    <span class="hero-meta-counts">{n_groups} groups &nbsp;·&nbsp; {n_slips} slips</span>
+    {built_html}
   </div>
 </div>''')
 

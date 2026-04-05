@@ -69,8 +69,65 @@
 #app.page-tickets .tickets-built > .hero:first-child {
   margin-top: 8px;
 }
-.tickets-built .hero h1 span {
-  color: var(--cyan);
+.tickets-built .hero.tickets-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+}
+.tickets-built .hero.tickets-hero .hero-oracle-em {
+  color: var(--accent);
+}
+.tickets-built .hero-meta-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: 12px 20px;
+  width: 100%;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+.tickets-built .hero-meta-date {
+  font-family: "Share Tech Mono", monospace;
+  font-size: clamp(15px, 1.7vw, 22px);
+  color: var(--text);
+  letter-spacing: 0.04em;
+  justify-self: start;
+  min-width: 0;
+}
+.tickets-built .hero-meta-counts {
+  font-size: 12px;
+  color: var(--muted);
+  justify-self: center;
+  text-align: center;
+  white-space: nowrap;
+}
+.tickets-built .hero-meta-built {
+  font-size: 10px;
+  color: var(--muted2);
+  justify-self: end;
+  text-align: right;
+  min-width: 0;
+}
+.tickets-built .hero-meta-built::before {
+  content: "Built ";
+}
+@media (max-width: 640px) {
+  .tickets-built .hero-meta-row {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    text-align: left;
+    gap: 8px;
+  }
+  .tickets-built .hero-meta-counts {
+    justify-self: start;
+    text-align: left;
+    white-space: normal;
+  }
+  .tickets-built .hero-meta-built {
+    justify-self: start;
+    text-align: left;
+  }
 }
 .tickets-built .hero-sub {
   color: var(--muted);
@@ -212,6 +269,9 @@
 [data-theme="light"] .tickets-built .ticket {
   background: rgba(255, 255, 255, 0.74);
   border: 1px solid rgba(196, 166, 107, 0.22);
+}
+[data-theme="light"] .tickets-built .hero-meta-row {
+  border-top-color: var(--border);
 }
 
 .tickets-built .pwrap {
