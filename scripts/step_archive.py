@@ -12,6 +12,8 @@ Table: props_history (one row per graded prop-game)
 CLI usage (called from run_grader.ps1 after each grading run):
     py -3.14 scripts/step_archive.py --sport NBA --graded graded_nba_2026-04-04.xlsx --date 2026-04-04
     py -3.14 scripts/step_archive.py --sport CBB --graded outputs/2026-04-04/graded_cbb_2026-04-04.xlsx --date 2026-04-04
+
+Bulk replay for Prop Evaluation: scripts/backfill_props_archive.ps1 -Date YYYY-MM-DD (or -ScanOutputsDays 14).
 """
 
 from __future__ import annotations
