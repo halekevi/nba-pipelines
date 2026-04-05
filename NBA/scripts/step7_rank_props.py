@@ -516,6 +516,16 @@ def _normalize_nba_prop_ml(raw: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", x).strip("_") or "unknown"
 
 
+def _nba_pos_wing_big_for_ast_penalty(pos_raw: object) -> bool:
+    """True for forwards/centers — 0.5 assists OVER is often a fake Goblin (floor at zero)."""
+    p = str(pos_raw or "").upper().replace("-", "/").strip()
+    if not p:
+        return False
+    if "PG" in p:
+        return False
+    return any(tok in p for tok in ("SF", "PF", "C")) or p == "F" or "/F" in p or "F/" in p
+
+
 def _nba_ml_defense_tier_4(out: pd.DataFrame) -> pd.Series:
     idx = out.index
     if "defense_tier" in out.columns:
@@ -807,6 +817,27 @@ def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, source_hint: s
         )
 
     ml_prob = _meta_adjust_ml_prob(out, ml_prob, model_key_used, root)
+    idx_ml = out.index
+    prop_ml = (
+        out.get("prop_norm", out.get("prop_type", pd.Series("unknown", index=idx_ml)))
+        .astype(str)
+        .map(_normalize_nba_prop_ml)
+    )
+    line_ml = _to_num(out.get("line", out.get("line_score", pd.Series(np.nan, index=idx_ml))))
+    dir_ml = out.get("bet_direction", pd.Series("OVER", index=idx_ml)).astype(str).str.upper().str.strip()
+    pos_ml = out.get("pos", pd.Series("", index=idx_ml)).astype(str)
+    ast_wing_mask = (
+        prop_ml.eq("assists")
+        & (line_ml - 0.5).abs().lt(1e-6)
+        & dir_ml.eq("OVER")
+        & pos_ml.map(_nba_pos_wing_big_for_ast_penalty)
+    )
+    out["assist_non_pg_high_var"] = ast_wing_mask.astype(int)
+    ml_prob = pd.Series(
+        np.minimum(ml_prob.to_numpy(dtype=float), np.where(ast_wing_mask.to_numpy(), 0.72, 1.0)),
+        index=idx_ml,
+        dtype=float,
+    )
     ml_edge = ml_prob - 0.5
 
     # Multi-signal blend when archive history features are available

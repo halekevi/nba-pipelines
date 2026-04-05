@@ -32,7 +32,36 @@ import pandas as pd
 _repo_root_cbb = Path(__file__).resolve().parents[3]
 if str(_repo_root_cbb) not in sys.path:
     sys.path.insert(0, str(_repo_root_cbb))
+from utils.cbb_tourney_metadata import CBB_TOURNEY_2026
 from utils.optional_ml_context import optional_context_features
+
+# CBB/WCBB ML is poorly calibrated at the top (frequent 0.99x on props that are not that certain).
+CBB_ML_PROB_MAX = 0.80
+# Bracket / elimination-style games: suppress individual points props in the rank composite (~12.5%).
+CBB_TOURNAMENT_POINTS_SCORE_MULT = 0.875
+# 0.5 assists OVER on wings/bigs: real mass at zero assists when primary guards dominate the ball.
+CBB_AST_NON_PG_05_SCORE_MULT = 0.88
+
+
+def _norm_cbb_team_abbr(v: object) -> str:
+    return str(v or "").strip().upper()
+
+
+def _cbb_row_in_tournament(team_val: object, opp_val: object) -> bool:
+    ta = _norm_cbb_team_abbr(team_val)
+    oa = _norm_cbb_team_abbr(opp_val)
+    return (bool(ta) and ta in CBB_TOURNEY_2026) or (bool(oa) and oa in CBB_TOURNEY_2026)
+
+
+def _cbb_pos_has_pg(pos_raw: object) -> bool:
+    p = str(pos_raw or "").upper().replace("-", "/").strip()
+    return bool(p) and "PG" in p
+
+
+def _cbb_points_like_prop(pn: object) -> bool:
+    x = str(pn or "").lower().strip()
+    return x in ("pts", "pr", "pa", "pra") or "point" in x
+
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
@@ -659,6 +688,7 @@ def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, source_hint: s
         return pd.Series(np.nan, index=out.index), pd.Series(np.nan, index=out.index), existing_score.copy()
 
     ml_prob = _cbb_meta_adjust_ml_prob(out, ml_prob, model_key_used, root)
+    ml_prob = pd.to_numeric(ml_prob, errors="coerce").clip(lower=0.001, upper=CBB_ML_PROB_MAX)
     ml_edge = ml_prob - 0.5
     final_score = (1.0 - blend_w) * existing_score + blend_w * ml_edge
     print(f"✅ CBB ML blend applied (model={model_key_used}, weight={blend_w:.2f})")
@@ -1051,6 +1081,38 @@ def main():
     usage_bonus = np.clip(_to_num(out.get("usage_boost", pd.Series(0.0, index=out.index))).fillna(0.0) * 5.0, 0.0, 0.5)
     out["usage_bonus"] = usage_bonus
     raw_score = raw_score + usage_bonus
+
+    _team_tr = next((c for c in ("team", "pp_team", "Team") if c in out.columns), None)
+    _opp_tr = next((c for c in ("opp", "opp_team_abbr", "pp_opp_team", "Opp") if c in out.columns), None)
+    if _team_tr and _opp_tr:
+        is_tr_s = pd.Series(
+            [
+                _cbb_row_in_tournament(out.iloc[i][_team_tr], out.iloc[i][_opp_tr])
+                for i in range(len(out))
+            ],
+            index=out.index,
+        )
+    else:
+        is_tr_s = pd.Series(False, index=out.index)
+    out["is_tournament_game"] = is_tr_s.astype(int)
+
+    pos_cbb = next((c for c in ("pos", "position", "Pos") if c in out.columns), None)
+    _pos_cbb_s = out[pos_cbb].astype(str) if pos_cbb else pd.Series("", index=out.index)
+    pn_lower = prop_norm_col.astype(str).str.lower().str.strip()
+    _line_half_ast = (line_num - 0.5).abs() < 1e-6
+    _over_ast = out["bet_direction"].astype(str).str.upper().eq("OVER")
+    ast_non_pg = (
+        pn_lower.eq("ast")
+        & _line_half_ast.fillna(False)
+        & _over_ast
+        & ~_pos_cbb_s.map(_cbb_pos_has_pg)
+    )
+    out["assist_non_pg_high_var"] = ast_non_pg.astype(int)
+
+    pts_like = pn_lower.map(_cbb_points_like_prop)
+    tourney_pts = is_tr_s & pts_like
+    raw_score = raw_score * np.where(ast_non_pg, CBB_AST_NON_PG_05_SCORE_MULT, 1.0)
+    raw_score = raw_score * np.where(tourney_pts, CBB_TOURNAMENT_POINTS_SCORE_MULT, 1.0)
 
     # Direction-aware edge gate (same idea as NBA step7): rank_score only when the
     # play-side adjusted edge is positive. Raw edge_adj = proj - line is negative for

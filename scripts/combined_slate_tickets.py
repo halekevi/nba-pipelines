@@ -54,6 +54,7 @@ import os
 import re
 import sys
 import unicodedata
+from collections import defaultdict
 from datetime import datetime, timezone
 from typing import List, Optional
 
@@ -69,6 +70,7 @@ REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file_
 if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 from utils.kelly_staking import fractional_kelly, leg_edge_pct_for_kelly
+from utils.cbb_tourney_metadata import CBB_AP_TOP25_2026, CBB_TOURNEY_2026
 
 DEFAULT_NBA_PATH = os.path.join(REPO_ROOT, "NBA", "data", "outputs", "step8_all_direction_clean.xlsx")
 DEFAULT_CBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_cbb.xlsx")
@@ -434,42 +436,37 @@ TICKET_PROB_CAP = 0.999
 RANK_SCORE_SIGMOID_SCALE = 0.4
 DEFAULT_LEG_PROB_FALLBACK = 0.50
 
+# Limit how many distinct generated slips may include the same player (reduces single-leg cascade risk).
+MAX_SLIPS_PER_PLAYER = 2
+
+
+def _ticket_cap_players_from_rows(rows: list) -> set[str]:
+    out: set[str] = set()
+    for r in rows:
+        p = _norm_player_join(r.get("player"))
+        if p:
+            out.add(p)
+    return out
+
+
+def _ticket_cap_can_add(rows: list, counts: dict[str, int] | None, cap: int = MAX_SLIPS_PER_PLAYER) -> bool:
+    if counts is None or cap <= 0:
+        return True
+    for p in _ticket_cap_players_from_rows(rows):
+        if int(counts.get(p, 0)) >= cap:
+            return False
+    return True
+
+
+def _ticket_cap_register(rows: list, counts: dict[str, int] | None) -> None:
+    if not counts:
+        return
+    for p in _ticket_cap_players_from_rows(rows):
+        counts[p] = int(counts.get(p, 0)) + 1
+
 
 def min_ev_for_ticket(n_legs: int) -> float:
     return MIN_TICKET_EV_BY_LEGS.get(int(n_legs), MIN_TICKET_EV_DEFAULT)
-
-# 2026 NCAA tournament + AP Top 25 metadata (CBB enrichment).
-# Keys follow abbreviations used in our CBB files.
-# Schedule: WCBB title Sun 2026-04-05; men's title Mon 2026-04-06 (Michigan vs UConn).
-CBB_TOURNEY_2026 = {
-    "DUKE": (1, "East"), "CONN": (2, "East"), "MSU": (3, "East"), "KU": (4, "East"),
-    "SJU": (5, "East"), "LOU": (6, "East"), "UCLA": (7, "East"), "OSU": (8, "East"),
-    "TCU": (9, "East"), "UCF": (10, "East"), "USF": (11, "East"), "UNI": (12, "East"),
-    "CBU": (13, "East"), "NDSU": (14, "East"), "FUR": (15, "East"), "SIEN": (16, "East"),
-    "ARIZ": (1, "West"), "PUR": (2, "West"), "GONZ": (3, "West"), "ARK": (4, "West"),
-    "WIS": (5, "West"), "BYU": (6, "West"), "MIA": (7, "West"), "VILL": (8, "West"),
-    "UST": (9, "West"), "MIZZ": (10, "West"), "TEX": (11, "West"), "NCSU": (11, "West"),
-    "HP": (12, "West"), "HAW": (13, "West"), "KSU": (14, "West"), "QUC": (15, "West"),
-    "LIU": (16, "West"),
-    "MICH": (1, "Midwest"), "ISU": (2, "Midwest"), "UVA": (3, "Midwest"), "ALA": (4, "Midwest"),
-    "TTU": (5, "Midwest"), "TENN": (6, "Midwest"), "UK": (7, "Midwest"), "UGA": (8, "Midwest"),
-    "SLU": (9, "Midwest"), "SCU": (10, "Midwest"), "M-OH": (11, "Midwest"), "SMU": (11, "Midwest"),
-    "AKR": (12, "Midwest"), "HOF": (13, "Midwest"), "WRST": (14, "Midwest"), "TNST": (15, "Midwest"),
-    "HOW": (16, "Midwest"), "UMBC": (16, "Midwest"),
-    "FLA": (1, "South"), "HOU": (2, "South"), "ILL": (3, "South"), "NEB": (4, "South"),
-    "VAN": (5, "South"), "UNC": (6, "South"), "SMC": (7, "South"), "CLEM": (8, "South"),
-    "IOWA": (9, "South"), "TA&M": (10, "South"), "VCU": (11, "South"), "MCN": (12, "South"),
-    "TROY": (13, "South"), "PENN": (14, "South"), "IDA": (15, "South"),
-    "PV": (16, "South"), "LEH": (16, "South"),
-}
-
-CBB_AP_TOP25_2026 = {
-    "DUKE": 1, "ARIZ": 2, "MICH": 3, "FLA": 4, "HOU": 5, "ISU": 6, "CONN": 7,
-    "PUR": 8, "UVA": 9, "SJU": 10, "MSU": 11, "GONZ": 12, "ILL": 13, "ARK": 14,
-    "NEB": 15, "VAN": 16, "KU": 17, "ALA": 18, "WIS": 19, "TTU": 20, "UNC": 21,
-    "SMC": 22, "LOU": 23, "MIA": 23, "TENN": 25,
-}
-
 
 def _norm_team_abbr(v: object) -> str:
     return str(v or "").strip().upper()
@@ -2547,6 +2544,13 @@ def load_cbb(path: str) -> pd.DataFrame:
     if "ncaa_rank" in df.columns:
         df["ncaa_rank"] = pd.to_numeric(df["ncaa_rank"], errors="coerce")
 
+    if "team_seed" in df.columns and "opp_seed" in df.columns:
+        _ts = pd.to_numeric(df["team_seed"], errors="coerce")
+        _os = pd.to_numeric(df["opp_seed"], errors="coerce")
+        df["is_tournament_game"] = ((_ts.notna()) & (_ts > 0)) | ((_os.notna()) & (_os > 0))
+    else:
+        df["is_tournament_game"] = False
+
     return df
 
 
@@ -3744,6 +3748,15 @@ def build_single_structure_ticket(
         return None
 
     if counters is not None:
+        pct_cap = counters.get("player_ticket_counts")
+        if pct_cap is not None and len(cand) > 0 and "player" in cand.columns:
+            pn = cand["player"].map(_norm_player_join)
+            cap_ok = pn.eq("") | pn.map(lambda p: int(pct_cap.get(p, 0)) < MAX_SLIPS_PER_PLAYER)
+            cand = cand[cap_ok].copy()
+    if cand.empty:
+        return None
+
+    if counters is not None:
         counters["total_eligible_count"] += int(len(cand))
 
     cand = _attach_ticket_pick_order(cand, ticket_sort_mode)
@@ -3814,6 +3827,11 @@ def build_single_structure_ticket(
         expected_win_rate = 0.78
     else:
         expected_win_rate = 0.68
+
+    pct_out = counters.get("player_ticket_counts") if counters else None
+    if pct_out is not None and not _ticket_cap_can_add(rows, pct_out):
+        return None
+    _ticket_cap_register(rows, pct_out)
 
     return {
         "key": frozenset((str(r.get("player", "")) + "|" + str(r.get("prop_type", ""))).strip() for r in rows),
@@ -3995,6 +4013,7 @@ def build_tickets(
     leg_min_hit_by_n: dict[int, float] | None = None,
     prioritize_ticket_hit: bool = False,
     ticket_sort_mode: str = "rank",
+    player_ticket_counts: dict[str, int] | None = None,
 ) -> list:
     """
     Smart ticket builder with quality filters per leg count.
@@ -4134,6 +4153,8 @@ def build_tickets(
                     continue
                 if prioritize_ticket_hit and ep < float(MIN_PRIORITIZE_MODELED_POWER_WIN_PROB):
                     continue
+                if not _ticket_cap_can_add(ticket_rows, player_ticket_counts):
+                    continue
 
                 tickets.append(
                     {
@@ -4154,6 +4175,7 @@ def build_tickets(
                         "correlation_audit": caudit,
                     }
                 )
+                _ticket_cap_register(ticket_rows, player_ticket_counts)
 
         if len(eligible) > n_legs:
             eligible = eligible.iloc[1:].reset_index(drop=True)
@@ -4176,6 +4198,7 @@ def build_mixed_picktype_tickets(
     min_leg_hit_rate: float | None = None,
     prioritize_ticket_hit: bool = False,
     ticket_sort_mode: str = "rank",
+    player_ticket_counts: dict[str, int] | None = None,
 ) -> list:
     """
     Deterministic ticket builder that enforces a minimum number of Standard legs,
@@ -4299,6 +4322,11 @@ def build_mixed_picktype_tickets(
 
                 key = frozenset((str(x.get("player", "")) + "|" + str(x.get("prop_type", ""))).strip() for x in legs)
                 if key not in [t["key"] for t in tickets]:
+                    if not _ticket_cap_can_add(legs, player_ticket_counts):
+                        std_start = min(std_start + 1, max(len(std) - 1, 0))
+                        if len(gob) > 0:
+                            gob_start = min(gob_start + 1, max(len(gob) - 1, 0))
+                        continue
                     tickets.append(
                         {
                             "key": key,
@@ -4318,6 +4346,7 @@ def build_mixed_picktype_tickets(
                             "correlation_audit": caudit,
                         }
                     )
+                    _ticket_cap_register(legs, player_ticket_counts)
 
         # Slide window to create different combos
         if len(std) > 0:
@@ -4342,6 +4371,7 @@ def build_final_web_ticket_groups(
     leg_min_hit_by_n: dict[int, float] | None = None,
     prioritize_ticket_hit: bool = False,
     ticket_sort_mode: str = "rank",
+    player_ticket_counts: dict[str, int] | None = None,
 ):
     def apply_filters(df):
         mask = pd.Series(True, index=df.index)
@@ -4372,6 +4402,8 @@ def build_final_web_ticket_groups(
             return df
         return df.sort_values("rank_score", ascending=False, na_position="last")
 
+    _pct: dict[str, int] = player_ticket_counts if player_ticket_counts is not None else defaultdict(int)
+
     nba_filtered = apply_filters(nba_pool)
     nba_mix, nba_std, nba_gob = _split_sg(nba_filtered)
 
@@ -4396,6 +4428,7 @@ def build_final_web_ticket_groups(
                 min_leg_hit_rate=_min_hr_for_n(n),
                 prioritize_ticket_hit=prioritize_ticket_hit,
                 ticket_sort_mode=ticket_sort_mode,
+                player_ticket_counts=_pct,
             )
             if tix:
                 groups.append((f"FINAL {n}-Leg (Std+Gob {label})", tix, None))
@@ -4411,6 +4444,7 @@ def build_final_web_ticket_groups(
                 leg_min_hit_by_n=leg_min_hit_by_n,
                 prioritize_ticket_hit=prioritize_ticket_hit,
                 ticket_sort_mode=ticket_sort_mode,
+                player_ticket_counts=_pct,
             )
             if tix:
                 groups.append((f"FINAL {n}-Leg STANDARD ONLY ({label})", tix, None))
@@ -4464,6 +4498,7 @@ def build_final_web_ticket_groups(
                     leg_min_hit_by_n=leg_min_hit_by_n,
                     prioritize_ticket_hit=prioritize_ticket_hit,
                     ticket_sort_mode=ticket_sort_mode,
+                    player_ticket_counts=_pct,
                 )
                 if tix:
                     groups.append((f"FINAL {n}-Leg CROSS-SPORT (Std+Gob best)", tix, None))
@@ -4483,6 +4518,7 @@ def build_final_web_ticket_groups(
                     leg_min_hit_by_n=leg_min_hit_by_n,
                     prioritize_ticket_hit=prioritize_ticket_hit,
                     ticket_sort_mode=ticket_sort_mode,
+                    player_ticket_counts=_pct,
                 )
                 if tix:
                     groups.append((f"FINAL {n}-Leg CROSS-SPORT (Standard best)", tix, None))
@@ -4629,6 +4665,7 @@ def build_cross_pipeline_ticket_bundle(
     sport_pools: list[tuple[str, pd.DataFrame | None]],
     max_legs: int = CROSS_PIPELINE_MAX_LEGS,
     ticket_sort_mode: str = "rank",
+    player_ticket_counts: dict[str, int] | None = None,
 ) -> list[tuple[str, dict]]:
     """
     Up to three tickets (each ≤ max_legs, default 6):
@@ -4645,6 +4682,9 @@ def build_cross_pipeline_ticket_bundle(
         legs = _collect_cross_pipeline_rows(sport_pools, mode, max_legs, ticket_sort_mode=ticket_sort_mode)
         tix = _finalize_cross_pipeline_ticket(legs, ttype)
         if tix is not None:
+            if not _ticket_cap_can_add(tix["rows"], player_ticket_counts):
+                continue
+            _ticket_cap_register(tix["rows"], player_ticket_counts)
             out.append((sheet[:31], tix))
     return out
 
@@ -5875,6 +5915,7 @@ def main():
         "def_tier_filtered_count": def_tier_filtered_count,
         "ban_list_filtered_count": ban_list_filtered_count,
         "total_eligible_count": total_eligible_count,
+        "player_ticket_counts": defaultdict(int),
     }
 
     def add_structured_sport_tickets(
@@ -6120,7 +6161,10 @@ def main():
         ("NBA1H", pool(nba1h) if nba1h is not None and len(nba1h) > 0 else None),
     ]
     cross_bundle = build_cross_pipeline_ticket_bundle(
-        _cross_pools, max_legs=CROSS_PIPELINE_MAX_LEGS, ticket_sort_mode=_ticket_sort
+        _cross_pools,
+        max_legs=CROSS_PIPELINE_MAX_LEGS,
+        ticket_sort_mode=_ticket_sort,
+        player_ticket_counts=counters["player_ticket_counts"],
     )
     mix_keys = ("cross_pipeline_standard", "cross_pipeline_goblin", "cross_pipeline_mix")
     generated_tickets.setdefault("MIX", {})

@@ -415,7 +415,9 @@ def _prop_hit_rate_prior(prop_norm: str, direction: str, pick_type: str = "Stand
     if pt == "Goblin":
         # Goblin lines are set below expected outcome — each level boosts hit rate
         bonus = {1: 0.06, 2: 0.10, 3: 0.14}.get(dev, 0.06)
-        return float(min(base + bonus, 0.90))
+        # Shots / saves Goblin lines at 0.5–1.5 empirically clear far more often than generic priors imply.
+        goblin_cap = 0.95 if key in ("saves", "shots_on_target", "shots") else 0.90
+        return float(min(base + bonus, goblin_cap))
     return float(base)
 
 
