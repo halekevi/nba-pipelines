@@ -244,6 +244,10 @@ PROP_NORM_MAP={
     # Other
     'offensive rebounds':'offensive rebounds','defensive rebounds':'defensive rebounds',
     'personal fouls':'personal fouls','fantasy score':'fantasy score',
+    # Milestone yes/no (actuals from box: 1.0 / 0.0 vs typical 0.5 line)
+    'double double':'double double','triple double':'triple double',
+    'double-double':'double double','triple-double':'triple double',
+    'dd':'double double','td':'triple double',
     # Combo props — display names from PP slate files
     'points (combo)':'points',
     'assists (combo)':'assists',

@@ -16,6 +16,7 @@ Fixes vs previous version:
   - Each actuals row now includes raw stat columns (PTS, REB, AST, 3PM, etc.)
     so the grader's stat_from_row() can look them up directly
   - 3-PT Made no longer voids as UNSUPPORTED_PROP
+  - Double Double / Triple Double actuals (1.0/0.0) from PTS/REB/AST/STL/BLK >= 10 rules
 """
 
 import argparse
@@ -32,6 +33,23 @@ HEADERS = {
 }
 
 # ── Build all prop rows from a stat_map ──────────────────────────────────────
+def _double_triple_from_five(pts, reb, ast, stl, blk):
+    """
+    PrizePicks-style: 10+ in two of PTS/REB/AST/STL/BLK => double-double (1.0 else 0.0);
+    10+ in three => triple-double. Missing stat treated as not qualifying (skip in count).
+    """
+    n = 0
+    for x in (pts, reb, ast, stl, blk):
+        if x is None:
+            continue
+        try:
+            if float(x) >= 10.0:
+                n += 1
+        except (TypeError, ValueError):
+            continue
+    return (1.0 if n >= 2 else 0.0), (1.0 if n >= 3 else 0.0)
+
+
 def parse_stats(player_name, t_abbr, stat_map):
     pts   = stat_map.get('PTS')
     reb   = stat_map.get('REB')
@@ -63,6 +81,8 @@ def parse_stats(player_name, t_abbr, stat_map):
     pa  = pts + ast       if all(x is not None for x in [pts, ast])       else None
     ra  = reb + ast       if all(x is not None for x in [reb, ast])       else None
     bs  = blk + stl       if all(x is not None for x in [blk, stl])       else None
+
+    dd_actual, td_actual = _double_triple_from_five(pts, reb, ast, stl, blk)
 
     # PrizePicks NBA Fantasy Score:
     # PTS*1.0 + REB*1.2 + AST*1.5 + STL*3.0 + BLK*3.0 - TOV*1.0
@@ -103,6 +123,9 @@ def parse_stats(player_name, t_abbr, stat_map):
         'Pts+Asts':               pa,
         'Rebs+Asts':              ra,
         'Blks+Stls':              bs,
+        # Yes/no markets from same box score (O/U vs 0.5)
+        'Double Double':          dd_actual,
+        'Triple Double':          td_actual,
     }
 
     # ── Raw stat columns on every row so grader's stat_from_row() can look

@@ -81,6 +81,33 @@ def to_float(x) -> float:
         return np.nan
 
 
+def _count_stat_categories_ge_10(row: pd.Series) -> int:
+    """How many of PTS/REB/AST/STL/BLK are present and >= 10 (PP double/triple-double rules)."""
+    n = 0
+    for c in ("PTS", "REB", "AST", "STL", "BLK"):
+        if c not in row.index:
+            continue
+        v = to_float(row.get(c))
+        if not np.isnan(v) and v >= 10.0:
+            n += 1
+    return n
+
+
+def attach_dd_td_to_wide_actuals(actuals: pd.DataFrame) -> pd.DataFrame:
+    """Ensure DD / TRIPLE_DOUBLE 0/1 columns exist (derived from counting stats)."""
+    if actuals is None or actuals.empty:
+        return actuals
+    cols = [c for c in ("PTS", "REB", "AST", "STL", "BLK") if c in actuals.columns]
+    if not cols:
+        return actuals
+    out = actuals.copy()
+    mat = out[cols].apply(pd.to_numeric, errors="coerce")
+    n_ge = (mat >= 10.0).sum(axis=1)
+    out["DD"] = (n_ge >= 2).astype(float)
+    out["TRIPLE_DOUBLE"] = (n_ge >= 3).astype(float)
+    return out
+
+
 def _first_existing_col(df: pd.DataFrame, candidates: List[str]) -> Optional[str]:
     for c in candidates:
         if c in df.columns:
@@ -124,6 +151,14 @@ _PROP_MAP = {
     "oreb": "oreb", "offensiverebounds": "oreb", "offrebounds": "oreb",
     "dreb": "dreb", "defensiverebounds": "dreb", "defrebounds": "dreb",
     "min": "min", "mins": "min", "minutes": "min",
+
+    # Milestone (0/1 actual for O/U vs 0.5)
+    "dd": "dd",
+    "td": "td",
+    "doubledouble": "dd",
+    "double_double": "dd",
+    "tripledouble": "td",
+    "triple_double": "td",
 }
 
 
@@ -187,6 +222,16 @@ def stat_from_row(actuals_row: pd.Series, prop_norm: str) -> float:
     if p == "oreb": return oreb
     if p == "dreb": return dreb
     if p == "min": return mins
+    if p == "dd":
+        v = _get_stat(actuals_row, ["DD", "dd"])
+        if not np.isnan(v):
+            return v
+        return 1.0 if _count_stat_categories_ge_10(actuals_row) >= 2 else 0.0
+    if p == "td":
+        v = _get_stat(actuals_row, ["TRIPLE_DOUBLE", "triple_double", "TD"])
+        if not np.isnan(v):
+            return v
+        return 1.0 if _count_stat_categories_ge_10(actuals_row) >= 3 else 0.0
     if p == "fantasy":
         # same formula you’re using now
         return pts + 1.2*reb + 1.5*ast + 3*stl + 3*blk - tov
@@ -228,6 +273,11 @@ def main():
     ap.add_argument("--actuals", required=True, help="Actuals CSV from ESPN fetcher")
     ap.add_argument("--out",     required=True, help="Output .xlsx")
     ap.add_argument("--date",    required=False, help="Optional (ignored) — kept for backward compat")
+    ap.add_argument(
+        "--drop-unsupported",
+        action="store_true",
+        help="Omit slate rows that grade VOID with UNSUPPORTED_PROP (no box-score formula).",
+    )
     args = ap.parse_args()
 
     slate   = pd.read_csv(args.slate,   dtype=str).fillna("")
@@ -239,8 +289,11 @@ def main():
     # Strategy: if the actuals already have raw stat columns attached (new fetch_actuals),
     # use them directly. Otherwise pivot prop_type→actual to build wide columns.
     RAW_STAT_COLS = ["PTS","REB","AST","STL","BLK","TO","FGM","FGA",
-                     "3PM","3PT","3PA","FTM","FTA","2PM","2PA","OREB","DREB","PF","MIN"]
-    has_raw_cols = any(c in actuals_raw.columns for c in RAW_STAT_COLS)
+                     "3PM","3PT","3PA","FTM","FTA","2PM","2PA","OREB","DREB","PF","MIN",
+                     "DD","TRIPLE_DOUBLE"]
+    # Wide actuals: need real box columns (not DD alone).
+    _WIDE_MARKERS = ("PTS", "REB", "AST", "STL", "BLK", "TO", "FGM", "FGA", "3PM", "MIN")
+    has_raw_cols = any(c in actuals_raw.columns for c in _WIDE_MARKERS)
 
     if has_raw_cols:
         # New fetch_actuals — raw stat columns already present, just use as-is
@@ -258,6 +311,7 @@ def main():
             "Two Pointers Made": "2PM", "Two Pointers Attempted": "2PA",
             "Offensive Rebounds": "OREB", "Defensive Rebounds": "DREB",
             "Personal Fouls": "PF",
+            "Double Double": "DD", "Triple Double": "TRIPLE_DOUBLE",
         }
         id_cols = [c for c in ["player", "team", "espn_athlete_id", "MIN"] if c in actuals_raw.columns]
         pivot_rows = []
@@ -282,6 +336,8 @@ def main():
             pivot_rows.append(row)
         actuals = pd.DataFrame(pivot_rows).fillna("")
         print(f"  Actuals: long format detected — pivoted to {len(actuals)} player rows with stat columns")
+
+    actuals = attach_dd_td_to_wide_actuals(actuals)
 
     # Required slate columns
     for req in ("prop_norm", "line"):
@@ -543,6 +599,13 @@ def main():
         for k, v in mm.items():
             print(f"  - {k}: {v}")
     print("="*55 + "\n")
+
+    if args.drop_unsupported:
+        m = (out["result"] == "VOID") & (out["void_reason"].astype(str) == "UNSUPPORTED_PROP")
+        n_drop = int(m.sum())
+        if n_drop:
+            out = out.loc[~m].reset_index(drop=True)
+            print(f"  [drop-unsupported] removed {n_drop} UNSUPPORTED_PROP row(s) from graded output\n")
 
     # Build Excel sheets
     def build_summary_block(df: pd.DataFrame, label_col: str, label_vals: list, title: str) -> pd.DataFrame:

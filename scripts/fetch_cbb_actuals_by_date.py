@@ -15,7 +15,8 @@ Inputs:
 
 Output columns (per athlete aggregated per event):
 - date, event_id, team_abbr, opponent_abbr, espn_athlete_id, player_name,
-  MIN, PTS, REB, AST, STL, BLK, TO, FG, FGA, 3PT, 3PTA, FT, FTA
+  MIN, PTS, REB, AST, STL, BLK, TO, FG, FGA, 3PT, 3PTA, FT, FTA,
+  DD, TRIPLE_DOUBLE (1.0/0.0 from box: 10+ in two / three of PTS,REB,AST,STL,BLK)
 
 One-line examples:
   py -3.14 .\fetch_cbb_actuals_by_date.py --slate step5b_cbb.csv --out cbb_actuals.csv
@@ -201,17 +202,24 @@ def extract_player_rows_from_boxscore(summary: Dict[str, Any]) -> List[Dict[str,
                             return safe_float(stats[idx])
                     return None
 
+                pts, reb, ast = get_stat("PTS"), get_stat("REB"), get_stat("AST")
+                stl, blk = get_stat("STL"), get_stat("BLK")
+                n_dd = sum(
+                    1
+                    for x in (pts, reb, ast, stl, blk)
+                    if x is not None and float(x) >= 10.0
+                )
                 row = {
                     "team_abbr": team_abbr,
                     "opponent_abbr": opp_abbr,
                     "espn_athlete_id": aid,
                     "player_name": name,
                     "MIN": get_stat("MIN"),
-                    "PTS": get_stat("PTS"),
-                    "REB": get_stat("REB"),
-                    "AST": get_stat("AST"),
-                    "STL": get_stat("STL"),
-                    "BLK": get_stat("BLK"),
+                    "PTS": pts,
+                    "REB": reb,
+                    "AST": ast,
+                    "STL": stl,
+                    "BLK": blk,
                     "TO":  get_stat("TO"),
                     "FG":  get_stat("FG"),
                     "FGA": get_stat("FGA"),
@@ -219,6 +227,8 @@ def extract_player_rows_from_boxscore(summary: Dict[str, Any]) -> List[Dict[str,
                     "3PTA": get_stat("3PTA"),
                     "FT":  get_stat("FT"),
                     "FTA": get_stat("FTA"),
+                    "DD": 1.0 if n_dd >= 2 else 0.0,
+                    "TRIPLE_DOUBLE": 1.0 if n_dd >= 3 else 0.0,
                 }
                 out.append(row)
 
@@ -308,7 +318,8 @@ def main():
     final_rows = list(dedup.values())
 
     fieldnames = ["date","event_id","team_abbr","opponent_abbr","espn_athlete_id","player_name",
-                  "MIN","PTS","REB","AST","STL","BLK","TO","FG","FGA","3PT","3PTA","FT","FTA"]
+                  "MIN","PTS","REB","AST","STL","BLK","TO","FG","FGA","3PT","3PTA","FT","FTA",
+                  "DD","TRIPLE_DOUBLE"]
 
     with open(args.out, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=fieldnames)
