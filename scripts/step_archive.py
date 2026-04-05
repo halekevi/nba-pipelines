@@ -23,7 +23,7 @@ import sqlite3
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -138,6 +138,61 @@ def _coalesce_line_series(df: pd.DataFrame) -> pd.Series:
     return out
 
 
+def _infer_row_grade_days(df: pd.DataFrame) -> pd.Series:
+    """
+    Per-row calendar date YYYY-MM-DD when inferable from slate columns; otherwise "".
+
+    If no column yields any parseable dates, returns all "" (caller should not filter).
+    """
+    if df is None or df.empty:
+        return pd.Series(dtype=object)
+    # Explicit date columns (avoid bare "Date" — often run/export metadata)
+    for col in ("game_date", "slate_game_date", "Game Date"):
+        if col not in df.columns:
+            continue
+        raw = pd.to_datetime(df[col], errors="coerce")
+        if raw.notna().any():
+            s = raw.dt.strftime("%Y-%m-%d")
+            return s.where(raw.notna(), "").fillna("").astype(str)
+    # Datetime columns → local calendar day
+    for col in ("game_time", "game_start", "fetched_at", "Game Time"):
+        if col not in df.columns:
+            continue
+        ts = pd.to_datetime(df[col], errors="coerce")
+        if ts.notna().any():
+            s = ts.dt.strftime("%Y-%m-%d")
+            return s.where(ts.notna(), "").fillna("").astype(str)
+    return pd.Series([""] * len(df), index=df.index, dtype=object)
+
+
+def filter_graded_rows_to_archive_date(df: pd.DataFrame, date: str, sport: str) -> pd.DataFrame:
+    """
+    Drop rows whose game day is known and does not match archive grade_date (YYYY-MM-DD).
+
+    Rows with no parseable game day are kept (same as pre-filter behavior).
+    """
+    if df is None or df.empty or not (date or "").strip():
+        return df
+    want = str(date).strip()[:10]
+    row_days = _infer_row_grade_days(df)
+    if row_days is None or len(row_days) != len(df):
+        return df
+    parsed = row_days.astype(str).str.strip().str[:10]
+    has_day = parsed.ne("") & parsed.ne("nan") & parsed.ne("NaT")
+    if not bool(has_day.any()):
+        return df
+    bad = has_day & parsed.ne(want)
+    n_bad = int(bad.sum())
+    if n_bad:
+        sp = str(sport).strip().upper()
+        print(
+            f"[archive] {sp} {want}: dropping {n_bad} graded row(s) "
+            f"whose game day != {want} (mixed-date slate)"
+        )
+        return df.loc[~bad].reset_index(drop=True)
+    return df
+
+
 def _row_over_under(df: pd.DataFrame, i: int) -> str:
     for k in (
         "final_bet_direction",
@@ -157,12 +212,15 @@ def _row_over_under(df: pd.DataFrame, i: int) -> str:
 
 # ── Archive ───────────────────────────────────────────────────────────────────
 
-def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
+def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> Tuple[int, pd.DataFrame]:
     """
     Upsert graded props into data/cache/{sport}_props_history.db (same key = refresh row).
 
     Reconciles result/margin from actual + line + side when possible so Prop Evaluation
     stays correct across NBA/CBB/NHL/MLB/Soccer even if the graded workbook still says VOID.
+
+    Rows whose slate game day is parseable and differs from ``date`` are dropped before
+    insert so mixed-date slates do not pollute props_history.
 
     Parameters
     ----------
@@ -172,13 +230,17 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
 
     Returns
     -------
-    Number of valid graded rows processed (each upserts one props_history row).
+    (number of valid graded rows processed, filtered DataFrame used for archive / CLV)
     """
     if graded_df is None or graded_df.empty:
         print(f"[archive] {sport}: empty graded DataFrame — nothing to archive.")
-        return 0
+        return 0, graded_df
 
     sport_up = str(sport).strip().upper()
+    graded_df = filter_graded_rows_to_archive_date(graded_df.copy(), date, sport_up)
+    if graded_df.empty:
+        print(f"[archive] {sport}: no rows left after game-date filter — nothing to archive.")
+        return 0, graded_df
     now_iso = datetime.now(timezone.utc).isoformat()
 
     player   = _col_first(graded_df, ("player", "player_name", "pp_player")).map(_norm_player)
@@ -239,7 +301,7 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
 
     if not rows:
         print(f"[archive] {sport}: 0 valid graded rows — nothing to insert.")
-        return 0
+        return 0, graded_df
 
     conn = _connect(sport)
     # SQLite 3.24+: upsert so re-archiving after a re-grade refreshes result/margin/void_reason.
@@ -292,7 +354,7 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
     conn.close()
     mode = "upserted" if _upsert_ok else "inserted (no upsert on this SQLite)"
     print(f"[archive] {sport} {date}: {mode} {len(rows)} rows (db: {_db_path(sport).name})")
-    return len(rows)
+    return len(rows), graded_df
 
 
 def archive_clv_log(sport: str, graded_df: pd.DataFrame, date: str) -> int:
@@ -556,7 +618,7 @@ def main() -> None:
         df = pd.read_csv(str(graded_path))
 
     df_used = df
-    n = archive_graded(args.sport, df_used, args.date)
+    n, df_used = archive_graded(args.sport, df_used, args.date)
     # NBA/CBB/WCBB/MLB slate_grader workbooks: sheet 0 is Summary; prop rows live on "Box Raw".
     if n == 0 and args.sheet is None and ext in (".xlsx", ".xlsm", ".xls"):
         try:
@@ -565,9 +627,9 @@ def main() -> None:
                 warnings.simplefilter("ignore")
                 df_br = pd.read_excel(str(graded_path), sheet_name="Box Raw", engine="openpyxl")
             if df_br is not None and not df_br.empty:
-                n2 = archive_graded(args.sport, df_br, args.date)
+                n2, df_br_f = archive_graded(args.sport, df_br, args.date)
                 if n2 > 0:
-                    df_used = df_br
+                    df_used = df_br_f
                     n = n2
         except Exception:
             pass

@@ -5701,6 +5701,11 @@ def main():
         # Soccer boards often span several upcoming ET days; drop only rows clearly before the pipeline target.
         if sport_label == "Soccer":
             stale = dated & (gd_str < td)
+        elif sport_label == "Combined" and "sport" in df.columns:
+            # Same rule as strict date check: soccer allows future ET days; other sports must match target.
+            su = df["sport"].astype(str).str.upper()
+            is_soc = su == "SOCCER"
+            stale = dated & ((gd_str < td) | (~is_soc & (gd_str != td)))
         else:
             stale = dated & (gd_str != td)
         n_stale = int(stale.sum())
@@ -5739,6 +5744,8 @@ def main():
         underdog_csv=str(args.underdog_csv or ""),
         draftkings_csv=str(args.draftkings_csv or ""),
     )
+
+    combined = drop_stale_rows(combined, args.date, "Combined")
 
     # Per-sport Excel sheets use SLATE_COLS — propagate UD/DK lines from combined onto each.
     nba = propagate_alt_book_lines_to_sport_frame(nba, combined, ("NBA",))
