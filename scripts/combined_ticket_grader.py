@@ -815,6 +815,21 @@ def enrich_ticket_backtest_with_payouts(ticket_bt: pd.DataFrame, ticket_results:
             }
         )
         out = out.merge(sub, on="ticket_id", how="left")
+
+    # Left merge: tickets present in only one mode get NaN for the other mode's columns.
+    # Treat missing payout_method_* as conservative flat_fallback (matches missing delta path).
+    _pm_cols = [c for c in ("payout_method_power", "payout_method_flex") if c in out.columns]
+    for _c in _pm_cols:
+        out[_c] = out[_c].fillna("flat_fallback")
+
+    _allowed_pm = {"curve", "flat_fallback"}
+    _bad_nan = [_c for _c in _pm_cols if out[_c].isna().any()]
+    _bad_val = [_c for _c in _pm_cols if not out[_c].astype(str).str.strip().isin(_allowed_pm).all()]
+    assert not _bad_nan and not _bad_val, (
+        "enrich_ticket_backtest_with_payouts: payout_method_* QA failed after fillna — "
+        f"NaN in columns={_bad_nan}, disallowed/blank values in columns={_bad_val}"
+    )
+
     return out
 
 
