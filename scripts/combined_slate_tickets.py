@@ -350,6 +350,42 @@ def attach_alt_book_lines(
     return out
 
 
+def propagate_alt_book_lines_to_sport_frame(
+    sport_df: pd.DataFrame | None,
+    combined: pd.DataFrame,
+    sport_labels: tuple[str, ...],
+) -> pd.DataFrame | None:
+    """
+    Copy line_underdog / line_draftkings from combined onto a per-sport slate (NBA Slate, CBB Slate, ...).
+    Join keys match attach_alt_book_lines (team + player + prop norms).
+    """
+    if sport_df is None or len(sport_df) == 0:
+        return sport_df
+    out = sport_df.copy()
+    if "line_underdog" not in combined.columns:
+        out["line_underdog"] = np.nan
+        out["line_draftkings"] = np.nan
+        return out
+    labels = {s.upper() for s in sport_labels}
+    sub = combined[combined["sport"].astype(str).str.upper().isin(labels)].copy()
+    if sub.empty:
+        out["line_underdog"] = np.nan
+        out["line_draftkings"] = np.nan
+        return out
+    sub = sub.copy()
+    sub["_jt"] = [_norm_team_join(t, s) for t, s in zip(sub["team"], sub["sport"])]
+    sub["_jp"] = sub["player"].map(_norm_player_join)
+    sub["_jpr"] = sub["prop_type"].map(_norm_prop_label)
+    agg = sub.groupby(["_jt", "_jp", "_jpr"], as_index=False).agg(
+        {"line_underdog": "first", "line_draftkings": "first"}
+    )
+    out["_jt"] = [_norm_team_join(t, s) for t, s in zip(out["team"], out["sport"])]
+    out["_jp"] = out["player"].map(_norm_player_join)
+    out["_jpr"] = out["prop_type"].map(_norm_prop_label)
+    out = out.merge(agg, on=["_jt", "_jp", "_jpr"], how="left")
+    return out.drop(columns=["_jt", "_jp", "_jpr"])
+
+
 def _prop_priority_bonus(v: object) -> float:
     p = _norm_prop_label(v)
     if p in TIER1_PROPS:
@@ -4631,6 +4667,8 @@ SLATE_COLS = [
     "prop_type",
     "pick_type",
     "line",
+    "line_underdog",
+    "line_draftkings",
     "direction",
     "edge",
     "projection",
@@ -4656,7 +4694,7 @@ SLATE_COLS = [
     "opp_vs_avg_pct",
     "game_time",
 ]
-SLATE_WIDTHS = [6, 5, 10, 20, 6, 6, 7, 10, 8, 7, 10, 8, 10, 18, 10, 6, 8, 7, 10, 10, 8, 10, 7, 7, 9, 10, 8, 8, 10, 9, 10, 10, 8, 9, 8, 10, 7, 8, 10, 16]
+SLATE_WIDTHS = [6, 5, 10, 20, 6, 6, 7, 10, 8, 7, 10, 8, 10, 18, 10, 6, 11, 11, 8, 7, 10, 10, 8, 10, 7, 7, 9, 10, 8, 8, 10, 9, 10, 10, 8, 9, 8, 10, 7, 8, 10, 16]
 SLATE_HDRS = [
     "Sport",
     "Tier",
@@ -4674,6 +4712,8 @@ SLATE_HDRS = [
     "Prop",
     "Pick Type",
     "Line",
+    "Line UD",
+    "Line DK",
     "Dir",
     "Edge",
     "Proj",
@@ -5699,6 +5739,25 @@ def main():
         underdog_csv=str(args.underdog_csv or ""),
         draftkings_csv=str(args.draftkings_csv or ""),
     )
+
+    # Per-sport Excel sheets use SLATE_COLS — propagate UD/DK lines from combined onto each.
+    nba = propagate_alt_book_lines_to_sport_frame(nba, combined, ("NBA",))
+    cbb = propagate_alt_book_lines_to_sport_frame(cbb, combined, ("CBB",))
+    nhl = propagate_alt_book_lines_to_sport_frame(nhl, combined, ("NHL",))
+    soccer = propagate_alt_book_lines_to_sport_frame(soccer, combined, ("Soccer",))
+    wcbb = propagate_alt_book_lines_to_sport_frame(wcbb, combined, ("WCBB",))
+    mlb = propagate_alt_book_lines_to_sport_frame(mlb, combined, ("MLB",))
+    nba1q = propagate_alt_book_lines_to_sport_frame(nba1q, combined, ("NBA1Q",))
+    nba1h = propagate_alt_book_lines_to_sport_frame(nba1h, combined, ("NBA1H",))
+
+    _n_ud = int(combined["line_underdog"].notna().sum()) if "line_underdog" in combined.columns else 0
+    _n_dk = int(combined["line_draftkings"].notna().sum()) if "line_draftkings" in combined.columns else 0
+    if _n_ud == 0 and _n_dk == 0:
+        print(
+            "  [alt-books] No Underdog/DraftKings lines merged (all blank). "
+            f"Fetch into outputs/{args.date}/underdog_props.csv and "
+            f"outputs/{args.date}/draftkings_props_nba.csv, then re-run this script."
+        )
 
     print(f"  {len(combined)} total props")
     for s in ("NBA", "CBB", "NHL", "Soccer", "MLB", "NBA1H", "NBA1Q", "WCBB"):
