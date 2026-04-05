@@ -68,6 +68,7 @@ def _ensure_schema(conn: sqlite3.Connection) -> None:
             edge          REAL,
             ml_prob       REAL,
             composite_hr  REAL,
+            void_reason   TEXT,
             created_at    TEXT,
             UNIQUE(sport, grade_date, player_name, prop_type, direction)
         )
@@ -102,6 +103,10 @@ def _ensure_schema(conn: sqlite3.Connection) -> None:
     conn.execute(
         "CREATE INDEX IF NOT EXISTS idx_clv_sport_date ON clv_log(sport, grade_date)"
     )
+    cur = conn.execute("PRAGMA table_info(props_history)")
+    ph_cols = {row[1] for row in cur.fetchall()}
+    if ph_cols and "void_reason" not in ph_cols:
+        conn.execute("ALTER TABLE props_history ADD COLUMN void_reason TEXT")
     conn.commit()
 
 
@@ -159,6 +164,9 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
     edge     = pd.to_numeric(_col_first(graded_df, ("edge",)), errors="coerce")
     ml_p     = pd.to_numeric(_col_first(graded_df, ("ml_prob",)), errors="coerce")
     comp_hr  = pd.to_numeric(_col_first(graded_df, ("composite_hit_rate", "composite_hr")), errors="coerce")
+    void_rsn = _col_first(
+        graded_df, ("void_reason_grade", "void_reason", "Void Reason")
+    ).astype(str).str.strip()
 
     rows = []
     for i in range(len(graded_df)):
@@ -170,6 +178,9 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
             res = "HIT"
         elif res == "LOSS":
             res = "MISS"
+        vr = void_rsn.iat[i]
+        if not vr or vr.lower() in ("nan", "none", "nat"):
+            vr = None
         rows.append((
             sport_up, date,
             player.iat[i], prop.iat[i],
@@ -182,6 +193,7 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
             None if pd.isna(edge.iat[i]) else float(edge.iat[i]),
             None if pd.isna(ml_p.iat[i]) else float(ml_p.iat[i]),
             None if pd.isna(comp_hr.iat[i]) else float(comp_hr.iat[i]),
+            vr,
             now_iso,
         ))
 
@@ -197,8 +209,8 @@ def archive_graded(sport: str, graded_df: pd.DataFrame, date: str) -> int:
                 INSERT OR IGNORE INTO props_history
                 (sport, grade_date, player_name, prop_type, line, direction,
                  actual_value, result, margin, opp_team, team, pick_type, tier,
-                 edge, ml_prob, composite_hr, created_at)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                 edge, ml_prob, composite_hr, void_reason, created_at)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
             """, row)
             if conn.total_changes > inserted:
                 inserted = conn.total_changes

@@ -20,6 +20,17 @@ CACHE = REPO / "data" / "cache"
 OUT_DIR = REPO / "ui_runner" / "data" / "grades_props"
 
 
+def _ensure_void_reason_column(conn: sqlite3.Connection) -> None:
+    try:
+        cur = conn.execute("PRAGMA table_info(props_history)")
+        cols = {r[1] for r in cur.fetchall()}
+        if cols and "void_reason" not in cols:
+            conn.execute("ALTER TABLE props_history ADD COLUMN void_reason TEXT")
+            conn.commit()
+    except Exception:
+        pass
+
+
 def _json_val(v):
     if v is None:
         return None
@@ -41,11 +52,13 @@ def main() -> None:
     for dbp in sorted(CACHE.glob("*_props_history.db")):
         try:
             conn = sqlite3.connect(str(dbp))
+            _ensure_void_reason_column(conn)
             conn.row_factory = sqlite3.Row
             cur = conn.execute(
                 """
                 SELECT sport, grade_date, player_name, prop_type, line, direction,
-                       actual_value, result, margin, opp_team, team, pick_type, tier, edge, ml_prob
+                       actual_value, result, margin, opp_team, team, pick_type, tier, edge, ml_prob,
+                       void_reason
                 FROM props_history
                 WHERE grade_date = ?
                 ORDER BY sport, player_name, prop_type, direction

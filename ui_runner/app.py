@@ -937,6 +937,18 @@ def _iter_props_history_db_paths():
     return sorted(cache.glob("*_props_history.db"))
 
 
+def _ensure_props_history_void_reason_column(conn: sqlite3.Connection) -> None:
+    """Older props_history DBs lack void_reason; add it so SELECT lists stay valid."""
+    try:
+        cur = conn.execute("PRAGMA table_info(props_history)")
+        cols = {r[1] for r in cur.fetchall()}
+        if cols and "void_reason" not in cols:
+            conn.execute("ALTER TABLE props_history ADD COLUMN void_reason TEXT")
+            conn.commit()
+    except Exception:
+        pass
+
+
 def _grades_insights_payload() -> dict:
     """Calibration (ml_prob buckets), edge-bucket hit rates, CLV summary from local SQLite archives."""
     rows_ml: list[tuple[float, float | None, str]] = []
@@ -1084,11 +1096,13 @@ def _grades_props_payload(date_str: str) -> dict[str, Any]:
         conn: sqlite3.Connection | None = None
         try:
             conn = sqlite3.connect(str(dbp))
+            _ensure_props_history_void_reason_column(conn)
             conn.row_factory = sqlite3.Row
             cur = conn.execute(
                 """
                 SELECT sport, grade_date, player_name, prop_type, line, direction,
-                       actual_value, result, margin, opp_team, team, pick_type, tier, edge, ml_prob
+                       actual_value, result, margin, opp_team, team, pick_type, tier, edge, ml_prob,
+                       void_reason
                 FROM props_history
                 WHERE grade_date = ?
                 ORDER BY sport, player_name, prop_type, direction
