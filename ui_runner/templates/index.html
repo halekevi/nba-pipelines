@@ -1549,7 +1549,7 @@ body::before{
 
 </div>
 
-<script src="/static/site-nav-chrome.js?v=20260408"></script>
+<script src="/static/site-nav-chrome.js?v=20260412"></script>
 <script>
 // ── Real PLAYER_DATA (last 10 games) ──────────────────────
 let ALL_SLATE = [];
@@ -1697,7 +1697,9 @@ async function loadSlateData() {
     } catch (err) {
       console.warn("loadSlateData failed:", err);
     }
-    await applyHeroSlateDate();
+    if (typeof window.applyHeroSlateDate === "function") {
+      await window.applyHeroSlateDate();
+    }
     renderEdges();
     renderStreaks();
     // buildSlateDataFromAllSlate() (2.2 MB fetch) is deferred until user opens a sport panel

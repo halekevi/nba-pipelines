@@ -25,6 +25,8 @@
       if (el) el.textContent = formatSlateDateDisplay(j.date);
     } catch (e) {}
   }
+  // Backwards-compat: some page scripts call this directly.
+  window.applyHeroSlateDate = applyHeroSlateDate;
 
   function formatLocalDateTime() {
     return new Date().toLocaleString(undefined, {
