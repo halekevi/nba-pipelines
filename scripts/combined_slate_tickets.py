@@ -1914,18 +1914,15 @@ canvas.leg-chart{width:100%!important;height:140px!important;}
 .filter-pill{background:rgba(14,18,34,.72);border:1px solid rgba(196,166,107,.20);border-radius:12px;padding:10px 16px;font-size:12px;color:#9aa4b2;margin-bottom:24px;backdrop-filter:blur(10px);}
 .filter-pill strong{color:var(--cyan);}
 
-/* group */
-.group{background:linear-gradient(160deg,rgba(22,27,47,.74) 0%,rgba(12,16,32,.70) 100%);border:1px solid rgba(196,166,107,.24);border-radius:16px;padding:20px;margin-bottom:24px;box-shadow:0 14px 32px rgba(0,0,0,.30),0 0 0 1px rgba(255,255,255,.03) inset;backdrop-filter:blur(12px);}
-.group-hdr{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+/* slip card (group title + slip body unified) */
+.ticket-group-band{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid rgba(255,255,255,.08);}
 .group-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.08em;color:var(--accent);}
 .group-meta{color:var(--muted);font-size:12px;}
 
 /* ticket card */
-.ticket{background:linear-gradient(160deg,rgba(24,30,52,.72) 0%,rgba(13,18,35,.68) 100%);border:1px solid rgba(196,166,107,.22);border-radius:14px;margin-bottom:16px;overflow:hidden;transition:transform .2s,box-shadow .2s;backdrop-filter:blur(10px);}
+.ticket{background:linear-gradient(160deg,rgba(24,30,52,.72) 0%,rgba(13,18,35,.68) 100%);border:1px solid rgba(196,166,107,.22);border-radius:14px;margin-bottom:24px;overflow:hidden;transition:transform .2s,box-shadow .2s;backdrop-filter:blur(10px);}
 .ticket:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.35),0 0 0 1px rgba(196,166,107,.20) inset;}
-.ticket-accent{width:5px;background:linear-gradient(180deg,var(--accent),var(--cyan));flex-shrink:0;}
-.ticket-inner{display:flex;}
-.ticket-body{flex:1;padding:14px 16px;}
+.ticket-body{padding:16px 18px;}
 .ticket-hdr{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
 .ticket-no{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.08em;color:var(--text);}
 .kpi-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;}
@@ -1958,7 +1955,6 @@ html[data-theme="light"] nav{
   border-bottom:1px solid rgba(196,166,107,.24);
 }
 html[data-theme="light"] .filter-pill,
-html[data-theme="light"] .group,
 html[data-theme="light"] .ticket{
   background:rgba(255,255,255,.74);
   border:1px solid rgba(196,166,107,.22);
@@ -2132,13 +2128,12 @@ html[data-theme="light"] .ticket{
 """)
 
     for g in payload.get("groups", []):
-        html_parts.append(f"""
-<div class="group">
-  <div class="group-hdr">
-    <div class="group-title">{g.get('group_name','Group')}</div>
-    <div class="group-meta">Legs: {g.get('n_legs','')} &nbsp;|&nbsp; Power: {g.get('power_payout','')}x &nbsp;|&nbsp; Flex: {g.get('flex_payout','')}x</div>
-  </div>
-""")
+        gname = g.get("group_name", "Group")
+        accent = _sport_accent(_group_sport(gname))
+        group_meta = (
+            f"Legs: {g.get('n_legs', '')} &nbsp;|&nbsp; Power: {g.get('power_payout', '')}x "
+            f"&nbsp;|&nbsp; Flex: {g.get('flex_payout', '')}x"
+        )
         for t in g.get("tickets", []):
             avg_hr = t.get("avg_hit_rate")
             avg_rs = t.get("avg_rank_score")
@@ -2171,10 +2166,12 @@ html[data-theme="light"] .ticket{
                     mult_kpi = ""
 
             html_parts.append(f"""
-  <div class="ticket">
-    <div class="ticket-inner">
-      <div class="ticket-accent"></div>
-      <div class="ticket-body">
+<div class="ticket" style="border-left:4px solid {accent};">
+  <div class="ticket-body">
+    <div class="ticket-group-band">
+      <div class="group-title" style="color:{accent};">{gname}</div>
+      <div class="group-meta">{group_meta}</div>
+    </div>
         <div class="ticket-hdr">
           <div class="ticket-no">Ticket #{t.get('ticket_no','')}</div>
         </div>
@@ -2387,17 +2384,15 @@ html[data-theme="light"] .ticket{
             html_parts.append("""
           </tbody>
         </table>
-      </div>
     </div>
-  </div>
+</div>
 """)
-        html_parts.append("</div>")  # group
 
     html_parts.append("""
 </div><!-- #app -->
 <script>
 (() => {
-  document.querySelectorAll('.group,.ticket,.filter-pill,.kpi').forEach(el => {
+  document.querySelectorAll('.ticket,.filter-pill,.kpi').forEach(el => {
     el.classList.add('ca-border');
     el.classList.add('mouse-glow');
     el.addEventListener('mousemove', e => {
@@ -6829,12 +6824,7 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
         elif power_pay:
             pay_label = f"{_fmt(power_pay, 1)}×"
 
-        parts.append(f'''
-<div class="group" style="border-left:4px solid {accent};">
-  <div class="group-hdr">
-    <span class="group-title" style="color:{accent};">{_h(group_name)}</span>
-    <span class="group-meta">{n_legs}-leg{(" &nbsp;·&nbsp; " + pay_label) if pay_label else ""}</span>
-  </div>''')
+        group_meta_html = f'{n_legs}-leg{(" &nbsp;·&nbsp; " + pay_label) if pay_label else ""}'
 
         for ticket in tickets:
             ticket_no = ticket.get("ticket_no") or ""
@@ -6864,10 +6854,12 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
                          if has_warn else "")
 
             parts.append(f'''
-<div class="ticket">
-  <div class="ticket-inner">
-    <div class="ticket-accent" style="background:linear-gradient(180deg,{accent},{accent}88);"></div>
-    <div class="ticket-body">
+<div class="ticket" style="border-left:4px solid {accent};">
+  <div class="ticket-body">
+    <div class="ticket-group-band">
+      <span class="group-title" style="color:{accent};">{_h(group_name)}</span>
+      <span class="group-meta">{group_meta_html}</span>
+    </div>
       <div class="ticket-hdr">
         <span class="ticket-no">#{_h(ticket_no)}</span>
         <span class="{sig_cls}">{sig_lbl}</span>
@@ -6976,11 +6968,8 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
             parts.append('''
         </tbody>
       </table>
-    </div>
   </div>
 </div>''')
-
-        parts.append('</div>')  # end .group
 
     parts.append('</div>')  # end .tickets-built.shell
 

@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260406"/>
 <link rel="stylesheet" href="/static/mobile-content-width.css?v=20260406"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
-<link rel="stylesheet" href="/static/tickets-built-content.css?v=20260408"/>
+<link rel="stylesheet" href="/static/tickets-built-content.css?v=20260409"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
 </head>
@@ -40,7 +40,7 @@
   const disableFx = window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;
   if (disableFx) return;
   const CA_SELS = [
-    '.tickets-built .ticket', '.tickets-built .group', '.tickets-built .hero',
+    '.tickets-built .ticket', '.tickets-built .hero',
     '.tickets-built .filter-pill', '.tickets-built .kpi'
   ];
   function initCA() {
