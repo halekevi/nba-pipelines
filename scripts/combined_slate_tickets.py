@@ -1925,10 +1925,10 @@ canvas.leg-chart{width:100%!important;height:140px!important;}
 .ticket-body{padding:16px 18px;}
 .ticket-hdr{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
 .ticket-no{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.08em;color:var(--text);}
-.kpi-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;}
-.kpi{display:flex;flex-direction:column;gap:2px;}
-.kpi-label{font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;}
-.kpi-val{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.05em;}
+.kpi-row{display:flex;gap:clamp(20px,4.5vw,44px);row-gap:14px;flex-wrap:wrap;margin-bottom:14px;justify-content:flex-start;}
+.kpi{display:flex;flex-direction:column;gap:6px;min-width:4.75rem;}
+.kpi-label{font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+.kpi-val{font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,2.4vw,28px);letter-spacing:.05em;line-height:1.1;}
 
 /* table */
 table{width:100%;border-collapse:collapse;}
@@ -1991,7 +1991,9 @@ html[data-theme="light"] .ticket{
 
 /* responsive */
 @media(max-width:640px){
-  .kpi-row{gap:10px;}
+  .kpi-row{gap:18px 22px;row-gap:12px;}
+  .kpi-label{font-size:11px;}
+  .kpi-val{font-size:clamp(20px,5.2vw,24px);}
   th,td{padding:6px 6px;font-size:11px;}
 }
 """
