@@ -1,7 +1,5 @@
 /**
- * Shared site nav: slate date, last sync, clock, hamburger, theme, scroll-hide.
- * Exposes window.ProporacleNav.updateLastSyncFromPipelineStatus(d) for pages
- * that already fetch /api/pipeline/status (e.g. home slate cards).
+ * Shared site nav: slate date, local date/time, hamburger, theme, scroll-hide.
  */
 (function () {
   "use strict";
@@ -17,38 +15,6 @@
     return dt.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   }
 
-  function parsePipelineModified(s) {
-    if (!s || typeof s !== "string") return null;
-    const t = Date.parse(s.trim().replace(" ", "T"));
-    return Number.isFinite(t) ? t : null;
-  }
-
-  function formatRelativeAgo(msAgo) {
-    if (msAgo < 0) msAgo = 0;
-    const sec = Math.floor(msAgo / 1000);
-    if (sec < 45) return "just now";
-    const min = Math.floor(sec / 60);
-    if (min < 60) return min === 1 ? "1 min ago" : `${min} mins ago`;
-    const hr = Math.floor(min / 60);
-    if (hr < 48) return hr === 1 ? "1 hr ago" : `${hr} hrs ago`;
-    const d = Math.floor(hr / 24);
-    return d === 1 ? "1 day ago" : `${d} days ago`;
-  }
-
-  function updateNavLastSyncFromPipelineStatus(d) {
-    const el = document.getElementById("nav-last-sync");
-    if (!el) return;
-    let best = 0;
-    const sports = ["combined", "nba", "nba1h", "nba1q", "cbb", "wcbb", "nhl", "soccer", "mlb"];
-    for (const k of sports) {
-      const m = d && d[k] && d[k].slate && d[k].slate.modified;
-      const t = parsePipelineModified(m);
-      if (t > best) best = t;
-    }
-    if (best > 0) el.textContent = "Last sync: " + formatRelativeAgo(Date.now() - best);
-    else el.textContent = "Last sync: —";
-  }
-
   async function applyHeroSlateDate() {
     try {
       const res = await fetch("/api/slate-display-date", { cache: "no-store" });
@@ -60,26 +26,32 @@
     } catch (e) {}
   }
 
-  async function refreshNavSync() {
-    try {
-      const res = await fetch("/api/pipeline/status", { cache: "no-store" });
-      if (!res.ok) return;
-      updateNavLastSyncFromPipelineStatus(await res.json());
-    } catch (e) {}
+  function formatLocalDateTime() {
+    return new Date().toLocaleString(undefined, {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      second: "2-digit",
+    });
   }
 
-  function initClock() {
+  function initLocalDateTime() {
+    const el = document.getElementById("nav-local-datetime");
+    if (!el) return;
     const tick = () => {
-      const c = document.getElementById("clock");
-      if (c) c.textContent = new Date().toLocaleTimeString();
+      el.textContent = formatLocalDateTime();
     };
     tick();
     setInterval(tick, 1000);
   }
 
   window.ProporacleNav = {
-    updateLastSyncFromPipelineStatus,
-    refreshNavSync,
+    /** @deprecated Nav no longer shows pipeline last sync; kept so older inline callers do not throw. */
+    updateLastSyncFromPipelineStatus: function () {},
+    refreshNavSync: async function () {},
   };
 
   function applyTheme(theme) {
@@ -158,9 +130,7 @@
     bindHamburger();
     bindNavScrollHide();
     applyHeroSlateDate();
-    initClock();
-    refreshNavSync();
-    setInterval(refreshNavSync, 60000);
+    initLocalDateTime();
   }
 
   if (document.readyState === "loading") {

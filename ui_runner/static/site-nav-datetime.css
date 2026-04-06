@@ -35,7 +35,12 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 0;
-  max-width: min(52vw, 300px);
+  max-width: min(78vw, 420px);
+}
+.nav-local-datetime {
+  font-family: "Share Tech Mono", ui-monospace, monospace;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.02em;
 }
 .nav-clock {
   font-family: "Share Tech Mono", ui-monospace, monospace;
@@ -53,6 +58,9 @@
 }
 [data-theme="light"] .nav-sync-line {
   color: rgba(0, 0, 0, 0.5);
+}
+[data-theme="light"] .nav-local-datetime {
+  color: rgba(0, 0, 0, 0.52);
 }
 [data-theme="light"] .nav-clock {
   color: rgba(0, 0, 0, 0.52);
