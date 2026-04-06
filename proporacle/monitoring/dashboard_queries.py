@@ -11,6 +11,27 @@ _SCHEMA_DIR = Path(__file__).resolve().parent.parent / "data" / "schema"
 _DDL_SQL = _SCHEMA_DIR / "ddl.sql"
 _VIEWS_SQL = _SCHEMA_DIR / "views.sql"
 
+# Loading proporacle.risk.drawdown via the package runs risk/__init__.py → state → pydantic,
+# which ui_runner does not install. Load the module file directly (drawdown.py has no deps).
+_drawdown_mod = None
+
+
+def _drawdown_math():
+    global _drawdown_mod
+    if _drawdown_mod is None:
+        import importlib.util
+
+        path = Path(__file__).resolve().parent.parent / "risk" / "drawdown.py"
+        spec = importlib.util.spec_from_file_location(
+            "proporacle.risk._drawdown_income_only", path
+        )
+        if spec is None or spec.loader is None:
+            raise ImportError(f"Cannot load drawdown helpers from {path}")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        _drawdown_mod = mod
+    return _drawdown_mod
+
 
 def _apply_sql_script(conn: sqlite3.Connection, path: Path) -> None:
     conn.executescript(path.read_text(encoding="utf-8"))
@@ -165,7 +186,9 @@ def fetch_equity_drawdown(conn: sqlite3.Connection, bankroll_0: float = 200.0) -
     """
     Cumulative equity and drawdown from v_roi_daily (Python — avoids hard-coded SQL recursion).
     """
-    from proporacle.risk.drawdown import drawdown_fraction_series, equity_curve_from_daily_pnl
+    dm = _drawdown_math()
+    equity_curve_from_daily_pnl = dm.equity_curve_from_daily_pnl
+    drawdown_fraction_series = dm.drawdown_fraction_series
 
     rows = fetch_roi_daily(conn)
     pnls = [float(r["daily_pnl"] or 0) for r in rows]
