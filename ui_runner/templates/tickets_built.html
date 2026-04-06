@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260406"/>
 <link rel="stylesheet" href="/static/mobile-content-width.css?v=20260406"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
-<link rel="stylesheet" href="/static/tickets-built-content.css?v=20260404f"/>
+<link rel="stylesheet" href="/static/tickets-built-content.css?v=20260408"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
 </head>
@@ -35,46 +35,6 @@
 </div>
 
 <script src="/static/site-nav-chrome.js?v=20260408"></script>
-<script>
-(function(){
-  const disableFx = window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;
-  if (disableFx) return;
-  const SELECTORS = [
-    '.tickets-built .ticket', '.tickets-built .group', '.tickets-built .filter-pill', '.tickets-built .kpi', '.tickets-built .hero'
-  ];
-  function attachGlow(el) {
-    if (el.dataset.glowBound === '1') return;
-    el.dataset.glowBound = '1';
-    el.classList.add('mouse-glow');
-    el.addEventListener('mousemove', e => {
-      const r = el.getBoundingClientRect();
-      el.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
-      el.style.setProperty('--mouse-y', (e.clientY - r.top)  + 'px');
-    });
-  }
-  function initGlow() {
-    SELECTORS.forEach(sel =>
-      document.querySelectorAll(sel).forEach(attachGlow)
-    );
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGlow);
-  } else {
-    initGlow();
-  }
-  let queued = false;
-  const queueInit = () => {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(() => {
-      queued = false;
-      initGlow();
-    });
-  };
-  const obs = new MutationObserver(queueInit);
-  obs.observe(document.body, { childList: true, subtree: true });
-})();
-</script>
 <script>
 (function(){
   const disableFx = window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;

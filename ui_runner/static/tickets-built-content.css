@@ -369,27 +369,6 @@
   mask-composite: exclude;
   opacity: 0.45;
 }
-.tickets-built .mouse-glow {
-  position: relative;
-  overflow: hidden;
-}
-.tickets-built .mouse-glow::after {
-  content: "";
-  position: absolute;
-  left: var(--mouse-x, 50%);
-  top: var(--mouse-y, 50%);
-  width: 340px;
-  height: 340px;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.18) 0%, rgba(0, 242, 255, 0.08) 28%, transparent 65%);
-  opacity: 0;
-  transition: opacity 0.25s;
-}
-.tickets-built .mouse-glow:hover::after {
-  opacity: 1;
-}
-
 @media (max-width: 640px) {
   .tickets-built .kpi-row {
     gap: 10px;
