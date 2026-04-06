@@ -23,7 +23,7 @@
   --pending:#666;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Share Tech Mono',monospace;background:transparent;color:var(--text);min-height:100vh;padding-bottom:28px;font-size:clamp(15px,1.08vw,18px);line-height:1.5}
+body{font-family:'Share Tech Mono',monospace;background:transparent;color:var(--text);min-height:100vh;padding-bottom:24px;font-size:clamp(14px,1.02vw,16px);line-height:1.45}
 h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif}
 body::before{content:'';position:fixed;top:-20%;left:-10%;width:55%;height:55%;background:radial-gradient(ellipse,rgba(212,160,23,.07) 0%,transparent 70%);pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;bottom:-20%;right:-10%;width:50%;height:50%;background:radial-gradient(ellipse,rgba(0,229,255,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
@@ -38,17 +38,17 @@ box-shadow:0 8px 32px rgba(0,0,0,.28)}
 .logo{display:flex;align-items:center;gap:14px}
 .logo-icon{width:120px;height:120px;object-fit:contain;display:block;filter:drop-shadow(0 0 8px rgba(212,160,23,0.45))}
 @media(max-width:768px){.logo-icon{width:80px;height:80px}}
-.logo-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;background:linear-gradient(to bottom,#f0a500,#d4a017,#f7e08a);-webkit-background-clip:text;background-clip:text;color:transparent}
-.logo-sub{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--muted);letter-spacing:2.2px;margin-top:2px}
-.date-badge{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--muted2);background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-border:1px solid var(--glass-bd);border-radius:999px;padding:10px 18px;letter-spacing:1.5px}
+.logo-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;background:linear-gradient(to bottom,#f0a500,#d4a017,#f7e08a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo-sub{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:2.2px;margin-top:2px}
+.date-badge{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted2);background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+border:1px solid var(--glass-bd);border-radius:999px;padding:8px 14px;letter-spacing:1.5px}
 .main{max-width:none;width:100%;margin:0;padding:24px 20px;box-sizing:border-box}
 .sport-header{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
-.sport-label{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3.5px;line-height:1;color:var(--gold);text-shadow:0 0 28px rgba(240,165,0,.18)}
+.sport-label{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;line-height:1;color:var(--gold);text-shadow:0 0 28px rgba(240,165,0,.18)}
 .sport-header-line{flex:1;min-width:80px;height:1px;background:rgba(255,255,255,0.08)}
-.sport-meta-count{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--muted2)}
+.sport-meta-count{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted2)}
 .sport-section{margin-bottom:48px;width:100%;max-width:100%;box-sizing:border-box}
-.section-label{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--muted);letter-spacing:2.8px;display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.section-label{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.08vw,16px);color:var(--muted);letter-spacing:2.5px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
 .stat-grid{display:grid;gap:14px;margin-bottom:24px}
 .stat-grid-4{grid-template-columns:repeat(4,1fr)}
@@ -63,25 +63,25 @@ box-shadow:0 4px 24px rgba(0,0,0,.22)}
 .stat-card.amber::before{background:linear-gradient(90deg,var(--gold),transparent)}
 .stat-card.red::before{background:linear-gradient(90deg,var(--red),transparent)}
 .stat-card.purple::before{background:linear-gradient(90deg,var(--purple),transparent)}
-.stat-label{font-family:'Bebas Neue',sans-serif;font-size:12px;color:var(--muted);letter-spacing:2.2px;margin-bottom:8px}
-.stat-val{font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:2px;line-height:1}
-.stat-sub{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--muted2);margin-top:6px}
+.stat-label{font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--muted);letter-spacing:2.2px;margin-bottom:8px}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;line-height:1}
+.stat-sub{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted2);margin-top:5px}
 .stat-sub strong{font-weight:700}
 .table-wrap{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
 border:1px solid var(--glass-bd);border-radius:14px;overflow:hidden;margin-bottom:20px;box-shadow:0 4px 24px rgba(0,0,0,.18)}
-table{width:100%;border-collapse:collapse;font-size:clamp(15px,1.05vw,17px);font-family:'Share Tech Mono',monospace}
-th{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.1vw,16px);letter-spacing:1.8px;color:var(--muted);padding:12px 16px;text-align:left;
+table{width:100%;border-collapse:collapse;font-size:clamp(13px,1.05vw,15px);font-family:'Share Tech Mono',monospace}
+th{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.15vw,16px);letter-spacing:2px;color:var(--muted);padding:10px 12px;text-align:left;
 background:rgba(0,0,0,0.22);backdrop-filter:blur(12px);border-bottom:1px solid var(--glass-bd);white-space:nowrap}
 th.right{text-align:right}
-td{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:middle}
+td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(255,255,255,.04)}
-td.right{text-align:right}td.mono{font-family:'Share Tech Mono',monospace;font-size:15px}
-.rate-cell{display:flex;align-items:center;gap:12px}
-.rate-bar-bg{flex:1;height:7px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
-.rate-bar-fill{height:100%;border-radius:4px;transition:width .4s}
-.rate-num{font-family:'Share Tech Mono',monospace;font-size:15px;min-width:52px;text-align:right;flex-shrink:0}
-.chip{display:inline-block;border-radius:8px;padding:4px 12px;font-size:14px;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:.5px;
+td.right{text-align:right}td.mono{font-family:'Share Tech Mono',monospace;font-size:clamp(13px,1.05vw,15px)}
+.rate-cell{display:flex;align-items:center;gap:10px}
+.rate-bar-bg{flex:1;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.rate-bar-fill{height:100%;border-radius:3px;transition:width .4s}
+.rate-num{font-family:'Share Tech Mono',monospace;font-size:clamp(13px,1.05vw,15px);min-width:48px;text-align:right;flex-shrink:0}
+.chip{display:inline-block;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:.5px;
 background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid var(--glass-bd)}
 .chip-a{background:rgba(57,255,110,.08);color:var(--green);border-color:rgba(57,255,110,.28)}
 .chip-b{background:rgba(0,229,255,.08);color:var(--cyan);border-color:rgba(0,229,255,.28)}
@@ -94,9 +94,9 @@ background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid va
 .three-col{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:20px;width:100%;max-width:100%;box-sizing:border-box}
 .insight-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:24px;width:100%;max-width:100%;box-sizing:border-box;min-width:0}
 .insight-card{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);border-radius:12px;padding:14px 16px;box-shadow:0 4px 20px rgba(0,0,0,.15);min-width:0;box-sizing:border-box}
-.insight-icon{font-size:26px;margin-bottom:8px}
-.insight-title{font-weight:700;font-size:16px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:var(--gold)}
-.insight-body{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--muted2);line-height:1.6}
+.insight-icon{font-size:22px;margin-bottom:8px}
+.insight-title{font-weight:700;font-size:14px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:var(--gold)}
+.insight-body{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted2);line-height:1.6}
 .insight-body strong{color:var(--text)}
 tr.player-hit td{background:rgba(57,255,110,0.04)}
 tr.player-hit td:first-child{border-left:3px solid var(--green)}
@@ -105,23 +105,25 @@ tr.player-miss td:first-child{border-left:3px solid var(--red)}
 tr.player-warn td{background:rgba(240,165,0,0.06)}
 tr.player-warn td:first-child{border-left:3px solid var(--gold)}
 .pos{color:var(--green);font-weight:700}.neg{color:var(--red);font-weight:700}.neu{color:var(--muted2)}
-.alert{border-radius:12px;padding:16px 20px;margin-bottom:20px;border:1px solid;font-size:16px;line-height:1.6;backdrop-filter:blur(16px)}
+.alert{border-radius:12px;padding:14px 18px;margin-bottom:20px;border:1px solid;font-size:13px;line-height:1.6;backdrop-filter:blur(16px)}
 .alert-red{background:rgba(255,77,77,.08);border-color:rgba(255,77,77,.35)}
 .alert-green{background:rgba(57,255,110,.08);border-color:rgba(57,255,110,.32)}
 .alert-amber{background:rgba(240,165,0,.08);border-color:rgba(240,165,0,.32)}
-.alert-title{font-family:'Bebas Neue',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;margin-bottom:4px}
+.alert-title{font-family:'Bebas Neue',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;margin-bottom:4px}
 .sub-dir{display:inline-block;margin-right:8px}
-.muted-note{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--muted);padding:14px;text-align:center}
+.muted-note{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);padding:14px;text-align:center}
 td.muted{color:var(--muted2)}
 @media(max-width:768px){
 .stat-grid-4,.stat-grid-2{grid-template-columns:repeat(2,1fr)}.two-col,.three-col,.insight-grid{grid-template-columns:1fr}
 body{font-size:clamp(14px,3.2vw,16px)}
-table{font-size:clamp(14px,3.1vw,16px)}
-th{font-size:clamp(12px,3vw,14px);padding:10px 12px}
-td{padding:10px 12px}
-.section-label{font-size:14px}
-.sport-label{font-size:30px}
-.logo-title{font-size:28px}
+table{font-size:clamp(12px,3.2vw,14px)}
+td.mono{font-size:clamp(12px,3.2vw,14px)}
+.rate-num{font-size:clamp(12px,3.2vw,14px)}
+th{font-size:clamp(12px,3.4vw,14px);padding:8px 8px}
+td{padding:8px 8px}
+.section-label{font-size:clamp(12px,3.2vw,14px)}
+.sport-label{font-size:28px}
+.logo-title{font-size:24px}
 }
 </style>
 </head>
@@ -154,7 +156,7 @@ td{padding:10px 12px}
       <thead><tr><th>TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th><th>HIT RATE</th></tr></thead>
       <tbody>
         <tr>
-      <td><span class="chip chip-goblin">🎃 Goblin</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">77.4%</span> (146 dec)</div></div></td>
+      <td><span class="chip chip-goblin">🎃 Goblin</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">77.4%</span> (146 dec)</div></div></td>
       <td class="right mono">146</td>
       <td class="right mono pos">113</td>
       <td class="right mono neg">33</td>
@@ -168,7 +170,7 @@ td{padding:10px 12px}
       <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
     </tr>
         <tr>
-          <td><span class="chip chip-std">⭐ Standard</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (5 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">44.4%</span> (36 dec)</div></div></td>
+          <td><span class="chip chip-std">⭐ Standard</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (5 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">44.4%</span> (36 dec)</div></div></td>
           <td class="right mono">41</td>
           <td class="right mono pos">16</td>
           <td class="right mono neg">25</td>
@@ -182,22 +184,22 @@ td{padding:10px 12px}
         <div class="table-wrap"><table>
       <thead><tr><th>TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
       <tbody><tr class="player-hit">
-          <td style="vertical-align:top"><span class="chip chip-a">TIER A</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">70.8%</span> (24 dec)</div></div></td>
+          <td style="vertical-align:top"><span class="chip chip-a">TIER A</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">70.8%</span> (24 dec)</div></div></td>
           <td class="right mono">24</td>
           <td class="right mono pos">17</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:70.8%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">70.8%</div></div></td>
         </tr><tr class="player-hit">
-          <td style="vertical-align:top"><span class="chip chip-b">TIER B</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">100.0%</span> (15 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--green)">100.0%</span> (1 dec)</div></div></td>
+          <td style="vertical-align:top"><span class="chip chip-b">TIER B</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">100.0%</span> (15 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--green)">100.0%</span> (1 dec)</div></div></td>
           <td class="right mono">16</td>
           <td class="right mono pos">16</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
         </tr><tr class="player-hit">
-          <td style="vertical-align:top"><span class="chip chip-c">TIER C</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">75.7%</span> (107 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--green)">80.0%</span> (5 dec)</div></div></td>
+          <td style="vertical-align:top"><span class="chip chip-c">TIER C</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">75.7%</span> (107 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--green)">80.0%</span> (5 dec)</div></div></td>
           <td class="right mono">112</td>
           <td class="right mono pos">85</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:75.9%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">75.9%</div></div></td>
         </tr><tr class="player-miss">
-          <td style="vertical-align:top"><span class="chip chip-d">TIER D</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (5 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">36.7%</span> (30 dec)</div></div></td>
+          <td style="vertical-align:top"><span class="chip chip-d">TIER D</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (5 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">36.7%</span> (30 dec)</div></div></td>
           <td class="right mono">35</td>
           <td class="right mono pos">11</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:31.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">31.4%</div></div></td>
@@ -209,22 +211,22 @@ td{padding:10px 12px}
     <div class="table-wrap" style="margin-bottom:20px"><table>
       <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
       <tbody><tr class="player-miss">
-          <td style="vertical-align:top"><span style="font-weight:700">Elite</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (2 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">53.3%</span> (15 dec)</div></div></td>
+          <td style="vertical-align:top"><span style="font-weight:700">Elite</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (2 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">53.3%</span> (15 dec)</div></div></td>
           <td class="right mono">17</td>
           <td class="right mono">8</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:47.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">47.1%</div></div></td>
         </tr><tr class="player-miss">
-          <td style="vertical-align:top"><span style="font-weight:700">Above Avg</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">60.0%</span> (15 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">16.7%</span> (6 dec)</div></div></td>
+          <td style="vertical-align:top"><span style="font-weight:700">Above Avg</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">60.0%</span> (15 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">16.7%</span> (6 dec)</div></div></td>
           <td class="right mono">21</td>
           <td class="right mono">10</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:47.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">47.6%</div></div></td>
         </tr><tr class="player-hit">
-          <td style="vertical-align:top"><span style="font-weight:700">Avg</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">77.9%</span> (104 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">50.0%</span> (14 dec)</div></div></td>
+          <td style="vertical-align:top"><span style="font-weight:700">Avg</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">77.9%</span> (104 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">50.0%</span> (14 dec)</div></div></td>
           <td class="right mono">118</td>
           <td class="right mono">88</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:74.6%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">74.6%</div></div></td>
         </tr><tr class="player-hit">
-          <td style="vertical-align:top"><span style="font-weight:700">Weak</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">76.7%</span> (30 dec)</div></div></td>
+          <td style="vertical-align:top"><span style="font-weight:700">Weak</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">76.7%</span> (30 dec)</div></div></td>
           <td class="right mono">30</td>
           <td class="right mono">23</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:76.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">76.7%</div></div></td>
@@ -238,21 +240,21 @@ td{padding:10px 12px}
           <tbody><tr>
           <td><strong>Elite</strong></td>
           <td class="mono" style="vertical-align:top">—</td>
-          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">47.1%</span> <span class="muted-note" style="font-size:14px;padding:0">(17)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (2 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">53.3%</span> (15 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">47.1%</span> <span class="muted-note" style="font-size:12px;padding:0">(17)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (2 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">53.3%</span> (15 dec)</div></div></td>
           <td class="mono" style="vertical-align:top">—</td>
         </tr><tr>
           <td><strong>Above Avg</strong></td>
-          <td class="mono" style="vertical-align:top"><span style="color:#5ef598;font-weight:700">60.0%</span> <span class="muted-note" style="font-size:14px;padding:0">(15)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">60.0%</span> (15 dec)</div></div></td>
-          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">16.7%</span> <span class="muted-note" style="font-size:14px;padding:0">(6)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">16.7%</span> (6 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top"><span style="color:#5ef598;font-weight:700">60.0%</span> <span class="muted-note" style="font-size:12px;padding:0">(15)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">60.0%</span> (15 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">16.7%</span> <span class="muted-note" style="font-size:12px;padding:0">(6)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">16.7%</span> (6 dec)</div></div></td>
           <td class="mono" style="vertical-align:top">—</td>
         </tr><tr>
           <td><strong>Avg</strong></td>
-          <td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">80.2%</span> <span class="muted-note" style="font-size:14px;padding:0">(101)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">80.2%</span> (101 dec)</div></div></td>
-          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">41.2%</span> <span class="muted-note" style="font-size:14px;padding:0">(17)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (3 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">50.0%</span> (14 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">80.2%</span> <span class="muted-note" style="font-size:12px;padding:0">(101)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">80.2%</span> (101 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">41.2%</span> <span class="muted-note" style="font-size:12px;padding:0">(17)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (3 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">50.0%</span> (14 dec)</div></div></td>
           <td class="mono" style="vertical-align:top">—</td>
         </tr><tr>
           <td><strong>Weak</strong></td>
-          <td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">76.7%</span> <span class="muted-note" style="font-size:14px;padding:0">(30)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">76.7%</span> (30 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">76.7%</span> <span class="muted-note" style="font-size:12px;padding:0">(30)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">76.7%</span> (30 dec)</div></div></td>
           <td class="mono" style="vertical-align:top">—</td>
           <td class="mono" style="vertical-align:top">—</td>
         </tr></tbody>
@@ -264,16 +266,16 @@ td{padding:10px 12px}
           <thead><tr><th>DEF TIER</th><th>TIER A</th><th>TIER B</th><th>TIER C</th><th>TIER D</th></tr></thead>
           <tbody><tr>
           <td><strong>Elite</strong></td>
-          <td class="mono" style="vertical-align:top">—</td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">100.0%</span> <span class="muted-note" style="font-size:14px;padding:0">(1)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--green)">100.0%</span> (1 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">75.0%</span> <span class="muted-note" style="font-size:14px;padding:0">(4)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (1 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--green)">100.0%</span> (3 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">33.3%</span> <span class="muted-note" style="font-size:14px;padding:0">(12)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (1 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">36.4%</span> (11 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top">—</td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">100.0%</span> <span class="muted-note" style="font-size:12px;padding:0">(1)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--green)">100.0%</span> (1 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">75.0%</span> <span class="muted-note" style="font-size:12px;padding:0">(4)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (1 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--green)">100.0%</span> (3 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">33.3%</span> <span class="muted-note" style="font-size:12px;padding:0">(12)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (1 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">36.4%</span> (11 dec)</div></div></td>
         </tr><tr>
           <td><strong>Above Avg</strong></td>
-          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">0.0%</span> <span class="muted-note" style="font-size:14px;padding:0">(1)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (1 dec)</div></div></td><td class="mono" style="vertical-align:top">—</td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">69.2%</span> <span class="muted-note" style="font-size:14px;padding:0">(13)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">69.2%</span> (13 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">14.3%</span> <span class="muted-note" style="font-size:14px;padding:0">(7)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (1 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">16.7%</span> (6 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">0.0%</span> <span class="muted-note" style="font-size:12px;padding:0">(1)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (1 dec)</div></div></td><td class="mono" style="vertical-align:top">—</td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">69.2%</span> <span class="muted-note" style="font-size:12px;padding:0">(13)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">69.2%</span> (13 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">14.3%</span> <span class="muted-note" style="font-size:12px;padding:0">(7)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (1 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">16.7%</span> (6 dec)</div></div></td>
         </tr><tr>
           <td><strong>Avg</strong></td>
-          <td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">68.8%</span> <span class="muted-note" style="font-size:14px;padding:0">(16)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">68.8%</span> (16 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">100.0%</span> <span class="muted-note" style="font-size:14px;padding:0">(12)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">100.0%</span> (12 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">78.7%</span> <span class="muted-note" style="font-size:14px;padding:0">(75)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">79.5%</span> (73 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">50.0%</span> (2 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">40.0%</span> <span class="muted-note" style="font-size:14px;padding:0">(15)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (3 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">50.0%</span> (12 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">68.8%</span> <span class="muted-note" style="font-size:12px;padding:0">(16)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">68.8%</span> (16 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">100.0%</span> <span class="muted-note" style="font-size:12px;padding:0">(12)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">100.0%</span> (12 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">78.7%</span> <span class="muted-note" style="font-size:12px;padding:0">(75)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">79.5%</span> (73 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">50.0%</span> (2 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">40.0%</span> <span class="muted-note" style="font-size:12px;padding:0">(15)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (3 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">50.0%</span> (12 dec)</div></div></td>
         </tr><tr>
           <td><strong>Weak</strong></td>
-          <td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">85.7%</span> <span class="muted-note" style="font-size:14px;padding:0">(7)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">85.7%</span> (7 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">100.0%</span> <span class="muted-note" style="font-size:14px;padding:0">(3)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">100.0%</span> (3 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">70.0%</span> <span class="muted-note" style="font-size:14px;padding:0">(20)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">70.0%</span> (20 dec)</div></div></td><td class="mono" style="vertical-align:top">—</td>
+          <td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">85.7%</span> <span class="muted-note" style="font-size:12px;padding:0">(7)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">85.7%</span> (7 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">100.0%</span> <span class="muted-note" style="font-size:12px;padding:0">(3)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">100.0%</span> (3 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">70.0%</span> <span class="muted-note" style="font-size:12px;padding:0">(20)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">70.0%</span> (20 dec)</div></div></td><td class="mono" style="vertical-align:top">—</td>
         </tr></tbody>
         </table></div>
       </div>
@@ -284,16 +286,16 @@ td{padding:10px 12px}
         <thead><tr><th>DEF TIER</th><th>STANDARD OVER</th><th>STANDARD UNDER</th></tr></thead>
         <tbody><tr>
           <td><strong>Elite</strong></td>
-          <td class="mono"><span style="color:var(--red);font-weight:700">0.0%</span> <span class="muted-note" style="font-size:14px;padding:0">(2)</span></td>
-          <td class="mono"><span style="color:var(--gold);font-weight:700">53.3%</span> <span class="muted-note" style="font-size:14px;padding:0">(15)</span></td>
+          <td class="mono"><span style="color:var(--red);font-weight:700">0.0%</span> <span class="muted-note" style="font-size:12px;padding:0">(2)</span></td>
+          <td class="mono"><span style="color:var(--gold);font-weight:700">53.3%</span> <span class="muted-note" style="font-size:12px;padding:0">(15)</span></td>
         </tr><tr>
           <td><strong>Above Avg</strong></td>
           <td class="mono">—</td>
-          <td class="mono"><span style="color:var(--red);font-weight:700">16.7%</span> <span class="muted-note" style="font-size:14px;padding:0">(6)</span></td>
+          <td class="mono"><span style="color:var(--red);font-weight:700">16.7%</span> <span class="muted-note" style="font-size:12px;padding:0">(6)</span></td>
         </tr><tr>
           <td><strong>Avg</strong></td>
-          <td class="mono"><span style="color:var(--red);font-weight:700">0.0%</span> <span class="muted-note" style="font-size:14px;padding:0">(3)</span></td>
-          <td class="mono"><span style="color:var(--gold);font-weight:700">50.0%</span> <span class="muted-note" style="font-size:14px;padding:0">(14)</span></td>
+          <td class="mono"><span style="color:var(--red);font-weight:700">0.0%</span> <span class="muted-note" style="font-size:12px;padding:0">(3)</span></td>
+          <td class="mono"><span style="color:var(--gold);font-weight:700">50.0%</span> <span class="muted-note" style="font-size:12px;padding:0">(14)</span></td>
         </tr><tr>
           <td><strong>Weak</strong></td>
           <td class="mono">—</td>
@@ -307,17 +309,17 @@ td{padding:10px 12px}
         <div class="table-wrap"><table>
           <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
           <tbody><tr class="player-hit">
-          <td style="vertical-align:top"><strong>Avg</strong><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">80.2%</span> (101 dec)</div></div></td>
+          <td style="vertical-align:top"><strong>Avg</strong><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">80.2%</span> (101 dec)</div></div></td>
           <td class="right mono">101</td>
           <td class="right mono pos">81</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:80.2%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">80.2%</div></div></td>
         </tr><tr class="player-hit">
-          <td style="vertical-align:top"><strong>Weak</strong><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">76.7%</span> (30 dec)</div></div></td>
+          <td style="vertical-align:top"><strong>Weak</strong><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">76.7%</span> (30 dec)</div></div></td>
           <td class="right mono">30</td>
           <td class="right mono pos">23</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:76.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">76.7%</div></div></td>
         </tr><tr class="player-hit">
-          <td style="vertical-align:top"><strong>Above Avg</strong><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">60.0%</span> (15 dec)</div></div></td>
+          <td style="vertical-align:top"><strong>Above Avg</strong><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">60.0%</span> (15 dec)</div></div></td>
           <td class="right mono">15</td>
           <td class="right mono pos">9</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:60.0%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">60.0%</div></div></td>
@@ -329,17 +331,17 @@ td{padding:10px 12px}
         <div class="table-wrap"><table>
           <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
           <tbody><tr class="player-miss">
-          <td style="vertical-align:top"><strong>Elite</strong><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (2 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">53.3%</span> (15 dec)</div></div></td>
+          <td style="vertical-align:top"><strong>Elite</strong><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (2 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">53.3%</span> (15 dec)</div></div></td>
           <td class="right mono">17</td>
           <td class="right mono pos">8</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:47.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">47.1%</div></div></td>
         </tr><tr class="player-miss">
-          <td style="vertical-align:top"><strong>Avg</strong><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (3 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">50.0%</span> (14 dec)</div></div></td>
+          <td style="vertical-align:top"><strong>Avg</strong><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (3 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">50.0%</span> (14 dec)</div></div></td>
           <td class="right mono">17</td>
           <td class="right mono pos">7</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:41.2%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">41.2%</div></div></td>
         </tr><tr class="player-miss">
-          <td style="vertical-align:top"><strong>Above Avg</strong><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">16.7%</span> (6 dec)</div></div></td>
+          <td style="vertical-align:top"><strong>Above Avg</strong><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">16.7%</span> (6 dec)</div></div></td>
           <td class="right mono">6</td>
           <td class="right mono pos">1</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:16.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">16.7%</div></div></td>
@@ -705,7 +707,7 @@ td{padding:10px 12px}
       <thead><tr><th>TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th><th>HIT RATE</th></tr></thead>
       <tbody>
         <tr>
-      <td><span class="chip chip-goblin">🎃 Goblin</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">65.5%</span> (110 dec)</div></div></td>
+      <td><span class="chip chip-goblin">🎃 Goblin</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">65.5%</span> (110 dec)</div></div></td>
       <td class="right mono">110</td>
       <td class="right mono pos">72</td>
       <td class="right mono neg">38</td>
@@ -719,7 +721,7 @@ td{padding:10px 12px}
       <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
     </tr>
         <tr>
-          <td><span class="chip chip-std">⭐ Standard</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">35.7%</span> (28 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">42.9%</span> (84 dec)</div></div></td>
+          <td><span class="chip chip-std">⭐ Standard</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">35.7%</span> (28 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">42.9%</span> (84 dec)</div></div></td>
           <td class="right mono">112</td>
           <td class="right mono pos">46</td>
           <td class="right mono neg">66</td>
@@ -733,22 +735,22 @@ td{padding:10px 12px}
         <div class="table-wrap"><table>
       <thead><tr><th>TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
       <tbody><tr class="player-hit">
-          <td style="vertical-align:top"><span class="chip chip-a">TIER A</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">66.7%</span> (39 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--green)">100.0%</span> (3 dec)</div></div></td>
+          <td style="vertical-align:top"><span class="chip chip-a">TIER A</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">66.7%</span> (39 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--green)">100.0%</span> (3 dec)</div></div></td>
           <td class="right mono">42</td>
           <td class="right mono pos">29</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:69.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">69.0%</div></div></td>
         </tr><tr class="player-hit">
-          <td style="vertical-align:top"><span class="chip chip-b">TIER B</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">62.3%</span> (53 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">46.2%</span> (13 dec)</div></div></td>
+          <td style="vertical-align:top"><span class="chip chip-b">TIER B</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">62.3%</span> (53 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">46.2%</span> (13 dec)</div></div></td>
           <td class="right mono">66</td>
           <td class="right mono pos">39</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:59.1%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">59.1%</div></div></td>
         </tr><tr class="player-miss">
-          <td style="vertical-align:top"><span class="chip chip-c">TIER C</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">50.0%</span> (46 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">41.4%</span> (29 dec)</div></div></td>
+          <td style="vertical-align:top"><span class="chip chip-c">TIER C</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">50.0%</span> (46 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">41.4%</span> (29 dec)</div></div></td>
           <td class="right mono">75</td>
           <td class="right mono pos">35</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:46.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">46.7%</div></div></td>
         </tr><tr class="player-miss">
-          <td style="vertical-align:top"><span class="chip chip-d">TIER D</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">38.5%</span> (39 dec)</div></div></td>
+          <td style="vertical-align:top"><span class="chip chip-d">TIER D</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">38.5%</span> (39 dec)</div></div></td>
           <td class="right mono">39</td>
           <td class="right mono pos">15</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:38.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">38.5%</div></div></td>
@@ -760,17 +762,17 @@ td{padding:10px 12px}
     <div class="table-wrap" style="margin-bottom:20px"><table>
       <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
       <tbody><tr class="player-hit">
-          <td style="vertical-align:top"><span style="font-weight:700">elite</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">62.6%</span> (99 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">47.6%</span> (63 dec)</div></div></td>
+          <td style="vertical-align:top"><span style="font-weight:700">elite</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">62.6%</span> (99 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">47.6%</span> (63 dec)</div></div></td>
           <td class="right mono">162</td>
           <td class="right mono">92</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:56.8%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">56.8%</div></div></td>
         </tr><tr class="player-miss">
-          <td style="vertical-align:top"><span style="font-weight:700">average</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">64.0%</span> (25 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">13.3%</span> (15 dec)</div></div></td>
+          <td style="vertical-align:top"><span style="font-weight:700">average</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">64.0%</span> (25 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">13.3%</span> (15 dec)</div></div></td>
           <td class="right mono">40</td>
           <td class="right mono">18</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:45.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">45.0%</div></div></td>
         </tr><tr class="player-miss">
-          <td style="vertical-align:top"><span style="font-weight:700">weak</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">28.6%</span> (14 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--green)">66.7%</span> (6 dec)</div></div></td>
+          <td style="vertical-align:top"><span style="font-weight:700">weak</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">28.6%</span> (14 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--green)">66.7%</span> (6 dec)</div></div></td>
           <td class="right mono">20</td>
           <td class="right mono">8</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:40.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">40.0%</div></div></td>
@@ -783,18 +785,18 @@ td{padding:10px 12px}
           <thead><tr><th>DEF TIER</th><th>GOBLIN</th><th>STANDARD</th><th>DEMON</th></tr></thead>
           <tbody><tr>
           <td><strong>elite</strong></td>
-          <td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">67.1%</span> <span class="muted-note" style="font-size:14px;padding:0">(85)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">67.1%</span> (85 dec)</div></div></td>
-          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">45.5%</span> <span class="muted-note" style="font-size:14px;padding:0">(77)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">35.7%</span> (14 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">47.6%</span> (63 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">67.1%</span> <span class="muted-note" style="font-size:12px;padding:0">(85)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">67.1%</span> (85 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">45.5%</span> <span class="muted-note" style="font-size:12px;padding:0">(77)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">35.7%</span> (14 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">47.6%</span> (63 dec)</div></div></td>
           <td class="mono" style="vertical-align:top">—</td>
         </tr><tr>
           <td><strong>average</strong></td>
-          <td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">78.6%</span> <span class="muted-note" style="font-size:14px;padding:0">(14)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">78.6%</span> (14 dec)</div></div></td>
-          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">26.9%</span> <span class="muted-note" style="font-size:14px;padding:0">(26)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">45.5%</span> (11 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">13.3%</span> (15 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">78.6%</span> <span class="muted-note" style="font-size:12px;padding:0">(14)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">78.6%</span> (14 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">26.9%</span> <span class="muted-note" style="font-size:12px;padding:0">(26)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">45.5%</span> (11 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">13.3%</span> (15 dec)</div></div></td>
           <td class="mono" style="vertical-align:top">—</td>
         </tr><tr>
           <td><strong>weak</strong></td>
-          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">36.4%</span> <span class="muted-note" style="font-size:14px;padding:0">(11)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">36.4%</span> (11 dec)</div></div></td>
-          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">44.4%</span> <span class="muted-note" style="font-size:14px;padding:0">(9)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (3 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--green)">66.7%</span> (6 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">36.4%</span> <span class="muted-note" style="font-size:12px;padding:0">(11)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">36.4%</span> (11 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">44.4%</span> <span class="muted-note" style="font-size:12px;padding:0">(9)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (3 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--green)">66.7%</span> (6 dec)</div></div></td>
           <td class="mono" style="vertical-align:top">—</td>
         </tr></tbody>
         </table></div>
@@ -805,13 +807,13 @@ td{padding:10px 12px}
           <thead><tr><th>DEF TIER</th><th>TIER A</th><th>TIER B</th><th>TIER C</th><th>TIER D</th></tr></thead>
           <tbody><tr>
           <td><strong>elite</strong></td>
-          <td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">91.3%</span> <span class="muted-note" style="font-size:14px;padding:0">(23)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">90.0%</span> (20 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--green)">100.0%</span> (3 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--gold);font-weight:700">56.1%</span> <span class="muted-note" style="font-size:14px;padding:0">(57)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">59.1%</span> (44 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">46.2%</span> (13 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">46.8%</span> <span class="muted-note" style="font-size:14px;padding:0">(62)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">51.4%</span> (35 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">40.7%</span> (27 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--gold);font-weight:700">50.0%</span> <span class="muted-note" style="font-size:14px;padding:0">(20)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">50.0%</span> (20 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">91.3%</span> <span class="muted-note" style="font-size:12px;padding:0">(23)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">90.0%</span> (20 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--green)">100.0%</span> (3 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--gold);font-weight:700">56.1%</span> <span class="muted-note" style="font-size:12px;padding:0">(57)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">59.1%</span> (44 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">46.2%</span> (13 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">46.8%</span> <span class="muted-note" style="font-size:12px;padding:0">(62)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">51.4%</span> (35 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">40.7%</span> (27 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--gold);font-weight:700">50.0%</span> <span class="muted-note" style="font-size:12px;padding:0">(20)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">50.0%</span> (20 dec)</div></div></td>
         </tr><tr>
           <td><strong>average</strong></td>
-          <td class="mono" style="vertical-align:top"><span style="color:var(--gold);font-weight:700">54.5%</span> <span class="muted-note" style="font-size:14px;padding:0">(11)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">54.5%</span> (11 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">75.0%</span> <span class="muted-note" style="font-size:14px;padding:0">(8)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">75.0%</span> (8 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--gold);font-weight:700">57.1%</span> <span class="muted-note" style="font-size:14px;padding:0">(7)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">66.7%</span> (6 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">0.0%</span> (1 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">14.3%</span> <span class="muted-note" style="font-size:14px;padding:0">(14)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">14.3%</span> (14 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top"><span style="color:var(--gold);font-weight:700">54.5%</span> <span class="muted-note" style="font-size:12px;padding:0">(11)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">54.5%</span> (11 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">75.0%</span> <span class="muted-note" style="font-size:12px;padding:0">(8)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">75.0%</span> (8 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--gold);font-weight:700">57.1%</span> <span class="muted-note" style="font-size:12px;padding:0">(7)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">66.7%</span> (6 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">0.0%</span> (1 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">14.3%</span> <span class="muted-note" style="font-size:12px;padding:0">(14)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">14.3%</span> (14 dec)</div></div></td>
         </tr><tr>
           <td><strong>weak</strong></td>
-          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">25.0%</span> <span class="muted-note" style="font-size:14px;padding:0">(8)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">25.0%</span> (8 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">100.0%</span> <span class="muted-note" style="font-size:14px;padding:0">(1)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">100.0%</span> (1 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">33.3%</span> <span class="muted-note" style="font-size:14px;padding:0">(6)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">20.0%</span> (5 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--green)">100.0%</span> (1 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:#5ef598;font-weight:700">60.0%</span> <span class="muted-note" style="font-size:14px;padding:0">(5)</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--green)">60.0%</span> (5 dec)</div></div></td>
+          <td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">25.0%</span> <span class="muted-note" style="font-size:12px;padding:0">(8)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">25.0%</span> (8 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--green);font-weight:700">100.0%</span> <span class="muted-note" style="font-size:12px;padding:0">(1)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">100.0%</span> (1 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:var(--red);font-weight:700">33.3%</span> <span class="muted-note" style="font-size:12px;padding:0">(6)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">20.0%</span> (5 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--green)">100.0%</span> (1 dec)</div></div></td><td class="mono" style="vertical-align:top"><span style="color:#5ef598;font-weight:700">60.0%</span> <span class="muted-note" style="font-size:12px;padding:0">(5)</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--green)">60.0%</span> (5 dec)</div></div></td>
         </tr></tbody>
         </table></div>
       </div>
@@ -822,16 +824,16 @@ td{padding:10px 12px}
         <thead><tr><th>DEF TIER</th><th>STANDARD OVER</th><th>STANDARD UNDER</th></tr></thead>
         <tbody><tr>
           <td><strong>elite</strong></td>
-          <td class="mono"><span style="color:var(--red);font-weight:700">35.7%</span> <span class="muted-note" style="font-size:14px;padding:0">(14)</span></td>
-          <td class="mono"><span style="color:var(--red);font-weight:700">47.6%</span> <span class="muted-note" style="font-size:14px;padding:0">(63)</span></td>
+          <td class="mono"><span style="color:var(--red);font-weight:700">35.7%</span> <span class="muted-note" style="font-size:12px;padding:0">(14)</span></td>
+          <td class="mono"><span style="color:var(--red);font-weight:700">47.6%</span> <span class="muted-note" style="font-size:12px;padding:0">(63)</span></td>
         </tr><tr>
           <td><strong>average</strong></td>
-          <td class="mono"><span style="color:var(--red);font-weight:700">45.5%</span> <span class="muted-note" style="font-size:14px;padding:0">(11)</span></td>
-          <td class="mono"><span style="color:var(--red);font-weight:700">13.3%</span> <span class="muted-note" style="font-size:14px;padding:0">(15)</span></td>
+          <td class="mono"><span style="color:var(--red);font-weight:700">45.5%</span> <span class="muted-note" style="font-size:12px;padding:0">(11)</span></td>
+          <td class="mono"><span style="color:var(--red);font-weight:700">13.3%</span> <span class="muted-note" style="font-size:12px;padding:0">(15)</span></td>
         </tr><tr>
           <td><strong>weak</strong></td>
-          <td class="mono"><span style="color:var(--red);font-weight:700">0.0%</span> <span class="muted-note" style="font-size:14px;padding:0">(3)</span></td>
-          <td class="mono"><span style="color:var(--green);font-weight:700">66.7%</span> <span class="muted-note" style="font-size:14px;padding:0">(6)</span></td>
+          <td class="mono"><span style="color:var(--red);font-weight:700">0.0%</span> <span class="muted-note" style="font-size:12px;padding:0">(3)</span></td>
+          <td class="mono"><span style="color:var(--green);font-weight:700">66.7%</span> <span class="muted-note" style="font-size:12px;padding:0">(6)</span></td>
         </tr></tbody>
       </table></div>
     </div>
@@ -841,17 +843,17 @@ td{padding:10px 12px}
         <div class="table-wrap"><table>
           <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
           <tbody><tr class="player-hit">
-          <td style="vertical-align:top"><strong>average</strong><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">78.6%</span> (14 dec)</div></div></td>
+          <td style="vertical-align:top"><strong>average</strong><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">78.6%</span> (14 dec)</div></div></td>
           <td class="right mono">14</td>
           <td class="right mono pos">11</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:78.6%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">78.6%</div></div></td>
         </tr><tr class="player-hit">
-          <td style="vertical-align:top"><strong>elite</strong><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">67.1%</span> (85 dec)</div></div></td>
+          <td style="vertical-align:top"><strong>elite</strong><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">67.1%</span> (85 dec)</div></div></td>
           <td class="right mono">85</td>
           <td class="right mono pos">57</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:67.1%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">67.1%</div></div></td>
         </tr><tr class="player-miss">
-          <td style="vertical-align:top"><strong>weak</strong><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">36.4%</span> (11 dec)</div></div></td>
+          <td style="vertical-align:top"><strong>weak</strong><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">36.4%</span> (11 dec)</div></div></td>
           <td class="right mono">11</td>
           <td class="right mono pos">4</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:36.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">36.4%</div></div></td>
@@ -863,17 +865,17 @@ td{padding:10px 12px}
         <div class="table-wrap"><table>
           <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
           <tbody><tr class="player-miss">
-          <td style="vertical-align:top"><strong>elite</strong><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">35.7%</span> (14 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">47.6%</span> (63 dec)</div></div></td>
+          <td style="vertical-align:top"><strong>elite</strong><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">35.7%</span> (14 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">47.6%</span> (63 dec)</div></div></td>
           <td class="right mono">77</td>
           <td class="right mono pos">35</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:45.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">45.5%</div></div></td>
         </tr><tr class="player-miss">
-          <td style="vertical-align:top"><strong>weak</strong><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (3 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--green)">66.7%</span> (6 dec)</div></div></td>
+          <td style="vertical-align:top"><strong>weak</strong><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">0.0%</span> (3 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--green)">66.7%</span> (6 dec)</div></div></td>
           <td class="right mono">9</td>
           <td class="right mono pos">4</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:44.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">44.4%</div></div></td>
         </tr><tr class="player-miss">
-          <td style="vertical-align:top"><strong>average</strong><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">45.5%</span> (11 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">13.3%</span> (15 dec)</div></div></td>
+          <td style="vertical-align:top"><strong>average</strong><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">45.5%</span> (11 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">13.3%</span> (15 dec)</div></div></td>
           <td class="right mono">26</td>
           <td class="right mono pos">7</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:26.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">26.9%</div></div></td>
@@ -1322,12 +1324,12 @@ td{padding:10px 12px}
         <div class="table-wrap"><table>
       <thead><tr><th>TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
       <tbody><tr class="player-warn">
-          <td style="vertical-align:top"><span class="chip chip-c">TIER C</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">50.0%</span> (10 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">50.0%</span> (6 dec)</div></div></td>
+          <td style="vertical-align:top"><span class="chip chip-c">TIER C</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">50.0%</span> (10 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">50.0%</span> (6 dec)</div></div></td>
           <td class="right mono">16</td>
           <td class="right mono pos">8</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
         </tr><tr class="player-miss">
-          <td style="vertical-align:top"><span class="chip chip-d">TIER D</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">29.6%</span> (918 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">18.2%</span> (11 dec)</div></div></td>
+          <td style="vertical-align:top"><span class="chip chip-d">TIER D</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">29.6%</span> (918 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">18.2%</span> (11 dec)</div></div></td>
           <td class="right mono">929</td>
           <td class="right mono pos">274</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:29.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">29.5%</div></div></td>
@@ -1796,21 +1798,21 @@ td{padding:10px 12px}
       <thead><tr><th>TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th><th>HIT RATE</th></tr></thead>
       <tbody>
         <tr>
-      <td><span class="chip chip-goblin">🎃 Goblin</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">58.3%</span> (357 dec)</div></div></td>
+      <td><span class="chip chip-goblin">🎃 Goblin</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">58.3%</span> (357 dec)</div></div></td>
       <td class="right mono">357</td>
       <td class="right mono pos">208</td>
       <td class="right mono neg">149</td>
       <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:58.3%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">58.3%</div></div></td>
     </tr>
         <tr>
-      <td><span class="chip chip-demon">😈 Demon</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">17.0%</span> (1,431 dec)</div></div></td>
+      <td><span class="chip chip-demon">😈 Demon</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">17.0%</span> (1,431 dec)</div></div></td>
       <td class="right mono">1,431</td>
       <td class="right mono pos">243</td>
       <td class="right mono neg">1,188</td>
       <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:17.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">17.0%</div></div></td>
     </tr>
         <tr>
-          <td><span class="chip chip-std">⭐ Standard</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">40.7%</span> (27 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">45.0%</span> (40 dec)</div></div></td>
+          <td><span class="chip chip-std">⭐ Standard</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">40.7%</span> (27 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">45.0%</span> (40 dec)</div></div></td>
           <td class="right mono">67</td>
           <td class="right mono pos">29</td>
           <td class="right mono neg">38</td>
@@ -1824,22 +1826,22 @@ td{padding:10px 12px}
         <div class="table-wrap"><table>
       <thead><tr><th>TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
       <tbody><tr class="player-warn">
-          <td style="vertical-align:top"><span class="chip chip-a">TIER A</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--green)">55.0%</span> (200 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">40.0%</span> (15 dec)</div></div></td>
+          <td style="vertical-align:top"><span class="chip chip-a">TIER A</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--green)">55.0%</span> (200 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">40.0%</span> (15 dec)</div></div></td>
           <td class="right mono">215</td>
           <td class="right mono pos">116</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:54.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">54.0%</div></div></td>
         </tr><tr class="player-miss">
-          <td style="vertical-align:top"><span class="chip chip-b">TIER B</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">27.6%</span> (29 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">0.0%</span> (1 dec)</div></div></td>
+          <td style="vertical-align:top"><span class="chip chip-b">TIER B</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">27.6%</span> (29 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">0.0%</span> (1 dec)</div></div></td>
           <td class="right mono">30</td>
           <td class="right mono pos">8</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:26.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">26.7%</div></div></td>
         </tr><tr class="player-warn">
-          <td style="vertical-align:top"><span class="chip chip-c">TIER C</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">53.8%</span> (39 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">33.3%</span> (3 dec)</div></div></td>
+          <td style="vertical-align:top"><span class="chip chip-c">TIER C</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">53.8%</span> (39 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">33.3%</span> (3 dec)</div></div></td>
           <td class="right mono">42</td>
           <td class="right mono pos">22</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:52.4%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">52.4%</div></div></td>
         </tr><tr class="player-miss">
-          <td style="vertical-align:top"><span class="chip chip-d">TIER D</span><div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5"><div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> <span style="color:var(--red)">20.9%</span> (1,547 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> <span style="color:var(--red)">52.4%</span> (21 dec)</div></div></td>
+          <td style="vertical-align:top"><span class="chip chip-d">TIER D</span><div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">20.9%</span> (1,547 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">52.4%</span> (21 dec)</div></div></td>
           <td class="right mono">1,568</td>
           <td class="right mono pos">334</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:21.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">21.3%</div></div></td>
