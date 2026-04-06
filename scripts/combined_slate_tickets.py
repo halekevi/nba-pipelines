@@ -1932,8 +1932,8 @@ canvas.leg-chart{width:100%!important;height:140px!important;}
 
 /* table */
 table{width:100%;border-collapse:collapse;}
-th{background:rgba(225,188,101,.10);color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.08em;padding:8px 10px;text-align:left;border-bottom:1px solid rgba(196,166,107,.28);}
-td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.06);font-size:12px;vertical-align:middle;}
+th{background:rgba(225,188,101,.10);color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.15vw,16px);letter-spacing:.08em;padding:10px 12px;text-align:left;border-bottom:1px solid rgba(196,166,107,.28);}
+td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.06);font-size:clamp(13px,1.05vw,15px);vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:rgba(225,188,101,.06);}
 
@@ -1962,12 +1962,12 @@ html[data-theme="light"] .ticket{
 
 /* player cell */
 .pwrap{display:flex;gap:8px;align-items:center;}
-.avatar{width:30px;height:30px;border-radius:50%;overflow:hidden;border:1px solid var(--border);flex-shrink:0;background:#1a1a2e;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent);}
+.avatar{width:34px;height:34px;border-radius:50%;overflow:hidden;border:1px solid var(--border);flex-shrink:0;background:#1a1a2e;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--accent);}
 .avatar img{width:100%;height:100%;object-fit:cover;}
 
 /* dir badges */
-.dir-over{background:rgba(0,242,255,.15);color:#00F2FF;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;}
-.dir-under{background:rgba(240,165,0,.15);color:#f0a500;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;}
+.dir-over{background:rgba(0,242,255,.15);color:#00F2FF;padding:3px 10px;border-radius:4px;font-size:13px;font-weight:700;}
+.dir-under{background:rgba(240,165,0,.15);color:#f0a500;padding:3px 10px;border-radius:4px;font-size:13px;font-weight:700;}
 .delta-badge{font-family:'Share Tech Mono',monospace;font-size:10px;padding:2px 6px;border-radius:6px;border:1px solid;margin-left:6px;vertical-align:middle;white-space:nowrap;}
 .sig-strong{background:rgba(0,242,255,.16);color:#00F2FF;border:1px solid rgba(0,242,255,.35);padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700;display:inline-block;}
 .sig-lean{background:rgba(240,165,0,.16);color:#f0a500;border:1px solid rgba(240,165,0,.35);padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700;display:inline-block;}
@@ -1994,7 +1994,10 @@ html[data-theme="light"] .ticket{
   .kpi-row{gap:18px 22px;row-gap:12px;}
   .kpi-label{font-size:11px;}
   .kpi-val{font-size:clamp(20px,5.2vw,24px);}
-  th,td{padding:6px 6px;font-size:11px;}
+  th{padding:8px 8px;font-size:clamp(12px,3.4vw,14px);}
+  td{padding:8px 8px;font-size:clamp(12px,3.2vw,14px);}
+  .avatar{width:30px;height:30px;font-size:11px;}
+  .dir-over,.dir-under{font-size:12px;padding:2px 8px;}
 }
 """
 
@@ -6925,17 +6928,17 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
                 # Pick type badge
                 pk_lower = pick_type.lower()
                 pk_color = _PICK_COLOR.get(pk_lower, "#aaa")
-                pick_html = f'<span style="font-size:11px;font-weight:700;color:{pk_color};">{_h(pick_type)}</span>'
+                pick_html = f'<span style="font-size:13px;font-weight:700;color:{pk_color};">{_h(pick_type)}</span>'
 
                 # Line display (show goblin discount if applicable)
                 if std_line and line and abs(float(std_line) - float(line)) >= 0.1:
-                    line_html = f'{_fmt(line, 1)} <span style="font-size:10px;color:var(--muted);text-decoration:line-through;">{_fmt(std_line, 1)}</span>'
+                    line_html = f'{_fmt(line, 1)} <span style="font-size:11px;color:var(--muted);text-decoration:line-through;">{_fmt(std_line, 1)}</span>'
                 else:
                     line_html = _fmt(line, 1)
 
                 # Sport accent chip
                 s_accent = _sport_accent(sport)
-                sport_html = f'<span style="font-size:10px;font-weight:700;color:{s_accent};background:{s_accent}22;padding:2px 6px;border-radius:4px;border:1px solid {s_accent}44;">{_h(sport)}</span>'
+                sport_html = f'<span style="font-size:12px;font-weight:700;color:{s_accent};background:{s_accent}22;padding:3px 8px;border-radius:4px;border:1px solid {s_accent}44;">{_h(sport)}</span>'
 
                 # Avatar
                 av_html = f'<div class="avatar">{_h(initials)}</div>'
@@ -6949,8 +6952,8 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
               <div class="pwrap">
                 {av_html}
                 <div>
-                  <div style="font-weight:600;font-size:12px;">{_h(player)}</div>
-                  <div style="font-size:10px;color:var(--muted);">{_h(matchup)}</div>
+                  <div style="font-weight:600;font-size:14px;">{_h(player)}</div>
+                  <div style="font-size:12px;color:var(--muted);">{_h(matchup)}</div>
                 </div>
               </div>
             </td>
@@ -6962,7 +6965,7 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
             <td style="font-family:'Share Tech Mono',monospace;color:var(--green);">{_pct(hit_rate)}</td>
             <td style="font-family:'Share Tech Mono',monospace;color:var(--cyan);">{_pct(ml_prob)}</td>
             <td style="font-family:'Share Tech Mono',monospace;color:var(--accent);">{_fmt(edge, 2)}</td>
-            <td style="font-size:11px;color:var(--muted);">{_h(def_tier)}</td>
+            <td style="font-size:13px;color:var(--muted);">{_h(def_tier)}</td>
           </tr>''')
                 leg_graph_uid += 1
                 parts.append(_tickets_leg_graph_row_html(leg, f"lgr-{leg_graph_uid}", table_cols))
