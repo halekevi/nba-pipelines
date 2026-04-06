@@ -14,7 +14,7 @@ import time
 import threading
 import unicodedata
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import quote
@@ -48,6 +48,16 @@ SESSION.headers.update(
 
 _HTTP_CACHE_LOCK = threading.Lock()
 _NOT_FOUND_REQUESTS: set[tuple[str, tuple[tuple[str, str], ...]]] = set()
+
+# ESPN gamelog rows often have status=null; we use site v2 summary + a short cache (per run, thread-safe).
+_ESPN_SUMMARY_STATUS_LOCK = threading.Lock()
+_ESPN_SUMMARY_STATUS_CACHE: dict[str, tuple[bool, str]] = {}
+
+# Polling guard: finalized-game stats for ESPN-backed rows (NBA/CBB/Soccer only).
+_ACTUALS_GUARD_LOCK = threading.Lock()
+_ACTUALS_GUARD_COUNTERS = {"espn_attempts": 0, "espn_written": 0}
+
+_FINALIZED_MIN_AGE = timedelta(hours=2.5)
 
 # Soccer-specific aliases seen in slate sources that differ from ESPN display names.
 SOCCER_NAME_ALIASES = {
@@ -402,6 +412,155 @@ def create_db(conn: sqlite3.Connection) -> None:
     )
 
 
+def _reset_actuals_guard_counters() -> None:
+    with _ACTUALS_GUARD_LOCK:
+        _ACTUALS_GUARD_COUNTERS["espn_attempts"] = 0
+        _ACTUALS_GUARD_COUNTERS["espn_written"] = 0
+
+
+def _espn_matchup_labels(meta: dict[str, Any]) -> tuple[str, str]:
+    """Returns (home_label, away_label) for logging."""
+    tm = meta.get("team") or {}
+    opp = meta.get("opponent") or {}
+    t_dn = str(tm.get("displayName") or tm.get("abbreviation") or "?").strip()
+    o_dn = str(opp.get("displayName") or opp.get("abbreviation") or "?").strip()
+    av = meta.get("atVs")
+    if av == "@":
+        return o_dn, t_dn
+    return t_dn, o_dn
+
+
+def _game_start_utc_from_meta(meta: dict[str, Any]) -> datetime | None:
+    gd = meta.get("gameDate")
+    if not gd:
+        return None
+    try:
+        ts = pd.Timestamp(gd)
+        if ts.tzinfo is None:
+            ts = ts.tz_localize("UTC")
+        else:
+            ts = ts.tz_convert("UTC")
+        return ts.to_pydatetime()
+    except Exception:
+        try:
+            s = str(gd).replace("Z", "+00:00")
+            dt = datetime.fromisoformat(s)
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            return dt.astimezone(timezone.utc)
+        except Exception:
+            return None
+
+
+def _status_dict_is_final(st: Any) -> tuple[bool, str]:
+    if not isinstance(st, dict):
+        return False, "no_status"
+    typ = st.get("type")
+    if not isinstance(typ, dict):
+        return False, "no_status_type"
+    name = str(typ.get("name") or "")
+    state = str(typ.get("state") or "").lower()
+    completed = typ.get("completed")
+    detail = str(typ.get("detail") or typ.get("description") or typ.get("shortDetail") or "")
+    rep = str(typ.get("name") or detail or state or "unknown")
+    if completed is True:
+        return True, rep
+    if state == "post":
+        return True, rep
+    nl = name.lower()
+    if "final" in nl or "full_time" in nl or nl == "status_final":
+        return True, rep
+    return False, rep
+
+
+def _espn_v2_summary_status(sports_path: str, event_id: str) -> tuple[bool, str]:
+    cache_key = f"{sports_path}:{event_id}"
+    with _ESPN_SUMMARY_STATUS_LOCK:
+        if cache_key in _ESPN_SUMMARY_STATUS_CACHE:
+            return _ESPN_SUMMARY_STATUS_CACHE[cache_key]
+    url = f"https://site.api.espn.com/apis/site/v2/sports/{sports_path}/summary?event={event_id}"
+    r = http_get(url)
+    if not r:
+        tup = (False, "summary_unavailable")
+        with _ESPN_SUMMARY_STATUS_LOCK:
+            _ESPN_SUMMARY_STATUS_CACHE[cache_key] = tup
+        return tup
+    try:
+        data = r.json()
+    except json.JSONDecodeError:
+        tup = (False, "summary_bad_json")
+        with _ESPN_SUMMARY_STATUS_LOCK:
+            _ESPN_SUMMARY_STATUS_CACHE[cache_key] = tup
+        return tup
+    comps = (data.get("header") or {}).get("competitions") or []
+    st: dict[str, Any] = {}
+    if comps and isinstance(comps[0], dict):
+        st = comps[0].get("status") or {}
+    ok, rep = _status_dict_is_final(st)
+    if not ok and isinstance(st, dict) and st.get("type"):
+        rep = str(((st.get("type") or {}) if isinstance(st.get("type"), dict) else st.get("type")) or rep)
+    tup = (ok, rep[:200])
+    with _ESPN_SUMMARY_STATUS_LOCK:
+        _ESPN_SUMMARY_STATUS_CACHE[cache_key] = tup
+    return tup
+
+
+def _espn_resolve_final_from_meta_or_summary(sports_path: str, event_id: str, meta: dict[str, Any]) -> tuple[bool, str]:
+    st_meta = meta.get("status")
+    if isinstance(st_meta, dict) and st_meta.get("type"):
+        ok, rep = _status_dict_is_final(st_meta)
+        if ok:
+            return True, rep
+        typ = st_meta.get("type")
+        if isinstance(typ, dict):
+            state = str(typ.get("state") or "").lower()
+            if state in ("in", "pre"):
+                return False, rep
+    return _espn_v2_summary_status(sports_path, event_id)
+
+
+def _soccer_league_slug_from_meta(meta: dict[str, Any]) -> str | None:
+    for link in meta.get("links") or []:
+        if not isinstance(link, dict):
+            continue
+        href = str(link.get("href") or "")
+        m = re.search(r"leagueAbbrev=([^&]+)", href, re.I)
+        if m:
+            return m.group(1)
+    return None
+
+
+def _espn_game_write_gate(game: dict[str, Any], now_utc: datetime) -> tuple[bool, str, str, str, str]:
+    """
+    ESPN rows only. Returns (allowed, home, away, status_for_log, started_iso).
+    """
+    meta = game.get("meta") or {}
+    path = str(game.get("espn_summary_path") or "").strip()
+    eid = str(game.get("event_id") or meta.get("id") or "").strip()
+    home, away = _espn_matchup_labels(meta)
+    start = _game_start_utc_from_meta(meta)
+    started_s = start.isoformat() if start else "unknown"
+    if not path or not eid:
+        return False, home, away, "missing_path_or_id", started_s
+    final_ok, st_rep = _espn_resolve_final_from_meta_or_summary(path, eid, meta)
+    time_ok = start is not None and (now_utc - start) >= _FINALIZED_MIN_AGE
+    ok = bool(final_ok and time_ok)
+    if final_ok and not time_ok:
+        st_rep = f"{st_rep}|too_recent(<2.5h)"
+    return ok, home, away, st_rep, started_s
+
+
+def _is_game_finalized(game: dict[str, Any], now_utc: datetime) -> bool:
+    """
+    True if actuals for this game may be written. Non-ESPN sources (e.g. NHLE) are unchanged (True).
+    For ESPN, requires summary/status final and scheduled start at least 2.5h before now_utc.
+    """
+    if str(game.get("source") or "") != "espn":
+        return True
+    ok, *_ = _espn_game_write_gate(game, now_utc)
+    return ok
+
+
 def _parse_made_attempted(cell: str | None) -> tuple[float | None, float | None]:
     if cell is None:
         return None, None
@@ -522,12 +681,19 @@ def _bb_compute_row(
 
 
 def parse_espn_basketball_gamelog(
-    j: dict[str, Any], player_name: str, sport: str, season_label: str, player_id: str
+    j: dict[str, Any],
+    player_name: str,
+    sport: str,
+    season_label: str,
+    player_id: str,
+    espn_league_key: str,
+    now_utc: datetime,
 ) -> list[dict[str, Any]]:
     names = j.get("names") or []
     events_meta = j.get("events") or {}
     if isinstance(events_meta, list):
         events_meta = {str(e.get("id")): e for e in events_meta if isinstance(e, dict) and e.get("id")}
+    summary_path = f"basketball/{espn_league_key}"
     rows: list[dict[str, Any]] = []
     for st in j.get("seasonTypes") or []:
         for cat in st.get("categories") or []:
@@ -544,6 +710,20 @@ def parse_espn_basketball_gamelog(
                     game_date = str(pd.Timestamp(gd).date())
                 except Exception:
                     continue
+                with _ACTUALS_GUARD_LOCK:
+                    _ACTUALS_GUARD_COUNTERS["espn_attempts"] += 1
+                game = {
+                    "source": "espn",
+                    "espn_summary_path": summary_path,
+                    "event_id": eid,
+                    "meta": meta,
+                }
+                ok, home, away, st_rep, started_s = _espn_game_write_gate(game, now_utc)
+                if not ok:
+                    print(
+                        f"[actuals] Skipping {home} vs {away} — not finalized (status={st_rep}, started={started_s})"
+                    )
+                    continue
                 opp = (meta.get("opponent") or {}).get("displayName")
                 av = meta.get("atVs")
                 home_away = "HOME" if av == "vs" else "AWAY" if av == "@" else None
@@ -552,6 +732,8 @@ def parse_espn_basketball_gamelog(
                     player_name, sport, season_label, game_date, opp, home_away, stats, names, raw, player_id
                 )
                 rows.append(row)
+                with _ACTUALS_GUARD_LOCK:
+                    _ACTUALS_GUARD_COUNTERS["espn_written"] += 1
     return rows
 
 
@@ -643,7 +825,8 @@ def fetch_basketball_season(
     except json.JSONDecodeError:
         return []
     label = season_code_to_label(season_code)
-    return parse_espn_basketball_gamelog(j, player_name, sport, label, espn_id)
+    now_utc = datetime.now(timezone.utc)
+    return parse_espn_basketball_gamelog(j, player_name, sport, label, espn_id, league, now_utc)
 
 
 def search_soccer_espn_id(player_name: str) -> tuple[str | None, str | None]:
@@ -683,7 +866,7 @@ def search_soccer_espn_id(player_name: str) -> tuple[str | None, str | None]:
 
 
 def parse_espn_soccer_gamelog(
-    j: dict[str, Any], player_name: str, season_label: str, player_id: str
+    j: dict[str, Any], player_name: str, season_label: str, player_id: str, now_utc: datetime
 ) -> list[dict[str, Any]]:
     names = j.get("names") or []
     events_meta = j.get("events") or {}
@@ -704,6 +887,22 @@ def parse_espn_soccer_gamelog(
                 try:
                     game_date = str(pd.Timestamp(gd).date())
                 except Exception:
+                    continue
+                slug = _soccer_league_slug_from_meta(meta)
+                summary_path = f"soccer/{slug}" if slug else ""
+                with _ACTUALS_GUARD_LOCK:
+                    _ACTUALS_GUARD_COUNTERS["espn_attempts"] += 1
+                game = {
+                    "source": "espn",
+                    "espn_summary_path": summary_path,
+                    "event_id": eid,
+                    "meta": meta,
+                }
+                ok, home, away, st_rep, started_s = _espn_game_write_gate(game, now_utc)
+                if not ok:
+                    print(
+                        f"[actuals] Skipping {home} vs {away} — not finalized (status={st_rep}, started={started_s})"
+                    )
                     continue
                 opp = (meta.get("opponent") or {}).get("displayName")
                 av = meta.get("atVs")
@@ -757,6 +956,8 @@ def parse_espn_soccer_gamelog(
                         "created_at": _now_iso(),
                     }
                 )
+                with _ACTUALS_GUARD_LOCK:
+                    _ACTUALS_GUARD_COUNTERS["espn_written"] += 1
     return rows
 
 
@@ -770,7 +971,8 @@ def fetch_soccer_season(espn_id: str, season_code: int, player_name: str) -> lis
         j = r.json()
     except json.JSONDecodeError:
         return []
-    return parse_espn_soccer_gamelog(j, player_name, season_code_to_label(season_code), espn_id)
+    now_utc = datetime.now(timezone.utc)
+    return parse_espn_soccer_gamelog(j, player_name, season_code_to_label(season_code), espn_id, now_utc)
 
 
 def search_nhl_player_id(player_name: str) -> tuple[str | None, str | None]:
@@ -1119,6 +1321,8 @@ def main() -> None:
 
         err_before = ERROR_LOG.read_text(encoding="utf-8").count("\n") if ERROR_LOG.is_file() else 0
 
+        _reset_actuals_guard_counters()
+
         print("Unique players by sport (sources merged):")
         for sp in ("NBA", "CBB", "NHL", "Soccer"):
             print(f"  {sp}: {len(by_sport.get(sp, set()))}")
@@ -1179,6 +1383,15 @@ def main() -> None:
                     games_stored += n
                     with _print_lock:
                         print(f"  [{completed}/{total}] {line}")
+
+        with _ACTUALS_GUARD_LOCK:
+            _att = _ACTUALS_GUARD_COUNTERS["espn_attempts"]
+            _wrt = _ACTUALS_GUARD_COUNTERS["espn_written"]
+        if _att > 0:
+            print(
+                f"[actuals] Wrote actuals for {_wrt}/{_att} games. "
+                f"Skipped {_att - _wrt} (in-progress or too recent)."
+            )
 
         summ = summarize_db(conn)
         err_after = ERROR_LOG.read_text(encoding="utf-8").count("\n") if ERROR_LOG.is_file() else 0
