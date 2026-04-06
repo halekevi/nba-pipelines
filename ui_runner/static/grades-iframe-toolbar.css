@@ -35,7 +35,7 @@
 
 .ist-title {
   font-family: "Bebas Neue", sans-serif;
-  font-size: 20px;
+  font-size: 24px;
   letter-spacing: 2px;
   color: var(--gold2, #d4a017);
   line-height: 1.1;
@@ -43,7 +43,7 @@
 
 .gc-live {
   font-family: "Share Tech Mono", monospace;
-  font-size: 12px;
+  font-size: 16px;
   letter-spacing: 1px;
   color: var(--cyan, #00e5ff);
   opacity: 0.92;
@@ -165,7 +165,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 17px;
+  font-size: 21px;
   transition: all 0.15s;
 }
 
@@ -195,7 +195,7 @@
 }
 
 .date-input-label {
-  font-size: 13px;
+  font-size: 17px;
   letter-spacing: 1.4px;
   color: var(--muted2, rgba(255, 255, 255, 0.48));
 }
@@ -205,7 +205,7 @@
   border: 1px solid var(--glass-bd, rgba(255, 255, 255, 0.08));
   border-radius: 11px;
   color: var(--text, #fff);
-  font-size: 15px;
+  font-size: 19px;
   padding: 8px 12px;
   outline: none;
   width: 144px;
@@ -218,7 +218,7 @@
 
 .date-go-btn {
   font-family: "Share Tech Mono", monospace;
-  font-size: 13px;
+  font-size: 17px;
   letter-spacing: 1.4px;
   padding: 8px 16px;
   border-radius: 11px;
@@ -264,7 +264,7 @@
   gap: 8px;
   padding: 10px 18px;
   border-radius: 11px;
-  font-size: 13px;
+  font-size: 17px;
   letter-spacing: 1.4px;
   text-transform: uppercase;
   color: var(--muted2, rgba(255, 255, 255, 0.48));
@@ -296,7 +296,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
+  font-size: 19px;
 }
 
 .tab-btn.active .tab-icon {
@@ -332,12 +332,12 @@
   }
 
   .dpill {
-    font-size: 13px;
+    font-size: 17px;
     padding: 7px 12px;
   }
 
   .tab-btn {
-    font-size: 12px;
+    font-size: 16px;
     padding: 8px 14px;
   }
 }
