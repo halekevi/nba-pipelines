@@ -8,53 +8,28 @@
   <meta name="proporacle-build" content="{{ ui_build_id|default('', true) }}"/>
   <title>PropORACLE — Income dashboard</title>
   <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260404d"/>
+  <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260407"/>
   <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260406"/>
   <link rel="stylesheet" href="/static/mobile-content-width.css?v=20260406"/>
   <style>
     body.page-dashboard-income {
-      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-      margin: 0;
-      background: #111;
-      color: #e8e8e8;
+      font-family: "Inter", sans-serif;
       -webkit-text-size-adjust: 100%;
       touch-action: manipulation;
     }
-    .income-nav {
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 4px;
-      padding: 10px max(12px, env(safe-area-inset-left, 0px)) 10px max(12px, env(safe-area-inset-right, 0px));
-      padding-top: max(10px, env(safe-area-inset-top, 0px));
-      background: rgba(26, 26, 26, 0.96);
-      border-bottom: 1px solid #333;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+    .page-dashboard-income .income-header,
+    .page-dashboard-income .grid,
+    .page-dashboard-income .warn {
+      position: relative;
+      z-index: 1;
     }
-    .income-nav a {
-      color: #9a9a9a;
-      text-decoration: none;
-      padding: 10px 12px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      min-height: 44px;
-      box-sizing: border-box;
-      display: inline-flex;
-      align-items: center;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .income-nav a:hover { color: #e0e0e0; background: rgba(255, 255, 255, 0.06); }
-    .income-nav a.active { color: #d4af37; }
     .income-header {
       padding: 1rem max(1.5rem, env(safe-area-inset-left, 0px)) 1rem max(1.5rem, env(safe-area-inset-right, 0px));
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
     .income-header h1 { margin: 0; font-size: clamp(1rem, 4vw, 1.15rem); font-weight: 600; }
-    .income-header p { margin: 0.35rem 0 0; font-size: 0.85rem; color: #888; line-height: 1.45; }
+    .income-header p { margin: 0.35rem 0 0; font-size: 0.85rem; color: var(--muted); line-height: 1.45; }
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -68,8 +43,8 @@
       .grid { grid-template-columns: 1fr; }
     }
     .panel {
-      background: #1a1a1a;
-      border: 1px solid #333;
+      background: rgba(26, 26, 26, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 8px;
       padding: 0.75rem;
       min-height: 320px;
@@ -93,13 +68,11 @@
   </style>
 </head>
 <body class="page-dashboard-income">
-  <nav class="income-nav" aria-label="Site">
-    <a href="/">Home</a>
-    <a href="/tickets">Tickets</a>
-    <a href="/grades">Grades</a>
-    <a href="/dashboard/income" class="active">Income</a>
-    <a href="/payout">Payouts</a>
-  </nav>
+  <div class="mesh-bg" aria-hidden="true"></div>
+  <div class="grain-layer" aria-hidden="true"></div>
+  {% set nav_active = 'income' %}
+  {% include '_site_nav.html' %}
+
   <header class="income-header">
     <h1>Income engine — ROI · CLV · calibration · drawdown</h1>
     <p>Not optimized for streaks or “correct legs.” See <code>DESIGN_PRINCIPLES.md</code>.</p>
@@ -116,6 +89,7 @@
     <div class="panel"><h2>Drawdown (from peak equity)</h2><div id="dd"></div></div>
   </div>
 
+  <script src="/static/site-nav-chrome.js?v=20260407"></script>
   <script>
     const plotCfg = { displayModeBar: false, responsive: true };
     const roi = {{ roi_json | safe }};

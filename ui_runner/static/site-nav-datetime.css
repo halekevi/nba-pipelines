@@ -1,0 +1,69 @@
+/* Shared top nav: live pill + slate date / last sync / clock (load after proporacle-page-shell on ticket/payout pages). */
+.nav-live-cluster {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.nav-datetime-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px 0;
+  min-width: 0;
+  text-align: left;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding-left: 14px;
+  margin-left: 2px;
+}
+.nav-slate-date {
+  font-family: "Share Tech Mono", ui-monospace, monospace;
+  font-size: clamp(14px, 1.25vw, 17px);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+}
+.nav-sync-line {
+  font-size: clamp(12px, 1.1vw, 14px);
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+  max-width: min(52vw, 300px);
+}
+.nav-clock {
+  font-family: "Share Tech Mono", ui-monospace, monospace;
+  color: rgba(255, 255, 255, 0.55);
+}
+.nav-sync-sep {
+  opacity: 0.45;
+  padding: 0 5px;
+}
+[data-theme="light"] .nav-datetime-block {
+  border-left-color: rgba(0, 0, 0, 0.1);
+}
+[data-theme="light"] .nav-slate-date {
+  color: rgba(0, 0, 0, 0.88);
+}
+[data-theme="light"] .nav-sync-line {
+  color: rgba(0, 0, 0, 0.5);
+}
+[data-theme="light"] .nav-clock {
+  color: rgba(0, 0, 0, 0.52);
+}
+
+/* Compact logo in snav (overrides oversized rule in proporacle-page-shell.css). */
+.snav .hybrid-logo .logo-icon,
+.snav-brand .logo-icon {
+  width: 44px !important;
+  height: 44px !important;
+  max-width: 44px !important;
+  max-height: 44px !important;
+  object-fit: contain !important;
+}
