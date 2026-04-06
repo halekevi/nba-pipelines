@@ -6,8 +6,9 @@
 .NOTES
   Order: (A1) Refresh historical game logs → (A) Grader for yesterday → (A1b) build_ticket_eval for yesterday → (A1c) optional CLV Excel columns → (A2) consistency
          → (B) Archive outputs\<yesterday>\ step8 copies → (C0) fetch game lines → (C0b) rolling NBA 1Q/2Q DB sync
-         → (C) run_pipeline for today → (D) combined_slate → (E) git commit/push.
+         → (C) run_pipeline for today → (D) combined_slate → (E) git commit/push → (F) optional night poll of historical actuals.
          Use -SkipFetch to skip A1 and C0b. -SkipGameLines skips C0. -SkipPeriodHistorySync skips C0b only.
+         Use -PollHistoricalActuals to re-run fetch_historical_actuals.py every 90 min (4 passes) after 21:00 ET (see -PollSkip9pmWait).
          -WeeklyAnalysis runs synthetic + full consistency rebuild after analyze_grader.
          -MonthlyRetrain after STEP E runs all four prop ML trainers + full consistency rebuild (logs OK/FAILED, continues on failure).
   NCAA 2026: WCBB slate not required from 2026-04-06; men's CBB not required from 2026-04-07 (see Get-MissingTodaySlateOutputs).
@@ -29,7 +30,11 @@ param(
     [switch]$AllowMissingSlates,
     [switch]$SkipPeriodHistorySync,
     [int]$PeriodHistoryLookbackDays = 10,
-    [int]$A1TimeoutMinutes = 30
+    [int]$A1TimeoutMinutes = 30,
+    [switch]$PollHistoricalActuals,
+    [int]$PollPasses = 4,
+    [int]$PollIntervalSeconds = 5400,
+    [switch]$PollSkip9pmWait
 )
 
 $ErrorActionPreference = "Continue"
@@ -712,6 +717,91 @@ else {
     finally {
         Pop-Location
     }
+}
+
+# =============================================================================
+# STEP F — Night polling: historical actuals (safe with finalized-game guard in Python)
+# =============================================================================
+if ($PollHistoricalActuals -and -not $SkipFetch) {
+    Write-Log "STEP F - Historical actuals poll: START ($PollPasses passes, interval ${PollIntervalSeconds}s)"
+    $fetchScriptPoll = Join-Path $Root "scripts\fetch_historical_actuals.py"
+    if (-not (Test-Path $fetchScriptPoll)) {
+        Write-Log "STEP F - Historical actuals poll: SKIP (fetch_historical_actuals.py missing)"
+    }
+    else {
+        $tzEt = $null
+        foreach ($tzId in @("America/New_York", "Eastern Standard Time")) {
+            try {
+                $tzEt = [System.TimeZoneInfo]::FindSystemTimeZoneById($tzId)
+                break
+            }
+            catch {
+            }
+        }
+        if ($tzEt -and -not $PollSkip9pmWait) {
+            $nowEt = [System.TimeZoneInfo]::ConvertTimeFromUtc([DateTime]::UtcNow, $tzEt)
+            $today9pmUnspec = [DateTime]::new($nowEt.Year, $nowEt.Month, $nowEt.Day, 21, 0, 0, [DateTimeKind]::Unspecified)
+            $today9pmUtc = [System.TimeZoneInfo]::ConvertTimeToUtc($today9pmUnspec, $tzEt)
+            $nowUtc = [DateTime]::UtcNow
+            if ($nowUtc -lt $today9pmUtc) {
+                $waitSec = [int][Math]::Ceiling(($today9pmUtc - $nowUtc).TotalSeconds)
+                if ($waitSec -gt 0) {
+                    Write-Log "STEP F - Poll: waiting $waitSec s until 21:00 ET ($($today9pmUnspec.ToString('yyyy-MM-dd')))"
+                    Start-Sleep -Seconds $waitSec
+                }
+            }
+        }
+        elseif (-not $tzEt -and -not $PollSkip9pmWait) {
+            Write-Log "STEP F - Poll: WARN (could not resolve ET timezone — starting passes immediately)"
+        }
+
+        Push-Location $Root
+        try {
+            $pollTimeoutSec = [Math]::Max(120, $A1TimeoutMinutes * 60)
+            for ($pi = 0; $pi -lt $PollPasses; $pi++) {
+                if ($pi -gt 0) {
+                    Write-Log "STEP F - Poll: sleep ${PollIntervalSeconds}s before pass $($pi + 1)/$PollPasses"
+                    Start-Sleep -Seconds $PollIntervalSeconds
+                }
+                Write-Host "[poll] Running actuals fetch pass $($pi + 1)/$PollPasses" -ForegroundColor Cyan
+                Write-Log "STEP F - Poll: fetch_historical_actuals pass $($pi + 1)/$PollPasses"
+                $pollProc = Start-Process -FilePath "py" `
+                    -ArgumentList @("-3.14", "-X", "utf8", "-u", $fetchScriptPoll, "--refresh-current") `
+                    -NoNewWindow -PassThru -WorkingDirectory $Root
+                $pollDone = $pollProc.WaitForExit($pollTimeoutSec * 1000)
+                if (-not $pollDone) {
+                    Write-Warning "[poll] fetch_historical_actuals pass $($pi + 1) exceeded timeout (${pollTimeoutSec}s)"
+                    Write-Log "STEP F - Poll pass $($pi + 1): WARN (timeout ${pollTimeoutSec}s)"
+                    try {
+                        Stop-Process -Id $pollProc.Id -Force -ErrorAction SilentlyContinue
+                    }
+                    catch {
+                    }
+                }
+                else {
+                    $pEx = $pollProc.ExitCode
+                    if ($pEx -ne 0) {
+                        Write-Warning "[poll] Actuals fetch pass $($pi + 1) exited $pEx"
+                        Write-Log "STEP F - Poll pass $($pi + 1): WARN (exit $pEx)"
+                    }
+                    else {
+                        Write-Log "STEP F - Poll pass $($pi + 1): OK"
+                    }
+                }
+            }
+        }
+        catch {
+            Write-Log "STEP F - Historical actuals poll: FAILED (exception: $($_.Exception.Message))"
+            Write-Warning "STEP F poll exception: $($_.Exception.Message)"
+        }
+        finally {
+            Pop-Location
+        }
+        Write-Log "STEP F - Historical actuals poll: complete"
+    }
+}
+elseif ($PollHistoricalActuals -and $SkipFetch) {
+    Write-Log "STEP F - Historical actuals poll: SKIPPED (-SkipFetch)"
 }
 
 # =============================================================================
