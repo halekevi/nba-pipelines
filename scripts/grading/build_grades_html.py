@@ -285,19 +285,19 @@ def over_under_lines_html(sub_rows: list[dict]) -> str:
     if over["decided"] > 0:
         col = "var(--green)" if over["hit_rate"] >= 55 else "var(--red)"
         inner += (
-            f'<div class="sub-dir"><span style="color:var(--cyan);font-size:11px">▲ OVER</span> '
+            f'<div class="sub-dir"><span style="color:var(--cyan);font-size:15px">▲ OVER</span> '
             f'<span style="color:{col}">{pct(over["hit_rate"])}</span> ({fmt_num(over["decided"])} dec)</div>'
         )
     if under["decided"] > 0:
         col = "var(--green)" if under["hit_rate"] >= 55 else "var(--red)"
         inner += (
-            f'<div class="sub-dir"><span style="color:var(--gold);font-size:11px">▼ UNDER</span> '
+            f'<div class="sub-dir"><span style="color:var(--gold);font-size:15px">▼ UNDER</span> '
             f'<span style="color:{col}">{pct(under["hit_rate"])}</span> ({fmt_num(under["decided"])} dec)</div>'
         )
     if not inner:
         return ""
     return (
-        f'<div style="font-size:11px;color:var(--muted2);margin-top:5px;line-height:1.45">{inner}</div>'
+        f'<div style="font-size:15px;color:var(--muted2);margin-top:6px;line-height:1.5">{inner}</div>'
     )
 
 
@@ -330,14 +330,14 @@ def tier_row(tier: str, agg: dict, extra: str = "") -> str:
     dir_html = ""
     if over_pct != "—":
         col = "var(--green)" if pct_f(over_pct) >= 55 else "var(--red)"
-        dir_html += f'<span style="color:var(--cyan);font-size:10px;margin-right:8px">▲ </span><span style="color:{col};font-size:10px;margin-right:8px">{over_pct}</span>'
+        dir_html += f'<span style="color:var(--cyan);font-size:14px;margin-right:8px">▲ </span><span style="color:{col};font-size:14px;margin-right:8px">{over_pct}</span>'
     if under_pct != "—":
         col = "var(--green)" if pct_f(under_pct) >= 55 else "var(--red)"
-        dir_html += f'<span style="color:var(--gold);font-size:10px">▼ </span><span style="color:{col};font-size:10px">{under_pct}</span>'
+        dir_html += f'<span style="color:var(--gold);font-size:14px">▼ </span><span style="color:{col};font-size:14px">{under_pct}</span>'
     tier_lbl = f"TIER {tier.upper()}"
     return f"""<tr class="{row_cls}">
       <td><span class="chip {chip_cls}">{tier_lbl}</span>
-      <div style="font-size:10px;color:var(--muted2);margin-top:3px">{dir_html}{extra}</div></td>
+      <div style="font-size:14px;color:var(--muted2);margin-top:4px">{dir_html}{extra}</div></td>
       <td class="right mono">{fmt_num(d)}</td>
       <td class="right mono pos">{fmt_num(h_)}</td>
       <td>{rate_bar_html(hr)}</td>
@@ -496,7 +496,7 @@ def def_tier_table(rows: list[dict]) -> str:
         if not s or s.get("decided", 0) == 0:
             return "—"
         col = rate_color(s.get("hit_rate", 0))
-        return f'<span style="color:{col};font-weight:700">{pct(s["hit_rate"])}</span> <span class="muted-note" style="font-size:10px;padding:0">({fmt_num(s["decided"])})</span>'
+        return f'<span style="color:{col};font-weight:700">{pct(s["hit_rate"])}</span> <span class="muted-note" style="font-size:14px;padding:0">({fmt_num(s["decided"])})</span>'
 
     detail_rows_pt = ""
     detail_rows_tier = ""
@@ -958,7 +958,7 @@ CSS = """
   --pending:#666;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Share Tech Mono',monospace;background:transparent;color:var(--text);min-height:100vh;padding-bottom:24px}
+body{font-family:'Share Tech Mono',monospace;background:transparent;color:var(--text);min-height:100vh;padding-bottom:28px;font-size:clamp(15px,1.08vw,18px);line-height:1.5}
 h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif}
 body::before{content:'';position:fixed;top:-20%;left:-10%;width:55%;height:55%;background:radial-gradient(ellipse,rgba(212,160,23,.07) 0%,transparent 70%);pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;bottom:-20%;right:-10%;width:50%;height:50%;background:radial-gradient(ellipse,rgba(0,229,255,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
@@ -973,17 +973,17 @@ box-shadow:0 8px 32px rgba(0,0,0,.28)}
 .logo{display:flex;align-items:center;gap:14px}
 .logo-icon{width:120px;height:120px;object-fit:contain;display:block;filter:drop-shadow(0 0 8px rgba(212,160,23,0.45))}
 @media(max-width:768px){.logo-icon{width:80px;height:80px}}
-.logo-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;background:linear-gradient(to bottom,#f0a500,#d4a017,#f7e08a);-webkit-background-clip:text;background-clip:text;color:transparent}
-.logo-sub{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2.5px;margin-top:2px}
-.date-badge{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted2);background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-border:1px solid var(--glass-bd);border-radius:999px;padding:8px 16px;letter-spacing:1.5px}
+.logo-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;background:linear-gradient(to bottom,#f0a500,#d4a017,#f7e08a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo-sub{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--muted);letter-spacing:2.2px;margin-top:2px}
+.date-badge{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--muted2);background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+border:1px solid var(--glass-bd);border-radius:999px;padding:10px 18px;letter-spacing:1.5px}
 .main{max-width:none;width:100%;margin:0;padding:24px 20px;box-sizing:border-box}
 .sport-header{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
-.sport-label{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;line-height:1;color:var(--gold);text-shadow:0 0 28px rgba(240,165,0,.18)}
+.sport-label{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3.5px;line-height:1;color:var(--gold);text-shadow:0 0 28px rgba(240,165,0,.18)}
 .sport-header-line{flex:1;min-width:80px;height:1px;background:rgba(255,255,255,0.08)}
-.sport-meta-count{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted2)}
+.sport-meta-count{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--muted2)}
 .sport-section{margin-bottom:48px;width:100%;max-width:100%;box-sizing:border-box}
-.section-label{font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--muted);letter-spacing:3px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.section-label{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--muted);letter-spacing:2.8px;display:flex;align-items:center;gap:10px;margin-bottom:18px}
 .section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
 .stat-grid{display:grid;gap:14px;margin-bottom:24px}
 .stat-grid-4{grid-template-columns:repeat(4,1fr)}
@@ -998,25 +998,25 @@ box-shadow:0 4px 24px rgba(0,0,0,.22)}
 .stat-card.amber::before{background:linear-gradient(90deg,var(--gold),transparent)}
 .stat-card.red::before{background:linear-gradient(90deg,var(--red),transparent)}
 .stat-card.purple::before{background:linear-gradient(90deg,var(--purple),transparent)}
-.stat-label{font-family:'Bebas Neue',sans-serif;font-size:9px;color:var(--muted);letter-spacing:2.5px;margin-bottom:8px}
-.stat-val{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;line-height:1}
-.stat-sub{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted2);margin-top:5px}
+.stat-label{font-family:'Bebas Neue',sans-serif;font-size:12px;color:var(--muted);letter-spacing:2.2px;margin-bottom:8px}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:2px;line-height:1}
+.stat-sub{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--muted2);margin-top:6px}
 .stat-sub strong{font-weight:700}
 .table-wrap{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
 border:1px solid var(--glass-bd);border-radius:14px;overflow:hidden;margin-bottom:20px;box-shadow:0 4px 24px rgba(0,0,0,.18)}
-table{width:100%;border-collapse:collapse;font-size:13px;font-family:'Share Tech Mono',monospace}
-th{font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:var(--muted);padding:10px 14px;text-align:left;
+table{width:100%;border-collapse:collapse;font-size:clamp(15px,1.05vw,17px);font-family:'Share Tech Mono',monospace}
+th{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.1vw,16px);letter-spacing:1.8px;color:var(--muted);padding:12px 16px;text-align:left;
 background:rgba(0,0,0,0.22);backdrop-filter:blur(12px);border-bottom:1px solid var(--glass-bd);white-space:nowrap}
 th.right{text-align:right}
-td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:middle}
+td{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(255,255,255,.04)}
-td.right{text-align:right}td.mono{font-family:'Share Tech Mono',monospace;font-size:12px}
-.rate-cell{display:flex;align-items:center;gap:10px}
-.rate-bar-bg{flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
-.rate-bar-fill{height:100%;border-radius:3px;transition:width .4s}
-.rate-num{font-family:'Share Tech Mono',monospace;font-size:12px;width:44px;text-align:right;flex-shrink:0}
-.chip{display:inline-block;border-radius:8px;padding:3px 10px;font-size:11px;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:.5px;
+td.right{text-align:right}td.mono{font-family:'Share Tech Mono',monospace;font-size:15px}
+.rate-cell{display:flex;align-items:center;gap:12px}
+.rate-bar-bg{flex:1;height:7px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
+.rate-bar-fill{height:100%;border-radius:4px;transition:width .4s}
+.rate-num{font-family:'Share Tech Mono',monospace;font-size:15px;min-width:52px;text-align:right;flex-shrink:0}
+.chip{display:inline-block;border-radius:8px;padding:4px 12px;font-size:14px;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:.5px;
 background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid var(--glass-bd)}
 .chip-a{background:rgba(57,255,110,.08);color:var(--green);border-color:rgba(57,255,110,.28)}
 .chip-b{background:rgba(0,229,255,.08);color:var(--cyan);border-color:rgba(0,229,255,.28)}
@@ -1029,9 +1029,9 @@ background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid va
 .three-col{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:20px;width:100%;max-width:100%;box-sizing:border-box}
 .insight-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:24px;width:100%;max-width:100%;box-sizing:border-box;min-width:0}
 .insight-card{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);border-radius:12px;padding:14px 16px;box-shadow:0 4px 20px rgba(0,0,0,.15);min-width:0;box-sizing:border-box}
-.insight-icon{font-size:22px;margin-bottom:8px}
-.insight-title{font-weight:700;font-size:13px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:var(--gold)}
-.insight-body{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted2);line-height:1.6}
+.insight-icon{font-size:26px;margin-bottom:8px}
+.insight-title{font-weight:700;font-size:16px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:var(--gold)}
+.insight-body{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--muted2);line-height:1.6}
 .insight-body strong{color:var(--text)}
 tr.player-hit td{background:rgba(57,255,110,0.04)}
 tr.player-hit td:first-child{border-left:3px solid var(--green)}
@@ -1040,15 +1040,24 @@ tr.player-miss td:first-child{border-left:3px solid var(--red)}
 tr.player-warn td{background:rgba(240,165,0,0.06)}
 tr.player-warn td:first-child{border-left:3px solid var(--gold)}
 .pos{color:var(--green);font-weight:700}.neg{color:var(--red);font-weight:700}.neu{color:var(--muted2)}
-.alert{border-radius:12px;padding:14px 18px;margin-bottom:20px;border:1px solid;font-size:13px;line-height:1.6;backdrop-filter:blur(16px)}
+.alert{border-radius:12px;padding:16px 20px;margin-bottom:20px;border:1px solid;font-size:16px;line-height:1.6;backdrop-filter:blur(16px)}
 .alert-red{background:rgba(255,77,77,.08);border-color:rgba(255,77,77,.35)}
 .alert-green{background:rgba(57,255,110,.08);border-color:rgba(57,255,110,.32)}
 .alert-amber{background:rgba(240,165,0,.08);border-color:rgba(240,165,0,.32)}
-.alert-title{font-family:'Bebas Neue',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;margin-bottom:4px}
+.alert-title{font-family:'Bebas Neue',sans-serif;font-weight:700;font-size:16px;letter-spacing:1px;margin-bottom:4px}
 .sub-dir{display:inline-block;margin-right:8px}
-.muted-note{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);padding:14px;text-align:center}
+.muted-note{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--muted);padding:14px;text-align:center}
 td.muted{color:var(--muted2)}
-@media(max-width:768px){.stat-grid-4,.stat-grid-2{grid-template-columns:repeat(2,1fr)}.two-col,.three-col,.insight-grid{grid-template-columns:1fr}}
+@media(max-width:768px){
+.stat-grid-4,.stat-grid-2{grid-template-columns:repeat(2,1fr)}.two-col,.three-col,.insight-grid{grid-template-columns:1fr}
+body{font-size:clamp(14px,3.2vw,16px)}
+table{font-size:clamp(14px,3.1vw,16px)}
+th{font-size:clamp(12px,3vw,14px);padding:10px 12px}
+td{padding:10px 12px}
+.section-label{font-size:14px}
+.sport-label{font-size:30px}
+.logo-title{font-size:28px}
+}
 """
 
 
@@ -1078,9 +1087,9 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
 
     if not nba_section and not cbb_section and not nhl_section and not soccer_section and not mlb_section:
         body_content = """<div style="text-align:center;padding:60px 20px;font-family:'Share Tech Mono',monospace">
-          <div style="font-size:32px;margin-bottom:16px">📭</div>
-          <div style="font-size:18px;color:rgba(255,255,255,0.55)">No graded data found for this date.</div>
-          <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:8px">
+          <div style="font-size:36px;margin-bottom:16px">📭</div>
+          <div style="font-size:22px;color:rgba(255,255,255,0.55)">No graded data found for this date.</div>
+          <div style="font-size:17px;color:rgba(255,255,255,0.4);margin-top:8px">
             Run <code style="color:var(--cyan)">run_grader.ps1 --date {date_str}</code> to generate grades.
           </div>
         </div>""".replace("{date_str}", date_str)
