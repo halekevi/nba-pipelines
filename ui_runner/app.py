@@ -96,7 +96,7 @@ app = Flask(
 )
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-04-12-home-data-populate-fix"
+_UI_BUILD_ID = "2026-04-12-grades-toolbar-type-down"
 
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
