@@ -61,6 +61,31 @@
       color: #cb8;
       box-sizing: border-box;
     }
+    .income-notice {
+      background: rgba(127, 199, 217, 0.08);
+      border: 1px solid rgba(127, 199, 217, 0.25);
+      padding: 0.85rem 1rem;
+      margin: 0 max(1rem, env(safe-area-inset-left, 0px)) 0 max(1rem, env(safe-area-inset-right, 0px));
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.45;
+      box-sizing: border-box;
+    }
+    .income-notice code { background: rgba(0, 0, 0, 0.25); }
+    .chart-empty {
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.8rem;
+      color: #777;
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
     code { background: #222; padding: 0.1rem 0.35rem; border-radius: 4px; }
     .panel [id^="roi"], .panel [id^="clv"], .panel [id^="cal"], .panel [id^="dd"] {
       min-height: 260px;
@@ -81,6 +106,12 @@
 
   {% if error %}
   <div class="warn">{{ error }}</div>
+  {% elif charts_empty %}
+  <div class="income-notice" role="status">
+    No daily PnL rows yet (empty <code>bet_result</code> / <code>v_roi_daily</code>). Demo seed may be off
+    (<code>PROPORACLE_INCOME_SEED_DEMO=0</code>) or the DB path may be read-only. Run
+    <code>python scripts/seed_income_dashboard_demo.py</code> or ingest settled bets, then reload.
+  </div>
   {% endif %}
 
   <div class="grid">
@@ -131,6 +162,8 @@
         font: { color: '#ccc' },
         xaxis: { title: 'EV bucket' }, yaxis: { title: 'Mean CLV (implied Δ)' }
       }, plotCfg);
+    } else {
+      emptyChart('clv', 'No CLV buckets — need bet_result with clv_implied_delta joined to bet_candidate.');
     }
 
     if (cal.pred && cal.pred.length) {
@@ -144,6 +177,8 @@
         font: { color: '#ccc' },
         xaxis: { title: 'Pred mean', range: [0, 1] }, yaxis: { title: 'Hit rate', range: [0, 1] }
       }, plotCfg);
+    } else {
+      emptyChart('cal', 'No calibration bins — need prediction + bet_result with HIT/MISS results.');
     }
 
     if (eq.days && eq.days.length) {
@@ -154,6 +189,8 @@
         font: { color: '#ccc' },
         xaxis: { title: 'Day' }, yaxis: { title: 'Drawdown', tickformat: ',.1%' }
       }, plotCfg);
+    } else {
+      emptyChart('dd', 'No drawdown series — follows cumulative PnL from ROI.');
     }
   </script>
 </body>

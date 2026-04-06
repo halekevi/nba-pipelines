@@ -19,10 +19,7 @@ Prop Oracle pipeline. These files are:
 
 ### Income dashboard (`proporacle_income.db`)
 
-On first open, the UI applies `ddl.sql` and `views.sql` automatically. If the DB has no `bet_result` rows:
-
-- **Local:** demo slates are inserted automatically unless you set `PROPORACLE_INCOME_SEED_DEMO=0`.
-- **Railway / hosted:** set `PROPORACLE_INCOME_SEED_DEMO=1` once for sample charts, or ingest real results.
+On first open, the UI applies `ddl.sql` and `views.sql` automatically. If `bet_result` is empty, demo slates are inserted so charts render, unless you set `PROPORACLE_INCOME_SEED_DEMO=0` (use that when you rely on an empty DB or only real ingest).
 
 Manual seed (any environment):
 

@@ -78,3 +78,25 @@ def test_load_income_db_applies_schema(monkeypatch, tmp_path):
         fetch_roi_daily(conn)
     finally:
         conn.close()
+
+
+def test_maybe_seed_demo_populates_empty_db(monkeypatch, tmp_path):
+    db = tmp_path / "seeded.db"
+    monkeypatch.setenv("PROPORACLE_DB_PATH", str(db))
+    monkeypatch.delenv("PROPORACLE_INCOME_SEED_DEMO", raising=False)
+
+    from proporacle.monitoring.dashboard_queries import (
+        bet_result_count,
+        fetch_roi_daily,
+        load_income_db,
+        maybe_seed_demo_income,
+    )
+
+    conn = load_income_db()
+    try:
+        assert bet_result_count(conn) == 0
+        maybe_seed_demo_income(conn)
+        assert bet_result_count(conn) > 0
+        assert len(fetch_roi_daily(conn)) >= 1
+    finally:
+        conn.close()

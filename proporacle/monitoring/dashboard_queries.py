@@ -118,21 +118,16 @@ def load_income_db(path: str | Path | None = None) -> sqlite3.Connection:
 
 def maybe_seed_demo_income(conn: sqlite3.Connection) -> None:
     """
-    When bet_result is empty, optionally insert demo rows so charts render.
+    When bet_result is empty, insert demo rows so charts render (idempotent demo slates).
 
-    - Local (no Railway env): seeds by default; set PROPORACLE_INCOME_SEED_DEMO=0 to skip.
-    - Railway / hosted: seeds only if PROPORACLE_INCOME_SEED_DEMO=1 (avoids fake data in prod).
+    Opt out with PROPORACLE_INCOME_SEED_DEMO=0 (or false/no) if you use an empty DB on purpose
+    or ingest only real results.
     """
     if bet_result_count(conn) > 0:
         return
-    railway = bool(os.environ.get("RAILWAY_ENVIRONMENT") or os.environ.get("RAILWAY_PROJECT_ID"))
     flag = os.environ.get("PROPORACLE_INCOME_SEED_DEMO", "").strip().lower()
-    if railway:
-        if flag not in ("1", "true", "yes"):
-            return
-    else:
-        if flag in ("0", "false", "no"):
-            return
+    if flag in ("0", "false", "no"):
+        return
     seed_demo_income_data(conn)
 
 

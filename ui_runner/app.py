@@ -96,7 +96,7 @@ app = Flask(
 )
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-04-08-income-db-auto-schema"
+_UI_BUILD_ID = "2026-04-08-income-seed-unified"
 
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
@@ -2165,9 +2165,8 @@ def dashboard_income():
     """
     ROI / CLV / calibration / drawdown only — see DESIGN_PRINCIPLES.md.
     Uses PROPORACLE_DB_PATH or data/cache/proporacle_income.db; ddl.sql + views.sql are applied
-    automatically on first open. Empty DB: local dev auto-seeds demo bets unless
-    PROPORACLE_INCOME_SEED_DEMO=0; on Railway set PROPORACLE_INCOME_SEED_DEMO=1 for demo charts
-    or ingest real bet_result rows.
+    automatically on first open. When bet_result is empty, demo slates are inserted unless
+    PROPORACLE_INCOME_SEED_DEMO=0. Use real pipeline ingest for production metrics.
     """
     import json
 
@@ -2216,9 +2215,12 @@ def dashboard_income():
             "Check PROPORACLE_DB_PATH and that proporacle/data/schema/ddl.sql and views.sql exist."
         )
 
+    charts_empty = err is None and len(roi_payload["days"]) == 0
+
     return render_template(
         "dashboard_income.html",
         error=err,
+        charts_empty=charts_empty,
         ui_build_id=_UI_BUILD_ID,
         roi_json=Markup(json.dumps(roi_payload)),
         clv_json=Markup(json.dumps(clv_payload)),
