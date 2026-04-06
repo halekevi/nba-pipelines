@@ -96,7 +96,7 @@ app = Flask(
 )
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-04-08-nav-local-datetime"
+_UI_BUILD_ID = "2026-04-08-income-db-auto-schema"
 
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
@@ -2164,7 +2164,10 @@ def api_vision_screenshot():
 def dashboard_income():
     """
     ROI / CLV / calibration / drawdown only — see DESIGN_PRINCIPLES.md.
-    Requires PROPORACLE_DB_PATH (or default data/cache/proporacle_income.db) with ddl.sql + views.sql applied.
+    Uses PROPORACLE_DB_PATH or data/cache/proporacle_income.db; ddl.sql + views.sql are applied
+    automatically on first open. Empty DB: local dev auto-seeds demo bets unless
+    PROPORACLE_INCOME_SEED_DEMO=0; on Railway set PROPORACLE_INCOME_SEED_DEMO=1 for demo charts
+    or ingest real bet_result rows.
     """
     import json
 
@@ -2181,10 +2184,12 @@ def dashboard_income():
             fetch_equity_drawdown,
             fetch_roi_daily,
             load_income_db,
+            maybe_seed_demo_income,
         )
 
         conn = load_income_db()
         try:
+            maybe_seed_demo_income(conn)
             roi_rows = fetch_roi_daily(conn)
             for r in roi_rows:
                 roi_payload["days"].append(r["bet_day"])
@@ -2208,7 +2213,7 @@ def dashboard_income():
     except Exception as e:
         err = (
             f"{type(e).__name__}: {e}. "
-            "Initialize DB: apply proporacle/data/schema/ddl.sql then views.sql; set PROPORACLE_DB_PATH if needed."
+            "Check PROPORACLE_DB_PATH and that proporacle/data/schema/ddl.sql and views.sql exist."
         )
 
     return render_template(

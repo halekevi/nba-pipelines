@@ -62,3 +62,19 @@ def test_views_roundtrip(tmp_path):
         assert cal[0]["hit_rate"] == pytest.approx(1.0)
     finally:
         conn.close()
+
+
+def test_load_income_db_applies_schema(monkeypatch, tmp_path):
+    db = tmp_path / "fresh.db"
+    monkeypatch.setenv("PROPORACLE_DB_PATH", str(db))
+    monkeypatch.delenv("RAILWAY_ENVIRONMENT", raising=False)
+    monkeypatch.delenv("RAILWAY_PROJECT_ID", raising=False)
+    monkeypatch.setenv("PROPORACLE_INCOME_SEED_DEMO", "0")
+
+    from proporacle.monitoring.dashboard_queries import fetch_roi_daily, load_income_db
+
+    conn = load_income_db()
+    try:
+        fetch_roi_daily(conn)
+    finally:
+        conn.close()
