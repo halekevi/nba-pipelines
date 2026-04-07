@@ -148,9 +148,77 @@ def load_graded(path: Path) -> list[dict]:
     return normalized
 
 
+
 # ══════════════════════════════════════════════════════════════════════════════
-#  AGGREGATION HELPERS
+#  GRADED PROPS JSON (Grades UI /api/graded-props)
 # ══════════════════════════════════════════════════════════════════════════════
+
+def _cell_str(v: Any) -> str:
+    if v is None:
+        return ""
+    s = str(v).strip()
+    if s.lower() in ("none", "nan", ""):
+        return ""
+    return s
+
+
+def _norm_result_display(row: dict) -> str:
+    r = _cell_str(row.get("Result") or row.get("Grade")).upper()
+    if r in ("HIT", "WIN", "1", "TRUE", "YES", "W"):
+        return "HIT"
+    if r in ("MISS", "LOSS", "0", "FALSE", "NO", "L"):
+        return "MISS"
+    if r in ("VOID", "PUSH", "N/A"):
+        return r
+    if r:
+        return r
+    return "—"
+
+
+def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
+    """One flat dict per prop row for the Prop Evaluation tab."""
+    player = _cell_str(row.get("Player") or row.get("Name"))
+    if not player:
+        return None
+    team = _cell_str(row.get("Team"))
+    prop = _cell_str(row.get("Prop Type") or row.get("Prop") or row.get("Pick"))
+    direction = _cell_str(row.get("Dir") or row.get("Direction")).upper()
+    line = _cell_str(
+        row.get("Line")
+        or row.get("Game Line")
+        or row.get("O/U")
+        or row.get("OU Line")
+        or row.get("Pick Line")
+    )
+    pick_type = _cell_str(row.get("Pick Type"))
+    result = _norm_result_display(row)
+    return {
+        "sport": sport,
+        "player": player,
+        "team": team or "—",
+        "prop": prop or "—",
+        "line": line or "—",
+        "direction": direction or "—",
+        "pick_type": pick_type or "—",
+        "result": result,
+    }
+
+
+def export_graded_props_json(
+    date_str: str,
+    out_dir: Path,
+    bundles: list[tuple[str, list[dict]]],
+) -> Path:
+    props: list[dict[str, str]] = []
+    for sport, rows in bundles:
+        for row in rows:
+            p = prop_row_for_api(row, sport)
+            if p:
+                props.append(p)
+    payload = {"date": date_str, "count": len(props), "props": props}
+    out = out_dir / f"graded_props_{date_str}.json"
+    out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    return out
 
 def agg_rows(rows: list[dict], key_col: str) -> dict[str, dict]:
     """Group rows by key_col and sum Hits, Misses, Decided, Voids."""
