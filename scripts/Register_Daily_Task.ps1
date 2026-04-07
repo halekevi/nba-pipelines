@@ -1,6 +1,6 @@
 # ============================================================
 #  Register_Daily_Task.ps1
-#  PropOracle – Master Pipeline  (all sports, daily 6:00 AM local)
+#  PropOracle – Master Pipeline  (all sports, daily 8 AM)
 #
 #  Run ONCE from an elevated (Administrator) PowerShell prompt:
 #    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
@@ -9,24 +9,22 @@
 
 # ─── CONFIGURATION ───────────────────────────────────────────
 
-# Root folder that contains run_pipeline.ps1
-$PipelineRoot   = "C:\Users\halek\OneDrive\Desktop\Vision Board\NbaPropPipelines\PropOracle"
+# Repo root (folder that contains run_pipeline.ps1). Default: parent of scripts\.
+$PipelineRoot   = Split-Path -Parent $PSScriptRoot
 
-# The master runner
-$MasterScript   = Join-Path $PipelineRoot "run_pipeline.ps1"
+# Pulls origin (fast-forward), then run_pipeline.ps1 -SkipFetch (inputs from repo + local disk).
+$MasterScript   = Join-Path $PipelineRoot "scripts\run_daily_from_git.ps1"
 
-# Sports flags to pass on every daily run.
-# Default: NBA + CBB + NHL + Soccer (the active daily sports).
-# Add -IncludeMLB when the MLB season starts.
-$DailyFlags     = "-IncludeNHL -IncludeSoccer"
+# Extra args for run_daily_from_git.ps1 (e.g. -SkipDailyGrader). -SkipFetch is always applied inside the wrapper.
+$DailyFlags     = ""
 
-# Run time (daily recurrence; Windows Task Scheduler uses local time)
-$RunHour        = 6
+# Run time
+$RunHour        = 8
 $RunMinute      = 0
 
 # Task identity
 $TaskName       = "PropOracle - Master Pipeline Daily"
-$TaskDesc       = "PropOracle daily prop pipeline: NBA + CBB + NHL + Soccer + Combined at 6:00 AM"
+$TaskDesc       = "PropOracle: git pull --ff-only, then pipeline -SkipFetch + combined + grades"
 # ─────────────────────────────────────────────────────────────
 
 if (-not (Test-Path $MasterScript)) {
@@ -47,7 +45,7 @@ $Settings = New-ScheduledTaskSettingsSet `
     -ExecutionTimeLimit    (New-TimeSpan -Hours 3)  `  # full multi-sport run can take a while
     -RestartCount          2                         `
     -RestartInterval       (New-TimeSpan -Minutes 15) `
-    -StartWhenAvailable                              `  # run ASAP if machine was off at scheduled time
+    -StartWhenAvailable                              `  # run ASAP if machine was off at 8 AM
     -RunOnlyIfNetworkAvailable                       `
     -MultipleInstances     IgnoreNew
 
@@ -79,8 +77,7 @@ if ($Task) {
     Write-Host "  # Check last run status:"
     Write-Host "  Get-ScheduledTaskInfo -TaskName '$TaskName' | Select LastRunTime, LastTaskResult"
     Write-Host ""
-    Write-Host "  # Change sports flags (e.g. add MLB for baseball season):"
-    Write-Host "  # Edit `$DailyFlags in this script and re-run it."
+    Write-Host "  # Edit `$DailyFlags e.g. -SkipDailyGrader (see scripts\run_daily_from_git.ps1)."
     Write-Host ""
     Write-Host "  # Remove task:"
     Write-Host "  Unregister-ScheduledTask -TaskName '$TaskName' -Confirm:`$false"

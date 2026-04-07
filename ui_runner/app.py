@@ -933,6 +933,33 @@ def serve_ticket_eval_report(date: str):
     abort(404)
 
 
+@app.get("/api/graded-props")
+def api_graded_props():
+    """JSON list of graded props for a slate date (from graded_props_YYYY-MM-DD.json)."""
+    date_q = (request.args.get("date") or "").strip()
+    if not date_q or not re.match(r"^\d{4}-\d{2}-\d{2}$", date_q):
+        return jsonify(
+            {"error": "missing_or_invalid_date", "detail": "Use ?date=YYYY-MM-DD"}
+        ), 400
+    fname = f"graded_props_{date_q}.json"
+    path = TEMPLATES_DIR / fname
+    if not path.exists() and ARCHIVE_DIR.exists():
+        alt = ARCHIVE_DIR / fname
+        if alt.exists():
+            path = alt
+    if not path.exists():
+        return jsonify(
+            {"date": date_q, "count": 0, "props": [], "missing": True}
+        )
+    try:
+        data = json.loads(path.read_text(encoding="utf-8-sig"))
+        if isinstance(data, dict):
+            return jsonify(data)
+        return jsonify({"error": "invalid_shape", "detail": "expected object"}), 500
+    except Exception as exc:
+        return jsonify({"error": "read_failed", "detail": str(exc)}), 500
+
+
 def _iter_props_history_db_paths():
     cache = BASE_DIR / "data" / "cache"
     if not cache.is_dir():

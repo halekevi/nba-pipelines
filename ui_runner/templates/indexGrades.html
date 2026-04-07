@@ -945,7 +945,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
     <div class="grades-props-inner">
       <div class="glass-insights props-eval-intro">
         <h3 class="insights-card-title">Prop evaluation</h3>
-        <p class="insights-card-sub">Every archived graded prop for the report date (hit / miss / other), from <code>props_history</code> in <code>data/cache/*_props_history.db</code> after you run the grader and archive step locally. The date must match the <strong>slate grade date</strong> (same <code>YYYY-MM-DD</code> as <code>outputs/&lt;date&gt;/</code>), not necessarily your PC clock. Use <strong>Jump to date</strong> if pills default to the wrong year. Deployed hosts only show rows if those databases exist on the server.</p>
+        <p class="insights-card-sub">Every graded prop for the report date (hit / miss / other). When <code>graded_props_YYYY-MM-DD.json</code> is deployed under <code>ui_runner/templates/</code> (written by <code>build_grades_html.py</code>), this tab loads from that file. Otherwise it uses archived rows from <code>props_history</code> in <code>data/cache/*_props_history.db</code>. The date must match the <strong>slate grade date</strong> (same <code>YYYY-MM-DD</code> as <code>outputs/&lt;date&gt;/</code>). Use <strong>Jump to date</strong> if pills default to the wrong year.</p>
         <div class="props-eval-toolbar">
           <label>Sport
             <select id="props-filter-sport" aria-label="Filter by sport">
@@ -1605,6 +1605,25 @@ function applyPropsEvalFilters() {
     el.textContent = 'Showing ' + filtered.length + ' of ' + rows.length + ' loaded' + extra;
   }
 }
+function mapGradedJsonToEvalRow(p) {
+  return {
+    sport: p.sport || '',
+    player_name: p.player || '',
+    prop_type: p.prop || '',
+    team: p.team || '',
+    opp_team: '',
+    direction: p.direction || '',
+    line: p.line,
+    pick_type: p.pick_type || '',
+    result: p.result || '',
+    tier: '',
+    edge: '',
+    ml_prob: '',
+    actual_value: '',
+    margin: '',
+    void_reason: '',
+  };
+}
 async function loadGradesProps(dateStr) {
   const grid = document.getElementById('props-eval-grid');
   const foot = document.getElementById('props-eval-foot');
@@ -1612,6 +1631,23 @@ async function loadGradesProps(dateStr) {
   grid.innerHTML = '<p class="insights-card-sub">Loading…</p>';
   if (foot) foot.textContent = '';
   try {
+    const jres = await fetch('/api/graded-props?date=' + encodeURIComponent(dateStr), { cache: 'no-store' });
+    const jd = await jres.json();
+    if (jres.ok && Array.isArray(jd.props) && jd.props.length) {
+      const mapped = jd.props.map(mapGradedJsonToEvalRow);
+      window._propsEvalCache = mapped;
+      var nh = 0, nm = 0;
+      mapped.forEach(function (r) {
+        var u = String(r.result || '').toUpperCase();
+        if (u === 'HIT') nh++;
+        else if (u === 'MISS') nm++;
+      });
+      window._propsEvalStats = { n_hit: nh, n_miss: nm, n: mapped.length };
+      if (foot) foot.textContent = 'Source: graded_props_' + dateStr + '.json';
+      fillPropsSportFilter(window._propsEvalCache);
+      applyPropsEvalFilters();
+      return;
+    }
     const res = await fetch('/api/grades/props?date=' + encodeURIComponent(dateStr), { cache: 'no-store' });
     const d = await res.json();
     if (!res.ok) throw new Error(d.error || res.statusText);
