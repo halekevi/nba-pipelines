@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import argparse
 import html as html_lib
+import json
 import re
 import sys
 from collections import defaultdict
@@ -1283,6 +1284,19 @@ def main() -> None:
     out_p.parent.mkdir(parents=True, exist_ok=True)
     out_p.write_text(html, encoding="utf-8")
     print(f"  Saved  -> {out_p}")
+
+    json_p = export_graded_props_json(
+        date_str,
+        out_p.parent,
+        [
+            ("NBA", nba_rows),
+            ("CBB", cbb_rows),
+            ("NHL", nhl_rows),
+            ("Soccer", soccer_rows),
+            ("MLB", mlb_rows),
+        ],
+    )
+    print(f"  Saved  -> {json_p}")
     print("  Done.")
 
 
