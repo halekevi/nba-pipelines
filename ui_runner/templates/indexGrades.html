@@ -1643,7 +1643,11 @@ async function loadGradesProps(dateStr) {
         else if (u === 'MISS') nm++;
       });
       window._propsEvalStats = { n_hit: nh, n_miss: nm, n: mapped.length };
-      if (foot) foot.textContent = 'Source: graded_props_' + dateStr + '.json';
+      if (foot) {
+        foot.textContent = jd.source === 'ticket_eval_html'
+          ? 'Ticket legs from ticket_eval_' + dateStr + '.html (subset). Run build_grades_html / backfill_graded_props_json and push graded_props_' + dateStr + '.json for every slate prop.'
+          : 'Source: graded_props_' + dateStr + '.json';
+      }
       fillPropsSportFilter(window._propsEvalCache);
       applyPropsEvalFilters();
       return;

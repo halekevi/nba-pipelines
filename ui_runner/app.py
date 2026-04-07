@@ -933,6 +933,134 @@ def serve_ticket_eval_report(date: str):
     abort(404)
 
 
+def _pick_type_from_tier_tier_el(tier_el) -> str:
+    if tier_el is None:
+        return "—"
+    t = tier_el.get_text(strip=True).upper()
+    return {"G": "Goblin", "S": "Standard", "D": "Demon"}.get(t, tier_el.get_text(strip=True) or "—")
+
+
+def _sport_from_ticket_eval_pill(span) -> str:
+    if span is None:
+        return "—"
+    classes = span.get("class") or []
+    for c in classes:
+        if isinstance(c, str) and c.startswith("sport-"):
+            key = c[len("sport-") :].lower()
+            return {
+                "nba": "NBA",
+                "cbb": "CBB",
+                "nhl": "NHL",
+                "mlb": "MLB",
+                "soccer": "Soccer",
+                "wnba": "WNBA",
+            }.get(key, key.upper())
+    return (span.get_text(strip=True) or "—").upper()
+
+
+def _player_name_from_ticket_legrow(row) -> str:
+    for el in row.select("div.pl-hit, div.pl-void, div.pl-pend"):
+        t = el.get_text(strip=True)
+        if t:
+            return t
+    pn = row.select_one("span.pl-name")
+    if pn is not None:
+        t = pn.get_text(strip=True)
+        if t:
+            return t
+    return ""
+
+
+def _props_from_ticket_eval_html(date_q: str) -> list[dict[str, str]]:
+    """
+    When graded_props_*.json is missing, parse ticket_eval_*.html leg rows so the
+    Prop Evaluation tab can still list ticket legs (subset of the full slate).
+    """
+    try:
+        from bs4 import BeautifulSoup
+    except ImportError:
+        return []
+
+    fname = f"ticket_eval_{date_q}.html"
+    raw_path: Path | None = None
+    for base in (TEMPLATES_DIR, ARCHIVE_DIR):
+        if not base.exists():
+            continue
+        p = base / fname
+        if p.is_file():
+            raw_path = p
+            break
+    if raw_path is None:
+        return []
+
+    try:
+        html = raw_path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return []
+
+    soup = BeautifulSoup(html, "html.parser")
+    props: list[dict[str, str]] = []
+    for row in soup.select("div.legrow"):
+        classes = " ".join(row.get("class") or [])
+        if "leg-hit" in classes:
+            result = "HIT"
+        elif "leg-miss" in classes:
+            result = "MISS"
+        elif "leg-void" in classes:
+            result = "VOID"
+        elif "leg-pend" in classes:
+            result = "—"
+        else:
+            continue
+
+        player = _player_name_from_ticket_legrow(row)
+        if not player:
+            continue
+
+        pill = row.select_one("span.pill")
+        sport = _sport_from_ticket_eval_pill(pill)
+
+        tier_el = row.select_one("div.tier")
+        pick_type = _pick_type_from_tier_tier_el(tier_el)
+
+        prop_txt = "—"
+        team_txt = "—"
+        pcol = row.select_one("div.leg-prop-col")
+        if pcol is not None:
+            kids = pcol.find_all("div", recursive=False)
+            if kids:
+                prop_txt = kids[0].get_text(strip=True) or "—"
+            meta = pcol.select_one("div.meta-muted")
+            if meta is not None:
+                team_txt = meta.get_text(strip=True) or "—"
+
+        direction = "—"
+        line_txt = "—"
+        extras = row.select("div.leg-extra")
+        if extras:
+            first = extras[0]
+            line_txt = first.get_text(" ", strip=True) or "—"
+            if first.select_one(".dir-over") is not None:
+                direction = "OVER"
+            elif first.select_one(".dir-under") is not None:
+                direction = "UNDER"
+
+        props.append(
+            {
+                "sport": sport,
+                "player": player,
+                "team": team_txt,
+                "prop": prop_txt,
+                "line": line_txt,
+                "direction": direction,
+                "pick_type": pick_type,
+                "result": result,
+            }
+        )
+
+    return props
+
+
 @app.get("/api/graded-props")
 def api_graded_props():
     """JSON list of graded props for a slate date (from graded_props_YYYY-MM-DD.json)."""
@@ -948,6 +1076,17 @@ def api_graded_props():
         if alt.exists():
             path = alt
     if not path.exists():
+        legs = _props_from_ticket_eval_html(date_q)
+        if legs:
+            return jsonify(
+                {
+                    "date": date_q,
+                    "count": len(legs),
+                    "props": legs,
+                    "source": "ticket_eval_html",
+                    "note": "Ticket legs only (subset). Deploy graded_props JSON for full slate props.",
+                }
+            )
         return jsonify(
             {"date": date_q, "count": 0, "props": [], "missing": True}
         )
