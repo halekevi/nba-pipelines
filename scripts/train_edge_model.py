@@ -538,42 +538,365 @@ def _correlations_with_target(
     return out
 
 
-def main() -> None:
-    print(f"[PropORACLE-{SCRIPT_NAME}] Starting...")
-    root = _repo_root()
-    ap = argparse.ArgumentParser(
-        description="Train edge_model_unified on all graded workbooks (including outputs/YYYY-MM-DD/)."
-    )
-    ap.add_argument("--repo-root", type=Path, default=root)
-    ap.add_argument(
-        "--no-recursive-outputs",
-        action="store_true",
-        help="Only use flat outputs/ and sport folders (skip outputs/**/dated nested graded files).",
-    )
-    ap.add_argument(
-        "--no-dedupe",
-        action="store_true",
-        help="Keep duplicate rows if the same prop appears in multiple dated exports.",
-    )
-    ap.add_argument(
-        "--include-synthetic",
-        action="store_true",
-        help="Include paths under .../synthetic/ (off by default).",
-    )
-    args = ap.parse_args()
-    root = Path(args.repo_root).resolve()
-    models_dir = root / "models"
-    models_dir.mkdir(parents=True, exist_ok=True)
+def _auc_safe(y: object, p: object) -> float | None:
+    yv = np.asarray(y).astype(int)
+    pv = np.asarray(p, dtype=float)
+    if len(yv) < 5 or len(np.unique(yv)) < 2:
+        return None
+    try:
+        return float(roc_auc_score(yv, pv))
+    except ValueError:
+        return None
 
-    print(
-        "  [config] recursive_outputs=%s dedupe=%s"
-        % (not args.no_recursive_outputs, not args.no_dedupe)
+
+def _infer_event_dates_from_source_paths(paths: pd.Series) -> pd.Series:
+    """Parse YYYY-MM-DD from outputs/.../YYYY-MM-DD/... or graded_*_YYYY-MM-DD.xlsx in path."""
+    norm = paths.astype(str).str.replace("\\", "/", regex=False)
+    d_folder = norm.str.extract(r"/(\d{4}-\d{2}-\d{2})/", expand=False)
+    d_file = norm.str.extract(r"(?i)graded_[^/]+_(\d{4}-\d{2}-\d{2})\.(?:xlsx|csv)", expand=False)
+    t1 = pd.to_datetime(d_folder, errors="coerce")
+    t2 = pd.to_datetime(d_file, errors="coerce")
+    return t1.where(t1.notna(), t2)
+
+
+def _event_date_series_for_raw(raw: pd.DataFrame) -> tuple[pd.Series, str]:
+    """Prefer game_date, graded_date, created_at; else slate_date / date / start_time; else _source_path."""
+    colmap = {str(c).lower(): c for c in raw.columns}
+    preferred = ("game_date", "graded_date", "created_at")
+    for key in preferred:
+        col: str | None = None
+        if key in raw.columns:
+            col = key
+        elif key.lower() in colmap:
+            col = colmap[key.lower()]
+        if col is None:
+            continue
+        s = pd.to_datetime(raw[col], errors="coerce")
+        n_ok = int(s.notna().sum())
+        if n_ok >= max(5, int(len(raw) * 0.02)):
+            return s, str(col)
+    for key in ("slate_date", "date", "start_time", "Game Date"):
+        col = None
+        if key in raw.columns:
+            col = key
+        elif str(key).lower() in colmap:
+            col = colmap[str(key).lower()]
+        if col is None:
+            continue
+        s = pd.to_datetime(raw[col], errors="coerce")
+        n_ok = int(s.notna().sum())
+        if n_ok >= max(5, int(len(raw) * 0.02)):
+            return s, str(col)
+    if "_source_path" in raw.columns:
+        s_path = _infer_event_dates_from_source_paths(raw["_source_path"])
+        n_path = int(s_path.notna().sum())
+        if n_path >= max(5, int(len(raw) * 0.02)):
+            return s_path, "_source_path (YYYY-MM-DD from export folder or graded_*_date filename)"
+    return pd.Series(pd.NaT, index=raw.index), ""
+
+
+def _stress_player_key_series(raw: pd.DataFrame) -> pd.Series:
+    colmap = {str(c).lower(): c for c in raw.columns}
+    for name in ("player_name", "player", "pp_player", "Player"):
+        if name in raw.columns:
+            return raw[name].astype(str).str.strip().str.lower()
+        if name.lower() in colmap:
+            return raw[colmap[name.lower()]].astype(str).str.strip().str.lower()
+    return pd.Series("", index=raw.index, dtype=str)
+
+
+def _stratify_series_for_split(sub: pd.DataFrame) -> pd.Series | None:
+    d = pd.to_numeric(sub["direction_encoded"], errors="coerce").fillna(0).astype(int)
+    vc = d.value_counts()
+    if d.nunique() >= 2 and int(vc.min()) >= 2:
+        return d
+    y = sub["y"].astype(int)
+    vc2 = y.value_counts()
+    if y.nunique() >= 2 and int(vc2.min()) >= 2:
+        return y
+    return None
+
+
+def _fit_xgb_platt_auc(
+    X_train: pd.DataFrame,
+    y_train: pd.Series,
+    X_test: pd.DataFrame,
+    y_test: pd.Series,
+    spw: float,
+) -> float | None:
+    ytr = y_train.astype(int).to_numpy()
+    yte = y_test.astype(int).to_numpy()
+    if len(np.unique(ytr)) < 2 or len(np.unique(yte)) < 2:
+        return None
+    model = XGBClassifier(
+        n_estimators=400,
+        max_depth=5,
+        learning_rate=0.05,
+        subsample=0.8,
+        colsample_bytree=0.8,
+        min_child_weight=10,
+        scale_pos_weight=spw,
+        eval_metric="auc",
+        early_stopping_rounds=30,
+        random_state=42,
     )
-    raw, n_combined_files_omitted = load_all_graded(
+    model.fit(X_train, y_train, eval_set=[(X_test, y_test)], verbose=False)
+    p_hold = model.predict_proba(X_test)[:, 1].reshape(-1, 1)
+    platt_lr = LogisticRegression(C=1e12, max_iter=2000, random_state=42, solver="lbfgs")
+    platt_lr.fit(p_hold, y_test)
+    calibrated = EdgeCalibratedModel(model, platt_lr)
+    prob_test = calibrated.predict_proba(X_test)[:, 1]
+    return _auc_safe(yte, prob_test)
+
+
+def _apply_step7b_nhl_soccer_ml_cap() -> None:
+    path = Path(__file__).resolve().parent / "step7b_edge_score.py"
+    text = path.read_text(encoding="utf-8")
+    if "if sp in (" in text and "0.15 * pd.Series(ml_prob, index=df2.index)" in text:
+        print("\n[Fix B] step7b_edge_score.py already applies NHL/SOCCER ml_prob cap — no change.")
+        return
+    old = "    blended = 0.3 * pd.Series(ml_prob, index=df2.index) + 0.7 * comp\n"
+    new = (
+        "    if sp in (\"NHL\", \"SOCCER\"):\n"
+        "        blended = 0.15 * pd.Series(ml_prob, index=df2.index) + 0.85 * comp\n"
+        "    else:\n"
+        "        blended = 0.3 * pd.Series(ml_prob, index=df2.index) + 0.7 * comp\n"
+    )
+    if old not in text:
+        print("[WARN] Fix B: expected blended_score line not found in step7b_edge_score.py — no change.")
+        return
+    path.write_text(text.replace(old, new, 1), encoding="utf-8")
+    print("\n[Fix B] Patched step7b_edge_score.py: NHL/SOCCER blended_score uses ml_prob weight 0.15.")
+
+
+def _run_stress_test_nhl_soccer(root: Path, args: argparse.Namespace) -> str:
+    print("\n" + "=" * 72)
+    print("STRESS TEST: NHL + SOCCER (isolated; does not write edge_model_unified.pkl)")
+    print("=" * 72)
+
+    raw, _ncomb = load_all_graded(
         root,
         recursive_outputs=not args.no_recursive_outputs,
         dedupe=not args.no_dedupe,
         include_synthetic=args.include_synthetic,
+    )
+    if raw.empty:
+        print("[ERROR] No graded data for stress test.")
+        return "A"
+
+    raw["sport"] = _normalize_sport_series(raw["sport"])
+    raw = raw.loc[raw["_hit_y"].isin([0.0, 1.0])].copy()
+    raw = raw.loc[raw["sport"].isin(["NHL", "SOCCER"])].copy()
+    if raw.empty:
+        print("[ERROR] No NHL or SOCCER rows after filtering.")
+        return "A"
+
+    _dt, date_col = _event_date_series_for_raw(raw)
+    ddesc = date_col if date_col else "(none: tried game_date, graded_date, created_at, fallbacks, _source_path)"
+    print(f"\nStress test date column used: {ddesc!r}")
+    raw = raw.copy()
+    raw["_stress_event_dt"] = _dt
+    raw["_stress_player_key"] = _stress_player_key_series(raw)
+
+    df = _prepare_features(raw)
+    df["y"] = df["_hit_y"].astype(int)
+
+    print("\n--- Per-sport quality (stress subset) ---")
+    sports_to_drop: list[str] = []
+    for sp in sorted(df["sport"].unique()):
+        sub_m = df["sport"] == sp
+        n = int(sub_m.sum())
+        n1, n0, dom_pct = _hit_class_balance(df.loc[sub_m, "y"])
+        reason = _sport_skip_reason(n, dom_pct)
+        if reason:
+            print(f"  Skipping {sp}: {reason}")
+            sports_to_drop.append(str(sp))
+    if sports_to_drop:
+        df = df.loc[~df["sport"].isin(sports_to_drop)].copy()
+
+    if df.empty:
+        print("[ERROR] No rows left after quality filters.")
+        return "A"
+
+    features_active = list(FEATURE_COLUMNS)
+    for c in FEATURE_COLUMNS:
+        if c not in df.columns:
+            df[c] = np.nan
+
+    present_ps = sorted({str(x) for x in df["sport"].unique() if str(x) in ("NHL", "SOCCER")})
+    temporal_overfit_sp: list[str] = []
+    player_overfit_sp: list[str] = []
+    high_dep_features: set[str] = set()
+
+    for sp in ("NHL", "SOCCER"):
+        if sp not in present_ps:
+            print(f"\n=== {sp}: not present after filters — skipping ===")
+            continue
+
+        sub = df[df["sport"].astype(str) == sp].copy().reset_index(drop=True)
+        pos = int((sub["y"] == 1).sum())
+        neg = int((sub["y"] == 0).sum())
+        spw = (neg / pos) if pos > 0 else 1.0
+
+        print(f"\n{'=' * 72}\nTASK 1 — Temporal vs random ({sp})\n{'=' * 72}")
+        sub_d = sub.dropna(subset=["_stress_event_dt"]).copy()
+        auc_rand: float | None = None
+        auc_temp: float | None = None
+        if len(sub_d) < 80:
+            print(f"  Random-split ROC-AUC (holdout, calibrated): {sp} = n/a (dated cohort n={len(sub_d)})")
+            print(f"Temporal ROC-AUC: {sp} = n/a")
+            print("  (insufficient dated rows for stable 80/20 temporal slice)")
+        else:
+            strat = _stratify_series_for_split(sub_d)
+            tr_r, te_r = train_test_split(sub_d, test_size=0.2, random_state=42, stratify=strat)
+            auc_rand = _fit_xgb_platt_auc(
+                tr_r[features_active].astype(float),
+                tr_r["y"],
+                te_r[features_active].astype(float),
+                te_r["y"],
+                spw,
+            )
+
+            sub_sorted = sub_d.sort_values("_stress_event_dt", kind="mergesort")
+            n = len(sub_sorted)
+            k = int(n * 0.8)
+            tr_t = sub_sorted.iloc[:k]
+            te_t = sub_sorted.iloc[k:]
+            if (
+                k >= 10
+                and (n - k) >= 10
+                and len(np.unique(tr_t["y"].to_numpy())) >= 2
+                and len(np.unique(te_t["y"].to_numpy())) >= 2
+            ):
+                auc_temp = _fit_xgb_platt_auc(
+                    tr_t[features_active].astype(float),
+                    tr_t["y"],
+                    te_t[features_active].astype(float),
+                    te_t["y"],
+                    spw,
+                )
+
+            r_s = "n/a" if auc_rand is None else f"{auc_rand:.4f}"
+            print(f"  Random-split ROC-AUC (holdout, calibrated): {sp} = {r_s}")
+            t_s = "n/a" if auc_temp is None else f"{auc_temp:.4f}"
+            print(f"Temporal ROC-AUC: {sp} = {t_s}")
+            if auc_rand is not None and auc_temp is not None:
+                if (auc_rand - auc_temp) > 0.10:
+                    print("  TEMPORAL OVERFIT — model memorized historical patterns")
+                    temporal_overfit_sp.append(sp)
+                else:
+                    print("  TEMPORAL OK — signal is stable")
+            elif auc_temp is None:
+                print("  (Temporal AUC not computed: class imbalance or small newest-20% test)")
+
+        print(f"\n{'=' * 72}\nTASK 2 — Player holdout ({sp})\n{'=' * 72}")
+        keys = sub["_stress_player_key"].fillna("").astype(str).str.strip()
+        players_arr = np.array(sorted(keys.unique()))
+        rng = np.random.RandomState(43)
+        auc_p: float | None = None
+        if len(players_arr) < 5:
+            print(f"Player-holdout ROC-AUC: {sp} = n/a (unique players={len(players_arr)})")
+        else:
+            n_ho = max(1, int(round(0.2 * len(players_arr))))
+            holdout_p = set(rng.choice(players_arr, size=n_ho, replace=False))
+            tr_m = ~keys.isin(holdout_p)
+            te_m = keys.isin(holdout_p)
+            s_tr = sub.loc[tr_m]
+            s_te = sub.loc[te_m]
+            if (
+                len(s_tr) >= 30
+                and len(s_te) >= 15
+                and len(np.unique(s_tr["y"].to_numpy())) >= 2
+                and len(np.unique(s_te["y"].to_numpy())) >= 2
+            ):
+                auc_p = _fit_xgb_platt_auc(
+                    s_tr[features_active].astype(float),
+                    s_tr["y"],
+                    s_te[features_active].astype(float),
+                    s_te["y"],
+                    spw,
+                )
+        p_s = "n/a" if auc_p is None else f"{auc_p:.4f}"
+        print(f"Player-holdout ROC-AUC: {sp} = {p_s}")
+        if auc_p is not None:
+            if auc_p < 0.65:
+                print("  PLAYER OVERFIT — model memorized player profiles")
+                player_overfit_sp.append(sp)
+            else:
+                print("  PLAYER OK — generalizes to unseen players")
+
+        print(f"\n{'=' * 72}\nTASK 3 — Feature ablation ({sp})\n{'=' * 72}")
+        strat_ab = _stratify_series_for_split(sub)
+        tr_a, te_a = train_test_split(sub, test_size=0.2, random_state=44, stratify=strat_ab)
+        baseline_ab: float | None = None
+        if len(tr_a) >= 20 and len(te_a) >= 10:
+            if len(np.unique(tr_a["y"])) >= 2 and len(np.unique(te_a["y"])) >= 2:
+                baseline_ab = _fit_xgb_platt_auc(
+                    tr_a[features_active].astype(float),
+                    tr_a["y"],
+                    te_a[features_active].astype(float),
+                    te_a["y"],
+                    spw,
+                )
+        print(f"  {'Feature':<28} | {'AUC Without':>12} | {'AUC Drop':>10} | Notes")
+        print(f"  {'-' * 28}-+-{'-' * 12}-+-{'-' * 10}-+-{'-' * 24}")
+        if baseline_ab is None:
+            print("  (Ablation skipped: stratified split not viable for this sport)")
+        else:
+            for fname in features_active:
+                cols = [c for c in features_active if c != fname]
+                aw = _fit_xgb_platt_auc(
+                    tr_a[cols].astype(float),
+                    tr_a["y"],
+                    te_a[cols].astype(float),
+                    te_a["y"],
+                    spw,
+                )
+                if aw is None:
+                    aw_s = "n/a"
+                    drop = 0.0
+                    note = ""
+                else:
+                    aw_s = f"{aw:.4f}"
+                    drop = float(baseline_ab) - float(aw)
+                    note = "HIGH DEPENDENCY" if drop > 0.15 else ""
+                    if drop > 0.15:
+                        high_dep_features.add(fname)
+                print(f"  {fname:<28} | {aw_s:>12} | {drop:>10.4f} | {note}")
+
+    present_set = {str(x) for x in df["sport"].unique()}
+    ps = {"NHL", "SOCCER"} & present_set
+    temporal_both = ps <= set(temporal_overfit_sp) and len(ps) == 2
+    player_both = ps <= set(player_overfit_sp) and len(ps) == 2
+    if temporal_both or player_both or len(high_dep_features) >= 2:
+        return "C"
+    if temporal_overfit_sp or player_overfit_sp or high_dep_features:
+        return "B"
+    return "A"
+
+
+def _train_unified_edge_model(
+    root: Path,
+    *,
+    recursive_outputs: bool,
+    dedupe: bool,
+    include_synthetic: bool,
+    temporal_split: bool,
+    exclude_player_level_features: bool,
+) -> None:
+    print(f"[PropORACLE-{SCRIPT_NAME}] Starting unified training...")
+    models_dir = root / "models"
+    models_dir.mkdir(parents=True, exist_ok=True)
+
+    print(
+        "  [config] recursive_outputs=%s dedupe=%s temporal_split=%s exclude_player_hr=%s"
+        % (recursive_outputs, dedupe, temporal_split, exclude_player_level_features)
+    )
+    raw, n_combined_files_omitted = load_all_graded(
+        root,
+        recursive_outputs=recursive_outputs,
+        dedupe=dedupe,
+        include_synthetic=include_synthetic,
     )
     if raw.empty:
         print("[ERROR] No graded files with hit labels found.")
@@ -581,6 +904,18 @@ def main() -> None:
 
     raw["sport"] = _normalize_sport_series(raw["sport"])
     raw = raw.loc[raw["_hit_y"].isin([0.0, 1.0])].copy()
+
+    if temporal_split:
+        dt_ser, col_used = _event_date_series_for_raw(raw)
+        if not col_used:
+            print(
+                "[ERROR] --temporal-split requires parseable dates (game_date, graded_date, "
+                "created_at, or slate_date/date/start_time) on enough graded rows."
+            )
+            return
+        print(f"Temporal split date column used: {col_used!r}")
+        raw = raw.copy()
+        raw["_stress_event_dt"] = dt_ser
 
     sport_counts = raw.groupby("sport").size()
     print("\nRows per sport (raw, before feature prep):")
@@ -625,6 +960,16 @@ def main() -> None:
         print("[ERROR] No sports left after row-count / class-balance filters.")
         return
 
+    if temporal_split:
+        df = (
+            df.dropna(subset=["_stress_event_dt"])
+            .sort_values("_stress_event_dt", kind="mergesort")
+            .reset_index(drop=True)
+        )
+        if len(df) < 100:
+            print("[ERROR] Temporal split: too few rows with valid event dates after feature prep.")
+            return
+
     y = df["y"].astype(int)
     pos = int((y == 1).sum())
     neg = int((y == 0).sum())
@@ -637,12 +982,19 @@ def main() -> None:
         u = int(df.loc[sub, "direction_encoded"].eq(0.0).sum())
         print(f"  {sp} OVER={o} UNDER={u}")
 
-    strat = df["sport"].astype(str) + "_" + df["direction_encoded"].astype(int).astype(str)
-    vc = strat.value_counts()
-    if strat.nunique() < 2 or int(vc.min()) < 2:
-        strat = df["sport"].astype(str)
-
-    tr, te = train_test_split(df, test_size=0.2, random_state=42, stratify=strat)
+    if temporal_split:
+        n = len(df)
+        k = max(1, int(n * 0.8))
+        if k < 50 or (n - k) < 50:
+            print("[ERROR] Temporal split: insufficient train or test rows.")
+            return
+        tr, te = df.iloc[:k].copy(), df.iloc[k:].copy()
+    else:
+        strat = df["sport"].astype(str) + "_" + df["direction_encoded"].astype(int).astype(str)
+        vc = strat.value_counts()
+        if strat.nunique() < 2 or int(vc.min()) < 2:
+            strat = df["sport"].astype(str)
+        tr, te = train_test_split(df, test_size=0.2, random_state=42, stratify=strat)
 
     # ── NHL / Soccer: feature-target correlation on TRAIN only (leakage suspects) ──
     print("\n--- Feature vs hit correlation (train only; |r|>0.5 = leakage suspect) ---")
@@ -678,6 +1030,18 @@ def main() -> None:
         )
     else:
         print("\n[Leakage] No |r|>0.5 feature-target correlation on NHL/Soccer train; no name-based removals.")
+
+    if exclude_player_level_features:
+        before_ex = list(features_active)
+        features_active = [f for f in features_active if f != "player_hr_historical"]
+        if len(features_active) < 8:
+            print(
+                "[WARN] Excluding player_hr_historical would leave too few features; "
+                "keeping player_hr_historical."
+            )
+            features_active = before_ex
+        else:
+            print("\n[Training] Excluded player-level feature: player_hr_historical")
 
     X_train = tr[features_active].astype(float)
     X_test = te[features_active].astype(float)
@@ -807,8 +1171,10 @@ def main() -> None:
         "features_removed_leakage": sorted(leak_by_corr | leak_by_name) if leak_confirmed else [],
         "sports_skipped_quality": {k: quality_skipped_rows[k] for k in sorted(quality_skipped_rows)},
         "leakage_confirmed": bool(leak_confirmed),
-        "recursive_outputs_used": not args.no_recursive_outputs,
-        "dedupe_used": not args.no_dedupe,
+        "recursive_outputs_used": recursive_outputs,
+        "dedupe_used": dedupe,
+        "temporal_split_used": temporal_split,
+        "exclude_player_level_features_used": exclude_player_level_features,
         "combined_graded_file_paths_omitted": int(n_combined_files_omitted),
     }
     (models_dir / "edge_model_metadata.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
@@ -833,6 +1199,87 @@ def main() -> None:
             auc_str = f"{auc_s:.4f}"
         print(f"{sp:<8} | {n_tot:6d} | {n_te:6d} | {auc_str:>10} | {st:<22}")
     print(f"{'OVERALL':<8} | {len(df):6d} | {len(te):6d} | {auc_overall:10.4f} | {'holdout':<22}")
+
+
+def main() -> None:
+    default_root = _repo_root()
+    ap = argparse.ArgumentParser(
+        description="Train edge_model_unified on all graded workbooks (including outputs/YYYY-MM-DD/)."
+    )
+    ap.add_argument("--repo-root", type=Path, default=default_root)
+    ap.add_argument(
+        "--no-recursive-outputs",
+        action="store_true",
+        help="Only use flat outputs/ and sport folders (skip outputs/**/dated nested graded files).",
+    )
+    ap.add_argument(
+        "--no-dedupe",
+        action="store_true",
+        help="Keep duplicate rows if the same prop appears in multiple dated exports.",
+    )
+    ap.add_argument(
+        "--include-synthetic",
+        action="store_true",
+        help="Include paths under .../synthetic/ (off by default).",
+    )
+    ap.add_argument(
+        "--stress-test-nhl-soccer",
+        action="store_true",
+        help="Run temporal / player-holdout / ablation stress tests for NHL+SOCCER only (no .pkl write).",
+    )
+    ap.add_argument(
+        "--temporal-split",
+        action="store_true",
+        help="Train on oldest 80%% of rows by event date, test on newest 20%% (full unified model).",
+    )
+    ap.add_argument(
+        "--exclude-player-level-features",
+        action="store_true",
+        help="Drop player_hr_historical from training (full unified model).",
+    )
+    args = ap.parse_args()
+    root = Path(args.repo_root).resolve()
+
+    if args.stress_test_nhl_soccer:
+        rec = _run_stress_test_nhl_soccer(root, args)
+        print("\n" + "=" * 72)
+        if rec == "A":
+            print(
+                "RECOMMENDATION A) NHL/Soccer AUC is legitimate — strong sport-specific signals confirmed"
+            )
+        elif rec == "B":
+            print(
+                "RECOMMENDATION B) NHL/Soccer AUC inflated — recommend capping ml_prob weight to 0.15 for "
+                "these sports in step7b_edge_score.py blended_score formula"
+            )
+        else:
+            print(
+                "RECOMMENDATION C) NHL/Soccer AUC severely overfit — recommend retraining with temporal "
+                "split only and excluding player-level features"
+            )
+        print("=" * 72)
+        if rec == "B":
+            _apply_step7b_nhl_soccer_ml_cap()
+        elif rec == "C":
+            print("\n[Fix C] Retraining unified edge model with temporal split + excluding player_hr_historical…")
+            _train_unified_edge_model(
+                root,
+                recursive_outputs=not args.no_recursive_outputs,
+                dedupe=not args.no_dedupe,
+                include_synthetic=args.include_synthetic,
+                temporal_split=True,
+                exclude_player_level_features=True,
+            )
+        return
+
+    _train_unified_edge_model(
+        root,
+        recursive_outputs=not args.no_recursive_outputs,
+        dedupe=not args.no_dedupe,
+        include_synthetic=args.include_synthetic,
+        temporal_split=args.temporal_split,
+        exclude_player_level_features=args.exclude_player_level_features,
+    )
 
 
 if __name__ == "__main__":

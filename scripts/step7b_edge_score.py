@@ -165,7 +165,10 @@ def main() -> None:
         errors="coerce",
     ).fillna(0.5)
     edge_score = pd.Series(ml_prob, index=df2.index) - implied_prob
-    blended = 0.3 * pd.Series(ml_prob, index=df2.index) + 0.7 * comp
+    if sp in ("NHL", "SOCCER"):
+        blended = 0.15 * pd.Series(ml_prob, index=df2.index) + 0.85 * comp
+    else:
+        blended = 0.3 * pd.Series(ml_prob, index=df2.index) + 0.7 * comp
 
     df2["ml_prob"] = ml_prob
     df2["edge_score"] = edge_score.values
