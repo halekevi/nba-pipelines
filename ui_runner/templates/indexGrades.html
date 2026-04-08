@@ -46,8 +46,8 @@ body{
   background:linear-gradient(135deg,#0a0a1a 0%,#0d0b1e 50%,#0a0f1a 100%);
 }
 body.page-grades{
-  font-size:clamp(12px,0.9vw,14px);
-  line-height:1.4;
+  font-size:clamp(11px,0.82vw,13px);
+  line-height:1.35;
 }
 body::before{
   content:'';
@@ -97,7 +97,7 @@ body::after{
 .nav-brand .oracle-word{font-weight:800;color:var(--accent-gold);}
 .snav-brand{display:flex;align-items:center;gap:14px;text-decoration:none;margin-right:48px;flex-shrink:0;}
 .snav-links{display:flex;align-items:stretch;list-style:none;flex:1;gap:4px;}
-.snav-links li a{display:flex;align-items:center;gap:10px;padding:0 20px;height:72px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#7a9ac8;text-decoration:none;border-bottom:2px solid transparent;transition:color .2s,border-color .2s,background .2s;position:relative;}
+.snav-links li a{display:flex;align-items:center;gap:10px;padding:0 20px;height:72px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;letter-spacing:1.3px;text-transform:uppercase;color:#7a9ac8;text-decoration:none;border-bottom:2px solid transparent;transition:color .2s,border-color .2s,background .2s;position:relative;}
 .snav-links li a:hover{color:var(--text);background:rgba(255,255,255,.02);}
 .snav-links li a.active{color:var(--accent);border-bottom-color:var(--accent);}
 .snav-links li a.active{background:linear-gradient(180deg,rgba(212,160,23,.14),rgba(212,160,23,.05));box-shadow:inset 0 0 0 1px rgba(212,160,23,.18),0 8px 24px rgba(212,160,23,.08);}
@@ -143,24 +143,24 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   background:var(--glass-panel);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
   border:1px solid var(--glass-panel-border);border-radius:16px;box-shadow:var(--glass-shadow);
 }
-.date-bar-label{flex-shrink:0;font-size:10px;letter-spacing:1.2px;color:var(--muted2);white-space:nowrap;}
+.date-bar-label{flex-shrink:0;font-size:9px;letter-spacing:1.05px;color:var(--muted2);white-space:nowrap;}
 .date-pills{flex:1 1 0;min-width:0;display:flex;gap:10px;align-items:center;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;}
 .date-pills::-webkit-scrollbar{display:none;}
-.dpill{font-size:11px;letter-spacing:.8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.42);cursor:pointer;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:5px;}
+.dpill{font-size:10px;letter-spacing:.65px;padding:5px 9px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.42);cursor:pointer;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:5px;}
 .dpill:hover{color:var(--text);border-color:var(--bd2);background:rgba(255,255,255,0.07);}
 .dpill.active{color:var(--accent-gold);border-color:rgba(212,160,23,0.55);background:rgba(212,160,23,0.15);box-shadow:0 0 18px rgba(212,160,23,0.14);}
 .dpill .dpill-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:none;}
 .dpill.active .dpill-dot{display:block;box-shadow:0 0 8px var(--green);}
 .date-sep{width:1px;height:22px;background:rgba(255,255,255,0.1);flex-shrink:0;}
-.date-nav-btn{flex-shrink:0;width:32px;height:32px;border-radius:10px;border:1px solid var(--glass-panel-border);background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);color:rgba(255,255,255,0.45);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s;}
+.date-nav-btn{flex-shrink:0;width:30px;height:30px;border-radius:10px;border:1px solid var(--glass-panel-border);background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);color:rgba(255,255,255,0.45);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s;}
 .date-nav-btn:hover{color:var(--text);border-color:rgba(255,255,255,0.18);background:rgba(255,255,255,0.08);}
 .date-nav-btn:disabled{opacity:.3;cursor:default;}
 .date-bar-right{flex-shrink:0;margin-left:auto;display:flex;align-items:center;gap:10px;}
 .date-input-wrap{display:flex;align-items:center;gap:6px;}
-.date-input-label{font-size:10px;letter-spacing:.9px;color:var(--muted2);}
-.date-input{background:rgba(255,255,255,0.04);backdrop-filter:blur(10px);border:1px solid var(--glass-panel-border);border-radius:10px;color:var(--text);font-size:11px;padding:6px 10px;outline:none;transition:border-color .15s;width:122px;font-family:'Share Tech Mono',monospace;}
+.date-input-label{font-size:9px;letter-spacing:.8px;color:var(--muted2);}
+.date-input{background:rgba(255,255,255,0.04);backdrop-filter:blur(10px);border:1px solid var(--glass-panel-border);border-radius:10px;color:var(--text);font-size:10px;padding:5px 9px;outline:none;transition:border-color .15s;width:122px;font-family:'Share Tech Mono',monospace;}
 .date-input:focus{border-color:rgba(212,160,23,0.45);}
-.date-go-btn{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.9px;padding:6px 10px;border-radius:10px;border:1px solid rgba(212,160,23,.35);background:rgba(212,160,23,.1);color:var(--accent-gold);cursor:pointer;transition:all .15s;}
+.date-go-btn{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.8px;padding:5px 9px;border-radius:10px;border:1px solid rgba(212,160,23,.35);background:rgba(212,160,23,.1);color:var(--accent-gold);cursor:pointer;transition:all .15s;}
 .date-go-btn:hover{background:rgba(212,160,23,.18);border-color:rgba(240,165,0,.55);}
 
 /* iframe shell: layout only — no outer “card” so slate header is the sole chrome */
@@ -287,7 +287,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   background:var(--glass-panel);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
   border:1px solid var(--glass-panel-border);border-radius:16px;box-shadow:var(--glass-shadow);
 }
-.tab-btn{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:10px;font-size:10px;letter-spacing:.9px;text-transform:uppercase;color:var(--muted2);background:rgba(255,255,255,0.03);border:1px solid transparent;cursor:pointer;transition:color .2s,border-color .2s,box-shadow .2s,background .2s;white-space:nowrap;}
+.tab-btn{display:flex;align-items:center;gap:6px;padding:6px 9px;border-radius:10px;font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted2);background:rgba(255,255,255,0.03);border:1px solid transparent;cursor:pointer;transition:color .2s,border-color .2s,box-shadow .2s,background .2s;white-space:nowrap;}
 .tab-btn:hover{color:var(--text);background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.08);}
 .tab-btn.active{
   color:var(--accent-gold);
@@ -1851,6 +1851,7 @@ let availableDates = [];  // sorted ascending
 let currentDateIdx = -1;
 let currentDateStr = '';
 let slateReportMissing = false;
+const MAX_REPORT_DATE_PILLS = 6;
 
 // ─── DATE HELPERS ─────────────────────────────────────────────────────────────
 function toDateStr(d){
@@ -1924,7 +1925,7 @@ function renderPills(){
     return;
   }
   // Most recent dates only — keeps the row readable; use ‹ › for full history
-  const display = availableDates.slice(-4);
+  const display = availableDates.slice(-MAX_REPORT_DATE_PILLS);
   display.forEach(ds => {
     const idx = availableDates.indexOf(ds);
     const pill = document.createElement('button');
@@ -1932,7 +1933,7 @@ function renderPills(){
     const isToday = ds === todayStr();
     const isYest  = ds === yesterdayStr();
     const tag = isToday ? ' · TODAY' : isYest ? ' · YESTERDAY' : '';
-    pill.innerHTML = `<span class="dpill-dot"></span>${formatLabel(ds)}${tag ? `<span style="font-size:16px;opacity:.72;white-space:nowrap">${tag}</span>` : ''}`;
+    pill.innerHTML = `<span class="dpill-dot"></span>${formatLabel(ds)}${tag ? `<span style="font-size:12px;opacity:.72;white-space:nowrap">${tag}</span>` : ''}`;
     pill.dataset.date = ds;
     pill.onclick = () => loadDate(ds);
     container.appendChild(pill);
