@@ -1851,7 +1851,7 @@ let availableDates = [];  // sorted ascending
 let currentDateIdx = -1;
 let currentDateStr = '';
 let slateReportMissing = false;
-const MAX_REPORT_DATE_PILLS = 6;
+const MIN_REPORT_DATE_PILLS = 6;
 
 // ─── DATE HELPERS ─────────────────────────────────────────────────────────────
 function toDateStr(d){
@@ -1872,6 +1872,35 @@ function yesterdayStr(){
 }
 function todayStr(){
   return toDateStr(new Date());
+}
+
+function estimateDatePillWidth(dateStr){
+  // Rough width model so we can fit as many pills as possible without overflow.
+  const labelLen = formatLabel(dateStr).length;
+  const isToday = dateStr === todayStr();
+  const isYest = dateStr === yesterdayStr();
+  const tagLen = isToday ? 8 : (isYest ? 12 : 0); // " · TODAY" / " · YESTERDAY"
+  const charPx = 7.2;
+  const basePx = 30; // dot + paddings + border/spacing
+  return Math.ceil(basePx + (labelLen + tagLen) * charPx);
+}
+
+function computeVisibleReportDateCount(){
+  const container = gradesEl('date-pills');
+  if (!container) return MIN_REPORT_DATE_PILLS;
+  const rowWidth = container.clientWidth || 0;
+  if (!rowWidth) return MIN_REPORT_DATE_PILLS;
+  const gapPx = 10; // .date-pills gap
+  const newestFirst = availableDates.slice().reverse();
+  let used = 0;
+  let count = 0;
+  for (const ds of newestFirst){
+    const w = estimateDatePillWidth(ds) + (count > 0 ? gapPx : 0);
+    if (used + w > rowWidth) break;
+    used += w;
+    count += 1;
+  }
+  return Math.max(MIN_REPORT_DATE_PILLS, Math.min(availableDates.length, count));
 }
 
 // ─── PROBE: check if a slate_eval file exists for a date ──────────────────────
@@ -1924,8 +1953,9 @@ function renderPills(){
     container.innerHTML = '<span style="font-size:16px;letter-spacing:1.5px;color:var(--muted2)">NO REPORTS FOUND</span>';
     return;
   }
-  // Most recent dates only — keeps the row readable; use ‹ › for full history
-  const display = availableDates.slice(-MAX_REPORT_DATE_PILLS);
+  // Show as many recent dates as fit the visible row width.
+  const maxVisible = computeVisibleReportDateCount();
+  const display = availableDates.slice(-maxVisible);
   display.forEach(ds => {
     const idx = availableDates.indexOf(ds);
     const pill = document.createElement('button');
@@ -2086,6 +2116,12 @@ window.loadDate = loadDate;
     } catch (_e) {}
   }, 0);
 })();
+
+// Re-fit pill count on viewport changes.
+window.addEventListener('resize', () => {
+  if (!availableDates.length) return;
+  renderPills();
+});
 </script>
 
 
