@@ -1000,6 +1000,15 @@ def _props_from_ticket_eval_html(date_q: str) -> list[dict[str, str]]:
 
     soup = BeautifulSoup(html, "html.parser")
     props: list[dict[str, str]] = []
+    def _first_num(s: str) -> float | None:
+        m = re.search(r"-?\d+(?:\.\d+)?", s or "")
+        if not m:
+            return None
+        try:
+            return float(m.group(0))
+        except Exception:
+            return None
+
     for row in soup.select("div.legrow"):
         classes = " ".join(row.get("class") or [])
         if "leg-hit" in classes:
@@ -1036,6 +1045,9 @@ def _props_from_ticket_eval_html(date_q: str) -> list[dict[str, str]]:
 
         direction = "—"
         line_txt = "—"
+        actual_txt = "—"
+        edge_txt = "—"
+        margin_txt = "—"
         extras = row.select("div.leg-extra")
         if extras:
             first = extras[0]
@@ -1044,6 +1056,15 @@ def _props_from_ticket_eval_html(date_q: str) -> list[dict[str, str]]:
                 direction = "OVER"
             elif first.select_one(".dir-under") is not None:
                 direction = "UNDER"
+            if len(extras) > 1:
+                actual_txt = extras[1].get_text(" ", strip=True) or "—"
+            if len(extras) > 2:
+                edge_txt = extras[2].get_text(" ", strip=True) or "—"
+            line_num = _first_num(line_txt)
+            actual_num = _first_num(actual_txt)
+            if line_num is not None and actual_num is not None:
+                margin = actual_num - line_num
+                margin_txt = f"{margin:.2f}".rstrip("0").rstrip(".")
 
         props.append(
             {
@@ -1054,6 +1075,9 @@ def _props_from_ticket_eval_html(date_q: str) -> list[dict[str, str]]:
                 "line": line_txt,
                 "direction": direction,
                 "pick_type": pick_type,
+                "actual_value": actual_txt,
+                "edge": edge_txt,
+                "margin": margin_txt,
                 "result": result,
             }
         )

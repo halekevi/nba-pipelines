@@ -217,13 +217,13 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .grades-analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;max-width:1420px;margin:0 auto;}
 .grades-props-inner{max-width:1420px;margin:0 auto;}
 .props-eval-toolbar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-top:12px;margin-bottom:14px;}
-.props-eval-toolbar label{font-size:16px;letter-spacing:1.2px;color:var(--muted2);display:flex;align-items:center;gap:6px;}
+.props-eval-toolbar label{font-size:12px;letter-spacing:0.8px;color:var(--muted2);display:flex;align-items:center;gap:6px;}
 .props-eval-toolbar select,.props-eval-toolbar input[type="search"]{
-  font-family:'Share Tech Mono',monospace;font-size:18px;padding:8px 12px;border-radius:10px;
+  font-family:'Share Tech Mono',monospace;font-size:12px;padding:6px 10px;border-radius:10px;
   border:1px solid var(--glass-panel-border);background:rgba(255,255,255,0.05);color:var(--text);min-width:120px;
 }
 .props-eval-toolbar input[type="search"]{min-width:160px;flex:1 1 140px;max-width:280px;}
-.props-eval-counts{font-family:'Share Tech Mono',monospace;font-size:17px;color:var(--cyan);letter-spacing:0.5px;margin-bottom:6px;}
+.props-eval-counts{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--cyan);letter-spacing:0.4px;margin-bottom:6px;}
 .props-eval-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;padding-bottom:28px;}
 .prop-eval-card{
   border-radius:14px;padding:14px 16px;border:1px solid var(--glass-panel-border);
@@ -234,16 +234,16 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .prop-eval-card.hit{border-left:4px solid var(--green);background:rgba(57,255,110,0.05);}
 .prop-eval-card.miss{border-left:4px solid var(--red);background:rgba(255,77,77,0.07);}
 .prop-eval-card.other{border-left:4px solid var(--amber);}
-.prop-eval-result{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;margin-bottom:8px;}
+.prop-eval-result{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1.4px;margin-bottom:8px;}
 .prop-eval-result.hit{color:var(--green);}
 .prop-eval-result.miss{color:var(--red);}
 .prop-eval-result.other{color:var(--amber);}
 .prop-eval-stat.hit{color:var(--green);font-weight:600;}
 .prop-eval-stat.miss{color:var(--red);font-weight:600;}
 .prop-eval-stat.other{color:var(--amber);font-weight:600;}
-.prop-eval-player{font-weight:700;font-size:19px;color:var(--text-primary);line-height:1.25;margin-bottom:4px;}
-.prop-eval-meta{font-family:'Share Tech Mono',monospace;font-size:17px;color:var(--muted);line-height:1.55;}
-.prop-eval-line{font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--cyan);margin-top:8px;}
+.prop-eval-player{font-weight:700;font-size:15px;color:var(--text-primary);line-height:1.25;margin-bottom:4px;}
+.prop-eval-meta{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);line-height:1.45;}
+.prop-eval-line{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--cyan);margin-top:8px;}
 [data-theme="light"] .prop-eval-card{background:rgba(255,255,255,0.72)!important;border-color:rgba(0,0,0,0.08)!important;}
 [data-theme="light"] .prop-eval-card.hit{background:rgba(26,140,69,.08)!important;}
 [data-theme="light"] .prop-eval-card.miss{background:rgba(204,34,0,.06)!important;}
@@ -1608,20 +1608,20 @@ function applyPropsEvalFilters() {
 function mapGradedJsonToEvalRow(p) {
   return {
     sport: p.sport || '',
-    player_name: p.player || '',
-    prop_type: p.prop || '',
+    player_name: p.player_name || p.player || '',
+    prop_type: p.prop_type || p.prop || '',
     team: p.team || '',
-    opp_team: '',
-    direction: p.direction || '',
+    opp_team: p.opp_team || p.opp || '',
+    direction: p.direction || p.dir || '',
     line: p.line,
     pick_type: p.pick_type || '',
     result: p.result || '',
-    tier: '',
-    edge: '',
-    ml_prob: '',
-    actual_value: '',
-    margin: '',
-    void_reason: '',
+    tier: p.tier || '',
+    edge: p.edge || '',
+    ml_prob: p.ml_prob || '',
+    actual_value: p.actual_value || p.actual || '',
+    margin: p.margin || '',
+    void_reason: p.void_reason || '',
   };
 }
 async function loadGradesProps(dateStr) {

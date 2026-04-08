@@ -177,29 +177,44 @@ def _norm_result_display(row: dict) -> str:
 
 def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
     """One flat dict per prop row for the Prop Evaluation tab."""
-    player = _cell_str(row.get("Player") or row.get("Name"))
+    def _pick(*keys: str) -> str:
+        for k in keys:
+            v = _cell_str(row.get(k))
+            if v:
+                return v
+        return ""
+
+    player = _pick("Player", "player", "Name", "name")
     if not player:
         return None
-    team = _cell_str(row.get("Team"))
-    prop = _cell_str(row.get("Prop Type") or row.get("Prop") or row.get("Pick"))
-    direction = _cell_str(row.get("Dir") or row.get("Direction")).upper()
-    line = _cell_str(
-        row.get("Line")
-        or row.get("Game Line")
-        or row.get("O/U")
-        or row.get("OU Line")
-        or row.get("Pick Line")
-    )
-    pick_type = _cell_str(row.get("Pick Type"))
+    team = _pick("Team", "team")
+    prop = _pick("Prop Type", "prop type", "Prop", "prop", "Pick", "pick")
+    direction = _pick("Dir", "dir", "Direction", "direction").upper()
+    line = _pick("Line", "line", "Game Line", "game line", "O/U", "OU Line", "Pick Line")
+    pick_type = _pick("Pick Type", "pick type")
+    tier = _pick("Tier", "tier")
+    opp_team = _pick("Opp Team", "opp team", "Opp", "opp", "Opponent", "opponent")
+    edge = _pick("Edge", "edge", "Edge Score", "edge score")
+    ml_prob = _pick("ML Prob", "ml prob", "ml_prob")
+    actual_value = _pick("Actual", "actual", "actual_value")
+    margin = _pick("Margin", "margin")
+    void_reason = _pick("void_reason", "Void Reason", "void reason")
     result = _norm_result_display(row)
     return {
         "sport": sport,
         "player": player,
         "team": team or "—",
+        "opp_team": opp_team or "—",
         "prop": prop or "—",
         "line": line or "—",
         "direction": direction or "—",
         "pick_type": pick_type or "—",
+        "tier": tier or "",
+        "edge": edge or "",
+        "ml_prob": ml_prob or "",
+        "actual_value": actual_value or "",
+        "margin": margin or "",
+        "void_reason": void_reason or "",
         "result": result,
     }
 

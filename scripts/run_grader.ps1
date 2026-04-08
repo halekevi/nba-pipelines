@@ -28,6 +28,7 @@ $CBBFullGraderScript = Join-Path $Root "scripts\grading\grade_cbb_full_slate.py"
 $NHLAdvancedGraderScript = Join-Path $Root "scripts\nhl_grader_advanced.py"
 $SoccerAdvancedGraderScript = Join-Path $Root "scripts\soccer_grader_advanced.py"
 $BuildGradesHtmlScript = Join-Path $Root "scripts\grading\build_grades_html.py"
+$BackfillGradedPropsJsonScript = Join-Path $Root "scripts\backfill_graded_props_json.py"
 $NBABacktestScript = Join-Path $Root "NBA\scripts\backtest_nba.py"
 $TicketEvalBuilderScript = Join-Path $Root "scripts\build_ticket_eval_html.py"
 if (-not (Test-Path $TicketEvalBuilderScript)) {
@@ -455,6 +456,19 @@ if (Test-Path $BuildGradesHtmlScript) {
 }
 else {
     Write-Host "Skipping HTML build (build_grades_html.py not found)." -ForegroundColor Yellow
+}
+
+# =============================
+# Write graded_props_<date>.json for Prop Evaluation cards
+# =============================
+if (Test-Path $BackfillGradedPropsJsonScript) {
+    Run-Py "Build graded props JSON" $Root $BackfillGradedPropsJsonScript @(
+        "--date", $Date,
+        "--out", $TemplatesDir
+    )
+}
+else {
+    Write-Host "Skipping graded props JSON build (backfill_graded_props_json.py not found)." -ForegroundColor Yellow
 }
 
 # =============================
