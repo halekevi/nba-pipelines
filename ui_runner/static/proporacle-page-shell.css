@@ -204,6 +204,11 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .field input,.field select{background:rgba(255,255,255,0.05);backdrop-filter:blur(8px) saturate(180%);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 12px;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text);width:100%;transition:border-color .2s;outline:none;}
 .field input:focus,.field select:focus{border-color:rgba(212,175,55,0.4);box-shadow:0 0 0 3px rgba(212,175,55,0.06);}
 .field select option{background:#0c0e1a;}
+select, .field select, .leg-input{color:var(--text);}
+select option, .field select option, .leg-input option{
+  background-color:#0c0e1a;
+  color:#f2f4ff;
+}
 .section-divider{font-size:10px;letter-spacing:2.5px;color:var(--muted);margin:20px 0 14px;display:flex;align-items:center;gap:10px;}
 .section-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08);}
 .btn{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:11px 28px;border-radius:10px;cursor:pointer;transition:all .15s;border:1px solid;}
@@ -595,6 +600,12 @@ canvas{width:100%!important;max-height:220px;}
   background:rgba(255,255,255,0.7) !important;
   border-color:rgba(0,0,0,0.12) !important;
   color:rgba(0,0,0,0.85) !important;
+}
+[data-theme="light"] select option,
+[data-theme="light"] .field select option,
+[data-theme="light"] .leg-input option{
+  background-color:#ffffff;
+  color:#111827;
 }
 [data-theme="light"] .slate-filter-btn,
 [data-theme="light"] .tab-btn,
