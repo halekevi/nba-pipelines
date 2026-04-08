@@ -257,6 +257,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .glass-insights{background:var(--glass-panel);border:1px solid var(--glass-panel-border);border-radius:16px;padding:20px 22px;box-shadow:var(--glass-shadow);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);}
 .insights-card-title{font-size:19px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:8px;}
 .insights-card-sub{font-size:18px;color:var(--muted);margin-bottom:14px;line-height:1.45;}
+.props-eval-intro .insights-card-sub{font-size:14px;line-height:1.35;}
 .insights-table-host table{width:100%;border-collapse:collapse;font-size:clamp(17px,1.05vw,19px);}
 .insights-table-host th,.insights-table-host td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);}
 .insights-table-host th{color:var(--muted2);font-weight:600;font-size:clamp(16px,1vw,18px);text-transform:uppercase;letter-spacing:0.06em;}
@@ -960,6 +961,15 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
               <option value="OTHER">Other / pending</option>
             </select>
           </label>
+          <label>Pick Type
+            <select id="props-filter-picktype" aria-label="Filter by pick type">
+              <option value="NO_DEMON">No Demon (default)</option>
+              <option value="">All pick types</option>
+              <option value="GOBLIN">Goblin only</option>
+              <option value="STANDARD">Standard only</option>
+              <option value="DEMON">Demon only</option>
+            </select>
+          </label>
           <label style="flex:1 1 200px;max-width:100%;">Search
             <input type="search" id="props-filter-q" placeholder="Player, prop, team…" autocomplete="off" aria-label="Search props"/>
           </label>
@@ -1573,10 +1583,14 @@ function renderPropsEvalCards(rows) {
 function applyPropsEvalFilters() {
   const sport = (document.getElementById('props-filter-sport') || {}).value || '';
   const resF = (document.getElementById('props-filter-result') || {}).value || '';
+  const pickTypeF = (document.getElementById('props-filter-picktype') || {}).value || 'NO_DEMON';
   const q = (((document.getElementById('props-filter-q') || {}).value) || '').trim().toLowerCase();
   const rows = window._propsEvalCache || [];
   const filtered = rows.filter(function (r) {
     if (sport && String(r.sport || '').toUpperCase() !== sport) return false;
+    var pt = String(r.pick_type || '').toUpperCase();
+    if (pickTypeF === 'NO_DEMON' && pt.indexOf('DEMON') >= 0) return false;
+    if (pickTypeF && pickTypeF !== 'NO_DEMON' && pt.indexOf(pickTypeF) < 0) return false;
     const ru = String(r.result || '').toUpperCase();
     if (resF === 'HIT' && ru !== 'HIT') return false;
     if (resF === 'MISS' && ru !== 'MISS') return false;
@@ -1593,16 +1607,19 @@ function applyPropsEvalFilters() {
     return String(a.player_name || '').localeCompare(String(b.player_name || ''), undefined, { sensitivity: 'base' });
   });
   renderPropsEvalCards(filtered);
+  var fHit = 0, fMiss = 0;
+  filtered.forEach(function (r) {
+    var ru = String(r.result || '').toUpperCase();
+    if (ru === 'HIT') fHit += 1;
+    else if (ru === 'MISS') fMiss += 1;
+  });
   const el = document.getElementById('props-eval-counts');
   if (el) {
-    var extra = '';
-    if (window._propsEvalStats) {
-      extra = ' · ' + window._propsEvalStats.n_hit + ' hits, ' + window._propsEvalStats.n_miss + ' misses';
-      if (window._propsEvalStats.n > rows.length) {
-        extra += ' · ' + window._propsEvalStats.n + ' total in archive (truncated view)';
-      }
-    }
-    el.textContent = 'Showing ' + filtered.length + ' of ' + rows.length + ' loaded' + extra;
+    var note = '';
+    if (pickTypeF === 'NO_DEMON') note = ' · demon excluded';
+    else if (pickTypeF === 'DEMON') note = ' · demon only';
+    else if (pickTypeF) note = ' · ' + pickTypeF.toLowerCase() + ' only';
+    el.textContent = 'Showing ' + filtered.length + ' of ' + rows.length + ' loaded · ' + fHit + ' hits, ' + fMiss + ' misses' + note;
   }
 }
 function mapGradedJsonToEvalRow(p) {
@@ -1691,7 +1708,7 @@ async function loadGradesProps(dateStr) {
   }
 }
 (function initPropsEvalFilters() {
-  ['props-filter-sport', 'props-filter-result'].forEach(function (id) {
+  ['props-filter-sport', 'props-filter-result', 'props-filter-picktype'].forEach(function (id) {
     var el = document.getElementById(id);
     if (el) el.addEventListener('change', applyPropsEvalFilters);
   });
