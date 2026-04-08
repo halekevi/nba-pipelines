@@ -86,6 +86,8 @@ DEFAULT_NBA1H_PATH = os.path.join(REPO_ROOT, "NBA", "step8_nba1h_direction_clean
 DEFAULT_NBA1Q_PATH = os.path.join(REPO_ROOT, "NBA", "step8_nba1q_direction_clean.xlsx")
 DEFAULT_WCBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_wcbb.xlsx")
 DEFAULT_MLB_PATH = os.path.join(REPO_ROOT, "MLB", "step8_mlb_direction_clean.xlsx")
+# CBB deactivated - season over (April 2026)
+DISABLED_SPORTS = {"CBB"}
 _soccer_root = os.path.join(REPO_ROOT, "Soccer", "step8_soccer_direction_clean.xlsx")
 _soccer_outputs = os.path.join(REPO_ROOT, "Soccer", "outputs", "step8_soccer_direction_clean.xlsx")
 if os.path.exists(_soccer_root) and os.path.exists(_soccer_outputs):
@@ -180,10 +182,16 @@ def power_flex_payout_for_n(n_legs: int) -> tuple[float, float]:
 # monitored. Remove from this set once validated.
 TICKET_EXCLUDED_PROPS = {
     "fantasy score", "fantasy_score", "fantasy",
-    "fg attempted",
     "fg made",
     "personal fouls",
     "blks+stls",
+}
+
+ATTEMPT_PROPS = {
+    "fg attempted",
+    "field goals attempted",
+    "3-pt attempted",
+    "three pointers attempted",
     "two pointers attempted",
 }
 
@@ -194,8 +202,8 @@ TIER3_PROPS = {"steals", "blocked shots", "turnovers", "free throws made"}
 UNDER_ALLOWED_PROPS = {"free throws attempted", "turnovers"}
 
 NBA_EXCLUDED_PROPS = {
-    "blocked shots", "3-pt attempted", "fg attempted",
-    "free throws attempted", "two pointers attempted",
+    "blocked shots",
+    "free throws attempted",
     "defensive rebounds", "offensive rebounds",
     "dunks", "quarters with 5+ points", "quarters with 3+ points",
     "points - 1st 3 minutes", "assists - 1st 3 minutes", "rebounds - 1st 3 minutes",
@@ -225,6 +233,10 @@ def _norm_prop_label(v: object) -> str:
     s = str(v or "").strip().lower()
     s = re.sub(r"\s+", " ", s)
     return s
+
+
+def _is_attempt_prop_series(prop_s: pd.Series) -> pd.Series:
+    return prop_s.astype(str).apply(_norm_prop_label).isin(ATTEMPT_PROPS)
 
 
 # NBA abbreviations sometimes differ vs other books (align to slate/step8 style).
@@ -587,6 +599,14 @@ LEG_MIN_HIT_RATE = {
     5: 0.66,
     6: 0.68,
 }
+
+MLB_LEG_MIN_HIT_RATE = {
+    2: 0.58,
+    3: 0.60,
+    4: 0.62,
+}
+MLB_MAX_LEGS = 4
+MLB_PITCHING_OVER_ONLY_PROPS = {"strikeouts", "hits allowed"}
 
 # When --high-conviction: per-leg hit_rate floors (merged with LEG_MIN_HIT_RATE via max())
 HIGH_CONVICTION_LEG_MIN_HIT_RATE = {
@@ -3753,7 +3773,14 @@ def filter_eligible(df: pd.DataFrame, min_hit_rate=0.55, min_edge=0.0, min_rank=
     if min_rank is not None and "rank_score" in df.columns:
         mask &= df["rank_score"].fillna(-99) >= min_rank
     if tiers and "tier" in df.columns:
-        mask &= df["tier"].isin([t.upper() for t in tiers])
+        tier_set = {str(t).upper() for t in tiers}
+        tier_s = df["tier"].astype(str).str.upper().str.strip()
+        tier_ok = tier_s.isin(tier_set)
+        # Attempt props can pass Tier-D exclusion if they satisfy hit-rate/edge gates.
+        if "D" not in tier_set and "prop_type" in df.columns:
+            attempt_ok = _is_attempt_prop_series(df["prop_type"])
+            tier_ok = tier_ok | ((tier_s == "D") & attempt_ok)
+        mask &= tier_ok
     if pick_types and "pick_type" in df.columns:
         mask &= df["pick_type"].isin(pick_types)
     return df[mask].copy()
@@ -3871,6 +3898,8 @@ def build_single_structure_ticket(
 
     if min_leg_hit_rate is not None and float(min_leg_hit_rate) > 0 and "hit_rate" in cand.columns:
         thr = float(min_leg_hit_rate)
+        if sport_up == "MLB":
+            thr = max(thr, float(MLB_LEG_MIN_HIT_RATE.get(int(n_legs), thr)))
         cand = cand[pd.to_numeric(cand["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
     if cand.empty:
         return None
@@ -5805,13 +5834,17 @@ def main():
     print(f"  {len(nba)} NBA props loaded")
     _load_audit_row("NBA", args.nba, nba)
 
-    print(f"Loading CBB slate from {args.cbb}...")
-    cbb = load_cbb(args.cbb)
-    cbb = enforce_target_date(
-        cbb, "CBB", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
-    )
-    print(f"  {len(cbb)} CBB props loaded")
-    _load_audit_row("CBB", args.cbb, cbb)
+    if "CBB" in DISABLED_SPORTS:
+        print("Loading CBB slate skipped (deactivated season).")
+        cbb = pd.DataFrame()
+    else:
+        print(f"Loading CBB slate from {args.cbb}...")
+        cbb = load_cbb(args.cbb)
+        cbb = enforce_target_date(
+            cbb, "CBB", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+        )
+        print(f"  {len(cbb)} CBB props loaded")
+        _load_audit_row("CBB", args.cbb, cbb)
 
     nhl = None
     if str(args.nhl).strip():
@@ -5922,7 +5955,7 @@ def main():
 
     # Apply teammate-absence usage redistribution before ticket eligibility filtering.
     nba = apply_usage_redistribution(nba, "NBA", args.date, REPO_ROOT)
-    cbb = apply_usage_redistribution(cbb, "CBB", args.date, REPO_ROOT)
+    cbb = apply_usage_redistribution(cbb, "CBB", args.date, REPO_ROOT) if "CBB" not in DISABLED_SPORTS else cbb
     wcbb = apply_usage_redistribution(wcbb, "WCBB", args.date, REPO_ROOT) if wcbb is not None else wcbb
     nhl = apply_usage_redistribution(nhl, "NHL", args.date, REPO_ROOT) if nhl is not None else nhl
     soccer = apply_usage_redistribution(soccer, "Soccer", args.date, REPO_ROOT) if soccer is not None else soccer
@@ -5965,7 +5998,7 @@ def main():
         )
 
     print(f"  {len(combined)} total props")
-    for s in ("NBA", "CBB", "NHL", "Soccer", "MLB", "NBA1H", "NBA1Q", "WCBB"):
+    for s in ("NBA", "NHL", "Soccer", "MLB", "NBA1H", "NBA1Q", "WCBB"):
         n_s = int((combined["sport"] == s).sum()) if "sport" in combined.columns else 0
         if n_s > 0:
             print(f"  Full Slate rows — {s}: {n_s}")
@@ -5999,6 +6032,29 @@ def main():
                 ~filtered_df["prop_type"].astype(str).str.lower().isin(excluded)
             ]
 
+        # Direction-aware defense tier bonus/penalty before threshold checks.
+        # Research-calibrated behavior:
+        # - OVER + Above Avg defense tier: +0.05
+        # - UNDER + Elite defense tier: +0.05
+        # - OVER + Elite defense tier: -0.03
+        if {"direction", "def_tier"}.issubset(filtered_df.columns):
+            ddir = filtered_df["direction"].astype(str).str.upper().str.strip()
+            dtier = filtered_df["def_tier"].astype(str).str.upper().str.strip()
+            def_bonus = pd.Series(0.0, index=filtered_df.index)
+            def_bonus = def_bonus + (((ddir == "OVER") & dtier.eq("ABOVE AVG")).astype(float) * 0.05)
+            def_bonus = def_bonus + (((ddir == "UNDER") & dtier.eq("ELITE")).astype(float) * 0.05)
+            def_bonus = def_bonus - (((ddir == "OVER") & dtier.eq("ELITE")).astype(float) * 0.03)
+            filtered_df["_def_tier_bonus"] = def_bonus
+
+            if "blended_score" in filtered_df.columns:
+                filtered_df["blended_score"] = (
+                    pd.to_numeric(filtered_df["blended_score"], errors="coerce").fillna(0.0) + def_bonus
+                )
+            if "rank_score" in filtered_df.columns:
+                filtered_df["rank_score"] = (
+                    pd.to_numeric(filtered_df["rank_score"], errors="coerce").fillna(0.0) + def_bonus
+                )
+
         # Sport-specific hit rate floors based on empirical data
         effective_min_hit = args.min_hit_rate
 
@@ -6027,6 +6083,13 @@ def main():
             filtered_df = filtered_df[
                 filtered_df["direction"].astype(str).str.upper() != "OVER"
             ]
+
+        # MLB: pitching props are OVER-only in ticket pools (reduce variance).
+        if sport == "MLB" and {"direction", "prop_type"}.issubset(filtered_df.columns):
+            _dir = filtered_df["direction"].astype(str).str.upper().str.strip()
+            _prop = filtered_df["prop_type"].apply(_norm_prop_label)
+            _pitch_under = _dir.eq("UNDER") & _prop.isin(MLB_PITCHING_OVER_ONLY_PROPS)
+            filtered_df = filtered_df[~_pitch_under].copy()
 
         # Tier floor: exclude Tier D from all pools
         effective_tiers = [t for t in (tiers if tiers else ["A", "B", "C", "D"]) if t != "D"]

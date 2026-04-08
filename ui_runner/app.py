@@ -88,6 +88,8 @@ MLB_SLATE     = MLB_DIR / "step8_mlb_direction_clean.xlsx"
 MLB_TICKETS   = MLB_DIR / "mlb_best_tickets.xlsx"
 COMBINED_OUT  = BASE_DIR  # combined_slate_tickets_YYYY-MM-DD.xlsx may live here or under outputs/
 OUTPUTS_ROOT  = BASE_DIR / "outputs"
+# CBB deactivated - season over (April 2026)
+DISABLED_SPORTS = {"cbb"}
 
 app = Flask(
     __name__,
@@ -616,25 +618,36 @@ def _selected_slate_sport_payload() -> dict:
         except Exception:
             return None
 
+    def _apply_disabled_sports(payload: dict | None) -> dict | None:
+        if not isinstance(payload, dict):
+            return payload
+        sports = payload.get("sports")
+        if isinstance(sports, dict):
+            payload = dict(payload)
+            payload["sports"] = {
+                str(k): v for k, v in sports.items() if str(k).strip().lower() not in DISABLED_SPORTS
+            }
+        return payload
+
     if src == "slate_latest":
         d = _load(sl_name)
         if not d:
             raise ValueError("slate_latest.json unavailable")
-        return d
+        return _apply_disabled_sports(d)
     if src == "ticket_eval":
         d = _load(te_name)
         if not d:
             raise ValueError("ticket_eval_slate_latest.json unavailable")
-        return d
+        return _apply_disabled_sports(d)
 
     sl = _load(sl_name)
     if sl and _count_slate_sport_rows(sl) > 0:
-        return sl
+        return _apply_disabled_sports(sl)
     te = _load(te_name)
     if te and _count_slate_sport_rows(te) > 0:
-        return te
+        return _apply_disabled_sports(te)
     if sl:
-        return sl
+        return _apply_disabled_sports(sl)
     raise ValueError("no slate json available")
 
 
@@ -2114,7 +2127,6 @@ def api_slate_excel():
             "NBA Slate":   "nba",
             "NBA1H Slate": "nba1h",
             "NBA1Q Slate": "nba1q",
-            "CBB Slate":   "cbb",
             "NHL Slate":   "nhl",
             "Soccer Slate":"soccer",
             "WCBB Slate":  "wcbb",

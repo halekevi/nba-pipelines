@@ -112,7 +112,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
             df2.loc[ok, "minutes_tier"] = lbl[ok]
     else:
         mt_num = pd.to_numeric(df2.get("minutes_tier", ""), errors="coerce")
-        _min_tier_map = {0: "DNP Risk", 1: "Spot", 2: "Rotation", 3: "Starter"}
+        _min_tier_map = {0: "Low", 1: "Med", 2: "High", 3: "Elite"}
         m_ok = mt_num.notna()
         if m_ok.any():
             keys = mt_num.loc[m_ok].round().astype("Int64")

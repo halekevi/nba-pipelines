@@ -665,8 +665,7 @@ else {
             "NBA\step8_nba1q_direction_clean.xlsx",
             "Soccer\step8_soccer_direction_clean.xlsx",
             "MLB\step8_mlb_direction_clean.xlsx",
-            "CBB\step6_ranked_cbb.xlsx",
-            "CBB\step6_ranked_wcbb.xlsx",
+            # CBB deactivated - season over (April 2026)
             "NHL\outputs\step8_nhl_direction_clean.xlsx"
         )
         foreach ($rel in $optionalAdds) {

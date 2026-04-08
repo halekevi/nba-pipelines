@@ -104,7 +104,7 @@ def write_sheet(wb, name: str, data: pd.DataFrame) -> None:
     ws.auto_filter.ref = f"A1:{get_column_letter(len(headers))}1"
 
 
-_MIN_TIER_NUM_MAP = {0: "DNP Risk", 1: "Spot", 2: "Rotation", 3: "Starter"}
+_MIN_TIER_NUM_MAP = {0: "Low", 1: "Med", 2: "High", 3: "Elite"}
 
 
 def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:

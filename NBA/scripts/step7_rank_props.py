@@ -1087,9 +1087,39 @@ def main() -> None:
     is_over     = pd.Series(bet_dir, index=out.index) == "OVER"
     is_under    = ~is_over
 
-    block_std_over  = is_standard & is_over  & prop_norm_s.isin(_BLOCKED_STD_OVER)
-    block_std_under = is_standard & is_under & prop_norm_s.isin(_BLOCKED_STD_UNDER)
-    block_any_under = is_under & prop_norm_s.isin(_BLOCKED_ANY_UNDER)
+    # Keep BLOCKED_* checks direction-aware: UNDER thresholds must evaluate
+    # UNDER-side hit rate (not raw OVER rate).
+    _BLOCKED_MIN_HR = 0.45
+    def _pick_block_first_valid(*col_names) -> pd.Series:
+        result = pd.Series(np.nan, index=out.index)
+        for col in col_names:
+            if col in out.columns:
+                v = _to_num(out[col])
+                result = result.where(result.notna(), v)
+        return result
+
+    over_rate_block = _pick_block_first_valid(
+        "line_hit_rate_over_ou_10",
+        "line_hit_rate_over_10",
+        "line_hit_rate",
+        "line_hit_rate_over_ou_5",
+        "line_hit_rate_over_5",
+        "last5_hit_rate",
+    )
+    under_rate_block = _pick_block_first_valid(
+        "line_hit_rate_under_ou_10",
+        "line_hit_rate_under_10",
+        "line_hit_rate_under_ou_5",
+        "line_hit_rate_under_5",
+    )
+    # Fallback: UNDER hit rate = 1 - OVER hit rate.
+    under_rate_block = under_rate_block.where(under_rate_block.notna(), 1.0 - _to_num(over_rate_block))
+    low_hr_over = _to_num(over_rate_block).fillna(1.0) < _BLOCKED_MIN_HR
+    low_hr_under = _to_num(under_rate_block).fillna(1.0) < _BLOCKED_MIN_HR
+
+    block_std_over  = is_standard & is_over  & prop_norm_s.isin(_BLOCKED_STD_OVER) & low_hr_over
+    block_std_under = is_standard & is_under & prop_norm_s.isin(_BLOCKED_STD_UNDER) & low_hr_under
+    block_any_under = is_under & prop_norm_s.isin(_BLOCKED_ANY_UNDER) & low_hr_under
     hard_block      = block_std_over | block_std_under | block_any_under
 
     eligible    = np.where(hard_block, 0, eligible)

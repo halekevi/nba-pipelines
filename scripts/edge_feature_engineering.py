@@ -16,7 +16,15 @@ import pandas as pd
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-SPORT_ENCODING = {"NBA": 0, "CBB": 1, "NHL": 2, "SOCCER": 3, "MLB": 4}
+SPORT_ENCODING = {
+    "NBA": 0,
+    "CBB": 1,
+    "NHL": 2,
+    "SOCCER": 3,
+    "MLB": 4,
+    "NBA1H": 5,
+    "NBA1Q": 6,
+}
 
 FEATURE_COLUMNS: list[str] = [
     "composite_hit_rate",
@@ -95,8 +103,23 @@ def _parse_toi_series(s: pd.Series) -> pd.Series:
 
 
 def _direction_series(df: pd.DataFrame) -> pd.Series:
-    d = _first_col(df, ("recommended_side", "direction", "final_bet_direction", "bet_direction"))
-    out = d.astype(str).str.strip().str.upper()
+    """Coalesce direction fields; graded exports often leave `direction` blank but set `bet_direction`."""
+    idx = df.index
+    out = pd.Series("", index=idx, dtype=str)
+    # Prefer explicit pick-side columns before a sparse/legacy `direction` column.
+    for n in (
+        "recommended_side",
+        "bet_direction",
+        "final_bet_direction",
+        "direction_used",
+        "direction",
+    ):
+        if n not in df.columns:
+            continue
+        s = df[n].astype(str).str.strip().str.upper()
+        s = s.replace({"NAN": "", "NONE": "", "NULL": ""})
+        fill = out.eq("") & s.ne("")
+        out = out.where(~fill, s)
     out = out.replace({"NAN": "", "NONE": "", "NULL": ""})
     return out
 

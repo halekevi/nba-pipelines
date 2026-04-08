@@ -125,7 +125,11 @@ def _infer_sport_from_graded_filename(path: Path) -> str | None:
         return "SOCCER"
     if "graded_wcbb" in n or "graded_cbb" in n:
         return "CBB"
-    if "graded_nba1h" in n or "graded_nba1q" in n or "graded_nba" in n:
+    if "graded_nba1h" in n:
+        return "NBA1H"
+    if "graded_nba1q" in n:
+        return "NBA1Q"
+    if "graded_nba" in n:
         return "NBA"
     return None
 
@@ -426,6 +430,114 @@ def _to_num_safe(s: pd.Series) -> pd.Series:
     return pd.to_numeric(s, errors="coerce")
 
 
+MIN_SPORT_ROWS = 200
+MAX_CLASS_DOMINANCE_PCT = 90.0  # skip if dominant hit class > 90%
+MIN_HOLDOUT_ROWS_PER_SPORT = 50
+
+
+def _hit_class_balance(y: pd.Series) -> tuple[int, int, float]:
+    """Counts of y==1 / y==0 and pct of dominant class (0-100)."""
+    yv = pd.to_numeric(y, errors="coerce")
+    n1 = int((yv == 1).sum())
+    n0 = int((yv == 0).sum())
+    n = n1 + n0
+    if n == 0:
+        return 0, 0, 0.0
+    dom = max(n1, n0) / n * 100.0
+    return n1, n0, dom
+
+
+def _sport_skip_reason(n_rows: int, dom_pct: float) -> str | None:
+    if n_rows < MIN_SPORT_ROWS:
+        return f"only {n_rows} rows / {dom_pct:.1f}% class imbalance"
+    if dom_pct > MAX_CLASS_DOMINANCE_PCT:
+        return f"only {n_rows} rows / {dom_pct:.1f}% class imbalance"
+    return None
+
+
+def _print_nba1h_hit_derivation_debug(raw: pd.DataFrame) -> None:
+    """First 5 NBA1H rows: columns relevant to hit / direction / result (for half-game QA)."""
+    if raw.empty or "sport" not in raw.columns:
+        return
+    m = _normalize_sport_series(raw["sport"]).astype(str).str.upper().eq("NBA1H")
+    if not m.any():
+        return
+    sub = raw.loc[m].head(5)
+    pat = re.compile(
+        r"direction|result|hit|actual|margin|line|pick|graded|void|outcome|scored|slate",
+        re.I,
+    )
+    interesting = [c for c in sub.columns if pat.search(str(c)) or c == "_hit_y"]
+    interesting = sorted(set(interesting))[:25]
+    if not interesting:
+        interesting = list(sub.columns[:12])
+    print("\n[NBA1H hit derivation] First 5 rows (hit-related columns):")
+    try:
+        print(sub[interesting].to_string())
+    except Exception as e:
+        print(f"  (could not format table: {e})")
+
+
+def _raw_columns_leakage_scan(raw: pd.DataFrame) -> list[str]:
+    """Flag raw workbook columns that look post-game (should not feed features)."""
+    bad_sub = (
+        "result",
+        "outcome",
+        "actual_value",
+        "scored",
+        "graded",
+        "final_stat",
+        "leg_result",
+        "final_margin",
+    )
+    found: list[str] = []
+    for c in raw.columns:
+        cl = str(c).strip().lower()
+        if any(b in cl for b in bad_sub):
+            found.append(str(c))
+    return sorted(set(found))
+
+
+def _feature_name_leakage_matches(name: str) -> bool:
+    n = str(name).lower()
+    needles = (
+        "result",
+        "outcome",
+        "actual_value",
+        "scored",
+        "graded",
+        "final_stat",
+        "leg_result",
+    )
+    return any(x in n for x in needles)
+
+
+def _correlations_with_target(
+    tr: pd.DataFrame, sport: str, feature_cols: list[str], y_col: str = "y"
+) -> dict[str, float]:
+    m = tr["sport"].astype(str).str.strip().str.upper() == sport.upper()
+    if int(m.sum()) < 30:
+        return {}
+    sub = tr.loc[m]
+    y = pd.to_numeric(sub[y_col], errors="coerce")
+    out: dict[str, float] = {}
+    for f in feature_cols:
+        if f not in sub.columns:
+            continue
+        x = pd.to_numeric(sub[f], errors="coerce")
+        ok = x.notna() & y.notna()
+        if int(ok.sum()) < 30:
+            continue
+        xv = x[ok].to_numpy(dtype=float)
+        yv = y[ok].to_numpy(dtype=float)
+        if np.std(xv) < 1e-12 or np.std(yv) < 1e-12:
+            continue
+        r = float(np.corrcoef(xv, yv)[0, 1])
+        if np.isfinite(r):
+            out[f] = r
+    return out
+
+
 def main() -> None:
     print(f"[PropORACLE-{SCRIPT_NAME}] Starting...")
     root = _repo_root()
@@ -471,24 +583,46 @@ def main() -> None:
     raw = raw.loc[raw["_hit_y"].isin([0.0, 1.0])].copy()
 
     sport_counts = raw.groupby("sport").size()
-    print("\nRows per sport (raw):")
+    print("\nRows per sport (raw, before feature prep):")
     print(sport_counts.to_string())
+
+    leak_raw_cols = _raw_columns_leakage_scan(raw)
+    if leak_raw_cols:
+        print(
+            f"\n[WARN] Raw graded columns look post-game (inspect for leakage): "
+            f"{leak_raw_cols[:20]}{' ...' if len(leak_raw_cols) > 20 else ''}"
+        )
+
+    _print_nba1h_hit_derivation_debug(raw)
 
     df = _prepare_features(raw)
     df["y"] = df["_hit_y"].astype(int)
 
-    skip_sports: list[str] = []
+    print("\n--- Per-sport training quality (before filters) ---")
+    print(
+        f"{'Sport':<8} {'Rows':>7} {'Hits':>7} {'Misses':>7} "
+        f"{'Hit%':>8} {'Dom%':>8} {'Status':<12}"
+    )
+    sports_to_drop: list[str] = []
+    quality_skipped_rows: dict[str, int] = {}
     for sp in sorted(df["sport"].unique()):
-        n = int((df["sport"] == sp).sum())
-        if n < 50:
-            skip_sports.append(f"{sp}: {n} rows")
-            df = df.loc[df["sport"] != sp].copy()
-    if skip_sports:
-        print("\n[WARN] Skipping sports with <50 rows:")
-        for s in skip_sports:
-            print(f"  {s}")
+        sub_m = df["sport"] == sp
+        n = int(sub_m.sum())
+        n1, n0, dom_pct = _hit_class_balance(df.loc[sub_m, "y"])
+        hit_pct = (100.0 * n1 / n) if n else 0.0
+        reason = _sport_skip_reason(n, dom_pct)
+        status = "SKIP" if reason else "OK"
+        print(f"{str(sp):<8} {n:7d} {n1:7d} {n0:7d} {hit_pct:7.1f}% {dom_pct:7.1f}% {status:<12}")
+        if reason:
+            print(f"  Skipping {sp}: {reason}")
+            sports_to_drop.append(str(sp))
+            quality_skipped_rows[str(sp)] = n
+
+    if sports_to_drop:
+        df = df.loc[~df["sport"].isin(sports_to_drop)].copy()
+
     if df.empty:
-        print("[ERROR] No sports left with enough rows.")
+        print("[ERROR] No sports left after row-count / class-balance filters.")
         return
 
     y = df["y"].astype(int)
@@ -496,11 +630,12 @@ def main() -> None:
     neg = int((y == 0).sum())
     spw = (neg / pos) if pos > 0 else 1.0
 
+    print("\n--- Direction mix (direction_encoded: 1=OVER, 0=UNDER) ---")
     for sp in sorted(df["sport"].unique()):
         sub = df["sport"] == sp
         o = int(df.loc[sub, "direction_encoded"].eq(1.0).sum())
         u = int(df.loc[sub, "direction_encoded"].eq(0.0).sum())
-        print(f"  {sp} OVER={o} UNDER={u} (direction_encoded)")
+        print(f"  {sp} OVER={o} UNDER={u}")
 
     strat = df["sport"].astype(str) + "_" + df["direction_encoded"].astype(int).astype(str)
     vc = strat.value_counts()
@@ -508,8 +643,44 @@ def main() -> None:
         strat = df["sport"].astype(str)
 
     tr, te = train_test_split(df, test_size=0.2, random_state=42, stratify=strat)
-    X_train = tr[FEATURE_COLUMNS].astype(float)
-    X_test = te[FEATURE_COLUMNS].astype(float)
+
+    # ── NHL / Soccer: feature-target correlation on TRAIN only (leakage suspects) ──
+    print("\n--- Feature vs hit correlation (train only; |r|>0.5 = leakage suspect) ---")
+    leak_by_corr: set[str] = set()
+    for sp_label in ("NHL", "SOCCER"):
+        corrs = _correlations_with_target(tr, sp_label, list(FEATURE_COLUMNS))
+        if not corrs:
+            print(f"  {sp_label}: insufficient train rows for correlation scan")
+            continue
+        suspects = [(f, r) for f, r in corrs.items() if abs(r) > 0.5]
+        suspects.sort(key=lambda x: -abs(x[1]))
+        print(f"  {sp_label} (n_train={int((tr['sport'].astype(str)==sp_label).sum())}):")
+        for f, r in sorted(corrs.items(), key=lambda x: -abs(x[1]))[:15]:
+            tag = " *** SUSPECT" if abs(r) > 0.5 else ""
+            print(f"    {f}: r={r:+.4f}{tag}")
+        for f, _r in suspects:
+            leak_by_corr.add(f)
+
+    leak_by_name = {f for f in FEATURE_COLUMNS if _feature_name_leakage_matches(f)}
+    if leak_by_name:
+        print(f"\n[WARN] Feature names matching leakage substrings removed: {sorted(leak_by_name)}")
+
+    leak_confirmed = bool(leak_by_corr or leak_by_name)
+    features_active = [f for f in FEATURE_COLUMNS if f not in leak_by_corr and f not in leak_by_name]
+    if len(features_active) < 8:
+        print("[WARN] Too few features after leakage removal; restoring full FEATURE_COLUMNS.")
+        features_active = list(FEATURE_COLUMNS)
+        leak_confirmed = False
+    elif leak_confirmed:
+        print(
+            f"\n[Leakage] Confirmed suspects removed from training: "
+            f"sorted({sorted(leak_by_corr | leak_by_name)})"
+        )
+    else:
+        print("\n[Leakage] No |r|>0.5 feature-target correlation on NHL/Soccer train; no name-based removals.")
+
+    X_train = tr[features_active].astype(float)
+    X_test = te[features_active].astype(float)
     y_train = tr["y"].astype(int)
     y_test = te["y"].astype(int)
 
@@ -537,21 +708,53 @@ def main() -> None:
     print(f"\nROC-AUC (holdout, calibrated): {auc_overall:.4f}")
 
     print("\nROC-AUC per sport (holdout):")
-    meta_auc: dict[str, float] = {}
+    meta_auc: dict[str, float | None] = {}
+    sport_status: dict[str, str] = {}
     for sp in sorted(df["sport"].unique()):
         m = te["sport"].astype(str).values == str(sp)
-        if int(np.sum(m)) < 5:
+        n_te = int(np.sum(m))
+        if n_te < MIN_HOLDOUT_ROWS_PER_SPORT:
+            print(f"  {sp}: insufficient holdout (test n={n_te} < {MIN_HOLDOUT_ROWS_PER_SPORT}) — excluded from per-sport ROC")
+            meta_auc[str(sp)] = None
+            sport_status[str(sp)] = "insufficient holdout"
+            continue
+        if n_te < 5:
             print(f"  {sp}: n/a (too few test rows)")
+            meta_auc[str(sp)] = None
+            sport_status[str(sp)] = "too few test"
+            continue
+        y_sub = y_test.values[m]
+        if len(np.unique(y_sub)) < 2:
+            print(f"  {sp}: n/a (single class in test)")
+            meta_auc[str(sp)] = None
+            sport_status[str(sp)] = "single-class test"
             continue
         try:
-            a = float(roc_auc_score(y_test.values[m], prob_test[m]))
-            meta_auc[sp] = a
-            print(f"  {sp}: {a:.4f}")
+            a = float(roc_auc_score(y_sub, prob_test[m]))
+            meta_auc[str(sp)] = a
+            sport_status[str(sp)] = "ok"
+            note = ""
+            if a > 0.85:
+                note = " (investigate: >0.85)"
+            elif a > 0.80:
+                note = " (watch: >0.80)"
+            print(f"  {sp}: {a:.4f}{note}")
         except Exception:
             print(f"  {sp}: n/a")
+            meta_auc[str(sp)] = None
+            sport_status[str(sp)] = "auc error"
 
-    imp = dict(zip(FEATURE_COLUMNS, model.feature_importances_.tolist(), strict=True))
-    top10 = sorted(imp.items(), key=lambda x: -x[1])[:10]
+    for sp in ("NHL", "SOCCER"):
+        a = meta_auc.get(sp)
+        if a is not None and float(a) > 0.85 and not leak_confirmed:
+            print(
+                f"\n[Findings] {sp} holdout ROC-AUC={a:.4f} with no feature |r|>0.5 vs hit on train — "
+                "not treated as confirmed column leakage. High AUC may reflect strong separable signals "
+                "(e.g. edge × sport slice) or slice-specific structure; consider time-based CV or ablation."
+            )
+
+    feat_imp = dict(zip(features_active, model.feature_importances_.tolist(), strict=True))
+    top10 = sorted(feat_imp.items(), key=lambda x: -x[1])[:10]
     print("\nTop 10 feature importances (pre-calibration booster):")
     for name, val in top10:
         print(f"  {name}: {val:.5f}")
@@ -587,22 +790,49 @@ def main() -> None:
 
     joblib.dump(calibrated, models_dir / "edge_model_unified.pkl", compress=3)
     (models_dir / "edge_model_features.json").write_text(
-        json.dumps(FEATURE_COLUMNS, indent=2), encoding="utf-8"
+        json.dumps(features_active, indent=2), encoding="utf-8"
     )
+    rows_per_sport = {str(k): int(v) for k, v in df.groupby("sport").size().items()}
     meta = {
+        "trained_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "trained_at_utc": datetime.now(timezone.utc).isoformat(),
         "training_rows_total": int(len(df)),
-        "rows_per_sport": {str(k): int(v) for k, v in df.groupby("sport").size().items()},
+        "rows_per_sport": rows_per_sport,
         "roc_auc_overall": auc_overall,
-        "roc_auc_per_sport": meta_auc,
+        "roc_auc_per_sport": {k: v for k, v in meta_auc.items() if v is not None},
+        "roc_auc_per_sport_with_nulls": {k: (float(v) if v is not None else None) for k, v in meta_auc.items()},
+        "per_sport_holdout_status": sport_status,
         "scale_pos_weight": spw,
-        "feature_columns": FEATURE_COLUMNS,
+        "feature_columns": features_active,
+        "features_removed_leakage": sorted(leak_by_corr | leak_by_name) if leak_confirmed else [],
+        "sports_skipped_quality": {k: quality_skipped_rows[k] for k in sorted(quality_skipped_rows)},
+        "leakage_confirmed": bool(leak_confirmed),
         "recursive_outputs_used": not args.no_recursive_outputs,
         "dedupe_used": not args.no_dedupe,
         "combined_graded_file_paths_omitted": int(n_combined_files_omitted),
     }
     (models_dir / "edge_model_metadata.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
     print(f"\nSaved: edge_model_unified.pkl, edge_model_features.json, edge_model_metadata.json -> {models_dir}")
+
+    print("\n=== Summary: Sport | Rows | Test Size | ROC-AUC | Status ===")
+    print(f"{'Sport':<8} | {'Rows':>6} | {'Test':>6} | {'ROC-AUC':>10} | {'Status':<22}")
+    print("-" * 55)
+    all_sports_keys = sorted(set(rows_per_sport.keys()) | set(quality_skipped_rows.keys()))
+    for sp in all_sports_keys:
+        if sp in quality_skipped_rows:
+            n_tot = quality_skipped_rows[sp]
+            print(f"{sp:<8} | {n_tot:6d} | {0:6d} | {'—':>10} | {'skipped (quality)':<22}")
+            continue
+        n_tot = rows_per_sport[sp]
+        n_te = int((te["sport"].astype(str) == sp).sum())
+        auc_s = meta_auc.get(sp)
+        st = sport_status.get(sp, "—")
+        if auc_s is None:
+            auc_str = "—"
+        else:
+            auc_str = f"{auc_s:.4f}"
+        print(f"{sp:<8} | {n_tot:6d} | {n_te:6d} | {auc_str:>10} | {st:<22}")
+    print(f"{'OVERALL':<8} | {len(df):6d} | {len(te):6d} | {auc_overall:10.4f} | {'holdout':<22}")
 
 
 if __name__ == "__main__":
