@@ -3887,11 +3887,14 @@ def build_single_structure_ticket(
     under_df = df[dirs == "UNDER"].copy()
 
     if flow == "standard":
-        # Standard: OVER only.
-        cand = over_df.copy()
+        # Standard: OVER only, except NHL where strong UNDER props are valid.
+        cand = pd.concat([over_df, under_df], ignore_index=True) if sport_up == "NHL" else over_df.copy()
     elif flow == "power":
-        # Power: OVER only unless not enough OVER legs.
-        cand = over_df if len(over_df) >= n_legs else pd.concat([over_df, under_df], ignore_index=True)
+        # Power: OVER only unless not enough OVER legs; NHL keeps UNDER candidates.
+        if sport_up == "NHL":
+            cand = pd.concat([over_df, under_df], ignore_index=True)
+        else:
+            cand = over_df if len(over_df) >= n_legs else pd.concat([over_df, under_df], ignore_index=True)
     else:
         # Flex: UNDER only for explicitly allowed props and strong hit-rate history.
         if not under_df.empty:
@@ -3908,9 +3911,9 @@ def build_single_structure_ticket(
         if sport_up == "MLB":
             thr = max(thr, float(MLB_LEG_MIN_HIT_RATE.get(int(n_legs), thr)))
         if sport_up == "NHL":
+            # NHL structured pool should use sport caps, not the global strict floor.
             nhl_cap = NHL_LEG_MIN_HIT_RATE.get(int(n_legs))
-            if nhl_cap is not None:
-                thr = min(thr, float(nhl_cap))
+            thr = max(0.52, float(nhl_cap)) if nhl_cap is not None else max(0.52, thr)
         cand = cand[pd.to_numeric(cand["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
     if cand.empty:
         return None
@@ -4203,7 +4206,7 @@ def build_tickets(
         if len(su) == 1 and su[0] == "NHL":
             nhl_cap = NHL_LEG_MIN_HIT_RATE.get(int(n_legs))
             if nhl_cap is not None:
-                min_hr = min(min_hr, float(nhl_cap))
+                min_hr = max(0.52, float(nhl_cap))
     ok_tiers = POWER_MIN_TIER.get(n_legs, ["A", "B", "C", "D"])
 
     # Apply hit rate floor to this pool
@@ -4403,8 +4406,7 @@ def build_mixed_picktype_tickets(
             su0 = str(pool_df["sport"].iloc[0]).strip().upper()
             if su0 == "NHL":
                 nhl_cap = NHL_LEG_MIN_HIT_RATE.get(int(n_legs))
-                if nhl_cap is not None:
-                    thr = min(thr, float(nhl_cap))
+                thr = max(0.52, float(nhl_cap)) if nhl_cap is not None else max(0.52, thr)
         std = std[pd.to_numeric(std["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
         gob = gob[pd.to_numeric(gob["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
 
@@ -5813,6 +5815,11 @@ def main():
     structured_min_leg_hr = args.min_leg_hit_rate
     if args.high_conviction and structured_min_leg_hr is None:
         structured_min_leg_hr = 0.70
+    nhl_structured_min_leg_hr = structured_min_leg_hr
+    if nhl_structured_min_leg_hr is not None and float(nhl_structured_min_leg_hr) > 0.55:
+        nhl_structured_min_leg_hr = 0.52
+    print(f"[NHL TRACE] global structured_min_leg_hr={structured_min_leg_hr}")
+    print(f"[NHL TRACE] NHL structured_min_leg_hr_override={nhl_structured_min_leg_hr}")
 
     if not str(args.nba).strip():
         args.nba = DEFAULT_NBA_PATH
@@ -6151,6 +6158,82 @@ def main():
             effective_pick_types,
         )
 
+    def print_nhl_trace(nhl_df: pd.DataFrame | None):
+        if nhl_df is None or nhl_df.empty:
+            return
+        t0 = nhl_df.copy()
+        print(f"  [NHL TRACE] After date filter:         {len(t0)}")
+
+        # Tier filter (mirrors pool's NHL behavior with strict-mode Tier C allowance)
+        effective_tiers = [t for t in (tiers if tiers else ["A", "B", "C", "D"]) if t != "D"]
+        if bool(args.high_conviction):
+            tier_u = {str(x).strip().upper() for x in effective_tiers}
+            if "C" not in tier_u:
+                effective_tiers = list(dict.fromkeys([*effective_tiers, "C"]))
+        t_tier = t0.copy()
+        if "tier" in t_tier.columns:
+            tier_set = {str(t).upper() for t in effective_tiers}
+            tier_s = t_tier["tier"].astype(str).str.upper().str.strip()
+            tier_ok = tier_s.isin(tier_set)
+            if "D" not in tier_set and "prop_type" in t_tier.columns:
+                attempt_ok = _is_attempt_prop_series(t_tier["prop_type"])
+                tier_ok = tier_ok | ((tier_s == "D") & attempt_ok)
+            t_tier = t_tier[tier_ok].copy()
+        print(f"  [NHL TRACE] After tier filter:         {len(t_tier)}")
+
+        # Direction filter
+        t_dir = t_tier.copy()
+        removed_dir = pd.DataFrame()
+        if "direction" in t_dir.columns:
+            d = t_dir["direction"].astype(str).str.upper().str.strip()
+            keep_mask = d.ne("OVER")
+            removed_dir = t_dir[~keep_mask].copy()
+            t_dir = t_dir[keep_mask].copy()
+        print(f"  [NHL TRACE] After direction filter:    {len(t_dir)}")
+        if not removed_dir.empty:
+            cols = [c for c in ("prop_type", "direction") if c in removed_dir.columns]
+            if cols:
+                print("  [NHL TRACE] Direction-cut legs (tier-pass -> direction-fail):")
+                for _, rr in removed_dir[cols].drop_duplicates().sort_values(cols).iterrows():
+                    ptxt = str(rr.get("prop_type", "")).strip()
+                    dtxt = str(rr.get("direction", "")).strip().upper()
+                    print(f"    - {ptxt} | {dtxt}")
+
+        # Prop exclusion (NHL excluded props)
+        t_prop = t_dir.copy()
+        if "prop_type" in t_prop.columns:
+            t_prop = t_prop[
+                ~t_prop["prop_type"].astype(str).str.lower().isin(NHL_EXCLUDED_PROPS)
+            ].copy()
+        print(f"  [NHL TRACE] After prop exclusion:      {len(t_prop)}")
+
+        # Global pool min_hit_rate (before NHL cap override)
+        t_global_hr = t_prop.copy()
+        if "hit_rate" in t_global_hr.columns:
+            global_min = float(args.min_hit_rate)
+            t_global_hr = t_global_hr[pd.to_numeric(t_global_hr["hit_rate"], errors="coerce").fillna(0) >= global_min].copy()
+        print(f"  [NHL TRACE] After global min_hit_rate: {len(t_global_hr)}")
+
+        # NHL hit-rate cap for 2-leg/structured entry (pool-level reference)
+        t_nhl_cap = t_global_hr.copy()
+        if "hit_rate" in t_nhl_cap.columns:
+            nhl_cap = float(NHL_LEG_MIN_HIT_RATE.get(2, 0.55))
+            t_nhl_cap = t_nhl_cap[pd.to_numeric(t_nhl_cap["hit_rate"], errors="coerce").fillna(0) >= max(0.52, nhl_cap)].copy()
+        print(f"  [NHL TRACE] After NHL hit_rate caps:   {len(t_nhl_cap)}")
+
+        # EV/edge gate
+        t_ev = t_nhl_cap.copy()
+        if float(args.min_edge) > 0:
+            t_ev = t_ev[_edge_magnitude_series(t_ev).fillna(0) >= float(args.min_edge)].copy()
+        print(f"  [NHL TRACE] After EV filter:           {len(t_ev)}")
+
+        # Final pool (actual runtime pool() result)
+        t_final = pool(nhl_df)
+        print(f"  [NHL TRACE] Final pool:                {len(t_final) if t_final is not None else 0}")
+
+    if nhl is not None and len(nhl) > 0:
+        print_nhl_trace(nhl)
+
     nba_pool = pool(nba)
     cbb_pool = pool(cbb)
     mlb_pool = pool(mlb)
@@ -6365,7 +6448,7 @@ def main():
             "NHL",
             C["hdr_nhl"],
             "NHL",
-            min_leg_hit_rate=structured_min_leg_hr,
+            min_leg_hit_rate=nhl_structured_min_leg_hr,
             prioritize_ticket_hit=_prio_hit,
             ticket_sort_mode=_ticket_sort,
             ticket_gen_starts=_tg_starts,
