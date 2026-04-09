@@ -540,6 +540,342 @@ def clear_slip(frame):
         pass
 
 
+MIN_SAMPLES = {
+    "all_standard": 8,
+    "has_goblin": 10,
+    "has_demon": 5,
+    "flex": 5,
+}
+
+
+def dismiss_modal(frame, page) -> bool:
+    dismissed = False
+    try:
+        for sel in [".MuiBackdrop-root", "[class*='MuiBackdrop']"]:
+            bd = frame.locator(sel).first
+            if bd.count() > 0:
+                try:
+                    bd.click(force=True, timeout=600)
+                    frame.wait_for_timeout(400)
+                    print("[MODAL] Dismissed backdrop (force)")
+                    dismissed = True
+                except Exception:
+                    pass
+    except Exception:
+        pass
+    try:
+        backdrop = frame.locator(
+            "[class*='MuiBackdrop'], [class*='backdrop'], "
+            "[class*='modal'], [class*='Modal'], "
+            "[class*='overlay'], [class*='Overlay']"
+        ).first
+        if backdrop.count() > 0 and backdrop.is_visible():
+            backdrop.click(force=True, timeout=800)
+            frame.wait_for_timeout(500)
+            print("[MODAL] Dismissed backdrop")
+            dismissed = True
+    except Exception:
+        pass
+    try:
+        for _ in range(2):
+            page.keyboard.press("Escape")
+            frame.wait_for_timeout(200)
+    except Exception:
+        pass
+    for label in ["Close", "Got it", "OK", "Dismiss", "×", "✕"]:
+        try:
+            loc = frame.get_by_text(label, exact=True).first
+            if loc.count() > 0 and loc.is_visible():
+                loc.click(timeout=600)
+                frame.wait_for_timeout(300)
+                print(f"[MODAL] Dismissed via '{label}' button")
+                return True
+        except Exception:
+            continue
+    return dismissed
+
+
+def _card_unique_key(c: dict) -> str:
+    return (
+        f"{_norm(c.get('player'))}|{_norm(c.get('prop_type'))}|"
+        f"{_line_key(c.get('line'))}|{c.get('pick_type', '')}"
+    )
+
+
+def _is_valid_board_card(c: dict) -> bool:
+    p = str(c.get("player", "") or "")
+    if len(p) < 2 or len(p) > 55:
+        return False
+    lo = p.lower()
+    if any(
+        x in lo
+        for x in (
+            "learn more",
+            "help center",
+            "how to play",
+            "scoring chart",
+        )
+    ):
+        return False
+    if "demons & goblins" in lo and "indicate" in lo:
+        return False
+    return True
+
+
+def expand_card_pool(frame, page) -> list[dict]:
+    all_cards: list[dict] = []
+    seen: set[str] = set()
+    for _ in range(3):
+        dismiss_modal(frame, page)
+        frame.wait_for_timeout(150)
+    filters = [
+        "Popular",
+        "Points",
+        "Assists",
+        "Rebounds",
+        "Turnovers",
+        "Steals",
+        "3-PT Made",
+    ]
+    for filter_name in filters:
+        try:
+            dismiss_modal(frame, page)
+            loc = frame.get_by_text(filter_name, exact=True).first
+            if loc.count() == 0:
+                loc = frame.get_by_text(filter_name, exact=False).first
+            loc.click(force=True, timeout=1500)
+            frame.wait_for_timeout(800)
+            _scroll_board_for_lazy_load(page)
+            cards = get_all_cards(frame)
+            new = 0
+            gobs = dens = 0
+            for c in cards:
+                if not _is_valid_board_card(c):
+                    continue
+                k = _card_unique_key(c)
+                if k in seen:
+                    continue
+                seen.add(k)
+                c2 = dict(c)
+                c2["source_filter"] = filter_name
+                all_cards.append(c2)
+                new += 1
+                if c2.get("pick_type") == "goblin":
+                    gobs += 1
+                elif c2.get("pick_type") == "demon":
+                    dens += 1
+            print(f"[FILTER] {filter_name}: +{new} unique cards ({gobs} goblins, {dens} demons)")
+        except Exception as e:
+            print(f"[FILTER] {filter_name}: skip ({e})")
+    try:
+        dismiss_modal(frame, page)
+        loc = frame.get_by_text("Popular", exact=True).first
+        if loc.count() == 0:
+            loc = frame.get_by_text("Popular", exact=False).first
+        loc.click(force=True, timeout=1500)
+        frame.wait_for_timeout(500)
+    except Exception:
+        pass
+    if not all_cards:
+        dismiss_modal(frame, page)
+        _scroll_board_for_lazy_load(page)
+        for c in get_all_cards(frame):
+            if not _is_valid_board_card(c):
+                continue
+            k = _card_unique_key(c)
+            if k in seen:
+                continue
+            seen.add(k)
+            c2 = dict(c)
+            c2.setdefault("source_filter", "Popular")
+            all_cards.append(c2)
+        print("[POOL] expand_card_pool fallback: using single-view get_all_cards")
+    print(f"[POOL] Total expanded: {len(all_cards)} cards")
+    print(f"  Standard: {sum(1 for c in all_cards if c['pick_type'] == 'standard')}")
+    print(f"  Goblin:   {sum(1 for c in all_cards if c['pick_type'] == 'goblin')}")
+    print(f"  Demon:    {sum(1 for c in all_cards if c['pick_type'] == 'demon')}")
+    return all_cards
+
+
+def resolve_leg_card(template: dict, fresh: list[dict]) -> dict | None:
+    nt = _norm(template.get("player"))
+    nl = _line_key(template.get("line"))
+    np = _norm(template.get("prop_type"))
+    pt = template.get("pick_type")
+    for c in fresh:
+        if _norm(c.get("player")) != nt:
+            continue
+        if _line_key(c.get("line")) != nl:
+            continue
+        if _norm(c.get("prop_type")) != np:
+            continue
+        if c.get("pick_type") != pt:
+            continue
+        return c
+    for c in fresh:
+        if nt not in _norm(c.get("player")) and _norm(c.get("player")) not in nt:
+            continue
+        if _line_key(c.get("line")) != nl:
+            continue
+        if c.get("pick_type") != pt:
+            continue
+        return c
+    return None
+
+
+def click_case_legs_with_filter_switches(
+    frame, page, tc: dict
+) -> bool:
+    """Switch stat filters as needed so each leg's More button is in the live DOM."""
+    current_tab = None
+    for leg in tc["legs"]:
+        tab = str(leg["card"].get("source_filter") or "Popular")
+        if tab != current_tab:
+            try:
+                dismiss_modal(frame, page)
+                tloc = frame.get_by_text(tab, exact=True).first
+                if tloc.count() == 0:
+                    tloc = frame.get_by_text(tab, exact=False).first
+                tloc.click(force=True, timeout=1500)
+                frame.wait_for_timeout(800)
+                _scroll_board_for_lazy_load(page)
+            except Exception as e:
+                print(f"[FILTER] Could not switch to {tab}: {e}")
+                return False
+            current_tab = tab
+        dismiss_modal(frame, page)
+        fresh = get_all_cards(frame)
+        resolved = resolve_leg_card(leg["card"], fresh)
+        if resolved is None:
+            fresh = get_all_cards(frame)
+            resolved = resolve_leg_card(leg["card"], fresh)
+        if resolved is None:
+            print(f"[CLICK] Could not resolve card for {leg['card'].get('player')}")
+            return False
+        if not click_leg(frame, resolved, leg["direction"]):
+            return False
+        frame.wait_for_timeout(300)
+    return True
+
+
+def case_target_buckets(tc: dict) -> set[str]:
+    buckets: set[str] = set()
+    if tc["ticket_type"] == "flex":
+        buckets.add("flex")
+    n_g = sum(1 for l in tc["legs"] if l["card"]["pick_type"] == "goblin")
+    n_d = sum(1 for l in tc["legs"] if l["card"]["pick_type"] == "demon")
+    if n_g > 0:
+        buckets.add("has_goblin")
+    elif n_d > 0:
+        buckets.add("has_demon")
+    else:
+        buckets.add("all_standard")
+    return buckets
+
+
+def bucket_needs_fill(
+    bucket: str,
+    counts: dict[str, int],
+    goblins_avail: bool,
+    demons_avail: bool,
+) -> bool:
+    if bucket == "has_goblin" and not goblins_avail:
+        return False
+    if bucket == "has_demon" and not demons_avail:
+        return False
+    return counts[bucket] < MIN_SAMPLES[bucket]
+
+
+def all_targets_met(
+    counts: dict[str, int],
+    goblins_avail: bool,
+    demons_avail: bool,
+) -> bool:
+    if counts["all_standard"] < MIN_SAMPLES["all_standard"]:
+        return False
+    if counts["flex"] < MIN_SAMPLES["flex"]:
+        return False
+    if goblins_avail and counts["has_goblin"] < MIN_SAMPLES["has_goblin"]:
+        return False
+    if demons_avail and counts["has_demon"] < MIN_SAMPLES["has_demon"]:
+        return False
+    return True
+
+
+def bump_counts_from_record(counts: dict[str, int], rec: dict) -> None:
+    if str(rec.get("ticket_type", "")).lower() == "flex":
+        counts["flex"] += 1
+    n_g = int(rec.get("n_goblins", 0) or 0)
+    n_d = int(rec.get("n_demons", 0) or 0)
+    if n_g > 0:
+        counts["has_goblin"] += 1
+    elif n_d > 0:
+        counts["has_demon"] += 1
+    else:
+        counts["all_standard"] += 1
+
+
+def pick_next_test_case(
+    cases: list[dict],
+    counts: dict[str, int],
+    cases_run: int,
+    goblins_avail: bool,
+    demons_avail: bool,
+) -> dict | None:
+    if not cases:
+        return None
+    for tc in cases:
+        if any(
+            bucket_needs_fill(b, counts, goblins_avail, demons_avail)
+            for b in case_target_buckets(tc)
+        ):
+            return tc
+    return cases[cases_run % len(cases)]
+
+
+def build_payout_test_matrix(
+    standard: list[dict], goblins: list[dict], demons: list[dict]
+) -> list[dict]:
+    cases: list[dict] = []
+    for ticket_type in ("power", "flex"):
+        for n in [2, 3, 4, 5]:
+            if len(standard) >= n:
+                cases.append({
+                    "legs": [{"card": standard[i], "direction": "OVER"} for i in range(n)],
+                    "ticket_type": ticket_type,
+                    "label": f"{n}-leg all-{ticket_type} standard",
+                })
+        if len(goblins) >= 1 and len(standard) >= 1:
+            for n_gob in [1, 2]:
+                for total in [2, 3, 4]:
+                    n_std = total - n_gob
+                    if len(goblins) >= n_gob and len(standard) >= n_std and n_std >= 0:
+                        legs_case = (
+                            [{"card": goblins[i], "direction": "OVER"} for i in range(n_gob)]
+                            + [{"card": standard[i], "direction": "OVER"} for i in range(n_std)]
+                        )
+                        cases.append({
+                            "legs": legs_case,
+                            "ticket_type": ticket_type,
+                            "label": f"{total}-leg {n_gob}gob-{ticket_type} {n_std}std",
+                        })
+        if len(demons) >= 1 and len(standard) >= 1:
+            for n_dem in [1, 2]:
+                for total in [2, 3, 4]:
+                    n_std = total - n_dem
+                    if len(demons) >= n_dem and len(standard) >= n_std and n_std >= 0:
+                        legs_case = (
+                            [{"card": demons[i], "direction": "OVER"} for i in range(n_dem)]
+                            + [{"card": standard[i], "direction": "OVER"} for i in range(n_std)]
+                        )
+                        cases.append({
+                            "legs": legs_case,
+                            "ticket_type": ticket_type,
+                            "label": f"{total}-leg {n_dem}dem-{ticket_type} {n_std}std",
+                        })
+    return cases
+
+
 def set_ticket_type(frame, ticket_type: str):
     if ticket_type == "flex":
         labels = ["Flex Play", "Flex", "Flex entry"]
@@ -934,7 +1270,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--cdp-url", default="http://localhost:9222")
     ap.add_argument("--entry-amount", type=float, default=1.0)
-    ap.add_argument("--max-cases", type=int, default=60)
+    ap.add_argument("--max-cases", type=int, default=100)
     ap.add_argument("--delay-sec", type=float, default=0.5)
     args = ap.parse_args()
 
@@ -966,7 +1302,8 @@ def main():
     try:
         frame = find_prizepicks_frame(page)
         ensure_popular_filter(frame, page)
-        cards = get_all_cards(frame)
+        dismiss_modal(frame, page)
+        cards = expand_card_pool(frame, page)
         if not cards:
             print("[FATAL] No cards parsed — check board state")
             DEBUG_DIR.mkdir(parents=True, exist_ok=True)
@@ -976,59 +1313,46 @@ def main():
         standard = [c for c in cards if c["pick_type"] == "standard"]
         goblins = [c for c in cards if c["pick_type"] == "goblin"]
         demons = [c for c in cards if c["pick_type"] == "demon"]
+        goblins_avail = len(goblins) > 0
+        demons_avail = len(demons) > 0
         print(f"[POOL] Standard={len(standard)} Goblin={len(goblins)} Demon={len(demons)}")
 
-        test_cases = []
-        for n in [2, 3, 4, 5]:
-            if len(standard) >= n:
-                test_cases.append({
-                    "legs": [{"card": standard[i], "direction": "OVER"} for i in range(n)],
-                    "ticket_type": "power",
-                    "label": f"{n}-leg all standard",
-                })
-        if len(goblins) >= 1 and len(standard) >= 1:
-            for n_gob in [1, 2]:
-                for total in [2, 3, 4]:
-                    n_std = total - n_gob
-                    if len(goblins) >= n_gob and len(standard) >= n_std and n_std >= 0:
-                        legs_case = (
-                            [{"card": goblins[i], "direction": "OVER"} for i in range(n_gob)] +
-                            [{"card": standard[i], "direction": "OVER"} for i in range(n_std)]
-                        )
-                        test_cases.append({
-                            "legs": legs_case,
-                            "ticket_type": "power",
-                            "label": f"{total}-leg {n_gob}gob {n_std}std",
-                        })
-        if len(demons) >= 1 and len(standard) >= 1:
-            for n_dem in [1, 2]:
-                for total in [2, 3, 4]:
-                    n_std = total - n_dem
-                    if len(demons) >= n_dem and len(standard) >= n_std and n_std >= 0:
-                        legs_case = (
-                            [{"card": demons[i], "direction": "OVER"} for i in range(n_dem)] +
-                            [{"card": standard[i], "direction": "OVER"} for i in range(n_std)]
-                        )
-                        test_cases.append({
-                            "legs": legs_case,
-                            "ticket_type": "power",
-                            "label": f"{total}-leg {n_dem}dem {n_std}std",
-                        })
+        test_cases = build_payout_test_matrix(standard, goblins, demons)
         print(f"[MATRIX] {len(test_cases)} test cases planned")
 
-        for i, tc in enumerate(test_cases[: max(1, int(args.max_cases))], start=1):
-            print(f"[TEST {i}/{len(test_cases)}] {tc['label']}")
+        max_cases = max(1, int(args.max_cases))
+        counts = {k: 0 for k in MIN_SAMPLES}
+        cases_run = 0
+        test_idx = 0
+
+        while cases_run < max_cases:
+            if all_targets_met(counts, goblins_avail, demons_avail):
+                print("[TARGETS] All MIN_SAMPLES satisfied.")
+                break
+            tc = pick_next_test_case(
+                test_cases, counts, cases_run, goblins_avail, demons_avail
+            )
+            if tc is None:
+                break
+            test_idx += 1
+            print(f"[TEST {test_idx}] (run {cases_run + 1}/{max_cases}) {tc['label']}")
+            print(
+                f"[TARGETS] std={counts['all_standard']}/{MIN_SAMPLES['all_standard']} "
+                f"gob={counts['has_goblin']}/{MIN_SAMPLES['has_goblin']} "
+                f"dem={counts['has_demon']}/{MIN_SAMPLES['has_demon']} "
+                f"flex={counts['flex']}/{MIN_SAMPLES['flex']}"
+            )
             try:
+                dismiss_modal(frame, page)
                 set_ticket_type(frame, tc["ticket_type"])
                 clear_slip(frame)
-                clicked = 0
-                for leg in tc["legs"]:
-                    if click_leg(frame, leg["card"], leg["direction"]):
-                        clicked += 1
-                        frame.wait_for_timeout(300)
-                if clicked < len(tc["legs"]):
-                    print(f"  Only {clicked}/{len(tc['legs'])} legs clicked")
+                dismiss_modal(frame, page)
+                ok = click_case_legs_with_filter_switches(frame, page, tc)
+                if not ok:
+                    print("  [SKIP] Leg click sequence failed")
                     clear_slip(frame)
+                    dismiss_modal(frame, page)
+                    cases_run += 1
                     continue
                 frame.wait_for_timeout(1000)
                 slip = read_slip(frame)
@@ -1063,17 +1387,21 @@ def main():
                         "to_win_amount": slip.get("to_win"),
                     }
                     out_rows.append(rec)
+                    bump_counts_from_record(counts, rec)
                     print(f"  [RECORDED] mult={rec['displayed_multiplier']} towin={rec['to_win_amount']}")
                 else:
                     print("  [NO SLIP] Slip panel not detected")
                 clear_slip(frame)
+                dismiss_modal(frame, page)
                 frame.wait_for_timeout(600)
             except Exception as e:
                 print(f"  [ERROR] {e}")
                 try:
                     clear_slip(frame)
+                    dismiss_modal(frame, page)
                 except Exception:
                     pass
+            cases_run += 1
     finally:
         try:
             browser.close()
