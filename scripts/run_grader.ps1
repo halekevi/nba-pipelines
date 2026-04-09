@@ -530,9 +530,18 @@ else {
 # Build Ticket Eval HTML for Grades tab
 # =============================
 if (Test-Path $TicketEvalBuilderScript) {
-    Run-Py "Build Ticket Eval HTML" $Root $TicketEvalBuilderScript @(
-        "--date", $Date
-    )
+    $GradedCombined = Join-Path $DateDir "combined_tickets_graded_$Date.xlsx"
+    $TicketEvalOut = Join-Path $TemplatesDir "ticket_eval_$Date.html"
+    if (Test-Path $GradedCombined) {
+        Run-Py "Build Ticket Eval HTML" $Root $TicketEvalBuilderScript @(
+            "--date", $Date,
+            "--graded", $GradedCombined,
+            "--out", $TicketEvalOut
+        )
+    }
+    else {
+        Write-Host "Skipping ticket eval build (graded workbook missing: $GradedCombined)." -ForegroundColor Yellow
+    }
 }
 else {
     Write-Host "Skipping ticket eval build (build_ticket_eval.py not found)." -ForegroundColor Yellow
