@@ -307,45 +307,101 @@ def _collect_visible_players(frame) -> tuple[list[str], str | None, dict[str, in
 
 
 def get_all_cards(frame) -> list[dict]:
-    """Find cards by anchoring on 'More' buttons and parsing parent text."""
+    """
+    Anchor on More buttons and parse player/stat details from ancestor text.
+    """
     cards: list[dict] = []
     try:
-        more_loc = frame.get_by_text("More", exact=True)
+        import re as _re
+        more_loc = frame.get_by_text("More")
         n = more_loc.count()
         print(f"[CARDS] Found {n} More buttons")
-        for i in range(min(n, 300)):
+        debug_unparsed = 0
+        for i in range(min(n, 200)):
             btn = more_loc.nth(i)
             try:
-                card_text = btn.evaluate(
+                card_info = btn.evaluate(
                     """
                     el => {
                       let p = el;
-                      for (let i = 0; i < 5; i++) {
+                      let best = null;
+                      for (let i = 0; i < 10; i++) {
                         p = p ? p.parentElement : null;
                         if (!p) break;
-                        const t = (p.innerText || '').trim();
-                        if (t.length > 30 && t.length < 300 && (t.includes('vs ') || t.includes('@ '))) {
-                          return t;
+                        const t = (p.innerText || '');
+                        const hasGame = /\\s(vs|@)\\s/i.test(t);
+                        const hasStat = /\\b\\d+(?:\\.\\d+)?\\s*[A-Za-z]/.test(t);
+                        const hasMore = /\\bMore\\b/.test(t);
+                        if (hasMore && hasStat && hasGame) {
+                          best = p;
+                          break;
                         }
                       }
-                      return null;
+                      if (!best) return null;
+                      return {
+                        text: best.innerText || '',
+                        html: (best.innerHTML || '').slice(0, 1200)
+                      };
                     }
                     """
                 )
-                if not card_text:
+                if not card_info or not card_info.get("text"):
                     continue
-                lines = [l.strip() for l in str(card_text).split("\n") if l.strip()]
+                text = str(card_info["text"])
+                lines = [l.strip() for l in text.split("\n") if l.strip()]
                 if len(lines) < 3:
                     continue
-                cards.append(
-                    {
-                        "player": lines[1] if len(lines) > 1 else lines[0],
-                        "stat": lines[3] if len(lines) > 3 else "",
-                        "game": lines[2] if len(lines) > 2 else "",
-                        "more_btn": btn,
-                        "card_text": card_text,
-                    }
-                )
+                player_name = None
+                prop_type = "unknown"
+                line_value = None
+                stat_line = None
+                game_idx = -1
+                for idx, line in enumerate(lines):
+                    if " vs " in line.lower() or " @ " in line.lower():
+                        game_idx = idx
+                        break
+                if game_idx > 0:
+                    for k in range(game_idx - 1, -1, -1):
+                        candidate = lines[k]
+                        if candidate not in ["More", "Less"] and len(candidate) > 2 and not _re.match(r"^[A-Z]{2,3}\s*[-–]", candidate):
+                            player_name = candidate
+                            break
+                if player_name is None:
+                    for line in lines:
+                        if (
+                            not _re.match(r"^[\d\.]+", line)
+                            and line not in ["More", "Less", "More Less"]
+                            and len(line) > 3
+                            and not _re.match(r"^[A-Z]{2,3}\s*[-–]", line)
+                        ):
+                            player_name = line
+                            break
+                for line in lines:
+                    stat_match = _re.match(r"^([0-9]+(?:\.[0-9]+)?)\s*(.+)$", line)
+                    if stat_match:
+                        line_value = float(stat_match.group(1))
+                        prop_type = stat_match.group(2).strip()
+                        stat_line = line
+                html = str(card_info.get("html", ""))
+                pick_type = "standard"
+                if "goblin" in html.lower() or "goblin" in text.lower():
+                    pick_type = "goblin"
+                elif "demon" in html.lower() or "demon" in text.lower():
+                    pick_type = "demon"
+                if player_name and line_value is not None:
+                    cards.append(
+                        {
+                            "player": player_name,
+                            "prop_type": prop_type if stat_line else "unknown",
+                            "line": line_value,
+                            "pick_type": pick_type,
+                            "more_btn": btn,
+                            "raw_text": text[:200],
+                        }
+                    )
+                elif debug_unparsed < 5:
+                    debug_unparsed += 1
+                    print(f"[CARDS][UNPARSED] sample {debug_unparsed}: {' | '.join(lines[:6])}")
             except Exception:
                 continue
     except Exception as e:
@@ -353,7 +409,7 @@ def get_all_cards(frame) -> list[dict]:
         return []
     print(f"[CARDS] Parsed {len(cards)} cards")
     for c in cards[:5]:
-        print(f"  {c['player']} | {c['stat']} | {c['game']}")
+        print(f"  {c['player']} | {c['line']} {c['prop_type']} | {c['pick_type']}")
     return cards
 
 
@@ -383,6 +439,34 @@ def _click_player_direction(frame, matched_name: str, direction: str, prop: str)
         return True
     except Exception as e:
         print(f"[CLICK] Failed: {e}")
+        return False
+
+
+def click_leg(frame, card: dict, direction: str) -> bool:
+    try:
+        if direction.upper() in ["OVER", "MORE"]:
+            card["more_btn"].click(timeout=1200)
+        else:
+            found_less = card["more_btn"].evaluate(
+                """
+                el => {
+                  let p = el;
+                  for (let i = 0; i < 4; i++) p = p?.parentElement;
+                  if (!p) return false;
+                  const btns = p.querySelectorAll('button');
+                  for (const b of btns) {
+                    if ((b.innerText || '').trim() === 'Less') { b.click(); return true; }
+                  }
+                  return false;
+                }
+                """
+            )
+            if not found_less:
+                frame.get_by_text("Less").nth(0).click(timeout=1200)
+        frame.wait_for_timeout(400)
+        return True
+    except Exception as e:
+        print(f"[CLICK] {card.get('player', '?')} failed: {e}")
         return False
 
 
@@ -425,39 +509,48 @@ def extract_multiplier_from_any(value: Any) -> float | None:
     return None
 
 
-def clear_slip(page):
+def clear_slip(frame):
     try:
-        for txt in ["Clear All", "Clear", "Remove All"]:
-            b = page.get_by_text(txt, exact=False).first
+        for txt in ["Clear", "Clear All", "Remove All"]:
+            b = frame.get_by_text(txt, exact=False).first
             if b.count() > 0:
                 try:
                     b.click(timeout=500)
+                    frame.wait_for_timeout(600)
+                    print("[SLIP] Cleared")
+                    return
                 except Exception:
                     pass
-        for sel in ["[aria-label*='Remove']", "[aria-label*='Close']", "[data-testid*='remove']"]:
-            btns = page.locator(sel)
+        for sel in [
+            "button[aria-label*='remove']",
+            "button[aria-label*='delete']",
+            "button[aria-label*='clear']",
+            "[aria-label*='Close']",
+            "[data-testid*='remove']",
+        ]:
+            btns = frame.locator(sel)
             n = min(btns.count(), 20)
             for _ in range(n):
                 try:
                     btns.nth(0).click(timeout=300)
+                    frame.wait_for_timeout(250)
                 except Exception:
                     break
-        page.wait_for_timeout(200)
     except Exception:
         pass
 
 
-def set_ticket_type(page, ticket_type: str):
+def set_ticket_type(frame, ticket_type: str):
     if ticket_type == "flex":
         labels = ["Flex Play", "Flex", "Flex entry"]
     else:
         labels = ["Power Play", "Power", "Power entry"]
     for t in labels:
         try:
-            b = page.get_by_text(t, exact=False).first
+            b = frame.get_by_text(t, exact=False).first
             if b.count() > 0:
                 b.click(timeout=800)
-                page.wait_for_timeout(150)
+                frame.wait_for_timeout(150)
                 return
         except Exception:
             continue
@@ -618,6 +711,35 @@ def read_to_win_amount(frame) -> float | None:
     return None
 
 
+def read_slip(frame) -> dict:
+    try:
+        text = frame.evaluate("() => document.body.innerText")
+        multipliers = re.findall(r"\b(\d+\.?\d*)x\b", text)
+        to_win = re.findall(r"To\s*Win[\s\n\$]*(\d+\.?\d*)", text, re.IGNORECASE)
+        n_selected = re.findall(r"(\d+)\s*Players?\s*Selected", text, re.IGNORECASE)
+        flex_first = re.findall(r"1st\s*place\s*pays[\s\n\$]*(\d+\.?\d*)", text, re.IGNORECASE)
+        flex_miss = re.findall(r"(\d+)\s*correct\s*pays[\s\n\$]*(\d+\.?\d*)", text, re.IGNORECASE)
+        entry_amt = re.findall(r"Entry[\s\n\$]*(\d+\.?\d*)", text, re.IGNORECASE)
+        slip = {
+            "multipliers": multipliers,
+            "to_win": float(to_win[0]) if to_win else None,
+            "n_selected": int(n_selected[0]) if n_selected else None,
+            "flex_first_place": float(flex_first[0]) if flex_first else None,
+            "flex_miss_1": flex_miss,
+            "entry_amount": float(entry_amt[0]) if entry_amt else 10.0,
+            "has_slip": any(x in text for x in ["Players Selected", "To Win", "Current Lineup"]),
+        }
+        if slip["has_slip"]:
+            print(
+                f"[SLIP] n={slip['n_selected']} | mult={slip['multipliers']} | "
+                f"towin={slip['to_win']} | flex={slip['flex_first_place']}"
+            )
+        return slip
+    except Exception as e:
+        print(f"[SLIP] Read error: {e}")
+        return {}
+
+
 def build_standard_line_map(legs: list[dict]) -> dict[tuple[str, str], float]:
     mp: dict[tuple[str, str], float] = {}
     for leg in legs:
@@ -749,77 +871,120 @@ def main():
 
     page.on("response", on_response)
 
-    all_cases = choose_leg_sets(legs, "power") + choose_leg_sets(legs, "flex")
-    all_cases = all_cases[: max(1, int(args.max_cases))]
     out_rows: list[dict] = []
     ts_now = datetime.utcnow().isoformat()
 
     try:
-        for combo in all_cases:
-            clear_slip(page)
-            # set ticket type based on case label (inferred by count and pattern attempt)
-            # if 2-5 only, we toggle both while collecting from matrix order: first power then flex
-            frame = find_prizepicks_frame(page)
-            ticket_type = "flex" if combo in all_cases[len(choose_leg_sets(legs, "power")):] else "power"
-            set_ticket_type(frame, ticket_type)
+        frame = find_prizepicks_frame(page)
+        ensure_popular_filter(frame, page)
+        cards = get_all_cards(frame)
+        if not cards:
+            print("[FATAL] No cards parsed — check board state")
+            DEBUG_DIR.mkdir(parents=True, exist_ok=True)
+            page.screenshot(path=str(DEBUG_DIR / "fatal_no_cards.png"), full_page=True)
+            return
 
-            ok = True
-            for leg in combo:
-                if not add_leg(frame, page, leg):
-                    ok = False
-                    break
-            if not ok:
-                clear_slip(page)
-                time.sleep(max(float(args.delay_sec), 0.5))
-                continue
+        standard = [c for c in cards if c["pick_type"] == "standard"]
+        goblins = [c for c in cards if c["pick_type"] == "goblin"]
+        demons = [c for c in cards if c["pick_type"] == "demon"]
+        print(f"[POOL] Standard={len(standard)} Goblin={len(goblins)} Demon={len(demons)}")
 
-            key = "|".join(sorted(str(x["pp_id"]) for x in combo))
-            current_key["value"] = key
-            displayed_multiplier, flex_first, flex_miss_1 = read_payout_from_dom(frame)
-            if displayed_multiplier is None:
-                displayed_multiplier = captures.get(key)
-            to_win_amount = read_to_win_amount(frame)
+        test_cases = []
+        for n in [2, 3, 4, 5]:
+            if len(standard) >= n:
+                test_cases.append({
+                    "legs": [{"card": standard[i], "direction": "OVER"} for i in range(n)],
+                    "ticket_type": "power",
+                    "label": f"{n}-leg all standard",
+                })
+        if len(goblins) >= 1 and len(standard) >= 1:
+            for n_gob in [1, 2]:
+                for total in [2, 3, 4]:
+                    n_std = total - n_gob
+                    if len(goblins) >= n_gob and len(standard) >= n_std and n_std >= 0:
+                        legs_case = (
+                            [{"card": goblins[i], "direction": "OVER"} for i in range(n_gob)] +
+                            [{"card": standard[i], "direction": "OVER"} for i in range(n_std)]
+                        )
+                        test_cases.append({
+                            "legs": legs_case,
+                            "ticket_type": "power",
+                            "label": f"{total}-leg {n_gob}gob {n_std}std",
+                        })
+        if len(demons) >= 1 and len(standard) >= 1:
+            for n_dem in [1, 2]:
+                for total in [2, 3, 4]:
+                    n_std = total - n_dem
+                    if len(demons) >= n_dem and len(standard) >= n_std and n_std >= 0:
+                        legs_case = (
+                            [{"card": demons[i], "direction": "OVER"} for i in range(n_dem)] +
+                            [{"card": standard[i], "direction": "OVER"} for i in range(n_std)]
+                        )
+                        test_cases.append({
+                            "legs": legs_case,
+                            "ticket_type": "power",
+                            "label": f"{total}-leg {n_dem}dem {n_std}std",
+                        })
+        print(f"[MATRIX] {len(test_cases)} test cases planned")
 
-            n_g = sum(1 for x in combo if "goblin" in x["pick_type"])
-            n_d = sum(1 for x in combo if "demon" in x["pick_type"])
-            n_s = sum(1 for x in combo if "standard" in x["pick_type"])
-            legs_payload = []
-            for leg in combo:
-                std_line = std_line_map.get((_norm(leg["player"]), _norm(leg["prop_type"])))
-                dist = None
-                if std_line is not None and leg.get("line") is not None:
-                    dist = abs(float(leg["line"]) - float(std_line))
-                legs_payload.append(
-                    {
-                        "player": leg["player"],
-                        "prop_type": leg["prop_type"],
-                        "line": leg["line"],
-                        "pick_type": leg["pick_type"],
-                        "direction": leg["direction"].lower(),
-                        "pp_id": leg["pp_id"],
-                        "standard_line": std_line,
-                        "line_distance": dist,
+        for i, tc in enumerate(test_cases[: max(1, int(args.max_cases))], start=1):
+            print(f"[TEST {i}/{len(test_cases)}] {tc['label']}")
+            try:
+                set_ticket_type(frame, tc["ticket_type"])
+                clear_slip(frame)
+                clicked = 0
+                for leg in tc["legs"]:
+                    if click_leg(frame, leg["card"], leg["direction"]):
+                        clicked += 1
+                        frame.wait_for_timeout(300)
+                if clicked < len(tc["legs"]):
+                    print(f"  Only {clicked}/{len(tc['legs'])} legs clicked")
+                    clear_slip(frame)
+                    continue
+                frame.wait_for_timeout(1000)
+                slip = read_slip(frame)
+                if slip.get("has_slip"):
+                    legs_payload = []
+                    for leg in tc["legs"]:
+                        c = leg["card"]
+                        std_line = std_line_map.get((_norm(c["player"]), _norm(c["prop_type"])))
+                        dist = abs(float(c["line"]) - float(std_line)) if std_line is not None else None
+                        legs_payload.append({
+                            "player": c["player"],
+                            "prop_type": c["prop_type"],
+                            "line": c["line"],
+                            "pick_type": c["pick_type"],
+                            "direction": leg["direction"].lower(),
+                            "pp_id": "",
+                            "standard_line": std_line,
+                            "line_distance": dist,
+                        })
+                    rec = {
+                        "timestamp": ts_now,
+                        "ticket_type": tc["ticket_type"],
+                        "n_legs": len(tc["legs"]),
+                        "legs": json.dumps(legs_payload, ensure_ascii=False),
+                        "n_goblins": sum(1 for l in tc["legs"] if l["card"]["pick_type"] == "goblin"),
+                        "n_demons": sum(1 for l in tc["legs"] if l["card"]["pick_type"] == "demon"),
+                        "n_standard": sum(1 for l in tc["legs"] if l["card"]["pick_type"] == "standard"),
+                        "displayed_multiplier": float(slip["multipliers"][0]) if slip.get("multipliers") else None,
+                        "flex_first_place": slip.get("flex_first_place"),
+                        "flex_miss_1": slip.get("flex_miss_1"),
+                        "entry_amount": float(slip.get("entry_amount") or args.entry_amount),
+                        "to_win_amount": slip.get("to_win"),
                     }
-                )
-
-            out_rows.append(
-                {
-                    "timestamp": ts_now,
-                    "ticket_type": ticket_type,
-                    "n_legs": len(combo),
-                    "legs": json.dumps(legs_payload, ensure_ascii=False),
-                    "n_goblins": n_g,
-                    "n_demons": n_d,
-                    "n_standard": n_s,
-                    "displayed_multiplier": displayed_multiplier,
-                    "flex_first_place": flex_first,
-                    "flex_miss_1": flex_miss_1,
-                    "entry_amount": float(args.entry_amount),
-                    "to_win_amount": to_win_amount,
-                }
-            )
-            clear_slip(page)
-            time.sleep(max(float(args.delay_sec), 0.5))
+                    out_rows.append(rec)
+                    print(f"  [RECORDED] mult={rec['displayed_multiplier']} towin={rec['to_win_amount']}")
+                else:
+                    print("  [NO SLIP] Slip panel not detected")
+                clear_slip(frame)
+                frame.wait_for_timeout(600)
+            except Exception as e:
+                print(f"  [ERROR] {e}")
+                try:
+                    clear_slip(frame)
+                except Exception:
+                    pass
     finally:
         try:
             browser.close()
