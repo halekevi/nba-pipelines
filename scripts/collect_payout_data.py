@@ -12,6 +12,7 @@ import csv
 import json
 import re
 import time
+from difflib import get_close_matches
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -21,6 +22,8 @@ from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent.parent
 SAMPLES_DIR = ROOT / "data" / "payout_samples"
+DEBUG_DIR = ROOT / "data" / "debug"
+_LOOKUP_DIAG_PRINTED = False
 
 
 def _norm(s: Any) -> str:
@@ -153,6 +156,95 @@ def connect_existing_browser(cdp_url: str):
         raise RuntimeError(str(e))
 
 
+def _safe_name(s: str) -> str:
+    return re.sub(r"[^A-Za-z0-9._-]+", "_", str(s or "").strip())[:80]
+
+
+def _scroll_board_for_lazy_load(page):
+    # Load additional projection cards before lookup.
+    for _ in range(3):
+        try:
+            page.mouse.wheel(0, 4000)
+        except Exception:
+            pass
+        page.wait_for_timeout(1000)
+
+
+def _collect_visible_players(page) -> tuple[list[str], str | None, dict[str, int]]:
+    selectors_to_try = [
+        "[data-testid='player-name']",
+        "[data-testid='projection-player-name']",
+        ".player-name",
+        ".projection-card .name",
+        "[class*='PlayerName']",
+        "[class*='player_name']",
+    ]
+    selector_counts: dict[str, int] = {}
+    best_sel = None
+    best_vals: list[str] = []
+    for sel in selectors_to_try:
+        vals: list[str] = []
+        try:
+            loc = page.locator(sel)
+            n = loc.count()
+            for i in range(min(n, 300)):
+                t = str(loc.nth(i).inner_text(timeout=200) or "").strip()
+                if t:
+                    vals.append(t)
+            vals = list(dict.fromkeys(vals))
+            selector_counts[sel] = len(vals)
+            if len(vals) > len(best_vals):
+                best_vals = vals
+                best_sel = sel
+        except Exception:
+            selector_counts[sel] = 0
+    return best_vals, best_sel, selector_counts
+
+
+def _click_player_direction(page, matched_name: str, direction: str, prop: str) -> bool:
+    card_selectors = [
+        "[data-testid='projection-card']",
+        ".projection-card",
+        "[class*='ProjectionCard']",
+        "[class*='projection-card']",
+    ]
+    lname = _norm(matched_name)
+    lprop = _norm(prop)
+    for csel in card_selectors:
+        try:
+            cards = page.locator(csel)
+            n = min(cards.count(), 400)
+            for i in range(n):
+                card = cards.nth(i)
+                txt = str(card.inner_text(timeout=150) or "")
+                ltxt = _norm(txt)
+                if lname not in ltxt:
+                    continue
+                # Prefer matching prop inside the same card if available.
+                if lprop and lprop not in ltxt:
+                    continue
+                try:
+                    card.get_by_text(direction, exact=False).first.click(timeout=800)
+                    page.wait_for_timeout(250)
+                    return True
+                except Exception:
+                    pass
+        except Exception:
+            continue
+
+    # Fallback: click matched name text then click direction globally.
+    try:
+        page.get_by_text(matched_name, exact=False).first.click(timeout=800)
+    except Exception:
+        pass
+    try:
+        page.get_by_text(direction, exact=False).first.click(timeout=1200)
+        page.wait_for_timeout(250)
+        return True
+    except Exception:
+        return False
+
+
 def extract_number(text: str) -> float | None:
     if not text:
         return None
@@ -231,38 +323,69 @@ def set_ticket_type(page, ticket_type: str):
 
 
 def add_leg(page, leg: dict) -> bool:
+    global _LOOKUP_DIAG_PRINTED
     player = leg["player"]
     prop = leg["prop_type"]
     direction = str(leg["direction"]).upper()
     try:
+        _scroll_board_for_lazy_load(page)
+        visible_players, best_sel, sel_counts = _collect_visible_players(page)
+        if not _LOOKUP_DIAG_PRINTED:
+            print("[LOOKUP] Card selector counts:")
+            for sel, n in sel_counts.items():
+                print(f"  {sel}: {n}")
+            print(f"[LOOKUP] Using selector: {best_sel or '(none)'}")
+            print("[LOOKUP] First 10 visible players:")
+            for nm in visible_players[:10]:
+                print(f"  - {nm}")
+            _LOOKUP_DIAG_PRINTED = True
+
+        print(f"[LOOKUP] Target player text: {player}")
+        print(f"[LOOKUP] Target prop text: {prop}")
+        print(f"[LOOKUP] Target direction text: {direction}")
+
         # Search player first when search exists.
         for sel in ["input[placeholder*='Search']", "input[type='search']", "input[aria-label*='Search']"]:
             box = page.locator(sel).first
             if box.count() > 0:
                 try:
+                    print(f"[LOOKUP] Using search selector: {sel}")
                     box.click(timeout=500)
                     box.fill(player, timeout=1200)
                     page.wait_for_timeout(250)
                     break
                 except Exception:
                     continue
+        _scroll_board_for_lazy_load(page)
+        visible_players2, _, _ = _collect_visible_players(page)
+        visible_pool = visible_players2 or visible_players
+        match = get_close_matches(player, visible_pool, n=1, cutoff=0.7)
+        matched_name = match[0] if match else None
+        if matched_name:
+            print(f"[LOOKUP] Fuzzy matched '{player}' -> '{matched_name}'")
+            if _click_player_direction(page, matched_name, direction, prop):
+                return True
 
-        # Try card area by player then prop then side.
-        card = page.locator(f"text={player}").first
-        if card.count() == 0:
-            print(f"[PAYOUT] SKIP: {player} not found on board")
-            return False
+        print(f"[PAYOUT] SKIP: {player} not found on board")
         try:
-            if prop:
-                page.locator(f"text={prop}").first.get_by_text(direction, exact=False).first.click(timeout=1200)
-            else:
-                card.get_by_text(direction, exact=False).first.click(timeout=1200)
-        except Exception:
-            page.get_by_text(direction, exact=False).first.click(timeout=1200)
-        page.wait_for_timeout(250)
-        return True
+            DEBUG_DIR.mkdir(parents=True, exist_ok=True)
+            ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+            shot = DEBUG_DIR / f"lookup_fail_{_safe_name(player)}_{ts}.png"
+            page.screenshot(path=str(shot), full_page=True)
+            print(f"[LOOKUP] Failure screenshot saved: {shot}")
+        except Exception as se:
+            print(f"[LOOKUP] Screenshot failed: {se}")
+        return False
     except Exception:
         print(f"[PAYOUT] SKIP: {player} not found on board")
+        try:
+            DEBUG_DIR.mkdir(parents=True, exist_ok=True)
+            ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+            shot = DEBUG_DIR / f"lookup_fail_{_safe_name(player)}_{ts}.png"
+            page.screenshot(path=str(shot), full_page=True)
+            print(f"[LOOKUP] Failure screenshot saved: {shot}")
+        except Exception:
+            pass
         return False
 
 
