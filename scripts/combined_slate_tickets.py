@@ -605,6 +605,13 @@ MLB_LEG_MIN_HIT_RATE = {
     3: 0.60,
     4: 0.62,
 }
+
+# NHL: smaller quality pool vs NBA — cap per-leg floors so structured/FINAL builders can fill slips.
+NHL_LEG_MIN_HIT_RATE = {
+    2: 0.55,
+    3: 0.57,
+    4: 0.60,
+}
 MLB_MAX_LEGS = 4
 MLB_PITCHING_OVER_ONLY_PROPS = {"strikeouts", "hits allowed"}
 
@@ -3900,6 +3907,10 @@ def build_single_structure_ticket(
         thr = float(min_leg_hit_rate)
         if sport_up == "MLB":
             thr = max(thr, float(MLB_LEG_MIN_HIT_RATE.get(int(n_legs), thr)))
+        if sport_up == "NHL":
+            nhl_cap = NHL_LEG_MIN_HIT_RATE.get(int(n_legs))
+            if nhl_cap is not None:
+                thr = min(thr, float(nhl_cap))
         cand = cand[pd.to_numeric(cand["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
     if cand.empty:
         return None
@@ -4187,6 +4198,12 @@ def build_tickets(
     # ── Per-leg-count quality filters ─────────────────────────────────────────
     _lim = leg_min_hit_by_n or LEG_MIN_HIT_RATE
     min_hr = float(_lim.get(n_legs, LEG_MIN_HIT_RATE.get(n_legs, 0.55)))
+    if "sport" in pool.columns and len(pool) > 0:
+        su = pool["sport"].dropna().astype(str).str.upper().str.strip().unique()
+        if len(su) == 1 and su[0] == "NHL":
+            nhl_cap = NHL_LEG_MIN_HIT_RATE.get(int(n_legs))
+            if nhl_cap is not None:
+                min_hr = min(min_hr, float(nhl_cap))
     ok_tiers = POWER_MIN_TIER.get(n_legs, ["A", "B", "C", "D"])
 
     # Apply hit rate floor to this pool
@@ -4382,6 +4399,12 @@ def build_mixed_picktype_tickets(
 
     if min_leg_hit_rate is not None and min_leg_hit_rate > 0 and "hit_rate" in std.columns:
         thr = float(min_leg_hit_rate)
+        if "sport" in pool_df.columns and len(pool_df) > 0:
+            su0 = str(pool_df["sport"].iloc[0]).strip().upper()
+            if su0 == "NHL":
+                nhl_cap = NHL_LEG_MIN_HIT_RATE.get(int(n_legs))
+                if nhl_cap is not None:
+                    thr = min(thr, float(nhl_cap))
         std = std[pd.to_numeric(std["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
         gob = gob[pd.to_numeric(gob["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
 
@@ -4567,10 +4590,19 @@ def build_final_web_ticket_groups(
     groups = []
     leg_sizes = ticket_leg_sizes if ticket_leg_sizes is not None else TICKET_LEG_SIZES
 
-    def _min_hr_for_n(n: int) -> float | None:
+    def _min_hr_for_n(n: int, label: str = "") -> float | None:
+        base: float | None
         if not leg_min_hit_by_n:
-            return None
-        return float(leg_min_hit_by_n.get(int(n), LEG_MIN_HIT_RATE.get(int(n), 0.55)))
+            base = None
+        else:
+            base = float(leg_min_hit_by_n.get(int(n), LEG_MIN_HIT_RATE.get(int(n), 0.55)))
+        if str(label).strip().upper() == "NHL":
+            cap = NHL_LEG_MIN_HIT_RATE.get(int(n))
+            if cap is not None:
+                if base is None:
+                    return float(cap)
+                return min(base, float(cap))
+        return base
 
     def _add_mixed_std_gob(sub: pd.DataFrame, label: str):
         for n in leg_sizes:
@@ -4582,7 +4614,7 @@ def build_final_web_ticket_groups(
                 n,
                 max_tickets=mt,
                 min_standard=_min_std_mixed(n),
-                min_leg_hit_rate=_min_hr_for_n(n),
+                min_leg_hit_rate=_min_hr_for_n(n, label),
                 prioritize_ticket_hit=prioritize_ticket_hit,
                 ticket_sort_mode=ticket_sort_mode,
                 player_ticket_counts=_pct,
@@ -6094,6 +6126,11 @@ def main():
 
         # Tier floor: exclude Tier D from all pools
         effective_tiers = [t for t in (tiers if tiers else ["A", "B", "C", "D"]) if t != "D"]
+        # NHL: strict high-conviction often collapses default tiers to A,B — pool is too small; allow Tier C.
+        if sport == "NHL" and bool(args.high_conviction):
+            tier_u = {str(x).strip().upper() for x in effective_tiers}
+            if "C" not in tier_u:
+                effective_tiers = list(dict.fromkeys([*effective_tiers, "C"]))
 
         # CBB Goblin rank floor
         effective_min_rank = args.min_rank
@@ -6119,7 +6156,13 @@ def main():
     mlb_pool = pool(mlb)
     combo_pool = pool(combined)
     mlb_elig = len(mlb_pool) if mlb_pool is not None else 0
+    _nhl_ticket_pool_n = (
+        len(pool(nhl)) if nhl is not None and len(nhl) > 0 else 0
+    )
     print(f"  NBA eligible: {len(nba_pool)} | CBB eligible: {len(cbb_pool)} | MLB eligible: {mlb_elig} | Combined: {len(combo_pool)}")
+    print(
+        f"  NHL ticket-pool legs (relaxed NHL hit-rate caps + Tier C in strict mode): {_nhl_ticket_pool_n}"
+    )
     print(f"  CBB Goblin rank floor: {CBB_GOBLIN_MIN_RANK} (NBA uses global floor: {args.min_rank})")
 
     print("Generating tickets + workbook...")
