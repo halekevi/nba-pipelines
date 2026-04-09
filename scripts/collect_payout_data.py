@@ -171,28 +171,41 @@ def _scroll_board_for_lazy_load(page):
         page.wait_for_timeout(1000)
 
 
-def ensure_popular_filter(page):
+def find_prizepicks_frame(page):
+    """Find the frame that contains the actual projection board content."""
+    for frame in page.frames:
+        try:
+            text = frame.evaluate("() => (document.body && document.body.innerText) ? document.body.innerText : ''")
+            if any(x in text for x in ["Turnovers", "Points", "Assists", "Rebounds", "More", "Less", "Popular"]):
+                print(f"[FRAME] Found content in frame: {frame.url}")
+                return frame
+        except Exception:
+            pass
+    print("[FRAME] Falling back to main page")
+    return page
+
+
+def ensure_popular_filter(frame, page):
     global _POPULAR_READY
     if _POPULAR_READY:
         return
-    selectors = [
-        "button:has-text('Popular')",
-        "[data-testid='popular-filter']",
-        "text=Popular",
-    ]
     clicked = False
-    for sel in selectors:
-        try:
-            loc = page.locator(sel).first
-            if loc.count() > 0:
-                loc.click(timeout=1200)
-                clicked = True
-                break
-        except Exception:
-            continue
-    page.wait_for_timeout(1000)
+    try:
+        frame.get_by_text("Popular", exact=True).first.click(timeout=1200)
+        clicked = True
+    except Exception:
+        for sel in ["[data-testid='popular-filter']", "text=Popular"]:
+            try:
+                loc = frame.locator(sel).first
+                if loc.count() > 0:
+                    loc.click(timeout=1200)
+                    clicked = True
+                    break
+            except Exception:
+                continue
+    frame.wait_for_timeout(1500)
     _scroll_board_for_lazy_load(page)
-    cards = _extract_cards_data_js(page)
+    cards = _extract_cards_data_js(frame)
     print(f"[LOOKUP] Popular filter click: {'OK' if clicked else 'NOT FOUND'}")
     print(f"[LOOKUP] Cards visible after Popular click: {len(cards)}")
     try:
@@ -245,7 +258,7 @@ def _player_name_from_card_text(text: str) -> str | None:
     return None
 
 
-def _collect_visible_players(page) -> tuple[list[str], str | None, dict[str, int]]:
+def _collect_visible_players(frame) -> tuple[list[str], str | None, dict[str, int]]:
     selectors_to_try = [
         "[data-testid='player-name']",
         "[data-testid='projection-player-name']",
@@ -260,7 +273,7 @@ def _collect_visible_players(page) -> tuple[list[str], str | None, dict[str, int
     for sel in selectors_to_try:
         vals: list[str] = []
         try:
-            loc = page.locator(sel)
+            loc = frame.locator(sel)
             n = loc.count()
             for i in range(min(n, 300)):
                 t = str(loc.nth(i).inner_text(timeout=200) or "").strip()
@@ -274,7 +287,7 @@ def _collect_visible_players(page) -> tuple[list[str], str | None, dict[str, int
         except Exception:
             selector_counts[sel] = 0
     # JS fallback for React/hashed classes.
-    cards_data = _extract_cards_data_js(page)
+    cards_data = _extract_cards_data_js(frame)
     js_players: list[str] = []
     for card in cards_data:
         nm = _player_name_from_card_text(card.get("text", ""))
@@ -293,78 +306,83 @@ def _collect_visible_players(page) -> tuple[list[str], str | None, dict[str, int
     return best_vals, best_sel, selector_counts
 
 
-def _click_player_direction(page, matched_name: str, direction: str, prop: str) -> bool:
-    card_selectors = [
-        "[data-testid='projection-card']",
-        ".projection-card",
-        "[class*='ProjectionCard']",
-        "[class*='projection-card']",
-    ]
+def get_all_cards(frame) -> list[dict]:
+    """Find cards by anchoring on 'More' buttons and parsing parent text."""
+    cards: list[dict] = []
+    try:
+        more_loc = frame.get_by_text("More", exact=True)
+        n = more_loc.count()
+        print(f"[CARDS] Found {n} More buttons")
+        for i in range(min(n, 300)):
+            btn = more_loc.nth(i)
+            try:
+                card_text = btn.evaluate(
+                    """
+                    el => {
+                      let p = el;
+                      for (let i = 0; i < 5; i++) {
+                        p = p ? p.parentElement : null;
+                        if (!p) break;
+                        const t = (p.innerText || '').trim();
+                        if (t.length > 30 && t.length < 300 && (t.includes('vs ') || t.includes('@ '))) {
+                          return t;
+                        }
+                      }
+                      return null;
+                    }
+                    """
+                )
+                if not card_text:
+                    continue
+                lines = [l.strip() for l in str(card_text).split("\n") if l.strip()]
+                if len(lines) < 3:
+                    continue
+                cards.append(
+                    {
+                        "player": lines[1] if len(lines) > 1 else lines[0],
+                        "stat": lines[3] if len(lines) > 3 else "",
+                        "game": lines[2] if len(lines) > 2 else "",
+                        "more_btn": btn,
+                        "card_text": card_text,
+                    }
+                )
+            except Exception:
+                continue
+    except Exception as e:
+        print(f"[CARDS] Error: {e}")
+        return []
+    print(f"[CARDS] Parsed {len(cards)} cards")
+    for c in cards[:5]:
+        print(f"  {c['player']} | {c['stat']} | {c['game']}")
+    return cards
+
+
+def _click_player_direction(frame, matched_name: str, direction: str, prop: str) -> bool:
+    # Rebuild current cards each attempt to avoid stale elements.
+    cards = get_all_cards(frame)
     lname = _norm(matched_name)
     lprop = _norm(prop)
-    for csel in card_selectors:
-        try:
-            cards = page.locator(csel)
-            n = min(cards.count(), 400)
-            for i in range(n):
-                card = cards.nth(i)
-                txt = str(card.inner_text(timeout=150) or "")
-                ltxt = _norm(txt)
-                if lname not in ltxt:
-                    continue
-                # Prefer matching prop inside the same card if available.
-                if lprop and lprop not in ltxt:
-                    continue
-                try:
-                    card.get_by_text(direction, exact=False).first.click(timeout=800)
-                    page.wait_for_timeout(250)
-                    return True
-                except Exception:
-                    pass
-        except Exception:
-            continue
-
-    # JS fallback: find card by player name and click Less/More button in-card.
+    target = None
+    for c in cards:
+        if lname in _norm(c.get("player", "")):
+            if lprop and lprop not in _norm(c.get("card_text", "")):
+                continue
+            target = c
+            break
+    if target is None:
+        return False
     try:
-        btn = "More" if str(direction).upper() == "OVER" else "Less"
-        ok = page.evaluate(
-            """
-            ({ playerName, buttonLabel }) => {
-              const all = document.querySelectorAll('*');
-              for (const el of all) {
-                const t = (el.innerText || '').trim();
-                if (!t.includes(playerName)) continue;
-                if (!((t.includes(' vs ') || t.includes(' @ ')) && t.length < 400)) continue;
-                const btns = el.querySelectorAll('button');
-                for (const b of btns) {
-                  const bt = (b.innerText || '').trim().toLowerCase();
-                  if (bt === buttonLabel.toLowerCase()) {
-                    b.click();
-                    return true;
-                  }
-                }
-              }
-              return false;
-            }
-            """,
-            {"playerName": matched_name, "buttonLabel": btn},
-        )
-        if ok:
-            page.wait_for_timeout(250)
-            return True
-    except Exception:
-        pass
-
-    # Fallback: click matched name text then click direction globally.
-    try:
-        page.get_by_text(matched_name, exact=False).first.click(timeout=800)
-    except Exception:
-        pass
-    try:
-        page.get_by_text(direction, exact=False).first.click(timeout=1200)
-        page.wait_for_timeout(250)
+        if str(direction).upper() == "OVER":
+            target["more_btn"].click(timeout=900)
+        else:
+            try:
+                target["more_btn"].locator("xpath=../..//button[contains(., 'Less')]").first.click(timeout=900)
+            except Exception:
+                frame.get_by_text("Less", exact=True).first.click(timeout=900)
+        frame.wait_for_timeout(500)
         return True
-    except Exception:
+    except Exception as e:
+        print(f"[CLICK] Failed: {e}")
         return False
 
 
@@ -445,15 +463,15 @@ def set_ticket_type(page, ticket_type: str):
             continue
 
 
-def add_leg(page, leg: dict) -> bool:
+def add_leg(frame, page, leg: dict) -> bool:
     global _LOOKUP_DIAG_PRINTED
     player = leg["player"]
     prop = leg["prop_type"]
     direction = str(leg["direction"]).upper()
     try:
-        ensure_popular_filter(page)
+        ensure_popular_filter(frame, page)
         _scroll_board_for_lazy_load(page)
-        visible_players, best_sel, sel_counts = _collect_visible_players(page)
+        visible_players, best_sel, sel_counts = _collect_visible_players(frame)
         if not _LOOKUP_DIAG_PRINTED:
             print("[LOOKUP] Card selector counts:")
             for sel, n in sel_counts.items():
@@ -470,7 +488,7 @@ def add_leg(page, leg: dict) -> bool:
 
         # Search player first when search exists.
         for sel in ["input[placeholder*='Search']", "input[type='search']", "input[aria-label*='Search']"]:
-            box = page.locator(sel).first
+            box = frame.locator(sel).first
             if box.count() > 0:
                 try:
                     print(f"[LOOKUP] Using search selector: {sel}")
@@ -481,13 +499,13 @@ def add_leg(page, leg: dict) -> bool:
                 except Exception:
                     continue
         _scroll_board_for_lazy_load(page)
-        visible_players2, _, _ = _collect_visible_players(page)
+        visible_players2, _, _ = _collect_visible_players(frame)
         visible_pool = visible_players2 or visible_players
         match = get_close_matches(player, visible_pool, n=1, cutoff=0.7)
         matched_name = match[0] if match else None
         if matched_name:
             print(f"[LOOKUP] Fuzzy matched '{player}' -> '{matched_name}'")
-            if _click_player_direction(page, matched_name, direction, prop):
+            if _click_player_direction(frame, matched_name, direction, prop):
                 return True
 
         print(f"[PAYOUT] SKIP: {player} not found on board")
@@ -513,7 +531,7 @@ def add_leg(page, leg: dict) -> bool:
         return False
 
 
-def read_payout_from_dom(page) -> tuple[float | None, float | None, float | None]:
+def read_payout_from_dom(frame) -> tuple[float | None, float | None, float | None]:
     # Returns (displayed_multiplier, flex_first_place, flex_miss_1)
     displayed = None
     for sel in [
@@ -523,7 +541,7 @@ def read_payout_from_dom(page) -> tuple[float | None, float | None, float | None
         ".entry-payout",
     ]:
         try:
-            txt = page.locator(sel).first.inner_text(timeout=600)
+            txt = frame.locator(sel).first.inner_text(timeout=600)
             m = re.search(r"(\d+(?:\.\d+)?)\s*x", txt.lower())
             if m:
                 displayed = float(m.group(1))
@@ -532,7 +550,7 @@ def read_payout_from_dom(page) -> tuple[float | None, float | None, float | None
             continue
     if displayed is None:
         try:
-            t = page.locator("text=/\\d+\\.?\\d*x/i").first
+            t = frame.locator("text=/\\d+\\.?\\d*x/i").first
             if t.count() > 0:
                 m = re.search(r"(\d+(?:\.\d+)?)\s*x", t.inner_text(timeout=600).lower())
                 if m:
@@ -543,7 +561,7 @@ def read_payout_from_dom(page) -> tuple[float | None, float | None, float | None
     flex_first = None
     flex_miss1 = None
     try:
-        txt = page.content()
+        txt = frame.content()
         m1 = re.search(r"1st\s*place\s*pays[^0-9]*(\d+(?:\.\d+)?)\s*x", txt, flags=re.I)
         if m1:
             flex_first = float(m1.group(1))
@@ -553,7 +571,7 @@ def read_payout_from_dom(page) -> tuple[float | None, float | None, float | None
     except Exception:
         pass
     try:
-        slip_text = page.evaluate(
+        slip_text = frame.evaluate(
             """
             () => {
               const all = document.querySelectorAll('*');
@@ -569,7 +587,7 @@ def read_payout_from_dom(page) -> tuple[float | None, float | None, float | None
     except Exception:
         pass
     try:
-        mult_candidates = page.evaluate(
+        mult_candidates = frame.evaluate(
             """
             () => {
               const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
@@ -589,9 +607,9 @@ def read_payout_from_dom(page) -> tuple[float | None, float | None, float | None
     return displayed, flex_first, flex_miss1
 
 
-def read_to_win_amount(page) -> float | None:
+def read_to_win_amount(frame) -> float | None:
     try:
-        txt = page.content()
+        txt = frame.content()
         m = re.search(r"to\s*win[^0-9$]*\$?\s*([0-9][0-9,]*(?:\.\d+)?)", txt, flags=re.I)
         if m:
             return float(m.group(1).replace(",", ""))
@@ -741,12 +759,13 @@ def main():
             clear_slip(page)
             # set ticket type based on case label (inferred by count and pattern attempt)
             # if 2-5 only, we toggle both while collecting from matrix order: first power then flex
+            frame = find_prizepicks_frame(page)
             ticket_type = "flex" if combo in all_cases[len(choose_leg_sets(legs, "power")):] else "power"
-            set_ticket_type(page, ticket_type)
+            set_ticket_type(frame, ticket_type)
 
             ok = True
             for leg in combo:
-                if not add_leg(page, leg):
+                if not add_leg(frame, page, leg):
                     ok = False
                     break
             if not ok:
@@ -756,10 +775,10 @@ def main():
 
             key = "|".join(sorted(str(x["pp_id"]) for x in combo))
             current_key["value"] = key
-            displayed_multiplier, flex_first, flex_miss_1 = read_payout_from_dom(page)
+            displayed_multiplier, flex_first, flex_miss_1 = read_payout_from_dom(frame)
             if displayed_multiplier is None:
                 displayed_multiplier = captures.get(key)
-            to_win_amount = read_to_win_amount(page)
+            to_win_amount = read_to_win_amount(frame)
 
             n_g = sum(1 for x in combo if "goblin" in x["pick_type"])
             n_d = sum(1 for x in combo if "demon" in x["pick_type"])
