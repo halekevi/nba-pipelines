@@ -47,6 +47,17 @@ SPORT_CFG = {
 }
 
 BASE_PAYOUT = {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0}
+MIN_REALISTIC_HIT_PROB = 0.50
+
+
+def find_col(df: pd.DataFrame, names: list[str]) -> str | None:
+    for c in names:
+        if c in df.columns:
+            return c
+        matches = [col for col in df.columns if str(col).strip().lower() == str(c).strip().lower()]
+        if matches:
+            return matches[0]
+    return None
 
 
 def _pick_col(df: pd.DataFrame, names: list[str]) -> str | None:
@@ -58,7 +69,7 @@ def _pick_col(df: pd.DataFrame, names: list[str]) -> str | None:
 
 
 def _norm_text(s: Any) -> str:
-    return re.sub(r"\s+", " ", str(s or "").strip().lower())
+    return re.sub(r"\s+", " ", str(s or "").strip().lower().replace("_", " "))
 
 
 def _line_key(v: Any) -> str:
@@ -74,6 +85,23 @@ def _to_sheet_df(path: Path) -> pd.DataFrame:
     return pd.read_excel(path, sheet_name=sheet)
 
 
+def score_to_hit_prob(score: Any, pick_type: str) -> float:
+    pt = str(pick_type or "").strip().lower()
+    if pt == "goblin":
+        ceiling = 0.82
+    elif pt == "demon":
+        ceiling = 0.65
+    else:
+        ceiling = 0.72
+    try:
+        s = float(score)
+    except Exception:
+        s = 0.0
+    s = max(0.0, min(1.0, s))
+    prob = MIN_REALISTIC_HIT_PROB + (s * (ceiling - MIN_REALISTIC_HIT_PROB))
+    return round(prob, 4)
+
+
 def load_candidate_legs(sport_filter: str | None = None) -> tuple[list[dict], dict[str, int]]:
     legs: list[dict] = []
     by_sport: dict[str, int] = {}
@@ -83,6 +111,8 @@ def load_candidate_legs(sport_filter: str | None = None) -> tuple[list[dict], di
             continue
         step8 = cfg["step8"]
         step1 = cfg["step1"]
+        print(f"[PAYOUT] {sport} step8 path: {step8}")
+        print(f"[PAYOUT] {sport} step1 path: {step1}")
         if not step8.exists() or not step1.exists():
             print(f"[PAYOUT] WARN: missing inputs for {sport} (step8/step1) — skip")
             continue
@@ -90,26 +120,53 @@ def load_candidate_legs(sport_filter: str | None = None) -> tuple[list[dict], di
         df8 = _to_sheet_df(step8)
         df1 = pd.read_csv(step1, low_memory=False)
 
-        p_col8 = _pick_col(df8, ["player"])
-        t_col8 = _pick_col(df8, ["team"])
-        prop_col8 = _pick_col(df8, ["prop_type", "prop"])
-        line_col8 = _pick_col(df8, ["line"])
-        dir_col8 = _pick_col(df8, ["direction", "final_bet_direction"])
-        tier_col8 = _pick_col(df8, ["tier"])
-        blend_col8 = _pick_col(df8, ["blended_score", "blended score"])
-        pick_type8 = _pick_col(df8, ["pick_type"])
-        proj_col8 = _pick_col(df8, ["projection_id", "pp_projection_id"])
+        if sport in ("NHL", "MLB"):
+            print(f"[PAYOUT] {sport} step8 columns: {list(df8.columns)}")
+
+        tier_expected = ["Tier", "tier", "TIER"]
+        score_expected = ["blended_score", "Blended Score", "Rank Score", "rank_score", "score"]
+        dir_expected = ["Direction", "direction", "final_bet_direction", "Bet Direction", "Dir"]
+        player_expected = ["Player", "player_name", "player", "Name"]
+        prop_expected = ["Prop", "prop_type", "Prop Type", "prop"]
+        line_expected = ["Line", "line_score", "Line Score", "line"]
+        picktype_expected = ["Pick Type", "pick_type", "PickType"]
+        proj_expected = ["projection_id", "pp_projection_id", "pp_id", "Projection ID"]
+        team_expected = ["team", "Team"]
+
+        p_col8 = find_col(df8, player_expected)
+        t_col8 = find_col(df8, team_expected)
+        prop_col8 = find_col(df8, prop_expected)
+        line_col8 = find_col(df8, line_expected)
+        dir_col8 = find_col(df8, dir_expected)
+        tier_col8 = find_col(df8, tier_expected)
+        blend_col8 = find_col(df8, score_expected)
+        pick_type8 = find_col(df8, picktype_expected)
+        proj_col8 = find_col(df8, proj_expected)
+
+        if sport in ("NHL", "MLB"):
+            print(
+                f"[PAYOUT] {sport} expected step8 mappings -> "
+                f"tier={tier_col8}, score={blend_col8}, direction={dir_col8}, "
+                f"player={p_col8}, prop={prop_col8}, line={line_col8}, pick_type={pick_type8}, proj={proj_col8}"
+            )
 
         if not all([p_col8, prop_col8, line_col8, dir_col8, tier_col8, blend_col8]):
             print(f"[PAYOUT] WARN: required step8 cols missing for {sport} — skip")
             continue
 
-        p_col1 = _pick_col(df1, ["player"])
-        t_col1 = _pick_col(df1, ["team"])
-        prop_col1 = _pick_col(df1, ["prop_type", "prop"])
-        line_col1 = _pick_col(df1, ["line"])
-        pick_col1 = _pick_col(df1, ["pick_type"])
-        proj_col1 = _pick_col(df1, ["projection_id", "pp_projection_id"])
+        p_col1 = find_col(df1, ["player", "player_name", "name", "Player"])
+        t_col1 = find_col(df1, ["team", "Team"])
+        prop_col1 = find_col(df1, ["prop_type", "prop", "Prop", "Prop Type", "stat_type", "Stat Type"])
+        line_col1 = find_col(df1, ["line", "line_score", "Line"])
+        pick_col1 = find_col(df1, ["pick_type", "Pick Type", "PickType"])
+        proj_col1 = find_col(df1, ["projection_id", "pp_projection_id", "pp_id", "Projection ID"])
+
+        if sport in ("NHL", "MLB"):
+            print(f"[PAYOUT] {sport} step1 columns: {list(df1.columns)}")
+            print(
+                f"[PAYOUT] {sport} expected step1 mappings -> "
+                f"player={p_col1}, team={t_col1}, prop={prop_col1}, line={line_col1}, pick_type={pick_col1}, proj={proj_col1}"
+            )
         if not all([p_col1, prop_col1, line_col1, proj_col1]):
             print(f"[PAYOUT] WARN: required step1 cols missing for {sport} — skip")
             continue
@@ -138,6 +195,7 @@ def load_candidate_legs(sport_filter: str | None = None) -> tuple[list[dict], di
         df8f = df8f.sort_values("__blend", ascending=False).head(int(cfg["top_n"]))
 
         added = 0
+        local_probs: list[tuple[str, float, float, str]] = []
         for _, r in df8f.iterrows():
             player = str(r.get(p_col8, "") or "").strip()
             prop = str(r.get(prop_col8, "") or "").strip()
@@ -160,6 +218,8 @@ def load_candidate_legs(sport_filter: str | None = None) -> tuple[list[dict], di
             if not proj:
                 continue
 
+            raw_blend = float(r.get("__blend") or 0.0)
+            hit_prob = score_to_hit_prob(raw_blend, ptype.lower() if ptype else "standard")
             legs.append(
                 {
                     "player": player,
@@ -168,14 +228,19 @@ def load_candidate_legs(sport_filter: str | None = None) -> tuple[list[dict], di
                     "line": float(line) if str(line).strip() != "" else None,
                     "direction": direction if direction in ("OVER", "UNDER") else "OVER",
                     "pick_type": ptype.lower() if ptype else "standard",
-                    "hit_prob": float(r.get("__blend") or 0.0),
+                    "hit_prob": hit_prob,
                     "pp_id": proj,
                     "team": team,
                 }
             )
+            local_probs.append((player, raw_blend, hit_prob, ptype.lower() if ptype else "standard"))
             added += 1
         by_sport[sport] = added
         print(f"[PAYOUT] {sport} candidate legs loaded: {added}")
+        if local_probs:
+            print(f"[PAYOUT] {sport} top 5 score->hit_prob:")
+            for i, (pl, raw_b, hp, pt) in enumerate(local_probs[:5], start=1):
+                print(f"  {i}. {pl} [{pt}] score={raw_b:.4f} -> hit_prob={hp:.4f}")
     return legs, by_sport
 
 
