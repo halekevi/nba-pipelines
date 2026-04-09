@@ -48,6 +48,8 @@ SPORT_CFG = {
 
 BASE_PAYOUT = {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0}
 MIN_REALISTIC_HIT_PROB = 0.50
+MAX_PLAYER_EXPOSURE_IN_TOP_N = 3
+MAX_SPORT_EXPOSURE_IN_TOP_N = 8
 
 
 def find_col(df: pd.DataFrame, names: list[str]) -> str | None:
@@ -437,6 +439,30 @@ def passes_diversity_constraints(combo: tuple[dict, ...]) -> bool:
     return True
 
 
+def _build_exposure_capped_top(df_all: pd.DataFrame, top_n: int = 20) -> tuple[pd.DataFrame, dict[str, int], dict[str, int]]:
+    if df_all.empty:
+        return df_all.head(0), {}, {}
+    player_exposure: dict[str, int] = {}
+    sport_exposure: dict[str, int] = {}
+    keep_rows = []
+    for _, r in df_all.iterrows():
+        players = [str(x).strip() for x in (r.get("players") or []) if str(x).strip()]
+        sports = [str(x).strip() for x in (r.get("sports") or []) if str(x).strip()]
+        if any(player_exposure.get(p, 0) >= MAX_PLAYER_EXPOSURE_IN_TOP_N for p in players):
+            continue
+        if any(sport_exposure.get(s, 0) >= MAX_SPORT_EXPOSURE_IN_TOP_N for s in sports):
+            continue
+        for p in players:
+            player_exposure[p] = player_exposure.get(p, 0) + 1
+        for s in sports:
+            sport_exposure[s] = sport_exposure.get(s, 0) + 1
+        keep_rows.append(r.to_dict())
+        if len(keep_rows) >= int(top_n):
+            break
+    out = pd.DataFrame(keep_rows) if keep_rows else df_all.head(0)
+    return out, player_exposure, sport_exposure
+
+
 def write_outputs(results: list[dict], date_str: str):
     out_dir = ROOT / "outputs"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -455,7 +481,7 @@ def write_outputs(results: list[dict], date_str: str):
     df_all = df.sort_values("true_ev", ascending=False) if not df.empty else df
     df_strong = df_all[df_all["true_ev"] > 1.5] if not df.empty else df_all
     df_ok = df_all[df_all["true_ev"] > 1.0] if not df.empty else df_all
-    df_top = df_all.head(20)
+    df_top, player_exposure, sport_exposure = _build_exposure_capped_top(df_all, top_n=20)
 
     with pd.ExcelWriter(xlsx_path, engine="openpyxl") as xw:
         df_all.to_excel(xw, sheet_name="ALL", index=False)
@@ -489,7 +515,7 @@ def write_outputs(results: list[dict], date_str: str):
         "groups": groups,
     }
     json_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-    return xlsx_path, json_path
+    return xlsx_path, json_path, df_top, player_exposure, sport_exposure
 
 
 def main():
@@ -580,6 +606,7 @@ def main():
                     results.append(
                         {
                             "legs": [f'{l["player"]} {l["prop_type"]}' for l in combo],
+                            "players": [l["player"] for l in combo],
                             "sports": sorted(list({l["sport"] for l in combo})),
                             "n_legs": n_legs,
                             "n_goblins": sum(1 for l in combo if "goblin" in str(l["pick_type"]).lower()),
@@ -623,6 +650,7 @@ def main():
                 results.append(
                     {
                         "legs": [f'{l["player"]} {l["prop_type"]}' for l in combo],
+                        "players": [l["player"] for l in combo],
                         "sports": sorted(list({l["sport"] for l in combo})),
                         "n_legs": n_legs,
                         "n_goblins": sum(1 for l in combo if "goblin" in str(l["pick_type"]).lower()),
@@ -656,7 +684,7 @@ def main():
             except Exception:
                 pass
 
-    xlsx_path, json_path = write_outputs(results, args.date)
+    xlsx_path, json_path, df_top_capped, player_exp_top, sport_exp_top = write_outputs(results, args.date)
     df = pd.DataFrame(results)
     strong_n = int((df["true_ev"] > 1.5).sum()) if not df.empty else 0
     ok_n = int((df["true_ev"] > 1.0).sum()) if not df.empty else 0
@@ -676,7 +704,7 @@ def main():
         print(f"[DRY RUN] Combos passing est_ev >= 1.5: {strong_est}")
         print(f"[DRY RUN] Estimated UI calls needed for live run: {min(tested, int(args.max_ui_combos))}")
         print("[DRY RUN] Top 5 combos by estimated EV:")
-        top5 = df.sort_values("true_ev", ascending=False).head(5) if not df.empty else pd.DataFrame()
+        top5 = df_top_capped.head(5) if not df_top_capped.empty else pd.DataFrame()
         if top5.empty:
             print("  (none)")
         else:
@@ -686,6 +714,18 @@ def main():
                     f"  {i}. {r['legs']} | P(win)={round(float(r['p_win'])*100,2)}% | "
                     f"Est Payout={r['exact_multiplier']}x | Est EV={r['true_ev']} | {rec}"
                 )
+        print("[DRY RUN] Player exposure in TOP20:")
+        if player_exp_top:
+            for p, n in sorted(player_exp_top.items(), key=lambda kv: (-kv[1], kv[0])):
+                print(f"  {p}: {n}")
+        else:
+            print("  (none)")
+        print("[DRY RUN] Sport exposure in TOP20:")
+        if sport_exp_top:
+            ordered = ", ".join(f"{k}: {sport_exp_top.get(k, 0)}" for k in ["NBA", "NHL", "Soccer", "MLB"])
+            print(f"  {ordered}")
+        else:
+            print("  (none)")
     else:
         print(f"Total combos tested: {tested}")
         print(f"Total combos skipped (diversity constraints): {skipped_diversity}")
