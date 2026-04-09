@@ -714,15 +714,16 @@ def read_to_win_amount(frame) -> float | None:
 def read_slip(frame) -> dict:
     try:
         text = frame.evaluate("() => document.body.innerText")
-        markers = ["Players Selected", "Current Lineup", "To Win", "Power Play", "Flex Play"]
-        for marker in markers:
-            idx = text.find(marker)
-            if idx >= 0:
-                slip_section = text[max(0, idx - 100) : idx + 400]
-                print(f"[SLIP RAW] Around '{marker}':")
-                print(slip_section)
-                print("---")
-                break
+        slip_start = text.find("Current Lineup")
+        if slip_start == -1:
+            slip_start = text.find("Players Selected")
+        if slip_start == -1:
+            slip_start = text.find("Power Play")
+        slip_section = text[slip_start : slip_start + 600] if slip_start >= 0 else ""
+        if slip_start >= 0:
+            print("[SLIP RAW] Slip section:")
+            print(slip_section)
+            print("---")
 
         multipliers: list[str] = []
         multiplier_patterns = [
@@ -734,7 +735,7 @@ def read_slip(frame) -> dict:
             r"(\d+\.?\d*)\s*times",
         ]
         for pat in multiplier_patterns:
-            found = re.findall(pat, text, re.IGNORECASE)
+            found = re.findall(pat, slip_section, re.IGNORECASE)
             if found:
                 print(f"[SLIP REGEX] Pattern '{pat}' found: {found}")
                 for v in found:
@@ -743,35 +744,45 @@ def read_slip(frame) -> dict:
                         multipliers.append(sv)
         multipliers = list(dict.fromkeys(multipliers))
 
-        to_win: list[str] = []
+        to_win_hits: list[str] = []
         to_win_patterns = [
-            r"To\s*Win[\s\n\$]*(\d+\.?\d*)",
-            r"to\s*win[:\s\n\$]*(\d+\.?\d*)",
-            r"You\s*win[:\s\n\$]*(\d+\.?\d*)",
-            r"Prize[:\s\n\$]*(\d+\.?\d*)",
-            r"Payout[:\s\n\$]*(\d+\.?\d*)",
+            r"To\s*Win[\s\n]*\$?(\d+\.?\d+)",
+            r"to\s*win[:\s\n]*\$?(\d+\.?\d+)",
+            r"You\s*win[:\s\n]*\$?(\d+\.?\d+)",
+            r"Prize[:\s\n]*\$?(\d+\.?\d+)",
+            r"Payout[:\s\n]*\$?(\d+\.?\d+)",
             r"\$(\d+\.\d{2})",
         ]
         for pat in to_win_patterns:
-            found = re.findall(pat, text, re.IGNORECASE)
+            found = re.findall(pat, slip_section, re.IGNORECASE)
             if found:
                 print(f"[SLIP REGEX] ToWin pattern '{pat}' found: {found}")
                 for v in found:
                     sv = str(v).strip()
                     if sv:
-                        to_win.append(sv)
-        to_win = list(dict.fromkeys(to_win))
-        n_selected = re.findall(r"(\d+)\s*Players?\s*Selected", text, re.IGNORECASE)
-        flex_first = re.findall(r"1st\s*place\s*pays[\s\n\$]*(\d+\.?\d*)", text, re.IGNORECASE)
-        flex_miss = re.findall(r"(\d+)\s*correct\s*pays[\s\n\$]*(\d+\.?\d*)", text, re.IGNORECASE)
+                        to_win_hits.append(sv)
+        to_win_clean = []
+        for v in list(dict.fromkeys(to_win_hits)):
+            try:
+                fv = float(v)
+                if fv > 0:
+                    to_win_clean.append(fv)
+            except Exception:
+                continue
+        to_win_num = to_win_clean[0] if to_win_clean else None
+
+        n_selected = re.findall(r"(\d+)\s*Players?\s*Selected", slip_section, re.IGNORECASE)
+        flex_first = re.findall(r"1st\s*place\s*pays[\s\n]*(\d+\.?\d*)[Xx]", slip_section, re.IGNORECASE)
+        flex_correct_pays = re.findall(r"(\d+)\s*correct\s*pays[\s\n]*(\d+\.?\d*)[Xx]", slip_section, re.IGNORECASE)
+
         entry_amt: list[str] = []
         entry_patterns = [
-            r"Entry[:\s\n\$]*(\d+\.?\d*)",
-            r"Entry\s*Fee[:\s\n\$]*(\d+\.?\d*)",
-            r"Wager[:\s\n\$]*(\d+\.?\d*)",
+            r"Entry[:\s\n]*\$?(\d+\.?\d+)",
+            r"Entry\s*Fee[:\s\n]*\$?(\d+\.?\d+)",
+            r"Wager[:\s\n]*\$?(\d+\.?\d+)",
         ]
         for pat in entry_patterns:
-            found = re.findall(pat, text, re.IGNORECASE)
+            found = re.findall(pat, slip_section, re.IGNORECASE)
             if found:
                 print(f"[SLIP REGEX] Entry pattern '{pat}' found: {found}")
                 for v in found:
@@ -779,24 +790,38 @@ def read_slip(frame) -> dict:
                     if sv:
                         entry_amt.append(sv)
         entry_amt = list(dict.fromkeys(entry_amt))
-        to_win_num = float(to_win[0]) if to_win else None
         entry_num = float(entry_amt[0]) if entry_amt else 10.0
-        if to_win_num and entry_num:
-            computed_mult = round(to_win_num / entry_num, 2)
+        computed_mult = None
+        if to_win_num is not None and entry_num > 0:
+            computed_mult = round(to_win_num / entry_num, 3)
             print(f"[SLIP] Computed mult from towin/entry: {computed_mult}x")
+
+        displayed_multiplier = None
+        if multipliers:
+            try:
+                displayed_multiplier = float(multipliers[0])
+            except Exception:
+                displayed_multiplier = None
+        if displayed_multiplier is None:
+            displayed_multiplier = computed_mult
+
         slip = {
             "multipliers": multipliers,
+            "displayed_multiplier": displayed_multiplier,
             "to_win": to_win_num,
             "n_selected": int(n_selected[0]) if n_selected else None,
             "flex_first_place": float(flex_first[0]) if flex_first else None,
-            "flex_miss_1": flex_miss,
+            "flex_correct_pays": flex_correct_pays,
+            "flex_miss_1": flex_correct_pays,
             "entry_amount": entry_num,
-            "has_slip": any(x in text for x in ["Players Selected", "To Win", "Current Lineup"]),
+            "computed_multiplier": computed_mult,
+            "has_slip": slip_start >= 0,
         }
         if slip["has_slip"]:
             print(
                 f"[SLIP] n={slip['n_selected']} | mult={slip['multipliers']} | "
-                f"towin={slip['to_win']} | flex={slip['flex_first_place']}"
+                f"displayed={slip['displayed_multiplier']} | towin={slip['to_win']} | "
+                f"flex={slip['flex_first_place']}"
             )
         return slip
     except Exception as e:
@@ -1031,7 +1056,7 @@ def main():
                         "n_goblins": sum(1 for l in tc["legs"] if l["card"]["pick_type"] == "goblin"),
                         "n_demons": sum(1 for l in tc["legs"] if l["card"]["pick_type"] == "demon"),
                         "n_standard": sum(1 for l in tc["legs"] if l["card"]["pick_type"] == "standard"),
-                        "displayed_multiplier": float(slip["multipliers"][0]) if slip.get("multipliers") else None,
+                        "displayed_multiplier": slip.get("displayed_multiplier"),
                         "flex_first_place": slip.get("flex_first_place"),
                         "flex_miss_1": slip.get("flex_miss_1"),
                         "entry_amount": float(slip.get("entry_amount") or args.entry_amount),
