@@ -5219,7 +5219,8 @@ def write_slate_sheet(
             else:
                 dc(ws, ri, ci, val, bg=bg_row, align="center")
 
-    ws.auto_filter.ref = f"A1:{get_column_letter(len(cols))}1"
+    if cols:
+        ws.auto_filter.ref = f"A1:{get_column_letter(len(cols))}1"
 
 
 # ── Write ticket sheet ─────────────────────────────────────────────────────────

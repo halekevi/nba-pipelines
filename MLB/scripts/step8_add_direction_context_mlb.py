@@ -227,10 +227,14 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--input",  default="MLB/scripts/step7_mlb_ranked.xlsx")
-    ap.add_argument("--sheet",  default="ALL")
-    ap.add_argument("--output", default="MLB/scripts/step8_mlb_direction.csv")
-    ap.add_argument("--xlsx",   default="MLB/scripts/step8_mlb_direction_clean.xlsx")
+    ap.add_argument("--input", default="step7_mlb_ranked.xlsx")
+    ap.add_argument("--sheet", default="ALL")
+    ap.add_argument("--output", default="step8_mlb_direction.csv")
+    ap.add_argument(
+        "--xlsx",
+        default="step8_mlb_direction_clean.xlsx",
+        help="Path for styled multi-sheet workbook (default: step8_mlb_direction_clean.xlsx).",
+    )
     args = ap.parse_args()
 
     print(f"Loading: {args.input} (sheet={args.sheet})")
