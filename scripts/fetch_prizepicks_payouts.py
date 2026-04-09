@@ -413,6 +413,30 @@ def correlation_flag(combo: tuple[dict, ...]) -> str:
     return "HIGH" if any(v >= 3 for v in counts.values()) else "OK"
 
 
+def passes_diversity_constraints(combo: tuple[dict, ...]) -> bool:
+    players = [str(x.get("player", "")).strip().lower() for x in combo]
+    if len(set(players)) < len(players):
+        return False
+    sports = [str(x.get("sport", "")).strip().upper() for x in combo]
+    # Force cross-sport diversity to avoid mono-sport saturation in top tickets.
+    if len(set(sports)) < 2:
+        return False
+    per_sport: dict[str, int] = {}
+    for s in sports:
+        per_sport[s] = per_sport.get(s, 0) + 1
+    # No more than 2 legs from one sport for 3+ leg tickets.
+    if len(combo) >= 3 and any(v > 2 for v in per_sport.values()):
+        return False
+    prop_counts: dict[str, int] = {}
+    for leg in combo:
+        p = str(leg.get("prop_type", "")).strip().lower()
+        prop_counts[p] = prop_counts.get(p, 0) + 1
+    # Avoid heavily correlated same-prop stacks.
+    if any(v >= 3 for v in prop_counts.values()):
+        return False
+    return True
+
+
 def write_outputs(results: list[dict], date_str: str):
     out_dir = ROOT / "outputs"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -512,6 +536,7 @@ def main():
     skipped_lookup = 0
     scanned = 0
     raw_combo_total = 0
+    skipped_diversity = 0
     results: list[dict] = []
     strong_est = 0
     ok_est = 0
@@ -528,6 +553,10 @@ def main():
                     break
                 if tested >= int(args.max_ui_combos):
                     break
+
+                if not passes_diversity_constraints(combo):
+                    skipped_diversity += 1
+                    continue
 
                 p_win_est = 1.0
                 for leg in combo:
@@ -641,6 +670,7 @@ def main():
             f"Soccer: {sport_counts.get('Soccer',0)}, MLB: {sport_counts.get('MLB',0)})"
         )
         print(f"[DRY RUN] Total raw combos (2-5 legs): {raw_combo_total}")
+        print(f"[DRY RUN] Combos skipped by diversity constraints: {skipped_diversity}")
         print(f"[DRY RUN] Combos passing est_ev >= {min_ev:.2f}: {tested}")
         print(f"[DRY RUN] Combos passing est_ev >= 1.0: {ok_est}")
         print(f"[DRY RUN] Combos passing est_ev >= 1.5: {strong_est}")
@@ -658,6 +688,7 @@ def main():
                 )
     else:
         print(f"Total combos tested: {tested}")
+        print(f"Total combos skipped (diversity constraints): {skipped_diversity}")
         print(f"Total combos skipped (est EV < {min_ev:.2f}): {skipped_low_ev}")
         print(f"Total combos skipped (leg lookup failed): {skipped_lookup}")
         print(f"STRONG tickets: {strong_n}")

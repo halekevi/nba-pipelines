@@ -2764,6 +2764,28 @@ def load_nhl(path: str) -> pd.DataFrame:
             hr = hr / 100.0
         df["hit_rate"] = hr
 
+    # NHL proxy hotfix:
+    # If hit_rate is present but effectively zeros, source a proxy from directional windows
+    # so strict min-leg gates do not collapse a healthy NHL pool.
+    if "hit_rate" in df.columns:
+        hr_now = pd.to_numeric(df["hit_rate"], errors="coerce").fillna(0.0)
+        zero_like = bool((hr_now <= 0.001).mean() >= 0.80)
+        if zero_like:
+            proxy_col = None
+            for c in ("hit_rate_over_L10", "hit_rate_over_L5", "hit_rate_over_L20", "over_L10", "over_L5", "composite_hr"):
+                if c in df.columns:
+                    proxy_col = c
+                    break
+            if proxy_col is not None:
+                proxy = pd.to_numeric(df[proxy_col], errors="coerce")
+                # Convert percentages to 0-1 when needed.
+                if proxy.dropna().max() > 1.5:
+                    proxy = proxy / 100.0
+                # Clamp to realistic range for NHL leg-level selection.
+                proxy = proxy.clip(lower=0.52, upper=0.90)
+                df["hit_rate"] = proxy.where(proxy.notna(), hr_now)
+                print(f"  [load_nhl] hit_rate proxy applied from '{proxy_col}' (>=80% zero-like source)")
+
     # opponent is stored in 'description' column
     if "opp" not in df.columns:
         if "description" in df.columns:
@@ -3905,6 +3927,25 @@ def build_single_structure_ticket(
 
     if cand.empty:
         return None
+
+    # NHL hit-rate proxy in ticket builder:
+    # pool() may pass strong-L5 candidates even when raw hit_rate is near zero.
+    # For structured-ticket leg floors, use directional L10/L5 proxy when hit_rate is mostly zero.
+    if sport_up == "NHL" and "hit_rate" in cand.columns:
+        hr0 = pd.to_numeric(cand["hit_rate"], errors="coerce").fillna(0.0)
+        if bool((hr0 <= 0.001).mean() >= 0.60):
+            proxy_col = None
+            for c in ("hit_rate_over_L10", "hit_rate_over_L5", "hit_rate_over_L20", "over_L10", "over_L5"):
+                if c in cand.columns:
+                    proxy_col = c
+                    break
+            if proxy_col is not None:
+                proxy = pd.to_numeric(cand[proxy_col], errors="coerce")
+                if proxy.dropna().max() > 1.5:
+                    proxy = proxy / 100.0
+                proxy = proxy.clip(lower=0.52, upper=0.90)
+                cand["hit_rate"] = proxy.where(proxy.notna(), hr0)
+                print(f"  [NHL GATE TRACE] build_single_structure_ticket hit_rate proxy='{proxy_col}' applied")
 
     if min_leg_hit_rate is not None and float(min_leg_hit_rate) > 0 and "hit_rate" in cand.columns:
         thr = float(min_leg_hit_rate)
@@ -6162,7 +6203,7 @@ def main():
         if nhl_df is None or nhl_df.empty:
             return
         t0 = nhl_df.copy()
-        print(f"  [NHL TRACE] After date filter:         {len(t0)}")
+        print(f"  [NHL GATE TRACE] After date filter:         {len(t0)}")
 
         # Tier filter (mirrors pool's NHL behavior with strict-mode Tier C allowance)
         effective_tiers = [t for t in (tiers if tiers else ["A", "B", "C", "D"]) if t != "D"]
@@ -6179,7 +6220,7 @@ def main():
                 attempt_ok = _is_attempt_prop_series(t_tier["prop_type"])
                 tier_ok = tier_ok | ((tier_s == "D") & attempt_ok)
             t_tier = t_tier[tier_ok].copy()
-        print(f"  [NHL TRACE] After tier filter:         {len(t_tier)}")
+        print(f"  [NHL GATE TRACE] After tier filter:         {len(t_tier)}")
 
         # Direction filter
         t_dir = t_tier.copy()
@@ -6189,11 +6230,11 @@ def main():
             keep_mask = d.ne("OVER")
             removed_dir = t_dir[~keep_mask].copy()
             t_dir = t_dir[keep_mask].copy()
-        print(f"  [NHL TRACE] After direction filter:    {len(t_dir)}")
+        print(f"  [NHL GATE TRACE] After direction filter:    {len(t_dir)}")
         if not removed_dir.empty:
             cols = [c for c in ("prop_type", "direction") if c in removed_dir.columns]
             if cols:
-                print("  [NHL TRACE] Direction-cut legs (tier-pass -> direction-fail):")
+                print("  [NHL GATE TRACE] Direction-cut legs (tier-pass -> direction-fail):")
                 for _, rr in removed_dir[cols].drop_duplicates().sort_values(cols).iterrows():
                     ptxt = str(rr.get("prop_type", "")).strip()
                     dtxt = str(rr.get("direction", "")).strip().upper()
@@ -6205,31 +6246,31 @@ def main():
             t_prop = t_prop[
                 ~t_prop["prop_type"].astype(str).str.lower().isin(NHL_EXCLUDED_PROPS)
             ].copy()
-        print(f"  [NHL TRACE] After prop exclusion:      {len(t_prop)}")
+        print(f"  [NHL GATE TRACE] After prop exclusion:      {len(t_prop)}")
 
         # Global pool min_hit_rate (before NHL cap override)
         t_global_hr = t_prop.copy()
         if "hit_rate" in t_global_hr.columns:
             global_min = float(args.min_hit_rate)
             t_global_hr = t_global_hr[pd.to_numeric(t_global_hr["hit_rate"], errors="coerce").fillna(0) >= global_min].copy()
-        print(f"  [NHL TRACE] After global min_hit_rate: {len(t_global_hr)}")
+        print(f"  [NHL GATE TRACE] After global min_hit_rate: {len(t_global_hr)}")
 
         # NHL hit-rate cap for 2-leg/structured entry (pool-level reference)
         t_nhl_cap = t_global_hr.copy()
         if "hit_rate" in t_nhl_cap.columns:
             nhl_cap = float(NHL_LEG_MIN_HIT_RATE.get(2, 0.55))
             t_nhl_cap = t_nhl_cap[pd.to_numeric(t_nhl_cap["hit_rate"], errors="coerce").fillna(0) >= max(0.52, nhl_cap)].copy()
-        print(f"  [NHL TRACE] After NHL hit_rate caps:   {len(t_nhl_cap)}")
+        print(f"  [NHL GATE TRACE] After NHL hit_rate caps:   {len(t_nhl_cap)}")
 
         # EV/edge gate
         t_ev = t_nhl_cap.copy()
         if float(args.min_edge) > 0:
             t_ev = t_ev[_edge_magnitude_series(t_ev).fillna(0) >= float(args.min_edge)].copy()
-        print(f"  [NHL TRACE] After EV filter:           {len(t_ev)}")
+        print(f"  [NHL GATE TRACE] After EV filter:           {len(t_ev)}")
 
         # Final pool (actual runtime pool() result)
         t_final = pool(nhl_df)
-        print(f"  [NHL TRACE] Final pool:                {len(t_final) if t_final is not None else 0}")
+        print(f"  [NHL GATE TRACE] Final pool:                {len(t_final) if t_final is not None else 0}")
 
     if nhl is not None and len(nhl) > 0:
         print_nhl_trace(nhl)
