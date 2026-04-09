@@ -64,9 +64,10 @@ for _ in range(12):
     _c = _c.parent
 
 # ── Prop → DB column ──────────────────────────────────────────────────────────
-PROP_TO_DB: dict[str, str] = {
+BASE_PROP_TO_DB: dict[str, str] = {
     "shots":                                "sh",
     "shots on target":                      "sog",
+    "shots on goal":                        "sog",
     "goals":                                "g",
     "assists":                              "a",
     "goal + assist":                        "g + a",
@@ -80,13 +81,36 @@ PROP_TO_DB: dict[str, str] = {
     "goalie saves (combo)":                 "sv",
 }
 
-UNSUPPORTED = {
-    "tackles", "passes attempted", "passes attempted (combo)",
-    "key passes", "shots assisted", "attempted dribbles",
-    "clearances", "crosses", "yellow cards",
+BASE_UNSUPPORTED = {
+    "key passes", "shots assisted", "crosses", "yellow cards",
     # proporacle_ref soccer table has no goals-conceded column; do not grade vs saves (sv).
     "goals allowed", "goals allowed (combo)", "goals allowed in first 30 minutes",
 }
+
+
+def resolve_soccer_mappings(con: sqlite3.Connection) -> tuple[dict[str, str], set[str], dict[str, str]]:
+    cols = {r[1].lower() for r in con.execute("PRAGMA table_info(soccer)").fetchall()}
+    prop_to_db = dict(BASE_PROP_TO_DB)
+    unsupported = set(BASE_UNSUPPORTED)
+    status: dict[str, str] = {}
+
+    # Task-specific mappings to audit/add.
+    checks = [
+        ("passes attempted", "pa", "Passes Attempted"),
+        ("passes attempted (combo)", "pa", "Passes Attempted (combo)"),
+        ("clearances", "clearances", "Clearances"),
+        ("tackles", "tk", "Tackles"),
+        ("attempted dribbles", "dribble_attempts", "Attempted Dribbles"),
+    ]
+    for key, col, label in checks:
+        if col in cols:
+            prop_to_db[key] = col
+            status[label] = f"ADDED ({col})"
+        else:
+            unsupported.add(key)
+            status[label] = f"NEEDS_SCRAPER_UPDATE (missing DB col '{col}')"
+
+    return prop_to_db, unsupported, status
 
 # ── Colours ───────────────────────────────────────────────────────────────────
 COL = {
@@ -135,45 +159,59 @@ def sw(ws, widths):
 
 # ── Lookup actual stat from DB ────────────────────────────────────────────────
 
-def get_actual(con: sqlite3.Connection, espn_id: str, player_name: str,
-               db_col: str, grade_date: str) -> float | None:
-    """Fetch player's actual stat for grade_date from soccer DB."""
+def get_actual_and_minutes(
+    con: sqlite3.Connection, espn_id: str, player_name: str, db_col: str, grade_date: str
+) -> tuple[float | None, float | None]:
+    """Fetch player's actual stat and minutes_played for grade_date from soccer DB."""
     if not db_col:
-        return None
+        return None, None
 
     # Handle combo expressions (g + a)
     if "+" in db_col:
         cols = [c.strip() for c in db_col.split("+")]
         vals = []
+        mins = []
         for col in cols:
-            v = get_actual(con, espn_id, player_name, col, grade_date)
+            v, m = get_actual_and_minutes(con, espn_id, player_name, col, grade_date)
             if v is None:
-                return None
+                return None, None
             vals.append(v)
-        return sum(vals)
+            mins.append(m)
+        m_out = None if any(x is None for x in mins) else min(float(x) for x in mins)
+        return sum(vals), m_out
 
     # Primary: ESPN player ID
     if espn_id and str(espn_id).strip() not in ("", "nan", "None"):
         row = con.execute(f"""
-            SELECT {db_col} FROM soccer
+            SELECT {db_col}, minutes_played FROM soccer
             WHERE espn_player_id = ? AND game_date = ?
               AND {db_col} IS NOT NULL
         """, [str(espn_id), grade_date]).fetchone()
         if row:
-            return float(row[0])
+            m = None
+            try:
+                m = float(row[1]) if row[1] is not None else None
+            except (TypeError, ValueError):
+                m = None
+            return float(row[0]), m
 
     # Fallback: player name
     if player_name:
         norm = _norm(player_name)
         row = con.execute(f"""
-            SELECT {db_col} FROM soccer
+            SELECT {db_col}, minutes_played FROM soccer
             WHERE lower(player) = ? AND game_date = ?
               AND {db_col} IS NOT NULL
         """, [norm, grade_date]).fetchone()
         if row:
-            return float(row[0])
+            m = None
+            try:
+                m = float(row[1]) if row[1] is not None else None
+            except (TypeError, ValueError):
+                m = None
+            return float(row[0]), m
 
-    return None
+    return None, None
 
 
 # ── Grade a single prop ───────────────────────────────────────────────────────
@@ -226,6 +264,10 @@ def run_grader(grade_date: str, slate_path: Path, db_path: Path,
     print(f"[Soccer Grader] Slate rows: {len(df)}")
 
     con = sqlite3.connect(str(db_path))
+    prop_to_db, unsupported, map_status = resolve_soccer_mappings(con)
+    print("[Soccer Grader] Mapping audit:")
+    for k in ("Passes Attempted", "Clearances", "Tackles", "Attempted Dribbles"):
+        print(f"  - {k}: {map_status.get(k, 'N/A')}")
     db_n = con.execute("SELECT COUNT(*) FROM soccer WHERE game_date = ?",
                        [grade_date]).fetchone()[0]
     print(f"[Soccer Grader] DB rows for {grade_date}: {db_n}")
@@ -257,6 +299,8 @@ def run_grader(grade_date: str, slate_path: Path, db_path: Path,
 
     results = []
     hit = miss = push = void_n = 0
+    legacy_hit = legacy_miss = legacy_push = 0
+    no_data_void_count = 0
 
     for _, row in df.iterrows():
         prop_type = str(row.get(prop_col, "") or "").strip()
@@ -267,14 +311,35 @@ def run_grader(grade_date: str, slate_path: Path, db_path: Path,
         player    = str(row.get(player_col, "") or "").strip() if player_col else ""
 
         # Check if prop is unsupported
-        if prop_key in UNSUPPORTED:
+        if prop_key in unsupported:
             result, reason = "VOID", "unsupported_prop"
         elif void_col and pd.notna(row.get(void_col)) and str(row.get(void_col)).strip():
             result, reason = "VOID", str(row.get(void_col))
         else:
-            db_col = PROP_TO_DB.get(prop_key)
-            actual = get_actual(con, espn_id, player, db_col, grade_date)
-            result, reason = grade_prop(actual, line, direction)
+            db_col = prop_to_db.get(prop_key)
+            actual, minutes_played = get_actual_and_minutes(con, espn_id, player, db_col, grade_date)
+            legacy_result, _ = grade_prop(actual, line, direction)
+            if legacy_result == "HIT":
+                legacy_hit += 1
+            elif legacy_result == "MISS":
+                legacy_miss += 1
+            elif legacy_result == "PUSH":
+                legacy_push += 1
+
+            if actual is None:
+                result, reason = "VOID", "no_actuals"
+                no_data_void_count += 1
+            elif float(actual) == 0.0:
+                if minutes_played is None:
+                    result, reason = "VOID", "no_minutes_data"
+                    no_data_void_count += 1
+                elif float(minutes_played) <= 0:
+                    result, reason = "VOID", "did_not_play"
+                    no_data_void_count += 1
+                else:
+                    result, reason = grade_prop(actual, line, direction)
+            else:
+                result, reason = grade_prop(actual, line, direction)
 
         # Tally
         if result == "HIT":   hit  += 1
@@ -312,6 +377,10 @@ def run_grader(grade_date: str, slate_path: Path, db_path: Path,
     print(f"  PUSH: {push}")
     print(f"  VOID: {void_n}")
     print(f"  Hit Rate: {hit_rate:.1f}%  ({hit}/{total_gradeable} gradeable props)")
+    legacy_total = legacy_hit + legacy_miss + legacy_push
+    legacy_hr = (legacy_hit / legacy_total * 100) if legacy_total else 0.0
+    print(f"  Est pre-fix hit rate (legacy no-data grading): {legacy_hr:.1f}% ({legacy_hit}/{legacy_total})")
+    print(f"  no_data->VOID rows: {no_data_void_count}")
 
     # ── Write Excel ───────────────────────────────────────────────────────────
     out_dir.mkdir(parents=True, exist_ok=True)

@@ -22,13 +22,16 @@ import time
 import random
 import threading
 import unicodedata
+from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Dict, Optional, Tuple, List
 
 import pandas as pd
 import requests
+from pathlib import Path
 
 COMBO_SEP = "|"
+MANUAL_PP_MAP_PATH = "outputs/pp_to_espn_id_map_soccer.csv"
 
 ESPN_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
@@ -167,12 +170,21 @@ def _fetch_team_ids(league: str) -> List[Tuple[str, str]]:
                 teams.append((tid, name))
     return teams
 
-def _fetch_roster(league: str, team_id: str) -> Dict[str, str]:
+def norm_team(s: str) -> str:
+    if not s or (isinstance(s, float) and pd.isna(s)):
+        return ""
+    s = unicodedata.normalize("NFKD", str(s))
+    s = "".join(c for c in s if not unicodedata.combining(c))
+    s = re.sub(r"[^a-z0-9]+", "", s.lower().strip())
+    return s
+
+def _fetch_roster(league: str, team_id: str, team_name: str = "") -> Dict[str, Tuple[str, str]]:
     url  = ESPN_ROSTER_URL.format(league=league, team_id=team_id)
     data = _safe_get_json(url)
     if not data:
         return {}
-    result: Dict[str, str] = {}
+    result: Dict[str, Tuple[str, str]] = {}
+    team_norm = norm_team(team_name)
     athletes = data.get("athletes") or []
     if athletes and isinstance(athletes[0], dict) and "items" in athletes[0]:
         flat = []
@@ -185,12 +197,17 @@ def _fetch_roster(league: str, team_id: str) -> Dict[str, str]:
         aid  = str(a.get("id", "")).strip()
         name = str(a.get("displayName", a.get("fullName", a.get("name", "")))).strip()
         if aid.isdigit() and int(aid) > 100 and name:
-            result[norm_name(name)] = aid
+            result[norm_name(name)] = (aid, team_norm)
     return result
 
 ROSTER_CACHE_MAX_AGE_DAYS = 7  # Auto-rebuild roster cache if older than this
 
-def build_roster_id_map(leagues: List[str], workers: int = 20, roster_cache_path: str = "", force_refresh: bool = False) -> Dict[str, str]:
+def build_roster_id_map(
+    leagues: List[str],
+    workers: int = 20,
+    roster_cache_path: str = "",
+    force_refresh: bool = False,
+) -> Tuple[Dict[str, str], Dict[Tuple[str, str], str]]:
     if roster_cache_path and os.path.exists(roster_cache_path) and not force_refresh:
         try:
             cache_age_days = (time.time() - os.path.getmtime(roster_cache_path)) / 86400
@@ -202,7 +219,21 @@ def build_roster_id_map(leagues: List[str], workers: int = 20, roster_cache_path
                     cached = dict(zip(cdf["player_norm"], cdf["espn_athlete_id"]))
                     cached = {k: v for k, v in cached.items() if v.strip()}
                     print(f"  ✅ Loaded roster cache: {len(cached)} players from {roster_cache_path} (age: {cache_age_days:.1f}d)")
-                    return cached
+                    by_last_team: Dict[Tuple[str, str], str] = {}
+                    if "team_norm" in cdf.columns:
+                        for _, rr in cdf.iterrows():
+                            pnorm = str(rr.get("player_norm", "")).strip()
+                            aid = str(rr.get("espn_athlete_id", "")).strip()
+                            tnorm = str(rr.get("team_norm", "")).strip()
+                            if not pnorm or not aid:
+                                continue
+                            parts = pnorm.split()
+                            if not parts:
+                                continue
+                            last = parts[-1]
+                            if tnorm:
+                                by_last_team[(last, tnorm)] = aid
+                    return cached, by_last_team
         except Exception as e:
             print(f"  ⚠️ Could not load roster cache: {e}")
 
@@ -217,40 +248,51 @@ def build_roster_id_map(leagues: List[str], workers: int = 20, roster_cache_path
 
     print(f"  Fetching rosters for {len(all_teams)} teams (workers={workers})...")
     combined: Dict[str, str] = {}
-
-    try:
-        from tqdm import tqdm as _tqdm
-    except ImportError:
-        import subprocess as _sp, sys as _sys
-        _sp.check_call([_sys.executable, "-m", "pip", "install", "tqdm", "--break-system-packages", "-q"])
-        from tqdm import tqdm as _tqdm
+    by_last_team: Dict[Tuple[str, str], str] = {}
 
     def _fetch_one(args):
-        league, team_id, _ = args
-        return _fetch_roster(league, team_id)
+        league, team_id, team_name = args
+        return _fetch_roster(league, team_id, team_name)
 
     with ThreadPoolExecutor(max_workers=workers) as pool:
         futures = {pool.submit(_fetch_one, t): t for t in all_teams}
-        with _tqdm(total=len(all_teams), desc="Fetching rosters", unit="team") as pbar:
-            for i, fut in enumerate(as_completed(futures), 1):
-                try:
-                    roster = fut.result()
-                    combined.update(roster)
-                except Exception:
-                    pass
-                pbar.set_postfix(players=len(combined))
-                pbar.update(1)
+        done = 0
+        for fut in as_completed(futures):
+            done += 1
+            try:
+                roster = fut.result()
+                for pnorm, (aid, tnorm) in roster.items():
+                    combined[pnorm] = aid
+                    parts = pnorm.split()
+                    if parts and tnorm:
+                        by_last_team[(parts[-1], tnorm)] = aid
+            except Exception:
+                pass
+            if done % 25 == 0 or done == len(all_teams):
+                print(f"    roster progress: {done}/{len(all_teams)} teams, players={len(combined)}")
 
     if roster_cache_path and combined:
-        pd.DataFrame([{"player_norm": k, "espn_athlete_id": v} for k, v in combined.items()]) \
+        rows = []
+        for k, v in combined.items():
+            parts = k.split()
+            tnorm = ""
+            if parts:
+                for (last, team_norm), aid in by_last_team.items():
+                    if aid == v and last == parts[-1]:
+                        tnorm = team_norm
+                        break
+            rows.append({"player_norm": k, "espn_athlete_id": v, "team_norm": tnorm})
+        pd.DataFrame(rows) \
           .to_csv(roster_cache_path, index=False, encoding="utf-8-sig")
         print(f"  Saved roster cache → {roster_cache_path}")
 
-    return combined
+    return combined, by_last_team
 
 def build_espn_id_cache_concurrent(
     names: List[str],
     existing_cache: Dict[str, str],
+    player_team_hints: Dict[str, str],
+    manual_map: Dict[Tuple[str, str], str],
     workers: int = 20,
     roster_cache_path: str = "",
     force_refresh: bool = False,
@@ -264,15 +306,32 @@ def build_espn_id_cache_concurrent(
         return cache
 
     print(f"  Need to resolve {len(need)} players — using roster-based lookup...")
-    roster_map = build_roster_id_map(LEAGUE_SLUGS_FOR_ROSTER, workers=workers, roster_cache_path=roster_cache_path, force_refresh=force_refresh)
+    roster_map, roster_last_team = build_roster_id_map(
+        LEAGUE_SLUGS_FOR_ROSTER,
+        workers=workers,
+        roster_cache_path=roster_cache_path,
+        force_refresh=force_refresh,
+    )
 
     resolved = failed = 0
     for name in need:
         key = norm_name(name)
         if not key:
             continue
+        team_hint = norm_team(player_team_hints.get(key, ""))
         aid = roster_map.get(key, "")
 
+        # Fallback 1: manual persistent map (normalized name + team).
+        if not aid and team_hint:
+            aid = manual_map.get((key, team_hint), "")
+
+        # Fallback 2: last-name-only match within same team.
+        if not aid and team_hint:
+            parts = key.split()
+            if parts:
+                aid = roster_last_team.get((parts[-1], team_hint), "")
+
+        # Fallback 3: loose last-name + first-initial across all rosters.
         if not aid:
             parts = key.split()
             if len(parts) >= 2:
@@ -445,6 +504,46 @@ def main() -> None:
                 print(f"  ⚠️ Could not load ID cache: {e}")
 
         singles_mask = df["is_combo_player"] == 0
+        old_exact_rate = 0.0
+        if singles_mask.any() and id_cache:
+            _old_keys = df.loc[singles_mask, "player"].apply(norm_name)
+            _old_ids = _old_keys.map(id_cache).fillna("")
+            old_exact_rate = float((_old_ids.astype(str).str.strip() != "").mean())
+        print(f"[SOCCER ID] Old exact/cache-only match rate: {old_exact_rate*100:.1f}%")
+
+        # Team hints for player-level fallback matching.
+        player_team_hints: Dict[str, str] = {}
+        for _, rr in df.loc[singles_mask, ["player", "team"]].iterrows():
+            pk = norm_name(rr.get("player", ""))
+            if pk and pk not in player_team_hints:
+                player_team_hints[pk] = str(rr.get("team", "") or "")
+        if combos_mask.any():
+            for _, rr in df.loc[combos_mask, ["player_1", "team_1", "player_2", "team_2"]].iterrows():
+                pk1 = norm_name(rr.get("player_1", ""))
+                pk2 = norm_name(rr.get("player_2", ""))
+                if pk1 and pk1 not in player_team_hints:
+                    player_team_hints[pk1] = str(rr.get("team_1", "") or "")
+                if pk2 and pk2 not in player_team_hints:
+                    player_team_hints[pk2] = str(rr.get("team_2", "") or "")
+
+        # Persistent manual map for hand-curated PP->ESPN IDs.
+        manual_map: Dict[Tuple[str, str], str] = {}
+        manual_path = Path(args.output).resolve().parent / "pp_to_espn_id_map_soccer.csv"
+        if not manual_path.exists():
+            manual_path = Path(MANUAL_PP_MAP_PATH)
+        if manual_path.exists():
+            try:
+                mdf = pd.read_csv(manual_path, dtype=str).fillna("")
+                for _, rr in mdf.iterrows():
+                    pname = norm_name(rr.get("player_name", rr.get("player", "")))
+                    pteam = norm_team(rr.get("team", ""))
+                    aid = str(rr.get("espn_athlete_id", rr.get("espn_player_id", ""))).strip()
+                    if pname and pteam and aid:
+                        manual_map[(pname, pteam)] = aid
+                print(f"  Loaded manual PP->ESPN map: {len(manual_map)} rows from {manual_path}")
+            except Exception as e:
+                print(f"  ⚠️ Could not load manual map {manual_path}: {e}")
+
         all_names = (
             df.loc[singles_mask, "player"].tolist()
             + df.loc[combos_mask, "player_1"].tolist()
@@ -452,7 +551,10 @@ def main() -> None:
         )
 
         id_cache = build_espn_id_cache_concurrent(
-            all_names, id_cache, workers=args.workers,
+            all_names, id_cache,
+            player_team_hints=player_team_hints,
+            manual_map=manual_map,
+            workers=args.workers,
             roster_cache_path=args.rostercache,
             force_refresh=args.refresh_roster,
         )
@@ -478,6 +580,26 @@ def main() -> None:
                 ids = sorted([int(id1), int(id2)])
                 df.at[idx, "espn_player_id"] = f"{ids[0]}{COMBO_SEP}{ids[1]}"
             df.loc[df.index[combos_mask][~both_ok.values], "id_status"] = "UNRESOLVED_COMBO"
+
+        new_match_rate = float((df["espn_player_id"].astype(str).str.strip() != "").mean())
+        print(f"[SOCCER ID] New match rate (after fallbacks): {new_match_rate*100:.1f}%")
+
+        # Persist unresolved list for manual map review.
+        unresolved = df[df["espn_player_id"].astype(str).str.strip() == ""].copy()
+        if not unresolved.empty:
+            if "start_time" in unresolved.columns and unresolved["start_time"].astype(str).str.strip().ne("").any():
+                ds = pd.to_datetime(unresolved["start_time"], errors="coerce").min()
+                date_tag = ds.strftime("%Y-%m-%d") if pd.notna(ds) else datetime.now().strftime("%Y-%m-%d")
+            else:
+                date_tag = datetime.now().strftime("%Y-%m-%d")
+            unmatched_path = Path(args.output).resolve().parent / f"unmatched_soccer_players_{date_tag}.csv"
+            keep_cols = [c for c in ["player", "team", "prop_type", "pp_game_id"] if c in unresolved.columns]
+            unresolved[keep_cols].rename(columns={"player": "player_name"}).drop_duplicates().to_csv(
+                unmatched_path, index=False, encoding="utf-8-sig"
+            )
+            print(f"[SOCCER ID] Wrote unresolved players: {unmatched_path}")
+        else:
+            print("[SOCCER ID] All players resolved after fallback matching.")
     else:
         print("  ⚠️ Skipping ESPN ID lookup (--skip_id_lookup)")
         df["id_status"] = "SKIPPED"

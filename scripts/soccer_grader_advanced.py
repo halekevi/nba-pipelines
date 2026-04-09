@@ -229,6 +229,28 @@ def build_soccer_actuals_lookup(actuals: pd.DataFrame) -> dict[tuple[str, str, s
     return lookup
 
 
+def build_soccer_minutes_lookup(actuals: pd.DataFrame) -> dict[tuple[str, str], float | None]:
+    """
+    Optional minutes lookup from actuals feed.
+    Uses minutes_played if present; otherwise returns empty lookup.
+    """
+    if "minutes_played" not in actuals.columns:
+        return {}
+    out: dict[tuple[str, str], float | None] = {}
+    for _, r in actuals.iterrows():
+        pl = _norm_soccer_player(r.get("player", ""))
+        tm = str(r.get("team", "") or "").strip().upper()
+        if not pl:
+            continue
+        try:
+            mv = float(r.get("minutes_played"))
+        except (TypeError, ValueError):
+            mv = np.nan
+        out[(pl, tm)] = None if pd.isna(mv) else mv
+        out[(pl, "")] = None if pd.isna(mv) else mv
+    return out
+
+
 def _soccer_prop_aliases(prop_norm: str) -> list[str]:
     """Map PrizePicks / slate labels → fetch_actuals.py prop_type strings."""
     pr = prop_norm
@@ -280,6 +302,20 @@ def lookup_soccer_actual(
             if (pl, alt, "") in lut:
                 return lut[(pl, alt, "")]
     return np.nan
+
+
+def lookup_soccer_minutes(
+    minutes_lut: dict[tuple[str, str], float | None],
+    player: str,
+    team: str = "",
+) -> float | None:
+    pl = _norm_soccer_player(player)
+    tm = str(team or "").strip().upper()
+    if not pl:
+        return None
+    if (pl, tm) in minutes_lut:
+        return minutes_lut[(pl, tm)]
+    return minutes_lut.get((pl, ""), None)
 
 
 PROP_PRIORS = {
@@ -577,6 +613,17 @@ def main() -> None:
     slate = normalize_soccer_slate_columns(slate)
     slate = filter_soccer_slate_by_date(slate, args.date)
     actuals_lut = build_soccer_actuals_lookup(actuals)
+    minutes_lut = build_soccer_minutes_lookup(actuals)
+    print("[Soccer Grader] Mapping audit:")
+    _actual_cols = {str(c).strip().lower() for c in actuals.columns}
+    passes_col = "PA" if "pa" in _actual_cols else ("passes" if "passes" in _actual_cols else None)
+    clear_col = "clearances" if "clearances" in _actual_cols else None
+    tackle_col = "TK" if "tk" in _actual_cols else ("tackles" if "tackles" in _actual_cols else None)
+    drib_col = "dribble_attempts" if "dribble_attempts" in _actual_cols else ("dribblesIntentados" if "dribblesintentados" in _actual_cols else None)
+    print(f"  - Passes Attempted: {'ADDED ('+passes_col+')' if passes_col else 'NEEDS_SCRAPER_UPDATE'}")
+    print(f"  - Clearances: {'ADDED ('+clear_col+')' if clear_col else 'NEEDS_SCRAPER_UPDATE'}")
+    print(f"  - Tackles: {'ADDED ('+tackle_col+')' if tackle_col else 'NEEDS_SCRAPER_UPDATE'}")
+    print(f"  - Attempted Dribbles: {'ADDED ('+drib_col+')' if drib_col else 'NEEDS_SCRAPER_UPDATE'}")
     
     opp_cache = None
     if args.opp_cache and Path(args.opp_cache).exists():
@@ -591,6 +638,8 @@ def main() -> None:
     # Grade
     print("[Soccer Grader] Grading props...")
     graded = []
+    legacy_hits = legacy_miss = legacy_push = 0
+    no_data_void_rows = 0
     
     for _, slate_row in slate.iterrows():
         player = slate_row.get("player", "")
@@ -611,10 +660,30 @@ def main() -> None:
         tier = slate_row.get("tier", "D")
 
         actual = lookup_soccer_actual(actuals_lut, player, prop_type, team)
+        minutes_played = lookup_soccer_minutes(minutes_lut, player, team)
         
         # Grade
         grader = SoccerGrader(league=league, position=position)
-        result, edge = grader.grade_prop(actual, line, direction)
+        legacy_result, _legacy_edge = grader.grade_prop(actual, line, direction)
+        if legacy_result == "HIT":
+            legacy_hits += 1
+        elif legacy_result == "MISS":
+            legacy_miss += 1
+        elif legacy_result == "PUSH":
+            legacy_push += 1
+
+        # no-data policy: if zero actual and no minutes evidence, VOID rather than MISS
+        if pd.isna(actual):
+            result, edge = "VOID", np.nan
+            no_data_void_rows += 1
+        elif float(actual) == 0.0 and minutes_played is None:
+            result, edge = "VOID", np.nan
+            no_data_void_rows += 1
+        elif float(actual) == 0.0 and float(minutes_played) <= 0:
+            result, edge = "VOID", np.nan
+            no_data_void_rows += 1
+        else:
+            result, edge = grader.grade_prop(actual, line, direction)
         
         opp_analysis = grader.get_opponent_analysis(player, opp_team, prop_type, opp_cache)
         
@@ -641,6 +710,15 @@ def main() -> None:
     
     graded_df = pd.DataFrame(graded)
     print(f"  Graded: {len(graded_df)}")
+    decided = graded_df[graded_df["result"].isin(["HIT", "MISS", "PUSH"])]
+    decided_hits = int((decided["result"] == "HIT").sum())
+    decided_n = int(len(decided))
+    curr_hr = (decided_hits / decided_n * 100) if decided_n else 0.0
+    legacy_n = legacy_hits + legacy_miss + legacy_push
+    legacy_hr = (legacy_hits / legacy_n * 100) if legacy_n else 0.0
+    print(f"  Hit rate now: {curr_hr:.1f}% ({decided_hits}/{decided_n})")
+    print(f"  Est pre-fix hit rate: {legacy_hr:.1f}% ({legacy_hits}/{legacy_n})")
+    print(f"  no_data->VOID rows: {no_data_void_rows}")
     
     # Analytics
     print("[Soccer Grader] Running analytics...")
