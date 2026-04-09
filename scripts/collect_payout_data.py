@@ -24,6 +24,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SAMPLES_DIR = ROOT / "data" / "payout_samples"
 DEBUG_DIR = ROOT / "data" / "debug"
 _LOOKUP_DIAG_PRINTED = False
+_POPULAR_READY = False
 
 
 def _norm(s: Any) -> str:
@@ -170,6 +171,80 @@ def _scroll_board_for_lazy_load(page):
         page.wait_for_timeout(1000)
 
 
+def ensure_popular_filter(page):
+    global _POPULAR_READY
+    if _POPULAR_READY:
+        return
+    selectors = [
+        "button:has-text('Popular')",
+        "[data-testid='popular-filter']",
+        "text=Popular",
+    ]
+    clicked = False
+    for sel in selectors:
+        try:
+            loc = page.locator(sel).first
+            if loc.count() > 0:
+                loc.click(timeout=1200)
+                clicked = True
+                break
+        except Exception:
+            continue
+    page.wait_for_timeout(1000)
+    _scroll_board_for_lazy_load(page)
+    cards = _extract_cards_data_js(page)
+    print(f"[LOOKUP] Popular filter click: {'OK' if clicked else 'NOT FOUND'}")
+    print(f"[LOOKUP] Cards visible after Popular click: {len(cards)}")
+    try:
+        DEBUG_DIR.mkdir(parents=True, exist_ok=True)
+        ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        shot = DEBUG_DIR / f"after_popular_{ts}.png"
+        page.screenshot(path=str(shot), full_page=True)
+        print(f"[LOOKUP] Popular screenshot saved: {shot}")
+    except Exception:
+        pass
+    _POPULAR_READY = True
+
+
+def _extract_cards_data_js(page) -> list[dict]:
+    return page.evaluate(
+        """
+        () => {
+          const allElements = document.querySelectorAll('*');
+          const cards = [];
+          for (const el of allElements) {
+            const text = (el.innerText || '').trim();
+            if (!text) continue;
+            if ((text.includes(' vs ') || text.includes(' @ '))
+                && /\\d+\\.?\\d*/.test(text)
+                && text.length < 200
+                && text.length > 20) {
+              const r = el.getBoundingClientRect();
+              cards.push({
+                text,
+                tag: el.tagName,
+                rect: {x: r.x, y: r.y, w: r.width, h: r.height}
+              });
+            }
+          }
+          const seen = new Set();
+          return cards.filter(c => {
+            if (seen.has(c.text)) return false;
+            seen.add(c.text);
+            return true;
+          }).slice(0, 200);
+        }
+        """
+    )
+
+
+def _player_name_from_card_text(text: str) -> str | None:
+    lines = [l.strip() for l in str(text or "").split("\n") if l.strip()]
+    if len(lines) > 1:
+        return lines[1]
+    return None
+
+
 def _collect_visible_players(page) -> tuple[list[str], str | None, dict[str, int]]:
     selectors_to_try = [
         "[data-testid='player-name']",
@@ -198,6 +273,23 @@ def _collect_visible_players(page) -> tuple[list[str], str | None, dict[str, int
                 best_sel = sel
         except Exception:
             selector_counts[sel] = 0
+    # JS fallback for React/hashed classes.
+    cards_data = _extract_cards_data_js(page)
+    js_players: list[str] = []
+    for card in cards_data:
+        nm = _player_name_from_card_text(card.get("text", ""))
+        if nm:
+            js_players.append(nm)
+    js_players = list(dict.fromkeys(js_players))
+    selector_counts["__js_card_text_parse__"] = len(js_players)
+    if len(js_players) > len(best_vals):
+        best_vals = js_players
+        best_sel = "__js_card_text_parse__"
+    # print raw card text sample for diagnosis
+    if cards_data:
+        print("[LOOKUP] JS card text samples:")
+        for c in cards_data[:10]:
+            print(f"  - {str(c.get('text',''))[:100]}")
     return best_vals, best_sel, selector_counts
 
 
@@ -231,6 +323,37 @@ def _click_player_direction(page, matched_name: str, direction: str, prop: str) 
                     pass
         except Exception:
             continue
+
+    # JS fallback: find card by player name and click Less/More button in-card.
+    try:
+        btn = "More" if str(direction).upper() == "OVER" else "Less"
+        ok = page.evaluate(
+            """
+            ({ playerName, buttonLabel }) => {
+              const all = document.querySelectorAll('*');
+              for (const el of all) {
+                const t = (el.innerText || '').trim();
+                if (!t.includes(playerName)) continue;
+                if (!((t.includes(' vs ') || t.includes(' @ ')) && t.length < 400)) continue;
+                const btns = el.querySelectorAll('button');
+                for (const b of btns) {
+                  const bt = (b.innerText || '').trim().toLowerCase();
+                  if (bt === buttonLabel.toLowerCase()) {
+                    b.click();
+                    return true;
+                  }
+                }
+              }
+              return false;
+            }
+            """,
+            {"playerName": matched_name, "buttonLabel": btn},
+        )
+        if ok:
+            page.wait_for_timeout(250)
+            return True
+    except Exception:
+        pass
 
     # Fallback: click matched name text then click direction globally.
     try:
@@ -328,6 +451,7 @@ def add_leg(page, leg: dict) -> bool:
     prop = leg["prop_type"]
     direction = str(leg["direction"]).upper()
     try:
+        ensure_popular_filter(page)
         _scroll_board_for_lazy_load(page)
         visible_players, best_sel, sel_counts = _collect_visible_players(page)
         if not _LOOKUP_DIAG_PRINTED:
@@ -335,8 +459,8 @@ def add_leg(page, leg: dict) -> bool:
             for sel, n in sel_counts.items():
                 print(f"  {sel}: {n}")
             print(f"[LOOKUP] Using selector: {best_sel or '(none)'}")
-            print("[LOOKUP] First 10 visible players:")
-            for nm in visible_players[:10]:
+            print("[LOOKUP] First 5 visible players:")
+            for nm in visible_players[:5]:
                 print(f"  - {nm}")
             _LOOKUP_DIAG_PRINTED = True
 
@@ -426,6 +550,40 @@ def read_payout_from_dom(page) -> tuple[float | None, float | None, float | None
         m2 = re.search(r"(?:\d+\s*out\s*of\s*\d+|miss\s*1)[^0-9]*(\d+(?:\.\d+)?)\s*x", txt, flags=re.I)
         if m2:
             flex_miss1 = float(m2.group(1))
+    except Exception:
+        pass
+    try:
+        slip_text = page.evaluate(
+            """
+            () => {
+              const all = document.querySelectorAll('*');
+              for (const el of all) {
+                const t = (el.innerText || '').trim();
+                if (t.includes('To Win') && t.length < 200) return t;
+              }
+              return null;
+            }
+            """
+        )
+        print(f"[LOOKUP] Slip panel text: {slip_text}")
+    except Exception:
+        pass
+    try:
+        mult_candidates = page.evaluate(
+            """
+            () => {
+              const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+              const out = [];
+              let node;
+              while (node = walker.nextNode()) {
+                const t = (node.textContent || '').trim();
+                if (/^\\d+\\.?\\d*x$/.test(t)) out.push(t);
+              }
+              return out.slice(0, 20);
+            }
+            """
+        )
+        print(f"[LOOKUP] Multiplier candidates: {mult_candidates}")
     except Exception:
         pass
     return displayed, flex_first, flex_miss1
