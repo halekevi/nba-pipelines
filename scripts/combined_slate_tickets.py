@@ -12,6 +12,7 @@ Cross-book lines (optional):
   Place CSVs next to the combined output, then pass --underdog-csv / --draftkings-csv (or use run_pipeline
   when files exist under outputs/<date>/):
     outputs/<date>/underdog_props.csv   ← fetch_underdog_pickem.py --output ...
+    outputs/<date>/draftkings_props_all.csv ← merge_draftkings_pickem_csvs.py (NBA+NHL+MLB+CBB), or
     outputs/<date>/draftkings_props_nba.csv ← fetch_draftkings_player_props.py --league nba -o ...
   Join is on sport + team + normalized player + normalized prop label (best-effort; DK/UD naming differs).
 
@@ -5841,7 +5842,7 @@ def main():
         "--draftkings-csv",
         default="",
         help="Optional DraftKings sportsbook CSV with board_sport column. "
-        "If omitted and outputs/<date>/draftkings_props_nba.csv exists, it is used.",
+        "If omitted, uses outputs/<date>/draftkings_props_all.csv if present, else draftkings_props_nba.csv.",
     )
 
     # Web outputs
@@ -5934,13 +5935,18 @@ def main():
 
     _repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     _auto_ud = os.path.join(_repo_root, "outputs", args.date, "underdog_props.csv")
-    _auto_dk = os.path.join(_repo_root, "outputs", args.date, "draftkings_props_nba.csv")
+    _auto_dk_all = os.path.join(_repo_root, "outputs", args.date, "draftkings_props_all.csv")
+    _auto_dk_nba = os.path.join(_repo_root, "outputs", args.date, "draftkings_props_nba.csv")
     if not str(args.underdog_csv).strip() and os.path.isfile(_auto_ud):
         args.underdog_csv = _auto_ud
         print(f"  [alt-books] Using Underdog CSV: {_auto_ud}")
-    if not str(args.draftkings_csv).strip() and os.path.isfile(_auto_dk):
-        args.draftkings_csv = _auto_dk
-        print(f"  [alt-books] Using DraftKings CSV: {_auto_dk}")
+    if not str(args.draftkings_csv).strip():
+        if os.path.isfile(_auto_dk_all):
+            args.draftkings_csv = _auto_dk_all
+            print(f"  [alt-books] Using DraftKings CSV: {_auto_dk_all}")
+        elif os.path.isfile(_auto_dk_nba):
+            args.draftkings_csv = _auto_dk_nba
+            print(f"  [alt-books] Using DraftKings CSV: {_auto_dk_nba}")
 
     tiers = [t.strip() for t in args.tiers.split(",") if t.strip()]
     pick_types = [p.strip() for p in args.pick_types.split(",") if p.strip()]
@@ -6152,8 +6158,9 @@ def main():
     if _n_ud == 0 and _n_dk == 0:
         print(
             "  [alt-books] No Underdog/DraftKings lines merged (all blank). "
-            f"Fetch into outputs/{args.date}/underdog_props.csv and "
-            f"outputs/{args.date}/draftkings_props_nba.csv, then re-run this script."
+            f"Run run_pipeline.ps1 (alt-book fetch before combined) or write "
+            f"outputs/{args.date}/underdog_props.csv and "
+            f"outputs/{args.date}/draftkings_props_all.csv (or draftkings_props_nba.csv)."
         )
 
     print(f"  {len(combined)} total props")

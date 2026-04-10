@@ -19,6 +19,7 @@
 #    .\run_pipeline.ps1 -RefreshCache          # Wipe + rebuild ESPN cache before NBA
 #    .\run_pipeline.ps1 -CacheAgeDays 7        # Auto-wipe cache if older than N days
 #    .\run_pipeline.ps1 -SkipDailyGrader       # Skip run_grader + grade HTML git push after combined
+#    .\run_pipeline.ps1 -SkipAltBooks          # Skip Underdog + DraftKings fetch before combined (geo/403)
 #
 #  Combined always auto-includes every sport whose step8 output exists on disk.
 #  No -Include flags needed -- just run any sport, combined picks it up.
@@ -43,6 +44,7 @@ param(
     [switch]$ForceAll,
     [switch]$SkipDailyGrader,
     [switch]$RunPayoutEngine,
+    [switch]$SkipAltBooks,
     [int]$CacheAgeDays = 7
 )
 
@@ -251,6 +253,76 @@ function Run-GitPushGradeArtifacts {
 
 # Run-PostPipelineGrader is defined in run_post_pipeline_grader.ps1 (dot-sourced above).
 
+# -- Alt-book fetch (Underdog + DraftKings); failures are non-fatal for combined ----------
+function Invoke-AltBookPy {
+    param(
+        [string]$Label,
+        [string]$RelScript,
+        [string]$Arguments
+    )
+    Write-Host "  --> $Label" -ForegroundColor Yellow
+    Push-Location $Root
+    try {
+        $cmd = "py -3.14 `"$RelScript`" $Arguments"
+        Write-Host "        CMD: $cmd" -ForegroundColor DarkGray
+        $output = Invoke-Expression $cmd 2>&1
+        $exit   = $LASTEXITCODE
+        foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
+        if ($exit -ne 0) {
+            Write-Host "      [alt-books] WARN exit $exit (continuing)" -ForegroundColor Yellow
+        } else {
+            Write-Host "      OK" -ForegroundColor Green
+        }
+    } catch {
+        Write-Host "      [alt-books] WARN: $_" -ForegroundColor Yellow
+    } finally {
+        Pop-Location
+    }
+}
+
+function Invoke-AltBookFetches {
+    if ($SkipAltBooks) {
+        Write-Host "  [alt-books] Skipped (-SkipAltBooks)" -ForegroundColor DarkGray
+        return
+    }
+    $UdScript    = Join-Path $Root "scripts\fetch_underdog_pickem.py"
+    $DkScript    = Join-Path $Root "scripts\fetch_draftkings_player_props.py"
+    $MergeScript = Join-Path $Root "scripts\merge_draftkings_pickem_csvs.py"
+    if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force -Path $OutDir | Out-Null }
+
+    Write-Host "  [alt-books] Fetching Underdog + DraftKings for cross-book columns..." -ForegroundColor Cyan
+    $UdOut = Join-Path $OutDir "underdog_props.csv"
+    if (Test-Path $UdScript) {
+        Invoke-AltBookPy "Underdog pick'em (ALL sports)" ".\scripts\fetch_underdog_pickem.py" "--sport ALL --output `"$UdOut`" --min-rows 0"
+    } else {
+        Write-Host "  [alt-books] WARN missing scripts\fetch_underdog_pickem.py" -ForegroundColor Yellow
+    }
+
+    $dkFiles = [System.Collections.Generic.List[string]]::new()
+    if (Test-Path $DkScript) {
+        foreach ($row in @(
+            @{ league = "nba"; name = "dk_props_nba.csv" },
+            @{ league = "nhl"; name = "dk_props_nhl.csv" },
+            @{ league = "mlb"; name = "dk_props_mlb.csv" },
+            @{ league = "cbb"; name = "dk_props_cbb.csv" }
+        )) {
+            $part = Join-Path $OutDir $row.name
+            Invoke-AltBookPy "DraftKings $($row.league.ToUpper())" ".\scripts\fetch_draftkings_player_props.py" "--league $($row.league) -o `"$part`""
+            if (Test-Path $part) { [void]$dkFiles.Add($part) }
+        }
+        $DkAll = Join-Path $OutDir "draftkings_props_all.csv"
+        if ($dkFiles.Count -gt 0 -and (Test-Path $MergeScript)) {
+            $inList = ($dkFiles | ForEach-Object { "`"$_`"" }) -join " "
+            Invoke-AltBookPy "Merge DraftKings CSVs" ".\scripts\merge_draftkings_pickem_csvs.py" "--inputs $inList -o `"$DkAll`""
+        } elseif ($dkFiles.Count -gt 0 -and -not (Test-Path $MergeScript)) {
+            Write-Host "  [alt-books] WARN missing merge_draftkings_pickem_csvs.py — using first league file only" -ForegroundColor Yellow
+            Copy-Item $dkFiles[0] $DkAll -Force -ErrorAction SilentlyContinue
+        }
+    } else {
+        Write-Host "  [alt-books] WARN missing scripts\fetch_draftkings_player_props.py" -ForegroundColor Yellow
+    }
+}
+
 # -- Helper: run combined, auto-detect all sports on disk ---------------------
 function Run-Combined {
     param([string]$Reason = "")
@@ -272,6 +344,8 @@ function Run-Combined {
 
     if (-not (Test-Path $nbaFile)) { Write-Host "  WARNING: NBA step8 not found -- skipping combined" -ForegroundColor Yellow; return $false }
 
+    Invoke-AltBookFetches
+
     $CombinedOut  = Join-Path $Root "combined_slate_tickets_$Date.xlsx"
     $CombinedArgs  = "--nba `"$nbaFile`""
     if (Test-Path $cbbFile) { Write-Host "  [CBB] present on disk but deactivated for combined build" -ForegroundColor DarkGray }
@@ -280,6 +354,21 @@ function Run-Combined {
     if (Test-Path $soccerFile) { $CombinedArgs += " --soccer `"$soccerFile`""; Write-Host "  [+] Soccer" -ForegroundColor DarkGray }
     if (Test-Path $tennisFile) { $CombinedArgs += " --tennis `"$tennisFile`""; Write-Host "  [+] Tennis" -ForegroundColor DarkGray }
     if (Test-Path $mlbFile)    { $CombinedArgs += " --mlb `"$mlbFile`"";       Write-Host "  [+] MLB"    -ForegroundColor DarkGray }
+
+    $UdCsv = Join-Path $OutDir "underdog_props.csv"
+    $DkAll = Join-Path $OutDir "draftkings_props_all.csv"
+    $DkNba = Join-Path $OutDir "draftkings_props_nba.csv"
+    if (Test-Path $UdCsv) {
+        $CombinedArgs += " --underdog-csv `"$UdCsv`""
+        Write-Host "  [alt-books] Passing Underdog CSV" -ForegroundColor DarkGray
+    }
+    if (Test-Path $DkAll) {
+        $CombinedArgs += " --draftkings-csv `"$DkAll`""
+        Write-Host "  [alt-books] Passing DraftKings merged CSV" -ForegroundColor DarkGray
+    } elseif (Test-Path $DkNba) {
+        $CombinedArgs += " --draftkings-csv `"$DkNba`""
+        Write-Host "  [alt-books] Passing DraftKings NBA CSV" -ForegroundColor DarkGray
+    }
 
     $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --max-tickets 3 --write-web --web-outdir `"$WebOutDir`""
 

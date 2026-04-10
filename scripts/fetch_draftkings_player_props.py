@@ -16,7 +16,8 @@ Examples:
   py -3 scripts/fetch_draftkings_player_props.py --league cbb -o dk_cbb_props.csv
   py -3 scripts/fetch_draftkings_player_props.py --league nfl --categories "Passing Props" "Rush/Rec Props" -o dk_nfl.csv
 
-NBA cross-book merge in combined_slate expects outputs/YYYY-MM-DD/draftkings_props_nba.csv by default.
+run_pipeline.ps1 merges NBA+NHL+MLB+CBB into outputs/YYYY-MM-DD/draftkings_props_all.csv; combined_slate
+  also accepts a single-league file draftkings_props_nba.csv.
   py -3 scripts/fetch_draftkings_player_props.py --list-categories --league nba
 
 Notes:
