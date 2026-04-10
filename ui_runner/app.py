@@ -206,15 +206,21 @@ _JSON_BASE_DEFAULT = (
 _TICKETS_JSON_URL = os.environ.get("TICKETS_JSON_URL", "").strip()
 _SLATE_JSON_URL = os.environ.get("SLATE_JSON_URL", "").strip()
 _TICKET_EVAL_SLATE_JSON_URL = os.environ.get("TICKET_EVAL_SLATE_JSON_URL", "").strip()
+_TICKET_EV_JSON_URL = os.environ.get("TICKET_EV_JSON_URL", "").strip()
 
 if not os.environ.get("DISABLE_AUTO_GITHUB_JSON", "").strip() and _running_on_railway():
     _base = os.environ.get("PROPORACLE_RAW_JSON_BASE", _JSON_BASE_DEFAULT).rstrip("/")
+    _root_base = _base
+    if _root_base.endswith("/ui_runner/templates"):
+        _root_base = _root_base[: -len("/ui_runner/templates")]
     if not _SLATE_JSON_URL:
         _SLATE_JSON_URL = f"{_base}/slate_latest.json"
     if not _TICKETS_JSON_URL:
         _TICKETS_JSON_URL = f"{_base}/tickets_latest.json"
     if not _TICKET_EVAL_SLATE_JSON_URL:
         _TICKET_EVAL_SLATE_JSON_URL = f"{_base}/ticket_eval_slate_latest.json"
+    if not _TICKET_EV_JSON_URL:
+        _TICKET_EV_JSON_URL = f"{_root_base}/outputs/ticket_ev_latest.json"
 
 _DATA_FILE_URL_MAP: dict[str, str] = {}
 if _TICKETS_JSON_URL:
@@ -223,6 +229,8 @@ if _SLATE_JSON_URL:
     _DATA_FILE_URL_MAP["slate_latest.json"] = _SLATE_JSON_URL
 if _TICKET_EVAL_SLATE_JSON_URL:
     _DATA_FILE_URL_MAP["ticket_eval_slate_latest.json"] = _TICKET_EVAL_SLATE_JSON_URL
+if _TICKET_EV_JSON_URL:
+    _DATA_FILE_URL_MAP["ticket_ev_latest.json"] = _TICKET_EV_JSON_URL
 
 
 def _template_json_available(filename: str) -> bool:
@@ -1802,6 +1810,87 @@ def api_tickets_latest():
         return resp
     except Exception as e:
         return jsonify({"error": str(e), "groups": []}), 500
+
+
+def _ticket_ev_path() -> Path:
+    return OUTPUTS_ROOT / "ticket_ev_latest.json"
+
+
+@app.get("/api/tickets-ev-top20")
+def api_tickets_ev_top20():
+    """
+    Top EV slips from outputs/ticket_ev_latest.json, optimized for mobile rendering.
+    """
+    path = _ticket_ev_path()
+    if not (_template_json_available("ticket_ev_latest.json") or path.exists()):
+        return jsonify({"error": "ticket_ev_latest.json not found", "tickets": []}), 404
+    try:
+        data = read_json_cached(path)
+    except Exception as e:
+        return jsonify({"error": str(e), "tickets": []}), 500
+
+    groups = list((data or {}).get("groups") or [])
+    if not groups:
+        return jsonify(
+            {
+                "date": (data or {}).get("date"),
+                "generated_at": (data or {}).get("generated_at"),
+                "group_name": "",
+                "tickets": [],
+            }
+        )
+
+    grp = groups[0]
+    tickets = list(grp.get("tickets") or [])
+    tickets = sorted(
+        tickets,
+        key=lambda t: float(t.get("ev_power") or 0.0),
+        reverse=True,
+    )[:20]
+
+    out = []
+    for t in tickets:
+        legs = [str((lg or {}).get("label") or "") for lg in (t.get("legs") or [])]
+        out.append(
+            {
+                "ticket_no": t.get("ticket_no"),
+                "n_legs": t.get("n_legs"),
+                "est_win_prob": t.get("est_win_prob"),
+                "power_payout": t.get("power_payout"),
+                "ev_power": t.get("ev_power"),
+                "sports": t.get("sports") or [],
+                "recommendation": t.get("recommendation") or "",
+                "correlation_flag": t.get("correlation_flag") or "",
+                "legs": legs,
+            }
+        )
+
+    r = jsonify(
+        {
+            "date": (data or {}).get("date"),
+            "generated_at": (data or {}).get("generated_at"),
+            "group_name": grp.get("group_name") or "TOP20 Exact EV",
+            "tickets": out,
+        }
+    )
+    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    return r
+
+
+@app.get("/tickets/ev")
+def page_tickets_ev():
+    r = make_response(
+        render_template(
+            "tickets_ev_top20.html",
+            ui_build_id=_UI_BUILD_ID,
+            deploy_git_sha=(os.environ.get("RAILWAY_GIT_COMMIT_SHA") or os.environ.get("GIT_COMMIT") or "")[:40],
+        )
+    )
+    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    return r
 
 
 @app.get("/api/slate/today-tickets")

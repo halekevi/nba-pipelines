@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-ui-build="{{ ui_build_id|default('', true) }}" data-deploy-sha="{{ deploy_git_sha|default('', true) }}">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#050505"/>
+<title>PropOracle EV Top 20</title>
+<link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260404d"/>
+<link rel="stylesheet" href="/static/site-nav-unified.css?v=20260408"/>
+<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260406"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260406"/>
+<link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
+<style>
+  #app.page-ev{max-width:980px!important}
+  .ev-wrap{display:grid;gap:14px}
+  .ev-head{padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:#0d1117}
+  .ev-title{font-family:"Bebas Neue",sans-serif;letter-spacing:.08em;font-size:32px;color:var(--text);margin:0}
+  .ev-sub{font-size:12px;color:var(--muted);margin-top:6px}
+  .ev-card{padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:#111827}
+  .ev-row{display:flex;justify-content:space-between;gap:10px;align-items:center}
+  .ev-num{font-family:"Share Tech Mono",monospace;color:var(--cyan);font-size:13px}
+  .ev-pill{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid #2f3e52;color:#dbe8ff}
+  .ev-strong{border-color:#1f6f46;color:#9ff5bf}
+  .ev-ok{border-color:#73591e;color:#f3d38c}
+  .ev-legs{margin:10px 0 0 0;padding-left:18px}
+  .ev-legs li{margin:4px 0;color:#d7deea;font-size:13px}
+  .ev-metrics{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:12px}
+  .ev-metrics span{color:var(--muted)}
+  .ev-metrics b{color:var(--text)}
+</style>
+</head>
+<body>
+{% set nav_active = 'tickets_ev' %}
+{% set nav_pill_suffix = 'EV TOP20' %}
+{% include '_site_nav.html' %}
+<div id="app" class="page-ev">
+  <div class="ev-wrap">
+    <div class="ev-head">
+      <h1 class="ev-title">TOP 20 Exact EV Tickets</h1>
+      <div id="evMeta" class="ev-sub">Loading...</div>
+    </div>
+    <div id="evList"></div>
+  </div>
+</div>
+<script src="/static/site-nav-chrome.js?v=20260408"></script>
+<script>
+(async function(){
+  const list = document.getElementById('evList');
+  const meta = document.getElementById('evMeta');
+  function pct(x){ return (x==null || Number.isNaN(Number(x))) ? '—' : (Number(x)*100).toFixed(1)+'%'; }
+  function num(x,d=3){ return (x==null || Number.isNaN(Number(x))) ? '—' : Number(x).toFixed(d); }
+  try{
+    const r = await fetch('/api/tickets-ev-top20', {cache:'no-store'});
+    const j = await r.json();
+    if(!r.ok){ throw new Error(j.error || ('HTTP '+r.status)); }
+    meta.textContent = `${j.group_name || 'TOP20'} • ${j.date || '—'} • built ${j.generated_at || '—'}`;
+    const rows = j.tickets || [];
+    if(!rows.length){
+      list.innerHTML = '<div class="ev-card">No tickets found.</div>';
+      return;
+    }
+    list.innerHTML = rows.map(t=>{
+      const rec = String(t.recommendation||'').toUpperCase();
+      const recCls = rec === 'STRONG' ? 'ev-strong' : 'ev-ok';
+      const sports = (t.sports||[]).join(' + ') || 'Mixed';
+      const legs = (t.legs||[]).map(s => `<li>${s}</li>`).join('');
+      return `<article class="ev-card">
+        <div class="ev-row">
+          <div class="ev-num">#${t.ticket_no ?? '—'} • ${t.n_legs ?? '—'} legs • ${sports}</div>
+          <div class="ev-pill ${recCls}">${rec || 'EV'}</div>
+        </div>
+        <div class="ev-metrics">
+          <span>EV: <b>${num(t.ev_power,3)}x</b></span>
+          <span>Win Prob: <b>${pct(t.est_win_prob)}</b></span>
+          <span>Payout: <b>${num(t.power_payout,1)}x</b></span>
+          <span>Corr: <b>${t.correlation_flag || '—'}</b></span>
+        </div>
+        <ol class="ev-legs">${legs}</ol>
+      </article>`;
+    }).join('');
+  }catch(err){
+    meta.textContent = 'Failed to load EV tickets';
+    list.innerHTML = `<div class="ev-card">Error: ${String(err.message || err)}</div>`;
+  }
+})();
+</script>
+</body>
+</html>
