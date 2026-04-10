@@ -15,9 +15,9 @@ Strategy:
 
 Outputs: step1_pp_props_today.csv  (same schema as before).
 
-Use --merge-existing to union with an existing output file: this fetch replaces
-any matching projection_id; rows present only in the old file are kept (e.g. props
-no longer returned by the API). For a live-board-only snapshot, omit --merge-existing.
+When --output already exists, this script **merges by default**: rows from this fetch
+replace same projection_id; rows only in the old file (IDs not returned today) are kept.
+Use **--replace** to write **only** this fetch (full overwrite, no carry-over).
 """
 
 from __future__ import annotations
@@ -431,9 +431,10 @@ def main() -> None:
         df.to_csv(args.output, index=False, encoding="utf-8-sig")
         sys.exit(1)
 
-    # ── Optional: union with prior output (fresh IDs win; keep API-missing IDs) ─
+    # ── Default: union with prior output when file exists (--replace skips) ───
     out_path = Path(args.output)
-    if args.merge_existing and out_path.is_file():
+    do_merge = out_path.is_file() and not args.replace
+    if do_merge:
         try:
             old = pd.read_csv(out_path, encoding="utf-8-sig")
             for c in EMPTY_COLS:
@@ -451,11 +452,13 @@ def main() -> None:
             n_kept = len(kept)
             df = pd.concat([df, kept], ignore_index=True)
             print(
-                f"\n📎 merge-existing: +{n_kept} rows only in prior file "
-                f"(not in this fetch) → {len(df)} total rows"
+                f"\n📎 Merged with existing file: +{n_kept} prior-only projection_id rows "
+                f"(not in this fetch) → {len(df)} total rows. Use --replace for fetch-only."
             )
         except Exception as e:
-            print(f"\n  [WARN] merge-existing skipped: {e}")
+            print(f"\n  [WARN] merge with existing file skipped: {e}")
+    elif out_path.is_file() and args.replace:
+        print("\n📄 --replace: writing this fetch only (no merge with prior file).")
 
     # ── Write output ──────────────────────────────────────────────────────────
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
