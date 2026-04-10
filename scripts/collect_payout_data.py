@@ -47,6 +47,46 @@ _LOOKUP_DIAG_PRINTED = False
 _POPULAR_READY = False
 
 
+def parse_card_lines(lines: list[str]) -> tuple[str | None, float | None, str | None]:
+    player_name = None
+    line_value = None
+    prop_type = None
+
+    for raw in lines:
+        line = raw.strip()
+        if not line:
+            continue
+        if re.match(r"^\d+\.?\d*[Kk]$", line):
+            continue
+        if re.match(r"^[A-Z]{2,3}\s*[-–]\s*[A-Z]", line):
+            continue
+        if line.startswith("vs ") or line.startswith("@ "):
+            continue
+        if line in ["More", "Less", "More\nLess"]:
+            continue
+
+        if player_name is None and not re.match(r"^\d", line) and len(line) > 3:
+            player_name = line
+            continue
+
+        if line_value is None and re.match(r"^\d+\.?\d*$", line):
+            try:
+                line_value = float(line)
+            except Exception:
+                pass
+            continue
+
+        if (
+            line_value is not None
+            and prop_type is None
+            and any(vp.lower() in line.lower() for vp in VALID_PROP_KEYWORDS)
+        ):
+            prop_type = line
+            continue
+
+    return player_name, line_value, prop_type
+
+
 def _norm(s: Any) -> str:
     return re.sub(r"\s+", " ", str(s or "").strip().lower())
 
@@ -382,44 +422,7 @@ def get_all_cards(frame) -> list[dict]:
                 lines = [l.strip() for l in text.split("\n") if l.strip()]
                 if len(lines) < 3:
                     continue
-                player_name = None
-                prop_type = "unknown"
-                line_value = None
-                stat_line = None
-                for line in lines:
-                    up = line.upper()
-                    if (
-                        not _re.match(r"^[A-Z]{2,3}\s*[-–]", line)
-                        and "vs " not in line.lower()
-                        and "@ " not in line.lower()
-                        and not _re.match(r"^\d", line)
-                        and "PM" not in up
-                        and "AM" not in up
-                        and ":" not in line
-                        and len(line) > 3
-                        and line not in ["More", "Less", "More Less"]
-                    ):
-                        player_name = line
-                        break
-
-                for line in lines:
-                    stat_match = _re.match(r"^([\d\.]+)\s+(.+)$", line)
-                    if not stat_match:
-                        continue
-                    try:
-                        candidate_line = float(stat_match.group(1))
-                    except Exception:
-                        continue
-                    candidate_prop = stat_match.group(2).strip()
-                    prop_match = any(
-                        vp.lower() in candidate_prop.lower()
-                        for vp in VALID_PROP_KEYWORDS
-                    )
-                    if prop_match and candidate_line >= 0.5:
-                        line_value = candidate_line
-                        prop_type = candidate_prop
-                        stat_line = line
-                        break
+                player_name, line_value, prop_type = parse_card_lines(lines)
                 html = str(card_info.get("html", ""))
                 pick_type = "standard"
                 if "goblin" in html.lower() or "goblin" in text.lower():
@@ -427,11 +430,11 @@ def get_all_cards(frame) -> list[dict]:
                 elif "demon" in html.lower() or "demon" in text.lower():
                     pick_type = "demon"
                 has_alt_lines = any(sym in text for sym in ("↔", "⇄", "⟷", "⇆", "↕"))
-                if player_name and line_value is not None:
+                if player_name and line_value is not None and prop_type:
                     cards.append(
                         {
                             "player": player_name,
-                            "prop_type": prop_type if stat_line else "unknown",
+                            "prop_type": prop_type,
                             "line": line_value,
                             "pick_type": pick_type,
                             "has_alt_lines": has_alt_lines,
@@ -448,8 +451,8 @@ def get_all_cards(frame) -> list[dict]:
         print(f"[CARDS] Error: {e}")
         return []
     print(f"[CARDS] Parsed {len(cards)} cards")
-    for c in cards[:5]:
-        print(f"  {c['player']} | {c['line']} {c['prop_type']} | {c['pick_type']}")
+    for c in cards[:10]:
+        print(f"[CARD] {c['player']} | {c['line']} {c['prop_type']} | {c['pick_type']}")
     return cards
 
 
