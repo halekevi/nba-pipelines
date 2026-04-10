@@ -1361,8 +1361,8 @@ def is_valid_record(record: dict) -> tuple[bool, str]:
     if first_v is None and min_g_v is None and mult_v is None:
         return False, "no payout data"
 
-    if first_v is not None and min_g_v is not None and min_g_v >= first_v:
-        return False, f"min_g {min_g_v} >= first {first_v}"
+    if first_v is not None and min_g_v is not None and min_g_v > first_v:
+        return False, f"min_g {min_g_v} > first {first_v}"
 
     max_min_g = {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 37.5}
     if min_g_v is not None and n in max_min_g:
