@@ -567,20 +567,34 @@ def verify_slip_empty(frame, page=None) -> tuple[bool, object]:
             text2 = frame.evaluate("() => document.body.innerText")
             n_selected2 = re.findall(r"(\d+)\s*Players?\s*Selected", text2, re.IGNORECASE)
             if n_selected2 and int(n_selected2[0]) > 0:
-                print("  [WARN] Slip still not empty after retry; reloading board")
+                print("  [WARN] Slip still not empty after retry; reconnecting frame")
                 if page is not None:
                     try:
-                        page.evaluate("() => window.location.reload()")
-                        page.wait_for_timeout(3000)
                         frame = find_prizepicks_frame(page)
                         ensure_popular_filter(frame, page)
                         dismiss_modal(frame, page)
                     except Exception as e:
-                        print(f"  [WARN] Reload recovery failed: {e}")
+                        print(f"  [WARN] Frame reconnect failed: {e}")
                 return False, frame
         return True, frame
     except Exception:
         return True, frame
+
+
+def soft_reset(frame, page):
+    """Clear slip and re-verify frame without page reload."""
+    try:
+        clear_slip(frame)
+        frame.wait_for_timeout(500)
+        text = frame.evaluate("() => document.body.innerText")
+        if "Points" in text or "More" in text:
+            return frame
+    except Exception:
+        pass
+    frame = find_prizepicks_frame(page)
+    ensure_popular_filter(frame, page)
+    dismiss_modal(frame, page)
+    return frame
 
 
 MIN_SAMPLES = {
@@ -671,15 +685,7 @@ def expand_card_pool(frame, page) -> list[dict]:
     for _ in range(3):
         dismiss_modal(frame, page)
         frame.wait_for_timeout(150)
-    filters = [
-        "Points",
-        "Popular",
-        "Assists",
-        "Rebounds",
-        "Turnovers",
-        "Steals",
-        "3-PT Made",
-    ]
+    filters = ["Points", "Assists", "Rebounds", "3-PT Made", "Pts+Asts", "Pts+Reb+Ast"]
     for filter_name in filters:
         try:
             dismiss_modal(frame, page)
@@ -1410,6 +1416,44 @@ def build_standard_line_map(legs: list[dict]) -> dict[tuple[str, str], float]:
     return mp
 
 
+def _reclassify_cards_with_std_map(
+    cards: list[dict],
+    std_line_map: dict[tuple[str, str], float],
+) -> tuple[list[dict], int]:
+    out: list[dict] = []
+    floor_filtered = 0
+    for c in cards:
+        line_val = float(pd.to_numeric(c.get("line"), errors="coerce") or 0.0)
+        if line_val <= 0.5 and c.get("pick_type") != "goblin":
+            floor_filtered += 1
+            continue
+        player_key = _norm(c.get("player"))
+        prop_key = _norm(c.get("prop_type"))
+        std_line = std_line_map.get((player_key, prop_key))
+
+        inferred = "standard"
+        if std_line is not None and std_line > 0:
+            if line_val < float(std_line) * 0.7:
+                inferred = "goblin"
+            elif line_val > float(std_line) * 1.3:
+                inferred = "demon"
+
+        final_pick_type = c.get("pick_type", "standard")
+        if final_pick_type == "standard" and inferred in ("goblin", "demon"):
+            final_pick_type = inferred
+
+        c2 = dict(c)
+        c2["pick_type"] = final_pick_type
+        c2["standard_line"] = std_line
+        c2["line_distance"] = (
+            abs(line_val - float(std_line))
+            if std_line is not None
+            else None
+        )
+        out.append(c2)
+    return out, floor_filtered
+
+
 def choose_leg_sets(legs: list[dict], ticket_type: str) -> list[list[dict]]:
     # Build requested matrix using today's available props.
     std = [x for x in legs if "standard" in x["pick_type"]]
@@ -1553,9 +1597,48 @@ def main():
             page.screenshot(path=str(DEBUG_DIR / "fatal_no_cards.png"), full_page=True)
             return
 
-        standard = [c for c in cards if c["pick_type"] == "standard"]
-        goblins = [c for c in cards if c["pick_type"] == "goblin"]
-        demons = [c for c in cards if c["pick_type"] == "demon"]
+        cards, floor_filtered = _reclassify_cards_with_std_map(cards, std_line_map)
+        print(f"[CARDS] After 0.5-line filter: {len(cards)}")
+        print(f"[CARDS] Floor props filtered out (line <= 0.5): {floor_filtered}")
+
+        standard = [
+            c
+            for c in cards
+            if c["pick_type"] == "standard"
+            and float(pd.to_numeric(c.get("line"), errors="coerce") or 0.0) >= 3.0
+        ]
+        goblins = []
+        demons = []
+        for c in cards:
+            line_val = float(pd.to_numeric(c.get("line"), errors="coerce") or 0.0)
+            std_line = c.get("standard_line")
+            is_distance_goblin = (
+                std_line is not None and std_line > 0 and line_val < float(std_line) * 0.8
+            )
+            is_distance_demon = (
+                std_line is not None and std_line > 0 and line_val > float(std_line) * 1.3
+            )
+            if c.get("pick_type") == "goblin" or is_distance_goblin:
+                goblins.append(c)
+            if c.get("pick_type") == "demon" or is_distance_demon:
+                demons.append(c)
+
+        std_sample = ", ".join(
+            [f"{c['player']} {c['line']} {c['prop_type']}" for c in standard[:3]]
+        ) or "none"
+        gob_sample = ", ".join(
+            [
+                (
+                    f"{c['player']} {c['line']} {c['prop_type']} "
+                    f"(std={c.get('standard_line')}, dist={c.get('line_distance')})"
+                )
+                for c in goblins[:3]
+            ]
+        ) or "none"
+        print(f"[CARDS] Standard legs (line >= 3.0): {len(standard)}")
+        print(f"  Sample: {std_sample}")
+        print(f"[CARDS] Goblin legs (line < std*0.8): {len(goblins)}")
+        print(f"  Sample: {gob_sample}")
         goblins_avail = len(goblins) > 0
         demons_avail = len(demons) > 0
         print(f"[POOL] Standard={len(standard)} Goblin={len(goblins)} Demon={len(demons)}")
@@ -1583,7 +1666,6 @@ def main():
         cases_run = 0
         test_idx = 0
         case_cursor = 0
-        prev_n_legs = None
         seen_combos: set[str] = set()
 
         while cases_run < max_cases:
@@ -1600,16 +1682,6 @@ def main():
                 f"[CASE {test_idx}/{len(test_cases)}] {tc['label']} | "
                 f"legs={case_players}"
             )
-            n_legs = len(tc["legs"])
-            if prev_n_legs is not None and prev_n_legs != n_legs:
-                print(f"[RELOAD] Switching from {prev_n_legs} to {n_legs} legs")
-                page.evaluate("() => window.location.reload()")
-                page.wait_for_timeout(3000)
-                frame = find_prizepicks_frame(page)
-                ensure_popular_filter(frame, page)
-                dismiss_modal(frame, page)
-                _ = get_all_cards(frame)
-            prev_n_legs = n_legs
             print(
                 f"[TARGETS] std={counts['all_standard']}/{MIN_SAMPLES['all_standard']} "
                 f"gob={counts['has_goblin']}/{MIN_SAMPLES['has_goblin']} "
@@ -1617,6 +1689,7 @@ def main():
                 f"flex={counts['flex']}/{MIN_SAMPLES['flex']}"
             )
             try:
+                frame = soft_reset(frame, page)
                 dismiss_modal(frame, page)
                 set_ticket_type(frame, tc["ticket_type"])
                 clear_slip(frame)
