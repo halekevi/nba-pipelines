@@ -23,6 +23,26 @@ from playwright.sync_api import sync_playwright
 ROOT = Path(__file__).resolve().parent.parent
 SAMPLES_DIR = ROOT / "data" / "payout_samples"
 DEBUG_DIR = ROOT / "data" / "debug"
+
+VALID_PROP_KEYWORDS = [
+    "Points",
+    "Assists",
+    "Rebounds",
+    "Steals",
+    "Blocks",
+    "Turnovers",
+    "3-PT Made",
+    "Points+Assists",
+    "Pts+Asts",
+    "Pts+Reb+Ast",
+    "Fantasy Score",
+    "Points+Rebounds",
+    "Rebounds+Assists",
+    "Points+Rebounds+Assists",
+    "FG Attempted",
+    "Free Throws Made",
+    "Minutes",
+]
 _LOOKUP_DIAG_PRINTED = False
 _POPULAR_READY = False
 
@@ -366,33 +386,40 @@ def get_all_cards(frame) -> list[dict]:
                 prop_type = "unknown"
                 line_value = None
                 stat_line = None
-                game_idx = -1
-                for idx, line in enumerate(lines):
-                    if " vs " in line.lower() or " @ " in line.lower():
-                        game_idx = idx
-                        break
-                if game_idx > 0:
-                    for k in range(game_idx - 1, -1, -1):
-                        candidate = lines[k]
-                        if candidate not in ["More", "Less"] and len(candidate) > 2 and not _re.match(r"^[A-Z]{2,3}\s*[-–]", candidate):
-                            player_name = candidate
-                            break
-                if player_name is None:
-                    for line in lines:
-                        if (
-                            not _re.match(r"^[\d\.]+", line)
-                            and line not in ["More", "Less", "More Less"]
-                            and len(line) > 3
-                            and not _re.match(r"^[A-Z]{2,3}\s*[-–]", line)
-                        ):
-                            player_name = line
-                            break
                 for line in lines:
-                    stat_match = _re.match(r"^([0-9]+(?:\.[0-9]+)?)\s*(.+)$", line)
-                    if stat_match:
-                        line_value = float(stat_match.group(1))
-                        prop_type = stat_match.group(2).strip()
+                    up = line.upper()
+                    if (
+                        not _re.match(r"^[A-Z]{2,3}\s*[-–]", line)
+                        and "vs " not in line.lower()
+                        and "@ " not in line.lower()
+                        and not _re.match(r"^\d", line)
+                        and "PM" not in up
+                        and "AM" not in up
+                        and ":" not in line
+                        and len(line) > 3
+                        and line not in ["More", "Less", "More Less"]
+                    ):
+                        player_name = line
+                        break
+
+                for line in lines:
+                    stat_match = _re.match(r"^([\d\.]+)\s+(.+)$", line)
+                    if not stat_match:
+                        continue
+                    try:
+                        candidate_line = float(stat_match.group(1))
+                    except Exception:
+                        continue
+                    candidate_prop = stat_match.group(2).strip()
+                    prop_match = any(
+                        vp.lower() in candidate_prop.lower()
+                        for vp in VALID_PROP_KEYWORDS
+                    )
+                    if prop_match and candidate_line >= 0.5:
+                        line_value = candidate_line
+                        prop_type = candidate_prop
                         stat_line = line
+                        break
                 html = str(card_info.get("html", ""))
                 pick_type = "standard"
                 if "goblin" in html.lower() or "goblin" in text.lower():
