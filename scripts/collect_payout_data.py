@@ -1047,7 +1047,21 @@ def read_to_win_amount(frame) -> float | None:
     return None
 
 
-def read_slip(frame) -> dict:
+# Primary payout multipliers on PrizePicks are within this band; filters bad DOM parses.
+_SLIP_MULT_MIN = 2.0
+_SLIP_MULT_MAX = 40.0
+# Power Play standard payouts (pick multipliers near these when in Power mode).
+_SLIP_BASE_BY_LEGS = {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 37.5}
+# Flex "1st place pays" is often lower than Power for the same leg count — avoid
+# matching Flex panel 3X when building a Power slip (same DOM slice).
+_SLIP_FLEX_FIRST_BASE = {2: 3.0, 3: 3.0, 4: 6.0, 5: 10.0, 6: 20.0}
+
+
+def read_slip(
+    frame,
+    n_legs: int | None = None,
+    ticket_type: str | None = None,
+) -> dict:
     try:
         text = frame.evaluate("() => document.body.innerText")
         slip_start = text.find("Current Lineup")
@@ -1080,6 +1094,16 @@ def read_slip(frame) -> dict:
                         multipliers.append(sv)
         multipliers = list(dict.fromkeys(multipliers))
 
+        valid_mults: list[str] = []
+        for m in multipliers:
+            try:
+                v = float(m)
+                if _SLIP_MULT_MIN <= v <= _SLIP_MULT_MAX:
+                    valid_mults.append(m)
+            except (TypeError, ValueError):
+                pass
+        multipliers = valid_mults
+
         to_win_hits: list[str] = []
         to_win_patterns = [
             r"To\s*Win[\s\n]*\$?(\d+\.?\d+)",
@@ -1108,6 +1132,7 @@ def read_slip(frame) -> dict:
         to_win_num = to_win_clean[0] if to_win_clean else None
 
         n_selected = re.findall(r"(\d+)\s*Players?\s*Selected", slip_section, re.IGNORECASE)
+        n_selected_int = int(n_selected[0]) if n_selected else None
         flex_first = re.findall(r"1st\s*place\s*pays[\s\n]*(\d+\.?\d*)[Xx]", slip_section, re.IGNORECASE)
         flex_correct_pays = re.findall(r"(\d+)\s*correct\s*pays[\s\n]*(\d+\.?\d*)[Xx]", slip_section, re.IGNORECASE)
 
@@ -1134,19 +1159,35 @@ def read_slip(frame) -> dict:
 
         displayed_multiplier = None
         if multipliers:
+            legs_for_base = n_legs if n_legs is not None else n_selected_int
+            tt = str(ticket_type or "power").lower().strip()
+            base_map = _SLIP_FLEX_FIRST_BASE if tt == "flex" else _SLIP_BASE_BY_LEGS
+            base = (
+                base_map.get(int(legs_for_base), 6.0)
+                if legs_for_base is not None
+                else 6.0
+            )
             try:
-                displayed_multiplier = float(multipliers[0])
-            except Exception:
+                pick = min(multipliers, key=lambda x: abs(float(x) - base))
+                displayed_multiplier = float(pick)
+            except (TypeError, ValueError):
                 displayed_multiplier = None
-        if displayed_multiplier is None:
-            displayed_multiplier = computed_mult
+        if displayed_multiplier is None and computed_mult is not None:
+            if _SLIP_MULT_MIN <= float(computed_mult) <= _SLIP_MULT_MAX:
+                displayed_multiplier = computed_mult
+
+        flex_first_val = float(flex_first[0]) if flex_first else None
+        if flex_first_val is not None and not (
+            _SLIP_MULT_MIN <= flex_first_val <= _SLIP_MULT_MAX
+        ):
+            flex_first_val = None
 
         slip = {
             "multipliers": multipliers,
             "displayed_multiplier": displayed_multiplier,
             "to_win": to_win_num,
-            "n_selected": int(n_selected[0]) if n_selected else None,
-            "flex_first_place": float(flex_first[0]) if flex_first else None,
+            "n_selected": n_selected_int,
+            "flex_first_place": flex_first_val,
             "flex_correct_pays": flex_correct_pays,
             "flex_miss_1": flex_correct_pays,
             "entry_amount": entry_num,
@@ -1355,7 +1396,11 @@ def main():
                     cases_run += 1
                     continue
                 frame.wait_for_timeout(1000)
-                slip = read_slip(frame)
+                slip = read_slip(
+                    frame,
+                    n_legs=len(tc["legs"]),
+                    ticket_type=tc["ticket_type"],
+                )
                 if slip.get("has_slip"):
                     legs_payload = []
                     for leg in tc["legs"]:
