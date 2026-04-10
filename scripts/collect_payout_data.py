@@ -553,6 +553,36 @@ def clear_slip(frame):
         pass
 
 
+def verify_slip_empty(frame, page=None) -> tuple[bool, object]:
+    try:
+        text = frame.evaluate("() => document.body.innerText")
+        n_selected = re.findall(r"(\d+)\s*Players?\s*Selected", text, re.IGNORECASE)
+        if n_selected and int(n_selected[0]) > 0:
+            print(
+                f"  [WARN] Slip not empty after clear: "
+                f"{n_selected[0]} players still selected"
+            )
+            clear_slip(frame)
+            frame.wait_for_timeout(1000)
+            text2 = frame.evaluate("() => document.body.innerText")
+            n_selected2 = re.findall(r"(\d+)\s*Players?\s*Selected", text2, re.IGNORECASE)
+            if n_selected2 and int(n_selected2[0]) > 0:
+                print("  [WARN] Slip still not empty after retry; reloading board")
+                if page is not None:
+                    try:
+                        page.evaluate("() => window.location.reload()")
+                        page.wait_for_timeout(3000)
+                        frame = find_prizepicks_frame(page)
+                        ensure_popular_filter(frame, page)
+                        dismiss_modal(frame, page)
+                    except Exception as e:
+                        print(f"  [WARN] Reload recovery failed: {e}")
+                return False, frame
+        return True, frame
+    except Exception:
+        return True, frame
+
+
 MIN_SAMPLES = {
     "all_standard": 8,
     "has_goblin": 10,
@@ -1537,23 +1567,49 @@ def main():
             std_line_map=std_line_map,
         )
         print(f"[MATRIX] {len(test_cases)} test cases planned")
+        print("\n=== TEST MATRIX ===")
+        for i, tc in enumerate(test_cases):
+            n_legs_tc = len(tc["legs"])
+            n_gob_tc = sum(1 for l in tc["legs"] if l["card"]["pick_type"] == "goblin")
+            n_dem_tc = sum(1 for l in tc["legs"] if l["card"]["pick_type"] == "demon")
+            print(
+                f"  {i + 1}. {tc['label']} | n_legs={n_legs_tc} | "
+                f"n_gob={n_gob_tc} | n_dem={n_dem_tc} | ticket_type={tc['ticket_type']}"
+            )
+        print(f"Total: {len(test_cases)} cases\n")
 
         max_cases = max(1, int(args.max_cases))
         counts = {k: 0 for k in MIN_SAMPLES}
         cases_run = 0
         test_idx = 0
+        case_cursor = 0
+        prev_n_legs = None
+        seen_combos: set[str] = set()
 
         while cases_run < max_cases:
             if all_targets_met(counts, goblins_avail, demons_avail):
                 print("[TARGETS] All MIN_SAMPLES satisfied.")
                 break
-            tc = pick_next_test_case(
-                test_cases, counts, cases_run, goblins_avail, demons_avail
-            )
+            tc = test_cases[case_cursor % len(test_cases)] if test_cases else None
+            case_cursor += 1
             if tc is None:
                 break
             test_idx += 1
-            print(f"[TEST {test_idx}] (run {cases_run + 1}/{max_cases}) {tc['label']}")
+            case_players = [f"{l['card']['player']} {l['card']['prop_type']}" for l in tc["legs"]]
+            print(
+                f"[CASE {test_idx}/{len(test_cases)}] {tc['label']} | "
+                f"legs={case_players}"
+            )
+            n_legs = len(tc["legs"])
+            if prev_n_legs is not None and prev_n_legs != n_legs:
+                print(f"[RELOAD] Switching from {prev_n_legs} to {n_legs} legs")
+                page.evaluate("() => window.location.reload()")
+                page.wait_for_timeout(3000)
+                frame = find_prizepicks_frame(page)
+                ensure_popular_filter(frame, page)
+                dismiss_modal(frame, page)
+                _ = get_all_cards(frame)
+            prev_n_legs = n_legs
             print(
                 f"[TARGETS] std={counts['all_standard']}/{MIN_SAMPLES['all_standard']} "
                 f"gob={counts['has_goblin']}/{MIN_SAMPLES['has_goblin']} "
@@ -1564,11 +1620,13 @@ def main():
                 dismiss_modal(frame, page)
                 set_ticket_type(frame, tc["ticket_type"])
                 clear_slip(frame)
+                _, frame = verify_slip_empty(frame, page)
                 dismiss_modal(frame, page)
                 ok = click_case_legs_with_filter_switches(frame, page, tc)
                 if not ok:
                     print("  [SKIP] Leg click sequence failed")
                     clear_slip(frame)
+                    _, frame = verify_slip_empty(frame, page)
                     dismiss_modal(frame, page)
                     cases_run += 1
                     continue
@@ -1584,6 +1642,22 @@ def main():
                         print(f"  [SKIP] n_selected={n_selected} != n_legs={len(tc['legs'])}")
                         skipped_records += 1
                         clear_slip(frame)
+                        _, frame = verify_slip_empty(frame, page)
+                        dismiss_modal(frame, page)
+                        frame.wait_for_timeout(600)
+                        cases_run += 1
+                        continue
+                    combo_key = (
+                        f"{len(tc['legs'])}L_"
+                        f"{sum(1 for l in tc['legs'] if l['card']['pick_type'] == 'goblin')}G_"
+                        f"{sum(1 for l in tc['legs'] if l['card']['pick_type'] == 'demon')}D_"
+                        f"{tc['ticket_type']}"
+                    )
+                    if combo_key in seen_combos:
+                        print(f"  [SKIP] Duplicate combo: {combo_key}")
+                        skipped_records += 1
+                        clear_slip(frame)
+                        _, frame = verify_slip_empty(frame, page)
                         dismiss_modal(frame, page)
                         frame.wait_for_timeout(600)
                         cases_run += 1
@@ -1629,6 +1703,7 @@ def main():
                             print((rec.get("raw_slip_section") or "not captured")[:400])
                         skipped_records += 1
                     else:
+                        seen_combos.add(combo_key)
                         out_rows.append(rec)
                         bump_counts_from_record(counts, rec)
                         saved_records += 1
@@ -1642,12 +1717,14 @@ def main():
                 else:
                     print("  [NO SLIP] Slip panel not detected")
                 clear_slip(frame)
+                _, frame = verify_slip_empty(frame, page)
                 dismiss_modal(frame, page)
                 frame.wait_for_timeout(600)
             except Exception as e:
                 print(f"  [ERROR] {e}")
                 try:
                     clear_slip(frame)
+                    _, frame = verify_slip_empty(frame, page)
                     dismiss_modal(frame, page)
                 except Exception:
                     pass
