@@ -136,10 +136,10 @@ def load_nba_legs(top_n: int = 30) -> list[dict]:
     return out
 
 
-def connect_existing_browser(cdp_url: str):
+def connect_existing_browser(cdp_url: str, *, cdp_timeout_ms: int = 45_000):
     try:
         p = sync_playwright().start()
-        browser = p.chromium.connect_over_cdp(cdp_url)
+        browser = p.chromium.connect_over_cdp(cdp_url, timeout=cdp_timeout_ms)
         if not browser.contexts:
             raise RuntimeError("No contexts found in CDP Chrome.")
         context = browser.contexts[0]
@@ -150,10 +150,14 @@ def connect_existing_browser(cdp_url: str):
                 break
         return p, browser, context, page
     except Exception as e:
-        print("Close Chrome completely, then run:")
-        print("Windows: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe' --remote-debugging-port=9222 --user-data-dir=C:\\chrome_debug")
-        print("Then navigate to prizepicks.com and log in.")
-        print("Then run this script.")
+        print("Could not attach to Chrome CDP (timed out or refused).")
+        print("Close every Chrome window, then start debug Chrome:")
+        print(
+            r'  & "C:\Program Files\Google\Chrome\Application\chrome.exe" '
+            r"--remote-debugging-port=9222 --user-data-dir=C:\chrome_debug"
+        )
+        print("Open https://app.prizepicks.com/ , log in, NBA board with props visible.")
+        print(f"Retry with: py -3.14 scripts\\collect_payout_data.py --cdp-url http://127.0.0.1:9222")
         raise RuntimeError(str(e))
 
 
@@ -1309,7 +1313,11 @@ def append_rows_csv(path: Path, rows: list[dict]):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--cdp-url", default="http://localhost:9222")
+    ap.add_argument(
+        "--cdp-url",
+        default="http://127.0.0.1:9222",
+        help="Chrome DevTools Protocol endpoint (127.0.0.1 avoids IPv6 localhost hangs on Windows).",
+    )
     ap.add_argument("--entry-amount", type=float, default=1.0)
     ap.add_argument("--max-cases", type=int, default=100)
     ap.add_argument("--delay-sec", type=float, default=0.5)
