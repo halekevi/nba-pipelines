@@ -215,6 +215,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
 
     wb = Workbook()
     wb.remove(wb.active)
+    write_sheet(wb, "Tennis", clean)
     write_sheet(wb, "ALL", clean)
     for tier in ["A", "B", "C", "D"]:
         subset = clean_eligible[clean_eligible["Tier"] == tier].copy()
