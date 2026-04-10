@@ -24,7 +24,8 @@ import argparse
 import csv
 import json
 import re
-from datetime import datetime
+from datetime import datetime, timezone
+from difflib import get_close_matches
 from pathlib import Path
 from typing import Any
 
@@ -139,11 +140,72 @@ def load_step1_leg_rows(path: Path) -> tuple[list[dict], list[dict]]:
     return standards, goblins
 
 
-def pick_std_for_goblin(standards: list[dict], gob: dict) -> dict | None:
-    gn = _norm(gob["player"])
-    for s in standards:
-        if _norm(s["player"]) != gn:
-            return s
+def pick_std_for_goblin(standards: list[dict], gob: dict, rotate_i: int) -> dict | None:
+    """Rotate standards so we do not always pick the same first row (often off-slate)."""
+    gn = _norm(gob.get("_board_player") or gob["player"])
+    opts = [s for s in standards if _norm(s.get("_board_player") or s["player"]) != gn]
+    if not opts:
+        return None
+    return opts[rotate_i % len(opts)]
+
+
+def _board_names_from_cards(cards: list[dict]) -> list[str]:
+    return sorted({str(c.get("player") or "").strip() for c in cards if c.get("player")})
+
+
+def enrich_legs_with_board_player(legs: list[dict], board_names: list[str]) -> list[dict]:
+    """Fuzzy-match step1 player names to names parsed from live cards."""
+    out: list[dict] = []
+    for L in legs:
+        m = get_close_matches(L["player"], board_names, n=1, cutoff=0.72)
+        if not m:
+            continue
+        out.append({**L, "_board_player": m[0]})
+    return out
+
+
+def props_match(step1_prop: str, card_prop: str) -> bool:
+    a, b = _norm(step1_prop), _norm(card_prop)
+    if not a or not b:
+        return True
+    if a == b or a in b or b in a:
+        return True
+    return False
+
+
+def find_card_for_leg(cards: list[dict], leg: dict) -> dict | None:
+    """Resolve a step1 leg (with _board_player) to a live card with More button."""
+    bp = _norm(leg.get("_board_player") or leg["player"])
+    pt = str(leg.get("pick_type", "")).lower()
+    target_lk = cpd._line_key(leg.get("line"))
+    for c in cards:
+        if _norm(c.get("player")) != bp:
+            continue
+        if str(c.get("pick_type", "")).lower() != pt:
+            continue
+        if cpd._line_key(c.get("line")) != target_lk:
+            continue
+        if props_match(str(leg.get("prop_type", "")), str(c.get("prop_type", ""))):
+            return c
+    try:
+        tl = float(leg.get("line"))
+    except (TypeError, ValueError):
+        tl = None
+    if tl is None:
+        return None
+    for c in cards:
+        if _norm(c.get("player")) != bp:
+            continue
+        if str(c.get("pick_type", "")).lower() != pt:
+            continue
+        try:
+            cl = float(c.get("line"))
+        except (TypeError, ValueError):
+            continue
+        if abs(cl - tl) > 0.35:
+            continue
+        if props_match(str(leg.get("prop_type", "")), str(c.get("prop_type", ""))):
+            return c
     return None
 
 
@@ -170,7 +232,7 @@ def build_pairs(
         for g in goblins:
             if len(out) >= max_pairs:
                 break
-            s = pick_std_for_goblin(standards, g)
+            s = pick_std_for_goblin(standards, g, len(out))
             if s:
                 out.append((s, g))
         return out
@@ -180,7 +242,6 @@ def build_pairs(
         by_b[bucket(g.get("line_distance"))].append(g)
 
     out = []
-    # Round-robin buckets so we sample each distance regime
     order = ["large", "med", "small", "unk"]
     bi = 0
     while len(out) < max_pairs:
@@ -192,7 +253,7 @@ def build_pairs(
             if not pool:
                 continue
             g = pool.pop(0)
-            s = pick_std_for_goblin(standards, g)
+            s = pick_std_for_goblin(standards, g, len(out))
             if not s:
                 continue
             out.append((s, g))
@@ -223,29 +284,53 @@ def main() -> None:
         raise SystemExit(f"Missing step1 file: {args.step1}")
 
     standards, goblins = load_step1_leg_rows(args.step1)
-    pairs = build_pairs(
-        standards,
-        goblins,
-        max_pairs=max(1, int(args.max_pairs)),
-        balance_buckets=not args.no_bucket_balance,
-    )
-    if not pairs:
-        raise SystemExit("No standard+goblin pairs after filters (need singles with two player types).")
 
-    print(f"[PLAN] {len(pairs)} pairs (standard + goblin, different players). Ticket={args.ticket_type.upper()}")
-    for i, (s, g) in enumerate(pairs, 1):
-        d = g.get("line_distance")
-        ds = f"{d:.2f}" if d is not None else "n/a"
-        print(f"  {i}. STD {s['player']} {s['line']} {s['prop_type']}  |  GOB {g['player']} {g['line']} {g['prop_type']} (dist={ds})")
-
-    p, browser, context, page = cpd.connect_existing_browser(args.cdp_url)
+    p, _browser, _context, page = cpd.connect_existing_browser(args.cdp_url)
     out_rows: list[dict[str, Any]] = []
-    ts = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     try:
         frame = cpd.find_prizepicks_frame(page)
         cpd.ensure_popular_filter(frame, page)
         cpd.dismiss_modal(frame, page)
+
+        # Live board names — only pair legs that exist on the app right now.
+        probe_cards = cpd.expand_card_pool(frame, page)
+        board_names = _board_names_from_cards(probe_cards)
+        if not board_names:
+            raise SystemExit(
+                "No player cards parsed from board. Open NBA board in the debug Chrome tab, "
+                "dismiss modals, then retry."
+            )
+        std_m = enrich_legs_with_board_player(standards, board_names)
+        gob_m = enrich_legs_with_board_player(goblins, board_names)
+        print(
+            f"[BOARD] Matched step1 -> live: {len(std_m)}/{len(standards)} standards, "
+            f"{len(gob_m)}/{len(goblins)} goblins (fuzzy name match to expanded card pool)."
+        )
+        if not std_m or not gob_m:
+            raise SystemExit(
+                "No step1 legs matched the live board. Refetch step1 "
+                "(NBA/scripts/step1_fetch_prizepicks_api.py) so CSV matches tonight's slate."
+            )
+
+        pairs = build_pairs(
+            std_m,
+            gob_m,
+            max_pairs=max(1, int(args.max_pairs)),
+            balance_buckets=not args.no_bucket_balance,
+        )
+        if not pairs:
+            raise SystemExit("No standard+goblin pairs after board filter (need two different players).")
+
+        print(f"[PLAN] {len(pairs)} pairs (standard + goblin, different players). Ticket={args.ticket_type.upper()}")
+        for i, (s, g) in enumerate(pairs, 1):
+            d = g.get("line_distance")
+            ds = f"{d:.2f}" if d is not None else "n/a"
+            print(
+                f"  {i}. STD {s['_board_player']} ({s['line']} {s['prop_type']})  |  "
+                f"GOB {g['_board_player']} ({g['line']} {g['prop_type']}) dist={ds}"
+            )
 
         for i, (std_leg, gob_leg) in enumerate(pairs, 1):
             print(f"\n[PAIR {i}/{len(pairs)}] Building slip...")
@@ -256,11 +341,22 @@ def main() -> None:
             _, frame = cpd.verify_slip_empty(frame, page)
             cpd.dismiss_modal(frame, page)
 
-            ok1 = cpd.add_leg(frame, page, std_leg)
-            page.wait_for_timeout(350)
-            ok2 = cpd.add_leg(frame, page, gob_leg)
+            cards = cpd.expand_card_pool(frame, page)
+            std_card = find_card_for_leg(cards, std_leg)
+            gob_card = find_card_for_leg(cards, gob_leg)
+            if not std_card or not gob_card:
+                print(
+                    f"  [SKIP] Card resolve failed std={bool(std_card)} gob={bool(gob_card)} "
+                    f"(step1 lines must match visible cards)."
+                )
+                cpd.clear_slip(frame)
+                continue
+
+            ok1 = cpd.click_leg(frame, std_card, "OVER")
+            page.wait_for_timeout(400)
+            ok2 = cpd.click_leg(frame, gob_card, "OVER")
             if not ok1 or not ok2:
-                print("  [SKIP] Could not add both legs (board/search mismatch).")
+                print("  [SKIP] click_leg failed for one or both picks.")
                 cpd.clear_slip(frame)
                 continue
 
@@ -320,17 +416,14 @@ def main() -> None:
             page.wait_for_timeout(500)
 
     finally:
-        try:
-            browser.close()
-        except Exception:
-            pass
+        # Do not browser.close() — CDP session is the user's Chrome; only stop Playwright.
         try:
             p.stop()
         except Exception:
             pass
 
     SAMPLES_DIR.mkdir(parents=True, exist_ok=True)
-    date_tag = datetime.utcnow().strftime("%Y-%m-%d")
+    date_tag = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     out_csv = SAMPLES_DIR / f"goblin_standard_scan_{date_tag}.csv"
     if out_rows:
         with out_csv.open("w", newline="", encoding="utf-8") as f:
