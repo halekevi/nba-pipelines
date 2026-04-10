@@ -15,6 +15,8 @@ Cross-book lines (optional):
     outputs/<date>/draftkings_props_all.csv ← merge_draftkings_pickem_csvs.py (NBA+NHL+MLB+CBB), or
     outputs/<date>/draftkings_props_nba.csv ← fetch_draftkings_player_props.py --league nba -o ...
   Join is on sport + team + normalized player + normalized prop label (best-effort; DK/UD naming differs).
+  After merge, each row gets cross-book comparison: best_cross_line / best_cross_book / cross_edge_vs_pp
+  (OVER favors lowest line; UNDER favors highest; edge_vs_pp is points vs PrizePicks).
 
 Sheets: SUMMARY, Full Slate (reordered + STRONG/LEAN/RISK + pace beside Def Tier), NBA Slate, CBB Slate,
         2–6-Leg tickets per sport (Goblin / Standard / Std+Gob mix),
@@ -376,13 +378,101 @@ def attach_alt_book_lines(
     return out
 
 
+# Columns produced by add_cross_platform_best_lines (propagated to per-sport slate dataframes).
+CROSS_LINE_COLS: tuple[str, ...] = (
+    "best_cross_line",
+    "best_cross_book",
+    "cross_edge_vs_pp",
+    "cross_n_books",
+)
+
+
+def add_cross_platform_best_lines(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    For each prop, compare PrizePicks ``line`` with ``line_underdog`` and ``line_draftkings``.
+    For OVER, the best line is the lowest; for UNDER, the highest (among books with data).
+
+    Adds:
+      best_cross_line — optimal line for the row's direction
+      best_cross_book — PP / UD / DK, or ties like PP+UD (short codes)
+      cross_edge_vs_pp — points of line value vs PrizePicks (0 when PP is best among available;
+                         NaN when PP line is missing)
+      cross_n_books — count of books with a finite line
+    """
+    if df is None or df.empty:
+        return df
+    out = df.copy()
+    if "line_underdog" not in out.columns:
+        out["line_underdog"] = np.nan
+    if "line_draftkings" not in out.columns:
+        out["line_draftkings"] = np.nan
+
+    pp = pd.to_numeric(out["line"], errors="coerce")
+    ud = pd.to_numeric(out["line_underdog"], errors="coerce")
+    dk = pd.to_numeric(out["line_draftkings"], errors="coerce")
+    mat = pd.DataFrame({"PrizePicks": pp, "Underdog": ud, "DraftKings": dk})
+
+    dir_u = (
+        out["direction"].astype(str).str.upper().str.strip()
+        if "direction" in out.columns
+        else pd.Series("", index=out.index)
+    )
+    is_under = dir_u == "UNDER"
+    order = ("PrizePicks", "Underdog", "DraftKings")
+    short = {"PrizePicks": "PP", "Underdog": "UD", "DraftKings": "DK"}
+
+    n = len(out)
+    best_line = np.full(n, np.nan, dtype=float)
+    best_book = np.array([""] * n, dtype=object)
+    edge_pp = np.full(n, np.nan, dtype=float)
+    n_books = np.zeros(n, dtype=np.int16)
+
+    for i in range(n):
+        vals: dict[str, float] = {}
+        for j, name in enumerate(order):
+            v = mat.iat[i, j]
+            if pd.notna(v) and np.isfinite(float(v)):
+                vals[name] = float(v)
+        n_books[i] = len(vals)
+        if not vals:
+            continue
+        iu = bool(is_under.iloc[i])
+        if iu:
+            bv = max(vals.values())
+            winners = [k for k, v in vals.items() if v == bv]
+        else:
+            bv = min(vals.values())
+            winners = [k for k, v in vals.items() if v == bv]
+        win_codes = "+".join(short[w] for w in sorted(winners, key=lambda x: order.index(x)))
+        best_line[i] = bv
+        best_book[i] = win_codes
+        ppv = vals.get("PrizePicks")
+        if ppv is not None and np.isfinite(ppv):
+            edge_pp[i] = (bv - ppv) if iu else (ppv - bv)
+
+    out["best_cross_line"] = best_line
+    out["best_cross_book"] = best_book
+    out["cross_edge_vs_pp"] = edge_pp
+    out["cross_n_books"] = n_books
+
+    finite_edge = np.isfinite(edge_pp) & (edge_pp > 1e-9)
+    n_edge = int(finite_edge.sum())
+    _nb = n_books[n_books > 0]
+    _mean_b = float(_nb.mean()) if len(_nb) else 0.0
+    print(
+        f"  [cross-book] rows with cross_edge_vs_pp > 0 vs PrizePicks: {n_edge} / {len(out)} "
+        f"(mean books/row with lines: {_mean_b:.2f})"
+    )
+    return out
+
+
 def propagate_alt_book_lines_to_sport_frame(
     sport_df: pd.DataFrame | None,
     combined: pd.DataFrame,
     sport_labels: tuple[str, ...],
 ) -> pd.DataFrame | None:
     """
-    Copy line_underdog / line_draftkings from combined onto a per-sport slate (NBA Slate, CBB Slate, ...).
+    Copy line_underdog / line_draftkings / cross-book best-line columns from combined onto each sport slate.
     Join keys match attach_alt_book_lines (team + player + prop norms).
     """
     if sport_df is None or len(sport_df) == 0:
@@ -391,20 +481,36 @@ def propagate_alt_book_lines_to_sport_frame(
     if "line_underdog" not in combined.columns:
         out["line_underdog"] = np.nan
         out["line_draftkings"] = np.nan
+        for c in CROSS_LINE_COLS:
+            if c == "best_cross_book":
+                out[c] = ""
+            elif c == "cross_n_books":
+                out[c] = 0
+            else:
+                out[c] = np.nan
         return out
     labels = {s.upper() for s in sport_labels}
     sub = combined[combined["sport"].astype(str).str.upper().isin(labels)].copy()
     if sub.empty:
         out["line_underdog"] = np.nan
         out["line_draftkings"] = np.nan
+        for c in CROSS_LINE_COLS:
+            if c == "best_cross_book":
+                out[c] = ""
+            elif c == "cross_n_books":
+                out[c] = 0
+            else:
+                out[c] = np.nan
         return out
     sub = sub.copy()
     sub["_jt"] = [_norm_team_join(t, s) for t, s in zip(sub["team"], sub["sport"])]
     sub["_jp"] = sub["player"].map(_norm_player_join)
     sub["_jpr"] = sub["prop_type"].map(_norm_prop_label)
-    agg = sub.groupby(["_jt", "_jp", "_jpr"], as_index=False).agg(
-        {"line_underdog": "first", "line_draftkings": "first"}
-    )
+    agg_map: dict = {"line_underdog": "first", "line_draftkings": "first"}
+    for c in CROSS_LINE_COLS:
+        if c in sub.columns:
+            agg_map[c] = "first"
+    agg = sub.groupby(["_jt", "_jp", "_jpr"], as_index=False).agg(agg_map)
     out["_jt"] = [_norm_team_join(t, s) for t, s in zip(out["team"], out["sport"])]
     out["_jp"] = out["player"].map(_norm_player_join)
     out["_jpr"] = out["prop_type"].map(_norm_prop_label)
@@ -1448,6 +1554,20 @@ def attach_standard_refs(df: pd.DataFrame) -> pd.DataFrame:
     out["line_discount_vs_standard"] = out.apply(_discount, axis=1)
     return out
 
+def _safe_int_cross_books(v) -> Optional[int]:
+    if v is None or v == "":
+        return None
+    try:
+        if isinstance(v, float) and math.isnan(v):
+            return None
+    except (TypeError, ValueError):
+        pass
+    try:
+        return int(round(float(v)))
+    except (TypeError, ValueError):
+        return None
+
+
 def player_initials(name: str) -> str:
     s = (name or "").strip()
     if not s:
@@ -1558,6 +1678,12 @@ def ticket_groups_to_payload(
                     "standard_projection": _safe_float(gv("standard_projection")),
                     "line_discount_vs_standard": _safe_float(gv("line_discount_vs_standard")),
                     "delta_pct": round(float(_dpv), 4) if _dpv is not None else None,
+                    "line_underdog": _safe_float(gv("line_underdog")),
+                    "line_draftkings": _safe_float(gv("line_draftkings")),
+                    "best_cross_line": _safe_float(gv("best_cross_line")),
+                    "best_cross_book": str(gv("best_cross_book") or ""),
+                    "cross_edge_vs_pp": _safe_float(gv("cross_edge_vs_pp")),
+                    "cross_n_books": _safe_int_cross_books(gv("cross_n_books")),
                     "hit_rate": _safe_float(gv("hit_rate")),
                     "ml_prob": _safe_float(gv("ml_prob")),
                     "rank_score": _safe_float(gv("rank_score")),
@@ -1653,6 +1779,12 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
                 "prop":       g("prop_type") or g("prop") or "",
                 "pick_type":  g("pick_type") or "",
                 "line":       g("line"),
+                "line_underdog": g("line_underdog"),
+                "line_draftkings": g("line_draftkings"),
+                "best_cross_line": g("best_cross_line"),
+                "best_cross_book": g("best_cross_book"),
+                "cross_edge_vs_pp": g("cross_edge_vs_pp"),
+                "cross_n_books": g("cross_n_books"),
                 "dir":        g("direction") or g("dir") or "",
                 "edge":       g("edge"),
                 "hit_rate":   g("hit_rate"),
@@ -4984,6 +5116,10 @@ SLATE_COLS = [
     "line",
     "line_underdog",
     "line_draftkings",
+    "best_cross_line",
+    "best_cross_book",
+    "cross_edge_vs_pp",
+    "cross_n_books",
     "direction",
     "edge",
     "projection",
@@ -5009,7 +5145,7 @@ SLATE_COLS = [
     "opp_vs_avg_pct",
     "game_time",
 ]
-SLATE_WIDTHS = [6, 5, 10, 20, 6, 6, 7, 10, 8, 7, 10, 8, 10, 18, 10, 6, 11, 11, 8, 7, 10, 10, 8, 10, 7, 7, 9, 10, 8, 8, 10, 9, 10, 10, 8, 9, 8, 10, 7, 8, 10, 16]
+SLATE_WIDTHS = [6, 5, 10, 20, 6, 6, 7, 10, 8, 7, 10, 8, 10, 18, 10, 6, 11, 11, 9, 10, 9, 6, 8, 7, 10, 10, 8, 10, 7, 7, 9, 10, 8, 8, 10, 9, 10, 10, 8, 9, 8, 10, 7, 8, 10, 16]
 SLATE_HDRS = [
     "Sport",
     "Tier",
@@ -5029,6 +5165,10 @@ SLATE_HDRS = [
     "Line",
     "Line UD",
     "Line DK",
+    "Best Line",
+    "Best Book",
+    "Edge vs PP",
+    "#Books",
     "Dir",
     "Edge",
     "Proj",
@@ -5070,6 +5210,10 @@ FULL_SLATE_EXTRA_HDRS = {
     "l5_consistency": "L5 Match %",
     "line_underdog": "Line (UD)",
     "line_draftkings": "Line (DK)",
+    "best_cross_line": "Best Line",
+    "best_cross_book": "Best Book",
+    "cross_edge_vs_pp": "Edge vs PP",
+    "cross_n_books": "#Books",
 }
 FULL_SLATE_EXTRA_WIDTHS = {
     "pace_tier": 10,
@@ -5082,6 +5226,10 @@ FULL_SLATE_EXTRA_WIDTHS = {
     "l5_consistency": 10,
     "line_underdog": 11,
     "line_draftkings": 11,
+    "best_cross_line": 9,
+    "best_cross_book": 10,
+    "cross_edge_vs_pp": 9,
+    "cross_n_books": 6,
 }
 
 FULL_SLATE_COLS = [
@@ -5104,6 +5252,10 @@ FULL_SLATE_COLS = [
     "line",
     "line_underdog",
     "line_draftkings",
+    "best_cross_line",
+    "best_cross_book",
+    "cross_edge_vs_pp",
+    "cross_n_books",
     "direction",
     "edge",
     "projection",
@@ -5338,6 +5490,23 @@ def write_slate_sheet(
                 )
             elif col == "game_script_note" and full_slate_visual:
                 dc(ws, ri, ci, val, bg=bg_row, align="left")
+            elif col == "best_cross_line" and val != "":
+                try:
+                    dc(ws, ri, ci, round(float(val), 2), bg=bg_row, align="center", fmt="0.00")
+                except (TypeError, ValueError):
+                    dc(ws, ri, ci, val, bg=bg_row, align="center")
+            elif col == "cross_edge_vs_pp" and val != "":
+                try:
+                    fv = float(val)
+                    cbg = PatternFill("solid", start_color="C8F7C5") if fv > 0.01 else bg_row
+                    dc(ws, ri, ci, round(fv, 2), bg=cbg, align="center", fmt="0.00")
+                except (TypeError, ValueError):
+                    dc(ws, ri, ci, val, bg=bg_row, align="center")
+            elif col == "cross_n_books" and val != "":
+                try:
+                    dc(ws, ri, ci, int(round(float(val))), bg=bg_row, align="center", fmt="0")
+                except (TypeError, ValueError):
+                    dc(ws, ri, ci, val, bg=bg_row, align="center")
             else:
                 dc(ws, ri, ci, val, bg=bg_row, align="center")
 
@@ -5374,6 +5543,9 @@ TICKET_COLS = [
     "opp_vs_avg_pct",
     "standard_line",
     "delta_pct",
+    "best_cross_line",
+    "best_cross_book",
+    "cross_edge_vs_pp",
     "sport",
 ]
 TICKET_HDRS = [
@@ -5404,9 +5576,12 @@ TICKET_HDRS = [
     "Opp vs Avg%",
     "Std Line",
     "Delta %",
+    "Best Line",
+    "Best Book",
+    "Edge vs PP",
     "Sport",
 ]
-TICKET_W = [4, 20, 6, 6, 18, 10, 6, 6, 7, 9, 8, 9, 7, 8, 8, 9, 11, 8, 10, 8, 9, 7, 7, 8, 10, 8, 8, 6]
+TICKET_W = [4, 20, 6, 6, 18, 10, 6, 6, 7, 9, 8, 9, 7, 8, 8, 9, 11, 8, 10, 8, 9, 7, 7, 8, 10, 8, 8, 9, 10, 9, 6]
 
 
 def write_ticket_sheet(wb, tickets, sheet_name, bg_hdr, label=""):
@@ -5582,10 +5757,29 @@ def write_ticket_sheet(wb, tickets, sheet_name, bg_hdr, label=""):
             _dpx = gd_leg_delta_pct(gv("line"), gv("standard_line"))
             dp_out = round(float(_dpx), 4) if _dpx is not None else ""
             dc(ws, ri, 27, dp_out, bg=bg, align="center", fmt="0.0000" if dp_out != "" else None)
+            bcl = gv("best_cross_line")
+            try:
+                bcl_out = round(float(bcl), 2) if bcl != "" and bcl is not None else ""
+            except (TypeError, ValueError):
+                bcl_out = ""
+            dc(ws, ri, 28, bcl_out, bg=bg, align="center", fmt="0.00" if bcl_out != "" else None)
+            dc(ws, ri, 29, gv("best_cross_book"), bg=bg, align="center")
+            cep = gv("cross_edge_vs_pp")
+            try:
+                cep_out = round(float(cep), 2) if cep != "" and cep is not None else ""
+            except (TypeError, ValueError):
+                cep_out = ""
+            cell_cep = dc(ws, ri, 30, cep_out, bg=bg, align="center", fmt="0.00" if cep_out != "" else None)
+            if cep_out != "":
+                try:
+                    if float(cep) > 0.01:
+                        cell_cep.fill = PatternFill("solid", start_color="C8F7C5")
+                except (TypeError, ValueError):
+                    pass
             # Sport
             sv = gv("sport")
             sbg = C["hdr_nba"] if sv == "NBA" else (C["hdr_cbb"] if sv == "CBB" else C["hdr"])
-            dc(ws, ri, 28, sv, bg=sbg, bold=True, fc="FFFFFF")
+            dc(ws, ri, 31, sv, bg=sbg, bold=True, fc="FFFFFF")
             ws.row_dimensions[ri].height = 14
             ri += 1
 
@@ -6139,6 +6333,7 @@ def main():
         underdog_csv=str(args.underdog_csv or ""),
         draftkings_csv=str(args.draftkings_csv or ""),
     )
+    combined = add_cross_platform_best_lines(combined)
 
     combined = drop_stale_rows(combined, args.date, "Combined")
 
