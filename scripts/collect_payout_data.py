@@ -1025,43 +1025,40 @@ def build_payout_test_matrix(
         return combo if len(combo) == n_legs else None
 
     cases: list[dict] = []
-    for ticket_type in ("power", "flex"):
-        for n in [2, 3, 4, 5]:
-            combo = _build_case(n_legs=n, n_gob=0, n_dem=0)
-            if combo:
-                cases.append(
-                    {
-                        "legs": [{"card": c, "direction": "OVER"} for c in combo],
-                        "ticket_type": ticket_type,
-                        "label": f"{n}-leg all-{ticket_type} standard",
-                    }
-                )
-        if len(goblins) >= 1 and len(standard) >= 1:
-            for n_gob in [1, 2]:
-                for total in [2, 3, 4]:
-                    combo = _build_case(n_legs=total, n_gob=n_gob, n_dem=0)
-                    n_std = total - n_gob
-                    if combo:
-                        cases.append(
-                            {
-                                "legs": [{"card": c, "direction": "OVER"} for c in combo],
-                                "ticket_type": ticket_type,
-                                "label": f"{total}-leg {n_gob}gob-{ticket_type} {n_std}std",
-                            }
-                        )
-        if len(demons) >= 1 and len(standard) >= 1:
-            for n_dem in [1, 2]:
-                for total in [2, 3, 4]:
-                    combo = _build_case(n_legs=total, n_gob=0, n_dem=n_dem)
-                    n_std = total - n_dem
-                    if combo:
-                        cases.append(
-                            {
-                                "legs": [{"card": c, "direction": "OVER"} for c in combo],
-                                "ticket_type": ticket_type,
-                                "label": f"{total}-leg {n_dem}dem-{ticket_type} {n_std}std",
-                            }
-                        )
+    priority_specs: list[tuple[str, int, int, int, str]] = [
+        ("power", 3, 0, 0, "3-leg all-power standard"),
+        ("power", 3, 1, 0, "3-leg 1gob-power 2std"),
+        ("power", 3, 2, 0, "3-leg 2gob-power 1std"),
+        ("power", 4, 0, 0, "4-leg all-power standard"),
+        ("power", 4, 1, 0, "4-leg 1gob-power 3std"),
+        ("power", 4, 2, 0, "4-leg 2gob-power 2std"),
+        ("flex", 3, 0, 0, "3-leg all-flex standard"),
+        ("flex", 3, 1, 0, "3-leg 1gob-flex 2std"),
+    ]
+    fallback_specs: list[tuple[str, int, int, int, str]] = [
+        ("power", 2, 0, 0, "2-leg all-power standard"),
+        ("power", 2, 1, 0, "2-leg 1gob-power 1std"),
+        ("power", 2, 2, 0, "2-leg 2gob-power 0std"),
+        ("flex", 2, 0, 0, "2-leg all-flex standard"),
+        ("flex", 2, 1, 0, "2-leg 1gob-flex 1std"),
+        ("flex", 2, 2, 0, "2-leg 2gob-flex 0std"),
+        ("power", 5, 0, 0, "5-leg all-power standard"),
+        ("flex", 4, 0, 0, "4-leg all-flex standard"),
+        ("flex", 4, 1, 0, "4-leg 1gob-flex 3std"),
+        ("flex", 4, 2, 0, "4-leg 2gob-flex 2std"),
+        ("flex", 5, 0, 0, "5-leg all-flex standard"),
+    ]
+    all_specs = priority_specs + fallback_specs
+    for ticket_type, n_legs, n_gob, n_dem, label in all_specs:
+        combo = _build_case(n_legs=n_legs, n_gob=n_gob, n_dem=n_dem)
+        if combo:
+            cases.append(
+                {
+                    "legs": [{"card": c, "direction": "OVER"} for c in combo],
+                    "ticket_type": ticket_type,
+                    "label": label,
+                }
+            )
     return cases
 
 
