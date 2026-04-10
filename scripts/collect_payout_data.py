@@ -194,30 +194,37 @@ def ensure_popular_filter(frame, page):
     if _POPULAR_READY:
         return
     clicked = False
-    try:
-        frame.get_by_text("Popular", exact=True).first.click(timeout=1200)
-        clicked = True
-    except Exception:
-        for sel in ["[data-testid='popular-filter']", "text=Popular"]:
-            try:
-                loc = frame.locator(sel).first
-                if loc.count() > 0:
-                    loc.click(timeout=1200)
-                    clicked = True
-                    break
-            except Exception:
-                continue
+    chosen = None
+    for primary in ("Points", "Popular"):
+        try:
+            frame.get_by_text(primary, exact=True).first.click(timeout=1200)
+            clicked = True
+            chosen = primary
+            break
+        except Exception:
+            for sel in [f"text={primary}", f"[data-testid='{primary.lower()}-filter']"]:
+                try:
+                    loc = frame.locator(sel).first
+                    if loc.count() > 0:
+                        loc.click(timeout=1200)
+                        clicked = True
+                        chosen = primary
+                        break
+                except Exception:
+                    continue
+            if clicked:
+                break
     frame.wait_for_timeout(1500)
     _scroll_board_for_lazy_load(page)
     cards = _extract_cards_data_js(frame)
-    print(f"[LOOKUP] Popular filter click: {'OK' if clicked else 'NOT FOUND'}")
-    print(f"[LOOKUP] Cards visible after Popular click: {len(cards)}")
+    print(f"[LOOKUP] Primary filter ({chosen or 'Points/Popular'}) click: {'OK' if clicked else 'NOT FOUND'}")
+    print(f"[LOOKUP] Cards visible after primary filter click: {len(cards)}")
     try:
         DEBUG_DIR.mkdir(parents=True, exist_ok=True)
         ts = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
-        shot = DEBUG_DIR / f"after_popular_{ts}.png"
+        shot = DEBUG_DIR / f"after_primary_filter_{ts}.png"
         page.screenshot(path=str(shot), full_page=True)
-        print(f"[LOOKUP] Popular screenshot saved: {shot}")
+        print(f"[LOOKUP] Primary filter screenshot saved: {shot}")
     except Exception:
         pass
     _POPULAR_READY = True
@@ -392,6 +399,7 @@ def get_all_cards(frame) -> list[dict]:
                     pick_type = "goblin"
                 elif "demon" in html.lower() or "demon" in text.lower():
                     pick_type = "demon"
+                has_alt_lines = any(sym in text for sym in ("↔", "⇄", "⟷", "⇆", "↕"))
                 if player_name and line_value is not None:
                     cards.append(
                         {
@@ -399,6 +407,7 @@ def get_all_cards(frame) -> list[dict]:
                             "prop_type": prop_type if stat_line else "unknown",
                             "line": line_value,
                             "pick_type": pick_type,
+                            "has_alt_lines": has_alt_lines,
                             "more_btn": btn,
                             "raw_text": text[:200],
                         }
@@ -633,8 +642,8 @@ def expand_card_pool(frame, page) -> list[dict]:
         dismiss_modal(frame, page)
         frame.wait_for_timeout(150)
     filters = [
-        "Popular",
         "Points",
+        "Popular",
         "Assists",
         "Rebounds",
         "Turnovers",
@@ -673,9 +682,9 @@ def expand_card_pool(frame, page) -> list[dict]:
             print(f"[FILTER] {filter_name}: skip ({e})")
     try:
         dismiss_modal(frame, page)
-        loc = frame.get_by_text("Popular", exact=True).first
+        loc = frame.get_by_text("Points", exact=True).first
         if loc.count() == 0:
-            loc = frame.get_by_text("Popular", exact=False).first
+            loc = frame.get_by_text("Points", exact=False).first
         loc.click(force=True, timeout=1500)
         frame.wait_for_timeout(500)
     except Exception:
@@ -691,7 +700,7 @@ def expand_card_pool(frame, page) -> list[dict]:
                 continue
             seen.add(k)
             c2 = dict(c)
-            c2.setdefault("source_filter", "Popular")
+            c2.setdefault("source_filter", "Points")
             all_cards.append(c2)
         print("[POOL] expand_card_pool fallback: using single-view get_all_cards")
     print(f"[POOL] Total expanded: {len(all_cards)} cards")
@@ -720,6 +729,16 @@ def resolve_leg_card(template: dict, fresh: list[dict]) -> dict | None:
         if nt not in _norm(c.get("player")) and _norm(c.get("player")) not in nt:
             continue
         if _line_key(c.get("line")) != nl:
+            continue
+        if c.get("pick_type") != pt:
+            continue
+        return c
+    # Fallback for cards with arrow-based alternate lines where visible line
+    # can differ from the template despite same player/prop/pick_type.
+    for c in fresh:
+        if nt not in _norm(c.get("player")) and _norm(c.get("player")) not in nt:
+            continue
+        if _norm(c.get("prop_type")) != np:
             continue
         if c.get("pick_type") != pt:
             continue
@@ -828,55 +847,155 @@ def pick_next_test_case(
 ) -> dict | None:
     if not cases:
         return None
+    # Prioritize scarce buckets first so goblin/demon evidence appears early.
+    # This avoids long front-loading of all-standard cases.
+    priority_weight = {
+        "has_demon": 6.0,
+        "has_goblin": 4.0,
+        "flex": 2.0,
+        "all_standard": 1.0,
+    }
+    best_tc = None
+    best_score = -1.0
     for tc in cases:
-        if any(
-            bucket_needs_fill(b, counts, goblins_avail, demons_avail)
-            for b in case_target_buckets(tc)
-        ):
-            return tc
+        buckets = case_target_buckets(tc)
+        score = 0.0
+        needed_any = False
+        for b in buckets:
+            if not bucket_needs_fill(b, counts, goblins_avail, demons_avail):
+                continue
+            needed_any = True
+            remain = max(0, MIN_SAMPLES[b] - counts[b])
+            score += priority_weight.get(b, 1.0) * float(remain)
+        if needed_any and score > best_score:
+            best_score = score
+            best_tc = tc
+    if best_tc is not None:
+        return best_tc
     return cases[cases_run % len(cases)]
 
 
 def build_payout_test_matrix(
-    standard: list[dict], goblins: list[dict], demons: list[dict]
+    standard: list[dict],
+    goblins: list[dict],
+    demons: list[dict],
+    std_line_map: dict[tuple[str, str], float] | None = None,
 ) -> list[dict]:
+    std_line_map = std_line_map or {}
+    std_anchor_keys = {
+        (_norm(c.get("player")), _norm(c.get("prop_type")))
+        for c in standard
+    }
+
+    def _rank_pool(pool: list[dict], require_anchor: bool = False) -> list[dict]:
+        return sorted(
+            [
+                c
+                for c in pool
+                if not require_anchor
+                or (_norm(c.get("player")), _norm(c.get("prop_type"))) in std_anchor_keys
+            ],
+            key=lambda c: (
+                # Prefer cards with known standard anchor in current board slate.
+                0
+                if (_norm(c.get("player")), _norm(c.get("prop_type"))) in std_anchor_keys
+                else 1,
+                # Prefer larger line delta vs mapped standard line from step outputs.
+                -abs(
+                    float(c.get("line"))
+                    - float(
+                        std_line_map.get(
+                            (_norm(c.get("player")), _norm(c.get("prop_type"))),
+                            c.get("line"),
+                        )
+                    )
+                ),
+                0 if c.get("has_alt_lines") else 1,
+                _norm(c.get("player")),
+                _norm(c.get("prop_type")),
+            ),
+        )
+
+    def _pick_unique(
+        pool: list[dict],
+        n: int,
+        used_players: set[str],
+        require_anchor: bool = False,
+    ) -> list[dict] | None:
+        out: list[dict] = []
+        for c in _rank_pool(pool, require_anchor=require_anchor):
+            player_k = _norm(c.get("player"))
+            if not player_k or player_k in used_players:
+                continue
+            used_players.add(player_k)
+            out.append(c)
+            if len(out) == n:
+                return out
+        return None
+
+    def _build_case(n_legs: int, n_gob: int, n_dem: int) -> list[dict] | None:
+        n_std = n_legs - n_gob - n_dem
+        if n_std < 0:
+            return None
+        used_players: set[str] = set()
+        pick_g = (
+            _pick_unique(goblins, n_gob, used_players, require_anchor=True)
+            if n_gob > 0
+            else []
+        )
+        if n_gob > 0 and not pick_g:
+            return None
+        pick_d = (
+            _pick_unique(demons, n_dem, used_players, require_anchor=True)
+            if n_dem > 0
+            else []
+        )
+        if n_dem > 0 and not pick_d:
+            return None
+        pick_s = _pick_unique(standard, n_std, used_players) if n_std > 0 else []
+        if n_std > 0 and not pick_s:
+            return None
+        combo = (pick_g or []) + (pick_d or []) + (pick_s or [])
+        return combo if len(combo) == n_legs else None
+
     cases: list[dict] = []
     for ticket_type in ("power", "flex"):
         for n in [2, 3, 4, 5]:
-            if len(standard) >= n:
-                cases.append({
-                    "legs": [{"card": standard[i], "direction": "OVER"} for i in range(n)],
-                    "ticket_type": ticket_type,
-                    "label": f"{n}-leg all-{ticket_type} standard",
-                })
+            combo = _build_case(n_legs=n, n_gob=0, n_dem=0)
+            if combo:
+                cases.append(
+                    {
+                        "legs": [{"card": c, "direction": "OVER"} for c in combo],
+                        "ticket_type": ticket_type,
+                        "label": f"{n}-leg all-{ticket_type} standard",
+                    }
+                )
         if len(goblins) >= 1 and len(standard) >= 1:
             for n_gob in [1, 2]:
                 for total in [2, 3, 4]:
+                    combo = _build_case(n_legs=total, n_gob=n_gob, n_dem=0)
                     n_std = total - n_gob
-                    if len(goblins) >= n_gob and len(standard) >= n_std and n_std >= 0:
-                        legs_case = (
-                            [{"card": goblins[i], "direction": "OVER"} for i in range(n_gob)]
-                            + [{"card": standard[i], "direction": "OVER"} for i in range(n_std)]
+                    if combo:
+                        cases.append(
+                            {
+                                "legs": [{"card": c, "direction": "OVER"} for c in combo],
+                                "ticket_type": ticket_type,
+                                "label": f"{total}-leg {n_gob}gob-{ticket_type} {n_std}std",
+                            }
                         )
-                        cases.append({
-                            "legs": legs_case,
-                            "ticket_type": ticket_type,
-                            "label": f"{total}-leg {n_gob}gob-{ticket_type} {n_std}std",
-                        })
         if len(demons) >= 1 and len(standard) >= 1:
             for n_dem in [1, 2]:
                 for total in [2, 3, 4]:
+                    combo = _build_case(n_legs=total, n_gob=0, n_dem=n_dem)
                     n_std = total - n_dem
-                    if len(demons) >= n_dem and len(standard) >= n_std and n_std >= 0:
-                        legs_case = (
-                            [{"card": demons[i], "direction": "OVER"} for i in range(n_dem)]
-                            + [{"card": standard[i], "direction": "OVER"} for i in range(n_std)]
+                    if combo:
+                        cases.append(
+                            {
+                                "legs": [{"card": c, "direction": "OVER"} for c in combo],
+                                "ticket_type": ticket_type,
+                                "label": f"{total}-leg {n_dem}dem-{ticket_type} {n_std}std",
+                            }
                         )
-                        cases.append({
-                            "legs": legs_case,
-                            "ticket_type": ticket_type,
-                            "label": f"{total}-leg {n_dem}dem-{ticket_type} {n_std}std",
-                        })
     return cases
 
 
@@ -1137,8 +1256,16 @@ def read_slip(
 
         n_selected = re.findall(r"(\d+)\s*Players?\s*Selected", slip_section, re.IGNORECASE)
         n_selected_int = int(n_selected[0]) if n_selected else None
-        flex_first = re.findall(r"1st\s*place\s*pays[\s\n]*(\d+\.?\d*)[Xx]", slip_section, re.IGNORECASE)
-        flex_correct_pays = re.findall(r"(\d+)\s*correct\s*pays[\s\n]*(\d+\.?\d*)[Xx]", slip_section, re.IGNORECASE)
+        first_place = re.findall(
+            r"1st\s*place\s*pays[\s\n]*(\d+\.?\d*)[Xx]",
+            slip_section,
+            re.IGNORECASE,
+        )
+        correct_pays = re.findall(
+            r"(\d+)\s*correct\s*pays[\s\n]*(\d+\.?\d*)[Xx]",
+            slip_section,
+            re.IGNORECASE,
+        )
 
         entry_amt: list[str] = []
         entry_patterns = [
@@ -1180,34 +1307,69 @@ def read_slip(
             if _SLIP_MULT_MIN <= float(computed_mult) <= _SLIP_MULT_MAX:
                 displayed_multiplier = computed_mult
 
-        flex_first_val = float(flex_first[0]) if flex_first else None
+        first_place_val = float(first_place[0]) if first_place else None
+        min_guarantee_val = float(correct_pays[-1][1]) if correct_pays else None
+        min_guarantee_hits_required = int(correct_pays[-1][0]) if correct_pays else None
+        flex_first_val = first_place_val
         if flex_first_val is not None and not (
             _SLIP_MULT_MIN <= flex_first_val <= _SLIP_MULT_MAX
         ):
             flex_first_val = None
+        if min_guarantee_val is not None and not (
+            _SLIP_MULT_MIN <= min_guarantee_val <= _SLIP_MULT_MAX
+        ):
+            min_guarantee_val = None
 
         slip = {
             "multipliers": multipliers,
             "displayed_multiplier": displayed_multiplier,
             "to_win": to_win_num,
             "n_selected": n_selected_int,
+            "first_place_payout": first_place_val,
+            "min_guarantee_payout": min_guarantee_val,
+            "min_guarantee_hits_required": min_guarantee_hits_required,
             "flex_first_place": flex_first_val,
-            "flex_correct_pays": flex_correct_pays,
-            "flex_miss_1": flex_correct_pays,
+            "flex_correct_pays": correct_pays,
+            "flex_miss_1": correct_pays,
             "entry_amount": entry_num,
             "computed_multiplier": computed_mult,
             "has_slip": slip_start >= 0,
+            "raw_slip_section": slip_section[:400],
         }
         if slip["has_slip"]:
             print(
                 f"[SLIP] n={slip['n_selected']} | mult={slip['multipliers']} | "
                 f"displayed={slip['displayed_multiplier']} | towin={slip['to_win']} | "
-                f"flex={slip['flex_first_place']}"
+                f"first={slip['first_place_payout']} | min_g={slip['min_guarantee_payout']}"
             )
         return slip
     except Exception as e:
         print(f"[SLIP] Read error: {e}")
         return {}
+
+
+def is_valid_record(record: dict) -> tuple[bool, str]:
+    n = int(pd.to_numeric(record.get("n_legs"), errors="coerce") or 0)
+    first = pd.to_numeric(record.get("first_place_payout"), errors="coerce")
+    min_g = pd.to_numeric(record.get("min_guarantee_payout"), errors="coerce")
+    mult = pd.to_numeric(record.get("displayed_multiplier"), errors="coerce")
+
+    first_v = float(first) if pd.notna(first) else None
+    min_g_v = float(min_g) if pd.notna(min_g) else None
+    mult_v = float(mult) if pd.notna(mult) else None
+
+    if first_v is None and min_g_v is None and mult_v is None:
+        return False, "no payout data"
+
+    if first_v is not None and min_g_v is not None and min_g_v >= first_v:
+        return False, f"min_g {min_g_v} >= first {first_v}"
+
+    max_min_g = {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 37.5}
+    if min_g_v is not None and n in max_min_g:
+        if not (0.3 <= min_g_v <= max_min_g[n]):
+            return False, f"min_g {min_g_v} out of range for {n}-leg"
+
+    return True, "ok"
 
 
 def build_standard_line_map(legs: list[dict]) -> dict[tuple[str, str], float]:
@@ -1347,6 +1509,8 @@ def main():
 
     out_rows: list[dict] = []
     ts_now = datetime.utcnow().isoformat()
+    saved_records = 0
+    skipped_records = 0
 
     try:
         frame = find_prizepicks_frame(page)
@@ -1366,7 +1530,12 @@ def main():
         demons_avail = len(demons) > 0
         print(f"[POOL] Standard={len(standard)} Goblin={len(goblins)} Demon={len(demons)}")
 
-        test_cases = build_payout_test_matrix(standard, goblins, demons)
+        test_cases = build_payout_test_matrix(
+            standard,
+            goblins,
+            demons,
+            std_line_map=std_line_map,
+        )
         print(f"[MATRIX] {len(test_cases)} test cases planned")
 
         max_cases = max(1, int(args.max_cases))
@@ -1410,6 +1579,15 @@ def main():
                     ticket_type=tc["ticket_type"],
                 )
                 if slip.get("has_slip"):
+                    n_selected = slip.get("n_selected")
+                    if n_selected is not None and int(n_selected) != len(tc["legs"]):
+                        print(f"  [SKIP] n_selected={n_selected} != n_legs={len(tc['legs'])}")
+                        skipped_records += 1
+                        clear_slip(frame)
+                        dismiss_modal(frame, page)
+                        frame.wait_for_timeout(600)
+                        cases_run += 1
+                        continue
                     legs_payload = []
                     for leg in tc["legs"]:
                         c = leg["card"]
@@ -1434,14 +1612,33 @@ def main():
                         "n_demons": sum(1 for l in tc["legs"] if l["card"]["pick_type"] == "demon"),
                         "n_standard": sum(1 for l in tc["legs"] if l["card"]["pick_type"] == "standard"),
                         "displayed_multiplier": slip.get("displayed_multiplier"),
+                        "first_place_payout": slip.get("first_place_payout"),
+                        "min_guarantee_payout": slip.get("min_guarantee_payout"),
+                        "min_guarantee_hits_required": slip.get("min_guarantee_hits_required"),
                         "flex_first_place": slip.get("flex_first_place"),
                         "flex_miss_1": slip.get("flex_miss_1"),
                         "entry_amount": float(slip.get("entry_amount") or args.entry_amount),
                         "to_win_amount": slip.get("to_win"),
+                        "raw_slip_section": slip.get("raw_slip_section"),
                     }
-                    out_rows.append(rec)
-                    bump_counts_from_record(counts, rec)
-                    print(f"  [RECORDED] mult={rec['displayed_multiplier']} towin={rec['to_win_amount']}")
+                    valid, reason = is_valid_record(rec)
+                    if not valid:
+                        print(f"  [SKIP] Bad record: {reason}")
+                        if "min_g" in reason:
+                            print("  [DEBUG SLIP TEXT]:")
+                            print((rec.get("raw_slip_section") or "not captured")[:400])
+                        skipped_records += 1
+                    else:
+                        out_rows.append(rec)
+                        bump_counts_from_record(counts, rec)
+                        saved_records += 1
+                        print(
+                            "  [RECORDED] "
+                            f"mult={rec['displayed_multiplier']} "
+                            f"first={rec['first_place_payout']} "
+                            f"min_g={rec['min_guarantee_payout']} "
+                            f"towin={rec['to_win_amount']}"
+                        )
                 else:
                     print("  [NO SLIP] Slip panel not detected")
                 clear_slip(frame)
@@ -1470,6 +1667,7 @@ def main():
     append_rows_csv(out_csv, out_rows)
     print(f"[PAYOUT] Collected samples: {len(out_rows)}")
     print(f"[PAYOUT] Saved -> {out_csv}")
+    print(f"[PAYOUT] Saved records: {saved_records} | Skipped records: {skipped_records}")
 
 
 if __name__ == "__main__":
