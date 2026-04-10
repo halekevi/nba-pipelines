@@ -3,6 +3,9 @@
 Manual payout data entry: suggest legs from NBA step8, print 15 ticket configs,
 prompt for PrizePicks slip values, save CSV for fit_payout_formula.py.
 No browser/CDP — terminal only.
+
+Leg selection is intentionally simple: valid board rows only (no scores).
+Each player appears in at most one suggested ticket.
 """
 
 from __future__ import annotations
@@ -12,6 +15,7 @@ import json
 import re
 import subprocess
 import sys
+from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -59,7 +63,6 @@ def find_nba_step8_excel() -> Path:
         candidates.extend(sub.glob("step8_nba_direction_clean*.xlsx"))
         candidates.extend(sub.glob("step8*direction*clean*.xlsx"))
         candidates.extend(sub.glob("step8_all_direction_clean*.xlsx"))
-    # De-dupe, newest first
     seen: set[str] = set()
     uniq: list[Path] = []
     for p in sorted(candidates, key=lambda x: x.stat().st_mtime, reverse=True):
@@ -79,9 +82,8 @@ def find_nba_step8_excel() -> Path:
     return uniq[0]
 
 
-def load_filtered_candidates(
-    path: Path,
-) -> tuple[pd.DataFrame, dict[tuple[str, str], float]]:
+def load_board(path: Path) -> tuple[pd.DataFrame, str, str, str, str | None, str | None]:
+    """Rows on the board: line > 0.5, player set, pick_type standard/goblin/demon. No score filters."""
     xls = pd.ExcelFile(path)
     sh = "ALL" if "ALL" in xls.sheet_names else xls.sheet_names[0]
     df = pd.read_excel(path, sheet_name=sh, engine="openpyxl")
@@ -89,12 +91,11 @@ def load_filtered_candidates(
     pcol = _pick_col(df, ["player"])
     prcol = _pick_col(df, ["prop_type", "prop"])
     lcol = _pick_col(df, ["line"])
-    dircol = _pick_col(df, ["direction", "final_bet_direction"])
-    tiercol = _pick_col(df, ["tier"])
-    blendcol = _pick_col(df, ["blended_score", "blended score"])
     pickcol = _pick_col(df, ["pick_type", "pick type"])
+    dircol = _pick_col(df, ["direction", "final_bet_direction"])
+    teamcol = _pick_col(df, ["team"])
 
-    req = [pcol, prcol, lcol, dircol, tiercol, blendcol, pickcol]
+    req = [pcol, prcol, lcol, pickcol]
     if any(c is None for c in req):
         raise RuntimeError(
             f"step8 sheet missing required columns. Have: {list(df.columns)}"
@@ -102,31 +103,27 @@ def load_filtered_candidates(
 
     work = df.copy()
     work["__pick"] = work[pickcol].map(_norm_pick_type)
-    tier = work[tiercol].astype(str).str.upper().str.strip()
-    direction = work[dircol].astype(str).str.strip()
     linev = pd.to_numeric(work[lcol], errors="coerce")
-    blend = pd.to_numeric(work[blendcol], errors="coerce")
+    player_ok = work[pcol].astype(str).str.strip().ne("") & work[pcol].notna()
 
     mask = (
-        tier.isin(["A", "B", "C"])
-        & direction.ne("")
-        & direction.notna()
-        & work["__pick"].isin(["standard", "goblin", "demon"])
+        work["__pick"].isin(["standard", "goblin", "demon"])
         & linev.notna()
         & (linev > 0.5)
-        & blend.notna()
+        & player_ok
     )
     work = work.loc[mask].copy()
     work["__line"] = linev.loc[work.index]
-    work["__blend"] = blend.loc[work.index]
 
-    # Standard line per (player, prop): line from standard row with highest blend
+    # Standard line per (player, prop): first row in stable name order (no scoring)
     std_map: dict[tuple[str, str], float] = {}
-    std_rows = work[work["__pick"] == "standard"]
-    for _, r in std_rows.sort_values("__blend", ascending=False).iterrows():
-        key = (_norm(r[pcol]), _norm(r[prcol]))
-        if key not in std_map:
-            std_map[key] = float(r["__line"])
+    std_rows = work[work["__pick"] == "standard"].copy()
+    if not std_rows.empty:
+        std_rows = std_rows.sort_values([pcol, prcol], kind="mergesort")
+        for _, r in std_rows.iterrows():
+            key = (_norm(r[pcol]), _norm(r[prcol]))
+            if key not in std_map:
+                std_map[key] = float(r["__line"])
 
     def row_std_line(row: pd.Series) -> float | None:
         key = (_norm(row[pcol]), _norm(row[prcol]))
@@ -143,18 +140,27 @@ def load_filtered_candidates(
 
     work["__distance"] = work.apply(row_distance, axis=1)
 
-    return work, std_map
+    return work, pcol, prcol, lcol, dircol, teamcol
 
 
-def top_by_pick(
+def build_pools(
     work: pd.DataFrame,
     pcol: str,
     prcol: str,
-    pick: str,
-    n: int,
-) -> pd.DataFrame:
-    sub = work[work["__pick"] == pick].sort_values("__blend", ascending=False)
-    return sub.head(n).copy()
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    std = work[work["__pick"] == "standard"].copy()
+    std = std.sort_values(pcol, kind="mergesort")
+    std = std.drop_duplicates(subset=[pcol], keep="first")
+
+    gob = work[work["__pick"] == "goblin"].copy()
+    gob = gob.sort_values("__distance", ascending=False, na_position="last", kind="mergesort")
+    gob = gob.drop_duplicates(subset=[pcol], keep="first")
+
+    dem = work[work["__pick"] == "demon"].copy()
+    dem = dem.sort_values(pcol, kind="mergesort")
+    dem = dem.drop_duplicates(subset=[pcol], keep="first")
+
+    return std, gob, dem
 
 
 def row_to_leg_dict(
@@ -162,354 +168,521 @@ def row_to_leg_dict(
     pcol: str,
     prcol: str,
     lcol: str,
-    dircol: str,
+    dircol: str | None,
+    teamcol: str | None,
 ) -> dict[str, Any]:
     dist = r.get("__distance")
-    return {
+    direction = "over"
+    if dircol and dircol in r.index:
+        direction = str(r[dircol] or "over").strip().lower() or "over"
+    leg: dict[str, Any] = {
         "player": str(r[pcol] or "").strip(),
         "prop_type": str(r[prcol] or "").strip(),
         "line": float(r["__line"]),
         "pick_type": str(r["__pick"]),
-        "direction": str(r[dircol] or "over").lower(),
+        "direction": direction,
         "line_distance": float(dist) if dist is not None and pd.notna(dist) else None,
     }
+    if teamcol and teamcol in r.index:
+        leg["team"] = str(r[teamcol] or "").strip()
+    return leg
 
 
 def leg_label(leg: dict[str, Any]) -> str:
+    dist = leg.get("line_distance")
+    dist_part = (
+        f", dist={float(dist):.2f}"
+        if dist is not None
+        else ", dist=n/a"
+    )
     return (
         f"{leg['player']} {leg['line']} {leg['prop_type']} "
-        f"({leg['pick_type']}"
-        + (
-            f", dist={leg['line_distance']:.2f}"
-            if leg.get("line_distance") is not None
-            else ""
-        )
-        + ")"
+        f"({leg['pick_type']}{dist_part})"
     )
 
 
-def pick_goblin_by_rank(
-    goblins: pd.DataFrame, pcol: str, prcol: str, lcol: str, dircol: str, rank: str
-) -> dict[str, Any] | None:
-    """rank: 'smallest', 'largest', 'second_largest', 'medium'."""
-    g = goblins[goblins["__distance"].notna()].copy()
-    if g.empty:
-        g = goblins.copy()
-        if g.empty:
-            return None
-        r0 = g.iloc[0]
-        return row_to_leg_dict(r0, pcol, prcol, lcol, dircol)
-    g = g.sort_values("__distance", ascending=True)
-    if rank == "smallest":
-        return row_to_leg_dict(g.iloc[0], pcol, prcol, lcol, dircol)
-    if rank == "largest":
-        return row_to_leg_dict(g.iloc[-1], pcol, prcol, lcol, dircol)
-    if rank == "second_largest":
-        if len(g) < 2:
-            return row_to_leg_dict(g.iloc[-1], pcol, prcol, lcol, dircol)
-        return row_to_leg_dict(g.iloc[-2], pcol, prcol, lcol, dircol)
-    if rank == "medium":
-        mid = len(g) // 2
-        return row_to_leg_dict(g.iloc[mid], pcol, prcol, lcol, dircol)
-    return None
+def avoid_team_frozenset(team: str | None) -> frozenset[str] | None:
+    if not team or not str(team).strip():
+        return None
+    return frozenset({str(team).strip()})
 
 
-def build_fifteen_tickets(
-    standards: pd.DataFrame,
-    goblins: pd.DataFrame,
-    demons: pd.DataFrame,
-    pcol: str,
-    prcol: str,
-    lcol: str,
-    dircol: str,
+@dataclass
+class DiversePicker:
+    """Picks legs without reusing players across tickets; optional same-team avoidance."""
+
+    standard_pool: pd.DataFrame
+    goblin_pool: pd.DataFrame
+    pcol: str
+    prcol: str
+    lcol: str
+    dircol: str | None
+    teamcol: str | None
+    used_players: set[str] = field(default_factory=set)
+    std_taken: set[int] = field(default_factory=set)
+    gob_taken: set[int] = field(default_factory=set)
+
+    def __post_init__(self) -> None:
+        self.standard_pool = self.standard_pool.reset_index(drop=True)
+        self.goblin_pool = self.goblin_pool.reset_index(drop=True)
+
+    def _take(self, leg: dict[str, Any]) -> None:
+        self.used_players.add(_norm(leg["player"]))
+
+    def _team(self, r: pd.Series) -> str:
+        if not self.teamcol or self.teamcol not in r.index:
+            return ""
+        return str(r[self.teamcol] or "").strip()
+
+    def pop_standard(self, avoid_teams: frozenset[str] | None = None) -> dict[str, Any] | None:
+        for k in range(len(self.standard_pool)):
+            if k in self.std_taken:
+                continue
+            r = self.standard_pool.iloc[k]
+            key = _norm(r[self.pcol])
+            if key in self.used_players:
+                continue
+            t = self._team(r)
+            if avoid_teams and t and t in avoid_teams:
+                continue
+            self.std_taken.add(k)
+            leg = row_to_leg_dict(r, self.pcol, self.prcol, self.lcol, self.dircol, self.teamcol)
+            self._take(leg)
+            return leg
+        return None
+
+    def pop_goblin_large(self, avoid_teams: frozenset[str] | None = None) -> dict[str, Any] | None:
+        for k in range(len(self.goblin_pool)):
+            if k in self.gob_taken:
+                continue
+            r = self.goblin_pool.iloc[k]
+            key = _norm(r[self.pcol])
+            if key in self.used_players:
+                continue
+            t = self._team(r)
+            if avoid_teams and t and t in avoid_teams:
+                continue
+            self.gob_taken.add(k)
+            leg = row_to_leg_dict(r, self.pcol, self.prcol, self.lcol, self.dircol, self.teamcol)
+            self._take(leg)
+            return leg
+        return None
+
+    def pop_goblin_small(self, avoid_teams: frozenset[str] | None = None) -> dict[str, Any] | None:
+        eps = 1e-6
+        for k in range(len(self.goblin_pool) - 1, -1, -1):
+            if k in self.gob_taken:
+                continue
+            r = self.goblin_pool.iloc[k]
+            d = r.get("__distance")
+            if d is None or pd.isna(d) or float(d) <= eps:
+                continue
+            key = _norm(r[self.pcol])
+            if key in self.used_players:
+                continue
+            t = self._team(r)
+            if avoid_teams and t and t in avoid_teams:
+                continue
+            self.gob_taken.add(k)
+            leg = row_to_leg_dict(r, self.pcol, self.prcol, self.lcol, self.dircol, self.teamcol)
+            self._take(leg)
+            return leg
+        return None
+
+
+def _fill_short(
+    legs: list[dict[str, Any] | None],
+    picker: DiversePicker,
+    need: int,
+    kind: str,
 ) -> list[dict[str, Any]]:
-    def std_i(i: int) -> dict[str, Any]:
-        r = standards.iloc[i % len(standards)]
-        return row_to_leg_dict(r, pcol, prcol, lcol, dircol)
+    """Replace Nones by pulling more legs from pools (goblin-preferring or standard-preferring)."""
+    out: list[dict[str, Any]] = [L for L in legs if L is not None]
+    while len(out) < need:
+        if kind == "goblin":
+            g = picker.pop_goblin_large()
+            if g is None:
+                g = picker.pop_standard()
+        else:
+            g = picker.pop_standard()
+            if g is None:
+                g = picker.pop_goblin_large()
+        if g is None:
+            break
+        out.append(g)
+    return out
 
+
+def build_fifteen_tickets(picker: DiversePicker) -> list[dict[str, Any]]:
+    p = picker
     tickets: list[dict[str, Any]] = []
 
-    # 1: 2 power 2 std
+    def count_types(legs: list[dict[str, Any]]) -> tuple[int, int, int]:
+        ng = sum(1 for x in legs if x.get("pick_type") == "goblin")
+        nd = sum(1 for x in legs if x.get("pick_type") == "demon")
+        ns = sum(1 for x in legs if x.get("pick_type") == "standard")
+        return ng, nd, ns
+
+    # NOTE: PrizePicks may block same-team 2-leg entries; we prefer different teams when Team exists.
+    print(
+        "\n[NOTE] Calibration slips: different players per leg. "
+        "If PrizePicks blocks same-team 2-leg picks, skip that build and use the next "
+        "standard/goblin from the printed pools (different Team) instead.\n"
+    )
+
+    # 1: 2 std — prefer different teams
+    a = p.pop_standard()
+    b = p.pop_standard(avoid_team_frozenset(a.get("team") if a else None))
+    legs = _fill_short([a, b], p, 2, "standard")
+    ng, nd, ns = count_types(legs)
     tickets.append(
         {
             "num": 1,
             "n_legs": 2,
             "ticket_type": "power",
-            "n_goblins": 0,
-            "n_demons": 0,
-            "n_standard": 2,
-            "legs": [std_i(0), std_i(1)],
+            "n_goblins": ng,
+            "n_demons": nd,
+            "n_standard": ns,
+            "legs": legs,
             "title": "2-leg Power, 2 Standard",
         }
     )
-    # 2: small gob + std (prefer smallest distance > 0 vs standard line)
-    g_pos = goblins[
-        goblins["__distance"].notna() & (pd.to_numeric(goblins["__distance"], errors="coerce") > 1e-6)
-    ]
-    g1 = pick_goblin_by_rank(
-        g_pos if not g_pos.empty else goblins, pcol, prcol, lcol, dircol, "smallest"
-    )
-    if g1 is None:
-        g1 = std_i(0)  # fallback
-        g1["pick_type"] = "goblin"
+
+    # 2: small goblin + std
+    g1 = p.pop_goblin_small()
+    s1 = p.pop_standard(avoid_team_frozenset(g1.get("team") if g1 else None))
+    legs = _fill_short([g1, s1], p, 2, "standard")
+    ng, nd, ns = count_types(legs)
     tickets.append(
         {
             "num": 2,
             "n_legs": 2,
             "ticket_type": "power",
-            "n_goblins": 1,
-            "n_demons": 0,
-            "n_standard": 1,
-            "legs": [g1, std_i(0)],
+            "n_goblins": ng,
+            "n_demons": nd,
+            "n_standard": ns,
+            "legs": legs,
             "title": "2-leg Power, 1 Goblin (small distance) + 1 Standard",
         }
     )
-    # 3: large gob + std (prefer distance >= 5 vs standard when available)
-    g_far = goblins[goblins["__distance"].notna() & (goblins["__distance"] >= 5.0)]
-    g2 = pick_goblin_by_rank(
-        g_far if not g_far.empty else goblins, pcol, prcol, lcol, dircol, "largest"
-    )
-    if g2 is None:
-        g2 = g1
+
+    # 3: large goblin + std
+    g2 = p.pop_goblin_large()
+    s2 = p.pop_standard(avoid_team_frozenset(g2.get("team") if g2 else None))
+    legs = _fill_short([g2, s2], p, 2, "standard")
+    ng, nd, ns = count_types(legs)
     tickets.append(
         {
             "num": 3,
             "n_legs": 2,
             "ticket_type": "power",
-            "n_goblins": 1,
-            "n_demons": 0,
-            "n_standard": 1,
-            "legs": [g2, std_i(1)],
+            "n_goblins": ng,
+            "n_demons": nd,
+            "n_standard": ns,
+            "legs": legs,
             "title": "2-leg Power, 1 Goblin (large distance) + 1 Standard",
         }
     )
-    # 4: 2 goblins
-    ga = pick_goblin_by_rank(goblins, pcol, prcol, lcol, dircol, "largest")
-    gb = pick_goblin_by_rank(goblins, pcol, prcol, lcol, dircol, "second_largest")
-    if ga is None or gb is None or ga["player"] == gb["player"]:
-        # use top two distinct goblin rows by blend
-        gob2 = goblins.drop_duplicates(subset=[pcol]).head(2)
-        legs_g = [
-            row_to_leg_dict(gob2.iloc[i], pcol, prcol, lcol, dircol)
-            for i in range(min(2, len(gob2)))
-        ]
-        while len(legs_g) < 2:
-            legs_g.append(std_i(2))
-            legs_g[-1]["pick_type"] = "goblin"
-    else:
-        legs_g = [ga, gb]
+
+    # 4: 2 goblins (large, then large w/ team avoid)
+    ga = p.pop_goblin_large()
+    gb = p.pop_goblin_large(avoid_team_frozenset(ga.get("team") if ga else None))
+    legs = _fill_short([ga, gb], p, 2, "goblin")
+    ng, nd, ns = count_types(legs)
     tickets.append(
         {
             "num": 4,
             "n_legs": 2,
             "ticket_type": "power",
-            "n_goblins": 2,
-            "n_demons": 0,
-            "n_standard": 0,
-            "legs": legs_g,
+            "n_goblins": ng,
+            "n_demons": nd,
+            "n_standard": ns,
+            "legs": legs,
             "title": "2-leg Power, 2 Goblins",
         }
     )
 
-    # 5–8: 3-leg power
+    # 5: 3 std
+    legs = _fill_short(
+        [p.pop_standard(), p.pop_standard(), p.pop_standard()],
+        p,
+        3,
+        "standard",
+    )
+    ng, nd, ns = count_types(legs)
     tickets.append(
         {
             "num": 5,
             "n_legs": 3,
             "ticket_type": "power",
-            "n_goblins": 0,
-            "n_demons": 0,
-            "n_standard": 3,
-            "legs": [std_i(0), std_i(1), std_i(2)],
+            "n_goblins": ng,
+            "n_demons": nd,
+            "n_standard": ns,
+            "legs": legs,
             "title": "3-leg Power, 3 Standard",
         }
     )
-    gm = pick_goblin_by_rank(goblins, pcol, prcol, lcol, dircol, "medium")
-    if gm is None:
-        gm = g1
+
+    # 6: 1 goblin (large queue) + 2 std
+    gm = p.pop_goblin_large()
+    legs = _fill_short(
+        [gm, p.pop_standard(), p.pop_standard()],
+        p,
+        3,
+        "standard",
+    )
+    ng, nd, ns = count_types(legs)
     tickets.append(
         {
             "num": 6,
             "n_legs": 3,
             "ticket_type": "power",
-            "n_goblins": 1,
-            "n_demons": 0,
-            "n_standard": 2,
-            "legs": [gm, std_i(0), std_i(1)],
+            "n_goblins": ng,
+            "n_demons": nd,
+            "n_standard": ns,
+            "legs": legs,
             "title": "3-leg Power, 1 Goblin + 2 Standard",
         }
     )
-    ga3 = pick_goblin_by_rank(goblins, pcol, prcol, lcol, dircol, "largest")
-    gb3 = pick_goblin_by_rank(goblins, pcol, prcol, lcol, dircol, "second_largest")
-    if ga3 is None:
-        ga3 = gm
-    if gb3 is None or (
-        ga3.get("player") == gb3.get("player") and ga3.get("prop_type") == gb3.get("prop_type")
-    ):
-        gb3 = pick_goblin_by_rank(goblins, pcol, prcol, lcol, dircol, "smallest") or ga3
+
+    # 7: 2 goblins + 1 std
+    ga3 = p.pop_goblin_large()
+    gb3 = p.pop_goblin_large(avoid_team_frozenset(ga3.get("team") if ga3 else None))
+    legs = _fill_short([ga3, gb3, p.pop_standard()], p, 3, "standard")
+    ng, nd, ns = count_types(legs)
     tickets.append(
         {
             "num": 7,
             "n_legs": 3,
             "ticket_type": "power",
-            "n_goblins": 2,
-            "n_demons": 0,
-            "n_standard": 1,
-            "legs": [ga3, gb3, std_i(2)],
+            "n_goblins": ng,
+            "n_demons": nd,
+            "n_standard": ns,
+            "legs": legs,
             "title": "3-leg Power, 2 Goblins + 1 Standard",
         }
     )
-    gob3 = goblins.drop_duplicates(subset=[pcol]).head(3)
-    legs_3g = [
-        row_to_leg_dict(gob3.iloc[i], pcol, prcol, lcol, dircol)
-        for i in range(min(3, len(gob3)))
-    ]
-    while len(legs_3g) < 3:
-        legs_3g.append(legs_3g[-1] if legs_3g else std_i(0))
+
+    # 8: 3 goblins
+    legs = _fill_short(
+        [
+            p.pop_goblin_large(),
+            p.pop_goblin_large(),
+            p.pop_goblin_large(),
+        ],
+        p,
+        3,
+        "goblin",
+    )
+    ng, nd, ns = count_types(legs)
     tickets.append(
         {
             "num": 8,
             "n_legs": 3,
             "ticket_type": "power",
-            "n_goblins": 3,
-            "n_demons": 0,
-            "n_standard": 0,
-            "legs": legs_3g[:3],
+            "n_goblins": ng,
+            "n_demons": nd,
+            "n_standard": ns,
+            "legs": legs,
             "title": "3-leg Power, 3 Goblins",
         }
     )
 
-    # 9–11: 4-leg power
+    # 9: 4 std
+    legs = _fill_short(
+        [
+            p.pop_standard(),
+            p.pop_standard(),
+            p.pop_standard(),
+            p.pop_standard(),
+        ],
+        p,
+        4,
+        "standard",
+    )
+    ng, nd, ns = count_types(legs)
     tickets.append(
         {
             "num": 9,
             "n_legs": 4,
             "ticket_type": "power",
-            "n_goblins": 0,
-            "n_demons": 0,
-            "n_standard": 4,
-            "legs": [std_i(0), std_i(1), std_i(2), std_i(3)],
+            "n_goblins": ng,
+            "n_demons": nd,
+            "n_standard": ns,
+            "legs": legs,
             "title": "4-leg Power, 4 Standard",
         }
     )
-    g4 = pick_goblin_by_rank(goblins, pcol, prcol, lcol, dircol, "medium") or gm
+
+    # 10: 1 gob + 3 std
+    g4 = p.pop_goblin_large()
+    legs = _fill_short(
+        [g4, p.pop_standard(), p.pop_standard(), p.pop_standard()],
+        p,
+        4,
+        "standard",
+    )
+    ng, nd, ns = count_types(legs)
     tickets.append(
         {
             "num": 10,
             "n_legs": 4,
             "ticket_type": "power",
-            "n_goblins": 1,
-            "n_demons": 0,
-            "n_standard": 3,
-            "legs": [g4, std_i(0), std_i(1), std_i(2)],
+            "n_goblins": ng,
+            "n_demons": nd,
+            "n_standard": ns,
+            "legs": legs,
             "title": "4-leg Power, 1 Goblin + 3 Standard",
         }
     )
-    ga4 = pick_goblin_by_rank(goblins, pcol, prcol, lcol, dircol, "largest") or g4
-    gb4 = pick_goblin_by_rank(goblins, pcol, prcol, lcol, dircol, "second_largest") or ga4
+
+    # 11: 2 gob + 2 std
+    ga4 = p.pop_goblin_large()
+    gb4 = p.pop_goblin_large(avoid_team_frozenset(ga4.get("team") if ga4 else None))
+    legs = _fill_short(
+        [ga4, gb4, p.pop_standard(), p.pop_standard()],
+        p,
+        4,
+        "standard",
+    )
+    ng, nd, ns = count_types(legs)
     tickets.append(
         {
             "num": 11,
             "n_legs": 4,
             "ticket_type": "power",
-            "n_goblins": 2,
-            "n_demons": 0,
-            "n_standard": 2,
-            "legs": [ga4, gb4, std_i(0), std_i(1)],
+            "n_goblins": ng,
+            "n_demons": nd,
+            "n_standard": ns,
+            "legs": legs,
             "title": "4-leg Power, 2 Goblins + 2 Standard",
         }
     )
 
-    # 12–15 flex
+    # 12–15 flex (same leg patterns)
+    legs = _fill_short(
+        [p.pop_standard(), p.pop_standard(), p.pop_standard()],
+        p,
+        3,
+        "standard",
+    )
+    ng, nd, ns = count_types(legs)
     tickets.append(
         {
             "num": 12,
             "n_legs": 3,
             "ticket_type": "flex",
-            "n_goblins": 0,
-            "n_demons": 0,
-            "n_standard": 3,
-            "legs": [std_i(0), std_i(1), std_i(2)],
+            "n_goblins": ng,
+            "n_demons": nd,
+            "n_standard": ns,
+            "legs": legs,
             "title": "3-leg Flex, 3 Standard",
         }
     )
-    flex_gob = pick_goblin_by_rank(goblins, pcol, prcol, lcol, dircol, "medium") or gm
+
+    flex_g = p.pop_goblin_large()
+    legs = _fill_short(
+        [flex_g, p.pop_standard(), p.pop_standard()],
+        p,
+        3,
+        "standard",
+    )
+    ng, nd, ns = count_types(legs)
     tickets.append(
         {
             "num": 13,
             "n_legs": 3,
             "ticket_type": "flex",
-            "n_goblins": 1,
-            "n_demons": 0,
-            "n_standard": 2,
-            "legs": [flex_gob, std_i(0), std_i(1)],
+            "n_goblins": ng,
+            "n_demons": nd,
+            "n_standard": ns,
+            "legs": legs,
             "title": "3-leg Flex, 1 Goblin + 2 Standard",
         }
     )
+
+    legs = _fill_short(
+        [
+            p.pop_standard(),
+            p.pop_standard(),
+            p.pop_standard(),
+            p.pop_standard(),
+        ],
+        p,
+        4,
+        "standard",
+    )
+    ng, nd, ns = count_types(legs)
     tickets.append(
         {
             "num": 14,
             "n_legs": 4,
             "ticket_type": "flex",
-            "n_goblins": 0,
-            "n_demons": 0,
-            "n_standard": 4,
-            "legs": [std_i(0), std_i(1), std_i(2), std_i(3)],
+            "n_goblins": ng,
+            "n_demons": nd,
+            "n_standard": ns,
+            "legs": legs,
             "title": "4-leg Flex, 4 Standard",
         }
     )
-    flex_gob_lg = pick_goblin_by_rank(goblins, pcol, prcol, lcol, dircol, "largest") or g4
+
+    flex_gl = p.pop_goblin_large()
+    legs = _fill_short(
+        [
+            flex_gl,
+            p.pop_standard(),
+            p.pop_standard(),
+            p.pop_standard(),
+        ],
+        p,
+        4,
+        "standard",
+    )
+    ng, nd, ns = count_types(legs)
     tickets.append(
         {
             "num": 15,
             "n_legs": 4,
             "ticket_type": "flex",
-            "n_goblins": 1,
-            "n_demons": 0,
-            "n_standard": 3,
-            "legs": [flex_gob_lg, std_i(0), std_i(1), std_i(2)],
+            "n_goblins": ng,
+            "n_demons": nd,
+            "n_standard": ns,
+            "legs": legs,
             "title": "4-leg Flex, 1 Goblin + 3 Standard",
         }
     )
 
-    _ = demons  # reserved if demon tickets added later
     return tickets
 
 
-def print_candidates(
-    work: pd.DataFrame,
-    standards: pd.DataFrame,
-    goblins: pd.DataFrame,
-    demons: pd.DataFrame,
+def print_pools(
+    standard_pool: pd.DataFrame,
+    goblin_pool: pd.DataFrame,
+    demon_pool: pd.DataFrame,
     pcol: str,
     prcol: str,
 ) -> None:
-    print("\n=== CANDIDATE LEGS (from step8) ===\n")
-
-    tier_col = _pick_col(work, ["tier"])
-    if tier_col is None:
-        tier_col = work.columns[0]
+    print("\n=== POOLS (deduped by player; no score filtering) ===\n")
 
     def dump(name: str, df: pd.DataFrame) -> None:
-        print(f"--- {name} ---")
+        print(f"--- {name} ({len(df)} rows) ---")
         for _, r in df.iterrows():
             std_ln = r.get("__std_line")
             dist = r.get("__distance")
             std_s = f"{float(std_ln):.1f}" if pd.notna(std_ln) else ""
             dist_s = f"{float(dist):.2f}" if pd.notna(dist) else ""
-            tier_val = r[tier_col] if tier_col in r.index else ""
             print(
                 f"  {r[pcol]} | {r[prcol]} | {float(r['__line']):.1f} | "
-                f"{r['__pick']} | {std_s} | {dist_s} | {tier_val}"
+                f"{r['__pick']} | std={std_s} | dist={dist_s}"
             )
         print()
 
-    dump("Standard (top 20)", standards)
-    dump("Goblin (top 20)", goblins)
-    if len(demons) > 0:
-        dump("Demon (top 10)", demons)
+    dump("Standard pool (A→Z by player)", standard_pool)
+    dump("Goblin pool (distance ↓, then deduped)", goblin_pool)
+    if len(demon_pool) > 0:
+        dump("Demon pool (A→Z by player)", demon_pool)
     else:
-        print("--- Demon (top 10) ---\n  (none in filtered data)\n")
+        print("--- Demon pool ---\n  (none)\n")
 
 
 def save_suggested_tickets(path: Path, tickets: list[dict[str, Any]]) -> None:
@@ -541,32 +714,19 @@ def main() -> None:
     step8_path = find_nba_step8_excel()
     print(f"[LOAD] {step8_path}")
 
-    work, _std_map = load_filtered_candidates(step8_path)
-    pcol = _pick_col(work, ["player"])
-    prcol = _pick_col(work, ["prop_type", "prop"])
-    lcol = _pick_col(work, ["line"])
-    dircol = _pick_col(work, ["direction", "final_bet_direction"])
-    assert pcol and prcol and lcol and dircol
+    work, pcol, prcol, lcol, dircol, teamcol = load_board(step8_path)
+    standard_pool, goblin_pool, demon_pool = build_pools(work, pcol, prcol)
 
-    standards = top_by_pick(work, pcol, prcol, "standard", 20)
-    goblins = top_by_pick(work, pcol, prcol, "goblin", 20)
-    demons = top_by_pick(work, pcol, prcol, "demon", 10)
+    print_pools(standard_pool, goblin_pool, demon_pool, pcol, prcol)
 
-    if _pick_col(work, ["tier"]) is None:
-        raise RuntimeError("tier column missing")
-
-    print_candidates(work, standards, goblins, demons, pcol, prcol)
-
-    if len(standards) < 4:
+    if len(standard_pool) + len(goblin_pool) < 25:
         print(
-            f"[WARN] Only {len(standards)} standard rows; ticket suggestions may repeat players."
+            "[WARN] Few deduped standard+goblin rows; tickets may repeat pick types "
+            "or fall short until pools exhaust.\n"
         )
-    if len(goblins) < 2:
-        print("[WARN] Few goblin rows; goblin tickets may be weak suggestions.")
 
-    tickets = build_fifteen_tickets(
-        standards, goblins, demons, pcol, prcol, lcol, dircol
-    )
+    picker = DiversePicker(standard_pool, goblin_pool, pcol, prcol, lcol, dircol, teamcol)
+    tickets = build_fifteen_tickets(picker)
 
     today = date.today().isoformat()
     suggested_path = SAMPLES_DIR / f"suggested_tickets_{today}.txt"
