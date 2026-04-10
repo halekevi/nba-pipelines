@@ -7341,7 +7341,7 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
 
     # ── Groups ────────────────────────────────────────────────────────────────
     leg_graph_uid = 0
-    table_cols = 10
+    table_cols = 13
     for group in groups:
         group_name = group.get("group_name") or "Tickets"
         n_legs = group.get("n_legs") or 0
@@ -7432,6 +7432,9 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
             <th>ML</th>
             <th>Edge</th>
             <th>Vs Def</th>
+            <th>Best Book</th>
+            <th>Best Line</th>
+            <th>Edge vs PP</th>
           </tr>
         </thead>
         <tbody>''')
@@ -7448,6 +7451,11 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
                 ml_prob = leg.get("ml_prob")
                 edge = leg.get("edge")
                 def_tier = leg.get("def_tier") or ""
+                best_book = str(leg.get("best_cross_book") or "").strip()
+                best_line = leg.get("best_cross_line")
+                cross_edge_vs_pp = leg.get("cross_edge_vs_pp")
+                line_underdog = leg.get("line_underdog")
+                line_draftkings = leg.get("line_draftkings")
                 team = leg.get("team") or ""
                 opp = leg.get("opp") or ""
                 initials = leg.get("initials") or player[:2].upper()
@@ -7466,6 +7474,25 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
                     line_html = f'{_fmt(line, 1)} <span style="font-size:11px;color:var(--muted);text-decoration:line-through;">{_fmt(std_line, 1)}</span>'
                 else:
                     line_html = _fmt(line, 1)
+
+                # Cross-book comparison summary (PP vs UD vs DK)
+                books_avail = []
+                if line is not None:
+                    books_avail.append(f'PP {_fmt(line, 1)}')
+                if line_underdog is not None:
+                    books_avail.append(f'UD {_fmt(line_underdog, 1)}')
+                if line_draftkings is not None:
+                    books_avail.append(f'DK {_fmt(line_draftkings, 1)}')
+                line_tip = " / ".join(books_avail) if books_avail else "No cross-book lines"
+                best_book_html = _h(best_book) if best_book else "—"
+                best_line_html = _fmt(best_line, 1) if best_line is not None else "—"
+                cross_edge_html = _fmt(cross_edge_vs_pp, 2) if cross_edge_vs_pp is not None else "—"
+                cross_edge_style = "color:var(--muted);"
+                try:
+                    if cross_edge_vs_pp is not None and float(cross_edge_vs_pp) > 0.01:
+                        cross_edge_style = "color:var(--green);font-weight:700;"
+                except (TypeError, ValueError):
+                    pass
 
                 # Sport accent chip
                 s_accent = _sport_accent(sport)
@@ -7497,6 +7524,9 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
             <td style="font-family:'Share Tech Mono',monospace;color:var(--cyan);">{_pct(ml_prob)}</td>
             <td style="font-family:'Share Tech Mono',monospace;color:var(--accent);">{_fmt(edge, 2)}</td>
             <td style="font-size:13px;color:var(--muted);">{_h(def_tier)}</td>
+            <td style="font-family:'Share Tech Mono',monospace;color:var(--cyan);" title="{_h(line_tip)}">{best_book_html}</td>
+            <td style="font-family:'Share Tech Mono',monospace;" title="{_h(line_tip)}">{best_line_html}</td>
+            <td style="font-family:'Share Tech Mono',monospace;{cross_edge_style}" title="Positive means better line than PP for this direction">{cross_edge_html}</td>
           </tr>''')
                 leg_graph_uid += 1
                 parts.append(_tickets_leg_graph_row_html(leg, f"lgr-{leg_graph_uid}", table_cols))
