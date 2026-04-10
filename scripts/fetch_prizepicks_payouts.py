@@ -39,6 +39,11 @@ SPORT_CFG = {
         "step1": ROOT / "Soccer" / "outputs" / "step1_soccer_props.csv",
         "top_n": 10,
     },
+    "Tennis": {
+        "step8": ROOT / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
+        "step1": ROOT / "Tennis" / "outputs" / "step1_tennis_props.csv",
+        "top_n": 10,
+    },
     "MLB": {
         "step8": ROOT / "MLB" / "step8_mlb_direction_clean.xlsx",
         "step1": ROOT / "MLB" / "step1_mlb_props.csv",
@@ -526,7 +531,12 @@ def main():
     ap.add_argument("--max-scan", type=int, default=150000)
     ap.add_argument("--min-est-ev", type=float, default=0.80, help=argparse.SUPPRESS)
     ap.add_argument("--min-ev", type=float, default=None, help="Estimated EV prefilter threshold (default: 0.80)")
-    ap.add_argument("--sport", choices=["NBA", "NHL", "Soccer", "MLB"], default="", help="Optional sport-only run")
+    ap.add_argument(
+        "--sport",
+        choices=["NBA", "NHL", "Soccer", "Tennis", "MLB"],
+        default="",
+        help="Optional sport-only run",
+    )
     ap.add_argument("--delay-sec", type=float, default=0.5)
     ap.add_argument("--date", default=datetime.now().strftime("%Y-%m-%d"))
     args = ap.parse_args()
@@ -695,7 +705,8 @@ def main():
         print(
             f"[DRY RUN] Candidate legs loaded: {total_loaded} "
             f"(NBA: {sport_counts.get('NBA',0)}, NHL: {sport_counts.get('NHL',0)}, "
-            f"Soccer: {sport_counts.get('Soccer',0)}, MLB: {sport_counts.get('MLB',0)})"
+            f"Soccer: {sport_counts.get('Soccer',0)}, Tennis: {sport_counts.get('Tennis',0)}, "
+            f"MLB: {sport_counts.get('MLB',0)})"
         )
         print(f"[DRY RUN] Total raw combos (2-5 legs): {raw_combo_total}")
         print(f"[DRY RUN] Combos skipped by diversity constraints: {skipped_diversity}")
@@ -722,7 +733,9 @@ def main():
             print("  (none)")
         print("[DRY RUN] Sport exposure in TOP20:")
         if sport_exp_top:
-            ordered = ", ".join(f"{k}: {sport_exp_top.get(k, 0)}" for k in ["NBA", "NHL", "Soccer", "MLB"])
+            ordered = ", ".join(
+                f"{k}: {sport_exp_top.get(k, 0)}" for k in ["NBA", "NHL", "Soccer", "Tennis", "MLB"]
+            )
             print(f"  {ordered}")
         else:
             print("  (none)")

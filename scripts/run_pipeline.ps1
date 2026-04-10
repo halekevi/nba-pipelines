@@ -8,12 +8,14 @@
 #    .\run_pipeline.ps1 -NHLOnly               # NHL only + Combined
 #    .\run_pipeline.ps1 -MLBOnly               # MLB only + Combined
 #    .\run_pipeline.ps1 -SoccerOnly            # Soccer only + Combined
+#    .\run_pipeline.ps1 -TennisOnly           # Tennis (light pipeline) + Combined
 #    .\run_pipeline.ps1 -WNBAOnly              # WNBA only (season-gated)
 #    .\run_pipeline.ps1 -CombinedOnly          # Re-run combined using all existing outputs
 #    .\run_pipeline.ps1 -SkipFetch             # Skip step1 fetch for whatever sport(s) run
 #    .\run_pipeline.ps1 -NBAOnly -SkipFetch    # NBA steps 2-8 + Combined
 #    .\run_pipeline.ps1 -NHLOnly -SkipFetch    # NHL steps 2-8 + Combined
 #    .\run_pipeline.ps1 -SoccerOnly -SkipFetch # Soccer steps 2-8 + Combined
+#    .\run_pipeline.ps1 -TennisOnly -SkipFetch # Tennis light ETL + Combined (no step1 fetch)
 #    .\run_pipeline.ps1 -RefreshCache          # Wipe + rebuild ESPN cache before NBA
 #    .\run_pipeline.ps1 -CacheAgeDays 7        # Auto-wipe cache if older than N days
 #    .\run_pipeline.ps1 -SkipDailyGrader       # Skip run_grader + grade HTML git push after combined
@@ -39,6 +41,7 @@ param(
     [switch]$RefreshCache,
     [switch]$ForceAll,
     [switch]$SkipDailyGrader,
+    [switch]$RunPayoutEngine,
     [int]$CacheAgeDays = 7
 )
 
@@ -66,6 +69,7 @@ $CBBDir    = Join-Path $Root "CBB"
 $NHLDir    = Join-Path $Root "NHL"
 $MLBDir    = Join-Path $Root "MLB"
 $SoccerDir = Join-Path $Root "Soccer"
+$TennisDir = Join-Path $Root "Tennis"
 $WNBADir   = Join-Path $Root "WNBA"
 $OutDir    = Join-Path $Root "outputs\$Date"
 $WebOutDir = Join-Path $Root "ui_runner\templates"
@@ -262,6 +266,7 @@ function Run-Combined {
     $cbbFile    = "$CBBDir\step6_ranked_cbb.xlsx"
     $nhlFile    = "$NHLDir\outputs\step8_nhl_direction_clean.xlsx"
     $soccerFile = "$SoccerDir\outputs\step8_soccer_direction_clean.xlsx"
+    $tennisFile = "$TennisDir\outputs\step8_tennis_direction_clean.xlsx"
     $mlbFile    = "$MLBDir\step8_mlb_direction_clean.xlsx"
 
     if (-not (Test-Path $nbaFile)) { Write-Host "  WARNING: NBA step8 not found -- skipping combined" -ForegroundColor Yellow; return $false }
@@ -272,6 +277,7 @@ function Run-Combined {
 
     if (Test-Path $nhlFile)    { $CombinedArgs += " --nhl `"$nhlFile`"";       Write-Host "  [+] NHL"    -ForegroundColor DarkGray }
     if (Test-Path $soccerFile) { $CombinedArgs += " --soccer `"$soccerFile`""; Write-Host "  [+] Soccer" -ForegroundColor DarkGray }
+    if (Test-Path $tennisFile) { $CombinedArgs += " --tennis `"$tennisFile`""; Write-Host "  [+] Tennis" -ForegroundColor DarkGray }
     if (Test-Path $mlbFile)    { $CombinedArgs += " --mlb `"$mlbFile`"";       Write-Host "  [+] MLB"    -ForegroundColor DarkGray }
 
     $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --max-tickets 3 --write-web --web-outdir `"$WebOutDir`""
@@ -282,6 +288,22 @@ function Run-Combined {
         Copy-Item $CombinedOut (Join-Path $OutDir "combined_slate_tickets_$Date.xlsx") -Force -ErrorAction SilentlyContinue
         Remove-Item $CombinedOut -Force -ErrorAction SilentlyContinue
         Write-Host "  Saved -> $(Join-Path $OutDir "combined_slate_tickets_$Date.xlsx")" -ForegroundColor Green
+        if ($RunPayoutEngine) {
+            Write-Host "[PAYOUT ENGINE] Fetching exact multipliers from PrizePicks..." -ForegroundColor Magenta
+            try {
+                Push-Location $Root
+                $payoutOut = py -3.14 ".\scripts\fetch_prizepicks_payouts.py" --date $Date 2>&1
+                $payoutExit = $LASTEXITCODE
+                foreach ($line in $payoutOut) { Write-Host "    $line" -ForegroundColor DarkGray }
+                if ($payoutExit -ne 0) {
+                    Write-Host "[PAYOUT ENGINE] WARN: exited $payoutExit" -ForegroundColor Yellow
+                }
+            } catch {
+                Write-Host "[PAYOUT ENGINE] WARN: $_" -ForegroundColor Yellow
+            } finally {
+                Pop-Location
+            }
+        }
         Run-GitPush
         try {
             Run-PostPipelineGrader
@@ -395,6 +417,27 @@ if ($SoccerOnly) {
 }
 
 # =============================================================================
+#  TENNIS ONLY  (light ETL: step1 fetch + ranked/direction xlsx)
+# =============================================================================
+if ($TennisOnly) {
+    Write-Host "[ TENNIS PIPELINE ]" -ForegroundColor Magenta
+    Write-Host ""
+    $ok = $true
+    if (-not $SkipFetch) {
+        if ($ok) { $ok = Run-Step "Tennis Step 1 - Fetch PrizePicks" $TennisDir ".\scripts\step1_fetch_prizepicks_tennis.py" "--output outputs\step1_tennis_props.csv" }
+    } else {
+        Write-Host "  [Tennis] Skipping step1 fetch -- using existing outputs\step1_tennis_props.csv" -ForegroundColor DarkGray
+    }
+    if ($ok) { $ok = Run-Step "Tennis Light ETL (step7 + step8 xlsx)" $TennisDir ".\scripts\tennis_light_pipeline.py" "" }
+    if ($ok) { Invoke-PropOracleStep7b "Tennis" }
+    Write-Host ""
+    if ($ok) { Write-Host "  Tennis complete." -ForegroundColor Green } else { Write-Host "  Tennis FAILED." -ForegroundColor Red }
+    if ($ok) { Run-Combined "after Tennis" }
+    Print-Done
+    exit
+}
+
+# =============================================================================
 #  CBB ONLY
 # =============================================================================
 if ($CBBOnly) {
@@ -486,7 +529,7 @@ if (Test-Path $backfillScript) {
 }
 Write-Host ""
 
-Write-Host "[ PARALLEL PIPELINE: NBA + NHL + Soccer + MLB ]" -ForegroundColor Magenta
+Write-Host "[ PARALLEL PIPELINE: NBA + NHL + Soccer + Tennis + MLB ]" -ForegroundColor Magenta
 Write-Host ""
 Write-Host "  Starting all pipelines simultaneously..." -ForegroundColor Cyan
 Write-Host ""
@@ -647,6 +690,49 @@ $SoccerJob = Start-Job -ScriptBlock {
     return $ok
 } -ArgumentList $SoccerDir, $Date, $SkipFetch, $Root
 
+# -- Tennis Job ---------------------------------------------------------------
+$TennisJob = Start-Job -ScriptBlock {
+    param($TennisDir, $SkipFetch, $RepoRoot)
+    $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
+    function Run-Step-Job {
+        param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
+        Write-Output "[TENNIS] --> $Label"
+        Push-Location $Dir
+        try {
+            $cmd = if ($Arguments) { "py -3.14 `"$Script`" $Arguments" } else { "py -3.14 `"$Script`"" }
+            Write-Output "        CMD: $cmd"
+            $output = Invoke-Expression $cmd 2>&1; $exit = $LASTEXITCODE
+            foreach ($line in $output) { Write-Output "        $line" }
+            if ($exit -ne 0) { Write-Output "[TENNIS] FAILED: $Label (exit $exit)"; return $false }
+            Write-Output "[TENNIS] OK: $Label"; return $true
+        } catch { Write-Output "[TENNIS] EXCEPTION: $_"; return $false
+        } finally { Pop-Location }
+    }
+    function Invoke-Step7b-Job {
+        param([string]$SportLabel, [string]$R)
+        Push-Location $R
+        try {
+            $p = Join-Path $R "scripts\step7b_edge_score.py"
+            if (-not (Test-Path $p)) {
+                Write-Output "  [$SportLabel] step7b: WARN (missing step7b_edge_score.py)"
+                return
+            }
+            $cmd = "py -3.14 `"$p`" --sport `"$SportLabel`""
+            Write-Output "  --> step7b ($SportLabel)"
+            Write-Output "        CMD: $cmd"
+            $output = Invoke-Expression $cmd 2>&1; $exit = $LASTEXITCODE
+            foreach ($line in $output) { Write-Output "        $line" }
+            if ($exit -ne 0) { Write-Output "  [$SportLabel] step7b: WARN (exit $exit)" } else { Write-Output "  [$SportLabel] step7b: OK" }
+        } catch { Write-Output "  [$SportLabel] step7b: WARN (exit 1)" }
+        finally { Pop-Location }
+    }
+    $ok = $true
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "Tennis Step 1 - Fetch PrizePicks" $TennisDir ".\scripts\step1_fetch_prizepicks_tennis.py" "--output outputs\step1_tennis_props.csv" } } else { Write-Output "[Tennis] Skipping step1 fetch" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Light ETL" $TennisDir ".\scripts\tennis_light_pipeline.py" "" }
+    if ($ok) { Invoke-Step7b-Job "Tennis" $RepoRoot }
+    return $ok
+} -ArgumentList $TennisDir, $SkipFetch, $Root
+
 # -- MLB Job ------------------------------------------------------------------
 # MLB activated April 2026
 $MLBJob = Start-Job -ScriptBlock {
@@ -714,6 +800,7 @@ $NBASuccess    = Test-Path (Join-Path $NBADir    "data\outputs\step8_all_directi
 $CBBSuccess    = $true
 $NHLSuccess    = Test-Path (Join-Path $NHLDir    "outputs\step8_nhl_direction_clean.xlsx")
 $SoccerSuccess = Test-Path (Join-Path $SoccerDir "outputs\step8_soccer_direction_clean.xlsx")
+$TennisSuccess = Test-Path (Join-Path $TennisDir "outputs\step8_tennis_direction_clean.xlsx")
 $MLBSuccess    = Test-Path (Join-Path $MLBDir    "step8_mlb_direction_clean.xlsx")
 
 Remove-Job $allJobs -Force -ErrorAction SilentlyContinue
@@ -724,6 +811,7 @@ Write-Host ""
     @{ Name="NBA";    Ok=$NBASuccess },
     @{ Name="NHL";    Ok=$NHLSuccess },
     @{ Name="Soccer"; Ok=$SoccerSuccess },
+    @{ Name="Tennis"; Ok=$TennisSuccess },
     @{ Name="MLB";    Ok=$MLBSuccess }
 ) | ForEach-Object {
     if ($_.Ok) { Write-Host "  $($_.Name) complete." -ForegroundColor Green }

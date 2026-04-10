@@ -22,7 +22,7 @@ from edge_feature_engineering import FEATURE_COLUMNS, build_feature_vector
 
 SCRIPT_NAME = "step7b_edge_score"
 
-SPORT_ALIASES = {"NBA", "CBB", "NHL", "SOCCER", "MLB", "SOC", "NBA1H", "NBA1Q", "WCBB"}
+SPORT_ALIASES = {"NBA", "CBB", "NHL", "SOCCER", "MLB", "SOC", "NBA1H", "NBA1Q", "WCBB", "TENNIS"}
 
 
 def _repo_root() -> Path:
@@ -56,6 +56,7 @@ def resolve_step7_path(root: Path, sport: str) -> Path | None:
         root / "NHL" / "outputs" / f"step7_{sl}_ranked.xlsx",
         root / "Soccer" / "outputs" / "step7_soccer_ranked.xlsx",
         root / "Soccer" / "step7_soccer_ranked.xlsx",
+        root / "Tennis" / "outputs" / "step7_tennis_ranked.xlsx",
         root / "MLB" / "outputs" / "step7_mlb_ranked.xlsx",
         root / "MLB" / "scripts" / "step7_mlb_ranked.xlsx",
         root / "MLB" / "step7_mlb_ranked.xlsx",
