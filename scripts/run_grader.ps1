@@ -20,7 +20,9 @@ $CBBActuals  = Join-Path $DateDir "actuals_cbb_$Date.csv"
 $WCBBActuals = Join-Path $DateDir "actuals_wcbb_$Date.csv"
 $NHLActuals  = Join-Path $DateDir "actuals_nhl_$Date.csv"
 $SoccerActuals  = Join-Path $DateDir "actuals_soccer_$Date.csv"
+$TennisActuals  = Join-Path $DateDir "actuals_tennis_$Date.csv"
 $FetchActualsScript = Join-Path $Root "scripts\fetch_actuals.py"
+$FetchTennisActualsScript = Join-Path $Root "scripts\fetch_tennis_actuals.py"
 $FetchNBAPeriodActualsScript = Join-Path $Root "scripts\fetch_nba_period_actuals.py"
 $BuildNBA1QHistoryScript = Join-Path $Root "scripts\build_nba1q_history_db.py"
 $SlateGraderScript = Join-Path $Root "scripts\grading\slate_grader.py"
@@ -159,6 +161,13 @@ if (Test-Path $FetchActualsScript) {
         "--date", $Date,
         "--output", $SoccerActuals
     )
+
+    if (Test-Path $FetchTennisActualsScript) {
+        Run-Py "Fetch Tennis Actuals" $Root $FetchTennisActualsScript @(
+            "--date", $Date,
+            "--output", $TennisActuals
+        )
+    }
 
     if (Test-Path $FetchNBAPeriodActualsScript) {
         Run-Py "Fetch NBA 1H Actuals" $Root $FetchNBAPeriodActualsScript @(
@@ -514,6 +523,9 @@ else {
     }
     if (Test-Path $SoccerActuals) {
         $GraderArgs += @("--soccer_actuals", $SoccerActuals)
+    }
+    if (Test-Path $TennisActuals) {
+        $GraderArgs += @("--tennis_actuals", $TennisActuals)
     }
     $InjNBA = Join-Path $DateDir "injuries_nba_$Date.csv"
     $InjCBB = Join-Path $DateDir "injuries_cbb_$Date.csv"

@@ -192,6 +192,14 @@ def prop_norm_from_label(prop: str) -> str:
         # Soccer actuals appear to use a generic "shots" label.
         return "shots on target"
 
+    # Tennis (PrizePicks wording vs normalized stat keys)
+    if p == "games_won" or p == "games won" or "games won" in p:
+        return "games_won"
+    if p == "match_total_games" or "match total" in p:
+        return "match_total_games"
+    if p == "total games" or p.startswith("total games"):
+        return "match_total_games"
+
     if "pts+reb+ast" in p or p == "pra":
         return "pra"
     if "pts+reb" in p or p == "pr":
@@ -875,7 +883,8 @@ def lookup_actual(sport: str, player: str, team: str, prop_norm: str,
                   nba1h_lpt=None, nba1h_lp=None,
                   nba1q_lpt=None, nba1q_lp=None,
                   nhl_lpt=None, nhl_lp=None,
-                  soccer_lpt=None, soccer_lp=None) -> float:
+                  soccer_lpt=None, soccer_lp=None,
+                  tennis_lpt=None, tennis_lp=None) -> float:
     sport = (sport or "").upper()
     if sport == "WCBB":
         sport = "CBB"
@@ -948,6 +957,17 @@ def lookup_actual(sport: str, player: str, team: str, prop_norm: str,
         key1 = (player_n, prop_norm)
         if key1 in soccer_lp:
             return float(soccer_lp[key1][0]["actual"])
+        return np.nan
+
+    if sport == "TENNIS":
+        if tennis_lpt is None or tennis_lp is None:
+            return np.nan
+        key2 = (player_n, team_n, prop_norm)
+        if key2 in tennis_lpt:
+            return float(tennis_lpt[key2][0]["actual"])
+        key1 = (player_n, prop_norm)
+        if key1 in tennis_lp:
+            return float(tennis_lp[key1][0]["actual"])
         return np.nan
 
     return np.nan
@@ -1533,6 +1553,7 @@ def main():
     ap.add_argument("--cbb_actuals", required=True, help="actuals_cbb_YYYY-MM-DD.csv")
     ap.add_argument("--nhl_actuals", default="", help="actuals_nhl_YYYY-MM-DD.csv (optional, for NHL legs)")
     ap.add_argument("--soccer_actuals", default="", help="actuals_soccer_YYYY-MM-DD.csv (optional, for Soccer legs)")
+    ap.add_argument("--tennis_actuals", default="", help="actuals_tennis_YYYY-MM-DD.csv (optional, for Tennis legs)")
     ap.add_argument("--nba_injuries", default="", help="injuries_nba CSV (optional; defaults next to nba actuals)")
     ap.add_argument("--cbb_injuries", default="", help="injuries_cbb CSV (optional)")
     ap.add_argument("--nhl_injuries", default="", help="injuries_nhl CSV (optional)")
@@ -1609,6 +1630,7 @@ def main():
 
     nhl_lp = nhl_lpt = None
     soccer_lp = soccer_lpt = None
+    tennis_lp = tennis_lpt = None
     if args.nhl_actuals:
         nhl_csv = Path(args.nhl_actuals)
         nhl_act = prep_actuals(nhl_csv, "NHL")
@@ -1617,6 +1639,10 @@ def main():
         soccer_csv = Path(args.soccer_actuals)
         soccer_act = prep_actuals(soccer_csv, "SOCCER")
         soccer_lp, soccer_lpt = build_lookup(soccer_act)
+    if args.tennis_actuals:
+        tennis_csv = Path(args.tennis_actuals)
+        tennis_act = prep_actuals(tennis_csv, "TENNIS")
+        tennis_lp, tennis_lpt = build_lookup(tennis_act)
 
     # Grade latency tracker (one row per actuals file)
     grade_ts = datetime.now(timezone.utc)
@@ -1632,6 +1658,8 @@ def main():
         _append_grade_latency_row(ROOT, grade_date, "NHL", Path(args.nhl_actuals), grade_ts)
     if args.soccer_actuals:
         _append_grade_latency_row(ROOT, grade_date, "SOCCER", Path(args.soccer_actuals), grade_ts)
+    if args.tennis_actuals:
+        _append_grade_latency_row(ROOT, grade_date, "TENNIS", Path(args.tennis_actuals), grade_ts)
 
     from espn_injuries import (  # noqa: E402
         canon_team_abbr as _inj_canon_team,
@@ -1654,6 +1682,7 @@ def main():
         soccer_void = load_injury_void_keys(
             _inj_csv(args.soccer_injuries, Path(args.soccer_actuals), "SOCCER"), "SOCCER"
         )
+    tennis_void: Set[Tuple[str, str]] = set()
 
     # ticket sheets (workbook) or JSON snapshot (same legs as --write-web output)
     tickets_xlsx = tickets_path
@@ -1685,7 +1714,8 @@ def main():
             nba1h_lpt=nba1h_lpt, nba1h_lp=nba1h_lp,
             nba1q_lpt=nba1q_lpt, nba1q_lp=nba1q_lp,
             nhl_lpt=nhl_lpt, nhl_lp=nhl_lp,
-            soccer_lpt=soccer_lpt, soccer_lp=soccer_lp
+            soccer_lpt=soccer_lpt, soccer_lp=soccer_lp,
+            tennis_lpt=tennis_lpt, tennis_lp=tennis_lp,
         ),
         axis=1,
     )
@@ -1711,6 +1741,10 @@ def main():
         elif sp == "SOCCER":
             tm = _inj_canon_team("SOCCER", row["team"])
             if pl and tm and (pl, tm) in soccer_void:
+                return "VOID"
+        elif sp == "TENNIS":
+            tm = _inj_canon_team("TENNIS", row["team"])
+            if pl and tm and (pl, tm) in tennis_void:
                 return "VOID"
         return row["leg_result"]
 

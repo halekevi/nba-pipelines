@@ -82,6 +82,8 @@ def canon_team_abbr(sport: str, abbr: str) -> str:
     st = (sport or "").upper()
     if st == "SOCCER":
         return str(abbr).strip().upper()[:12]
+    if st == "TENNIS":
+        return str(abbr).strip().upper()[:12]
     if st == "NHL":
         u = str(abbr).strip().upper()
         return NHL_TEAM_CANON.get(key, u)[:3]

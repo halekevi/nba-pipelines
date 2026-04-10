@@ -8,14 +8,14 @@
 #    .\run_pipeline.ps1 -NHLOnly               # NHL only + Combined
 #    .\run_pipeline.ps1 -MLBOnly               # MLB only + Combined
 #    .\run_pipeline.ps1 -SoccerOnly            # Soccer only + Combined
-#    .\run_pipeline.ps1 -TennisOnly           # Tennis (light pipeline) + Combined
+#    .\run_pipeline.ps1 -TennisOnly           # Tennis steps 1-8 + Combined
 #    .\run_pipeline.ps1 -WNBAOnly              # WNBA only (season-gated)
 #    .\run_pipeline.ps1 -CombinedOnly          # Re-run combined using all existing outputs
 #    .\run_pipeline.ps1 -SkipFetch             # Skip step1 fetch for whatever sport(s) run
 #    .\run_pipeline.ps1 -NBAOnly -SkipFetch    # NBA steps 2-8 + Combined
 #    .\run_pipeline.ps1 -NHLOnly -SkipFetch    # NHL steps 2-8 + Combined
 #    .\run_pipeline.ps1 -SoccerOnly -SkipFetch # Soccer steps 2-8 + Combined
-#    .\run_pipeline.ps1 -TennisOnly -SkipFetch # Tennis light ETL + Combined (no step1 fetch)
+#    .\run_pipeline.ps1 -TennisOnly -SkipFetch # Tennis steps 2-8 + Combined (no step1 fetch)
 #    .\run_pipeline.ps1 -RefreshCache          # Wipe + rebuild ESPN cache before NBA
 #    .\run_pipeline.ps1 -CacheAgeDays 7        # Auto-wipe cache if older than N days
 #    .\run_pipeline.ps1 -SkipDailyGrader       # Skip run_grader + grade HTML git push after combined
@@ -35,6 +35,7 @@ param(
     [switch]$NHLOnly,
     [switch]$MLBOnly,
     [switch]$SoccerOnly,
+    [switch]$TennisOnly,
     [switch]$WNBAOnly,
     [switch]$CombinedOnly,
     [switch]$SkipFetch,
@@ -417,7 +418,7 @@ if ($SoccerOnly) {
 }
 
 # =============================================================================
-#  TENNIS ONLY  (light ETL: step1 fetch + ranked/direction xlsx)
+#  TENNIS ONLY  (steps 1-8 + step7b)
 # =============================================================================
 if ($TennisOnly) {
     Write-Host "[ TENNIS PIPELINE ]" -ForegroundColor Magenta
@@ -428,8 +429,14 @@ if ($TennisOnly) {
     } else {
         Write-Host "  [Tennis] Skipping step1 fetch -- using existing outputs\step1_tennis_props.csv" -ForegroundColor DarkGray
     }
-    if ($ok) { $ok = Run-Step "Tennis Light ETL (step7 + step8 xlsx)" $TennisDir ".\scripts\tennis_light_pipeline.py" "" }
+    if ($ok) { $ok = Run-Step "Tennis Step 2 - Attach Pick Types" $TennisDir ".\scripts\step2_attach_picktypes_tennis.py" "--input outputs\step1_tennis_props.csv --output outputs\step2_tennis_picktypes.csv" }
+    if ($ok) { $ok = Run-Step "Tennis Step 3 - Opponent Context" $TennisDir ".\scripts\step3_attach_context_tennis.py" "--input outputs\step2_tennis_picktypes.csv --output outputs\step3_tennis_with_context.csv" }
+    if ($ok) { $ok = Run-Step "Tennis Step 4 - Match History" $TennisDir ".\scripts\step4_attach_match_history_tennis.py" "--input outputs\step3_tennis_with_context.csv --output outputs\step4_tennis_with_stats.csv" }
+    if ($ok) { $ok = Run-Step "Tennis Step 5 - Line Hit Rates" $TennisDir ".\scripts\step5_add_line_hit_rates_tennis.py" "--input outputs\step4_tennis_with_stats.csv --output outputs\step5_tennis_hit_rates.csv --compute10" }
+    if ($ok) { $ok = Run-Step "Tennis Step 6 - Match Context" $TennisDir ".\scripts\step6_match_context_tennis.py" "--input outputs\step5_tennis_hit_rates.csv --output outputs\step6_tennis_role_context.csv" }
+    if ($ok) { $ok = Run-Step "Tennis Step 7 - Rank Props" $TennisDir ".\scripts\step7_rank_props_tennis.py" "--input outputs\step6_tennis_role_context.csv --output outputs\step7_tennis_ranked.xlsx" }
     if ($ok) { Invoke-PropOracleStep7b "Tennis" }
+    if ($ok) { $ok = Run-Step "Tennis Step 8 - Direction Context" $TennisDir ".\scripts\step8_add_direction_context_tennis.py" "--input outputs\step7_tennis_ranked.xlsx --sheet ALL --output outputs\step8_tennis_direction.csv --xlsx outputs\step8_tennis_direction_clean.xlsx --date $Date" }
     Write-Host ""
     if ($ok) { Write-Host "  Tennis complete." -ForegroundColor Green } else { Write-Host "  Tennis FAILED." -ForegroundColor Red }
     if ($ok) { Run-Combined "after Tennis" }
@@ -692,7 +699,7 @@ $SoccerJob = Start-Job -ScriptBlock {
 
 # -- Tennis Job ---------------------------------------------------------------
 $TennisJob = Start-Job -ScriptBlock {
-    param($TennisDir, $SkipFetch, $RepoRoot)
+    param($TennisDir, $Date, $SkipFetch, $RepoRoot)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
     function Run-Step-Job {
         param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
@@ -728,10 +735,16 @@ $TennisJob = Start-Job -ScriptBlock {
     }
     $ok = $true
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "Tennis Step 1 - Fetch PrizePicks" $TennisDir ".\scripts\step1_fetch_prizepicks_tennis.py" "--output outputs\step1_tennis_props.csv" } } else { Write-Output "[Tennis] Skipping step1 fetch" }
-    if ($ok) { $ok = Run-Step-Job "Tennis Light ETL" $TennisDir ".\scripts\tennis_light_pipeline.py" "" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 2 - Attach Pick Types" $TennisDir ".\scripts\step2_attach_picktypes_tennis.py" "--input outputs\step1_tennis_props.csv --output outputs\step2_tennis_picktypes.csv" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 3 - Opponent Context" $TennisDir ".\scripts\step3_attach_context_tennis.py" "--input outputs\step2_tennis_picktypes.csv --output outputs\step3_tennis_with_context.csv" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 4 - Match History" $TennisDir ".\scripts\step4_attach_match_history_tennis.py" "--input outputs\step3_tennis_with_context.csv --output outputs\step4_tennis_with_stats.csv" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 5 - Line Hit Rates" $TennisDir ".\scripts\step5_add_line_hit_rates_tennis.py" "--input outputs\step4_tennis_with_stats.csv --output outputs\step5_tennis_hit_rates.csv --compute10" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 6 - Match Context" $TennisDir ".\scripts\step6_match_context_tennis.py" "--input outputs\step5_tennis_hit_rates.csv --output outputs\step6_tennis_role_context.csv" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 7 - Rank Props" $TennisDir ".\scripts\step7_rank_props_tennis.py" "--input outputs\step6_tennis_role_context.csv --output outputs\step7_tennis_ranked.xlsx" }
     if ($ok) { Invoke-Step7b-Job "Tennis" $RepoRoot }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 8 - Direction Context" $TennisDir ".\scripts\step8_add_direction_context_tennis.py" "--input outputs\step7_tennis_ranked.xlsx --sheet ALL --output outputs\step8_tennis_direction.csv --xlsx outputs\step8_tennis_direction_clean.xlsx --date $Date" }
     return $ok
-} -ArgumentList $TennisDir, $SkipFetch, $Root
+} -ArgumentList $TennisDir, $Date, $SkipFetch, $Root
 
 # -- MLB Job ------------------------------------------------------------------
 # MLB activated April 2026
