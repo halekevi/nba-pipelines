@@ -13,7 +13,11 @@ Strategy:
   - Validates output row/team counts before writing
   - Exits non-zero if data is missing so the pipeline halts cleanly
 
-Outputs: step1_pp_props_today.csv  (same schema as before)
+Outputs: step1_pp_props_today.csv  (same schema as before).
+
+Use --merge-existing to union with an existing output file: this fetch replaces
+any matching projection_id; rows present only in the old file are kept (e.g. props
+no longer returned by the API). For a live-board-only snapshot, omit --merge-existing.
 """
 
 from __future__ import annotations
@@ -25,6 +29,7 @@ import re
 import sys
 import time
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 import pandas as pd
@@ -347,6 +352,12 @@ def main() -> None:
     ap.add_argument("--min_teams",  type=int, default=4,   help="Minimum teams required to consider fetch valid")
     ap.add_argument("--raw_json",   default="",            help="Optional path to dump raw API response")
     ap.add_argument("--history",    default="",            help="Optional path template for history CSV (use {ts})")
+    ap.add_argument(
+        "--merge-existing",
+        action="store_true",
+        help="If --output already exists: keep rows whose projection_id was not returned "
+        "this fetch; fresh rows replace matching projection_id (board updates + prior-only props).",
+    )
     # Legacy args accepted but ignored (were for Playwright version)
     ap.add_argument("--game_mode",        default="pickem")
     ap.add_argument("--sleep",            type=float, default=2.0)
@@ -419,6 +430,32 @@ def main() -> None:
         print(f"   Writing partial CSV and exiting with error so pipeline halts.")
         df.to_csv(args.output, index=False, encoding="utf-8-sig")
         sys.exit(1)
+
+    # ── Optional: union with prior output (fresh IDs win; keep API-missing IDs) ─
+    out_path = Path(args.output)
+    if args.merge_existing and out_path.is_file():
+        try:
+            old = pd.read_csv(out_path, encoding="utf-8-sig")
+            for c in EMPTY_COLS:
+                if c not in old.columns:
+                    old[c] = ""
+            old = old[EMPTY_COLS].copy()
+            old["line"] = pd.to_numeric(old["line"], errors="coerce")
+            old["standard_line"] = pd.to_numeric(old["standard_line"], errors="coerce")
+            _mstd_o = old["pick_type"].astype(str).str.lower().eq("standard")
+            old.loc[_mstd_o, "standard_line"] = old.loc[_mstd_o, "standard_line"].fillna(
+                old.loc[_mstd_o, "line"]
+            )
+            new_ids = set(df["projection_id"].astype(str).str.strip())
+            kept = old[~old["projection_id"].astype(str).str.strip().isin(new_ids)]
+            n_kept = len(kept)
+            df = pd.concat([df, kept], ignore_index=True)
+            print(
+                f"\n📎 merge-existing: +{n_kept} rows only in prior file "
+                f"(not in this fetch) → {len(df)} total rows"
+            )
+        except Exception as e:
+            print(f"\n  [WARN] merge-existing skipped: {e}")
 
     # ── Write output ──────────────────────────────────────────────────────────
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
