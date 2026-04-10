@@ -92,7 +92,7 @@ def load_filtered_candidates(
     dircol = _pick_col(df, ["direction", "final_bet_direction"])
     tiercol = _pick_col(df, ["tier"])
     blendcol = _pick_col(df, ["blended_score", "blended score"])
-    pickcol = _pick_col(df, ["pick_type"])
+    pickcol = _pick_col(df, ["pick_type", "pick type"])
 
     req = [pcol, prcol, lcol, dircol, tiercol, blendcol, pickcol]
     if any(c is None for c in req):
