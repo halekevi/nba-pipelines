@@ -14,11 +14,30 @@ Run:
 from __future__ import annotations
 
 import argparse
+import shutil
 import numpy as np
 import pandas as pd
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
+from datetime import date
+from pathlib import Path
+
+
+def _copy_dated_step8_mlb(output_xlsx_path: str) -> None:
+    src = Path(output_xlsx_path)
+    if not src.is_file():
+        return
+    today = date.today().isoformat()
+    repo_root = Path(__file__).resolve().parent.parent.parent
+    dated_dir = repo_root / "outputs" / today
+    try:
+        dated_dir.mkdir(parents=True, exist_ok=True)
+        dated_path = dated_dir / f"step8_mlb_direction_clean_{today}.xlsx"
+        shutil.copy2(src, dated_path)
+        print(f"[MLB step8] Dated copy -> {dated_path}")
+    except Exception as e:
+        print(f"[MLB step8] WARN: dated copy failed: {e}")
 
 
 def _norm_pick_type(x: str) -> str:
@@ -275,6 +294,7 @@ def main() -> None:
 
     xlsx_path = args.xlsx if args.xlsx else args.output.replace(".csv", "_clean.xlsx")
     build_clean_xlsx(out, xlsx_path)
+    _copy_dated_step8_mlb(xlsx_path)
 
 
 if __name__ == "__main__":

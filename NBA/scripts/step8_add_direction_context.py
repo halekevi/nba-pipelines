@@ -17,6 +17,7 @@ Run:
 from __future__ import annotations
 
 import argparse
+import shutil
 import sys
 import numpy as np
 import pandas as pd
@@ -24,12 +25,30 @@ from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 import os
-from datetime import datetime
+from datetime import date, datetime
+from pathlib import Path
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
 except Exception:
     pass
+
+
+def _copy_dated_step8_nba(output_xlsx_path: str) -> None:
+    src = Path(output_xlsx_path)
+    if not src.is_file():
+        return
+    today = date.today().isoformat()
+    repo_root = Path(__file__).resolve().parent.parent.parent
+    dated_dir = repo_root / "outputs" / today
+    try:
+        dated_dir.mkdir(parents=True, exist_ok=True)
+        dated_path = dated_dir / f"step8_nba_direction_clean_{today}.xlsx"
+        shutil.copy2(src, dated_path)
+        print(f"[NBA step8] Dated copy -> {dated_path}")
+    except Exception as e:
+        print(f"[NBA step8] WARN: dated copy failed: {e}")
+
 
 def _norm_pick_type(x: str) -> str:
     t = (str(x) if x is not None else "").strip().lower()
@@ -470,6 +489,7 @@ def main() -> None:
     # Save clean XLSX
     xlsx_path = args.xlsx if args.xlsx else args.output.replace(".csv", "_clean.xlsx")
     build_clean_xlsx(out, xlsx_path, source_hint=args.input)
+    _copy_dated_step8_nba(xlsx_path)
 
 if __name__ == "__main__":
     main()

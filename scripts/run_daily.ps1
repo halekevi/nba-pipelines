@@ -13,6 +13,7 @@
          -MonthlyRetrain after STEP E runs all four prop ML trainers + full consistency rebuild (logs OK/FAILED, continues on failure).
   NCAA 2026: WCBB slate not required from 2026-04-06; men's CBB not required from 2026-04-07 (see Get-MissingTodaySlateOutputs).
   $Root = parent of scripts\ (repo root).
+  STEP C calls repo-root run_pipeline.ps1; step 8 Python entrypoints live under each sport's scripts\ folder (see run_pipeline.ps1 for Join-Path $Root "<Sport>\scripts\step8_*.py").
 #>
 param(
     [switch]$SkipGrader,

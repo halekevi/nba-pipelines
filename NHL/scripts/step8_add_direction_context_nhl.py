@@ -30,8 +30,10 @@ Usage:
 
 import argparse
 import csv
+import shutil
 import openpyxl
 from datetime import date, datetime, timezone
+from pathlib import Path
 try:
     from tqdm import tqdm as _tqdm
 except ImportError:
@@ -40,6 +42,22 @@ except ImportError:
     from tqdm import tqdm as _tqdm
 from openpyxl.styles import Font, PatternFill, Alignment
 from openpyxl.utils import get_column_letter
+
+
+def _copy_dated_step8_nhl(output_xlsx_path: str) -> None:
+    src = Path(output_xlsx_path)
+    if not src.is_file():
+        return
+    today = date.today().isoformat()
+    repo_root = Path(__file__).resolve().parent.parent.parent
+    dated_dir = repo_root / "outputs" / today
+    try:
+        dated_dir.mkdir(parents=True, exist_ok=True)
+        dated_path = dated_dir / f"step8_nhl_direction_clean_{today}.xlsx"
+        shutil.copy2(src, dated_path)
+        print(f"[NHL step8] Dated copy -> {dated_path}")
+    except Exception as e:
+        print(f"[NHL step8] WARN: dated copy failed: {e}")
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -469,10 +487,14 @@ def main():
         write_xlsx(display_rows, args.output)
         csv_out = args.output.replace(".xlsx", ".csv")
         write_csv(display_rows, csv_out)
+        xlsx_final = args.output
     else:
         write_csv(display_rows, args.output)
         xlsx_out = args.output.replace(".csv", "_clean.xlsx")
         write_xlsx(display_rows, xlsx_out)
+        xlsx_final = xlsx_out
+
+    _copy_dated_step8_nhl(xlsx_final)
 
     # ── Console summary ───────────────────────────────────────────────────────
     tier_counts = {}

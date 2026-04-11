@@ -66,7 +66,11 @@ if (-not $Date) {
 $StartTime = Get-Date
 
 # -- Paths --------------------------------------------------------------------
-$Root      = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Definition)
+# Script may live at repo root or under scripts\; jobs also need a stable $Root for absolute step8 paths.
+$Root = $PSScriptRoot
+if ((Split-Path -Leaf $Root) -eq "scripts") {
+    $Root = Split-Path -Parent $Root
+}
 $NBADir    = Join-Path $Root "NBA"
 $CBBDir    = Join-Path $Root "CBB"
 $NHLDir    = Join-Path $Root "NHL"
@@ -90,7 +94,7 @@ if (Test-Path (Join-Path $Root ".venv\Scripts\Activate.ps1")) {
     & (Join-Path $Root ".venv\Scripts\Activate.ps1")
 }
 
-$__graderPs1 = Join-Path $PSScriptRoot "run_post_pipeline_grader.ps1"
+$__graderPs1 = Join-Path $Root "scripts\run_post_pipeline_grader.ps1"
 if (Test-Path $__graderPs1) {
     . $__graderPs1
 } else {
@@ -451,7 +455,7 @@ if ($NHLOnly) {
     if ($ok) { $ok = Run-Step "NHL Step 6 - Team Role Context"  $NHLDir ".\scripts\step6_team_role_context_nhl.py"      "--input outputs\step5_nhl_hit_rates.csv --output outputs\step6_nhl_role_context.csv" }
     if ($ok) { $ok = Run-Step "NHL Step 7 - Rank Props"         $NHLDir ".\scripts\step7_rank_props_nhl.py"             "--input outputs\step6_nhl_role_context.csv --output outputs\step7_nhl_ranked.xlsx" }
     if ($ok) { Invoke-PropOracleStep7b "NHL" }
-    if ($ok) { $ok = Run-Step "NHL Step 8 - Direction Context"  $NHLDir ".\scripts\step8_add_direction_context_nhl.py"  "--input outputs\step7_nhl_ranked.xlsx --output outputs\step8_nhl_direction_clean.xlsx" }
+    if ($ok) { $ok = Run-Step "NHL Step 8 - Direction Context"  $NHLDir (Join-Path $Root "NHL\scripts\step8_add_direction_context_nhl.py")  "--input outputs\step7_nhl_ranked.xlsx --output outputs\step8_nhl_direction_clean.xlsx" }
     Write-Host ""
     if ($ok) { Write-Host "  NHL complete." -ForegroundColor Green } else { Write-Host "  NHL FAILED." -ForegroundColor Red }
     if ($ok) { Run-Combined "after NHL" }
@@ -474,7 +478,7 @@ if ($MLBOnly) {
     if ($ok) { $ok = Run-Step "MLB Step 6 - Team Role Context"  $MLBDir ".\scripts\step6_team_role_context_mlb.py"      "--input step5_mlb_hit_rates.csv --output step6_mlb_role_context.csv" }
     if ($ok) { $ok = Run-Step "MLB Step 7 - Rank Props"         $MLBDir ".\scripts\step7_rank_props_mlb.py"             "--input step6_mlb_role_context.csv --output step7_mlb_ranked.xlsx" }
     if ($ok) { Invoke-PropOracleStep7b "MLB" }
-    if ($ok) { $ok = Run-Step "MLB Step 8 - Direction Context"  $MLBDir ".\scripts\step8_add_direction_context_mlb.py"  "--input step7_mlb_ranked.xlsx --output step8_mlb_direction.csv --xlsx step8_mlb_direction_clean.xlsx" }
+    if ($ok) { $ok = Run-Step "MLB Step 8 - Direction Context"  $MLBDir (Join-Path $Root "MLB\scripts\step8_add_direction_context_mlb.py")  "--input step7_mlb_ranked.xlsx --output step8_mlb_direction.csv --xlsx step8_mlb_direction_clean.xlsx" }
     Write-Host ""
     if ($ok) { Write-Host "  MLB complete." -ForegroundColor Green } else { Write-Host "  MLB FAILED." -ForegroundColor Red }
     if ($ok) { Run-Combined "after MLB" }
@@ -498,7 +502,7 @@ if ($SoccerOnly) {
     if ($ok) { $ok = Run-Step "Soccer Step 6 - Team Role Context"  $SoccerDir ".\scripts\step6_team_role_context_soccer.py"      "--input outputs\step5_soccer_hit_rates.csv --output outputs\step6_soccer_role_context.csv" }
     if ($ok) { $ok = Run-Step "Soccer Step 7 - Rank Props"         $SoccerDir ".\scripts\step7_rank_props_soccer.py"             "--input outputs\step6_soccer_role_context.csv --output outputs\step7_soccer_ranked.xlsx" }
     if ($ok) { Invoke-PropOracleStep7b "Soccer" }
-    if ($ok) { $ok = Run-Step "Soccer Step 8 - Direction Context"  $SoccerDir ".\scripts\step8_add_direction_context_soccer.py"  "--input outputs\step7_soccer_ranked.xlsx --sheet ALL --output outputs\step8_soccer_direction.csv --xlsx outputs\step8_soccer_direction_clean.xlsx --date $Date" }
+    if ($ok) { $ok = Run-Step "Soccer Step 8 - Direction Context"  $SoccerDir (Join-Path $Root "Soccer\scripts\step8_add_direction_context_soccer.py")  "--input outputs\step7_soccer_ranked.xlsx --sheet ALL --output outputs\step8_soccer_direction.csv --xlsx outputs\step8_soccer_direction_clean.xlsx --date $Date" }
     Write-Host ""
     if ($ok) { Write-Host "  Soccer complete." -ForegroundColor Green } else { Write-Host "  Soccer FAILED." -ForegroundColor Red }
     if ($ok) { Run-Combined "after Soccer" }
@@ -525,7 +529,7 @@ if ($TennisOnly) {
     if ($ok) { $ok = Run-Step "Tennis Step 6 - Match Context" $TennisDir ".\scripts\step6_match_context_tennis.py" "--input outputs\step5_tennis_hit_rates.csv --output outputs\step6_tennis_role_context.csv" }
     if ($ok) { $ok = Run-Step "Tennis Step 7 - Rank Props" $TennisDir ".\scripts\step7_rank_props_tennis.py" "--input outputs\step6_tennis_role_context.csv --output outputs\step7_tennis_ranked.xlsx" }
     if ($ok) { Invoke-PropOracleStep7b "Tennis" }
-    if ($ok) { $ok = Run-Step "Tennis Step 8 - Direction Context" $TennisDir ".\scripts\step8_add_direction_context_tennis.py" "--input outputs\step7_tennis_ranked.xlsx --sheet ALL --output outputs\step8_tennis_direction.csv --xlsx outputs\step8_tennis_direction_clean.xlsx --date $Date" }
+    if ($ok) { $ok = Run-Step "Tennis Step 8 - Direction Context" $TennisDir (Join-Path $Root "Tennis\scripts\step8_add_direction_context_tennis.py") "--input outputs\step7_tennis_ranked.xlsx --sheet ALL --output outputs\step8_tennis_direction.csv --xlsx outputs\step8_tennis_direction_clean.xlsx --date $Date" }
     Write-Host ""
     if ($ok) { Write-Host "  Tennis complete." -ForegroundColor Green } else { Write-Host "  Tennis FAILED." -ForegroundColor Red }
     if ($ok) { Run-Combined "after Tennis" }
@@ -587,7 +591,7 @@ if ($NBAOnly) {
     if ($ok) { $ok = Run-Step "NBA Step 6d - H2H Matchup Stats"      $NBADir ".\scripts\step6d_attach_h2h_matchups.py"          "--input data\outputs\step6c_with_schedule_flags.csv --output data\outputs\step6d_with_h2h.csv" }
     if ($ok) { $ok = Run-Step "NBA Step 7 - Rank Props"              $NBADir ".\scripts\step7_rank_props.py"                    "--input data\outputs\step6d_with_h2h.csv --output data\outputs\step7_ranked_props.xlsx" }
     if ($ok) { Invoke-PropOracleStep7b "NBA" }
-    if ($ok) { $ok = Run-Step "NBA Step 8 - Direction Context"       $NBADir ".\scripts\step8_add_direction_context.py"         "--input data\outputs\step7_ranked_props.xlsx --sheet ALL --output data\outputs\step8_all_direction.csv" }
+    if ($ok) { $ok = Run-Step "NBA Step 8 - Direction Context"       $NBADir (Join-Path $Root "NBA\scripts\step8_add_direction_context.py")         "--input data\outputs\step7_ranked_props.xlsx --sheet ALL --output data\outputs\step8_all_direction.csv" }
 
     if ($ok) { New-Item -ItemType File -Force -Path (Join-Path $NBADir "RUN_COMPLETE.flag") | Out-Null }
     Write-Host ""
@@ -679,7 +683,7 @@ $NBAJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "NBA Step 6d - H2H Matchup Stats"      $NBADir ".\scripts\step6d_attach_h2h_matchups.py"          "--input data\outputs\step6c_with_schedule_flags.csv --output data\outputs\step6d_with_h2h.csv" }
     if ($ok) { $ok = Run-Step-Job "NBA Step 7 - Rank Props"              $NBADir ".\scripts\step7_rank_props.py"                    "--input data\outputs\step6d_with_h2h.csv --output data\outputs\step7_ranked_props.xlsx" }
     if ($ok) { Invoke-Step7b-Job "NBA" $RepoRoot }
-    if ($ok) { $ok = Run-Step-Job "NBA Step 8 - Direction Context"       $NBADir ".\scripts\step8_add_direction_context.py"         "--input data\outputs\step7_ranked_props.xlsx --sheet ALL --output data\outputs\step8_all_direction.csv" }
+    if ($ok) { $ok = Run-Step-Job "NBA Step 8 - Direction Context"       $NBADir (Join-Path $RepoRoot "NBA\scripts\step8_add_direction_context.py")         "--input data\outputs\step7_ranked_props.xlsx --sheet ALL --output data\outputs\step8_all_direction.csv" }
     return $ok
 } -ArgumentList $NBADir, $Date, $OddsApiKey, $SkipFetch, $Root
 
@@ -732,7 +736,7 @@ $NHLJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "NHL Step 6 - Team Role Context"  $NHLDir ".\scripts\step6_team_role_context_nhl.py"      "--input outputs\step5_nhl_hit_rates.csv --output outputs\step6_nhl_role_context.csv" }
     if ($ok) { $ok = Run-Step-Job "NHL Step 7 - Rank Props"         $NHLDir ".\scripts\step7_rank_props_nhl.py"             "--input outputs\step6_nhl_role_context.csv --output outputs\step7_nhl_ranked.xlsx" }
     if ($ok) { Invoke-Step7b-Job "NHL" $RepoRoot }
-    if ($ok) { $ok = Run-Step-Job "NHL Step 8 - Direction Context"  $NHLDir ".\scripts\step8_add_direction_context_nhl.py"  "--input outputs\step7_nhl_ranked.xlsx --output outputs\step8_nhl_direction_clean.xlsx" }
+    if ($ok) { $ok = Run-Step-Job "NHL Step 8 - Direction Context"  $NHLDir (Join-Path $RepoRoot "NHL\scripts\step8_add_direction_context_nhl.py")  "--input outputs\step7_nhl_ranked.xlsx --output outputs\step8_nhl_direction_clean.xlsx" }
     return $ok
 } -ArgumentList $NHLDir, $SkipFetch, $Root
 
@@ -782,7 +786,7 @@ $SoccerJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "Soccer Step 6 - Team Role Context"  $SoccerDir ".\scripts\step6_team_role_context_soccer.py"      "--input outputs\step5_soccer_hit_rates.csv --output outputs\step6_soccer_role_context.csv" }
     if ($ok) { $ok = Run-Step-Job "Soccer Step 7 - Rank Props"         $SoccerDir ".\scripts\step7_rank_props_soccer.py"             "--input outputs\step6_soccer_role_context.csv --output outputs\step7_soccer_ranked.xlsx" }
     if ($ok) { Invoke-Step7b-Job "Soccer" $RepoRoot }
-    if ($ok) { $ok = Run-Step-Job "Soccer Step 8 - Direction Context"  $SoccerDir ".\scripts\step8_add_direction_context_soccer.py"  "--input outputs\step7_soccer_ranked.xlsx --sheet ALL --output outputs\step8_soccer_direction.csv --xlsx outputs\step8_soccer_direction_clean.xlsx --date $Date" }
+    if ($ok) { $ok = Run-Step-Job "Soccer Step 8 - Direction Context"  $SoccerDir (Join-Path $RepoRoot "Soccer\scripts\step8_add_direction_context_soccer.py")  "--input outputs\step7_soccer_ranked.xlsx --sheet ALL --output outputs\step8_soccer_direction.csv --xlsx outputs\step8_soccer_direction_clean.xlsx --date $Date" }
     return $ok
 } -ArgumentList $SoccerDir, $Date, $SkipFetch, $Root
 
@@ -831,7 +835,7 @@ $TennisJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "Tennis Step 6 - Match Context" $TennisDir ".\scripts\step6_match_context_tennis.py" "--input outputs\step5_tennis_hit_rates.csv --output outputs\step6_tennis_role_context.csv" }
     if ($ok) { $ok = Run-Step-Job "Tennis Step 7 - Rank Props" $TennisDir ".\scripts\step7_rank_props_tennis.py" "--input outputs\step6_tennis_role_context.csv --output outputs\step7_tennis_ranked.xlsx" }
     if ($ok) { Invoke-Step7b-Job "Tennis" $RepoRoot }
-    if ($ok) { $ok = Run-Step-Job "Tennis Step 8 - Direction Context" $TennisDir ".\scripts\step8_add_direction_context_tennis.py" "--input outputs\step7_tennis_ranked.xlsx --sheet ALL --output outputs\step8_tennis_direction.csv --xlsx outputs\step8_tennis_direction_clean.xlsx --date $Date" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 8 - Direction Context" $TennisDir (Join-Path $RepoRoot "Tennis\scripts\step8_add_direction_context_tennis.py") "--input outputs\step7_tennis_ranked.xlsx --sheet ALL --output outputs\step8_tennis_direction.csv --xlsx outputs\step8_tennis_direction_clean.xlsx --date $Date" }
     return $ok
 } -ArgumentList $TennisDir, $Date, $SkipFetch, $Root
 
@@ -881,7 +885,7 @@ $MLBJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "MLB Step 6 - Team Role Context"  $MLBDir ".\scripts\step6_team_role_context_mlb.py"      "--input step5_mlb_hit_rates.csv --output step6_mlb_role_context.csv" }
     if ($ok) { $ok = Run-Step-Job "MLB Step 7 - Rank Props"         $MLBDir ".\scripts\step7_rank_props_mlb.py"             "--input step6_mlb_role_context.csv --output step7_mlb_ranked.xlsx" }
     if ($ok) { Invoke-Step7b-Job "MLB" $RepoRoot }
-    if ($ok) { $ok = Run-Step-Job "MLB Step 8 - Direction Context"  $MLBDir ".\scripts\step8_add_direction_context_mlb.py"  "--input step7_mlb_ranked.xlsx --output step8_mlb_direction.csv --xlsx step8_mlb_direction_clean.xlsx" }
+    if ($ok) { $ok = Run-Step-Job "MLB Step 8 - Direction Context"  $MLBDir (Join-Path $RepoRoot "MLB\scripts\step8_add_direction_context_mlb.py")  "--input step7_mlb_ranked.xlsx --output step8_mlb_direction.csv --xlsx step8_mlb_direction_clean.xlsx" }
     return $ok
 } -ArgumentList $MLBDir, $SkipFetch, $Root
 
