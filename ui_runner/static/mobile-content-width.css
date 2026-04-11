@@ -1,7 +1,7 @@
 /**
  * Mobile: full-width shell, safe-area gutters, touch scrolling, form zoom fix.
  * Load after page styles and nav-mobile-shared.css.
- * v=20260413
+ * v=20260413b
  */
 @media (max-width: 900px) {
   html {
@@ -175,7 +175,7 @@
   }
 }
 
-/* ── Global overflow + tables + skeleton (all viewports) — v20260413 ───────── */
+/* ── Global overflow + tables + skeleton (all viewports) — v20260413b ──────── */
 html {
   box-sizing: border-box;
 }
@@ -241,102 +241,118 @@ table.grades-table th {
   .grades-json-wrap .grades-table-wrapper {
     overflow-x: visible;
   }
+
+  /* Grades cards: block layout (no CSS grid on tr/td — avoids invisible cells). */
+  .grades-json-wrap table.grades-table,
+  .grades-json-wrap table.grades-table tbody,
+  .grades-json-wrap table.grades-table tr.grade-row {
+    display: block !important;
+    width: 100% !important;
+  }
+
   .grades-json-wrap table.grades-table {
     min-width: unset !important;
-    width: 100%;
     border-collapse: separate;
     border-spacing: 0;
   }
+
   .grades-json-wrap table.grades-table thead {
     display: none !important;
   }
+
   .grades-json-wrap table.grades-table tbody tr.grade-row {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    grid-template-areas:
-      "gicon gplayer gdir"
-      "gicon gpline gpline"
-      "gicon gactual gactual";
-    background: var(--card-bg, rgba(26, 26, 46, 0.92));
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-    margin-bottom: 8px;
-    padding: 8px 10px;
-    gap: 4px 10px;
-    align-items: center;
-    border-left: 3px solid transparent;
+    background: var(--card-bg, #1a1a2e) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 8px !important;
+    margin-bottom: 8px !important;
+    padding: 10px 12px !important;
+    position: relative !important;
+    border-left: 3px solid transparent !important;
   }
+
   .grades-json-wrap table.grades-table tbody tr.grade-row[data-result="HIT"] {
-    border-left-color: #00ff88;
+    border-left-color: #00ff88 !important;
   }
   .grades-json-wrap table.grades-table tbody tr.grade-row[data-result="MISS"] {
-    border-left-color: #ff4444;
+    border-left-color: #ff4444 !important;
   }
   .grades-json-wrap table.grades-table tbody tr.grade-row[data-result="VOID"] {
-    border-left-color: #666;
-    opacity: 0.72;
+    border-left-color: #555 !important;
+    opacity: 0.75 !important;
   }
-  .grades-json-wrap table.grades-table tbody tr.grade-row > td {
-    display: none;
-    padding: 0 !important;
+
+  .grades-json-wrap table.grades-table tbody tr.grade-row td {
+    display: block !important;
+    padding: 1px 0 !important;
     border: none !important;
-    font-size: 13px;
+    font-size: 13px !important;
     white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: unset !important;
     writing-mode: horizontal-tb !important;
+    text-align: left !important;
+    overflow: visible !important;
     text-orientation: mixed !important;
   }
-  .grades-json-wrap table.grades-table tbody tr.grade-row > td:first-child {
+
+  .grades-json-wrap table.grades-table td.gcol-icon {
+    display: inline !important;
+    font-size: 16px !important;
+    margin-right: 6px !important;
+    vertical-align: baseline !important;
+  }
+
+  .grades-json-wrap table.grades-table td.gcol-player {
+    display: inline !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: var(--text-primary, #e0e0e0) !important;
+  }
+
+  .grades-json-wrap table.grades-table td.gcol-player::after {
+    content: "";
     display: block;
-    grid-area: gicon;
-    font-size: 18px;
-    line-height: 1;
-    align-self: center;
   }
-  .grades-json-wrap table.grades-table tbody td.gcol-player {
-    display: block;
-    grid-area: gplayer;
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--text-primary, var(--text, #e8e8f0));
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    max-width: 100%;
+
+  .grades-json-wrap table.grades-table td.gcol-prop {
+    font-size: 12px !important;
+    color: var(--accent, #88ccff) !important;
+    display: inline !important;
   }
-  .grades-json-wrap table.grades-table tbody td.gcol-prop {
-    display: block;
-    grid-area: gpline;
-    font-size: 12px;
-    color: var(--muted, #888);
+
+  .grades-json-wrap table.grades-table td.gcol-line {
+    font-size: 12px !important;
+    color: var(--muted, #888) !important;
+    display: inline !important;
   }
-  .grades-json-wrap table.grades-table tbody td.gcol-prop::after {
-    content: " · " attr(data-line-mobile);
+  .grades-json-wrap table.grades-table td.gcol-line::before {
+    content: " · " !important;
   }
-  .grades-json-wrap table.grades-table tbody td.gcol-line {
-    display: none !important;
-  }
-  .grades-json-wrap table.grades-table tbody td.gcol-dir {
-    display: block;
-    grid-area: gdir;
-    font-size: 11px;
-    font-weight: 700;
-    text-align: right;
+
+  .grades-json-wrap table.grades-table td.gcol-dir {
+    display: inline !important;
+    font-size: 11px !important;
+    font-weight: bold !important;
+    margin-left: 8px !important;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
-    color: var(--cyan, #7fc7d9);
-    white-space: nowrap !important;
+    letter-spacing: 0.02em;
+    color: var(--cyan, #7fc7d9) !important;
   }
-  .grades-json-wrap table.grades-table tbody td.gcol-actual {
-    display: block;
-    grid-area: gactual;
-    font-size: 11px;
-    color: var(--muted, rgba(255, 255, 255, 0.5));
+
+  .grades-json-wrap table.grades-table td.gcol-actual {
+    font-size: 11px !important;
+    color: var(--muted, #888) !important;
+    display: block !important;
+    margin-top: 2px !important;
   }
-  .grades-json-wrap table.grades-table tbody td.gcol-actual::before {
-    content: "Actual: ";
-    color: var(--muted2, rgba(255, 255, 255, 0.35));
+  .grades-json-wrap table.grades-table td.gcol-actual:not(:empty)::before {
+    content: "Actual: " !important;
+    color: var(--muted2, rgba(255, 255, 255, 0.35)) !important;
+  }
+
+  .grades-json-wrap table.grades-table td.gcol-margin,
+  .grades-json-wrap table.grades-table td.gcol-type,
+  .grades-json-wrap table.grades-table td.gcol-tier,
+  .grades-json-wrap table.grades-table td.hide-mobile {
+    display: none !important;
   }
 }
 
