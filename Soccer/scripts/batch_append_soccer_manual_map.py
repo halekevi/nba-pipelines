@@ -106,6 +106,19 @@ def main() -> int:
             if pname and pteam and aid:
                 manual_map[(pname, pteam)] = aid
 
+    seeds_path = repo / "Soccer" / "pp_to_espn_id_map_soccer_seeds.csv"
+    if seeds_path.is_file():
+        try:
+            sdf = pd.read_csv(seeds_path, dtype=str).fillna("")
+            for _, rr in sdf.iterrows():
+                pname = s2.norm_name(rr.get("player_name", rr.get("player", "")))
+                pteam = s2.norm_team(rr.get("team", ""))
+                aid = str(rr.get("espn_athlete_id", rr.get("espn_player_id", ""))).strip()
+                if pname and pteam and aid and (pname, pteam) not in manual_map:
+                    manual_map[(pname, pteam)] = aid
+        except Exception:
+            pass
+
     roster_map, roster_last_team, single_bucket = s2.build_roster_id_map(
         s2.LEAGUE_SLUGS_FOR_ROSTER,
         workers=args.workers,

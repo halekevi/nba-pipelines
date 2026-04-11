@@ -647,6 +647,24 @@ def main() -> None:
             except Exception as e:
                 print(f"  ⚠️ Could not load manual map {manual_path}: {e}")
 
+        # Repo-tracked defaults (not under outputs/, which may be gitignored).
+        seeds_path = Path(__file__).resolve().parent.parent / "pp_to_espn_id_map_soccer_seeds.csv"
+        if seeds_path.exists():
+            try:
+                n_before = len(manual_map)
+                sdf = pd.read_csv(seeds_path, dtype=str).fillna("")
+                for _, rr in sdf.iterrows():
+                    pname = norm_name(rr.get("player_name", rr.get("player", "")))
+                    pteam = norm_team(rr.get("team", ""))
+                    aid = str(rr.get("espn_athlete_id", rr.get("espn_player_id", ""))).strip()
+                    if pname and pteam and aid and (pname, pteam) not in manual_map:
+                        manual_map[(pname, pteam)] = aid
+                added = len(manual_map) - n_before
+                if added:
+                    print(f"  Loaded repo seeds: +{added} PP->ESPN rows from {seeds_path.name}")
+            except Exception as e:
+                print(f"  ⚠️ Could not load seeds {seeds_path}: {e}")
+
         all_names = (
             df.loc[singles_mask, "player"].tolist()
             + df.loc[combos_mask, "player_1"].tolist()
