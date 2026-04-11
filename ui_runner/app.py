@@ -1010,22 +1010,6 @@ def api_payout_rate_cards():
     return r
 
 
-_GRADED_PROPS_JSON_NAME_RE = re.compile(r"^graded_props_(\d{4}-\d{2}-\d{2})\.json\Z")
-
-
-def _graded_props_json_dates_sorted() -> list[str]:
-    """Dates (YYYY-MM-DD) with a graded_props_*.json under templates/ or templates/archive/."""
-    found: set[str] = set()
-    for base in (TEMPLATES_DIR, ARCHIVE_DIR):
-        if not base.is_dir():
-            continue
-        for p in base.glob("graded_props_*.json"):
-            m = _GRADED_PROPS_JSON_NAME_RE.match(p.name)
-            if m:
-                found.add(m.group(1))
-    return sorted(found)
-
-
 def _graded_props_json_path_for_date(date_str: str) -> Path | None:
     fname = f"graded_props_{date_str}.json"
     for base in (TEMPLATES_DIR, ARCHIVE_DIR):
@@ -1069,64 +1053,6 @@ def _grades_flat_rows_from_sections(
     return flat
 
 
-def _grades_json_page_context(
-    date_str: str, data: dict[str, Any], *, initial_row_cap: int = GRADES_HTML_INITIAL_ROWS
-) -> dict[str, Any]:
-    """Template context for grades.html from graded_props JSON (date, count, props)."""
-    props_in = [p for p in (data.get("props") or []) if isinstance(p, dict)]
-    by_sections = _grades_group_props_into_sections(props_in)
-    sport_totals = {sk: len(rows) for sk, rows in by_sections}
-    flat = _grades_flat_rows_from_sections(by_sections)
-    cap = max(0, int(initial_row_cap))
-    initial_flat = flat[:cap] if cap else flat
-    by_init: dict[str, list[dict[str, Any]]] = {}
-    for sk, r in initial_flat:
-        by_init.setdefault(sk, []).append(r)
-    sport_keys_ordered = [sk for sk, _ in by_sections]
-    by_sport_initial = [(k, by_init[k]) for k in sport_keys_ordered if k in by_init]
-    has_more = len(flat) > len(initial_flat)
-    next_offset = len(initial_flat) if has_more else len(flat)
-
-    n_total = len(props_in)
-    n_hit = sum(1 for p in props_in if str(p.get("result") or "").upper() == "HIT")
-    n_miss = sum(1 for p in props_in if str(p.get("result") or "").upper() == "MISS")
-    n_void = sum(1 for p in props_in if str(p.get("result") or "").upper() == "VOID")
-    n_other = max(0, n_total - n_hit - n_miss - n_void)
-    hit_rate = round(100.0 * n_hit / n_total, 2) if n_total else 0.0
-
-    sport_summary: list[dict[str, Any]] = []
-    for sk, rows in by_sections:
-        nh = sum(1 for r in rows if str(r.get("result") or "").upper() == "HIT")
-        sport_summary.append(
-            {
-                "sport": sk,
-                "n": len(rows),
-                "hits": nh,
-                "hit_rate": round(100.0 * nh / len(rows), 1) if rows else 0.0,
-            }
-        )
-
-    return {
-        "date": date_str,
-        "graded_data": data,
-        "props": props_in,
-        "by_sport": by_sport_initial,
-        "sport_summary": sport_summary,
-        "sport_totals": sport_totals,
-        "grades_has_more": has_more,
-        "grades_next_offset": next_offset,
-        "grades_chunk_size": cap,
-        "grades_page_date": date_str,
-        "n_total": n_total,
-        "n_hit": n_hit,
-        "n_miss": n_miss,
-        "n_void": n_void,
-        "n_other": n_other,
-        "hit_rate": hit_rate,
-        "json_count": int(data.get("count") or 0) or n_total,
-    }
-
-
 def _grades_html_response(template: str, **kwargs: Any) -> Response:
     r = make_response(
         render_template(
@@ -1161,84 +1087,15 @@ def page_grades_hub():
 
 
 @app.get("/grades/props")
-def page_grades_props_redirect():
-    """Latest graded_props JSON view, or hub if no JSON on server."""
-    dates = _graded_props_json_dates_sorted()
-    if not dates:
-        return redirect("/grades", code=302)
-    return redirect(f"/grades/props/{dates[-1]}", code=302)
+def page_grades_props_legacy_redirect():
+    """Legacy URL: standalone raw-prop HTML was removed; use Grades → Prop Evaluation."""
+    return redirect("/grades", code=302)
 
 
 @app.get("/grades/props/<date_str>")
-def page_grades_props_date(date_str: str):
-    """HTML grid of graded props from graded_props_YYYY-MM-DD.json (Railway-friendly)."""
-    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date_str):
-        abort(404)
-    avail = _graded_props_json_dates_sorted()
-    path = _graded_props_json_path_for_date(date_str)
-    if path is None:
-        r = _grades_html_response(
-            "grades.html",
-            nav_active="grades",
-            error=f"No grades JSON found for {date_str}.",
-            available_dates=avail,
-            date=date_str,
-            graded_data=None,
-            by_sport=[],
-            sport_summary=[],
-            sport_totals={},
-            grades_has_more=False,
-            grades_next_offset=0,
-            grades_chunk_size=GRADES_HTML_INITIAL_ROWS,
-            grades_page_date=date_str,
-            n_total=0,
-            n_hit=0,
-            n_miss=0,
-            n_void=0,
-            n_other=0,
-            hit_rate=0.0,
-            json_count=0,
-        )
-        r.status_code = 404
-        return r
-    try:
-        raw = path.read_text(encoding="utf-8-sig")
-        data = json.loads(raw)
-    except Exception as exc:
-        r = _grades_html_response(
-            "grades.html",
-            nav_active="grades",
-            error=f"Could not read grades JSON: {exc}",
-            available_dates=avail,
-            date=date_str,
-            graded_data=None,
-            by_sport=[],
-            sport_summary=[],
-            sport_totals={},
-            grades_has_more=False,
-            grades_next_offset=0,
-            grades_chunk_size=GRADES_HTML_INITIAL_ROWS,
-            grades_page_date=date_str,
-            n_total=0,
-            n_hit=0,
-            n_miss=0,
-            n_void=0,
-            n_other=0,
-            hit_rate=0.0,
-            json_count=0,
-        )
-        r.status_code = 500
-        return r
-    if not isinstance(data, dict):
-        abort(500)
-    ctx = _grades_json_page_context(date_str, data)
-    return _grades_html_response(
-        "grades.html",
-        nav_active="grades",
-        error=None,
-        available_dates=avail,
-        **ctx,
-    )
+def page_grades_props_legacy_redirect_date(date_str: str):
+    """Legacy URL per date; same redirect as /grades/props."""
+    return redirect("/grades", code=302)
 
 
 @app.get("/grades")
@@ -1781,8 +1638,7 @@ def api_grades_props():
 @app.get("/api/grades/page-rows")
 def api_grades_page_rows():
     """
-    Paginated rows for /grades/props/YYYY-MM-DD HTML (graded_props_*.json on disk).
-    Matches the same sport ordering as the main grades page.
+    Paginated rows from graded_props_*.json on disk (sport ordering matches Grades hub).
     """
     raw = (request.args.get("date") or "").strip()
     date_str = raw[:10]

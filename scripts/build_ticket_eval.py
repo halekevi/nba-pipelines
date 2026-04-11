@@ -98,7 +98,7 @@ SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
 }
 
 
-# Shared shell CSS versions — keep aligned with ui_runner/templates (e.g. grades.html).
+# Shared shell CSS versions — keep aligned with ui_runner/templates (e.g. indexGrades.html).
 _TICKET_EVAL_SHELL_CSS_VER = "20260411"
 _TICKET_EVAL_NAV_UNIFIED_VER = "20260408"
 _TICKET_EVAL_NAV_MOBILE_VER = "20260411"
@@ -158,34 +158,6 @@ body.ticket-eval-page{
   --gold: var(--accent, #d4af37);
   --gold2: #d4a017;
   --pending: #888;
-}
-.te-back-nav{
-  position:relative;
-  z-index:2;
-  max-width:min(1520px,96vw);
-  margin:0 auto 10px;
-  padding:6px clamp(14px,2.5vw,32px) 10px;
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  gap:10px 18px;
-  border-bottom:1px solid var(--border, rgba(255,255,255,0.08));
-  font-size:13px;
-}
-.te-back-link{
-  color:var(--cyan, #00e5ff);
-  font-weight:600;
-  text-decoration:none;
-}
-.te-back-link:hover{text-decoration:underline;}
-.te-date{
-  color:var(--muted, rgba(255,255,255,0.45));
-  font-variant-numeric:tabular-nums;
-  letter-spacing:0.02em;
-}
-.te-prop-link{margin-left:auto;}
-@media(max-width:768px){
-  .te-prop-link{margin-left:0;}
 }
 :is([data-theme='light'], html.light-theme) .ticket-bucket{
   background:rgba(255,255,255,0.52);
@@ -1826,14 +1798,6 @@ def _build_html(
 .sport-default{background:rgba(255,255,255,.04);color:#888;border:1px solid rgba(255,255,255,.1);}
 """
 
-    te_back = (
-        f'<div class="te-back-nav">'
-        f'<a href="/grades" class="te-back-link">← Grades hub</a>'
-        f'<span class="te-date">{json_date}</span>'
-        f'<a href="/grades/props/{json_date}" class="te-back-link te-prop-link">Raw prop grades →</a>'
-        "</div>"
-    )
-
     parts: list[str] = [
         "<!DOCTYPE html>",
         '<html lang="en" data-theme="dark">',
@@ -1855,8 +1819,8 @@ def _build_html(
         _TICKET_EVAL_PAGE_WRAP_CSS,
         "h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}",
         ".bebas{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}",
-        ".stats-bar{position:-webkit-sticky;position:sticky;top:88px;z-index:175;margin:0 auto 18px;width:100%;max-width:min(1520px,96vw);"
-        "padding:18px clamp(16px,2.5vw,32px);transition:top .28s ease,box-shadow .22s ease;"
+        ".stats-bar{position:-webkit-sticky;position:sticky;top:72px;z-index:175;margin:0 auto 12px;width:100%;max-width:min(1520px,96vw);"
+        "padding:14px clamp(16px,2.5vw,28px);transition:top .28s ease,box-shadow .22s ease;"
         "background:linear-gradient(180deg,rgba(10,10,18,.92),rgba(8,8,14,.88)),var(--glass);"
         "backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);"
         "border:1px solid var(--glass-bd);border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.35);}",
@@ -1951,7 +1915,7 @@ def _build_html(
         ".warning-chip{display:inline-flex;align-items:center;margin-left:8px;padding:2px 8px;border-radius:999px;"
         "border:1px solid rgba(240,165,0,.4);background:rgba(240,165,0,.12);color:#ffd87a;"
         "font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.6px;cursor:help;}",
-        ".grade-eval-summary{max-width:min(1520px,96vw);margin:12px auto 0;padding:14px 18px;border-radius:16px;"
+        ".grade-eval-summary{max-width:min(1520px,96vw);margin:2px auto 0;padding:10px 16px;border-radius:16px;"
         "border:1px solid var(--glass-bd);background:rgba(0,0,0,.22);font-family:'Share Tech Mono',monospace;font-size:13px;"
         "line-height:1.55;color:var(--text);}",
         ".grade-eval-summary-empty{color:var(--muted);font-size:12px;}",
@@ -1982,7 +1946,6 @@ def _build_html(
         "</head>",
         '<body class="ticket-eval-page">',
         _render_site_nav_grades_active(),
-        te_back,
         grade_eval_summary_html,
         '<div class="stats-bar">',
         '<div class="sum-row">',
