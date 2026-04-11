@@ -7853,7 +7853,8 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
           <div class="kpi-val">{_fmt(t_power_pay, 1)}×</div>
         </div>
       </div>
-      <table>
+      <div class="ticket-legs-table-wrapper">
+      <table class="ticket-legs-table">
         <thead>
           <tr>
             <th>Player</th>
@@ -7896,6 +7897,7 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
 
                 # Direction badge
                 dir_cls = "dir-over" if direction == "OVER" else "dir-under"
+                dir_axis_cls = "direction-over" if direction == "OVER" else "direction-under"
                 dir_html = f'<span class="{dir_cls}">{_h(direction)}</span>'
 
                 # Pick type badge
@@ -7938,9 +7940,14 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
                 # Matchup sub-label
                 matchup = f"{team} vs {opp}" if team and opp else (team or opp)
 
+                hr_disp = (
+                    f"Hit rate {_pct(hit_rate)} · ML {_pct(ml_prob)} · Edge {_fmt(edge, 2)}"
+                    + (f" · Def {def_tier}" if def_tier else "")
+                )
+
                 parts.append(f'''
-          <tr class="leg-row">
-            <td>
+          <tr class="leg-row" data-hr-display="{_h(hr_disp)}">
+            <td class="leg-col leg-col-player">
               <div class="pwrap">
                 {av_html}
                 <div>
@@ -7949,18 +7956,18 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
                 </div>
               </div>
             </td>
-            <td>{sport_html}</td>
-            <td style="color:var(--text);font-weight:500;">{_h(prop_type)}</td>
-            <td style="font-family:'Share Tech Mono',monospace;">{line_html}</td>
-            <td>{dir_html}</td>
-            <td>{pick_html}</td>
-            <td style="font-family:'Share Tech Mono',monospace;color:var(--green);">{_pct(hit_rate)}</td>
-            <td style="font-family:'Share Tech Mono',monospace;color:var(--cyan);">{_pct(ml_prob)}</td>
-            <td style="font-family:'Share Tech Mono',monospace;color:var(--accent);">{_fmt(edge, 2)}</td>
-            <td style="font-size:13px;color:var(--muted);">{_h(def_tier)}</td>
-            <td style="font-family:'Share Tech Mono',monospace;color:var(--cyan);" title="{_h(line_tip)}">{best_book_html}</td>
-            <td style="font-family:'Share Tech Mono',monospace;" title="{_h(line_tip)}">{best_line_html}</td>
-            <td style="font-family:'Share Tech Mono',monospace;{cross_edge_style}" title="Positive means better line than PP for this direction">{cross_edge_html}</td>
+            <td class="leg-col leg-col-sport hide-mobile">{sport_html}</td>
+            <td class="leg-col leg-col-prop" style="color:var(--text);font-weight:500;">{_h(prop_type)}</td>
+            <td class="leg-col leg-col-line" style="font-family:'Share Tech Mono',monospace;">{line_html}</td>
+            <td class="leg-col leg-col-dir direction-cell {dir_axis_cls}">{dir_html}</td>
+            <td class="leg-col leg-col-pick">{pick_html}</td>
+            <td class="leg-col leg-col-hr hide-mobile" style="font-family:'Share Tech Mono',monospace;color:var(--green);">{_pct(hit_rate)}</td>
+            <td class="leg-col leg-col-ml hide-mobile" style="font-family:'Share Tech Mono',monospace;color:var(--cyan);">{_pct(ml_prob)}</td>
+            <td class="leg-col leg-col-edge hide-mobile" style="font-family:'Share Tech Mono',monospace;color:var(--accent);">{_fmt(edge, 2)}</td>
+            <td class="leg-col leg-col-def hide-mobile" style="font-size:13px;color:var(--muted);">{_h(def_tier)}</td>
+            <td class="leg-col leg-col-book hide-mobile" style="font-family:'Share Tech Mono',monospace;color:var(--cyan);" title="{_h(line_tip)}">{best_book_html}</td>
+            <td class="leg-col leg-col-bl hide-mobile" style="font-family:'Share Tech Mono',monospace;" title="{_h(line_tip)}">{best_line_html}</td>
+            <td class="leg-col leg-col-ce hide-mobile" style="font-family:'Share Tech Mono',monospace;{cross_edge_style}" title="Positive means better line than PP for this direction">{cross_edge_html}</td>
           </tr>''')
                 leg_graph_uid += 1
                 parts.append(_tickets_leg_graph_row_html(leg, f"lgr-{leg_graph_uid}", table_cols))
@@ -8004,6 +8011,7 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
             parts.append(f'''
         </tbody>
       </table>
+      </div>
 {payout_section}
   </div>
 </div>''')

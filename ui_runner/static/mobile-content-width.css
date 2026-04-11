@@ -1,7 +1,7 @@
 /**
  * Mobile: full-width shell, safe-area gutters, touch scrolling, form zoom fix.
  * Load after page styles and nav-mobile-shared.css.
- * v=20260411
+ * v=20260412
  */
 @media (max-width: 900px) {
   html {
@@ -180,7 +180,7 @@
   }
 }
 
-/* ── Global overflow + tables + skeleton (all viewports) — v20260411 ───────── */
+/* ── Global overflow + tables + skeleton (all viewports) — v20260412 ───────── */
 html {
   box-sizing: border-box;
 }
@@ -194,12 +194,197 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
 }
-table {
+/* Do not apply fixed layout to ticket leg tables — 13 columns become unreadable (vertical text). */
+table:not(.ticket-legs-table) {
   width: 100%;
   table-layout: fixed;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
+
+/* ── /tickets built slips: leg grid + nav (no vertical text) ───────────────── */
+nav.snav .snav-links li,
+nav.snav .snav-links a,
+nav.snav .mobile-menu a {
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+}
+
+.tickets-built .ticket-legs-table {
+  width: 100%;
+  table-layout: auto !important;
+  border-collapse: collapse;
+}
+.tickets-built .ticket-legs-table th,
+.tickets-built .ticket-legs-table td {
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+}
+.tickets-built .ticket-legs-table th {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tickets-built .ticket-legs-table td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tickets-built .ticket-legs-table .leg-col-player {
+  white-space: normal !important;
+  max-width: min(300px, 36vw);
+}
+.tickets-built .ticket-legs-table .leg-col-player .pwrap {
+  min-width: 0;
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .tickets-built .ticket-legs-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-left: -4px;
+    margin-right: -4px;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+  .tickets-built .ticket-legs-table {
+    min-width: 720px;
+    width: max-content;
+    max-width: none;
+  }
+  .tickets-built .ticket-legs-table thead {
+    display: table-header-group !important;
+  }
+  .tickets-built .ticket-legs-table tbody tr.leg-row,
+  .tickets-built .ticket-legs-table tbody tr.leg-graph-row {
+    display: table-row !important;
+  }
+  .tickets-built .ticket-legs-table tbody td {
+    display: table-cell !important;
+    position: static !important;
+    transform: none !important;
+  }
+  .tickets-built .ticket-legs-table tbody td.hide-mobile {
+    display: table-cell !important;
+  }
+  .tickets-built .ticket-legs-table tbody tr.leg-row::after {
+    content: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .tickets-built .ticket-legs-table-wrapper {
+    overflow-x: visible;
+  }
+  .tickets-built .ticket-legs-table thead {
+    display: none !important;
+  }
+  .tickets-built .ticket-legs-table tbody tr.leg-row {
+    display: block;
+    position: relative;
+    background: var(--card-bg, rgba(255, 255, 255, 0.04));
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    box-sizing: border-box;
+  }
+  .tickets-built .ticket-legs-table tbody tr.leg-row::after {
+    content: attr(data-hr-display);
+    display: block;
+    font-size: 11px;
+    color: var(--muted, rgba(255, 255, 255, 0.45));
+    margin-top: 6px;
+    line-height: 1.35;
+    white-space: normal !important;
+  }
+  .tickets-built .ticket-legs-table tbody td.hide-mobile {
+    display: none !important;
+  }
+  .tickets-built .ticket-legs-table tbody tr.leg-row > td {
+    display: block;
+    text-align: left !important;
+    padding: 3px 0 !important;
+    border: none !important;
+    font-size: 13px;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
+    transform: none !important;
+  }
+  .tickets-built .ticket-legs-table tbody td.leg-col-player {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary, var(--text, #fff));
+    padding-right: 88px !important;
+    margin-bottom: 2px;
+    max-width: none !important;
+  }
+  .tickets-built .ticket-legs-table tbody td.leg-col-prop::before {
+    content: "Prop: ";
+    color: var(--muted, rgba(255, 255, 255, 0.45));
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .tickets-built .ticket-legs-table tbody td.leg-col-line::before {
+    content: "Line: ";
+    color: var(--muted, rgba(255, 255, 255, 0.45));
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .tickets-built .ticket-legs-table tbody td.leg-col-pick {
+    font-size: 12px;
+    color: var(--muted, rgba(255, 255, 255, 0.55));
+    margin-top: 2px;
+  }
+  .tickets-built .ticket-legs-table tbody td.direction-cell {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: auto !important;
+    padding: 4px 10px !important;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .tickets-built .ticket-legs-table tbody td.direction-cell.direction-over {
+    background: rgba(0, 255, 136, 0.18) !important;
+    color: #00e5c8 !important;
+  }
+  .tickets-built .ticket-legs-table tbody td.direction-cell.direction-under {
+    background: rgba(255, 100, 100, 0.18) !important;
+    color: #ff8a8a !important;
+  }
+  .tickets-built .ticket-legs-table tbody td.direction-cell span {
+    background: transparent !important;
+    padding: 0 !important;
+    color: inherit !important;
+  }
+  .tickets-built .ticket-legs-table tbody tr.leg-graph-row {
+    display: block;
+    width: 100%;
+    margin-bottom: 12px;
+  }
+  .tickets-built .ticket-legs-table tbody tr.leg-graph-row td.leg-graph-cell {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  }
+}
+
+@media (max-width: 900px) {
+  nav.snav .mobile-menu a {
+    white-space: normal;
+  }
+}
+
 .table-responsive {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;

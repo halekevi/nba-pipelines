@@ -230,6 +230,9 @@
   width: 100%;
   border-collapse: collapse;
 }
+.tickets-built table.ticket-legs-table {
+  table-layout: auto !important;
+}
 .tickets-built th {
   background: rgba(225, 188, 101, 0.1);
   color: var(--accent);

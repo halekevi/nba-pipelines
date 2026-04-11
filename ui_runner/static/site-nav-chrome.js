@@ -79,15 +79,22 @@
   function bindHamburger() {
     const ham = document.getElementById("hamburger");
     const mob = document.getElementById("mobile-menu");
+    const nl = document.getElementById("nav-links");
     if (!ham || !mob) return;
+    const syncNavLinksOpen = () => {
+      if (!nl) return;
+      nl.classList.toggle("open", ham.classList.contains("open"));
+    };
     ham.addEventListener("click", () => {
       ham.classList.toggle("open");
       mob.classList.toggle("open");
+      syncNavLinksOpen();
     });
     document.addEventListener("click", (e) => {
       if (!ham.contains(e.target) && !mob.contains(e.target)) {
         ham.classList.remove("open");
         mob.classList.remove("open");
+        syncNavLinksOpen();
       }
     });
   }
