@@ -698,6 +698,147 @@ def _ticket_is_flex_play_structure(group_name: str, n_legs: int) -> bool:
     return "flex" in str(group_name or "").strip().lower()
 
 
+def _safe_float_ticket(x: Any, default: float | None = None) -> float | None:
+    if x is None or x == "":
+        return default
+    try:
+        v = float(x)
+        if isinstance(v, float) and math.isnan(v):
+            return default
+        return v
+    except (TypeError, ValueError):
+        return default
+
+
+def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: dict[str, Any]) -> dict[str, Any]:
+    """
+    Empirical payout model vs graded leg outcomes for ticket_eval HTML.
+
+    ``ticket`` may include ``payout`` from tickets_latest.json; older slips omit it (graceful N/A).
+    """
+    pay = ticket.get("payout")
+    payd: dict[str, Any] = pay if isinstance(pay, dict) else {}
+
+    if any(g == "UNGRADED" for g in leg_grades):
+        return {"pending": True}
+
+    n = len(leg_grades)
+    h = sum(1 for g in leg_grades if g == "HIT")
+    m = sum(1 for g in leg_grades if g == "MISS")
+    all_hit = bool(n) and all(g == "HIT" for g in leg_grades)
+
+    paid = _ticket_pays_money(group_name, leg_grades)
+
+    min_x = _safe_float_ticket(payd.get("payout")) or _safe_float_ticket(payd.get("min_guarantee"))
+    if min_x is None:
+        min_x = 0.0
+    sweep_x = _safe_float_ticket(payd.get("sweep_payout")) or _safe_float_ticket(payd.get("first_place"))
+    if sweep_x is None or sweep_x <= 0:
+        sweep_x = _safe_float_ticket(ticket.get("power_payout")) or 0.0
+
+    flex = _ticket_is_flex_play_structure(group_name, n)
+
+    if not paid:
+        result = "LOSS"
+        emoji = "❌"
+        css = "loss"
+        actual = 0.0
+    elif flex:
+        if all_hit:
+            result = "SWEEP"
+            emoji = "🏆"
+            css = "sweep"
+            actual = float(sweep_x)
+        else:
+            result = "MIN GUARANTEE"
+            emoji = "🛡️"
+            css = "min_guarantee"
+            actual = float(min_x)
+    else:
+        # Power (and other non-flex): cashing slip pays the min-guarantee multiplier, not sweep.
+        result = "WIN"
+        emoji = "✅"
+        css = "win"
+        actual = float(min_x)
+
+    pred_pay = _safe_float_ticket(payd.get("payout")) or _safe_float_ticket(payd.get("min_guarantee"))
+    pred_ev = _safe_float_ticket(payd.get("ev"))
+    pred_p = _safe_float_ticket(payd.get("p_all_win"))
+    rec = str(payd.get("recommendation") or "").strip()
+
+    gross_10 = round(10.0 * actual, 2)
+    net_10 = round(gross_10 - 10.0, 2)
+
+    h_show = h
+    m_show = m
+    if result == "MIN GUARANTEE" and n:
+        detail = f"{result} ({h_show}/{n} correct)"
+    elif result == "SWEEP" and n:
+        detail = f"{result} — all {n} legs correct"
+    elif result == "WIN" and n:
+        detail = f"{result} — all {n} legs correct"
+    elif result == "LOSS" and n:
+        detail = f"{result} ({h_show} hit, {m_show} miss)"
+    else:
+        detail = result
+
+    return {
+        "pending": False,
+        "result": result,
+        "result_emoji": emoji,
+        "result_css": css,
+        "result_detail": detail,
+        "actual_payout": actual,
+        "predicted_payout": pred_pay,
+        "predicted_ev": pred_ev,
+        "predicted_p_win": pred_p,
+        "recommendation_at_entry": rec,
+        "entry_10_return": gross_10,
+        "net_10": net_10,
+    }
+
+
+def _fmt_pay_cell(v: float | None, suffix: str = "x") -> str:
+    if v is None:
+        return "N/A"
+    try:
+        return f"{float(v):.2f}{suffix}"
+    except (TypeError, ValueError):
+        return "N/A"
+
+
+def _fmt_pct_cell(v: float | None) -> str:
+    if v is None:
+        return "N/A"
+    try:
+        x = float(v)
+        if x <= 1.0:
+            return f"{x * 100:.1f}%"
+        return f"{x:.1f}%"
+    except (TypeError, ValueError):
+        return "N/A"
+
+
+def _append_grade_history(record: dict[str, Any]) -> None:
+    """Append (or replace same-date) run summary to data/grade_history.json."""
+    path = REPO_ROOT / "data" / "grade_history.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    runs: list[Any] = []
+    if path.is_file():
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            if isinstance(raw, list):
+                runs = list(raw)
+            elif isinstance(raw, dict) and isinstance(raw.get("runs"), list):
+                runs = list(raw["runs"])
+        except (OSError, json.JSONDecodeError):
+            runs = []
+    ds = str(record.get("date") or "")[:10]
+    runs = [r for r in runs if not (isinstance(r, dict) and str(r.get("date", ""))[:10] == ds)]
+    runs.append(record)
+    path.write_text(json.dumps(runs, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
 def _ticket_pays_money(group_name: str, leg_grades: list[str]) -> bool:
     """
     Cash outcome: power = every leg HIT; flex (sheet title contains 'Flex', 3+ legs) = at most one
@@ -1693,11 +1834,51 @@ def write_ticket_eval_slate_json(manual_props: list[dict[str, Any]], slate_date:
     return TICKET_EVAL_SLATE_JSON
 
 
+def _ticket_grade_payout_html(oc: dict[str, Any], esc) -> str:
+    """HTML block: predicted vs actual payout (under graded ticket legs)."""
+    if oc.get("pending"):
+        return (
+            '<div class="ticket-grade-payout">'
+            '<div class="grade-payout-pending">Payout model: awaiting all leg grades</div>'
+            "</div>"
+        )
+    r = str(oc.get("result") or "")
+    css = str(oc.get("result_css") or "loss")
+    emoji = str(oc.get("result_emoji") or "")
+    pred_pay = oc.get("predicted_payout")
+    pred_ev = oc.get("predicted_ev")
+    pred_p = oc.get("predicted_p_win")
+    rec = str(oc.get("recommendation_at_entry") or "")
+    act = float(oc.get("actual_payout") or 0.0)
+    gross = float(oc.get("entry_10_return") or 0.0)
+    ev_line = (
+        f"{float(pred_ev):.2f} — {esc(rec)}" if pred_ev is not None else f"N/A — {esc(rec) if rec else 'N/A'}"
+    )
+    pwin_pred = _fmt_pct_cell(pred_p)
+    pwin_act = "✅" if r != "LOSS" else "❌"
+    ev_act = f"+${gross:.2f} on $10" if r != "LOSS" else "-$10.00 on $10"
+    entry_line = f"Lost $10.00" if r == "LOSS" else f"Won ${gross:.2f}"
+    detail = esc(str(oc.get("result_detail") or r))
+    return (
+        '<div class="ticket-grade-payout">'
+        f'<div class="grade-result grade-result-{esc(css)}">{esc(emoji)} {esc(r)}</div>'
+        '<div class="grade-result-sub">' + detail + "</div>"
+        '<table class="grade-payout-table">'
+        "<tr><th></th><th>Predicted</th><th>Actual</th></tr>"
+        f"<tr><td>Payout</td><td>{_fmt_pay_cell(pred_pay)}</td><td>{_fmt_pay_cell(act)}</td></tr>"
+        f"<tr><td>P(Win)</td><td>{esc(pwin_pred)}</td><td>{pwin_act}</td></tr>"
+        f"<tr><td>EV at Entry</td><td>{ev_line}</td><td>{esc(ev_act)}</td></tr>"
+        "</table>"
+        f'<div class="grade-entry-line">$10 entry → {entry_line}</div>'
+        "</div>"
+    )
+
+
 def _build_html(
     payload: dict[str, Any],
     arg_date: str,
     sport_candidates: dict[str, list[Path]],
-) -> str:
+) -> tuple[str, dict[str, Any] | None]:
     groups = payload.get("groups") or []
     indices = _load_actuals_indices(sport_candidates, arg_date)
 
@@ -1743,13 +1924,14 @@ def _build_html(
     # Avoid prematurely terminating the <script> tag if any string contains "</".
     manual_props_json = manual_props_json.replace("</", "<\\/")
 
+    outcome_map: dict[tuple[str, Any], dict[str, Any]] = {}
     perfect = 0
     money_wins = 0
     money_losses = 0
     for t in tickets_flat:
         gname = str(t.get("_group_name") or "Group")
         legs = t.get("legs") or []
-        gs = []
+        gs: list[str] = []
         for leg in legs:
             row = _match_leg_to_row_multi(leg, indices)
             try:
@@ -1763,8 +1945,12 @@ def _build_html(
                 lf = row["line"]
             g = _leg_grade(act, lf, d, gr)
             gs.append(g)
+        tno = t.get("ticket_no", "?")
+        t["_leg_grades_cache"] = gs
         if not gs:
+            outcome_map[(gname, tno)] = {"pending": True}
             continue
+        outcome_map[(gname, tno)] = _ticket_eval_money_outcome(gname, gs, t)
         if all(x == "HIT" for x in gs):
             perfect += 1
         if any(x == "UNGRADED" for x in gs):
@@ -1779,9 +1965,106 @@ def _build_html(
     ticket_decided = money_wins + money_losses
     ticket_pct = (100.0 * money_wins / ticket_decided) if ticket_decided else 0.0
 
+    pay_summary_rows: list[dict[str, Any]] = []
+    for t in tickets_flat:
+        gs = t.get("_leg_grades_cache") or []
+        if not gs or any(x == "UNGRADED" for x in gs) or all(x == "VOID" for x in gs):
+            continue
+        gname = str(t.get("_group_name") or "Group")
+        oc = outcome_map.get((gname, t.get("ticket_no", "?")), {})
+        if oc.get("pending"):
+            continue
+        pay_summary_rows.append(oc)
+
+    n_pay = len(pay_summary_rows)
+    wins_ct = sum(1 for oc in pay_summary_rows if oc.get("result") in ("WIN", "SWEEP"))
+    guar_ct = sum(1 for oc in pay_summary_rows if oc.get("result") == "MIN GUARANTEE")
+    loss_ct = sum(1 for oc in pay_summary_rows if oc.get("result") == "LOSS")
+    total_net_10 = sum(float(oc.get("net_10") or 0.0) for oc in pay_summary_rows)
+    evs = [float(oc["predicted_ev"]) for oc in pay_summary_rows if oc.get("predicted_ev") is not None]
+    avg_ev = sum(evs) / len(evs) if evs else None
+
+    def _rec_bucket(rec: str) -> str:
+        u = (rec or "").strip().upper()
+        if u == "STRONG":
+            return "STRONG"
+        if u == "OK":
+            return "OK"
+        if u == "MARGINAL":
+            return "MARGINAL"
+        if u == "SKIP":
+            return "SKIP"
+        return "SKIP"
+
+    buck: dict[str, dict[str, int]] = {
+        "STRONG": {"count": 0, "wins": 0},
+        "OK": {"count": 0, "wins": 0},
+        "MARGINAL": {"count": 0, "wins": 0},
+        "SKIP": {"count": 0, "wins": 0},
+    }
+    for oc in pay_summary_rows:
+        bk = _rec_bucket(str(oc.get("recommendation_at_entry") or ""))
+        buck[bk]["count"] += 1
+        if oc.get("result") != "LOSS":
+            buck[bk]["wins"] += 1
+
+    win_rate_pay = (wins_ct + guar_ct) / n_pay if n_pay else 0.0
+    net_per = total_net_10 / n_pay if n_pay else 0.0
+    roi_pct = (100.0 * total_net_10 / (10 * n_pay)) if n_pay else 0.0
+
+    history_record: dict[str, Any] | None = None
+    if n_pay:
+        history_record = {
+            "date": str(payload.get("date") or arg_date)[:10],
+            "n_tickets": n_pay,
+            "wins": wins_ct,
+            "guarantees": guar_ct,
+            "losses": loss_ct,
+            "win_rate": round(win_rate_pay, 4),
+            "avg_ev_predicted": round(avg_ev, 4) if avg_ev is not None else None,
+            "net_per_10": round(net_per, 2),
+            "roi_pct": round(roi_pct, 2),
+            "strong_tickets": dict(buck["STRONG"]),
+            "ok_tickets": dict(buck["OK"]),
+            "marginal_tickets": dict(buck["MARGINAL"]),
+            "skip_tickets": dict(buck["SKIP"]),
+        }
+    else:
+        history_record = None
+
     # ── HTML
     esc = html.escape
     json_date = esc(str(payload.get("date") or arg_date))
+
+    if n_pay:
+        total_staked = 10 * n_pay
+        win_rate_pct = 100.0 * win_rate_pay
+        avg_ev_s = f"{avg_ev:.2f}" if avg_ev is not None else "N/A"
+        net_abs = abs(total_net_10)
+        net_word = "profit" if total_net_10 >= 0 else "loss"
+        net_sign = "+" if total_net_10 >= 0 else "−"
+        grade_eval_summary_html = (
+            '<div class="grade-eval-summary">'
+            f'<div class="grade-eval-summary-line1">Date: {json_date} | {n_pay} tickets graded</div>'
+            '<div class="grade-eval-summary-line2">'
+            f'<span>✅ Wins: {wins_ct}</span>'
+            f'<span>🛡️ Guarantees: {guar_ct}</span>'
+            f'<span>❌ Losses: {loss_ct}</span>'
+            "</div>"
+            '<div class="grade-eval-summary-line3">'
+            f"Win rate (W+🛡️): {win_rate_pct:.0f}%"
+            f' <span class="grade-eval-sep">|</span> Avg EV at entry: {avg_ev_s}'
+            "</div>"
+            f'<div class="grade-eval-summary-line4">Total: {net_sign}${net_abs:.2f} net on ${total_staked:.0f} staked '
+            f"(${10}/ticket flat) — {net_word}</div>"
+            "</div>"
+        )
+    else:
+        grade_eval_summary_html = (
+            '<div class="grade-eval-summary grade-eval-summary-empty">'
+            f'<div>Date: {json_date} · No fully graded tickets for payout summary (ungraded, all-void, or none).</div>'
+            "</div>"
+        )
 
     sport_colors_css = """
 .sport-nba{background:rgba(212,160,23,.12);color:#f0a500;border:1px solid rgba(212,160,23,.35);}
@@ -1904,10 +2187,38 @@ def _build_html(
         ".warning-chip{display:inline-flex;align-items:center;margin-left:8px;padding:2px 8px;border-radius:999px;"
         "border:1px solid rgba(240,165,0,.4);background:rgba(240,165,0,.12);color:#ffd87a;"
         "font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.6px;cursor:help;}",
+        ".grade-eval-summary{max-width:min(1520px,96vw);margin:12px auto 0;padding:14px 18px;border-radius:16px;"
+        "border:1px solid var(--glass-bd);background:rgba(0,0,0,.22);font-family:'Share Tech Mono',monospace;font-size:13px;"
+        "line-height:1.55;color:var(--text);}",
+        ".grade-eval-summary-empty{color:var(--muted);font-size:12px;}",
+        ".grade-eval-summary-line1{font-weight:700;color:var(--gold);margin-bottom:6px;}",
+        ".grade-eval-summary-line2{display:flex;flex-wrap:wrap;gap:12px 22px;margin-bottom:4px;}",
+        ".grade-eval-summary-line3{color:var(--muted);margin-bottom:4px;}",
+        ".grade-eval-summary-line4{color:var(--cyan);font-weight:600;}",
+        ".grade-eval-sep{opacity:.45;margin:0 6px;}",
+        ".ticket-grade-payout{margin:0;padding:14px clamp(14px,2vw,22px) 16px;border-top:1px solid var(--glass-bd);"
+        "background:rgba(0,0,0,.12);}",
+        ".grade-result{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:clamp(16px,1.8vw,20px);"
+        "padding:10px 14px;border-radius:10px;margin-bottom:6px;display:inline-block;}",
+        ".grade-result-sub{font-size:11px;color:var(--muted);margin:-2px 0 10px;font-family:'Share Tech Mono',monospace;}",
+        ".grade-result-sweep{background:gold;color:#000;}",
+        ".grade-result-win{background:#00ff88;color:#000;}",
+        ".grade-result-min_guarantee{background:#88ccff;color:#000;}",
+        ".grade-result-loss{background:#ff4444;color:#fff;}",
+        ".grade-payout-table{width:100%;border-collapse:collapse;font-size:clamp(12px,1.25vw,14px);margin-bottom:10px;}",
+        ".grade-payout-table th,.grade-payout-table td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;}",
+        ".grade-payout-table th{color:var(--muted);font-weight:600;font-size:11px;letter-spacing:1px;}",
+        ".grade-entry-line{font-size:12px;color:var(--gold2);font-family:'Share Tech Mono',monospace;}",
+        ".grade-payout-pending{font-size:12px;color:var(--pending);padding:8px 0;}",
+        ".grade-ticket-result{font-family:'Share Tech Mono',monospace;font-size:clamp(11px,1.2vw,13px);letter-spacing:.3px;}",
+        ".grade-ticket-result.won{color:var(--green);}",
+        ".grade-ticket-result.lost{color:var(--red);}",
+        ".grade-ticket-result-label{opacity:.85;font-weight:600;}",
         "</style>",
         "</head>",
         "<body>",
         _TICKETS_NAV_HTML,
+        grade_eval_summary_html,
         '<div class="stats-bar">',
         '<div class="sum-row">',
         f'<div class="sum-item"><div class="sum-val">{ticket_pct:.1f}%</div><div class="sum-lab">TICKET HIT RATE</div></div>',
@@ -1918,6 +2229,12 @@ def _build_html(
         f'<div class="sum-item"><div class="sum-val">{perfect}</div><div class="sum-lab">PERFECT TICKETS</div></div>',
         f'<div class="sum-item"><div class="sum-val green">{money_wins}</div><div class="sum-lab">PAID TIX</div></div>',
         f'<div class="sum-item"><div class="sum-val red">{money_losses}</div><div class="sum-lab">NO PAYOUT</div></div>',
+        f'<div class="sum-item"><div class="sum-val sum-val-sm">{total_net_10:+.2f}</div><div class="sum-lab">NET @ $10/TKT</div></div>'
+        if n_pay
+        else '<div class="sum-item"><div class="sum-val sum-val-sm pend">—</div><div class="sum-lab">NET @ $10/TKT</div></div>',
+        f'<div class="sum-item"><div class="sum-val sum-val-sm">{roi_pct:.1f}%</div><div class="sum-lab">ROI (FLAT $10)</div></div>'
+        if n_pay
+        else '<div class="sum-item"><div class="sum-val sum-val-sm pend">—</div><div class="sum-lab">ROI (FLAT $10)</div></div>',
         f'<div class="sum-item"><div class="sum-val sum-val-sm">{total_legs}</div><div class="sum-lab">TOTAL LEGS</div></div>',
         "</div></div>",
         '<div class="wrap">',
@@ -1955,19 +2272,8 @@ def _build_html(
                 pp = t.get("power_payout")
                 fp = t.get("flex_payout")
                 legs = t.get("legs") or []
-                leg_grades: list[str] = []
-                for leg in legs:
-                    row = _match_leg_to_row_multi(leg, indices)
-                    try:
-                        lf = float(leg.get("line"))
-                    except (TypeError, ValueError):
-                        lf = None
-                    d = str(leg.get("direction") or "").strip().upper()
-                    act = row["actual"] if row else None
-                    gr = row["grade_raw"] if row else ""
-                    if row and row.get("line") is not None and lf is None:
-                        lf = row["line"]
-                    leg_grades.append(_leg_grade(act, lf, d, gr))
+                leg_grades = list(t.get("_leg_grades_cache") or [])
+                oc = outcome_map.get((gname, tno), {})
 
                 h = leg_grades.count("HIT")
                 m = leg_grades.count("MISS")
@@ -2003,6 +2309,16 @@ def _build_html(
                 parts.append(f'<span class="tg">{esc(gname)}</span>')
                 parts.append(f'<span class="tg">{h}✓ {m}✗ / {n}</span>')
                 parts.append(f'<span class="payout">PWR {_fmt_num(pp)}× · FLEX {_fmt_num(fp)}×</span>')
+                if not oc.get("pending") and oc.get("result"):
+                    rtxt = str(oc.get("result") or "")
+                    rem = str(oc.get("result_emoji") or "")
+                    won = rtxt != "LOSS"
+                    res_cls = "tg grade-ticket-result won" if won else "tg grade-ticket-result lost"
+                    parts.append(
+                        f'<span class="{res_cls}">RESULT: {esc(rem)} '
+                        f'{"✅ WON" if won else "❌ LOSS"}'
+                        f' <span class="grade-ticket-result-label">({esc(rtxt)})</span></span>'
+                    )
                 parts.append(f'<span class="banner {banner_cls}">{esc(banner_txt)}</span>')
                 parts.append("</div>")
                 parts.append(
@@ -2129,6 +2445,7 @@ def _build_html(
                     parts.append(f'<div class="leg-extra{miss_cell}">{_fmt_num(edge)}</div>')
                     parts.append("</div>")
 
+                parts.append(_ticket_grade_payout_html(oc, esc))
                 parts.append("</article>")
                 if has_data_warning:
                     parts.append('<div class="ticket-warning-note">⚠ NBA1Q stats based on limited Q1 history - use with caution</div>')
@@ -2891,7 +3208,7 @@ def _build_html(
     parts.append("</div>")
     parts.append(_TICKETS_THEME_JS)
     parts.append("</body></html>")
-    return "\n".join(parts)
+    return "\n".join(parts), history_record
 
 
 def main() -> int:
@@ -2934,7 +3251,7 @@ def main() -> int:
     if args.debug:
         debug_report(arg_date, payload, tpath, sport_candidates)
 
-    html_out = _build_html(payload, arg_date, sport_candidates)
+    html_out, hist = _build_html(payload, arg_date, sport_candidates)
     TEMPLATES_DIR.mkdir(parents=True, exist_ok=True)
     dated_name = f"ticket_eval_{arg_date}.html"
     out_dated = TEMPLATES_DIR / dated_name
@@ -2943,6 +3260,13 @@ def main() -> int:
     except OSError as e:
         print(f"ERROR: Write failed: {e}")
         return 1
+
+    if hist:
+        try:
+            _append_grade_history(hist)
+            print(f"  Appended grade history -> data/grade_history.json ({hist.get('date')})")
+        except OSError as e:
+            print(f"  WARN: could not append grade_history.json: {e}")
 
     print(f"Wrote {out_dated}")
     print("  (Serve /tickets from tickets_latest.json; graded view: Grades → Ticket evaluation.)")

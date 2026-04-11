@@ -1534,6 +1534,31 @@ def api_grades_report_dates():
     return r
 
 
+@app.get("/api/grade-history")
+def api_grade_history():
+    """
+    Daily ticket_eval summaries: predicted vs actual payout aggregates and recommendation buckets.
+    Populated when ``scripts/build_ticket_eval.py`` runs (appends ``data/grade_history.json``).
+    """
+    path = BASE_DIR / "data" / "grade_history.json"
+    if not path.is_file():
+        return jsonify([])
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return jsonify({"error": "unreadable grade_history.json", "runs": []}), 500
+    if isinstance(raw, list):
+        out = raw
+    elif isinstance(raw, dict) and isinstance(raw.get("runs"), list):
+        out = raw["runs"]
+    else:
+        out = []
+    r = jsonify(out)
+    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    return r
+
+
 # ──────────────────────────────────────────────────────────────────────────────
 # NEW: Pipeline Status API
 # Returns health of all pipeline outputs so UI can show green/red indicators
