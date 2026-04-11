@@ -217,6 +217,11 @@ def fit_model(fit_df: pd.DataFrame, label: str) -> dict[str, Any] | None:
     }
 
 
+def save_coefficients(coeffs: dict[str, Any], path: Path = OUT_JSON) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(coeffs, indent=2), encoding="utf-8")
+
+
 def update_combined_constants_if_good(a: float, b: float, r2: float) -> bool:
     if r2 <= 0.85 or not COMBINED_TICKETS.exists():
         return False
@@ -403,21 +408,47 @@ def main():
         coeffs_out["r_squared"] = flex_result["r_squared"]
         coeffs_out["n_samples"] = flex_result["n_samples"]
 
-    OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
-    OUT_JSON.write_text(json.dumps(coeffs_out, indent=2), encoding="utf-8")
-    print(f"\n[FIT] Coefficients saved -> {OUT_JSON}")
-
-    updated = False
-    if power_result and power_result["r_squared"] > float(args.min_r2_update):
-        updated = update_combined_constants_if_good(
-            power_result["goblin_base_discount"],
-            power_result["goblin_distance_scale"],
-            power_result["r_squared"],
-        )
-    if updated:
-        print("[FIT] Updated combined_slate_tickets goblin constants (R2 gate passed).")
+    n_clean_samples = int(len(df))
+    if power_result:
+        r2 = float(power_result["r_squared"])
+    elif flex_result:
+        r2 = float(flex_result["r_squared"])
     else:
-        print("[FIT] No combined_slate_tickets update (R2 gate failed or constants not found).")
+        r2 = 0.0
+
+    MIN_SAMPLES_TO_OVERWRITE = 30
+    MIN_R2_TO_OVERWRITE = 0.85
+
+    if n_clean_samples < MIN_SAMPLES_TO_OVERWRITE:
+        print(
+            f"[FIT] Only {n_clean_samples} samples — "
+            f"need {MIN_SAMPLES_TO_OVERWRITE} to overwrite "
+            f"empirical coefficients. Skipping save."
+        )
+        print("[FIT] Current empirical coefficients preserved:")
+        print(f"  GOBLIN_DISCOUNT_PER_UNIT = 0.110")
+        print(f"  DEMON_POWER_COEFF = 0.1782")
+        print(f"  DEMON_POWER_EXP = 1.287")
+    elif r2 < MIN_R2_TO_OVERWRITE:
+        print(
+            f"[FIT] R²={r2:.3f} below threshold {MIN_R2_TO_OVERWRITE}. "
+            f"Skipping save."
+        )
+    else:
+        save_coefficients(coeffs_out)
+        print(f"[FIT] Updated coefficients saved (R²={r2:.3f})")
+
+        updated = False
+        if power_result and power_result["r_squared"] > float(args.min_r2_update):
+            updated = update_combined_constants_if_good(
+                power_result["goblin_base_discount"],
+                power_result["goblin_distance_scale"],
+                power_result["r_squared"],
+            )
+        if updated:
+            print("[FIT] Updated combined_slate_tickets goblin constants (R2 gate passed).")
+        else:
+            print("[FIT] No combined_slate_tickets update (R2 gate failed or constants not found).")
 
 
 if __name__ == "__main__":
