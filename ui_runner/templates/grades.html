@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260411"/>
 <link rel="stylesheet" href="/static/site-nav-unified.css?v=20260408"/>
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260411"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260413b"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260413c"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 <style>
 .grades-json-wrap{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 18px 48px;}
@@ -30,7 +30,6 @@
 .grades-kpi .val.miss{color:#d07a78;}
 .grades-kpi .val.void{color:#a8a8b8;}
 .sport-block{margin-bottom:1.75rem;border:1px solid rgba(255,255,255,.1);border-radius:14px;overflow:hidden;background:rgba(12,12,22,.5);}
-.sport-block h3{margin:0;padding:12px 16px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.08);color:var(--accent-gold, #d4af37);}
 .grades-table-wrap{overflow:auto;max-height:min(70vh,720px);}
 .grades-table-wrap.table-responsive{-webkit-overflow-scrolling:touch;}
 .grades-table{width:100%;border-collapse:collapse;font-size:12px;font-family:'Inter',sans-serif;}
@@ -99,10 +98,27 @@
   </div>
   {% endif %}
 
+  {% if by_sport %}
+  <div class="grades-sport-pills" role="toolbar" aria-label="Jump to sport section">
+    {% for sport, rows in by_sport %}
+    <button type="button" class="pill grades-pill-jump" data-sport="{{ sport }}">{{ sport }}</button>
+    {% endfor %}
+    <button type="button" class="pill pill-all grades-pill-all">All</button>
+  </div>
+  {% endif %}
+
   {% for sport, rows in by_sport %}
-  <section class="sport-block" data-sport="{{ sport }}">
-    {% set total_for_sport = sport_totals.get(sport, rows|length) %}
-    <h3>{{ sport }} <span style="font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0;">({{ total_for_sport }} total{% if rows|length < total_for_sport %} · showing {{ rows|length }}{% endif %})</span></h3>
+  {% set total_for_sport = sport_totals.get(sport, rows|length) %}
+  {% set nba_open = sport|string|trim|upper == 'NBA' %}
+  <section class="sport-block grades-sport-section" data-sport="{{ sport }}">
+    <button type="button" class="grades-sport-header collapsible" data-sport="{{ sport }}"
+            aria-expanded="{{ 'true' if nba_open else 'false' }}"
+            aria-controls="grades-body-{{ loop.index0 }}">
+      <span class="sport-label">{{ sport }}</span>
+      <span class="sport-count">({{ total_for_sport }} total{% if rows|length < total_for_sport %} · showing {{ rows|length }}{% endif %})</span>
+      <span class="collapse-icon" aria-hidden="true">{% if nba_open %}▲{% else %}▼{% endif %}</span>
+    </button>
+    <div class="grades-sport-body" id="grades-body-{{ loop.index0 }}" data-sport="{{ sport }}"{% if not nba_open %} hidden{% endif %}>
     <div class="grades-table-wrap table-responsive">
       <div class="grades-table-wrapper">
       <table class="grades-table">
@@ -151,6 +167,7 @@
       </table>
       </div>
     </div>
+    </div>
   </section>
   {% endfor %}
 
@@ -171,7 +188,7 @@
 <script src="/static/site-nav-chrome.js?v=20260412" defer></script>
 <script>
 (function () {
-  const btn = document.getElementById("grades-load-more");
+  const wrap = document.querySelector(".grades-json-wrap");
   const totalsEl = document.getElementById("grades-sport-totals");
   let sportTotals = {};
   if (totalsEl) {
@@ -179,23 +196,105 @@
       sportTotals = JSON.parse(totalsEl.textContent || "{}");
     } catch (e) {}
   }
+
+  function setSectionOpen(section, open) {
+    const body = section.querySelector(".grades-sport-body");
+    const icon = section.querySelector(".collapse-icon");
+    const hdr = section.querySelector(".grades-sport-header");
+    if (body) {
+      if (open) body.removeAttribute("hidden");
+      else body.setAttribute("hidden", "");
+    }
+    if (icon) icon.textContent = open ? "▲" : "▼";
+    if (hdr) hdr.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+
+  function toggleGradeSection(sport) {
+    if (!sport) return;
+    document.querySelectorAll(".grades-sport-section").forEach(function (sec) {
+      if (sec.getAttribute("data-sport") !== sport) return;
+      const body = sec.querySelector(".grades-sport-body");
+      const open = !!(body && body.hasAttribute("hidden"));
+      setSectionOpen(sec, open);
+    });
+  }
+
+  function syncPillActive(sportOrAll) {
+    if (!wrap) return;
+    wrap.querySelectorAll(".grades-sport-pills .pill").forEach(function (p) {
+      if (p.classList.contains("pill-all")) {
+        p.classList.toggle("active", sportOrAll === "__ALL__");
+      } else {
+        p.classList.toggle("active", p.getAttribute("data-sport") === sportOrAll);
+      }
+    });
+  }
+
+  function expandOnlyGrades(sport) {
+    if (!sport) return;
+    syncPillActive(sport);
+    let target = null;
+    document.querySelectorAll(".grades-sport-section").forEach(function (sec) {
+      const open = sec.getAttribute("data-sport") === sport;
+      setSectionOpen(sec, open);
+      if (open) target = sec;
+    });
+    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function expandAllGrades() {
+    syncPillActive("__ALL__");
+    document.querySelectorAll(".grades-sport-section").forEach(function (sec) {
+      setSectionOpen(sec, true);
+    });
+  }
+
+  function applyDefaultSectionState() {
+    document.querySelectorAll(".grades-sport-section").forEach(function (sec) {
+      const s = (sec.getAttribute("data-sport") || "").toUpperCase();
+      setSectionOpen(sec, s === "NBA");
+    });
+    syncPillActive(null);
+  }
+
+  if (wrap) {
+    wrap.addEventListener("click", function (e) {
+      const hdr = e.target.closest(".grades-sport-header.collapsible");
+      if (hdr && wrap.contains(hdr)) {
+        toggleGradeSection(hdr.getAttribute("data-sport"));
+        return;
+      }
+      const jump = e.target.closest(".grades-pill-jump");
+      if (jump && wrap.contains(jump)) {
+        expandOnlyGrades(jump.getAttribute("data-sport"));
+        return;
+      }
+      if (e.target.closest(".grades-pill-all")) {
+        expandAllGrades();
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", applyDefaultSectionState);
+
   function findSportSection(sport) {
     let found = null;
-    document.querySelectorAll("section.sport-block[data-sport]").forEach(function (el) {
+    document.querySelectorAll("section.grades-sport-section[data-sport]").forEach(function (el) {
       if (el.getAttribute("data-sport") === sport) found = el;
     });
     return found;
   }
+
   function refreshSectionHeader(section, sport) {
     const tbody = section.querySelector("tbody");
     const n = tbody ? tbody.rows.length : 0;
     const tot = Object.prototype.hasOwnProperty.call(sportTotals, sport) ? sportTotals[sport] : n;
-    const sub = section.querySelector("h3 span");
+    const sub = section.querySelector(".sport-count");
     if (!sub) return;
     if (n >= tot) sub.textContent = "(" + tot + " total)";
     else sub.textContent = "(" + tot + " total · showing " + n + ")";
   }
-  if (!btn) return;
+
   function esc(s) {
     return String(s ?? "")
       .replace(/&/g, "&amp;")
@@ -261,9 +360,18 @@
       "</td></tr>"
     );
   }
+
+  const btn = document.getElementById("grades-load-more");
+  if (!btn) return;
+
   let nextOffset = parseInt(btn.getAttribute("data-next-offset") || "0", 10);
   const dateStr = btn.getAttribute("data-date") || "";
   const chunk = parseInt(btn.getAttribute("data-chunk") || "500", 10);
+
+  function dynBodyId(sport) {
+    return "grades-body-dyn-" + String(sport).replace(/[^a-zA-Z0-9_-]/g, "_");
+  }
+
   btn.addEventListener("click", async function () {
     if (!dateStr) return;
     btn.disabled = true;
@@ -281,18 +389,40 @@
         const p = it.row || {};
         let section = findSportSection(sport);
         if (!section) {
+          const bodyId = dynBodyId(sport);
           section = document.createElement("section");
-          section.className = "sport-block";
+          section.className = "sport-block grades-sport-section";
           section.setAttribute("data-sport", sport);
           section.innerHTML =
-            '<h3>' +
+            '<button type="button" class="grades-sport-header collapsible" data-sport="' +
+            escAttr(sport) +
+            '" aria-expanded="true" aria-controls="' +
+            bodyId +
+            '">' +
+            "<span class=\"sport-label\">" +
             esc(sport) +
-            ' <span style="font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0;"></span></h3>' +
+            '</span> <span class="sport-count"></span> <span class="collapse-icon" aria-hidden="true">▲</span></button>' +
+            '<div class="grades-sport-body" id="' +
+            bodyId +
+            '" data-sport="' +
+            escAttr(sport) +
+            '">' +
             '<div class="grades-table-wrap table-responsive"><div class="grades-table-wrapper"><table class="grades-table"><thead><tr>' +
             "<th class=\"gcol-icon\" style=\"width:2.5em;\"></th>" +
             "<th class=\"gcol-player\">Player</th><th class=\"gcol-prop\">Prop</th><th class=\"gcol-line\">Line</th><th class=\"gcol-dir\">Dir</th><th class=\"gcol-actual\">Actual</th>" +
             "<th class=\"gcol-margin hide-mobile\">Margin</th><th class=\"gcol-type hide-mobile\">Type</th><th class=\"gcol-tier hide-mobile\">Tier</th>" +
-            "</tr></thead><tbody></tbody></table></div></div>";
+            "</tr></thead><tbody></tbody></table></div></div></div>";
+          const pills = wrap && wrap.querySelector(".grades-sport-pills");
+          if (pills) {
+            const pill = document.createElement("button");
+            pill.type = "button";
+            pill.className = "pill grades-pill-jump";
+            pill.setAttribute("data-sport", sport);
+            pill.textContent = sport;
+            const allP = pills.querySelector(".grades-pill-all");
+            if (allP) pills.insertBefore(pill, allP);
+            else pills.appendChild(pill);
+          }
           btn.parentElement.insertAdjacentElement("beforebegin", section);
         }
         const tbody = section.querySelector("tbody");
