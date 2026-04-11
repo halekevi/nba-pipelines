@@ -478,6 +478,27 @@ if (-not $SkipPipeline) {
         Write-Log "STEP C0b - NBA period history sync: SKIPPED (-SkipFetch)"
     }
 
+    # Weekly: append resolved ESPN IDs from latest unmatched dump into manual map.
+    if ((Get-Date).DayOfWeek -eq "Monday") {
+        Write-Log "[SOCCER] Weekly batch ID resolve (Monday): START"
+        Push-Location $Root
+        try {
+            & py -3.14 "Soccer/scripts/batch_append_soccer_manual_map.py" --latest-unmatched
+            if ($LASTEXITCODE -ne 0) {
+                Write-Log "[SOCCER] Weekly batch ID resolve: WARN (exit $LASTEXITCODE)"
+            }
+            else {
+                Write-Log "[SOCCER] Weekly batch ID resolve: OK"
+            }
+        }
+        catch {
+            Write-Log "[SOCCER] Weekly batch ID resolve: FAILED ($($_.Exception.Message))"
+        }
+        finally {
+            Pop-Location
+        }
+    }
+
     Write-Log "STEP C - Pipeline ($Today): START"
     $pipeScript = Join-Path $Root "run_pipeline.ps1"
     $pipeArgs = @("-File", $pipeScript, "-Date", $Today)

@@ -217,6 +217,16 @@ def get_actual_and_minutes(
 
 # ── Grade a single prop ───────────────────────────────────────────────────────
 
+def refine_soccer_void_reason(prop_key: str, reason: str) -> str:
+    """Clarify VOID rows when ESPN does not expose per-player clearances / dribbles in ref DB."""
+    pk = str(prop_key or "").lower().replace(" ", "_").strip()
+    if pk == "clearances" and reason in ("no_actuals", "unsupported_prop"):
+        return "ESPN_NO_PLAYER_CLEARANCES"
+    if pk in ("attempted_dribbles", "attempteddribbles") and reason in ("no_actuals", "unsupported_prop"):
+        return "ESPN_NO_PLAYER_DRIBBLES"
+    return reason
+
+
 def grade_prop(actual: float | None, line: float,
                direction: str) -> tuple[str, str]:
     """Return (result, reason)."""
@@ -341,6 +351,9 @@ def run_grader(grade_date: str, slate_path: Path, db_path: Path,
                     result, reason = grade_prop(actual, line, direction)
             else:
                 result, reason = grade_prop(actual, line, direction)
+
+        if result == "VOID":
+            reason = refine_soccer_void_reason(prop_key, reason)
 
         # Tally
         if result == "HIT":   hit  += 1

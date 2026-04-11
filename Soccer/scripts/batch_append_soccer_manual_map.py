@@ -106,7 +106,7 @@ def main() -> int:
             if pname and pteam and aid:
                 manual_map[(pname, pteam)] = aid
 
-    roster_map, roster_last_team = s2.build_roster_id_map(
+    roster_map, roster_last_team, single_bucket = s2.build_roster_id_map(
         s2.LEAGUE_SLUGS_FOR_ROSTER,
         workers=args.workers,
         roster_cache_path=str(roster_cache),
@@ -132,7 +132,9 @@ def main() -> int:
         tn = s2.norm_team(raw_t)
         if (pn, tn) in manual_map:
             continue
-        aid = s2.resolve_soccer_player_espn_id(raw_p, raw_t, roster_map, roster_last_team, manual_map)
+        aid = s2.resolve_soccer_player_espn_id(
+            raw_p, raw_t, roster_map, roster_last_team, manual_map, single_bucket
+        )
         if not aid:
             continue
         manual_map[(pn, tn)] = aid

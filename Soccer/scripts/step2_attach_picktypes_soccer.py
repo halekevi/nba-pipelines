@@ -31,7 +31,7 @@ import unicodedata
 from datetime import datetime
 from difflib import SequenceMatcher
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from typing import Dict, Optional, Tuple, List
+from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
 import requests
@@ -209,12 +209,34 @@ def _fetch_roster(league: str, team_id: str, team_name: str = "") -> Dict[str, T
 
 ROSTER_CACHE_MAX_AGE_DAYS = 7  # Auto-rebuild roster cache if older than this
 
+
+def _is_single_name_key(key: str) -> bool:
+    """True when normalized player name is a single token (e.g. 'wesley', 'hulk')."""
+    parts = str(key or "").strip().split()
+    return len(parts) == 1 and bool(parts[0])
+
+
+def _single_bucket_add(
+    bucket: Dict[str, List[Tuple[str, str]]],
+    pnorm: str,
+    aid: str,
+    tnorm: str,
+) -> None:
+    """Track mono-token display names that may collide in the flat roster_map dict."""
+    if not _is_single_name_key(pnorm) or not aid:
+        return
+    pair = (str(aid).strip(), str(tnorm or "").strip())
+    lst = bucket.setdefault(pnorm, [])
+    if pair not in lst:
+        lst.append(pair)
+
+
 def build_roster_id_map(
     leagues: List[str],
     workers: int = 20,
     roster_cache_path: str = "",
     force_refresh: bool = False,
-) -> Tuple[Dict[str, str], Dict[Tuple[str, str], str]]:
+) -> Tuple[Dict[str, str], Dict[Tuple[str, str], str], Dict[str, List[Tuple[str, str]]]]:
     if roster_cache_path and os.path.exists(roster_cache_path) and not force_refresh:
         try:
             cache_age_days = (time.time() - os.path.getmtime(roster_cache_path)) / 86400
@@ -227,6 +249,7 @@ def build_roster_id_map(
                     cached = {k: v for k, v in cached.items() if v.strip()}
                     print(f"  ✅ Loaded roster cache: {len(cached)} players from {roster_cache_path} (age: {cache_age_days:.1f}d)")
                     by_last_team: Dict[Tuple[str, str], str] = {}
+                    single_bucket: Dict[str, List[Tuple[str, str]]] = {}
                     if "team_norm" in cdf.columns:
                         for _, rr in cdf.iterrows():
                             pnorm = str(rr.get("player_norm", "")).strip()
@@ -240,7 +263,8 @@ def build_roster_id_map(
                             last = parts[-1]
                             if tnorm:
                                 by_last_team[(last, tnorm)] = aid
-                    return cached, by_last_team
+                            _single_bucket_add(single_bucket, pnorm, aid, tnorm)
+                    return cached, by_last_team, single_bucket
         except Exception as e:
             print(f"  ⚠️ Could not load roster cache: {e}")
 
@@ -256,6 +280,7 @@ def build_roster_id_map(
     print(f"  Fetching rosters for {len(all_teams)} teams (workers={workers})...")
     combined: Dict[str, str] = {}
     by_last_team: Dict[Tuple[str, str], str] = {}
+    single_bucket: Dict[str, List[Tuple[str, str]]] = {}
 
     def _fetch_one(args):
         league, team_id, team_name = args
@@ -273,6 +298,7 @@ def build_roster_id_map(
                     parts = pnorm.split()
                     if parts and tnorm:
                         by_last_team[(parts[-1], tnorm)] = aid
+                    _single_bucket_add(single_bucket, pnorm, aid, tnorm)
             except Exception:
                 pass
             if done % 25 == 0 or done == len(all_teams):
@@ -293,7 +319,7 @@ def build_roster_id_map(
           .to_csv(roster_cache_path, index=False, encoding="utf-8-sig")
         print(f"  Saved roster cache → {roster_cache_path}")
 
-    return combined, by_last_team
+    return combined, by_last_team, single_bucket
 
 
 def resolve_soccer_player_espn_id(
@@ -302,6 +328,7 @@ def resolve_soccer_player_espn_id(
     roster_map: Dict[str, str],
     roster_last_team: Dict[Tuple[str, str], str],
     manual_map: Dict[Tuple[str, str], str],
+    single_bucket: Optional[Dict[str, List[Tuple[str, str]]]] = None,
 ) -> str:
     """
     Resolve a single PP display name + team hint to an ESPN athlete id using the
@@ -312,8 +339,27 @@ def resolve_soccer_player_espn_id(
     if not key:
         return ""
     team_hint = norm_team(team)
+    sb = single_bucket or {}
 
-    aid = roster_map.get(key, "")
+    aid = ""
+    # Single-token names: disambiguate with team hint (flat roster_map overwrites duplicates).
+    if _is_single_name_key(key):
+        cands = sb.get(key, [])
+        if len(cands) == 1:
+            aid = cands[0][0]
+        elif len(cands) > 1 and team_hint:
+            for a, t in cands:
+                if t == team_hint:
+                    aid = a
+                    break
+            if not aid:
+                for a, t in cands:
+                    if team_hint and t and (team_hint in t or t in team_hint):
+                        aid = a
+                        break
+
+    if not aid:
+        aid = roster_map.get(key, "")
 
     if not aid and team_hint:
         aid = manual_map.get((key, team_hint), "")
@@ -379,7 +425,7 @@ def build_espn_id_cache_concurrent(
         return cache
 
     print(f"  Need to resolve {len(need)} players — using roster-based lookup...")
-    roster_map, roster_last_team = build_roster_id_map(
+    roster_map, roster_last_team, single_bucket = build_roster_id_map(
         LEAGUE_SLUGS_FOR_ROSTER,
         workers=workers,
         roster_cache_path=roster_cache_path,
@@ -392,7 +438,9 @@ def build_espn_id_cache_concurrent(
         if not key:
             continue
         team_raw = player_team_hints.get(key, "")
-        aid = resolve_soccer_player_espn_id(name, team_raw, roster_map, roster_last_team, manual_map)
+        aid = resolve_soccer_player_espn_id(
+            name, team_raw, roster_map, roster_last_team, manual_map, single_bucket
+        )
 
         cache[key] = aid
         if aid:
@@ -592,6 +640,8 @@ def main() -> None:
                     pteam = norm_team(rr.get("team", ""))
                     aid = str(rr.get("espn_athlete_id", rr.get("espn_player_id", ""))).strip()
                     if pname and pteam and aid:
+                        if (pname, pteam) in manual_map:
+                            continue  # never overwrite existing manual entries
                         manual_map[(pname, pteam)] = aid
                 print(f"  Loaded manual PP->ESPN map: {len(manual_map)} rows from {manual_path}")
             except Exception as e:
@@ -647,10 +697,34 @@ def main() -> None:
                 date_tag = datetime.now().strftime("%Y-%m-%d")
             unmatched_path = Path(args.output).resolve().parent / f"unmatched_soccer_players_{date_tag}.csv"
             keep_cols = [c for c in ["player", "team", "prop_type", "pp_game_id"] if c in unresolved.columns]
-            unresolved[keep_cols].rename(columns={"player": "player_name"}).drop_duplicates().to_csv(
-                unmatched_path, index=False, encoding="utf-8-sig"
+            prev_rows: int | None = None
+            prev_unique: int | None = None
+            if unmatched_path.is_file():
+                try:
+                    prev_df = pd.read_csv(unmatched_path, dtype=str, encoding="utf-8-sig").fillna("")
+                    prev_rows = len(prev_df)
+                    pc = "player_name" if "player_name" in prev_df.columns else "player"
+                    if pc in prev_df.columns and "team" in prev_df.columns:
+                        prev_unique = prev_df[[pc, "team"]].drop_duplicates().shape[0]
+                except Exception:
+                    pass
+            out_un = unresolved[keep_cols].rename(columns={"player": "player_name"}).drop_duplicates()
+            new_rows = len(out_un)
+            new_unique = (
+                out_un[["player_name", "team"]].drop_duplicates().shape[0]
+                if not out_un.empty and "team" in out_un.columns
+                else 0
             )
+            out_un.to_csv(unmatched_path, index=False, encoding="utf-8-sig")
             print(f"[SOCCER ID] Wrote unresolved players: {unmatched_path}")
+            if prev_rows is not None:
+                umsg = f"{prev_unique} → {new_unique} unique (player, team)" if (
+                    prev_unique is not None
+                ) else ""
+                extra = f" | {umsg}" if umsg else ""
+                print(
+                    f"[SOCCER ID] Improvement: {prev_rows} → {new_rows} unmatched rows{extra}"
+                )
         else:
             print("[SOCCER ID] All players resolved after fallback matching.")
     else:
