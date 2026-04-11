@@ -529,6 +529,30 @@ if ($env:PROPORACLE_SKIP_GRADES_GIT_PUSH -ne "1") {
             Pop-Location
         }
     }
+
+    $TeHtml = Join-Path $TemplatesDir "ticket_eval_$Date.html"
+    if (Test-Path $TeHtml) {
+        Push-Location $Root
+        try {
+            $env:GIT_TERMINAL_PROMPT = "0"
+            $teRel = "ui_runner/templates/ticket_eval_$Date.html"
+            git add -- $teRel 2>$null | Out-Null
+            git diff --cached --quiet
+            if ($LASTEXITCODE -ne 0) {
+                git commit -m "data: ticket eval $Date"
+                if ($LASTEXITCODE -eq 0) {
+                    git push origin HEAD 2>$null
+                    Write-Host "[GRADER] Ticket eval HTML pushed for $Date" -ForegroundColor Green
+                }
+            }
+        }
+        catch {
+            Write-Warning "Ticket eval HTML git publish skipped: $_"
+        }
+        finally {
+            Pop-Location
+        }
+    }
 }
 
 # =============================
