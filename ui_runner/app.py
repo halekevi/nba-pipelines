@@ -908,8 +908,8 @@ def page_tickets():
     """
     Today's built ticket slips from tickets_latest.json (combined_slate_tickets --write-web).
 
-    Graded legs, actuals, and hit/miss summaries live under Grades → Ticket evaluation
-    (static ticket_eval_YYYY-MM-DD.html from build_ticket_eval.py), not on this route.
+    Graded legs, actuals, and hit/miss summaries live under Grades (/grades hub, or
+    /grades/YYYY-MM-DD for ticket_eval_*.html from build_ticket_eval.py), not on this route.
     """
     import importlib.util
 
@@ -1142,44 +1142,35 @@ def _grades_html_response(template: str, **kwargs: Any) -> Response:
     return r
 
 
+def _send_grades_report_html(fname: str) -> Response | None:
+    """Serve slate_eval_*.html or ticket_eval_*.html from templates or archive dir."""
+    for base in (TEMPLATES_DIR, ARCHIVE_DIR):
+        if base.exists() and (base / fname).is_file():
+            response = send_from_directory(str(base), fname)
+            response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+            response.headers["Pragma"] = "no-cache"
+            response.headers["Expires"] = "0"
+            return response
+    return None
+
+
 @app.get("/grades/hub")
 def page_grades_hub():
-    """Full Grades SPA ( slate / ticket iframes ); needs slate_eval / ticket_eval HTML for every tab."""
-    return _grades_html_response("indexGrades.html")
+    """Bookmark alias: same experience as /grades (ticket evaluation hub)."""
+    return redirect("/grades", code=302)
 
 
-@app.get("/grades")
-def page_grades():
-    """Redirect to newest graded_props_*.json date, or explain when none exist."""
+@app.get("/grades/props")
+def page_grades_props_redirect():
+    """Latest graded_props JSON view, or hub if no JSON on server."""
     dates = _graded_props_json_dates_sorted()
     if not dates:
-        return _grades_html_response(
-            "grades.html",
-            nav_active="grades",
-            error="No graded_props JSON on this server. Run scripts/run_grader.ps1 locally, then commit ui_runner/templates/graded_props_YYYY-MM-DD.json and redeploy.",
-            available_dates=[],
-            date=None,
-            graded_data=None,
-            by_sport=[],
-            sport_summary=[],
-            sport_totals={},
-            grades_has_more=False,
-            grades_next_offset=0,
-            grades_chunk_size=GRADES_HTML_INITIAL_ROWS,
-            grades_page_date=None,
-            n_total=0,
-            n_hit=0,
-            n_miss=0,
-            n_void=0,
-            n_other=0,
-            hit_rate=0.0,
-            json_count=0,
-        )
-    return redirect(f"/grades/{dates[-1]}", code=302)
+        return redirect("/grades", code=302)
+    return redirect(f"/grades/props/{dates[-1]}", code=302)
 
 
-@app.get("/grades/<date_str>")
-def page_grades_json_date(date_str: str):
+@app.get("/grades/props/<date_str>")
+def page_grades_props_date(date_str: str):
     """HTML grid of graded props from graded_props_YYYY-MM-DD.json (Railway-friendly)."""
     if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date_str):
         abort(404)
@@ -1250,22 +1241,30 @@ def page_grades_json_date(date_str: str):
     )
 
 
+@app.get("/grades")
+def page_grades():
+    """Primary Grades hub: slate / ticket iframes, KPIs, per-sport views (indexGrades.html)."""
+    return _grades_html_response("indexGrades.html")
+
+
+@app.get("/grades/<date_str>")
+def page_grades_ticket_date(date_str: str):
+    """Ticket evaluation report for YYYY-MM-DD (same HTML as /grades/ticket_eval_<date>.html)."""
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date_str):
+        abort(404)
+    r = _send_grades_report_html(f"ticket_eval_{date_str}.html")
+    if r is not None:
+        return r
+    abort(404)
+
+
 @app.route("/grades/slate_eval_<date>.html", methods=("GET", "HEAD"))
 def serve_grade_report(date: str):
     """Serve individual slate_eval_YYYY-MM-DD.html files for the grades iframe."""
     fname = f"slate_eval_{date}.html"
-    if TEMPLATES_DIR.exists() and (TEMPLATES_DIR / fname).exists():
-        response = send_from_directory(str(TEMPLATES_DIR), fname)
-        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
-        response.headers["Pragma"] = "no-cache"
-        response.headers["Expires"] = "0"
-        return response
-    if ARCHIVE_DIR.exists() and (ARCHIVE_DIR / fname).exists():
-        response = send_from_directory(str(ARCHIVE_DIR), fname)
-        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
-        response.headers["Pragma"] = "no-cache"
-        response.headers["Expires"] = "0"
-        return response
+    r = _send_grades_report_html(fname)
+    if r is not None:
+        return r
     abort(404)
 
 
@@ -1273,18 +1272,9 @@ def serve_grade_report(date: str):
 def serve_ticket_eval_report(date: str):
     """Serve individual ticket_eval_YYYY-MM-DD.html files for the ticket evaluation iframe."""
     fname = f"ticket_eval_{date}.html"
-    if TEMPLATES_DIR.exists() and (TEMPLATES_DIR / fname).exists():
-        response = send_from_directory(str(TEMPLATES_DIR), fname)
-        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
-        response.headers["Pragma"] = "no-cache"
-        response.headers["Expires"] = "0"
-        return response
-    if ARCHIVE_DIR.exists() and (ARCHIVE_DIR / fname).exists():
-        response = send_from_directory(str(ARCHIVE_DIR), fname)
-        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
-        response.headers["Pragma"] = "no-cache"
-        response.headers["Expires"] = "0"
-        return response
+    r = _send_grades_report_html(fname)
+    if r is not None:
+        return r
     abort(404)
 
 
@@ -1791,7 +1781,7 @@ def api_grades_props():
 @app.get("/api/grades/page-rows")
 def api_grades_page_rows():
     """
-    Paginated rows for /grades/YYYY-MM-DD HTML (graded_props_*.json on disk).
+    Paginated rows for /grades/props/YYYY-MM-DD HTML (graded_props_*.json on disk).
     Matches the same sport ordering as the main grades page.
     """
     raw = (request.args.get("date") or "").strip()

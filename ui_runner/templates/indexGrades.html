@@ -204,6 +204,9 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   .iframe-shell-toolbar{transition:none;}
 }
 .iframe-shell-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.iframe-shell-head-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.grades-props-link{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan,#00e5ff);text-decoration:none;white-space:nowrap;}
+.grades-props-link:hover{text-decoration:underline;color:var(--text);}
 .ist-title{
   font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1.2px;
   color:var(--accent-gold);line-height:1.1;
@@ -868,7 +871,10 @@ select option,
     <div class="iframe-shell-toolbar" id="iframe-shell-toolbar">
       <div class="iframe-shell-head">
         <span class="ist-title" id="iframe-shell-title">Slate evaluation</span>
-        <span class="gc-live" id="grades-controls-live" aria-live="polite"></span>
+        <div class="iframe-shell-head-right">
+          <a href="/grades/props" class="grades-props-link">View raw prop grades →</a>
+          <span class="gc-live" id="grades-controls-live" aria-live="polite"></span>
+        </div>
       </div>
       <div class="grades-scroll-hide-wrap" id="grades-scroll-hide-wrap">
         <div class="grades-scroll-hide-inner">

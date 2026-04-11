@@ -505,7 +505,7 @@ else {
     Write-Host "Skipping graded props JSON build (backfill_graded_props_json.py not found)." -ForegroundColor Yellow
 }
 
-# Publish graded_props JSON so Railway can serve /grades/<date> (set PROPORACLE_SKIP_GRADES_GIT_PUSH=1 to skip).
+# Publish graded_props JSON so Railway can serve /grades/props/<date> (set PROPORACLE_SKIP_GRADES_GIT_PUSH=1 to skip).
 if ($env:PROPORACLE_SKIP_GRADES_GIT_PUSH -ne "1") {
     $GpJson = Join-Path $TemplatesDir "graded_props_$Date.json"
     if (Test-Path $GpJson) {

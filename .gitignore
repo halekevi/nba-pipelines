@@ -78,9 +78,8 @@ models/
 # Ignore only dated/extra copies so pipeline snapshots do not clutter git.
 ui_runner/templates/tickets_latest_*.json
 ui_runner/templates/slate_latest_*.json
-ui_runner/templates/ticket_eval_*.html
-ui_runner/templates/ticket_eval_latest.html
-# graded_props_YYYY-MM-DD.json under ui_runner/templates/ — keep tracked (Railway serves /grades/<date> from these files).
+# ticket_eval_*.html — track in git for Railway/static hosts (served at /grades/<date> and iframe URLs).
+# graded_props_YYYY-MM-DD.json under ui_runner/templates/ — keep tracked (Railway serves /grades/props/<date>).
 # ui_runner/templates/slate_eval_*.html  # optional: often committed for deploy/CDN
 
 # Grade / payout logs (generated)

@@ -59,8 +59,9 @@
 <div class="grades-json-wrap">
   <h1 class="grades-json-head">Grades{% if date %} — {{ date }}{% endif %}</h1>
   <p class="grades-json-sub">
-    Deployed view from <code>graded_props_{{ date or 'YYYY-MM-DD' }}.json</code>.
-    <a href="/grades/hub">Open full Grades hub</a> (slate / ticket iframes; needs extra HTML in the repo).
+    Raw prop-level grades from <code>graded_props_{{ date or 'YYYY-MM-DD' }}.json</code>
+    (<code>/grades/props/&lt;date&gt;</code>).
+    <a href="/grades">← Back to ticket evaluation</a>
   </p>
 
   {% if error %}
@@ -70,7 +71,7 @@
   {% if available_dates and available_dates|length > 0 %}
   <div class="grades-pills" aria-label="Available grade dates">
     {% for d in available_dates %}
-    <a href="/grades/{{ d }}">{{ d }}</a>
+    <a href="/grades/props/{{ d }}">{{ d }}</a>
     {% endfor %}
   </div>
   {% endif %}
