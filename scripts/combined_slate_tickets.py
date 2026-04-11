@@ -295,6 +295,120 @@ def compute_ticket_ev(
     }
 
 
+def _ticket_row_get(row: Any, field: str) -> Any:
+    """Read one field from a leg row (dict or pandas Series)."""
+    if isinstance(row, dict):
+        return row.get(field)
+    try:
+        if hasattr(row, "index") and field in row.index:
+            return row[field]
+    except Exception:
+        pass
+    try:
+        return getattr(row, field, None)
+    except Exception:
+        return None
+
+
+def _ticket_payout_line_distance(row: Any) -> float:
+    ld = _ticket_row_get(row, "line_distance")
+    if ld is not None and str(ld).strip() != "":
+        try:
+            if isinstance(ld, float) and math.isnan(ld):
+                return 0.0
+            return abs(float(ld))
+        except (TypeError, ValueError):
+            pass
+    try:
+        sl = _ticket_row_get(row, "standard_line")
+        ln = _ticket_row_get(row, "line")
+        if sl is not None and ln is not None and str(sl).strip() != "" and str(ln).strip() != "":
+            return abs(float(sl) - float(ln))
+    except (TypeError, ValueError):
+        pass
+    return 0.0
+
+
+def _ticket_payout_hit_prob(row: Any) -> float:
+    """
+    Per-leg hit probability for empirical EV. blended_score when present and in-range;
+    otherwise default 0.62 (pipeline constraint).
+    """
+    raw = _ticket_row_get(row, "blended_score")
+    if raw is None or (isinstance(raw, str) and not str(raw).strip()):
+        return 0.62
+    try:
+        v = float(raw)
+    except (TypeError, ValueError):
+        return 0.62
+    if isinstance(v, float) and math.isnan(v):
+        return 0.62
+    if v <= 0:
+        return 0.62
+    if v <= 1.0:
+        return min(0.999, max(0.01, v))
+    if v <= 100.0:
+        return min(0.999, max(0.01, v / 100.0))
+    return 0.62
+
+
+def _ticket_payout_pick_type_token(row: Any) -> str:
+    pt = str(
+        _ticket_row_get(row, "pick_type")
+        or _ticket_row_get(row, "Pick Type")
+        or "standard"
+    ).strip().lower()
+    if "goblin" in pt:
+        return "goblin"
+    if "demon" in pt:
+        return "demon"
+    return "standard"
+
+
+def build_ticket_payout_json(group_name: str, ticket_rows: list) -> dict[str, Any] | None:
+    """
+    Empirical payout + EV block for tickets_latest.json / UI.
+    On any error, returns None (caller stores null in JSON).
+    """
+    if not ticket_rows:
+        return None
+    legs: list[dict[str, Any]] = []
+    for row in ticket_rows:
+        legs.append(
+            {
+                "pick_type": _ticket_payout_pick_type_token(row),
+                "line_distance": float(_ticket_payout_line_distance(row) or 0.0),
+                "hit_prob": float(_ticket_payout_hit_prob(row)),
+            }
+        )
+    n = len(legs)
+    gname = str(group_name or "")
+    # PrizePicks: Flex cash slips are named "… Flex …"; Power Play / Standard / Goblin sheets are power path.
+    tt = "flex" if "Flex" in gname else "power"
+    try:
+        ev_result = compute_ticket_ev(legs=legs, ticket_type=tt, n_legs=n)
+    except Exception:
+        return None
+    try:
+        fp = float(ev_result["first_place_payout"])
+        mg = float(ev_result["min_guarantee"])
+        return {
+            "first_place": ev_result["first_place_payout"],
+            "min_guarantee": ev_result["min_guarantee"],
+            "min_guarantee_adjustment": ev_result["min_guarantee_adjustment"],
+            "p_all_win": ev_result["p_all_win"],
+            "p_miss_1": ev_result["p_miss_1"],
+            "ev": ev_result["ev"],
+            "recommendation": ev_result["recommendation"],
+            "entry_10_to_win_sweep": round(10 * fp, 2),
+            "entry_10_to_win_guarantee": round(10 * mg, 2),
+            "entry_20_to_win_sweep": round(20 * fp, 2),
+            "entry_20_to_win_guarantee": round(20 * mg, 2),
+        }
+    except Exception:
+        return None
+
+
 # Props excluded from ticket pools based on empirical hit rates below break-even
 # Blocked Shots NBA: 41.9% overall, too low for any ticket
 # Combo props: small sample, unreliable
@@ -1888,6 +2002,11 @@ def ticket_groups_to_payload(
 
                 slip["legs"].append(leg)
             slip["has_data_warning"] = any(bool(x.get("data_warning")) for x in slip["legs"])
+
+            try:
+                slip["payout"] = build_ticket_payout_json(str(group_name), rows)
+            except Exception:
+                slip["payout"] = None
 
             group["tickets"].append(slip)
 
@@ -7222,6 +7341,95 @@ _PICK_COLOR: dict[str, str] = {
     "standard": "#00e5ff",
 }
 
+_TICKETS_BUILT_PAYOUT_CSS = """<style>
+.tickets-built .ticket-hdr-bracket {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: clamp(14px, 1.5vw, 17px);
+  letter-spacing: 0.06em;
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 6px;
+  padding: 2px 8px;
+  background: rgba(0,0,0,0.2);
+}
+.tickets-built .payout-rec-badge {
+  font-family: "Share Tech Mono", monospace;
+  font-size: clamp(11px, 1.1vw, 13px);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 6px;
+  padding: 3px 10px;
+  background: rgba(0,0,0,0.22);
+}
+.tickets-built .payout-x-badge {
+  font-family: "Share Tech Mono", monospace;
+  font-size: clamp(11px, 1.1vw, 13px);
+  color: var(--cyan);
+  border: 1px solid rgba(0,229,255,0.28);
+  border-radius: 6px;
+  padding: 3px 10px;
+  background: rgba(0,229,255,0.06);
+}
+.tickets-built .ticket-payout {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(196,166,107,0.22);
+  background: rgba(0,0,0,0.18);
+  font-family: "Share Tech Mono", monospace;
+  font-size: clamp(12px, 1.1vw, 14px);
+}
+.tickets-built .payout-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.tickets-built .payout-row:last-of-type { margin-bottom: 0; }
+.tickets-built .payout-label { color: var(--muted); }
+.tickets-built .payout-value { color: var(--text); text-align: right; }
+.tickets-built .payout-entry-guide {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+.tickets-built .ev-strong { color: #00ff88; font-weight: bold; }
+.tickets-built .ev-ok { color: #88ccff; }
+.tickets-built .ev-marginal { color: #ffaa00; }
+.tickets-built .ev-skip { color: #ff4444; }
+[data-theme="light"] .tickets-built .ticket-payout {
+  background: rgba(255,255,255,0.5);
+  border-color: rgba(0,0,0,0.1);
+}
+</style>"""
+
+
+def _payout_ev_class(rec: str) -> str:
+    u = (rec or "").strip().upper()
+    if u == "STRONG":
+        return "ev-strong"
+    if u == "OK":
+        return "ev-ok"
+    if u == "MARGINAL":
+        return "ev-marginal"
+    return "ev-skip"
+
+
+def _payout_rec_prefix(rec: str) -> str:
+    u = (rec or "").strip().upper()
+    if u == "STRONG":
+        return "⚡"
+    if u == "OK":
+        return "✅"
+    if u == "MARGINAL":
+        return "⚠"
+    if u == "SKIP":
+        return "⏭"
+    return "•"
+
 
 def _h(v) -> str:
     """HTML-escape a value."""
@@ -7466,6 +7674,7 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
 
     parts: list[str] = []
     parts.append('<div class="tickets-built shell">')
+    parts.append(_TICKETS_BUILT_PAYOUT_CSS)
 
     # ── Hero ──────────────────────────────────────────────────────────────────
     built_html = (
@@ -7542,6 +7751,33 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
             else:
                 sig_cls, sig_lbl = "sig-lean", "—"
 
+            payout = ticket.get("payout")
+            hdr_brackets = ""
+            payout_ok = False
+            if isinstance(payout, dict) and payout.get("ev") is not None:
+                try:
+                    ev_emp_f = float(payout["ev"])
+                    payout_ok = bool(math.isfinite(ev_emp_f))
+                except (TypeError, ValueError):
+                    ev_emp_f = None
+                    payout_ok = False
+                if payout_ok:
+                    rec_s = str(payout.get("recommendation") or "")
+                    ev_cls = _payout_ev_class(rec_s)
+                    pre = _payout_rec_prefix(rec_s)
+                    fpv = payout.get("first_place")
+                    mgv = payout.get("min_guarantee")
+                    hdr_brackets = f'''
+        <span class="ticket-hdr-bracket">[{_h(group_name)}]</span>
+        <span class="payout-rec-badge {ev_cls}">[{_h(pre)} {_h(rec_s)} — EV {_fmt(ev_emp_f, 2)}]</span>
+        <span class="payout-x-badge">[{_fmt(fpv, 1)}x / {_fmt(mgv, 2)}x]</span>
+        <span class="{sig_cls}" title="Modeled EV tier (Power × win prob)">{sig_lbl}</span>'''
+            if not hdr_brackets:
+                hdr_brackets = (
+                    f'<span class="ticket-hdr-bracket">[{_h(group_name)}]</span>'
+                    f'<span class="{sig_cls}">{sig_lbl}</span>'
+                )
+
             warn_html = ('<span style="font-size:10px;color:var(--amber);margin-left:auto;">⚠ data warning</span>'
                          if has_warn else "")
 
@@ -7554,7 +7790,7 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
     </div>
       <div class="ticket-hdr">
         <span class="ticket-no">#{_h(ticket_no)}</span>
-        <span class="{sig_cls}">{sig_lbl}</span>
+        {hdr_brackets}
         {warn_html}
       </div>
       <div class="kpi-row">
@@ -7687,9 +7923,47 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
                 leg_graph_uid += 1
                 parts.append(_tickets_leg_graph_row_html(leg, f"lgr-{leg_graph_uid}", table_cols))
 
-            parts.append('''
+            payout_section = ""
+            if payout_ok and isinstance(payout, dict):
+                try:
+                    p_all = float(payout["p_all_win"])
+                except (TypeError, ValueError):
+                    p_all = 0.0
+                rec_s2 = str(payout.get("recommendation") or "")
+                ev_cls_row = _payout_ev_class(rec_s2)
+                try:
+                    ev_disp = float(payout["ev"])
+                except (TypeError, ValueError):
+                    ev_disp = 0.0
+                e10s = payout.get("entry_10_to_win_sweep")
+                e10g = payout.get("entry_10_to_win_guarantee")
+                payout_section = f'''
+      <div class="ticket-payout">
+        <div class="payout-row">
+          <span class="payout-label">1st Place</span>
+          <span class="payout-value">{_fmt(payout.get("first_place"), 2)}x</span>
+        </div>
+        <div class="payout-row">
+          <span class="payout-label">Min Guarantee</span>
+          <span class="payout-value">{_fmt(payout.get("min_guarantee"), 2)}x</span>
+        </div>
+        <div class="payout-row">
+          <span class="payout-label">P(Win All)</span>
+          <span class="payout-value">{_fmt(p_all * 100, 1)}%</span>
+        </div>
+        <div class="payout-row">
+          <span class="payout-label">EV</span>
+          <span class="payout-value {ev_cls_row}">{_fmt(ev_disp, 2)} — {_h(rec_s2)}</span>
+        </div>
+        <div class="payout-entry-guide">
+          $10 entry &rarr; win ${_fmt(e10s, 2)} (or ${_fmt(e10g, 2)} guarantee)
+        </div>
+      </div>'''
+
+            parts.append(f'''
         </tbody>
       </table>
+{payout_section}
   </div>
 </div>''')
 

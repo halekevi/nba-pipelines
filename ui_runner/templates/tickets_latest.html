@@ -285,6 +285,17 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .thdr .tn{font-size:clamp(24px,2.8vw,32px);font-family:'Bebas Neue',sans-serif;letter-spacing:2px;color:var(--gold);}
 .thdr .tg{font-family:'Share Tech Mono',monospace;font-size:clamp(12px,1.35vw,15px);color:var(--muted);letter-spacing:0.5px;line-height:1.35;}
 .payout{font-family:'Share Tech Mono',monospace;font-size:clamp(13px,1.4vw,16px);color:var(--cyan);}
+/* Empirical payout panel (parity with /tickets built slips from tickets_latest.json) */
+.ticket-payout{margin-top:14px;padding:12px 14px;border-radius:10px;border:1px solid rgba(196,166,107,0.22);background:rgba(0,0,0,0.18);font-family:'Share Tech Mono',monospace;font-size:clamp(12px,1.1vw,14px);}
+.payout-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px;}
+.payout-row:last-of-type{margin-bottom:0;}
+.payout-label{color:var(--muted);}
+.payout-value{color:var(--text);text-align:right;}
+.payout-entry-guide{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.08);color:var(--muted);font-size:11px;line-height:1.45;}
+.ev-strong{color:#00ff88;font-weight:bold;}
+.ev-ok{color:#88ccff;}
+.ev-marginal{color:#ffaa00;}
+.ev-skip{color:#ff4444;}
 .banner{font-family:'Bebas Neue',sans-serif;font-size:clamp(11px,1.2vw,13px);letter-spacing:2px;padding:8px 18px;border-radius:999px;font-weight:700;background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);}
 .banner.hit{color:var(--green);border-color:rgba(57,255,110,.45);box-shadow:0 0 16px rgba(57,255,110,.15);}
 .banner.miss{color:var(--red);border-color:rgba(255,77,77,.5);box-shadow:0 0 16px rgba(255,77,77,.12);}

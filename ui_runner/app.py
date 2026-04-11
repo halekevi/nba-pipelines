@@ -20,6 +20,7 @@ if sys.platform == "win32":
 import gzip
 import io
 import json
+import math
 import re
 import sqlite3
 import time
@@ -1829,12 +1830,99 @@ def api_tickets_latest():
         return jsonify({"error": "tickets_latest.json not found", "groups": []}), 404
     try:
         data = read_json_cached(json_path)
+        # jsonify serializes each ticket's payout dict unchanged when present.
         resp = jsonify(data)
         resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
         resp.headers["Pragma"] = "no-cache"
         return resp
     except Exception as e:
         return jsonify({"error": str(e), "groups": []}), 500
+
+
+def _ticket_ev_summary_from_payload(data: dict | None) -> dict[str, Any]:
+    """
+    Aggregate empirical EV (tickets_latest.json payout blocks).
+    Buckets are mutually exclusive: strong >1.5, ok >1.0, marginal >0.8, skip <=0.8.
+    """
+    date_str = str((data or {}).get("date") or "").strip()[:10] or None
+    groups = list((data or {}).get("groups") or [])
+    strong_c = ok_c = marg_c = skip_c = 0
+    total_considered = 0
+    best_ticket: dict[str, Any] | None = None
+    best_ev = float("-inf")
+
+    for g in groups:
+        gname = str(g.get("group_name") or "")
+        for t in g.get("tickets") or []:
+            pay = t.get("payout")
+            if not isinstance(pay, dict):
+                continue
+            try:
+                ev = float(pay.get("ev"))
+            except (TypeError, ValueError):
+                continue
+            if not math.isfinite(ev):
+                continue
+            total_considered += 1
+            if ev > 1.5:
+                strong_c += 1
+            elif ev > 1.0:
+                ok_c += 1
+            elif ev > 0.8:
+                marg_c += 1
+            else:
+                skip_c += 1
+            if ev > best_ev:
+                best_ev = ev
+                try:
+                    p_all = float(pay.get("p_all_win", 0))
+                except (TypeError, ValueError):
+                    p_all = 0.0
+                try:
+                    fp = float(pay.get("first_place", 0))
+                except (TypeError, ValueError):
+                    fp = 0.0
+                try:
+                    mg = float(pay.get("min_guarantee", 0))
+                except (TypeError, ValueError):
+                    mg = 0.0
+                tno = t.get("ticket_no")
+                nm = f"{gname} #{tno}".strip() if tno is not None else gname
+                best_ticket = {
+                    "name": nm,
+                    "ev": round(ev, 4),
+                    "recommendation": str(pay.get("recommendation") or ""),
+                    "first_place": f"{fp:.1f}x",
+                    "min_guarantee": f"{mg:.2f}x",
+                    "p_all_win": f"{p_all * 100:.1f}%",
+                }
+
+    return {
+        "date": date_str,
+        "total_tickets": total_considered,
+        "strong_count": strong_c,
+        "ok_count": ok_c,
+        "marginal_count": marg_c,
+        "skip_count": skip_c,
+        "best_ticket": best_ticket,
+    }
+
+
+@app.get("/api/ticket-ev-summary")
+def api_ticket_ev_summary():
+    """Empirical EV summary from tickets_latest.json payout fields."""
+    json_path = TEMPLATES_DIR / "tickets_latest.json"
+    if not _template_json_available("tickets_latest.json"):
+        return jsonify({"error": "tickets_latest.json not found"}), 404
+    try:
+        data = read_json_cached(json_path)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    out = _ticket_ev_summary_from_payload(data if isinstance(data, dict) else None)
+    r = jsonify(out)
+    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    return r
 
 
 def _ticket_ev_path() -> Path:
@@ -1964,6 +2052,7 @@ def api_slate_today_tickets():
                     "flat_mult": t.get("flat_multiplier"),
                     "combined_prob": t.get("combined_hit_prob_curve"),
                     "est_ev": t.get("est_ev"),
+                    "payout": t.get("payout"),
                 }
             )
     r = jsonify(
