@@ -996,6 +996,13 @@ NHL_LEG_MIN_HIT_RATE = {
 MLB_MAX_LEGS = 4
 MLB_PITCHING_OVER_ONLY_PROPS = {"strikeouts", "hits allowed"}
 
+# Tennis: short slips only; stricter per-leg floors for 2- and 3-leg structured tickets.
+MAX_LEGS_TENNIS = 3
+LEG_MIN_HIT_RATE_TENNIS = {2: 0.58, 3: 0.62}
+
+# Pipelines that emit step8 boards into combined slate (reference for docs / tooling).
+ACTIVE_SPORTS = ("NBA", "NHL", "SOCCER", "TENNIS", "MLB", "NBA1H", "NBA1Q", "WCBB")
+
 # When --high-conviction: per-leg hit_rate floors (merged with LEG_MIN_HIT_RATE via max())
 HIGH_CONVICTION_LEG_MIN_HIT_RATE = {
     2: 0.70,
@@ -4371,6 +4378,18 @@ def build_single_structure_ticket(
     if cand.empty:
         return None
 
+    # Tennis: OVER only for Aces + Games Won; Double Faults (and other props) allow UNDER.
+    if sport_up == "TENNIS" and "prop_type" in cand.columns and "direction" in cand.columns:
+        pn = cand["prop_type"].apply(_norm_prop_label)
+        ddir = cand["direction"].astype(str).str.upper().str.strip()
+        ace_games_won = pn.str.contains("ace", na=False) | (
+            pn.str.contains("game", na=False) & pn.str.contains("won", na=False) & ~pn.str.contains("set", na=False)
+        )
+        cand = cand[~(ace_games_won & (ddir == "UNDER"))].copy()
+
+    if cand.empty:
+        return None
+
     # NHL hit-rate proxy in ticket builder:
     # pool() may pass strong-L5 candidates even when raw hit_rate is near zero.
     # For structured-ticket leg floors, use directional L10/L5 proxy when hit_rate is mostly zero.
@@ -4398,6 +4417,10 @@ def build_single_structure_ticket(
             # NHL structured pool should use sport caps, not the global strict floor.
             nhl_cap = NHL_LEG_MIN_HIT_RATE.get(int(n_legs))
             thr = max(0.52, float(nhl_cap)) if nhl_cap is not None else max(0.52, thr)
+        if sport_up == "TENNIS":
+            tn_cap = LEG_MIN_HIT_RATE_TENNIS.get(int(n_legs))
+            if tn_cap is not None:
+                thr = max(thr, float(tn_cap))
         cand = cand[pd.to_numeric(cand["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
     if cand.empty:
         return None
@@ -5089,10 +5112,15 @@ def build_final_web_ticket_groups(
                 if base is None:
                     return float(cap)
                 return min(base, float(cap))
+        if str(label).strip().upper() == "TENNIS":
+            cap = LEG_MIN_HIT_RATE_TENNIS.get(int(n))
+            if cap is not None:
+                base = float(cap) if base is None else max(base, float(cap))
         return base
 
-    def _add_mixed_std_gob(sub: pd.DataFrame, label: str):
-        for n in leg_sizes:
+    def _add_mixed_std_gob(sub: pd.DataFrame, label: str, leg_sizes_override: list | None = None):
+        _ls = leg_sizes_override if leg_sizes_override is not None else leg_sizes
+        for n in _ls:
             if len(sub) < n:
                 continue
             mt = 2 if n == 3 else 1
@@ -5109,8 +5137,9 @@ def build_final_web_ticket_groups(
             if tix:
                 groups.append((f"FINAL {n}-Leg (Std+Gob {label})", tix, None))
 
-    def _add_std_only(sub: pd.DataFrame, label: str):
-        for n in leg_sizes:
+    def _add_std_only(sub: pd.DataFrame, label: str, leg_sizes_override: list | None = None):
+        _ls = leg_sizes_override if leg_sizes_override is not None else leg_sizes
+        for n in _ls:
             if len(sub) < n:
                 continue
             tix = build_tickets(
@@ -5156,8 +5185,9 @@ def build_final_web_ticket_groups(
     if tennis_pool is not None and len(tennis_pool):
         ten_f = apply_filters(tennis_pool)
         ten_mix, ten_std, ten_gob = _split_sg(ten_f)
-        _add_mixed_std_gob(ten_mix, "Tennis")
-        _add_std_only(ten_std, "Tennis")
+        ten_ls = [n for n in leg_sizes if n <= MAX_LEGS_TENNIS]
+        _add_mixed_std_gob(ten_mix, "Tennis", ten_ls)
+        _add_std_only(ten_std, "Tennis", ten_ls)
 
     mlb_mix = mlb_std = mlb_gob = pd.DataFrame()
     if mlb_pool is not None and len(mlb_pool):
@@ -6729,6 +6759,16 @@ def main():
             _prop = filtered_df["prop_type"].apply(_norm_prop_label)
             _pitch_under = _dir.eq("UNDER") & _prop.isin(MLB_PITCHING_OVER_ONLY_PROPS)
             filtered_df = filtered_df[~_pitch_under].copy()
+
+        # Tennis: OVER only for Aces + Games Won; other props keep both directions.
+        if sport == "TENNIS" and {"direction", "prop_type"}.issubset(filtered_df.columns):
+            _pn = filtered_df["prop_type"].apply(_norm_prop_label)
+            _dd = filtered_df["direction"].astype(str).str.upper().str.strip()
+            _og = _pn.str.contains("ace", na=False) | (
+                _pn.str.contains("game", na=False) & _pn.str.contains("won", na=False)
+                & ~_pn.str.contains("set", na=False)
+            )
+            filtered_df = filtered_df[~(_og & (_dd == "UNDER"))].copy()
 
         # Tier floor: exclude Tier D from all pools
         effective_tiers = [t for t in (tiers if tiers else ["A", "B", "C", "D"]) if t != "D"]

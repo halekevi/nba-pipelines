@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Tennis step7 — rank / tier from line hit rates + opponent rank + player rank.
+Tennis step7 — composite_score tiers (A/B/C/D) + rank_score for ticket sorting.
 """
 
 from __future__ import annotations
@@ -16,6 +16,7 @@ _SCRIPT_DIR = Path(__file__).resolve().parent
 
 
 def main() -> None:
+    print("[Tennis step7] Starting...")
     root = _SCRIPT_DIR.parent
     ap = argparse.ArgumentParser()
     ap.add_argument("--input", default="outputs/step6_tennis_role_context.csv")
@@ -31,39 +32,41 @@ def main() -> None:
 
     df = pd.read_csv(inp, low_memory=False, encoding="utf-8-sig").fillna("")
     if df.empty:
-        print("ERROR [Tennis-S7] empty input")
+        print("ERROR [Tennis step7] empty input")
         sys.exit(1)
 
     hr5 = pd.to_numeric(df.get("line_hit_rate_over_ou_5", np.nan), errors="coerce")
     hr10 = pd.to_numeric(df.get("line_hit_rate_over_ou_10", np.nan), errors="coerce")
     hr10 = hr10.fillna(hr5)
-    opp_r = pd.to_numeric(df.get("OVERALL_DEF_RANK", 50), errors="coerce").fillna(50.0)
-    p_r = pd.to_numeric(df.get("player_atp_rank", 100), errors="coerce").fillna(100.0)
+    composite_hit_rate = (0.5 * hr5.fillna(0.5) + 0.5 * hr10.fillna(0.5)).clip(0.0, 1.0)
+    composite_score = composite_hit_rate * 2.0
 
-    opp_adj = (85.0 - opp_r.clip(1, 120)) / 85.0
-    player_adj = (120.0 - p_r.clip(1, 300)) / 120.0
-    base = (
-        0.18
-        + 0.48 * hr5.fillna(0.52)
-        + 0.18 * hr10.fillna(hr5).fillna(0.52)
-        + 0.10 * opp_adj.clip(0, 1)
-        + 0.06 * player_adj.clip(0, 1)
+    surf = df["surface"].astype(str).str.lower() if "surface" in df.columns else pd.Series("hard", index=df.index)
+    best = (
+        df["best_surface"].astype(str).str.lower()
+        if "best_surface" in df.columns
+        else pd.Series("", index=df.index)
     )
-    rank_score = (base * 10.0).clip(0.0, 10.0)
-    df["rank_score"] = rank_score
+    bonus_surf = ((best.str.len() > 1) & (surf == best)).astype(float) * 0.10
+    rdiff = pd.to_numeric(df.get("ranking_diff", 0), errors="coerce").fillna(0.0)
+    bonus_rank = (rdiff > 50).astype(float) * 0.05 - (rdiff < -50).astype(float) * 0.05
 
-    def tier_for(rs: float, h: float) -> str:
-        if rs >= 6.8 and h >= 0.58:
+    composite_score = composite_score + bonus_surf + bonus_rank
+    df["composite_hit_rate"] = composite_hit_rate
+    df["composite_score"] = composite_score
+
+    def tier_for(cs: float) -> str:
+        if cs >= 1.25:
             return "A"
-        if rs >= 6.0 and h >= 0.52:
+        if cs >= 0.75:
             return "B"
-        if rs >= 5.0:
+        if cs >= 0.40:
             return "C"
         return "D"
 
-    df["tier"] = [tier_for(rank_score.iat[i], float(hr5.fillna(0.5).iat[i])) for i in range(len(df))]
+    df["tier"] = [tier_for(float(composite_score.iat[i])) for i in range(len(df))]
 
-    line = pd.to_numeric(df["line"], errors="coerce")
+    line = pd.to_numeric(df.get("line", df.get("line_score", np.nan)), errors="coerce")
     l5 = pd.to_numeric(df.get("stat_last5_avg", np.nan), errors="coerce")
     seas = pd.to_numeric(df.get("stat_season_avg", np.nan), errors="coerce")
     proj = l5.fillna(seas).fillna(line)
@@ -72,10 +75,14 @@ def main() -> None:
 
     df["ml_prob"] = (0.42 + 0.22 * hr5.fillna(0.5).clip(0.35, 0.72)).clip(0.38, 0.78)
     df["edge_score"] = (df["edge"].astype(float).abs().clip(0, 8) / 8.0 * 10.0).round(4)
-    df["blended_score"] = (pd.to_numeric(df["rank_score"], errors="coerce") * 0.55 + df["ml_prob"] * 10 * 0.45).round(4)
+    df["rank_score"] = (composite_score * 4.0).clip(0.0, 10.0).round(4)
+    df["blended_score"] = (0.3 * df["ml_prob"] + 0.7 * composite_hit_rate).round(4)
 
     df["void_reason"] = ""
-    bad = df["stat_status"].astype(str).str.upper().isin(["NO_DATA", "NO_ID"]) & df["unsupported_prop"].astype(str).ne("1")
+    bad = (
+        df["stat_status"].astype(str).str.upper().isin(["NO_DATA", "NO_ID"])
+        & df["unsupported_prop"].astype(str).ne("1")
+    )
     df.loc[bad, "void_reason"] = "WEAK_MATCH_HISTORY"
 
     df["espn_player_id"] = df.get("espn_athlete_id", "")
@@ -83,12 +90,15 @@ def main() -> None:
         df["pos"] = ""
     df["league"] = (df["tour"].astype(str).str.upper() + " / " + df["surface"].astype(str).str.upper()).str.strip()
     opp_col = "opp_team" if "opp_team" in df.columns else "opp"
-    df["opp_team"] = df[opp_col].astype(str)
+    df["opp_team"] = df[opp_col].astype(str) if opp_col in df.columns else ""
+
+    df["DEF_TIER"] = "N/A"
+    df["OVERALL_DEF_RANK"] = df.get("OVERALL_DEF_RANK", "")
 
     out.parent.mkdir(parents=True, exist_ok=True)
     with pd.ExcelWriter(out, engine="openpyxl") as w:
         df.to_excel(w, sheet_name="ALL", index=False)
-    print(f"OK [Tennis-S7] -> {out}  rows={len(df)}")
+    print(f"OK [Tennis step7] -> {out}  rows={len(df)}")
 
 
 if __name__ == "__main__":

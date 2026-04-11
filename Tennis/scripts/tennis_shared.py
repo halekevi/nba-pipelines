@@ -20,6 +20,62 @@ URL_ATP_BOARD = "https://site.api.espn.com/apis/site/v2/sports/tennis/atp/scoreb
 URL_WTA_BOARD = "https://site.api.espn.com/apis/site/v2/sports/tennis/wta/scoreboard"
 
 
+def athlete_statistics_url(tour: str, athlete_id: str) -> str:
+    t = "atp" if str(tour).upper() == "ATP" else "wta"
+    return f"https://site.api.espn.com/apis/site/v2/sports/tennis/{t}/athletes/{athlete_id}/statistics"
+
+
+def fetch_athlete_statistics(tour: str, athlete_id: str) -> dict[str, Any]:
+    if not str(athlete_id).strip():
+        return {}
+    try:
+        return fetch_json(athlete_statistics_url(tour, athlete_id))
+    except Exception:
+        return {}
+
+
+def _flatten_espn_stat_dicts(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    for split in payload.get("splits") or []:
+        for cat in split.get("categories") or []:
+            for st in cat.get("stats") or []:
+                if isinstance(st, dict):
+                    out.append(st)
+    return out
+
+
+def parse_tennis_season_stats(payload: dict[str, Any]) -> dict[str, float | None]:
+    """
+    Best-effort parse of ESPN tennis athlete statistics JSON.
+    Returns floats or None when missing.
+    """
+    stats = _flatten_espn_stat_dicts(payload)
+    if not stats and isinstance(payload.get("statistics"), list):
+        stats = [x for x in payload["statistics"] if isinstance(x, dict)]
+
+    def find_val(*needles: str) -> float | None:
+        for st in stats:
+            raw = str(st.get("name") or st.get("displayName") or st.get("abbreviation") or "").lower()
+            raw = re.sub(r"[^a-z0-9]+", "", raw)
+            for nd in needles:
+                n2 = re.sub(r"[^a-z0-9]+", "", nd.lower())
+                if n2 and n2 in raw:
+                    try:
+                        return float(st.get("value"))
+                    except (TypeError, ValueError):
+                        return None
+        return None
+
+    return {
+        "aces_per_match": find_val("aces", "acepermatch", "avgaces"),
+        "double_faults_per_match": find_val("doublefault", "doublefaults", "df"),
+        "first_serve_pct": find_val("firstserve", "1stsrvpct", "firstservepercent"),
+        "games_won_per_match": find_val("games", "gameswon"),
+        "sets_won_per_match": find_val("sets", "setswon"),
+        "win_pct": find_val("wins", "winpercent", "matchwin"),
+    }
+
+
 def norm_key(s: str) -> str:
     if not s or (isinstance(s, float) and str(s) == "nan"):
         return ""
@@ -85,6 +141,37 @@ def _games_from_linescores(comp: dict[str, Any]) -> float:
     return float(sum(float(x.get("value") or 0) for x in ls))
 
 
+def _stat_from_competitor(comp: dict[str, Any], *needles: str) -> float | None:
+    for st in comp.get("statistics") or []:
+        name = str(st.get("name") or st.get("displayName") or st.get("abbreviation") or "").lower()
+        name = re.sub(r"[^a-z0-9]+", "", name)
+        for nd in needles:
+            n2 = re.sub(r"[^a-z0-9]+", "", nd.lower())
+            if n2 and n2 in name:
+                try:
+                    return float(st.get("value"))
+                except (TypeError, ValueError):
+                    return None
+    return None
+
+
+def _sets_won_from_linescores(comp: dict[str, Any], other: dict[str, Any] | None) -> float:
+    ls = comp.get("linescores") or []
+    if not ls or not other:
+        return 0.0
+    ols = other.get("linescores") or []
+    won = 0
+    for i, cur in enumerate(ls):
+        try:
+            gv = float(cur.get("value") or 0)
+            ov = float(ols[i].get("value") or 0) if i < len(ols) else 0.0
+            if gv > ov:
+                won += 1
+        except (TypeError, ValueError, IndexError):
+            continue
+    return float(won)
+
+
 def _comp_status_final(comp: dict[str, Any]) -> bool:
     st = (comp.get("status") or {}).get("type") or {}
     return str(st.get("name") or "").upper() == "STATUS_FINAL"
@@ -106,20 +193,25 @@ def iter_scoreboard_matches(tour: str) -> Iterator[dict[str, Any]]:
                     continue
                 dt = str(comp.get("date") or comp.get("startDate") or "")[:19]
                 match_total = sum(_games_from_linescores(c) for c in comps)
-                for c in comps:
+                for i, c in enumerate(comps):
                     ath = c.get("athlete") or {}
                     aid = str(ath.get("id") or c.get("id") or "").strip()
                     nm = str(ath.get("displayName") or "").strip()
                     if not aid or not nm:
                         continue
+                    other_c = comps[1 - i] if len(comps) == 2 else None
                     gw = _games_from_linescores(c)
+                    aces = _stat_from_competitor(c, "aces", "ace")
+                    dbl = _stat_from_competitor(c, "doublefault", "doublefaults", "double faults")
+                    if aces is None:
+                        aces = 0.0
+                    if dbl is None:
+                        dbl = 0.0
+                    sw = _sets_won_from_linescores(c, other_c)
                     opp = ""
-                    for c2 in comps:
-                        if str(c2.get("id")) == aid:
-                            continue
-                        a2 = c2.get("athlete") or {}
+                    if other_c is not None:
+                        a2 = other_c.get("athlete") or {}
                         opp = str(a2.get("displayName") or "").strip()
-                        break
                     yield {
                         "espn_athlete_id": aid,
                         "player": nm,
@@ -129,6 +221,9 @@ def iter_scoreboard_matches(tour: str) -> Iterator[dict[str, Any]]:
                         "games_won": gw,
                         "match_total_games": float(match_total),
                         "opponent": opp,
+                        "aces": float(aces),
+                        "double_faults": float(dbl),
+                        "sets_won": float(sw),
                     }
 
 
@@ -211,6 +306,8 @@ PROP_NORM_MAP = {
     "total games": "match_total_games",
     "match total games": "match_total_games",
     "match games": "match_total_games",
+    "sets won": "sets_won",
+    "set won": "sets_won",
 }
 
 
@@ -229,6 +326,8 @@ def norm_tennis_prop(raw: str) -> str:
         return "games_won"
     if "total" in s2 and "game" in s2:
         return "match_total_games"
+    if "set" in s2 and "won" in s2:
+        return "sets_won"
     return s2.replace(" ", "_")[:48]
 
 
@@ -237,4 +336,10 @@ def history_value_key(prop_norm: str) -> str | None:
         return "games_won"
     if prop_norm == "match_total_games":
         return "match_total_games"
+    if prop_norm == "aces":
+        return "aces"
+    if prop_norm == "double_faults":
+        return "double_faults"
+    if prop_norm == "sets_won":
+        return "sets_won"
     return None

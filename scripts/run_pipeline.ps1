@@ -523,10 +523,10 @@ if ($TennisOnly) {
         Write-Host "  [Tennis] Skipping step1 fetch -- using existing outputs\step1_tennis_props.csv" -ForegroundColor DarkGray
     }
     if ($ok) { $ok = Run-Step "Tennis Step 2 - Attach Pick Types" $TennisDir ".\scripts\step2_attach_picktypes_tennis.py" "--input outputs\step1_tennis_props.csv --output outputs\step2_tennis_picktypes.csv" }
-    if ($ok) { $ok = Run-Step "Tennis Step 3 - Opponent Context" $TennisDir ".\scripts\step3_attach_context_tennis.py" "--input outputs\step2_tennis_picktypes.csv --output outputs\step3_tennis_with_context.csv" }
-    if ($ok) { $ok = Run-Step "Tennis Step 4 - Match History" $TennisDir ".\scripts\step4_attach_match_history_tennis.py" "--input outputs\step3_tennis_with_context.csv --output outputs\step4_tennis_with_stats.csv" }
-    if ($ok) { $ok = Run-Step "Tennis Step 5 - Line Hit Rates" $TennisDir ".\scripts\step5_add_line_hit_rates_tennis.py" "--input outputs\step4_tennis_with_stats.csv --output outputs\step5_tennis_hit_rates.csv --compute10" }
-    if ($ok) { $ok = Run-Step "Tennis Step 6 - Match Context" $TennisDir ".\scripts\step6_match_context_tennis.py" "--input outputs\step5_tennis_hit_rates.csv --output outputs\step6_tennis_role_context.csv" }
+    if ($ok) { $ok = Run-Step "Tennis Step 3 - Defense Stub" $TennisDir ".\scripts\step3_defense_rankings_tennis.py" "--input outputs\step2_tennis_picktypes.csv --output outputs\step3_tennis_with_defense.csv" }
+    if ($ok) { $ok = Run-Step "Tennis Step 4 - Player Stats + History" $TennisDir ".\scripts\step4_attach_player_stats_tennis.py" "--input outputs\step3_tennis_with_defense.csv --output outputs\step4_tennis_with_stats.csv --refresh-cache" }
+    if ($ok) { $ok = Run-Step "Tennis Step 5 - Hit Rates" $TennisDir ".\scripts\step5_compute_hitrates_tennis.py" "--input outputs\step4_tennis_with_stats.csv --output outputs\step5_tennis_hit_rates.csv --compute10" }
+    if ($ok) { $ok = Run-Step "Tennis Step 6 - Context" $TennisDir ".\scripts\step6_add_context_tennis.py" "--input outputs\step5_tennis_hit_rates.csv --output outputs\step6_tennis_role_context.csv" }
     if ($ok) { $ok = Run-Step "Tennis Step 7 - Rank Props" $TennisDir ".\scripts\step7_rank_props_tennis.py" "--input outputs\step6_tennis_role_context.csv --output outputs\step7_tennis_ranked.xlsx" }
     if ($ok) { Invoke-PropOracleStep7b "Tennis" }
     if ($ok) { $ok = Run-Step "Tennis Step 8 - Direction Context" $TennisDir (Join-Path $Root "Tennis\scripts\step8_add_direction_context_tennis.py") "--input outputs\step7_tennis_ranked.xlsx --sheet ALL --output outputs\step8_tennis_direction.csv --xlsx outputs\step8_tennis_direction_clean.xlsx --date $Date" }
@@ -829,10 +829,10 @@ $TennisJob = Start-Job -ScriptBlock {
     $ok = $true
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "Tennis Step 1 - Fetch PrizePicks" $TennisDir ".\scripts\step1_fetch_prizepicks_tennis.py" "--output outputs\step1_tennis_props.csv" } } else { Write-Output "[Tennis] Skipping step1 fetch" }
     if ($ok) { $ok = Run-Step-Job "Tennis Step 2 - Attach Pick Types" $TennisDir ".\scripts\step2_attach_picktypes_tennis.py" "--input outputs\step1_tennis_props.csv --output outputs\step2_tennis_picktypes.csv" }
-    if ($ok) { $ok = Run-Step-Job "Tennis Step 3 - Opponent Context" $TennisDir ".\scripts\step3_attach_context_tennis.py" "--input outputs\step2_tennis_picktypes.csv --output outputs\step3_tennis_with_context.csv" }
-    if ($ok) { $ok = Run-Step-Job "Tennis Step 4 - Match History" $TennisDir ".\scripts\step4_attach_match_history_tennis.py" "--input outputs\step3_tennis_with_context.csv --output outputs\step4_tennis_with_stats.csv" }
-    if ($ok) { $ok = Run-Step-Job "Tennis Step 5 - Line Hit Rates" $TennisDir ".\scripts\step5_add_line_hit_rates_tennis.py" "--input outputs\step4_tennis_with_stats.csv --output outputs\step5_tennis_hit_rates.csv --compute10" }
-    if ($ok) { $ok = Run-Step-Job "Tennis Step 6 - Match Context" $TennisDir ".\scripts\step6_match_context_tennis.py" "--input outputs\step5_tennis_hit_rates.csv --output outputs\step6_tennis_role_context.csv" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 3 - Defense Stub" $TennisDir ".\scripts\step3_defense_rankings_tennis.py" "--input outputs\step2_tennis_picktypes.csv --output outputs\step3_tennis_with_defense.csv" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 4 - Player Stats + History" $TennisDir ".\scripts\step4_attach_player_stats_tennis.py" "--input outputs\step3_tennis_with_defense.csv --output outputs\step4_tennis_with_stats.csv --refresh-cache" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 5 - Hit Rates" $TennisDir ".\scripts\step5_compute_hitrates_tennis.py" "--input outputs\step4_tennis_with_stats.csv --output outputs\step5_tennis_hit_rates.csv --compute10" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 6 - Context" $TennisDir ".\scripts\step6_add_context_tennis.py" "--input outputs\step5_tennis_hit_rates.csv --output outputs\step6_tennis_role_context.csv" }
     if ($ok) { $ok = Run-Step-Job "Tennis Step 7 - Rank Props" $TennisDir ".\scripts\step7_rank_props_tennis.py" "--input outputs\step6_tennis_role_context.csv --output outputs\step7_tennis_ranked.xlsx" }
     if ($ok) { Invoke-Step7b-Job "Tennis" $RepoRoot }
     if ($ok) { $ok = Run-Step-Job "Tennis Step 8 - Direction Context" $TennisDir (Join-Path $RepoRoot "Tennis\scripts\step8_add_direction_context_tennis.py") "--input outputs\step7_tennis_ranked.xlsx --sheet ALL --output outputs\step8_tennis_direction.csv --xlsx outputs\step8_tennis_direction_clean.xlsx --date $Date" }

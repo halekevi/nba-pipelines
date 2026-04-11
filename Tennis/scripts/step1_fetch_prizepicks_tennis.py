@@ -1,73 +1,78 @@
 #!/usr/bin/env python3
 """
-step1_fetch_prizepicks_tennis.py  (Tennis Pipeline)
+step1_fetch_prizepicks_tennis.py — PrizePicks Tennis projections (API, NBA-style fetch).
 
-Fetches Tennis PrizePicks projections from the public API.
-Default league_id=20 (verify on https://api.prizepicks.com/leagues if the board is empty).
+Default: auto-detect league_id among candidates (14, 20, 7, 9, 12, 15) using
+tennis-like prop names vs NBA stat noise.
 
-Run (from repo root or Tennis/):
+Run:
   py -3.14 Tennis/scripts/step1_fetch_prizepicks_tennis.py
-  py -3.14 Tennis/scripts/step1_fetch_prizepicks_tennis.py --output Tennis/outputs/step1_tennis_props.csv
 """
 
 from __future__ import annotations
 
 import argparse
-import json
+import importlib.util
 import re
+import sys
 import time
-import random
-from datetime import datetime, timezone
-from typing import Any, Dict, List, Tuple, Set
+from pathlib import Path
+from typing import Any
 
 import pandas as pd
-import requests
 
-API_URL   = "https://api.prizepicks.com/projections"
-WARMUP_URL = "https://api.prizepicks.com/leagues"
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
 
-USER_AGENTS = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0",
-]
-
-PICKTYPE_MAP = {"standard": "Standard", "goblin": "Goblin", "demon": "Demon"}
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
-def _make_headers(ua: str) -> dict:
-    return {
-        "User-Agent": ua,
-        "Accept": "application/json, text/plain, */*",
-        "Accept-Language": "en-US,en;q=0.9",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Origin": "https://app.prizepicks.com",
-        "Referer": "https://app.prizepicks.com/board",
-        "Sec-Ch-Ua": '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
-        "Sec-Ch-Ua-Mobile": "?0",
-        "Sec-Ch-Ua-Platform": '"Windows"',
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "same-site",
-        "Connection": "keep-alive",
-        "Cache-Control": "no-cache",
-        "Pragma": "no-cache",
-    }
+def _load_nba_step1():
+    p = REPO_ROOT / "NBA" / "scripts" / "step1_fetch_prizepicks_api.py"
+    spec = importlib.util.spec_from_file_location("nba_pp_fetch", p)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Cannot load NBA step1 from {p}")
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m
 
 
-def _warm_session(session: requests.Session, ua: str) -> None:
-    try:
-        r = session.get(WARMUP_URL, headers=_make_headers(ua), timeout=15)
-        print(f"  🌐 Session warmed ({r.status_code})")
-        time.sleep(random.uniform(1.5, 3.0))
-    except Exception as e:
-        print(f"  ⚠️ Warmup failed: {e} — continuing")
+def _pick_type_from_attrs(attrs: dict[str, Any]) -> tuple[str, str, str, str]:
+    """Returns (pick_type, standard_line, goblin_line, demon_line) as strings for CSV."""
+    desc = str(attrs.get("description", "") or "")
+    odds_type = str(attrs.get("odds_type", "")).strip().lower()
+    std_api = attrs.get("standard_line") or attrs.get("standard_score") or attrs.get("baseline")
+    gob_api = attrs.get("goblin_line") or attrs.get("goblin_score") or ""
+    dem_api = attrs.get("demon_line") or attrs.get("demon_score") or ""
+
+    if "🐱" in desc or "goblin" in desc.lower():
+        pick = "Goblin"
+    elif "😈" in desc or "demon" in desc.lower():
+        pick = "Demon"
+    elif odds_type == "goblin":
+        pick = "Goblin"
+    elif odds_type == "demon":
+        pick = "Demon"
+    else:
+        pick = {"standard": "Standard", "goblin": "Goblin", "demon": "Demon"}.get(odds_type, "Standard")
+
+    line = attrs.get("line_score", attrs.get("line"))
+    if pick == "Standard":
+        standard = std_api if std_api is not None and str(std_api).strip() != "" else line
+    else:
+        standard = std_api if std_api is not None else ""
+    return (
+        pick,
+        str(standard) if standard is not None else "",
+        str(gob_api) if gob_api is not None else "",
+        str(dem_api) if dem_api is not None else "",
+    )
 
 
-def _safe_get(d: dict, path: List[str], default=""):
-    cur: Any = d
+def _safe_get(d: Any, path: list[str], default: Any = "") -> Any:
+    cur = d
     for p in path:
         if not isinstance(cur, dict) or p not in cur:
             return default
@@ -75,233 +80,289 @@ def _safe_get(d: dict, path: List[str], default=""):
     return cur if cur is not None else default
 
 
-def _norm_team(s: str) -> str:
+def _norm_team(s: Any) -> str:
     return str(s or "").strip().upper()
 
 
-def _included_index(included: List[dict]) -> Dict[Tuple[str, str], dict]:
-    idx: Dict[Tuple[str, str], dict] = {}
-    for obj in included or []:
-        t = str(obj.get("type", "")).strip()
-        i = str(obj.get("id",   "")).strip()
-        if t and i:
-            idx[(t, i)] = obj
-    return idx
-
-
-def fetch_pages(
-    league_id: str,
-    game_mode: str,
-    per_page: int,
-    max_pages: int,
-    sleep: float,
-    cooldown_seconds: float,
-    max_cooldowns: int,
-    jitter_seconds: float,
-    max_403_retries: int = 3,
-    forbidden_backoff_base: float = 15.0,
-) -> Tuple[List[dict], List[dict]]:
-    all_data: List[dict] = []
-    all_included: List[dict] = []
-    cooldowns_used = 0
-    forbidden_retries = 0
-    stop_paging = False
-    seen_ids: Set[str] = set()
-
-    session = requests.Session()
-    ua = random.choice(USER_AGENTS)
-    headers = _make_headers(ua)
-    _warm_session(session, ua)
-
-    for page in range(1, max_pages + 1):
-        if stop_paging:
-            break
-        params = {
-            "league_id": str(league_id),
-            "game_mode": str(game_mode),
-            "per_page": int(per_page),
-            "page": int(page),
-            "page[number]": int(page),
-            "page[size]": int(per_page),
-        }
-        for attempt in range(1, 9):
-            r = session.get(API_URL, headers=headers, params=params, timeout=30)
-
-            if r.status_code == 429:
-                cooldowns_used += 1
-                if cooldowns_used > max_cooldowns:
-                    print(f"🛑 429 persists after {max_cooldowns} cooldowns. Stopping early.")
-                    stop_paging = True
-                    break
-                sleep_s = cooldown_seconds + random.uniform(0, jitter_seconds)
-                print(f"⏸️ 429 cooldown {cooldowns_used}/{max_cooldowns}: sleeping {sleep_s:.1f}s...")
-                time.sleep(sleep_s)
-                continue
-
-            if r.status_code == 403:
-                forbidden_retries += 1
-                if forbidden_retries > max_403_retries:
-                    print(f"🛑 403 persists. Stopping early.")
-                    stop_paging = True
-                    break
-                backoff = forbidden_backoff_base * (2 ** (forbidden_retries - 1)) + random.uniform(2, 8)
-                print(f"⏸️ 403 retry {forbidden_retries}/{max_403_retries}: sleeping {backoff:.1f}s...")
-                time.sleep(backoff)
-                ua = random.choice(USER_AGENTS)
-                headers = _make_headers(ua)
-                _warm_session(session, ua)
-                continue
-
-            if r.status_code >= 500:
-                time.sleep(5.0 * attempt)
-                continue
-
-            r.raise_for_status()
-            j = r.json()
-            page_data = j.get("data") or []
-            page_new = [x for x in page_data if str(x.get("id","")) not in seen_ids]
-            if not page_new:
-                print(f"  Page {page}: 0 new rows — stopping pagination")
-                stop_paging = True
-                break
-
-            for x in page_new:
-                seen_ids.add(str(x.get("id","")))
-            all_data.extend(page_new)
-            all_included.extend(j.get("included") or [])
-            print(f"  Page {page}: +{len(page_new)} rows (total={len(all_data)})")
-            time.sleep(sleep + random.uniform(0, 0.5))
-            break
-
-    session.close()
-    return all_data, all_included
-
-
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--output",           default="outputs/step1_tennis_props.csv")
-    ap.add_argument("--league_id",        default="20")   # Tennis (PrizePicks; confirm via /leagues if needed)
-    ap.add_argument("--game_mode",        default="pickem")
-    ap.add_argument("--per_page",         type=int,   default=250)
-    ap.add_argument("--max_pages",        type=int,   default=20)
-    ap.add_argument("--sleep",            type=float, default=1.2)
-    ap.add_argument("--cooldown_seconds", type=float, default=60.0)
-    ap.add_argument("--max_cooldowns",    type=int,   default=2)
-    ap.add_argument("--jitter_seconds",   type=float, default=7.0)
-    ap.add_argument("--max_403_retries",  type=int,   default=3)
-    ap.add_argument("--min_rows",         type=int,   default=8)
-    ap.add_argument("--min_teams",        type=int,   default=2)
-    args = ap.parse_args()
-
-    print(f"📡 Fetching PrizePicks Tennis | league_id={args.league_id}")
-
-    data, included = fetch_pages(
-        league_id=args.league_id,
-        game_mode=args.game_mode,
-        per_page=args.per_page,
-        max_pages=args.max_pages,
-        sleep=args.sleep,
-        cooldown_seconds=args.cooldown_seconds,
-        max_cooldowns=args.max_cooldowns,
-        jitter_seconds=args.jitter_seconds,
-        max_403_retries=args.max_403_retries,
+def _tennis_league_score(df: pd.DataFrame) -> float:
+    """Higher = more likely tennis board."""
+    if df.empty or "prop_type" not in df.columns:
+        return -1e9
+    props = df["prop_type"].astype(str).str.lower()
+    tennis_hits = props.str.contains(
+        r"ace|double\s*fault|doublefault|games?\s*won|sets?\s*won|break\s*point|match\s*total|tennis",
+        regex=True,
+        na=False,
     )
+    nba_hits = props.str.contains(
+        r"\bpoints\b|rebounds|assists|three|steals|blocks|pra|combo|fantasy",
+        regex=True,
+        na=False,
+    )
+    return float(tennis_hits.sum() - 6.0 * nba_hits.sum())
 
-    if not data:
-        cols = ["projection_id","pp_projection_id","player_id","pp_game_id","start_time",
-                "player","image_url","pos","team","opp_team","pp_home_team","pp_away_team",
-                "prop_type","line","pick_type"]
-        pd.DataFrame(columns=cols).to_csv(args.output, index=False)
-        print("❌ No projections fetched. Wrote empty CSV (check league_id / season).")
-        return
 
-    inc = _included_index(included)
-    rows: List[dict] = []
+def build_tennis_rows(data: list[dict], included: list[dict], nba_mod: Any) -> list[dict]:
+    inc = nba_mod._included_index(included)
+    rows: list[dict] = []
 
     for d in data:
         if not isinstance(d, dict):
             continue
-        pid   = str(d.get("id", "")).strip()
+        pid = str(d.get("id", "")).strip()
         attrs = d.get("attributes") or {}
-        rel   = d.get("relationships") or {}
+        rel = d.get("relationships") or {}
+        pick_type, standard_line_s, goblin_line_s, demon_line_s = _pick_type_from_attrs(attrs)
 
-        line      = attrs.get("line_score", attrs.get("line"))
-        prop_type = str(attrs.get("stat_type", attrs.get("projection_type", attrs.get("name", "")))).strip()
-        odds_type = str(attrs.get("odds_type", "")).strip().lower()
-        pick_type = PICKTYPE_MAP.get(odds_type, "Standard")
+        line = attrs.get("line_score", attrs.get("line"))
+        prop_type = str(
+            attrs.get("stat_type", attrs.get("projection_type", attrs.get("name", "")))
+        ).strip()
 
-        player_id   = _safe_get(rel, ["new_player", "data", "id"], "")
+        player_id = _safe_get(rel, ["new_player", "data", "id"], "") or ""
         player_type = _safe_get(rel, ["new_player", "data", "type"], "new_player")
-        game_id     = _safe_get(rel, ["new_game", "data", "id"], "") or _safe_get(rel, ["game", "data", "id"], "")
-        game_type   = _safe_get(rel, ["new_game", "data", "type"], "") or _safe_get(rel, ["game", "data", "type"], "")
+        player_obj = inc.get((str(player_type), str(player_id))) if player_id else None
 
-        player_obj = inc.get((player_type, str(player_id))) if player_id else None
-        game_obj   = inc.get((game_type, str(game_id)))     if game_id and game_type else None
-
-        player_name = pos = team = image_url = ""
+        player_name = pos = team_pp = image_url = ""
         if isinstance(player_obj, dict):
             pa = player_obj.get("attributes") or {}
             player_name = str(pa.get("display_name", pa.get("name", ""))).strip()
-            pos         = str(pa.get("position", "")).strip()
-            team        = _norm_team(pa.get("team", ""))
-            image_url   = str(pa.get("image_url") or pa.get("image_url_small") or "").strip()
+            pos = str(pa.get("position", "")).strip()
+            team_pp = _norm_team(pa.get("team", ""))
+            image_url = str(
+                pa.get("image_url")
+                or pa.get("image_url_small")
+                or pa.get("photo_url")
+                or pa.get("headshot")
+                or pa.get("avatar")
+                or ""
+            ).strip()
 
-        home = away = start_time = ""
+        game_id = _safe_get(rel, ["new_game", "data", "id"], "") or _safe_get(rel, ["game", "data", "id"], "")
+        game_type = _safe_get(rel, ["new_game", "data", "type"], "") or _safe_get(rel, ["game", "data", "type"], "")
+        game_obj = inc.get((str(game_type), str(game_id))) if game_id and game_type else None
+
+        home = away = start_time = tournament = league_name = ""
         if isinstance(game_obj, dict):
             ga = game_obj.get("attributes") or {}
-            home       = _norm_team(ga.get("home_team", ""))
-            away       = _norm_team(ga.get("away_team", ""))
+            home = _norm_team(ga.get("home_team", ""))
+            away = _norm_team(ga.get("away_team", ""))
             start_time = str(ga.get("start_time", "")).strip()
+            tournament = str(
+                ga.get("name") or ga.get("short_name") or ga.get("slug") or ga.get("summary") or ""
+            ).strip()
+
+        league_id_rel = _safe_get(rel, ["new_league", "data", "id"], "") or _safe_get(
+            rel, ["league", "data", "id"], ""
+        )
+        league_type = _safe_get(rel, ["new_league", "data", "type"], "") or _safe_get(
+            rel, ["league", "data", "type"], "league"
+        )
+        league_obj = (
+            inc.get((str(league_type), str(league_id_rel))) if league_id_rel and league_type else None
+        )
+        if isinstance(league_obj, dict):
+            la = league_obj.get("attributes") or {}
+            league_name = str(la.get("name") or la.get("slug") or "").strip()
 
         if not start_time:
             start_time = str(attrs.get("start_time", "")).strip()
 
+        team_slot = tournament or team_pp or league_name or ""
         opp_team = ""
-        if team and home and away:
-            opp_team = away if team == home else (home if team == away else "")
-        else:
+        if team_slot and home and away:
+            opp_team = away if team_slot == home else (home if team_slot == away else "")
+        if not opp_team:
             desc = str(attrs.get("description", "") or "")
-            m = re.search(r"\bvs\.?\s+([A-Za-z]{2,4})\b", desc)
+            m = re.search(r"vs\.?\s+([A-Za-z0-9 .'-]{2,64})", desc, re.I)
             if m:
-                opp_team = _norm_team(m.group(1))
+                opp_team = m.group(1).strip()
+            elif home and away and player_name:
+                for cand in (home, away):
+                    if cand and cand not in player_name.upper() and len(cand) > 1:
+                        opp_team = cand
+                        break
 
-        rows.append({
-            "projection_id":    pid,
-            "pp_projection_id": pid,
-            "player_id":        str(player_id).strip(),
-            "pp_game_id":       str(game_id or "").strip(),
-            "start_time":       start_time,
-            "player":           player_name,
-            "image_url":        image_url,
-            "pos":              pos,
-            "team":             team,
-            "opp_team":         opp_team,
-            "pp_home_team":     home,
-            "pp_away_team":     away,
-            "prop_type":        prop_type,
-            "line":             line,
-            "pick_type":        pick_type,
-        })
+        rows.append(
+            {
+                "projection_id": pid,
+                "player_name": player_name,
+                "player": player_name,
+                "team": team_slot,
+                "prop_type": prop_type,
+                "line_score": line,
+                "line": line,
+                "start_time": start_time,
+                "sport": "Tennis",
+                "league": league_name or "Tennis",
+                "pick_type": pick_type,
+                "standard_line": standard_line_s,
+                "goblin_line": goblin_line_s,
+                "demon_line": demon_line_s,
+                "pp_projection_id": pid,
+                "player_id": str(player_id).strip(),
+                "pp_game_id": str(game_id or "").strip(),
+                "pos": pos,
+                "opp_team": opp_team,
+                "pp_home_team": home,
+                "pp_away_team": away,
+                "image_url": image_url,
+                "tournament": tournament,
+            }
+        )
 
+    return rows
+
+
+def main() -> None:
+    print("[Tennis step1] Starting...")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--output", default="outputs/step1_tennis_props.csv")
+    ap.add_argument(
+        "--league_id",
+        default="auto",
+        help="PrizePicks league_id, or 'auto' to scan candidates",
+    )
+    ap.add_argument("--per_page", type=int, default=250)
+    ap.add_argument("--max_pages", type=int, default=10)
+    ap.add_argument("--retries", type=int, default=5)
+    ap.add_argument("--min_rows", type=int, default=5)
+    ap.add_argument("--min_teams", type=int, default=1)
+    ap.add_argument("--replace", action="store_true", help="Do not merge with existing output")
+    args = ap.parse_args()
+
+    nba = _load_nba_step1()
+
+    root = Path(__file__).resolve().parent.parent
+    out_path = Path(args.output)
+    if not out_path.is_absolute():
+        out_path = root / out_path
+
+    candidates = ["14", "20", "7", "9", "12", "15"]
+    chosen = str(args.league_id).strip().lower()
+    use_id: str
+
+    if chosen == "auto":
+        best_id = ""
+        best_score = -1e10
+        print("[Tennis step1] Auto-detecting tennis league_id (first page each)...")
+        for lid in candidates:
+            try:
+                time.sleep(2.75)
+                data, inc = nba.fetch_projections(
+                    league_id=lid,
+                    per_page=args.per_page,
+                    max_pages=1,
+                    retries=args.retries,
+                )
+                rows = build_tennis_rows(data, inc, nba)
+                df_try = pd.DataFrame(rows)
+                sc = _tennis_league_score(df_try)
+                print(f"  league_id={lid}  rows={len(df_try)}  tennis_score={sc:.1f}")
+                if sc > best_score and len(df_try) > 0:
+                    best_score = sc
+                    best_id = lid
+            except Exception as e:
+                print(f"  league_id={lid}  ERROR: {e}")
+        if not best_id:
+            print("[Tennis step1] ERROR: Could not find a league_id with projections.")
+            pd.DataFrame().to_csv(out_path, index=False)
+            sys.exit(1)
+        use_id = best_id
+        print(f"[Tennis step1] Using league_id={use_id} (best tennis_score={best_score:.1f})")
+    else:
+        use_id = str(args.league_id).strip()
+
+    try:
+        data, included = nba.fetch_projections(
+            league_id=use_id,
+            per_page=args.per_page,
+            max_pages=args.max_pages,
+            retries=args.retries,
+        )
+    except Exception as e:
+        print(f"[Tennis step1] Fetch failed: {e}")
+        sys.exit(1)
+
+    if not data:
+        print("[Tennis step1] No projections returned.")
+        sys.exit(1)
+
+    rows = build_tennis_rows(data, included, nba)
     df = pd.DataFrame(rows).fillna("")
-    df["line"] = pd.to_numeric(df["line"], errors="coerce")
+    for col in ("line", "line_score", "standard_line", "goblin_line", "demon_line"):
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+    _mstd = df["pick_type"].astype(str).str.lower().eq("standard")
+    df.loc[_mstd, "standard_line"] = df.loc[_mstd, "standard_line"].fillna(df.loc[_mstd, "line_score"])
 
     before = len(df)
     df = df.drop_duplicates(subset=["projection_id"], keep="first").reset_index(drop=True)
-    after = len(df)
-    if before != after:
-        print(f"  Deduped: {before} → {after}")
+    if before != len(df):
+        print(f"  Deduped: {before} → {len(df)}")
 
-    df.to_csv(args.output, index=False, encoding="utf-8-sig")
+    preferred = [
+        "projection_id",
+        "player_name",
+        "team",
+        "prop_type",
+        "line_score",
+        "start_time",
+        "sport",
+        "league",
+        "pick_type",
+        "standard_line",
+        "goblin_line",
+        "demon_line",
+        "pp_projection_id",
+        "player_id",
+        "pp_game_id",
+        "player",
+        "line",
+        "pos",
+        "opp_team",
+        "pp_home_team",
+        "pp_away_team",
+        "image_url",
+        "tournament",
+    ]
+    extra = [c for c in df.columns if c not in preferred]
+    df = df[preferred + extra]
 
-    rows_n  = len(df)
-    teams_n = df["team"].astype(str).nunique()
-    print(f"✅ Saved → {args.output}  rows={rows_n}  teams={teams_n}")
+    n_rows = len(df)
+    n_teams = df["team"].astype(str).replace("", pd.NA).dropna().nunique()
+    n_players = df["player"].astype(str).replace("", pd.NA).dropna().nunique()
+    print(f"[Tennis step1] Fetched {n_rows} props | tournaments/teams={n_teams} | players={n_players}")
 
-    if rows_n < args.min_rows or teams_n < args.min_teams:
-        print(f"⛔ BOARD_TOO_SMALL (need min_rows={args.min_rows}, min_teams={args.min_teams})")
-    else:
-        print("✅ BOARD_OK")
+    if n_rows < args.min_rows or n_teams < args.min_teams:
+        print(
+            f"[Tennis step1] BOARD_TOO_SMALL (min_rows={args.min_rows}, min_teams={args.min_teams}) — writing CSV and exiting 1"
+        )
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        df.to_csv(out_path, index=False, encoding="utf-8-sig")
+        sys.exit(1)
+
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    if out_path.is_file() and not args.replace:
+        try:
+            old = pd.read_csv(out_path, encoding="utf-8-sig")
+            for c in df.columns:
+                if c not in old.columns:
+                    old[c] = ""
+            for c in old.columns:
+                if c not in df.columns:
+                    df[c] = ""
+            old = old[df.columns]
+            new_ids = set(df["projection_id"].astype(str).str.strip())
+            kept = old[~old["projection_id"].astype(str).str.strip().isin(new_ids)]
+            df = pd.concat([df, kept], ignore_index=True)
+            print(f"[Tennis step1] Merged with prior file → {len(df)} total rows")
+        except Exception as e:
+            print(f"  [WARN] merge skipped: {e}")
+
+    df.to_csv(out_path, index=False, encoding="utf-8-sig")
+    print(f"[Tennis step1] Saved → {out_path}")
+    print("[Tennis step1] BOARD_OK")
 
 
 if __name__ == "__main__":

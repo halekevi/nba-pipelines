@@ -15,7 +15,12 @@ Run:
 from __future__ import annotations
 
 import argparse
+import datetime as _dt
+import shutil
 import sys
+import zoneinfo
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 from openpyxl import Workbook
@@ -236,6 +241,7 @@ def main() -> None:
     ap.add_argument("--date",   default="", help="YYYY-MM-DD target date (default: today ET)")
     args = ap.parse_args()
 
+    print("[Tennis step8] Starting...")
     print(f"Loading: {args.input} (sheet={args.sheet})")
     df  = pd.read_excel(args.input, sheet_name=args.sheet, dtype=str).fillna("")
 
@@ -244,10 +250,9 @@ def main() -> None:
         sys.exit(1)
 
     # ── Date filter: keep only target date's games ───────────────────────────
-    import datetime, zoneinfo
     eastern = zoneinfo.ZoneInfo("America/New_York")
     target_str = (args.date.strip()[:10] if args.date
-                  else datetime.datetime.now(tz=eastern).date().isoformat())
+                  else _dt.datetime.now(tz=eastern).date().isoformat())
     if "start_time" in df.columns:
         before_filter = len(df)
         def _to_et_date(val):
@@ -385,6 +390,16 @@ def main() -> None:
 
     out["final_bet_direction"] = final_dir
     out["final_dir_reason"]    = reason
+    out["direction"] = out["final_bet_direction"]
+    out["DEF_TIER"] = "N/A"
+
+    hr5b = pd.to_numeric(out.get("line_hit_rate_over_ou_5", np.nan), errors="coerce")
+    hr10b = pd.to_numeric(out.get("line_hit_rate_over_ou_10", np.nan), errors="coerce")
+    hr10b = hr10b.fillna(hr5b)
+    comp_hr = (0.5 * hr5b.fillna(0.5) + 0.5 * hr10b.fillna(0.5)).clip(0.0, 1.0)
+    out["composite_hit_rate"] = comp_hr
+    mpb = pd.to_numeric(out.get("ml_prob", np.nan), errors="coerce").fillna(0.5)
+    out["blended_score"] = (0.3 * mpb + 0.7 * comp_hr).round(4)
 
     out.to_csv(args.output, index=False, encoding="utf-8-sig")
     print(f"Saved -> {args.output}")
@@ -417,6 +432,27 @@ def main() -> None:
             print(f"Fallback xlsx saved -> {xlsx_path}")
         except Exception as e2:
             print(f"ERROR Fallback xlsx also failed: {e2}")
+
+    # Dated copy: <repo>/outputs/{date}/step8_tennis_direction_clean_{date}.xlsx
+    try:
+        eastern = zoneinfo.ZoneInfo("America/New_York")
+        slate_date = (
+            str(args.date).strip()[:10]
+            if args.date
+            else _dt.datetime.now(tz=eastern).date().isoformat()
+        )
+        repo_root = Path(__file__).resolve().parents[2]
+        dated_dir = repo_root / "outputs" / slate_date
+        dated_dir.mkdir(parents=True, exist_ok=True)
+        dated_xlsx = dated_dir / f"step8_tennis_direction_clean_{slate_date}.xlsx"
+        xp = Path(xlsx_path)
+        if not xp.is_file():
+            xp = repo_root / "Tennis" / str(xlsx_path).replace("\\", "/").lstrip("./")
+        if xp.is_file():
+            shutil.copy2(xp, dated_xlsx)
+            print(f"[Tennis step8] Dated clean workbook -> {dated_xlsx}")
+    except Exception as e:
+        print(f"[Tennis step8] WARN dated copy skipped: {e}")
 
 
 if __name__ == "__main__":

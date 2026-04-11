@@ -62,6 +62,9 @@ outputs/synthetic/preview_*.csv
 ~$*.xlsx
 ~$*.xls
 
+# Tennis local stats cache (generated)
+Tennis/data/
+
 # Generated outputs
 outputs/
 ResultFiles/

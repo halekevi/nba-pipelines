@@ -1,0 +1,156 @@
+#!/usr/bin/env python3
+"""
+tennis_grader.py — Grade tennis props from ESPN ATP/WTA completed matches.
+
+Reads slate (step8 CSV or XLSX), matches player + prop to scoreboard stats,
+writes graded_tennis_{date}.xlsx.
+"""
+
+from __future__ import annotations
+
+import argparse
+import sys
+from pathlib import Path
+
+import pandas as pd
+
+_SCRIPT_DIR = Path(__file__).resolve().parent
+_REPO_ROOT = _SCRIPT_DIR.parents[2]
+if str(_SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPT_DIR))
+from tennis_shared import iter_scoreboard_matches, norm_key, norm_tennis_prop
+
+
+def _actual_key(prop_norm: str) -> str | None:
+    m = {
+        "aces": "aces",
+        "double_faults": "double_faults",
+        "games_won": "games_won",
+        "sets_won": "sets_won",
+        "match_total_games": "match_total_games",
+    }
+    return m.get(prop_norm)
+
+
+def _load_slate(path: Path) -> pd.DataFrame:
+    if not path.is_file():
+        return pd.DataFrame()
+    if path.suffix.lower() in (".xlsx", ".xls"):
+        return pd.read_excel(path, sheet_name="ALL", engine="openpyxl", dtype=str).fillna("")
+    return pd.read_csv(path, dtype=str, encoding="utf-8-sig").fillna("")
+
+
+def _grade(direction: str, line: float, actual: float | None) -> tuple[str, str]:
+    if actual is None:
+        return "VOID", "NO_MATCH_OR_INCOMPLETE"
+    d = direction.strip().upper()
+    if d == "OVER":
+        return ("HIT", "") if actual >= line else ("MISS", "")
+    if d == "UNDER":
+        return ("HIT", "") if actual < line else ("MISS", "")
+    return "VOID", "NO_DIRECTION"
+
+
+def main() -> None:
+    print("[Tennis grader] Starting...")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--date", required=True, help="Slate date YYYY-MM-DD (UTC date on ESPN match)")
+    ap.add_argument("--output", default="", help="Output graded .xlsx path")
+    ap.add_argument("--slate", default="", help="step8 CSV or XLSX (default: Tennis outputs)")
+    args = ap.parse_args()
+
+    target = str(args.date).strip()[:10]
+    out = Path(args.output) if str(args.output).strip() else _REPO_ROOT / "outputs" / target / f"graded_tennis_{target}.xlsx"
+    if not out.is_absolute():
+        out = _REPO_ROOT / out
+    out.parent.mkdir(parents=True, exist_ok=True)
+
+    slate_path = Path(args.slate) if str(args.slate).strip() else Path()
+    if not str(args.slate).strip():
+        cands = [
+            _REPO_ROOT / "outputs" / target / f"step8_tennis_direction_clean_{target}.xlsx",
+            _REPO_ROOT / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
+            _REPO_ROOT / "Tennis" / "outputs" / "step8_tennis_direction.csv",
+        ]
+        for c in cands:
+            if c.is_file():
+                slate_path = c
+                break
+    elif not slate_path.is_absolute():
+        slate_path = _REPO_ROOT / slate_path
+
+    slate = _load_slate(slate_path)
+    if slate.empty:
+        print(f"[Tennis grader] ERROR: no slate at {slate_path}")
+        pd.DataFrame(
+            columns=["player", "prop_type", "line", "direction", "actual", "result", "notes"]
+        ).to_excel(out, sheet_name="graded", index=False)
+        sys.exit(1)
+
+    # Normalize slate columns
+    colmap = {
+        "Player": "player",
+        "Prop": "prop_type",
+        "Line": "line",
+        "Direction": "direction",
+        "final_bet_direction": "direction",
+    }
+    for a, b in colmap.items():
+        if a in slate.columns and b not in slate.columns:
+            slate[b] = slate[a]
+
+    by_player_day: dict[str, dict[str, float]] = {}
+    for tour in ("ATP", "WTA"):
+        for m in iter_scoreboard_matches(tour):
+            dt = str(m.get("match_date_utc") or "")[:10]
+            if dt != target:
+                continue
+            pk = norm_key(str(m.get("player") or ""))
+            if not pk:
+                continue
+            by_player_day[pk] = {
+                "aces": float(m.get("aces") or 0),
+                "double_faults": float(m.get("double_faults") or 0),
+                "games_won": float(m.get("games_won") or 0),
+                "sets_won": float(m.get("sets_won") or 0),
+                "match_total_games": float(m.get("match_total_games") or 0),
+            }
+
+    rows: list[dict[str, object]] = []
+    for _, r in slate.iterrows():
+        player = str(r.get("player", "")).strip()
+        pk = norm_key(player)
+        prop_raw = str(r.get("prop_type", "")).strip()
+        pnorm = norm_tennis_prop(prop_raw)
+        ak = _actual_key(pnorm)
+        direction = str(r.get("direction", r.get("final_bet_direction", ""))).strip()
+        try:
+            line = float(r.get("line", "") or r.get("Line", ""))
+        except (TypeError, ValueError):
+            line = float("nan")
+        stats = by_player_day.get(pk) if pk else None
+        actual = None
+        if stats is not None and ak:
+            actual = stats.get(ak)
+        res, note = _grade(direction, line, actual)
+        rows.append(
+            {
+                "player": player,
+                "prop_type": prop_raw,
+                "prop_norm": pnorm,
+                "line": line,
+                "direction": direction,
+                "actual": actual if actual is not None else "",
+                "result": res,
+                "notes": note or ("" if pk in by_player_day else "PLAYER_OR_DATE_NOT_FOUND"),
+            }
+        )
+
+    df = pd.DataFrame(rows)
+    with pd.ExcelWriter(out, engine="openpyxl") as w:
+        df.to_excel(w, sheet_name="graded", index=False)
+    print(f"[Tennis grader] Saved -> {out}  rows={len(df)}")
+
+
+if __name__ == "__main__":
+    main()

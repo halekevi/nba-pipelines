@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tennis step5 — same hit-rate logic as soccer (stat_g vs line)."""
+"""Tennis step5 — line vs last games (L5/L10) hit rates (same pattern as soccer/NHL)."""
 
 from __future__ import annotations
 
@@ -48,6 +48,7 @@ def _ensure_cols(df: pd.DataFrame, cols: List[str]) -> None:
 
 
 def main() -> None:
+    print("[Tennis step5] Starting...")
     root = Path(__file__).resolve().parent.parent
     ap = argparse.ArgumentParser()
     ap.add_argument("--input", default="outputs/step4_tennis_with_stats.csv")
@@ -63,11 +64,9 @@ def main() -> None:
     if not out.is_absolute():
         out = root / out
 
-    print(f"→ Loading: {inp}")
     df = pd.read_csv(inp, low_memory=False, encoding="utf-8-sig").copy()
-
     if df.empty:
-        print("ERROR [Tennis-S5] empty input")
+        print("ERROR [Tennis step5] empty input")
         sys.exit(1)
 
     if args.line_col not in df.columns:
@@ -150,8 +149,7 @@ def main() -> None:
 
     out.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(out, index=False, encoding="utf-8-sig")
-    filled = int(pd.to_numeric(df["line_hit_rate_over_ou_5"], errors="coerce").notna().sum())
-    print(f"OK [Tennis-S5] -> {out}  rows={len(df)}  filled_hr5={filled}")
+    print(f"OK [Tennis step5] -> {out}  rows={len(df)}")
 
 
 if __name__ == "__main__":

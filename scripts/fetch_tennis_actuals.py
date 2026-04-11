@@ -41,6 +41,9 @@ def main() -> None:
                 continue
             gw = float(m.get("games_won") or 0)
             mt = float(m.get("match_total_games") or 0)
+            ac = float(m.get("aces") or 0)
+            df = float(m.get("double_faults") or 0)
+            sw = float(m.get("sets_won") or 0)
             rows.append(
                 {
                     "player": pl,
@@ -55,6 +58,30 @@ def main() -> None:
                     "team": "",
                     "prop_type": "match_total_games",
                     "actual": mt,
+                }
+            )
+            rows.append(
+                {
+                    "player": pl,
+                    "team": "",
+                    "prop_type": "aces",
+                    "actual": ac,
+                }
+            )
+            rows.append(
+                {
+                    "player": pl,
+                    "team": "",
+                    "prop_type": "double faults",
+                    "actual": df,
+                }
+            )
+            rows.append(
+                {
+                    "player": pl,
+                    "team": "",
+                    "prop_type": "sets won",
+                    "actual": sw,
                 }
             )
 
