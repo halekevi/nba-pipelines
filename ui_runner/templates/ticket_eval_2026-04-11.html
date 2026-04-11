@@ -25,34 +25,6 @@ body.ticket-eval-page{
   --gold2: #d4a017;
   --pending: #888;
 }
-.te-back-nav{
-  position:relative;
-  z-index:2;
-  max-width:min(1520px,96vw);
-  margin:0 auto 10px;
-  padding:6px clamp(14px,2.5vw,32px) 10px;
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  gap:10px 18px;
-  border-bottom:1px solid var(--border, rgba(255,255,255,0.08));
-  font-size:13px;
-}
-.te-back-link{
-  color:var(--cyan, #00e5ff);
-  font-weight:600;
-  text-decoration:none;
-}
-.te-back-link:hover{text-decoration:underline;}
-.te-date{
-  color:var(--muted, rgba(255,255,255,0.45));
-  font-variant-numeric:tabular-nums;
-  letter-spacing:0.02em;
-}
-.te-prop-link{margin-left:auto;}
-@media(max-width:768px){
-  .te-prop-link{margin-left:0;}
-}
 :is([data-theme='light'], html.light-theme) .ticket-bucket{
   background:rgba(255,255,255,0.52);
   border-color:rgba(0,0,0,0.1);
@@ -64,7 +36,7 @@ body.ticket-eval-page{
 
 h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .bebas{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
-.stats-bar{position:-webkit-sticky;position:sticky;top:88px;z-index:175;margin:0 auto 18px;width:100%;max-width:min(1520px,96vw);padding:18px clamp(16px,2.5vw,32px);transition:top .28s ease,box-shadow .22s ease;background:linear-gradient(180deg,rgba(10,10,18,.92),rgba(8,8,14,.88)),var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--glass-bd);border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.35);}
+.stats-bar{position:-webkit-sticky;position:sticky;top:72px;z-index:175;margin:0 auto 12px;width:100%;max-width:min(1520px,96vw);padding:14px clamp(16px,2.5vw,28px);transition:top .28s ease,box-shadow .22s ease;background:linear-gradient(180deg,rgba(10,10,18,.92),rgba(8,8,14,.88)),var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--glass-bd);border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.35);}
 .sum-row{display:flex;flex-wrap:wrap;gap:18px 36px;align-items:center;justify-content:center;}
 .sum-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:88px;}
 .sum-val{font-family:'Share Tech Mono',monospace;font-size:clamp(22px,2.6vw,30px);font-weight:700;color:var(--gold);text-shadow:0 0 20px rgba(240,165,0,.25);}
@@ -142,7 +114,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .slate-kicker{font-family:'Share Tech Mono',monospace;font-size:clamp(11px,1.2vw,13px);letter-spacing:3px;color:var(--muted);margin-bottom:10px;}
 .pl-hit,.pl-pend{font-size:1em;font-weight:600;}
 .warning-chip{display:inline-flex;align-items:center;margin-left:8px;padding:2px 8px;border-radius:999px;border:1px solid rgba(240,165,0,.4);background:rgba(240,165,0,.12);color:#ffd87a;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.6px;cursor:help;}
-.grade-eval-summary{max-width:min(1520px,96vw);margin:12px auto 0;padding:14px 18px;border-radius:16px;border:1px solid var(--glass-bd);background:rgba(0,0,0,.22);font-family:'Share Tech Mono',monospace;font-size:13px;line-height:1.55;color:var(--text);}
+.grade-eval-summary{max-width:min(1520px,96vw);margin:2px auto 0;padding:10px 16px;border-radius:16px;border:1px solid var(--glass-bd);background:rgba(0,0,0,.22);font-family:'Share Tech Mono',monospace;font-size:13px;line-height:1.55;color:var(--text);}
 .grade-eval-summary-empty{color:var(--muted);font-size:12px;}
 .grade-eval-summary-line1{font-weight:700;color:var(--gold);margin-bottom:6px;}
 .grade-eval-summary-line2{display:flex;flex-wrap:wrap;gap:12px 22px;margin-bottom:4px;}
@@ -210,7 +182,6 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
   <a href="/dashboard/income" class="">📈 Income</a>
   <a href="/payout" class="">💰 Payouts</a>
 </div>
-<div class="te-back-nav"><a href="/grades" class="te-back-link">← Grades hub</a><span class="te-date">2026-04-11</span><a href="/grades/props/2026-04-11" class="te-back-link te-prop-link">Raw prop grades →</a></div>
 <div class="grade-eval-summary grade-eval-summary-empty"><div>Date: 2026-04-11 · No fully graded tickets for payout summary (ungraded, all-void, or none).</div></div>
 <div class="stats-bar">
 <div class="sum-row">
