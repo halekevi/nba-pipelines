@@ -38,10 +38,12 @@ from zoneinfo import ZoneInfo
 
 from flask import (
     Flask,
+    Response,
     abort,
     current_app,
     jsonify,
     make_response,
+    redirect,
     render_template,
     request,
     send_from_directory,
@@ -100,6 +102,11 @@ app = Flask(
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
 _UI_BUILD_ID = "2026-04-12-grades-toolbar-type-down-2"
+
+
+def _deploy_git_sha_short() -> str:
+    return (os.environ.get("RAILWAY_GIT_COMMIT_SHA") or os.environ.get("GIT_COMMIT") or "").strip()[:40]
+
 
 # ── Response compression + static caching ─────────────────────────────────────
 _COMPRESSIBLE = ("text/", "application/json", "application/javascript")
@@ -933,13 +940,192 @@ def api_payout_rate_cards():
     return r
 
 
-@app.get("/grades")
-def page_grades():
-    r = make_response(render_template("indexGrades.html"))
+_GRADED_PROPS_JSON_NAME_RE = re.compile(r"^graded_props_(\d{4}-\d{2}-\d{2})\.json\Z")
+
+
+def _graded_props_json_dates_sorted() -> list[str]:
+    """Dates (YYYY-MM-DD) with a graded_props_*.json under templates/ or templates/archive/."""
+    found: set[str] = set()
+    for base in (TEMPLATES_DIR, ARCHIVE_DIR):
+        if not base.is_dir():
+            continue
+        for p in base.glob("graded_props_*.json"):
+            m = _GRADED_PROPS_JSON_NAME_RE.match(p.name)
+            if m:
+                found.add(m.group(1))
+    return sorted(found)
+
+
+def _graded_props_json_path_for_date(date_str: str) -> Path | None:
+    fname = f"graded_props_{date_str}.json"
+    for base in (TEMPLATES_DIR, ARCHIVE_DIR):
+        if not base.is_dir():
+            continue
+        cand = base / fname
+        if cand.is_file():
+            return cand
+    return None
+
+
+def _grades_json_page_context(date_str: str, data: dict[str, Any]) -> dict[str, Any]:
+    """Template context for grades.html from graded_props JSON (date, count, props)."""
+    props_in = [p for p in (data.get("props") or []) if isinstance(p, dict)]
+    pref = ("NBA", "NBA1H", "NBA1Q", "CBB", "WCBB", "NHL", "MLB", "SOCCER", "TENNIS")
+    by_sport: dict[str, list[dict[str, Any]]] = {}
+    for p in props_in:
+        sk = str(p.get("sport") or "—").strip() or "—"
+        by_sport.setdefault(sk, []).append(p)
+
+    def sport_key(k: str) -> tuple:
+        u = k.upper()
+        if u in pref:
+            return (0, pref.index(u), k)
+        return (1, u, k)
+
+    sport_keys = sorted(by_sport.keys(), key=sport_key)
+    by_sections: list[tuple[str, list[dict[str, Any]]]] = [(k, by_sport[k]) for k in sport_keys]
+
+    n_total = len(props_in)
+    n_hit = sum(1 for p in props_in if str(p.get("result") or "").upper() == "HIT")
+    n_miss = sum(1 for p in props_in if str(p.get("result") or "").upper() == "MISS")
+    n_void = sum(1 for p in props_in if str(p.get("result") or "").upper() == "VOID")
+    n_other = max(0, n_total - n_hit - n_miss - n_void)
+    hit_rate = round(100.0 * n_hit / n_total, 2) if n_total else 0.0
+
+    sport_summary: list[dict[str, Any]] = []
+    for sk, rows in by_sections:
+        nh = sum(1 for r in rows if str(r.get("result") or "").upper() == "HIT")
+        sport_summary.append(
+            {
+                "sport": sk,
+                "n": len(rows),
+                "hits": nh,
+                "hit_rate": round(100.0 * nh / len(rows), 1) if rows else 0.0,
+            }
+        )
+
+    return {
+        "date": date_str,
+        "graded_data": data,
+        "props": props_in,
+        "by_sport": by_sections,
+        "sport_summary": sport_summary,
+        "n_total": n_total,
+        "n_hit": n_hit,
+        "n_miss": n_miss,
+        "n_void": n_void,
+        "n_other": n_other,
+        "hit_rate": hit_rate,
+        "json_count": int(data.get("count") or 0) or n_total,
+    }
+
+
+def _grades_html_response(template: str, **kwargs: Any) -> Response:
+    r = make_response(
+        render_template(
+            template,
+            ui_build_id=_UI_BUILD_ID,
+            deploy_git_sha=_deploy_git_sha_short(),
+            **kwargs,
+        )
+    )
     r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
     r.headers["Pragma"] = "no-cache"
     r.headers["Expires"] = "0"
     return r
+
+
+@app.get("/grades/hub")
+def page_grades_hub():
+    """Full Grades SPA ( slate / ticket iframes ); needs slate_eval / ticket_eval HTML for every tab."""
+    return _grades_html_response("indexGrades.html")
+
+
+@app.get("/grades")
+def page_grades():
+    """Redirect to newest graded_props_*.json date, or explain when none exist."""
+    dates = _graded_props_json_dates_sorted()
+    if not dates:
+        return _grades_html_response(
+            "grades.html",
+            nav_active="grades",
+            error="No graded_props JSON on this server. Run scripts/run_grader.ps1 locally, then commit ui_runner/templates/graded_props_YYYY-MM-DD.json and redeploy.",
+            available_dates=[],
+            date=None,
+            graded_data=None,
+            by_sport=[],
+            sport_summary=[],
+            n_total=0,
+            n_hit=0,
+            n_miss=0,
+            n_void=0,
+            n_other=0,
+            hit_rate=0.0,
+            json_count=0,
+        )
+    return redirect(f"/grades/{dates[-1]}", code=302)
+
+
+@app.get("/grades/<date_str>")
+def page_grades_json_date(date_str: str):
+    """HTML grid of graded props from graded_props_YYYY-MM-DD.json (Railway-friendly)."""
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date_str):
+        abort(404)
+    avail = _graded_props_json_dates_sorted()
+    path = _graded_props_json_path_for_date(date_str)
+    if path is None:
+        r = _grades_html_response(
+            "grades.html",
+            nav_active="grades",
+            error=f"No grades JSON found for {date_str}.",
+            available_dates=avail,
+            date=date_str,
+            graded_data=None,
+            by_sport=[],
+            sport_summary=[],
+            n_total=0,
+            n_hit=0,
+            n_miss=0,
+            n_void=0,
+            n_other=0,
+            hit_rate=0.0,
+            json_count=0,
+        )
+        r.status_code = 404
+        return r
+    try:
+        raw = path.read_text(encoding="utf-8-sig")
+        data = json.loads(raw)
+    except Exception as exc:
+        r = _grades_html_response(
+            "grades.html",
+            nav_active="grades",
+            error=f"Could not read grades JSON: {exc}",
+            available_dates=avail,
+            date=date_str,
+            graded_data=None,
+            by_sport=[],
+            sport_summary=[],
+            n_total=0,
+            n_hit=0,
+            n_miss=0,
+            n_void=0,
+            n_other=0,
+            hit_rate=0.0,
+            json_count=0,
+        )
+        r.status_code = 500
+        return r
+    if not isinstance(data, dict):
+        abort(500)
+    ctx = _grades_json_page_context(date_str, data)
+    return _grades_html_response(
+        "grades.html",
+        nav_active="grades",
+        error=None,
+        available_dates=avail,
+        **ctx,
+    )
 
 
 @app.route("/grades/slate_eval_<date>.html", methods=("GET", "HEAD"))

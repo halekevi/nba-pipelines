@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-ui-build="{{ ui_build_id|default('', true) }}" data-deploy-sha="{{ deploy_git_sha|default('', true) }}">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#050505"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="proporacle-build" content="{{ ui_build_id|default('', true) }}"/>
+<meta property="og:title" content="PropOracle — Grades{% if date %} {{ date }}{% endif %}"/>
+<title>PropOracle — Grades{% if date %} {{ date }}{% endif %}</title>
+<link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260404d"/>
+<link rel="stylesheet" href="/static/site-nav-unified.css?v=20260408"/>
+<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260406"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260406"/>
+<link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
+<style>
+.grades-json-wrap{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 18px 48px;}
+.grades-json-head{margin:0 0 1rem;font-family:'Inter',sans-serif;font-size:clamp(1.25rem,2.5vw,1.75rem);font-weight:700;color:var(--text-primary, #fff);}
+.grades-json-sub{color:var(--muted, rgba(255,255,255,.5));font-size:13px;margin-bottom:1.25rem;line-height:1.5;}
+.grades-alert{background:rgba(255,77,77,.1);border:1px solid rgba(255,120,120,.35);color:#ffb4b4;border-radius:12px;padding:14px 16px;margin-bottom:1rem;font-size:14px;}
+.grades-pills{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 20px;}
+.grades-pills a{display:inline-block;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;text-decoration:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--cyan, #7fc7d9);}
+.grades-pills a:hover{background:rgba(212,175,55,.12);border-color:rgba(212,175,55,.35);color:var(--accent-gold, #d4af37);}
+.grades-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:1.25rem;}
+.grades-kpi{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;}
+.grades-kpi .lbl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2, rgba(255,255,255,.35));margin-bottom:4px;}
+.grades-kpi .val{font-size:1.35rem;font-weight:700;color:var(--text-primary, #fff);}
+.grades-kpi .val.hit{color:#9fd8a7;}
+.grades-kpi .val.miss{color:#d07a78;}
+.grades-kpi .val.void{color:#a8a8b8;}
+.sport-block{margin-bottom:1.75rem;border:1px solid rgba(255,255,255,.1);border-radius:14px;overflow:hidden;background:rgba(12,12,22,.5);}
+.sport-block h3{margin:0;padding:12px 16px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.08);color:var(--accent-gold, #d4af37);}
+.grades-table-wrap{overflow:auto;max-height:min(70vh,720px);}
+.grades-table{width:100%;border-collapse:collapse;font-size:12px;font-family:'Inter',sans-serif;}
+.grades-table th,.grades-table td{padding:8px 10px;text-align:left;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top;}
+.grades-table th{position:sticky;top:0;background:rgba(10,10,18,.95);z-index:1;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted, rgba(255,255,255,.45));}
+.grades-table tr:hover td{background:rgba(255,255,255,.02);}
+.ri{font-size:14px;display:inline-block;min-width:1.25em;}
+.ri.hit{color:#9fd8a7;}
+.ri.miss{color:#ff6b6b;}
+.ri.void{color:#a8a8b8;}
+.grades-foot{margin-top:2rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--muted, rgba(255,255,255,.45));}
+.grades-foot a{color:var(--cyan, #7fc7d9);}
+</style>
+</head>
+<body>
+<div class="orb-1" style="position:fixed;top:-12%;left:-6%;width:520px;height:520px;background:radial-gradient(circle,rgba(127,199,217,0.14) 0%,transparent 70%);filter:blur(100px);z-index:0;pointer-events:none;"></div>
+<div class="mesh-bg" aria-hidden="true"></div>
+<div class="grain-layer" aria-hidden="true"></div>
+{% set nav_active = 'grades' %}
+{% include '_site_nav.html' %}
+
+<div class="grades-json-wrap">
+  <h1 class="grades-json-head">Grades{% if date %} — {{ date }}{% endif %}</h1>
+  <p class="grades-json-sub">
+    Deployed view from <code>graded_props_{{ date or 'YYYY-MM-DD' }}.json</code>.
+    <a href="/grades/hub">Open full Grades hub</a> (slate / ticket iframes; needs extra HTML in the repo).
+  </p>
+
+  {% if error %}
+  <div class="grades-alert">{{ error }}</div>
+  {% endif %}
+
+  {% if available_dates and available_dates|length > 0 %}
+  <div class="grades-pills" aria-label="Available grade dates">
+    {% for d in available_dates %}
+    <a href="/grades/{{ d }}">{{ d }}</a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if not error and date and graded_data is not none %}
+  <div class="grades-summary">
+    <div class="grades-kpi"><div class="lbl">Total props</div><div class="val">{{ n_total }}</div></div>
+    <div class="grades-kpi"><div class="lbl">Hit rate</div><div class="val">{{ hit_rate }}%</div></div>
+    <div class="grades-kpi"><div class="lbl">Hits</div><div class="val hit">{{ n_hit }}</div></div>
+    <div class="grades-kpi"><div class="lbl">Misses</div><div class="val miss">{{ n_miss }}</div></div>
+    <div class="grades-kpi"><div class="lbl">Voids</div><div class="val void">{{ n_void }}</div></div>
+    {% if n_other > 0 %}
+    <div class="grades-kpi"><div class="lbl">Other / pending</div><div class="val">{{ n_other }}</div></div>
+    {% endif %}
+  </div>
+
+  {% if sport_summary %}
+  <div class="grades-summary" style="margin-bottom:1.5rem;">
+    {% for s in sport_summary %}
+    <div class="grades-kpi">
+      <div class="lbl">{{ s.sport }}</div>
+      <div class="val">{{ s.n }} props · {{ s.hit_rate }}%</div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% for sport, rows in by_sport %}
+  <section class="sport-block">
+    <h3>{{ sport }} <span style="font-weight:500;color:var(--muted);">({{ rows|length }})</span></h3>
+    <div class="grades-table-wrap">
+      <table class="grades-table">
+        <thead><tr>
+          <th style="width:2.5em;"></th>
+          <th>Player</th>
+          <th>Prop</th>
+          <th>Line</th>
+          <th>Dir</th>
+          <th>Actual</th>
+          <th>Margin</th>
+          <th>Type</th>
+          <th>Tier</th>
+        </tr></thead>
+        <tbody>
+        {% for p in rows %}
+          {% set R = (p.get('result') or '')|upper %}
+          <tr>
+            <td>
+              {% if R == 'HIT' %}<span class="ri hit" title="Hit">✅</span>
+              {% elif R == 'MISS' %}<span class="ri miss" title="Miss">❌</span>
+              {% elif R == 'VOID' %}<span class="ri void" title="Void">⊘</span>
+              {% else %}<span class="ri void" title="{{ p.get('result') or '—' }}">{{ (p.get('result') or '—')[:8] }}</span>
+              {% endif %}
+            </td>
+            <td>{{ p.get('player') or '—' }}</td>
+            <td>{{ p.get('prop') or '—' }}</td>
+            <td>{{ p.get('line') if p.get('line') is not none else '—' }}</td>
+            <td>{{ p.get('direction') or '—' }}</td>
+            <td>{{ p.get('actual_value') if p.get('actual_value') is not none else '—' }}</td>
+            <td>{{ p.get('margin') if p.get('margin') is not none else '—' }}</td>
+            <td>{{ p.get('pick_type') or '—' }}</td>
+            <td>{{ p.get('tier') or '—' }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  {% endfor %}
+  {% endif %}
+
+  <div class="grades-foot">
+    Build <code>{{ ui_build_id|default('', true) }}</code>
+    {% if deploy_git_sha %} · deploy <code>{{ deploy_git_sha }}</code>{% endif %}
+  </div>
+</div>
+
+<script src="/static/site-nav-chrome.js?v=20260408"></script>
+</body>
+</html>

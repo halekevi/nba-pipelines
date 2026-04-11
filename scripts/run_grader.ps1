@@ -480,6 +480,32 @@ else {
     Write-Host "Skipping graded props JSON build (backfill_graded_props_json.py not found)." -ForegroundColor Yellow
 }
 
+# Publish graded_props JSON so Railway can serve /grades/<date> (set PROPORACLE_SKIP_GRADES_GIT_PUSH=1 to skip).
+if ($env:PROPORACLE_SKIP_GRADES_GIT_PUSH -ne "1") {
+    $GpJson = Join-Path $TemplatesDir "graded_props_$Date.json"
+    if (Test-Path $GpJson) {
+        Push-Location $Root
+        try {
+            $env:GIT_TERMINAL_PROMPT = "0"
+            $gpRel = "ui_runner/templates/graded_props_$Date.json"
+            git add -- $gpRel 2>$null | Out-Null
+            git diff --cached --quiet
+            if ($LASTEXITCODE -ne 0) {
+                git commit -m "data: graded props $Date"
+                if ($LASTEXITCODE -eq 0) {
+                    git push origin HEAD 2>$null
+                }
+            }
+        }
+        catch {
+            Write-Warning "Graded props git publish skipped: $_"
+        }
+        finally {
+            Pop-Location
+        }
+    }
+}
+
 # =============================
 # Backfill MyTicketPerformance entry_legs using cached historical actuals
 # =============================
