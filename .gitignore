@@ -70,13 +70,20 @@ ResultFiles/
 grades/
 models/
 
-# Generated html/json artifacts if you don't want tracked
-# Uncomment these if they should stay local only
-# ui_runner/templates/slate_eval_*.html
-# ui_runner/templates/ticket_eval_*.html
-# ui_runner/templates/tickets_latest.json
-# ui_runner/templates/slate_latest.json
-# ui_runner/docs/tickets_latest.json
+# Generated UI templates / JSON (pipeline & ticket eval — keep local only)
+ui_runner/templates/tickets_latest.json
+ui_runner/templates/slate_latest.json
+ui_runner/templates/ticket_eval_*.html
+ui_runner/templates/ticket_eval_latest.html
+# ui_runner/templates/slate_eval_*.html  # optional: often committed for deploy/CDN
+
+# Grade / payout logs (generated)
+data/grade_history.json
+data/payout_samples/payout_log_*.csv
+
+# Soccer ID tooling outputs (under Soccer/outputs/; also listed explicitly if outputs rules change)
+Soccer/outputs/unmatched_soccer_players_*.csv
+Soccer/outputs/soccer_id_batch_resolve_log.csv
 
 # Build artifacts
 build/
