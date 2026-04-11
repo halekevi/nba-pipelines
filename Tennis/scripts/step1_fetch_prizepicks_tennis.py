@@ -7,12 +7,14 @@ tennis-like prop names vs NBA stat noise.
 
 Run:
   py -3.14 Tennis/scripts/step1_fetch_prizepicks_tennis.py
+  py -3.14 Tennis/scripts/step1_fetch_prizepicks_tennis.py --list-leagues
 """
 
 from __future__ import annotations
 
 import argparse
 import importlib.util
+import random
 import re
 import sys
 import time
@@ -20,6 +22,7 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
+import requests
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
@@ -27,6 +30,72 @@ except Exception:
     pass
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+
+LEAGUES_URL = "https://api.prizepicks.com/leagues"
+
+
+def _leagues_request_headers() -> dict[str, str]:
+    return {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+        ),
+        "Accept": "application/json, text/plain, */*",
+        "Referer": "https://app.prizepicks.com/",
+        "Origin": "https://app.prizepicks.com",
+    }
+
+
+def list_leagues_and_print(*, retries: int = 5) -> None:
+    """GET /leagues and print id + name; exit process on failure."""
+    last_exc: Exception | None = None
+    payload: dict[str, Any] | None = None
+    for attempt in range(1, retries + 1):
+        try:
+            if attempt > 1:
+                time.sleep(random.uniform(2.0, 5.0))
+            r = requests.get(LEAGUES_URL, headers=_leagues_request_headers(), timeout=(10.0, 45.0))
+            if r.status_code == 429:
+                wait = random.uniform(45.0, 95.0)
+                print(f"  [429] Rate limited — waiting {wait:.0f}s (attempt {attempt}/{retries})")
+                time.sleep(wait)
+                continue
+            r.raise_for_status()
+            payload = r.json()
+            break
+        except Exception as e:
+            last_exc = e
+            time.sleep(min(30.0, (2 ** (attempt - 1)) * 2.0) + random.uniform(0.5, 2.0))
+    if not payload:
+        print(f"[Tennis step1] list-leagues failed: {last_exc}")
+        sys.exit(1)
+
+    rows: list[tuple[str, str]] = []
+    for o in payload.get("data") or []:
+        if not isinstance(o, dict):
+            continue
+        lid = str(o.get("id", "")).strip()
+        attr = o.get("attributes") or {}
+        name = str(attr.get("name") or attr.get("abbr") or "").strip() or "(no name)"
+        if lid:
+            rows.append((lid, name))
+
+    def _sort_key(t: tuple[str, str]) -> tuple[int, int, str, str]:
+        lid, name = t
+        try:
+            return (0, int(lid), name.lower(), lid)
+        except ValueError:
+            return (1, 0, name.lower(), lid)
+
+    rows.sort(key=_sort_key)
+
+    print("[Tennis step1] PrizePicks leagues (from GET /leagues)")
+    print(f"{'ID':<8} | Name")
+    print("-" * 56)
+    for lid, name in rows:
+        print(f"{lid:<8} | {name}")
+    print("-" * 56)
+    print(f"Total: {len(rows)} leagues")
 
 
 def _load_nba_step1():
@@ -215,8 +284,12 @@ def build_tennis_rows(data: list[dict], included: list[dict], nba_mod: Any) -> l
 
 
 def main() -> None:
-    print("[Tennis step1] Starting...")
     ap = argparse.ArgumentParser()
+    ap.add_argument(
+        "--list-leagues",
+        action="store_true",
+        help="Fetch api.prizepicks.com/leagues, print ID | Name, then exit (no projections fetch).",
+    )
     ap.add_argument("--output", default="outputs/step1_tennis_props.csv")
     ap.add_argument(
         "--league_id",
@@ -231,6 +304,12 @@ def main() -> None:
     ap.add_argument("--replace", action="store_true", help="Do not merge with existing output")
     args = ap.parse_args()
 
+    if args.list_leagues:
+        print("[Tennis step1] Starting...")
+        list_leagues_and_print(retries=args.retries)
+        return
+
+    print("[Tennis step1] Starting...")
     nba = _load_nba_step1()
 
     root = Path(__file__).resolve().parent.parent
