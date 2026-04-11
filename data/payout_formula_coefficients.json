@@ -1,0 +1,20 @@
+{
+  "goblin_discount_per_unit": 0.110,
+  "demon_power_coeff": 0.1782,
+  "demon_power_exp": 1.287,
+  "model_type": "multiplicative_per_leg_power_law_demon",
+  "fitted_from": "manual_observations",
+  "n_observations": 13,
+  "fitted_at": "2026-04-10",
+  "goblin_r_squared": 0.94,
+  "demon_r_squared": 0.98,
+  "standard_lines_observed": {
+    "Jrue Holiday Points": 17.5,
+    "Darius Garland Points": 19.5,
+    "Scoot Henderson Points": 14.5
+  },
+  "base_power_payouts": {"2": 3.0, "3": 6.0, "4": 10.0, "5": 20.0, "6": 37.5},
+  "base_flex_first": {"2": 3.0, "3": 3.0, "4": 5.0, "5": 10.0, "6": 25.0},
+  "base_flex_min": {"2": 1.5, "3": 1.25, "4": 1.5, "5": 2.0, "6": 2.0},
+  "notes": "Goblin linear fit R2=0.94. Demon power law fit R2=0.98. Both multiplicative per leg. Expand with more prop types and distances."
+}

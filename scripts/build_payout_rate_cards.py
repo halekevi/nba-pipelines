@@ -111,21 +111,38 @@ def build_cards(fitted: dict | None) -> list[dict]:
     cards.append(mod_card("mod-demon-flex", "Demon — Flex multiplier factor", DEMON_FLEX))
 
     if fitted:
-        n = fitted.get("n_clean_samples")
-        fitted_at = fitted.get("fitted_at", "")
-        cards.append(
-            {
-                "id": "fitted-coefficients",
-                "category": "fitted",
-                "title": "Last fitted coefficients file",
-                "subtitle": str(COEFF_PATH.name),
-                "bullets": [
-                    f"fitted_at: {fitted_at}",
-                    f"n_clean_samples: {n}" if n is not None else "n_clean_samples: (missing)",
-                    "Re-run: python scripts/fit_payout_formula.py after collecting payout_samples.",
-                ],
-            }
-        )
+        fitted_at = str(fitted.get("fitted_at", "") or "")
+        if fitted.get("model_type") == "multiplicative_per_leg_power_law_demon":
+            cards.append(
+                {
+                    "id": "fitted-coefficients",
+                    "category": "fitted",
+                    "title": "Empirical coefficients (manual observations)",
+                    "subtitle": str(COEFF_PATH.name),
+                    "bullets": [
+                        f"fitted_at: {fitted_at}",
+                        f"n_observations: {fitted.get('n_observations', '')}",
+                        f"goblin_discount_per_unit: {fitted.get('goblin_discount_per_unit')} (R²={fitted.get('goblin_r_squared')})",
+                        f"demon: coeff={fitted.get('demon_power_coeff')} exp={fitted.get('demon_power_exp')} (R²={fitted.get('demon_r_squared')})",
+                        str(fitted.get("notes") or ""),
+                    ],
+                }
+            )
+        else:
+            n = fitted.get("n_clean_samples")
+            cards.append(
+                {
+                    "id": "fitted-coefficients",
+                    "category": "fitted",
+                    "title": "Last fitted coefficients file",
+                    "subtitle": str(COEFF_PATH.name),
+                    "bullets": [
+                        f"fitted_at: {fitted_at}",
+                        f"n_clean_samples: {n}" if n is not None else "n_clean_samples: (missing)",
+                        "Re-run: python scripts/fit_payout_formula.py after collecting payout_samples.",
+                    ],
+                }
+            )
     return cards
 
 

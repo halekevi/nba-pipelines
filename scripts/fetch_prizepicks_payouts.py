@@ -13,8 +13,9 @@ import itertools
 import json
 import math
 import re
+import sys
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -22,6 +23,10 @@ import pandas as pd
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent.parent
+_scripts = str(ROOT / "scripts")
+if _scripts not in sys.path:
+    sys.path.insert(0, _scripts)
+import combined_slate_tickets as _cst  # noqa: E402
 
 SPORT_CFG = {
     "NBA": {
@@ -51,7 +56,6 @@ SPORT_CFG = {
     },
 }
 
-BASE_PAYOUT = {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0}
 MIN_REALISTIC_HIT_PROB = 0.50
 MAX_PLAYER_EXPOSURE_IN_TOP_N = 3
 MAX_SPORT_EXPOSURE_IN_TOP_N = 8
@@ -90,6 +94,35 @@ def _to_sheet_df(path: Path) -> pd.DataFrame:
     xls = pd.ExcelFile(path)
     sheet = "ALL" if "ALL" in xls.sheet_names else xls.sheet_names[0]
     return pd.read_excel(path, sheet_name=sheet)
+
+
+def combo_to_ev_legs(combo: tuple[dict, ...]) -> list[dict]:
+    """Leg payloads for combined_slate_tickets.compute_ticket_ev (power path)."""
+    out: list[dict] = []
+    for leg in combo:
+        pt = str(leg.get("pick_type") or "standard").lower()
+        if "goblin" in pt:
+            pe = "goblin"
+        elif "demon" in pt:
+            pe = "demon"
+        else:
+            pe = "standard"
+        sl = leg.get("standard_line")
+        ln = leg.get("line")
+        dist = 0.0
+        try:
+            if sl is not None and ln is not None:
+                dist = abs(float(sl) - float(ln))
+        except (TypeError, ValueError):
+            dist = 0.0
+        out.append(
+            {
+                "pick_type": pe,
+                "line_distance": dist,
+                "hit_prob": float(leg["hit_prob"]),
+            }
+        )
+    return out
 
 
 def score_to_hit_prob(score: Any, pick_type: str) -> float:
@@ -167,6 +200,7 @@ def load_candidate_legs(sport_filter: str | None = None) -> tuple[list[dict], di
         line_col1 = find_col(df1, ["line", "line_score", "Line"])
         pick_col1 = find_col(df1, ["pick_type", "Pick Type", "PickType"])
         proj_col1 = find_col(df1, ["projection_id", "pp_projection_id", "pp_id", "Projection ID"])
+        std_col1 = find_col(df1, ["standard_line", "Standard Line", "baseline", "standard_score"])
 
         if sport in ("NHL", "MLB"):
             print(f"[PAYOUT] {sport} step1 columns: {list(df1.columns)}")
@@ -187,9 +221,17 @@ def load_candidate_legs(sport_filter: str | None = None) -> tuple[list[dict], di
                 _line_key(r.get(line_col1)),
                 _norm_text(r.get(t_col1)) if t_col1 else "",
             )
+            raw_std = r.get(std_col1) if std_col1 else None
+            std_parsed: float | None = None
+            if raw_std is not None and str(raw_std).strip() != "":
+                try:
+                    std_parsed = float(raw_std)
+                except (TypeError, ValueError):
+                    std_parsed = None
             idx[key] = {
                 "projection_id": str(r.get(proj_col1, "") or "").strip(),
                 "pick_type": str(r.get(pick_col1, "Standard") or "Standard"),
+                "standard_line": std_parsed,
             }
 
         df8f = df8.copy()
@@ -211,13 +253,10 @@ def load_candidate_legs(sport_filter: str | None = None) -> tuple[list[dict], di
             direction = str(r.get(dir_col8, "") or "").strip().upper()
             proj = str(r.get(proj_col8, "") or "").strip() if proj_col8 else ""
             ptype = str(r.get(pick_type8, "") or "").strip()
+            key_full = (_norm_text(player), _norm_text(prop), _line_key(line), _norm_text(team))
+            key_noteam = (_norm_text(player), _norm_text(prop), _line_key(line), "")
+            match = idx.get(key_full) or idx.get(key_noteam)
             if not proj:
-                key = (_norm_text(player), _norm_text(prop), _line_key(line), _norm_text(team))
-                match = idx.get(key)
-                if not match:
-                    # fallback without team
-                    key2 = (_norm_text(player), _norm_text(prop), _line_key(line), "")
-                    match = idx.get(key2)
                 if match:
                     proj = str(match.get("projection_id", "") or "").strip()
                     if not ptype:
@@ -227,17 +266,31 @@ def load_candidate_legs(sport_filter: str | None = None) -> tuple[list[dict], di
 
             raw_blend = float(r.get("__blend") or 0.0)
             hit_prob = score_to_hit_prob(raw_blend, ptype.lower() if ptype else "standard")
+            std_line_val: float | None = None
+            if match:
+                sv = match.get("standard_line")
+                if sv is not None:
+                    try:
+                        std_line_val = float(sv)
+                    except (TypeError, ValueError):
+                        std_line_val = None
+            leg_line = float(line) if str(line).strip() != "" else None
+            if std_line_val is None and leg_line is not None:
+                pl = (ptype.lower() if ptype else "standard")
+                if "standard" in pl and "goblin" not in pl and "demon" not in pl:
+                    std_line_val = leg_line
             legs.append(
                 {
                     "player": player,
                     "sport": sport,
                     "prop_type": prop,
-                    "line": float(line) if str(line).strip() != "" else None,
+                    "line": leg_line,
                     "direction": direction if direction in ("OVER", "UNDER") else "OVER",
                     "pick_type": ptype.lower() if ptype else "standard",
                     "hit_prob": hit_prob,
                     "pp_id": proj,
                     "team": team,
+                    "standard_line": std_line_val,
                 }
             )
             local_probs.append((player, raw_blend, hit_prob, ptype.lower() if ptype else "standard"))
@@ -515,7 +568,7 @@ def write_outputs(results: list[dict], date_str: str):
         groups.append({"group_name": "TOP20 Exact EV", "tickets": tickets})
 
     payload = {
-        "generated_at": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC"),
+        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
         "date": date_str,
         "groups": groups,
     }
@@ -597,8 +650,10 @@ def main():
                 p_win_est = 1.0
                 for leg in combo:
                     p_win_est *= float(leg["hit_prob"])
-                base_payout = BASE_PAYOUT[n_legs]
-                est_ev = p_win_est * base_payout - (1 - p_win_est)
+                ev_legs = combo_to_ev_legs(combo)
+                ev_pack = _cst.compute_ticket_ev(ev_legs, "power", n_legs)
+                base_payout = float(ev_pack["first_place_payout"])
+                est_ev = float(ev_pack["ev"])
                 if est_ev < min_ev:
                     skipped_low_ev += 1
                     continue
@@ -623,13 +678,11 @@ def main():
                             "n_demons": sum(1 for l in combo if "demon" in str(l["pick_type"]).lower()),
                             "p_win": round(p_win_est, 4),
                             "base_payout": base_payout,
+                            "empirical_min_g": float(ev_pack["min_guarantee"]),
+                            "empirical_adj": float(ev_pack["min_guarantee_adjustment"]),
                             "exact_multiplier": float(base_payout),
                             "true_ev": round(est_ev, 4),
-                            "recommendation": (
-                                "STRONG" if est_ev > 1.5 else
-                                "OK" if est_ev > 1.0 else
-                                "MARGINAL" if est_ev > 0.8 else "SKIP"
-                            ),
+                            "recommendation": ev_pack.get("recommendation", "SKIP"),
                             "payout_source": "estimated",
                             "correlation_flag": corr,
                         }
@@ -667,8 +720,11 @@ def main():
                         "n_demons": sum(1 for l in combo if "demon" in str(l["pick_type"]).lower()),
                         "p_win": round(p_win_est, 4),
                         "base_payout": base_payout,
+                        "empirical_min_g": float(ev_pack["min_guarantee"]),
+                        "empirical_adj": float(ev_pack["min_guarantee_adjustment"]),
                         "exact_multiplier": float(exact_multiplier),
                         "true_ev": round(true_ev, 4),
+                        "empirical_ev_prefilter": round(est_ev, 4),
                         "recommendation": (
                             "STRONG" if true_ev > 1.5 else
                             "OK" if true_ev > 1.0 else

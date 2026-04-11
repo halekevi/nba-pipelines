@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-04-10T23:58:37.829627+00:00",
+  "generated_at": "2026-04-11T00:34:25.639029+00:00",
   "reference": {
     "power_first_standard": {
       "2": 3.0,
@@ -63,29 +63,42 @@
     }
   },
   "fitted_file": {
-    "fitted_at": "2026-04-10T17:05:52.871296",
-    "base_payouts": {
+    "goblin_discount_per_unit": 0.11,
+    "demon_power_coeff": 0.1782,
+    "demon_power_exp": 1.287,
+    "model_type": "multiplicative_per_leg_power_law_demon",
+    "fitted_from": "manual_observations",
+    "n_observations": 13,
+    "fitted_at": "2026-04-10",
+    "goblin_r_squared": 0.94,
+    "demon_r_squared": 0.98,
+    "standard_lines_observed": {
+      "Jrue Holiday Points": 17.5,
+      "Darius Garland Points": 19.5,
+      "Scoot Henderson Points": 14.5
+    },
+    "base_power_payouts": {
       "2": 3.0,
       "3": 6.0,
       "4": 10.0,
       "5": 20.0,
       "6": 37.5
     },
-    "power_base_payout": {
+    "base_flex_first": {
       "2": 3.0,
-      "3": 6.0,
-      "4": 10.0,
-      "5": 20.0,
-      "6": 37.5
+      "3": 3.0,
+      "4": 5.0,
+      "5": 10.0,
+      "6": 25.0
     },
-    "flex_base_min_guarantee": {
+    "base_flex_min": {
       "2": 1.5,
       "3": 1.25,
       "4": 1.5,
       "5": 2.0,
       "6": 2.0
     },
-    "n_clean_samples": 1
+    "notes": "Goblin linear fit R2=0.94. Demon power law fit R2=0.98. Both multiplicative per leg. Expand with more prop types and distances."
   },
   "cards": [
     {
@@ -253,12 +266,14 @@
     {
       "id": "fitted-coefficients",
       "category": "fitted",
-      "title": "Last fitted coefficients file",
+      "title": "Empirical coefficients (manual observations)",
       "subtitle": "payout_formula_coefficients.json",
       "bullets": [
-        "fitted_at: 2026-04-10T17:05:52.871296",
-        "n_clean_samples: 1",
-        "Re-run: python scripts/fit_payout_formula.py after collecting payout_samples."
+        "fitted_at: 2026-04-10",
+        "n_observations: 13",
+        "goblin_discount_per_unit: 0.11 (R\u00b2=0.94)",
+        "demon: coeff=0.1782 exp=1.287 (R\u00b2=0.98)",
+        "Goblin linear fit R2=0.94. Demon power law fit R2=0.98. Both multiplicative per leg. Expand with more prop types and distances."
       ]
     }
   ]

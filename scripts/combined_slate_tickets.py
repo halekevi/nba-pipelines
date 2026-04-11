@@ -60,7 +60,7 @@ import sys
 import unicodedata
 from collections import defaultdict
 from datetime import datetime, timezone
-from typing import List, Optional
+from typing import Any, List, Optional
 
 import numpy as np
 import pandas as pd
@@ -178,6 +178,122 @@ def power_flex_payout_for_n(n_legs: int) -> tuple[float, float]:
     power = float(base["power"]) * (1.10**extra)
     flex = float(base["flex"]) * (1.08**extra)
     return round(power, 2), round(flex, 2)
+
+
+# ── Empirical Goblin/Demon payout (manual observations, April 10 2026) ───────
+# 13 data points; multiplicative per leg; line_distance = |standard - played|.
+GOBLIN_DISCOUNT_PER_UNIT = 0.110
+DEMON_POWER_COEFF = 0.1782
+DEMON_POWER_EXP = 1.287
+
+
+def compute_leg_adjustment(pick_type: str, line_distance: float) -> float:
+    """
+    Per-leg payout adjustment factor.
+
+    pick_type: 'goblin' | 'standard' | 'demon'
+    line_distance: abs(standard_line - played_line)
+
+    Standard = 1.0. Goblin < 1.0. Demon >= 1.0 (capped at 10).
+    """
+    dist = abs(float(line_distance or 0.0))
+    pt = str(pick_type or "standard").strip().lower()
+
+    if pt == "goblin":
+        return max(0.30, 1.0 - GOBLIN_DISCOUNT_PER_UNIT * dist)
+
+    if pt == "demon":
+        if dist <= 0:
+            return 1.0
+        raw = DEMON_POWER_COEFF * (dist ** DEMON_POWER_EXP)
+        return min(10.0, max(1.0, raw))
+
+    return 1.0
+
+
+def compute_min_guarantee_adjustment(legs: list) -> float:
+    """
+    Combined min_guarantee / power adjustment: product of per-leg factors.
+
+    legs: list of dicts with 'pick_type', 'line_distance'.
+    """
+    adjustment = 1.0
+    for leg in legs:
+        adjustment *= compute_leg_adjustment(
+            str(leg.get("pick_type", "standard")),
+            float(leg.get("line_distance", 0.0) or 0.0),
+        )
+    return round(adjustment, 4)
+
+
+def compute_ticket_ev(
+    legs: list,
+    ticket_type: str,
+    n_legs: int,
+) -> dict[str, Any]:
+    """
+    EV (per $1 stake style) using empirical payout formula.
+
+    Flex first place stays at standard base; Power first place scales with adj.
+    Min-guarantee / power base scales with adj for both.
+    """
+    BASE_POWER = {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 37.5}
+    BASE_FLEX_FIRST = {2: 3.0, 3: 3.0, 4: 5.0, 5: 10.0, 6: 25.0}
+    BASE_FLEX_MIN = {2: 1.5, 3: 1.25, 4: 1.5, 5: 2.0, 6: 2.0}
+
+    n = int(n_legs)
+    tt = str(ticket_type or "power").strip().lower()
+    adj = compute_min_guarantee_adjustment(legs)
+
+    if tt == "flex":
+        first_place = float(BASE_FLEX_FIRST.get(n, 3.0))
+        base_min_g = float(BASE_FLEX_MIN.get(n, 1.25))
+    else:
+        first_place = float(BASE_POWER.get(n, 6.0))
+        base_min_g = float(BASE_POWER.get(n, 6.0))
+
+    adjusted_min_g = round(base_min_g * adj, 4)
+    adjusted_first = round(first_place * adj, 4) if tt != "flex" else round(first_place, 4)
+
+    probs = [float(leg.get("hit_prob", 0.65)) for leg in legs]
+    p_all = 1.0
+    for p in probs:
+        p_all *= p
+
+    p_miss_1 = 0.0
+    if tt == "flex" and n >= 3:
+        for i in range(len(probs)):
+            term = 1.0 - probs[i]
+            for j, p in enumerate(probs):
+                if j != i:
+                    term *= p
+            p_miss_1 += term
+
+    p_lose = 1.0 - p_all - p_miss_1
+
+    if tt == "flex":
+        ev = (p_all * adjusted_first) + (p_miss_1 * adjusted_min_g) - p_lose
+    else:
+        ev = (p_all * adjusted_first) - (1.0 - p_all)
+
+    return {
+        "ev": round(ev, 4),
+        "p_all_win": round(p_all, 4),
+        "p_miss_1": round(p_miss_1, 4),
+        "p_lose": round(p_lose, 4),
+        "first_place_payout": adjusted_first,
+        "min_guarantee": adjusted_min_g,
+        "min_guarantee_adjustment": adj,
+        "ticket_type": tt,
+        "n_legs": n,
+        "recommendation": (
+            "STRONG" if ev > 1.5 else
+            "OK" if ev > 1.0 else
+            "MARGINAL" if ev > 0.8 else
+            "SKIP"
+        ),
+    }
+
 
 # Props excluded from ticket pools based on empirical hit rates below break-even
 # Blocked Shots NBA: 41.9% overall, too low for any ticket
@@ -691,6 +807,46 @@ def enrich_ticket_curve_payouts(ticket: dict, stake_unit: float = 1.0) -> None:
         ticket["est_multiplier_flex_nn"] = summ_f.get("est_mult")
         ticket["flat_multiplier_flex_nn"] = summ_f.get("flat_mult")
     ticket["using_flat_fallback"] = bool(using_fb)
+    try:
+        emp_legs: list[dict] = []
+        for r in rows:
+            rd = r if isinstance(r, dict) else dict(r)
+            pt_raw = str(rd.get("pick_type") or "Standard")
+            pll = pt_raw.lower()
+            if "goblin" in pll:
+                pt_e = "goblin"
+            elif "demon" in pll:
+                pt_e = "demon"
+            else:
+                pt_e = "standard"
+            ld = 0.0
+            try:
+                sl = rd.get("standard_line")
+                ln = rd.get("line")
+                if sl is not None and ln is not None and str(sl).strip() != "" and str(ln).strip() != "":
+                    ld = abs(float(sl) - float(ln))
+            except (TypeError, ValueError):
+                ld = 0.0
+            pr = rd.get("leg_prob_used")
+            if pr is None:
+                pr = rd.get("ml_prob")
+            try:
+                prf = float(pr)
+            except (TypeError, ValueError):
+                prf = 0.52
+            if not (0.0 < prf <= 1.0):
+                prf = 0.52
+            emp_legs.append({"pick_type": pt_e, "line_distance": ld, "hit_prob": prf})
+        flow = str(ticket.get("flow") or "power").strip().lower()
+        tt = "flex" if flow == "flex" else "power"
+        emp = compute_ticket_ev(emp_legs, tt, n)
+        ticket["empirical_ev"] = emp["ev"]
+        ticket["empirical_first_place"] = emp["first_place_payout"]
+        ticket["empirical_min_guarantee"] = emp["min_guarantee"]
+        ticket["empirical_min_guarantee_adjustment"] = emp["min_guarantee_adjustment"]
+        ticket["empirical_recommendation"] = emp["recommendation"]
+    except Exception:
+        pass
     if abs(mult_err) > 1.0:
         _log_slate.warning(
             "Ticket curve mult_error %.4f (>1.0 vs flat base): %s-leg slip",
