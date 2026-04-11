@@ -97,357 +97,105 @@ SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
     ],
 }
 
-# Shell theme for ticket_eval_*.html (tokens + background + nav match index.html).
-_TICKETS_NAV_THEME_CSS = r'''/* ── CSS Variables (matches index.html) ── */
-:root{
-  --bg-main:#050505;
-  --glass-bg:rgba(20,20,20,0.6);
-  --glass-border:rgba(212,175,55,0.15);
-  --text-primary:#ffffff;
-  --accent-gold:#d4af37;
-  --bg:#05050f;--bg2:rgba(255,255,255,0.03);--bg3:rgba(255,255,255,0.05);
-  --border:rgba(255,255,255,0.08);--bd2:rgba(255,255,255,0.14);
-  --text:rgba(255,255,255,0.92);--muted:rgba(255,255,255,0.45);--muted2:rgba(255,255,255,0.25);
-  --accent:#d4af37;--cyan:#7fc7d9;
-  --green:#9fd8a7;--amber:#c89a4a;--red:#d07a78;--purple:#8f7ab8;--blue:#7fc7d9;
-  --glass:rgba(255,255,255,0.03);
-  --glass-mid:rgba(255,255,255,0.055);
-  --glass-hi:rgba(255,255,255,0.08);
-  --glass-border:rgba(255,255,255,0.09);
-  --glass-border-hi:rgba(255,255,255,0.16);
-  --glass-shadow:0 8px 32px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.06) inset;
-  --glass-shadow-lg:0 20px 60px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.07) inset;
-  --blur:blur(22px) saturate(180%);
-  --glass-border:rgba(212,175,55,0.15);
-  --gold:#f0a500;
-  --gold2:#d4a017;
-  --pending:#666;
-  --glass-bd:var(--glass-border);
-}
-[data-theme='light']{
-  --bg-main:#f0f2f5;
-  --glass-bg:rgba(255,255,255,0.7);
-  --glass-border:rgba(255,255,255,0.4);
-  --text-primary:#1d1d1f;
-  --accent-gold:#c5a059;
-  --bg:#f0f2f5;--bg2:rgba(0,0,0,0.03);--bg3:rgba(0,0,0,0.05);
-  --border:rgba(0,0,0,0.10);--bd2:rgba(0,0,0,0.14);
-  --text:rgba(0,0,0,0.88);--muted:rgba(0,0,0,0.45);--muted2:rgba(0,0,0,0.25);
-  --accent:#c5a059;--cyan:#4a9ab5;
-  --green:#3a7d44;--amber:#a07830;--red:#a04040;--purple:#6a5a98;
-  --glass-border:rgba(0,0,0,0.12);
-}
 
-/* ── Reset ── */
-*{box-sizing:border-box;margin:0;padding:0}
-html{
-  overflow-x:hidden;
-}
+# Shared shell CSS versions — keep aligned with ui_runner/templates (e.g. grades.html).
+_TICKET_EVAL_SHELL_CSS_VER = "20260411"
+_TICKET_EVAL_NAV_UNIFIED_VER = "20260408"
+_TICKET_EVAL_NAV_MOBILE_VER = "20260411"
+_TICKET_EVAL_MOBILE_WIDTH_VER = "20260413c"
+_TICKET_EVAL_NAV_DATETIME_VER = "20260408"
+_TICKET_EVAL_NAV_CHROME_VER = "20260412"
 
-/* ── Body + deep space background (matches index.html exactly) ── */
-body{
-  font-family:'Inter',sans-serif;
-  background:var(--bg-main);
-  color:var(--text-primary);
-  min-height:100vh;
-  padding-top:0;
-  padding-bottom:80px;
-  overflow-x:hidden;
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-}
-body::before{
-  content:'';position:fixed;inset:0;
-  background:
-    radial-gradient(ellipse at 12% 8%, rgba(127,199,217,0.18) 0%, transparent 38%),
-    radial-gradient(ellipse at 88% 6%, rgba(212,175,55,0.13) 0%, transparent 36%),
-    radial-gradient(ellipse at 50% 55%, rgba(183,168,255,0.07) 0%, transparent 50%),
-    radial-gradient(ellipse at 20% 85%, rgba(212,175,55,0.06) 0%, transparent 35%),
-    radial-gradient(ellipse at 80% 80%, rgba(127,199,217,0.08) 0%, transparent 32%),
-    linear-gradient(180deg,#040404 0%,#090909 50%,#111111 100%);
-  pointer-events:none;z-index:0;
-}
-body::after{
-  content:'';position:fixed;inset:0;
-  background-image:
-    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.5) 0%, transparent 100%),
-    radial-gradient(1px 1px at 60% 15%, rgba(255,255,255,0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 80% 60%, rgba(255,255,255,0.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.35) 0%, transparent 100%),
-    radial-gradient(1px 1px at 90% 35%, rgba(255,255,255,0.3) 0%, transparent 100%),
-    linear-gradient(rgba(212,175,55,.012) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(212,175,55,.012) 1px,transparent 1px);
-  background-size:auto,auto,auto,auto,auto,52px 52px,52px 52px;
-  pointer-events:none;z-index:0;mix-blend-mode:screen;opacity:.6;
-}
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:rgba(255,255,255,0.02)}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:4px}
 
-/* ── Nav (matches index.html exactly) ── */
-.snav{position:sticky;top:0;z-index:200;background:var(--glass-bg);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid var(--glass-border);border-left:none;border-right:none;box-shadow:0 1px 0 rgba(255,255,255,0.04),0 8px 32px rgba(0,0,0,0.4);padding:0 40px;display:flex;align-items:center;height:72px;gap:0;margin:0 0 1rem 0;border-radius:0;transform:translateY(0);opacity:1;transition:transform .25s ease,opacity .2s ease;}
-.snav.nav-hidden{transform:translateY(calc(-100% - 10px));opacity:.96;}
-.nav-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,#c6ff00 15%,var(--cyan) 40%,var(--purple) 65%,#c6ff00 85%,transparent 100%);opacity:.7;animation:accentShift 6s ease-in-out infinite alternate;border-radius:0;}
-@keyframes accentShift{from{opacity:.5;filter:hue-rotate(0deg);}to{opacity:.9;filter:hue-rotate(20deg);}}
-.snav-brand{display:flex;align-items:center;gap:14px;text-decoration:none;margin-right:48px;flex-shrink:0;}
-.hybrid-logo{display:flex;align-items:center;gap:10px;}
-.logo-icon{width:182px;height:60px;object-fit:contain;display:block;filter:drop-shadow(0 0 6px rgba(212,175,55,0.45));}
-.nav-brand{font-family:'Inter',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px;line-height:1;color:var(--text-primary);display:flex;align-items:baseline;}
-.oracle-upper{text-transform:uppercase;font-weight:800;color:var(--accent-gold);}
-.gold-shimmer{background:linear-gradient(to bottom,#d4af37,#f7ef8a);-webkit-background-clip:text;background-clip:text;color:transparent;}
-.snav-links{display:flex;align-items:stretch;list-style:none;flex:1;gap:4px;}
-.snav-links li a{display:flex;align-items:center;gap:10px;padding:0 20px;height:72px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#7a9ac8;text-decoration:none;border-bottom:2px solid transparent;transition:color .2s,border-color .2s,background .2s;position:relative;}
-.snav-links li a:hover{color:var(--text);background:rgba(255,255,255,.02);}
-.snav-links li a.active{color:var(--accent);border-bottom-color:var(--accent);}
-.snav-links li a.active::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent),0 0 24px rgba(212,175,55,.5);}
-.snav-links li:nth-child(1) a:hover{color:var(--cyan);}
-.snav-links li:nth-child(2) a:hover{color:var(--accent);}
-.snav-links li:nth-child(3) a:hover{color:var(--purple);}
-.snav-links li:nth-child(4) a:hover{color:var(--green);}
-.ni{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .2s,box-shadow .2s;}
-.snav-links li a:hover .ni{transform:scale(1.1) translateY(-1px);}
-.ni-ctrl{background:rgba(127,199,217,.08);border:1px solid rgba(127,199,217,.2);color:var(--cyan);}
-.ni-tick{background:rgba(183,168,255,.08);border:1px solid rgba(183,168,255,.2);color:var(--purple);}
-.ni-grade{background:rgba(0,255,170,.08);border:1px solid rgba(0,255,170,.2);color:var(--green);}
-.ni-pay{background:rgba(255,192,107,.08);border:1px solid rgba(255,192,107,.2);color:var(--amber);}
-.snav-right{display:flex;align-items:center;gap:16px;margin-left:auto;}
-.live-pill{font-family:'Inter',sans-serif;font-weight:600;font-size:10px;letter-spacing:1.5px;padding:6px 16px;border-radius:100px;border:1px solid rgba(46,204,113,.3);color:var(--green);background:rgba(46,204,113,.06);display:flex;align-items:center;gap:8px;}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2s ease-in-out infinite;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-.hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:8px;border:1px solid rgba(255,255,255,0.09);border-radius:8px;background:rgba(255,255,255,0.04);backdrop-filter:blur(10px) saturate(180%);}
-.hamburger span{display:block;width:18px;height:2px;background:var(--muted);border-radius:2px;transition:all .25s;}
-.hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
-.hamburger.open span:nth-child(2){opacity:0;}
-.hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
-.mobile-menu{display:none;position:fixed;top:72px;left:0;right:0;background:rgba(5,5,15,.98);backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--border);z-index:199;padding:12px 0;}
-.mobile-menu.open{display:block;}
-.mobile-menu a{display:flex;align-items:center;gap:12px;padding:12px 24px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-decoration:none;border-left:3px solid transparent;transition:all .15s;}
-.mobile-menu a:hover,.mobile-menu a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(212,175,55,.04);}
+def _render_site_nav_grades_active() -> str:
+    """Render _site_nav.html with Grades active (static HTML artifact; no Flask Jinja)."""
+    path = TEMPLATES_DIR / "_site_nav.html"
+    if not path.is_file():
+        return (
+            '<nav class="snav glass-card" role="navigation" aria-label="Main">'
+            '<a class="snav-brand" href="/">PropOracle</a>'
+            '<ul class="snav-links nav-links"><li><a href="/grades" class="active">Grades</a></li></ul></nav>'
+        )
+    raw = path.read_text(encoding="utf-8")
+    lines = raw.splitlines()
+    if lines and lines[0].lstrip().startswith("{#"):
+        lines = lines[1:]
+    raw = "\n".join(lines).lstrip()
+    raw = re.sub(
+        r"\{%\s*set\s+_na\s*=\s*nav_active\|default\('home'\)\s*%\}\s*\n?",
+        "",
+        raw,
+        count=1,
+    )
+    raw = re.sub(
+        r"\{%\s*set\s+_pill\s*=\s*nav_pill_suffix\|default\('LIVE'\)\s*%\}\s*\n?",
+        "",
+        raw,
+        count=1,
+    )
+    raw = raw.replace("{{ _pill }}", "LIVE")
 
-/* ── Theme toggle ── */
-.theme-toggle{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);cursor:pointer;font-size:16px;transition:background .2s,border-color .2s,transform .15s;flex-shrink:0;backdrop-filter:blur(10px) saturate(180%);-webkit-backdrop-filter:blur(10px) saturate(180%);}
-.theme-toggle:hover{background:rgba(255,255,255,0.13);border-color:rgba(255,255,255,0.22);transform:scale(1.08);}
-[data-theme='light'] .theme-toggle{background:rgba(0,0,0,0.06)!important;border-color:rgba(0,0,0,0.12)!important;}
-[data-theme='light'] .theme-toggle:hover{background:rgba(0,0,0,0.10)!important;}
+    def _active_repl(m: re.Match[str]) -> str:
+        return "active" if m.group(1) == "grades" else ""
 
-/* ── Light mode overrides for ticket eval content ── */
-[data-theme='light'] body::before{
-  background:
-    radial-gradient(ellipse at 12% 8%, rgba(127,199,217,0.12) 0%, transparent 38%),
-    radial-gradient(ellipse at 88% 6%, rgba(212,175,55,0.10) 0%, transparent 36%),
-    linear-gradient(180deg,#f0f2f5 0%,#e8eaf0 100%);
-}
-[data-theme='light'] body::after{opacity:0.08;}
-[data-theme='light'] .stats-bar{
-  background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(248,250,252,.9)),rgba(255,255,255,0.72);
-  border-color:rgba(0,0,0,0.1);
-  box-shadow:0 4px 24px rgba(0,0,0,0.08);
-}
-[data-theme='light'] .ticket-card{background:rgba(255,255,255,0.65);border-color:rgba(0,0,0,0.1);box-shadow:0 4px 20px rgba(0,0,0,0.08);}
-[data-theme='light'] .thdr{background:rgba(0,0,0,0.04);}
-[data-theme='light'] .legrow{color:rgba(0,0,0,0.85);}
-[data-theme='light'] .leg-head{background:rgba(0,0,0,0.04);border-bottom-color:rgba(0,0,0,0.08);color:rgba(0,0,0,0.45);}
-[data-theme='light'] .meta-muted{color:rgba(0,0,0,0.5);}
-[data-theme='light'] .sum-val{color:#b8860b;}
-[data-theme='light'] .sum-lab{color:rgba(0,0,0,0.5);}
-[data-theme='light'] .sec-head{color:#b8860b;}
-[data-theme='light'] .slate-kicker{color:rgba(0,0,0,0.45);}
-[data-theme='light'] .thdr .tn{color:#b8860b;}
-[data-theme='light'] .thdr .tg{color:rgba(0,0,0,0.5);}
-[data-theme='light'] .payout{color:#1a6b7a;}
-[data-theme='light'] .dir-over{color:#1a6b7a;}
-[data-theme='light'] .dir-under{color:#b8860b;}
-[data-theme='light'] .tier{color:#b8860b;border-color:rgba(0,0,0,0.12);background:rgba(0,0,0,0.04);}
-[data-theme='light'] .pill{border-color:rgba(0,0,0,0.15)!important;}
-[data-theme='light'] .banner.pend{color:rgba(0,0,0,0.4);border-color:rgba(0,0,0,0.12);}
+    raw = re.sub(
+        r"\{\{\s*'active'\s*if\s*_na\s*==\s*'(\w+)'\s*else\s*''\s*\}\}",
+        _active_repl,
+        raw,
+    )
+    return raw.strip()
 
-/* Light: nav chrome + semantics (matches index.html — variables alone are not enough for .snav glass) */
-[data-theme='light']{
-  --accent:#4b6f96;
-  --cyan:#2c7fb8;
-  --green:#2e7f7a;
-  --amber:#8f7396;
-  --red:#b5687e;
-  --purple:#6f84bf;
-  --muted:rgba(23,43,64,0.52);
-  --muted2:rgba(23,43,64,0.34);
-  --text:rgba(14,36,58,0.90);
-}
-[data-theme='light'] .snav,
-[data-theme='light'] nav{
-  background:rgba(255,255,255,0.72)!important;
-  border:1px solid rgba(0,0,0,0.08)!important;
-  box-shadow:0 1px 0 rgba(255,255,255,0.9),0 4px 20px rgba(0,0,0,0.08)!important;
-}
-[data-theme='light'] .snav-links li a,
-[data-theme='light'] .nav-links a{
-  color:rgba(0,0,0,0.48)!important;
-}
-[data-theme='light'] .snav-links li a:hover,
-[data-theme='light'] .nav-links a:hover{
-  color:rgba(0,0,0,0.80)!important;
-  background:rgba(0,0,0,0.04)!important;
-}
-[data-theme='light'] .snav-links li a.active,
-[data-theme='light'] .nav-links a.active{
-  color:var(--accent)!important;
-  background:rgba(75,111,150,0.08)!important;
-  border-color:rgba(75,111,150,0.25)!important;
-}
-[data-theme='light'] .live-pill{
-  background:rgba(255,255,255,0.62)!important;
-  border-color:rgba(26,140,69,0.30)!important;
-  color:var(--green)!important;
-}
-[data-theme='light'] .hamburger{
-  background:rgba(255,255,255,0.62)!important;
-  border-color:rgba(0,0,0,0.10)!important;
-}
-[data-theme='light'] .hamburger span{background:rgba(0,0,0,0.55)!important;}
-[data-theme='light'] .mobile-menu{
-  background:rgba(245,248,255,0.96)!important;
-  border-bottom-color:rgba(0,0,0,0.08)!important;
-}
-[data-theme='light'] .mobile-menu a{color:rgba(0,0,0,0.55)!important;}
-[data-theme='light'] .mobile-menu a:hover,
-[data-theme='light'] .mobile-menu a.active{
-  color:var(--accent)!important;
-  background:rgba(75,111,150,0.05)!important;
-  border-left-color:var(--accent)!important;
-}
 
-/* Ticket page: collapsible sport / cross-sport buckets */
-.ticket-bucket{margin-bottom:18px;border-radius:16px;border:1px solid var(--glass-bd);background:rgba(255,255,255,0.025);overflow:hidden;backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);}
-.ticket-bucket > summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:14px 18px;font-family:'Bebas Neue',sans-serif;font-size:clamp(22px,2.6vw,30px);letter-spacing:2px;color:var(--gold);user-select:none;}
-.ticket-bucket > summary::-webkit-details-marker{display:none}
-.ticket-bucket > summary::after{content:'▸';font-size:16px;opacity:.55;transition:transform .2s ease;color:var(--muted);flex-shrink:0;}
-.ticket-bucket[open] > summary::after{transform:rotate(90deg)}
-.ticket-bucket-meta{font-family:'Share Tech Mono',monospace;font-size:clamp(11px,1.1vw,13px);letter-spacing:.6px;font-weight:400;color:var(--muted);text-align:right;max-width:100%;}
-.ticket-bucket-body{padding:4px 12px 16px;}
-.ticket-bucket.sb-nba{border-left:4px solid rgba(240,165,0,.8);}
-.ticket-bucket.sb-nba1h{border-left:4px solid rgba(255,155,86,.85);}
-.ticket-bucket.sb-nba1q{border-left:4px solid rgba(255,214,102,.85);}
-.ticket-bucket.sb-cbb{border-left:4px solid rgba(0,229,255,.65);}
-.ticket-bucket.sb-wcbb{border-left:4px solid rgba(159,216,232,.75);}
-.ticket-bucket.sb-nhl{border-left:4px solid rgba(196,165,255,.8);}
-.ticket-bucket.sb-soccer{border-left:4px solid rgba(232,184,74,.8);}
-.ticket-bucket.sb-mlb{border-left:4px solid rgba(255,154,154,.8);}
-.ticket-bucket.sb-xsport{border-left:4px solid rgba(183,168,255,.85);}
-.ticket-bucket.sb-default{border-left:4px solid rgba(255,255,255,.2);}
-[data-theme='light'] .ticket-bucket{background:rgba(255,255,255,0.52);border-color:rgba(0,0,0,0.1);box-shadow:0 2px 16px rgba(0,0,0,0.06);}
-[data-theme='light'] .ticket-bucket > summary{color:#b8860b;}
-[data-theme='light'] .ticket-bucket-meta{color:rgba(0,0,0,0.45);}
-[data-theme='light'] .ticket-bucket.sb-default{border-left-color:rgba(0,0,0,0.15);}
-
-/* ── Mobile ── */
+# Ticket-eval layout only; colors come from proporacle-page-shell + mobile-content-width.
+_TICKET_EVAL_PAGE_WRAP_CSS = r"""
+body.ticket-eval-page{
+  font-family:'Inter',system-ui,sans-serif !important;
+  color:var(--text, rgba(255,255,255,0.92));
+}
+body.ticket-eval-page{
+  --glass: var(--card-bg, rgba(26,26,46,0.92));
+  --glass-bd: var(--border, rgba(255,255,255,0.08));
+  --gold: var(--accent, #d4af37);
+  --gold2: #d4a017;
+  --pending: #888;
+}
+.te-back-nav{
+  position:relative;
+  z-index:2;
+  max-width:min(1520px,96vw);
+  margin:0 auto 10px;
+  padding:6px clamp(14px,2.5vw,32px) 10px;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px 18px;
+  border-bottom:1px solid var(--border, rgba(255,255,255,0.08));
+  font-size:13px;
+}
+.te-back-link{
+  color:var(--cyan, #00e5ff);
+  font-weight:600;
+  text-decoration:none;
+}
+.te-back-link:hover{text-decoration:underline;}
+.te-date{
+  color:var(--muted, rgba(255,255,255,0.45));
+  font-variant-numeric:tabular-nums;
+  letter-spacing:0.02em;
+}
+.te-prop-link{margin-left:auto;}
 @media(max-width:768px){
-  .snav{padding:0 16px;margin:0 0 0.75rem 0;}
-  .snav-links{display:none;}
-  .hamburger{display:flex;}
-  .snav-brand{margin-right:0;}
-  .logo-icon{width:120px;height:40px;}
+  .te-prop-link{margin-left:0;}
 }
-@media(max-width:900px){
-  .legrow{grid-template-columns:52px 80px 1fr;gap:10px;padding:12px;font-size:14px;}
-  .leg-head{display:none;}
-  .leg-extra{display:none;}
-  .stats-bar{padding:14px 16px;}
-  .sum-val{font-size:22px;}
+:is([data-theme='light'], html.light-theme) .ticket-bucket{
+  background:rgba(255,255,255,0.52);
+  border-color:rgba(0,0,0,0.1);
+  box-shadow:0 2px 16px rgba(0,0,0,0.06);
 }
-'''
-
-_TICKETS_NAV_HTML = """<nav class="snav">
-  <div class="nav-accent"></div>
-  <a class="snav-brand" href="/">
-    <img src="/static/proporacle-logo-v3.png?v=20260320b" alt="PropORACLE" class="logo-icon">
-    <span class="nav-brand">Prop<span class="oracle-upper gold-shimmer">ORACLE</span></span>
-  </a>
-  <ul class="snav-links">
-    <li><a href="/">Home</a></li>
-    <li><a href="/tickets" class="active">Tickets</a></li>
-    <li><a href="/grades">Grades</a></li>
-    <li><a href="/payout">Payouts</a></li>
-  </ul>
-  <div class="snav-right">
-    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()"
-            title="Toggle light/dark mode" aria-label="Toggle theme">
-      <span class="tt-moon">🌙</span>
-      <span class="tt-sun" style="display:none">☀️</span>
-    </button>
-    <div class="live-pill"><div class="live-dot"></div>LIVE</div>
-  </div>
-  <button class="hamburger" id="hamburger">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-<div class="mobile-menu" id="mobile-menu">
-  <a href="/">🏠 Home</a>
-  <a href="/tickets" class="active">🎟 Tickets</a>
-  <a href="/grades">✏️ Grades</a>
-  <a href="/payout">💰 Payouts</a>
-</div>"""
-
-_TICKETS_THEME_JS = """<script>
-(function(){
-  const saved = localStorage.getItem('proporacle-theme') || 'dark';
-  applyTheme(saved);
-})();
-function applyTheme(theme) {
-  document.documentElement.setAttribute('data-theme', theme);
-  localStorage.setItem('proporacle-theme', theme);
-  localStorage.setItem('theme', theme);
-  const moon = document.getElementById('theme-toggle')?.querySelector('.tt-moon');
-  const sun  = document.getElementById('theme-toggle')?.querySelector('.tt-sun');
-  if (moon) moon.style.display = theme === 'dark' ? '' : 'none';
-  if (sun)  sun.style.display  = theme === 'dark' ? 'none' : '';
-}
-function toggleTheme() {
-  const curr = document.documentElement.getAttribute('data-theme') || 'dark';
-  applyTheme(curr === 'dark' ? 'light' : 'dark');
-}
-const ham = document.getElementById('hamburger');
-const mob = document.getElementById('mobile-menu');
-if (ham) ham.addEventListener('click', () => {
-  ham.classList.toggle('open');
-  mob.classList.toggle('open');
-});
-document.addEventListener('click', e => {
-  if (ham && mob && !ham.contains(e.target) && !mob.contains(e.target)) {
-    ham.classList.remove('open');
-    mob.classList.remove('open');
-  }
-});
-(function(){
-  const nav = document.querySelector('.snav');
-  if (!nav) return;
-  const mq = window.matchMedia('(max-width: 900px), (pointer: coarse)');
-  let lastY = window.scrollY || 0;
-  let ticking = false;
-  const hideAfter = 140;
-  const minDelta = 8;
-  const update = () => {
-    ticking = false;
-    if (mq.matches) {
-      nav.classList.remove('nav-hidden');
-      lastY = window.scrollY || 0;
-      return;
-    }
-    const y = window.scrollY || 0;
-    const delta = y - lastY;
-    if (y < hideAfter || delta < -minDelta) nav.classList.remove('nav-hidden');
-    else if (delta > minDelta) nav.classList.add('nav-hidden');
-    lastY = y;
-  };
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      ticking = true;
-      window.requestAnimationFrame(update);
-    }
-  }, { passive: true });
-  window.addEventListener('resize', update);
-  update();
-})();
-</script>"""
+:is([data-theme='light'], html.light-theme) .ticket-bucket > summary{color:#b8860b;}
+:is([data-theme='light'], html.light-theme) .ticket-bucket-meta{color:rgba(0,0,0,0.45);}
+:is([data-theme='light'], html.light-theme) .ticket-bucket.sb-default{border-left-color:rgba(0,0,0,0.15);}
+"""
 
 
 def _dated_candidates(date_str: str) -> dict[str, list[Path]]:
@@ -2078,24 +1826,40 @@ def _build_html(
 .sport-default{background:rgba(255,255,255,.04);color:#888;border:1px solid rgba(255,255,255,.1);}
 """
 
+    te_back = (
+        f'<div class="te-back-nav">'
+        f'<a href="/grades" class="te-back-link">← Grades hub</a>'
+        f'<span class="te-date">{json_date}</span>'
+        f'<a href="/grades/props/{json_date}" class="te-back-link te-prop-link">Raw prop grades →</a>'
+        "</div>"
+    )
+
     parts: list[str] = [
         "<!DOCTYPE html>",
         '<html lang="en" data-theme="dark">',
         "<head>",
         '<meta charset="UTF-8"/>',
-        '<meta name="viewport" content="width=device-width, initial-scale=1.0"/>',
+        '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>',
+        "<script>(function(){try{var t=localStorage.getItem('proporacle-theme')||localStorage.getItem('theme');"
+        "if(t==='light'){document.documentElement.setAttribute('data-theme','light');"
+        "document.documentElement.classList.add('light-theme');}}catch(e){}})();</script>",
+        '<meta name="theme-color" content="#050505"/>',
         f"<title>Ticket Eval — {json_date}</title>",
         '<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@600;700;800&display=swap" rel="stylesheet"/>',
+        f'<link rel="stylesheet" href="/static/proporacle-page-shell.css?v={_TICKET_EVAL_SHELL_CSS_VER}"/>',
+        f'<link rel="stylesheet" href="/static/site-nav-unified.css?v={_TICKET_EVAL_NAV_UNIFIED_VER}"/>',
+        f'<link rel="stylesheet" href="/static/nav-mobile-shared.css?v={_TICKET_EVAL_NAV_MOBILE_VER}"/>',
+        f'<link rel="stylesheet" href="/static/mobile-content-width.css?v={_TICKET_EVAL_MOBILE_WIDTH_VER}"/>',
+        f'<link rel="stylesheet" href="/static/site-nav-datetime.css?v={_TICKET_EVAL_NAV_DATETIME_VER}"/>',
         "<style>",
-        _TICKETS_NAV_THEME_CSS,
+        _TICKET_EVAL_PAGE_WRAP_CSS,
         "h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}",
         ".bebas{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}",
-        ".stats-bar{position:-webkit-sticky;position:sticky;top:72px;z-index:175;margin:0 auto 18px;width:100%;max-width:min(1520px,96vw);"
+        ".stats-bar{position:-webkit-sticky;position:sticky;top:88px;z-index:175;margin:0 auto 18px;width:100%;max-width:min(1520px,96vw);"
         "padding:18px clamp(16px,2.5vw,32px);transition:top .28s ease,box-shadow .22s ease;"
         "background:linear-gradient(180deg,rgba(10,10,18,.92),rgba(8,8,14,.88)),var(--glass);"
         "backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);"
         "border:1px solid var(--glass-bd);border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.35);}",
-        ".snav.nav-hidden+.stats-bar{top:8px;}",
         ".sum-row{display:flex;flex-wrap:wrap;gap:18px 36px;align-items:center;justify-content:center;}",
         ".sum-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:88px;}",
         ".sum-val{font-family:'Share Tech Mono',monospace;font-size:clamp(22px,2.6vw,30px);font-weight:700;color:var(--gold);text-shadow:0 0 20px rgba(240,165,0,.25);}",
@@ -2216,8 +1980,9 @@ def _build_html(
         ".grade-ticket-result-label{opacity:.85;font-weight:600;}",
         "</style>",
         "</head>",
-        "<body>",
-        _TICKETS_NAV_HTML,
+        '<body class="ticket-eval-page">',
+        _render_site_nav_grades_active(),
+        te_back,
         grade_eval_summary_html,
         '<div class="stats-bar">',
         '<div class="sum-row">',
@@ -3206,7 +2971,9 @@ def _build_html(
     )
 
     parts.append("</div>")
-    parts.append(_TICKETS_THEME_JS)
+    parts.append(
+        f'<script src="/static/site-nav-chrome.js?v={_TICKET_EVAL_NAV_CHROME_VER}" defer></script>'
+    )
     parts.append("</body></html>")
     return "\n".join(parts), history_record
 
