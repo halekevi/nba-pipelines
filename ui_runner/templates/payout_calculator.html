@@ -195,6 +195,27 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .tab-btn.active{color:var(--accent);background:rgba(212,175,55,0.10);border-color:rgba(212,175,55,0.32);box-shadow:0 0 18px rgba(212,175,55,0.12),inset 0 -1px 0 rgba(212,175,55,0.5);}
 .tab-panel{display:none;}.tab-panel.active{display:block;}
 
+/* ── Payout rate card deck (/api/payout/rate-cards) ── */
+.rate-cards-intro{font-size:11px;color:var(--muted);line-height:1.75;margin-bottom:18px;max-width:720px;}
+.rate-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:14px;margin-bottom:12px;}
+.rate-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:16px 18px 14px;position:relative;}
+.rate-card-cat{font-size:9px;letter-spacing:2.2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;}
+.rate-card-title{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;color:var(--text);line-height:1.2;margin-bottom:6px;}
+.rate-card-sub{font-size:11px;color:var(--cyan);margin-bottom:10px;line-height:1.4;}
+.rate-card-bul{margin:0;padding-left:18px;font-size:11px;color:var(--muted);line-height:1.65;}
+.rate-card-bul li{margin-bottom:4px;}
+.rate-card[data-cat="power"]{border-color:rgba(0,242,255,0.22);}
+.rate-card[data-cat="flex"]{border-color:rgba(143,122,184,0.35);}
+.rate-card[data-cat="modifier"]{border-color:rgba(57,255,110,0.2);}
+.rate-card[data-cat="modifier"]:has(+ *){} 
+.rate-card[data-cat="dictionary"]{border-color:rgba(212,175,55,0.28);}
+.rate-card[data-cat="fitted"]{border-color:rgba(200,154,74,0.35);}
+.rate-card[data-cat="power"] .rate-card-cat{color:var(--cyan);}
+.rate-card[data-cat="flex"] .rate-card-cat{color:var(--purple);}
+.rate-card[data-cat="modifier"] .rate-card-cat{color:var(--goblin);}
+.rate-card[data-cat="dictionary"] .rate-card-cat{color:var(--accent);}
+.rate-card[data-cat="fitted"] .rate-card-cat{color:var(--amber);}
+
 /* ── CARDS ── */
 .card{background:rgba(255,255,255,0.03);backdrop-filter:blur(22px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%);border:1px solid rgba(255,255,255,0.09);border-radius:18px;padding:24px;margin-bottom:20px;position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.06);}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);}
@@ -880,6 +901,7 @@ body::before{
   <button class="tab-btn" onclick="switchTab('log',this)">📋 Log Lines <span class="badge-count" id="log-count">0</span></button>
   <button class="tab-btn" onclick="switchTab('patterns',this)">📈 Patterns</button>
   <button class="tab-btn" onclick="switchTab('ref',this)">📊 Reference</button>
+  <button class="tab-btn" onclick="switchTab('cards',this)">🃏 Rate cards</button>
 </div>
 
 <!-- ═══════════ TAB 1: CALCULATOR ═══════════ -->
@@ -1074,6 +1096,15 @@ body::before{
   </div>
 </div>
 
+<!-- ═══════════ TAB 5: RATE CARDS (JSON dictionary) ═══════════ -->
+<div id="tab-cards" class="tab-panel">
+  <div class="card accent">
+    <div class="card-title">🃏 Payout rate cards</div>
+    <p class="hint">Quick-reference deck from <code style="font-size:10px;opacity:.85">data/payout_rate_cards.json</code> — same baselines as the calculator / grader. Regenerate after updating coefficients: <code style="font-size:10px;opacity:.85">python scripts/build_payout_rate_cards.py</code></p>
+    <div id="rate-cards-mount"><div class="hint" style="padding:20px 0">Open this tab to load the dictionary.</div></div>
+  </div>
+</div>
+
 </div><!-- /app -->
 
 <div id="modal-overlay" class="modal-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="if(event.target===this)closePickModal()">
@@ -1107,11 +1138,63 @@ function switchTab(id,btn){
   btn.classList.add('active');
   if(id==='patterns')renderPatterns();
   if(id==='log'){renderLogTable();updateLogCount();}
+  if(id==='cards')renderRateCards(false);
 }
 function goTab(id){
-  const order=['calc','log','patterns','ref'],i=order.indexOf(id);
+  const order=['calc','log','patterns','ref','cards'],i=order.indexOf(id);
   const btns=document.querySelectorAll('.tab-bar .tab-btn');
   if(i>=0&&btns[i])switchTab(id,btns[i]);
+}
+
+let _rateCardsInFlight=false;
+window.__rateCardsCache=null;
+function _escapeRateCardHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function paintRateCards(data){
+  const root=document.getElementById('rate-cards-mount');
+  if(!root)return;
+  const intro=document.createElement('div');
+  intro.className='rate-cards-intro';
+  const when=data.generated_at?('Generated '+data.generated_at+' · '):'';
+  intro.textContent=when+'Power, flex tiers, and Goblin/Demon factors match the shared PropOracle defaults.';
+  const grid=document.createElement('div');
+  grid.className='rate-cards-grid';
+  (data.cards||[]).forEach(c=>{
+    const el=document.createElement('div');
+    el.className='rate-card';
+    if(c.category)el.setAttribute('data-cat',c.category);
+    const bullets=(c.bullets||[]).map(b=>'<li>'+_escapeRateCardHtml(b)+'</li>').join('');
+    el.innerHTML='<div class="rate-card-cat">'+_escapeRateCardHtml(c.category||'card')+'</div>'+
+      '<div class="rate-card-title">'+_escapeRateCardHtml(c.title||'')+'</div>'+
+      (c.subtitle?'<div class="rate-card-sub">'+_escapeRateCardHtml(c.subtitle)+'</div>':'')+
+      (bullets?'<ul class="rate-card-bul">'+bullets+'</ul>':'');
+    grid.appendChild(el);
+  });
+  root.innerHTML='';
+  root.appendChild(intro);
+  root.appendChild(grid);
+}
+function renderRateCards(force){
+  const root=document.getElementById('rate-cards-mount');
+  if(!root)return;
+  if(!force&&window.__rateCardsCache){paintRateCards(window.__rateCardsCache);return;}
+  if(_rateCardsInFlight&&!force)return;
+  _rateCardsInFlight=true;
+  root.innerHTML='<div class="hint" style="padding:16px 0">Loading rate cards…</div>';
+  fetch('/api/payout/rate-cards').then(r=>{
+    if(!r.ok)throw new Error('HTTP '+r.status+(r.status===404?' — run python scripts/build_payout_rate_cards.py':''));
+    return r.json();
+  }).then(data=>{
+    _rateCardsInFlight=false;
+    window.__rateCardsCache=data;
+    paintRateCards(data);
+  }).catch(e=>{
+    _rateCardsInFlight=false;
+    window.__rateCardsCache=null;
+    root.innerHTML='<div class="hint" style="color:var(--red)">Could not load rate cards: '+_escapeRateCardHtml(e.message)+'</div>'+
+      '<div style="margin-top:12px"><button type="button" class="btn btn-accent" onclick="renderRateCards(true)">Retry</button></div>';
+  });
 }
 
 function getDeltaPct(s,p){if(!s||!p||s===0)return null;return Math.round((p/s)*1000)/1000;}

@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 
 // ── Data ────────────────────────────────────────────────────────────────────
 const DEFAULT_POWER_BASE = { 2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 37.5 };
@@ -190,6 +190,9 @@ export default function PayoutCalculator() {
   const [exactFlex, setExactFlex]   = useState("");
   const [refLegs, setRefLegs] = useState(4);
   const [showSettings, setShowSettings] = useState(false);
+  const [rateDeck, setRateDeck] = useState(null);
+  const [rateCardRetry, setRateCardRetry] = useState(0);
+  const rateCardsCacheRef = useRef(null);
 
   const [powerBase, setPowerBase] = useState(DEFAULT_POWER_BASE);
   const [flexBase, setFlexBase]   = useState(DEFAULT_FLEX_BASE);
@@ -243,6 +246,36 @@ export default function PayoutCalculator() {
     const t = setTimeout(() => setLogSuccess(false), 2000);
     return () => clearTimeout(t);
   }, [logSuccess]);
+
+  const retryRateCards = useCallback(() => {
+    rateCardsCacheRef.current = null;
+    setRateCardRetry((n) => n + 1);
+  }, []);
+
+  useEffect(() => {
+    if (tab !== "cards") return;
+    if (rateCardsCacheRef.current) {
+      setRateDeck({ loading: false, data: rateCardsCacheRef.current, err: null });
+      return;
+    }
+    let cancelled = false;
+    setRateDeck({ loading: true, data: null, err: null });
+    fetch("/api/payout/rate-cards")
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
+      .then((data) => {
+        if (cancelled) return;
+        rateCardsCacheRef.current = data;
+        setRateDeck({ loading: false, data, err: null });
+      })
+      .catch((e) => {
+        if (cancelled) return;
+        setRateDeck({ loading: false, data: null, err: e.message || "fetch failed" });
+      });
+    return () => { cancelled = true; };
+  }, [tab, rateCardRetry]);
 
   const mods = { goblinPower, goblinFlex, demonPower, demonFlex };
   const tables = { powerBase, flexBase };
@@ -531,7 +564,7 @@ export default function PayoutCalculator() {
 
       {/* TABS */}
       <div style={S.tabs}>
-        {[["builder","🏗 BUILDER"],["logger","📋 LOGGER"],["reference","📊 REFERENCE"]].map(([id,label]) => (
+        {[["builder","🏗 BUILDER"],["logger","📋 LOGGER"],["reference","📊 REFERENCE"],["cards","🃏 CARDS"]].map(([id,label]) => (
           <button key={id} style={S.tabBtn(tab === id)} onClick={() => setTab(id)}>{label}</button>
         ))}
       </div>
@@ -1000,6 +1033,61 @@ export default function PayoutCalculator() {
                 ))}
               </div>
             </div>
+          </div>
+        )}
+
+        {tab === "cards" && (
+          <div>
+            <div style={S.secLabel}>RATE CARDS · DICTIONARY</div>
+            <p style={{ fontSize: 12, color: C.muted, marginBottom: 18, lineHeight: 1.65, maxWidth: 720 }}>
+              Loaded from <code style={{ fontSize: 11, color: C.text }}>/api/payout/rate-cards</code>
+              {" "}(<code style={{ fontSize: 11, color: C.text }}>data/payout_rate_cards.json</code>). Regenerate after changing baselines:{" "}
+              <code style={{ fontSize: 11, color: C.text }}>python scripts/build_payout_rate_cards.py</code>
+            </p>
+            {rateDeck?.loading && <div style={{ color: C.muted, fontFamily: mono, fontSize: 12 }}>Loading…</div>}
+            {rateDeck?.err && (
+              <div style={{ marginBottom: 12 }}>
+                <div style={{ color: C.red, fontFamily: mono, fontSize: 12, marginBottom: 10 }}>{rateDeck.err}</div>
+                <button type="button" style={S.smallBtn(true)} onClick={retryRateCards}>Retry</button>
+              </div>
+            )}
+            {rateDeck?.data && (
+              <div style={{ fontFamily: mono, fontSize: 10, color: C.muted, marginBottom: 14 }}>
+                {rateDeck.data.generated_at ? `Generated ${rateDeck.data.generated_at}` : "Reference deck"}
+              </div>
+            )}
+            {rateDeck?.data?.cards && (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(268px, 1fr))", gap: 14 }}>
+                {rateDeck.data.cards.map((c) => (
+                  <div
+                    key={c.id}
+                    style={{
+                      background: C.surface2,
+                      border: `1px solid ${C.border}`,
+                      borderRadius: 14,
+                      padding: "16px 18px",
+                      borderLeft: `3px solid ${
+                        c.category === "power" ? C.blue
+                          : c.category === "flex" ? C.purple
+                            : c.category === "modifier" ? "#a855f7"
+                              : c.category === "fitted" ? C.gold
+                                : c.category === "dictionary" ? C.gold
+                                  : C.border2
+                      }`,
+                    }}
+                  >
+                    <div style={{ fontFamily: mono, fontSize: 9, color: C.muted, letterSpacing: "2px", marginBottom: 8 }}>{c.category}</div>
+                    <div style={{ fontFamily: syne, fontSize: 16, fontWeight: 700, marginBottom: 6 }}>{c.title}</div>
+                    {c.subtitle && <div style={{ fontSize: 12, color: C.blue, marginBottom: 10 }}>{c.subtitle}</div>}
+                    <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12, color: C.muted, lineHeight: 1.6 }}>
+                      {(c.bullets || []).map((b, i) => (
+                        <li key={i} style={{ marginBottom: 4 }}>{b}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

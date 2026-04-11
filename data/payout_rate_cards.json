@@ -1,0 +1,265 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-04-10T23:58:37.829627+00:00",
+  "reference": {
+    "power_first_standard": {
+      "2": 3.0,
+      "3": 6.0,
+      "4": 10.0,
+      "5": 20.0,
+      "6": 37.5
+    },
+    "flex_first_standard": {
+      "2": {
+        "2": 3.0
+      },
+      "3": {
+        "3": 3.0,
+        "2": 1.0
+      },
+      "4": {
+        "4": 6.0,
+        "3": 1.5
+      },
+      "5": {
+        "5": 10.0,
+        "4": 2.0,
+        "3": 0.4
+      },
+      "6": {
+        "6": 25.0,
+        "5": 2.0,
+        "4": 0.4
+      }
+    },
+    "flex_min_guarantee_base": {
+      "2": 1.5,
+      "3": 1.25,
+      "4": 1.5,
+      "5": 2.0,
+      "6": 2.0
+    },
+    "modifiers": {
+      "goblin_power": {
+        "1": 0.84,
+        "2": 0.747,
+        "3": 0.707
+      },
+      "goblin_flex": {
+        "1": 0.8,
+        "2": 0.72,
+        "3": 0.6
+      },
+      "demon_power": {
+        "1": 1.627,
+        "2": 2.4,
+        "3": 2.72
+      },
+      "demon_flex": {
+        "1": 1.6,
+        "2": 1.52,
+        "3": 1.56
+      }
+    }
+  },
+  "fitted_file": {
+    "fitted_at": "2026-04-10T17:05:52.871296",
+    "base_payouts": {
+      "2": 3.0,
+      "3": 6.0,
+      "4": 10.0,
+      "5": 20.0,
+      "6": 37.5
+    },
+    "power_base_payout": {
+      "2": 3.0,
+      "3": 6.0,
+      "4": 10.0,
+      "5": 20.0,
+      "6": 37.5
+    },
+    "flex_base_min_guarantee": {
+      "2": 1.5,
+      "3": 1.25,
+      "4": 1.5,
+      "5": 2.0,
+      "6": 2.0
+    },
+    "n_clean_samples": 1
+  },
+  "cards": [
+    {
+      "id": "dict-overview",
+      "category": "dictionary",
+      "title": "How to read these cards",
+      "subtitle": "Published-style baselines used in PropOracle tools",
+      "bullets": [
+        "Power: every leg must win; one multiplier for the full slip.",
+        "Flex: partial wins pay smaller multipliers; top row is n/n correct.",
+        "Goblin / Demon: easier or harder lines; estimate mode multiplies per-leg factors (see modifier cards).",
+        "Site rules change \u2014 log real slips to refine coefficients (data/payout_formula_coefficients.json)."
+      ]
+    },
+    {
+      "id": "power-2",
+      "category": "power",
+      "title": "2-leg Power (all Standard)",
+      "subtitle": "First-place multiplier 3.0\u00d7",
+      "bullets": [
+        "All 2 legs correct \u2192 3.0\u00d7 stake (before Goblin/Demon adjustments).",
+        "Breakeven implied win rate \u2248 1 \u00f7 multiplier if legs were independent and fair (illustrative only)."
+      ]
+    },
+    {
+      "id": "power-3",
+      "category": "power",
+      "title": "3-leg Power (all Standard)",
+      "subtitle": "First-place multiplier 6.0\u00d7",
+      "bullets": [
+        "All 3 legs correct \u2192 6.0\u00d7 stake (before Goblin/Demon adjustments).",
+        "Breakeven implied win rate \u2248 1 \u00f7 multiplier if legs were independent and fair (illustrative only)."
+      ]
+    },
+    {
+      "id": "power-4",
+      "category": "power",
+      "title": "4-leg Power (all Standard)",
+      "subtitle": "First-place multiplier 10.0\u00d7",
+      "bullets": [
+        "All 4 legs correct \u2192 10.0\u00d7 stake (before Goblin/Demon adjustments).",
+        "Breakeven implied win rate \u2248 1 \u00f7 multiplier if legs were independent and fair (illustrative only)."
+      ]
+    },
+    {
+      "id": "power-5",
+      "category": "power",
+      "title": "5-leg Power (all Standard)",
+      "subtitle": "First-place multiplier 20.0\u00d7",
+      "bullets": [
+        "All 5 legs correct \u2192 20.0\u00d7 stake (before Goblin/Demon adjustments).",
+        "Breakeven implied win rate \u2248 1 \u00f7 multiplier if legs were independent and fair (illustrative only)."
+      ]
+    },
+    {
+      "id": "power-6",
+      "category": "power",
+      "title": "6-leg Power (all Standard)",
+      "subtitle": "First-place multiplier 37.5\u00d7",
+      "bullets": [
+        "All 6 legs correct \u2192 37.5\u00d7 stake (before Goblin/Demon adjustments).",
+        "Breakeven implied win rate \u2248 1 \u00f7 multiplier if legs were independent and fair (illustrative only)."
+      ]
+    },
+    {
+      "id": "flex-2",
+      "category": "flex",
+      "title": "2-leg Flex (Standard table)",
+      "subtitle": "Partial payouts",
+      "bullets": [
+        "2/2 correct \u2192 3.0\u00d7",
+        "Flex min-guarantee baseline (fitter): 1.5\u00d7 \u2014 used as denominator for some flex adjustments."
+      ]
+    },
+    {
+      "id": "flex-3",
+      "category": "flex",
+      "title": "3-leg Flex (Standard table)",
+      "subtitle": "Partial payouts",
+      "bullets": [
+        "3/3 correct \u2192 3.0\u00d7",
+        "2/3 correct \u2192 1.0\u00d7",
+        "Flex min-guarantee baseline (fitter): 1.25\u00d7 \u2014 used as denominator for some flex adjustments."
+      ]
+    },
+    {
+      "id": "flex-4",
+      "category": "flex",
+      "title": "4-leg Flex (Standard table)",
+      "subtitle": "Partial payouts",
+      "bullets": [
+        "4/4 correct \u2192 6.0\u00d7",
+        "3/4 correct \u2192 1.5\u00d7",
+        "Flex min-guarantee baseline (fitter): 1.5\u00d7 \u2014 used as denominator for some flex adjustments."
+      ]
+    },
+    {
+      "id": "flex-5",
+      "category": "flex",
+      "title": "5-leg Flex (Standard table)",
+      "subtitle": "Partial payouts",
+      "bullets": [
+        "5/5 correct \u2192 10.0\u00d7",
+        "4/5 correct \u2192 2.0\u00d7",
+        "3/5 correct \u2192 0.4\u00d7",
+        "Flex min-guarantee baseline (fitter): 2.0\u00d7 \u2014 used as denominator for some flex adjustments."
+      ]
+    },
+    {
+      "id": "flex-6",
+      "category": "flex",
+      "title": "6-leg Flex (Standard table)",
+      "subtitle": "Partial payouts",
+      "bullets": [
+        "6/6 correct \u2192 25.0\u00d7",
+        "5/6 correct \u2192 2.0\u00d7",
+        "4/6 correct \u2192 0.4\u00d7",
+        "Flex min-guarantee baseline (fitter): 2.0\u00d7 \u2014 used as denominator for some flex adjustments."
+      ]
+    },
+    {
+      "id": "mod-goblin-power",
+      "category": "modifier",
+      "title": "Goblin \u2014 Power multiplier factor",
+      "subtitle": "Per leg \u2014 multiply together in estimate mode",
+      "bullets": [
+        "Tier 1: \u00d70.84",
+        "Tier 2: \u00d70.747",
+        "Tier 3: \u00d70.707"
+      ]
+    },
+    {
+      "id": "mod-goblin-flex",
+      "category": "modifier",
+      "title": "Goblin \u2014 Flex multiplier factor",
+      "subtitle": "Per leg \u2014 multiply together in estimate mode",
+      "bullets": [
+        "Tier 1: \u00d70.8",
+        "Tier 2: \u00d70.72",
+        "Tier 3: \u00d70.6"
+      ]
+    },
+    {
+      "id": "mod-demon-power",
+      "category": "modifier",
+      "title": "Demon \u2014 Power multiplier factor",
+      "subtitle": "Per leg \u2014 multiply together in estimate mode",
+      "bullets": [
+        "Tier 1: \u00d71.627",
+        "Tier 2: \u00d72.4",
+        "Tier 3: \u00d72.72"
+      ]
+    },
+    {
+      "id": "mod-demon-flex",
+      "category": "modifier",
+      "title": "Demon \u2014 Flex multiplier factor",
+      "subtitle": "Per leg \u2014 multiply together in estimate mode",
+      "bullets": [
+        "Tier 1: \u00d71.6",
+        "Tier 2: \u00d71.52",
+        "Tier 3: \u00d71.56"
+      ]
+    },
+    {
+      "id": "fitted-coefficients",
+      "category": "fitted",
+      "title": "Last fitted coefficients file",
+      "subtitle": "payout_formula_coefficients.json",
+      "bullets": [
+        "fitted_at: 2026-04-10T17:05:52.871296",
+        "n_clean_samples: 1",
+        "Re-run: python scripts/fit_payout_formula.py after collecting payout_samples."
+      ]
+    }
+  ]
+}

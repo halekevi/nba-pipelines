@@ -907,6 +907,31 @@ def page_payout():
     return r
 
 
+@app.get("/api/payout/rate-cards")
+def api_payout_rate_cards():
+    """JSON deck for /payout Rate cards tab (scripts/build_payout_rate_cards.py)."""
+    path = BASE_DIR / "data" / "payout_rate_cards.json"
+    if not path.is_file():
+        return (
+            jsonify(
+                {
+                    "schema_version": 1,
+                    "error": "missing_file",
+                    "message": "Run python scripts/build_payout_rate_cards.py from the repo root.",
+                    "cards": [],
+                }
+            ),
+            404,
+        )
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as e:
+        return jsonify({"schema_version": 1, "error": "read_failed", "message": str(e), "cards": []}), 500
+    r = jsonify(data)
+    r.headers["Cache-Control"] = "public, max-age=120"
+    return r
+
+
 @app.get("/grades")
 def page_grades():
     r = make_response(render_template("indexGrades.html"))
