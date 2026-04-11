@@ -7,6 +7,7 @@
   --green:#9fd8a7;--amber:#c89a4a;--red:#d07a78;--purple:#8f7ab8;
   --goblin:#39ff6e;--demon:#ff4d4d;--std:#00e5ff;
   --glass-border:rgba(255,255,255,0.08);--glass-shadow:0 8px 32px rgba(0,0,0,0.45);
+  --card-bg:rgba(20,20,20,0.55);--card-bg-hover:rgba(255,255,255,0.08);
 }
 body{background:#05050f;color:var(--text);font-family:'Share Tech Mono',monospace;min-height:100vh;overflow-x:hidden;padding-bottom:80px;}
 
@@ -456,6 +457,8 @@ canvas{width:100%!important;max-height:220px;}
   --muted:rgba(23,43,64,0.52);
   --muted2:rgba(23,43,64,0.34);
   --text:rgba(14,36,58,0.90);
+  --card-bg:rgba(255,255,255,0.88);
+  --card-bg-hover:rgba(0,0,0,0.06);
 }
 [data-theme="light"] body {
   background:

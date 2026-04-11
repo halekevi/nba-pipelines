@@ -58,6 +58,7 @@
 
   function applyTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.classList.toggle("light-theme", theme === "light");
     if (document.body) document.body.classList.toggle("light-mode", theme === "light");
     try {
       localStorage.setItem("proporacle-theme", theme);

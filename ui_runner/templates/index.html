@@ -2,7 +2,8 @@
 <html lang="en" data-theme="dark" data-ui-build="{{ ui_build_id|default('', true) }}" data-deploy-sha="{{ deploy_git_sha|default('', true) }}">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>
+<script>(function(){try{var t=localStorage.getItem('proporacle-theme')||localStorage.getItem('theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');document.documentElement.classList.add('light-theme');}}catch(e){}})();</script>
 <meta name="theme-color" content="#050505"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="proporacle-build" content="{{ ui_build_id|default('', true) }}"/>
@@ -36,8 +37,10 @@
   --blur:blur(22px) saturate(180%);
   /* Re-assert hybrid border after legacy token block */
   --glass-border:rgba(212,175,55,0.15);
+  --card-bg:rgba(255,255,255,0.04);--card-bg-hover:rgba(255,255,255,0.08);
 }
 [data-theme='light']{
+  --card-bg:rgba(0,0,0,0.04);--card-bg-hover:rgba(0,0,0,0.07);
   --bg-main:#f0f2f5;
   --glass-bg:rgba(255,255,255,0.7);
   --glass-border:rgba(255,255,255,0.4);
@@ -911,8 +914,8 @@ body::before{
 }
 
 </style>
-<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260406"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260406"/>
+<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260411"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260411"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 </head>
 <body>
@@ -1561,7 +1564,7 @@ body::before{
 
 </div>
 
-<script src="/static/site-nav-chrome.js?v=20260412"></script>
+<script src="/static/site-nav-chrome.js?v=20260411" defer></script>
 <script>
 // ── Real PLAYER_DATA (last 10 games) ──────────────────────
 let ALL_SLATE = [];
@@ -2286,7 +2289,10 @@ function loadSlateSport(sport) {
   if (sport === 'combined') { loadSlateExcel(); return; }
   if (SLATE_DATA[sport] && SLATE_DATA[sport].length) { scheduleRenderSlateTable(sport); return; }
   const tbody = document.getElementById(`stb-${sport}`);
-  if (tbody) tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;padding:20px;color:var(--muted);letter-spacing:1px;font-size:10px;">LOADING…</td></tr>`;
+  if (tbody) {
+    const cells = () => '<td><div class="skeleton" style="height:12px;border-radius:4px;width:100%;min-width:40px"></div></td>';
+    tbody.innerHTML = Array.from({length: 6}, () => `<tr>${Array.from({length: 14}, cells).join('')}</tr>`).join('');
+  }
   // Lazy: fetch the 2.2 MB slate-sport payload only on first panel open
   if (!_slateSportPromise) {
     _slateSportPromise = loadSlateData().then(() => buildSlateDataFromAllSlate());

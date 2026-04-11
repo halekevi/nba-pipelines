@@ -100,8 +100,17 @@ app = Flask(
     static_folder=str(STATIC_DIR) if STATIC_DIR.exists() else None,
 )
 
+# Optional: flask-compress if installed (requirements.txt does not include it).
+try:
+    from flask_compress import Compress as _FlaskCompress  # type: ignore[import-not-found]
+
+    _FlaskCompress(app)
+    _APP_USES_FLASK_COMPRESS = True
+except ImportError:
+    _APP_USES_FLASK_COMPRESS = False
+
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-04-12-grades-toolbar-type-down-2"
+_UI_BUILD_ID = "2026-04-11-mobile-optimization"
 
 
 def _deploy_git_sha_short() -> str:
@@ -115,14 +124,18 @@ _STATIC_EXTS  = (".css", ".js", ".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg"
 @app.after_request
 def post_process_response(response):
     response.headers.setdefault("X-PropOracle-Build", _UI_BUILD_ID)
-    # Long-lived cache for static assets (images, CSS, JS)
+    # Cache static CSS/JS for 1 hour (images/fonts keep same policy)
     if request.path.startswith("/static/") and any(request.path.endswith(e) for e in _STATIC_EXTS):
         if "Cache-Control" not in response.headers:
-            response.headers["Cache-Control"] = "public, max-age=86400"
+            if request.path.endswith((".css", ".js")):
+                response.headers["Cache-Control"] = "public, max-age=3600"
+            else:
+                response.headers["Cache-Control"] = "public, max-age=86400"
 
-    # Gzip compress eligible text responses
+    # Gzip compress eligible text responses (skip if flask-compress handles it)
     if (
-        response.direct_passthrough
+        _APP_USES_FLASK_COMPRESS
+        or response.direct_passthrough
         or response.status_code < 200
         or response.status_code >= 300
         or "Content-Encoding" in response.headers
@@ -182,6 +195,9 @@ def load_config() -> dict:
 
 _json_file_cache: dict[str, dict[str, Any]] = {}
 _JSON_FILE_CACHE_LOCK = threading.Lock()
+# Strong refs for large template JSON — same objects as read_json_cached entries (TTL still applies).
+_LARGE_TEMPLATE_JSON_MEMORY: dict[str, Any] = {}
+_LARGE_JSON_NAMES = frozenset({"tickets_latest.json", "slate_latest.json"})
 
 # If set, fetch data from these URLs instead of baked-in files (avoids Docker layer cache).
 # Optional on Railway — auto-defaults apply when RAILWAY_* is set (see below).
@@ -272,7 +288,10 @@ def read_json_cached(path: Path, ttl: float | None = None) -> Any:
     with _JSON_FILE_CACHE_LOCK:
         entry = _json_file_cache.get(key)
         if entry is not None and now - entry["ts"] <= ttl:
-            return entry["data"]
+            data = entry["data"]
+            if path.name in _LARGE_JSON_NAMES:
+                _LARGE_TEMPLATE_JSON_MEMORY[path.name] = data
+            return data
 
         url = _DATA_FILE_URL_MAP.get(path.name)
         if url:
@@ -288,12 +307,16 @@ def read_json_cached(path: Path, ttl: float | None = None) -> Any:
                 with urllib.request.urlopen(req, timeout=25) as resp:
                     data = json.loads(resp.read().decode("utf-8"))
                 _json_file_cache[key] = {"data": data, "ts": time.time()}
+                if path.name in _LARGE_JSON_NAMES:
+                    _LARGE_TEMPLATE_JSON_MEMORY[path.name] = data
                 return data
             except Exception:
                 if not path.exists():
                     raise
         data = json.loads(path.read_text(encoding="utf-8-sig"))
         _json_file_cache[key] = {"data": data, "ts": time.time()}
+        if path.name in _LARGE_JSON_NAMES:
+            _LARGE_TEMPLATE_JSON_MEMORY[path.name] = data
         return data
 
 
@@ -326,19 +349,19 @@ def _gz_json_response(key: str, build_fn, ttl: float = 300.0):
             gz_bytes = buf.getvalue()
             _gz_cache[key] = (gz_bytes, time.time())
 
-    _NO_CACHE = "no-store, no-cache, must-revalidate, max-age=0"
+    _JSON_CC = "no-cache, must-revalidate, max-age=0"
     if "gzip" in request.headers.get("Accept-Encoding", ""):
         resp = app.response_class(gz_bytes, status=200, mimetype="application/json")
         resp.headers["Content-Encoding"] = "gzip"
         resp.headers["Content-Length"]   = len(gz_bytes)
         resp.headers["Vary"]             = "Accept-Encoding"
-        resp.headers["Cache-Control"]    = _NO_CACHE
+        resp.headers["Cache-Control"]    = _JSON_CC
         resp.headers["Pragma"]           = "no-cache"
         return resp
     # Non-gzip client: decompress inline (rare — all modern browsers support gzip)
     with gzip.GzipFile(fileobj=io.BytesIO(gz_bytes)) as f:
         resp = app.response_class(f.read(), status=200, mimetype="application/json")
-        resp.headers["Cache-Control"] = _NO_CACHE
+        resp.headers["Cache-Control"] = _JSON_CC
         resp.headers["Pragma"]        = "no-cache"
         return resp
 
@@ -667,6 +690,51 @@ def _selected_slate_sport_payload() -> dict:
     raise ValueError("no slate json available")
 
 
+# Home slate explorer table only reads these keys (see templates/index.html renderSlateTable).
+_SLATE_SPORT_UI_KEYS = frozenset(
+    {
+        "tier",
+        "rank_score",
+        "player",
+        "team",
+        "opp",
+        "prop",
+        "pick_type",
+        "line",
+        "dir",
+        "edge",
+        "hit_rate",
+        "l5_over",
+        "l5_under",
+        "game_time",
+    }
+)
+
+
+def _slim_slate_sport_payload(payload: dict) -> dict:
+    """Drop unused columns from /api/slate-sport to shrink the gzipped JSON payload."""
+    if not isinstance(payload, dict):
+        return payload
+    out = dict(payload)
+    sports = payload.get("sports")
+    if not isinstance(sports, dict):
+        return out
+    slim_sports: dict[str, Any] = {}
+    for k, rows in sports.items():
+        if not isinstance(rows, list):
+            slim_sports[k] = rows
+            continue
+        slim_rows: list[Any] = []
+        for r in rows:
+            if isinstance(r, dict):
+                slim_rows.append({kk: r[kk] for kk in _SLATE_SPORT_UI_KEYS if kk in r})
+            else:
+                slim_rows.append(r)
+        slim_sports[k] = slim_rows
+    out["sports"] = slim_sports
+    return out
+
+
 def _slate_counts() -> tuple[dict[str, int], dict]:
     """
     Return ({sport_key: row_count}, file_info for slate_latest.json on disk, if present).
@@ -768,7 +836,7 @@ def ping():
         })
         r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
         return r
-    return "ok", 200
+    return "OK", 200
 
 
 @app.get("/api/build")
@@ -824,13 +892,15 @@ def serve_tickets_latest_json():
     path = TEMPLATES_DIR / "tickets_latest.json"
     if not _template_json_available("tickets_latest.json"):
         abort(404)
+
     try:
-        data = read_json_cached(path)
+        return _gz_json_response(
+            "tickets-latest-json",
+            lambda: read_json_cached(path),
+            ttl=_PIPELINE_JSON_TTL,
+        )
     except Exception:
         abort(404)
-    r = jsonify(data)
-    r.headers["Content-Type"] = "application/json; charset=utf-8"
-    return _no_store_headers(r)
 
 
 @app.get("/tickets")
@@ -967,9 +1037,12 @@ def _graded_props_json_path_for_date(date_str: str) -> Path | None:
     return None
 
 
-def _grades_json_page_context(date_str: str, data: dict[str, Any]) -> dict[str, Any]:
-    """Template context for grades.html from graded_props JSON (date, count, props)."""
-    props_in = [p for p in (data.get("props") or []) if isinstance(p, dict)]
+GRADES_HTML_INITIAL_ROWS = 500
+
+
+def _grades_group_props_into_sections(
+    props_in: list[dict[str, Any]],
+) -> list[tuple[str, list[dict[str, Any]]]]:
     pref = ("NBA", "NBA1H", "NBA1Q", "CBB", "WCBB", "NHL", "MLB", "SOCCER", "TENNIS")
     by_sport: dict[str, list[dict[str, Any]]] = {}
     for p in props_in:
@@ -983,7 +1056,36 @@ def _grades_json_page_context(date_str: str, data: dict[str, Any]) -> dict[str, 
         return (1, u, k)
 
     sport_keys = sorted(by_sport.keys(), key=sport_key)
-    by_sections: list[tuple[str, list[dict[str, Any]]]] = [(k, by_sport[k]) for k in sport_keys]
+    return [(k, by_sport[k]) for k in sport_keys]
+
+
+def _grades_flat_rows_from_sections(
+    by_sections: list[tuple[str, list[dict[str, Any]]]],
+) -> list[tuple[str, dict[str, Any]]]:
+    flat: list[tuple[str, dict[str, Any]]] = []
+    for sk, rows in by_sections:
+        for r in rows:
+            flat.append((sk, r))
+    return flat
+
+
+def _grades_json_page_context(
+    date_str: str, data: dict[str, Any], *, initial_row_cap: int = GRADES_HTML_INITIAL_ROWS
+) -> dict[str, Any]:
+    """Template context for grades.html from graded_props JSON (date, count, props)."""
+    props_in = [p for p in (data.get("props") or []) if isinstance(p, dict)]
+    by_sections = _grades_group_props_into_sections(props_in)
+    sport_totals = {sk: len(rows) for sk, rows in by_sections}
+    flat = _grades_flat_rows_from_sections(by_sections)
+    cap = max(0, int(initial_row_cap))
+    initial_flat = flat[:cap] if cap else flat
+    by_init: dict[str, list[dict[str, Any]]] = {}
+    for sk, r in initial_flat:
+        by_init.setdefault(sk, []).append(r)
+    sport_keys_ordered = [sk for sk, _ in by_sections]
+    by_sport_initial = [(k, by_init[k]) for k in sport_keys_ordered if k in by_init]
+    has_more = len(flat) > len(initial_flat)
+    next_offset = len(initial_flat) if has_more else len(flat)
 
     n_total = len(props_in)
     n_hit = sum(1 for p in props_in if str(p.get("result") or "").upper() == "HIT")
@@ -1008,8 +1110,13 @@ def _grades_json_page_context(date_str: str, data: dict[str, Any]) -> dict[str, 
         "date": date_str,
         "graded_data": data,
         "props": props_in,
-        "by_sport": by_sections,
+        "by_sport": by_sport_initial,
         "sport_summary": sport_summary,
+        "sport_totals": sport_totals,
+        "grades_has_more": has_more,
+        "grades_next_offset": next_offset,
+        "grades_chunk_size": cap,
+        "grades_page_date": date_str,
         "n_total": n_total,
         "n_hit": n_hit,
         "n_miss": n_miss,
@@ -1055,6 +1162,11 @@ def page_grades():
             graded_data=None,
             by_sport=[],
             sport_summary=[],
+            sport_totals={},
+            grades_has_more=False,
+            grades_next_offset=0,
+            grades_chunk_size=GRADES_HTML_INITIAL_ROWS,
+            grades_page_date=None,
             n_total=0,
             n_hit=0,
             n_miss=0,
@@ -1083,6 +1195,11 @@ def page_grades_json_date(date_str: str):
             graded_data=None,
             by_sport=[],
             sport_summary=[],
+            sport_totals={},
+            grades_has_more=False,
+            grades_next_offset=0,
+            grades_chunk_size=GRADES_HTML_INITIAL_ROWS,
+            grades_page_date=date_str,
             n_total=0,
             n_hit=0,
             n_miss=0,
@@ -1106,6 +1223,11 @@ def page_grades_json_date(date_str: str):
             graded_data=None,
             by_sport=[],
             sport_summary=[],
+            sport_totals={},
+            grades_has_more=False,
+            grades_next_offset=0,
+            grades_chunk_size=GRADES_HTML_INITIAL_ROWS,
+            grades_page_date=date_str,
             n_total=0,
             n_hit=0,
             n_miss=0,
@@ -1662,6 +1784,58 @@ def api_grades_props():
         return jsonify({"error": "invalid date", "props": []}), 400
     r = jsonify(_grades_props_payload(date_str))
     r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    return r
+
+
+@app.get("/api/grades/page-rows")
+def api_grades_page_rows():
+    """
+    Paginated rows for /grades/YYYY-MM-DD HTML (graded_props_*.json on disk).
+    Matches the same sport ordering as the main grades page.
+    """
+    raw = (request.args.get("date") or "").strip()
+    date_str = raw[:10]
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date_str):
+        return jsonify({"error": "invalid date; use YYYY-MM-DD", "items": [], "total": 0}), 400
+    try:
+        y, m, d = int(date_str[0:4]), int(date_str[5:7]), int(date_str[8:10])
+        datetime(y, m, d)
+    except (TypeError, ValueError):
+        return jsonify({"error": "invalid date", "items": [], "total": 0}), 400
+    path = _graded_props_json_path_for_date(date_str)
+    if path is None:
+        return jsonify({"error": "not found", "items": [], "total": 0}), 404
+    try:
+        data = json.loads(path.read_text(encoding="utf-8-sig"))
+    except Exception as exc:
+        return jsonify({"error": str(exc), "items": [], "total": 0}), 500
+    if not isinstance(data, dict):
+        return jsonify({"error": "invalid json shape", "items": [], "total": 0}), 500
+    props_in = [p for p in (data.get("props") or []) if isinstance(p, dict)]
+    by_sections = _grades_group_props_into_sections(props_in)
+    flat = _grades_flat_rows_from_sections(by_sections)
+    try:
+        offset = max(0, int(request.args.get("offset", "0")))
+    except (TypeError, ValueError):
+        offset = 0
+    try:
+        limit = int(request.args.get("limit", str(GRADES_HTML_INITIAL_ROWS)))
+    except (TypeError, ValueError):
+        limit = GRADES_HTML_INITIAL_ROWS
+    limit = max(1, min(limit, 2000))
+    chunk = flat[offset : offset + limit]
+    r = jsonify(
+        {
+            "date": date_str,
+            "offset": offset,
+            "total": len(flat),
+            "next_offset": offset + len(chunk),
+            "has_more": offset + len(chunk) < len(flat),
+            "items": [{"sport": sk, "row": row} for sk, row in chunk],
+        }
+    )
+    r.headers["Cache-Control"] = "no-cache, must-revalidate, max-age=0"
     r.headers["Pragma"] = "no-cache"
     return r
 
@@ -2523,7 +2697,9 @@ def api_slate_sport():
         return jsonify({"error": str(e), "sports": {}}), 404
     try:
         return _gz_json_response(
-            "slate-sport", lambda: _selected_slate_sport_payload(), ttl=_PIPELINE_JSON_TTL
+            "slate-sport-slim-v1",
+            lambda: _slim_slate_sport_payload(_selected_slate_sport_payload()),
+            ttl=_PIPELINE_JSON_TTL,
         )
     except Exception as e:
         return jsonify({"error": str(e), "sports": {}}), 500

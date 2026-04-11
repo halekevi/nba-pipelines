@@ -2,16 +2,17 @@
 <html lang="en" data-theme="dark" data-ui-build="{{ ui_build_id|default('', true) }}" data-deploy-sha="{{ deploy_git_sha|default('', true) }}">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>
+<script>(function(){try{var t=localStorage.getItem('proporacle-theme')||localStorage.getItem('theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');document.documentElement.classList.add('light-theme');}}catch(e){}})();</script>
 <meta name="theme-color" content="#050505"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="proporacle-build" content="{{ ui_build_id|default('', true) }}"/>
 <meta property="og:title" content="PropOracle — Grades{% if date %} {{ date }}{% endif %}"/>
 <title>PropOracle — Grades{% if date %} {{ date }}{% endif %}</title>
-<link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260404d"/>
+<link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260411"/>
 <link rel="stylesheet" href="/static/site-nav-unified.css?v=20260408"/>
-<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260406"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260406"/>
+<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260411"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260411"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 <style>
 .grades-json-wrap{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 18px 48px;}
@@ -31,6 +32,7 @@
 .sport-block{margin-bottom:1.75rem;border:1px solid rgba(255,255,255,.1);border-radius:14px;overflow:hidden;background:rgba(12,12,22,.5);}
 .sport-block h3{margin:0;padding:12px 16px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.08);color:var(--accent-gold, #d4af37);}
 .grades-table-wrap{overflow:auto;max-height:min(70vh,720px);}
+.grades-table-wrap.table-responsive{-webkit-overflow-scrolling:touch;}
 .grades-table{width:100%;border-collapse:collapse;font-size:12px;font-family:'Inter',sans-serif;}
 .grades-table th,.grades-table td{padding:8px 10px;text-align:left;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top;}
 .grades-table th{position:sticky;top:0;background:rgba(10,10,18,.95);z-index:1;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted, rgba(255,255,255,.45));}
@@ -41,6 +43,11 @@
 .ri.void{color:#a8a8b8;}
 .grades-foot{margin-top:2rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:var(--muted, rgba(255,255,255,.45));}
 .grades-foot a{color:var(--cyan, #7fc7d9);}
+.grades-load-more-wrap{display:flex;justify-content:center;margin:1.25rem 0 2rem;}
+#grades-load-more{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:12px 22px;border-radius:12px;border:1px solid rgba(212,175,55,.35);background:rgba(212,175,55,.12);color:var(--accent-gold,#d4af37);cursor:pointer;}
+#grades-load-more:disabled{opacity:.5;cursor:default;}
+[data-theme="light"] .sport-block{background:rgba(255,255,255,.72);}
+[data-theme="light"] .grades-table th{background:rgba(245,248,255,.95);}
 </style>
 </head>
 <body>
@@ -93,9 +100,10 @@
   {% endif %}
 
   {% for sport, rows in by_sport %}
-  <section class="sport-block">
-    <h3>{{ sport }} <span style="font-weight:500;color:var(--muted);">({{ rows|length }})</span></h3>
-    <div class="grades-table-wrap">
+  <section class="sport-block" data-sport="{{ sport }}">
+    {% set total_for_sport = sport_totals.get(sport, rows|length) %}
+    <h3>{{ sport }} <span style="font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0;">({{ total_for_sport }} total{% if rows|length < total_for_sport %} · showing {{ rows|length }}{% endif %})</span></h3>
+    <div class="grades-table-wrap table-responsive">
       <table class="grades-table">
         <thead><tr>
           <th style="width:2.5em;"></th>
@@ -134,6 +142,13 @@
     </div>
   </section>
   {% endfor %}
+
+  {% if grades_has_more %}
+  <div class="grades-load-more-wrap">
+    <button type="button" id="grades-load-more" data-date="{{ grades_page_date }}" data-next-offset="{{ grades_next_offset }}" data-chunk="{{ grades_chunk_size }}">Load more ({{ n_total - grades_next_offset }} left)</button>
+  </div>
+  {% endif %}
+  <script type="application/json" id="grades-sport-totals">{{ sport_totals | tojson }}</script>
   {% endif %}
 
   <div class="grades-foot">
@@ -142,6 +157,128 @@
   </div>
 </div>
 
-<script src="/static/site-nav-chrome.js?v=20260408"></script>
+<script src="/static/site-nav-chrome.js?v=20260411" defer></script>
+<script>
+(function () {
+  const btn = document.getElementById("grades-load-more");
+  const totalsEl = document.getElementById("grades-sport-totals");
+  let sportTotals = {};
+  if (totalsEl) {
+    try {
+      sportTotals = JSON.parse(totalsEl.textContent || "{}");
+    } catch (e) {}
+  }
+  function findSportSection(sport) {
+    let found = null;
+    document.querySelectorAll("section.sport-block[data-sport]").forEach(function (el) {
+      if (el.getAttribute("data-sport") === sport) found = el;
+    });
+    return found;
+  }
+  function refreshSectionHeader(section, sport) {
+    const tbody = section.querySelector("tbody");
+    const n = tbody ? tbody.rows.length : 0;
+    const tot = Object.prototype.hasOwnProperty.call(sportTotals, sport) ? sportTotals[sport] : n;
+    const sub = section.querySelector("h3 span");
+    if (!sub) return;
+    if (n >= tot) sub.textContent = "(" + tot + " total)";
+    else sub.textContent = "(" + tot + " total · showing " + n + ")";
+  }
+  if (!btn) return;
+  function esc(s) {
+    return String(s ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+  function resultCell(R, raw) {
+    R = (R || "").toUpperCase();
+    if (R === "HIT") return '<span class="ri hit" title="Hit">✅</span>';
+    if (R === "MISS") return '<span class="ri miss" title="Miss">❌</span>';
+    if (R === "VOID") return '<span class="ri void" title="Void">⊘</span>';
+    const t = esc(raw || "—").slice(0, 8);
+    return '<span class="ri void" title="' + esc(raw || "—") + '">' + t + "</span>";
+  }
+  function rowHtml(p) {
+    const R = (p.result || "").toUpperCase();
+    return (
+      "<tr><td>" +
+      resultCell(R, p.result) +
+      "</td><td>" +
+      esc(p.player) +
+      "</td><td>" +
+      esc(p.prop) +
+      "</td><td>" +
+      esc(p.line != null ? p.line : "—") +
+      "</td><td>" +
+      esc(p.direction) +
+      "</td><td>" +
+      esc(p.actual_value != null && p.actual_value !== "" ? p.actual_value : "—") +
+      "</td><td>" +
+      esc(p.margin != null && p.margin !== "" ? p.margin : "—") +
+      "</td><td>" +
+      esc(p.pick_type) +
+      "</td><td>" +
+      esc(p.tier) +
+      "</td></tr>"
+    );
+  }
+  let nextOffset = parseInt(btn.getAttribute("data-next-offset") || "0", 10);
+  const dateStr = btn.getAttribute("data-date") || "";
+  const chunk = parseInt(btn.getAttribute("data-chunk") || "500", 10);
+  btn.addEventListener("click", async function () {
+    if (!dateStr) return;
+    btn.disabled = true;
+    try {
+      const u = new URL("/api/grades/page-rows", window.location.origin);
+      u.searchParams.set("date", dateStr);
+      u.searchParams.set("offset", String(nextOffset));
+      u.searchParams.set("limit", String(chunk));
+      const res = await fetch(u.toString(), { cache: "no-store" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const j = await res.json();
+      const items = j.items || [];
+      for (const it of items) {
+        const sport = it.sport;
+        const p = it.row || {};
+        let section = findSportSection(sport);
+        if (!section) {
+          section = document.createElement("section");
+          section.className = "sport-block";
+          section.setAttribute("data-sport", sport);
+          section.innerHTML =
+            '<h3>' +
+            esc(sport) +
+            ' <span style="font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0;"></span></h3>' +
+            '<div class="grades-table-wrap table-responsive"><table class="grades-table"><thead><tr>' +
+            "<th style=\"width:2.5em;\"></th><th>Player</th><th>Prop</th><th>Line</th><th>Dir</th><th>Actual</th><th>Margin</th><th>Type</th><th>Tier</th>" +
+            "</tr></thead><tbody></tbody></table></div>";
+          btn.parentElement.insertAdjacentElement("beforebegin", section);
+        }
+        const tbody = section.querySelector("tbody");
+        if (tbody) tbody.insertAdjacentHTML("beforeend", rowHtml(p));
+        if (tbody) {
+          const prev = typeof sportTotals[sport] === "number" ? sportTotals[sport] : 0;
+          sportTotals[sport] = Math.max(prev, tbody.rows.length);
+        }
+        refreshSectionHeader(section, sport);
+      }
+      nextOffset = typeof j.next_offset === "number" ? j.next_offset : nextOffset + items.length;
+      const left = (j.total != null ? j.total : 0) - nextOffset;
+      if (!j.has_more || left <= 0) {
+        btn.parentElement.style.display = "none";
+      } else {
+        btn.textContent = "Load more (" + left + " left)";
+        btn.disabled = false;
+      }
+    } catch (e) {
+      btn.disabled = false;
+      btn.textContent = "Load more — retry";
+      console.warn("grades load more failed:", e);
+    }
+  });
+})();
+</script>
 </body>
 </html>
