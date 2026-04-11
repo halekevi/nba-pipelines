@@ -368,6 +368,9 @@ def _ticket_payout_pick_type_token(row: Any) -> str:
 def build_ticket_payout_json(group_name: str, ticket_rows: list) -> dict[str, Any] | None:
     """
     Empirical payout + EV block for tickets_latest.json / UI.
+
+    Primary multiplier is min guarantee: ``payout`` and ``min_guarantee`` (same value).
+    ``sweep_payout`` is the all-legs-hit multiplier (informational only; not shown in slip UI).
     On any error, returns None (caller stores null in JSON).
     """
     if not ticket_rows:
@@ -390,20 +393,18 @@ def build_ticket_payout_json(group_name: str, ticket_rows: list) -> dict[str, An
     except Exception:
         return None
     try:
-        fp = float(ev_result["first_place_payout"])
         mg = float(ev_result["min_guarantee"])
         return {
-            "first_place": ev_result["first_place_payout"],
+            "payout": ev_result["min_guarantee"],
             "min_guarantee": ev_result["min_guarantee"],
             "min_guarantee_adjustment": ev_result["min_guarantee_adjustment"],
             "p_all_win": ev_result["p_all_win"],
             "p_miss_1": ev_result["p_miss_1"],
             "ev": ev_result["ev"],
             "recommendation": ev_result["recommendation"],
-            "entry_10_to_win_sweep": round(10 * fp, 2),
             "entry_10_to_win_guarantee": round(10 * mg, 2),
-            "entry_20_to_win_sweep": round(20 * fp, 2),
             "entry_20_to_win_guarantee": round(20 * mg, 2),
+            "sweep_payout": ev_result["first_place_payout"],
         }
     except Exception:
         return None
@@ -7386,7 +7387,7 @@ _TICKETS_BUILT_PAYOUT_CSS = """<style>
   margin-bottom: 6px;
 }
 .tickets-built .payout-row:last-of-type { margin-bottom: 0; }
-.tickets-built .payout-label { color: var(--muted); }
+.tickets-built .payout-label { color: var(--muted); min-width: 5.5em; }
 .tickets-built .payout-value { color: var(--text); text-align: right; }
 .tickets-built .payout-entry-guide {
   margin-top: 10px;
@@ -7765,12 +7766,13 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
                     rec_s = str(payout.get("recommendation") or "")
                     ev_cls = _payout_ev_class(rec_s)
                     pre = _payout_rec_prefix(rec_s)
-                    fpv = payout.get("first_place")
-                    mgv = payout.get("min_guarantee")
+                    pay_x = payout.get("payout")
+                    if pay_x is None:
+                        pay_x = payout.get("min_guarantee")
                     hdr_brackets = f'''
         <span class="ticket-hdr-bracket">[{_h(group_name)}]</span>
         <span class="payout-rec-badge {ev_cls}">[{_h(pre)} {_h(rec_s)} — EV {_fmt(ev_emp_f, 2)}]</span>
-        <span class="payout-x-badge">[{_fmt(fpv, 1)}x / {_fmt(mgv, 2)}x]</span>
+        <span class="payout-x-badge">[{_fmt(pay_x, 2)}x]</span>
         <span class="{sig_cls}" title="Modeled EV tier (Power × win prob)">{sig_lbl}</span>'''
             if not hdr_brackets:
                 hdr_brackets = (
@@ -7935,28 +7937,27 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
                     ev_disp = float(payout["ev"])
                 except (TypeError, ValueError):
                     ev_disp = 0.0
-                e10s = payout.get("entry_10_to_win_sweep")
+                pay_mult = payout.get("payout")
+                if pay_mult is None:
+                    pay_mult = payout.get("min_guarantee")
                 e10g = payout.get("entry_10_to_win_guarantee")
+                pre_ev = _payout_rec_prefix(rec_s2)
                 payout_section = f'''
       <div class="ticket-payout">
         <div class="payout-row">
-          <span class="payout-label">1st Place</span>
-          <span class="payout-value">{_fmt(payout.get("first_place"), 2)}x</span>
+          <span class="payout-label">Payout</span>
+          <span class="payout-value">{_fmt(pay_mult, 2)}x</span>
         </div>
         <div class="payout-row">
-          <span class="payout-label">Min Guarantee</span>
-          <span class="payout-value">{_fmt(payout.get("min_guarantee"), 2)}x</span>
-        </div>
-        <div class="payout-row">
-          <span class="payout-label">P(Win All)</span>
+          <span class="payout-label">P(Win)</span>
           <span class="payout-value">{_fmt(p_all * 100, 1)}%</span>
         </div>
         <div class="payout-row">
           <span class="payout-label">EV</span>
-          <span class="payout-value {ev_cls_row}">{_fmt(ev_disp, 2)} — {_h(rec_s2)}</span>
+          <span class="payout-value {ev_cls_row}">{_fmt(ev_disp, 2)} — {_h(pre_ev)} {_h(rec_s2)}</span>
         </div>
         <div class="payout-entry-guide">
-          $10 entry &rarr; win ${_fmt(e10s, 2)} (or ${_fmt(e10g, 2)} guarantee)
+          $10 &rarr; ${_fmt(e10g, 2)}
         </div>
       </div>'''
 

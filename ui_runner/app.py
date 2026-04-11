@@ -1879,11 +1879,13 @@ def _ticket_ev_summary_from_payload(data: dict | None) -> dict[str, Any]:
                 except (TypeError, ValueError):
                     p_all = 0.0
                 try:
-                    fp = float(pay.get("first_place", 0))
+                    sp = float(
+                        pay.get("sweep_payout", pay.get("first_place", 0))
+                    )
                 except (TypeError, ValueError):
-                    fp = 0.0
+                    sp = 0.0
                 try:
-                    mg = float(pay.get("min_guarantee", 0))
+                    mg = float(pay.get("payout", pay.get("min_guarantee", 0)))
                 except (TypeError, ValueError):
                     mg = 0.0
                 tno = t.get("ticket_no")
@@ -1892,8 +1894,8 @@ def _ticket_ev_summary_from_payload(data: dict | None) -> dict[str, Any]:
                     "name": nm,
                     "ev": round(ev, 4),
                     "recommendation": str(pay.get("recommendation") or ""),
-                    "first_place": f"{fp:.1f}x",
-                    "min_guarantee": f"{mg:.2f}x",
+                    "payout": round(mg, 4),
+                    "sweep_payout": f"{sp:.1f}x",
                     "p_all_win": f"{p_all * 100:.1f}%",
                 }
 
