@@ -7,14 +7,15 @@ Grades yesterday's (or any date's) soccer props against actual results
 pulled directly from proporacle_ref.db. Outputs a per-prop graded Excel
 file into Soccer/outputs/graded/.
 
-Supported props (ESPN provides these reliably):
+Supported props (when the column exists in proporacle_ref.soccer — filled by
+``build_boxscore_ref.py`` from ESPN boxscore / roster stat shapes):
   Shots, Shots On Target, Goals, Assists, Goal + Assist,
-  Goalie Saves, Goals Allowed, Fouls
+  Goalie Saves, Fouls, Passes Attempted, Tackles,
+  Clearances, Attempted Dribbles (often NULL until ESPN exposes them per player)
 
-Unsupported props (ESPN does not provide):
-  Tackles, Passes Attempted, Key Passes, Shots Assisted,
-  Attempted Dribbles, Clearances, Crosses
-  → These are marked VOID in output
+Still unsupported / VOID:
+  Key Passes, Shots Assisted, Crosses, Yellow Cards,
+  Goals Allowed (no per-player goals-conceded column in ref DB)
 
 Run:
   py -3.14 scripts/soccer_grader.py

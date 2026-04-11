@@ -189,6 +189,10 @@ _SOCCER_PROP_MAP = {
     "shots assisted":          "kp",
     "minutes":                 "minutes_played",
     "minutes played":          "minutes_played",
+    "clearances":              "clearances",
+    "attempted dribbles":      "dribble_attempts",
+    "attempteddribbles":       "dribble_attempts",
+    "attempted_dribbles":      "dribble_attempts",
 }
 
 

@@ -23,6 +23,7 @@ import random
 import threading
 import unicodedata
 from datetime import datetime
+from difflib import SequenceMatcher
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Dict, Optional, Tuple, List
 
@@ -288,6 +289,72 @@ def build_roster_id_map(
 
     return combined, by_last_team
 
+
+def resolve_soccer_player_espn_id(
+    name: str,
+    team: str,
+    roster_map: Dict[str, str],
+    roster_last_team: Dict[Tuple[str, str], str],
+    manual_map: Dict[Tuple[str, str], str],
+) -> str:
+    """
+    Resolve a single PP display name + team hint to an ESPN athlete id using the
+    same rules as the main step2 cache build, including a last-name-bucket fuzzy
+    match for European / Latin spelling variants.
+    """
+    key = norm_name(name)
+    if not key:
+        return ""
+    team_hint = norm_team(team)
+
+    aid = roster_map.get(key, "")
+
+    if not aid and team_hint:
+        aid = manual_map.get((key, team_hint), "")
+
+    if not aid and team_hint:
+        parts = key.split()
+        if parts:
+            aid = roster_last_team.get((parts[-1], team_hint), "")
+
+    if not aid:
+        parts = key.split()
+        if len(parts) >= 2:
+            last = parts[-1]
+            first_init = parts[0][0] if parts[0] else ""
+            for rname, rid in roster_map.items():
+                rparts = rname.split()
+                if rparts and rparts[-1] == last and rparts[0].startswith(first_init):
+                    aid = rid
+                    break
+
+    if not aid:
+        parts = key.split()
+        if len(parts) >= 2:
+            last = parts[-1]
+            candidates = [(rn, rid) for rn, rid in roster_map.items() if rn.split()[-1] == last]
+            if len(candidates) == 1:
+                aid = candidates[0][1]
+            elif candidates:
+                if team_hint:
+                    hint_id = roster_last_team.get((last, team_hint), "")
+                    if hint_id:
+                        for rn, rid in candidates:
+                            if rid == hint_id:
+                                aid = rid
+                                break
+                if not aid:
+                    best_r, best_id = 0.0, ""
+                    for rn, rid in candidates:
+                        r = SequenceMatcher(None, key, rn).ratio()
+                        if r > best_r:
+                            best_r, best_id = r, rid
+                    if best_r >= 0.88:
+                        aid = best_id
+
+    return str(aid or "").strip()
+
+
 def build_espn_id_cache_concurrent(
     names: List[str],
     existing_cache: Dict[str, str],
@@ -318,34 +385,14 @@ def build_espn_id_cache_concurrent(
         key = norm_name(name)
         if not key:
             continue
-        team_hint = norm_team(player_team_hints.get(key, ""))
-        aid = roster_map.get(key, "")
-
-        # Fallback 1: manual persistent map (normalized name + team).
-        if not aid and team_hint:
-            aid = manual_map.get((key, team_hint), "")
-
-        # Fallback 2: last-name-only match within same team.
-        if not aid and team_hint:
-            parts = key.split()
-            if parts:
-                aid = roster_last_team.get((parts[-1], team_hint), "")
-
-        # Fallback 3: loose last-name + first-initial across all rosters.
-        if not aid:
-            parts = key.split()
-            if len(parts) >= 2:
-                last = parts[-1]
-                first_init = parts[0][0] if parts[0] else ""
-                for rname, rid in roster_map.items():
-                    rparts = rname.split()
-                    if rparts and rparts[-1] == last and rparts[0].startswith(first_init):
-                        aid = rid
-                        break
+        team_raw = player_team_hints.get(key, "")
+        aid = resolve_soccer_player_espn_id(name, team_raw, roster_map, roster_last_team, manual_map)
 
         cache[key] = aid
-        if aid: resolved += 1
-        else:   failed += 1
+        if aid:
+            resolved += 1
+        else:
+            failed += 1
 
     print(f"  Resolved {resolved}/{len(need)} players ({failed} not found in rosters)")
     return cache

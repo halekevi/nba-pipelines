@@ -163,6 +163,8 @@ CREATE TABLE IF NOT EXISTS soccer (
     kp              REAL, tk  REAL,
     fc              REAL, yc  REAL,
     minutes_played  REAL,
+    clearances      REAL,
+    dribble_attempts REAL,
     PRIMARY KEY (event_id, player, team)
 );
 """
@@ -264,6 +266,10 @@ def _migrate_columns(con: sqlite3.Connection) -> None:
             ("pr",   "REAL"), ("pa",   "REAL"), ("ra",  "REAL"),
             ("bs",   "REAL"), ("fantasy_score", "REAL"),
             ("espn_athlete_id", "TEXT"),
+        ],
+        "soccer": [
+            ("clearances", "REAL"),
+            ("dribble_attempts", "REAL"),
         ],
     }
     for table, cols in migrations.items():
@@ -757,10 +763,19 @@ SOCCER_STAT_MAP = {
     "sv":  ["SV", "SAVES", "SVS", "GOALSAVE", "GOALSAVED"],
     "pa":  ["PA", "TOTALPASS", "PASSES", "PS"],
     "kp":  ["KP", "KEYPASS", "KEYPASSES"],
-    "tk":  ["TK", "TOTALTACKLE", "TACKLES", "TCKS"],
+    "tk":  ["TK", "TOTALTACKLE", "TACKLES", "TCKS", "TOTALTACKLES", "EFFECTIVETACKLES"],
     "fc":  ["FC", "FOULSCOMMITTED", "FL", "FOULS"],
     "yc":  ["YC", "YELLOWCARDS", "YELLOW"],
     "min": ["MIN", "MINSPLAYED", "MINUTESPLAYED", "TIMEPLAYED"],
+    # Outfield defending / dribbling — only present on some ESPN payloads / stat shapes.
+    "clr": [
+        "CLR", "CL", "CLEARANCES", "CLEARANCE", "TOTALCLEARANCE", "EFFECTIVECLEARANCE",
+        "DEFENDINGCLEARANCES", "DEFCLEARANCES",
+    ],
+    "drib": [
+        "DRI", "DR", "DRB", "ATTEMPTEDDRIBBLES", "DRIBBLEATTEMPTS", "DRIBBLESATTEMPTED",
+        "TAKEONS", "TAKEON", "TOTALDRIBBLES", "ONBALLCARRIES", "UNSUCCESSFULTAKEONS",
+    ],
 }
 
 
@@ -814,7 +829,9 @@ def _parse_soccer_boxscore(box: dict, event_id: str, game_date: str,
         fc  = _soc_stat(lmap, "fc")
         yc  = _soc_stat(lmap, "yc")
         mins = _soc_stat(lmap, "min")
-        if all(x is None for x in [sh, sog, g, a, sv, pa]):
+        clr = _soc_stat(lmap, "clr")
+        drb = _soc_stat(lmap, "drib")
+        if all(x is None for x in [sh, sog, g, a, sv, pa, kp, tk, fc, yc, mins, clr, drb]):
             return
         rows.append({
             "game_date": game_date, "event_id": event_id,
@@ -823,6 +840,8 @@ def _parse_soccer_boxscore(box: dict, event_id: str, game_date: str,
             "sh": sh, "sog": sog, "g": g, "a": a,
             "sv": sv, "pa": pa, "kp": kp, "tk": tk,
             "fc": fc, "yc": yc, "minutes_played": mins,
+            "clearances": clr,
+            "dribble_attempts": drb,
         })
 
     # PATH 1: box['rosters'] with stat objects
