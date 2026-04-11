@@ -71,8 +71,10 @@ grades/
 models/
 
 # Generated UI templates / JSON (pipeline & ticket eval — keep local only)
-ui_runner/templates/tickets_latest.json
-ui_runner/templates/slate_latest.json
+# Base tickets_latest.json + slate_latest.json are committed stubs for Railway cold deploy.
+# Ignore only dated/extra copies so pipeline snapshots do not clutter git.
+ui_runner/templates/tickets_latest_*.json
+ui_runner/templates/slate_latest_*.json
 ui_runner/templates/ticket_eval_*.html
 ui_runner/templates/ticket_eval_latest.html
 # ui_runner/templates/slate_eval_*.html  # optional: often committed for deploy/CDN
