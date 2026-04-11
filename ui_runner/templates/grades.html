@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260411"/>
 <link rel="stylesheet" href="/static/site-nav-unified.css?v=20260408"/>
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260411"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260412"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260413"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 <style>
 .grades-json-wrap{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 18px 48px;}
@@ -89,9 +89,9 @@
   </div>
 
   {% if sport_summary %}
-  <div class="grades-summary" style="margin-bottom:1.5rem;">
+  <div class="grades-summary grades-sport-summary" style="margin-bottom:1.5rem;">
     {% for s in sport_summary %}
-    <div class="grades-kpi">
+    <div class="grades-kpi grades-sport-card">
       <div class="lbl">{{ s.sport }}</div>
       <div class="val">{{ s.n }} props · {{ s.hit_rate }}%</div>
     </div>
@@ -104,41 +104,52 @@
     {% set total_for_sport = sport_totals.get(sport, rows|length) %}
     <h3>{{ sport }} <span style="font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0;">({{ total_for_sport }} total{% if rows|length < total_for_sport %} · showing {{ rows|length }}{% endif %})</span></h3>
     <div class="grades-table-wrap table-responsive">
+      <div class="grades-table-wrapper">
       <table class="grades-table">
         <thead><tr>
-          <th style="width:2.5em;"></th>
-          <th>Player</th>
-          <th>Prop</th>
-          <th>Line</th>
-          <th>Dir</th>
-          <th>Actual</th>
-          <th>Margin</th>
-          <th>Type</th>
-          <th>Tier</th>
+          <th class="gcol-icon" style="width:2.5em;"></th>
+          <th class="gcol-player">Player</th>
+          <th class="gcol-prop">Prop</th>
+          <th class="gcol-line">Line</th>
+          <th class="gcol-dir">Dir</th>
+          <th class="gcol-actual">Actual</th>
+          <th class="gcol-margin hide-mobile">Margin</th>
+          <th class="gcol-type hide-mobile">Type</th>
+          <th class="gcol-tier hide-mobile">Tier</th>
         </tr></thead>
         <tbody>
         {% for p in rows %}
           {% set R = (p.get('result') or '')|upper %}
-          <tr>
-            <td>
+          {% set line_disp = (p.get('line') if p.get('line') is not none else '—') | string %}
+          <tr class="grade-row"
+              data-result="{{ R|e }}"
+              data-player="{{ (p.get('player') or '')|e }}"
+              data-prop="{{ (p.get('prop') or '')|e }}"
+              data-line="{{ line_disp|e }}"
+              data-dir="{{ (p.get('direction') or '')|e }}"
+              data-actual="{{ (p.get('actual_value') if p.get('actual_value') is not none else '')|e }}"
+              data-type="{{ (p.get('pick_type') or '')|e }}"
+              data-tier="{{ (p.get('tier') or '')|e }}">
+            <td class="gcol-icon">
               {% if R == 'HIT' %}<span class="ri hit" title="Hit">✅</span>
               {% elif R == 'MISS' %}<span class="ri miss" title="Miss">❌</span>
               {% elif R == 'VOID' %}<span class="ri void" title="Void">⊘</span>
               {% else %}<span class="ri void" title="{{ p.get('result') or '—' }}">{{ (p.get('result') or '—')[:8] }}</span>
               {% endif %}
             </td>
-            <td>{{ p.get('player') or '—' }}</td>
-            <td>{{ p.get('prop') or '—' }}</td>
-            <td>{{ p.get('line') if p.get('line') is not none else '—' }}</td>
-            <td>{{ p.get('direction') or '—' }}</td>
-            <td>{{ p.get('actual_value') if p.get('actual_value') is not none else '—' }}</td>
-            <td>{{ p.get('margin') if p.get('margin') is not none else '—' }}</td>
-            <td>{{ p.get('pick_type') or '—' }}</td>
-            <td>{{ p.get('tier') or '—' }}</td>
+            <td class="gcol-player">{{ p.get('player') or '—' }}</td>
+            <td class="gcol-prop" data-line-mobile="{{ line_disp|e }}">{{ p.get('prop') or '—' }}</td>
+            <td class="gcol-line">{{ p.get('line') if p.get('line') is not none else '—' }}</td>
+            <td class="gcol-dir">{{ p.get('direction') or '—' }}</td>
+            <td class="gcol-actual">{{ p.get('actual_value') if p.get('actual_value') is not none else '—' }}</td>
+            <td class="gcol-margin hide-mobile">{{ p.get('margin') if p.get('margin') is not none else '—' }}</td>
+            <td class="gcol-type hide-mobile">{{ p.get('pick_type') or '—' }}</td>
+            <td class="gcol-tier hide-mobile">{{ p.get('tier') or '—' }}</td>
           </tr>
         {% endfor %}
         </tbody>
       </table>
+      </div>
     </div>
   </section>
   {% endfor %}
@@ -192,6 +203,12 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
   }
+  function escAttr(s) {
+    return String(s ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;");
+  }
   function resultCell(R, raw) {
     R = (R || "").toUpperCase();
     if (R === "HIT") return '<span class="ri hit" title="Hit">✅</span>';
@@ -202,24 +219,44 @@
   }
   function rowHtml(p) {
     const R = (p.result || "").toUpperCase();
+    const lineDisp = p.line != null && p.line !== "" ? String(p.line) : "—";
     return (
-      "<tr><td>" +
+      '<tr class="grade-row" data-result="' +
+      escAttr(R) +
+      '" data-player="' +
+      escAttr(p.player || "") +
+      '" data-prop="' +
+      escAttr(p.prop || "") +
+      '" data-line="' +
+      escAttr(lineDisp) +
+      '" data-dir="' +
+      escAttr(p.direction || "") +
+      '" data-actual="' +
+      escAttr(p.actual_value != null && p.actual_value !== "" ? String(p.actual_value) : "") +
+      '" data-type="' +
+      escAttr(p.pick_type || "") +
+      '" data-tier="' +
+      escAttr(p.tier || "") +
+      '">' +
+      '<td class="gcol-icon">' +
       resultCell(R, p.result) +
-      "</td><td>" +
+      "</td><td class=\"gcol-player\">" +
       esc(p.player) +
-      "</td><td>" +
+      "</td><td class=\"gcol-prop\" data-line-mobile=\"" +
+      escAttr(lineDisp) +
+      "\">" +
       esc(p.prop) +
-      "</td><td>" +
-      esc(p.line != null ? p.line : "—") +
-      "</td><td>" +
+      "</td><td class=\"gcol-line\">" +
+      esc(lineDisp) +
+      "</td><td class=\"gcol-dir\">" +
       esc(p.direction) +
-      "</td><td>" +
+      "</td><td class=\"gcol-actual\">" +
       esc(p.actual_value != null && p.actual_value !== "" ? p.actual_value : "—") +
-      "</td><td>" +
+      "</td><td class=\"gcol-margin hide-mobile\">" +
       esc(p.margin != null && p.margin !== "" ? p.margin : "—") +
-      "</td><td>" +
+      "</td><td class=\"gcol-type hide-mobile\">" +
       esc(p.pick_type) +
-      "</td><td>" +
+      "</td><td class=\"gcol-tier hide-mobile\">" +
       esc(p.tier) +
       "</td></tr>"
     );
@@ -251,9 +288,11 @@
             '<h3>' +
             esc(sport) +
             ' <span style="font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0;"></span></h3>' +
-            '<div class="grades-table-wrap table-responsive"><table class="grades-table"><thead><tr>' +
-            "<th style=\"width:2.5em;\"></th><th>Player</th><th>Prop</th><th>Line</th><th>Dir</th><th>Actual</th><th>Margin</th><th>Type</th><th>Tier</th>" +
-            "</tr></thead><tbody></tbody></table></div>";
+            '<div class="grades-table-wrap table-responsive"><div class="grades-table-wrapper"><table class="grades-table"><thead><tr>' +
+            "<th class=\"gcol-icon\" style=\"width:2.5em;\"></th>" +
+            "<th class=\"gcol-player\">Player</th><th class=\"gcol-prop\">Prop</th><th class=\"gcol-line\">Line</th><th class=\"gcol-dir\">Dir</th><th class=\"gcol-actual\">Actual</th>" +
+            "<th class=\"gcol-margin hide-mobile\">Margin</th><th class=\"gcol-type hide-mobile\">Type</th><th class=\"gcol-tier hide-mobile\">Tier</th>" +
+            "</tr></thead><tbody></tbody></table></div></div>";
           btn.parentElement.insertAdjacentElement("beforebegin", section);
         }
         const tbody = section.querySelector("tbody");
