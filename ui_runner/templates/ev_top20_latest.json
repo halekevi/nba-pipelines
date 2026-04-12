@@ -1,0 +1,446 @@
+{
+  "generated_at": "2026-04-12T01:41:40Z",
+  "date": "2026-04-11",
+  "mode": "balanced",
+  "total_combos_evaluated": 103076,
+  "tickets": [
+    {
+      "rank": 1,
+      "legs": [
+        "Logan Mailloux hits 1.5 UNDER",
+        "Connelly Early Pitcher Strikeouts 3.5 OVER",
+        "Jes\u00fas Luzardo Pitcher Strikeouts 4.5 OVER"
+      ],
+      "sports": [
+        "MLB",
+        "NHL"
+      ],
+      "n_legs": 3,
+      "p_win_pct": 48.0,
+      "payout": 6.0,
+      "min_guarantee": 6.0,
+      "ev": 2.3621,
+      "recommendation": "STRONG",
+      "n_goblins": 2,
+      "n_demons": 0,
+      "pick_types": [
+        "standard",
+        "goblin",
+        "goblin"
+      ]
+    },
+    {
+      "rank": 2,
+      "legs": [
+        "Logan Mailloux hits 1.5 UNDER",
+        "Connelly Early Pitcher Strikeouts 3.5 OVER",
+        "Nolan McLean Pitcher Strikeouts 4.5 OVER"
+      ],
+      "sports": [
+        "MLB",
+        "NHL"
+      ],
+      "n_legs": 3,
+      "p_win_pct": 48.0,
+      "payout": 6.0,
+      "min_guarantee": 6.0,
+      "ev": 2.3621,
+      "recommendation": "STRONG",
+      "n_goblins": 2,
+      "n_demons": 0,
+      "pick_types": [
+        "standard",
+        "goblin",
+        "goblin"
+      ]
+    },
+    {
+      "rank": 3,
+      "legs": [
+        "Logan Mailloux hits 1.5 UNDER",
+        "Connelly Early Pitcher Strikeouts 3.5 OVER",
+        "Jes\u00fas Luzardo Pitcher Strikeouts 5.5 OVER"
+      ],
+      "sports": [
+        "MLB",
+        "NHL"
+      ],
+      "n_legs": 3,
+      "p_win_pct": 48.0,
+      "payout": 6.0,
+      "min_guarantee": 6.0,
+      "ev": 2.3621,
+      "recommendation": "STRONG",
+      "n_goblins": 2,
+      "n_demons": 0,
+      "pick_types": [
+        "standard",
+        "goblin",
+        "goblin"
+      ]
+    },
+    {
+      "rank": 4,
+      "legs": [
+        "Thomas Harley blocked_shots 1.5 UNDER",
+        "Jes\u00fas Luzardo Pitcher Strikeouts 4.5 OVER",
+        "Nolan McLean Pitcher Strikeouts 4.5 OVER"
+      ],
+      "sports": [
+        "MLB",
+        "NHL"
+      ],
+      "n_legs": 3,
+      "p_win_pct": 48.0,
+      "payout": 6.0,
+      "min_guarantee": 6.0,
+      "ev": 2.3616,
+      "recommendation": "STRONG",
+      "n_goblins": 2,
+      "n_demons": 0,
+      "pick_types": [
+        "standard",
+        "goblin",
+        "goblin"
+      ]
+    },
+    {
+      "rank": 5,
+      "legs": [
+        "Thomas Harley blocked_shots 1.5 UNDER",
+        "Nolan McLean Pitcher Strikeouts 4.5 OVER",
+        "Dustin May Pitcher Strikeouts 2.5 OVER"
+      ],
+      "sports": [
+        "MLB",
+        "NHL"
+      ],
+      "n_legs": 3,
+      "p_win_pct": 48.0,
+      "payout": 6.0,
+      "min_guarantee": 6.0,
+      "ev": 2.3616,
+      "recommendation": "STRONG",
+      "n_goblins": 2,
+      "n_demons": 0,
+      "pick_types": [
+        "standard",
+        "goblin",
+        "goblin"
+      ]
+    },
+    {
+      "rank": 6,
+      "legs": [
+        "Thomas Harley blocked_shots 1.5 UNDER",
+        "Dustin May Pitcher Strikeouts 2.5 OVER",
+        "Bailey Ober Pitching Outs 14.5 OVER"
+      ],
+      "sports": [
+        "MLB",
+        "NHL"
+      ],
+      "n_legs": 3,
+      "p_win_pct": 48.0,
+      "payout": 6.0,
+      "min_guarantee": 6.0,
+      "ev": 2.3616,
+      "recommendation": "STRONG",
+      "n_goblins": 2,
+      "n_demons": 0,
+      "pick_types": [
+        "standard",
+        "goblin",
+        "goblin"
+      ]
+    },
+    {
+      "rank": 7,
+      "legs": [
+        "Aaron Wiggins Pts+Asts 24.5 UNDER",
+        "Dustin May Pitcher Strikeouts 2.5 OVER",
+        "Bailey Ober Pitching Outs 14.5 OVER"
+      ],
+      "sports": [
+        "MLB",
+        "NBA"
+      ],
+      "n_legs": 3,
+      "p_win_pct": 47.8,
+      "payout": 6.0,
+      "min_guarantee": 6.0,
+      "ev": 2.3428,
+      "recommendation": "STRONG",
+      "n_goblins": 2,
+      "n_demons": 0,
+      "pick_types": [
+        "standard",
+        "goblin",
+        "goblin"
+      ]
+    },
+    {
+      "rank": 8,
+      "legs": [
+        "Aaron Wiggins Pts+Asts 24.5 UNDER",
+        "Bailey Ober Pitching Outs 14.5 OVER",
+        "Slade Cecconi Pitching Outs 14.5 OVER"
+      ],
+      "sports": [
+        "MLB",
+        "NBA"
+      ],
+      "n_legs": 3,
+      "p_win_pct": 47.8,
+      "payout": 6.0,
+      "min_guarantee": 6.0,
+      "ev": 2.3428,
+      "recommendation": "STRONG",
+      "n_goblins": 2,
+      "n_demons": 0,
+      "pick_types": [
+        "standard",
+        "goblin",
+        "goblin"
+      ]
+    },
+    {
+      "rank": 9,
+      "legs": [
+        "Colin Blackwell hits 1.5 UNDER",
+        "Samuel Helenius hits 3.0 UNDER",
+        "Marco Carnesecchi + Michele Di Gregorio Goalie Saves (Combo) 6.0 UNDER"
+      ],
+      "sports": [
+        "NHL",
+        "Soccer"
+      ],
+      "n_legs": 3,
+      "p_win_pct": 36.4,
+      "payout": 6.0,
+      "min_guarantee": 6.0,
+      "ev": 1.5455,
+      "recommendation": "STRONG",
+      "n_goblins": 0,
+      "n_demons": 0,
+      "pick_types": [
+        "standard",
+        "standard",
+        "standard"
+      ]
+    },
+    {
+      "rank": 10,
+      "legs": [
+        "Colin Blackwell hits 1.5 UNDER",
+        "Marcus Foligno hits 3.0 UNDER",
+        "Marco Carnesecchi + Michele Di Gregorio Goalie Saves (Combo) 6.0 UNDER"
+      ],
+      "sports": [
+        "NHL",
+        "Soccer"
+      ],
+      "n_legs": 3,
+      "p_win_pct": 36.4,
+      "payout": 6.0,
+      "min_guarantee": 6.0,
+      "ev": 1.5455,
+      "recommendation": "STRONG",
+      "n_goblins": 0,
+      "n_demons": 0,
+      "pick_types": [
+        "standard",
+        "standard",
+        "standard"
+      ]
+    },
+    {
+      "rank": 11,
+      "legs": [
+        "Aaron Wiggins Pts+Asts 24.5 UNDER",
+        "Marco Carnesecchi + Michele Di Gregorio Goalie Saves (Combo) 6.0 UNDER",
+        "Dayne St. Clair + Ethan Horvath Goalie Saves (Combo) 7.0 UNDER"
+      ],
+      "sports": [
+        "NBA",
+        "Soccer"
+      ],
+      "n_legs": 3,
+      "p_win_pct": 36.1,
+      "payout": 6.0,
+      "min_guarantee": 6.0,
+      "ev": 1.5241,
+      "recommendation": "STRONG",
+      "n_goblins": 0,
+      "n_demons": 0,
+      "pick_types": [
+        "standard",
+        "standard",
+        "standard"
+      ]
+    },
+    {
+      "rank": 12,
+      "legs": [
+        "Jared McCain Rebs+Asts 8.5 UNDER",
+        "Dayne St. Clair + Ethan Horvath Goalie Saves (Combo) 7.0 UNDER",
+        "Matt Turner Goalie Saves 2.0 OVER"
+      ],
+      "sports": [
+        "NBA",
+        "Soccer"
+      ],
+      "n_legs": 3,
+      "p_win_pct": 35.7,
+      "payout": 6.0,
+      "min_guarantee": 6.0,
+      "ev": 1.499,
+      "recommendation": "OK",
+      "n_goblins": 0,
+      "n_demons": 0,
+      "pick_types": [
+        "standard",
+        "standard",
+        "standard"
+      ]
+    },
+    {
+      "rank": 13,
+      "legs": [
+        "Jared McCain Rebs+Asts 8.5 UNDER",
+        "Dayne St. Clair + Ethan Horvath Goalie Saves (Combo) 7.0 UNDER",
+        "Jonathan Sirois Goalie Saves 3.0 UNDER"
+      ],
+      "sports": [
+        "NBA",
+        "Soccer"
+      ],
+      "n_legs": 3,
+      "p_win_pct": 35.7,
+      "payout": 6.0,
+      "min_guarantee": 6.0,
+      "ev": 1.4972,
+      "recommendation": "OK",
+      "n_goblins": 0,
+      "n_demons": 0,
+      "pick_types": [
+        "standard",
+        "standard",
+        "standard"
+      ]
+    },
+    {
+      "rank": 14,
+      "legs": [
+        "Jared McCain Rebs+Asts 8.5 UNDER",
+        "Matt Turner Goalie Saves 2.0 OVER",
+        "Jonathan Sirois Goalie Saves 3.0 UNDER"
+      ],
+      "sports": [
+        "NBA",
+        "Soccer"
+      ],
+      "n_legs": 3,
+      "p_win_pct": 35.6,
+      "payout": 6.0,
+      "min_guarantee": 6.0,
+      "ev": 1.4951,
+      "recommendation": "OK",
+      "n_goblins": 0,
+      "n_demons": 0,
+      "pick_types": [
+        "standard",
+        "standard",
+        "standard"
+      ]
+    },
+    {
+      "rank": 15,
+      "legs": [
+        "Matt Turner Goalie Saves 2.0 OVER",
+        "Jonathan Sirois Goalie Saves 3.0 UNDER"
+      ],
+      "sports": [
+        "Soccer"
+      ],
+      "n_legs": 2,
+      "p_win_pct": 50.6,
+      "payout": 3.0,
+      "min_guarantee": 3.0,
+      "ev": 1.0229,
+      "recommendation": "OK",
+      "n_goblins": 0,
+      "n_demons": 0,
+      "pick_types": [
+        "standard",
+        "standard"
+      ]
+    },
+    {
+      "rank": 16,
+      "legs": [
+        "Gabriel Pec Shots 4.0 OVER",
+        "Rodolfo Cota Goalie Saves 3.0 UNDER"
+      ],
+      "sports": [
+        "Soccer"
+      ],
+      "n_legs": 2,
+      "p_win_pct": 50.5,
+      "payout": 3.0,
+      "min_guarantee": 3.0,
+      "ev": 1.0209,
+      "recommendation": "OK",
+      "n_goblins": 0,
+      "n_demons": 0,
+      "pick_types": [
+        "standard",
+        "standard"
+      ]
+    },
+    {
+      "rank": 17,
+      "legs": [
+        "Victor Wembanyama Points 14.5 OVER",
+        "Nikola Joki\u0107 Pts+Rebs 29.5 OVER"
+      ],
+      "sports": [
+        "NBA"
+      ],
+      "n_legs": 2,
+      "p_win_pct": 65.2,
+      "payout": 0.27,
+      "min_guarantee": 0.27,
+      "ev": -0.1718,
+      "recommendation": "SKIP",
+      "n_goblins": 2,
+      "n_demons": 0,
+      "pick_types": [
+        "goblin",
+        "goblin"
+      ]
+    },
+    {
+      "rank": 18,
+      "legs": [
+        "Victor Wembanyama Points 14.5 OVER",
+        "Jamal Murray Pts+Asts 24.5 OVER"
+      ],
+      "sports": [
+        "NBA"
+      ],
+      "n_legs": 2,
+      "p_win_pct": 65.1,
+      "payout": 0.27,
+      "min_guarantee": 0.27,
+      "ev": -0.1734,
+      "recommendation": "SKIP",
+      "n_goblins": 2,
+      "n_demons": 0,
+      "pick_types": [
+        "goblin",
+        "goblin"
+      ]
+    }
+  ]
+}

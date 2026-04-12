@@ -20,6 +20,7 @@
 #    .\run_pipeline.ps1 -CacheAgeDays 7        # Auto-wipe cache if older than N days
 #    .\run_pipeline.ps1 -SkipDailyGrader       # Skip run_grader + grade HTML git push after combined
 #    .\run_pipeline.ps1 -SkipAltBooks          # Skip Underdog + DraftKings fetch before combined (geo/403)
+#    .\run_pipeline.ps1 -SkipUltimateTickets   # Skip build_ultimate_tickets.py after combined (EV TOP20 JSON)
 #
 #  Combined always auto-includes every sport whose step8 output exists on disk.
 #  No -Include flags needed -- just run any sport, combined picks it up.
@@ -45,6 +46,7 @@ param(
     [switch]$SkipDailyGrader,
     [switch]$RunPayoutEngine,
     [switch]$SkipAltBooks,
+    [switch]$SkipUltimateTickets,
     [int]$CacheAgeDays = 7
 )
 
@@ -382,6 +384,25 @@ function Run-Combined {
         Copy-Item $CombinedOut (Join-Path $OutDir "combined_slate_tickets_$Date.xlsx") -Force -ErrorAction SilentlyContinue
         Remove-Item $CombinedOut -Force -ErrorAction SilentlyContinue
         Write-Host "  Saved -> $(Join-Path $OutDir "combined_slate_tickets_$Date.xlsx")" -ForegroundColor Green
+        if (-not $SkipUltimateTickets) {
+            Write-Host "[ULTIMATE] Building ranked tickets (EV TOP20 feed)..." -ForegroundColor Cyan
+            Push-Location $Root
+            try {
+                & py -3.14 ".\scripts\build_ultimate_tickets.py" --date $Date --mode balanced
+                if ($LASTEXITCODE -ne 0) {
+                    Write-Host "[ULTIMATE] WARN: exit $LASTEXITCODE" -ForegroundColor Yellow
+                }
+                else {
+                    Write-Host "[ULTIMATE] OK" -ForegroundColor Green
+                }
+            }
+            catch {
+                Write-Host "[ULTIMATE] WARN: $_" -ForegroundColor Yellow
+            }
+            finally {
+                Pop-Location
+            }
+        }
         if ($RunPayoutEngine) {
             Write-Host "[PAYOUT ENGINE] Fetching exact multipliers from PrizePicks..." -ForegroundColor Magenta
             try {

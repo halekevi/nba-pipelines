@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>
 <script>(function(){try{var t=localStorage.getItem('proporacle-theme')||localStorage.getItem('theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');document.documentElement.classList.add('light-theme');}}catch(e){}})();</script>
 <meta name="theme-color" content="#050505"/>
-<title>PropOracle EV Top 20</title>
+<title>PropOracle — EV TOP 20</title>
 <link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260404d"/>
 <link rel="stylesheet" href="/static/site-nav-unified.css?v=20260408"/>
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260406"/>
@@ -37,7 +37,7 @@
 <div id="app" class="page-ev">
   <div class="ev-wrap">
     <div class="ev-head">
-      <h1 class="ev-title">TOP 20 Exact EV Tickets</h1>
+      <h1 class="ev-title">EV TOP 20</h1>
       <div id="evMeta" class="ev-sub">Loading...</div>
     </div>
     <div id="evList"></div>
@@ -54,7 +54,8 @@
     const r = await fetch('/api/tickets-ev-top20', {cache:'no-store'});
     const j = await r.json();
     if(!r.ok){ throw new Error(j.error || ('HTTP '+r.status)); }
-    meta.textContent = `${j.group_name || 'TOP20'} • ${j.date || '—'} • built ${j.generated_at || '—'}`;
+    const combo = j.total_combos_evaluated != null ? ` • ${j.total_combos_evaluated} combos` : '';
+    meta.textContent = `${j.group_name || 'TOP20'} • ${j.date || '—'} • ${j.generated_at || '—'}${combo}`;
     const rows = j.tickets || [];
     if(!rows.length){
       list.innerHTML = '<div class="ev-card">No tickets found.</div>';
@@ -67,7 +68,7 @@
       const legs = (t.legs||[]).map(s => `<li>${s}</li>`).join('');
       return `<article class="ev-card">
         <div class="ev-row">
-          <div class="ev-num">#${t.ticket_no ?? '—'} • ${t.n_legs ?? '—'} legs • ${sports}</div>
+          <div class="ev-num">#${t.ticket_no ?? '—'} • ${t.n_legs ?? '—'} legs • ${sports}${t.min_guarantee != null ? ` • min ${num(t.min_guarantee,2)}x` : ''}</div>
           <div class="ev-pill ${recCls}">${rec || 'EV'}</div>
         </div>
         <div class="ev-metrics">

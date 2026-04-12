@@ -2162,11 +2162,62 @@ def _ticket_ev_path() -> Path:
     return OUTPUTS_ROOT / "ticket_ev_latest.json"
 
 
+def _ev_top20_latest_path() -> Path:
+    return TEMPLATES_DIR / "ev_top20_latest.json"
+
+
 @app.get("/api/tickets-ev-top20")
 def api_tickets_ev_top20():
     """
-    Top EV slips from outputs/ticket_ev_latest.json, optimized for mobile rendering.
+    Top EV slips: prefer templates/ev_top20_latest.json (build_ultimate_tickets.py),
+    else outputs/ticket_ev_latest.json (legacy combined path).
     """
+    ultimate_path = _ev_top20_latest_path()
+    if ultimate_path.is_file():
+        try:
+            data = read_json_cached(ultimate_path)
+        except Exception as e:
+            return jsonify({"error": str(e), "tickets": []}), 500
+        tickets_in = list((data or {}).get("tickets") or [])
+        out = []
+        for t in tickets_in:
+            pw = t.get("p_win_pct")
+            try:
+                est = float(pw) / 100.0 if pw is not None and float(pw) > 1.0 else float(pw or 0)
+            except (TypeError, ValueError):
+                est = None
+            legs = [str(x) for x in (t.get("legs") or [])]
+            out.append(
+                {
+                    "ticket_no": t.get("rank"),
+                    "n_legs": t.get("n_legs"),
+                    "est_win_prob": est,
+                    "power_payout": t.get("payout"),
+                    "ev_power": t.get("ev"),
+                    "sports": t.get("sports") or [],
+                    "recommendation": str(t.get("recommendation") or "").upper(),
+                    "correlation_flag": "",
+                    "legs": legs,
+                    "n_goblins": t.get("n_goblins"),
+                    "n_demons": t.get("n_demons"),
+                    "pick_types": t.get("pick_types"),
+                    "min_guarantee": t.get("min_guarantee"),
+                }
+            )
+        r = jsonify(
+            {
+                "date": (data or {}).get("date"),
+                "generated_at": (data or {}).get("generated_at"),
+                "group_name": f"ULTIMATE TOP20 ({(data or {}).get('mode') or 'balanced'})",
+                "mode": (data or {}).get("mode"),
+                "total_combos_evaluated": (data or {}).get("total_combos_evaluated"),
+                "tickets": out,
+            }
+        )
+        r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        r.headers["Pragma"] = "no-cache"
+        return r
+
     path = _ticket_ev_path()
     if not (_template_json_available("ticket_ev_latest.json") or path.exists()):
         return jsonify({"error": "ticket_ev_latest.json not found", "tickets": []}), 404
