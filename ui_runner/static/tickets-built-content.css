@@ -34,6 +34,67 @@
   }
 }
 
+/* Empirical payout strip — one horizontal row (markup: .ticket-payout > .payout-row ×3 + .payout-entry-guide) */
+.tickets-built .ticket-payout {
+  margin-top: 14px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(196, 166, 107, 0.22);
+  background: rgba(0, 0, 0, 0.18);
+  font-family: "Share Tech Mono", monospace;
+  font-size: clamp(12px, 1.1vw, 14px);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 16px;
+}
+
+.tickets-built .payout-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  margin-bottom: 0;
+}
+
+.tickets-built .payout-label {
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.tickets-built .payout-value {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tickets-built .payout-entry-guide {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+[data-theme="light"] .tickets-built .ticket-payout {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 480px) {
+  .tickets-built .ticket-payout {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
 .tickets-built .leg-row {
   cursor: pointer;
   transition: background 0.15s;

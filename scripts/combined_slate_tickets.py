@@ -7410,41 +7410,10 @@ _TICKETS_BUILT_PAYOUT_CSS = """<style>
   padding: 3px 10px;
   background: rgba(0,229,255,0.06);
 }
-.tickets-built .ticket-payout {
-  margin-top: 14px;
-  padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid rgba(196,166,107,0.22);
-  background: rgba(0,0,0,0.18);
-  font-family: "Share Tech Mono", monospace;
-  font-size: clamp(12px, 1.1vw, 14px);
-}
-.tickets-built .payout-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
-  margin-bottom: 6px;
-}
-.tickets-built .payout-row:last-of-type { margin-bottom: 0; }
-.tickets-built .payout-label { color: var(--muted); min-width: 5.5em; }
-.tickets-built .payout-value { color: var(--text); text-align: right; }
-.tickets-built .payout-entry-guide {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.45;
-}
 .tickets-built .ev-strong { color: #00ff88; font-weight: bold; }
 .tickets-built .ev-ok { color: #88ccff; }
 .tickets-built .ev-marginal { color: #ffaa00; }
 .tickets-built .ev-skip { color: #ff4444; }
-[data-theme="light"] .tickets-built .ticket-payout {
-  background: rgba(255,255,255,0.5);
-  border-color: rgba(0,0,0,0.1);
-}
 </style>"""
 
 
