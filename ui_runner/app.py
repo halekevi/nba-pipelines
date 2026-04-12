@@ -2275,6 +2275,12 @@ def api_tickets_ev_top20():
     return r
 
 
+@app.get("/ev-top20")
+def ev_top20_redirect():
+    """Legacy path used in bookmarks; EV TOP20 page lives at /tickets/ev."""
+    return redirect("/tickets/ev", code=302)
+
+
 @app.get("/tickets/ev")
 def page_tickets_ev():
     r = make_response(

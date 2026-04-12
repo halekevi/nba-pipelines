@@ -258,42 +258,189 @@ def estimate_raw_combo_count(n_legs: int, pool: int) -> int:
     return math.comb(pool, n_legs)
 
 
+def _exposure_player_key(name: str) -> str:
+    """Normalize for cross-row exposure (case/whitespace)."""
+    return re.sub(r"\s+", " ", str(name or "").strip()).casefold()
+
+
+def canonical_ticket_key(r: dict[str, Any]) -> frozenset[tuple[str, str, float, str]]:
+    """Same legs (player+prop+line+direction) = duplicate ticket."""
+    tk = r.get("_ticket_key")
+    if isinstance(tk, frozenset):
+        return tk
+    out: list[tuple[str, str, float, str]] = []
+    detail = r.get("legs_detail") or []
+    for x in detail:
+        if isinstance(x, dict):
+            try:
+                ln = float(x.get("line"))
+            except (TypeError, ValueError):
+                ln = 0.0
+            out.append(
+                (
+                    _exposure_player_key(str(x.get("player", "") or "")),
+                    str(x.get("prop_type", "") or "").strip().lower(),
+                    round(ln, 4),
+                    str(x.get("direction", "") or "").strip().upper(),
+                )
+            )
+        elif isinstance(x, str):
+            parts = x.split()
+            if len(parts) >= 4:
+                try:
+                    ln = float(parts[-2])
+                except ValueError:
+                    ln = 0.0
+                direction = parts[-1].upper()
+                prop = parts[-3] if len(parts) >= 4 else ""
+                player_guess = " ".join(parts[:-3]).strip()
+                out.append(
+                    (
+                        _exposure_player_key(player_guess),
+                        prop.lower(),
+                        ln,
+                        direction,
+                    )
+                )
+    return frozenset(out) if out else frozenset()
+
+
+def get_players_from_result(r: dict[str, Any]) -> list[str]:
+    """Display / exposure names (original casing preferred)."""
+    keys = r.get("player_keys")
+    if isinstance(keys, list) and keys:
+        return [str(p).strip() for p in keys if str(p).strip()]
+    detail = r.get("legs_detail") or []
+    players: list[str] = []
+    for leg in detail:
+        if isinstance(leg, dict):
+            p = leg.get("player") or leg.get("Player")
+            if p:
+                players.append(str(p).strip())
+        elif isinstance(leg, str):
+            parts = leg.split()
+            if len(parts) >= 4:
+                players.append(" ".join(parts[:-3]).strip())
+            elif parts:
+                players.append(parts[0])
+    if not players:
+        for line in r.get("legs") or []:
+            if isinstance(line, str) and line.strip():
+                parts = line.split()
+                if len(parts) >= 4:
+                    players.append(" ".join(parts[:-3]).strip())
+    return [p for p in players if p]
+
+
+def short_player_label(name: str) -> str:
+    """LaMelo Ball → LaMelo B.; Jesús Luzardo → Jesús L."""
+    s = str(name or "").strip()
+    if not s:
+        return "?"
+    if "+" in s:
+        s = s.split("+", 1)[0].strip()
+    parts = s.split()
+    if len(parts) >= 2:
+        return f"{parts[0]} {parts[-1][0]}."
+    return parts[0][:14]
+
+
+def _line_suffix_for_leg(leg: dict[str, Any]) -> str:
+    try:
+        v = float(leg.get("line"))
+    except (TypeError, ValueError):
+        return ""
+    s = f"{v:.1f}".rstrip("0").rstrip(".")
+    return s
+
+
+def format_ticket_players_line(r: dict[str, Any], max_len: int = 52) -> str:
+    """Abbreviated names plus line (e.g. Jesús L/5.5) so same player different lines stays distinct."""
+    detail = r.get("legs_detail") or []
+    chunks: list[str] = []
+    if detail and isinstance(detail[0], dict):
+        for leg in detail:
+            if not isinstance(leg, dict):
+                continue
+            p = str(leg.get("player") or "").strip()
+            if not p:
+                continue
+            lab = short_player_label(p)
+            sfx = _line_suffix_for_leg(leg)
+            chunks.append(f"{lab}/{sfx}" if sfx else lab)
+    if not chunks:
+        players = get_players_from_result(r)
+        if not players:
+            return "—"
+        chunks = [short_player_label(p) for p in players]
+    line = "+".join(chunks)
+    return (line[: max_len - 1] + "…") if len(line) > max_len else line
+
+
+MAX_PLAYER_IN_TOP20 = 3
+
+
 def get_top_n(
     results: list[dict[str, Any]],
     n: int,
     mode: str,
-    max_player: int = 3,
+    max_player: int = MAX_PLAYER_IN_TOP20,
     max_sport: int = 8,
+    verbose: bool = False,
 ) -> list[dict[str, Any]]:
     mode = str(mode or "balanced").strip().lower()
     if mode == "pure_ev":
-        results = sorted(results, key=lambda r: r.get("score_pure_ev", 0.0), reverse=True)
+        sorted_results = sorted(results, key=lambda r: r.get("score_pure_ev", 0.0), reverse=True)
     elif mode == "safe":
-        results = sorted(
+        sorted_results = sorted(
             results,
             key=lambda r: (r.get("score_safe", 0.0), r.get("p_win", 0.0)),
             reverse=True,
         )
     else:
-        results = sorted(results, key=lambda r: r.get("score_balanced", 0.0), reverse=True)
+        sorted_results = sorted(results, key=lambda r: r.get("score_balanced", 0.0), reverse=True)
 
     player_exposure: dict[str, int] = {}
     sport_exposure: dict[str, int] = {}
+    # Dedup before exposure: first occurrence of each canonical leg-set in sort order wins.
+    seen_ticket_keys: set[frozenset[tuple[str, str, float, str]]] = set()
     top_n: list[dict[str, Any]] = []
+    n_dup_skip = 0
+    n_player_cap_skip = 0
+    n_sport_cap_skip = 0
 
-    for r in results:
-        detail = r.get("legs_detail") or []
-        players = [str(x.get("player", "")) for x in detail]
+    for r in sorted_results:
+        tkey = canonical_ticket_key(r)
+        if not tkey and verbose:
+            print(f"[ULTIMATE] WARN: empty ticket_key (no legs?) legs={r.get('legs')!r}")
+        if tkey in seen_ticket_keys:
+            n_dup_skip += 1
+            if verbose and n_dup_skip <= 25:
+                print(f"[ULTIMATE] skip duplicate ticket (same leg-set already processed) key={tkey}")
+            continue
+        seen_ticket_keys.add(tkey)
+
+        players_raw = get_players_from_result(r)
+        players_expo = [_exposure_player_key(p) for p in players_raw if p]
+        if not players_expo and verbose:
+            print(f"[ULTIMATE] WARN: no players resolved for ticket p_win={r.get('p_win')} legs={r.get('legs')!r}")
+
+        if any(player_exposure.get(pk, 0) >= max_player for pk in players_expo):
+            n_player_cap_skip += 1
+            if verbose and n_player_cap_skip <= 25:
+                print(
+                    f"[ULTIMATE] skip player cap: players={players_raw} "
+                    f"counts={[(pk, player_exposure.get(pk, 0)) for pk in players_expo]}"
+                )
+            continue
+
         sports = list(r.get("sports") or [])
-
-        if any(player_exposure.get(p, 0) >= max_player for p in players if p):
-            continue
         if any(sport_exposure.get(s, 0) >= max_sport for s in sports if s):
+            n_sport_cap_skip += 1
             continue
 
-        for p in players:
-            if p:
-                player_exposure[p] = player_exposure.get(p, 0) + 1
+        for pk in players_expo:
+            player_exposure[pk] = player_exposure.get(pk, 0) + 1
         for s in sports:
             if s:
                 sport_exposure[s] = sport_exposure.get(s, 0) + 1
@@ -302,6 +449,12 @@ def get_top_n(
         top_n.append(r)
         if len(top_n) >= n:
             break
+
+    if verbose and (n_dup_skip or n_player_cap_skip or n_sport_cap_skip):
+        print(
+            f"[ULTIMATE] get_top_n skip summary: duplicate_legset={n_dup_skip} "
+            f"player_cap={n_player_cap_skip} sport_cap={n_sport_cap_skip}"
+        )
 
     return top_n
 
@@ -337,6 +490,7 @@ def main() -> int:
     ap.add_argument("--min-ev", type=float, default=0.80)
     ap.add_argument("--top-n", type=int, default=20)
     ap.add_argument("--dry-run", action="store_true", help="Print summary only; do not write files")
+    ap.add_argument("--verbose", action="store_true", help="Log dedupe / exposure skips in get_top_n")
     args = ap.parse_args()
 
     date_str = str(args.date or "").strip()[:10] or date.today().strftime("%Y-%m-%d")
@@ -430,12 +584,24 @@ def main() -> int:
             leg_strs = [
                 f"{l['player']} {l['prop_type']} {l['line']} {l['direction']}" for l in combo
             ]
+            ticket_key = frozenset(
+                (
+                    _exposure_player_key(str(l["player"])),
+                    str(l.get("prop_type", "")).strip().lower(),
+                    round(float(l["line"]), 4),
+                    str(l.get("direction", "")).strip().upper(),
+                )
+                for l in combo
+            )
+            player_keys = [str(l["player"]).strip() for l in combo]
             all_results.append(
                 {
                     "rank": 0,
                     "n_legs": n_legs,
                     "legs": leg_strs,
                     "legs_detail": leg_detail_to_jsonable(combo),
+                    "player_keys": player_keys,
+                    "_ticket_key": ticket_key,
                     "sports": sorted({str(l["sport"]) for l in combo}),
                     "n_sports": len({l["sport"] for l in combo}),
                     "pick_types": [l["pick_type"] for l in combo],
@@ -460,17 +626,28 @@ def main() -> int:
         total_combos_evaluated += combos_tested
         print(f"[ULTIMATE] {n_legs}-leg: tested={combos_tested} kept={combos_kept}")
 
-    top = get_top_n(all_results, int(args.top_n), args.mode)
+    top = get_top_n(all_results, int(args.top_n), args.mode, verbose=bool(args.verbose))
     mode_label = str(args.mode).upper()
 
     print(f"\n=== ULTIMATE TICKETS — {mode_label} MODE ===")
-    print(f"{'Rank':<5} | {'Legs':<4} | {'Sports':<18} | {'P(Win)':<8} | {'Pay':<6} | {'EV':<6} | Rec")
+    hdr = f"{'Rank':<5} | {'Legs':<4} | {'Players':<52} | {'Sports':<14} | {'P(Win)':<8} | {'Pay':<5} | {'EV':<6} | Rec"
+    print(hdr)
+    print("-" * len(hdr))
     for t in top[:10]:
         sp = "+".join(t["sports"])
+        pline = format_ticket_players_line(t)
         print(
-            f"{t['rank']:<5} | {t['n_legs']:<4} | {sp:<18} | "
-            f"{t['p_win_pct']:<7.1f}% | {t['payout']:<5.1f}x | {t['ev']:<6.2f} | {t['recommendation']}"
+            f"{t['rank']:<5} | {t['n_legs']:<4} | {pline:<52} | {sp:<14} | "
+            f"{t['p_win_pct']:<7.1f}% | {t['payout']:<4.1f}x | {t['ev']:<6.2f} | {t['recommendation']}"
         )
+
+    if args.verbose:
+        print("\n[ULTIMATE] Top-10 resolved players (post dedupe + exposure):")
+        for t in top[:10]:
+            print(f"  rank {t['rank']}: players={get_players_from_result(t)}")
+        print("\n[ULTIMATE] Top-6 canonical leg keys (why similar rows may differ):")
+        for t in top[:6]:
+            print(f"  rank {t['rank']}: key={canonical_ticket_key(t)}")
 
     generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     ui_payload = {
@@ -492,6 +669,7 @@ def main() -> int:
                 "n_goblins": t["n_goblins"],
                 "n_demons": t["n_demons"],
                 "pick_types": t["pick_types"],
+                "player_keys": t.get("player_keys"),
             }
             for t in top
         ],
@@ -509,7 +687,11 @@ def main() -> int:
 
     rows = []
     for t in all_results:
-        row = {k: v for k, v in t.items() if k != "legs_detail"}
+        row = {
+            k: v
+            for k, v in t.items()
+            if k != "legs_detail" and not str(k).startswith("_")
+        }
         row["legs_detail"] = json.dumps(t.get("legs_detail") or [])
         rows.append(row)
     if rows:
@@ -534,7 +716,10 @@ def main() -> int:
                 "date": date_str,
                 "mode": args.mode,
                 "total_combos_evaluated": total_combos_evaluated,
-                "results": all_results,
+                "results": [
+                    {k: v for k, v in t.items() if not str(k).startswith("_")}
+                    for t in all_results
+                ],
             },
             f,
             indent=2,
