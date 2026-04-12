@@ -2506,72 +2506,184 @@ def api_slate_display_date():
     return r
 
 
-# API: Slate picks - deduped unique picks from tickets_latest.json
+def _side_hit_count_for_slate_picks(raw: object, n: int) -> int | None:
+    """Match UI streakHits: rate in [0,1] or integer count in last n games."""
+    if raw is None:
+        return None
+    try:
+        x = float(raw)
+    except (TypeError, ValueError):
+        return None
+    if x != x:  # NaN
+        return None
+    if x <= 1.0:
+        return max(0, min(n, int(round(x * n))))
+    return max(0, min(n, int(round(x))))
+
+
+def _player_initials_from_name(player: object) -> str:
+    s = str(player or "").strip()
+    if not s:
+        return ""
+    parts = s.split()
+    if len(parts) >= 2 and parts[0] and parts[1]:
+        return (parts[0][0] + parts[1][0]).upper()
+    return s[:2].upper()
+
+
+def _picks_payload_from_slate_latest() -> dict[str, Any] | None:
+    """
+    Home /api/slate fallback when tickets_latest.json is missing or has no leg rows.
+    Uses the same slate_latest.json as /api/slate-sport (pipeline output).
+    """
+    if not _template_json_available("slate_latest.json"):
+        return None
+    try:
+        data = read_json_cached(TEMPLATES_DIR / "slate_latest.json")
+    except Exception:
+        return None
+    if not isinstance(data, dict):
+        return None
+    sports = data.get("sports") or {}
+    if not isinstance(sports, dict):
+        return None
+    seen: set[tuple[Any, ...]] = set()
+    picks: list[dict[str, Any]] = []
+    for raw_key, rows in sports.items():
+        lk = str(raw_key).strip().lower()
+        if lk in DISABLED_SPORTS:
+            continue
+        if not isinstance(rows, list):
+            continue
+        sport_label = str(raw_key).strip().upper()
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            player = row.get("player") or ""
+            prop = row.get("prop") or row.get("prop_type") or ""
+            dirv = row.get("dir") or row.get("direction") or "OVER"
+            line = row.get("line")
+            key = (player, prop, dirv, line)
+            if key in seen:
+                continue
+            seen.add(key)
+            l5_over = row.get("l5_over")
+            l5_under = row.get("l5_under")
+            if l5_under is None and l5_over is not None:
+                ho = _side_hit_count_for_slate_picks(l5_over, 5)
+                if ho is not None:
+                    l5_under = 5 - ho
+            l10_over = row.get("l10_over")
+            l10_under = row.get("l10_under")
+            if l10_under is None and l10_over is not None:
+                ho = _side_hit_count_for_slate_picks(l10_over, 10)
+                if ho is not None:
+                    l10_under = 10 - ho
+            try:
+                hr = float(row.get("hit_rate") or 0.0)
+            except (TypeError, ValueError):
+                hr = 0.0
+            try:
+                edge = float(row.get("edge") or 0.0)
+            except (TypeError, ValueError):
+                edge = 0.0
+            picks.append(
+                {
+                    "sport": sport_label,
+                    "initials": _player_initials_from_name(player),
+                    "player": player,
+                    "prop": prop,
+                    "line": line,
+                    "pick": row.get("pick_type") or "Standard",
+                    "dir": str(dirv).strip().upper() or "OVER",
+                    "hit": round(hr * 100),
+                    "edge": edge,
+                    "l5_over": l5_over,
+                    "l5_under": l5_under,
+                    "l10_over": l10_over,
+                    "l10_under": l10_under,
+                    "l5_avg": row.get("l5_avg"),
+                    "season_avg": row.get("season_avg") or row.get("szn_avg"),
+                }
+            )
+    if not picks:
+        return None
+    picks.sort(key=lambda p: abs(float(p.get("edge") or 0.0)), reverse=True)
+    return {
+        "picks": picks,
+        "generated_at": data.get("generated_at"),
+        "date": data.get("date"),
+        "source": "slate_latest",
+    }
+
+
+# API: Slate picks — deduped legs from tickets_latest.json, else rows from slate_latest.json
 @app.get("/api/slate")
 def api_slate():
-    json_path = TEMPLATES_DIR / "tickets_latest.json"
-    if not _template_json_available("tickets_latest.json"):
-        return jsonify({"picks": [], "generated_at": None, "date": None})
+    tickets_path = TEMPLATES_DIR / "tickets_latest.json"
 
     def _build_picks():
-        def _side_hit_count(raw: object, n: int) -> int | None:
-            """Match UI streakHits: rate in [0,1] or integer count in last n games."""
-            if raw is None:
-                return None
-            try:
-                x = float(raw)
-            except (TypeError, ValueError):
-                return None
-            if x != x:  # NaN
-                return None
-            if x <= 1.0:
-                return max(0, min(n, int(round(x * n))))
-            return max(0, min(n, int(round(x))))
-
-        data = read_json_cached(json_path)
-        seen = set()
-        picks = []
-        for group in (data.get("groups") or []):
-            for ticket in (group.get("tickets") or []):
-                for leg in (ticket.get("legs") or []):
-                    key = (leg.get("player"), leg.get("prop_type"), leg.get("direction"), leg.get("line"))
-                    if key in seen:
-                        continue
-                    seen.add(key)
-                    l5_over = leg.get("l5_over")
-                    l5_under = leg.get("l5_under")
-                    if l5_under is None and l5_over is not None:
-                        ho = _side_hit_count(l5_over, 5)
-                        if ho is not None:
-                            l5_under = 5 - ho
-                    l10_over = leg.get("l10_over")
-                    l10_under = leg.get("l10_under")
-                    if l10_under is None and l10_over is not None:
-                        ho = _side_hit_count(l10_over, 10)
-                        if ho is not None:
-                            l10_under = 10 - ho
-                    picks.append({
-                        "sport":      leg.get("sport", ""),
-                        "initials":   leg.get("initials", ""),
-                        "player":     leg.get("player", ""),
-                        "prop":       leg.get("prop_type", ""),
-                        "line":       leg.get("line", 0),
-                        "pick":       leg.get("pick_type", "Standard"),
-                        "dir":        leg.get("direction", "OVER"),
-                        "hit":        round((leg.get("hit_rate") or 0) * 100),
-                        "edge":       leg.get("edge") or 0,
-                        "l5_over":    l5_over,
-                        "l5_under":   l5_under,
-                        "l10_over":   l10_over,
-                        "l10_under":  l10_under,
-                        "l5_avg":     leg.get("l5_avg"),
-                        "season_avg": leg.get("season_avg"),
-                    })
-        picks.sort(key=lambda p: abs(p["edge"]), reverse=True)
-        return {"picks": picks, "generated_at": data.get("generated_at"), "date": data.get("date")}
+        if not _template_json_available("tickets_latest.json"):
+            base: dict[str, Any] = {"picks": [], "generated_at": None, "date": None}
+        else:
+            data = read_json_cached(tickets_path)
+            seen = set()
+            picks: list[dict[str, Any]] = []
+            for group in (data.get("groups") or []):
+                for ticket in (group.get("tickets") or []):
+                    for leg in (ticket.get("legs") or []):
+                        key = (leg.get("player"), leg.get("prop_type"), leg.get("direction"), leg.get("line"))
+                        if key in seen:
+                            continue
+                        seen.add(key)
+                        l5_over = leg.get("l5_over")
+                        l5_under = leg.get("l5_under")
+                        if l5_under is None and l5_over is not None:
+                            ho = _side_hit_count_for_slate_picks(l5_over, 5)
+                            if ho is not None:
+                                l5_under = 5 - ho
+                        l10_over = leg.get("l10_over")
+                        l10_under = leg.get("l10_under")
+                        if l10_under is None and l10_over is not None:
+                            ho = _side_hit_count_for_slate_picks(l10_over, 10)
+                            if ho is not None:
+                                l10_under = 10 - ho
+                        picks.append(
+                            {
+                                "sport": leg.get("sport", ""),
+                                "initials": leg.get("initials", ""),
+                                "player": leg.get("player", ""),
+                                "prop": leg.get("prop_type", ""),
+                                "line": leg.get("line", 0),
+                                "pick": leg.get("pick_type", "Standard"),
+                                "dir": leg.get("direction", "OVER"),
+                                "hit": round((leg.get("hit_rate") or 0) * 100),
+                                "edge": leg.get("edge") or 0,
+                                "l5_over": l5_over,
+                                "l5_under": l5_under,
+                                "l10_over": l10_over,
+                                "l10_under": l10_under,
+                                "l5_avg": leg.get("l5_avg"),
+                                "season_avg": leg.get("season_avg"),
+                            }
+                        )
+            picks.sort(key=lambda p: abs(float(p.get("edge") or 0)), reverse=True)
+            base = {
+                "picks": picks,
+                "generated_at": data.get("generated_at"),
+                "date": data.get("date"),
+            }
+        if base.get("picks"):
+            base["source"] = "tickets_latest"
+            return base
+        fb = _picks_payload_from_slate_latest()
+        if fb:
+            return fb
+        base.setdefault("source", None)
+        return base
 
     try:
-        return _gz_json_response("slate-picks", _build_picks, ttl=_PIPELINE_JSON_TTL)
+        return _gz_json_response("slate-picks-v2-tickets-or-slate", _build_picks, ttl=_PIPELINE_JSON_TTL)
     except Exception as e:
         return jsonify({"error": str(e), "picks": []}), 500
 
