@@ -7477,6 +7477,137 @@ def _group_sport(group_name: str) -> str:
     return "NBA"
 
 
+_EV_REC_RANK = {"SKIP": 0, "MARGINAL": 1, "OK": 2, "STRONG": 3}
+
+
+def _ticket_group_filter_slugs(group_name: str) -> tuple[str, str, str]:
+    """(data_sport, data_type, data_pick) lowercase slugs for /tickets filter pills."""
+    name_u = (group_name or "").upper().replace("\u00a0", " ")
+    sport_key = _group_sport(group_name)
+    sport_sl = sport_key.lower()
+
+    if " FLEX" in name_u or name_u.startswith("FLEX ") or " FLEX " in name_u:
+        type_sl = "flex"
+    elif "POWER" in name_u:
+        type_sl = "power"
+    else:
+        type_sl = "power"
+
+    if "GOBLIN" in name_u:
+        pick_sl = "goblin"
+    elif "DEMON" in name_u:
+        pick_sl = "demon"
+    else:
+        pick_sl = "standard"
+
+    return sport_sl, type_sl, pick_sl
+
+
+def _group_ev_data_attr(tickets: list) -> str:
+    """Strongest empirical payout recommendation across tickets in the group."""
+    best_r = -1
+    best_sl = ""
+    for t in tickets:
+        p = t.get("payout")
+        if not isinstance(p, dict):
+            continue
+        rec = str(p.get("recommendation") or "").strip().upper()
+        r = _EV_REC_RANK.get(rec, -1)
+        if r > best_r:
+            best_r = r
+            best_sl = rec.lower() if rec in _EV_REC_RANK else ""
+    return best_sl
+
+
+def _group_ev_badge_summary_html(tickets: list) -> str:
+    """Header line: best empirical EV among tickets with payout JSON."""
+    best: tuple[float, str, str] | None = None
+    for t in tickets:
+        p = t.get("payout")
+        if not isinstance(p, dict) or p.get("ev") is None:
+            continue
+        try:
+            evf = float(p["ev"])
+        except (TypeError, ValueError):
+            continue
+        if not math.isfinite(evf):
+            continue
+        rec = str(p.get("recommendation") or "")
+        ev_cls = _payout_ev_class(rec)
+        if best is None or evf > best[0]:
+            best = (evf, rec, ev_cls)
+    if best is None:
+        return '<span class="group-ev-badge group-ev-badge--na">—</span>'
+    evf, rec, ev_cls = best
+    return f'<span class="group-ev-badge {ev_cls}">EV {_fmt(evf, 2)} — {_h(rec)}</span>'
+
+
+def _tickets_filter_pills_html(attr_rows: list[dict]) -> str:
+    """Dynamic filter bar from group-derived slugs (sport / power / flex / goblin / demon / strong)."""
+    sports_seen: list[str] = []
+    seen_sp: set[str] = set()
+    has_power = has_flex = has_goblin = has_demon = has_strong = False
+    for row in attr_rows:
+        sp = row.get("sport") or ""
+        if sp and sp not in seen_sp:
+            seen_sp.add(sp)
+            sports_seen.append(sp)
+        if row.get("type") == "power":
+            has_power = True
+        if row.get("type") == "flex":
+            has_flex = True
+        if row.get("pick") == "goblin":
+            has_goblin = True
+        if row.get("pick") == "demon":
+            has_demon = True
+        if row.get("ev") == "strong":
+            has_strong = True
+
+    sport_order = (
+        "nba",
+        "nba1q",
+        "nba1h",
+        "cbb",
+        "wcbb",
+        "nhl",
+        "mlb",
+        "soccer",
+        "tennis",
+        "cross",
+        "mix",
+    )
+    sports_sorted = sorted(
+        sports_seen,
+        key=lambda s: (sport_order.index(s) if s in sport_order else 99, s),
+    )
+
+    def _pill(data_filter: str, label: str, *, active: bool = False) -> str:
+        cls = "ticket-filter-pill active" if active else "ticket-filter-pill"
+        return f'<button type="button" class="{cls}" data-filter="{_h(data_filter)}">{label}</button>'
+
+    chunks: list[str] = [
+        '<div class="ticket-filter-bar" role="toolbar" aria-label="Filter ticket groups">',
+        _pill("all", "ALL", active=True),
+    ]
+    for sp in sports_sorted:
+        chunks.append(_pill(sp, sp.upper()))
+    if has_power:
+        chunks.append(_pill("power", "POWER"))
+    if has_flex:
+        chunks.append(_pill("flex", "FLEX"))
+    if has_goblin:
+        chunks.append(_pill("goblin", "GOBLIN"))
+    if has_demon:
+        chunks.append(_pill("demon", "DEMON"))
+    if has_strong:
+        chunks.append(_pill("strong", "⚡ STRONG"))
+    chunks.append('<span class="ticket-filter-bar-spacer" aria-hidden="true"></span>')
+    chunks.append('<button type="button" class="ticket-filter-bar-action" id="expand-all">EXPAND ALL</button>')
+    chunks.append('<button type="button" class="ticket-filter-bar-action" id="collapse-all">COLLAPSE ALL</button>')
+    chunks.append("</div>")
+    return "".join(chunks)
+
+
 def _tickets_fmt_line_plain(x) -> str:
     try:
         if x is None:
@@ -7717,14 +7848,37 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
     # ── Groups ────────────────────────────────────────────────────────────────
     leg_graph_uid = 0
     table_cols = 13
+
+    prepared: list[dict] = []
     for group in groups:
+        tickets = group.get("tickets") or []
+        if not tickets:
+            continue
+        gn = group.get("group_name") or "Tickets"
+        ds, dt, dpk = _ticket_group_filter_slugs(gn)
+        ev_a = _group_ev_data_attr(tickets)
+        prepared.append(
+            {
+                "group": group,
+                "sport": ds,
+                "type": dt,
+                "pick": dpk,
+                "ev": ev_a,
+            }
+        )
+
+    filter_attr_rows = [
+        {"sport": x["sport"], "type": x["type"], "pick": x["pick"], "ev": x["ev"]} for x in prepared
+    ]
+    parts.append(_tickets_filter_pills_html(filter_attr_rows))
+
+    for ent in prepared:
+        group = ent["group"]
         group_name = group.get("group_name") or "Tickets"
         n_legs = group.get("n_legs") or 0
         power_pay = group.get("power_payout")
         flex_pay = group.get("flex_payout")
         tickets = group.get("tickets") or []
-        if not tickets:
-            continue
 
         sport_key = _group_sport(group_name)
         accent = _sport_accent(sport_key)
@@ -7736,6 +7890,22 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
             pay_label = f"{_fmt(power_pay, 1)}×"
 
         group_meta_html = f'{n_legs}-leg{(" &nbsp;·&nbsp; " + pay_label) if pay_label else ""}'
+        ev_badge_html = _group_ev_badge_summary_html(tickets)
+        d_sport = ent["sport"]
+        d_type = ent["type"]
+        d_pick = ent["pick"]
+        d_ev = ent["ev"]
+
+        parts.append(f'''
+<div class="ticket-group-section" data-sport="{_h(d_sport)}" data-type="{_h(d_type)}" data-pick="{_h(d_pick)}" data-ev="{_h(d_ev)}">
+  <div class="ticket-group-header collapsible-header" role="button" tabindex="0" aria-expanded="true">
+    <span class="group-title" style="color:{accent};">{_h(group_name)}</span>
+    <span class="group-meta">{group_meta_html}</span>
+    {ev_badge_html}
+    <span class="collapse-icon" aria-hidden="true">▼</span>
+  </div>
+  <div class="ticket-group-body">
+''')
 
         for ticket in tickets:
             ticket_no = ticket.get("ticket_no") or ""
@@ -7795,10 +7965,6 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
             parts.append(f'''
 <div class="ticket" style="border-left:4px solid {accent};">
   <div class="ticket-body">
-    <div class="ticket-group-band">
-      <span class="group-title" style="color:{accent};">{_h(group_name)}</span>
-      <span class="group-meta">{group_meta_html}</span>
-    </div>
       <div class="ticket-hdr">
         <span class="ticket-no">#{_h(ticket_no)}</span>
         {hdr_brackets}
@@ -7985,9 +8151,11 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
   </div>
 </div>''')
 
+        parts.append("</div></div>")  # ticket-group-body, ticket-group-section
+
     parts.append('</div>')  # end .tickets-built.shell
 
-    # Inline JS: expand/collapse leg graph rows on click
+    # Inline JS: leg graphs, filter pills, collapsible groups
     parts.append('''
 <script>
 (function(){
@@ -7997,6 +8165,65 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
       if(next && next.classList.contains('leg-graph-row')){
         next.classList.toggle('open');
       }
+    });
+  });
+
+  document.querySelectorAll('.ticket-filter-pill').forEach(function(pill){
+    pill.addEventListener('click', function(){
+      document.querySelectorAll('.ticket-filter-pill').forEach(function(p){ p.classList.remove('active'); });
+      pill.classList.add('active');
+      var filter = (pill.getAttribute('data-filter') || '').toLowerCase();
+      document.querySelectorAll('.ticket-group-section').forEach(function(group){
+        if(filter === 'all'){
+          group.style.display = '';
+        } else {
+          var ds = (group.getAttribute('data-sport') || '').toLowerCase();
+          var dt = (group.getAttribute('data-type') || '').toLowerCase();
+          var dp = (group.getAttribute('data-pick') || '').toLowerCase();
+          var de = (group.getAttribute('data-ev') || '').toLowerCase();
+          var matches = ds === filter || dt === filter || dp === filter || de === filter;
+          group.style.display = matches ? '' : 'none';
+        }
+      });
+    });
+  });
+
+  function toggleSectionCollapsed(section){
+    if(!section) return;
+    section.classList.toggle('collapsed');
+    var hdr = section.querySelector('.collapsible-header');
+    if(hdr) hdr.setAttribute('aria-expanded', section.classList.contains('collapsed') ? 'false' : 'true');
+  }
+
+  document.querySelectorAll('.tickets-built .collapsible-header').forEach(function(header){
+    header.addEventListener('click', function(ev){
+      ev.preventDefault();
+      toggleSectionCollapsed(header.closest('.ticket-group-section'));
+    });
+    header.addEventListener('keydown', function(ev){
+      if(ev.key === 'Enter' || ev.key === ' '){
+        ev.preventDefault();
+        toggleSectionCollapsed(header.closest('.ticket-group-section'));
+      }
+    });
+  });
+
+  var ex = document.getElementById('expand-all');
+  if(ex) ex.addEventListener('click', function(ev){
+    ev.preventDefault();
+    document.querySelectorAll('.ticket-group-section').forEach(function(s){
+      s.classList.remove('collapsed');
+      var h = s.querySelector('.collapsible-header');
+      if(h) h.setAttribute('aria-expanded', 'true');
+    });
+  });
+  var col = document.getElementById('collapse-all');
+  if(col) col.addEventListener('click', function(ev){
+    ev.preventDefault();
+    document.querySelectorAll('.ticket-group-section').forEach(function(s){
+      s.classList.add('collapsed');
+      var h = s.querySelector('.collapsible-header');
+      if(h) h.setAttribute('aria-expanded', 'false');
     });
   });
 })();
