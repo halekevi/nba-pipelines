@@ -573,30 +573,6 @@ if ($env:PROPORACLE_SKIP_GRADES_GIT_PUSH -ne "1") {
             Pop-Location
         }
     }
-
-    $TeHtml = Join-Path $TemplatesDir "ticket_eval_$Date.html"
-    if (Test-Path $TeHtml) {
-        Push-Location $Root
-        try {
-            $env:GIT_TERMINAL_PROMPT = "0"
-            $teRel = "ui_runner/templates/ticket_eval_$Date.html"
-            git add -- $teRel 2>$null | Out-Null
-            git diff --cached --quiet
-            if ($LASTEXITCODE -ne 0) {
-                git commit -m "data: ticket eval $Date"
-                if ($LASTEXITCODE -eq 0) {
-                    git push origin HEAD 2>$null
-                    Write-Host "[GRADER] Ticket eval HTML pushed for $Date" -ForegroundColor Green
-                }
-            }
-        }
-        catch {
-            Write-Warning "Ticket eval HTML git publish skipped: $_"
-        }
-        finally {
-            Pop-Location
-        }
-    }
 }
 
 # =============================
@@ -676,6 +652,36 @@ if (Test-Path $TicketEvalBuilderScript) {
 }
 else {
     Write-Host "Skipping ticket eval build (build_ticket_eval.py not found)." -ForegroundColor Yellow
+}
+
+# Publish ticket eval + slate eval HTML (after combined ticket grader + build above).
+if ($env:PROPORACLE_SKIP_GRADES_GIT_PUSH -ne "1") {
+    $TeHtml = Join-Path $TemplatesDir "ticket_eval_$Date.html"
+    $SeHtml = Join-Path $TemplatesDir "slate_eval_$Date.html"
+    if ((Test-Path $TeHtml) -or (Test-Path $SeHtml)) {
+        Push-Location $Root
+        try {
+            $env:GIT_TERMINAL_PROMPT = "0"
+            $teRel = "ui_runner/templates/ticket_eval_$Date.html"
+            $seRel = "ui_runner/templates/slate_eval_$Date.html"
+            if (Test-Path $TeHtml) { git add -- $teRel 2>$null | Out-Null }
+            if (Test-Path $SeHtml) { git add -- $seRel 2>$null | Out-Null }
+            git diff --cached --quiet
+            if ($LASTEXITCODE -ne 0) {
+                git commit -m "data: ticket eval + slate eval grades $Date"
+                if ($LASTEXITCODE -eq 0) {
+                    git push origin HEAD 2>$null
+                    Write-Host "[GRADER] Grades ticket/slate HTML pushed for $Date" -ForegroundColor Green
+                }
+            }
+        }
+        catch {
+            Write-Warning "Grades HTML git publish skipped: $_"
+        }
+        finally {
+            Pop-Location
+        }
+    }
 }
 
 # =============================
