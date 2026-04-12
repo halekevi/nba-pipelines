@@ -1755,6 +1755,13 @@ def _build_html(
     # ── HTML
     esc = html.escape
     json_date = esc(str(payload.get("date") or arg_date))
+    ungraded_note_html = (
+        f" <strong>UNGRADED ({ungraded} legs):</strong> the matched graded row still has no actual or HIT/MISS—often unfinished games, voids, "
+        f"or grading before final stats. Re-run the grader after games; on hosts without <code>outputs/{json_date}/</code>, "
+        f"commit workbooks under <code>ui_runner/graded_slate/{json_date}/</code> before rebuilding this page. "
+        if ungraded > 0
+        else ""
+    )
 
     if n_pay:
         total_staked = 10 * n_pay
@@ -1949,15 +1956,15 @@ def _build_html(
         ".grade-ticket-result.won{color:var(--green);}",
         ".grade-ticket-result.lost{color:var(--red);}",
         ".grade-ticket-result-label{opacity:.85;font-weight:600;}",
-        "body.ticket-eval-embed-grades{padding-top:0!important;padding-bottom:36px!important;}"
-        "body.ticket-eval-embed-grades .snav,body.ticket-eval-embed-grades #mobile-menu{display:none!important;}"
-        "body.ticket-eval-embed-grades > .grade-eval-summary{margin-top:0!important;}"
-        "body.ticket-eval-embed-grades .stats-bar{top:0!important;}"
-        "body.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;padding-top:9px!important;}",
+        "html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!important;}"
+        "html.ticket-eval-embed-grades .snav,html.ticket-eval-embed-grades #mobile-menu{display:none!important;}"
+        "html.ticket-eval-embed-grades body > .grade-eval-summary{margin-top:0!important;}"
+        "html.ticket-eval-embed-grades .stats-bar{top:0!important;}"
+        "html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;padding-top:9px!important;}",
         "</style>",
+        '<script>try{if(window.self!==window.top)document.documentElement.classList.add("ticket-eval-embed-grades");}catch(e){}</script>',
         "</head>",
         '<body class="ticket-eval-page">',
-        '<script>try{if(window.self!==window.top)document.body.classList.add("ticket-eval-embed-grades");}catch(e){}</script>',
         _render_site_nav_grades_active(),
         grade_eval_summary_html,
         '<div class="stats-bar">',
@@ -1985,7 +1992,7 @@ def _build_html(
         f"<strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/{json_date}/graded_*.xlsx</code>. "
         "<strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). "
         "Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss."
-        "</p>",
+        f"{ungraded_note_html}</p>",
     ]
     parts.append('<div class="ticket-sections-wrap">')
 

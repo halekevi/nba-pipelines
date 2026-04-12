@@ -215,6 +215,9 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .grades-toolbar-parent-slot.grades-toolbar-parent-slot--collapsed{display:none;height:0;min-height:0;overflow:hidden;margin:0;padding:0;border:0}
 .iframe-shell-stage{flex:1;min-height:0;position:relative;overflow:hidden;}
 .iframe-shell-stage > .grade-frame{position:absolute;inset:0;width:100%;height:100%;border:none;display:block;transition:opacity .25s;}
+/* Ticket tab: pull iframe flush under toolbar (ticket_eval has its own KPI bar) */
+.iframe-shell--ticket-tab .iframe-shell-toolbar{padding-bottom:0;gap:4px;}
+.iframe-shell--ticket-tab .iframe-shell-stage{margin-top:-1px;}
 .grades-analytics-wrap{position:absolute;inset:0;overflow:auto;padding:20px 24px 36px;z-index:4;background:transparent;}
 .grades-analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;max-width:1420px;margin:0 auto;}
 .grades-props-inner{max-width:1420px;margin:0 auto;}
@@ -1753,6 +1756,8 @@ function refreshControlsSummary() {
 }
 function switchTab(tab) {
   activeTab = tab;
+  const shell = document.getElementById('grades-iframe-shell');
+  if (shell) shell.classList.toggle('iframe-shell--ticket-tab', tab === 'tickets');
   if (tab === 'tickets' || tab === 'props') {
     restoreGradesToolbarToParent();
   }
@@ -1828,20 +1833,23 @@ function switchTab(tab) {
  */
 function applyTicketEvalGradesEmbed(doc) {
   if (!doc || !doc.head || !doc.body) return;
-  doc.body.classList.add('ticket-eval-embed-grades');
+  try {
+    doc.documentElement.classList.add('ticket-eval-embed-grades');
+    doc.body.classList.remove('ticket-eval-embed-grades');
+  } catch (_e) {}
   if (doc.getElementById('grades-embed-ticket-nav-css')) return;
   const st = doc.createElement('style');
   st.id = 'grades-embed-ticket-nav-css';
   st.setAttribute('data-from', 'grades-hub');
   st.textContent =
-    'body.ticket-eval-embed-grades{padding-top:0!important;padding-bottom:36px!important;}' +
-    'body.ticket-eval-embed-grades .snav,' +
-    'body.ticket-eval-embed-grades #mobile-menu{display:none!important;}' +
-    'body.ticket-eval-embed-grades > .grade-eval-summary{margin-top:0!important;}' +
-    'body.ticket-eval-embed-grades .stats-bar{top:0!important;}' +
-    'body.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar){margin-top:0!important;margin-bottom:0!important;border-bottom:none!important;' +
+    'html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!important;}' +
+    'html.ticket-eval-embed-grades .snav,' +
+    'html.ticket-eval-embed-grades #mobile-menu{display:none!important;}' +
+    'html.ticket-eval-embed-grades body > .grade-eval-summary{margin-top:0!important;}' +
+    'html.ticket-eval-embed-grades .stats-bar{top:0!important;}' +
+    'html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar){margin-top:0!important;margin-bottom:0!important;border-bottom:none!important;' +
     'border-radius:12px 12px 0 0!important;box-shadow:none!important;padding:6px 12px 6px!important;}' +
-    'body.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;' +
+    'html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;' +
     'border-radius:0 0 16px 16px!important;padding:9px clamp(12px,2.5vw,26px)!important;margin-bottom:10px!important;}';
   doc.head.appendChild(st);
 }

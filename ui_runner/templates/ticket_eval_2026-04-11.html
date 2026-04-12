@@ -140,11 +140,11 @@ details.ticket-bucket{margin:0 0 10px;}
 .grade-ticket-result.won{color:var(--green);}
 .grade-ticket-result.lost{color:var(--red);}
 .grade-ticket-result-label{opacity:.85;font-weight:600;}
-body.ticket-eval-embed-grades{padding-top:0!important;padding-bottom:36px!important;}body.ticket-eval-embed-grades .snav,body.ticket-eval-embed-grades #mobile-menu{display:none!important;}body.ticket-eval-embed-grades > .grade-eval-summary{margin-top:0!important;}body.ticket-eval-embed-grades .stats-bar{top:0!important;}body.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;padding-top:9px!important;}
+html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!important;}html.ticket-eval-embed-grades .snav,html.ticket-eval-embed-grades #mobile-menu{display:none!important;}html.ticket-eval-embed-grades body > .grade-eval-summary{margin-top:0!important;}html.ticket-eval-embed-grades .stats-bar{top:0!important;}html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;padding-top:9px!important;}
 </style>
+<script>try{if(window.self!==window.top)document.documentElement.classList.add("ticket-eval-embed-grades");}catch(e){}</script>
 </head>
 <body class="ticket-eval-page">
-<script>try{if(window.self!==window.top)document.body.classList.add("ticket-eval-embed-grades");}catch(e){}</script>
 <nav class="snav glass-card">
   <div class="nav-accent"></div>
   <a class="snav-brand" href="/">
