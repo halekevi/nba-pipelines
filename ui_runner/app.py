@@ -2609,6 +2609,10 @@ def _picks_payload_from_slate_latest() -> dict[str, Any] | None:
     if not picks:
         return None
     picks.sort(key=lambda p: abs(float(p.get("edge") or 0.0)), reverse=True)
+    # Cap: full slate can be 10k+ rows; hero table + edges only need top props by |edge|.
+    _max = 2500
+    if len(picks) > _max:
+        picks = picks[:_max]
     return {
         "picks": picks,
         "generated_at": data.get("generated_at"),
