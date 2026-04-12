@@ -329,27 +329,60 @@ def _ticket_payout_line_distance(row: Any) -> float:
     return 0.0
 
 
+def _normalize_historical_hit_rate_to_prob(hr_raw: Any, default: float = 0.65) -> float:
+    """Convert spreadsheet/UI hit rate to Bernoulli p in (0,1). Supports 0.8 or 80 or '80%'."""
+    if hr_raw is None or (isinstance(hr_raw, str) and not str(hr_raw).strip()):
+        return default
+    try:
+        s = str(hr_raw).strip().replace("%", "")
+        v = float(s)
+    except (TypeError, ValueError):
+        return default
+    if isinstance(v, float) and math.isnan(v):
+        return default
+    if v <= 0:
+        return default
+    if v > 1.0:
+        v = v / 100.0 if v <= 100.0 else 1.0
+    return max(0.05, min(0.99, float(v)))
+
+
 def _ticket_payout_hit_prob(row: Any) -> float:
     """
-    Per-leg hit probability for empirical EV. blended_score when present and in-range;
-    otherwise default 0.62 (pipeline constraint).
+    Per-leg hit probability for empirical EV: direction-aware historical hit rate
+    (hit_rate / over-under splits), not blended_score or ml_prob.
     """
-    raw = _ticket_row_get(row, "blended_score")
-    if raw is None or (isinstance(raw, str) and not str(raw).strip()):
-        return 0.62
-    try:
-        v = float(raw)
-    except (TypeError, ValueError):
-        return 0.62
-    if isinstance(v, float) and math.isnan(v):
-        return 0.62
-    if v <= 0:
-        return 0.62
-    if v <= 1.0:
-        return min(0.999, max(0.01, v))
-    if v <= 100.0:
-        return min(0.999, max(0.01, v / 100.0))
-    return 0.62
+    direction_raw = (
+        _ticket_row_get(row, "bet_direction")
+        or _ticket_row_get(row, "direction_used")
+        or _ticket_row_get(row, "direction")
+        or "OVER"
+    )
+    direction = str(direction_raw).strip().upper()
+    if "UNDER" in direction:
+        direction = "UNDER"
+    elif "OVER" in direction:
+        direction = "OVER"
+    else:
+        direction = "OVER"
+
+    hr_raw = None
+    if direction == "UNDER":
+        for key in ("under_hit_rate", "hit_rate_under_L5", "hit_rate_under_L10", "hit_rate"):
+            hr_raw = _ticket_row_get(row, key)
+            if hr_raw is not None and str(hr_raw).strip() != "":
+                break
+        if hr_raw is None or str(hr_raw).strip() == "":
+            hr_raw = _ticket_row_get(row, "hr")
+    else:
+        for key in ("over_hit_rate", "hit_rate_over_L5", "hit_rate_over_L10", "hit_rate"):
+            hr_raw = _ticket_row_get(row, key)
+            if hr_raw is not None and str(hr_raw).strip() != "":
+                break
+        if hr_raw is None or str(hr_raw).strip() == "":
+            hr_raw = _ticket_row_get(row, "hr")
+
+    return float(_normalize_historical_hit_rate_to_prob(hr_raw, default=0.65))
 
 
 def _ticket_payout_pick_type_token(row: Any) -> str:
