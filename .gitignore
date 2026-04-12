@@ -70,6 +70,9 @@ outputs/
 ResultFiles/
 **/outputs/
 **/ResultFiles/
+
+# Committed graded bundles for Railway / static hosts (populated by scripts/run_grader.ps1).
+# ui_runner/graded_slate/<date>/graded_*.xlsx — NOT ignored; keep under 5MB per file in the copy step.
 grades/
 models/
 

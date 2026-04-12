@@ -1,5 +1,7 @@
 param(
-    [string]$Date = ((Get-Date).AddDays(-1).ToString("yyyy-MM-dd"))
+    [string]$Date = ((Get-Date).AddDays(-1).ToString("yyyy-MM-dd")),
+    # After copying to ui_runner/graded_slate/<Date>/, commit and push (for CI/Railway).
+    [switch]$PushGradedSlate
 )
 
 $Root = Split-Path $PSScriptRoot -Parent
@@ -48,6 +50,48 @@ $NBA1QGradedFile = Join-Path $DateDir "graded_nba1q_$Date.xlsx"
 $WCBBGradedFile = Join-Path $DateDir "graded_wcbb_$Date.xlsx"
 $EvalHtmlFile = Join-Path $DateDir "slate_eval_$Date.html"
 $TemplatesDir = Join-Path $Root "ui_runner\templates"
+
+# Max size for graded_slate git copies (avoid huge Excel in repo).
+$GradedSlateMaxBytes = 5 * 1024 * 1024
+
+function Copy-PropOracleGradedSlateBundle {
+    param(
+        [string]$RepoRoot,
+        [string]$GradeDate,
+        [string]$OutputsDir,
+        [int]$MaxFileBytes
+    )
+
+    $destRoot = Join-Path $RepoRoot "ui_runner\graded_slate\$GradeDate"
+    New-Item -ItemType Directory -Force -Path $destRoot | Out-Null
+
+    $names = @(
+        "graded_nba_$GradeDate.xlsx",
+        "graded_cbb_$GradeDate.xlsx",
+        "graded_wcbb_$GradeDate.xlsx",
+        "graded_nhl_$GradeDate.xlsx",
+        "graded_mlb_$GradeDate.xlsx",
+        "graded_soccer_$GradeDate.xlsx",
+        "combined_tickets_graded_$GradeDate.xlsx"
+    )
+
+    foreach ($name in $names) {
+        $src = Join-Path $OutputsDir $name
+        if (-not (Test-Path $src)) {
+            continue
+        }
+        $len = (Get-Item -LiteralPath $src).Length
+        if ($len -gt $MaxFileBytes) {
+            Write-Warning "[GRADER] Skip graded_slate copy (over 5MB): $name ($len bytes)"
+            continue
+        }
+        $dst = Join-Path $destRoot $name
+        Copy-Item -LiteralPath $src -Destination $dst -Force
+        Write-Host "[GRADER] Deploy copy: $name ($len bytes)" -ForegroundColor Green
+    }
+
+    Write-Host "[GRADER] Graded slate bundle -> ui_runner\graded_slate\$GradeDate\" -ForegroundColor Cyan
+}
 
 function Run-Py {
     param (
@@ -632,6 +676,41 @@ if (Test-Path $TicketEvalBuilderScript) {
 }
 else {
     Write-Host "Skipping ticket eval build (build_ticket_eval.py not found)." -ForegroundColor Yellow
+}
+
+# =============================
+# Copy graded workbooks for Railway / git (outputs/ is not deployed)
+# =============================
+if (Test-Path $DateDir) {
+    Copy-PropOracleGradedSlateBundle -RepoRoot $Root -GradeDate $Date -OutputsDir $DateDir -MaxFileBytes $GradedSlateMaxBytes
+    if (-not $PushGradedSlate) {
+        Write-Host "[GRADER] To commit and push graded_slate, re-run with -PushGradedSlate" -ForegroundColor DarkGray
+    }
+    else {
+        Push-Location $Root
+        try {
+            & git rev-parse --is-inside-work-tree 2>$null | Out-Null
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "[GRADER] PushGradedSlate skipped (not a git repository)." -ForegroundColor Yellow
+            }
+            else {
+                $gsPath = "ui_runner/graded_slate/$Date"
+                git add -- $gsPath
+                git diff --cached --quiet
+                if ($LASTEXITCODE -ne 0) {
+                    git commit -m "data: graded slate $Date"
+                    git push origin HEAD
+                    Write-Host "[GRADER] Graded slate pushed for $Date" -ForegroundColor Green
+                }
+                else {
+                    Write-Host "[GRADER] No graded_slate changes to commit." -ForegroundColor DarkGray
+                }
+            }
+        }
+        finally {
+            Pop-Location
+        }
+    }
 }
 
 Write-Host ""

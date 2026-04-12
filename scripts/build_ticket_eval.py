@@ -714,6 +714,21 @@ def _graded_slate_bundle_dir(arg_date: str) -> Path:
     return REPO_ROOT / "ui_runner" / "graded_slate" / arg_date
 
 
+def find_graded_workbook_path(sport_slug: str, date_str: str) -> Path | None:
+    """
+    Resolve ``graded_<sport>_<date>.xlsx``: prefer ``ui_runner/graded_slate/<date>/`` (git/Railway),
+    then ``outputs/<date>/`` (local). ``sport_slug`` is the filename token, e.g. ``nhl``, ``nba``, ``soccer``.
+    """
+    fn = f"graded_{sport_slug}_{date_str}.xlsx"
+    deploy = REPO_ROOT / "ui_runner" / "graded_slate" / date_str / fn
+    if deploy.is_file():
+        return deploy
+    local = REPO_ROOT / "outputs" / date_str / fn
+    if local.is_file():
+        return local
+    return None
+
+
 def _merge_strict_graded_date_workbooks(
     out: dict[str, tuple[dict, dict]],
     graded_dir: Path,
@@ -861,6 +876,7 @@ def _load_actuals_indices(
         out[bucket] = (triple, pair_buckets)
 
     if arg_date and re.match(r"^\d{4}-\d{2}-\d{2}$", arg_date):
+        # Deploy bundle first (Railway), then local outputs/ — same keys from outputs win when both exist.
         bundle_dir = _graded_slate_bundle_dir(arg_date)
         _merge_graded_workbooks_into_indices(out, _graded_xlsx_in_dir(bundle_dir))
         _merge_strict_graded_date_workbooks(out, bundle_dir, arg_date)
@@ -1054,11 +1070,20 @@ def debug_report(
     bpaths = _graded_xlsx_in_dir(bundle_dir)
     print(f"\nui_runner/graded_slate/{arg_date}/ (optional; for Railway when outputs/ is absent):")
     if not bpaths:
-        print("  (none — copy graded_*.xlsx here, then rebuild tickets_latest.html)")
+        print("  (none — run scripts/run_grader.ps1; it copies graded_*.xlsx here, or copy manually)")
     else:
         for p in bpaths:
             bk = ", ".join(_sport_buckets_for_graded_filename(p)) or "?"
             print(f"  - {p.relative_to(REPO_ROOT)}  -> buckets [{bk}]")
+
+    print("\nfind_graded_workbook_path() (deploy path first, then outputs/):")
+    for slug in ("nba", "nhl", "mlb", "soccer", "cbb", "wcbb"):
+        p = find_graded_workbook_path(slug, arg_date)
+        label = f"graded_{slug}_{arg_date}.xlsx"
+        if p:
+            print(f"  {label} -> {p.relative_to(REPO_ROOT)}")
+        else:
+            print(f"  {label} -> (not found)")
 
     indices = _load_actuals_indices(sport_candidates, arg_date)
     gpaths = _graded_xlsx_in_outputs_date(arg_date)

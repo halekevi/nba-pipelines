@@ -691,20 +691,93 @@ def parse_nhl_boxscore(box):
 
 
 # ── Fetch NHL actuals ─────────────────────────────────────────────────────────
-def fetch_nhl(date_str):
-    """Fetch all completed NHL games for date_str and return actuals DataFrame."""
+def _nhl_scoreboard_url(date_str: str) -> str:
     date_espn = date_str.replace("-", "")
-    print(f"\nFetching NHL scoreboard for {date_str} ...")
+    return NHL_SCOREBOARD_URL.format(date_espn=date_espn)
+
+
+def _fetch_nhl_scoreboard_payload(date_str: str) -> tuple[list, str, str]:
+    """
+    Return (events list, url, response_text) for one calendar date.
+    ESPN uses YYYYMMDD; some dates have zero scheduled games (true off-days or sparse slates).
+    """
+    url = _nhl_scoreboard_url(date_str)
+    r = requests.get(url, headers=HEADERS, timeout=20)
+    r.raise_for_status()
+    text = r.text or ""
     try:
-        r = requests.get(NHL_SCOREBOARD_URL.format(date_espn=date_espn),
-                         headers=HEADERS, timeout=20)
-        r.raise_for_status()
-        events = r.json().get("events", [])
+        data = r.json()
+    except Exception:
+        data = {}
+    events = data.get("events", []) if isinstance(data, dict) else []
+    if not isinstance(events, list):
+        events = []
+    return events, url, text
+
+
+def fetch_nhl(date_str: str, adjacent_days: int = 1):
+    """
+    Fetch all completed NHL games for date_str and return actuals DataFrame.
+
+    If the primary scoreboard date has **no events** (common when the slate calendar day
+    has no NHL games in ESPN's schedule), also query ``adjacent_days`` before/after so
+    nearby games still produce actuals (e.g. 2026-04-10 often has 0 events while 04-09/04-11 do).
+    """
+    print(f"\nFetching NHL scoreboard for {date_str} ...")
+
+    try:
+        primary_events, primary_url, primary_text = _fetch_nhl_scoreboard_payload(date_str)
     except Exception as e:
         print(f"  ERROR fetching NHL scoreboard: {e}")
         return pd.DataFrame()
 
-    print(f"  Found {len(events)} events")
+    print(f"  Primary URL: {primary_url}")
+    print(f"  Found {len(primary_events)} events on {date_str}")
+
+    dates_to_fetch: list[str] = [date_str]
+    if not primary_events:
+        preview = (primary_text or "")[:800].replace("\n", " ")
+        print(f"  Response preview (first 800 chars): {preview!r}")
+        base = date.fromisoformat(date_str)
+        for delta in range(-adjacent_days, adjacent_days + 1):
+            if delta == 0:
+                continue
+            adj = (base + timedelta(days=delta)).strftime("%Y-%m-%d")
+            if adj not in dates_to_fetch:
+                dates_to_fetch.append(adj)
+        print(
+            "  No games on primary date — expanding scoreboard to: "
+            f"{', '.join(dates_to_fetch)}"
+        )
+
+    seen_event_ids: set[str] = set()
+    events: list = []
+
+    for d in dates_to_fetch:
+        try:
+            if d == date_str:
+                evs = primary_events
+            else:
+                evs, u, txt = _fetch_nhl_scoreboard_payload(d)
+                print(f"  [{d}] URL: {u}")
+                print(f"  [{d}] events: {len(evs)}")
+                if not evs:
+                    p2 = (txt or "")[:500].replace("\n", " ")
+                    print(f"  [{d}] response preview: {p2!r}")
+        except Exception as e:
+            print(f"  WARN: scoreboard {d} failed: {e}")
+            continue
+
+        for e in evs:
+            eid = str(e.get("id", "") or "")
+            if eid:
+                if eid in seen_event_ids:
+                    continue
+                seen_event_ids.add(eid)
+            events.append(e)
+
+    print(f"  Unique events to consider (after merge): {len(events)}")
+
     all_rows = []
     for event in events:
         state = event.get("status", {}).get("type", {}).get("state", "")
@@ -1258,6 +1331,9 @@ def main():
     ap.add_argument('--output', default='')
     ap.add_argument('--window', default=2, type=int,
                     help='CBB only: days either side of target date to fetch (default: 2, use 0 for single-date)')
+    ap.add_argument('--nhl-window', default=1, type=int,
+                    help='NHL only: when the primary scoreboard date has zero games, also fetch +/- this many '
+                         'calendar days (default: 1). Use 0 to disable expansion.')
     args = ap.parse_args()
 
     if not args.date:
@@ -1270,7 +1346,8 @@ def main():
 
     empty_reason = "pending"
     if args.sport == 'NHL':
-        df = fetch_nhl(args.date)
+        w = max(0, int(args.nhl_window))
+        df = fetch_nhl(args.date, adjacent_days=w)
     elif args.sport == 'Soccer':
         df = fetch_soccer(args.date)
     else:
