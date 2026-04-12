@@ -5,6 +5,39 @@
   max-width: 1400px !important;
 }
 
+/* Desktop: ~20% inset each side (60% column, centered). Beats .shell mobile rules in (769px–900px]. */
+@media (min-width: 769px) {
+  #app.page-tickets .tickets-built.shell {
+    width: 60% !important;
+    max-width: 60% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  #app.page-ev .ev-wrap {
+    width: 60% !important;
+    max-width: 60% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+@media (max-width: 768px) {
+  #app.page-tickets .tickets-built.shell {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  #app.page-ev .ev-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
 .tickets-built .leg-row {
   cursor: pointer;
   transition: background 0.15s;
