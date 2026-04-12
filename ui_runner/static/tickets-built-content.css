@@ -5,19 +5,19 @@
   max-width: 1400px !important;
 }
 
-/* Desktop: 80% column (~10% margin each side). Beats .shell mobile rules in (769px–900px]. */
+/* Desktop: 92% column (~4% margin each side). Beats .shell mobile rules in (769px–900px]. */
 @media (min-width: 769px) {
   .tickets-built.shell {
-    width: 80% !important;
-    max-width: 80% !important;
+    width: 92% !important;
+    max-width: 92% !important;
     margin-left: auto !important;
     margin-right: auto !important;
     box-sizing: border-box;
   }
 
   #app.page-ev .ev-wrap {
-    width: 80% !important;
-    max-width: 80% !important;
+    width: 92% !important;
+    max-width: 92% !important;
     margin-left: auto !important;
     margin-right: auto !important;
     box-sizing: border-box;
