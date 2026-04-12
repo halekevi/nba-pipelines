@@ -1722,13 +1722,12 @@ async function loadSlateData() {
   return slateDataPromise;
 }
 
-/** Split pipeline modified string onto two lines: date, then time (for Slate Explorer cards). */
+/** Pipeline modified string: date only on Slate Explorer cards (no time). */
 function formatSlateModifiedDisplay(raw) {
   if (!raw || typeof raw !== "string") return "—";
   const s = raw.trim();
-  const m = s.match(/^(\d{4}-\d{2}-\d{2})[ T](\d{1,2}:\d{2}(?::\d{2})?)/);
-  if (m) return `${m[1]}\n${m[2]}`;
-  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+  const m = s.match(/^(\d{4}-\d{2}-\d{2})(?:[ T]\d{1,2}:\d{2}(?::\d{2})?)?/);
+  if (m) return m[1];
   return s;
 }
 
