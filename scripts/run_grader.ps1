@@ -215,11 +215,21 @@ if (Test-Path $FetchActualsScript) {
     }
 
     if (Test-Path $TennisGraderScript) {
-        $TennisGraded = Join-Path $DateDir "graded_tennis_$Date.xlsx"
-        Run-Py "Tennis Grader" $Root $TennisGraderScript @(
-            "--date", $Date,
-            "--output", $TennisGraded
-        ) -PreferPy314
+        $TennisStep8Dated = Join-Path $DateDir "step8_tennis_direction_clean_$Date.xlsx"
+        $TennisStep8Static = Join-Path $Root "Tennis\outputs\step8_tennis_direction_clean.xlsx"
+        $TennisStep8Csv = Join-Path $Root "Tennis\outputs\step8_tennis_direction.csv"
+        $TennisSlateFile = Resolve-FirstExisting @($TennisStep8Dated, $TennisStep8Static, $TennisStep8Csv)
+        if (-not $TennisSlateFile) {
+            Write-Host "Skipping Tennis grader (no step8 tennis slate; build Tennis pipeline or place step8 under outputs\$Date or Tennis\outputs)." -ForegroundColor Yellow
+        }
+        else {
+            $TennisGraded = Join-Path $DateDir "graded_tennis_$Date.xlsx"
+            Run-Py "Tennis Grader" $Root $TennisGraderScript @(
+                "--date", $Date,
+                "--slate", $TennisSlateFile,
+                "--output", $TennisGraded
+            ) -PreferPy314
+        }
     }
 
     if (Test-Path $FetchNBAPeriodActualsScript) {

@@ -65,23 +65,35 @@ def main() -> None:
         out = _REPO_ROOT / out
     out.parent.mkdir(parents=True, exist_ok=True)
 
-    slate_path = Path(args.slate) if str(args.slate).strip() else Path()
-    if not str(args.slate).strip():
-        cands = [
+    default_cands: list[Path] = []
+    if str(args.slate).strip():
+        slate_path = Path(str(args.slate).strip())
+        if not slate_path.is_absolute():
+            slate_path = _REPO_ROOT / slate_path
+    else:
+        default_cands = [
             _REPO_ROOT / "outputs" / target / f"step8_tennis_direction_clean_{target}.xlsx",
             _REPO_ROOT / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
             _REPO_ROOT / "Tennis" / "outputs" / "step8_tennis_direction.csv",
         ]
-        for c in cands:
-            if c.is_file():
-                slate_path = c
-                break
-    elif not slate_path.is_absolute():
-        slate_path = _REPO_ROOT / slate_path
+        slate_path = next((c for c in default_cands if c.is_file()), Path())
+
+    if not slate_path.is_file():
+        print("[Tennis grader] ERROR: no tennis step8 slate file found.")
+        if default_cands:
+            print("  Default search paths:")
+            for p in default_cands:
+                print(f"    - {p}")
+        else:
+            print(f"  --slate does not exist: {slate_path}")
+        pd.DataFrame(
+            columns=["player", "prop_type", "line", "direction", "actual", "result", "notes"]
+        ).to_excel(out, sheet_name="graded", index=False)
+        sys.exit(1)
 
     slate = _load_slate(slate_path)
     if slate.empty:
-        print(f"[Tennis grader] ERROR: no slate at {slate_path}")
+        print(f"[Tennis grader] ERROR: slate file has no rows: {slate_path}")
         pd.DataFrame(
             columns=["player", "prop_type", "line", "direction", "actual", "result", "notes"]
         ).to_excel(out, sheet_name="graded", index=False)

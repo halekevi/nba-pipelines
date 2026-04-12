@@ -119,6 +119,12 @@ def _run_single_backtest(
     merged["line"] = _to_num(merged["line"])
     merged["actual"] = _to_num(merged["actual"])
     merged = merged[merged["line"].notna() & merged["actual"].notna()].copy()
+    if merged.empty:
+        return {
+            "actuals_file": str(actuals_path),
+            "error": "No matched rows between slate and actuals (or all line/actual invalid).",
+            "matched_rows": 0,
+        }
 
     direction = _resolve_direction(merged)
     merged = merged[direction.isin(["OVER", "UNDER"])].copy()
@@ -135,7 +141,11 @@ def _run_single_backtest(
     score_cols = [c for c in ["rank_score", "final_score", "ml_prob"] if c in merged.columns]
     score_cols = [c for c in score_cols if merged[c].notna().any()]
     if not score_cols:
-        raise ValueError("No score columns found. Need at least one of: rank_score, final_score, ml_prob")
+        return {
+            "actuals_file": str(actuals_path),
+            "error": "No score columns found. Need at least one of: rank_score, final_score, ml_prob",
+            "matched_rows": int(len(merged)),
+        }
 
     summary: dict[str, float | int | str] = {
         "actuals_file": str(actuals_path),
@@ -229,6 +239,14 @@ def main() -> None:
     merged["line"] = _to_num(merged["line"])
     merged["actual"] = _to_num(merged["actual"])
     merged = merged[merged["line"].notna() & merged["actual"].notna()].copy()
+    if merged.empty:
+        print(
+            "[backtest_nba] SKIP daily backtest: no rows after merging slate with actuals "
+            "(empty slate or no overlap)."
+        )
+        merged.to_csv(out_dir / "backtest_nba_graded_rows.csv", index=False)
+        return
+
     direction = _resolve_direction(merged)
     merged = merged[direction.isin(["OVER", "UNDER"])].copy()
     merged["direction_used"] = direction[direction.isin(["OVER", "UNDER"])].values
@@ -244,7 +262,12 @@ def main() -> None:
     score_cols = [c for c in ["rank_score", "final_score", "ml_prob"] if c in merged.columns]
     score_cols = [c for c in score_cols if merged[c].notna().any()]
     if not score_cols:
-        raise ValueError("No score columns found. Need at least one of: rank_score, final_score, ml_prob")
+        print(
+            "[backtest_nba] SKIP daily backtest: no usable score columns "
+            f"(matched_rows={len(merged)}). Slate needs rank_score, final_score, or ml_prob with at least one non-null value."
+        )
+        merged.to_csv(out_dir / "backtest_nba_graded_rows.csv", index=False)
+        return
 
     print(f"Matched graded rows: {len(merged)}")
     print(f"Available scoring columns: {score_cols}")
