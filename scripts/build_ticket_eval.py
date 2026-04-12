@@ -1950,9 +1950,15 @@ def _build_html(
         ".grade-ticket-result.won{color:var(--green);}",
         ".grade-ticket-result.lost{color:var(--red);}",
         ".grade-ticket-result-label{opacity:.85;font-weight:600;}",
+        "body.ticket-eval-embed-grades{padding-top:0!important;padding-bottom:36px!important;}"
+        "body.ticket-eval-embed-grades .snav,body.ticket-eval-embed-grades #mobile-menu{display:none!important;}"
+        "body.ticket-eval-embed-grades > .grade-eval-summary{margin-top:0!important;}"
+        "body.ticket-eval-embed-grades .stats-bar{top:0!important;}"
+        "body.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;}",
         "</style>",
         "</head>",
         '<body class="ticket-eval-page">',
+        '<script>try{if(window.self!==window.top)document.body.classList.add("ticket-eval-embed-grades");}catch(e){}</script>',
         _render_site_nav_grades_active(),
         grade_eval_summary_html,
         '<div class="stats-bar">',

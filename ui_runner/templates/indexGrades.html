@@ -171,8 +171,8 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
 }
 .iframe-shell-toolbar{
-  flex-shrink:0;padding:12px 12px 10px;border-bottom:1px solid var(--glass-panel-border);
-  display:flex;flex-direction:column;gap:10px;
+  flex-shrink:0;padding:8px 12px 2px;border-bottom:1px solid var(--glass-panel-border);
+  display:flex;flex-direction:column;gap:6px;
   background:rgba(255,255,255,0.02);
   transition:padding .28s ease;
 }
@@ -187,7 +187,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   overflow:hidden;
   display:flex;
   flex-direction:column;
-  gap:10px;
+  gap:6px;
 }
 .iframe-shell-toolbar.bars-collapsed .grades-scroll-hide-wrap{
   grid-template-rows:0fr;
@@ -196,8 +196,8 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   margin:0;
 }
 .iframe-shell-toolbar.bars-collapsed{
-  padding-bottom:8px;
-  gap:6px;
+  padding-bottom:2px;
+  gap:4px;
 }
 @media (prefers-reduced-motion:reduce){
   .grades-scroll-hide-wrap{transition:none;}
@@ -1834,11 +1834,14 @@ function applyTicketEvalGradesEmbed(doc) {
   st.id = 'grades-embed-ticket-nav-css';
   st.setAttribute('data-from', 'grades-hub');
   st.textContent =
+    'body.ticket-eval-embed-grades{padding-top:0!important;padding-bottom:36px!important;}' +
     'body.ticket-eval-embed-grades .snav,' +
     'body.ticket-eval-embed-grades #mobile-menu{display:none!important;}' +
+    'body.ticket-eval-embed-grades > .grade-eval-summary{margin-top:0!important;}' +
+    'body.ticket-eval-embed-grades .stats-bar{top:0!important;}' +
     'body.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar){margin-top:0!important;margin-bottom:0!important;border-bottom:none!important;' +
     'border-radius:12px 12px 0 0!important;box-shadow:none!important;padding:6px 12px 6px!important;}' +
-    'body.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:4px!important;margin-top:0!important;border-top:none!important;' +
+    'body.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:0!important;border-top:none!important;' +
     'border-radius:0 0 16px 16px!important;padding:8px clamp(12px,2.5vw,26px)!important;margin-bottom:10px!important;}';
   doc.head.appendChild(st);
 }
