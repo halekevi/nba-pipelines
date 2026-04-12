@@ -410,6 +410,52 @@ def build_ticket_payout_json(group_name: str, ticket_rows: list) -> dict[str, An
         return None
 
 
+def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
+    """
+    True if slip should appear on /tickets JSON and page (non-negative empirical EV).
+    Prefer payout.ev when present; else recommendation != SKIP; without payout use est_ev >= 0.
+    """
+    pay = ticket.get("payout")
+    if isinstance(pay, dict):
+        ev_raw = pay.get("ev")
+        if ev_raw is not None:
+            try:
+                v = float(ev_raw)
+                if isinstance(v, float) and math.isnan(v):
+                    return False
+                return math.isfinite(v) and v >= 0.0
+            except (TypeError, ValueError):
+                pass
+        return str(pay.get("recommendation") or "").strip().upper() != "SKIP"
+    est = ticket.get("est_ev")
+    if est is not None:
+        try:
+            v = float(est)
+            return math.isfinite(v) and v >= 0.0
+        except (TypeError, ValueError):
+            return False
+    return False
+
+
+def filter_positive_ev_tickets_payload(payload: dict) -> dict:
+    """Only persist / show slips that pass _ticket_passes_positive_ev_gate; drop empty groups."""
+    groups_in = list(payload.get("groups") or [])
+    out_groups: list[dict] = []
+    for g in groups_in:
+        if not isinstance(g, dict):
+            continue
+        tickets_in = list(g.get("tickets") or [])
+        kept = [t for t in tickets_in if isinstance(t, dict) and _ticket_passes_positive_ev_gate(t)]
+        if not kept:
+            continue
+        ng = dict(g)
+        ng["tickets"] = kept
+        out_groups.append(ng)
+    out = dict(payload)
+    out["groups"] = out_groups
+    return out
+
+
 # Props excluded from ticket pools based on empirical hit rates below break-even
 # Blocked Shots NBA: 41.9% overall, too low for any ticket
 # Combo props: small sample, unreliable
@@ -2867,6 +2913,8 @@ def write_web_outputs(payload, outdir: str):
     """Write tickets_latest.json for /tickets; graded HTML is build_ticket_eval.py → ticket_eval_<date>.html."""
     os.makedirs(outdir, exist_ok=True)
     json_path = os.path.join(outdir, "tickets_latest.json")
+    # Only persist positive-EV (non-negative empirical EV) slips for web JSON.
+    payload = filter_positive_ev_tickets_payload(payload)
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
     print(f"[OK] Web JSON  -> {json_path}")
@@ -7800,7 +7848,11 @@ def _tickets_generator_filter_html(filters: dict) -> str:
 </div>'''
 
 
-def render_tickets_body_html(payload: dict) -> tuple[str, str]:
+def render_tickets_body_html(
+    payload: dict,
+    *,
+    _non_ev_slips_removed: int = 0,
+) -> tuple[str, str]:
     """
     Render today's ticket slips from the tickets_latest.json payload.
     Returns (body_html, page_title) for injection into tickets_built.html.
@@ -7821,6 +7873,13 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
     built_html = (
         f'<span class="hero-meta-built">{_h(generated_at)}</span>' if generated_at else ""
     )
+    if _non_ev_slips_removed > 0:
+        counts_line = (
+            f"{n_groups} groups &nbsp;·&nbsp; {n_slips} +EV slips "
+            f"&nbsp;·&nbsp; <span style=\"color:var(--muted);\">{_non_ev_slips_removed} non-EV filtered</span>"
+        )
+    else:
+        counts_line = f"{n_groups} groups &nbsp;·&nbsp; {n_slips} slips"
     parts.append(f'''
 <div class="hero tickets-hero" style="margin-bottom:24px;">
   <div class="hero-copy">
@@ -7831,7 +7890,7 @@ def render_tickets_body_html(payload: dict) -> tuple[str, str]:
   </div>
   <div class="hero-meta-row" role="group" aria-label="Slate summary">
     <span class="hero-meta-date">{_h(date_str)}</span>
-    <span class="hero-meta-counts">{n_groups} groups &nbsp;·&nbsp; {n_slips} slips</span>
+    <span class="hero-meta-counts">{counts_line}</span>
     {built_html}
   </div>
 </div>''')

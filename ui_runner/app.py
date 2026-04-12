@@ -934,7 +934,15 @@ def page_tickets():
                 raise RuntimeError("could not load combined_slate_tickets spec")
             mod = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(mod)
-            body, page_title = mod.render_tickets_body_html(payload)
+            # Filter: only show positive-EV tickets on /tickets page (defensive if JSON predates filter).
+            n_slips_before = sum(len(g.get("tickets") or []) for g in (payload.get("groups") or []))
+            payload = mod.filter_positive_ev_tickets_payload(payload)
+            n_slips_after = sum(len(g.get("tickets") or []) for g in (payload.get("groups") or []))
+            removed = max(0, n_slips_before - n_slips_after)
+            body, page_title = mod.render_tickets_body_html(
+                payload,
+                _non_ev_slips_removed=removed,
+            )
             return render_template(
                 "tickets_built.html",
                 tickets_body=Markup(body),
