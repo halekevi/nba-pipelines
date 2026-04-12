@@ -1819,7 +1819,7 @@ def _build_html(
         _TICKET_EVAL_PAGE_WRAP_CSS,
         "h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}",
         ".bebas{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}",
-        ".stats-bar{position:-webkit-sticky;position:sticky;top:72px;z-index:175;margin:0 auto 12px;width:100%;max-width:min(1520px,96vw);"
+        ".stats-bar{position:-webkit-sticky;position:sticky;top:72px;z-index:175;margin:0 auto 8px;width:100%;max-width:min(1520px,96vw);"
         "padding:14px clamp(16px,2.5vw,28px);transition:top .28s ease,box-shadow .22s ease;"
         "background:linear-gradient(180deg,rgba(10,10,18,.92),rgba(8,8,14,.88)),var(--glass);"
         "backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);"
@@ -1833,8 +1833,12 @@ def _build_html(
         ".sum-val.void{color:var(--gold2);text-shadow:none;}",
         ".sum-val-sm{font-size:clamp(18px,2.1vw,24px)!important;}",
         ".sum-lab{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2.2px;color:var(--muted);text-align:center;line-height:1.2;max-width:11em;}",
-        ".wrap{width:100%;max-width:min(1520px,96vw);margin:0 auto;padding:10px clamp(14px,2.5vw,32px) 0;}",
-        ".sec{margin-top:36px;}",
+        ".wrap.ticket-eval-main{width:100%;max-width:min(1520px,96vw);margin:0 auto;padding:8px clamp(14px,2.5vw,32px) 0;}",
+        ".ticket-sections-wrap{padding-top:8px;}",
+        "details.ticket-bucket{margin:0 0 10px;}",
+        ".ticket-sections-wrap > details.ticket-bucket:first-child{margin-top:0;}",
+        ".sec{margin-top:22px;}",
+        ".ticket-sections-wrap > section.sec:first-of-type,.ticket-bucket-body > section.sec:first-of-type{margin-top:8px;}",
         ".sec-head{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,3.2vw,40px);color:var(--gold);margin-bottom:8px;padding-bottom:14px;"
         "border-bottom:1px solid var(--glass-bd);letter-spacing:3px;text-shadow:0 0 24px rgba(240,165,0,.2);}",
         ".ticket-card{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);"
@@ -1910,12 +1914,12 @@ def _build_html(
         ".dir-over{color:var(--cyan);font-weight:700;}",
         ".dir-under{color:var(--gold);font-weight:700;}",
         ".meta-muted{font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:clamp(11px,1.2vw,13px);margin-top:3px;}",
-        ".slate-kicker{font-family:'Share Tech Mono',monospace;font-size:clamp(11px,1.2vw,13px);letter-spacing:3px;color:var(--muted);margin-bottom:10px;}",
+        ".slate-kicker{font-family:'Share Tech Mono',monospace;font-size:clamp(11px,1.2vw,13px);letter-spacing:3px;color:var(--muted);margin:0 0 6px;}",
         ".pl-hit,.pl-pend{font-size:1em;font-weight:600;}",
         ".warning-chip{display:inline-flex;align-items:center;margin-left:8px;padding:2px 8px;border-radius:999px;"
         "border:1px solid rgba(240,165,0,.4);background:rgba(240,165,0,.12);color:#ffd87a;"
         "font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.6px;cursor:help;}",
-        ".grade-eval-summary{max-width:min(1520px,96vw);margin:2px auto 0;padding:10px 16px;border-radius:16px;"
+        ".grade-eval-summary{max-width:min(1520px,96vw);margin:2px auto 8px;padding:10px 16px;border-radius:16px;"
         "border:1px solid var(--glass-bd);background:rgba(0,0,0,.22);font-family:'Share Tech Mono',monospace;font-size:13px;"
         "line-height:1.55;color:var(--text);}",
         ".grade-eval-summary-empty{color:var(--muted);font-size:12px;}",
@@ -1965,15 +1969,16 @@ def _build_html(
         else '<div class="sum-item"><div class="sum-val sum-val-sm pend">—</div><div class="sum-lab">ROI (FLAT $10)</div></div>',
         f'<div class="sum-item"><div class="sum-val sum-val-sm">{total_legs}</div><div class="sum-lab">TOTAL LEGS</div></div>',
         "</div></div>",
-        '<div class="wrap">',
+        '<div class="wrap ticket-eval-main">',
         f'<p class="slate-kicker">SLATE DATE · {json_date}</p>',
-        '<p class="meta-muted" style="margin:6px 0 14px;line-height:1.5">'
+        '<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">'
         "Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · "
         f"<strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/{json_date}/graded_*.xlsx</code>. "
         "<strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). "
         "Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss."
         "</p>",
     ]
+    parts.append('<div class="ticket-sections-wrap">')
 
     bucketed = _bucket_ticket_groups(groups)
     use_buckets = len(bucketed) > 1
@@ -2182,6 +2187,7 @@ def _build_html(
         if use_buckets:
             parts.append("</div></details>")
 
+    parts.append("</div>")
     # ──────────────────────────────────────────────────────────────────────────
     # Manual Ticket Builder (appended at the bottom of the tickets page)
     # ──────────────────────────────────────────────────────────────────────────
