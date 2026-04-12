@@ -1765,7 +1765,7 @@ def _build_html(
         net_sign = "+" if total_net_10 >= 0 else "−"
         grade_eval_summary_html = (
             '<div class="grade-eval-summary">'
-            f'<div class="grade-eval-summary-line1">Date: {json_date} | {n_pay} tickets graded</div>'
+            f'<div class="grade-eval-summary-line1">Date: {json_date} · {n_pay} tickets graded</div>'
             '<div class="grade-eval-summary-line2">'
             f'<span>✅ Wins: {wins_ct}</span>'
             f'<span>🛡️ Guarantees: {guar_ct}</span>'
@@ -1773,7 +1773,7 @@ def _build_html(
             "</div>"
             '<div class="grade-eval-summary-line3">'
             f"Win rate (W+🛡️): {win_rate_pct:.0f}%"
-            f' <span class="grade-eval-sep">|</span> Avg EV at entry: {avg_ev_s}'
+            f" · Avg EV at entry: {avg_ev_s}"
             "</div>"
             f'<div class="grade-eval-summary-line4">Total: {net_sign}${net_abs:.2f} net on ${total_staked:.0f} staked '
             f"(${10}/ticket flat) — {net_word}</div>"
@@ -1826,8 +1826,8 @@ def _build_html(
         "border:1px solid var(--glass-bd);border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.35);}"
         "body.ticket-eval-page .grade-eval-summary:has(+ .stats-bar){margin-bottom:0;padding-bottom:8px;border-bottom:none;"
         "border-radius:16px 16px 0 0;box-shadow:none;}"
-        "body.ticket-eval-page .grade-eval-summary:has(+ .stats-bar)+.stats-bar{margin-top:0;border-top:none;"
-        "border-radius:0 0 18px 18px;padding-top:10px;box-shadow:0 8px 32px rgba(0,0,0,.35);}",
+        "body.ticket-eval-page .grade-eval-summary:has(+ .stats-bar)+.stats-bar{margin-top:-1px;border-top:none;"
+        "border-radius:0 0 18px 18px;padding-top:11px;box-shadow:0 8px 32px rgba(0,0,0,.35);}",
         ".sum-row{display:flex;flex-wrap:wrap;gap:18px 36px;align-items:center;justify-content:center;}",
         ".sum-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:88px;}",
         ".sum-val{font-family:'Share Tech Mono',monospace;font-size:clamp(22px,2.6vw,30px);font-weight:700;color:var(--gold);text-shadow:0 0 20px rgba(240,165,0,.25);}",
@@ -1837,8 +1837,8 @@ def _build_html(
         ".sum-val.void{color:var(--gold2);text-shadow:none;}",
         ".sum-val-sm{font-size:clamp(18px,2.1vw,24px)!important;}",
         ".sum-lab{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2.2px;color:var(--muted);text-align:center;line-height:1.2;max-width:11em;}",
-        ".wrap.ticket-eval-main{width:100%;max-width:min(1520px,96vw);margin:0 auto;padding:8px clamp(14px,2.5vw,32px) 0;}",
-        ".ticket-sections-wrap{padding-top:8px;}",
+        ".wrap.ticket-eval-main{width:100%;max-width:min(1520px,96vw);margin:0 auto;padding:2px clamp(14px,2.5vw,32px) 0;}",
+        ".ticket-sections-wrap{padding-top:2px;}",
         "details.ticket-bucket{margin:0 0 10px;}",
         ".ticket-sections-wrap > details.ticket-bucket:first-child{margin-top:0;}",
         ".sec{margin-top:22px;}",
@@ -1931,7 +1931,6 @@ def _build_html(
         ".grade-eval-summary-line2{display:flex;flex-wrap:wrap;gap:12px 22px;margin-bottom:4px;}",
         ".grade-eval-summary-line3{color:var(--muted);margin-bottom:4px;}",
         ".grade-eval-summary-line4{color:var(--cyan);font-weight:600;}",
-        ".grade-eval-sep{opacity:.45;margin:0 6px;}",
         ".ticket-grade-payout{margin:0;padding:14px clamp(14px,2vw,22px) 16px;border-top:1px solid var(--glass-bd);"
         "background:rgba(0,0,0,.12);}",
         ".grade-result{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:clamp(16px,1.8vw,20px);"
@@ -1954,7 +1953,7 @@ def _build_html(
         "body.ticket-eval-embed-grades .snav,body.ticket-eval-embed-grades #mobile-menu{display:none!important;}"
         "body.ticket-eval-embed-grades > .grade-eval-summary{margin-top:0!important;}"
         "body.ticket-eval-embed-grades .stats-bar{top:0!important;}"
-        "body.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;}",
+        "body.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;padding-top:9px!important;}",
         "</style>",
         "</head>",
         '<body class="ticket-eval-page">',
