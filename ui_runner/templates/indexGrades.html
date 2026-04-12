@@ -1836,8 +1836,10 @@ function applyTicketEvalGradesEmbed(doc) {
   st.textContent =
     'body.ticket-eval-embed-grades .snav,' +
     'body.ticket-eval-embed-grades #mobile-menu{display:none!important;}' +
-    'body.ticket-eval-embed-grades .grade-eval-summary{margin-top:0!important;margin-bottom:4px!important;padding:8px 14px!important;}' +
-    'body.ticket-eval-embed-grades .stats-bar{top:4px!important;margin-top:0!important;margin-bottom:10px!important;padding:12px clamp(14px,2.5vw,28px)!important;}';
+    'body.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar){margin-top:0!important;margin-bottom:0!important;border-bottom:none!important;' +
+    'border-radius:12px 12px 0 0!important;box-shadow:none!important;padding:6px 12px 6px!important;}' +
+    'body.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:4px!important;margin-top:0!important;border-top:none!important;' +
+    'border-radius:0 0 16px 16px!important;padding:8px clamp(12px,2.5vw,26px)!important;margin-bottom:10px!important;}';
   doc.head.appendChild(st);
 }
 

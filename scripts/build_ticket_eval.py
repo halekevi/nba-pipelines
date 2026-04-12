@@ -1823,7 +1823,11 @@ def _build_html(
         "padding:14px clamp(16px,2.5vw,28px);transition:top .28s ease,box-shadow .22s ease;"
         "background:linear-gradient(180deg,rgba(10,10,18,.92),rgba(8,8,14,.88)),var(--glass);"
         "backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);"
-        "border:1px solid var(--glass-bd);border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.35);}",
+        "border:1px solid var(--glass-bd);border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.35);}"
+        "body.ticket-eval-page .grade-eval-summary:has(+ .stats-bar){margin-bottom:0;padding-bottom:8px;border-bottom:none;"
+        "border-radius:16px 16px 0 0;box-shadow:none;}"
+        "body.ticket-eval-page .grade-eval-summary:has(+ .stats-bar)+.stats-bar{margin-top:0;border-top:none;"
+        "border-radius:0 0 18px 18px;padding-top:10px;box-shadow:0 8px 32px rgba(0,0,0,.35);}",
         ".sum-row{display:flex;flex-wrap:wrap;gap:18px 36px;align-items:center;justify-content:center;}",
         ".sum-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:88px;}",
         ".sum-val{font-family:'Share Tech Mono',monospace;font-size:clamp(22px,2.6vw,30px);font-weight:700;color:var(--gold);text-shadow:0 0 20px rgba(240,165,0,.25);}",
@@ -1919,7 +1923,7 @@ def _build_html(
         ".warning-chip{display:inline-flex;align-items:center;margin-left:8px;padding:2px 8px;border-radius:999px;"
         "border:1px solid rgba(240,165,0,.4);background:rgba(240,165,0,.12);color:#ffd87a;"
         "font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.6px;cursor:help;}",
-        ".grade-eval-summary{max-width:min(1520px,96vw);margin:2px auto 8px;padding:10px 16px;border-radius:16px;"
+        ".grade-eval-summary{max-width:min(1520px,96vw);margin:0 auto 8px;padding:10px 16px;border-radius:16px;"
         "border:1px solid var(--glass-bd);background:rgba(0,0,0,.22);font-family:'Share Tech Mono',monospace;font-size:13px;"
         "line-height:1.55;color:var(--text);}",
         ".grade-eval-summary-empty{color:var(--muted);font-size:12px;}",
