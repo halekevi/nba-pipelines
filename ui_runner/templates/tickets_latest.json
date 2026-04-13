@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-04-13 04:12:28 UTC",
+  "generated_at": "2026-04-13 13:35:45 UTC",
   "date": "2026-04-13",
   "filters": {
-    "tiers": "A,B,C",
+    "tiers": "A,B,C,D",
     "min_hit_rate": 0.65,
     "min_edge": 0.0,
     "min_rank": null,
