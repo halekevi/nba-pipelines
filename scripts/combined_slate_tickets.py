@@ -33,8 +33,8 @@ NEW (Web):
 
 Ticket modes (defaults are strict; no extra flag needed):
 - --high-conviction is ON by default (--no-high-conviction for legacy wider pools).
-- With strict: pool hit rate floor >= 0.70, default tiers A,B,C collapse to A,B, max 4 legs on FINAL slips,
-  stricter per-leg floors; structured 2–3 leg tickets use 0.70 leg floor unless --min-leg-hit-rate set.
+- Default pool: tiers A,B,C, min hit rate 0.65, per-leg floors LEG_MIN_HIT_RATE; optional --high-conviction tightens pool.
+- With --high-conviction: pool min hit rate >= 0.65, max 4 legs on FINAL slips; structured 2–3 leg tickets use 0.65 leg floor unless --min-leg-hit-rate set.
 - --min-leg-hit-rate / --max-ticket-legs: optional overrides (see argparse help).
 - --prioritize-ticket-hit: optional; raises per-leg floors and drops slips below modeled P(payout).
   This maximizes *expected* ticket success — no generator can guarantee a literal 100% hit rate.
@@ -492,6 +492,82 @@ def filter_positive_ev_tickets_payload(payload: dict) -> dict:
     out = dict(payload)
     out["groups"] = out_groups
     return out
+
+
+def _norm_line_for_leg_fp(val: Any) -> str:
+    """Normalize line for stable dedupe keys."""
+    if val is None or val == "":
+        return ""
+    try:
+        x = float(val)
+        if isinstance(x, float) and math.isnan(x):
+            return ""
+        return f"{x:.6g}"
+    except (TypeError, ValueError):
+        return str(val).strip().lower()
+
+
+def _leg_fp_tuple(r: Any) -> tuple[str, str, str, str]:
+    """One leg key: (player, prop, line, direction). Works on ticket row dict/Series or JSON leg dict."""
+
+    def gv(field: str) -> Any:
+        if isinstance(r, dict):
+            return r.get(field)
+        try:
+            if hasattr(r, "index") and field in r.index:
+                return r[field]
+        except Exception:
+            pass
+        try:
+            return getattr(r, field, None)
+        except Exception:
+            return None
+
+    p = str(gv("player_name") or gv("player") or "").strip().lower()
+    pt = str(gv("prop_type") or gv("prop") or "").strip().lower()
+    ln_raw = gv("line_score") if gv("line_score") is not None else gv("line")
+    line_s = _norm_line_for_leg_fp(ln_raw)
+    d_raw = gv("bet_direction") or gv("direction") or gv("direction_used")
+    d = str(d_raw or "").strip().upper()
+    if "UNDER" in d:
+        d = "UNDER"
+    elif "OVER" in d:
+        d = "OVER"
+    return (p, pt, line_s, d)
+
+
+def _ticket_group_leg_fingerprint(tickets: list) -> frozenset:
+    """All legs across all slips in a workbook group (player+prop+line+direction)."""
+    acc: set[tuple[str, str, str, str]] = set()
+    for t in tickets or []:
+        if not isinstance(t, dict):
+            continue
+        for row in t.get("rows") or []:
+            acc.add(_leg_fp_tuple(row))
+    return frozenset(acc)
+
+
+def dedupe_ticket_groups_by_leg_set(all_ticket_groups: list) -> tuple[list, int, int]:
+    # Deduplicate: drop groups with identical player+prop+line+direction sets
+    n_before = len(all_ticket_groups)
+    seen: set[frozenset] = set()
+    out: list = []
+    for item in all_ticket_groups:
+        if not isinstance(item, (list, tuple)) or len(item) < 2:
+            out.append(item)
+            continue
+        group_name, tickets = item[0], item[1]
+        tail = item[2:] if len(item) > 2 else ()
+        tickets = tickets or []
+        fp = _ticket_group_leg_fingerprint(tickets)
+        if len(fp) == 0:
+            out.append((group_name, tickets, *tail))
+            continue
+        if fp in seen:
+            continue
+        seen.add(fp)
+        out.append((group_name, tickets, *tail))
+    return out, n_before, len(out)
 
 
 # Props excluded from ticket pools based on empirical hit rates below break-even
@@ -1058,11 +1134,11 @@ def enrich_ticket_curve_payouts(ticket: dict, stake_unit: float = 1.0) -> None:
 # Min hit rate required per leg depending on ticket length
 # Longer tickets need higher floor because win prob = product of all hit rates
 LEG_MIN_HIT_RATE = {
-    2: 0.60,
-    3: 0.62,
-    4: 0.64,
-    5: 0.66,
-    6: 0.68,
+    2: 0.65,
+    3: 0.67,
+    4: 0.69,
+    5: 0.71,
+    6: 0.73,
 }
 
 MLB_LEG_MIN_HIT_RATE = {
@@ -1089,11 +1165,11 @@ ACTIVE_SPORTS = ("NBA", "NHL", "SOCCER", "TENNIS", "MLB", "NBA1H", "NBA1Q", "WCB
 
 # When --high-conviction: per-leg hit_rate floors (merged with LEG_MIN_HIT_RATE via max())
 HIGH_CONVICTION_LEG_MIN_HIT_RATE = {
-    2: 0.70,
-    3: 0.72,
-    4: 0.74,
-    5: 0.76,
-    6: 0.78,
+    2: 0.65,
+    3: 0.67,
+    4: 0.69,
+    5: 0.71,
+    6: 0.73,
 }
 
 # With --prioritize-ticket-hit: extra leg floors (merged via max() on top of strict pools).
@@ -2348,7 +2424,7 @@ def render_tickets_html(payload: dict) -> str:
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --bg:#050505;--surface:rgba(20,20,20,0.60);--card:rgba(20,20,20,0.60);--border:rgba(212,175,55,0.15);
-  --accent:#d4af37;--cyan:#00F2FF;--muted:#999;--text:#e8e8f0;
+  --accent:#d4af37;--cyan:#00F2FF;--muted:#ffffff;--muted2:#f0f0f0;--text:#e8e8f0;
 }
 body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
 
@@ -2420,7 +2496,7 @@ nav{display:flex;align-items:center;gap:16px;padding:10px 0 12px;border-bottom:1
 .brand{font-family:'Inter',sans-serif;font-size:34px;font-weight:700;letter-spacing:-0.5px;color:#ffffff;line-height:1;text-shadow:0 1px 10px rgba(0,0,0,.35);}
 .brand span{color:var(--accent);font-weight:800;}
 .nav-links{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
-.nav-links a{color:#aaa;text-decoration:none;font-size:13px;padding:6px 14px;border-radius:6px;border:1px solid transparent;transition:all .2s;}
+.nav-links a{color:rgba(255,255,255,0.95);text-decoration:none;font-size:13px;padding:6px 14px;border-radius:6px;border:1px solid transparent;transition:all .2s;}
 .nav-links a:hover{color:var(--text);border-color:var(--border);}
 .nav-links a.active{color:var(--accent);border-color:var(--accent);background:rgba(225,188,101,.10);}
 /* player graph expand */
@@ -2432,7 +2508,7 @@ nav{display:flex;align-items:center;gap:16px;padding:10px 0 12px;border-bottom:1
 .graph-wrap{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;}
 .graph-stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px;}
 .gstat{background:#1a1f2e;border:1px solid var(--border);border-radius:6px;padding:6px 12px;min-width:80px;text-align:center;}
-.gstat-label{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.5px;}
+.gstat-label{font-size:10px;color:rgba(255,255,255,0.92);text-transform:uppercase;letter-spacing:.5px;}
 .gstat-val{font-size:15px;font-weight:700;color:var(--accent);margin-top:2px;}
 .graph-canvas-wrap{flex:1;min-width:260px;max-width:480px;}
 canvas.leg-chart{width:100%!important;height:140px!important;}
@@ -2444,7 +2520,7 @@ canvas.leg-chart{width:100%!important;height:140px!important;}
 .meta{color:var(--muted);font-size:12px;margin-top:4px;}
 
 /* filter pill */
-.filter-pill{background:rgba(14,18,34,.72);border:1px solid rgba(196,166,107,.20);border-radius:12px;padding:10px 16px;font-size:12px;color:#9aa4b2;margin-bottom:24px;backdrop-filter:blur(10px);}
+.filter-pill{background:rgba(14,18,34,.72);border:1px solid rgba(196,166,107,.20);border-radius:12px;padding:10px 16px;font-size:12px;color:rgba(255,255,255,0.92);margin-bottom:24px;backdrop-filter:blur(10px);}
 .filter-pill strong{color:var(--cyan);}
 
 /* slip card (group title + slip body unified) */
@@ -2838,7 +2914,7 @@ html[data-theme="light"] .ticket{
   <td class="leg-graph-cell" colspan="15">
     <div class="graph-wrap">
       <div style="flex:1;min-width:200px;">
-        <div style="font-size:11px;color:#888;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;">{leg.get('player','')} · {leg.get('prop_type','')} · Line {fmt_line(line_val)}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.92);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;">{leg.get('player','')} · {leg.get('prop_type','')} · Line {fmt_line(line_val)}</div>
         <div class="graph-stats">{pills}</div>
       </div>
       <div class="graph-canvas-wrap">
@@ -2877,13 +2953,13 @@ html[data-theme="light"] .ticket{
             tooltip:{{callbacks:{{label:function(c){{return hits10[c.dataIndex] ? 'Hit' : 'Miss';}}}}}}
           }},
           scales:{{
-            x:{{ticks:{{color:'#888',font:{{size:10}}}},grid:{{color:'#1a1f2e'}}}},
+            x:{{ticks:{{color:'#e8e8e8',font:{{size:10}}}},grid:{{color:'#1a1f2e'}}}},
             y:{{
               min: 0,
               max: 1,
               ticks:{{
                 stepSize: 1,
-                color:'#888',
+                color:'#e8e8e8',
                 font:{{size:10}},
                 callback: function(v){{ return v === 1 ? 'Hit' : 'Miss'; }}
               }},
@@ -7831,13 +7907,13 @@ def _tickets_leg_graph_row_html(leg: dict, row_id: str, table_cols: int) -> str:
             tooltip:{{callbacks:{{label:function(c){{return hits10[c.dataIndex] ? 'Hit' : 'Miss';}}}}}}
           }},
           scales:{{
-            x:{{ticks:{{color:'#888',font:{{size:10}}}},grid:{{color:'#1a1f2e'}}}},
+            x:{{ticks:{{color:'#e8e8e8',font:{{size:10}}}},grid:{{color:'#1a1f2e'}}}},
             y:{{
               min: 0,
               max: 1,
               ticks:{{
                 stepSize: 1,
-                color:'#888',
+                color:'#e8e8e8',
                 font:{{size:10}},
                 callback: function(v){{ return v === 1 ? 'Hit' : 'Miss'; }}
               }},

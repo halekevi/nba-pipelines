@@ -292,7 +292,7 @@
 }
 .tickets-built .gstat-label {
   font-size: 10px;
-  color: #888;
+  color: rgba(255, 255, 255, 0.92);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -389,7 +389,7 @@
   border-radius: 12px;
   padding: 10px 16px;
   font-size: 12px;
-  color: #9aa4b2;
+  color: rgba(255, 255, 255, 0.92);
   margin-bottom: 24px;
   backdrop-filter: blur(10px);
 }
