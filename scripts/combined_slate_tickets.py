@@ -39,7 +39,7 @@ Ticket modes (defaults favor volume; optional strict mode):
 - --prioritize-ticket-hit: optional; raises per-leg floors and drops slips below modeled P(payout).
   This maximizes *expected* ticket success — no generator can guarantee a literal 100% hit rate.
 - --ticket-candidate-sort: how to rank props when *choosing* legs (default blend = ML prob + rank composite).
-  ML already drives est_win_prob via _resolve_leg_prob; this aligns *selection* order with that signal.
+  L5-backed hit_rate (when sample ≥3) drives est_win_prob via _resolve_leg_prob; else ML (capped), rank, edge.
 - Improve ml_prob over time: run combined_ticket_grader.py with --export-graded-legs-csv (stack slates) and read ML_CALIBRATION in the graded workbook.
 - --ticket-gen-starts (default 10): structured slips try K alternative first legs and keep the best modeled ticket payout (flex cash or all-hit prob).
 
@@ -410,8 +410,9 @@ def build_ticket_payout_json(group_name: str, ticket_rows: list) -> dict[str, An
     """
     Empirical payout + EV block for tickets_latest.json / UI.
 
-    Primary multiplier is min guarantee: ``payout`` and ``min_guarantee`` (same value).
-    ``sweep_payout`` is the all-legs-hit multiplier (informational only; not shown in slip UI).
+    ``payout`` / ``min_guarantee`` are the flex min-guarantee multiplier (can look like a small
+    goblin-adjusted factor). ``sweep_payout`` is the all-legs-hit headline multiplier; the
+    /tickets page shows sweep for the slip payout card (see ``_slip_display_payout_multiplier``).
     On any error, returns None (caller stores null in JSON).
     """
     if not ticket_rows:
@@ -435,6 +436,8 @@ def build_ticket_payout_json(group_name: str, ticket_rows: list) -> dict[str, An
         return None
     try:
         mg = float(ev_result["min_guarantee"])
+        sweep = float(ev_result["first_place_payout"])
+        paw = float(ev_result["p_all_win"])
         return {
             "payout": ev_result["min_guarantee"],
             "min_guarantee": ev_result["min_guarantee"],
@@ -445,7 +448,9 @@ def build_ticket_payout_json(group_name: str, ticket_rows: list) -> dict[str, An
             "recommendation": ev_result["recommendation"],
             "entry_10_to_win_guarantee": round(10 * mg, 2),
             "entry_20_to_win_guarantee": round(20 * mg, 2),
-            "sweep_payout": ev_result["first_place_payout"],
+            "sweep_payout": sweep,
+            "entry_10_to_win_sweep": round(10 * sweep, 2),
+            "payout_confidence_score": round(sweep * paw, 4),
         }
     except Exception:
         return None
@@ -954,7 +959,7 @@ MIN_TICKET_EV_BY_LEGS: dict = {
 LEG_PROB_FLOOR = 0.35
 # Source-aware caps (ML > hit-rate > rank-score fallback)
 LEG_PROB_CAPS = {
-    "ml_prob": 0.85,
+    "ml_prob": 0.92,
     "rank_score": 0.72,
     "edge": 0.70,
     "hit_rate": 0.72,
@@ -1427,7 +1432,48 @@ def get_edge_threshold(sport: str, prop_type: str, pick_type: str) -> float:
 
 
 def _resolve_leg_prob(row: pd.Series) -> tuple[float, str]:
-    # Priority 1: calibrated ML probability.
+    """
+    Selection / est_win_prob leg probability.
+    Prefer empirical hit_rate when L5 sample is sufficient; else ML (capped), rank, edge, shrunk HR.
+    """
+    direction = str(
+        row.get("bet_direction") or row.get("direction_used") or row.get("direction") or "OVER"
+    ).strip().upper()
+    if direction == "UNDER":
+        hr_raw = row.get("under_hit_rate")
+        if hr_raw is None or str(hr_raw).strip() == "":
+            hr_raw = row.get("hit_rate")
+    else:
+        hr_raw = row.get("over_hit_rate")
+        if hr_raw is None or str(hr_raw).strip() == "":
+            hr_raw = row.get("hit_rate")
+
+    try:
+        if hr_raw is not None and isinstance(hr_raw, float) and (math.isnan(hr_raw) or not math.isfinite(hr_raw)):
+            hr_raw = None
+    except TypeError:
+        pass
+    if hr_raw is not None and pd.isna(hr_raw):
+        hr_raw = None
+
+    if direction == "UNDER":
+        l5_s = row.get("l5_under")
+    else:
+        l5_s = row.get("l5_over")
+    l5_sample = pd.to_numeric(l5_s, errors="coerce")
+    l5_n = 0.0 if pd.isna(l5_sample) else float(l5_sample)
+
+    if hr_raw is not None and str(hr_raw).strip() != "" and l5_n >= 3.0:
+        try:
+            hit_prob = float(hr_raw)
+            if hit_prob > 1.0:
+                hit_prob = hit_prob / 100.0
+            hit_prob = max(0.50, min(0.99, hit_prob))
+            return hit_prob, "hit_rate"
+        except (TypeError, ValueError):
+            pass
+
+    # Priority 1: calibrated ML probability (cap via LEG_PROB_CAPS["ml_prob"]).
     mlp = pd.to_numeric(row.get("ml_prob"), errors="coerce")
     if pd.notna(mlp) and 0.0 < float(mlp) < 1.0:
         return _clip_prob(float(mlp), "ml_prob"), "ml_prob"
@@ -2131,6 +2177,8 @@ def ticket_groups_to_payload(
                     "cross_edge_vs_pp": _safe_float(gv("cross_edge_vs_pp")),
                     "cross_n_books": _safe_int_cross_books(gv("cross_n_books")),
                     "hit_rate": _safe_float(gv("hit_rate")),
+                    "over_hit_rate": _safe_float(gv("over_hit_rate") or gv("hit_rate_over_L5")),
+                    "under_hit_rate": _safe_float(gv("under_hit_rate") or gv("hit_rate_under_L5")),
                     "ml_prob": _safe_float(gv("ml_prob")),
                     "rank_score": _safe_float(gv("rank_score")),
                     "game_time": str(gv("game_time") or ""),
@@ -7740,6 +7788,10 @@ _TICKETS_BUILT_PAYOUT_CSS = """<style>
 .tickets-built .ev-marginal { color: #ffaa00; }
 .tickets-built .ev-low { color: #ff8844; }
 .tickets-built .ev-skip { color: #ff4444; }
+.tickets-built .ticket-filter-pill[data-filter="top-payout"].active {
+  border-color: rgba(255, 215, 0, 0.42);
+  color: #ffd54f;
+}
 </style>"""
 
 
@@ -7810,6 +7862,67 @@ def _group_sport(group_name: str) -> str:
 
 
 _EV_REC_RANK = {"LOW": 0, "SKIP": 0, "MARGINAL": 1, "OK": 2, "STRONG": 3}
+
+
+def _group_payout_confidence_score(tickets: list) -> float:
+    """Max payout_confidence_score (sweep × p_all_win) across slips in a group."""
+    best = 0.0
+    for t in tickets:
+        if not isinstance(t, dict):
+            continue
+        p = t.get("payout")
+        if not isinstance(p, dict):
+            continue
+        raw = p.get("payout_confidence_score")
+        if raw is None:
+            continue
+        try:
+            v = float(raw)
+            if math.isfinite(v) and v > best:
+                best = v
+        except (TypeError, ValueError):
+            continue
+    return best
+
+
+def _slip_display_payout_multiplier(
+    payout: dict | None, ticket: dict, group: dict
+) -> float | None:
+    """
+    Headline all-hit multiplier for slip UI (not min-guarantee / goblin discount factor).
+    Prefer sweep_payout, then ticket/group power/flex, then payout.payout fallback.
+    """
+    if isinstance(payout, dict):
+        sp = payout.get("sweep_payout")
+        if sp is not None:
+            try:
+                v = float(sp)
+                if math.isfinite(v) and v > 0:
+                    return v
+            except (TypeError, ValueError):
+                pass
+    for k in ("power_payout", "flex_payout"):
+        v = ticket.get(k)
+        if v is None:
+            v = group.get(k)
+        if v is not None:
+            try:
+                vf = float(v)
+                if math.isfinite(vf) and vf > 0:
+                    return vf
+            except (TypeError, ValueError):
+                pass
+    if isinstance(payout, dict):
+        for k in ("payout", "min_guarantee"):
+            v = payout.get(k)
+            if v is not None:
+                try:
+                    vf = float(v)
+                    if math.isfinite(vf) and vf > 0:
+                        return vf
+                except (TypeError, ValueError):
+                    pass
+    return None
 
 
 def _ticket_group_filter_slugs(group_name: str) -> tuple[str, str, str]:
@@ -7913,9 +8026,18 @@ def _tickets_filter_pills_html(attr_rows: list[dict]) -> str:
         key=lambda s: (sport_order.index(s) if s in sport_order else 99, s),
     )
 
-    def _pill(data_filter: str, label: str, *, active: bool = False) -> str:
+    def _pill(
+        data_filter: str,
+        label: str,
+        *,
+        active: bool = False,
+        title_attr: str = "",
+    ) -> str:
         cls = "ticket-filter-pill active" if active else "ticket-filter-pill"
-        return f'<button type="button" class="{cls}" data-filter="{_h(data_filter)}">{label}</button>'
+        return (
+            f'<button type="button" class="{cls}" data-filter="{_h(data_filter)}"'
+            f"{title_attr}>{label}</button>"
+        )
 
     chunks: list[str] = [
         '<div class="ticket-filter-bar" role="toolbar" aria-label="Filter ticket groups">',
@@ -7933,6 +8055,13 @@ def _tickets_filter_pills_html(attr_rows: list[dict]) -> str:
         chunks.append(_pill("demon", "DEMON"))
     if has_strong:
         chunks.append(_pill("strong", "⚡ STRONG"))
+    chunks.append(
+        _pill(
+            "top-payout",
+            "🏆 TOP PAYOUT",
+            title_attr=' title="Highest payout × win probability (top 3 groups)"',
+        )
+    )
     chunks.append('<span class="ticket-filter-bar-spacer" aria-hidden="true"></span>')
     chunks.append('<button type="button" class="ticket-filter-bar-action" id="expand-all">EXPAND ALL</button>')
     chunks.append('<button type="button" class="ticket-filter-bar-action" id="collapse-all">COLLAPSE ALL</button>')
@@ -8193,13 +8322,14 @@ def render_tickets_body_html(
     table_cols = 13
 
     prepared: list[dict] = []
-    for group in groups:
+    for original_index, group in enumerate(groups):
         tickets = group.get("tickets") or []
         if not tickets:
             continue
         gn = group.get("group_name") or "Tickets"
         ds, dt, dpk = _ticket_group_filter_slugs(gn)
         ev_a = _group_ev_data_attr(tickets)
+        pc_max = _group_payout_confidence_score(tickets)
         prepared.append(
             {
                 "group": group,
@@ -8207,6 +8337,8 @@ def render_tickets_body_html(
                 "type": dt,
                 "pick": dpk,
                 "ev": ev_a,
+                "original_index": original_index,
+                "payout_confidence": pc_max,
             }
         )
 
@@ -8238,9 +8370,11 @@ def render_tickets_body_html(
         d_type = ent["type"]
         d_pick = ent["pick"]
         d_ev = ent["ev"]
+        d_pc = float(ent.get("payout_confidence") or 0.0)
+        d_oi = int(ent.get("original_index", 0))
 
         parts.append(f'''
-<div class="ticket-group-section" data-sport="{_h(d_sport)}" data-type="{_h(d_type)}" data-pick="{_h(d_pick)}" data-ev="{_h(d_ev)}">
+<div class="ticket-group-section" data-sport="{_h(d_sport)}" data-type="{_h(d_type)}" data-pick="{_h(d_pick)}" data-ev="{_h(d_ev)}" data-payout-confidence="{_fmt(d_pc, 2)}" data-original-index="{d_oi}">
   <div class="ticket-group-header collapsible-header" role="button" tabindex="0" aria-expanded="true">
     <span class="group-title" style="color:{accent};">{_h(group_name)}</span>
     <span class="group-meta">{group_meta_html}</span>
@@ -8288,9 +8422,11 @@ def render_tickets_body_html(
                     rec_s = str(payout.get("recommendation") or "")
                     ev_cls = _payout_ev_class(rec_s)
                     pre = _payout_rec_prefix(rec_s)
-                    pay_x = payout.get("payout")
+                    pay_x = _slip_display_payout_multiplier(payout, ticket, group)
                     if pay_x is None:
-                        pay_x = payout.get("min_guarantee")
+                        pay_x = payout.get("payout")
+                        if pay_x is None:
+                            pay_x = payout.get("min_guarantee")
                     hdr_brackets = f'''
         <span class="ticket-hdr-bracket">[{_h(group_name)}]</span>
         <span class="payout-rec-badge {ev_cls}">[{_h(pre)} {_h(rec_s)} — EV {_fmt(ev_emp_f, 2)}]</span>
@@ -8301,6 +8437,14 @@ def render_tickets_body_html(
                     f'<span class="ticket-hdr-bracket">[{_h(group_name)}]</span>'
                     f'<span class="{sig_cls}">{sig_lbl}</span>'
                 )
+
+            kpi_payout = (
+                _slip_display_payout_multiplier(payout, ticket, group)
+                if payout_ok and isinstance(payout, dict)
+                else None
+            )
+            if kpi_payout is None:
+                kpi_payout = t_power_pay
 
             warn_html = ('<span style="font-size:10px;color:var(--amber);margin-left:auto;">⚠ data warning</span>'
                          if has_warn else "")
@@ -8328,7 +8472,7 @@ def render_tickets_body_html(
         </div>
         <div class="kpi">
           <div class="kpi-label">Payout</div>
-          <div class="kpi-val">{_fmt(t_power_pay, 1)}×</div>
+          <div class="kpi-val">{_fmt(kpi_payout, 1)}×</div>
         </div>
       </div>
       <div class="ticket-legs-table-wrapper">
@@ -8462,10 +8606,19 @@ def render_tickets_body_html(
                     ev_disp = float(payout["ev"])
                 except (TypeError, ValueError):
                     ev_disp = 0.0
-                pay_mult = payout.get("payout")
+                pay_mult = _slip_display_payout_multiplier(payout, ticket, group)
                 if pay_mult is None:
-                    pay_mult = payout.get("min_guarantee")
-                e10g = payout.get("entry_10_to_win_guarantee")
+                    pay_mult = payout.get("payout")
+                    if pay_mult is None:
+                        pay_mult = payout.get("min_guarantee")
+                e10g = payout.get("entry_10_to_win_sweep")
+                if e10g is None and pay_mult is not None:
+                    try:
+                        e10g = round(10 * float(pay_mult), 2)
+                    except (TypeError, ValueError):
+                        e10g = payout.get("entry_10_to_win_guarantee")
+                if e10g is None:
+                    e10g = payout.get("entry_10_to_win_guarantee")
                 pre_ev = _payout_rec_prefix(rec_s2)
                 payout_section = f'''
       <div class="ticket-payout">
@@ -8516,17 +8669,44 @@ def render_tickets_body_html(
       document.querySelectorAll('.ticket-filter-pill').forEach(function(p){ p.classList.remove('active'); });
       pill.classList.add('active');
       var filter = (pill.getAttribute('data-filter') || '').toLowerCase();
-      document.querySelectorAll('.ticket-group-section').forEach(function(group){
-        if(filter === 'all'){
-          group.style.display = '';
-        } else {
-          var ds = (group.getAttribute('data-sport') || '').toLowerCase();
-          var dt = (group.getAttribute('data-type') || '').toLowerCase();
-          var dp = (group.getAttribute('data-pick') || '').toLowerCase();
-          var de = (group.getAttribute('data-ev') || '').toLowerCase();
-          var matches = ds === filter || dt === filter || dp === filter || de === filter;
-          group.style.display = matches ? '' : 'none';
+      var shell = document.querySelector('.tickets-built.shell');
+      if(filter === 'all' && shell){
+        var barA = shell.querySelector('.ticket-filter-bar');
+        var allg = Array.from(shell.querySelectorAll('.ticket-group-section'));
+        allg.sort(function(a,b){
+          return parseInt(a.getAttribute('data-original-index')||'0',10) - parseInt(b.getAttribute('data-original-index')||'0',10);
+        });
+        var anchor = barA ? barA.nextSibling : null;
+        allg.forEach(function(g){
+          shell.insertBefore(g, anchor);
+          anchor = g.nextSibling;
+        });
+        allg.forEach(function(g){ g.style.display = ''; });
+        return;
+      }
+      if(filter === 'top-payout' && shell){
+        var barT = shell.querySelector('.ticket-filter-bar');
+        var allt = Array.from(shell.querySelectorAll('.ticket-group-section'));
+        allt.forEach(function(g){ g.style.display = 'none'; });
+        var ranked = allt.map(function(g){
+          return { el: g, sc: parseFloat(g.getAttribute('data-payout-confidence') || '0') || 0 };
+        }).sort(function(a,b){ return b.sc - a.sc; });
+        var top3 = ranked.slice(0, 3);
+        if(barT && top3.length){
+          var frag = document.createDocumentFragment();
+          top3.forEach(function(x){ frag.appendChild(x.el); });
+          shell.insertBefore(frag, barT.nextSibling);
         }
+        top3.forEach(function(x){ x.el.style.display = ''; });
+        return;
+      }
+      document.querySelectorAll('.ticket-group-section').forEach(function(group){
+        var ds = (group.getAttribute('data-sport') || '').toLowerCase();
+        var dt = (group.getAttribute('data-type') || '').toLowerCase();
+        var dp = (group.getAttribute('data-pick') || '').toLowerCase();
+        var de = (group.getAttribute('data-ev') || '').toLowerCase();
+        var matches = ds === filter || dt === filter || dp === filter || de === filter;
+        group.style.display = matches ? '' : 'none';
       });
     });
   });

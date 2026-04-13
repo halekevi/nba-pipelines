@@ -32,6 +32,7 @@
 {% set nav_active = 'tickets' %}
 {% include '_site_nav.html' %}
 <div id="app" class="page-tickets">
+{# Slips, empirical payout panel (sweep multiplier), and filter pills including TOP PAYOUT are rendered by scripts/combined_slate_tickets.render_tickets_body_html #}
 {{ tickets_body|safe }}
 </div>
 
