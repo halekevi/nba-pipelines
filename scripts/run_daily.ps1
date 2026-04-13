@@ -881,20 +881,21 @@ if ($MonthlyRetrain) {
 }
 
 # =============================================================================
-# NBA Late Fetch — PrizePicks posts NBA props mid-morning (often ~10–11 ET).
-# 7AM daily run usually has an empty/minimal NBA board; a separate 11AM task
-# should run scripts\run_nba_late_fetch.ps1 (see schtasks example on the next lines).
-# If you run run_daily.ps1 manually after ~10:00 local, we refresh NBA here.
+# Late slate refresh — PrizePicks posts NBA props mid-morning (often ~10–11 ET).
+# 7AM daily may have a thin NBA board; scripts\run_nba_late_fetch.ps1 (11AM task) re-fetches
+# NBA (append) plus NHL/Soccer/MLB (overwrite), then full pipeline -SkipFetch (see schtasks below).
+# If you run run_daily.ps1 manually after ~10:00 local, the same multi-sport refresh runs here.
 # =============================================================================
 # Register once (working form — no nested quotes needed when path has no spaces):
 # schtasks /Create /TN "PropORACLE_NBA_LateFetch" /TR "powershell.exe -ExecutionPolicy Bypass -NoProfile -File C:\Users\halek\OneDrive\Desktop\PropORACLE\scripts\run_nba_late_fetch.ps1" /SC DAILY /ST 11:00 /F
 # =============================================================================
 $NowHour = (Get-Date).Hour
 if ($NowHour -ge 10) {
-    Write-Host "[NBA_LATE_FETCH] Hour=$NowHour >= 10, appending NBA props to existing slate..." -ForegroundColor Cyan
-    Write-Log "[NBA_LATE_FETCH] Hour=$NowHour >= 10: starting NBA step1 + NBAOnly pipeline"
+    Write-Host "[NBA_LATE_FETCH] Hour=$NowHour >= 10, re-fetching all sports (NBA append)..." -ForegroundColor Cyan
+    Write-Log "[NBA_LATE_FETCH] Hour=$NowHour >= 10: late slate refresh (NBA append + NHL/Soccer/MLB overwrite + full pipeline -SkipFetch)"
+
     $NBADir = Join-Path $Root "NBA"
-    $step1Args = @(
+    $lateNbaArgs = @(
         "--league_id", "7",
         "--game_mode", "pickem",
         "--per_page", "250",
@@ -908,31 +909,69 @@ if ($NowHour -ge 10) {
     )
     Push-Location $NBADir
     try {
-        & py -3.14 ".\scripts\step1_fetch_prizepicks_api.py" @step1Args
+        & py -3.14 ".\scripts\step1_fetch_prizepicks_api.py" @lateNbaArgs
     }
     finally {
         Pop-Location
     }
-    if ($LASTEXITCODE -eq 0) {
-        $pipeScript = Join-Path $Root "run_pipeline.ps1"
-        if (Test-Path $pipeScript) {
-            & pwsh -NoProfile -File $pipeScript -NBAOnly -SkipFetch
-            if ($LASTEXITCODE -eq 0) {
-                Write-Log "[NBA_LATE_FETCH] OK (step1 + NBAOnly pipeline)"
-            }
-            else {
-                Write-Warning "[NBA_LATE_FETCH] NBAOnly pipeline exited $LASTEXITCODE"
-                Write-Log "[NBA_LATE_FETCH] WARN: NBAOnly pipeline exit $LASTEXITCODE"
-            }
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "[NBA_LATE_FETCH] NBA step1 failed (exit $LASTEXITCODE) — continuing other sports"
+        Write-Log "[NBA_LATE_FETCH] WARN: NBA step1 exit $LASTEXITCODE"
+    }
+
+    $NHLDir = Join-Path $Root "NHL"
+    Push-Location $NHLDir
+    try {
+        & py -3.14 ".\scripts\step1_fetch_prizepicks_nhl.py" "--output" "outputs\step1_nhl_props.csv"
+    }
+    finally {
+        Pop-Location
+    }
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "[NBA_LATE_FETCH] NHL step1 failed (exit $LASTEXITCODE) — continuing"
+        Write-Log "[NBA_LATE_FETCH] WARN: NHL step1 exit $LASTEXITCODE"
+    }
+
+    $SoccerDir = Join-Path $Root "Soccer"
+    Push-Location $SoccerDir
+    try {
+        & py -3.14 ".\scripts\step1_fetch_prizepicks_soccer.py" "--output" "outputs\step1_soccer_props.csv"
+    }
+    finally {
+        Pop-Location
+    }
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "[NBA_LATE_FETCH] Soccer step1 failed (exit $LASTEXITCODE) — continuing"
+        Write-Log "[NBA_LATE_FETCH] WARN: Soccer step1 exit $LASTEXITCODE"
+    }
+
+    $MLBDir = Join-Path $Root "MLB"
+    Push-Location $MLBDir
+    try {
+        & py -3.14 ".\scripts\step1_fetch_prizepicks_mlb.py" "--output" "step1_mlb_props.csv"
+    }
+    finally {
+        Pop-Location
+    }
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "[NBA_LATE_FETCH] MLB step1 failed (exit $LASTEXITCODE) — continuing"
+        Write-Log "[NBA_LATE_FETCH] WARN: MLB step1 exit $LASTEXITCODE"
+    }
+
+    $pipeScript = Join-Path $Root "run_pipeline.ps1"
+    if (Test-Path $pipeScript) {
+        & pwsh -NoProfile -File $pipeScript -SkipFetch
+        if ($LASTEXITCODE -eq 0) {
+            Write-Log "[NBA_LATE_FETCH] OK (full pipeline -SkipFetch)"
         }
         else {
-            Write-Warning "[NBA_LATE_FETCH] run_pipeline.ps1 missing at $pipeScript"
-            Write-Log "[NBA_LATE_FETCH] WARN: run_pipeline.ps1 missing"
+            Write-Warning "[NBA_LATE_FETCH] pipeline exited $LASTEXITCODE"
+            Write-Log "[NBA_LATE_FETCH] WARN: pipeline exit $LASTEXITCODE"
         }
     }
     else {
-        Write-Warning "[NBA_LATE_FETCH] step1_fetch_prizepicks_api.py failed (exit $LASTEXITCODE)"
-        Write-Log "[NBA_LATE_FETCH] WARN: step1 exit $LASTEXITCODE — skipped NBAOnly pipeline"
+        Write-Warning "[NBA_LATE_FETCH] run_pipeline.ps1 missing at $pipeScript"
+        Write-Log "[NBA_LATE_FETCH] WARN: run_pipeline.ps1 missing"
     }
 }
 else {
