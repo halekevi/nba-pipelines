@@ -31,9 +31,9 @@ NEW (Web):
 - JSON includes image_url per leg.
 - More helpful file-path resolution (tries script dir + recursive search if file not found)
 
-Ticket modes (defaults are strict; no extra flag needed):
-- --high-conviction is ON by default (--no-high-conviction for legacy wider pools).
-- Default pool: tiers A,B,C, min hit rate 0.65, per-leg floors LEG_MIN_HIT_RATE; optional --high-conviction tightens pool.
+Ticket modes (defaults favor volume; optional strict mode):
+- --high-conviction is OFF by default (--high-conviction for stricter pools).
+- Default pool: tiers A,B,C, min hit rate 0.65, per-leg floors LEG_MIN_HIT_RATE; --high-conviction raises floors via max().
 - With --high-conviction: pool min hit rate >= 0.65, max 4 legs on FINAL slips; structured 2–3 leg tickets use 0.65 leg floor unless --min-leg-hit-rate set.
 - --min-leg-hit-rate / --max-ticket-legs: optional overrides (see argparse help).
 - --prioritize-ticket-hit: optional; raises per-leg floors and drops slips below modeled P(payout).
@@ -41,7 +41,7 @@ Ticket modes (defaults are strict; no extra flag needed):
 - --ticket-candidate-sort: how to rank props when *choosing* legs (default blend = ML prob + rank composite).
   ML already drives est_win_prob via _resolve_leg_prob; this aligns *selection* order with that signal.
 - Improve ml_prob over time: run combined_ticket_grader.py with --export-graded-legs-csv (stack slates) and read ML_CALIBRATION in the graded workbook.
-- --ticket-gen-starts (default 6): structured slips try K alternative first legs and keep the best modeled ticket payout (flex cash or all-hit prob).
+- --ticket-gen-starts (default 10): structured slips try K alternative first legs and keep the best modeled ticket payout (flex cash or all-hit prob).
 
 HOTFIX:
 - Fixes crash when CBB "direction" becomes a DataFrame due to duplicate columns.
@@ -58,7 +58,7 @@ import os
 import re
 import sys
 import unicodedata
-from collections import defaultdict
+from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from typing import Any, List, Optional
 
@@ -4447,7 +4447,7 @@ def build_single_structure_ticket(
     min_leg_hit_rate: float | None = None,
     prioritize_ticket_hit: bool = False,
     ticket_sort_mode: str = "rank",
-    ticket_gen_starts: int = 6,
+    ticket_gen_starts: int = 10,
 ) -> dict | None:
     """
     Build exactly one best ticket for a sport+structure.
@@ -5216,7 +5216,7 @@ def build_final_web_ticket_groups(
     soccer_pool: pd.DataFrame = None,
     tennis_pool: pd.DataFrame = None,
     mlb_pool: pd.DataFrame = None,
-    min_hit_rate=0.70,
+    min_hit_rate=0.65,
     min_edge=2.0,
     min_rank=5.0,
     ticket_leg_sizes: list | None = None,
@@ -6420,10 +6420,10 @@ def main():
     ap.add_argument(
         "--high-conviction",
         action=argparse.BooleanOptionalAction,
-        default=True,
+        default=False,
         help=(
-            "Strict ticket pool (default: on): min pool hit rate >= 0.70; if tiers are default A,B,C, use A,B; "
-            "cap FINAL slips at 4 legs; higher per-leg floors. --no-high-conviction restores legacy behavior."
+            "Strict ticket pool (optional): min pool hit rate >= 0.65; cap FINAL slips at 4 legs; "
+            "merges HIGH_CONVICTION_LEG_MIN_HIT_RATE into per-leg floors. Default off for wider pools."
         ),
     )
     ap.add_argument(
@@ -6451,7 +6451,7 @@ def main():
     ap.add_argument(
         "--ticket-gen-starts",
         type=int,
-        default=6,
+        default=10,
         dest="ticket_gen_starts",
         help=(
             "Structured tickets only: try the first K eligible rows as the first leg (after sort) and keep the slip "
@@ -6472,7 +6472,7 @@ def main():
         dest="max_ticket_legs",
         help="FINAL / long-slip builders: max leg count (2-6). In strict mode (default), capped at 4 unless already lower.",
     )
-    ap.add_argument("--min-hit-rate", type=float, default=0.55, dest="min_hit_rate")
+    ap.add_argument("--min-hit-rate", type=float, default=0.65, dest="min_hit_rate")
     ap.add_argument("--min-edge", type=float, default=0.0, dest="min_edge")
     ap.add_argument("--min-rank", type=float, default=None, dest="min_rank")
     ap.add_argument(
@@ -6546,13 +6546,11 @@ def main():
     args.max_ticket_legs = max(2, min(6, int(args.max_ticket_legs)))
     args.ticket_gen_starts = max(1, min(24, int(args.ticket_gen_starts)))
     if args.high_conviction:
-        args.min_hit_rate = max(float(args.min_hit_rate), 0.70)
-        if str(args.tiers).strip() == "A,B,C":
-            args.tiers = "A,B"
+        args.min_hit_rate = max(float(args.min_hit_rate), 0.65)
         args.max_ticket_legs = min(args.max_ticket_legs, 4)
         print(
-            "[tickets] strict pool: min hit rate >= 0.70, tiers A,B when default A,B,C, "
-            f"max FINAL legs={args.max_ticket_legs} (use --no-high-conviction for legacy)"
+            "[tickets] strict pool: min hit rate >= 0.65, "
+            f"max FINAL legs={args.max_ticket_legs} (use --no-high-conviction for wider pools)"
         )
     if args.prioritize_ticket_hit:
         args.min_hit_rate = max(float(args.min_hit_rate), 0.72)
@@ -6574,7 +6572,7 @@ def main():
 
     structured_min_leg_hr = args.min_leg_hit_rate
     if args.high_conviction and structured_min_leg_hr is None:
-        structured_min_leg_hr = 0.70
+        structured_min_leg_hr = 0.65
     nhl_structured_min_leg_hr = structured_min_leg_hr
     if nhl_structured_min_leg_hr is not None and float(nhl_structured_min_leg_hr) > 0.55:
         nhl_structured_min_leg_hr = 0.52
@@ -7075,7 +7073,7 @@ def main():
         min_leg_hit_rate: float | None = None,
         prioritize_ticket_hit: bool = False,
         ticket_sort_mode: str = "rank",
-        ticket_gen_starts: int = 6,
+        ticket_gen_starts: int = 10,
     ):
         if sport_df is None or sport_df.empty:
             print(f"  WARNING: {sport_label} skipped (empty pool).")
@@ -7426,6 +7424,24 @@ def main():
     if nba1h is not None and len(nba1h) > 0:
         write_slate_sheet(wb, nba1h, "NBA1H Slate", C["hdr_nba1h"], "NBA1H")
 
+    _pre_dedupe_n = len(all_ticket_groups)
+    _groups_pre_dedupe_snapshot = list(all_ticket_groups)
+    all_ticket_groups, _n_groups_before_dedupe, _n_groups_after_dedupe = dedupe_ticket_groups_by_leg_set(
+        all_ticket_groups
+    )
+    print(
+        f"  [dedupe] ticket groups: {_n_groups_before_dedupe} -> {_n_groups_after_dedupe} "
+        f"({_n_groups_before_dedupe - _n_groups_after_dedupe} duplicate leg sets removed)"
+    )
+    _kept_ticket_sheet_names = {str(g[0]) for g in all_ticket_groups}
+    for _ent in _groups_pre_dedupe_snapshot:
+        _sn = str(_ent[0])
+        if _sn not in _kept_ticket_sheet_names and _sn in wb.sheetnames:
+            try:
+                wb.remove(wb[_sn])
+            except Exception:
+                pass
+
     for _gn, _tickets, _bg in all_ticket_groups:
         for _ti in _tickets:
             enrich_ticket_curve_payouts(_ti, stake_unit=float(args.curve_stake_usd))
@@ -7459,6 +7475,25 @@ def main():
             n_groups = len(payload["groups"])
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
             print(f"  Web payload: {n_groups} groups, {n_slips} slips (workbook — all sports).")
+            gated_preview = filter_positive_ev_tickets_payload(payload)
+            n_g_g = len(gated_preview["groups"])
+            n_s_g = sum(len(g["tickets"]) for g in gated_preview["groups"])
+            print(f"  [gate ev>=0.80] groups: {n_g_g}  slips: {n_s_g}")
+            sport_slip_ctr: Counter[str] = Counter()
+            for _g in gated_preview["groups"]:
+                _gn = str(_g.get("group_name") or "")
+                sport_slip_ctr[_group_sport(_gn)] += len(_g.get("tickets") or [])
+            print(f"  [gate ev>=0.80] slips by sport: {dict(sport_slip_ctr)}")
+            _fps: list[frozenset] = []
+            for _g in gated_preview["groups"]:
+                _acc: set[tuple[str, str, str, str]] = set()
+                for _t in _g.get("tickets") or []:
+                    for _L in _t.get("legs") or []:
+                        if isinstance(_L, dict):
+                            _acc.add(_leg_fp_tuple(_L))
+                _fps.append(frozenset(_acc))
+            _dup = len(_fps) != len(set(_fps))
+            print(f"  [gate ev>=0.80] duplicate fingerprints among groups: {'YES' if _dup else 'none'}")
         else:
             print("  WARNING: workbook produced 0 groups — falling back to FINAL builder.")
             nhl_pool_web = pool(nhl) if nhl is not None and len(nhl) > 0 else None
@@ -7472,7 +7507,7 @@ def main():
                 soccer_pool=soccer_pool_web,
                 tennis_pool=tennis_pool_web,
                 mlb_pool=mlb_pool_web,
-                min_hit_rate=thresholds.get("min_hit_rate", 0.70),
+                min_hit_rate=thresholds.get("min_hit_rate", 0.65),
                 min_edge=thresholds.get("min_edge", 2.0),
                 min_rank=thresholds.get("min_rank", 5.0),
                 ticket_leg_sizes=leg_sizes_runtime,
@@ -7480,6 +7515,9 @@ def main():
                 prioritize_ticket_hit=bool(args.prioritize_ticket_hit),
                 ticket_sort_mode=str(args.ticket_candidate_sort),
             )
+            final_groups, _fg_b, _fg_a = dedupe_ticket_groups_by_leg_set(final_groups)
+            if _fg_b != _fg_a:
+                print(f"  [dedupe] FINAL fallback groups: {_fg_b} -> {_fg_a}")
             payload = ticket_groups_to_payload(
                 final_groups,
                 args.date,
@@ -7490,6 +7528,25 @@ def main():
             n_groups = len(payload["groups"])
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
             print(f"  Web payload: {n_groups} groups, {n_slips} slips (FINAL fallback).")
+            gated_preview = filter_positive_ev_tickets_payload(payload)
+            n_g_g = len(gated_preview["groups"])
+            n_s_g = sum(len(g["tickets"]) for g in gated_preview["groups"])
+            print(f"  [gate ev>=0.80] groups: {n_g_g}  slips: {n_s_g}")
+            sport_slip_ctr = Counter()
+            for _g in gated_preview["groups"]:
+                _gn = str(_g.get("group_name") or "")
+                sport_slip_ctr[_group_sport(_gn)] += len(_g.get("tickets") or [])
+            print(f"  [gate ev>=0.80] slips by sport: {dict(sport_slip_ctr)}")
+            _fps = []
+            for _g in gated_preview["groups"]:
+                _acc = set()
+                for _t in _g.get("tickets") or []:
+                    for _L in _t.get("legs") or []:
+                        if isinstance(_L, dict):
+                            _acc.add(_leg_fp_tuple(_L))
+                _fps.append(frozenset(_acc))
+            _dup = len(_fps) != len(set(_fps))
+            print(f"  [gate ev>=0.80] duplicate fingerprints among groups: {'YES' if _dup else 'none'}")
         write_web_outputs(payload, args.web_outdir)
         write_slate_json(nba, cbb, nhl, soccer, args.date, args.web_outdir,
                          wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis)
