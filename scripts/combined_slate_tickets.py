@@ -197,12 +197,20 @@ GOBLIN_FACTOR_MIN = 0.40
 DEMON_POWER_COEFF = 0.1782
 DEMON_POWER_EXP = 1.287
 SWEEP_PAYOUT = {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 40.0}
-# Empirical lower bound observed on PrizePicks for goblin-heavy/all-goblin power slips.
-GOBLIN_SWEEP_FLOOR: dict[int, float] = {
-    2: 1.5,
+# Power-style min guarantees by composition.
+# Sweep remains standard SWEEP_PAYOUT for all-correct; guarantees are n-1 partial tiers.
+GOBLIN_MIN_GUARANTEE: dict[int, float] = {
+    2: 1.4,
     3: 1.6,
     4: 2.0,
     5: 2.5,
+    6: 3.0,
+}
+STANDARD_MIN_GUARANTEE: dict[int, float] = {
+    2: 0.0,
+    3: 1.6,
+    4: 2.5,
+    5: 2.0,
     6: 3.0,
 }
 # Runtime toggle wired from CLI (--debug-payout).
@@ -279,31 +287,26 @@ def compute_min_guarantee_adjustment(legs: list) -> float:
     return round(adjustment, 4)
 
 
-def _compute_power_sweep_payout_with_floor(legs: list, n_legs: int) -> tuple[float, float, float, int]:
+def _compute_power_min_guarantee(legs: list, n_legs: int) -> tuple[float, int]:
     """
-    Compute power sweep multiplier from per-leg adjustments, then apply goblin floors:
-    - all goblin: hard floor from GOBLIN_SWEEP_FLOOR[n]
-    - mixed with goblin: ratio-based partial floor between 1.0 and that floor.
-    Returns (sweep, base_sweep, raw_adjustment, goblin_leg_count).
+    Power-play min guarantee by goblin composition.
+    Sweep payout remains SWEEP_PAYOUT[n] regardless of goblin/demon distance.
     """
     n = int(n_legs)
-    base = float(SWEEP_PAYOUT.get(n, 6.0))
-    adj = float(compute_min_guarantee_adjustment(legs))
-    sweep = float(base * adj)
-    goblin_legs = [
-        leg for leg in (legs or [])
+    g_count = sum(
+        1
+        for leg in (legs or [])
         if str(leg.get("pick_type", "standard")).strip().lower() == "goblin"
-    ]
-    g_count = len(goblin_legs)
-    if g_count > 0:
-        floor = float(GOBLIN_SWEEP_FLOOR.get(n, 1.6))
-        if g_count == n:
-            sweep = max(sweep, floor)
-        else:
-            goblin_ratio = float(g_count) / max(1.0, float(n))
-            partial_floor = 1.0 + goblin_ratio * (floor - 1.0)
-            sweep = max(sweep, partial_floor)
-    return round(float(sweep), 4), base, adj, g_count
+    )
+    std_g = float(STANDARD_MIN_GUARANTEE.get(n, 0.0))
+    gob_g = float(GOBLIN_MIN_GUARANTEE.get(n, 1.6))
+    if g_count <= 0:
+        return round(std_g, 4), g_count
+    if g_count >= n:
+        return round(gob_g, 4), g_count
+    ratio = float(g_count) / max(1.0, float(n))
+    mg = std_g + ratio * (gob_g - std_g)
+    return round(float(mg), 4), g_count
 
 
 def compute_ticket_ev(
@@ -314,8 +317,9 @@ def compute_ticket_ev(
     """
     EV (per $1 stake style) using empirical payout formula.
 
-    Power: sweep = STANDARD_SWEEP[n] × Π per-leg goblin/demon factors; no partial (min guarantee 0).
-    Flex: FLEX_GUARANTEE payouts × the same factor product (obs_A table + goblin adj).
+    Power: sweep = SWEEP_PAYOUT[n] (all-correct jackpot unchanged by goblin),
+           min guarantee = composition-based n-1 tier (standard/goblin interpolation).
+    Flex: FLEX_GUARANTEE payouts × per-leg goblin/demon adjustment product.
     """
     n = int(n_legs)
     tt = str(ticket_type or "power").strip().lower()
@@ -328,10 +332,10 @@ def compute_ticket_ev(
         adjusted_first = round(base_first * adj, 4)
         adjusted_min_g = round(base_partial * adj, 4)
     else:
-        adjusted_first, base_sweep, raw_adj, g_count = _compute_power_sweep_payout_with_floor(legs, n)
-        adjusted_min_g = 0.0
+        adjusted_first = round(float(SWEEP_PAYOUT.get(n, 6.0)), 4)
+        adjusted_min_g, g_count = _compute_power_min_guarantee(legs, n)
         if PAYOUT_DEBUG:
-            print(f"[PAYOUT DEBUG] n_legs={n} base={base_sweep}")
+            print(f"[PAYOUT DEBUG] n_legs={n} base={adjusted_first}")
             print(f"[PAYOUT DEBUG] goblin_legs={g_count}")
             for leg in legs:
                 if str(leg.get("pick_type", "standard")).strip().lower() != "goblin":
@@ -344,7 +348,7 @@ def compute_ticket_ev(
                     dist = 0.0
                 factor = goblin_per_leg_factor(dist)
                 print(f"[PAYOUT DEBUG] dist={dist} factor={factor}")
-            print(f"[PAYOUT DEBUG] total_adj={raw_adj} sweep={adjusted_first}")
+            print(f"[PAYOUT DEBUG] total_adj={adj} sweep={adjusted_first} min_guarantee={adjusted_min_g}")
 
     mg_adjustment = round(adjusted_min_g / adjusted_first, 4) if adjusted_first > 0 else 0.0
 
@@ -363,10 +367,7 @@ def compute_ticket_ev(
             p_miss_1 += term
 
     p_lose = max(0.0, 1.0 - p_all - p_miss_1)
-    if tt == "power":
-        ev = p_all * adjusted_first - 1.0
-    else:
-        ev = (p_all * adjusted_first) + (p_miss_1 * adjusted_min_g) - p_lose
+    ev = (p_all * adjusted_first) + (p_miss_1 * adjusted_min_g) - p_lose
 
     return {
         "ev": round(ev, 4),
@@ -376,14 +377,14 @@ def compute_ticket_ev(
         "first_place_payout": adjusted_first,
         "min_guarantee": adjusted_min_g,
         "min_guarantee_adjustment": mg_adjustment,
-        "payout_adjustment": adj,
+        "payout_adjustment": (adj if tt == "flex" else 1.0),
         "ticket_type": tt,
         "n_legs": n,
         "recommendation": (
-            "STRONG" if ev >= 1.50 else
+            "STRONG" if ev >= 1.40 else
             "OK" if ev >= 1.15 else
-            "MARGINAL" if ev >= 0.80 else
-            "LOW"
+            "MARGINAL" if ev >= 1.0 else
+            "SKIP"
         ),
     }
 
@@ -9031,16 +9032,22 @@ def render_tickets_body_html(
                     ev_cls = _payout_ev_class(rec_s)
                     pre = _payout_rec_prefix(rec_s)
                     pay_x = payout.get("min_guarantee")
-                    if str(payout.get("ticket_type") or "").lower() == "power":
-                        pay_x = payout.get("sweep_payout")
+                    sweep_x = payout.get("sweep_payout")
                     if pay_x is None:
                         pay_x = payout.get("payout")
+                    if sweep_x is None:
+                        sweep_x = _slip_display_payout_multiplier(payout, ticket, group)
                     if pay_x is None:
-                        pay_x = _slip_display_payout_multiplier(payout, ticket, group)
+                        pay_x = sweep_x
+                    tt_pay_hdr = str(payout.get("ticket_type") or "").lower()
+                    if tt_pay_hdr == "power":
+                        payout_badge_label = f"Min {_fmt(pay_x, 2)}x | Sweep {_fmt(sweep_x, 2)}x"
+                    else:
+                        payout_badge_label = f"{_fmt(pay_x, 2)}x"
                     hdr_brackets = f'''
         <span class="ticket-hdr-bracket">[{_h(group_name)}]</span>
         <span class="payout-rec-badge {ev_cls}">[{_h(pre)} {_h(rec_s)} — EV {_fmt(ev_emp_f, 2)}]</span>
-        <span class="payout-x-badge">[{_fmt(pay_x, 2)}x]</span>
+        <span class="payout-x-badge">[{_h(payout_badge_label)}]</span>
         <span class="{sig_cls}" title="Modeled EV tier (Power × win prob)">{sig_lbl}</span>'''
             if not hdr_brackets:
                 hdr_brackets = (
@@ -9051,7 +9058,9 @@ def render_tickets_body_html(
             kpi_payout = None
             if payout_ok and isinstance(payout, dict):
                 if str(payout.get("ticket_type") or "").lower() == "power":
-                    kpi_payout = payout.get("sweep_payout")
+                    kpi_payout = payout.get("min_guarantee")
+                    if kpi_payout is None:
+                        kpi_payout = payout.get("sweep_payout")
                 else:
                     kpi_payout = payout.get("min_guarantee")
             if kpi_payout is None:
@@ -9238,11 +9247,16 @@ def render_tickets_body_html(
                 pre_ev = _payout_rec_prefix(rec_s2)
                 tt_pay = str(payout.get("ticket_type") or "").lower()
                 if tt_pay == "power":
+                    min_lbl = f"{int(n_legs) - 1} correct" if int(n_legs) > 2 else "2 correct"
                     payout_section = f'''
       <div class="ticket-payout">
         <div class="payout-row">
-          <span class="payout-label">Payout (sweep &mdash; all correct)</span>
+          <span class="payout-label">1st Place (all correct)</span>
           <span class="payout-value">{_fmt(sweep_mult, 2)}x</span>
+        </div>
+        <div class="payout-row">
+          <span class="payout-label">Min Guarantee ({_h(min_lbl)})</span>
+          <span class="payout-value">{_fmt(pay_mult, 2)}x</span>
         </div>
         <div class="payout-row">
           <span class="payout-label">P(Win)</span>
@@ -9253,7 +9267,8 @@ def render_tickets_body_html(
           <span class="payout-value {ev_cls_row}">{_fmt(ev_disp, 2)} &mdash; {_h(pre_ev)} {_h(rec_s2)}</span>
         </div>
         <div class="payout-entry-guide">
-          $10 &rarr; ${_fmt(e10s, 2)} (all correct)
+          $10 &rarr; ${_fmt(e10g, 2)} (guarantee)<br/>
+          $10 &rarr; ${_fmt(e10s, 2)} (sweep)
         </div>
       </div>'''
                 else:
