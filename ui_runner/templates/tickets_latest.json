@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-13 01:23:24 UTC",
+  "generated_at": "2026-04-13 01:32:43 UTC",
   "date": "2026-04-12",
   "filters": {
     "tiers": "A,B,C,D",
@@ -16,6 +16,7 @@
     "ticket_gen_starts": 10,
     "min_leg_hit_rate": null,
     "structured_min_leg_hit_rate": null,
+    "tennis_structured_min_leg_hit_rate": null,
     "max_ticket_legs": 6,
     "leg_min_hit_by_n": {
       "2": 0.65,
