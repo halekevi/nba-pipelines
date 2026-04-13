@@ -1,40 +1,80 @@
 {
-  "goblin_base_factor": 0.644,
-  "goblin_distance_scale": 0.020,
-  "goblin_floor_multiplier": 0.50,
-  "demon_power_coeff": 0.1782,
-  "demon_power_exp": 1.287,
-  "model_type": "multiplicative_per_leg_base_times_distance_and_power_law_demon",
+  "model_type": "flat_min_guarantee_with_sweep",
   "fitted_from": "manual_observations",
-  "n_observations": 14,
   "fitted_at": "2026-04-13",
-  "goblin_r_squared": 0.94,
-  "demon_r_squared": 0.98,
-  "standard_lines_observed": {
-    "Jrue Holiday Points": 17.5,
-    "Darius Garland Points": 19.5,
-    "Scoot Henderson Points": 14.5
+  "n_observations": 3,
+  "sweep_payout": {
+    "2": 3.0,
+    "3": 6.0,
+    "4": 10.0,
+    "5": 20.0,
+    "6": 40.0
   },
-  "base_power_payouts": {"2": 3.0, "3": 6.0, "4": 10.0, "5": 20.0, "6": 37.5},
-  "base_flex_first": {"2": 3.0, "3": 3.0, "4": 5.0, "5": 10.0, "6": 25.0},
-  "base_flex_min": {"2": 1.5, "3": 1.25, "4": 1.5, "5": 2.0, "6": 2.0},
+  "standard_min_guarantee": {
+    "2": 0.0,
+    "3": 1.6,
+    "4": 2.5,
+    "5": 2.0,
+    "6": 3.0
+  },
+  "goblin_min_guarantee": {
+    "2": 1.6,
+    "3": 1.6,
+    "4": 2.5,
+    "5": 2.0,
+    "6": 3.0
+  },
+  "demon_policy": "use_standard_min_guarantee_until_more_observations",
+  "standard_lines_observed": {
+    "Christian Braun Pts+Rebs": 16.5,
+    "Jabari Smith Points": 14.5,
+    "Jamal Murray Pts+Asts": 30.5
+  },
   "observations": [
     {
+      "id": "obs_1",
+      "observed_at": "2026-04-13",
+      "ticket_type": "Power Play",
+      "n_legs": 2,
+      "n_goblins": 2,
+      "distances": [
+        5.0,
+        5.0
+      ],
+      "min_guarantee": 1.6,
+      "sweep_payout": 3.0
+    },
+    {
+      "id": "obs_2",
       "observed_at": "2026-04-13",
       "ticket_type": "Power Play",
       "n_legs": 3,
-      "entry_amount": 20.0,
-      "to_win_amount": 32.0,
-      "multiplier": 1.6,
-      "legs": [
-        {"player": "Christian Braun", "prop": "Pts+Asts", "line": 9.5, "pick_type": "Goblin"},
-        {"player": "Jamal Murray", "prop": "Pts+Asts", "line": 24.5, "pick_type": "Goblin"},
-        {"player": "Jabari Smith", "prop": "Points", "line": 9.5, "pick_type": "Goblin"}
+      "n_goblins": 3,
+      "distances": [
+        5.0,
+        6.0,
+        5.0
       ],
-      "standard_3leg_power_multiplier": 6.0,
-      "observed_adjustment": 0.2667,
-      "derived_per_leg_goblin_factor": 0.644
+      "min_guarantee": 1.6,
+      "sweep_payout": 6.0,
+      "entry_amount": 20.0,
+      "to_win_amount": 32.0
+    },
+    {
+      "id": "obs_3",
+      "observed_at": "2026-04-10",
+      "ticket_type": "Power Play",
+      "n_legs": 3,
+      "n_goblins": 3,
+      "distances": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "min_guarantee": 1.6,
+      "sweep_payout": 6.0,
+      "status": "unverified_historical_reference"
     }
   ],
-  "notes": "Goblin model now uses per-leg base factor (0.644) multiplied by distance adjustment max(0.5, 1-0.02*dist), anchored to observed 3-goblin 3-leg Power payout of 1.6x. Demon keeps power law fit R2=0.98."
+  "notes": "Goblin min guarantee appears flat by leg count in current observations (2-leg and 3-leg both 1.6x). EV should use P(all)*sweep + P(exactly n-1)*min_guarantee - P(other losses)."
 }

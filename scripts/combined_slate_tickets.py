@@ -196,6 +196,11 @@ GOBLIN_BASE_FACTOR = 0.644
 GOBLIN_DISTANCE_SCALE = 0.020
 DEMON_POWER_COEFF = 0.1782
 DEMON_POWER_EXP = 1.287
+SWEEP_PAYOUT = {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 40.0}
+STANDARD_MIN_GUARANTEE = {2: 0.0, 3: 1.6, 4: 2.5, 5: 2.0, 6: 3.0}
+GOBLIN_MIN_GUARANTEE = {2: 1.6, 3: 1.6, 4: 2.5, 5: 2.0, 6: 3.0}
+BASE_FLEX_FIRST = {2: 3.0, 3: 3.0, 4: 5.0, 5: 10.0, 6: 25.0}
+BASE_FLEX_MIN = {2: 1.5, 3: 1.25, 4: 1.5, 5: 2.0, 6: 2.0}
 
 
 def compute_leg_adjustment(pick_type: str, line_distance: float) -> float:
@@ -238,6 +243,30 @@ def compute_min_guarantee_adjustment(legs: list) -> float:
     return round(adjustment, 4)
 
 
+def compute_min_guarantee(legs: list, n_legs: int) -> float:
+    """Empirical min-guarantee model keyed by composition of goblin legs."""
+    n = int(n_legs)
+    n_goblins = 0
+    n_demons = 0
+    for leg in legs or []:
+        pt = str(leg.get("pick_type", "standard")).strip().lower()
+        if pt == "goblin":
+            n_goblins += 1
+        elif pt == "demon":
+            n_demons += 1
+
+    if n_goblins == n:
+        return float(GOBLIN_MIN_GUARANTEE.get(n, 1.6))
+    if n_goblins > 0:
+        ratio = float(n_goblins) / float(max(n, 1))
+        standard = float(STANDARD_MIN_GUARANTEE.get(n, 0.0))
+        goblin = float(GOBLIN_MIN_GUARANTEE.get(n, 1.6))
+        return standard + (ratio * (goblin - standard))
+    if n_demons > 0:
+        return float(STANDARD_MIN_GUARANTEE.get(n, 0.0))
+    return float(STANDARD_MIN_GUARANTEE.get(n, 0.0))
+
+
 def compute_ticket_ev(
     legs: list,
     ticket_type: str,
@@ -249,23 +278,16 @@ def compute_ticket_ev(
     Flex first place stays at standard base; Power first place scales with adj.
     Min-guarantee / power base scales with adj for both.
     """
-    BASE_POWER = {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 37.5}
-    BASE_FLEX_FIRST = {2: 3.0, 3: 3.0, 4: 5.0, 5: 10.0, 6: 25.0}
-    BASE_FLEX_MIN = {2: 1.5, 3: 1.25, 4: 1.5, 5: 2.0, 6: 2.0}
-
     n = int(n_legs)
     tt = str(ticket_type or "power").strip().lower()
-    adj = compute_min_guarantee_adjustment(legs)
 
     if tt == "flex":
-        first_place = float(BASE_FLEX_FIRST.get(n, 3.0))
-        base_min_g = float(BASE_FLEX_MIN.get(n, 1.25))
+        adjusted_first = round(float(BASE_FLEX_FIRST.get(n, 3.0)), 4)
+        adjusted_min_g = round(float(BASE_FLEX_MIN.get(n, 1.25)), 4)
     else:
-        first_place = float(BASE_POWER.get(n, 6.0))
-        base_min_g = float(BASE_POWER.get(n, 6.0))
-
-    adjusted_min_g = round(base_min_g * adj, 4)
-    adjusted_first = round(first_place * adj, 4) if tt != "flex" else round(first_place, 4)
+        adjusted_first = round(float(SWEEP_PAYOUT.get(n, 6.0)), 4)
+        adjusted_min_g = round(float(compute_min_guarantee(legs, n)), 4)
+    mg_adjustment = round(adjusted_min_g / adjusted_first, 4) if adjusted_first > 0 else 0.0
 
     probs = [float(leg.get("hit_prob", 0.65)) for leg in legs]
     p_all = 1.0
@@ -273,7 +295,7 @@ def compute_ticket_ev(
         p_all *= p
 
     p_miss_1 = 0.0
-    if tt == "flex" and n >= 3:
+    if n >= 2:
         for i in range(len(probs)):
             term = 1.0 - probs[i]
             for j, p in enumerate(probs):
@@ -281,12 +303,8 @@ def compute_ticket_ev(
                     term *= p
             p_miss_1 += term
 
-    p_lose = 1.0 - p_all - p_miss_1
-
-    if tt == "flex":
-        ev = (p_all * adjusted_first) + (p_miss_1 * adjusted_min_g) - p_lose
-    else:
-        ev = (p_all * adjusted_first) - (1.0 - p_all)
+    p_lose = max(0.0, 1.0 - p_all - p_miss_1)
+    ev = (p_all * adjusted_first) + (p_miss_1 * adjusted_min_g) - p_lose
 
     return {
         "ev": round(ev, 4),
@@ -295,7 +313,7 @@ def compute_ticket_ev(
         "p_lose": round(p_lose, 4),
         "first_place_payout": adjusted_first,
         "min_guarantee": adjusted_min_g,
-        "min_guarantee_adjustment": adj,
+        "min_guarantee_adjustment": mg_adjustment,
         "ticket_type": tt,
         "n_legs": n,
         "recommendation": (
@@ -414,9 +432,8 @@ def build_ticket_payout_json(group_name: str, ticket_rows: list) -> dict[str, An
     """
     Empirical payout + EV block for tickets_latest.json / UI.
 
-    ``payout`` / ``min_guarantee`` are the flex min-guarantee multiplier (can look like a small
-    goblin-adjusted factor). ``sweep_payout`` is the all-legs-hit headline multiplier; the
-    /tickets page shows sweep for the slip payout card (see ``_slip_display_payout_multiplier``).
+    ``payout`` / ``min_guarantee`` are the primary min-guarantee multipliers.
+    ``sweep_payout`` is the all-legs-hit upside multiplier ("jackpot").
     On any error, returns None (caller stores null in JSON).
     """
     if not ticket_rows:
@@ -454,7 +471,7 @@ def build_ticket_payout_json(group_name: str, ticket_rows: list) -> dict[str, An
             "entry_20_to_win_guarantee": round(20 * mg, 2),
             "sweep_payout": sweep,
             "entry_10_to_win_sweep": round(10 * sweep, 2),
-            "payout_confidence_score": round(sweep * paw, 4),
+            "payout_confidence_score": round(mg * paw, 4),
         }
     except Exception:
         return None
@@ -8681,11 +8698,11 @@ def render_tickets_body_html(
                     rec_s = str(payout.get("recommendation") or "")
                     ev_cls = _payout_ev_class(rec_s)
                     pre = _payout_rec_prefix(rec_s)
-                    pay_x = _slip_display_payout_multiplier(payout, ticket, group)
+                    pay_x = payout.get("min_guarantee")
                     if pay_x is None:
                         pay_x = payout.get("payout")
-                        if pay_x is None:
-                            pay_x = payout.get("min_guarantee")
+                    if pay_x is None:
+                        pay_x = _slip_display_payout_multiplier(payout, ticket, group)
                     hdr_brackets = f'''
         <span class="ticket-hdr-bracket">[{_h(group_name)}]</span>
         <span class="payout-rec-badge {ev_cls}">[{_h(pre)} {_h(rec_s)} — EV {_fmt(ev_emp_f, 2)}]</span>
@@ -8698,7 +8715,7 @@ def render_tickets_body_html(
                 )
 
             kpi_payout = (
-                _slip_display_payout_multiplier(payout, ticket, group)
+                payout.get("min_guarantee")
                 if payout_ok and isinstance(payout, dict)
                 else None
             )
@@ -8865,25 +8882,34 @@ def render_tickets_body_html(
                     ev_disp = float(payout["ev"])
                 except (TypeError, ValueError):
                     ev_disp = 0.0
-                pay_mult = _slip_display_payout_multiplier(payout, ticket, group)
+                pay_mult = payout.get("min_guarantee")
                 if pay_mult is None:
                     pay_mult = payout.get("payout")
-                    if pay_mult is None:
-                        pay_mult = payout.get("min_guarantee")
-                e10g = payout.get("entry_10_to_win_sweep")
+                sweep_mult = payout.get("sweep_payout")
+                if sweep_mult is None:
+                    sweep_mult = _slip_display_payout_multiplier(payout, ticket, group)
+                e10g = payout.get("entry_10_to_win_guarantee")
                 if e10g is None and pay_mult is not None:
                     try:
                         e10g = round(10 * float(pay_mult), 2)
                     except (TypeError, ValueError):
-                        e10g = payout.get("entry_10_to_win_guarantee")
-                if e10g is None:
-                    e10g = payout.get("entry_10_to_win_guarantee")
+                        e10g = None
+                e10s = payout.get("entry_10_to_win_sweep")
+                if e10s is None and sweep_mult is not None:
+                    try:
+                        e10s = round(10 * float(sweep_mult), 2)
+                    except (TypeError, ValueError):
+                        e10s = None
                 pre_ev = _payout_rec_prefix(rec_s2)
                 payout_section = f'''
       <div class="ticket-payout">
         <div class="payout-row">
-          <span class="payout-label">Payout</span>
+          <span class="payout-label">Min Guarantee</span>
           <span class="payout-value">{_fmt(pay_mult, 2)}x</span>
+        </div>
+        <div class="payout-row">
+          <span class="payout-label">Sweep (all correct)</span>
+          <span class="payout-value">{_fmt(sweep_mult, 2)}x</span>
         </div>
         <div class="payout-row">
           <span class="payout-label">P(Win)</span>
@@ -8894,7 +8920,7 @@ def render_tickets_body_html(
           <span class="payout-value {ev_cls_row}">{_fmt(ev_disp, 2)} — {_h(pre_ev)} {_h(rec_s2)}</span>
         </div>
         <div class="payout-entry-guide">
-          $10 &rarr; ${_fmt(e10g, 2)}
+          $10 &rarr; ${_fmt(e10g, 2)} (guarantee) / ${_fmt(e10s, 2)} (sweep)
         </div>
       </div>'''
 
