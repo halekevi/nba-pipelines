@@ -35,7 +35,7 @@ except Exception:
 
 
 def _copy_dated_step8_nba(output_xlsx_path: str, slate_date: str) -> None:
-    """Copy clean XLSX to outputs/<slate>/step8_nba_direction_clean_<slate>.xlsx.
+    """Copy clean XLSX to outputs/<slate>/step8_*_direction_clean_<slate>.xlsx.
 
     slate_date must be YYYY-MM-DD (pipeline -Date). Falls back to today only when empty.
     """
@@ -47,9 +47,16 @@ def _copy_dated_step8_nba(output_xlsx_path: str, slate_date: str) -> None:
         d = date.today().isoformat()
     repo_root = Path(__file__).resolve().parent.parent.parent
     dated_dir = repo_root / "outputs" / d
+    src_name = src.name.lower()
+    if "nba1q" in src_name:
+        dated_name = f"step8_nba1q_direction_clean_{d}.xlsx"
+    elif "nba1h" in src_name:
+        dated_name = f"step8_nba1h_direction_clean_{d}.xlsx"
+    else:
+        dated_name = f"step8_nba_direction_clean_{d}.xlsx"
     try:
         dated_dir.mkdir(parents=True, exist_ok=True)
-        dated_path = dated_dir / f"step8_nba_direction_clean_{d}.xlsx"
+        dated_path = dated_dir / dated_name
         shutil.copy2(src, dated_path)
         print(f"[NBA step8] Dated copy -> {dated_path}")
     except Exception as e:

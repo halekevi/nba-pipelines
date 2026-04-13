@@ -150,6 +150,79 @@ function Run-Step {
     }
 }
 
+# -- Helper: NBA period sub-slate pipelines (NBA1H / NBA1Q) -------------------
+function Run-NBAPeriodPipeline {
+    param(
+        [string]$Tag,            # nba1h or nba1q
+        [string]$LeagueId,       # PrizePicks league id
+        [switch]$SkipFetchStep
+    )
+    $tagLower = ($Tag ?? "").ToLowerInvariant()
+    if ($tagLower -notin @("nba1h", "nba1q")) {
+        Write-Host "  [NBA-PERIOD] Unknown tag '$Tag' (expected nba1h|nba1q)" -ForegroundColor Yellow
+        return $false
+    }
+
+    Write-Host ""
+    Write-Host "[ NBA PERIOD PIPELINE: $tagLower ]" -ForegroundColor Magenta
+
+    $step1 = "step1_${tagLower}_props.csv"
+    $step2 = "step2_${tagLower}_picktypes.csv"
+    $step3 = "step3_${tagLower}_with_defense.csv"
+    $step4 = "step4_${tagLower}_with_stats.csv"
+    $step5 = "step5_${tagLower}_with_hit_rates.csv"
+    $step6 = "step6_${tagLower}_with_team_role_context.csv"
+    $step7 = "step7_${tagLower}_ranked_props.xlsx"
+    $step8Csv = "step8_${tagLower}_direction.csv"
+    $step8Xlsx = "step8_${tagLower}_direction_clean.xlsx"
+    $datedOut = Join-Path $OutDir "step8_${tagLower}_direction_clean_${Date}.xlsx"
+
+    $ok = $true
+    if (-not $SkipFetchStep) {
+        Write-Host "  --> ${tagLower} Step 1 - Fetch PrizePicks" -ForegroundColor Yellow
+        Push-Location $NBADir
+        try {
+            $cmd = "py -3.14 `".\scripts\step1_fetch_prizepicks_api.py`" --league_id $LeagueId --game_mode pickem --per_page 250 --max_pages 5 --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --replace --output `"$step1`""
+            Write-Host "        CMD: $cmd" -ForegroundColor DarkGray
+            $out = Invoke-Expression $cmd 2>&1
+            $exit = $LASTEXITCODE
+            foreach ($line in $out) { Write-Host "        $line" -ForegroundColor DarkGray }
+            if ($exit -ne 0) {
+                $joined = ($out | Out-String)
+                if ($joined -match "No projections returned") {
+                    Write-Host "      No live $tagLower board right now — clearing stale period files and skipping." -ForegroundColor DarkGray
+                    foreach ($stale in @($step2, $step3, $step4, $step5, $step6, $step7, $step8Csv, $step8Xlsx)) {
+                        Remove-Item (Join-Path $NBADir $stale) -Force -ErrorAction SilentlyContinue
+                    }
+                    Remove-Item $datedOut -Force -ErrorAction SilentlyContinue
+                    return $true
+                }
+                Write-Host "      FAILED (exit $exit)" -ForegroundColor Red
+                return $false
+            }
+        } finally {
+            Pop-Location
+        }
+    } else {
+        Write-Host "  [$tagLower] Skipping step1 fetch -- using existing $step1" -ForegroundColor DarkGray
+    }
+
+    if ($ok) { $ok = Run-Step "${tagLower} Step 2 - Attach Pick Types"      $NBADir ".\scripts\step2_attach_picktypes.py"               "--input $step1 --output $step2" }
+    if ($ok) { $ok = Run-Step "${tagLower} Step 3 - Attach Defense"         $NBADir ".\scripts\step3_attach_defense.py"                 "--input $step2 --defense data\cache\defense_team_summary.csv --output $step3" }
+    if ($ok) { $ok = Run-Step "${tagLower} Step 4 - Player Stats (ESPN)"    $NBADir ".\scripts\step4_attach_player_stats_espn_cache.py" "--slate $step3 --out $step4 --date $Date" }
+    if ($ok) { $ok = Run-Step "${tagLower} Step 5 - Line Hit Rates"         $NBADir ".\scripts\step5_add_line_hit_rates.py"             "--input $step4 --output $step5" }
+    if ($ok) { $ok = Run-Step "${tagLower} Step 6 - Team Role Context"      $NBADir ".\scripts\step6_team_role_context.py"              "--input $step5 --output $step6" }
+    if ($ok) { $ok = Run-Step "${tagLower} Step 7 - Rank Props"             $NBADir ".\scripts\step7_rank_props.py"                     "--input $step6 --output $step7" }
+    if ($ok) { $ok = Run-Step "${tagLower} Step 8 - Direction Context"      $NBADir (Join-Path $Root "NBA\scripts\step8_add_direction_context.py") "--input $step7 --sheet ALL --output $step8Csv --xlsx $step8Xlsx --date $Date" }
+
+    if ($ok -and (Test-Path (Join-Path $NBADir $step8Xlsx))) {
+        Copy-Item (Join-Path $NBADir $step8Xlsx) $datedOut -Force -ErrorAction SilentlyContinue
+        Write-Host "  [$tagLower] Dated copy -> $datedOut" -ForegroundColor DarkGray
+    }
+    if ($ok) { Write-Host "  $tagLower complete." -ForegroundColor Green } else { Write-Host "  $tagLower FAILED." -ForegroundColor Red }
+    return $ok
+}
+
 # -- step7b edge model scoring (non-fatal if model missing or script errors) ---
 function Invoke-PropOracleStep7b {
     param([string]$SportLabel)
@@ -592,6 +665,8 @@ if ($NBAOnly) {
     if ($ok) { $ok = Run-Step "NBA Step 7 - Rank Props"              $NBADir ".\scripts\step7_rank_props.py"                    "--input data\outputs\step6d_with_h2h.csv --output data\outputs\step7_ranked_props.xlsx" }
     if ($ok) { Invoke-PropOracleStep7b "NBA" }
     if ($ok) { $ok = Run-Step "NBA Step 8 - Direction Context"       $NBADir (Join-Path $Root "NBA\scripts\step8_add_direction_context.py")         "--input data\outputs\step7_ranked_props.xlsx --sheet ALL --output data\outputs\step8_all_direction.csv --date $Date" }
+    if ($ok) { $ok = Run-NBAPeriodPipeline -Tag "nba1h" -LeagueId "84"  -SkipFetchStep:$SkipFetch }
+    if ($ok) { $ok = Run-NBAPeriodPipeline -Tag "nba1q" -LeagueId "192" -SkipFetchStep:$SkipFetch }
 
     if ($ok) { New-Item -ItemType File -Force -Path (Join-Path $NBADir "RUN_COMPLETE.flag") | Out-Null }
     Write-Host ""
@@ -907,6 +982,15 @@ $CBBSuccess    = $true
 $NHLSuccess    = Test-Path (Join-Path $NHLDir    "outputs\step8_nhl_direction_clean.xlsx")
 $SoccerSuccess = Test-Path (Join-Path $SoccerDir "outputs\step8_soccer_direction_clean.xlsx")
 $MLBSuccess    = Test-Path (Join-Path $MLBDir    "step8_mlb_direction_clean.xlsx")
+
+# NBA period sub-slates are required by daily checks and combined defaults.
+$NBA1HSuccess  = $false
+$NBA1QSuccess  = $false
+if ($NBASuccess) {
+    $NBA1HSuccess = Run-NBAPeriodPipeline -Tag "nba1h" -LeagueId "84"  -SkipFetchStep:$SkipFetch
+    $NBA1QSuccess = Run-NBAPeriodPipeline -Tag "nba1q" -LeagueId "192" -SkipFetchStep:$SkipFetch
+}
+$NBASuccess = $NBASuccess -and $NBA1HSuccess -and $NBA1QSuccess
 
 Remove-Job $allJobs -Force -ErrorAction SilentlyContinue
 if ($NBASuccess) { New-Item -ItemType File -Force -Path (Join-Path $NBADir "RUN_COMPLETE.flag") | Out-Null }

@@ -2015,25 +2015,18 @@ def enforce_target_date(
     kept = int(keep_mask.sum())
     total = len(out)
 
-    use_date_fallback = allow_cross_date_fallback or (sport in ("Soccer", "Tennis"))
+    fallback_sports = {"SOCCER", "TENNIS", "NBA1Q", "NBA1H"}
+    use_date_fallback = allow_cross_date_fallback or (str(sport).upper() in fallback_sports)
     if kept == 0 and use_date_fallback:
         avail = [str(d) for d in counts.index.tolist() if str(d)]
         if avail:
-            target_dt = pd.to_datetime(target_date, errors="coerce")
-            candidates = [d for d in avail if d >= target_date] or avail
-
-            def _key(d: str):
-                c = int(counts.get(d, 0))
-                dd = pd.to_datetime(d, errors="coerce")
-                dist = abs((dd - target_dt).days) if pd.notna(dd) and pd.notna(target_dt) else 999999
-                return (-c, dist, d)
-
-            chosen = sorted(candidates, key=_key)[0]
+            future_dates = sorted([d for d in avail if d >= target_date])
+            chosen = future_dates[0] if future_dates else max(avail)
             keep_mask = out["game_date"].eq(chosen)
             kept = int(keep_mask.sum())
             print(
                 f"  [{sport} date] no rows for {target_date}; "
-                f"date fallback -> using {chosen} ({kept} rows)"
+                f"date fallback -> using nearest date {chosen} ({kept} rows)"
             )
 
     filtered = out.loc[keep_mask].copy()
