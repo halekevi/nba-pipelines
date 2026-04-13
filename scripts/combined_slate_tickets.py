@@ -60,7 +60,7 @@ import sys
 import unicodedata
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
-from typing import Any, List, Optional
+from typing import Any, Iterable, List, Optional
 from zoneinfo import ZoneInfo
 
 _SLATE_TZ = ZoneInfo("America/New_York")
@@ -2682,7 +2682,7 @@ canvas.leg-chart{width:100%!important;height:140px!important;}
 
 /* slip card (group title + slip body unified) */
 .ticket-group-band{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid rgba(255,255,255,.08);}
-.group-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.08em;color:var(--accent);}
+.group-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.08em;color:var(--accent);line-height:1.15;max-width:100%;overflow-wrap:anywhere;word-break:break-word;}
 .group-meta{color:var(--muted);font-size:12px;}
 
 /* ticket card */
@@ -5275,7 +5275,7 @@ def build_tickets(
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# FINAL web groups (ONLY the ticket sets you want) + ENFORCED Std/Gob mix
+# Long-leg web ticket groups (per-sport + cross-sport) with enforced Std/Gob mix where applicable
 # ──────────────────────────────────────────────────────────────────────────────
 def build_mixed_picktype_tickets(
     pool_df: pd.DataFrame,
@@ -5456,6 +5456,53 @@ def build_mixed_picktype_tickets(
     return tickets[:max_tickets]
 
 
+def _sport_display_label(label: str) -> str:
+    """Readable sport token for ticket group titles (web + SUMMARY)."""
+    s = str(label or "").strip()
+    if s.upper() in ("NBA+CBB", "NBA + CBB"):
+        return "NBA/CBB"
+    return s
+
+
+def _sanitize_excel_sheet_title(raw: str) -> str:
+    """Excel disallows \\ / * ? : [ ] in sheet names."""
+    s = str(raw or "").strip()
+    for ch in ("\\", "/", "*", "?", ":", "[", "]"):
+        s = s.replace(ch, "-")
+    return " ".join(s.split())
+
+
+def _excel_ticket_sheet_title(display_name: str, max_len: int = 31) -> str:
+    """Fit a workbook tab label; may abbreviate (display_name stays full in JSON)."""
+    s = _sanitize_excel_sheet_title(display_name)
+    if len(s) <= max_len:
+        return s
+    compact = (
+        s.replace("Cross-sport", "X-Sport")
+        .replace("(all pipes)", "(pipes)")
+        .replace("Standard only", "Std only")
+        .replace("Std+Gob", "S+G")
+    )
+    compact = " ".join(compact.split())
+    if len(compact) <= max_len:
+        return compact
+    return compact[:max_len]
+
+
+def _excel_ticket_sheet_title_unique(display_name: str, existing: Iterable[str]) -> str:
+    base = _excel_ticket_sheet_title(display_name, 31)
+    used = {str(x) for x in existing}
+    if base not in used:
+        return base
+    for i in range(2, 30):
+        suff = f" ({i})"
+        head = base[: max(0, 31 - len(suff))].rstrip()
+        cand = (head + suff).strip()[:31]
+        if cand not in used:
+            return cand
+    return base[:28] + " +"
+
+
 def build_final_web_ticket_groups(
     nba_pool: pd.DataFrame,
     cbb_pool: pd.DataFrame,
@@ -5546,7 +5593,8 @@ def build_final_web_ticket_groups(
                 player_ticket_counts=_pct,
             )
             if tix:
-                groups.append((f"FINAL {n}-Leg (Std+Gob {label})", tix, None))
+                dlab = _sport_display_label(label)
+                groups.append((f"{dlab} {n}-Leg · Std+Gob", tix, None))
 
     def _add_std_only(sub: pd.DataFrame, label: str, leg_sizes_override: list | None = None):
         _ls = leg_sizes_override if leg_sizes_override is not None else leg_sizes
@@ -5563,7 +5611,8 @@ def build_final_web_ticket_groups(
                 player_ticket_counts=_pct,
             )
             if tix:
-                groups.append((f"FINAL {n}-Leg STANDARD ONLY ({label})", tix, None))
+                dlab = _sport_display_label(label)
+                groups.append((f"{dlab} {n}-Leg · Standard only", tix, None))
 
     _add_mixed_std_gob(nba_mix, "NBA")
     _add_std_only(nba_std, "NBA")
@@ -5575,8 +5624,8 @@ def build_final_web_ticket_groups(
         _add_mixed_std_gob(cbb_mix, "CBB")
         _add_std_only(cbb_std, "CBB")
         combo_ncaa = pd.concat([nba_mix, cbb_mix], ignore_index=True)
-        _add_mixed_std_gob(combo_ncaa, "NBA+CBB")
-        _add_std_only(pd.concat([nba_std, cbb_std], ignore_index=True), "NBA+CBB")
+        _add_mixed_std_gob(combo_ncaa, "NBA/CBB")
+        _add_std_only(pd.concat([nba_std, cbb_std], ignore_index=True), "NBA/CBB")
 
     nhl_mix = nhl_std = nhl_gob = pd.DataFrame()
     if nhl_pool is not None and len(nhl_pool):
@@ -5625,7 +5674,7 @@ def build_final_web_ticket_groups(
                     player_ticket_counts=_pct,
                 )
                 if tix:
-                    groups.append((f"FINAL {n}-Leg CROSS-SPORT (Std+Gob best)", tix, None))
+                    groups.append((f"Cross-sport {n}-Leg · Std+Gob", tix, None))
 
     std_frames = [f for f in (nba_std, cbb_std, nhl_std, soc_std, ten_std, mlb_std) if len(f) > 0]
     if std_frames:
@@ -5645,7 +5694,7 @@ def build_final_web_ticket_groups(
                     player_ticket_counts=_pct,
                 )
                 if tix:
-                    groups.append((f"FINAL {n}-Leg CROSS-SPORT (Standard best)", tix, None))
+                    groups.append((f"Cross-sport {n}-Leg · Standard", tix, None))
 
     return groups
 
@@ -5794,22 +5843,22 @@ def build_cross_pipeline_ticket_bundle(
     """
     Up to three tickets (each ≤ max_legs, default 6):
       Standard-only, Goblin-only, Std+Gob mix — best eligible prop per pipeline.
-    Returns [(excel_sheet_name, ticket_dict), ...].
+    Returns [(display_group_name, ticket_dict), ...] (Excel tab is derived separately).
     """
     specs = [
-        ("standard", "Cross-Pipeline Standard", "Cross Std All Pipe"),
-        ("goblin", "Cross-Pipeline Goblin", "Cross Gob All Pipe"),
-        ("mix", "Cross-Pipeline Mix", "Cross Mix All Pipe"),
+        ("standard", "Cross-Pipeline Standard", "Cross-sport · Standard (all pipes)"),
+        ("goblin", "Cross-Pipeline Goblin", "Cross-sport · Goblin (all pipes)"),
+        ("mix", "Cross-Pipeline Mix", "Cross-sport · Std+Gob (all pipes)"),
     ]
     out: list[tuple[str, dict]] = []
-    for mode, ttype, sheet in specs:
+    for mode, ttype, display in specs:
         legs = _collect_cross_pipeline_rows(sport_pools, mode, max_legs, ticket_sort_mode=ticket_sort_mode)
         tix = _finalize_cross_pipeline_ticket(legs, ttype)
         if tix is not None:
             if not _ticket_cap_can_add(tix["rows"], player_ticket_counts):
                 continue
             _ticket_cap_register(tix["rows"], player_ticket_counts)
-            out.append((sheet[:31], tix))
+            out.append((display, tix))
     return out
 
 
@@ -7601,7 +7650,8 @@ def main():
         return "cross_pipeline_mix"
 
     if cross_bundle:
-        for xs, cross_ticket in cross_bundle:
+        for display, cross_ticket in cross_bundle:
+            xs = _excel_ticket_sheet_title_unique(display, wb.sheetnames)
             write_ticket_sheet(
                 wb,
                 [cross_ticket],
@@ -7609,9 +7659,9 @@ def main():
                 C["hdr_mix"],
                 label=str(cross_ticket.get("ticket_type", "Cross-Pipeline")),
             )
-            all_ticket_groups.append((xs, [cross_ticket], None))
+            all_ticket_groups.append((display, [cross_ticket], None))
             print(
-                f"  {xs}: 1 ticket ({cross_ticket['n_legs']} legs, max {CROSS_PIPELINE_MAX_LEGS})"
+                f"  {display}: 1 ticket ({cross_ticket['n_legs']} legs, max {CROSS_PIPELINE_MAX_LEGS})"
             )
             gk = _mix_key_for_cross_ticket(cross_ticket)
             generated_tickets["MIX"][gk] = {
@@ -7709,10 +7759,11 @@ def main():
             player_ticket_counts=counters["player_ticket_counts"],
         )
         for gname, tix, _bg in final_long:
-            sname = str(gname)[:31]
-            write_ticket_sheet(wb, tix, sname, C["hdr_sum"], label=str(gname))
-            all_ticket_groups.append((sname, tix, _bg))
-        print(f"  [long-legs] added {len(final_long)} FINAL sheet(s) for leg sizes {long_leg_sizes}")
+            display = str(gname)
+            sname = _excel_ticket_sheet_title_unique(display, wb.sheetnames)
+            write_ticket_sheet(wb, tix, sname, C["hdr_sum"], label=display)
+            all_ticket_groups.append((display, tix, _bg))
+        print(f"  [long-legs] added {len(final_long)} long-leg sheet(s) for leg sizes {long_leg_sizes}")
 
     _pre_slips = sum(len(t[1]) for t in all_ticket_groups)
     _lc_groups_pre: Counter[int] = Counter()
@@ -7985,7 +8036,9 @@ def _sport_accent(sport: str) -> str:
 
 def _group_sport(group_name: str) -> str:
     """Infer sport from group name for accent colouring."""
-    name = (group_name or "").upper()
+    name = (group_name or "").upper().replace("\u00a0", " ")
+    if "NBA/CBB" in name or "NBA+CBB" in name or "NBA-CBB" in name:
+        return "CROSS"
     if name.startswith("CROSS") or name.startswith("MIX"):
         return "CROSS"
     for sp in ("NBA1Q", "NBA1H", "WCBB", "TENNIS", "SOCCER", "NHL", "MLB", "CBB", "NBA"):
