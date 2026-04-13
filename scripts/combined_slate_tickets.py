@@ -459,9 +459,12 @@ def build_ticket_payout_json(group_name: str, ticket_rows: list) -> dict[str, An
 def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
     """
     True if slip should appear on /tickets JSON and page.
-    Gate: only persist slips with empirical EV >= 0.80 (MARGINAL or better), or modeled est_ev
+    Gate: empirical EV >= MIN_TICKET_EV_BY_LEGS[n_legs] (at least 0.80 for 2–3 legs), or modeled est_ev
     in the same band when payout is missing.
     """
+    n_legs = _ticket_n_legs(ticket)
+    min_ev = float(MIN_TICKET_EV_BY_LEGS.get(int(n_legs), MIN_TICKET_EV_DEFAULT))
+
     pay = ticket.get("payout")
     if isinstance(pay, dict):
         ev_raw = pay.get("ev")
@@ -470,7 +473,7 @@ def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
                 v = float(ev_raw)
                 if isinstance(v, float) and math.isnan(v):
                     return False
-                return math.isfinite(v) and v >= 0.80
+                return math.isfinite(v) and v >= min_ev
             except (TypeError, ValueError):
                 pass
         return str(pay.get("recommendation") or "").strip().upper() in (
@@ -482,7 +485,7 @@ def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
     if est is not None:
         try:
             v = float(est)
-            return math.isfinite(v) and v >= 0.80
+            return math.isfinite(v) and v >= min_ev
         except (TypeError, ValueError):
             return False
     return False
@@ -505,6 +508,66 @@ def filter_positive_ev_tickets_payload(payload: dict) -> dict:
     out = dict(payload)
     out["groups"] = out_groups
     return out
+
+
+def print_positive_ev_gate_report(gated_preview: dict) -> None:
+    """Console verification: leg-count histogram, best EV slip, sport mix, fingerprint dedupe."""
+    n_g_g = len(gated_preview["groups"])
+    n_s_g = sum(len(g["tickets"]) for g in gated_preview["groups"])
+    print(f"  [gate positive-EV by leg] groups: {n_g_g}  slips: {n_s_g}")
+    lc_grp: Counter[int] = Counter()
+    for _g in gated_preview["groups"]:
+        _nl0 = int(_g.get("n_legs") or 0)
+        if _nl0 > 0:
+            lc_grp[_nl0] += 1
+    print(f"  [verify] gated groups by leg count: {dict(sorted(lc_grp.items()))}")
+    lc_g: Counter[int] = Counter()
+    best_ev_o = -1e9
+    best_n_o = 0
+    best_gn_o = ""
+    for _g in gated_preview["groups"]:
+        _gn = str(_g.get("group_name") or "")
+        for _t in _g.get("tickets") or []:
+            if not isinstance(_t, dict):
+                continue
+            _nl = _ticket_n_legs(_t)
+            lc_g[_nl] += 1
+            _evv = None
+            _pay = _t.get("payout")
+            if isinstance(_pay, dict) and _pay.get("ev") is not None:
+                try:
+                    _evv = float(_pay["ev"])
+                except (TypeError, ValueError):
+                    pass
+            if _evv is None and _t.get("est_ev") is not None:
+                try:
+                    _evv = float(_t["est_ev"])
+                except (TypeError, ValueError):
+                    pass
+            if _evv is not None and math.isfinite(_evv) and _evv > best_ev_o:
+                best_ev_o = _evv
+                best_n_o = _nl
+                best_gn_o = _gn
+    print(f"  [verify] gated slips by leg count: {dict(sorted(lc_g.items()))}")
+    print(
+        f"  [verify] highest EV slip (gated): ev={best_ev_o:.4f} n_legs={best_n_o} "
+        f"group={best_gn_o[:72]}"
+    )
+    sport_slip_ctr: Counter[str] = Counter()
+    for _g in gated_preview["groups"]:
+        _gn = str(_g.get("group_name") or "")
+        sport_slip_ctr[_group_sport(_gn)] += len(_g.get("tickets") or [])
+    print(f"  [gate positive-EV by leg] slips by sport: {dict(sport_slip_ctr)}")
+    _fps: list[frozenset] = []
+    for _g in gated_preview["groups"]:
+        _acc: set[tuple[str, str, str, str]] = set()
+        for _t in _g.get("tickets") or []:
+            for _L in _t.get("legs") or []:
+                if isinstance(_L, dict):
+                    _acc.add(_leg_fp_tuple(_L))
+        _fps.append(frozenset(_acc))
+    _dup = len(_fps) != len(set(_fps))
+    print(f"  [gate positive-EV by leg] duplicate fingerprints among groups: {'YES' if _dup else 'none'}")
 
 
 def _norm_line_for_leg_fp(val: Any) -> str:
@@ -946,15 +1009,28 @@ GOBLIN_MAX_REDUCTION:      float = 0.60   # single-leg reduction cap (60%)
 DEMON_BOOST_PER_UNIT: float = 0.28        # ← tune me
 DEMON_MAX_BOOST:      float = 2.50        # single-leg multiplier cap (2.5×)
 
-# Min EV threshold for a ticket to be included in output.
-# ev = est_win_prob × adj_power_payout.  ev < 1.0 means expected loss.
-# Shorter slips use a lower bar so the web/workbook are not empty when payouts are modest.
-MIN_TICKET_EV_DEFAULT: float = 1.20
-MIN_TICKET_EV_BY_LEGS: dict = {
-    2: 1.05,
-    3: 1.08,
-    4: 1.10,
+# Min EV for generation (ev_power = est_win_prob × adj_power) and for positive-EV web gate
+# (see _ticket_passes_positive_ev_gate). Longer slips need higher EV vs variance.
+MIN_TICKET_EV_DEFAULT: float = 0.80
+MIN_TICKET_EV_BY_LEGS: dict[int, float] = {
+    2: 0.80,
+    3: 0.80,
+    4: 1.00,
+    5: 1.20,
+    6: 1.50,
 }
+
+# Cap sorted candidate pool size per leg count (top rows by ticket sort) to bound greedy work.
+MAX_TICKET_POOL_ROWS_BY_LEG_COUNT: dict[int, int] = {
+    2: 50_000,
+    3: 50_000,
+    4: 30_000,
+    5: 20_000,
+    6: 10_000,
+}
+
+# Max legs for FINAL / cross-sport builders (argparse default matches).
+MAX_TICKET_LEGS: int = 6
 
 LEG_PROB_FLOOR = 0.35
 # Source-aware caps (ML > hit-rate > rank-score fallback)
@@ -1000,7 +1076,32 @@ def _ticket_cap_register(rows: list, counts: dict[str, int] | None) -> None:
 
 
 def min_ev_for_ticket(n_legs: int) -> float:
-    return MIN_TICKET_EV_BY_LEGS.get(int(n_legs), MIN_TICKET_EV_DEFAULT)
+    return float(MIN_TICKET_EV_BY_LEGS.get(int(n_legs), MIN_TICKET_EV_DEFAULT))
+
+
+def _trim_pool_by_leg_count(df: pd.DataFrame, n_legs: int) -> pd.DataFrame:
+    if df is None or len(df) == 0:
+        return df
+    cap = int(MAX_TICKET_POOL_ROWS_BY_LEG_COUNT.get(int(n_legs), 50_000))
+    if len(df) <= cap:
+        return df
+    return df.iloc[:cap].reset_index(drop=True)
+
+
+def _ticket_n_legs(ticket: dict) -> int:
+    """Leg count for EV gates / stats (payload uses 'legs'; builders use 'rows')."""
+    n = ticket.get("n_legs")
+    if n is not None:
+        try:
+            return max(1, int(n))
+        except (TypeError, ValueError):
+            pass
+    legs = ticket.get("legs") if isinstance(ticket.get("legs"), list) else None
+    rows = ticket.get("rows") if isinstance(ticket.get("rows"), list) else None
+    seq = legs if legs else rows
+    if seq:
+        return len(seq)
+    return 2
 
 def _norm_team_abbr(v: object) -> str:
     return str(v or "").strip().upper()
@@ -5021,8 +5122,8 @@ def build_tickets(
     if "hit_rate" in pool.columns:
         pool = pool[pool["hit_rate"].fillna(0) >= min_hr].copy()
 
-    # Apply tier floor for 5/6-leg tickets
-    if n_legs >= 5 and "tier" in pool.columns:
+    # Apply tier floor for 4+ leg power-style tickets (POWER_MIN_TIER)
+    if n_legs >= 4 and "tier" in pool.columns:
         pool = pool[pool["tier"].isin(ok_tiers)].copy()
 
     pool = pool.reset_index(drop=True)
@@ -5036,6 +5137,7 @@ def build_tickets(
         .sort_values(["__ts_pri", "__ts_sec"], ascending=[False, False], na_position="last")
         .reset_index(drop=True)
     )
+    eligible = _trim_pool_by_leg_count(eligible, n_legs)
     max_fantasy = MAX_FANTASY_LEGS.get(n_legs, n_legs)
 
     for _ in range(max_tickets * 5):
@@ -5217,6 +5319,12 @@ def build_mixed_picktype_tickets(
                 thr = max(0.52, float(nhl_cap)) if nhl_cap is not None else max(0.52, thr)
         std = std[pd.to_numeric(std["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
         gob = gob[pd.to_numeric(gob["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
+
+    cap = int(MAX_TICKET_POOL_ROWS_BY_LEG_COUNT.get(int(n_legs), 50_000))
+    if len(std) > cap:
+        std = std.iloc[:cap].copy()
+    if len(gob) > cap:
+        gob = gob.iloc[:cap].copy()
 
     if len(std) < min_standard:
         return []
@@ -7578,6 +7686,52 @@ def main():
     if nba1h is not None and len(nba1h) > 0:
         write_slate_sheet(wb, nba1h, "NBA1H Slate", C["hdr_nba1h"], "NBA1H")
 
+    long_leg_sizes = [n for n in leg_sizes_runtime if n >= 4]
+    if long_leg_sizes:
+        nhl_lg = pool(nhl) if nhl is not None and len(nhl) > 0 else None
+        soc_lg = pool(soccer) if soccer is not None and len(soccer) > 0 else None
+        ten_lg = pool(tennis) if tennis is not None and len(tennis) > 0 else None
+        mlb_lg = mlb_pool if mlb_pool is not None and len(mlb_pool) > 0 else None
+        final_long = build_final_web_ticket_groups(
+            nba_pool,
+            cbb_pool,
+            nhl_pool=nhl_lg,
+            soccer_pool=soc_lg,
+            tennis_pool=ten_lg,
+            mlb_pool=mlb_lg,
+            min_hit_rate=float(thresholds.get("min_hit_rate", 0.65)),
+            min_edge=float(thresholds.get("min_edge") or 0.0),
+            min_rank=thresholds.get("min_rank"),
+            ticket_leg_sizes=long_leg_sizes,
+            leg_min_hit_by_n=leg_min_hit_by_n,
+            prioritize_ticket_hit=_prio_hit,
+            ticket_sort_mode=_ticket_sort,
+            player_ticket_counts=counters["player_ticket_counts"],
+        )
+        for gname, tix, _bg in final_long:
+            sname = str(gname)[:31]
+            write_ticket_sheet(wb, tix, sname, C["hdr_sum"], label=str(gname))
+            all_ticket_groups.append((sname, tix, _bg))
+        print(f"  [long-legs] added {len(final_long)} FINAL sheet(s) for leg sizes {long_leg_sizes}")
+
+    _pre_slips = sum(len(t[1]) for t in all_ticket_groups)
+    _lc_groups_pre: Counter[int] = Counter()
+    for _sn, _tickets, _ in all_ticket_groups:
+        if not _tickets:
+            continue
+        _t0 = _tickets[0]
+        _nl_g = int(_t0.get("n_legs") or 0) or len(_t0.get("rows") or [])
+        if _nl_g > 0:
+            _lc_groups_pre[_nl_g] += 1
+    print(
+        f"  [verify] groups by leg count (pre-dedupe): {dict(sorted(_lc_groups_pre.items()))}"
+    )
+    print(
+        f"  [verify] pre-dedupe: {len(all_ticket_groups)} groups, {_pre_slips} slips | "
+        f"PAYOUT power n=4,5,6: {PAYOUT[4]['power']}, {PAYOUT[5]['power']}, {PAYOUT[6]['power']} "
+        f"(compute_ticket_ev BASE_POWER[4,5,6] match: 10.0, 20.0, 37.5)"
+    )
+
     _pre_dedupe_n = len(all_ticket_groups)
     _groups_pre_dedupe_snapshot = list(all_ticket_groups)
     all_ticket_groups, _n_groups_before_dedupe, _n_groups_after_dedupe = dedupe_ticket_groups_by_leg_set(
@@ -7587,6 +7741,19 @@ def main():
         f"  [dedupe] ticket groups: {_n_groups_before_dedupe} -> {_n_groups_after_dedupe} "
         f"({_n_groups_before_dedupe - _n_groups_after_dedupe} duplicate leg sets removed)"
     )
+    _post_slips = sum(len(t[1]) for t in all_ticket_groups)
+    _lc_groups_post: Counter[int] = Counter()
+    for _sn, _tickets, _ in all_ticket_groups:
+        if not _tickets:
+            continue
+        _t0 = _tickets[0]
+        _nl_g = int(_t0.get("n_legs") or 0) or len(_t0.get("rows") or [])
+        if _nl_g > 0:
+            _lc_groups_post[_nl_g] += 1
+    print(
+        f"  [verify] groups by leg count (post-dedupe): {dict(sorted(_lc_groups_post.items()))}"
+    )
+    print(f"  [verify] post-dedupe: {len(all_ticket_groups)} groups, {_post_slips} slips")
     _kept_ticket_sheet_names = {str(g[0]) for g in all_ticket_groups}
     for _ent in _groups_pre_dedupe_snapshot:
         _sn = str(_ent[0])
@@ -7630,24 +7797,7 @@ def main():
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
             print(f"  Web payload: {n_groups} groups, {n_slips} slips (workbook — all sports).")
             gated_preview = filter_positive_ev_tickets_payload(payload)
-            n_g_g = len(gated_preview["groups"])
-            n_s_g = sum(len(g["tickets"]) for g in gated_preview["groups"])
-            print(f"  [gate ev>=0.80] groups: {n_g_g}  slips: {n_s_g}")
-            sport_slip_ctr: Counter[str] = Counter()
-            for _g in gated_preview["groups"]:
-                _gn = str(_g.get("group_name") or "")
-                sport_slip_ctr[_group_sport(_gn)] += len(_g.get("tickets") or [])
-            print(f"  [gate ev>=0.80] slips by sport: {dict(sport_slip_ctr)}")
-            _fps: list[frozenset] = []
-            for _g in gated_preview["groups"]:
-                _acc: set[tuple[str, str, str, str]] = set()
-                for _t in _g.get("tickets") or []:
-                    for _L in _t.get("legs") or []:
-                        if isinstance(_L, dict):
-                            _acc.add(_leg_fp_tuple(_L))
-                _fps.append(frozenset(_acc))
-            _dup = len(_fps) != len(set(_fps))
-            print(f"  [gate ev>=0.80] duplicate fingerprints among groups: {'YES' if _dup else 'none'}")
+            print_positive_ev_gate_report(gated_preview)
         else:
             print("  WARNING: workbook produced 0 groups — falling back to FINAL builder.")
             nhl_pool_web = pool(nhl) if nhl is not None and len(nhl) > 0 else None
@@ -7683,24 +7833,7 @@ def main():
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
             print(f"  Web payload: {n_groups} groups, {n_slips} slips (FINAL fallback).")
             gated_preview = filter_positive_ev_tickets_payload(payload)
-            n_g_g = len(gated_preview["groups"])
-            n_s_g = sum(len(g["tickets"]) for g in gated_preview["groups"])
-            print(f"  [gate ev>=0.80] groups: {n_g_g}  slips: {n_s_g}")
-            sport_slip_ctr = Counter()
-            for _g in gated_preview["groups"]:
-                _gn = str(_g.get("group_name") or "")
-                sport_slip_ctr[_group_sport(_gn)] += len(_g.get("tickets") or [])
-            print(f"  [gate ev>=0.80] slips by sport: {dict(sport_slip_ctr)}")
-            _fps = []
-            for _g in gated_preview["groups"]:
-                _acc = set()
-                for _t in _g.get("tickets") or []:
-                    for _L in _t.get("legs") or []:
-                        if isinstance(_L, dict):
-                            _acc.add(_leg_fp_tuple(_L))
-                _fps.append(frozenset(_acc))
-            _dup = len(_fps) != len(set(_fps))
-            print(f"  [gate ev>=0.80] duplicate fingerprints among groups: {'YES' if _dup else 'none'}")
+            print_positive_ev_gate_report(gated_preview)
         write_web_outputs(payload, args.web_outdir)
         write_slate_json(nba, cbb, nhl, soccer, args.date, args.web_outdir,
                          wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis)
