@@ -1,11 +1,13 @@
 {
-  "goblin_discount_per_unit": 0.110,
+  "goblin_base_factor": 0.644,
+  "goblin_distance_scale": 0.020,
+  "goblin_floor_multiplier": 0.50,
   "demon_power_coeff": 0.1782,
   "demon_power_exp": 1.287,
-  "model_type": "multiplicative_per_leg_power_law_demon",
+  "model_type": "multiplicative_per_leg_base_times_distance_and_power_law_demon",
   "fitted_from": "manual_observations",
-  "n_observations": 13,
-  "fitted_at": "2026-04-10",
+  "n_observations": 14,
+  "fitted_at": "2026-04-13",
   "goblin_r_squared": 0.94,
   "demon_r_squared": 0.98,
   "standard_lines_observed": {
@@ -16,5 +18,23 @@
   "base_power_payouts": {"2": 3.0, "3": 6.0, "4": 10.0, "5": 20.0, "6": 37.5},
   "base_flex_first": {"2": 3.0, "3": 3.0, "4": 5.0, "5": 10.0, "6": 25.0},
   "base_flex_min": {"2": 1.5, "3": 1.25, "4": 1.5, "5": 2.0, "6": 2.0},
-  "notes": "Goblin linear fit R2=0.94. Demon power law fit R2=0.98. Both multiplicative per leg. Expand with more prop types and distances."
+  "observations": [
+    {
+      "observed_at": "2026-04-13",
+      "ticket_type": "Power Play",
+      "n_legs": 3,
+      "entry_amount": 20.0,
+      "to_win_amount": 32.0,
+      "multiplier": 1.6,
+      "legs": [
+        {"player": "Christian Braun", "prop": "Pts+Asts", "line": 9.5, "pick_type": "Goblin"},
+        {"player": "Jamal Murray", "prop": "Pts+Asts", "line": 24.5, "pick_type": "Goblin"},
+        {"player": "Jabari Smith", "prop": "Points", "line": 9.5, "pick_type": "Goblin"}
+      ],
+      "standard_3leg_power_multiplier": 6.0,
+      "observed_adjustment": 0.2667,
+      "derived_per_leg_goblin_factor": 0.644
+    }
+  ],
+  "notes": "Goblin model now uses per-leg base factor (0.644) multiplied by distance adjustment max(0.5, 1-0.02*dist), anchored to observed 3-goblin 3-leg Power payout of 1.6x. Demon keeps power law fit R2=0.98."
 }

@@ -188,9 +188,12 @@ def power_flex_payout_for_n(n_legs: int) -> tuple[float, float]:
     return round(power, 2), round(flex, 2)
 
 
-# ── Empirical Goblin/Demon payout (manual observations, April 10 2026) ───────
-# 13 data points; multiplicative per leg; line_distance = |standard - played|.
-GOBLIN_DISCOUNT_PER_UNIT = 0.110
+# ── Empirical Goblin/Demon payout (manual observations, April 2026) ───────────
+# Multiplicative per leg; line_distance = |standard - played|.
+# New anchor: 3-leg Power with 3 Goblins paid 1.6x (1.6/6.0=0.267 total adj),
+# implying per-leg Goblin base factor ~0.644 before distance shaping.
+GOBLIN_BASE_FACTOR = 0.644
+GOBLIN_DISTANCE_SCALE = 0.020
 DEMON_POWER_COEFF = 0.1782
 DEMON_POWER_EXP = 1.287
 
@@ -208,7 +211,8 @@ def compute_leg_adjustment(pick_type: str, line_distance: float) -> float:
     pt = str(pick_type or "standard").strip().lower()
 
     if pt == "goblin":
-        return max(0.30, 1.0 - GOBLIN_DISCOUNT_PER_UNIT * dist)
+        dist_adj = max(0.50, 1.0 - GOBLIN_DISTANCE_SCALE * dist)
+        return GOBLIN_BASE_FACTOR * dist_adj
 
     if pt == "demon":
         if dist <= 0:
