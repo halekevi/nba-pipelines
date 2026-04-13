@@ -886,8 +886,8 @@ if ($MonthlyRetrain) {
 # should run scripts\run_nba_late_fetch.ps1 (see schtasks example on the next lines).
 # If you run run_daily.ps1 manually after ~10:00 local, we refresh NBA here.
 # =============================================================================
-# Register once (elevated cmd or PowerShell), adjust user if needed:
-#   schtasks /Create /TN "PropORACLE_NBA_LateFetch" /TR "powershell.exe -ExecutionPolicy Bypass -NoProfile -File \"C:\Users\halek\OneDrive\Desktop\PropORACLE\scripts\run_nba_late_fetch.ps1\"" /SC DAILY /ST 11:00 /F
+# Register once (working form — no nested quotes needed when path has no spaces):
+# schtasks /Create /TN "PropORACLE_NBA_LateFetch" /TR "powershell.exe -ExecutionPolicy Bypass -NoProfile -File C:\Users\halek\OneDrive\Desktop\PropORACLE\scripts\run_nba_late_fetch.ps1" /SC DAILY /ST 11:00 /F
 # =============================================================================
 $NowHour = (Get-Date).Hour
 if ($NowHour -ge 10) {
