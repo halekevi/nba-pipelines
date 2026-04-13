@@ -217,18 +217,18 @@ STANDARD_MIN_GUARANTEE: dict[int, float] = {
 PAYOUT_DEBUG: bool = False
 PAYOUT_LADDER_PATH = os.path.join(REPO_ROOT, "data", "payout_ladder.json")
 _PAYOUT_LADDER_CACHE: list[dict[str, Any]] | None = None
-# Flex: standard multipliers (obs_A). Keys are hit counts; same goblin/demon adj applies to each.
-# 3-leg flex all-correct = 3x per obs_A (not 6x Power sweep).
+# Flex: published ladder (all-standard) aligned with data/payout_ladder.json.
+# Keys are legs correct (n = all hit, n-1 = one miss). Goblin/demon scaling is applied on top.
 FLEX_GUARANTEE: dict[int, dict[int, float]] = {
     2: {2: 3.0},
-    3: {3: 3.0, 2: 0.75},
-    4: {4: 10.0, 3: 2.5, 2: 0.4},
-    5: {5: 20.0, 4: 1.0, 3: 0.4},
-    6: {6: 40.0, 5: 2.0, 4: 0.4},
+    3: {3: 2.25, 2: 1.25},
+    4: {4: 5.0, 3: 1.5, 2: 0.4},
+    5: {5: 10.0, 4: 2.0, 3: 0.4},
+    6: {6: 25.0, 5: 2.0, 4: 0.4},
 }
 # Fallback when n not in FLEX_GUARANTEE (extrapolation)
-BASE_FLEX_FIRST = {2: 3.0, 3: 3.0, 4: 10.0, 5: 20.0, 6: 40.0}
-BASE_FLEX_MIN = {2: 0.0, 3: 0.75, 4: 0.4, 5: 0.4, 6: 0.4}
+BASE_FLEX_FIRST = {2: 3.0, 3: 2.25, 4: 5.0, 5: 10.0, 6: 25.0}
+BASE_FLEX_MIN = {2: 0.0, 3: 1.25, 4: 1.5, 5: 2.0, 6: 2.0}
 KNOWN_SWEEP_BOUNDS: dict[tuple[int, str], tuple[float, float]] = {
     (2, "power"): (3.0, 3.0),
     (3, "power"): (4.5, 6.0),
@@ -377,6 +377,26 @@ def compute_min_guarantee_adjustment(legs: list) -> float:
     return round(adjustment, 4)
 
 
+def compute_flex_normalized_adjustment(legs: list) -> float:
+    """
+    Flex ladder entries are defined for all-standard legs (factor 1). For goblins, the raw
+    per-leg factor at distance 0 is GOBLIN_FACTOR_INTERCEPT; multiplying n legs would
+    compound that baseline and crush partial payouts. Normalize each goblin leg by the
+    intercept so distance-0 goblins do not add extra discount beyond the ladder; deeper
+    lines still reduce payouts via ratio f/intercept < 1.
+    """
+    adjustment = 1.0
+    intercept = float(GOBLIN_FACTOR_INTERCEPT) or 1.0
+    for leg in legs or []:
+        pt = str(leg.get("pick_type", "standard")).strip().lower()
+        dist = float(leg.get("line_distance", 0.0) or 0.0)
+        if pt == "goblin":
+            adjustment *= goblin_per_leg_factor(dist) / intercept
+        elif pt == "demon":
+            adjustment *= compute_leg_adjustment(pt, dist)
+    return round(float(adjustment), 4)
+
+
 def _compute_power_min_guarantee(legs: list, n_legs: int) -> tuple[float, int]:
     """
     Power-play min guarantee by goblin composition.
@@ -414,6 +434,7 @@ def compute_ticket_ev(
     n = int(n_legs)
     tt = str(ticket_type or "power").strip().lower()
     adj = float(compute_min_guarantee_adjustment(legs))
+    flex_adj = float(compute_flex_normalized_adjustment(legs)) if tt == "flex" else adj
     payout_source = "calibrated"
 
     exact = _lookup_exact_payout_ladder(tt, n, legs)
@@ -424,8 +445,8 @@ def compute_ticket_ev(
             flex_tbl = FLEX_GUARANTEE.get(n, {})
             base_first = float(flex_tbl.get(n, BASE_FLEX_FIRST.get(n, 3.0)))
             base_partial = float(flex_tbl.get(n - 1, BASE_FLEX_MIN.get(n, 0.0))) if n >= 2 else 0.0
-            adjusted_first = round(base_first * adj, 4)
-            adjusted_min_g = round(base_partial * adj, 4)
+            adjusted_first = round(base_first * flex_adj, 4)
+            adjusted_min_g = round(base_partial * flex_adj, 4)
         else:
             adjusted_first = round(float(SWEEP_PAYOUT.get(n, 6.0)), 4)
             adjusted_min_g, g_count = _compute_power_min_guarantee(legs, n)
@@ -449,8 +470,12 @@ def compute_ticket_ev(
     if bounds:
         lo, hi = float(bounds[0]), float(bounds[1])
         adjusted_first = max(lo, min(hi, float(adjusted_first)))
-        min_floor = lo * 0.3
-        adjusted_min_g = max(min_floor, min(hi, float(adjusted_min_g)))
+        if tt == "flex":
+            # Partial tier can be below sweep bounds' lo; do not force a bogus floor from sweep.
+            adjusted_min_g = max(0.0, min(float(hi), float(adjusted_min_g)))
+        else:
+            min_floor = lo * 0.3
+            adjusted_min_g = max(min_floor, min(hi, float(adjusted_min_g)))
 
     mg_adjustment = round(adjusted_min_g / adjusted_first, 4) if adjusted_first > 0 else 0.0
 
@@ -496,7 +521,7 @@ def compute_ticket_ev(
         "min_payout_x": round(min_payout_x, 4),
         "sweep_payout_x": round(sweep_payout_x, 4),
         "min_guarantee_adjustment": mg_adjustment,
-        "payout_adjustment": (adj if tt == "flex" else 1.0),
+        "payout_adjustment": (flex_adj if tt == "flex" else 1.0),
         "payout_source": payout_source,
         "ev_formula": ev_formula,
         "ticket_type": tt,
