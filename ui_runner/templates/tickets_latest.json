@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-13 01:32:43 UTC",
+  "generated_at": "2026-04-13 02:52:51 UTC",
   "date": "2026-04-12",
   "filters": {
     "tiers": "A,B,C,D",
@@ -38,15 +38,15 @@
           "ticket_no": 1,
           "avg_hit_rate": 0.9333333333333332,
           "avg_rank_score": 1.3500000000000003,
-          "est_win_prob": 0.6141249999999999,
-          "ticket_objective_score": 0.9392,
-          "est_flex_cash_prob": 0.9392,
+          "est_win_prob": 0.37324799999999997,
+          "ticket_objective_score": 0.8087,
+          "est_flex_cash_prob": 0.8087,
           "power_payout": 2.8,
           "flex_payout": 1.4,
           "base_power_payout": 6.0,
           "payout_multiplier": 0.4667,
-          "ev_power": 1.7195,
-          "kelly_units": 0.1,
+          "ev_power": 1.0451,
+          "kelly_units": 0.01,
           "correlation_multiplier": 1.0,
           "correlation_audit": [
             "same_game_density×1.0000"
@@ -88,6 +88,8 @@
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 2,
               "hit_rate": 1.0,
+              "over_hit_rate": null,
+              "under_hit_rate": null,
               "ml_prob": 0.8792,
               "rank_score": 1.07,
               "game_time": "2026-04-12 20:30:00-04:00",
@@ -115,8 +117,8 @@
               "usage_boost": 0.0,
               "usage_boost_reason": "",
               "data_warning": null,
-              "leg_prob_used": 0.85,
-              "leg_prob_source": "ml_prob",
+              "leg_prob_used": 0.99,
+              "leg_prob_source": "hit_rate",
               "image_url": null,
               "initials": "PA",
               "recommended_stake_usd": null
@@ -144,6 +146,8 @@
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 1,
               "hit_rate": 1.0,
+              "over_hit_rate": null,
+              "under_hit_rate": null,
               "ml_prob": 0.9256,
               "rank_score": 1.33,
               "game_time": "2026-04-12 20:30:00-04:00",
@@ -171,8 +175,8 @@
               "usage_boost": 0.0,
               "usage_boost_reason": "",
               "data_warning": null,
-              "leg_prob_used": 0.85,
-              "leg_prob_source": "ml_prob",
+              "leg_prob_used": 0.99,
+              "leg_prob_source": "hit_rate",
               "image_url": null,
               "initials": "BP",
               "recommended_stake_usd": null
@@ -200,6 +204,8 @@
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 1,
               "hit_rate": 0.8,
+              "over_hit_rate": null,
+              "under_hit_rate": null,
               "ml_prob": 0.8684,
               "rank_score": 1.65,
               "game_time": "2026-04-12 20:30:00-04:00",
@@ -227,8 +233,8 @@
               "usage_boost": 0.0,
               "usage_boost_reason": "",
               "data_warning": null,
-              "leg_prob_used": 0.85,
-              "leg_prob_source": "ml_prob",
+              "leg_prob_used": 0.8,
+              "leg_prob_source": "hit_rate",
               "image_url": null,
               "initials": "DV",
               "recommended_stake_usd": null
@@ -244,7 +250,9 @@
             "recommendation": "STRONG",
             "entry_10_to_win_guarantee": 2.44,
             "entry_20_to_win_guarantee": 4.88,
-            "sweep_payout": 3.0
+            "sweep_payout": 3.0,
+            "entry_10_to_win_sweep": 30.0,
+            "payout_confidence_score": 2.3523
           }
         }
       ]
@@ -309,6 +317,8 @@
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 1,
               "hit_rate": 0.0,
+              "over_hit_rate": null,
+              "under_hit_rate": null,
               "ml_prob": 0.629,
               "rank_score": 1.19,
               "game_time": "2026-04-12 20:30:00-04:00",
@@ -365,6 +375,8 @@
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 1,
               "hit_rate": 0.0,
+              "over_hit_rate": null,
+              "under_hit_rate": null,
               "ml_prob": 0.6842,
               "rank_score": 1.02,
               "game_time": "2026-04-12 20:30:00-04:00",
@@ -421,6 +433,8 @@
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 1,
               "hit_rate": 0.0,
+              "over_hit_rate": null,
+              "under_hit_rate": null,
               "ml_prob": 0.6534,
               "rank_score": 1.19,
               "game_time": "2026-04-12 20:30:00-04:00",
@@ -465,7 +479,9 @@
             "recommendation": "MARGINAL",
             "entry_10_to_win_guarantee": 60.0,
             "entry_20_to_win_guarantee": 120.0,
-            "sweep_payout": 6.0
+            "sweep_payout": 6.0,
+            "entry_10_to_win_sweep": 60.0,
+            "payout_confidence_score": 1.6476
           }
         }
       ]
@@ -530,6 +546,8 @@
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 1,
               "hit_rate": 0.8,
+              "over_hit_rate": null,
+              "under_hit_rate": null,
               "ml_prob": null,
               "rank_score": 6.13,
               "game_time": "04/13 3:30 PM",
@@ -557,8 +575,8 @@
               "usage_boost": 0.0,
               "usage_boost_reason": "",
               "data_warning": null,
-              "leg_prob_used": 0.72,
-              "leg_prob_source": "rank_score",
+              "leg_prob_used": 0.8,
+              "leg_prob_source": "hit_rate",
               "image_url": null,
               "initials": "JM",
               "recommended_stake_usd": null
@@ -586,6 +604,8 @@
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 1,
               "hit_rate": 1.0,
+              "over_hit_rate": null,
+              "under_hit_rate": null,
               "ml_prob": null,
               "rank_score": 6.02,
               "game_time": "04/13 3:00 PM",
@@ -613,8 +633,8 @@
               "usage_boost": 0.0,
               "usage_boost_reason": "",
               "data_warning": null,
-              "leg_prob_used": 0.72,
-              "leg_prob_source": "rank_score",
+              "leg_prob_used": 0.99,
+              "leg_prob_source": "hit_rate",
               "image_url": null,
               "initials": "DS",
               "recommended_stake_usd": null
@@ -642,6 +662,8 @@
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 1,
               "hit_rate": 0.8,
+              "over_hit_rate": null,
+              "under_hit_rate": null,
               "ml_prob": null,
               "rank_score": 5.5,
               "game_time": "04/13 6:00 PM",
@@ -669,8 +691,8 @@
               "usage_boost": 0.0,
               "usage_boost_reason": "",
               "data_warning": null,
-              "leg_prob_used": 0.72,
-              "leg_prob_source": "rank_score",
+              "leg_prob_used": 0.8,
+              "leg_prob_source": "hit_rate",
               "image_url": null,
               "initials": "MM",
               "recommended_stake_usd": null
@@ -686,7 +708,9 @@
             "recommendation": "STRONG",
             "entry_10_to_win_guarantee": 0.94,
             "entry_20_to_win_guarantee": 1.88,
-            "sweep_payout": 3.0
+            "sweep_payout": 3.0,
+            "entry_10_to_win_sweep": 30.0,
+            "payout_confidence_score": 1.9008
           }
         }
       ]
@@ -752,6 +776,8 @@
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 1,
               "hit_rate": 1.0,
+              "over_hit_rate": null,
+              "under_hit_rate": null,
               "ml_prob": null,
               "rank_score": 7.49,
               "game_time": "2026-03-29 13:40:00-04:00",
@@ -779,8 +805,8 @@
               "usage_boost": 0.0,
               "usage_boost_reason": "",
               "data_warning": null,
-              "leg_prob_used": 0.72,
-              "leg_prob_source": "rank_score",
+              "leg_prob_used": 0.99,
+              "leg_prob_source": "hit_rate",
               "image_url": null,
               "initials": "CE",
               "recommended_stake_usd": null
@@ -808,6 +834,8 @@
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 1,
               "hit_rate": 0.8,
+              "over_hit_rate": null,
+              "under_hit_rate": null,
               "ml_prob": null,
               "rank_score": 9.15,
               "game_time": "2026-03-29 13:37:00-04:00",
@@ -835,8 +863,8 @@
               "usage_boost": 0.0,
               "usage_boost_reason": "",
               "data_warning": null,
-              "leg_prob_used": 0.72,
-              "leg_prob_source": "rank_score",
+              "leg_prob_used": 0.8,
+              "leg_prob_source": "hit_rate",
               "image_url": null,
               "initials": "GS",
               "recommended_stake_usd": null
@@ -864,6 +892,8 @@
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 1,
               "hit_rate": 0.8,
+              "over_hit_rate": null,
+              "under_hit_rate": null,
               "ml_prob": null,
               "rank_score": 8.31,
               "game_time": "2026-03-29 13:37:00-04:00",
@@ -891,8 +921,8 @@
               "usage_boost": 0.0,
               "usage_boost_reason": "",
               "data_warning": null,
-              "leg_prob_used": 0.72,
-              "leg_prob_source": "rank_score",
+              "leg_prob_used": 0.8,
+              "leg_prob_source": "hit_rate",
               "image_url": null,
               "initials": "DV",
               "recommended_stake_usd": null
@@ -908,7 +938,9 @@
             "recommendation": "STRONG",
             "entry_10_to_win_guarantee": 0.82,
             "entry_20_to_win_guarantee": 1.63,
-            "sweep_payout": 3.0
+            "sweep_payout": 3.0,
+            "entry_10_to_win_sweep": 30.0,
+            "payout_confidence_score": 1.9008
           }
         }
       ]
@@ -973,6 +1005,8 @@
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 1,
               "hit_rate": 1.0,
+              "over_hit_rate": null,
+              "under_hit_rate": null,
               "ml_prob": null,
               "rank_score": 4.66,
               "game_time": "2026-03-29 13:35:00-04:00",
@@ -1000,8 +1034,8 @@
               "usage_boost": 0.0,
               "usage_boost_reason": "",
               "data_warning": null,
-              "leg_prob_used": 0.72,
-              "leg_prob_source": "rank_score",
+              "leg_prob_used": 0.99,
+              "leg_prob_source": "hit_rate",
               "image_url": null,
               "initials": "JL",
               "recommended_stake_usd": null
@@ -1029,6 +1063,8 @@
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 1,
               "hit_rate": 0.8,
+              "over_hit_rate": null,
+              "under_hit_rate": null,
               "ml_prob": null,
               "rank_score": 3.91,
               "game_time": "2026-03-29 13:40:00-04:00",
@@ -1056,8 +1092,8 @@
               "usage_boost": 0.0,
               "usage_boost_reason": "",
               "data_warning": null,
-              "leg_prob_used": 0.72,
-              "leg_prob_source": "rank_score",
+              "leg_prob_used": 0.8,
+              "leg_prob_source": "hit_rate",
               "image_url": null,
               "initials": "SH",
               "recommended_stake_usd": null
@@ -1073,7 +1109,9 @@
             "recommendation": "STRONG",
             "entry_10_to_win_guarantee": 30.0,
             "entry_20_to_win_guarantee": 60.0,
-            "sweep_payout": 3.0
+            "sweep_payout": 3.0,
+            "entry_10_to_win_sweep": 30.0,
+            "payout_confidence_score": 2.376
           }
         }
       ]
@@ -1138,6 +1176,8 @@
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 1,
               "hit_rate": 1.0,
+              "over_hit_rate": null,
+              "under_hit_rate": null,
               "ml_prob": null,
               "rank_score": 4.66,
               "game_time": "2026-03-29 13:35:00-04:00",
@@ -1165,8 +1205,8 @@
               "usage_boost": 0.0,
               "usage_boost_reason": "",
               "data_warning": null,
-              "leg_prob_used": 0.72,
-              "leg_prob_source": "rank_score",
+              "leg_prob_used": 0.99,
+              "leg_prob_source": "hit_rate",
               "image_url": null,
               "initials": "JL",
               "recommended_stake_usd": null
@@ -1194,6 +1234,8 @@
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 1,
               "hit_rate": 0.8,
+              "over_hit_rate": null,
+              "under_hit_rate": null,
               "ml_prob": null,
               "rank_score": 3.91,
               "game_time": "2026-03-29 13:40:00-04:00",
@@ -1221,8 +1263,8 @@
               "usage_boost": 0.0,
               "usage_boost_reason": "",
               "data_warning": null,
-              "leg_prob_used": 0.72,
-              "leg_prob_source": "rank_score",
+              "leg_prob_used": 0.8,
+              "leg_prob_source": "hit_rate",
               "image_url": null,
               "initials": "SH",
               "recommended_stake_usd": null
@@ -1250,6 +1292,8 @@
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 1,
               "hit_rate": 0.75,
+              "over_hit_rate": null,
+              "under_hit_rate": null,
               "ml_prob": null,
               "rank_score": 2.87,
               "game_time": "2026-03-29 13:40:00-04:00",
@@ -1277,8 +1321,8 @@
               "usage_boost": 0.0,
               "usage_boost_reason": "",
               "data_warning": null,
-              "leg_prob_used": 0.72,
-              "leg_prob_source": "rank_score",
+              "leg_prob_used": 0.75,
+              "leg_prob_source": "hit_rate",
               "image_url": null,
               "initials": "NM",
               "recommended_stake_usd": null
@@ -1294,7 +1338,9 @@
             "recommendation": "STRONG",
             "entry_10_to_win_guarantee": 60.0,
             "entry_20_to_win_guarantee": 120.0,
-            "sweep_payout": 6.0
+            "sweep_payout": 6.0,
+            "entry_10_to_win_sweep": 60.0,
+            "payout_confidence_score": 3.564
           }
         }
       ]
