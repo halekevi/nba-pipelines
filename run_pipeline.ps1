@@ -452,7 +452,7 @@ function Run-Combined {
         Write-Host "  [alt-books] Passing DraftKings NBA CSV" -ForegroundColor DarkGray
     }
 
-    $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --max-tickets 3 --write-web --web-outdir `"$WebOutDir`""
+    $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --max-tickets 3 --nba-structured-variants 3 --write-web --web-outdir `"$WebOutDir`""
 
     $okC = Run-Step "Combined Slate + Tickets" $Root ".\scripts\combined_slate_tickets.py" $CombinedArgs
 
