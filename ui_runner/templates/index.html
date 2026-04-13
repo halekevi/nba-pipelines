@@ -1033,7 +1033,8 @@ body::before{
   /* table */
   .slate-table-wrap{
     overflow-x:auto;
-    max-height:min(420px,62vh);
+    /* Taller scroll area so more props visible; vh scales with window, px cap for very tall monitors */
+    max-height:min(720px,72vh);
     overflow-y:auto;
     padding:0 18px 18px;
     -webkit-overflow-scrolling:touch;
@@ -1125,7 +1126,7 @@ body::before{
   @media(max-width:480px){.slate-panel-header-row{grid-template-columns:1fr!important;}}
   @media(max-width:900px){
     .slate-table-wrap{
-      max-height:58vh;
+      max-height:68vh;
       overscroll-behavior:contain;
       padding:0 10px 12px;
     }
@@ -1144,13 +1145,13 @@ body::before{
   }
   @media(max-width:900px) and (orientation:landscape){
     .slate-panel-header-row{grid-template-columns:repeat(3,1fr)!important;}
-    .slate-table-wrap{max-height:52vh;}
+    .slate-table-wrap{max-height:62vh;}
     .slate-table{min-width:1000px;}
     .slate-filter-input{max-width:280px;}
   }
   @media(max-width:900px) and (orientation:portrait){
     .slate-panel-header-row{grid-template-columns:1fr!important;gap:10px;padding:0 0 10px 0;}
-    .slate-table-wrap{max-height:62vh;}
+    .slate-table-wrap{max-height:72vh;}
     .slate-table{min-width:1040px;}
   }
   </style>
