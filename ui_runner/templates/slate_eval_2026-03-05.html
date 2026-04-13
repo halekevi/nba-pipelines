@@ -23,7 +23,7 @@
   --pending:#666;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Share Tech Mono',monospace;background:transparent;color:var(--text);min-height:100vh;padding-bottom:24px;font-size:clamp(14px,1.02vw,16px);line-height:1.45}
+body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);min-height:100vh;padding-bottom:24px;font-size:clamp(14px,1.02vw,16px);line-height:1.45}
 h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif}
 body::before{content:'';position:fixed;top:-20%;left:-10%;width:55%;height:55%;background:radial-gradient(ellipse,rgba(212,160,23,.07) 0%,transparent 70%);pointer-events:none;z-index:0}
 body::after{content:'';position:fixed;bottom:-20%;right:-10%;width:50%;height:50%;background:radial-gradient(ellipse,rgba(0,229,255,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
@@ -39,14 +39,14 @@ box-shadow:0 8px 32px rgba(0,0,0,.28)}
 .logo-icon{width:120px;height:120px;object-fit:contain;display:block;filter:drop-shadow(0 0 8px rgba(212,160,23,0.45))}
 @media(max-width:768px){.logo-icon{width:80px;height:80px}}
 .logo-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;background:linear-gradient(to bottom,#f0a500,#d4a017,#f7e08a);-webkit-background-clip:text;background-clip:text;color:transparent}
-.logo-sub{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:2.2px;margin-top:2px}
-.date-badge{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted2);background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+.logo-sub{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);letter-spacing:2.2px;margin-top:2px}
+.date-badge{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2);background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
 border:1px solid var(--glass-bd);border-radius:999px;padding:8px 14px;letter-spacing:1.5px}
 .main{max-width:none;width:100%;margin:0;padding:24px 20px;box-sizing:border-box}
 .sport-header{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
 .sport-label{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;line-height:1;color:var(--gold);text-shadow:0 0 28px rgba(240,165,0,.18)}
 .sport-header-line{flex:1;min-width:80px;height:1px;background:rgba(255,255,255,0.08)}
-.sport-meta-count{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted2)}
+.sport-meta-count{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2)}
 .sport-section{margin-bottom:48px;width:100%;max-width:100%;box-sizing:border-box}
 .section-label{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.08vw,16px);color:var(--muted);letter-spacing:2.5px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
@@ -65,22 +65,22 @@ box-shadow:0 4px 24px rgba(0,0,0,.22)}
 .stat-card.purple::before{background:linear-gradient(90deg,var(--purple),transparent)}
 .stat-label{font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--muted);letter-spacing:2.2px;margin-bottom:8px}
 .stat-val{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;line-height:1}
-.stat-sub{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted2);margin-top:5px}
+.stat-sub{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2);margin-top:5px}
 .stat-sub strong{font-weight:700}
 .table-wrap{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
 border:1px solid var(--glass-bd);border-radius:14px;overflow:hidden;margin-bottom:20px;box-shadow:0 4px 24px rgba(0,0,0,.18)}
-table{width:100%;border-collapse:collapse;font-size:clamp(13px,1.05vw,15px);font-family:'Share Tech Mono',monospace}
+table{width:100%;border-collapse:collapse;font-size:clamp(13px,1.05vw,15px);font-family:'Inter',sans-serif}
 th{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.15vw,16px);letter-spacing:2px;color:var(--muted);padding:10px 12px;text-align:left;
 background:rgba(0,0,0,0.22);backdrop-filter:blur(12px);border-bottom:1px solid var(--glass-bd);white-space:nowrap}
 th.right{text-align:right}
 td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(255,255,255,.04)}
-td.right{text-align:right}td.mono{font-family:'Share Tech Mono',monospace;font-size:clamp(13px,1.05vw,15px)}
+td.right{text-align:right}td.mono{font-family:'Inter',sans-serif;font-size:clamp(13px,1.05vw,15px)}
 .rate-cell{display:flex;align-items:center;gap:10px}
 .rate-bar-bg{flex:1;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
 .rate-bar-fill{height:100%;border-radius:3px;transition:width .4s}
-.rate-num{font-family:'Share Tech Mono',monospace;font-size:clamp(13px,1.05vw,15px);min-width:48px;text-align:right;flex-shrink:0}
+.rate-num{font-family:'Inter',sans-serif;font-size:clamp(13px,1.05vw,15px);min-width:48px;text-align:right;flex-shrink:0}
 .chip{display:inline-block;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:.5px;
 background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid var(--glass-bd)}
 .chip-a{background:rgba(57,255,110,.08);color:var(--green);border-color:rgba(57,255,110,.28)}
@@ -96,7 +96,7 @@ background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid va
 .insight-card{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);border-radius:12px;padding:14px 16px;box-shadow:0 4px 20px rgba(0,0,0,.15);min-width:0;box-sizing:border-box}
 .insight-icon{font-size:22px;margin-bottom:8px}
 .insight-title{font-weight:700;font-size:14px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:var(--gold)}
-.insight-body{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted2);line-height:1.6}
+.insight-body{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2);line-height:1.6}
 .insight-body strong{color:var(--text)}
 tr.player-hit td{background:rgba(57,255,110,0.04)}
 tr.player-hit td:first-child{border-left:3px solid var(--green)}
@@ -111,7 +111,7 @@ tr.player-warn td:first-child{border-left:3px solid var(--gold)}
 .alert-amber{background:rgba(240,165,0,.08);border-color:rgba(240,165,0,.32)}
 .alert-title{font-family:'Bebas Neue',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;margin-bottom:4px}
 .sub-dir{display:inline-block;margin-right:8px}
-.muted-note{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);padding:14px;text-align:center}
+.muted-note{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);padding:14px;text-align:center}
 td.muted{color:var(--muted2)}
 @media(max-width:768px){
 .stat-grid-4,.stat-grid-2{grid-template-columns:repeat(2,1fr)}.two-col,.three-col,.insight-grid{grid-template-columns:1fr}
@@ -139,7 +139,7 @@ td{padding:8px 8px}
   <div class="date-badge">📅 MAR 05, 2026</div>
 </header>
 <div class="main">
-<div style="text-align:center;padding:60px 20px;font-family:'Share Tech Mono',monospace">
+<div style="text-align:center;padding:60px 20px;font-family:'Inter',sans-serif">
           <div style="font-size:32px;margin-bottom:16px">📭</div>
           <div style="font-size:18px;color:rgba(255,255,255,0.55)">No graded data found for this date.</div>
           <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-top:8px">

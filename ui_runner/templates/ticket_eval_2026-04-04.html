@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Ticket Eval — 2026-04-04</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 /* ── CSS Variables (matches index.html) ── */
 :root{
@@ -230,7 +230,7 @@ body::after{
 .ticket-bucket > summary::-webkit-details-marker{display:none}
 .ticket-bucket > summary::after{content:'▸';font-size:16px;opacity:.55;transition:transform .2s ease;color:var(--muted);flex-shrink:0;}
 .ticket-bucket[open] > summary::after{transform:rotate(90deg)}
-.ticket-bucket-meta{font-family:'Share Tech Mono',monospace;font-size:clamp(11px,1.1vw,13px);letter-spacing:.6px;font-weight:400;color:var(--muted);text-align:right;max-width:100%;}
+.ticket-bucket-meta{font-family:'Inter',sans-serif;font-size:clamp(11px,1.1vw,13px);letter-spacing:.6px;font-weight:400;color:var(--muted);text-align:right;max-width:100%;}
 .ticket-bucket-body{padding:4px 12px 16px;}
 .ticket-bucket.sb-nba{border-left:4px solid rgba(240,165,0,.8);}
 .ticket-bucket.sb-nba1h{border-left:4px solid rgba(255,155,86,.85);}
@@ -269,7 +269,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .snav.nav-hidden+.stats-bar{top:8px;}
 .sum-row{display:flex;flex-wrap:wrap;gap:18px 36px;align-items:center;justify-content:center;}
 .sum-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:88px;}
-.sum-val{font-family:'Share Tech Mono',monospace;font-size:clamp(22px,2.6vw,30px);font-weight:700;color:var(--gold);text-shadow:0 0 20px rgba(240,165,0,.25);}
+.sum-val{font-family:'Inter',sans-serif;font-size:clamp(22px,2.6vw,30px);font-weight:700;color:var(--gold);text-shadow:0 0 20px rgba(240,165,0,.25);}
 .sum-val.green{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.35);}
 .sum-val.red{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.35);}
 .sum-val.pend{color:var(--pending);text-shadow:none;}
@@ -281,20 +281,20 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .sec-head{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,3.2vw,40px);color:var(--gold);margin-bottom:8px;padding-bottom:14px;border-bottom:1px solid var(--glass-bd);letter-spacing:3px;text-shadow:0 0 24px rgba(240,165,0,.2);}
 .ticket-card{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid var(--glass-bd);border-radius:14px;margin-bottom:22px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.35);}
 .ticket-card.card-warning{border-color:rgba(240,165,0,.55);box-shadow:0 0 0 1px rgba(240,165,0,.22),0 8px 32px rgba(0,0,0,.35);}
-.ticket-warning-note{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.4px;color:#ffd87a;background:rgba(240,165,0,.08);border-top:1px solid rgba(240,165,0,.3);padding:8px 14px;}
+.ticket-warning-note{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.4px;color:#ffd87a;background:rgba(240,165,0,.08);border-top:1px solid rgba(240,165,0,.3);padding:8px 14px;}
 .ticket-card.all-hit{background:rgba(57,255,110,0.06);border-color:rgba(57,255,110,.42);box-shadow:0 0 28px rgba(57,255,110,.14),0 8px 32px rgba(0,0,0,.3);}
 .ticket-card.card-missed{background:rgba(255,77,77,0.06);border:1px solid rgba(255,77,77,0.35);box-shadow:0 0 24px rgba(255,77,77,0.12),0 0 1px rgba(255,77,77,0.4),0 8px 32px rgba(0,0,0,.28);position:relative;}
 .ticket-card.card-missed::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:#ff4d4d;box-shadow:0 0 14px rgba(255,77,77,0.45);z-index:2;border-radius:14px 14px 0 0;pointer-events:none;}
 .thdr{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;padding:18px clamp(14px,2vw,24px);border-bottom:1px solid var(--glass-bd);background:rgba(0,0,0,.18);backdrop-filter:blur(12px);}
 .thdr .tn{font-size:clamp(24px,2.8vw,32px);font-family:'Bebas Neue',sans-serif;letter-spacing:2px;color:var(--gold);}
-.thdr .tg{font-family:'Share Tech Mono',monospace;font-size:clamp(12px,1.35vw,15px);color:var(--muted);letter-spacing:0.5px;line-height:1.35;}
-.payout{font-family:'Share Tech Mono',monospace;font-size:clamp(13px,1.4vw,16px);color:var(--cyan);}
+.thdr .tg{font-family:'Inter',sans-serif;font-size:clamp(12px,1.35vw,15px);color:var(--muted);letter-spacing:0.5px;line-height:1.35;}
+.payout{font-family:'Inter',sans-serif;font-size:clamp(13px,1.4vw,16px);color:var(--cyan);}
 .banner{font-family:'Bebas Neue',sans-serif;font-size:clamp(11px,1.2vw,13px);letter-spacing:2px;padding:8px 18px;border-radius:999px;font-weight:700;background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);}
 .banner.hit{color:var(--green);border-color:rgba(57,255,110,.45);box-shadow:0 0 16px rgba(57,255,110,.15);}
 .banner.miss{color:var(--red);border-color:rgba(255,77,77,.5);box-shadow:0 0 16px rgba(255,77,77,.12);}
 .banner.pend{color:var(--pending);border-color:rgba(255,255,255,.12);}
 .banner.void{color:var(--gold2);border-color:rgba(240,165,0,.35);}
-.legrow{font-family:'Share Tech Mono',monospace;display:grid;grid-template-columns:56px 92px minmax(120px,1fr) 44px minmax(240px,1.45fr) minmax(108px,1fr) minmax(96px,1fr) minmax(76px,.85fr);gap:12px;align-items:center;padding:14px clamp(14px,2vw,22px);font-size:clamp(13px,1.45vw,16px);line-height:1.35;border-bottom:1px solid rgba(255,255,255,.06);border-left:3px solid transparent;}
+.legrow{font-family:'Inter',sans-serif;display:grid;grid-template-columns:56px 92px minmax(120px,1fr) 44px minmax(240px,1.45fr) minmax(108px,1fr) minmax(96px,1fr) minmax(76px,.85fr);gap:12px;align-items:center;padding:14px clamp(14px,2vw,22px);font-size:clamp(13px,1.45vw,16px);line-height:1.35;border-bottom:1px solid rgba(255,255,255,.06);border-left:3px solid transparent;}
 .leg-head{font-family:'Bebas Neue',sans-serif;display:grid;grid-template-columns:56px 92px minmax(120px,1fr) 44px minmax(240px,1.45fr) minmax(108px,1fr) minmax(96px,1fr) minmax(76px,.85fr);gap:12px;align-items:end;padding:6px clamp(14px,2vw,22px) 8px;font-size:10px;letter-spacing:2px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.12);}
 .leg-head-lab{line-height:1.2;}
 .legrow:last-child{border-bottom:none;}
@@ -340,10 +340,10 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 .pl-void{color:var(--gold2);}
 .dir-over{color:var(--cyan);font-weight:700;}
 .dir-under{color:var(--gold);font-weight:700;}
-.meta-muted{font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:clamp(11px,1.2vw,13px);margin-top:3px;}
-.slate-kicker{font-family:'Share Tech Mono',monospace;font-size:clamp(11px,1.2vw,13px);letter-spacing:3px;color:var(--muted);margin-bottom:10px;}
+.meta-muted{font-family:'Inter',sans-serif;color:var(--muted);font-size:clamp(11px,1.2vw,13px);margin-top:3px;}
+.slate-kicker{font-family:'Inter',sans-serif;font-size:clamp(11px,1.2vw,13px);letter-spacing:3px;color:var(--muted);margin-bottom:10px;}
 .pl-hit,.pl-pend{font-size:1em;font-weight:600;}
-.warning-chip{display:inline-flex;align-items:center;margin-left:8px;padding:2px 8px;border-radius:999px;border:1px solid rgba(240,165,0,.4);background:rgba(240,165,0,.12);color:#ffd87a;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.6px;cursor:help;}
+.warning-chip{display:inline-flex;align-items:center;margin-left:8px;padding:2px 8px;border-radius:999px;border:1px solid rgba(240,165,0,.4);background:rgba(240,165,0,.12);color:#ffd87a;font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.6px;cursor:help;}
 </style>
 </head>
 <body>
@@ -852,7 +852,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
     border:1px solid var(--border);
     background:var(--bg2);
     transition:all .15s;
-    font-family:'Share Tech Mono',monospace;
+    font-family:'Inter',sans-serif;
     text-transform:uppercase;
   }
   .manual-tb .manual-mode-btn:hover {
@@ -888,7 +888,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
     display:flex;align-items:center;gap:12px;flex-wrap:wrap;
   }
   .manual-tb .manual-slider-row label {
-    font-family:'Share Tech Mono',monospace;
+    font-family:'Inter',sans-serif;
     color:var(--muted);font-size:12px;
   }
   .manual-tb input[type="range"] {
@@ -931,16 +931,16 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
     min-width:240px;flex:1;
   }
   .manual-tb .manual-prop-name {
-    font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text);
+    font-family:'Inter',sans-serif;font-size:13px;color:var(--text);
   }
   .manual-tb .manual-prop-sub {
-    font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);margin-top:2px;
+    font-family:'Inter',sans-serif;font-size:11px;color:var(--muted);margin-top:2px;
   }
   .manual-tb .manual-prop-metric {
-    font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);
   }
   .manual-tb .manual-prop-rank {
-    font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--cyan);
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--cyan);
   }
 
   /* rbar (reused for hit-rate visualization) */
@@ -958,13 +958,13 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
     display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:flex-start;margin-bottom:10px;
   }
   .manual-tb .manual-stat {
-    font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);
   }
   .manual-tb .manual-stat strong {
-    color:var(--text);font-family:'Share Tech Mono',monospace;
+    color:var(--text);font-family:'Inter',sans-serif;
   }
   .manual-tb .manual-warning {
-    font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--amber);
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--amber);
     border:1px solid rgba(200,160,60,.35);background:rgba(200,160,60,.08);
     padding:6px 10px;border-radius:999px;display:flex;align-items:center;gap:8px;
   }
@@ -982,7 +982,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
     border:1px solid rgba(255,255,255,0.12);
     background:rgba(255,255,255,0.04);
     color:var(--muted);
-    font-family:'Share Tech Mono',monospace;
+    font-family:'Inter',sans-serif;
     border-radius:10px;
     padding:6px 10px;cursor:pointer;
     transition:all .15s;
@@ -998,7 +998,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
     border:1px solid rgba(255,255,255,0.14);
     background:rgba(255,255,255,0.05);
     color:var(--text);
-    font-family:'Share Tech Mono',monospace;
+    font-family:'Inter',sans-serif;
     border-radius:14px;
     padding:10px 14px;cursor:pointer;
     transition:all .15s;
@@ -1033,7 +1033,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
   }
   .manual-tb .manual-locked-leg {
     display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-    font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);
   }
   .manual-tb .manual-locked-leg .player {
     color:var(--text);
@@ -1218,7 +1218,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
 
     list.innerHTML = '';
     if (!fp.length) {
-      list.innerHTML = `<div style="color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:12px;padding:8px;">No props match filters.</div>`;
+      list.innerHTML = `<div style="color:var(--muted);font-family:'Inter',sans-serif;font-size:12px;padding:8px;">No props match filters.</div>`;
       return;
     }
 
@@ -1248,7 +1248,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
           <div class="manual-prop-sub">${leg.team} · ${leg.prop_type}</div>
         </div>
         <div class="manual-prop-metric">
-          <div style="color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;">${lineStr} <span class="${dirCls}">${leg.direction || ''}</span></div>
+          <div style="color:var(--text);font-family:'Inter',sans-serif;font-size:12px;">${lineStr} <span class="${dirCls}">${leg.direction || ''}</span></div>
           <div style="margin-top:4px;">${pickChip} ${dupChip}</div>
         </div>
         <div class="manual-prop-metric" style="min-width:120px;">${hitBar}</div>
@@ -1326,9 +1326,9 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
       row.className = 'manual-active-leg';
       row.innerHTML = `
         <span class="pill ${spClass}">${leg.sport}</span>
-        <span class="player" style="font-family:'Share Tech Mono',monospace;color:var(--text);font-size:13px;">${leg.player}</span>
+        <span class="player" style="font-family:'Inter',sans-serif;color:var(--text);font-size:13px;">${leg.player}</span>
         <span style="color:var(--muted);font-size:12px;">${leg.prop_type}</span>
-        <span style="margin-left:auto;color:var(--text);font-size:12px;font-family:'Share Tech Mono',monospace;">
+        <span style="margin-left:auto;color:var(--text);font-size:12px;font-family:'Inter',sans-serif;">
           ${leg.line} <span class="${dirCls}">${leg.direction}</span>
         </span>
         <span style="display:flex;align-items:center;gap:8px;">
@@ -1370,7 +1370,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
       card.innerHTML = `
         <div class="manual-locked-hdr">
           <span class="tn bebas">Manual #${idx+1}</span>
-          <span class="tg" style="color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:12px;">${t.legs.length} legs</span>
+          <span class="tg" style="color:var(--muted);font-family:'Inter',sans-serif;font-size:12px;">${t.legs.length} legs</span>
           <span class="payout" style="margin-left:0;">Est. win prob: ${winProbPct}%</span>
           <span class="payout" style="margin-left:12px;">Avg edge: ${fmt2(avgEdge)}</span>
           <button type="button" class="manual-locked-x" data-remove-ticket="${idx}">✕</button>

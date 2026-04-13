@@ -182,7 +182,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 
 /* ── TABS ── */
 .tab-bar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:20px;padding:8px;background:rgba(255,255,255,0.03);backdrop-filter:blur(18px) saturate(170%);-webkit-backdrop-filter:blur(18px) saturate(170%);border:1px solid rgba(255,255,255,0.09);border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,0.32),inset 0 1px 0 rgba(255,255,255,0.05);}
-.tab-btn{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;padding:10px 16px;cursor:pointer;color:var(--muted);border:1px solid transparent;background:rgba(255,255,255,0.02);border-radius:10px;transition:all .15s;text-transform:uppercase;}
+.tab-btn{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2px;padding:10px 16px;cursor:pointer;color:var(--muted);border:1px solid transparent;background:rgba(255,255,255,0.02);border-radius:10px;transition:all .15s;text-transform:uppercase;}
 .tab-btn:hover{color:var(--text);background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.10);}
 .tab-btn.active{color:var(--accent);background:rgba(212,175,55,0.10);border-color:rgba(212,175,55,0.32);box-shadow:0 0 18px rgba(212,175,55,0.12),inset 0 -1px 0 rgba(212,175,55,0.5);}
 .tab-panel{display:none;}.tab-panel.active{display:block;}
@@ -202,7 +202,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .form-grid-5{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:8px;}
 .field{display:flex;flex-direction:column;gap:6px;}
 .field label{font-size:10px;letter-spacing:2px;color:var(--muted);}
-.field input,.field select{background:rgba(255,255,255,0.05);backdrop-filter:blur(8px) saturate(180%);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 12px;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text);width:100%;transition:border-color .2s;outline:none;}
+.field input,.field select{background:rgba(255,255,255,0.05);backdrop-filter:blur(8px) saturate(180%);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 12px;font-family:'Inter',sans-serif;font-size:13px;color:var(--text);width:100%;transition:border-color .2s;outline:none;}
 .field input:focus,.field select:focus{border-color:rgba(212,175,55,0.4);box-shadow:0 0 0 3px rgba(212,175,55,0.06);}
 .field select option{background:#0c0e1a;}
 select, .field select, .leg-input{color:var(--text);}
@@ -232,7 +232,7 @@ select option, .field select option, .leg-input option{
 .leg-card-header{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;user-select:none;transition:background .15s;}
 .leg-card-header:hover{background:rgba(255,255,255,.04);}
 .leg-num{font-family:'Bebas Neue',sans-serif;font-size:20px;width:22px;text-align:center;flex-shrink:0;line-height:1;}
-.leg-type-badge{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;padding:3px 10px;border-radius:20px;font-weight:700;white-space:nowrap;flex-shrink:0;}
+.leg-type-badge{font-family:'Inter',sans-serif;font-size:10px;letter-spacing:1px;padding:3px 10px;border-radius:20px;font-weight:700;white-space:nowrap;flex-shrink:0;}
 .leg-type-badge.goblin{background:rgba(125,255,203,.12);color:var(--goblin);border:1px solid rgba(125,255,203,.25);} .leg-card.is-goblin{background:rgba(125,255,203,0.04)!important;border-color:rgba(125,255,203,0.16)!important;} .leg-card.is-demon{background:rgba(255,127,159,0.04)!important;border-color:rgba(255,127,159,0.16)!important;}
 .leg-type-badge.demon{background:rgba(255,127,159,.12);color:var(--demon);border:1px solid rgba(255,127,159,.25);}
 .leg-type-badge.standard{background:rgba(127,199,217,.12);color:var(--std);border:1px solid rgba(127,199,217,.25);}
@@ -283,7 +283,7 @@ select option, .field select option, .leg-input option{
 .t-gob::-webkit-slider-thumb{background:var(--goblin);}
 .t-dem::-webkit-slider-thumb{background:var(--demon);}
 .prob-ticks{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:4px;}
-.leg-input{background:rgba(255,255,255,0.04);backdrop-filter:blur(8px) saturate(180%);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:8px 10px;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text);width:100%;outline:none;transition:border-color .15s;}
+.leg-input{background:rgba(255,255,255,0.04);backdrop-filter:blur(8px) saturate(180%);border:1px solid rgba(255,255,255,0.09);border-radius:8px;padding:8px 10px;font-family:'Inter',sans-serif;font-size:12px;color:var(--text);width:100%;outline:none;transition:border-color .15s;}
 .leg-input:focus{border-color:rgba(212,175,55,0.35);}
 .leg-input:disabled{opacity:.3;cursor:not-allowed;}
 .result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
@@ -415,7 +415,7 @@ canvas{width:100%!important;max-height:220px;}
 .hero h1 span{color:var(--cyan);}
 .hero-sub{color:var(--muted);font-size:12px;margin-top:6px;letter-spacing:.06em;position:relative;z-index:1;}
 .tab-bar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:20px;padding:8px;background:rgba(255,255,255,0.03);backdrop-filter:blur(18px) saturate(170%);-webkit-backdrop-filter:blur(18px) saturate(170%);border:1px solid rgba(255,255,255,0.09);border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,0.32),inset 0 1px 0 rgba(255,255,255,0.05);}
-.tab-btn{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;padding:10px 16px;cursor:pointer;color:var(--muted);border:1px solid transparent;background:rgba(255,255,255,0.02);border-radius:10px;transition:all .15s;text-transform:uppercase;}
+.tab-btn{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2px;padding:10px 16px;cursor:pointer;color:var(--muted);border:1px solid transparent;background:rgba(255,255,255,0.02);border-radius:10px;transition:all .15s;text-transform:uppercase;}
 .tab-btn:hover{color:var(--text);background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.10);}
 .tab-btn.active{color:var(--accent);background:rgba(212,175,55,0.10);border-color:rgba(212,175,55,0.32);box-shadow:0 0 18px rgba(212,175,55,0.12),inset 0 -1px 0 rgba(212,175,55,0.5);}
 

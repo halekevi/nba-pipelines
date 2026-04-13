@@ -340,9 +340,9 @@ def build_best_ticket_summary(tickets: list[dict]) -> str:
         lc, _ = rate_color(leg.get("Hit Rate"))
         rows_html += f"""<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);">
   <span style="font-size:12px;color:var(--text);flex:1;font-weight:600">{h(leg.get('Player',''))}</span>
-  <span style="font-size:11px;color:var(--muted);font-family:'Share Tech Mono',monospace">{h(leg.get('Prop',''))} {fmt(leg.get('Line'),1)}</span>
+  <span style="font-size:11px;color:var(--muted);font-family:'Inter',sans-serif">{h(leg.get('Prop',''))} {fmt(leg.get('Line'),1)}</span>
   {dir_chip(leg.get('Dir'))}
-  <span style="font-size:11px;color:{lc};font-family:'Share Tech Mono',monospace;min-width:38px;text-align:right">{hr_val}</span>
+  <span style="font-size:11px;color:{lc};font-family:'Inter',sans-serif;min-width:38px;text-align:right">{hr_val}</span>
 </div>"""
 
     power_str = f"⚡ {info['power']} Power" if info['power'] else ""
@@ -491,7 +491,7 @@ CSS = """
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Share Tech Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:100px;overflow-x:hidden;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:100px;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(200,255,0,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(200,255,0,.03) 1px,transparent 1px);background-size:40px 40px;animation:gridScroll 20s linear infinite;pointer-events:none;z-index:0;}
 @keyframes gridScroll{from{background-position:0 0;}to{background-position:0 40px;}}
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.15) 2px,rgba(0,0,0,.15) 4px);pointer-events:none;z-index:0;}
@@ -551,11 +551,11 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .filter-inner{max-width:1400px;margin:0 auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
 .search-box{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;flex:1;min-width:200px;max-width:360px;transition:border-color .2s;}
 .search-box:focus-within{border-color:var(--accent);}
-.search-box input{background:none;border:none;outline:none;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;flex:1;min-width:0;}
+.search-box input{background:none;border:none;outline:none;color:var(--text);font-family:'Inter',sans-serif;font-size:12px;flex:1;min-width:0;}
 .search-box input::placeholder{color:var(--muted2);}
 .search-icon{color:var(--muted);font-size:12px;flex-shrink:0;}
 .sport-filters{display:flex;gap:6px;flex-wrap:wrap;}
-.sf-btn{font-size:10px;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);color:var(--muted);cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:1px;transition:all .15s;}
+.sf-btn{font-size:10px;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:1px;transition:all .15s;}
 .sf-btn:hover{color:var(--text);border-color:var(--bd2);}
 .sf-btn.active{border-color:currentColor;}
 .sf-btn.sf-all.active{color:var(--text);border-color:var(--bd2);background:var(--bg3);}
@@ -597,11 +597,11 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 /* ── TABS ── */
 .top-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px;overflow-x:auto;-webkit-overflow-scrolling:touch;}
 .top-tabs::-webkit-scrollbar{height:2px;}
-.top-tab{font-size:10px;letter-spacing:1px;padding:8px 14px;cursor:pointer;color:var(--muted);border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;gap:5px;font-family:'Share Tech Mono',monospace;white-space:nowrap;flex-shrink:0;}
+.top-tab{font-size:10px;letter-spacing:1px;padding:8px 14px;cursor:pointer;color:var(--muted);border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;gap:5px;font-family:'Inter',sans-serif;white-space:nowrap;flex-shrink:0;}
 .top-tab:hover{color:var(--text);}.top-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
 .top-panel{display:none;}.top-panel.active{display:block;}
 .stab-bar{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;align-items:center;}
-.stab{font-size:10px;letter-spacing:1px;padding:4px 12px;cursor:pointer;color:var(--muted2);border:1px solid var(--border);background:var(--bg2);border-radius:20px;transition:all .15s;display:flex;align-items:center;gap:4px;font-family:'Share Tech Mono',monospace;}
+.stab{font-size:10px;letter-spacing:1px;padding:4px 12px;cursor:pointer;color:var(--muted2);border:1px solid var(--border);background:var(--bg2);border-radius:20px;transition:all .15s;display:flex;align-items:center;gap:4px;font-family:'Inter',sans-serif;}
 .stab:hover{color:var(--text);border-color:var(--bd2);}.stab.active{color:var(--accent);border-color:var(--accent);background:rgba(200,255,0,.06);}
 .stab-panel{display:none;}.stab-panel.active{display:block;}
 .count-badge{background:var(--bg3);border-radius:10px;padding:1px 5px;font-size:9px;color:var(--muted2);}
@@ -629,7 +629,7 @@ th.right{text-align:right;}
 td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:rgba(200,255,0,.015);}
-td.right{text-align:right;}td.mono{font-family:'Share Tech Mono',monospace;font-size:11px;}
+td.right{text-align:right;}td.mono{font-family:'Inter',sans-serif;font-size:11px;}
 td.muted{color:var(--muted2);}td.small{font-size:10px;}
 
 /* ── MOBILE TICKET CARDS (replace table on small screens) ── */
@@ -640,7 +640,7 @@ td.muted{color:var(--muted2);}td.small{font-size:10px;}
 .leg-matchup{font-size:10px;color:var(--muted);margin-bottom:8px;}
 .leg-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
 .leg-label{font-size:9px;color:var(--muted);letter-spacing:1.5px;}
-.leg-value{font-size:11px;font-family:'Share Tech Mono',monospace;}
+.leg-value{font-size:11px;font-family:'Inter',sans-serif;}
 
 /* ── RATE BAR ── */
 .rbar{display:flex;align-items:center;gap:6px;min-width:80px;}
@@ -649,7 +649,7 @@ td.muted{color:var(--muted2);}td.small{font-size:10px;}
 .rbar-num{font-size:10px;width:32px;text-align:right;flex-shrink:0;}
 
 /* ── CHIPS ── */
-.chip{display:inline-block;border-radius:5px;padding:2px 7px;font-size:9px;font-weight:700;letter-spacing:.5px;white-space:nowrap;font-family:'Share Tech Mono',monospace;}
+.chip{display:inline-block;border-radius:5px;padding:2px 7px;font-size:9px;font-weight:700;letter-spacing:.5px;white-space:nowrap;font-family:'Inter',sans-serif;}
 .chip-a{background:rgba(57,255,110,.1);color:var(--green);border:1px solid rgba(57,255,110,.25);}
 .chip-b{background:rgba(0,229,255,.1);color:var(--cyan);border:1px solid rgba(0,229,255,.25);}
 .chip-c{background:rgba(240,165,0,.1);color:var(--amber);border:1px solid rgba(240,165,0,.25);}

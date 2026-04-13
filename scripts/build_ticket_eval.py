@@ -1841,7 +1841,7 @@ def _build_html(
         "document.documentElement.classList.add('light-theme');}}catch(e){}})();</script>",
         '<meta name="theme-color" content="#050505"/>',
         f"<title>Ticket Eval — {json_date}</title>",
-        '<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@600;700;800&display=swap" rel="stylesheet"/>',
+        '<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>',
         f'<link rel="stylesheet" href="/static/proporacle-page-shell.css?v={_TICKET_EVAL_SHELL_CSS_VER}"/>',
         f'<link rel="stylesheet" href="/static/site-nav-unified.css?v={_TICKET_EVAL_NAV_UNIFIED_VER}"/>',
         f'<link rel="stylesheet" href="/static/nav-mobile-shared.css?v={_TICKET_EVAL_NAV_MOBILE_VER}"/>',
@@ -1862,7 +1862,7 @@ def _build_html(
         "border-radius:0 0 18px 18px;padding-top:11px;box-shadow:0 8px 32px rgba(0,0,0,.35);}",
         ".sum-row{display:flex;flex-wrap:wrap;gap:18px 36px;align-items:center;justify-content:center;}",
         ".sum-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:88px;}",
-        ".sum-val{font-family:'Share Tech Mono',monospace;font-size:clamp(22px,2.6vw,30px);font-weight:700;color:var(--gold);text-shadow:0 0 20px rgba(240,165,0,.25);}",
+        ".sum-val{font-family:'Inter',sans-serif;font-size:clamp(22px,2.6vw,30px);font-weight:700;color:var(--gold);text-shadow:0 0 20px rgba(240,165,0,.25);}",
         ".sum-val.green{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.35);}",
         ".sum-val.red{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.35);}",
         ".sum-val.pend{color:var(--pending);text-shadow:none;}",
@@ -1881,7 +1881,7 @@ def _build_html(
         "border:1px solid var(--glass-bd);border-radius:14px;margin-bottom:22px;overflow:hidden;"
         "box-shadow:0 8px 32px rgba(0,0,0,.35);}",
         ".ticket-card.card-warning{border-color:rgba(240,165,0,.55);box-shadow:0 0 0 1px rgba(240,165,0,.22),0 8px 32px rgba(0,0,0,.35);}",
-        ".ticket-warning-note{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.4px;color:#ffd87a;"
+        ".ticket-warning-note{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.4px;color:#ffd87a;"
         "background:rgba(240,165,0,.08);border-top:1px solid rgba(240,165,0,.3);padding:8px 14px;}",
         ".ticket-card.all-hit{background:rgba(57,255,110,0.06);border-color:rgba(57,255,110,.42);"
         "box-shadow:0 0 28px rgba(57,255,110,.14),0 8px 32px rgba(0,0,0,.3);}",
@@ -1892,15 +1892,15 @@ def _build_html(
         ".thdr{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;padding:18px clamp(14px,2vw,24px);border-bottom:1px solid var(--glass-bd);"
         "background:rgba(0,0,0,.18);backdrop-filter:blur(12px);}",
         ".thdr .tn{font-size:clamp(24px,2.8vw,32px);font-family:'Bebas Neue',sans-serif;letter-spacing:2px;color:var(--gold);}",
-        ".thdr .tg{font-family:'Share Tech Mono',monospace;font-size:clamp(12px,1.35vw,15px);color:var(--muted);letter-spacing:0.5px;line-height:1.35;}",
-        ".payout{font-family:'Share Tech Mono',monospace;font-size:clamp(13px,1.4vw,16px);color:var(--cyan);}",
+        ".thdr .tg{font-family:'Inter',sans-serif;font-size:clamp(12px,1.35vw,15px);color:var(--muted);letter-spacing:0.5px;line-height:1.35;}",
+        ".payout{font-family:'Inter',sans-serif;font-size:clamp(13px,1.4vw,16px);color:var(--cyan);}",
         ".banner{font-family:'Bebas Neue',sans-serif;font-size:clamp(11px,1.2vw,13px);letter-spacing:2px;padding:8px 18px;border-radius:999px;font-weight:700;"
         "background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);}",
         ".banner.hit{color:var(--green);border-color:rgba(57,255,110,.45);box-shadow:0 0 16px rgba(57,255,110,.15);}",
         ".banner.miss{color:var(--red);border-color:rgba(255,77,77,.5);box-shadow:0 0 16px rgba(255,77,77,.12);}",
         ".banner.pend{color:var(--pending);border-color:rgba(255,255,255,.12);}",
         ".banner.void{color:var(--gold2);border-color:rgba(240,165,0,.35);}",
-        ".legrow{font-family:'Share Tech Mono',monospace;display:grid;"
+        ".legrow{font-family:'Inter',sans-serif;display:grid;"
         "grid-template-columns:56px 92px minmax(120px,1fr) 44px minmax(240px,1.45fr) minmax(108px,1fr) minmax(96px,1fr) minmax(76px,.85fr);gap:12px;"
         "align-items:center;padding:14px clamp(14px,2vw,22px);font-size:clamp(13px,1.45vw,16px);line-height:1.35;"
         "border-bottom:1px solid rgba(255,255,255,.06);border-left:3px solid transparent;}",
@@ -1949,14 +1949,14 @@ def _build_html(
         ".pl-void{color:var(--gold2);}",
         ".dir-over{color:var(--cyan);font-weight:700;}",
         ".dir-under{color:var(--gold);font-weight:700;}",
-        ".meta-muted{font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:clamp(11px,1.2vw,13px);margin-top:3px;}",
-        ".slate-kicker{font-family:'Share Tech Mono',monospace;font-size:clamp(11px,1.2vw,13px);letter-spacing:3px;color:var(--muted);margin:0 0 6px;}",
+        ".meta-muted{font-family:'Inter',sans-serif;color:var(--muted);font-size:clamp(11px,1.2vw,13px);margin-top:3px;}",
+        ".slate-kicker{font-family:'Inter',sans-serif;font-size:clamp(11px,1.2vw,13px);letter-spacing:3px;color:var(--muted);margin:0 0 6px;}",
         ".pl-hit,.pl-pend{font-size:1em;font-weight:600;}",
         ".warning-chip{display:inline-flex;align-items:center;margin-left:8px;padding:2px 8px;border-radius:999px;"
         "border:1px solid rgba(240,165,0,.4);background:rgba(240,165,0,.12);color:#ffd87a;"
-        "font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.6px;cursor:help;}",
+        "font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.6px;cursor:help;}",
         ".grade-eval-summary{max-width:min(1520px,96vw);margin:0 auto 8px;padding:10px 16px;border-radius:16px;"
-        "border:1px solid var(--glass-bd);background:rgba(0,0,0,.22);font-family:'Share Tech Mono',monospace;font-size:13px;"
+        "border:1px solid var(--glass-bd);background:rgba(0,0,0,.22);font-family:'Inter',sans-serif;font-size:13px;"
         "line-height:1.55;color:var(--text);}",
         ".grade-eval-summary-empty{color:var(--muted);font-size:12px;}",
         ".grade-eval-summary-line1{font-weight:700;color:var(--gold);margin-bottom:6px;}",
@@ -1967,7 +1967,7 @@ def _build_html(
         "background:rgba(0,0,0,.12);}",
         ".grade-result{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:clamp(16px,1.8vw,20px);"
         "padding:10px 14px;border-radius:10px;margin-bottom:6px;display:inline-block;}",
-        ".grade-result-sub{font-size:11px;color:var(--muted);margin:-2px 0 10px;font-family:'Share Tech Mono',monospace;}",
+        ".grade-result-sub{font-size:11px;color:var(--muted);margin:-2px 0 10px;font-family:'Inter',sans-serif;}",
         ".grade-result-sweep{background:gold;color:#000;}",
         ".grade-result-win{background:#00ff88;color:#000;}",
         ".grade-result-min_guarantee{background:#88ccff;color:#000;}",
@@ -1975,9 +1975,9 @@ def _build_html(
         ".grade-payout-table{width:100%;border-collapse:collapse;font-size:clamp(12px,1.25vw,14px);margin-bottom:10px;}",
         ".grade-payout-table th,.grade-payout-table td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;}",
         ".grade-payout-table th{color:var(--muted);font-weight:600;font-size:11px;letter-spacing:1px;}",
-        ".grade-entry-line{font-size:12px;color:var(--gold2);font-family:'Share Tech Mono',monospace;}",
+        ".grade-entry-line{font-size:12px;color:var(--gold2);font-family:'Inter',sans-serif;}",
         ".grade-payout-pending{font-size:12px;color:var(--pending);padding:8px 0;}",
-        ".grade-ticket-result{font-family:'Share Tech Mono',monospace;font-size:clamp(11px,1.2vw,13px);letter-spacing:.3px;}",
+        ".grade-ticket-result{font-family:'Inter',sans-serif;font-size:clamp(11px,1.2vw,13px);letter-spacing:.3px;}",
         ".grade-ticket-result.won{color:var(--green);}",
         ".grade-ticket-result.lost{color:var(--red);}",
         ".grade-ticket-result-label{opacity:.85;font-weight:600;}",
@@ -2253,7 +2253,7 @@ def _build_html(
     border:1px solid var(--border);
     background:var(--bg2);
     transition:all .15s;
-    font-family:'Share Tech Mono',monospace;
+    font-family:'Inter',sans-serif;
     text-transform:uppercase;
   }}
   .manual-tb .manual-mode-btn:hover {{
@@ -2289,7 +2289,7 @@ def _build_html(
     display:flex;align-items:center;gap:12px;flex-wrap:wrap;
   }}
   .manual-tb .manual-slider-row label {{
-    font-family:'Share Tech Mono',monospace;
+    font-family:'Inter',sans-serif;
     color:var(--muted);font-size:12px;
   }}
   .manual-tb input[type="range"] {{
@@ -2332,16 +2332,16 @@ def _build_html(
     min-width:240px;flex:1;
   }}
   .manual-tb .manual-prop-name {{
-    font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--text);
+    font-family:'Inter',sans-serif;font-size:13px;color:var(--text);
   }}
   .manual-tb .manual-prop-sub {{
-    font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);margin-top:2px;
+    font-family:'Inter',sans-serif;font-size:11px;color:var(--muted);margin-top:2px;
   }}
   .manual-tb .manual-prop-metric {{
-    font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);
   }}
   .manual-tb .manual-prop-rank {{
-    font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--cyan);
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--cyan);
   }}
 
   /* rbar (reused for hit-rate visualization) */
@@ -2359,13 +2359,13 @@ def _build_html(
     display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:flex-start;margin-bottom:10px;
   }}
   .manual-tb .manual-stat {{
-    font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);
   }}
   .manual-tb .manual-stat strong {{
-    color:var(--text);font-family:'Share Tech Mono',monospace;
+    color:var(--text);font-family:'Inter',sans-serif;
   }}
   .manual-tb .manual-warning {{
-    font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--amber);
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--amber);
     border:1px solid rgba(200,160,60,.35);background:rgba(200,160,60,.08);
     padding:6px 10px;border-radius:999px;display:flex;align-items:center;gap:8px;
   }}
@@ -2383,7 +2383,7 @@ def _build_html(
     border:1px solid rgba(255,255,255,0.12);
     background:rgba(255,255,255,0.04);
     color:var(--muted);
-    font-family:'Share Tech Mono',monospace;
+    font-family:'Inter',sans-serif;
     border-radius:10px;
     padding:6px 10px;cursor:pointer;
     transition:all .15s;
@@ -2399,7 +2399,7 @@ def _build_html(
     border:1px solid rgba(255,255,255,0.14);
     background:rgba(255,255,255,0.05);
     color:var(--text);
-    font-family:'Share Tech Mono',monospace;
+    font-family:'Inter',sans-serif;
     border-radius:14px;
     padding:10px 14px;cursor:pointer;
     transition:all .15s;
@@ -2434,7 +2434,7 @@ def _build_html(
   }}
   .manual-tb .manual-locked-leg {{
     display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-    font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);
   }}
   .manual-tb .manual-locked-leg .player {{
     color:var(--text);
@@ -2619,7 +2619,7 @@ def _build_html(
 
     list.innerHTML = '';
     if (!fp.length) {{
-      list.innerHTML = `<div style="color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:12px;padding:8px;">No props match filters.</div>`;
+      list.innerHTML = `<div style="color:var(--muted);font-family:'Inter',sans-serif;font-size:12px;padding:8px;">No props match filters.</div>`;
       return;
     }}
 
@@ -2649,7 +2649,7 @@ def _build_html(
           <div class="manual-prop-sub">${{leg.team}} · ${{leg.prop_type}}</div>
         </div>
         <div class="manual-prop-metric">
-          <div style="color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;">${{lineStr}} <span class="${{dirCls}}">${{leg.direction || ''}}</span></div>
+          <div style="color:var(--text);font-family:'Inter',sans-serif;font-size:12px;">${{lineStr}} <span class="${{dirCls}}">${{leg.direction || ''}}</span></div>
           <div style="margin-top:4px;">${{pickChip}} ${{dupChip}}</div>
         </div>
         <div class="manual-prop-metric" style="min-width:120px;">${{hitBar}}</div>
@@ -2727,9 +2727,9 @@ def _build_html(
       row.className = 'manual-active-leg';
       row.innerHTML = `
         <span class="pill ${{spClass}}">${{leg.sport}}</span>
-        <span class="player" style="font-family:'Share Tech Mono',monospace;color:var(--text);font-size:13px;">${{leg.player}}</span>
+        <span class="player" style="font-family:'Inter',sans-serif;color:var(--text);font-size:13px;">${{leg.player}}</span>
         <span style="color:var(--muted);font-size:12px;">${{leg.prop_type}}</span>
-        <span style="margin-left:auto;color:var(--text);font-size:12px;font-family:'Share Tech Mono',monospace;">
+        <span style="margin-left:auto;color:var(--text);font-size:12px;font-family:'Inter',sans-serif;">
           ${{leg.line}} <span class="${{dirCls}}">${{leg.direction}}</span>
         </span>
         <span style="display:flex;align-items:center;gap:8px;">
@@ -2771,7 +2771,7 @@ def _build_html(
       card.innerHTML = `
         <div class="manual-locked-hdr">
           <span class="tn bebas">Manual #${{idx+1}}</span>
-          <span class="tg" style="color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:12px;">${{t.legs.length}} legs</span>
+          <span class="tg" style="color:var(--muted);font-family:'Inter',sans-serif;font-size:12px;">${{t.legs.length}} legs</span>
           <span class="payout" style="margin-left:0;">Est. win prob: ${{winProbPct}}%</span>
           <span class="payout" style="margin-left:12px;">Avg edge: ${{fmt2(avgEdge)}}</span>
           <button type="button" class="manual-locked-x" data-remove-ticket="${{idx}}">✕</button>

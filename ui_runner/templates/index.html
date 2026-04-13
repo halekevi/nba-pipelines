@@ -11,7 +11,7 @@
 <title>PropOracle — Home</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{
   /* Hybrid liquid-glass palette */
@@ -134,10 +134,10 @@ body::after{content:'';position:fixed;inset:0;
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 .nav-live-cluster{display:flex;align-items:center;gap:14px;flex-shrink:0;flex-wrap:wrap;}
 .nav-datetime-block{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:4px;padding:4px 0;min-width:0;text-align:left;border-left:1px solid rgba(255,255,255,.1);padding-left:14px;margin-left:2px;}
-.nav-slate-date{font-family:'Share Tech Mono',monospace;font-size:clamp(14px,1.25vw,17px);font-weight:500;color:rgba(255,255,255,.9);letter-spacing:.02em;line-height:1.25;}
+.nav-slate-date{font-family:'Inter',sans-serif;font-size:clamp(14px,1.25vw,17px);font-weight:500;color:rgba(255,255,255,.9);letter-spacing:.02em;line-height:1.25;}
 .nav-sync-line{font-size:clamp(12px,1.1vw,14px);color:var(--muted);line-height:1.4;display:flex;align-items:center;flex-wrap:wrap;gap:0;max-width:min(78vw,420px);}
-.nav-local-datetime{font-family:'Share Tech Mono',monospace;color:rgba(255,255,255,.55);letter-spacing:.02em;}
-.nav-clock{font-family:'Share Tech Mono',monospace;color:rgba(255,255,255,.55);}
+.nav-local-datetime{font-family:'Inter',sans-serif;color:rgba(255,255,255,.55);letter-spacing:.02em;}
+.nav-clock{font-family:'Inter',sans-serif;color:rgba(255,255,255,.55);}
 .nav-sync-sep{opacity:.45;padding:0 5px;}
 [data-theme="light"] .nav-datetime-block{border-left-color:rgba(0,0,0,.1);}
 [data-theme="light"] .nav-slate-date{color:rgba(0,0,0,.88);}
@@ -351,7 +351,7 @@ body::after{content:'';position:fixed;inset:0;
 [data-theme="light"] .home-cat>summary{color:rgba(0,0,0,.82);}
 
 /* modal tab */
-.modal-tab{flex:1;background:none;border:none;border-bottom:2px solid transparent;padding:10px;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted);cursor:pointer;transition:all .15s;}
+.modal-tab{flex:1;background:none;border:none;border-bottom:2px solid transparent;padding:10px;font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2px;color:var(--muted);cursor:pointer;transition:all .15s;}
 .modal-tab:hover{color:var(--text);}
 .modal-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
 
@@ -1006,7 +1006,7 @@ body::before{
     letter-spacing:.03em;
     white-space:pre-line;
     word-break:break-word;
-    font-family:'Share Tech Mono',monospace;
+    font-family:'Inter',sans-serif;
   }
   .slate-panel-header-row .scard:hover{
     border-color:rgba(255,255,255,.2);
@@ -1024,11 +1024,11 @@ body::before{
   .slate-expand.open{display:block;}
   /* filter/sort bar */
   .slate-toolbar{display:flex;align-items:center;gap:8px 10px;padding:14px 18px 10px;flex-wrap:wrap;}
-  .slate-filter-input{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:13px;padding:9px 14px;outline:none;min-width:0;flex:1 1 200px;max-width:min(100%,380px);transition:border-color .15s;backdrop-filter:blur(10px) saturate(180%);}
+  .slate-filter-input{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:9px 14px;outline:none;min-width:0;flex:1 1 200px;max-width:min(100%,380px);transition:border-color .15s;backdrop-filter:blur(10px) saturate(180%);}
   .slate-filter-input:focus{border-color:rgba(255,255,255,0.2);}
   .slate-filter-btn{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.2px;padding:6px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.09);background:rgba(255,255,255,0.03);color:var(--muted);cursor:pointer;transition:all .15s;backdrop-filter:blur(8px) saturate(180%);}
   .slate-filter-btn.on{background:rgba(212,175,55,.1);border-color:rgba(212,175,55,.3);color:var(--accent);}
-  .slate-sort-sel{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;padding:6px 12px;outline:none;cursor:pointer;}
+  .slate-sort-sel{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:12px;padding:6px 12px;outline:none;cursor:pointer;}
   .slate-row-count{font-size:12px;color:var(--muted);letter-spacing:.08em;margin-left:auto;}
   /* table */
   .slate-table-wrap{
@@ -1081,12 +1081,12 @@ body::before{
   .tier-D{background:rgba(255,127,159,.1);color:var(--red);border:1px solid rgba(255,127,159,.2);}
   .dir-over{color:var(--green);font-weight:700;}
   .dir-under{color:var(--amber);font-weight:700;}
-  .slate-pick-type-cell{font-family:'Share Tech Mono',monospace;font-size:14px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+  .slate-pick-type-cell{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
   .pick-goblin-cell{color:var(--purple);}
   .pick-standard-cell{color:var(--cyan);}
   .pick-demon-cell{color:var(--amber);}
-  .slate-rank-cell{color:var(--accent);font-family:'Share Tech Mono',monospace;font-weight:700;}
-  .slate-time-cell{color:rgba(255,255,255,.95)!important;font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.02em;}
+  .slate-rank-cell{color:var(--accent);font-family:'Inter',sans-serif;font-weight:700;}
+  .slate-time-cell{color:rgba(255,255,255,.95)!important;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.02em;}
   .edge-pos{color:var(--green);}
   .edge-neg{color:var(--amber);}
   @media(max-width:768px){.slate-panel-header-row{grid-template-columns:repeat(2,1fr)!important;}}
@@ -2371,12 +2371,12 @@ function renderSlateTable(sport) {
       <td style="color:var(--muted);">${r.opp  || '—'}</td>
       <td style="color:var(--text);">${r.prop || '—'}</td>
       <td class="slate-pick-type-cell ${pickCls}">${r.pick_type || '—'}</td>
-      <td style="font-family:'Share Tech Mono',monospace;">${r.line != null ? r.line : '—'}</td>
+      <td style="font-family:'Inter',sans-serif;">${r.line != null ? r.line : '—'}</td>
       <td class="${dirCls}">${dirSym} ${r.dir || '—'}</td>
-      <td class="${edgeCls}" style="font-family:'Share Tech Mono',monospace;font-weight:700;">${edgeStr}</td>
-      <td style="color:var(--cyan);font-family:'Share Tech Mono',monospace;">${hitStr}</td>
-      <td style="color:var(--green);font-family:'Share Tech Mono',monospace;">${l5o}</td>
-      <td style="color:var(--amber);font-family:'Share Tech Mono',monospace;">${l5u}</td>
+      <td class="${edgeCls}" style="font-family:'Inter',sans-serif;font-weight:700;">${edgeStr}</td>
+      <td style="color:var(--cyan);font-family:'Inter',sans-serif;">${hitStr}</td>
+      <td style="color:var(--green);font-family:'Inter',sans-serif;">${l5o}</td>
+      <td style="color:var(--amber);font-family:'Inter',sans-serif;">${l5u}</td>
       <td class="slate-time-cell">${timeStr}</td>
     </tr>`;
   };
@@ -2551,7 +2551,7 @@ function renderSlateTableDynamic(sport) {
         const n = parseFloat(val);
         const cls = !isNaN(n) ? (n >= 0 ? 'edge-pos' : 'edge-neg') : '';
         const disp = !isNaN(n) ? (n >= 0 ? '+' : '') + n.toFixed(2) : vStr;
-        return `<td class="${cls}" style="font-family:'Share Tech Mono',monospace;font-weight:700;">${disp}</td>`;
+        return `<td class="${cls}" style="font-family:'Inter',sans-serif;font-weight:700;">${disp}</td>`;
       }
       if (pickIdx >= 0 && i === pickIdx) {
         const pc = pickTypeCls(val);
