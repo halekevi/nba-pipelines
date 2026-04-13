@@ -536,9 +536,10 @@ def _file_info(path: Path) -> dict:
     if not path.exists():
         return {"exists": False, "modified": None, "size_kb": None}
     stat = path.stat()
+    # Always UTC wall clock so browsers / JS can align with generated_at and US Eastern "slate day".
     return {
         "exists":   True,
-        "modified": datetime.fromtimestamp(stat.st_mtime).strftime("%Y-%m-%d %H:%M:%S"),
+        "modified": datetime.fromtimestamp(stat.st_mtime, tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S"),
         "size_kb":  round(stat.st_size / 1024, 1),
     }
 
@@ -547,7 +548,8 @@ def _mtime_ts(mod_str: str | None) -> float:
     if not mod_str or len(mod_str) < 19:
         return 0.0
     try:
-        return datetime.strptime(mod_str[:19], "%Y-%m-%d %H:%M:%S").timestamp()
+        dt = datetime.strptime(mod_str[:19], "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+        return dt.timestamp()
     except ValueError:
         return 0.0
 
@@ -561,7 +563,7 @@ def _payload_timestamp_meta(payload: dict | None) -> tuple[float | None, str | N
         core = ga.replace(" UTC", "").strip()
         prefix = core[:19].replace("T", " ")
         try:
-            dt = datetime.strptime(prefix, "%Y-%m-%d %H:%M:%S")
+            dt = datetime.strptime(prefix, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
             return dt.timestamp(), dt.strftime("%Y-%m-%d %H:%M:%S")
         except ValueError:
             pass
@@ -605,8 +607,9 @@ def _slate_day_candidates(preferred_date: str | None) -> list[str]:
 
     _add(os.environ.get("PROPORACLE_SLATE_DATE", "").strip() or "")
     _add(preferred_date or "")
+    et_today = datetime.now(ZoneInfo("America/New_York")).date()
     for i in range(14):
-        _add((date.today() - timedelta(days=i)).strftime("%Y-%m-%d"))
+        _add((et_today - timedelta(days=i)).strftime("%Y-%m-%d"))
     return out
 
 
@@ -628,7 +631,7 @@ def _resolve_outputs_artifact(
             return leg
     if legacy:
         return legacy[0]
-    d0 = days[0] if days else date.today().strftime("%Y-%m-%d")
+    d0 = days[0] if days else datetime.now(ZoneInfo("America/New_York")).date().strftime("%Y-%m-%d")
     return OUTPUTS_ROOT / d0 / filename_fmt.format(d=d0)
 
 

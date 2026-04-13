@@ -61,6 +61,14 @@ import unicodedata
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from typing import Any, List, Optional
+from zoneinfo import ZoneInfo
+
+_SLATE_TZ = ZoneInfo("America/New_York")
+
+
+def slate_calendar_date_ymd() -> str:
+    """US Eastern calendar date for outputs/ and tickets JSON (avoids UTC-midnight skew on Railway)."""
+    return datetime.now(_SLATE_TZ).date().strftime("%Y-%m-%d")
 
 import numpy as np
 import pandas as pd
@@ -6263,7 +6271,10 @@ def write_summary(wb, nba, cbb, combined, all_ticket_groups, date_str, threshold
 
     ws.merge_cells("A1:I1")
     c = ws["A1"]
-    c.value = f"COMBINED NBA + CBB SLATE  |  {date_str}  |  Generated {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+    c.value = (
+        f"COMBINED NBA + CBB SLATE  |  {date_str}  |  Generated "
+        f"{datetime.now(_SLATE_TZ).strftime('%Y-%m-%d %I:%M %p %Z')}"
+    )
     c.font = Font(bold=True, name="Arial", size=13, color="FFFFFF")
     c.fill = PatternFill("solid", start_color=C["hdr"])
     c.alignment = Alignment(horizontal="center", vertical="center")
@@ -6413,8 +6424,8 @@ def main():
     ap.add_argument("--output", default="")
     ap.add_argument(
         "--date",
-        default=datetime.now().strftime("%Y-%m-%d"),
-        help="Slate date YYYY-MM-DD, or 'today' / 'now'",
+        default="",
+        help="Slate date YYYY-MM-DD, or 'today' / 'now' (default: US Eastern calendar date)",
     )
     ap.add_argument("--tiers", default="A,B,C", help="Comma-separated tiers e.g. A,B")
     ap.add_argument(
@@ -6540,8 +6551,8 @@ def main():
     args = ap.parse_args()
 
     ds = str(args.date).strip().lower()
-    if ds in ("today", "now"):
-        args.date = datetime.now().strftime("%Y-%m-%d")
+    if not ds or ds in ("today", "now"):
+        args.date = slate_calendar_date_ymd()
 
     args.max_ticket_legs = max(2, min(6, int(args.max_ticket_legs)))
     args.ticket_gen_starts = max(1, min(24, int(args.ticket_gen_starts)))

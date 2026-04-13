@@ -1731,6 +1731,23 @@ function formatSlateModifiedDisplay(raw) {
   return s;
 }
 
+/** Pipeline / API timestamps are UTC wall clock (YYYY-MM-DD HH:MM:SS). Fresh = same US Eastern calendar day as "now". */
+const PROPORACLE_SLATE_FRESHNESS_TZ = "America/New_York";
+function ymdInEastern(d) {
+  if (!d || Number.isNaN(d.getTime())) return null;
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: PROPORACLE_SLATE_FRESHNESS_TZ,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(d);
+}
+function parsePipelineModifiedAsUtc(s) {
+  const m = (s || "").trim().match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})/);
+  if (!m) return null;
+  return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +m[6]));
+}
+
 function applyStatusCard(id, info, _label) {
   const card = document.getElementById(`sc-${id}`),
         val = document.getElementById(`sc-${id}-val`),
@@ -1744,9 +1761,10 @@ function applyStatusCard(id, info, _label) {
     badge.textContent = "PENDING";
     return;
   }
-  const _d = new Date();
-  const today = `${_d.getFullYear()}-${String(_d.getMonth()+1).padStart(2,'0')}-${String(_d.getDate()).padStart(2,'0')}`;
-  const fresh = info.modified && info.modified.startsWith(today);
+  const modUtc = parsePipelineModifiedAsUtc(info.modified || "");
+  const modEt = modUtc ? ymdInEastern(modUtc) : null;
+  const todayEt = ymdInEastern(new Date());
+  const fresh = Boolean(modEt && todayEt && modEt === todayEt);
   const cls = fresh ? "fresh" : "stale";
   card.classList.add(cls); badge.classList.add(cls);
   val.textContent = formatSlateModifiedDisplay(info.modified || "—");
