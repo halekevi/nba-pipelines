@@ -2350,7 +2350,7 @@ def render_tickets_html(payload: dict) -> str:
   --bg:#050505;--surface:rgba(20,20,20,0.60);--card:rgba(20,20,20,0.60);--border:rgba(212,175,55,0.15);
   --accent:#d4af37;--cyan:#00F2FF;--muted:#999;--text:#e8e8f0;
 }
-body{background:var(--bg);color:var(--text);font-family:'Share Tech Mono',monospace;min-height:100vh;overflow-x:hidden;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;}
 
 body::before{
   content:'';position:fixed;inset:0;
@@ -2501,7 +2501,7 @@ html[data-theme="light"] .ticket{
 /* dir badges */
 .dir-over{background:rgba(0,242,255,.15);color:#00F2FF;padding:3px 10px;border-radius:4px;font-size:13px;font-weight:700;}
 .dir-under{background:rgba(240,165,0,.15);color:#f0a500;padding:3px 10px;border-radius:4px;font-size:13px;font-weight:700;}
-.delta-badge{font-family:'Share Tech Mono',monospace;font-size:10px;padding:2px 6px;border-radius:6px;border:1px solid;margin-left:6px;vertical-align:middle;white-space:nowrap;}
+.delta-badge{font-family:'Inter',sans-serif;font-size:10px;padding:2px 6px;border-radius:6px;border:1px solid;margin-left:6px;vertical-align:middle;white-space:nowrap;}
 .sig-strong{background:rgba(0,242,255,.16);color:#00F2FF;border:1px solid rgba(0,242,255,.35);padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700;display:inline-block;}
 .sig-lean{background:rgba(240,165,0,.16);color:#f0a500;border:1px solid rgba(240,165,0,.35);padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700;display:inline-block;}
 .sig-risk{background:rgba(201,106,116,.16);color:#c96a74;border:1px solid rgba(201,106,116,.35);padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700;display:inline-block;}
@@ -7480,7 +7480,7 @@ _TICKETS_BUILT_PAYOUT_CSS = """<style>
   background: rgba(0,0,0,0.2);
 }
 .tickets-built .payout-rec-badge {
-  font-family: "Share Tech Mono", monospace;
+  font-family: "Inter", sans-serif;
   font-size: clamp(11px, 1.1vw, 13px);
   border: 1px solid rgba(255,255,255,0.16);
   border-radius: 6px;
@@ -7488,7 +7488,7 @@ _TICKETS_BUILT_PAYOUT_CSS = """<style>
   background: rgba(0,0,0,0.22);
 }
 .tickets-built .payout-x-badge {
-  font-family: "Share Tech Mono", monospace;
+  font-family: "Inter", sans-serif;
   font-size: clamp(11px, 1.1vw, 13px);
   color: var(--cyan);
   border: 1px solid rgba(0,229,255,0.28);
@@ -8197,16 +8197,16 @@ def render_tickets_body_html(
             </td>
             <td class="leg-col leg-col-sport hide-mobile">{sport_html}</td>
             <td class="leg-col leg-col-prop" style="color:var(--text);font-weight:500;">{_h(prop_type)}</td>
-            <td class="leg-col leg-col-line" style="font-family:'Share Tech Mono',monospace;">{line_html}</td>
+            <td class="leg-col leg-col-line" style="font-family:'Inter',sans-serif;">{line_html}</td>
             <td class="leg-col leg-col-dir direction-cell {dir_axis_cls}">{dir_html}</td>
             <td class="leg-col leg-col-pick">{pick_html}</td>
-            <td class="leg-col leg-col-hr hide-mobile" style="font-family:'Share Tech Mono',monospace;color:var(--green);">{_pct(hit_rate)}</td>
-            <td class="leg-col leg-col-ml hide-mobile" style="font-family:'Share Tech Mono',monospace;color:var(--cyan);">{_pct(ml_prob)}</td>
-            <td class="leg-col leg-col-edge hide-mobile" style="font-family:'Share Tech Mono',monospace;color:var(--accent);">{_fmt(edge, 2)}</td>
+            <td class="leg-col leg-col-hr hide-mobile" style="font-family:'Inter',sans-serif;color:var(--green);">{_pct(hit_rate)}</td>
+            <td class="leg-col leg-col-ml hide-mobile" style="font-family:'Inter',sans-serif;color:var(--cyan);">{_pct(ml_prob)}</td>
+            <td class="leg-col leg-col-edge hide-mobile" style="font-family:'Inter',sans-serif;color:var(--accent);">{_fmt(edge, 2)}</td>
             <td class="leg-col leg-col-def hide-mobile" style="font-size:13px;color:var(--muted);">{_h(def_tier)}</td>
-            <td class="leg-col leg-col-book hide-mobile" style="font-family:'Share Tech Mono',monospace;color:var(--cyan);" title="{_h(line_tip)}">{best_book_html}</td>
-            <td class="leg-col leg-col-bl hide-mobile" style="font-family:'Share Tech Mono',monospace;" title="{_h(line_tip)}">{best_line_html}</td>
-            <td class="leg-col leg-col-ce hide-mobile" style="font-family:'Share Tech Mono',monospace;{cross_edge_style}" title="Positive means better line than PP for this direction">{cross_edge_html}</td>
+            <td class="leg-col leg-col-book hide-mobile" style="font-family:'Inter',sans-serif;color:var(--cyan);" title="{_h(line_tip)}">{best_book_html}</td>
+            <td class="leg-col leg-col-bl hide-mobile" style="font-family:'Inter',sans-serif;" title="{_h(line_tip)}">{best_line_html}</td>
+            <td class="leg-col leg-col-ce hide-mobile" style="font-family:'Inter',sans-serif;{cross_edge_style}" title="Positive means better line than PP for this direction">{cross_edge_html}</td>
           </tr>''')
                 leg_graph_uid += 1
                 parts.append(_tickets_leg_graph_row_html(leg, f"lgr-{leg_graph_uid}", table_cols))

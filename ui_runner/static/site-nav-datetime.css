@@ -20,7 +20,7 @@
   margin-left: 2px;
 }
 .nav-slate-date {
-  font-family: "Share Tech Mono", ui-monospace, monospace;
+  font-family: "Inter", ui-sans-serif, sans-serif;
   font-size: clamp(14px, 1.25vw, 17px);
   font-weight: 500;
   color: rgba(255, 255, 255, 0.9);
@@ -38,12 +38,12 @@
   max-width: min(78vw, 420px);
 }
 .nav-local-datetime {
-  font-family: "Share Tech Mono", ui-monospace, monospace;
+  font-family: "Inter", ui-sans-serif, sans-serif;
   color: rgba(255, 255, 255, 0.55);
   letter-spacing: 0.02em;
 }
 .nav-clock {
-  font-family: "Share Tech Mono", ui-monospace, monospace;
+  font-family: "Inter", ui-sans-serif, sans-serif;
   color: rgba(255, 255, 255, 0.55);
 }
 .nav-sync-sep {

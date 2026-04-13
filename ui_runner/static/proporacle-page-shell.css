@@ -1,5 +1,5 @@
 /* Extracted from payout_calculator.html inline <style> — keep in sync when editing that page shell. */
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --bg:#050505;--surface:rgba(20,20,20,0.6);--card:rgba(20,20,20,0.6);--border:rgba(212,175,55,0.15);
@@ -9,7 +9,7 @@
   --glass-border:rgba(255,255,255,0.08);--glass-shadow:0 8px 32px rgba(0,0,0,0.45);
   --card-bg:rgba(20,20,20,0.55);--card-bg-hover:rgba(255,255,255,0.08);
 }
-body{background:#05050f;color:var(--text);font-family:'Share Tech Mono',monospace;min-height:100vh;overflow-x:hidden;padding-bottom:80px;}
+body{background:#05050f;color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;padding-bottom:80px;}
 
 body::before{
   content:'';position:fixed;inset:0;

@@ -52,7 +52,7 @@
   background: transparent;
   color: var(--text);
   cursor: pointer;
-  font-family: "Share Tech Mono", monospace;
+  font-family: "Inter", sans-serif;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -91,7 +91,7 @@
   background: transparent;
   color: var(--muted);
   cursor: pointer;
-  font-family: "Share Tech Mono", monospace;
+  font-family: "Inter", sans-serif;
   font-size: 11px;
   letter-spacing: 0.04em;
   flex-shrink: 0;
@@ -136,7 +136,7 @@
 }
 
 .tickets-built .group-ev-badge {
-  font-family: "Share Tech Mono", monospace;
+  font-family: "Inter", sans-serif;
   font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
@@ -198,7 +198,7 @@
   border-radius: 10px;
   border: 1px solid rgba(196, 166, 107, 0.22);
   background: rgba(0, 0, 0, 0.18);
-  font-family: "Share Tech Mono", monospace;
+  font-family: "Inter", sans-serif;
   font-size: clamp(12px, 1.1vw, 14px);
   display: flex;
   flex-direction: row;
@@ -335,7 +335,7 @@
   border-top: 1px solid rgba(255, 255, 255, 0.07);
 }
 .tickets-built .hero-meta-date {
-  font-family: "Share Tech Mono", monospace;
+  font-family: "Inter", sans-serif;
   font-size: clamp(15px, 1.7vw, 22px);
   color: var(--text);
   letter-spacing: 0.04em;
