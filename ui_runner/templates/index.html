@@ -1067,11 +1067,43 @@ body::before{
   }
   [data-theme="light"] .slate-table-wrap::-webkit-scrollbar-corner{background:rgba(0,0,0,.06);}
   .slate-table{width:100%;border-collapse:collapse;font-size:13px;font-family:'Inter',sans-serif;line-height:1.4;}
-  .slate-table th{position:sticky;top:0;z-index:2;background:rgba(4,6,16,0.9);backdrop-filter:blur(12px) saturate(180%);-webkit-backdrop-filter:blur(12px) saturate(180%);padding:9px 12px;font-size:11px;letter-spacing:1.2px;color:var(--cyan);font-weight:700;text-align:left;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,0.07);cursor:pointer;user-select:none;transition:color .15s;}
+  /* Fixed schema tables (per-sport): tighter padding + column caps so TIME fits ~1440px */
+  .slate-table:not(#st-combined){table-layout:fixed;width:100%;}
+  .slate-table th{position:sticky;top:0;z-index:2;background:rgba(4,6,16,0.9);backdrop-filter:blur(12px) saturate(180%);-webkit-backdrop-filter:blur(12px) saturate(180%);padding:9px 8px;font-size:11px;letter-spacing:1.2px;color:var(--cyan);font-weight:700;text-align:left;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,0.07);cursor:pointer;user-select:none;transition:color .15s;}
   .slate-table th:hover{color:var(--text);}
   .slate-table th.sort-asc::after{content:' ▲';}
   .slate-table th.sort-desc::after{content:' ▼';}
-  .slate-table td{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04);white-space:nowrap;vertical-align:middle;}
+  .slate-table td{padding:8px 8px;border-bottom:1px solid rgba(255,255,255,0.04);white-space:nowrap;vertical-align:middle;}
+  .slate-table:not(#st-combined) th:nth-child(1),
+  .slate-table:not(#st-combined) td:nth-child(1){width:44px;max-width:44px;text-align:center;}
+  .slate-table:not(#st-combined) th:nth-child(2),
+  .slate-table:not(#st-combined) td:nth-child(2){width:54px;max-width:54px;}
+  .slate-table:not(#st-combined) th:nth-child(3),
+  .slate-table:not(#st-combined) td:nth-child(3){min-width:0;overflow:hidden;text-overflow:ellipsis;}
+  .slate-table:not(#st-combined) th:nth-child(4),
+  .slate-table:not(#st-combined) td:nth-child(4){width:50px;max-width:50px;overflow:hidden;text-overflow:ellipsis;}
+  .slate-table:not(#st-combined) th:nth-child(5),
+  .slate-table:not(#st-combined) td:nth-child(5){width:50px;max-width:50px;overflow:hidden;text-overflow:ellipsis;}
+  .slate-table:not(#st-combined) th:nth-child(6),
+  .slate-table:not(#st-combined) td:nth-child(6){min-width:0;overflow:hidden;text-overflow:ellipsis;}
+  .slate-table:not(#st-combined) th:nth-child(7),
+  .slate-table:not(#st-combined) td:nth-child(7){width:90px;max-width:90px;}
+  .slate-table:not(#st-combined) th:nth-child(8),
+  .slate-table:not(#st-combined) td:nth-child(8){width:52px;max-width:52px;}
+  .slate-table:not(#st-combined) th:nth-child(9),
+  .slate-table:not(#st-combined) td:nth-child(9){width:76px;max-width:76px;}
+  .slate-table:not(#st-combined) th:nth-child(10),
+  .slate-table:not(#st-combined) td:nth-child(10){width:58px;max-width:58px;}
+  .slate-table:not(#st-combined) th:nth-child(11),
+  .slate-table:not(#st-combined) td:nth-child(11){width:52px;max-width:52px;}
+  .slate-table:not(#st-combined) th:nth-child(12),
+  .slate-table:not(#st-combined) td:nth-child(12){width:48px;max-width:48px;}
+  .slate-table:not(#st-combined) th:nth-child(13),
+  .slate-table:not(#st-combined) td:nth-child(13){width:48px;max-width:48px;}
+  .slate-table:not(#st-combined) th:nth-child(14),
+  .slate-table:not(#st-combined) td:nth-child(14){min-width:145px;width:145px;max-width:145px;}
+  .slate-tier-group{display:inline-flex;flex-wrap:wrap;align-items:center;gap:6px;}
+  .slate-tier-group .slate-tier-btn{padding:6px 10px;min-width:0;}
   .slate-table tr:nth-child(even) td{background:rgba(255,255,255,0.018);}
   .slate-table tr:hover td{background:rgba(212,175,55,0.05)!important;}
   .tier-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:8px;letter-spacing:.4px;}
@@ -1081,12 +1113,12 @@ body::before{
   .tier-D{background:rgba(255,127,159,.1);color:var(--red);border:1px solid rgba(255,127,159,.2);}
   .dir-over{color:var(--green);font-weight:700;}
   .dir-under{color:var(--amber);font-weight:700;}
-  .slate-pick-type-cell{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+  .slate-pick-type-cell{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;max-width:90px;}
   .pick-goblin-cell{color:var(--purple);}
   .pick-standard-cell{color:var(--cyan);}
   .pick-demon-cell{color:var(--amber);}
   .slate-rank-cell{color:var(--accent);font-family:'Inter',sans-serif;font-weight:700;}
-  .slate-time-cell{color:rgba(255,255,255,.95)!important;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.02em;}
+  .slate-time-cell{color:rgba(255,255,255,.95)!important;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.02em;white-space:nowrap;}
   .edge-pos{color:var(--green);}
   .edge-neg{color:var(--amber);}
   @media(max-width:768px){.slate-panel-header-row{grid-template-columns:repeat(2,1fr)!important;}}
@@ -1098,15 +1130,15 @@ body::before{
       padding:0 10px 12px;
     }
     .slate-table{
-      min-width:1080px;
+      min-width:1000px;
       font-size:12px;
     }
     .slate-table th{
       font-size:10px;
       letter-spacing:1px;
-      padding:8px 10px;
+      padding:8px 8px;
     }
-    .slate-table td{padding:7px 10px;}
+    .slate-table td{padding:7px 8px;}
     .slate-toolbar{row-gap:6px;}
     .slate-row-count{margin-left:0;width:100%;}
   }
@@ -1119,7 +1151,7 @@ body::before{
   @media(max-width:900px) and (orientation:portrait){
     .slate-panel-header-row{grid-template-columns:1fr!important;gap:10px;padding:0 0 10px 0;}
     .slate-table-wrap{max-height:62vh;}
-    .slate-table{min-width:1160px;}
+    .slate-table{min-width:1040px;}
   }
   </style>
 
@@ -1255,6 +1287,13 @@ body::before{
         <button class="slate-filter-btn" id="sfb-nba-under" onclick="toggleDirFilter('nba','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-nba-goblin" onclick="togglePickFilter('nba','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-nba-standard" onclick="togglePickFilter('nba','Standard',this)">Standard</button>
+        <span class="slate-tier-group" role="group" aria-label="Tier filter">
+          <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('nba','',this)">All</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('nba','A',this)">A</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="B" onclick="setSlateTierFilter('nba','B',this)">B</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="C" onclick="setSlateTierFilter('nba','C',this)">C</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="D" onclick="setSlateTierFilter('nba','D',this)">D</button>
+        </span>
         <span class="slate-row-count" id="src-nba"></span>
       </div>
       <div class="slate-table-wrap"><table class="slate-table" id="st-nba">
@@ -1285,6 +1324,13 @@ body::before{
         <button class="slate-filter-btn" id="sfb-nba1h-under" onclick="toggleDirFilter('nba1h','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-nba1h-goblin" onclick="togglePickFilter('nba1h','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-nba1h-standard" onclick="togglePickFilter('nba1h','Standard',this)">Standard</button>
+        <span class="slate-tier-group" role="group" aria-label="Tier filter">
+          <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('nba1h','',this)">All</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('nba1h','A',this)">A</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="B" onclick="setSlateTierFilter('nba1h','B',this)">B</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="C" onclick="setSlateTierFilter('nba1h','C',this)">C</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="D" onclick="setSlateTierFilter('nba1h','D',this)">D</button>
+        </span>
         <span class="slate-row-count" id="src-nba1h"></span>
       </div>
       <div class="slate-table-wrap"><table class="slate-table" id="st-nba1h">
@@ -1315,6 +1361,13 @@ body::before{
         <button class="slate-filter-btn" id="sfb-nba1q-under" onclick="toggleDirFilter('nba1q','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-nba1q-goblin" onclick="togglePickFilter('nba1q','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-nba1q-standard" onclick="togglePickFilter('nba1q','Standard',this)">Standard</button>
+        <span class="slate-tier-group" role="group" aria-label="Tier filter">
+          <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('nba1q','',this)">All</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('nba1q','A',this)">A</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="B" onclick="setSlateTierFilter('nba1q','B',this)">B</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="C" onclick="setSlateTierFilter('nba1q','C',this)">C</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="D" onclick="setSlateTierFilter('nba1q','D',this)">D</button>
+        </span>
         <span class="slate-row-count" id="src-nba1q"></span>
       </div>
       <div class="slate-table-wrap"><table class="slate-table" id="st-nba1q">
@@ -1345,6 +1398,13 @@ body::before{
         <button class="slate-filter-btn" id="sfb-cbb-under" onclick="toggleDirFilter('cbb','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-cbb-goblin" onclick="togglePickFilter('cbb','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-cbb-standard" onclick="togglePickFilter('cbb','Standard',this)">Standard</button>
+        <span class="slate-tier-group" role="group" aria-label="Tier filter">
+          <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('cbb','',this)">All</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('cbb','A',this)">A</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="B" onclick="setSlateTierFilter('cbb','B',this)">B</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="C" onclick="setSlateTierFilter('cbb','C',this)">C</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="D" onclick="setSlateTierFilter('cbb','D',this)">D</button>
+        </span>
         <span class="slate-row-count" id="src-cbb"></span>
       </div>
       <div class="slate-table-wrap"><table class="slate-table" id="st-cbb">
@@ -1375,6 +1435,13 @@ body::before{
         <button class="slate-filter-btn" id="sfb-nhl-under" onclick="toggleDirFilter('nhl','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-nhl-goblin" onclick="togglePickFilter('nhl','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-nhl-standard" onclick="togglePickFilter('nhl','Standard',this)">Standard</button>
+        <span class="slate-tier-group" role="group" aria-label="Tier filter">
+          <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('nhl','',this)">All</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('nhl','A',this)">A</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="B" onclick="setSlateTierFilter('nhl','B',this)">B</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="C" onclick="setSlateTierFilter('nhl','C',this)">C</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="D" onclick="setSlateTierFilter('nhl','D',this)">D</button>
+        </span>
         <span class="slate-row-count" id="src-nhl"></span>
       </div>
       <div class="slate-table-wrap"><table class="slate-table" id="st-nhl">
@@ -1405,6 +1472,13 @@ body::before{
         <button class="slate-filter-btn" id="sfb-soccer-under" onclick="toggleDirFilter('soccer','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-soccer-goblin" onclick="togglePickFilter('soccer','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-soccer-standard" onclick="togglePickFilter('soccer','Standard',this)">Standard</button>
+        <span class="slate-tier-group" role="group" aria-label="Tier filter">
+          <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('soccer','',this)">All</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('soccer','A',this)">A</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="B" onclick="setSlateTierFilter('soccer','B',this)">B</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="C" onclick="setSlateTierFilter('soccer','C',this)">C</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="D" onclick="setSlateTierFilter('soccer','D',this)">D</button>
+        </span>
         <span class="slate-row-count" id="src-soccer"></span>
       </div>
       <div class="slate-table-wrap"><table class="slate-table" id="st-soccer">
@@ -1435,6 +1509,13 @@ body::before{
         <button class="slate-filter-btn" id="sfb-mlb-under" onclick="toggleDirFilter('mlb','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-mlb-goblin" onclick="togglePickFilter('mlb','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-mlb-standard" onclick="togglePickFilter('mlb','Standard',this)">Standard</button>
+        <span class="slate-tier-group" role="group" aria-label="Tier filter">
+          <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('mlb','',this)">All</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('mlb','A',this)">A</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="B" onclick="setSlateTierFilter('mlb','B',this)">B</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="C" onclick="setSlateTierFilter('mlb','C',this)">C</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="D" onclick="setSlateTierFilter('mlb','D',this)">D</button>
+        </span>
         <span class="slate-row-count" id="src-mlb"></span>
       </div>
       <div class="slate-table-wrap"><table class="slate-table" id="st-mlb">
@@ -1466,6 +1547,13 @@ body::before{
         <button class="slate-filter-btn" id="sfb-combined-under"    onclick="toggleDirFilter('combined','UNDER',this)">▼ UNDER</button>
         <button class="slate-filter-btn" id="sfb-combined-goblin"   onclick="togglePickFilter('combined','Goblin',this)">Goblin</button>
         <button class="slate-filter-btn" id="sfb-combined-standard" onclick="togglePickFilter('combined','Standard',this)">Standard</button>
+        <span class="slate-tier-group" role="group" aria-label="Tier filter">
+          <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('combined','',this)">All</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('combined','A',this)">A</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="B" onclick="setSlateTierFilter('combined','B',this)">B</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="C" onclick="setSlateTierFilter('combined','C',this)">C</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="D" onclick="setSlateTierFilter('combined','D',this)">D</button>
+        </span>
         <span class="slate-row-count" id="src-combined"></span>
       </div>
       <div class="slate-table-wrap"><table class="slate-table" id="st-combined">
@@ -2178,9 +2266,9 @@ const MOBILE_TABLE_QUERY = window.matchMedia('(max-width: 900px)');
 
 const SPORTS = ['nba','nba1h','nba1q','cbb','nhl','soccer','mlb'];
 SPORTS.forEach(s => {
-  SLATE_STATE[s] = { sortKey: 'rank_score', sortDir: -1, search: '', dir: null, pick: null };
+  SLATE_STATE[s] = { sortKey: 'rank_score', sortDir: -1, search: '', dir: null, pick: null, tier: null };
 });
-SLATE_STATE['combined'] = { sortKey: 'Rank Score', sortDir: -1, search: '', dir: null, pick: null };
+SLATE_STATE['combined'] = { sortKey: 'Rank Score', sortDir: -1, search: '', dir: null, pick: null, tier: null };
 
 const SLATE_COLS = {};  // sport -> array of column names from Excel
 let openSlatePanel = null;
@@ -2339,6 +2427,10 @@ function renderSlateTable(sport) {
     }
     if (state.dir  && r.dir       !== state.dir)  return false;
     if (state.pick && r.pick_type !== state.pick) return false;
+    if (state.tier) {
+      const tv = String(r.tier == null ? '' : r.tier).trim().toUpperCase();
+      if (tv !== String(state.tier).toUpperCase()) return false;
+    }
     return true;
   });
 
@@ -2384,7 +2476,7 @@ function renderSlateTable(sport) {
     return `<tr>
       <td><span class="tier-badge ${tierCls}">${r.tier || '?'}</span></td>
       <td class="slate-rank-cell">${rankStr}</td>
-      <td style="color:var(--text);font-weight:600;max-width:140px;overflow:hidden;text-overflow:ellipsis;">${r.player || '—'}</td>
+      <td style="color:var(--text);font-weight:600;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;">${r.player || '—'}</td>
       <td style="color:var(--muted);">${r.team || '—'}</td>
       <td style="color:var(--muted);">${r.opp  || '—'}</td>
       <td style="color:var(--text);">${r.prop || '—'}</td>
@@ -2453,6 +2545,17 @@ function togglePickFilter(sport, pick, btn) {
   scheduleRenderSlateTable(sport);
 }
 
+/** Tier chips: optional client filter; default is All (no tier constraint). */
+function setSlateTierFilter(sport, tier, btn) {
+  const s = SLATE_STATE[sport];
+  if (!s) return;
+  s.tier = tier ? String(tier).trim().toUpperCase() : null;
+  const panel = document.getElementById(`sp-${sport}`);
+  if (panel) panel.querySelectorAll('.slate-tier-btn').forEach(b => b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  scheduleRenderSlateTable(sport);
+}
+
 // ── Combined Slate Excel endpoint ─────────────────────────────────────────────
 async function loadSlateExcel() {
   const tbody = document.getElementById('stb-combined');
@@ -2510,6 +2613,7 @@ function renderSlateTableDynamic(sport) {
   const playerIdx = ci('Player');
   const propIdx   = ci('Prop') >= 0 ? ci('Prop') : ci('Stat');
   const teamIdx   = ci('Team');
+  const tierIdx   = ci('Tier') >= 0 ? ci('Tier') : -1;
 
   // Filter
   let filtered = allRows.filter(row => {
@@ -2520,6 +2624,10 @@ function renderSlateTableDynamic(sport) {
     }
     if (state.dir  && dirIdx  >= 0 && String(row[dirIdx]  || '') !== state.dir)  return false;
     if (state.pick && pickIdx >= 0 && String(row[pickIdx] || '') !== state.pick) return false;
+    if (state.tier && tierIdx >= 0) {
+      const tv = String(row[tierIdx] == null ? '' : row[tierIdx]).trim().toUpperCase();
+      if (tv !== String(state.tier).toUpperCase()) return false;
+    }
     return true;
   });
 

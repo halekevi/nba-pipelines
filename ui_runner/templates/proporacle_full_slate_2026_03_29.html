@@ -8,6 +8,8 @@ body{font-family:var(--font-sans)}
 .sport-btn:hover:not(.active){background:var(--color-background-secondary)}
 .filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
 .filter-row select{font-size:12px;padding:4px 8px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans)}
+/* List-style tier control: All + A/B/C visible without opening native dropdown */
+.filter-row select#tier-sel{width:7.5rem;padding:2px 6px;line-height:1.35}
 .filter-row input{font-size:12px;padding:4px 8px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);width:160px}
 .count-bar{display:flex;gap:16px;margin-bottom:12px;font-size:12px;flex-wrap:wrap}
 .stat-pill{background:var(--color-background-secondary);padding:4px 10px;border-radius:var(--border-radius-md);color:var(--color-text-secondary)}
@@ -50,7 +52,7 @@ tr:hover td{background:var(--color-background-secondary)}
 <div class="ctrl" id="sport-btns"></div>
 
 <div class="filter-row">
-  <select id="tier-sel"><option value="">All tiers</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+  <select id="tier-sel" size="4" title="Tier filter"><option value="">All tiers</option><option value="A">Tier A</option><option value="B">Tier B</option><option value="C">Tier C</option><option value="D">Tier D</option></select>
   <select id="pick-sel"><option value="">All pick types</option><option value="Goblin">Goblin</option><option value="Standard">Standard</option><option value="Demon">Demon</option></select>
   <select id="dir-sel"><option value="">Both directions</option><option value="OVER">OVER</option><option value="UNDER">UNDER</option></select>
   <input id="search" placeholder="Search player / team / prop..." />

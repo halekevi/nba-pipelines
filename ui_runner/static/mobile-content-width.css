@@ -710,6 +710,12 @@ nav.snav .mobile-menu a {
     align-items: center;
     justify-content: center;
   }
+  /* Tier chips stay compact so A–D stay on one row with other slate filters */
+  .slate-tier-group .slate-filter-btn.slate-tier-btn {
+    min-height: 36px;
+    min-width: 34px;
+    padding: 6px 8px;
+  }
   .grades-pills a {
     min-height: 44px;
     display: inline-flex;
