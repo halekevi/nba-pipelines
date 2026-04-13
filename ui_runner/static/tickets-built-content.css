@@ -230,6 +230,25 @@
   white-space: nowrap;
 }
 
+.tickets-built .payout-source-badge {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  margin-left: 6px;
+  white-space: nowrap;
+}
+
+.tickets-built .payout-source-exact {
+  color: #4caf50;
+}
+
+.tickets-built .payout-source-calibrated {
+  color: #ffc107;
+}
+
+.tickets-built .payout-source-fallback {
+  color: #9e9e9e;
+}
+
 .tickets-built .payout-entry-guide {
   margin-top: 0;
   padding-top: 0;
