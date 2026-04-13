@@ -8,12 +8,14 @@
 #    .\run_pipeline.ps1 -NHLOnly               # NHL only + Combined
 #    .\run_pipeline.ps1 -MLBOnly               # MLB only + Combined
 #    .\run_pipeline.ps1 -SoccerOnly            # Soccer only + Combined
+#    .\run_pipeline.ps1 -TennisOnly             # Tennis only (PrizePicks league_id=5) + Combined
 #    .\run_pipeline.ps1 -WNBAOnly              # WNBA only (season-gated)
 #    .\run_pipeline.ps1 -CombinedOnly          # Re-run combined using all existing outputs
 #    .\run_pipeline.ps1 -SkipFetch             # Skip step1 fetch for whatever sport(s) run
 #    .\run_pipeline.ps1 -NBAOnly -SkipFetch    # NBA steps 2-8 + Combined
 #    .\run_pipeline.ps1 -NHLOnly -SkipFetch    # NHL steps 2-8 + Combined
 #    .\run_pipeline.ps1 -SoccerOnly -SkipFetch # Soccer steps 2-8 + Combined
+#    .\run_pipeline.ps1 -TennisOnly -SkipFetch # Tennis steps 2-8 + Combined
 #    .\run_pipeline.ps1 -RefreshCache          # Wipe + rebuild ESPN cache before NBA
 #    .\run_pipeline.ps1 -CacheAgeDays 7        # Auto-wipe cache if older than N days
 #    .\run_pipeline.ps1 -SkipDailyGrader       # Skip run_grader + grade HTML git push after combined
@@ -33,6 +35,7 @@ param(
     [switch]$NHLOnly,
     [switch]$MLBOnly,
     [switch]$SoccerOnly,
+    [switch]$TennisOnly,
     [switch]$WNBAOnly,
     [switch]$CombinedOnly,
     [switch]$SkipFetch,
@@ -73,6 +76,7 @@ $CBBDir    = Join-Path $Root "CBB"
 $NHLDir    = Join-Path $Root "NHL"
 $MLBDir    = Join-Path $Root "MLB"
 $SoccerDir = Join-Path $Root "Soccer"
+$TennisDir = Join-Path $Root "Tennis"
 $WNBADir   = Join-Path $Root "WNBA"
 $OutDir    = Join-Path $Root "outputs\$Date"
 $WebOutDir = Join-Path $Root "ui_runner\templates"
@@ -254,6 +258,7 @@ function Run-Combined {
     $nhlFile    = "$NHLDir\outputs\step8_nhl_direction_clean.xlsx"
     $soccerFile = "$SoccerDir\outputs\step8_soccer_direction_clean.xlsx"
     $mlbFile    = "$MLBDir\step8_mlb_direction_clean.xlsx"
+    $tennisFile = "$TennisDir\outputs\step8_tennis_direction_clean.xlsx"
 
     if (-not (Test-Path $nbaFile)) { Write-Host "  WARNING: NBA step8 not found -- skipping combined" -ForegroundColor Yellow; return $false }
     if (-not (Test-Path $cbbFile)) { Write-Host "  WARNING: CBB step6 not found -- skipping combined" -ForegroundColor Yellow; return $false }
@@ -265,6 +270,7 @@ function Run-Combined {
     if (Test-Path $nhlFile)    { $CombinedArgs += " --nhl `"$nhlFile`"";       Write-Host "  [+] NHL"    -ForegroundColor DarkGray }
     if (Test-Path $soccerFile) { $CombinedArgs += " --soccer `"$soccerFile`""; Write-Host "  [+] Soccer" -ForegroundColor DarkGray }
     if (Test-Path $mlbFile)    { $CombinedArgs += " --mlb `"$mlbFile`"";       Write-Host "  [+] MLB"    -ForegroundColor DarkGray }
+    if (Test-Path $tennisFile) { $CombinedArgs += " --tennis `"$tennisFile`""; Write-Host "  [+] Tennis" -ForegroundColor DarkGray }
 
     $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --max-tickets 3 --write-web --web-outdir `"$WebOutDir`""
 
@@ -380,6 +386,34 @@ if ($SoccerOnly) {
 }
 
 # =============================================================================
+#  TENNIS ONLY  (PrizePicks league_id 5 = TENNIS)
+# =============================================================================
+if ($TennisOnly) {
+    Write-Host "[ TENNIS PIPELINE ]" -ForegroundColor Magenta
+    Write-Host ""
+    $ok = $true
+    if (-not $SkipFetch) {
+        if ($ok) {
+            $ok = Run-Step "Tennis Step 1 - Fetch PrizePicks" $TennisDir ".\scripts\step1_fetch_prizepicks_tennis.py" "--league_id 5 --output outputs\step1_tennis_props.csv"
+        }
+    } else {
+        Write-Host "  [Tennis] Skipping step1 fetch -- using existing outputs\step1_tennis_props.csv" -ForegroundColor DarkGray
+    }
+    if ($ok) { $ok = Run-Step "Tennis Step 2 - Attach Pick Types"   $TennisDir ".\scripts\step2_attach_picktypes_tennis.py"   "--input outputs\step1_tennis_props.csv --output outputs\step2_tennis_picktypes.csv" }
+    if ($ok) { $ok = Run-Step "Tennis Step 3 - Defense Rankings"   $TennisDir ".\scripts\step3_defense_rankings_tennis.py"   "--input outputs\step2_tennis_picktypes.csv --output outputs\step3_tennis_with_defense.csv" }
+    if ($ok) { $ok = Run-Step "Tennis Step 4 - Player Stats"        $TennisDir ".\scripts\step4_attach_player_stats_tennis.py" "--input outputs\step3_tennis_with_defense.csv --output outputs\step4_tennis_with_stats.csv" }
+    if ($ok) { $ok = Run-Step "Tennis Step 5 - Line Hit Rates"      $TennisDir ".\scripts\step5_compute_hitrates_tennis.py"    "--input outputs\step4_tennis_with_stats.csv --output outputs\step5_tennis_hit_rates.csv" }
+    if ($ok) { $ok = Run-Step "Tennis Step 6 - Role Context"       $TennisDir ".\scripts\step6_add_context_tennis.py"         "--input outputs\step5_tennis_hit_rates.csv --output outputs\step6_tennis_role_context.csv" }
+    if ($ok) { $ok = Run-Step "Tennis Step 7 - Rank Props"         $TennisDir ".\scripts\step7_rank_props_tennis.py"          "--input outputs\step6_tennis_role_context.csv --output outputs\step7_tennis_ranked.xlsx" }
+    if ($ok) { $ok = Run-Step "Tennis Step 8 - Direction Context"  $TennisDir ".\scripts\step8_add_direction_context_tennis.py" "--input outputs\step7_tennis_ranked.xlsx --sheet ALL --output outputs\step8_tennis_direction.csv --xlsx outputs\step8_tennis_direction_clean.xlsx --date $Date" }
+    Write-Host ""
+    if ($ok) { Write-Host "  Tennis complete." -ForegroundColor Green } else { Write-Host "  Tennis FAILED." -ForegroundColor Red }
+    if ($ok) { Run-Combined "after Tennis" }
+    Print-Done
+    exit
+}
+
+# =============================================================================
 #  CBB ONLY
 # =============================================================================
 if ($CBBOnly) {
@@ -468,7 +502,7 @@ if (Test-Path $backfillScript) {
 }
 Write-Host ""
 
-Write-Host "[ PARALLEL PIPELINE: NBA + CBB + NHL + Soccer ]" -ForegroundColor Magenta
+Write-Host "[ PARALLEL PIPELINE: NBA + CBB + NHL + Soccer + Tennis ]" -ForegroundColor Magenta
 Write-Host ""
 Write-Host "  Starting all pipelines simultaneously..." -ForegroundColor Cyan
 Write-Host ""
@@ -596,8 +630,42 @@ $SoccerJob = Start-Job -ScriptBlock {
     return $ok
 } -ArgumentList $SoccerDir, $Date, $SkipFetch
 
+# -- Tennis Job ---------------------------------------------------------------
+$TennisJob = Start-Job -ScriptBlock {
+    param($TennisDir, $Date, $SkipFetch)
+    $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
+    function Run-Step-Job {
+        param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
+        Write-Output "[TENNIS] --> $Label"
+        Push-Location $Dir
+        try {
+            $cmd = if ($Arguments) { "py -3.14 `"$Script`" $Arguments" } else { "py -3.14 `"$Script`"" }
+            Write-Output "        CMD: $cmd"
+            $output = Invoke-Expression $cmd 2>&1; $exit = $LASTEXITCODE
+            foreach ($line in $output) { Write-Output "        $line" }
+            if ($exit -ne 0) { Write-Output "[TENNIS] FAILED: $Label (exit $exit)"; return $false }
+            Write-Output "[TENNIS] OK: $Label"; return $true
+        } catch { Write-Output "[TENNIS] EXCEPTION: $_"; return $false
+        } finally { Pop-Location }
+    }
+    $ok = $true
+    if (-not $SkipFetch) {
+        if ($ok) { $ok = Run-Step-Job "Tennis Step 1 - Fetch PrizePicks" $TennisDir ".\scripts\step1_fetch_prizepicks_tennis.py" "--league_id 5 --output outputs\step1_tennis_props.csv" }
+    } else {
+        Write-Output "[Tennis] Skipping step1 fetch"
+    }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 2 - Attach Pick Types"   $TennisDir ".\scripts\step2_attach_picktypes_tennis.py"   "--input outputs\step1_tennis_props.csv --output outputs\step2_tennis_picktypes.csv" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 3 - Defense Rankings"   $TennisDir ".\scripts\step3_defense_rankings_tennis.py"   "--input outputs\step2_tennis_picktypes.csv --output outputs\step3_tennis_with_defense.csv" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 4 - Player Stats"        $TennisDir ".\scripts\step4_attach_player_stats_tennis.py" "--input outputs\step3_tennis_with_defense.csv --output outputs\step4_tennis_with_stats.csv" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 5 - Line Hit Rates"      $TennisDir ".\scripts\step5_compute_hitrates_tennis.py"    "--input outputs\step4_tennis_with_stats.csv --output outputs\step5_tennis_hit_rates.csv" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 6 - Role Context"       $TennisDir ".\scripts\step6_add_context_tennis.py"         "--input outputs\step5_tennis_hit_rates.csv --output outputs\step6_tennis_role_context.csv" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 7 - Rank Props"         $TennisDir ".\scripts\step7_rank_props_tennis.py"          "--input outputs\step6_tennis_role_context.csv --output outputs\step7_tennis_ranked.xlsx" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 8 - Direction Context"  $TennisDir ".\scripts\step8_add_direction_context_tennis.py" "--input outputs\step7_tennis_ranked.xlsx --sheet ALL --output outputs\step8_tennis_direction.csv --xlsx outputs\step8_tennis_direction_clean.xlsx --date $Date" }
+    return $ok
+} -ArgumentList $TennisDir, $Date, $SkipFetch
+
 # -- Wait + stream output -----------------------------------------------------
-$allJobs = @($NBAJob, $CBBJob, $NHLJob, $SoccerJob)
+$allJobs = @($NBAJob, $CBBJob, $NHLJob, $SoccerJob, $TennisJob)
 
 Write-Host "  [Waiting for all pipelines to finish...]" -ForegroundColor DarkGray
 Write-Host ""
@@ -613,6 +681,7 @@ $NBASuccess    = Test-Path (Join-Path $NBADir    "data\outputs\step8_all_directi
 $CBBSuccess    = Test-Path (Join-Path $CBBDir    "step6_ranked_cbb.xlsx")
 $NHLSuccess    = Test-Path (Join-Path $NHLDir    "outputs\step8_nhl_direction_clean.xlsx")
 $SoccerSuccess = Test-Path (Join-Path $SoccerDir "outputs\step8_soccer_direction_clean.xlsx")
+$TennisSuccess = Test-Path (Join-Path $TennisDir "outputs\step8_tennis_direction_clean.xlsx")
 
 Remove-Job $allJobs -Force -ErrorAction SilentlyContinue
 if ($NBASuccess) { New-Item -ItemType File -Force -Path (Join-Path $NBADir "RUN_COMPLETE.flag") | Out-Null }
@@ -622,7 +691,8 @@ Write-Host ""
     @{ Name="NBA";    Ok=$NBASuccess },
     @{ Name="CBB";    Ok=$CBBSuccess },
     @{ Name="NHL";    Ok=$NHLSuccess },
-    @{ Name="Soccer"; Ok=$SoccerSuccess }
+    @{ Name="Soccer"; Ok=$SoccerSuccess },
+    @{ Name="Tennis"; Ok=$TennisSuccess }
 ) | ForEach-Object {
     if ($_.Ok) { Write-Host "  $($_.Name) complete." -ForegroundColor Green }
     else        { Write-Host "  $($_.Name) FAILED."  -ForegroundColor Red   }
