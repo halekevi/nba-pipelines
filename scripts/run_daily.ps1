@@ -880,6 +880,66 @@ if ($MonthlyRetrain) {
     Write-Log "MONTHLY - Model retrain: complete"
 }
 
+# =============================================================================
+# NBA Late Fetch — PrizePicks posts NBA props mid-morning (often ~10–11 ET).
+# 7AM daily run usually has an empty/minimal NBA board; a separate 11AM task
+# should run scripts\run_nba_late_fetch.ps1 (see schtasks example on the next lines).
+# If you run run_daily.ps1 manually after ~10:00 local, we refresh NBA here.
+# =============================================================================
+# Register once (elevated cmd or PowerShell), adjust user if needed:
+#   schtasks /Create /TN "PropORACLE_NBA_LateFetch" /TR "powershell.exe -ExecutionPolicy Bypass -NoProfile -File \"C:\Users\halek\OneDrive\Desktop\PropORACLE\scripts\run_nba_late_fetch.ps1\"" /SC DAILY /ST 11:00 /F
+# =============================================================================
+$NowHour = (Get-Date).Hour
+if ($NowHour -ge 10) {
+    Write-Host "[NBA_LATE_FETCH] Hour=$NowHour >= 10, re-fetching NBA props now..." -ForegroundColor Cyan
+    Write-Log "[NBA_LATE_FETCH] Hour=$NowHour >= 10: starting NBA step1 + NBAOnly pipeline"
+    $NBADir = Join-Path $Root "NBA"
+    $step1Args = @(
+        "--league_id", "7",
+        "--game_mode", "pickem",
+        "--per_page", "250",
+        "--max_pages", "5",
+        "--sleep", "2.0",
+        "--cooldown_seconds", "90",
+        "--max_cooldowns", "3",
+        "--jitter_seconds", "10.0",
+        "--replace",
+        "--output", "data\outputs\step1_pp_props_today.csv"
+    )
+    Push-Location $NBADir
+    try {
+        & py -3.14 ".\scripts\step1_fetch_prizepicks_api.py" @step1Args
+    }
+    finally {
+        Pop-Location
+    }
+    if ($LASTEXITCODE -eq 0) {
+        $pipeScript = Join-Path $Root "run_pipeline.ps1"
+        if (Test-Path $pipeScript) {
+            & pwsh -NoProfile -File $pipeScript -NBAOnly -SkipFetch
+            if ($LASTEXITCODE -eq 0) {
+                Write-Log "[NBA_LATE_FETCH] OK (step1 + NBAOnly pipeline)"
+            }
+            else {
+                Write-Warning "[NBA_LATE_FETCH] NBAOnly pipeline exited $LASTEXITCODE"
+                Write-Log "[NBA_LATE_FETCH] WARN: NBAOnly pipeline exit $LASTEXITCODE"
+            }
+        }
+        else {
+            Write-Warning "[NBA_LATE_FETCH] run_pipeline.ps1 missing at $pipeScript"
+            Write-Log "[NBA_LATE_FETCH] WARN: run_pipeline.ps1 missing"
+        }
+    }
+    else {
+        Write-Warning "[NBA_LATE_FETCH] step1_fetch_prizepicks_api.py failed (exit $LASTEXITCODE)"
+        Write-Log "[NBA_LATE_FETCH] WARN: step1 exit $LASTEXITCODE — skipped NBAOnly pipeline"
+    }
+}
+else {
+    Write-Host "[NBA_LATE_FETCH] Hour=$NowHour < 10, skipping NBA re-fetch (use 11AM task: PropORACLE_NBA_LateFetch)" -ForegroundColor DarkGray
+    Write-Log "[NBA_LATE_FETCH] Hour=$NowHour < 10: skipped (scheduled late fetch runs separately)"
+}
+
 $dur = (Get-Date) - $script:DailyStart
 Write-Log "Daily run complete. Duration: $([int]$dur.TotalMinutes)m $([int]$dur.Seconds)s"
 if ($WeeklyAnalysis -and $script:WeeklyAnalysisReport) {
