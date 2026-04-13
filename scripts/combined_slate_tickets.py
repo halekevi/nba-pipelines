@@ -7044,18 +7044,39 @@ def main():
     def drop_stale_rows(df, target_date, sport_label):
         if df is None or df.empty:
             return df
+        td = str(target_date).strip()[:10]
         if "game_date" not in df.columns:
-            return df
+            # Only synthesize for NBA period sheets; other sports intentionally rely on explicit game_date.
+            if sport_label not in ("NBA1Q", "NBA1H") or "game_time" not in df.columns:
+                return df
+            # Build game_date on the fly for sheets that only carry Game Time.
+            target_year = int(td[:4]) if len(td) >= 4 and td[:4].isdigit() else datetime.now().year
+            tmp = df.copy()
+            tmp["game_date"] = _extract_game_dates(tmp["game_time"], target_year)
+            df = tmp
         dated = df["game_date"].notna()
         gd_str = df["game_date"].astype(str).str[:10]
-        td = str(target_date).strip()[:10]
-        # Soccer boards often span several upcoming ET days; drop only rows clearly before the pipeline target.
-        if sport_label in ("Soccer", "Tennis"):
+        # NBA period boards can be posted ahead of the run date.
+        # Keep only the nearest future slate date (or latest available if all are past).
+        if sport_label in ("NBA1Q", "NBA1H"):
+            avail = sorted(gd_str[dated].dropna().unique().tolist())
+            if not avail:
+                return df
+            future = [d for d in avail if d >= td]
+            chosen = min(future) if future else max(avail)
+            stale = dated & (gd_str != chosen)
+            if chosen != td:
+                print(
+                    f"  [{sport_label}] date fallback: no props on {td}, "
+                    f"using nearest date {chosen} ({int((~stale).sum())} rows)"
+                )
+        # Soccer/Tennis boards often span several upcoming ET days; drop only rows clearly before target.
+        elif sport_label in ("Soccer", "Tennis"):
             stale = dated & (gd_str < td)
         elif sport_label == "Combined" and "sport" in df.columns:
             # Same rule as strict date check: soccer/tennis allow future ET days; other sports must match target.
             su = df["sport"].astype(str).str.upper()
-            is_roll = su.isin(["SOCCER", "TENNIS"])
+            is_roll = su.isin(["SOCCER", "TENNIS", "NBA1Q", "NBA1H"])
             stale = dated & ((gd_str < td) | (~is_roll & (gd_str != td)))
         else:
             stale = dated & (gd_str != td)
@@ -7689,9 +7710,11 @@ def main():
             gd = sdf["game_date"].astype(str).str[:10]
             if label in ("Soccer", "Tennis"):
                 bad = sdf[dated & (gd < td)]
+            elif label in ("NBA1Q", "NBA1H"):
+                bad = sdf[dated & (gd < td)]
             elif label == "Combined" and "sport" in sdf.columns:
                 su = sdf["sport"].astype(str).str.upper()
-                is_roll = su.isin(["SOCCER", "TENNIS"])
+                is_roll = su.isin(["SOCCER", "TENNIS", "NBA1Q", "NBA1H"])
                 bad = sdf[dated & ((gd < td) | (~is_roll & (gd != td)))]
             else:
                 bad = sdf[dated & (gd != td)]

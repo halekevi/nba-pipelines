@@ -418,6 +418,8 @@ function Run-Combined {
     $soccerFile = "$SoccerDir\outputs\step8_soccer_direction_clean.xlsx"
     $tennisFile = "$TennisDir\outputs\step8_tennis_direction_clean.xlsx"
     $mlbFile    = "$MLBDir\step8_mlb_direction_clean.xlsx"
+    $nba1qFile  = "$NBADir\step8_nba1q_direction_clean.xlsx"
+    $nba1hFile  = "$NBADir\step8_nba1h_direction_clean.xlsx"
 
     if (-not (Test-Path $nbaFile)) { Write-Host "  WARNING: NBA step8 not found -- skipping combined" -ForegroundColor Yellow; return $false }
 
@@ -431,6 +433,8 @@ function Run-Combined {
     if (Test-Path $soccerFile) { $CombinedArgs += " --soccer `"$soccerFile`""; Write-Host "  [+] Soccer" -ForegroundColor DarkGray }
     if (Test-Path $tennisFile) { $CombinedArgs += " --tennis `"$tennisFile`""; Write-Host "  [+] Tennis" -ForegroundColor DarkGray }
     if (Test-Path $mlbFile)    { $CombinedArgs += " --mlb `"$mlbFile`"";       Write-Host "  [+] MLB"    -ForegroundColor DarkGray }
+    if (Test-Path $nba1qFile)  { $CombinedArgs += " --nba1q `"$nba1qFile`"";   Write-Host "  [+] NBA1Q"  -ForegroundColor DarkGray }
+    if (Test-Path $nba1hFile)  { $CombinedArgs += " --nba1h `"$nba1hFile`"";   Write-Host "  [+] NBA1H"  -ForegroundColor DarkGray }
 
     $UdCsv = Join-Path $OutDir "underdog_props.csv"
     $DkAll = Join-Path $OutDir "draftkings_props_all.csv"
