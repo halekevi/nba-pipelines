@@ -287,10 +287,10 @@ def compute_ticket_ev(
         "ticket_type": tt,
         "n_legs": n,
         "recommendation": (
-            "STRONG" if ev > 1.5 else
-            "OK" if ev > 1.0 else
-            "MARGINAL" if ev > 0.8 else
-            "SKIP"
+            "STRONG" if ev >= 1.50 else
+            "OK" if ev >= 1.15 else
+            "MARGINAL" if ev >= 0.80 else
+            "LOW"
         ),
     }
 
@@ -445,8 +445,9 @@ def build_ticket_payout_json(group_name: str, ticket_rows: list) -> dict[str, An
 
 def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
     """
-    True if slip should appear on /tickets JSON and page (non-negative empirical EV).
-    Prefer payout.ev when present; else recommendation != SKIP; without payout use est_ev >= 0.
+    True if slip should appear on /tickets JSON and page.
+    Gate: only persist slips with empirical EV >= 0.80 (MARGINAL or better), or modeled est_ev
+    in the same band when payout is missing.
     """
     pay = ticket.get("payout")
     if isinstance(pay, dict):
@@ -456,15 +457,19 @@ def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
                 v = float(ev_raw)
                 if isinstance(v, float) and math.isnan(v):
                     return False
-                return math.isfinite(v) and v >= 0.0
+                return math.isfinite(v) and v >= 0.80
             except (TypeError, ValueError):
                 pass
-        return str(pay.get("recommendation") or "").strip().upper() != "SKIP"
+        return str(pay.get("recommendation") or "").strip().upper() in (
+            "STRONG",
+            "OK",
+            "MARGINAL",
+        )
     est = ticket.get("est_ev")
     if est is not None:
         try:
             v = float(est)
-            return math.isfinite(v) and v >= 0.0
+            return math.isfinite(v) and v >= 0.80
         except (TypeError, ValueError):
             return False
     return False
@@ -7494,6 +7499,7 @@ _TICKETS_BUILT_PAYOUT_CSS = """<style>
 .tickets-built .ev-strong { color: #00ff88; font-weight: bold; }
 .tickets-built .ev-ok { color: #88ccff; }
 .tickets-built .ev-marginal { color: #ffaa00; }
+.tickets-built .ev-low { color: #ff8844; }
 .tickets-built .ev-skip { color: #ff4444; }
 </style>"""
 
@@ -7506,6 +7512,10 @@ def _payout_ev_class(rec: str) -> str:
         return "ev-ok"
     if u == "MARGINAL":
         return "ev-marginal"
+    if u == "LOW":
+        return "ev-low"
+    if u == "SKIP":
+        return "ev-skip"
     return "ev-skip"
 
 
@@ -7517,6 +7527,8 @@ def _payout_rec_prefix(rec: str) -> str:
         return "✅"
     if u == "MARGINAL":
         return "⚠"
+    if u == "LOW":
+        return "▼"
     if u == "SKIP":
         return "⏭"
     return "•"
@@ -7558,7 +7570,7 @@ def _group_sport(group_name: str) -> str:
     return "NBA"
 
 
-_EV_REC_RANK = {"SKIP": 0, "MARGINAL": 1, "OK": 2, "STRONG": 3}
+_EV_REC_RANK = {"LOW": 0, "SKIP": 0, "MARGINAL": 1, "OK": 2, "STRONG": 3}
 
 
 def _ticket_group_filter_slugs(group_name: str) -> tuple[str, str, str]:
