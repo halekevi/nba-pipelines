@@ -3657,6 +3657,8 @@ def _load_step8_board_like(
         "Projection":       "projection",
         "ESPN ID":          "espn_player_id",
         "Hit Rate (5g)":    "hit_rate",
+        "Hit Rate Status":  "hit_rate_status",
+        "Reliability Note": "reliability_note",
         # Kept separate so we can coalesce into hit_rate when 5g is blank (common when
         # line-hit columns aren't populated yet).
         "Hit Rate (10g)":   "_board_hit10",
@@ -3902,6 +3904,8 @@ def load_wcbb(path: str) -> pd.DataFrame:
         "Projection":       "projection",
         "ESPN ID":          "espn_player_id",
         "Hit Rate (5g)":    "hit_rate",
+        "Hit Rate Status":  "hit_rate_status",
+        "Reliability Note": "reliability_note",
         # Kept separate so we can coalesce into hit_rate when 5g is blank (common when
         # Soccer step5/7 line-hit columns aren't populated yet).
         "Hit Rate (10g)":   "_soccer_hit10",
@@ -4040,6 +4044,8 @@ def load_mlb(path: str) -> pd.DataFrame:
         "Projection":       "projection",
         "ESPN ID":          "espn_player_id",
         "Hit Rate (5g)":    "hit_rate",
+        "Hit Rate Status":  "hit_rate_status",
+        "Reliability Note": "reliability_note",
         # Kept separate so we can coalesce into hit_rate when 5g is blank (common when
         # Soccer step5/7 line-hit columns aren't populated yet).
         "Hit Rate (10g)":   "_soccer_hit10",
@@ -4190,6 +4196,8 @@ def load_nba1q(path: str) -> pd.DataFrame:
         "ESPN ID":          "espn_player_id",
         "ML Prob":          "ml_prob",
         "Hit Rate (5g)":    "hit_rate",
+        "Hit Rate Status":  "hit_rate_status",
+        "Reliability Note": "reliability_note",
         # Kept separate so we can coalesce into hit_rate when 5g is blank (common when
         # Soccer step5/7 line-hit columns aren't populated yet).
         "Hit Rate (10g)":   "_soccer_hit10",
@@ -4536,6 +4544,8 @@ def build_combined_slate(
         "l5_under",
         "l10_over",
         "l10_under",
+        "hit_rate_status",
+        "reliability_note",
         "def_tier",
         "pace_tier",
         "context_score",
@@ -4613,6 +4623,25 @@ def filter_eligible(df: pd.DataFrame, min_hit_rate=0.55, min_edge=0.0, min_rank=
         vs = df["void_reason"]
         void_str = vs.astype(str).str.strip()
         mask &= ~void_str.eq("NO_PROJECTION_OR_LINE")
+    # MLB reliability gate: keep thin-sample props in slate visibility, but do not
+    # ticket inflated rows explicitly tagged by step5 (e.g., THIN_SAMPLE_5g_raw_100%).
+    if "sport" in df.columns and "reliability_note" in df.columns:
+        sp = df["sport"].astype(str).str.upper().str.strip()
+        rel = df["reliability_note"].astype(str).str.upper()
+        thin_inflated = sp.eq("MLB") & rel.str.contains("THIN_SAMPLE_", na=False)
+        mask &= ~thin_inflated
+    # MLB: thin-sample blended pitcher props are allowed in slate views but excluded
+    # from ticket pools to avoid overconfident long-leg construction.
+    if {"sport", "hit_rate_status", "prop_type"}.issubset(df.columns):
+        sp = df["sport"].astype(str).str.upper().str.strip()
+        hs = df["hit_rate_status"].astype(str).str.upper()
+        pp = df["prop_type"].astype(str).str.lower()
+        pitch_kw = pp.str.contains(
+            "strikeout|pitching out|earned run|walks allowed|hits allowed|pitches thrown|innings",
+            regex=True,
+            na=False,
+        )
+        mask &= ~(sp.eq("MLB") & hs.str.startswith("BLENDED_N") & pitch_kw)
     l5_o = pd.to_numeric(df.get("l5_over"), errors="coerce").fillna(0)
     l5_u = pd.to_numeric(df.get("l5_under"), errors="coerce").fillna(0)
     strong_l5 = (l5_o >= 4) | (l5_u >= 4)
@@ -5514,6 +5543,20 @@ def build_final_web_ticket_groups(
 ):
     def apply_filters(df):
         mask = pd.Series(True, index=df.index)
+        if "sport" in df.columns and "reliability_note" in df.columns:
+            sp = df["sport"].astype(str).str.upper().str.strip()
+            rel = df["reliability_note"].astype(str).str.upper()
+            mask &= ~(sp.eq("MLB") & rel.str.contains("THIN_SAMPLE_", na=False))
+        if {"sport", "hit_rate_status", "prop_type"}.issubset(df.columns):
+            sp = df["sport"].astype(str).str.upper().str.strip()
+            hs = df["hit_rate_status"].astype(str).str.upper()
+            pp = df["prop_type"].astype(str).str.lower()
+            pitch_kw = pp.str.contains(
+                "strikeout|pitching out|earned run|walks allowed|hits allowed|pitches thrown|innings",
+                regex=True,
+                na=False,
+            )
+            mask &= ~(sp.eq("MLB") & hs.str.startswith("BLENDED_N") & pitch_kw)
         if min_hit_rate > 0 and "hit_rate" in df.columns:
             mask &= df["hit_rate"].fillna(0) >= min_hit_rate
         if min_edge > 0:

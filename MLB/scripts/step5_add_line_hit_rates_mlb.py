@@ -17,6 +17,23 @@ from typing import List, Tuple
 import numpy as np
 import pandas as pd
 
+MLB_MIN_GAMES = {
+    "pitcher": 8.0,
+    "hitter": 6.0,
+}
+
+PITCHER_PROP_KEYWORDS = (
+    "strikeout",
+    "pitching out",
+    "earned run",
+    "walks allowed",
+    "hits allowed",
+    "pitches thrown",
+    "innings",
+)
+
+RELIABILITY_PRIOR = 0.55
+
 
 def _get_stat_cols(df: pd.DataFrame, n: int) -> List[str]:
     return [f"stat_g{i}" for i in range(1, n + 1) if f"stat_g{i}" in df.columns]
@@ -38,6 +55,60 @@ def _ensure_cols(df, cols):
     for c in cols:
         if c not in df.columns:
             df[c] = np.nan
+
+
+def _is_pitcher_prop(prop_series: pd.Series) -> pd.Series:
+    text = prop_series.astype(str).str.lower()
+    patt = "|".join(PITCHER_PROP_KEYWORDS)
+    return text.str.contains(patt, regex=True, na=False)
+
+
+def _apply_reliability_gate(df: pd.DataFrame, ok_mask: pd.Series) -> None:
+    """Blend thin 5-game hit rates toward a conservative prior."""
+    _ensure_cols(df, ["reliability_note"])
+    df["reliability_note"] = df["reliability_note"].astype(object)
+
+    # Only apply to rows with line + stats; keep missing-line/missing-stat statuses untouched.
+    work = ok_mask.copy()
+    if not work.any():
+        return
+
+    n = pd.to_numeric(df.loc[work, "line_games_played_5"], errors="coerce").fillna(0.0)
+    raw = pd.to_numeric(df.loc[work, "line_hit_rate_over_ou_5"], errors="coerce")
+    is_pitcher = _is_pitcher_prop(df.loc[work, "prop_type"])
+    min_games = pd.Series(
+        np.where(is_pitcher, MLB_MIN_GAMES["pitcher"], MLB_MIN_GAMES["hitter"]),
+        index=n.index,
+        dtype=float,
+    )
+    thin = n < min_games
+    if not thin.any():
+        return
+
+    weight = (n / min_games).clip(lower=0.0, upper=1.0)
+    blended = (weight * raw) + ((1.0 - weight) * RELIABILITY_PRIOR)
+    blended = blended.clip(lower=0.0, upper=1.0)
+    target_idx = thin[thin].index
+
+    # Propagate the blended 5g signal to both over-ou and over-only columns used downstream.
+    df.loc[target_idx, "line_hit_rate_over_ou_5"] = blended.loc[target_idx].round(4)
+    if "line_hit_rate_over_5" in df.columns:
+        df.loc[target_idx, "line_hit_rate_over_5"] = blended.loc[target_idx].round(4)
+    if "line_hit_rate_under_ou_5" in df.columns:
+        df.loc[target_idx, "line_hit_rate_under_ou_5"] = (1.0 - blended.loc[target_idx]).round(4)
+    if "line_hit_rate_under_5" in df.columns:
+        df.loc[target_idx, "line_hit_rate_under_5"] = (1.0 - blended.loc[target_idx]).round(4)
+
+    n_int = n.loc[target_idx].round().astype(int).astype(str)
+    df.loc[target_idx, "hit_rate_status"] = "BLENDED_n" + n_int
+
+    # Emit a reliability note only when the raw signal looked extremely inflated.
+    raw_hi = (raw >= 0.90) & thin
+    if raw_hi.any():
+        hi_idx = raw_hi[raw_hi].index
+        pct = (raw.loc[hi_idx] * 100.0).round(0).astype(int).astype(str)
+        n_hi = n.loc[hi_idx].round().astype(int).astype(str)
+        df.loc[hi_idx, "reliability_note"] = "THIN_SAMPLE_" + n_hi + "g_raw_" + pct + "%"
 
 
 def main() -> None:
@@ -80,6 +151,7 @@ def main() -> None:
     df.loc[ok5, "line_hit_rate_under_5"]    = urp5.values
     df.loc[ok5, "line_hit_rate_over_ou_5"]  = orou5.values
     df.loc[ok5, "line_hit_rate_under_ou_5"] = urou5.values
+    _apply_reliability_gate(df, ok5)
 
     if args.compute10:
         stat10 = _get_stat_cols(df, 10)
