@@ -1,3 +1,4 @@
+#requires -Version 7.2
 # ============================================================
 #  PROP PIPELINE  -  Master Run Script  [MULTI-SPORT]
 #
@@ -164,7 +165,7 @@ function Run-NBAPeriodPipeline {
     }
 
     Write-Host ""
-    Write-Host "[ NBA PERIOD PIPELINE: $tagLower ]" -ForegroundColor Magenta
+    Write-Host ('[ NBA PERIOD PIPELINE: ' + $tagLower + ' ]') -ForegroundColor Magenta
 
     $step1 = "step1_${tagLower}_props.csv"
     $step2 = "step2_${tagLower}_picktypes.csv"
