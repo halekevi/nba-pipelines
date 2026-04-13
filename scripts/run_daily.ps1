@@ -891,8 +891,8 @@ if ($MonthlyRetrain) {
 # =============================================================================
 $NowHour = (Get-Date).Hour
 if ($NowHour -ge 10) {
-    Write-Host "[NBA_LATE_FETCH] Hour=$NowHour >= 10, re-fetching all sports (NBA append)..." -ForegroundColor Cyan
-    Write-Log "[NBA_LATE_FETCH] Hour=$NowHour >= 10: late slate refresh (NBA append + NHL/Soccer/MLB overwrite + full pipeline -SkipFetch)"
+    Write-Host "[LATE_FETCH] Re-fetching all sports (append only, no overwrites)..." -ForegroundColor Cyan
+    Write-Log "[NBA_LATE_FETCH] Hour=$NowHour >= 10: late slate refresh (all sports step1 --append + full pipeline -SkipFetch)"
 
     $NBADir = Join-Path $Root "NBA"
     $lateNbaArgs = @(
@@ -922,7 +922,7 @@ if ($NowHour -ge 10) {
     $NHLDir = Join-Path $Root "NHL"
     Push-Location $NHLDir
     try {
-        & py -3.14 ".\scripts\step1_fetch_prizepicks_nhl.py" "--output" "outputs\step1_nhl_props.csv"
+        & py -3.14 ".\scripts\step1_fetch_prizepicks_nhl.py" "--append" "--output" "outputs\step1_nhl_props.csv"
     }
     finally {
         Pop-Location
@@ -935,7 +935,7 @@ if ($NowHour -ge 10) {
     $SoccerDir = Join-Path $Root "Soccer"
     Push-Location $SoccerDir
     try {
-        & py -3.14 ".\scripts\step1_fetch_prizepicks_soccer.py" "--output" "outputs\step1_soccer_props.csv"
+        & py -3.14 ".\scripts\step1_fetch_prizepicks_soccer.py" "--append" "--output" "outputs\step1_soccer_props.csv"
     }
     finally {
         Pop-Location
@@ -948,7 +948,7 @@ if ($NowHour -ge 10) {
     $MLBDir = Join-Path $Root "MLB"
     Push-Location $MLBDir
     try {
-        & py -3.14 ".\scripts\step1_fetch_prizepicks_mlb.py" "--output" "step1_mlb_props.csv"
+        & py -3.14 ".\scripts\step1_fetch_prizepicks_mlb.py" "--append" "--output" "step1_mlb_props.csv"
     }
     finally {
         Pop-Location

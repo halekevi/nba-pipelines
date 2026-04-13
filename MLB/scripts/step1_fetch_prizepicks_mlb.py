@@ -77,8 +77,8 @@ PICKTYPE_MAP = {"standard": "Standard", "goblin": "Goblin", "demon": "Demon"}
 
 EMPTY_COLS = [
     "projection_id", "pp_projection_id", "player_id", "pp_game_id", "start_time",
-    "player", "image_url", "pos", "team", "opp_team", "pp_home_team", "pp_away_team",
-    "prop_type", "line", "standard_line", "pick_type",
+    "player", "player_name", "image_url", "pos", "team", "opp_team", "pp_home_team", "pp_away_team",
+    "prop_type", "line", "line_score", "standard_line", "pick_type", "sport",
 ]
 
 PROFILE_DIR = Path.home() / ".pp_browser_profile"
@@ -246,6 +246,7 @@ def parse_rows(data: List[dict], included: List[dict]) -> List[dict]:
             "pp_game_id":       str(game_id or "").strip(),
             "start_time":       start_time,
             "player":           player_name,
+            "player_name":      player_name,
             "image_url":        image_url,
             "pos":              pos,
             "team":             team,
@@ -254,8 +255,10 @@ def parse_rows(data: List[dict], included: List[dict]) -> List[dict]:
             "pp_away_team":     away,
             "prop_type":        prop_type_raw,
             "line":             line,
+            "line_score":       line,
             "standard_line":    standard_line,
             "pick_type":        pick_type,
+            "sport":            "MLB",
         })
 
     return rows
@@ -456,6 +459,11 @@ def main():
     ap.add_argument("--gentle",         action="store_true",   help="(compat) no-op")
     ap.add_argument("--manual-seconds", type=int, default=None, help="(compat) no-op — manual window removed")
     ap.add_argument("--manual_window",  type=int, default=None, help="(compat) no-op — manual window removed")
+    ap.add_argument(
+        "--append",
+        action="store_true",
+        help="Append this fetch after existing CSV rows, then dedupe (keep='last').",
+    )
     args     = ap.parse_args()
     out_path = Path(args.output)
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -463,6 +471,7 @@ def main():
     # ── Fetch ────────────────────────────────────────────────────────────────
     data: list     = []
     included: list = []
+    max_attempts   = 1
 
     if args.from_file:
         print(f"[step1] Loading MLB payload from file: {args.from_file}")
@@ -482,8 +491,12 @@ def main():
 
     # ── Empty guard ──────────────────────────────────────────────────────────
     if not data:
-        pd.DataFrame(columns=EMPTY_COLS).to_csv(out_path, index=False)
-        print("❌ No projections intercepted after all attempts. Wrote empty CSV.")
+        if args.append and out_path.is_file():
+            print("❌ No projections intercepted after all attempts.")
+            print("   (--append: left existing output file unchanged)")
+        else:
+            pd.DataFrame(columns=EMPTY_COLS).to_csv(out_path, index=False)
+            print("❌ No projections intercepted after all attempts. Wrote empty CSV.")
         log_pipeline_health(
             "mlb.step1_fetch_prizepicks",
             "no_projections",
@@ -526,7 +539,8 @@ def main():
     for c in required:
         if c not in df.columns:
             print(f"⚠️  Missing required column: {c}")
-            df.to_csv(out_path, index=False, encoding="utf-8-sig")
+            if not (args.append and out_path.is_file()):
+                df.to_csv(out_path, index=False, encoding="utf-8-sig")
             sys.exit(1)
 
     before_bounce = len(df)
@@ -553,6 +567,65 @@ def main():
         df      = df[mask].reset_index(drop=True)
         if dropped:
             print(f"  Filtered out {dropped} non-trackable props (use --all_props to keep all)")
+
+    rows_n_new = len(df)
+    teams_n_new = df["team"].astype(str).nunique()
+    small_board = rows_n_new < args.min_rows or teams_n_new < args.min_teams
+
+    if args.append and out_path.is_file():
+        if small_board:
+            print(
+                f"\n⛔ BOARD_TOO_SMALL on new fetch — got {rows_n_new} rows / {teams_n_new} teams "
+                f"(need min_rows={args.min_rows}, min_teams={args.min_teams})"
+            )
+            print("   (--append: left existing output file unchanged)")
+            log_pipeline_health(
+                "mlb.step1_fetch_prizepicks",
+                "board_too_small",
+                extra={"rows": rows_n_new, "teams": teams_n_new, "append": True},
+                start=Path(__file__),
+            )
+            sys.exit(1)
+        try:
+            existing = pd.read_csv(out_path, encoding="utf-8-sig")
+            n_existing = len(existing)
+            for c in EMPTY_COLS:
+                if c not in existing.columns:
+                    existing[c] = ""
+            existing = existing[EMPTY_COLS].copy()
+            existing["line"] = pd.to_numeric(existing["line"], errors="coerce")
+            existing["standard_line"] = pd.to_numeric(existing["standard_line"], errors="coerce")
+            _eo = existing["pick_type"].astype(str).str.lower().eq("standard")
+            existing.loc[_eo, "standard_line"] = existing.loc[_eo, "standard_line"].fillna(
+                existing.loc[_eo, "line"]
+            )
+
+            for c in EMPTY_COLS:
+                if c not in df.columns:
+                    df[c] = ""
+            df = df[EMPTY_COLS].copy()
+            df["line"] = pd.to_numeric(df["line"], errors="coerce")
+            df["standard_line"] = pd.to_numeric(df["standard_line"], errors="coerce")
+            _dn = df["pick_type"].astype(str).str.lower().eq("standard")
+            df.loc[_dn, "standard_line"] = df.loc[_dn, "standard_line"].fillna(df.loc[_dn, "line"])
+
+            combined = pd.concat([existing, df], ignore_index=True)
+            for col in ("player", "prop_type", "pick_type", "pp_game_id"):
+                if col in combined.columns:
+                    combined[col] = combined[col].astype(str).str.strip()
+            combined["line"] = pd.to_numeric(combined["line"], errors="coerce")
+            dedup_cols = [
+                c for c in ("player", "prop_type", "line", "pp_game_id", "pick_type") if c in combined.columns
+            ]
+            if dedup_cols:
+                combined = combined.drop_duplicates(subset=dedup_cols, keep="last")
+            df = combined
+            print(
+                f"[step1 MLB append] {n_existing} existing + {rows_n_new} new → "
+                f"{len(df)} after dedup (subset={dedup_cols})"
+            )
+        except Exception as e:
+            print(f"  [WARN] --append merge failed ({e}); writing new fetch only")
 
     df.to_csv(out_path, index=False, encoding="utf-8-sig")
 

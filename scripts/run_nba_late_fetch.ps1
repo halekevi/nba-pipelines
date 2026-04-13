@@ -1,7 +1,7 @@
 #requires -Version 5.1
 <#
 .SYNOPSIS
-  Mid-day full slate refresh: re-fetch NBA (append), NHL/Soccer/MLB (overwrite), then full pipeline with -SkipFetch.
+  Mid-day full slate refresh: re-fetch all sports with step1 --append, then full pipeline with -SkipFetch.
 .NOTES
   Task Scheduler entry PropORACLE_NBA_LateFetch points here; filename kept for existing registrations.
   Per-sport step1 failures are non-fatal; pipeline failure exits 1.
@@ -42,12 +42,12 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host "[LATE_FETCH] NBA step1 failed — continuing other sports" -ForegroundColor Yellow
 }
 
-# NHL — standard overwrite (default script behavior)
-Write-Host "[LATE_FETCH] Fetching NHL props..."
+# NHL — append (semantic dedupe in script)
+Write-Host "[LATE_FETCH] Fetching NHL props (append)..."
 $NHLDir = Join-Path $Root "NHL"
 Push-Location $NHLDir
 try {
-    & py -3.14 ".\scripts\step1_fetch_prizepicks_nhl.py" "--output" "outputs\step1_nhl_props.csv"
+    & py -3.14 ".\scripts\step1_fetch_prizepicks_nhl.py" "--append" "--output" "outputs\step1_nhl_props.csv"
 }
 finally {
     Pop-Location
@@ -57,11 +57,11 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 # Soccer
-Write-Host "[LATE_FETCH] Fetching Soccer props..."
+Write-Host "[LATE_FETCH] Fetching Soccer props (append)..."
 $SoccerDir = Join-Path $Root "Soccer"
 Push-Location $SoccerDir
 try {
-    & py -3.14 ".\scripts\step1_fetch_prizepicks_soccer.py" "--output" "outputs\step1_soccer_props.csv"
+    & py -3.14 ".\scripts\step1_fetch_prizepicks_soccer.py" "--append" "--output" "outputs\step1_soccer_props.csv"
 }
 finally {
     Pop-Location
@@ -71,11 +71,11 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 # MLB
-Write-Host "[LATE_FETCH] Fetching MLB props..."
+Write-Host "[LATE_FETCH] Fetching MLB props (append)..."
 $MLBDir = Join-Path $Root "MLB"
 Push-Location $MLBDir
 try {
-    & py -3.14 ".\scripts\step1_fetch_prizepicks_mlb.py" "--output" "step1_mlb_props.csv"
+    & py -3.14 ".\scripts\step1_fetch_prizepicks_mlb.py" "--append" "--output" "step1_mlb_props.csv"
 }
 finally {
     Pop-Location

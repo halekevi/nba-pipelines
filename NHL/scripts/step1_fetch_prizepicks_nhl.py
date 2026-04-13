@@ -18,6 +18,9 @@ import time
 import random
 import requests
 from datetime import datetime, timezone
+from pathlib import Path
+
+import pandas as pd
 try:
     from tqdm import tqdm as _tqdm
 except ImportError:
@@ -349,10 +352,60 @@ def write_csv(rows, path):
     print(f"✅ Saved {len(rows)} rows -> {path}")
 
 
+def _write_nhl_output(rows: list, out_path: Path, append: bool) -> None:
+    """Write NHL props; with --append, merge with existing CSV and semantic-dedupe (keep='last')."""
+    if not rows:
+        return
+    new_df = pd.DataFrame(rows)
+    if append and out_path.is_file():
+        try:
+            existing = pd.read_csv(out_path, encoding="utf-8-sig")
+            n_existing = len(existing)
+            all_cols = list(dict.fromkeys(list(existing.columns) + list(new_df.columns)))
+            for c in all_cols:
+                if c not in existing.columns:
+                    existing[c] = ""
+                if c not in new_df.columns:
+                    new_df[c] = ""
+            existing = existing[all_cols].copy()
+            new_df = new_df[all_cols].copy()
+            n_new = len(new_df)
+            combined = pd.concat([existing, new_df], ignore_index=True)
+            for col in ("player_name", "stat_type", "pick_type", "game_id"):
+                if col in combined.columns:
+                    combined[col] = combined[col].astype(str).str.strip()
+            if "line_score" in combined.columns:
+                combined["line_score"] = pd.to_numeric(combined["line_score"], errors="coerce")
+            dedup_cols = [
+                c
+                for c in ("player_name", "stat_type", "line_score", "game_id", "pick_type")
+                if c in combined.columns
+            ]
+            if dedup_cols:
+                combined = combined.drop_duplicates(subset=dedup_cols, keep="last")
+            combined.to_csv(out_path, index=False, encoding="utf-8-sig")
+            print(
+                f"[step1 NHL append] {n_existing} existing + {n_new} new → "
+                f"{len(combined)} after dedup (subset={dedup_cols})"
+            )
+            print(f"✅ Saved {len(combined)} rows -> {out_path}")
+        except Exception as e:
+            print(f"  [WARN] --append merge failed ({e}); writing this fetch only")
+            write_csv(rows, str(out_path))
+    else:
+        write_csv(rows, str(out_path))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", default="outputs/step1_nhl_props.csv")
+    parser.add_argument(
+        "--append",
+        action="store_true",
+        help="Append this fetch after existing CSV rows, then dedupe (keep='last').",
+    )
     args = parser.parse_args()
+    out_path = Path(args.output)
 
     print(f"📡 Fetching PrizePicks NHL | league_id={NHL_LEAGUE_ID}")
 
@@ -375,6 +428,9 @@ def main():
 
     if not rows:
         print("⚠️  No NHL props found. NHL may not be active on PrizePicks today.")
+        if args.append and out_path.is_file():
+            print("   (--append: left existing output file unchanged)")
+            sys.exit(1)
         sys.exit(0)
 
     rows, n_missing_std = enrich_standard_lines(rows)
@@ -391,7 +447,7 @@ def main():
     for st, cnt in sorted(stat_counts.items(), key=lambda x: -x[1]):
         print(f"  {st}: {cnt}")
 
-    write_csv(rows, args.output)
+    _write_nhl_output(rows, out_path, args.append)
 
 
 if __name__ == "__main__":

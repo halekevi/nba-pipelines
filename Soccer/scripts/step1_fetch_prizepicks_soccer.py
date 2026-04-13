@@ -16,6 +16,7 @@ import time
 import json
 import urllib.request
 import urllib.error
+from pathlib import Path
 
 import pandas as pd
 
@@ -171,7 +172,13 @@ def main():
     ap.add_argument("--league_id", default=None, metavar="ID",
                     help="Primary board PrizePicks league_id (default 82). "
                          "Half/season extras still come from --include_halves / --include_season.")
+    ap.add_argument(
+        "--append",
+        action="store_true",
+        help="Append this fetch after existing CSV rows, then dedupe (keep='last').",
+    )
     args = ap.parse_args()
+    out_path = Path(args.output)
 
     primary_id = str(args.league_id).strip() if args.league_id is not None else "82"
     if not primary_id.isdigit():
@@ -200,6 +207,9 @@ def main():
 
     if not all_rows:
         print("\n❌ No soccer props fetched — nothing on the board right now.")
+        if args.append and out_path.is_file():
+            print("   (--append: left existing output file unchanged)")
+            sys.exit(1)
         pd.DataFrame().to_csv(args.output, index=False, encoding="utf-8-sig")
         sys.exit(1)
 
@@ -209,6 +219,39 @@ def main():
     _mstd = df["pick_type"].astype(str).str.lower().eq("standard")
     df.loc[_mstd, "standard_line"] = df.loc[_mstd, "standard_line"].fillna(df.loc[_mstd, "line"])
     df = df.drop_duplicates(subset=["projection_id"], keep="first").reset_index(drop=True)
+
+    if args.append and out_path.is_file():
+        try:
+            existing = pd.read_csv(out_path, encoding="utf-8-sig")
+            n_existing = len(existing)
+            all_cols = list(dict.fromkeys(list(existing.columns) + list(df.columns)))
+            for c in all_cols:
+                if c not in existing.columns:
+                    existing[c] = ""
+                if c not in df.columns:
+                    df[c] = ""
+            existing = existing[all_cols].copy()
+            df = df[all_cols].copy()
+            n_new_chunk = len(df)
+            combined = pd.concat([existing, df], ignore_index=True)
+            for col in ("player", "prop_type", "pick_type", "pp_game_id", "league"):
+                if col in combined.columns:
+                    combined[col] = combined[col].astype(str).str.strip()
+            combined["line"] = pd.to_numeric(combined["line"], errors="coerce")
+            dedup_cols = [
+                c
+                for c in ("player", "prop_type", "line", "pp_game_id", "pick_type", "league")
+                if c in combined.columns
+            ]
+            if dedup_cols:
+                combined = combined.drop_duplicates(subset=dedup_cols, keep="last")
+            df = combined
+            print(
+                f"[step1 SOCCER append] {n_existing} existing + {n_new_chunk} new → "
+                f"{len(df)} after dedup (subset={dedup_cols})"
+            )
+        except Exception as e:
+            print(f"  [WARN] --append merge failed ({e}); writing this fetch only")
 
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
     print(f"\n✅ Saved {len(df)} rows -> {args.output}")
