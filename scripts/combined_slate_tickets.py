@@ -231,11 +231,11 @@ BASE_FLEX_FIRST = {2: 3.0, 3: 2.25, 4: 5.0, 5: 10.0, 6: 25.0}
 BASE_FLEX_MIN = {2: 0.0, 3: 1.25, 4: 1.5, 5: 2.0, 6: 2.0}
 KNOWN_SWEEP_BOUNDS: dict[tuple[int, str], tuple[float, float]] = {
     (2, "power"): (3.0, 3.0),
-    (3, "power"): (4.5, 6.0),
+    (3, "power"): (3.5, 6.0),
     (4, "power"): (7.5, 10.0),
     (5, "power"): (15.0, 20.0),
     (6, "power"): (28.0, 37.5),
-    (3, "flex"): (1.5, 2.25),
+    (3, "flex"): (1.5, 3.0),
     (4, "flex"): (2.5, 5.0),
     (5, "flex"): (4.0, 10.0),
     (6, "flex"): (8.0, 25.0),
@@ -283,13 +283,29 @@ def _goblin_distance_signature(legs: list[dict[str, Any]]) -> list[int]:
     return out
 
 
+def _ladder_entry_goblin_sig(ent: dict[str, Any]) -> list[int] | None:
+    """Return sorted goblin distance signature required by entry, or None if entry matches any."""
+    if "goblin_distances" not in ent:
+        return None
+    e_g = ent.get("goblin_distances")
+    if not isinstance(e_g, list) or len(e_g) == 0:
+        return None
+    return sorted([int(round(float(x))) for x in e_g])
+
+
 def _lookup_exact_payout_ladder(
     ticket_type: str,
     n_legs: int,
     legs: list[dict[str, Any]],
 ) -> tuple[float, float, str] | None:
+    """
+    Prefer mix + goblin_distances exact rows over mix-only wildcards so
+    distance-specific ladder entries beat generic same-mix rows.
+    """
     mix_sig = _mix_signature_from_legs(legs)
     gob_sig = _goblin_distance_signature(legs)
+    specific: list[dict[str, Any]] = []
+    generic: list[dict[str, Any]] = []
     for ent in _load_payout_ladder_entries():
         try:
             if str(ent.get("entry_type", "")).strip().lower() != str(ticket_type).strip().lower():
@@ -303,20 +319,22 @@ def _lookup_exact_payout_ladder(
                 "demon": int(emix.get("demon", 0)),
             } != mix_sig:
                 continue
-            if "goblin_distances" in ent:
-                e_g = ent.get("goblin_distances")
-                if not isinstance(e_g, list):
-                    continue
-                e_sig = sorted([int(round(float(x))) for x in e_g])
-                if e_sig != gob_sig:
-                    continue
-            sweep = float(ent["sweep_payout_x"])
-            min_p = float(ent["min_payout_x"])
-            src = "exact"
-            return sweep, min_p, src
+            req = _ladder_entry_goblin_sig(ent)
+            if req is None:
+                generic.append(ent)
+            elif req == gob_sig:
+                specific.append(ent)
         except Exception:
             continue
-    return None
+    chosen = specific[0] if specific else (generic[0] if generic else None)
+    if chosen is None:
+        return None
+    try:
+        sweep = float(chosen["sweep_payout_x"])
+        min_p = float(chosen["min_payout_x"])
+        return sweep, min_p, "exact"
+    except Exception:
+        return None
 
 
 def goblin_per_leg_factor(line_distance: float) -> float:
