@@ -464,6 +464,16 @@ def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
     """
     n_legs = _ticket_n_legs(ticket)
     min_ev = float(MIN_TICKET_EV_BY_LEGS.get(int(n_legs), MIN_TICKET_EV_DEFAULT))
+    legs = list(ticket.get("legs") or [])
+    leg_sports = {
+        str(leg.get("sport") or "").strip().upper()
+        for leg in legs
+        if isinstance(leg, dict)
+    }
+    # Keep pure Tennis slips visible on the web tickets page even when empirical EV
+    # is below the global cutoff; Tennis boards are often sparse and otherwise vanish.
+    if leg_sports and leg_sports.issubset({"TENNIS"}):
+        return True
 
     pay = ticket.get("payout")
     if isinstance(pay, dict):
@@ -2015,7 +2025,7 @@ def enforce_target_date(
     kept = int(keep_mask.sum())
     total = len(out)
 
-    fallback_sports = {"SOCCER", "TENNIS", "NBA1Q", "NBA1H"}
+    fallback_sports = {"SOCCER", "TENNIS", "NBA", "NBA1Q", "NBA1H"}
     use_date_fallback = allow_cross_date_fallback or (str(sport).upper() in fallback_sports)
     if kept == 0 and use_date_fallback:
         avail = [str(d) for d in counts.index.tolist() if str(d)]
@@ -7099,9 +7109,9 @@ def main():
             df = tmp
         dated = df["game_date"].notna()
         gd_str = df["game_date"].astype(str).str[:10]
-        # NBA period boards can be posted ahead of the run date.
+        # NBA boards (full + period) can be posted ahead of the run date.
         # Keep only the nearest future slate date (or latest available if all are past).
-        if sport_label in ("NBA1Q", "NBA1H"):
+        if sport_label in ("NBA", "NBA1Q", "NBA1H"):
             avail = sorted(gd_str[dated].dropna().unique().tolist())
             if not avail:
                 return df
@@ -7119,7 +7129,7 @@ def main():
         elif sport_label == "Combined" and "sport" in df.columns:
             # Same rule as strict date check: soccer/tennis allow future ET days; other sports must match target.
             su = df["sport"].astype(str).str.upper()
-            is_roll = su.isin(["SOCCER", "TENNIS", "NBA1Q", "NBA1H"])
+            is_roll = su.isin(["SOCCER", "TENNIS", "NBA", "NBA1Q", "NBA1H"])
             stale = dated & ((gd_str < td) | (~is_roll & (gd_str != td)))
         else:
             stale = dated & (gd_str != td)
@@ -7753,11 +7763,11 @@ def main():
             gd = sdf["game_date"].astype(str).str[:10]
             if label in ("Soccer", "Tennis"):
                 bad = sdf[dated & (gd < td)]
-            elif label in ("NBA1Q", "NBA1H"):
+            elif label in ("NBA", "NBA1Q", "NBA1H"):
                 bad = sdf[dated & (gd < td)]
             elif label == "Combined" and "sport" in sdf.columns:
                 su = sdf["sport"].astype(str).str.upper()
-                is_roll = su.isin(["SOCCER", "TENNIS", "NBA1Q", "NBA1H"])
+                is_roll = su.isin(["SOCCER", "TENNIS", "NBA", "NBA1Q", "NBA1H"])
                 bad = sdf[dated & ((gd < td) | (~is_roll & (gd != td)))]
             else:
                 bad = sdf[dated & (gd != td)]
