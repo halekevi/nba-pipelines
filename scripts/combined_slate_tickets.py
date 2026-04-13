@@ -197,6 +197,16 @@ GOBLIN_FACTOR_MIN = 0.40
 DEMON_POWER_COEFF = 0.1782
 DEMON_POWER_EXP = 1.287
 SWEEP_PAYOUT = {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 40.0}
+# Empirical lower bound observed on PrizePicks for goblin-heavy/all-goblin power slips.
+GOBLIN_SWEEP_FLOOR: dict[int, float] = {
+    2: 1.5,
+    3: 1.6,
+    4: 2.0,
+    5: 2.5,
+    6: 3.0,
+}
+# Runtime toggle wired from CLI (--debug-payout).
+PAYOUT_DEBUG: bool = False
 # Flex: standard multipliers (obs_A). Keys are hit counts; same goblin/demon adj applies to each.
 # 3-leg flex all-correct = 3x per obs_A (not 6x Power sweep).
 FLEX_GUARANTEE: dict[int, dict[int, float]] = {
@@ -213,7 +223,12 @@ BASE_FLEX_MIN = {2: 0.0, 3: 0.75, 4: 0.4, 5: 0.4, 6: 0.4}
 
 def goblin_per_leg_factor(line_distance: float) -> float:
     """Empirical goblin multiplier vs line distance (linear fit, floored)."""
-    dist = abs(float(line_distance or 0.0))
+    try:
+        dist = abs(float(line_distance or 0.0))
+        if not math.isfinite(dist):
+            dist = 0.0
+    except (TypeError, ValueError):
+        dist = 0.0
     return max(
         GOBLIN_FACTOR_MIN,
         GOBLIN_FACTOR_INTERCEPT - GOBLIN_FACTOR_SLOPE * dist,
@@ -229,7 +244,12 @@ def compute_leg_adjustment(pick_type: str, line_distance: float) -> float:
 
     Standard = 1.0. Goblin < 1.0. Demon >= 1.0 (capped at 3).
     """
-    dist = abs(float(line_distance or 0.0))
+    try:
+        dist = abs(float(line_distance or 0.0))
+        if not math.isfinite(dist):
+            dist = 0.0
+    except (TypeError, ValueError):
+        dist = 0.0
     pt = str(pick_type or "standard").strip().lower()
 
     if pt == "goblin":
@@ -259,6 +279,33 @@ def compute_min_guarantee_adjustment(legs: list) -> float:
     return round(adjustment, 4)
 
 
+def _compute_power_sweep_payout_with_floor(legs: list, n_legs: int) -> tuple[float, float, float, int]:
+    """
+    Compute power sweep multiplier from per-leg adjustments, then apply goblin floors:
+    - all goblin: hard floor from GOBLIN_SWEEP_FLOOR[n]
+    - mixed with goblin: ratio-based partial floor between 1.0 and that floor.
+    Returns (sweep, base_sweep, raw_adjustment, goblin_leg_count).
+    """
+    n = int(n_legs)
+    base = float(SWEEP_PAYOUT.get(n, 6.0))
+    adj = float(compute_min_guarantee_adjustment(legs))
+    sweep = float(base * adj)
+    goblin_legs = [
+        leg for leg in (legs or [])
+        if str(leg.get("pick_type", "standard")).strip().lower() == "goblin"
+    ]
+    g_count = len(goblin_legs)
+    if g_count > 0:
+        floor = float(GOBLIN_SWEEP_FLOOR.get(n, 1.6))
+        if g_count == n:
+            sweep = max(sweep, floor)
+        else:
+            goblin_ratio = float(g_count) / max(1.0, float(n))
+            partial_floor = 1.0 + goblin_ratio * (floor - 1.0)
+            sweep = max(sweep, partial_floor)
+    return round(float(sweep), 4), base, adj, g_count
+
+
 def compute_ticket_ev(
     legs: list,
     ticket_type: str,
@@ -281,8 +328,23 @@ def compute_ticket_ev(
         adjusted_first = round(base_first * adj, 4)
         adjusted_min_g = round(base_partial * adj, 4)
     else:
-        adjusted_first = round(float(SWEEP_PAYOUT.get(n, 6.0)) * adj, 4)
+        adjusted_first, base_sweep, raw_adj, g_count = _compute_power_sweep_payout_with_floor(legs, n)
         adjusted_min_g = 0.0
+        if PAYOUT_DEBUG:
+            print(f"[PAYOUT DEBUG] n_legs={n} base={base_sweep}")
+            print(f"[PAYOUT DEBUG] goblin_legs={g_count}")
+            for leg in legs:
+                if str(leg.get("pick_type", "standard")).strip().lower() != "goblin":
+                    continue
+                try:
+                    dist = abs(float(leg.get("line_distance", 0.0) or 0.0))
+                    if not math.isfinite(dist):
+                        dist = 0.0
+                except (TypeError, ValueError):
+                    dist = 0.0
+                factor = goblin_per_leg_factor(dist)
+                print(f"[PAYOUT DEBUG] dist={dist} factor={factor}")
+            print(f"[PAYOUT DEBUG] total_adj={raw_adj} sweep={adjusted_first}")
 
     mg_adjustment = round(adjusted_min_g / adjusted_first, 4) if adjusted_first > 0 else 0.0
 
@@ -345,16 +407,21 @@ def _ticket_payout_line_distance(row: Any) -> float:
     ld = _ticket_row_get(row, "line_distance")
     if ld is not None and str(ld).strip() != "":
         try:
-            if isinstance(ld, float) and math.isnan(ld):
+            v = float(ld)
+            if not math.isfinite(v):
                 return 0.0
-            return abs(float(ld))
+            return abs(v)
         except (TypeError, ValueError):
             pass
     try:
         sl = _ticket_row_get(row, "standard_line")
         ln = _ticket_row_get(row, "line")
         if sl is not None and ln is not None and str(sl).strip() != "" and str(ln).strip() != "":
-            return abs(float(sl) - float(ln))
+            sv = float(sl)
+            lv = float(ln)
+            if not (math.isfinite(sv) and math.isfinite(lv)):
+                return 0.0
+            return abs(sv - lv)
     except (TypeError, ValueError):
         pass
     return 0.0
@@ -7188,8 +7255,15 @@ def main():
         dest="curve_stake_usd",
         help="Stake (USD) for est_payout / est_ev / flat_ev columns (Goblin-Demon curve); does not change Kelly stakes.",
     )
+    ap.add_argument(
+        "--debug-payout",
+        action="store_true",
+        help="Print empirical payout debug for power tickets (base, goblin dists/factors, total adj, sweep).",
+    )
 
     args = ap.parse_args()
+    global PAYOUT_DEBUG
+    PAYOUT_DEBUG = bool(args.debug_payout)
 
     ds = str(args.date).strip().lower()
     if not ds or ds in ("today", "now"):
