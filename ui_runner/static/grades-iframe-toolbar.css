@@ -366,3 +366,144 @@
     transition: none;
   }
 }
+
+/* ── Legacy ticket_eval_*.html (Grades → Ticket tab) — glass to match hub / home ──
+   Slate eval pages use header .slate-header-top; old ticket_eval does not. */
+header:not(:has(.slate-header-top)) {
+  background: rgba(255, 255, 255, 0.055) !important;
+  backdrop-filter: blur(28px) saturate(185%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(185%) !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.22) !important;
+  border-radius: 0 0 22px 22px !important;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+  padding: 22px 20px !important;
+}
+
+header:not(:has(.slate-header-top)) .logo-title {
+  background: linear-gradient(to bottom, #f0a500, #d4af37, #f7e08a) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  font-family: "Bebas Neue", sans-serif !important;
+  letter-spacing: 0.14em !important;
+  filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.2));
+}
+
+header:not(:has(.slate-header-top)) .logo-sub {
+  color: rgba(255, 255, 255, 0.58) !important;
+  letter-spacing: 0.2em !important;
+}
+
+header:not(:has(.slate-header-top)) .date-badge {
+  background: rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: blur(16px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 999px !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22) !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main .section-title {
+  font-weight: 600 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #7fc7d9 !important;
+  padding-bottom: 10px !important;
+  text-shadow: 0 0 22px rgba(0, 229, 255, 0.12) !important;
+  letter-spacing: 0.12em !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main .kpi-card {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(22px) saturate(165%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(165%) !important;
+  border: 1px solid rgba(212, 175, 55, 0.14) !important;
+  border-radius: 16px !important;
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main .kpi-card:hover {
+  border-color: rgba(212, 175, 55, 0.28) !important;
+  transform: translateY(-2px) !important;
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main .kpi-val {
+  color: #d4af37 !important;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.28) !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main .kpi-label {
+  color: rgba(255, 255, 255, 0.52) !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main .table-wrapper {
+  background: rgba(255, 255, 255, 0.045) !important;
+  backdrop-filter: blur(24px) saturate(175%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(175%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 18px !important;
+  box-shadow:
+    0 10px 36px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main table th {
+  background: rgba(4, 6, 16, 0.55) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  color: #7fc7d9 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  font-weight: 700 !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main table td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main table tbody tr:hover td {
+  background: rgba(212, 175, 55, 0.07) !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main .footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) {
+  background: linear-gradient(180deg, #05050f 0%, #0a0a18 45%, #080814 100%) !important;
+}
+
+[data-theme="light"] body:has(header:not(:has(.slate-header-top))) {
+  background: linear-gradient(180deg, #eef1f6 0%, #e8ecf4 100%) !important;
+}
+
+[data-theme="light"] header:not(:has(.slate-header-top)) {
+  background: rgba(255, 255, 255, 0.72) !important;
+  border-bottom-color: rgba(75, 111, 150, 0.22) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] body:has(header:not(:has(.slate-header-top))) .main .kpi-card {
+  background: rgba(255, 255, 255, 0.82) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] body:has(header:not(:has(.slate-header-top))) .main .table-wrapper {
+  background: rgba(255, 255, 255, 0.78) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] body:has(header:not(:has(.slate-header-top))) .main table th {
+  background: rgba(245, 248, 252, 0.95) !important;
+  color: #2c7fb8 !important;
+}
