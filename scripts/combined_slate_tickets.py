@@ -483,8 +483,9 @@ def build_ticket_payout_json(group_name: str, ticket_rows: list) -> dict[str, An
 def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
     """
     True if slip should appear on /tickets JSON and page.
-    Gate: empirical EV >= MIN_TICKET_EV_BY_LEGS[n_legs] (at least 0.80 for 2–3 legs), or modeled est_ev
-    in the same band when payout is missing.
+    Gate: empirical payout.ev >= MIN_TICKET_EV_BY_LEGS[n_legs], OR payout recommendation in
+    STRONG/OK/MARGINAL (so workbook-structured slips are not hidden when EV is slightly below the
+    numeric bar but the curve still labels the slip playable). Else modeled est_ev vs same bar.
     """
     n_legs = _ticket_n_legs(ticket)
     min_ev = float(MIN_TICKET_EV_BY_LEGS.get(int(n_legs), MIN_TICKET_EV_DEFAULT))
@@ -499,22 +500,43 @@ def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
     if leg_sports and leg_sports.issubset({"TENNIS"}):
         return True
 
+    # Workbook structured sheets (per-sport Power/Flex/Standard/PwrStd/Goblin): always show on /tickets.
+    # Power 2 / Goblin often fail the numeric EV bar (empirical model has no flex-style partial) but match Excel.
+    wg = str(ticket.get("web_group_name") or "")
+    _struct_markers = (
+        "Power Play 2-Leg",
+        "Flex 3-Leg",
+        "Standard 2-Leg",
+        "Pwr Std 3-Leg",
+        "Goblin 3-Leg",
+    )
+    if (
+        "Cross-sport" not in wg
+        and "·" not in wg
+        and any(m in wg for m in _struct_markers)
+    ):
+        return True
+
     pay = ticket.get("payout")
     if isinstance(pay, dict):
+        rec_ok = str(pay.get("recommendation") or "").strip().upper() in (
+            "STRONG",
+            "OK",
+            "MARGINAL",
+        )
+        ev_ok = False
         ev_raw = pay.get("ev")
         if ev_raw is not None:
             try:
                 v = float(ev_raw)
                 if isinstance(v, float) and math.isnan(v):
-                    return False
-                return math.isfinite(v) and v >= min_ev
+                    ev_ok = False
+                elif math.isfinite(v):
+                    ev_ok = v >= min_ev
             except (TypeError, ValueError):
                 pass
-        return str(pay.get("recommendation") or "").strip().upper() in (
-            "STRONG",
-            "OK",
-            "MARGINAL",
-        )
+        if ev_ok or rec_ok:
+            return True
     est = ticket.get("est_ev")
     if est is not None:
         try:
@@ -2373,6 +2395,7 @@ def ticket_groups_to_payload(
             enrich_ticket_curve_payouts(t, stake_unit=float(curve_stake_usd))
             rows = t.get("rows", [])
             slip = {
+                "web_group_name": str(group_name),
                 "ticket_no": ti,
                 "avg_hit_rate": _safe_float(t.get("avg_hit_rate")),
                 "avg_rank_score": _safe_float(t.get("avg_rank_score")),
