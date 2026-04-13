@@ -1164,9 +1164,9 @@ NHL_LEG_MIN_HIT_RATE = {
 MLB_MAX_LEGS = 4
 MLB_PITCHING_OVER_ONLY_PROPS = {"strikeouts", "hits allowed"}
 
-# Tennis: short slips only; stricter per-leg floors for 2- and 3-leg structured tickets.
+# Tennis: short slips only (max 3 legs). Relaxed per-leg floors vs NBA — no graded PP history yet.
 MAX_LEGS_TENNIS = 3
-LEG_MIN_HIT_RATE_TENNIS = {2: 0.58, 3: 0.62}
+TENNIS_LEG_MIN_HIT_RATE = {2: 0.55, 3: 0.58, 4: 0.62}
 
 # Pipelines that emit step8 boards into combined slate (reference for docs / tooling).
 ACTIVE_SPORTS = ("NBA", "NHL", "SOCCER", "TENNIS", "MLB", "NBA1H", "NBA1Q", "WCBB")
@@ -3454,6 +3454,35 @@ def load_nhl(path: str) -> pd.DataFrame:
 
 
 
+def _tennis_hit_rate_zero_like_proxy(df: pd.DataFrame, log_prefix: str) -> None:
+    """
+    Tennis step8 often carries Hit Rate (5g) as zeros while L10/L5 windows are populated.
+    Mirror the NHL hotfix: if >=80% of rows look like zero hit_rate, backfill from directional windows.
+    Mutates df['hit_rate'] in place (expects numeric 0–1 hit_rate column after normalization).
+    """
+    if "hit_rate" not in df.columns or len(df) == 0:
+        return
+    hr_now = pd.to_numeric(df["hit_rate"], errors="coerce").fillna(0.0)
+    if bool((hr_now <= 0.001).mean() < 0.80):
+        return
+    proxy_col = None
+    for c in ("l10_over", "l10_under", "l5_over", "l5_under"):
+        if c in df.columns:
+            proxy_col = c
+            break
+    if proxy_col is None:
+        return
+    proxy = pd.to_numeric(df[proxy_col], errors="coerce")
+    if proxy.notna().any() and float(proxy.dropna().max()) > 1.5:
+        proxy = proxy / 100.0
+    proxy = proxy.clip(lower=0.52, upper=0.90)
+    df["hit_rate"] = proxy.where(proxy.notna(), hr_now)
+    print(
+        f"  [{log_prefix}] Tennis hit_rate proxy applied from '{proxy_col}' "
+        "(>=80% zero-like Hit Rate (5g))"
+    )
+
+
 # ── Load & normalize step8 "direction clean" boards (Soccer, Tennis, …) ───────
 def _load_step8_board_like(
     path: str,
@@ -3528,6 +3557,8 @@ def _load_step8_board_like(
         "Game Script Note": "game_script_note",
         "game_script_mult": "game_script_mult",
         "game_script_note": "game_script_note",
+        "Blended Score": "blended_score",
+        "blended_score": "blended_score",
     })
 
     if "opp" not in df.columns:
@@ -3564,6 +3595,7 @@ def _load_step8_board_like(
         "hit_rate",
         "line",
         "_board_hit10",
+        "blended_score",
         "l5_avg",
         "season_avg",
         "l5_over",
@@ -3591,6 +3623,10 @@ def _load_step8_board_like(
         if hr.dropna().max() is not None and hr.dropna().max() > 1.5:
             hr = hr / 100.0
         df["hit_rate"] = hr
+
+    # Tennis: degenerate 5g hit_rate (mostly zeros) while L10/L5 exist — same idea as NHL proxy.
+    if sport == "Tennis" and "hit_rate" in df.columns:
+        _tennis_hit_rate_zero_like_proxy(df, log_prefix)
 
     # Still no usable hit rate (common when line-hit columns aren't wired yet).
     # Use a mild rank_score-based proxy so tier/rank ticket gates still run.
@@ -3666,14 +3702,40 @@ def load_soccer(path: str) -> pd.DataFrame:
     )
 
 
+def _tennis_board_hit_rate_proxy(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    PrizePicks Tennis has no graded history — step8 often leaves hit_rate at 0.
+    Mirror NHL-style recovery: when most rows are zero-like, derive hit_rate from blended_score
+    so pool()/ticket gates can run (combined already skips true NaN via rank proxy; 0.0 needs this).
+    """
+    if df is None or len(df) == 0 or "hit_rate" not in df.columns:
+        return df
+    out = df.copy()
+    hr0 = pd.to_numeric(out["hit_rate"], errors="coerce").fillna(0.0)
+    if float((hr0 <= 0.001).mean()) < 0.60:
+        return out
+    bs = pd.to_numeric(out.get("blended_score", np.nan), errors="coerce")
+    if bs.notna().sum() == 0:
+        return out
+    high = bs >= 0.70
+    proxy = (bs * 0.65).where(high, (bs * 0.58))
+    proxy = proxy.clip(0.52, 0.90)
+    m0 = hr0 <= 0.001
+    use = m0 & proxy.notna()
+    out.loc[use, "hit_rate"] = proxy.loc[use]
+    print("  [load_tennis] hit_rate proxy from blended_score (zero-history board)")
+    return out
+
+
 def load_tennis(path: str) -> pd.DataFrame:
-    return _load_step8_board_like(
+    base = _load_step8_board_like(
         path,
         fallback_filename="step8_tennis_direction_clean.xlsx",
         sheet_order=("Tennis", "ALL"),
         sport="Tennis",
         log_prefix="load_tennis",
     )
+    return _tennis_board_hit_rate_proxy(base)
 
 
 def load_wcbb(path: str) -> pd.DataFrame:
@@ -4560,9 +4622,10 @@ def build_single_structure_ticket(
     if cand.empty:
         return None
 
-    # NHL hit-rate proxy in ticket builder:
+    # NHL / Tennis hit-rate proxy in ticket builder:
     # pool() may pass strong-L5 candidates even when raw hit_rate is near zero.
     # For structured-ticket leg floors, use directional L10/L5 proxy when hit_rate is mostly zero.
+    # Tennis: no PP graded history — usually use blended_score (see load_tennis board proxy too).
     if sport_up == "NHL" and "hit_rate" in cand.columns:
         hr0 = pd.to_numeric(cand["hit_rate"], errors="coerce").fillna(0.0)
         if bool((hr0 <= 0.001).mean() >= 0.60):
@@ -4579,6 +4642,30 @@ def build_single_structure_ticket(
                 cand["hit_rate"] = proxy.where(proxy.notna(), hr0)
                 print(f"  [NHL GATE TRACE] build_single_structure_ticket hit_rate proxy='{proxy_col}' applied")
 
+    if sport_up == "TENNIS" and "hit_rate" in cand.columns:
+        hr0 = pd.to_numeric(cand["hit_rate"], errors="coerce").fillna(0.0)
+        if bool((hr0 <= 0.001).mean() >= 0.60):
+            proxy_col = None
+            for c in ("hit_rate_over_L10", "hit_rate_over_L5", "hit_rate_over_L20", "over_L10", "over_L5"):
+                if c in cand.columns:
+                    proxy_col = c
+                    break
+            if proxy_col is not None:
+                proxy = pd.to_numeric(cand[proxy_col], errors="coerce")
+                if proxy.dropna().max() > 1.5:
+                    proxy = proxy / 100.0
+                proxy = proxy.clip(lower=0.52, upper=0.90)
+                cand["hit_rate"] = proxy.where(proxy.notna(), hr0)
+                print(f"  [TENNIS GATE TRACE] build_single_structure_ticket hit_rate proxy='{proxy_col}' applied")
+            elif "blended_score" in cand.columns:
+                bs = pd.to_numeric(cand["blended_score"], errors="coerce")
+                high = bs >= 0.70
+                proxy = (bs * 0.65).where(high, (bs * 0.58)).clip(0.52, 0.90)
+                m0 = hr0 <= 0.001
+                use = m0 & proxy.notna()
+                cand.loc[use, "hit_rate"] = proxy.loc[use]
+                print("  [TENNIS GATE TRACE] build_single_structure_ticket hit_rate proxy=blended_score applied")
+
     if min_leg_hit_rate is not None and float(min_leg_hit_rate) > 0 and "hit_rate" in cand.columns:
         thr = float(min_leg_hit_rate)
         if sport_up == "MLB":
@@ -4588,9 +4675,8 @@ def build_single_structure_ticket(
             nhl_cap = NHL_LEG_MIN_HIT_RATE.get(int(n_legs))
             thr = max(0.52, float(nhl_cap)) if nhl_cap is not None else max(0.52, thr)
         if sport_up == "TENNIS":
-            tn_cap = LEG_MIN_HIT_RATE_TENNIS.get(int(n_legs))
-            if tn_cap is not None:
-                thr = max(thr, float(tn_cap))
+            tn_cap = TENNIS_LEG_MIN_HIT_RATE.get(int(n_legs))
+            thr = max(0.50, float(tn_cap)) if tn_cap is not None else max(0.50, thr)
         cand = cand[pd.to_numeric(cand["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
     if cand.empty:
         return None
@@ -5283,9 +5369,11 @@ def build_final_web_ticket_groups(
                     return float(cap)
                 return min(base, float(cap))
         if str(label).strip().upper() == "TENNIS":
-            cap = LEG_MIN_HIT_RATE_TENNIS.get(int(n))
+            cap = TENNIS_LEG_MIN_HIT_RATE.get(int(n))
             if cap is not None:
-                base = float(cap) if base is None else max(base, float(cap))
+                if base is None:
+                    return float(cap)
+                return min(base, float(cap))
         return base
 
     def _add_mixed_std_gob(sub: pd.DataFrame, label: str, leg_sizes_override: list | None = None):
@@ -6587,8 +6675,12 @@ def main():
     nhl_structured_min_leg_hr = structured_min_leg_hr
     if nhl_structured_min_leg_hr is not None and float(nhl_structured_min_leg_hr) > 0.55:
         nhl_structured_min_leg_hr = 0.52
+    tennis_structured_min_leg_hr = structured_min_leg_hr
+    if tennis_structured_min_leg_hr is not None and float(tennis_structured_min_leg_hr) > 0.55:
+        tennis_structured_min_leg_hr = 0.52
     print(f"[NHL TRACE] global structured_min_leg_hr={structured_min_leg_hr}")
     print(f"[NHL TRACE] NHL structured_min_leg_hr_override={nhl_structured_min_leg_hr}")
+    print(f"[TENNIS TRACE] Tennis structured_min_leg_hr_override={tennis_structured_min_leg_hr}")
 
     if not str(args.nba).strip():
         args.nba = DEFAULT_NBA_PATH
@@ -6638,6 +6730,7 @@ def main():
         "ticket_gen_starts": int(args.ticket_gen_starts),
         "min_leg_hit_rate": args.min_leg_hit_rate,
         "structured_min_leg_hit_rate": structured_min_leg_hr,
+        "tennis_structured_min_leg_hit_rate": tennis_structured_min_leg_hr,
         "max_ticket_legs": effective_max_legs,
         "leg_min_hit_by_n": {str(k): round(v, 4) for k, v in leg_min_hit_by_n.items()},
     }
@@ -6943,8 +7036,8 @@ def main():
 
         # Tier floor: exclude Tier D from all pools
         effective_tiers = [t for t in (tiers if tiers else ["A", "B", "C", "D"]) if t != "D"]
-        # NHL: strict high-conviction often collapses default tiers to A,B — pool is too small; allow Tier C.
-        if sport == "NHL" and bool(args.high_conviction):
+        # NHL / Tennis: strict high-conviction often collapses default tiers to A,B — pool is too small; allow Tier C.
+        if sport in ("NHL", "TENNIS") and bool(args.high_conviction):
             tier_u = {str(x).strip().upper() for x in effective_tiers}
             if "C" not in tier_u:
                 effective_tiers = list(dict.fromkeys([*effective_tiers, "C"]))
@@ -7280,7 +7373,7 @@ def main():
             "Tennis",
             C["hdr_tennis"],
             "Tennis",
-            min_leg_hit_rate=structured_min_leg_hr,
+            min_leg_hit_rate=tennis_structured_min_leg_hr,
             prioritize_ticket_hit=_prio_hit,
             ticket_sort_mode=_ticket_sort,
             ticket_gen_starts=_tg_starts,
