@@ -3624,10 +3624,6 @@ def _load_step8_board_like(
             hr = hr / 100.0
         df["hit_rate"] = hr
 
-    # Tennis: degenerate 5g hit_rate (mostly zeros) while L10/L5 exist — same idea as NHL proxy.
-    if sport == "Tennis" and "hit_rate" in df.columns:
-        _tennis_hit_rate_zero_like_proxy(df, log_prefix)
-
     # Still no usable hit rate (common when line-hit columns aren't wired yet).
     # Use a mild rank_score-based proxy so tier/rank ticket gates still run.
     hr_series = pd.to_numeric(df["hit_rate"], errors="coerce")
@@ -3705,12 +3701,13 @@ def load_soccer(path: str) -> pd.DataFrame:
 def _tennis_board_hit_rate_proxy(df: pd.DataFrame) -> pd.DataFrame:
     """
     PrizePicks Tennis has no graded history — step8 often leaves hit_rate at 0.
-    Mirror NHL-style recovery: when most rows are zero-like, derive hit_rate from blended_score
-    so pool()/ticket gates can run (combined already skips true NaN via rank proxy; 0.0 needs this).
+    1) NHL-style L10/L5 window proxy when >=80% of rows are zero-like (realize counts /5).
+    2) Remaining zeros: derive from blended_score (zero-history board) when still mostly flat.
     """
     if df is None or len(df) == 0 or "hit_rate" not in df.columns:
         return df
     out = df.copy()
+    _tennis_hit_rate_zero_like_proxy(out, "load_tennis")
     hr0 = pd.to_numeric(out["hit_rate"], errors="coerce").fillna(0.0)
     if float((hr0 <= 0.001).mean()) < 0.60:
         return out
