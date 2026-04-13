@@ -44180,10 +44180,10 @@
       "tier": "D",
       "edge": "0.1",
       "ml_prob": "",
-      "actual_value": "0",
-      "margin": "-0.5",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "MISS"
+      "result": "HIT"
     },
     {
       "sport": "MLB",
@@ -73726,8 +73726,8 @@
       "tier": "D",
       "edge": "-2.9",
       "ml_prob": "",
-      "actual_value": "5",
-      "margin": "1.5",
+      "actual_value": "6",
+      "margin": "2.5",
       "void_reason": "",
       "result": "HIT"
     },
@@ -74100,8 +74100,8 @@
       "tier": "D",
       "edge": "-1.9",
       "ml_prob": "",
-      "actual_value": "5",
-      "margin": "2.5",
+      "actual_value": "6",
+      "margin": "3.5",
       "void_reason": "",
       "result": "HIT"
     },
@@ -74678,8 +74678,8 @@
       "tier": "D",
       "edge": "-0.9",
       "ml_prob": "",
-      "actual_value": "5",
-      "margin": "3.5",
+      "actual_value": "6",
+      "margin": "4.5",
       "void_reason": "",
       "result": "HIT"
     },
