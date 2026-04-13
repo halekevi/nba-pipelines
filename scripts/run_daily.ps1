@@ -891,7 +891,7 @@ if ($MonthlyRetrain) {
 # =============================================================================
 $NowHour = (Get-Date).Hour
 if ($NowHour -ge 10) {
-    Write-Host "[NBA_LATE_FETCH] Hour=$NowHour >= 10, re-fetching NBA props now..." -ForegroundColor Cyan
+    Write-Host "[NBA_LATE_FETCH] Hour=$NowHour >= 10, appending NBA props to existing slate..." -ForegroundColor Cyan
     Write-Log "[NBA_LATE_FETCH] Hour=$NowHour >= 10: starting NBA step1 + NBAOnly pipeline"
     $NBADir = Join-Path $Root "NBA"
     $step1Args = @(
@@ -903,7 +903,7 @@ if ($NowHour -ge 10) {
         "--cooldown_seconds", "90",
         "--max_cooldowns", "3",
         "--jitter_seconds", "10.0",
-        "--replace",
+        "--append",
         "--output", "data\outputs\step1_pp_props_today.csv"
     )
     Push-Location $NBADir

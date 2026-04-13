@@ -18,6 +18,10 @@ Outputs: step1_pp_props_today.csv  (same schema as before).
 When --output already exists, this script **merges by default**: rows from this fetch
 replace same projection_id; rows only in the old file (IDs not returned today) are kept.
 Use **--replace** to write **only** this fetch (full overwrite, no carry-over).
+
+Use **--append** to concatenate this fetch after existing rows and deduplicate
+(keep='last') on player + prop_type + line + pp_game_id + pick_type so a later
+run wins line updates without dropping non-returned projection_ids from the file.
 """
 
 from __future__ import annotations
@@ -363,6 +367,12 @@ def main() -> None:
         action="store_true",
         help="Overwrite --output with this fetch only (no merge with an existing CSV).",
     )
+    ap.add_argument(
+        "--append",
+        action="store_true",
+        help="Append this fetch after existing CSV rows, then dedupe (keep='last'); "
+        "incompatible with --replace.",
+    )
     # Legacy args accepted but ignored (were for Playwright version)
     ap.add_argument("--game_mode",        default="pickem")
     ap.add_argument("--sleep",            type=float, default=2.0)
@@ -370,6 +380,8 @@ def main() -> None:
     ap.add_argument("--max_cooldowns",    type=int,   default=3)
     ap.add_argument("--jitter_seconds",   type=float, default=10.0)
     args = ap.parse_args()
+    if args.append and args.replace:
+        ap.error("Use either --append or --replace, not both.")
 
     EMPTY_COLS = [
         "projection_id", "pp_projection_id", "player_id", "pp_game_id",
@@ -379,6 +391,7 @@ def main() -> None:
 
     print(f"📡 PrizePicks fetch | league_id={args.league_id} | direct API (no browser)")
 
+    out_path = Path(args.output)
     try:
         data, included = fetch_projections(
             league_id=str(args.league_id),
@@ -388,12 +401,18 @@ def main() -> None:
         )
     except Exception as e:
         print(f"❌ Fetch failed: {e}")
-        pd.DataFrame(columns=EMPTY_COLS).to_csv(args.output, index=False, encoding="utf-8-sig")
+        if not (args.append and out_path.is_file()):
+            pd.DataFrame(columns=EMPTY_COLS).to_csv(args.output, index=False, encoding="utf-8-sig")
+        else:
+            print("   (--append: left existing output file unchanged)")
         sys.exit(1)
 
     if not data:
         print("❌ No projections returned from API.")
-        pd.DataFrame(columns=EMPTY_COLS).to_csv(args.output, index=False, encoding="utf-8-sig")
+        if not (args.append and out_path.is_file()):
+            pd.DataFrame(columns=EMPTY_COLS).to_csv(args.output, index=False, encoding="utf-8-sig")
+        else:
+            print("   (--append: left existing output file unchanged)")
         sys.exit(1)
 
     # Optional raw JSON dump
@@ -432,13 +451,50 @@ def main() -> None:
     if n_rows < args.min_rows or n_teams < args.min_teams:
         print(f"\n⛔ BOARD_TOO_SMALL — got {n_rows} rows / {n_teams} teams")
         print(f"   Required: min_rows={args.min_rows}, min_teams={args.min_teams}")
-        print(f"   Writing partial CSV and exiting with error so pipeline halts.")
-        df.to_csv(args.output, index=False, encoding="utf-8-sig")
+        if args.append and out_path.is_file():
+            print("   (--append: left existing output file unchanged; pipeline should halt.)")
+        else:
+            print(f"   Writing partial CSV and exiting with error so pipeline halts.")
+            df.to_csv(args.output, index=False, encoding="utf-8-sig")
         sys.exit(1)
 
-    # ── Default: union with prior output when file exists (--replace skips) ───
-    out_path = Path(args.output)
-    do_merge = out_path.is_file() and not args.replace
+    n_fetched = len(df)
+
+    # ── --append: stack new fetch after existing file, semantic dedupe (keep last) ──
+    if args.append and out_path.is_file():
+        try:
+            existing = pd.read_csv(out_path, encoding="utf-8-sig")
+            for c in EMPTY_COLS:
+                if c not in existing.columns:
+                    existing[c] = ""
+            existing = existing[EMPTY_COLS].copy()
+            existing["line"] = pd.to_numeric(existing["line"], errors="coerce")
+            existing["standard_line"] = pd.to_numeric(existing["standard_line"], errors="coerce")
+            _mstd_e = existing["pick_type"].astype(str).str.lower().eq("standard")
+            existing.loc[_mstd_e, "standard_line"] = existing.loc[_mstd_e, "standard_line"].fillna(
+                existing.loc[_mstd_e, "line"]
+            )
+            combined = pd.concat([existing, df], ignore_index=True)
+            # Align dtypes so CSV int pp_game_id matches API string ids for dedupe.
+            combined["player"] = combined["player"].astype(str).str.strip()
+            combined["prop_type"] = combined["prop_type"].astype(str).str.strip()
+            combined["pick_type"] = combined["pick_type"].astype(str).str.strip()
+            combined["pp_game_id"] = combined["pp_game_id"].astype(str).str.strip()
+            combined["line"] = pd.to_numeric(combined["line"], errors="coerce")
+            dedup_candidates = ("player", "prop_type", "line", "pp_game_id", "pick_type")
+            dedup_cols = [c for c in dedup_candidates if c in combined.columns]
+            if dedup_cols:
+                combined = combined.drop_duplicates(subset=dedup_cols, keep="last")
+            df = combined
+            print(
+                f"\n[step1 append] {len(existing)} existing + {n_fetched} new → {len(df)} "
+                f"after dedup (subset={dedup_cols})"
+            )
+        except Exception as e:
+            print(f"\n  [WARN] --append merge skipped: {e}")
+
+    # ── Default: union with prior output when file exists (--replace / --append skip) ───
+    do_merge = out_path.is_file() and not args.replace and not args.append
     if do_merge:
         try:
             old = pd.read_csv(out_path, encoding="utf-8-sig")

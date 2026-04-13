@@ -4,7 +4,7 @@
   Re-fetch NBA PrizePicks props and run NBA pipeline + combined tickets (mid-morning board).
 .NOTES
   Safe to run manually anytime. Intended for Task Scheduler ~11:00 ET after PrizePicks posts NBA props.
-  Invokes repo-root run_pipeline.ps1 with -NBAOnly -SkipFetch (step1 done here with --replace).
+  Invokes repo-root run_pipeline.ps1 with -NBAOnly -SkipFetch (step1 done here with --append).
 #>
 $ErrorActionPreference = "Continue"
 $Root = Split-Path $PSScriptRoot -Parent
@@ -14,7 +14,7 @@ $env:PYTHONUTF8 = "1"
 $env:PYTHONIOENCODING = "utf-8"
 try { [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 } catch { }
 
-Write-Host "[NBA_LATE_FETCH] Starting NBA re-fetch $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+Write-Host "[NBA_LATE_FETCH] Appending NBA props to existing slate... ($(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'))"
 
 $NBADir = Join-Path $Root "NBA"
 $step1Args = @(
@@ -26,7 +26,7 @@ $step1Args = @(
     "--cooldown_seconds", "90",
     "--max_cooldowns", "3",
     "--jitter_seconds", "10.0",
-    "--replace",
+    "--append",
     "--output", "data\outputs\step1_pp_props_today.csv"
 )
 
