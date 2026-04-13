@@ -1,80 +1,120 @@
 {
-  "model_type": "flat_min_guarantee_with_sweep",
+  "model_type": "linear_goblin_distance_sweep_flex",
   "fitted_from": "manual_observations",
+  "fit_method": "linear_distance_regression",
+  "fit_date": "2026-04-13",
   "fitted_at": "2026-04-13",
-  "n_observations": 3,
-  "sweep_payout": {
+  "n_observations": 4,
+  "goblin_factor_intercept": 0.838,
+  "goblin_factor_slope": 0.031,
+  "goblin_factor_min": 0.4,
+  "demon_power_coeff": 0.1782,
+  "demon_power_exp": 1.287,
+  "demon_per_leg_cap": 3.0,
+  "sweep_payout_standard": {
     "2": 3.0,
     "3": 6.0,
     "4": 10.0,
     "5": 20.0,
     "6": 40.0
   },
-  "standard_min_guarantee": {
-    "2": 0.0,
-    "3": 1.6,
-    "4": 2.5,
-    "5": 2.0,
-    "6": 3.0
+  "flex_guarantee_standard": {
+    "2": { "2": 3.0 },
+    "3": { "3": 3.0, "2": 0.75 },
+    "4": { "4": 10.0, "3": 2.5, "2": 0.4 },
+    "5": { "5": 20.0, "4": 1.0, "3": 0.4 },
+    "6": { "6": 40.0, "5": 2.0, "4": 0.4 }
   },
-  "goblin_min_guarantee": {
-    "2": 1.6,
-    "3": 1.6,
-    "4": 2.5,
-    "5": 2.0,
-    "6": 3.0
-  },
-  "demon_policy": "use_standard_min_guarantee_until_more_observations",
+  "notes": "Power: no partial payout; sweep = standard_sweep[n] × Π goblin_per_leg_factor(dist) × demon factors. Flex: flex_guarantee hit-count table × same adjustment. 3-leg flex all-correct = 3x per obs_A (Power3-leg sweep = 6x). EV: Power uses p_all×sweep−1; Flex uses sweep/partial decomposition.",
   "standard_lines_observed": {
+    "Davion Mitchell Points": 8.5,
+    "LaMelo Ball Points": 22.5,
+    "Devin Booker Points": 26.5,
     "Christian Braun Pts+Rebs": 16.5,
     "Jabari Smith Points": 14.5,
     "Jamal Murray Pts+Asts": 30.5
   },
   "observations": [
     {
-      "id": "obs_1",
+      "id": "obs_A",
+      "label": "3-leg Power, all standard; 3-leg Flex baselines",
+      "observed_at": "2026-04-13",
+      "ticket_type": "Power Play + Flex",
+      "n_legs": 3,
+      "n_goblins": 0,
+      "players_standard": [
+        { "player": "Davion Mitchell", "stat": "Points", "line": 8.5 },
+        { "player": "LaMelo Ball", "stat": "Points", "line": 22.5 },
+        { "player": "Devin Booker", "stat": "Points", "line": 26.5 }
+      ],
+      "power_sweep_payout": 6.0,
+      "flex_sweep_payout": 3.0,
+      "flex_partial_n_minus_1": 0.75,
+      "entry_amount": 20.0,
+      "power_to_win_amount": 120.0,
+      "status": "confirmed_screenshot"
+    },
+    {
+      "id": "obs_B",
+      "label": "3-leg Power, 3 goblins",
+      "observed_at": "2026-04-13",
+      "ticket_type": "Power Play",
+      "n_legs": 3,
+      "n_goblins": 3,
+      "legs": [
+        { "player": "Davion Mitchell", "goblin_line": 6.5, "standard_line": 8.5, "distance": 2.0 },
+        { "player": "LaMelo Ball", "goblin_line": 17.5, "standard_line": 22.5, "distance": 5.0 },
+        { "player": "Devin Booker", "goblin_line": 19.5, "standard_line": 26.5, "distance": 7.0 }
+      ],
+      "avg_distance": 4.67,
+      "goblin_adjustment_vs_standard": 0.333,
+      "per_leg_factor_geometric": 0.693,
+      "power_sweep_payout": 2.0,
+      "flex_sweep_payout": 1.7,
+      "flex_partial_n_minus_1": 0.5,
+      "entry_amount": 20.0,
+      "power_to_win_amount": 40.0,
+      "status": "confirmed_screenshot"
+    },
+    {
+      "id": "obs_C",
+      "label": "5-leg Power, 3 standard + 2 goblins",
+      "observed_at": "2026-04-13",
+      "ticket_type": "Power Play",
+      "n_legs": 5,
+      "n_goblins": 2,
+      "goblin_legs": [
+        { "player": "LaMelo Ball", "distance": 5.0 },
+        { "player": "Devin Booker", "distance": 7.0 }
+      ],
+      "avg_goblin_distance": 6.0,
+      "goblin_adjustment_vs_standard": 0.425,
+      "per_goblin_factor_geometric": 0.652,
+      "power_sweep_payout": 8.5,
+      "standard_5leg_sweep": 20.0,
+      "entry_amount": 20.0,
+      "power_to_win_amount": 170.0,
+      "status": "confirmed_screenshot"
+    },
+    {
+      "id": "obs_D",
+      "label": "2-leg Power, 2 goblins",
       "observed_at": "2026-04-13",
       "ticket_type": "Power Play",
       "n_legs": 2,
       "n_goblins": 2,
-      "distances": [
-        5.0,
-        5.0
+      "legs": [
+        { "player": "Christian Braun", "stat": "Pts+Rebs", "goblin_line": 11.5, "standard_line": 16.5, "distance": 5.0 },
+        { "player": "Jabari Smith", "stat": "Points", "goblin_line": 9.5, "standard_line": 14.5, "distance": 5.0 }
       ],
-      "min_guarantee": 1.6,
-      "sweep_payout": 3.0
-    },
-    {
-      "id": "obs_2",
-      "observed_at": "2026-04-13",
-      "ticket_type": "Power Play",
-      "n_legs": 3,
-      "n_goblins": 3,
-      "distances": [
-        5.0,
-        6.0,
-        5.0
-      ],
-      "min_guarantee": 1.6,
-      "sweep_payout": 6.0,
+      "avg_distance": 5.0,
+      "goblin_adjustment_vs_standard": 0.533,
+      "per_goblin_factor_geometric": 0.73,
+      "power_sweep_payout": 1.6,
+      "standard_2leg_sweep": 3.0,
       "entry_amount": 20.0,
-      "to_win_amount": 32.0
-    },
-    {
-      "id": "obs_3",
-      "observed_at": "2026-04-10",
-      "ticket_type": "Power Play",
-      "n_legs": 3,
-      "n_goblins": 3,
-      "distances": [
-        2.0,
-        2.0,
-        2.0
-      ],
-      "min_guarantee": 1.6,
-      "sweep_payout": 6.0,
-      "status": "unverified_historical_reference"
+      "power_to_win_amount": 32.0,
+      "status": "confirmed_screenshot"
     }
-  ],
-  "notes": "Goblin min guarantee appears flat by leg count in current observations (2-leg and 3-leg both 1.6x). EV should use P(all)*sweep + P(exactly n-1)*min_guarantee - P(other losses)."
+  ]
 }

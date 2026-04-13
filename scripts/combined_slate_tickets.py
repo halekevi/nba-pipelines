@@ -164,7 +164,7 @@ PAYOUT = {
     3: {"power": 6.0,  "flex": 3.0},
     4: {"power": 10.0, "flex": 6.0},
     5: {"power": 20.0, "flex": 10.0},
-    6: {"power": 37.5, "flex": 25.0},
+    6: {"power": 40.0, "flex": 25.0},
 }
 
 
@@ -188,19 +188,36 @@ def power_flex_payout_for_n(n_legs: int) -> tuple[float, float]:
     return round(power, 2), round(flex, 2)
 
 
-# ── Empirical Goblin/Demon payout (manual observations, April 2026) ───────────
-# Multiplicative per leg; line_distance = |standard - played|.
-# New anchor: 3-leg Power with 3 Goblins paid 1.6x (1.6/6.0=0.267 total adj),
-# implying per-leg Goblin base factor ~0.644 before distance shaping.
-GOBLIN_BASE_FACTOR = 0.644
-GOBLIN_DISTANCE_SCALE = 0.020
+# ── Empirical Goblin/Demon payout (manual PrizePicks observations, April 2026) ─
+# Multiplicative per leg; line_distance = |standard_line - played_line|.
+# Goblin: linear distance fit from obs_A–obs_D (see data/payout_formula_coefficients.json).
+GOBLIN_FACTOR_INTERCEPT = 0.838
+GOBLIN_FACTOR_SLOPE = 0.031
+GOBLIN_FACTOR_MIN = 0.40
 DEMON_POWER_COEFF = 0.1782
 DEMON_POWER_EXP = 1.287
 SWEEP_PAYOUT = {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 40.0}
-STANDARD_MIN_GUARANTEE = {2: 0.0, 3: 1.6, 4: 2.5, 5: 2.0, 6: 3.0}
-GOBLIN_MIN_GUARANTEE = {2: 1.6, 3: 1.6, 4: 2.5, 5: 2.0, 6: 3.0}
-BASE_FLEX_FIRST = {2: 3.0, 3: 3.0, 4: 5.0, 5: 10.0, 6: 25.0}
-BASE_FLEX_MIN = {2: 1.5, 3: 1.25, 4: 1.5, 5: 2.0, 6: 2.0}
+# Flex: standard multipliers (obs_A). Keys are hit counts; same goblin/demon adj applies to each.
+# 3-leg flex all-correct = 3x per obs_A (not 6x Power sweep).
+FLEX_GUARANTEE: dict[int, dict[int, float]] = {
+    2: {2: 3.0},
+    3: {3: 3.0, 2: 0.75},
+    4: {4: 10.0, 3: 2.5, 2: 0.4},
+    5: {5: 20.0, 4: 1.0, 3: 0.4},
+    6: {6: 40.0, 5: 2.0, 4: 0.4},
+}
+# Fallback when n not in FLEX_GUARANTEE (extrapolation)
+BASE_FLEX_FIRST = {2: 3.0, 3: 3.0, 4: 10.0, 5: 20.0, 6: 40.0}
+BASE_FLEX_MIN = {2: 0.0, 3: 0.75, 4: 0.4, 5: 0.4, 6: 0.4}
+
+
+def goblin_per_leg_factor(line_distance: float) -> float:
+    """Empirical goblin multiplier vs line distance (linear fit, floored)."""
+    dist = abs(float(line_distance or 0.0))
+    return max(
+        GOBLIN_FACTOR_MIN,
+        GOBLIN_FACTOR_INTERCEPT - GOBLIN_FACTOR_SLOPE * dist,
+    )
 
 
 def compute_leg_adjustment(pick_type: str, line_distance: float) -> float:
@@ -210,20 +227,19 @@ def compute_leg_adjustment(pick_type: str, line_distance: float) -> float:
     pick_type: 'goblin' | 'standard' | 'demon'
     line_distance: abs(standard_line - played_line)
 
-    Standard = 1.0. Goblin < 1.0. Demon >= 1.0 (capped at 10).
+    Standard = 1.0. Goblin < 1.0. Demon >= 1.0 (capped at 3).
     """
     dist = abs(float(line_distance or 0.0))
     pt = str(pick_type or "standard").strip().lower()
 
     if pt == "goblin":
-        dist_adj = max(0.50, 1.0 - GOBLIN_DISTANCE_SCALE * dist)
-        return GOBLIN_BASE_FACTOR * dist_adj
+        return goblin_per_leg_factor(dist)
 
     if pt == "demon":
         if dist <= 0:
             return 1.0
         raw = DEMON_POWER_COEFF * (dist ** DEMON_POWER_EXP)
-        return min(10.0, max(1.0, raw))
+        return min(3.0, max(1.0, raw))
 
     return 1.0
 
@@ -243,30 +259,6 @@ def compute_min_guarantee_adjustment(legs: list) -> float:
     return round(adjustment, 4)
 
 
-def compute_min_guarantee(legs: list, n_legs: int) -> float:
-    """Empirical min-guarantee model keyed by composition of goblin legs."""
-    n = int(n_legs)
-    n_goblins = 0
-    n_demons = 0
-    for leg in legs or []:
-        pt = str(leg.get("pick_type", "standard")).strip().lower()
-        if pt == "goblin":
-            n_goblins += 1
-        elif pt == "demon":
-            n_demons += 1
-
-    if n_goblins == n:
-        return float(GOBLIN_MIN_GUARANTEE.get(n, 1.6))
-    if n_goblins > 0:
-        ratio = float(n_goblins) / float(max(n, 1))
-        standard = float(STANDARD_MIN_GUARANTEE.get(n, 0.0))
-        goblin = float(GOBLIN_MIN_GUARANTEE.get(n, 1.6))
-        return standard + (ratio * (goblin - standard))
-    if n_demons > 0:
-        return float(STANDARD_MIN_GUARANTEE.get(n, 0.0))
-    return float(STANDARD_MIN_GUARANTEE.get(n, 0.0))
-
-
 def compute_ticket_ev(
     legs: list,
     ticket_type: str,
@@ -275,18 +267,23 @@ def compute_ticket_ev(
     """
     EV (per $1 stake style) using empirical payout formula.
 
-    Flex first place stays at standard base; Power first place scales with adj.
-    Min-guarantee / power base scales with adj for both.
+    Power: sweep = STANDARD_SWEEP[n] × Π per-leg goblin/demon factors; no partial (min guarantee 0).
+    Flex: FLEX_GUARANTEE payouts × the same factor product (obs_A table + goblin adj).
     """
     n = int(n_legs)
     tt = str(ticket_type or "power").strip().lower()
+    adj = float(compute_min_guarantee_adjustment(legs))
 
     if tt == "flex":
-        adjusted_first = round(float(BASE_FLEX_FIRST.get(n, 3.0)), 4)
-        adjusted_min_g = round(float(BASE_FLEX_MIN.get(n, 1.25)), 4)
+        flex_tbl = FLEX_GUARANTEE.get(n, {})
+        base_first = float(flex_tbl.get(n, BASE_FLEX_FIRST.get(n, 3.0)))
+        base_partial = float(flex_tbl.get(n - 1, BASE_FLEX_MIN.get(n, 0.0))) if n >= 2 else 0.0
+        adjusted_first = round(base_first * adj, 4)
+        adjusted_min_g = round(base_partial * adj, 4)
     else:
-        adjusted_first = round(float(SWEEP_PAYOUT.get(n, 6.0)), 4)
-        adjusted_min_g = round(float(compute_min_guarantee(legs, n)), 4)
+        adjusted_first = round(float(SWEEP_PAYOUT.get(n, 6.0)) * adj, 4)
+        adjusted_min_g = 0.0
+
     mg_adjustment = round(adjusted_min_g / adjusted_first, 4) if adjusted_first > 0 else 0.0
 
     probs = [float(leg.get("hit_prob", 0.65)) for leg in legs]
@@ -304,7 +301,10 @@ def compute_ticket_ev(
             p_miss_1 += term
 
     p_lose = max(0.0, 1.0 - p_all - p_miss_1)
-    ev = (p_all * adjusted_first) + (p_miss_1 * adjusted_min_g) - p_lose
+    if tt == "power":
+        ev = p_all * adjusted_first - 1.0
+    else:
+        ev = (p_all * adjusted_first) + (p_miss_1 * adjusted_min_g) - p_lose
 
     return {
         "ev": round(ev, 4),
@@ -314,6 +314,7 @@ def compute_ticket_ev(
         "first_place_payout": adjusted_first,
         "min_guarantee": adjusted_min_g,
         "min_guarantee_adjustment": mg_adjustment,
+        "payout_adjustment": adj,
         "ticket_type": tt,
         "n_legs": n,
         "recommendation": (
@@ -460,9 +461,11 @@ def build_ticket_payout_json(group_name: str, ticket_rows: list) -> dict[str, An
         sweep = float(ev_result["first_place_payout"])
         paw = float(ev_result["p_all_win"])
         return {
+            "ticket_type": tt,
             "payout": ev_result["min_guarantee"],
             "min_guarantee": ev_result["min_guarantee"],
             "min_guarantee_adjustment": ev_result["min_guarantee_adjustment"],
+            "payout_adjustment": ev_result.get("payout_adjustment", 1.0),
             "p_all_win": ev_result["p_all_win"],
             "p_miss_1": ev_result["p_miss_1"],
             "ev": ev_result["ev"],
@@ -471,7 +474,7 @@ def build_ticket_payout_json(group_name: str, ticket_rows: list) -> dict[str, An
             "entry_20_to_win_guarantee": round(20 * mg, 2),
             "sweep_payout": sweep,
             "entry_10_to_win_sweep": round(10 * sweep, 2),
-            "payout_confidence_score": round(mg * paw, 4),
+            "payout_confidence_score": round(sweep * paw, 4),
         }
     except Exception:
         return None
@@ -7870,7 +7873,7 @@ def main():
     print(
         f"  [verify] pre-dedupe: {len(all_ticket_groups)} groups, {_pre_slips} slips | "
         f"PAYOUT power n=4,5,6: {PAYOUT[4]['power']}, {PAYOUT[5]['power']}, {PAYOUT[6]['power']} "
-        f"(compute_ticket_ev BASE_POWER[4,5,6] match: 10.0, 20.0, 37.5)"
+        f"(compute_ticket_ev SWEEP_PAYOUT[4,5,6] match: 10.0, 20.0, 40.0)"
     )
 
     _pre_dedupe_n = len(all_ticket_groups)
@@ -8699,6 +8702,8 @@ def render_tickets_body_html(
                     ev_cls = _payout_ev_class(rec_s)
                     pre = _payout_rec_prefix(rec_s)
                     pay_x = payout.get("min_guarantee")
+                    if str(payout.get("ticket_type") or "").lower() == "power":
+                        pay_x = payout.get("sweep_payout")
                     if pay_x is None:
                         pay_x = payout.get("payout")
                     if pay_x is None:
@@ -8714,11 +8719,12 @@ def render_tickets_body_html(
                     f'<span class="{sig_cls}">{sig_lbl}</span>'
                 )
 
-            kpi_payout = (
-                payout.get("min_guarantee")
-                if payout_ok and isinstance(payout, dict)
-                else None
-            )
+            kpi_payout = None
+            if payout_ok and isinstance(payout, dict):
+                if str(payout.get("ticket_type") or "").lower() == "power":
+                    kpi_payout = payout.get("sweep_payout")
+                else:
+                    kpi_payout = payout.get("min_guarantee")
             if kpi_payout is None:
                 kpi_payout = t_power_pay
 
@@ -8901,14 +8907,12 @@ def render_tickets_body_html(
                     except (TypeError, ValueError):
                         e10s = None
                 pre_ev = _payout_rec_prefix(rec_s2)
-                payout_section = f'''
+                tt_pay = str(payout.get("ticket_type") or "").lower()
+                if tt_pay == "power":
+                    payout_section = f'''
       <div class="ticket-payout">
         <div class="payout-row">
-          <span class="payout-label">Min Guarantee</span>
-          <span class="payout-value">{_fmt(pay_mult, 2)}x</span>
-        </div>
-        <div class="payout-row">
-          <span class="payout-label">Sweep (all correct)</span>
+          <span class="payout-label">Payout (sweep &mdash; all correct)</span>
           <span class="payout-value">{_fmt(sweep_mult, 2)}x</span>
         </div>
         <div class="payout-row">
@@ -8917,10 +8921,33 @@ def render_tickets_body_html(
         </div>
         <div class="payout-row">
           <span class="payout-label">EV</span>
-          <span class="payout-value {ev_cls_row}">{_fmt(ev_disp, 2)} — {_h(pre_ev)} {_h(rec_s2)}</span>
+          <span class="payout-value {ev_cls_row}">{_fmt(ev_disp, 2)} &mdash; {_h(pre_ev)} {_h(rec_s2)}</span>
         </div>
         <div class="payout-entry-guide">
-          $10 &rarr; ${_fmt(e10g, 2)} (guarantee) / ${_fmt(e10s, 2)} (sweep)
+          $10 &rarr; ${_fmt(e10s, 2)} (all correct)
+        </div>
+      </div>'''
+                else:
+                    payout_section = f'''
+      <div class="ticket-payout">
+        <div class="payout-row">
+          <span class="payout-label">Sweep (all correct)</span>
+          <span class="payout-value">{_fmt(sweep_mult, 2)}x</span>
+        </div>
+        <div class="payout-row">
+          <span class="payout-label">Partial ({int(n_legs) - 1} correct)</span>
+          <span class="payout-value">{_fmt(pay_mult, 2)}x</span>
+        </div>
+        <div class="payout-row">
+          <span class="payout-label">P(Win)</span>
+          <span class="payout-value">{_fmt(p_all * 100, 1)}%</span>
+        </div>
+        <div class="payout-row">
+          <span class="payout-label">EV</span>
+          <span class="payout-value {ev_cls_row}">{_fmt(ev_disp, 2)} &mdash; {_h(pre_ev)} {_h(rec_s2)}</span>
+        </div>
+        <div class="payout-entry-guide">
+          $10 &rarr; ${_fmt(e10s, 2)} (sweep) / ${_fmt(e10g, 2)} (n&minus;1)
         </div>
       </div>'''
 
