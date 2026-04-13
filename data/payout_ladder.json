@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-04-13",
+  "updated_at": "2026-04-18",
   "entries": [
     {
       "entry_type": "power",
@@ -55,6 +55,16 @@
       "min_payout_x": 1.25,
       "source": "pp_published",
       "confirmed_at": "2026-04-13"
+    },
+    {
+      "entry_type": "flex",
+      "n_legs": 3,
+      "mix": {"goblin": 3, "standard": 0, "demon": 0},
+      "sweep_payout_x": 1.5,
+      "min_payout_x": 0.5,
+      "source": "pp_observed",
+      "confirmed_at": "2026-04-18",
+      "notes": "PrizePicks flex 3-leg all goblin:3/3 and 2/3 minimum tiers (app sidebar, Apr 2026)"
     },
     {
       "entry_type": "flex",
