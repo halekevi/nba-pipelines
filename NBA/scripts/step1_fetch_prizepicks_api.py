@@ -358,6 +358,11 @@ def main() -> None:
         help="If --output already exists: keep rows whose projection_id was not returned "
         "this fetch; fresh rows replace matching projection_id (board updates + prior-only props).",
     )
+    ap.add_argument(
+        "--replace",
+        action="store_true",
+        help="Overwrite --output with this fetch only (no merge with an existing CSV).",
+    )
     # Legacy args accepted but ignored (were for Playwright version)
     ap.add_argument("--game_mode",        default="pickem")
     ap.add_argument("--sleep",            type=float, default=2.0)
