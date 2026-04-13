@@ -81,7 +81,7 @@ $WNBADir   = Join-Path $Root "WNBA"
 $OutDir    = Join-Path $Root "outputs\$Date"
 $WebOutDir = Join-Path $Root "ui_runner\templates"
 
-# CBB season off — must match scripts/combined_slate_tickets.py (DISABLED_SPORTS / skipped CBB load).
+# CBB season off  -  must match scripts/combined_slate_tickets.py (DISABLED_SPORTS / skipped CBB load).
 $CBBPipelineDeactivated = $true
 
 if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force -Path $OutDir | Out-Null }
@@ -188,7 +188,7 @@ function Run-GitPushGradeArtifacts {
         if (Test-Path $full) { $toStage += $rel }
     }
     if (-not $toStage.Count) {
-        Write-Host "  No slate_eval / ticket_eval / graded_props found for $GradeDate — nothing to push" -ForegroundColor DarkGray
+        Write-Host "  No slate_eval / ticket_eval / graded_props found for $GradeDate  -  nothing to push" -ForegroundColor DarkGray
         "$Date $(Get-Date -Format 'HH:mm:ss') - GRADE PUSH SKIP (no grade artifacts for $GradeDate)" | Out-File -FilePath (Join-Path $Root "git_push_log.txt") -Append -Encoding utf8
         return
     }
@@ -223,13 +223,13 @@ function Run-GitPushGradeArtifacts {
 
 function Run-PostPipelineGrader {
     if ($SkipDailyGrader) {
-        Write-Host "`n[ GRADES ] SkipDailyGrader — not running post-pipeline grader" -ForegroundColor DarkGray
+        Write-Host "`n[ GRADES ] SkipDailyGrader  -  not running post-pipeline grader" -ForegroundColor DarkGray
         return
     }
     try {
         $dt = [datetime]::ParseExact($Date, "yyyy-MM-dd", [System.Globalization.CultureInfo]::InvariantCulture)
     } catch {
-        Write-Host "`n[ GRADES ] Could not parse pipeline date '$Date' — skip grader" -ForegroundColor Yellow
+        Write-Host "`n[ GRADES ] Could not parse pipeline date '$Date'  -  skip grader" -ForegroundColor Yellow
         return
     }
     $gradeDate = $dt.AddDays(-1).ToString("yyyy-MM-dd")
@@ -238,7 +238,7 @@ function Run-PostPipelineGrader {
 
     $runner = Join-Path $Root "scripts\run_grader.ps1"
     if (-not (Test-Path $runner)) {
-        Write-Host "  scripts\run_grader.ps1 not found — skip" -ForegroundColor Yellow
+        Write-Host "  scripts\run_grader.ps1 not found  -  skip" -ForegroundColor Yellow
         return
     }
     & $runner -Date $gradeDate
@@ -271,7 +271,7 @@ function Run-Combined {
     $CombinedOut  = Join-Path $Root "combined_slate_tickets_$Date.xlsx"
     $CombinedArgs  = "--nba `"$nbaFile`""
     if ($CBBPipelineDeactivated) {
-        Write-Host "  [ ] CBB (season deactivated — combined skips CBB slate)" -ForegroundColor DarkGray
+        Write-Host "  [ ] CBB (season deactivated  -  combined skips CBB slate)" -ForegroundColor DarkGray
     } else {
         $CombinedArgs += " --cbb `"$cbbFile`""
         Write-Host "  [+] CBB" -ForegroundColor DarkGray
@@ -430,7 +430,7 @@ if ($CBBOnly) {
     Write-Host "[ CBB PIPELINE ]" -ForegroundColor Magenta
     Write-Host ""
     if ($CBBPipelineDeactivated) {
-        Write-Host "  CBB is deactivated for the season (no steps 1–6). Running combined only." -ForegroundColor Yellow
+        Write-Host "  CBB is deactivated for the season (no steps 1-6). Running combined only." -ForegroundColor Yellow
         Write-Host ""
         Run-Combined "CBB deactivated (CBBOnly)"
         Print-Done
@@ -563,7 +563,7 @@ $CBBJob = Start-Job -ScriptBlock {
     param($CBBDir, $SkipFetch, $CBBDeactivated)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
     if ($CBBDeactivated) {
-        Write-Output "[CBB] Skipped (season deactivated — steps 1–6 not run; combined omits CBB)."
+        Write-Output "[CBB] Skipped (season deactivated  -  steps 1-6 not run; combined omits CBB)."
         return $true
     }
     function Run-Step-Job {

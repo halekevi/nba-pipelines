@@ -4534,10 +4534,10 @@ def build_single_structure_ticket(
     allowed_tiers = {"A", "B", "C", "D"}
     q = 0.70 if flow in ("power", "standard") else 0.50  # top 30% / top 50%
 
-    # NHL and Soccer don't use Goblin/Standard split — all props are Standard.
+    # NHL, Soccer, and Tennis don't use Goblin/Standard split for tickets — all props behave as Standard.
     # Skip pick_type filtering for these sports so Power/Flex can use Standard props.
     sport_up = sport_label.upper()
-    skip_picktype_filter = sport_up in ("NHL", "SOCCER", "SOCCER")
+    skip_picktype_filter = sport_up in ("NHL", "SOCCER", "SOC", "TENNIS")
 
     df = pool_df.copy()
     if "pick_type" in df.columns and not skip_picktype_filter:
@@ -5503,7 +5503,7 @@ def _filter_pool_cross_pick_mode(pool_df: pd.DataFrame | None, sport_label: str,
         return pd.DataFrame()
     df = pool_df.copy()
     su = str(sport_label).upper()
-    skip_pt = su in ("NHL", "SOCCER", "SOC")
+    skip_pt = su in ("NHL", "SOCCER", "SOC", "TENNIS")
     if "pick_type" in df.columns and not skip_pt:
         pt = df["pick_type"].astype(str).str.strip().str.lower()
         if mode == "standard":
@@ -7007,6 +7007,11 @@ def main():
                 effective_min_hit = max(args.min_hit_rate, 0.65)   # NHL Standard: 67.9% — very strong
             else:
                 effective_min_hit = max(args.min_hit_rate, 0.50)
+
+        # Tennis: pool() is often called with pt=None (structured + cross). Without a branch, the global
+        # min_hit_rate (0.65+) applies while hit_rate is rank/blended proxy as low as ~0.50 — pool collapses.
+        elif pt is None and sport == "TENNIS":
+            effective_min_hit = min(float(args.min_hit_rate), 0.50)
 
         # Direction filter: NHL OVER props are only 21.5% — exclude from NHL pools
         if sport == "NHL" and "direction" in filtered_df.columns:
