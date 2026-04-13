@@ -92,7 +92,7 @@ def rate_color(v: Any) -> tuple[str, str]:
         f = float(v)
         if f <= 1.0: f *= 100
     except (TypeError, ValueError):
-        return "#94a3b8", "var(--muted2)"
+        return "rgba(255,255,255,0.92)", "var(--muted2)"
     if f >= 80:  return "#6ee7b7", "var(--green)"
     if f >= 65:  return "#6ee7b7", "var(--green)"
     if f >= 55:  return "#fcd34d", "var(--amber)"
@@ -485,7 +485,7 @@ CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&display=swap');
 :root{
   --bg:#05050f;--bg2:#0d0d1f;--bg3:#111128;--border:#1e1e3a;--bd2:#2a2a4a;
-  --text:#e8e8f0;--muted:#888;--muted2:#555;
+  --text:#e8e8f0;--muted:rgba(255,255,255,0.95);--muted2:rgba(255,255,255,0.88);
   --accent:#c8ff00;--cyan:#00e5ff;
   --green:#39ff6e;--amber:#f0a500;--red:#ff4d4d;--purple:#a78bfa;--blue:#00e5ff;
 }
@@ -653,7 +653,7 @@ td.muted{color:var(--muted2);}td.small{font-size:10px;}
 .chip-a{background:rgba(57,255,110,.1);color:var(--green);border:1px solid rgba(57,255,110,.25);}
 .chip-b{background:rgba(0,229,255,.1);color:var(--cyan);border:1px solid rgba(0,229,255,.25);}
 .chip-c{background:rgba(240,165,0,.1);color:var(--amber);border:1px solid rgba(240,165,0,.25);}
-.chip-d{background:rgba(153,153,153,.08);color:#888;border:1px solid rgba(153,153,153,.18);}
+.chip-d{background:rgba(153,153,153,.08);color:rgba(255,255,255,0.92);border:1px solid rgba(153,153,153,.18);}
 .chip-goblin{background:rgba(167,139,250,.1);color:var(--purple);border:1px solid rgba(167,139,250,.25);}
 .chip-demon{background:rgba(255,77,77,.1);color:#ff8080;border:1px solid rgba(255,77,77,.25);}
 .chip-std{background:rgba(0,229,255,.1);color:var(--cyan);border:1px solid rgba(0,229,255,.25);}
