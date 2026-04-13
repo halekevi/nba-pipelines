@@ -81,6 +81,9 @@ $WNBADir   = Join-Path $Root "WNBA"
 $OutDir    = Join-Path $Root "outputs\$Date"
 $WebOutDir = Join-Path $Root "ui_runner\templates"
 
+# CBB season off — must match scripts/combined_slate_tickets.py (DISABLED_SPORTS / skipped CBB load).
+$CBBPipelineDeactivated = $true
+
 if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force -Path $OutDir | Out-Null }
 
 # -- Encoding -----------------------------------------------------------------
@@ -261,11 +264,18 @@ function Run-Combined {
     $tennisFile = "$TennisDir\outputs\step8_tennis_direction_clean.xlsx"
 
     if (-not (Test-Path $nbaFile)) { Write-Host "  WARNING: NBA step8 not found -- skipping combined" -ForegroundColor Yellow; return $false }
-    if (-not (Test-Path $cbbFile)) { Write-Host "  WARNING: CBB step6 not found -- skipping combined" -ForegroundColor Yellow; return $false }
+    if (-not $CBBPipelineDeactivated) {
+        if (-not (Test-Path $cbbFile)) { Write-Host "  WARNING: CBB step6 not found -- skipping combined" -ForegroundColor Yellow; return $false }
+    }
 
     $CombinedOut  = Join-Path $Root "combined_slate_tickets_$Date.xlsx"
     $CombinedArgs  = "--nba `"$nbaFile`""
-    $CombinedArgs += " --cbb `"$cbbFile`""
+    if ($CBBPipelineDeactivated) {
+        Write-Host "  [ ] CBB (season deactivated — combined skips CBB slate)" -ForegroundColor DarkGray
+    } else {
+        $CombinedArgs += " --cbb `"$cbbFile`""
+        Write-Host "  [+] CBB" -ForegroundColor DarkGray
+    }
 
     if (Test-Path $nhlFile)    { $CombinedArgs += " --nhl `"$nhlFile`"";       Write-Host "  [+] NHL"    -ForegroundColor DarkGray }
     if (Test-Path $soccerFile) { $CombinedArgs += " --soccer `"$soccerFile`""; Write-Host "  [+] Soccer" -ForegroundColor DarkGray }
@@ -419,6 +429,13 @@ if ($TennisOnly) {
 if ($CBBOnly) {
     Write-Host "[ CBB PIPELINE ]" -ForegroundColor Magenta
     Write-Host ""
+    if ($CBBPipelineDeactivated) {
+        Write-Host "  CBB is deactivated for the season (no steps 1–6). Running combined only." -ForegroundColor Yellow
+        Write-Host ""
+        Run-Combined "CBB deactivated (CBBOnly)"
+        Print-Done
+        exit
+    }
     $ok = $true
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "CBB Step 1 - Fetch PrizePicks"      $CBBDir ".\scripts\pipeline\step1_pp_cbb_scraper.py"      "--out step1_cbb.csv" } } else { Write-Host "  [CBB] Skipping step1 fetch -- using existing step1_cbb.csv" -ForegroundColor DarkGray }
     if ($ok) { $ok = Run-Step "CBB Step 2 - Normalize"               $CBBDir ".\scripts\pipeline\step2_normalize.py"                            "--input step1_cbb.csv --output step2_cbb.csv" }
@@ -543,8 +560,12 @@ $NBAJob = Start-Job -ScriptBlock {
 
 # -- CBB Job ------------------------------------------------------------------
 $CBBJob = Start-Job -ScriptBlock {
-    param($CBBDir, $SkipFetch)
+    param($CBBDir, $SkipFetch, $CBBDeactivated)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
+    if ($CBBDeactivated) {
+        Write-Output "[CBB] Skipped (season deactivated — steps 1–6 not run; combined omits CBB)."
+        return $true
+    }
     function Run-Step-Job {
         param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
         Write-Output "[CBB] --> $Label"
@@ -567,7 +588,7 @@ $CBBJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "CBB Step 5 - Boxscore Stats"          $CBBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input step3_cbb.csv --output step5b_cbb.csv" }
     if ($ok) { $ok = Run-Step-Job "CBB Step 6 - Rank Props"              $CBBDir ".\scripts\pipeline\step6_rank_props_cbb.py"                       "--input step5b_cbb.csv --output step6_ranked_cbb.xlsx" }
     return $ok
-} -ArgumentList $CBBDir, $SkipFetch
+} -ArgumentList $CBBDir, $SkipFetch, $CBBPipelineDeactivated
 
 # -- NHL Job ------------------------------------------------------------------
 $NHLJob = Start-Job -ScriptBlock {
@@ -678,7 +699,7 @@ foreach ($job in $allJobs) { $out = Receive-Job $job -ErrorAction SilentlyContin
 
 # -- Results ------------------------------------------------------------------
 $NBASuccess    = Test-Path (Join-Path $NBADir    "data\outputs\step8_all_direction_clean.xlsx")
-$CBBSuccess    = Test-Path (Join-Path $CBBDir    "step6_ranked_cbb.xlsx")
+$CBBSuccess    = if ($CBBPipelineDeactivated) { $true } else { Test-Path (Join-Path $CBBDir "step6_ranked_cbb.xlsx") }
 $NHLSuccess    = Test-Path (Join-Path $NHLDir    "outputs\step8_nhl_direction_clean.xlsx")
 $SoccerSuccess = Test-Path (Join-Path $SoccerDir "outputs\step8_soccer_direction_clean.xlsx")
 $TennisSuccess = Test-Path (Join-Path $TennisDir "outputs\step8_tennis_direction_clean.xlsx")
@@ -694,8 +715,13 @@ Write-Host ""
     @{ Name="Soccer"; Ok=$SoccerSuccess },
     @{ Name="Tennis"; Ok=$TennisSuccess }
 ) | ForEach-Object {
-    if ($_.Ok) { Write-Host "  $($_.Name) complete." -ForegroundColor Green }
-    else        { Write-Host "  $($_.Name) FAILED."  -ForegroundColor Red   }
+    if ($_.Name -eq "CBB" -and $CBBPipelineDeactivated) {
+        Write-Host "  CBB skipped (season deactivated)." -ForegroundColor DarkGray
+    } elseif ($_.Ok) {
+        Write-Host "  $($_.Name) complete." -ForegroundColor Green
+    } else {
+        Write-Host "  $($_.Name) FAILED."  -ForegroundColor Red
+    }
 }
 
 Run-Combined "full parallel run"
