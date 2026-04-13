@@ -9039,15 +9039,17 @@ def render_tickets_body_html(
                         sweep_x = _slip_display_payout_multiplier(payout, ticket, group)
                     if pay_x is None:
                         pay_x = sweep_x
-                    tt_pay_hdr = str(payout.get("ticket_type") or "").lower()
-                    if tt_pay_hdr == "power":
-                        payout_badge_label = f"Min {_fmt(pay_x, 2)}x | Sweep {_fmt(sweep_x, 2)}x"
-                    else:
-                        payout_badge_label = f"{_fmt(pay_x, 2)}x"
+                    payout_badge_label = f"{_fmt(pay_x, 2)}x"
+                    pay_tt = str(payout.get("ticket_type") or "").lower()
+                    payout_badge_title = (
+                        f' title="Min guarantee {_fmt(pay_x, 2)}x · Sweep {_fmt(sweep_x, 2)}x"'
+                        if pay_tt == "power"
+                        else ""
+                    )
                     hdr_brackets = f'''
         <span class="ticket-hdr-bracket">[{_h(group_name)}]</span>
         <span class="payout-rec-badge {ev_cls}">[{_h(pre)} {_h(rec_s)} — EV {_fmt(ev_emp_f, 2)}]</span>
-        <span class="payout-x-badge">[{_h(payout_badge_label)}]</span>
+        <span class="payout-x-badge"{payout_badge_title}>[{_h(payout_badge_label)}]</span>
         <span class="{sig_cls}" title="Modeled EV tier (Power × win prob)">{sig_lbl}</span>'''
             if not hdr_brackets:
                 hdr_brackets = (
@@ -9247,16 +9249,11 @@ def render_tickets_body_html(
                 pre_ev = _payout_rec_prefix(rec_s2)
                 tt_pay = str(payout.get("ticket_type") or "").lower()
                 if tt_pay == "power":
-                    min_lbl = f"{int(n_legs) - 1} correct" if int(n_legs) > 2 else "2 correct"
                     payout_section = f'''
       <div class="ticket-payout">
         <div class="payout-row">
-          <span class="payout-label">1st Place (all correct)</span>
-          <span class="payout-value">{_fmt(sweep_mult, 2)}x</span>
-        </div>
-        <div class="payout-row">
-          <span class="payout-label">Min Guarantee ({_h(min_lbl)})</span>
-          <span class="payout-value">{_fmt(pay_mult, 2)}x</span>
+          <span class="payout-label" title="Sweep payout (all correct): {_fmt(sweep_mult, 2)}x">Payout</span>
+          <span class="payout-value" title="Sweep payout (all correct): {_fmt(sweep_mult, 2)}x">{_fmt(pay_mult, 2)}x</span>
         </div>
         <div class="payout-row">
           <span class="payout-label">P(Win)</span>
@@ -9267,8 +9264,7 @@ def render_tickets_body_html(
           <span class="payout-value {ev_cls_row}">{_fmt(ev_disp, 2)} &mdash; {_h(pre_ev)} {_h(rec_s2)}</span>
         </div>
         <div class="payout-entry-guide">
-          $10 &rarr; ${_fmt(e10g, 2)} (guarantee)<br/>
-          $10 &rarr; ${_fmt(e10s, 2)} (sweep)
+          $10 &rarr; ${_fmt(e10g, 2)}
         </div>
       </div>'''
                 else:
