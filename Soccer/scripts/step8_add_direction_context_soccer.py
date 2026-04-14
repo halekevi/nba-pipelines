@@ -338,6 +338,7 @@ def main() -> None:
     abs_edge = edge.abs()
 
     pick_type = out.get("pick_type", "Standard").astype(str).apply(_norm_pick_type)
+    step7_dir = out.get("bet_direction", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
 
     # BUG FIX: edge >= 0 is False for NaN, which wrongly assigns UNDER to rows
     # with no projection. Use explicit NaN check.
@@ -354,9 +355,13 @@ def main() -> None:
         np.where(has_edge & (abs_edge < 0.03), "MODEL_TIEBREAK_DIFF<0.03", ""),
         index=out.index
     )
+    # Preserve step7 direction for Standard rows so valid Standard UNDERs survive into step8.
+    std_from_step7 = pick_type.eq("Standard") & step7_dir.isin(["OVER", "UNDER"])
+    final_dir = final_dir.where(~std_from_step7, step7_dir)
+    reason = reason.where(~std_from_step7, "STANDARD_PASS_THROUGH_STEP7")
 
     # Standard-only tie-break: when edge is effectively zero, use L5 side signal.
-    std_mask = pick_type.eq("Standard")
+    std_mask = pick_type.eq("Standard") & ~std_from_step7
     tie_mask = std_mask & has_edge & (abs_edge < 0.03)
     if tie_mask.any():
         l5_over = pd.to_numeric(out.get("last5_over", np.nan), errors="coerce")
@@ -395,6 +400,10 @@ def main() -> None:
     if force_over.any():
         final_dir = final_dir.where(~force_over, "OVER")
         reason = reason.where(~force_over, "STANDARD_L5AVG_OVER")
+
+    forced    = pick_type.isin(["Goblin", "Demon"])
+    final_dir = final_dir.where(~forced, "OVER")
+    reason    = reason.where(~forced, "FORCED_OVER_ONLY_GOB_DEM")
 
     out["final_bet_direction"] = final_dir
     out["final_dir_reason"]    = reason

@@ -245,9 +245,7 @@ def _norm_pick_type(x: str) -> str:
 
 
 def _forced_over_only(pick_type: str) -> int:
-    # Soccer directionality is now model-driven for all pick types.
-    # Keep column for downstream compatibility, but do not force OVER here.
-    return 0
+    return 1 if _norm_pick_type(pick_type) in ("Goblin", "Demon") else 0
 
 
 # ── Soccer prop weights ───────────────────────────────────────────────────────
