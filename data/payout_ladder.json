@@ -42,10 +42,11 @@
       "entry_type": "power",
       "n_legs": 6,
       "mix": {"goblin": 0, "standard": 6, "demon": 0},
-      "sweep_payout_x": 37.5,
-      "min_payout_x": 37.5,
+      "sweep_payout_x": 40.0,
+      "min_payout_x": 40.0,
       "source": "pp_published",
-      "confirmed_at": "2026-04-13"
+      "confirmed_at": "2026-04-14",
+      "notes": "Corrected from 37.5x to 40x to match PrizePicks 6-leg Standard Power (Apr 2026)."
     },
     {
       "entry_type": "flex",
