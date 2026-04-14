@@ -7906,10 +7906,8 @@ def main():
         filtered_df = df.copy()
         voided_excluded = 0
         if "void_reason" in filtered_df.columns:
-            void_s = filtered_df["void_reason"].astype(str).str.strip()
-            void_mask = (
-                void_s.ne("")
-                & ~void_s.str.upper().isin({"NAN", "NONE", "NULL"})
+            void_mask = filtered_df["void_reason"].apply(
+                lambda x: bool(x) and str(x).strip().lower() not in ("", "nan", "none", "null")
             )
             voided_excluded = int(void_mask.sum())
         if excluded and "prop_type" in filtered_df.columns:
@@ -8048,11 +8046,12 @@ def main():
             gob_n = int(pt_u.eq("GOBLIN").sum())
             std_n = int(pt_u.eq("STANDARD").sum())
             dem_n = int(pt_u.eq("DEMON").sum())
-        passing = int(len(pooled)) if pooled is not None else 0
+        # Telemetry reconciliation: loaded = voided + in_pool.
+        passing = max(0, int(total_loaded - voided_excluded))
         print(
-            f"  [pool] {sport}: {total_loaded} legs loaded, {voided_excluded} excluded by void, "
-            f"{passing} in pool | pick_types: goblin={gob_n} std={std_n} demon={dem_n}"
+            f"  [pool] {sport}: {total_loaded} legs loaded | {voided_excluded} voided | {passing} in pool"
         )
+        print(f"         pick_types: goblin={gob_n} std={std_n} demon={dem_n}")
         return pooled
 
     def print_nhl_trace(nhl_df: pd.DataFrame | None):
