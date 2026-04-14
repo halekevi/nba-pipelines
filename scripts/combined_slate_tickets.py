@@ -197,22 +197,17 @@ GOBLIN_FACTOR_MIN = 0.40
 DEMON_POWER_COEFF = 0.1782
 DEMON_POWER_EXP = 1.287
 SWEEP_PAYOUT = {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 40.0}
-# Power-style min guarantees by composition.
-# Sweep remains standard SWEEP_PAYOUT for all-correct; guarantees are n-1 partial tiers.
-GOBLIN_MIN_GUARANTEE: dict[int, float] = {
-    2: 1.4,
-    3: 1.6,
-    4: 2.0,
-    5: 2.5,
-    6: 3.0,
-}
-STANDARD_MIN_GUARANTEE: dict[int, float] = {
-    2: 0.0,
+# Power-style min guarantees (all-standard baseline) and goblin distance factors.
+POWER_MIN_GUARANTEE_STANDARD: dict[int, float] = {
+    2: 3.0,
     3: 1.6,
     4: 2.5,
-    5: 2.0,
-    6: 3.0,
+    5: 8.5,
+    6: 40.0,
 }
+GOBLIN_MIN_FACTOR_INTERCEPT = 1.0
+GOBLIN_MIN_FACTOR_SLOPE = 0.074
+GOBLIN_MIN_FACTOR_FLOOR = 0.30
 # Runtime toggle wired from CLI (--debug-payout).
 PAYOUT_DEBUG: bool = False
 PAYOUT_LADDER_PATH = os.path.join(REPO_ROOT, "data", "payout_ladder.json")
@@ -415,26 +410,56 @@ def compute_flex_normalized_adjustment(legs: list) -> float:
     return round(float(adjustment), 4)
 
 
+def goblin_min_factor(dist: float) -> float:
+    try:
+        d = abs(float(dist or 0.0))
+        if not math.isfinite(d):
+            d = 0.0
+    except (TypeError, ValueError):
+        d = 0.0
+    return max(
+        float(GOBLIN_MIN_FACTOR_FLOOR),
+        float(GOBLIN_MIN_FACTOR_INTERCEPT) - float(GOBLIN_MIN_FACTOR_SLOPE) * d,
+    )
+
+
 def _compute_power_min_guarantee(legs: list, n_legs: int) -> tuple[float, int]:
     """
-    Power-play min guarantee by goblin composition.
+    Power-play min guarantee by all-standard base × per-leg distance adjustments.
     Sweep payout remains SWEEP_PAYOUT[n] regardless of goblin/demon distance.
     """
     n = int(n_legs)
+    base = float(POWER_MIN_GUARANTEE_STANDARD.get(n, 1.6))
     g_count = sum(
         1
         for leg in (legs or [])
         if str(leg.get("pick_type", "standard")).strip().lower() == "goblin"
     )
-    std_g = float(STANDARD_MIN_GUARANTEE.get(n, 0.0))
-    gob_g = float(GOBLIN_MIN_GUARANTEE.get(n, 1.6))
-    if g_count <= 0:
-        return round(std_g, 4), g_count
-    if g_count >= n:
-        return round(gob_g, 4), g_count
-    ratio = float(g_count) / max(1.0, float(n))
-    mg = std_g + ratio * (gob_g - std_g)
-    return round(float(mg), 4), g_count
+    adj = 1.0
+    for leg in legs or []:
+        pt = str(leg.get("pick_type", "") or "").strip().lower()
+        try:
+            dist = abs(float(leg.get("line_distance", 0.0) or 0.0))
+            if not math.isfinite(dist):
+                dist = 0.0
+        except (TypeError, ValueError):
+            dist = 0.0
+        if pt == "goblin":
+            f = float(goblin_min_factor(dist))
+            if PAYOUT_DEBUG:
+                print(f"[PAYOUT] goblin dist={dist:.1f} factor={f:.3f}")
+            adj *= f
+        elif pt == "demon":
+            raw = DEMON_POWER_COEFF * (dist ** DEMON_POWER_EXP)
+            f = min(3.0, max(1.0, raw))
+            if PAYOUT_DEBUG:
+                print(f"[PAYOUT] demon dist={dist:.1f} factor={f:.3f}")
+            adj *= f
+    mg = round(float(base * adj), 2)
+    if PAYOUT_DEBUG:
+        print(f"[PAYOUT] total_adj={adj:.3f}")
+        print(f"[PAYOUT] min_guarantee={mg:.2f}")
+    return mg, g_count
 
 
 def compute_ticket_ev(
@@ -521,13 +546,16 @@ def compute_ticket_ev(
         }
         if any(s in {"ml_prob", "fallback_const"} for s in hsrcs):
             payout_source = "fallback"
-    ev = (p_all * adjusted_first) + (p_miss_1 * adjusted_min_g) - p_lose
+    if tt == "power":
+        ev = (p_all * adjusted_min_g) - 1.0
+    else:
+        ev = (p_all * adjusted_first) + (p_miss_1 * adjusted_min_g) - p_lose
     min_payout_x = float(adjusted_min_g)
     sweep_payout_x = float(adjusted_first)
     ev_formula = (
         f"EV = P(all)*{sweep_payout_x:.2f} + P(miss-1)*{min_payout_x:.2f} - 1.0"
         if tt == "flex"
-        else f"EV = P(all)*{sweep_payout_x:.2f} - (1 - P(all))"
+        else f"EV = P(all)*{min_payout_x:.2f} - 1.0"
     )
 
     return {
