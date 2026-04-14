@@ -510,6 +510,16 @@ def compute_ticket_ev(
                 print(f"[PAYOUT DEBUG] total_adj={adj} sweep={adjusted_first} min_guarantee={adjusted_min_g}")
                 print(f"[PAYOUT] min_guarantee={adjusted_min_g}")
 
+    # 6-leg all-Standard Power: published board is 40× min guarantee and 40× sweep.
+    # `payout_ladder.json` may still carry an older 37.5× row; ladder "exact" must not win here.
+    if tt == "power" and n == 6:
+        mix6 = _mix_signature_from_legs(legs)
+        if int(mix6.get("goblin", 0)) == 0 and int(mix6.get("demon", 0)) == 0:
+            if payout_source == "exact":
+                payout_source = "calibrated"
+            adjusted_first = float(SWEEP_PAYOUT.get(6, 40.0))
+            adjusted_min_g = float(POWER_MIN_GUARANTEE_STANDARD.get(6, 40.0))
+
     bounds = KNOWN_SWEEP_BOUNDS.get((n, tt))
     if bounds:
         lo, hi = float(bounds[0]), float(bounds[1])
