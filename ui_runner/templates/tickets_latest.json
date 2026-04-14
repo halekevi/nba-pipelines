@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-14 21:44:45 UTC",
+  "generated_at": "2026-04-14 22:29:10 UTC",
   "date": "2026-04-14",
   "filters": {
     "tiers": "A,B,C,D",
@@ -7335,23 +7335,23 @@
           ],
           "payout": {
             "ticket_type": "power",
-            "payout": 37.5,
-            "min_guarantee": 37.5,
-            "min_payout_x": 37.5,
+            "payout": 40.0,
+            "min_guarantee": 40.0,
+            "min_payout_x": 40.0,
             "min_guarantee_adjustment": 1.0,
             "payout_adjustment": 1.0,
             "p_all_win": 0.6148,
             "p_miss_1": 0.3322,
-            "ev": 22.0543,
+            "ev": 23.5913,
             "recommendation": "STRONG",
-            "entry_10_to_win_guarantee": 375.0,
-            "entry_20_to_win_guarantee": 750.0,
-            "sweep_payout": 37.5,
-            "sweep_payout_x": 37.5,
-            "entry_10_to_win_sweep": 375.0,
-            "payout_confidence_score": 23.055,
-            "payout_source": "exact",
-            "ev_formula": "EV = P(all)*37.50 - 1.0"
+            "entry_10_to_win_guarantee": 400.0,
+            "entry_20_to_win_guarantee": 800.0,
+            "sweep_payout": 40.0,
+            "sweep_payout_x": 40.0,
+            "entry_10_to_win_sweep": 400.0,
+            "payout_confidence_score": 24.592,
+            "payout_source": "calibrated",
+            "ev_formula": "EV = P(all)*40.00 - 1.0"
           }
         }
       ]
@@ -9157,23 +9157,23 @@
           ],
           "payout": {
             "ticket_type": "power",
-            "payout": 37.5,
-            "min_guarantee": 37.5,
-            "min_payout_x": 37.5,
+            "payout": 40.0,
+            "min_guarantee": 40.0,
+            "min_payout_x": 40.0,
             "min_guarantee_adjustment": 1.0,
             "payout_adjustment": 1.0,
             "p_all_win": 0.4484,
             "p_miss_1": 0.4088,
-            "ev": 15.8133,
+            "ev": 16.9342,
             "recommendation": "STRONG",
-            "entry_10_to_win_guarantee": 375.0,
-            "entry_20_to_win_guarantee": 750.0,
-            "sweep_payout": 37.5,
-            "sweep_payout_x": 37.5,
-            "entry_10_to_win_sweep": 375.0,
-            "payout_confidence_score": 16.815,
-            "payout_source": "exact",
-            "ev_formula": "EV = P(all)*37.50 - 1.0"
+            "entry_10_to_win_guarantee": 400.0,
+            "entry_20_to_win_guarantee": 800.0,
+            "sweep_payout": 40.0,
+            "sweep_payout_x": 40.0,
+            "entry_10_to_win_sweep": 400.0,
+            "payout_confidence_score": 17.936,
+            "payout_source": "calibrated",
+            "ev_formula": "EV = P(all)*40.00 - 1.0"
           }
         }
       ]
