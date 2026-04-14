@@ -9153,7 +9153,7 @@ def _tickets_generator_filter_html(filters: dict) -> str:
   &nbsp;&nbsp;<a href="/tickets_latest.json" style="color:var(--cyan);">⬇ JSON</a>
 </div>
 <div class="filter-pill" style="margin-top:-12px;">
-  Slip tags use modeled <strong>EV</strong> (Power payout &times; win prob): <strong>STRONG</strong> &ge;1.40&times;, <strong>LEAN</strong> 1.15&ndash;1.40&times;, <strong>RISKY</strong> &lt;1.15&times;.
+  Slip tags use empirical <strong>EV</strong> when payout data exists (fallback to modeled EV): <strong>STRONG</strong> &ge;1.50&times;, <strong>OK</strong> 1.15&ndash;1.50&times;, <strong>MARGINAL</strong> 0.80&ndash;1.15&times;.
   Tap a player row to expand the L5 / L10 hit timeline when counts exist in JSON.
 </div>'''
 
@@ -9290,24 +9290,17 @@ def render_tickets_body_html(
             has_warn = ticket.get("has_data_warning", False)
             legs = ticket.get("legs") or []
 
-            # Signal badge
+            ev_f = None
             if ev is not None:
                 try:
                     ev_f = float(ev)
-                    if ev_f >= 1.40:
-                        sig_cls, sig_lbl = "sig-strong", "STRONG"
-                    elif ev_f >= 1.15:
-                        sig_cls, sig_lbl = "sig-lean", "LEAN"
-                    else:
-                        sig_cls, sig_lbl = "sig-risk", "RISKY"
                 except (TypeError, ValueError):
-                    sig_cls, sig_lbl = "sig-lean", "—"
-            else:
-                sig_cls, sig_lbl = "sig-lean", "—"
+                    ev_f = None
 
             payout = ticket.get("payout")
             hdr_brackets = ""
             payout_ok = False
+            ev_emp_f = None
             if isinstance(payout, dict) and payout.get("ev") is not None:
                 try:
                     ev_emp_f = float(payout["ev"])
@@ -9315,34 +9308,49 @@ def render_tickets_body_html(
                 except (TypeError, ValueError):
                     ev_emp_f = None
                     payout_ok = False
-                if payout_ok:
-                    rec_s = str(payout.get("recommendation") or "")
-                    ev_cls = _payout_ev_class(rec_s)
-                    pre = _payout_rec_prefix(rec_s)
-                    pay_x = payout.get("min_payout_x")
-                    sweep_x = payout.get("sweep_payout_x")
-                    psrc = str(payout.get("payout_source") or "calibrated")
-                    if pay_x is None:
-                        pay_x = payout.get("min_guarantee")
-                    if sweep_x is None:
-                        sweep_x = payout.get("sweep_payout")
-                    if sweep_x is None:
-                        sweep_x = _slip_display_payout_multiplier(payout, ticket, group)
-                    if pay_x is None:
-                        pay_x = sweep_x
-                    pay_tt = str(payout.get("ticket_type") or "").lower()
-                    payout_badge_label = f"Min {_fmt(pay_x, 2)}x · Sweep {_fmt(sweep_x, 2)}x"
-                    payout_badge_title = (
-                        f' title="Min guarantee {_fmt(pay_x, 2)}x · Sweep {_fmt(sweep_x, 2)}x"'
-                        if pay_tt == "power"
-                        else ""
-                    )
-                    hdr_brackets = f'''
+            ev_for_badge = ev_emp_f if payout_ok else ev_f
+            if ev_for_badge is not None and math.isfinite(ev_for_badge):
+                if ev_for_badge >= 1.50:
+                    sig_cls, sig_lbl = "sig-strong", "STRONG"
+                elif ev_for_badge >= 1.15:
+                    sig_cls, sig_lbl = "sig-lean", "OK"
+                elif ev_for_badge >= 0.80:
+                    sig_cls, sig_lbl = "sig-risk", "MARGINAL"
+                else:
+                    sig_cls, sig_lbl = "sig-risk", "LOW"
+            else:
+                sig_cls, sig_lbl = "sig-lean", "—"
+            display_ev = ev_emp_f if payout_ok else ev_f
+            if display_ev is None:
+                display_ev = 0.0
+            if payout_ok:
+                rec_s = str(payout.get("recommendation") or "")
+                ev_cls = _payout_ev_class(rec_s)
+                pre = _payout_rec_prefix(rec_s)
+                pay_x = payout.get("min_payout_x")
+                sweep_x = payout.get("sweep_payout_x")
+                psrc = str(payout.get("payout_source") or "calibrated")
+                if pay_x is None:
+                    pay_x = payout.get("min_guarantee")
+                if sweep_x is None:
+                    sweep_x = payout.get("sweep_payout")
+                if sweep_x is None:
+                    sweep_x = _slip_display_payout_multiplier(payout, ticket, group)
+                if pay_x is None:
+                    pay_x = sweep_x
+                pay_tt = str(payout.get("ticket_type") or "").lower()
+                payout_badge_label = f"Min {_fmt(pay_x, 2)}x · Sweep {_fmt(sweep_x, 2)}x"
+                payout_badge_title = (
+                    f' title="Min guarantee {_fmt(pay_x, 2)}x · Sweep {_fmt(sweep_x, 2)}x"'
+                    if pay_tt == "power"
+                    else ""
+                )
+                hdr_brackets = f'''
         <span class="ticket-hdr-bracket">[{_h(group_name)}]</span>
         <span class="payout-rec-badge {ev_cls}">[{_h(pre)} {_h(rec_s)} — EV {_fmt(ev_emp_f, 2)}]</span>
         <span class="payout-x-badge"{payout_badge_title}>[{_h(payout_badge_label)}]</span>
         {_payout_source_badge_html(psrc)}
-        <span class="{sig_cls}" title="Modeled EV tier (Power × win prob)">{sig_lbl}</span>'''
+        <span class="{sig_cls}" title="Empirical EV tier (fallback to modeled EV when payout block is missing)">{sig_lbl}</span>'''
             if not hdr_brackets:
                 hdr_brackets = (
                     f'<span class="ticket-hdr-bracket">[{_h(group_name)}]</span>'
@@ -9387,7 +9395,7 @@ def render_tickets_body_html(
         </div>
         <div class="kpi">
           <div class="kpi-label">EV</div>
-          <div class="kpi-val" style="color:var(--accent);" title="{_h(str((payout or {}).get('ev_formula') or 'EV = P(all)*sweep + P(miss-1)*min - 1.0'))}">{_fmt(ev, 2)}×</div>
+          <div class="kpi-val" style="color:var(--accent);" title="{_h(str((payout or {}).get('ev_formula') or 'EV = P(all)*sweep + P(miss-1)*min - 1.0'))}">{_fmt(display_ev, 2)}×</div>
         </div>
         <div class="kpi">
           <div class="kpi-label">MIN PAYOUT</div>
@@ -9552,11 +9560,16 @@ def render_tickets_body_html(
                 pre_ev = _payout_rec_prefix(rec_s2)
                 tt_pay = str(payout.get("ticket_type") or "").lower()
                 if tt_pay == "power":
+                    try:
+                        power_min_mult = float(payout.get("min_payout_x", 1.0))
+                    except (TypeError, ValueError):
+                        power_min_mult = 1.0
+                    e10g = round(10 * power_min_mult, 2)
                     payout_section = f'''
       <div class="ticket-payout">
         <div class="payout-row">
           <span class="payout-label" title="Sweep payout (all correct): {_fmt(sweep_mult, 2)}x">Payout</span>
-          <span class="payout-value" title="Sweep payout (all correct): {_fmt(sweep_mult, 2)}x">{_fmt(pay_mult, 2)}x</span>
+          <span class="payout-value" title="Sweep payout (all correct): {_fmt(sweep_mult, 2)}x">{_fmt(power_min_mult, 2)}x</span>
           {_payout_source_badge_html(psrc2)}
         </div>
         <div class="payout-row">
