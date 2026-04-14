@@ -1032,12 +1032,14 @@ CBB_EXCLUDED_PROPS = {
     "points (combo)",
 }
 
-NHL_EXCLUDED_PROPS = {
-    "shots on goal",    # 23.7% hit rate — worst NHL prop
-    "goals",            # 36.1% overall
-    "assists",          # 36.8% overall
-    "plus/minus",       # 39.9% overall
-}
+# MLB: graded slate (Apr 13) — very low signal / high variance for ticket pool.
+MLB_EXCLUDED_PROPS = frozenset({"home_runs", "stolen_bases"})
+
+# NHL: Apr 13 graded slate — SOG OVER only (UNDER retained); faceoffs_won both directions.
+# Legacy exclusions kept from prior calibration (goals / assists / plus-minus).
+NHL_EXCLUDED_PROPS_SOG_OVER_ONLY = frozenset({"shots_on_goal"})
+NHL_EXCLUDED_PROPS_ALL_DIRS = frozenset({"faceoffs_won"})
+NHL_POOL_EXCLUDE_LEGACY = frozenset({"goals", "assists", "plus/minus"})
 
 SOCCER_EXCLUDED_PROPS = {
     "passes attempted",  # 0% hit rate
@@ -1062,6 +1064,39 @@ def _norm_prop_label(v: object) -> str:
     s = str(v or "").strip().lower()
     s = re.sub(r"\s+", " ", s)
     return s
+
+
+def _pool_prop_snake(pt: object) -> str:
+    """Normalize prop_type for pool exclusion keys (e.g. 'Home Runs' -> 'home_runs')."""
+    return _norm_prop_label(pt).replace(" ", "_")
+
+
+def _mlb_ticket_pool_exclusion_mask(df: pd.DataFrame) -> tuple[pd.Series, int]:
+    if not {"sport", "prop_type"}.issubset(df.columns):
+        return pd.Series(False, index=df.index), 0
+    sp = df["sport"].astype(str).str.upper().str.strip()
+    ps = df["prop_type"].apply(_pool_prop_snake)
+    m = sp.eq("MLB") & ps.isin(MLB_EXCLUDED_PROPS)
+    return m, int(m.sum())
+
+
+def _nhl_ticket_pool_exclusion_mask(df: pd.DataFrame) -> tuple[pd.Series, int, int, int]:
+    """Mask rows to drop from NHL (or combined) ticket pools; counts by rule bucket."""
+    if not {"sport", "prop_type"}.issubset(df.columns):
+        z = pd.Series(False, index=df.index)
+        return z, 0, 0, 0
+    sp = df["sport"].astype(str).str.upper().str.strip()
+    ps = df["prop_type"].apply(_pool_prop_snake)
+    nhl = sp.eq("NHL")
+    if "direction" in df.columns:
+        dir_u = df["direction"].astype(str).str.upper().str.strip()
+    else:
+        dir_u = pd.Series("", index=df.index)
+    m_sog = nhl & ps.isin(NHL_EXCLUDED_PROPS_SOG_OVER_ONLY) & dir_u.eq("OVER")
+    m_fc = nhl & ps.isin(NHL_EXCLUDED_PROPS_ALL_DIRS)
+    m_leg = nhl & ps.isin(NHL_POOL_EXCLUDE_LEGACY)
+    m_all = m_sog | m_fc | m_leg
+    return m_all, int(m_sog.sum()), int(m_fc.sum()), int(m_leg.sum())
 
 
 def _is_attempt_prop_series(prop_s: pd.Series) -> pd.Series:
@@ -7996,12 +8031,11 @@ def main():
             excluded = NBA_EXCLUDED_PROPS
         elif sport == "CBB":
             excluded = CBB_EXCLUDED_PROPS
-        elif sport == "NHL":
-            excluded = NHL_EXCLUDED_PROPS
         elif sport == "SOCCER":
             excluded = SOCCER_EXCLUDED_PROPS
         elif sport == "TENNIS":
             excluded = set()
+        # NHL + MLB: row-wise low-signal exclusions (see _mlb/_nhl_ticket_pool_exclusion_mask).
 
         filtered_df = df.copy()
         voided_excluded = 0
@@ -8017,6 +8051,25 @@ def main():
             filtered_df = filtered_df[
                 ~filtered_df["prop_type"].astype(str).str.lower().isin(excluded)
             ]
+
+        mlb_ex_n = 0
+        nhl_sog_ex_n = nhl_fc_ex_n = nhl_leg_ex_n = 0
+        if {"sport", "prop_type"}.issubset(filtered_df.columns):
+            m_mlb, mlb_ex_n = _mlb_ticket_pool_exclusion_mask(filtered_df)
+            m_nhl, nhl_sog_ex_n, nhl_fc_ex_n, nhl_leg_ex_n = _nhl_ticket_pool_exclusion_mask(filtered_df)
+            filtered_df = filtered_df[~(m_mlb | m_nhl)].copy()
+        if mlb_ex_n:
+            print(f"  [pool] Excluded {mlb_ex_n} MLB legs (home_runs/stolen_bases)")
+        nhl_apr13_n = int(nhl_sog_ex_n + nhl_fc_ex_n)
+        if nhl_apr13_n:
+            print(
+                f"  [pool] Excluded {nhl_apr13_n} NHL legs "
+                f"(shots_on_goal OVER: {nhl_sog_ex_n}, faceoffs_won: {nhl_fc_ex_n})"
+            )
+        if nhl_leg_ex_n:
+            print(
+                f"  [pool] Excluded {nhl_leg_ex_n} NHL legs (goals/assists/plus-minus)"
+            )
 
         # Direction-aware defense tier bonus/penalty before threshold checks.
         # Research-calibrated behavior:
@@ -8073,12 +8126,6 @@ def main():
         # min_hit_rate (0.65+) applies while hit_rate is rank/blended proxy as low as ~0.50 — pool collapses.
         elif pt is None and sport == "TENNIS":
             effective_min_hit = min(float(args.min_hit_rate), 0.50)
-
-        # Direction filter: NHL OVER props are only 21.5% — exclude from NHL pools.
-        if sport == "NHL" and "direction" in filtered_df.columns:
-            filtered_df = filtered_df[
-                filtered_df["direction"].astype(str).str.upper() != "OVER"
-            ]
 
         # Soccer OVER legs require stronger edge support; keep UNDER legs unchanged.
         if sport == "SOCCER" and "direction" in filtered_df.columns:
@@ -8212,31 +8259,17 @@ def main():
             t_tier = t_tier[tier_ok].copy()
         print(f"  [NHL GATE TRACE] After tier filter:         {len(t_tier)}")
 
-        # Direction filter
-        t_dir = t_tier.copy()
-        removed_dir = pd.DataFrame()
-        if "direction" in t_dir.columns:
-            d = t_dir["direction"].astype(str).str.upper().str.strip()
-            keep_mask = d.ne("OVER")
-            removed_dir = t_dir[~keep_mask].copy()
-            t_dir = t_dir[keep_mask].copy()
-        print(f"  [NHL GATE TRACE] After direction filter:    {len(t_dir)}")
-        if not removed_dir.empty:
-            cols = [c for c in ("prop_type", "direction") if c in removed_dir.columns]
-            if cols:
-                print("  [NHL GATE TRACE] Direction-cut legs (tier-pass -> direction-fail):")
-                for _, rr in removed_dir[cols].drop_duplicates().sort_values(cols).iterrows():
-                    ptxt = str(rr.get("prop_type", "")).strip()
-                    dtxt = str(rr.get("direction", "")).strip().upper()
-                    print(f"    - {ptxt} | {dtxt}")
-
-        # Prop exclusion (NHL excluded props)
-        t_prop = t_dir.copy()
-        if "prop_type" in t_prop.columns:
-            t_prop = t_prop[
-                ~t_prop["prop_type"].astype(str).str.lower().isin(NHL_EXCLUDED_PROPS)
-            ].copy()
-        print(f"  [NHL GATE TRACE] After prop exclusion:      {len(t_prop)}")
+        # Low-signal prop exclusions (mirror pool(): SOG OVER, faceoffs all dirs, legacy props)
+        t_prop = t_tier.copy()
+        if {"sport", "prop_type"}.issubset(t_prop.columns):
+            m_nhl, n_sog, n_fc, n_leg = _nhl_ticket_pool_exclusion_mask(t_prop)
+            t_prop = t_prop[~m_nhl].copy()
+            print(
+                f"  [NHL GATE TRACE] After low-signal prop filter: {len(t_prop)} "
+                f"(shots_on_goal OVER={n_sog}, faceoffs_won={n_fc}, legacy={n_leg})"
+            )
+        else:
+            print(f"  [NHL GATE TRACE] After low-signal prop filter: {len(t_prop)}")
 
         # Global pool min_hit_rate (before NHL cap override)
         t_global_hr = t_prop.copy()
