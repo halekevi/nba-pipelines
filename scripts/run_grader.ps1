@@ -591,8 +591,7 @@ else {
 # =============================
 if (Test-Path $BackfillGradedPropsJsonScript) {
     Run-Py "Build graded props JSON" $Root $BackfillGradedPropsJsonScript @(
-        "--date", $Date,
-        "--out", $TemplatesDir
+        "--date", $Date
     )
 }
 else {

@@ -332,6 +332,27 @@ PROP_PRIORS = {
 
 # ── SOCCER GRADING ENGINE ─────────────────────────────────────────────────────
 
+
+def soccer_signed_margin(actual, line, direction: str) -> float:
+    """
+    Favorable margin is positive (aligned with slate_grader.grade / NHL grader).
+    OVER: actual - line; UNDER: line - actual. NaN when inputs unusable.
+    """
+    act = pd.to_numeric(actual, errors="coerce")
+    ln = pd.to_numeric(line, errors="coerce")
+    if pd.isna(act) or pd.isna(ln):
+        return np.nan
+    actual_f = float(act)
+    line_f = float(ln)
+    buffer = 0.05
+    if abs(actual_f - line_f) <= buffer:
+        return 0.0
+    d = str(direction or "OVER").upper().strip()
+    if d == "OVER":
+        return round(actual_f - line_f, 2)
+    return round(line_f - actual_f, 2)
+
+
 class SoccerGrader:
     """Advanced soccer prop grader with league & position awareness."""
     
@@ -690,7 +711,9 @@ def main() -> None:
         confidence = grader.compute_confidence_score(
             result, edge if not pd.isna(edge) else 0, tier, opp_analysis
         )
-        
+
+        margin = soccer_signed_margin(actual, line, direction)
+
         graded.append({
             "player": player,
             "league": league,
@@ -699,6 +722,7 @@ def main() -> None:
             "prop_type": prop_type,
             "line": line,
             "actual": actual,
+            "margin": margin,
             "direction": direction,
             "tier": tier,
             "result": result,

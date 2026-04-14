@@ -114,14 +114,38 @@ def read_sheet(ws) -> list[dict]:
             out.append(dict(zip(headers, row)))
     return out
 
+
+def _sheet_header_has_margin(ws) -> bool:
+    row0 = next(ws.iter_rows(min_row=1, max_row=1, values_only=True), None)
+    if not row0:
+        return False
+    return any(str(c or "").strip().lower() == "margin" for c in row0)
+
+
 def load_graded(path: Path) -> list[dict]:
-    """Load all rows from all sheets of a graded xlsx, normalizing column names."""
+    """
+    Load graded workbook rows for Prop Evaluation / HTML.
+
+    When **Box Raw** exists and includes a **margin** column (NBA/MLB slate_grader
+    layout), load only that sheet so per-prop margin and actuals are present.
+    Otherwise load every sheet (NHL/Soccer/simple workbooks).
+    """
     wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
     rows: list[dict] = []
-    for shname in wb.sheetnames:
-        ws = wb[shname]
-        rows.extend(read_sheet(ws))
-    wb.close()
+    try:
+        if "Box Raw" in wb.sheetnames and _sheet_header_has_margin(wb["Box Raw"]):
+            br_rows = read_sheet(wb["Box Raw"])
+            # Some dates have a margin-ready Box Raw header but no per-prop rows yet; fall back.
+            if len(br_rows) > 0:
+                rows = br_rows
+            else:
+                for shname in wb.sheetnames:
+                    rows.extend(read_sheet(wb[shname]))
+        else:
+            for shname in wb.sheetnames:
+                rows.extend(read_sheet(wb[shname]))
+    finally:
+        wb.close()
     # Normalize common column name variants
     normalized = []
     for r in rows:

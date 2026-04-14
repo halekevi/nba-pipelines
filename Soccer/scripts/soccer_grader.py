@@ -252,6 +252,22 @@ def grade_prop(actual: float | None, line: float,
     return result, f"actual={actual} {direction} line={line_f}"
 
 
+def soccer_signed_margin(actual, line, direction) -> float | None:
+    """Favorable margin positive: OVER → actual−line, UNDER → line−actual (aligned with slate_grader)."""
+    try:
+        if actual is None:
+            return None
+        a = float(actual)
+        l = float(line)
+        if abs(a - l) < 0.01:
+            return 0.0
+        if str(direction).upper() == "OVER":
+            return round(a - l, 2)
+        return round(l - a, 2)
+    except (TypeError, ValueError):
+        return None
+
+
 # ── Load slate ────────────────────────────────────────────────────────────────
 
 def load_slate(slate_path: Path) -> pd.DataFrame:
@@ -320,6 +336,8 @@ def run_grader(grade_date: str, slate_path: Path, db_path: Path,
         direction = str(row.get(dir_col, "") or "").strip().upper()
         espn_id   = str(row.get(espnid_col, "") or "").strip() if espnid_col else ""
         player    = str(row.get(player_col, "") or "").strip() if player_col else ""
+        actual_val = None
+        minutes_played = None
 
         # Check if prop is unsupported
         if prop_key in unsupported:
@@ -329,6 +347,7 @@ def run_grader(grade_date: str, slate_path: Path, db_path: Path,
         else:
             db_col = prop_to_db.get(prop_key)
             actual, minutes_played = get_actual_and_minutes(con, espn_id, player, db_col, grade_date)
+            actual_val = actual
             legacy_result, _ = grade_prop(actual, line, direction)
             if legacy_result == "HIT":
                 legacy_hit += 1
@@ -355,6 +374,8 @@ def run_grader(grade_date: str, slate_path: Path, db_path: Path,
         if result == "VOID":
             reason = refine_soccer_void_reason(prop_key, reason)
 
+        margin_v = soccer_signed_margin(actual_val, line, direction)
+
         # Tally
         if result == "HIT":   hit  += 1
         elif result == "MISS": miss += 1
@@ -368,6 +389,8 @@ def run_grader(grade_date: str, slate_path: Path, db_path: Path,
             "Opp":          row.get(opp_col, "")  if opp_col  else "",
             "Prop":         prop_type,
             "Line":         line,
+            "Actual":       "" if actual_val is None else actual_val,
+            "margin":       margin_v,
             "Direction":    direction,
             "Tier":         row.get(tier_col, "")  if tier_col  else "",
             "Rank Score":   row.get(score_col, "") if score_col else "",
