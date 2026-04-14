@@ -302,6 +302,17 @@ def norm_prop_key(p) -> str:
 def norm_player_key(p) -> str:
     return fold_player_name(p)
 
+
+# Columns used to build ``player|prop`` keys when joining slate rows to actuals.
+_PROP_RESOLVE_COLS: tuple[str, ...] = (
+    "prop_type_norm",
+    "stat_norm",
+    "prop_norm",
+    "prop_type",
+    "Prop",
+)
+
+
 def _alias_cols(df):
     for alias,canon in [('DEF_TIER','def_tier'),('minutes_tier','minutes_tier'),
                          ('shot_role','shot_role'),('usage_role','usage_role')]:
@@ -584,7 +595,7 @@ def _resolve_actual(act_map: dict[str, float], row) -> float:
     player = str(row.get("player", "") or "")
     p0 = norm_player_key(player)
     if p0:
-        for col in ("prop_type_norm", "stat_norm", "prop_norm", "prop_type", "Prop"):
+        for col in _PROP_RESOLVE_COLS:
             if col not in row.index:
                 continue
             cell = row.get(col)
@@ -594,6 +605,24 @@ def _resolve_actual(act_map: dict[str, float], row) -> float:
             a = act_map.get(nk, np.nan)
             if pd.notna(a):
                 return float(a)
+    return np.nan
+
+
+def _resolve_actual_for_player(act_map: dict[str, float], player_str: str, row) -> float:
+    """Resolve actual for one combo leg using the same prop columns as ``_resolve_actual``."""
+    p0 = norm_player_key(str(player_str or ""))
+    if not p0:
+        return np.nan
+    for col in _PROP_RESOLVE_COLS:
+        if col not in row.index:
+            continue
+        cell = row.get(col)
+        if cell is None or (isinstance(cell, float) and pd.isna(cell)):
+            continue
+        nk = f"{p0}|{norm_prop_key(str(cell))}"
+        a = act_map.get(nk, np.nan)
+        if pd.notna(a):
+            return float(a)
     return np.nan
 
 
@@ -645,12 +674,10 @@ def apply_actuals(df, actuals_path):
         if pd.isna(actual):
             parts = _split_combo_players(row.get("player", ""))
             if parts:
-                base_prop = norm_prop_key(str(row.get("prop_type_norm", "") or ""))
                 vals = []
                 ok = True
                 for p in parts:
-                    k2 = norm_player_key(p) + "|" + base_prop
-                    v = act_map.get(k2, np.nan)
+                    v = _resolve_actual_for_player(act_map, p, row)
                     if pd.isna(v):
                         ok = False
                         break
