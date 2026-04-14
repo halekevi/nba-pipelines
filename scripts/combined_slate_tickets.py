@@ -1353,9 +1353,11 @@ LEG_PROB_FLOOR = 0.35
 # Source-aware caps (ML > hit-rate > rank-score fallback)
 LEG_PROB_CAPS = {
     "ml_prob": 0.92,
+    "ml_prob_demon": 0.72,
     "rank_score": 0.72,
     "edge": 0.70,
     "hit_rate": 0.72,
+    "hit_rate_demon": 0.75,
     "fallback_const": 0.65,
 }
 TICKET_PROB_FLOOR = 1e-6
@@ -1873,6 +1875,49 @@ def get_edge_threshold(sport: str, prop_type: str, pick_type: str) -> float:
     return 0.0
 
 
+def _to_prob_0_1(v: Any) -> float | None:
+    p = pd.to_numeric(v, errors="coerce")
+    if pd.isna(p):
+        return None
+    pf = float(p)
+    if pf > 1.0 and pf <= 100.0:
+        pf = pf / 100.0
+    if 0.0 <= pf <= 1.0:
+        return pf
+    return None
+
+
+def _demon_passes_quality_gate(row: pd.Series | dict) -> bool:
+    getv = row.get if hasattr(row, "get") else (lambda _k, _d=None: _d)
+    hr = _to_prob_0_1(getv("hit_rate"))
+    if hr is None:
+        hr = _to_prob_0_1(getv("Hit Rate (5g)"))
+    ml = _to_prob_0_1(getv("ml_prob"))
+    if ml is None:
+        ml = _to_prob_0_1(getv("ML Prob"))
+    l5_over = pd.to_numeric(getv("l5_over", getv("L5 Over", 0)), errors="coerce")
+    l5_under = pd.to_numeric(getv("l5_under", getv("L5 Under", 0)), errors="coerce")
+    l5_sample = max(
+        0.0,
+        float(0.0 if pd.isna(l5_over) else l5_over),
+        float(0.0 if pd.isna(l5_under) else l5_under),
+    )
+    tier = str(getv("tier", getv("Tier", "D")) or "D").strip().upper()
+
+    if tier not in ("A", "B", "C"):
+        return False
+    has_sample = l5_sample >= 3.0
+    hr_val = float(hr) if hr is not None else 0.0
+    ml_val = float(ml) if ml is not None else 0.0
+    hr_strong = hr_val >= 0.70 and has_sample
+    ml_strong = ml_val >= 0.72
+    if not hr_strong and not ml_strong:
+        return False
+    if hr_val < 0.55 and ml_val < 0.65:
+        return False
+    return True
+
+
 def _resolve_leg_prob(row: pd.Series) -> tuple[float, str]:
     """
     Selection / est_win_prob leg probability.
@@ -1904,6 +1949,22 @@ def _resolve_leg_prob(row: pd.Series) -> tuple[float, str]:
         l5_s = row.get("l5_over")
     l5_sample = pd.to_numeric(l5_s, errors="coerce")
     l5_n = 0.0 if pd.isna(l5_sample) else float(l5_sample)
+    pick_type = str(row.get("pick_type", "") or "").strip().lower()
+    sport = str(row.get("sport", "") or "").strip().upper()
+
+    if "demon" in pick_type and sport in ("NHL", "SOCCER", "SOC"):
+        hr = _to_prob_0_1(hr_raw)
+        ml = _to_prob_0_1(row.get("ml_prob"))
+        has_sample = l5_n >= 3.0
+        hr_val = float(hr) if hr is not None else 0.0
+        ml_val = float(ml) if ml is not None else 0.0
+        hr_prob = min(0.75, hr_val)
+        ml_prob = min(0.75, ml_val)
+        if has_sample and hr_val >= 0.60:
+            demon_prob = min(hr_prob, max(ml_prob, 0.50))
+            return _clip_prob(demon_prob, "hit_rate_demon"), "hit_rate_demon"
+        demon_prob = min(ml_prob, 0.72)
+        return _clip_prob(demon_prob, "ml_prob_demon"), "ml_prob_demon"
 
     if hr_raw is not None and str(hr_raw).strip() != "" and l5_n >= 3.0:
         try:
@@ -7905,6 +7966,9 @@ def main():
 
         filtered_df = df.copy()
         voided_excluded = 0
+        demon_candidates = None
+        demon_passed = None
+        demon_example = None
         if "void_reason" in filtered_df.columns:
             void_mask = filtered_df["void_reason"].apply(
                 lambda x: bool(x) and str(x).strip().lower() not in ("", "nan", "none", "null")
@@ -8013,6 +8077,29 @@ def main():
             )
             filtered_df = filtered_df[~(_og & (_dd == "UNDER"))].copy()
 
+        # NHL/Soccer demon pool inclusion requires quality gate.
+        if sport in ("NHL", "SOCCER") and "pick_type" in filtered_df.columns:
+            _pt = filtered_df["pick_type"].astype(str).str.strip().str.upper()
+            _is_demon = _pt.eq("DEMON")
+            demon_candidates = int(_is_demon.sum())
+            if demon_candidates > 0:
+                _demon_pass = filtered_df.apply(_demon_passes_quality_gate, axis=1)
+                _keep = (~_is_demon) | (_is_demon & _demon_pass)
+                passed_rows = filtered_df[_is_demon & _demon_pass]
+                demon_passed = int(len(passed_rows))
+                if demon_passed > 0:
+                    _ex = passed_rows.iloc[0]
+                    demon_example = (
+                        f"player={str(_ex.get('player', '')).strip()} | "
+                        f"prop={str(_ex.get('prop_type', '')).strip()} | "
+                        f"line={_fmt(_ex.get('line'), 2)} | "
+                        f"hr={_fmt(_to_prob_0_1(_ex.get('hit_rate')), 2)} | "
+                        f"ml={_fmt(_to_prob_0_1(_ex.get('ml_prob')), 2)}"
+                    )
+                filtered_df = filtered_df[_keep].copy()
+            else:
+                demon_passed = 0
+
         # Tier floor: exclude Tier D from all pools
         effective_tiers = [t for t in (tiers if tiers else ["A", "B", "C", "D"]) if t != "D"]
         # NHL / Tennis: strict high-conviction often collapses default tiers to A,B — pool is too small; allow Tier C.
@@ -8027,9 +8114,14 @@ def main():
             effective_min_rank = max(args.min_rank or 0, CBB_GOBLIN_MIN_RANK)
 
         # Exclude Demon from all pools
-        effective_pick_types = pt if pt is not None else [
-            p for p in (pick_types if pick_types else ["Goblin", "Standard"]) if p != "Demon"
-        ]
+        if pt is not None:
+            effective_pick_types = pt
+        else:
+            effective_pick_types = list(pick_types if pick_types else ["Goblin", "Standard"])
+            if sport in ("NHL", "SOCCER") and "Demon" not in effective_pick_types:
+                effective_pick_types.append("Demon")
+            if sport not in ("NHL", "SOCCER"):
+                effective_pick_types = [p for p in effective_pick_types if p != "Demon"]
 
         pooled = filter_eligible(
             filtered_df,
@@ -8052,6 +8144,10 @@ def main():
             f"  [pool] {sport}: {total_loaded} legs loaded | {voided_excluded} voided | {passing} in pool"
         )
         print(f"         pick_types: goblin={gob_n} std={std_n} demon={dem_n}")
+        if sport in ("NHL", "SOCCER") and demon_candidates is not None and demon_passed is not None:
+            print(f"         demon gate: {demon_candidates} candidates -> {demon_passed} passed quality gate")
+            if demon_example:
+                print(f"         demon sample pass: {demon_example}")
         return pooled
 
     def print_nhl_trace(nhl_df: pd.DataFrame | None):
