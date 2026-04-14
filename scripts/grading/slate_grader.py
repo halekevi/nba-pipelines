@@ -533,6 +533,70 @@ def load_cbb(path: str) -> pd.DataFrame:
     df["player_key"] = df["player"].astype(str).apply(norm_player_key) + "|" + df["prop_type_norm"].apply(norm_prop_key)
     return df
 
+def _build_actuals_lookup(act: pd.DataFrame) -> dict[str, float]:
+    """Map ``norm_player|norm_prop`` -> actual, plus alias keys from PROP_NORM_MAP.
+
+    Period and full-game actuals CSVs use PrizePicks-style labels (``Points``,
+    ``3-PT Made``) while some slates use short codes (``pts``, ``fg3m``). Register
+    every alias that normalizes to the same canonical prop so rows are not voided
+    as ``NO_ACTUAL`` when the game was played and the stat exists under a variant
+    label.
+    """
+    out: dict[str, float] = {}
+    if act is None or len(act) == 0:
+        return out
+    if "player" not in act.columns or "actual" not in act.columns:
+        return out
+    prop_col = "prop_type" if "prop_type" in act.columns else ("Prop" if "Prop" in act.columns else None)
+    if not prop_col:
+        return out
+    for _, arow in act.iterrows():
+        val = pd.to_numeric(arow.get("actual"), errors="coerce")
+        if pd.isna(val):
+            continue
+        p0 = norm_player_key(str(arow.get("player", "") or ""))
+        if not p0:
+            continue
+        raw_prop = str(arow.get(prop_col, "") or "").strip()
+        if not raw_prop or raw_prop.lower() in ("nan", "none"):
+            continue
+        canon = norm_prop_key(raw_prop)
+        keys: set[str] = {f"{p0}|{canon}"}
+        for short, mapped in PROP_NORM_MAP.items():
+            ns = norm_prop_key(short)
+            nl = norm_prop_key(mapped)
+            if nl == canon or ns == canon:
+                keys.add(f"{p0}|{ns}")
+                keys.add(f"{p0}|{nl}")
+        for k in keys:
+            if not k.endswith("|") and "|" in k:
+                out[k] = float(val)
+    return out
+
+
+def _resolve_actual(act_map: dict[str, float], row) -> float:
+    """Primary player_key on row, then alternate stat columns, then combo sum."""
+    key = row.get("player_key", "")
+    if isinstance(key, str) and key.strip() and key.strip().lower() not in ("nan", "none"):
+        a = act_map.get(key, np.nan)
+        if pd.notna(a):
+            return float(a)
+    player = str(row.get("player", "") or "")
+    p0 = norm_player_key(player)
+    if p0:
+        for col in ("prop_type_norm", "stat_norm", "prop_norm", "prop_type", "Prop"):
+            if col not in row.index:
+                continue
+            cell = row.get(col)
+            if cell is None or (isinstance(cell, float) and pd.isna(cell)):
+                continue
+            nk = f"{p0}|{norm_prop_key(str(cell))}"
+            a = act_map.get(nk, np.nan)
+            if pd.notna(a):
+                return float(a)
+    return np.nan
+
+
 def _split_combo_players(player_str: str) -> list[str]:
     s = str(player_str)
     # common separators in PP combo names
@@ -545,15 +609,7 @@ def _split_combo_players(player_str: str) -> list[str]:
 
 def apply_actuals(df, actuals_path):
     act = pd.read_csv(actuals_path)
-    act["player_key"] = (
-        act["player"].astype(str).apply(norm_player_key)
-        + "|"
-        + act["prop_type"].fillna("").astype(str).apply(norm_prop_key)
-    )
-    act_map = {
-        str(k): v for k, v in zip(act["player_key"], act["actual"])
-        if k is not None and str(k).strip() not in ("", "nan", "none")
-    }
+    act_map = _build_actuals_lookup(act)
 
     df["player_key"] = (
         df["player"].astype(str).apply(norm_player_key)
@@ -562,7 +618,7 @@ def apply_actuals(df, actuals_path):
     )
 
     # Diagnostic: surface any slate prop types with zero actuals matches so mismatches are visible
-    act_props = {str(k).split("|", 1)[-1] for k in act_map}
+    act_props = {str(k).split("|", 1)[-1] for k in act_map.keys()}
     unmatched_props = set()
     for key in df["player_key"]:
         key = str(key) if key is not None else ""
@@ -583,7 +639,7 @@ def apply_actuals(df, actuals_path):
         key = row.get("player_key", "")
         if not isinstance(key, str) or key.strip() in ("", "nan", "none"):
             key = ""
-        actual = act_map.get(key, np.nan)
+        actual = _resolve_actual(act_map, row)
 
         # If this is a combo prop (Points (Combo), etc.), try to compute combined actual
         if pd.isna(actual):

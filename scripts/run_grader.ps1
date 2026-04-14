@@ -477,32 +477,52 @@ else {
     }
 }
 
-if ($NBA1HSlateFile -and (Test-Path $NBA1HSlateFile) -and (Test-Path $SlateGraderScript) -and ((Test-Path $NBA1HActuals) -or (Test-Path $NBAActuals))) {
-    $NBA1HActualsForGrade = if (Test-Path $NBA1HActuals) { $NBA1HActuals } else { $NBAActuals }
+# NBA 1H / 1Q must use period box scores. Do not fall back to full-game actuals_nba_*.csv
+# (wrong period totals + avoidable NO_ACTUAL voids). Auto-fetch period CSVs when missing.
+if (-not (Test-Path $DateDir)) {
+    New-Item -ItemType Directory -Path $DateDir -Force | Out-Null
+}
+if (Test-Path $FetchNBAPeriodActualsScript) {
+    if ($NBA1HSlateFile -and (Test-Path $NBA1HSlateFile) -and -not (Test-Path $NBA1HActuals)) {
+        Run-Py "Fetch NBA 1H Actuals (pre-grade, missing CSV)" $Root $FetchNBAPeriodActualsScript @(
+            "--date", $Date,
+            "--segment", "1H",
+            "--output", $NBA1HActuals
+        )
+    }
+    if ($NBA1QSlateFile -and (Test-Path $NBA1QSlateFile) -and -not (Test-Path $NBA1QActuals)) {
+        Run-Py "Fetch NBA 1Q Actuals (pre-grade, missing CSV)" $Root $FetchNBAPeriodActualsScript @(
+            "--date", $Date,
+            "--segment", "1Q",
+            "--output", $NBA1QActuals
+        )
+    }
+}
+
+if ($NBA1HSlateFile -and (Test-Path $NBA1HSlateFile) -and (Test-Path $SlateGraderScript) -and (Test-Path $NBA1HActuals)) {
     Run-Py "Grade NBA1H Slate" $Root $SlateGraderScript @(
         "--sport", "NBA",
         "--slate", $NBA1HSlateFile,
-        "--actuals", $NBA1HActualsForGrade,
+        "--actuals", $NBA1HActuals,
         "--output", $NBA1HGradedFile,
         "--date", $Date
     )
 }
 else {
-    Write-Host "Skipping NBA1H grading (missing slate/actuals/grader)." -ForegroundColor Yellow
+    Write-Host "Skipping NBA1H grading (missing slate, grader, or actuals_nba1h_$Date.csv after fetch attempt)." -ForegroundColor Yellow
 }
 
-if ($NBA1QSlateFile -and (Test-Path $NBA1QSlateFile) -and (Test-Path $SlateGraderScript) -and ((Test-Path $NBA1QActuals) -or (Test-Path $NBAActuals))) {
-    $NBA1QActualsForGrade = if (Test-Path $NBA1QActuals) { $NBA1QActuals } else { $NBAActuals }
+if ($NBA1QSlateFile -and (Test-Path $NBA1QSlateFile) -and (Test-Path $SlateGraderScript) -and (Test-Path $NBA1QActuals)) {
     Run-Py "Grade NBA1Q Slate" $Root $SlateGraderScript @(
         "--sport", "NBA",
         "--slate", $NBA1QSlateFile,
-        "--actuals", $NBA1QActualsForGrade,
+        "--actuals", $NBA1QActuals,
         "--output", $NBA1QGradedFile,
         "--date", $Date
     )
 }
 else {
-    Write-Host "Skipping NBA1Q grading (missing slate/actuals/grader)." -ForegroundColor Yellow
+    Write-Host "Skipping NBA1Q grading (missing slate, grader, or actuals_nba1q_$Date.csv after fetch attempt)." -ForegroundColor Yellow
 }
 
 if ($WCBBSlateFile -and (Test-Path $WCBBSlateFile) -and (Test-Path $SlateGraderScript)) {
