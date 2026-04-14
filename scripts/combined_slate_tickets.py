@@ -234,7 +234,7 @@ KNOWN_SWEEP_BOUNDS: dict[tuple[int, str], tuple[float, float]] = {
     (3, "power"): (3.5, 6.0),
     (4, "power"): (7.5, 10.0),
     (5, "power"): (15.0, 20.0),
-    (6, "power"): (28.0, 37.5),
+    (6, "power"): (28.0, 40.0),
     (3, "flex"): (1.5, 3.0),
     (4, "flex"): (2.5, 5.0),
     (5, "flex"): (4.0, 10.0),
@@ -483,6 +483,7 @@ def compute_ticket_ev(
                     factor = goblin_per_leg_factor(dist)
                     print(f"[PAYOUT DEBUG] dist={dist} factor={factor}")
                 print(f"[PAYOUT DEBUG] total_adj={adj} sweep={adjusted_first} min_guarantee={adjusted_min_g}")
+                print(f"[PAYOUT] min_guarantee={adjusted_min_g}")
 
     bounds = KNOWN_SWEEP_BOUNDS.get((n, tt))
     if bounds:
@@ -521,7 +522,7 @@ def compute_ticket_ev(
         if any(s in {"ml_prob", "fallback_const"} for s in hsrcs):
             payout_source = "fallback"
     ev = (p_all * adjusted_first) + (p_miss_1 * adjusted_min_g) - p_lose
-    min_payout_x = float(adjusted_min_g if tt == "flex" else adjusted_first)
+    min_payout_x = float(adjusted_min_g)
     sweep_payout_x = float(adjusted_first)
     ev_formula = (
         f"EV = P(all)*{sweep_payout_x:.2f} + P(miss-1)*{min_payout_x:.2f} - 1.0"
@@ -9336,6 +9337,14 @@ def render_tickets_body_html(
     Render today's ticket slips from the tickets_latest.json payload.
     Returns (body_html, page_title) for injection into tickets_built.html.
     """
+    def safe_str(val, default: str = "") -> str:
+        if val is None:
+            return default
+        s = str(val).strip()
+        if s.lower() in ("nan", "none", "nat", "null"):
+            return default
+        return s
+
     date_str = payload.get("date") or "Today"
     generated_at = payload.get("generated_at") or ""
     groups = payload.get("groups") or []
@@ -9555,12 +9564,12 @@ def render_tickets_body_html(
       </div>
       <div class="kpi-row">
         <div class="kpi">
-          <div class="kpi-label">Win Prob</div>
-          <div class="kpi-val" style="color:var(--green);">{_pct(win_prob)}</div>
+          <div class="kpi-label">Avg Leg HR</div>
+          <div class="kpi-val" style="color:var(--green);">{_pct(avg_hr)}</div>
         </div>
         <div class="kpi">
-          <div class="kpi-label">Avg HR</div>
-          <div class="kpi-val" style="color:var(--cyan);">{_pct(avg_hr)}</div>
+          <div class="kpi-label">Model Win Prob</div>
+          <div class="kpi-val" style="color:var(--cyan);">{_pct(win_prob)}</div>
         </div>
         <div class="kpi">
           <div class="kpi-label">EV</div>
@@ -9604,7 +9613,7 @@ def render_tickets_body_html(
                 hit_rate = leg.get("hit_rate")
                 ml_prob = leg.get("ml_prob")
                 edge = leg.get("edge")
-                def_tier = leg.get("def_tier") or ""
+                def_tier = safe_str(leg.get("def_tier"), "")
                 best_book = str(leg.get("best_cross_book") or "").strip()
                 best_line = leg.get("best_cross_line")
                 cross_edge_vs_pp = leg.get("cross_edge_vs_pp")
