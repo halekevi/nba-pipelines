@@ -25,6 +25,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+DEMON_PICK_TYPE = "demon"
+
 
 def _repo_root() -> Path:
     return Path(__file__).resolve().parent.parent
@@ -171,11 +173,15 @@ def summarize_file(path: Path, df: pd.DataFrame, slate_date: str | None) -> dict
     b_mask = tier_l.eq("B")
     if "pick_type" in df.columns:
         pt_l = df["pick_type"].astype(str).str.strip().str.lower()
-        demon_mask = pt_l.eq("demon")
+        demon_mask = pt_l.eq(DEMON_PICK_TYPE)
     else:
         demon_mask = tier_l.eq("DEMON")
+    non_demon_mask = ~demon_mask
     demon_rows = int(demon_mask.sum())
     demon_void = int((demon_mask & ru.eq("VOID")).sum()) if demon_rows else 0
+    non_demon_rows = int(non_demon_mask.sum())
+    non_demon_void = int((non_demon_mask & ru.eq("VOID")).sum()) if non_demon_rows else 0
+    non_demon_decided = int((non_demon_mask & ru.isin(["HIT", "MISS"])).sum()) if non_demon_rows else 0
     tier_b_rows = int(b_mask.sum())
     tier_b_void = int((b_mask & ru.eq("VOID")).sum()) if tier_b_rows else 0
     return {
@@ -190,6 +196,8 @@ def summarize_file(path: Path, df: pd.DataFrame, slate_date: str | None) -> dict
         "n_miss": miss_n,
         "n_decided": decided,
         "void_rate": void_n / n if n else np.nan,
+        "n_decided_ex_demon": non_demon_decided,
+        "void_rate_ex_demon": non_demon_void / non_demon_rows if non_demon_rows else np.nan,
         "demon_rows": demon_rows,
         "demon_void_rows": demon_void,
         "demon_void_rate": demon_void / demon_rows if demon_rows else np.nan,
@@ -210,6 +218,12 @@ def enrich_rows(df: pd.DataFrame, slate_date: str | None, source_file: str) -> p
     out["_is_decided"] = out["result_u"].isin(["HIT", "MISS"])
     out["_is_void"] = out["result_u"].eq("VOID")
     out["_is_hit"] = out["result_u"].eq("HIT")
+    if "pick_type" in out.columns:
+        out["_is_demon"] = out["pick_type"].astype(str).str.strip().str.lower().eq(DEMON_PICK_TYPE)
+    else:
+        out["_is_demon"] = False
+    out["_is_void_ex_demon"] = out["_is_void"] & (~out["_is_demon"])
+    out["_is_decided_ex_demon"] = out["_is_decided"] & (~out["_is_demon"])
     return out
 
 
@@ -220,7 +234,10 @@ def aggregate_prop_dir_date(all_rows: pd.DataFrame) -> pd.DataFrame:
     agg = g.agg(
         n_rows=("_is_void", "size"),
         n_void=("_is_void", "sum"),
+        n_rows_ex_demon=("_is_demon", lambda s: int((~s).sum())),
+        n_void_ex_demon=("_is_void_ex_demon", "sum"),
         n_decided=("_is_decided", "sum"),
+        n_decided_ex_demon=("_is_decided_ex_demon", "sum"),
         n_hit=("_is_hit", "sum"),
         line_min=("_line", "min"),
         line_q25=("_line", lambda s: float(s.quantile(0.25)) if s.notna().any() else np.nan),
@@ -232,6 +249,7 @@ def aggregate_prop_dir_date(all_rows: pd.DataFrame) -> pd.DataFrame:
     ).reset_index()
     agg.rename(columns={"_slate_date": "slate_date", "_prop": "prop", "_dir": "bet_direction"}, inplace=True)
     agg["void_rate"] = agg["n_void"] / agg["n_rows"].replace(0, np.nan)
+    agg["void_rate_ex_demon"] = agg["n_void_ex_demon"] / agg["n_rows_ex_demon"].replace(0, np.nan)
     agg["hit_rate"] = np.where(agg["n_decided"] > 0, agg["n_hit"] / agg["n_decided"], np.nan)
     agg["decided_rate"] = agg["n_decided"] / agg["n_rows"].replace(0, np.nan)
     return agg.sort_values(["slate_date", "prop", "bet_direction"])
@@ -244,7 +262,10 @@ def aggregate_prop_dir_pooled(all_rows: pd.DataFrame) -> pd.DataFrame:
     agg = g.agg(
         n_rows=("_is_void", "size"),
         n_void=("_is_void", "sum"),
+        n_rows_ex_demon=("_is_demon", lambda s: int((~s).sum())),
+        n_void_ex_demon=("_is_void_ex_demon", "sum"),
         n_decided=("_is_decided", "sum"),
+        n_decided_ex_demon=("_is_decided_ex_demon", "sum"),
         n_hit=("_is_hit", "sum"),
         line_min=("_line", "min"),
         line_q25=("_line", lambda s: float(s.quantile(0.25)) if s.notna().any() else np.nan),
@@ -256,6 +277,7 @@ def aggregate_prop_dir_pooled(all_rows: pd.DataFrame) -> pd.DataFrame:
     ).reset_index()
     agg.rename(columns={"_prop": "prop", "_dir": "bet_direction"}, inplace=True)
     agg["void_rate"] = agg["n_void"] / agg["n_rows"].replace(0, np.nan)
+    agg["void_rate_ex_demon"] = agg["n_void_ex_demon"] / agg["n_rows_ex_demon"].replace(0, np.nan)
     agg["hit_rate"] = np.where(agg["n_decided"] > 0, agg["n_hit"] / agg["n_decided"], np.nan)
     agg["decided_rate"] = agg["n_decided"] / agg["n_rows"].replace(0, np.nan)
     return agg.sort_values(["prop", "bet_direction"])
@@ -320,8 +342,24 @@ def main() -> None:
     pooled_path = out_dir / "nba1q_prop_direction_pooled.csv"
     pooled.to_csv(pooled_path, index=False)
 
+    rows_total = len(stacked)
+    void_total = int(stacked["_is_void"].sum())
+    non_demon_total = int((~stacked["_is_demon"]).sum())
+    void_non_demon = int(stacked["_is_void_ex_demon"].sum())
+    decided_total = int(stacked["_is_decided"].sum())
+    decided_non_demon = int(stacked["_is_decided_ex_demon"].sum())
+    void_rate_all = (void_total / rows_total) if rows_total else np.nan
+    void_rate_ex_demon = (void_non_demon / non_demon_total) if non_demon_total else np.nan
+
     print(f"Workbooks found: {len(paths)}")
     print(f"Total Box Raw rows stacked: {len(stacked)}")
+    print(
+        f"Void rate (all rows): {void_rate_all:.4f} | decided={decided_total}"
+    )
+    print(
+        "Void rate (ex-Demon, gate metric): "
+        f"{void_rate_ex_demon:.4f} | decided_ex_demon={decided_non_demon}"
+    )
     print(f"Wrote: {summary_path}")
     print(f"Wrote: {by_date_path}")
     print(f"Wrote: {pooled_path}")

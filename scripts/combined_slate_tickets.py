@@ -1010,7 +1010,7 @@ SOCCER_EXCLUDED_PROPS = {
     "clearances",
 }
 
-# Soccer step8 boards are OVER-only today; graded history shows weak realized OVER EV.
+# Soccer tickets now allow UNDER legs in standard flow; OVER legs are additionally edge-gated.
 # Raise per-leg hit floors vs global defaults (still below NBA; soccer hit_rate is often a proxy).
 SOCCER_LEG_MIN_HIT_RATE = {
     2: 0.56,
@@ -1584,6 +1584,9 @@ NHL_LEG_MIN_HIT_RATE = {
     3: 0.57,
     4: 0.60,
 }
+# Soccer OVER legs have materially weaker realized performance; require stronger edge or drop.
+# TODO: confirm 0.60 vs 0.65 once post-fix Soccer graded sample grows.
+SOCCER_OVER_MIN_EDGE = 0.60
 MLB_MAX_LEGS = 4
 MLB_PITCHING_OVER_ONLY_PROPS = {"strikeouts", "hits allowed"}
 
@@ -5217,8 +5220,12 @@ def build_single_structure_ticket(
     under_df = df[dirs == "UNDER"].copy()
 
     if flow == "standard":
-        # Standard: OVER only, except NHL where strong UNDER props are valid.
-        cand = pd.concat([over_df, under_df], ignore_index=True) if sport_up == "NHL" else over_df.copy()
+        # Standard: OVER + UNDER for NHL and Soccer; others remain OVER-first.
+        cand = (
+            pd.concat([over_df, under_df], ignore_index=True)
+            if sport_up in ("NHL", "SOCCER", "SOC")
+            else over_df.copy()
+        )
     elif flow == "power":
         # Power: OVER only unless not enough OVER legs; NHL keeps UNDER candidates.
         if sport_up == "NHL":
@@ -5433,7 +5440,11 @@ def build_structure_ticket_variants(
     under_df = df[dirs == "UNDER"].copy()
 
     if flow == "standard":
-        cand = pd.concat([over_df, under_df], ignore_index=True) if sport_up == "NHL" else over_df.copy()
+        cand = (
+            pd.concat([over_df, under_df], ignore_index=True)
+            if sport_up in ("NHL", "SOCCER", "SOC")
+            else over_df.copy()
+        )
     elif flow == "power":
         if sport_up == "NHL":
             cand = pd.concat([over_df, under_df], ignore_index=True)
@@ -7900,11 +7911,17 @@ def main():
         elif pt is None and sport == "TENNIS":
             effective_min_hit = min(float(args.min_hit_rate), 0.50)
 
-        # Direction filter: NHL OVER props are only 21.5% — exclude from NHL pools
+        # Direction filter: NHL OVER props are only 21.5% — exclude from NHL pools.
         if sport == "NHL" and "direction" in filtered_df.columns:
             filtered_df = filtered_df[
                 filtered_df["direction"].astype(str).str.upper() != "OVER"
             ]
+
+        # Soccer OVER legs require stronger edge support; keep UNDER legs unchanged.
+        if sport == "SOCCER" and "direction" in filtered_df.columns:
+            _dir = filtered_df["direction"].astype(str).str.upper().str.strip()
+            _edge = _edge_magnitude_series(filtered_df).fillna(0.0)
+            filtered_df = filtered_df[(_dir != "OVER") | (_edge >= float(SOCCER_OVER_MIN_EDGE))].copy()
 
         # MLB: pitching props are OVER-only in ticket pools (reduce variance).
         if sport == "MLB" and {"direction", "prop_type"}.issubset(filtered_df.columns):
