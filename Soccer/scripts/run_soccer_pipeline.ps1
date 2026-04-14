@@ -138,6 +138,21 @@ Run-Step "S7" "step7_rank_props_soccer.py" @(
     "--n_teams", "$NTeams"
 )
 
+# ── S7b: Unified edge score overlay (ml_prob / edge_score / blended_score) ──
+$Step7bScript = Join-Path $RepoRoot "scripts\step7b_edge_score.py"
+if (Test-Path $Step7bScript) {
+    Write-Host ""
+    Write-Host "[ PropOracle-Soccer-S7b ] Starting..." -ForegroundColor Cyan
+    & py -3.14 $Step7bScript --sport Soccer --step7-xlsx "$OutputsDir\step7_soccer_ranked.xlsx" --repo-root "$RepoRoot"
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "[ PropOracle-Soccer-S7b ] FAILED (exit $LASTEXITCODE) - aborting." -ForegroundColor Red
+        exit $LASTEXITCODE
+    }
+    Write-Host "[ PropOracle-Soccer-S7b ] OK" -ForegroundColor Green
+} else {
+    Write-Host "[ PropOracle-Soccer-S7b ] SKIPPED (script not found: $Step7bScript)" -ForegroundColor Yellow
+}
+
 # ── S8: Direction Context + Clean XLSX ───────────────────────────────────────
 # --xlsx produces the clean formatted workbook (step8_soccer_direction_clean.xlsx)
 # which is what run_pipeline.ps1 and combined_slate_tickets.py consume.

@@ -356,7 +356,6 @@ def main() -> None:
     )
 
     # Standard-only tie-break: when edge is effectively zero, use L5 side signal.
-    # This preserves Goblin/Demon OVER-only behavior while allowing true Standard UNDERS.
     std_mask = pick_type.eq("Standard")
     tie_mask = std_mask & has_edge & (abs_edge < 0.03)
     if tie_mask.any():
@@ -396,10 +395,6 @@ def main() -> None:
     if force_over.any():
         final_dir = final_dir.where(~force_over, "OVER")
         reason = reason.where(~force_over, "STANDARD_L5AVG_OVER")
-
-    forced    = pick_type.isin(["Goblin", "Demon"])
-    final_dir = final_dir.where(~forced, "OVER")
-    reason    = reason.where(~forced, "FORCED_OVER_ONLY_GOB_DEM")
 
     out["final_bet_direction"] = final_dir
     out["final_dir_reason"]    = reason
