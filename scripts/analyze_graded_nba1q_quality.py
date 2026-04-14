@@ -44,20 +44,42 @@ def _stem_base(stem: str) -> str:
     return s[: -len("_mlbackfill")] if s.endswith("_mlbackfill") else s
 
 
-def _path_priority(p: Path) -> tuple[int, int, str]:
-    """Prefer mlbackfill copy, then canonical outputs tree."""
-    name_l = p.name.lower()
-    parts_l = {x.lower() for x in p.parts}
-    score = 0
-    if "_mlbackfill" in name_l:
-        score += 10
-    if "outputs" in parts_l:
-        score += 1
-    return (score, len(p.parts), str(p.resolve()))
+def _count_box_raw_rows(path: Path) -> int:
+    """Number of data rows on ``Box Raw`` (0 if missing sheet or unreadable)."""
+    try:
+        from openpyxl import load_workbook
+
+        wb = load_workbook(path, read_only=True, data_only=True)
+        try:
+            if "Box Raw" not in wb.sheetnames:
+                return 0
+            ws = wb["Box Raw"]
+            return sum(1 for _ in ws.iter_rows(min_row=2))
+        finally:
+            wb.close()
+    except Exception:
+        return 0
+
+
+def _pick_best_path_by_box_raw(paths: list[Path]) -> Path | None:
+    if not paths:
+        return None
+    best = max(paths, key=lambda p: (_count_box_raw_rows(p), str(p.resolve())))
+    return best
+
+
+def _pick_preferred(canonical: Path | None, mlbackfill: Path | None) -> Path | None:
+    """Prefer non-empty canonical; fall back to mlbackfill only when canonical is empty/missing."""
+    if canonical is None:
+        return mlbackfill
+    n_canonical = _count_box_raw_rows(canonical)
+    if n_canonical == 0 and mlbackfill is not None:
+        return mlbackfill
+    return canonical
 
 
 def discover_nba1q_workbooks(roots: list[Path]) -> list[Path]:
-    """Unique resolved paths, then one file per stem (drop plain vs mlbackfill dupes)."""
+    """One workbook per slate stem: prefer the file with more Box Raw rows over name-based mlbackfill bias."""
     raw: list[Path] = []
     seen: set[str] = set()
     for root in roots:
@@ -71,12 +93,20 @@ def discover_nba1q_workbooks(roots: list[Path]) -> list[Path]:
                 continue
             seen.add(key)
             raw.append(p)
-    best: dict[str, Path] = {}
+    by_stem: dict[str, list[Path]] = {}
     for p in raw:
         stem_key = _stem_base(p.stem)
-        prev = best.get(stem_key)
-        if prev is None or _path_priority(p) > _path_priority(prev):
-            best[stem_key] = p
+        by_stem.setdefault(stem_key, []).append(p)
+
+    best: dict[str, Path] = {}
+    for stem_key, plist in by_stem.items():
+        canon_list = [p for p in plist if not p.stem.lower().endswith("_mlbackfill")]
+        ml_list = [p for p in plist if p.stem.lower().endswith("_mlbackfill")]
+        canonical = _pick_best_path_by_box_raw(canon_list)
+        mlbackfill = _pick_best_path_by_box_raw(ml_list)
+        chosen = _pick_preferred(canonical, mlbackfill)
+        if chosen is not None:
+            best[stem_key] = chosen
     return sorted(best.values(), key=lambda x: str(x))
 
 

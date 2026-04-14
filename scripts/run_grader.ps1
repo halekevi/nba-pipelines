@@ -29,6 +29,7 @@ $TennisGraderScript = Join-Path $Root "Tennis\scripts\tennis_grader.py"
 $FetchNBAPeriodActualsScript = Join-Path $Root "scripts\fetch_nba_period_actuals.py"
 $BuildNBA1QHistoryScript = Join-Path $Root "scripts\build_nba1q_history_db.py"
 $SlateGraderScript = Join-Path $Root "scripts\grading\slate_grader.py"
+$CountNbaSlateGradeRowsScript = Join-Path $Root "scripts\count_nba_slate_grade_rows.py"
 $CBBFullGraderScript = Join-Path $Root "scripts\grading\grade_cbb_full_slate.py"
 $NHLAdvancedGraderScript = Join-Path $Root "scripts\nhl_grader_advanced.py"
 $SoccerAdvancedGraderScript = Join-Path $Root "scripts\soccer_grader_advanced.py"
@@ -512,14 +513,33 @@ else {
     Write-Host "Skipping NBA1H grading (missing slate, grader, or actuals_nba1h_$Date.csv after fetch attempt)." -ForegroundColor Yellow
 }
 
+$nba1qSlateRowsAfterFilter = -1
+if ($NBA1QSlateFile -and (Test-Path $NBA1QSlateFile) -and (Test-Path $CountNbaSlateGradeRowsScript)) {
+    try {
+        $env:PYTHONUTF8 = "1"
+        $rowOut = & python -X utf8 $CountNbaSlateGradeRowsScript --slate $NBA1QSlateFile --date $Date 2>$null
+        if ($rowOut -match '^[0-9]+$') {
+            $nba1qSlateRowsAfterFilter = [int]$rowOut
+        }
+    }
+    catch {
+        $nba1qSlateRowsAfterFilter = -1
+    }
+}
+
 if ($NBA1QSlateFile -and (Test-Path $NBA1QSlateFile) -and (Test-Path $SlateGraderScript) -and (Test-Path $NBA1QActuals)) {
-    Run-Py "Grade NBA1Q Slate" $Root $SlateGraderScript @(
-        "--sport", "NBA",
-        "--slate", $NBA1QSlateFile,
-        "--actuals", $NBA1QActuals,
-        "--output", $NBA1QGradedFile,
-        "--date", $Date
-    )
+    if ($nba1qSlateRowsAfterFilter -eq 0) {
+        Write-Warning "[GRADER] NBA1Q slate has 0 rows after date filter for $Date (file: $(Split-Path $NBA1QSlateFile -Leaf)). Skipping graded_nba1q write so an existing workbook is not overwritten with empty Box Raw."
+    }
+    else {
+        Run-Py "Grade NBA1Q Slate" $Root $SlateGraderScript @(
+            "--sport", "NBA",
+            "--slate", $NBA1QSlateFile,
+            "--actuals", $NBA1QActuals,
+            "--output", $NBA1QGradedFile,
+            "--date", $Date
+        )
+    }
 }
 else {
     Write-Host "Skipping NBA1Q grading (missing slate, grader, or actuals_nba1q_$Date.csv after fetch attempt)." -ForegroundColor Yellow
