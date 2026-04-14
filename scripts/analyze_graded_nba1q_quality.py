@@ -61,11 +61,24 @@ def _count_box_raw_rows(path: Path) -> int:
         return 0
 
 
+def _path_source_rank(p: Path) -> int:
+    """When Box Raw row counts tie, prefer outputs/<date>/ over ui_runner/graded_slate copies."""
+    parts_l = {x.lower() for x in p.parts}
+    score = 0
+    if "outputs" in parts_l:
+        score += 2
+    if "graded_slate" in parts_l:
+        score -= 1
+    return score
+
+
 def _pick_best_path_by_box_raw(paths: list[Path]) -> Path | None:
     if not paths:
         return None
-    best = max(paths, key=lambda p: (_count_box_raw_rows(p), str(p.resolve())))
-    return best
+    return max(
+        paths,
+        key=lambda p: (_count_box_raw_rows(p), _path_source_rank(p), str(p.resolve())),
+    )
 
 
 def _pick_preferred(canonical: Path | None, mlbackfill: Path | None) -> Path | None:
