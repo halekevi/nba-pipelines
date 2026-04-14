@@ -7921,7 +7921,20 @@ def main():
         if sport == "SOCCER" and "direction" in filtered_df.columns:
             _dir = filtered_df["direction"].astype(str).str.upper().str.strip()
             _edge = _edge_magnitude_series(filtered_df).fillna(0.0)
-            filtered_df = filtered_df[(_dir != "OVER") | (_edge >= float(SOCCER_OVER_MIN_EDGE))].copy()
+            _over_mask = _dir.eq("OVER")
+            _under_mask = _dir.eq("UNDER")
+            _over_total = int(_over_mask.sum())
+            _under_total = int(_under_mask.sum())
+            _keep_mask = (~_over_mask) | (_edge >= float(SOCCER_OVER_MIN_EDGE))
+            filtered_df = filtered_df[_keep_mask].copy()
+            _over_kept = int((_over_mask & _keep_mask).sum())
+            _under_kept = int((_under_mask & _keep_mask).sum())
+            print(
+                "  [SOCCER GATE TRACE] "
+                f"OVER kept={_over_kept}/{_over_total} removed={_over_total - _over_kept} "
+                f"(edge>={SOCCER_OVER_MIN_EDGE:.2f}); "
+                f"UNDER kept={_under_kept}/{_under_total} removed={_under_total - _under_kept}"
+            )
 
         # MLB: pitching props are OVER-only in ticket pools (reduce variance).
         if sport == "MLB" and {"direction", "prop_type"}.issubset(filtered_df.columns):
