@@ -35,6 +35,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 import requests
@@ -42,6 +43,7 @@ import requests
 # ── constants ─────────────────────────────────────────────────────────────────
 
 BASE_URL = "https://api.prizepicks.com/projections"
+DEFAULT_TZ = "America/New_York"
 
 PICKTYPE_MAP = {
     "standard": "Standard",
@@ -72,6 +74,39 @@ BASE_HEADERS = {
     "Sec-Ch-Ua-Platform": '"Windows"',
     "DNT":                "1",
 }
+
+
+def _default_et_date_str() -> str:
+    return datetime.now(ZoneInfo(DEFAULT_TZ)).date().isoformat()
+
+
+def _apply_game_date_filter(
+    df: pd.DataFrame,
+    target_date: str,
+    tz_name: str,
+    allow_nearest_future: bool,
+) -> tuple[pd.DataFrame, str | None]:
+    if df is None or len(df) == 0:
+        out = df.copy() if isinstance(df, pd.DataFrame) else pd.DataFrame()
+        if isinstance(out, pd.DataFrame) and "game_date" not in out.columns:
+            out["game_date"] = ""
+        return out, None
+    tz = ZoneInfo(tz_name)
+    ts = pd.to_datetime(df.get("start_time", pd.Series([], dtype=object)), errors="coerce", utc=True)
+    game_date = ts.dt.tz_convert(tz).dt.date.astype("string")
+    out = df.copy()
+    out["game_date"] = game_date.fillna("")
+    keep = out["game_date"].eq(target_date)
+    if keep.any():
+        return out.loc[keep].copy(), None
+    if not allow_nearest_future:
+        return out.head(0).copy(), None
+    available = sorted({d for d in out["game_date"].astype(str).tolist() if d and d != "nan"})
+    future = [d for d in available if d >= target_date]
+    if not future:
+        return out.head(0).copy(), None
+    chosen = future[0]
+    return out.loc[out["game_date"].eq(chosen)].copy(), chosen
 
 # ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -356,6 +391,9 @@ def main() -> None:
     ap.add_argument("--min_teams",  type=int, default=4,   help="Minimum teams required to consider fetch valid")
     ap.add_argument("--raw_json",   default="",            help="Optional path to dump raw API response")
     ap.add_argument("--history",    default="",            help="Optional path template for history CSV (use {ts})")
+    ap.add_argument("--date", default=_default_et_date_str(), help=f"Target game date in {DEFAULT_TZ} (YYYY-MM-DD).")
+    ap.add_argument("--tz", default=DEFAULT_TZ, help="Timezone used to derive game_date from start_time.")
+    ap.add_argument("--allow-nearest-future", action="store_true", help="If no rows match --date, keep nearest future game_date.")
     ap.add_argument(
         "--merge-existing",
         action="store_true",
@@ -521,8 +559,30 @@ def main() -> None:
     elif out_path.is_file() and args.replace:
         print("\n📄 --replace: writing this fetch only (no merge with prior file).")
 
+    # ── Date alignment (folder date vs game date) ───────────────────────────
+    fetched_rows = len(df)
+    filtered_df, fallback_date = _apply_game_date_filter(
+        df,
+        target_date=str(args.date).strip(),
+        tz_name=str(args.tz).strip() or DEFAULT_TZ,
+        allow_nearest_future=bool(args.allow_nearest_future),
+    )
+    board_dates = sorted({d for d in filtered_df.get("game_date", pd.Series([], dtype=object)).astype(str).tolist() if d and d != "nan"})
+    print(
+        f"[INFO] NBA step1 fetched={fetched_rows} rows; date_filter={args.date} ({args.tz}); "
+        f"survived={len(filtered_df)}"
+    )
+    if board_dates:
+        print(f"[INFO] NBA step1 filtered_game_dates={board_dates}")
+    if fallback_date:
+        print(f"[WARNING] NBA step1 no rows for requested date; using nearest future game_date={fallback_date}")
+    df = filtered_df
+
     # ── Write output ──────────────────────────────────────────────────────────
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
+    if len(df) == 0:
+        print(f"\n[INFO] Saved empty date-filtered NBA step1 CSV -> {args.output}")
+        sys.exit(0)
     print(f"\n✅ Saved → {args.output}")
 
     # Optional history snapshot

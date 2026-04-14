@@ -26,8 +26,10 @@ import json
 import re
 import sys
 import time
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 
@@ -40,6 +42,7 @@ from scripts.db_utils import log_pipeline_health
 
 MLB_LEAGUE_ID = "2"
 BOARD_URL     = f"https://app.prizepicks.com/board?league_id={MLB_LEAGUE_ID}"
+DEFAULT_TZ = "America/New_York"
 
 TRACKABLE_PROPS = {
     # Hitter
@@ -117,6 +120,39 @@ CAPTURE_PATTERNS = [
     "api.prizepicks.com/v2/projections",
 ]
 GAME_PATTERN = "api.prizepicks.com/games"
+
+
+def _default_et_date_str() -> str:
+    return datetime.now(ZoneInfo(DEFAULT_TZ)).date().isoformat()
+
+
+def _apply_game_date_filter(
+    df: pd.DataFrame,
+    target_date: str,
+    tz_name: str,
+    allow_nearest_future: bool,
+) -> tuple[pd.DataFrame, str | None]:
+    if df is None or len(df) == 0:
+        out = df.copy() if isinstance(df, pd.DataFrame) else pd.DataFrame()
+        if isinstance(out, pd.DataFrame) and "game_date" not in out.columns:
+            out["game_date"] = ""
+        return out, None
+    tz = ZoneInfo(tz_name)
+    ts = pd.to_datetime(df.get("start_time", pd.Series([], dtype=object)), errors="coerce", utc=True)
+    game_date = ts.dt.tz_convert(tz).dt.date.astype("string")
+    out = df.copy()
+    out["game_date"] = game_date.fillna("")
+    keep = out["game_date"].eq(target_date)
+    if keep.any():
+        return out.loc[keep].copy(), None
+    if not allow_nearest_future:
+        return out.head(0).copy(), None
+    available = sorted({d for d in out["game_date"].astype(str).tolist() if d and d != "nan"})
+    future = [d for d in available if d >= target_date]
+    if not future:
+        return out.head(0).copy(), None
+    chosen = future[0]
+    return out.loc[out["game_date"].eq(chosen)].copy(), chosen
 
 
 # ─── helpers ──────────────────────────────────────────────────────────────────
@@ -455,6 +491,9 @@ def main():
     ap.add_argument("--min_rows",       type=int, default=30)
     ap.add_argument("--min_teams",      type=int, default=2)
     ap.add_argument("--all_props",      action="store_true",   help="Keep all prop types unfiltered")
+    ap.add_argument("--date", default=_default_et_date_str(), help=f"Target game date in {DEFAULT_TZ} (YYYY-MM-DD).")
+    ap.add_argument("--tz", default=DEFAULT_TZ, help="Timezone used to derive game_date from start_time.")
+    ap.add_argument("--allow-nearest-future", action="store_true", help="If no rows match --date, keep nearest future game_date.")
     # Compat aliases — accepted silently so existing pipeline calls don't break
     ap.add_argument("--gentle",         action="store_true",   help="(compat) no-op")
     ap.add_argument("--manual-seconds", type=int, default=None, help="(compat) no-op — manual window removed")
@@ -627,7 +666,28 @@ def main():
         except Exception as e:
             print(f"  [WARN] --append merge failed ({e}); writing new fetch only")
 
+    fetched_rows = len(df)
+    filtered_df, fallback_date = _apply_game_date_filter(
+        df,
+        target_date=str(args.date).strip(),
+        tz_name=str(args.tz).strip() or DEFAULT_TZ,
+        allow_nearest_future=bool(args.allow_nearest_future),
+    )
+    game_dates = sorted({d for d in filtered_df.get("game_date", pd.Series([], dtype=object)).astype(str).tolist() if d and d != "nan"})
+    print(
+        f"[INFO] MLB step1 fetched={fetched_rows} rows; date_filter={args.date} ({args.tz}); "
+        f"survived={len(filtered_df)}"
+    )
+    if game_dates:
+        print(f"[INFO] MLB step1 filtered_game_dates={game_dates}")
+    if fallback_date:
+        print(f"[WARNING] MLB step1 no rows for requested date; using nearest future game_date={fallback_date}")
+    df = filtered_df
+
     df.to_csv(out_path, index=False, encoding="utf-8-sig")
+    if len(df) == 0:
+        print(f"\n[INFO] Saved empty date-filtered MLB step1 CSV -> {out_path}")
+        sys.exit(0)
 
     rows_n  = len(df)
     teams_n = df["team"].astype(str).nunique()

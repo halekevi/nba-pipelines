@@ -16,7 +16,9 @@ import time
 import json
 import urllib.request
 import urllib.error
+from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 
@@ -40,6 +42,41 @@ HEADERS = {
     "Referer":     "https://app.prizepicks.com/",
     "Origin":      "https://app.prizepicks.com",
 }
+
+DEFAULT_TZ = "America/New_York"
+
+
+def _default_et_date_str() -> str:
+    return datetime.now(ZoneInfo(DEFAULT_TZ)).date().isoformat()
+
+
+def _apply_game_date_filter(
+    df: pd.DataFrame,
+    target_date: str,
+    tz_name: str,
+    allow_nearest_future: bool,
+) -> tuple[pd.DataFrame, str | None]:
+    if df.empty:
+        return df.copy(), None
+    tz = ZoneInfo(tz_name)
+    ts = pd.to_datetime(df.get("start_time", pd.Series([], dtype=object)), errors="coerce", utc=True)
+    game_date = ts.dt.tz_convert(tz).dt.date.astype("string")
+    out = df.copy()
+    out["game_date"] = game_date.fillna("")
+
+    keep = out["game_date"].eq(target_date)
+    if keep.any():
+        return out.loc[keep].copy(), None
+
+    if not allow_nearest_future:
+        return out.head(0).copy(), None
+
+    available = sorted({d for d in out["game_date"].astype(str).tolist() if d and d != "nan"})
+    future = [d for d in available if d >= target_date]
+    if not future:
+        return out.head(0).copy(), None
+    chosen = future[0]
+    return out.loc[out["game_date"].eq(chosen)].copy(), chosen
 
 
 def fetch_board(league_id: str, league_name: str, per_page: int = 250) -> tuple[list, list]:
@@ -177,6 +214,17 @@ def main():
         action="store_true",
         help="Append this fetch after existing CSV rows, then dedupe (keep='last').",
     )
+    ap.add_argument(
+        "--date",
+        default=_default_et_date_str(),
+        help=f"Target game date in {DEFAULT_TZ} (YYYY-MM-DD). Defaults to today {DEFAULT_TZ}.",
+    )
+    ap.add_argument("--tz", default=DEFAULT_TZ, help="Timezone used to derive game_date from start_time.")
+    ap.add_argument(
+        "--allow-nearest-future",
+        action="store_true",
+        help="When no rows match --date, keep nearest future game_date on board.",
+    )
     args = ap.parse_args()
     out_path = Path(args.output)
 
@@ -253,7 +301,38 @@ def main():
         except Exception as e:
             print(f"  [WARN] --append merge failed ({e}); writing this fetch only")
 
+    fetched_rows = len(df)
+    _raw_ts = pd.to_datetime(df.get("start_time", pd.Series([], dtype=object)), errors="coerce", utc=True)
+    distinct_dates = sorted(
+        {
+            d
+            for d in _raw_ts.dt.tz_convert(ZoneInfo(str(args.tz).strip() or DEFAULT_TZ)).dt.date.astype("string").tolist()
+            if d and d != "nan"
+        }
+    )
+    filtered, fallback_date = _apply_game_date_filter(
+        df,
+        target_date=str(args.date).strip(),
+        tz_name=str(args.tz).strip() or DEFAULT_TZ,
+        allow_nearest_future=bool(args.allow_nearest_future),
+    )
+    print(
+        f"[INFO] Soccer step1 fetched={fetched_rows} rows; "
+        f"date_filter={args.date} ({args.tz}); survived={len(filtered)}"
+    )
+    if distinct_dates:
+        print(f"[INFO] Soccer step1 game_dates_on_board={distinct_dates}")
+    if fallback_date:
+        print(
+            "[WARNING] Soccer step1 no rows for requested date; "
+            f"using nearest future game_date={fallback_date}"
+        )
+    df = filtered
+
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
+    if len(df) == 0:
+        print(f"\n[INFO] Saved empty date-filtered Soccer step1 CSV -> {args.output}")
+        sys.exit(0)
     print(f"\n✅ Saved {len(df)} rows -> {args.output}")
     league_counts = df["league"].value_counts().to_dict()
     print(f"   Leagues: {league_counts}")

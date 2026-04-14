@@ -76,7 +76,7 @@ if ($SkipFetch) {
         exit 1
     }
 } else {
-    $s1args = [System.Collections.Generic.List[string]]@("--output", "$OutputsDir\step1_soccer_props.csv")
+    $s1args = [System.Collections.Generic.List[string]]@("--output", "$OutputsDir\step1_soccer_props.csv", "--date", $Date)
     if ($LeagueId -ne "") { $s1args.Add("--league_id"); $s1args.Add($LeagueId) }
     Run-Step "S1" "step1_fetch_prizepicks_soccer.py" $s1args.ToArray()
 }
