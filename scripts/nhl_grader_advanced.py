@@ -306,6 +306,25 @@ def _resolve_direction_from_slate_row(slate_row: pd.Series) -> str:
     return v if v else "OVER"
 
 
+def nhl_signed_margin(actual, line, direction: str) -> float:
+    """
+    Favorable margin is positive (same convention as scripts/grading/slate_grader.grade).
+    OVER: actual - line; UNDER: line - actual. NaN when actual/line missing.
+    """
+    act = pd.to_numeric(actual, errors="coerce")
+    ln = pd.to_numeric(line, errors="coerce")
+    if pd.isna(act) or pd.isna(ln):
+        return np.nan
+    actual_f = float(act)
+    line_f = float(ln)
+    if abs(actual_f - line_f) < 0.01:
+        return 0.0
+    d = str(direction or "OVER").upper().strip()
+    if d == "OVER":
+        return round(actual_f - line_f, 2)
+    return round(line_f - actual_f, 2)
+
+
 # ── ADVANCED ANALYTICS ────────────────────────────────────────────────────────
 
 class NHLAnalytics:
@@ -518,7 +537,8 @@ def main() -> None:
         
         # Grade
         result, edge, pct_of_line = grader.grade_prop(actual, line, direction, player_type)
-        
+        margin = nhl_signed_margin(actual, line, direction)
+
         # Opponent analysis
         opp_analysis = grader.get_opponent_analysis(player, opp_team, prop_type)
         
@@ -535,6 +555,7 @@ def main() -> None:
             "prop_type": prop_type,
             "line": line,
             "actual": actual,
+            "margin": margin,
             "direction": direction,
             "bet_direction": direction,
             "tier": tier,
