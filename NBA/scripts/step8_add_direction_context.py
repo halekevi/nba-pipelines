@@ -289,6 +289,42 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
             df2.loc[has_hist, "line_hit_rate_over_ou_5"] = (over_n[has_hist] / valid_n[has_hist]).round(4)
             df2.loc[has_hist, "line_hit_rate_under_ou_5"] = (under_n[has_hist] / valid_n[has_hist]).round(4)
 
+    # Sample size proxy used by downstream eligibility void exceptions.
+    if "n_legs_sample" not in df2.columns:
+        df2["n_legs_sample"] = np.nan
+    l5o = pd.to_numeric(df2.get("last5_over", np.nan), errors="coerce")
+    l5u = pd.to_numeric(df2.get("last5_under", np.nan), errors="coerce")
+    l5_sample = (l5o.fillna(0) + l5u.fillna(0)).where(l5o.notna() | l5u.notna(), np.nan)
+    df2["n_legs_sample"] = pd.to_numeric(df2["n_legs_sample"], errors="coerce")
+    df2.loc[df2["n_legs_sample"].isna(), "n_legs_sample"] = l5_sample[df2["n_legs_sample"].isna()]
+
+    # Exempt high-confidence low-line OVER rows from strict OVER void tags.
+    if "void_reason" in df2.columns:
+        vr = df2["void_reason"].astype(str).fillna("")
+        hr5 = pd.to_numeric(df2.get("line_hit_rate_over_ou_5", np.nan), errors="coerce")
+        hr5 = np.where(hr5 > 1.0, hr5 / 100.0, hr5)
+        hr5 = pd.Series(hr5, index=df2.index).fillna(0.0)
+        sample_n = pd.to_numeric(df2.get("n_legs_sample", np.nan), errors="coerce").fillna(0)
+        line = pd.to_numeric(df2.get("line", np.nan), errors="coerce")
+        dir_over = df2.get("final_bet_direction", pd.Series("", index=df2.index)).astype(str).str.upper().eq("OVER")
+
+        exc_std_ml = dir_over & hr5.ge(0.85) & sample_n.ge(4)
+        exc_elite_def = dir_over & hr5.ge(0.85) & line.le(2.0)
+
+        def _drop_tag(text: str, tag: str) -> str:
+            parts = [p for p in str(text).split(";") if p]
+            kept = [p for p in parts if p != tag]
+            return ";".join(kept)
+
+        if exc_std_ml.any():
+            m = exc_std_ml & vr.str.contains("VOID_STD_OVER_LOW_ML_PROB", na=False)
+            df2.loc[m, "void_reason"] = vr[m].map(lambda x: _drop_tag(x, "VOID_STD_OVER_LOW_ML_PROB"))
+            vr = df2["void_reason"].astype(str).fillna("")
+        if exc_elite_def.any():
+            m = exc_elite_def & vr.str.contains("VOID_OVER_ELITE_DEF_NON_Q5", na=False)
+            df2.loc[m, "void_reason"] = vr[m].map(lambda x: _drop_tag(x, "VOID_OVER_ELITE_DEF_NON_Q5"))
+            vr = df2["void_reason"].astype(str).fillna("")
+
     keep = [
         'tier', 'rank_score',
         'player', 'pos', 'team', 'opp_team', 'game_time',
@@ -301,6 +337,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'line_hit_rate_over_ou_5',
         'stat_last5_avg', 'stat_season_avg',
         'last5_over', 'last5_under',
+        'n_legs_sample',
         'OVERALL_DEF_RANK', 'DEF_TIER',
         'minutes_tier', 'shot_role', 'usage_role',
         'void_reason',
@@ -333,6 +370,8 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
     for col in ['last5_over', 'last5_under']:
         if col in clean.columns:
             clean[col] = pd.to_numeric(clean[col], errors='coerce').astype('Int64')
+    if 'n_legs_sample' in clean.columns:
+        clean['n_legs_sample'] = pd.to_numeric(clean['n_legs_sample'], errors='coerce').astype('Int64')
 
     tier_order = {'A': 0, 'B': 1, 'C': 2, 'D': 3}
     clean['_tier_sort'] = clean['tier'].map(tier_order)
@@ -350,6 +389,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'line_hit_rate_over_ou_5': 'Hit Rate (5g)',
         'stat_last5_avg': 'Last 5 Avg', 'stat_season_avg': 'Season Avg',
         'last5_over': 'L5 Over', 'last5_under': 'L5 Under',
+        'n_legs_sample': 'N Legs Sample',
         'OVERALL_DEF_RANK': 'Def Rank', 'DEF_TIER': 'Def Tier',
         'minutes_tier': 'Min Tier', 'shot_role': 'Shot Role', 'usage_role': 'Usage Role',
         'void_reason': 'Void Reason',

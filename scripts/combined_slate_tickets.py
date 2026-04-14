@@ -1662,6 +1662,7 @@ MAX_FANTASY_LEGS = {
     5: 2,
     6: 2,
 }
+MAX_SAME_PROP_TYPE_PER_TICKET = 2
 
 # Ticket leg counts written to workbook + FINAL web payload
 TICKET_LEG_SIZES = [2, 3, 4, 5, 6]
@@ -1670,6 +1671,26 @@ MIN_TICKET_POOL = min(TICKET_LEG_SIZES)
 
 def _is_fantasy_prop(row: pd.Series) -> bool:
     return "fantasy" in str(row.get("prop_type", "")).strip().lower()
+
+
+def _ticket_prop_token(row: pd.Series | dict) -> str:
+    raw = ""
+    if isinstance(row, pd.Series):
+        raw = str(row.get("prop_type", "") or "")
+    elif isinstance(row, dict):
+        raw = str(row.get("prop_type", "") or "")
+    return _norm_prop_label(raw) or raw.strip().lower()
+
+
+def _can_add_row_with_prop_cap(
+    row: pd.Series | dict,
+    prop_type_counts: Counter[str],
+    max_same_prop: int = MAX_SAME_PROP_TYPE_PER_TICKET,
+) -> bool:
+    tok = _ticket_prop_token(row)
+    if not tok:
+        return True
+    return int(prop_type_counts.get(tok, 0)) < int(max_same_prop)
 
 # Demon legs are only allowed in Flex-mode analysis (too low hit rate for Power)
 # This is enforced in build_tickets_smart() below
@@ -1987,6 +2008,8 @@ def _greedy_ticket_with_first_leg(cand: pd.DataFrame, n_legs: int, first_idx: in
         return None
     chosen: list[pd.Series] = [first]
     used = {p0}
+    prop_counts: Counter[str] = Counter()
+    prop_counts[_ticket_prop_token(first)] += 1
     for i in range(len(cand)):
         if len(chosen) >= n_legs:
             break
@@ -1996,8 +2019,11 @@ def _greedy_ticket_with_first_leg(cand: pd.DataFrame, n_legs: int, first_idx: in
         p = str(r.get("player", "") or "").strip().lower()
         if not p or p in used:
             continue
+        if not _can_add_row_with_prop_cap(r, prop_counts):
+            continue
         chosen.append(r)
         used.add(p)
+        prop_counts[_ticket_prop_token(r)] += 1
     if len(chosen) < n_legs:
         return None
     return chosen
@@ -2083,12 +2109,16 @@ def _collect_row_candidates_for_structure(
     if max_variants == 1 and tg_starts <= 1:
         chosen: list[pd.Series] = []
         used_players: set[str] = set()
+        prop_counts: Counter[str] = Counter()
         for _, r in cand.iterrows():
             p = str(r.get("player", "")).strip().lower()
             if not p or p in used_players:
                 continue
+            if not _can_add_row_with_prop_cap(r, prop_counts):
+                continue
             chosen.append(r)
             used_players.add(p)
+            prop_counts[_ticket_prop_token(r)] += 1
             if len(chosen) == n_legs:
                 break
         if len(chosen) < n_legs:
@@ -5772,6 +5802,7 @@ def build_tickets(
         ticket_players = set()
         sports_in_ticket = set()
         fantasy_count = 0
+        prop_type_counts: Counter[str] = Counter()
 
         if can_mix:
             for sport in sports_available:
@@ -5779,9 +5810,12 @@ def build_tickets(
                 for _, row in sport_pool.iterrows():
                     player = str(row.get("player", "")).strip().lower()
                     if player and player not in ticket_players:
+                        if not _can_add_row_with_prop_cap(row, prop_type_counts):
+                            continue
                         ticket_rows.append(row)
                         ticket_players.add(player)
                         sports_in_ticket.add(sport)
+                        prop_type_counts[_ticket_prop_token(row)] += 1
                         break
 
             for _, row in eligible.iterrows():
@@ -5791,9 +5825,12 @@ def build_tickets(
                 if player and player not in ticket_players:
                     if _is_fantasy_prop(row) and fantasy_count >= max_fantasy:
                         continue
+                    if not _can_add_row_with_prop_cap(row, prop_type_counts):
+                        continue
                     ticket_rows.append(row)
                     ticket_players.add(player)
                     sports_in_ticket.add(row.get("sport", ""))
+                    prop_type_counts[_ticket_prop_token(row)] += 1
                     if _is_fantasy_prop(row):
                         fantasy_count += 1
         else:
@@ -5805,9 +5842,12 @@ def build_tickets(
 
                     if _is_fantasy_prop(row) and fantasy_count >= max_fantasy:
                         continue
+                    if not _can_add_row_with_prop_cap(row, prop_type_counts):
+                        continue
 
                     ticket_rows.append(row)
                     ticket_players.add(player)
+                    prop_type_counts[_ticket_prop_token(row)] += 1
                     if _is_fantasy_prop(row):
                         fantasy_count += 1
 
@@ -5818,9 +5858,12 @@ def build_tickets(
                     break
                 player = str(row.get("player", "")).strip().lower()
                 if player and player not in ticket_players:
+                    if not _can_add_row_with_prop_cap(row, prop_type_counts):
+                        continue
                     ticket_rows.append(row)
                     ticket_players.add(player)
                     sports_in_ticket.add(row.get("sport", ""))
+                    prop_type_counts[_ticket_prop_token(row)] += 1
 
         if len(ticket_rows) == n_legs:
             if can_mix and len(sports_in_ticket) < 2:
@@ -5969,6 +6012,7 @@ def build_mixed_picktype_tickets(
         legs = []
         used_players = set()
         fantasy_count = 0
+        prop_type_counts: Counter[str] = Counter()
 
         # 1) Required Standards first
         for _, r in std.iloc[std_start:].iterrows():
@@ -5978,8 +6022,11 @@ def build_mixed_picktype_tickets(
             if p and p not in used_players:
                 if _is_fantasy_prop(r) and fantasy_count >= max_fantasy:
                     continue
+                if not _can_add_row_with_prop_cap(r, prop_type_counts):
+                    continue
                 legs.append(r)
                 used_players.add(p)
+                prop_type_counts[_ticket_prop_token(r)] += 1
                 if _is_fantasy_prop(r):
                     fantasy_count += 1
 
@@ -5997,8 +6044,11 @@ def build_mixed_picktype_tickets(
             if p and p not in used_players:
                 if _is_fantasy_prop(r) and fantasy_count >= max_fantasy:
                     continue
+                if not _can_add_row_with_prop_cap(r, prop_type_counts):
+                    continue
                 legs.append(r)
                 used_players.add(p)
+                prop_type_counts[_ticket_prop_token(r)] += 1
                 if _is_fantasy_prop(r):
                     fantasy_count += 1
 
@@ -6009,8 +6059,11 @@ def build_mixed_picktype_tickets(
                     break
                 p = str(r.get("player", "")).strip().lower()
                 if p and p not in used_players:
+                    if not _can_add_row_with_prop_cap(r, prop_type_counts):
+                        continue
                     legs.append(r)
                     used_players.add(p)
+                    prop_type_counts[_ticket_prop_token(r)] += 1
 
         if len(legs) == n_legs:
             std_count = sum(1 for x in legs if str(x.get("pick_type", "")) == "Standard")
@@ -7835,6 +7888,7 @@ def main():
             return df
 
         sport = str(df["sport"].iloc[0]).upper() if "sport" in df.columns and len(df) > 0 else ""
+        total_loaded = int(len(df))
 
         # Sport-specific prop exclusions
         excluded = set()
@@ -7850,6 +7904,14 @@ def main():
             excluded = set()
 
         filtered_df = df.copy()
+        voided_excluded = 0
+        if "void_reason" in filtered_df.columns:
+            void_s = filtered_df["void_reason"].astype(str).str.strip()
+            void_mask = (
+                void_s.ne("")
+                & ~void_s.str.upper().isin({"NAN", "NONE", "NULL"})
+            )
+            voided_excluded = int(void_mask.sum())
         if excluded and "prop_type" in filtered_df.columns:
             filtered_df = filtered_df[
                 ~filtered_df["prop_type"].astype(str).str.lower().isin(excluded)
@@ -7971,7 +8033,7 @@ def main():
             p for p in (pick_types if pick_types else ["Goblin", "Standard"]) if p != "Demon"
         ]
 
-        return filter_eligible(
+        pooled = filter_eligible(
             filtered_df,
             effective_min_hit,
             args.min_edge,
@@ -7980,6 +8042,18 @@ def main():
             effective_pick_types,
             allow_strong_l5_bypass=(sport != "SOCCER"),
         )
+        gob_n = std_n = dem_n = 0
+        if pooled is not None and "pick_type" in pooled.columns:
+            pt_u = pooled["pick_type"].astype(str).str.upper().str.strip()
+            gob_n = int(pt_u.eq("GOBLIN").sum())
+            std_n = int(pt_u.eq("STANDARD").sum())
+            dem_n = int(pt_u.eq("DEMON").sum())
+        passing = int(len(pooled)) if pooled is not None else 0
+        print(
+            f"  [pool] {sport}: {total_loaded} legs loaded, {voided_excluded} excluded by void, "
+            f"{passing} in pool | pick_types: goblin={gob_n} std={std_n} demon={dem_n}"
+        )
+        return pooled
 
     def print_nhl_trace(nhl_df: pd.DataFrame | None):
         if nhl_df is None or nhl_df.empty:
