@@ -22,7 +22,8 @@ Thumbs.db
 desktop.ini
 .vscode/
 .idea/
-.claude/
+# Local clone of personal Cursor profile repo (see README inside that folder)
+cursor-profile/
 
 # Logs
 *.log
@@ -31,10 +32,6 @@ desktop.ini
 .env
 .env.*
 *.env
-private/*
-!private/secrets.example
-!private/docs/
-!private/docs/**
 
 # Databases
 # Includes data/cache/synthetic_graded.db (large generated synthetic graded store)
@@ -62,36 +59,21 @@ outputs/synthetic/preview_*.csv
 ~$*.xlsx
 ~$*.xls
 
-# Tennis local stats cache (generated)
-Tennis/data/
-
 # Generated outputs
 outputs/
 ResultFiles/
 **/outputs/
 **/ResultFiles/
-
-# Committed graded bundles for Railway / static hosts (populated by scripts/run_grader.ps1).
-# ui_runner/graded_slate/<date>/graded_*.xlsx — NOT ignored; keep under 5MB per file in the copy step.
 grades/
 models/
 
-# Generated UI templates / JSON (pipeline & ticket eval — keep local only)
-# Base tickets_latest.json + slate_latest.json are committed stubs for Railway cold deploy.
-# Ignore only dated/extra copies so pipeline snapshots do not clutter git.
-ui_runner/templates/tickets_latest_*.json
-ui_runner/templates/slate_latest_*.json
-# ticket_eval_*.html — track in git for Railway/static hosts (served at /grades/<date> and iframe URLs).
-# graded_props_YYYY-MM-DD.json under ui_runner/templates/ — keep tracked (Railway serves /grades/props/<date>).
-# ui_runner/templates/slate_eval_*.html  # optional: often committed for deploy/CDN
-
-# Grade / payout logs (generated)
-data/grade_history.json
-data/payout_samples/payout_log_*.csv
-
-# Soccer ID tooling outputs (under Soccer/outputs/; also listed explicitly if outputs rules change)
-Soccer/outputs/unmatched_soccer_players_*.csv
-Soccer/outputs/soccer_id_batch_resolve_log.csv
+# Generated html/json artifacts if you don't want tracked
+# Uncomment these if they should stay local only
+# ui_runner/templates/slate_eval_*.html
+# ui_runner/templates/ticket_eval_*.html
+# ui_runner/templates/tickets_latest.json
+# ui_runner/templates/slate_latest.json
+# ui_runner/docs/tickets_latest.json
 
 # Build artifacts
 build/
@@ -106,7 +88,6 @@ dist/
 *.gif
 
 # Browser/session runtime artifacts (never commit)
-local/
 browser_session/
 browser_session_harvest2/
 chrome_cdp_profile/
@@ -118,8 +99,6 @@ ui_runner/static/Logo Design Request_files/
 ui_runner/static/Logo Design Request2_files/
 
 # Docs/temp/patch leftovers
-*.bak
-*.BROKEN_BACKUP
 
 git_push_log.txt
 patch_replacement.txt
@@ -136,7 +115,9 @@ NBA/schedule_cache_*.csv
 
 # Railway slate files — tracked at sport root so the Railway app gets fresh data on every push
 !NBA/step8_all_direction_clean.xlsx
-!NHL/outputs/step8_nhl_direction_clean.xlsx
 !NHL/step8_nhl_direction_clean.xlsx
 !Soccer/step8_soccer_direction_clean.xlsx
 !MLB/step8_mlb_direction_clean.xlsx
+
+# Optional machine-local grader wrapper (same logic as a trimmed run_grader.ps1; keep local if you use it)
+scripts/run_grader-Travel-PC.ps1
