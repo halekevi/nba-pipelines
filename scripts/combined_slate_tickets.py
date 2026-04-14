@@ -1002,8 +1002,20 @@ NHL_EXCLUDED_PROPS = {
 
 SOCCER_EXCLUDED_PROPS = {
     "passes attempted",  # 0% hit rate
-    "assists",           # 5.6% hit rate
-    "goals",             # 9.7% hit rate
+    "assists",  # 5.6% hit rate
+    "goals",  # 9.7% hit rate
+    "goal + assist",  # combo — very low realized hit rate on graded history
+    "tackles",
+    "fouls",
+    "clearances",
+}
+
+# Soccer step8 boards are OVER-only today; graded history shows weak realized OVER EV.
+# Raise per-leg hit floors vs global defaults (still below NBA; soccer hit_rate is often a proxy).
+SOCCER_LEG_MIN_HIT_RATE = {
+    2: 0.56,
+    3: 0.58,
+    4: 0.60,
 }
 
 
@@ -5041,7 +5053,16 @@ def _edge_magnitude_series(df: pd.DataFrame) -> pd.Series:
 
 
 # ── Filter eligible props for tickets ─────────────────────────────────────────
-def filter_eligible(df: pd.DataFrame, min_hit_rate=0.55, min_edge=0.0, min_rank=None, tiers=None, pick_types=None):
+def filter_eligible(
+    df: pd.DataFrame,
+    min_hit_rate=0.55,
+    min_edge=0.0,
+    min_rank=None,
+    tiers=None,
+    pick_types=None,
+    *,
+    allow_strong_l5_bypass: bool = True,
+):
     mask = pd.Series([True] * len(df), index=df.index)
     MIN_SAMPLE_FOR_TICKET = 4
     if "l5_games" in df.columns:
@@ -5079,7 +5100,11 @@ def filter_eligible(df: pd.DataFrame, min_hit_rate=0.55, min_edge=0.0, min_rank=
     l5_u = pd.to_numeric(df.get("l5_under"), errors="coerce").fillna(0)
     strong_l5 = (l5_o >= 4) | (l5_u >= 4)
     if min_hit_rate > 0 and "hit_rate" in df.columns:
-        mask &= (df["hit_rate"].fillna(0) >= min_hit_rate) | strong_l5
+        hr_ok = df["hit_rate"].fillna(0) >= min_hit_rate
+        if allow_strong_l5_bypass:
+            mask &= hr_ok | strong_l5
+        else:
+            mask &= hr_ok
     if min_edge > 0:
         mask &= _edge_magnitude_series(df).fillna(0) >= min_edge
     if min_rank is not None and "rank_score" in df.columns:
@@ -5275,6 +5300,10 @@ def build_single_structure_ticket(
             # NHL structured pool should use sport caps, not the global strict floor.
             nhl_cap = NHL_LEG_MIN_HIT_RATE.get(int(n_legs))
             thr = max(0.52, float(nhl_cap)) if nhl_cap is not None else max(0.52, thr)
+        if sport_up in ("SOCCER", "SOC"):
+            soc_cap = SOCCER_LEG_MIN_HIT_RATE.get(int(n_legs))
+            if soc_cap is not None:
+                thr = max(thr, float(soc_cap))
         if sport_up == "TENNIS":
             tn_cap = TENNIS_LEG_MIN_HIT_RATE.get(int(n_legs))
             thr = max(0.50, float(tn_cap)) if tn_cap is not None else max(0.50, thr)
@@ -5475,6 +5504,10 @@ def build_structure_ticket_variants(
         if sport_up == "NHL":
             nhl_cap = NHL_LEG_MIN_HIT_RATE.get(int(n_legs))
             thr = max(0.52, float(nhl_cap)) if nhl_cap is not None else max(0.52, thr)
+        if sport_up in ("SOCCER", "SOC"):
+            soc_cap = SOCCER_LEG_MIN_HIT_RATE.get(int(n_legs))
+            if soc_cap is not None:
+                thr = max(thr, float(soc_cap))
         if sport_up == "TENNIS":
             tn_cap = TENNIS_LEG_MIN_HIT_RATE.get(int(n_legs))
             thr = max(0.50, float(tn_cap)) if tn_cap is not None else max(0.50, thr)
@@ -5692,6 +5725,10 @@ def build_tickets(
             nhl_cap = NHL_LEG_MIN_HIT_RATE.get(int(n_legs))
             if nhl_cap is not None:
                 min_hr = max(0.52, float(nhl_cap))
+        if len(su) == 1 and su[0] == "SOCCER":
+            soc_cap = SOCCER_LEG_MIN_HIT_RATE.get(int(n_legs))
+            if soc_cap is not None:
+                min_hr = max(float(min_hr), float(soc_cap))
     ok_tiers = POWER_MIN_TIER.get(n_legs, ["A", "B", "C", "D"])
 
     # Apply hit rate floor to this pool
@@ -5893,6 +5930,10 @@ def build_mixed_picktype_tickets(
             if su0 == "NHL":
                 nhl_cap = NHL_LEG_MIN_HIT_RATE.get(int(n_legs))
                 thr = max(0.52, float(nhl_cap)) if nhl_cap is not None else max(0.52, thr)
+            elif su0 in ("SOCCER", "SOC"):
+                soc_cap = SOCCER_LEG_MIN_HIT_RATE.get(int(n_legs))
+                if soc_cap is not None:
+                    thr = max(thr, float(soc_cap))
         std = std[pd.to_numeric(std["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
         gob = gob[pd.to_numeric(gob["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
 
@@ -6164,6 +6205,12 @@ def build_final_web_ticket_groups(
                 if base is None:
                     return float(cap)
                 return min(base, float(cap))
+        if str(label).strip().upper() in ("SOCCER", "SOC"):
+            cap = SOCCER_LEG_MIN_HIT_RATE.get(int(n))
+            if cap is not None:
+                if base is None:
+                    return float(cap)
+                return max(base, float(cap))
         return base
 
     def _add_mixed_std_gob(sub: pd.DataFrame, label: str, leg_sizes_override: list | None = None):
@@ -7830,6 +7877,9 @@ def main():
                 effective_min_hit = max(args.min_hit_rate, 0.58)   # CBB Goblin: 61.9%
             elif sport == "NHL":
                 effective_min_hit = max(args.min_hit_rate, 0.38)   # NHL Goblin is weak (40%)
+            elif sport == "SOCCER":
+                # Soccer OVER legs grade poorly vs model hit_rate — tighten pool vs generic 0.55.
+                effective_min_hit = max(args.min_hit_rate, 0.58)
             else:
                 effective_min_hit = max(args.min_hit_rate, 0.55)
 
@@ -7840,6 +7890,8 @@ def main():
                 effective_min_hit = max(args.min_hit_rate, 0.50)   # CBB Standard: 51.6%
             elif sport == "NHL":
                 effective_min_hit = max(args.min_hit_rate, 0.65)   # NHL Standard: 67.9% — very strong
+            elif sport == "SOCCER":
+                effective_min_hit = max(args.min_hit_rate, 0.55)
             else:
                 effective_min_hit = max(args.min_hit_rate, 0.50)
 
@@ -7896,6 +7948,7 @@ def main():
             effective_min_rank,
             effective_tiers,
             effective_pick_types,
+            allow_strong_l5_bypass=(sport != "SOCCER"),
         )
 
     def print_nhl_trace(nhl_df: pd.DataFrame | None):
