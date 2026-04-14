@@ -389,6 +389,7 @@ if ($SoccerOnly) {
     if ($ok) { $ok = Run-Step "Soccer Step 7 - Rank Props"         $SoccerDir ".\scripts\step7_rank_props_soccer.py"             "--input outputs\step6_soccer_role_context.csv --output outputs\step7_soccer_ranked.xlsx" }
     if ($ok) { $ok = Run-Step "Soccer Step 7b - Edge Score"        $Root      ".\scripts\step7b_edge_score.py"                  "--sport Soccer --step7-xlsx `"$SoccerDir\outputs\step7_soccer_ranked.xlsx`" --repo-root `"$Root`"" }
     if ($ok) { $ok = Run-Step "Soccer Step 8 - Direction Context"  $SoccerDir ".\scripts\step8_add_direction_context_soccer.py"  "--input outputs\step7_soccer_ranked.xlsx --sheet ALL --output outputs\step8_soccer_direction.csv --xlsx outputs\step8_soccer_direction_clean.xlsx --date $Date" }
+    if ($ok) { $ok = Run-Step "Soccer Step 8b - Health Check"      $SoccerDir ".\scripts\healthcheck_soccer_directions.py"      "--step7 outputs\step7_soccer_ranked.xlsx --step8 outputs\step8_soccer_direction_clean.xlsx" }
     Write-Host ""
     if ($ok) { Write-Host "  Soccer complete." -ForegroundColor Green } else { Write-Host "  Soccer FAILED." -ForegroundColor Red }
     if ($ok) { Run-Combined "after Soccer" }
@@ -650,6 +651,7 @@ $SoccerJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "Soccer Step 7 - Rank Props"         $SoccerDir ".\scripts\step7_rank_props_soccer.py"             "--input outputs\step6_soccer_role_context.csv --output outputs\step7_soccer_ranked.xlsx" }
     if ($ok) { $ok = Run-Step-Job "Soccer Step 7b - Edge Score"        $Root      ".\scripts\step7b_edge_score.py"                  "--sport Soccer --step7-xlsx `"$SoccerDir\outputs\step7_soccer_ranked.xlsx`" --repo-root `"$Root`"" }
     if ($ok) { $ok = Run-Step-Job "Soccer Step 8 - Direction Context"  $SoccerDir ".\scripts\step8_add_direction_context_soccer.py"  "--input outputs\step7_soccer_ranked.xlsx --sheet ALL --output outputs\step8_soccer_direction.csv --xlsx outputs\step8_soccer_direction_clean.xlsx --date $Date" }
+    if ($ok) { $ok = Run-Step-Job "Soccer Step 8b - Health Check"      $SoccerDir ".\scripts\healthcheck_soccer_directions.py"      "--step7 outputs\step7_soccer_ranked.xlsx --step8 outputs\step8_soccer_direction_clean.xlsx" }
     return $ok
 } -ArgumentList $SoccerDir, $Date, $SkipFetch
 

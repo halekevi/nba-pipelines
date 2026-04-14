@@ -163,6 +163,12 @@ Run-Step "S8" "step8_add_direction_context_soccer.py" @(
     "--xlsx",   "$OutputsDir\step8_soccer_direction_clean.xlsx"
 )
 
+# ── S8b: Direction / edge health checks (non-blocking warnings) ──────────────
+Run-Step "S8b" "healthcheck_soccer_directions.py" @(
+    "--step7", "$OutputsDir\step7_soccer_ranked.xlsx",
+    "--step8", "$OutputsDir\step8_soccer_direction_clean.xlsx"
+)
+
 # Copy clean slate into repo outputs\<Date>\ for run_grader.ps1 (dated filename).
 $DateDir = Join-Path $RepoRoot "outputs\$Date"
 if (-not (Test-Path $DateDir)) { New-Item -ItemType Directory -Path $DateDir -Force | Out-Null }
