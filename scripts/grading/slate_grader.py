@@ -892,6 +892,14 @@ def write_dashboard(wb,df,sport,date_str):
     c.alignment=Alignment(horizontal='center',vertical='center')
     ws.row_dimensions[1].height=28
     d=drc(df)
+    # Headline quality metrics exclude Tier D (keep Tier D rows in Box Raw / detail sheets).
+    if 'tier' in df.columns:
+        tier_u = df['tier'].astype(str).str.upper().str.strip()
+        df_headline = df[tier_u.ne('D')].copy()
+        headline_label = 'Full Slate (A+B+C)'
+    else:
+        df_headline = df
+        headline_label = 'Full Slate'
 
     def sec_hdr(row,label,color):
         hc(ws,row,1,label,bg=color)
@@ -926,12 +934,9 @@ def write_dashboard(wb,df,sport,date_str):
     for ci,h in enumerate(['Direction','Total Props','Decided','Hits','Misses','Voids','Hit Rate'],2):
         hc(ws,row,ci,h,bg=C['hdr2'])
     row+=1
-    decided=df[df['result'].isin(['HIT','MISS'])]
-    hits=(decided['result']=='HIT').sum(); misses=(decided['result']=='MISS').sum()
-    voids=df['result'].isin(['VOID','PUSH']).sum()
-    hr=hits/len(decided) if len(decided) else 0
-    dc(ws,row,1,'Full Slate',bold=True,align='left'); dc(ws,row,2,'ALL')
-    dc(ws,row,3,len(df)); dc(ws,row,4,len(decided))
+    hr,hits,misses,voids,decided_n = hit_rate(df_headline)
+    dc(ws,row,1,headline_label,bold=True,align='left'); dc(ws,row,2,'ALL')
+    dc(ws,row,3,len(df_headline)); dc(ws,row,4,decided_n)
     dc(ws,row,5,int(hits)); dc(ws,row,6,int(misses)); dc(ws,row,7,int(voids))
     pct_cell(ws,row,8,hr); row+=1
 
@@ -1014,9 +1019,14 @@ def main():
     if args.actuals:
         print(f'Applying actuals from {args.actuals}...')
         df=apply_actuals(df,args.actuals)
-        decided=df[df['result'].isin(['HIT','MISS'])]
+        headline_df = df
+        if 'tier' in df.columns:
+            tier_u = df['tier'].astype(str).str.upper().str.strip()
+            headline_df = df[tier_u.ne('D')].copy()
+        decided=headline_df[headline_df['result'].isin(['HIT','MISS'])]
         hits=(decided['result']=='HIT').sum()
-        print(f'  Graded: {len(decided)} decided — {hits} HIT / {len(decided)-hits} MISS')
+        extra = " (A+B+C only)" if len(headline_df) != len(df) else ""
+        print(f'  Graded{extra}: {len(decided)} decided — {hits} HIT / {len(decided)-hits} MISS')
     else:
         df['result']='PENDING'; df['void_reason_grade']=''; df['margin']=np.nan
         df['actual']=np.nan; df['result_sign']=0
