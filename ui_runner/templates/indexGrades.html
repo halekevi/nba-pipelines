@@ -2062,6 +2062,39 @@ async function discoverDates(){
   return found.sort();
 }
 
+// Prefer a default Grades date that already has decided outcomes, not a still-live slate.
+async function _decidedPropsCountForDate(dateStr) {
+  try {
+    const res = await fetch('/api/graded-props?date=' + encodeURIComponent(dateStr), { cache: 'no-store' });
+    if (!res.ok) return 0;
+    const j = await res.json();
+    const props = Array.isArray(j?.props) ? j.props : [];
+    let decided = 0;
+    for (const p of props) {
+      const ru = String((p && p.result) || '').trim().toUpperCase();
+      if (ru === 'HIT' || ru === 'MISS') {
+        decided += 1;
+        if (decided >= 1) break; // one is enough to qualify date as graded
+      }
+    }
+    return decided;
+  } catch (_e) {
+    return 0;
+  }
+}
+
+async function pickBestDefaultGradesDate(found, yest) {
+  if (!Array.isArray(found) || !found.length) return yest;
+  // Check up to the most recent 12 dates up to yesterday.
+  const candidates = found.filter(ds => ds <= yest).slice(-12).reverse();
+  for (const ds of candidates) {
+    const decided = await _decidedPropsCountForDate(ds);
+    if (decided > 0) return ds;
+  }
+  // Fallback: yesterday if available, else newest report date.
+  return found.includes(yest) ? yest : found[found.length - 1];
+}
+
 // ─── RENDER date pills ────────────────────────────────────────────────────────
 function renderPills(){
   const container = gradesEl('date-pills');
@@ -2222,9 +2255,8 @@ window.loadDate = loadDate;
     return;
   }
 
-  // Prefer yesterday when a slate exists for it (aligns ticket eval with "yesterday" grading day)
-  const latest = found[found.length - 1];
-  const pick = found.includes(yest) ? yest : latest;
+  // Prefer the newest date that already has decided props (avoids defaulting to today's ungraded slips).
+  const pick = await pickBestDefaultGradesDate(found, yest);
   currentDateIdx = found.indexOf(pick);
   renderPills();
   loadDate(pick);
