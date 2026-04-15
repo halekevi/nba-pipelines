@@ -1343,6 +1343,65 @@ def _iter_props_history_db_paths():
     return sorted(cache.glob("*_props_history.db"))
 
 
+def _graded_props_json_paths_sorted() -> list[Path]:
+    """Committed graded prop bundles (Railway has these; data/cache/*.db is gitignored)."""
+    if not TEMPLATES_DIR.is_dir():
+        return []
+    return sorted(TEMPLATES_DIR.glob("graded_props_*.json"))
+
+
+def _rows_ml_from_graded_props_json() -> list[tuple[float, float | None, str]]:
+    """
+    (ml_prob, edge, result) for HIT/MISS rows with ml_prob — same shape as props_history
+    calibration query. ml_prob may be 0–1 or percent; edge may be fraction or percent points.
+    """
+    rows: list[tuple[float, float | None, str]] = []
+    for path in _graded_props_json_paths_sorted():
+        try:
+            data = json.loads(path.read_text(encoding="utf-8-sig"))
+        except Exception:
+            continue
+        for p in data.get("props") or []:
+            res = str(p.get("result") or "").strip().upper()
+            if res not in ("HIT", "MISS"):
+                continue
+            raw_ml = p.get("ml_prob")
+            if raw_ml is None or (isinstance(raw_ml, str) and not str(raw_ml).strip()):
+                continue
+            try:
+                ml = float(raw_ml)
+            except (TypeError, ValueError):
+                continue
+            raw_edge = p.get("edge")
+            edge_f: float | None = None
+            if raw_edge is not None and str(raw_edge).strip() != "":
+                try:
+                    edge_f = float(raw_edge)
+                except (TypeError, ValueError):
+                    edge_f = None
+            rows.append((ml, edge_f, res))
+    return rows
+
+
+def _rows_ml_from_props_history_sqlite() -> list[tuple[float, float | None, str]]:
+    rows: list[tuple[float, float | None, str]] = []
+    for dbp in _iter_props_history_db_paths():
+        try:
+            conn = sqlite3.connect(str(dbp))
+            cur = conn.execute(
+                "SELECT ml_prob, edge, result FROM props_history "
+                "WHERE result IN ('HIT','MISS') AND ml_prob IS NOT NULL"
+            )
+            rows.extend((float(r[0]), r[1], str(r[2])) for r in cur.fetchall())
+            conn.close()
+        except Exception:
+            try:
+                conn.close()
+            except Exception:
+                pass
+    return rows
+
+
 def _ensure_props_history_void_reason_column(conn: sqlite3.Connection) -> None:
     """Older props_history DBs lack void_reason; add it so SELECT lists stay valid."""
     try:
@@ -1356,22 +1415,14 @@ def _ensure_props_history_void_reason_column(conn: sqlite3.Connection) -> None:
 
 
 def _grades_insights_payload() -> dict:
-    """Calibration (ml_prob buckets), edge-bucket hit rates, CLV summary from local SQLite archives."""
-    rows_ml: list[tuple[float, float | None, str]] = []
-    for dbp in _iter_props_history_db_paths():
-        try:
-            conn = sqlite3.connect(str(dbp))
-            cur = conn.execute(
-                "SELECT ml_prob, edge, result FROM props_history "
-                "WHERE result IN ('HIT','MISS') AND ml_prob IS NOT NULL"
-            )
-            rows_ml.extend((float(r[0]), r[1], str(r[2])) for r in cur.fetchall())
-            conn.close()
-        except Exception:
-            try:
-                conn.close()
-            except Exception:
-                pass
+    """
+    Calibration + edge buckets: prefer committed graded_props_*.json (deployed on Railway);
+    fall back to data/cache/*_props_history.db when JSON yields no ml_prob rows (local archives).
+    CLV breakdowns still use clv_log in props_history DBs when present.
+    """
+    rows_ml = _rows_ml_from_graded_props_json()
+    if not rows_ml:
+        rows_ml = _rows_ml_from_props_history_sqlite()
 
     cal_bins: list[tuple[int, int, str]] = [
         (50, 55, "50-55%"),
