@@ -1672,6 +1672,8 @@ TENNIS_LEG_MIN_HIT_RATE = {2: 0.55, 3: 0.58, 4: 0.62}
 
 # Pipelines that emit step8 boards into combined slate (reference for docs / tooling).
 ACTIVE_SPORTS = ("NBA", "NHL", "SOCCER", "TENNIS", "MLB", "NBA1H", "NBA1Q", "WCBB")
+# NFL — Phase 1 scaffold only; keep off slate until step8 + historical hit rates exist (Sept 2026).
+# Reference: {"NFL": False}  # activate September 2026 — do not add "NFL" to ACTIVE_SPORTS yet.
 
 # When --high-conviction: per-leg hit_rate floors (merged with LEG_MIN_HIT_RATE via max())
 HIGH_CONVICTION_LEG_MIN_HIT_RATE = {

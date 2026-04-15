@@ -78,6 +78,7 @@ $MLBDir    = Join-Path $Root "MLB"
 $SoccerDir = Join-Path $Root "Soccer"
 $TennisDir = Join-Path $Root "Tennis"
 $WNBADir   = Join-Path $Root "WNBA"
+$NFLDir    = Join-Path $Root "NFL"
 $OutDir    = Join-Path $Root "outputs\$Date"
 $WebOutDir = Join-Path $Root "ui_runner\templates"
 
@@ -688,6 +689,35 @@ $TennisJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "Tennis Step 8 - Direction Context"  $TennisDir ".\scripts\step8_add_direction_context_tennis.py" "--input outputs\step7_tennis_ranked.xlsx --sheet ALL --output outputs\step8_tennis_direction.csv --xlsx outputs\step8_tennis_direction_clean.xlsx --date $Date" }
     return $ok
 } -ArgumentList $TennisDir, $Date, $SkipFetch
+
+# -- NFL Job (INACTIVE until Sept 2026 regular season) -------------------------
+# NFL — activate September 2026 for regular season
+# Uncomment when step6 historical data is populated and step8 exists.
+# $NFLJob = Start-Job -ScriptBlock {
+#     param($NFLDir, $Date, $SkipFetch)
+#     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
+#     $env:NFL_PIPELINE_ACTIVE = "1"
+#     function Run-Step-Job {
+#         param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
+#         Write-Output "[NFL] --> $Label"
+#         Push-Location $Dir
+#         try {
+#             $cmd = if ($Arguments) { "py -3.14 `"$Script`" $Arguments" } else { "py -3.14 `"$Script`"" }
+#             Write-Output "        CMD: $cmd"
+#             $output = Invoke-Expression $cmd 2>&1; $exit = $LASTEXITCODE
+#             foreach ($line in $output) { Write-Output "        $line" }
+#             if ($exit -ne 0) { Write-Output "[NFL] FAILED: $Label (exit $exit)"; return $false }
+#             Write-Output "[NFL] OK: $Label"; return $true
+#         } catch { Write-Output "[NFL] EXCEPTION: $_"; return $false
+#         } finally { Pop-Location }
+#     }
+#     $ok = $true
+#     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "NFL Step 1 - Fetch PrizePicks" $NFLDir ".\scripts\step1_fetch_prizepicks_nfl.py" "--output data\outputs\step1_pp_props_today.csv --date $Date" } } else { Write-Output "[NFL] Skipping step1 fetch" }
+#     if ($ok) { $ok = Run-Step-Job "NFL Step 2 - Clean Props" $NFLDir ".\scripts\step2_clean_props.py" "" }
+#     if ($ok) { $ok = Run-Step-Job "NFL Step 4 - Defense Rankings" $NFLDir ".\scripts\step4_defense_rankings.py" "" }
+#     if ($ok) { $ok = Run-Step-Job "NFL Step 6 - Hit Rates (skeleton)" $NFLDir ".\scripts\step6_historical_hit_rates.py" "" }
+#     return $ok
+# } -ArgumentList $NFLDir, $Date, $SkipFetch
 
 # -- Wait + stream output -----------------------------------------------------
 $allJobs = @($NBAJob, $CBBJob, $NHLJob, $SoccerJob, $TennisJob)

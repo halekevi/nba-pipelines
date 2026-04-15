@@ -84,6 +84,23 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host "[LATE_FETCH] MLB step1 failed — continuing" -ForegroundColor Yellow
 }
 
+# NFL late fetch — activate week of Sep 7, 2026
+# $NFLActive = (Get-Date) -ge [DateTime]"2026-09-07"
+# if ($NFLActive) {
+#     Write-Host "[LATE_FETCH] Fetching NFL props (append)..."
+#     $NFLDir = Join-Path $Root "NFL"
+#     Push-Location $NFLDir
+#     try {
+#         & py -3.14 ".\scripts\step1_fetch_prizepicks_nfl.py" "--append" "--output" "data\outputs\step1_pp_props_today.csv"
+#     }
+#     finally {
+#         Pop-Location
+#     }
+#     if ($LASTEXITCODE -ne 0) {
+#         Write-Host "[LATE_FETCH] NFL step1 failed — continuing" -ForegroundColor Yellow
+#     }
+# }
+
 $pipeScript = Join-Path $Root "run_pipeline.ps1"
 if (-not (Test-Path $pipeScript)) {
     Write-Host "[LATE_FETCH] Missing run_pipeline.ps1 at $pipeScript" -ForegroundColor Red
