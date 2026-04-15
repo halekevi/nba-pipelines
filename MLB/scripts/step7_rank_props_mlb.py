@@ -190,47 +190,31 @@ BLEND_WEIGHTS_MLB: dict[str, float] = {
 }
 
 
-def _apply_ml_blend_mlb(out: pd.DataFrame) -> pd.DataFrame:
-    """Apply ML blend to rank_score. Graceful no-op when model is missing."""
-    import json as _json
-    root = Path(__file__).resolve().parents[2]
-    model_path = root / "models" / "prop_model_mlb.pkl"
-    feat_path  = root / "models" / "prop_model_mlb_features.json"
-    if not (model_path.exists() and feat_path.exists()):
-        out["ml_prob"] = np.nan; out["ml_edge"] = np.nan; out["final_score"] = out["rank_score"]
-        return out
-    try:
-        import joblib as _jl
-        model = _jl.load(model_path)
-        feats = _json.loads(feat_path.read_text(encoding="utf-8"))
-    except Exception as e:
-        print(f"⚠️  MLB ML model load failed: {e}")
-        out["ml_prob"] = np.nan; out["ml_edge"] = np.nan; out["final_score"] = out["rank_score"]
-        return out
-    try:
-        from ml_blend_weight import load_ml_blend_weight as _lmbw
-        blend_w = float(_lmbw(root, "mlb"))
-    except Exception:
-        blend_w = 0.20
-    try:
-        missing_f = [c for c in feats if c not in out.columns]
-        for c in missing_f: out[c] = 0.0
-        X = out[feats].astype(float)
-        raw_prob = pd.Series(model.predict_proba(X)[:, 1], index=out.index, dtype=float)
-        calib_path = root / "models" / "prop_model_mlb_calibrator.pkl"
-        if calib_path.exists():
-            import joblib as _jl2
-            cal = _jl2.load(calib_path)
-            try:
-                cal_vals = cal.predict_proba(raw_prob.values.reshape(-1, 1))[:, 1] if hasattr(cal, "predict_proba") else cal.predict(raw_prob.values)
-                ml_prob = pd.Series(cal_vals, index=out.index, dtype=float).clip(0.001, 0.999)
-            except Exception: ml_prob = raw_prob
-        else:
-            ml_prob = raw_prob
-    except Exception as e:
-        print(f"⚠️  MLB ML inference failed: {e}")
-        out["ml_prob"] = np.nan; out["ml_edge"] = np.nan; out["final_score"] = out["rank_score"]
-        return out
+def _fallback_ml_prob_series_mlb(out: pd.DataFrame) -> pd.Series:
+    """
+    When prop_model_mlb.pkl is missing or inference fails, use prop/direction
+    hit-rate priors (same signal as prop_hr_prior built earlier in step7).
+    """
+    s = pd.to_numeric(out.get("prop_hr_prior"), errors="coerce")
+    if s.notna().any():
+        return s.clip(0.001, 0.999)
+    return (
+        out.apply(
+            lambda r: _prop_hit_rate_prior(
+                str(r.get("prop_norm", "")).lower(),
+                str(r.get("bet_direction", "OVER")).upper(),
+            ),
+            axis=1,
+        )
+        .astype(float)
+        .clip(0.001, 0.999)
+    )
+
+
+def _finalize_mlb_ml_blend(out: pd.DataFrame, ml_prob: pd.Series, blend_w: float, label: str) -> pd.DataFrame:
+    fb = _fallback_ml_prob_series_mlb(out)
+    ml_prob = pd.to_numeric(ml_prob, errors="coerce")
+    ml_prob = ml_prob.where(ml_prob.notna(), fb).clip(0.001, 0.999)
     out["ml_prob"] = ml_prob
     out["ml_edge"] = ml_prob - 0.5
     existing = _to_num(out["rank_score"]).fillna(0.0)
@@ -246,12 +230,68 @@ def _apply_ml_blend_mlb(out: pd.DataFrame) -> pd.DataFrame:
         opp_hr = _to_num(out.get("opp_hr_historical")).where(_to_num(out.get("opp_hr_historical")).notna(), comp_hr)
         new_blend = w["ml_prob"]*ml_prob.clip(0,1).fillna(0.5) + w["composite_hr"]*comp_hr.clip(0,1) + w["floor_signal"]*floor_sig + w["line_gap_norm"]*lgn + w["opp_hr_historical"]*opp_hr.clip(0,1).fillna(0.5)
         out["final_score"] = existing * (1.0 + 0.30 * (new_blend - 0.5))
-        print(f"✅ MLB ML blend (multi-signal, weight={blend_w:.2f})")
+        print(f"✅ MLB ML blend (multi-signal, weight={blend_w:.2f}) [{label}]")
     else:
         out["final_score"] = (1.0 - blend_w) * existing + blend_w * out["ml_edge"]
-        print(f"✅ MLB ML blend applied (weight={blend_w:.2f})")
+        print(f"✅ MLB ML blend applied (weight={blend_w:.2f}) [{label}]")
     out["rank_score"] = out["final_score"].where(out["final_score"].notna(), out["rank_score"])
     return out
+
+
+def _apply_ml_blend_mlb(out: pd.DataFrame) -> pd.DataFrame:
+    """Apply ML blend to rank_score. Falls back to prop_hr_prior when model files are missing."""
+    import json as _json
+
+    root = Path(__file__).resolve().parents[2]
+    try:
+        from ml_blend_weight import load_ml_blend_weight as _lmbw
+
+        blend_w = float(_lmbw(root, "mlb"))
+    except Exception:
+        blend_w = 0.20
+
+    model_path = root / "models" / "prop_model_mlb.pkl"
+    feat_path = root / "models" / "prop_model_mlb_features.json"
+    if not (model_path.exists() and feat_path.exists()):
+        print("⚠️  MLB prop model files missing — using prop_hr_prior for ml_prob")
+        return _finalize_mlb_ml_blend(out, _fallback_ml_prob_series_mlb(out), blend_w, "prior-only")
+
+    try:
+        import joblib as _jl
+
+        model = _jl.load(model_path)
+        feats = _json.loads(feat_path.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"⚠️  MLB ML model load failed: {e} — using prop_hr_prior for ml_prob")
+        return _finalize_mlb_ml_blend(out, _fallback_ml_prob_series_mlb(out), blend_w, "prior-only")
+
+    try:
+        missing_f = [c for c in feats if c not in out.columns]
+        for c in missing_f:
+            out[c] = 0.0
+        X = out[feats].astype(float)
+        raw_prob = pd.Series(model.predict_proba(X)[:, 1], index=out.index, dtype=float)
+        calib_path = root / "models" / "prop_model_mlb_calibrator.pkl"
+        if calib_path.exists():
+            import joblib as _jl2
+
+            cal = _jl2.load(calib_path)
+            try:
+                cal_vals = (
+                    cal.predict_proba(raw_prob.values.reshape(-1, 1))[:, 1]
+                    if hasattr(cal, "predict_proba")
+                    else cal.predict(raw_prob.values)
+                )
+                ml_prob = pd.Series(cal_vals, index=out.index, dtype=float).clip(0.001, 0.999)
+            except Exception:
+                ml_prob = raw_prob
+        else:
+            ml_prob = raw_prob
+    except Exception as e:
+        print(f"⚠️  MLB ML inference failed: {e} — using prop_hr_prior for ml_prob")
+        return _finalize_mlb_ml_blend(out, _fallback_ml_prob_series_mlb(out), blend_w, "prior-only")
+
+    return _finalize_mlb_ml_blend(out, ml_prob, blend_w, "model")
 
 
 def _tier_from_score(score: float) -> str:

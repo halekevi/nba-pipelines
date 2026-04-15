@@ -353,6 +353,24 @@ def soccer_signed_margin(actual, line, direction: str) -> float:
     return round(line_f - actual_f, 2)
 
 
+def _slate_ml_prob_soccer(row: pd.Series) -> float:
+    """Carry ML probability from soccer step8 into graded rows (non-fatal if missing)."""
+    for k in ("ML Prob", "ml_prob", "MLProb", "ML_PROB"):
+        if k not in row.index:
+            continue
+        v = row[k]
+        if pd.isna(v):
+            continue
+        try:
+            x = float(v)
+            if x > 1.0:
+                x /= 100.0
+            return float(np.clip(x, 1e-3, 1.0 - 1e-3))
+        except (TypeError, ValueError):
+            continue
+    return float(np.nan)
+
+
 class SoccerGrader:
     """Advanced soccer prop grader with league & position awareness."""
     
@@ -727,6 +745,7 @@ def main() -> None:
             "tier": tier,
             "result": result,
             "edge": edge,
+            "ml_prob": _slate_ml_prob_soccer(slate_row),
             "confidence_score": confidence,
             "opp_avg": opp_analysis["opp_avg"],
             "opp_consistency": opp_analysis["opp_consistency"],

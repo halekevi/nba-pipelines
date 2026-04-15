@@ -92,6 +92,27 @@ def _normalize_nhl_prop_key(raw) -> str:
     return re.sub(r"_+", "_", s).strip("_")
 
 
+def _slate_ml_prob_nhl(row: pd.Series) -> float:
+    """Carry ml_prob from NHL step8 into graded rows (non-fatal if missing)."""
+    for k in ("ml_prob", "ML Prob", "MLProb"):
+        if k not in row.index:
+            continue
+        v = row[k]
+        if pd.isna(v):
+            continue
+        s = str(v).strip().lower()
+        if s in ("", "nan", "none"):
+            continue
+        try:
+            x = float(v)
+            if x > 1.0:
+                x /= 100.0
+            return float(np.clip(x, 1e-3, 1.0 - 1e-3))
+        except (TypeError, ValueError):
+            continue
+    return float(np.nan)
+
+
 def _build_nhl_actuals_lookup(actuals_df: pd.DataFrame) -> Dict[Tuple[str, str, str], float]:
     """(folded_player, TEAM, normalized_prop) -> actual"""
     lut: Dict[Tuple[str, str, str], float] = {}
@@ -562,6 +583,7 @@ def main() -> None:
             "player_type": player_type,
             "result": result,
             "edge": edge,
+            "ml_prob": _slate_ml_prob_nhl(slate_row),
             "pct_of_line": pct_of_line,
             "confidence_score": confidence,
             "opp_avg": opp_analysis["opp_avg"],
