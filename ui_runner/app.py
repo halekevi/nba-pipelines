@@ -1330,7 +1330,31 @@ def api_graded_props():
     try:
         data = json.loads(path.read_text(encoding="utf-8-sig"))
         if isinstance(data, dict):
-            return jsonify(data)
+            # Normalize stale graded_props bundles so Prop Evaluation does not show
+            # VOID_* eligibility flags as active when actual+line reconcile to HIT/MISS.
+            props_in = list(data.get("props") or [])
+            props_out: list[dict[str, Any]] = []
+            for p in props_in:
+                if not isinstance(p, dict):
+                    continue
+                row = dict(p)
+                if row.get("actual_value") in (None, "") and row.get("actual") not in (None, ""):
+                    row["actual_value"] = row.get("actual")
+                if row.get("direction") in (None, "") and row.get("dir") not in (None, ""):
+                    row["direction"] = row.get("dir")
+                if row.get("void_reason") in (None, "") and row.get("void_reason_grade") not in (None, ""):
+                    row["void_reason"] = row.get("void_reason_grade")
+                row = reconcile_props_history_dict(row)
+                res_u = str(row.get("result") or "").strip().upper()
+                if res_u in ("HIT", "MISS", "PUSH"):
+                    # Keep legacy eligibility flags for archives, but don't surface as active voids
+                    # once the row has a reconciled game result.
+                    row["void_reason"] = ""
+                props_out.append(row)
+            out = dict(data)
+            out["props"] = props_out
+            out["count"] = len(props_out)
+            return jsonify(out)
         return jsonify({"error": "invalid_shape", "detail": "expected object"}), 500
     except Exception as exc:
         return jsonify({"error": "read_failed", "detail": str(exc)}), 500

@@ -1657,7 +1657,7 @@ function renderPropsEvalCards(rows) {
         ((r.team || r.opp_team) ? escProps([r.team, r.opp_team].filter(Boolean).join(' vs ')) : '—') +
       '</div>' +
       '<div class="prop-eval-meta">Edge ' + escProps(edgeS) + ' · ML ' + escProps(mlS) + '</div>' +
-      ((r.void_reason && String(r.void_reason).trim()) ?
+      ((r.void_reason && String(r.void_reason).trim() && !(ru === 'HIT' || ru === 'MISS' || ru === 'PUSH')) ?
         ('<div class="prop-eval-meta" style="opacity:0.88;font-size:17px;letter-spacing:0.02em;">Eligibility: ' +
           escProps(String(r.void_reason).trim()) + '</div>') : '') +
       '<div class="prop-eval-meta">Actual <span class="prop-eval-stat ' + cls + '">' + fmtPropsNum(r.actual_value) + '</span>' +
