@@ -3,7 +3,9 @@
 Build ticket_eval_{date}.html for Grades → Ticket evaluation (graded legs, actuals, KPI bar).
 
 Reads ticket JSON (or combined_slate_tickets_{date}.xlsx) and sport step8/graded workbooks,
-matches legs to actuals, writes self-contained HTML.
+matches legs to actuals, writes self-contained HTML. Graded overlays merge ``outputs/<d>/`` and
+``ui_runner/graded_slate/<d>/`` for the slate ``--date`` **and** each unique leg ``game_time``
+calendar day (so evening slates with tomorrow's games pick up graded_* for the game day).
 
 The /tickets page is rendered from tickets_latest.json (today's built slips), not from this file.
 
@@ -26,9 +28,10 @@ import re
 import sys
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Sequence
 
 import pandas as pd
+from dateutil.parser import parse as _parse_datetime_guess
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 _SCRIPTS = REPO_ROOT / "scripts"
@@ -854,9 +857,81 @@ def _merge_graded_workbooks_into_indices(
     return merged
 
 
+def _reference_datetime_for_parse(slate_date: str) -> datetime:
+    """Default for dateutil when parsing leg game_time strings missing year (e.g. '04/14 3:00 PM')."""
+    s = str(slate_date or "").strip()[:10]
+    if re.match(r"^\d{4}-\d{2}-\d{2}$", s):
+        try:
+            y, m, d_ = int(s[:4]), int(s[5:7]), int(s[8:10])
+            return datetime(y, m, d_, 12, 0, 0)
+        except ValueError:
+            pass
+    return datetime.now(tz=timezone.utc).replace(tzinfo=None)
+
+
+def _game_dates_from_ticket_payload(payload: dict[str, Any], slate_date: str) -> set[str]:
+    """Unique YYYY-MM-DD calendar dates from leg game_time / start_time (ISO or MDY-style strings)."""
+    dates: set[str] = set()
+    ref = _reference_datetime_for_parse(slate_date)
+    for group in payload.get("groups") or []:
+        for ticket in group.get("tickets") or []:
+            for leg in ticket.get("legs") or []:
+                gt = leg.get("game_time") or leg.get("start_time") or ""
+                if not str(gt).strip():
+                    continue
+                try:
+                    dt = _parse_datetime_guess(str(gt).strip(), default=ref)
+                    dates.add(dt.date().isoformat())
+                except (ValueError, TypeError, OverflowError):
+                    continue
+    return dates
+
+
+def resolve_ticket_eval_graded_merge_dates(
+    slate_date: str,
+    payload: dict[str, Any],
+    extra_iso_dates: Sequence[str] | None = None,
+) -> list[str]:
+    """
+    Ordered list of calendar folders whose graded_*.xlsx files are merged into ticket eval.
+
+    Slate date is merged first, then each leg game date (sorted), then optional --game-date extras.
+    Later merges overwrite matching keys so game-day graded exports win over slate-day rows.
+    """
+    from_legs = _game_dates_from_ticket_payload(payload, slate_date)
+    out: list[str] = []
+    sd = str(slate_date).strip()
+    if re.match(r"^\d{4}-\d{2}-\d{2}$", sd):
+        out.append(sd)
+    for d in sorted(from_legs):
+        if d not in out:
+            out.append(d)
+    for raw in extra_iso_dates or ():
+        ds = str(raw).strip()
+        if re.match(r"^\d{4}-\d{2}-\d{2}$", ds) and ds not in out:
+            out.append(ds)
+    return out
+
+
+def _merge_graded_workbooks_for_date(
+    out: dict[str, tuple[dict, dict]],
+    gd: str,
+) -> None:
+    """Merge graded workbooks from ui_runner/graded_slate/{gd}/ and outputs/{gd}/ (no-op if folders missing)."""
+    d = str(gd).strip()
+    if not d or not re.match(r"^\d{4}-\d{2}-\d{2}$", d):
+        return
+    bundle_dir = _graded_slate_bundle_dir(d)
+    _merge_graded_workbooks_into_indices(out, _graded_xlsx_in_dir(bundle_dir))
+    _merge_strict_graded_date_workbooks(out, bundle_dir, d)
+    outputs_dir = REPO_ROOT / "outputs" / d
+    _merge_graded_workbooks_into_indices(out, _graded_xlsx_in_dir(outputs_dir))
+    _merge_strict_graded_date_workbooks(out, outputs_dir, d)
+
+
 def _load_actuals_indices(
     sport_candidates: dict[str, list[Path]],
-    arg_date: str | None = None,
+    graded_merge_dates: list[str],
 ) -> dict[str, tuple[dict[tuple[str, str, str], dict], dict[tuple[str, str], list[dict]]]]:
     """Per sport-bucket indices (NBA1H separate from NBA, etc.)."""
     out: dict[str, tuple[dict, dict]] = {}
@@ -875,15 +950,9 @@ def _load_actuals_indices(
         _ingest_workbook_rows_into_index(rows, triple, pair_buckets)
         out[bucket] = (triple, pair_buckets)
 
-    if arg_date and re.match(r"^\d{4}-\d{2}-\d{2}$", arg_date):
-        # Deploy bundle first (Railway), then local outputs/ — same keys from outputs win when both exist.
-        bundle_dir = _graded_slate_bundle_dir(arg_date)
-        _merge_graded_workbooks_into_indices(out, _graded_xlsx_in_dir(bundle_dir))
-        _merge_strict_graded_date_workbooks(out, bundle_dir, arg_date)
-
-        outputs_dir = REPO_ROOT / "outputs" / arg_date
-        _merge_graded_workbooks_into_indices(out, _graded_xlsx_in_dir(outputs_dir))
-        _merge_strict_graded_date_workbooks(out, outputs_dir, arg_date)
+    for gd in graded_merge_dates:
+        if gd and re.match(r"^\d{4}-\d{2}-\d{2}$", str(gd).strip()):
+            _merge_graded_workbooks_for_date(out, str(gd).strip())
     return out
 
 
@@ -1031,27 +1100,32 @@ def debug_report(
     payload: dict[str, Any],
     tpath: Path,
     sport_candidates: dict[str, list[Path]],
+    graded_merge_dates: list[str],
 ) -> None:
     """Print why legs may not match (JSON date vs CLI, xlsx paths, headers, sample legs)."""
     print("\n=== build_ticket_eval.py --debug ===\n")
     print(f"CLI --date:     {arg_date}")
     print(f"Ticket source:  {tpath}")
     print(f"Payload \"date\": {payload.get('date')!r}")
+    leg_game_dates = sorted(_game_dates_from_ticket_payload(payload, arg_date))
+    print(f"Leg game_time dates: {leg_game_dates if leg_game_dates else '(none parsed)'}")
+    print(f"Graded merge order:  {graded_merge_dates}")
     if str(payload.get("date") or "").strip() != arg_date:
         print(
             "  ! Mismatch: ticket payload date differs from --date; legs are still matched against"
             " STATIC pipeline workbooks (see below), not per-date outputs unless we add that."
         )
-    out_dir = _graded_outputs_dir(arg_date)
-    og = _debug_list_outputs_graded(arg_date)
-    print(f"\noutputs/{arg_date}/ graded_*.xlsx:")
-    if not out_dir.is_dir():
-        print(f"  (folder missing: {out_dir})")
-    elif not og:
-        print("  (none found)")
-    else:
-        for p in og:
-            print(f"  - {p.relative_to(REPO_ROOT)}")
+    for gd in graded_merge_dates:
+        out_dir = _graded_outputs_dir(gd)
+        og = _debug_list_outputs_graded(gd)
+        print(f"\noutputs/{gd}/ graded_*.xlsx:")
+        if not out_dir.is_dir():
+            print(f"  (folder missing: {out_dir})")
+        elif not og:
+            print("  (none found)")
+        else:
+            for p in og:
+                print(f"  - {p.relative_to(REPO_ROOT)}")
     print("\nWorkbooks used for matching (first existing path per sport; NOT date-specific today):")
     for sport, paths in sport_candidates.items():
         src = next((p for p in paths if p.is_file()), None)
@@ -1066,34 +1140,42 @@ def debug_report(
             extra = f" ...(+{len(cols) - 24})" if len(cols) > 24 else ""
             print(f"       sheet {sh!r}: {preview}{extra}")
 
-    bundle_dir = _graded_slate_bundle_dir(arg_date)
-    bpaths = _graded_xlsx_in_dir(bundle_dir)
-    print(f"\nui_runner/graded_slate/{arg_date}/ (optional; for Railway when outputs/ is absent):")
-    if not bpaths:
-        print("  (none — run scripts/run_grader.ps1; it copies graded_*.xlsx here, or copy manually)")
-    else:
-        for p in bpaths:
-            bk = ", ".join(_sport_buckets_for_graded_filename(p)) or "?"
-            print(f"  - {p.relative_to(REPO_ROOT)}  -> buckets [{bk}]")
+    for gd in graded_merge_dates:
+        bundle_dir = _graded_slate_bundle_dir(gd)
+        bpaths = _graded_xlsx_in_dir(bundle_dir)
+        print(f"\nui_runner/graded_slate/{gd}/ (optional; for Railway when outputs/ is absent):")
+        if not bpaths:
+            print("  (none — run scripts/run_grader.ps1; it copies graded_*.xlsx here, or copy manually)")
+        else:
+            for p in bpaths:
+                bk = ", ".join(_sport_buckets_for_graded_filename(p)) or "?"
+                print(f"  - {p.relative_to(REPO_ROOT)}  -> buckets [{bk}]")
 
     print("\nfind_graded_workbook_path() (deploy path first, then outputs/):")
-    for slug in ("nba", "nhl", "mlb", "soccer", "cbb", "wcbb"):
-        p = find_graded_workbook_path(slug, arg_date)
-        label = f"graded_{slug}_{arg_date}.xlsx"
-        if p:
-            print(f"  {label} -> {p.relative_to(REPO_ROOT)}")
-        else:
-            print(f"  {label} -> (not found)")
+    for gd in graded_merge_dates:
+        print(f"  --- date {gd} ---")
+        for slug in ("nba", "nhl", "mlb", "soccer", "cbb", "wcbb"):
+            p = find_graded_workbook_path(slug, gd)
+            label = f"graded_{slug}_{gd}.xlsx"
+            if p:
+                print(f"  {label} -> {p.relative_to(REPO_ROOT)}")
+            else:
+                print(f"  {label} -> (not found)")
 
-    indices = _load_actuals_indices(sport_candidates, arg_date)
-    gpaths = _graded_xlsx_in_outputs_date(arg_date)
-    print(f"\noutputs/{arg_date}/ graded workbook(s) merged into indices (overrides bundle):")
-    if not gpaths:
-        print("  (none — add graded_nba_{date}.xlsx, graded_mlb_{date}.xlsx, etc.)")
-    else:
+    indices = _load_actuals_indices(sport_candidates, graded_merge_dates)
+    print("\nGraded workbook(s) merged into indices (per date in merge order; later overwrites keys):")
+    any_g = False
+    for gd in graded_merge_dates:
+        gpaths = _graded_xlsx_in_outputs_date(gd)
+        if not gpaths:
+            continue
+        any_g = True
+        print(f"  outputs/{gd}/:")
         for p in gpaths:
             bk = ", ".join(_sport_buckets_for_graded_filename(p)) or "?"
-            print(f"  - {p.relative_to(REPO_ROOT)}  -> buckets [{bk}]")
+            print(f"    - {p.relative_to(REPO_ROOT)}  -> buckets [{bk}]")
+    if not any_g:
+        print("  (none under outputs/<merge-date>/ — add graded_nba_<date>.xlsx, etc.)")
     total_triples = sum(len(t) for t, _ in indices.values())
     total_pairs = sum(len(p) for _, p in indices.values())
     print(f"\nIndex (all buckets): {total_triples:,} triple-keys, {total_pairs:,} player+prop buckets (sum per sport)")
@@ -1135,8 +1217,8 @@ def debug_report(
     total = sum(len(t.get("legs") or []) for g in groups for t in g.get("tickets") or [])
     print(f"\nTotal legs in JSON: {total}")
     print(
-        "\nNote: Base rows come from SPORT_XLSX_CANDIDATES (pre-game step8 slates)."
-        f"\n      Graded files: ui_runner/graded_slate/{arg_date}/ first, then outputs/{arg_date}/ (wins ties)."
+        "\nNote: Base rows come from SPORT_XLSX_CANDIDATES (pre-game step8 slates) for the slate --date."
+        f"\n      Graded overlays: merge order {graded_merge_dates} (ui_runner/graded_slate/<d>/ then outputs/<d>/ per d)."
     )
     print("=== end debug ===\n")
 
@@ -1308,6 +1390,8 @@ def _leg_from_xlsx_row(row: tuple[Any, ...], colmap: dict[int, str]) -> dict[str
             leg["season_avg"] = x
         elif field == "sport":
             leg["sport"] = str(val or "").strip().upper()
+        elif field == "game_time":
+            leg["game_time"] = str(val or "").strip()
     if not leg.get("player"):
         return None
     leg["data_warning"] = "LIMITED_Q1_HISTORY" if str(leg.get("sport") or "").upper() == "NBA1Q" else None
@@ -1623,9 +1707,10 @@ def _build_html(
     payload: dict[str, Any],
     arg_date: str,
     sport_candidates: dict[str, list[Path]],
+    graded_merge_dates: list[str],
 ) -> tuple[str, dict[str, Any] | None]:
     groups = payload.get("groups") or []
-    indices = _load_actuals_indices(sport_candidates, arg_date)
+    indices = _load_actuals_indices(sport_candidates, graded_merge_dates)
 
     all_legs: list[tuple[dict, dict | None, str]] = []
     tickets_flat: list[dict] = []
@@ -3000,6 +3085,23 @@ def main() -> int:
         action="store_true",
         help="Print ticket JSON path, payload date, outputs/graded files, Excel headers, sample leg matches; then build.",
     )
+    ap.add_argument(
+        "--game-date",
+        action="append",
+        default=None,
+        metavar="YYYY-MM-DD",
+        help="Extra calendar date(s) to merge graded_*.xlsx from (repeatable). Leg game_time dates are auto-detected.",
+    )
+    ap.add_argument(
+        "--graded",
+        default="",
+        help="Ignored; retained for run_grader.ps1 compatibility with build_ticket_eval_html.py.",
+    )
+    ap.add_argument(
+        "--out",
+        default="",
+        help="Ignored; output is always ui_runner/templates/ticket_eval_{--date}.html.",
+    )
     args = ap.parse_args()
     if args.date:
         arg_date = args.date.strip()
@@ -3025,10 +3127,18 @@ def main() -> int:
         print(f"ERROR: Failed to read ticket file: {e}")
         return 1
 
-    if args.debug:
-        debug_report(arg_date, payload, tpath, sport_candidates)
+    extra_game_dates: list[str] = list(args.game_date) if args.game_date else []
+    graded_merge_dates = resolve_ticket_eval_graded_merge_dates(arg_date, payload, extra_game_dates)
+    print(
+        f"[TICKET EVAL] Slate date: {arg_date}; leg game_time dates: "
+        f"{sorted(_game_dates_from_ticket_payload(payload, arg_date)) or '[]'}; "
+        f"graded workbook merge order: {graded_merge_dates}"
+    )
 
-    html_out, hist = _build_html(payload, arg_date, sport_candidates)
+    if args.debug:
+        debug_report(arg_date, payload, tpath, sport_candidates, graded_merge_dates)
+
+    html_out, hist = _build_html(payload, arg_date, sport_candidates, graded_merge_dates)
     TEMPLATES_DIR.mkdir(parents=True, exist_ok=True)
     dated_name = f"ticket_eval_{arg_date}.html"
     out_dated = TEMPLATES_DIR / dated_name

@@ -703,11 +703,23 @@ if (Test-Path $TicketEvalBuilderScript) {
     $GradedCombined = Join-Path $DateDir "combined_tickets_graded_$Date.xlsx"
     $TicketEvalOut = Join-Path $TemplatesDir "ticket_eval_$Date.html"
     if (Test-Path $GradedCombined) {
-        Run-Py "Build Ticket Eval HTML" $Root $TicketEvalBuilderScript @(
+        $TeArgs = @(
             "--date", $Date,
             "--graded", $GradedCombined,
             "--out", $TicketEvalOut
         )
+        # Optional: extra graded folders (comma-separated YYYY-MM-DD). Leg game_time dates are
+        # auto-detected inside build_ticket_eval.py; use this when tickets lack game_time (e.g. old xlsx).
+        if ($env:PROPORACLE_TICKET_EVAL_GAME_DATE -and $env:PROPORACLE_TICKET_EVAL_GAME_DATE.Trim()) {
+            foreach ($gd in ($env:PROPORACLE_TICKET_EVAL_GAME_DATE -split ',')) {
+                $t = $gd.Trim()
+                if ($t -match '^\d{4}-\d{2}-\d{2}$') {
+                    $TeArgs += @("--game-date", $t)
+                }
+            }
+        }
+        Run-Py "Build Ticket Eval HTML" $Root $TicketEvalBuilderScript $TeArgs
+        Write-Host "[GRADER] Ticket eval merges graded_* for slate date and each leg game_time date (see build_ticket_eval log)." -ForegroundColor DarkGray
     }
     else {
         Write-Host "Skipping ticket eval build (graded workbook missing: $GradedCombined)." -ForegroundColor Yellow
