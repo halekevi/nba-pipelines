@@ -13,7 +13,7 @@ from __future__ import annotations
 import argparse
 import html as html_lib
 import sys
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
@@ -380,7 +380,18 @@ tbody tr:hover td {
 """
 
 
-def build_html(graded_path: Path) -> str:
+def _display_date_from_arg(report_date: str | None) -> str:
+    """Human-readable report date for title/header (prefer --date, not build time)."""
+    s = (report_date or "").strip()
+    if len(s) >= 10 and s[4] == "-" and s[7] == "-":
+        try:
+            return date.fromisoformat(s[:10]).strftime("%b %d, %Y").upper()
+        except ValueError:
+            pass
+    return datetime.now().strftime("%b %d, %Y").upper()
+
+
+def build_html(graded_path: Path, report_date: str | None = None) -> str:
     """Build HTML from graded tickets workbook."""
     
     # Read sheets
@@ -418,8 +429,8 @@ def build_html(graded_path: Path) -> str:
     win_rate = winners / total_tickets if total_tickets > 0 else 0
     roi = total_profit / total_staked if total_staked > 0 else 0
     
-    # Date
-    display_date = datetime.now().strftime("%b %d, %Y").upper()
+    # Date (slate/report date from CLI — not the machine clock)
+    display_date = _display_date_from_arg(report_date)
     generated = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     # KPI section
@@ -610,7 +621,7 @@ def main() -> None:
         print(f"ERROR: Not found: {graded_path}")
         sys.exit(1)
     
-    html = build_html(graded_path)
+    html = build_html(graded_path, report_date=args.date)
     if not html:
         sys.exit(1)
     

@@ -1858,7 +1858,10 @@ async function probeTicketEval(dateStr) {
   const url = TICKET_EVAL_URL_TEMPLATE.replace('{date}', dateStr);
   try {
     const res = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
-    return res.ok;
+    if (res.ok) return true;
+    // Some CDN/proxy stacks answer GET but not HEAD (405/501/404); try GET once.
+    const res2 = await fetch(url, { method: 'GET', cache: 'no-cache' });
+    return res2.ok;
   } catch (e) {
     return false;
   }
