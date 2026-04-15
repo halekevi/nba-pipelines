@@ -205,6 +205,7 @@ if (Test-Path $FetchActualsScript) {
     Run-Py "Fetch Soccer Actuals" $Root $FetchActualsScript @(
         "--sport", "Soccer",
         "--date", $Date,
+        "--soccer-window", "1",
         "--output", $SoccerActuals
     )
 

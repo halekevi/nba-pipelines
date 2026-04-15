@@ -9,6 +9,7 @@ Usage:
   py -3 fetch_actuals.py --sport NBA   # defaults to yesterday
   py -3 fetch_actuals.py --sport NHL --date 2026-03-06
   py -3 fetch_actuals.py --sport Soccer --date 2026-03-06
+  py -3 fetch_actuals.py --sport Soccer --date 2026-04-13 --soccer-window 1  # default; +1 day for next-day kickoffs
   py -3 fetch_actuals.py --sport WCBB --date 2026-04-02
 
 Fixes vs previous version:
@@ -1213,65 +1214,79 @@ def parse_soccer_boxscore(box, league_id):
 
 
 # ── Fetch Soccer actuals ──────────────────────────────────────────────────────
-def fetch_soccer(date_str):
-    """Fetch completed soccer games across all tracked leagues for date_str."""
-    date_espn = date_str.replace("-", "")
+def fetch_soccer(date_str, adjacent_days: int = 1):
+    """
+    Fetch completed soccer games across all tracked leagues.
+
+    adjacent_days: also scan the following N calendar days (default 1). PrizePicks
+    slate files are keyed by board date while many soccer kickoffs (e.g. UCL) are
+    the next local day; without +1 day, grade-date actuals miss the slate and every
+    soccer row VOIDs.
+    """
+    base = date.fromisoformat(date_str)
     all_rows = []
     seen_event_ids = set()
+    day_span = max(0, int(adjacent_days)) + 1
 
-    for league_id, league_name in SOCCER_LEAGUES:
-        try:
-            url = SOCCER_SCOREBOARD_BASE.format(league=league_id, date_espn=date_espn)
-            r = requests.get(url, headers=HEADERS, timeout=20)
-            r.raise_for_status()
-            events = r.json().get("events", [])
-            if not events:
-                continue
-            print(f"  {league_name}: {len(events)} events")
+    for day_off in range(day_span):
+        day_iso = (base + timedelta(days=day_off)).strftime("%Y-%m-%d")
+        date_espn = day_iso.replace("-", "")
+        if day_off:
+            print(f"\n  Soccer: also fetching calendar day +{day_off} -> {day_iso}")
 
-            for event in events:
-                state     = event.get("status", {}).get("type", {}).get("state", "")
-                completed = event.get("status", {}).get("type", {}).get("completed", False)
-                if state != "post" and not completed:
+        for league_id, league_name in SOCCER_LEAGUES:
+            try:
+                url = SOCCER_SCOREBOARD_BASE.format(league=league_id, date_espn=date_espn)
+                r = requests.get(url, headers=HEADERS, timeout=20)
+                r.raise_for_status()
+                events = r.json().get("events", [])
+                if not events:
                     continue
-                event_id = event.get("id", "")
-                if event_id in seen_event_ids:
-                    continue
-                seen_event_ids.add(event_id)
+                print(f"  {league_name}: {len(events)} events")
 
-                game_name = event.get("shortName", "")
-                print(f"    Grading: {game_name}")
-                try:
-                    sum_url = SOCCER_SUMMARY_BASE.format(league=league_id, event_id=event_id)
-                    br = requests.get(sum_url, headers=HEADERS, timeout=20)
-                    br.raise_for_status()
-                    box_json = br.json()
-                    game_rows = parse_soccer_boxscore(box_json, league_id)
-                    all_rows.extend(game_rows)
-                    if len(game_rows) == 0:
-                        # Diagnostic: dump first athlete's actual stats structure
-                        rosters = box_json.get("rosters", [])
-                        if isinstance(rosters, list) and rosters:
-                            first_team  = rosters[0] if isinstance(rosters[0], dict) else {}
-                            roster_list = first_team.get("roster") or []
-                            first_entry = roster_list[0] if roster_list else {}
-                            entry_stats = first_entry.get("stats", [])
-                            # Show abbreviations found so we can add missing aliases
-                            abbrevs = [s.get("abbreviation","?") for s in entry_stats
-                                       if isinstance(s, dict)]
-                            print(f"      WARNING: 0 rows — stat abbrevs in roster: {abbrevs}")
+                for event in events:
+                    state     = event.get("status", {}).get("type", {}).get("state", "")
+                    completed = event.get("status", {}).get("type", {}).get("completed", False)
+                    if state != "post" and not completed:
+                        continue
+                    event_id = event.get("id", "")
+                    if event_id in seen_event_ids:
+                        continue
+                    seen_event_ids.add(event_id)
+
+                    game_name = event.get("shortName", "")
+                    print(f"    Grading: {game_name}")
+                    try:
+                        sum_url = SOCCER_SUMMARY_BASE.format(league=league_id, event_id=event_id)
+                        br = requests.get(sum_url, headers=HEADERS, timeout=20)
+                        br.raise_for_status()
+                        box_json = br.json()
+                        game_rows = parse_soccer_boxscore(box_json, league_id)
+                        all_rows.extend(game_rows)
+                        if len(game_rows) == 0:
+                            # Diagnostic: dump first athlete's actual stats structure
+                            rosters = box_json.get("rosters", [])
+                            if isinstance(rosters, list) and rosters:
+                                first_team  = rosters[0] if isinstance(rosters[0], dict) else {}
+                                roster_list = first_team.get("roster") or []
+                                first_entry = roster_list[0] if roster_list else {}
+                                entry_stats = first_entry.get("stats", [])
+                                # Show abbreviations found so we can add missing aliases
+                                abbrevs = [s.get("abbreviation","?") for s in entry_stats
+                                           if isinstance(s, dict)]
+                                print(f"      WARNING: 0 rows — stat abbrevs in roster: {abbrevs}")
+                            else:
+                                print(f"      WARNING: 0 rows — no rosters block found")
+                                print(f"      Top-level keys: {list(box_json.keys())}")
                         else:
-                            print(f"      WARNING: 0 rows — no rosters block found")
-                            print(f"      Top-level keys: {list(box_json.keys())}")
-                    else:
-                        print(f"      -> {len(game_rows)} stat rows")
-                    time.sleep(0.2)
-                except Exception as e:
-                    print(f"      ERROR: {e}")
+                            print(f"      -> {len(game_rows)} stat rows")
+                        time.sleep(0.2)
+                    except Exception as e:
+                        print(f"      ERROR: {e}")
 
-            time.sleep(0.3)
-        except Exception as e:
-            print(f"  WARNING: {league_name} fetch failed: {e}")
+                time.sleep(0.3)
+            except Exception as e:
+                print(f"  WARNING: {league_name} fetch failed: {e}")
 
     if not all_rows:
         return pd.DataFrame()
@@ -1334,6 +1349,9 @@ def main():
     ap.add_argument('--nhl-window', default=1, type=int,
                     help='NHL only: when the primary scoreboard date has zero games, also fetch +/- this many '
                          'calendar days (default: 1). Use 0 to disable expansion.')
+    ap.add_argument('--soccer-window', default=1, type=int,
+                    help='Soccer only: also fetch completed games for the following N calendar days after '
+                         '--date (default: 1). Use 0 for single calendar day only.')
     args = ap.parse_args()
 
     if not args.date:
@@ -1349,7 +1367,7 @@ def main():
         w = max(0, int(args.nhl_window))
         df = fetch_nhl(args.date, adjacent_days=w)
     elif args.sport == 'Soccer':
-        df = fetch_soccer(args.date)
+        df = fetch_soccer(args.date, adjacent_days=max(0, int(args.soccer_window)))
     else:
         if args.sport == "NBA":
             sport_path = "nba"
