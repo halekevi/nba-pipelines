@@ -789,19 +789,12 @@ def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
         return True
 
     # Workbook structured sheets (per-sport Power/Flex/Standard/PwrStd/Goblin): always show on /tickets.
-    # Power 2 / Goblin often fail the numeric EV bar (empirical model has no flex-style partial) but match Excel.
+    # These can be 2–6 legs; some fail the numeric EV bar but should still mirror workbook output.
     wg = str(ticket.get("web_group_name") or "")
-    _struct_markers = (
-        "Power Play 2-Leg",
-        "Flex 3-Leg",
-        "Standard 2-Leg",
-        "Pwr Std 3-Leg",
-        "Goblin 3-Leg",
-    )
     if (
         "Cross-sport" not in wg
         and "·" not in wg
-        and any(m in wg for m in _struct_markers)
+        and re.search(r"(Power Play|Flex|Standard|Pwr Std|Goblin)\s+\d-Leg", wg, re.I)
     ):
         return True
 
@@ -5294,7 +5287,13 @@ def filter_eligible(
 # direction/sort flow (power vs flex vs standard 2-leg).
 _STRUCTURE_SPECS: dict[str, dict[str, object]] = {
     "power": {"n_legs": 2, "pool": "goblin", "flow": "power"},
+    "power4": {"n_legs": 4, "pool": "goblin", "flow": "power"},
+    "power5": {"n_legs": 5, "pool": "goblin", "flow": "power"},
+    "power6": {"n_legs": 6, "pool": "goblin", "flow": "power"},
     "flex": {"n_legs": 3, "pool": "goblin", "flow": "flex"},
+    "flex4": {"n_legs": 4, "pool": "goblin", "flow": "flex"},
+    "flex5": {"n_legs": 5, "pool": "goblin", "flow": "flex"},
+    "flex6": {"n_legs": 6, "pool": "goblin", "flow": "flex"},
     "standard": {"n_legs": 2, "pool": "standard", "flow": "standard"},
     "power_std3": {"n_legs": 3, "pool": "standard", "flow": "power"},
     "goblin3": {"n_legs": 3, "pool": "goblin", "flow": "power"},
@@ -8346,6 +8345,10 @@ def main():
         tvc = max(1, min(8, int(ticket_variant_count))) if sport_label == "NBA" else 1
 
         def _structured_list(structure: str, relaxed: bool = False) -> list[dict]:
+            spec = _STRUCTURE_SPECS.get(structure) or {}
+            nlegs = int(spec.get("n_legs", 0) or 0)
+            if nlegs and nlegs > int(args.max_ticket_legs):
+                return []
             if tvc > 1:
                 return build_structure_ticket_variants(
                     sport_df,
@@ -8385,7 +8388,13 @@ def main():
             return entry
 
         p_list = _structured_list("power")
+        p4_list = _structured_list("power4")
+        p5_list = _structured_list("power5")
+        p6_list = _structured_list("power6")
         f_list = _structured_list("flex")
+        f4_list = _structured_list("flex4")
+        f5_list = _structured_list("flex5")
+        f6_list = _structured_list("flex6")
         s_list = _structured_list("standard")
         if not s_list:
             s_list = _structured_list("standard", relaxed=True)
@@ -8398,7 +8407,11 @@ def main():
         ps3_list = _structured_list("power_std3")
         g3_list = _structured_list("goblin3")
 
-        if not p_list and not f_list and not s_list and not ps3_list and not g3_list:
+        if (
+            not p_list and not p4_list and not p5_list and not p6_list
+            and not f_list and not f4_list and not f5_list and not f6_list
+            and not s_list and not ps3_list and not g3_list
+        ):
             print(f"  WARNING: {sport_label} skipped (<2 eligible legs after strict filters).")
             return
 
@@ -8412,6 +8425,36 @@ def main():
             print(f"  WARNING: {sport_label} Power Play 2-Leg unavailable (strict filters).")
             generated_tickets.setdefault(sport_label, {})["power_play"] = None
 
+        if p4_list:
+            sname = f"{prefix} Power Play 4-Leg"[:31]
+            write_ticket_sheet(wb, p4_list, sname, bg_hdr, label=f"{sport_label} Power Play")
+            all_ticket_groups.append((sname, p4_list, None))
+            print(f"  {sname}: {len(p4_list)} ticket(s)")
+            generated_tickets.setdefault(sport_label, {})["power_play_4"] = _gen_entry(p4_list)
+        else:
+            print(f"  WARNING: {sport_label} Power Play 4-Leg unavailable (strict filters).")
+            generated_tickets.setdefault(sport_label, {})["power_play_4"] = None
+
+        if p5_list:
+            sname = f"{prefix} Power Play 5-Leg"[:31]
+            write_ticket_sheet(wb, p5_list, sname, bg_hdr, label=f"{sport_label} Power Play")
+            all_ticket_groups.append((sname, p5_list, None))
+            print(f"  {sname}: {len(p5_list)} ticket(s)")
+            generated_tickets.setdefault(sport_label, {})["power_play_5"] = _gen_entry(p5_list)
+        else:
+            print(f"  WARNING: {sport_label} Power Play 5-Leg unavailable (strict filters).")
+            generated_tickets.setdefault(sport_label, {})["power_play_5"] = None
+
+        if p6_list:
+            sname = f"{prefix} Power Play 6-Leg"[:31]
+            write_ticket_sheet(wb, p6_list, sname, bg_hdr, label=f"{sport_label} Power Play")
+            all_ticket_groups.append((sname, p6_list, None))
+            print(f"  {sname}: {len(p6_list)} ticket(s)")
+            generated_tickets.setdefault(sport_label, {})["power_play_6"] = _gen_entry(p6_list)
+        else:
+            print(f"  WARNING: {sport_label} Power Play 6-Leg unavailable (strict filters).")
+            generated_tickets.setdefault(sport_label, {})["power_play_6"] = None
+
         if f_list:
             sname = f"{prefix} Flex 3-Leg"[:31]
             write_ticket_sheet(wb, f_list, sname, bg_hdr, label=f"{sport_label} Flex")
@@ -8421,6 +8464,36 @@ def main():
         else:
             print(f"  WARNING: {sport_label} Flex 3-Leg unavailable (strict filters).")
             generated_tickets.setdefault(sport_label, {})["flex"] = None
+
+        if f4_list:
+            sname = f"{prefix} Flex 4-Leg"[:31]
+            write_ticket_sheet(wb, f4_list, sname, bg_hdr, label=f"{sport_label} Flex")
+            all_ticket_groups.append((sname, f4_list, None))
+            print(f"  {sname}: {len(f4_list)} ticket(s)")
+            generated_tickets.setdefault(sport_label, {})["flex_4"] = _gen_entry(f4_list)
+        else:
+            print(f"  WARNING: {sport_label} Flex 4-Leg unavailable (strict filters).")
+            generated_tickets.setdefault(sport_label, {})["flex_4"] = None
+
+        if f5_list:
+            sname = f"{prefix} Flex 5-Leg"[:31]
+            write_ticket_sheet(wb, f5_list, sname, bg_hdr, label=f"{sport_label} Flex")
+            all_ticket_groups.append((sname, f5_list, None))
+            print(f"  {sname}: {len(f5_list)} ticket(s)")
+            generated_tickets.setdefault(sport_label, {})["flex_5"] = _gen_entry(f5_list)
+        else:
+            print(f"  WARNING: {sport_label} Flex 5-Leg unavailable (strict filters).")
+            generated_tickets.setdefault(sport_label, {})["flex_5"] = None
+
+        if f6_list:
+            sname = f"{prefix} Flex 6-Leg"[:31]
+            write_ticket_sheet(wb, f6_list, sname, bg_hdr, label=f"{sport_label} Flex")
+            all_ticket_groups.append((sname, f6_list, None))
+            print(f"  {sname}: {len(f6_list)} ticket(s)")
+            generated_tickets.setdefault(sport_label, {})["flex_6"] = _gen_entry(f6_list)
+        else:
+            print(f"  WARNING: {sport_label} Flex 6-Leg unavailable (strict filters).")
+            generated_tickets.setdefault(sport_label, {})["flex_6"] = None
 
         if s_list:
             sname = f"{prefix} Standard 2-Leg"[:31]

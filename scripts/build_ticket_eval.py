@@ -1525,7 +1525,11 @@ def _load_tickets(path: Path, arg_date: str) -> dict[str, Any]:
 
 def _group_is_allowed(group_name: str) -> bool:
     n = str(group_name or "").strip()
-    m = re.match(r"^([A-Za-z0-9]+)\s+(Power Play 2-Leg|Flex 3-Leg|Standard 2-Leg)$", n)
+    m = re.match(
+        r"^([A-Za-z0-9]+)\s+((?:Power Play|Flex|Standard|Pwr Std|Goblin)\s+\d-Leg)$",
+        n,
+        flags=re.I,
+    )
     if not m:
         return False
     sport = m.group(1).strip().upper()
@@ -1545,7 +1549,8 @@ def _leg_drop_reason(group_name: str, leg: dict[str, Any]) -> str | None:
     except (TypeError, ValueError):
         line_f = None
 
-    is_power = "power play 2-leg" in str(group_name or "").strip().lower()
+    gl = str(group_name or "").strip().lower()
+    is_power = ("power play" in gl) or ("pwr std" in gl) or ("goblin" in gl)
 
     if prop == "rebounds" and direction == "OVER" and (line_f is None or line_f < 2.5):
         return "rebounds_over_min_line"
@@ -1564,12 +1569,12 @@ def _filter_payload_groups(payload: dict[str, Any], debug: bool = False) -> dict
             continue
         gl = gname.strip().lower()
         min_legs = 0
-        if "power play 2-leg" in gl:
-            min_legs = 2
-        elif "flex 3-leg" in gl:
-            min_legs = 3
-        elif "standard 2-leg" in gl:
-            min_legs = 2
+        m_leg = re.search(r"\b(\d+)-leg\b", gl)
+        if m_leg:
+            try:
+                min_legs = int(m_leg.group(1))
+            except (TypeError, ValueError):
+                min_legs = 0
         filtered_tickets: list[dict[str, Any]] = []
         for t in g.get("tickets") or []:
             legs: list[dict[str, Any]] = []
