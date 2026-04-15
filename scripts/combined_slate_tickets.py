@@ -1047,7 +1047,6 @@ SOCCER_EXCLUDED_PROPS = {
     "fouls",
     "clearances",
 }
-SOCCER_EXCLUDED_PROPS_OVER_ONLY = frozenset({"shots", "shots_on_target"})
 
 # Soccer tickets now allow UNDER legs in standard flow; OVER legs are additionally edge-gated.
 # Raise per-leg hit floors vs global defaults (still below NBA; soccer hit_rate is often a proxy).
@@ -1095,21 +1094,6 @@ def _nhl_ticket_pool_exclusion_mask(df: pd.DataFrame) -> tuple[pd.Series, int, i
     m_leg = nhl & ps.isin(NHL_POOL_EXCLUDE_LEGACY)
     m_all = m_sog | m_fc | m_leg
     return m_all, int(m_sog.sum()), int(m_fc.sum()), int(m_leg.sum())
-
-
-def _soccer_ticket_pool_exclusion_mask(df: pd.DataFrame) -> tuple[pd.Series, int]:
-    """Mask rows to drop from Soccer pools; currently Shots OVER only."""
-    if not {"sport", "prop_type"}.issubset(df.columns):
-        z = pd.Series(False, index=df.index)
-        return z, 0
-    sp = df["sport"].astype(str).str.upper().str.strip()
-    ps = df["prop_type"].apply(_pool_prop_snake)
-    if "direction" in df.columns:
-        dir_u = df["direction"].astype(str).str.upper().str.strip()
-    else:
-        dir_u = pd.Series("", index=df.index)
-    m_shots_over = sp.eq("SOCCER") & ps.isin(SOCCER_EXCLUDED_PROPS_OVER_ONLY) & dir_u.eq("OVER")
-    return m_shots_over, int(m_shots_over.sum())
 
 
 def _is_attempt_prop_series(prop_s: pd.Series) -> pd.Series:
@@ -8050,7 +8034,7 @@ def main():
             excluded = SOCCER_EXCLUDED_PROPS
         elif sport == "TENNIS":
             excluded = set()
-        # NHL + MLB + Soccer: row-wise low-signal exclusions.
+        # NHL + MLB: row-wise low-signal exclusions.
 
         filtered_df = df.copy()
         voided_excluded = 0
@@ -8068,13 +8052,11 @@ def main():
             ]
 
         mlb_ex_n = 0
-        soccer_shots_over_ex_n = 0
         nhl_sog_ex_n = nhl_fc_ex_n = nhl_leg_ex_n = 0
         if {"sport", "prop_type"}.issubset(filtered_df.columns):
             m_mlb, mlb_ex_n = _mlb_ticket_pool_exclusion_mask(filtered_df)
             m_nhl, nhl_sog_ex_n, nhl_fc_ex_n, nhl_leg_ex_n = _nhl_ticket_pool_exclusion_mask(filtered_df)
-            m_soc, soccer_shots_over_ex_n = _soccer_ticket_pool_exclusion_mask(filtered_df)
-            filtered_df = filtered_df[~(m_mlb | m_nhl | m_soc)].copy()
+            filtered_df = filtered_df[~(m_mlb | m_nhl)].copy()
         if mlb_ex_n:
             print(f"  [pool] Excluded {mlb_ex_n} MLB legs (home_runs/stolen_bases)")
         nhl_apr13_n = int(nhl_sog_ex_n + nhl_fc_ex_n)
@@ -8087,9 +8069,6 @@ def main():
             print(
                 f"  [pool] Excluded {nhl_leg_ex_n} NHL legs (goals/assists/plus-minus)"
             )
-        if soccer_shots_over_ex_n:
-            print(f"  [pool] Excluded {soccer_shots_over_ex_n} Soccer legs (shots/shots_on_target OVER)")
-
         # Direction-aware defense tier bonus/penalty before threshold checks.
         # Research-calibrated behavior:
         # - OVER + Above Avg defense tier: +0.05
