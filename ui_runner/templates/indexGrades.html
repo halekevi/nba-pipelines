@@ -2039,8 +2039,12 @@ async function discoverDates(){
     const res = await fetch('/api/grades/report_dates', { cache: 'no-store' });
     if (res.ok) {
       const j = await res.json();
-      const ds = j.slate_eval_dates;
-      if (Array.isArray(ds) && ds.length) {
+      const slateDs = Array.isArray(j.slate_eval_dates) ? j.slate_eval_dates : [];
+      const ticketDs = Array.isArray(j.ticket_eval_dates) ? j.ticket_eval_dates : [];
+      const ds = Array.from(new Set([].concat(slateDs, ticketDs))).filter(function (x) {
+        return /^\d{4}-\d{2}-\d{2}$/.test(String(x || ''));
+      });
+      if (ds.length) {
         return ds.slice().sort();
       }
     }
@@ -2085,6 +2089,18 @@ async function _decidedPropsCountForDate(dateStr) {
 
 async function pickBestDefaultGradesDate(found, yest) {
   if (!Array.isArray(found) || !found.length) return yest;
+  // Next best: newest ticket_eval date on disk (<= yesterday), even if props archive is sparse.
+  try {
+    const rr = await fetch('/api/grades/report_dates', { cache: 'no-store' });
+    if (rr.ok) {
+      const rj = await rr.json();
+      const tds = Array.isArray(rj?.ticket_eval_dates) ? rj.ticket_eval_dates : [];
+      const eligible = tds
+        .filter(function (ds) { return /^\d{4}-\d{2}-\d{2}$/.test(ds) && ds <= yest && found.includes(ds); })
+        .sort();
+      if (eligible.length) return eligible[eligible.length - 1];
+    }
+  } catch (_e0) {}
   // First, prefer the newest date with a recorded ticket-eval payout summary.
   try {
     const hr = await fetch('/api/grade-history', { cache: 'no-store' });
