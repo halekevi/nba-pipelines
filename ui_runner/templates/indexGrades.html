@@ -219,7 +219,17 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .iframe-shell--ticket-tab .iframe-shell-toolbar{padding-bottom:0;gap:4px;}
 .iframe-shell--ticket-tab .iframe-shell-stage{margin-top:-1px;}
 .grades-analytics-wrap{position:absolute;inset:0;overflow:auto;padding:20px 24px 36px;z-index:4;background:transparent;}
-.grades-analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;max-width:1420px;margin:0 auto;}
+.grades-analytics-stack{max-width:1680px;margin:0 auto;display:flex;flex-direction:column;gap:14px;}
+.grades-analytics-context{
+  padding:12px 14px;
+  border-radius:14px;
+  font-size:13px;
+  color:var(--muted2);
+  line-height:1.45;
+}
+.grades-analytics-context strong{color:var(--text-primary);}
+.grades-analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;width:100%;}
+.insights-card.insights-card-empty{display:none !important;}
 .grades-props-inner{max-width:1420px;margin:0 auto;}
 .props-eval-toolbar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-top:12px;margin-bottom:14px;}
 .props-eval-toolbar label{font-size:12px;letter-spacing:0.8px;color:var(--muted2);display:flex;align-items:center;gap:6px;}
@@ -261,11 +271,11 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 }
 .glass-insights{background:var(--glass-panel);border:1px solid var(--glass-panel-border);border-radius:16px;padding:20px 22px;box-shadow:var(--glass-shadow);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);}
 .insights-card-title{font-size:19px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:8px;}
-.insights-card-sub{font-size:18px;color:var(--muted);margin-bottom:14px;line-height:1.45;}
+.insights-card-sub{font-size:16px;color:var(--muted);margin-bottom:14px;line-height:1.45;}
 .props-eval-intro .insights-card-sub{font-size:14px;line-height:1.35;}
-.insights-table-host table{width:100%;border-collapse:collapse;font-size:clamp(17px,1.05vw,19px);}
+.insights-table-host table{width:100%;border-collapse:collapse;font-size:clamp(14px,0.95vw,16px);}
 .insights-table-host th,.insights-table-host td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);}
-.insights-table-host th{color:var(--muted2);font-weight:600;font-size:clamp(16px,1vw,18px);text-transform:uppercase;letter-spacing:0.06em;}
+.insights-table-host th{color:var(--muted2);font-weight:600;font-size:clamp(12px,0.86vw,14px);text-transform:uppercase;letter-spacing:0.06em;}
 .ins-bar-wrap{margin-top:6px;background:rgba(0,0,0,0.28);border-radius:6px;height:8px;overflow:hidden;max-width:100%;}
 .ins-bar{height:100%;background:linear-gradient(90deg,var(--cyan),var(--accent-gold));border-radius:6px;transition:width .4s ease;}
 .grade-frame.loading{opacity:0;}
@@ -933,32 +943,35 @@ select option,
   <iframe class="grade-frame loading" id="grade-frame" src="about:blank" title="Grade Report"></iframe>
   <iframe class="grade-frame" id="ticket-frame" src="about:blank" title="Ticket Evaluation" style="display:none;"></iframe>
   <div id="analytics-panel" class="grades-analytics-wrap" style="display:none;" aria-label="CLV and calibration insights">
+    <div class="grades-analytics-stack">
+    <div class="grades-analytics-context glass-insights" id="insights-context">Loading analytics context…</div>
     <div class="grades-analytics-grid">
-      <div class="insights-card glass-insights">
+      <div class="insights-card glass-insights" id="ins-card-cal">
         <h3 class="insights-card-title">Predicted probability vs outcome</h3>
         <p class="insights-card-sub">Buckets from archived <code>props_history.ml_prob</code> vs graded HIT rate.</p>
-        <div id="ins-cal" class="insights-table-host"></div>
+        <div id="ins-cal" class="insights-table-host" data-empty-message="No archived probability rows yet. Run the grader + archive step to populate <code>props_history</code>."></div>
       </div>
-      <div class="insights-card glass-insights">
+      <div class="insights-card glass-insights" id="ins-card-clv">
         <h3 class="insights-card-title">Average CLV by sport</h3>
         <p class="insights-card-sub">From <code>clv_log</code> (closing − open implied), when odds columns were archived.</p>
-        <div id="ins-clv" class="insights-table-host"></div>
+        <div id="ins-clv" class="insights-table-host" data-empty-message="No CLV archive rows yet. Archive a graded slate with odds columns to populate <code>clv_log</code>."></div>
       </div>
-      <div class="insights-card glass-insights">
+      <div class="insights-card glass-insights" id="ins-card-edge">
         <h3 class="insights-card-title">Edge magnitude vs hit rate</h3>
         <p class="insights-card-sub">Absolute edge buckets (treats |edge| &gt; 1.5 as percentage points / 100).</p>
-        <div id="ins-edge" class="insights-table-host"></div>
+        <div id="ins-edge" class="insights-table-host" data-empty-message="No edge rows yet. Run grader + archive to populate edge calibration."></div>
       </div>
-      <div class="insights-card glass-insights">
+      <div class="insights-card glass-insights" id="ins-card-clv-prop">
         <h3 class="insights-card-title">CLV by prop type</h3>
         <p class="insights-card-sub">Top prop types by volume in <code>clv_log</code> (per sport).</p>
-        <div id="ins-clv-prop" class="insights-table-host"></div>
+        <div id="ins-clv-prop" class="insights-table-host" data-empty-message="No CLV prop-type rows yet."></div>
       </div>
-      <div class="insights-card glass-insights">
+      <div class="insights-card glass-insights" id="ins-card-clv-tier">
         <h3 class="insights-card-title">CLV by tier</h3>
         <p class="insights-card-sub">Archived tier labels when present on graded rows.</p>
-        <div id="ins-clv-tier" class="insights-table-host"></div>
+        <div id="ins-clv-tier" class="insights-table-host" data-empty-message="No CLV tier rows yet."></div>
       </div>
+    </div>
     </div>
   </div>
   <div id="props-eval-panel" class="grades-analytics-wrap grades-props-wrap" style="display:none;" aria-label="Graded props by report date">
@@ -1428,12 +1441,55 @@ function _insightsBarPct(hitRate) {
   return Math.min(100, Math.round(hitRate * 100));
 }
 
+function _insightsCountRows(rows) {
+  if (!Array.isArray(rows) || !rows.length) return 0;
+  let n = 0;
+  rows.forEach((r) => {
+    const v = Number((r || {}).n);
+    if (Number.isFinite(v) && v > 0) n += v;
+  });
+  return n;
+}
+
+function _setInsightsCardEmpty(host, isEmpty) {
+  if (!host) return;
+  const card = host.closest('.insights-card');
+  if (card) card.classList.toggle('insights-card-empty', Boolean(isEmpty));
+}
+
+function _renderInsightsContext(meta) {
+  const el = document.getElementById('insights-context');
+  if (!el) return;
+  if (meta && meta.error) {
+    el.innerHTML = '<strong>Insights unavailable.</strong> ' + escProps(meta.error);
+    return;
+  }
+  const ds = currentDateStr || gradesEl('date-jump')?.value || '—';
+  const totalCards = 5;
+  const cardsWithData = Number(meta?.cardsWithData || 0);
+  const calN = Number(meta?.calN || 0);
+  const edgeN = Number(meta?.edgeN || 0);
+  const clvN = Number(meta?.clvN || 0);
+  const refreshed = new Date().toLocaleString();
+  const status = cardsWithData === 0
+    ? 'No archived analytics data yet.'
+    : `${cardsWithData}/${totalCards} analytics cards have data.`;
+  el.innerHTML =
+    '<strong>Analytics context</strong> · Date: <strong>' + escProps(ds) + '</strong> · ' +
+    status + ' Calibration N: <strong>' + calN + '</strong> · ' +
+    'Edge N: <strong>' + edgeN + '</strong> · ' +
+    'CLV N: <strong>' + clvN + '</strong> · Refreshed: <strong>' + escProps(refreshed) + '</strong>';
+}
+
 function _renderInsightsTable(host, rows, cols) {
   if (!host) return;
   if (!rows || !rows.length) {
-    host.innerHTML = '<p class="insights-card-sub">No archived rows yet. Run the grader and <code>step_archive.py</code> to populate SQLite.</p>';
+    const msg = host.dataset.emptyMessage || 'No archived rows yet.';
+    host.innerHTML = '<p class="insights-card-sub">' + msg + '</p>';
+    _setInsightsCardEmpty(host, true);
     return;
   }
+  _setInsightsCardEmpty(host, false);
   let h = '<table><thead><tr>';
   cols.forEach((c) => { h += `<th>${c.label}</th>`; });
   h += '</tr></thead><tbody>';
@@ -1494,9 +1550,21 @@ async function loadGradesInsights() {
       { key: 'n', label: 'N' },
       { key: 'avg_clv', label: 'Avg CLV' },
     ]);
+    const calN = _insightsCountRows(d.calibration || []);
+    const edgeN = _insightsCountRows(d.edge_bucket_hit_rate || []);
+    const clvN = _insightsCountRows(d.clv_by_sport || []);
+    const cardsWithData = [
+      calN > 0,
+      clvN > 0,
+      edgeN > 0,
+      _insightsCountRows(d.clv_by_prop_type || []) > 0,
+      _insightsCountRows(d.clv_by_tier || []) > 0,
+    ].filter(Boolean).length;
+    _renderInsightsContext({ calN, edgeN, clvN, cardsWithData });
   } catch (e) {
     const msg = 'Could not load insights (' + (e && e.message ? e.message : e) + ').';
     [elCal, elClv, elEdge, document.getElementById('ins-clv-prop'), document.getElementById('ins-clv-tier')].forEach((el) => { if (el) el.innerHTML = '<p class="insights-card-sub">' + msg + '</p>'; });
+    _renderInsightsContext({ error: msg });
   }
 }
 
