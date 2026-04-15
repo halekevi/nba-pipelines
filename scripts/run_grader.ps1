@@ -37,9 +37,10 @@ $BuildGradesHtmlScript = Join-Path $Root "scripts\grading\build_grades_html.py"
 $BackfillGradedPropsJsonScript = Join-Path $Root "scripts\backfill_graded_props_json.py"
 $IngestGradedIncomeScript     = Join-Path $Root "scripts\ingest_graded_to_income_db.py"
 $NBABacktestScript = Join-Path $Root "NBA\scripts\backtest_nba.py"
-$TicketEvalBuilderScript = Join-Path $Root "scripts\build_ticket_eval_html.py"
+# Prefer build_ticket_eval.py (multi-date graded merge from leg game_time); fallback to legacy HTML-only builder.
+$TicketEvalBuilderScript = Join-Path $Root "scripts\build_ticket_eval.py"
 if (-not (Test-Path $TicketEvalBuilderScript)) {
-    $TicketEvalBuilderScript = Join-Path $Root "scripts\build_ticket_eval.py"
+    $TicketEvalBuilderScript = Join-Path $Root "scripts\build_ticket_eval_html.py"
 }
 $EntryLegGraderScript = Join-Path $Root "scripts\grade_entry_legs.py"
 

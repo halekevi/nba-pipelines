@@ -887,18 +887,49 @@ def _game_dates_from_ticket_payload(payload: dict[str, Any], slate_date: str) ->
     return dates
 
 
+# combined_slate_tickets_*.xlsx often omits Game Time; evening pipeline slips still target the next
+# calendar day for these books. Used only when no leg game_time / start_time was parsed.
+_TEAM_SPORTS_INFER_NEXT_DAY_GRADED: frozenset[str] = frozenset(
+    {"NBA", "NBA1H", "NBA1Q", "MLB", "NHL", "SOCCER", "CBB", "WCBB"}
+)
+
+
+def _payload_has_infer_next_day_sport_legs(payload: dict[str, Any]) -> bool:
+    for group in payload.get("groups") or []:
+        for ticket in group.get("tickets") or []:
+            for leg in ticket.get("legs") or []:
+                sp = str(leg.get("sport") or "").strip().upper()
+                if sp in _TEAM_SPORTS_INFER_NEXT_DAY_GRADED:
+                    return True
+    return False
+
+
+def _inferred_next_calendar_game_date(slate_date: str) -> str | None:
+    try:
+        y, m, d_ = int(slate_date[:4]), int(slate_date[5:7]), int(slate_date[8:10])
+        return (date(y, m, d_) + timedelta(days=1)).isoformat()
+    except (ValueError, IndexError, TypeError):
+        return None
+
+
 def resolve_ticket_eval_graded_merge_dates(
     slate_date: str,
     payload: dict[str, Any],
     extra_iso_dates: Sequence[str] | None = None,
-) -> list[str]:
+) -> tuple[list[str], list[str]]:
     """
-    Ordered list of calendar folders whose graded_*.xlsx files are merged into ticket eval.
+    Ordered list of calendar folders whose graded_*.xlsx files are merged into ticket eval,
+    and leg-side game dates for logging (parsed from legs, or inferred when xlsx has no game_time).
 
     Slate date is merged first, then each leg game date (sorted), then optional --game-date extras.
     Later merges overwrite matching keys so game-day graded exports win over slate-day rows.
     """
-    from_legs = _game_dates_from_ticket_payload(payload, slate_date)
+    parsed = _game_dates_from_ticket_payload(payload, slate_date)
+    from_legs: set[str] = set(parsed)
+    if not from_legs and _payload_has_infer_next_day_sport_legs(payload):
+        nxt = _inferred_next_calendar_game_date(slate_date)
+        if nxt:
+            from_legs.add(nxt)
     out: list[str] = []
     sd = str(slate_date).strip()
     if re.match(r"^\d{4}-\d{2}-\d{2}$", sd):
@@ -910,7 +941,8 @@ def resolve_ticket_eval_graded_merge_dates(
         ds = str(raw).strip()
         if re.match(r"^\d{4}-\d{2}-\d{2}$", ds) and ds not in out:
             out.append(ds)
-    return out
+    leg_dates_for_log = sorted(from_legs)
+    return out, leg_dates_for_log
 
 
 def _merge_graded_workbooks_for_date(
@@ -3128,10 +3160,16 @@ def main() -> int:
         return 1
 
     extra_game_dates: list[str] = list(args.game_date) if args.game_date else []
-    graded_merge_dates = resolve_ticket_eval_graded_merge_dates(arg_date, payload, extra_game_dates)
+    graded_merge_dates, leg_game_dates_for_log = resolve_ticket_eval_graded_merge_dates(
+        arg_date, payload, extra_game_dates
+    )
+    parsed_leg_dates = sorted(_game_dates_from_ticket_payload(payload, arg_date))
+    infer_note = ""
+    if leg_game_dates_for_log and not parsed_leg_dates:
+        infer_note = " (inferred next day; ticket file has no leg game_time column)"
     print(
         f"[TICKET EVAL] Slate date: {arg_date}; leg game_time dates: "
-        f"{sorted(_game_dates_from_ticket_payload(payload, arg_date)) or '[]'}; "
+        f"{leg_game_dates_for_log or '[]'}{infer_note}; "
         f"graded workbook merge order: {graded_merge_dates}"
     )
 
