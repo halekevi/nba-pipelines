@@ -35,6 +35,7 @@ $NHLAdvancedGraderScript = Join-Path $Root "scripts\nhl_grader_advanced.py"
 $SoccerAdvancedGraderScript = Join-Path $Root "scripts\soccer_grader_advanced.py"
 $BuildGradesHtmlScript = Join-Path $Root "scripts\grading\build_grades_html.py"
 $BackfillGradedPropsJsonScript = Join-Path $Root "scripts\backfill_graded_props_json.py"
+$IngestGradedIncomeScript     = Join-Path $Root "scripts\ingest_graded_to_income_db.py"
 $NBABacktestScript = Join-Path $Root "NBA\scripts\backtest_nba.py"
 $TicketEvalBuilderScript = Join-Path $Root "scripts\build_ticket_eval_html.py"
 if (-not (Test-Path $TicketEvalBuilderScript)) {
@@ -597,6 +598,18 @@ if (Test-Path $BackfillGradedPropsJsonScript) {
 }
 else {
     Write-Host "Skipping graded props JSON build (backfill_graded_props_json.py not found)." -ForegroundColor Yellow
+}
+
+# =============================
+# Ingest graded_props JSON -> proporacle_income.db (dashboard / ROI)
+# =============================
+if ((Test-Path $IngestGradedIncomeScript) -and (Test-Path (Join-Path $TemplatesDir "graded_props_$Date.json"))) {
+    Run-Py "Ingest graded props to income DB" $Root $IngestGradedIncomeScript @(
+        "--date", $Date
+    )
+}
+elseif (-not (Test-Path $IngestGradedIncomeScript)) {
+    Write-Host "Skipping income DB ingest (ingest_graded_to_income_db.py not found)." -ForegroundColor Yellow
 }
 
 # Publish graded_props JSON so Railway can serve /grades/props/<date> (set PROPORACLE_SKIP_GRADES_GIT_PUSH=1 to skip).
