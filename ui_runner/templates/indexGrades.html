@@ -2085,6 +2085,22 @@ async function _decidedPropsCountForDate(dateStr) {
 
 async function pickBestDefaultGradesDate(found, yest) {
   if (!Array.isArray(found) || !found.length) return yest;
+  // First, prefer the newest date with a recorded ticket-eval payout summary.
+  try {
+    const hr = await fetch('/api/grade-history', { cache: 'no-store' });
+    if (hr.ok) {
+      const runs = await hr.json();
+      if (Array.isArray(runs) && runs.length) {
+        const byDate = runs
+          .map(function (r) { return String((r && r.date) || '').slice(0, 10); })
+          .filter(function (ds) {
+            return /^\d{4}-\d{2}-\d{2}$/.test(ds) && ds <= yest && found.includes(ds);
+          })
+          .sort();
+        if (byDate.length) return byDate[byDate.length - 1];
+      }
+    }
+  } catch (_e) {}
   // Check up to the most recent 12 dates up to yesterday.
   const candidates = found.filter(ds => ds <= yest).slice(-12).reverse();
   for (const ds of candidates) {
