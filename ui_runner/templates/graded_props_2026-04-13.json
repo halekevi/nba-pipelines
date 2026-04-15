@@ -26328,12 +26328,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -26364,8 +26364,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -26430,12 +26430,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "4.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "7",
+      "margin": "4.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -26449,8 +26449,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -26483,8 +26483,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -26515,12 +26515,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -26532,12 +26532,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -26687,8 +26687,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -26721,8 +26721,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -26736,12 +26736,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -26755,8 +26755,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -26770,12 +26770,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -26821,12 +26821,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -26838,12 +26838,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -26857,8 +26857,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -26891,8 +26891,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -26908,8 +26908,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -26942,8 +26942,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -26974,12 +26974,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "4.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "6",
+      "margin": "4.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -26993,8 +26993,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -27042,12 +27042,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "3.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "4",
+      "margin": "3.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -27059,12 +27059,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -27110,12 +27110,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -27212,12 +27212,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "3.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "5",
+      "margin": "3.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -27229,12 +27229,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -27265,8 +27265,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -27280,12 +27280,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -27297,12 +27297,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -27314,12 +27314,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -27350,8 +27350,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -27367,8 +27367,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -27384,8 +27384,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -27401,8 +27401,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -27433,12 +27433,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -27452,8 +27452,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -27467,12 +27467,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -27605,8 +27605,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -27620,12 +27620,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "3.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "7",
+      "margin": "3.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -27637,12 +27637,12 @@
       "direction": "UNDER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "2",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "2",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -27656,8 +27656,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -27775,8 +27775,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -27790,12 +27790,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-1",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-1",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -27809,8 +27809,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -27826,8 +27826,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -27841,12 +27841,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -27858,12 +27858,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -27875,12 +27875,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -27894,8 +27894,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -27911,8 +27911,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -27943,12 +27943,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -27979,8 +27979,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -27996,8 +27996,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -28013,8 +28013,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -28028,12 +28028,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -28045,12 +28045,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "5",
+      "margin": "2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -28081,8 +28081,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-3.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -28198,12 +28198,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -28232,12 +28232,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -28249,12 +28249,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -28268,8 +28268,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -28283,12 +28283,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -28302,8 +28302,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -28319,8 +28319,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -28351,12 +28351,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -28368,12 +28368,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -28385,12 +28385,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -28438,8 +28438,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -28470,12 +28470,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -28489,8 +28489,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -28521,12 +28521,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -28929,12 +28929,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -28948,8 +28948,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29339,8 +29339,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29356,8 +29356,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29388,12 +29388,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -29407,8 +29407,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29424,8 +29424,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29441,8 +29441,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29458,8 +29458,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29490,12 +29490,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -29509,8 +29509,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29526,8 +29526,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29575,12 +29575,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -29609,12 +29609,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -29626,12 +29626,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -29643,12 +29643,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -29660,12 +29660,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-3.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-3.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -29696,8 +29696,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29713,8 +29713,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29730,8 +29730,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29747,8 +29747,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29764,8 +29764,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29781,8 +29781,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29815,8 +29815,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29866,8 +29866,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29883,8 +29883,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29917,8 +29917,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29951,8 +29951,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -29985,8 +29985,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -30002,8 +30002,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-4.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -30155,8 +30155,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -30189,8 +30189,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -30238,12 +30238,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -30255,12 +30255,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -30291,8 +30291,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -30323,12 +30323,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -30342,8 +30342,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -30374,12 +30374,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -30835,8 +30835,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -30852,8 +30852,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -30869,8 +30869,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -30920,8 +30920,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -30937,8 +30937,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -30954,8 +30954,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -30971,8 +30971,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -30988,8 +30988,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -31005,8 +31005,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -31022,8 +31022,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -31039,8 +31039,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -31056,8 +31056,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -31090,8 +31090,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -31209,8 +31209,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -31243,8 +31243,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -31258,12 +31258,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -31277,8 +31277,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-3.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -31294,8 +31294,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-3.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -31343,12 +31343,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-3.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-3.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -31360,12 +31360,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-3.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-3.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -31379,8 +31379,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -31396,8 +31396,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32059,8 +32059,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32076,8 +32076,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32093,8 +32093,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32110,8 +32110,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32127,8 +32127,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32144,8 +32144,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32161,8 +32161,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32212,8 +32212,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32263,8 +32263,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32280,8 +32280,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32297,8 +32297,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32312,12 +32312,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -32346,12 +32346,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -32365,8 +32365,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32433,8 +32433,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32465,12 +32465,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -32482,12 +32482,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -32518,8 +32518,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32535,8 +32535,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32552,8 +32552,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32569,8 +32569,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32584,12 +32584,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -32618,12 +32618,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -32637,8 +32637,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32652,12 +32652,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -32671,8 +32671,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32722,8 +32722,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32739,8 +32739,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -32756,8 +32756,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-4.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -33130,8 +33130,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -33147,8 +33147,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -33164,8 +33164,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -33181,8 +33181,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -33198,8 +33198,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -33249,8 +33249,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -33283,8 +33283,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -33317,8 +33317,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -34371,8 +34371,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -34575,8 +34575,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -34626,8 +34626,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -34643,8 +34643,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -34660,8 +34660,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -34677,8 +34677,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -34711,8 +34711,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -34743,12 +34743,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -34760,12 +34760,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -34796,8 +34796,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -34828,12 +34828,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -34915,8 +34915,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -34932,8 +34932,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -34949,8 +34949,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -34966,8 +34966,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -34983,8 +34983,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -35000,8 +35000,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -35017,8 +35017,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -35051,8 +35051,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -35068,8 +35068,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -35085,8 +35085,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -35119,8 +35119,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -35151,12 +35151,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -35170,8 +35170,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -35187,8 +35187,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -35204,8 +35204,8 @@
       "tier": "A",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -35236,12 +35236,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "A",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -35610,12 +35610,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "7",
+      "margin": "2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -35680,8 +35680,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -35697,8 +35697,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -35967,12 +35967,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -36003,8 +36003,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -36020,8 +36020,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -36035,12 +36035,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -36052,12 +36052,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -36069,12 +36069,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -36088,8 +36088,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -36120,12 +36120,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -36139,8 +36139,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -36156,8 +36156,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -36171,12 +36171,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -36190,8 +36190,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -36205,12 +36205,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -36241,8 +36241,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-3.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -36256,12 +36256,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "5",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -36326,8 +36326,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -36358,12 +36358,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -36377,8 +36377,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -36392,12 +36392,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -36426,12 +36426,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -36443,12 +36443,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -36479,8 +36479,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -36496,8 +36496,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -36513,8 +36513,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -36545,12 +36545,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -36562,12 +36562,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -36955,8 +36955,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -36972,8 +36972,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -36989,8 +36989,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37006,8 +37006,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37023,8 +37023,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37040,8 +37040,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37125,8 +37125,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37142,8 +37142,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37210,8 +37210,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37244,8 +37244,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37259,12 +37259,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -37278,8 +37278,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-3.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37752,12 +37752,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -37771,8 +37771,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37788,8 +37788,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37822,8 +37822,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37839,8 +37839,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37856,8 +37856,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37873,8 +37873,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37890,8 +37890,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37907,8 +37907,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37924,8 +37924,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37941,8 +37941,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37958,8 +37958,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -37975,8 +37975,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38009,8 +38009,8 @@
       "tier": "B",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38024,12 +38024,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "B",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -38058,12 +38058,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -38228,12 +38228,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -38245,12 +38245,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -38264,8 +38264,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38298,8 +38298,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38315,8 +38315,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38332,8 +38332,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38364,12 +38364,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -38383,8 +38383,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38398,12 +38398,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -38417,8 +38417,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38434,8 +38434,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38451,8 +38451,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38466,12 +38466,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -38485,8 +38485,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38500,12 +38500,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -38519,8 +38519,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38534,12 +38534,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -38587,8 +38587,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38604,8 +38604,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38621,8 +38621,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38655,8 +38655,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38670,12 +38670,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -38689,8 +38689,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38706,8 +38706,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38723,8 +38723,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38740,8 +38740,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38757,8 +38757,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38774,8 +38774,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38808,8 +38808,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38823,12 +38823,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -38840,12 +38840,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -38942,12 +38942,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "4",
+      "margin": "2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -38961,8 +38961,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -38978,8 +38978,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -39505,8 +39505,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -39962,12 +39962,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -39981,8 +39981,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -39998,8 +39998,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40015,8 +40015,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40030,12 +40030,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -40049,8 +40049,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40066,8 +40066,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40098,12 +40098,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -40115,12 +40115,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -40134,8 +40134,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40151,8 +40151,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40168,8 +40168,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40200,12 +40200,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -40217,12 +40217,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -40270,8 +40270,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40287,8 +40287,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40302,12 +40302,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "C",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -40321,8 +40321,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40353,12 +40353,12 @@
       "direction": "UNDER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-1",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "-1",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -40387,12 +40387,12 @@
       "direction": "UNDER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "1",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "1",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -40406,8 +40406,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "3",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40472,12 +40472,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -40506,12 +40506,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -40523,12 +40523,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -40542,8 +40542,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40557,12 +40557,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -40576,8 +40576,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-3.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40593,8 +40593,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-3.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40608,12 +40608,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "5",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -40625,12 +40625,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -40659,12 +40659,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -40678,8 +40678,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40693,12 +40693,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -40729,8 +40729,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40746,8 +40746,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40761,12 +40761,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -40780,8 +40780,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40797,8 +40797,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40831,8 +40831,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40848,8 +40848,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40899,8 +40899,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40950,8 +40950,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40967,8 +40967,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -40984,8 +40984,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41001,8 +41001,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41018,8 +41018,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41033,12 +41033,12 @@
       "direction": "UNDER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -41067,12 +41067,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "-2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -41103,8 +41103,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41137,8 +41137,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41171,8 +41171,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41188,8 +41188,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41205,8 +41205,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41220,12 +41220,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -41239,8 +41239,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41256,8 +41256,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41290,8 +41290,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41307,8 +41307,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41324,8 +41324,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41341,8 +41341,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41358,8 +41358,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41375,8 +41375,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41392,8 +41392,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41407,12 +41407,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -41426,8 +41426,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41443,8 +41443,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41477,8 +41477,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41494,8 +41494,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41511,8 +41511,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41528,8 +41528,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41562,8 +41562,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41579,8 +41579,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41594,12 +41594,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -41611,12 +41611,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -41630,8 +41630,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41747,12 +41747,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -41766,8 +41766,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41781,12 +41781,12 @@
       "direction": "UNDER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "4",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -41798,12 +41798,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -41817,8 +41817,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41832,12 +41832,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -41885,8 +41885,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41919,8 +41919,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41936,8 +41936,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41953,8 +41953,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -41987,8 +41987,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42004,8 +42004,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42021,8 +42021,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42055,8 +42055,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42072,8 +42072,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-3.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42087,12 +42087,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -42106,8 +42106,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42121,12 +42121,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -42206,12 +42206,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -42223,12 +42223,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "4",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -42240,12 +42240,12 @@
       "direction": "UNDER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "0",
       "void_reason": "",
-      "result": "VOID"
+      "result": "PUSH"
     },
     {
       "sport": "Soccer",
@@ -42259,8 +42259,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42276,8 +42276,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42293,8 +42293,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42310,8 +42310,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42344,8 +42344,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42395,8 +42395,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-3.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42410,12 +42410,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -42429,8 +42429,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42497,8 +42497,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42514,8 +42514,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42529,12 +42529,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -42546,12 +42546,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -42565,8 +42565,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42582,8 +42582,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42616,8 +42616,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42633,8 +42633,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42650,8 +42650,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42665,12 +42665,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -42701,8 +42701,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42735,8 +42735,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42752,8 +42752,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42769,8 +42769,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42786,8 +42786,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42837,8 +42837,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42854,8 +42854,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42903,12 +42903,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -42920,12 +42920,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -42939,8 +42939,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -42954,12 +42954,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -42971,12 +42971,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -43024,8 +43024,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-3.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43039,12 +43039,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -43058,8 +43058,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-3.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43090,12 +43090,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -43107,12 +43107,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -43175,12 +43175,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -43192,12 +43192,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -43381,8 +43381,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43415,8 +43415,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43449,8 +43449,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43483,8 +43483,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43500,8 +43500,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43549,12 +43549,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -43568,8 +43568,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43619,8 +43619,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43651,12 +43651,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -43670,8 +43670,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43702,12 +43702,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -43738,8 +43738,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-4.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43755,8 +43755,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43772,8 +43772,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-3.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43789,8 +43789,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43806,8 +43806,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43823,8 +43823,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43840,8 +43840,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43855,12 +43855,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -43872,12 +43872,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -43889,12 +43889,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -43908,8 +43908,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43923,12 +43923,12 @@
       "direction": "UNDER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "4",
+      "margin": "-2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -43942,8 +43942,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43959,8 +43959,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -43993,8 +43993,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-4.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44010,8 +44010,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44027,8 +44027,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44078,8 +44078,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44095,8 +44095,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44110,12 +44110,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "4",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -44129,8 +44129,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44146,8 +44146,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44163,8 +44163,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44180,8 +44180,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44197,8 +44197,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44280,12 +44280,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -44299,8 +44299,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44316,8 +44316,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44333,8 +44333,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44365,12 +44365,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -44416,12 +44416,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "6",
+      "margin": "2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -44433,12 +44433,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -44469,8 +44469,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44484,12 +44484,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -44537,8 +44537,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44554,8 +44554,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44673,8 +44673,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44688,12 +44688,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -44707,8 +44707,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44775,8 +44775,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44792,8 +44792,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44809,8 +44809,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44843,8 +44843,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44860,8 +44860,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44877,8 +44877,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44894,8 +44894,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44911,8 +44911,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44928,8 +44928,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44945,8 +44945,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -44994,12 +44994,12 @@
       "direction": "UNDER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -45013,8 +45013,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -45028,12 +45028,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -45047,8 +45047,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -45098,8 +45098,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -45113,12 +45113,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-3.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-3.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -45130,12 +45130,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -45198,12 +45198,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -45217,8 +45217,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -45251,8 +45251,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-5.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -45268,8 +45268,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-4.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -45285,8 +45285,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -45302,8 +45302,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -45319,8 +45319,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -45385,12 +45385,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -45489,8 +45489,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -45504,12 +45504,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -45521,12 +45521,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -45555,12 +45555,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -45574,8 +45574,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -45591,8 +45591,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -45608,8 +45608,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -45642,8 +45642,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -45674,12 +45674,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -45693,8 +45693,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -45725,12 +45725,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -46084,8 +46084,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46101,8 +46101,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46118,8 +46118,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46133,12 +46133,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "4",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -46286,12 +46286,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -46303,12 +46303,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "6",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -46322,8 +46322,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46356,8 +46356,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46390,8 +46390,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46407,8 +46407,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46424,8 +46424,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46441,8 +46441,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46458,8 +46458,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46490,12 +46490,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -46541,12 +46541,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "4",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -46560,8 +46560,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46577,8 +46577,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-3.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46611,8 +46611,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46643,12 +46643,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "4",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -46662,8 +46662,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46677,12 +46677,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -46696,8 +46696,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46711,12 +46711,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -46745,12 +46745,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -46764,8 +46764,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46781,8 +46781,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46796,12 +46796,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -46815,8 +46815,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46832,8 +46832,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46866,8 +46866,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46883,8 +46883,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46917,8 +46917,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46934,8 +46934,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46951,8 +46951,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -46968,8 +46968,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47002,8 +47002,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47034,12 +47034,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -47053,8 +47053,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47070,8 +47070,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47087,8 +47087,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47104,8 +47104,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47121,8 +47121,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47155,8 +47155,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47172,8 +47172,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47272,12 +47272,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -47289,12 +47289,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-3.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-3.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -47306,12 +47306,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -47342,8 +47342,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47376,8 +47376,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47393,8 +47393,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47410,8 +47410,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47427,8 +47427,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47444,8 +47444,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47461,8 +47461,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47478,8 +47478,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47495,8 +47495,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47512,8 +47512,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47546,8 +47546,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47563,8 +47563,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47580,8 +47580,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47597,8 +47597,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47614,8 +47614,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47631,8 +47631,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47682,8 +47682,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47716,8 +47716,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47733,8 +47733,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47750,8 +47750,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47767,8 +47767,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47784,8 +47784,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47801,8 +47801,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47816,12 +47816,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -47835,8 +47835,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47850,12 +47850,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -47869,8 +47869,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47886,8 +47886,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47903,8 +47903,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47920,8 +47920,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47937,8 +47937,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47954,8 +47954,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47971,8 +47971,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -47988,8 +47988,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48005,8 +48005,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48037,12 +48037,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -48056,8 +48056,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48073,8 +48073,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48090,8 +48090,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48107,8 +48107,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48124,8 +48124,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48141,8 +48141,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48175,8 +48175,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48192,8 +48192,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48207,12 +48207,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -48224,12 +48224,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -48243,8 +48243,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48260,8 +48260,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48294,8 +48294,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48309,12 +48309,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -48328,8 +48328,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48362,8 +48362,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48396,8 +48396,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48413,8 +48413,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48430,8 +48430,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48447,8 +48447,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48464,8 +48464,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48498,8 +48498,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48515,8 +48515,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48532,8 +48532,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48549,8 +48549,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48566,8 +48566,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48617,8 +48617,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48634,8 +48634,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48651,8 +48651,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48668,8 +48668,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48685,8 +48685,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48702,8 +48702,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48719,8 +48719,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48736,8 +48736,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48770,8 +48770,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48787,8 +48787,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48804,8 +48804,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48821,8 +48821,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-3.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48838,8 +48838,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -48972,12 +48972,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-2.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-2.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -49042,8 +49042,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49059,8 +49059,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49093,8 +49093,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49110,8 +49110,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49127,8 +49127,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49144,8 +49144,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49161,8 +49161,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49178,8 +49178,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49212,8 +49212,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49229,8 +49229,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49246,8 +49246,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49263,8 +49263,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49280,8 +49280,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49295,12 +49295,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -49314,8 +49314,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49331,8 +49331,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49382,8 +49382,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49399,8 +49399,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49416,8 +49416,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49433,8 +49433,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49450,8 +49450,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49467,8 +49467,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49484,8 +49484,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49501,8 +49501,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49535,8 +49535,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-3.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49552,8 +49552,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-4.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49569,8 +49569,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-3.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49586,8 +49586,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49603,8 +49603,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49620,8 +49620,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49637,8 +49637,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-5.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49654,8 +49654,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49671,8 +49671,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49705,8 +49705,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49722,8 +49722,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49739,8 +49739,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49756,8 +49756,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-2.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49807,8 +49807,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-3.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49856,12 +49856,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -49875,8 +49875,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-4.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -49890,12 +49890,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -49907,12 +49907,12 @@
       "direction": "UNDER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -49924,12 +49924,12 @@
       "direction": "UNDER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-3.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "6",
+      "margin": "-3.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -49941,12 +49941,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -49992,12 +49992,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-1",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "2",
+      "margin": "-1",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -50434,12 +50434,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -51148,12 +51148,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -51320,8 +51320,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -51337,8 +51337,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -51369,12 +51369,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -51386,12 +51386,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -51439,8 +51439,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -51473,8 +51473,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -51490,8 +51490,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -51505,12 +51505,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -51592,8 +51592,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -51624,12 +51624,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "1.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "3",
+      "margin": "1.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "HIT"
     },
     {
       "sport": "Soccer",
@@ -51643,8 +51643,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -51660,8 +51660,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -51694,8 +51694,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -51709,12 +51709,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -51728,8 +51728,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-1.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -51796,8 +51796,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -51830,8 +51830,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -51864,8 +51864,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -51881,8 +51881,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "0",
+      "margin": "-0.5",
       "void_reason": "",
       "result": "VOID"
     },
@@ -51896,12 +51896,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "Soccer",
@@ -51930,12 +51930,12 @@
       "direction": "OVER",
       "pick_type": "—",
       "tier": "D",
-      "edge": "",
+      "edge": "-0.5",
       "ml_prob": "",
-      "actual_value": "",
-      "margin": "",
+      "actual_value": "1",
+      "margin": "-0.5",
       "void_reason": "",
-      "result": "VOID"
+      "result": "MISS"
     },
     {
       "sport": "MLB",
