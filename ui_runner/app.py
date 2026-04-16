@@ -2603,6 +2603,31 @@ def api_payout_log_observation():
     return jsonify({"saved": True, "total_obs": max(0, n_lines), "mult_delta": mult_delta, "warning_large_delta": warn})
 
 
+@app.get("/api/payout/observations")
+def api_payout_observations():
+    """Read server-side payout observations for /payout Patterns (data/payout_observations.csv)."""
+    csv_path = BASE_DIR / "data" / "payout_observations.csv"
+    if not csv_path.is_file():
+        r = jsonify({"observations": [], "count": 0, "truncated": False})
+        r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        return r
+    rows: list[dict[str, Any]] = []
+    try:
+        with csv_path.open("r", newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for rec in reader:
+                if isinstance(rec, dict):
+                    rows.append({str(k): (v if v is not None else "") for k, v in rec.items()})
+    except OSError as e:
+        return jsonify({"error": str(e), "observations": [], "count": 0}), 500
+    max_return = 800
+    truncated = len(rows) > max_return
+    out = rows[-max_return:] if truncated else rows
+    resp = jsonify({"observations": out, "count": len(rows), "truncated": truncated})
+    resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    return resp
+
+
 @app.get("/api/payout/combo-table")
 def api_payout_combo_table():
     """Static combo reference from outputs/combo_table_latest.json (run write_combo_table_latest.py)."""

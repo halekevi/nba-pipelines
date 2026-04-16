@@ -1027,11 +1027,15 @@ body::before{
   <div id="patterns-empty" class="card">
     <div class="empty-log" style="padding:60px">
       <div style="font-size:32px;margin-bottom:12px">📈</div>
-      <div style="font-size:14px;color:var(--muted);margin-bottom:8px">Log at least 3 tickets to see patterns</div>
-      <div style="font-size:11px;color:var(--muted)">Switch to Log Lines and start entering real standard + played lines with actual payouts</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:8px">Need at least 3 payout observations to see patterns</div>
+      <div style="font-size:11px;color:var(--muted)">Use Log Lines in this browser and/or server rows in <code style="font-size:10px">data/payout_observations.csv</code> (when you enable CSV append). Patterns merge both sources.</div>
     </div>
   </div>
   <div id="patterns-content" style="display:none">
+    <div id="patterns-source-banner" class="card cyan" style="display:none;margin-bottom:20px;padding:14px 18px;border-color:rgba(127,199,217,.28)">
+      <div class="card-title" style="margin-bottom:8px;font-size:12px;color:var(--cyan)">📎 Merged data</div>
+      <div id="patterns-source-text" style="font-size:11px;color:var(--muted);line-height:1.85"></div>
+    </div>
     <div class="pattern-grid">
       <div class="card goblin" style="margin-bottom:0"><div class="card-title" style="color:var(--goblin)">🎃 Goblin Pattern</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" id="goblin-stats"></div></div>
       <div class="card demon"  style="margin-bottom:0"><div class="card-title" style="color:var(--demon)">😈 Demon Pattern</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" id="demon-stats"></div></div>
@@ -1053,7 +1057,7 @@ body::before{
     </div>
     <div class="card" style="border-color:rgba(212,175,55,.15)">
       <div class="card-title" style="color:var(--accent)">⚗️ Estimated Per-Leg Formula</div>
-      <p class="hint">Derived from your logged data. Use to predict payouts before locking in.</p>
+      <p class="hint">Derived from browser log plus server CSV rows (same shape). Use to predict payouts before locking in.</p>
       <div id="formula-output" style="font-size:12px;line-height:2;color:var(--muted);"></div>
     </div>
   </div>
@@ -1152,7 +1156,7 @@ function switchTab(id,btn){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
   btn.classList.add('active');
-  if(id==='patterns')renderPatterns();
+  if(id==='patterns'){ensureServerObservationsLoaded().then(()=>renderPatterns()).catch(()=>renderPatterns());}
   if(id==='log'){renderLogTable();updateLogCount();}
   if(id==='cards')renderRateCards(false);
 }
@@ -1561,6 +1565,7 @@ async function logTicket(){
         }
         if(obsJ.warning_large_delta)showMsg(`✓ Logged! CSV row(s) added (large Δ vs model — check). ${logEntries.length} total.`,'good');
         else showMsg(`✓ Logged + server row (${obsJ.total_obs||'?'} obs). ${logEntries.length} total.`,'good');
+        _payoutServerObsFetchTs=0;
       }
     }catch(e){showMsg('⚠ Saved locally; server CSV error.','warn');}
   }else showMsg(`✓ Logged! ${logEntries.length} total.`,'good');
@@ -1584,12 +1589,75 @@ function renderLogTable(){
   w.innerHTML=`<div style="overflow-x:auto"><table class="log-table"><thead><tr><th>DATE</th><th>PLATFORM</th><th>MIX</th><th>LEGS</th><th>BASE</th><th>ACTUAL</th><th>FLEX n−1</th><th>SHIFT</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
-/* ─── PATTERNS ─── */
+/* ─── PATTERNS (browser log + server CSV) ─── */
+let _payoutServerObsFetchTs=0;
+const PAYOUT_SERVER_OBS_TTL_MS=45000;
+window.__payoutServerObs=window.__payoutServerObs||[];
+function getPatternLogEntries(){return [...logEntries,...(window.__payoutServerObs||[])];}
+function parseLegDetailsJson(s){
+  if(s==null||s==='')return null;
+  if(typeof s==='object')return s;
+  try{return JSON.parse(String(s));}catch{return null;}
+}
+function observationRowToLogEntry(row,ix){
+  const am=parseFloat(row.actual_mult),bm=parseFloat(row.base_mult);
+  if(isNaN(am)||am<=0)return null;
+  const mc=(bm>0&&!isNaN(bm))?Math.round(((am/bm)-1)*1000)/10:null;
+  const meta=parseLegDetailsJson(row.leg_details_json);
+  const legsIn=(meta&&Array.isArray(meta.legs))?meta.legs:[];
+  const legs=legsIn.map((l)=>{
+    const typ=String(l.type||'standard').toLowerCase();
+    const kind=typ==='goblin'?'goblin':typ==='demon'?'demon':'standard';
+    const s=parseFloat(l.stdLine),p=parseFloat(l.playedLine);
+    const dp=l.deltaPct!=null&&!isNaN(parseFloat(l.deltaPct))?parseFloat(l.deltaPct):getDeltaPct(s,p);
+    let dist=l.distance;
+    if((dist==null||dist==='')&&kind!=='standard'&&!isNaN(s)&&!isNaN(p))dist=Math.round(Math.abs(p-s)*100)/100;
+    const bkt=l.bucket||(dp!=null?getBucket(dp,kind):null);
+    return{type:kind,player:l.player||'Unknown',sport:l.sport||'NBA',prop:l.prop||'Other',stdLine:isNaN(s)?null:s,playedLine:isNaN(p)?null:p,distance:dist!=null&&!isNaN(parseFloat(dist))?parseFloat(dist):null,deltaPct:dp,bucket:bkt};
+  });
+  const nL=parseInt(row.n_legs,10)||legs.length||0;
+  const nStd=legs.filter(l=>l.type==='standard').length,nGob=legs.filter(l=>l.type==='goblin').length,nDem=legs.filter(l=>l.type==='demon').length;
+  const slipRaw=String(row.slip_type||'').toLowerCase();
+  return{
+    id:'csv-'+ix+'-'+(String(row.date||'').slice(0,10)||ix),
+    ts:String(row.date||'').slice(0,10)||'—',
+    platform:(meta&&meta.platform)||'Server CSV',
+    slipType:slipRaw.includes('flex')?'Flex Play':'Power Play',
+    nLegs:nL||Math.max(legs.length,1),nStd:nStd||Math.max(0,legs.length-nGob-nDem),nGob,nDem,
+    baseMult:!isNaN(bm)&&bm>0?bm:null,actualMult:am,multChange:mc,
+    bucketSig:(meta&&meta.bucketSig)||String(row.combo_label||''),
+    comboSig:(meta&&meta.comboSig)||'',
+    legs,
+    _source:'server',
+  };
+}
+function ensureServerObservationsLoaded(){
+  const now=Date.now();
+  if(_payoutServerObsFetchTs&&(now-_payoutServerObsFetchTs<PAYOUT_SERVER_OBS_TTL_MS))
+    return Promise.resolve();
+  return fetch('/api/payout/observations').then(r=>r.json().then(j=>{
+    if(!r.ok){window.__payoutServerObs=[];return;}
+    const arr=j.observations||[];
+    window.__payoutServerObs=arr.map((row,i)=>observationRowToLogEntry(row,i)).filter(Boolean);
+    _payoutServerObsFetchTs=Date.now();
+  })).catch(()=>{window.__payoutServerObs=[];});
+}
 function avg(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:0;}
 
 function renderPatterns(){
-  const wa=logEntries.filter(e=>e.multChange!==null);
-  if(logEntries.length<3){document.getElementById('patterns-empty').style.display='block';document.getElementById('patterns-content').style.display='none';return;}
+  const merged=getPatternLogEntries();
+  const wa=merged.filter(e=>e.multChange!==null);
+  const ban=document.getElementById('patterns-source-banner'),btxt=document.getElementById('patterns-source-text');
+  if(ban&&btxt){
+    const nB=logEntries.length,nS=(window.__payoutServerObs||[]).length;
+    if(nB||nS){
+      ban.style.display='block';
+      let t=`Browser log: <strong style="color:var(--text)">${nB}</strong> ticket(s). Server CSV: <strong style="color:var(--text)">${nS}</strong> row(s) loaded for patterns.`;
+      if(nS===0)t+=' Append rows from Log Lines (checkbox) or add to <code style="font-size:10px">data/payout_observations.csv</code> to grow this pool.';
+      btxt.innerHTML=t;
+    }else{ban.style.display='none';}
+  }
+  if(merged.length<3){document.getElementById('patterns-empty').style.display='block';document.getElementById('patterns-content').style.display='none';return;}
   document.getElementById('patterns-empty').style.display='none';document.getElementById('patterns-content').style.display='block';
   const go=[],de=[],bm={};
   wa.forEach(e=>{(e.legs||[]).forEach(l=>{
