@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-16 19:27:22 UTC",
+  "generated_at": "2026-04-16 19:51:57 UTC",
   "date": "2026-04-16",
   "filters": {
     "tiers": "A,B,C,D",
@@ -85,7 +85,7 @@
               "delta_pct": 1.0,
               "line_underdog": null,
               "line_draftkings": null,
-              "best_cross_line": 2.5,
+              "best_cross_line": 1.5,
               "best_cross_book": "PP",
               "cross_edge_vs_pp": 0.0,
               "cross_n_books": 1,

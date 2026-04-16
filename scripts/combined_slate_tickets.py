@@ -2812,10 +2812,10 @@ def enforce_target_date(
     total = len(out)
 
     # Keep cross-date fallback limited to sparse/overnight boards.
-    # NBA (including period slates) and Soccer should not silently roll dates.
+    # NBA/MLB period boards and Soccer should not silently roll dates.
     sport_u = str(sport).upper()
     fallback_sports = {"TENNIS"}
-    if sport_u in {"NBA", "NBA1Q", "NBA1H", "SOCCER", "SOC"}:
+    if sport_u in {"NBA", "NBA1Q", "NBA1H", "MLB", "SOCCER", "SOC"}:
         use_date_fallback = False
     else:
         use_date_fallback = allow_cross_date_fallback or (sport_u in fallback_sports)
@@ -8183,8 +8183,12 @@ def main():
     if args.mlb:
         try:
             mlb = load_mlb(args.mlb)
+            mlb = enforce_target_date(
+                mlb, "MLB", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+            )
             mlb = attach_standard_refs(mlb)
             print(f"  {len(mlb)} MLB props loaded")
+            _load_audit_row("MLB", args.mlb, mlb)
         except Exception as e:
             print(f"  WARNING: Could not load MLB file: {e}")
             mlb = None
