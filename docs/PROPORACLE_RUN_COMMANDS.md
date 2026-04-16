@@ -92,21 +92,30 @@ One-off index/app patcher; requires `archive\root-text\patch_replacement.txt`. R
 .\scripts\patch_slateiq.ps1
 ```
 
-## Register Scheduled Task (`scripts/Register_Daily_Task.ps1`)
+## Register Scheduled Tasks (`scripts/Register_Daily_Task.ps1`)
 
 ```powershell
 # Run once in elevated PowerShell
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 .\scripts\Register_Daily_Task.ps1
 
-# Test scheduled task now
-Start-ScheduledTask -TaskName "PropOracle - Master Pipeline Daily"
+# Registered tasks:
+#  - PropOracle - Grader 5AM
+#  - PropOracle - Daily 7AM
+#  - PropOracle - Refresh 9AM
+#  - PropOracle - Refresh 11AM
+
+# Test one now
+Start-ScheduledTask -TaskName "PropOracle - Daily 7AM"
 
 # Check task status
-Get-ScheduledTaskInfo -TaskName "PropOracle - Master Pipeline Daily" | Select LastRunTime, LastTaskResult
+Get-ScheduledTask | Where-Object TaskName -like "PropOracle -*" | Select TaskName, State
+Get-ScheduledTaskInfo -TaskName "PropOracle - Refresh 9AM" | Select LastRunTime, LastTaskResult
 
-# Remove task
-Unregister-ScheduledTask -TaskName "PropOracle - Master Pipeline Daily" -Confirm:$false
+# Remove all PropOracle tasks
+Get-ScheduledTask | Where-Object TaskName -like "PropOracle -*" | ForEach-Object {
+  Unregister-ScheduledTask -TaskName $_.TaskName -Confirm:$false
+}
 ```
 
 ## Optional Python Direct Commands

@@ -1,38 +1,41 @@
-# Rebuild graded_props JSON for yesterday from outputs\<date>\graded_*.xlsx.
-# JSON-only first; if that fails, runs build_grades_html.py for that date.
+# Emit ui_runner/templates/graded_props_YYYY-MM-DD.json for yesterday (or -Date).
+# Requires graded_*.xlsx under outputs\<date>\ (run run_grader.ps1 first if missing).
+param([string]$Date = "")
 
-param(
-    [string]$Date = ""
-)
-
-$ErrorActionPreference = "Stop"
 $Root = Split-Path -Parent $PSScriptRoot
 if (-not $Date) {
     $Date = (Get-Date).AddDays(-1).ToString("yyyy-MM-dd")
 }
+Set-Location $Root
+Write-Host "Backfill graded_props JSON for slate date: $Date" -ForegroundColor Cyan
 
-$Templates = Join-Path $Root "ui_runner\templates"
-$JsonOnly = Join-Path $PSScriptRoot "backfill_graded_props_json.py"
-$FullHtml = Join-Path $PSScriptRoot "grading\build_grades_html.py"
+$bf = Join-Path $Root "scripts\backfill_graded_props_json.py"
+$bg = Join-Path $Root "scripts\grading\build_grades_html.py"
+$out = Join-Path $Root "ui_runner\templates"
 
-Push-Location $Root
-try {
-    Write-Host "[backfill] Date: $Date" -ForegroundColor Cyan
-    if (Test-Path $JsonOnly) {
-        py -3.14 $JsonOnly --date $Date --out $Templates
-        if ($LASTEXITCODE -eq 0) {
-            Write-Host "OK -> graded_props_$Date.json" -ForegroundColor Green
-            exit 0
-        }
-        Write-Host "JSON-only backfill failed; trying full HTML build..." -ForegroundColor Yellow
-    }
-    if (-not (Test-Path $FullHtml)) {
-        Write-Error "build_grades_html.py not found: $FullHtml"
+function Run-Py {
+    param([string[]]$PyArgs)
+    if (Get-Command python -ErrorAction SilentlyContinue) {
+        & python @PyArgs
+    } elseif (Get-Command py -ErrorAction SilentlyContinue) {
+        & py -3 @PyArgs
+    } else {
+        Write-Error "Python not found."
         exit 1
     }
-    py -3.14 $FullHtml --date $Date --out $Templates
-    exit $LASTEXITCODE
 }
-finally {
-    Pop-Location
+
+# Fast path: JSON only (needs build_grades_html.py with export_graded_props_json).
+if ((Test-Path $bf) -and (Test-Path $bg)) {
+    Run-Py @($bf, "--date", $Date)
+    if ($LASTEXITCODE -eq 0) { exit 0 }
+    Write-Host "JSON-only backfill failed; running full slate HTML + JSON build..." -ForegroundColor Yellow
 }
+
+if (-not (Test-Path $bg)) {
+    Write-Error "Missing $bg"
+    exit 1
+}
+
+Run-Py @($bg, "--date", $Date, "--out", $out)
+exit $LASTEXITCODE
