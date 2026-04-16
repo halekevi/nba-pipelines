@@ -1,6 +1,7 @@
 # Shared deps for NBA/CBB/NHL/MLB/Soccer pipeline scripts and graders.
 # Install: py -m pip install -r requirements-pipeline.txt
 pandas>=2.0
+playwright-stealth
 numpy
 scipy>=1.10
 requests

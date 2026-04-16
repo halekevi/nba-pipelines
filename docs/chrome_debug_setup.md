@@ -70,7 +70,7 @@ cd C:\Users\halek\OneDrive\Desktop\PropORACLE\MLB
 py -3.14 .\scripts\step1_fetch_prizepicks_mlb.py --cdp http://127.0.0.1:9222 --output step1_mlb_props.csv
 ```
 
-Optional: set `PROPORACLE_LOG_PLAYWRIGHT_UA=1` in the environment to print `navigator.userAgent` after the board loads (useful when comparing CDP vs launched Chromium).
+Optional: set `PROPORACLE_LOG_PLAYWRIGHT_UA=1` in the environment to print `navigator.userAgent` after the board loads (useful when comparing CDP vs launched Chromium). The MLB step1 script also reconfigures stdout to UTF-8 on Windows so emoji logs do not require `PYTHONIOENCODING` when you run it outside `run_pipeline.ps1`.
 
 ### How to read results
 

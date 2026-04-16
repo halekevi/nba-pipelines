@@ -138,6 +138,9 @@ function Run-Step {
     Write-Host "  --> $Label" -ForegroundColor Yellow
     Push-Location $Dir
     try {
+        # Child Python inherits these; avoids UnicodeEncodeError on emoji logs (e.g. MLB step1) if the shell was cold-started without UTF-8.
+        $env:PYTHONUTF8       = "1"
+        $env:PYTHONIOENCODING = "utf-8"
         $cmd = if ($Arguments) { "py -3.14 `"$Script`" $Arguments" } else { "py -3.14 `"$Script`"" }
         Write-Host "        CMD: $cmd" -ForegroundColor DarkGray
         $output = Invoke-Expression $cmd 2>&1

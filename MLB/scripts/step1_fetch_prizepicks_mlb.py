@@ -125,6 +125,17 @@ CAPTURE_PATTERNS = [
 GAME_PATTERN = "api.prizepicks.com/games"
 
 
+def _ensure_utf8_stdio() -> None:
+    """Avoid UnicodeEncodeError on Windows (cp1252) when logs use emoji."""
+    for _stream in (sys.stdout, sys.stderr):
+        reconf = getattr(_stream, "reconfigure", None)
+        if callable(reconf):
+            try:
+                reconf(encoding="utf-8", errors="replace")
+            except Exception:
+                pass
+
+
 def _default_et_date_str() -> str:
     return datetime.now(ZoneInfo(DEFAULT_TZ)).date().isoformat()
 
@@ -327,6 +338,7 @@ def fetch_via_playwright(timeout_s: int = 90, cdp_url: str | None = None) -> Tup
       4. Trigger scroll/click events to nudge lazy API calls if needed
       5. Return (data, included) — empty lists if nothing intercepted
     """
+    _ensure_utf8_stdio()
     from playwright.sync_api import sync_playwright
 
     captured:          dict  = {}
