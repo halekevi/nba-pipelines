@@ -89,6 +89,9 @@ SOCCER_SLATE  = SOCCER_DIR / "step8_soccer_direction_clean.xlsx"
 SOCCER_TICKETS= SOCCER_DIR / "soccer_best_tickets.xlsx"
 MLB_SLATE     = MLB_DIR / "step8_mlb_direction_clean.xlsx"
 MLB_TICKETS   = MLB_DIR / "mlb_best_tickets.xlsx"
+TENNIS_DIR    = BASE_DIR / "Tennis"
+# Same pattern as Soccer/MLB: run_daily.ps1 copies outputs → sport root for Railway.
+TENNIS_SLATE  = TENNIS_DIR / "step8_tennis_direction_clean.xlsx"
 COMBINED_OUT  = BASE_DIR  # combined_slate_tickets_YYYY-MM-DD.xlsx may live here or under outputs/
 OUTPUTS_ROOT  = BASE_DIR / "outputs"
 # CBB deactivated - season over (April 2026)
@@ -110,7 +113,7 @@ except ImportError:
     _APP_USES_FLASK_COMPRESS = False
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-04-11-mobile-optimization"
+_UI_BUILD_ID = "2026-04-15-tennis-slate-status"
 
 
 def _deploy_git_sha_short() -> str:
@@ -1166,6 +1169,7 @@ def _sport_from_ticket_eval_pill(span) -> str:
                 "nhl": "NHL",
                 "mlb": "MLB",
                 "soccer": "Soccer",
+                "tennis": "Tennis",
                 "wnba": "WNBA",
             }.get(key, key.upper())
     return (span.get_text(strip=True) or "—").upper()
@@ -1902,6 +1906,12 @@ def api_pipeline_status():
     nhl_slate_p = _resolve_outputs_artifact(days, "step8_nhl_direction_clean_{d}.xlsx", NHL_SLATE)
     soccer_slate_p = _resolve_outputs_artifact(days, "step8_soccer_direction_clean_{d}.xlsx", SOCCER_SLATE)
     mlb_slate_p = _resolve_outputs_artifact(days, "step8_mlb_direction_clean_{d}.xlsx", MLB_SLATE)
+    tennis_slate_p = _resolve_outputs_artifact(
+        days,
+        "step8_tennis_direction_clean_{d}.xlsx",
+        TENNIS_SLATE,
+        TENNIS_DIR / "outputs" / "step8_tennis_direction_clean.xlsx",
+    )
     udq_p = _resolve_outputs_artifact(days, "upstream_data_quality_{d}.csv")
 
     combined_candidates: list[Path] = []
@@ -1960,6 +1970,9 @@ def api_pipeline_status():
         "mlb": {
             "slate":   _sport_slate_status(mlb_slate_p, "mlb", slate_counts, slate_disk_info, status_js_ts, card_disp),
             "tickets": _file_info(MLB_TICKETS),
+        },
+        "tennis": {
+            "slate": _sport_slate_status(tennis_slate_p, "tennis", slate_counts, slate_disk_info, status_js_ts, card_disp),
         },
         "combined": {
             "slate": combined_slate,
@@ -2826,6 +2839,7 @@ def api_slate_excel():
             "NBA1Q Slate": "nba1q",
             "NHL Slate":   "nhl",
             "Soccer Slate":"soccer",
+            "Tennis Slate": "tennis",
             "WCBB Slate":  "wcbb",
             "MLB Slate":   "mlb",
         }

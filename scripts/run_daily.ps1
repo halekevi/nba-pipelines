@@ -35,7 +35,8 @@ param(
     [switch]$PollHistoricalActuals,
     [int]$PollPasses = 4,
     [int]$PollIntervalSeconds = 5400,
-    [switch]$PollSkip9pmWait
+    [switch]$PollSkip9pmWait,
+    [switch]$NoOverwrite
 )
 
 $ErrorActionPreference = "Continue"
@@ -69,6 +70,33 @@ function Write-Log([string]$Message) {
     $line | Tee-Object -FilePath $LogFile -Append
 }
 
+function Get-VersionedPath([string]$Path) {
+    $dir = Split-Path -Parent $Path
+    $name = [System.IO.Path]::GetFileNameWithoutExtension($Path)
+    $ext = [System.IO.Path]::GetExtension($Path)
+    $stamp = Get-Date -Format "yyyyMMdd_HHmmss"
+    $candidate = Join-Path $dir "$name.bak_$stamp$ext"
+    $i = 1
+    while (Test-Path $candidate) {
+        $candidate = Join-Path $dir "$name.bak_${stamp}_$i$ext"
+        $i++
+    }
+    return $candidate
+}
+
+function Preserve-ExistingFile([string]$Path, [string]$Reason = "") {
+    if (-not $NoOverwrite) { return }
+    if (-not (Test-Path $Path)) { return }
+    $backup = Get-VersionedPath -Path $Path
+    Copy-Item -LiteralPath $Path -Destination $backup -Force -ErrorAction SilentlyContinue
+    if ($Reason) {
+        Write-Log "NO-OVERWRITE - Preserved '$Path' -> '$backup' ($Reason)"
+    }
+    else {
+        Write-Log "NO-OVERWRITE - Preserved '$Path' -> '$backup'"
+    }
+}
+
 function Get-MissingTodaySlateOutputs([string]$RunDate) {
     $outDir = Join-Path $Root "outputs\$RunDate"
     $required = @(
@@ -77,7 +105,8 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
         "step8_nba1q_direction_clean_$RunDate.xlsx",
         "step8_nhl_direction_clean_$RunDate.xlsx",
         "step8_soccer_direction_clean_$RunDate.xlsx",
-        "step8_mlb_direction_clean_$RunDate.xlsx"
+        "step8_mlb_direction_clean_$RunDate.xlsx",
+        "step8_tennis_direction_clean_$RunDate.xlsx"
     )
     # 2026 NCAA: WCBB title Sun Apr 5; men's title Mon Apr 6. Expect no WCBB slate from Apr 6+;
     # no men's CBB slate from Apr 7+ — omit from required outputs so daily does not false-fail.
@@ -101,6 +130,9 @@ $env:PYTHONIOENCODING = "utf-8"
 try { [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 } catch { }
 
 Write-Log "======== Daily run start (Today=$Today, Yesterday=$Yesterday) ========"
+if ($NoOverwrite) {
+    Write-Log "NO-OVERWRITE mode enabled (existing files are preserved to *.bak_YYYYMMDD_HHMMSS before updates)"
+}
 
 # =============================================================================
 # STEP A1 — Refresh current season game logs (historical actuals)
@@ -374,12 +406,20 @@ else {
     foreach ($src in $archiveFiles) {
         if (Test-Path $src) {
             $name = Split-Path $src -Leaf
-            Copy-Item -LiteralPath $src -Destination (Join-Path $ArchiveDir $name) -Force -ErrorAction SilentlyContinue
+            $archiveTarget = Join-Path $ArchiveDir $name
+            if ($NoOverwrite -and (Test-Path $archiveTarget)) {
+                $archiveTarget = Get-VersionedPath -Path $archiveTarget
+            }
+            Copy-Item -LiteralPath $src -Destination $archiveTarget -Force -ErrorAction SilentlyContinue
         }
     }
     # CBB: anything under outputs\<yesterday>\ matching step6_ranked_cbb*.xlsx
     Get-ChildItem -Path $YesterdayOut -Filter "step6_ranked_cbb*.xlsx" -File -ErrorAction SilentlyContinue | ForEach-Object {
-        Copy-Item -LiteralPath $_.FullName -Destination (Join-Path $ArchiveDir $_.Name) -Force -ErrorAction SilentlyContinue
+        $archiveTarget = Join-Path $ArchiveDir $_.Name
+        if ($NoOverwrite -and (Test-Path $archiveTarget)) {
+            $archiveTarget = Get-VersionedPath -Path $archiveTarget
+        }
+        Copy-Item -LiteralPath $_.FullName -Destination $archiveTarget -Force -ErrorAction SilentlyContinue
     }
     Write-Log "STEP B - Archive yesterday ($Yesterday): OK"
 }
@@ -500,6 +540,21 @@ if (-not $SkipPipeline) {
         }
     }
 
+    if ($NoOverwrite) {
+        $prePipelineTargets = @(
+            (Join-Path $Root "outputs\$Today\combined_slate_tickets_$Today.xlsx"),
+            (Join-Path $Root "outputs\$Today\combined_slate_tickets_$Today.json"),
+            (Join-Path $Root "ui_runner\templates\tickets_latest.html"),
+            (Join-Path $Root "ui_runner\templates\tickets_latest.json"),
+            (Join-Path $Root "ui_runner\templates\slate_latest.json"),
+            (Join-Path $Root "ui_runner\templates\slate_eval_$Today.html"),
+            (Join-Path $Root "ui_runner\templates\ticket_eval_$Today.html"),
+            (Join-Path $Root "ui_runner\templates\graded_props_$Today.json")
+        )
+        foreach ($pt in $prePipelineTargets) {
+            Preserve-ExistingFile -Path $pt -Reason "pre-STEP C pipeline snapshot"
+        }
+    }
     Write-Log "STEP C - Pipeline ($Today): START"
     $pipeScript = Join-Path $Root "run_pipeline.ps1"
     $pipeArgs = @("-File", $pipeScript, "-Date", $Today)
@@ -602,12 +657,14 @@ Write-Log "STEP D2 - Copy Railway slate files to sport roots: START"
 $railwayCopies = @(
     @{ Src = "NBA\data\outputs\step8_all_direction_clean.xlsx"; Dst = "NBA\step8_all_direction_clean.xlsx" },
     @{ Src = "Soccer\outputs\step8_soccer_direction_clean.xlsx"; Dst = "Soccer\step8_soccer_direction_clean.xlsx" },
-    @{ Src = "MLB\outputs\step8_mlb_direction_clean.xlsx"; Dst = "MLB\step8_mlb_direction_clean.xlsx" }
+    @{ Src = "MLB\outputs\step8_mlb_direction_clean.xlsx"; Dst = "MLB\step8_mlb_direction_clean.xlsx" },
+    @{ Src = "Tennis\outputs\step8_tennis_direction_clean.xlsx"; Dst = "Tennis\step8_tennis_direction_clean.xlsx" }
 )
 foreach ($rc in $railwayCopies) {
     $srcPath = Join-Path $Root $rc.Src
     $dstPath = Join-Path $Root $rc.Dst
     if (Test-Path $srcPath) {
+        Preserve-ExistingFile -Path $dstPath -Reason "pre-STEP D2 Railway copy"
         Copy-Item -LiteralPath $srcPath -Destination $dstPath -Force
         Write-Log "STEP D2 - Copied $($rc.Src) -> $($rc.Dst)"
     }
@@ -687,6 +744,7 @@ else {
             "NBA\step8_nba1q_direction_clean.xlsx",
             "Soccer\step8_soccer_direction_clean.xlsx",
             "MLB\step8_mlb_direction_clean.xlsx",
+            "Tennis\step8_tennis_direction_clean.xlsx",
             # CBB deactivated - season over (April 2026)
             "NHL\outputs\step8_nhl_direction_clean.xlsx"
         )
@@ -905,6 +963,7 @@ if ($NowHour -ge 10) {
         "--max_cooldowns", "3",
         "--jitter_seconds", "10.0",
         "--append",
+        "--date", $Today,
         "--output", "data\outputs\step1_pp_props_today.csv"
     )
     Push-Location $NBADir
@@ -935,7 +994,7 @@ if ($NowHour -ge 10) {
     $SoccerDir = Join-Path $Root "Soccer"
     Push-Location $SoccerDir
     try {
-        & py -3.14 ".\scripts\step1_fetch_prizepicks_soccer.py" "--append" "--output" "outputs\step1_soccer_props.csv"
+        & py -3.14 ".\scripts\step1_fetch_prizepicks_soccer.py" "--append" "--date" "$Today" "--output" "outputs\step1_soccer_props.csv"
     }
     finally {
         Pop-Location
@@ -948,7 +1007,7 @@ if ($NowHour -ge 10) {
     $MLBDir = Join-Path $Root "MLB"
     Push-Location $MLBDir
     try {
-        & py -3.14 ".\scripts\step1_fetch_prizepicks_mlb.py" "--append" "--output" "step1_mlb_props.csv"
+        & py -3.14 ".\scripts\step1_fetch_prizepicks_mlb.py" "--append" "--date" "$Today" "--output" "step1_mlb_props.csv"
     }
     finally {
         Pop-Location
