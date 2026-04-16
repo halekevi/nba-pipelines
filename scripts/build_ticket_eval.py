@@ -9,6 +9,10 @@ calendar day (so evening slates with tomorrow's games pick up graded_* for the g
 
 The /tickets page is rendered from tickets_latest.json (today's built slips), not from this file.
 
+P(Win) and EV at entry in the HTML come only from the empirical ``payout`` object on each ticket (same
+run as ``tickets_latest.json``). Combined-slate Excel has multipliers on the banner only; archive
+per-date ticket JSON if you need those fields historically (``tickets_latest`` is overwritten each run).
+
 Also writes ticket_eval_slate_latest.json — same legs as window.SLATE_DATA in the HTML — so the home
 page /api/slate-sport slate cards can match the ticket eval builder (when SLATE_SPORT_SOURCE=auto).
 
@@ -23,6 +27,7 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import logging
 import math
 import re
 import sys
@@ -34,6 +39,7 @@ import pandas as pd
 from dateutil.parser import parse as _parse_datetime_guess
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+_log = logging.getLogger(__name__)
 _SCRIPTS = REPO_ROOT / "scripts"
 if str(_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS))
@@ -513,6 +519,23 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
 
     gross_10 = round(10.0 * actual, 2)
     net_10 = round(gross_10 - 10.0, 2)
+
+    if (
+        not payd
+        and paid
+        and actual <= 0
+        and result in ("WIN", "SWEEP", "MIN GUARANTEE")
+    ):
+        _log.warning(
+            "[ticket_eval] Graded outcome %s but payout multiplier is 0 without empirical JSON; "
+            "check banner multipliers. group=%r ticket_no=%r power_payout=%r flex_payout=%r n_legs=%s",
+            result,
+            group_name,
+            ticket.get("ticket_no"),
+            ticket.get("power_payout"),
+            ticket.get("flex_payout"),
+            n,
+        )
 
     h_show = h
     m_show = m
@@ -1510,6 +1533,17 @@ def _parse_ticket_sheet(ws: Any) -> list[dict[str, Any]]:
             if current is not None and current.get("legs"):
                 tickets.append(current)
             pow_v, flex_v, tno = _parse_ticket_banner(s0)
+            if pow_v <= 0 and flex_v <= 0:
+                sh = str(getattr(ws, "title", "") or "?")
+                _log.warning(
+                    "[ticket_eval] Banner matched as ticket header but parsed power_payout=%s flex_payout=%s. "
+                    "If PrizePicks changes labels (e.g. PP instead of PWR), update _parse_ticket_banner. "
+                    "sheet=%r col_a=%r",
+                    pow_v,
+                    flex_v,
+                    sh,
+                    (s0[:240] + "…") if len(s0) > 240 else s0,
+                )
             current = {
                 "ticket_no": tno,
                 "power_payout": pow_v,
