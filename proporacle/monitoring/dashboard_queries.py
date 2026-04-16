@@ -4,9 +4,15 @@ from __future__ import annotations
 
 import os
 import sqlite3
+from datetime import date, timedelta
 from pathlib import Path
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def _today() -> date:
+    """Calendar “today” for demo windows; tests may monkeypatch this symbol."""
+    return date.today()
 _SCHEMA_DIR = Path(__file__).resolve().parent.parent / "data" / "schema"
 _DDL_SQL = _SCHEMA_DIR / "ddl.sql"
 _VIEWS_SQL = _SCHEMA_DIR / "views.sql"
@@ -60,6 +66,63 @@ def bet_result_count(conn: sqlite3.Connection) -> int:
         return 0
 
 
+def _non_demo_bet_result_count(conn: sqlite3.Connection) -> int:
+    try:
+        return int(
+            conn.execute(
+                "SELECT COUNT(*) FROM bet_result WHERE slate_id NOT LIKE 'demo_slate_%'"
+            ).fetchone()[0]
+        )
+    except sqlite3.OperationalError:
+        return 0
+
+
+def _max_bet_day_str(conn: sqlite3.Connection) -> str | None:
+    try:
+        row = conn.execute("SELECT MAX(date(settled_at)) FROM bet_result").fetchone()
+        return str(row[0]) if row and row[0] is not None else None
+    except sqlite3.OperationalError:
+        return None
+
+
+def purge_demo_income_slates(conn: sqlite3.Connection) -> int:
+    """Remove demo_slate_* rows (child tables first). Returns number of slates removed."""
+    cur = conn.cursor()
+    n = 0
+    cur.execute("SELECT slate_id FROM slate_run WHERE slate_id LIKE 'demo_slate_%'")
+    ids = [r[0] for r in cur.fetchall()]
+    for sid in ids:
+        cur.execute("DELETE FROM bet_result WHERE slate_id = ?", (sid,))
+        cur.execute("DELETE FROM bet_recommendation WHERE slate_id = ?", (sid,))
+        cur.execute("DELETE FROM bet_candidate WHERE slate_id = ?", (sid,))
+        cur.execute("DELETE FROM prediction WHERE slate_id = ?", (sid,))
+        cur.execute("DELETE FROM slate_run WHERE slate_id = ?", (sid,))
+        n += 1
+    conn.commit()
+    return n
+
+
+def income_dashboard_meta(conn: sqlite3.Connection) -> dict:
+    """UI hint: whether charts are demo-only vs ingested grades, and last calendar day in DB."""
+    n_demo = 0
+    n_real = _non_demo_bet_result_count(conn)
+    try:
+        n_demo = int(
+            conn.execute(
+                "SELECT COUNT(*) FROM bet_result WHERE slate_id LIKE 'demo_slate_%'"
+            ).fetchone()[0]
+        )
+    except sqlite3.OperationalError:
+        pass
+    if n_real > 0:
+        mode = "mixed" if n_demo else "real"
+    elif n_demo > 0:
+        mode = "demo"
+    else:
+        mode = "empty"
+    return {"mode": mode, "data_through": _max_bet_day_str(conn)}
+
+
 def seed_demo_income_data(conn: sqlite3.Connection) -> bool:
     """
     Insert synthetic slates/bets so income charts are non-empty. Idempotent: skips if
@@ -72,18 +135,19 @@ def seed_demo_income_data(conn: sqlite3.Connection) -> bool:
         return False
 
     import random
-    from datetime import date, timedelta
 
     random.seed(42)
     mv = "demo_model_v1"
     pv = "demo_pricing_v1"
+    # Rolling 40-day window ending yesterday so placeholder charts stay current without redeploy.
+    end_day = _today() - timedelta(days=1)
+    start = end_day - timedelta(days=39)
     conn.execute(
         "INSERT OR IGNORE INTO model_version (model_version, sport, trained_from, trained_to, n_train) "
-        "VALUES (?, 'nba', '2025-01-01', '2026-03-01', 5000)",
-        (mv,),
+        "VALUES (?, 'nba', '2025-01-01', ?, 5000)",
+        (mv, end_day.isoformat()),
     )
 
-    start = date(2026, 2, 1)
     for d in range(40):
         day = start + timedelta(days=d)
         ds = day.isoformat()
@@ -141,14 +205,42 @@ def maybe_seed_demo_income(conn: sqlite3.Connection) -> None:
     """
     When bet_result is empty, insert demo rows so charts render (idempotent demo slates).
 
+    If the DB only contains demo_slate_* rows and the newest settled day is older than
+    PROPORACLE_INCOME_DEMO_REFRESH_DAYS (default 10), demo slates are purged and re-seeded
+    with a rolling 40-day window ending yesterday (keeps Railway / ephemeral volumes from
+    freezing on an old fixed-range sample).
+
     Opt out with PROPORACLE_INCOME_SEED_DEMO=0 (or false/no) if you use an empty DB on purpose
     or ingest only real results.
     """
-    if bet_result_count(conn) > 0:
-        return
     flag = os.environ.get("PROPORACLE_INCOME_SEED_DEMO", "").strip().lower()
     if flag in ("0", "false", "no"):
         return
+
+    n_real = _non_demo_bet_result_count(conn)
+    if n_real > 0:
+        return
+
+    refresh_days_raw = os.environ.get("PROPORACLE_INCOME_DEMO_REFRESH_DAYS", "10").strip()
+    try:
+        refresh_days = max(1, int(refresh_days_raw))
+    except ValueError:
+        refresh_days = 10
+
+    n_total = bet_result_count(conn)
+    if n_total > 0:
+        max_day_s = _max_bet_day_str(conn)
+        if not max_day_s:
+            return
+        try:
+            max_day = date.fromisoformat(max_day_s)
+        except ValueError:
+            return
+        age = (_today() - max_day).days
+        if age <= refresh_days:
+            return
+        purge_demo_income_slates(conn)
+
     seed_demo_income_data(conn)
 
 

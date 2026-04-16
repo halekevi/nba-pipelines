@@ -1,6 +1,7 @@
 """Golden-style: DDL + views + seed row → dashboard queries run."""
 
 import sqlite3
+from datetime import date
 from pathlib import Path
 
 import pytest
@@ -98,5 +99,65 @@ def test_maybe_seed_demo_populates_empty_db(monkeypatch, tmp_path):
         maybe_seed_demo_income(conn)
         assert bet_result_count(conn) > 0
         assert len(fetch_roi_daily(conn)) >= 1
+    finally:
+        conn.close()
+
+
+def test_demo_seed_rolling_window_ends_yesterday(monkeypatch, tmp_path):
+    """Demo PnL should track a 40-day window ending yesterday (not a fixed Feb–Mar range)."""
+    fixed = date(2026, 4, 15)
+    db = tmp_path / "roll.db"
+    monkeypatch.setenv("PROPORACLE_DB_PATH", str(db))
+    monkeypatch.delenv("PROPORACLE_INCOME_SEED_DEMO", raising=False)
+
+    import proporacle.monitoring.dashboard_queries as dq
+
+    monkeypatch.setattr(dq, "_today", lambda: fixed)
+
+    from proporacle.monitoring.dashboard_queries import (
+        fetch_roi_daily,
+        load_income_db,
+        maybe_seed_demo_income,
+    )
+
+    conn = load_income_db()
+    try:
+        maybe_seed_demo_income(conn)
+        roi = fetch_roi_daily(conn)
+        assert roi
+        assert roi[0]["bet_day"] == "2026-03-06"
+        assert roi[-1]["bet_day"] == "2026-04-14"
+    finally:
+        conn.close()
+
+
+def test_maybe_seed_refreshes_stale_demo_only(monkeypatch, tmp_path):
+    db = tmp_path / "refresh.db"
+    monkeypatch.setenv("PROPORACLE_DB_PATH", str(db))
+    monkeypatch.setenv("PROPORACLE_INCOME_DEMO_REFRESH_DAYS", "5")
+    monkeypatch.delenv("PROPORACLE_INCOME_SEED_DEMO", raising=False)
+
+    clock = {"d": date(2026, 2, 20)}
+
+    import proporacle.monitoring.dashboard_queries as dq
+
+    monkeypatch.setattr(dq, "_today", lambda: clock["d"])
+
+    from proporacle.monitoring.dashboard_queries import (
+        fetch_roi_daily,
+        load_income_db,
+        maybe_seed_demo_income,
+    )
+
+    conn = load_income_db()
+    try:
+        maybe_seed_demo_income(conn)
+        roi_a = fetch_roi_daily(conn)
+        assert roi_a[0]["bet_day"] == "2026-01-11"
+        assert roi_a[-1]["bet_day"] == "2026-02-19"
+        clock["d"] = date(2026, 4, 15)
+        maybe_seed_demo_income(conn)
+        second_last = fetch_roi_daily(conn)[-1]["bet_day"]
+        assert second_last == "2026-04-14"
     finally:
         conn.close()

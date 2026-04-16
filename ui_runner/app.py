@@ -3079,7 +3079,8 @@ def dashboard_income():
     ROI / CLV / calibration / drawdown only — see DESIGN_PRINCIPLES.md.
     Uses PROPORACLE_DB_PATH or data/cache/proporacle_income.db; ddl.sql + views.sql are applied
     automatically on first open. When bet_result is empty, demo slates are inserted unless
-    PROPORACLE_INCOME_SEED_DEMO=0. Use real pipeline ingest for production metrics.
+    PROPORACLE_INCOME_SEED_DEMO=0. Demo-only DBs older than PROPORACLE_INCOME_DEMO_REFRESH_DAYS
+    (default 10) are re-seeded on each request. Use real pipeline ingest for production metrics.
     """
     import json
 
@@ -3088,6 +3089,7 @@ def dashboard_income():
     clv_payload = {"buckets": [], "means": []}
     cal_payload = {"pred": [], "hit": []}
     eq_payload = {"days": [], "dd": []}
+    income_meta: dict = {"mode": "empty", "data_through": None}
 
     try:
         from proporacle.monitoring.dashboard_queries import (
@@ -3095,6 +3097,7 @@ def dashboard_income():
             fetch_clv_by_edge_bucket,
             fetch_equity_drawdown,
             fetch_roi_daily,
+            income_dashboard_meta,
             load_income_db,
             maybe_seed_demo_income,
         )
@@ -3120,6 +3123,7 @@ def dashboard_income():
             for r in fetch_equity_drawdown(conn, bankroll_0=br0):
                 eq_payload["days"].append(r["bet_day"])
                 eq_payload["dd"].append(float(r["drawdown"]))
+            income_meta = income_dashboard_meta(conn)
         finally:
             conn.close()
     except Exception as e:
@@ -3134,6 +3138,8 @@ def dashboard_income():
         "dashboard_income.html",
         error=err,
         charts_empty=charts_empty,
+        income_mode=income_meta.get("mode", "empty"),
+        income_data_through=income_meta.get("data_through"),
         ui_build_id=_UI_BUILD_ID,
         roi_json=Markup(json.dumps(roi_payload)),
         clv_json=Markup(json.dumps(clv_payload)),

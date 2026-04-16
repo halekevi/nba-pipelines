@@ -124,6 +124,18 @@
     (<code>PROPORACLE_INCOME_SEED_DEMO=0</code>) or the DB path may be read-only. Run
     <code>python scripts/seed_income_dashboard_demo.py</code> or ingest settled bets, then reload.
   </div>
+  {% elif income_mode == 'demo' and income_data_through %}
+  <div class="income-notice" role="status">
+    Charts use <strong>sample demo slates</strong> (not your graded tickets). Last day in this sample:
+    <code>{{ income_data_through }}</code>. For production, run
+    <code>python scripts/ingest_graded_to_income_db.py --all</code> (or wire it after the grader) so
+    <code>graded_props_*.json</code> fills <code>proporacle_income.db</code>.
+  </div>
+  {% elif income_mode in ('real', 'mixed') and income_data_through %}
+  <div class="income-notice" role="status">
+    Settled results in DB through <code>{{ income_data_through }}</code>{% if income_mode == 'mixed' %}
+    (mix of ingested grades and any leftover demo rows){% endif %}.
+  </div>
   {% endif %}
 
   <div class="grid">
