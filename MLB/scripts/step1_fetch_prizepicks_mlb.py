@@ -97,17 +97,17 @@ LAUNCH_ARGS = [
     "--window-size=1920,1080",
 ]
 
+# Omit user_agent: Playwright's real Chromium UA must match TLS fingerprint (DataDome).
 CTX_KWARGS = dict(
-    user_agent=(
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/122.0.0.0 Safari/537.36"
-    ),
     locale="en-US",
-    timezone_id="America/Chicago",
-    geolocation={"latitude": 29.7604, "longitude": -95.3698},  # Houston, TX
+    timezone_id="America/New_York",
+    geolocation={"latitude": 33.7490, "longitude": -84.3880},  # Atlanta, GA — align with typical SE US IP
     permissions=["geolocation", "notifications"],
     color_scheme="dark",
+    extra_http_headers={
+        "accept-language": "en-US,en;q=0.9",
+        "sec-ch-ua-platform": '"Windows"',
+    },
 )
 
 # PrizePicks API endpoints to intercept
@@ -398,6 +398,7 @@ def fetch_via_playwright(timeout_s: int = 90) -> Tuple[List[dict], List[dict]]:
     GAMES_GRACE = 6.0  # seconds to wait after projections for /games response
 
     use_profile = PROFILE_DIR.exists()
+    cold_context = False  # True when not using persistent profile (no cookies / cold DataDome score)
     if not use_profile:
         print(f"  ⚠️  No saved profile found at {PROFILE_DIR}")
         print(f"       Run: py -3.14 setup_prizepicks_profile.py")
@@ -406,14 +407,21 @@ def fetch_via_playwright(timeout_s: int = 90) -> Tuple[List[dict], List[dict]]:
     with sync_playwright() as p:
         if use_profile:
             print(f"🌐 Launching Chromium with saved profile: {PROFILE_DIR}")
-            context = p.chromium.launch_persistent_context(
-                user_data_dir=str(PROFILE_DIR),
-                headless=False,         # visible browser — bypasses DataDome fingerprinting
-                args=LAUNCH_ARGS,
-                **CTX_KWARGS,
-            )
-            browser = None
+            try:
+                context = p.chromium.launch_persistent_context(
+                    user_data_dir=str(PROFILE_DIR),
+                    headless=False,         # visible browser — bypasses DataDome fingerprinting
+                    args=LAUNCH_ARGS,
+                    **CTX_KWARGS,
+                )
+                browser = None
+            except Exception as e:
+                print(f"  ⚠️  Profile launch failed ({type(e).__name__}). Falling back to fresh browser context.")
+                cold_context = True
+                browser  = p.chromium.launch(headless=False, args=LAUNCH_ARGS)
+                context  = browser.new_context(viewport={"width": 1920, "height": 1080}, **CTX_KWARGS)
         else:
+            cold_context = True
             print("🌐 Launching Chromium (no saved profile)...")
             browser  = p.chromium.launch(headless=False, args=LAUNCH_ARGS)
             context  = browser.new_context(viewport={"width": 1920, "height": 1080}, **CTX_KWARGS)
@@ -425,11 +433,20 @@ def fetch_via_playwright(timeout_s: int = 90) -> Tuple[List[dict], List[dict]]:
 
         page.on("response", handle_response)
 
+        if cold_context:
+            # Let first-party cookies / DataDome challenge settle before board XHRs.
+            print("  Warming fresh context: https://app.prizepicks.com/ …")
+            try:
+                page.goto("https://app.prizepicks.com/", timeout=30_000, wait_until="domcontentloaded")
+                time.sleep(5)
+            except Exception as e:
+                print(f"  ⚠️  Warm navigation warning (continuing): {e}")
+
         print(f"  Loading {BOARD_URL}")
         try:
             page.goto(BOARD_URL, timeout=30_000, wait_until="domcontentloaded")
-            # Give the MLB board a moment to fire its API calls after page load
-            time.sleep(5)
+            # Let DataDome / board JS settle before scroll nudges (cold sessions need longer).
+            time.sleep(9)
         except Exception as e:
             print(f"  ⚠️  Page load warning (continuing): {e}")
 
@@ -522,7 +539,13 @@ def main():
                 print(f"\n🔄 Retry {attempt - 1}/{args.retries} — relaunching in {args.retry_delay}s...")
                 time.sleep(args.retry_delay)
             print(f"[step1] MLB fetch via headless browser | league_id={MLB_LEAGUE_ID} | attempt {attempt}/{max_attempts}")
-            data, included = fetch_via_playwright(timeout_s=args.timeout)
+            try:
+                data, included = fetch_via_playwright(timeout_s=args.timeout)
+            except Exception as e:
+                # Do not preserve stale boards when browser launch/intercept crashes.
+                # Treat this attempt as a miss so the empty-file guard can run if all retries fail.
+                data, included = [], []
+                print(f"  ⚠️  Attempt {attempt} crashed: {type(e).__name__}: {e}")
             if data:
                 print(f"  ✅ Captured on attempt {attempt}")
                 break
