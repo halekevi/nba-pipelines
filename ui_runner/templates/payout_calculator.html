@@ -917,6 +917,7 @@ body::before{
         <button type="button" class="btn-glass-sm" id="btn-screenshot" onclick="_screenshotImportTarget='calc';document.getElementById('screenshot-file').click()">UPLOAD SCREENSHOT</button>
         <span style="font-size:10px;color:var(--muted);letter-spacing:1px">Or paste an image with Ctrl+V on this tab (Gemini vision)</span>
       </div>
+      <p style="font-size:10px;color:var(--muted);margin:8px 0 0;letter-spacing:0.3px">If the slip shows the payout multiplier (and Flex min guarantee when visible), vision can pre-fill those after you confirm the import.</p>
       <input type="file" id="screenshot-file" class="hidden-file" accept="image/*" onchange="onScreenshotFile(this.files)"/>
     </div>
     <div class="form-grid" style="margin-bottom:16px">
@@ -970,6 +971,7 @@ body::before{
         <button type="button" class="btn-glass-sm" onclick="_screenshotImportTarget='log';document.getElementById('screenshot-file').click()">UPLOAD SCREENSHOT</button>
         <span style="font-size:10px;color:var(--muted);letter-spacing:1px">Or paste an image with Ctrl+V on this tab (Gemini vision)</span>
       </div>
+      <p style="font-size:10px;color:var(--muted);margin:8px 0 0;letter-spacing:0.3px">Screenshots can fill legs plus, when visible on screen, the sweep multiplier and Flex one-miss rate — then enable server CSV on log if you want a curve row.</p>
       <div class="import-actions" style="margin-top:10px">
         <button type="button" class="btn-glass-sm" onclick="importTodayTicketsFromSlate()">📥 Import from slate JSON</button>
         <span style="font-size:10px;color:var(--muted);letter-spacing:1px">Loads tickets_latest.json (same as /tickets). Enter actual PP multiplier, then Log.</span>
@@ -1122,7 +1124,7 @@ body::before{
 <div id="modal-overlay" class="modal-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="if(event.target===this)closePickModal()">
   <div class="modal-card" onclick="event.stopPropagation()">
     <h3 id="modal-title">Confirm imported picks</h3>
-    <p style="font-size:11px;color:var(--muted);line-height:1.6">Review JSON below. Apply replaces legs on the tab you chose (or pick either destination).</p>
+    <p style="font-size:11px;color:var(--muted);line-height:1.6">Review JSON below. Apply replaces legs on the tab you chose. When the model returns <code style="font-size:10px">actual_payout_multiplier</code> / <code style="font-size:10px">flex_min_guarantee_multiplier</code>, those fill in Calculator and Log Lines payout fields.</p>
     <pre id="modal-picks-json"></pre>
     <div class="modal-actions" style="flex-wrap:wrap;gap:8px">
       <button type="button" class="btn btn-accent" onclick="confirmApplyImportedPicksCalc()">Apply to Calculator</button>
@@ -1662,20 +1664,29 @@ function renderInsights(go,de){
 
 /* ─── SCREENSHOT IMPORT (Gemini vision via same-origin /api/vision/screenshot) ─── */
 let _pendingImportedPicks=null;
+let _pendingImportedMeta=null;
 var _screenshotImportTarget='calc';
 
 const VISION_PROMPT=
-  "This is a PrizePicks ticket screenshot. Extract all picks and return ONLY a JSON array like:\n"+
-  "[\n"+
-  "  {\n"+
-  "    \"player\": \"Ja Morant\",\n"+
-  "    \"prop\": \"Points\",\n"+
-  "    \"line\": 24.5,\n"+
-  "    \"direction\": \"OVER\",\n"+
-  "    \"pick_type\": \"Goblin\"\n"+
-  "  }\n"+
-  "]\n"+
-  "Include pick_type if visible (Goblin/Demon/Standard). Return only the JSON, no other text.";
+  "This is a PrizePicks ticket screenshot. Extract all picks and any visible payout info.\n"+
+  "Return ONLY valid JSON (no markdown, no commentary).\n"+
+  "Preferred shape (so payout rates can be logged):\n"+
+  "{\n"+
+  "  \"picks\": [\n"+
+  "    {\n"+
+  "      \"player\": \"Ja Morant\",\n"+
+  "      \"prop\": \"Points\",\n"+
+  "      \"line\": 24.5,\n"+
+  "      \"direction\": \"OVER\",\n"+
+  "      \"pick_type\": \"Goblin\"\n"+
+  "    }\n"+
+  "  ],\n"+
+  "  \"actual_payout_multiplier\": number or null — main multiplier on screen (Power all-hit, or Flex all-correct sweep),\n"+
+  "  \"flex_min_guarantee_multiplier\": number or null — Flex only: one-miss or (n-1)/n payout if shown; else null,\n"+
+  "  \"slip_type\": \"flex\" | \"power\" | \"unknown\"\n"+
+  "}\n"+
+  "If no payout text is visible, use null for the numeric fields and \"unknown\" for slip_type.\n"+
+  "Legacy: you may return a bare JSON array of picks instead of the object (same pick objects as above).";
 
 function stripVisionFence(t){
   let s=String(t||'').trim();
@@ -1704,7 +1715,30 @@ function nearestProp(stat){
   if(/pra/i.test(low))return'Pts+Reb+Ast';
   return'Other';
 }
-function applyPicksToCalc(picks){
+function applyVisionMetaToCalc(meta){
+  if(!meta)return;
+  const m=document.getElementById('calc-mult');
+  if(!m)return;
+  const v=meta.actual_payout_multiplier!=null?Number(meta.actual_payout_multiplier):NaN;
+  if(!isNaN(v)&&v>0)m.value=String(v);
+}
+function applyVisionMetaToLog(meta){
+  if(!meta)return;
+  const am=document.getElementById('log-actual-mult');
+  const mg=document.getElementById('log-min-guarantee-mult');
+  const st=document.getElementById('log-slip-type');
+  const v=meta.actual_payout_multiplier!=null?Number(meta.actual_payout_multiplier):NaN;
+  if(am&&!isNaN(v)&&v>0)am.value=String(v);
+  const g=meta.flex_min_guarantee_multiplier!=null?Number(meta.flex_min_guarantee_multiplier):NaN;
+  if(mg&&!isNaN(g)&&g>=0)mg.value=String(g);
+  const raw=String(meta.slip_type||'').toLowerCase();
+  if(st){
+    if(raw.includes('flex'))st.value='Flex Play';
+    else if(raw.includes('power'))st.value='Power Play';
+    onLogSlipTypeChange();
+  }
+}
+function applyPicksToCalc(picks,meta){
   if(!Array.isArray(picks)||!picks.length)return;
   calcLegs=[];
   calcCounter=0;
@@ -1730,8 +1764,9 @@ function applyPicksToCalc(picks){
   });
   renderCalcLegs();
   document.getElementById('calc-results').style.display='none';
+  applyVisionMetaToCalc(meta||null);
 }
-function applyPicksToLog(picks){
+function applyPicksToLog(picks,meta){
   if(!Array.isArray(picks)||!picks.length)return;
   logLegs=[];
   logCounter=0;
@@ -1746,6 +1781,7 @@ function applyPicksToLog(picks){
     logLegs.push({id:++logCounter,type,player,sport:'NBA',prop,stdLine:std,playedLine:played});
   });
   renderLogLegs();
+  applyVisionMetaToLog(meta||null);
   refreshLogSummary();
 }
 function blurDecimalField(el,opts){
@@ -1827,12 +1863,23 @@ async function sendScreenshotToVision(rawBase64,mediaType){
       alert('Could not parse JSON from model. Try a clearer screenshot.\n'+String(e.message||e));
       return;
     }
+    let meta=null;
+    if(picks&&typeof picks==='object'&&!Array.isArray(picks)&&Array.isArray(picks.picks)){
+      meta={
+        actual_payout_multiplier:picks.actual_payout_multiplier,
+        flex_min_guarantee_multiplier:picks.flex_min_guarantee_multiplier,
+        slip_type:picks.slip_type,
+      };
+      picks=picks.picks;
+    }
     if(!Array.isArray(picks)||!picks.length){
-      alert('Model did not return a non-empty JSON array.');
+      alert('Model did not return picks (array or .picks array).');
       return;
     }
     _pendingImportedPicks=picks;
-    document.getElementById('modal-picks-json').textContent=JSON.stringify(picks,null,2);
+    _pendingImportedMeta=meta;
+    const preview={picks,...(meta?{actual_payout_multiplier:meta.actual_payout_multiplier,flex_min_guarantee_multiplier:meta.flex_min_guarantee_multiplier,slip_type:meta.slip_type}:{})};
+    document.getElementById('modal-picks-json').textContent=JSON.stringify(preview,null,2);
     overlay.style.display='flex';
   }catch(err){
     const hint=' If you upgraded the server, hard-refresh this page (Ctrl+Shift+R) so the browser is not using an old cached payout page.';
@@ -1843,14 +1890,15 @@ async function sendScreenshotToVision(rawBase64,mediaType){
 function closePickModal(){
   document.getElementById('modal-overlay').style.display='none';
   _pendingImportedPicks=null;
+  _pendingImportedMeta=null;
 }
 function confirmApplyImportedPicksCalc(){
-  if(_pendingImportedPicks)applyPicksToCalc(_pendingImportedPicks);
+  if(_pendingImportedPicks)applyPicksToCalc(_pendingImportedPicks,_pendingImportedMeta);
   closePickModal();
   goTab('calc');
 }
 function confirmApplyImportedPicksLog(){
-  if(_pendingImportedPicks)applyPicksToLog(_pendingImportedPicks);
+  if(_pendingImportedPicks)applyPicksToLog(_pendingImportedPicks,_pendingImportedMeta);
   closePickModal();
   goTab('log');
 }
