@@ -77,3 +77,24 @@ Optional: set `PROPORACLE_LOG_PLAYWRIGHT_UA=1` in the environment to print `navi
 - **`[200]`** on `api.prizepicks.com` projections with `league_id=2` over CDP, but **scheduled runs still `403`** on the same endpoints, usually means the **saved profile session** (cookies / age / warmth) is the weak link, not the intercept logic. Refresh the profile periodically (re-login via `setup_prizepicks_profile.py` or a manual session in that user data dir).
 - A practical check order: **CDP run first** (confirms end-to-end fetch), then **normal profile launch** (confirms whether recent anti-bot / UA / geo changes are enough for unattended runs).
 
+### Troubleshooting: CDP works, scheduled profile path does not
+
+Use this to interpret the next unattended run (e.g. morning pipeline without `--cdp`):
+
+| What you see | Likely meaning |
+| --- | --- |
+| CDP run **`[200]`** on MLB projections | Script and intercept path are fine; session in the browser you attached was warm / trusted. |
+| Same day, profile-only run **`[200]`** | DataDome / UA / geo / stealth / warm-up nav fixes are enough; scheduled runs are self-sufficient. |
+| CDP **`[200]`**, profile-only **`[403]`** on API calls | Cookies in `~/.pp_browser_profile` are stale or scored cold; Playwright is not inheriting the same trust as your manual Chrome. |
+
+**Refreshing stale profile cookies (when you get the 403 row above):**
+
+1. Close all Chrome windows that use the PrizePicks profile.
+2. Start Chrome with the **same** user data dir the pipeline uses, e.g.  
+   `"C:\Program Files\Google\Chrome\Application\chrome.exe" --user-data-dir="%USERPROFILE%\.pp_browser_profile"`
+3. Open `https://app.prizepicks.com/`, complete login and any DataDome challenge, browse until the board loads normally.
+4. Close Chrome cleanly so the profile writes to disk.
+5. Run the pipeline again (or only MLB step1). The next launch should pick up fresh cookies.
+
+Alternatively re-seed the profile with `setup_prizepicks_profile.py` if that is how you normally refresh the copy.
+
