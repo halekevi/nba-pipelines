@@ -9862,7 +9862,9 @@ def render_tickets_body_html(
         return max(counts.items(), key=lambda kv: (kv[1], kv[0]))[0]
 
     date_from_legs = _modal_slate_date_from_legs(payload)
-    date_str = date_from_legs or date_declared or "Today"
+    # Header date should reflect the pipeline target date (file date),
+    # not the surviving leg subset date after sport-specific fallbacks.
+    date_str = date_declared or date_from_legs or "Today"
     date_note_html = ""
     if date_from_legs and date_declared and date_from_legs != date_declared:
         date_note_html = (
