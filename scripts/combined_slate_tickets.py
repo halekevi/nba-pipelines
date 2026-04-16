@@ -2812,10 +2812,10 @@ def enforce_target_date(
     total = len(out)
 
     # Keep cross-date fallback limited to sparse/overnight boards.
-    # NBA (including period slates) should not silently roll to yesterday.
+    # NBA (including period slates) and Soccer should not silently roll dates.
     sport_u = str(sport).upper()
-    fallback_sports = {"SOCCER", "SOC", "TENNIS"}
-    if sport_u in {"NBA", "NBA1Q", "NBA1H"}:
+    fallback_sports = {"TENNIS"}
+    if sport_u in {"NBA", "NBA1Q", "NBA1H", "SOCCER", "SOC"}:
         use_date_fallback = False
     else:
         use_date_fallback = allow_cross_date_fallback or (sport_u in fallback_sports)
@@ -4443,10 +4443,22 @@ def _load_step8_board_like(
     log_prefix: str,
 ) -> pd.DataFrame:
     path = resolve_input_path(path, fallback_filename=fallback_filename)
-
-    xl = pd.ExcelFile(path, engine="openpyxl")
-    sheet = next((s for s in sheet_order if s in xl.sheet_names), xl.sheet_names[0])
-    df = pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
+    df: pd.DataFrame
+    try:
+        xl = pd.ExcelFile(path, engine="openpyxl")
+        sheet = next((s for s in sheet_order if s in xl.sheet_names), xl.sheet_names[0])
+        df = pd.read_excel(path, sheet_name=sheet, engine="openpyxl")
+    except PermissionError:
+        base, _ext = os.path.splitext(path)
+        csv_candidates = [
+            f"{base}.csv",
+            f"{base.replace('_clean', '')}.csv",
+        ]
+        csv_path = next((p for p in csv_candidates if os.path.exists(p)), "")
+        if not csv_path:
+            raise
+        print(f"  [{log_prefix}] XLSX locked; using CSV fallback: {csv_path}")
+        df = pd.read_csv(csv_path)
 
     df = df.rename(columns={
         # title-case (from step8 clean xlsx)
@@ -4497,7 +4509,9 @@ def _load_step8_board_like(
         "def_rank":           "def_rank",
         "prop_score":         "rank_score",
         "game_start":         "game_time",
+        "start_time":         "game_time",
         "opponent":           "opp",
+        "opp_team":           "opp",
         "line_hit_rate_over_ou_5":  "hit_rate",
         "line_hit_rate_over_ou_10": "_board_hit10",
         "hit_rate_over_L10": "l10_over",
@@ -4641,13 +4655,108 @@ def _load_step8_board_like(
 
 
 def load_soccer(path: str) -> pd.DataFrame:
-    return _load_step8_board_like(
+    df = _load_step8_board_like(
         path,
         fallback_filename="step8_soccer_direction_clean.xlsx",
         sheet_order=("Soccer", "ALL"),
         sport="Soccer",
         log_prefix="load_soccer",
     )
+    if df is None or df.empty:
+        return df
+
+    # Guardrail: keep only props that still exist in the current Soccer PP fetch snapshot.
+    # This prevents stale names from older step8 rows appearing on /tickets after board churn.
+    try:
+        step8_path = resolve_input_path(path, fallback_filename="step8_soccer_direction_clean.xlsx")
+        step8_dir = os.path.dirname(step8_path)
+        step1_csv = os.path.join(step8_dir, "step1_soccer_props.csv")
+        if os.path.exists(step1_csv):
+            s1 = pd.read_csv(step1_csv)
+            live_ids: set[str] = set()
+            for c in ("pp_projection_id", "projection_id"):
+                if c in s1.columns:
+                    vals = (
+                        pd.to_numeric(s1[c], errors="coerce")
+                        .dropna()
+                        .astype(int)
+                        .astype(str)
+                    )
+                    live_ids.update(vals.tolist())
+            if live_ids:
+                id_series = pd.Series([""] * len(df), index=df.index)
+                for c in ("pp_projection_id", "projection_id"):
+                    if c in df.columns:
+                        vals = (
+                            pd.to_numeric(df[c], errors="coerce")
+                            .fillna(-1)
+                            .astype(int)
+                            .astype(str)
+                        )
+                        id_series = id_series.where(id_series.ne(""), vals)
+                keep_id = id_series.isin(live_ids)
+
+                # Fallback matcher: some Soccer step8 runs remap projection IDs.
+                # In that case, keep rows that match current PP board keys.
+                def _norm_txt(v: object) -> str:
+                    return re.sub(r"\s+", " ", str(v or "").strip().lower())
+
+                live_keys: set[tuple[str, str, str, str]] = set()
+                for _, r in s1.iterrows():
+                    live_keys.add(
+                        (
+                            _norm_txt(r.get("player")),
+                            _norm_txt(r.get("prop_type")),
+                            str(pd.to_numeric(r.get("line"), errors="coerce")),
+                            _norm_txt(r.get("pick_type")),
+                        )
+                    )
+
+                row_keys = df.apply(
+                    lambda r: (
+                        _norm_txt(r.get("player")),
+                        _norm_txt(r.get("prop_type")),
+                        str(pd.to_numeric(r.get("line"), errors="coerce")),
+                        _norm_txt(r.get("pick_type")),
+                    ),
+                    axis=1,
+                )
+                keep_key = row_keys.isin(live_keys)
+                keep = keep_id | keep_key
+
+                before = len(df)
+                kept_id = int(keep_id.sum())
+                kept_key = int((~keep_id & keep_key).sum())
+                df = df.loc[keep].copy()
+                dropped = before - len(df)
+                if dropped > 0:
+                    print(
+                        f"  [load_soccer] reconciled against step1_soccer_props.csv: "
+                        f"dropped {dropped} stale rows; kept {len(df)} "
+                        f"(id={kept_id}, key={kept_key})"
+                    )
+            else:
+                print("  [load_soccer] step1 snapshot has no projection IDs; skipping stale-row reconciliation")
+        else:
+            print("  [load_soccer] step1_soccer_props.csv not found; skipping stale-row reconciliation")
+    except Exception as e:
+        print(f"  [load_soccer] WARN: stale-row reconciliation skipped ({e})")
+
+    if "opp" in df.columns:
+        opp_norm = (
+            df["opp"]
+            .astype(str)
+            .str.strip()
+            .str.upper()
+        )
+        bad_opp = opp_norm.isin({"", "UNKNOWN_OPP", "UNKNOWN"})
+        if bad_opp.any():
+            before = len(df)
+            df = df.loc[~bad_opp].copy()
+            print(
+                f"  [load_soccer] dropped {before - len(df)} rows with unknown opponent metadata"
+            )
+    return df
 
 
 def _tennis_board_hit_rate_proxy(df: pd.DataFrame) -> pd.DataFrame:
