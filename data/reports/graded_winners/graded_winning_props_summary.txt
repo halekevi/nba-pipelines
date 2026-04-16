@@ -18,8 +18,6 @@ Counts by sport:
   fg3m: hit_rate=0.571 n=336 mean_ml_prob=0.734
   pts: hit_rate=0.568 n=2152 mean_ml_prob=0.760
   reb: hit_rate=0.567 n=1271 mean_ml_prob=0.716
-  tov: hit_rate=0.548 n=361 mean_ml_prob=0.650
-  pra: hit_rate=0.542 n=1402 mean_ml_prob=0.720
 
 === MLB - top props by hit rate (min_n=15) ===
   Walks Allowed: hit_rate=0.660 n=97 mean_ml_prob=0.348
@@ -30,8 +28,6 @@ Counts by sport:
   Walks: hit_rate=0.323 n=2162 mean_ml_prob=0.196
   Total Bases: hit_rate=0.266 n=9380 mean_ml_prob=0.300
   Runs: hit_rate=0.253 n=3034 mean_ml_prob=0.237
-  Stolen Bases: hit_rate=0.114 n=1044 mean_ml_prob=0.097
-  Home Runs: hit_rate=0.096 n=1941 mean_ml_prob=0.107
 
 === NBA - top props by hit rate (min_n=15) ===
   Defensive Rebounds: hit_rate=0.596 n=141 mean_ml_prob=0.465
@@ -42,8 +38,6 @@ Counts by sport:
   Assists: hit_rate=0.563 n=5582 mean_ml_prob=0.694
   Assists (Combo): hit_rate=0.562 n=162 mean_ml_prob=0.490
   Pts+Rebs: hit_rate=0.560 n=8691 mean_ml_prob=0.719
-  Steals: hit_rate=0.556 n=3870 mean_ml_prob=0.697
-  Pts+Asts: hit_rate=0.550 n=7298 mean_ml_prob=0.706
 
 === NBA1H - top props by hit rate (min_n=15) ===
   Fantasy Score: hit_rate=0.927 n=82 mean_ml_prob=0.914
@@ -64,8 +58,6 @@ Counts by sport:
   Shots: hit_rate=0.500 n=64190
   Time On Ice: hit_rate=0.500 n=74 mean_ml_prob=0.333
   goals_allowed: hit_rate=0.500 n=24
-  Goals: hit_rate=0.497 n=65611 mean_ml_prob=0.101
-  Points: hit_rate=0.496 n=65357 mean_ml_prob=0.183
 
 === SOCCER - top props by hit rate (min_n=15) ===
   Shots Assisted: hit_rate=0.765 n=17 mean_ml_prob=0.170
@@ -76,8 +68,6 @@ Counts by sport:
   Tackles: hit_rate=0.220 n=545 mean_ml_prob=0.070
   Shots: hit_rate=0.220 n=6179 mean_ml_prob=0.185
   Fouls: hit_rate=0.212 n=1384 mean_ml_prob=0.338
-  Goal + Assist: hit_rate=0.145 n=2063 mean_ml_prob=0.101
-  Goals: hit_rate=0.129 n=1644 mean_ml_prob=0.088
 
 === WCBB - top props by hit rate (min_n=15) ===
   reb: hit_rate=0.722 n=18 mean_ml_prob=0.419
