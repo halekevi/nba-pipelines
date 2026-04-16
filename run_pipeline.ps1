@@ -152,6 +152,46 @@ function Run-Step {
     }
 }
 
+function Get-MLBStep1DateHealth {
+    param(
+        [string]$CsvPath,
+        [string]$TargetDate
+    )
+    if (-not (Test-Path $CsvPath)) { return @{ ok = $false; rows = 0; reason = "missing_file" } }
+    try {
+        $rows = Import-Csv -Path $CsvPath
+    } catch {
+        return @{ ok = $false; rows = 0; reason = "read_error" }
+    }
+    if (-not $rows -or $rows.Count -eq 0) { return @{ ok = $false; rows = 0; reason = "empty_file" } }
+
+    $match = @()
+    if ($rows[0].PSObject.Properties.Name -contains "game_date") {
+        $match = $rows | Where-Object { (($_.game_date | ForEach-Object { "$_".Trim() })) -eq $TargetDate }
+    } elseif ($rows[0].PSObject.Properties.Name -contains "start_time") {
+        $match = $rows | Where-Object { "$($_.start_time)".Length -ge 10 -and "$($_.start_time)".Substring(0, 10) -eq $TargetDate }
+    } else {
+        return @{ ok = $false; rows = $rows.Count; reason = "missing_date_columns" }
+    }
+    return @{ ok = ($match.Count -gt 0); rows = $rows.Count; reason = (if ($match.Count -gt 0) { "ok" } else { "date_mismatch" }) }
+}
+
+function Clear-MLBGeneratedOutputs {
+    param([string]$BaseDir)
+    foreach ($p in @(
+        "step2_mlb_picktypes.csv",
+        "step3_mlb_with_defense.csv",
+        "step4_mlb_with_stats.csv",
+        "step5_mlb_hit_rates.csv",
+        "step6_mlb_role_context.csv",
+        "step7_mlb_ranked.xlsx",
+        "step8_mlb_direction.csv",
+        "step8_mlb_direction_clean.xlsx"
+    )) {
+        Remove-Item (Join-Path $BaseDir $p) -Force -ErrorAction SilentlyContinue
+    }
+}
+
 # -- Helper: NBA period sub-slate pipelines (NBA1H / NBA1Q) -------------------
 function Run-NBAPeriodPipeline {
     param(
@@ -550,7 +590,20 @@ if ($MLBOnly) {
     Write-Host "[ MLB PIPELINE ]" -ForegroundColor Magenta
     Write-Host ""
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "MLB Step 1 - Fetch PrizePicks" $MLBDir ".\scripts\step1_fetch_prizepicks_mlb.py" "--output step1_mlb_props.csv --date $Date" } } else { Write-Host "  [MLB] Skipping step1 fetch -- using existing step1_mlb_props.csv" -ForegroundColor DarkGray }
+    if (-not $SkipFetch) {
+        Clear-MLBGeneratedOutputs -BaseDir $MLBDir
+        if ($ok) { $ok = Run-Step "MLB Step 1 - Fetch PrizePicks" $MLBDir ".\scripts\step1_fetch_prizepicks_mlb.py" "--output step1_mlb_props.csv --date $Date" }
+        if ($ok) {
+            $mlbStep1Health = Get-MLBStep1DateHealth -CsvPath (Join-Path $MLBDir "step1_mlb_props.csv") -TargetDate $Date
+            if (-not $mlbStep1Health.ok) {
+                Write-Host "  [MLB] Step1 date health failed ($($mlbStep1Health.reason)); clearing MLB outputs to avoid stale carry-over." -ForegroundColor Yellow
+                Clear-MLBGeneratedOutputs -BaseDir $MLBDir
+                $ok = $false
+            }
+        }
+    } else {
+        Write-Host "  [MLB] Skipping step1 fetch -- using existing step1_mlb_props.csv" -ForegroundColor DarkGray
+    }
     if ($ok) { $ok = Run-Step "MLB Step 2 - Attach Pick Types"  $MLBDir ".\scripts\step2_attach_picktypes_mlb.py"       "--input step1_mlb_props.csv --output step2_mlb_picktypes.csv" }
     if ($ok) { $ok = Run-Step "MLB Step 3 - Attach Defense"     $MLBDir ".\scripts\step3_attach_defense_mlb.py"         "--input step2_mlb_picktypes.csv --defense mlb_defense_summary.csv --output step3_mlb_with_defense.csv" }
     if ($ok) { $ok = Run-Step "MLB Step 4 - Player Stats"       $MLBDir ".\scripts\step4_attach_player_stats_mlb.py"    "--input step3_mlb_with_defense.csv --cache mlb_stats_cache.csv --output step4_mlb_with_stats.csv --season 2025" }
@@ -924,7 +977,7 @@ $TennisJob = Start-Job -ScriptBlock {
 # -- MLB Job ------------------------------------------------------------------
 # MLB activated April 2026
 $MLBJob = Start-Job -ScriptBlock {
-    param($MLBDir, $SkipFetch, $RepoRoot)
+    param($MLBDir, $Date, $SkipFetch, $RepoRoot)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
     function Run-Step-Job {
         param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
@@ -958,8 +1011,49 @@ $MLBJob = Start-Job -ScriptBlock {
         } catch { Write-Output "  [$SportLabel] step7b: WARN (exit 1)" }
         finally { Pop-Location }
     }
+    function Get-MLBStep1DateHealth-Job {
+        param([string]$CsvPath, [string]$TargetDate)
+        if (-not (Test-Path $CsvPath)) { return @{ ok = $false; reason = "missing_file" } }
+        try { $rows = Import-Csv -Path $CsvPath } catch { return @{ ok = $false; reason = "read_error" } }
+        if (-not $rows -or $rows.Count -eq 0) { return @{ ok = $false; reason = "empty_file" } }
+        $match = @()
+        if ($rows[0].PSObject.Properties.Name -contains "game_date") {
+            $match = $rows | Where-Object { (($_.game_date | ForEach-Object { "$_".Trim() })) -eq $TargetDate }
+        } elseif ($rows[0].PSObject.Properties.Name -contains "start_time") {
+            $match = $rows | Where-Object { "$($_.start_time)".Length -ge 10 -and "$($_.start_time)".Substring(0, 10) -eq $TargetDate }
+        }
+        return @{ ok = ($match.Count -gt 0); reason = (if ($match.Count -gt 0) { "ok" } else { "date_mismatch" }) }
+    }
+    function Clear-MLBGeneratedOutputs-Job {
+        param([string]$BaseDir)
+        foreach ($p in @(
+            "step2_mlb_picktypes.csv",
+            "step3_mlb_with_defense.csv",
+            "step4_mlb_with_stats.csv",
+            "step5_mlb_hit_rates.csv",
+            "step6_mlb_role_context.csv",
+            "step7_mlb_ranked.xlsx",
+            "step8_mlb_direction.csv",
+            "step8_mlb_direction_clean.xlsx"
+        )) {
+            Remove-Item (Join-Path $BaseDir $p) -Force -ErrorAction SilentlyContinue
+        }
+    }
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "MLB Step 1 - Fetch PrizePicks" $MLBDir ".\scripts\step1_fetch_prizepicks_mlb.py" "--output step1_mlb_props.csv --date $Date" } } else { Write-Output "[MLB] Skipping step1 fetch" }
+    if (-not $SkipFetch) {
+        Clear-MLBGeneratedOutputs-Job -BaseDir $MLBDir
+        if ($ok) { $ok = Run-Step-Job "MLB Step 1 - Fetch PrizePicks" $MLBDir ".\scripts\step1_fetch_prizepicks_mlb.py" "--output step1_mlb_props.csv --date $Date" }
+        if ($ok) {
+            $health = Get-MLBStep1DateHealth-Job -CsvPath (Join-Path $MLBDir "step1_mlb_props.csv") -TargetDate $Date
+            if (-not $health.ok) {
+                Write-Output "[MLB] Step1 date health failed ($($health.reason)); clearing MLB outputs to avoid stale carry-over."
+                Clear-MLBGeneratedOutputs-Job -BaseDir $MLBDir
+                $ok = $false
+            }
+        }
+    } else {
+        Write-Output "[MLB] Skipping step1 fetch"
+    }
     if ($ok) { $ok = Run-Step-Job "MLB Step 2 - Attach Pick Types"  $MLBDir ".\scripts\step2_attach_picktypes_mlb.py"       "--input step1_mlb_props.csv --output step2_mlb_picktypes.csv" }
     if ($ok) { $ok = Run-Step-Job "MLB Step 3 - Attach Defense"     $MLBDir ".\scripts\step3_attach_defense_mlb.py"         "--input step2_mlb_picktypes.csv --defense mlb_defense_summary.csv --output step3_mlb_with_defense.csv" }
     if ($ok) { $ok = Run-Step-Job "MLB Step 4 - Player Stats"       $MLBDir ".\scripts\step4_attach_player_stats_mlb.py"    "--input step3_mlb_with_defense.csv --cache mlb_stats_cache.csv --output step4_mlb_with_stats.csv --season 2025" }
@@ -969,7 +1063,7 @@ $MLBJob = Start-Job -ScriptBlock {
     if ($ok) { Invoke-Step7b-Job "MLB" $RepoRoot }
     if ($ok) { $ok = Run-Step-Job "MLB Step 8 - Direction Context"  $MLBDir (Join-Path $RepoRoot "MLB\scripts\step8_add_direction_context_mlb.py")  "--input step7_mlb_ranked.xlsx --output step8_mlb_direction.csv --xlsx step8_mlb_direction_clean.xlsx" }
     return $ok
-} -ArgumentList $MLBDir, $SkipFetch, $Root
+} -ArgumentList $MLBDir, $Date, $SkipFetch, $Root
 
 # -- NFL Job (INACTIVE until Sept 2026 regular season) -------------------------
 # NFL — activate September 2026 for regular season
@@ -1050,6 +1144,14 @@ $CBBSuccess    = $true
 $NHLSuccess    = Test-Path (Join-Path $NHLDir    "outputs\step8_nhl_direction_clean.xlsx")
 $SoccerSuccess = Test-Path (Join-Path $SoccerDir "outputs\step8_soccer_direction_clean.xlsx")
 $MLBSuccess    = Test-Path (Join-Path $MLBDir    "step8_mlb_direction_clean.xlsx")
+$mlbStep1Health = Get-MLBStep1DateHealth -CsvPath (Join-Path $MLBDir "step1_mlb_props.csv") -TargetDate $Date
+if (-not $mlbStep1Health.ok) {
+    Write-Host "  [MLB] stale/invalid step1 for $Date ($($mlbStep1Health.reason)); clearing MLB outputs from this run." -ForegroundColor Yellow
+    Clear-MLBGeneratedOutputs -BaseDir $MLBDir
+    $MLBSuccess = $false
+} else {
+    $MLBSuccess = $MLBSuccess -and $true
+}
 
 # NBA period sub-slates are required by daily checks and combined defaults.
 $NBA1HSuccess  = $false
