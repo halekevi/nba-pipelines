@@ -60,6 +60,7 @@ import sys
 import unicodedata
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any, Iterable, List, Optional
 from zoneinfo import ZoneInfo
 
@@ -88,6 +89,7 @@ from utils.goblin_demon_multiplier import (
     leg_delta_pct as gd_leg_delta_pct,
     multiplier_summary as gd_multiplier_summary,
 )
+from utils.ticket_diversity import apply_diversity_filter
 
 _log_slate = logging.getLogger("combined_slate_tickets")
 
@@ -116,6 +118,7 @@ else:
 DEFAULT_TENNIS_PATH = os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis_direction_clean.xlsx")
 DEFAULT_NHL_PATH = os.path.join(REPO_ROOT, "NHL", "outputs", "step8_nhl_direction_clean.xlsx")
 DEFAULT_WEB_OUTDIR = os.path.join(REPO_ROOT, "ui_runner", "templates")
+DIVERSITY_CONFIG_PATH = os.path.join(REPO_ROOT, "config", "diversity_config.json")
 
 
 # ── Color palette ─────────────────────────────────────────────────────────────
@@ -1025,6 +1028,72 @@ def dedupe_ticket_groups_by_leg_set(all_ticket_groups: list) -> tuple[list, int,
         seen.add(fp)
         out.append((group_name, tickets, *tail))
     return out, n_before, len(out)
+
+
+def _load_diversity_config(path: str = DIVERSITY_CONFIG_PATH) -> dict[str, Any]:
+    defaults: dict[str, Any] = {
+        "max_leg_exposure": 2,
+        "max_player_exposure": 3,
+        "void_risk_min_sample": 10,
+        "max_jaccard_overlap": 0.5,
+        "exposure_penalty_weight": 0.1,
+        "overlap_penalty_weight": 0.2,
+        "void_penalty_weight": 0.5,
+        "enabled": True,
+    }
+    try:
+        if not os.path.isfile(path):
+            _log_slate.info("[diversity] config missing at %s; using defaults", path)
+            return defaults
+        raw = json.loads(Path(path).read_text(encoding="utf-8"))
+        if not isinstance(raw, dict):
+            _log_slate.info("[diversity] invalid config shape at %s; using defaults", path)
+            return defaults
+        merged = dict(defaults)
+        merged.update(raw)
+        return merged
+    except Exception as e:
+        _log_slate.info("[diversity] failed to read config at %s (%s); using defaults", path, e)
+        return defaults
+
+
+def _apply_diversity_filter_to_ticket_groups(
+    all_ticket_groups: list[tuple[str, list[dict[str, Any]], Any]],
+    config: dict[str, Any],
+) -> list[tuple[str, list[dict[str, Any]], Any]]:
+    flat: list[dict[str, Any]] = []
+    for _gname, tickets, _bg in all_ticket_groups:
+        for t in (tickets or []):
+            if isinstance(t, dict):
+                flat.append(t)
+    n_before_groups = len(all_ticket_groups)
+    n_before_slips = len(flat)
+    if n_before_slips == 0:
+        _log_slate.info("[diversity] no candidate slips to filter")
+        return all_ticket_groups
+
+    kept = apply_diversity_filter(flat, config)
+    kept_ids = {id(t) for t in kept}
+
+    out: list[tuple[str, list[dict[str, Any]], Any]] = []
+    dropped_groups = 0
+    for group_name, tickets, bg in all_ticket_groups:
+        filtered = [t for t in (tickets or []) if id(t) in kept_ids]
+        if filtered:
+            out.append((group_name, filtered, bg))
+        else:
+            dropped_groups += 1
+
+    n_after_slips = sum(len(g[1]) for g in out)
+    _log_slate.info(
+        "[diversity] groups %d -> %d (dropped %d), slips %d -> %d",
+        n_before_groups,
+        len(out),
+        dropped_groups,
+        n_before_slips,
+        n_after_slips,
+    )
+    return out
 
 
 # Props excluded from ticket pools based on empirical hit rates below break-even
@@ -8375,6 +8444,7 @@ def main():
         "total_eligible_count": total_eligible_count,
         "player_ticket_counts": defaultdict(int),
     }
+    _diversity_cfg = _load_diversity_config()
 
     def add_structured_sport_tickets(
         sport_df: pd.DataFrame,
@@ -8840,6 +8910,9 @@ def main():
         f"  [dedupe] ticket groups: {_n_groups_before_dedupe} -> {_n_groups_after_dedupe} "
         f"({_n_groups_before_dedupe - _n_groups_after_dedupe} duplicate leg sets removed)"
     )
+    if bool(_diversity_cfg.get("enabled", True)):
+        all_ticket_groups = _apply_diversity_filter_to_ticket_groups(all_ticket_groups, _diversity_cfg)
+        print(f"  [diversity] groups after filter: {len(all_ticket_groups)}")
     _post_slips = sum(len(t[1]) for t in all_ticket_groups)
     _lc_groups_post: Counter[int] = Counter()
     for _sn, _tickets, _ in all_ticket_groups:
@@ -8923,6 +8996,9 @@ def main():
             final_groups, _fg_b, _fg_a = dedupe_ticket_groups_by_leg_set(final_groups)
             if _fg_b != _fg_a:
                 print(f"  [dedupe] FINAL fallback groups: {_fg_b} -> {_fg_a}")
+            if bool(_diversity_cfg.get("enabled", True)):
+                final_groups = _apply_diversity_filter_to_ticket_groups(final_groups, _diversity_cfg)
+                print(f"  [diversity] FINAL fallback groups: {len(final_groups)}")
             payload = ticket_groups_to_payload(
                 final_groups,
                 args.date,
