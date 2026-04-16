@@ -819,8 +819,7 @@ def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
     """
     True if slip should appear on /tickets JSON and page.
     Gate: empirical payout.ev >= MIN_TICKET_EV_BY_LEGS[n_legs], OR payout recommendation in
-    STRONG/OK/MARGINAL (so workbook-structured slips are not hidden when EV is slightly below the
-    numeric bar but the curve still labels the slip playable). Else modeled est_ev vs same bar.
+    STRONG/OK. Else modeled est_ev vs same bar.
     """
     n_legs = _ticket_n_legs(ticket)
     min_ev = float(MIN_TICKET_EV_BY_LEGS.get(int(n_legs), MIN_TICKET_EV_DEFAULT))
@@ -835,22 +834,11 @@ def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
     if leg_sports and leg_sports.issubset({"TENNIS"}):
         return True
 
-    # Workbook structured sheets (per-sport Power/Flex/Standard/PwrStd/Goblin): always show on /tickets.
-    # These can be 2–6 legs; some fail the numeric EV bar but should still mirror workbook output.
-    wg = str(ticket.get("web_group_name") or "")
-    if (
-        "Cross-sport" not in wg
-        and "·" not in wg
-        and re.search(r"(Power Play|Flex|Standard|Pwr Std|Goblin)\s+\d-Leg", wg, re.I)
-    ):
-        return True
-
     pay = ticket.get("payout")
     if isinstance(pay, dict):
         rec_ok = str(pay.get("recommendation") or "").strip().upper() in (
             "STRONG",
             "OK",
-            "MARGINAL",
         )
         ev_ok = False
         ev_raw = pay.get("ev")
@@ -875,6 +863,88 @@ def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
     return False
 
 
+def _ticket_primary_sport(ticket: dict) -> str:
+    legs = list(ticket.get("legs") or [])
+    sports = {
+        str(leg.get("sport") or "").strip().upper()
+        for leg in legs
+        if isinstance(leg, dict) and str(leg.get("sport") or "").strip()
+    }
+    if len(sports) != 1:
+        return ""
+    return next(iter(sports))
+
+
+def _ticket_rank_tuple(ticket: dict) -> tuple[float, int, float]:
+    pay = ticket.get("payout")
+    ev = None
+    rec = ""
+    if isinstance(pay, dict):
+        ev = pay.get("ev")
+        rec = str(pay.get("recommendation") or "").strip().upper()
+    if ev is None:
+        ev = ticket.get("est_ev")
+    try:
+        evf = float(ev)
+        if not math.isfinite(evf):
+            evf = -1e9
+    except (TypeError, ValueError):
+        evf = -1e9
+    rec_rank = {"STRONG": 3, "OK": 2, "MARGINAL": 1, "SKIP": 0}.get(rec, -1)
+    try:
+        winf = float(ticket.get("est_win_prob"))
+        if not math.isfinite(winf):
+            winf = -1e9
+    except (TypeError, ValueError):
+        winf = -1e9
+    return (evf, rec_rank, winf)
+
+
+def _apply_web_ticket_template(groups: list[dict]) -> list[dict]:
+    if not groups:
+        return []
+
+    candidates_by_key: dict[tuple[str, int], list[tuple[tuple[int, int], dict]]] = defaultdict(list)
+
+    for gi, g in enumerate(groups):
+        tickets = list(g.get("tickets") or [])
+        for ti, t in enumerate(tickets):
+            if not isinstance(t, dict):
+                continue
+            n_legs = _ticket_n_legs(t)
+            if n_legs not in WEB_TICKET_TEMPLATE_BY_LEGS:
+                continue
+            sport = _ticket_primary_sport(t)
+            if not sport:
+                continue
+            candidates_by_key[(sport, n_legs)].append(((gi, ti), t))
+
+    selected_ids: set[tuple[int, int]] = set()
+    sports = sorted({sport for sport, _ in candidates_by_key.keys()})
+    for sport in sports:
+        for n_legs, quota in WEB_TICKET_TEMPLATE_BY_LEGS.items():
+            cand = list(candidates_by_key.get((sport, n_legs), []))
+            if not cand:
+                continue
+            cand.sort(key=lambda x: _ticket_rank_tuple(x[1]), reverse=True)
+            for tid, _t in cand[: int(quota)]:
+                selected_ids.add(tid)
+
+    if not selected_ids:
+        return groups
+
+    out_groups: list[dict] = []
+    for gi, g in enumerate(groups):
+        tickets = list(g.get("tickets") or [])
+        kept = [t for ti, t in enumerate(tickets) if (gi, ti) in selected_ids]
+        if not kept:
+            continue
+        ng = dict(g)
+        ng["tickets"] = kept
+        out_groups.append(ng)
+    return out_groups
+
+
 def filter_positive_ev_tickets_payload(payload: dict) -> dict:
     """Only persist / show slips that pass _ticket_passes_positive_ev_gate; drop empty groups."""
     groups_in = list(payload.get("groups") or [])
@@ -889,6 +959,7 @@ def filter_positive_ev_tickets_payload(payload: dict) -> dict:
         ng = dict(g)
         ng["tickets"] = kept
         out_groups.append(ng)
+    out_groups = _apply_web_ticket_template(out_groups)
     out = dict(payload)
     out["groups"] = out_groups
     return out
@@ -1507,11 +1578,19 @@ DEMON_MAX_BOOST:      float = 2.50        # single-leg multiplier cap (2.5×)
 # (see _ticket_passes_positive_ev_gate). Longer slips need higher EV vs variance.
 MIN_TICKET_EV_DEFAULT: float = 0.80
 MIN_TICKET_EV_BY_LEGS: dict[int, float] = {
-    2: 0.80,
-    3: 0.80,
-    4: 1.00,
-    5: 1.20,
+    2: 1.00,
+    3: 1.00,
+    4: 1.10,
+    5: 1.25,
     6: 1.50,
+}
+
+# /tickets page target volumes per sport after EV gate.
+WEB_TICKET_TEMPLATE_BY_LEGS: dict[int, int] = {
+    6: 1,
+    5: 1,
+    4: 2,
+    3: 2,
 }
 
 # Cap sorted candidate pool size per leg count (top rows by ticket sort) to bound greedy work.
@@ -2732,8 +2811,14 @@ def enforce_target_date(
     kept = int(keep_mask.sum())
     total = len(out)
 
-    fallback_sports = {"SOCCER", "TENNIS", "NBA", "NBA1Q", "NBA1H"}
-    use_date_fallback = allow_cross_date_fallback or (str(sport).upper() in fallback_sports)
+    # Keep cross-date fallback limited to sparse/overnight boards.
+    # NBA (including period slates) should not silently roll to yesterday.
+    sport_u = str(sport).upper()
+    fallback_sports = {"SOCCER", "SOC", "TENNIS"}
+    if sport_u in {"NBA", "NBA1Q", "NBA1H"}:
+        use_date_fallback = False
+    else:
+        use_date_fallback = allow_cross_date_fallback or (sport_u in fallback_sports)
     if kept == 0 and use_date_fallback:
         avail = [str(d) for d in counts.index.tolist() if str(d)]
         if avail:
@@ -9605,7 +9690,7 @@ def render_tickets_body_html(
     _non_ev_slips_removed: int = 0,
 ) -> tuple[str, str]:
     """
-    Render today's ticket slips from the tickets_latest.json payload.
+    Render ticket slips from tickets_latest.json payload.
     Returns (body_html, page_title) for injection into tickets_built.html.
     """
     def safe_str(val, default: str = "") -> str:
@@ -9616,11 +9701,60 @@ def render_tickets_body_html(
             return default
         return s
 
-    date_str = payload.get("date") or "Today"
+    date_declared_raw = (payload.get("date") or "").strip()
+    date_declared = date_declared_raw[:10] if len(date_declared_raw) >= 10 else date_declared_raw
     generated_at = payload.get("generated_at") or ""
     groups = payload.get("groups") or []
     n_slips = sum(len(g.get("tickets") or []) for g in groups)
     n_groups = len(groups)
+
+    def _calendar_date_from_game_time(gs: str) -> str | None:
+        """Calendar YYYY-MM-DD from mixed game_time strings."""
+        s = (gs or "").strip()
+        if not s:
+            return None
+        candidates = [s]
+        if " " in s and "T" not in s.split(" ", 1)[0]:
+            candidates.append(s.replace(" ", "T", 1))
+        for cand in candidates:
+            try:
+                c2 = cand.replace("Z", "+00:00") if cand.endswith("Z") else cand
+                dt = datetime.fromisoformat(c2)
+                return dt.date().isoformat()
+            except ValueError:
+                continue
+        mmdd = re.match(r"^\s*(\d{1,2})/(\d{1,2})\b", s)
+        if mmdd and len(date_declared) >= 4 and date_declared[:4].isdigit():
+            y = int(date_declared[:4])
+            m = int(mmdd.group(1))
+            d = int(mmdd.group(2))
+            if 1 <= m <= 12 and 1 <= d <= 31:
+                return f"{y:04d}-{m:02d}-{d:02d}"
+        if len(s) >= 10 and s[4] == "-" and s[7] == "-":
+            head = s[:10]
+            if head[0:4].isdigit() and head[5:7].isdigit() and head[8:10].isdigit():
+                return head
+        return None
+
+    def _modal_slate_date_from_legs(p: dict) -> str | None:
+        counts: dict[str, int] = {}
+        for g in p.get("groups") or []:
+            for t in g.get("tickets") or []:
+                for leg in t.get("legs") or []:
+                    cd = _calendar_date_from_game_time(str(leg.get("game_time") or ""))
+                    if cd:
+                        counts[cd] = counts.get(cd, 0) + 1
+        if not counts:
+            return None
+        return max(counts.items(), key=lambda kv: (kv[1], kv[0]))[0]
+
+    date_from_legs = _modal_slate_date_from_legs(payload)
+    date_str = date_from_legs or date_declared or "Today"
+    date_note_html = ""
+    if date_from_legs and date_declared and date_from_legs != date_declared:
+        date_note_html = (
+            f' <span style="opacity:.7;font-size:12px;">(file date {_h(date_declared)})</span>'
+        )
 
     page_title = f"PropOracle Tickets — {date_str}"
 
@@ -9648,7 +9782,7 @@ def render_tickets_body_html(
     </h1>
   </div>
   <div class="hero-meta-row" role="group" aria-label="Slate summary">
-    <span class="hero-meta-date">{_h(date_str)}</span>
+    <span class="hero-meta-date">{_h(date_str)}{date_note_html}</span>
     <span class="hero-meta-counts">{counts_line}</span>
     {built_html}
   </div>

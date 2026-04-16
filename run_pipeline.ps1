@@ -453,6 +453,7 @@ function Run-Combined {
         Write-Host "  [alt-books] Passing DraftKings NBA CSV" -ForegroundColor DarkGray
     }
 
+    # Keep strict date checks for NBA-family slates so /tickets never shows yesterday as today.
     $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --max-tickets 3 --nba-structured-variants 3 --write-web --web-outdir `"$WebOutDir`""
 
     $okC = Run-Step "Combined Slate + Tickets" $Root ".\scripts\combined_slate_tickets.py" $CombinedArgs
@@ -1000,16 +1001,48 @@ $MLBJob = Start-Job -ScriptBlock {
 # } -ArgumentList $NFLDir, $Date, $SkipFetch
 
 # -- Wait + stream output -----------------------------------------------------
-$allJobs = @($NBAJob, $NHLJob, $SoccerJob, $MLBJob) | Where-Object { $_ -ne $null }
+$allJobs = @($NBAJob, $NHLJob, $SoccerJob, $TennisJob, $MLBJob) | Where-Object { $_ -ne $null }
 
 Write-Host "  [Waiting for all pipelines to finish...]" -ForegroundColor DarkGray
 Write-Host ""
 
+$waitStart = Get-Date
+$lastHeartbeat = $waitStart
+$maxParallelMinutes = 45
+
 while (($allJobs | Where-Object { $_.State -eq 'Running' }).Count -gt 0) {
-    foreach ($job in $allJobs) { $out = Receive-Job $job -ErrorAction SilentlyContinue; foreach ($line in $out) { Write-Host "    $line" -ForegroundColor DarkGray } }
+    foreach ($job in $allJobs) {
+        $out = Receive-Job $job -ErrorAction SilentlyContinue
+        foreach ($line in $out) {
+            Write-Host "    $line" -ForegroundColor DarkGray
+        }
+    }
+
+    $now = Get-Date
+    if ((New-TimeSpan -Start $lastHeartbeat -End $now).TotalSeconds -ge 30) {
+        $states = $allJobs | ForEach-Object { "$($_.Name):$($_.State)" }
+        Write-Host ("  [parallel status] " + ($states -join " | ")) -ForegroundColor DarkGray
+        $lastHeartbeat = $now
+    }
+
+    if ((New-TimeSpan -Start $waitStart -End $now).TotalMinutes -ge $maxParallelMinutes) {
+        Write-Host "  [parallel] Timeout waiting for jobs. Stopping remaining running jobs..." -ForegroundColor Yellow
+        foreach ($rj in ($allJobs | Where-Object { $_.State -eq 'Running' })) {
+            Write-Host "    stopping job $($rj.Name) ($($rj.Id))" -ForegroundColor Yellow
+            Stop-Job -Job $rj -ErrorAction SilentlyContinue
+        }
+        break
+    }
+
     Start-Sleep -Milliseconds 500
 }
-foreach ($job in $allJobs) { $out = Receive-Job $job -ErrorAction SilentlyContinue; foreach ($line in $out) { Write-Host "    $line" -ForegroundColor DarkGray } }
+
+foreach ($job in $allJobs) {
+    $out = Receive-Job $job -ErrorAction SilentlyContinue
+    foreach ($line in $out) {
+        Write-Host "    $line" -ForegroundColor DarkGray
+    }
+}
 
 # -- Results ------------------------------------------------------------------
 $NBASuccess    = Test-Path (Join-Path $NBADir    "data\outputs\step8_all_direction_clean.xlsx")
