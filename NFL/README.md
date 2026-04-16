@@ -43,4 +43,10 @@ py -3.14 scripts\step6_historical_hit_rates.py
 | 1 | `data/outputs/step1_pp_props_today.csv` |
 | 2 | `data/outputs/step2_clean_props.csv` |
 | 4 | `data/defense_rankings.csv` |
+| 8 (target) | `outputs/step8_nfl_direction_clean.xlsx` — same layout as **NHL** (`NHL/outputs/step8_…`), **not** a flat file under repo `outputs/`. Matches `NFL_SLATE` in `ui_runner/app.py`. |
+
+### Web / `slate_latest.json`
+
+- Combined `write_slate_json` emits the **`nfl`** key (lowercase) alongside other sports; `ui_runner` normalizes any legacy mixed-case keys when loading slate JSON.
+- Ticket legs may show **`sport`: `"NFL"`** (uppercase); the home page maps that to panel key `nfl` and CSS `sp-nfl` via `.toLowerCase()`.
 | 6 | `data/outputs/step6_hit_rates.csv` |

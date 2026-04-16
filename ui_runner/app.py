@@ -93,7 +93,8 @@ TENNIS_DIR    = BASE_DIR / "Tennis"
 # Same pattern as Soccer/MLB: run_daily.ps1 copies outputs → sport root for Railway.
 TENNIS_SLATE  = TENNIS_DIR / "step8_tennis_direction_clean.xlsx"
 NFL_DIR       = BASE_DIR / "NFL"
-# NFL pipeline scaffold (Sept 2026); card shows pending until step8 + slate JSON include NFL.
+# NFL step8 target: same convention as NHL — sport folder + outputs/ (not repo-root outputs/).
+# Pipeline should write: NFL/outputs/step8_nfl_direction_clean.xlsx
 NFL_SLATE     = NFL_DIR / "outputs" / "step8_nfl_direction_clean.xlsx"
 COMBINED_OUT  = BASE_DIR  # combined_slate_tickets_YYYY-MM-DD.xlsx may live here or under outputs/
 OUTPUTS_ROOT  = BASE_DIR / "outputs"
@@ -672,8 +673,11 @@ def _selected_slate_sport_payload() -> dict:
         sports = payload.get("sports")
         if isinstance(sports, dict):
             payload = dict(payload)
+            # Lowercase keys so UI (_slate_counts, index.html SPORTS) and pipeline agree (e.g. nfl not NFL).
             payload["sports"] = {
-                str(k): v for k, v in sports.items() if str(k).strip().lower() not in DISABLED_SPORTS
+                str(k).strip().lower(): v
+                for k, v in sports.items()
+                if str(k).strip().lower() not in DISABLED_SPORTS
             }
         return payload
 
@@ -2889,7 +2893,11 @@ def api_slate_sport():
 
 @app.get("/api/slate-excel")
 def api_slate_excel():
-    """Return all sheets from the combined Excel with non-blank columns only."""
+    """Return all sheets from the combined Excel with non-blank columns only.
+
+    Only sheets that exist in the workbook are returned; missing names (e.g. NFL Slate
+    before the pipeline emits that tab) are skipped without error.
+    """
     import openpyxl
 
     def _build():

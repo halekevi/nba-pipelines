@@ -1952,6 +1952,7 @@ function applyStatusCard(id, info, _label) {
   if (!card || !val || !badge) return;
   card.classList.remove("fresh","stale","missing","loading");
   badge.classList.remove("fresh","stale","missing","loading");
+  // Missing endpoint field or no artifact yet → neutral pending (not "stale").
   if (!info || !info.exists) {
     card.classList.add("loading"); badge.classList.add("loading");
     val.textContent = "Not Yet Run";
@@ -2424,6 +2425,7 @@ function toggleSlatePanel(sport) {
 }
 
 // ── Populate SLATE_DATA — tries full slate endpoint, falls back to tickets ────
+/** Ticket legs use uppercase sport labels (e.g. NFL, NBA); Slate Explorer uses lowercase keys (nfl, nba). */
 function _sportKeyNorm(sp) {
   const x = String(sp || '').trim().toLowerCase().replace(/\s+/g, '');
   if (x === 'nba1h' || x === 'nba_1h') return 'nba1h';

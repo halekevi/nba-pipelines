@@ -2983,8 +2983,12 @@ def ticket_groups_to_payload(
 
 
 def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
-                     wcbb=None, mlb=None, nba1q=None, nba1h=None, tennis=None):
-    """Write full per-sport ranked slate to slate_latest.json for the web UI."""
+                     wcbb=None, mlb=None, nba1q=None, nba1h=None, tennis=None, nfl=None):
+    """Write full per-sport ranked slate to slate_latest.json for the web UI.
+
+    Sport keys in ``sports`` are lowercase (nba, nfl, …) so /api/slate-sport and the
+    home Slate Explorer stay aligned with templates/index.html (SPORTS + _slate_counts).
+    """
     import math
 
     def safe(v):
@@ -3052,6 +3056,7 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
             "mlb":    df_to_rows(mlb,    "mlb"),
             "nba1q":  df_to_rows(nba1q,  "nba1q"),
             "nba1h":  df_to_rows(nba1h,  "nba1h"),
+            "nfl":    df_to_rows(nfl,    "nfl"),
         }
     }
 
@@ -8865,6 +8870,8 @@ def main():
                   nhl=nhl, soccer=soccer, tennis=tennis, wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h)
 
     # Reorder: put SUMMARY + slate sheets at the front
+    # NFL: when combined loads NFL step8, add "NFL Slate" here + write_slate_sheet(..., "NFL Slate", ...),
+    # and keep ui_runner/app.py api_slate_excel sheet_map ("NFL Slate" -> "nfl") in sync.
     desired_first = [
         "SUMMARY", "Full Slate", "NBA Slate", "CBB Slate", "NHL Slate", "Soccer Slate", "Tennis Slate",
         "WCBB Slate", "MLB Slate", "NBA1Q Slate", "NBA1H Slate",
@@ -8929,8 +8936,10 @@ def main():
             gated_preview = filter_positive_ev_tickets_payload(payload)
             print_positive_ev_gate_report(gated_preview)
         write_web_outputs(payload, args.web_outdir)
+        # nfl: pass None until combined loads NFL step8; keep key "nfl": [] in slate_latest.json for UI.
+        nfl = None
         write_slate_json(nba, cbb, nhl, soccer, args.date, args.web_outdir,
-                         wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis)
+                         wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis, nfl=nfl)
         if args.also_root:
             write_web_outputs(payload, outdir=".")
         # Avoid Windows console codepage issues with unicode checkmarks.
