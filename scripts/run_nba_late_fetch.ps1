@@ -6,6 +6,10 @@
   Task Scheduler entry PropORACLE_NBA_LateFetch points here; filename kept for existing registrations.
   Per-sport step1 failures are non-fatal; pipeline failure exits 1.
 #>
+param(
+    [switch]$NoOverwrite
+)
+
 $ErrorActionPreference = "Continue"
 $Root = Split-Path $PSScriptRoot -Parent
 Set-Location $Root
@@ -15,6 +19,33 @@ $env:PYTHONIOENCODING = "utf-8"
 try { [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 } catch { }
 
 Write-Host "[LATE_FETCH] Starting full slate re-fetch $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+
+function Get-VersionedPath([string]$Path) {
+    $dir = Split-Path -Parent $Path
+    $name = [System.IO.Path]::GetFileNameWithoutExtension($Path)
+    $ext = [System.IO.Path]::GetExtension($Path)
+    $stamp = Get-Date -Format "yyyyMMdd_HHmmss"
+    $candidate = Join-Path $dir "$name.bak_$stamp$ext"
+    $i = 1
+    while (Test-Path $candidate) {
+        $candidate = Join-Path $dir "$name.bak_${stamp}_$i$ext"
+        $i++
+    }
+    return $candidate
+}
+
+function Preserve-ExistingFile([string]$Path, [string]$Reason = "") {
+    if (-not $NoOverwrite) { return }
+    if (-not (Test-Path $Path)) { return }
+    $backup = Get-VersionedPath -Path $Path
+    Copy-Item -LiteralPath $Path -Destination $backup -Force -ErrorAction SilentlyContinue
+    if ($Reason) {
+        Write-Host "[LATE_FETCH][NO-OVERWRITE] Preserved '$Path' -> '$backup' ($Reason)" -ForegroundColor DarkGray
+    }
+    else {
+        Write-Host "[LATE_FETCH][NO-OVERWRITE] Preserved '$Path' -> '$backup'" -ForegroundColor DarkGray
+    }
+}
 
 # NBA — append so early fetch rows are preserved when the board fills in
 Write-Host "[LATE_FETCH] Fetching NBA props (append)..."
@@ -108,6 +139,26 @@ if (-not (Test-Path $pipeScript)) {
 }
 
 Write-Host "[LATE_FETCH] Running full pipeline -SkipFetch..."
+if ($NoOverwrite) {
+    $today = Get-Date -Format "yyyy-MM-dd"
+    $preserveTargets = @(
+        (Join-Path $Root "outputs\$today\combined_slate_tickets_$today.xlsx"),
+        (Join-Path $Root "outputs\$today\combined_slate_tickets_$today.json"),
+        (Join-Path $Root "ui_runner\templates\tickets_latest.html"),
+        (Join-Path $Root "ui_runner\templates\tickets_latest.json"),
+        (Join-Path $Root "ui_runner\templates\slate_latest.json"),
+        (Join-Path $Root "ui_runner\templates\slate_eval_$today.html"),
+        (Join-Path $Root "ui_runner\templates\ticket_eval_$today.html"),
+        (Join-Path $Root "ui_runner\templates\graded_props_$today.json"),
+        (Join-Path $Root "NBA\step8_all_direction_clean.xlsx"),
+        (Join-Path $Root "Soccer\step8_soccer_direction_clean.xlsx"),
+        (Join-Path $Root "MLB\step8_mlb_direction_clean.xlsx"),
+        (Join-Path $Root "Tennis\step8_tennis_direction_clean.xlsx")
+    )
+    foreach ($pt in $preserveTargets) {
+        Preserve-ExistingFile -Path $pt -Reason "pre-LATE_FETCH pipeline snapshot"
+    }
+}
 & pwsh -NoProfile -File $pipeScript -SkipFetch
 if ($LASTEXITCODE -ne 0) {
     Write-Host "[LATE_FETCH] Pipeline failed (exit $LASTEXITCODE)" -ForegroundColor Red

@@ -32,6 +32,13 @@ import numpy as np
 import pandas as pd
 import joblib
 
+try:
+    # Prevent Windows cp1252 console crashes on unicode status logs.
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
+
 for _efe_anc in Path(__file__).resolve().parents:
     if (_efe_anc / "scripts" / "edge_feature_engineering.py").is_file():
         _efe_sd = str(_efe_anc / "scripts")
@@ -1307,13 +1314,13 @@ def main() -> None:
                     continue
                 mu = x[dir_mask].mean()
                 sd = x[dir_mask].std()
-                if sd and not np.isnan(sd) and sd > 1e-9:
+                if pd.notna(sd) and float(sd) > 1e-9:
                     z_vals = (x[dir_mask] - mu) / sd
                     result.loc[dir_mask.index[dir_mask]] = z_vals.values
             return result
         mu = x[elig_mask].mean()
         sd = x[elig_mask].std()
-        if sd and not np.isnan(sd) and sd > 1e-9:
+        if pd.notna(sd) and float(sd) > 1e-9:
             return (x - mu) / sd
         return result
 

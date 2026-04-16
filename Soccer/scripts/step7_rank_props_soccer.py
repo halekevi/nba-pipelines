@@ -25,6 +25,13 @@ import joblib
 import numpy as np
 import pandas as pd
 
+try:
+    # Prevent Windows cp1252 console crashes on unicode status logs.
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
+
 for _efe_anc in Path(__file__).resolve().parents:
     if (_efe_anc / "scripts" / "edge_feature_engineering.py").is_file():
         _efe_sd = str(_efe_anc / "scripts")
