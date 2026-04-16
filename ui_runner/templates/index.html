@@ -226,6 +226,7 @@ body::after{content:'';position:fixed;inset:0;
 .scard-icon.nhl{background:rgba(183,168,255,.1);border:1px solid rgba(183,168,255,.2);}
 .scard-icon.soccer{background:rgba(125,255,203,.1);border:1px solid rgba(125,255,203,.2);}
 .scard-icon.mlb{background:rgba(255,121,121,.1);border:1px solid rgba(255,121,121,.22);}
+.scard-icon.nfl{background:rgba(0,122,92,.12);border:1px solid rgba(0,200,150,.22);}
 .scard-icon.tennis{background:rgba(173,216,255,.1);border:1px solid rgba(173,216,255,.28);}
 .scard-icon.combined{background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.2);}
 .scard-body{flex:1;}
@@ -302,6 +303,7 @@ body::after{content:'';position:fixed;inset:0;
 .sp-nhl{background:rgba(183,168,255,.12);color:var(--purple);border:1px solid rgba(183,168,255,.25);}
 .sp-soccer{background:rgba(125,255,203,.12);color:var(--green);border:1px solid rgba(125,255,203,.25);}
 .sp-mlb{background:rgba(255,121,121,.12);color:#ff8c8c;border:1px solid rgba(255,121,121,.26);}
+.sp-nfl{background:rgba(0,122,92,.14);color:#5ee0c0;border:1px solid rgba(0,200,150,.28);}
 .sp-tennis{background:rgba(173,216,255,.14);color:#b8e0ff;border:1px solid rgba(173,216,255,.32);}
 .edge-pick{font-size:9px;font-family:"Inter",sans-serif;font-weight:600;padding:3px 8px;border-radius:10px;letter-spacing:.5px;display:inline-block;}
 .pick-goblin{background:rgba(183,168,255,.12);color:var(--purple);border:1px solid rgba(183,168,255,.25);}
@@ -941,7 +943,7 @@ body::before{
   <!-- HERO -->
   <div class="hero">
     <div class="hero-copy">
-      <div class="hero-eyebrow">NBA · NBA1H · NBA1Q · CBB · WCBB · NHL · SOCCER · MLB · Prop Intelligence</div>
+      <div class="hero-eyebrow">NBA · NBA1H · NBA1Q · CBB · WCBB · NHL · SOCCER · MLB · NFL · Prop Intelligence</div>
       <h1 class="hero-title">
         <span class="ht1 prop-hero-prefix">Prop</span>
         <span class="ht2">Oracle</span>
@@ -1266,6 +1268,21 @@ body::before{
         <div class="scard-val" id="sc-mlb-val">Checking...</div>
       </div>
 
+      <div class="scard loading" id="sc-nfl" onclick="toggleSlatePanel('nfl')">
+        <div class="scard-head">
+          <div class="scard-icon nfl">
+            <svg class="db-icon" viewBox="0 0 24 24" fill="none" stroke="#00c896" stroke-width="1.5">
+              <ellipse cx="12" cy="6" rx="9" ry="3"/><path d="M3 6v4c0 1.66 4.03 3 9 3s9-1.34 9-3V6"/><path d="M3 10v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+              <path d="M3 14v4c0 1.66 4.03 3 9 3s9-1.34 9-3v-4"/>
+            </svg>
+          </div>
+          <div class="scard-title">NFL SLATE</div>
+          <span class="sbadge loading" id="sc-nfl-badge">—</span>
+          <span class="scard-toggle">▾</span>
+        </div>
+        <div class="scard-val" id="sc-nfl-val">Checking...</div>
+      </div>
+
       <div class="scard loading" id="sc-tennis" onclick="toggleSlatePanel('tennis')">
         <div class="scard-head">
           <div class="scard-icon tennis">
@@ -1554,6 +1571,43 @@ body::before{
           <th onclick="sortSlate('mlb','game_time')">TIME</th>
         </tr></thead>
         <tbody id="stb-mlb"></tbody>
+      </table></div>
+    </div>
+
+    <div class="slate-expand" id="sp-nfl">
+      <div class="slate-toolbar">
+        <input class="slate-filter-input" type="text" placeholder="Filter player / prop…" oninput="filterSlate('nfl',this.value)" id="sf-nfl"/>
+        <button class="slate-filter-btn" id="sfb-nfl-over" onclick="toggleDirFilter('nfl','OVER',this)">▲ OVER</button>
+        <button class="slate-filter-btn" id="sfb-nfl-under" onclick="toggleDirFilter('nfl','UNDER',this)">▼ UNDER</button>
+        <button class="slate-filter-btn" id="sfb-nfl-goblin" onclick="togglePickFilter('nfl','Goblin',this)">Goblin</button>
+        <button class="slate-filter-btn" id="sfb-nfl-standard" onclick="togglePickFilter('nfl','Standard',this)">Standard</button>
+        <span class="slate-tier-group" role="group" aria-label="Tier filter">
+          <button type="button" class="slate-filter-btn slate-tier-btn on" data-tier="" onclick="setSlateTierFilter('nfl','',this)">All</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="A" onclick="setSlateTierFilter('nfl','A',this)">A</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="B" onclick="setSlateTierFilter('nfl','B',this)">B</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="C" onclick="setSlateTierFilter('nfl','C',this)">C</button>
+          <button type="button" class="slate-filter-btn slate-tier-btn" data-tier="D" onclick="setSlateTierFilter('nfl','D',this)">D</button>
+        </span>
+        <span class="slate-row-count" id="src-nfl"></span>
+      </div>
+      <div class="slate-table-wrap"><table class="slate-table" id="st-nfl">
+        <thead><tr>
+          <th onclick="sortSlate('nfl','tier')">TIER</th>
+          <th onclick="sortSlate('nfl','rank_score')">RANK</th>
+          <th onclick="sortSlate('nfl','player')">PLAYER</th>
+          <th onclick="sortSlate('nfl','team')">TEAM</th>
+          <th onclick="sortSlate('nfl','opp')">OPP</th>
+          <th onclick="sortSlate('nfl','prop')">PROP</th>
+          <th onclick="sortSlate('nfl','pick_type')">TYPE</th>
+          <th onclick="sortSlate('nfl','line')">LINE</th>
+          <th onclick="sortSlate('nfl','dir')">DIR</th>
+          <th onclick="sortSlate('nfl','edge')">EDGE</th>
+          <th onclick="sortSlate('nfl','hit_rate')">HIT%</th>
+          <th onclick="sortSlate('nfl','l5_over')">L5 O</th>
+          <th onclick="sortSlate('nfl','l5_under')">L5 U</th>
+          <th onclick="sortSlate('nfl','game_time')">TIME</th>
+        </tr></thead>
+        <tbody id="stb-nfl"></tbody>
       </table></div>
     </div>
 
@@ -1925,6 +1979,7 @@ function sportDisplayLabel(rawSport) {
     NHL: 'NHL',
     SOCCER: 'Soccer',
     MLB: 'MLB',
+    NFL: 'NFL',
     TENNIS: 'Tennis',
   };
   return labels[key] || rawSport || '';
@@ -1941,6 +1996,7 @@ async function refreshStatus() {
     applyStatusCard("nhl",      d.nhl?.slate,      "NHL Slate");
     applyStatusCard("soccer",   d.soccer?.slate,   "Soccer Slate");
     applyStatusCard("mlb",      d.mlb?.slate,      "MLB Slate");
+    applyStatusCard("nfl",      d.nfl?.slate,      "NFL Slate");
     applyStatusCard("tennis",   d.tennis?.slate,   "Tennis Slate");
     applyStatusCard("combined", d.combined?.slate, "Combined Tickets");
   } catch {}
@@ -2321,7 +2377,7 @@ const RENDER_SCHEDULED = {};
 const RENDER_TOKEN = {};
 const MOBILE_TABLE_QUERY = window.matchMedia('(max-width: 900px)');
 
-const SPORTS = ['nba','nba1h','nba1q','cbb','nhl','soccer','mlb','tennis'];
+const SPORTS = ['nba','nba1h','nba1q','cbb','nhl','soccer','mlb','nfl','tennis'];
 SPORTS.forEach(s => {
   SLATE_STATE[s] = { sortKey: 'rank_score', sortDir: -1, search: '', dir: null, pick: null, tier: null };
 });

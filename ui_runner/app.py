@@ -92,6 +92,9 @@ MLB_TICKETS   = MLB_DIR / "mlb_best_tickets.xlsx"
 TENNIS_DIR    = BASE_DIR / "Tennis"
 # Same pattern as Soccer/MLB: run_daily.ps1 copies outputs → sport root for Railway.
 TENNIS_SLATE  = TENNIS_DIR / "step8_tennis_direction_clean.xlsx"
+NFL_DIR       = BASE_DIR / "NFL"
+# NFL pipeline scaffold (Sept 2026); card shows pending until step8 + slate JSON include NFL.
+NFL_SLATE     = NFL_DIR / "outputs" / "step8_nfl_direction_clean.xlsx"
 COMBINED_OUT  = BASE_DIR  # combined_slate_tickets_YYYY-MM-DD.xlsx may live here or under outputs/
 OUTPUTS_ROOT  = BASE_DIR / "outputs"
 # CBB deactivated - season over (April 2026)
@@ -1024,6 +1027,58 @@ def api_payout_rate_cards():
     return r
 
 
+@app.post("/api/payout/estimate-mult")
+def api_payout_estimate_mult():
+    """Estimated multiplier from shared Goblin/Demon curve (utils.goblin_demon_multiplier)."""
+    from utils.goblin_demon_multiplier import leg_delta_pct, multiplier_summary
+
+    body = request.get_json(silent=True) or {}
+    mode_raw = str(body.get("mode", "power")).lower()
+    mode = "flex" if "flex" in mode_raw else "power"
+
+    raw_legs = body.get("legs")
+    if not isinstance(raw_legs, list):
+        return jsonify({"error": "legs array required"}), 400
+
+    legs: List[dict[str, Any]] = []
+    for L in raw_legs:
+        if not isinstance(L, dict):
+            continue
+        typ = str(L.get("type", "")).lower()
+        if typ == "goblin":
+            pick = "Goblin"
+        elif typ == "demon":
+            pick = "Demon"
+        else:
+            pick = "Standard"
+        dp = L.get("deltaPct")
+        if dp is None and pick != "Standard":
+            dp = leg_delta_pct(L.get("playedLine"), L.get("stdLine"))
+        else:
+            try:
+                dp = float(dp) if dp is not None else None
+            except (TypeError, ValueError):
+                dp = None
+        legs.append({"pick_type": pick, "delta_pct": dp})
+
+    n = len(legs)
+    if n < 2:
+        return jsonify({"error": "at least 2 legs required"}), 400
+
+    hits_raw = body.get("hits")
+    try:
+        hits = int(hits_raw) if hits_raw is not None and str(hits_raw).strip() != "" else None
+    except (TypeError, ValueError):
+        hits = None
+    if mode == "flex" and hits is None:
+        hits = n
+
+    summ = multiplier_summary(legs, mode=mode, hits=hits)
+    r = jsonify(summ)
+    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    return r
+
+
 def _graded_props_json_path_for_date(date_str: str) -> Path | None:
     fname = f"graded_props_{date_str}.json"
     for base in (TEMPLATES_DIR, ARCHIVE_DIR):
@@ -1912,6 +1967,12 @@ def api_pipeline_status():
         TENNIS_SLATE,
         TENNIS_DIR / "outputs" / "step8_tennis_direction_clean.xlsx",
     )
+    nfl_slate_p = _resolve_outputs_artifact(
+        days,
+        "step8_nfl_direction_clean_{d}.xlsx",
+        NFL_SLATE,
+        NFL_DIR / "outputs" / "step8_nfl_direction_clean.xlsx",
+    )
     udq_p = _resolve_outputs_artifact(days, "upstream_data_quality_{d}.csv")
 
     combined_candidates: list[Path] = []
@@ -1973,6 +2034,9 @@ def api_pipeline_status():
         },
         "tennis": {
             "slate": _sport_slate_status(tennis_slate_p, "tennis", slate_counts, slate_disk_info, status_js_ts, card_disp),
+        },
+        "nfl": {
+            "slate": _sport_slate_status(nfl_slate_p, "nfl", slate_counts, slate_disk_info, status_js_ts, card_disp),
         },
         "combined": {
             "slate": combined_slate,
@@ -2842,6 +2906,7 @@ def api_slate_excel():
             "Tennis Slate": "tennis",
             "WCBB Slate":  "wcbb",
             "MLB Slate":   "mlb",
+            "NFL Slate":   "nfl",
         }
         wb = openpyxl.load_workbook(str(path), read_only=True, data_only=True)
         result: dict[str, Any] = {}
