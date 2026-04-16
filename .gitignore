@@ -24,6 +24,7 @@ desktop.ini
 .vscode/
 .idea/
 .claude/
+*-DESKTOP-*.gitignore
 # Local clone of personal Cursor profile repo (see README inside that folder)
 cursor-profile/
 
@@ -128,3 +129,7 @@ NBA/schedule_cache_*.csv
 # Local run artifacts
 combined_slate_tickets_*.xlsx
 ui_runner/graded_slate/
+scripts/*-DESKTOP-*
+archive/
+data/grade_history.json
+data/payout_samples/
