@@ -996,6 +996,7 @@ body::before{
     </div>
     <div class="form-grid" id="log-flex-mg-wrap" style="display:none;margin-top:4px">
       <div class="field" style="grid-column:1/-1"><label>FLEX MIN GUARANTEE MULT (e.g. (n−1)/n — optional)</label><input id="log-min-guarantee-mult" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 0.75 or 1.25 — what PP shows if you miss one leg" oninput="scheduleLogDraftSave()" onchange="refreshLogSummary()"/></div>
+    </div>
     <div class="field" style="margin-top:10px">
       <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:11px;color:var(--muted);letter-spacing:0.5px">
         <input type="checkbox" id="log-server-csv" style="width:16px;height:16px;accent-color:var(--accent)" onchange="scheduleLogDraftSave()"/>
@@ -1008,7 +1009,7 @@ body::before{
       <button class="btn btn-ghost" onclick="clearLogForm()">✕ Clear</button>
     </div>
     <div id="log-msg" style="font-size:11px;margin-top:10px;height:18px;"></div>
-  </div>
+  </div><!-- /card accent (log form) -->
 
   <div class="card" style="padding:0">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)">
