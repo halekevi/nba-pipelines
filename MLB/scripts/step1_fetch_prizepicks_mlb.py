@@ -17,6 +17,8 @@ Usage:
     py -3.14 step1_fetch_prizepicks_mlb.py --output step1_mlb_props.csv
     py -3.14 step1_fetch_prizepicks_mlb.py --timeout 90
     py -3.14 step1_fetch_prizepicks_mlb.py --from-file payload.json
+    # After starting Chrome with --remote-debugging-port=9222 (see docs/chrome_debug_setup.md):
+    py -3.14 step1_fetch_prizepicks_mlb.py --cdp http://127.0.0.1:9222
 """
 
 from __future__ import annotations
@@ -313,10 +315,10 @@ def load_payload_from_file(path: str) -> Tuple[List[dict], List[dict]]:
 
 # ─── Playwright fetch — fully headless, no manual window ──────────────────────
 
-def fetch_via_playwright(timeout_s: int = 90) -> Tuple[List[dict], List[dict]]:
+def fetch_via_playwright(timeout_s: int = 90, cdp_url: str | None = None) -> Tuple[List[dict], List[dict]]:
     """
-    Launch headless Chromium using the saved ~/.pp_browser_profile so
-    PrizePicks sees a real authenticated session. No popups, no manual steps.
+    Either launch Chromium (saved ~/.pp_browser_profile when present) or attach
+    to an existing Chrome via CDP (--cdp) after you have solved login/DataDome.
 
     Strategy:
       1. Navigate to the MLB board URL
@@ -398,15 +400,26 @@ def fetch_via_playwright(timeout_s: int = 90) -> Tuple[List[dict], List[dict]]:
 
     GAMES_GRACE = 6.0  # seconds to wait after projections for /games response
 
+    cdp = (cdp_url or "").strip()
+    use_cdp = bool(cdp)
+
     use_profile = PROFILE_DIR.exists()
     cold_context = False  # True when not using persistent profile (no cookies / cold DataDome score)
-    if not use_profile:
+    if not use_cdp and not use_profile:
         print(f"  ⚠️  No saved profile found at {PROFILE_DIR}")
         print(f"       Run: py -3.14 setup_prizepicks_profile.py")
         print(f"       Falling back to fresh browser (may hit DataDome challenge)...")
 
     with sync_playwright() as p:
-        if use_profile:
+        browser = None
+        if use_cdp:
+            print(f"🌐 Connecting to existing Chrome via CDP: {cdp}")
+            browser = p.chromium.connect_over_cdp(cdp)
+            if not browser.contexts:
+                raise RuntimeError("CDP browser has no contexts (is Chrome running with --remote-debugging-port?)")
+            context = browser.contexts[0]
+            print(f"  Using browser context[0] (existing session / cookies).")
+        elif use_profile:
             print(f"🌐 Launching Chromium with saved profile: {PROFILE_DIR}")
             try:
                 context = p.chromium.launch_persistent_context(
@@ -497,9 +510,19 @@ def fetch_via_playwright(timeout_s: int = 90) -> Tuple[List[dict], List[dict]]:
                 print("\n  ⚠️  No api.prizepicks.com calls detected at all.")
                 print("       Profile may need refreshing: py -3.14 setup_prizepicks_profile.py")
 
-        context.close()
-        if browser:
-            browser.close()
+        if use_cdp:
+            try:
+                page.close()
+            except Exception:
+                pass
+            try:
+                browser.close()
+            except Exception:
+                pass
+        else:
+            context.close()
+            if browser:
+                browser.close()
 
     return captured.get("data", []), captured.get("included", [])
 
@@ -528,6 +551,13 @@ def main():
         action="store_true",
         help="Append this fetch after existing CSV rows, then dedupe (keep='last').",
     )
+    ap.add_argument(
+        "--cdp",
+        default="",
+        metavar="URL",
+        help="Attach to existing Chrome via CDP (e.g. http://127.0.0.1:9222). "
+        "Start Chrome with --remote-debugging-port; skips launching a new browser.",
+    )
     args     = ap.parse_args()
     out_path = Path(args.output)
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -546,9 +576,11 @@ def main():
             if attempt > 1:
                 print(f"\n🔄 Retry {attempt - 1}/{args.retries} — relaunching in {args.retry_delay}s...")
                 time.sleep(args.retry_delay)
-            print(f"[step1] MLB fetch via headless browser | league_id={MLB_LEAGUE_ID} | attempt {attempt}/{max_attempts}")
+            mode = "cdp" if (args.cdp or "").strip() else "playwright"
+            print(f"[step1] MLB fetch ({mode}) | league_id={MLB_LEAGUE_ID} | attempt {attempt}/{max_attempts}")
             try:
-                data, included = fetch_via_playwright(timeout_s=args.timeout)
+                cdp = (args.cdp or "").strip() or None
+                data, included = fetch_via_playwright(timeout_s=args.timeout, cdp_url=cdp)
             except Exception as e:
                 # Do not preserve stale boards when browser launch/intercept crashes.
                 # Treat this attempt as a miss so the empty-file guard can run if all retries fail.
