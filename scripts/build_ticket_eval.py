@@ -456,7 +456,26 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
     n = len(leg_grades)
     h = sum(1 for g in leg_grades if g == "HIT")
     m = sum(1 for g in leg_grades if g == "MISS")
+    v = sum(1 for g in leg_grades if g == "VOID")
     all_hit = bool(n) and all(g == "HIT" for g in leg_grades)
+
+    if n > 0 and v == n:
+        return {
+            "pending": False,
+            "result": "VOID",
+            "result_display": "NO CONTEST",
+            "result_emoji": "○",
+            "result_css": "void",
+            "result_detail": f"All {n} legs void — no graded contest against the board.",
+            "actual_payout": 0.0,
+            "predicted_payout": None,
+            "predicted_ev": None,
+            "predicted_p_win": None,
+            "recommendation_at_entry": "",
+            "entry_10_return": 0.0,
+            "net_10": 0.0,
+            "omit_payout_block": True,
+        }
 
     paid = _ticket_pays_money(group_name, leg_grades)
 
@@ -483,6 +502,10 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
         emoji = "❌"
         css = "loss"
         actual = 0.0
+        if m == 0 and v > 0:
+            result = "VOID_LOSS"
+            emoji = "⚠"
+            css = "void_loss"
     elif flex:
         if all_hit:
             result = "SWEEP"
@@ -545,12 +568,14 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
         detail = f"{result} — all {n} legs correct"
     elif result == "WIN" and n:
         detail = f"{result} — all {n} legs correct"
+    elif result == "VOID_LOSS" and n:
+        detail = f"Voided legs prevented payout ({h_show} hit, {m_show} miss, {v} void)"
     elif result == "LOSS" and n:
         detail = f"{result} ({h_show} hit, {m_show} miss)"
     else:
         detail = result
 
-    return {
+    out: dict[str, Any] = {
         "pending": False,
         "result": result,
         "result_emoji": emoji,
@@ -564,6 +589,9 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
         "entry_10_return": gross_10,
         "net_10": net_10,
     }
+    if result == "VOID_LOSS":
+        out["result_display"] = "VOID / NO ACTION"
+    return out
 
 
 def _fmt_pay_cell(v: float | None, suffix: str = "x") -> str:
@@ -1792,7 +1820,21 @@ def _ticket_grade_payout_html(oc: dict[str, Any], esc) -> str:
             '<div class="grade-payout-pending">Payout model: awaiting all leg grades</div>'
             "</div>"
         )
+    if oc.get("omit_payout_block"):
+        r = str(oc.get("result") or "")
+        css = str(oc.get("result_css") or "void")
+        emoji = str(oc.get("result_emoji") or "")
+        rd = esc(str(oc.get("result_display") or r))
+        detail = esc(str(oc.get("result_detail") or r))
+        return (
+            '<div class="ticket-grade-payout">'
+            f'<div class="grade-result grade-result-{esc(css)}">{esc(emoji)} {rd}</div>'
+            f'<div class="grade-result-sub">{detail}</div>'
+            '<div class="grade-entry-line">No payout table — slip did not resolve against the board.</div>'
+            "</div>"
+        )
     r = str(oc.get("result") or "")
+    r_head = esc(str(oc.get("result_display") or r))
     css = str(oc.get("result_css") or "loss")
     emoji = str(oc.get("result_emoji") or "")
     pred_pay = oc.get("predicted_payout")
@@ -1805,13 +1847,14 @@ def _ticket_grade_payout_html(oc: dict[str, Any], esc) -> str:
         f"{float(pred_ev):.2f} — {esc(rec)}" if pred_ev is not None else f"N/A — {esc(rec) if rec else 'N/A'}"
     )
     pwin_pred = _fmt_pct_cell(pred_p)
-    pwin_act = "✅" if r != "LOSS" else "❌"
-    ev_act = f"+${gross:.2f} on $10" if r != "LOSS" else "-$10.00 on $10"
-    entry_line = f"Lost $10.00" if r == "LOSS" else f"Won ${gross:.2f}"
+    is_money_loss = r in ("LOSS", "VOID_LOSS")
+    pwin_act = "❌" if is_money_loss else "✅"
+    ev_act = "-$10.00 on $10" if is_money_loss else f"+${gross:.2f} on $10"
+    entry_line = "Lost $10.00" if is_money_loss else f"Won ${gross:.2f}"
     detail = esc(str(oc.get("result_detail") or r))
     return (
         '<div class="ticket-grade-payout">'
-        f'<div class="grade-result grade-result-{esc(css)}">{esc(emoji)} {esc(r)}</div>'
+        f'<div class="grade-result grade-result-{esc(css)}">{esc(emoji)} {r_head}</div>'
         '<div class="grade-result-sub">' + detail + "</div>"
         '<table class="grade-payout-table">'
         "<tr><th></th><th>Predicted</th><th>Actual</th></tr>"
@@ -1930,7 +1973,7 @@ def _build_html(
     n_pay = len(pay_summary_rows)
     wins_ct = sum(1 for oc in pay_summary_rows if oc.get("result") in ("WIN", "SWEEP"))
     guar_ct = sum(1 for oc in pay_summary_rows if oc.get("result") == "MIN GUARANTEE")
-    loss_ct = sum(1 for oc in pay_summary_rows if oc.get("result") == "LOSS")
+    loss_ct = sum(1 for oc in pay_summary_rows if oc.get("result") in ("LOSS", "VOID_LOSS"))
     total_net_10 = sum(float(oc.get("net_10") or 0.0) for oc in pay_summary_rows)
     evs = [float(oc["predicted_ev"]) for oc in pay_summary_rows if oc.get("predicted_ev") is not None]
     avg_ev = sum(evs) / len(evs) if evs else None
@@ -1956,7 +1999,7 @@ def _build_html(
     for oc in pay_summary_rows:
         bk = _rec_bucket(str(oc.get("recommendation_at_entry") or ""))
         buck[bk]["count"] += 1
-        if oc.get("result") != "LOSS":
+        if oc.get("result") not in ("LOSS", "VOID_LOSS"):
             buck[bk]["wins"] += 1
 
     win_rate_pay = (wins_ct + guar_ct) / n_pay if n_pay else 0.0
@@ -2178,6 +2221,8 @@ def _build_html(
         ".grade-result-win{background:#00ff88;color:#000;}",
         ".grade-result-min_guarantee{background:#88ccff;color:#000;}",
         ".grade-result-loss{background:#ff4444;color:#fff;}",
+        ".grade-result-void{background:rgba(140,140,150,.35);color:#f2f2f4;border:1px solid rgba(255,255,255,.12);}",
+        ".grade-result-void_loss{background:rgba(240,165,0,.2);color:#ffe6a8;border:1px solid rgba(240,165,0,.45);}",
         ".grade-payout-table{width:100%;border-collapse:collapse;font-size:clamp(12px,1.25vw,14px);margin-bottom:10px;}",
         ".grade-payout-table th,.grade-payout-table td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;}",
         ".grade-payout-table th{color:var(--muted);font-weight:600;font-size:11px;letter-spacing:1px;}",
@@ -2186,6 +2231,8 @@ def _build_html(
         ".grade-ticket-result{font-family:'Inter',sans-serif;font-size:clamp(11px,1.2vw,13px);letter-spacing:.3px;}",
         ".grade-ticket-result.won{color:var(--green);}",
         ".grade-ticket-result.lost{color:var(--red);}",
+        ".grade-ticket-result.void-slip{color:var(--gold2);}",
+        ".grade-ticket-result.void-loss{color:#ffd87a;}",
         ".grade-ticket-result-label{opacity:.85;font-weight:600;}",
         "html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!important;}"
         "html.ticket-eval-embed-grades .snav,html.ticket-eval-embed-grades #mobile-menu{display:none!important;}"
@@ -2291,14 +2338,28 @@ def _build_html(
                 parts.append(f'<span class="payout">PWR {_fmt_num(pp)}× · FLEX {_fmt_num(fp)}×</span>')
                 if not oc.get("pending") and oc.get("result"):
                     rtxt = str(oc.get("result") or "")
+                    rdisp = str(oc.get("result_display") or rtxt)
                     rem = str(oc.get("result_emoji") or "")
-                    won = rtxt != "LOSS"
-                    res_cls = "tg grade-ticket-result won" if won else "tg grade-ticket-result lost"
-                    parts.append(
-                        f'<span class="{res_cls}">RESULT: {esc(rem)} '
-                        f'{"✅ WON" if won else "❌ LOSS"}'
-                        f' <span class="grade-ticket-result-label">({esc(rtxt)})</span></span>'
-                    )
+                    if rtxt == "VOID":
+                        res_cls = "tg grade-ticket-result void-slip"
+                        parts.append(
+                            f'<span class="{res_cls}">RESULT: {esc(rem)} NO CONTEST'
+                            f' <span class="grade-ticket-result-label">({esc(rdisp)})</span></span>'
+                        )
+                    elif rtxt == "VOID_LOSS":
+                        res_cls = "tg grade-ticket-result void-loss"
+                        parts.append(
+                            f'<span class="{res_cls}">RESULT: {esc(rem)} VOID / NO ACTION'
+                            f' <span class="grade-ticket-result-label">(VOID_LOSS)</span></span>'
+                        )
+                    else:
+                        won = rtxt != "LOSS"
+                        res_cls = "tg grade-ticket-result won" if won else "tg grade-ticket-result lost"
+                        parts.append(
+                            f'<span class="{res_cls}">RESULT: {esc(rem)} '
+                            f'{"✅ WON" if won else "❌ LOSS"}'
+                            f' <span class="grade-ticket-result-label">({esc(rdisp)})</span></span>'
+                        )
                 parts.append(f'<span class="banner {banner_cls}">{esc(banner_txt)}</span>')
                 parts.append("</div>")
                 parts.append(

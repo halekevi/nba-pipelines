@@ -131,6 +131,8 @@ details.ticket-bucket{margin:0 0 10px;}
 .grade-result-win{background:#00ff88;color:#000;}
 .grade-result-min_guarantee{background:#88ccff;color:#000;}
 .grade-result-loss{background:#ff4444;color:#fff;}
+.grade-result-void{background:rgba(140,140,150,.35);color:#f2f2f4;border:1px solid rgba(255,255,255,.12);}
+.grade-result-void_loss{background:rgba(240,165,0,.2);color:#ffe6a8;border:1px solid rgba(240,165,0,.45);}
 .grade-payout-table{width:100%;border-collapse:collapse;font-size:clamp(12px,1.25vw,14px);margin-bottom:10px;}
 .grade-payout-table th,.grade-payout-table td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;}
 .grade-payout-table th{color:var(--muted);font-weight:600;font-size:11px;letter-spacing:1px;}
@@ -139,6 +141,8 @@ details.ticket-bucket{margin:0 0 10px;}
 .grade-ticket-result{font-family:'Inter',sans-serif;font-size:clamp(11px,1.2vw,13px);letter-spacing:.3px;}
 .grade-ticket-result.won{color:var(--green);}
 .grade-ticket-result.lost{color:var(--red);}
+.grade-ticket-result.void-slip{color:var(--gold2);}
+.grade-ticket-result.void-loss{color:#ffd87a;}
 .grade-ticket-result-label{opacity:.85;font-weight:600;}
 html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!important;}html.ticket-eval-embed-grades .snav,html.ticket-eval-embed-grades #mobile-menu{display:none!important;}html.ticket-eval-embed-grades body > .grade-eval-summary{margin-top:0!important;}html.ticket-eval-embed-grades .stats-bar{top:0!important;}html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;padding-top:9px!important;}
 </style>
@@ -706,7 +710,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="tg">NHL Pwr Std 3-Leg</span>
 <span class="tg">2✓ 0✗ / 3</span>
 <span class="payout">PWR 6× · FLEX 3×</span>
-<span class="tg grade-ticket-result lost">RESULT: ❌ ❌ LOSS <span class="grade-ticket-result-label">(LOSS)</span></span>
+<span class="tg grade-ticket-result void-loss">RESULT: ⚠ VOID / NO ACTION <span class="grade-ticket-result-label">(VOID_LOSS)</span></span>
 <span class="banner void">VOID/PUSH</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
@@ -740,7 +744,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-void">—</div>
 <div class="leg-extra">0.5</div>
 </div>
-<div class="ticket-grade-payout"><div class="grade-result grade-result-loss">❌ LOSS</div><div class="grade-result-sub">LOSS (2 hit, 0 miss)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>6.00x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>N/A</td><td>❌</td></tr><tr><td>EV at Entry</td><td>N/A — N/A</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
+<div class="ticket-grade-payout"><div class="grade-result grade-result-void_loss">⚠ VOID / NO ACTION</div><div class="grade-result-sub">Voided legs prevented payout (2 hit, 0 miss, 1 void)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>6.00x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>N/A</td><td>❌</td></tr><tr><td>EV at Entry</td><td>N/A — N/A</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
 </article>
 </section>
 </div></details>
@@ -754,7 +758,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="tg">Soccer Power Play 2-Leg</span>
 <span class="tg">1✓ 0✗ / 2</span>
 <span class="payout">PWR 2.46× · FLEX 2.46×</span>
-<span class="tg grade-ticket-result lost">RESULT: ❌ ❌ LOSS <span class="grade-ticket-result-label">(LOSS)</span></span>
+<span class="tg grade-ticket-result void-loss">RESULT: ⚠ VOID / NO ACTION <span class="grade-ticket-result-label">(VOID_LOSS)</span></span>
 <span class="banner void">VOID/PUSH</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
@@ -778,7 +782,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.3</div>
 </div>
-<div class="ticket-grade-payout"><div class="grade-result grade-result-loss">❌ LOSS</div><div class="grade-result-sub">LOSS (1 hit, 0 miss)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>2.46x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>N/A</td><td>❌</td></tr><tr><td>EV at Entry</td><td>N/A — N/A</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
+<div class="ticket-grade-payout"><div class="grade-result grade-result-void_loss">⚠ VOID / NO ACTION</div><div class="grade-result-sub">Voided legs prevented payout (1 hit, 0 miss, 1 void)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>2.46x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>N/A</td><td>❌</td></tr><tr><td>EV at Entry</td><td>N/A — N/A</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">Soccer Flex 3-Leg</h2>
@@ -788,7 +792,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="tg">Soccer Flex 3-Leg</span>
 <span class="tg">1✓ 0✗ / 3</span>
 <span class="payout">PWR 4.92× · FLEX 2.46×</span>
-<span class="tg grade-ticket-result lost">RESULT: ❌ ❌ LOSS <span class="grade-ticket-result-label">(LOSS)</span></span>
+<span class="tg grade-ticket-result void-loss">RESULT: ⚠ VOID / NO ACTION <span class="grade-ticket-result-label">(VOID_LOSS)</span></span>
 <span class="banner void">VOID/PUSH</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
@@ -822,7 +826,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-void">—</div>
 <div class="leg-extra">1.3</div>
 </div>
-<div class="ticket-grade-payout"><div class="grade-result grade-result-loss">❌ LOSS</div><div class="grade-result-sub">LOSS (1 hit, 0 miss)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>2.46x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>N/A</td><td>❌</td></tr><tr><td>EV at Entry</td><td>N/A — N/A</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
+<div class="ticket-grade-payout"><div class="grade-result grade-result-void_loss">⚠ VOID / NO ACTION</div><div class="grade-result-sub">Voided legs prevented payout (1 hit, 0 miss, 2 void)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>2.46x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>N/A</td><td>❌</td></tr><tr><td>EV at Entry</td><td>N/A — N/A</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
 </article>
 </section>
 </div></details>
