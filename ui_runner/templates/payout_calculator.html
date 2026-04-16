@@ -963,7 +963,7 @@ body::before{
 <div id="tab-log" class="tab-panel">
   <div class="card accent">
     <div class="card-title">🎟 Log a Full Ticket</div>
-    <p class="hint">Log every leg with its <strong>standard line</strong> and <strong>played line</strong>. Type auto-classifies from the delta. The delta% per leg (played ÷ standard) is the key variable. Your draft is saved automatically in this browser.</p>
+    <p class="hint">Log every leg with its <strong>standard line</strong> and <strong>played line</strong>. Type auto-classifies from the delta. The delta% per leg (played ÷ standard) is the key variable. For <strong>Flex</strong>, log the <strong>sweep</strong> multiplier and optionally the <strong>min guarantee</strong> (one miss) rate the app shows. Your draft is saved automatically in this browser.</p>
     <div class="import-panel" id="import-panel-log">
       <div class="import-panel-title">IMPORT FROM SCREENSHOT</div>
       <div class="import-actions">
@@ -977,7 +977,7 @@ body::before{
     </div>
     <div class="form-grid-3" style="margin-bottom:16px">
       <div class="field"><label>PLATFORM</label><select id="log-platform" onchange="scheduleLogDraftSave()"><option>PrizePicks</option><option>Underdog Fantasy</option><option>Sleeper</option></select></div>
-      <div class="field"><label>SLIP TYPE</label><select id="log-slip-type" onchange="scheduleLogDraftSave()"><option>Power Play</option><option>Flex Play</option></select></div>
+      <div class="field"><label>SLIP TYPE</label><select id="log-slip-type" onchange="onLogSlipTypeChange();scheduleLogDraftSave()"><option>Power Play</option><option>Flex Play</option></select></div>
       <div class="field"><label>DATE</label><input id="log-date" type="date" onchange="scheduleLogDraftSave()"></div>
     </div>
     <div class="section-divider">TICKET LEGS <span id="log-leg-summary" style="color:var(--muted);font-size:10px;margin-left:8px"></span></div>
@@ -991,8 +991,16 @@ body::before{
     </div>
     <div class="section-divider">PAYOUT</div>
     <div class="form-grid">
-      <div class="field"><label>BASE PAYOUT (all-standard, same leg count)</label><input id="log-base-mult" type="text" inputmode="decimal" placeholder="Auto" readonly style="opacity:.6"/></div>
-      <div class="field"><label>ACTUAL PAYOUT SHOWN ON APP</label><input id="log-actual-mult" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 4.2"/></div>
+      <div class="field"><label id="log-base-mult-label">BASE MULTIPLIER (standard legs, this leg count)</label><input id="log-base-mult" type="text" inputmode="decimal" placeholder="Auto" readonly style="opacity:.6"/></div>
+      <div class="field"><label id="log-actual-mult-label">ACTUAL MULTIPLIER SHOWN (sweep / power)</label><input id="log-actual-mult" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 4.2" oninput="scheduleLogDraftSave()" onchange="refreshLogSummary()"/></div>
+    </div>
+    <div class="form-grid" id="log-flex-mg-wrap" style="display:none;margin-top:4px">
+      <div class="field" style="grid-column:1/-1"><label>FLEX MIN GUARANTEE MULT (e.g. (n−1)/n — optional)</label><input id="log-min-guarantee-mult" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 0.75 or 1.25 — what PP shows if you miss one leg" oninput="scheduleLogDraftSave()" onchange="refreshLogSummary()"/></div>
+    <div class="field" style="margin-top:10px">
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:11px;color:var(--muted);letter-spacing:0.5px">
+        <input type="checkbox" id="log-server-csv" style="width:16px;height:16px;accent-color:var(--accent)" onchange="scheduleLogDraftSave()"/>
+        Also append to server <code style="font-size:10px;color:var(--text)">data/payout_observations.csv</code> (uses model est. vs your actual for curve tuning)
+      </label>
     </div>
     <div id="log-ticket-summary" style="display:none;margin-top:14px;padding:12px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;font-size:11px;line-height:2;color:var(--muted)"></div>
     <div class="btn-row">
@@ -1103,6 +1111,7 @@ body::before{
   <div class="card accent">
     <div class="card-title">🃏 Payout rate cards</div>
     <p class="hint">Quick-reference deck from <code style="font-size:10px;opacity:.85">data/payout_rate_cards.json</code> — same baselines as the calculator / grader. Regenerate after updating coefficients: <code style="font-size:10px;opacity:.85">python scripts/build_payout_rate_cards.py</code></p>
+    <p class="hint" style="margin-top:10px">To capture <strong>live payout and flex guarantee rates</strong>, use <strong>Log Lines</strong>: enter the app’s sweep multiplier (and optional min guarantee on Flex), then enable “append to server CSV” if you want rows in <code style="font-size:10px;opacity:.85">data/payout_observations.csv</code> for refitting <code style="font-size:10px;opacity:.85">payout_formula_coefficients.json</code>.</p>
     <div id="rate-cards-mount"><div class="hint" style="padding:20px 0">Open this tab to load the dictionary.</div></div>
   </div>
 </div>
@@ -1124,6 +1133,8 @@ body::before{
 
 <script>
 const PP_BASE   = {2:3,3:6,4:10,5:20,6:37.5};
+/* Matches utils.goblin_demon_multiplier.BASE_FLEX — sweep + partial tiers */
+const FLEX_BASE = {2:{2:3},3:{3:3,2:1},4:{4:6,3:1.5},5:{5:10,4:2,3:0.4},6:{6:25,5:2,4:0.4}};
 const STORE_KEY = 'proporacle_payout_log_v5';
 const LOG_DRAFT_KEY = 'proporacle_payout_log_draft_v1';
 const PROP_OPTS = ['Points','Rebounds','Assists','Pts+Reb+Ast','Pts+Reb','Pts+Ast','3-PT Made','Steals','Blocks','Turnovers','Fantasy Score','Other'];
@@ -1199,6 +1210,26 @@ function renderRateCards(force){
   });
 }
 
+function logSlipIsFlex(){const s=document.getElementById('log-slip-type');return s&&String(s.value||'').toLowerCase().includes('flex');}
+function logBaseMultForN(n){
+  if(!n||n<2)return null;
+  if(logSlipIsFlex()){
+    const t=FLEX_BASE[n];
+    return t&&t[n]!=null?t[n]:null;
+  }
+  return PP_BASE[n]||null;
+}
+function onLogSlipTypeChange(){
+  const flex=logSlipIsFlex();
+  const w=document.getElementById('log-flex-mg-wrap');
+  if(w)w.style.display=flex?'block':'none';
+  if(!flex){const m=document.getElementById('log-min-guarantee-mult');if(m)m.value='';}
+  const lb=document.getElementById('log-base-mult-label');
+  const la=document.getElementById('log-actual-mult-label');
+  if(lb)lb.textContent=flex?'BASE FLEX MULT (all hit, standard legs)':'BASE POWER MULT (standard legs, this count)';
+  if(la)la.textContent=flex?'ACTUAL FLEX SWEEP MULT SHOWN (n/n)':'ACTUAL POWER MULT SHOWN';
+  refreshLogSummary();
+}
 function getDeltaPct(s,p){if(!s||!p||s===0)return null;return Math.round((p/s)*1000)/1000;}
 function autoClassify(s,p){if(!s||!p)return'standard';const d=p-s;if(Math.abs(d)<0.25)return'standard';return d<0?'goblin':'demon';}
 function getBucket(pct,kind){
@@ -1337,6 +1368,8 @@ function saveLogDraft(){
       slipType:document.getElementById('log-slip-type').value,
       date:document.getElementById('log-date').value,
       actualMult:String(document.getElementById('log-actual-mult').value||''),
+      minGuaranteeMult:String(document.getElementById('log-min-guarantee-mult')?.value||''),
+      serverCsv:!!document.getElementById('log-server-csv')?.checked,
     }));
   }catch{}
 }
@@ -1397,6 +1430,10 @@ function loadLogDraft(){
     if(o.slipType&&sf){const opt=[...sf.options].find(x=>x.value===o.slipType||x.text===o.slipType);if(opt)sf.value=opt.value;}
     if(o.date)document.getElementById('log-date').value=o.date;
     if(o.actualMult!=null)document.getElementById('log-actual-mult').value=String(o.actualMult);
+    const mg=document.getElementById('log-min-guarantee-mult'),sv=document.getElementById('log-server-csv');
+    if(o.minGuaranteeMult!=null&&mg)mg.value=String(o.minGuaranteeMult);
+    if(sv&&typeof o.serverCsv==='boolean')sv.checked=o.serverCsv;
+    onLogSlipTypeChange();
   }catch{}
 }
 
@@ -1420,6 +1457,7 @@ function blurLFPlayer(id){renderLogLegs();refreshLogSummary();}
 function clearLogForm(){
   logLegs=[];logCounter=0;renderLogLegs();
   document.getElementById('log-base-mult').value='';document.getElementById('log-actual-mult').value='';
+  const mg=document.getElementById('log-min-guarantee-mult');if(mg)mg.value='';
   document.getElementById('log-ticket-summary').style.display='none';document.getElementById('log-leg-summary').textContent='';
   try{localStorage.removeItem(LOG_DRAFT_KEY);}catch{}
 }
@@ -1461,29 +1499,69 @@ function refreshLogSummary(){
   const p=[];if(nS)p.push(`${nS}⭐`);if(nG)p.push(`${nG}🎃`);if(nD)p.push(`${nD}😈`);
   document.getElementById('log-leg-summary').textContent=n?`(${n} legs: ${p.join(' · ')})`:'';
   const bEl=document.getElementById('log-base-mult');
-  if(n>=2&&PP_BASE[n]){bEl.value=PP_BASE[n];}else{bEl.value='';}
+  const bm=logBaseMultForN(n);
+  if(n>=2&&bm!=null){bEl.value=bm;}else{bEl.value='';}
   const sEl=document.getElementById('log-ticket-summary');
-  const am=parseFloat(document.getElementById('log-actual-mult').value),bm=PP_BASE[n]||null;
+  const am=parseFloat(document.getElementById('log-actual-mult').value);
+  const mgRaw=document.getElementById('log-min-guarantee-mult')?.value;
+  const mg=parseFloat(mgRaw);
+  const flex=logSlipIsFlex();
+  const flexRef=flex&&FLEX_BASE[n]?FLEX_BASE[n][n-1]:null;
   if(!n){sEl.style.display='none';return;}
   const ll=logLegs.map((l,i)=>{const col=l.type==='goblin'?'var(--goblin)':l.type==='demon'?'var(--demon)':'var(--std)';const icon=l.type==='goblin'?'🎃':l.type==='demon'?'😈':'⭐';const std=parseFloat(l.stdLine),pld=parseFloat(l.playedLine);const lp=(!isNaN(std)&&!isNaN(pld)&&l.type!=='standard')?` <span style="color:${col}">${l.stdLine}→${l.playedLine} (${Math.round((pld/std)*1000)/1000})</span>`:l.stdLine?` Line: ${l.stdLine}`:'';return `<div>${icon} <span style="color:${col}">${l.player||`Leg ${i+1}`}</span> · ${l.sport} ${l.prop}${lp}</div>`;}).join('');
-  let pl='';if(bm&&am){const sh=((am/bm)-1)*100;pl=`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">Base: <strong>${bm}x</strong> → Actual: <strong style="color:${sCol(sh)}">${am}x</strong> · <span style="color:${sCol(sh)}">${sh>=0?'+':''}${sh.toFixed(1)}%</span> vs all-standard</div>`;}
+  let pl='';if(bm&&am&&!isNaN(am)){const sh=((am/bm)-1)*100;pl=`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">Base: <strong>${bm}x</strong> → Actual: <strong style="color:${sCol(sh)}">${am}x</strong> · <span style="color:${sCol(sh)}">${sh>=0?'+':''}${sh.toFixed(1)}%</span> vs all-standard${flex?' sweep':''}</div>`;}
+  if(flex&&flexRef!=null&&!isNaN(mg)){const sh2=((mg/flexRef)-1)*100;pl+=`<div style="margin-top:8px">Flex ref (miss 1): <strong>${flexRef}x</strong> → Logged min guar: <strong style="color:${sCol(sh2)}">${mg}x</strong> · <span style="color:${sCol(sh2)}">${sh2>=0?'+':''}${sh2.toFixed(1)}%</span></div>`;}
+  else if(flex&&flexRef!=null){pl+=`<div style="margin-top:8px;font-size:10px;color:var(--muted)">Ref (n−1)/n standard: <strong>${flexRef}x</strong> — enter min guarantee above to compare.</div>`;}
   sEl.style.display='block';
-  sEl.innerHTML=`<div style="font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:8px">TICKET PREVIEW — ${n}-LEG SLIP</div>${ll}${pl}`;
+  sEl.innerHTML=`<div style="font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:8px">TICKET PREVIEW — ${n}-LEG ${flex?'FLEX':'POWER'}</div>${ll}${pl}`;
   scheduleLogDraftSave();
 }
 
-function logTicket(){
+async function logTicket(){
   if(logLegs.length<2){showMsg('⚠ Add at least 2 legs.','warn');return;}
   const am=parseFloat(document.getElementById('log-actual-mult').value);
   if(!am||am<=0){showMsg('⚠ Enter the actual payout multiplier.','warn');return;}
   const n=logLegs.length,platform=document.getElementById('log-platform').value,slipType=document.getElementById('log-slip-type').value,dt=document.getElementById('log-date').value;
-  const bm=PP_BASE[n]||null,nG=logLegs.filter(l=>l.type==='goblin').length,nD=logLegs.filter(l=>l.type==='demon').length,nS=logLegs.filter(l=>l.type==='standard').length;
+  const flex=logSlipIsFlex();
+  const bm=logBaseMultForN(n);
+  const nG=logLegs.filter(l=>l.type==='goblin').length,nD=logLegs.filter(l=>l.type==='demon').length,nS=logLegs.filter(l=>l.type==='standard').length;
   const mc=bm?Math.round(((am/bm)-1)*1000)/10:null;
+  const mgRaw=String(document.getElementById('log-min-guarantee-mult')?.value||'').trim();
+  const minGuaranteeMult=mgRaw?parseFloat(mgRaw):null;
   const legs=logLegs.map(l=>{const s=parseFloat(l.stdLine)||null,p=parseFloat(l.playedLine)||null;const dp=getDeltaPct(s,p);return{type:l.type,player:l.player||'Unknown',sport:l.sport,prop:l.prop,stdLine:s,playedLine:l.type!=='standard'?p:null,distance:(l.type!=='standard'&&s&&p)?Math.round(Math.abs(p-s)*100)/100:null,deltaPct:dp,bucket:getBucket(dp,l.type)};});
   const bSig=[...legs].map(l=>l.bucket||l.type).sort().join(' + '),cSig=[...legs].map(l=>l.type).sort().join(' + ');
-  logEntries.push({id:Date.now(),ts:dt||new Date().toLocaleDateString(),platform,slipType,nLegs:n,nStd:nS,nGob:nG,nDem:nD,baseMult:bm,actualMult:am,multChange:mc,bucketSig:bSig,comboSig:cSig,legs});
-  saveLog(logEntries);renderLogTable();updateLogCount();clearLogForm();
-  showMsg(`✓ Logged! ${logEntries.length} total.`,'good');
+  logEntries.push({id:Date.now(),ts:dt||new Date().toLocaleDateString(),platform,slipType,nLegs:n,nStd:nS,nGob:nG,nDem:nD,baseMult:bm,actualMult:am,multChange:mc,bucketSig:bSig,comboSig:cSig,legs,minGuaranteeMult:(minGuaranteeMult!=null&&!isNaN(minGuaranteeMult))?minGuaranteeMult:null});
+  saveLog(logEntries);renderLogTable();updateLogCount();
+  const wantServer=document.getElementById('log-server-csv')?.checked;
+  if(wantServer){
+    try{
+      const mode=flex?'flex':'power';
+      const estR=await fetch('/api/payout/estimate-mult',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode,legs:logLegs.map(l=>({type:l.type,stdLine:l.stdLine,playedLine:l.playedLine,deltaPct:getDeltaPct(parseFloat(l.stdLine),parseFloat(l.playedLine))}))})});
+      const estJ=estR.ok?await estR.json():{};
+      const estMult=parseFloat(estJ.est_mult)||0;
+      const legBlob={platform,slipType,bucketSig:bSig,comboSig:cSig,min_guarantee_mult:(minGuaranteeMult!=null&&!isNaN(minGuaranteeMult))?minGuaranteeMult:null,legs};
+      const obsR=await fetch('/api/payout/log-observation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:dt||'',n_legs:n,slip_type:mode,combo_label:bSig,base_mult:bm||0,est_mult:estMult,actual_mult:am,stake:'',actual_payout:'',leg_details_json:legBlob})});
+      const obsJ=obsR.ok?await obsR.json():{};
+      if(!obsR.ok||!obsJ.saved)showMsg('⚠ Saved locally; server CSV append failed.','warn');
+      else{
+        if(flex&&minGuaranteeMult!=null&&!isNaN(minGuaranteeMult)&&n>2){
+          const basePartial=FLEX_BASE[n]&&FLEX_BASE[n][n-1];
+          if(basePartial!=null){
+            try{
+              const estR2=await fetch('/api/payout/estimate-mult',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:'flex',hits:n-1,legs:logLegs.map(l=>({type:l.type,stdLine:l.stdLine,playedLine:l.playedLine,deltaPct:getDeltaPct(parseFloat(l.stdLine),parseFloat(l.playedLine))}))})});
+              const estJ2=estR2.ok?await estR2.json():{};
+              const est2=parseFloat(estJ2.est_mult)||0;
+              const legBlob2=Object.assign({},legBlob,{tier:'flex_n_minus_1'});
+              await fetch('/api/payout/log-observation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:dt||'',n_legs:n,slip_type:'flex',combo_label:bSig+'|flex_n-1',base_mult:basePartial,est_mult:est2,actual_mult:minGuaranteeMult,stake:'',actual_payout:'',leg_details_json:legBlob2})});
+            }catch(_){/* optional second row */}
+          }
+        }
+        if(obsJ.warning_large_delta)showMsg(`✓ Logged! CSV row(s) added (large Δ vs model — check). ${logEntries.length} total.`,'good');
+        else showMsg(`✓ Logged + server row (${obsJ.total_obs||'?'} obs). ${logEntries.length} total.`,'good');
+      }
+    }catch(e){showMsg('⚠ Saved locally; server CSV error.','warn');}
+  }else showMsg(`✓ Logged! ${logEntries.length} total.`,'good');
+  clearLogForm();
 }
 function showMsg(m,t){const e=document.getElementById('log-msg');e.textContent=m;e.style.color=t==='good'?'var(--green)':t==='warn'?'var(--amber)':'var(--red)';setTimeout(()=>e.textContent='',3500);}
 function deleteEntry(id){logEntries=logEntries.filter(e=>e.id!==id);saveLog(logEntries);renderLogTable();updateLogCount();}
@@ -1497,9 +1575,10 @@ function renderLogTable(){
     const sc=sCol(e.multChange),cs=e.multChange!==null?`<span style="color:${sc};font-weight:700">${e.multChange>=0?'+':''}${e.multChange.toFixed(1)}%</span>`:'—';
     const mx=[];if(e.nStd)mx.push(`<span class="tag tag-standard">${e.nStd}⭐</span>`);if(e.nGob)mx.push(`<span class="tag tag-goblin">${e.nGob}🎃</span>`);if(e.nDem)mx.push(`<span class="tag tag-demon">${e.nDem}😈</span>`);
     const ld=(e.legs||[]).map(l=>{const ic=l.type==='goblin'?'🎃':l.type==='demon'?'😈':'⭐';const cl=l.type==='goblin'?'var(--goblin)':l.type==='demon'?'var(--demon)':'var(--std)';const ls=(l.stdLine&&l.playedLine&&l.type!=='standard')?` <span style="color:${cl};font-size:10px">(${l.stdLine}→${l.playedLine} Δ%=${l.deltaPct})</span>`:l.stdLine?` <span style="color:var(--muted);font-size:10px">Line:${l.stdLine}</span>`:'';return `<div style="font-size:10px;color:var(--muted);line-height:1.7">${ic} <span style="color:${cl}">${l.player}</span> · ${l.sport} ${l.prop}${ls}</div>`;}).join('');
-    return `<tr><td style="font-size:11px;color:var(--muted)">${e.ts}</td><td style="font-size:10px;color:var(--muted)">${e.platform}</td><td><div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px">${mx.join('')}</div><div style="font-size:10px;color:var(--muted)">${e.nLegs}-leg</div></td><td>${ld}</td><td class="mono" style="font-size:12px">${e.baseMult?e.baseMult+'x':'—'}</td><td class="mono" style="font-size:14px;color:${sc};font-weight:700">${e.actualMult}x</td><td>${cs}</td><td><button class="del-btn" onclick="deleteEntry(${e.id})">✕</button></td></tr>`;
+    const mg=e.minGuaranteeMult!=null&&!isNaN(e.minGuaranteeMult)?`<span class="mono" style="font-size:12px">${e.minGuaranteeMult}x</span>`:'—';
+    return `<tr><td style="font-size:11px;color:var(--muted)">${e.ts}</td><td style="font-size:10px;color:var(--muted)">${e.platform}</td><td><div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px">${mx.join('')}</div><div style="font-size:10px;color:var(--muted)">${e.nLegs}-leg${String(e.slipType||'').toLowerCase().includes('flex')?' flex':''}</div></td><td>${ld}</td><td class="mono" style="font-size:12px">${e.baseMult!=null&&e.baseMult!==''?e.baseMult+'x':'—'}</td><td class="mono" style="font-size:14px;color:${sc};font-weight:700">${e.actualMult}x</td><td style="text-align:center">${mg}</td><td>${cs}</td><td><button class="del-btn" onclick="deleteEntry(${e.id})">✕</button></td></tr>`;
   }).join('');
-  w.innerHTML=`<div style="overflow-x:auto"><table class="log-table"><thead><tr><th>DATE</th><th>PLATFORM</th><th>MIX</th><th>LEGS</th><th>BASE</th><th>ACTUAL</th><th>SHIFT</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  w.innerHTML=`<div style="overflow-x:auto"><table class="log-table"><thead><tr><th>DATE</th><th>PLATFORM</th><th>MIX</th><th>LEGS</th><th>BASE</th><th>ACTUAL</th><th>FLEX n−1</th><th>SHIFT</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
 /* ─── PATTERNS ─── */
@@ -1685,6 +1764,8 @@ function bindTopDecimals(){
   if(m)m.addEventListener('blur',()=>blurDecimalField(m,{min:0.01,max:1e6,allowEmpty:true}));
   if(s)s.addEventListener('blur',()=>blurDecimalField(s,{min:0.01,max:1e6}));
   if(a)a.addEventListener('blur',()=>{blurDecimalField(a,{min:0.01,max:1e6,allowEmpty:true});refreshLogSummary();});
+  const g=document.getElementById('log-min-guarantee-mult');
+  if(g)g.addEventListener('blur',()=>{blurDecimalField(g,{min:0,max:1e6,allowEmpty:true});refreshLogSummary();});
 }
 function fileToBase64(file){
   return new Promise((resolve,reject)=>{
@@ -1798,6 +1879,7 @@ addCalcLeg('goblin');
 updateLogCount();
 renderLogTable();
 loadLogDraft();
+onLogSlipTypeChange();
 renderLogLegs();
 refreshLogSummary();
 bindTopDecimals();
