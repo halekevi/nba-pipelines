@@ -118,6 +118,3 @@ NBA/schedule_cache_*.csv
 !NHL/step8_nhl_direction_clean.xlsx
 !Soccer/step8_soccer_direction_clean.xlsx
 !MLB/step8_mlb_direction_clean.xlsx
-
-# Optional machine-local grader wrapper (same logic as a trimmed run_grader.ps1; keep local if you use it)
-scripts/run_grader-Travel-PC.ps1
