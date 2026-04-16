@@ -32,8 +32,25 @@ def test_2leg_1goblin():
         {"pick_type": "standard", "line_distance": 0, "hit_prob": 0.65},
     ]
     result = compute_ticket_ev(legs, "power", 2)
-    assert result["first_place_payout"] < 3.0
+    # 2-leg Power sweep stays at the published cap; Goblin reduces the min tier instead.
+    assert result["first_place_payout"] == 3.0
+    assert result["min_guarantee"] < 3.0
     assert result["min_guarantee_adjustment"] < 1.0
+
+
+def test_6leg_all_goblin_power_below_standard_board():
+    legs = [
+        {"pick_type": "goblin", "line_distance": 0.0, "hit_prob": 0.65},
+        {"pick_type": "goblin", "line_distance": 0.0, "hit_prob": 0.65},
+        {"pick_type": "goblin", "line_distance": 0.0, "hit_prob": 0.65},
+        {"pick_type": "goblin", "line_distance": 0.0, "hit_prob": 0.65},
+        {"pick_type": "goblin", "line_distance": 0.0, "hit_prob": 0.65},
+        {"pick_type": "goblin", "line_distance": 0.0, "hit_prob": 0.65},
+    ]
+    result = compute_ticket_ev(legs, "power", 6)
+    assert result["first_place_payout"] < 20.0
+    assert result["min_guarantee"] < 20.0
+    assert result["first_place_payout"] == pytest.approx(result["min_guarantee"], rel=0, abs=0.02)
 
 
 def test_smoke_dry_run():

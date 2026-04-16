@@ -425,8 +425,9 @@ def goblin_min_factor(dist: float) -> float:
 
 def _compute_power_min_guarantee(legs: list, n_legs: int) -> tuple[float, int]:
     """
-    Power-play min guarantee by all-standard base × per-leg distance adjustments.
-    Sweep payout remains SWEEP_PAYOUT[n] regardless of goblin/demon distance.
+    Power-play min guarantee by all-standard base × per-leg Goblin/Demon distance factors.
+    (Sweep for mixed tickets is handled separately in compute_ticket_ev; all-Goblin Power uses
+    a dedicated scaled path so we do not show Standard-tier jackpots on Goblin-only slips.)
     """
     n = int(n_legs)
     base = float(POWER_MIN_GUARANTEE_STANDARD.get(n, 1.6))
@@ -462,6 +463,42 @@ def _compute_power_min_guarantee(legs: list, n_legs: int) -> tuple[float, int]:
     return mg, g_count
 
 
+def _all_goblin_power_legs(legs: list, n: int) -> bool:
+    """True when this is an n-leg Power slip with every leg marked Goblin (no Std/Demon)."""
+    if n < 1:
+        return False
+    mx = _mix_signature_from_legs(legs)
+    return (
+        int(mx.get("goblin", 0)) == int(n)
+        and int(mx.get("standard", 0)) == 0
+        and int(mx.get("demon", 0)) == 0
+    )
+
+
+def _all_goblin_power_sweep_min_from_standard_tier(legs: list, n: int) -> tuple[float, float]:
+    """
+    PrizePicks all-Goblin Power boards pay far below all-Standard; there is often no ladder row
+    beyond 3 legs. Scale the published Standard sweep + min tier by the empirical Goblin
+    per-leg factor product (same family as Flex EV adjustments).
+    """
+    prod = 1.0
+    for leg in legs or []:
+        try:
+            d = abs(float(leg.get("line_distance", 0.0) or 0.0))
+            if not math.isfinite(d):
+                d = 0.0
+        except (TypeError, ValueError):
+            d = 0.0
+        prod *= float(goblin_per_leg_factor(d))
+    std_sw = float(SWEEP_PAYOUT.get(int(n), 6.0))
+    std_mn = float(POWER_MIN_GUARANTEE_STANDARD.get(int(n), std_sw))
+    sweep = round(max(1.05, std_sw * prod), 4)
+    mn = round(max(1.0, std_mn * prod), 4)
+    if mn > sweep:
+        mn = sweep
+    return sweep, mn
+
+
 def compute_ticket_ev(
     legs: list,
     ticket_type: str,
@@ -470,8 +507,9 @@ def compute_ticket_ev(
     """
     EV (per $1 stake style) using empirical payout formula.
 
-    Power: sweep = SWEEP_PAYOUT[n] (all-correct jackpot unchanged by goblin),
-           min guarantee = composition-based n-1 tier (standard/goblin interpolation).
+    Power: all-Standard uses SWEEP_PAYOUT / POWER_MIN_GUARANTEE_STANDARD (see ladder + 6-leg fix).
+           Mixed or all-Goblin uses ladder when present; otherwise all-Goblin Power is scaled down
+           from the Standard tier by the Goblin per-leg factor product (sweep is not 40× on 6 Goblin).
     Flex: FLEX_GUARANTEE payouts × per-leg goblin/demon adjustment product.
     """
     n = int(n_legs)
@@ -520,8 +558,14 @@ def compute_ticket_ev(
             adjusted_first = float(SWEEP_PAYOUT.get(6, 40.0))
             adjusted_min_g = float(POWER_MIN_GUARANTEE_STANDARD.get(6, 40.0))
 
+    # All-Goblin Power: never inherit Standard 40× sweep + PP "all-standard" sweep clamps.
+    if tt == "power" and _all_goblin_power_legs(legs, n) and payout_source != "exact":
+        adjusted_first, adjusted_min_g = _all_goblin_power_sweep_min_from_standard_tier(legs, n)
+        payout_source = "calibrated"
+
     bounds = KNOWN_SWEEP_BOUNDS.get((n, tt))
-    if bounds:
+    skip_sweep_bounds = tt == "power" and _all_goblin_power_legs(legs, n) and payout_source != "exact"
+    if bounds and not skip_sweep_bounds:
         lo, hi = float(bounds[0]), float(bounds[1])
         adjusted_first = max(lo, min(hi, float(adjusted_first)))
         if tt == "flex":
