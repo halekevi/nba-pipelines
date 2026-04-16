@@ -437,7 +437,9 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
     """
     Empirical payout model vs graded leg outcomes for ticket_eval HTML.
 
-    ``ticket`` may include ``payout`` from tickets_latest.json; older slips omit it (graceful N/A).
+    ``ticket`` may include ``payout`` from tickets_latest.json (full empirical block). Tickets loaded
+    from ``combined_slate_tickets_*.xlsx`` only have ``power_payout`` / ``flex_payout`` from the sheet
+    banner — we fall back to those so Predicted / Actual are not N/A and Power wins are not $0.
     """
     pay = ticket.get("payout")
     payd: dict[str, Any] = pay if isinstance(pay, dict) else {}
@@ -452,14 +454,23 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
 
     paid = _ticket_pays_money(group_name, leg_grades)
 
+    flex = _ticket_is_flex_play_structure(group_name, n)
+    banner_pow = _safe_float_ticket(ticket.get("power_payout")) or 0.0
+    banner_flex = _safe_float_ticket(ticket.get("flex_payout")) or 0.0
+
     min_x = _safe_float_ticket(payd.get("payout")) or _safe_float_ticket(payd.get("min_guarantee"))
-    if min_x is None:
-        min_x = 0.0
+    if min_x is None or min_x <= 0:
+        # Excel-combined path: flex cash floor lives on flex_payout; power min tier matches banner power.
+        if flex and banner_flex > 0:
+            min_x = float(banner_flex)
+        elif banner_pow > 0:
+            min_x = float(banner_pow)
+        else:
+            min_x = 0.0
+
     sweep_x = _safe_float_ticket(payd.get("sweep_payout")) or _safe_float_ticket(payd.get("first_place"))
     if sweep_x is None or sweep_x <= 0:
-        sweep_x = _safe_float_ticket(ticket.get("power_payout")) or 0.0
-
-    flex = _ticket_is_flex_play_structure(group_name, n)
+        sweep_x = float(banner_pow) if banner_pow > 0 else 0.0
 
     if not paid:
         result = "LOSS"
@@ -478,13 +489,24 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
             css = "min_guarantee"
             actual = float(min_x)
     else:
-        # Power (and other non-flex): cashing slip pays the min-guarantee multiplier, not sweep.
+        # Power Play: all legs correct pays the full board (sweep) multiplier on PrizePicks.
         result = "WIN"
         emoji = "✅"
         css = "win"
-        actual = float(min_x)
+        pay_win = float(sweep_x) if sweep_x > 0 else float(min_x)
+        actual = pay_win
 
     pred_pay = _safe_float_ticket(payd.get("payout")) or _safe_float_ticket(payd.get("min_guarantee"))
+    if pred_pay is None or pred_pay <= 0:
+        if flex and banner_flex > 0:
+            pred_pay = float(banner_flex)
+        elif banner_pow > 0:
+            pred_pay = float(banner_pow)
+        else:
+            pred_pay = None
+    # XLSX-only tickets: flex sweep pays the power-board multiplier; show that as predicted, not the 1-miss floor.
+    if not payd and flex and paid and all_hit and banner_pow > 0:
+        pred_pay = float(banner_pow)
     pred_ev = _safe_float_ticket(payd.get("ev"))
     pred_p = _safe_float_ticket(payd.get("p_all_win"))
     rec = str(payd.get("recommendation") or "").strip()
@@ -1297,12 +1319,36 @@ def _clean_team_abbr(s: str) -> str:
 
 
 def _parse_ticket_banner(s: str) -> tuple[float, float, int]:
+    """Parse power/flex multipliers from combined ticket sheet banner row (col A)."""
     m_no = re.search(r"Ticket\s*#?\s*(\d+)", s, re.I)
     ticket_no = int(m_no.group(1)) if m_no else 1
-    m_pow = re.search(r"Power:\s*([\d.]+)\s*x", s, re.I)
-    m_flex = re.search(r"Flex:\s*([\d.]+)\s*x", s, re.I)
-    power = float(m_pow.group(1)) if m_pow else 0.0
-    flex = float(m_flex.group(1)) if m_flex else 0.0
+
+    def _first_float(patterns: list[str]) -> float:
+        for pat in patterns:
+            m = re.search(pat, s, re.I)
+            if not m:
+                continue
+            try:
+                return float(m.group(1))
+            except ValueError:
+                continue
+        return 0.0
+
+    # Workbooks use ``×`` (U+00D7) or ``x``; some rows use ``PWR`` / ``FLEX`` instead of ``Power:`` / ``Flex:``.
+    x_or_times = r"[x×]"
+    power = _first_float(
+        [
+            rf"Power:\s*([\d.]+)\s*{x_or_times}?",
+            rf"\bPWR\s*([\d.]+)\s*{x_or_times}?",
+        ]
+    )
+    # Require a times marker for ``FLEX`` so we do not treat ``Flex 3-Leg`` as a multiplier.
+    flex = _first_float(
+        [
+            rf"Flex:\s*([\d.]+)\s*{x_or_times}?",
+            rf"\bFLEX\s*([\d.]+)\s*{x_or_times}",
+        ]
+    )
     return power, flex, ticket_no
 
 
@@ -1451,11 +1497,15 @@ def _parse_ticket_sheet(ws: Any) -> list[dict[str, Any]]:
             continue
         r0 = row[0] if row else None
         s0 = str(r0 or "").strip()
-        is_banner = (
-            s0
-            and "ticket #" in s0.lower()
-            and ("power:" in s0.lower() or "flex:" in s0.lower())
+        s_lower = s0.lower()
+        has_ticket_no = "ticket #" in s_lower
+        has_payout_hint = bool(
+            re.search(r"power:\s*[\d.]+", s0, re.I)
+            or re.search(r"flex:\s*[\d.]+", s0, re.I)
+            or re.search(r"\bpwr\s*[\d.]+", s0, re.I)
+            or re.search(r"\bflex\s*[\d.]+\s*[x×]", s0, re.I)
         )
+        is_banner = bool(s0 and has_ticket_no and has_payout_hint)
         if is_banner:
             if current is not None and current.get("legs"):
                 tickets.append(current)
