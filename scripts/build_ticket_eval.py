@@ -3195,6 +3195,11 @@ def _build_html(
 
 
 def main() -> int:
+    logging.basicConfig(
+        level=logging.WARNING,
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
     ap = argparse.ArgumentParser(description="Build ticket_eval HTML for Grades UI.")
     ap.add_argument(
         "--date",
