@@ -113,7 +113,7 @@ except ImportError:
     _APP_USES_FLASK_COMPRESS = False
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-04-15-tennis-slate-status"
+_UI_BUILD_ID = "2026-04-16-global-scrollbar"
 
 
 def _deploy_git_sha_short() -> str:
