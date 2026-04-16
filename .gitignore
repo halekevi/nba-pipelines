@@ -1,5 +1,6 @@
 # Python
 __pycache__/
+**/__pycache__/
 *.py[cod]
 *.pyo
 *.pyd
@@ -22,6 +23,7 @@ Thumbs.db
 desktop.ini
 .vscode/
 .idea/
+.claude/
 # Local clone of personal Cursor profile repo (see README inside that folder)
 cursor-profile/
 
@@ -40,9 +42,12 @@ cursor-profile/
 *.sqlite3
 
 # SQLite databases — local only, not synced to OneDrive
+data/cache/
 data/cache/*.db
 data/cache/*.db-wal
 data/cache/*.db-shm
+Tennis/cache/
+MLB/mlb_stats_cache.csv
 
 # Fetch error log — local only
 logs/fetch_errors.log
@@ -99,6 +104,7 @@ ui_runner/static/Logo Design Request_files/
 ui_runner/static/Logo Design Request2_files/
 
 # Docs/temp/patch leftovers
+*.bak_*
 
 git_push_log.txt
 patch_replacement.txt
@@ -118,3 +124,7 @@ NBA/schedule_cache_*.csv
 !NHL/step8_nhl_direction_clean.xlsx
 !Soccer/step8_soccer_direction_clean.xlsx
 !MLB/step8_mlb_direction_clean.xlsx
+
+# Local run artifacts
+combined_slate_tickets_*.xlsx
+ui_runner/graded_slate/
