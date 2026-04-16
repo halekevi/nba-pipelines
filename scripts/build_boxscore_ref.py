@@ -40,9 +40,11 @@ Primary key on all tables: (event_id, player, team)
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import sqlite3
 import sys
+import threading
 
 try:
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -50,9 +52,10 @@ try:
 except Exception:
     pass
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, timedelta
 from pathlib import Path
-from typing import Optional
+from typing import Callable, Optional, TypeVar
 
 import requests
 
@@ -66,6 +69,47 @@ HEADERS = {
     ),
     "Accept": "application/json",
 }
+
+# requests.Session is not documented as thread-safe; use one session per worker thread.
+_thread_local = threading.local()
+
+
+def _http_session() -> requests.Session:
+    s = getattr(_thread_local, "session", None)
+    if s is None:
+        s = requests.Session()
+        s.headers.update(HEADERS)
+        _thread_local.session = s
+    return s
+
+
+def _summary_fetch_workers() -> int:
+    raw = os.environ.get("PROPORACLE_ESPN_SUMMARY_WORKERS", "").strip()
+    if raw.isdigit():
+        return max(1, min(12, int(raw)))
+    return 6
+
+
+T = TypeVar("T")
+
+
+def _parallel_flatmap(fn: Callable[[T], list], items: list[T]) -> list:
+    """Run I/O-bound per-item work in a small thread pool; flatten list results."""
+    if not items:
+        return []
+    workers = min(_summary_fetch_workers(), len(items))
+    if workers <= 1:
+        out: list = []
+        for it in items:
+            out.extend(fn(it))
+        return out
+    out = []
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        futs = [ex.submit(fn, it) for it in items]
+        for fut in as_completed(futs):
+            out.extend(fut.result())
+    return out
+
 
 # ── ESPN URL templates ─────────────────────────────────────────────────────────
 NBA_SCOREBOARD  = "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates={date}&limit=100&page={page}"
@@ -435,7 +479,7 @@ def _str_or_none(v):
 def _get(url: str, retries: int = 3) -> Optional[dict]:
     for attempt in range(1, retries + 1):
         try:
-            r = requests.get(url, headers=HEADERS, timeout=20)
+            r = _http_session().get(url, timeout=20)
             if r.status_code == 429:
                 wait = 30 * attempt
                 print(f"    ⚠️  429 rate-limit — sleeping {wait}s")
@@ -605,19 +649,24 @@ def fetch_nba(date_str: str, con: sqlite3.Connection) -> int:
             break
         events = data.get("events", [])
         page_count = data.get("pageCount", 1)
-        new = 0
+        work: list[tuple[str, str, str]] = []
         for ev in events:
             eid = str(ev.get("id", ""))
             if eid in seen or not _is_final(ev):
                 continue
             seen.add(eid)
-            home, away = _team_names(ev)
+            work.append((eid, *_team_names(ev)))
+
+        def _nba_one(item: tuple[str, str, str]) -> list[dict]:
+            eid, home, away = item
             box = _get(NBA_SUMMARY.format(event_id=eid))
-            if box:
-                rows = _parse_bball_boxscore(box, eid, date_str, home, away, "NBA")
-                all_rows.extend(rows)
-                new += len(rows)
-            time.sleep(0.2)
+            if not box:
+                return []
+            return _parse_bball_boxscore(box, eid, date_str, home, away, "NBA")
+
+        page_rows = _parallel_flatmap(_nba_one, work)
+        all_rows.extend(page_rows)
+        new = len(page_rows)
         print(f"  NBA page {page}/{page_count}: {len(events)} events, {new} rows")
         if page >= page_count or not events:
             break
@@ -646,17 +695,22 @@ def fetch_cbb(date_str: str, con: sqlite3.Connection) -> int:
                 break
             events = data.get("events", [])
             page_count = data.get("pageCount", 1)
+            work: list[tuple[str, str, str]] = []
             for ev in events:
                 eid = str(ev.get("id", ""))
                 if eid in seen or not _is_final(ev):
                     continue
                 seen.add(eid)
-                home, away = _team_names(ev)
+                work.append((eid, *_team_names(ev)))
+
+            def _cbb_one(item: tuple[str, str, str]) -> list[dict]:
+                eid, home, away = item
                 box = _get(CBB_SUMMARY.format(event_id=eid))
-                if box:
-                    rows = _parse_bball_boxscore(box, eid, date_str, home, away, "CBB")
-                    all_rows.extend(rows)
-                time.sleep(0.15)
+                if not box:
+                    return []
+                return _parse_bball_boxscore(box, eid, date_str, home, away, "CBB")
+
+            all_rows.extend(_parallel_flatmap(_cbb_one, work))
             if page >= page_count or not events:
                 break
             page += 1
@@ -744,17 +798,21 @@ def fetch_nhl(date_str: str, con: sqlite3.Connection) -> int:
     if not data:
         return 0
     events = data.get("events", [])
-    all_rows = []
+    work: list[tuple[str, str, str]] = []
     for ev in events:
         eid = str(ev.get("id", ""))
         if not _is_final(ev):
             continue
-        home, away = _team_names(ev)
+        work.append((eid, *_team_names(ev)))
+
+    def _nhl_one(item: tuple[str, str, str]) -> list[dict]:
+        eid, home, away = item
         box = _get(NHL_SUMMARY.format(event_id=eid))
-        if box:
-            rows = _parse_nhl_boxscore(box, eid, date_str, home, away)
-            all_rows.extend(rows)
-        time.sleep(0.2)
+        if not box:
+            return []
+        return _parse_nhl_boxscore(box, eid, date_str, home, away)
+
+    all_rows = _parallel_flatmap(_nhl_one, work)
     print(f"  NHL: {len(events)} events, {len(all_rows)} rows")
     return _upsert(con, "nhl", all_rows)
 
@@ -911,27 +969,37 @@ def fetch_soccer(date_str: str, con: sqlite3.Connection) -> int:
             continue
         events = data.get("events", [])
         league_rows = 0
+        work: list[tuple[str, str, str, str]] = []
+        ev_by_eid: dict[str, dict] = {}
         for ev in events:
             eid = str(ev.get("id", ""))
             if eid in seen or not _is_final(ev):
                 continue
             seen.add(eid)
+            ev_by_eid[eid] = ev
             home, away = _team_names(ev)
-            box = _get(SOC_SUMMARY.format(league=league_id, event_id=eid))
-            if box:
-                rows = _parse_soccer_boxscore(box, eid, date_str, home, away, league_id)
-                # Diagnostic when 0 rows parsed
-                if not rows:
-                    rosters = box.get("rosters", [])
-                    if rosters:
-                        first_entry = (rosters[0].get("roster") or [{}])[0]
-                        abbrevs = [s.get("abbreviation", "?")
-                                   for s in (first_entry.get("stats") or [])
-                                   if isinstance(s, dict)]
-                        print(f"    ⚠️  {ev.get('shortName','?')} — 0 rows. ESPN abbrevs: {abbrevs}")
-                all_rows.extend(rows)
-                league_rows += len(rows)
-            time.sleep(0.2)
+            work.append((eid, home, away, league_id))
+
+        def _soc_one(item: tuple[str, str, str, str]) -> list[dict]:
+            eid, home, away, lid = item
+            box = _get(SOC_SUMMARY.format(league=lid, event_id=eid))
+            if not box:
+                return []
+            rows = _parse_soccer_boxscore(box, eid, date_str, home, away, lid)
+            if not rows:
+                ev = ev_by_eid.get(eid, {})
+                rosters = box.get("rosters", [])
+                if rosters:
+                    first_entry = (rosters[0].get("roster") or [{}])[0]
+                    abbrevs = [s.get("abbreviation", "?")
+                               for s in (first_entry.get("stats") or [])
+                               if isinstance(s, dict)]
+                    print(f"    ⚠️  {ev.get('shortName','?')} — 0 rows. ESPN abbrevs: {abbrevs}")
+            return rows
+
+        batch = _parallel_flatmap(_soc_one, work)
+        all_rows.extend(batch)
+        league_rows = len(batch)
         if league_rows:
             print(f"  {league_name}: {len(events)} events, {league_rows} rows")
         time.sleep(0.3)
