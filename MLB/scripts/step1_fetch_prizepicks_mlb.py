@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 import time
@@ -449,6 +450,13 @@ def fetch_via_playwright(timeout_s: int = 90) -> Tuple[List[dict], List[dict]]:
             time.sleep(9)
         except Exception as e:
             print(f"  ⚠️  Page load warning (continuing): {e}")
+
+        if os.environ.get("PROPORACLE_LOG_PLAYWRIGHT_UA", "").strip().lower() in ("1", "true", "yes"):
+            try:
+                ua = page.evaluate("navigator.userAgent")
+                print(f"  [step1 MLB] navigator.userAgent={ua}")
+            except Exception as ex:
+                print(f"  [step1 MLB] navigator.userAgent (unavailable): {type(ex).__name__}: {ex}")
 
         # Auto-scroll/trigger sequence — nudges lazy API calls immediately
         # No manual window: scheduled runs can't have human interaction
