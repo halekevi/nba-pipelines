@@ -474,7 +474,9 @@ function Run-Combined {
     $nba1qFile  = "$NBADir\step8_nba1q_direction_clean.xlsx"
     $nba1hFile  = "$NBADir\step8_nba1h_direction_clean.xlsx"
 
-    if (-not (Test-Path $nbaFile)) { Write-Host "  WARNING: NBA step8 not found -- skipping combined" -ForegroundColor Yellow; return $false }
+    if (-not (Test-Path $nbaFile)) {
+        Write-Host "  WARNING: NBA step8 not found -- combined will run with 0 NBA props (other sports only)" -ForegroundColor Yellow
+    }
 
     Invoke-AltBookFetches
 

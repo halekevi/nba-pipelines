@@ -8103,11 +8103,15 @@ def main():
     }
 
     print(f"Loading NBA slate from {args.nba}...")
-    nba = load_nba(args.nba)
-    nba = enforce_target_date(
-        nba, "NBA", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
-    )
-    print(f"  {len(nba)} NBA props loaded")
+    try:
+        nba = load_nba(args.nba)
+        nba = enforce_target_date(
+            nba, "NBA", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+        )
+        print(f"  {len(nba)} NBA props loaded")
+    except (FileNotFoundError, OSError) as e:
+        print(f"  WARNING: NBA slate unavailable ({type(e).__name__}: {e}); continuing with 0 NBA props.")
+        nba = pd.DataFrame()
     _load_audit_row("NBA", args.nba, nba)
 
     if "CBB" in DISABLED_SPORTS:
