@@ -335,6 +335,7 @@ def fetch_via_direct_api(
     inter_max: float,
     session_min: float,
     session_max: float,
+    first_page_waves: int,
 ) -> Tuple[List[dict], List[dict]]:
     mod = _load_prizepicks_api_module()
     return mod.fetch_projections(
@@ -344,6 +345,7 @@ def fetch_via_direct_api(
         retries=retries,
         inter_page_delay=(inter_min, inter_max),
         session_jitter=(session_min, session_max),
+        first_page_waves=first_page_waves,
     )
 
 
@@ -610,7 +612,13 @@ def main():
     )
     ap.add_argument("--per-page", type=int, default=250, help="Direct API: per_page (default 250).")
     ap.add_argument("--max-pages", type=int, default=8, help="Direct API: max pagination pages (default 8).")
-    ap.add_argument("--api-retries", type=int, default=12, help="Direct API: retries per GET (default 12; PrizePicks often returns 403 until a profile sticks).")
+    ap.add_argument("--api-retries", type=int, default=15, help="Direct API: retries per GET inside each session wave (default 15).")
+    ap.add_argument(
+        "--api-session-waves",
+        type=int,
+        default=4,
+        help="Direct API: fresh TCP session attempts if page-1 still fails after all retries (default 4).",
+    )
     ap.add_argument("--api-inter-min", type=float, default=6.0, help="Direct API: min seconds between paginated requests.")
     ap.add_argument("--api-inter-max", type=float, default=14.0, help="Direct API: max seconds between paginated requests.")
     ap.add_argument("--api-session-min", type=float, default=5.0, help="Direct API: min seconds before first request.")
@@ -635,7 +643,8 @@ def main():
     elif not use_playwright:
         print(
             f"[step1] MLB fetch (direct_api) | league_id={MLB_LEAGUE_ID} | "
-            f"per_page={args.per_page} max_pages={args.max_pages}"
+            f"per_page={args.per_page} max_pages={args.max_pages} | "
+            f"retries={args.api_retries} session_waves={args.api_session_waves}"
         )
         try:
             data, included = fetch_via_direct_api(
@@ -646,6 +655,7 @@ def main():
                 inter_max=float(args.api_inter_max),
                 session_min=float(args.api_session_min),
                 session_max=float(args.api_session_max),
+                first_page_waves=int(args.api_session_waves),
             )
         except Exception as e:
             data, included = [], []

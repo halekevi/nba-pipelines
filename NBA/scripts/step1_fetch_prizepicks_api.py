@@ -6,8 +6,10 @@ Fetches PrizePicks projections directly from the API — no browser, no
 Playwright, no interception. Harder to detect, faster, and fully headless.
 
 Strategy:
-  - Rotates User-Agent strings per request
-  - Uses a persistent requests.Session with realistic headers
+  - Rotates cohesive browser profiles (User-Agent + Sec-CH-UA + platform); full rotation on 403
+  - Optional multi-wave first page: new Session + backoff if all in-wave retries exhaust (MLB uses more waves)
+  - Uses a persistent requests.Session with app.prizepicks.com-style headers
+  - Conservative delays before the first request and between paginated pages
   - Paginates through all projections (per_page=250)
   - Retries with exponential backoff on 429/5xx
   - Validates output row/team counts before writing
@@ -40,6 +42,18 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 import requests
 
+
+def _ensure_utf8_stdio() -> None:
+    """Avoid UnicodeEncodeError on Windows (cp1252) when logs use emoji."""
+    for _stream in (sys.stdout, sys.stderr):
+        reconf = getattr(_stream, "reconfigure", None)
+        if callable(reconf):
+            try:
+                reconf(encoding="utf-8", errors="replace")
+            except Exception:
+                pass
+
+
 # ── constants ─────────────────────────────────────────────────────────────────
 
 BASE_URL = "https://api.prizepicks.com/projections"
@@ -51,29 +65,102 @@ PICKTYPE_MAP = {
     "demon":    "Demon",
 }
 
-# Realistic browser User-Agents — rotated per session
-USER_AGENTS = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0",
+# Conservative pacing when callers do not override (least aggressive defaults).
+DEFAULT_SESSION_JITTER: Tuple[float, float] = (5.0, 12.0)
+DEFAULT_INTER_PAGE_DELAY: Tuple[float, float] = (6.0, 14.0)
+
+# Cohesive browser profiles: Sec-CH-UA major version must match the Chrome/Edg token in User-Agent.
+_BROWSER_PROFILES: List[Dict[str, str]] = [
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/131.0.0.0 Safari/537.36"
+        ),
+        "Sec-Ch-Ua": '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"Windows"',
+    },
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/132.0.0.0 Safari/537.36"
+        ),
+        "Sec-Ch-Ua": '"Google Chrome";v="132", "Chromium";v="132", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"Windows"',
+    },
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/131.0.0.0 Safari/537.36"
+        ),
+        "Sec-Ch-Ua": '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"macOS"',
+    },
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0"
+        ),
+        "Sec-Ch-Ua": '"Microsoft Edge";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"Windows"',
+    },
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/130.0.0.0 Safari/537.36"
+        ),
+        "Sec-Ch-Ua": '"Google Chrome";v="130", "Chromium";v="130", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"Windows"',
+    },
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/133.0.0.0 Safari/537.36"
+        ),
+        "Sec-Ch-Ua": '"Google Chrome";v="133", "Chromium";v="133", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"Windows"',
+    },
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/133.0.0.0 Safari/537.36"
+        ),
+        "Sec-Ch-Ua": '"Google Chrome";v="133", "Chromium";v="133", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"macOS"',
+    },
 ]
 
-# Base headers that look like a real browser
-BASE_HEADERS = {
-    "Accept":             "application/json, text/plain, */*",
-    "Accept-Language":    "en-US,en;q=0.9",
-    "Accept-Encoding":    "gzip, deflate, br",
-    "Connection":         "keep-alive",
-    "Referer":            "https://app.prizepicks.com/",
-    "Origin":             "https://app.prizepicks.com",
-    "Sec-Fetch-Dest":     "empty",
-    "Sec-Fetch-Mode":     "cors",
-    "Sec-Fetch-Site":     "same-site",
-    "Sec-Ch-Ua-Platform": '"Windows"',
-    "DNT":                "1",
-}
+
+def _browser_headers_from_profile(profile: Dict[str, str]) -> Dict[str, str]:
+    """Full header set for a PrizePicks API XHR (matches app.prizepicks.com origin)."""
+    return {
+        **profile,
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Referer": "https://app.prizepicks.com/",
+        "Origin": "https://app.prizepicks.com",
+        "Connection": "keep-alive",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-site",
+        "Priority": "u=1, i",
+    }
+
+
+def _random_browser_headers() -> Dict[str, str]:
+    return _browser_headers_from_profile(random.choice(_BROWSER_PROFILES))
+
+
+def _rotate_session_headers(session: requests.Session) -> None:
+    session.headers.clear()
+    session.headers.update(_random_browser_headers())
 
 
 def _default_et_date_str() -> str:
@@ -123,13 +210,12 @@ def _norm_team(s: Any) -> str:
     return str(s or "").strip().upper()
 
 
-def _make_session() -> requests.Session:
-    """Create a session with realistic headers and a random User-Agent."""
+def _make_session(session_jitter: Tuple[float, float] | None = None) -> requests.Session:
+    """Create a session with a random cohesive browser profile; pause before first request."""
     s = requests.Session()
-    ua = random.choice(USER_AGENTS)
-    s.headers.update({**BASE_HEADERS, "User-Agent": ua})
-    # Brief pause before first request — looks more human
-    time.sleep(random.uniform(0.5, 1.5))
+    _rotate_session_headers(s)
+    lo, hi = session_jitter if session_jitter is not None else DEFAULT_SESSION_JITTER
+    time.sleep(random.uniform(lo, hi))
     return s
 
 
@@ -140,31 +226,31 @@ def _api_get(
     retries: int = 5,
     timeout: Tuple[float, float] = (10.0, 30.0),
 ) -> dict:
-    """Stateless GET — builds URL manually to avoid params-encoding 403 issues."""
-    import urllib.parse
-    qs = urllib.parse.urlencode(params)
-    full_url = f"{url}?{qs}"
-    WORKING_HEADERS = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-        "Accept":     "application/json, text/plain, */*",
-        "Referer":    "https://app.prizepicks.com/",
-        "Origin":     "https://app.prizepicks.com",
-    }
     """
-    GET with retry logic:
+    GET with session headers (cohesive UA + Sec-CH-UA). Builds query string manually
+    for the first page to avoid rare encoding-related 403s.
+
+    Retry logic:
       - 429 → long backoff (60-120s) then retry
+      - 403 → new full browser profile + longer pause
       - 5xx → exponential backoff
-      - Other errors → exponential backoff
     Raises RuntimeError after all retries exhausted.
     """
+    import urllib.parse
+
+    if params:
+        qs = urllib.parse.urlencode(params)
+        full_url = f"{url}?{qs}" if qs else url
+    else:
+        full_url = url
+
     last_exc = None
     for attempt in range(1, retries + 1):
         try:
-            # Small jitter between every request
             if attempt > 1:
-                time.sleep(random.uniform(1.0, 3.0))
+                time.sleep(random.uniform(2.5, 6.5))
 
-            r = requests.get(full_url, headers=WORKING_HEADERS, timeout=timeout)
+            r = session.get(full_url, timeout=timeout)
 
             if r.status_code == 429:
                 wait = random.uniform(60.0, 120.0)
@@ -173,10 +259,15 @@ def _api_get(
                 continue
 
             if r.status_code == 403:
-                print(f"  [403] Forbidden on attempt {attempt}/{retries} — rotating headers")
-                # Swap User-Agent and retry
-                session.headers.update({"User-Agent": random.choice(USER_AGENTS)})
-                time.sleep(random.uniform(5.0, 15.0))
+                print(f"  [403] Forbidden on attempt {attempt}/{retries} — rotating browser profile")
+                try:
+                    session.cookies.clear()
+                except Exception:
+                    pass
+                _rotate_session_headers(session)
+                # Escalate pause as attempts burn (WAF / bot checks often ease after a longer gap).
+                base = min(55.0, 7.0 + float(attempt) * 4.5)
+                time.sleep(random.uniform(base, base + 14.0))
                 continue
 
             if r.status_code >= 500:
@@ -214,14 +305,21 @@ def fetch_projections(
     per_page: int = 250,
     max_pages: int = 10,
     retries: int = 5,
+    *,
+    inter_page_delay: Tuple[float, float] | None = None,
+    session_jitter: Tuple[float, float] | None = None,
+    first_page_waves: int = 3,
 ) -> Tuple[List[dict], List[dict]]:
     """
     Fetch all projections + included sideloads from PrizePicks API.
     Paginates until no more data or max_pages reached.
     Returns (data_list, included_list).
-    """
-    session = _make_session()
 
+    inter_page_delay: (min_sec, max_sec) random sleep between pagination requests.
+    session_jitter: (min_sec, max_sec) sleep before the first request (new session).
+    first_page_waves: On repeated 403/429 exhaustion for page 1, discard the session,
+        wait, open a fresh session, and retry (helps PrizePicks MLB fetches).
+    """
     all_data: List[dict] = []
     all_included: List[dict] = []
     seen_ids: set = set()
@@ -233,8 +331,41 @@ def fetch_projections(
         "in_game":     "false",
     }
 
-    print(f"  Fetching page 1 (league_id={league_id}, per_page={per_page})...")
-    payload = _api_get(session, BASE_URL, params, retries=retries)
+    waves = max(1, int(first_page_waves))
+    session: requests.Session | None = None
+    payload: dict | None = None
+    for wave in range(waves):
+        if session is not None:
+            try:
+                session.close()
+            except Exception:
+                pass
+            session = None
+        if wave > 0:
+            gap = random.uniform(12.0, 28.0)
+            print(f"  [session-wave {wave + 1}/{waves}] New session after page-1 failure; pausing {gap:.0f}s...")
+            time.sleep(gap)
+
+        if wave == 0:
+            jitter = session_jitter
+        elif session_jitter is not None:
+            lo, hi = session_jitter
+            jitter = (max(1.2, lo * 0.45), max(2.0, hi * 0.55))
+        else:
+            jitter = (2.0, 6.5)
+
+        session = _make_session(session_jitter=jitter)
+        print(f"  Fetching page 1 (league_id={league_id}, per_page={per_page})...")
+        try:
+            payload = _api_get(session, BASE_URL, params, retries=retries)
+            break
+        except RuntimeError as e:
+            if wave + 1 >= waves:
+                raise
+            print(f"  [WARN] Page 1 wave failed ({wave + 1}/{waves}): {e}")
+
+    if payload is None or session is None:
+        raise RuntimeError("fetch_projections: no payload after first-page waves")
 
     data     = payload.get("data") or []
     included = payload.get("included") or []
@@ -250,11 +381,12 @@ def fetch_projections(
     # Check for pagination — some API responses include links.next
     links = payload.get("links") or {}
     page = 2
+    ip_lo, ip_hi = inter_page_delay if inter_page_delay is not None else DEFAULT_INTER_PAGE_DELAY
     while links.get("next") and page <= max_pages:
         next_url = links["next"]
         print(f"  Fetching page {page}...")
-        # Small inter-page delay
-        time.sleep(random.uniform(1.5, 3.0))
+        # Inter-page delay (default gentle; MLB caller can pass slower bounds)
+        time.sleep(random.uniform(ip_lo, ip_hi))
         try:
             payload  = _api_get(session, next_url, {}, retries=retries)
             new_data = payload.get("data") or []
@@ -418,6 +550,7 @@ def main() -> None:
     ap.add_argument("--max_cooldowns",    type=int,   default=3)
     ap.add_argument("--jitter_seconds",   type=float, default=10.0)
     args = ap.parse_args()
+    _ensure_utf8_stdio()
     if args.append and args.replace:
         ap.error("Use either --append or --replace, not both.")
 
