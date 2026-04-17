@@ -4,6 +4,9 @@
 Uses edge_feature_engineering.build_feature_vector(), which applies play-side edge
 (negate raw projection-line edge for explicit UNDER rows) so the `edge` feature matches
 step7b / prop ML conventions. Retrain after that convention change.
+
+Optional: ``--input-csv data/retrain_dataset.csv [--sport NBA] [--dry-run]`` loads
+``result_binary`` as the label and maps CSV columns for ``build_feature_vector``.
 """
 
 from __future__ import annotations
@@ -382,7 +385,81 @@ def _sanitize_sport_with_hint(s: pd.Series, hint: str) -> pd.Series:
     return out
 
 
-def _prepare_features(df: pd.DataFrame) -> pd.DataFrame:
+def _adapt_retrain_csv_for_feature_pipeline(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Map build_retrain_dataset / retrain_dataset.csv columns onto names that
+    `build_feature_vector` reads via `_first_col` / `_direction_series`.
+
+    `_prop_type_key` uses ``stat_type``, ``stat_norm``, ``prop_type``, ``prop_norm`` (not ``prop``).
+    ``edge`` is read only from a column named ``edge`` (coalesce ``edge_score`` here).
+    ``composite_hit_rate`` is filled from ``blended_score`` when present.
+    """
+    out = df.copy()
+    if "prop_type" not in out.columns and "prop" in out.columns:
+        out["prop_type"] = out["prop"].astype(str)
+    if "bet_direction" not in out.columns and "direction" in out.columns:
+        out["bet_direction"] = out["direction"].astype(str).str.strip().str.upper()
+    if "game_date" not in out.columns:
+        fd = (
+            pd.to_datetime(out["file_date"], errors="coerce")
+            if "file_date" in out.columns
+            else pd.Series(pd.NaT, index=out.index)
+        )
+        if "step8_game_date" in out.columns:
+            st = out["step8_game_date"].astype(str).str.strip()
+            st = st.replace("", pd.NA)
+            sg = pd.to_datetime(st, errors="coerce")
+            gd = sg.where(sg.notna(), fd)
+        else:
+            gd = fd
+        out["game_date"] = gd
+
+    e = pd.to_numeric(out["edge"], errors="coerce") if "edge" in out.columns else pd.Series(np.nan, index=out.index)
+    if "edge_score" in out.columns:
+        es = pd.to_numeric(out["edge_score"], errors="coerce")
+        e = e.where(e.notna(), es)
+    out["edge"] = e
+
+    if "blended_score" in out.columns:
+        bl = pd.to_numeric(out["blended_score"], errors="coerce")
+        if "composite_hit_rate" in out.columns:
+            ch = pd.to_numeric(out["composite_hit_rate"], errors="coerce")
+            out["composite_hit_rate"] = ch.where(ch.notna(), bl)
+        else:
+            out["composite_hit_rate"] = bl
+    return out
+
+
+def _load_retrain_csv_as_raw(path: Path, sport_filter: str | None, *, source_label: str) -> pd.DataFrame:
+    path = Path(path).expanduser().resolve()
+    if not path.is_file():
+        print(f"[ERROR] --input-csv not found: {path}")
+        return pd.DataFrame()
+    df = pd.read_csv(path, low_memory=False, encoding="utf-8-sig")
+    n_loaded = len(df)
+    if sport_filter:
+        sf = str(sport_filter).strip().upper()
+        if "sport" not in df.columns:
+            print("[ERROR] --input-csv has no sport column.")
+            return pd.DataFrame()
+        norm_sp = _normalize_sport_series(df["sport"])
+        mask = norm_sp.astype(str).str.strip().str.upper() == sf
+        if not bool(mask.any()):
+            print(f"[WARN] No rows with sport=={sf!r} after normalization (loaded {n_loaded:,} rows).")
+        df = df.loc[mask].copy()
+    if "result_binary" not in df.columns:
+        print("[ERROR] --input-csv must include a result_binary column.")
+        return pd.DataFrame()
+    rb = pd.to_numeric(df["result_binary"], errors="coerce")
+    df = df.loc[rb.notna()].copy()
+    rb = pd.to_numeric(df["result_binary"], errors="coerce")
+    df["_hit_y"] = rb.astype(float)
+    df = df.loc[df["_hit_y"].isin([0.0, 1.0])].copy()
+    df["_source_path"] = source_label
+    return _adapt_retrain_csv_for_feature_pipeline(df)
+
+
+def _prepare_features(df: pd.DataFrame, *, skip_median_fill: bool = False) -> pd.DataFrame:
     df = df.copy()
     df["sport"] = _normalize_sport_series(df["sport"])
     parts: list[pd.DataFrame] = []
@@ -420,8 +497,11 @@ def _prepare_features(df: pd.DataFrame) -> pd.DataFrame:
         if c not in out.columns:
             out[c] = np.nan
         if c not in enc_cols:
+            out[c] = _to_num_safe(out[c])
+            if skip_median_fill:
+                continue
             med = out.groupby("sport_encoded")[c].transform("median")
-            out[c] = _to_num_safe(out[c]).fillna(med)
+            out[c] = out[c].fillna(med)
             out[c] = _to_num_safe(out[c]).fillna(float(_to_num_safe(out[c]).median()))
     return out
 
@@ -883,27 +963,76 @@ def _train_unified_edge_model(
     include_synthetic: bool,
     temporal_split: bool,
     exclude_player_level_features: bool,
+    input_csv: Path | None = None,
+    sport_filter: str | None = None,
+    dry_run: bool = False,
 ) -> None:
     print(f"[PropORACLE-{SCRIPT_NAME}] Starting unified training...")
     models_dir = root / "models"
-    models_dir.mkdir(parents=True, exist_ok=True)
 
     print(
         "  [config] recursive_outputs=%s dedupe=%s temporal_split=%s exclude_player_hr=%s"
         % (recursive_outputs, dedupe, temporal_split, exclude_player_level_features)
     )
-    raw, n_combined_files_omitted = load_all_graded(
-        root,
-        recursive_outputs=recursive_outputs,
-        dedupe=dedupe,
-        include_synthetic=include_synthetic,
-    )
+    if input_csv is not None:
+        print(f"  [config] input_csv={input_csv} sport_filter={sport_filter!r} dry_run={dry_run}")
+    n_combined_files_omitted = 0
+    if input_csv is not None:
+        csv_path = Path(input_csv).expanduser().resolve()
+        raw = _load_retrain_csv_as_raw(csv_path, sport_filter, source_label=str(csv_path))
+        if dedupe and not raw.empty:
+            raw, removed = _dedupe_graded_rows(raw)
+            if removed:
+                print(f"\n  [dedupe] removed {removed} duplicate rows (same sport/player/date/prop/line/dir)")
+    else:
+        raw, n_combined_files_omitted = load_all_graded(
+            root,
+            recursive_outputs=recursive_outputs,
+            dedupe=dedupe,
+            include_synthetic=include_synthetic,
+        )
     if raw.empty:
-        print("[ERROR] No graded files with hit labels found.")
+        if input_csv is not None:
+            print("[ERROR] No rows left after loading --input-csv (check sport filter and result_binary).")
+        else:
+            print("[ERROR] No graded files with hit labels found.")
         return
 
     raw["sport"] = _normalize_sport_series(raw["sport"])
     raw = raw.loc[raw["_hit_y"].isin([0.0, 1.0])].copy()
+
+    if dry_run:
+        if input_csv is None:
+            print("[ERROR] --dry-run requires --input-csv.")
+            return
+        n_after = len(raw)
+        print("\n=== DRY RUN (--input-csv) ===")
+        print(f"Rows after sport filter + null result_binary drop: {n_after:,}")
+        n1, n0, dom = _hit_class_balance(raw["_hit_y"])
+        tot = n1 + n0
+        if tot:
+            print(f"Class balance — HIT (1): {n1:,}  MISS (0): {n0:,}  hit%: {100.0 * n1 / tot:.2f}%  dominant-class%: {dom:.1f}")
+        else:
+            print("Class balance — no labeled rows.")
+        print("\nSport counts (raw):")
+        print(raw.groupby("sport").size().to_string())
+        print(
+            "\nFeature completeness (FEATURE_COLUMNS; after build_feature_vector + row filter; "
+            "median imputation OFF for this diagnostic):"
+        )
+        df_dry = _prepare_features(raw, skip_median_fill=True)
+        for col in FEATURE_COLUMNS:
+            if col not in df_dry.columns:
+                print(f"  {col:<28}  missing column")
+                continue
+            rate = float(pd.to_numeric(df_dry[col], errors="coerce").notna().mean())
+            print(f"  {col:<28}  non_null={rate:.4f}")
+        if len(df_dry) == 0:
+            print("\n[WARN] Zero rows after _prepare_features (check edge/line/rank_score/blended_signal).")
+        print("\n[DRY RUN] Done (no model written).")
+        return
+
+    models_dir.mkdir(parents=True, exist_ok=True)
 
     if temporal_split:
         dt_ser, col_used = _event_date_series_for_raw(raw)
@@ -1237,10 +1366,41 @@ def main() -> None:
         action="store_true",
         help="Drop player_hr_historical from training (full unified model).",
     )
+    ap.add_argument(
+        "--input-csv",
+        type=Path,
+        default=None,
+        help="Optional training table (e.g. data/retrain_dataset.csv with result_binary). Relative paths resolve against --repo-root.",
+    )
+    ap.add_argument(
+        "--sport",
+        type=str,
+        default=None,
+        help="When using --input-csv, keep only this sport (e.g. NBA). Omit for all sports in the file.",
+    )
+    ap.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="With --input-csv only: print row counts, class balance, and feature completeness; do not train or write models.",
+    )
     args = ap.parse_args()
     root = Path(args.repo_root).resolve()
 
+    input_csv_resolved: Path | None = None
+    if args.input_csv is not None:
+        p = Path(args.input_csv)
+        input_csv_resolved = (root / p).resolve() if not p.is_absolute() else p.expanduser().resolve()
+
+    if args.dry_run and input_csv_resolved is None:
+        print("[ERROR] --dry-run requires --input-csv.")
+        raise SystemExit(1)
+    if args.sport and input_csv_resolved is None:
+        print("[WARN] --sport is ignored without --input-csv (graded file discovery unchanged).")
+
     if args.stress_test_nhl_soccer:
+        if input_csv_resolved is not None:
+            print("[ERROR] Cannot combine --stress-test-nhl-soccer with --input-csv.")
+            raise SystemExit(1)
         rec = _run_stress_test_nhl_soccer(root, args)
         print("\n" + "=" * 72)
         if rec == "A":
@@ -1269,6 +1429,9 @@ def main() -> None:
                 include_synthetic=args.include_synthetic,
                 temporal_split=True,
                 exclude_player_level_features=True,
+                input_csv=None,
+                sport_filter=None,
+                dry_run=False,
             )
         return
 
@@ -1279,6 +1442,9 @@ def main() -> None:
         include_synthetic=args.include_synthetic,
         temporal_split=args.temporal_split,
         exclude_player_level_features=args.exclude_player_level_features,
+        input_csv=input_csv_resolved,
+        sport_filter=args.sport,
+        dry_run=args.dry_run,
     )
 
 
