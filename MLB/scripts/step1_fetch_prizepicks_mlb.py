@@ -1,29 +1,29 @@
 #!/usr/bin/env python3
 """
-step1_fetch_prizepicks_mlb.py  (MLB Pipeline — fully automated edition)
+step1_fetch_prizepicks_mlb.py  (MLB Pipeline)
 
-Launches a headless Chromium using your saved ~/.pp_browser_profile so
-PrizePicks sees a real logged-in session — no manual interaction needed.
+Default: direct PrizePicks API (same pattern as NBA step1_fetch_prizepicks_api.py) —
+no Playwright, no Chrome debugger/CDP, slower paced requests to reduce 429/403.
 
-First-time setup (run once):
+Optional legacy path: Playwright intercept (DataDome-heavy). Use only if API fails.
+
+First-time setup (Playwright path only):
     pip install playwright playwright-stealth --break-system-packages
     playwright install chromium
-    py -3.14 setup_prizepicks_profile.py   ← copies your Chrome profile/cookies
-
-After that, step1 runs fully unattended in the scheduled pipeline.
+    py -3.14 setup_prizepicks_profile.py
 
 Usage:
     py -3.14 step1_fetch_prizepicks_mlb.py
     py -3.14 step1_fetch_prizepicks_mlb.py --output step1_mlb_props.csv
-    py -3.14 step1_fetch_prizepicks_mlb.py --timeout 90
+    py -3.14 step1_fetch_prizepicks_mlb.py --playwright --timeout 90   # legacy browser
     py -3.14 step1_fetch_prizepicks_mlb.py --from-file payload.json
-    # After starting Chrome with --remote-debugging-port=9222 (see docs/chrome_debug_setup.md):
-    py -3.14 step1_fetch_prizepicks_mlb.py --cdp http://127.0.0.1:9222
+    py -3.14 step1_fetch_prizepicks_mlb.py --cdp http://127.0.0.1:9222   # attach existing Chrome
 """
 
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import os
 import re
@@ -314,6 +314,39 @@ def parse_rows(data: List[dict], included: List[dict]) -> List[dict]:
     return rows
 
 
+def _load_prizepicks_api_module():
+    """Load NBA direct-API fetcher from repo (shared PrizePicks JSONAPI client)."""
+    root = Path(__file__).resolve().parents[2]
+    path = root / "NBA" / "scripts" / "step1_fetch_prizepicks_api.py"
+    spec = importlib.util.spec_from_file_location("pp_fetch_api_mlb", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Cannot load API module spec from {path}")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def fetch_via_direct_api(
+    *,
+    per_page: int,
+    max_pages: int,
+    retries: int,
+    inter_min: float,
+    inter_max: float,
+    session_min: float,
+    session_max: float,
+) -> Tuple[List[dict], List[dict]]:
+    mod = _load_prizepicks_api_module()
+    return mod.fetch_projections(
+        league_id=MLB_LEAGUE_ID,
+        per_page=per_page,
+        max_pages=max_pages,
+        retries=retries,
+        inter_page_delay=(inter_min, inter_max),
+        session_jitter=(session_min, session_max),
+    )
+
+
 def load_payload_from_file(path: str) -> Tuple[List[dict], List[dict]]:
     with open(path, "r", encoding="utf-8") as f:
         raw = json.load(f)
@@ -410,7 +443,7 @@ def fetch_via_playwright(timeout_s: int = 90, cdp_url: str | None = None) -> Tup
         )
         return have_games or elapsed >= GAMES_GRACE
 
-    GAMES_GRACE = 6.0  # seconds to wait after projections for /games response
+    GAMES_GRACE = 10.0  # seconds to wait after projections for /games response
 
     cdp = (cdp_url or "").strip()
     use_cdp = bool(cdp)
@@ -472,7 +505,7 @@ def fetch_via_playwright(timeout_s: int = 90, cdp_url: str | None = None) -> Tup
         try:
             page.goto(BOARD_URL, timeout=30_000, wait_until="domcontentloaded")
             # Let DataDome / board JS settle before scroll nudges (cold sessions need longer).
-            time.sleep(9)
+            time.sleep(12)
         except Exception as e:
             print(f"  ⚠️  Page load warning (continuing): {e}")
 
@@ -505,9 +538,9 @@ def fetch_via_playwright(timeout_s: int = 90, cdp_url: str | None = None) -> Tup
                     trigger_idx += 1
                 except Exception:
                     pass
-                time.sleep(2)
+                time.sleep(3.5)
             else:
-                time.sleep(1)
+                time.sleep(2.0)
 
         if _capture_complete():
             print("  ✅ Capture complete.")
@@ -570,7 +603,20 @@ def main():
         help="Attach to existing Chrome via CDP (e.g. http://127.0.0.1:9222). "
         "Start Chrome with --remote-debugging-port; skips launching a new browser.",
     )
+    ap.add_argument(
+        "--playwright",
+        action="store_true",
+        help="Force Playwright intercept instead of direct API (legacy / DataDome fallback).",
+    )
+    ap.add_argument("--per-page", type=int, default=250, help="Direct API: per_page (default 250).")
+    ap.add_argument("--max-pages", type=int, default=8, help="Direct API: max pagination pages (default 8).")
+    ap.add_argument("--api-retries", type=int, default=12, help="Direct API: retries per GET (default 12; PrizePicks often returns 403 until a profile sticks).")
+    ap.add_argument("--api-inter-min", type=float, default=6.0, help="Direct API: min seconds between paginated requests.")
+    ap.add_argument("--api-inter-max", type=float, default=14.0, help="Direct API: max seconds between paginated requests.")
+    ap.add_argument("--api-session-min", type=float, default=5.0, help="Direct API: min seconds before first request.")
+    ap.add_argument("--api-session-max", type=float, default=12.0, help="Direct API: max seconds before first request.")
     args     = ap.parse_args()
+    _ensure_utf8_stdio()
     out_path = Path(args.output)
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -578,11 +624,35 @@ def main():
     data: list     = []
     included: list = []
     max_attempts   = 1
+    fetch_method   = "direct_api"
+
+    use_playwright = bool((args.cdp or "").strip()) or bool(args.playwright)
 
     if args.from_file:
         print(f"[step1] Loading MLB payload from file: {args.from_file}")
         data, included = load_payload_from_file(args.from_file)
+        fetch_method = "from_file"
+    elif not use_playwright:
+        print(
+            f"[step1] MLB fetch (direct_api) | league_id={MLB_LEAGUE_ID} | "
+            f"per_page={args.per_page} max_pages={args.max_pages}"
+        )
+        try:
+            data, included = fetch_via_direct_api(
+                per_page=int(args.per_page),
+                max_pages=int(args.max_pages),
+                retries=int(args.api_retries),
+                inter_min=float(args.api_inter_min),
+                inter_max=float(args.api_inter_max),
+                session_min=float(args.api_session_min),
+                session_max=float(args.api_session_max),
+            )
+        except Exception as e:
+            data, included = [], []
+            print(f"  ❌ Direct API fetch failed: {type(e).__name__}: {e}")
+        max_attempts = 1
     else:
+        fetch_method = "cdp" if (args.cdp or "").strip() else "playwright"
         max_attempts = 1 + max(0, args.retries)
         for attempt in range(1, max_attempts + 1):
             if attempt > 1:
@@ -606,15 +676,15 @@ def main():
     # ── Empty guard ──────────────────────────────────────────────────────────
     if not data:
         if args.append and out_path.is_file():
-            print("❌ No projections intercepted after all attempts.")
+            print("❌ No projections returned after all attempts.")
             print("   (--append: left existing output file unchanged)")
         else:
             pd.DataFrame(columns=EMPTY_COLS).to_csv(out_path, index=False)
-            print("❌ No projections intercepted after all attempts. Wrote empty CSV.")
+            print("❌ No projections returned after all attempts. Wrote empty CSV.")
         log_pipeline_health(
             "mlb.step1_fetch_prizepicks",
             "no_projections",
-            extra={"league_id": MLB_LEAGUE_ID, "method": "playwright_headless", "attempts": max_attempts},
+            extra={"league_id": MLB_LEAGUE_ID, "method": fetch_method, "attempts": max_attempts},
             start=Path(__file__),
         )
         sys.exit(1)

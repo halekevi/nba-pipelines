@@ -176,7 +176,8 @@ function Get-MLBStep1DateHealth {
     } else {
         return @{ ok = $false; rows = $rows.Count; reason = "missing_date_columns" }
     }
-    return @{ ok = ($match.Count -gt 0); rows = $rows.Count; reason = (if ($match.Count -gt 0) { "ok" } else { "date_mismatch" }) }
+    $reason = if ($match.Count -gt 0) { "ok" } else { "date_mismatch" }
+    return @{ ok = ($match.Count -gt 0); rows = $rows.Count; reason = $reason }
 }
 
 function Clear-MLBGeneratedOutputs {
@@ -457,6 +458,13 @@ function Run-Combined {
     Get-ChildItem -Path $Root -Filter "combined_slate_tickets_*.xlsx" | Remove-Item -Force -ErrorAction SilentlyContinue
 
     $nbaFile    = "$NBADir\data\outputs\step8_all_direction_clean.xlsx"
+    if (-not (Test-Path $nbaFile)) {
+        $nbaAlt = Join-Path $NBADir "step8_all_direction_clean.xlsx"
+        if (Test-Path $nbaAlt) {
+            $nbaFile = $nbaAlt
+            Write-Host "  [NBA] Using fallback step8: $nbaFile" -ForegroundColor DarkGray
+        }
+    }
     # CBB deactivated - season over (April 2026)
     $cbbFile    = "$CBBDir\step6_ranked_cbb.xlsx"
     $nhlFile    = "$NHLDir\outputs\step8_nhl_direction_clean.xlsx"
