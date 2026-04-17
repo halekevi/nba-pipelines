@@ -7,7 +7,7 @@ Migrated from flat CSV cache to proporacle_ref.db.
 Queries the nba table directly — no nba_espn_boxscore_cache.csv needed.
 
 OUTPUT COLUMNS (unchanged):
-  h2h_last_stat, h2h_last_date, h2h_games_vs_opp, h2h_avg, h2h_over_rate
+  h2h_last_stat, h2h_last_date, h2h_games_vs_opp, h2h_avg, h2h_over_rate, h2h_over_rate_l5
 """
 
 from __future__ import annotations
@@ -152,6 +152,7 @@ def _compute_h2h(games: pd.DataFrame, stat_col: str, line: float) -> dict:
         "h2h_games_vs_opp": 0,
         "h2h_avg":          np.nan,
         "h2h_over_rate":    np.nan,
+        "h2h_over_rate_l5": np.nan,
     }
     if games.empty:
         return result
@@ -168,6 +169,13 @@ def _compute_h2h(games: pd.DataFrame, stat_col: str, line: float) -> dict:
                 result["h2h_over_rate"] = round(float((vals > float(line)).mean()), 2)
             except Exception:
                 pass
+    recent5 = games.tail(5)
+    vals5 = recent5[stat_col].dropna()
+    if not vals5.empty and pd.notna(line):
+        try:
+            result["h2h_over_rate_l5"] = round(float((vals5 > float(line)).mean()), 2)
+        except Exception:
+            pass
 
     # Last game
     last = games.iloc[-1]
@@ -236,7 +244,7 @@ def main() -> None:
     print(f"  {len(df)} rows")
 
     # Init output columns
-    for col in ["h2h_last_stat", "h2h_last_date", "h2h_games_vs_opp", "h2h_avg", "h2h_over_rate"]:
+    for col in ["h2h_last_stat", "h2h_last_date", "h2h_games_vs_opp", "h2h_avg", "h2h_over_rate", "h2h_over_rate_l5"]:
         df[col] = np.nan
     df["h2h_last_date"] = ""
     df["h2h_games_vs_opp"] = 0
@@ -268,7 +276,7 @@ def main() -> None:
                         "--break-system-packages", "-q"])
         from tqdm import tqdm as _tqdm
 
-    h2h_last_stats, h2h_last_dates, h2h_counts, h2h_avgs, h2h_over_rates = [], [], [], [], []
+    h2h_last_stats, h2h_last_dates, h2h_counts, h2h_avgs, h2h_over_rates, h2h_over_rates_l5 = [], [], [], [], [], []
     h2h_sources = []
     matched = 0
     fallback_matched = 0
@@ -288,6 +296,7 @@ def main() -> None:
             h2h_counts.append(0)
             h2h_avgs.append(np.nan)
             h2h_over_rates.append(np.nan)
+            h2h_over_rates_l5.append(np.nan)
             h2h_sources.append("")
             continue
 
@@ -308,6 +317,7 @@ def main() -> None:
         h2h_counts.append(stats["h2h_games_vs_opp"])
         h2h_avgs.append(stats["h2h_avg"])
         h2h_over_rates.append(stats["h2h_over_rate"])
+        h2h_over_rates_l5.append(stats["h2h_over_rate_l5"])
         h2h_sources.append(source)
 
     df["h2h_last_stat"]    = h2h_last_stats
@@ -315,6 +325,7 @@ def main() -> None:
     df["h2h_games_vs_opp"] = h2h_counts
     df["h2h_avg"]          = h2h_avgs
     df["h2h_over_rate"]    = h2h_over_rates
+    df["h2h_over_rate_l5"] = h2h_over_rates_l5
     df["h2h_source"]       = h2h_sources
 
     con.close()
@@ -327,6 +338,7 @@ def main() -> None:
         print(f"  fallback recent-history matches: {fallback_matched}")
     print(f"  h2h_avg filled:       {df['h2h_avg'].notna().sum()}/{len(df)}")
     print(f"  h2h_over_rate filled: {df['h2h_over_rate'].notna().sum()}/{len(df)}")
+    print(f"  h2h_over_rate_l5:     {df['h2h_over_rate_l5'].notna().sum()}/{len(df)}")
     print(f"✅ Saved → {args.output}")
 
 

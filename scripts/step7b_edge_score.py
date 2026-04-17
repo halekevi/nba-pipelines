@@ -165,6 +165,18 @@ def main() -> None:
         df2.get("composite_hit_rate", df2.get("line_hit_rate", pd.Series(0.5, index=df2.index))),
         errors="coerce",
     ).fillna(0.5)
+    # Playoff uplift: emphasize short-window same-opponent trend where available.
+    # step7 populates l5_vs_same_opp_hit_rate direction-aware (high = supports pick side).
+    if sp == "NBA" and "l5_vs_same_opp_hit_rate" in df2.columns:
+        opp_l5 = pd.to_numeric(df2["l5_vs_same_opp_hit_rate"], errors="coerce")
+        opp_l5 = pd.Series(np.where(opp_l5 > 1.0, opp_l5 / 100.0, opp_l5), index=df2.index)
+        playoff = (
+            df2.get("is_playoff_game", pd.Series(False, index=df2.index))
+            .astype(str).str.strip().str.lower().isin(["1", "true", "t", "yes", "y"])
+        )
+        use_opp_l5 = playoff & opp_l5.notna()
+        if use_opp_l5.any():
+            comp = pd.Series(np.where(use_opp_l5, (0.55 * comp + 0.45 * opp_l5), comp), index=df2.index)
     edge_score = pd.Series(ml_prob, index=df2.index) - implied_prob
     if sp in ("NHL", "SOCCER"):
         blended = 0.15 * pd.Series(ml_prob, index=df2.index) + 0.85 * comp

@@ -46,6 +46,13 @@ for _efe_anc in Path(__file__).resolve().parents:
             sys.path.insert(0, _efe_sd)
         break
 from edge_feature_engineering import apply_ticket_eligibility_voids, build_feature_vector  # noqa: E402
+try:
+    _playoff_sd = str(Path(__file__).resolve().parents[2] / "scripts")
+    if _playoff_sd not in sys.path:
+        sys.path.insert(0, _playoff_sd)
+    from playoff_config import NBA_PLAYOFF_TEAMS  # noqa: E402
+except Exception:
+    NBA_PLAYOFF_TEAMS = set()
 
 # UTF-8 safe Excel export
 try:
@@ -213,6 +220,23 @@ def _apply_consistency_grade_scores(out: pd.DataFrame, sport: str) -> None:
 
 def _to_num(s):
     return pd.to_numeric(s, errors="coerce")
+
+
+def _is_playoff_matchup_series(out: pd.DataFrame) -> pd.Series:
+    idx = out.index
+    if not NBA_PLAYOFF_TEAMS:
+        return pd.Series(False, index=idx)
+    team_col = next((c for c in ("team", "Team", "pp_team") if c in out.columns), None)
+    opp_col = next((c for c in ("opp_team", "opp", "opponent") if c in out.columns), None)
+    if not team_col or not opp_col:
+        return pd.Series(False, index=idx)
+
+    def _abbr(s: pd.Series) -> pd.Series:
+        return s.astype(str).str.split("/").str[0].str.strip().str.upper()
+
+    team = _abbr(out[team_col]).isin(NBA_PLAYOFF_TEAMS)
+    opp = _abbr(out[opp_col]).isin(NBA_PLAYOFF_TEAMS)
+    return (team & opp).fillna(False)
 
 
 # ── step_archive lazy import ──────────────────────────────────────────────────
@@ -1201,6 +1225,11 @@ def main() -> None:
         bet_is_under, 1.0 - line_hit_over_only, line_hit_over_only
     )
     out["composite_hit_rate"] = pd.to_numeric(out["composite_hit_rate"], errors="coerce")
+    # Same-opponent short window signal (last 5 H2H games where available).
+    h2h_l5_over = _to_num(out.get("h2h_over_rate_l5", out.get("h2h_over_rate", pd.Series(np.nan, index=out.index))))
+    h2h_l5_over = np.where(h2h_l5_over > 1.0, h2h_l5_over / 100.0, h2h_l5_over)
+    out["l5_vs_same_opp_hit_rate"] = np.where(bet_is_under, 1.0 - h2h_l5_over, h2h_l5_over)
+    out["l5_vs_same_opp_hit_rate"] = pd.to_numeric(out["l5_vs_same_opp_hit_rate"], errors="coerce")
 
     # ── VECTORIZED MINUTES CERTAINTY ──────────────────────────────────────────
     _MIN_TIER_MAP = {"HIGH": 1.00, "MEDIUM": 0.90, "LOW": 0.75}
@@ -1227,6 +1256,9 @@ def main() -> None:
     # ── SCHEDULE / REST ADJUSTMENT (Step 6c: B2B, rest days) ─────────────────
     # rest_adj: -0.10 B2B, 0.00 baseline (1-day rest), +0.02 two days, +0.04 three+
     rest_adj = _to_num(out["rest_adj"]).fillna(0.0) if "rest_adj" in out.columns else pd.Series(0.0, index=out.index)
+    playoff_game = _is_playoff_matchup_series(out)
+    out["is_playoff_game"] = playoff_game
+    rest_adj = pd.Series(np.where(playoff_game, 0.0, rest_adj), index=out.index)
     out["rest_adj"] = rest_adj
 
     # ── PACE SIGNAL ──────────────────────────────────────────────────────────
@@ -1350,7 +1382,8 @@ def main() -> None:
     # 2) structural/context factors are secondary rank stabilizers
     # 3) L5/L10 style signals act only as bounded confidence modifiers
 
-    b2b_penalty    = np.where(out.get("b2b_flag",    pd.Series(False, index=out.index)).astype(str).str.lower() == "true", -0.20, 0.0)
+    b2b_penalty_raw = np.where(out.get("b2b_flag", pd.Series(False, index=out.index)).astype(str).str.lower() == "true", -0.20, 0.0)
+    b2b_penalty = np.where(playoff_game, 0.0, b2b_penalty_raw)
     blowout_penalty= np.where(out.get("blowout_risk", pd.Series(False, index=out.index)).astype(str).str.lower() == "true", -0.10, 0.0)
     low_total_pen  = np.where(out.get("low_total_flag", pd.Series(False, index=out.index)).astype(str).str.lower() == "true", -0.10, 0.0)
 

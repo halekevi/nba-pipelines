@@ -351,7 +351,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'stat_g6', 'stat_g7', 'stat_g8', 'stat_g9', 'stat_g10',
         'stat_last10_avg',
         'h2h_avg', 'h2h_over_rate', 'h2h_games_vs_opp', 'h2h_last_stat',
+        'h2h_over_rate_l5', 'l5_vs_same_opp_hit_rate',
         'b2b_flag', 'days_rest', 'game_total', 'spread',
+        'is_playoff_game',
         'game_script_mult', 'game_script_note',
     ]
     # Force full schema so NBA1Q/NBA1H clean outputs match NBA Step 8 columns.
@@ -413,11 +415,14 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'h2h_over_rate':    'H2H Over%',
         'h2h_games_vs_opp': 'H2H Games',
         'h2h_last_stat':    'H2H Last',
+        'h2h_over_rate_l5': 'H2H Over% (L5)',
+        'l5_vs_same_opp_hit_rate': 'L5 vs Opp Hit%',
         # Schedule
         'b2b_flag':  'B2B',
         'days_rest': 'Days Rest',
         'game_total':'Game Total',
         'spread':    'Spread',
+        'is_playoff_game': 'Playoff Game',
         'game_script_mult': 'Game Script Mult',
         'game_script_note': 'Game Script Note',
     }
