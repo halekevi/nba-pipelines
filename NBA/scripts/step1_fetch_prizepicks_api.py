@@ -6,9 +6,10 @@ Fetches PrizePicks projections directly from the API — no browser, no
 Playwright, no interception. Harder to detect, faster, and fully headless.
 
 Strategy:
+  - Default HTTP: curl_cffi Session(impersonate=chrome120) when installed (browser TLS/JA3); else requests
   - Rotates cohesive browser profiles (User-Agent + Sec-CH-UA + platform); full rotation on 403
   - Optional multi-wave first page: new Session + backoff if all in-wave retries exhaust (MLB uses more waves)
-  - Uses a persistent requests.Session with app.prizepicks.com-style headers
+  - Persistent session with app.prizepicks.com-style headers on top of impersonation
   - Conservative delays before the first request and between paginated pages
   - Paginates through all projections (per_page=250)
   - Retries with exponential backoff on 429/5xx
@@ -30,6 +31,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import random
 import re
 import sys
@@ -41,6 +43,39 @@ from zoneinfo import ZoneInfo
 
 import pandas as pd
 import requests
+
+# PrizePicks sits behind Cloudflare; stdlib TLS (requests) is often JA3-flagged.
+# curl_cffi impersonates a real browser TLS + HTTP/2 fingerprint (see _make_session).
+_CURL_IMPERSONATE = (os.environ.get("PROPORACLE_CURL_IMPERSONATE") or "chrome120").strip()
+try:
+    from curl_cffi.requests import Session as _CurlCffiSession
+
+    _CURL_CFFI_AVAILABLE = True
+except ImportError:
+    _CurlCffiSession = None  # type: ignore[misc, assignment]
+    _CURL_CFFI_AVAILABLE = False
+
+_HTTP_BACKEND_LOGGED = False
+
+
+def _new_http_session() -> Any:
+    if _CURL_CFFI_AVAILABLE and _CurlCffiSession is not None:
+        return _CurlCffiSession(impersonate=_CURL_IMPERSONATE)
+    return requests.Session()
+
+
+def _log_http_backend_once() -> None:
+    global _HTTP_BACKEND_LOGGED
+    if _HTTP_BACKEND_LOGGED:
+        return
+    _HTTP_BACKEND_LOGGED = True
+    if _CURL_CFFI_AVAILABLE:
+        print(f"  [PP] HTTP transport: curl_cffi impersonate={_CURL_IMPERSONATE!r} (browser TLS/JA3)")
+    else:
+        print(
+            "  [PP] HTTP transport: requests (install curl-cffi for Cloudflare-resistant TLS; "
+            "pip install curl-cffi)"
+        )
 
 
 def _ensure_utf8_stdio() -> None:
@@ -158,7 +193,7 @@ def _random_browser_headers() -> Dict[str, str]:
     return _browser_headers_from_profile(random.choice(_BROWSER_PROFILES))
 
 
-def _rotate_session_headers(session: requests.Session) -> None:
+def _rotate_session_headers(session: Any) -> None:
     session.headers.clear()
     session.headers.update(_random_browser_headers())
 
@@ -210,9 +245,10 @@ def _norm_team(s: Any) -> str:
     return str(s or "").strip().upper()
 
 
-def _make_session(session_jitter: Tuple[float, float] | None = None) -> requests.Session:
-    """Create a session with a random cohesive browser profile; pause before first request."""
-    s = requests.Session()
+def _make_session(session_jitter: Tuple[float, float] | None = None) -> Any:
+    """Create a session (curl_cffi or requests) with cohesive headers; pause before first request."""
+    _log_http_backend_once()
+    s = _new_http_session()
     _rotate_session_headers(s)
     lo, hi = session_jitter if session_jitter is not None else DEFAULT_SESSION_JITTER
     time.sleep(random.uniform(lo, hi))
@@ -220,7 +256,7 @@ def _make_session(session_jitter: Tuple[float, float] | None = None) -> requests
 
 
 def _api_get(
-    session: requests.Session,
+    session: Any,
     url: str,
     params: dict,
     retries: int = 5,
@@ -332,7 +368,7 @@ def fetch_projections(
     }
 
     waves = max(1, int(first_page_waves))
-    session: requests.Session | None = None
+    session: Any | None = None
     payload: dict | None = None
     for wave in range(waves):
         if session is not None:

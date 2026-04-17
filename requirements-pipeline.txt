@@ -5,6 +5,7 @@ playwright-stealth
 numpy
 scipy>=1.10
 requests
+curl-cffi>=0.6.0
 openpyxl
 joblib
 scikit-learn

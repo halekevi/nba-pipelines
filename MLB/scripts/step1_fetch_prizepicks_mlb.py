@@ -2,8 +2,8 @@
 """
 step1_fetch_prizepicks_mlb.py  (MLB Pipeline)
 
-Default: direct PrizePicks API (same pattern as NBA step1_fetch_prizepicks_api.py) —
-no Playwright, no Chrome debugger/CDP, slower paced requests to reduce 429/403.
+Default: direct PrizePicks API via NBA/scripts/step1_fetch_prizepicks_api.py (curl_cffi
+browser TLS impersonation when installed; else requests). No Playwright/CDP unless --playwright.
 
 Optional legacy path: Playwright intercept (DataDome-heavy). Use only if API fails.
 
