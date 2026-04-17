@@ -116,10 +116,20 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
     if ($RunDate -lt "2026-04-06") {
         $required = @($required) + @("step6_ranked_wcbb_$RunDate.xlsx")
     }
+    # Some sports can intentionally skip writing dated copies while still producing
+    # valid root clean files used by combined + Railway.
+    $fallbackRoots = @{
+        "step8_mlb_direction_clean_$RunDate.xlsx" = (Join-Path $Root "MLB\outputs\step8_mlb_direction_clean.xlsx")
+    }
     $missing = @()
     foreach ($name in $required) {
         $p = Join-Path $outDir $name
-        if (-not (Test-Path $p)) { $missing += $name }
+        if (Test-Path $p) { continue }
+        if ($fallbackRoots.ContainsKey($name)) {
+            $fallback = $fallbackRoots[$name]
+            if (Test-Path $fallback) { continue }
+        }
+        $missing += $name
     }
     return $missing
 }
