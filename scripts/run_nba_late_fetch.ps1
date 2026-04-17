@@ -138,7 +138,21 @@ if (-not (Test-Path $pipeScript)) {
     exit 1
 }
 
-Write-Host "[LATE_FETCH] Running full pipeline -SkipFetch..."
+# US Eastern: after 20:00, PP NHL/tennis boards often roll to the next calendar day.
+# Morning --date would leave NHL step8 at 0 rows; align pipeline date with the slate.
+$PipeDate = (Get-Date).ToString("yyyy-MM-dd")
+try {
+    $tz = [System.TimeZoneInfo]::FindSystemTimeZoneById("Eastern Standard Time")
+    $etNow = [System.TimeZoneInfo]::ConvertTimeFromUtc((Get-Date).ToUniversalTime(), $tz)
+    if ($etNow.Hour -ge 20) {
+        $PipeDate = $etNow.Date.AddDays(1).ToString("yyyy-MM-dd")
+        Write-Host "[LATE_FETCH] After 8 PM ET — using next calendar date for pipeline: $PipeDate" -ForegroundColor Cyan
+    }
+} catch {
+    Write-Host "[LATE_FETCH] WARN: Eastern time check failed (using local calendar date): $_" -ForegroundColor Yellow
+}
+
+Write-Host "[LATE_FETCH] Running full pipeline -SkipFetch -Date $PipeDate..."
 if ($NoOverwrite) {
     $today = Get-Date -Format "yyyy-MM-dd"
     $preserveTargets = @(
@@ -159,7 +173,7 @@ if ($NoOverwrite) {
         Preserve-ExistingFile -Path $pt -Reason "pre-LATE_FETCH pipeline snapshot"
     }
 }
-& pwsh -NoProfile -File $pipeScript -SkipFetch
+& pwsh -NoProfile -File $pipeScript -SkipFetch -Date $PipeDate
 if ($LASTEXITCODE -ne 0) {
     Write-Host "[LATE_FETCH] Pipeline failed (exit $LASTEXITCODE)" -ForegroundColor Red
     exit 1

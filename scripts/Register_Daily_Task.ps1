@@ -5,6 +5,9 @@
 #   - 7:00 AM  initial daily pipeline
 #   - 9:00 AM  refresh + add/remove diff log
 #   - 11:00 AM refresh + add/remove diff log
+#
+# Run elevated from the repo you want tasks to use (e.g. H:\...\PropORACLE\scripts).
+# Re-running replaces tasks so paths stay in sync after moving the clone off OneDrive.
 # ============================================================
 
 $PipelineRoot = Split-Path -Parent $PSScriptRoot

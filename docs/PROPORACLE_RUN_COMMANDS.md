@@ -94,9 +94,12 @@ One-off index/app patcher; requires `archive\root-text\patch_replacement.txt`. R
 
 ## Register Scheduled Tasks (`scripts/Register_Daily_Task.ps1`)
 
+After moving the repo (e.g. from OneDrive to `H:\halek\ProfileFromC\Desktop\PropORACLE`), open **elevated** PowerShell **in that folder** and re-run this script so every task action points at the new path.
+
 ```powershell
 # Run once in elevated PowerShell
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+cd "H:\halek\ProfileFromC\Desktop\PropORACLE"
 .\scripts\Register_Daily_Task.ps1
 
 # Registered tasks:
@@ -104,6 +107,10 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 #  - PropOracle - Daily 7AM
 #  - PropOracle - Refresh 9AM
 #  - PropOracle - Refresh 11AM
+#  (9AM/11AM refresh runs scripts\run_nba_late_fetch.ps1 via run_refresh_with_log.ps1)
+
+# Inspect what Windows will actually run (look for old OneDrive paths)
+schtasks /query /fo LIST /v | findstr /i "PropOracle PropORACLE"
 
 # Test one now
 Start-ScheduledTask -TaskName "PropOracle - Daily 7AM"

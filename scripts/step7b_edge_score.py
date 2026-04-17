@@ -40,6 +40,17 @@ def _norm_sport(s: str) -> str:
     return x
 
 
+def _is_zip_xlsx(path: Path) -> bool:
+    """True if path looks like a real .xlsx (OOXML zip), not an HTML stub or empty file."""
+    try:
+        if not path.is_file() or path.stat().st_size < 64:
+            return False
+        with path.open("rb") as fh:
+            return fh.read(2) == b"PK"
+    except OSError:
+        return False
+
+
 def resolve_step7_path(root: Path, sport: str) -> Path | None:
     sp = _norm_sport(sport)
     raw_sp = str(sport or "").strip().upper()
@@ -57,9 +68,6 @@ def resolve_step7_path(root: Path, sport: str) -> Path | None:
         root / "Soccer" / "outputs" / "step7_soccer_ranked.xlsx",
         root / "Soccer" / "step7_soccer_ranked.xlsx",
         root / "Tennis" / "outputs" / "step7_tennis_ranked.xlsx",
-        root / "MLB" / "outputs" / "step7_mlb_ranked.xlsx",
-        root / "MLB" / "scripts" / "step7_mlb_ranked.xlsx",
-        root / "MLB" / "step7_mlb_ranked.xlsx",
         root / "CBB" / "outputs" / f"step7_{sl}_ranked.xlsx",
         root / "CBB" / "outputs" / "step6_ranked_cbb.xlsx",
         root / "CBB" / "step6_ranked_cbb.xlsx",
@@ -82,14 +90,22 @@ def resolve_step7_path(root: Path, sport: str) -> Path | None:
             root / "CBB" / "outputs" / "step6_ranked_wcbb.xlsx",
             *candidates,
         ]
+    elif sp == "MLB":
+        # Canonical MLB step7 lives under MLB/; avoid picking another sport's xlsx after ZIP checks.
+        candidates = [
+            root / "MLB" / "step7_mlb_ranked.xlsx",
+            root / "MLB" / "outputs" / "step7_mlb_ranked.xlsx",
+            root / "MLB" / "scripts" / "step7_mlb_ranked.xlsx",
+        ]
     for p in candidates:
-        if p.is_file():
+        if p.is_file() and _is_zip_xlsx(p):
             return p
     return None
 
 
 def _first_sheet(path: Path) -> str:
-    xl = pd.ExcelFile(path)
+    # Pandas 2.2+ / Py3.14: engine must be explicit for .xlsx (otherwise ValueError).
+    xl = pd.ExcelFile(path, engine="openpyxl")
     return xl.sheet_names[0]
 
 
@@ -190,7 +206,7 @@ def main() -> None:
     if sp.upper() != "NHL":
         df2 = df2.sort_values("blended_score", ascending=False, na_position="last", kind="mergesort")
 
-    xl_obj = pd.ExcelFile(xlsx)
+    xl_obj = pd.ExcelFile(xlsx, engine="openpyxl")
     all_sheets: dict[str, pd.DataFrame] = {}
     for sn in xl_obj.sheet_names:
         if sn == sheet:
