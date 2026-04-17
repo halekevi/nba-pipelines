@@ -1,34 +1,34 @@
 {
-  "trained_at": "2026-04-08T21:28:58Z",
-  "trained_at_utc": "2026-04-08T21:28:58.729525+00:00",
-  "training_rows_total": 180454,
+  "trained_at": "2026-04-17T01:18:53Z",
+  "trained_at_utc": "2026-04-17T01:18:53.163198+00:00",
+  "training_rows_total": 230107,
   "rows_per_sport": {
-    "CBB": 20513,
-    "MLB": 14878,
-    "NBA": 86204,
-    "NBA1H": 1159,
-    "NBA1Q": 4872,
-    "NHL": 32184,
-    "SOCCER": 20644
+    "CBB": 21722,
+    "MLB": 29253,
+    "NBA": 105376,
+    "NBA1H": 1418,
+    "NBA1Q": 6460,
+    "NHL": 46310,
+    "SOCCER": 19568
   },
-  "roc_auc_overall": 0.7983943052778221,
+  "roc_auc_overall": 0.8103172650530255,
   "roc_auc_per_sport": {
-    "CBB": 0.6139328543387993,
-    "MLB": 0.6814712171756052,
-    "NBA": 0.6478299156191829,
-    "NBA1H": 0.7268148518148518,
-    "NBA1Q": 0.7903694114137153,
-    "NHL": 0.9594953224328903,
-    "SOCCER": 0.922193655824738
+    "CBB": 0.6211678432131,
+    "MLB": 0.7033351145226737,
+    "NBA": 0.6468216898620547,
+    "NBA1H": 0.7011766030512864,
+    "NBA1Q": 0.7894855336820852,
+    "NHL": 0.974191034295181,
+    "SOCCER": 0.9181552008300216
   },
   "roc_auc_per_sport_with_nulls": {
-    "CBB": 0.6139328543387993,
-    "MLB": 0.6814712171756052,
-    "NBA": 0.6478299156191829,
-    "NBA1H": 0.7268148518148518,
-    "NBA1Q": 0.7903694114137153,
-    "NHL": 0.9594953224328903,
-    "SOCCER": 0.922193655824738
+    "CBB": 0.6211678432131,
+    "MLB": 0.7033351145226737,
+    "NBA": 0.6468216898620547,
+    "NBA1H": 0.7011766030512864,
+    "NBA1Q": 0.7894855336820852,
+    "NHL": 0.974191034295181,
+    "SOCCER": 0.9181552008300216
   },
   "per_sport_holdout_status": {
     "CBB": "ok",
@@ -39,7 +39,7 @@
     "NHL": "ok",
     "SOCCER": "ok"
   },
-  "scale_pos_weight": 1.221437100685682,
+  "scale_pos_weight": 1.2487637550573656,
   "feature_columns": [
     "composite_hit_rate",
     "tier_encoded",
@@ -73,5 +73,7 @@
   "leakage_confirmed": false,
   "recursive_outputs_used": true,
   "dedupe_used": true,
+  "temporal_split_used": false,
+  "exclude_player_level_features_used": false,
   "combined_graded_file_paths_omitted": 9
 }
