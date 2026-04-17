@@ -119,15 +119,24 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
     # Some sports can intentionally skip writing dated copies while still producing
     # valid root clean files used by combined + Railway.
     $fallbackRoots = @{
-        "step8_mlb_direction_clean_$RunDate.xlsx" = (Join-Path $Root "MLB\outputs\step8_mlb_direction_clean.xlsx")
+        "step8_mlb_direction_clean_$RunDate.xlsx" = @(
+            (Join-Path $Root "MLB\outputs\step8_mlb_direction_clean.xlsx"),
+            (Join-Path $Root "MLB\step8_mlb_direction_clean.xlsx")
+        )
     }
     $missing = @()
     foreach ($name in $required) {
         $p = Join-Path $outDir $name
         if (Test-Path $p) { continue }
         if ($fallbackRoots.ContainsKey($name)) {
-            $fallback = $fallbackRoots[$name]
-            if (Test-Path $fallback) { continue }
+            $resolved = $false
+            foreach ($fallback in @($fallbackRoots[$name])) {
+                if (Test-Path $fallback) {
+                    $resolved = $true
+                    break
+                }
+            }
+            if ($resolved) { continue }
         }
         $missing += $name
     }
