@@ -29,6 +29,16 @@ if (-not $WhatIf) {
 $NewRepoRoot = $NewRepoRoot.TrimEnd('\')
 $OldRepoRoot = $OldRepoRoot.TrimEnd('\')
 
+function Normalize-DoubledQuotesAroundFileArg([string]$argLine) {
+    if ([string]::IsNullOrWhiteSpace($argLine)) { return $argLine }
+    # Task Scheduler sometimes stores: -File ""C:\path\script.ps1"" (broken). Use a single pair of quotes.
+    return [regex]::Replace(
+        $argLine,
+        '(?i)-File\s+""([^""]+)""',
+        '-File "$1"'
+    )
+}
+
 $names = @(
     "PropOracle - Grader 5AM",
     "PropOracle - Daily 7AM",
@@ -49,6 +59,7 @@ foreach ($taskName in $names) {
     $oldArgs = [string]$a.Arguments
     $oldWd = [string]$a.WorkingDirectory
     $newArgs = $oldArgs.Replace($OldRepoRoot, $NewRepoRoot)
+    $newArgs = Normalize-DoubledQuotesAroundFileArg $newArgs
     $newWd = if ($oldWd) { $oldWd.Replace($OldRepoRoot, $NewRepoRoot) } else { "" }
 
     if ($newArgs -eq $oldArgs -and ($newWd -eq $oldWd -or -not $oldWd)) {
