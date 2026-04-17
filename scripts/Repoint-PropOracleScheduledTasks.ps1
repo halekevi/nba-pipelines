@@ -17,10 +17,13 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
-        [Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Write-Error "Run this script in an elevated (Administrator) PowerShell window."
-    exit 1
+# Dry-run is safe without elevation; applying changes requires admin for Set-ScheduledTask.
+if (-not $WhatIf) {
+    if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
+            [Security.Principal.WindowsBuiltInRole]::Administrator)) {
+        Write-Error "Run without -WhatIf in an elevated (Administrator) PowerShell window."
+        exit 1
+    }
 }
 
 $NewRepoRoot = $NewRepoRoot.TrimEnd('\')
