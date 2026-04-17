@@ -849,14 +849,14 @@ def write_def_rank_bucket_sheet(wb, df):
 # ── Box Raw sheet ─────────────────────────────────────────────────────────────
 def write_raw(wb,df):
     ws=wb.create_sheet('Box Raw')
-    desired=['player','team','opp_team','prop_type_norm','pick_type','line',
+    desired=['pp_projection_id','player','team','opp_team','prop_type_norm','pick_type','line',
              'bet_direction','tier','def_tier','minutes_tier','shot_role','usage_role',
              'edge','abs_edge','last5_hit_rate','last5_avg','season_avg',
              'last5_over','last5_under','projection','rank_score','ml_prob','ml_edge',
              'edge_score','blended_score',
              'actual','result','margin','void_reason_grade']
     cols=[c for c in desired if c in df.columns]
-    widths={'player':22,'team':6,'opp_team':6,'prop_type_norm':20,'pick_type':10,
+    widths={'pp_projection_id':14,'player':22,'team':6,'opp_team':6,'prop_type_norm':20,'pick_type':10,
             'line':7,'bet_direction':10,'tier':5,'def_tier':10,'minutes_tier':12,
             'shot_role':10,'usage_role':10,'edge':8,'abs_edge':8,
             'last5_hit_rate':13,'last5_avg':10,'season_avg':12,
@@ -1031,6 +1031,9 @@ def main():
         df['result']='PENDING'; df['void_reason_grade']=''; df['margin']=np.nan
         df['actual']=np.nan; df['result_sign']=0
         print('  No actuals — PENDING slate')
+
+    if "pp_projection_id" not in df.columns and "projection_id" in df.columns:
+        df["pp_projection_id"] = df["projection_id"]
 
     wb=Workbook(); wb.remove(wb.active)
     write_dashboard(wb,df,args.sport,args.date)

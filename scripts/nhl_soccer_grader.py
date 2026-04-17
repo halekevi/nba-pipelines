@@ -643,6 +643,10 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
 
 def save_graded(df: pd.DataFrame, out_path: Path, sport: str, date_str: str):
     """Save NBA-style multi-sheet graded Excel with full formatting and Demon exclusion."""
+    df = df.copy()
+    if "pp_projection_id" not in df.columns and "projection_id" in df.columns:
+        df["pp_projection_id"] = df["projection_id"]
+
     from openpyxl import Workbook
     from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
     from openpyxl.utils import get_column_letter
@@ -866,13 +870,13 @@ def save_graded(df: pd.DataFrame, out_path: Path, sport: str, date_str: str):
 
     # ── Box Raw ───────────────────────────────────────────────────────────────
     ws_raw = wb.create_sheet('Box Raw')
-    desired = ['player','team','opp_team','prop_type_norm','pick_type','line',
+    desired = ['pp_projection_id','player','team','opp_team','prop_type_norm','pick_type','line',
                'bet_direction','tier','def_tier','minutes_tier','position_group',
                'edge','hit_rate','projection','rank_score','ml_prob','ml_edge',
                'edge_score','blended_score',
                'actual','result','margin','void_reason_grade']
     cols = [c for c in desired if c in df.columns]
-    widths_map = {'player':22,'team':6,'opp_team':6,'prop_type_norm':20,'pick_type':10,
+    widths_map = {'pp_projection_id':14,'player':22,'team':6,'opp_team':6,'prop_type_norm':20,'pick_type':10,
                   'line':7,'bet_direction':10,'tier':5,'def_tier':10,'minutes_tier':12,
                   'position_group':14,'edge':8,'hit_rate':10,'projection':12,'rank_score':12,
                   'ml_prob':10,'ml_edge':10,'edge_score':11,'blended_score':12,

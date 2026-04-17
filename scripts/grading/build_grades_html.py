@@ -223,6 +223,7 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
     actual_value = _pick("Actual", "actual", "actual_value")
     margin = _pick("Margin", "margin")
     void_reason = _pick("void_reason", "Void Reason", "void reason")
+    proj_id = _pick("pp_projection_id", "projection_id", "PP Projection ID", "Projection ID")
     result = _norm_result_display(row)
     return {
         "sport": sport,
@@ -240,6 +241,7 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
         "margin": margin or "",
         "void_reason": void_reason or "",
         "result": result,
+        "pp_projection_id": proj_id or "",
     }
 
 

@@ -133,3 +133,4 @@ scripts/*-DESKTOP-*
 archive/
 data/grade_history.json
 data/payout_samples/
+data/retrain_dataset*.csv
