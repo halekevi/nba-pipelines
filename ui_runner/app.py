@@ -2681,13 +2681,29 @@ def api_payout_log_observation():
     n_lines = sum(1 for _ in csv_path.open("r", encoding="utf-8")) - 1
     hand_lines = sum(1 for _ in hand_csv_path.open("r", encoding="utf-8")) - 1
     warn = bool(est_mult and abs(float(actual_mult) - float(est_mult)) > 1.5)
+    csv_row = ",".join(
+        [
+            hand_row["date"],
+            hand_row["group_name"],
+            hand_row["n_legs"],
+            hand_row["pick_types"],
+            hand_row["lines"],
+            hand_row["standard_lines"],
+            str(hand_row["actual_payout_multiplier"]),
+            hand_row["slip_type"],
+            hand_row["result"],
+        ]
+    )
     return jsonify(
         {
+            "status": "ok",
             "saved": True,
             "total_obs": max(0, n_lines),
             "total_hand_obs": max(0, hand_lines),
             "mult_delta": mult_delta,
             "warning_large_delta": warn,
+            "csv_row": csv_row,
+            "message": "Copy this row to data/payout_samples/payout_log_hand.csv on your machine",
         }
     )
 

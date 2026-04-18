@@ -1036,6 +1036,13 @@ body::before{
       <button class="btn btn-ghost" onclick="clearLogForm()">✕ Clear</button>
     </div>
     <div id="log-msg" style="font-size:11px;margin-top:10px;height:18px;"></div>
+    <div id="log-csv-wrap" style="display:none;margin-top:10px">
+      <label style="font-size:10px;color:var(--muted);letter-spacing:.7px">CSV ROW (copy to local <code style="font-size:10px">data/payout_samples/payout_log_hand.csv</code>)</label>
+      <div style="display:flex;gap:8px;align-items:flex-start;margin-top:6px">
+        <textarea id="log-csv-row" readonly style="flex:1;min-height:52px;resize:vertical;padding:8px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:11px;line-height:1.4"></textarea>
+        <button type="button" class="btn btn-ghost" style="padding:7px 12px;font-size:11px" onclick="copyLogCsvRow()">Copy</button>
+      </div>
+    </div>
   </div><!-- /card accent (log form) -->
 
   <div class="card" style="padding:0">
@@ -1737,8 +1744,9 @@ async function logTicket(){
       const legBlob={platform,slipType,result,group_name:logLoadedGroupName||calcLoadedGroupName||'',bucketSig:bSig,comboSig:cSig,min_guarantee_mult:(minGuaranteeMult!=null&&!isNaN(minGuaranteeMult))?minGuaranteeMult:null,legs};
       const obsR=await fetch('/api/payout/log-observation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:dt||'',group_name:logLoadedGroupName||calcLoadedGroupName||'',n_legs:n,slip_type:mode,result,pick_types:pickTypes,lines,standard_lines:standardLines,combo_label:bSig,base_mult:bm||0,est_mult:estMult,actual_mult:am,stake:'',actual_payout:'',leg_details_json:legBlob})});
       const obsJ=obsR.ok?await obsR.json():{};
-      if(!obsR.ok||!obsJ.saved)showMsg('⚠ Saved locally; server CSV append failed.','warn');
+      if(!obsR.ok||!obsJ.saved){setLogCsvRow('');showMsg('⚠ Saved locally; server CSV append failed.','warn');}
       else{
+        setLogCsvRow(obsJ.csv_row||'');
         if(flex&&minGuaranteeMult!=null&&!isNaN(minGuaranteeMult)&&n>2){
           const basePartial=FLEX_BASE[n]&&FLEX_BASE[n][n-1];
           if(basePartial!=null){
@@ -1755,11 +1763,32 @@ async function logTicket(){
         else showMsg(`✓ Logged + server row (${obsJ.total_obs||'?'} obs). ${logEntries.length} total.`,'good');
         _payoutServerObsFetchTs=0;
       }
-    }catch(e){showMsg('⚠ Saved locally; server CSV error.','warn');}
+    }catch(e){setLogCsvRow('');showMsg('⚠ Saved locally; server CSV error.','warn');}
   }else showMsg(`✓ Logged! ${logEntries.length} total.`,'good');
   clearLogForm();
 }
 function showMsg(m,t){const e=document.getElementById('log-msg');e.textContent=m;e.style.color=t==='good'?'var(--green)':t==='warn'?'var(--amber)':'var(--red)';setTimeout(()=>e.textContent='',3500);}
+function setLogCsvRow(row){
+  const wrap=document.getElementById('log-csv-wrap');
+  const area=document.getElementById('log-csv-row');
+  if(!wrap||!area)return;
+  const val=String(row||'').trim();
+  if(!val){wrap.style.display='none';area.value='';return;}
+  area.value=val;
+  wrap.style.display='block';
+}
+function copyLogCsvRow(){
+  const area=document.getElementById('log-csv-row');
+  if(!area||!area.value)return;
+  area.select();
+  area.setSelectionRange(0,area.value.length);
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(area.value).then(()=>showMsg('✓ CSV row copied.','good')).catch(()=>showMsg('⚠ Copy failed — select and copy manually.','warn'));
+  }else{
+    document.execCommand('copy');
+    showMsg('✓ CSV row copied.','good');
+  }
+}
 function deleteEntry(id){logEntries=logEntries.filter(e=>e.id!==id);saveLog(logEntries);renderLogTable();updateLogCount();}
 function clearAllLog(){if(!logEntries.length||!confirm('Delete all?'))return;logEntries=[];saveLog(logEntries);renderLogTable();updateLogCount();}
 function updateLogCount(){const n=logEntries.length;document.getElementById('log-count').textContent=n;document.getElementById('log-table-count').textContent=n;}
