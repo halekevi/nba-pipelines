@@ -236,9 +236,9 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .field input:focus,.field select:focus{border-color:rgba(212,175,55,0.4);box-shadow:0 0 0 3px rgba(212,175,55,0.06);}
 .field select option{background:#0c0e1a;color:#f2f4ff;}
 /* Slate ticket dropdown contrast (native option list can ignore inherited glass colors). */
-#calc-slate-ticket-select{color:var(--text);}
-#calc-slate-ticket-select option{background:#0c0e1a;color:#f2f4ff;}
-#calc-slate-ticket-select optgroup{background:#0c0e1a;color:#9fd8e8;font-weight:600;}
+#calc-slate-ticket-select,#log-slate-ticket-select{color:var(--text);}
+#calc-slate-ticket-select option,#log-slate-ticket-select option{background:#0c0e1a;color:#f2f4ff;}
+#calc-slate-ticket-select optgroup,#log-slate-ticket-select optgroup{background:#0c0e1a;color:#9fd8e8;font-weight:600;}
 .section-divider{font-size:10px;letter-spacing:2.5px;color:var(--muted);margin:20px 0 14px;display:flex;align-items:center;gap:10px;}
 .section-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08);}
 .btn{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:11px 28px;border-radius:10px;cursor:pointer;transition:all .15s;border:1px solid;}
@@ -630,11 +630,13 @@ canvas{width:100%!important;max-height:220px;}
   background-color:#ffffff !important;
   color:#111827 !important;
 }
-[data-theme="light"] #calc-slate-ticket-select option{
+[data-theme="light"] #calc-slate-ticket-select option,
+[data-theme="light"] #log-slate-ticket-select option{
   background-color:#ffffff !important;
   color:#111827 !important;
 }
-[data-theme="light"] #calc-slate-ticket-select optgroup{
+[data-theme="light"] #calc-slate-ticket-select optgroup,
+[data-theme="light"] #log-slate-ticket-select optgroup{
   background-color:#ffffff !important;
   color:#1f4b7a !important;
 }
@@ -998,6 +1000,16 @@ body::before{
         <button type="button" class="btn-glass-sm" onclick="importTodayTicketsFromSlate()">📥 Import from slate JSON</button>
         <span style="font-size:10px;color:var(--muted);letter-spacing:1px">Loads tickets_latest.json (same as /tickets). Enter actual PP multiplier, then Log.</span>
       </div>
+      <div class="import-actions" style="margin-top:12px;align-items:flex-end;gap:10px;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:6px;min-width:320px;flex:1">
+          <label style="font-size:10px;color:var(--muted);letter-spacing:1.5px;">LOAD TICKET FROM TODAY'S SLATE</label>
+          <select id="log-slate-ticket-select" class="leg-input" onchange="applySelectedSlateTicketToLog()" style="min-height:38px">
+            <option value="">Select a ticket group...</option>
+          </select>
+        </div>
+        <button type="button" class="btn-glass-sm" onclick="loadSlateTicketOptions()">📋 Refresh slate</button>
+        <span id="log-slate-msg" style="font-size:10px;color:var(--muted);letter-spacing:0.5px"></span>
+      </div>
     </div>
     <div class="form-grid-3" style="margin-bottom:10px">
       <div class="field"><label>PLATFORM</label><select id="log-platform" onchange="scheduleLogDraftSave()"><option>PrizePicks</option><option>Underdog Fantasy</option><option>Sleeper</option></select></div>
@@ -1186,6 +1198,8 @@ const SPORT_OPTS= ['NBA','NBA1H','NBA1Q','CBB','NHL','NFL','MLB','Soccer','Tenni
 
 let slateTicketOptions = [];
 let slateTicketMap = {};
+/** Flattened legs from slate tickets for vision import (sport + standard line correction). */
+let slateLegLookup = [];
 let calcLoadedGroupName = '';
 
 function loadLog(){try{const r=localStorage.getItem(STORE_KEY);return r?JSON.parse(r):[]}catch{return[]}}
@@ -1316,6 +1330,50 @@ function normalizePropOpt(raw){
   const hit=PROP_OPTS.find(v=>v.toLowerCase()===s);
   return hit||'Other';
 }
+function normalizePlayerKey(name){
+  return String(name||'').toLowerCase().replace(/\./g,'').replace(/'/g,'').replace(/\s+/g,' ').trim();
+}
+function rebuildSlateLegLookup(){
+  slateLegLookup=[];
+  Object.values(slateTicketMap).forEach(t=>{
+    (t.legs||[]).forEach(leg=>{
+      const stdRaw=(leg.standard_line!=null&&leg.standard_line!=='')?leg.standard_line:leg.line;
+      const playedRaw=leg.line;
+      slateLegLookup.push({
+        pk:normalizePlayerKey(leg.player||''),
+        prop:normalizePropOpt(leg.prop_type||''),
+        sport:normalizeSportOpt(leg.sport||''),
+        std:String(stdRaw!=null&&stdRaw!==''?stdRaw:''),
+        played:String(playedRaw!=null&&playedRaw!==''?playedRaw:''),
+      });
+    });
+  });
+}
+function lookupSlateLegForPick(player,prop,playedLine){
+  const pk=normalizePlayerKey(player);
+  if(!pk||!slateLegLookup.length)return null;
+  const pr=normalizePropOpt(prop);
+  const pNum=parseFloat(String(playedLine??'').replace(/,/g,''));
+  let best=null,bestScore=1e9;
+  for(const r of slateLegLookup){
+    if(!r.pk)continue;
+    if(r.pk!==pk&&!(r.pk.includes(pk)||pk.includes(r.pk)))continue;
+    let score=0;
+    if(pr&&r.prop&&pr!=='Other'&&r.prop!=='Other'&&pr!==r.prop)score+=50;
+    if(!isNaN(pNum)){
+      const pl=parseFloat(r.played),ps=parseFloat(r.std);
+      if(!isNaN(pl))score+=Math.abs(pNum-pl);
+      else if(!isNaN(ps))score+=Math.abs(pNum-ps);
+    }
+    if(score<bestScore){bestScore=score;best=r;}
+  }
+  return best;
+}
+function inferLogSlipTypeFromGroupName(gn){
+  const s=String(gn||'').toLowerCase();
+  if(/\bflex\b/.test(s)||s.includes('flex'))return'Flex Play';
+  return'Power Play';
+}
 function pctFromLegProb(leg){
   const hr=parseFloat(leg.hit_rate);
   if(!isNaN(hr)){
@@ -1335,9 +1393,38 @@ function setCalcSlateMsg(txt,isErr){
   el.textContent=txt||'';
   el.style.color=isErr?'var(--amber)':'var(--muted)';
 }
+function setLogSlateMsg(txt,isErr){
+  const el=document.getElementById('log-slate-msg');
+  if(!el)return;
+  el.textContent=txt||'';
+  el.style.color=isErr?'var(--amber)':'var(--muted)';
+}
+function populateSlateTicketSelect(selectEl){
+  if(!selectEl)return;
+  selectEl.innerHTML='<option value="">Select a ticket group...</option>';
+  const byGroup={};
+  slateTicketOptions.forEach(t=>{
+    const g=String(t.group_name||'Ungrouped');
+    if(!byGroup[g])byGroup[g]=[];
+    byGroup[g].push(t);
+  });
+  Object.keys(byGroup).sort().forEach(groupName=>{
+    const og=document.createElement('optgroup');
+    og.label=groupName;
+    byGroup[groupName].forEach(t=>{
+      const o=document.createElement('option');
+      o.value=String(t.ticket_key||'');
+      const n=Number(t.n_legs)||((t.legs||[]).length||0);
+      o.textContent=groupName+' · #'+String(t.ticket_no||'?')+' ('+n+' legs)';
+      og.appendChild(o);
+    });
+    selectEl.appendChild(og);
+  });
+}
 async function loadSlateTicketOptions(){
   try{
     setCalcSlateMsg('Loading slate tickets...',false);
+    setLogSlateMsg('Loading slate tickets...',false);
     const r=await fetch('/api/slate-legs',{cache:'no-store'});
     const j=await r.json();
     if(!r.ok)throw new Error(j.error||('HTTP '+r.status));
@@ -1345,31 +1432,16 @@ async function loadSlateTicketOptions(){
     slateTicketOptions=list;
     slateTicketMap={};
     list.forEach(t=>{slateTicketMap[String(t.ticket_key||'')]=t;});
-    const sel=document.getElementById('calc-slate-ticket-select');
-    if(!sel)return;
-    sel.innerHTML='<option value="">Select a ticket group...</option>';
-    const byGroup={};
-    list.forEach(t=>{
-      const g=String(t.group_name||'Ungrouped');
-      if(!byGroup[g])byGroup[g]=[];
-      byGroup[g].push(t);
-    });
-    Object.keys(byGroup).sort().forEach(groupName=>{
-      const og=document.createElement('optgroup');
-      og.label=groupName;
-      byGroup[groupName].forEach(t=>{
-        const o=document.createElement('option');
-        o.value=String(t.ticket_key||'');
-        const n=Number(t.n_legs)||((t.legs||[]).length||0);
-        o.textContent=groupName+' · #'+String(t.ticket_no||'?')+' ('+n+' legs)';
-        og.appendChild(o);
-      });
-      sel.appendChild(og);
-    });
+    rebuildSlateLegLookup();
+    populateSlateTicketSelect(document.getElementById('calc-slate-ticket-select'));
+    populateSlateTicketSelect(document.getElementById('log-slate-ticket-select'));
     const stamp=j.built_at?(' · '+j.built_at):'';
-    setCalcSlateMsg('Loaded '+list.length+' tickets'+stamp,false);
+    const msg='Loaded '+list.length+' tickets'+stamp;
+    setCalcSlateMsg(msg,false);
+    setLogSlateMsg(msg,false);
   }catch(e){
     setCalcSlateMsg('Could not load slate tickets',true);
+    setLogSlateMsg('Could not load slate tickets',true);
   }
 }
 function applySelectedSlateTicketToCalc(){
@@ -1405,6 +1477,47 @@ function applySelectedSlateTicketToCalc(){
   });
   renderCalcLegs();
   setCalcSlateMsg('Loaded '+calcLegs.length+' legs from '+calcLoadedGroupName,false);
+}
+function applySelectedSlateTicketToLog(){
+  const sel=document.getElementById('log-slate-ticket-select');
+  if(!sel)return;
+  const key=String(sel.value||'');
+  if(!key){setLogSlateMsg('',false);return;}
+  const t=slateTicketMap[key];
+  if(!t||!Array.isArray(t.legs)||!t.legs.length){
+    setLogSlateMsg('No legs found for selection',true);
+    return;
+  }
+  logLoadedGroupName=String(t.group_name||'');
+  logLegs=[];
+  logCounter=0;
+  (t.legs||[]).forEach(leg=>{
+    const typ=normalizePickType(leg.pick_type);
+    const stdRaw=(leg.standard_line!=null&&leg.standard_line!=='')?leg.standard_line:leg.line;
+    const playedRaw=leg.line;
+    const std=(stdRaw!=null&&stdRaw!=='')?String(stdRaw):'';
+    const played=(playedRaw!=null&&playedRaw!=='')?String(playedRaw):'';
+    logLegs.push({
+      id:++logCounter,
+      type:typ,
+      player:String(leg.player||''),
+      sport:normalizeSportOpt(leg.sport),
+      prop:normalizePropOpt(leg.prop_type),
+      stdLine:std,
+      playedLine:typ==='standard'?std:played,
+    });
+  });
+  const st=document.getElementById('log-slip-type');
+  if(st){
+    st.value=inferLogSlipTypeFromGroupName(logLoadedGroupName);
+    onLogSlipTypeChange();
+  }
+  const res=document.getElementById('log-result');
+  if(res)res.value='PENDING';
+  renderLogLegs();
+  refreshLogSummary();
+  scheduleLogDraftSave();
+  setLogSlateMsg('Loaded '+logLegs.length+' legs from '+logLoadedGroupName,false);
 }
 function renderGoblinDiscountTable(){
   const host=document.getElementById('goblin-discount-mount');
@@ -1953,21 +2066,31 @@ let _pendingImportedMeta=null;
 var _screenshotImportTarget='calc';
 
 const VISION_PROMPT=
-  "This is a PrizePicks ticket screenshot. Extract all picks and any visible payout info.\n"+
+  "You are reading a PrizePicks bet slip screenshot. Extract exactly what is visible on screen.\n"+
   "Return ONLY valid JSON (no markdown, no commentary).\n"+
-  "Preferred shape (so payout rates can be logged):\n"+
+  "1) For each leg: player name, prop label, pick type (Standard / Goblin / Demon), direction (OVER/UNDER),\n"+
+  "   sport if shown on the slip (e.g. MLB, NBA, NHL, NFL, Soccer, Tennis, WNBA). If sport is not printed, use null.\n"+
+  "2) For each leg line numbers: \"line\" MUST be the EXACT played line printed on the slip for that leg (Goblin/Demon/Standard).\n"+
+  "   When both a market/standard line and a different played line appear, set \"standard_line\" to the market line and \"line\" to the played line.\n"+
+  "   Never guess a default like 0.5 for Goblin — read the real number from the slip. Goblin lines are typically LOWER than standard for OVER props.\n"+
+  "3) Slip type: Power Play (all must hit) vs Flex Play (can miss one).\n"+
+  "4) Sweep multiplier: the main payout shown (e.g. 6.00x).\n"+
+  "5) Flex only: min guarantee / one-miss multiplier if visible (smaller number, e.g. 1.5x).\n"+
+  "JSON shape:\n"+
   "{\n"+
   "  \"picks\": [\n"+
   "    {\n"+
   "      \"player\": \"Ja Morant\",\n"+
+  "      \"sport\": \"NBA\",\n"+
   "      \"prop\": \"Points\",\n"+
   "      \"line\": 24.5,\n"+
+  "      \"standard_line\": 27.5,\n"+
   "      \"direction\": \"OVER\",\n"+
   "      \"pick_type\": \"Goblin\"\n"+
   "    }\n"+
   "  ],\n"+
-  "  \"actual_payout_multiplier\": number or null — main multiplier on screen (Power all-hit, or Flex all-correct sweep),\n"+
-  "  \"flex_min_guarantee_multiplier\": number or null — Flex only: one-miss or (n-1)/n payout if shown; else null,\n"+
+  "  \"actual_payout_multiplier\": number or null,\n"+
+  "  \"flex_min_guarantee_multiplier\": number or null,\n"+
   "  \"slip_type\": \"flex\" | \"power\" | \"unknown\"\n"+
   "}\n"+
   "If no payout text is visible, use null for the numeric fields and \"unknown\" for slip_type.\n"+
@@ -2012,6 +2135,8 @@ function applyVisionMetaToLog(meta){
   const am=document.getElementById('log-actual-mult');
   const mg=document.getElementById('log-min-guarantee-mult');
   const st=document.getElementById('log-slip-type');
+  const res=document.getElementById('log-result');
+  if(res)res.value='PENDING';
   const v=meta.actual_payout_multiplier!=null?Number(meta.actual_payout_multiplier):NaN;
   if(am&&!isNaN(v)&&v>0)am.value=String(v);
   const g=meta.flex_min_guarantee_multiplier!=null?Number(meta.flex_min_guarantee_multiplier):NaN;
@@ -2022,6 +2147,42 @@ function applyVisionMetaToLog(meta){
     else if(raw.includes('power'))st.value='Power Play';
     onLogSlipTypeChange();
   }
+  scheduleLogDraftSave();
+}
+function enrichVisionPickForUi(p){
+  const type=mapPickType(p.pick_type||p.pickType||'standard');
+  const prop=nearestProp(p.prop||p.stat||'');
+  const player=String(p.player||'').trim();
+  let playedNum=Number(p.line);
+  let stdNum=p.standard_line!=null&&p.standard_line!==''?Number(p.standard_line):NaN;
+  let visionSport=p.sport?normalizeSportOpt(p.sport):'';
+  if(visionSport==='Other')visionSport='';
+  const m=lookupSlateLegForPick(player,prop,!isNaN(playedNum)?playedNum:null);
+  function resolveSport(){
+    if(m)return m.sport;
+    if(visionSport)return visionSport;
+    return'NBA';
+  }
+  const sport=normalizeSportOpt(resolveSport());
+  if(type==='standard'){
+    const line=!isNaN(playedNum)?playedNum:(!isNaN(stdNum)?stdNum:NaN);
+    if(isNaN(line))return null;
+    return{type,player,sport,prop,stdLine:String(line),playedLine:String(line),hitProb:52};
+  }
+  if(isNaN(stdNum)&&m){
+    const s2=parseFloat(m.std);
+    if(!isNaN(s2))stdNum=s2;
+  }
+  if(isNaN(playedNum)&&m){
+    const p2=parseFloat(m.played);
+    if(!isNaN(p2))playedNum=p2;
+  }
+  if(isNaN(playedNum))return null;
+  let stdLine=!isNaN(stdNum)?String(stdNum):'';
+  if(!stdLine&&m&&m.std)stdLine=m.std;
+  const playedLine=String(playedNum);
+  if(!stdLine)stdLine=playedLine;
+  return{type,player,sport,prop,stdLine,playedLine,hitProb:type==='goblin'?68:type==='demon'?32:52};
 }
 function applyPicksToCalc(picks,meta){
   if(!Array.isArray(picks)||!picks.length)return;
@@ -2029,22 +2190,17 @@ function applyPicksToCalc(picks,meta){
   calcLegs=[];
   calcCounter=0;
   picks.forEach(p=>{
-    const type=mapPickType(p.pick_type||p.pickType||'standard');
-    const line=Number(p.line);
-    if(isNaN(line))return;
-    const prop=nearestProp(p.prop||p.stat||'');
-    const player=String(p.player||'').trim();
-    const std=line;
-    const played=type==='standard'?'':String(line);
+    const row=enrichVisionPickForUi(p);
+    if(!row)return;
     calcLegs.push({
       id:++calcCounter,
-      type,
-      player,
-      sport:'NBA',
-      prop,
-      stdLine:String(std),
-      playedLine:played,
-      hitProb:type==='goblin'?68:type==='demon'?32:52,
+      type:row.type,
+      player:row.player,
+      sport:row.sport,
+      prop:row.prop,
+      stdLine:row.stdLine,
+      playedLine:row.type==='standard'?row.stdLine:row.playedLine,
+      hitProb:row.hitProb,
       open:true,
     });
   });
@@ -2057,14 +2213,17 @@ function applyPicksToLog(picks,meta){
   logLegs=[];
   logCounter=0;
   picks.forEach(p=>{
-    const type=mapPickType(p.pick_type||p.pickType||'standard');
-    const line=Number(p.line);
-    if(isNaN(line))return;
-    const prop=nearestProp(p.prop||p.stat||'');
-    const player=String(p.player||'').trim();
-    const std=String(line);
-    const played=type==='standard'?'':String(line);
-    logLegs.push({id:++logCounter,type,player,sport:'NBA',prop,stdLine:std,playedLine:played});
+    const row=enrichVisionPickForUi(p);
+    if(!row)return;
+    logLegs.push({
+      id:++logCounter,
+      type:row.type,
+      player:row.player,
+      sport:row.sport,
+      prop:row.prop,
+      stdLine:row.stdLine,
+      playedLine:row.type==='standard'?row.stdLine:row.playedLine,
+    });
   });
   renderLogLegs();
   applyVisionMetaToLog(meta||null);
@@ -2162,6 +2321,8 @@ async function sendScreenshotToVision(rawBase64,mediaType){
       alert('Model did not return picks (array or .picks array).');
       return;
     }
+    if(_screenshotImportTarget==='log')applyVisionMetaToLog(meta||null);
+    else applyVisionMetaToCalc(meta||null);
     _pendingImportedPicks=picks;
     _pendingImportedMeta=meta;
     const preview={picks,...(meta?{actual_payout_multiplier:meta.actual_payout_multiplier,flex_min_guarantee_multiplier:meta.flex_min_guarantee_multiplier,slip_type:meta.slip_type}:{})};

@@ -3214,6 +3214,16 @@ def api_vision_screenshot():
     if not isinstance(media_type, str):
         media_type = "image/jpeg"
 
+    # Reinforce numeric extraction (client also sends a detailed prompt). Prevents lazy defaults
+    # like 0.5 for Goblin lines when the model should read the slip pixels.
+    _vision_line_hint = (
+        "\n\nReminder: For every leg, copy the exact line numbers visible on the slip. "
+        "Do not invent values (e.g. do not default Goblin lines to 0.5). "
+        "When both market and played lines appear, put the market line in standard_line "
+        "and the slip's played line in line."
+    )
+    prompt = str(prompt) + _vision_line_hint
+
     gemini_body = {
         "contents": [
             {
