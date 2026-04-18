@@ -1,9 +1,9 @@
 /**
  * Shared mobile nav: two-row bar (brand + hamburger, then snav-right meta)
  * and fixed flyout. Load after page inline <style> so these rules win.
- * v=20260406 — safe areas, touch targets, reduced motion respect.
+ * v=20260418nav — ≤768px hamburger; hide ul#nav-links; flyout above sticky bar.
  */
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   nav.snav,
   .snav {
     flex-wrap: wrap !important;
@@ -40,6 +40,12 @@
     object-fit: contain !important;
   }
 
+  /* Primary nav list (ul carries both .snav-links and .nav-links — see proporacle-page-shell .nav-links:not(.snav-links) fix). */
+  nav.snav ul.snav-links,
+  nav.snav ul.nav-links,
+  nav.snav ul#nav-links,
+  .snav ul.snav-links,
+  .snav ul#nav-links,
   .snav-links {
     display: none !important;
   }
@@ -91,6 +97,7 @@
   }
 
   .mobile-menu {
+    z-index: 230 !important;
     top: calc(env(safe-area-inset-top, 0px) + var(--snav-mobile-stack-h, 118px)) !important;
     left: 0 !important;
     right: 0 !important;
@@ -115,7 +122,7 @@
   }
 }
 
-@media (max-width: 900px) and (prefers-reduced-motion: reduce) {
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
   .snav,
   .mobile-menu a,
   .hamburger span {

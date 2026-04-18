@@ -141,10 +141,10 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 @keyframes bsparkFly{0%,47%{opacity:0;transform:translate(0,0) scale(0);}50%{opacity:1;transform:translate(0,0) scale(1);}75%{opacity:0.5;}95%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0.2);}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0);}}
 .brand{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.12em;color:var(--accent);line-height:1;}
 .brand span{color:var(--cyan);}
-.nav-links{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
-.nav-links a{color:rgba(255,255,255,0.95);text-decoration:none;font-size:13px;padding:6px 14px;border-radius:6px;border:1px solid transparent;transition:all .2s;}
-.nav-links a:hover{color:var(--text);border-color:var(--border);}
-.nav-links a.active{color:var(--accent);border-color:var(--accent);background:rgba(212,175,55,.06);}
+.nav-links:not(.snav-links){display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
+.nav-links:not(.snav-links) a{color:rgba(255,255,255,0.95);text-decoration:none;font-size:13px;padding:6px 14px;border-radius:6px;border:1px solid transparent;transition:all .2s;}
+.nav-links:not(.snav-links) a:hover{color:var(--text);border-color:var(--border);}
+.nav-links:not(.snav-links) a.active{color:var(--accent);border-color:var(--accent);background:rgba(212,175,55,.06);}
 
 /* force propOracle logo treatment to match home */
 .nav-logo{gap:12px;}
@@ -554,16 +554,16 @@ canvas{width:100%!important;max-height:220px;}
 }
 /* Nav links */
 [data-theme="light"] .snav-links li a,
-[data-theme="light"] .nav-links a {
+[data-theme="light"] .nav-links:not(.snav-links) a {
   color:rgba(0,0,0,0.48) !important;
 }
 [data-theme="light"] .snav-links li a:hover,
-[data-theme="light"] .nav-links a:hover {
+[data-theme="light"] .nav-links:not(.snav-links) a:hover {
   color:rgba(0,0,0,0.80) !important;
   background:rgba(0,0,0,0.04) !important;
 }
 [data-theme="light"] .snav-links li a.active,
-[data-theme="light"] .nav-links a.active {
+[data-theme="light"] .nav-links:not(.snav-links) a.active {
   color:var(--accent) !important;
   background:rgba(75,111,150,0.08) !important;
   border-color:rgba(75,111,150,0.25) !important;
@@ -862,8 +862,8 @@ body::before{
 }
 </style>
 <link rel="stylesheet" href="/static/global-scrollbar.css?v=20260416"/>
-<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260406"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260418mobile"/>
+<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260418nav"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260418nav2"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 <link rel="stylesheet" href="/static/site-nav-unified.css?v=20260408"/>
 </head>

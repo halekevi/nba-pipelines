@@ -97,7 +97,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
 .hamburger.open span:nth-child(2){opacity:0;}
 .hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
-.mobile-menu{display:none;position:fixed;top:72px;left:0;right:0;background:rgba(5,5,15,.98);backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--border);z-index:199;padding:12px 0;}
+.mobile-menu{display:none;position:fixed;top:72px;left:0;right:0;background:rgba(5,5,15,.98);backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--border);z-index:230;padding:12px 0;}
 .mobile-menu.open{display:block;}
 .mobile-menu a{display:flex;align-items:center;gap:12px;padding:12px 24px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-decoration:none;border-left:3px solid transparent;transition:all .15s;}
 .mobile-menu a:hover,.mobile-menu a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(212,175,55,.04);}
@@ -147,10 +147,11 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 @keyframes bsparkFly{0%,47%{opacity:0;transform:translate(0,0) scale(0);}50%{opacity:1;transform:translate(0,0) scale(1);}75%{opacity:0.5;}95%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0.2);}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0);}}
 .brand{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.12em;color:var(--accent);line-height:1;}
 .brand span{color:var(--cyan);}
-.nav-links{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
-.nav-links a{color:rgba(255,255,255,0.95);text-decoration:none;font-size:13px;padding:6px 14px;border-radius:6px;border:1px solid transparent;transition:all .2s;}
-.nav-links a:hover{color:var(--text);border-color:var(--border);}
-.nav-links a.active{color:var(--accent);border-color:var(--accent);background:rgba(212,175,55,.06);}
+/* Do not target ul.snav-links.nav-links — same element; display:flex here broke mobile hide (nav-mobile-shared). */
+.nav-links:not(.snav-links){display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
+.nav-links:not(.snav-links) a{color:rgba(255,255,255,0.95);text-decoration:none;font-size:13px;padding:6px 14px;border-radius:6px;border:1px solid transparent;transition:all .2s;}
+.nav-links:not(.snav-links) a:hover{color:var(--text);border-color:var(--border);}
+.nav-links:not(.snav-links) a.active{color:var(--accent);border-color:var(--accent);background:rgba(212,175,55,.06);}
 
 /* force propOracle logo treatment to match home */
 .nav-logo{gap:12px;}
@@ -548,16 +549,16 @@ canvas{width:100%!important;max-height:220px;}
 }
 /* Nav links */
 [data-theme="light"] .snav-links li a,
-[data-theme="light"] .nav-links a {
+[data-theme="light"] .nav-links:not(.snav-links) a {
   color:rgba(0,0,0,0.48) !important;
 }
 [data-theme="light"] .snav-links li a:hover,
-[data-theme="light"] .nav-links a:hover {
+[data-theme="light"] .nav-links:not(.snav-links) a:hover {
   color:rgba(0,0,0,0.80) !important;
   background:rgba(0,0,0,0.04) !important;
 }
 [data-theme="light"] .snav-links li a.active,
-[data-theme="light"] .nav-links a.active {
+[data-theme="light"] .nav-links:not(.snav-links) a.active {
   color:var(--accent) !important;
   background:rgba(75,111,150,0.08) !important;
   border-color:rgba(75,111,150,0.25) !important;
@@ -665,6 +666,7 @@ canvas{width:100%!important;max-height:220px;}
 [data-theme="light"] .hamburger span { background:rgba(0,0,0,0.55) !important; }
 /* Mobile menu */
 [data-theme="light"] .mobile-menu {
+  z-index:230 !important;
   background:rgba(226,240,252,0.97) !important;
   border-bottom-color:rgba(0,0,0,0.08) !important;
 }

@@ -133,7 +133,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
 .hamburger.open span:nth-child(2){opacity:0;}
 .hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
-.mobile-menu{display:none;position:fixed;top:72px;left:0;right:0;background:rgba(5,5,15,.98);backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--glass-panel-border);z-index:199;padding:12px 0;box-shadow:0 12px 40px rgba(0,0,0,.45);}
+.mobile-menu{display:none;position:fixed;top:72px;left:0;right:0;background:rgba(5,5,15,.98);backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--glass-panel-border);z-index:230;padding:12px 0;box-shadow:0 12px 40px rgba(0,0,0,.45);}
 .mobile-menu.open{display:block;}
 .mobile-menu a{display:flex;align-items:center;gap:12px;padding:12px 24px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-decoration:none;border-left:3px solid transparent;transition:all .15s;font-family:'Inter',sans-serif;}
 .mobile-menu a:hover,.mobile-menu a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(212,160,23,.06);}
@@ -599,6 +599,7 @@ select option,
 [data-theme="light"] .hamburger span { background:rgba(0,0,0,0.55) !important; }
 /* Mobile menu */
 [data-theme="light"] .mobile-menu {
+  z-index:230 !important;
   background:rgba(245,248,255,0.96) !important;
   border-bottom-color:rgba(0,0,0,0.08) !important;
 }
@@ -848,8 +849,8 @@ select option,
 }
 
 </style>
-<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260406"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260418mobile"/>
+<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260418nav"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260418nav2"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 </head>
 <body class="page-grades">

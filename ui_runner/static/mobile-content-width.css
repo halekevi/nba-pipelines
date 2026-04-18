@@ -1,7 +1,7 @@
 /**
  * Mobile: full-width shell, safe-area gutters, touch scrolling, form zoom fix.
  * Load after page styles and nav-mobile-shared.css.
- * v=20260418mobile
+ * v=20260418nav2
  */
 @media (max-width: 900px) {
   html {
@@ -175,7 +175,7 @@
   }
 }
 
-/* ── Global overflow + tables + skeleton (all viewports) — v20260418mobile ─── */
+/* ── Global overflow + tables + skeleton (all viewports) — v20260418nav2 ─── */
 html {
   box-sizing: border-box;
 }
@@ -539,7 +539,7 @@ nav.snav .mobile-menu a {
     display: none !important;
   }
   .tickets-built .ticket-legs-table tbody tr.leg-row {
-    display: block;
+    display: block !important;
     position: relative;
     background: var(--card-bg, rgba(255, 255, 255, 0.04));
     border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
@@ -561,7 +561,7 @@ nav.snav .mobile-menu a {
     display: none !important;
   }
   .tickets-built .ticket-legs-table tbody tr.leg-row > td {
-    display: block;
+    display: block !important;
     text-align: left !important;
     padding: 3px 0 !important;
     border: none !important;
@@ -723,7 +723,7 @@ nav.snav .mobile-menu a {
   }
 }
 
-/* ── v20260418mobile — tickets filters, payout legs, home slate tiles, nav, grades ─ */
+/* ── v20260418nav2 — tickets filters, payout legs, home slate tiles, nav, grades ─ */
 @media (max-width: 768px) {
   .tickets-built .ticket-filter-bar,
   .tickets-built .filter-bar,
