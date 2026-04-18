@@ -11,7 +11,8 @@
 #    .\run_pipeline.ps1 -SoccerOnly            # Soccer only + Combined
 #    .\run_pipeline.ps1 -TennisOnly           # Tennis (light pipeline) + Combined
 #    .\run_pipeline.ps1 -WNBAOnly              # WNBA only (season-gated)
-#    .\run_pipeline.ps1 -CombinedOnly          # Re-run combined using all existing outputs
+#    .\run_pipeline.ps1 -CombinedOnly          # Re-run combined + web tickets (multi-sport /tickets JSON)
+#    .\run_pipeline.ps1 -CombinedOnly -WebEvOnly   # Stricter /tickets: positive-EV gate only (+ Tennis bypass)
 #    .\run_pipeline.ps1 -SkipFetch             # Skip step1 fetch for whatever sport(s) run
 #    .\run_pipeline.ps1 -NBAOnly -SkipFetch    # NBA steps 2-8 + Combined
 #    .\run_pipeline.ps1 -NHLOnly -SkipFetch    # NHL steps 2-8 + Combined
@@ -46,7 +47,10 @@ param(
     [switch]$SkipDailyGrader,
     [switch]$RunPayoutEngine,
     [switch]$SkipAltBooks,
-    [int]$CacheAgeDays = 7
+    [int]$CacheAgeDays = 7,
+    # By default /tickets JSON includes MLB/NHL/Soccer slips (not only strict positive-EV + Tennis).
+    # Pass -WebEvOnly to restore the stricter web JSON filter.
+    [switch]$WebEvOnly
 )
 
 $ErrorActionPreference = "Continue"
@@ -508,6 +512,9 @@ function Run-Combined {
 
     # Keep strict date checks for NBA-family slates so /tickets never shows yesterday as today.
     $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --max-tickets 3 --nba-structured-variants 3 --write-web --web-outdir `"$WebOutDir`""
+    if (-not $WebEvOnly) {
+        $CombinedArgs += " --no-web-ev-gate"
+    }
 
     $okC = Run-Step "Combined Slate + Tickets" $Root ".\scripts\combined_slate_tickets.py" $CombinedArgs
 

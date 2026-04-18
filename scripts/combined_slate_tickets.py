@@ -945,15 +945,18 @@ def _apply_web_ticket_template(groups: list[dict]) -> list[dict]:
     return out_groups
 
 
-def filter_positive_ev_tickets_payload(payload: dict) -> dict:
-    """Only persist / show slips that pass _ticket_passes_positive_ev_gate; drop empty groups."""
+def filter_web_tickets_for_ui(payload: dict, *, require_positive_ev: bool) -> dict:
+    """Build /tickets JSON groups: optional positive-EV gate, then WEB_TICKET_TEMPLATE quotas."""
     groups_in = list(payload.get("groups") or [])
     out_groups: list[dict] = []
     for g in groups_in:
         if not isinstance(g, dict):
             continue
         tickets_in = list(g.get("tickets") or [])
-        kept = [t for t in tickets_in if isinstance(t, dict) and _ticket_passes_positive_ev_gate(t)]
+        if require_positive_ev:
+            kept = [t for t in tickets_in if isinstance(t, dict) and _ticket_passes_positive_ev_gate(t)]
+        else:
+            kept = [t for t in tickets_in if isinstance(t, dict)]
         if not kept:
             continue
         ng = dict(g)
@@ -963,6 +966,11 @@ def filter_positive_ev_tickets_payload(payload: dict) -> dict:
     out = dict(payload)
     out["groups"] = out_groups
     return out
+
+
+def filter_positive_ev_tickets_payload(payload: dict) -> dict:
+    """Only persist / show slips that pass _ticket_passes_positive_ev_gate; drop empty groups."""
+    return filter_web_tickets_for_ui(payload, require_positive_ev=True)
 
 
 def print_positive_ev_gate_report(gated_preview: dict) -> None:
@@ -3981,12 +3989,13 @@ html[data-theme="light"] .ticket{
     return "\n".join(html_parts)
 
 
-def write_web_outputs(payload, outdir: str):
+def write_web_outputs(payload, outdir: str, *, require_positive_ev: bool = True):
     """Write tickets_latest.json for /tickets; graded HTML is build_ticket_eval.py → ticket_eval_<date>.html."""
     os.makedirs(outdir, exist_ok=True)
     json_path = os.path.join(outdir, "tickets_latest.json")
-    # Only persist positive-EV (non-negative empirical EV) slips for web JSON.
-    payload = filter_positive_ev_tickets_payload(payload)
+    payload = filter_web_tickets_for_ui(payload, require_positive_ev=require_positive_ev)
+    if not require_positive_ev:
+        print("  [web] EV gate OFF — JSON includes top slips per sport/leg-count (workbook pool, template caps)")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
     print(f"[OK] Web JSON  -> {json_path}")
@@ -7971,6 +7980,13 @@ def main():
         help="Write tickets_latest.json for web/Railway (graded HTML via build_ticket_eval.py)",
     )
     ap.add_argument(
+        "--no-web-ev-gate",
+        action="store_true",
+        dest="no_web_ev_gate",
+        help="Put more sports on /tickets: skip positive-EV filter for JSON (template per sport/leg-count still applies). "
+        "Default web JSON only keeps slips with empirical EV or STRONG/OK recommendation (Tennis always allowed).",
+    )
+    ap.add_argument(
         "--web-outdir",
         default=DEFAULT_WEB_OUTDIR,
         help="Folder to write tickets_latest.json (+ slate_latest.json)",
@@ -9213,13 +9229,14 @@ def main():
             print(f"  Web payload: {n_groups} groups, {n_slips} slips (FINAL fallback).")
             gated_preview = filter_positive_ev_tickets_payload(payload)
             print_positive_ev_gate_report(gated_preview)
-        write_web_outputs(payload, args.web_outdir)
+        _web_ev = not bool(args.no_web_ev_gate)
+        write_web_outputs(payload, args.web_outdir, require_positive_ev=_web_ev)
         # nfl: pass None until combined loads NFL step8; keep key "nfl": [] in slate_latest.json for UI.
         nfl = None
         write_slate_json(nba, cbb, nhl, soccer, args.date, args.web_outdir,
                          wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis, nfl=nfl)
         if args.also_root:
-            write_web_outputs(payload, outdir=".")
+            write_web_outputs(payload, outdir=".", require_positive_ev=_web_ev)
         # Avoid Windows console codepage issues with unicode checkmarks.
         print("[OK] Web outputs complete.")
 
