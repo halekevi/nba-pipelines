@@ -830,9 +830,12 @@ def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
         for leg in legs
         if isinstance(leg, dict)
     }
-    # Keep pure Tennis slips visible on the web tickets page even when empirical EV
-    # is below the global cutoff; Tennis boards are often sparse and otherwise vanish.
-    if leg_sports and leg_sports.issubset({"TENNIS"}):
+    # Pure Tennis / Soccer slips: skip the global min-EV bar on /tickets so they stay visible
+    # when empirical EV is noisy or below cutoff (sparse boards, weaker hit-rate baselines).
+    if leg_sports and (
+        leg_sports.issubset({"TENNIS"})
+        or leg_sports.issubset({"SOCCER", "SOC"})
+    ):
         return True
 
     pay = ticket.get("payout")
@@ -8037,7 +8040,8 @@ def main():
         action="store_true",
         dest="no_web_ev_gate",
         help="Put more sports on /tickets: skip positive-EV filter for JSON (template per sport/leg-count still applies). "
-        "Default web JSON only keeps slips with empirical EV or STRONG/OK recommendation (Tennis always allowed).",
+        "Default web JSON only keeps slips with empirical EV or STRONG/OK recommendation "
+        "(pure Tennis / Soccer slips bypass the min-EV bar for visibility).",
     )
     ap.add_argument(
         "--web-outdir",
