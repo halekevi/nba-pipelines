@@ -3156,10 +3156,11 @@ def _find_combined_excel() -> "tuple[Path | None, str | None]":
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# API: Screenshot → Google Gemini vision (server proxy; key in GOOGLE_API_KEY).
+# API: Screenshot → Google Gemini vision (server proxy).
 #
 # Get a free Gemini API key at: https://aistudio.google.com/apikey
-# Set in Railway dashboard: GOOGLE_API_KEY = your key
+# Set in Railway dashboard: "Google Screenshot API" = your key
+# (fallback still supports GOOGLE_API_KEY for local env/.env usage)
 # Set locally: $env:GOOGLE_API_KEY = "your key"
 #
 # Optional: $env:GEMINI_VISION_MODEL = "gemini-2.5-flash"   # override default model id
@@ -3175,9 +3176,9 @@ _DEFAULT_GEMINI_VISION_MODEL = "gemini-2.5-flash-lite"
 
 @app.post("/api/vision/screenshot")
 def api_vision_screenshot():
-    key = (os.environ.get("GOOGLE_API_KEY") or "").strip()
+    key = (os.environ.get("Google Screenshot API") or os.environ.get("GOOGLE_API_KEY") or "").strip()
     if not key:
-        return jsonify({"error": "GOOGLE_API_KEY not set"}), 503
+        return jsonify({"error": "Google Screenshot API / GOOGLE_API_KEY not set"}), 503
 
     model_id = (os.environ.get("GEMINI_VISION_MODEL") or "").strip() or _DEFAULT_GEMINI_VISION_MODEL
     _mid_ok = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._-")
