@@ -2412,6 +2412,165 @@ def _best_flex3_rows_from_long_ticket(rows: list[dict]) -> list[dict] | None:
     return best
 
 
+_GUARANTEE_FLEX3_SPORT_KEYS: frozenset[str] = frozenset({"SOCCER", "TENNIS", "MLB", "NHL"})
+
+
+def _normalize_sport_key_for_flex3_guarantee(raw: object) -> str:
+    u = str(raw or "").strip().upper()
+    if u in ("SOC", "SOCCER"):
+        return "SOCCER"
+    return u
+
+
+def _ticket_normalized_single_sport(ticket: dict) -> str | None:
+    rows = list(ticket.get("rows") or [])
+    sports = {
+        _normalize_sport_key_for_flex3_guarantee(r.get("sport"))
+        for r in rows
+        if isinstance(r, dict) and str(r.get("sport") or "").strip()
+    }
+    if len(sports) == 1:
+        return next(iter(sports))
+    if not sports:
+        ts = _normalize_sport_key_for_flex3_guarantee(ticket.get("sport"))
+        if ts in _GUARANTEE_FLEX3_SPORT_KEYS:
+            return ts
+    return None
+
+
+def _ticket_is_cross_sport(ticket: dict) -> bool:
+    rows = list(ticket.get("rows") or [])
+    sports = {
+        _normalize_sport_key_for_flex3_guarantee(r.get("sport"))
+        for r in rows
+        if isinstance(r, dict) and str(r.get("sport") or "").strip()
+    }
+    return len(sports) >= 2
+
+
+def _builder_ticket_n_legs(ticket: dict) -> int:
+    try:
+        n = int(ticket.get("n_legs") or 0)
+        if n > 0:
+            return n
+    except (TypeError, ValueError):
+        pass
+    return len(list(ticket.get("rows") or []))
+
+
+def _top3_rows_by_hit_rate(rows: list[dict]) -> list[dict] | None:
+    """Pick three legs with highest numeric hit_rate (for guaranteed Flex 3 from 4+)."""
+    if len(rows) < 3:
+        return None
+    scored: list[tuple[float, dict]] = []
+    for r in rows:
+        if not isinstance(r, dict):
+            continue
+        hr = float(pd.to_numeric(r.get("hit_rate"), errors="coerce") or 0.0)
+        scored.append((hr, dict(r)))
+    if len(scored) < 3:
+        return None
+    scored.sort(key=lambda x: (-x[0], str(x[1].get("player", ""))))
+    return [dict(x[1]) for x in scored[:3]]
+
+
+def _flex3_guarantee_prefix_and_hdr(skey: str) -> tuple[str, str]:
+    if skey == "SOCCER":
+        return "Soccer", C["hdr_soccer"]
+    if skey == "TENNIS":
+        return "Tennis", C["hdr_tennis"]
+    if skey == "MLB":
+        return "MLB", C["hdr_mlb"]
+    if skey == "NHL":
+        return "NHL", C["hdr_nhl"]
+    return "MIX", C["hdr_mix"]
+
+
+def apply_guaranteed_flex3_backfill_from_four_plus(
+    all_ticket_groups: list,
+    counters: dict,
+    wb: Any,
+) -> None:
+    """
+    After all ticket groups are built: for Soccer/Tennis/MLB/NHL, if any slip has n>=4 and none
+    has n==3, add Flex 3 from the best 4+ slip's top 3 legs by hit_rate. Same for cross-sport slips.
+    """
+    for skey in sorted(_GUARANTEE_FLEX3_SPORT_KEYS):
+        has3 = False
+        cands: list[tuple[int, float, dict, str]] = []
+        for gname, tickets, *_ in all_ticket_groups:
+            for t in tickets or []:
+                if not isinstance(t, dict):
+                    continue
+                if _ticket_normalized_single_sport(t) != skey:
+                    continue
+                n = _builder_ticket_n_legs(t)
+                if n == 3:
+                    has3 = True
+                if n >= 4:
+                    avg_hr = float(t.get("avg_hit_rate") or 0.0)
+                    cands.append((n, avg_hr, t, str(gname)))
+        if has3 or not cands:
+            continue
+        cands.sort(key=lambda x: (-x[0], -x[1]))
+        best_t = cands[0][2]
+        rows = list(best_t.get("rows") or [])
+        rows3 = _top3_rows_by_hit_rate(rows)
+        if not rows3:
+            continue
+        prefix, bg_hdr = _flex3_guarantee_prefix_and_hdr(skey)
+        fin = _finalize_structure_ticket_dict(
+            rows3, "flex", prefix, "flex", 3, counters, False
+        )
+        if fin is None:
+            print(f"  [flex3-guarantee] WARN: could not finalize {prefix} Flex 3 from 4+ slip")
+            continue
+        fin.setdefault("ticket_type", "Flex")
+        display = f"{prefix} Flex 3-Leg · from 4+"
+        sname = _excel_ticket_sheet_title_unique(display, wb.sheetnames)
+        write_ticket_sheet(wb, [fin], sname, bg_hdr, label=f"{prefix} Flex")
+        all_ticket_groups.append((display, [fin], None))
+        print(
+            f"  [flex3-guarantee] {prefix}: Flex 3 from top HR legs of {cands[0][0]}-leg slip "
+            f"(no natural 3-leg found)"
+        )
+
+    has3x = False
+    cands_x: list[tuple[int, float, dict, str]] = []
+    for gname, tickets, *_ in all_ticket_groups:
+        for t in tickets or []:
+            if not isinstance(t, dict):
+                continue
+            if not _ticket_is_cross_sport(t):
+                continue
+            n = _builder_ticket_n_legs(t)
+            if n == 3:
+                has3x = True
+            if n >= 4:
+                avg_hr = float(t.get("avg_hit_rate") or 0.0)
+                cands_x.append((n, avg_hr, t, str(gname)))
+    if has3x or not cands_x:
+        return
+    cands_x.sort(key=lambda x: (-x[0], -x[1]))
+    rows = list(cands_x[0][2].get("rows") or [])
+    rows3 = _top3_rows_by_hit_rate(rows)
+    if not rows3:
+        return
+    fin = _finalize_structure_ticket_dict(rows3, "flex", "MIX", "flex", 3, counters, False)
+    if fin is None:
+        print("  [flex3-guarantee] WARN: could not finalize cross-sport Flex 3 from 4+ slip")
+        return
+    fin.setdefault("ticket_type", "Flex")
+    display = "Cross-sport Flex 3-Leg · from 4+"
+    sname = _excel_ticket_sheet_title_unique(display, wb.sheetnames)
+    write_ticket_sheet(wb, [fin], sname, C["hdr_mix"], label="Cross-sport Flex")
+    all_ticket_groups.append((display, [fin], None))
+    print(
+        f"  [flex3-guarantee] cross-sport: Flex 3 from top HR legs of {cands_x[0][0]}-leg slip "
+        "(no natural 3-leg found)"
+    )
+
+
 def _greedy_ticket_with_first_leg(cand: pd.DataFrame, n_legs: int, first_idx: int) -> list[pd.Series] | None:
     """Greedy unique-player fill in cand row order; first leg locked to cand.iloc[first_idx]."""
     cand = cand.reset_index(drop=True)
@@ -9267,6 +9426,8 @@ def main():
             write_ticket_sheet(wb, tix, sname, C["hdr_sum"], label=display)
             all_ticket_groups.append((display, tix, _bg))
         print(f"  [long-legs] added {len(final_long)} long-leg sheet(s) for leg sizes {long_leg_sizes}")
+
+    apply_guaranteed_flex3_backfill_from_four_plus(all_ticket_groups, counters, wb)
 
     _pre_slips = sum(len(t[1]) for t in all_ticket_groups)
     _lc_groups_pre: Counter[int] = Counter()
