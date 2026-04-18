@@ -941,6 +941,18 @@ def _apply_web_ticket_template(groups: list[dict]) -> list[dict]:
     for gi, g in enumerate(groups):
         tickets = list(g.get("tickets") or [])
         kept = [t for ti, t in enumerate(tickets) if (gi, ti) in selected_ids]
+        # Keep template-sized slips that never entered the per-sport quota pool (e.g. cross-sport,
+        # or legs missing sport before payload fixes). Otherwise they vanish whenever any other slip
+        # activates the template filter.
+        for ti, t in enumerate(tickets):
+            if (gi, ti) in selected_ids or not isinstance(t, dict):
+                continue
+            nl = _ticket_n_legs(t)
+            if nl not in WEB_TICKET_TEMPLATE_BY_LEGS:
+                continue
+            if _ticket_primary_sport(t):
+                continue
+            kept.append(t)
         if not kept:
             continue
         ng = dict(g)
@@ -2521,6 +2533,20 @@ def _finalize_structure_ticket_dict(
     counters: dict | None,
     prioritize_ticket_hit: bool,
 ) -> dict | None:
+    # Many step8 rows omit sport; web template / EV grouping need per-leg sport for _ticket_primary_sport.
+    sl = str(sport_label or "").strip()
+    rows_use: list[dict] = []
+    for r in rows:
+        if not isinstance(r, dict):
+            continue
+        rd = dict(r)
+        if sl and not str(rd.get("sport") or "").strip():
+            rd["sport"] = sl
+        rows_use.append(rd)
+    if len(rows_use) < int(n_legs):
+        return None
+    rows = rows_use
+
     leg_probs = [_resolve_leg_prob(pd.Series(r)) for r in rows]
     cmult, caudit = _correlation_multiplier_and_audit(rows)
     ep = win_prob(leg_probs, n_legs) * cmult
@@ -3116,7 +3142,7 @@ def ticket_groups_to_payload(
 
                 _dpv = gd_leg_delta_pct(gv("line"), gv("standard_line"))
                 leg = {
-                    "sport": str(gv("sport") or ""),
+                    "sport": str(gv("sport") or t.get("sport") or "").strip(),
                     "player": str(gv("player") or ""),
                     "team": str(gv("team") or ""),
                     "opp": str(gv("opp") or ""),
@@ -8813,6 +8839,7 @@ def main():
                 rows_long = list(src_long.get("rows") or [])
                 rows3 = _best_flex3_rows_from_long_ticket(rows_long)
                 if rows3:
+                    # Backfill must not re-apply flex-cash floor if greedy Flex failed for pool-order reasons.
                     fin3 = _finalize_structure_ticket_dict(
                         rows3,
                         "flex",
@@ -8820,7 +8847,7 @@ def main():
                         "flex",
                         3,
                         counters,
-                        prioritize_ticket_hit,
+                        False,
                     )
                     if fin3 is not None:
                         f_list = [fin3]
@@ -8839,7 +8866,7 @@ def main():
                         "flex",
                         3,
                         counters,
-                        prioritize_ticket_hit,
+                        False,
                     )
                     if fin3 is not None:
                         f_list = [fin3]
