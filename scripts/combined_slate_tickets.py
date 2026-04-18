@@ -819,8 +819,13 @@ def build_ticket_payout_json(group_name: str, ticket_rows: list) -> dict[str, An
 def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
     """
     True if slip should appear on /tickets JSON and page.
-    Gate: empirical payout.ev >= MIN_TICKET_EV_BY_LEGS[n_legs], OR payout recommendation in
-    STRONG/OK. Else modeled est_ev vs same bar.
+
+    Hygiene (all sports): never show SKIP, negative empirical payout.ev, negative est_ev,
+    or modeled win prob below MIN_WEB_DISPLAY_EST_WIN_PROB.
+
+    Then: pure Tennis / Soccer bypass only the *min-EV threshold* (sparse boards).
+
+    Other sports: payout.ev >= bar OR STRONG/OK, else est_ev >= bar.
     """
     n_legs = _ticket_n_legs(ticket)
     min_ev = float(MIN_TICKET_EV_BY_LEGS.get(int(n_legs), MIN_TICKET_EV_DEFAULT))
@@ -830,15 +835,46 @@ def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
         for leg in legs
         if isinstance(leg, dict)
     }
-    # Pure Tennis / Soccer slips: skip the global min-EV bar on /tickets so they stay visible
-    # when empirical EV is noisy or below cutoff (sparse boards, weaker hit-rate baselines).
+
+    wp = ticket.get("est_win_prob")
+    if wp is not None:
+        try:
+            wpf = float(wp)
+            if math.isfinite(wpf) and wpf < float(MIN_WEB_DISPLAY_EST_WIN_PROB):
+                return False
+        except (TypeError, ValueError):
+            pass
+
+    pay = ticket.get("payout")
+    if isinstance(pay, dict):
+        rec_u = str(pay.get("recommendation") or "").strip().upper()
+        if rec_u == "SKIP":
+            return False
+        ev_raw = pay.get("ev")
+        if ev_raw is not None:
+            try:
+                v = float(ev_raw)
+                if math.isfinite(v) and v < 0:
+                    return False
+            except (TypeError, ValueError):
+                pass
+
+    est_neg = ticket.get("est_ev")
+    if est_neg is not None:
+        try:
+            ve = float(est_neg)
+            if math.isfinite(ve) and ve < 0:
+                return False
+        except (TypeError, ValueError):
+            pass
+
+    # Pure Tennis / Soccer: after hygiene, skip the global min-EV bar only.
     if leg_sports and (
         leg_sports.issubset({"TENNIS"})
         or leg_sports.issubset({"SOCCER", "SOC"})
     ):
         return True
 
-    pay = ticket.get("payout")
     if isinstance(pay, dict):
         rec_ok = str(pay.get("recommendation") or "").strip().upper() in (
             "STRONG",
@@ -1620,6 +1656,9 @@ MIN_TICKET_EV_BY_LEGS: dict[int, float] = {
     5: 1.25,
     6: 1.50,
 }
+
+# /tickets: hide slips at or below this modeled all-hit win prob (clutter / lottery tickets).
+MIN_WEB_DISPLAY_EST_WIN_PROB: float = 0.06
 
 # /tickets page target volumes per sport after EV gate.
 WEB_TICKET_TEMPLATE_BY_LEGS: dict[int, int] = {
@@ -8066,8 +8105,8 @@ def main():
         action="store_true",
         dest="no_web_ev_gate",
         help="Put more sports on /tickets: skip positive-EV filter for JSON (template per sport/leg-count still applies). "
-        "Default web JSON only keeps slips with empirical EV or STRONG/OK recommendation "
-        "(pure Tennis / Soccer slips bypass the min-EV bar for visibility).",
+        "Default web JSON drops SKIP / negative-EV / very-low win-prob slips, then keeps "
+        "empirical EV or STRONG/OK (pure Tennis / Soccer bypass only the min-EV threshold).",
     )
     ap.add_argument(
         "--web-outdir",
