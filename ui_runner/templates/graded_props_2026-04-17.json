@@ -86,10 +86,10 @@
       "tier": "A",
       "edge": "1.6",
       "ml_prob": "0.8486",
-      "actual_value": "",
-      "margin": "",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "actual_value": "1",
+      "margin": "0.5",
+      "void_reason": "",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -158,10 +158,10 @@
       "tier": "A",
       "edge": "4.39",
       "ml_prob": "0.836",
-      "actual_value": "",
-      "margin": "",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "actual_value": "4",
+      "margin": "2.5",
+      "void_reason": "",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -914,10 +914,10 @@
       "tier": "A",
       "edge": "1.85",
       "ml_prob": "0.7714",
-      "actual_value": "",
-      "margin": "",
-      "void_reason": "NO_ACTUAL",
-      "result": "VOID",
+      "actual_value": "3",
+      "margin": "1.5",
+      "void_reason": "",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -1436,10 +1436,10 @@
       "tier": "A",
       "edge": "8.16",
       "ml_prob": "0.7396",
-      "actual_value": "",
-      "margin": "",
-      "void_reason": "VOID_STD_OVER_LOW_ML_PROB;VOID_OVER_ELITE_DEF_NON_Q5; NO_ACTUAL",
-      "result": "VOID",
+      "actual_value": "9",
+      "margin": "2.5",
+      "void_reason": "VOID_STD_OVER_LOW_ML_PROB;VOID_OVER_ELITE_DEF_NON_Q5",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -1544,10 +1544,10 @@
       "tier": "B",
       "edge": "3.39",
       "ml_prob": "0.7725",
-      "actual_value": "",
-      "margin": "",
-      "void_reason": "VOID_LOW_MINUTES_NON_A;VOID_STD_OVER_LOW_ML_PROB;VOID_OVER_ELITE_DEF_NON_Q5; NO_ACTUAL",
-      "result": "VOID",
+      "actual_value": "4",
+      "margin": "1.5",
+      "void_reason": "VOID_LOW_MINUTES_NON_A;VOID_STD_OVER_LOW_ML_PROB;VOID_OVER_ELITE_DEF_NON_Q5",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -1652,10 +1652,10 @@
       "tier": "B",
       "edge": "0.65",
       "ml_prob": "0.7706",
-      "actual_value": "",
-      "margin": "",
-      "void_reason": "VOID_LOW_MINUTES_NON_A; NO_ACTUAL",
-      "result": "VOID",
+      "actual_value": "5",
+      "margin": "4.5",
+      "void_reason": "VOID_LOW_MINUTES_NON_A",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -2498,10 +2498,10 @@
       "tier": "B",
       "edge": "1.4",
       "ml_prob": "0.8268",
-      "actual_value": "",
-      "margin": "",
-      "void_reason": "VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5; NO_ACTUAL",
-      "result": "VOID",
+      "actual_value": "2",
+      "margin": "0.5",
+      "void_reason": "VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -3308,10 +3308,10 @@
       "tier": "C",
       "edge": "0.95",
       "ml_prob": "0.4647",
-      "actual_value": "",
-      "margin": "",
-      "void_reason": "VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5; NO_ACTUAL",
-      "result": "VOID",
+      "actual_value": "0",
+      "margin": "-0.5",
+      "void_reason": "VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -3974,10 +3974,10 @@
       "tier": "C",
       "edge": "0.85",
       "ml_prob": "0.4784",
-      "actual_value": "",
-      "margin": "",
-      "void_reason": "VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5; NO_ACTUAL",
-      "result": "VOID",
+      "actual_value": "1",
+      "margin": "0.5",
+      "void_reason": "VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -5144,10 +5144,10 @@
       "tier": "C",
       "edge": "1.7",
       "ml_prob": "0.5386",
-      "actual_value": "",
-      "margin": "",
-      "void_reason": "VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5; NO_ACTUAL",
-      "result": "VOID",
+      "actual_value": "2",
+      "margin": "0.5",
+      "void_reason": "VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -9680,10 +9680,10 @@
       "tier": "D",
       "edge": "2.39",
       "ml_prob": "0.5116",
-      "actual_value": "",
-      "margin": "",
-      "void_reason": "VOID_TIER_D;VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5; NO_ACTUAL",
-      "result": "VOID",
+      "actual_value": "4",
+      "margin": "0.5",
+      "void_reason": "VOID_TIER_D;VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -11462,10 +11462,10 @@
       "tier": "D",
       "edge": "0.85",
       "ml_prob": "0.4305",
-      "actual_value": "",
-      "margin": "",
-      "void_reason": "VOID_TIER_D;VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5; NO_ACTUAL",
-      "result": "VOID",
+      "actual_value": "3",
+      "margin": "0.5",
+      "void_reason": "VOID_TIER_D;VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -11498,10 +11498,10 @@
       "tier": "D",
       "edge": "0.6",
       "ml_prob": "0.5179",
-      "actual_value": "",
-      "margin": "",
-      "void_reason": "VOID_TIER_D;VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5; NO_ACTUAL",
-      "result": "VOID",
+      "actual_value": "1",
+      "margin": "-0.5",
+      "void_reason": "VOID_TIER_D;VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -12398,10 +12398,10 @@
       "tier": "D",
       "edge": "0.15",
       "ml_prob": "0.7536",
-      "actual_value": "",
-      "margin": "",
-      "void_reason": "VOID_TIER_D;VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5; NO_ACTUAL",
-      "result": "VOID",
+      "actual_value": "1",
+      "margin": "0.5",
+      "void_reason": "VOID_TIER_D;VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5",
+      "result": "HIT",
       "pp_projection_id": ""
     },
     {
@@ -14126,10 +14126,10 @@
       "tier": "D",
       "edge": "1.39",
       "ml_prob": "0.515",
-      "actual_value": "",
-      "margin": "",
-      "void_reason": "VOID_TIER_D;VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5; NO_ACTUAL",
-      "result": "VOID",
+      "actual_value": "4",
+      "margin": "-0.5",
+      "void_reason": "VOID_TIER_D;VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
@@ -17456,10 +17456,10 @@
       "tier": "D",
       "edge": "0",
       "ml_prob": "0.5826",
-      "actual_value": "",
-      "margin": "",
-      "void_reason": "VOID_TIER_D;VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5; NO_ACTUAL",
-      "result": "VOID",
+      "actual_value": "0",
+      "margin": "-0.5",
+      "void_reason": "VOID_TIER_D;VOID_LOW_MINUTES_NON_A;VOID_OVER_ELITE_DEF_NON_Q5",
+      "result": "MISS",
       "pp_projection_id": ""
     },
     {
