@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="/static/global-scrollbar.css?v=20260416"/>
+<link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260416perf"/>
 <style>
 :root{
   /* Hybrid liquid-glass palette */
@@ -2504,7 +2505,7 @@ function loadSlateSport(sport) {
     const cells = () => '<td><div class="skeleton" style="height:12px;border-radius:4px;width:100%;min-width:40px"></div></td>';
     tbody.innerHTML = Array.from({length: 6}, () => `<tr>${Array.from({length: 14}, cells).join('')}</tr>`).join('');
   }
-  // Lazy: fetch the 2.2 MB slate-sport payload only on first panel open
+  // Lazy: fetch /api/slate-sport only on first panel open (payload is slimmed server-side)
   if (!_slateSportPromise) {
     _slateSportPromise = loadSlateData().then(() => buildSlateDataFromAllSlate());
   }

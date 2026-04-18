@@ -3462,7 +3462,10 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
         for _, r in df.iterrows():
             def g(c):
                 return safe(r[c]) if c in df.columns else None
-            rows.append({
+            # Home Slate Explorer + /api/slate-sport only read these keys (see ui_runner/app.py
+            # _SLATE_SPORT_UI_KEYS). Omitting cross-book and extra L5 columns shrinks slate_latest.json
+            # and speeds mobile fetch + parse.
+            row = {
                 "tier":       g("tier"),
                 "rank_score": g("rank_score"),
                 "player":     g("player") or "",
@@ -3471,22 +3474,14 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
                 "prop":       g("prop_type") or g("prop") or "",
                 "pick_type":  g("pick_type") or "",
                 "line":       g("line"),
-                "line_underdog": g("line_underdog"),
-                "line_draftkings": g("line_draftkings"),
-                "best_cross_line": g("best_cross_line"),
-                "best_cross_book": g("best_cross_book"),
-                "cross_edge_vs_pp": g("cross_edge_vs_pp"),
-                "cross_n_books": g("cross_n_books"),
                 "dir":        g("direction") or g("dir") or "",
                 "edge":       g("edge"),
                 "hit_rate":   g("hit_rate"),
-                "l5_avg":     g("l5_avg"),
                 "l5_over":    g("l5_over"),
                 "l5_under":   g("l5_under"),
-                "l5_side_hits": g("l5_side_hits"),
-                "l5_consistency": g("l5_consistency"),
-                "game_time":  str(g("game_time") or ""),
-            })
+                "game_time":  str(g("game_time") or "") or None,
+            }
+            rows.append({k: v for k, v in row.items() if v is not None})
         return rows
 
     payload = {

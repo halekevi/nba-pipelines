@@ -117,7 +117,7 @@ except ImportError:
     _APP_USES_FLASK_COMPRESS = False
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-04-16-global-scrollbar"
+_UI_BUILD_ID = "2026-04-16-slate-slim-v2"
 
 
 def _deploy_git_sha_short() -> str:
@@ -724,14 +724,55 @@ _SLATE_SPORT_UI_KEYS = frozenset(
 )
 
 
+def _slim_slate_sport_cell(key: str, v: Any) -> Any:
+    """Normalize values for smaller JSON and stable sorting in the client."""
+    if v is None:
+        return None
+    if isinstance(v, str):
+        s = v.strip()
+        return s if s else None
+    if isinstance(v, bool):
+        return v
+    if isinstance(v, (int, float)):
+        if isinstance(v, float) and (math.isnan(v) or math.isinf(v)):
+            return None
+        if key in ("edge", "rank_score"):
+            return round(float(v), 4)
+        if key == "hit_rate":
+            return round(float(v), 6)
+        if key in ("line", "l5_over", "l5_under"):
+            fv = float(v)
+            if fv.is_integer():
+                return int(fv)
+            return round(fv, 3)
+        return v
+    return v
+
+
+def _slim_slate_sport_row(r: dict) -> dict:
+    """One slate row: only UI keys, omit nulls / blanks after coercion."""
+    slim: dict[str, Any] = {}
+    for kk in _SLATE_SPORT_UI_KEYS:
+        if kk not in r:
+            continue
+        cv = _slim_slate_sport_cell(kk, r[kk])
+        if cv is None:
+            continue
+        slim[kk] = cv
+    return slim
+
+
 def _slim_slate_sport_payload(payload: dict) -> dict:
     """Drop unused columns from /api/slate-sport to shrink the gzipped JSON payload."""
     if not isinstance(payload, dict):
         return payload
-    out = dict(payload)
     sports = payload.get("sports")
     if not isinstance(sports, dict):
-        return out
+        return {
+            "date": payload.get("date"),
+            "generated_at": payload.get("generated_at"),
+            "sports": sports,
+        }
     slim_sports: dict[str, Any] = {}
     for k, rows in sports.items():
         if not isinstance(rows, list):
@@ -740,12 +781,15 @@ def _slim_slate_sport_payload(payload: dict) -> dict:
         slim_rows: list[Any] = []
         for r in rows:
             if isinstance(r, dict):
-                slim_rows.append({kk: r[kk] for kk in _SLATE_SPORT_UI_KEYS if kk in r})
+                slim_rows.append(_slim_slate_sport_row(r))
             else:
                 slim_rows.append(r)
         slim_sports[k] = slim_rows
-    out["sports"] = slim_sports
-    return out
+    return {
+        "date": payload.get("date"),
+        "generated_at": payload.get("generated_at"),
+        "sports": slim_sports,
+    }
 
 
 def _slate_counts() -> tuple[dict[str, int], dict]:
@@ -3013,7 +3057,7 @@ def api_slate_sport():
         return jsonify({"error": str(e), "sports": {}}), 404
     try:
         return _gz_json_response(
-            "slate-sport-slim-v1",
+            "slate-sport-slim-v2",
             lambda: _slim_slate_sport_payload(_selected_slate_sport_payload()),
             ttl=_PIPELINE_JSON_TTL,
         )
