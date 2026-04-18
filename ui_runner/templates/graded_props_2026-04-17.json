@@ -48884,8 +48884,8 @@
       "tier": "C",
       "edge": "",
       "ml_prob": "0.1435",
-      "actual_value": "0",
-      "margin": "-1.5",
+      "actual_value": "",
+      "margin": "",
       "void_reason": "",
       "result": "VOID",
       "pp_projection_id": ""
@@ -60404,8 +60404,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.1068",
-      "actual_value": "0",
-      "margin": "-2.5",
+      "actual_value": "",
+      "margin": "",
       "void_reason": "",
       "result": "VOID",
       "pp_projection_id": ""
@@ -61538,8 +61538,8 @@
       "tier": "D",
       "edge": "",
       "ml_prob": "0.2106",
-      "actual_value": "0",
-      "margin": "-0.5",
+      "actual_value": "",
+      "margin": "",
       "void_reason": "",
       "result": "VOID",
       "pp_projection_id": ""
