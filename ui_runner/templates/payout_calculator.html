@@ -1290,6 +1290,11 @@ function normalizePickType(raw){
   if(s.includes('dem'))return'demon';
   return'standard';
 }
+/** Leg cards expanded on desktop; collapsed on mobile / coarse pointer to shorten the page */
+function payoutLegCardsOpenByDefault(){
+  try{ return !window.matchMedia('(max-width: 900px), (pointer: coarse)').matches; }
+  catch(_e){ return true; }
+}
 function normalizeSportOpt(raw){
   const s=String(raw||'').trim();
   const hit=SPORT_OPTS.find(v=>v.toLowerCase()===s.toLowerCase());
@@ -1452,7 +1457,7 @@ function applySelectedSlateTicketToCalc(){
       stdLine:std,
       playedLine:typ==='standard'?std:played,
       hitProb:pctFromLegProb(leg),
-      open:true,
+      open:payoutLegCardsOpenByDefault(),
     });
   });
   renderCalcLegs();
@@ -1529,7 +1534,7 @@ function renderGoblinDiscountTable(){
 let calcLegs=[],calcCounter=0;
 
 function addCalcLeg(type){
-  calcLegs.push({id:++calcCounter,type,player:'',sport:'NBA',prop:'Points',stdLine:'',playedLine:'',hitProb:type==='goblin'?68:type==='demon'?32:52,open:true});
+  calcLegs.push({id:++calcCounter,type,player:'',sport:'NBA',prop:'Points',stdLine:'',playedLine:'',hitProb:type==='goblin'?68:type==='demon'?32:52,open:payoutLegCardsOpenByDefault()});
   renderCalcLegs();
 }
 function removeCalcLeg(id){calcLegs=calcLegs.filter(l=>l.id!==id);renderCalcLegs();}
@@ -2181,7 +2186,7 @@ function applyPicksToCalc(picks,meta){
       stdLine:row.stdLine,
       playedLine:row.type==='standard'?row.stdLine:row.playedLine,
       hitProb:row.hitProb,
-      open:true,
+      open:payoutLegCardsOpenByDefault(),
     });
   });
   renderCalcLegs();

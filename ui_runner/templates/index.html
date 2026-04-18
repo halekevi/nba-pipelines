@@ -2906,5 +2906,32 @@ loadSlateData();
 })();
 </script>
 
+<script>
+/* Mobile / touch: start with all home category <details> collapsed to reduce scroll height */
+(function () {
+  function mqMobile() {
+    try {
+      return window.matchMedia("(max-width: 900px), (pointer: coarse)").matches;
+    } catch (_e) {
+      return false;
+    }
+  }
+  function collapseHomeCatsOnMobile() {
+    if (!mqMobile()) return;
+    document.querySelectorAll("details.home-cat").forEach(function (d) {
+      d.removeAttribute("open");
+    });
+  }
+  function bind() {
+    collapseHomeCatsOnMobile();
+    var m = window.matchMedia("(max-width: 900px), (pointer: coarse)");
+    if (m.addEventListener) m.addEventListener("change", collapseHomeCatsOnMobile);
+    else if (m.addListener) m.addListener(collapseHomeCatsOnMobile);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
+  else bind();
+})();
+</script>
+
 </body>
 </html>

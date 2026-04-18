@@ -10792,6 +10792,22 @@ def render_tickets_body_html(
       if(h) h.setAttribute('aria-expanded', 'false');
     });
   });
+
+  (function(){
+    function mob(){ return window.matchMedia('(max-width: 900px), (pointer: coarse)').matches; }
+    function collapseAllGroupsMobile(){
+      if(!mob()) return;
+      document.querySelectorAll('.ticket-group-section').forEach(function(s){
+        s.classList.add('collapsed');
+        var h = s.querySelector('.collapsible-header');
+        if(h) h.setAttribute('aria-expanded', 'false');
+      });
+    }
+    collapseAllGroupsMobile();
+    var mm = window.matchMedia('(max-width: 900px), (pointer: coarse)');
+    if(mm.addEventListener) mm.addEventListener('change', collapseAllGroupsMobile);
+    else if(mm.addListener) mm.addListener(collapseAllGroupsMobile);
+  })();
 })();
 </script>''')
 

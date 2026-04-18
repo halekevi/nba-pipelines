@@ -1331,6 +1331,14 @@ function ensureFrameCollapseCss(doc) {
   (doc.head || doc.documentElement).appendChild(style);
 }
 
+function gradesFrameMobileLayout() {
+  try {
+    return window.matchMedia('(max-width: 900px), (pointer: coarse)').matches;
+  } catch (_e) {
+    return false;
+  }
+}
+
 function collapseSportsInSlateFrame(frame) {
   const doc = frame?.contentDocument;
   if (!doc) return;
@@ -1342,6 +1350,8 @@ function collapseSportsInSlateFrame(frame) {
   const firstMain = doc.querySelector('.main');
   if (!firstMain) return;
 
+  const _mobileBuckets = gradesFrameMobileLayout();
+
   sections.forEach((sec, idx) => {
     let sportLabel =
       sec.querySelector('.sport-label')?.textContent?.trim() ||
@@ -1352,8 +1362,8 @@ function collapseSportsInSlateFrame(frame) {
 
     const details = doc.createElement('details');
     details.className = 'grades-sport-bucket';
-    // Keep all ticket sport buckets expanded by default so non-NBA grades are immediately visible.
-    details.open = true;
+    // Desktop: expanded so non-NBA grades are visible. Mobile: collapsed to shorten the page.
+    details.open = !_mobileBuckets;
 
     const summary = doc.createElement('summary');
     const title = doc.createElement('span');
@@ -1406,10 +1416,11 @@ function collapseSportsInTicketFrame(frame) {
   sections.forEach(sec => sec.parentNode && sec.parentNode.removeChild(sec));
 
   let idx = 0;
+  const _mobTk = gradesFrameMobileLayout();
   groups.forEach((groupSecs, key) => {
     const details = doc.createElement('details');
     details.className = 'grades-sport-bucket';
-    if (idx === 0) details.open = true;
+    if (idx === 0 && !_mobTk) details.open = true;
     idx += 1;
 
     const summary = doc.createElement('summary');
