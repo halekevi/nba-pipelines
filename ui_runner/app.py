@@ -3152,79 +3152,212 @@ def api_vision_screenshot():
     )
 
 
-@app.get("/dashboard/income")
-def dashboard_income():
-    """
-    ROI / CLV / calibration / drawdown only — see DESIGN_PRINCIPLES.md.
-    Uses PROPORACLE_DB_PATH or data/cache/proporacle_income.db; ddl.sql + views.sql are applied
-    automatically on first open. When bet_result is empty, demo slates are inserted unless
-    PROPORACLE_INCOME_SEED_DEMO=0. Demo-only DBs older than PROPORACLE_INCOME_DEMO_REFRESH_DAYS
-    (default 10) are re-seeded on each request. Use real pipeline ingest for production metrics.
-    """
-    import json
+_SPORT_BREAKDOWN_ORDER = ("NBA", "MLB", "SOCCER", "TENNIS", "NHL")
 
-    err: str | None = None
-    roi_payload = {"days": [], "pnl": []}
-    clv_payload = {"buckets": [], "means": []}
-    cal_payload = {"pred": [], "hit": []}
-    eq_payload = {"days": [], "dd": []}
-    income_meta: dict = {"mode": "empty", "data_through": None}
 
+def _to_float(v: Any, default: float = 0.0) -> float:
     try:
-        from proporacle.monitoring.dashboard_queries import (
-            fetch_calibration_bins,
-            fetch_clv_by_edge_bucket,
-            fetch_equity_drawdown,
-            fetch_roi_daily,
-            income_dashboard_meta,
-            load_income_db,
-            maybe_seed_demo_income,
+        f = float(v)
+        return f if math.isfinite(f) else default
+    except (TypeError, ValueError):
+        return default
+
+
+def _to_int(v: Any, default: int = 0) -> int:
+    try:
+        return int(v)
+    except (TypeError, ValueError):
+        return default
+
+
+def _load_grade_history_rows() -> list[dict[str, Any]]:
+    path = BASE_DIR / "data" / "grade_history.json"
+    if not path.is_file():
+        return []
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    if isinstance(raw, list):
+        runs = raw
+    elif isinstance(raw, dict) and isinstance(raw.get("runs"), list):
+        runs = raw.get("runs") or []
+    else:
+        runs = []
+
+    rows: list[dict[str, Any]] = []
+    for r in runs:
+        if not isinstance(r, dict):
+            continue
+        d = str(r.get("date") or "").strip()[:10]
+        if not d:
+            continue
+        n_tickets = max(0, _to_int(r.get("n_tickets"), 0))
+        wins = max(0, _to_int(r.get("wins"), 0))
+        guarantees = max(0, _to_int(r.get("guarantees"), 0))
+        losses = max(0, _to_int(r.get("losses"), 0))
+        decided = wins + guarantees + losses
+        if decided == 0:
+            decided = n_tickets
+        paid = wins + guarantees
+        net_per_10 = _to_float(r.get("net_per_10"), 0.0)
+        net_dollars = round(net_per_10 * n_tickets, 2)
+        roi_pct = _to_float(r.get("roi_pct"), 0.0)
+        if n_tickets > 0 and abs(roi_pct) < 1e-9 and abs(net_dollars) > 1e-9:
+            roi_pct = (net_dollars / (n_tickets * 10.0)) * 100.0
+        day_win_rate = (paid / decided) if decided > 0 else None
+        rows.append(
+            {
+                "date": d,
+                "tickets": n_tickets,
+                "wins": wins,
+                "losses": losses,
+                "guarantees": guarantees,
+                "decided": decided,
+                "paid": paid,
+                "net_dollars": net_dollars,
+                "roi_pct": round(roi_pct, 2),
+                "win_rate": day_win_rate,
+            }
         )
 
-        conn = load_income_db()
+    rows.sort(key=lambda x: x["date"])
+    return rows
+
+
+def _parse_sports_tokens(raw: Any) -> list[str]:
+    s = str(raw or "").upper()
+    if not s:
+        return []
+    toks = [t for t in re.split(r"[^A-Z0-9]+", s) if t]
+    seen: set[str] = set()
+    out: list[str] = []
+    for t in toks:
+        if t not in seen:
+            seen.add(t)
+            out.append(t)
+    return out
+
+
+def _sport_breakdown_from_graded_workbooks(stake_per_ticket: float = 10.0) -> list[dict[str, Any]]:
+    stats: dict[str, dict[str, float]] = {
+        s: {"decided": 0.0, "paid": 0.0, "net": 0.0} for s in _SPORT_BREAKDOWN_ORDER
+    }
+    try:
+        import pandas as pd
+    except Exception:
+        return [{"sport": s, "decided": 0, "paid": 0, "win_rate": None, "net_dollars": 0.0} for s in _SPORT_BREAKDOWN_ORDER]
+
+    files = sorted(OUTPUTS_ROOT.glob("*/combined_tickets_graded_*.xlsx"))
+    for fp in files:
         try:
-            maybe_seed_demo_income(conn)
-            roi_rows = fetch_roi_daily(conn)
-            for r in roi_rows:
-                roi_payload["days"].append(r["bet_day"])
-                roi_payload["pnl"].append(float(r["daily_pnl"] or 0))
+            df = pd.read_excel(
+                fp,
+                sheet_name="TICKET_RESULTS",
+                usecols=["sports", "payout_status", "applied_mult", "is_cash"],
+            )
+        except Exception:
+            continue
+        if df is None or len(df) == 0:
+            continue
+        for _, row in df.iterrows():
+            toks = _parse_sports_tokens(row.get("sports"))
+            if len(toks) != 1:
+                # Skip cross-sport tickets to keep per-sport totals clean.
+                continue
+            sp = toks[0]
+            if sp not in stats:
+                continue
+            status = str(row.get("payout_status") or "").strip().upper()
+            if status in {"", "NO_ACTUAL", "PENDING"}:
+                continue
+            mult = _to_float(row.get("applied_mult"), float("nan"))
+            if not math.isfinite(mult):
+                continue
+            is_cash = _to_int(row.get("is_cash"), 0) > 0 or mult > 0
+            stats[sp]["decided"] += 1.0
+            stats[sp]["paid"] += 1.0 if is_cash else 0.0
+            stats[sp]["net"] += stake_per_ticket * (mult - 1.0)
 
-            for r in fetch_clv_by_edge_bucket(conn):
-                clv_payload["buckets"].append(r["ev_bucket"])
-                clv_payload["means"].append(float(r["mean_clv"] or 0))
-
-            for r in fetch_calibration_bins(conn):
-                if r["pred_mean"] is not None and r["hit_rate"] is not None:
-                    cal_payload["pred"].append(float(r["pred_mean"]))
-                    cal_payload["hit"].append(float(r["hit_rate"]))
-
-            br0 = float(os.environ.get("PROPORACLE_BANKROLL_0", "200"))
-            for r in fetch_equity_drawdown(conn, bankroll_0=br0):
-                eq_payload["days"].append(r["bet_day"])
-                eq_payload["dd"].append(float(r["drawdown"]))
-            income_meta = income_dashboard_meta(conn)
-        finally:
-            conn.close()
-    except Exception as e:
-        err = (
-            f"{type(e).__name__}: {e}. "
-            "Check PROPORACLE_DB_PATH and that proporacle/data/schema/ddl.sql and views.sql exist."
+    out: list[dict[str, Any]] = []
+    for sp in _SPORT_BREAKDOWN_ORDER:
+        decided = int(stats[sp]["decided"])
+        paid = int(stats[sp]["paid"])
+        win_rate = (paid / decided) if decided > 0 else None
+        out.append(
+            {
+                "sport": sp,
+                "decided": decided,
+                "paid": paid,
+                "win_rate": win_rate,
+                "net_dollars": round(float(stats[sp]["net"]), 2),
+            }
         )
+    return out
 
-    charts_empty = err is None and len(roi_payload["days"]) == 0
 
+def _current_streak_label(rows_asc: list[dict[str, Any]]) -> str:
+    streak_sign = 0
+    streak_len = 0
+    for r in reversed(rows_asc):
+        net = _to_float(r.get("net_dollars"), 0.0)
+        sign = 1 if net > 0 else (-1 if net < 0 else 0)
+        if sign == 0:
+            if streak_len == 0:
+                continue
+            break
+        if streak_sign == 0:
+            streak_sign = sign
+            streak_len = 1
+        elif sign == streak_sign:
+            streak_len += 1
+        else:
+            break
+    if streak_len == 0:
+        return "—"
+    return f"{'W' if streak_sign > 0 else 'L'}{streak_len}"
+
+
+@app.get("/income")
+def page_income():
+    rows_asc = _load_grade_history_rows()
+    total_tickets = sum(_to_int(r.get("tickets"), 0) for r in rows_asc)
+    total_decided = sum(_to_int(r.get("decided"), 0) for r in rows_asc)
+    total_paid = sum(_to_int(r.get("paid"), 0) for r in rows_asc)
+    total_net = round(sum(_to_float(r.get("net_dollars"), 0.0) for r in rows_asc), 2)
+    win_rate = (total_paid / total_decided) if total_decided > 0 else None
+    roi_pct = (total_net / (total_tickets * 10.0) * 100.0) if total_tickets > 0 else 0.0
+    streak = _current_streak_label(rows_asc)
+
+    cum = 0.0
+    cum_points: list[dict[str, Any]] = []
+    for r in rows_asc:
+        cum += _to_float(r.get("net_dollars"), 0.0)
+        cum_points.append({"date": r.get("date"), "cum_net": round(cum, 2)})
+
+    rows_desc = list(reversed(rows_asc))
+    sport_rows = _sport_breakdown_from_graded_workbooks(stake_per_ticket=10.0)
     return render_template(
         "dashboard_income.html",
-        error=err,
-        charts_empty=charts_empty,
-        income_mode=income_meta.get("mode", "empty"),
-        income_data_through=income_meta.get("data_through"),
         ui_build_id=_UI_BUILD_ID,
-        roi_json=Markup(json.dumps(roi_payload)),
-        clv_json=Markup(json.dumps(clv_payload)),
-        cal_json=Markup(json.dumps(cal_payload)),
-        equity_json=Markup(json.dumps(eq_payload)),
+        summary={
+            "total_tickets": total_tickets,
+            "decided_tickets": total_decided,
+            "paid_tickets": total_paid,
+            "win_rate": win_rate,
+            "net_pnl": total_net,
+            "roi_pct": round(roi_pct, 2),
+            "streak": streak,
+        },
+        daily_rows=rows_desc,
+        chart_points=Markup(json.dumps(cum_points)),
+        sport_rows=sport_rows,
     )
+
+
+@app.get("/dashboard/income")
+def dashboard_income_legacy_redirect():
+    return redirect("/income", code=302)
 
 
 if __name__ == "__main__":
