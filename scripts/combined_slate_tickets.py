@@ -9427,8 +9427,6 @@ def main():
             all_ticket_groups.append((display, tix, _bg))
         print(f"  [long-legs] added {len(final_long)} long-leg sheet(s) for leg sizes {long_leg_sizes}")
 
-    apply_guaranteed_flex3_backfill_from_four_plus(all_ticket_groups, counters, wb)
-
     _pre_slips = sum(len(t[1]) for t in all_ticket_groups)
     _lc_groups_pre: Counter[int] = Counter()
     for _sn, _tickets, _ in all_ticket_groups:
@@ -9459,6 +9457,8 @@ def main():
     if bool(_diversity_cfg.get("enabled", True)):
         all_ticket_groups = _apply_diversity_filter_to_ticket_groups(all_ticket_groups, _diversity_cfg)
         print(f"  [diversity] groups after filter: {len(all_ticket_groups)}")
+    # Diversity can drop every 3-leg group while leaving 4+ — re-check so /tickets always has Flex 3 when 4+ exists.
+    apply_guaranteed_flex3_backfill_from_four_plus(all_ticket_groups, counters, wb)
     _post_slips = sum(len(t[1]) for t in all_ticket_groups)
     _lc_groups_post: Counter[int] = Counter()
     for _sn, _tickets, _ in all_ticket_groups:
