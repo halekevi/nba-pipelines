@@ -51,6 +51,7 @@ HOTFIX:
 from __future__ import annotations
 
 import argparse
+import itertools
 import json
 import logging
 import math
@@ -2322,6 +2323,27 @@ def flex_cash_prob(leg_probs_with_source: list) -> float:
                 rest *= vals[j]
         one_miss += miss * rest
     return float(np.clip(prod_all + one_miss, TICKET_PROB_FLOOR, TICKET_PROB_CAP))
+
+
+def _mlb_best_flex3_rows_from_long_ticket(rows: list[dict]) -> list[dict] | None:
+    """
+    If a 4+ leg MLB slip was built but greedy Flex 3 failed, pick the 3-leg subset
+    with highest modeled flex cash (independent-leg approximation used in finalize).
+    """
+    if not rows or len(rows) < 3:
+        return None
+    if len(rows) == 3:
+        return [dict(r) for r in rows]
+    best: list[dict] | None = None
+    best_sc = -1.0
+    for combo in itertools.combinations(range(len(rows)), 3):
+        r3 = [rows[i] for i in combo]
+        leg_probs = [_resolve_leg_prob(pd.Series(r)) for r in r3]
+        sc = flex_cash_prob(leg_probs)
+        if sc > best_sc:
+            best_sc = sc
+            best = [dict(r) for r in r3]
+    return best
 
 
 def _greedy_ticket_with_first_leg(cand: pd.DataFrame, n_legs: int, first_idx: int) -> list[pd.Series] | None:
@@ -8743,6 +8765,30 @@ def main():
 
         ps3_list = _structured_list("power_std3")
         g3_list = _structured_list("goblin3")
+
+        # MLB: greedy Flex 3 can fail on thin goblin pools while Power/Flex 4+ still fills.
+        # If we have any 4–6 leg slip, derive Flex 3 from the best 3-leg subset of that slip.
+        if str(sport_label).strip().upper() == "MLB" and not f_list:
+            src_long = None
+            for cand in (f4_list, f5_list, f6_list, p4_list, p5_list, p6_list):
+                if cand:
+                    src_long = cand[0]
+                    break
+            if src_long is not None:
+                rows_long = list(src_long.get("rows") or [])
+                rows3 = _mlb_best_flex3_rows_from_long_ticket(rows_long)
+                if rows3:
+                    fin3 = _finalize_structure_ticket_dict(
+                        rows3,
+                        "flex",
+                        sport_label,
+                        "flex",
+                        3,
+                        counters,
+                        prioritize_ticket_hit,
+                    )
+                    if fin3 is not None:
+                        f_list = [fin3]
 
         if (
             not p_list and not p4_list and not p5_list and not p6_list
