@@ -2440,23 +2440,8 @@ def api_tickets_ev_top20():
 
 @app.get("/ev-top20")
 def ev_top20_redirect():
-    """Legacy path used in bookmarks; EV TOP20 page lives at /tickets/ev."""
-    return redirect("/tickets/ev", code=302)
-
-
-@app.get("/tickets/ev")
-def page_tickets_ev():
-    r = make_response(
-        render_template(
-            "tickets_ev_top20.html",
-            ui_build_id=_UI_BUILD_ID,
-            deploy_git_sha=(os.environ.get("RAILWAY_GIT_COMMIT_SHA") or os.environ.get("GIT_COMMIT") or "")[:40],
-        )
-    )
-    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
-    r.headers["Pragma"] = "no-cache"
-    r.headers["Expires"] = "0"
-    return r
+    """Legacy bookmark fallback after EV TOP20 nav removal."""
+    return redirect("/tickets", code=302)
 
 
 @app.get("/api/slate/today-tickets")

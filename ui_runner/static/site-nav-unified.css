@@ -2,6 +2,7 @@
  * Match top nav to Home + Grades: full-bleed sticky bar, gold gradient wordmark,
  * active link pill, live-pill glass, static accent strip. Load after
  * proporacle-page-shell.css (or payout’s inline shell block) and before nav-mobile-shared.css.
+ * Primary nav links: Home, Tickets, Grades, Income, Payouts.
  */
 .gold-shimmer {
   background: linear-gradient(to bottom, #d4af37, #f7ef8a);
