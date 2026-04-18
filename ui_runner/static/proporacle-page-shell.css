@@ -456,9 +456,9 @@ canvas{width:100%!important;max-height:220px;}
   --amber:#8f7396;
   --red:#b5687e;
   --purple:#6f84bf;
-  --muted:rgba(23,43,64,0.52);
-  --muted2:rgba(23,43,64,0.34);
-  --text:rgba(14,36,58,0.90);
+  --muted:rgba(26,42,58,0.78);
+  --muted2:rgba(26,42,58,0.62);
+  --text:rgba(14,36,58,0.96);
   /* Muted slate surfaces (cool blue-grey — not near-white) */
   --light-snow-solid:#c8d4e8;
   --light-snow-deep:#b8c6dc;
@@ -621,7 +621,7 @@ canvas{width:100%!important;max-height:220px;}
 [data-theme="light"] .dpill {
   background:rgba(232,244,252,0.88) !important;
   border-color:rgba(70,110,140,0.12) !important;
-  color:rgba(0,0,0,0.52) !important;
+  color:rgba(26,42,58,0.88) !important;
 }
 [data-theme="light"] .slate-filter-btn.on,
 [data-theme="light"] .tab-btn.active,
@@ -640,7 +640,7 @@ canvas{width:100%!important;max-height:220px;}
 [data-theme="light"] .date-nav-btn {
   background:rgba(232,244,252,0.92) !important;
   border-color:rgba(70,110,140,0.12) !important;
-  color:rgba(0,0,0,0.52) !important;
+  color:rgba(26,42,58,0.88) !important;
 }
 /* Section headers */
 [data-theme="light"] .sec-line {
@@ -843,4 +843,31 @@ body::before{
     radial-gradient(ellipse at 14% 9%, rgba(0,242,255,0.10) 0%, transparent 36%),
     radial-gradient(ellipse at 86% 8%, rgba(212,175,55,0.16) 0%, transparent 36%),
     linear-gradient(180deg,#050505 0%,#0a0a0a 52%,#111111 100%);
+}
+
+/* Light theme: force readable foreground (many slip/table rules assumed near-white surfaces). */
+html.light-theme,
+html[data-theme="light"] {
+  color: #1a2a3a;
+}
+[data-theme="light"] td,
+[data-theme="light"] th,
+[data-theme="light"] .stat-val,
+[data-theme="light"] .stat-label,
+[data-theme="light"] .leg-player,
+[data-theme="light"] .leg-prop,
+[data-theme="light"] .leg-line,
+[data-theme="light"] [class*="ticket-"],
+[data-theme="light"] [class*="leg-"],
+[data-theme="light"] .filter-pill,
+[data-theme="light"] .ticket-filter-pill,
+[data-theme="light"] .group-label,
+[data-theme="light"] .table-header,
+[data-theme="light"] .col-header {
+  color: #1a2a3a !important;
+}
+[data-theme="light"] .chip-d {
+  color: #1a2a3a !important;
+  border-color: rgba(0, 0, 0, 0.18) !important;
+  background: rgba(0, 0, 0, 0.06) !important;
 }

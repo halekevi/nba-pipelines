@@ -657,3 +657,41 @@
     padding: 2px 8px;
   }
 }
+
+/* Light theme: /tickets body uses hardcoded frost text on several surfaces — force slate ink. */
+[data-theme="light"] .tickets-built .filter-pill {
+  color: #1a2a3a !important;
+}
+[data-theme="light"] .tickets-built .filter-pill strong {
+  color: #0d5a82 !important;
+}
+[data-theme="light"] .tickets-built table th,
+[data-theme="light"] .tickets-built table td {
+  color: #1a2a3a !important;
+}
+[data-theme="light"] .tickets-built .gstat-label {
+  color: #1a2a3a !important;
+}
+[data-theme="light"] .tickets-built .why-note {
+  color: rgba(26, 42, 58, 0.72) !important;
+}
+[data-theme="light"] .tickets-built .ticket-hdr-bracket,
+[data-theme="light"] .tickets-built .payout-rec-badge {
+  color: #1a2a3a !important;
+  border-color: rgba(0, 0, 0, 0.14) !important;
+  background: rgba(255, 255, 255, 0.5) !important;
+}
+[data-theme="light"] .tickets-built .ticket-filter-pill {
+  color: #1a2a3a !important;
+}
+[data-theme="light"] .tickets-built .ticket-filter-pill.active {
+  color: #0a0a0f !important;
+}
+[data-theme="light"] .tickets-built .ticket-filter-pill[data-filter="top-payout"].active {
+  color: #3d2e08 !important;
+}
+[data-theme="light"] .tickets-built .chip-d {
+  color: #1a2a3a !important;
+  border-color: rgba(0, 0, 0, 0.18) !important;
+  background: rgba(0, 0, 0, 0.06) !important;
+}
