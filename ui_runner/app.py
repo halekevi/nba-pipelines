@@ -3177,8 +3177,9 @@ _DEFAULT_GEMINI_VISION_MODEL = "gemini-2.5-flash-lite"
 @app.post("/api/vision/screenshot")
 def api_vision_screenshot():
     key = (os.environ.get("GOOGLE_API_KEY") or os.environ.get("Google Screenshot API") or "").strip()
+    print(f"[vision] key found: {bool(key)} len={len(key)}", flush=True)
     if not key:
-        return jsonify({"error": "Google Screenshot API / GOOGLE_API_KEY not set"}), 503
+        return jsonify({"error": "No API key configured"}), 503
 
     model_id = (os.environ.get("GEMINI_VISION_MODEL") or "").strip() or _DEFAULT_GEMINI_VISION_MODEL
     _mid_ok = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._-")
