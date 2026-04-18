@@ -37,18 +37,36 @@ def _prop_token(leg: dict[str, Any]) -> str:
 
 
 def _line_token(leg: dict[str, Any]) -> str:
+    """Stable line key so 2.5, 2.50, and float 2.5 match for exposure counting."""
     for k in ("line", "played_line", "std_line", "standard_line"):
         val = leg.get(k)
         if val is None:
             continue
-        s = str(val).strip()
-        if s != "":
-            return s
+        try:
+            f = float(val)
+            if isinstance(f, float) and f != f:  # NaN
+                continue
+            if abs(f - round(f)) < 1e-9:
+                return str(int(round(f)))
+            return f"{f:.6g}"
+        except (TypeError, ValueError):
+            s = str(val).strip().lower()
+            if s:
+                return s
     return ""
 
 
+def _direction_token(leg: dict[str, Any]) -> str:
+    d = str(leg.get("direction") or leg.get("bet_direction") or "").strip().upper()
+    if "UNDER" in d:
+        return "under"
+    if "OVER" in d:
+        return "over"
+    return d.lower()
+
+
 def _leg_token(leg: dict[str, Any]) -> str:
-    return f"{_player_token(leg)}|{_prop_token(leg)}|{_line_token(leg)}"
+    return f"{_player_token(leg)}|{_prop_token(leg)}|{_line_token(leg)}|{_direction_token(leg)}"
 
 
 def _leg_sample_size(leg: dict[str, Any]) -> int:

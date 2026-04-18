@@ -537,6 +537,10 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
     if not payd and flex and paid and all_hit and banner_pow > 0:
         pred_pay = float(banner_pow)
     pred_ev = _safe_float_ticket(payd.get("ev"))
+    if pred_ev is None:
+        pred_ev = _safe_float_ticket(ticket.get("est_ev"))
+    if pred_ev is None:
+        pred_ev = _safe_float_ticket(ticket.get("flat_ev"))
     pred_p = _safe_float_ticket(payd.get("p_all_win"))
     rec = str(payd.get("recommendation") or "").strip()
 
