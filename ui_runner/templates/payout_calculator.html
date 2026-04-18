@@ -1342,7 +1342,7 @@ async function loadSlateTicketOptions(){
         const o=document.createElement('option');
         o.value=String(t.ticket_key||'');
         const n=Number(t.n_legs)||((t.legs||[]).length||0);
-        o.textContent='#'+String(t.ticket_no||'?')+' · '+n+' legs';
+        o.textContent=groupName+' · #'+String(t.ticket_no||'?')+' ('+n+' legs)';
         og.appendChild(o);
       });
       sel.appendChild(og);
