@@ -43,7 +43,7 @@ body::after{
 }
 @keyframes gridScroll{from{background-position:0 0,0 0,0 0,0 0,0 0,0 0;}to{background-position:0 0,0 0,0 0,0 0,0 40px,0 40px;}}
 
-#app{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 20px 24px;}
+#app{position:relative;z-index:1;max-width:90vw;width:90vw;margin:0 auto;padding:0 20px 24px;}
 
 /* nav */
 .snav{position:sticky;top:1rem;z-index:200;background:rgba(20,20,20,0.6);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid rgba(212,175,55,0.15);box-shadow:0 1px 0 rgba(255,255,255,0.04),0 8px 32px rgba(0,0,0,0.4);padding:0 40px;display:flex;align-items:center;height:72px;gap:0;margin:1rem;border-radius:20px;transform:translateY(0);opacity:1;transition:transform .25s ease,opacity .2s ease;}
@@ -270,7 +270,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .leg-remove:hover{color:var(--red);}
 .leg-body{display:none;padding:0 14px 16px;}
 .leg-card.open .leg-body{display:block;}
-.calc-leg-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:start;}
+.calc-leg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:10px;align-items:start;}
 .calc-leg-grid .leg-card{margin-bottom:0;}
 .calc-leg-empty{grid-column:1/-1;font-size:11px;color:var(--muted);padding:14px;text-align:center;border:1px dashed var(--border);border-radius:10px;}
 .pt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
@@ -425,7 +425,7 @@ canvas{width:100%!important;max-height:220px;}
 }
 
 /* Glass orb helpers for payout */
-#app{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:24px 20px;}
+#app{position:relative;z-index:1;max-width:90vw;width:90vw;margin:0 auto;padding:24px 20px;}
 .legacy-nav{display:flex;align-items:center;gap:16px;padding:14px 0 20px;border-bottom:1px solid rgba(255,255,255,0.07);flex-wrap:wrap;}
 .hero{margin:20px 0 18px;padding:18px 20px;border-radius:18px;background:rgba(255,255,255,0.03);backdrop-filter:blur(22px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%);border:1px solid rgba(255,255,255,0.09);box-shadow:0 8px 32px rgba(0,0,0,0.32),inset 0 1px 0 rgba(255,255,255,0.06);position:relative;overflow:hidden;}
 .hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--cyan));opacity:.9;}
@@ -928,6 +928,16 @@ body::before{
         <select id="calc-slip-type"><option value="power">Power Play (all must hit)</option><option value="flex">Flex Play (can miss 1-2)</option></select>
       </div>
     </div>
+    <div class="import-actions" style="margin-bottom:10px;align-items:flex-end;gap:10px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:6px;min-width:320px;flex:1">
+        <label style="font-size:10px;color:var(--muted);letter-spacing:1.5px;">LOAD TICKET FROM TODAY'S SLATE</label>
+        <select id="calc-slate-ticket-select" class="leg-input" onchange="applySelectedSlateTicketToCalc()" style="min-height:38px">
+          <option value="">Select a ticket group...</option>
+        </select>
+      </div>
+      <button type="button" class="btn-glass-sm" onclick="loadSlateTicketOptions()">📋 Refresh slate</button>
+      <span id="calc-slate-msg" style="font-size:10px;color:var(--muted);letter-spacing:0.5px"></span>
+    </div>
     <div class="section-divider">LEGS &nbsp;<span id="leg-badge" style="color:var(--muted);font-size:10px;letter-spacing:1px"></span></div>
     <div id="calc-leg-list" style="margin-bottom:14px">
       <div style="font-size:11px;color:var(--muted);padding:14px;text-align:center;border:1px dashed var(--border);border-radius:10px">No legs added yet — use the buttons below</div>
@@ -977,10 +987,13 @@ body::before{
         <span style="font-size:10px;color:var(--muted);letter-spacing:1px">Loads tickets_latest.json (same as /tickets). Enter actual PP multiplier, then Log.</span>
       </div>
     </div>
-    <div class="form-grid-3" style="margin-bottom:16px">
+    <div class="form-grid-3" style="margin-bottom:10px">
       <div class="field"><label>PLATFORM</label><select id="log-platform" onchange="scheduleLogDraftSave()"><option>PrizePicks</option><option>Underdog Fantasy</option><option>Sleeper</option></select></div>
       <div class="field"><label>SLIP TYPE</label><select id="log-slip-type" onchange="onLogSlipTypeChange();scheduleLogDraftSave()"><option>Power Play</option><option>Flex Play</option></select></div>
       <div class="field"><label>DATE</label><input id="log-date" type="date" onchange="scheduleLogDraftSave()"></div>
+    </div>
+    <div class="form-grid" style="margin-bottom:16px">
+      <div class="field"><label>RESULT STATUS</label><select id="log-result" onchange="scheduleLogDraftSave()"><option>PENDING</option><option>WIN</option><option>LOSS</option><option>GUARANTEE</option></select></div>
     </div>
     <div class="section-divider">TICKET LEGS <span id="log-leg-summary" style="color:var(--muted);font-size:10px;margin-left:8px"></span></div>
     <div id="log-leg-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
@@ -1120,6 +1133,10 @@ body::before{
     <p class="hint">Quick-reference deck from <code style="font-size:10px;opacity:.85">data/payout_rate_cards.json</code> — same baselines as the calculator / grader. Regenerate after updating coefficients: <code style="font-size:10px;opacity:.85">python scripts/build_payout_rate_cards.py</code></p>
     <p class="hint" style="margin-top:10px">To capture <strong>live payout and flex guarantee rates</strong>, use <strong>Log Lines</strong>: enter the app’s sweep multiplier (and optional min guarantee on Flex), then enable “append to server CSV” if you want rows in <code style="font-size:10px;opacity:.85">data/payout_observations.csv</code> for refitting <code style="font-size:10px;opacity:.85">payout_formula_coefficients.json</code>.</p>
     <div id="rate-cards-mount"><div class="hint" style="padding:20px 0">Open this tab to load the dictionary.</div></div>
+    <div style="margin-top:14px">
+      <div class="section-divider" style="margin-bottom:10px">GOBLIN DISCOUNT REFERENCE</div>
+      <div id="goblin-discount-mount"><div class="hint" style="padding:8px 0">Loading discount table...</div></div>
+    </div>
   </div>
 </div>
 
@@ -1142,10 +1159,15 @@ body::before{
 const PP_BASE   = {2:3,3:6,4:10,5:20,6:37.5};
 /* Matches utils.goblin_demon_multiplier.BASE_FLEX — sweep + partial tiers */
 const FLEX_BASE = {2:{2:3},3:{3:3,2:1},4:{4:6,3:1.5},5:{5:10,4:2,3:0.4},6:{6:25,5:2,4:0.4}};
+const GOBLIN_DISCOUNT_PER_UNIT = 0.110;
 const STORE_KEY = 'proporacle_payout_log_v5';
 const LOG_DRAFT_KEY = 'proporacle_payout_log_draft_v1';
 const PROP_OPTS = ['Points','Rebounds','Assists','Pts+Reb+Ast','Pts+Reb','Pts+Ast','3-PT Made','Steals','Blocks','Turnovers','Fantasy Score','Other'];
-const SPORT_OPTS= ['NBA','CBB','NFL','MLB','WNBA','Soccer','Other'];
+const SPORT_OPTS= ['NBA','NBA1H','NBA1Q','CBB','NHL','NFL','MLB','Soccer','Tennis','WNBA','Other'];
+
+let slateTicketOptions = [];
+let slateTicketMap = {};
+let calcLoadedGroupName = '';
 
 function loadLog(){try{const r=localStorage.getItem(STORE_KEY);return r?JSON.parse(r):[]}catch{return[]}}
 function saveLog(e){try{localStorage.setItem(STORE_KEY,JSON.stringify(e))}catch{}}
@@ -1194,6 +1216,7 @@ function paintRateCards(data){
   root.innerHTML='';
   root.appendChild(intro);
   root.appendChild(grid);
+  renderGoblinDiscountTable();
 }
 function renderRateCards(force){
   const root=document.getElementById('rate-cards-mount');
@@ -1248,6 +1271,148 @@ function getBucket(pct,kind){
 function bCol(b){if(!b)return'var(--muted)';if(b.startsWith('Standard'))return'var(--std)';if(b.startsWith('Goblin'))return'var(--goblin)';if(b.startsWith('Demon'))return'var(--demon)';return'var(--muted)';}
 function sCol(p){if(p===null||p===undefined)return'var(--muted)';if(p>5)return'var(--demon)';if(p<-5)return'var(--goblin)';return'var(--amber)';}
 
+function normalizePickType(raw){
+  const s=String(raw||'').toLowerCase();
+  if(s.includes('gob'))return'goblin';
+  if(s.includes('dem'))return'demon';
+  return'standard';
+}
+function normalizeSportOpt(raw){
+  const s=String(raw||'').trim();
+  const hit=SPORT_OPTS.find(v=>v.toLowerCase()===s.toLowerCase());
+  return hit||'Other';
+}
+function normalizePropOpt(raw){
+  const s=String(raw||'').trim().toLowerCase();
+  const alias={
+    'pts+rebs+asts':'Pts+Reb+Ast',
+    'pts+reb+ast':'Pts+Reb+Ast',
+    'points+rebounds+assists':'Pts+Reb+Ast',
+    'pts+rebs':'Pts+Reb',
+    'pts+asts':'Pts+Ast',
+    'three pointers made':'3-PT Made',
+    '3pt made':'3-PT Made',
+  };
+  if(alias[s])return alias[s];
+  const hit=PROP_OPTS.find(v=>v.toLowerCase()===s);
+  return hit||'Other';
+}
+function pctFromLegProb(leg){
+  const hr=parseFloat(leg.hit_rate);
+  if(!isNaN(hr)){
+    if(hr>0&&hr<=1)return Math.round(hr*100);
+    if(hr>1&&hr<=100)return Math.round(hr);
+  }
+  const ml=parseFloat(leg.ml_prob);
+  if(!isNaN(ml)){
+    if(ml>0&&ml<=1)return Math.round(ml*100);
+    if(ml>1&&ml<=100)return Math.round(ml);
+  }
+  return 50;
+}
+function setCalcSlateMsg(txt,isErr){
+  const el=document.getElementById('calc-slate-msg');
+  if(!el)return;
+  el.textContent=txt||'';
+  el.style.color=isErr?'var(--amber)':'var(--muted)';
+}
+async function loadSlateTicketOptions(){
+  try{
+    setCalcSlateMsg('Loading slate tickets...',false);
+    const r=await fetch('/api/slate-legs',{cache:'no-store'});
+    const j=await r.json();
+    if(!r.ok)throw new Error(j.error||('HTTP '+r.status));
+    const list=Array.isArray(j.tickets)?j.tickets:[];
+    slateTicketOptions=list;
+    slateTicketMap={};
+    list.forEach(t=>{slateTicketMap[String(t.ticket_key||'')]=t;});
+    const sel=document.getElementById('calc-slate-ticket-select');
+    if(!sel)return;
+    sel.innerHTML='<option value="">Select a ticket group...</option>';
+    const byGroup={};
+    list.forEach(t=>{
+      const g=String(t.group_name||'Ungrouped');
+      if(!byGroup[g])byGroup[g]=[];
+      byGroup[g].push(t);
+    });
+    Object.keys(byGroup).sort().forEach(groupName=>{
+      const og=document.createElement('optgroup');
+      og.label=groupName;
+      byGroup[groupName].forEach(t=>{
+        const o=document.createElement('option');
+        o.value=String(t.ticket_key||'');
+        const n=Number(t.n_legs)||((t.legs||[]).length||0);
+        o.textContent='#'+String(t.ticket_no||'?')+' · '+n+' legs';
+        og.appendChild(o);
+      });
+      sel.appendChild(og);
+    });
+    const stamp=j.built_at?(' · '+j.built_at):'';
+    setCalcSlateMsg('Loaded '+list.length+' tickets'+stamp,false);
+  }catch(e){
+    setCalcSlateMsg('Could not load slate tickets',true);
+  }
+}
+function applySelectedSlateTicketToCalc(){
+  const sel=document.getElementById('calc-slate-ticket-select');
+  if(!sel)return;
+  const key=String(sel.value||'');
+  if(!key)return;
+  const t=slateTicketMap[key];
+  if(!t||!Array.isArray(t.legs)||!t.legs.length){
+    setCalcSlateMsg('No legs found for selection',true);
+    return;
+  }
+  calcLoadedGroupName=String(t.group_name||'');
+  calcLegs=[];
+  calcCounter=0;
+  (t.legs||[]).forEach(leg=>{
+    const typ=normalizePickType(leg.pick_type);
+    const stdRaw=(leg.standard_line!=null&&leg.standard_line!=='')?leg.standard_line:leg.line;
+    const playedRaw=leg.line;
+    const std=(stdRaw!=null&&stdRaw!=='')?String(stdRaw):'';
+    const played=(playedRaw!=null&&playedRaw!=='')?String(playedRaw):'';
+    calcLegs.push({
+      id:++calcCounter,
+      type:typ,
+      player:String(leg.player||''),
+      sport:normalizeSportOpt(leg.sport),
+      prop:normalizePropOpt(leg.prop_type),
+      stdLine:std,
+      playedLine:typ==='standard'?std:played,
+      hitProb:pctFromLegProb(leg),
+      open:true,
+    });
+  });
+  renderCalcLegs();
+  setCalcSlateMsg('Loaded '+calcLegs.length+' legs from '+calcLoadedGroupName,false);
+}
+function renderGoblinDiscountTable(){
+  const host=document.getElementById('goblin-discount-mount');
+  if(!host)return;
+  const fm=x=>Number(x).toFixed(2)+'x';
+  const fp=x=>(x>=0?'+':'-')+Math.abs(x*100).toFixed(1)+'%';
+  const rows=[2,3,4,5,6].map(n=>{
+    const base=Number(PP_BASE[n]||0);
+    const one=base*Math.pow(1-GOBLIN_DISCOUNT_PER_UNIT,1);
+    const two=n>=2?base*Math.pow(1-GOBLIN_DISCOUNT_PER_UNIT,2):NaN;
+    const all=base*Math.pow(1-GOBLIN_DISCOUNT_PER_UNIT,n);
+    const d1=(one/base)-1,d2=(two/base)-1,da=(all/base)-1;
+    return `<tr>
+      <td style="text-align:left">${n}</td>
+      <td>${fm(base)}</td>
+      <td>${fm(one)} <span style="color:var(--muted)">(${fp(d1)})</span></td>
+      <td>${n>=2?`${fm(two)} <span style="color:var(--muted)">(${fp(d2)})</span>`:'—'}</td>
+      <td>${fm(all)} <span style="color:var(--muted)">(${fp(da)})</span></td>
+    </tr>`;
+  }).join('');
+  host.innerHTML=`<div style="overflow-x:auto"><table class="log-table" style="font-size:11px">
+    <thead><tr><th style="text-align:left">LEGS</th><th>STANDARD</th><th>1 GOBLIN</th><th>2 GOBLINS</th><th>ALL GOBLIN</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table></div>
+  <div class="hint" style="margin-top:8px">Discount model uses <code style="font-size:10px">GOBLIN_DISCOUNT_PER_UNIT = 0.110</code> applied multiplicatively.</div>`;
+}
+
 /* ─── CALCULATOR ─── */
 let calcLegs=[],calcCounter=0;
 
@@ -1256,7 +1421,7 @@ function addCalcLeg(type){
   renderCalcLegs();
 }
 function removeCalcLeg(id){calcLegs=calcLegs.filter(l=>l.id!==id);renderCalcLegs();}
-function clearCalcLegs(){calcLegs=[];calcCounter=0;renderCalcLegs();document.getElementById('calc-results').style.display='none';}
+function clearCalcLegs(){calcLegs=[];calcCounter=0;calcLoadedGroupName='';renderCalcLegs();document.getElementById('calc-results').style.display='none';setCalcSlateMsg('',false);}
 function toggleLeg(id){const l=calcLegs.find(l=>l.id===id);if(l){l.open=!l.open;renderCalcLegs();}}
 function changeType(id,type){const l=calcLegs.find(l=>l.id===id);if(l){l.type=type;l.playedLine='';l.hitProb=type==='goblin'?68:type==='demon'?32:52;renderCalcLegs();}}
 function updateCF(id,field,val){
@@ -1363,6 +1528,7 @@ function runCalc(){
 
 /* ─── LOG ─── */
 let logLegs=[],logCounter=0;
+let logLoadedGroupName='';
 document.getElementById('log-date').value=new Date().toISOString().slice(0,10);
 let _logDraftTimer=null;
 function saveLogDraft(){
@@ -1374,6 +1540,7 @@ function saveLogDraft(){
       platform:document.getElementById('log-platform').value,
       slipType:document.getElementById('log-slip-type').value,
       date:document.getElementById('log-date').value,
+      result:document.getElementById('log-result')?.value||'PENDING',
       actualMult:String(document.getElementById('log-actual-mult').value||''),
       minGuaranteeMult:String(document.getElementById('log-min-guarantee-mult')?.value||''),
       serverCsv:!!document.getElementById('log-server-csv')?.checked,
@@ -1391,6 +1558,8 @@ async function importTodayTicketsFromSlate(){
     if(!r.ok){ showMsg('⚠ '+(j.error||'Could not load slate'),'warn'); return; }
     const arr = j.tickets||[];
     if(!arr.length){ showMsg('⚠ No tickets in slate JSON','warn'); return; }
+    const sheetNames=[...new Set(arr.map(x=>String(x.sheet||'').trim()).filter(Boolean))];
+    logLoadedGroupName=sheetNames.length===1?sheetNames[0]:(sheetNames.length?sheetNames[0]+' (+more)':'');
     logLegs = [];
     for(const tix of arr){
       for(const L of tix.legs||[]){
@@ -1436,6 +1605,7 @@ function loadLogDraft(){
     if(o.platform&&pf){const opt=[...pf.options].find(x=>x.value===o.platform||x.text===o.platform);if(opt)pf.value=opt.value;}
     if(o.slipType&&sf){const opt=[...sf.options].find(x=>x.value===o.slipType||x.text===o.slipType);if(opt)sf.value=opt.value;}
     if(o.date)document.getElementById('log-date').value=o.date;
+    if(o.result&&document.getElementById('log-result'))document.getElementById('log-result').value=String(o.result).toUpperCase();
     if(o.actualMult!=null)document.getElementById('log-actual-mult').value=String(o.actualMult);
     const mg=document.getElementById('log-min-guarantee-mult'),sv=document.getElementById('log-server-csv');
     if(o.minGuaranteeMult!=null&&mg)mg.value=String(o.minGuaranteeMult);
@@ -1463,7 +1633,9 @@ function blurLFLine(id,field,el){
 function blurLFPlayer(id){renderLogLegs();refreshLogSummary();}
 function clearLogForm(){
   logLegs=[];logCounter=0;renderLogLegs();
+  logLoadedGroupName='';
   document.getElementById('log-base-mult').value='';document.getElementById('log-actual-mult').value='';
+  if(document.getElementById('log-result'))document.getElementById('log-result').value='PENDING';
   const mg=document.getElementById('log-min-guarantee-mult');if(mg)mg.value='';
   document.getElementById('log-ticket-summary').style.display='none';document.getElementById('log-leg-summary').textContent='';
   try{localStorage.removeItem(LOG_DRAFT_KEY);}catch{}
@@ -1529,6 +1701,7 @@ async function logTicket(){
   const am=parseFloat(document.getElementById('log-actual-mult').value);
   if(!am||am<=0){showMsg('⚠ Enter the actual payout multiplier.','warn');return;}
   const n=logLegs.length,platform=document.getElementById('log-platform').value,slipType=document.getElementById('log-slip-type').value,dt=document.getElementById('log-date').value;
+  const result=String(document.getElementById('log-result')?.value||'PENDING').toUpperCase();
   const flex=logSlipIsFlex();
   const bm=logBaseMultForN(n);
   const nG=logLegs.filter(l=>l.type==='goblin').length,nD=logLegs.filter(l=>l.type==='demon').length,nS=logLegs.filter(l=>l.type==='standard').length;
@@ -1537,7 +1710,7 @@ async function logTicket(){
   const minGuaranteeMult=mgRaw?parseFloat(mgRaw):null;
   const legs=logLegs.map(l=>{const s=parseFloat(l.stdLine)||null,p=parseFloat(l.playedLine)||null;const dp=getDeltaPct(s,p);return{type:l.type,player:l.player||'Unknown',sport:l.sport,prop:l.prop,stdLine:s,playedLine:l.type!=='standard'?p:null,distance:(l.type!=='standard'&&s&&p)?Math.round(Math.abs(p-s)*100)/100:null,deltaPct:dp,bucket:getBucket(dp,l.type)};});
   const bSig=[...legs].map(l=>l.bucket||l.type).sort().join(' + '),cSig=[...legs].map(l=>l.type).sort().join(' + ');
-  logEntries.push({id:Date.now(),ts:dt||new Date().toLocaleDateString(),platform,slipType,nLegs:n,nStd:nS,nGob:nG,nDem:nD,baseMult:bm,actualMult:am,multChange:mc,bucketSig:bSig,comboSig:cSig,legs,minGuaranteeMult:(minGuaranteeMult!=null&&!isNaN(minGuaranteeMult))?minGuaranteeMult:null});
+  logEntries.push({id:Date.now(),ts:dt||new Date().toLocaleDateString(),platform,slipType,result,nLegs:n,nStd:nS,nGob:nG,nDem:nD,baseMult:bm,actualMult:am,multChange:mc,bucketSig:bSig,comboSig:cSig,legs,minGuaranteeMult:(minGuaranteeMult!=null&&!isNaN(minGuaranteeMult))?minGuaranteeMult:null});
   saveLog(logEntries);renderLogTable();updateLogCount();
   const wantServer=document.getElementById('log-server-csv')?.checked;
   if(wantServer){
@@ -1546,8 +1719,11 @@ async function logTicket(){
       const estR=await fetch('/api/payout/estimate-mult',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode,legs:logLegs.map(l=>({type:l.type,stdLine:l.stdLine,playedLine:l.playedLine,deltaPct:getDeltaPct(parseFloat(l.stdLine),parseFloat(l.playedLine))}))})});
       const estJ=estR.ok?await estR.json():{};
       const estMult=parseFloat(estJ.est_mult)||0;
-      const legBlob={platform,slipType,bucketSig:bSig,comboSig:cSig,min_guarantee_mult:(minGuaranteeMult!=null&&!isNaN(minGuaranteeMult))?minGuaranteeMult:null,legs};
-      const obsR=await fetch('/api/payout/log-observation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:dt||'',n_legs:n,slip_type:mode,combo_label:bSig,base_mult:bm||0,est_mult:estMult,actual_mult:am,stake:'',actual_payout:'',leg_details_json:legBlob})});
+      const pickTypes=(legs||[]).map(l=>l.type==='goblin'?'Goblin':l.type==='demon'?'Demon':'Standard').join(',');
+      const lines=(legs||[]).map(l=>(l.type==='standard'?l.stdLine:l.playedLine)).join(',');
+      const standardLines=(legs||[]).map(l=>l.stdLine).join(',');
+      const legBlob={platform,slipType,result,group_name:logLoadedGroupName||calcLoadedGroupName||'',bucketSig:bSig,comboSig:cSig,min_guarantee_mult:(minGuaranteeMult!=null&&!isNaN(minGuaranteeMult))?minGuaranteeMult:null,legs};
+      const obsR=await fetch('/api/payout/log-observation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:dt||'',group_name:logLoadedGroupName||calcLoadedGroupName||'',n_legs:n,slip_type:mode,result,pick_types:pickTypes,lines,standard_lines:standardLines,combo_label:bSig,base_mult:bm||0,est_mult:estMult,actual_mult:am,stake:'',actual_payout:'',leg_details_json:legBlob})});
       const obsJ=obsR.ok?await obsR.json():{};
       if(!obsR.ok||!obsJ.saved)showMsg('⚠ Saved locally; server CSV append failed.','warn');
       else{
@@ -1808,6 +1984,7 @@ function applyVisionMetaToLog(meta){
 }
 function applyPicksToCalc(picks,meta){
   if(!Array.isArray(picks)||!picks.length)return;
+  calcLoadedGroupName='';
   calcLegs=[];
   calcCounter=0;
   picks.forEach(p=>{
@@ -2000,6 +2177,8 @@ onLogSlipTypeChange();
 renderLogLegs();
 refreshLogSummary();
 bindTopDecimals();
+renderGoblinDiscountTable();
+loadSlateTicketOptions();
 </script>
 
 <script src="/static/site-nav-chrome.js?v=20260412" defer></script>

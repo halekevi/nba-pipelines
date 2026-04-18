@@ -2504,6 +2504,73 @@ def api_slate_today_tickets():
     return r
 
 
+@app.get("/api/slate-legs")
+def api_slate_legs():
+    """Flatten today's tickets_latest.json legs and include ticket-grouped options."""
+    if not _template_json_available("tickets_latest.json"):
+        return jsonify({"error": "tickets_latest.json not found", "legs": [], "tickets": []}), 404
+    try:
+        data = read_json_cached(TEMPLATES_DIR / "tickets_latest.json")
+    except Exception as e:
+        return jsonify({"error": str(e), "legs": [], "tickets": []}), 500
+
+    groups = list((data or {}).get("groups") or [])
+    legs: list[dict[str, Any]] = []
+    tickets_out: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for grp in groups:
+        group_name = str((grp or {}).get("group_name") or "")
+        for t in (grp or {}).get("tickets") or []:
+            tno = t.get("ticket_no")
+            ticket_key = f"{group_name}#{tno}"
+            t_legs: list[dict[str, Any]] = []
+            for leg in (t or {}).get("legs") or []:
+                item = {
+                    "player": str(leg.get("player") or ""),
+                    "sport": str(leg.get("sport") or ""),
+                    "team": str(leg.get("team") or ""),
+                    "opp": str(leg.get("opp") or ""),
+                    "prop_type": str(leg.get("prop_type") or ""),
+                    "pick_type": str(leg.get("pick_type") or ""),
+                    "direction": str(leg.get("direction") or ""),
+                    "line": leg.get("line"),
+                    "standard_line": leg.get("standard_line") if leg.get("standard_line") is not None else leg.get("line"),
+                    "hit_rate": leg.get("hit_rate"),
+                    "ml_prob": leg.get("ml_prob"),
+                    "group_name": group_name,
+                    "ticket_no": tno,
+                    "ticket_key": ticket_key,
+                }
+                t_legs.append(item)
+                key = (
+                    f"{item['player']}|{item['prop_type']}|{item['line']}|{item['direction']}"
+                )
+                if key not in seen:
+                    seen.add(key)
+                    legs.append(item)
+            tickets_out.append(
+                {
+                    "group_name": group_name,
+                    "ticket_no": tno,
+                    "ticket_key": ticket_key,
+                    "n_legs": len(t_legs),
+                    "legs": t_legs,
+                }
+            )
+
+    r = jsonify(
+        {
+            "legs": legs,
+            "tickets": tickets_out,
+            "built_at": str((data or {}).get("built_at") or (data or {}).get("generated_at") or ""),
+            "date": str((data or {}).get("date") or ""),
+        }
+    )
+    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    return r
+
+
 @app.post("/api/payout/log-observation")
 def api_payout_log_observation():
     """Append one row to data/payout_observations.csv (server-side curve learning)."""
@@ -2579,9 +2646,50 @@ def api_payout_log_observation():
             w.writeheader()
         w.writerow(row)
 
+    # Hand-logged payout rows used by manual screenshot calibration workflow.
+    hand_csv_path = BASE_DIR / "data" / "payout_samples" / "payout_log_hand.csv"
+    hand_fields = [
+        "date",
+        "group_name",
+        "n_legs",
+        "pick_types",
+        "lines",
+        "standard_lines",
+        "actual_payout_multiplier",
+        "slip_type",
+        "result",
+    ]
+    hand_row = {
+        "date": str(_f("date", "")).strip(),
+        "group_name": str(_f("group_name", "")).strip(),
+        "n_legs": str(_f("n_legs", "")).strip(),
+        "pick_types": str(_f("pick_types", "")).strip(),
+        "lines": str(_f("lines", "")).strip(),
+        "standard_lines": str(_f("standard_lines", "")).strip(),
+        "actual_payout_multiplier": actual_mult,
+        "slip_type": str(_f("slip_type", "power")).strip().lower(),
+        "result": str(_f("result", "pending")).strip().upper() or "PENDING",
+    }
+    hand_csv_path.parent.mkdir(parents=True, exist_ok=True)
+    hand_exists = hand_csv_path.exists()
+    with hand_csv_path.open("a", newline="", encoding="utf-8") as f2:
+        w2 = csv.DictWriter(f2, fieldnames=hand_fields)
+        if not hand_exists:
+            w2.writeheader()
+        w2.writerow(hand_row)
+
     n_lines = sum(1 for _ in csv_path.open("r", encoding="utf-8")) - 1
+    hand_lines = sum(1 for _ in hand_csv_path.open("r", encoding="utf-8")) - 1
     warn = bool(est_mult and abs(float(actual_mult) - float(est_mult)) > 1.5)
-    return jsonify({"saved": True, "total_obs": max(0, n_lines), "mult_delta": mult_delta, "warning_large_delta": warn})
+    return jsonify(
+        {
+            "saved": True,
+            "total_obs": max(0, n_lines),
+            "total_hand_obs": max(0, hand_lines),
+            "mult_delta": mult_delta,
+            "warning_large_delta": warn,
+        }
+    )
 
 
 @app.get("/api/payout/observations")
