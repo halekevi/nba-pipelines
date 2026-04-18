@@ -46,6 +46,7 @@ from flask import (
     redirect,
     render_template,
     request,
+    send_file,
     send_from_directory,
 )
 from markupsafe import Markup
@@ -66,6 +67,28 @@ ARCHIVE_DIR   = TEMPLATES_DIR / "archive"
 STATIC_DIR    = UI_DIR / "static"
 # Bundled graded-prop exports for deploy hosts without data/cache/*_props_history.db (see scripts/export_grades_props_bundle.py).
 GRADES_PROPS_EXPORT_DIR = UI_DIR / "data" / "grades_props"
+
+
+def _persistent_data_root() -> Path:
+    """
+    Writable data root for payout logs and similar artifacts.
+
+    Railway: add a Volume mounted at /app/data (or set PROPORACLE_PERSISTENT_DATA_DIR /
+    RAILWAY_VOLUME_MOUNT_PATH). Local dev: repo ``data/`` under BASE_DIR.
+    """
+    for key in ("PROPORACLE_PERSISTENT_DATA_DIR", "RAILWAY_VOLUME_MOUNT_PATH"):
+        raw = (os.environ.get(key) or "").strip()
+        if raw:
+            return Path(raw).expanduser().resolve()
+    if (os.environ.get("RAILWAY_ENVIRONMENT") or "").strip() and Path("/app/data").is_dir():
+        return Path("/app/data").resolve()
+    return (BASE_DIR / "data").resolve()
+
+
+DATA_ROOT = _persistent_data_root()
+PAYOUT_SAMPLES_DIR = DATA_ROOT / "payout_samples"
+PAYOUT_LOG_PATH = PAYOUT_SAMPLES_DIR / "payout_log_hand.csv"
+PAYOUT_OBS_PATH = DATA_ROOT / "payout_observations.csv"
 
 # Pipeline output paths (used by status + slate endpoints)
 NBA_DIR       = BASE_DIR / "NBA"
@@ -107,6 +130,12 @@ app = Flask(
     static_folder=str(STATIC_DIR) if STATIC_DIR.exists() else None,
 )
 
+try:
+    DATA_ROOT.mkdir(parents=True, exist_ok=True)
+    PAYOUT_SAMPLES_DIR.mkdir(parents=True, exist_ok=True)
+except OSError:
+    pass
+
 # Optional: flask-compress if installed (requirements.txt does not include it).
 try:
     from flask_compress import Compress as _FlaskCompress  # type: ignore[import-not-found]
@@ -117,7 +146,7 @@ except ImportError:
     _APP_USES_FLASK_COMPRESS = False
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-04-16-slate-slim-v2"
+_UI_BUILD_ID = "2026-04-19-payout-volume"
 
 
 def _deploy_git_sha_short() -> str:
@@ -2617,9 +2646,9 @@ def api_slate_legs():
 
 @app.post("/api/payout/log-observation")
 def api_payout_log_observation():
-    """Append one row to data/payout_observations.csv (server-side curve learning)."""
+    """Append one row to payout_observations.csv (server-side curve learning; volume when mounted)."""
     body = request.get_json(silent=True) or {}
-    csv_path = BASE_DIR / "data" / "payout_observations.csv"
+    csv_path = PAYOUT_OBS_PATH
     fieldnames = [
         "date",
         "n_legs",
@@ -2691,7 +2720,7 @@ def api_payout_log_observation():
         w.writerow(row)
 
     # Hand-logged payout rows used by manual screenshot calibration workflow.
-    hand_csv_path = BASE_DIR / "data" / "payout_samples" / "payout_log_hand.csv"
+    hand_csv_path = PAYOUT_LOG_PATH
     hand_fields = [
         "date",
         "group_name",
@@ -2747,15 +2776,41 @@ def api_payout_log_observation():
             "mult_delta": mult_delta,
             "warning_large_delta": warn,
             "csv_row": csv_row,
-            "message": "Copy this row to data/payout_samples/payout_log_hand.csv on your machine",
+            "message": "Row appended to payout_log_hand.csv (sync from Railway via PROPORACLE_PAYOUT_EXPORT_URL in run_daily if configured)",
         }
     )
 
 
+@app.get("/api/payout/export-log-hand")
+def api_payout_export_log_hand():
+    """Download payout_log_hand.csv (manual / LOG THIS TICKET rows) from the persistent data root."""
+    if PAYOUT_LOG_PATH.is_file():
+        return send_file(
+            str(PAYOUT_LOG_PATH),
+            mimetype="text/csv",
+            as_attachment=True,
+            download_name="payout_log_hand.csv",
+        )
+    return jsonify({"error": "No payout_log_hand.csv yet"}), 404
+
+
+@app.get("/api/payout/export-observations")
+def api_payout_export_observations():
+    """Download payout_observations.csv (full observation log) from the persistent data root."""
+    if PAYOUT_OBS_PATH.is_file():
+        return send_file(
+            str(PAYOUT_OBS_PATH),
+            mimetype="text/csv",
+            as_attachment=True,
+            download_name="payout_observations.csv",
+        )
+    return jsonify({"error": "No payout_observations.csv yet"}), 404
+
+
 @app.get("/api/payout/observations")
 def api_payout_observations():
-    """Read server-side payout observations for /payout Patterns (data/payout_observations.csv)."""
-    csv_path = BASE_DIR / "data" / "payout_observations.csv"
+    """Read server-side payout observations for /payout Patterns (payout_observations.csv)."""
+    csv_path = PAYOUT_OBS_PATH
     if not csv_path.is_file():
         r = jsonify({"observations": [], "count": 0, "truncated": False})
         r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
