@@ -1087,10 +1087,21 @@ def _ticket_group_leg_fingerprint(tickets: list) -> frozenset:
     return frozenset(acc)
 
 
+def _ticket_group_dedupe_key(tickets: list) -> tuple[frozenset, tuple[str, ...]]:
+    """Leg set + ticket_type per slip so Flex vs Power with the same legs are not merged."""
+    leg_fp = _ticket_group_leg_fingerprint(tickets)
+    types = tuple(
+        str(t.get("ticket_type", "")).strip().lower()
+        for t in (tickets or [])
+        if isinstance(t, dict)
+    )
+    return (leg_fp, types)
+
+
 def dedupe_ticket_groups_by_leg_set(all_ticket_groups: list) -> tuple[list, int, int]:
-    # Deduplicate: drop groups with identical player+prop+line+direction sets
+    # Deduplicate: drop groups with identical legs AND ticket product (Flex vs Power Std 3, etc.)
     n_before = len(all_ticket_groups)
-    seen: set[frozenset] = set()
+    seen: set[tuple[frozenset, tuple[str, ...]]] = set()
     out: list = []
     for item in all_ticket_groups:
         if not isinstance(item, (list, tuple)) or len(item) < 2:
@@ -1103,9 +1114,10 @@ def dedupe_ticket_groups_by_leg_set(all_ticket_groups: list) -> tuple[list, int,
         if len(fp) == 0:
             out.append((group_name, tickets, *tail))
             continue
-        if fp in seen:
+        key = _ticket_group_dedupe_key(tickets)
+        if key in seen:
             continue
-        seen.add(fp)
+        seen.add(key)
         out.append((group_name, tickets, *tail))
     return out, n_before, len(out)
 
@@ -2391,6 +2403,23 @@ def _modeled_ticket_paid_score(rows: list[dict], flow: str, n_legs: int) -> tupl
     return score, ep, flex_cash
 
 
+def _greedy_ticket_ev_rank_metric(rows: list[dict], flow: str, n_legs: int) -> float:
+    """
+    Payout-adjusted EV proxy for ranking greedy candidates: flex n≥3 uses flex_cash×adj_flex;
+    otherwise est win prob × adj power payout (matches ticket ev_power spirit).
+    """
+    leg_probs = [_resolve_leg_prob(pd.Series(r)) for r in rows]
+    cmult, _ = _correlation_multiplier_and_audit(rows)
+    ep = win_prob(leg_probs, n_legs) * cmult
+    flex_cash = flex_cash_prob(leg_probs) * cmult if n_legs >= 3 else ep
+    po = PAYOUT.get(int(n_legs), {"power": 0.0, "flex": 0.0})
+    adj_p = calc_adjusted_payout(float(po["power"]), rows)
+    adj_f = calc_adjusted_payout(float(po["flex"]), rows)
+    if str(flow) == "flex" and int(n_legs) >= 3:
+        return float(flex_cash * adj_f)
+    return float(ep * adj_p)
+
+
 def _ticket_row_dedup_key(rows: list[dict]) -> frozenset[str]:
     return frozenset((str(r.get("player", "")) + "|" + str(r.get("prop_type", ""))).strip() for r in rows)
 
@@ -2404,13 +2433,14 @@ def _rank_greedy_tickets_by_paid_metric(
 ) -> list[tuple[list[dict], float, float, float]]:
     """
     Rank up to max_tickets distinct greedy slips from the first K first-leg seeds (sorted-candidate order).
+    Sorts by payout-adjusted EV proxy first, then modeled hit/flex score (see _greedy_ticket_ev_rank_metric).
     """
     cand = cand.reset_index(drop=True)
     eligible_idx = [i for i in range(len(cand)) if str(cand.iloc[i].get("player", "") or "").strip()]
     if not eligible_idx:
         return []
     n_starts = max(1, min(int(ticket_gen_starts), len(eligible_idx)))
-    ranked: list[tuple[list[dict], float, float, float]] = []
+    ranked_work: list[tuple[list[dict], float, float, float, float]] = []
     seen: set[frozenset[str]] = set()
     for s in range(n_starts):
         first_idx = eligible_idx[s]
@@ -2423,10 +2453,11 @@ def _rank_greedy_tickets_by_paid_metric(
             continue
         seen.add(key)
         score, ep, fc = _modeled_ticket_paid_score(rows, flow, n_legs)
-        ranked.append((rows, score, ep, fc))
-    ranked.sort(key=lambda x: -x[1])
+        ev_m = _greedy_ticket_ev_rank_metric(rows, flow, n_legs)
+        ranked_work.append((rows, score, ep, fc, ev_m))
+    ranked_work.sort(key=lambda x: (-x[4], -x[1]))
     max_keep = max(1, int(max_tickets))
-    return ranked[:max_keep]
+    return [(t[0], t[1], t[2], t[3]) for t in ranked_work[:max_keep]]
 
 
 def _pick_best_greedy_ticket_by_paid_metric(
@@ -8789,6 +8820,26 @@ def main():
                     )
                     if fin3 is not None:
                         f_list = [fin3]
+            # Tennis / Soccer often cap at 3 legs (no 4+ source): reuse Power Std 3 or Goblin 3 legs as Flex 3.
+            if not f_list:
+                for src3 in (ps3_list, g3_list):
+                    if not src3:
+                        continue
+                    rows3 = list(src3[0].get("rows") or [])
+                    if len(rows3) < 3:
+                        continue
+                    fin3 = _finalize_structure_ticket_dict(
+                        rows3,
+                        "flex",
+                        sport_label,
+                        "flex",
+                        3,
+                        counters,
+                        prioritize_ticket_hit,
+                    )
+                    if fin3 is not None:
+                        f_list = [fin3]
+                        break
 
         if (
             not p_list and not p4_list and not p5_list and not p6_list
