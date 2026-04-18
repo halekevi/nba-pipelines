@@ -3286,7 +3286,11 @@ def ticket_groups_to_payload(
         "groups": [],
     }
 
-    for group_name, tickets, _bg in all_ticket_groups:
+    _ordered_groups = sorted(
+        enumerate(all_ticket_groups),
+        key=lambda ix_t: (_ticket_group_sort_rank(str(ix_t[1][0])), ix_t[0]),
+    )
+    for _, (group_name, tickets, _bg) in _ordered_groups:
         if not tickets:
             continue
 
@@ -9746,6 +9750,27 @@ def _group_sport(group_name: str) -> str:
     return "NBA"
 
 
+# Align with Slate Explorer sport order; cross-sport / mix buckets sort last.
+_TICKET_GROUP_SPORT_SORT_ORDER: dict[str, int] = {
+    "NBA": 0,
+    "NBA1H": 1,
+    "NBA1Q": 2,
+    "CBB": 3,
+    "WCBB": 4,
+    "NHL": 5,
+    "SOCCER": 6,
+    "MLB": 7,
+    "TENNIS": 8,
+    "CROSS": 10_000,
+    "MIX": 10_000,
+}
+
+
+def _ticket_group_sort_rank(group_name: str) -> int:
+    sk = _group_sport(group_name)
+    return _TICKET_GROUP_SPORT_SORT_ORDER.get(sk, 999)
+
+
 _EV_REC_RANK = {"LOW": 0, "SKIP": 0, "MARGINAL": 1, "OK": 2, "STRONG": 3}
 
 
@@ -10286,6 +10311,12 @@ def render_tickets_body_html(
             }
         )
 
+    prepared.sort(
+        key=lambda ent: (
+            _ticket_group_sort_rank(str(ent["group"].get("group_name") or "")),
+            int(ent.get("original_index", 0)),
+        )
+    )
     filter_attr_rows = [
         {"sport": x["sport"], "type": x["type"], "pick": x["pick"], "ev": x["ev"]} for x in prepared
     ]
