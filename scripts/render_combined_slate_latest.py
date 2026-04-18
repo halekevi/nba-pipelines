@@ -128,9 +128,11 @@ def df_to_html(df: pd.DataFrame, title: str, subtitle: str) -> str:
   }}
 
   .wrap {{
-    max-width: 1400px;
+    max-width: none;
+    width: 100%;
     margin: 0 auto;
     padding: 18px 14px 40px;
+    box-sizing: border-box;
   }}
 
   .header {{

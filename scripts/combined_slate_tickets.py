@@ -3690,7 +3690,7 @@ body::before{
 /* scanlines */
 body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;}
 
-#app{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:0 20px 24px;}
+#app{position:relative;z-index:1;width:100%;max-width:min(1920px,98vw);margin:0 auto;padding:0 clamp(10px,2.5vw,28px) 24px;box-sizing:border-box;}
 
 /* nav */
 nav{display:flex;align-items:center;gap:16px;padding:10px 0 12px;border-bottom:1px solid rgba(196,166,107,.22);flex-wrap:wrap;position:sticky;top:0;z-index:220;background:rgba(7,10,19,0.90);backdrop-filter:blur(22px) saturate(180%);}

@@ -6,7 +6,7 @@
   <meta name="proporacle-build" content="{{ ui_build_id|default('', true) }}"/>
   <title>PropORACLE - P&L Log</title>
   <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
-  <link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260416scroll"/>
+  <link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260418width"/>
   <link rel="stylesheet" href="/static/site-nav-unified.css?v=20260408"/>
   <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
   <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260406"/>
@@ -17,11 +17,13 @@
       color: var(--text, rgba(255, 255, 255, 0.92));
     }
     .income-wrap {
-      max-width: min(1520px, 96vw);
+      max-width: min(1920px, 98vw);
+      width: 100%;
       margin: 0 auto;
       padding: 16px clamp(14px, 2.4vw, 28px) 28px;
       position: relative;
       z-index: 1;
+      box-sizing: border-box;
     }
     .hero {
       margin: 6px 0 18px;

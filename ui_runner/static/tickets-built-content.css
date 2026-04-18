@@ -1,25 +1,26 @@
 /**
  * Built slips (/tickets body only). Load after proporacle-page-shell.css.
  */
+/* Width cap comes from proporacle-page-shell.css #app (same as home .shell). */
 #app.page-tickets {
-  max-width: 1400px !important;
+  max-width: none !important;
+  width: 100% !important;
 }
 
-/* Desktop: 96% column (~2% margin each side). Beats .shell mobile rules in (769px–900px]. */
 @media (min-width: 769px) {
   .tickets-built.shell {
-    width: 96% !important;
-    max-width: 96% !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
     box-sizing: border-box;
   }
 
   #app.page-ev .ev-wrap {
-    width: 96% !important;
-    max-width: 96% !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
     box-sizing: border-box;
   }
 }
