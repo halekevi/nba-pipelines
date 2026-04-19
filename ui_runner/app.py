@@ -3120,6 +3120,48 @@ def api_slate_sport():
         return jsonify({"error": str(e), "sports": {}}), 500
 
 
+@app.get("/api/slate-sport/<sport>")
+def api_slate_sport_single(sport: str):
+    """
+    Per-sport lazy slate endpoint for the home explorer.
+    Reads slate_latest.json and returns one slimmed sport slice.
+    """
+    if not _template_json_available("slate_latest.json"):
+        return jsonify(
+            {
+                "error": "No slate JSON — run pipeline (slate_latest.json)",
+                "sport": str(sport or "").strip().lower(),
+                "rows": [],
+            }
+        ), 404
+
+    sport_key = str(sport or "").strip().lower()
+    if not sport_key:
+        return jsonify({"error": "missing sport key", "sport": sport_key, "rows": []}), 400
+
+    def _build():
+        payload = read_json_cached(TEMPLATES_DIR / "slate_latest.json")
+        sports = (payload or {}).get("sports") or {}
+        rows = sports.get(sport_key) or []
+        # Match existing UI behavior: CBB card combines cbb + wcbb rows.
+        if sport_key == "cbb":
+            rows = list(rows) + list(sports.get("wcbb") or [])
+        if not isinstance(rows, list):
+            rows = []
+        slim_rows = [_slim_slate_sport_row(r) if isinstance(r, dict) else r for r in rows]
+        return {
+            "date": payload.get("date"),
+            "generated_at": payload.get("generated_at"),
+            "sport": sport_key,
+            "rows": slim_rows,
+        }
+
+    try:
+        return _gz_json_response(f"slate-sport-single-v1:{sport_key}", _build, ttl=60.0)
+    except Exception as e:
+        return jsonify({"error": str(e), "sport": sport_key, "rows": []}), 500
+
+
 @app.get("/api/slate-excel")
 def api_slate_excel():
     """Return all sheets from the combined Excel with non-blank columns only.

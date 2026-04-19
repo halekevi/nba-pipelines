@@ -1906,7 +1906,7 @@ async function loadSlateData() {
     }
     renderEdges();
     renderStreaks();
-    // buildSlateDataFromAllSlate() (2.2 MB fetch) is deferred until user opens a sport panel
+    // Slate panel rows are fetched lazily per sport via /api/slate-sport/<sport>.
   })();
   return slateDataPromise;
 }
@@ -2361,6 +2361,7 @@ function renderStreaks() {
 // ── Add streak-card CSS ───────────────────────────────────
 document.head.insertAdjacentHTML("beforeend",`<style>
 .streak-card{background:rgba(255,255,255,0.03);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px 14px 14px 18px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;}
+@keyframes slateSpin{to{transform:rotate(360deg);}}
 </style>`);
 
 // ── Slate Panel expand / sort / filter ───────────────────
@@ -2379,8 +2380,9 @@ SLATE_STATE['combined'] = { sortKey: 'Rank Score', sortDir: -1, search: '', dir:
 const SLATE_COLS = {};  // sport -> array of column names from Excel
 let openSlatePanel = null;
 let slateDataPromise = null;
-let _slateSportPromise = null; // lazy: only fetches /api/slate-sport when a panel is first opened
 let _slateExcelPromise = null; // lazy: only fetches /api/slate-excel when combined panel is first opened
+const SLATE_SPORT_CACHE = {};           // sport -> true once fetched from /api/slate-sport/<sport>
+const SLATE_SPORT_FETCH_PROMISES = {};  // sport -> in-flight promise
 
 function scheduleRenderSlateTable(sport) {
   if (RENDER_SCHEDULED[sport]) return;
@@ -2416,7 +2418,18 @@ function toggleSlatePanel(sport) {
   }
 }
 
-// ── Populate SLATE_DATA — tries full slate endpoint, falls back to tickets ────
+function showSlateSportLoading(sport, msg = 'Loading...') {
+  const tbody = document.getElementById(`stb-${sport}`);
+  if (!tbody) return;
+  tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;padding:20px;color:var(--muted2);font-size:11px;letter-spacing:.06em;">
+    <span style="display:inline-flex;align-items:center;gap:8px;">
+      <span style="width:12px;height:12px;border:2px solid rgba(255,255,255,.25);border-top-color:var(--accent);border-radius:50%;display:inline-block;animation:slateSpin .7s linear infinite;"></span>
+      ${msg}
+    </span>
+  </td></tr>`;
+}
+
+// ── Populate SLATE_DATA — per-sport lazy endpoint, ticket fallback ────────────
 /** Ticket legs use uppercase sport labels (e.g. NFL, NBA); Slate Explorer uses lowercase keys (nfl, nba). */
 function _sportKeyNorm(sp) {
   const x = String(sp || '').trim().toLowerCase().replace(/\s+/g, '');
@@ -2425,91 +2438,77 @@ function _sportKeyNorm(sp) {
   return x;
 }
 
-async function buildSlateDataFromAllSlate() {
-  // Try full slate endpoint first (authoritative per-sport rows for cards)
+function _fallbackSlateRowsFromTickets(sport) {
+  return ALL_SLATE
+    .filter(p => {
+      const sp = _sportKeyNorm(p.sport);
+      if (sport === 'cbb') return sp === 'cbb' || sp === 'wcbb';
+      return sp === sport;
+    })
+    .map(p => ({
+      tier:      null,
+      rank_score: p.edge != null ? Math.abs(p.edge) : null,
+      player:    p.player || '',
+      team:      p.team   || '',
+      opp:       p.opp    || '',
+      prop:      p.prop   || '',
+      pick_type: p.pick   || '',
+      line:      p.line,
+      dir:       p.dir    || '',
+      edge:      p.edge,
+      hit_rate:  p.hit != null ? p.hit / 100 : null,
+      l5_avg:    p.l5_avg,
+      l5_over:   p.l5_over,
+      l5_under:  p.l5_under,
+      game_time: '',
+    }));
+}
+
+function _setSlateSportRows(sport, rows) {
+  delete SLATE_COLS[sport];
+  SLATE_DATA[sport] = Array.isArray(rows) ? rows : [];
+  SLATE_DATA[sport].sort((a,b) => Math.abs(b?.edge||0) - Math.abs(a?.edge||0));
+}
+
+async function fetchSlateSport(sport, opts = {}) {
+  if (sport === 'combined') return;
+  if (SLATE_SPORT_CACHE[sport] && Array.isArray(SLATE_DATA[sport])) return;
+  if (SLATE_SPORT_FETCH_PROMISES[sport]) return SLATE_SPORT_FETCH_PROMISES[sport];
+  const prefetch = !!opts.prefetch;
+  if (!prefetch || openSlatePanel === sport) showSlateSportLoading(sport, 'Loading slate...');
+
+  SLATE_SPORT_FETCH_PROMISES[sport] = (async () => {
+    await loadSlateData();
+    let rows = [];
   try {
-    const res = await fetch('/api/slate-sport', {cache: 'no-store'});
+      const res = await fetch(`/api/slate-sport/${encodeURIComponent(sport)}`, {cache: 'no-store'});
     if (res.ok) {
       const d = await res.json();
-      const raw = d.sports;
-      if (raw && typeof raw === 'object') {
-        const sportsLc = {};
-        Object.keys(raw).forEach(k => {
-          sportsLc[String(k).toLowerCase()] = raw[k];
-        });
-        SPORTS.forEach(s => {
-          if (s === 'cbb') {
-            const men = sportsLc.cbb || [];
-            const wom = sportsLc.wcbb || [];
-            const merged = [...men, ...wom];
-            if (merged.length) {
-              delete SLATE_COLS[s];
-              SLATE_DATA[s] = merged;
-            }
-          } else if (sportsLc[s] && sportsLc[s].length) {
-            delete SLATE_COLS[s];
-            SLATE_DATA[s] = sportsLc[s];
-          }
-        });
-      }
+        rows = Array.isArray(d.rows) ? d.rows : [];
     }
-  } catch(e) { console.warn('slate-sport failed, using tickets data:', e); }
-
-  // Fall back to ALL_SLATE (tickets data) for any sport not populated above
-  SPORTS.forEach(s => {
-    if (SLATE_DATA[s] && SLATE_DATA[s].length) return;
-    delete SLATE_COLS[s];
-    SLATE_DATA[s] = ALL_SLATE
-      .filter(p => {
-        const sp = _sportKeyNorm(p.sport);
-        if (s === 'cbb') return sp === 'cbb' || sp === 'wcbb';
-        return sp === s;
-      })
-      .map(p => ({
-        tier:      null,
-        rank_score: p.edge != null ? Math.abs(p.edge) : null,
-        player:    p.player || '',
-        team:      p.team   || '',
-        opp:       p.opp    || '',
-        prop:      p.prop   || '',
-        pick_type: p.pick   || '',
-        line:      p.line,
-        dir:       p.dir    || '',
-        edge:      p.edge,
-        hit_rate:  p.hit != null ? p.hit / 100 : null,
-        l5_avg:    p.l5_avg,
-        l5_over:   p.l5_over,
-        l5_under:  p.l5_under,
-        game_time: '',
-      }));
+    } catch(e) {
+      console.warn(`slate-sport/${sport} failed, using tickets fallback:`, e);
+    }
+    if (!rows.length) rows = _fallbackSlateRowsFromTickets(sport);
+    _setSlateSportRows(sport, rows);
+    SLATE_SPORT_CACHE[sport] = true;
+    if (openSlatePanel === sport) scheduleRenderSlateTable(sport);
+  })().finally(() => {
+    delete SLATE_SPORT_FETCH_PROMISES[sport];
   });
 
-  // Sort each sport by edge desc, update count badges
-  SPORTS.forEach(s => {
-    if (!Array.isArray(SLATE_DATA[s])) SLATE_DATA[s] = [];
-    SLATE_DATA[s].sort((a,b) => Math.abs(b.edge||0) - Math.abs(a.edge||0));
-  });
-  if (openSlatePanel) scheduleRenderSlateTable(openSlatePanel);
+  return SLATE_SPORT_FETCH_PROMISES[sport];
 }
 
 async function loadSlatePicks() {
-  // No-op: data comes from buildSlateDataFromAllSlate() after loadSlateData()
+  // No-op: panel rows are now fetched lazily per sport.
   if (openSlatePanel && SLATE_DATA[openSlatePanel]) scheduleRenderSlateTable(openSlatePanel);
 }
 
 function loadSlateSport(sport) {
   if (sport === 'combined') { loadSlateExcel(); return; }
-  if (SLATE_DATA[sport] && SLATE_DATA[sport].length) { scheduleRenderSlateTable(sport); return; }
-  const tbody = document.getElementById(`stb-${sport}`);
-  if (tbody) {
-    const cells = () => '<td><div class="skeleton" style="height:12px;border-radius:4px;width:100%;min-width:40px"></div></td>';
-    tbody.innerHTML = Array.from({length: 6}, () => `<tr>${Array.from({length: 14}, cells).join('')}</tr>`).join('');
-  }
-  // Lazy: fetch /api/slate-sport only on first panel open (payload is slimmed server-side)
-  if (!_slateSportPromise) {
-    _slateSportPromise = loadSlateData().then(() => buildSlateDataFromAllSlate());
-  }
-  _slateSportPromise.then(() => scheduleRenderSlateTable(sport));
+  if (SLATE_SPORT_CACHE[sport] && SLATE_DATA[sport]) { scheduleRenderSlateTable(sport); return; }
+  fetchSlateSport(sport).then(() => scheduleRenderSlateTable(sport));
 }
 
 function renderSlateTable(sport) {
@@ -2821,8 +2820,13 @@ function sortSlateDynamic(sport, key) {
   scheduleRenderSlateTable(sport);
 }
 
-// Data loaded dynamically — loadSlateData() populates ALL_SLATE then calls buildSlateDataFromAllSlate()
+// Keep edge/streak sections populated and warm slate panel with NBA first.
 loadSlateData();
+fetchSlateSport('nba');
+window.setTimeout(() => {
+  if (!SLATE_SPORT_CACHE.soccer) fetchSlateSport('soccer', {prefetch: true});
+  if (!SLATE_SPORT_CACHE.mlb) fetchSlateSport('mlb', {prefetch: true});
+}, 3000);
 </script>
 
 <script>
