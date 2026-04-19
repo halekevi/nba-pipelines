@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="/static/global-scrollbar.css?v=20260416"/>
-<link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260416perf"/>
+<link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260419perf2"/>
 <style>
 :root{
   /* Hybrid liquid-glass palette */
@@ -2828,45 +2828,47 @@ loadSlateData();
 <script>
 /* Mouse-tracking glow on all glass cards */
 (function(){
-  const disableFx = window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;
-  if (disableFx) return;
-  const SELECTORS = [
-    '.ticket', '.card', '.group', '.edge-card',
-    '.scard', '.streak-card',
-    '.result-item', '.pp-cell', '.stat-mini', '.leg-card',
-    '.grades-stat', '.grades-hero'
-  ];
-  function attachGlow(el) {
-    if (el.dataset.glowBound === '1') return;
-    el.dataset.glowBound = '1';
-    el.classList.add('mouse-glow');
-    el.addEventListener('mousemove', e => {
-      const r = el.getBoundingClientRect();
-      el.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
-      el.style.setProperty('--mouse-y', (e.clientY - r.top)  + 'px');
-    });
-  }
-  function initGlow() {
-    SELECTORS.forEach(sel =>
-      document.querySelectorAll(sel).forEach(attachGlow)
-    );
-  }
-  // Run on load + after dynamic content
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGlow);
-  } else {
-    initGlow();
-  }
-  let debounceT = null;
-  const queueInit = () => {
-    if (debounceT != null) window.clearTimeout(debounceT);
-    debounceT = window.setTimeout(() => {
-      debounceT = null;
+  const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!isCoarse && !reduceMotion) {
+    const SELECTORS = [
+      '.ticket', '.card', '.group', '.edge-card',
+      '.scard', '.streak-card',
+      '.result-item', '.pp-cell', '.stat-mini', '.leg-card',
+      '.grades-stat', '.grades-hero'
+    ];
+    function attachGlow(el) {
+      if (el.dataset.glowBound === '1') return;
+      el.dataset.glowBound = '1';
+      el.classList.add('mouse-glow');
+      el.addEventListener('mousemove', e => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
+        el.style.setProperty('--mouse-y', (e.clientY - r.top)  + 'px');
+      });
+    }
+    function initGlow() {
+      SELECTORS.forEach(sel =>
+        document.querySelectorAll(sel).forEach(attachGlow)
+      );
+    }
+    // Run on load + after dynamic content
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initGlow);
+    } else {
       initGlow();
-    }, 400);
-  };
-  const obs = new MutationObserver(queueInit);
-  obs.observe(document.body, { childList: true, subtree: true });
+    }
+    let debounceT = null;
+    const queueInit = () => {
+      if (debounceT != null) window.clearTimeout(debounceT);
+      debounceT = window.setTimeout(() => {
+        debounceT = null;
+        initGlow();
+      }, 400);
+    };
+    const obs = new MutationObserver(queueInit);
+    obs.observe(document.body, { childList: true, subtree: true });
+  }
 })();
 </script>
 
@@ -2874,35 +2876,37 @@ loadSlateData();
 <script>
 /* Chromatic aberration border on primary glass surfaces */
 (function(){
-  const disableFx = window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;
-  if (disableFx) return;
-  const CA_SELS = [
-    '.ticket', '.card', '.group', '.hero',
-    '.edge-card', '.grades-hero',
-    '.result-item'
-  ];
-  function initCA() {
-    CA_SELS.forEach(sel =>
-      document.querySelectorAll(sel).forEach(el => {
-        el.classList.add('ca-border');
-      })
-    );
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCA);
-  } else {
-    initCA();
-  }
-  let debounceT = null;
-  const queueInit = () => {
-    if (debounceT != null) window.clearTimeout(debounceT);
-    debounceT = window.setTimeout(() => {
-      debounceT = null;
+  const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!isCoarse && !reduceMotion) {
+    const CA_SELS = [
+      '.ticket', '.card', '.group', '.hero',
+      '.edge-card', '.grades-hero',
+      '.result-item'
+    ];
+    function initCA() {
+      CA_SELS.forEach(sel =>
+        document.querySelectorAll(sel).forEach(el => {
+          el.classList.add('ca-border');
+        })
+      );
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCA);
+    } else {
       initCA();
-    }, 400);
-  };
-  const obs = new MutationObserver(queueInit);
-  obs.observe(document.body, { childList: true, subtree: true });
+    }
+    let debounceT = null;
+    const queueInit = () => {
+      if (debounceT != null) window.clearTimeout(debounceT);
+      debounceT = window.setTimeout(() => {
+        debounceT = null;
+        initCA();
+      }, 400);
+    };
+    const obs = new MutationObserver(queueInit);
+    obs.observe(document.body, { childList: true, subtree: true });
+  }
 })();
 </script>
 

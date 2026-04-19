@@ -862,7 +862,7 @@ body::before{
 }
 </style>
 <link rel="stylesheet" href="/static/global-scrollbar.css?v=20260416"/>
-<link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260416perf"/>
+<link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260419perf2"/>
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260418nav"/>
 <link rel="stylesheet" href="/static/mobile-content-width.css?v=20260418nav2"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
@@ -2373,46 +2373,48 @@ loadSlateTicketOptions();
 <script>
 /* Mouse-tracking glow on all glass cards */
 (function(){
-  const disableFx = window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;
-  if (disableFx) return;
-  const SELECTORS = [
-    '.ticket', '.card', '.group', '.edge-card',
-    '.scard', '.qcard', '.hero-stat', '.streak-card',
-    '.result-item', '.pp-cell', '.stat-mini', '.leg-card',
-    '.grades-stat', '.grades-hero'
-  ];
-  function attachGlow(el) {
-    if (el.dataset.glowBound === '1') return;
-    el.dataset.glowBound = '1';
-    el.classList.add('mouse-glow');
-    el.addEventListener('mousemove', e => {
-      const r = el.getBoundingClientRect();
-      el.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
-      el.style.setProperty('--mouse-y', (e.clientY - r.top)  + 'px');
-    });
-  }
-  function initGlow() {
-    SELECTORS.forEach(sel =>
-      document.querySelectorAll(sel).forEach(attachGlow)
-    );
-  }
-  // Run on load + after dynamic content
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGlow);
-  } else {
-    initGlow();
-  }
-  let queued = false;
-  const queueInit = () => {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(() => {
-      queued = false;
+  const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!isCoarse && !reduceMotion) {
+    const SELECTORS = [
+      '.ticket', '.card', '.group', '.edge-card',
+      '.scard', '.qcard', '.hero-stat', '.streak-card',
+      '.result-item', '.pp-cell', '.stat-mini', '.leg-card',
+      '.grades-stat', '.grades-hero'
+    ];
+    function attachGlow(el) {
+      if (el.dataset.glowBound === '1') return;
+      el.dataset.glowBound = '1';
+      el.classList.add('mouse-glow');
+      el.addEventListener('mousemove', e => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
+        el.style.setProperty('--mouse-y', (e.clientY - r.top)  + 'px');
+      });
+    }
+    function initGlow() {
+      SELECTORS.forEach(sel =>
+        document.querySelectorAll(sel).forEach(attachGlow)
+      );
+    }
+    // Run on load + after dynamic content
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initGlow);
+    } else {
       initGlow();
-    });
-  };
-  const obs = new MutationObserver(queueInit);
-  obs.observe(document.body, { childList: true, subtree: true });
+    }
+    let queued = false;
+    const queueInit = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        initGlow();
+      });
+    };
+    const obs = new MutationObserver(queueInit);
+    obs.observe(document.body, { childList: true, subtree: true });
+  }
 })();
 </script>
 
@@ -2420,36 +2422,38 @@ loadSlateTicketOptions();
 <script>
 /* Chromatic aberration border on primary glass surfaces */
 (function(){
-  const disableFx = window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;
-  if (disableFx) return;
-  const CA_SELS = [
-    '.ticket', '.card', '.group', '.hero',
-    '.edge-card', '.qcard', '.grades-hero',
-    '.hero-stat', '.result-item'
-  ];
-  function initCA() {
-    CA_SELS.forEach(sel =>
-      document.querySelectorAll(sel).forEach(el => {
-        el.classList.add('ca-border');
-      })
-    );
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCA);
-  } else {
-    initCA();
-  }
-  let queued = false;
-  const queueInit = () => {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(() => {
-      queued = false;
+  const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!isCoarse && !reduceMotion) {
+    const CA_SELS = [
+      '.ticket', '.card', '.group', '.hero',
+      '.edge-card', '.qcard', '.grades-hero',
+      '.hero-stat', '.result-item'
+    ];
+    function initCA() {
+      CA_SELS.forEach(sel =>
+        document.querySelectorAll(sel).forEach(el => {
+          el.classList.add('ca-border');
+        })
+      );
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCA);
+    } else {
       initCA();
-    });
-  };
-  const obs = new MutationObserver(queueInit);
-  obs.observe(document.body, { childList: true, subtree: true });
+    }
+    let queued = false;
+    const queueInit = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        initCA();
+      });
+    };
+    const obs = new MutationObserver(queueInit);
+    obs.observe(document.body, { childList: true, subtree: true });
+  }
 })();
 </script>
 
