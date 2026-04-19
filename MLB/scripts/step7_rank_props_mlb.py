@@ -461,13 +461,16 @@ def main() -> None:
 
     out["edge_dr"]           = out["edge"].apply(_edge_transform)
     out["line_hit_rate"]     = out.apply(_line_hit_rate_from_row, axis=1)
-    same_opp_over = pd.to_numeric(out.get("same_opp_over_rate_l5", np.nan), errors="coerce")
+    same_opp_over = pd.to_numeric(
+        out.get("same_opp_over_rate_l5", pd.Series(np.nan, index=out.index)),
+        errors="coerce",
+    )
     if "same_series_hit_rate" not in out.columns:
         out["same_series_hit_rate"] = np.nan
     series_existing = pd.to_numeric(out["same_series_hit_rate"], errors="coerce")
     series_from_same_opp = pd.Series(
         [
-            _same_opp_signal(out["bet_direction"].iloc[i], same_opp_over.iloc[i] if i < len(same_opp_over) else np.nan)
+            _same_opp_signal(out["bet_direction"].iloc[i], same_opp_over.iloc[i])
             for i in range(len(out))
         ],
         index=out.index,
