@@ -137,6 +137,7 @@ def write_sheet(wb, name: str, data: pd.DataFrame, tab_color: str = HEADER_COLOR
         "L5 Over": 8, "L5 Under": 8,
         "Def Rank": 9, "Def Tier": 10,
         "Min Tier": 9, "Bat Order": 10, "Pitcher Role": 12,
+        "Series HR": 9,
         "Void Reason": 20,
     }
     for ci, h in enumerate(headers, 1):
@@ -178,6 +179,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "last5_over", "last5_under",
         "OVERALL_DEF_RANK", "DEF_TIER",
         "minutes_tier", "batting_order_tier", "pitcher_role",
+        "same_series_hit_rate",
         "void_reason",
     ]
     keep  = [c for c in keep if c in df2.columns]
@@ -191,6 +193,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "edge_score",
         "blended_score",
         "line_hit_rate_over_ou_5",
+        "same_series_hit_rate",
     ]:
         if col in clean.columns:
             rnd = 4 if col in ("ml_prob", "edge_score", "blended_score") else 2
@@ -225,6 +228,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "OVERALL_DEF_RANK": "Def Rank", "DEF_TIER": "Def Tier",
         "minutes_tier": "Min Tier", "batting_order_tier": "Bat Order",
         "pitcher_role": "Pitcher Role",
+        "same_series_hit_rate": "Series HR",
         "void_reason": "Void Reason",
     }
     clean = clean.rename(columns=rename)
