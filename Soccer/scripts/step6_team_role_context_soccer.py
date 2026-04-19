@@ -119,6 +119,55 @@ def tier_field_involvement(x, pos_group: str = "MID") -> str:
         return "STARTER"
 
 
+def _assign_starter_tier(row: pd.Series) -> str:
+    """
+    Priority order:
+    1. avg_minutes (real DB data when available)
+    2. minutes_tier from step6 heuristics (HIGH/MEDIUM/LOW)
+    3. position_group + pick_type inference
+    """
+    # Level 1 — real minutes data
+    avg_min = pd.to_numeric(pd.Series([row.get("avg_minutes")]), errors="coerce").iloc[0]
+    if pd.notna(avg_min) and float(avg_min) > 0:
+        m = float(avg_min)
+        if m >= 60:
+            return "STARTER"
+        if m >= 30:
+            return "ROTATION"
+        return "SUB"
+
+    # Level 2 — minutes_tier heuristic from step6
+    mt = str(row.get("minutes_tier") or "").strip().upper()
+    if mt == "HIGH":
+        return "STARTER"
+    if mt == "MEDIUM":
+        return "ROTATION"
+    if mt == "LOW":
+        return "SUB"
+
+    # Level 3 — position + pick_type inference
+    pos = str(row.get("position_group") or "").strip().upper()
+    pick = str(row.get("pick_type") or "").strip().lower()
+
+    # Goalkeepers almost always start (only 1 per team)
+    if pos == "GK":
+        return "STARTER"
+
+    # Goblin lines = low lines = player likely plays limited minutes
+    if "goblin" in pick:
+        return "ROTATION"
+
+    # DEF/MID with standard lines typically start
+    if pos in ("DEF", "MID"):
+        return "STARTER"
+
+    # FWD — could be starter or rotation, default rotation
+    if pos == "FWD":
+        return "ROTATION"
+
+    return "UNKNOWN"
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -168,6 +217,7 @@ def main() -> None:
         return "LOW"  # FWD with no data — rotational
 
     new_cols["minutes_tier"] = pd.Series([_minutes_tier(i) for i in range(len(df))], index=df.index)
+    df["starter_tier"] = df.apply(_assign_starter_tier, axis=1)
 
     # shot_volume — shooting output tier per position
     def _shot_volume(i):

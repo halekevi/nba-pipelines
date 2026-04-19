@@ -113,7 +113,7 @@ def write_sheet(wb, name: str, data: pd.DataFrame) -> None:
         "Hit Rate (5g)": 12, "Hit Rate (10g)": 12, "Last 5 Avg": 10, "Season Avg": 10,
         "L5 Over": 8, "L5 Under": 8,
         "Def Rank": 9, "Def Tier": 10,
-        "Min Tier": 9, "Shot Role": 10, "Usage Role": 10,
+        "Min Tier": 9, "Starter Tier": 11, "Shot Role": 10, "Usage Role": 10,
         "Void Reason": 20,
     }
     for ci, h in enumerate(headers, 1):
@@ -156,7 +156,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "stat_last5_avg", "stat_season_avg",
         "last5_over", "last5_under",
         "OVERALL_DEF_RANK", "DEF_TIER",
-        "minutes_tier", "shot_role", "usage_role",
+        "minutes_tier", "starter_tier", "shot_role", "usage_role",
         "void_reason",
         # ── Game log ─────────────────────────────────────────────────────────
         "stat_g1", "stat_g2", "stat_g3", "stat_g4", "stat_g5",
@@ -211,7 +211,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "stat_last5_avg": "Last 5 Avg", "stat_season_avg": "Season Avg",
         "last5_over": "L5 Over", "last5_under": "L5 Under",
         "OVERALL_DEF_RANK": "Def Rank", "DEF_TIER": "Def Tier",
-        "minutes_tier": "Min Tier", "shot_role": "Shot Role", "usage_role": "Usage Role",
+        "minutes_tier": "Min Tier", "starter_tier": "Starter Tier", "shot_role": "Shot Role", "usage_role": "Usage Role",
         "void_reason": "Void Reason",
         # Game log
         "stat_last10_avg": "Last 10 Avg",
