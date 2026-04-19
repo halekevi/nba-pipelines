@@ -193,6 +193,17 @@ def main() -> None:
         use_opp_l5 = playoff & opp_l5.notna()
         if use_opp_l5.any():
             comp = pd.Series(np.where(use_opp_l5, (0.55 * comp + 0.45 * opp_l5), comp), index=df2.index)
+    # MLB same-series H2H: blend when short-window same-opponent trend exists.
+    if sp == "MLB":
+        src_col = "l5_vs_same_opp_hit_rate" if "l5_vs_same_opp_hit_rate" in df2.columns else (
+            "same_series_hit_rate" if "same_series_hit_rate" in df2.columns else ""
+        )
+        if src_col:
+            opp_l5 = pd.to_numeric(df2[src_col], errors="coerce")
+            opp_l5 = pd.Series(np.where(opp_l5 > 1.0, opp_l5 / 100.0, opp_l5), index=df2.index)
+            use_opp_l5 = opp_l5.notna()
+            if use_opp_l5.any():
+                comp = pd.Series(np.where(use_opp_l5, (0.70 * comp + 0.30 * opp_l5), comp), index=df2.index)
     edge_score = pd.Series(ml_prob, index=df2.index) - implied_prob
     if sp in ("NHL", "SOCCER"):
         blended = 0.15 * pd.Series(ml_prob, index=df2.index) + 0.85 * comp

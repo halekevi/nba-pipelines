@@ -344,6 +344,13 @@ def _line_hit_rate_from_row(row: pd.Series) -> float:
     return np.nan
 
 
+def _same_opp_signal(direction: str, same_opp_over_l5: float) -> float:
+    if np.isnan(same_opp_over_l5):
+        return np.nan
+    d = str(direction or "OVER").upper().strip()
+    return float(1.0 - same_opp_over_l5) if d == "UNDER" else float(same_opp_over_l5)
+
+
 def _minutes_certainty(row: pd.Series) -> float:
     tier = str(row.get("minutes_tier", "")).upper()
     return {"HIGH": 1.00, "MEDIUM": 0.90, "LOW": 0.75, "UNKNOWN": 0.80}.get(tier, 0.85)
@@ -454,6 +461,20 @@ def main() -> None:
 
     out["edge_dr"]           = out["edge"].apply(_edge_transform)
     out["line_hit_rate"]     = out.apply(_line_hit_rate_from_row, axis=1)
+    same_opp_over = pd.to_numeric(out.get("same_opp_over_rate_l5", np.nan), errors="coerce")
+    if "same_series_hit_rate" not in out.columns:
+        out["same_series_hit_rate"] = np.nan
+    series_existing = pd.to_numeric(out["same_series_hit_rate"], errors="coerce")
+    series_from_same_opp = pd.Series(
+        [
+            _same_opp_signal(out["bet_direction"].iloc[i], same_opp_over.iloc[i] if i < len(same_opp_over) else np.nan)
+            for i in range(len(out))
+        ],
+        index=out.index,
+        dtype=float,
+    )
+    out["same_series_hit_rate"] = series_existing.where(series_existing.notna(), series_from_same_opp)
+    out["l5_vs_same_opp_hit_rate"] = out["same_series_hit_rate"]
     def _line_hit_over_only_row(row: pd.Series) -> float:
         hr5 = hr10 = np.nan
         for c in ("line_hit_rate_over_ou_5", "line_hit_rate_over_5", "last5_hit_rate"):
