@@ -355,10 +355,15 @@ def _fetch_actuals_csv(
         team = ""
         if "Team" in slate_df.columns:
             team = str(r.get("Team", "")).strip()
-        # Game log split from MLB Stats API includes opponent + home/away
+        # Game log split: opponent has id/name; abbreviation is often omitted — resolve via team-id map.
         opp_team = ""
         try:
-            opp_abbr = (spl.get("opponent") or {}).get("abbreviation") or ""
+            opp = spl.get("opponent") or {}
+            opp_abbr = str(opp.get("abbreviation") or "").strip()
+            if not opp_abbr:
+                oid = opp.get("id")
+                if oid is not None:
+                    opp_abbr = _mlb_team_id_to_abbr_map().get(int(oid), "") or ""
             opp_team = str(opp_abbr).strip().upper()
         except Exception:
             pass
