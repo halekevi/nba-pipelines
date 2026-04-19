@@ -240,3 +240,26 @@ html[data-theme="light"] {
     opacity: 0.12 !important;
   }
 }
+
+/* Tickets light-mode perf: disable blur layers + simplify shadows. */
+[data-theme="light"] .ticket-card,
+[data-theme="light"] .slip-card,
+[data-theme="light"] .leg-card,
+[data-theme="light"] .ticket-bucket,
+[data-theme="light"] .tickets-built .ticket,
+.light-theme .ticket-card,
+.light-theme .slip-card {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+[data-theme="light"] .ticket-card,
+[data-theme="light"] .tickets-built .ticket,
+.light-theme .ticket-card {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12) !important;
+}
+
+[data-theme="light"] .home-cat,
+.light-theme .home-cat {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10) !important;
+}

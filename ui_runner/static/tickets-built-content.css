@@ -7,6 +7,18 @@
   width: 100% !important;
 }
 
+/* Scroll perf: keep ticket surfaces in stable compositing lanes. */
+.tickets-built,
+#app.page-tickets {
+  will-change: scroll-position;
+}
+
+.ticket-bucket,
+.ticket-group-section {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
 @media (min-width: 769px) {
   .tickets-built.shell {
     width: 100% !important;
@@ -446,6 +458,12 @@
   transition: transform 0.2s, box-shadow 0.2s;
   backdrop-filter: blur(10px);
 }
+.ticket-card,
+.tickets-built .ticket {
+  contain: content;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 280px;
+}
 .tickets-built .ticket:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(196, 166, 107, 0.2) inset;
@@ -527,6 +545,25 @@
 [data-theme="light"] .tickets-built .ticket {
   background: rgba(255, 255, 255, 0.74);
   border: 1px solid rgba(196, 166, 107, 0.22);
+}
+[data-theme="light"] .ticket-card,
+[data-theme="light"] .slip-card,
+[data-theme="light"] .leg-card,
+[data-theme="light"] .ticket-bucket,
+[data-theme="light"] .tickets-built .ticket,
+.light-theme .ticket-card,
+.light-theme .slip-card {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+[data-theme="light"] .ticket-card,
+[data-theme="light"] .tickets-built .ticket,
+.light-theme .ticket-card {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12) !important;
+}
+[data-theme="light"] .home-cat,
+.light-theme .home-cat {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10) !important;
 }
 [data-theme="light"] .tickets-built .hero-meta-row {
   border-top-color: var(--border);

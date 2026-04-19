@@ -10,11 +10,11 @@
 <meta property="og:title" content="{{ page_title }}"/>
 <title>{{ page_title }}</title>
 <link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260418nav"/>
-<link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260416perf"/>
+<link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260419perf"/>
 <link rel="stylesheet" href="/static/site-nav-unified.css?v=20260408"/>
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260418nav"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
-<link rel="stylesheet" href="/static/tickets-built-content.css?v=20260418contrast"/>
+<link rel="stylesheet" href="/static/tickets-built-content.css?v=20260419perf"/>
 <link rel="stylesheet" href="/static/mobile-content-width.css?v=20260418nav2"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
@@ -40,35 +40,58 @@
 <script src="/static/site-nav-chrome.js?v=20260412" defer></script>
 <script>
 (function(){
-  const disableFx = window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;
-  if (disableFx) return;
-  const CA_SELS = [
-    '.tickets-built .ticket', '.tickets-built .hero',
-    '.tickets-built .filter-pill', '.tickets-built .kpi'
-  ];
-  function initCA() {
-    CA_SELS.forEach(sel =>
-      document.querySelectorAll(sel).forEach(el => {
-        el.classList.add('ca-border');
-      })
-    );
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCA);
-  } else {
-    initCA();
-  }
-  let queued = false;
-  const queueInit = () => {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(() => {
-      queued = false;
+  // Skip cosmetic DOM passes on coarse-pointer (touch) devices.
+  const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!isCoarse && !reduceMotion) {
+    const CA_SELS = [
+      '.tickets-built .ticket', '.tickets-built .hero',
+      '.tickets-built .filter-pill', '.tickets-built .kpi'
+    ];
+    function initCA() {
+      CA_SELS.forEach(sel =>
+        document.querySelectorAll(sel).forEach(el => {
+          el.classList.add('ca-border');
+        })
+      );
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCA);
+    } else {
       initCA();
+    }
+    let queued = false;
+    const queueInit = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        initCA();
+      });
+    };
+    const obs = new MutationObserver(queueInit);
+    obs.observe(document.body, { childList: true, subtree: true });
+  }
+})();
+</script>
+<script>
+(function () {
+  const legTables = document.querySelectorAll('.ticket-legs-table-wrapper');
+  if (!legTables.length || !('IntersectionObserver' in window)) return;
+
+  const legObs = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.style.contentVisibility = 'visible';
+        legObs.unobserve(entry.target);
+      }
     });
-  };
-  const obs = new MutationObserver(queueInit);
-  obs.observe(document.body, { childList: true, subtree: true });
+  }, { rootMargin: '200px' });
+
+  legTables.forEach((node) => {
+    node.style.contentVisibility = 'auto';
+    legObs.observe(node);
+  });
 })();
 </script>
 </body>
