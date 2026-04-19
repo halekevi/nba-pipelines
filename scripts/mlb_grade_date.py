@@ -355,6 +355,14 @@ def _fetch_actuals_csv(
         team = ""
         if "Team" in slate_df.columns:
             team = str(r.get("Team", "")).strip()
+        # Game log split from MLB Stats API includes opponent + home/away
+        opp_team = ""
+        try:
+            opp_abbr = (spl.get("opponent") or {}).get("abbreviation") or ""
+            opp_team = str(opp_abbr).strip().upper()
+        except Exception:
+            pass
+
         out_rows[nk] = {
             "player": player,
             "prop": gkey,
@@ -362,6 +370,7 @@ def _fetch_actuals_csv(
             "game_date": d,
             "mlb_player_id": mlb_id,
             "team": team,
+            "opp_team": opp_team,
         }
 
     act_df = pd.DataFrame(list(out_rows.values()))
