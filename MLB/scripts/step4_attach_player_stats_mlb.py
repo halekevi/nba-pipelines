@@ -31,6 +31,7 @@ import sys
 import time
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+from functools import lru_cache
 
 import numpy as np
 import pandas as pd
@@ -232,12 +233,17 @@ def derive_pitcher_stat(game: dict, prop_norm: str) -> float:
 CACHE_COLS = [
     "MLB_PLAYER_ID", "SEASON", "GAME_DATE", "GAME_ID",
     "PLAYER_TYPE", "PROP_NORM", "STAT_VALUE",
+    "TEAM_ID", "OPP_TEAM_ID",
 ]
 
 def load_cache(path: Path) -> pd.DataFrame:
     if path.exists():
         try:
             df = pd.read_csv(path, dtype=str, low_memory=False).fillna("")
+            # Backward-compatible cache schema upgrades.
+            for c in CACHE_COLS:
+                if c not in df.columns:
+                    df[c] = ""
             print(f"  Loaded cache: {len(df)} rows from {path.name}")
             return df
         except Exception as e:
@@ -260,6 +266,64 @@ def fetch_game_log(player_id: str, group: str, season: str) -> List[dict]:
         if splits:
             return splits
     return []
+
+
+@lru_cache(maxsize=1)
+def _mlb_team_lookup() -> Dict[str, str]:
+    """
+    Return MLB team code/name aliases -> team_id as strings.
+    Uses live statsapi lookup once per run.
+    """
+    out: Dict[str, str] = {}
+    try:
+        data = _get("https://statsapi.mlb.com/api/v1/teams?sportId=1")
+        teams = (data or {}).get("teams") or []
+        for t in teams:
+            tid = str(t.get("id", "")).strip()
+            if not tid:
+                continue
+            aliases = {
+                str(t.get("abbreviation", "")).strip().upper(),
+                str(t.get("teamName", "")).strip().upper(),
+                str(t.get("name", "")).strip().upper(),
+                str(t.get("clubName", "")).strip().upper(),
+                str(t.get("locationName", "")).strip().upper(),
+            }
+            for a in aliases:
+                if a:
+                    out[a] = tid
+    except Exception:
+        return {}
+    return out
+
+
+def _resolve_team_id(team_value: str) -> str:
+    key = str(team_value or "").strip().upper()
+    if not key:
+        return ""
+    return _mlb_team_lookup().get(key, "")
+
+
+def _infer_opp_team_for_row(slate: pd.DataFrame, idx: int) -> str:
+    """
+    Infer opp team code for rows where opp_team is missing using pp_game_id.
+    """
+    try:
+        row = slate.loc[idx]
+    except Exception:
+        return ""
+    opp = str(row.get("opp_team", "")).strip().upper()
+    if opp:
+        return opp
+    gid = str(row.get("pp_game_id", "")).strip()
+    team = str(row.get("team", "")).strip().upper()
+    if not gid or not team:
+        return ""
+    sub = slate.loc[slate.get("pp_game_id", pd.Series(dtype=str)).astype(str).str.strip().eq(gid), "team"].astype(str).str.strip().str.upper()
+    teams = sorted({t for t in sub.tolist() if t and t != "NAN"})
+    if len(teams) == 2 and team in teams:
+        return teams[0] if teams[1] == team else teams[1]
+    return ""
 
 
 def update_cache(
@@ -333,6 +397,8 @@ def update_cache(
                 "PLAYER_TYPE":   player_type,
                 "PROP_NORM":     prop_norm,
                 "STAT_VALUE":    fmt_num(val) if not np.isnan(val) else "",
+                "TEAM_ID":       str((split.get("team") or {}).get("id", "")).strip(),
+                "OPP_TEAM_ID":   str((split.get("opponent") or {}).get("id", "")).strip(),
             })
 
         existing_game_ids.add(game_id)
@@ -364,6 +430,32 @@ def get_vals_from_cache(
     if sub.empty:
         return []
 
+    sub["GAME_DATE"] = pd.to_datetime(sub["GAME_DATE"], errors="coerce")
+    sub = sub.sort_values("GAME_DATE", ascending=False)
+    vals = pd.to_numeric(sub["STAT_VALUE"], errors="coerce").dropna().tolist()
+    return vals[:n]
+
+
+def get_vals_vs_opp_from_cache(
+    cache: pd.DataFrame,
+    player_id: str,
+    prop_norm: str,
+    season: str,
+    opp_team_id: str,
+    n: int = 5,
+) -> List[float]:
+    if not opp_team_id:
+        return []
+    mask = (
+        (cache["MLB_PLAYER_ID"].astype(str) == str(player_id)) &
+        (cache["SEASON"].astype(str) == str(season)) &
+        (cache["PROP_NORM"].astype(str) == str(prop_norm)) &
+        (cache["OPP_TEAM_ID"].astype(str) == str(opp_team_id)) &
+        (cache["STAT_VALUE"].astype(str).str.strip() != "")
+    )
+    sub = cache.loc[mask].copy()
+    if sub.empty:
+        return []
     sub["GAME_DATE"] = pd.to_datetime(sub["GAME_DATE"], errors="coerce")
     sub = sub.sort_values("GAME_DATE", ascending=False)
     vals = pd.to_numeric(sub["STAT_VALUE"], errors="coerce").dropna().tolist()
@@ -416,6 +508,7 @@ def main() -> None:
         "last5_over", "last5_under", "last5_push", "last5_hit_rate",
         "line_hit_rate_over_ou_5", "line_hit_rate_under_ou_5",
         "line_hit_rate_over_ou_10", "line_hit_rate_under_ou_10",
+        "same_opp_games_l5", "same_opp_over_rate_l5",
         "stat_status",
     ]
     for c in out_cols:
@@ -512,6 +605,11 @@ def main() -> None:
                 slate.at[idx, "stat_status"] = "NO_CACHE_DATA"
                 continue
             vals = cached_vals
+            opp_team_code = _infer_opp_team_for_row(slate, idx)
+            opp_team_id = _resolve_team_id(opp_team_code)
+            same_opp_vals = get_vals_vs_opp_from_cache(
+                cache, pid, prop, args.season, opp_team_id, n=5
+            )
 
         # ── Combo ──
         else:
@@ -551,6 +649,7 @@ def main() -> None:
             if not vals:
                 slate.at[idx, "stat_status"] = "INSUFFICIENT_GAMES"
                 continue
+            same_opp_vals = []
 
         # ── Fill output ──
         for i in range(1, N + 1):
@@ -577,6 +676,10 @@ def main() -> None:
             _, _, _, _, hr10_ou, ur10_ou = calc_hit_context(vals, line, k=10)
             slate.at[idx, "line_hit_rate_over_ou_10"]  = fmt_num(hr10_ou)
             slate.at[idx, "line_hit_rate_under_ou_10"] = fmt_num(ur10_ou)
+            if same_opp_vals:
+                _, _, _, _, same_opp_over_ou, _ = calc_hit_context(same_opp_vals, line, k=5)
+                slate.at[idx, "same_opp_games_l5"] = str(int(len(same_opp_vals)))
+                slate.at[idx, "same_opp_over_rate_l5"] = fmt_num(same_opp_over_ou)
 
         slate.at[idx, "stat_status"] = "OK"
 
