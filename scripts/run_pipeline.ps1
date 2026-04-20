@@ -145,6 +145,38 @@ function Run-Step {
     }
 }
 
+function Invoke-MLBStep1Fetch {
+    param(
+        [string]$WorkDir,
+        [string]$PipelineDate
+    )
+    Write-Host "  --> MLB Step 1 - Fetch PrizePicks (Playwright, then direct API if needed)" -ForegroundColor Yellow
+    Push-Location $WorkDir
+    try {
+        $env:PYTHONUTF8       = "1"
+        $env:PYTHONIOENCODING = "utf-8"
+        $cmd1 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --playwright --timeout 180 --date `"$PipelineDate`" --output step1_mlb_props.csv"
+        Write-Host "        CMD: $cmd1" -ForegroundColor DarkGray
+        $output = Invoke-Expression $cmd1 2>&1
+        $exit   = $LASTEXITCODE
+        foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
+        if ($exit -ne 0) {
+            Write-Host "      MLB Playwright failed (exit $exit); trying direct API..." -ForegroundColor Yellow
+            $cmd2 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --date `"$PipelineDate`" --output step1_mlb_props.csv"
+            Write-Host "        CMD: $cmd2" -ForegroundColor DarkGray
+            $output = Invoke-Expression $cmd2 2>&1
+            $exit   = $LASTEXITCODE
+            foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
+        }
+        if ($exit -ne 0) { Write-Host "      FAILED (exit $exit)" -ForegroundColor Red; return $false }
+        Write-Host "      OK" -ForegroundColor Green; return $true
+    } catch {
+        Write-Host "      EXCEPTION: $_" -ForegroundColor Red; return $false
+    } finally {
+        Pop-Location
+    }
+}
+
 # -- Helper: git push templates -----------------------------------------------
 function Run-GitPush {
     Write-Host ""
@@ -365,7 +397,7 @@ if ($MLBOnly) {
     Write-Host "[ MLB PIPELINE ]" -ForegroundColor Magenta
     Write-Host ""
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "MLB Step 1 - Fetch PrizePicks" $MLBDir ".\scripts\step1_fetch_prizepicks_mlb.py" "--output step1_mlb_props.csv --date $Date" } } else { Write-Host "  [MLB] Skipping step1 fetch -- using existing step1_mlb_props.csv" -ForegroundColor DarkGray }
+    if (-not $SkipFetch) { if ($ok) { $ok = Invoke-MLBStep1Fetch -WorkDir $MLBDir -PipelineDate $Date } } else { Write-Host "  [MLB] Skipping step1 fetch -- using existing step1_mlb_props.csv" -ForegroundColor DarkGray }
     if ($ok) { $ok = Run-Step "MLB Step 2 - Attach Pick Types"  $MLBDir ".\step2_attach_picktypes_mlb.py"       "--input step1_mlb_props.csv --output step2_mlb_picktypes.csv" }
     if ($ok) { $ok = Run-Step "MLB Step 3 - Attach Defense"     $MLBDir ".\step3_attach_defense_mlb.py"         "--input step2_mlb_picktypes.csv --defense mlb_defense_summary.csv --output step3_mlb_with_defense.csv" }
     if ($ok) { $ok = Run-Step "MLB Step 4 - Player Stats"       $MLBDir ".\step4_attach_player_stats_mlb.py"    "--input step3_mlb_with_defense.csv --cache mlb_stats_cache.csv --output step4_mlb_with_stats.csv --season 2025" }

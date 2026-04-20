@@ -40,6 +40,17 @@ def _norm_sport(s: str) -> str:
     return x
 
 
+def _is_zip_xlsx(path: Path) -> bool:
+    """True if path looks like a real .xlsx (OOXML zip), not an HTML stub or empty file."""
+    try:
+        if not path.is_file() or path.stat().st_size < 64:
+            return False
+        with path.open("rb") as fh:
+            return fh.read(2) == b"PK"
+    except OSError:
+        return False
+
+
 def resolve_step7_path(root: Path, sport: str) -> Path | None:
     sp = _norm_sport(sport)
     raw_sp = str(sport or "").strip().upper()
@@ -57,9 +68,6 @@ def resolve_step7_path(root: Path, sport: str) -> Path | None:
         root / "Soccer" / "outputs" / "step7_soccer_ranked.xlsx",
         root / "Soccer" / "step7_soccer_ranked.xlsx",
         root / "Tennis" / "outputs" / "step7_tennis_ranked.xlsx",
-        root / "MLB" / "outputs" / "step7_mlb_ranked.xlsx",
-        root / "MLB" / "scripts" / "step7_mlb_ranked.xlsx",
-        root / "MLB" / "step7_mlb_ranked.xlsx",
         root / "CBB" / "outputs" / f"step7_{sl}_ranked.xlsx",
         root / "CBB" / "outputs" / "step6_ranked_cbb.xlsx",
         root / "CBB" / "step6_ranked_cbb.xlsx",
@@ -82,14 +90,22 @@ def resolve_step7_path(root: Path, sport: str) -> Path | None:
             root / "CBB" / "outputs" / "step6_ranked_wcbb.xlsx",
             *candidates,
         ]
+    elif sp == "MLB":
+        # Canonical MLB step7 lives under MLB/; avoid picking another sport's xlsx after ZIP checks.
+        candidates = [
+            root / "MLB" / "step7_mlb_ranked.xlsx",
+            root / "MLB" / "outputs" / "step7_mlb_ranked.xlsx",
+            root / "MLB" / "scripts" / "step7_mlb_ranked.xlsx",
+        ]
     for p in candidates:
-        if p.is_file():
+        if p.is_file() and _is_zip_xlsx(p):
             return p
     return None
 
 
 def _first_sheet(path: Path) -> str:
-    xl = pd.ExcelFile(path)
+    # Pandas 2.2+ / Py3.14: engine must be explicit for .xlsx (otherwise ValueError).
+    xl = pd.ExcelFile(path, engine="openpyxl")
     return xl.sheet_names[0]
 
 
@@ -177,6 +193,17 @@ def main() -> None:
         use_opp_l5 = playoff & opp_l5.notna()
         if use_opp_l5.any():
             comp = pd.Series(np.where(use_opp_l5, (0.55 * comp + 0.45 * opp_l5), comp), index=df2.index)
+    # MLB same-series H2H: blend when short-window same-opponent trend exists.
+    if sp == "MLB":
+        src_col = "l5_vs_same_opp_hit_rate" if "l5_vs_same_opp_hit_rate" in df2.columns else (
+            "same_series_hit_rate" if "same_series_hit_rate" in df2.columns else ""
+        )
+        if src_col:
+            opp_l5 = pd.to_numeric(df2[src_col], errors="coerce")
+            opp_l5 = pd.Series(np.where(opp_l5 > 1.0, opp_l5 / 100.0, opp_l5), index=df2.index)
+            use_opp_l5 = opp_l5.notna()
+            if use_opp_l5.any():
+                comp = pd.Series(np.where(use_opp_l5, (0.70 * comp + 0.30 * opp_l5), comp), index=df2.index)
     edge_score = pd.Series(ml_prob, index=df2.index) - implied_prob
     if sp in ("NHL", "SOCCER"):
         blended = 0.15 * pd.Series(ml_prob, index=df2.index) + 0.85 * comp
@@ -190,7 +217,7 @@ def main() -> None:
     if sp.upper() != "NHL":
         df2 = df2.sort_values("blended_score", ascending=False, na_position="last", kind="mergesort")
 
-    xl_obj = pd.ExcelFile(xlsx)
+    xl_obj = pd.ExcelFile(xlsx, engine="openpyxl")
     all_sheets: dict[str, pd.DataFrame] = {}
     for sn in xl_obj.sheet_names:
         if sn == sheet:

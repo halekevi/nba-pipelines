@@ -108,10 +108,10 @@ SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
 
 
 # Shared shell CSS versions — keep aligned with ui_runner/templates (e.g. indexGrades.html).
-_TICKET_EVAL_SHELL_CSS_VER = "20260411"
+_TICKET_EVAL_SHELL_CSS_VER = "20260418nav"
 _TICKET_EVAL_NAV_UNIFIED_VER = "20260408"
-_TICKET_EVAL_NAV_MOBILE_VER = "20260411"
-_TICKET_EVAL_MOBILE_WIDTH_VER = "20260413c"
+_TICKET_EVAL_NAV_MOBILE_VER = "20260418nav"
+_TICKET_EVAL_MOBILE_WIDTH_VER = "20260418nav2"
 _TICKET_EVAL_NAV_DATETIME_VER = "20260408"
 _TICKET_EVAL_NAV_CHROME_VER = "20260412"
 
@@ -537,6 +537,10 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
     if not payd and flex and paid and all_hit and banner_pow > 0:
         pred_pay = float(banner_pow)
     pred_ev = _safe_float_ticket(payd.get("ev"))
+    if pred_ev is None:
+        pred_ev = _safe_float_ticket(ticket.get("est_ev"))
+    if pred_ev is None:
+        pred_ev = _safe_float_ticket(ticket.get("flat_ev"))
     pred_p = _safe_float_ticket(payd.get("p_all_win"))
     rec = str(payd.get("recommendation") or "").strip()
 
@@ -2100,7 +2104,7 @@ def _build_html(
         _TICKET_EVAL_PAGE_WRAP_CSS,
         "h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}",
         ".bebas{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}",
-        ".stats-bar{position:-webkit-sticky;position:sticky;top:72px;z-index:175;margin:0 auto 8px;width:100%;max-width:min(1520px,96vw);"
+        ".stats-bar{position:-webkit-sticky;position:sticky;top:72px;z-index:175;margin:0 auto 8px;width:100%;max-width:min(1920px,98vw);"
         "padding:14px clamp(16px,2.5vw,28px);transition:top .28s ease,box-shadow .22s ease;"
         "background:linear-gradient(180deg,rgba(10,10,18,.92),rgba(8,8,14,.88)),var(--glass);"
         "backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);"
@@ -2118,7 +2122,7 @@ def _build_html(
         ".sum-val.void{color:var(--gold2);text-shadow:none;}",
         ".sum-val-sm{font-size:clamp(18px,2.1vw,24px)!important;}",
         ".sum-lab{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2.2px;color:var(--muted);text-align:center;line-height:1.2;max-width:11em;}",
-        ".wrap.ticket-eval-main{width:100%;max-width:min(1520px,96vw);margin:0 auto;padding:2px clamp(14px,2.5vw,32px) 0;}",
+        ".wrap.ticket-eval-main{width:100%;max-width:min(1920px,98vw);margin:0 auto;padding:2px clamp(14px,2.5vw,32px) 0;}",
         ".ticket-sections-wrap{padding-top:2px;}",
         "details.ticket-bucket{margin:0 0 10px;}",
         ".ticket-sections-wrap > details.ticket-bucket:first-child{margin-top:0;}",
@@ -2204,7 +2208,7 @@ def _build_html(
         ".warning-chip{display:inline-flex;align-items:center;margin-left:8px;padding:2px 8px;border-radius:999px;"
         "border:1px solid rgba(240,165,0,.4);background:rgba(240,165,0,.12);color:#ffd87a;"
         "font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.6px;cursor:help;}",
-        ".grade-eval-summary{max-width:min(1520px,96vw);margin:0 auto 8px;padding:10px 16px;border-radius:16px;"
+        ".grade-eval-summary{max-width:min(1920px,98vw);margin:0 auto 8px;padding:10px 16px;border-radius:16px;"
         "border:1px solid var(--glass-bd);background:rgba(0,0,0,.22);font-family:'Inter',sans-serif;font-size:13px;"
         "line-height:1.55;color:var(--text);}",
         ".grade-eval-summary-empty{color:var(--muted);font-size:12px;}",

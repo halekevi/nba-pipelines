@@ -24,16 +24,19 @@ from datetime import date
 from pathlib import Path
 
 
-def _copy_dated_step8_mlb(output_xlsx_path: str) -> None:
+def _copy_dated_step8_mlb(output_xlsx_path: str, slate_date: str) -> None:
+    """Copy clean XLSX to outputs/<slate>/step8_mlb_direction_clean_<slate>.xlsx (matches NBA step8)."""
     src = Path(output_xlsx_path)
     if not src.is_file():
         return
-    today = date.today().isoformat()
+    d = (slate_date or "").strip()
+    if not d:
+        d = date.today().isoformat()
     repo_root = Path(__file__).resolve().parent.parent.parent
-    dated_dir = repo_root / "outputs" / today
+    dated_dir = repo_root / "outputs" / d
     try:
         dated_dir.mkdir(parents=True, exist_ok=True)
-        dated_path = dated_dir / f"step8_mlb_direction_clean_{today}.xlsx"
+        dated_path = dated_dir / f"step8_mlb_direction_clean_{d}.xlsx"
         shutil.copy2(src, dated_path)
         print(f"[MLB step8] Dated copy -> {dated_path}")
     except Exception as e:
@@ -134,6 +137,7 @@ def write_sheet(wb, name: str, data: pd.DataFrame, tab_color: str = HEADER_COLOR
         "L5 Over": 8, "L5 Under": 8,
         "Def Rank": 9, "Def Tier": 10,
         "Min Tier": 9, "Bat Order": 10, "Pitcher Role": 12,
+        "Series HR": 9,
         "Void Reason": 20,
     }
     for ci, h in enumerate(headers, 1):
@@ -175,6 +179,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "last5_over", "last5_under",
         "OVERALL_DEF_RANK", "DEF_TIER",
         "minutes_tier", "batting_order_tier", "pitcher_role",
+        "same_series_hit_rate",
         "void_reason",
     ]
     keep  = [c for c in keep if c in df2.columns]
@@ -188,6 +193,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "edge_score",
         "blended_score",
         "line_hit_rate_over_ou_5",
+        "same_series_hit_rate",
     ]:
         if col in clean.columns:
             rnd = 4 if col in ("ml_prob", "edge_score", "blended_score") else 2
@@ -222,6 +228,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "OVERALL_DEF_RANK": "Def Rank", "DEF_TIER": "Def Tier",
         "minutes_tier": "Min Tier", "batting_order_tier": "Bat Order",
         "pitcher_role": "Pitcher Role",
+        "same_series_hit_rate": "Series HR",
         "void_reason": "Void Reason",
     }
     clean = clean.rename(columns=rename)
@@ -257,6 +264,11 @@ def main() -> None:
         "--xlsx",
         default="step8_mlb_direction_clean.xlsx",
         help="Path for styled multi-sheet workbook (default: step8_mlb_direction_clean.xlsx).",
+    )
+    ap.add_argument(
+        "--date",
+        default="",
+        help="YYYY-MM-DD pipeline slate date for outputs/<date>/ archive (default: today).",
     )
     args = ap.parse_args()
 
@@ -298,7 +310,7 @@ def main() -> None:
 
     xlsx_path = args.xlsx if args.xlsx else args.output.replace(".csv", "_clean.xlsx")
     build_clean_xlsx(out, xlsx_path)
-    _copy_dated_step8_mlb(xlsx_path)
+    _copy_dated_step8_mlb(xlsx_path, (args.date or "").strip())
 
 
 if __name__ == "__main__":

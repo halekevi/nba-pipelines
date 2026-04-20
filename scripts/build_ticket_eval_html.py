@@ -179,9 +179,11 @@ header {
 }
 
 .main {
-  max-width: 1400px;
+  max-width: none;
+  width: 100%;
   margin: 0 auto;
   padding: 24px 20px 32px;
+  box-sizing: border-box;
 }
 
 .section {

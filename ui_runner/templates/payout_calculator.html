@@ -43,7 +43,7 @@ body::after{
 }
 @keyframes gridScroll{from{background-position:0 0,0 0,0 0,0 0,0 0,0 0;}to{background-position:0 0,0 0,0 0,0 0,0 40px,0 40px;}}
 
-#app{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 20px 24px;}
+#app{position:relative;z-index:1;width:100%;max-width:min(1920px,98vw);margin:0 auto;padding:0 clamp(10px,2.5vw,28px) 24px;box-sizing:border-box;}
 
 /* nav */
 .snav{position:sticky;top:1rem;z-index:200;background:rgba(20,20,20,0.6);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid rgba(212,175,55,0.15);box-shadow:0 1px 0 rgba(255,255,255,0.04),0 8px 32px rgba(0,0,0,0.4);padding:0 40px;display:flex;align-items:center;height:72px;gap:0;margin:1rem;border-radius:20px;transform:translateY(0);opacity:1;transition:transform .25s ease,opacity .2s ease;}
@@ -141,10 +141,10 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 @keyframes bsparkFly{0%,47%{opacity:0;transform:translate(0,0) scale(0);}50%{opacity:1;transform:translate(0,0) scale(1);}75%{opacity:0.5;}95%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0.2);}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0);}}
 .brand{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.12em;color:var(--accent);line-height:1;}
 .brand span{color:var(--cyan);}
-.nav-links{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
-.nav-links a{color:rgba(255,255,255,0.95);text-decoration:none;font-size:13px;padding:6px 14px;border-radius:6px;border:1px solid transparent;transition:all .2s;}
-.nav-links a:hover{color:var(--text);border-color:var(--border);}
-.nav-links a.active{color:var(--accent);border-color:var(--accent);background:rgba(212,175,55,.06);}
+.nav-links:not(.snav-links){display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
+.nav-links:not(.snav-links) a{color:rgba(255,255,255,0.95);text-decoration:none;font-size:13px;padding:6px 14px;border-radius:6px;border:1px solid transparent;transition:all .2s;}
+.nav-links:not(.snav-links) a:hover{color:var(--text);border-color:var(--border);}
+.nav-links:not(.snav-links) a.active{color:var(--accent);border-color:var(--accent);background:rgba(212,175,55,.06);}
 
 /* force propOracle logo treatment to match home */
 .nav-logo{gap:12px;}
@@ -235,6 +235,10 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .field input,.field select{background:rgba(255,255,255,0.05);backdrop-filter:blur(8px) saturate(180%);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 12px;font-family:'Inter',sans-serif;font-size:13px;color:var(--text);width:100%;transition:border-color .2s;outline:none;}
 .field input:focus,.field select:focus{border-color:rgba(212,175,55,0.4);box-shadow:0 0 0 3px rgba(212,175,55,0.06);}
 .field select option{background:#0c0e1a;color:#f2f4ff;}
+/* Slate ticket dropdown contrast (native option list can ignore inherited glass colors). */
+#calc-slate-ticket-select,#log-slate-ticket-select{color:var(--text);}
+#calc-slate-ticket-select option,#log-slate-ticket-select option{background:#0c0e1a;color:#f2f4ff;}
+#calc-slate-ticket-select optgroup,#log-slate-ticket-select optgroup{background:#0c0e1a;color:#9fd8e8;font-weight:600;}
 .section-divider{font-size:10px;letter-spacing:2.5px;color:var(--muted);margin:20px 0 14px;display:flex;align-items:center;gap:10px;}
 .section-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08);}
 .btn{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:11px 28px;border-radius:10px;cursor:pointer;transition:all .15s;border:1px solid;}
@@ -270,7 +274,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .leg-remove:hover{color:var(--red);}
 .leg-body{display:none;padding:0 14px 16px;}
 .leg-card.open .leg-body{display:block;}
-.calc-leg-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:start;}
+.calc-leg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:10px;align-items:start;}
 .calc-leg-grid .leg-card{margin-bottom:0;}
 .calc-leg-empty{grid-column:1/-1;font-size:11px;color:var(--muted);padding:14px;text-align:center;border:1px dashed var(--border);border-radius:10px;}
 .pt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
@@ -424,18 +428,6 @@ canvas{width:100%!important;max-height:220px;}
   .calc-leg-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
 }
 
-/* Glass orb helpers for payout */
-#app{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:24px 20px;}
-.legacy-nav{display:flex;align-items:center;gap:16px;padding:14px 0 20px;border-bottom:1px solid rgba(255,255,255,0.07);flex-wrap:wrap;}
-.hero{margin:20px 0 18px;padding:18px 20px;border-radius:18px;background:rgba(255,255,255,0.03);backdrop-filter:blur(22px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%);border:1px solid rgba(255,255,255,0.09);box-shadow:0 8px 32px rgba(0,0,0,0.32),inset 0 1px 0 rgba(255,255,255,0.06);position:relative;overflow:hidden;}
-.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--cyan));opacity:.9;}
-.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,52px);letter-spacing:.08em;line-height:1;color:var(--accent);position:relative;z-index:1;}
-.hero h1 span{color:var(--cyan);}
-.hero-sub{color:var(--muted);font-size:12px;margin-top:6px;letter-spacing:.06em;position:relative;z-index:1;}
-.tab-bar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:20px;padding:8px;background:rgba(255,255,255,0.03);backdrop-filter:blur(18px) saturate(170%);-webkit-backdrop-filter:blur(18px) saturate(170%);border:1px solid rgba(255,255,255,0.09);border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,0.32),inset 0 1px 0 rgba(255,255,255,0.05);}
-.tab-btn{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:2px;padding:10px 16px;cursor:pointer;color:var(--muted);border:1px solid transparent;background:rgba(255,255,255,0.02);border-radius:10px;transition:all .15s;text-transform:uppercase;}
-.tab-btn:hover{color:var(--text);background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.10);}
-.tab-btn.active{color:var(--accent);background:rgba(212,175,55,0.10);border-color:rgba(212,175,55,0.32);box-shadow:0 0 18px rgba(212,175,55,0.12),inset 0 -1px 0 rgba(212,175,55,0.5);}
 
 /* ── Theme toggle button ── */
 .theme-toggle {
@@ -475,20 +467,23 @@ canvas{width:100%!important;max-height:220px;}
   --muted:rgba(23,43,64,0.52);
   --muted2:rgba(23,43,64,0.34);
   --text:rgba(14,36,58,0.90);
+  --light-snow-solid:#c8d4e8;
+  --light-snow-deep:#b8c6dc;
+  --card-bg:rgba(200,215,235,0.90);
 }
 [data-theme="light"] body {
   background:
-    radial-gradient(ellipse at 12% 8%, rgba(137,196,255,0.12) 0%, transparent 38%),
-    radial-gradient(ellipse at 88% 6%, rgba(169,220,255,0.10) 0%, transparent 36%),
-    radial-gradient(ellipse at 50% 55%, rgba(173,196,255,0.06) 0%, transparent 50%),
-    linear-gradient(180deg,#f5fbff 0%,#edf6ff 50%,#e8f3ff 100%);
+    radial-gradient(ellipse at 14% 10%, rgba(160,180,220,0.35) 0%, transparent 40%),
+    radial-gradient(ellipse at 86% 8%, rgba(140,165,210,0.25) 0%, transparent 38%),
+    radial-gradient(ellipse at 52% 60%, rgba(120,150,200,0.20) 0%, transparent 50%),
+    linear-gradient(180deg,#c8d4e8 0%,#bfcde0 48%,#b5c4d8 100%);
 }
 [data-theme="light"] body::before {
   background:
-    radial-gradient(ellipse at 12% 8%, rgba(137,196,255,0.10) 0%, transparent 38%),
-    radial-gradient(ellipse at 88% 6%, rgba(169,220,255,0.08) 0%, transparent 36%),
-    radial-gradient(ellipse at 50% 55%, rgba(173,196,255,0.05) 0%, transparent 50%),
-    linear-gradient(180deg,#f5fbff 0%,#edf6ff 50%,#e8f3ff 100%);
+    radial-gradient(ellipse at 14% 10%, rgba(160,180,220,0.35) 0%, transparent 40%),
+    radial-gradient(ellipse at 86% 8%, rgba(140,165,210,0.25) 0%, transparent 38%),
+    radial-gradient(ellipse at 52% 60%, rgba(120,150,200,0.20) 0%, transparent 50%),
+    linear-gradient(180deg,#c8d4e8 0%,#bfcde0 48%,#b5c4d8 100%);
 }
 [data-theme="light"] body::after {
   background-image:
@@ -504,9 +499,9 @@ canvas{width:100%!important;max-height:220px;}
 /* Glass surfaces - light mode */
 [data-theme="light"] .snav,
 [data-theme="light"] .legacy-nav {
-  background:rgba(255,255,255,0.72) !important;
-  border-bottom:1px solid rgba(0,0,0,0.08) !important;
-  box-shadow:0 1px 0 rgba(255,255,255,0.9),0 4px 20px rgba(0,0,0,0.08) !important;
+  background:rgba(198,212,232,0.94) !important;
+  border-bottom:1px solid rgba(0,0,0,0.10) !important;
+  box-shadow:0 1px 0 rgba(230,236,246,0.55),0 4px 20px rgba(15,45,80,0.10) !important;
 }
 [data-theme="light"] .hero,
 [data-theme="light"] .card,
@@ -534,9 +529,9 @@ canvas{width:100%!important;max-height:220px;}
 [data-theme="light"] .result-notes,
 [data-theme="light"] .grades-hero,
 [data-theme="light"] .grades-stat {
-  background:rgba(255,255,255,0.66) !important;
-  border-color:rgba(0,0,0,0.09) !important;
-  box-shadow:0 4px 24px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9) !important;
+  background:rgba(205,218,236,0.92) !important;
+  border-color:rgba(70,100,130,0.18) !important;
+  box-shadow:0 4px 24px rgba(15,45,80,0.10),inset 0 1px 0 rgba(230,236,246,0.55) !important;
 }
 [data-theme="light"] .hero::after,
 [data-theme="light"] .grades-hero::after {
@@ -547,8 +542,8 @@ canvas{width:100%!important;max-height:220px;}
 [data-theme="light"] .hero-meta span,
 [data-theme="light"] .hero-eyebrow,
 [data-theme="light"] .grades-kicker {
-  background:rgba(255,255,255,0.62) !important;
-  border-color:rgba(0,0,0,0.10) !important;
+  background:rgba(215,224,238,0.95) !important;
+  border-color:rgba(70,100,130,0.16) !important;
   color:rgba(0,0,0,0.55) !important;
 }
 [data-theme="light"] .hero-stat-sub { color:rgba(0,0,0,0.5) !important; }
@@ -559,16 +554,16 @@ canvas{width:100%!important;max-height:220px;}
 }
 /* Nav links */
 [data-theme="light"] .snav-links li a,
-[data-theme="light"] .nav-links a {
+[data-theme="light"] .nav-links:not(.snav-links) a {
   color:rgba(0,0,0,0.48) !important;
 }
 [data-theme="light"] .snav-links li a:hover,
-[data-theme="light"] .nav-links a:hover {
+[data-theme="light"] .nav-links:not(.snav-links) a:hover {
   color:rgba(0,0,0,0.80) !important;
   background:rgba(0,0,0,0.04) !important;
 }
 [data-theme="light"] .snav-links li a.active,
-[data-theme="light"] .nav-links a.active {
+[data-theme="light"] .nav-links:not(.snav-links) a.active {
   color:var(--accent) !important;
   background:rgba(75,111,150,0.08) !important;
   border-color:rgba(75,111,150,0.25) !important;
@@ -625,6 +620,16 @@ canvas{width:100%!important;max-height:220px;}
 [data-theme="light"] .leg-input option{
   background-color:#ffffff !important;
   color:#111827 !important;
+}
+[data-theme="light"] #calc-slate-ticket-select option,
+[data-theme="light"] #log-slate-ticket-select option{
+  background-color:#ffffff !important;
+  color:#111827 !important;
+}
+[data-theme="light"] #calc-slate-ticket-select optgroup,
+[data-theme="light"] #log-slate-ticket-select optgroup{
+  background-color:#ffffff !important;
+  color:#1f4b7a !important;
 }
 [data-theme="light"] .slate-filter-btn,
 [data-theme="light"] .tab-btn,
@@ -687,8 +692,8 @@ canvas{width:100%!important;max-height:220px;}
   border-left-color:var(--accent) !important;
 }
 /* Load overlay / empty state */
-[data-theme="light"] .load-overlay { background:rgba(235,240,250,0.90) !important; }
-[data-theme="light"] .empty-state { background:rgba(235,240,250,0.6) !important; }
+[data-theme="light"] .load-overlay { background:rgba(190,205,225,0.92) !important; }
+[data-theme="light"] .empty-state { background:rgba(190,205,225,0.72) !important; }
 
 
 /* ── Film Grain noise texture ── */
@@ -855,22 +860,11 @@ body::before{
     radial-gradient(ellipse at 86% 8%, rgba(212,175,55,0.16) 0%, transparent 36%),
     linear-gradient(180deg,#050505 0%,#0a0a0a 52%,#111111 100%);
 }
-[data-theme="light"] body,
-[data-theme="light"] body::before{
-  background:
-    radial-gradient(ellipse at 14% 10%, rgba(255,245,220,0.66) 0%, transparent 40%),
-    radial-gradient(ellipse at 86% 8%, rgba(255,233,185,0.52) 0%, transparent 38%),
-    radial-gradient(ellipse at 52% 60%, rgba(198,220,255,0.28) 0%, transparent 50%),
-    linear-gradient(180deg,#fdfcff 0%,#f6f8ff 48%,#eef3ff 100%);
-}
-[data-theme="light"] .snav{
-  background:rgba(255,255,255,0.78) !important;
-}
-
 </style>
 <link rel="stylesheet" href="/static/global-scrollbar.css?v=20260416"/>
-<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260406"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260416"/>
+<link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260419perf2"/>
+<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260418nav"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260418nav2"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 <link rel="stylesheet" href="/static/site-nav-unified.css?v=20260408"/>
 </head>
@@ -928,6 +922,16 @@ body::before{
         <select id="calc-slip-type"><option value="power">Power Play (all must hit)</option><option value="flex">Flex Play (can miss 1-2)</option></select>
       </div>
     </div>
+    <div class="import-actions" style="margin-bottom:10px;align-items:flex-end;gap:10px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:6px;min-width:320px;flex:1">
+        <label style="font-size:10px;color:var(--muted);letter-spacing:1.5px;">LOAD TICKET FROM TODAY'S SLATE</label>
+        <select id="calc-slate-ticket-select" class="leg-input" onchange="applySelectedSlateTicketToCalc()" style="min-height:38px">
+          <option value="">Select a ticket group...</option>
+        </select>
+      </div>
+      <button type="button" class="btn-glass-sm" onclick="loadSlateTicketOptions()">📋 Refresh slate</button>
+      <span id="calc-slate-msg" style="font-size:10px;color:var(--muted);letter-spacing:0.5px"></span>
+    </div>
     <div class="section-divider">LEGS &nbsp;<span id="leg-badge" style="color:var(--muted);font-size:10px;letter-spacing:1px"></span></div>
     <div id="calc-leg-list" style="margin-bottom:14px">
       <div style="font-size:11px;color:var(--muted);padding:14px;text-align:center;border:1px dashed var(--border);border-radius:10px">No legs added yet — use the buttons below</div>
@@ -976,11 +980,24 @@ body::before{
         <button type="button" class="btn-glass-sm" onclick="importTodayTicketsFromSlate()">📥 Import from slate JSON</button>
         <span style="font-size:10px;color:var(--muted);letter-spacing:1px">Loads tickets_latest.json (same as /tickets). Enter actual PP multiplier, then Log.</span>
       </div>
+      <div class="import-actions" style="margin-top:12px;align-items:flex-end;gap:10px;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:6px;min-width:320px;flex:1">
+          <label style="font-size:10px;color:var(--muted);letter-spacing:1.5px;">LOAD TICKET FROM TODAY'S SLATE</label>
+          <select id="log-slate-ticket-select" class="leg-input" onchange="applySelectedSlateTicketToLog()" style="min-height:38px">
+            <option value="">Select a ticket group...</option>
+          </select>
+        </div>
+        <button type="button" class="btn-glass-sm" onclick="loadSlateTicketOptions()">📋 Refresh slate</button>
+        <span id="log-slate-msg" style="font-size:10px;color:var(--muted);letter-spacing:0.5px"></span>
+      </div>
     </div>
-    <div class="form-grid-3" style="margin-bottom:16px">
+    <div class="form-grid-3" style="margin-bottom:10px">
       <div class="field"><label>PLATFORM</label><select id="log-platform" onchange="scheduleLogDraftSave()"><option>PrizePicks</option><option>Underdog Fantasy</option><option>Sleeper</option></select></div>
       <div class="field"><label>SLIP TYPE</label><select id="log-slip-type" onchange="onLogSlipTypeChange();scheduleLogDraftSave()"><option>Power Play</option><option>Flex Play</option></select></div>
       <div class="field"><label>DATE</label><input id="log-date" type="date" onchange="scheduleLogDraftSave()"></div>
+    </div>
+    <div class="form-grid" style="margin-bottom:16px">
+      <div class="field"><label>RESULT STATUS</label><select id="log-result" onchange="scheduleLogDraftSave()"><option>PENDING</option><option>WIN</option><option>LOSS</option><option>GUARANTEE</option></select></div>
     </div>
     <div class="section-divider">TICKET LEGS <span id="log-leg-summary" style="color:var(--muted);font-size:10px;margin-left:8px"></span></div>
     <div id="log-leg-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
@@ -1011,6 +1028,13 @@ body::before{
       <button class="btn btn-ghost" onclick="clearLogForm()">✕ Clear</button>
     </div>
     <div id="log-msg" style="font-size:11px;margin-top:10px;height:18px;"></div>
+    <div id="log-csv-wrap" style="display:none;margin-top:10px">
+      <label style="font-size:10px;color:var(--muted);letter-spacing:.7px">CSV ROW (copy to local <code style="font-size:10px">data/payout_samples/payout_log_hand.csv</code>)</label>
+      <div style="display:flex;gap:8px;align-items:flex-start;margin-top:6px">
+        <textarea id="log-csv-row" readonly style="flex:1;min-height:52px;resize:vertical;padding:8px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:11px;line-height:1.4"></textarea>
+        <button type="button" class="btn btn-ghost" style="padding:7px 12px;font-size:11px" onclick="copyLogCsvRow()">Copy</button>
+      </div>
+    </div>
   </div><!-- /card accent (log form) -->
 
   <div class="card" style="padding:0">
@@ -1120,6 +1144,10 @@ body::before{
     <p class="hint">Quick-reference deck from <code style="font-size:10px;opacity:.85">data/payout_rate_cards.json</code> — same baselines as the calculator / grader. Regenerate after updating coefficients: <code style="font-size:10px;opacity:.85">python scripts/build_payout_rate_cards.py</code></p>
     <p class="hint" style="margin-top:10px">To capture <strong>live payout and flex guarantee rates</strong>, use <strong>Log Lines</strong>: enter the app’s sweep multiplier (and optional min guarantee on Flex), then enable “append to server CSV” if you want rows in <code style="font-size:10px;opacity:.85">data/payout_observations.csv</code> for refitting <code style="font-size:10px;opacity:.85">payout_formula_coefficients.json</code>.</p>
     <div id="rate-cards-mount"><div class="hint" style="padding:20px 0">Open this tab to load the dictionary.</div></div>
+    <div style="margin-top:14px">
+      <div class="section-divider" style="margin-bottom:10px">GOBLIN DISCOUNT REFERENCE</div>
+      <div id="goblin-discount-mount"><div class="hint" style="padding:8px 0">Loading discount table...</div></div>
+    </div>
   </div>
 </div>
 
@@ -1142,10 +1170,17 @@ body::before{
 const PP_BASE   = {2:3,3:6,4:10,5:20,6:37.5};
 /* Matches utils.goblin_demon_multiplier.BASE_FLEX — sweep + partial tiers */
 const FLEX_BASE = {2:{2:3},3:{3:3,2:1},4:{4:6,3:1.5},5:{5:10,4:2,3:0.4},6:{6:25,5:2,4:0.4}};
+const GOBLIN_DISCOUNT_PER_UNIT = 0.110;
 const STORE_KEY = 'proporacle_payout_log_v5';
 const LOG_DRAFT_KEY = 'proporacle_payout_log_draft_v1';
 const PROP_OPTS = ['Points','Rebounds','Assists','Pts+Reb+Ast','Pts+Reb','Pts+Ast','3-PT Made','Steals','Blocks','Turnovers','Fantasy Score','Other'];
-const SPORT_OPTS= ['NBA','CBB','NFL','MLB','WNBA','Soccer','Other'];
+const SPORT_OPTS= ['NBA','NBA1H','NBA1Q','CBB','NHL','NFL','MLB','Soccer','Tennis','WNBA','Other'];
+
+let slateTicketOptions = [];
+let slateTicketMap = {};
+/** Flattened legs from slate tickets for vision import (sport + standard line correction). */
+let slateLegLookup = [];
+let calcLoadedGroupName = '';
 
 function loadLog(){try{const r=localStorage.getItem(STORE_KEY);return r?JSON.parse(r):[]}catch{return[]}}
 function saveLog(e){try{localStorage.setItem(STORE_KEY,JSON.stringify(e))}catch{}}
@@ -1194,6 +1229,7 @@ function paintRateCards(data){
   root.innerHTML='';
   root.appendChild(intro);
   root.appendChild(grid);
+  renderGoblinDiscountTable();
 }
 function renderRateCards(force){
   const root=document.getElementById('rate-cards-mount');
@@ -1248,15 +1284,261 @@ function getBucket(pct,kind){
 function bCol(b){if(!b)return'var(--muted)';if(b.startsWith('Standard'))return'var(--std)';if(b.startsWith('Goblin'))return'var(--goblin)';if(b.startsWith('Demon'))return'var(--demon)';return'var(--muted)';}
 function sCol(p){if(p===null||p===undefined)return'var(--muted)';if(p>5)return'var(--demon)';if(p<-5)return'var(--goblin)';return'var(--amber)';}
 
+function normalizePickType(raw){
+  const s=String(raw||'').toLowerCase();
+  if(s.includes('gob'))return'goblin';
+  if(s.includes('dem'))return'demon';
+  return'standard';
+}
+/** Leg cards expanded on desktop; collapsed on mobile / coarse pointer to shorten the page */
+function payoutLegCardsOpenByDefault(){
+  try{ return !window.matchMedia('(max-width: 900px), (pointer: coarse)').matches; }
+  catch(_e){ return true; }
+}
+function normalizeSportOpt(raw){
+  const s=String(raw||'').trim();
+  const hit=SPORT_OPTS.find(v=>v.toLowerCase()===s.toLowerCase());
+  return hit||'Other';
+}
+function normalizePropOpt(raw){
+  const s=String(raw||'').trim().toLowerCase();
+  const alias={
+    'pts+rebs+asts':'Pts+Reb+Ast',
+    'pts+reb+ast':'Pts+Reb+Ast',
+    'points+rebounds+assists':'Pts+Reb+Ast',
+    'pts+rebs':'Pts+Reb',
+    'pts+asts':'Pts+Ast',
+    'three pointers made':'3-PT Made',
+    '3pt made':'3-PT Made',
+  };
+  if(alias[s])return alias[s];
+  const hit=PROP_OPTS.find(v=>v.toLowerCase()===s);
+  return hit||'Other';
+}
+function normalizePlayerKey(name){
+  return String(name||'').toLowerCase().replace(/\./g,'').replace(/'/g,'').replace(/\s+/g,' ').trim();
+}
+function rebuildSlateLegLookup(){
+  slateLegLookup=[];
+  Object.values(slateTicketMap).forEach(t=>{
+    (t.legs||[]).forEach(leg=>{
+      const stdRaw=(leg.standard_line!=null&&leg.standard_line!=='')?leg.standard_line:leg.line;
+      const playedRaw=leg.line;
+      slateLegLookup.push({
+        pk:normalizePlayerKey(leg.player||''),
+        prop:normalizePropOpt(leg.prop_type||''),
+        sport:normalizeSportOpt(leg.sport||''),
+        std:String(stdRaw!=null&&stdRaw!==''?stdRaw:''),
+        played:String(playedRaw!=null&&playedRaw!==''?playedRaw:''),
+      });
+    });
+  });
+}
+function lookupSlateLegForPick(player,prop,playedLine){
+  const pk=normalizePlayerKey(player);
+  if(!pk||!slateLegLookup.length)return null;
+  const pr=normalizePropOpt(prop);
+  const pNum=parseFloat(String(playedLine??'').replace(/,/g,''));
+  let best=null,bestScore=1e9;
+  for(const r of slateLegLookup){
+    if(!r.pk)continue;
+    if(r.pk!==pk&&!(r.pk.includes(pk)||pk.includes(r.pk)))continue;
+    let score=0;
+    if(pr&&r.prop&&pr!=='Other'&&r.prop!=='Other'&&pr!==r.prop)score+=50;
+    if(!isNaN(pNum)){
+      const pl=parseFloat(r.played),ps=parseFloat(r.std);
+      if(!isNaN(pl))score+=Math.abs(pNum-pl);
+      else if(!isNaN(ps))score+=Math.abs(pNum-ps);
+    }
+    if(score<bestScore){bestScore=score;best=r;}
+  }
+  return best;
+}
+function inferLogSlipTypeFromGroupName(gn){
+  const s=String(gn||'').toLowerCase();
+  if(/\bflex\b/.test(s)||s.includes('flex'))return'Flex Play';
+  return'Power Play';
+}
+function pctFromLegProb(leg){
+  const hr=parseFloat(leg.hit_rate);
+  if(!isNaN(hr)){
+    if(hr>0&&hr<=1)return Math.round(hr*100);
+    if(hr>1&&hr<=100)return Math.round(hr);
+  }
+  const ml=parseFloat(leg.ml_prob);
+  if(!isNaN(ml)){
+    if(ml>0&&ml<=1)return Math.round(ml*100);
+    if(ml>1&&ml<=100)return Math.round(ml);
+  }
+  return 50;
+}
+function setCalcSlateMsg(txt,isErr){
+  const el=document.getElementById('calc-slate-msg');
+  if(!el)return;
+  el.textContent=txt||'';
+  el.style.color=isErr?'var(--amber)':'var(--muted)';
+}
+function setLogSlateMsg(txt,isErr){
+  const el=document.getElementById('log-slate-msg');
+  if(!el)return;
+  el.textContent=txt||'';
+  el.style.color=isErr?'var(--amber)':'var(--muted)';
+}
+function populateSlateTicketSelect(selectEl){
+  if(!selectEl)return;
+  selectEl.innerHTML='<option value="">Select a ticket group...</option>';
+  const byGroup={};
+  slateTicketOptions.forEach(t=>{
+    const g=String(t.group_name||'Ungrouped');
+    if(!byGroup[g])byGroup[g]=[];
+    byGroup[g].push(t);
+  });
+  Object.keys(byGroup).sort().forEach(groupName=>{
+    const og=document.createElement('optgroup');
+    og.label=groupName;
+    byGroup[groupName].forEach(t=>{
+      const o=document.createElement('option');
+      o.value=String(t.ticket_key||'');
+      const n=Number(t.n_legs)||((t.legs||[]).length||0);
+      o.textContent=groupName+' · #'+String(t.ticket_no||'?')+' ('+n+' legs)';
+      og.appendChild(o);
+    });
+    selectEl.appendChild(og);
+  });
+}
+async function loadSlateTicketOptions(){
+  try{
+    setCalcSlateMsg('Loading slate tickets...',false);
+    setLogSlateMsg('Loading slate tickets...',false);
+    const r=await fetch('/api/slate-legs',{cache:'no-store'});
+    const j=await r.json();
+    if(!r.ok)throw new Error(j.error||('HTTP '+r.status));
+    const list=Array.isArray(j.tickets)?j.tickets:[];
+    slateTicketOptions=list;
+    slateTicketMap={};
+    list.forEach(t=>{slateTicketMap[String(t.ticket_key||'')]=t;});
+    rebuildSlateLegLookup();
+    populateSlateTicketSelect(document.getElementById('calc-slate-ticket-select'));
+    populateSlateTicketSelect(document.getElementById('log-slate-ticket-select'));
+    const stamp=j.built_at?(' · '+j.built_at):'';
+    const msg='Loaded '+list.length+' tickets'+stamp;
+    setCalcSlateMsg(msg,false);
+    setLogSlateMsg(msg,false);
+  }catch(e){
+    setCalcSlateMsg('Could not load slate tickets',true);
+    setLogSlateMsg('Could not load slate tickets',true);
+  }
+}
+function applySelectedSlateTicketToCalc(){
+  const sel=document.getElementById('calc-slate-ticket-select');
+  if(!sel)return;
+  const key=String(sel.value||'');
+  if(!key)return;
+  const t=slateTicketMap[key];
+  if(!t||!Array.isArray(t.legs)||!t.legs.length){
+    setCalcSlateMsg('No legs found for selection',true);
+    return;
+  }
+  calcLoadedGroupName=String(t.group_name||'');
+  calcLegs=[];
+  calcCounter=0;
+  (t.legs||[]).forEach(leg=>{
+    const typ=normalizePickType(leg.pick_type);
+    const stdRaw=(leg.standard_line!=null&&leg.standard_line!=='')?leg.standard_line:leg.line;
+    const playedRaw=leg.line;
+    const std=(stdRaw!=null&&stdRaw!=='')?String(stdRaw):'';
+    const played=(playedRaw!=null&&playedRaw!=='')?String(playedRaw):'';
+    calcLegs.push({
+      id:++calcCounter,
+      type:typ,
+      player:String(leg.player||''),
+      sport:normalizeSportOpt(leg.sport),
+      prop:normalizePropOpt(leg.prop_type),
+      stdLine:std,
+      playedLine:typ==='standard'?std:played,
+      hitProb:pctFromLegProb(leg),
+      open:payoutLegCardsOpenByDefault(),
+    });
+  });
+  renderCalcLegs();
+  setCalcSlateMsg('Loaded '+calcLegs.length+' legs from '+calcLoadedGroupName,false);
+}
+function applySelectedSlateTicketToLog(){
+  const sel=document.getElementById('log-slate-ticket-select');
+  if(!sel)return;
+  const key=String(sel.value||'');
+  if(!key){setLogSlateMsg('',false);return;}
+  const t=slateTicketMap[key];
+  if(!t||!Array.isArray(t.legs)||!t.legs.length){
+    setLogSlateMsg('No legs found for selection',true);
+    return;
+  }
+  logLoadedGroupName=String(t.group_name||'');
+  logLegs=[];
+  logCounter=0;
+  (t.legs||[]).forEach(leg=>{
+    const typ=normalizePickType(leg.pick_type);
+    const stdRaw=(leg.standard_line!=null&&leg.standard_line!=='')?leg.standard_line:leg.line;
+    const playedRaw=leg.line;
+    const std=(stdRaw!=null&&stdRaw!=='')?String(stdRaw):'';
+    const played=(playedRaw!=null&&playedRaw!=='')?String(playedRaw):'';
+    logLegs.push({
+      id:++logCounter,
+      type:typ,
+      player:String(leg.player||''),
+      sport:normalizeSportOpt(leg.sport),
+      prop:normalizePropOpt(leg.prop_type),
+      stdLine:std,
+      playedLine:typ==='standard'?std:played,
+    });
+  });
+  const st=document.getElementById('log-slip-type');
+  if(st){
+    st.value=inferLogSlipTypeFromGroupName(logLoadedGroupName);
+    onLogSlipTypeChange();
+  }
+  const res=document.getElementById('log-result');
+  if(res)res.value='PENDING';
+  renderLogLegs();
+  refreshLogSummary();
+  scheduleLogDraftSave();
+  setLogSlateMsg('Loaded '+logLegs.length+' legs from '+logLoadedGroupName,false);
+}
+function renderGoblinDiscountTable(){
+  const host=document.getElementById('goblin-discount-mount');
+  if(!host)return;
+  const fm=x=>Number(x).toFixed(2)+'x';
+  const fp=x=>(x>=0?'+':'-')+Math.abs(x*100).toFixed(1)+'%';
+  const rows=[2,3,4,5,6].map(n=>{
+    const base=Number(PP_BASE[n]||0);
+    const one=base*Math.pow(1-GOBLIN_DISCOUNT_PER_UNIT,1);
+    const two=n>=2?base*Math.pow(1-GOBLIN_DISCOUNT_PER_UNIT,2):NaN;
+    const all=base*Math.pow(1-GOBLIN_DISCOUNT_PER_UNIT,n);
+    const d1=(one/base)-1,d2=(two/base)-1,da=(all/base)-1;
+    return `<tr>
+      <td style="text-align:left">${n}</td>
+      <td>${fm(base)}</td>
+      <td>${fm(one)} <span style="color:var(--muted)">(${fp(d1)})</span></td>
+      <td>${n>=2?`${fm(two)} <span style="color:var(--muted)">(${fp(d2)})</span>`:'—'}</td>
+      <td>${fm(all)} <span style="color:var(--muted)">(${fp(da)})</span></td>
+    </tr>`;
+  }).join('');
+  host.innerHTML=`<div style="overflow-x:auto"><table class="log-table" style="font-size:11px">
+    <thead><tr><th style="text-align:left">LEGS</th><th>STANDARD</th><th>1 GOBLIN</th><th>2 GOBLINS</th><th>ALL GOBLIN</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table></div>
+  <div class="hint" style="margin-top:8px">Discount model uses <code style="font-size:10px">GOBLIN_DISCOUNT_PER_UNIT = 0.110</code> applied multiplicatively.</div>`;
+}
+
 /* ─── CALCULATOR ─── */
 let calcLegs=[],calcCounter=0;
 
 function addCalcLeg(type){
-  calcLegs.push({id:++calcCounter,type,player:'',sport:'NBA',prop:'Points',stdLine:'',playedLine:'',hitProb:type==='goblin'?68:type==='demon'?32:52,open:true});
+  calcLegs.push({id:++calcCounter,type,player:'',sport:'NBA',prop:'Points',stdLine:'',playedLine:'',hitProb:type==='goblin'?68:type==='demon'?32:52,open:payoutLegCardsOpenByDefault()});
   renderCalcLegs();
 }
 function removeCalcLeg(id){calcLegs=calcLegs.filter(l=>l.id!==id);renderCalcLegs();}
-function clearCalcLegs(){calcLegs=[];calcCounter=0;renderCalcLegs();document.getElementById('calc-results').style.display='none';}
+function clearCalcLegs(){calcLegs=[];calcCounter=0;calcLoadedGroupName='';renderCalcLegs();document.getElementById('calc-results').style.display='none';setCalcSlateMsg('',false);}
 function toggleLeg(id){const l=calcLegs.find(l=>l.id===id);if(l){l.open=!l.open;renderCalcLegs();}}
 function changeType(id,type){const l=calcLegs.find(l=>l.id===id);if(l){l.type=type;l.playedLine='';l.hitProb=type==='goblin'?68:type==='demon'?32:52;renderCalcLegs();}}
 function updateCF(id,field,val){
@@ -1363,6 +1645,7 @@ function runCalc(){
 
 /* ─── LOG ─── */
 let logLegs=[],logCounter=0;
+let logLoadedGroupName='';
 document.getElementById('log-date').value=new Date().toISOString().slice(0,10);
 let _logDraftTimer=null;
 function saveLogDraft(){
@@ -1374,6 +1657,7 @@ function saveLogDraft(){
       platform:document.getElementById('log-platform').value,
       slipType:document.getElementById('log-slip-type').value,
       date:document.getElementById('log-date').value,
+      result:document.getElementById('log-result')?.value||'PENDING',
       actualMult:String(document.getElementById('log-actual-mult').value||''),
       minGuaranteeMult:String(document.getElementById('log-min-guarantee-mult')?.value||''),
       serverCsv:!!document.getElementById('log-server-csv')?.checked,
@@ -1391,6 +1675,8 @@ async function importTodayTicketsFromSlate(){
     if(!r.ok){ showMsg('⚠ '+(j.error||'Could not load slate'),'warn'); return; }
     const arr = j.tickets||[];
     if(!arr.length){ showMsg('⚠ No tickets in slate JSON','warn'); return; }
+    const sheetNames=[...new Set(arr.map(x=>String(x.sheet||'').trim()).filter(Boolean))];
+    logLoadedGroupName=sheetNames.length===1?sheetNames[0]:(sheetNames.length?sheetNames[0]+' (+more)':'');
     logLegs = [];
     for(const tix of arr){
       for(const L of tix.legs||[]){
@@ -1436,6 +1722,7 @@ function loadLogDraft(){
     if(o.platform&&pf){const opt=[...pf.options].find(x=>x.value===o.platform||x.text===o.platform);if(opt)pf.value=opt.value;}
     if(o.slipType&&sf){const opt=[...sf.options].find(x=>x.value===o.slipType||x.text===o.slipType);if(opt)sf.value=opt.value;}
     if(o.date)document.getElementById('log-date').value=o.date;
+    if(o.result&&document.getElementById('log-result'))document.getElementById('log-result').value=String(o.result).toUpperCase();
     if(o.actualMult!=null)document.getElementById('log-actual-mult').value=String(o.actualMult);
     const mg=document.getElementById('log-min-guarantee-mult'),sv=document.getElementById('log-server-csv');
     if(o.minGuaranteeMult!=null&&mg)mg.value=String(o.minGuaranteeMult);
@@ -1463,7 +1750,9 @@ function blurLFLine(id,field,el){
 function blurLFPlayer(id){renderLogLegs();refreshLogSummary();}
 function clearLogForm(){
   logLegs=[];logCounter=0;renderLogLegs();
+  logLoadedGroupName='';
   document.getElementById('log-base-mult').value='';document.getElementById('log-actual-mult').value='';
+  if(document.getElementById('log-result'))document.getElementById('log-result').value='PENDING';
   const mg=document.getElementById('log-min-guarantee-mult');if(mg)mg.value='';
   document.getElementById('log-ticket-summary').style.display='none';document.getElementById('log-leg-summary').textContent='';
   try{localStorage.removeItem(LOG_DRAFT_KEY);}catch{}
@@ -1529,6 +1818,7 @@ async function logTicket(){
   const am=parseFloat(document.getElementById('log-actual-mult').value);
   if(!am||am<=0){showMsg('⚠ Enter the actual payout multiplier.','warn');return;}
   const n=logLegs.length,platform=document.getElementById('log-platform').value,slipType=document.getElementById('log-slip-type').value,dt=document.getElementById('log-date').value;
+  const result=String(document.getElementById('log-result')?.value||'PENDING').toUpperCase();
   const flex=logSlipIsFlex();
   const bm=logBaseMultForN(n);
   const nG=logLegs.filter(l=>l.type==='goblin').length,nD=logLegs.filter(l=>l.type==='demon').length,nS=logLegs.filter(l=>l.type==='standard').length;
@@ -1537,7 +1827,7 @@ async function logTicket(){
   const minGuaranteeMult=mgRaw?parseFloat(mgRaw):null;
   const legs=logLegs.map(l=>{const s=parseFloat(l.stdLine)||null,p=parseFloat(l.playedLine)||null;const dp=getDeltaPct(s,p);return{type:l.type,player:l.player||'Unknown',sport:l.sport,prop:l.prop,stdLine:s,playedLine:l.type!=='standard'?p:null,distance:(l.type!=='standard'&&s&&p)?Math.round(Math.abs(p-s)*100)/100:null,deltaPct:dp,bucket:getBucket(dp,l.type)};});
   const bSig=[...legs].map(l=>l.bucket||l.type).sort().join(' + '),cSig=[...legs].map(l=>l.type).sort().join(' + ');
-  logEntries.push({id:Date.now(),ts:dt||new Date().toLocaleDateString(),platform,slipType,nLegs:n,nStd:nS,nGob:nG,nDem:nD,baseMult:bm,actualMult:am,multChange:mc,bucketSig:bSig,comboSig:cSig,legs,minGuaranteeMult:(minGuaranteeMult!=null&&!isNaN(minGuaranteeMult))?minGuaranteeMult:null});
+  logEntries.push({id:Date.now(),ts:dt||new Date().toLocaleDateString(),platform,slipType,result,nLegs:n,nStd:nS,nGob:nG,nDem:nD,baseMult:bm,actualMult:am,multChange:mc,bucketSig:bSig,comboSig:cSig,legs,minGuaranteeMult:(minGuaranteeMult!=null&&!isNaN(minGuaranteeMult))?minGuaranteeMult:null});
   saveLog(logEntries);renderLogTable();updateLogCount();
   const wantServer=document.getElementById('log-server-csv')?.checked;
   if(wantServer){
@@ -1546,11 +1836,15 @@ async function logTicket(){
       const estR=await fetch('/api/payout/estimate-mult',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode,legs:logLegs.map(l=>({type:l.type,stdLine:l.stdLine,playedLine:l.playedLine,deltaPct:getDeltaPct(parseFloat(l.stdLine),parseFloat(l.playedLine))}))})});
       const estJ=estR.ok?await estR.json():{};
       const estMult=parseFloat(estJ.est_mult)||0;
-      const legBlob={platform,slipType,bucketSig:bSig,comboSig:cSig,min_guarantee_mult:(minGuaranteeMult!=null&&!isNaN(minGuaranteeMult))?minGuaranteeMult:null,legs};
-      const obsR=await fetch('/api/payout/log-observation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:dt||'',n_legs:n,slip_type:mode,combo_label:bSig,base_mult:bm||0,est_mult:estMult,actual_mult:am,stake:'',actual_payout:'',leg_details_json:legBlob})});
+      const pickTypes=(legs||[]).map(l=>l.type==='goblin'?'Goblin':l.type==='demon'?'Demon':'Standard').join(',');
+      const lines=(legs||[]).map(l=>(l.type==='standard'?l.stdLine:l.playedLine)).join(',');
+      const standardLines=(legs||[]).map(l=>l.stdLine).join(',');
+      const legBlob={platform,slipType,result,group_name:logLoadedGroupName||calcLoadedGroupName||'',bucketSig:bSig,comboSig:cSig,min_guarantee_mult:(minGuaranteeMult!=null&&!isNaN(minGuaranteeMult))?minGuaranteeMult:null,legs};
+      const obsR=await fetch('/api/payout/log-observation',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:dt||'',group_name:logLoadedGroupName||calcLoadedGroupName||'',n_legs:n,slip_type:mode,result,pick_types:pickTypes,lines,standard_lines:standardLines,combo_label:bSig,base_mult:bm||0,est_mult:estMult,actual_mult:am,stake:'',actual_payout:'',leg_details_json:legBlob})});
       const obsJ=obsR.ok?await obsR.json():{};
-      if(!obsR.ok||!obsJ.saved)showMsg('⚠ Saved locally; server CSV append failed.','warn');
+      if(!obsR.ok||!obsJ.saved){setLogCsvRow('');showMsg('⚠ Saved locally; server CSV append failed.','warn');}
       else{
+        setLogCsvRow(obsJ.csv_row||'');
         if(flex&&minGuaranteeMult!=null&&!isNaN(minGuaranteeMult)&&n>2){
           const basePartial=FLEX_BASE[n]&&FLEX_BASE[n][n-1];
           if(basePartial!=null){
@@ -1567,11 +1861,32 @@ async function logTicket(){
         else showMsg(`✓ Logged + server row (${obsJ.total_obs||'?'} obs). ${logEntries.length} total.`,'good');
         _payoutServerObsFetchTs=0;
       }
-    }catch(e){showMsg('⚠ Saved locally; server CSV error.','warn');}
+    }catch(e){setLogCsvRow('');showMsg('⚠ Saved locally; server CSV error.','warn');}
   }else showMsg(`✓ Logged! ${logEntries.length} total.`,'good');
   clearLogForm();
 }
 function showMsg(m,t){const e=document.getElementById('log-msg');e.textContent=m;e.style.color=t==='good'?'var(--green)':t==='warn'?'var(--amber)':'var(--red)';setTimeout(()=>e.textContent='',3500);}
+function setLogCsvRow(row){
+  const wrap=document.getElementById('log-csv-wrap');
+  const area=document.getElementById('log-csv-row');
+  if(!wrap||!area)return;
+  const val=String(row||'').trim();
+  if(!val){wrap.style.display='none';area.value='';return;}
+  area.value=val;
+  wrap.style.display='block';
+}
+function copyLogCsvRow(){
+  const area=document.getElementById('log-csv-row');
+  if(!area||!area.value)return;
+  area.select();
+  area.setSelectionRange(0,area.value.length);
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(area.value).then(()=>showMsg('✓ CSV row copied.','good')).catch(()=>showMsg('⚠ Copy failed — select and copy manually.','warn'));
+  }else{
+    document.execCommand('copy');
+    showMsg('✓ CSV row copied.','good');
+  }
+}
 function deleteEntry(id){logEntries=logEntries.filter(e=>e.id!==id);saveLog(logEntries);renderLogTable();updateLogCount();}
 function clearAllLog(){if(!logEntries.length||!confirm('Delete all?'))return;logEntries=[];saveLog(logEntries);renderLogTable();updateLogCount();}
 function updateLogCount(){const n=logEntries.length;document.getElementById('log-count').textContent=n;document.getElementById('log-table-count').textContent=n;}
@@ -1736,21 +2051,31 @@ let _pendingImportedMeta=null;
 var _screenshotImportTarget='calc';
 
 const VISION_PROMPT=
-  "This is a PrizePicks ticket screenshot. Extract all picks and any visible payout info.\n"+
+  "You are reading a PrizePicks bet slip screenshot. Extract exactly what is visible on screen.\n"+
   "Return ONLY valid JSON (no markdown, no commentary).\n"+
-  "Preferred shape (so payout rates can be logged):\n"+
+  "1) For each leg: player name, prop label, pick type (Standard / Goblin / Demon), direction (OVER/UNDER),\n"+
+  "   sport if shown on the slip (e.g. MLB, NBA, NHL, NFL, Soccer, Tennis, WNBA). If sport is not printed, use null.\n"+
+  "2) For each leg line numbers: \"line\" MUST be the EXACT played line printed on the slip for that leg (Goblin/Demon/Standard).\n"+
+  "   When both a market/standard line and a different played line appear, set \"standard_line\" to the market line and \"line\" to the played line.\n"+
+  "   Never guess a default like 0.5 for Goblin — read the real number from the slip. Goblin lines are typically LOWER than standard for OVER props.\n"+
+  "3) Slip type: Power Play (all must hit) vs Flex Play (can miss one).\n"+
+  "4) Sweep multiplier: the main payout shown (e.g. 6.00x).\n"+
+  "5) Flex only: min guarantee / one-miss multiplier if visible (smaller number, e.g. 1.5x).\n"+
+  "JSON shape:\n"+
   "{\n"+
   "  \"picks\": [\n"+
   "    {\n"+
   "      \"player\": \"Ja Morant\",\n"+
+  "      \"sport\": \"NBA\",\n"+
   "      \"prop\": \"Points\",\n"+
   "      \"line\": 24.5,\n"+
+  "      \"standard_line\": 27.5,\n"+
   "      \"direction\": \"OVER\",\n"+
   "      \"pick_type\": \"Goblin\"\n"+
   "    }\n"+
   "  ],\n"+
-  "  \"actual_payout_multiplier\": number or null — main multiplier on screen (Power all-hit, or Flex all-correct sweep),\n"+
-  "  \"flex_min_guarantee_multiplier\": number or null — Flex only: one-miss or (n-1)/n payout if shown; else null,\n"+
+  "  \"actual_payout_multiplier\": number or null,\n"+
+  "  \"flex_min_guarantee_multiplier\": number or null,\n"+
   "  \"slip_type\": \"flex\" | \"power\" | \"unknown\"\n"+
   "}\n"+
   "If no payout text is visible, use null for the numeric fields and \"unknown\" for slip_type.\n"+
@@ -1795,6 +2120,8 @@ function applyVisionMetaToLog(meta){
   const am=document.getElementById('log-actual-mult');
   const mg=document.getElementById('log-min-guarantee-mult');
   const st=document.getElementById('log-slip-type');
+  const res=document.getElementById('log-result');
+  if(res)res.value='PENDING';
   const v=meta.actual_payout_multiplier!=null?Number(meta.actual_payout_multiplier):NaN;
   if(am&&!isNaN(v)&&v>0)am.value=String(v);
   const g=meta.flex_min_guarantee_multiplier!=null?Number(meta.flex_min_guarantee_multiplier):NaN;
@@ -1805,29 +2132,61 @@ function applyVisionMetaToLog(meta){
     else if(raw.includes('power'))st.value='Power Play';
     onLogSlipTypeChange();
   }
+  scheduleLogDraftSave();
+}
+function enrichVisionPickForUi(p){
+  const type=mapPickType(p.pick_type||p.pickType||'standard');
+  const prop=nearestProp(p.prop||p.stat||'');
+  const player=String(p.player||'').trim();
+  let playedNum=Number(p.line);
+  let stdNum=p.standard_line!=null&&p.standard_line!==''?Number(p.standard_line):NaN;
+  let visionSport=p.sport?normalizeSportOpt(p.sport):'';
+  if(visionSport==='Other')visionSport='';
+  const m=lookupSlateLegForPick(player,prop,!isNaN(playedNum)?playedNum:null);
+  function resolveSport(){
+    if(m)return m.sport;
+    if(visionSport)return visionSport;
+    return'NBA';
+  }
+  const sport=normalizeSportOpt(resolveSport());
+  if(type==='standard'){
+    const line=!isNaN(playedNum)?playedNum:(!isNaN(stdNum)?stdNum:NaN);
+    if(isNaN(line))return null;
+    return{type,player,sport,prop,stdLine:String(line),playedLine:String(line),hitProb:52};
+  }
+  if(isNaN(stdNum)&&m){
+    const s2=parseFloat(m.std);
+    if(!isNaN(s2))stdNum=s2;
+  }
+  if(isNaN(playedNum)&&m){
+    const p2=parseFloat(m.played);
+    if(!isNaN(p2))playedNum=p2;
+  }
+  if(isNaN(playedNum))return null;
+  let stdLine=!isNaN(stdNum)?String(stdNum):'';
+  if(!stdLine&&m&&m.std)stdLine=m.std;
+  const playedLine=String(playedNum);
+  if(!stdLine)stdLine=playedLine;
+  return{type,player,sport,prop,stdLine,playedLine,hitProb:type==='goblin'?68:type==='demon'?32:52};
 }
 function applyPicksToCalc(picks,meta){
   if(!Array.isArray(picks)||!picks.length)return;
+  calcLoadedGroupName='';
   calcLegs=[];
   calcCounter=0;
   picks.forEach(p=>{
-    const type=mapPickType(p.pick_type||p.pickType||'standard');
-    const line=Number(p.line);
-    if(isNaN(line))return;
-    const prop=nearestProp(p.prop||p.stat||'');
-    const player=String(p.player||'').trim();
-    const std=line;
-    const played=type==='standard'?'':String(line);
+    const row=enrichVisionPickForUi(p);
+    if(!row)return;
     calcLegs.push({
       id:++calcCounter,
-      type,
-      player,
-      sport:'NBA',
-      prop,
-      stdLine:String(std),
-      playedLine:played,
-      hitProb:type==='goblin'?68:type==='demon'?32:52,
-      open:true,
+      type:row.type,
+      player:row.player,
+      sport:row.sport,
+      prop:row.prop,
+      stdLine:row.stdLine,
+      playedLine:row.type==='standard'?row.stdLine:row.playedLine,
+      hitProb:row.hitProb,
+      open:payoutLegCardsOpenByDefault(),
     });
   });
   renderCalcLegs();
@@ -1839,14 +2198,17 @@ function applyPicksToLog(picks,meta){
   logLegs=[];
   logCounter=0;
   picks.forEach(p=>{
-    const type=mapPickType(p.pick_type||p.pickType||'standard');
-    const line=Number(p.line);
-    if(isNaN(line))return;
-    const prop=nearestProp(p.prop||p.stat||'');
-    const player=String(p.player||'').trim();
-    const std=String(line);
-    const played=type==='standard'?'':String(line);
-    logLegs.push({id:++logCounter,type,player,sport:'NBA',prop,stdLine:std,playedLine:played});
+    const row=enrichVisionPickForUi(p);
+    if(!row)return;
+    logLegs.push({
+      id:++logCounter,
+      type:row.type,
+      player:row.player,
+      sport:row.sport,
+      prop:row.prop,
+      stdLine:row.stdLine,
+      playedLine:row.type==='standard'?row.stdLine:row.playedLine,
+    });
   });
   renderLogLegs();
   applyVisionMetaToLog(meta||null);
@@ -1944,6 +2306,8 @@ async function sendScreenshotToVision(rawBase64,mediaType){
       alert('Model did not return picks (array or .picks array).');
       return;
     }
+    if(_screenshotImportTarget==='log')applyVisionMetaToLog(meta||null);
+    else applyVisionMetaToCalc(meta||null);
     _pendingImportedPicks=picks;
     _pendingImportedMeta=meta;
     const preview={picks,...(meta?{actual_payout_multiplier:meta.actual_payout_multiplier,flex_min_guarantee_multiplier:meta.flex_min_guarantee_multiplier,slip_type:meta.slip_type}:{})};
@@ -2000,6 +2364,8 @@ onLogSlipTypeChange();
 renderLogLegs();
 refreshLogSummary();
 bindTopDecimals();
+renderGoblinDiscountTable();
+loadSlateTicketOptions();
 </script>
 
 <script src="/static/site-nav-chrome.js?v=20260412" defer></script>
@@ -2007,46 +2373,48 @@ bindTopDecimals();
 <script>
 /* Mouse-tracking glow on all glass cards */
 (function(){
-  const disableFx = window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;
-  if (disableFx) return;
-  const SELECTORS = [
-    '.ticket', '.card', '.group', '.edge-card',
-    '.scard', '.qcard', '.hero-stat', '.streak-card',
-    '.result-item', '.pp-cell', '.stat-mini', '.leg-card',
-    '.grades-stat', '.grades-hero'
-  ];
-  function attachGlow(el) {
-    if (el.dataset.glowBound === '1') return;
-    el.dataset.glowBound = '1';
-    el.classList.add('mouse-glow');
-    el.addEventListener('mousemove', e => {
-      const r = el.getBoundingClientRect();
-      el.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
-      el.style.setProperty('--mouse-y', (e.clientY - r.top)  + 'px');
-    });
-  }
-  function initGlow() {
-    SELECTORS.forEach(sel =>
-      document.querySelectorAll(sel).forEach(attachGlow)
-    );
-  }
-  // Run on load + after dynamic content
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGlow);
-  } else {
-    initGlow();
-  }
-  let queued = false;
-  const queueInit = () => {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(() => {
-      queued = false;
+  const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!isCoarse && !reduceMotion) {
+    const SELECTORS = [
+      '.ticket', '.card', '.group', '.edge-card',
+      '.scard', '.qcard', '.hero-stat', '.streak-card',
+      '.result-item', '.pp-cell', '.stat-mini', '.leg-card',
+      '.grades-stat', '.grades-hero'
+    ];
+    function attachGlow(el) {
+      if (el.dataset.glowBound === '1') return;
+      el.dataset.glowBound = '1';
+      el.classList.add('mouse-glow');
+      el.addEventListener('mousemove', e => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
+        el.style.setProperty('--mouse-y', (e.clientY - r.top)  + 'px');
+      });
+    }
+    function initGlow() {
+      SELECTORS.forEach(sel =>
+        document.querySelectorAll(sel).forEach(attachGlow)
+      );
+    }
+    // Run on load + after dynamic content
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initGlow);
+    } else {
       initGlow();
-    });
-  };
-  const obs = new MutationObserver(queueInit);
-  obs.observe(document.body, { childList: true, subtree: true });
+    }
+    let queued = false;
+    const queueInit = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        initGlow();
+      });
+    };
+    const obs = new MutationObserver(queueInit);
+    obs.observe(document.body, { childList: true, subtree: true });
+  }
 })();
 </script>
 
@@ -2054,36 +2422,38 @@ bindTopDecimals();
 <script>
 /* Chromatic aberration border on primary glass surfaces */
 (function(){
-  const disableFx = window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;
-  if (disableFx) return;
-  const CA_SELS = [
-    '.ticket', '.card', '.group', '.hero',
-    '.edge-card', '.qcard', '.grades-hero',
-    '.hero-stat', '.result-item'
-  ];
-  function initCA() {
-    CA_SELS.forEach(sel =>
-      document.querySelectorAll(sel).forEach(el => {
-        el.classList.add('ca-border');
-      })
-    );
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCA);
-  } else {
-    initCA();
-  }
-  let queued = false;
-  const queueInit = () => {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(() => {
-      queued = false;
+  const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!isCoarse && !reduceMotion) {
+    const CA_SELS = [
+      '.ticket', '.card', '.group', '.hero',
+      '.edge-card', '.qcard', '.grades-hero',
+      '.hero-stat', '.result-item'
+    ];
+    function initCA() {
+      CA_SELS.forEach(sel =>
+        document.querySelectorAll(sel).forEach(el => {
+          el.classList.add('ca-border');
+        })
+      );
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCA);
+    } else {
       initCA();
-    });
-  };
-  const obs = new MutationObserver(queueInit);
-  obs.observe(document.body, { childList: true, subtree: true });
+    }
+    let queued = false;
+    const queueInit = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        initCA();
+      });
+    };
+    const obs = new MutationObserver(queueInit);
+    obs.observe(document.body, { childList: true, subtree: true });
+  }
 })();
 </script>
 

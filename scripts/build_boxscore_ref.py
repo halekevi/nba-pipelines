@@ -831,6 +831,8 @@ SOCCER_STAT_MAP = {
     "fc":  ["FC", "FOULSCOMMITTED", "FL", "FOULS"],
     "yc":  ["YC", "YELLOWCARDS", "YELLOW"],
     "min": ["MIN", "MINSPLAYED", "MINUTESPLAYED", "TIMEPLAYED"],
+    "app": ["APP", "APPEARANCES"],
+    "sub": ["SUB", "SUBSTITUTIONS", "SUBS"],
     # Outfield defending / dribbling — only present on some ESPN payloads / stat shapes.
     "clr": [
         "CLR", "CL", "CLEARANCES", "CLEARANCE", "TOTALCLEARANCE", "EFFECTIVECLEARANCE",
@@ -855,13 +857,24 @@ def _build_soccer_lmap(stats_list: list) -> dict:
             return {}  # flat-array format, signal caller
         abbr = stat.get("abbreviation") or ""
         name = stat.get("name") or ""
-        val  = stat.get("value")
+        val = stat.get("value")
+        if val is None:
+            val = stat.get("displayValue")
         if val is None:
             continue
         try:
             fval = float(val)
         except (TypeError, ValueError):
-            continue
+            sval = str(val).strip()
+            # Handle soccer minute formats such as "90:00" or "90+4".
+            mmss = re.match(r"^(\d{1,3}):\d{2}$", sval)
+            plus = re.match(r"^(\d{1,3})\+\d{1,2}$", sval)
+            if mmss:
+                fval = float(mmss.group(1))
+            elif plus:
+                fval = float(plus.group(1))
+            else:
+                continue
         # Index by abbreviation (e.g. "SV") AND camelCase name (e.g. "saves")
         for key in (_norm(abbr), _norm(name)):
             if key:
@@ -877,11 +890,69 @@ def _soc_stat(lmap: dict, key: str):
     return None
 
 
+def _soc_minutes_from_roster_entry(entry: dict, lmap: dict, default_full_minutes: float = 90.0) -> Optional[float]:
+    """
+    Derive minutes from roster-level context when explicit MIN is absent.
+    This uses substitution metadata when provided, otherwise starter/appearance heuristics.
+    """
+    mins = _soc_stat(lmap, "min")
+    if mins is not None:
+        return float(mins)
+
+    def _to_min(v) -> Optional[float]:
+        if isinstance(v, bool) or v is None:
+            return None
+        s = str(v).strip()
+        if not s:
+            return None
+        mmss = re.match(r"^(\d{1,3}):\d{2}$", s)
+        plus = re.match(r"^(\d{1,3})\+\d{1,2}$", s)
+        if mmss:
+            return float(mmss.group(1))
+        if plus:
+            return float(plus.group(1))
+        try:
+            return float(s)
+        except (TypeError, ValueError):
+            return None
+
+    starter = bool(entry.get("starter", False))
+    sub_in_raw = entry.get("subbedIn")
+    sub_out_raw = entry.get("subbedOut")
+    sub_in_min = _to_min(sub_in_raw)
+    sub_out_min = _to_min(sub_out_raw)
+
+    if starter:
+        if sub_out_min is not None:
+            return max(0.0, sub_out_min)
+        if sub_out_raw is False:
+            return float(default_full_minutes)
+    else:
+        if sub_in_min is not None:
+            end_min = sub_out_min if sub_out_min is not None else float(default_full_minutes)
+            return max(0.0, end_min - sub_in_min)
+        if sub_in_raw is False:
+            return 0.0
+
+    app = _soc_stat(lmap, "app")
+    if app is not None:
+        try:
+            if float(app) <= 0:
+                return 0.0
+        except (TypeError, ValueError):
+            pass
+        # Common case: started and no sub-out event details in summary.
+        if starter:
+            return float(default_full_minutes)
+
+    return None
+
+
 def _parse_soccer_boxscore(box: dict, event_id: str, game_date: str,
                             home: str, away: str, league_id: str) -> list[dict]:
     rows = []
 
-    def _emit(name, t_abbr, espn_id, lmap):
+    def _emit(name, t_abbr, espn_id, lmap, minutes_override: Optional[float] = None):
         sh  = _soc_stat(lmap, "sh")
         sog = _soc_stat(lmap, "sog")
         g   = _soc_stat(lmap, "g")
@@ -892,7 +963,7 @@ def _parse_soccer_boxscore(box: dict, event_id: str, game_date: str,
         tk  = _soc_stat(lmap, "tk")
         fc  = _soc_stat(lmap, "fc")
         yc  = _soc_stat(lmap, "yc")
-        mins = _soc_stat(lmap, "min")
+        mins = minutes_override if minutes_override is not None else _soc_stat(lmap, "min")
         clr = _soc_stat(lmap, "clr")
         drb = _soc_stat(lmap, "drib")
         if all(x is None for x in [sh, sog, g, a, sv, pa, kp, tk, fc, yc, mins, clr, drb]):
@@ -928,7 +999,8 @@ def _parse_soccer_boxscore(box: dict, event_id: str, game_date: str,
                     continue
                 lmap = _build_soccer_lmap(stats_list)
                 if lmap:
-                    _emit(name, t_abbr, espn_id, lmap)
+                    mins_guess = _soc_minutes_from_roster_entry(entry, lmap, default_full_minutes=90.0)
+                    _emit(name, t_abbr, espn_id, lmap, mins_guess)
         if rows:
             return rows
 

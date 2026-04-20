@@ -540,7 +540,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .mobile-menu a.active{color:var(--accent);border-left-color:var(--accent);background:rgba(200,255,0,.04);}
 
 /* ── PAGE HEADER ── */
-.page-header{position:relative;z-index:1;padding:20px 20px 0;max-width:1400px;margin:0 auto;}
+.page-header{position:relative;z-index:1;padding:20px 20px 0;max-width:none;width:100%;margin:0 auto;box-sizing:border-box;}
 .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,42px);letter-spacing:.08em;color:var(--accent);line-height:1;}
 .page-subtitle{font-size:10px;color:var(--muted);letter-spacing:2.5px;margin-top:4px;}
 .page-meta{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap;}
@@ -548,7 +548,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 
 /* ── SEARCH + FILTER BAR ── */
 .filter-bar{position:sticky;top:58px;z-index:150;background:rgba(5,5,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 20px;max-width:100%;}
-.filter-inner{max-width:1400px;margin:0 auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.filter-inner{max-width:none;width:100%;margin:0 auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap;box-sizing:border-box;}
 .search-box{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;flex:1;min-width:200px;max-width:360px;transition:border-color .2s;}
 .search-box:focus-within{border-color:var(--accent);}
 .search-box input{background:none;border:none;outline:none;color:var(--text);font-family:'Inter',sans-serif;font-size:12px;flex:1;min-width:0;}
@@ -566,7 +566,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .filter-count{font-size:10px;color:var(--muted);white-space:nowrap;margin-left:auto;}
 
 /* ── LAYOUT ── */
-.main{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:20px;}
+.main{position:relative;z-index:1;max-width:none;width:100%;margin:0 auto;padding:20px;box-sizing:border-box;}
 
 /* ── STAT CARDS ── */
 .stat-grid{display:grid;gap:12px;margin-bottom:24px;}

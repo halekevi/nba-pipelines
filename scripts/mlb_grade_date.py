@@ -355,6 +355,19 @@ def _fetch_actuals_csv(
         team = ""
         if "Team" in slate_df.columns:
             team = str(r.get("Team", "")).strip()
+        # Game log split: opponent has id/name; abbreviation is often omitted — resolve via team-id map.
+        opp_team = ""
+        try:
+            opp = spl.get("opponent") or {}
+            opp_abbr = str(opp.get("abbreviation") or "").strip()
+            if not opp_abbr:
+                oid = opp.get("id")
+                if oid is not None:
+                    opp_abbr = _mlb_team_id_to_abbr_map().get(int(oid), "") or ""
+            opp_team = str(opp_abbr).strip().upper()
+        except Exception:
+            pass
+
         out_rows[nk] = {
             "player": player,
             "prop": gkey,
@@ -362,6 +375,7 @@ def _fetch_actuals_csv(
             "game_date": d,
             "mlb_player_id": mlb_id,
             "team": team,
+            "opp_team": opp_team,
         }
 
     act_df = pd.DataFrame(list(out_rows.values()))

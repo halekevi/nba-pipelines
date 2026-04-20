@@ -433,6 +433,41 @@ def main():
     )
     target_str = target_local.isoformat()
     before_filter = len(display_rows)
+    unfiltered = list(display_rows)
+
+    def _game_start_local_date(gs):
+        """Return local calendar date for game_start, or None if unparseable."""
+        if gs is None or gs == "":
+            return None
+        try:
+            if isinstance(gs, datetime):
+                if gs.tzinfo is not None:
+                    return gs.astimezone().date()
+                return gs.date()
+            gs_str = str(gs).strip()
+            if not gs_str:
+                return None
+            for fmt in (
+                "%Y-%m-%dT%H:%M:%S%z",
+                "%Y-%m-%d %H:%M:%S%z",
+                "%Y-%m-%dT%H:%M:%S",
+                "%Y-%m-%d %H:%M:%S",
+            ):
+                try:
+                    dt = datetime.strptime(gs_str[:25], fmt)
+                    if dt.tzinfo is not None:
+                        return dt.astimezone().date()
+                    return dt.date()
+                except ValueError:
+                    continue
+            if len(gs_str) >= 10 and gs_str[4] == "-" and gs_str[7] == "-":
+                try:
+                    return datetime.strptime(gs_str[:10], "%Y-%m-%d").date()
+                except ValueError:
+                    return None
+        except Exception:
+            return None
+        return None
 
     def _is_target_date(gs) -> bool:
         """
@@ -476,7 +511,32 @@ def main():
 
     display_rows = [r for r in display_rows if _is_target_date(r.get("game_start", ""))]
     dropped = before_filter - len(display_rows)
-    print(f"[DateFilter] Kept {len(display_rows)}/{before_filter} rows for {target_str} (dropped {dropped} future/past rows)")
+    if len(display_rows) == 0 and len(unfiltered) > 0:
+        # NHL PP board often lists games on the next Eastern calendar day vs --date
+        # from the morning pipeline (same pattern as Tennis step8).
+        dates_seen = []
+        for r in unfiltered:
+            d = _game_start_local_date(r.get("game_start", ""))
+            if d is not None:
+                dates_seen.append(d)
+        if dates_seen:
+            unique = sorted(set(dates_seen))
+            future = [d for d in unique if d >= target_local]
+            chosen = future[0] if future else unique[-1]
+
+            def _is_chosen_date(gs) -> bool:
+                d = _game_start_local_date(gs)
+                return d is not None and d == chosen
+
+            display_rows = [r for r in unfiltered if _is_chosen_date(r.get("game_start", ""))]
+            print(
+                f"[DateFilter] Kept 0/{before_filter} for {target_str}; "
+                f"using nearest slate date {chosen.isoformat()} (>= target when possible) -> {len(display_rows)} rows"
+            )
+        else:
+            print(f"[DateFilter] Kept {len(display_rows)}/{before_filter} rows for {target_str} (dropped {dropped} future/past rows)")
+    else:
+        print(f"[DateFilter] Kept {len(display_rows)}/{before_filter} rows for {target_str} (dropped {dropped} future/past rows)")
 
     display_rows.sort(
         key=lambda r: int(r.get("rank") or 9999)

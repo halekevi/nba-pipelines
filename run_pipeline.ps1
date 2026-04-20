@@ -11,7 +11,8 @@
 #    .\run_pipeline.ps1 -SoccerOnly            # Soccer only + Combined
 #    .\run_pipeline.ps1 -TennisOnly           # Tennis (light pipeline) + Combined
 #    .\run_pipeline.ps1 -WNBAOnly              # WNBA only (season-gated)
-#    .\run_pipeline.ps1 -CombinedOnly          # Re-run combined using all existing outputs
+#    .\run_pipeline.ps1 -CombinedOnly          # Re-run combined + web tickets (multi-sport /tickets JSON)
+#    .\run_pipeline.ps1 -CombinedOnly -WebEvOnly   # Stricter /tickets: positive-EV gate only (+ Tennis bypass)
 #    .\run_pipeline.ps1 -SkipFetch             # Skip step1 fetch for whatever sport(s) run
 #    .\run_pipeline.ps1 -NBAOnly -SkipFetch    # NBA steps 2-8 + Combined
 #    .\run_pipeline.ps1 -NHLOnly -SkipFetch    # NHL steps 2-8 + Combined
@@ -46,7 +47,10 @@ param(
     [switch]$SkipDailyGrader,
     [switch]$RunPayoutEngine,
     [switch]$SkipAltBooks,
-    [int]$CacheAgeDays = 7
+    [int]$CacheAgeDays = 7,
+    # By default /tickets JSON includes MLB/NHL/Soccer slips (not only strict positive-EV + Tennis).
+    # Pass -WebEvOnly to restore the stricter web JSON filter.
+    [switch]$WebEvOnly
 )
 
 $ErrorActionPreference = "Continue"
@@ -146,6 +150,38 @@ function Run-Step {
         $output = Invoke-Expression $cmd 2>&1
         $exit   = $LASTEXITCODE
         foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
+        if ($exit -ne 0) { Write-Host "      FAILED (exit $exit)" -ForegroundColor Red; return $false }
+        Write-Host "      OK" -ForegroundColor Green; return $true
+    } catch {
+        Write-Host "      EXCEPTION: $_" -ForegroundColor Red; return $false
+    } finally {
+        Pop-Location
+    }
+}
+
+function Invoke-MLBStep1Fetch {
+    param(
+        [string]$WorkDir,
+        [string]$PipelineDate
+    )
+    Write-Host "  --> MLB Step 1 - Fetch PrizePicks (Playwright, then direct API if needed)" -ForegroundColor Yellow
+    Push-Location $WorkDir
+    try {
+        $env:PYTHONUTF8       = "1"
+        $env:PYTHONIOENCODING = "utf-8"
+        $cmd1 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --playwright --timeout 180 --date `"$PipelineDate`" --output step1_mlb_props.csv"
+        Write-Host "        CMD: $cmd1" -ForegroundColor DarkGray
+        $output = Invoke-Expression $cmd1 2>&1
+        $exit   = $LASTEXITCODE
+        foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
+        if ($exit -ne 0) {
+            Write-Host "      MLB Playwright failed (exit $exit); trying direct API..." -ForegroundColor Yellow
+            $cmd2 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --date `"$PipelineDate`" --output step1_mlb_props.csv"
+            Write-Host "        CMD: $cmd2" -ForegroundColor DarkGray
+            $output = Invoke-Expression $cmd2 2>&1
+            $exit   = $LASTEXITCODE
+            foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
+        }
         if ($exit -ne 0) { Write-Host "      FAILED (exit $exit)" -ForegroundColor Red; return $false }
         Write-Host "      OK" -ForegroundColor Green; return $true
     } catch {
@@ -474,7 +510,9 @@ function Run-Combined {
     $nba1qFile  = "$NBADir\step8_nba1q_direction_clean.xlsx"
     $nba1hFile  = "$NBADir\step8_nba1h_direction_clean.xlsx"
 
-    if (-not (Test-Path $nbaFile)) { Write-Host "  WARNING: NBA step8 not found -- skipping combined" -ForegroundColor Yellow; return $false }
+    if (-not (Test-Path $nbaFile)) {
+        Write-Host "  WARNING: NBA step8 not found -- combined will run with 0 NBA props (other sports only)" -ForegroundColor Yellow
+    }
 
     Invoke-AltBookFetches
 
@@ -506,6 +544,9 @@ function Run-Combined {
 
     # Keep strict date checks for NBA-family slates so /tickets never shows yesterday as today.
     $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --max-tickets 3 --nba-structured-variants 3 --write-web --web-outdir `"$WebOutDir`""
+    if (-not $WebEvOnly) {
+        $CombinedArgs += " --no-web-ev-gate"
+    }
 
     $okC = Run-Step "Combined Slate + Tickets" $Root ".\scripts\combined_slate_tickets.py" $CombinedArgs
 
@@ -603,7 +644,7 @@ if ($MLBOnly) {
     $ok = $true
     if (-not $SkipFetch) {
         Clear-MLBGeneratedOutputs -BaseDir $MLBDir
-        if ($ok) { $ok = Run-Step "MLB Step 1 - Fetch PrizePicks" $MLBDir ".\scripts\step1_fetch_prizepicks_mlb.py" "--output step1_mlb_props.csv --date $Date" }
+        if ($ok) { $ok = Invoke-MLBStep1Fetch -WorkDir $MLBDir -PipelineDate $Date }
         if ($ok) {
             $mlbStep1Health = Get-MLBStep1DateHealth -CsvPath (Join-Path $MLBDir "step1_mlb_props.csv") -TargetDate $Date
             if (-not $mlbStep1Health.ok) {
@@ -622,7 +663,7 @@ if ($MLBOnly) {
     if ($ok) { $ok = Run-Step "MLB Step 6 - Team Role Context"  $MLBDir ".\scripts\step6_team_role_context_mlb.py"      "--input step5_mlb_hit_rates.csv --output step6_mlb_role_context.csv" }
     if ($ok) { $ok = Run-Step "MLB Step 7 - Rank Props"         $MLBDir ".\scripts\step7_rank_props_mlb.py"             "--input step6_mlb_role_context.csv --output step7_mlb_ranked.xlsx" }
     if ($ok) { Invoke-PropOracleStep7b "MLB" }
-    if ($ok) { $ok = Run-Step "MLB Step 8 - Direction Context"  $MLBDir (Join-Path $Root "MLB\scripts\step8_add_direction_context_mlb.py")  "--input step7_mlb_ranked.xlsx --output step8_mlb_direction.csv --xlsx step8_mlb_direction_clean.xlsx" }
+    if ($ok) { $ok = Run-Step "MLB Step 8 - Direction Context"  $MLBDir (Join-Path $Root "MLB\scripts\step8_add_direction_context_mlb.py")  "--input step7_mlb_ranked.xlsx --output step8_mlb_direction.csv --xlsx step8_mlb_direction_clean.xlsx --date $Date" }
     Write-Host ""
     if ($ok) { Write-Host "  MLB complete." -ForegroundColor Green } else { Write-Host "  MLB FAILED." -ForegroundColor Red }
     if ($ok) { Run-Combined "after MLB" }
@@ -1004,6 +1045,30 @@ $MLBJob = Start-Job -ScriptBlock {
         } catch { Write-Output "[MLB] EXCEPTION: $_"; return $false
         } finally { Pop-Location }
     }
+    function Invoke-MLBStep1Fetch-Job {
+        param([string]$Dir, [string]$PipelineDate)
+        Write-Output "[MLB] --> MLB Step 1 - Fetch PrizePicks (Playwright, then direct API if needed)"
+        Push-Location $Dir
+        try {
+            $cmd1 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --playwright --timeout 180 --date `"$PipelineDate`" --output step1_mlb_props.csv"
+            Write-Output "        CMD: $cmd1"
+            $output = Invoke-Expression $cmd1 2>&1; $exit = $LASTEXITCODE
+            foreach ($line in $output) { Write-Output "        $line" }
+            if ($exit -ne 0) {
+                Write-Output "[MLB] Playwright failed (exit $exit); trying direct API"
+                $cmd2 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --date `"$PipelineDate`" --output step1_mlb_props.csv"
+                Write-Output "        CMD: $cmd2"
+                $output = Invoke-Expression $cmd2 2>&1; $exit = $LASTEXITCODE
+                foreach ($line in $output) { Write-Output "        $line" }
+            }
+            if ($exit -ne 0) { Write-Output "[MLB] FAILED: MLB Step 1 (exit $exit)"; return $false }
+            Write-Output "[MLB] OK: MLB Step 1"; return $true
+        } catch {
+            Write-Output "[MLB] EXCEPTION: $_"; return $false
+        } finally {
+            Pop-Location
+        }
+    }
     function Invoke-Step7b-Job {
         param([string]$SportLabel, [string]$R)
         Push-Location $R
@@ -1053,7 +1118,7 @@ $MLBJob = Start-Job -ScriptBlock {
     $ok = $true
     if (-not $SkipFetch) {
         Clear-MLBGeneratedOutputs-Job -BaseDir $MLBDir
-        if ($ok) { $ok = Run-Step-Job "MLB Step 1 - Fetch PrizePicks" $MLBDir ".\scripts\step1_fetch_prizepicks_mlb.py" "--output step1_mlb_props.csv --date $Date" }
+        if ($ok) { $ok = Invoke-MLBStep1Fetch-Job -Dir $MLBDir -PipelineDate $Date }
         if ($ok) {
             $health = Get-MLBStep1DateHealth-Job -CsvPath (Join-Path $MLBDir "step1_mlb_props.csv") -TargetDate $Date
             if (-not $health.ok) {
@@ -1072,7 +1137,7 @@ $MLBJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "MLB Step 6 - Team Role Context"  $MLBDir ".\scripts\step6_team_role_context_mlb.py"      "--input step5_mlb_hit_rates.csv --output step6_mlb_role_context.csv" }
     if ($ok) { $ok = Run-Step-Job "MLB Step 7 - Rank Props"         $MLBDir ".\scripts\step7_rank_props_mlb.py"             "--input step6_mlb_role_context.csv --output step7_mlb_ranked.xlsx" }
     if ($ok) { Invoke-Step7b-Job "MLB" $RepoRoot }
-    if ($ok) { $ok = Run-Step-Job "MLB Step 8 - Direction Context"  $MLBDir (Join-Path $RepoRoot "MLB\scripts\step8_add_direction_context_mlb.py")  "--input step7_mlb_ranked.xlsx --output step8_mlb_direction.csv --xlsx step8_mlb_direction_clean.xlsx" }
+    if ($ok) { $ok = Run-Step-Job "MLB Step 8 - Direction Context"  $MLBDir (Join-Path $RepoRoot "MLB\scripts\step8_add_direction_context_mlb.py")  "--input step7_mlb_ranked.xlsx --output step8_mlb_direction.csv --xlsx step8_mlb_direction_clean.xlsx --date $Date" }
     return $ok
 } -ArgumentList $MLBDir, $Date, $SkipFetch, $Root
 

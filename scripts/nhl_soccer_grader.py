@@ -384,6 +384,10 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
     slate["result"] = "VOID"
     slate["void_reason_grade"] = "NO_ACTUAL"
     slate["margin"] = float("nan")
+    if "opp_team" not in slate.columns:
+        slate["opp_team"] = ""
+    else:
+        slate["opp_team"] = slate["opp_team"].fillna("").astype(str)
 
     if actuals.empty:
         print("  WARNING: no actuals — all props marked VOID")
@@ -617,6 +621,12 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
         slate.at[idx, "actual"] = actual_val
         margin = actual_val - line_val
         slate.at[idx, "margin"] = margin
+
+        if "opp_team" in actuals.columns:
+            ot = matched.get("opp_team")
+            slate.at[idx, "opp_team"] = (
+                "" if pd.isna(ot) or ot is None else str(ot).strip()
+            )
 
         # Grade
         if margin == 0:

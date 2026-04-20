@@ -600,6 +600,87 @@ def _minutes_certainty(row: pd.Series) -> float:
     return base
 
 
+POSITION_PROP_GATES = {
+    "saves": {"GK"},
+    "goals_allowed": {"GK"},
+    "shots": {"FWD", "MID"},
+    "shots_on_target": {"FWD", "MID"},
+    "assists": {"FWD", "MID"},
+    "goals": {"FWD", "MID"},
+    "key_passes": {"FWD", "MID"},
+    "tackles": {"DEF", "MID"},
+    "clearances": {"DEF", "GK"},
+}
+
+STARTER_TIER_MULTIPLIERS = {
+    "STARTER": 1.00,
+    "ROTATION": 0.92,
+    "SUB": 0.75,
+    "UNKNOWN": 0.85,
+}
+
+
+def apply_position_prop_gates(df: pd.DataFrame) -> pd.DataFrame:
+    """Void rows where prop type does not match position group constraints."""
+    if "position_group" not in df.columns or "prop_norm" not in df.columns:
+        return df
+
+    if "void_reason" not in df.columns:
+        df["void_reason"] = ""
+    if "eligible" not in df.columns:
+        df["eligible"] = 1
+
+    pos = df["position_group"].astype(str).str.strip().str.upper()
+    prop = (
+        df["prop_norm"]
+        .astype(str)
+        .str.strip()
+        .str.lower()
+        .str.replace(" ", "_", regex=False)
+    )
+
+    total_voided = 0
+    for gate_prop, allowed_positions in POSITION_PROP_GATES.items():
+        mask = prop.eq(gate_prop) & ~pos.isin(allowed_positions) & ~pos.isin(["", "MID"])
+        if not mask.any():
+            continue
+        df.loc[mask, "eligible"] = 0
+        df.loc[mask, "void_reason"] = pos.loc[mask].map(lambda p: f"POSITION_GATE_{p}")
+        total_voided += int(mask.sum())
+
+    if total_voided:
+        print(f"  [Soccer] Position gate voided {total_voided} props")
+    return df
+
+
+def apply_starter_tier_penalty(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Adjust rank_score by starter_tier.
+    Sign-aware: for negative scores, dividing by mult makes them more negative
+    (a true penalty regardless of sign).
+    """
+    if "starter_tier" not in df.columns or "rank_score" not in df.columns:
+        return df
+
+    mult = (
+        df["starter_tier"]
+        .astype(str)
+        .str.strip()
+        .str.upper()
+        .map(STARTER_TIER_MULTIPLIERS)
+        .fillna(STARTER_TIER_MULTIPLIERS["UNKNOWN"])
+    )
+
+    score = pd.to_numeric(df["rank_score"], errors="coerce")
+    positive_mask = score >= 0
+    score_pos = score[positive_mask] * mult[positive_mask]
+    score_neg = score[~positive_mask] / mult[~positive_mask]
+    score.loc[positive_mask] = score_pos
+    score.loc[~positive_mask] = score_neg
+    df["rank_score"] = score
+    return df
+
+
 def _def_adjustment(row: pd.Series, n_teams: int = 15) -> float:
     """Soccer defense adjustment — scale around midpoint of n_teams."""
     rank = _safe_float(row.get("OVERALL_DEF_RANK", np.nan))
@@ -1032,12 +1113,14 @@ def main() -> None:
         out["final_score"] = _to_num(out["final_score"]).astype(float) + _pen_soc.values
 
     out["rank_score"] = out["final_score"]
+    out = apply_starter_tier_penalty(out)
     out["tier"]       = out.apply(
         lambda r: _tier_from_score_by_picktype(r["rank_score"], str(r.get("pick_type", "Standard"))),
         axis=1
     )
     if "recommended_side" not in out.columns:
         out["recommended_side"] = out["bet_direction"]
+    out = apply_position_prop_gates(out)
     out = build_feature_vector(out, "Soccer")
     out = apply_ticket_eligibility_voids(out, "SOCCER")
     elig_mask = out["eligible"].astype(int).eq(1)

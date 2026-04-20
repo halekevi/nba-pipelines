@@ -51,6 +51,7 @@ HOTFIX:
 from __future__ import annotations
 
 import argparse
+import itertools
 import json
 import logging
 import math
@@ -818,8 +819,13 @@ def build_ticket_payout_json(group_name: str, ticket_rows: list) -> dict[str, An
 def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
     """
     True if slip should appear on /tickets JSON and page.
-    Gate: empirical payout.ev >= MIN_TICKET_EV_BY_LEGS[n_legs], OR payout recommendation in
-    STRONG/OK. Else modeled est_ev vs same bar.
+
+    Hygiene (all sports): never show SKIP, negative empirical payout.ev, negative est_ev,
+    or modeled win prob below MIN_WEB_DISPLAY_EST_WIN_PROB.
+
+    Then: pure Tennis / Soccer bypass only the *min-EV threshold* (sparse boards).
+
+    Other sports: payout.ev >= bar OR STRONG/OK, else est_ev >= bar.
     """
     n_legs = _ticket_n_legs(ticket)
     min_ev = float(MIN_TICKET_EV_BY_LEGS.get(int(n_legs), MIN_TICKET_EV_DEFAULT))
@@ -829,12 +835,46 @@ def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
         for leg in legs
         if isinstance(leg, dict)
     }
-    # Keep pure Tennis slips visible on the web tickets page even when empirical EV
-    # is below the global cutoff; Tennis boards are often sparse and otherwise vanish.
-    if leg_sports and leg_sports.issubset({"TENNIS"}):
-        return True
+
+    wp = ticket.get("est_win_prob")
+    if wp is not None:
+        try:
+            wpf = float(wp)
+            if math.isfinite(wpf) and wpf < float(MIN_WEB_DISPLAY_EST_WIN_PROB):
+                return False
+        except (TypeError, ValueError):
+            pass
 
     pay = ticket.get("payout")
+    if isinstance(pay, dict):
+        rec_u = str(pay.get("recommendation") or "").strip().upper()
+        if rec_u == "SKIP":
+            return False
+        ev_raw = pay.get("ev")
+        if ev_raw is not None:
+            try:
+                v = float(ev_raw)
+                if math.isfinite(v) and v < 0:
+                    return False
+            except (TypeError, ValueError):
+                pass
+
+    est_neg = ticket.get("est_ev")
+    if est_neg is not None:
+        try:
+            ve = float(est_neg)
+            if math.isfinite(ve) and ve < 0:
+                return False
+        except (TypeError, ValueError):
+            pass
+
+    # Pure Tennis / Soccer: after hygiene, skip the global min-EV bar only.
+    if leg_sports and (
+        leg_sports.issubset({"TENNIS"})
+        or leg_sports.issubset({"SOCCER", "SOC"})
+    ):
+        return True
+
     if isinstance(pay, dict):
         rec_ok = str(pay.get("recommendation") or "").strip().upper() in (
             "STRONG",
@@ -937,6 +977,18 @@ def _apply_web_ticket_template(groups: list[dict]) -> list[dict]:
     for gi, g in enumerate(groups):
         tickets = list(g.get("tickets") or [])
         kept = [t for ti, t in enumerate(tickets) if (gi, ti) in selected_ids]
+        # Keep template-sized slips that never entered the per-sport quota pool (e.g. cross-sport,
+        # or legs missing sport before payload fixes). Otherwise they vanish whenever any other slip
+        # activates the template filter.
+        for ti, t in enumerate(tickets):
+            if (gi, ti) in selected_ids or not isinstance(t, dict):
+                continue
+            nl = _ticket_n_legs(t)
+            if nl not in WEB_TICKET_TEMPLATE_BY_LEGS:
+                continue
+            if _ticket_primary_sport(t):
+                continue
+            kept.append(t)
         if not kept:
             continue
         ng = dict(g)
@@ -945,15 +997,18 @@ def _apply_web_ticket_template(groups: list[dict]) -> list[dict]:
     return out_groups
 
 
-def filter_positive_ev_tickets_payload(payload: dict) -> dict:
-    """Only persist / show slips that pass _ticket_passes_positive_ev_gate; drop empty groups."""
+def filter_web_tickets_for_ui(payload: dict, *, require_positive_ev: bool) -> dict:
+    """Build /tickets JSON groups: optional positive-EV gate, then WEB_TICKET_TEMPLATE quotas."""
     groups_in = list(payload.get("groups") or [])
     out_groups: list[dict] = []
     for g in groups_in:
         if not isinstance(g, dict):
             continue
         tickets_in = list(g.get("tickets") or [])
-        kept = [t for t in tickets_in if isinstance(t, dict) and _ticket_passes_positive_ev_gate(t)]
+        if require_positive_ev:
+            kept = [t for t in tickets_in if isinstance(t, dict) and _ticket_passes_positive_ev_gate(t)]
+        else:
+            kept = [t for t in tickets_in if isinstance(t, dict)]
         if not kept:
             continue
         ng = dict(g)
@@ -963,6 +1018,11 @@ def filter_positive_ev_tickets_payload(payload: dict) -> dict:
     out = dict(payload)
     out["groups"] = out_groups
     return out
+
+
+def filter_positive_ev_tickets_payload(payload: dict) -> dict:
+    """Only persist / show slips that pass _ticket_passes_positive_ev_gate; drop empty groups."""
+    return filter_web_tickets_for_ui(payload, require_positive_ev=True)
 
 
 def print_positive_ev_gate_report(gated_preview: dict) -> None:
@@ -1078,10 +1138,21 @@ def _ticket_group_leg_fingerprint(tickets: list) -> frozenset:
     return frozenset(acc)
 
 
+def _ticket_group_dedupe_key(tickets: list) -> tuple[frozenset, tuple[str, ...]]:
+    """Leg set + ticket_type per slip so Flex vs Power with the same legs are not merged."""
+    leg_fp = _ticket_group_leg_fingerprint(tickets)
+    types = tuple(
+        str(t.get("ticket_type", "")).strip().lower()
+        for t in (tickets or [])
+        if isinstance(t, dict)
+    )
+    return (leg_fp, types)
+
+
 def dedupe_ticket_groups_by_leg_set(all_ticket_groups: list) -> tuple[list, int, int]:
-    # Deduplicate: drop groups with identical player+prop+line+direction sets
+    # Deduplicate: drop groups with identical legs AND ticket product (Flex vs Power Std 3, etc.)
     n_before = len(all_ticket_groups)
-    seen: set[frozenset] = set()
+    seen: set[tuple[frozenset, tuple[str, ...]]] = set()
     out: list = []
     for item in all_ticket_groups:
         if not isinstance(item, (list, tuple)) or len(item) < 2:
@@ -1094,9 +1165,10 @@ def dedupe_ticket_groups_by_leg_set(all_ticket_groups: list) -> tuple[list, int,
         if len(fp) == 0:
             out.append((group_name, tickets, *tail))
             continue
-        if fp in seen:
+        key = _ticket_group_dedupe_key(tickets)
+        if key in seen:
             continue
-        seen.add(fp)
+        seen.add(key)
         out.append((group_name, tickets, *tail))
     return out, n_before, len(out)
 
@@ -1584,6 +1656,9 @@ MIN_TICKET_EV_BY_LEGS: dict[int, float] = {
     5: 1.25,
     6: 1.50,
 }
+
+# /tickets: hide slips at or below this modeled all-hit win prob (clutter / lottery tickets).
+MIN_WEB_DISPLAY_EST_WIN_PROB: float = 0.06
 
 # /tickets page target volumes per sport after EV gate.
 WEB_TICKET_TEMPLATE_BY_LEGS: dict[int, int] = {
@@ -2316,6 +2391,186 @@ def flex_cash_prob(leg_probs_with_source: list) -> float:
     return float(np.clip(prod_all + one_miss, TICKET_PROB_FLOOR, TICKET_PROB_CAP))
 
 
+def _best_flex3_rows_from_long_ticket(rows: list[dict]) -> list[dict] | None:
+    """
+    If a 4+ leg slip was built but greedy Flex 3 failed, pick the 3-leg subset with
+    highest modeled flex cash (independent-leg approximation used in finalize).
+    """
+    if not rows or len(rows) < 3:
+        return None
+    if len(rows) == 3:
+        return [dict(r) for r in rows]
+    best: list[dict] | None = None
+    best_sc = -1.0
+    for combo in itertools.combinations(range(len(rows)), 3):
+        r3 = [rows[i] for i in combo]
+        leg_probs = [_resolve_leg_prob(pd.Series(r)) for r in r3]
+        sc = flex_cash_prob(leg_probs)
+        if sc > best_sc:
+            best_sc = sc
+            best = [dict(r) for r in r3]
+    return best
+
+
+_GUARANTEE_FLEX3_SPORT_KEYS: frozenset[str] = frozenset({"SOCCER", "TENNIS", "MLB", "NHL"})
+
+
+def _normalize_sport_key_for_flex3_guarantee(raw: object) -> str:
+    u = str(raw or "").strip().upper()
+    if u in ("SOC", "SOCCER"):
+        return "SOCCER"
+    return u
+
+
+def _ticket_normalized_single_sport(ticket: dict) -> str | None:
+    rows = list(ticket.get("rows") or [])
+    sports = {
+        _normalize_sport_key_for_flex3_guarantee(r.get("sport"))
+        for r in rows
+        if isinstance(r, dict) and str(r.get("sport") or "").strip()
+    }
+    if len(sports) == 1:
+        return next(iter(sports))
+    if not sports:
+        ts = _normalize_sport_key_for_flex3_guarantee(ticket.get("sport"))
+        if ts in _GUARANTEE_FLEX3_SPORT_KEYS:
+            return ts
+    return None
+
+
+def _ticket_is_cross_sport(ticket: dict) -> bool:
+    rows = list(ticket.get("rows") or [])
+    sports = {
+        _normalize_sport_key_for_flex3_guarantee(r.get("sport"))
+        for r in rows
+        if isinstance(r, dict) and str(r.get("sport") or "").strip()
+    }
+    return len(sports) >= 2
+
+
+def _builder_ticket_n_legs(ticket: dict) -> int:
+    try:
+        n = int(ticket.get("n_legs") or 0)
+        if n > 0:
+            return n
+    except (TypeError, ValueError):
+        pass
+    return len(list(ticket.get("rows") or []))
+
+
+def _top3_rows_by_hit_rate(rows: list[dict]) -> list[dict] | None:
+    """Pick three legs with highest numeric hit_rate (for guaranteed Flex 3 from 4+)."""
+    if len(rows) < 3:
+        return None
+    scored: list[tuple[float, dict]] = []
+    for r in rows:
+        if not isinstance(r, dict):
+            continue
+        hr = float(pd.to_numeric(r.get("hit_rate"), errors="coerce") or 0.0)
+        scored.append((hr, dict(r)))
+    if len(scored) < 3:
+        return None
+    scored.sort(key=lambda x: (-x[0], str(x[1].get("player", ""))))
+    return [dict(x[1]) for x in scored[:3]]
+
+
+def _flex3_guarantee_prefix_and_hdr(skey: str) -> tuple[str, str]:
+    if skey == "SOCCER":
+        return "Soccer", C["hdr_soccer"]
+    if skey == "TENNIS":
+        return "Tennis", C["hdr_tennis"]
+    if skey == "MLB":
+        return "MLB", C["hdr_mlb"]
+    if skey == "NHL":
+        return "NHL", C["hdr_nhl"]
+    return "MIX", C["hdr_mix"]
+
+
+def apply_guaranteed_flex3_backfill_from_four_plus(
+    all_ticket_groups: list,
+    counters: dict,
+    wb: Any,
+) -> None:
+    """
+    After all ticket groups are built: for Soccer/Tennis/MLB/NHL, if any slip has n>=4 and none
+    has n==3, add Flex 3 from the best 4+ slip's top 3 legs by hit_rate. Same for cross-sport slips.
+    """
+    for skey in sorted(_GUARANTEE_FLEX3_SPORT_KEYS):
+        has3 = False
+        cands: list[tuple[int, float, dict, str]] = []
+        for gname, tickets, *_ in all_ticket_groups:
+            for t in tickets or []:
+                if not isinstance(t, dict):
+                    continue
+                if _ticket_normalized_single_sport(t) != skey:
+                    continue
+                n = _builder_ticket_n_legs(t)
+                if n == 3:
+                    has3 = True
+                if n >= 4:
+                    avg_hr = float(t.get("avg_hit_rate") or 0.0)
+                    cands.append((n, avg_hr, t, str(gname)))
+        if has3 or not cands:
+            continue
+        cands.sort(key=lambda x: (-x[0], -x[1]))
+        best_t = cands[0][2]
+        rows = list(best_t.get("rows") or [])
+        rows3 = _top3_rows_by_hit_rate(rows)
+        if not rows3:
+            continue
+        prefix, bg_hdr = _flex3_guarantee_prefix_and_hdr(skey)
+        fin = _finalize_structure_ticket_dict(
+            rows3, "flex", prefix, "flex", 3, counters, False
+        )
+        if fin is None:
+            print(f"  [flex3-guarantee] WARN: could not finalize {prefix} Flex 3 from 4+ slip")
+            continue
+        fin.setdefault("ticket_type", "Flex")
+        display = f"{prefix} Flex 3-Leg · from 4+"
+        sname = _excel_ticket_sheet_title_unique(display, wb.sheetnames)
+        write_ticket_sheet(wb, [fin], sname, bg_hdr, label=f"{prefix} Flex")
+        all_ticket_groups.append((display, [fin], None))
+        print(
+            f"  [flex3-guarantee] {prefix}: Flex 3 from top HR legs of {cands[0][0]}-leg slip "
+            f"(no natural 3-leg found)"
+        )
+
+    has3x = False
+    cands_x: list[tuple[int, float, dict, str]] = []
+    for gname, tickets, *_ in all_ticket_groups:
+        for t in tickets or []:
+            if not isinstance(t, dict):
+                continue
+            if not _ticket_is_cross_sport(t):
+                continue
+            n = _builder_ticket_n_legs(t)
+            if n == 3:
+                has3x = True
+            if n >= 4:
+                avg_hr = float(t.get("avg_hit_rate") or 0.0)
+                cands_x.append((n, avg_hr, t, str(gname)))
+    if has3x or not cands_x:
+        return
+    cands_x.sort(key=lambda x: (-x[0], -x[1]))
+    rows = list(cands_x[0][2].get("rows") or [])
+    rows3 = _top3_rows_by_hit_rate(rows)
+    if not rows3:
+        return
+    fin = _finalize_structure_ticket_dict(rows3, "flex", "MIX", "flex", 3, counters, False)
+    if fin is None:
+        print("  [flex3-guarantee] WARN: could not finalize cross-sport Flex 3 from 4+ slip")
+        return
+    fin.setdefault("ticket_type", "Flex")
+    display = "Cross-sport Flex 3-Leg · from 4+"
+    sname = _excel_ticket_sheet_title_unique(display, wb.sheetnames)
+    write_ticket_sheet(wb, [fin], sname, C["hdr_mix"], label="Cross-sport Flex")
+    all_ticket_groups.append((display, [fin], None))
+    print(
+        f"  [flex3-guarantee] cross-sport: Flex 3 from top HR legs of {cands_x[0][0]}-leg slip "
+        "(no natural 3-leg found)"
+    )
+
+
 def _greedy_ticket_with_first_leg(cand: pd.DataFrame, n_legs: int, first_idx: int) -> list[pd.Series] | None:
     """Greedy unique-player fill in cand row order; first leg locked to cand.iloc[first_idx]."""
     cand = cand.reset_index(drop=True)
@@ -2361,6 +2616,23 @@ def _modeled_ticket_paid_score(rows: list[dict], flow: str, n_legs: int) -> tupl
     return score, ep, flex_cash
 
 
+def _greedy_ticket_ev_rank_metric(rows: list[dict], flow: str, n_legs: int) -> float:
+    """
+    Payout-adjusted EV proxy for ranking greedy candidates: flex n≥3 uses flex_cash×adj_flex;
+    otherwise est win prob × adj power payout (matches ticket ev_power spirit).
+    """
+    leg_probs = [_resolve_leg_prob(pd.Series(r)) for r in rows]
+    cmult, _ = _correlation_multiplier_and_audit(rows)
+    ep = win_prob(leg_probs, n_legs) * cmult
+    flex_cash = flex_cash_prob(leg_probs) * cmult if n_legs >= 3 else ep
+    po = PAYOUT.get(int(n_legs), {"power": 0.0, "flex": 0.0})
+    adj_p = calc_adjusted_payout(float(po["power"]), rows)
+    adj_f = calc_adjusted_payout(float(po["flex"]), rows)
+    if str(flow) == "flex" and int(n_legs) >= 3:
+        return float(flex_cash * adj_f)
+    return float(ep * adj_p)
+
+
 def _ticket_row_dedup_key(rows: list[dict]) -> frozenset[str]:
     return frozenset((str(r.get("player", "")) + "|" + str(r.get("prop_type", ""))).strip() for r in rows)
 
@@ -2374,13 +2646,14 @@ def _rank_greedy_tickets_by_paid_metric(
 ) -> list[tuple[list[dict], float, float, float]]:
     """
     Rank up to max_tickets distinct greedy slips from the first K first-leg seeds (sorted-candidate order).
+    Sorts by payout-adjusted EV proxy first, then modeled hit/flex score (see _greedy_ticket_ev_rank_metric).
     """
     cand = cand.reset_index(drop=True)
     eligible_idx = [i for i in range(len(cand)) if str(cand.iloc[i].get("player", "") or "").strip()]
     if not eligible_idx:
         return []
     n_starts = max(1, min(int(ticket_gen_starts), len(eligible_idx)))
-    ranked: list[tuple[list[dict], float, float, float]] = []
+    ranked_work: list[tuple[list[dict], float, float, float, float]] = []
     seen: set[frozenset[str]] = set()
     for s in range(n_starts):
         first_idx = eligible_idx[s]
@@ -2393,10 +2666,11 @@ def _rank_greedy_tickets_by_paid_metric(
             continue
         seen.add(key)
         score, ep, fc = _modeled_ticket_paid_score(rows, flow, n_legs)
-        ranked.append((rows, score, ep, fc))
-    ranked.sort(key=lambda x: -x[1])
+        ev_m = _greedy_ticket_ev_rank_metric(rows, flow, n_legs)
+        ranked_work.append((rows, score, ep, fc, ev_m))
+    ranked_work.sort(key=lambda x: (-x[4], -x[1]))
     max_keep = max(1, int(max_tickets))
-    return ranked[:max_keep]
+    return [(t[0], t[1], t[2], t[3]) for t in ranked_work[:max_keep]]
 
 
 def _pick_best_greedy_ticket_by_paid_metric(
@@ -2457,6 +2731,20 @@ def _finalize_structure_ticket_dict(
     counters: dict | None,
     prioritize_ticket_hit: bool,
 ) -> dict | None:
+    # Many step8 rows omit sport; web template / EV grouping need per-leg sport for _ticket_primary_sport.
+    sl = str(sport_label or "").strip()
+    rows_use: list[dict] = []
+    for r in rows:
+        if not isinstance(r, dict):
+            continue
+        rd = dict(r)
+        if sl and not str(rd.get("sport") or "").strip():
+            rd["sport"] = sl
+        rows_use.append(rd)
+    if len(rows_use) < int(n_legs):
+        return None
+    rows = rows_use
+
     leg_probs = [_resolve_leg_prob(pd.Series(r)) for r in rows]
     cmult, caudit = _correlation_multiplier_and_audit(rows)
     ep = win_prob(leg_probs, n_legs) * cmult
@@ -2998,7 +3286,11 @@ def ticket_groups_to_payload(
         "groups": [],
     }
 
-    for group_name, tickets, _bg in all_ticket_groups:
+    _ordered_groups = sorted(
+        enumerate(all_ticket_groups),
+        key=lambda ix_t: (_ticket_group_sort_rank(str(ix_t[1][0])), ix_t[0]),
+    )
+    for _, (group_name, tickets, _bg) in _ordered_groups:
         if not tickets:
             continue
 
@@ -3052,7 +3344,7 @@ def ticket_groups_to_payload(
 
                 _dpv = gd_leg_delta_pct(gv("line"), gv("standard_line"))
                 leg = {
-                    "sport": str(gv("sport") or ""),
+                    "sport": str(gv("sport") or t.get("sport") or "").strip(),
                     "player": str(gv("player") or ""),
                     "team": str(gv("team") or ""),
                     "opp": str(gv("opp") or ""),
@@ -3170,7 +3462,10 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
         for _, r in df.iterrows():
             def g(c):
                 return safe(r[c]) if c in df.columns else None
-            rows.append({
+            # Home Slate Explorer + /api/slate-sport only read these keys (see ui_runner/app.py
+            # _SLATE_SPORT_UI_KEYS). Omitting cross-book and extra L5 columns shrinks slate_latest.json
+            # and speeds mobile fetch + parse.
+            row = {
                 "tier":       g("tier"),
                 "rank_score": g("rank_score"),
                 "player":     g("player") or "",
@@ -3179,22 +3474,14 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
                 "prop":       g("prop_type") or g("prop") or "",
                 "pick_type":  g("pick_type") or "",
                 "line":       g("line"),
-                "line_underdog": g("line_underdog"),
-                "line_draftkings": g("line_draftkings"),
-                "best_cross_line": g("best_cross_line"),
-                "best_cross_book": g("best_cross_book"),
-                "cross_edge_vs_pp": g("cross_edge_vs_pp"),
-                "cross_n_books": g("cross_n_books"),
                 "dir":        g("direction") or g("dir") or "",
                 "edge":       g("edge"),
                 "hit_rate":   g("hit_rate"),
-                "l5_avg":     g("l5_avg"),
                 "l5_over":    g("l5_over"),
                 "l5_under":   g("l5_under"),
-                "l5_side_hits": g("l5_side_hits"),
-                "l5_consistency": g("l5_consistency"),
-                "game_time":  str(g("game_time") or ""),
-            })
+                "game_time":  str(g("game_time") or "") or None,
+            }
+            rows.append({k: v for k, v in row.items() if v is not None})
         return rows
 
     payload = {
@@ -3398,7 +3685,7 @@ body::before{
 /* scanlines */
 body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;}
 
-#app{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:0 20px 24px;}
+#app{position:relative;z-index:1;width:100%;max-width:min(1920px,98vw);margin:0 auto;padding:0 clamp(10px,2.5vw,28px) 24px;box-sizing:border-box;}
 
 /* nav */
 nav{display:flex;align-items:center;gap:16px;padding:10px 0 12px;border-bottom:1px solid rgba(196,166,107,.22);flex-wrap:wrap;position:sticky;top:0;z-index:220;background:rgba(7,10,19,0.90);backdrop-filter:blur(22px) saturate(180%);}
@@ -3981,12 +4268,13 @@ html[data-theme="light"] .ticket{
     return "\n".join(html_parts)
 
 
-def write_web_outputs(payload, outdir: str):
+def write_web_outputs(payload, outdir: str, *, require_positive_ev: bool = True):
     """Write tickets_latest.json for /tickets; graded HTML is build_ticket_eval.py → ticket_eval_<date>.html."""
     os.makedirs(outdir, exist_ok=True)
     json_path = os.path.join(outdir, "tickets_latest.json")
-    # Only persist positive-EV (non-negative empirical EV) slips for web JSON.
-    payload = filter_positive_ev_tickets_payload(payload)
+    payload = filter_web_tickets_for_ui(payload, require_positive_ev=require_positive_ev)
+    if not require_positive_ev:
+        print("  [web] EV gate OFF — JSON includes top slips per sport/leg-count (workbook pool, template caps)")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
     print(f"[OK] Web JSON  -> {json_path}")
@@ -7971,6 +8259,14 @@ def main():
         help="Write tickets_latest.json for web/Railway (graded HTML via build_ticket_eval.py)",
     )
     ap.add_argument(
+        "--no-web-ev-gate",
+        action="store_true",
+        dest="no_web_ev_gate",
+        help="Put more sports on /tickets: skip positive-EV filter for JSON (template per sport/leg-count still applies). "
+        "Default web JSON drops SKIP / negative-EV / very-low win-prob slips, then keeps "
+        "empirical EV or STRONG/OK (pure Tennis / Soccer bypass only the min-EV threshold).",
+    )
+    ap.add_argument(
         "--web-outdir",
         default=DEFAULT_WEB_OUTDIR,
         help="Folder to write tickets_latest.json (+ slate_latest.json)",
@@ -8103,11 +8399,15 @@ def main():
     }
 
     print(f"Loading NBA slate from {args.nba}...")
-    nba = load_nba(args.nba)
-    nba = enforce_target_date(
-        nba, "NBA", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
-    )
-    print(f"  {len(nba)} NBA props loaded")
+    try:
+        nba = load_nba(args.nba)
+        nba = enforce_target_date(
+            nba, "NBA", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+        )
+        print(f"  {len(nba)} NBA props loaded")
+    except (FileNotFoundError, OSError) as e:
+        print(f"  WARNING: NBA slate unavailable ({type(e).__name__}: {e}); continuing with 0 NBA props.")
+        nba = pd.DataFrame()
     _load_audit_row("NBA", args.nba, nba)
 
     if "CBB" in DISABLED_SPORTS:
@@ -8724,6 +9024,51 @@ def main():
         ps3_list = _structured_list("power_std3")
         g3_list = _structured_list("goblin3")
 
+        # Greedy Flex 3 can fail on thin goblin pools while Power/Flex 4+ still fills.
+        # If we have any 4–6 leg slip, derive Flex 3 from the best 3-leg subset of that slip.
+        if not f_list:
+            src_long = None
+            for cand in (f4_list, f5_list, f6_list, p4_list, p5_list, p6_list):
+                if cand:
+                    src_long = cand[0]
+                    break
+            if src_long is not None:
+                rows_long = list(src_long.get("rows") or [])
+                rows3 = _best_flex3_rows_from_long_ticket(rows_long)
+                if rows3:
+                    # Backfill must not re-apply flex-cash floor if greedy Flex failed for pool-order reasons.
+                    fin3 = _finalize_structure_ticket_dict(
+                        rows3,
+                        "flex",
+                        sport_label,
+                        "flex",
+                        3,
+                        counters,
+                        False,
+                    )
+                    if fin3 is not None:
+                        f_list = [fin3]
+            # Tennis / Soccer often cap at 3 legs (no 4+ source): reuse Power Std 3 or Goblin 3 legs as Flex 3.
+            if not f_list:
+                for src3 in (ps3_list, g3_list):
+                    if not src3:
+                        continue
+                    rows3 = list(src3[0].get("rows") or [])
+                    if len(rows3) < 3:
+                        continue
+                    fin3 = _finalize_structure_ticket_dict(
+                        rows3,
+                        "flex",
+                        sport_label,
+                        "flex",
+                        3,
+                        counters,
+                        False,
+                    )
+                    if fin3 is not None:
+                        f_list = [fin3]
+                        break
+
         if (
             not p_list and not p4_list and not p5_list and not p6_list
             and not f_list and not f4_list and not f5_list and not f6_list
@@ -9111,6 +9456,8 @@ def main():
     if bool(_diversity_cfg.get("enabled", True)):
         all_ticket_groups = _apply_diversity_filter_to_ticket_groups(all_ticket_groups, _diversity_cfg)
         print(f"  [diversity] groups after filter: {len(all_ticket_groups)}")
+    # Diversity can drop every 3-leg group while leaving 4+ — re-check so /tickets always has Flex 3 when 4+ exists.
+    apply_guaranteed_flex3_backfill_from_four_plus(all_ticket_groups, counters, wb)
     _post_slips = sum(len(t[1]) for t in all_ticket_groups)
     _lc_groups_post: Counter[int] = Counter()
     for _sn, _tickets, _ in all_ticket_groups:
@@ -9209,13 +9556,14 @@ def main():
             print(f"  Web payload: {n_groups} groups, {n_slips} slips (FINAL fallback).")
             gated_preview = filter_positive_ev_tickets_payload(payload)
             print_positive_ev_gate_report(gated_preview)
-        write_web_outputs(payload, args.web_outdir)
+        _web_ev = not bool(args.no_web_ev_gate)
+        write_web_outputs(payload, args.web_outdir, require_positive_ev=_web_ev)
         # nfl: pass None until combined loads NFL step8; keep key "nfl": [] in slate_latest.json for UI.
         nfl = None
         write_slate_json(nba, cbb, nhl, soccer, args.date, args.web_outdir,
                          wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis, nfl=nfl)
         if args.also_root:
-            write_web_outputs(payload, outdir=".")
+            write_web_outputs(payload, outdir=".", require_positive_ev=_web_ev)
         # Avoid Windows console codepage issues with unicode checkmarks.
         print("[OK] Web outputs complete.")
 
@@ -9395,6 +9743,27 @@ def _group_sport(group_name: str) -> str:
         if sp in name:
             return sp
     return "NBA"
+
+
+# Align with Slate Explorer sport order; cross-sport / mix buckets sort last.
+_TICKET_GROUP_SPORT_SORT_ORDER: dict[str, int] = {
+    "NBA": 0,
+    "NBA1H": 1,
+    "NBA1Q": 2,
+    "CBB": 3,
+    "WCBB": 4,
+    "NHL": 5,
+    "SOCCER": 6,
+    "MLB": 7,
+    "TENNIS": 8,
+    "CROSS": 10_000,
+    "MIX": 10_000,
+}
+
+
+def _ticket_group_sort_rank(group_name: str) -> int:
+    sk = _group_sport(group_name)
+    return _TICKET_GROUP_SPORT_SORT_ORDER.get(sk, 999)
 
 
 _EV_REC_RANK = {"LOW": 0, "SKIP": 0, "MARGINAL": 1, "OK": 2, "STRONG": 3}
@@ -9937,6 +10306,12 @@ def render_tickets_body_html(
             }
         )
 
+    prepared.sort(
+        key=lambda ent: (
+            _ticket_group_sort_rank(str(ent["group"].get("group_name") or "")),
+            int(ent.get("original_index", 0)),
+        )
+    )
     filter_attr_rows = [
         {"sport": x["sport"], "type": x["type"], "pick": x["pick"], "ev": x["ev"]} for x in prepared
     ]
@@ -10417,6 +10792,22 @@ def render_tickets_body_html(
       if(h) h.setAttribute('aria-expanded', 'false');
     });
   });
+
+  (function(){
+    function mob(){ return window.matchMedia('(max-width: 900px), (pointer: coarse)').matches; }
+    function collapseAllGroupsMobile(){
+      if(!mob()) return;
+      document.querySelectorAll('.ticket-group-section').forEach(function(s){
+        s.classList.add('collapsed');
+        var h = s.querySelector('.collapsible-header');
+        if(h) h.setAttribute('aria-expanded', 'false');
+      });
+    }
+    collapseAllGroupsMobile();
+    var mm = window.matchMedia('(max-width: 900px), (pointer: coarse)');
+    if(mm.addEventListener) mm.addEventListener('change', collapseAllGroupsMobile);
+    else if(mm.addListener) mm.addListener(collapseAllGroupsMobile);
+  })();
 })();
 </script>''')
 

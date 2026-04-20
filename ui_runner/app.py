@@ -46,6 +46,7 @@ from flask import (
     redirect,
     render_template,
     request,
+    send_file,
     send_from_directory,
 )
 from markupsafe import Markup
@@ -66,6 +67,28 @@ ARCHIVE_DIR   = TEMPLATES_DIR / "archive"
 STATIC_DIR    = UI_DIR / "static"
 # Bundled graded-prop exports for deploy hosts without data/cache/*_props_history.db (see scripts/export_grades_props_bundle.py).
 GRADES_PROPS_EXPORT_DIR = UI_DIR / "data" / "grades_props"
+
+
+def _persistent_data_root() -> Path:
+    """
+    Writable data root for payout logs and similar artifacts.
+
+    Railway: add a Volume mounted at /app/data (or set PROPORACLE_PERSISTENT_DATA_DIR /
+    RAILWAY_VOLUME_MOUNT_PATH). Local dev: repo ``data/`` under BASE_DIR.
+    """
+    for key in ("PROPORACLE_PERSISTENT_DATA_DIR", "RAILWAY_VOLUME_MOUNT_PATH"):
+        raw = (os.environ.get(key) or "").strip()
+        if raw:
+            return Path(raw).expanduser().resolve()
+    if (os.environ.get("RAILWAY_ENVIRONMENT") or "").strip() and Path("/app/data").is_dir():
+        return Path("/app/data").resolve()
+    return (BASE_DIR / "data").resolve()
+
+
+DATA_ROOT = _persistent_data_root()
+PAYOUT_SAMPLES_DIR = DATA_ROOT / "payout_samples"
+PAYOUT_LOG_PATH = PAYOUT_SAMPLES_DIR / "payout_log_hand.csv"
+PAYOUT_OBS_PATH = DATA_ROOT / "payout_observations.csv"
 
 # Pipeline output paths (used by status + slate endpoints)
 NBA_DIR       = BASE_DIR / "NBA"
@@ -107,6 +130,12 @@ app = Flask(
     static_folder=str(STATIC_DIR) if STATIC_DIR.exists() else None,
 )
 
+try:
+    DATA_ROOT.mkdir(parents=True, exist_ok=True)
+    PAYOUT_SAMPLES_DIR.mkdir(parents=True, exist_ok=True)
+except OSError:
+    pass
+
 # Optional: flask-compress if installed (requirements.txt does not include it).
 try:
     from flask_compress import Compress as _FlaskCompress  # type: ignore[import-not-found]
@@ -117,7 +146,7 @@ except ImportError:
     _APP_USES_FLASK_COMPRESS = False
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-04-16-global-scrollbar"
+_UI_BUILD_ID = "2026-04-19-payout-volume"
 
 
 def _deploy_git_sha_short() -> str:
@@ -724,14 +753,55 @@ _SLATE_SPORT_UI_KEYS = frozenset(
 )
 
 
+def _slim_slate_sport_cell(key: str, v: Any) -> Any:
+    """Normalize values for smaller JSON and stable sorting in the client."""
+    if v is None:
+        return None
+    if isinstance(v, str):
+        s = v.strip()
+        return s if s else None
+    if isinstance(v, bool):
+        return v
+    if isinstance(v, (int, float)):
+        if isinstance(v, float) and (math.isnan(v) or math.isinf(v)):
+            return None
+        if key in ("edge", "rank_score"):
+            return round(float(v), 4)
+        if key == "hit_rate":
+            return round(float(v), 6)
+        if key in ("line", "l5_over", "l5_under"):
+            fv = float(v)
+            if fv.is_integer():
+                return int(fv)
+            return round(fv, 3)
+        return v
+    return v
+
+
+def _slim_slate_sport_row(r: dict) -> dict:
+    """One slate row: only UI keys, omit nulls / blanks after coercion."""
+    slim: dict[str, Any] = {}
+    for kk in _SLATE_SPORT_UI_KEYS:
+        if kk not in r:
+            continue
+        cv = _slim_slate_sport_cell(kk, r[kk])
+        if cv is None:
+            continue
+        slim[kk] = cv
+    return slim
+
+
 def _slim_slate_sport_payload(payload: dict) -> dict:
     """Drop unused columns from /api/slate-sport to shrink the gzipped JSON payload."""
     if not isinstance(payload, dict):
         return payload
-    out = dict(payload)
     sports = payload.get("sports")
     if not isinstance(sports, dict):
-        return out
+        return {
+            "date": payload.get("date"),
+            "generated_at": payload.get("generated_at"),
+            "sports": sports,
+        }
     slim_sports: dict[str, Any] = {}
     for k, rows in sports.items():
         if not isinstance(rows, list):
@@ -740,12 +810,15 @@ def _slim_slate_sport_payload(payload: dict) -> dict:
         slim_rows: list[Any] = []
         for r in rows:
             if isinstance(r, dict):
-                slim_rows.append({kk: r[kk] for kk in _SLATE_SPORT_UI_KEYS if kk in r})
+                slim_rows.append(_slim_slate_sport_row(r))
             else:
                 slim_rows.append(r)
         slim_sports[k] = slim_rows
-    out["sports"] = slim_sports
-    return out
+    return {
+        "date": payload.get("date"),
+        "generated_at": payload.get("generated_at"),
+        "sports": slim_sports,
+    }
 
 
 def _slate_counts() -> tuple[dict[str, int], dict]:
@@ -947,14 +1020,10 @@ def page_tickets():
                 raise RuntimeError("could not load combined_slate_tickets spec")
             mod = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(mod)
-            # Filter: only show positive-EV tickets on /tickets page (defensive if JSON predates filter).
-            n_slips_before = sum(len(g.get("tickets") or []) for g in (payload.get("groups") or []))
-            payload = mod.filter_positive_ev_tickets_payload(payload)
-            n_slips_after = sum(len(g.get("tickets") or []) for g in (payload.get("groups") or []))
-            removed = max(0, n_slips_before - n_slips_after)
+            # tickets_latest.json is authoritative (EV gate applied only when combined is built with strict web mode).
             body, page_title = mod.render_tickets_body_html(
                 payload,
-                _non_ev_slips_removed=removed,
+                _non_ev_slips_removed=0,
             )
             return render_template(
                 "tickets_built.html",
@@ -2444,23 +2513,8 @@ def api_tickets_ev_top20():
 
 @app.get("/ev-top20")
 def ev_top20_redirect():
-    """Legacy path used in bookmarks; EV TOP20 page lives at /tickets/ev."""
-    return redirect("/tickets/ev", code=302)
-
-
-@app.get("/tickets/ev")
-def page_tickets_ev():
-    r = make_response(
-        render_template(
-            "tickets_ev_top20.html",
-            ui_build_id=_UI_BUILD_ID,
-            deploy_git_sha=(os.environ.get("RAILWAY_GIT_COMMIT_SHA") or os.environ.get("GIT_COMMIT") or "")[:40],
-        )
-    )
-    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
-    r.headers["Pragma"] = "no-cache"
-    r.headers["Expires"] = "0"
-    return r
+    """Legacy bookmark fallback after EV TOP20 nav removal."""
+    return redirect("/tickets", code=302)
 
 
 @app.get("/api/slate/today-tickets")
@@ -2523,11 +2577,78 @@ def api_slate_today_tickets():
     return r
 
 
+@app.get("/api/slate-legs")
+def api_slate_legs():
+    """Flatten today's tickets_latest.json legs and include ticket-grouped options."""
+    if not _template_json_available("tickets_latest.json"):
+        return jsonify({"error": "tickets_latest.json not found", "legs": [], "tickets": []}), 404
+    try:
+        data = read_json_cached(TEMPLATES_DIR / "tickets_latest.json")
+    except Exception as e:
+        return jsonify({"error": str(e), "legs": [], "tickets": []}), 500
+
+    groups = list((data or {}).get("groups") or [])
+    legs: list[dict[str, Any]] = []
+    tickets_out: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for grp in groups:
+        group_name = str((grp or {}).get("group_name") or "")
+        for t in (grp or {}).get("tickets") or []:
+            tno = t.get("ticket_no")
+            ticket_key = f"{group_name}#{tno}"
+            t_legs: list[dict[str, Any]] = []
+            for leg in (t or {}).get("legs") or []:
+                item = {
+                    "player": str(leg.get("player") or ""),
+                    "sport": str(leg.get("sport") or ""),
+                    "team": str(leg.get("team") or ""),
+                    "opp": str(leg.get("opp") or ""),
+                    "prop_type": str(leg.get("prop_type") or ""),
+                    "pick_type": str(leg.get("pick_type") or ""),
+                    "direction": str(leg.get("direction") or ""),
+                    "line": leg.get("line"),
+                    "standard_line": leg.get("standard_line") if leg.get("standard_line") is not None else leg.get("line"),
+                    "hit_rate": leg.get("hit_rate"),
+                    "ml_prob": leg.get("ml_prob"),
+                    "group_name": group_name,
+                    "ticket_no": tno,
+                    "ticket_key": ticket_key,
+                }
+                t_legs.append(item)
+                key = (
+                    f"{item['player']}|{item['prop_type']}|{item['line']}|{item['direction']}"
+                )
+                if key not in seen:
+                    seen.add(key)
+                    legs.append(item)
+            tickets_out.append(
+                {
+                    "group_name": group_name,
+                    "ticket_no": tno,
+                    "ticket_key": ticket_key,
+                    "n_legs": len(t_legs),
+                    "legs": t_legs,
+                }
+            )
+
+    r = jsonify(
+        {
+            "legs": legs,
+            "tickets": tickets_out,
+            "built_at": str((data or {}).get("built_at") or (data or {}).get("generated_at") or ""),
+            "date": str((data or {}).get("date") or ""),
+        }
+    )
+    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    r.headers["Pragma"] = "no-cache"
+    return r
+
+
 @app.post("/api/payout/log-observation")
 def api_payout_log_observation():
-    """Append one row to data/payout_observations.csv (server-side curve learning)."""
+    """Append one row to payout_observations.csv (server-side curve learning; volume when mounted)."""
     body = request.get_json(silent=True) or {}
-    csv_path = BASE_DIR / "data" / "payout_observations.csv"
+    csv_path = PAYOUT_OBS_PATH
     fieldnames = [
         "date",
         "n_legs",
@@ -2598,15 +2719,98 @@ def api_payout_log_observation():
             w.writeheader()
         w.writerow(row)
 
+    # Hand-logged payout rows used by manual screenshot calibration workflow.
+    hand_csv_path = PAYOUT_LOG_PATH
+    hand_fields = [
+        "date",
+        "group_name",
+        "n_legs",
+        "pick_types",
+        "lines",
+        "standard_lines",
+        "actual_payout_multiplier",
+        "slip_type",
+        "result",
+    ]
+    hand_row = {
+        "date": str(_f("date", "")).strip(),
+        "group_name": str(_f("group_name", "")).strip(),
+        "n_legs": str(_f("n_legs", "")).strip(),
+        "pick_types": str(_f("pick_types", "")).strip(),
+        "lines": str(_f("lines", "")).strip(),
+        "standard_lines": str(_f("standard_lines", "")).strip(),
+        "actual_payout_multiplier": actual_mult,
+        "slip_type": str(_f("slip_type", "power")).strip().lower(),
+        "result": str(_f("result", "pending")).strip().upper() or "PENDING",
+    }
+    hand_csv_path.parent.mkdir(parents=True, exist_ok=True)
+    hand_exists = hand_csv_path.exists()
+    with hand_csv_path.open("a", newline="", encoding="utf-8") as f2:
+        w2 = csv.DictWriter(f2, fieldnames=hand_fields)
+        if not hand_exists:
+            w2.writeheader()
+        w2.writerow(hand_row)
+
     n_lines = sum(1 for _ in csv_path.open("r", encoding="utf-8")) - 1
+    hand_lines = sum(1 for _ in hand_csv_path.open("r", encoding="utf-8")) - 1
     warn = bool(est_mult and abs(float(actual_mult) - float(est_mult)) > 1.5)
-    return jsonify({"saved": True, "total_obs": max(0, n_lines), "mult_delta": mult_delta, "warning_large_delta": warn})
+    csv_row = ",".join(
+        [
+            hand_row["date"],
+            hand_row["group_name"],
+            hand_row["n_legs"],
+            hand_row["pick_types"],
+            hand_row["lines"],
+            hand_row["standard_lines"],
+            str(hand_row["actual_payout_multiplier"]),
+            hand_row["slip_type"],
+            hand_row["result"],
+        ]
+    )
+    return jsonify(
+        {
+            "status": "ok",
+            "saved": True,
+            "total_obs": max(0, n_lines),
+            "total_hand_obs": max(0, hand_lines),
+            "mult_delta": mult_delta,
+            "warning_large_delta": warn,
+            "csv_row": csv_row,
+            "message": "Row appended to payout_log_hand.csv (sync from Railway via PROPORACLE_PAYOUT_EXPORT_URL in run_daily if configured)",
+        }
+    )
+
+
+@app.get("/api/payout/export-log-hand")
+def api_payout_export_log_hand():
+    """Download payout_log_hand.csv (manual / LOG THIS TICKET rows) from the persistent data root."""
+    if PAYOUT_LOG_PATH.is_file():
+        return send_file(
+            str(PAYOUT_LOG_PATH),
+            mimetype="text/csv",
+            as_attachment=True,
+            download_name="payout_log_hand.csv",
+        )
+    return jsonify({"error": "No payout_log_hand.csv yet"}), 404
+
+
+@app.get("/api/payout/export-observations")
+def api_payout_export_observations():
+    """Download payout_observations.csv (full observation log) from the persistent data root."""
+    if PAYOUT_OBS_PATH.is_file():
+        return send_file(
+            str(PAYOUT_OBS_PATH),
+            mimetype="text/csv",
+            as_attachment=True,
+            download_name="payout_observations.csv",
+        )
+    return jsonify({"error": "No payout_observations.csv yet"}), 404
 
 
 @app.get("/api/payout/observations")
 def api_payout_observations():
-    """Read server-side payout observations for /payout Patterns (data/payout_observations.csv)."""
-    csv_path = BASE_DIR / "data" / "payout_observations.csv"
+    """Read server-side payout observations for /payout Patterns (payout_observations.csv)."""
+    csv_path = PAYOUT_OBS_PATH
     if not csv_path.is_file():
         r = jsonify({"observations": [], "count": 0, "truncated": False})
         r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
@@ -2908,12 +3112,54 @@ def api_slate_sport():
         return jsonify({"error": str(e), "sports": {}}), 404
     try:
         return _gz_json_response(
-            "slate-sport-slim-v1",
+            "slate-sport-slim-v2",
             lambda: _slim_slate_sport_payload(_selected_slate_sport_payload()),
             ttl=_PIPELINE_JSON_TTL,
         )
     except Exception as e:
         return jsonify({"error": str(e), "sports": {}}), 500
+
+
+@app.get("/api/slate-sport/<sport>")
+def api_slate_sport_single(sport: str):
+    """
+    Per-sport lazy slate endpoint for the home explorer.
+    Reads slate_latest.json and returns one slimmed sport slice.
+    """
+    if not _template_json_available("slate_latest.json"):
+        return jsonify(
+            {
+                "error": "No slate JSON — run pipeline (slate_latest.json)",
+                "sport": str(sport or "").strip().lower(),
+                "rows": [],
+            }
+        ), 404
+
+    sport_key = str(sport or "").strip().lower()
+    if not sport_key:
+        return jsonify({"error": "missing sport key", "sport": sport_key, "rows": []}), 400
+
+    def _build():
+        payload = read_json_cached(TEMPLATES_DIR / "slate_latest.json")
+        sports = (payload or {}).get("sports") or {}
+        rows = sports.get(sport_key) or []
+        # Match existing UI behavior: CBB card combines cbb + wcbb rows.
+        if sport_key == "cbb":
+            rows = list(rows) + list(sports.get("wcbb") or [])
+        if not isinstance(rows, list):
+            rows = []
+        slim_rows = [_slim_slate_sport_row(r) if isinstance(r, dict) else r for r in rows]
+        return {
+            "date": payload.get("date"),
+            "generated_at": payload.get("generated_at"),
+            "sport": sport_key,
+            "rows": slim_rows,
+        }
+
+    try:
+        return _gz_json_response(f"slate-sport-single-v1:{sport_key}", _build, ttl=60.0)
+    except Exception as e:
+        return jsonify({"error": str(e), "sport": sport_key, "rows": []}), 500
 
 
 @app.get("/api/slate-excel")
@@ -3067,10 +3313,11 @@ def _find_combined_excel() -> "tuple[Path | None, str | None]":
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# API: Screenshot → Google Gemini vision (server proxy; key in GOOGLE_API_KEY).
+# API: Screenshot → Google Gemini vision (server proxy).
 #
 # Get a free Gemini API key at: https://aistudio.google.com/apikey
-# Set in Railway dashboard: GOOGLE_API_KEY = your key
+# Set in Railway dashboard: "Google Screenshot API" = your key
+# (fallback still supports GOOGLE_API_KEY for local env/.env usage)
 # Set locally: $env:GOOGLE_API_KEY = "your key"
 #
 # Optional: $env:GEMINI_VISION_MODEL = "gemini-2.5-flash"   # override default model id
@@ -3086,9 +3333,10 @@ _DEFAULT_GEMINI_VISION_MODEL = "gemini-2.5-flash-lite"
 
 @app.post("/api/vision/screenshot")
 def api_vision_screenshot():
-    key = (os.environ.get("GOOGLE_API_KEY") or "").strip()
+    key = (os.environ.get("GOOGLE_API_KEY") or os.environ.get("Google Screenshot API") or "").strip()
+    print(f"[vision] key found: {bool(key)} len={len(key)}", flush=True)
     if not key:
-        return jsonify({"error": "GOOGLE_API_KEY not set"}), 503
+        return jsonify({"error": "No API key configured"}), 503
 
     model_id = (os.environ.get("GEMINI_VISION_MODEL") or "").strip() or _DEFAULT_GEMINI_VISION_MODEL
     _mid_ok = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._-")
@@ -3106,6 +3354,16 @@ def api_vision_screenshot():
         return jsonify({"error": "missing prompt"}), 400
     if not isinstance(media_type, str):
         media_type = "image/jpeg"
+
+    # Reinforce numeric extraction (client also sends a detailed prompt). Prevents lazy defaults
+    # like 0.5 for Goblin lines when the model should read the slip pixels.
+    _vision_line_hint = (
+        "\n\nReminder: For every leg, copy the exact line numbers visible on the slip. "
+        "Do not invent values (e.g. do not default Goblin lines to 0.5). "
+        "When both market and played lines appear, put the market line in standard_line "
+        "and the slip's played line in line."
+    )
+    prompt = str(prompt) + _vision_line_hint
 
     gemini_body = {
         "contents": [
@@ -3171,79 +3429,212 @@ def api_vision_screenshot():
     )
 
 
-@app.get("/dashboard/income")
-def dashboard_income():
-    """
-    ROI / CLV / calibration / drawdown only — see DESIGN_PRINCIPLES.md.
-    Uses PROPORACLE_DB_PATH or data/cache/proporacle_income.db; ddl.sql + views.sql are applied
-    automatically on first open. When bet_result is empty, demo slates are inserted unless
-    PROPORACLE_INCOME_SEED_DEMO=0. Demo-only DBs older than PROPORACLE_INCOME_DEMO_REFRESH_DAYS
-    (default 10) are re-seeded on each request. Use real pipeline ingest for production metrics.
-    """
-    import json
+_SPORT_BREAKDOWN_ORDER = ("NBA", "MLB", "SOCCER", "TENNIS", "NHL")
 
-    err: str | None = None
-    roi_payload = {"days": [], "pnl": []}
-    clv_payload = {"buckets": [], "means": []}
-    cal_payload = {"pred": [], "hit": []}
-    eq_payload = {"days": [], "dd": []}
-    income_meta: dict = {"mode": "empty", "data_through": None}
 
+def _to_float(v: Any, default: float = 0.0) -> float:
     try:
-        from proporacle.monitoring.dashboard_queries import (
-            fetch_calibration_bins,
-            fetch_clv_by_edge_bucket,
-            fetch_equity_drawdown,
-            fetch_roi_daily,
-            income_dashboard_meta,
-            load_income_db,
-            maybe_seed_demo_income,
+        f = float(v)
+        return f if math.isfinite(f) else default
+    except (TypeError, ValueError):
+        return default
+
+
+def _to_int(v: Any, default: int = 0) -> int:
+    try:
+        return int(v)
+    except (TypeError, ValueError):
+        return default
+
+
+def _load_grade_history_rows() -> list[dict[str, Any]]:
+    path = BASE_DIR / "data" / "grade_history.json"
+    if not path.is_file():
+        return []
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    if isinstance(raw, list):
+        runs = raw
+    elif isinstance(raw, dict) and isinstance(raw.get("runs"), list):
+        runs = raw.get("runs") or []
+    else:
+        runs = []
+
+    rows: list[dict[str, Any]] = []
+    for r in runs:
+        if not isinstance(r, dict):
+            continue
+        d = str(r.get("date") or "").strip()[:10]
+        if not d:
+            continue
+        n_tickets = max(0, _to_int(r.get("n_tickets"), 0))
+        wins = max(0, _to_int(r.get("wins"), 0))
+        guarantees = max(0, _to_int(r.get("guarantees"), 0))
+        losses = max(0, _to_int(r.get("losses"), 0))
+        decided = wins + guarantees + losses
+        if decided == 0:
+            decided = n_tickets
+        paid = wins + guarantees
+        net_per_10 = _to_float(r.get("net_per_10"), 0.0)
+        net_dollars = round(net_per_10 * n_tickets, 2)
+        roi_pct = _to_float(r.get("roi_pct"), 0.0)
+        if n_tickets > 0 and abs(roi_pct) < 1e-9 and abs(net_dollars) > 1e-9:
+            roi_pct = (net_dollars / (n_tickets * 10.0)) * 100.0
+        day_win_rate = (paid / decided) if decided > 0 else None
+        rows.append(
+            {
+                "date": d,
+                "tickets": n_tickets,
+                "wins": wins,
+                "losses": losses,
+                "guarantees": guarantees,
+                "decided": decided,
+                "paid": paid,
+                "net_dollars": net_dollars,
+                "roi_pct": round(roi_pct, 2),
+                "win_rate": day_win_rate,
+            }
         )
 
-        conn = load_income_db()
+    rows.sort(key=lambda x: x["date"])
+    return rows
+
+
+def _parse_sports_tokens(raw: Any) -> list[str]:
+    s = str(raw or "").upper()
+    if not s:
+        return []
+    toks = [t for t in re.split(r"[^A-Z0-9]+", s) if t]
+    seen: set[str] = set()
+    out: list[str] = []
+    for t in toks:
+        if t not in seen:
+            seen.add(t)
+            out.append(t)
+    return out
+
+
+def _sport_breakdown_from_graded_workbooks(stake_per_ticket: float = 10.0) -> list[dict[str, Any]]:
+    stats: dict[str, dict[str, float]] = {
+        s: {"decided": 0.0, "paid": 0.0, "net": 0.0} for s in _SPORT_BREAKDOWN_ORDER
+    }
+    try:
+        import pandas as pd
+    except Exception:
+        return [{"sport": s, "decided": 0, "paid": 0, "win_rate": None, "net_dollars": 0.0} for s in _SPORT_BREAKDOWN_ORDER]
+
+    files = sorted(OUTPUTS_ROOT.glob("*/combined_tickets_graded_*.xlsx"))
+    for fp in files:
         try:
-            maybe_seed_demo_income(conn)
-            roi_rows = fetch_roi_daily(conn)
-            for r in roi_rows:
-                roi_payload["days"].append(r["bet_day"])
-                roi_payload["pnl"].append(float(r["daily_pnl"] or 0))
+            df = pd.read_excel(
+                fp,
+                sheet_name="TICKET_RESULTS",
+                usecols=["sports", "payout_status", "applied_mult", "is_cash"],
+            )
+        except Exception:
+            continue
+        if df is None or len(df) == 0:
+            continue
+        for _, row in df.iterrows():
+            toks = _parse_sports_tokens(row.get("sports"))
+            if len(toks) != 1:
+                # Skip cross-sport tickets to keep per-sport totals clean.
+                continue
+            sp = toks[0]
+            if sp not in stats:
+                continue
+            status = str(row.get("payout_status") or "").strip().upper()
+            if status in {"", "NO_ACTUAL", "PENDING"}:
+                continue
+            mult = _to_float(row.get("applied_mult"), float("nan"))
+            if not math.isfinite(mult):
+                continue
+            is_cash = _to_int(row.get("is_cash"), 0) > 0 or mult > 0
+            stats[sp]["decided"] += 1.0
+            stats[sp]["paid"] += 1.0 if is_cash else 0.0
+            stats[sp]["net"] += stake_per_ticket * (mult - 1.0)
 
-            for r in fetch_clv_by_edge_bucket(conn):
-                clv_payload["buckets"].append(r["ev_bucket"])
-                clv_payload["means"].append(float(r["mean_clv"] or 0))
-
-            for r in fetch_calibration_bins(conn):
-                if r["pred_mean"] is not None and r["hit_rate"] is not None:
-                    cal_payload["pred"].append(float(r["pred_mean"]))
-                    cal_payload["hit"].append(float(r["hit_rate"]))
-
-            br0 = float(os.environ.get("PROPORACLE_BANKROLL_0", "200"))
-            for r in fetch_equity_drawdown(conn, bankroll_0=br0):
-                eq_payload["days"].append(r["bet_day"])
-                eq_payload["dd"].append(float(r["drawdown"]))
-            income_meta = income_dashboard_meta(conn)
-        finally:
-            conn.close()
-    except Exception as e:
-        err = (
-            f"{type(e).__name__}: {e}. "
-            "Check PROPORACLE_DB_PATH and that proporacle/data/schema/ddl.sql and views.sql exist."
+    out: list[dict[str, Any]] = []
+    for sp in _SPORT_BREAKDOWN_ORDER:
+        decided = int(stats[sp]["decided"])
+        paid = int(stats[sp]["paid"])
+        win_rate = (paid / decided) if decided > 0 else None
+        out.append(
+            {
+                "sport": sp,
+                "decided": decided,
+                "paid": paid,
+                "win_rate": win_rate,
+                "net_dollars": round(float(stats[sp]["net"]), 2),
+            }
         )
+    return out
 
-    charts_empty = err is None and len(roi_payload["days"]) == 0
 
+def _current_streak_label(rows_asc: list[dict[str, Any]]) -> str:
+    streak_sign = 0
+    streak_len = 0
+    for r in reversed(rows_asc):
+        net = _to_float(r.get("net_dollars"), 0.0)
+        sign = 1 if net > 0 else (-1 if net < 0 else 0)
+        if sign == 0:
+            if streak_len == 0:
+                continue
+            break
+        if streak_sign == 0:
+            streak_sign = sign
+            streak_len = 1
+        elif sign == streak_sign:
+            streak_len += 1
+        else:
+            break
+    if streak_len == 0:
+        return "—"
+    return f"{'W' if streak_sign > 0 else 'L'}{streak_len}"
+
+
+@app.get("/income")
+def page_income():
+    rows_asc = _load_grade_history_rows()
+    total_tickets = sum(_to_int(r.get("tickets"), 0) for r in rows_asc)
+    total_decided = sum(_to_int(r.get("decided"), 0) for r in rows_asc)
+    total_paid = sum(_to_int(r.get("paid"), 0) for r in rows_asc)
+    total_net = round(sum(_to_float(r.get("net_dollars"), 0.0) for r in rows_asc), 2)
+    win_rate = (total_paid / total_decided) if total_decided > 0 else None
+    roi_pct = (total_net / (total_tickets * 10.0) * 100.0) if total_tickets > 0 else 0.0
+    streak = _current_streak_label(rows_asc)
+
+    cum = 0.0
+    cum_points: list[dict[str, Any]] = []
+    for r in rows_asc:
+        cum += _to_float(r.get("net_dollars"), 0.0)
+        cum_points.append({"date": r.get("date"), "cum_net": round(cum, 2)})
+
+    rows_desc = list(reversed(rows_asc))
+    sport_rows = _sport_breakdown_from_graded_workbooks(stake_per_ticket=10.0)
     return render_template(
         "dashboard_income.html",
-        error=err,
-        charts_empty=charts_empty,
-        income_mode=income_meta.get("mode", "empty"),
-        income_data_through=income_meta.get("data_through"),
         ui_build_id=_UI_BUILD_ID,
-        roi_json=Markup(json.dumps(roi_payload)),
-        clv_json=Markup(json.dumps(clv_payload)),
-        cal_json=Markup(json.dumps(cal_payload)),
-        equity_json=Markup(json.dumps(eq_payload)),
+        summary={
+            "total_tickets": total_tickets,
+            "decided_tickets": total_decided,
+            "paid_tickets": total_paid,
+            "win_rate": win_rate,
+            "net_pnl": total_net,
+            "roi_pct": round(roi_pct, 2),
+            "streak": streak,
+        },
+        daily_rows=rows_desc,
+        chart_points=Markup(json.dumps(cum_points)),
+        sport_rows=sport_rows,
     )
+
+
+@app.get("/dashboard/income")
+def dashboard_income_legacy_redirect():
+    return redirect("/income", code=302)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,265 @@
+/**
+ * Light theme: soft blue page chrome + clean white panels (Tickets, Home, etc.)
+ * Link AFTER proporacle-page-shell.css (and after index.html <style> on home if used).
+ */
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+[data-theme="light"] {
+  /* Panels lean white; chrome uses blue */
+  --card-bg: rgba(255, 255, 255, 0.94);
+  --light-snow-solid: #f4f9ff;
+  --light-page-blue: #c9e2f5;
+  --light-page-blue-mid: #ddeef9;
+  --light-page-white: #f8fbff;
+}
+
+[data-theme="light"] body,
+[data-theme="light"] body::before {
+  background:
+    radial-gradient(ellipse at 18% 0%, rgba(160, 205, 245, 0.45) 0%, transparent 45%),
+    radial-gradient(ellipse at 82% 12%, rgba(190, 220, 255, 0.35) 0%, transparent 42%),
+    radial-gradient(ellipse at 50% 100%, rgba(230, 242, 255, 0.9) 0%, transparent 55%),
+    linear-gradient(180deg, #b8d9f2 0%, #d4e9f8 28%, #eef6fc 58%, #fafdff 100%) !important;
+}
+
+/* Lighten texture overlay so it tints instead of dulling */
+[data-theme="light"] body::after {
+  opacity: 0.38 !important;
+}
+
+[data-theme="light"] .snav,
+[data-theme="light"] nav.snav,
+[data-theme="light"] .legacy-nav,
+[data-theme="light"] nav {
+  background: rgba(236, 246, 255, 0.88) !important;
+  border-color: rgba(120, 170, 210, 0.22) !important;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.75),
+    0 6px 22px rgba(40, 90, 140, 0.1) !important;
+}
+
+/* Main content surfaces: white with a cool undertone */
+[data-theme="light"] .hero,
+[data-theme="light"] .card,
+[data-theme="light"] .group,
+[data-theme="light"] .ticket,
+[data-theme="light"] .scard,
+[data-theme="light"] .qcard,
+[data-theme="light"] .edge-card,
+[data-theme="light"] .filter-pill,
+[data-theme="light"] .gstat,
+[data-theme="light"] .leg-card,
+[data-theme="light"] .result-item,
+[data-theme="light"] .pp-cell,
+[data-theme="light"] .log-table-wrap,
+[data-theme="light"] .stat-mini,
+[data-theme="light"] .chart-wrap,
+[data-theme="light"] .insight-item,
+[data-theme="light"] .bucket-card,
+[data-theme="light"] .import-panel,
+[data-theme="light"] .modal-card,
+[data-theme="light"] .expand-stat,
+[data-theme="light"] .streak-card,
+[data-theme="light"] .pt-opt,
+[data-theme="light"] .line-box,
+[data-theme="light"] .result-notes,
+[data-theme="light"] .grades-hero,
+[data-theme="light"] .grades-stat,
+[data-theme="light"] .glass-card,
+[data-theme="light"] .home-cat,
+[data-theme="light"] .tickets-built-wrap,
+[data-theme="light"] .tickets-shell,
+[data-theme="light"] .ticket-block,
+[data-theme="light"] .built-ticket {
+  background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 100%) !important;
+  border-color: rgba(140, 180, 215, 0.28) !important;
+  box-shadow:
+    0 6px 26px rgba(30, 80, 130, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+}
+
+[data-theme="light"] .hero-stat,
+[data-theme="light"] .hero-meta span,
+[data-theme="light"] .hero-eyebrow,
+[data-theme="light"] .grades-kicker,
+[data-theme="light"] .live-pill,
+[data-theme="light"] .slate-filter-btn,
+[data-theme="light"] .tab-btn,
+[data-theme="light"] .date-pill,
+[data-theme="light"] .dpill,
+[data-theme="light"] .date-nav-btn,
+[data-theme="light"] .hamburger {
+  background: rgba(248, 252, 255, 0.92) !important;
+  border-color: rgba(130, 170, 205, 0.22) !important;
+}
+
+[data-theme="light"] .date-bar,
+[data-theme="light"] .tabs-bar {
+  background: rgba(232, 244, 255, 0.9) !important;
+}
+
+[data-theme="light"] .slate-filter-input,
+[data-theme="light"] .field input,
+[data-theme="light"] .field select,
+[data-theme="light"] .leg-input,
+[data-theme="light"] .big-input,
+[data-theme="light"] .date-input {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(120, 165, 205, 0.28) !important;
+}
+
+[data-theme="light"] .mobile-menu {
+  background: rgba(226, 240, 255, 0.97) !important;
+}
+
+[data-theme="light"] .load-overlay {
+  background: rgba(210, 232, 250, 0.88) !important;
+}
+
+[data-theme="light"] .empty-state {
+  background: rgba(230, 244, 255, 0.75) !important;
+}
+
+[data-theme="light"] select option,
+[data-theme="light"] .field select option,
+[data-theme="light"] .leg-input option {
+  background-color: #f4f9ff !important;
+}
+
+[data-theme="light"] .home-flow-lede,
+[data-theme="light"] .hero .home-flow-lede {
+  background: rgba(255, 255, 255, 0.78) !important;
+  border-color: rgba(130, 175, 215, 0.25) !important;
+}
+
+/* Table body: crisp white rows on blue-tinted page */
+[data-theme="light"] .slate-table td,
+[data-theme="light"] td,
+[data-theme="light"] .log-table td {
+  background-color: rgba(255, 255, 255, 0.55) !important;
+}
+
+[data-theme="light"] .slate-table tr:nth-child(even) td,
+[data-theme="light"] tr:nth-child(even) td {
+  background: rgba(240, 248, 255, 0.75) !important;
+}
+
+@media (max-width: 900px), (pointer: coarse) {
+  [data-theme="light"] .hero,
+  [data-theme="light"] .home-cat,
+  [data-theme="light"] .scard,
+  [data-theme="light"] .edge-card,
+  [data-theme="light"] .streak-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f0f7ff 100%) !important;
+  }
+
+  /*
+   * Mobile / coarse pointer: fewer full-screen gradients and lighter shadows
+   * reduce overdraw and layer count (common cause of scroll jank on phones).
+   */
+  [data-theme="light"] body,
+  [data-theme="light"] body::before {
+    background: linear-gradient(180deg, #b8d9f2 0%, #d4e9f8 35%, #eef6fc 70%, #fafdff 100%) !important;
+  }
+
+  [data-theme="light"] body::after {
+    opacity: 0.22 !important;
+  }
+
+  [data-theme="light"] .snav,
+  [data-theme="light"] nav.snav,
+  [data-theme="light"] .legacy-nav,
+  [data-theme="light"] nav {
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.6),
+      0 4px 14px rgba(40, 90, 140, 0.08) !important;
+  }
+
+  [data-theme="light"] .hero,
+  [data-theme="light"] .card,
+  [data-theme="light"] .group,
+  [data-theme="light"] .ticket,
+  [data-theme="light"] .scard,
+  [data-theme="light"] .qcard,
+  [data-theme="light"] .edge-card,
+  [data-theme="light"] .filter-pill,
+  [data-theme="light"] .gstat,
+  [data-theme="light"] .leg-card,
+  [data-theme="light"] .result-item,
+  [data-theme="light"] .pp-cell,
+  [data-theme="light"] .log-table-wrap,
+  [data-theme="light"] .stat-mini,
+  [data-theme="light"] .chart-wrap,
+  [data-theme="light"] .insight-item,
+  [data-theme="light"] .bucket-card,
+  [data-theme="light"] .import-panel,
+  [data-theme="light"] .modal-card,
+  [data-theme="light"] .expand-stat,
+  [data-theme="light"] .streak-card,
+  [data-theme="light"] .pt-opt,
+  [data-theme="light"] .line-box,
+  [data-theme="light"] .result-notes,
+  [data-theme="light"] .grades-hero,
+  [data-theme="light"] .grades-stat,
+  [data-theme="light"] .glass-card,
+  [data-theme="light"] .home-cat,
+  [data-theme="light"] .tickets-built-wrap,
+  [data-theme="light"] .tickets-shell,
+  [data-theme="light"] .ticket-block,
+  [data-theme="light"] .built-ticket {
+    box-shadow: 0 4px 18px rgba(30, 80, 130, 0.09) !important;
+  }
+}
+
+/* Faster taps on touch devices (avoids double-tap zoom wait on some browsers) */
+@media (pointer: coarse) {
+  button,
+  [role="button"],
+  .tab-btn,
+  .slate-filter-btn,
+  .date-nav-btn,
+  .hamburger,
+  .date-pill,
+  .dpill,
+  .slate-filter-input,
+  nav a,
+  .snav a {
+    touch-action: manipulation;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="light"] body,
+  [data-theme="light"] body::before {
+    background: #ddeef9 !important;
+  }
+
+  [data-theme="light"] body::after {
+    opacity: 0.12 !important;
+  }
+}
+
+/* Tickets light-mode perf: disable blur layers + simplify shadows. */
+[data-theme="light"] .ticket-card,
+[data-theme="light"] .slip-card,
+[data-theme="light"] .leg-card,
+[data-theme="light"] .ticket-bucket,
+[data-theme="light"] .tickets-built .ticket,
+.light-theme .ticket-card,
+.light-theme .slip-card {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+[data-theme="light"] .ticket-card,
+[data-theme="light"] .tickets-built .ticket,
+.light-theme .ticket-card {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12) !important;
+}
+
+[data-theme="light"] .home-cat,
+.light-theme .home-cat {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10) !important;
+}

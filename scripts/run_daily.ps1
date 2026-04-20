@@ -6,7 +6,9 @@
 .NOTES
   Order: (A1) Refresh historical game logs → (A) Grader for yesterday → (A1b) build_ticket_eval for yesterday → (A1c) optional CLV Excel columns → (A2) consistency
          → (B) Archive outputs\<yesterday>\ step8 copies → (C0) fetch game lines → (C0b) rolling NBA 1Q/2Q DB sync
-         → (C) run_pipeline for today → (D) combined_slate → (E) git commit/push → (F) optional night poll of historical actuals.
+         → (C) run_pipeline for today → (D) combined_slate → (E) git commit/push → (E1) optional payout hand CSV pull from Railway
+         → (F) optional night poll of historical actuals.
+         Set env PROPORACLE_PAYOUT_EXPORT_URL (e.g. https://<app>.up.railway.app/api/payout/export-log-hand) to merge Railway volume logs into data\payout_samples\payout_log_hand.csv after STEP E.
          Use -SkipFetch to skip A1 and C0b. -SkipGameLines skips C0. -SkipPeriodHistorySync skips C0b only.
          Use -PollHistoricalActuals to re-run fetch_historical_actuals.py every 90 min (4 passes) after 21:00 ET (see -PollSkip9pmWait).
          -WeeklyAnalysis runs synthetic + full consistency rebuild after analyze_grader.
@@ -132,15 +134,24 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
     # Some sports can intentionally skip writing dated copies while still producing
     # valid root clean files used by combined + Railway.
     $fallbackRoots = @{
-        "step8_mlb_direction_clean_$RunDate.xlsx" = (Join-Path $Root "MLB\outputs\step8_mlb_direction_clean.xlsx")
+        "step8_mlb_direction_clean_$RunDate.xlsx" = @(
+            (Join-Path $Root "MLB\outputs\step8_mlb_direction_clean.xlsx"),
+            (Join-Path $Root "MLB\step8_mlb_direction_clean.xlsx")
+        )
     }
     $missing = @()
     foreach ($name in $required) {
         $p = Join-Path $outDir $name
         if (Test-Path $p) { continue }
         if ($fallbackRoots.ContainsKey($name)) {
-            $fallback = $fallbackRoots[$name]
-            if (Test-Path $fallback) { continue }
+            $resolved = $false
+            foreach ($fallback in @($fallbackRoots[$name])) {
+                if (Test-Path $fallback) {
+                    $resolved = $true
+                    break
+                }
+            }
+            if ($resolved) { continue }
         }
         $missing += $name
     }
@@ -819,6 +830,49 @@ else {
     finally {
         Pop-Location
     }
+}
+
+# =============================================================================
+# STEP E1 — Merge payout hand log from Railway (persistent /app/data volume)
+# =============================================================================
+# Set PROPORACLE_PAYOUT_EXPORT_URL to your deployed app, e.g.:
+#   https://<your-service>.up.railway.app/api/payout/export-log-hand
+# Railway: add a Volume on the PropORACLE service with mount path /app/data (see ui_runner/app.py DATA_ROOT).
+$payoutExportUrl = [string]$env:PROPORACLE_PAYOUT_EXPORT_URL
+if ($payoutExportUrl -and $payoutExportUrl.Trim().Length -gt 0) {
+    Write-Log "STEP E1 - Payout hand log sync from Railway: START"
+    $samplesDir = Join-Path $Root "data\payout_samples"
+    if (-not (Test-Path $samplesDir)) {
+        New-Item -ItemType Directory -Path $samplesDir -Force | Out-Null
+    }
+    $tmpRail = Join-Path $samplesDir "payout_log_hand.railway_tmp.csv"
+    $localHand = Join-Path $samplesDir "payout_log_hand.csv"
+    $mergeScript = Join-Path $Root "scripts\merge_payout_log_hand.py"
+    try {
+        Invoke-WebRequest -Uri $payoutExportUrl.Trim() -OutFile $tmpRail -UseBasicParsing
+        if (-not (Test-Path $mergeScript)) {
+            Write-Log "STEP E1 - Payout hand log sync: FAILED (scripts\merge_payout_log_hand.py missing)"
+        }
+        elseif (-not (Test-Path $tmpRail)) {
+            Write-Log "STEP E1 - Payout hand log sync: FAILED (download missing)"
+        }
+        else {
+            & py -3.14 $mergeScript --local $localHand --remote $tmpRail
+            if ($LASTEXITCODE -eq 0) {
+                Remove-Item -LiteralPath $tmpRail -Force -ErrorAction SilentlyContinue
+                Write-Log "STEP E1 - Payout hand log sync: OK -> $localHand"
+            }
+            else {
+                Write-Log "STEP E1 - Payout hand log sync: FAILED (merge exit $LASTEXITCODE)"
+            }
+        }
+    }
+    catch {
+        Write-Log "STEP E1 - Payout hand log sync: WARN ($($_.Exception.Message))"
+    }
+}
+else {
+    Write-Log "STEP E1 - Payout hand log sync: SKIP (set env PROPORACLE_PAYOUT_EXPORT_URL to https://.../api/payout/export-log-hand)"
 }
 
 # =============================================================================

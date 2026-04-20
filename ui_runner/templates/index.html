@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="/static/global-scrollbar.css?v=20260416"/>
+<link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260419perf2"/>
 <style>
 :root{
   /* Hybrid liquid-glass palette */
@@ -41,10 +42,10 @@
   --card-bg:rgba(255,255,255,0.04);--card-bg-hover:rgba(255,255,255,0.08);
 }
 [data-theme='light']{
-  --card-bg:rgba(0,0,0,0.04);--card-bg-hover:rgba(0,0,0,0.07);
-  --bg-main:#f0f2f5;
-  --glass-bg:rgba(255,255,255,0.7);
-  --glass-border:rgba(255,255,255,0.4);
+  --card-bg:rgba(232,244,252,0.94);--card-bg-hover:rgba(0,0,0,0.07);
+  --bg-main:#dbeaf6;
+  --glass-bg:rgba(228,241,252,0.88);
+  --glass-border:rgba(180,210,235,0.45);
   --text-primary:#1d1d1f;
   --accent-gold:#c5a059;
   --nebula-overlay:linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
@@ -161,12 +162,12 @@ body::after{content:'';position:fixed;inset:0;
 .insight-card{padding:24px;transition:transform .3s ease,border-color .3s ease;}
 .insight-card:hover{transform:translateY(-5px);border-color:var(--accent-gold);}
 .edge-badge{color:#00ffcc;font-weight:800;text-shadow:0 0 10px rgba(0,255,204,0.5);}
-[data-theme="light"] .glass-card{background:rgba(255,255,255,0.4);backdrop-filter:blur(15px) saturate(180%);-webkit-backdrop-filter:blur(15px) saturate(180%);border:1px solid rgba(255,255,255,0.6);}
+[data-theme="light"] .glass-card{background:rgba(200,215,235,0.72);backdrop-filter:blur(15px) saturate(180%);-webkit-backdrop-filter:blur(15px) saturate(180%);border:1px solid rgba(120,150,185,0.35);}
 
 /* shell — fluid side padding, never touch viewport edges */
 .shell{position:relative;z-index:1;width:100%;max-width:min(1920px,98vw);margin:0 auto;padding:clamp(12px,2.5vw,28px) clamp(10px,2.5vw,28px);}
 .home-flow-lede{font-size:clamp(12px,1.4vw,13px);color:var(--muted);line-height:1.5;max-width:min(72ch,100%);margin:0 0 14px;padding:10px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025);}
-[data-theme="light"] .home-flow-lede{border-color:rgba(0,0,0,.08);background:rgba(255,255,255,.5);}
+[data-theme="light"] .home-flow-lede{border-color:rgba(70,110,140,.14);background:rgba(232,244,252,.78);}
 .home-jump{display:inline-block;font-size:11px;margin-top:6px;}
 .home-jump a{color:var(--accent);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(212,175,55,.35);}
 .home-jump a:hover{border-bottom-color:var(--accent);}
@@ -206,8 +207,8 @@ body::after{content:'';position:fixed;inset:0;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
 }
 [data-theme="light"] .hero .home-flow-lede{
-  background:rgba(255,255,255,.42)!important;
-  border-color:rgba(0,0,0,.07)!important;
+  background:rgba(230,243,252,.82)!important;
+  border-color:rgba(70,110,140,.12)!important;
   box-shadow:none!important;
 }
 @media(max-width:720px){
@@ -351,7 +352,7 @@ body::after{content:'';position:fixed;inset:0;
 .home-cat-title span{color:var(--accent);}
 .home-cat-body{padding:clamp(10px,2vw,16px) clamp(10px,2.5vw,18px) clamp(14px,2.5vw,20px);}
 .home-cat-flat{margin-bottom:0!important;}
-[data-theme="light"] .home-cat{background:rgba(255,255,255,.62);border-color:rgba(0,0,0,.1);box-shadow:0 4px 20px rgba(0,0,0,.08);}
+[data-theme="light"] .home-cat{background:rgba(205,218,236,.92);border-color:rgba(70,100,130,.18);box-shadow:0 4px 20px rgba(15,45,80,.10);}
 [data-theme="light"] .home-cat>summary{color:rgba(0,0,0,.82);}
 
 /* modal tab */
@@ -364,8 +365,6 @@ body::after{content:'';position:fixed;inset:0;
   #slate-panel-header-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
   .snav-name{display:none;}
   .edge-grid{grid-template-columns:1fr!important;}
-}
-@media(max-width:640px){
   .hamburger{display:flex;}
   .snav-links{display:none!important;}
   .live-pill{display:none;}
@@ -479,20 +478,21 @@ body{
   --muted:rgba(23,43,64,0.52);
   --muted2:rgba(23,43,64,0.34);
   --text:rgba(14,36,58,0.90);
+  --light-snow-solid:#c8d4e8;
 }
 [data-theme="light"] body {
   background:
-    radial-gradient(ellipse at 12% 8%, rgba(137,196,255,0.12) 0%, transparent 38%),
-    radial-gradient(ellipse at 88% 6%, rgba(169,220,255,0.10) 0%, transparent 36%),
-    radial-gradient(ellipse at 50% 55%, rgba(173,196,255,0.06) 0%, transparent 50%),
-    linear-gradient(180deg,#f5fbff 0%,#edf6ff 50%,#e8f3ff 100%);
+    radial-gradient(ellipse at 14% 10%, rgba(160,180,220,0.35) 0%, transparent 40%),
+    radial-gradient(ellipse at 86% 8%, rgba(140,165,210,0.25) 0%, transparent 38%),
+    radial-gradient(ellipse at 52% 60%, rgba(120,150,200,0.20) 0%, transparent 50%),
+    linear-gradient(180deg,#c8d4e8 0%,#bfcde0 48%,#b5c4d8 100%);
 }
 [data-theme="light"] body::before {
   background:
-    radial-gradient(ellipse at 12% 8%, rgba(137,196,255,0.10) 0%, transparent 38%),
-    radial-gradient(ellipse at 88% 6%, rgba(169,220,255,0.08) 0%, transparent 36%),
-    radial-gradient(ellipse at 50% 55%, rgba(173,196,255,0.05) 0%, transparent 50%),
-    linear-gradient(180deg,#f5fbff 0%,#edf6ff 50%,#e8f3ff 100%);
+    radial-gradient(ellipse at 14% 10%, rgba(160,180,220,0.35) 0%, transparent 40%),
+    radial-gradient(ellipse at 86% 8%, rgba(140,165,210,0.25) 0%, transparent 38%),
+    radial-gradient(ellipse at 52% 60%, rgba(120,150,200,0.20) 0%, transparent 50%),
+    linear-gradient(180deg,#c8d4e8 0%,#bfcde0 48%,#b5c4d8 100%);
 }
 [data-theme="light"] body::after {
   background-image:
@@ -508,9 +508,9 @@ body{
 /* Glass surfaces - light mode */
 [data-theme="light"] .snav,
 [data-theme="light"] nav {
-  background:rgba(255,255,255,0.72) !important;
-  border-bottom:1px solid rgba(0,0,0,0.08) !important;
-  box-shadow:0 1px 0 rgba(255,255,255,0.9),0 4px 20px rgba(0,0,0,0.08) !important;
+  background:rgba(198,212,232,0.94) !important;
+  border-bottom:1px solid rgba(0,0,0,0.10) !important;
+  box-shadow:0 1px 0 rgba(230,236,246,0.55),0 4px 20px rgba(15,45,80,0.10) !important;
 }
 [data-theme="light"] .hero,
 [data-theme="light"] .card,
@@ -535,9 +535,9 @@ body{
 [data-theme="light"] .result-notes,
 [data-theme="light"] .grades-hero,
 [data-theme="light"] .grades-stat {
-  background:rgba(255,255,255,0.66) !important;
-  border-color:rgba(0,0,0,0.09) !important;
-  box-shadow:0 4px 24px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9) !important;
+  background:rgba(205,218,236,0.92) !important;
+  border-color:rgba(70,100,130,0.18) !important;
+  box-shadow:0 4px 24px rgba(15,45,80,0.10),inset 0 1px 0 rgba(230,236,246,0.55) !important;
 }
 [data-theme="light"] .hero::after,
 [data-theme="light"] .grades-hero::after {
@@ -546,8 +546,8 @@ body{
 }
 [data-theme="light"] .hero-eyebrow,
 [data-theme="light"] .grades-kicker {
-  background:rgba(255,255,255,0.62) !important;
-  border-color:rgba(0,0,0,0.10) !important;
+  background:rgba(215,224,238,0.95) !important;
+  border-color:rgba(70,100,130,0.16) !important;
   color:rgba(0,0,0,0.55) !important;
 }
 [data-theme="light"] .edge-expand,
@@ -572,7 +572,7 @@ body{
   border-color:rgba(75,111,150,0.25) !important;
 }
 [data-theme="light"] .live-pill {
-  background:rgba(255,255,255,0.62) !important;
+  background:rgba(232,246,252,0.92) !important;
   border-color:rgba(26,140,69,0.30) !important;
   color:var(--green) !important;
 }
@@ -613,7 +613,7 @@ body{
 [data-theme="light"] .field select,
 [data-theme="light"] .leg-input,
 [data-theme="light"] .date-input {
-  background:rgba(255,255,255,0.7) !important;
+  background:rgba(236,246,255,0.92) !important;
   border-color:rgba(0,0,0,0.12) !important;
   color:rgba(0,0,0,0.85) !important;
 }
@@ -626,15 +626,15 @@ select option,
 [data-theme="light"] select option,
 [data-theme="light"] .field select option,
 [data-theme="light"] .leg-input option{
-  background-color:#ffffff !important;
+  background-color:var(--light-snow-solid) !important;
   color:#111827 !important;
 }
 [data-theme="light"] .slate-filter-btn,
 [data-theme="light"] .tab-btn,
 [data-theme="light"] .date-pill,
 [data-theme="light"] .dpill {
-  background:rgba(255,255,255,0.62) !important;
-  border-color:rgba(0,0,0,0.10) !important;
+  background:rgba(232,244,252,0.88) !important;
+  border-color:rgba(70,110,140,0.12) !important;
   color:rgba(0,0,0,0.52) !important;
 }
 [data-theme="light"] .slate-filter-btn.on,
@@ -649,12 +649,12 @@ select option,
 /* Date/tabs bars */
 [data-theme="light"] .date-bar,
 [data-theme="light"] .tabs-bar {
-  background:rgba(255,255,255,0.68) !important;
+  background:rgba(228,241,252,0.88) !important;
   border-bottom-color:rgba(0,0,0,0.08) !important;
 }
 [data-theme="light"] .date-nav-btn {
-  background:rgba(255,255,255,0.60) !important;
-  border-color:rgba(0,0,0,0.10) !important;
+  background:rgba(232,244,252,0.92) !important;
+  border-color:rgba(70,110,140,0.12) !important;
   color:rgba(0,0,0,0.52) !important;
 }
 /* Section headers */
@@ -674,13 +674,13 @@ select option,
 [data-theme="light"] .tier-D { background:rgba(204,34,0,.10) !important; }
 /* Hamburger */
 [data-theme="light"] .hamburger {
-  background:rgba(255,255,255,0.62) !important;
-  border-color:rgba(0,0,0,0.10) !important;
+  background:rgba(232,244,252,0.90) !important;
+  border-color:rgba(70,110,140,0.12) !important;
 }
 [data-theme="light"] .hamburger span { background:rgba(0,0,0,0.55) !important; }
 /* Mobile menu */
 [data-theme="light"] .mobile-menu {
-  background:rgba(245,248,255,0.96) !important;
+  background:rgba(226,240,252,0.97) !important;
   border-bottom-color:rgba(0,0,0,0.08) !important;
 }
 [data-theme="light"] .mobile-menu a { color:rgba(0,0,0,0.55) !important; }
@@ -691,8 +691,8 @@ select option,
   border-left-color:var(--accent) !important;
 }
 /* Load overlay / empty state */
-[data-theme="light"] .load-overlay { background:rgba(235,240,250,0.90) !important; }
-[data-theme="light"] .empty-state { background:rgba(235,240,250,0.6) !important; }
+[data-theme="light"] .load-overlay { background:rgba(218,234,248,0.92) !important; }
+[data-theme="light"] .empty-state { background:rgba(218,234,248,0.65) !important; }
 
 /* Brand wordmark: PropOracle casing must survive theme/injected CSS */
 a.snav-brand .brand-wordmark .wb-first,
@@ -845,19 +845,11 @@ body::before{
     radial-gradient(ellipse at 82% 82%, rgba(159,204,255,0.10) 0%, transparent 30%),
     linear-gradient(180deg,#050507 0%,#0d0b12 46%,#141017 100%);
 }
-[data-theme="light"] body,
-[data-theme="light"] body::before{
-  background:
-    radial-gradient(ellipse at 14% 10%, rgba(255,245,220,0.70) 0%, transparent 40%),
-    radial-gradient(ellipse at 86% 8%, rgba(255,233,185,0.52) 0%, transparent 38%),
-    radial-gradient(ellipse at 52% 60%, rgba(198,220,255,0.28) 0%, transparent 50%),
-    linear-gradient(180deg,#fdfcff 0%,#f6f8ff 48%,#eef3ff 100%);
-}
 [data-theme="light"] .hero,
 [data-theme="light"] .scard,
 [data-theme="light"] .edge-card{
-  background:rgba(255,255,255,0.74) !important;
-  border-color:rgba(196,166,107,0.22) !important;
+  background:rgba(205,218,236,0.92) !important;
+  border-color:rgba(90,120,150,0.22) !important;
 }
 
 /*
@@ -913,13 +905,13 @@ body::before{
   [data-theme="light"] .scard,
   [data-theme="light"] .edge-card,
   [data-theme="light"] .streak-card {
-    background: rgba(255, 255, 255, 0.92) !important;
+    background: rgba(205, 218, 236, 0.95) !important;
   }
 }
 
 </style>
-<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260411"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260416"/>
+<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260418nav"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260418nav2"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 </head>
 <body>
@@ -1914,7 +1906,7 @@ async function loadSlateData() {
     }
     renderEdges();
     renderStreaks();
-    // buildSlateDataFromAllSlate() (2.2 MB fetch) is deferred until user opens a sport panel
+    // Slate panel rows are fetched lazily per sport via /api/slate-sport/<sport>.
   })();
   return slateDataPromise;
 }
@@ -2369,6 +2361,7 @@ function renderStreaks() {
 // ── Add streak-card CSS ───────────────────────────────────
 document.head.insertAdjacentHTML("beforeend",`<style>
 .streak-card{background:rgba(255,255,255,0.03);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px 14px 14px 18px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;}
+@keyframes slateSpin{to{transform:rotate(360deg);}}
 </style>`);
 
 // ── Slate Panel expand / sort / filter ───────────────────
@@ -2387,8 +2380,9 @@ SLATE_STATE['combined'] = { sortKey: 'Rank Score', sortDir: -1, search: '', dir:
 const SLATE_COLS = {};  // sport -> array of column names from Excel
 let openSlatePanel = null;
 let slateDataPromise = null;
-let _slateSportPromise = null; // lazy: only fetches /api/slate-sport when a panel is first opened
 let _slateExcelPromise = null; // lazy: only fetches /api/slate-excel when combined panel is first opened
+const SLATE_SPORT_CACHE = {};           // sport -> true once fetched from /api/slate-sport/<sport>
+const SLATE_SPORT_FETCH_PROMISES = {};  // sport -> in-flight promise
 
 function scheduleRenderSlateTable(sport) {
   if (RENDER_SCHEDULED[sport]) return;
@@ -2424,7 +2418,18 @@ function toggleSlatePanel(sport) {
   }
 }
 
-// ── Populate SLATE_DATA — tries full slate endpoint, falls back to tickets ────
+function showSlateSportLoading(sport, msg = 'Loading...') {
+  const tbody = document.getElementById(`stb-${sport}`);
+  if (!tbody) return;
+  tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;padding:20px;color:var(--muted2);font-size:11px;letter-spacing:.06em;">
+    <span style="display:inline-flex;align-items:center;gap:8px;">
+      <span style="width:12px;height:12px;border:2px solid rgba(255,255,255,.25);border-top-color:var(--accent);border-radius:50%;display:inline-block;animation:slateSpin .7s linear infinite;"></span>
+      ${msg}
+    </span>
+  </td></tr>`;
+}
+
+// ── Populate SLATE_DATA — per-sport lazy endpoint, ticket fallback ────────────
 /** Ticket legs use uppercase sport labels (e.g. NFL, NBA); Slate Explorer uses lowercase keys (nfl, nba). */
 function _sportKeyNorm(sp) {
   const x = String(sp || '').trim().toLowerCase().replace(/\s+/g, '');
@@ -2433,91 +2438,77 @@ function _sportKeyNorm(sp) {
   return x;
 }
 
-async function buildSlateDataFromAllSlate() {
-  // Try full slate endpoint first (authoritative per-sport rows for cards)
+function _fallbackSlateRowsFromTickets(sport) {
+  return ALL_SLATE
+    .filter(p => {
+      const sp = _sportKeyNorm(p.sport);
+      if (sport === 'cbb') return sp === 'cbb' || sp === 'wcbb';
+      return sp === sport;
+    })
+    .map(p => ({
+      tier:      null,
+      rank_score: p.edge != null ? Math.abs(p.edge) : null,
+      player:    p.player || '',
+      team:      p.team   || '',
+      opp:       p.opp    || '',
+      prop:      p.prop   || '',
+      pick_type: p.pick   || '',
+      line:      p.line,
+      dir:       p.dir    || '',
+      edge:      p.edge,
+      hit_rate:  p.hit != null ? p.hit / 100 : null,
+      l5_avg:    p.l5_avg,
+      l5_over:   p.l5_over,
+      l5_under:  p.l5_under,
+      game_time: '',
+    }));
+}
+
+function _setSlateSportRows(sport, rows) {
+  delete SLATE_COLS[sport];
+  SLATE_DATA[sport] = Array.isArray(rows) ? rows : [];
+  SLATE_DATA[sport].sort((a,b) => Math.abs(b?.edge||0) - Math.abs(a?.edge||0));
+}
+
+async function fetchSlateSport(sport, opts = {}) {
+  if (sport === 'combined') return;
+  if (SLATE_SPORT_CACHE[sport] && Array.isArray(SLATE_DATA[sport])) return;
+  if (SLATE_SPORT_FETCH_PROMISES[sport]) return SLATE_SPORT_FETCH_PROMISES[sport];
+  const prefetch = !!opts.prefetch;
+  if (!prefetch || openSlatePanel === sport) showSlateSportLoading(sport, 'Loading slate...');
+
+  SLATE_SPORT_FETCH_PROMISES[sport] = (async () => {
+    await loadSlateData();
+    let rows = [];
   try {
-    const res = await fetch('/api/slate-sport', {cache: 'no-store'});
+      const res = await fetch(`/api/slate-sport/${encodeURIComponent(sport)}`, {cache: 'no-store'});
     if (res.ok) {
       const d = await res.json();
-      const raw = d.sports;
-      if (raw && typeof raw === 'object') {
-        const sportsLc = {};
-        Object.keys(raw).forEach(k => {
-          sportsLc[String(k).toLowerCase()] = raw[k];
-        });
-        SPORTS.forEach(s => {
-          if (s === 'cbb') {
-            const men = sportsLc.cbb || [];
-            const wom = sportsLc.wcbb || [];
-            const merged = [...men, ...wom];
-            if (merged.length) {
-              delete SLATE_COLS[s];
-              SLATE_DATA[s] = merged;
-            }
-          } else if (sportsLc[s] && sportsLc[s].length) {
-            delete SLATE_COLS[s];
-            SLATE_DATA[s] = sportsLc[s];
-          }
-        });
-      }
+        rows = Array.isArray(d.rows) ? d.rows : [];
     }
-  } catch(e) { console.warn('slate-sport failed, using tickets data:', e); }
-
-  // Fall back to ALL_SLATE (tickets data) for any sport not populated above
-  SPORTS.forEach(s => {
-    if (SLATE_DATA[s] && SLATE_DATA[s].length) return;
-    delete SLATE_COLS[s];
-    SLATE_DATA[s] = ALL_SLATE
-      .filter(p => {
-        const sp = _sportKeyNorm(p.sport);
-        if (s === 'cbb') return sp === 'cbb' || sp === 'wcbb';
-        return sp === s;
-      })
-      .map(p => ({
-        tier:      null,
-        rank_score: p.edge != null ? Math.abs(p.edge) : null,
-        player:    p.player || '',
-        team:      p.team   || '',
-        opp:       p.opp    || '',
-        prop:      p.prop   || '',
-        pick_type: p.pick   || '',
-        line:      p.line,
-        dir:       p.dir    || '',
-        edge:      p.edge,
-        hit_rate:  p.hit != null ? p.hit / 100 : null,
-        l5_avg:    p.l5_avg,
-        l5_over:   p.l5_over,
-        l5_under:  p.l5_under,
-        game_time: '',
-      }));
+    } catch(e) {
+      console.warn(`slate-sport/${sport} failed, using tickets fallback:`, e);
+    }
+    if (!rows.length) rows = _fallbackSlateRowsFromTickets(sport);
+    _setSlateSportRows(sport, rows);
+    SLATE_SPORT_CACHE[sport] = true;
+    if (openSlatePanel === sport) scheduleRenderSlateTable(sport);
+  })().finally(() => {
+    delete SLATE_SPORT_FETCH_PROMISES[sport];
   });
 
-  // Sort each sport by edge desc, update count badges
-  SPORTS.forEach(s => {
-    if (!Array.isArray(SLATE_DATA[s])) SLATE_DATA[s] = [];
-    SLATE_DATA[s].sort((a,b) => Math.abs(b.edge||0) - Math.abs(a.edge||0));
-  });
-  if (openSlatePanel) scheduleRenderSlateTable(openSlatePanel);
+  return SLATE_SPORT_FETCH_PROMISES[sport];
 }
 
 async function loadSlatePicks() {
-  // No-op: data comes from buildSlateDataFromAllSlate() after loadSlateData()
+  // No-op: panel rows are now fetched lazily per sport.
   if (openSlatePanel && SLATE_DATA[openSlatePanel]) scheduleRenderSlateTable(openSlatePanel);
 }
 
 function loadSlateSport(sport) {
   if (sport === 'combined') { loadSlateExcel(); return; }
-  if (SLATE_DATA[sport] && SLATE_DATA[sport].length) { scheduleRenderSlateTable(sport); return; }
-  const tbody = document.getElementById(`stb-${sport}`);
-  if (tbody) {
-    const cells = () => '<td><div class="skeleton" style="height:12px;border-radius:4px;width:100%;min-width:40px"></div></td>';
-    tbody.innerHTML = Array.from({length: 6}, () => `<tr>${Array.from({length: 14}, cells).join('')}</tr>`).join('');
-  }
-  // Lazy: fetch the 2.2 MB slate-sport payload only on first panel open
-  if (!_slateSportPromise) {
-    _slateSportPromise = loadSlateData().then(() => buildSlateDataFromAllSlate());
-  }
-  _slateSportPromise.then(() => scheduleRenderSlateTable(sport));
+  if (SLATE_SPORT_CACHE[sport] && SLATE_DATA[sport]) { scheduleRenderSlateTable(sport); return; }
+  fetchSlateSport(sport).then(() => scheduleRenderSlateTable(sport));
 }
 
 function renderSlateTable(sport) {
@@ -2829,52 +2820,59 @@ function sortSlateDynamic(sport, key) {
   scheduleRenderSlateTable(sport);
 }
 
-// Data loaded dynamically — loadSlateData() populates ALL_SLATE then calls buildSlateDataFromAllSlate()
+// Keep edge/streak sections populated and warm slate panel with NBA first.
 loadSlateData();
+fetchSlateSport('nba');
+window.setTimeout(() => {
+  if (!SLATE_SPORT_CACHE.soccer) fetchSlateSport('soccer', {prefetch: true});
+  if (!SLATE_SPORT_CACHE.mlb) fetchSlateSport('mlb', {prefetch: true});
+}, 3000);
 </script>
 
 <script>
 /* Mouse-tracking glow on all glass cards */
 (function(){
-  const disableFx = window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;
-  if (disableFx) return;
-  const SELECTORS = [
-    '.ticket', '.card', '.group', '.edge-card',
-    '.scard', '.streak-card',
-    '.result-item', '.pp-cell', '.stat-mini', '.leg-card',
-    '.grades-stat', '.grades-hero'
-  ];
-  function attachGlow(el) {
-    if (el.dataset.glowBound === '1') return;
-    el.dataset.glowBound = '1';
-    el.classList.add('mouse-glow');
-    el.addEventListener('mousemove', e => {
-      const r = el.getBoundingClientRect();
-      el.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
-      el.style.setProperty('--mouse-y', (e.clientY - r.top)  + 'px');
-    });
-  }
-  function initGlow() {
-    SELECTORS.forEach(sel =>
-      document.querySelectorAll(sel).forEach(attachGlow)
-    );
-  }
-  // Run on load + after dynamic content
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGlow);
-  } else {
-    initGlow();
-  }
-  let debounceT = null;
-  const queueInit = () => {
-    if (debounceT != null) window.clearTimeout(debounceT);
-    debounceT = window.setTimeout(() => {
-      debounceT = null;
+  const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!isCoarse && !reduceMotion) {
+    const SELECTORS = [
+      '.ticket', '.card', '.group', '.edge-card',
+      '.scard', '.streak-card',
+      '.result-item', '.pp-cell', '.stat-mini', '.leg-card',
+      '.grades-stat', '.grades-hero'
+    ];
+    function attachGlow(el) {
+      if (el.dataset.glowBound === '1') return;
+      el.dataset.glowBound = '1';
+      el.classList.add('mouse-glow');
+      el.addEventListener('mousemove', e => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty('--mouse-x', (e.clientX - r.left) + 'px');
+        el.style.setProperty('--mouse-y', (e.clientY - r.top)  + 'px');
+      });
+    }
+    function initGlow() {
+      SELECTORS.forEach(sel =>
+        document.querySelectorAll(sel).forEach(attachGlow)
+      );
+    }
+    // Run on load + after dynamic content
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initGlow);
+    } else {
       initGlow();
-    }, 400);
-  };
-  const obs = new MutationObserver(queueInit);
-  obs.observe(document.body, { childList: true, subtree: true });
+    }
+    let debounceT = null;
+    const queueInit = () => {
+      if (debounceT != null) window.clearTimeout(debounceT);
+      debounceT = window.setTimeout(() => {
+        debounceT = null;
+        initGlow();
+      }, 400);
+    };
+    const obs = new MutationObserver(queueInit);
+    obs.observe(document.body, { childList: true, subtree: true });
+  }
 })();
 </script>
 
@@ -2882,35 +2880,64 @@ loadSlateData();
 <script>
 /* Chromatic aberration border on primary glass surfaces */
 (function(){
-  const disableFx = window.matchMedia('(pointer: coarse), (prefers-reduced-motion: reduce)').matches;
-  if (disableFx) return;
-  const CA_SELS = [
-    '.ticket', '.card', '.group', '.hero',
-    '.edge-card', '.grades-hero',
-    '.result-item'
-  ];
-  function initCA() {
-    CA_SELS.forEach(sel =>
-      document.querySelectorAll(sel).forEach(el => {
-        el.classList.add('ca-border');
-      })
-    );
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCA);
-  } else {
-    initCA();
-  }
-  let debounceT = null;
-  const queueInit = () => {
-    if (debounceT != null) window.clearTimeout(debounceT);
-    debounceT = window.setTimeout(() => {
-      debounceT = null;
+  const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!isCoarse && !reduceMotion) {
+    const CA_SELS = [
+      '.ticket', '.card', '.group', '.hero',
+      '.edge-card', '.grades-hero',
+      '.result-item'
+    ];
+    function initCA() {
+      CA_SELS.forEach(sel =>
+        document.querySelectorAll(sel).forEach(el => {
+          el.classList.add('ca-border');
+        })
+      );
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCA);
+    } else {
       initCA();
-    }, 400);
-  };
-  const obs = new MutationObserver(queueInit);
-  obs.observe(document.body, { childList: true, subtree: true });
+    }
+    let debounceT = null;
+    const queueInit = () => {
+      if (debounceT != null) window.clearTimeout(debounceT);
+      debounceT = window.setTimeout(() => {
+        debounceT = null;
+        initCA();
+      }, 400);
+    };
+    const obs = new MutationObserver(queueInit);
+    obs.observe(document.body, { childList: true, subtree: true });
+  }
+})();
+</script>
+
+<script>
+/* Mobile / touch: start with all home category <details> collapsed to reduce scroll height */
+(function () {
+  function mqMobile() {
+    try {
+      return window.matchMedia("(max-width: 900px), (pointer: coarse)").matches;
+    } catch (_e) {
+      return false;
+    }
+  }
+  function collapseHomeCatsOnMobile() {
+    if (!mqMobile()) return;
+    document.querySelectorAll("details.home-cat").forEach(function (d) {
+      d.removeAttribute("open");
+    });
+  }
+  function bind() {
+    collapseHomeCatsOnMobile();
+    var m = window.matchMedia("(max-width: 900px), (pointer: coarse)");
+    if (m.addEventListener) m.addEventListener("change", collapseHomeCatsOnMobile);
+    else if (m.addListener) m.addListener(collapseHomeCatsOnMobile);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
+  else bind();
 })();
 </script>
 
