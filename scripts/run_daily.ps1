@@ -97,6 +97,19 @@ function Preserve-ExistingFile([string]$Path, [string]$Reason = "") {
     }
 }
 
+function Get-CsvDataRowCount([string]$CsvPath) {
+    if (-not (Test-Path $CsvPath)) { return 0 }
+    try {
+        $raw = Import-Csv -Path $CsvPath
+        if ($null -eq $raw) { return 0 }
+        if ($raw -is [array]) { return $raw.Count }
+        return 1
+    }
+    catch {
+        return 0
+    }
+}
+
 function Get-MissingTodaySlateOutputs([string]$RunDate) {
     $outDir = Join-Path $Root "outputs\$RunDate"
     $required = @(
@@ -116,10 +129,20 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
     if ($RunDate -lt "2026-04-06") {
         $required = @($required) + @("step6_ranked_wcbb_$RunDate.xlsx")
     }
+    # Some sports can intentionally skip writing dated copies while still producing
+    # valid root clean files used by combined + Railway.
+    $fallbackRoots = @{
+        "step8_mlb_direction_clean_$RunDate.xlsx" = (Join-Path $Root "MLB\outputs\step8_mlb_direction_clean.xlsx")
+    }
     $missing = @()
     foreach ($name in $required) {
         $p = Join-Path $outDir $name
-        if (-not (Test-Path $p)) { $missing += $name }
+        if (Test-Path $p) { continue }
+        if ($fallbackRoots.ContainsKey($name)) {
+            $fallback = $fallbackRoots[$name]
+            if (Test-Path $fallback) { continue }
+        }
+        $missing += $name
     }
     return $missing
 }
@@ -1013,8 +1036,16 @@ if ($NowHour -ge 10) {
         Pop-Location
     }
     if ($LASTEXITCODE -ne 0) {
-        Write-Warning "[NBA_LATE_FETCH] MLB step1 failed (exit $LASTEXITCODE) — continuing"
-        Write-Log "[NBA_LATE_FETCH] WARN: MLB step1 exit $LASTEXITCODE"
+        $mlbOut = Join-Path $MLBDir "step1_mlb_props.csv"
+        $mlbRows = Get-CsvDataRowCount -CsvPath $mlbOut
+        if ($mlbRows -gt 0) {
+            Write-Warning "[NBA_LATE_FETCH] MLB step1 failed (exit $LASTEXITCODE), but fallback rows are present ($mlbRows) — continuing"
+            Write-Log "[NBA_LATE_FETCH] WARN: MLB step1 exit $LASTEXITCODE (fallback rows=$mlbRows)"
+        }
+        else {
+            Write-Warning "[NBA_LATE_FETCH][HIGH] MLB step1 failed (exit $LASTEXITCODE) and no fallback rows are available; continuing other sports"
+            Write-Log "[NBA_LATE_FETCH][HIGH] MLB step1 exit $LASTEXITCODE with no fallback rows"
+        }
     }
 
     $pipeScript = Join-Path $Root "run_pipeline.ps1"

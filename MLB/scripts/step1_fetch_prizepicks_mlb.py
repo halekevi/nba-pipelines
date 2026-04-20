@@ -88,6 +88,8 @@ EMPTY_COLS = [
 ]
 
 PROFILE_DIR = Path.home() / ".pp_browser_profile"
+SNAPSHOT_DIR = Path(__file__).resolve().parents[1] / "outputs" / "step1_snapshots"
+SNAPSHOT_LATEST_NAME = "step1_mlb_props_latest.csv"
 
 LAUNCH_ARGS = [
     "--no-sandbox",
@@ -336,6 +338,10 @@ def fetch_via_direct_api(
     session_min: float,
     session_max: float,
     first_page_waves: int,
+    forbid_cooldown_threshold: int,
+    forbid_cooldown_seconds: float,
+    forbid_cooldown_jitter_min: float,
+    forbid_cooldown_jitter_max: float,
 ) -> Tuple[List[dict], List[dict]]:
     mod = _load_prizepicks_api_module()
     return mod.fetch_projections(
@@ -346,6 +352,9 @@ def fetch_via_direct_api(
         inter_page_delay=(inter_min, inter_max),
         session_jitter=(session_min, session_max),
         first_page_waves=first_page_waves,
+        forbid_cooldown_threshold=forbid_cooldown_threshold,
+        forbid_cooldown_seconds=forbid_cooldown_seconds,
+        forbid_cooldown_jitter=(forbid_cooldown_jitter_min, forbid_cooldown_jitter_max),
     )
 
 
@@ -357,6 +366,96 @@ def load_payload_from_file(path: str) -> Tuple[List[dict], List[dict]]:
     data     = raw.get("data") or []
     included = raw.get("included") or []
     return (data if isinstance(data, list) else []), (included if isinstance(included, list) else [])
+
+
+def _read_csv_safe(path: Path) -> pd.DataFrame:
+    try:
+        return pd.read_csv(path, encoding="utf-8-sig")
+    except UnicodeDecodeError:
+        return pd.read_csv(path, encoding="utf-8")
+    except Exception:
+        return pd.DataFrame()
+
+
+def _date_from_snapshot_filename(path: Path) -> str:
+    m = re.search(r"(\d{4}-\d{2}-\d{2})", path.name)
+    return m.group(1) if m else ""
+
+
+def _resolve_fallback_frame(out_path: Path, target_date: str, tz_name: str) -> tuple[pd.DataFrame, Path | None, str | None]:
+    SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
+    candidates: list[Path] = []
+    same_day = SNAPSHOT_DIR / f"step1_mlb_props_{target_date}.csv"
+    latest = SNAPSHOT_DIR / SNAPSHOT_LATEST_NAME
+    for p in (same_day, latest, out_path):
+        if p.is_file() and p not in candidates:
+            candidates.append(p)
+    for p in sorted(SNAPSHOT_DIR.glob("step1_mlb_props_*.csv"), key=lambda x: x.stat().st_mtime, reverse=True):
+        if p.name == SNAPSHOT_LATEST_NAME:
+            continue
+        if p.is_file() and p not in candidates:
+            candidates.append(p)
+
+    for source in candidates:
+        frame = _read_csv_safe(source)
+        if frame.empty:
+            continue
+        filtered, _ = _apply_game_date_filter(
+            frame,
+            target_date=str(target_date).strip(),
+            tz_name=str(tz_name).strip() or DEFAULT_TZ,
+            allow_nearest_future=False,
+        )
+        if not filtered.empty:
+            return filtered.copy(), source, target_date
+
+    for source in candidates:
+        frame = _read_csv_safe(source)
+        if frame.empty:
+            continue
+        tagged_date = _date_from_snapshot_filename(source) or target_date
+        return frame.copy(), source, tagged_date
+
+    return pd.DataFrame(), None, None
+
+
+def _write_snapshot(df: pd.DataFrame, target_date: str) -> None:
+    if df is None or df.empty:
+        return
+    SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
+    dated_path = SNAPSHOT_DIR / f"step1_mlb_props_{target_date}.csv"
+    latest_path = SNAPSHOT_DIR / SNAPSHOT_LATEST_NAME
+    df.to_csv(dated_path, index=False, encoding="utf-8-sig")
+    df.to_csv(latest_path, index=False, encoding="utf-8-sig")
+
+
+def _attempt_fallback_write(out_path: Path, target_date: str, tz_name: str, reason: str) -> int:
+    fallback_df, source_path, source_date = _resolve_fallback_frame(
+        out_path=out_path,
+        target_date=target_date,
+        tz_name=tz_name,
+    )
+    if fallback_df.empty or source_path is None:
+        print(f"[FALLBACK] No usable MLB step1 snapshot found (reason={reason}).")
+        return 0
+    fallback_df.to_csv(out_path, index=False, encoding="utf-8-sig")
+    rows = int(len(fallback_df))
+    print(
+        f"[FALLBACK] Using MLB snapshot due to {reason}: source={source_path} "
+        f"snapshot_date={source_date or 'unknown'} rows={rows}"
+    )
+    log_pipeline_health(
+        "mlb.step1_fetch_prizepicks",
+        "fallback_used",
+        extra={
+            "reason": reason,
+            "source_file": str(source_path),
+            "snapshot_date": str(source_date or ""),
+            "rows": rows,
+        },
+        start=Path(__file__),
+    )
+    return rows
 
 
 # ─── Playwright fetch — fully headless, no manual window ──────────────────────
@@ -612,17 +711,41 @@ def main():
     )
     ap.add_argument("--per-page", type=int, default=250, help="Direct API: per_page (default 250).")
     ap.add_argument("--max-pages", type=int, default=8, help="Direct API: max pagination pages (default 8).")
-    ap.add_argument("--api-retries", type=int, default=15, help="Direct API: retries per GET inside each session wave (default 15).")
+    ap.add_argument("--api-retries", type=int, default=5, help="Direct API: retries per GET inside each session wave (default 5).")
     ap.add_argument(
         "--api-session-waves",
         type=int,
-        default=4,
-        help="Direct API: fresh TCP session attempts if page-1 still fails after all retries (default 4).",
+        default=2,
+        help="Direct API: fresh TCP session attempts if page-1 still fails after all retries (default 2).",
     )
     ap.add_argument("--api-inter-min", type=float, default=6.0, help="Direct API: min seconds between paginated requests.")
     ap.add_argument("--api-inter-max", type=float, default=14.0, help="Direct API: max seconds between paginated requests.")
     ap.add_argument("--api-session-min", type=float, default=5.0, help="Direct API: min seconds before first request.")
     ap.add_argument("--api-session-max", type=float, default=12.0, help="Direct API: max seconds before first request.")
+    ap.add_argument(
+        "--api-403-cooldown-after",
+        type=int,
+        default=3,
+        help="Direct API: trigger cooldown window after this many consecutive 403s.",
+    )
+    ap.add_argument(
+        "--api-403-cooldown-seconds",
+        type=float,
+        default=90.0,
+        help="Direct API: base cooldown duration once consecutive 403 threshold is reached.",
+    )
+    ap.add_argument(
+        "--api-403-cooldown-jitter-min",
+        type=float,
+        default=12.0,
+        help="Direct API: extra random cooldown seconds (min) after repeated 403s.",
+    )
+    ap.add_argument(
+        "--api-403-cooldown-jitter-max",
+        type=float,
+        default=40.0,
+        help="Direct API: extra random cooldown seconds (max) after repeated 403s.",
+    )
     args     = ap.parse_args()
     _ensure_utf8_stdio()
     out_path = Path(args.output)
@@ -656,6 +779,10 @@ def main():
                 session_min=float(args.api_session_min),
                 session_max=float(args.api_session_max),
                 first_page_waves=int(args.api_session_waves),
+                forbid_cooldown_threshold=int(args.api_403_cooldown_after),
+                forbid_cooldown_seconds=float(args.api_403_cooldown_seconds),
+                forbid_cooldown_jitter_min=float(args.api_403_cooldown_jitter_min),
+                forbid_cooldown_jitter_max=float(args.api_403_cooldown_jitter_max),
             )
         except Exception as e:
             data, included = [], []
@@ -685,12 +812,21 @@ def main():
 
     # ── Empty guard ──────────────────────────────────────────────────────────
     if not data:
+        print("❌ No projections returned after all attempts.")
+        fallback_rows = _attempt_fallback_write(
+            out_path=out_path,
+            target_date=str(args.date).strip(),
+            tz_name=str(args.tz).strip() or DEFAULT_TZ,
+            reason="no_projections",
+        )
+        if fallback_rows > 0:
+            print(f"[INFO] MLB step1 fallback satisfied with rows={fallback_rows}; returning success.")
+            sys.exit(0)
         if args.append and out_path.is_file():
-            print("❌ No projections returned after all attempts.")
             print("   (--append: left existing output file unchanged)")
         else:
-            pd.DataFrame(columns=EMPTY_COLS).to_csv(out_path, index=False)
-            print("❌ No projections returned after all attempts. Wrote empty CSV.")
+            pd.DataFrame(columns=EMPTY_COLS).to_csv(out_path, index=False, encoding="utf-8-sig")
+            print("   Wrote empty CSV (no fallback rows available).")
         log_pipeline_health(
             "mlb.step1_fetch_prizepicks",
             "no_projections",
@@ -733,6 +869,15 @@ def main():
     for c in required:
         if c not in df.columns:
             print(f"⚠️  Missing required column: {c}")
+            fallback_rows = _attempt_fallback_write(
+                out_path=out_path,
+                target_date=str(args.date).strip(),
+                tz_name=str(args.tz).strip() or DEFAULT_TZ,
+                reason=f"missing_required_column_{c}",
+            )
+            if fallback_rows > 0:
+                print(f"[INFO] MLB step1 fallback satisfied with rows={fallback_rows}; returning success.")
+                sys.exit(0)
             if not (args.append and out_path.is_file()):
                 df.to_csv(out_path, index=False, encoding="utf-8-sig")
             sys.exit(1)
@@ -772,6 +917,15 @@ def main():
                 f"\n⛔ BOARD_TOO_SMALL on new fetch — got {rows_n_new} rows / {teams_n_new} teams "
                 f"(need min_rows={args.min_rows}, min_teams={args.min_teams})"
             )
+            fallback_rows = _attempt_fallback_write(
+                out_path=out_path,
+                target_date=str(args.date).strip(),
+                tz_name=str(args.tz).strip() or DEFAULT_TZ,
+                reason="board_too_small",
+            )
+            if fallback_rows > 0:
+                print(f"[INFO] MLB step1 fallback satisfied with rows={fallback_rows}; returning success.")
+                sys.exit(0)
             print("   (--append: left existing output file unchanged)")
             log_pipeline_health(
                 "mlb.step1_fetch_prizepicks",
@@ -839,10 +993,22 @@ def main():
         print(f"[WARNING] MLB step1 no rows for requested date; using nearest future game_date={fallback_date}")
     df = filtered_df
 
-    df.to_csv(out_path, index=False, encoding="utf-8-sig")
     if len(df) == 0:
-        print(f"\n[INFO] Saved empty date-filtered MLB step1 CSV -> {out_path}")
-        sys.exit(0)
+        fallback_rows = _attempt_fallback_write(
+            out_path=out_path,
+            target_date=str(args.date).strip(),
+            tz_name=str(args.tz).strip() or DEFAULT_TZ,
+            reason="date_filter_empty",
+        )
+        if fallback_rows > 0:
+            print(f"[INFO] MLB step1 fallback satisfied with rows={fallback_rows}; returning success.")
+            sys.exit(0)
+        pd.DataFrame(columns=EMPTY_COLS).to_csv(out_path, index=False, encoding="utf-8-sig")
+        print(f"\n[WARNING] Saved empty date-filtered MLB step1 CSV -> {out_path} (no fallback available)")
+        sys.exit(1)
+
+    df.to_csv(out_path, index=False, encoding="utf-8-sig")
+    _write_snapshot(df, target_date=str(args.date).strip())
 
     rows_n  = len(df)
     teams_n = df["team"].astype(str).nunique()

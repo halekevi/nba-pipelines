@@ -261,6 +261,10 @@ def _api_get(
     params: dict,
     retries: int = 5,
     timeout: Tuple[float, float] = (10.0, 30.0),
+    *,
+    forbid_cooldown_threshold: int = 3,
+    forbid_cooldown_seconds: float = 90.0,
+    forbid_cooldown_jitter: Tuple[float, float] = (12.0, 40.0),
 ) -> dict:
     """
     GET with session headers (cohesive UA + Sec-CH-UA). Builds query string manually
@@ -281,37 +285,54 @@ def _api_get(
         full_url = url
 
     last_exc = None
+    consecutive_403 = 0
     for attempt in range(1, retries + 1):
         try:
             if attempt > 1:
-                time.sleep(random.uniform(2.5, 6.5))
+                # Gentle jitter before retries to avoid bursty retry signatures.
+                time.sleep(random.uniform(2.5, 6.5) + min(5.0, attempt * 0.45))
 
             r = session.get(full_url, timeout=timeout)
 
             if r.status_code == 429:
+                consecutive_403 = 0
                 wait = random.uniform(60.0, 120.0)
                 print(f"  [429] Rate limited — waiting {wait:.0f}s (attempt {attempt}/{retries})")
                 time.sleep(wait)
                 continue
 
             if r.status_code == 403:
+                consecutive_403 += 1
                 print(f"  [403] Forbidden on attempt {attempt}/{retries} — rotating browser profile")
                 try:
                     session.cookies.clear()
                 except Exception:
                     pass
                 _rotate_session_headers(session)
-                # Escalate pause as attempts burn (WAF / bot checks often ease after a longer gap).
-                base = min(55.0, 7.0 + float(attempt) * 4.5)
-                time.sleep(random.uniform(base, base + 14.0))
+                # Do a second short header rotate to vary session fingerprint more aggressively.
+                time.sleep(random.uniform(0.35, 1.15))
+                _rotate_session_headers(session)
+                # Escalate pause as attempts/consecutive blocks increase.
+                base = min(95.0, 8.0 + float(attempt) * 4.0 + float(consecutive_403) * 6.0)
+                wait = random.uniform(base, base + 20.0)
+                print(f"    [403] Backing off {wait:.1f}s before retry")
+                time.sleep(wait)
+                if consecutive_403 >= max(1, int(forbid_cooldown_threshold)):
+                    cd_lo, cd_hi = forbid_cooldown_jitter
+                    cooldown_wait = max(15.0, float(forbid_cooldown_seconds)) + random.uniform(cd_lo, cd_hi)
+                    print(f"    [403] Cooldown window hit ({consecutive_403} consecutive). Sleeping {cooldown_wait:.1f}s")
+                    time.sleep(cooldown_wait)
+                    consecutive_403 = 0
                 continue
 
             if r.status_code >= 500:
+                consecutive_403 = 0
                 wait = min(60.0, (2 ** (attempt - 1)) * 3.0) + random.uniform(1.0, 4.0)
                 print(f"  [{r.status_code}] Server error — waiting {wait:.1f}s (attempt {attempt}/{retries})")
                 time.sleep(wait)
                 continue
 
+            consecutive_403 = 0
             r.raise_for_status()
             return r.json()
 
@@ -345,6 +366,9 @@ def fetch_projections(
     inter_page_delay: Tuple[float, float] | None = None,
     session_jitter: Tuple[float, float] | None = None,
     first_page_waves: int = 3,
+    forbid_cooldown_threshold: int = 3,
+    forbid_cooldown_seconds: float = 90.0,
+    forbid_cooldown_jitter: Tuple[float, float] = (12.0, 40.0),
 ) -> Tuple[List[dict], List[dict]]:
     """
     Fetch all projections + included sideloads from PrizePicks API.
@@ -393,7 +417,15 @@ def fetch_projections(
         session = _make_session(session_jitter=jitter)
         print(f"  Fetching page 1 (league_id={league_id}, per_page={per_page})...")
         try:
-            payload = _api_get(session, BASE_URL, params, retries=retries)
+            payload = _api_get(
+                session,
+                BASE_URL,
+                params,
+                retries=retries,
+                forbid_cooldown_threshold=forbid_cooldown_threshold,
+                forbid_cooldown_seconds=forbid_cooldown_seconds,
+                forbid_cooldown_jitter=forbid_cooldown_jitter,
+            )
             break
         except RuntimeError as e:
             if wave + 1 >= waves:
@@ -424,7 +456,15 @@ def fetch_projections(
         # Inter-page delay (default gentle; MLB caller can pass slower bounds)
         time.sleep(random.uniform(ip_lo, ip_hi))
         try:
-            payload  = _api_get(session, next_url, {}, retries=retries)
+            payload  = _api_get(
+                session,
+                next_url,
+                {},
+                retries=retries,
+                forbid_cooldown_threshold=forbid_cooldown_threshold,
+                forbid_cooldown_seconds=forbid_cooldown_seconds,
+                forbid_cooldown_jitter=forbid_cooldown_jitter,
+            )
             new_data = payload.get("data") or []
             new_inc  = payload.get("included") or []
             added = 0

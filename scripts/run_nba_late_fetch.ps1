@@ -47,6 +47,19 @@ function Preserve-ExistingFile([string]$Path, [string]$Reason = "") {
     }
 }
 
+function Get-CsvDataRowCount([string]$CsvPath) {
+    if (-not (Test-Path $CsvPath)) { return 0 }
+    try {
+        $raw = Import-Csv -Path $CsvPath
+        if ($null -eq $raw) { return 0 }
+        if ($raw -is [array]) { return $raw.Count }
+        return 1
+    }
+    catch {
+        return 0
+    }
+}
+
 # NBA — append so early fetch rows are preserved when the board fills in
 Write-Host "[LATE_FETCH] Fetching NBA props (append)..."
 $NBADir = Join-Path $Root "NBA"
@@ -112,7 +125,14 @@ finally {
     Pop-Location
 }
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "[LATE_FETCH] MLB step1 failed — continuing" -ForegroundColor Yellow
+    $mlbOut = Join-Path $MLBDir "step1_mlb_props.csv"
+    $mlbRows = Get-CsvDataRowCount -CsvPath $mlbOut
+    if ($mlbRows -gt 0) {
+        Write-Host "[LATE_FETCH] MLB step1 failed but fallback rows are present ($mlbRows) — continuing" -ForegroundColor Yellow
+    }
+    else {
+        Write-Host "[LATE_FETCH][HIGH] MLB step1 failed and no fallback rows are available. Continuing pipeline for other sports." -ForegroundColor Red
+    }
 }
 
 # NFL late fetch — activate week of Sep 7, 2026
