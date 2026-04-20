@@ -102,6 +102,10 @@ dist/
 *.webp
 *.gif
 
+# Launcher assets for Capacitor Android (override ignores above)
+!mobile/android/app/src/main/res/mipmap-*/*.png
+!mobile/android/app/src/main/res/mipmap-*/*.webp
+
 # Browser/session runtime artifacts (never commit)
 browser_session/
 browser_session_harvest2/
