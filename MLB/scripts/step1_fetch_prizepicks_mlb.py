@@ -807,6 +807,11 @@ def main():
         except Exception as e:
             data, included = [], []
             print(f"  ❌ Direct API fetch failed: {type(e).__name__}: {e}")
+            print(
+                "  [HINT] Persistent 403: use Chrome remote debugging (real session) — "
+                "pwsh -NoProfile -File scripts\\run_mlb_step1_chrome_debug.ps1 "
+                "(see docs\\chrome_debug_setup.md)"
+            )
         max_attempts = 1
     else:
         fetch_method = "cdp" if (args.cdp or "").strip() else "playwright"

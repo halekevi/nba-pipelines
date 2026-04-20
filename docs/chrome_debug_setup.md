@@ -65,6 +65,14 @@ Open `https://app.prizepicks.com/`, confirm you are logged in and not stuck on a
 
 ### 3) Run MLB step1 attached to that session
 
+From repo root (verifies `http://127.0.0.1:9222/json/version` before running):
+
+```powershell
+pwsh -NoProfile -File scripts\run_mlb_step1_chrome_debug.ps1
+```
+
+Or manually:
+
 ```powershell
 cd C:\Users\halek\OneDrive\Desktop\PropORACLE\MLB
 py -3.14 .\scripts\step1_fetch_prizepicks_mlb.py --cdp http://127.0.0.1:9222 --output step1_mlb_props.csv
