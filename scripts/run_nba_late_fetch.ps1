@@ -114,23 +114,36 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host "[LATE_FETCH] Soccer step1 failed — continuing" -ForegroundColor Yellow
 }
 
-# MLB — Playwright first (avoids cold direct API 403), then direct API fallback
-Write-Host "[LATE_FETCH] Fetching MLB props (append; Playwright then direct API if needed)..."
+# US Eastern: after 20:00, PP NHL/tennis boards often roll to the next calendar day.
+# Resolve before MLB fetch so step1 --date matches the pipeline slate.
+$PipeDate = (Get-Date).ToString("yyyy-MM-dd")
+try {
+    $tz = [System.TimeZoneInfo]::FindSystemTimeZoneById("Eastern Standard Time")
+    $etNow = [System.TimeZoneInfo]::ConvertTimeFromUtc((Get-Date).ToUniversalTime(), $tz)
+    if ($etNow.Hour -ge 20) {
+        $PipeDate = $etNow.Date.AddDays(1).ToString("yyyy-MM-dd")
+        Write-Host "[LATE_FETCH] After 8 PM ET - using next calendar date for pipeline: $PipeDate" -ForegroundColor Cyan
+    }
+} catch {
+    Write-Host "[LATE_FETCH] WARN: Eastern time check failed (using local calendar date): $_" -ForegroundColor Yellow
+}
+
+# MLB - Playwright first (avoids cold direct API 403), then direct API fallback
+Write-Host "[LATE_FETCH] Fetching MLB props (append; Playwright then direct API if needed)..." -ForegroundColor Cyan
 $MLBDir = Join-Path $Root "MLB"
-$LateMlbDate = (Get-Date).ToString("yyyy-MM-dd")
 Push-Location $MLBDir
 try {
     & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
         "--playwright" `
         "--timeout" "180" `
         "--append" `
-        "--date" "$LateMlbDate" `
+        "--date" "$PipeDate" `
         "--output" "step1_mlb_props.csv"
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "[LATE_FETCH] MLB Playwright step1 failed (exit $LASTEXITCODE) — trying direct API" -ForegroundColor Yellow
+        Write-Host "[LATE_FETCH] MLB Playwright step1 failed (exit $LASTEXITCODE) - trying direct API" -ForegroundColor Yellow
         & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
             "--append" `
-            "--date" "$LateMlbDate" `
+            "--date" "$PipeDate" `
             "--output" "step1_mlb_props.csv"
     }
 }
@@ -141,13 +154,12 @@ if ($LASTEXITCODE -ne 0) {
     $mlbOut = Join-Path $MLBDir "step1_mlb_props.csv"
     $mlbRows = Get-CsvDataRowCount -CsvPath $mlbOut
     if ($mlbRows -gt 0) {
-        Write-Host "[LATE_FETCH] MLB step1 failed but fallback rows are present ($mlbRows) — continuing" -ForegroundColor Yellow
+        Write-Host "[LATE_FETCH] MLB step1 failed but fallback rows are present ($mlbRows) - continuing" -ForegroundColor Yellow
     }
     else {
         Write-Host "[LATE_FETCH][HIGH] MLB step1 failed and no fallback rows are available. Continuing pipeline for other sports." -ForegroundColor Red
     }
 }
-
 # NFL late fetch — activate week of Sep 7, 2026
 # $NFLActive = (Get-Date) -ge [DateTime]"2026-09-07"
 # if ($NFLActive) {
@@ -169,20 +181,6 @@ $pipeScript = Join-Path $Root "run_pipeline.ps1"
 if (-not (Test-Path $pipeScript)) {
     Write-Host "[LATE_FETCH] Missing run_pipeline.ps1 at $pipeScript" -ForegroundColor Red
     exit 1
-}
-
-# US Eastern: after 20:00, PP NHL/tennis boards often roll to the next calendar day.
-# Morning --date would leave NHL step8 at 0 rows; align pipeline date with the slate.
-$PipeDate = (Get-Date).ToString("yyyy-MM-dd")
-try {
-    $tz = [System.TimeZoneInfo]::FindSystemTimeZoneById("Eastern Standard Time")
-    $etNow = [System.TimeZoneInfo]::ConvertTimeFromUtc((Get-Date).ToUniversalTime(), $tz)
-    if ($etNow.Hour -ge 20) {
-        $PipeDate = $etNow.Date.AddDays(1).ToString("yyyy-MM-dd")
-        Write-Host "[LATE_FETCH] After 8 PM ET — using next calendar date for pipeline: $PipeDate" -ForegroundColor Cyan
-    }
-} catch {
-    Write-Host "[LATE_FETCH] WARN: Eastern time check failed (using local calendar date): $_" -ForegroundColor Yellow
 }
 
 Write-Host "[LATE_FETCH] Running full pipeline -SkipFetch -Date $PipeDate..."

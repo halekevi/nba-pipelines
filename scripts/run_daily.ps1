@@ -38,7 +38,10 @@ param(
     [int]$PollPasses = 4,
     [int]$PollIntervalSeconds = 5400,
     [switch]$PollSkip9pmWait,
-    [switch]$NoOverwrite
+    [switch]$NoOverwrite,
+    [string]$TicketModelMode = "",
+    [double]$TicketModelWeight = 0.35,
+    [int]$TicketModelTopN = 10
 )
 
 $ErrorActionPreference = "Continue"
@@ -60,6 +63,11 @@ function Get-TimeStamp { return Get-Date -Format "HH:mm:ss" }
 
 $Today = if ($Date.Trim()) { $Date.Trim() } else { (Get-Date).ToString("yyyy-MM-dd") }
 $Yesterday = if ($GradeDate.Trim()) { $GradeDate.Trim() } else { (Get-Date).AddDays(-1).ToString("yyyy-MM-dd") }
+$TicketModelModeEffective = if ($TicketModelMode.Trim()) { $TicketModelMode.Trim().ToLowerInvariant() } elseif ([string]$env:TICKET_MODEL_MODE) { ([string]$env:TICKET_MODEL_MODE).Trim().ToLowerInvariant() } else { "shadow" }
+if (@("off", "shadow", "on") -notcontains $TicketModelModeEffective) {
+    Write-Warning "Invalid TicketModelMode '$TicketModelModeEffective' (expected off|shadow|on); defaulting to shadow"
+    $TicketModelModeEffective = "shadow"
+}
 
 $LogsDir = Join-Path $Root "logs"
 if (!(Test-Path $LogsDir)) {
@@ -164,6 +172,7 @@ $env:PYTHONIOENCODING = "utf-8"
 try { [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 } catch { }
 
 Write-Log "======== Daily run start (Today=$Today, Yesterday=$Yesterday) ========"
+Write-Log "Ticket model mode: $TicketModelModeEffective (weight=$TicketModelWeight, top_n=$TicketModelTopN)"
 if ($NoOverwrite) {
     Write-Log "NO-OVERWRITE mode enabled (existing files are preserved to *.bak_YYYYMMDD_HHMMSS before updates)"
 }
@@ -685,6 +694,210 @@ if ($script:PipelineFailed) {
 }
 
 # =============================================================================
+# STEP D1 — Ticket-level ML refresh + eval history + ultimate tickets
+# Modes:
+#   off    -> build EV-only ultimate tickets, skip dataset/train/eval
+#   shadow -> build EV-only ultimate tickets, but run dataset/train/eval + append lift history
+#   on     -> run dataset/train/eval, then build ultimate tickets with ticket-model rerank;
+#             on any model failure, auto-fallback to EV-only for zero-risk output.
+# =============================================================================
+if ($script:PipelineFailed) {
+    Write-Log "STEP D1 - Ticket model refresh/eval: SKIPPED (pipeline failed)"
+}
+else {
+    Write-Log "STEP D1 - Ticket model refresh/eval: START (mode=$TicketModelModeEffective)"
+    $ticketDatasetOk = $false
+    $ticketTrainOk = $false
+    $ticketEvalOk = $false
+    $ticketModelAllowedThisRun = $false
+    $ticketModeApplied = "off"
+    $ticketEvalSummaryPath = Join-Path $Root "data\ml\ticket_model_eval_summary_latest.json"
+    $ticketEvalByDatePath = Join-Path $Root "data\ml\ticket_model_eval_by_date.csv"
+    $ticketEvalHistoryPath = Join-Path $Root "data\ml\ticket_model_eval_history.csv"
+    $ticketRunReportPath = Join-Path $Root "outputs\$Today\ticket_model_eval_report_$Today.json"
+    $dataMlDir = Join-Path $Root "data\ml"
+    if (-not (Test-Path $dataMlDir)) {
+        New-Item -ItemType Directory -Path $dataMlDir -Force | Out-Null
+    }
+    Push-Location $Root
+    try {
+        $buildDatasetScript = Join-Path $Root "scripts\build_ticket_training_dataset.py"
+        $trainTicketScript = Join-Path $Root "scripts\train_ticket_model.py"
+        $evalTicketScript = Join-Path $Root "scripts\evaluate_ticket_model.py"
+        $ultimateScript = Join-Path $Root "scripts\build_ultimate_tickets.py"
+
+        if ($TicketModelModeEffective -ne "off") {
+            if (Test-Path $buildDatasetScript) {
+                & py -3.14 -X utf8 $buildDatasetScript --output (Join-Path $Root "data\ml\ticket_training_dataset.csv")
+                if ($LASTEXITCODE -eq 0) {
+                    $ticketDatasetOk = $true
+                    Write-Log "STEP D1a - build_ticket_training_dataset: OK"
+                }
+                else {
+                    Write-Log "STEP D1a - build_ticket_training_dataset: WARN (exit $LASTEXITCODE)"
+                }
+            }
+            else {
+                Write-Log "STEP D1a - build_ticket_training_dataset: SKIP (script missing)"
+            }
+
+            if ($ticketDatasetOk -and (Test-Path $trainTicketScript)) {
+                & py -3.14 -X utf8 $trainTicketScript --input-csv (Join-Path $Root "data\ml\ticket_training_dataset.csv") --target label_cash
+                if ($LASTEXITCODE -eq 0) {
+                    $ticketTrainOk = $true
+                    Write-Log "STEP D1b - train_ticket_model: OK"
+                }
+                else {
+                    Write-Log "STEP D1b - train_ticket_model: WARN (exit $LASTEXITCODE)"
+                }
+            }
+            elseif (-not (Test-Path $trainTicketScript)) {
+                Write-Log "STEP D1b - train_ticket_model: SKIP (script missing)"
+            }
+
+            if ($ticketTrainOk -and (Test-Path $evalTicketScript)) {
+                & py -3.14 -X utf8 $evalTicketScript `
+                    --input-csv (Join-Path $Root "data\ml\ticket_training_dataset.csv") `
+                    --model (Join-Path $Root "models\ticket_model.pkl") `
+                    --features (Join-Path $Root "models\ticket_model_features.json") `
+                    --top-n $TicketModelTopN `
+                    --weight $TicketModelWeight `
+                    --ranking-mode blend `
+                    --out-csv $ticketEvalByDatePath `
+                    --out-json $ticketEvalSummaryPath
+                if ($LASTEXITCODE -eq 0) {
+                    $ticketEvalOk = $true
+                    Write-Log "STEP D1c - evaluate_ticket_model: OK"
+                }
+                else {
+                    Write-Log "STEP D1c - evaluate_ticket_model: WARN (exit $LASTEXITCODE)"
+                }
+            }
+            elseif (-not (Test-Path $evalTicketScript)) {
+                Write-Log "STEP D1c - evaluate_ticket_model: SKIP (script missing)"
+            }
+
+            if ($ticketEvalOk -and (Test-Path $ticketEvalSummaryPath)) {
+                try {
+                    $summaryRaw = Get-Content -Raw -LiteralPath $ticketEvalSummaryPath | ConvertFrom-Json
+                    $histRow = [PSCustomObject]@{
+                        run_ts_utc = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+                        slate_date = $Today
+                        mode_requested = $TicketModelModeEffective
+                        top_n = [int]$summaryRaw.top_n
+                        blend_weight = [double]$summaryRaw.blend_weight
+                        rows_decided = [int]$summaryRaw.rows_decided
+                        date_count = [int]$summaryRaw.date_count
+                        delta_cash_rate = [double]$summaryRaw.by_date_avg_delta.delta_cash_rate
+                        delta_avg_net_10 = [double]$summaryRaw.by_date_avg_delta.delta_avg_net_10
+                        delta_total_net_10 = [double]$summaryRaw.by_date_avg_delta.delta_total_net_10
+                        top_swapped_count = [double]$summaryRaw.by_date_avg_delta.top_swapped_count
+                        avg_pred_p_cash = [double]$summaryRaw.overall.avg_pred_p_cash
+                    }
+                    if (Test-Path $ticketEvalHistoryPath) {
+                        $histRow | Export-Csv -LiteralPath $ticketEvalHistoryPath -Append -NoTypeInformation -Encoding UTF8
+                    }
+                    else {
+                        $histRow | Export-Csv -LiteralPath $ticketEvalHistoryPath -NoTypeInformation -Encoding UTF8
+                    }
+                    Write-Log "STEP D1d - Ticket eval history append: OK -> $ticketEvalHistoryPath"
+                }
+                catch {
+                    Write-Log "STEP D1d - Ticket eval history append: WARN ($($_.Exception.Message))"
+                }
+            }
+        }
+        else {
+            Write-Log "STEP D1a-D1d - Ticket model train/eval: SKIPPED (mode=off)"
+        }
+
+        # Enable model rerank only in explicit ON mode and only if train+eval succeeded this run.
+        if (
+            $TicketModelModeEffective -eq "on" -and
+            $ticketDatasetOk -and
+            $ticketTrainOk -and
+            $ticketEvalOk -and
+            (Test-Path (Join-Path $Root "models\ticket_model.pkl")) -and
+            (Test-Path (Join-Path $Root "models\ticket_model_features.json"))
+        ) {
+            $ticketModelAllowedThisRun = $true
+        }
+
+        if (Test-Path $ultimateScript) {
+            if ($ticketModelAllowedThisRun) {
+                & py -3.14 -X utf8 $ultimateScript --date $Today --mode balanced --ticket-model on --ticket-model-weight $TicketModelWeight
+                if ($LASTEXITCODE -eq 0) {
+                    $ticketModeApplied = "on"
+                    Write-Log "STEP D1e - build_ultimate_tickets: OK (ticket-model on)"
+                }
+                else {
+                    Write-Log "STEP D1e - build_ultimate_tickets: WARN (ticket-model on exit $LASTEXITCODE); fallback EV-only"
+                    & py -3.14 -X utf8 $ultimateScript --date $Today --mode balanced --ticket-model off
+                    if ($LASTEXITCODE -eq 0) {
+                        $ticketModeApplied = "off"
+                        Write-Log "STEP D1e - build_ultimate_tickets: OK (fallback EV-only)"
+                    }
+                    else {
+                        Write-Log "STEP D1e - build_ultimate_tickets: WARN (fallback EV-only exit $LASTEXITCODE)"
+                    }
+                }
+            }
+            else {
+                & py -3.14 -X utf8 $ultimateScript --date $Today --mode balanced --ticket-model off
+                if ($LASTEXITCODE -eq 0) {
+                    $ticketModeApplied = "off"
+                    if ($TicketModelModeEffective -eq "on") {
+                        Write-Log "STEP D1e - build_ultimate_tickets: OK (EV-only fallback due to model stage failure)"
+                    }
+                    else {
+                        Write-Log "STEP D1e - build_ultimate_tickets: OK (EV-only)"
+                    }
+                }
+                else {
+                    Write-Log "STEP D1e - build_ultimate_tickets: WARN (EV-only exit $LASTEXITCODE)"
+                }
+            }
+        }
+        else {
+            Write-Log "STEP D1e - build_ultimate_tickets: SKIP (script missing)"
+        }
+
+        # Persist a concise run report in dated outputs (auto-staged by STEP E).
+        try {
+            $reportObj = [PSCustomObject]@{
+                run_ts_utc = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+                slate_date = $Today
+                mode_requested = $TicketModelModeEffective
+                mode_applied = $ticketModeApplied
+                model_stage = [PSCustomObject]@{
+                    dataset_ok = $ticketDatasetOk
+                    train_ok = $ticketTrainOk
+                    eval_ok = $ticketEvalOk
+                    model_allowed = $ticketModelAllowedThisRun
+                }
+                eval_summary_path = $ticketEvalSummaryPath
+                eval_by_date_path = $ticketEvalByDatePath
+                eval_history_path = $ticketEvalHistoryPath
+            }
+            if (-not (Test-Path (Split-Path -Parent $ticketRunReportPath))) {
+                New-Item -ItemType Directory -Path (Split-Path -Parent $ticketRunReportPath) -Force | Out-Null
+            }
+            $reportObj | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $ticketRunReportPath -Encoding UTF8
+            Write-Log "STEP D1f - Ticket model run report: OK -> $ticketRunReportPath"
+        }
+        catch {
+            Write-Log "STEP D1f - Ticket model run report: WARN ($($_.Exception.Message))"
+        }
+    }
+    catch {
+        Write-Log "STEP D1 - Ticket model refresh/eval: WARN (exception: $($_.Exception.Message))"
+    }
+    finally {
+        Pop-Location
+    }
+}
+
+# =============================================================================
 # STEP D2 — Copy step8 clean slates to sport root folders (Railway reads these)
 # =============================================================================
 Write-Log "STEP D2 - Copy Railway slate files to sport roots: START"
@@ -791,6 +1004,17 @@ else {
 
         if ($WeeklyAnalysis -and (Test-Path (Join-Path $Root "outputs\$Today\grader_analysis_$Today.txt"))) {
             git -C $Root add -- "outputs/$Today/grader_analysis_$Today.txt"
+        }
+        $ticketMlArtifacts = @(
+            "data\ml\ticket_model_eval_history.csv",
+            "data\ml\ticket_model_eval_by_date.csv",
+            "data\ml\ticket_model_eval_summary_latest.json"
+        )
+        foreach ($rel in $ticketMlArtifacts) {
+            $full = Join-Path $Root $rel
+            if (Test-Path $full) {
+                git -C $Root add -- $rel
+            }
         }
 
         $CommitMsg = "Daily slate $Today [auto]"
@@ -1081,10 +1305,10 @@ if ($NowHour -ge 10) {
         Write-Log "[NBA_LATE_FETCH] WARN: Soccer step1 exit $LASTEXITCODE"
     }
 
+    Write-Host "[MLB] Fetching MLB props (Playwright)..." -ForegroundColor Cyan
     $MLBDir = Join-Path $Root "MLB"
     Push-Location $MLBDir
     try {
-        Write-Host "[NBA_LATE_FETCH] MLB step1: Playwright (primary), then direct API if needed..."
         & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
             "--playwright" `
             "--timeout" "180" `
@@ -1092,7 +1316,7 @@ if ($NowHour -ge 10) {
             "--date" "$Today" `
             "--output" "step1_mlb_props.csv"
         if ($LASTEXITCODE -ne 0) {
-            Write-Warning "[NBA_LATE_FETCH] MLB Playwright step1 failed (exit $LASTEXITCODE) — trying direct API"
+            Write-Warning "[NBA_LATE_FETCH] MLB Playwright step1 failed (exit $LASTEXITCODE) - trying direct API"
             Write-Log "[NBA_LATE_FETCH] MLB Playwright failed (exit $LASTEXITCODE); trying direct API"
             & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
                 "--append" `
@@ -1107,7 +1331,7 @@ if ($NowHour -ge 10) {
         $mlbOut = Join-Path $MLBDir "step1_mlb_props.csv"
         $mlbRows = Get-CsvDataRowCount -CsvPath $mlbOut
         if ($mlbRows -gt 0) {
-            Write-Warning "[NBA_LATE_FETCH] MLB step1 failed (exit $LASTEXITCODE), but fallback rows are present ($mlbRows) — continuing"
+            Write-Warning "[NBA_LATE_FETCH] MLB step1 failed (exit $LASTEXITCODE), but fallback rows are present ($mlbRows) - continuing"
             Write-Log "[NBA_LATE_FETCH] WARN: MLB step1 exit $LASTEXITCODE (fallback rows=$mlbRows)"
         }
         else {
