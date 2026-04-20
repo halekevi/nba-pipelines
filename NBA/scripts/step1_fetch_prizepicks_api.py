@@ -7,7 +7,7 @@ Playwright, no interception. Harder to detect, faster, and fully headless.
 
 Strategy:
   - Default HTTP: curl_cffi Session(impersonate=chrome120) when installed (browser TLS/JA3); else requests
-  - Rotates cohesive browser profiles (User-Agent + Sec-CH-UA + platform); full rotation on 403
+  - Cohesive browser profiles (User-Agent + Sec-CH-UA + platform); with curl_cffi, pool matches impersonate=chromeNNN; light rotation on repeated 403
   - Optional multi-wave first page: new Session + backoff if all in-wave retries exhaust (MLB uses more waves)
   - Persistent session with app.prizepicks.com-style headers on top of impersonation
   - Conservative delays before the first request and between paginated pages
@@ -104,8 +104,29 @@ PICKTYPE_MAP = {
 DEFAULT_SESSION_JITTER: Tuple[float, float] = (5.0, 12.0)
 DEFAULT_INTER_PAGE_DELAY: Tuple[float, float] = (6.0, 14.0)
 
+# Gap between session waves after page-1 failure (new TCP session).
+DEFAULT_WAVE_GAP: Tuple[float, float] = (12.0, 28.0)
+
 # Cohesive browser profiles: Sec-CH-UA major version must match the Chrome/Edg token in User-Agent.
 _BROWSER_PROFILES: List[Dict[str, str]] = [
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/120.0.0.0 Safari/537.36"
+        ),
+        "Sec-Ch-Ua": '"Google Chrome";v="120", "Chromium";v="120", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"Windows"',
+    },
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/120.0.0.0 Safari/537.36"
+        ),
+        "Sec-Ch-Ua": '"Google Chrome";v="120", "Chromium";v="120", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"macOS"',
+    },
     {
         "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -172,6 +193,37 @@ _BROWSER_PROFILES: List[Dict[str, str]] = [
 ]
 
 
+def _tls_chrome_major_from_impersonate() -> int | None:
+    """Parse chromeNNN from PROPORACLE_CURL_IMPERSONATE / default so UA matches TLS impersonation."""
+    m = re.search(r"(?i)chrome[_-]?(\d+)", _CURL_IMPERSONATE)
+    if not m:
+        return None
+    try:
+        return int(m.group(1))
+    except ValueError:
+        return None
+
+
+def _profiles_for_current_transport() -> List[Dict[str, str]]:
+    """
+    When curl_cffi is active, only use client hints whose Chrome major matches impersonate=chromeNNN.
+    Mismatch (e.g. TLS chrome120 + UA Chrome/131) is a common WAF 403 trigger.
+    """
+    if not _CURL_CFFI_AVAILABLE:
+        return list(_BROWSER_PROFILES)
+    major = _tls_chrome_major_from_impersonate()
+    if major is None:
+        return list(_BROWSER_PROFILES)
+    needle = f"Chrome/{major}."
+    edge_needle = f"Edg/{major}."
+    matched = [
+        p
+        for p in _BROWSER_PROFILES
+        if needle in p.get("User-Agent", "") or edge_needle in p.get("User-Agent", "")
+    ]
+    return matched if matched else list(_BROWSER_PROFILES)
+
+
 def _browser_headers_from_profile(profile: Dict[str, str]) -> Dict[str, str]:
     """Full header set for a PrizePicks API XHR (matches app.prizepicks.com origin)."""
     return {
@@ -190,7 +242,8 @@ def _browser_headers_from_profile(profile: Dict[str, str]) -> Dict[str, str]:
 
 
 def _random_browser_headers() -> Dict[str, str]:
-    return _browser_headers_from_profile(random.choice(_BROWSER_PROFILES))
+    pool = _profiles_for_current_transport()
+    return _browser_headers_from_profile(random.choice(pool))
 
 
 def _rotate_session_headers(session: Any) -> None:
@@ -272,7 +325,7 @@ def _api_get(
 
     Retry logic:
       - 429 → long backoff (60-120s) then retry
-      - 403 → new full browser profile + longer pause
+      - 403 → clear cookies; first 403 keeps UA/client hints (matches TLS impersonation), later 403s rotate within TLS-matched pool + backoff
       - 5xx → exponential backoff
     Raises RuntimeError after all retries exhausted.
     """
@@ -303,18 +356,26 @@ def _api_get(
 
             if r.status_code == 403:
                 consecutive_403 += 1
-                print(f"  [403] Forbidden on attempt {attempt}/{retries} — rotating browser profile")
                 try:
                     session.cookies.clear()
                 except Exception:
                     pass
-                _rotate_session_headers(session)
-                # Do a second short header rotate to vary session fingerprint more aggressively.
-                time.sleep(random.uniform(0.35, 1.15))
-                _rotate_session_headers(session)
-                # Escalate pause as attempts/consecutive blocks increase.
-                base = min(95.0, 8.0 + float(attempt) * 4.0 + float(consecutive_403) * 6.0)
-                wait = random.uniform(base, base + 20.0)
+                # First 403: keep the same UA/client-hint fingerprint (TLS already fixed to impersonate).
+                # Later 403s: rotate within the TLS-matched pool only (see _profiles_for_current_transport).
+                if consecutive_403 < 2:
+                    print(
+                        f"  [403] Forbidden on attempt {attempt}/{retries} — "
+                        f"same client fingerprint; clearing cookies only"
+                    )
+                else:
+                    print(
+                        f"  [403] Forbidden on attempt {attempt}/{retries} — "
+                        f"rotating browser profile (TLS-matched pool)"
+                    )
+                    _rotate_session_headers(session)
+                # Softer backoff: avoid hammering; escalate slowly.
+                base = min(72.0, 10.0 + float(attempt) * 3.2 + float(consecutive_403) * 4.5)
+                wait = random.uniform(base, base + 16.0)
                 print(f"    [403] Backing off {wait:.1f}s before retry")
                 time.sleep(wait)
                 if consecutive_403 >= max(1, int(forbid_cooldown_threshold)):
@@ -366,6 +427,7 @@ def fetch_projections(
     inter_page_delay: Tuple[float, float] | None = None,
     session_jitter: Tuple[float, float] | None = None,
     first_page_waves: int = 3,
+    wave_gap_seconds: Tuple[float, float] | None = None,
     forbid_cooldown_threshold: int = 3,
     forbid_cooldown_seconds: float = 90.0,
     forbid_cooldown_jitter: Tuple[float, float] = (12.0, 40.0),
@@ -379,6 +441,7 @@ def fetch_projections(
     session_jitter: (min_sec, max_sec) sleep before the first request (new session).
     first_page_waves: On repeated 403/429 exhaustion for page 1, discard the session,
         wait, open a fresh session, and retry (helps PrizePicks MLB fetches).
+    wave_gap_seconds: Random pause between session waves (min, max); wider = less aggressive.
     """
     all_data: List[dict] = []
     all_included: List[dict] = []
@@ -402,7 +465,8 @@ def fetch_projections(
                 pass
             session = None
         if wave > 0:
-            gap = random.uniform(12.0, 28.0)
+            wg_lo, wg_hi = wave_gap_seconds if wave_gap_seconds is not None else DEFAULT_WAVE_GAP
+            gap = random.uniform(wg_lo, wg_hi)
             print(f"  [session-wave {wave + 1}/{waves}] New session after page-1 failure; pausing {gap:.0f}s...")
             time.sleep(gap)
 

@@ -338,6 +338,8 @@ def fetch_via_direct_api(
     session_min: float,
     session_max: float,
     first_page_waves: int,
+    wave_gap_min: float,
+    wave_gap_max: float,
     forbid_cooldown_threshold: int,
     forbid_cooldown_seconds: float,
     forbid_cooldown_jitter_min: float,
@@ -352,6 +354,7 @@ def fetch_via_direct_api(
         inter_page_delay=(inter_min, inter_max),
         session_jitter=(session_min, session_max),
         first_page_waves=first_page_waves,
+        wave_gap_seconds=(wave_gap_min, wave_gap_max),
         forbid_cooldown_threshold=forbid_cooldown_threshold,
         forbid_cooldown_seconds=forbid_cooldown_seconds,
         forbid_cooldown_jitter=(forbid_cooldown_jitter_min, forbid_cooldown_jitter_max),
@@ -711,21 +714,33 @@ def main():
     )
     ap.add_argument("--per-page", type=int, default=250, help="Direct API: per_page (default 250).")
     ap.add_argument("--max-pages", type=int, default=8, help="Direct API: max pagination pages (default 8).")
-    ap.add_argument("--api-retries", type=int, default=5, help="Direct API: retries per GET inside each session wave (default 5).")
+    ap.add_argument("--api-retries", type=int, default=4, help="Direct API: retries per GET inside each session wave (default 4).")
     ap.add_argument(
         "--api-session-waves",
         type=int,
         default=2,
         help="Direct API: fresh TCP session attempts if page-1 still fails after all retries (default 2).",
     )
-    ap.add_argument("--api-inter-min", type=float, default=6.0, help="Direct API: min seconds between paginated requests.")
-    ap.add_argument("--api-inter-max", type=float, default=14.0, help="Direct API: max seconds between paginated requests.")
-    ap.add_argument("--api-session-min", type=float, default=5.0, help="Direct API: min seconds before first request.")
-    ap.add_argument("--api-session-max", type=float, default=12.0, help="Direct API: max seconds before first request.")
+    ap.add_argument("--api-inter-min", type=float, default=8.0, help="Direct API: min seconds between paginated requests.")
+    ap.add_argument("--api-inter-max", type=float, default=18.0, help="Direct API: max seconds between paginated requests.")
+    ap.add_argument("--api-session-min", type=float, default=8.0, help="Direct API: min seconds before first request.")
+    ap.add_argument("--api-session-max", type=float, default=18.0, help="Direct API: max seconds before first request.")
+    ap.add_argument(
+        "--api-wave-gap-min",
+        type=float,
+        default=22.0,
+        help="Direct API: min seconds between session waves after page-1 failure.",
+    )
+    ap.add_argument(
+        "--api-wave-gap-max",
+        type=float,
+        default=48.0,
+        help="Direct API: max seconds between session waves after page-1 failure.",
+    )
     ap.add_argument(
         "--api-403-cooldown-after",
         type=int,
-        default=3,
+        default=5,
         help="Direct API: trigger cooldown window after this many consecutive 403s.",
     )
     ap.add_argument(
@@ -770,6 +785,9 @@ def main():
             f"retries={args.api_retries} session_waves={args.api_session_waves}"
         )
         try:
+            wave_lo, wave_hi = sorted(
+                (float(args.api_wave_gap_min), float(args.api_wave_gap_max))
+            )
             data, included = fetch_via_direct_api(
                 per_page=int(args.per_page),
                 max_pages=int(args.max_pages),
@@ -779,6 +797,8 @@ def main():
                 session_min=float(args.api_session_min),
                 session_max=float(args.api_session_max),
                 first_page_waves=int(args.api_session_waves),
+                wave_gap_min=wave_lo,
+                wave_gap_max=wave_hi,
                 forbid_cooldown_threshold=int(args.api_403_cooldown_after),
                 forbid_cooldown_seconds=float(args.api_403_cooldown_seconds),
                 forbid_cooldown_jitter_min=float(args.api_403_cooldown_jitter_min),
