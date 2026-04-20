@@ -1,0 +1,23 @@
+{
+  "name": "proporacle-mobile",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Capacitor WebView shell loading the PropORACLE Flask UI from Railway (set PROPORACLE_SERVER_URL before cap sync).",
+  "scripts": {
+    "cap": "cap",
+    "sync": "cap sync",
+    "open:android": "cap open android",
+    "open:ios": "cap open ios"
+  },
+  "engines": {
+    "node": ">=20 <23"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.6.2",
+    "@capacitor/core": "^7.6.2",
+    "@capacitor/ios": "^7.6.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.6.2"
+  }
+}

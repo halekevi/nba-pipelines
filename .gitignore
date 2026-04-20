@@ -81,6 +81,15 @@ models/
 # ui_runner/templates/slate_latest.json
 # ui_runner/docs/tickets_latest.json
 
+# Capacitor (mobile/) — install locally; do not commit npm tree
+mobile/node_modules/
+mobile/android/**/build/
+mobile/android/.gradle/
+mobile/android/local.properties
+mobile/android/captures/
+mobile/android/*.iml
+mobile/android/.idea/
+
 # Build artifacts
 build/
 dist/
