@@ -483,14 +483,25 @@ def fetch_via_playwright(timeout_s: int = 90, cdp_url: str | None = None) -> Tup
     projections_time:  float = 0.0
     seen_urls:         list  = []
 
-    # playwright-stealth patches ~30 automation fingerprint signals DataDome checks
+    # playwright-stealth: legacy `stealth_sync` (old wheels) vs v2 `Stealth().apply_stealth_sync` (pypi 2.x).
+    _apply_stealth_fn = None
     try:
-        from playwright_stealth import stealth_sync
-        use_stealth = True
-        print("  🛡️  playwright-stealth loaded")
+        from playwright_stealth import stealth_sync as _stealth_sync_legacy
+
+        def _apply_stealth_fn(page):  # type: ignore[no-redef]
+            _stealth_sync_legacy(page)
+
+        print("  🛡️  playwright-stealth loaded (legacy stealth_sync)")
     except ImportError:
-        use_stealth = False
-        print("  ⚠️  playwright-stealth not installed — run: pip install playwright-stealth --break-system-packages")
+        try:
+            from playwright_stealth import Stealth
+
+            def _apply_stealth_fn(page):  # type: ignore[no-redef]
+                Stealth().apply_stealth_sync(page)
+
+            print("  🛡️  playwright-stealth loaded (Stealth v2 API)")
+        except ImportError:
+            print("  ⚠️  playwright-stealth not installed — run: py -3.14 -m pip install playwright-stealth")
 
     def handle_response(response):
         nonlocal have_projections, projections_time
@@ -591,8 +602,8 @@ def fetch_via_playwright(timeout_s: int = 90, cdp_url: str | None = None) -> Tup
 
         page = context.new_page()
 
-        if use_stealth:
-            stealth_sync(page)
+        if _apply_stealth_fn is not None:
+            _apply_stealth_fn(page)
 
         page.on("response", handle_response)
 
