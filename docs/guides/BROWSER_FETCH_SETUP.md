@@ -83,6 +83,31 @@ A raw `requests` session with copied cookies still fails. The browser is require
 
 ---
 
+## Direct API (curl_cffi) — long-term contract
+
+The NBA/MLB **direct API** path uses `curl_cffi` with `impersonate=chromeNNN` (default
+`chrome120`, overridable via `PROPORACLE_CURL_IMPERSONATE`). PrizePicks/Cloudflare
+often reject traffic when **TLS says one Chrome major** but **User-Agent / Sec-CH-UA
+say another**.
+
+**Permanent rules in this repo:**
+
+1. **Alignment:** When `curl_cffi` is installed, `NBA/scripts/step1_fetch_prizepicks_api.py`
+   only rotates profiles whose Chrome/Edg **major matches** the impersonation string.
+   If you bump impersonation to a new major, you **must** add matching entries to
+   `_BROWSER_PROFILES` or the fetcher raises at startup (fail-fast).
+2. **Regression tests:** Run `pytest tests/test_prizepicks_fetch_client_hints.py`.
+3. **MLB resilience:** `MLB/scripts/step1_fetch_prizepicks_mlb.py` keeps dated snapshots
+   under `MLB/outputs/step1_snapshots/` and can **fall back** when the live API is blocked,
+   so the rest of the pipeline still has rows. That does not replace a healthy fetch;
+   it prevents a total blank slate.
+
+PrizePicks can still return **403** from the network side; the engineering guarantee is
+**consistent fingerprints**, **gentle retries**, and **fallback data** — not that every
+request succeeds.
+
+---
+
 ## Adding a New Sport Pipeline
 
 ### 1. Copy `step1_fetch_prizepicks_mlb.py` as your template

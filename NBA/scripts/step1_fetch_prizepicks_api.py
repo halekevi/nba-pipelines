@@ -221,7 +221,28 @@ def _profiles_for_current_transport() -> List[Dict[str, str]]:
         for p in _BROWSER_PROFILES
         if needle in p.get("User-Agent", "") or edge_needle in p.get("User-Agent", "")
     ]
-    return matched if matched else list(_BROWSER_PROFILES)
+    if not matched:
+        raise RuntimeError(
+            f"No User-Agent profile for curl_cffi impersonate={_CURL_IMPERSONATE!r} "
+            f"(expected Chrome/{major}. or Edg/{major}. in _BROWSER_PROFILES). "
+            "Add a matching profile or set PROPORACLE_CURL_IMPERSONATE to a supported Chrome major."
+        )
+    return matched
+
+
+def _validate_client_hints_match_tls(browser_profile_headers: Dict[str, str]) -> None:
+    """Fail fast if HTTP client hints contradict curl_cffi TLS impersonation (regression guard)."""
+    if not _CURL_CFFI_AVAILABLE:
+        return
+    major = _tls_chrome_major_from_impersonate()
+    if major is None:
+        return
+    ua = browser_profile_headers.get("User-Agent", "")
+    if f"Chrome/{major}." not in ua and f"Edg/{major}." not in ua:
+        raise RuntimeError(
+            f"PrizePicks client-hint/TLS mismatch: impersonate={_CURL_IMPERSONATE!r} "
+            f"requires User-Agent containing Chrome/{major}. or Edg/{major}.; got {ua[:160]!r}"
+        )
 
 
 def _browser_headers_from_profile(profile: Dict[str, str]) -> Dict[str, str]:
@@ -243,7 +264,9 @@ def _browser_headers_from_profile(profile: Dict[str, str]) -> Dict[str, str]:
 
 def _random_browser_headers() -> Dict[str, str]:
     pool = _profiles_for_current_transport()
-    return _browser_headers_from_profile(random.choice(pool))
+    headers = _browser_headers_from_profile(random.choice(pool))
+    _validate_client_hints_match_tls(headers)
+    return headers
 
 
 def _rotate_session_headers(session: Any) -> None:
