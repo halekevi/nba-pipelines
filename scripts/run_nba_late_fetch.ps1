@@ -114,12 +114,25 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host "[LATE_FETCH] Soccer step1 failed — continuing" -ForegroundColor Yellow
 }
 
-# MLB
-Write-Host "[LATE_FETCH] Fetching MLB props (append)..."
+# MLB — Playwright first (avoids cold direct API 403), then direct API fallback
+Write-Host "[LATE_FETCH] Fetching MLB props (append; Playwright then direct API if needed)..."
 $MLBDir = Join-Path $Root "MLB"
+$LateMlbDate = (Get-Date).ToString("yyyy-MM-dd")
 Push-Location $MLBDir
 try {
-    & py -3.14 ".\scripts\step1_fetch_prizepicks_mlb.py" "--append" "--output" "step1_mlb_props.csv"
+    & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+        "--playwright" `
+        "--timeout" "180" `
+        "--append" `
+        "--date" "$LateMlbDate" `
+        "--output" "step1_mlb_props.csv"
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "[LATE_FETCH] MLB Playwright step1 failed (exit $LASTEXITCODE) — trying direct API" -ForegroundColor Yellow
+        & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+            "--append" `
+            "--date" "$LateMlbDate" `
+            "--output" "step1_mlb_props.csv"
+    }
 }
 finally {
     Pop-Location

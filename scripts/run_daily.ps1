@@ -1030,7 +1030,21 @@ if ($NowHour -ge 10) {
     $MLBDir = Join-Path $Root "MLB"
     Push-Location $MLBDir
     try {
-        & py -3.14 ".\scripts\step1_fetch_prizepicks_mlb.py" "--append" "--date" "$Today" "--output" "step1_mlb_props.csv"
+        Write-Host "[NBA_LATE_FETCH] MLB step1: Playwright (primary), then direct API if needed..."
+        & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+            "--playwright" `
+            "--timeout" "180" `
+            "--append" `
+            "--date" "$Today" `
+            "--output" "step1_mlb_props.csv"
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warning "[NBA_LATE_FETCH] MLB Playwright step1 failed (exit $LASTEXITCODE) — trying direct API"
+            Write-Log "[NBA_LATE_FETCH] MLB Playwright failed (exit $LASTEXITCODE); trying direct API"
+            & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+                "--append" `
+                "--date" "$Today" `
+                "--output" "step1_mlb_props.csv"
+        }
     }
     finally {
         Pop-Location
