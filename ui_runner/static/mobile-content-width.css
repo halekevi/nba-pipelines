@@ -1,8 +1,25 @@
 /**
  * Mobile: full-width shell, safe-area gutters, touch scrolling, form zoom fix.
  * Load after page styles and nav-mobile-shared.css.
- * v=20260418nav2
+ * v=20260422ticketscv
  */
+@media (max-width: 900px), (pointer: coarse) {
+  /*
+   * proporacle-page-shell.css: body::after is full-viewport fixed with an infinite
+   * background-position animation plus mix-blend-mode:screen. On Android WebView that
+   * stack often causes the ambient “lights” / background to shimmer or flicker.
+   * Keep the static grid; drop continuous repaints and screen blending on touch/narrow.
+   */
+  body::after {
+    animation: none !important;
+    mix-blend-mode: normal !important;
+  }
+
+  html:not([data-theme="light"]):not(.light-theme) body::after {
+    opacity: 0.3 !important;
+  }
+}
+
 @media (max-width: 900px) {
   html {
     scroll-behavior: auto;
@@ -33,10 +50,39 @@
     padding-bottom: 20px !important;
   }
 
+  /* “How to read this page” — was only 8px horizontal; give links/text room from edges */
   .hero .home-flow-lede {
-    padding-left: max(8px, env(safe-area-inset-left, 0px)) !important;
-    padding-right: max(8px, env(safe-area-inset-right, 0px)) !important;
     box-sizing: border-box !important;
+    padding-top: 14px !important;
+    padding-bottom: 16px !important;
+    padding-left: max(14px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(14px, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  .hero .home-flow-lede .home-jump {
+    margin-top: 10px !important;
+    display: block !important;
+  }
+
+  /* Home <details> section headers (Slate Explorer, Top Edges, …) — more vertical + horizontal padding */
+  .home-cat > summary {
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(16px, env(safe-area-inset-right, 0px)) !important;
+    min-height: 48px !important;
+    box-sizing: border-box !important;
+  }
+
+  .home-cat-body {
+    padding-top: clamp(12px, 3vw, 18px) !important;
+    padding-bottom: clamp(16px, 3.5vw, 22px) !important;
+    padding-left: max(14px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(14px, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  .home-cat {
+    margin-bottom: 16px !important;
   }
 
   .slate-panel-header-row {
@@ -114,22 +160,67 @@
     padding-bottom: 16px !important;
   }
 
-  /* Grades */
+  /* Grades hub: keep a definite viewport column + give the iframe stage the remaining
+     height. Inline indexGrades.css used to set html,body{height:auto} + .iframe-shell
+     min-heights on phones — that prevented flex:1 from filling and left a dark band. */
+  html:has(body.page-grades) {
+    height: 100%;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+
+  body.page-grades {
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    overflow: hidden !important;
+  }
+
+  body.page-grades nav.snav,
+  body.page-grades nav.snav.glass-card {
+    flex-shrink: 0 !important;
+  }
+
+  body.page-grades .grades-page,
+  body.page-grades .grades-body {
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  body.page-grades .iframe-shell {
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto minmax(0, 1fr) !important;
+    overflow: hidden !important;
+  }
+
+  body.page-grades #grades-toolbar-parent-slot,
+  body.page-grades .grades-toolbar-parent-slot {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+  }
+
+  body.page-grades .iframe-shell-stage {
+    grid-column: 1;
+    grid-row: 2;
+    min-height: 0 !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+
   body.page-grades .grades-body {
     margin-left: env(safe-area-inset-left, 0px) !important;
     margin-right: env(safe-area-inset-right, 0px) !important;
     margin-bottom: 0.75rem !important;
   }
 
-  body.page-grades .iframe-shell,
-  body.page-grades .grades-iframe-host {
-    min-height: 50dvh !important;
-  }
-
-  body.page-grades iframe.slate-eval-frame,
-  body.page-grades #grades-iframe {
-    min-height: 55dvh !important;
-    width: 100% !important;
+  body.page-grades .grades-page {
+    overflow: hidden !important;
   }
 
   .iframe-shell-toolbar .date-bar,
@@ -153,24 +244,24 @@
     padding-top: 8px !important;
   }
 
-  /* Income dashboard */
-  body.page-dashboard-income {
+  /* Income (P&L) — body class is page-income in dashboard_income.html */
+  body.page-income {
     padding-left: env(safe-area-inset-left, 0px) !important;
     padding-right: env(safe-area-inset-right, 0px) !important;
     padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px)) !important;
   }
 
-  body.page-dashboard-income .grid {
+  body.page-income .summary-grid {
     grid-template-columns: 1fr !important;
     padding-left: max(0.5rem, env(safe-area-inset-left, 0px)) !important;
     padding-right: max(0.5rem, env(safe-area-inset-right, 0px)) !important;
   }
 
-  body.page-dashboard-income .panel {
+  body.page-income .panel {
     min-height: 240px !important;
   }
 
-  body.page-dashboard-income .js-plotly-plot {
+  body.page-income .js-plotly-plot {
     width: 100% !important;
   }
 }
@@ -451,14 +542,6 @@ table.grades-table th {
 }
 .grades-json-wrap .sport-block .grades-sport-body[hidden] {
   display: none !important;
-}
-
-/* Tickets: reduce scroll/composite work for off-screen slips */
-.ticket-card,
-.tickets-built .ticket {
-  contain: layout style paint;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 300px;
 }
 
 /* ── /tickets built slips: leg grid + nav (no vertical text) ───────────────── */
@@ -782,10 +865,13 @@ nav.snav .mobile-menu a {
 }
 
 @media (max-width: 480px) {
+  /* Single column on narrow phones — avoids cramped 2-col slate tiles overlapping badges/text */
   #slate-panel-header-row,
   .slate-cards-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 8px !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px !important;
+    row-gap: 12px !important;
+    column-gap: 12px !important;
   }
 
   .leg-card .pt-grid {
@@ -811,13 +897,276 @@ nav.snav .mobile-menu a {
     padding: 4px 8px !important;
   }
 
-  body.page-grades .iframe-shell,
-  body.page-grades .iframe-shell-stage,
-  body.page-grades iframe.grade-frame,
-  body.page-grades #grade-frame,
-  body.page-grades #ticket-frame,
-  body.page-grades #grades-iframe {
-    min-height: 70vw !important;
+}
+
+/* WebView anti-flicker pass for /tickets on phones */
+@media (max-width: 900px), (pointer: coarse) {
+  body.page-tickets .orb-1,
+  body.page-tickets .orb-2,
+  body.page-tickets .mesh-bg,
+  body.page-tickets .grain-layer {
+    display: none !important;
+  }
+
+  body.page-tickets .snav,
+  body.page-tickets .stats-bar,
+  body.page-tickets .ticket,
+  body.page-tickets .ticket-group-header,
+  body.page-tickets .filter-pill {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  body.page-tickets .snav,
+  body.page-tickets .stats-bar,
+  body.page-tickets .ticket,
+  body.page-tickets .ticket-group-header,
+  body.page-tickets .ticket-bucket > summary,
+  body.page-tickets .ticket-filter-pill,
+  body.page-tickets .collapse-icon {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* App-like phone shell: sticky top bar (brand + hamburger + theme) + fixed bottom icon tabs.
+   Must use nav.snav (not .snav) or nav-mobile-shared.css wins and keeps #nav-links display:none. */
+@media (max-width: 768px) {
+  nav.snav,
+  nav.snav.glass-card {
+    position: sticky !important;
+    top: 0 !important;
+    bottom: auto !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin: 0 0 12px 0 !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    height: auto !important;
+    min-height: 56px !important;
+    max-height: none !important;
+    /* Extra air below status bar / notch (safe-area + cushion) */
+    padding: calc(env(safe-area-inset-top, 0px) + 12px) max(12px, env(safe-area-inset-right, 0px)) 12px max(12px, env(safe-area-inset-left, 0px)) !important;
+    z-index: 220 !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    /* Critical: proporacle .snav uses transform:translateY(0); backdrop-filter can also
+       create a fixed-position containing block in WebKit — strip both so #nav-links
+       anchors to the viewport bottom (fixes /tickets and other shell pages). */
+    transform: none !important;
+    filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    transition: opacity 0.2s ease !important;
+  }
+
+  nav.snav .nav-accent {
+    display: none !important;
+  }
+
+  /* Bottom icon tabs replace flyout menu — hide hamburger + duplicate mobile-menu */
+  nav.snav .snav-brand {
+    display: flex !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    margin-right: 8px !important;
+    order: 1 !important;
+  }
+
+  nav.snav .snav-right {
+    display: flex !important;
+    flex: 0 1 auto !important;
+    width: auto !important;
+    max-width: min(62vw, 320px) !important;
+    min-width: 0 !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 6px !important;
+    order: 2 !important;
+  }
+
+  nav.snav .hamburger,
+  nav.snav button#hamburger.hamburger,
+  nav.snav #hamburger.hamburger,
+  button#hamburger.hamburger {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+
+  #mobile-menu,
+  #mobile-menu.mobile-menu {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  /* Primary routes: fixed strip (taken out of nav flex flow) */
+  nav.snav ul#nav-links,
+  nav.snav ul#nav-links.nav-links,
+  nav.snav ul.snav-links#nav-links,
+  nav.snav ul.snav-links,
+  ul#nav-links.snav-links {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    /* Viewport-fixed once ancestor transform is cleared on nav.snav */
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 6px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 6px max(8px, env(safe-area-inset-left, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-right, 0px)) !important;
+    min-height: calc(54px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 260 !important;
+    list-style: none !important;
+    box-sizing: border-box !important;
+    background: rgba(12, 12, 20, 0.94) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+    backdrop-filter: blur(14px) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(160%) !important;
+    box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.45) !important;
+  }
+
+  nav.snav ul#nav-links li,
+  ul#nav-links.snav-links li {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    list-style: none !important;
+  }
+
+  nav.snav ul#nav-links li a,
+  ul#nav-links.snav-links li a {
+    height: 48px !important;
+    min-height: 48px !important;
+    min-width: 44px !important;
+    width: 100% !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border-radius: 12px !important;
+    border-bottom: none !important;
+    padding: 0 !important;
+    font-size: 0 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+  }
+
+  nav.snav ul#nav-links li a.active,
+  ul#nav-links.snav-links li a.active {
+    background: rgba(212, 175, 55, 0.16) !important;
+    box-shadow: inset 0 0 0 1px rgba(212, 175, 55, 0.34), 0 6px 20px rgba(212, 175, 55, 0.14) !important;
+  }
+
+  nav.snav ul#nav-links li a.active::after,
+  ul#nav-links.snav-links li a.active::after {
+    content: none !important;
+  }
+
+  nav.snav ul#nav-links .ni,
+  ul#nav-links.snav-links .ni {
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 8px !important;
+    margin: 0 !important;
+  }
+
+  body {
+    padding-bottom: calc(74px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .shell,
+  .wrap,
+  #app,
+  .grades-body,
+  .grades-page,
+  .wrap.ticket-eval-main,
+  .income-wrap,
+  .page-ev {
+    padding-bottom: calc(82px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* Home — Slate Explorer: one column ≤640px so two-up grid never overlaps mid-size phones */
+@media (max-width: 640px) {
+  #slate-panel-header-row {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+/* Home — Slate Explorer tiles: breathing room + no column squeeze (v20260422slate) */
+@media (max-width: 768px) {
+  #slate-panel-header-row {
+    gap: 12px !important;
+    row-gap: 12px !important;
+    column-gap: 12px !important;
+    padding: 0 0 12px 0 !important;
+  }
+
+  #slate-panel-header-row .scard {
+    min-width: 0 !important;
+    padding: 12px 12px !important;
+    gap: 8px !important;
+  }
+
+  #slate-panel-header-row .scard-head {
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    row-gap: 6px !important;
+  }
+
+  #slate-panel-header-row .scard-title {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    line-height: 1.25 !important;
+  }
+
+  #slate-panel-header-row .scard-val {
+    font-size: clamp(16px, 4.2vw, 20px) !important;
+    line-height: 1.2 !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  #slate-panel-header-row .sbadge {
+    flex-shrink: 0 !important;
+    margin-left: auto !important;
+  }
+
+  #slate-panel-header-row .scard-toggle {
+    flex-shrink: 0 !important;
+    margin-left: 0 !important;
+  }
+
+  .hero-eyebrow {
+    max-width: 100% !important;
+    white-space: normal !important;
+    line-height: 1.35 !important;
+    padding: 8px 12px !important;
+    font-size: 9px !important;
+    letter-spacing: 0.12em !important;
+  }
+
+  /* Aurora mesh was stacking visually heavy on some Android GPUs */
+  .mesh-bg {
+    opacity: 0.38 !important;
   }
 }
 

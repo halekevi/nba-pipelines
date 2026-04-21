@@ -111,7 +111,7 @@ SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
 _TICKET_EVAL_SHELL_CSS_VER = "20260418nav"
 _TICKET_EVAL_NAV_UNIFIED_VER = "20260408"
 _TICKET_EVAL_NAV_MOBILE_VER = "20260418nav"
-_TICKET_EVAL_MOBILE_WIDTH_VER = "20260418nav2"
+_TICKET_EVAL_MOBILE_WIDTH_VER = "20260422ticketscv"
 _TICKET_EVAL_NAV_DATETIME_VER = "20260408"
 _TICKET_EVAL_NAV_CHROME_VER = "20260412"
 
@@ -255,6 +255,16 @@ def _canon_line(row: dict[str, Any]) -> float | None:
         v = row.get(k)
         if v is None or (isinstance(v, float) and pd.isna(v)):
             continue
+        if isinstance(v, str):
+            s = v.strip()
+            if not s:
+                continue
+            m = re.search(r"-?\d+(?:\.\d+)?", s)
+            if m:
+                try:
+                    return float(m.group(0))
+                except (TypeError, ValueError):
+                    pass
         try:
             return float(v)
         except (TypeError, ValueError):
@@ -281,6 +291,14 @@ def _canon_actual(row: dict[str, Any]) -> float | None:
             continue
         if isinstance(v, str) and not v.strip():
             continue
+        if isinstance(v, str):
+            s = v.strip()
+            m = re.search(r"-?\d+(?:\.\d+)?", s)
+            if m:
+                try:
+                    return float(m.group(0))
+                except (TypeError, ValueError):
+                    pass
         try:
             return float(v)
         except (TypeError, ValueError):
@@ -393,6 +411,7 @@ def _leg_grade(
     line: float | None,
     direction: str,
     grade_col: str,
+    void_note: str = "",
 ) -> str:
     """
     Prefer numeric grading (same margin rules as scripts/nhl_soccer_grader) when actual+line exist,
@@ -416,6 +435,13 @@ def _leg_grade(
     if g in ("MISS", "LOSS", "L", "0", "FALSE", "NO"):
         return "MISS"
     if g in ("VOID", "PUSH", "N/A", "NA"):
+        # Stale pre-grade rows often mark VOID while no actual has landed yet.
+        # Keep true voids (postponed/cancelled), otherwise treat as pending/ungraded.
+        vn = str(void_note or "").strip().upper()
+        if not _finite_line_actual(actual, line) and (
+            not vn or vn in ("NO_ACTUAL", "MISSING_ACTUAL", "PENDING", "TBD", "UNKNOWN")
+        ):
+            return "UNGRADED"
         return "VOID"
     return "UNGRADED"
 
@@ -1898,9 +1924,10 @@ def _build_html(
                 direction = str(leg.get("direction") or "").strip().upper()
                 actual = row["actual"] if row else None
                 graw = row["grade_raw"] if row else ""
+                vnote = row.get("void_note", "") if row else ""
                 if row and row.get("line") is not None and line_f is None:
                     line_f = row["line"]
-                grade = _leg_grade(actual, line_f, direction, graw)
+                grade = _leg_grade(actual, line_f, direction, graw, vnote)
                 all_legs.append((leg, row, grade))
 
     total_legs = len(all_legs)
@@ -1939,9 +1966,10 @@ def _build_html(
             d = str(leg.get("direction") or "").strip().upper()
             act = row["actual"] if row else None
             gr = row["grade_raw"] if row else ""
+            vn = row.get("void_note", "") if row else ""
             if row and row.get("line") is not None and lf is None:
                 lf = row["line"]
-            g = _leg_grade(act, lf, d, gr)
+            g = _leg_grade(act, lf, d, gr, vn)
             gs.append(g)
         tno = t.get("ticket_no", "?")
         t["_leg_grades_cache"] = gs

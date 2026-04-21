@@ -145,8 +145,11 @@ body::after{content:'';position:fixed;inset:0;
 [data-theme="light"] .nav-local-datetime{color:rgba(0,0,0,.52);}
 [data-theme="light"] .nav-clock{color:rgba(0,0,0,.52);}
 
-/* hamburger */
+/* hamburger — hidden on desktop (769px+); phone uses bottom tabs only (see mobile-content-width.css) */
 .hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:8px;min-width:44px;min-height:44px;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.09);border-radius:8px;background:rgba(255,255,255,0.04);backdrop-filter:blur(10px) saturate(180%);}
+@media(min-width:769px){
+  #hamburger,button#hamburger,#hamburger.hamburger{display:none!important;pointer-events:none!important;}
+}
 .hamburger span{display:block;width:18px;height:2px;background:var(--muted);border-radius:2px;transition:all .25s;}
 .hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
 .hamburger.open span:nth-child(2){opacity:0;}
@@ -365,8 +368,7 @@ body::after{content:'';position:fixed;inset:0;
   #slate-panel-header-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
   .snav-name{display:none;}
   .edge-grid{grid-template-columns:1fr!important;}
-  .hamburger{display:flex;}
-  .snav-links{display:none!important;}
+  /* Hamburger + bottom tabs: mobile-content-width.css (nav.snav …) */
   .live-pill{display:none;}
   .nav-datetime-block{border-left:none;padding-left:0;margin-left:0;}
   .snav{padding:0 16px;}
@@ -426,7 +428,7 @@ body{
   .hero{padding:18px 12px 16px;}
   .status-row{grid-template-columns:1fr!important;}
   .slate-table-wrap{padding:0 10px 12px;}
-  .home-cat>summary{font-size:clamp(18px,5vw,22px);padding:10px 12px;}
+  .home-cat>summary{font-size:clamp(18px,5vw,22px);padding:14px 16px;min-height:48px;box-sizing:border-box;}
 }
 @media(max-width:900px) and (orientation:portrait){
   .shell{padding:16px 10px 18px;}
@@ -911,7 +913,7 @@ body::before{
 
 </style>
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260418nav"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260418nav2"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260422ticketscv"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 </head>
 <body>
@@ -1118,8 +1120,9 @@ body::before{
   .slate-time-cell{color:rgba(255,255,255,.95)!important;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.02em;white-space:nowrap;}
   .edge-pos{color:var(--green);}
   .edge-neg{color:var(--amber);}
-  @media(max-width:768px){.slate-panel-header-row{grid-template-columns:repeat(2,1fr)!important;}}
-  @media(max-width:480px){.slate-panel-header-row{grid-template-columns:1fr!important;}}
+  @media(max-width:768px){#slate-panel-header-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;}}
+  @media(max-width:640px){#slate-panel-header-row{grid-template-columns:minmax(0,1fr)!important;}}
+  @media(max-width:480px){#slate-panel-header-row{grid-template-columns:minmax(0,1fr)!important;}}
   @media(max-width:900px){
     .slate-table-wrap{
       max-height:68vh;

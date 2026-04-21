@@ -460,9 +460,9 @@
 }
 .ticket-card,
 .tickets-built .ticket {
-  contain: content;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 280px;
+  /* layout only — avoid content-visibility:auto on phones: WebKit/Chromium WebViews
+     often skip-paint slips they wrongly treat as off-screen, so /tickets looks empty. */
+  contain: layout;
 }
 .tickets-built .ticket:hover {
   transform: translateY(-2px);

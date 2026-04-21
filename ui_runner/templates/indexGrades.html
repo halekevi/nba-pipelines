@@ -328,10 +328,6 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   .date-bar{margin-left:10px;margin-right:10px;overflow-x:auto;}
   .tabs-bar{margin-left:10px;margin-right:10px;}
 }
-@media(max-width:520px){
-  html,body{height:auto;overflow:auto;}
-  .iframe-shell{min-height:60vh;}
-}
 @media(max-width:900px){
   .date-bar,.tabs-bar{
     overflow-x:auto;
@@ -341,19 +337,15 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   .date-pills{overflow-x:auto;-webkit-overflow-scrolling:touch;}
 }
 @media(max-width:900px) and (orientation:portrait){
-  html,body{height:auto;overflow:auto;}
   .grades-body{margin:0 0 .8rem;}
   .tabs-bar{padding:6px 8px;min-height:38px;}
   .tab-btn{padding:7px 9px;font-size:10px;letter-spacing:.9px;}
-  .iframe-shell{min-height:62vh;}
 }
 @media(max-width:900px) and (orientation:landscape){
-  html,body{height:auto;overflow:auto;}
   .grades-body{margin:0 0 .8rem;}
   .date-bar{min-height:42px;padding:7px 10px;gap:8px;}
   .tabs-bar{padding:6px 8px;min-height:38px;}
   .tab-btn{padding:7px 9px;font-size:10px;letter-spacing:.9px;}
-  .iframe-shell{min-height:56vh;}
 }
 
 .grades-body{margin:0 0 .35rem;}
@@ -851,7 +843,7 @@ select option,
 
 </style>
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260418nav"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260418nav2"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260422incomeplot"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 </head>
 <body class="page-grades">
@@ -1165,7 +1157,7 @@ function ensureGradesToolbarStylesInFrame(doc) {
   const link = doc.createElement('link');
   link.id = 'grades-iframe-toolbar-link';
   link.rel = 'stylesheet';
-    link.href = '/static/grades-iframe-toolbar.css?v=20260414a';
+    link.href = '/static/grades-iframe-toolbar.css?v=20260422framescroll';
   doc.head.appendChild(link);
 }
 
@@ -1247,12 +1239,21 @@ function ensureFrameCollapseCss(doc) {
   style.textContent = `
     /* Older slate_eval_*.html embed .main{max-width:1100px;margin:auto} and header side margins — content
        stays narrow while the toolbar is full width. Override only on slate-shaped documents (direct header + .main). */
-    html,body{
-      min-height:100%;
-      overflow-y:auto;
-      -webkit-overflow-scrolling:touch;
+    /* Hub iframe has a fixed height; slate_eval body used min-height:100vh without a
+       bounded scroll root, so long sport lists were clipped instead of scrolling. */
+    html{
+      height:100% !important;
+      overflow:hidden !important;
     }
     body{
+      height:100% !important;
+      max-height:100% !important;
+      min-height:0 !important;
+      margin:0;
+      overflow-x:hidden !important;
+      overflow-y:auto !important;
+      -webkit-overflow-scrolling:touch !important;
+      overscroll-behavior-y:contain !important;
       padding-bottom:calc(36px + env(safe-area-inset-bottom, 0px));
     }
     body > header{
