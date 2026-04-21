@@ -1247,6 +1247,14 @@ function ensureFrameCollapseCss(doc) {
   style.textContent = `
     /* Older slate_eval_*.html embed .main{max-width:1100px;margin:auto} and header side margins — content
        stays narrow while the toolbar is full width. Override only on slate-shaped documents (direct header + .main). */
+    html,body{
+      min-height:100%;
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+    body{
+      padding-bottom:calc(36px + env(safe-area-inset-bottom, 0px));
+    }
     body > header{
       margin-left:0;
       margin-right:0;
@@ -1919,7 +1927,8 @@ function applyTicketEvalGradesEmbed(doc) {
   st.id = 'grades-embed-ticket-nav-css';
   st.setAttribute('data-from', 'grades-hub');
   st.textContent =
-    'html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!important;}' +
+    'html.ticket-eval-embed-grades,html.ticket-eval-embed-grades body{min-height:100%!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;}' +
+    'html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:calc(36px + env(safe-area-inset-bottom, 0px))!important;}' +
     'html.ticket-eval-embed-grades .snav,' +
     'html.ticket-eval-embed-grades #mobile-menu{display:none!important;}' +
     'html.ticket-eval-embed-grades body > .grade-eval-summary{margin-top:0!important;}' +
