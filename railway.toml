@@ -20,6 +20,9 @@
 #   - Deployments: confirm latest deploy shows the same commit as GitHub main (not Failed/Crashed)
 #
 # Verify live revision: View Source on home → <meta name="proporacle-build" ...> or curl -I /ping → X-PropOracle-Build
+#
+# Mobile (Capacitor): the Android app loads this same deployment via server.url — no new APK
+# is required for template/CSS/Flask changes once this service redeploys from main.
 
 [build]
 builder = "NIXPACKS"

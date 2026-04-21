@@ -1,0 +1,34 @@
+# Ensures the Capacitor mobile shell still loads after changes on main.
+# UI/CSS updates do not require this job to pass for users — they load from server.url at runtime —
+# but a broken capacitor.config.js would block local sync and release builds.
+
+name: capacitor-config
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "mobile/**"
+      - ".github/workflows/capacitor-config.yml"
+  pull_request:
+    branches: [main, master]
+    paths:
+      - "mobile/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - name: Install mobile dependencies
+        run: npm ci
+      - name: Verify capacitor.config.js loads
+        run: node -e "require('./capacitor.config.js'); console.log('capacitor.config.js ok');"
