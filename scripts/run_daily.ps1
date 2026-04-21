@@ -1305,20 +1305,20 @@ if ($NowHour -ge 10) {
         Write-Log "[NBA_LATE_FETCH] WARN: Soccer step1 exit $LASTEXITCODE"
     }
 
-    Write-Host "[MLB] Fetching MLB props (Playwright)..." -ForegroundColor Cyan
+    Write-Host "[MLB] Fetching MLB props (direct API first; Playwright fallback)..." -ForegroundColor Cyan
     $MLBDir = Join-Path $Root "MLB"
     Push-Location $MLBDir
     try {
         & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
-            "--playwright" `
-            "--timeout" "180" `
             "--append" `
             "--date" "$Today" `
             "--output" "step1_mlb_props.csv"
         if ($LASTEXITCODE -ne 0) {
-            Write-Warning "[NBA_LATE_FETCH] MLB Playwright step1 failed (exit $LASTEXITCODE) - trying direct API"
-            Write-Log "[NBA_LATE_FETCH] MLB Playwright failed (exit $LASTEXITCODE); trying direct API"
+            Write-Warning "[NBA_LATE_FETCH] MLB direct API step1 failed (exit $LASTEXITCODE) - trying Playwright"
+            Write-Log "[NBA_LATE_FETCH] MLB direct API failed (exit $LASTEXITCODE); trying Playwright"
             & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+                "--playwright" `
+                "--timeout" "180" `
                 "--append" `
                 "--date" "$Today" `
                 "--output" "step1_mlb_props.csv"

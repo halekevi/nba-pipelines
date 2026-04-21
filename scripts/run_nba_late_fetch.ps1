@@ -128,20 +128,20 @@ try {
     Write-Host "[LATE_FETCH] WARN: Eastern time check failed (using local calendar date): $_" -ForegroundColor Yellow
 }
 
-# MLB - Playwright first (avoids cold direct API 403), then direct API fallback
-Write-Host "[LATE_FETCH] Fetching MLB props (append; Playwright then direct API if needed)..." -ForegroundColor Cyan
+# MLB - direct API first (avoids bot-check hangs), then Playwright fallback
+Write-Host "[LATE_FETCH] Fetching MLB props (append; direct API then Playwright if needed)..." -ForegroundColor Cyan
 $MLBDir = Join-Path $Root "MLB"
 Push-Location $MLBDir
 try {
     & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
-        "--playwright" `
-        "--timeout" "180" `
         "--append" `
         "--date" "$PipeDate" `
         "--output" "step1_mlb_props.csv"
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "[LATE_FETCH] MLB Playwright step1 failed (exit $LASTEXITCODE) - trying direct API" -ForegroundColor Yellow
+        Write-Host "[LATE_FETCH] MLB direct API step1 failed (exit $LASTEXITCODE) - trying Playwright" -ForegroundColor Yellow
         & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+            "--playwright" `
+            "--timeout" "180" `
             "--append" `
             "--date" "$PipeDate" `
             "--output" "step1_mlb_props.csv"

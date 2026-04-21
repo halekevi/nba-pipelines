@@ -4268,13 +4268,115 @@ html[data-theme="light"] .ticket{
     return "\n".join(html_parts)
 
 
-def write_web_outputs(payload, outdir: str, *, require_positive_ev: bool = True):
+def _safe_group_key(group: dict[str, Any]) -> tuple[str, int, float, float]:
+    return (
+        str(group.get("group_name") or ""),
+        int(group.get("n_legs") or 0),
+        float(group.get("power_payout") or 0.0),
+        float(group.get("flex_payout") or 0.0),
+    )
+
+
+def _safe_leg_sig(leg: dict[str, Any]) -> tuple:
+    def _s(v: Any) -> str:
+        return str(v or "").strip().lower()
+
+    try:
+        line_v = round(float(leg.get("line")), 4)
+    except Exception:
+        line_v = _s(leg.get("line"))
+    return (
+        _s(leg.get("sport")),
+        _s(leg.get("player")),
+        _s(leg.get("team")),
+        _s(leg.get("opp")),
+        _s(leg.get("prop_type")),
+        _s(leg.get("pick_type")),
+        _s(leg.get("direction")),
+        line_v,
+    )
+
+
+def _safe_ticket_sig(ticket: dict[str, Any]) -> tuple:
+    legs = ticket.get("legs") or []
+    if isinstance(legs, list) and legs:
+        leg_sigs = sorted(_safe_leg_sig(leg) for leg in legs if isinstance(leg, dict))
+        if leg_sigs:
+            return tuple(leg_sigs)
+    # Fallback when legs are malformed/missing.
+    return (json.dumps(ticket, sort_keys=True, ensure_ascii=False, default=str),)
+
+
+def merge_web_payloads_by_group(new_payload: dict[str, Any], old_payload: dict[str, Any]) -> dict[str, Any]:
+    """Merge new + existing tickets_latest payload for the same date, de-duping by leg set."""
+    merged = dict(new_payload)
+    new_groups = list(new_payload.get("groups") or [])
+    old_groups = list(old_payload.get("groups") or [])
+    grouped: dict[tuple[str, int, float, float], dict[str, Any]] = {}
+    order: list[tuple[str, int, float, float]] = []
+
+    # Seed with new groups (so latest run remains primary ordering).
+    for g in new_groups:
+        if not isinstance(g, dict):
+            continue
+        k = _safe_group_key(g)
+        grouped[k] = {**g, "tickets": list(g.get("tickets") or [])}
+        order.append(k)
+
+    # Merge in old groups/tickets.
+    for g in old_groups:
+        if not isinstance(g, dict):
+            continue
+        k = _safe_group_key(g)
+        if k not in grouped:
+            grouped[k] = {**g, "tickets": []}
+            order.append(k)
+        grouped[k]["tickets"].extend(list(g.get("tickets") or []))
+
+    out_groups: list[dict[str, Any]] = []
+    for k in order:
+        g = grouped[k]
+        seen: set[tuple] = set()
+        deduped_tickets: list[dict[str, Any]] = []
+        for t in list(g.get("tickets") or []):
+            if not isinstance(t, dict):
+                continue
+            sig = _safe_ticket_sig(t)
+            if sig in seen:
+                continue
+            seen.add(sig)
+            deduped_tickets.append(t)
+        for i, t in enumerate(deduped_tickets, start=1):
+            t["ticket_no"] = i
+        g["tickets"] = deduped_tickets
+        out_groups.append(g)
+
+    merged["groups"] = out_groups
+    merged["generated_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    return merged
+
+
+def write_web_outputs(payload, outdir: str, *, require_positive_ev: bool = True, merge_existing_for_date: bool = False):
     """Write tickets_latest.json for /tickets; graded HTML is build_ticket_eval.py → ticket_eval_<date>.html."""
     os.makedirs(outdir, exist_ok=True)
     json_path = os.path.join(outdir, "tickets_latest.json")
     payload = filter_web_tickets_for_ui(payload, require_positive_ev=require_positive_ev)
     if not require_positive_ev:
         print("  [web] EV gate OFF — JSON includes top slips per sport/leg-count (workbook pool, template caps)")
+    if merge_existing_for_date and os.path.isfile(json_path):
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                existing = json.load(f)
+            if isinstance(existing, dict) and str(existing.get("date")) == str(payload.get("date")):
+                old_count = sum(len(g.get("tickets") or []) for g in (existing.get("groups") or []))
+                new_count = sum(len(g.get("tickets") or []) for g in (payload.get("groups") or []))
+                payload = merge_web_payloads_by_group(payload, existing)
+                merged_count = sum(len(g.get("tickets") or []) for g in (payload.get("groups") or []))
+                print(f"  [web-merge] same-date merge enabled: new={new_count}, existing={old_count}, merged={merged_count}")
+            else:
+                print("  [web-merge] skipped: existing tickets_latest.json has a different slate date")
+        except Exception as exc:
+            print(f"  [web-merge] WARN: could not merge existing tickets_latest.json ({exc})")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
     print(f"[OK] Web JSON  -> {json_path}")
@@ -8277,6 +8379,11 @@ def main():
         help="Also write tickets_latest.json in repo root (HTML only from build_ticket_eval.py)",
     )
     ap.add_argument(
+        "--merge-web-latest",
+        action="store_true",
+        help="Merge same-date slips into existing tickets_latest.json instead of replacing it (dedupe by leg set).",
+    )
+    ap.add_argument(
         "--bankroll",
         type=float,
         default=0.0,
@@ -9557,13 +9664,23 @@ def main():
             gated_preview = filter_positive_ev_tickets_payload(payload)
             print_positive_ev_gate_report(gated_preview)
         _web_ev = not bool(args.no_web_ev_gate)
-        write_web_outputs(payload, args.web_outdir, require_positive_ev=_web_ev)
+        write_web_outputs(
+            payload,
+            args.web_outdir,
+            require_positive_ev=_web_ev,
+            merge_existing_for_date=bool(args.merge_web_latest),
+        )
         # nfl: pass None until combined loads NFL step8; keep key "nfl": [] in slate_latest.json for UI.
         nfl = None
         write_slate_json(nba, cbb, nhl, soccer, args.date, args.web_outdir,
                          wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis, nfl=nfl)
         if args.also_root:
-            write_web_outputs(payload, outdir=".", require_positive_ev=_web_ev)
+            write_web_outputs(
+                payload,
+                outdir=".",
+                require_positive_ev=_web_ev,
+                merge_existing_for_date=bool(args.merge_web_latest),
+            )
         # Avoid Windows console codepage issues with unicode checkmarks.
         print("[OK] Web outputs complete.")
 

@@ -164,19 +164,19 @@ function Invoke-MLBStep1Fetch {
         [string]$WorkDir,
         [string]$PipelineDate
     )
-    Write-Host "  --> MLB Step 1 - Fetch PrizePicks (Playwright, then direct API if needed)" -ForegroundColor Yellow
+    Write-Host "  --> MLB Step 1 - Fetch PrizePicks (direct API, then Playwright if needed)" -ForegroundColor Yellow
     Push-Location $WorkDir
     try {
         $env:PYTHONUTF8       = "1"
         $env:PYTHONIOENCODING = "utf-8"
-        $cmd1 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --playwright --timeout 180 --date `"$PipelineDate`" --output step1_mlb_props.csv"
+        $cmd1 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --date `"$PipelineDate`" --output step1_mlb_props.csv"
         Write-Host "        CMD: $cmd1" -ForegroundColor DarkGray
         $output = Invoke-Expression $cmd1 2>&1
         $exit   = $LASTEXITCODE
         foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
         if ($exit -ne 0) {
-            Write-Host "      MLB Playwright failed (exit $exit); trying direct API..." -ForegroundColor Yellow
-            $cmd2 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --date `"$PipelineDate`" --output step1_mlb_props.csv"
+            Write-Host "      MLB direct API failed (exit $exit); trying Playwright..." -ForegroundColor Yellow
+            $cmd2 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --playwright --timeout 180 --date `"$PipelineDate`" --output step1_mlb_props.csv"
             Write-Host "        CMD: $cmd2" -ForegroundColor DarkGray
             $output = Invoke-Expression $cmd2 2>&1
             $exit   = $LASTEXITCODE
@@ -543,7 +543,7 @@ function Run-Combined {
     }
 
     # Keep strict date checks for NBA-family slates so /tickets never shows yesterday as today.
-    $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --max-tickets 3 --nba-structured-variants 3 --write-web --web-outdir `"$WebOutDir`""
+    $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --max-tickets 3 --nba-structured-variants 3 --write-web --merge-web-latest --web-outdir `"$WebOutDir`""
     if (-not $WebEvOnly) {
         $CombinedArgs += " --no-web-ev-gate"
     }
@@ -1047,16 +1047,16 @@ $MLBJob = Start-Job -ScriptBlock {
     }
     function Invoke-MLBStep1Fetch-Job {
         param([string]$Dir, [string]$PipelineDate)
-        Write-Output "[MLB] --> MLB Step 1 - Fetch PrizePicks (Playwright, then direct API if needed)"
+        Write-Output "[MLB] --> MLB Step 1 - Fetch PrizePicks (direct API, then Playwright if needed)"
         Push-Location $Dir
         try {
-            $cmd1 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --playwright --timeout 180 --date `"$PipelineDate`" --output step1_mlb_props.csv"
+            $cmd1 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --date `"$PipelineDate`" --output step1_mlb_props.csv"
             Write-Output "        CMD: $cmd1"
             $output = Invoke-Expression $cmd1 2>&1; $exit = $LASTEXITCODE
             foreach ($line in $output) { Write-Output "        $line" }
             if ($exit -ne 0) {
-                Write-Output "[MLB] Playwright failed (exit $exit); trying direct API"
-                $cmd2 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --date `"$PipelineDate`" --output step1_mlb_props.csv"
+                Write-Output "[MLB] Direct API failed (exit $exit); trying Playwright"
+                $cmd2 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --playwright --timeout 180 --date `"$PipelineDate`" --output step1_mlb_props.csv"
                 Write-Output "        CMD: $cmd2"
                 $output = Invoke-Expression $cmd2 2>&1; $exit = $LASTEXITCODE
                 foreach ($line in $output) { Write-Output "        $line" }
