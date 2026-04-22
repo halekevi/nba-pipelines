@@ -87,7 +87,7 @@ def _chrono_split_idx(df: pd.DataFrame, date_col: str | None) -> pd.Index:
         dd = pd.to_datetime(df[date_col], errors="coerce")
         if dd.notna().any():
             return dd.sort_values().index
-    print("⚠️  [ML] No usable date column found — using index order (no shuffle).")
+    print("[WARN] [ML] No usable date column found - using index order (no shuffle).")
     return df.index
 
 
@@ -373,7 +373,7 @@ def _audit_and_load() -> pd.DataFrame:
             df[col] = _norm_cat(df[col])
     df["final_direction"] = _final_direction_series(df)
 
-    print(f"Training mix — real: {n_real:,}  synthetic: {n_syn_used:,}  total: {len(df):,}")
+    print(f"Training mix - real: {n_real:,}  synthetic: {n_syn_used:,}  total: {len(df):,}")
     print(f"-> Total rows (all sources): {len(df)}")
     print(f"-> Columns ({len(df.columns)}): {list(df.columns)}")
     hit_col = _first_present(df, ["result", "outcome", "grade"])
@@ -582,7 +582,7 @@ def main() -> None:
     bw = blend_weight_for_n(n)
     if n < 200:
         print(
-            f"\nWARNING: Only {n} decided rows for NHL — model will be trained but accuracy may be low.\n"
+            f"\nWARNING: Only {n} decided rows for NHL - model will be trained but accuracy may be low.\n"
             f"Proceeding with ML_BLEND_WEIGHT = {bw}\n"
         )
     elif n < 500:
@@ -755,21 +755,17 @@ def main() -> None:
     print("NHL Model Training Complete")
     print("-----------------------------")
     print(f"  Training rows:    {len(X_train)}")
-    print(f"  Calibration rows: {len(X_cal)}")
     print(f"  Test rows:        {len(X_test)}")
     print(f"  ROC-AUC:          {auc:.4f}" if not np.isnan(auc) else "  ROC-AUC:          n/a")
     print(f"  Brier (raw):      {brier_raw:.4f}" if not np.isnan(brier_raw) else "  Brier (raw):      n/a")
-    print(f"  Brier (cal test): {brier_calibrated:.4f}" if not np.isnan(brier_calibrated) else "  Brier (cal test): n/a")
-    print(f"  Calibration:      {calibration_type}")
     print(f"  Blend weight:     {bw:.2f}")
-    print("\n  Top 20 features:")
-    for i, (k, v) in enumerate(fi.head(20).items(), 1):
-        print(f"  {i}. {k:<28} {v:.6f}")
+    if fi is not None:
+        print("\n  Top 20 features:")
+        for i, (k, v) in enumerate(fi.head(20).items(), 1):
+            print(f"  {i}. {k:<28} {v:.6f}")
     print(f"\n  Saved: {MODEL_PATH}")
     print(f"  Saved: {FEATURES_PATH}")
     print(f"  Saved: {BLEND_PATH}")
-    if calibrator is not None:
-        print(f"  Saved: {CALIB_PATH}")
     print(f"  Saved: {METRICS_PATH}")
     print(f"  Saved: {METADATA_PATH}")
     print(f"  Saved: {LATEST_TEST_RESULTS_PATH}")

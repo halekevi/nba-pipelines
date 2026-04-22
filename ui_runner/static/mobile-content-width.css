@@ -1,7 +1,7 @@
 /**
  * Mobile: full-width shell, safe-area gutters, touch scrolling, form zoom fix.
  * Load after page styles and nav-mobile-shared.css.
- * v=20260421nograin
+ * v=20260423gradeslayout
  */
 @media (max-width: 900px), (pointer: coarse) {
   /*
@@ -226,6 +226,15 @@
     position: relative !important;
   }
 
+  /* Toolbar lives inside slate iframe — hub slot is display:none; keep one grid row so stage fills height */
+  body.page-grades .iframe-shell:has(.grades-toolbar-parent-slot--collapsed) {
+    grid-template-rows: minmax(0, 1fr) !important;
+  }
+
+  body.page-grades .iframe-shell:has(.grades-toolbar-parent-slot--collapsed) .iframe-shell-stage {
+    grid-row: 1 !important;
+  }
+
   body.page-grades .grades-body {
     margin-left: env(safe-area-inset-left, 0px) !important;
     margin-right: env(safe-area-inset-right, 0px) !important;
@@ -234,6 +243,9 @@
 
   body.page-grades .grades-page {
     overflow: hidden !important;
+    padding-left: max(0px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(0px, env(safe-area-inset-right, 0px)) !important;
+    min-height: 0 !important;
   }
 
   .iframe-shell-toolbar .date-bar,
@@ -276,6 +288,25 @@
 
   body.page-income .js-plotly-plot {
     width: 100% !important;
+  }
+}
+
+@media (max-width: 900px) and (orientation: portrait) {
+  html:has(body.page-grades) {
+    min-height: 100svh !important;
+    min-height: 100dvh !important;
+  }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+  body.page-grades .grades-body {
+    margin-bottom: 0.45rem !important;
+  }
+
+  body.page-grades .iframe-shell-toolbar {
+    padding-top: 4px !important;
+    padding-left: max(6px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(6px, env(safe-area-inset-right, 0px)) !important;
   }
 }
 
@@ -1128,6 +1159,18 @@ nav.snav .mobile-menu a {
   .income-wrap,
   .page-ev {
     padding-bottom: calc(82px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* Grades: landscape phones lose vertical space — trim body/bottom padding so iframe stage stays usable */
+@media (max-width: 768px) and (orientation: landscape) {
+  body.page-grades {
+    padding-bottom: calc(54px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  body.page-grades .grades-page,
+  body.page-grades .grades-body {
+    padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px)) !important;
   }
 }
 

@@ -1,1 +1,1 @@
-date,entry_type,n_legs,n_goblin,n_standard,n_demon,goblin_distances_sorted,flex_sweep_x,flex_partial_x,power_first_x,power_min_x,notes
+date,group_name,n_legs,pick_types,lines,standard_lines,actual_payout_multiplier,slip_type,result

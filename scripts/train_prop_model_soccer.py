@@ -94,7 +94,7 @@ def _chrono_split_idx(df: pd.DataFrame, date_col: str | None) -> pd.Index:
         dd = pd.to_datetime(df[date_col], errors="coerce")
         if dd.notna().any():
             return dd.sort_values().index
-    print("⚠️  [ML] No usable date column found — using index order (no shuffle).")
+    print("[WARN] [ML] No usable date column found - using index order (no shuffle).")
     return df.index
 
 
@@ -213,7 +213,7 @@ def _audit_and_load_soccer() -> tuple[pd.DataFrame, list[str]]:
         df = pd.concat([df_real, syn_df], ignore_index=True)
         sources = list(sources) + ["synthetic_graded.db::synthetic"]
 
-    print(f"Training mix — real: {n_real:,}  synthetic: {n_syn_used:,}  total: {len(df):,}")
+    print(f"Training mix - real: {n_real:,}  synthetic: {n_syn_used:,}  total: {len(df):,}")
     return df, sources
 
 
@@ -393,7 +393,7 @@ def main() -> None:
     else:
         sw = np.where(df.loc[train.index, "_synthetic"].to_numpy() > 0, 0.7, 1.0)
 
-    date_col = _first_present(train, ["game_date", "date", "_source_date", "slate_date"])
+    date_col = _first_present(train, ["game_date", "date", "source_date", "_source_date", "slate_date"])
     if date_col:
         print(f"-> Using temporal split on: {date_col}")
     order = _chrono_split_idx(train, date_col)
