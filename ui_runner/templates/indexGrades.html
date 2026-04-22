@@ -52,6 +52,17 @@ body.page-grades{
   font-size:clamp(11px,0.82vw,13px);
   line-height:1.35;
 }
+/* Transparent shell showed hub body::before/::after + .grain-layer under the toolbar strip; slate iframe used transparent body + its own ::before/::after (Grades-only). */
+body.page-grades::before,
+body.page-grades::after{display:none !important;}
+body.page-grades .grain-layer{display:none !important;}
+body.page-grades .iframe-shell-stage{
+  background:var(--bg-main);
+  isolation:isolate;
+}
+[data-theme="light"] body.page-grades .iframe-shell-stage{
+  background:#dfe6f2;
+}
 body::before{
   content:'';
   position:fixed;
@@ -241,7 +252,16 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 }
 .props-eval-toolbar input[type="search"]{min-width:160px;flex:1 1 140px;max-width:280px;}
 .props-eval-counts{font-family:'Inter',sans-serif;font-size:12px;color:var(--cyan);letter-spacing:0.4px;margin-bottom:6px;}
-.props-eval-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;padding-bottom:28px;}
+/* Desktop: responsive card masonry */
+.props-eval-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:12px;
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
+  padding-bottom:28px;
+}
 .prop-eval-card{
   border-radius:14px;padding:14px 16px;border:1px solid var(--glass-panel-border);
   background:rgba(255,255,255,0.035);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
@@ -284,7 +304,14 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 
 /* loading */
 .load-overlay{position:absolute;inset:0;background:rgba(6,8,18,0.82);backdrop-filter:blur(20px) saturate(180%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:50;pointer-events:none;transition:opacity .3s;}
-.load-overlay.hidden{opacity:0;}
+.load-overlay.hidden{
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  transition:opacity .2s ease,visibility 0s linear .2s,backdrop-filter 0s linear .2s;
+}
 .load-spinner{width:42px;height:42px;border:3px solid rgba(255,255,255,0.1);border-top-color:var(--f0a500);border-right-color:rgba(212,160,23,0.35);border-radius:50%;animation:spin .85s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .load-text{font-family:'Inter',sans-serif;font-size:17px;letter-spacing:2px;color:var(--muted2);}
@@ -297,6 +324,26 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .empty-sub{font-family:'Inter',sans-serif;font-size:17px;letter-spacing:1.5px;color:var(--muted);text-align:center;line-height:1.85;max-width:440px;}
 .empty-sub code{color:var(--cyan);font-size:16px;}
 .empty-hint{font-family:'Inter',sans-serif;font-size:16px;letter-spacing:1.2px;color:var(--muted2);background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid var(--glass-panel-border);border-radius:12px;padding:10px 18px;margin-top:6px;box-shadow:var(--glass-shadow);}
+
+/* Mobile / coarse pointer only — iframe stacking, prop-eval 2-col grid, overlay layering (WebView); desktop hub unchanged */
+@media (max-width:900px),(pointer:coarse){
+  .iframe-shell-stage{isolation:isolate;}
+  .iframe-shell-stage > .grade-frame{z-index:2;pointer-events:auto;}
+  .grades-analytics-wrap{z-index:6;}
+  .props-eval-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px 14px;
+    align-content:start;
+  }
+  .prop-eval-card{min-width:0;}
+  .load-overlay{z-index:10;transition:opacity .25s ease,visibility 0s linear .25s;}
+  .load-overlay.hidden{z-index:0;}
+  .empty-state{z-index:8;}
+}
+@media (max-width:760px){
+  .props-eval-grid{grid-template-columns:1fr;}
+}
 
 /* tabs — glass, gold active */
 .tabs-bar{
@@ -416,6 +463,8 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   mix-blend-mode:multiply;
   opacity:.5;
 }
+[data-theme="light"] body.page-grades::before,
+[data-theme="light"] body.page-grades::after{display:none !important;}
 
 /* Glass surfaces - light mode */
 [data-theme="light"] .snav,
@@ -605,6 +654,9 @@ select option,
 }
 /* Load overlay / empty state */
 [data-theme="light"] .load-overlay { background:rgba(235,240,250,0.90) !important; }
+[data-theme="light"] .load-overlay.hidden {
+  background:transparent !important;
+}
 [data-theme="light"] .empty-state { background:rgba(235,240,250,0.6) !important; }
 [data-theme="light"] .empty-hint {
   background:rgba(255,255,255,0.72) !important;
@@ -632,7 +684,9 @@ select option,
   width: 200%;
   height: 200%;
   pointer-events: none;
-  z-index: 9999;
+  /* Must stay behind .grades-page (z-index:1) and nav — 9999 sat on top of the iframe and
+     caused a washed-out / opaque band on some Android WebViews (mix-blend + full-screen fixed). */
+  z-index: 0;
   opacity: 0.028;
   animation: grainShift 0.4s steps(1) infinite;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
@@ -786,16 +840,16 @@ select option,
 @media (max-width: 900px), (pointer: coarse) {
   .orb-1,
   .orb-2,
-  .grain-layer {
+  .grain-layer,
+  .mesh-bg {
     display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    animation: none !important;
   }
   body::after {
     display: none !important;
-  }
-  .mesh-bg {
-    animation: none !important;
-    filter: blur(12px) !important;
-    opacity: 0.75;
   }
   .nav-accent {
     animation: none !important;
@@ -843,7 +897,7 @@ select option,
 
 </style>
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260418nav"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260422incomeplot"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260421nograin"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 </head>
 <body class="page-grades">
@@ -1157,7 +1211,7 @@ function ensureGradesToolbarStylesInFrame(doc) {
   const link = doc.createElement('link');
   link.id = 'grades-iframe-toolbar-link';
   link.rel = 'stylesheet';
-    link.href = '/static/grades-iframe-toolbar.css?v=20260422framescroll';
+    link.href = '/static/grades-iframe-toolbar.css?v=20260423gradeboxfit';
   doc.head.appendChild(link);
 }
 
@@ -1237,40 +1291,12 @@ function ensureFrameCollapseCss(doc) {
   const style = doc.createElement('style');
   style.id = 'grades-collapsible-sport-style';
   style.textContent = `
+    /* Embedded slate: transparent body + fixed ::before/::after glows composite badly in WebView over glass (reads as film grain). */
+    html{background:#06060f!important;}
+    body{background:#06060f!important;}
+    body::before,body::after{display:none!important;}
     /* Older slate_eval_*.html embed .main{max-width:1100px;margin:auto} and header side margins — content
        stays narrow while the toolbar is full width. Override only on slate-shaped documents (direct header + .main). */
-    /* Hub iframe has a fixed height; slate_eval body used min-height:100vh without a
-       bounded scroll root, so long sport lists were clipped instead of scrolling. */
-    html{
-      height:100% !important;
-      overflow:hidden !important;
-    }
-    body{
-      height:100% !important;
-      max-height:100% !important;
-      min-height:0 !important;
-      margin:0;
-      overflow-x:hidden !important;
-      overflow-y:auto !important;
-      -webkit-overflow-scrolling:touch !important;
-      overscroll-behavior-y:contain !important;
-      padding-bottom:calc(36px + env(safe-area-inset-bottom, 0px));
-    }
-    body > header{
-      margin-left:0;
-      margin-right:0;
-      width:100%;
-      max-width:none;
-      box-sizing:border-box;
-    }
-    body > .main{
-      max-width:none;
-      width:100%;
-      margin-left:0;
-      margin-right:0;
-      box-sizing:border-box;
-      min-width:0;
-    }
     .grades-sport-bucket{
       width:100%;
       max-width:100%;
@@ -1289,12 +1315,26 @@ function ensureFrameCollapseCss(doc) {
       align-items:center;
       justify-content:space-between;
       gap:10px;
+      flex-wrap:wrap;
+      row-gap:8px;
       font-family:'Bebas Neue',sans-serif;
       letter-spacing:1.6px;
       font-size:28px;
       color:inherit;
       background:rgba(255,255,255,.02);
       border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .grades-sport-bucket > summary > span:first-child{
+      flex:1 1 12rem;
+      min-width:0;
+      line-height:1.08;
+      word-break:break-word;
+    }
+    .grades-sport-bucket > summary .grades-sport-meta{
+      flex:0 0 auto;
+      margin-left:auto;
+      text-align:right;
+      white-space:nowrap;
     }
     .grades-sport-bucket > summary::-webkit-details-marker{display:none;}
     .grades-sport-bucket > summary::marker{display:none;content:'';}
@@ -1319,17 +1359,76 @@ function ensureFrameCollapseCss(doc) {
       box-sizing:border-box;
       min-width:0;
     }
-    .grades-sport-bucket-body .insight-grid,
     .grades-sport-bucket-body .two-col,
     .grades-sport-bucket-body .three-col{
       width:100%;
       max-width:100%;
       box-sizing:border-box;
       min-width:0;
-      grid-template-columns:repeat(3,minmax(0,1fr));
+      display:grid;
     }
-    .grades-sport-bucket-body .two-col{grid-template-columns:repeat(2,minmax(0,1fr));}
-    .grades-sport-bucket-body .insight-card{min-width:0;box-sizing:border-box;}
+    .grades-sport-bucket-body .two-col{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;}
+    .grades-sport-bucket-body .three-col{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+    /* Hub iframe has a fixed height; slate_eval body used min-height:100vh without a bounded scroll root — narrow / touch only */
+    @media (max-width:900px),(pointer:coarse){
+    html{
+      height:100% !important;
+      overflow-x:hidden !important;
+      overflow-y:auto !important;
+      -webkit-overflow-scrolling:touch !important;
+      overscroll-behavior-y:contain !important;
+    }
+    body{
+      min-height:100% !important;
+      height:auto !important;
+      max-height:none !important;
+      margin:0;
+      overflow-x:hidden !important;
+      overflow-y:visible !important;
+      padding-bottom:calc(36px + env(safe-area-inset-bottom, 0px));
+    }
+    body > header{
+      margin-left:0;
+      margin-right:0;
+      width:100%;
+      max-width:none;
+      box-sizing:border-box;
+    }
+    body > .main{
+      max-width:none;
+      width:100%;
+      margin-left:0;
+      margin-right:0;
+      box-sizing:border-box;
+      min-width:0;
+    }
+    body .main .insight-grid{
+      display:flex !important;
+      flex-wrap:wrap !important;
+      gap:14px !important;
+      width:100%;
+      max-width:100%;
+      box-sizing:border-box;
+      min-width:0;
+      justify-content:flex-start !important;
+      align-items:flex-start !important;
+    }
+    body .main .insight-card{
+      width:fit-content !important;
+      max-width:100% !important;
+      min-width:0 !important;
+      box-sizing:border-box !important;
+    }
+    body .main .stat-grid{
+      justify-items:start !important;
+      justify-content:start !important;
+    }
+    body .main .stat-grid-4{grid-template-columns:repeat(auto-fill,minmax(min(100%,9.5rem),max-content)) !important;}
+    body .main .stat-grid-2{grid-template-columns:repeat(auto-fill,minmax(min(100%,11rem),max-content)) !important;}
+    body .main .stat-card{width:fit-content !important;max-width:100% !important;box-sizing:border-box !important;}
+    body .main .chip{max-width:100% !important;box-sizing:border-box !important;}
+    body .main .alert{width:fit-content !important;max-width:100% !important;box-sizing:border-box !important;}
+    }
     .grades-sport-meta{
       font-family:'Inter',sans-serif;
       font-size:12px;
@@ -1359,8 +1458,6 @@ function collapseSportsInSlateFrame(frame) {
   const firstMain = doc.querySelector('.main');
   if (!firstMain) return;
 
-  const _mobileBuckets = gradesFrameMobileLayout();
-
   sections.forEach((sec, idx) => {
     let sportLabel =
       sec.querySelector('.sport-label')?.textContent?.trim() ||
@@ -1371,8 +1468,9 @@ function collapseSportsInSlateFrame(frame) {
 
     const details = doc.createElement('details');
     details.className = 'grades-sport-bucket';
-    // Desktop: expanded so non-NBA grades are visible. Mobile: collapsed to shorten the page.
-    details.open = !_mobileBuckets;
+    // Keep buckets open everywhere: collapsed mobile buckets hid grades and, on some
+    // WebViews, sat below a broken inner scroll — looked like a large empty band.
+    details.open = true;
 
     const summary = doc.createElement('summary');
     const title = doc.createElement('span');

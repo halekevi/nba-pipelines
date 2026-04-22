@@ -1068,11 +1068,9 @@ CSS = """
   --pending:#666;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{height:100%;overflow:hidden}
-body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);height:100%;max-height:100%;min-height:0;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:24px;font-size:clamp(14px,1.02vw,16px);line-height:1.45}
+html{height:100%;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#06060f}
+body{font-family:'Inter',sans-serif;background:#06060f;color:var(--text);min-height:100%;height:auto;max-height:none;margin:0;overflow-x:hidden;overflow-y:visible;padding-bottom:24px;font-size:clamp(14px,1.02vw,16px);line-height:1.45}
 h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif}
-body::before{content:'';position:fixed;top:-20%;left:-10%;width:55%;height:55%;background:radial-gradient(ellipse,rgba(212,160,23,.07) 0%,transparent 70%);pointer-events:none;z-index:0}
-body::after{content:'';position:fixed;bottom:-20%;right:-10%;width:50%;height:50%;background:radial-gradient(ellipse,rgba(0,229,255,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
 header,.main{position:relative;z-index:1}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:rgba(255,255,255,0.04)}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.14);border-radius:4px}
 
@@ -1089,14 +1087,14 @@ box-shadow:0 8px 32px rgba(0,0,0,.28)}
 .date-badge{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2);background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
 border:1px solid var(--glass-bd);border-radius:999px;padding:8px 14px;letter-spacing:1.5px}
 .main{max-width:none;width:100%;margin:0;padding:24px 20px;box-sizing:border-box}
-.sport-header{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.sport-header{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap;min-width:0}
 .sport-label{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;line-height:1;color:var(--gold);text-shadow:0 0 28px rgba(240,165,0,.18)}
 .sport-header-line{flex:1;min-width:80px;height:1px;background:rgba(255,255,255,0.08)}
 .sport-meta-count{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2)}
 .sport-section{margin-bottom:48px;width:100%;max-width:100%;box-sizing:border-box}
 .section-label{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.08vw,16px);color:var(--muted);letter-spacing:2.5px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
-.stat-grid{display:grid;gap:14px;margin-bottom:24px}
+.stat-grid{display:grid;gap:14px;margin-bottom:24px;width:100%;max-width:100%;box-sizing:border-box}
 .stat-grid-4{grid-template-columns:repeat(4,1fr)}
 .stat-grid-2{grid-template-columns:repeat(2,1fr)}
 .stat-card{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
@@ -1128,7 +1126,7 @@ td.right{text-align:right}td.mono{font-family:'Inter',sans-serif;font-size:clamp
 .rate-bar-fill{height:100%;border-radius:3px;transition:width .4s}
 .rate-num{font-family:'Inter',sans-serif;font-size:clamp(13px,1.05vw,15px);min-width:48px;text-align:right;flex-shrink:0}
 .chip{display:inline-block;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:.5px;
-background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid var(--glass-bd)}
+background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid var(--glass-bd);max-width:100%;box-sizing:border-box;word-break:break-word}
 .chip-a{background:rgba(57,255,110,.08);color:var(--green);border-color:rgba(57,255,110,.28)}
 .chip-b{background:rgba(0,229,255,.08);color:var(--cyan);border-color:rgba(0,229,255,.28)}
 .chip-c{background:rgba(240,165,0,.08);color:var(--gold);border-color:rgba(240,165,0,.3)}
@@ -1151,7 +1149,7 @@ tr.player-miss td:first-child{border-left:3px solid var(--red)}
 tr.player-warn td{background:rgba(240,165,0,0.06)}
 tr.player-warn td:first-child{border-left:3px solid var(--gold)}
 .pos{color:var(--green);font-weight:700}.neg{color:var(--red);font-weight:700}.neu{color:var(--muted2)}
-.alert{border-radius:12px;padding:14px 18px;margin-bottom:20px;border:1px solid;font-size:13px;line-height:1.6;backdrop-filter:blur(16px)}
+.alert{border-radius:12px;padding:14px 18px;margin-bottom:20px;border:1px solid;font-size:13px;line-height:1.6;backdrop-filter:blur(16px);max-width:100%;box-sizing:border-box}
 .alert-red{background:rgba(255,77,77,.08);border-color:rgba(255,77,77,.35)}
 .alert-green{background:rgba(57,255,110,.08);border-color:rgba(57,255,110,.32)}
 .alert-amber{background:rgba(240,165,0,.08);border-color:rgba(240,165,0,.32)}
@@ -1160,7 +1158,14 @@ tr.player-warn td:first-child{border-left:3px solid var(--gold)}
 .muted-note{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);padding:14px;text-align:center}
 td.muted{color:var(--muted2)}
 @media(max-width:768px){
-.stat-grid-4,.stat-grid-2{grid-template-columns:repeat(2,1fr)}.two-col,.three-col,.insight-grid{grid-template-columns:1fr}
+.stat-grid{justify-items:start;justify-content:start}
+.stat-grid-4,.stat-grid-2{grid-template-columns:repeat(auto-fill,minmax(min(100%,9rem),max-content))}
+.two-col,.three-col{grid-template-columns:1fr}
+.insight-grid{display:flex;flex-wrap:wrap;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:14px}
+.insight-card{width:fit-content;max-width:100%}
+.stat-card{width:fit-content;max-width:100%}
+.alert{width:fit-content;max-width:100%}
+.rate-num{min-width:min(48px,max-content)}
 body{font-size:clamp(14px,3.2vw,16px)}
 table{font-size:clamp(12px,3.2vw,14px)}
 td.mono{font-size:clamp(12px,3.2vw,14px)}
