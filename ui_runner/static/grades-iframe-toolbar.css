@@ -1,22 +1,25 @@
 /**
  * Grades hub: date + slate/ticket tabs when embedded inside slate_eval iframe.
  * Uses slate_eval CSS variables with rgba fallbacks for older files.
- * v=20260422framescroll
+ * v=20260423gradeboxfit
  */
 
-/* slate_eval / ticket_eval in a fixed-height iframe: scroll inside the document body. */
+/* slate_eval / ticket_eval in a fixed-height iframe: scroll on `html` (Android WebView
+   often fails when `html` is overflow:hidden and `body` is height-locked + max-height). */
 html {
   height: 100% !important;
-  overflow: hidden !important;
-}
-body {
-  height: 100% !important;
-  max-height: 100% !important;
-  min-height: 0 !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch !important;
   overscroll-behavior-y: contain !important;
+}
+body {
+  min-height: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
 }
 
 .iframe-shell-toolbar {
