@@ -1,2 +1,3 @@
 "run_ts_utc","slate_date","mode_requested","top_n","blend_weight","rows_decided","date_count","delta_cash_rate","delta_avg_net_10","delta_total_net_10","top_swapped_count","avg_pred_p_cash"
 "2026-04-22T12:17:17Z","2026-04-22","shadow","10","0.35","112","14","0","0","0","3.4285714285714284","0.43417664285200935"
+"2026-04-22T12:26:07Z","2026-04-22","shadow","10","0.35","112","14","0","0","0","3.4285714285714284","0.43417664285200935"
