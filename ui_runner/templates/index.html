@@ -1120,9 +1120,9 @@ body::before{
   .slate-time-cell{color:rgba(255,255,255,.95)!important;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.02em;white-space:nowrap;}
   .edge-pos{color:var(--green);}
   .edge-neg{color:var(--amber);}
-  @media(max-width:768px){#slate-panel-header-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;}}
-  @media(max-width:640px){#slate-panel-header-row{grid-template-columns:minmax(0,1fr)!important;}}
-  @media(max-width:480px){#slate-panel-header-row{grid-template-columns:minmax(0,1fr)!important;}}
+@media(max-width:768px){ #slate-panel-header-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;}}
+@media(max-width:640px){ #slate-panel-header-row{grid-template-columns:minmax(0,1fr)!important;}}
+@media(max-width:480px){ #slate-panel-header-row{grid-template-columns:minmax(0,1fr)!important;}}
   @media(max-width:900px){
     .slate-table-wrap{
       max-height:68vh;
@@ -1772,6 +1772,26 @@ function getPD(name, line) {
   });
 }
 
+function normalizeSeries(vals) {
+  if (!Array.isArray(vals)) return [];
+  const out = [];
+  for (const v of vals) {
+    const n = Number(v);
+    if (Number.isFinite(n)) out.push(streakQuantize(n));
+  }
+  return out;
+}
+
+function historySeriesForPick(p, n) {
+  const actual = normalizeSeries(p.actual_series).slice(-n);
+  if (actual.length >= Math.min(3, n)) {
+    const lineRaw = normalizeSeries(p.line_series);
+    const lineSeries = lineRaw.length ? lineRaw.slice(-actual.length) : Array.from({length: actual.length}, () => Number(p.line));
+    return {actual, lineSeries};
+  }
+  return null;
+}
+
 /** Pipeline often sends L5/L10 as a rate in [0,1] (e.g. 0.8 = 4/5), not always integer counts. */
 function streakHits(raw, n) {
   if (raw === null || raw === undefined) return null;
@@ -1888,6 +1908,8 @@ async function loadSlateData() {
         l10_over: p.l10_over,
         l10_under: p.l10_under != null ? p.l10_under : resolvedUnderHits(p, 10),
         l5_avg: p.l5_avg, season_avg: p.season_avg,
+        actual_series: p.actual_series,
+        line_series: p.line_series,
       }));
       for (const p of (d.picks || [])) {
         if (p.player && !PLAYER_DATA[p.player]) {
@@ -2001,38 +2023,40 @@ setInterval(refreshStatus, 60000);
 refreshStatus();
 
 // ── SVG chart (full) — premium area chart ──────────────────
-function makeSVG(data, line, isOver, W=260, H=100) {
+function makeSVG(data, line, isOver, W=260, H=100, lineSeries=null) {
   const pL=32,pR=10,pT=14,pB=22, cW=W-pL-pR, cH=H-pT-pB;
-  const pad=Math.max((Math.max(...data)-Math.min(...data))*0.18, line*0.08);
-  const mn=Math.min(...data,line)-pad, mx=Math.max(...data,line)+pad, R=mx-mn||1;
+  const lineVals = Array.isArray(lineSeries) && lineSeries.length === data.length ? lineSeries : Array.from({length:data.length},()=>line);
+  const allVals = [...data, ...lineVals];
+  const pad=Math.max((Math.max(...allVals)-Math.min(...allVals))*0.18, Number(line||0)*0.08);
+  const mn=Math.min(...allVals)-pad, mx=Math.max(...allVals)+pad, R=mx-mn||1;
   const px=(v,i)=>pL+(i/(data.length-1))*cW;
   const py=v=>pT+cH-((v-mn)/R)*cH;
-  const hc=isOver?'#2ecc71':'#f39c12', mc='#e74c3c';
-  const hcGlow=isOver?'rgba(46,204,113,':'rgba(243,156,18,';
+  const actualColor='#22d3ee', lineColor='#f39c12';
   const uid='ch'+Math.random().toString(36).slice(2,7);
   const pts=data.map((v,i)=>({x:px(v,i),y:py(v)}));
+  const lpts=lineVals.map((v,i)=>({x:px(v,i),y:py(v)}));
   // bezier control points
   function cpx(p1,p2,t){return p1.x+(p2.x-p1.x)*t;}
   function cpy(p1,p2,t){return p1.y+(p2.y-p1.y)*t;}
   let pathD='M'+pts[0].x+','+pts[0].y;
+  let lineD='M'+lpts[0].x+','+lpts[0].y;
   for(let i=1;i<pts.length;i++){
     const prev=pts[i-1],curr=pts[i];
+    const lprev=lpts[i-1], lcurr=lpts[i];
     const cp1x=prev.x+(curr.x-prev.x)*0.5, cp1y=prev.y;
     const cp2x=prev.x+(curr.x-prev.x)*0.5, cp2y=curr.y;
     pathD+=` C${cp1x},${cp1y} ${cp2x},${cp2y} ${curr.x},${curr.y}`;
+    const lcp1x=lprev.x+(lcurr.x-lprev.x)*0.5, lcp1y=lprev.y;
+    const lcp2x=lprev.x+(lcurr.x-lprev.x)*0.5, lcp2y=lcurr.y;
+    lineD+=` C${lcp1x},${lcp1y} ${lcp2x},${lcp2y} ${lcurr.x},${lcurr.y}`;
   }
   const areaD=pathD+` L${pts[pts.length-1].x},${pT+cH} L${pts[0].x},${pT+cH} Z`;
-  const lY=py(line);
   let s=`<svg viewBox="0 0 ${W} ${H}" style="overflow:visible;width:100%;height:auto">`;
   s+=`<defs>
     <linearGradient id="ag${uid}" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="${hc}" stop-opacity="0.22"/>
-      <stop offset="100%" stop-color="${hc}" stop-opacity="0.01"/>
+      <stop offset="0%" stop-color="${actualColor}" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="${actualColor}" stop-opacity="0.01"/>
     </linearGradient>
-    <filter id="glow${uid}" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="2.5" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
     <clipPath id="clip${uid}"><rect x="${pL}" y="${pT}" width="${cW}" height="${cH}"/></clipPath>
   </defs>`;
   // subtle horizontal grid lines
@@ -2041,31 +2065,25 @@ function makeSVG(data, line, isOver, W=260, H=100) {
     s+=`<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="rgba(255,255,255,.04)" stroke-width="1"/>`;
   });
   // axis labels
-  [mn,line,mx].forEach(v=>{
+  [mn,(mn+mx)/2,mx].forEach(v=>{
     const y=py(v);
     s+=`<text x="${pL-4}" y="${y+3.5}" text-anchor="end" font-size="8" fill="#555575" font-family="Inter,sans-serif" font-weight="500">${Math.round(v*10)/10}</text>`;
   });
   // area fill
   s+=`<path d="${areaD}" fill="url(#ag${uid})" clip-path="url(#clip${uid})"/>`;
-  // line label zone tint
-  s+=`<rect x="${pL}" y="${lY-0.5}" width="${cW}" height="1" fill="#f39c12" opacity="0.8"/>`;
-  s+=`<rect x="${pL}" y="${lY}" width="${cW}" height="${pT+cH-lY}" fill="${isOver?'rgba(46,204,113,.04)':'rgba(243,156,18,.04)'}" clip-path="url(#clip${uid})"/>`;
-  // dashed line
-  s+=`<line x1="${pL}" y1="${lY}" x2="${W-pR}" y2="${lY}" stroke="#f39c12" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.7"/>`;
-  s+=`<text x="${W-pR-2}" y="${lY-4}" text-anchor="end" font-size="8" fill="#f39c12" font-weight="700" font-family="Inter,sans-serif">${line}</text>`;
-  // main curve
-  s+=`<path d="${pathD}" fill="none" stroke="${hcGlow}0.6)" stroke-width="2" stroke-linecap="round" filter="url(#glow${uid})" clip-path="url(#clip${uid})"/>`;
-  s+=`<path d="${pathD}" fill="none" stroke="${hc}" stroke-width="1.5" stroke-linecap="round" clip-path="url(#clip${uid})"/>`;
+  s+=`<path d="${lineD}" fill="none" stroke="${lineColor}" stroke-width="1.25" stroke-dasharray="4,3" opacity="0.9" clip-path="url(#clip${uid})"/>`;
+  s+=`<path d="${pathD}" fill="none" stroke="${actualColor}" stroke-width="1.8" stroke-linecap="round" clip-path="url(#clip${uid})"/>`;
   // dots + labels
   data.forEach((v,i)=>{
-    const hit=isOver?v>=line:v<=line;
     const cx=px(v,i), cy=py(v);
-    const dc=hit?hc:mc;
-    s+=`<circle cx="${cx}" cy="${cy}" r="6" fill="${hcGlow}0.12)" stroke="none"/>`;
-    s+=`<circle cx="${cx}" cy="${cy}" r="3.5" fill="${dc}" stroke="rgba(0,0,0,.5)" stroke-width="1"/>`;
-    s+=`<text x="${cx}" y="${cy-9}" text-anchor="middle" font-size="8.5" fill="${dc}" font-weight="700" font-family="Inter,sans-serif">${v}</text>`;
+    const ly=py(lineVals[i]);
+    s+=`<circle cx="${cx}" cy="${cy}" r="3.5" fill="${actualColor}" stroke="rgba(0,0,0,.5)" stroke-width="1"/>`;
+    s+=`<circle cx="${cx}" cy="${ly}" r="2.5" fill="${lineColor}" stroke="rgba(0,0,0,.45)" stroke-width="0.8"/>`;
+    s+=`<text x="${cx}" y="${cy-9}" text-anchor="middle" font-size="8.5" fill="${actualColor}" font-weight="700" font-family="Inter,sans-serif">${v}</text>`;
     s+=`<text x="${cx}" y="${H-5}" text-anchor="middle" font-size="7" fill="#44446a" font-family="Inter,sans-serif">G${i+1}</text>`;
   });
+  s+=`<text x="${pL}" y="${pT-2}" font-size="8" fill="${actualColor}" font-family="Inter,sans-serif">Actual</text>`;
+  s+=`<text x="${pL+34}" y="${pT-2}" font-size="8" fill="${lineColor}" font-family="Inter,sans-serif">Line</text>`;
   s+='</svg>'; return s;
 }
 
@@ -2181,8 +2199,11 @@ function toggleEdge(idx, p) {
 
 function renderExpandChart(idx, p, tab) {
   const data=getPD(p.player,p.line), isOver=p.dir==="OVER";
-  const show=tab==="l5"?data.slice(-5):tab==="l10"?data:data.slice(-5).map(v=>Math.round(v*0.95*10)/10);
-  document.getElementById(`chart-${idx}`).innerHTML=makeSVG(show,p.line,isOver);
+  const n = tab==="l5" ? 5 : 10;
+  const hist = historySeriesForPick(p, n);
+  const show = hist ? hist.actual : (tab==="h2h" ? data.slice(-5).map(v=>Math.round(v*0.95*10)/10) : data.slice(-n));
+  const showLine = hist ? hist.lineSeries : Array.from({length:show.length},()=>Number(p.line));
+  document.getElementById(`chart-${idx}`).innerHTML=makeSVG(show,p.line,isOver,260,100,showLine);
   const avg=show.reduce((a,b)=>a+b,0)/show.length;
   const maxV=Math.max(p.line*1.5,avg*1.3);
   document.getElementById(`pfill-${idx}`).style.width=Math.min(100,Math.round((avg/maxV)*100))+"%";
