@@ -54,7 +54,10 @@ import argparse
 import hashlib
 import itertools
 import json
-import joblib
+try:
+    import joblib
+except Exception:  # optional on web runtime; rerank gracefully disables
+    joblib = None
 import logging
 import math
 import os
@@ -6634,6 +6637,9 @@ def _load_ticket_rerank_models() -> None:
     _TICKET_MODEL_BUCKETS = {}
     _TICKET_MODEL_FEATURES = []
     try:
+        if joblib is None:
+            _log_slate.warning("[ticket-rerank] joblib unavailable; rerank disabled")
+            return
         if os.path.exists(TICKET_MODEL_FEATURES_PATH):
             with open(TICKET_MODEL_FEATURES_PATH, "r", encoding="utf-8") as f:
                 _TICKET_MODEL_FEATURES = list(json.load(f) or [])
