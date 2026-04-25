@@ -23,10 +23,16 @@
         min-height: 100%;
         padding: 1.5rem;
         text-align: center;
+        max-width: 28rem;
+        margin: 0 auto;
+        box-sizing: border-box;
       }
       code {
         font-size: 0.85rem;
         color: #94a3b8;
+      }
+      p {
+        line-height: 1.5;
       }
     </style>
   </head>
@@ -35,9 +41,14 @@
       <div>
         <p><strong>PropORACLE</strong></p>
         <p>
-          With <code>server.url</code> set in <code>capacitor.config.js</code>, the native shell
-          loads your Railway site. This page is only a fallback if the remote URL is missing or
-          offline.
+          This build loads the app from <strong>bundled files</strong> in the native shell
+          (<code>mobile/www</code>). It does not open your Railway site unless you explicitly
+          synced with <code>PROPORACLE_SERVER_URL</code> set.
+        </p>
+        <p>
+          To ship UI updates inside the APK, replace the contents of <code>mobile/www</code>
+          (e.g. export or copy your built static UI), then run <code>npm run sync:bundle</code>
+          from the <code>mobile</code> folder and rebuild in Android Studio.
         </p>
       </div>
     </main>

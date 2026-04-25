@@ -1,81 +1,69 @@
 # PropORACLE Mobile (Capacitor)
 
-This folder contains the Android wrapper for the PropORACLE Flask UI.
+Android (and optional iOS) **native shell** around a WebView. There are **two ways** the UI can load:
 
-## Mainline → what the app actually runs
+| Mode | What loads | When to use |
+|------|------------|-------------|
+| **Bundled (default)** | Files under `mobile/www/` copied into the APK | You want the app to **not** depend on Railway or LAN; you ship UI updates by rebuilding the APK after refreshing `www/`. |
+| **Remote** | `PROPORACLE_SERVER_URL` (https Railway or http LAN) baked at `cap sync` | You want the WebView to always open the live site (same as mobile browser, but inside the shell). |
 
-The Play Store / sideload **APK is only a WebView shell**. At runtime it loads **`server.url`** from `capacitor.config.js` (set when you run `npm run sync` / `sync:android` with `PROPORACLE_SERVER_URL`).
+**Default repo config:** no `server.url` — the shell uses **bundled `www/`** only. That avoids Railway “Not Found” pages when no service exists at a placeholder hostname, and avoids LAN `ERR_CONNECTION_ABORTED` when the PC is unreachable.
 
-| Change on `main` | Reaches the app when… |
-|------------------|-------------------------|
-| Flask templates, `ui_runner/static/*.css`, JSON under `ui_runner/templates/`, Python routes | **No new APK needed.** Merge to `main` → Railway (or your host) deploys that commit → the WebView loads the updated site on next open or refresh. Confirm Railway is wired to **`main`** and deploy succeeds (see repo root `railway.toml`). |
-| `mobile/capacitor.config.js`, Gradle, `MainActivity`, native plugins, or **changing the production base URL** | **New `npm run sync:android` + rebuild/install** so `capacitor.config.json` and native projects pick up the change; ship a new APK/AAB if you distribute binaries. |
+## Bundled build (recommended for “mobile app files”)
 
-**Operational checklist after merging UI work to `main`:** (1) Push `main`. (2) Wait for the web deploy (Railway) to finish. (3) Force-close the app or pull-to-refresh if the WebView cached an old asset; templates already use `?v=…` on many stylesheets to bust cache.
+1. Put your built static UI under `mobile/www/` (replace or extend the starter `index.html` as needed).
+2. From the `mobile` folder:
+   ```powershell
+   npm run sync:bundle
+   ```
+   This clears `PROPORACLE_SERVER_URL` for this session and runs `cap sync android` so **`android/app/src/main/assets/capacitor.config.json` has no `server` block**.
+3. Android Studio: **Build → Clean Project**, then **Run** to install.
 
-## Local Development & Deployment
+To refresh the APK later, repeat after updating `www/`.
 
-### 1. Sync the Configuration
-Before building the app, you must sync the server URL so the mobile app knows where to load the UI from. Run these commands from the `mobile` folder.
+## Remote build (live Railway / LAN)
 
-*   **For Physical Device (on LAN):**
-    ```sh
-    npm run sync:dev
-    ```
-    *(Note: This is currently pinned to `http://10.0.0.207:5173`. If your IP changes, see "Custom URL" below.)*
+Only when you explicitly want the WebView to load a URL:
 
-*   **For Android Emulator:**
-    ```sh
-    npm run sync:emulator
-    ```
-    *(Uses `http://10.0.2.2:5173` to point to your PC's localhost.)*
+```powershell
+cd mobile
+$env:PROPORACLE_SERVER_URL="https://your-real-app.up.railway.app"
+npm run sync:remote
+```
 
-*   **For a Custom URL:**
-    ```sh
-    npm run sync:url --url=http://YOUR_IP:5173
-    ```
+(`sync:remote` requires `https://`.) Then rebuild the APK. **Railway “Not Found”** means the hostname is wrong or no deployment is listening on that domain — fix the Railway project or the URL, not the Capacitor shell.
 
-*   **For production (Railway — recommended for a build that works on cellular):**
-    ```powershell
-    $env:PROPORACLE_SERVER_URL="https://YOUR-ACTUAL-APP.up.railway.app"
-    npm run sync:prod
-    ```
-    `sync:prod` requires a non-empty `https://` URL and refuses the `YOUR-SERVICE` placeholder. You can use `npm run sync:android` instead if the variable is already set.
+LAN dev (device on same Wi‑Fi as PC):
 
-### 2. Reinstall the App
-If you change the URL or apply Java fixes, you should perform a clean reinstall:
+```powershell
+npm run sync:dev
+# or
+npm run sync:url --url=http://YOUR_LAN_IP:5173
+```
 
-1.  **Uninstall** the existing app from your phone/emulator (long-press icon -> Uninstall).
-2.  **Sync** (as shown in Step 1).
-3.  **Run** from Android Studio (Green Play button) or via command line:
-    ```sh
-    npx cap run android
-    ```
+## What reaches users without a new APK
+
+| Change | Bundled mode | Remote mode |
+|--------|--------------|-------------|
+| Flask templates / `ui_runner/static` on **Railway** | **No** — update `www/` and rebuild APK | **Yes** — redeploy web, user refreshes or reopens app |
+| `mobile/www/` files | **Yes** — after `sync:bundle` + rebuild | N/A for UI (remote site owns UI) |
+| `capacitor.config.js`, Gradle, native code | New sync + rebuild | New sync + rebuild |
+
+## Reinstall checklist
+
+1. Uninstall the old app if you switched **bundled ↔ remote**.
+2. Run the appropriate `sync:*` command from `mobile/`.
+3. **Build → Clean Project** → Run.
 
 ## Troubleshooting
 
-### Repair: `Webpage not available` / `ERR_CONNECTION_ABORTED` (LAN IP in the error)
+* **`ERR_CONNECTION_ABORTED` to `http://10.x.x.x:5173`:** You synced **LAN remote** mode; PC unreachable or IP changed. Use **`npm run sync:bundle`** to return to bundled `www/`, or fix LAN and `sync:url`.
 
-The shell was **synced for local dev** (e.g. `http://10.0.0.207:5173`). The phone cannot reach your PC (different network, PC off, IP changed, or port blocked), so the WebView shows “Webpage not available.”
+* **Railway “Not Found” / train page:** Remote URL points at a hostname with **no active Railway service**. Use **`sync:bundle`** to stop using Railway in the shell, or set `PROPORACLE_SERVER_URL` to the **exact** public URL shown in Railway for a running deployment, then `npm run sync:remote`.
 
-1. **Set the live server URL** — Use your real Railway hostname (not `YOUR-SERVICE`):
-   - Edit `mobile/capacitor.config.js` if you want the default when no env var is set, **or** (recommended) only set the env var when syncing so secrets stay out of git.
-2. **Sync the native project** (from `mobile/`):
-    ```powershell
-    $env:PROPORACLE_SERVER_URL="https://YOUR-ACTUAL-APP.up.railway.app"
-    npm run sync:prod
-    ```
-    (`npm run sync` or `npm run sync:android` also works once the variable is set.)
-3. **Rebuild in Android Studio:** **Build → Clean Project**, then **Run** (green arrow) to reinstall on the device. Uninstall the old app first if the URL changed.
+* **Stale URL after switching modes:** Uninstall the app, then sync + reinstall.
 
-**Recommendation:** Keep production devices on the **public `https://` Railway URL** so the app works on Wi‑Fi and cellular.
+## Recent fixes
 
-*   **Webpage not available / Connection Refused (when you *intend* LAN dev):**
-    *   Ensure the Flask/Vite server is running on your PC (listening on `0.0.0.0:5173`).
-    *   Verify your phone is on the same Wi-Fi network as the PC.
-    *   Check Windows Firewall: Allow inbound TCP traffic on port `5173`.
-*   **Stale URL:** If the app still tries to load an old IP (e.g., `192.168.1.5`), perform a full uninstall from the device and run the `sync` command again.
-
-## Recent Fixes
-*   **MainActivity.java:** Uses a `WebViewListener` to forcefully hide the hamburger menu (`.hamburger`, `ion-menu-button`) once the page loads, without breaking Capacitor's bridge.
-*   **Resources:** Added missing `colors.xml` to resolve "Resource not found" errors in the Android Studio editor.
+* **MainActivity.java:** WebView listener hides duplicate chrome where needed.
+* **colors.xml:** Resolves missing resource warnings in Android Studio.

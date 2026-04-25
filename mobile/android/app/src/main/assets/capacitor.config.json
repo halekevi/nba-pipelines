@@ -1,10 +1,5 @@
 {
 	"appId": "com.proporacle.app",
 	"appName": "PropORACLE",
-	"webDir": "www",
-	"server": {
-		"url": "https://YOUR-SERVICE.up.railway.app",
-		"androidScheme": "https",
-		"cleartext": false
-	}
+	"webDir": "www"
 }
