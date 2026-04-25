@@ -4,6 +4,7 @@ from __future__ import annotations
 # Windows UTF-8 fix — MUST be at the very top
 # ──────────────────────────────────────────────────────────────────────────────
 import csv
+import base64
 import os
 import sys
 
@@ -22,6 +23,7 @@ import io
 import json
 import math
 import re
+import statistics
 import sqlite3
 import time
 import uuid
@@ -89,6 +91,8 @@ DATA_ROOT = _persistent_data_root()
 PAYOUT_SAMPLES_DIR = DATA_ROOT / "payout_samples"
 PAYOUT_LOG_PATH = PAYOUT_SAMPLES_DIR / "payout_log_hand.csv"
 PAYOUT_OBS_PATH = DATA_ROOT / "payout_observations.csv"
+PAYOUT_LADDER_LOG_PATH = UI_DIR / "data" / "payout_ladder_log.csv"
+PAYOUT_LADDER_EXAMPLES_PATH = UI_DIR / "data" / "payout_ladder_examples.json"
 
 # Pipeline output paths (used by status + slate endpoints)
 NBA_DIR       = BASE_DIR / "NBA"
@@ -1073,6 +1077,301 @@ def page_payout():
     r.headers["Pragma"] = "no-cache"
     r.headers["Expires"] = "0"
     return r
+
+
+_PAYOUT_BASE_POWER = {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 37.5}
+_PAYOUT_LADDER_FIELDS = [
+    "date",
+    "n_legs",
+    "leg_composition",
+    "goblin_deltas",
+    "demon_deltas",
+    "power_payout_x",
+    "flex_payout_x",
+    "source",
+    "notes",
+]
+
+
+def _safe_float(v: Any, default: float = 0.0) -> float:
+    try:
+        f = float(v)
+        return f if math.isfinite(f) else default
+    except (TypeError, ValueError):
+        return default
+
+
+def _normalize_leg_pick_type(raw: Any) -> str:
+    s = str(raw or "").strip().lower()
+    if "gob" in s:
+        return "Goblin"
+    if "dem" in s:
+        return "Demon"
+    return "Standard"
+
+
+def _ticket_prob_from_leg_hit(leg_hit_rate: float, n_legs: int) -> float:
+    p = max(0.0, min(1.0, float(leg_hit_rate)))
+    n = max(0, int(n_legs))
+    return p**n
+
+
+def predict_payout(legs: list[dict[str, Any]]) -> dict[str, Any]:
+    """
+    Estimate payout multiplier from leg composition (Standard / Goblin / Demon).
+    """
+    n = len(legs)
+    if n < 2 or n > 6:
+        raise ValueError("Ticket Composer supports 2 to 6 legs.")
+    base_mult = float(_PAYOUT_BASE_POWER.get(n, 0.0))
+    if base_mult <= 0:
+        raise ValueError("Unsupported leg count for PrizePicks power baseline.")
+
+    leg_breakdown: list[dict[str, Any]] = []
+    composite_factor = 1.0
+    for i, leg in enumerate(legs, start=1):
+        pt = _normalize_leg_pick_type(leg.get("pick_type"))
+        delta = abs(_safe_float(leg.get("delta"), 0.0))
+        direction = str(leg.get("direction") or "OVER").strip().upper()
+        if direction not in {"OVER", "UNDER"}:
+            direction = "OVER"
+        if pt == "Goblin":
+            factor = max(0.2, 1.0 - 0.110 * delta)
+        elif pt == "Demon":
+            factor = max(1.0, 1.0 + 0.1782 * (delta ** 1.287))
+        else:
+            factor = 1.0
+        composite_factor *= factor
+        leg_breakdown.append(
+            {
+                "leg": i,
+                "pick_type": pt,
+                "direction": direction,
+                "delta": round(delta, 4),
+                "factor": round(factor, 4),
+            }
+        )
+
+    estimated_multiplier = round(base_mult * composite_factor, 4)
+
+    def _ev_for_leg_hit(p_leg: float) -> float:
+        p_ticket = _ticket_prob_from_leg_hit(p_leg, n)
+        # EV per $1 stake.
+        return (p_ticket * (estimated_multiplier - 1.0)) - (1.0 - p_ticket)
+
+    return {
+        "estimated_multiplier": estimated_multiplier,
+        "ev_at_65pct": round(_ev_for_leg_hit(0.65), 4),
+        "ev_at_75pct": round(_ev_for_leg_hit(0.75), 4),
+        "ev_at_85pct": round(_ev_for_leg_hit(0.85), 4),
+        "leg_breakdown": leg_breakdown,
+        "base_multiplier_standard": base_mult,
+        "n_legs": n,
+    }
+
+
+def _extract_json_object(text: str) -> dict[str, Any]:
+    if not text:
+        raise ValueError("Gemini returned empty text.")
+    s = text.strip()
+    try:
+        obj = json.loads(s)
+        if isinstance(obj, dict):
+            return obj
+    except json.JSONDecodeError:
+        pass
+    m = re.search(r"\{[\s\S]*\}", s)
+    if not m:
+        raise ValueError("Could not find JSON object in Gemini response.")
+    obj = json.loads(m.group(0))
+    if not isinstance(obj, dict):
+        raise ValueError("Gemini JSON payload is not an object.")
+    return obj
+
+
+def _gemini_extract_ticket_from_image(image_bytes: bytes, mime_type: str) -> dict[str, Any]:
+    api_key = (os.environ.get("GEMINI_API_KEY") or "").strip()
+    if not api_key:
+        raise RuntimeError("Missing GEMINI_API_KEY.")
+    try:
+        import google.generativeai as genai  # type: ignore
+    except Exception as exc:
+        raise RuntimeError("google-generativeai is not installed in this environment.") from exc
+
+    prompt = (
+        "Extract PrizePicks ticket data. Return ONLY valid JSON (no markdown, no code fences).\n"
+        "Schema:\n"
+        "{"
+        "\"n_legs\": int|null,"
+        "\"legs\": ["
+        "{\"player\":str,\"prop_type\":str,\"line\":number|null,\"pick_type\":\"Standard|Goblin|Demon|Unknown\",\"direction\":\"OVER|UNDER|UNKNOWN\",\"delta\":number|null}"
+        "],"
+        "\"power_payout_x\": number|null,"
+        "\"flex_payout_x\": number|null,"
+        "\"entry_amount\": number|null,"
+        "\"notes\": str"
+        "}\n"
+        "If a field is unknown, use null (or \"Unknown\" for pick_type/direction)."
+    )
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel("gemini-1.5-flash")
+    img_part = {"mime_type": mime_type or "image/png", "data": base64.b64encode(image_bytes).decode("utf-8")}
+    resp = model.generate_content([prompt, img_part])
+    txt = getattr(resp, "text", "") or ""
+    return _extract_json_object(txt)
+
+
+def _composition_label_from_legs(legs: list[dict[str, Any]]) -> str:
+    s = g = d = 0
+    for leg in legs:
+        pt = _normalize_leg_pick_type(leg.get("pick_type"))
+        if pt == "Goblin":
+            g += 1
+        elif pt == "Demon":
+            d += 1
+        else:
+            s += 1
+    return f"{s}S+{g}G+{d}D"
+
+
+def _read_payout_ladder_rows() -> list[dict[str, Any]]:
+    p = PAYOUT_LADDER_LOG_PATH
+    if not p.is_file():
+        return []
+    out: list[dict[str, Any]] = []
+    try:
+        with p.open("r", newline="", encoding="utf-8") as f:
+            rdr = csv.DictReader(f)
+            for row in rdr:
+                if isinstance(row, dict):
+                    out.append({str(k): (v if v is not None else "") for k, v in row.items()})
+    except OSError:
+        return []
+    return out
+
+
+@app.post("/payout/predict")
+def api_payout_predict():
+    body = request.get_json(silent=True) or {}
+    legs = body.get("legs")
+    if not isinstance(legs, list):
+        return jsonify({"error": "legs must be an array"}), 400
+    try:
+        out = predict_payout([x for x in legs if isinstance(x, dict)])
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    r = jsonify(out)
+    r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    return r
+
+
+@app.get("/payout/log")
+def page_payout_log():
+    return _grades_html_response("payout_log.html")
+
+
+@app.post("/api/payout/log/extract")
+def api_payout_log_extract():
+    up = request.files.get("screenshot")
+    if up is None:
+        return jsonify({"error": "screenshot file is required"}), 400
+    blob = up.read()
+    if not blob:
+        return jsonify({"error": "uploaded screenshot is empty"}), 400
+    mime = str(up.mimetype or "image/png")
+    try:
+        extracted = _gemini_extract_ticket_from_image(blob, mime)
+    except Exception as exc:
+        return jsonify({"error": str(exc)}), 500
+    return jsonify({"ok": True, "extracted": extracted})
+
+
+@app.post("/api/payout/log/save")
+def api_payout_log_save():
+    body = request.get_json(silent=True) or {}
+    legs = body.get("legs") if isinstance(body.get("legs"), list) else []
+    legs = [x for x in legs if isinstance(x, dict)]
+    n_legs = int(_safe_float(body.get("n_legs"), float(len(legs))))
+    if n_legs <= 0:
+        n_legs = len(legs)
+    if n_legs < 2 or n_legs > 6:
+        return jsonify({"error": "n_legs must be between 2 and 6"}), 400
+
+    comp = str(body.get("leg_composition") or _composition_label_from_legs(legs)).strip()
+    goblin_deltas = [str(_safe_float(x.get("delta"), 0.0)) for x in legs if _normalize_leg_pick_type(x.get("pick_type")) == "Goblin"]
+    demon_deltas = [str(_safe_float(x.get("delta"), 0.0)) for x in legs if _normalize_leg_pick_type(x.get("pick_type")) == "Demon"]
+    row = {
+        "date": str(body.get("date") or datetime.now().date().isoformat()).strip(),
+        "n_legs": str(n_legs),
+        "leg_composition": comp,
+        "goblin_deltas": str(body.get("goblin_deltas") or ",".join(goblin_deltas)).strip(),
+        "demon_deltas": str(body.get("demon_deltas") or ",".join(demon_deltas)).strip(),
+        "power_payout_x": str(body.get("power_payout_x") or "").strip(),
+        "flex_payout_x": str(body.get("flex_payout_x") or "").strip(),
+        "source": str(body.get("source") or "screenshot").strip(),
+        "notes": str(body.get("notes") or "").strip(),
+    }
+    PAYOUT_LADDER_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+    exists = PAYOUT_LADDER_LOG_PATH.is_file()
+    with PAYOUT_LADDER_LOG_PATH.open("a", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=_PAYOUT_LADDER_FIELDS)
+        if not exists:
+            w.writeheader()
+        w.writerow(row)
+    total = len(_read_payout_ladder_rows())
+    return jsonify({"ok": True, "saved": row, "total_rows": total})
+
+
+@app.get("/payout/ladder")
+def page_payout_ladder():
+    rows = _read_payout_ladder_rows()
+    grouped: dict[tuple[int, str], list[dict[str, Any]]] = {}
+    for r in rows:
+        n = int(_safe_float(r.get("n_legs"), 0))
+        comp = str(r.get("leg_composition") or "").strip()
+        if n <= 0 or not comp:
+            continue
+        grouped.setdefault((n, comp), []).append(r)
+    summary: list[dict[str, Any]] = []
+    for (n, comp), recs in sorted(grouped.items(), key=lambda x: (x[0][0], x[0][1])):
+        vals: list[float] = []
+        for r in recs:
+            p = _safe_float(r.get("power_payout_x"), float("nan"))
+            f = _safe_float(r.get("flex_payout_x"), float("nan"))
+            if math.isfinite(p) and p > 0:
+                vals.append(p)
+            if math.isfinite(f) and f > 0:
+                vals.append(f)
+        if vals:
+            mn, mx, avg = min(vals), max(vals), statistics.mean(vals)
+        else:
+            mn = mx = avg = 0.0
+        summary.append(
+            {
+                "n_legs": n,
+                "leg_composition": comp,
+                "samples": len(recs),
+                "min_payout_x": round(mn, 4),
+                "max_payout_x": round(mx, 4),
+                "avg_payout_x": round(avg, 4),
+                "is_sparse": len(recs) < 5,
+            }
+        )
+    return _grades_html_response("payout_ladder.html", ladder_rows=summary, total_rows=len(rows))
+
+
+@app.get("/payout/examples")
+def page_payout_examples():
+    p = PAYOUT_LADDER_EXAMPLES_PATH
+    payload: dict[str, Any]
+    if p.is_file():
+        try:
+            payload = json.loads(p.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            payload = {"generated_at": "", "examples": []}
+    else:
+        payload = {"generated_at": "", "examples": []}
+    return _grades_html_response("payout_examples.html", payload=payload)
 
 
 @app.get("/api/payout/rate-cards")

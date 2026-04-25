@@ -233,6 +233,7 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .field{display:flex;flex-direction:column;gap:6px;}
 .field label{font-size:10px;letter-spacing:2px;color:var(--muted);}
 .field input,.field select{background:rgba(255,255,255,0.05);backdrop-filter:blur(8px) saturate(180%);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 12px;font-family:'Inter',sans-serif;font-size:13px;color:var(--text);width:100%;transition:border-color .2s;outline:none;}
+.field{min-width:0;}
 .field input:focus,.field select:focus{border-color:rgba(212,175,55,0.4);box-shadow:0 0 0 3px rgba(212,175,55,0.06);}
 .field select option{background:#0c0e1a;color:#f2f4ff;}
 /* Slate ticket dropdown contrast (native option list can ignore inherited glass colors). */
@@ -389,6 +390,12 @@ canvas{width:100%!important;max-height:220px;}
   .pattern-grid{grid-template-columns:1fr;}
   .line-compare{grid-template-columns:1fr 1fr;}
   .calc-leg-grid{grid-template-columns:1fr;}
+  .pp-table{gap:6px;margin-bottom:12px;}
+  .pp-cell{padding:8px 6px;border-radius:10px;min-height:0;}
+  .pp-legs{font-size:18px;line-height:1.05;}
+  .pp-power{font-size:15px;line-height:1.05;}
+  .pp-flex{font-size:9px;line-height:1.4;margin-top:2px;}
+  .pp-lbl{font-size:8px;margin-bottom:2px;}
 }
 @media(max-width:900px){
   #app{padding:0 12px 18px;}
@@ -396,11 +403,59 @@ canvas{width:100%!important;max-height:220px;}
   .nav-logo::before{width:52px;height:52px;flex:0 0 52px;}
   .nav-logo .brand::before,.nav-logo .brand::after{font-size:30px;}
   .live-pill{display:none;}
+  #calc-slate-ticket-select,
+  #log-slate-ticket-select{
+    box-sizing:border-box;
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    padding-right:40px !important;
+    -webkit-appearance:none;
+    appearance:none;
+    background-image:
+      linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.7) 50%),
+      linear-gradient(135deg, rgba(255,255,255,0.7) 50%, transparent 50%);
+    background-position:
+      calc(100% - 18px) calc(50% - 2px),
+      calc(100% - 12px) calc(50% - 2px);
+    background-size:6px 6px, 6px 6px;
+    background-repeat:no-repeat;
+  }
+  .add-leg-row{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px;
+    flex-wrap:nowrap;
+  }
+  .add-leg-btn{
+    width:100%;
+    min-width:0;
+    justify-content:center;
+    white-space:nowrap;
+    padding:10px 6px;
+    font-size:13px;
+    letter-spacing:1.2px;
+  }
 }
 @media(max-width:520px){
   .pp-table{grid-template-columns:repeat(2,1fr);}
   .result-grid{grid-template-columns:1fr;}
   .line-compare{grid-template-columns:1fr;}
+  .add-leg-row{gap:6px;}
+  .add-leg-btn{
+    font-size:11px;
+    letter-spacing:.8px;
+    padding:9px 4px;
+    gap:4px;
+  }
+  .pp-table{gap:6px;}
+  .pp-cell{padding:7px 6px;border-radius:9px;}
+  .pp-legs{font-size:17px;}
+  .pp-power{font-size:14px;}
+  .pp-flex{font-size:8.5px;line-height:1.35;}
 }
 @media(max-width:900px){
   .log-table-wrap,
@@ -894,6 +949,7 @@ body::before{
 <!-- ── TABS ── -->
 <div class="tab-bar">
   <button class="tab-btn active" onclick="switchTab('calc',this)">⚡ Calculator</button>
+  <button class="tab-btn" onclick="switchTab('composer',this)">🧩 Ticket Composer</button>
   <button class="tab-btn" onclick="switchTab('log',this)">📋 Log Lines <span class="badge-count" id="log-count">0</span></button>
   <button class="tab-btn" onclick="switchTab('patterns',this)">📈 Patterns</button>
   <button class="tab-btn" onclick="switchTab('ref',this)">📊 Reference</button>
@@ -961,6 +1017,38 @@ body::before{
       <div class="result-item"><div class="result-label">EV PER $1 STAKE</div><div class="result-val" id="r-ev">—</div><div class="result-sub" id="r-ev-sub"></div></div>
     </div>
     <div class="result-notes" id="r-notes"></div>
+  </div>
+</div>
+
+<!-- ═══════════ TAB 1B: TICKET COMPOSER ═══════════ -->
+<div id="tab-composer" class="tab-panel">
+  <div class="card accent">
+    <div class="card-title">🧩 Ticket Composer</div>
+    <p class="hint">Build composition-only tickets for payout prediction. Each leg has <strong>pick type</strong>, <strong>delta</strong> (units from standard), and <strong>direction</strong>.</p>
+    <div id="composer-legs"></div>
+    <div class="add-leg-row">
+      <button class="add-leg-btn standard" type="button" onclick="composerAddLeg('Standard')">⭐ + Standard</button>
+      <button class="add-leg-btn goblin" type="button" onclick="composerAddLeg('Goblin')">🎃 + Goblin</button>
+      <button class="add-leg-btn demon" type="button" onclick="composerAddLeg('Demon')">😈 + Demon</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-accent" type="button" onclick="runComposerPredict()">▶ Predict</button>
+      <button class="btn btn-ghost" type="button" onclick="composerReset()">✕ Clear</button>
+      <a class="btn btn-ghost" href="/payout/log">📷 Ladder Log</a>
+      <a class="btn btn-ghost" href="/payout/ladder">🧱 Ladder Table</a>
+      <a class="btn btn-ghost" href="/payout/examples">🗂 Examples</a>
+    </div>
+    <div id="composer-msg" style="font-size:11px;margin-top:8px;color:var(--muted)"></div>
+  </div>
+  <div class="card cyan" id="composer-results" style="display:none">
+    <div class="card-title" style="color:var(--cyan)">Prediction</div>
+    <div class="result-grid">
+      <div class="result-item"><div class="result-label">ESTIMATED MULT</div><div class="result-val" id="composer-est-mult">—</div></div>
+      <div class="result-item"><div class="result-label">EV @ 65%</div><div class="result-val" id="composer-ev-65">—</div></div>
+      <div class="result-item"><div class="result-label">EV @ 75%</div><div class="result-val" id="composer-ev-75">—</div></div>
+      <div class="result-item"><div class="result-label">EV @ 85%</div><div class="result-val" id="composer-ev-85">—</div></div>
+    </div>
+    <div class="result-notes" id="composer-breakdown"></div>
   </div>
 </div>
 
@@ -1181,6 +1269,7 @@ let slateTicketMap = {};
 /** Flattened legs from slate tickets for vision import (sport + standard line correction). */
 let slateLegLookup = [];
 let calcLoadedGroupName = '';
+let composerLegs = [];
 
 function loadLog(){try{const r=localStorage.getItem(STORE_KEY);return r?JSON.parse(r):[]}catch{return[]}}
 function saveLog(e){try{localStorage.setItem(STORE_KEY,JSON.stringify(e))}catch{}}
@@ -1196,9 +1285,132 @@ function switchTab(id,btn){
   if(id==='cards')renderRateCards(false);
 }
 function goTab(id){
-  const order=['calc','log','patterns','ref','cards'],i=order.indexOf(id);
+  const order=['calc','composer','log','patterns','ref','cards'],i=order.indexOf(id);
   const btns=document.querySelectorAll('.tab-bar .tab-btn');
   if(i>=0&&btns[i])switchTab(id,btns[i]);
+}
+
+function composerAddLeg(pickType){
+  composerLegs.push({ pick_type: pickType || 'Standard', delta: 0, direction: 'OVER' });
+  renderComposerLegs();
+}
+function composerLoadPrefill(){
+  try{
+    const raw=localStorage.getItem('payout_composer_prefill');
+    if(!raw)return;
+    const j=JSON.parse(raw);
+    const legs=Array.isArray(j&&j.legs)?j.legs:[];
+    if(!legs.length)return;
+    composerLegs=legs.map((l)=>({
+      pick_type:String(l.pick_type||'Standard'),
+      delta:Number(l.delta||0),
+      direction:String(l.direction||'OVER').toUpperCase()==='UNDER'?'UNDER':'OVER'
+    }));
+    localStorage.removeItem('payout_composer_prefill');
+    renderComposerLegs();
+    const btns=document.querySelectorAll('.tab-bar .tab-btn');
+    if(btns[1])switchTab('composer',btns[1]);
+  }catch(_e){}
+}
+function composerRemoveLeg(i){
+  if(i<0||i>=composerLegs.length)return;
+  composerLegs.splice(i,1);
+  renderComposerLegs();
+}
+function composerReset(){
+  composerLegs = [];
+  renderComposerLegs();
+  const r=document.getElementById('composer-results');
+  if(r)r.style.display='none';
+  const m=document.getElementById('composer-msg');
+  if(m)m.textContent='';
+}
+function renderComposerLegs(){
+  const host=document.getElementById('composer-legs');
+  if(!host)return;
+  if(!composerLegs.length){
+    host.innerHTML='<div class="hint" style="margin-bottom:10px">No composer legs yet — add 2 to 6 legs.</div>';
+    return;
+  }
+  host.innerHTML = composerLegs.map((leg,idx)=>(
+    '<div class="card" style="padding:10px;margin-bottom:8px">'+
+      '<div class="form-grid-3">'+
+        '<div class="field"><label>LEG '+(idx+1)+' TYPE</label>'+
+          '<select onchange="composerLegs['+idx+'].pick_type=this.value">'+
+            '<option'+(leg.pick_type==='Standard'?' selected':'')+'>Standard</option>'+
+            '<option'+(leg.pick_type==='Goblin'?' selected':'')+'>Goblin</option>'+
+            '<option'+(leg.pick_type==='Demon'?' selected':'')+'>Demon</option>'+
+          '</select></div>'+
+        '<div class="field"><label>DELTA (UNITS)</label>'+
+          '<input type="number" step="0.01" value="'+Number(leg.delta||0)+'" oninput="composerLegs['+idx+'].delta=Number(this.value||0)"/></div>'+
+        '<div class="field"><label>DIRECTION</label>'+
+          '<select onchange="composerLegs['+idx+'].direction=this.value">'+
+            '<option'+(leg.direction==='OVER'?' selected':'')+'>OVER</option>'+
+            '<option'+(leg.direction==='UNDER'?' selected':'')+'>UNDER</option>'+
+          '</select></div>'+
+      '</div>'+
+      '<div style="margin-top:8px"><button type="button" class="btn btn-ghost" onclick="composerRemoveLeg('+idx+')">Remove Leg</button></div>'+
+    '</div>'
+  )).join('');
+}
+async function runComposerPredict(){
+  const msg=document.getElementById('composer-msg');
+  if(composerLegs.length<2||composerLegs.length>6){
+    if(msg)msg.textContent='Composer requires 2 to 6 legs.';
+    return;
+  }
+  if(msg)msg.textContent='Predicting...';
+  const localPredict = () => {
+    const base={2:3,3:6,4:10,5:20,6:37.5}[composerLegs.length]||0;
+    if(!base)return null;
+    let f=1;
+    const bd=[];
+    composerLegs.forEach((leg,idx)=>{
+      const pt=String(leg.pick_type||'Standard');
+      const d=Math.abs(Number(leg.delta||0));
+      let lf=1;
+      if(pt==='Goblin') lf=Math.max(0.2,1-(GOBLIN_DISCOUNT_PER_UNIT*d));
+      else if(pt==='Demon') lf=Math.max(1,1+(0.1782*Math.pow(d,1.287)));
+      f*=lf;
+      bd.push({leg:idx+1,pick_type:pt,direction:String(leg.direction||'OVER'),delta:d,factor:Number(lf.toFixed(4))});
+    });
+    const mult=Number((base*f).toFixed(4));
+    const tev=(p)=>Number((((Math.pow(p,composerLegs.length)*(mult-1))-(1-Math.pow(p,composerLegs.length))).toFixed(4)));
+    return {estimated_multiplier:mult,ev_at_65pct:tev(0.65),ev_at_75pct:tev(0.75),ev_at_85pct:tev(0.85),leg_breakdown:bd};
+  };
+  try{
+    const r=await fetch('/payout/predict',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({legs:composerLegs})});
+    const j=await r.json();
+    if(!r.ok)throw new Error(j.error||('HTTP '+r.status));
+    const out=document.getElementById('composer-results');
+    if(out)out.style.display='block';
+    document.getElementById('composer-est-mult').textContent=(j.estimated_multiplier??'—')+'x';
+    document.getElementById('composer-ev-65').textContent=String(j.ev_at_65pct??'—');
+    document.getElementById('composer-ev-75').textContent=String(j.ev_at_75pct??'—');
+    document.getElementById('composer-ev-85').textContent=String(j.ev_at_85pct??'—');
+    const bd=Array.isArray(j.leg_breakdown)?j.leg_breakdown:[];
+    document.getElementById('composer-breakdown').innerHTML=bd.map((x)=>
+      'Leg '+x.leg+': '+x.pick_type+' '+x.direction+' Δ '+x.delta+' → factor '+x.factor
+    ).join('<br>');
+    if(msg)msg.textContent='Prediction complete.';
+  }catch(e){
+    const j=localPredict();
+    if(j){
+      const out=document.getElementById('composer-results');
+      if(out)out.style.display='block';
+      document.getElementById('composer-est-mult').textContent=(j.estimated_multiplier??'—')+'x';
+      document.getElementById('composer-ev-65').textContent=String(j.ev_at_65pct??'—');
+      document.getElementById('composer-ev-75').textContent=String(j.ev_at_75pct??'—');
+      document.getElementById('composer-ev-85').textContent=String(j.ev_at_85pct??'—');
+      const bd=Array.isArray(j.leg_breakdown)?j.leg_breakdown:[];
+      document.getElementById('composer-breakdown').innerHTML=bd.map((x)=>
+        'Leg '+x.leg+': '+x.pick_type+' '+x.direction+' Δ '+x.delta+' → factor '+x.factor
+      ).join('<br>');
+      if(msg)msg.textContent='Prediction complete (local fallback).';
+      return;
+    }
+    if(msg)msg.textContent='Predict failed: '+(e&&e.message?e.message:String(e));
+  }
 }
 
 let _rateCardsInFlight=false;
@@ -2358,6 +2570,7 @@ document.addEventListener('paste',e=>{
 addCalcLeg('standard');
 addCalcLeg('goblin');
 updateLogCount();
+composerLoadPrefill();
 renderLogTable();
 loadLogDraft();
 onLogSlipTypeChange();

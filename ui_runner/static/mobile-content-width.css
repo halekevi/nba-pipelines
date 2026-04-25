@@ -1228,6 +1228,15 @@ nav.snav .mobile-menu a {
     margin: 0 !important;
   }
 
+  /* Payout tab icon fix on Android WebView: ensure expected vertical orientation. */
+  nav.snav ul#nav-links li a[href="/payout"] .ni svg,
+  ul#nav-links.snav-links li a[href="/payout"] .ni svg,
+  nav.snav ul#nav-links li a[href="payout.html"] .ni svg,
+  ul#nav-links.snav-links li a[href="payout.html"] .ni svg {
+    transform: scaleY(-1) !important;
+    transform-origin: center center !important;
+  }
+
   body {
     padding-bottom: var(--po-mobile-body-pad-extra) !important;
   }

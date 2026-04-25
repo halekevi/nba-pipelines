@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>
+  <title>PropORACLE - Payout Ladder</title>
+  <link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260418nav"/>
+  <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260418nav"/>
+  <link rel="stylesheet" href="/static/mobile-content-width.css?v=20260422incomeplot"/>
+  <style>
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 16px 14px 24px; }
+    .card { border: 1px solid rgba(255,255,255,.12); border-radius: 14px; background: rgba(255,255,255,.03); padding: 14px; margin-bottom: 12px; }
+    h1 { margin: 0; font-family: "Bebas Neue", sans-serif; letter-spacing: .08em; color: var(--accent, #d4af37); }
+    .muted { color: rgba(255,255,255,.72); font-size: 12px; line-height: 1.6; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { border-bottom: 1px solid rgba(255,255,255,.08); padding: 8px 6px; text-align: right; white-space: nowrap; }
+    th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) { text-align: left; }
+    tr.sparse { background: rgba(255, 127, 127, 0.08); }
+    @media (max-width: 900px) { table { font-size: 12px; } }
+  </style>
+</head>
+<body class="page-payout-ladder">
+  {% set nav_active = 'payout' %}
+  {% include '_site_nav.html' %}
+  <main class="wrap">
+    <section class="card">
+      <h1>Payout Ladder Coverage</h1>
+      <p class="muted">Grouped by leg count and composition. Rows with fewer than 5 samples are highlighted as incomplete coverage.</p>
+      <p class="muted">Total logged rows: <strong>{{ total_rows }}</strong></p>
+    </section>
+    <section class="card">
+      <table aria-label="Payout ladder summary">
+        <thead>
+          <tr>
+            <th>Legs</th>
+            <th>Composition</th>
+            <th>Samples</th>
+            <th>Min X</th>
+            <th>Max X</th>
+            <th>Avg X</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in ladder_rows %}
+          <tr class="{{ 'sparse' if r.is_sparse else '' }}">
+            <td>{{ r.n_legs }}</td>
+            <td>{{ r.leg_composition }}</td>
+            <td>{{ r.samples }}</td>
+            <td>{{ '%.3f'|format(r.min_payout_x) }}</td>
+            <td>{{ '%.3f'|format(r.max_payout_x) }}</td>
+            <td>{{ '%.3f'|format(r.avg_payout_x) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <script src="/static/site-nav-chrome.js?v=20260412" defer></script>
+</body>
+</html>

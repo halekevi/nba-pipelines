@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>
+  <title>PropORACLE - Payout Ladder Logger</title>
+  <link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260418nav"/>
+  <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260418nav"/>
+  <link rel="stylesheet" href="/static/mobile-content-width.css?v=20260422incomeplot"/>
+  <style>
+    body { color: var(--text, #f4f7ff); }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 16px 14px 24px; }
+    .card { border: 1px solid rgba(255,255,255,.12); border-radius: 14px; background: rgba(255,255,255,.03); padding: 14px; margin-bottom: 12px; }
+    .title { font-family: "Bebas Neue", sans-serif; letter-spacing: .08em; font-size: 26px; color: var(--accent, #d4af37); }
+    .muted { color: rgba(255,255,255,.72); font-size: 12px; line-height: 1.6; }
+    .row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .field label { font-size: 10px; letter-spacing: .12em; color: rgba(255,255,255,.75); }
+    .field input, .field select, .field textarea { width: 100%; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.15); border-radius: 10px; color: var(--text, #f4f7ff); padding: 10px; }
+    .field textarea { min-height: 80px; resize: vertical; }
+    .btn { border: 1px solid rgba(212,175,55,.35); border-radius: 10px; background: rgba(212,175,55,.12); color: var(--accent, #d4af37); padding: 10px 14px; cursor: pointer; }
+    .btn:disabled { opacity: .5; cursor: not-allowed; }
+    pre { background: rgba(0,0,0,.25); border: 1px solid rgba(255,255,255,.1); border-radius: 10px; padding: 10px; white-space: pre-wrap; word-break: break-word; }
+    @media (max-width: 900px) { .row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="page-payout-log">
+  {% set nav_active = 'payout' %}
+  {% include '_site_nav.html' %}
+  <main class="wrap">
+    <section class="card">
+      <div class="title">Payout Ladder Logger</div>
+      <p class="muted">Upload a PrizePicks screenshot, run Gemini OCR, review/edit extracted data, then save a row into <code>ui_runner/data/payout_ladder_log.csv</code>.</p>
+    </section>
+    <section class="card">
+      <div class="field">
+        <label>SCREENSHOT</label>
+        <input type="file" id="shot" accept="image/*"/>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="extractBtn">Run Gemini OCR</button>
+        <span class="muted" id="extractMsg"></span>
+      </div>
+    </section>
+    <section class="card">
+      <div class="row">
+        <div class="field"><label>DATE</label><input id="f-date" type="date"/></div>
+        <div class="field"><label>N LEGS</label><input id="f-n-legs" type="number" min="2" max="6"/></div>
+        <div class="field"><label>COMPOSITION</label><input id="f-comp" placeholder="2S+1G+0D"/></div>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <div class="field"><label>POWER PAYOUT X</label><input id="f-power" type="text" placeholder="e.g. 6.0"/></div>
+        <div class="field"><label>FLEX PAYOUT X</label><input id="f-flex" type="text" placeholder="e.g. 1.5"/></div>
+        <div class="field"><label>SOURCE</label><input id="f-source" value="screenshot"/></div>
+      </div>
+      <div class="field" style="margin-top:10px">
+        <label>LEGS JSON</label>
+        <textarea id="f-legs-json" placeholder='[{"player":"...","pick_type":"Goblin","delta":1.5}]'></textarea>
+      </div>
+      <div class="field" style="margin-top:10px">
+        <label>NOTES</label>
+        <textarea id="f-notes"></textarea>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="saveBtn">Save to Ladder CSV</button>
+        <span class="muted" id="saveMsg"></span>
+      </div>
+    </section>
+    <section class="card">
+      <div class="field">
+        <label>LAST EXTRACTED JSON</label>
+        <pre id="extractOut">No extraction yet.</pre>
+      </div>
+    </section>
+  </main>
+  <script src="/static/site-nav-chrome.js?v=20260412" defer></script>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    $("f-date").value = new Date().toISOString().slice(0, 10);
+    const IS_BUNDLED_MOBILE = window.location.protocol === "file:";
+    $("extractBtn").addEventListener("click", async () => {
+      const f = $("shot").files && $("shot").files[0];
+      if (!f) { $("extractMsg").textContent = "Select an image first."; return; }
+      if (IS_BUNDLED_MOBILE) {
+        $("extractMsg").textContent = "Gemini OCR upload needs the platform site (/payout/log). Mobile offline bundle cannot call server OCR endpoints.";
+        return;
+      }
+      $("extractMsg").textContent = "Extracting...";
+      const fd = new FormData();
+      fd.append("screenshot", f);
+      try {
+        const r = await fetch("/api/payout/log/extract", { method: "POST", body: fd });
+        const ct = String(r.headers.get("content-type") || "").toLowerCase();
+        if (!ct.includes("application/json")) {
+          const txt = await r.text();
+          throw new Error("Server returned non-JSON response (likely HTML). Use platform /payout/log route.");
+        }
+        const j = await r.json();
+        if (!r.ok) throw new Error(j.error || ("HTTP " + r.status));
+        const ex = j.extracted || {};
+        $("extractOut").textContent = JSON.stringify(ex, null, 2);
+        $("f-n-legs").value = ex.n_legs || "";
+        $("f-power").value = ex.power_payout_x ?? "";
+        $("f-flex").value = ex.flex_payout_x ?? "";
+        $("f-notes").value = ex.notes || "";
+        $("f-legs-json").value = JSON.stringify(ex.legs || [], null, 2);
+        $("extractMsg").textContent = "OCR parsed. Review and save.";
+      } catch (e) {
+        $("extractMsg").textContent = "Failed: " + (e && e.message ? e.message : String(e));
+      }
+    });
+    $("saveBtn").addEventListener("click", async () => {
+      let legs = [];
+      try { legs = JSON.parse($("f-legs-json").value || "[]"); } catch (_e) {}
+      const body = {
+        date: $("f-date").value,
+        n_legs: $("f-n-legs").value,
+        leg_composition: $("f-comp").value,
+        legs,
+        power_payout_x: $("f-power").value,
+        flex_payout_x: $("f-flex").value,
+        source: $("f-source").value || "screenshot",
+        notes: $("f-notes").value || "",
+      };
+      $("saveMsg").textContent = "Saving...";
+      try {
+        const r = await fetch("/api/payout/log/save", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const j = await r.json();
+        if (!r.ok) throw new Error(j.error || ("HTTP " + r.status));
+        $("saveMsg").textContent = "Saved. Total rows: " + (j.total_rows || 0);
+      } catch (e) {
+        $("saveMsg").textContent = "Failed: " + (e && e.message ? e.message : String(e));
+      }
+    });
+  </script>
+</body>
+</html>

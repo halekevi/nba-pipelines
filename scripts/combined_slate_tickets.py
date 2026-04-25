@@ -4434,6 +4434,94 @@ def write_web_outputs(payload, outdir: str, *, require_positive_ev: bool = True,
     print("  (Graded eval HTML) Run: py -3.14 scripts/build_ticket_eval.py --date <YYYY-MM-DD>")
 
 
+def generate_payout_ladder_examples(payload: dict, out_path: str) -> None:
+    """
+    Build composition-oriented ticket examples for payout ladder collection.
+    """
+    all_legs: list[dict] = []
+    for grp in (payload or {}).get("groups") or []:
+        for t in (grp or {}).get("tickets") or []:
+            for leg in (t or {}).get("legs") or []:
+                if isinstance(leg, dict):
+                    all_legs.append(leg)
+    if not all_legs:
+        os.makedirs(os.path.dirname(out_path), exist_ok=True)
+        with open(out_path, "w", encoding="utf-8") as f:
+            json.dump({"generated_at": datetime.now(timezone.utc).isoformat(), "examples": []}, f, ensure_ascii=False, indent=2)
+        return
+
+    std_pool: list[tuple[dict, float]] = []
+    gob_pool: list[tuple[dict, float]] = []
+    dem_pool: list[tuple[dict, float]] = []
+    for leg in all_legs:
+        pt = str(leg.get("pick_type") or "Standard").strip().title()
+        line = _to_float_safe(leg.get("line"), float("nan"))
+        std_line = _to_float_safe(leg.get("standard_line"), line)
+        delta = abs(std_line - line) if (math.isfinite(std_line) and math.isfinite(line)) else 0.0
+        if pt == "Goblin" and 0.5 <= delta <= 3.0:
+            gob_pool.append((leg, delta))
+        elif pt == "Demon" or delta > 3.0:
+            dem_pool.append((leg, delta))
+        else:
+            std_pool.append((leg, delta))
+
+    seed_std = std_pool[0] if std_pool else (all_legs[0], 0.0)
+    seed_gob = gob_pool[0] if gob_pool else seed_std
+    seed_dem = dem_pool[0] if dem_pool else seed_std
+    delta_targets = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0]
+    examples: list[dict] = []
+
+    def _leg(seed: tuple[dict, float], pick_type: str, delta_override: float | None = None) -> dict:
+        row, dflt = seed
+        delta_val = float(dflt if delta_override is None else delta_override)
+        return {
+            "player": str(row.get("player") or ""),
+            "prop_type": str(row.get("prop_type") or row.get("prop") or ""),
+            "line": row.get("line"),
+            "standard_line": row.get("standard_line"),
+            "pick_type": pick_type,
+            "delta": round(delta_val, 4),
+            "direction": str(row.get("direction") or "OVER").upper(),
+            "hit_rate": row.get("hit_rate"),
+        }
+
+    def _emit(n: int, g_count: int, d_count: int, g_delta: float | None):
+        s_count = max(0, n - g_count - d_count)
+        legs = []
+        for _ in range(s_count):
+            legs.append(_leg(seed_std, "Standard", 0.0))
+        for _ in range(g_count):
+            legs.append(_leg(seed_gob, "Goblin", g_delta))
+        for _ in range(d_count):
+            legs.append(_leg(seed_dem, "Demon"))
+        examples.append(
+            {
+                "composition": f"{s_count}S+{g_count}G+{d_count}D",
+                "goblin_delta": (round(float(g_delta), 3) if g_delta is not None else None),
+                "legs": legs,
+            }
+        )
+
+    for n in range(2, 7):
+        _emit(n, g_count=0, d_count=0, g_delta=None)      # all standard
+        for dlt in delta_targets:                          # 1 goblin + standard
+            _emit(n, g_count=1, d_count=0, g_delta=dlt)
+        if n >= 3:
+            _emit(n, g_count=2, d_count=0, g_delta=2.0)   # 2 goblin + standard
+            _emit(n, g_count=1, d_count=1, g_delta=1.5)   # mixed goblin + demon
+        _emit(n, g_count=0, d_count=1, g_delta=None)      # 1 demon + standard
+
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(
+            {"generated_at": datetime.now(timezone.utc).isoformat(), "examples": examples},
+            f,
+            ensure_ascii=False,
+            indent=2,
+        )
+    print(f"[OK] Payout ladder examples -> {out_path}")
+
+
 def _apply_l5_truth_from_stat_games(df: pd.DataFrame, sport_label: str) -> pd.DataFrame:
     """
     Source-of-truth guardrail:
@@ -9970,6 +10058,11 @@ def main():
         nfl = None
         write_slate_json(nba, cbb, nhl, soccer, args.date, args.web_outdir,
                          wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis, nfl=nfl)
+        try:
+            ex_out = os.path.join(REPO_ROOT, "ui_runner", "data", "payout_ladder_examples.json")
+            generate_payout_ladder_examples(payload, ex_out)
+        except Exception as _pex:
+            print(f"[WARN] Could not write payout ladder examples: {_pex}")
         if args.also_root:
             write_web_outputs(
                 payload,
@@ -10381,8 +10474,8 @@ def _tickets_filter_pills_html(attr_rows: list[dict]) -> str:
         )
     )
     chunks.append('<span class="ticket-filter-bar-spacer" aria-hidden="true"></span>')
-    chunks.append('<button type="button" class="ticket-filter-bar-action" id="expand-all">EXPAND ALL</button>')
-    chunks.append('<button type="button" class="ticket-filter-bar-action" id="collapse-all">COLLAPSE ALL</button>')
+    chunks.append('<button type="button" class="ticket-filter-bar-action" id="expand-all" style="border-radius:999px;">EXPAND ALL</button>')
+    chunks.append('<button type="button" class="ticket-filter-bar-action" id="collapse-all" style="border-radius:999px;">COLLAPSE ALL</button>')
     chunks.append("</div>")
     return "".join(chunks)
 

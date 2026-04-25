@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>
+  <title>PropORACLE - Payout Ladder Examples</title>
+  <link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260418nav"/>
+  <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260418nav"/>
+  <link rel="stylesheet" href="/static/mobile-content-width.css?v=20260422incomeplot"/>
+  <style>
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 16px 14px 24px; }
+    .card { border: 1px solid rgba(255,255,255,.12); border-radius: 14px; background: rgba(255,255,255,.03); padding: 14px; margin-bottom: 12px; }
+    .row { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+    .title { margin: 0; font-family: "Bebas Neue", sans-serif; letter-spacing: .08em; color: var(--accent, #d4af37); }
+    .muted { color: rgba(255,255,255,.72); font-size: 12px; line-height: 1.6; }
+    .leg { font-size: 12px; color: rgba(255,255,255,.84); margin-bottom: 4px; }
+    .btn { border: 1px solid rgba(212,175,55,.35); border-radius: 10px; background: rgba(212,175,55,.12); color: var(--accent, #d4af37); padding: 8px 10px; cursor: pointer; font-size: 12px; }
+  </style>
+</head>
+<body class="page-payout-examples">
+  {% set nav_active = 'payout' %}
+  {% include '_site_nav.html' %}
+  <main class="wrap">
+    <section class="card">
+      <h1 class="title">Payout Ladder Examples</h1>
+      <p class="muted">Generated at: <strong>{{ payload.generated_at or '—' }}</strong>. Use "Copy to Composer" then open <code>/payout</code> and paste into Ticket Composer.</p>
+    </section>
+    <section class="row">
+      {% for ex in payload.examples or [] %}
+      <article class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+          <strong>{{ ex.composition }}</strong>
+          <button class="btn" onclick='copyComposer({{ ex|tojson }})'>Copy to Composer</button>
+        </div>
+        <div class="muted" style="margin:6px 0 8px">Goblin delta: {{ ex.goblin_delta if ex.goblin_delta is not none else '—' }}</div>
+        {% for leg in ex.legs or [] %}
+          <div class="leg">{{ leg.player }} · {{ leg.prop_type }} · {{ leg.pick_type }} · Δ {{ leg.delta }} · {{ leg.direction }}</div>
+        {% endfor %}
+      </article>
+      {% endfor %}
+    </section>
+  </main>
+  <script src="/static/site-nav-chrome.js?v=20260412" defer></script>
+  <script>
+    function copyComposer(ex){
+      const legs = (ex && Array.isArray(ex.legs)) ? ex.legs.map((l) => ({
+        pick_type: l.pick_type || "Standard",
+        delta: Number(l.delta || 0),
+        direction: String(l.direction || "OVER").toUpperCase()
+      })) : [];
+      const payload = { legs: legs };
+      const txt = JSON.stringify(payload);
+      try { localStorage.setItem("payout_composer_prefill", txt); } catch(_e){}
+      window.location.href = "/payout#composer";
+    }
+  </script>
+</body>
+</html>

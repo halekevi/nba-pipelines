@@ -130,7 +130,10 @@ def generate_bundle():
         ticket_source: "tickets.html",
         "indexGrades.html": "grades.html",
         "dashboard_income.html": "income.html",
-        "payout_calculator.html": "payout.html"
+        "payout_calculator.html": "payout.html",
+        "payout_log.html": "payout_log.html",
+        "payout_ladder.html": "payout_ladder.html",
+        "payout_examples.html": "payout_examples.html",
     }
 
     for src_name, dest_name in PAGES.items():
@@ -149,6 +152,9 @@ def generate_bundle():
             content = content.replace('href="/grades"', 'href="grades.html"')
             content = content.replace('href="/income"', 'href="income.html"')
             content = content.replace('href="/payout"', 'href="payout.html"')
+            content = content.replace('href="/payout/log"', 'href="payout_log.html"')
+            content = content.replace('href="/payout/ladder"', 'href="payout_ladder.html"')
+            content = content.replace('href="/payout/examples"', 'href="payout_examples.html"')
 
             # Mobile bundle runs from local files (not Railway routes).
             # Rewrite grades page report/API paths to local assets.
@@ -444,6 +450,16 @@ def generate_bundle():
                     'href="tickets.html" class=""',
                     'href="tickets.html" class="active"'
                 )
+            elif dest_name == "payout.html":
+                # Offline/mobile: rate cards must load from bundled JSON (no /api route in file:// mode).
+                content = content.replace(
+                    "fetch('/api/payout/rate-cards')",
+                    "fetch('payout_rate_cards.json', { cache: 'no-store' })"
+                )
+                content = content.replace(
+                    'fetch("/api/payout/rate-cards")',
+                    "fetch('payout_rate_cards.json', { cache: 'no-store' })"
+                )
 
             # Strip remaining Jinja2 placeholders, control blocks, and comments
             content = re.sub(r'\{\{.*?\}\}', '', content, flags=re.DOTALL)
@@ -645,6 +661,14 @@ def generate_bundle():
         mobile_data_dir = MOBILE_WWW_DIR / "data"
         mobile_data_dir.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src_grade_history, mobile_data_dir / "grade_history.json")
+
+    # Payout tab offline/mobile dependency.
+    src_payout_rate_cards = DATA_DIR / "payout_rate_cards.json"
+    if src_payout_rate_cards.exists():
+        shutil.copy2(src_payout_rate_cards, MOBILE_WWW_DIR / "payout_rate_cards.json")
+    src_payout_ladder_examples = ROOT_DIR / "ui_runner" / "data" / "payout_ladder_examples.json"
+    if src_payout_ladder_examples.exists():
+        shutil.copy2(src_payout_ladder_examples, MOBILE_WWW_DIR / "payout_ladder_examples.json")
 
     # Offline/mobile Sport Breakdown source for income page.
     (MOBILE_WWW_DIR / "sport_breakdown.json").write_text(
