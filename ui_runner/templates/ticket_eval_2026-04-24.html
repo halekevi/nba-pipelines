@@ -599,6 +599,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
   .manual-tb .manual-filter-group {
     display:flex;gap:8px;flex-wrap:wrap;align-items:center;
   }
+  .manual-tb .manual-sport-pill {
+    /* Keep chips visible on mobile before interaction (was too dim on Android OLED). */
+    opacity:.92;
+    filter:none;
+    border-width:1px;
+    border-style:solid;
+    border-color:rgba(255,255,255,.28);
+  }
   .manual-tb .manual-slider-row {
     margin-bottom:10px;
     padding:10px 12px;border:1px solid var(--glass-bd);
@@ -1194,9 +1202,11 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
     for (const btn of $$('.manual-sport-btn')) {
       const s = btn.dataset.manualSport;
       const active = state.selectedSports.has(s);
-      // active state uses a stronger border via inline style since we don't own sport CSS here.
-      btn.style.opacity = active ? '1' : '.55';
-      btn.style.filter = active ? 'none' : 'grayscale(0.2)';
+      // Keep inactive chips readable; only mute slightly when not selected.
+      btn.style.opacity = active ? '1' : '.88';
+      btn.style.filter = 'none';
+      btn.style.borderColor = active ? 'rgba(212,175,55,.62)' : 'rgba(255,255,255,.30)';
+      btn.style.boxShadow = active ? '0 0 0 1px rgba(212,175,55,.25), 0 6px 16px rgba(0,0,0,.28)' : 'none';
     }
   }
 
