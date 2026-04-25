@@ -35,6 +35,13 @@ Before building the app, you must sync the server URL so the mobile app knows wh
     npm run sync:url --url=http://YOUR_IP:5173
     ```
 
+*   **For production (Railway — recommended for a build that works on cellular):**
+    ```powershell
+    $env:PROPORACLE_SERVER_URL="https://YOUR-ACTUAL-APP.up.railway.app"
+    npm run sync:prod
+    ```
+    `sync:prod` requires a non-empty `https://` URL and refuses the `YOUR-SERVICE` placeholder. You can use `npm run sync:android` instead if the variable is already set.
+
 ### 2. Reinstall the App
 If you change the URL or apply Java fixes, you should perform a clean reinstall:
 
@@ -47,14 +54,21 @@ If you change the URL or apply Java fixes, you should perform a clean reinstall:
 
 ## Troubleshooting
 
-*   **`Webpage not available` + `http://10.0.x.x:5173` + `ERR_CONNECTION_ABORTED` (from the app):**  
-    The installed APK was synced with **LAN dev mode** (`npm run sync:dev` or `sync:url` to your PC). The WebView is trying to reach a **Vite/Flask dev server on your home network**, not Railway. That fails when the PC is off, the IP changed, you are on cellular/different Wi‑Fi, or nothing is listening on `:5173`.  
-    **Fix:** From the `mobile` folder, point the shell at your **public** site, sync, then reinstall the APK:
+### Repair: `Webpage not available` / `ERR_CONNECTION_ABORTED` (LAN IP in the error)
+
+The shell was **synced for local dev** (e.g. `http://10.0.0.207:5173`). The phone cannot reach your PC (different network, PC off, IP changed, or port blocked), so the WebView shows “Webpage not available.”
+
+1. **Set the live server URL** — Use your real Railway hostname (not `YOUR-SERVICE`):
+   - Edit `mobile/capacitor.config.js` if you want the default when no env var is set, **or** (recommended) only set the env var when syncing so secrets stay out of git.
+2. **Sync the native project** (from `mobile/`):
     ```powershell
     $env:PROPORACLE_SERVER_URL="https://YOUR-ACTUAL-APP.up.railway.app"
-    npm run sync:android
+    npm run sync:prod
     ```
-    Then rebuild in Android Studio and install again (or uninstall old build first).
+    (`npm run sync` or `npm run sync:android` also works once the variable is set.)
+3. **Rebuild in Android Studio:** **Build → Clean Project**, then **Run** (green arrow) to reinstall on the device. Uninstall the old app first if the URL changed.
+
+**Recommendation:** Keep production devices on the **public `https://` Railway URL** so the app works on Wi‑Fi and cellular.
 
 *   **Webpage not available / Connection Refused (when you *intend* LAN dev):**
     *   Ensure the Flask/Vite server is running on your PC (listening on `0.0.0.0:5173`).

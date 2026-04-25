@@ -5,7 +5,16 @@
   "description": "Capacitor WebView shell loading the PropORACLE Flask UI from Railway (set PROPORACLE_SERVER_URL before cap sync).",
   "scripts": {
     "cap": "cap",
+    "copy": "cap copy",
+    "copy:android": "cap copy android",
     "sync": "cap sync",
+    "sync:android": "cap sync android",
+    "sync:prod": "PowerShell -NoProfile -ExecutionPolicy Bypass -Command \"$u = [Environment]::GetEnvironmentVariable('PROPORACLE_SERVER_URL','Process'); if ([string]::IsNullOrWhiteSpace($u)) { throw 'Set PROPORACLE_SERVER_URL to your live https URL (Railway), then run npm run sync:prod again.' }; if ($u -match 'YOUR-SERVICE') { throw 'URL still contains YOUR-SERVICE placeholder; set PROPORACLE_SERVER_URL to your real hostname.' }; if (-not ($u.StartsWith('https://'))) { throw 'Production URL must start with https://' }; npm run sync:android\"",
+    "sync:url": "PowerShell -NoProfile -ExecutionPolicy Bypass -Command \"$u=$env:npm_config_url; if (-not $u) { throw 'Usage: npm run sync:url --url=http://IP:PORT'; }; $env:PROPORACLE_SERVER_URL=$u; npm run sync:android\"",
+    "sync:dev": "PowerShell -NoProfile -ExecutionPolicy Bypass -Command \"$env:PROPORACLE_SERVER_URL='http://10.0.0.207:5173'; npm run sync:android\"",
+    "sync:emulator": "PowerShell -NoProfile -ExecutionPolicy Bypass -Command \"$env:PROPORACLE_SERVER_URL='http://10.0.2.2:5173'; npm run sync:android\"",
+    "clean:android": "cd android && gradlew.bat clean",
+    "clean-deploy:android": "npm run sync:android && npm run clean:android && npm run open:android",
     "open:android": "cap open android",
     "open:ios": "cap open ios"
   },
