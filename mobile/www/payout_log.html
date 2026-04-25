@@ -188,7 +188,20 @@
   <script>
     const $ = (id) => document.getElementById(id);
     $("f-date").value = new Date().toISOString().slice(0, 10);
-    const IS_BUNDLED_MOBILE = window.location.protocol === "file:";
+    const HOSTNAME = String(window.location.hostname || "").toLowerCase();
+    const IS_BUNDLED_MOBILE =
+      window.location.protocol === "file:" ||
+      HOSTNAME === "localhost" ||
+      HOSTNAME === "127.0.0.1";
+    const DEFAULT_MOBILE_API_BASE = "https://web-production-9e6a5.up.railway.app";
+    function resolveApiBase() {
+      // Optional override for bundled mobile shell:
+      // localStorage.setItem("proporacle_api_base", "https://your-app.up.railway.app")
+      const override = String(localStorage.getItem("proporacle_api_base") || "").trim();
+      if (/^https?:\/\//i.test(override)) return override.replace(/\/+$/, "");
+      return IS_BUNDLED_MOBILE ? DEFAULT_MOBILE_API_BASE : "";
+    }
+    const API_BASE = resolveApiBase();
     let selectedImageFile = null;
 
     function setSelectedImage(file) {
@@ -296,15 +309,11 @@
     $("extractBtn").addEventListener("click", async () => {
       const f = selectedImageFile || ($("shot").files && $("shot").files[0]);
       if (!f) { $("extractMsg").textContent = "Select an image first."; return; }
-      if (IS_BUNDLED_MOBILE) {
-        $("extractMsg").textContent = "Gemini OCR upload needs the platform site (/payout/log). Mobile offline bundle cannot call server OCR endpoints.";
-        return;
-      }
       $("extractMsg").textContent = "Extracting...";
       const fd = new FormData();
       fd.append("screenshot", f);
       try {
-        const r = await fetch("/api/payout/log/extract", { method: "POST", body: fd });
+        const r = await fetch(API_BASE + "/api/payout/log/extract", { method: "POST", body: fd });
         const ct = String(r.headers.get("content-type") || "").toLowerCase();
         if (!ct.includes("application/json")) {
           const txt = await r.text();
@@ -339,7 +348,7 @@
       };
       $("saveMsg").textContent = "Saving...";
       try {
-        const r = await fetch("/api/payout/log/save", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const r = await fetch(API_BASE + "/api/payout/log/save", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
         const j = await r.json();
         if (!r.ok) throw new Error(j.error || ("HTTP " + r.status));
         $("saveMsg").textContent = "Saved. Total rows: " + (j.total_rows || 0);

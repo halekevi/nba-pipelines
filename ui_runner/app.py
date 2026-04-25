@@ -1189,6 +1189,171 @@ def _extract_json_object(text: str) -> dict[str, Any]:
     return obj
 
 
+def _has_missing_tier_delta(legs: list[dict[str, Any]]) -> bool:
+    for leg in legs:
+        pt = _normalize_leg_pick_type(leg.get("pick_type"))
+        if pt not in {"Goblin", "Demon"}:
+            continue
+        v = leg.get("delta")
+        if v is None:
+            return True
+        try:
+            if float(v) <= 0:
+                return True
+        except (TypeError, ValueError):
+            return True
+    return False
+
+
+def _norm_lookup_token(raw: Any) -> str:
+    s = str(raw or "").strip().lower()
+    s = re.sub(r"[^a-z0-9]+", " ", s)
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def _safe_num_or_none(raw: Any) -> float | None:
+    try:
+        v = float(raw)
+    except (TypeError, ValueError):
+        return None
+    if not math.isfinite(v):
+        return None
+    return v
+
+
+def _lookup_standard_line_from_slate(
+    leg: dict[str, Any],
+    by_triplet: dict[tuple[str, str, str], float],
+    by_pair: dict[tuple[str, str], float],
+) -> float | None:
+    player = _norm_lookup_token(leg.get("player"))
+    prop = _norm_lookup_token(leg.get("prop_type") or leg.get("prop"))
+    if not player or not prop:
+        return None
+    direction = str(leg.get("direction") or "").strip().upper()
+    if direction in {"OVER", "UNDER"}:
+        k3 = (player, prop, direction)
+        if k3 in by_triplet:
+            return by_triplet[k3]
+    return by_pair.get((player, prop))
+
+
+def _fill_missing_tier_deltas_from_slate(legs: list[dict[str, Any]]) -> None:
+    if not _has_missing_tier_delta(legs):
+        return
+    try:
+        payload = read_json_cached(TEMPLATES_DIR / "slate_latest.json")
+    except Exception:
+        return
+    sports = (payload or {}).get("sports") or {}
+    if not isinstance(sports, dict):
+        return
+
+    by_triplet: dict[tuple[str, str, str], float] = {}
+    by_pair: dict[tuple[str, str], float] = {}
+    for rows in sports.values():
+        if not isinstance(rows, list):
+            continue
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            if _normalize_leg_pick_type(row.get("pick_type")) != "Standard":
+                continue
+            player = _norm_lookup_token(row.get("player"))
+            prop = _norm_lookup_token(row.get("prop") or row.get("prop_type"))
+            direction = str(row.get("dir") or row.get("direction") or "").strip().upper()
+            line_val = _safe_num_or_none(row.get("line"))
+            if not player or not prop or line_val is None:
+                continue
+            if direction in {"OVER", "UNDER"}:
+                by_triplet.setdefault((player, prop, direction), line_val)
+            by_pair.setdefault((player, prop), line_val)
+
+    if not by_pair:
+        return
+
+    for leg in legs:
+        pt = _normalize_leg_pick_type(leg.get("pick_type"))
+        if pt not in {"Goblin", "Demon"}:
+            continue
+        cur_delta = _safe_num_or_none(leg.get("delta"))
+        if cur_delta is not None and cur_delta > 0:
+            continue
+        played_line = _safe_num_or_none(leg.get("line"))
+        if played_line is None:
+            continue
+        std_line = _lookup_standard_line_from_slate(leg, by_triplet, by_pair)
+        if std_line is None:
+            continue
+        d = abs(std_line - played_line)
+        if d > 0:
+            leg["delta"] = round(d, 3)
+
+
+def _fill_missing_tier_deltas(
+    model: Any,
+    image_bytes: bytes,
+    mime_type: str,
+    legs: list[dict[str, Any]],
+) -> None:
+    if not _has_missing_tier_delta(legs):
+        return
+    legs_min = []
+    for leg in legs:
+        legs_min.append(
+            {
+                "player": str(leg.get("player") or "").strip(),
+                "prop_type": str(leg.get("prop_type") or "").strip(),
+                "line": leg.get("line"),
+                "pick_type": str(leg.get("pick_type") or "").strip(),
+                "direction": str(leg.get("direction") or "").strip(),
+                "delta": leg.get("delta"),
+            }
+        )
+    prompt = (
+        "You are fixing missing PrizePicks tier deltas from a screenshot.\n"
+        "Return ONLY valid JSON with this exact schema:\n"
+        "{\"legs\":[{\"delta\":number|null}]}\n"
+        "One output leg per input leg, same order, no extra keys.\n"
+        "Rules:\n"
+        "- Standard legs must return null.\n"
+        "- Goblin or Demon legs should return a positive numeric delta whenever readable.\n"
+        "- Use visible line adjustment cues on the slip (line pairs, easier/harder text, badge values).\n"
+        "- If truly unreadable for that leg, return null.\n"
+        f"Input legs: {json.dumps(legs_min, ensure_ascii=True)}"
+    )
+    img_part = {"mime_type": mime_type or "image/png", "data": base64.b64encode(image_bytes).decode("utf-8")}
+    try:
+        resp = model.generate_content([prompt, img_part])
+        txt = getattr(resp, "text", "") or ""
+        obj = _extract_json_object(txt)
+        out_legs = obj.get("legs")
+        if not isinstance(out_legs, list):
+            return
+        for idx, leg in enumerate(legs):
+            if idx >= len(out_legs):
+                break
+            row = out_legs[idx]
+            if not isinstance(row, dict):
+                continue
+            pt = _normalize_leg_pick_type(leg.get("pick_type"))
+            if pt not in {"Goblin", "Demon"}:
+                leg["delta"] = None
+                continue
+            cur = leg.get("delta")
+            curf = _safe_float(cur, 0.0)
+            if cur is not None and curf > 0:
+                continue
+            val = row.get("delta")
+            if val is None:
+                continue
+            new_delta = abs(_safe_float(val, 0.0))
+            if new_delta > 0:
+                leg["delta"] = round(new_delta, 3)
+    except Exception:
+        return
+
+
 def _gemini_extract_ticket_from_image(image_bytes: bytes, mime_type: str) -> dict[str, Any]:
     api_key = (
         (os.environ.get("GEMINI_API_KEY") or "").strip()
@@ -1237,7 +1402,14 @@ def _gemini_extract_ticket_from_image(image_bytes: bytes, mime_type: str) -> dic
     img_part = {"mime_type": mime_type or "image/png", "data": base64.b64encode(image_bytes).decode("utf-8")}
     resp = model.generate_content([prompt, img_part])
     txt = getattr(resp, "text", "") or ""
-    return _extract_json_object(txt)
+    extracted = _extract_json_object(txt)
+    legs = extracted.get("legs")
+    if isinstance(legs, list):
+        leg_dicts = [x for x in legs if isinstance(x, dict)]
+        _fill_missing_tier_deltas(model, image_bytes, mime_type, leg_dicts)
+        _fill_missing_tier_deltas_from_slate(leg_dicts)
+        extracted["legs"] = leg_dicts
+    return extracted
 
 
 def _composition_label_from_legs(legs: list[dict[str, Any]]) -> str:
