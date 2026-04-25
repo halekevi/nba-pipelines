@@ -21,6 +21,18 @@ Android (and optional iOS) **native shell** around a WebView. There are **two wa
 
 To refresh the APK later, repeat after updating `www/`.
 
+Equivalent CLI (from `mobile/`): `npx cap sync android` — same as `npm run sync:android` after `sync:bundle` clears the remote URL for that session.
+
+If you **only** changed files under `www/` (no `capacitor.config.js` edits), you can copy assets into Android without a full sync: `npx cap copy android` (or `npm run copy:android`), then rebuild in Android Studio.
+
+### Flask vs a truly offline `www/`
+
+The main PropOracle **Flask** app runs on a server (e.g. Railway or your PC); **Python does not run inside the Android WebView.** To use **only** bundled files with **no** internet:
+
+- Ship a **static** HTML/JS/CSS (or exported) UI into `mobile/www/`, then `npm run sync:bundle` and rebuild the APK.
+
+If you need **live** Flask APIs without Railway, point the shell at your PC with **`server.url`** (LAN `http://192.168.x.x:5000` or similar), same Wi‑Fi as the phone, Flask listening on `0.0.0.0`, firewall open — use `npm run sync:url` / `sync:dev` with that URL (remote mode, not bundle).
+
 ## Remote build (live Railway / LAN)
 
 Only when you explicitly want the WebView to load a URL:

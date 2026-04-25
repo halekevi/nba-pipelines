@@ -1,6 +1,9 @@
 /**
  * Capacitor shell for PropORACLE.
  *
+ * Bundled mode (default): do **not** set `server.url`. Capacitor loads `webDir` (`www/`) from the
+ * APK — same idea as deleting/commenting a static `server: { url: ... }` block in older configs.
+ *
  * Default (no PROPORACLE_SERVER_URL): the WebView loads **bundled files** from `webDir` (`www/`)
  * inside the APK — no Railway, no LAN dev server, no "mobile web" remote host.
  *
