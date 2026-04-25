@@ -407,7 +407,7 @@ def over_under_lines_html(sub_rows: list[dict]) -> str:
     if not inner:
         return ""
     return (
-        f'<div style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45">{inner}</div>'
+        f'<div class="ou-breakdown" style="font-size:13px;color:var(--muted2);margin-top:5px;line-height:1.45">{inner}</div>'
     )
 
 
@@ -421,7 +421,7 @@ def pick_type_row(label: str, icon: str, agg: dict, extra_html: str = "") -> str
     m   = agg["misses"]
     hr  = agg["hit_rate"]
     return f"""<tr>
-      <td><span class="chip chip-{label.lower()}">{icon} {label}</span>{extra_html}</td>
+      <td><span class="chip chip-{label.lower()}">{icon}\u00a0{label}</span>{extra_html}</td>
       <td class="right mono">{fmt_num(d)}</td>
       <td class="right mono pos">{fmt_num(h_)}</td>
       <td class="right mono neg">{fmt_num(m)}</td>
@@ -770,7 +770,7 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
         {pick_type_row("Goblin","🎃", gob_s, gob_ou)}
         {pick_type_row("Demon","😈",  dem_s, dem_ou)}
         <tr>
-          <td><span class="chip chip-std">⭐ Standard</span>{std_ou}</td>
+          <td><span class="chip chip-std">⭐\u00a0Standard</span>{std_ou}</td>
           <td class="right mono">{fmt_num(std_s['decided'])}</td>
           <td class="right mono pos">{fmt_num(std_s['hits'])}</td>
           <td class="right mono neg">{fmt_num(std_s['misses'])}</td>
@@ -796,7 +796,7 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
         row_cls  = "player-hit" if hr>=55 else ("player-miss" if hr<48 else "player-warn")
         tier_ou = over_under_lines_html(t_rows)
         tier_rows_html += f"""<tr class="{row_cls}">
-          <td style="vertical-align:top"><span class="chip {chip_cls}">TIER {t}</span>{tier_ou}</td>
+          <td style="vertical-align:top"><span class="chip {chip_cls}">TIER\u00a0{t}</span>{tier_ou}</td>
           <td class="right mono">{fmt_num(d)}</td>
           <td class="right mono pos">{fmt_num(h_)}</td>
           <td>{rate_bar_html(hr)}</td>
@@ -807,7 +807,7 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
       <tbody>{tier_rows_html}</tbody>
     </table></div>"""
 
-    two_col = f"""<div class="two-col">
+    two_col = f"""<div class="two-col pick-tier-split">
       <div>
         <div class="section-label">BY PICK TYPE</div>
         {pick_table}
@@ -976,12 +976,19 @@ def build_takeaways(nba_rows: list[dict], cbb_rows: list[dict]) -> str:
         add_insight("📋", "Overall Slate Summary",
             f"NBA: <strong>{pct(nba_stats['hit_rate'])}</strong> overall ({fmt_num(nba_stats['decided'])} decided).{cbb_str}")
 
-        # Over vs Under
-        nba_over  = overall_stats([r for r in nba_rows if str(r.get("Dir","") or r.get("Direction","")).strip().upper() == "OVER"])
-        nba_under = overall_stats([r for r in nba_rows if str(r.get("Dir","") or r.get("Direction","")).strip().upper() == "UNDER"])
+        # Over vs Under (last card often sits alone in a 3-col grid — span full row via CSS)
+        nba_over = overall_stats(
+            [r for r in nba_rows if str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "OVER"]
+        )
+        nba_under = overall_stats(
+            [r for r in nba_rows if str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "UNDER"]
+        )
         if nba_over["decided"] > 0 and nba_under["decided"] > 0:
-            add_insight("📈", "Over vs Under Performance",
-                f"NBA OVERs: <strong>{pct(nba_over['hit_rate'])}</strong>. NBA UNDERs: <strong>{pct(nba_under['hit_rate'])}</strong>.")
+            add_insight(
+                "📈",
+                "Over vs Under Performance",
+                f"NBA OVERs: <strong>{pct(nba_over['hit_rate'])}</strong>. NBA UNDERs: <strong>{pct(nba_under['hit_rate'])}</strong>.",
+            )
 
     # Worst NBA players (alerts)
     if nba_rows:
@@ -1068,8 +1075,8 @@ CSS = """
   --pending:#666;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{height:100%;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#06060f}
-body{font-family:'Inter',sans-serif;background:#06060f;color:var(--text);min-height:100%;height:auto;max-height:none;margin:0;overflow-x:hidden;overflow-y:visible;padding-bottom:24px;font-size:clamp(14px,1.02vw,16px);line-height:1.45}
+html{height:100%;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#0a0a14}
+body{font-family:'Inter',sans-serif;background:#0a0a14;color:var(--text);min-height:100%;height:auto;max-height:none;margin:0;overflow-x:hidden;overflow-y:visible;padding-bottom:max(10px, env(safe-area-inset-bottom, 0px));font-size:clamp(14px,1.02vw,16px);line-height:1.45}
 h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif}
 header,.main{position:relative;z-index:1}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:rgba(255,255,255,0.04)}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.14);border-radius:4px}
@@ -1092,6 +1099,7 @@ border:1px solid var(--glass-bd);border-radius:999px;padding:8px 14px;letter-spa
 .sport-header-line{flex:1;min-width:80px;height:1px;background:rgba(255,255,255,0.08)}
 .sport-meta-count{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2)}
 .sport-section{margin-bottom:48px;width:100%;max-width:100%;box-sizing:border-box}
+.sport-section:last-child{margin-bottom:0}
 .section-label{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.08vw,16px);color:var(--muted);letter-spacing:2.5px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
 .stat-grid{display:grid;gap:14px;margin-bottom:24px;width:100%;max-width:100%;box-sizing:border-box}
@@ -1125,8 +1133,9 @@ td.right{text-align:right}td.mono{font-family:'Inter',sans-serif;font-size:clamp
 .rate-bar-bg{flex:1;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
 .rate-bar-fill{height:100%;border-radius:3px;transition:width .4s}
 .rate-num{font-family:'Inter',sans-serif;font-size:clamp(13px,1.05vw,15px);min-width:48px;text-align:right;flex-shrink:0}
-.chip{display:inline-block;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:.5px;
-background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid var(--glass-bd);max-width:100%;box-sizing:border-box;word-break:break-word}
+.chip{display:inline-flex;align-items:center;flex-shrink:0;min-width:max-content;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:.35px;
+background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid var(--glass-bd);box-sizing:border-box;vertical-align:middle;white-space:nowrap!important;word-break:normal!important;overflow-wrap:normal!important;hyphens:none!important;max-width:none}
+.chip-a,.chip-b,.chip-c,.chip-d,.chip-goblin,.chip-demon,.chip-std{display:inline-flex;align-items:center;flex-shrink:0;min-width:max-content;white-space:nowrap!important;word-break:normal!important;overflow-wrap:normal!important;hyphens:none!important}
 .chip-a{background:rgba(57,255,110,.08);color:var(--green);border-color:rgba(57,255,110,.28)}
 .chip-b{background:rgba(0,229,255,.08);color:var(--cyan);border-color:rgba(0,229,255,.28)}
 .chip-c{background:rgba(240,165,0,.08);color:var(--gold);border-color:rgba(240,165,0,.3)}
@@ -1137,6 +1146,9 @@ background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid va
 .two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-bottom:20px;width:100%;max-width:100%;box-sizing:border-box}
 .three-col{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:20px;width:100%;max-width:100%;box-sizing:border-box}
 .insight-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:24px;width:100%;max-width:100%;box-sizing:border-box;min-width:0}
+.sport-section:last-child .insight-grid{margin-bottom:0}
+/* Last card is alone on its row when count is 1,4,7,… — span full width instead of a narrow left column */
+.insight-grid>.insight-card:last-child:nth-child(3n+1){grid-column:1 / -1}
 .insight-card{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);border-radius:12px;padding:14px 16px;box-shadow:0 4px 20px rgba(0,0,0,.15);min-width:0;box-sizing:border-box}
 .insight-icon{font-size:22px;margin-bottom:8px}
 .insight-title{font-weight:700;font-size:14px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:var(--gold)}
@@ -1161,8 +1173,9 @@ td.muted{color:var(--muted2)}
 .stat-grid{justify-items:start;justify-content:start}
 .stat-grid-4,.stat-grid-2{grid-template-columns:repeat(auto-fill,minmax(min(100%,9rem),max-content))}
 .two-col,.three-col{grid-template-columns:1fr}
-.insight-grid{display:flex;flex-wrap:wrap;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:14px}
-.insight-card{width:fit-content;max-width:100%}
+.insight-grid{display:grid;grid-template-columns:1fr;gap:14px;width:100%;max-width:100%}
+.insight-grid>.insight-card:last-child:nth-child(3n+1){grid-column:auto}
+.insight-card{width:100%;max-width:100%;min-width:0}
 .stat-card{width:fit-content;max-width:100%}
 .alert{width:fit-content;max-width:100%}
 .rate-num{min-width:min(48px,max-content)}
@@ -1175,6 +1188,26 @@ td{padding:8px 8px}
 .section-label{font-size:clamp(12px,3.2vw,14px)}
 .sport-label{font-size:28px}
 .logo-title{font-size:24px}
+.two-col.pick-tier-split{grid-template-columns:1fr!important;gap:18px!important}
+}
+/* Touch / hub iframe: BY PICK TYPE + BY TIER stack when viewport math is wrong (wide iframe on a phone). */
+@media(pointer:coarse){
+.two-col.pick-tier-split{grid-template-columns:1fr!important;gap:18px!important}
+}
+/* v20260429mobilecol — ≤960px: tables/chips only (no blanket .two-col stack — desktop keeps 2-col). */
+@media(max-width:960px){
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.table-wrap table{min-width:0;width:100%;max-width:100%}
+.two-col.pick-tier-split .table-wrap table{min-width:0}
+.sport-header{flex-wrap:wrap;gap:6px}
+.sport-meta-count{font-size:clamp(10px,2.5vw,12px)}
+.chip,.chip-a,.chip-b,.chip-c,.chip-d,.chip-goblin,.chip-demon,.chip-std{font-size:clamp(10px,2.6vw,12px);padding:4px 8px;letter-spacing:.06em;display:inline-flex!important;align-items:center!important;flex-shrink:0!important;min-width:max-content!important;white-space:nowrap!important;word-break:normal!important;overflow-wrap:normal!important;hyphens:none!important;max-width:none!important}
+.table-wrap .sub-dir{display:block;margin:5px 0 0;font-size:clamp(11px,2.8vw,13px);line-height:1.35}
+.ou-breakdown{font-size:clamp(11px,2.8vw,13px)!important;line-height:1.4!important}
+.two-col.pick-tier-split td.mono{font-size:clamp(11px,2.8vw,13px)}
+.two-col.pick-tier-split td:first-child,.two-col.pick-tier-split th:first-child{min-width:0}
+.two-col.pick-tier-split .table-wrap td{vertical-align:top}
+.two-col.pick-tier-split .table-wrap th{white-space:normal;word-break:normal;line-height:1.2}
 }
 """
 
@@ -1218,9 +1251,17 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#0a0a14"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <title>Slate Eval — {h(display_date)}</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/static/global-scrollbar.css?v=20260416"/>
+<link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260419perf2"/>
+<link rel="stylesheet" href="/static/proporacle-mobile-schema.css?v=20260430mobileapp"/>
 <style>{CSS}</style>
 </head>
 <body>

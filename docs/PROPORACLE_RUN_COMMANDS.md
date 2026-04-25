@@ -5,7 +5,7 @@ This is a single reference for the most common PowerShell run commands in this r
 ## Open PowerShell in Project Root
 
 ```powershell
-cd "C:\Users\halek\OneDrive\Desktop\PropORACLE"
+cd "H:\halek\ProfileFromC\Desktop\PropORACLE"
 ```
 
 ## Main Pipeline (`run_pipeline.ps1` at repo root)

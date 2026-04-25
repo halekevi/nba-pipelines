@@ -1,0 +1,29 @@
+/**
+ * PropOracle mobile app schema — shared tokens + baseline behavior for:
+ *   - Mobile Safari / Chrome (same URLs as desktop)
+ *   - Capacitor Android/iOS WebView (see mobile/capacitor.config.js)
+ *
+ * Shell pages (/, /grades, /tickets, …) should also load:
+ *   nav-mobile-shared.css → mobile-content-width.css (bottom icon strip + safe-area).
+ * Slate eval HTML loads this file so standalone mobile viewing matches hub typography/touch.
+ *
+ * v=20260430mobileapp
+ */
+:root {
+  --po-mobile-bottom-bar-bg: rgba(12, 12, 20, 0.94);
+  --po-mobile-bottom-bar-border: rgba(255, 255, 255, 0.12);
+  --po-mobile-bottom-bar-shadow: 0 -8px 28px rgba(0, 0, 0, 0.45);
+  /* Bottom tab strip + safe area — keep in sync with mobile-content-width.css */
+  --po-mobile-nav-clearance: calc(82px + env(safe-area-inset-bottom, 0px));
+  --po-mobile-body-pad-extra: calc(74px + env(safe-area-inset-bottom, 0px));
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (max-width: 768px) {
+  html {
+    -webkit-tap-highlight-color: rgba(212, 175, 55, 0.14);
+  }
+}

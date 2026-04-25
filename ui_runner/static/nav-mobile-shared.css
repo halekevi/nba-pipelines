@@ -1,7 +1,7 @@
 /**
  * Shared mobile nav: two-row bar (brand + hamburger, then snav-right meta)
- * and fixed flyout. Load after page inline <style> so these rules win.
- * v=20260418nav — ≤768px hamburger; hide ul#nav-links; flyout above sticky bar.
+ * and fixed flyout. Load proporacle-mobile-schema.css first, then page inline <style>, then this file so these rules win.
+ * v=20260430mobileapp — ≤768px hamburger; hide ul#nav-links; flyout above sticky bar.
  */
 @media (max-width: 768px) {
   nav.snav,
@@ -53,15 +53,10 @@
   .snav .hamburger,
   button.hamburger#hamburger,
   button#hamburger.hamburger {
-    order: 2 !important;
-    display: flex !important;
-    margin-left: auto !important;
-    flex-shrink: 0 !important;
-    align-self: center !important;
-    min-width: 48px !important;
-    min-height: 48px !important;
-    touch-action: manipulation !important;
-    -webkit-tap-highlight-color: rgba(212, 175, 55, 0.15);
+    /* Keep hidden on phone layouts; bottom-tab nav uses direct links. */
+    display: none !important;
+    position: static !important;
+    inset: auto !important;
   }
 
   .snav-right {

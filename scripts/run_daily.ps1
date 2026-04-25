@@ -1246,7 +1246,7 @@ if ($MonthlyRetrain) {
 # If you run run_daily.ps1 manually after ~10:00 local, the same multi-sport refresh runs here.
 # =============================================================================
 # Register once (working form — no nested quotes needed when path has no spaces):
-# schtasks /Create /TN "PropORACLE_NBA_LateFetch" /TR "powershell.exe -ExecutionPolicy Bypass -NoProfile -File C:\Users\halek\OneDrive\Desktop\PropORACLE\scripts\run_nba_late_fetch.ps1" /SC DAILY /ST 11:00 /F
+# schtasks /Create /TN "PropORACLE_NBA_LateFetch" /TR "powershell.exe -ExecutionPolicy Bypass -NoProfile -File H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\run_nba_late_fetch.ps1" /SC DAILY /ST 11:00 /F
 # =============================================================================
 $NowHour = (Get-Date).Hour
 if ($NowHour -ge 10) {

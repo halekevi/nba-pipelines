@@ -74,7 +74,7 @@ pwsh -NoProfile -File scripts\run_mlb_step1_chrome_debug.ps1
 Or manually:
 
 ```powershell
-cd C:\Users\halek\OneDrive\Desktop\PropORACLE\MLB
+cd H:\halek\ProfileFromC\Desktop\PropORACLE\MLB
 py -3.14 .\scripts\step1_fetch_prizepicks_mlb.py --cdp http://127.0.0.1:9222 --output step1_mlb_props.csv
 ```
 

@@ -36,7 +36,7 @@ This sets the DataDome trust cookies (`datadome`, `cf_clearance`, `_prizepicks_s
 Close Chrome **completely** (check Task Manager — kill any `chrome.exe`), then:
 
 ```powershell
-cd C:\Users\halek\OneDrive\Desktop\PropORACLE\MLB
+cd H:\halek\ProfileFromC\Desktop\PropORACLE\MLB
 py -3.14 .\scripts\setup_prizepicks_profile.py
 ```
 
@@ -164,7 +164,7 @@ which is shared across all sport pipelines.
 ### 4. Test in isolation before wiring into `run_pipeline.ps1`
 
 ```powershell
-cd C:\Users\halek\OneDrive\Desktop\PropORACLE\{SPORT}
+cd H:\halek\ProfileFromC\Desktop\PropORACLE\{SPORT}
 py -3.14 .\scripts\step1_fetch_prizepicks_{sport}.py --timeout 90 --retries 2 --output outputs\step1_{sport}_props.csv
 ```
 
@@ -234,7 +234,7 @@ This script (`scripts/capture_entries.py`, run from the repo root) also talks to
 Run (visible browser, **not** headless):
 
 ```powershell
-cd C:\Users\halek\OneDrive\Desktop\PropORACLE
+cd H:\halek\ProfileFromC\Desktop\PropORACLE
 py -3.14 -u scripts/capture_entries.py
 ```
 

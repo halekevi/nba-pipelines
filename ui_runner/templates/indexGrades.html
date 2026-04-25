@@ -10,7 +10,8 @@
 <title>PropOracle — Grades</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="/static/global-scrollbar.css?v=20260416"/>
-<link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260416perf"/>
+<link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260419perf2"/>
+<link rel="stylesheet" href="/static/proporacle-mobile-schema.css?v=20260430mobileapp"/>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap');
 :root{
@@ -58,7 +59,6 @@ body.page-grades::after{display:none !important;}
 body.page-grades .grain-layer{display:none !important;}
 body.page-grades .iframe-shell-stage{
   background:var(--bg-main);
-  isolation:isolate;
 }
 [data-theme="light"] body.page-grades .iframe-shell-stage{
   background:#d2e2f4;
@@ -181,7 +181,8 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 
 /* iframe shell: layout only — no outer “card” so slate header is the sole chrome */
 .iframe-shell{
-  flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;
+  flex:1;min-height:0;min-width:0;width:100%;max-width:100%;
+  display:flex;flex-direction:column;overflow:hidden;
   margin-top:0;border:none;border-radius:0;background:transparent;
   box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
 }
@@ -228,8 +229,8 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .iframe-shell-toolbar .date-bar,.iframe-shell-toolbar .tabs-bar{margin:0;width:100%;box-sizing:border-box;}
 .grades-toolbar-parent-slot{flex-shrink:0}
 .grades-toolbar-parent-slot.grades-toolbar-parent-slot--collapsed{display:none;height:0;min-height:0;overflow:hidden;margin:0;padding:0;border:0}
-.iframe-shell-stage{flex:1;min-height:0;position:relative;overflow:hidden;}
-.iframe-shell-stage > .grade-frame{position:absolute;inset:0;width:100%;height:100%;border:none;display:block;transition:opacity .25s;}
+.iframe-shell-stage{flex:1;min-height:0;min-width:0;width:100%;max-width:100%;position:relative;overflow:hidden;}
+.iframe-shell-stage > .grade-frame{position:absolute;inset:0;width:100%;max-width:100%;height:100%;border:none;display:block;transition:opacity .25s;background:var(--bg-main);min-width:0;box-sizing:border-box;}
 /* Ticket tab: pull iframe flush under toolbar (ticket_eval has its own KPI bar) */
 .iframe-shell--ticket-tab .iframe-shell-toolbar{padding-bottom:0;gap:4px;}
 .iframe-shell--ticket-tab .iframe-shell-stage{margin-top:-1px;}
@@ -306,14 +307,27 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 
 /* loading */
 .load-overlay{position:absolute;inset:0;background:rgba(6,8,18,0.82);backdrop-filter:blur(20px) saturate(180%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:50;pointer-events:none;transition:opacity .3s;}
-.load-overlay.hidden{
+.load-overlay.hidden,
+#load-overlay.hidden{
   display:none !important;
   opacity:0 !important;
   visibility:hidden !important;
   pointer-events:none !important;
+  z-index:-999 !important;
+  background:transparent !important;
   backdrop-filter:none !important;
   -webkit-backdrop-filter:none !important;
-  transition:opacity .2s ease,visibility 0s linear .2s,backdrop-filter 0s linear .2s;
+  inset:auto !important;
+  width:0 !important;
+  height:0 !important;
+  max-width:0 !important;
+  max-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  clip:rect(0,0,0,0) !important;
+  clip-path:inset(50%) !important;
+  transition:opacity .15s ease,visibility 0s linear .15s,backdrop-filter 0s linear .15s;
 }
 .load-spinner{width:42px;height:42px;border:3px solid rgba(255,255,255,0.1);border-top-color:var(--f0a500);border-right-color:rgba(212,160,23,0.35);border-radius:50%;animation:spin .85s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -322,6 +336,11 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 
 /* empty state */
 .empty-state{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:rgba(6,8,20,0.72);backdrop-filter:blur(16px) saturate(180%);}
+.empty-state[hidden],
+#empty-state[hidden],
+#ticket-empty-state[hidden]{display:none !important;visibility:hidden !important;pointer-events:none !important;z-index:-1 !important;}
+#analytics-panel[hidden],
+#props-eval-panel[hidden]{display:none !important;visibility:hidden !important;pointer-events:none !important;}
 .empty-icon{font-size:56px;opacity:.45;filter:drop-shadow(0 0 12px rgba(0,229,255,0.15));}
 .empty-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:4px;color:var(--text-primary);text-shadow:0 0 40px rgba(212,160,23,0.12);}
 .empty-sub{font-family:'Inter',sans-serif;font-size:17px;letter-spacing:1.5px;color:var(--muted);text-align:center;line-height:1.85;max-width:440px;}
@@ -330,7 +349,6 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 
 /* Mobile / coarse pointer only — iframe stacking, prop-eval 2-col grid, overlay layering (WebView); desktop hub unchanged */
 @media (max-width:900px),(pointer:coarse){
-  .iframe-shell-stage{isolation:isolate;}
   .iframe-shell-stage > .grade-frame{z-index:2;pointer-events:auto;}
   .grades-analytics-wrap{z-index:6;}
   .props-eval-grid{
@@ -340,9 +358,22 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
     align-content:start;
   }
   .prop-eval-card{min-width:0;}
-  .load-overlay{z-index:10;transition:opacity .25s ease,visibility 0s linear .25s;}
-  .load-overlay.hidden{z-index:0;}
-  .empty-state{z-index:8;}
+  /* Only style the overlay while loading — do not target .hidden or WebView keeps painting a solid slab */
+  .load-overlay:not(.hidden){
+    z-index:10;
+    transition:opacity .2s ease,visibility 0s linear .2s;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    background:rgba(6,8,18,0.94) !important;
+  }
+  .empty-state{
+    z-index:8;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    background:rgba(6,8,20,0.94) !important;
+  }
+  [data-theme="light"] .load-overlay:not(.hidden){background:rgba(235,240,250,0.96)!important;}
+  [data-theme="light"] .empty-state{background:rgba(245,248,255,0.96)!important;}
 }
 @media (max-width:760px){
   .props-eval-grid{grid-template-columns:1fr;}
@@ -355,11 +386,11 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   background:var(--glass-panel);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
   border:1px solid var(--glass-panel-border);border-radius:16px;box-shadow:var(--glass-shadow);
 }
-.tab-btn{display:flex;align-items:center;gap:6px;padding:6px 9px;border-radius:10px;font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted2);background:rgba(255,255,255,0.03);border:1px solid transparent;cursor:pointer;transition:color .2s,border-color .2s,box-shadow .2s,background .2s;white-space:nowrap;}
+.tab-btn{display:flex;align-items:center;gap:6px;padding:6px 9px;border-radius:12px;font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted2);background:rgba(255,255,255,0.03);border:2px solid transparent;cursor:pointer;transition:color .2s,border-color .2s,box-shadow .2s,background .2s;white-space:nowrap;}
 .tab-btn:hover{color:var(--text);background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.08);}
 .tab-btn.active{
   color:var(--accent-gold);
-  border-color:rgba(212,160,23,0.4);
+  border-color:rgba(212,160,23,0.55);
   background:rgba(212,160,23,0.12);
   box-shadow:0 0 22px rgba(212,160,23,0.15),inset 0 -2px 0 var(--accent-gold);
 }
@@ -371,20 +402,115 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   .date-bar-right{display:none;}
   .tabs-bar{margin-left:12px;margin-right:12px;padding:6px 8px;min-height:38px;}
   .dpill{font-size:10px;padding:6px 9px;}
-  .tab-btn{padding:7px 9px;font-size:10px;}
+  /* Narrow phones: 2×2 tab grid so all four tabs stay fully visible without horizontal scroll */
+  .tabs-bar{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+    overflow-x:visible;
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    box-sizing:border-box;
+    align-items:stretch;
+    justify-items:stretch;
+  }
+  .tabs-bar .tab-btn{
+    display:flex;
+    flex-direction:column;
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    min-height:0;
+    box-sizing:border-box;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    font-size:clamp(10px,2.8vw,12px);
+    padding:8px 4px;
+    white-space:normal;
+    line-height:1.2;
+    gap:5px;
+    letter-spacing:0.04em;
+    border-radius:12px;
+    border:2px solid rgba(255,255,255,0.06);
+    overflow:hidden;
+    word-break:break-word;
+    hyphens:none;
+  }
+  .tabs-bar .tab-btn.active{
+    border-color:rgba(212,160,23,0.65);
+    box-shadow:0 0 20px rgba(212,160,23,0.2),inset 0 -2px 0 var(--accent-gold);
+  }
+  .tabs-bar .tab-icon{
+    width:18px;
+    height:18px;
+    font-size:14px;
+    flex-shrink:0;
+    line-height:1;
+  }
 }
 @media(max-width:900px){
   .live-pill{display:none;}
   .date-bar{margin-left:10px;margin-right:10px;overflow-x:auto;}
   .tabs-bar{margin-left:10px;margin-right:10px;}
 }
-@media(max-width:900px){
-  .date-bar,.tabs-bar{
+/* Tablets / wider narrow viewports: one row × 4 (not used below 769px — 768 block is 2×2) */
+@media(max-width:900px) and (min-width:769px){
+  .date-bar{
     overflow-x:auto;
     -webkit-overflow-scrolling:touch;
     overscroll-behavior-x:contain;
   }
   .date-pills{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .tabs-bar{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    grid-template-rows:auto;
+    gap:6px;
+    overflow-x:visible;
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    box-sizing:border-box;
+    padding:8px clamp(6px,2vw,10px);
+    align-items:stretch;
+    justify-items:stretch;
+  }
+  .tabs-bar .tab-btn{
+    display:flex;
+    flex-direction:column;
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    min-height:56px;
+    box-sizing:border-box;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    white-space:normal;
+    line-height:1.18;
+    gap:5px;
+    padding:8px 6px;
+    font-size:clamp(9px,2.6vw,11px);
+    letter-spacing:0.04em;
+    border-radius:12px;
+    border:2px solid rgba(255,255,255,0.06);
+    overflow:hidden;
+    word-break:break-word;
+    hyphens:none;
+  }
+  .tabs-bar .tab-btn.active{
+    border-color:rgba(212,160,23,0.65);
+    box-shadow:0 0 20px rgba(212,160,23,0.2),inset 0 -2px 0 var(--accent-gold);
+  }
+  .tabs-bar .tab-icon{
+    width:20px;
+    height:20px;
+    font-size:15px;
+    flex-shrink:0;
+    line-height:1;
+  }
 }
 /* Phone portrait: safe-area gutters + readable chrome; iframe stage keeps flex:1 from shell */
 @media (max-width:900px) and (orientation:portrait){
@@ -403,19 +529,24 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
     margin-left:max(8px, env(safe-area-inset-left, 0px));
     margin-right:max(8px, env(safe-area-inset-right, 0px));
   }
-  .tabs-bar{
-    margin-left:max(8px, env(safe-area-inset-left, 0px));
-    margin-right:max(8px, env(safe-area-inset-right, 0px));
-    padding:6px 8px;
-    min-height:38px;
-  }
-  .tab-btn{padding:7px 9px;font-size:10px;letter-spacing:.85px;}
   .grades-analytics-wrap{
     padding-left:max(12px, env(safe-area-inset-left, 0px));
     padding-right:max(12px, env(safe-area-inset-right, 0px));
     padding-bottom:max(22px, env(safe-area-inset-bottom, 0px));
   }
   .grades-analytics-grid{grid-template-columns:minmax(0, 1fr) !important;}
+}
+
+/* Portrait ≥769px: extra tab chrome (below 769px the 2×2 grid block owns tab sizing) */
+@media (max-width:900px) and (orientation:portrait) and (min-width:769px){
+  .tabs-bar{
+    margin-left:max(8px, env(safe-area-inset-left, 0px));
+    margin-right:max(8px, env(safe-area-inset-right, 0px));
+    padding:8px max(6px, env(safe-area-inset-right, 0px)) 8px max(6px, env(safe-area-inset-left, 0px));
+    min-height:0;
+    gap:7px;
+  }
+  .tabs-bar .tab-btn{min-height:54px;padding:8px 5px;font-size:clamp(9px,2.5vw,11px);}
 }
 
 /* Phone landscape: short viewport — compact toolbar/tabs, hide live line, tighter stage */
@@ -437,18 +568,23 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   }
   .dpill{font-size:9px;padding:4px 8px;}
   .date-nav-btn{width:28px;height:28px;font-size:13px;}
-  .tabs-bar{
-    min-height:34px;
-    padding:4px 6px;
-    margin-left:max(6px, env(safe-area-inset-left, 0px));
-    margin-right:max(6px, env(safe-area-inset-right, 0px));
-  }
-  .tab-btn{padding:5px 7px;font-size:9px;letter-spacing:.65px;gap:4px;}
-  .tab-icon{width:12px;height:12px;font-size:10px;}
   .grades-analytics-wrap{
     padding:10px max(10px, env(safe-area-inset-right, 0px)) max(14px, env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px));
   }
   .grades-analytics-grid{grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)) !important;}
+}
+
+/* Landscape ≥769px: compact tab row (narrow ≤768 uses 2×2 from main 768 block) */
+@media (max-width:900px) and (orientation:landscape) and (min-width:769px){
+  .tabs-bar{
+    min-height:0;
+    padding:6px max(4px, env(safe-area-inset-right, 0px)) 6px max(4px, env(safe-area-inset-left, 0px));
+    margin-left:max(6px, env(safe-area-inset-left, 0px));
+    margin-right:max(6px, env(safe-area-inset-right, 0px));
+    gap:6px;
+  }
+  .tabs-bar .tab-btn{min-height:48px;padding:6px 4px;font-size:clamp(8px,2.2vw,10px);gap:3px;}
+  .tabs-bar .tab-icon{width:16px;height:16px;font-size:12px;}
 }
 
 @media (max-width:900px) and (orientation:landscape) and (max-height:420px){
@@ -923,7 +1059,7 @@ select option,
 }
 [data-theme="light"] body.page-grades .tab-btn.active{
   color:#6a5200!important;
-  border-color:rgba(184,140,0,0.55)!important;
+  border:2px solid rgba(184,140,0,0.65)!important;
   background:rgba(255,243,200,0.95)!important;
 }
 [data-theme="light"] body.page-grades .iframe-shell-toolbar{
@@ -931,14 +1067,15 @@ select option,
   border-bottom-color:rgba(15,45,80,0.14)!important;
 }
 [data-theme="light"] body.page-grades .grade-frame{
-  background:#06060f;
-  box-shadow:inset 0 0 0 1px rgba(15,45,80,0.12);
+  background:#0a0a14;
+  box-shadow:none;
 }
 
-/* Mobile / coarse pointer: reduce stacked backdrop-filter cost (scroll jank) */
+/* Mobile / coarse pointer: strip compositor-heavy layers (WebView GPU voids / shader stalls) */
 @media (max-width: 900px), (pointer: coarse) {
   .orb-1,
   .orb-2,
+  .orb-3,
   .grain-layer,
   .mesh-bg {
     display: none !important;
@@ -946,9 +1083,14 @@ select option,
     visibility: hidden !important;
     pointer-events: none !important;
     animation: none !important;
+    filter: none !important;
+    mix-blend-mode: normal !important;
   }
-  body::after {
+  body::after,
+  body::before {
     display: none !important;
+    mix-blend-mode: normal !important;
+    animation: none !important;
   }
   .nav-accent {
     animation: none !important;
@@ -983,6 +1125,14 @@ select option,
   }
   .iframe-shell {
     background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
+  }
+  .iframe-shell-stage {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
   }
   [data-theme="light"] .date-bar,
   [data-theme="light"] .tabs-bar,
@@ -995,8 +1145,8 @@ select option,
 }
 
 </style>
-<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260418nav"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260423gradeslayout"/>
+<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260430mobileapp"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260430mobileapp"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 </head>
 <body class="page-grades">
@@ -1066,26 +1216,26 @@ select option,
     </div>
   </div>
   <div class="iframe-shell-stage">
-  <div class="load-overlay" id="load-overlay">
+  <div class="load-overlay hidden" id="load-overlay" aria-hidden="true">
     <div class="load-spinner"></div>
     <div class="load-text">LOADING GRADE REPORT</div>
     <div class="load-date" id="load-date-text"></div>
   </div>
-  <div class="empty-state" id="empty-state" style="display:none;">
+  <div class="empty-state" id="empty-state" hidden>
     <div class="empty-icon">📊</div>
     <div class="empty-title">No Report Found</div>
     <div class="empty-sub">No grade report exists for this date on the server. Locally run <code>scripts/run_grader.ps1 -Date YYYY-MM-DD</code> (or <code>scripts/grading/build_grades_html.py --date … --out ui_runner/templates</code>), then <strong>commit and push</strong> <code>ui_runner/templates/slate_eval_YYYY-MM-DD.html</code> and redeploy Railway. Use date pills or <strong>Jump to date</strong> for a day listed by <code>/api/grades/report_dates</code>.</div>
     <div class="empty-hint">Expected: slate_eval_<span id="empty-date"></span>.html</div>
   </div>
-  <div class="empty-state" id="ticket-empty-state" style="display:none;">
+  <div class="empty-state" id="ticket-empty-state" hidden>
     <div class="empty-icon">🎟</div>
     <div class="empty-title">No Ticket Evaluation</div>
     <div class="empty-sub">No ticket evaluation page exists for this date <strong>on the deployed site</strong>. Run <code>scripts/build_ticket_eval.py --date YYYY-MM-DD</code> after the pipeline, then <strong>commit and push</strong> <code>ui_runner/templates/ticket_eval_YYYY-MM-DD.html</code> so Railway (or any host) can serve it—or pick a date that already has that file in git.</div>
     <div class="empty-hint">Expected: ticket_eval_<span id="ticket-empty-date"></span>.html</div>
   </div>
-  <iframe class="grade-frame loading" id="grade-frame" src="about:blank" title="Grade Report"></iframe>
+  <iframe class="grade-frame" id="grade-frame" src="about:blank" title="Grade Report"></iframe>
   <iframe class="grade-frame" id="ticket-frame" src="about:blank" title="Ticket Evaluation" style="display:none;"></iframe>
-  <div id="analytics-panel" class="grades-analytics-wrap" style="display:none;" aria-label="CLV and calibration insights">
+  <div id="analytics-panel" class="grades-analytics-wrap" hidden aria-label="CLV and calibration insights">
     <div class="grades-analytics-stack">
     <div class="grades-analytics-context glass-insights" id="insights-context">Loading analytics context…</div>
     <div class="grades-analytics-grid">
@@ -1117,7 +1267,7 @@ select option,
     </div>
     </div>
   </div>
-  <div id="props-eval-panel" class="grades-analytics-wrap grades-props-wrap" style="display:none;" aria-label="Graded props by report date">
+  <div id="props-eval-panel" class="grades-analytics-wrap grades-props-wrap" hidden aria-label="Graded props by report date">
     <div class="grades-props-inner">
       <div class="glass-insights props-eval-intro">
         <h3 class="insights-card-title">Prop evaluation</h3>
@@ -1174,6 +1324,23 @@ select option,
 const REPORT_URL_TEMPLATE = '/grades/slate_eval_{date}.html';
 const TICKET_EVAL_URL_TEMPLATE = '/grades/ticket_eval_{date}.html';
 
+(function gradesIframeDebug(){
+  try {
+    if (new URLSearchParams(window.location.search).get('debug') !== '1') return;
+  } catch (_e) { return; }
+  function logFrame(label, el){
+    if (!el) { console.warn('[grades debug] missing element:', label); return; }
+    el.addEventListener('load', function(){
+      var u = '';
+      try { u = (el.contentDocument && el.contentDocument.URL) || ''; } catch (e2) { u = '(no access: ' + e2 + ')'; }
+      console.log('[grades debug]', label, 'load; contentDocument.URL=', u, 'iframe.getAttribute(src)=', el.getAttribute('src'));
+    });
+    el.addEventListener('error', function(){ console.warn('[grades debug]', label, 'error'); });
+  }
+  logFrame('grade-frame', document.getElementById('grade-frame'));
+  logFrame('ticket-frame', document.getElementById('ticket-frame'));
+})();
+
 // ─── Hide date + Slate/Ticket bars on scroll (iframe content scrolls, not the hub body) ───
 (function () {
   let scrollCleanups = [];
@@ -1189,11 +1356,11 @@ const TICKET_EVAL_URL_TEMPLATE = '/grades/ticket_eval_{date}.html';
 
   function activeScrollWin() {
     const ap = document.getElementById('analytics-panel');
-    if (ap && ap.style.display !== 'none') {
+    if (ap && !ap.hidden) {
       return { win: window, key: 'a' };
     }
     const pe = document.getElementById('props-eval-panel');
-    if (pe && pe.style.display !== 'none') {
+    if (pe && !pe.hidden) {
       return { win: window, key: 'p' };
     }
     const tick = document.getElementById('ticket-frame');
@@ -1310,7 +1477,7 @@ function ensureGradesToolbarStylesInFrame(doc) {
   const link = doc.createElement('link');
   link.id = 'grades-iframe-toolbar-link';
   link.rel = 'stylesheet';
-    link.href = '/static/grades-iframe-toolbar.css?v=20260423gradeboxfit';
+    link.href = '/static/grades-iframe-toolbar.css?v=20260429onecol';
   doc.head.appendChild(link);
 }
 
@@ -1386,14 +1553,70 @@ function embedGradesToolbarInSlate(frame) {
 }
 
 function ensureFrameCollapseCss(doc) {
-  if (!doc || doc.getElementById('grades-collapsible-sport-style')) return;
-  const style = doc.createElement('style');
-  style.id = 'grades-collapsible-sport-style';
+  if (!doc) return;
+  let style = doc.getElementById('grades-collapsible-sport-style');
+  if (!style) {
+    style = doc.createElement('style');
+    style.id = 'grades-collapsible-sport-style';
+    (doc.head || doc.documentElement).appendChild(style);
+  }
   style.textContent = `
+    /* v20260430mobilecol — hub-injected slate; column stack ≤768px + coarse pick-tier (desktop keeps 2-col). */
     /* Embedded slate: transparent body + fixed ::before/::after glows composite badly in WebView over glass (reads as film grain). */
-    html{background:#06060f!important;}
-    body{background:#06060f!important;}
+    html{background:#0a0a14!important;}
+    body{background:#0a0a14!important;}
     body::before,body::after{display:none!important;}
+    /* Pick-type / tier badges: never wrap — table cells default min-width:auto can still squeeze inline-block text. */
+    .chip,.chip-a,.chip-b,.chip-c,.chip-d,.chip-goblin,.chip-demon,.chip-std{
+      display:inline-flex!important;
+      align-items:center!important;
+      flex-shrink:0!important;
+      min-width:max-content!important;
+      white-space:nowrap!important;
+      word-break:normal!important;
+      overflow-wrap:normal!important;
+      hyphens:none!important;
+      max-width:none!important;
+    }
+    /* BY PICK TYPE / BY TIER: box model only; column count from slate on desktop. */
+    .pick-tier-split,
+    .two-col.pick-tier-split,
+    .grades-sport-bucket-body .pick-tier-split,
+    .grades-sport-bucket-body .two-col.pick-tier-split{
+      display:grid!important;
+      width:100%!important;
+      max-width:100%!important;
+      min-width:0!important;
+      box-sizing:border-box!important;
+    }
+    @media(max-width:768px){
+      body > .main .two-col,
+      body > .main .three-col{
+        grid-template-columns:1fr!important;
+        gap:16px!important;
+      }
+      .grades-sport-bucket-body .two-col,
+      .grades-sport-bucket-body .three-col{
+        grid-template-columns:1fr!important;
+        gap:14px;
+      }
+      .pick-tier-split,
+      .two-col.pick-tier-split,
+      .grades-sport-bucket-body .pick-tier-split,
+      .grades-sport-bucket-body .two-col.pick-tier-split{
+        grid-template-columns:1fr!important;
+        gap:18px!important;
+      }
+    }
+    @media(pointer:coarse){
+      .pick-tier-split,
+      .two-col.pick-tier-split,
+      .grades-sport-bucket-body .pick-tier-split,
+      .grades-sport-bucket-body .two-col.pick-tier-split{
+        grid-template-columns:1fr!important;
+        gap:18px!important;
+      }
+    }
     /* Older slate_eval_*.html embed .main{max-width:1100px;margin:auto} and header side margins — content
        stays narrow while the toolbar is full width. Override only on slate-shaped documents (direct header + .main). */
     .grades-sport-bucket{
@@ -1458,6 +1681,10 @@ function ensureFrameCollapseCss(doc) {
       box-sizing:border-box;
       min-width:0;
     }
+    /* Summary row already shows sport + counts — hide duplicate .sport-header inside bucket */
+    .grades-sport-bucket-body > .sport-section > .sport-header{
+      display:none !important;
+    }
     .grades-sport-bucket-body .two-col,
     .grades-sport-bucket-body .three-col{
       width:100%;
@@ -1466,12 +1693,68 @@ function ensureFrameCollapseCss(doc) {
       min-width:0;
       display:grid;
     }
-    .grades-sport-bucket-body .two-col{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;}
-    .grades-sport-bucket-body .three-col{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+    /* ≤960px inside slate doc: typography + chips (matches build_grades_html standalone slate). */
+    @media (max-width:960px){
+      .table-wrap{
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+      }
+      .table-wrap table{
+        min-width:0;
+        width:100%;
+        max-width:100%;
+      }
+      .two-col.pick-tier-split .table-wrap table,
+      .pick-tier-split .table-wrap table{min-width:0;}
+      .sport-header{
+        flex-wrap:wrap;
+        gap:6px;
+      }
+      .sport-meta-count{font-size:clamp(10px,2.5vw,12px);}
+      .chip,
+      .chip-a,.chip-b,.chip-c,.chip-d,.chip-goblin,.chip-demon,.chip-std,
+      .grades-sport-bucket-body .chip,
+      .two-col.pick-tier-split .chip,
+      .pick-tier-split .chip{
+        font-size:clamp(10px,2.6vw,12px);
+        padding:4px 8px;
+        letter-spacing:0.06em;
+        white-space:nowrap !important;
+        word-break:normal !important;
+        overflow-wrap:normal !important;
+        hyphens:none !important;
+        max-width:none !important;
+      }
+      .table-wrap .sub-dir{
+        display:block;
+        margin:5px 0 0;
+        font-size:clamp(11px,2.8vw,13px);
+        line-height:1.35;
+      }
+      .ou-breakdown{
+        font-size:clamp(11px,2.8vw,13px)!important;
+        line-height:1.4!important;
+      }
+      .two-col.pick-tier-split td.mono,
+      .pick-tier-split td.mono{font-size:clamp(11px,2.8vw,13px);}
+      .two-col.pick-tier-split td:first-child,
+      .two-col.pick-tier-split th:first-child,
+      .pick-tier-split td:first-child,
+      .pick-tier-split th:first-child{min-width:0;}
+      .two-col.pick-tier-split .table-wrap td,
+      .pick-tier-split .table-wrap td{vertical-align:top;}
+      .two-col.pick-tier-split .table-wrap th,
+      .pick-tier-split .table-wrap th{
+        white-space:normal;
+        word-break:normal;
+        line-height:1.2;
+      }
+    }
     /* Hub iframe has a fixed height; slate_eval body used min-height:100vh without a bounded scroll root — narrow / touch only */
     @media (max-width:900px),(pointer:coarse){
     html{
-      height:100% !important;
+      min-height:100% !important;
+      height:auto !important;
       overflow-x:hidden !important;
       overflow-y:auto !important;
       -webkit-overflow-scrolling:touch !important;
@@ -1500,6 +1783,8 @@ function ensureFrameCollapseCss(doc) {
       margin-right:0;
       box-sizing:border-box;
       min-width:0;
+      padding-left:max(14px, env(safe-area-inset-left, 0px)) !important;
+      padding-right:max(14px, env(safe-area-inset-right, 0px)) !important;
     }
     body .main .insight-grid{
       display:flex !important;
@@ -1525,7 +1810,25 @@ function ensureFrameCollapseCss(doc) {
     body .main .stat-grid-4{grid-template-columns:repeat(auto-fill,minmax(min(100%,9.5rem),max-content)) !important;}
     body .main .stat-grid-2{grid-template-columns:repeat(auto-fill,minmax(min(100%,11rem),max-content)) !important;}
     body .main .stat-card{width:fit-content !important;max-width:100% !important;box-sizing:border-box !important;}
-    body .main .chip{max-width:100% !important;box-sizing:border-box !important;}
+    body .main .chip,
+    body .main .chip-a,
+    body .main .chip-b,
+    body .main .chip-c,
+    body .main .chip-d,
+    body .main .chip-goblin,
+    body .main .chip-demon,
+    body .main .chip-std{
+      display:inline-flex !important;
+      align-items:center !important;
+      flex-shrink:0 !important;
+      min-width:max-content !important;
+      box-sizing:border-box !important;
+      white-space:nowrap !important;
+      word-break:normal !important;
+      overflow-wrap:normal !important;
+      hyphens:none !important;
+      max-width:none !important;
+    }
     body .main .alert{width:fit-content !important;max-width:100% !important;box-sizing:border-box !important;}
     }
     .grades-sport-meta{
@@ -1535,7 +1838,6 @@ function ensureFrameCollapseCss(doc) {
       opacity:.72;
     }
   `;
-  (doc.head || doc.documentElement).appendChild(style);
 }
 
 function gradesFrameMobileLayout() {
@@ -2056,17 +2358,17 @@ function switchTab(tab) {
   const pe = document.getElementById('props-eval-panel');
   document.getElementById('grade-frame').style.display   = tab === 'slate'   ? 'block' : 'none';
   document.getElementById('ticket-frame').style.display  = tab === 'tickets' ? 'block' : 'none';
-  if (ap) ap.style.display = tab === 'analytics' ? 'block' : 'none';
-  if (pe) pe.style.display = tab === 'props' ? 'block' : 'none';
-  document.getElementById('ticket-empty-state').style.display = 'none';
+  if (ap) ap.hidden = tab !== 'analytics';
+  if (pe) pe.hidden = tab !== 'props';
+  document.getElementById('ticket-empty-state').hidden = true;
 
   try {
     window.resetGradesBarsScrollState();
   } catch (_e) {}
 
   if (tab === 'analytics') {
-    document.getElementById('load-overlay').classList.add('hidden');
-    document.getElementById('empty-state').style.display = 'none';
+    hideGradesHubLoadOverlay();
+    document.getElementById('empty-state').hidden = true;
     loadGradesInsights();
     setTimeout(() => {
       try {
@@ -2074,8 +2376,8 @@ function switchTab(tab) {
       } catch (_e) {}
     }, 0);
   } else if (tab === 'props') {
-    document.getElementById('load-overlay').classList.add('hidden');
-    document.getElementById('empty-state').style.display = 'none';
+    hideGradesHubLoadOverlay();
+    document.getElementById('empty-state').hidden = true;
     const ds = currentDateStr || gradesEl('date-jump')?.value || yesterdayStr();
     loadGradesProps(ds);
     setTimeout(() => {
@@ -2084,8 +2386,8 @@ function switchTab(tab) {
       } catch (_e) {}
     }, 0);
   } else if (tab === 'tickets') {
-    document.getElementById('load-overlay').classList.add('hidden');
-    document.getElementById('empty-state').style.display = 'none';
+    hideGradesHubLoadOverlay();
+    document.getElementById('empty-state').hidden = true;
     const ds = currentDateStr || gradesEl('date-jump')?.value || yesterdayStr();
     loadTicketEval(ds);
     setTimeout(() => {
@@ -2094,12 +2396,19 @@ function switchTab(tab) {
       } catch (_e) {}
     }, 0);
   } else {
-    document.getElementById('empty-state').style.display = slateReportMissing ? 'flex' : 'none';
+    const es = document.getElementById('empty-state');
+    if (es) es.hidden = !slateReportMissing;
     try {
       const sf = document.getElementById('grade-frame');
       const slo = document.getElementById('load-overlay');
+      if (sf) {
+        sf.classList.remove('loading');
+        sf.style.removeProperty('opacity');
+      }
       const d = sf && sf.contentDocument;
-      if (
+      if (slateReportMissing && slo) {
+        hideGradesHubLoadOverlay();
+      } else if (
         sf &&
         slo &&
         d &&
@@ -2108,8 +2417,7 @@ function switchTab(tab) {
         sf.getAttribute('src') &&
         !String(sf.getAttribute('src')).includes('about:blank')
       ) {
-        slo.classList.add('hidden');
-        sf.classList.remove('loading');
+        hideGradesHubLoadOverlay();
       }
     } catch (_es) {}
     requestAnimationFrame(() => {
@@ -2176,12 +2484,12 @@ async function loadTicketEval(dateStr) {
   const ok = await probeTicketEval(dateStr);
   if (!ok) {
     tf.style.display = 'none';
-    tEmpty.style.display = 'flex';
+    tEmpty.hidden = false;
     document.getElementById('ticket-empty-date').textContent = dateStr;
     tf.src = 'about:blank';
     return;
   }
-  tEmpty.style.display = 'none';
+  tEmpty.hidden = true;
   tf.style.display = 'block';
   tf.onload = function(){
     try {
@@ -2258,9 +2566,12 @@ function computeVisibleReportDateCount(){
 async function probeDate(dateStr){
   const url = REPORT_URL_TEMPLATE.replace('{date}', dateStr);
   try {
-    const res = await fetch(url, {method:'HEAD', cache:'no-cache'});
-    return res.ok;
-  } catch(e) {
+    const res = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
+    if (res.ok) return true;
+    // Some mobile browsers / proxies / CDNs omit or break HEAD while GET works (blank iframe if we bail here).
+    const res2 = await fetch(url, { method: 'GET', cache: 'no-cache' });
+    return res2.ok;
+  } catch (e) {
     return false;
   }
 }
@@ -2395,21 +2706,55 @@ function renderPills(){
 }
 
 // Slate iframe: WebView sometimes skips `onload` when `src` is unchanged — overlay + .loading would cover the report.
-var __gradesSlateLoadWatch = null;
+var __gradesSlateLoadTimeout = null;
+var __gradesSlatePoll = null;
 function clearGradesSlateLoadWatch() {
-  if (__gradesSlateLoadWatch != null) {
-    clearTimeout(__gradesSlateLoadWatch);
-    __gradesSlateLoadWatch = null;
+  if (__gradesSlateLoadTimeout != null) {
+    clearTimeout(__gradesSlateLoadTimeout);
+    __gradesSlateLoadTimeout = null;
   }
+  if (__gradesSlatePoll != null) {
+    clearInterval(__gradesSlatePoll);
+    __gradesSlatePoll = null;
+  }
+}
+function hideGradesHubLoadOverlay() {
+  try {
+    const o = document.getElementById('load-overlay');
+    if (!o) return;
+    o.classList.add('hidden');
+    o.setAttribute('aria-hidden', 'true');
+    o.style.setProperty('display', 'none', 'important');
+    o.style.setProperty('visibility', 'hidden', 'important');
+    o.style.setProperty('pointer-events', 'none', 'important');
+  } catch (_e) {}
 }
 function finishGradesSlateLoadUI() {
   clearGradesSlateLoadWatch();
   try {
-    const o = document.getElementById('load-overlay');
+    hideGradesHubLoadOverlay();
     const f = document.getElementById('grade-frame');
-    if (o) o.classList.add('hidden');
-    if (f) f.classList.remove('loading');
+    if (f) {
+      f.classList.remove('loading');
+      f.style.removeProperty('opacity');
+    }
   } catch (_e) {}
+}
+/** One-shot after slate iframe document looks ready (onload + poll fallback for Android WebView). */
+function completeSlateFrameLoad(frame) {
+  if (!frame || frame.dataset.slateHubLoadDone === '1') return;
+  frame.dataset.slateHubLoadDone = '1';
+  clearGradesSlateLoadWatch();
+  try {
+    embedGradesToolbarInSlate(frame);
+  } catch (_e) {}
+  try {
+    window.setupGradesBarsScrollHide();
+  } catch (_e2) {}
+  try {
+    collapseSportsInSlateFrame(frame);
+  } catch (_e3) {}
+  finishGradesSlateLoadUI();
 }
 
 // ─── LOAD a date's report ─────────────────────────────────────────────────────
@@ -2425,10 +2770,17 @@ function loadDate(dateStr){
   const emptyState = document.getElementById('empty-state');
 
   clearGradesSlateLoadWatch();
+  try {
+    delete frame.dataset.slateHubLoadDone;
+  } catch (_sd) {}
 
   // Show loading
   overlay.classList.remove('hidden');
-  emptyState.style.display = 'none';
+  overlay.removeAttribute('aria-hidden');
+  overlay.style.removeProperty('display');
+  overlay.style.removeProperty('visibility');
+  overlay.style.removeProperty('pointer-events');
+  emptyState.hidden = true;
   frame.classList.add('loading');
   document.getElementById('load-date-text').textContent = dateStr;
 
@@ -2449,10 +2801,7 @@ function loadDate(dateStr){
       if (!hasSlate) {
         throw new Error('empty');
       }
-      try { embedGradesToolbarInSlate(frame); } catch(_e) {}
-      try { window.setupGradesBarsScrollHide(); } catch(_e) {}
-      try { collapseSportsInSlateFrame(frame); } catch(_e) {}
-      finishGradesSlateLoadUI();
+      completeSlateFrameLoad(frame);
     } catch(e) {
       // cross-origin or empty — just show it anyway if we can
       finishGradesSlateLoadUI();
@@ -2460,7 +2809,7 @@ function loadDate(dateStr){
   };
   frame.onerror = function(){
     finishGradesSlateLoadUI();
-    emptyState.style.display = 'flex';
+    emptyState.hidden = false;
     document.getElementById('empty-date').textContent = dateStr;
   };
 
@@ -2470,7 +2819,7 @@ function loadDate(dateStr){
       slateReportMissing = true;
       frame.src = 'about:blank';
       finishGradesSlateLoadUI();
-      emptyState.style.display = 'flex';
+      emptyState.hidden = false;
       document.getElementById('empty-date').textContent = dateStr;
     } else {
       slateReportMissing = false;
@@ -2488,12 +2837,37 @@ function loadDate(dateStr){
         sameDoc = false;
       }
       if (sameDoc) {
-        try { embedGradesToolbarInSlate(frame); } catch (_e1) {}
-        try { window.setupGradesBarsScrollHide(); } catch (_e2) {}
-        try { collapseSportsInSlateFrame(frame); } catch (_e3) {}
-        finishGradesSlateLoadUI();
+        completeSlateFrameLoad(frame);
       } else {
-        __gradesSlateLoadWatch = setTimeout(finishGradesSlateLoadUI, 12000);
+        __gradesSlateLoadTimeout = setTimeout(finishGradesSlateLoadUI, 8000);
+        let pollN = 0;
+        __gradesSlatePoll = setInterval(function () {
+          pollN++;
+          var ok = false;
+          try {
+            var d = frame.contentDocument;
+            ok =
+              !!d &&
+              !!d.body &&
+              (!!d.querySelector('.main,header,.sport-section') ||
+                (d.body.innerHTML && d.body.innerHTML.trim().length >= 40));
+          } catch (_pe) {}
+          if (ok || pollN >= 160) {
+            if (__gradesSlatePoll != null) {
+              clearInterval(__gradesSlatePoll);
+              __gradesSlatePoll = null;
+            }
+            if (__gradesSlateLoadTimeout != null) {
+              clearTimeout(__gradesSlateLoadTimeout);
+              __gradesSlateLoadTimeout = null;
+            }
+            if (ok) {
+              completeSlateFrameLoad(frame);
+            } else {
+              finishGradesSlateLoadUI();
+            }
+          }
+        }, 50);
         frame.src = url;
       }
     }
@@ -2536,13 +2910,45 @@ window.jumpToDate = jumpToDate;
 window.switchTab = switchTab;
 window.loadDate = loadDate;
 
+document.addEventListener('visibilitychange', function () {
+  if (document.visibilityState !== 'visible') return;
+  try {
+    const o = document.getElementById('load-overlay');
+    const f = document.getElementById('grade-frame');
+    if (!o || !f || o.classList.contains('hidden') || activeTab !== 'slate') return;
+    const d = f.contentDocument;
+    if (
+      d &&
+      d.body &&
+      (d.querySelector('.main,header,.sport-section') ||
+        (d.body.innerHTML && d.body.innerHTML.trim().length >= 40))
+    ) {
+      finishGradesSlateLoadUI();
+    }
+  } catch (_e) {}
+});
+window.addEventListener('pageshow', function (ev) {
+  if (!ev.persisted) return;
+  try {
+    finishGradesSlateLoadUI();
+  } catch (_e) {}
+});
+
 (async function init(){
   // Set date input default to yesterday
   const yest = yesterdayStr();
   const dj0 = gradesEl('date-jump');
   if (dj0) dj0.value = yest;
 
-  // Show spinner while discovering
+  // Brief “scanning” overlay — starts hidden in HTML so first paint is not a full-screen slab on WebView
+  const scanOv = document.getElementById('load-overlay');
+  if (scanOv) {
+    scanOv.classList.remove('hidden');
+    scanOv.removeAttribute('aria-hidden');
+    scanOv.style.removeProperty('display');
+    scanOv.style.removeProperty('visibility');
+    scanOv.style.removeProperty('pointer-events');
+  }
   document.getElementById('load-date-text').textContent = 'scanning...';
 
   const found = await discoverDates();

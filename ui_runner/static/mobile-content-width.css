@@ -1,7 +1,7 @@
 /**
  * Mobile: full-width shell, safe-area gutters, touch scrolling, form zoom fix.
- * Load after page styles and nav-mobile-shared.css.
- * v=20260423gradeslayout
+ * Load after page styles, proporacle-mobile-schema.css, and nav-mobile-shared.css.
+ * v=20260430mobileapp
  */
 @media (max-width: 900px), (pointer: coarse) {
   /*
@@ -21,6 +21,7 @@
   .mesh-bg,
   .orb-1,
   .orb-2,
+  .orb-3,
   .noise,
   .noise-bg,
   .grain {
@@ -30,6 +31,24 @@
     pointer-events: none !important;
     animation: none !important;
     transition: none !important;
+    filter: none !important;
+    mix-blend-mode: normal !important;
+  }
+
+  body.page-grades .load-overlay,
+  body.page-grades .empty-state {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  body.page-grades #load-overlay.hidden,
+  body.page-grades .load-overlay.hidden {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+    z-index: -999 !important;
+    background: transparent !important;
   }
 }
 
@@ -183,6 +202,7 @@
   }
 
   body.page-grades {
+    box-sizing: border-box !important;
     height: 100dvh !important;
     min-height: 100dvh !important;
     overflow: hidden !important;
@@ -197,6 +217,9 @@
   body.page-grades .grades-body {
     flex: 1 1 0% !important;
     min-height: 0 !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
     display: flex !important;
     flex-direction: column !important;
   }
@@ -204,6 +227,9 @@
   body.page-grades .iframe-shell {
     flex: 1 1 0% !important;
     min-height: 0 !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) !important;
     grid-template-rows: auto minmax(0, 1fr) !important;
@@ -222,8 +248,18 @@
     grid-row: 2;
     min-height: 0 !important;
     min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
     overflow: hidden !important;
     position: relative !important;
+    align-self: stretch !important;
+  }
+
+  body.page-grades #grade-frame,
+  body.page-grades #ticket-frame {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   /* Toolbar lives inside slate iframe — hub slot is display:none; keep one grid row so stage fills height */
@@ -263,6 +299,11 @@
   .tabs-bar {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
+  }
+
+  /* Grades hub: tabs are equal-width flex cells — no sideways strip */
+  body.page-grades .iframe-shell-toolbar .tabs-bar {
+    overflow-x: visible !important;
   }
 
   body.page-tickets {
@@ -844,6 +885,23 @@ nav.snav .mobile-menu a {
     min-width: 34px;
     padding: 6px 8px;
   }
+  body.page-grades .iframe-shell-toolbar .tabs-bar {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+    overflow-x: visible !important;
+  }
+
+  body.page-grades .iframe-shell-toolbar .tabs-bar .tab-btn {
+    min-width: 0 !important;
+    width: 100% !important;
+    text-align: center !important;
+    font-size: clamp(10px, 2.8vw, 12px) !important;
+    padding: 8px 4px !important;
+    white-space: normal !important;
+    line-height: 1.2 !important;
+    justify-content: center !important;
+  }
   .grades-pills a {
     min-height: 44px;
     display: inline-flex;
@@ -1075,11 +1133,11 @@ nav.snav .mobile-menu a {
     z-index: 260 !important;
     list-style: none !important;
     box-sizing: border-box !important;
-    background: rgba(12, 12, 20, 0.94) !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+    background: var(--po-mobile-bottom-bar-bg, rgba(12, 12, 20, 0.94)) !important;
+    border-top: 1px solid var(--po-mobile-bottom-bar-border, rgba(255, 255, 255, 0.12)) !important;
     backdrop-filter: blur(14px) saturate(160%) !important;
     -webkit-backdrop-filter: blur(14px) saturate(160%) !important;
-    box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.45) !important;
+    box-shadow: var(--po-mobile-bottom-bar-shadow, 0 -8px 28px rgba(0, 0, 0, 0.45)) !important;
   }
 
   nav.snav ul#nav-links li,
@@ -1147,7 +1205,7 @@ nav.snav .mobile-menu a {
   }
 
   body {
-    padding-bottom: calc(74px + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: var(--po-mobile-body-pad-extra, calc(74px + env(safe-area-inset-bottom, 0px))) !important;
   }
 
   .shell,
@@ -1158,19 +1216,23 @@ nav.snav .mobile-menu a {
   .wrap.ticket-eval-main,
   .income-wrap,
   .page-ev {
-    padding-bottom: calc(82px + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: var(--po-mobile-nav-clearance, calc(82px + env(safe-area-inset-bottom, 0px))) !important;
+  }
+
+  /* Override the generic 82px bottom-nav clearance for the grades flex layout — the snav is
+     sticky inside the flex column so padding-bottom fights flex sizing. body.page-grades prefix
+     beats .grades-body / .grades-page in this same block (higher specificity). */
+  body.page-grades .grades-body,
+  body.page-grades .grades-page {
+    padding-bottom: 0 !important;
   }
 }
 
-/* Grades: landscape phones lose vertical space — trim body/bottom padding so iframe stage stays usable */
+/* Grades: landscape — same override (no stacked nav gutter inside flex column) */
 @media (max-width: 768px) and (orientation: landscape) {
-  body.page-grades {
-    padding-bottom: calc(54px + env(safe-area-inset-bottom, 0px)) !important;
-  }
-
-  body.page-grades .grades-page,
-  body.page-grades .grades-body {
-    padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px)) !important;
+  body.page-grades .grades-body,
+  body.page-grades .grades-page {
+    padding-bottom: 0 !important;
   }
 }
 

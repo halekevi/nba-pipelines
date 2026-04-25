@@ -1,5 +1,5 @@
 Category,Script,Command,Description
-Setup,N/A,"cd ""C:\Users\halek\OneDrive\Desktop\PropORACLE""","Open PowerShell in project root"
+Setup,N/A,"cd ""H:\halek\ProfileFromC\Desktop\PropORACLE""","Open PowerShell in project root"
 Main Pipeline,run_pipeline.ps1,".\run_pipeline.ps1","Full parallel run (NBA+CBB+NHL+Soccer+Combined)"
 Main Pipeline,run_pipeline.ps1,".\run_pipeline.ps1 -Date 2026-03-20","Run full pipeline for a specific date"
 Main Pipeline,run_pipeline.ps1,".\run_pipeline.ps1 -NBAOnly","Run NBA only, then Combined"

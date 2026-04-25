@@ -1,5 +1,6 @@
 /* Extracted from payout_calculator.html inline <style> — keep in sync when editing that page shell. */
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('proporacle-mobile-schema.css');
 @import url('global-scrollbar.css');
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -92,7 +93,16 @@ body::after{
 a.snav-brand .brand-wordmark .wb-first,
 a.snav-brand .brand-wordmark .oracle-word{text-transform:none !important;font-variant:normal !important;}
 nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !important;font-variant:normal !important;}
-.hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:8px;border:1px solid rgba(255,255,255,0.09);border-radius:8px;background:rgba(255,255,255,0.04);backdrop-filter:blur(10px) saturate(180%);}
+.hamburger{display:none!important;flex-direction:column;gap:4px;cursor:pointer;padding:8px;border:1px solid rgba(255,255,255,0.09);border-radius:8px;background:rgba(255,255,255,0.04);backdrop-filter:blur(10px) saturate(180%);}
+/* Hard-disable legacy hamburger button; mobile uses direct links/bottom-tab nav. */
+#hamburger,
+button#hamburger,
+#hamburger.hamburger{
+  display:none !important;
+  position:static !important;
+  inset:auto !important;
+  pointer-events:none !important;
+}
 .hamburger span{display:block;width:18px;height:2px;background:var(--muted);border-radius:2px;transition:all .25s;}
 .hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
 .hamburger.open span:nth-child(2){opacity:0;}
