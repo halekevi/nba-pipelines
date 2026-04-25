@@ -1313,12 +1313,13 @@ def _fill_missing_tier_deltas(
     prompt = (
         "You are fixing missing PrizePicks tier deltas from a screenshot.\n"
         "Return ONLY valid JSON with this exact schema:\n"
-        "{\"legs\":[{\"delta\":number|null}]}\n"
+        "{\"legs\":[{\"delta\":number|null,\"played_line\":number|null,\"standard_line\":number|null}]}\n"
         "One output leg per input leg, same order, no extra keys.\n"
         "Rules:\n"
         "- Standard legs must return null.\n"
         "- Goblin or Demon legs should return a positive numeric delta whenever readable.\n"
         "- Use visible line adjustment cues on the slip (line pairs, easier/harder text, badge values).\n"
+        "- If you can read both lines, populate played_line and standard_line even if delta is null.\n"
         "- If truly unreadable for that leg, return null.\n"
         f"Input legs: {json.dumps(legs_min, ensure_ascii=True)}"
     )
@@ -1345,9 +1346,12 @@ def _fill_missing_tier_deltas(
             if cur is not None and curf > 0:
                 continue
             val = row.get("delta")
-            if val is None:
-                continue
             new_delta = abs(_safe_float(val, 0.0))
+            if new_delta <= 0:
+                played_line = _safe_num_or_none(row.get("played_line"))
+                standard_line = _safe_num_or_none(row.get("standard_line"))
+                if played_line is not None and standard_line is not None:
+                    new_delta = abs(standard_line - played_line)
             if new_delta > 0:
                 leg["delta"] = round(new_delta, 3)
     except Exception:
