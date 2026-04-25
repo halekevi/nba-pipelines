@@ -1218,7 +1218,17 @@ def _gemini_extract_ticket_from_image(image_bytes: bytes, mime_type: str) -> dic
         "\"entry_amount\": number|null,"
         "\"notes\": str"
         "}\n"
-        "If a field is unknown, use null (or \"Unknown\" for pick_type/direction)."
+        "General: If a scalar field is truly unreadable, use null (use \"Unknown\" only for pick_type/direction when needed).\n"
+        "CRITICAL — legs[].delta (PrizePicks tier lines):\n"
+        "- Standard legs: set \"delta\" to null (Standard does not use delta).\n"
+        "- Goblin or Demon legs: set \"delta\" to a positive NUMBER (half-points allowed, e.g. 0.5, 1, 1.5, 2) = "
+        "the absolute line movement in POINTS vs the Standard line for that same player+prop.\n"
+        "  If the slip shows BOTH a standard/reference line and the played Goblin/Demon line, compute "
+        "delta = round(abs(standard_line - played_line), 2) using the numbers on screen (same units as Points/Rebounds/etc.).\n"
+        "  If only one line is visible but the UI states an adjustment (badge text, 'pts easier/harder', strikethrough pair, etc.), "
+        "use that magnitude as delta.\n"
+        "  Every Goblin/Demon leg must have its own delta — e.g. two Goblin legs ⇒ two separate numeric \"delta\" values, "
+        "not null, whenever the screenshot supports it. Only use null for a Goblin/Demon leg if no adjustment magnitude can be determined at all.\n"
     )
     genai.configure(api_key=api_key)
     # gemini-1.5-flash was removed from the v1beta API (404). Use current stable Flash; override via GEMINI_VISION_MODEL if needed.
