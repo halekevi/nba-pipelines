@@ -292,15 +292,19 @@ body::after{content:'';position:fixed;inset:0;
 .edge-card:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(0,0,0,0.45);}
 .edge-card:hover.over{border-color:var(--accent-gold);}
 .edge-card:hover.under{border-color:rgba(255,192,107,.22);}
-.edge-card-top{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;}
-.edge-avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:13px;flex-shrink:0;margin-top:1px;}
+.edge-card-top{display:flex;flex-direction:column;gap:8px;padding:10px 12px;}
+.edge-row{display:flex;align-items:center;gap:8px;min-width:0;max-width:100%;}
+.edge-row-top{justify-content:space-between;}
+.edge-row-main{justify-content:space-between;align-items:baseline;gap:10px;}
+.edge-row-tags{justify-content:space-between;align-items:center;gap:8px;flex-wrap:nowrap;}
+.edge-avatar{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:12px;flex-shrink:0;}
 .edge-avatar.over{background:rgba(125,255,203,.1);border:1px solid rgba(125,255,203,.25);color:var(--green);}
 .edge-avatar.under{background:rgba(255,192,107,.1);border:1px solid rgba(255,192,107,.25);color:var(--amber);}
-.edge-info{flex:1;min-width:0;}
-.edge-name{font-size:clamp(12px,1.2vw,14px);font-weight:600;color:var(--text);line-height:1.2;white-space:normal;word-break:normal;overflow-wrap:break-word;letter-spacing:-0.2px;}
-.edge-prop{font-size:clamp(10px,1vw,11px);color:var(--muted);margin-top:2px;letter-spacing:0;font-family:"Inter",sans-serif;line-height:1.3;white-space:normal;word-break:normal;overflow-wrap:break-word;}
-.edge-tags{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;}
-.edge-sport{font-size:9px;font-family:"Inter",sans-serif;font-weight:600;padding:3px 8px;border-radius:10px;letter-spacing:.5px;display:inline-block;}
+.edge-info{min-width:0;}
+.edge-name{flex:1 1 auto;font-size:clamp(12px,1.2vw,14px);font-weight:600;color:var(--text);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-0.2px;min-width:0;}
+.edge-prop{flex:0 1 auto;max-width:58%;font-size:clamp(10px,1vw,11px);color:var(--muted);letter-spacing:0;font-family:"Inter",sans-serif;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right;min-width:0;}
+.edge-tags{display:flex;gap:4px;flex-wrap:nowrap;min-width:0;overflow:hidden;}
+.edge-sport{font-size:9px;font-family:"Inter",sans-serif;font-weight:600;padding:3px 8px;border-radius:10px;letter-spacing:.5px;display:inline-block;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
 .sp-nba{background:rgba(255,192,107,.12);color:var(--amber);border:1px solid rgba(255,192,107,.25);}
 .sp-nba1h{background:rgba(255,155,86,.12);color:#ffb27d;border:1px solid rgba(255,155,86,.28);}
 .sp-nba1q{background:rgba(255,214,102,.14);color:#ffd87a;border:1px solid rgba(255,214,102,.3);}
@@ -310,15 +314,16 @@ body::after{content:'';position:fixed;inset:0;
 .sp-mlb{background:rgba(255,121,121,.12);color:#ff8c8c;border:1px solid rgba(255,121,121,.26);}
 .sp-nfl{background:rgba(0,122,92,.14);color:#5ee0c0;border:1px solid rgba(0,200,150,.28);}
 .sp-tennis{background:rgba(173,216,255,.14);color:#b8e0ff;border:1px solid rgba(173,216,255,.32);}
-.edge-pick{font-size:9px;font-family:"Inter",sans-serif;font-weight:600;padding:3px 8px;border-radius:10px;letter-spacing:.5px;display:inline-block;}
+.edge-pick{font-size:9px;font-family:"Inter",sans-serif;font-weight:600;padding:3px 8px;border-radius:10px;letter-spacing:.5px;display:inline-block;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
 .pick-goblin{background:rgba(183,168,255,.12);color:var(--purple);border:1px solid rgba(183,168,255,.25);}
 .pick-standard{background:rgba(127,199,217,.12);color:var(--cyan);border:1px solid rgba(127,199,217,.25);}
-.edge-val{text-align:right;flex-shrink:0;max-width:76px;overflow:visible;}
+.edge-val{text-align:right;flex-shrink:0;max-width:none;overflow:hidden;display:flex;align-items:baseline;gap:8px;min-width:0;}
 .edge-num{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.5px;white-space:nowrap;}
 .edge-num.over{color:var(--green);}
 .edge-num.under{color:var(--amber);}
-.edge-hr{font-size:10px;color:var(--muted);margin-top:2px;font-weight:500;white-space:nowrap;}
-.edge-line-badge{font-size:10px;color:var(--muted);font-family:"Inter",sans-serif;font-weight:500;white-space:nowrap;}
+.edge-hr{font-size:10px;color:var(--muted);margin-top:2px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.edge-line-badge{font-size:10px;color:var(--muted);font-family:"Inter",sans-serif;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.edge-mini{font-size:10px;color:var(--muted);font-family:"Inter",sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
 /* expand panel */
 .edge-expand{display:none;border-top:1px solid rgba(255,255,255,.06);padding:16px 18px;background:rgba(8,8,22,.6);}
@@ -367,6 +372,8 @@ body::after{content:'';position:fixed;inset:0;
 @media(max-width:768px){
   .status-row{grid-template-columns:repeat(2,1fr)!important;}
   #slate-panel-header-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .streak-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .streak-card{min-width:0;}
   .snav-name{display:none;}
   .edge-grid{grid-template-columns:1fr!important;}
   /* Hamburger + bottom tabs: mobile-content-width.css (nav.snav …) */
@@ -378,6 +385,8 @@ body::after{content:'';position:fixed;inset:0;
 }
 @media(max-width:480px){
   #slate-panel-header-row{grid-template-columns:minmax(0,1fr)!important;}
+  .streak-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  .edge-grid{grid-template-columns:1fr!important;}
 }
 
 /* Reduce GPU-heavy blur on small screens */
@@ -421,6 +430,24 @@ body{
   .shell{padding:18px 12px 22px;}
   .status-row{grid-template-columns:repeat(2,1fr)!important;gap:10px;}
   .edge-grid{grid-template-columns:1fr!important;}
+  .edge-card{overflow:hidden;border-radius:16px;}
+  .edge-card-top{gap:4px;padding:8px 9px;}
+  .edge-row{gap:5px;}
+  .edge-row-main{gap:6px;}
+  .edge-row-tags{gap:6px;}
+  .edge-name{font-size:12px;}
+  .edge-prop{max-width:56%;font-size:10px;}
+  .edge-num{font-size:18px;line-height:1;}
+  .edge-mini{font-size:9px;max-width:88px;}
+  .edge-tags{gap:4px;max-width:100%;}
+  .edge-line-badge{font-size:10px;max-width:88px;text-align:right;}
+  .edge-name,.edge-prop,.edge-tags,.edge-sport,.edge-pick{
+    writing-mode:horizontal-tb!important;
+    text-orientation:mixed!important;
+    word-break:normal!important;
+    overflow-wrap:normal!important;
+    white-space:nowrap!important;
+  }
   .slate-toolbar{padding:10px 10px 8px;gap:8px;}
   .slate-filter-input{width:100%;max-width:none;}
 }
@@ -428,8 +455,21 @@ body{
   .hero-title{font-size:44px;letter-spacing:1px;}
   .hero{padding:18px 12px 16px;}
   .status-row{grid-template-columns:1fr!important;}
+  .edge-name{font-size:11px;}
+  .edge-prop{font-size:9px;max-width:56%;}
+  .edge-tags{gap:3px;max-width:100%;}
+  .edge-sport,.edge-pick{font-size:7px;padding:2px 5px;max-width:108px;}
+  .edge-avatar{width:30px;height:30px;font-size:10px;}
+  .edge-mini{font-size:8px;max-width:88px;}
+  .edge-line-badge{font-size:9px;max-width:88px;}
   .slate-table-wrap{padding:0 10px 12px;}
   .home-cat>summary{font-size:clamp(18px,5vw,22px);padding:14px 16px;min-height:48px;box-sizing:border-box;}
+}
+@media(max-width:520px){
+  .edge-card-top{padding:8px 9px;}
+  .edge-prop{max-width:58%;}
+  .edge-sport,.edge-pick{max-width:120px;}
+  .edge-line-badge,.edge-mini{max-width:90px;}
 }
 @media(max-width:900px) and (orientation:portrait){
   .shell{padding:16px 10px 18px;}
@@ -1122,37 +1162,183 @@ body::before{
   .edge-pos{color:var(--green);}
   .edge-neg{color:var(--amber);}
 @media(max-width:768px){ #slate-panel-header-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;}}
-@media(max-width:640px){ #slate-panel-header-row{grid-template-columns:minmax(0,1fr)!important;}}
-@media(max-width:480px){ #slate-panel-header-row{grid-template-columns:minmax(0,1fr)!important;}}
+@media(max-width:640px){ #slate-panel-header-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;}}
+@media(max-width:480px){ #slate-panel-header-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;}}
   @media(max-width:900px){
     .slate-table-wrap{
       max-height:68vh;
       overscroll-behavior:contain;
       padding:0 10px 12px;
+      overflow-x:hidden;
     }
     .slate-table{
-      min-width:1000px;
-      font-size:12px;
+      min-width:0;
+      width:100%;
+      font-size:10px;
+    }
+    /* Mobile fit-to-width mode: keep all columns inside viewport. */
+    .slate-table:not(#st-combined){
+      table-layout:fixed;
     }
     .slate-table th{
-      font-size:10px;
-      letter-spacing:1px;
-      padding:8px 8px;
+      font-size:9px;
+      letter-spacing:.4px;
+      padding:7px 4px;
     }
-    .slate-table td{padding:7px 8px;}
-    .slate-toolbar{row-gap:6px;}
+    .slate-table td{
+      padding:7px 4px;
+      line-height:1.2;
+    }
+    .slate-table:not(#st-combined) th,
+    .slate-table:not(#st-combined) td{
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .slate-table:not(#st-combined) th:nth-child(1),
+    .slate-table:not(#st-combined) td:nth-child(1){width:5%;max-width:5%;}
+    .slate-table:not(#st-combined) th:nth-child(2),
+    .slate-table:not(#st-combined) td:nth-child(2){width:7%;max-width:7%;}
+    .slate-table:not(#st-combined) th:nth-child(3),
+    .slate-table:not(#st-combined) td:nth-child(3){width:15%;max-width:15%;}
+    .slate-table:not(#st-combined) th:nth-child(4),
+    .slate-table:not(#st-combined) td:nth-child(4){width:6%;max-width:6%;}
+    .slate-table:not(#st-combined) th:nth-child(5),
+    .slate-table:not(#st-combined) td:nth-child(5){width:6%;max-width:6%;}
+    .slate-table:not(#st-combined) th:nth-child(6),
+    .slate-table:not(#st-combined) td:nth-child(6){width:13%;max-width:13%;}
+    .slate-table:not(#st-combined) th:nth-child(7),
+    .slate-table:not(#st-combined) td:nth-child(7){width:7%;max-width:7%;}
+    .slate-table:not(#st-combined) th:nth-child(8),
+    .slate-table:not(#st-combined) td:nth-child(8){width:5%;max-width:5%;}
+    .slate-table:not(#st-combined) th:nth-child(9),
+    .slate-table:not(#st-combined) td:nth-child(9){width:6%;max-width:6%;}
+    .slate-table:not(#st-combined) th:nth-child(10),
+    .slate-table:not(#st-combined) td:nth-child(10){width:6%;max-width:6%;}
+    .slate-table:not(#st-combined) th:nth-child(11),
+    .slate-table:not(#st-combined) td:nth-child(11){width:5%;max-width:5%;}
+    .slate-table:not(#st-combined) th:nth-child(12),
+    .slate-table:not(#st-combined) td:nth-child(12){width:4%;max-width:4%;}
+    .slate-table:not(#st-combined) th:nth-child(13),
+    .slate-table:not(#st-combined) td:nth-child(13){width:4%;max-width:4%;}
+    .slate-table:not(#st-combined) th:nth-child(14),
+    .slate-table:not(#st-combined) td:nth-child(14){width:11%;max-width:11%;min-width:0;}
+    /* Override to readable auto-fit mode (undo cramped fit-to-width). */
+    .slate-table-wrap{overflow-x:auto!important;}
+    .slate-table{
+      min-width:980px!important;
+      width:max-content!important;
+      font-size:12px!important;
+    }
+    .slate-table:not(#st-combined){table-layout:auto!important;}
+    .slate-table th{
+      font-size:10px!important;
+      letter-spacing:1px!important;
+      padding:8px 8px!important;
+    }
+    .slate-table td{
+      padding:7px 8px!important;
+      line-height:1.35!important;
+    }
+    .slate-table:not(#st-combined) th,
+    .slate-table:not(#st-combined) td{
+      width:auto!important;
+      max-width:none!important;
+      white-space:nowrap!important;
+      overflow:visible!important;
+      text-overflow:clip!important;
+    }
+    /* Mobile toolbar: search on first row, O/U/Goblin/Standard on one row below it. */
+    .slate-toolbar{
+      row-gap:6px;
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      align-items:center;
+      justify-items:stretch;
+      width:auto;
+      max-width:100%;
+      box-sizing:border-box;
+      padding:10px 8px 8px;
+      overflow:hidden;
+    }
+    .slate-filter-input{
+      grid-column:1 / -1;
+      max-width:none;
+    }
+    .slate-filter-btn{
+      min-width:0;
+      width:100%;
+      font-size:10px;
+      letter-spacing:.6px;
+      padding:7px 6px;
+      text-align:center;
+      box-sizing:border-box;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .slate-tier-group{
+      grid-column:1 / -1;
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      width:100%;
+      gap:6px;
+      justify-items:stretch;
+      min-width:0;
+      overflow:hidden;
+    }
+    .slate-tier-group .slate-tier-btn{
+      min-width:0;
+      width:100%;
+      padding:7px 6px;
+      box-sizing:border-box;
+    }
     .slate-row-count{margin-left:0;width:100%;}
   }
   @media(max-width:900px) and (orientation:landscape){
     .slate-panel-header-row{grid-template-columns:repeat(3,1fr)!important;}
     .slate-table-wrap{max-height:62vh;}
-    .slate-table{min-width:1000px;}
+    .slate-table{min-width:0;}
     .slate-filter-input{max-width:280px;}
   }
   @media(max-width:900px) and (orientation:portrait){
-    .slate-panel-header-row{grid-template-columns:1fr!important;gap:10px;padding:0 0 10px 0;}
+    .slate-panel-header-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px;padding:0 0 8px 0;}
+    .slate-panel-header-row .scard{padding:9px 10px;gap:7px;border-radius:12px;position:relative;}
+    .slate-panel-header-row .scard-head{gap:6px;}
+    .slate-panel-header-row .scard-head .scard-icon{width:30px;height:30px;min-height:30px;border-radius:8px;}
+    .slate-panel-header-row .scard-head .db-icon{width:16px;height:16px;}
+    .slate-panel-header-row .scard-head .scard-title{font-size:8px;letter-spacing:1.8px;}
+    /* Move freshness badge near date row so sport labels have room. */
+    .slate-panel-header-row .sbadge{
+      font-size:7px;
+      padding:2px 6px;
+      position:absolute;
+      right:10px;
+      bottom:10px;
+      margin:0;
+      line-height:1.1;
+    }
+    .slate-panel-header-row .scard-toggle{font-size:12px;}
+    .slate-panel-header-row .scard-val{
+      font-size:clamp(14px,3.2vw,17px);
+      line-height:1.15;
+      padding-right:56px;
+      font-family:'Inter',sans-serif;
+      font-weight:500;
+      letter-spacing:0;
+    }
+    /* Date cards: keep date on one line and visually match title typography. */
+    .slate-panel-header-row .scard.fresh .scard-val,
+    .slate-panel-header-row .scard.stale .scard-val{
+      font-size:8px;
+      letter-spacing:0;
+      line-height:1;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
     .slate-table-wrap{max-height:72vh;}
-    .slate-table{min-width:1040px;}
+    .slate-table{min-width:0;}
   }
   </style>
 
@@ -1946,6 +2132,52 @@ function formatSlateModifiedDisplay(raw) {
   return s;
 }
 
+/** Normalize mixed game-time strings to "MM/DD h:mm AM/PM" for mobile tables. */
+function formatGameTimeDisplay(raw) {
+  if (raw == null) return '—';
+  const s = String(raw).trim();
+  if (!s) return '—';
+
+  // Already like "04/25 8:30 PM" -> normalize spacing/casing.
+  const mdAmpm = s.match(/^(\d{1,2})\/(\d{1,2})(?:\/\d{2,4})?\s+(\d{1,2}):(\d{2})\s*([AP]M)$/i);
+  if (mdAmpm) {
+    const mm = mdAmpm[1].padStart(2, '0');
+    const dd = mdAmpm[2].padStart(2, '0');
+    const hh = String(parseInt(mdAmpm[3], 10));
+    const mi = mdAmpm[4];
+    const ap = mdAmpm[5].toUpperCase();
+    return `${mm}/${dd} ${hh}:${mi} ${ap}`;
+  }
+
+  // ISO-like: 2026-04-25 18:05:00-04:00 or 2026-04-25T18:05:00Z
+  const isoLike = s.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{1,2}):(\d{2})(?::\d{2})?(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})?$/);
+  if (isoLike) {
+    const mm = isoLike[2];
+    const dd = isoLike[3];
+    let h = parseInt(isoLike[4], 10);
+    const mi = isoLike[5];
+    const ap = h >= 12 ? 'PM' : 'AM';
+    h = h % 12;
+    if (h === 0) h = 12;
+    return `${mm}/${dd} ${h}:${mi} ${ap}`;
+  }
+
+  // Fallback: try Date parsing, then format.
+  const d = new Date(s);
+  if (!Number.isNaN(d.getTime())) {
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    let h = d.getHours();
+    const mi = String(d.getMinutes()).padStart(2, '0');
+    const ap = h >= 12 ? 'PM' : 'AM';
+    h = h % 12;
+    if (h === 0) h = 12;
+    return `${mm}/${dd} ${h}:${mi} ${ap}`;
+  }
+
+  return s;
+}
+
 /** Pipeline / API timestamps are UTC wall clock (YYYY-MM-DD HH:MM:SS). Fresh = same US Eastern calendar day as "now". */
 const PROPORACLE_SLATE_FRESHNESS_TZ = "America/New_York";
 function ymdInEastern(d) {
@@ -2145,19 +2377,23 @@ function buildEdgeCard(p, idx) {
   const hitColor=p.hit>=90?'var(--green)':p.hit>=75?'var(--amber)':'var(--red)';
   div.innerHTML=`
     <div class="edge-card-top">
-      <div class="edge-avatar ${dc}">${p.initials}</div>
-      <div class="edge-info">
+      <div class="edge-row edge-row-top">
+        <div class="edge-avatar ${dc}">${p.initials}</div>
+        <div class="edge-val">
+          <div class="edge-num edge-badge ${dc}">${es}${p.edge.toFixed(2)}</div>
+          <div class="edge-mini">${p.hit}% · L${p.line}</div>
+        </div>
+      </div>
+      <div class="edge-row edge-row-main">
         <div class="edge-name">${p.player}</div>
         <div class="edge-prop">${p.dir} ${p.line} · ${p.prop}</div>
+      </div>
+      <div class="edge-row edge-row-tags">
         <div class="edge-tags">
           <span class="edge-sport ${sc}">${sportLabel}</span>
           <span class="edge-pick ${pc}">${p.pick}</span>
         </div>
-      </div>
-      <div class="edge-val">
-        <div class="edge-num edge-badge ${dc}">${es}${p.edge.toFixed(2)}</div>
-        <div class="edge-hr">${p.hit}% hit</div>
-        <div class="edge-line-badge">Line ${p.line}</div>
+        <div class="edge-line-badge">${p.hit}% hit</div>
       </div>
     </div>
     <div style="padding:0 12px 10px;display:flex;align-items:center;gap:8px;">
@@ -2264,7 +2500,8 @@ function renderEdges() {
   };
   const stdO = [], gobO = [];
   for (const p of ALL_SLATE) {
-    if (String(p.dir || "").trim().toUpperCase() === "OVER") {
+    const dir = String(p.dir || "").trim().toUpperCase();
+    if (dir === "OVER") {
       if (isGoblinPick(p)) gobO.push(p);
       else stdO.push(p);
     }
@@ -2274,15 +2511,16 @@ function renderEdges() {
   gobO.sort(byEdgeDesc);
 
   const underRows = collectUnderEdgeRows().sort((a, b) => num(b.disp.edge) - num(a.disp.edge));
+  const EDGE_CARD_LIMIT = 10;
 
   const appendAll = (arr, el) => {
-    for (const p of arr) {
+    for (const p of arr.slice(0, EDGE_CARD_LIMIT)) {
       const idx = ALL_SLATE.indexOf(p);
       el.appendChild(buildEdgeCard(p, idx));
     }
   };
   const appendUnderRows = (rows, el) => {
-    for (const { baseIdx, disp } of rows) {
+    for (const { baseIdx, disp } of rows.slice(0, EDGE_CARD_LIMIT)) {
       if (disp !== ALL_SLATE[baseIdx]) EDGE_DISPLAY_PICK[baseIdx] = disp;
       el.appendChild(buildEdgeCard(disp, baseIdx));
     }
@@ -2338,10 +2576,12 @@ function streakCard(p, n) {
 }
 
 function renderStreaks() {
+  const STREAK_CARD_LIMIT = 10;
   // Use REAL pipeline hit counts from /api/slate
   function realHits(p, n) {
-    if (n === 5)  return p.dir === "OVER" ? (p.l5_over  ?? null) : (p.l5_under  ?? null);
-    if (n === 10) return p.dir === "OVER" ? (p.l10_over ?? null) : (p.l10_under ?? null);
+    const dir = String(p.dir || "").trim().toUpperCase();
+    if (n === 5)  return dir === "OVER" ? (p.l5_over  ?? null) : (p.l5_under  ?? null);
+    if (n === 10) return dir === "OVER" ? (p.l10_over ?? null) : (p.l10_under ?? null);
     return null;
   }
 
@@ -2361,26 +2601,26 @@ function renderStreaks() {
 
   const l5all = [...ALL_SLATE]
     .map(p => ({...p, h: streakHits(realHits(p, 5), 5)}))
-    .filter(p => p.h !== null)
+    .filter(p => p.h !== null && p.h >= 4)
     .sort((a, b) => b.h - a.h);
 
-  const l5O = l5all.filter(p => p.dir === "OVER");
-  const l5U = underStreakRows(5, null);
+  const l5O = l5all.filter(p => String(p.dir || "").trim().toUpperCase() === "OVER");
+  const l5U = underStreakRows(5, 4);
 
   const l10all = [...ALL_SLATE]
     .map(p => ({...p, h: streakHits(realHits(p, 10), 10)}))
     .filter(p => p.h !== null && p.h >= 8)
     .sort((a, b) => b.h - a.h);
 
-  const l10O = l10all.filter(p => p.dir === "OVER");
+  const l10O = l10all.filter(p => String(p.dir || "").trim().toUpperCase() === "OVER");
   const l10U = underStreakRows(10, 8);
 
   const none = msg => `<div style="padding:14px 0;font-size:11px;color:var(--muted2);letter-spacing:1px;">${msg}</div>`;
 
-  document.getElementById("l5-over-grid").innerHTML   = l5O.length  ? l5O.map(p=>streakCard(p,5)).join("")   : none("No L5 over data on today's slate");
-  document.getElementById("l5-under-grid").innerHTML  = l5U.length  ? l5U.map(p=>streakCard(p,5)).join("")   : none("No L5 under data on today's slate (need l5_under or l5_over on legs)");
-  document.getElementById("l10-over-grid").innerHTML  = l10O.length ? l10O.map(p=>streakCard(p,10)).join("") : none("No L10 over streaks (8+/10) on today's slate");
-  document.getElementById("l10-under-grid").innerHTML = l10U.length ? l10U.map(p=>streakCard(p,10)).join("") : none("No L10 under streaks (8+/10) on this slate — legs here may skew over-heavy, or lack L10 totals");
+  document.getElementById("l5-over-grid").innerHTML   = l5O.length  ? l5O.slice(0, STREAK_CARD_LIMIT).map(p=>streakCard(p,5)).join("")   : none("No L5 over data on today's slate");
+  document.getElementById("l5-under-grid").innerHTML  = l5U.length  ? l5U.slice(0, STREAK_CARD_LIMIT).map(p=>streakCard(p,5)).join("")   : none("No L5 under data on today's slate (need l5_under or l5_over on legs)");
+  document.getElementById("l10-over-grid").innerHTML  = l10O.length ? l10O.slice(0, STREAK_CARD_LIMIT).map(p=>streakCard(p,10)).join("") : none("No L10 over streaks (8+/10) on today's slate");
+  document.getElementById("l10-under-grid").innerHTML = l10U.length ? l10U.slice(0, STREAK_CARD_LIMIT).map(p=>streakCard(p,10)).join("") : none("No L10 under streaks (8+/10) on this slate — legs here may skew over-heavy, or lack L10 totals");
 }
 
 // ── Add streak-card CSS ───────────────────────────────────
@@ -2603,7 +2843,7 @@ function renderSlateTable(sport) {
     const l5o = r.l5_over  != null ? r.l5_over  : '—';
     const l5u = r.l5_under != null ? r.l5_under : '—';
     const rankStr = r.rank_score != null ? r.rank_score.toFixed(2) : '—';
-    const timeStr = (r.game_time || '').replace('03/13 ','') || '—';
+    const timeStr = formatGameTimeDisplay(r.game_time);
     return `<tr>
       <td><span class="tier-badge ${tierCls}">${r.tier || '?'}</span></td>
       <td class="slate-rank-cell">${rankStr}</td>
@@ -2815,7 +3055,7 @@ function renderSlateTableDynamic(sport) {
         return `<td class="slate-pick-type-cell ${pc}">${vStr}</td>`;
       }
       if (rankIdx >= 0 && i === rankIdx) return `<td class="slate-rank-cell">${vStr}</td>`;
-      if (timeIdx >= 0 && i === timeIdx) return `<td class="slate-time-cell">${vStr}</td>`;
+      if (timeIdx >= 0 && i === timeIdx) return `<td class="slate-time-cell">${formatGameTimeDisplay(val)}</td>`;
       if (i === playerIdx) return `<td style="font-weight:600;max-width:140px;overflow:hidden;text-overflow:ellipsis;">${vStr}</td>`;
       return `<td>${vStr}</td>`;
     }).join('');

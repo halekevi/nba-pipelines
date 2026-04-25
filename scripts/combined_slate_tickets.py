@@ -51,6 +51,7 @@ HOTFIX:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import itertools
 import json
 import logging
@@ -1175,14 +1176,14 @@ def dedupe_ticket_groups_by_leg_set(all_ticket_groups: list) -> tuple[list, int,
 
 def _load_diversity_config(path: str = DIVERSITY_CONFIG_PATH) -> dict[str, Any]:
     defaults: dict[str, Any] = {
-        "max_leg_exposure": 2,
-        "max_player_exposure": 3,
+        "max_leg_exposure": 4,
+        "max_player_exposure": 8,
         "void_risk_min_sample": 10,
-        "max_jaccard_overlap": 0.5,
+        "max_jaccard_overlap": 0.8,
         "exposure_penalty_weight": 0.1,
         "overlap_penalty_weight": 0.2,
         "void_penalty_weight": 0.5,
-        "enabled": True,
+        "enabled": False,
     }
     try:
         if not os.path.isfile(path):
@@ -1662,10 +1663,10 @@ MIN_WEB_DISPLAY_EST_WIN_PROB: float = 0.06
 
 # /tickets page target volumes per sport after EV gate.
 WEB_TICKET_TEMPLATE_BY_LEGS: dict[int, int] = {
-    6: 1,
-    5: 1,
-    4: 2,
-    3: 2,
+    6: 3,
+    5: 4,
+    4: 6,
+    3: 8,
 }
 
 # Cap sorted candidate pool size per leg count (top rows by ticket sort) to bound greedy work.
@@ -1697,7 +1698,7 @@ RANK_SCORE_SIGMOID_SCALE = 0.4
 DEFAULT_LEG_PROB_FALLBACK = 0.50
 
 # Limit how many distinct generated slips may include the same player (reduces single-leg cascade risk).
-MAX_SLIPS_PER_PLAYER = 2
+MAX_SLIPS_PER_PLAYER = 4
 
 
 def _ticket_cap_players_from_rows(rows: list) -> set[str]:
@@ -3343,15 +3344,40 @@ def ticket_groups_to_payload(
                     return row.get(field, "") if isinstance(row, dict) else getattr(row, field, "")
 
                 _dpv = gd_leg_delta_pct(gv("line"), gv("standard_line"))
+                sport_s = str(gv("sport") or t.get("sport") or "").strip()
+                player_s = str(gv("player") or "")
+                team_s = str(gv("team") or "")
+                opp_s = str(gv("opp") or "")
+                prop_s = str(gv("prop_type") or "")
+                dir_s = str(gv("direction") or "")
+                game_time_s = str(gv("game_time") or "")
+                best_book_s = str(gv("best_cross_book") or "")
+                line_f = _safe_float(gv("line"))
+                line_key = f"{float(line_f):.3f}" if line_f is not None else ""
+                id_material = "|".join(
+                    [
+                        sport_s.strip().lower(),
+                        player_s.strip().lower(),
+                        team_s.strip().lower(),
+                        opp_s.strip().lower(),
+                        prop_s.strip().lower(),
+                        line_key,
+                        dir_s.strip().lower(),
+                        game_time_s.strip().lower(),
+                        best_book_s.strip().lower(),
+                        str(date_str).strip().lower(),
+                    ]
+                )
+                canonical_leg_id = "leg_" + hashlib.sha1(id_material.encode("utf-8")).hexdigest()[:20]
                 leg = {
-                    "sport": str(gv("sport") or t.get("sport") or "").strip(),
-                    "player": str(gv("player") or ""),
-                    "team": str(gv("team") or ""),
-                    "opp": str(gv("opp") or ""),
-                    "prop_type": str(gv("prop_type") or ""),
+                    "sport": sport_s,
+                    "player": player_s,
+                    "team": team_s,
+                    "opp": opp_s,
+                    "prop_type": prop_s,
                     "pick_type": str(gv("pick_type") or ""),
-                    "direction": str(gv("direction") or ""),
-                    "line": _safe_float(gv("line")),
+                    "direction": dir_s,
+                    "line": line_f,
                     "edge": _safe_float(gv("edge")),
                     "abs_edge": _safe_float(gv("abs_edge")),
                     "standard_line": _safe_float(gv("standard_line")),
@@ -3362,7 +3388,7 @@ def ticket_groups_to_payload(
                     "line_underdog": _safe_float(gv("line_underdog")),
                     "line_draftkings": _safe_float(gv("line_draftkings")),
                     "best_cross_line": _safe_float(gv("best_cross_line")),
-                    "best_cross_book": str(gv("best_cross_book") or ""),
+                    "best_cross_book": best_book_s,
                     "cross_edge_vs_pp": _safe_float(gv("cross_edge_vs_pp")),
                     "cross_n_books": _safe_int_cross_books(gv("cross_n_books")),
                     "hit_rate": _safe_float(gv("hit_rate")),
@@ -3370,7 +3396,13 @@ def ticket_groups_to_payload(
                     "under_hit_rate": _safe_float(gv("under_hit_rate") or gv("hit_rate_under_L5")),
                     "ml_prob": _safe_float(gv("ml_prob")),
                     "rank_score": _safe_float(gv("rank_score")),
-                    "game_time": str(gv("game_time") or ""),
+                    "game_time": game_time_s,
+                    "event_start_time": game_time_s or None,
+                    "posted_at": str(gv("posted_at") or "") or None,
+                    "lock_at": str(gv("lock_at") or gv("game_time") or "") or None,
+                    "source_priority": "prizepicks_primary",
+                    "lineage_version": "v1",
+                    "canonical_leg_id": canonical_leg_id,
                     "nba_player_id": gv("nba_player_id"),
                     "espn_player_id": gv("espn_player_id"),
                     "min_tier": str(gv("min_tier") or gv("minutes_tier") or gv("Min Tier") or ""),
@@ -7034,6 +7066,7 @@ def build_final_web_ticket_groups(
     prioritize_ticket_hit: bool = False,
     ticket_sort_mode: str = "rank",
     player_ticket_counts: dict[str, int] | None = None,
+    max_tickets_per_group: int = 3,
 ):
     def apply_filters(df):
         mask = pd.Series(True, index=df.index)
@@ -7112,12 +7145,16 @@ def build_final_web_ticket_groups(
                 return max(base, float(cap))
         return base
 
+    max_tix = max(1, int(max_tickets_per_group))
+    max_tix_3 = max(2, min(max_tix, max_tix))
+    max_tix_other = max(1, max_tix)
+
     def _add_mixed_std_gob(sub: pd.DataFrame, label: str, leg_sizes_override: list | None = None):
         _ls = leg_sizes_override if leg_sizes_override is not None else leg_sizes
         for n in _ls:
             if len(sub) < n:
                 continue
-            mt = 2 if n == 3 else 1
+            mt = max_tix_3 if n == 3 else max_tix_other
             tix = build_mixed_picktype_tickets(
                 sub,
                 n,
@@ -7140,7 +7177,7 @@ def build_final_web_ticket_groups(
             tix = build_tickets(
                 sub,
                 n,
-                max_tickets=1,
+                max_tickets=max_tix_other,
                 leg_min_hit_by_n=leg_min_hit_by_n,
                 prioritize_ticket_hit=prioritize_ticket_hit,
                 ticket_sort_mode=ticket_sort_mode,
@@ -7202,7 +7239,7 @@ def build_final_web_ticket_groups(
                 tix = build_tickets(
                     all_sg,
                     n,
-                    max_tickets=2 if n == 3 else 1,
+                    max_tickets=max_tix_3 if n == 3 else max_tix_other,
                     require_mix=True,
                     leg_min_hit_by_n=leg_min_hit_by_n,
                     prioritize_ticket_hit=prioritize_ticket_hit,
@@ -7222,7 +7259,7 @@ def build_final_web_ticket_groups(
                 tix = build_tickets(
                     all_std,
                     n,
-                    max_tickets=2 if n == 3 else 1,
+                    max_tickets=max_tix_3 if n == 3 else max_tix_other,
                     require_mix=True,
                     leg_min_hit_by_n=leg_min_hit_by_n,
                     prioritize_ticket_hit=prioritize_ticket_hit,
@@ -8288,7 +8325,7 @@ def main():
     ap.add_argument(
         "--ticket-gen-starts",
         type=int,
-        default=10,
+        default=48,
         dest="ticket_gen_starts",
         help=(
             "Structured tickets only: try the first K eligible rows as the first leg (after sort) and keep the slip "
@@ -8298,7 +8335,7 @@ def main():
     ap.add_argument(
         "--nba-structured-variants",
         type=int,
-        default=3,
+        default=8,
         dest="nba_structured_variants",
         help=(
             "NBA only: up to N distinct structured slips per sheet type (Power 2, Flex 3, Standard 2, Pwr Std 3, "
@@ -8328,7 +8365,7 @@ def main():
         dest="pick_types",
         help="Comma-separated pick types for ticket eligibility (Demon excluded from tickets).",
     )
-    ap.add_argument("--max-tickets", type=int, default=3, dest="max_tickets")
+    ap.add_argument("--max-tickets", type=int, default=10, dest="max_tickets")
     ap.add_argument("--use-context-filter", action="store_true", dest="use_context_filter", default=True,
                     help="Apply NBA direction+defense+pace context confidence filter")
     ap.add_argument("--no-context-filter", action="store_false", dest="use_context_filter",
@@ -8411,7 +8448,7 @@ def main():
         args.date = slate_calendar_date_ymd()
 
     args.max_ticket_legs = max(2, min(6, int(args.max_ticket_legs)))
-    args.ticket_gen_starts = max(1, min(24, int(args.ticket_gen_starts)))
+    args.ticket_gen_starts = max(1, min(64, int(args.ticket_gen_starts)))
     args.nba_structured_variants = max(1, min(8, int(args.nba_structured_variants)))
     if args.high_conviction:
         args.min_hit_rate = max(float(args.min_hit_rate), 0.65)
@@ -9066,7 +9103,9 @@ def main():
             print(f"  WARNING: {sport_label} skipped (empty pool).")
             return
 
-        tvc = max(1, min(8, int(ticket_variant_count))) if sport_label == "NBA" else 1
+        default_variant_count = max(1, min(8, int(args.max_tickets)))
+        requested_variants = int(ticket_variant_count) if ticket_variant_count is not None else default_variant_count
+        tvc = max(1, min(8, requested_variants))
 
         def _structured_list(structure: str, relaxed: bool = False) -> list[dict]:
             spec = _STRUCTURE_SPECS.get(structure) or {}
@@ -9525,6 +9564,7 @@ def main():
             prioritize_ticket_hit=_prio_hit,
             ticket_sort_mode=_ticket_sort,
             player_ticket_counts=counters["player_ticket_counts"],
+            max_tickets_per_group=int(args.max_tickets),
         )
         for gname, tix, _bg in final_long:
             display = str(gname)
@@ -9644,6 +9684,7 @@ def main():
                 leg_min_hit_by_n=leg_min_hit_by_n,
                 prioritize_ticket_hit=bool(args.prioritize_ticket_hit),
                 ticket_sort_mode=str(args.ticket_candidate_sort),
+                max_tickets_per_group=int(args.max_tickets),
             )
             final_groups, _fg_b, _fg_a = dedupe_ticket_groups_by_leg_set(final_groups)
             if _fg_b != _fg_a:
@@ -10461,8 +10502,8 @@ def render_tickets_body_html(
         d_oi = int(ent.get("original_index", 0))
 
         parts.append(f'''
-<div class="ticket-group-section" data-sport="{_h(d_sport)}" data-type="{_h(d_type)}" data-pick="{_h(d_pick)}" data-ev="{_h(d_ev)}" data-payout-confidence="{_fmt(d_pc, 2)}" data-original-index="{d_oi}">
-  <div class="ticket-group-header collapsible-header" role="button" tabindex="0" aria-expanded="true">
+<div class="ticket-group-section collapsed" data-sport="{_h(d_sport)}" data-type="{_h(d_type)}" data-pick="{_h(d_pick)}" data-ev="{_h(d_ev)}" data-payout-confidence="{_fmt(d_pc, 2)}" data-original-index="{d_oi}">
+  <div class="ticket-group-header collapsible-header" role="button" tabindex="0" aria-expanded="false">
     <span class="group-title" style="color:{accent};">{_h(group_name)}</span>
     <span class="group-meta">{group_meta_html}</span>
     {ev_badge_html}
@@ -10911,19 +10952,15 @@ def render_tickets_body_html(
   });
 
   (function(){
-    function mob(){ return window.matchMedia('(max-width: 900px), (pointer: coarse)').matches; }
-    function collapseAllGroupsMobile(){
-      if(!mob()) return;
+    // Always start collapsed so /tickets opens compact on both mobile and desktop.
+    function collapseAllGroups(){
       document.querySelectorAll('.ticket-group-section').forEach(function(s){
         s.classList.add('collapsed');
         var h = s.querySelector('.collapsible-header');
         if(h) h.setAttribute('aria-expanded', 'false');
       });
     }
-    collapseAllGroupsMobile();
-    var mm = window.matchMedia('(max-width: 900px), (pointer: coarse)');
-    if(mm.addEventListener) mm.addEventListener('change', collapseAllGroupsMobile);
-    else if(mm.addListener) mm.addListener(collapseAllGroupsMobile);
+    collapseAllGroups();
   })();
 })();
 </script>''')

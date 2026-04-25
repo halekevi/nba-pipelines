@@ -1,7 +1,7 @@
 /**
  * Mobile: full-width shell, safe-area gutters, touch scrolling, form zoom fix.
  * Optional: proporacle-mobile-schema.css (tap / text-size) before nav-mobile-shared.css.
- * v=20260430webviewfix — :root here so pages without schema still resolve --po-mobile-* (Android WebView).
+ * v=20260430schemapage — :root here + proporacle-page-shell @imports schema; shell pages get full mobile baseline.
  */
 :root {
   --po-mobile-bottom-bar-bg: rgba(12, 12, 20, 0.94);
@@ -316,6 +316,22 @@
 
   body.page-tickets {
     padding-top: 8px !important;
+  }
+
+  /* Tighten top stack on Tickets: reduce empty gap under sticky nav before ratings cards. */
+  body.page-tickets nav.snav,
+  body.page-tickets nav.snav.glass-card {
+    margin-bottom: 4px !important;
+  }
+  body.page-tickets .grade-eval-summary {
+    margin-top: 0 !important;
+    margin-bottom: 6px !important;
+  }
+  body.page-tickets .stats-bar {
+    margin-top: 0 !important;
+  }
+  body.page-tickets .wrap.ticket-eval-main {
+    padding-top: 0 !important;
   }
 
   /* Income (P&L) — body class is page-income in dashboard_income.html */
