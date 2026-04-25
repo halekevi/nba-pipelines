@@ -1190,9 +1190,16 @@ def _extract_json_object(text: str) -> dict[str, Any]:
 
 
 def _gemini_extract_ticket_from_image(image_bytes: bytes, mime_type: str) -> dict[str, Any]:
-    api_key = (os.environ.get("GEMINI_API_KEY") or "").strip()
+    api_key = (
+        (os.environ.get("GEMINI_API_KEY") or "").strip()
+        or (os.environ.get("GOOGLE_API_KEY") or "").strip()
+        or (os.environ.get("GOOGLE_GENERATIVE_AI_API_KEY") or "").strip()
+    )
     if not api_key:
-        raise RuntimeError("Missing GEMINI_API_KEY.")
+        raise RuntimeError(
+            "Missing Gemini API key. Set GEMINI_API_KEY (preferred), GOOGLE_API_KEY, or "
+            "GOOGLE_GENERATIVE_AI_API_KEY on the server."
+        )
     try:
         import google.generativeai as genai  # type: ignore
     except Exception as exc:
