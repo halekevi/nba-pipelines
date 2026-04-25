@@ -1261,7 +1261,7 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="/static/global-scrollbar.css?v=20260416"/>
 <link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260419perf2"/>
-<link rel="stylesheet" href="/static/proporacle-mobile-schema.css?v=20260430mobileapp"/>
+<link rel="stylesheet" href="/static/proporacle-mobile-schema.css?v=20260430webviewfix"/>
 <style>{CSS}</style>
 </head>
 <body>

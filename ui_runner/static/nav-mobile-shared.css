@@ -1,7 +1,7 @@
 /**
  * Shared mobile nav: two-row bar (brand + hamburger, then snav-right meta)
  * and fixed flyout. Load proporacle-mobile-schema.css first, then page inline <style>, then this file so these rules win.
- * v=20260430mobileapp — ≤768px hamburger; hide ul#nav-links; flyout above sticky bar.
+ * v=20260430webviewfix — ≤768px hamburger; hide ul#nav-links; flyout above sticky bar.
  */
 @media (max-width: 768px) {
   nav.snav,

@@ -7,13 +7,12 @@
  *   nav-mobile-shared.css → mobile-content-width.css (bottom icon strip + safe-area).
  * Slate eval HTML loads this file so standalone mobile viewing matches hub typography/touch.
  *
- * v=20260430mobileapp
+ * v=20260430webviewfix — --po-mobile-* tokens duplicated at top of mobile-content-width.css (keep in sync).
  */
 :root {
   --po-mobile-bottom-bar-bg: rgba(12, 12, 20, 0.94);
   --po-mobile-bottom-bar-border: rgba(255, 255, 255, 0.12);
   --po-mobile-bottom-bar-shadow: 0 -8px 28px rgba(0, 0, 0, 0.45);
-  /* Bottom tab strip + safe area — keep in sync with mobile-content-width.css */
   --po-mobile-nav-clearance: calc(82px + env(safe-area-inset-bottom, 0px));
   --po-mobile-body-pad-extra: calc(74px + env(safe-area-inset-bottom, 0px));
 }

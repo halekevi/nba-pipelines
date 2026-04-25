@@ -1,8 +1,16 @@
 /**
  * Mobile: full-width shell, safe-area gutters, touch scrolling, form zoom fix.
- * Load after page styles, proporacle-mobile-schema.css, and nav-mobile-shared.css.
- * v=20260430mobileapp
+ * Optional: proporacle-mobile-schema.css (tap / text-size) before nav-mobile-shared.css.
+ * v=20260430webviewfix — :root here so pages without schema still resolve --po-mobile-* (Android WebView).
  */
+:root {
+  --po-mobile-bottom-bar-bg: rgba(12, 12, 20, 0.94);
+  --po-mobile-bottom-bar-border: rgba(255, 255, 255, 0.12);
+  --po-mobile-bottom-bar-shadow: 0 -8px 28px rgba(0, 0, 0, 0.45);
+  --po-mobile-nav-clearance: calc(82px + env(safe-area-inset-bottom, 0px));
+  --po-mobile-body-pad-extra: calc(74px + env(safe-area-inset-bottom, 0px));
+}
+
 @media (max-width: 900px), (pointer: coarse) {
   /*
    * Full-viewport decorative layers (body::after dot grid + mix-blend, mesh, SVG grain,
@@ -1133,11 +1141,11 @@ nav.snav .mobile-menu a {
     z-index: 260 !important;
     list-style: none !important;
     box-sizing: border-box !important;
-    background: var(--po-mobile-bottom-bar-bg, rgba(12, 12, 20, 0.94)) !important;
-    border-top: 1px solid var(--po-mobile-bottom-bar-border, rgba(255, 255, 255, 0.12)) !important;
+    background: var(--po-mobile-bottom-bar-bg) !important;
+    border-top: 1px solid var(--po-mobile-bottom-bar-border) !important;
     backdrop-filter: blur(14px) saturate(160%) !important;
     -webkit-backdrop-filter: blur(14px) saturate(160%) !important;
-    box-shadow: var(--po-mobile-bottom-bar-shadow, 0 -8px 28px rgba(0, 0, 0, 0.45)) !important;
+    box-shadow: var(--po-mobile-bottom-bar-shadow) !important;
   }
 
   nav.snav ul#nav-links li,
@@ -1205,7 +1213,7 @@ nav.snav .mobile-menu a {
   }
 
   body {
-    padding-bottom: var(--po-mobile-body-pad-extra, calc(74px + env(safe-area-inset-bottom, 0px))) !important;
+    padding-bottom: var(--po-mobile-body-pad-extra) !important;
   }
 
   .shell,
@@ -1216,7 +1224,7 @@ nav.snav .mobile-menu a {
   .wrap.ticket-eval-main,
   .income-wrap,
   .page-ev {
-    padding-bottom: var(--po-mobile-nav-clearance, calc(82px + env(safe-area-inset-bottom, 0px))) !important;
+    padding-bottom: var(--po-mobile-nav-clearance) !important;
   }
 
   /* Override the generic 82px bottom-nav clearance for the grades flex layout — the snav is
