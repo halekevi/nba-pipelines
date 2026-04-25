@@ -47,8 +47,17 @@ If you change the URL or apply Java fixes, you should perform a clean reinstall:
 
 ## Troubleshooting
 
-*   **Webpage not available / Connection Refused:**
-    *   Ensure the Flask server is running on your PC (listening on `0.0.0.0:5173`).
+*   **`Webpage not available` + `http://10.0.x.x:5173` + `ERR_CONNECTION_ABORTED` (from the app):**  
+    The installed APK was synced with **LAN dev mode** (`npm run sync:dev` or `sync:url` to your PC). The WebView is trying to reach a **Vite/Flask dev server on your home network**, not Railway. That fails when the PC is off, the IP changed, you are on cellular/different Wi‑Fi, or nothing is listening on `:5173`.  
+    **Fix:** From the `mobile` folder, point the shell at your **public** site, sync, then reinstall the APK:
+    ```powershell
+    $env:PROPORACLE_SERVER_URL="https://YOUR-ACTUAL-APP.up.railway.app"
+    npm run sync:android
+    ```
+    Then rebuild in Android Studio and install again (or uninstall old build first).
+
+*   **Webpage not available / Connection Refused (when you *intend* LAN dev):**
+    *   Ensure the Flask/Vite server is running on your PC (listening on `0.0.0.0:5173`).
     *   Verify your phone is on the same Wi-Fi network as the PC.
     *   Check Windows Firewall: Allow inbound TCP traffic on port `5173`.
 *   **Stale URL:** If the app still tries to load an old IP (e.g., `192.168.1.5`), perform a full uninstall from the device and run the `sync` command again.
