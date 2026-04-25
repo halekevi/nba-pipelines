@@ -95,7 +95,6 @@ capacitor-cordova-android-plugins
 # Copied web assets
 app/src/main/assets/public
 
-# Generated Config files
-app/src/main/assets/capacitor.config.json
+# Generated Config files (capacitor.config.json is tracked so clones do not default to a stale LAN IP)
 app/src/main/assets/capacitor.plugins.json
 app/src/main/res/xml/config.xml
