@@ -556,7 +556,11 @@ function Run-Combined {
     $okC = Run-Step "Combined Slate + Tickets" $Root ".\scripts\combined_slate_tickets.py" $CombinedArgs
 
     if ($okC) {
-        Copy-Item $CombinedOut (Join-Path $OutDir "combined_slate_tickets_$Date.xlsx") -Force -ErrorAction SilentlyContinue
+        $datedCombinedPath = Join-Path $OutDir "combined_slate_tickets_$Date.xlsx"
+        $stamp = Get-Date -Format "HHmmss"
+        $stampedCombinedPath = Join-Path $OutDir "combined_slate_tickets_${Date}_$stamp.xlsx"
+        Copy-Item $CombinedOut $datedCombinedPath -Force -ErrorAction SilentlyContinue
+        Copy-Item $CombinedOut $stampedCombinedPath -Force -ErrorAction SilentlyContinue
         # ML backfill expects dated combined_slate_tickets_YYYY-MM-DD.json archives.
         # Snapshot today's tickets_latest.json into outputs/$Date/ as a dated JSON source.
         $TicketsLatestJson = Join-Path $WebOutDir "tickets_latest.json"
@@ -567,8 +571,36 @@ function Run-Combined {
         } else {
             Write-Host "  [warn] Missing tickets_latest.json; skipped dated JSON snapshot for ML backfill." -ForegroundColor Yellow
         }
+        # Compare this run vs previous stamped run for line movement reporting.
+        $prevStamped = Get-ChildItem -Path $OutDir -Filter "combined_slate_tickets_${Date}_*.xlsx" -ErrorAction SilentlyContinue |
+            Where-Object { $_.FullName -ne $stampedCombinedPath } |
+            Sort-Object LastWriteTime -Descending |
+            Select-Object -First 1
+        if ($prevStamped) {
+            $compareOutDir = Join-Path $OutDir ("compare_" + (Get-Date -Format "HHmmss"))
+            $compareScript = Join-Path $Root "scripts\compare_combined_slate_runs.py"
+            if (Test-Path $compareScript) {
+                Write-Host "  [Compare] Previous run: $($prevStamped.Name)" -ForegroundColor DarkGray
+                $cmpCmd = "py -3.14 `"$compareScript`" --old `"$($prevStamped.FullName)`" --new `"$stampedCombinedPath`" --outdir `"$compareOutDir`""
+                Write-Host "        CMD: $cmpCmd" -ForegroundColor DarkGray
+                $cmpOut = Invoke-Expression $cmpCmd 2>&1
+                $cmpExit = $LASTEXITCODE
+                foreach ($line in $cmpOut) { Write-Host "        $line" -ForegroundColor DarkGray }
+                if ($cmpExit -eq 0) {
+                    Write-Host "  [Compare] Report -> $compareOutDir" -ForegroundColor Green
+                } else {
+                    Write-Host "  [Compare] WARN: compare script exit $cmpExit" -ForegroundColor Yellow
+                }
+            } else {
+                Write-Host "  [Compare] WARN: missing scripts\compare_combined_slate_runs.py" -ForegroundColor Yellow
+            }
+        } else {
+            Write-Host "  [Compare] No previous stamped run found for $Date (skipping compare this run)." -ForegroundColor DarkGray
+        }
+
         Remove-Item $CombinedOut -Force -ErrorAction SilentlyContinue
-        Write-Host "  Saved -> $(Join-Path $OutDir "combined_slate_tickets_$Date.xlsx")" -ForegroundColor Green
+        Write-Host "  Saved -> $datedCombinedPath" -ForegroundColor Green
+        Write-Host "  Saved -> $stampedCombinedPath" -ForegroundColor Green
         if ($RunPayoutEngine) {
             Write-Host "[PAYOUT ENGINE] Fetching exact multipliers from PrizePicks..." -ForegroundColor Magenta
             try {
