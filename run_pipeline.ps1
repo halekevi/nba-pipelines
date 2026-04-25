@@ -548,7 +548,7 @@ function Run-Combined {
     }
 
     # Keep strict date checks for NBA-family slates so /tickets never shows yesterday as today.
-    $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --max-tickets 8 --ticket-gen-starts 48 --nba-structured-variants 3 --write-web --merge-web-latest --web-outdir `"$WebOutDir`""
+    $CombinedArgs += " --date $Date --output `"$CombinedOut`" --tiers A,B,C,D --min-hit-rate 0.45 --min-edge -0.25 --max-tickets 40 --ticket-gen-starts 64 --nba-structured-variants 8 --write-web --merge-web-latest --web-outdir `"$WebOutDir`""
     if (-not $WebEvOnly) {
         $CombinedArgs += " --no-web-ev-gate"
     }
@@ -557,6 +557,16 @@ function Run-Combined {
 
     if ($okC) {
         Copy-Item $CombinedOut (Join-Path $OutDir "combined_slate_tickets_$Date.xlsx") -Force -ErrorAction SilentlyContinue
+        # ML backfill expects dated combined_slate_tickets_YYYY-MM-DD.json archives.
+        # Snapshot today's tickets_latest.json into outputs/$Date/ as a dated JSON source.
+        $TicketsLatestJson = Join-Path $WebOutDir "tickets_latest.json"
+        $DatedTicketsJson  = Join-Path $OutDir "combined_slate_tickets_$Date.json"
+        if (Test-Path $TicketsLatestJson) {
+            Copy-Item $TicketsLatestJson $DatedTicketsJson -Force -ErrorAction SilentlyContinue
+            Write-Host "  Saved -> $DatedTicketsJson" -ForegroundColor Green
+        } else {
+            Write-Host "  [warn] Missing tickets_latest.json; skipped dated JSON snapshot for ML backfill." -ForegroundColor Yellow
+        }
         Remove-Item $CombinedOut -Force -ErrorAction SilentlyContinue
         Write-Host "  Saved -> $(Join-Path $OutDir "combined_slate_tickets_$Date.xlsx")" -ForegroundColor Green
         if ($RunPayoutEngine) {

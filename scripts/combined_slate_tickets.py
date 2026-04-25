@@ -54,6 +54,7 @@ import argparse
 import hashlib
 import itertools
 import json
+import joblib
 import logging
 import math
 import os
@@ -94,6 +95,19 @@ from utils.goblin_demon_multiplier import (
 from utils.ticket_diversity import apply_diversity_filter
 
 _log_slate = logging.getLogger("combined_slate_tickets")
+TICKET_MODEL_PATH = os.path.join(REPO_ROOT, "models", "ticket_model.pkl")
+TICKET_MODEL_2LEG_PATH = os.path.join(REPO_ROOT, "models", "ticket_model_2leg.pkl")
+TICKET_MODEL_3LEG_PATH = os.path.join(REPO_ROOT, "models", "ticket_model_3leg.pkl")
+TICKET_MODEL_4PLUS_PATH = os.path.join(REPO_ROOT, "models", "ticket_model_4plus.pkl")
+TICKET_MODEL_FEATURES_PATH = os.path.join(REPO_ROOT, "models", "ticket_model_features.json")
+
+_TICKET_MODEL_RERANK_ENABLED = False
+_TICKET_MODEL_RERANK_WEIGHT = 0.15
+_TICKET_MODEL_RERANK_TOP_N = 5
+_TICKET_MODEL_USE_BUCKETS = True
+_TICKET_MODEL = None
+_TICKET_MODEL_BUCKETS: dict[str, Any] = {}
+_TICKET_MODEL_FEATURES: list[str] = []
 
 DEFAULT_NBA_PATH = os.path.join(REPO_ROOT, "NBA", "data", "outputs", "step8_all_direction_clean.xlsx")
 DEFAULT_CBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_cbb.xlsx")
@@ -3313,6 +3327,8 @@ def ticket_groups_to_payload(
                 "avg_rank_score": _safe_float(t.get("avg_rank_score")),
                 "est_win_prob": _safe_float(t.get("est_win_prob")),
                 "ticket_objective_score": _safe_float(t.get("ticket_objective_score")),
+                "ticket_live_score": _safe_float(t.get("ticket_live_score")),
+                "ticket_model_p_cash": _safe_float(t.get("ticket_model_p_cash")),
                 "est_flex_cash_prob": _safe_float(t.get("est_flex_cash_prob")),
                 "power_payout": _safe_float(t.get("power_payout")),
                 "flex_payout": _safe_float(t.get("flex_payout")),
@@ -6601,6 +6617,202 @@ def apply_full_slate_signal_columns(df: pd.DataFrame) -> pd.DataFrame:
     return pd.concat([out, sig], axis=1)
 
 
+def _ticket_bucket_name(n_legs: int) -> str:
+    n = int(n_legs or 0)
+    if n <= 2:
+        return "2leg"
+    if n == 3:
+        return "3leg"
+    return "4plus"
+
+
+def _load_ticket_rerank_models() -> None:
+    global _TICKET_MODEL, _TICKET_MODEL_BUCKETS, _TICKET_MODEL_FEATURES
+    if _TICKET_MODEL is not None:
+        return
+    _TICKET_MODEL = False
+    _TICKET_MODEL_BUCKETS = {}
+    _TICKET_MODEL_FEATURES = []
+    try:
+        if os.path.exists(TICKET_MODEL_FEATURES_PATH):
+            with open(TICKET_MODEL_FEATURES_PATH, "r", encoding="utf-8") as f:
+                _TICKET_MODEL_FEATURES = list(json.load(f) or [])
+        if os.path.exists(TICKET_MODEL_PATH):
+            _TICKET_MODEL = joblib.load(TICKET_MODEL_PATH)
+        if bool(_TICKET_MODEL_USE_BUCKETS):
+            for bname, p in {
+                "2leg": TICKET_MODEL_2LEG_PATH,
+                "3leg": TICKET_MODEL_3LEG_PATH,
+                "4plus": TICKET_MODEL_4PLUS_PATH,
+            }.items():
+                if os.path.exists(p):
+                    _TICKET_MODEL_BUCKETS[bname] = joblib.load(p)
+    except Exception as e:
+        _log_slate.warning("[ticket-rerank] model load failed: %s", e)
+        _TICKET_MODEL = False
+        _TICKET_MODEL_BUCKETS = {}
+        _TICKET_MODEL_FEATURES = []
+
+
+def _ticket_ev_signal(ticket: dict) -> float:
+    for k in ("est_ev", "predicted_ev", "ev_power", "ticket_objective_score"):
+        v = ticket.get(k)
+        try:
+            if v is not None and np.isfinite(float(v)):
+                return float(v)
+        except Exception:
+            continue
+    return 0.0
+
+
+def _ticket_feature_vector(ticket: dict) -> tuple[pd.DataFrame, list[str]]:
+    rows = list(ticket.get("rows") or [])
+    sport_counts: Counter[str] = Counter()
+    pick_counts: Counter[str] = Counter()
+    ml_probs: list[float] = []
+    hit_rates: list[float] = []
+    edges: list[float] = []
+    abs_edges: list[float] = []
+    rank_scores: list[float] = []
+    context_scores: list[float] = []
+    intel_rates: list[float] = []
+    leg_probs_used: list[float] = []
+    for r in rows:
+        sp = str(r.get("sport") or "").strip().upper()
+        if sp:
+            sport_counts[sp] += 1
+        pt = str(r.get("pick_type") or "").strip().upper()
+        if "DEMON" in pt:
+            pick_counts["DEMON"] += 1
+        elif "GOBLIN" in pt:
+            pick_counts["GOBLIN"] += 1
+        else:
+            pick_counts["STANDARD"] += 1
+        for dst, key in (
+            (ml_probs, "ml_prob"),
+            (hit_rates, "hit_rate"),
+            (edges, "edge"),
+            (abs_edges, "abs_edge"),
+            (rank_scores, "rank_score"),
+            (context_scores, "context_score"),
+            (intel_rates, "intel_season_hit_rate"),
+            (leg_probs_used, "leg_prob_used"),
+        ):
+            try:
+                v = r.get(key)
+                if v is not None and np.isfinite(float(v)):
+                    dst.append(float(v))
+            except Exception:
+                pass
+
+    n_legs = int(ticket.get("n_legs") or len(rows) or 0)
+    dominant = sport_counts.most_common(1)[0][0] if sport_counts else ""
+    group_type = str(ticket.get("group_type") or "").upper()
+    if not group_type:
+        group_type = "FLEX" if "flex" in str(ticket.get("sheet", "")).lower() else "POWER"
+
+    base_num = {
+        "n_legs": float(n_legs),
+        "is_flex_structure": float(1 if group_type == "FLEX" else 0),
+        "sports_in_ticket": float(len(sport_counts)),
+        "legs_nba": float(sport_counts.get("NBA", 0) + sport_counts.get("NBA1H", 0) + sport_counts.get("NBA1Q", 0)),
+        "legs_cbb": float(sport_counts.get("CBB", 0) + sport_counts.get("WCBB", 0)),
+        "legs_nhl": float(sport_counts.get("NHL", 0)),
+        "legs_soccer": float(sport_counts.get("SOCCER", 0)),
+        "legs_mlb": float(sport_counts.get("MLB", 0)),
+        "pick_standard_count": float(pick_counts.get("STANDARD", 0)),
+        "pick_goblin_count": float(pick_counts.get("GOBLIN", 0)),
+        "pick_demon_count": float(pick_counts.get("DEMON", 0)),
+        "ticket_objective_score": float(ticket.get("ticket_objective_score") or 0.0),
+        "ev_power": float(ticket.get("ev_power") or 0.0),
+        "est_ev": float(ticket.get("est_ev") or 0.0),
+        "flat_ev": float(ticket.get("flat_ev") or 0.0),
+        "payout_multiplier": float(ticket.get("payout_multiplier") or 0.0),
+        "power_payout": float(ticket.get("power_payout") or 0.0),
+        "flex_payout": float(ticket.get("flex_payout") or 0.0),
+        "est_win_prob": float(ticket.get("est_win_prob") or 0.0),
+        "predicted_payout_mult": float(ticket.get("predicted_payout_mult") or 0.0),
+        "predicted_p_win": float(ticket.get("predicted_p_win") or 0.0),
+        "predicted_ev": float(ticket.get("predicted_ev") or 0.0),
+        "avg_hit_rate_leg": float(np.mean(hit_rates)) if hit_rates else 0.0,
+        "avg_ml_prob_leg": float(np.mean(ml_probs)) if ml_probs else 0.0,
+        "min_ml_prob_leg": float(np.min(ml_probs)) if ml_probs else 0.0,
+        "max_ml_prob_leg": float(np.max(ml_probs)) if ml_probs else 0.0,
+        "std_ml_prob_leg": float(np.std(ml_probs)) if ml_probs else 0.0,
+        "avg_leg_prob_used": float(np.mean(leg_probs_used)) if leg_probs_used else 0.0,
+        "min_leg_prob_used": float(np.min(leg_probs_used)) if leg_probs_used else 0.0,
+        "avg_edge_leg": float(np.mean(edges)) if edges else 0.0,
+        "min_edge_leg": float(np.min(edges)) if edges else 0.0,
+        "max_edge_leg": float(np.max(edges)) if edges else 0.0,
+        "avg_abs_edge_leg": float(np.mean(abs_edges)) if abs_edges else 0.0,
+        "avg_rank_score_leg": float(np.mean(rank_scores)) if rank_scores else 0.0,
+        "min_rank_score_leg": float(np.min(rank_scores)) if rank_scores else 0.0,
+        "avg_context_score_leg": float(np.mean(context_scores)) if context_scores else 0.0,
+        "avg_intel_hit_rate_leg": float(np.mean(intel_rates)) if intel_rates else 0.0,
+    }
+    cat_vals = {
+        f"group_type_{group_type}": 1.0 if group_type else 0.0,
+        f"dominant_sport_{dominant}": 1.0 if dominant else 0.0,
+    }
+    feat_names = _TICKET_MODEL_FEATURES or (list(base_num.keys()) + list(cat_vals.keys()))
+    vec = np.zeros((1, len(feat_names)), dtype=float)
+    for i, name in enumerate(feat_names):
+        if name in base_num:
+            vec[0, i] = float(base_num[name])
+        elif name in cat_vals:
+            vec[0, i] = float(cat_vals[name])
+    return pd.DataFrame(vec, columns=feat_names), feat_names
+
+
+def _ticket_model_prob(ticket: dict) -> float | None:
+    _load_ticket_rerank_models()
+    if _TICKET_MODEL is False:
+        return None
+    try:
+        model = _TICKET_MODEL_BUCKETS.get(_ticket_bucket_name(int(ticket.get("n_legs") or 0))) if _TICKET_MODEL_BUCKETS else _TICKET_MODEL
+        if model is None:
+            model = _TICKET_MODEL
+        if model is None or model is False:
+            return None
+        X, _ = _ticket_feature_vector(ticket)
+        p = float(model.predict_proba(X)[0, 1])
+        return p
+    except Exception:
+        return None
+
+
+def _rerank_tickets_live(tickets: list[dict], max_tickets: int) -> list[dict]:
+    if not tickets:
+        return []
+    if not bool(_TICKET_MODEL_RERANK_ENABLED):
+        return tickets[:max_tickets]
+    scored: list[dict] = []
+    evs = np.array([_ticket_ev_signal(t) for t in tickets], dtype=float)
+    if len(evs) and float(np.max(evs) - np.min(evs)) > 1e-12:
+        evn = (evs - np.min(evs)) / (np.max(evs) - np.min(evs))
+    else:
+        evn = np.full(len(tickets), 0.5, dtype=float)
+    w = max(0.0, min(1.0, float(_TICKET_MODEL_RERANK_WEIGHT)))
+    for i, t in enumerate(tickets):
+        mp = _ticket_model_prob(t)
+        if mp is None:
+            mp = float(t.get("est_win_prob") or 0.0)
+        score = (1.0 - w) * float(evn[i]) + w * float(mp)
+        x = dict(t)
+        x["ticket_model_p_cash"] = round(float(mp), 6)
+        x["ticket_live_score"] = round(float(score), 6)
+        scored.append(x)
+    scored.sort(
+        key=lambda x: (
+            -float(x.get("ticket_live_score", 0.0)),
+            -float(x.get("ticket_model_p_cash", 0.0)),
+            -float(x.get("est_win_prob", 0.0)),
+        )
+    )
+    keep_n = min(max_tickets, max(1, int(_TICKET_MODEL_RERANK_TOP_N)))
+    return scored[:keep_n]
+
+
 # ── Build tickets ──────────────────────────────────────────────────────────────
 def build_tickets(
     pool: pd.DataFrame,
@@ -6803,9 +7015,9 @@ def build_tickets(
         else:
             break
 
-    # Sort by win probability first, then rank score — optimises for actual wins
+    # Sort by win probability first, then rank score — optimises for actual wins.
     tickets.sort(key=lambda x: (-x["est_win_prob"], -x["avg_rank_score"]))
-    return tickets[:max_tickets]
+    return _rerank_tickets_live(tickets, max_tickets=max_tickets)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -7001,7 +7213,7 @@ def build_mixed_picktype_tickets(
             gob_start = min(gob_start + 1, max(len(gob) - 1, 0))
 
     tickets.sort(key=lambda x: (-x["avg_rank_score"], -x["avg_hit_rate"]))
-    return tickets[:max_tickets]
+    return _rerank_tickets_live(tickets, max_tickets=max_tickets)
 
 
 def _sport_display_label(label: str) -> str:
@@ -8366,6 +8578,30 @@ def main():
         help="Comma-separated pick types for ticket eligibility (Demon excluded from tickets).",
     )
     ap.add_argument("--max-tickets", type=int, default=10, dest="max_tickets")
+    ap.add_argument(
+        "--ticket-model-rerank",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Use trained ticket ML models to rerank built tickets within each group.",
+    )
+    ap.add_argument(
+        "--ticket-model-weight",
+        type=float,
+        default=0.15,
+        help="Blend weight for model p_cash vs EV signal when reranking tickets (0..1).",
+    )
+    ap.add_argument(
+        "--ticket-model-top-n",
+        type=int,
+        default=5,
+        help="Keep top N tickets per generated group after model reranking.",
+    )
+    ap.add_argument(
+        "--ticket-model-use-buckets",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Use bucketed ticket models (2-leg, 3-leg, 4+) when available.",
+    )
     ap.add_argument("--use-context-filter", action="store_true", dest="use_context_filter", default=True,
                     help="Apply NBA direction+defense+pace context confidence filter")
     ap.add_argument("--no-context-filter", action="store_false", dest="use_context_filter",
@@ -8450,6 +8686,8 @@ def main():
     args.max_ticket_legs = max(2, min(6, int(args.max_ticket_legs)))
     args.ticket_gen_starts = max(1, min(64, int(args.ticket_gen_starts)))
     args.nba_structured_variants = max(1, min(8, int(args.nba_structured_variants)))
+    args.ticket_model_weight = max(0.0, min(1.0, float(args.ticket_model_weight)))
+    args.ticket_model_top_n = max(1, int(args.ticket_model_top_n))
     if args.high_conviction:
         args.min_hit_rate = max(float(args.min_hit_rate), 0.65)
         args.max_ticket_legs = min(args.max_ticket_legs, 4)
@@ -8462,6 +8700,17 @@ def main():
         print(
             "[tickets] prioritize-ticket-hit: pool min hit rate >= 0.72, raised per-leg floors, "
             "modeled payout probability gates on structured + FINAL tickets"
+        )
+
+    global _TICKET_MODEL_RERANK_ENABLED, _TICKET_MODEL_RERANK_WEIGHT, _TICKET_MODEL_RERANK_TOP_N, _TICKET_MODEL_USE_BUCKETS
+    _TICKET_MODEL_RERANK_ENABLED = bool(args.ticket_model_rerank)
+    _TICKET_MODEL_RERANK_WEIGHT = float(args.ticket_model_weight)
+    _TICKET_MODEL_RERANK_TOP_N = int(args.ticket_model_top_n)
+    _TICKET_MODEL_USE_BUCKETS = bool(args.ticket_model_use_buckets)
+    if _TICKET_MODEL_RERANK_ENABLED:
+        print(
+            f"[ticket-rerank] ON: weight={_TICKET_MODEL_RERANK_WEIGHT:.2f} "
+            f"top_n={_TICKET_MODEL_RERANK_TOP_N} buckets={_TICKET_MODEL_USE_BUCKETS}"
         )
 
     effective_max_legs = int(args.max_ticket_legs)
