@@ -5,6 +5,56 @@ import json
 from pathlib import Path
 import combined_slate_tickets
 
+SPORT_BREAKDOWN_ORDER = ("NBA", "MLB", "SOCCER", "TENNIS", "NHL")
+
+
+def _normalize_sport_label(raw):
+    s = str(raw or "").strip().upper()
+    aliases = {"NCAAB": "CBB", "WCBB": "CBB", "NCAAF": "NFL"}
+    return aliases.get(s, s)
+
+
+def _build_mobile_sport_breakdown(templates_dir):
+    stats = {s: {"decided": 0, "paid": 0, "net_dollars": 0.0} for s in SPORT_BREAKDOWN_ORDER}
+    for gp in sorted(templates_dir.glob("graded_props_*.json")):
+        try:
+            payload = json.loads(gp.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        props = payload.get("props") if isinstance(payload, dict) else None
+        if not isinstance(props, list):
+            continue
+        for row in props:
+            if not isinstance(row, dict):
+                continue
+            sport = _normalize_sport_label(row.get("sport"))
+            if sport not in stats:
+                continue
+            result = str(row.get("result") or "").strip().upper()
+            if result == "HIT":
+                stats[sport]["decided"] += 1
+                stats[sport]["paid"] += 1
+                stats[sport]["net_dollars"] += 10.0
+            elif result == "MISS":
+                stats[sport]["decided"] += 1
+                stats[sport]["net_dollars"] -= 10.0
+    rows = []
+    for sport in SPORT_BREAKDOWN_ORDER:
+        decided = int(stats[sport]["decided"])
+        paid = int(stats[sport]["paid"])
+        win_rate = (paid / decided) if decided > 0 else None
+        rows.append(
+            {
+                "sport": sport,
+                "decided": decided,
+                "paid": paid,
+                "win_rate": win_rate,
+                "net_dollars": round(float(stats[sport]["net_dollars"]), 2),
+            }
+        )
+    return {"ok": True, "rows": rows, "source": "graded_props_json"}
+
+
 def process_template(file_path, templates_dir):
     """Recursively processes Jinja2 includes and strips placeholders."""
     if not file_path.exists():
@@ -213,6 +263,7 @@ def generate_bundle():
   <script>
     (function () {
       const HISTORY_URL = 'data/grade_history.json';
+      const SPORT_BREAKDOWN_URL = 'sport_breakdown.json';
       const fmtMoney = (n) => (Number.isFinite(n) ? `$${n.toFixed(2)}` : '$0.00');
       const fmtPct = (n) => (Number.isFinite(n) ? `${n.toFixed(1)}%` : '0.0%');
       const clsFor = (n, pos = 'num-pos', neg = 'num-neg') => (n > 0 ? pos : (n < 0 ? neg : ''));
@@ -320,10 +371,37 @@ def generate_bundle():
         }
       }
 
+      function renderSportBreakdown(rows) {
+        const body = document.querySelectorAll('.panel .tbl tbody')[1];
+        if (!body) return;
+        const safe = Array.isArray(rows) ? rows : [];
+        body.innerHTML = safe.map((r) => {
+          const decided = Number(r.decided || 0);
+          const paid = Number(r.paid || 0);
+          const winRate = decided > 0 ? (paid / decided) * 100 : NaN;
+          const net = Number(r.net_dollars || 0);
+          const winText = Number.isFinite(winRate) ? `${winRate.toFixed(1)}%` : '—';
+          return `
+            <tr>
+              <td>${String(r.sport || '')}</td>
+              <td>${decided}</td>
+              <td>${paid}</td>
+              <td>${winText}</td>
+              <td class="${clsFor(net)}">${fmtMoney(net)}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
       fetch(HISTORY_URL, { cache: 'no-store' })
         .then((r) => (r.ok ? r.json() : []))
         .then((raw) => render(parseRows(raw)))
         .catch(() => render([]));
+
+      fetch(SPORT_BREAKDOWN_URL, { cache: 'no-store' })
+        .then((r) => (r.ok ? r.json() : { rows: [] }))
+        .then((j) => renderSportBreakdown(j && j.rows))
+        .catch(() => renderSportBreakdown([]));
     })();
   </script>
 """
@@ -567,6 +645,12 @@ def generate_bundle():
         mobile_data_dir = MOBILE_WWW_DIR / "data"
         mobile_data_dir.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src_grade_history, mobile_data_dir / "grade_history.json")
+
+    # Offline/mobile Sport Breakdown source for income page.
+    (MOBILE_WWW_DIR / "sport_breakdown.json").write_text(
+        json.dumps(_build_mobile_sport_breakdown(TEMPLATES_DIR), ensure_ascii=True, indent=2),
+        encoding="utf-8",
+    )
 
     print("Mobile bundle generation complete.")
 

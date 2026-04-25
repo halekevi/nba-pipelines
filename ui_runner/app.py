@@ -1218,6 +1218,8 @@ def _send_grades_report_html(fname: str) -> Response | None:
             response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
             response.headers["Pragma"] = "no-cache"
             response.headers["Expires"] = "0"
+            # Hub loads these same-origin in iframes; proxies must not force DENY (breaks mobile WebViews).
+            response.headers.pop("X-Frame-Options", None)
             return response
     return None
 
@@ -1964,19 +1966,7 @@ def api_grade_history():
     Daily ticket_eval summaries: predicted vs actual payout aggregates and recommendation buckets.
     Populated when ``scripts/build_ticket_eval.py`` runs (appends ``data/grade_history.json``).
     """
-    path = BASE_DIR / "data" / "grade_history.json"
-    if not path.is_file():
-        return jsonify([])
-    try:
-        raw = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return jsonify({"error": "unreadable grade_history.json", "runs": []}), 500
-    if isinstance(raw, list):
-        out = raw
-    elif isinstance(raw, dict) and isinstance(raw.get("runs"), list):
-        out = raw["runs"]
-    else:
-        out = []
+    out = _read_grade_history_runs()
     r = jsonify(out)
     r.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
     r.headers["Pragma"] = "no-cache"
@@ -2927,6 +2917,49 @@ def _player_initials_from_name(player: object) -> str:
     return s[:2].upper()
 
 
+def _extract_history_series(row: dict[str, Any]) -> tuple[list[float], list[float]]:
+    """Return up-to-10 game actual/line history from known row key patterns."""
+    actual_candidates = ("stat_g", "actual_g", "g")
+    line_candidates = ("line_g", "prop_line_g")
+    actual_vals: list[float] = []
+    line_vals: list[float] = []
+
+    for i in range(1, 11):
+        aval: float | None = None
+        for pref in actual_candidates:
+            v = row.get(f"{pref}{i}")
+            if v is None:
+                continue
+            try:
+                fv = float(v)
+            except (TypeError, ValueError):
+                continue
+            if math.isnan(fv) or math.isinf(fv):
+                continue
+            aval = fv
+            break
+        if aval is not None:
+            actual_vals.append(aval)
+
+        lval: float | None = None
+        for pref in line_candidates:
+            v = row.get(f"{pref}{i}")
+            if v is None:
+                continue
+            try:
+                fv = float(v)
+            except (TypeError, ValueError):
+                continue
+            if math.isnan(fv) or math.isinf(fv):
+                continue
+            lval = fv
+            break
+        if lval is not None:
+            line_vals.append(lval)
+
+    return actual_vals, line_vals
+
+
 def _picks_payload_from_slate_latest() -> dict[str, Any] | None:
     """
     Home /api/slate fallback when tickets_latest.json is missing or has no leg rows.
@@ -2983,6 +3016,7 @@ def _picks_payload_from_slate_latest() -> dict[str, Any] | None:
                 edge = float(row.get("edge") or 0.0)
             except (TypeError, ValueError):
                 edge = 0.0
+            actual_series, line_series = _extract_history_series(row)
             picks.append(
                 {
                     "sport": sport_label,
@@ -3000,6 +3034,8 @@ def _picks_payload_from_slate_latest() -> dict[str, Any] | None:
                     "l10_under": l10_under,
                     "l5_avg": row.get("l5_avg"),
                     "season_avg": row.get("season_avg") or row.get("szn_avg"),
+                    "actual_series": actual_series,
+                    "line_series": line_series,
                 }
             )
     if not picks:
@@ -3048,6 +3084,7 @@ def api_slate():
                             ho = _side_hit_count_for_slate_picks(l10_over, 10)
                             if ho is not None:
                                 l10_under = 10 - ho
+                        actual_series, line_series = _extract_history_series(leg)
                         picks.append(
                             {
                                 "sport": leg.get("sport", ""),
@@ -3065,6 +3102,8 @@ def api_slate():
                                 "l10_under": l10_under,
                                 "l5_avg": leg.get("l5_avg"),
                                 "season_avg": leg.get("season_avg"),
+                                "actual_series": actual_series,
+                                "line_series": line_series,
                             }
                         )
             picks.sort(key=lambda p: abs(float(p.get("edge") or 0)), reverse=True)
@@ -3447,20 +3486,35 @@ def _to_int(v: Any, default: int = 0) -> int:
         return default
 
 
+def _grade_history_candidate_paths() -> list[Path]:
+    """
+    Ordered fallbacks for income history.
+    - data/grade_history.json (local pipeline output)
+    - ui_runner/templates/grade_history.json (deploy-safe committed fallback)
+    """
+    return [
+        BASE_DIR / "data" / "grade_history.json",
+        TEMPLATES_DIR / "grade_history.json",
+    ]
+
+
+def _read_grade_history_runs() -> list[dict[str, Any]]:
+    for path in _grade_history_candidate_paths():
+        if not path.is_file():
+            continue
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if isinstance(raw, list):
+            return [x for x in raw if isinstance(x, dict)]
+        if isinstance(raw, dict) and isinstance(raw.get("runs"), list):
+            return [x for x in (raw.get("runs") or []) if isinstance(x, dict)]
+    return []
+
+
 def _load_grade_history_rows() -> list[dict[str, Any]]:
-    path = BASE_DIR / "data" / "grade_history.json"
-    if not path.is_file():
-        return []
-    try:
-        raw = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return []
-    if isinstance(raw, list):
-        runs = raw
-    elif isinstance(raw, dict) and isinstance(raw.get("runs"), list):
-        runs = raw.get("runs") or []
-    else:
-        runs = []
+    runs = _read_grade_history_runs()
 
     rows: list[dict[str, Any]] = []
     for r in runs:
@@ -3516,6 +3570,72 @@ def _parse_sports_tokens(raw: Any) -> list[str]:
     return out
 
 
+def _empty_sport_breakdown_rows() -> list[dict[str, Any]]:
+    return [{"sport": s, "decided": 0, "paid": 0, "win_rate": None, "net_dollars": 0.0} for s in _SPORT_BREAKDOWN_ORDER]
+
+
+def _normalize_sport_label(raw: Any) -> str:
+    s = str(raw or "").strip().upper()
+    if not s:
+        return ""
+    aliases = {
+        "NCAAB": "CBB",
+        "WCBB": "CBB",
+        "NCAAF": "NFL",
+    }
+    return aliases.get(s, s)
+
+
+def _sport_breakdown_from_graded_props_json(stake_per_pick: float = 10.0) -> list[dict[str, Any]]:
+    stats: dict[str, dict[str, float]] = {
+        s: {"decided": 0.0, "paid": 0.0, "net": 0.0} for s in _SPORT_BREAKDOWN_ORDER
+    }
+    files = sorted(TEMPLATES_DIR.glob("graded_props_*.json"))
+    for fp in files:
+        try:
+            payload = json.loads(fp.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        props = payload.get("props") if isinstance(payload, dict) else None
+        if not isinstance(props, list):
+            continue
+        for row in props:
+            if not isinstance(row, dict):
+                continue
+            sp = _normalize_sport_label(row.get("sport"))
+            if sp not in stats:
+                continue
+            result = str(row.get("result") or "").strip().upper()
+            if result in {"", "NO_ACTUAL", "PENDING", "VOID", "PUSH"}:
+                continue
+            is_hit = result == "HIT"
+            is_miss = result == "MISS"
+            if not is_hit and not is_miss:
+                continue
+            stats[sp]["decided"] += 1.0
+            if is_hit:
+                stats[sp]["paid"] += 1.0
+                stats[sp]["net"] += stake_per_pick
+            else:
+                stats[sp]["net"] -= stake_per_pick
+
+    out: list[dict[str, Any]] = []
+    for sp in _SPORT_BREAKDOWN_ORDER:
+        decided = int(stats[sp]["decided"])
+        paid = int(stats[sp]["paid"])
+        win_rate = (paid / decided) if decided > 0 else None
+        out.append(
+            {
+                "sport": sp,
+                "decided": decided,
+                "paid": paid,
+                "win_rate": win_rate,
+                "net_dollars": round(float(stats[sp]["net"]), 2),
+            }
+        )
+    return out
+
+
 def _sport_breakdown_from_graded_workbooks(stake_per_ticket: float = 10.0) -> list[dict[str, Any]]:
     stats: dict[str, dict[str, float]] = {
         s: {"decided": 0.0, "paid": 0.0, "net": 0.0} for s in _SPORT_BREAKDOWN_ORDER
@@ -3523,9 +3643,11 @@ def _sport_breakdown_from_graded_workbooks(stake_per_ticket: float = 10.0) -> li
     try:
         import pandas as pd
     except Exception:
-        return [{"sport": s, "decided": 0, "paid": 0, "win_rate": None, "net_dollars": 0.0} for s in _SPORT_BREAKDOWN_ORDER]
+        return _empty_sport_breakdown_rows()
 
     files = sorted(OUTPUTS_ROOT.glob("*/combined_tickets_graded_*.xlsx"))
+    if not files:
+        return _sport_breakdown_from_graded_props_json(stake_per_pick=stake_per_ticket)
     for fp in files:
         try:
             df = pd.read_excel(
@@ -3570,7 +3692,9 @@ def _sport_breakdown_from_graded_workbooks(stake_per_ticket: float = 10.0) -> li
                 "net_dollars": round(float(stats[sp]["net"]), 2),
             }
         )
-    return out
+    if any(r.get("decided", 0) > 0 for r in out):
+        return out
+    return _sport_breakdown_from_graded_props_json(stake_per_pick=stake_per_ticket)
 
 
 def _current_streak_label(rows_asc: list[dict[str, Any]]) -> str:
