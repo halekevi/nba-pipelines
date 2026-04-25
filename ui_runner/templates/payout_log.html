@@ -20,6 +20,29 @@
     .field textarea { min-height: 80px; resize: vertical; }
     .btn { border: 1px solid rgba(212,175,55,.35); border-radius: 10px; background: rgba(212,175,55,.12); color: var(--accent, #d4af37); padding: 10px 14px; cursor: pointer; }
     .btn:disabled { opacity: .5; cursor: not-allowed; }
+    .drop-zone {
+      border: 1px dashed rgba(255,255,255,.28);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      color: rgba(255,255,255,.72);
+      font-size: 12px;
+      background: rgba(255,255,255,.02);
+    }
+    .drop-zone.active {
+      border-color: rgba(212,175,55,.55);
+      background: rgba(212,175,55,.08);
+      color: var(--text, #f4f7ff);
+    }
+    .thumb {
+      max-width: 100%;
+      max-height: 180px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.14);
+      margin-top: 10px;
+      object-fit: contain;
+      display: none;
+    }
     pre { background: rgba(0,0,0,.25); border: 1px solid rgba(255,255,255,.1); border-radius: 10px; padding: 10px; white-space: pre-wrap; word-break: break-word; }
     @media (max-width: 900px) { .row { grid-template-columns: 1fr; } }
   </style>
@@ -35,8 +58,14 @@
     <section class="card">
       <div class="field">
         <label>SCREENSHOT</label>
-        <input type="file" id="shot" accept="image/*"/>
+        <input type="file" id="shot" accept="image/*" capture="environment"/>
       </div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="pasteBtn" type="button">Use Clipboard Screenshot</button>
+        <span class="muted">You can choose a file, paste (Ctrl/Cmd+V), or drag & drop an image.</span>
+      </div>
+      <div id="dropZone" class="drop-zone" style="margin-top:10px">Drop screenshot image here</div>
+      <img id="shotThumb" class="thumb" alt="Selected screenshot preview"/>
       <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn" id="extractBtn">Run Gemini OCR</button>
         <span class="muted" id="extractMsg"></span>
@@ -78,8 +107,82 @@
     const $ = (id) => document.getElementById(id);
     $("f-date").value = new Date().toISOString().slice(0, 10);
     const IS_BUNDLED_MOBILE = window.location.protocol === "file:";
-    $("extractBtn").addEventListener("click", async () => {
+    let selectedImageFile = null;
+
+    function setSelectedImage(file) {
+      if (!file) return;
+      selectedImageFile = file;
+      const thumb = $("shotThumb");
+      const reader = new FileReader();
+      reader.onload = () => {
+        thumb.src = String(reader.result || "");
+        thumb.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+      $("extractMsg").textContent = `Selected: ${file.name || "clipboard-image.png"}`;
+    }
+
+    $("shot").addEventListener("change", () => {
       const f = $("shot").files && $("shot").files[0];
+      if (f) setSelectedImage(f);
+    });
+
+    $("pasteBtn").addEventListener("click", async () => {
+      try {
+        if (!navigator.clipboard || !navigator.clipboard.read) {
+          $("extractMsg").textContent = "Clipboard image API not available in this browser. Use file upload or paste shortcut.";
+          return;
+        }
+        const items = await navigator.clipboard.read();
+        for (const item of items) {
+          const imgType = item.types.find((t) => t.startsWith("image/"));
+          if (!imgType) continue;
+          const blob = await item.getType(imgType);
+          const file = new File([blob], "clipboard-screenshot.png", { type: imgType });
+          setSelectedImage(file);
+          return;
+        }
+        $("extractMsg").textContent = "No image found in clipboard.";
+      } catch (e) {
+        $("extractMsg").textContent = "Clipboard access failed. Try Ctrl/Cmd+V directly or choose file.";
+      }
+    });
+
+    window.addEventListener("paste", (event) => {
+      const items = Array.from((event.clipboardData && event.clipboardData.items) || []);
+      const img = items.find((it) => it.kind === "file" && it.type.startsWith("image/"));
+      if (!img) return;
+      const f = img.getAsFile();
+      if (!f) return;
+      event.preventDefault();
+      setSelectedImage(new File([f], "pasted-screenshot.png", { type: f.type || "image/png" }));
+    });
+
+    const dropZone = $("dropZone");
+    ["dragenter", "dragover"].forEach((name) => {
+      dropZone.addEventListener(name, (e) => {
+        e.preventDefault();
+        dropZone.classList.add("active");
+      });
+    });
+    ["dragleave", "drop"].forEach((name) => {
+      dropZone.addEventListener(name, (e) => {
+        e.preventDefault();
+        dropZone.classList.remove("active");
+      });
+    });
+    dropZone.addEventListener("drop", (e) => {
+      const files = Array.from((e.dataTransfer && e.dataTransfer.files) || []);
+      const f = files.find((x) => String(x.type || "").startsWith("image/"));
+      if (!f) {
+        $("extractMsg").textContent = "Dropped file is not an image.";
+        return;
+      }
+      setSelectedImage(f);
+    });
+
+    $("extractBtn").addEventListener("click", async () => {
+      const f = selectedImageFile || ($("shot").files && $("shot").files[0]);
       if (!f) { $("extractMsg").textContent = "Select an image first."; return; }
       if (IS_BUNDLED_MOBILE) {
         $("extractMsg").textContent = "Gemini OCR upload needs the platform site (/payout/log). Mobile offline bundle cannot call server OCR endpoints.";
