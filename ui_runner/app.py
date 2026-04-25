@@ -1290,6 +1290,122 @@ def _fill_missing_tier_deltas_from_slate(legs: list[dict[str, Any]]) -> None:
             leg["delta"] = round(d, 3)
 
 
+_HIST_STD_LINE_CACHE: dict[str, Any] = {"built_at": 0.0, "triplet": {}, "pair": {}}
+
+
+def _recent_combined_slate_paths(max_days: int = 10, max_files: int = 40) -> list[Path]:
+    out_root = BASE_DIR / "outputs"
+    if not out_root.is_dir():
+        return []
+    dated_dirs: list[tuple[date, Path]] = []
+    for d in out_root.iterdir():
+        if not d.is_dir():
+            continue
+        try:
+            dd = datetime.strptime(d.name, "%Y-%m-%d").date()
+        except ValueError:
+            continue
+        if (date.today() - dd).days < 0 or (date.today() - dd).days > max_days:
+            continue
+        dated_dirs.append((dd, d))
+    dated_dirs.sort(key=lambda x: x[0], reverse=True)
+    files: list[Path] = []
+    seen: set[Path] = set()
+    for _, folder in dated_dirs:
+        for p in sorted(folder.glob("combined_slate_tickets_*.xlsx"), reverse=True):
+            if p in seen:
+                continue
+            seen.add(p)
+            files.append(p)
+            if len(files) >= max_files:
+                return files
+    return files
+
+
+def _historical_standard_line_index(ttl_s: float = 600.0) -> tuple[dict[tuple[str, str, str], float], dict[tuple[str, str], float]]:
+    now = time.time()
+    built_at = float(_HIST_STD_LINE_CACHE.get("built_at") or 0.0)
+    if now - built_at < ttl_s:
+        t = _HIST_STD_LINE_CACHE.get("triplet")
+        p = _HIST_STD_LINE_CACHE.get("pair")
+        if isinstance(t, dict) and isinstance(p, dict):
+            return t, p
+
+    trip_vals: dict[tuple[str, str, str], list[float]] = {}
+    pair_vals: dict[tuple[str, str], list[float]] = {}
+    for path in _recent_combined_slate_paths():
+        try:
+            import openpyxl  # type: ignore
+
+            wb = openpyxl.load_workbook(str(path), data_only=True, read_only=True)
+            if "Full Slate" not in wb.sheetnames:
+                wb.close()
+                continue
+            ws = wb["Full Slate"]
+            it = ws.iter_rows(values_only=True)
+            hdr = [str(x).strip() if x is not None else "" for x in next(it)]
+            idx = {h: i for i, h in enumerate(hdr)}
+            if "Player" not in idx or "Prop" not in idx or "Pick Type" not in idx:
+                wb.close()
+                continue
+            std_col = "Standard Line" if "Standard Line" in idx else "Line"
+            if std_col not in idx:
+                wb.close()
+                continue
+            for row in it:
+                if _normalize_leg_pick_type(row[idx["Pick Type"]]) != "Standard":
+                    continue
+                player = _norm_lookup_token(row[idx["Player"]])
+                prop = _norm_lookup_token(row[idx["Prop"]])
+                direction = _norm_lookup_token(row[idx["Dir"]]).upper() if "Dir" in idx else ""
+                std_line = _safe_num_or_none(row[idx[std_col]])
+                if not player or not prop or std_line is None:
+                    continue
+                pair_vals.setdefault((player, prop), []).append(std_line)
+                if direction in {"OVER", "UNDER"}:
+                    trip_vals.setdefault((player, prop, direction), []).append(std_line)
+            wb.close()
+        except Exception:
+            continue
+
+    trip: dict[tuple[str, str, str], float] = {}
+    pair: dict[tuple[str, str], float] = {}
+    for k, vals in trip_vals.items():
+        if vals:
+            trip[k] = float(statistics.median(vals))
+    for k, vals in pair_vals.items():
+        if vals:
+            pair[k] = float(statistics.median(vals))
+    _HIST_STD_LINE_CACHE["built_at"] = now
+    _HIST_STD_LINE_CACHE["triplet"] = trip
+    _HIST_STD_LINE_CACHE["pair"] = pair
+    return trip, pair
+
+
+def _fill_missing_tier_deltas_from_history(legs: list[dict[str, Any]]) -> None:
+    if not _has_missing_tier_delta(legs):
+        return
+    by_triplet, by_pair = _historical_standard_line_index()
+    if not by_triplet and not by_pair:
+        return
+    for leg in legs:
+        pt = _normalize_leg_pick_type(leg.get("pick_type"))
+        if pt not in {"Goblin", "Demon"}:
+            continue
+        cur_delta = _safe_num_or_none(leg.get("delta"))
+        if cur_delta is not None and cur_delta > 0:
+            continue
+        played_line = _safe_num_or_none(leg.get("line"))
+        if played_line is None:
+            continue
+        std_line = _lookup_standard_line_from_slate(leg, by_triplet, by_pair)
+        if std_line is None:
+            continue
+        d = abs(std_line - played_line)
+        if d > 0:
+            leg["delta"] = round(d, 3)
+
+
 def _fill_missing_tier_deltas(
     model: Any,
     image_bytes: bytes,
@@ -1412,6 +1528,7 @@ def _gemini_extract_ticket_from_image(image_bytes: bytes, mime_type: str) -> dic
         leg_dicts = [x for x in legs if isinstance(x, dict)]
         _fill_missing_tier_deltas(model, image_bytes, mime_type, leg_dicts)
         _fill_missing_tier_deltas_from_slate(leg_dicts)
+        _fill_missing_tier_deltas_from_history(leg_dicts)
         extracted["legs"] = leg_dicts
     return extracted
 
