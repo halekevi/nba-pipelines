@@ -1221,7 +1221,9 @@ def _gemini_extract_ticket_from_image(image_bytes: bytes, mime_type: str) -> dic
         "If a field is unknown, use null (or \"Unknown\" for pick_type/direction)."
     )
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    # gemini-1.5-flash was removed from the v1beta API (404). Use current stable Flash; override via GEMINI_VISION_MODEL if needed.
+    model_name = (os.environ.get("GEMINI_VISION_MODEL") or "gemini-2.5-flash").strip()
+    model = genai.GenerativeModel(model_name)
     img_part = {"mime_type": mime_type or "image/png", "data": base64.b64encode(image_bytes).decode("utf-8")}
     resp = model.generate_content([prompt, img_part])
     txt = getattr(resp, "text", "") or ""
