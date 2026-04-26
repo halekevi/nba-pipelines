@@ -4450,13 +4450,21 @@ def generate_payout_ladder_examples(payload: dict, out_path: str) -> None:
             json.dump({"generated_at": datetime.now(timezone.utc).isoformat(), "examples": []}, f, ensure_ascii=False, indent=2)
         return
 
+    def _num_or_nan(raw: Any) -> float:
+        try:
+            return float(raw)
+        except (TypeError, ValueError):
+            return float("nan")
+
     std_pool: list[tuple[dict, float]] = []
     gob_pool: list[tuple[dict, float]] = []
     dem_pool: list[tuple[dict, float]] = []
     for leg in all_legs:
         pt = str(leg.get("pick_type") or "Standard").strip().title()
-        line = _to_float_safe(leg.get("line"), float("nan"))
-        std_line = _to_float_safe(leg.get("standard_line"), line)
+        line = _num_or_nan(leg.get("line"))
+        std_line = _num_or_nan(leg.get("standard_line"))
+        if not math.isfinite(std_line):
+            std_line = line
         delta = abs(std_line - line) if (math.isfinite(std_line) and math.isfinite(line)) else 0.0
         if pt == "Goblin" and 0.5 <= delta <= 3.0:
             gob_pool.append((leg, delta))

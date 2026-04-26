@@ -1,0 +1,2253 @@
+{
+  "generated_at": "2026-04-26T00:00:15.703362+00:00",
+  "examples": [
+    {
+      "composition": "2S+0G+0D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "1S+1G+0D",
+      "goblin_delta": 0.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 0.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "1S+1G+0D",
+      "goblin_delta": 1.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 1.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "1S+1G+0D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "1S+1G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "1S+1G+0D",
+      "goblin_delta": 2.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "1S+1G+0D",
+      "goblin_delta": 3.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 3.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "1S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Demon",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "3S+0G+0D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "2S+1G+0D",
+      "goblin_delta": 0.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 0.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "2S+1G+0D",
+      "goblin_delta": 1.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 1.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "2S+1G+0D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "2S+1G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "2S+1G+0D",
+      "goblin_delta": 2.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "2S+1G+0D",
+      "goblin_delta": 3.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 3.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "1S+2G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "1S+1G+1D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Demon",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "2S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Demon",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "4S+0G+0D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "3S+1G+0D",
+      "goblin_delta": 0.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 0.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "3S+1G+0D",
+      "goblin_delta": 1.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 1.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "3S+1G+0D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "3S+1G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "3S+1G+0D",
+      "goblin_delta": 2.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "3S+1G+0D",
+      "goblin_delta": 3.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 3.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "2S+2G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "2S+1G+1D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Demon",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "3S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Demon",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "5S+0G+0D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "4S+1G+0D",
+      "goblin_delta": 0.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 0.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "4S+1G+0D",
+      "goblin_delta": 1.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 1.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "4S+1G+0D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "4S+1G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "4S+1G+0D",
+      "goblin_delta": 2.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "4S+1G+0D",
+      "goblin_delta": 3.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 3.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "3S+2G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "3S+1G+1D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Demon",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "4S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Demon",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "6S+0G+0D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 0.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 0.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 1.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 1.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 2.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 3.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 3.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "4S+2G+0D",
+      "goblin_delta": 2.0,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "4S+1G+1D",
+      "goblin_delta": 1.5,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jonathan Bond",
+          "prop_type": "Goalie Saves",
+          "line": 2.5,
+          "standard_line": 3.0,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Demon",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    },
+    {
+      "composition": "5S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jordan Clarkson",
+          "prop_type": "Two Pointers Made",
+          "line": 1.5,
+          "standard_line": 1.5,
+          "pick_type": "Demon",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        }
+      ]
+    }
+  ]
+}
