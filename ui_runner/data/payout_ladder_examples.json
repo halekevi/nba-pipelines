@@ -1,32 +1,6 @@
 {
-  "generated_at": "2026-04-26T00:00:15.703362+00:00",
+  "generated_at": "2026-04-26T00:18:47.845857+00:00",
   "examples": [
-    {
-      "composition": "2S+0G+0D",
-      "goblin_delta": null,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        }
-      ]
-    },
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
@@ -184,68 +158,6 @@
       ]
     },
     {
-      "composition": "1S+0G+1D",
-      "goblin_delta": null,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Demon",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        }
-      ]
-    },
-    {
-      "composition": "3S+0G+0D",
-      "goblin_delta": null,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        }
-      ]
-    },
-    {
       "composition": "2S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
@@ -260,14 +172,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
           "player": "Jonathan Bond",
@@ -296,14 +208,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
           "player": "Jonathan Bond",
@@ -332,14 +244,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
           "player": "Jonathan Bond",
@@ -368,14 +280,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
           "player": "Jonathan Bond",
@@ -404,14 +316,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
           "player": "Jonathan Bond",
@@ -440,14 +352,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
           "player": "Jonathan Bond",
@@ -486,132 +398,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Jonathan Bond",
+          "player": "Brad Stuver",
           "prop_type": "Goalie Saves",
           "line": 2.5,
           "standard_line": 3.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
-        }
-      ]
-    },
-    {
-      "composition": "1S+1G+1D",
-      "goblin_delta": 1.5,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 1.5,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Demon",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        }
-      ]
-    },
-    {
-      "composition": "2S+0G+1D",
-      "goblin_delta": null,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Demon",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        }
-      ]
-    },
-    {
-      "composition": "4S+0G+0D",
-      "goblin_delta": null,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.5
         }
       ]
     },
@@ -630,20 +424,20 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -676,20 +470,20 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -722,20 +516,20 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -768,20 +562,20 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -814,20 +608,20 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -860,20 +654,20 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -906,22 +700,12 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
@@ -934,154 +718,16 @@
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 1.0
-        }
-      ]
-    },
-    {
-      "composition": "2S+1G+1D",
-      "goblin_delta": 1.5,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jonathan Bond",
+          "player": "Brad Stuver",
           "prop_type": "Goalie Saves",
           "line": 2.5,
           "standard_line": 3.0,
           "pick_type": "Goblin",
-          "delta": 1.5,
+          "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Demon",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        }
-      ]
-    },
-    {
-      "composition": "3S+0G+1D",
-      "goblin_delta": null,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Demon",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        }
-      ]
-    },
-    {
-      "composition": "5S+0G+0D",
-      "goblin_delta": null,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.5
         }
       ]
     },
@@ -1100,30 +746,30 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 3.0,
+          "standard_line": 3.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1156,30 +802,30 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 3.0,
+          "standard_line": 3.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1212,30 +858,30 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 3.0,
+          "standard_line": 3.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1268,30 +914,30 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 3.0,
+          "standard_line": 3.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1324,30 +970,30 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 3.0,
+          "standard_line": 3.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1380,30 +1026,30 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 3.0,
+          "standard_line": 3.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1436,20 +1082,20 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1466,192 +1112,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Jonathan Bond",
+          "player": "Brad Stuver",
           "prop_type": "Goalie Saves",
           "line": 2.5,
           "standard_line": 3.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
-        }
-      ]
-    },
-    {
-      "composition": "3S+1G+1D",
-      "goblin_delta": 1.5,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 1.5,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Demon",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        }
-      ]
-    },
-    {
-      "composition": "4S+0G+1D",
-      "goblin_delta": null,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Demon",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        }
-      ]
-    },
-    {
-      "composition": "6S+0G+0D",
-      "goblin_delta": null,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.5
         }
       ]
     },
@@ -1670,44 +1138,44 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 3.0,
+          "standard_line": 3.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Daniss Jenkins",
+          "prop_type": "FG Attempted",
+          "line": 6.0,
+          "standard_line": 6.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
           "player": "Jonathan Bond",
@@ -1736,44 +1204,44 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 3.0,
+          "standard_line": 3.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Daniss Jenkins",
+          "prop_type": "FG Attempted",
+          "line": 6.0,
+          "standard_line": 6.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
           "player": "Jonathan Bond",
@@ -1802,44 +1270,44 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 3.0,
+          "standard_line": 3.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Daniss Jenkins",
+          "prop_type": "FG Attempted",
+          "line": 6.0,
+          "standard_line": 6.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
           "player": "Jonathan Bond",
@@ -1868,44 +1336,44 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 3.0,
+          "standard_line": 3.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Daniss Jenkins",
+          "prop_type": "FG Attempted",
+          "line": 6.0,
+          "standard_line": 6.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
           "player": "Jonathan Bond",
@@ -1934,44 +1402,44 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 3.0,
+          "standard_line": 3.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Daniss Jenkins",
+          "prop_type": "FG Attempted",
+          "line": 6.0,
+          "standard_line": 6.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
           "player": "Jonathan Bond",
@@ -2000,44 +1468,44 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 3.0,
+          "standard_line": 3.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Daniss Jenkins",
+          "prop_type": "FG Attempted",
+          "line": 6.0,
+          "standard_line": 6.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
           "player": "Jonathan Bond",
@@ -2066,30 +1534,30 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Bruce Brown",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Ayo Dosunmu",
+          "prop_type": "Points",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Karl-Anthony Towns",
+          "prop_type": "Assists",
+          "line": 3.0,
+          "standard_line": 3.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -2106,146 +1574,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Jonathan Bond",
+          "player": "Brad Stuver",
           "prop_type": "Goalie Saves",
           "line": 2.5,
           "standard_line": 3.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
-        }
-      ]
-    },
-    {
-      "composition": "4S+1G+1D",
-      "goblin_delta": 1.5,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 1.5,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Demon",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        }
-      ]
-    },
-    {
-      "composition": "5S+0G+1D",
-      "goblin_delta": null,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Demon",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.5
         }
       ]
     }

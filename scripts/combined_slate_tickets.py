@@ -4493,15 +4493,51 @@ def generate_payout_ladder_examples(payload: dict, out_path: str) -> None:
             "hit_rate": row.get("hit_rate"),
         }
 
+    def _pick_unique_leg(
+        pool: list[tuple[dict, float]],
+        used_players: set[str],
+        fallback: tuple[dict, float],
+        pick_type: str,
+        delta_override: float | None = None,
+    ) -> dict | None:
+        for cand in pool:
+            player = str((cand[0] or {}).get("player") or "").strip().lower()
+            if player and player in used_players:
+                continue
+            out = _leg(cand, pick_type, delta_override)
+            p_out = str(out.get("player") or "").strip().lower()
+            if p_out:
+                used_players.add(p_out)
+            return out
+        # fallback only if it doesn't violate uniqueness
+        fb_player = str((fallback[0] or {}).get("player") or "").strip().lower()
+        if fb_player and fb_player in used_players:
+            return None
+        out = _leg(fallback, pick_type, delta_override)
+        p_out = str(out.get("player") or "").strip().lower()
+        if p_out:
+            used_players.add(p_out)
+        return out
+
     def _emit(n: int, g_count: int, d_count: int, g_delta: float | None):
         s_count = max(0, n - g_count - d_count)
-        legs = []
+        legs: list[dict] = []
+        used_players: set[str] = set()
         for _ in range(s_count):
-            legs.append(_leg(seed_std, "Standard", 0.0))
+            leg = _pick_unique_leg(std_pool, used_players, seed_std, "Standard", 0.0)
+            if not leg:
+                return
+            legs.append(leg)
         for _ in range(g_count):
-            legs.append(_leg(seed_gob, "Goblin", g_delta))
+            leg = _pick_unique_leg(gob_pool, used_players, seed_gob, "Goblin", g_delta)
+            if not leg:
+                return
+            legs.append(leg)
         for _ in range(d_count):
-            legs.append(_leg(seed_dem, "Demon"))
+            leg = _pick_unique_leg(dem_pool, used_players, seed_dem, "Demon")
+            if not leg:
+                return
+            legs.append(leg)
         examples.append(
             {
                 "composition": f"{s_count}S+{g_count}G+{d_count}D",
@@ -4511,7 +4547,6 @@ def generate_payout_ladder_examples(payload: dict, out_path: str) -> None:
         )
 
     for n in range(2, 7):
-        _emit(n, g_count=0, d_count=0, g_delta=None)      # all standard
         for dlt in delta_targets:                          # 1 goblin + standard
             _emit(n, g_count=1, d_count=0, g_delta=dlt)
         if n >= 3:
