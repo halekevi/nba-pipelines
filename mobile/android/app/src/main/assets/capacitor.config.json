@@ -1,5 +1,8 @@
 {
 	"appId": "com.proporacle.app",
 	"appName": "PropORACLE",
-	"webDir": "www"
+	"webDir": "www",
+	"server": {
+		"androidScheme": "http"
+	}
 }

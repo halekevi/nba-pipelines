@@ -1191,6 +1191,43 @@ def dedupe_ticket_groups_by_leg_set(all_ticket_groups: list) -> tuple[list, int,
     return out, n_before, len(out)
 
 
+def enforce_group_jaccard_diversity(
+    all_ticket_groups: list,
+    max_jaccard_overlap: float = 0.55,
+) -> tuple[list, int, int]:
+    """
+    Hard diversity guard at group level:
+    after exact dedupe, keep only groups whose combined leg-set overlap is <= threshold.
+    """
+    n_before = len(all_ticket_groups or [])
+    if n_before <= 1:
+        return list(all_ticket_groups or []), n_before, n_before
+    thr = float(max(0.0, min(1.0, max_jaccard_overlap)))
+    kept: list = []
+    kept_leg_sets: list[frozenset] = []
+    for item in (all_ticket_groups or []):
+        if not isinstance(item, (list, tuple)) or len(item) < 2:
+            kept.append(item)
+            continue
+        tickets = item[1] or []
+        leg_set = _ticket_group_leg_fingerprint(tickets)
+        if not leg_set:
+            kept.append(item)
+            continue
+        too_similar = False
+        for prev in kept_leg_sets:
+            union = len(leg_set | prev)
+            overlap = (len(leg_set & prev) / union) if union > 0 else 0.0
+            if overlap > thr:
+                too_similar = True
+                break
+        if too_similar:
+            continue
+        kept.append(item)
+        kept_leg_sets.append(leg_set)
+    return kept, n_before, len(kept)
+
+
 def _load_diversity_config(path: str = DIVERSITY_CONFIG_PATH) -> dict[str, Any]:
     defaults: dict[str, Any] = {
         "max_leg_exposure": 4,
@@ -2651,8 +2688,114 @@ def _greedy_ticket_ev_rank_metric(rows: list[dict], flow: str, n_legs: int) -> f
     return float(ep * adj_p)
 
 
+STRUCTURE_VARIANT_MAX_JACCARD = 0.55
+
+
 def _ticket_row_dedup_key(rows: list[dict]) -> frozenset[str]:
-    return frozenset((str(r.get("player", "")) + "|" + str(r.get("prop_type", ""))).strip() for r in rows)
+    """
+    Canonical leg-set key for slip dedupe.
+    Include sport/player/prop/line/direction so near-identical variants collapse.
+    """
+    out: set[str] = set()
+    for r in rows or []:
+        if not isinstance(r, dict):
+            continue
+        line_s = _norm_line_for_leg_fp(r.get("line"))
+        d = str(r.get("direction", "") or "").strip().upper()
+        if "UNDER" in d:
+            d = "UNDER"
+        elif "OVER" in d:
+            d = "OVER"
+        out.add(
+            "|".join(
+                [
+                    str(r.get("sport", "") or "").strip().upper(),
+                    str(r.get("player", "") or "").strip().lower(),
+                    str(r.get("prop_type", "") or "").strip().lower(),
+                    line_s,
+                    d,
+                ]
+            )
+        )
+    return frozenset(x for x in out if x.strip())
+
+
+def _jaccard_overlap(a: frozenset[str], b: frozenset[str]) -> float:
+    if not a and not b:
+        return 1.0
+    if not a or not b:
+        return 0.0
+    inter = len(a & b)
+    union = len(a | b)
+    return float(inter) / float(union) if union else 0.0
+
+
+def _pctl(vals: list[float], q: float) -> float:
+    if not vals:
+        return 0.0
+    arr = sorted(float(v) for v in vals)
+    qq = max(0.0, min(1.0, float(q)))
+    idx = int(round((len(arr) - 1) * qq))
+    idx = max(0, min(len(arr) - 1, idx))
+    return float(arr[idx])
+
+
+def compute_ticket_diversity_audit(
+    all_ticket_groups: list[tuple[str, list[dict[str, Any]], Any]],
+) -> dict[str, Any]:
+    slips: list[tuple[int, frozenset[str]]] = []
+    for _group_name, tickets, _bg in all_ticket_groups or []:
+        for t in (tickets or []):
+            if not isinstance(t, dict):
+                continue
+            rows = t.get("rows") or t.get("legs") or []
+            key = _ticket_row_dedup_key(rows)
+            if not key:
+                continue
+            n_legs = int(t.get("n_legs") or len(rows) or 0)
+            slips.append((n_legs, key))
+
+    keys_all = [k for _, k in slips]
+    total = len(keys_all)
+    unique = len(set(keys_all))
+    dup_rate = (1.0 - (float(unique) / float(total))) if total > 0 else 0.0
+
+    pair_j: list[float] = []
+    for i in range(len(keys_all)):
+        a = keys_all[i]
+        for j in range(i + 1, len(keys_all)):
+            pair_j.append(_jaccard_overlap(a, keys_all[j]))
+
+    by_legs: dict[str, Any] = {}
+    for n in sorted({n for n, _ in slips if n > 0}):
+        nk = [k for n0, k in slips if n0 == n]
+        n_total = len(nk)
+        n_unique = len(set(nk))
+        n_dup = (1.0 - (float(n_unique) / float(n_total))) if n_total > 0 else 0.0
+        n_pair_j: list[float] = []
+        for i in range(len(nk)):
+            a = nk[i]
+            for j in range(i + 1, len(nk)):
+                n_pair_j.append(_jaccard_overlap(a, nk[j]))
+        by_legs[str(n)] = {
+            "tickets": int(n_total),
+            "unique_leg_sets": int(n_unique),
+            "duplicate_rate": float(n_dup),
+            "jaccard_mean": float(sum(n_pair_j) / len(n_pair_j)) if n_pair_j else 0.0,
+            "jaccard_p90": float(_pctl(n_pair_j, 0.90)) if n_pair_j else 0.0,
+            "jaccard_max": float(max(n_pair_j)) if n_pair_j else 0.0,
+        }
+
+    return {
+        "tickets": int(total),
+        "unique_leg_sets": int(unique),
+        "duplicate_rate": float(dup_rate),
+        "pair_count": int(len(pair_j)),
+        "jaccard_mean": float(sum(pair_j) / len(pair_j)) if pair_j else 0.0,
+        "jaccard_p90": float(_pctl(pair_j, 0.90)) if pair_j else 0.0,
+        "jaccard_max": float(max(pair_j)) if pair_j else 0.0,
+        "by_legs": by_legs,
+    }
 
 
 def _rank_greedy_tickets_by_paid_metric(
@@ -2736,8 +2879,28 @@ def _collect_row_candidates_for_structure(
             return []
         return [[x.to_dict() for x in chosen]]
     eff_starts = max(tg_starts, max_variants * 3) if max_variants > 1 else tg_starts
-    ranked = _rank_greedy_tickets_by_paid_metric(cand, n_legs, flow, eff_starts, max_tickets=max_variants)
-    return [t[0] for t in ranked]
+    # Pull a larger candidate set, then keep only diverse slips by leg-set overlap.
+    ranked = _rank_greedy_tickets_by_paid_metric(
+        cand,
+        n_legs,
+        flow,
+        eff_starts,
+        max_tickets=max(3, max_variants * 4),
+    )
+    selected: list[list[dict]] = []
+    selected_keys: list[frozenset[str]] = []
+    for t in ranked:
+        rows = t[0]
+        key = _ticket_row_dedup_key(rows)
+        if not key:
+            continue
+        if any(_jaccard_overlap(key, k) > float(STRUCTURE_VARIANT_MAX_JACCARD) for k in selected_keys):
+            continue
+        selected.append(rows)
+        selected_keys.append(key)
+        if len(selected) >= max_variants:
+            break
+    return selected
 
 
 def _finalize_structure_ticket_dict(
@@ -9996,6 +10159,16 @@ def main():
         f"  [dedupe] ticket groups: {_n_groups_before_dedupe} -> {_n_groups_after_dedupe} "
         f"({_n_groups_before_dedupe - _n_groups_after_dedupe} duplicate leg sets removed)"
     )
+    _jg_max = float(_diversity_cfg.get("max_jaccard_overlap", 0.55))
+    all_ticket_groups, _jg_b, _jg_a = enforce_group_jaccard_diversity(
+        all_ticket_groups,
+        max_jaccard_overlap=_jg_max,
+    )
+    if _jg_b != _jg_a:
+        print(
+            f"  [dedupe-jaccard] ticket groups: {_jg_b} -> {_jg_a} "
+            f"({_jg_b - _jg_a} high-overlap groups removed; max_jaccard={_jg_max:.2f})"
+        )
     if bool(_diversity_cfg.get("enabled", True)):
         all_ticket_groups = _apply_diversity_filter_to_ticket_groups(all_ticket_groups, _diversity_cfg)
         print(f"  [diversity] groups after filter: {len(all_ticket_groups)}")
@@ -10014,6 +10187,27 @@ def main():
         f"  [verify] groups by leg count (post-dedupe): {dict(sorted(_lc_groups_post.items()))}"
     )
     print(f"  [verify] post-dedupe: {len(all_ticket_groups)} groups, {_post_slips} slips")
+    _div_audit = compute_ticket_diversity_audit(all_ticket_groups)
+    print(
+        "  [audit] ticket diversity: "
+        f"tickets={_div_audit.get('tickets', 0)} "
+        f"unique={_div_audit.get('unique_leg_sets', 0)} "
+        f"dup_rate={float(_div_audit.get('duplicate_rate', 0.0)):.4f} "
+        f"jaccard_mean={float(_div_audit.get('jaccard_mean', 0.0)):.4f} "
+        f"jaccard_p90={float(_div_audit.get('jaccard_p90', 0.0)):.4f}"
+    )
+    try:
+        _audit_out = Path(args.output).with_name(f"ticket_diversity_audit_{args.date}.json")
+        _audit_payload = {
+            "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+            "date": str(args.date),
+            "source_output": str(args.output),
+            "audit": _div_audit,
+        }
+        _audit_out.write_text(json.dumps(_audit_payload, indent=2), encoding="utf-8")
+        print(f"  [audit] wrote diversity audit -> {_audit_out}")
+    except Exception as _audit_exc:
+        print(f"  [WARN] failed writing diversity audit: {_audit_exc}")
     _kept_ticket_sheet_names = {str(g[0]) for g in all_ticket_groups}
     for _ent in _groups_pre_dedupe_snapshot:
         _sn = str(_ent[0])
@@ -10085,6 +10279,15 @@ def main():
             final_groups, _fg_b, _fg_a = dedupe_ticket_groups_by_leg_set(final_groups)
             if _fg_b != _fg_a:
                 print(f"  [dedupe] FINAL fallback groups: {_fg_b} -> {_fg_a}")
+            final_groups, _fj_b, _fj_a = enforce_group_jaccard_diversity(
+                final_groups,
+                max_jaccard_overlap=float(_diversity_cfg.get("max_jaccard_overlap", 0.55)),
+            )
+            if _fj_b != _fj_a:
+                print(
+                    f"  [dedupe-jaccard] FINAL fallback groups: {_fj_b} -> {_fj_a} "
+                    f"(max_jaccard={float(_diversity_cfg.get('max_jaccard_overlap', 0.55)):.2f})"
+                )
             if bool(_diversity_cfg.get("enabled", True)):
                 final_groups = _apply_diversity_filter_to_ticket_groups(final_groups, _diversity_cfg)
                 print(f"  [diversity] FINAL fallback groups: {len(final_groups)}")

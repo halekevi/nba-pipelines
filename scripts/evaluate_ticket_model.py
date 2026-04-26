@@ -219,6 +219,15 @@ def _evaluate_for_knw(
         g = g.copy()
         if g.empty:
             continue
+        # Collapse near-identical tickets (same leg-set emitted in multiple groups/variants).
+        # Without this, EV vs model reranks can swap IDs but keep effectively the same outcomes.
+        if "canonical_leg_ids" in g.columns:
+            k = g["canonical_leg_ids"].fillna("").astype(str).str.strip()
+            k = k.where(k.ne(""), g.get("ticket_uid", pd.Series([""] * len(g), index=g.index)).astype(str))
+            g["_eval_dedupe_key"] = k
+            g = g.sort_values(["ev_signal_num", "ticket_model_p_cash"], ascending=[False, False])
+            g = g.drop_duplicates(subset=["_eval_dedupe_key"], keep="first")
+            g = g.drop(columns=["_eval_dedupe_key"], errors="ignore")
         g["score_ev"] = _norm01(g["ev_signal_num"])
         g["score_blend"] = (1.0 - w) * g["score_ev"] + w * g["ticket_model_p_cash"]
         g["score_model"] = _to_num(g["ticket_model_p_cash"]).fillna(0.0)
@@ -230,7 +239,10 @@ def _evaluate_for_knw(
         ev_keys = set(top_ev.get("ticket_uid", pd.Series([], dtype=str)).astype(str).tolist())
         model_keys = set(top_model.get("ticket_uid", pd.Series([], dtype=str)).astype(str).tolist())
         overlap = len(ev_keys & model_keys)
-        swapped = max(0, n - overlap)
+        # Use effective comparison size (not requested n) so short slates do not
+        # report artificial swaps when both arms chose the same smaller set.
+        effective_n = min(int(n), int(len(top_ev)), int(len(top_model)))
+        swapped = max(0, effective_n - overlap)
 
         a = _summarize_subset(top_ev)
         b = _summarize_subset(top_model)
