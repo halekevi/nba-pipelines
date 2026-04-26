@@ -4554,6 +4554,16 @@ def generate_payout_ladder_examples(payload: dict, out_path: str) -> None:
             _emit(n, g_count=1, d_count=1, g_delta=1.5)   # mixed goblin + demon
         _emit(n, g_count=0, d_count=1, g_delta=None)      # 1 demon + standard
 
+    # Safety net: never publish examples with duplicate players in the same ticket.
+    deduped_examples: list[dict] = []
+    for ex in examples:
+        legs = [l for l in (ex.get("legs") or []) if isinstance(l, dict)]
+        players = [str((l.get("player") or "")).strip().lower() for l in legs if str((l.get("player") or "")).strip()]
+        if len(players) != len(set(players)):
+            continue
+        deduped_examples.append(ex)
+    examples = deduped_examples
+
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(
