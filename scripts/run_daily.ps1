@@ -68,6 +68,20 @@ if (@("off", "shadow", "on") -notcontains $TicketModelModeEffective) {
     Write-Warning "Invalid TicketModelMode '$TicketModelModeEffective' (expected off|shadow|on); defaulting to shadow"
     $TicketModelModeEffective = "shadow"
 }
+$PqControlPercent = 10
+if ([string]$env:PROPORACLE_PQ_CONTROL_PERCENT) {
+    $tmpPct = 0
+    if ([int]::TryParse(([string]$env:PROPORACLE_PQ_CONTROL_PERCENT).Trim(), [ref]$tmpPct)) {
+        $PqControlPercent = [Math]::Max(0, [Math]::Min(100, $tmpPct))
+    }
+}
+$PqControlMaxTickets = 4
+if ([string]$env:PROPORACLE_PQ_CONTROL_MAX_TICKETS) {
+    $tmpCap = 0
+    if ([int]::TryParse(([string]$env:PROPORACLE_PQ_CONTROL_MAX_TICKETS).Trim(), [ref]$tmpCap)) {
+        $PqControlMaxTickets = [Math]::Max(1, $tmpCap)
+    }
+}
 
 $LogsDir = Join-Path $Root "logs"
 if (!(Test-Path $LogsDir)) {
@@ -173,6 +187,7 @@ try { [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 } catch { }
 
 Write-Log "======== Daily run start (Today=$Today, Yesterday=$Yesterday) ========"
 Write-Log "Ticket model mode: $TicketModelModeEffective (weight=$TicketModelWeight, top_n=$TicketModelTopN)"
+Write-Log "PQS control slice: ${PqControlPercent}% (cap=$PqControlMaxTickets, pq=0.0, artifacts only)"
 if ($NoOverwrite) {
     Write-Log "NO-OVERWRITE mode enabled (existing files are preserved to *.bak_YYYYMMDD_HHMMSS before updates)"
 }
@@ -652,6 +667,34 @@ else {
 }
 
 # =============================================================================
+# STEP C1 — Prop reliability index refresh (used by ticket pool gating)
+# =============================================================================
+if ($script:PipelineFailed) {
+    Write-Log "STEP C1 - Prop reliability index: SKIPPED (pipeline failed)"
+}
+else {
+    $reliabilityScript = Join-Path $Root "scripts\validate_prop_reliability.py"
+    if (Test-Path $reliabilityScript) {
+        try {
+            Write-Log "STEP C1 - Prop reliability index: START"
+            & py -3.14 -X utf8 $reliabilityScript --min-n 40 --out-json (Join-Path $Root "data\reports\prop_reliability_latest.json")
+            if ($LASTEXITCODE -eq 0) {
+                Write-Log "STEP C1 - Prop reliability index: OK"
+            }
+            else {
+                Write-Log "STEP C1 - Prop reliability index: WARN (exit $LASTEXITCODE)"
+            }
+        }
+        catch {
+            Write-Log "STEP C1 - Prop reliability index: WARN ($($_.Exception.Message))"
+        }
+    }
+    else {
+        Write-Log "STEP C1 - Prop reliability index: SKIP (script missing)"
+    }
+}
+
+# =============================================================================
 # STEP D — Combined slate for today (explicit; ensures outputs + web)
 # =============================================================================
 if ($script:PipelineFailed) {
@@ -887,6 +930,97 @@ else {
         }
         catch {
             Write-Log "STEP D1f - Ticket model run report: WARN ($($_.Exception.Message))"
+        }
+
+        # Edge quality report (props + tickets + model eval row for date when available)
+        $edgeQualityScript = Join-Path $Root "scripts\build_edge_quality_report.py"
+        if (Test-Path $edgeQualityScript) {
+            try {
+                & py -3.14 -X utf8 $edgeQualityScript --date $Today --out-dir (Join-Path $Root "outputs\$Today")
+                if ($LASTEXITCODE -eq 0) {
+                    Write-Log "STEP D1g - Edge quality report: OK"
+                }
+                else {
+                    Write-Log "STEP D1g - Edge quality report: WARN (exit $LASTEXITCODE)"
+                }
+            }
+            catch {
+                Write-Log "STEP D1g - Edge quality report: WARN ($($_.Exception.Message))"
+            }
+        }
+        else {
+            Write-Log "STEP D1g - Edge quality report: SKIP (script missing)"
+        }
+
+        # Optional PQ control artifact (small pq0 slice) for drift tracking.
+        # This does not overwrite tickets_latest/slate_latest and is kept for offline analysis only.
+        if ($PqControlPercent -gt 0) {
+            $combinedScript = Join-Path $Root "scripts\combined_slate_tickets.py"
+            if (Test-Path $combinedScript) {
+                try {
+                    $outDir = Join-Path $Root "outputs\$Today"
+                    if (-not (Test-Path $outDir)) {
+                        New-Item -ItemType Directory -Path $outDir -Force | Out-Null
+                    }
+                    $controlOut = Join-Path $outDir "combined_slate_tickets_control_pq0_$Today.xlsx"
+                    $controlTickets = [Math]::Max(1, [Math]::Min($PqControlMaxTickets, [int][Math]::Floor(40 * ($PqControlPercent / 100.0))))
+                    $candidate = @{
+                        nba = @((Join-Path $Root "outputs\$Today\step8_nba_direction_clean_$Today.xlsx"), (Join-Path $Root "NBA\data\outputs\step8_all_direction_clean.xlsx"))
+                        nhl = @((Join-Path $Root "outputs\$Today\step8_nhl_direction_clean_$Today.xlsx"), (Join-Path $Root "NHL\outputs\step8_nhl_direction_clean.xlsx"))
+                        soccer = @((Join-Path $Root "outputs\$Today\step8_soccer_direction_clean_$Today.xlsx"), (Join-Path $Root "Soccer\outputs\step8_soccer_direction_clean.xlsx"))
+                        mlb = @((Join-Path $Root "outputs\$Today\step8_mlb_direction_clean_$Today.xlsx"), (Join-Path $Root "MLB\step8_mlb_direction_clean.xlsx"), (Join-Path $Root "MLB\outputs\step8_mlb_direction_clean.xlsx"))
+                        tennis = @((Join-Path $Root "outputs\$Today\step8_tennis_direction_clean_$Today.xlsx"), (Join-Path $Root "Tennis\outputs\step8_tennis_direction_clean.xlsx"))
+                        nba1q = @((Join-Path $Root "outputs\$Today\step8_nba1q_direction_clean_$Today.xlsx"), (Join-Path $Root "NBA\step8_nba1q_direction_clean.xlsx"))
+                        nba1h = @((Join-Path $Root "outputs\$Today\step8_nba1h_direction_clean_$Today.xlsx"), (Join-Path $Root "NBA\step8_nba1h_direction_clean.xlsx"))
+                        cbb = @((Join-Path $Root "CBB\step6_ranked_cbb.xlsx"))
+                    }
+                    $resolved = @{}
+                    foreach ($k in $candidate.Keys) {
+                        foreach ($p in $candidate[$k]) {
+                            if (Test-Path $p) { $resolved[$k] = $p; break }
+                        }
+                    }
+                    if (-not $resolved.ContainsKey("nba")) {
+                        Write-Log "STEP D1h - PQ control slice: SKIP (NBA step8 missing)"
+                    }
+                    else {
+                        $controlArgs = @(
+                            "-3.14", "-X", "utf8", $combinedScript,
+                            "--date", $Today,
+                            "--nba", $resolved["nba"],
+                            "--output", $controlOut,
+                            "--tiers", "A,B,C,D",
+                            "--min-hit-rate", "0.45",
+                            "--min-edge", "-0.25",
+                            "--max-tickets", "$controlTickets",
+                            "--ticket-gen-starts", "32",
+                            "--nba-structured-variants", "4",
+                            "--min-prop-quality", "0.0"
+                        )
+                        foreach ($opt in @("nhl", "soccer", "mlb", "tennis", "nba1q", "nba1h", "cbb")) {
+                            if ($resolved.ContainsKey($opt)) {
+                                $controlArgs += @("--$opt", $resolved[$opt])
+                            }
+                        }
+                        & py @controlArgs
+                        if ($LASTEXITCODE -eq 0 -and (Test-Path $controlOut)) {
+                            Write-Log "STEP D1h - PQ control slice: OK -> $controlOut"
+                        }
+                        else {
+                            Write-Log "STEP D1h - PQ control slice: WARN (exit $LASTEXITCODE)"
+                        }
+                    }
+                }
+                catch {
+                    Write-Log "STEP D1h - PQ control slice: WARN ($($_.Exception.Message))"
+                }
+            }
+            else {
+                Write-Log "STEP D1h - PQ control slice: SKIP (combined_slate_tickets.py missing)"
+            }
+        }
+        else {
+            Write-Log "STEP D1h - PQ control slice: SKIP (disabled; PROPORACLE_PQ_CONTROL_PERCENT<=0)"
         }
     }
     catch {

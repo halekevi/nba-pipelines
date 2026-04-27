@@ -1550,7 +1550,7 @@ def main():
     ap.add_argument("--nba_actuals", required=True, help="actuals_nba_YYYY-MM-DD.csv")
     ap.add_argument("--nba1h_actuals", default="", help="actuals_nba1h_YYYY-MM-DD.csv (optional)")
     ap.add_argument("--nba1q_actuals", default="", help="actuals_nba1q_YYYY-MM-DD.csv (optional)")
-    ap.add_argument("--cbb_actuals", required=True, help="actuals_cbb_YYYY-MM-DD.csv")
+    ap.add_argument("--cbb_actuals", default="", help="actuals_cbb_YYYY-MM-DD.csv (optional when no CBB/WCBB legs)")
     ap.add_argument("--nhl_actuals", default="", help="actuals_nhl_YYYY-MM-DD.csv (optional, for NHL legs)")
     ap.add_argument("--soccer_actuals", default="", help="actuals_soccer_YYYY-MM-DD.csv (optional, for Soccer legs)")
     ap.add_argument("--tennis_actuals", default="", help="actuals_tennis_YYYY-MM-DD.csv (optional, for Tennis legs)")
@@ -1606,7 +1606,7 @@ def main():
 
     tickets_path = Path(args.tickets)
     nba_csv = Path(args.nba_actuals)
-    cbb_csv = Path(args.cbb_actuals)
+    cbb_csv = Path(args.cbb_actuals) if str(args.cbb_actuals or "").strip() else None
     if args.out:
         out_xlsx = Path(args.out)
     else:
@@ -1614,9 +1614,9 @@ def main():
 
     # actuals + lookups
     nba_act = prep_actuals(nba_csv, "NBA")
-    cbb_act = prep_actuals(cbb_csv, "CBB")
+    cbb_act = prep_actuals(cbb_csv, "CBB") if cbb_csv and cbb_csv.exists() else pd.DataFrame()
     nba_lp, nba_lpt = build_lookup(nba_act)
-    cbb_lp, cbb_lpt = build_lookup(cbb_act)
+    cbb_lp, cbb_lpt = build_lookup(cbb_act) if not cbb_act.empty else ({}, {})
     nba1h_lp = nba1h_lpt = None
     nba1q_lp = nba1q_lpt = None
     if args.nba1h_actuals:
@@ -1649,7 +1649,8 @@ def main():
     m = re.search(r"_(\d{4}-\d{2}-\d{2})", str(nba_csv.name))
     grade_date = m.group(1) if m else grade_ts.strftime("%Y-%m-%d")
     _append_grade_latency_row(ROOT, grade_date, "NBA", nba_csv, grade_ts)
-    _append_grade_latency_row(ROOT, grade_date, "CBB", cbb_csv, grade_ts)
+    if cbb_csv and cbb_csv.exists():
+        _append_grade_latency_row(ROOT, grade_date, "CBB", cbb_csv, grade_ts)
     if args.nba1h_actuals:
         _append_grade_latency_row(ROOT, grade_date, "NBA1H", Path(args.nba1h_actuals), grade_ts)
     if args.nba1q_actuals:
@@ -1673,7 +1674,9 @@ def main():
         return injuries_csv_path_for_actuals(act_csv, sport)
 
     nba_void = load_injury_void_keys(_inj_csv(args.nba_injuries, nba_csv, "NBA"), "NBA")
-    cbb_void = load_injury_void_keys(_inj_csv(args.cbb_injuries, cbb_csv, "CBB"), "CBB")
+    cbb_void: Set[Tuple[str, str]] = set()
+    if cbb_csv and cbb_csv.exists():
+        cbb_void = load_injury_void_keys(_inj_csv(args.cbb_injuries, cbb_csv, "CBB"), "CBB")
     nhl_void: Set[Tuple[str, str]] = set()
     if args.nhl_actuals:
         nhl_void = load_injury_void_keys(_inj_csv(args.nhl_injuries, Path(args.nhl_actuals), "NHL"), "NHL")
@@ -1704,6 +1707,12 @@ def main():
 
         legs_df = pd.concat(leg_frames, ignore_index=True)
     legs_df["ticket_id"] = legs_df["sheet"].astype(str) + " | " + legs_df["ticket_no"].astype(str)
+    if cbb_act.empty:
+        has_cbb_legs = legs_df["sport"].astype(str).str.upper().isin(["CBB", "WCBB"]).any()
+        if has_cbb_legs:
+            raise RuntimeError(
+                "CBB/WCBB legs detected in tickets but --cbb_actuals was not provided (or file missing)."
+            )
 
     # grade legs
     legs_df["actual"] = legs_df.apply(

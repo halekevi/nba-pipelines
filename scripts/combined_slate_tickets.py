@@ -138,6 +138,7 @@ DEFAULT_TENNIS_PATH = os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis
 DEFAULT_NHL_PATH = os.path.join(REPO_ROOT, "NHL", "outputs", "step8_nhl_direction_clean.xlsx")
 DEFAULT_WEB_OUTDIR = os.path.join(REPO_ROOT, "ui_runner", "templates")
 DIVERSITY_CONFIG_PATH = os.path.join(REPO_ROOT, "config", "diversity_config.json")
+PROP_RELIABILITY_LATEST_PATH = os.path.join(REPO_ROOT, "data", "reports", "prop_reliability_latest.json")
 
 
 # ── Color palette ─────────────────────────────────────────────────────────────
@@ -1363,8 +1364,103 @@ SOCCER_LEG_MIN_HIT_RATE = {
 
 def _norm_prop_label(v: object) -> str:
     s = str(v or "").strip().lower()
+    s = s.replace("_", " ")
     s = re.sub(r"\s+", " ", s)
     return s
+
+
+def _line_bucket_label(v: object) -> str:
+    try:
+        x = abs(float(v))
+    except Exception:
+        return "(missing)"
+    if x < 1.5:
+        return "micro"
+    if x < 5:
+        return "low"
+    if x < 15:
+        return "mid"
+    if x < 30:
+        return "high"
+    return "xl"
+
+
+def _load_prop_reliability_index(path: str = PROP_RELIABILITY_LATEST_PATH) -> dict[tuple[str, str, str, str], dict]:
+    if not path or not os.path.exists(path):
+        return {}
+    try:
+        payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    rows = payload.get("rows", []) if isinstance(payload, dict) else []
+    out: dict[tuple[str, str, str, str], dict] = {}
+    for r in rows:
+        if not isinstance(r, dict):
+            continue
+        k = (
+            str(r.get("sport", "")).strip().upper(),
+            _norm_prop_label(r.get("prop_type", "")),
+            str(r.get("direction", "")).strip().upper(),
+            str(r.get("line_bucket", "")).strip().lower(),
+        )
+        if not k[0] or not k[1] or not k[2] or not k[3]:
+            continue
+        out[k] = r
+    return out
+
+
+def _apply_reliability_pool_filter(df: pd.DataFrame, reliability_index: dict[tuple[str, str, str, str], dict]) -> tuple[pd.DataFrame, int]:
+    if df is None or df.empty:
+        return df, 0
+    if not reliability_index:
+        return df, 0
+    if not {"sport", "prop_type", "direction"}.issubset(df.columns):
+        return df, 0
+    sp = df["sport"].astype(str).str.upper().str.strip()
+    prop = df["prop_type"].apply(_norm_prop_label)
+    direc = df["direction"].astype(str).str.upper().str.strip()
+    bucket = df["line"].apply(_line_bucket_label) if "line" in df.columns else pd.Series("(missing)", index=df.index)
+    drop_mask = pd.Series(False, index=df.index)
+    for i in df.index:
+        row = reliability_index.get((sp.loc[i], prop.loc[i], direc.loc[i], bucket.loc[i]))
+        if not row:
+            continue
+        n = int(float(row.get("decided_n", 0) or 0))
+        status = str(row.get("status", "")).strip().upper()
+        reliability = float(row.get("reliability_score", 1.0) or 1.0)
+        if n >= 40 and (status == "UNRELIABLE" or reliability < 0.35):
+            drop_mask.loc[i] = True
+    return df.loc[~drop_mask].copy(), int(drop_mask.sum())
+
+
+def _attach_reliability_columns(df: pd.DataFrame, reliability_index: dict[tuple[str, str, str, str], dict]) -> pd.DataFrame:
+    if df is None or df.empty:
+        return df
+    if not reliability_index:
+        out = df.copy()
+        out["prop_reliability_score"] = np.nan
+        out["prop_reliability_status"] = ""
+        return out
+    if not {"sport", "prop_type", "direction"}.issubset(df.columns):
+        return df
+    out = df.copy()
+    sp = out["sport"].astype(str).str.upper().str.strip()
+    prop = out["prop_type"].apply(_norm_prop_label)
+    direc = out["direction"].astype(str).str.upper().str.strip()
+    bucket = out["line"].apply(_line_bucket_label) if "line" in out.columns else pd.Series("(missing)", index=out.index)
+    scores = []
+    statuses = []
+    for i in out.index:
+        row = reliability_index.get((sp.loc[i], prop.loc[i], direc.loc[i], bucket.loc[i]))
+        if row:
+            scores.append(float(row.get("reliability_score", np.nan)))
+            statuses.append(str(row.get("status", "")).strip().upper())
+        else:
+            scores.append(np.nan)
+            statuses.append("")
+    out["prop_reliability_score"] = scores
+    out["prop_reliability_status"] = statuses
+    return out
 
 
 def _pool_prop_snake(pt: object) -> str:
@@ -3609,6 +3705,23 @@ def ticket_groups_to_payload(
                     "usage_boost": _safe_float(gv("usage_boost")),
                     "usage_boost_reason": str(gv("usage_boost_reason") or ""),
                 }
+                # Preserve per-game history so UI can render true actual-vs-line charts.
+                for _i in range(1, 11):
+                    _gv = gv(f"G{_i}")
+                    if _gv is None or _gv == "":
+                        _gv = gv(f"g{_i}")
+                    if _gv is None or _gv == "":
+                        _gv = gv(f"stat_g{_i}")
+                    _hist_v = _safe_float(_gv)
+                    if _hist_v is not None:
+                        leg[f"g{_i}"] = _hist_v
+                        leg[f"stat_g{_i}"] = _hist_v
+                    _lv = gv(f"line_g{_i}")
+                    if _lv is None or _lv == "":
+                        _lv = gv(f"prop_line_g{_i}")
+                    _line_hist_v = _safe_float(_lv)
+                    if _line_hist_v is not None:
+                        leg[f"line_g{_i}"] = _line_hist_v
                 leg["data_warning"] = "LIMITED_Q1_HISTORY" if str(leg.get("sport", "")).upper() == "NBA1Q" else None
                 leg_prob_used, leg_prob_source = _resolve_leg_prob(pd.Series(leg))
                 leg["leg_prob_used"] = _safe_float(leg_prob_used)
@@ -3695,6 +3808,15 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
                 "l5_under":   g("l5_under"),
                 "game_time":  str(g("game_time") or "") or None,
             }
+            # Include last-10 game values for accurate UI charts.
+            for _i in range(1, 11):
+                _v = g(f"G{_i}")
+                if _v is None:
+                    _v = g(f"g{_i}")
+                _vf = safe(_v)
+                if _vf is not None:
+                    row[f"g{_i}"] = _vf
+                    row[f"stat_g{_i}"] = _vf
             rows.append({k: v for k, v in row.items() if v is not None})
         return rows
 
@@ -6211,6 +6333,7 @@ def build_combined_slate(
         "def_tier",
         "pace_tier",
         "context_score",
+        "prop_quality_score",
         "min_tier",
         "shot_role",
         "usage_role",
@@ -6253,6 +6376,7 @@ def build_combined_slate(
         combined["abs_edge"] = pd.to_numeric(combined["abs_edge"], errors="coerce")
 
     combined = add_l5_play_side_columns(combined)
+    combined = add_prop_quality_score(combined)
 
     combined = combined.sort_values("rank_score", ascending=False, na_position="last").reset_index(drop=True)
     return combined
@@ -6269,6 +6393,73 @@ def _edge_magnitude_series(df: pd.DataFrame) -> pd.Series:
     return pd.to_numeric(df.get("edge", np.nan), errors="coerce").abs()
 
 
+PROP_QUALITY_MIN_BY_SPORT: dict[str, float] = {
+    "NBA": 0.58,
+    "NBA1Q": 0.58,
+    "NBA1H": 0.58,
+    "CBB": 0.60,
+    "WCBB": 0.60,
+    "MLB": 0.62,
+    "NHL": 0.60,
+    "SOCCER": 0.72,
+    "SOC": 0.72,
+    "TENNIS": 0.57,
+}
+
+
+def _prop_quality_min_threshold_series(df: pd.DataFrame, min_prop_quality: float) -> pd.Series:
+    if df is None or len(df) == 0:
+        return pd.Series(dtype=float)
+    if min_prop_quality >= 0:
+        return pd.Series(float(min_prop_quality), index=df.index)
+    sp = df.get("sport", pd.Series("", index=df.index)).astype(str).str.upper().str.strip()
+    th = sp.map(PROP_QUALITY_MIN_BY_SPORT).fillna(0.58)
+    return pd.to_numeric(th, errors="coerce").fillna(0.58)
+
+
+def add_prop_quality_score(df: pd.DataFrame) -> pd.DataFrame:
+    """Attach prop_quality_score in [0,1] from core leg quality signals."""
+    if df is None or len(df) == 0:
+        return df
+    out = df.copy()
+
+    hr = pd.to_numeric(out.get("hit_rate"), errors="coerce")
+    hr = hr.apply(_to_prob_0_1)
+
+    l5o = pd.to_numeric(out.get("l5_over"), errors="coerce").fillna(0.0)
+    l5u = pd.to_numeric(out.get("l5_under"), errors="coerce").fillna(0.0)
+    l5_side = np.maximum(l5o, l5u)
+    l5_side_rate = np.clip(l5_side / 5.0, 0.0, 1.0)
+    hr = hr.fillna(pd.Series(l5_side_rate, index=out.index))
+
+    edge = _edge_magnitude_series(out).fillna(0.0)
+    edge_norm = np.clip(edge / 15.0, 0.0, 1.0)
+
+    rs = pd.to_numeric(out.get("rank_score"), errors="coerce")
+    rank_prob = rs.apply(lambda x: _rank_score_to_prob(float(x)) if pd.notna(x) else np.nan).fillna(0.5)
+
+    sample_strength = pd.Series(np.clip(l5_side / 5.0, 0.0, 1.0), index=out.index)
+
+    tier_raw = out.get("tier", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
+    tier_norm = tier_raw.map({"A": 1.00, "B": 0.86, "C": 0.70, "D": 0.45}).fillna(0.55)
+
+    score = (
+        0.33 * hr
+        + 0.22 * edge_norm
+        + 0.20 * rank_prob
+        + 0.15 * sample_strength
+        + 0.10 * tier_norm
+    )
+
+    rel = out.get("reliability_note", pd.Series("", index=out.index)).astype(str).str.upper()
+    hs = out.get("hit_rate_status", pd.Series("", index=out.index)).astype(str).str.upper()
+    score = score - np.where(rel.str.contains("THIN_SAMPLE_", na=False), 0.08, 0.0)
+    score = score - np.where(hs.str.startswith("BLENDED_N"), 0.05, 0.0)
+
+    out["prop_quality_score"] = np.clip(score, 0.0, 1.0)
+    return out
+
+
 # ── Filter eligible props for tickets ─────────────────────────────────────────
 def filter_eligible(
     df: pd.DataFrame,
@@ -6279,7 +6470,9 @@ def filter_eligible(
     pick_types=None,
     *,
     allow_strong_l5_bypass: bool = True,
+    min_prop_quality: float = -1.0,
 ):
+    df = add_prop_quality_score(df)
     mask = pd.Series([True] * len(df), index=df.index)
     MIN_SAMPLE_FOR_TICKET = 4
     if "l5_games" in df.columns:
@@ -6337,6 +6530,10 @@ def filter_eligible(
         mask &= tier_ok
     if pick_types and "pick_type" in df.columns:
         mask &= df["pick_type"].isin(pick_types)
+    if "prop_quality_score" in df.columns:
+        pq = pd.to_numeric(df["prop_quality_score"], errors="coerce").fillna(0.0)
+        pq_min = _prop_quality_min_threshold_series(df, float(min_prop_quality))
+        mask &= pq >= pq_min
     return df[mask].copy()
 
 
@@ -8880,6 +9077,16 @@ def main():
     )
     ap.add_argument("--min-hit-rate", type=float, default=0.65, dest="min_hit_rate")
     ap.add_argument("--min-edge", type=float, default=0.0, dest="min_edge")
+    ap.add_argument(
+        "--min-prop-quality",
+        type=float,
+        default=-1.0,
+        dest="min_prop_quality",
+        help=(
+            "Minimum prop quality score in [0,1]. "
+            "Use -1 (default) for sport-specific conservative defaults."
+        ),
+    )
     ap.add_argument("--min-rank", type=float, default=None, dest="min_rank")
     ap.add_argument(
         "--pick-types",
@@ -9289,6 +9496,11 @@ def main():
     combined = build_combined_slate(nba, cbb, nhl, soccer,
                                     tennis=tennis,
                                     wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h)
+    reliability_index = _load_prop_reliability_index()
+    if reliability_index:
+        print(f"  [reliability] loaded {len(reliability_index)} prop-direction buckets from {PROP_RELIABILITY_LATEST_PATH}")
+    else:
+        print("  [reliability] no reliability index found; continuing without reliability gate")
 
     # ✅ Attach Standard refs for combined too
     combined = attach_standard_refs(combined)
@@ -9355,6 +9567,7 @@ def main():
         # NHL + MLB: row-wise low-signal exclusions.
 
         filtered_df = df.copy()
+        filtered_df = _attach_reliability_columns(filtered_df, reliability_index)
         voided_excluded = 0
         demon_candidates = None
         demon_passed = None
@@ -9370,13 +9583,17 @@ def main():
             ]
 
         mlb_ex_n = 0
+        rel_ex_n = 0
         nhl_sog_ex_n = nhl_fc_ex_n = nhl_leg_ex_n = 0
         if {"sport", "prop_type"}.issubset(filtered_df.columns):
             m_mlb, mlb_ex_n = _mlb_ticket_pool_exclusion_mask(filtered_df)
             m_nhl, nhl_sog_ex_n, nhl_fc_ex_n, nhl_leg_ex_n = _nhl_ticket_pool_exclusion_mask(filtered_df)
             filtered_df = filtered_df[~(m_mlb | m_nhl)].copy()
+            filtered_df, rel_ex_n = _apply_reliability_pool_filter(filtered_df, reliability_index)
         if mlb_ex_n:
             print(f"  [pool] Excluded {mlb_ex_n} MLB legs (home_runs/stolen_bases)")
+        if rel_ex_n:
+            print(f"  [pool] Excluded {rel_ex_n} legs via prop reliability gate")
         nhl_apr13_n = int(nhl_sog_ex_n + nhl_fc_ex_n)
         if nhl_apr13_n:
             print(
@@ -9409,6 +9626,19 @@ def main():
                 filtered_df["rank_score"] = (
                     pd.to_numeric(filtered_df["rank_score"], errors="coerce").fillna(0.0) + def_bonus
                 )
+
+        # Reliability-aware score shaping: keep rows for exploration, but softly downweight watchlist
+        # buckets before threshold/ranking and hard filter later via _apply_reliability_pool_filter.
+        if {"prop_reliability_score", "prop_reliability_status"}.issubset(filtered_df.columns):
+            rel_score = pd.to_numeric(filtered_df["prop_reliability_score"], errors="coerce")
+            rel_status = filtered_df["prop_reliability_status"].astype(str).str.upper().str.strip()
+            soft_mult = pd.Series(1.0, index=filtered_df.index)
+            soft_mult = soft_mult * np.where(rel_status.eq("WATCHLIST"), 0.85, 1.0)
+            soft_mult = soft_mult * np.where(rel_score.notna(), np.clip(rel_score.fillna(1.0), 0.35, 1.0), 1.0)
+            if "blended_score" in filtered_df.columns:
+                filtered_df["blended_score"] = pd.to_numeric(filtered_df["blended_score"], errors="coerce").fillna(0.0) * soft_mult
+            if "rank_score" in filtered_df.columns:
+                filtered_df["rank_score"] = pd.to_numeric(filtered_df["rank_score"], errors="coerce").fillna(0.0) * soft_mult
 
         # Sport-specific hit rate floors based on empirical data
         effective_min_hit = args.min_hit_rate
@@ -9533,6 +9763,7 @@ def main():
             effective_tiers,
             effective_pick_types,
             allow_strong_l5_bypass=(sport != "SOCCER"),
+            min_prop_quality=float(args.min_prop_quality),
         )
         gob_n = std_n = dem_n = 0
         if pooled is not None and "pick_type" in pooled.columns:
@@ -9546,6 +9777,12 @@ def main():
             f"  [pool] {sport}: {total_loaded} legs loaded | {voided_excluded} voided | {passing} in pool"
         )
         print(f"         pick_types: goblin={gob_n} std={std_n} demon={dem_n}")
+        if pooled is not None and len(pooled) > 0 and "prop_quality_score" in pooled.columns:
+            pq = pd.to_numeric(pooled["prop_quality_score"], errors="coerce")
+            avg_pq = float(pq.mean()) if pq.notna().any() else float("nan")
+            sport_pq_floor = float(PROP_QUALITY_MIN_BY_SPORT.get(sport, 0.58))
+            active_floor = float(args.min_prop_quality) if float(args.min_prop_quality) >= 0 else sport_pq_floor
+            print(f"         quality: avg_pq={avg_pq:.3f} floor={active_floor:.2f}")
         if sport in ("NHL", "SOCCER") and demon_candidates is not None and demon_passed is not None:
             print(f"         demon gate: {demon_candidates} candidates -> {demon_passed} passed quality gate")
             if demon_example:

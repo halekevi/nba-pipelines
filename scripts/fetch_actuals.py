@@ -498,7 +498,7 @@ def fetch_sport(sport_path, date_str, window=2):
 
 # ── Parse NHL ESPN box score ──────────────────────────────────────────────────
 NHL_STAT_MAP = {
-    "shots_on_goal": ["SOG", "S", "SHOTS", "SHOT"],
+    "shots_on_goal": ["SOG", "SHOTSONGOAL", "S", "SHOTS", "SHOT"],
     "goals":         ["G", "GOALS"],
     "assists":       ["A", "ASSISTS"],
     "points":        ["PTS", "P", "POINTS"],
@@ -565,6 +565,12 @@ def _parse_nhl_stat(label_map, key):
             except (ValueError, TypeError):
                 pass
     return None
+
+
+def _has_nhl_stat_label(norm_labels: list[str], key: str) -> bool:
+    aliases = NHL_STAT_MAP.get(key, [key.upper()])
+    alias_set = {re.sub(r"[^A-Z0-9]", "", str(a).upper()) for a in aliases}
+    return any(lbl in alias_set for lbl in (norm_labels or []))
 
 
 def parse_nhl_boxscore(box):
@@ -640,22 +646,23 @@ def parse_nhl_boxscore(box):
                 if not has_skater_stat:
                     continue
 
-                # Dressed skaters with 0 SOG / 0 hits still need rows — ESPN often omits zeros as None
-                if sog is None:
+                # Only impute missing skater stats to 0 when that stat label exists in this stat group.
+                # This prevents mass-false 0.0 rows when ESPN changes/omits a label (notably SOG).
+                if sog is None and _has_nhl_stat_label(norm_labels, "shots_on_goal"):
                     sog = 0.0
-                if g is None:
+                if g is None and _has_nhl_stat_label(norm_labels, "goals"):
                     g = 0.0
-                if ast is None:
+                if ast is None and _has_nhl_stat_label(norm_labels, "assists"):
                     ast = 0.0
-                if hits is None:
+                if hits is None and _has_nhl_stat_label(norm_labels, "hits"):
                     hits = 0.0
-                if bs is None:
+                if bs is None and _has_nhl_stat_label(norm_labels, "blocked_shots"):
                     bs = 0.0
-                if pim is None:
+                if pim is None and _has_nhl_stat_label(norm_labels, "pim"):
                     pim = 0.0
-                if pm is None:
+                if pm is None and _has_nhl_stat_label(norm_labels, "plus_minus"):
                     pm = 0.0
-                if pts is None:
+                if pts is None and g is not None and ast is not None:
                     pts = float(g) + float(ast)
 
                 prop_map = {

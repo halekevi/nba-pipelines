@@ -1,0 +1,44 @@
+{
+  "overrides": [
+    {
+      "sport": "NHL",
+      "prop_type": "shots on goal",
+      "direction": "OVER",
+      "line_bucket": "micro",
+      "status": "UNRELIABLE",
+      "note": "Known NHL SOG mapping artifact window"
+    },
+    {
+      "sport": "NHL",
+      "prop_type": "shots on goal",
+      "direction": "OVER",
+      "line_bucket": "low",
+      "status": "UNRELIABLE",
+      "note": "Known NHL SOG mapping artifact window"
+    },
+    {
+      "sport": "NHL",
+      "prop_type": "shots on goal",
+      "direction": "OVER",
+      "line_bucket": "mid",
+      "status": "UNRELIABLE",
+      "note": "Known NHL SOG mapping artifact window"
+    },
+    {
+      "sport": "NHL",
+      "prop_type": "shots on goal",
+      "direction": "UNDER",
+      "line_bucket": "low",
+      "status": "UNRELIABLE",
+      "note": "Known NHL SOG mapping artifact window"
+    },
+    {
+      "sport": "NHL",
+      "prop_type": "shots on goal",
+      "direction": "UNDER",
+      "line_bucket": "mid",
+      "status": "UNRELIABLE",
+      "note": "Known NHL SOG mapping artifact window"
+    }
+  ]
+}

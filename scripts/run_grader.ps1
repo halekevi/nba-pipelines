@@ -33,6 +33,7 @@ $CountNbaSlateGradeRowsScript = Join-Path $Root "scripts\count_nba_slate_grade_r
 $CBBFullGraderScript = Join-Path $Root "scripts\grading\grade_cbb_full_slate.py"
 $NHLAdvancedGraderScript = Join-Path $Root "scripts\nhl_grader_advanced.py"
 $SoccerAdvancedGraderScript = Join-Path $Root "scripts\soccer_grader_advanced.py"
+$VoidValidatorScript = Join-Path $Root "scripts\validate_unacceptable_voids.py"
 $BuildGradesHtmlScript = Join-Path $Root "scripts\grading\build_grades_html.py"
 $BackfillGradedPropsJsonScript = Join-Path $Root "scripts\backfill_graded_props_json.py"
 $IngestGradedIncomeScript     = Join-Path $Root "scripts\ingest_graded_to_income_db.py"
@@ -51,6 +52,7 @@ $SoccerGradedFile = Join-Path $DateDir "graded_soccer_$Date.xlsx"
 $NBA1HGradedFile = Join-Path $DateDir "graded_nba1h_$Date.xlsx"
 $NBA1QGradedFile = Join-Path $DateDir "graded_nba1q_$Date.xlsx"
 $WCBBGradedFile = Join-Path $DateDir "graded_wcbb_$Date.xlsx"
+$TennisGradedFile = Join-Path $DateDir "graded_tennis_$Date.xlsx"
 $EvalHtmlFile = Join-Path $DateDir "slate_eval_$Date.html"
 $TemplatesDir = Join-Path $Root "ui_runner\templates"
 
@@ -161,6 +163,50 @@ if (-not (Test-Path $DateDir)) {
     New-Item -ItemType Directory -Path $DateDir -Force | Out-Null
 }
 
+# Off-season / deactivated sports: skip fetch + grade and drop stale graded_* for this date (no phantom void rows).
+# Default: college only (CBB/WCBB). NBA 1H / 1Q stay enabled — use static step8 + period actuals as usual.
+# Re-enable all: set PROPORACLE_GRADER_DISABLED_SPORTS to empty string.
+# Temporarily skip period props: PROPORACLE_GRADER_DISABLED_SPORTS=cbb,wcbb,nba1h,nba1q
+$GraderDisabledSports = @('cbb', 'wcbb')
+if ($null -ne $env:PROPORACLE_GRADER_DISABLED_SPORTS) {
+    $envRaw = [string]$env:PROPORACLE_GRADER_DISABLED_SPORTS
+    if ($envRaw.Trim() -eq '') {
+        $GraderDisabledSports = @()
+    }
+    else {
+        $GraderDisabledSports = @(
+            $envRaw.ToLower() -split '[,\s;]+' | Where-Object { $_ }
+        ) | Select-Object -Unique
+    }
+}
+function Test-GraderSportDisabled {
+    param([Parameter(Mandatory)][string]$SportKey)
+    return @($GraderDisabledSports) -contains $SportKey.ToLower().Trim()
+}
+function Remove-StaleGradedWorkbook {
+    param([string]$Path, [string]$Label)
+    if (-not $Path) { return }
+    if (Test-Path -LiteralPath $Path) {
+        Remove-Item -LiteralPath $Path -Force -ErrorAction SilentlyContinue
+        Write-Host "[GRADER] Removed stale graded workbook ($Label): $(Split-Path $Path -Leaf)" -ForegroundColor DarkYellow
+    }
+}
+if (@($GraderDisabledSports).Count -gt 0) {
+    Write-Host "[GRADER] Disabled sports (skip fetch/grade for this run): $($GraderDisabledSports -join ', ')" -ForegroundColor Yellow
+    if (Test-GraderSportDisabled 'cbb') {
+        Remove-StaleGradedWorkbook -Path $CBBGradedFile -Label 'cbb'
+    }
+    if (Test-GraderSportDisabled 'wcbb') {
+        Remove-StaleGradedWorkbook -Path $WCBBGradedFile -Label 'wcbb'
+    }
+    if (Test-GraderSportDisabled 'nba1h') {
+        Remove-StaleGradedWorkbook -Path $NBA1HGradedFile -Label 'nba1h'
+    }
+    if (Test-GraderSportDisabled 'nba1q') {
+        Remove-StaleGradedWorkbook -Path $NBA1QGradedFile -Label 'nba1q'
+    }
+}
+
 # =============================
 # Resolve Combined Ticket Grader Path
 # =============================
@@ -184,19 +230,29 @@ if (Test-Path $FetchActualsScript) {
         "--output", $NBAActuals
     )
 
-    Run-Py "Fetch CBB Actuals" $Root $FetchActualsScript @(
-        "--sport", "CBB",
-        "--date", $Date,
-        "--output", $CBBActuals,
-        "--window", "0"
-    )
+    if (-not (Test-GraderSportDisabled 'cbb')) {
+        Run-Py "Fetch CBB Actuals" $Root $FetchActualsScript @(
+            "--sport", "CBB",
+            "--date", $Date,
+            "--output", $CBBActuals,
+            "--window", "0"
+        )
+    }
+    else {
+        Write-Host "Skipping Fetch CBB Actuals (sport disabled: cbb)." -ForegroundColor Yellow
+    }
 
-    Run-Py "Fetch WCBB Actuals" $Root $FetchActualsScript @(
-        "--sport", "WCBB",
-        "--date", $Date,
-        "--output", $WCBBActuals,
-        "--window", "0"
-    )
+    if (-not (Test-GraderSportDisabled 'wcbb')) {
+        Run-Py "Fetch WCBB Actuals" $Root $FetchActualsScript @(
+            "--sport", "WCBB",
+            "--date", $Date,
+            "--output", $WCBBActuals,
+            "--window", "0"
+        )
+    }
+    else {
+        Write-Host "Skipping Fetch WCBB Actuals (sport disabled: wcbb)." -ForegroundColor Yellow
+    }
 
     Run-Py "Fetch NHL Actuals" $Root $FetchActualsScript @(
         "--sport", "NHL",
@@ -227,26 +283,35 @@ if (Test-Path $FetchActualsScript) {
             Write-Host "Skipping Tennis grader (no step8 tennis slate; build Tennis pipeline or place step8 under outputs\$Date or Tennis\outputs)." -ForegroundColor Yellow
         }
         else {
-            $TennisGraded = Join-Path $DateDir "graded_tennis_$Date.xlsx"
             Run-Py "Tennis Grader" $Root $TennisGraderScript @(
                 "--date", $Date,
                 "--slate", $TennisSlateFile,
-                "--output", $TennisGraded
+                "--output", $TennisGradedFile
             ) -PreferPy314
         }
     }
 
     if (Test-Path $FetchNBAPeriodActualsScript) {
-        Run-Py "Fetch NBA 1H Actuals" $Root $FetchNBAPeriodActualsScript @(
-            "--date", $Date,
-            "--segment", "1H",
-            "--output", $NBA1HActuals
-        )
-        Run-Py "Fetch NBA 1Q Actuals" $Root $FetchNBAPeriodActualsScript @(
-            "--date", $Date,
-            "--segment", "1Q",
-            "--output", $NBA1QActuals
-        )
+        if (-not (Test-GraderSportDisabled 'nba1h')) {
+            Run-Py "Fetch NBA 1H Actuals" $Root $FetchNBAPeriodActualsScript @(
+                "--date", $Date,
+                "--segment", "1H",
+                "--output", $NBA1HActuals
+            )
+        }
+        else {
+            Write-Host "Skipping Fetch NBA 1H Actuals (sport disabled: nba1h)." -ForegroundColor Yellow
+        }
+        if (-not (Test-GraderSportDisabled 'nba1q')) {
+            Run-Py "Fetch NBA 1Q Actuals" $Root $FetchNBAPeriodActualsScript @(
+                "--date", $Date,
+                "--segment", "1Q",
+                "--output", $NBA1QActuals
+            )
+        }
+        else {
+            Write-Host "Skipping Fetch NBA 1Q Actuals (sport disabled: nba1q)." -ForegroundColor Yellow
+        }
         Run-Py "Fetch NBA 2Q Actuals" $Root $FetchNBAPeriodActualsScript @(
             "--date", $Date,
             "--segment", "2Q",
@@ -267,12 +332,17 @@ if (Test-Path $FetchActualsScript) {
             "--segment", "2H",
             "--output", $NBA2HActuals
         )
-        Run-Py "Fetch CBB 1H Actuals (ESPN PBP)" $Root $FetchNBAPeriodActualsScript @(
-            "--sport", "CBB",
-            "--date", $Date,
-            "--segment", "1H",
-            "--output", $CBB1HActuals
-        )
+        if (-not (Test-GraderSportDisabled 'cbb')) {
+            Run-Py "Fetch CBB 1H Actuals (ESPN PBP)" $Root $FetchNBAPeriodActualsScript @(
+                "--sport", "CBB",
+                "--date", $Date,
+                "--segment", "1H",
+                "--output", $CBB1HActuals
+            )
+        }
+        else {
+            Write-Host "Skipping Fetch CBB 1H Actuals (sport disabled: cbb)." -ForegroundColor Yellow
+        }
         if (Test-Path $BuildNBA1QHistoryScript) {
             Write-Host "[NBA1Q DB] Appending Q1/Q2 actuals to proporacle_ref.db..." -ForegroundColor Yellow
             Run-Py "Build NBA1Q History DB" $Root $BuildNBA1QHistoryScript @()
@@ -394,7 +464,10 @@ else {
     Write-Host "Skipping NBA slate grading (missing slate/actuals/grader)." -ForegroundColor Yellow
 }
 
-if ((Test-Path $CBBActuals) -and (Test-Path $CBBSlateCsv) -and (Test-Path $CBBFullGraderScript)) {
+if (Test-GraderSportDisabled 'cbb') {
+    Write-Host "Skipping CBB slate grading (sport disabled: cbb — no live lines this season)." -ForegroundColor Yellow
+}
+elseif ((Test-Path $CBBActuals) -and (Test-Path $CBBSlateCsv) -and (Test-Path $CBBFullGraderScript)) {
     Run-Py "Grade CBB Full Slate" $Root $CBBFullGraderScript @(
         "--slate", $CBBSlateCsv,
         "--actuals", $CBBActuals,
@@ -487,23 +560,36 @@ if (-not (Test-Path $DateDir)) {
     New-Item -ItemType Directory -Path $DateDir -Force | Out-Null
 }
 if (Test-Path $FetchNBAPeriodActualsScript) {
-    if ($NBA1HSlateFile -and (Test-Path $NBA1HSlateFile) -and -not (Test-Path $NBA1HActuals)) {
-        Run-Py "Fetch NBA 1H Actuals (pre-grade, missing CSV)" $Root $FetchNBAPeriodActualsScript @(
-            "--date", $Date,
-            "--segment", "1H",
-            "--output", $NBA1HActuals
-        )
+    if (-not (Test-GraderSportDisabled 'nba1h')) {
+        if ($NBA1HSlateFile -and (Test-Path $NBA1HSlateFile) -and -not (Test-Path $NBA1HActuals)) {
+            Run-Py "Fetch NBA 1H Actuals (pre-grade, missing CSV)" $Root $FetchNBAPeriodActualsScript @(
+                "--date", $Date,
+                "--segment", "1H",
+                "--output", $NBA1HActuals
+            )
+        }
     }
-    if ($NBA1QSlateFile -and (Test-Path $NBA1QSlateFile) -and -not (Test-Path $NBA1QActuals)) {
-        Run-Py "Fetch NBA 1Q Actuals (pre-grade, missing CSV)" $Root $FetchNBAPeriodActualsScript @(
-            "--date", $Date,
-            "--segment", "1Q",
-            "--output", $NBA1QActuals
-        )
+    else {
+        Write-Host "Skipping NBA1H actuals fetch (sport disabled: nba1h)." -ForegroundColor Yellow
+    }
+    if (-not (Test-GraderSportDisabled 'nba1q')) {
+        if ($NBA1QSlateFile -and (Test-Path $NBA1QSlateFile) -and -not (Test-Path $NBA1QActuals)) {
+            Run-Py "Fetch NBA 1Q Actuals (pre-grade, missing CSV)" $Root $FetchNBAPeriodActualsScript @(
+                "--date", $Date,
+                "--segment", "1Q",
+                "--output", $NBA1QActuals
+            )
+        }
+    }
+    else {
+        Write-Host "Skipping NBA1Q actuals fetch (sport disabled: nba1q)." -ForegroundColor Yellow
     }
 }
 
-if ($NBA1HSlateFile -and (Test-Path $NBA1HSlateFile) -and (Test-Path $SlateGraderScript) -and (Test-Path $NBA1HActuals)) {
+if (Test-GraderSportDisabled 'nba1h') {
+    Write-Host "Skipping NBA1H grading (sport disabled: nba1h — no live period lines this season)." -ForegroundColor Yellow
+}
+elseif ($NBA1HSlateFile -and (Test-Path $NBA1HSlateFile) -and (Test-Path $SlateGraderScript) -and (Test-Path $NBA1HActuals)) {
     Run-Py "Grade NBA1H Slate" $Root $SlateGraderScript @(
         "--sport", "NBA",
         "--slate", $NBA1HSlateFile,
@@ -517,20 +603,25 @@ else {
 }
 
 $nba1qSlateRowsAfterFilter = -1
-if ($NBA1QSlateFile -and (Test-Path $NBA1QSlateFile) -and (Test-Path $CountNbaSlateGradeRowsScript)) {
-    try {
-        $env:PYTHONUTF8 = "1"
-        $rowOut = & python -X utf8 $CountNbaSlateGradeRowsScript --slate $NBA1QSlateFile --date $Date 2>$null
-        if ($rowOut -match '^[0-9]+$') {
-            $nba1qSlateRowsAfterFilter = [int]$rowOut
+if (-not (Test-GraderSportDisabled 'nba1q')) {
+    if ($NBA1QSlateFile -and (Test-Path $NBA1QSlateFile) -and (Test-Path $CountNbaSlateGradeRowsScript)) {
+        try {
+            $env:PYTHONUTF8 = "1"
+            $rowOut = & python -X utf8 $CountNbaSlateGradeRowsScript --slate $NBA1QSlateFile --date $Date 2>$null
+            if ($rowOut -match '^[0-9]+$') {
+                $nba1qSlateRowsAfterFilter = [int]$rowOut
+            }
         }
-    }
-    catch {
-        $nba1qSlateRowsAfterFilter = -1
+        catch {
+            $nba1qSlateRowsAfterFilter = -1
+        }
     }
 }
 
-if ($NBA1QSlateFile -and (Test-Path $NBA1QSlateFile) -and (Test-Path $SlateGraderScript) -and (Test-Path $NBA1QActuals)) {
+if (Test-GraderSportDisabled 'nba1q') {
+    Write-Host "Skipping NBA1Q grading (sport disabled: nba1q — no live period lines this season)." -ForegroundColor Yellow
+}
+elseif ($NBA1QSlateFile -and (Test-Path $NBA1QSlateFile) -and (Test-Path $SlateGraderScript) -and (Test-Path $NBA1QActuals)) {
     if ($nba1qSlateRowsAfterFilter -eq 0) {
         Write-Warning "[GRADER] NBA1Q slate has 0 rows after date filter for $Date (file: $(Split-Path $NBA1QSlateFile -Leaf)). Skipping graded_nba1q write so an existing workbook is not overwritten with empty Box Raw."
     }
@@ -548,7 +639,10 @@ else {
     Write-Host "Skipping NBA1Q grading (missing slate, grader, or actuals_nba1q_$Date.csv after fetch attempt)." -ForegroundColor Yellow
 }
 
-if ($WCBBSlateFile -and (Test-Path $WCBBSlateFile) -and (Test-Path $SlateGraderScript)) {
+if (Test-GraderSportDisabled 'wcbb') {
+    Write-Host "Skipping WCBB slate grading (sport disabled: wcbb — no live lines this season)." -ForegroundColor Yellow
+}
+elseif ($WCBBSlateFile -and (Test-Path $WCBBSlateFile) -and (Test-Path $SlateGraderScript)) {
     $WCBBActualsForGrade = if (Test-Path $WCBBActuals) { $WCBBActuals } elseif (Test-Path $CBBActuals) { $CBBActuals } else { $null }
     if ($WCBBActualsForGrade) {
         Run-Py "Grade WCBB Slate" $Root $SlateGraderScript @(
@@ -565,6 +659,42 @@ if ($WCBBSlateFile -and (Test-Path $WCBBSlateFile) -and (Test-Path $SlateGraderS
 }
 else {
     Write-Host "Skipping WCBB grading (missing slate/actuals/grader)." -ForegroundColor Yellow
+}
+
+# =============================
+# Validate unacceptable VOIDs (allow NO_DATA + DNP)
+# =============================
+if (Test-Path $VoidValidatorScript) {
+    $VoidArgs = @(
+        "--date", $Date,
+        "--out-dir", (Join-Path $Root "data\reports\void_validator"),
+        "--accepted-void-token", "NO_DATA",
+        "--accepted-void-token", "DNP",
+        "--accepted-void-token", "NO_ACTUAL",
+        "--accepted-void-token", "NO_LINE",
+        "--accepted-void-token", "PUSH"
+    )
+    foreach ($gf in @(
+        $NBAGradedFile,
+        $CBBGradedFile,
+        $WCBBGradedFile,
+        $NHLGradedFile,
+        $MLBGradedFile,
+        $SoccerGradedFile,
+        $NBA1HGradedFile,
+        $NBA1QGradedFile,
+        $TennisGradedFile
+    )) {
+        if ($gf -and (Test-Path $gf)) {
+            $VoidArgs += @("--graded", $gf)
+        }
+    }
+    if ($VoidArgs.Count -gt 8) {
+        Run-Py "Validate unacceptable VOIDs" $Root $VoidValidatorScript $VoidArgs
+    }
+}
+else {
+    Write-Host "Skipping VOID validator (validate_unacceptable_voids.py not found)." -ForegroundColor Yellow
 }
 
 if (Test-Path $BuildGradesHtmlScript) {
@@ -658,9 +788,6 @@ if (-not (Test-Path $TicketsFileXlsx) -and -not (Test-Path $TicketsFileJson)) {
 elseif (-not (Test-Path $NBAActuals)) {
     Write-Host "NBA actuals not found: $NBAActuals" -ForegroundColor Yellow
 }
-elseif (-not (Test-Path $CBBActuals)) {
-    Write-Host "CBB actuals not found: $CBBActuals" -ForegroundColor Yellow
-}
 elseif (-not (Test-Path $CombinedTicketGrader)) {
     Write-Host "Combined ticket grader script not found!" -ForegroundColor Red
 }
@@ -668,9 +795,14 @@ else {
     $GraderArgs = @(
         "--tickets", $TicketsFile,
         "--nba_actuals", $NBAActuals,
-        "--cbb_actuals", $CBBActuals,
         "--out", (Join-Path $DateDir "combined_tickets_graded_$Date.xlsx")
     )
+    if (Test-Path $CBBActuals) {
+        $GraderArgs += @("--cbb_actuals", $CBBActuals)
+    }
+    else {
+        Write-Host "CBB actuals not found (continuing without CBB): $CBBActuals" -ForegroundColor Yellow
+    }
     if (Test-Path $NBA1HActuals) {
         $GraderArgs += @("--nba1h_actuals", $NBA1HActuals)
     }

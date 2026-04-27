@@ -222,9 +222,34 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
     ml_prob = _pick("ML Prob", "ml prob", "ml_prob")
     actual_value = _pick("Actual", "actual", "actual_value")
     margin = _pick("Margin", "margin")
-    void_reason = _pick("void_reason", "Void Reason", "void reason")
+    def_tier = _pick("Def Tier", "def_tier", "Defense Tier", "defense_tier", "Opp Def Tier", "opp_def_tier")
+    h2h_bucket = _pick("H2H Tier", "h2h_tier", "H2H Bucket", "h2h_bucket", "Head To Head Bucket", "head_to_head_bucket")
+    minutes_tier = _pick("Minutes Tier", "minutes_tier", "Min Tier", "min_tier", "Minutes Bucket", "minutes_bucket")
+    role_tier = _pick("Role Tier", "role_tier", "Player Role", "player_role", "Usage Role", "usage_role", "Team Role", "team_role")
+    game_total_bucket = _pick("Game Total Bucket", "game_total_bucket", "OU Bucket", "ou_bucket", "Over Under Bucket", "over_under_bucket", "Total Bucket", "total_bucket")
+    game_total = _pick("Game O/U", "game_ou", "Game Total", "game_total", "O/U Total", "ou_total")
+    h2h_raw = _pick("H2H", "h2h", "Head To Head", "head_to_head")
+    void_reason = _pick(
+        "void_reason",
+        "Void Reason",
+        "void reason",
+        "reason",
+        "Reason",
+        "status_note",
+        "notes",
+    )
     proj_id = _pick("pp_projection_id", "projection_id", "PP Projection ID", "Projection ID")
     result = _norm_result_display(row)
+    sport_up = str(sport or "").strip().upper()
+    vr_up = str(void_reason or "").strip().upper()
+    # Soccer VOID rows must carry explicit data quality tags for validator/reporting.
+    if result == "VOID" and sport_up == "SOCCER":
+        if "DNP" in vr_up:
+            void_reason = "DNP"
+        elif "NO_DATA" in vr_up or "NO ACTUAL" in vr_up:
+            void_reason = "NO_DATA"
+        elif not vr_up:
+            void_reason = "NO_DATA"
     return {
         "sport": sport,
         "player": player,
@@ -239,6 +264,14 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
         "ml_prob": ml_prob or "",
         "actual_value": actual_value or "",
         "margin": margin or "",
+        "def_tier": def_tier or "",
+        "h2h_bucket": h2h_bucket or "",
+        "minutes_tier": minutes_tier or "",
+        "role_tier": role_tier or "",
+        "game_total_bucket": game_total_bucket or "",
+        "game_total": game_total or "",
+        "h2h_raw": h2h_raw or "",
+        "over_under": direction or "—",
         "void_reason": void_reason or "",
         "result": result,
         "pp_projection_id": proj_id or "",
@@ -1261,7 +1294,7 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="/static/global-scrollbar.css?v=20260416"/>
 <link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260419perf2"/>
-<link rel="stylesheet" href="/static/proporacle-mobile-schema.css?v=20260430webviewfix"/>
+<link rel="stylesheet" href="/static/proporacle-mobile-schema.css?v=20260430schemapage"/>
 <style>{CSS}</style>
 </head>
 <body>
