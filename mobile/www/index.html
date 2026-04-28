@@ -2107,12 +2107,29 @@ function empiricalHitPctForPick(p, n = 5) {
   return Math.round((hits / hist.actual.length) * 100);
 }
 
+function pctFromValue(raw) {
+  const x = Number(raw);
+  if (!Number.isFinite(x)) return null;
+  return x <= 1 ? Math.round(x * 100) : Math.round(x);
+}
+
+function topEdgeL5HitPct(p, dirOverride = "") {
+  const d = String(dirOverride || p?.dir || "").trim().toUpperCase();
+  const hits = d === "UNDER" ? resolvedUnderHits(p, 5) : resolvedOverHits(p, 5);
+  if (hits !== null) return Math.round((hits / 5) * 100);
+  const empirical = empiricalHitPctForPick({ ...p, dir: d }, 5);
+  if (Number.isFinite(empirical)) return empirical;
+  return pctFromValue(p?.hit);
+}
+
 /** Pipeline often sends L5/L10 as a rate in [0,1] (e.g. 0.8 = 4/5), not always integer counts. */
 function streakHits(raw, n) {
   if (raw === null || raw === undefined) return null;
   const x = Number(raw);
   if (!Number.isFinite(x)) return null;
+  // Supports both ratio form (0.8) and percent form (80) from different feeds.
   if (x <= 1) return Math.max(0, Math.min(n, Math.round(x * n)));
+  if (x > n && x <= 100) return Math.max(0, Math.min(n, Math.round((x / 100) * n)));
   return Math.max(0, Math.min(n, Math.round(x)));
 }
 
@@ -2223,10 +2240,7 @@ function getUnderStreakSeries(p, n, hits) {
 async function loadSlateData() {
   if (slateDataPromise) return slateDataPromise;
   slateDataPromise = (async () => {
-    try {
-      const res = await fetch('slate_latest.json', {cache: 'no-store'});
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      const d = await res.json();
+    const applySlatePayload = (d) => {
       SLATE_DEBUG_META = {
         source: String(d?.source || ""),
         generated_at: String(d?.generated_at || ""),
@@ -2258,8 +2272,24 @@ async function loadSlateData() {
           });
         }
       }
+    };
+    try {
+      const res = await fetch('slate_latest.json', {cache: 'no-store'});
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const d = await res.json();
+      applySlatePayload(d);
     } catch (err) {
       console.warn("loadSlateData failed:", err);
+      try {
+        // Bundled mobile fallback: use local static slate payload when API endpoints are unavailable.
+        const fb = await fetch("slate_latest.json", { cache: "no-store" });
+        if (fb.ok) {
+          const d = await fb.json();
+          applySlatePayload(d);
+        }
+      } catch (fbErr) {
+        console.warn("loadSlateData fallback failed:", fbErr);
+      }
     }
     if (typeof window.applyHeroSlateDate === "function") {
       await window.applyHeroSlateDate();
@@ -2521,8 +2551,8 @@ function buildEdgeCard(p, idx) {
   const isOver=p.dir==="OVER", dc=isOver?"over":"under", es=isOver?"+":"";
   const sc=`sp-${p.sport.toLowerCase()}`, pc=p.pick==="Goblin"?"pick-goblin":"pick-standard";
   const sportLabel = sportDisplayLabel(p.sport);
-  const hitDisplay = empiricalHitPctForPick(p, 5);
-  const hitPct = Number.isFinite(hitDisplay) ? hitDisplay : Number(p.hit || 0);
+  const hitDisplay = topEdgeL5HitPct(p);
+  const hitPct = Number.isFinite(hitDisplay) ? hitDisplay : 0;
   const hc=hitPct>=90?"var(--green)":hitPct>=75?"var(--amber)":"var(--red)";
   const div=document.createElement("div");
   div.className=`edge-card insight-card ${dc}`;
@@ -2697,10 +2727,7 @@ function renderEdges() {
   // Top Edges quality gate: keep only rows with strong last-5 directionality
   // (>=4/5, i.e. >=80%) so cards reflect high-confidence short-window form.
   const passesEdgeL5Gate = (p, dir) => {
-    const d = String(dir || p?.dir || "").trim().toUpperCase();
-    const hits = d === "UNDER" ? resolvedUnderHits(p, 5) : resolvedOverHits(p, 5);
-    if (hits !== null) return hits >= 4;
-    const pct = empiricalHitPctForPick({ ...p, dir: d }, 5);
+    const pct = topEdgeL5HitPct(p, dir);
     return Number.isFinite(pct) && pct >= 80;
   };
   const overPrimary = pickPrimaryLineRows(overRows).filter((p) => passesEdgeL5Gate(p, "OVER"));

@@ -2,7 +2,7 @@
 """
 combined_slate_tickets.py
 
-Combined NBA + CBB + NHL + Soccer + Tennis Slate & Ticket Generator
+Combined NBA + CBB + NHL + Soccer + Tennis + WNBA Slate & Ticket Generator
 Merges NBA (step8_all_direction_clean.xlsx) and CBB (step6_ranked_cbb.xlsx ELIGIBLE)
 Outputs:
   - combined_slate_tickets_YYYY-MM-DD.xlsx
@@ -135,10 +135,12 @@ elif os.path.exists(_soccer_outputs):
 else:
     DEFAULT_SOCCER_PATH = _soccer_root
 DEFAULT_TENNIS_PATH = os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis_direction_clean.xlsx")
+DEFAULT_WNBA_PATH = os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction.xlsx")
 DEFAULT_NHL_PATH = os.path.join(REPO_ROOT, "NHL", "outputs", "step8_nhl_direction_clean.xlsx")
 DEFAULT_WEB_OUTDIR = os.path.join(REPO_ROOT, "ui_runner", "templates")
 DIVERSITY_CONFIG_PATH = os.path.join(REPO_ROOT, "config", "diversity_config.json")
 PROP_RELIABILITY_LATEST_PATH = os.path.join(REPO_ROOT, "data", "reports", "prop_reliability_latest.json")
+PROP_STRAT_BOARD_LATEST_PATH = os.path.join(REPO_ROOT, "data", "reports", "prop_stratification_board_latest.json")
 
 
 # ── Color palette ─────────────────────────────────────────────────────────────
@@ -1463,6 +1465,80 @@ def _attach_reliability_columns(df: pd.DataFrame, reliability_index: dict[tuple[
     return out
 
 
+def _norm_optional_bucket(v: object) -> str:
+    s = str(v or "").strip()
+    if not s:
+        return "(unknown)"
+    return s
+
+
+def _load_prop_strat_index(path: str = PROP_STRAT_BOARD_LATEST_PATH) -> dict[tuple[str, ...], dict]:
+    if not path or not os.path.exists(path):
+        return {}
+    try:
+        payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    rows = payload.get("top_trusted_segments", []) if isinstance(payload, dict) else []
+    out: dict[tuple[str, ...], dict] = {}
+    for r in rows:
+        if not isinstance(r, dict):
+            continue
+        key = (
+            str(r.get("sport", "")).strip().upper(),
+            _norm_prop_label(r.get("prop_type", "")),
+            str(r.get("direction", "")).strip().upper(),
+            str(r.get("pick_type", "")).strip().upper(),
+            str(r.get("tier", "")).strip().upper(),
+            str(r.get("line_bucket", "")).strip().lower(),
+            _norm_optional_bucket(r.get("def_tier")),
+            _norm_optional_bucket(r.get("h2h_bucket")),
+            _norm_optional_bucket(r.get("minutes_tier")),
+            _norm_optional_bucket(r.get("role_tier")),
+            _norm_optional_bucket(r.get("game_total_bucket")),
+        )
+        if not key[0] or not key[1] or not key[2]:
+            continue
+        out[key] = r
+    return out
+
+
+def _attach_strat_columns(df: pd.DataFrame, strat_index: dict[tuple[str, ...], dict]) -> pd.DataFrame:
+    if df is None or df.empty:
+        return df
+    out = df.copy()
+    if not strat_index:
+        out["strat_hit_rate"] = np.nan
+        out["strat_last5_hit_rate"] = np.nan
+        out["strat_n"] = np.nan
+        return out
+    sp = out["sport"].astype(str).str.upper().str.strip() if "sport" in out.columns else pd.Series("", index=out.index)
+    prop = out["prop_type"].apply(_norm_prop_label) if "prop_type" in out.columns else pd.Series("", index=out.index)
+    direc = out["direction"].astype(str).str.upper().str.strip() if "direction" in out.columns else pd.Series("", index=out.index)
+    pick = out["pick_type"].astype(str).str.upper().str.strip() if "pick_type" in out.columns else pd.Series("UNKNOWN", index=out.index)
+    tier = out["tier"].astype(str).str.upper().str.strip() if "tier" in out.columns else pd.Series("UNKNOWN", index=out.index)
+    lb = out["line"].apply(_line_bucket_label) if "line" in out.columns else pd.Series("(missing)", index=out.index)
+    def_tier = out["def_tier"].apply(_norm_optional_bucket) if "def_tier" in out.columns else pd.Series("(unknown)", index=out.index)
+    h2h = out["h2h_bucket"].apply(_norm_optional_bucket) if "h2h_bucket" in out.columns else pd.Series("(unknown)", index=out.index)
+    minutes = out["minutes_tier"].apply(_norm_optional_bucket) if "minutes_tier" in out.columns else pd.Series("(unknown)", index=out.index)
+    role = out["role_tier"].apply(_norm_optional_bucket) if "role_tier" in out.columns else pd.Series("(unknown)", index=out.index)
+    ou = out["game_total_bucket"].apply(_norm_optional_bucket) if "game_total_bucket" in out.columns else pd.Series("(unknown)", index=out.index)
+
+    s_hr, s_l5, s_n = [], [], []
+    for i in out.index:
+        key = (sp.loc[i], prop.loc[i], direc.loc[i], pick.loc[i], tier.loc[i], lb.loc[i], def_tier.loc[i], h2h.loc[i], minutes.loc[i], role.loc[i], ou.loc[i])
+        row = strat_index.get(key)
+        if not row:
+            s_hr.append(np.nan); s_l5.append(np.nan); s_n.append(np.nan); continue
+        s_hr.append(float(row.get("hit_rate", np.nan)))
+        s_l5.append(float(row.get("last5_hit_rate", np.nan)))
+        s_n.append(float(row.get("n", np.nan)))
+    out["strat_hit_rate"] = s_hr
+    out["strat_last5_hit_rate"] = s_l5
+    out["strat_n"] = s_n
+    return out
+
+
 def _pool_prop_snake(pt: object) -> str:
     """Normalize prop_type for pool exclusion keys (e.g. 'Home Runs' -> 'home_runs')."""
     return _norm_prop_label(pt).replace(" ", "_")
@@ -2323,8 +2399,10 @@ def _scalar_rank_to_prob_for_sort(x: object) -> float:
 def _attach_ticket_pick_order(df: pd.DataFrame, mode: str) -> pd.DataFrame:
     """
     Add __ts_pri / __ts_sec for descending sort when assembling tickets.
-    rank: primary = rank_score; ml: primary = ml_prob (missing last); blend: 0.5*ml + 0.5*sigmoid(rank),
-    with missing ml falling back to sigmoid(rank) only.
+    rank: primary = rank_score; ml: primary = ml_prob (missing last);
+    blend: 0.5*ml + 0.5*sigmoid(rank), with missing ml falling back to sigmoid(rank) only.
+    rule: user ruleset (L5, L10/season consistency, defense, minutes, role, H2H, edge),
+    with Demon legs deprioritized.
     """
     out = df.copy()
     if out.empty:
@@ -2335,7 +2413,7 @@ def _attach_ticket_pick_order(df: pd.DataFrame, mode: str) -> pd.DataFrame:
     ml = pd.to_numeric(out["ml_prob"], errors="coerce") if "ml_prob" in out.columns else pd.Series(np.nan, index=out.index)
     rs_p = rs.map(_scalar_rank_to_prob_for_sort)
     m = (mode or "rank").strip().lower()
-    if m not in ("rank", "ml", "blend"):
+    if m not in ("rank", "ml", "blend", "rule"):
         m = "rank"
     if m == "ml":
         out["__ts_pri"] = ml.fillna(-1.0)
@@ -2343,6 +2421,91 @@ def _attach_ticket_pick_order(df: pd.DataFrame, mode: str) -> pd.DataFrame:
     elif m == "blend":
         ml_b = ml.where(ml.notna(), rs_p)
         out["__ts_pri"] = 0.5 * ml_b + 0.5 * rs_p
+        out["__ts_sec"] = rs.fillna(-1e9)
+    elif m == "rule":
+        # User methodology:
+        # 1) Remove/deprioritize Demon
+        # 2) Prefer L5 side hit count >= 4
+        # 3) Consistency from L10 + L5 vs season average
+        # 4) Defense/mintier directional context
+        # 5) Role context
+        # 6) H2H consistency
+        # 7) Edge as a smaller tie-breaker
+        direction = out.get("direction", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
+        pick_type = out.get("pick_type", pd.Series("Standard", index=out.index)).astype(str).str.upper().str.strip()
+        def_tier = out.get("def_tier", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
+        min_tier = out.get("min_tier", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
+        role = (
+            out.get("usage_role", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
+            + " "
+            + out.get("shot_role", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
+        ).str.strip()
+
+        nan_s = pd.Series(np.nan, index=out.index)
+        l5_over = pd.to_numeric(out.get("l5_over", nan_s), errors="coerce")
+        l5_under = pd.to_numeric(out.get("l5_under", nan_s), errors="coerce")
+        l10_over = pd.to_numeric(out.get("l10_over", nan_s), errors="coerce")
+        l10_under = pd.to_numeric(out.get("l10_under", nan_s), errors="coerce")
+        l5_avg = pd.to_numeric(out.get("l5_avg", nan_s), errors="coerce")
+        szn_avg = pd.to_numeric(out.get("szn_avg", nan_s), errors="coerce")
+        h2h_over = pd.to_numeric(out.get("h2h_over_pct", nan_s), errors="coerce")
+        h2h_gp = pd.to_numeric(out.get("h2h_gp", nan_s), errors="coerce")
+        edge = pd.to_numeric(out.get("edge", nan_s), errors="coerce")
+        hr = pd.to_numeric(out.get("hit_rate", nan_s), errors="coerce")
+        mlp = pd.to_numeric(out.get("ml_prob", nan_s), errors="coerce")
+
+        pri = hr.where(hr.notna(), mlp).fillna(rs_p).fillna(DEFAULT_LEG_PROB_FALLBACK)
+
+        side_l5 = np.where(direction.eq("UNDER"), l5_under, l5_over)
+        side_l10 = np.where(direction.eq("UNDER"), l10_under, l10_over)
+
+        # L5 threshold behavior (>=4 strong, <=2 weak)
+        pri = pri + np.where(pd.isna(side_l5), 0.0, np.where(side_l5 >= 4, 0.10, np.where(side_l5 <= 2, -0.07, 0.0)))
+        # L10 consistency
+        pri = pri + np.where(pd.isna(side_l10), 0.0, np.where(side_l10 >= 7, 0.05, np.where(side_l10 >= 6, 0.02, np.where(side_l10 <= 4, -0.03, 0.0))))
+        # L5 vs season average stability
+        avg_diff = (l5_avg - szn_avg).abs()
+        pri = pri + np.where(pd.isna(avg_diff), 0.0, np.where(avg_diff <= 0.5, 0.03, np.where(avg_diff <= 1.0, 0.015, np.where(avg_diff >= 2.0, -0.02, 0.0))))
+
+        over_mask = direction.eq("OVER")
+        under_mask = direction.eq("UNDER")
+
+        # Defense directional preference
+        pri = pri + np.where(over_mask & def_tier.isin(["WEAK"]), 0.05, 0.0)
+        pri = pri + np.where(over_mask & def_tier.isin(["ABOVE AVG", "ELITE", "SOLID"]), -0.03, 0.0)
+        pri = pri + np.where(under_mask & def_tier.isin(["ELITE", "ABOVE AVG", "SOLID"]), 0.04, 0.0)
+        pri = pri + np.where(under_mask & def_tier.isin(["WEAK"]), -0.04, 0.0)
+
+        # Minutes directional preference
+        pri = pri + np.where(over_mask & min_tier.isin(["HIGH"]), 0.04, 0.0)
+        pri = pri + np.where(over_mask & min_tier.isin(["LOW"]), -0.04, 0.0)
+        pri = pri + np.where(under_mask & min_tier.isin(["LOW"]), 0.04, 0.0)
+        pri = pri + np.where(under_mask & min_tier.isin(["HIGH"]), -0.04, 0.0)
+
+        # Role preference
+        pri = pri + np.where(role.str.contains("PRIMARY", regex=False, na=False) & over_mask, 0.03, 0.0)
+        pri = pri + np.where(role.str.contains("PRIMARY", regex=False, na=False) & under_mask, -0.01, 0.0)
+        pri = pri + np.where(role.str.contains("SECONDARY", regex=False, na=False), 0.015, 0.0)
+        pri = pri + np.where(role.str.contains("SUPPORT", regex=False, na=False) & under_mask, 0.015, 0.0)
+        pri = pri + np.where(role.str.contains("SUPPORT", regex=False, na=False) & over_mask, -0.015, 0.0)
+
+        # H2H (requires small but non-trivial sample)
+        valid_h2h = h2h_gp.fillna(0) >= 2
+        pri = pri + np.where(valid_h2h & over_mask & (h2h_over >= 0.60), 0.03, 0.0)
+        pri = pri + np.where(valid_h2h & over_mask & (h2h_over <= 0.40), -0.03, 0.0)
+        pri = pri + np.where(valid_h2h & under_mask & (h2h_over <= 0.40), 0.03, 0.0)
+        pri = pri + np.where(valid_h2h & under_mask & (h2h_over >= 0.60), -0.03, 0.0)
+
+        # Edge last, with directional sign handling and capped influence
+        edge_adj = pd.Series(np.where(over_mask, edge, -edge), index=out.index)
+        edge_adj = pd.to_numeric(edge_adj, errors="coerce").fillna(0.0).clip(-0.30, 0.30) / 10.0
+        pri = pri + edge_adj
+
+        # Explicitly deprioritize Demon as requested.
+        pri = np.where(pick_type.eq("DEMON"), -9.0, pri)
+
+        pri_s = pd.Series(pri, index=out.index)
+        out["__ts_pri"] = pd.to_numeric(pri_s, errors="coerce").fillna(-9.0)
         out["__ts_sec"] = rs.fillna(-1e9)
     else:
         out["__ts_pri"] = rs.fillna(-1e9)
@@ -3380,7 +3543,7 @@ def enforce_target_date(
     # NBA/MLB period boards and Soccer should not silently roll dates.
     sport_u = str(sport).upper()
     fallback_sports = {"TENNIS"}
-    if sport_u in {"NBA", "NBA1Q", "NBA1H", "MLB", "SOCCER", "SOC"}:
+    if sport_u in {"NBA", "NBA1Q", "NBA1H", "MLB", "SOCCER", "SOC", "WNBA"}:
         use_date_fallback = False
     else:
         use_date_fallback = allow_cross_date_fallback or (sport_u in fallback_sports)
@@ -3756,7 +3919,7 @@ def ticket_groups_to_payload(
 
 
 def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
-                     wcbb=None, mlb=None, nba1q=None, nba1h=None, tennis=None, nfl=None):
+                     wcbb=None, mlb=None, nba1q=None, nba1h=None, tennis=None, nfl=None, wnba=None):
     """Write full per-sport ranked slate to slate_latest.json for the web UI.
 
     Sport keys in ``sports`` are lowercase (nba, nfl, …) so /api/slate-sport and the
@@ -3834,6 +3997,7 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
             "nba1q":  df_to_rows(nba1q,  "nba1q"),
             "nba1h":  df_to_rows(nba1h,  "nba1h"),
             "nfl":    df_to_rows(nfl,    "nfl"),
+            "wnba":   df_to_rows(wnba,   "wnba"),
         }
     }
 
@@ -5118,6 +5282,59 @@ def load_cbb(path: str) -> pd.DataFrame:
     return df
 
 
+def _fill_nhl_l5_season_avgs(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Step8 NHL often writes blank avg_L5 / avg_season while projection and last-N raw
+    game cells are populated. Backfill L5 Avg and Szn Avg for combined / Excel / web.
+    """
+    if df is None or len(df) == 0:
+        return df
+    out = df.copy()
+    if "l5_avg" not in out.columns:
+        out["l5_avg"] = np.nan
+    if "season_avg" not in out.columns:
+        out["season_avg"] = np.nan
+
+    l5 = pd.to_numeric(out["l5_avg"], errors="coerce")
+    szn = pd.to_numeric(out["season_avg"], errors="coerce")
+    proj = (
+        pd.to_numeric(out["projection"], errors="coerce")
+        if "projection" in out.columns
+        else pd.Series(np.nan, index=out.index)
+    )
+    a10 = (
+        pd.to_numeric(out["avg_L10"], errors="coerce")
+        if "avg_L10" in out.columns
+        else pd.Series(np.nan, index=out.index)
+    )
+    a20 = (
+        pd.to_numeric(out["avg_L20"], errors="coerce")
+        if "avg_L20" in out.columns
+        else pd.Series(np.nan, index=out.index)
+    )
+
+    raw_cols = [c for c in ("last1_raw", "last2_raw", "last3_raw") if c in out.columns]
+    l3_mean = pd.Series(np.nan, index=out.index)
+    if raw_cols:
+        mats = [pd.to_numeric(out[c], errors="coerce") for c in raw_cols]
+        l3_mean = pd.concat(mats, axis=1).mean(axis=1, skipna=True)
+
+    l5_filled = l5.combine_first(proj).combine_first(l3_mean)
+    n_l5 = int((l5.isna() & l5_filled.notna()).sum())
+    out["l5_avg"] = l5_filled
+
+    szn_filled = szn.combine_first(a10).combine_first(a20).combine_first(l5_filled)
+    n_szn = int((szn.isna() & szn_filled.notna()).sum())
+    out["season_avg"] = szn_filled
+
+    if n_l5 or n_szn:
+        print(
+            f"  [load_nhl] backfilled l5_avg on {n_l5} row(s), season_avg on {n_szn} row(s) "
+            "(projection / avg_L10 / avg_L20 / last1–3 raw fallbacks)"
+        )
+    return out
+
+
 # ── Load & normalize NHL ──────────────────────────────────────────────────────
 def load_nhl(path: str) -> pd.DataFrame:
     raw = (path or "").strip()
@@ -5148,6 +5365,8 @@ def load_nhl(path: str) -> pd.DataFrame:
         "hr_L10":             "hit_rate_over_L10",
         "avg_L5":             "l5_avg",
         "avg_season":         "season_avg",
+        "Last 5 Avg":         "l5_avg",
+        "Season Avg":         "season_avg",
         "def_tier":           "def_tier",
         "def_rank":           "def_rank",
         "prop_score":         "rank_score",
@@ -5262,7 +5481,11 @@ def load_nhl(path: str) -> pd.DataFrame:
     elif "l5_under" not in df.columns:
         df["l5_under"] = np.nan
 
+    # Keep NHL on the same source-of-truth L5 logic as other sports whenever
+    # stat_g* windows are present in the board payload.
+    df = _apply_l5_truth_from_stat_games(df, "NHL")
     df = add_l5_play_side_columns(df)
+    df = _fill_nhl_l5_season_avgs(df)
 
     df = df[df["line"].notna() & (df["line"] > 0)]
     # Convert all pandas NA/NaT to None so openpyxl can handle them
@@ -5661,6 +5884,17 @@ def load_tennis(path: str) -> pd.DataFrame:
         log_prefix="load_tennis",
     )
     return _tennis_board_hit_rate_proxy(base)
+
+
+def load_wnba(path: str) -> pd.DataFrame:
+    """WNBA step8 direction workbook (same column contract as other step8 boards)."""
+    return _load_step8_board_like(
+        path,
+        fallback_filename="step8_wnba_direction.xlsx",
+        sheet_order=("WNBA", "ALL"),
+        sport="WNBA",
+        log_prefix="load_wnba",
+    )
 
 
 def load_wcbb(path: str) -> pd.DataFrame:
@@ -6285,6 +6519,26 @@ def add_l5_play_side_columns(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def drop_demon_over_rows(df: Optional[pd.DataFrame], sport_label: str) -> Optional[pd.DataFrame]:
+    """
+    PrizePicks Demon is a line-hardening pick type and is not offered on the OVER side for
+    these boards — upstream step8 can still emit Demon+OVER rows. Remove them so Excel
+    slates, Full Slate, ticket pools, and slate_latest.json never surface unbookable legs.
+    """
+    if df is None or len(df) == 0:
+        return df
+    if "pick_type" not in df.columns or "direction" not in df.columns:
+        return df
+    pt = df["pick_type"].astype(str).str.strip().str.upper()
+    dr = df["direction"].astype(str).str.strip().str.upper()
+    bad = pt.eq("DEMON") & dr.eq("OVER")
+    n_drop = int(bad.sum())
+    if n_drop:
+        print(f"  [bookability] {sport_label}: dropping {n_drop} Demon+OVER row(s) (not a valid PP offering).")
+        return df.loc[~bad].copy()
+    return df
+
+
 # ── Merge to full slate ────────────────────────────────────────────────────────
 def build_combined_slate(
     nba: pd.DataFrame,
@@ -6627,7 +6881,12 @@ def build_single_structure_ticket(
     if "rank_score" in df.columns and len(df) > 0 and not (relaxed and structure == "standard"):
         rs = pd.to_numeric(df["rank_score"], errors="coerce")
         cutoff = float(rs.quantile(q))
-        df = df[rs >= cutoff].copy()
+        df_q = df[rs >= cutoff].copy()
+        # Top-quantile cuts collapse tiny pools (NHL/MLB especially) to <2 legs after other gates.
+        if sport_up in ("NHL", "MLB", "TENNIS", "SOCCER", "SOC") and len(df_q) < max(n_legs * 2, 6):
+            df = df  # keep pre-quantile pool for thin sports
+        else:
+            df = df_q
     if df.empty:
         return None
 
@@ -6848,7 +7107,11 @@ def build_structure_ticket_variants(
     if "rank_score" in df.columns and len(df) > 0 and not (relaxed and structure == "standard"):
         rs = pd.to_numeric(df["rank_score"], errors="coerce")
         cutoff = float(rs.quantile(q))
-        df = df[rs >= cutoff].copy()
+        df_q = df[rs >= cutoff].copy()
+        if sport_up in ("NHL", "MLB", "TENNIS", "SOCCER", "SOC") and len(df_q) < max(n_legs * 2, 6):
+            df = df
+        else:
+            df = df_q
     if df.empty:
         return []
 
@@ -8999,6 +9262,11 @@ def main():
         default="",
         help=f"Tennis step8 (default: {DEFAULT_TENNIS_PATH})",
     )
+    ap.add_argument(
+        "--wnba",
+        default="",
+        help=f"WNBA step8 (default: {DEFAULT_WNBA_PATH} when present on disk)",
+    )
     ap.add_argument("--wcbb", default="", help="WCBB step8 direction clean xlsx (optional)")
     ap.add_argument("--mlb", default="", help="MLB step8 direction clean xlsx (optional)")
     ap.add_argument("--nba1q", default="", help="NBA 1st Quarter step8 direction clean xlsx (optional)")
@@ -9032,12 +9300,13 @@ def main():
     )
     ap.add_argument(
         "--ticket-candidate-sort",
-        choices=("rank", "ml", "blend"),
-        default="blend",
+        choices=("rank", "ml", "blend", "rule"),
+        default="rule",
         dest="ticket_candidate_sort",
         help=(
             "Order slate rows when choosing ticket legs. rank=rank_score only; ml=ml_prob first (NaN last); "
-            "blend=avg(ml_prob, sigmoid(rank_score)) with missing ml using sigmoid(rank) only. "
+            "blend=avg(ml_prob, sigmoid(rank_score)) with missing ml using sigmoid(rank) only; "
+            "rule=full context rules (remove Demon, L5/L10, defense, minutes, role, H2H, edge). "
             "Default blend uses your step8 ML Prob column when present (same signal as _resolve_leg_prob priority)."
         ),
     )
@@ -9264,6 +9533,8 @@ def main():
         args.soccer = DEFAULT_SOCCER_PATH
     if not str(args.tennis).strip():
         args.tennis = DEFAULT_TENNIS_PATH if os.path.isfile(DEFAULT_TENNIS_PATH) else ""
+    if not str(args.wnba).strip():
+        args.wnba = DEFAULT_WNBA_PATH if os.path.isfile(DEFAULT_WNBA_PATH) else ""
 
     if not args.output:
         args.output = f"combined_slate_tickets_{args.date}.xlsx"
@@ -9379,6 +9650,22 @@ def main():
     else:
         print("  [Tennis] skipped (empty --tennis)")
 
+    wnba = None
+    if str(args.wnba).strip():
+        try:
+            wnba = load_wnba(args.wnba)
+            wnba = enforce_target_date(
+                wnba, "WNBA", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+            )
+            wnba = attach_standard_refs(wnba)
+            print(f"  {len(wnba)} WNBA props loaded")
+            _load_audit_row("WNBA", args.wnba, wnba)
+        except Exception as e:
+            print(f"  WARNING: Could not load WNBA file: {e}")
+            wnba = None
+    else:
+        print("  [WNBA] skipped (empty --wnba)")
+
     wcbb = None
     if args.wcbb:
         try:
@@ -9444,7 +9731,7 @@ def main():
         gd_str = df["game_date"].astype(str).str[:10]
         # NBA boards (full + period) can be posted ahead of the run date.
         # Keep only the nearest future slate date (or latest available if all are past).
-        if sport_label in ("NBA", "NBA1Q", "NBA1H"):
+        if sport_label in ("NBA", "NBA1Q", "NBA1H", "WNBA"):
             avail = sorted(gd_str[dated].dropna().unique().tolist())
             if not avail:
                 return df
@@ -9456,13 +9743,31 @@ def main():
                     f"  [{sport_label}] date fallback: no props on {td}, "
                     f"using nearest date {chosen} ({int((~stale).sum())} rows)"
                 )
-        # Soccer/Tennis boards often span several upcoming ET days; drop only rows clearly before target.
+        # Soccer/Tennis: boards may not carry the pipeline calendar day (late refresh / ET drift).
+        # If a strict "drop everything before td" would empty the slate, keep the nearest available
+        # slate date (same idea as NBA), otherwise PP-only runs lose Tennis entirely.
         elif sport_label in ("Soccer", "Tennis"):
-            stale = dated & (gd_str < td)
+            stale_strict = dated & (gd_str < td)
+            # If there is no dated row on/after the pipeline day, the board is from a nearby slate only.
+            if dated.any() and not (dated & (gd_str >= td)).any():
+                avail = sorted(gd_str[dated].dropna().unique().tolist())
+                if avail:
+                    future = [d for d in avail if d >= td]
+                    chosen = min(future) if future else max(avail)
+                    stale = dated & (gd_str != chosen)
+                    if chosen != td:
+                        print(
+                            f"  [{sport_label}] date fallback: no rows on {td}, "
+                            f"using nearest slate date {chosen} ({int((~stale).sum())} rows)"
+                        )
+                else:
+                    stale = stale_strict
+            else:
+                stale = stale_strict
         elif sport_label == "Combined" and "sport" in df.columns:
             # Same rule as strict date check: soccer/tennis allow future ET days; other sports must match target.
             su = df["sport"].astype(str).str.upper()
-            is_roll = su.isin(["SOCCER", "TENNIS", "NBA", "NBA1Q", "NBA1H"])
+            is_roll = su.isin(["SOCCER", "TENNIS", "NBA", "NBA1Q", "NBA1H", "WNBA"])
             stale = dated & ((gd_str < td) | (~is_roll & (gd_str != td)))
         else:
             stale = dated & (gd_str != td)
@@ -9476,6 +9781,7 @@ def main():
     nhl = drop_stale_rows(nhl, args.date, "NHL")
     soccer = drop_stale_rows(soccer, args.date, "Soccer")
     tennis = drop_stale_rows(tennis, args.date, "Tennis")
+    wnba = drop_stale_rows(wnba, args.date, "WNBA")
     wcbb = drop_stale_rows(wcbb, args.date, "WCBB")
     mlb = drop_stale_rows(mlb, args.date, "MLB")
     nba1q = drop_stale_rows(nba1q, args.date, "NBA1Q")
@@ -9488,9 +9794,21 @@ def main():
     nhl = apply_usage_redistribution(nhl, "NHL", args.date, REPO_ROOT) if nhl is not None else nhl
     soccer = apply_usage_redistribution(soccer, "Soccer", args.date, REPO_ROOT) if soccer is not None else soccer
     tennis = apply_usage_redistribution(tennis, "Tennis", args.date, REPO_ROOT) if tennis is not None else tennis
+    wnba = apply_usage_redistribution(wnba, "WNBA", args.date, REPO_ROOT) if wnba is not None else wnba
     mlb = apply_usage_redistribution(mlb, "MLB", args.date, REPO_ROOT) if mlb is not None else mlb
     nba1q = apply_usage_redistribution(nba1q, "NBA1Q", args.date, REPO_ROOT) if nba1q is not None else nba1q
     nba1h = apply_usage_redistribution(nba1h, "NBA1H", args.date, REPO_ROOT) if nba1h is not None else nba1h
+
+    nba = drop_demon_over_rows(nba, "NBA")
+    cbb = drop_demon_over_rows(cbb, "CBB")
+    nhl = drop_demon_over_rows(nhl, "NHL")
+    soccer = drop_demon_over_rows(soccer, "Soccer")
+    tennis = drop_demon_over_rows(tennis, "Tennis")
+    wnba = drop_demon_over_rows(wnba, "WNBA")
+    wcbb = drop_demon_over_rows(wcbb, "WCBB")
+    mlb = drop_demon_over_rows(mlb, "MLB")
+    nba1q = drop_demon_over_rows(nba1q, "NBA1Q")
+    nba1h = drop_demon_over_rows(nba1h, "NBA1H")
 
     print("Building combined slate...")
     combined = build_combined_slate(nba, cbb, nhl, soccer,
@@ -9501,6 +9819,11 @@ def main():
         print(f"  [reliability] loaded {len(reliability_index)} prop-direction buckets from {PROP_RELIABILITY_LATEST_PATH}")
     else:
         print("  [reliability] no reliability index found; continuing without reliability gate")
+    strat_index = _load_prop_strat_index()
+    if strat_index:
+        print(f"  [strat] loaded {len(strat_index)} trusted segment rows from {PROP_STRAT_BOARD_LATEST_PATH}")
+    else:
+        print("  [strat] no trusted stratification board found; continuing without strat weighting")
 
     # ✅ Attach Standard refs for combined too
     combined = attach_standard_refs(combined)
@@ -9568,6 +9891,7 @@ def main():
 
         filtered_df = df.copy()
         filtered_df = _attach_reliability_columns(filtered_df, reliability_index)
+        filtered_df = _attach_strat_columns(filtered_df, strat_index)
         voided_excluded = 0
         demon_candidates = None
         demon_passed = None
@@ -9639,6 +9963,21 @@ def main():
                 filtered_df["blended_score"] = pd.to_numeric(filtered_df["blended_score"], errors="coerce").fillna(0.0) * soft_mult
             if "rank_score" in filtered_df.columns:
                 filtered_df["rank_score"] = pd.to_numeric(filtered_df["rank_score"], errors="coerce").fillna(0.0) * soft_mult
+
+        strat_boost_n = 0
+        if {"strat_hit_rate", "strat_last5_hit_rate", "strat_n"}.issubset(filtered_df.columns):
+            hr = pd.to_numeric(filtered_df["strat_hit_rate"], errors="coerce")
+            l5 = pd.to_numeric(filtered_df["strat_last5_hit_rate"], errors="coerce")
+            n = pd.to_numeric(filtered_df["strat_n"], errors="coerce")
+            hr_component = ((hr - 0.56) * 1.2).clip(lower=-0.18, upper=0.22)
+            l5_component = ((l5 - 0.56) * 0.5).clip(lower=-0.10, upper=0.10)
+            n_conf = np.clip((n.fillna(0.0) / 80.0), 0.0, 1.0)
+            strat_mult = (1.0 + (hr_component.fillna(0.0) + l5_component.fillna(0.0)) * (0.35 + 0.65 * n_conf)).clip(lower=0.78, upper=1.25)
+            strat_boost_n = int(hr.notna().sum())
+            if "blended_score" in filtered_df.columns:
+                filtered_df["blended_score"] = pd.to_numeric(filtered_df["blended_score"], errors="coerce").fillna(0.0) * strat_mult
+            if "rank_score" in filtered_df.columns:
+                filtered_df["rank_score"] = pd.to_numeric(filtered_df["rank_score"], errors="coerce").fillna(0.0) * strat_mult
 
         # Sport-specific hit rate floors based on empirical data
         effective_min_hit = args.min_hit_rate
@@ -9776,6 +10115,8 @@ def main():
         print(
             f"  [pool] {sport}: {total_loaded} legs loaded | {voided_excluded} voided | {passing} in pool"
         )
+        if strat_boost_n:
+            print(f"         strat: weighted {strat_boost_n} rows using trusted segment history")
         print(f"         pick_types: goblin={gob_n} std={std_n} demon={dem_n}")
         if pooled is not None and len(pooled) > 0 and "prop_quality_score" in pooled.columns:
             pq = pd.to_numeric(pooled["prop_quality_score"], errors="coerce")
@@ -10301,7 +10642,7 @@ def main():
                 bad = sdf[dated & (gd < td)]
             elif label == "Combined" and "sport" in sdf.columns:
                 su = sdf["sport"].astype(str).str.upper()
-                is_roll = su.isin(["SOCCER", "TENNIS", "NBA", "NBA1Q", "NBA1H"])
+                is_roll = su.isin(["SOCCER", "TENNIS", "NBA", "NBA1Q", "NBA1H", "WNBA"])
                 bad = sdf[dated & ((gd < td) | (~is_roll & (gd != td)))]
             else:
                 bad = sdf[dated & (gd != td)]
@@ -10550,7 +10891,7 @@ def main():
         # nfl: pass None until combined loads NFL step8; keep key "nfl": [] in slate_latest.json for UI.
         nfl = None
         write_slate_json(nba, cbb, nhl, soccer, args.date, args.web_outdir,
-                         wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis, nfl=nfl)
+                         wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis, nfl=nfl, wnba=wnba)
         try:
             ex_out = os.path.join(REPO_ROOT, "ui_runner", "data", "payout_ladder_examples.json")
             generate_payout_ladder_examples(payload, ex_out)

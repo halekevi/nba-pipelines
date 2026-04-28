@@ -192,10 +192,24 @@ def _parse_game_period_stats(
     Used as fallback for NBA when NBA.com fails, and as the primary path for CBB.
     """
     url = CORE_PBP_URL.format(sport=espn_sport, event_id=event_id)
-    r = requests.get(url, headers=HEADERS, timeout=25)
-    r.raise_for_status()
-    payload = r.json() or {}
-    gp = payload.get("gamepackageJSON", {}) or {}
+    gp = {}
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=25)
+        r.raise_for_status()
+        payload = r.json() or {}
+        gp = payload.get("gamepackageJSON", {}) or {}
+    except Exception:
+        # Core endpoint can intermittently return non-JSON/empty for NBA.
+        # Fallback to site summary, which carries compatible plays/boxscore blocks.
+        league = "nba" if espn_sport == "nba" else "mens-college-basketball"
+        s_url = (
+            f"https://site.api.espn.com/apis/site/v2/sports/basketball/"
+            f"{league}/summary?event={event_id}"
+        )
+        r2 = requests.get(s_url, headers=HEADERS, timeout=25)
+        r2.raise_for_status()
+        payload2 = r2.json() or {}
+        gp = payload2.get("gamepackageJSON", payload2) or {}
     plays = gp.get("plays", []) or []
     if not plays:
         return []
