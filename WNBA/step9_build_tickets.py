@@ -367,7 +367,18 @@ def main():
     leg_counts = [int(x.strip()) for x in args.legs.split(',')]
 
     print(f"→ Loading: {args.input} (sheet={args.sheet})")
-    df = pd.read_excel(args.input, sheet_name=args.sheet)
+    try:
+        df = pd.read_excel(args.input, sheet_name=args.sheet)
+    except ValueError:
+        # Empty step8 workbooks may not contain Tier A; emit a valid empty tickets file.
+        print(f"  ⚠ Sheet '{args.sheet}' not found. Writing empty ticket workbook.")
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "Summary"
+        ws["A1"] = "No eligible WNBA props for ticket generation."
+        wb.save(args.output)
+        print(f"\n✅ Saved → {args.output}")
+        return
     df['Pick Type'] = df['Pick Type'].astype(str).apply(_norm_pick_type)
 
     # Filter by min hit rate
