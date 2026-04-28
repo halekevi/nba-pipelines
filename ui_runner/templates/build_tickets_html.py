@@ -767,7 +767,7 @@ def build_html(xlsx_path: Path) -> str:
 
 <div class="page-header">
   <div class="page-title">PropOracle TICKETS</div>
-  <div class="page-subtitle">MULTI-SPORT PROP INTELLIGENCE · NBA · CBB · NHL · SOCCER</div>
+  <div class="page-subtitle">NBA · NBA1H · NBA1Q · CBB · WCBB · NHL · SOCCER · MLB · NFL · Prop Intelligence</div>
   <div class="page-meta">
     <span class="date-chip">📅 {display_date}</span>
     <span class="date-chip">⚡ {total_tickets:,} TICKETS</span>

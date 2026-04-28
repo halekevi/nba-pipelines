@@ -980,7 +980,7 @@ body::before{
   <!-- HERO -->
   <div class="hero">
     <div class="hero-copy">
-      <div class="hero-eyebrow">NBA · NBA1H · NBA1Q · CBB · WCBB · NHL · SOCCER · MLB · NFL · Prop Intelligence</div>
+      <div class="hero-eyebrow">NBA · NBA1H · NBA1Q · CBB · WCBB · NHL · SOCCER · MLB · NFL · TENNIS · WNBA · Prop Intelligence</div>
       <h1 class="hero-title">
         <span class="ht1 prop-hero-prefix">Prop</span>
         <span class="ht2">Oracle</span>
@@ -2090,6 +2090,19 @@ function resolvedUnderHits(p, n) {
   return Math.max(0, Math.min(n, n - ho));
 }
 
+/** Resolved over-side hit count in last n games (supports over-only or under-only payloads). */
+function resolvedOverHits(p, n) {
+  const keyO = n === 5 ? "l5_over" : "l10_over";
+  const keyU = n === 5 ? "l5_under" : "l10_under";
+  const o = p[keyO];
+  if (o !== null && o !== undefined && o !== "") return streakHits(o, n);
+  const u = p[keyU];
+  if (u === null || u === undefined || u === "") return null;
+  const hu = streakHits(u, n);
+  if (hu === null) return null;
+  return Math.max(0, Math.min(n, n - hu));
+}
+
 /** Goblin is OVER-only in this product — exclude from under-edge and under-streak surfaces. */
 function isGoblinPick(p) {
   const t = String(p?.pick ?? p?.pick_type ?? "").trim().toLowerCase();
@@ -2638,7 +2651,16 @@ function renderEdges() {
     const dir = String(p.dir || "").trim().toUpperCase();
     if (dir === "OVER") overRows.push(p);
   }
-  const overPrimary = pickPrimaryLineRows(overRows);
+  // Top Edges quality gate: keep only rows with strong last-5 directionality
+  // (>=4/5, i.e. >=80%) so cards reflect high-confidence short-window form.
+  const passesEdgeL5Gate = (p, dir) => {
+    const d = String(dir || p?.dir || "").trim().toUpperCase();
+    const hits = d === "UNDER" ? resolvedUnderHits(p, 5) : resolvedOverHits(p, 5);
+    if (hits !== null) return hits >= 4;
+    const pct = empiricalHitPctForPick({ ...p, dir: d }, 5);
+    return Number.isFinite(pct) && pct >= 80;
+  };
+  const overPrimary = pickPrimaryLineRows(overRows).filter((p) => passesEdgeL5Gate(p, "OVER"));
   const stdO = overPrimary.filter((p) => !isGoblinPick(p));
   const gobO = overPrimary.filter((p) => isGoblinPick(p));
   const byEdgeDesc = (a, b) => num(b.edge) - num(a.edge);
@@ -2659,6 +2681,7 @@ function renderEdges() {
     if (!underByKey.has(k)) underByKey.set(k, row);
   }
   const underRows = pickPrimaryLineRows(underSourceRows.map((x) => x.disp))
+    .filter((disp) => passesEdgeL5Gate(disp, "UNDER"))
     .map((disp) => {
       const k = [
         String(disp.sport || "").trim().toUpperCase(),
