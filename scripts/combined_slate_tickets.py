@@ -6909,16 +6909,16 @@ def _directional_edge_series(df: pd.DataFrame) -> pd.Series:
 
 
 PROP_QUALITY_MIN_BY_SPORT: dict[str, float] = {
-    "NBA": 0.58,
-    "NBA1Q": 0.58,
-    "NBA1H": 0.58,
+    "NBA": 0.60,
+    "NBA1Q": 0.60,
+    "NBA1H": 0.60,
     "CBB": 0.60,
     "WCBB": 0.60,
-    "MLB": 0.62,
-    "NHL": 0.60,
-    "SOCCER": 0.72,
-    "SOC": 0.72,
-    "TENNIS": 0.57,
+    "MLB": 0.35,
+    "NHL": 0.35,
+    "SOCCER": 0.35,
+    "SOC": 0.35,
+    "TENNIS": 0.35,
 }
 
 
@@ -7017,6 +7017,21 @@ class FunnelTracker:
     """Track survivor counts by stage and sport."""
 
     def __init__(self) -> None:
+        self.stage_order: list[str] = [
+            "input",
+            "after_min_sample",
+            "after_prop_ban",
+            "after_fantasy_score",
+            "after_projection_line",
+            "after_mlb_thin_sample",
+            "after_mlb_blended_pitcher",
+            "after_l5_directional",
+            "after_edge",
+            "after_rank",
+            "after_tier",
+            "after_pick_type",
+            "after_prop_quality",
+        ]
         self.stages: list[str] = []
         self.snapshots: dict[str, defaultdict[str, int]] = {}
 
@@ -7052,14 +7067,23 @@ class FunnelTracker:
         rows: list[str] = []
         for sport in ["ALL", *sports]:
             rows.append(f"\n  [{sport}]")
-            base = int(self.snapshots[self.stages[0]].get(sport, 0))
+            first_stage = "input" if "input" in self.snapshots else self.stages[0]
+            base = int(self.snapshots[first_stage].get(sport, 0))
             prev = None
-            for i, stage in enumerate(self.stages):
-                cur = int(self.snapshots.get(stage, {}).get(sport, 0))
+            for i, stage in enumerate(self.stage_order):
+                if stage not in self.snapshots:
+                    continue
+                snap = self.snapshots.get(stage, {})
+                if sport in snap:
+                    cur_raw = int(snap.get(sport, 0))
+                    cur = cur_raw if prev is None else min(cur_raw, int(prev))
+                else:
+                    # If a sport has no rows at a stage, carry forward prior value.
+                    cur = int(prev) if prev is not None else int(base)
                 if i == 0:
                     rows.append(f"    {'INPUT':<34} {cur:>5}")
                 else:
-                    drop = max(0, int(prev or 0) - cur)
+                    drop = max(0, int(prev or 0) - int(cur))
                     pct = (100.0 * float(cur) / float(base)) if base > 0 else 0.0
                     drop_txt = f"(-{drop})" if drop > 0 else "(+0)"
                     rows.append(f"    {stage:<34} {cur:>5}  {drop_txt:>6}  [{pct:>3.0f}% of input]")
@@ -7170,7 +7194,17 @@ def filter_eligible(
         if "D" not in tier_set and "prop_type" in df.columns:
             attempt_ok = _is_attempt_prop_series(df["prop_type"])
             tier_ok = tier_ok | ((tier_s == "D") & attempt_ok)
+        killed_tier = df[mask & ~tier_ok].copy()
         _apply_gate(tier_ok, "tier_excluded", "after_tier")
+        if len(killed_tier) > 0 and {"direction", "tier"}.issubset(killed_tier.columns):
+            print(f"\n[TIER GATE] dropped rows - direction x tier ({sport_hint}):")
+            tier_xtab = pd.crosstab(
+                killed_tier["direction"].astype(str).str.upper().str.strip(),
+                killed_tier["tier"].astype(str).str.upper().str.strip(),
+                dropna=False,
+            )
+            if len(tier_xtab) > 0:
+                print(tier_xtab.to_string())
     if pick_types and "pick_type" in df.columns:
         _apply_gate(df["pick_type"].isin(pick_types), "pick_type_not_allowed", "after_pick_type")
     if "prop_quality_score" in df.columns:
@@ -10018,6 +10052,14 @@ def main():
         n_s = int((combined["sport"] == s).sum()) if "sport" in combined.columns else 0
         if n_s > 0:
             print(f"  Full Slate rows — {s}: {n_s}")
+    if len(combined) > 0 and {"sport", "prop_quality_score"}.issubset(combined.columns):
+        print("\n[PROP QUALITY] percentiles by sport:")
+        pq_summary = (
+            combined.groupby("sport")["prop_quality_score"]
+            .describe(percentiles=[0.25, 0.50, 0.75, 0.90])
+            .round(3)
+        )
+        print(pq_summary.to_string())
 
     # ── CBB Goblin rank floor ─────────────────────────────────────────────────
     # CBB Goblin hits at ~55-58% vs NBA Goblin at ~67%.
@@ -10027,6 +10069,7 @@ def main():
 
     discard_tracker = DiscardTracker()
     funnel_tracker = FunnelTracker()
+    funnel_seen_sports: set[str] = set()
 
     def pool(df, pt=None):
         if df is None or len(df) == 0:
@@ -10246,6 +10289,7 @@ def main():
             if sport not in ("NHL", "SOCCER"):
                 effective_pick_types = [p for p in effective_pick_types if p != "Demon"]
 
+        use_funnel = (pt is None) and (sport not in funnel_seen_sports)
         pooled = filter_eligible(
             filtered_df,
             effective_min_hit,
@@ -10256,9 +10300,11 @@ def main():
             allow_strong_l5_bypass=(sport != "SOCCER"),
             min_prop_quality=float(args.min_prop_quality),
             discard_tracker=discard_tracker,
-            funnel_tracker=(funnel_tracker if pt is None else None),
+            funnel_tracker=(funnel_tracker if use_funnel else None),
             discard_sport=sport,
         )
+        if use_funnel:
+            funnel_seen_sports.add(sport)
         discard_tracker.log_count(str(sport), "final_pool_kept", int(len(pooled)))
         gob_n = std_n = dem_n = 0
         if pooled is not None and "pick_type" in pooled.columns:

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-29 18:03:50 UTC",
+  "generated_at": "2026-04-29 18:21:45 UTC",
   "date": "2026-04-29",
   "filters": {
     "tiers": "A,B,C",
@@ -147,8 +147,8 @@
               "g10": 39.0,
               "stat_g10": 39.0,
               "data_warning": null,
-              "leg_prob_used": 0.99,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_used": 0.8,
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "DJ",
               "recommended_stake_usd": null
@@ -232,7 +232,7 @@
               "stat_g10": 4.0,
               "data_warning": null,
               "leg_prob_used": 0.8,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "DM",
               "recommended_stake_usd": null
@@ -382,7 +382,7 @@
               "stat_g10": 25.0,
               "data_warning": null,
               "leg_prob_used": 0.99,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "RB",
               "recommended_stake_usd": null
@@ -466,7 +466,7 @@
               "stat_g10": 20.0,
               "data_warning": null,
               "leg_prob_used": 0.8,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "RB",
               "recommended_stake_usd": null
@@ -549,8 +549,8 @@
               "g10": 39.0,
               "stat_g10": 39.0,
               "data_warning": null,
-              "leg_prob_used": 0.99,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_used": 0.8,
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "DJ",
               "recommended_stake_usd": null
@@ -634,7 +634,7 @@
               "stat_g10": 4.0,
               "data_warning": null,
               "leg_prob_used": 0.8,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "DM",
               "recommended_stake_usd": null
@@ -776,7 +776,7 @@
               "stat_g10": 25.0,
               "data_warning": null,
               "leg_prob_used": 0.99,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "RB",
               "recommended_stake_usd": null
@@ -860,7 +860,7 @@
               "stat_g10": 26.0,
               "data_warning": null,
               "leg_prob_used": 0.8,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "RB",
               "recommended_stake_usd": null
@@ -943,8 +943,8 @@
               "g10": 39.0,
               "stat_g10": 39.0,
               "data_warning": null,
-              "leg_prob_used": 0.99,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_used": 0.8,
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "DJ",
               "recommended_stake_usd": null
@@ -1028,7 +1028,7 @@
               "stat_g10": 4.0,
               "data_warning": null,
               "leg_prob_used": 0.8,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "DM",
               "recommended_stake_usd": null
@@ -1170,7 +1170,7 @@
               "stat_g10": 31.0,
               "data_warning": null,
               "leg_prob_used": 0.8,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "RB",
               "recommended_stake_usd": null
@@ -1254,7 +1254,7 @@
               "stat_g10": 25.0,
               "data_warning": null,
               "leg_prob_used": 0.99,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "RB",
               "recommended_stake_usd": null
@@ -1337,8 +1337,8 @@
               "g10": 39.0,
               "stat_g10": 39.0,
               "data_warning": null,
-              "leg_prob_used": 0.99,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_used": 0.8,
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "DJ",
               "recommended_stake_usd": null
@@ -1422,7 +1422,7 @@
               "stat_g10": 4.0,
               "data_warning": null,
               "leg_prob_used": 0.8,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "DM",
               "recommended_stake_usd": null
@@ -1564,7 +1564,7 @@
               "stat_g10": 26.0,
               "data_warning": null,
               "leg_prob_used": 0.8,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "RB",
               "recommended_stake_usd": null
@@ -1648,7 +1648,7 @@
               "stat_g10": 20.0,
               "data_warning": null,
               "leg_prob_used": 0.8,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "RB",
               "recommended_stake_usd": null
@@ -1731,8 +1731,8 @@
               "g10": 39.0,
               "stat_g10": 39.0,
               "data_warning": null,
-              "leg_prob_used": 0.99,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_used": 0.8,
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "DJ",
               "recommended_stake_usd": null
@@ -1816,7 +1816,7 @@
               "stat_g10": 4.0,
               "data_warning": null,
               "leg_prob_used": 0.8,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "DM",
               "recommended_stake_usd": null
@@ -1958,7 +1958,7 @@
               "stat_g10": 25.0,
               "data_warning": null,
               "leg_prob_used": 0.99,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "RB",
               "recommended_stake_usd": null
@@ -2042,7 +2042,7 @@
               "stat_g10": 26.0,
               "data_warning": null,
               "leg_prob_used": 0.8,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "RB",
               "recommended_stake_usd": null
@@ -2126,7 +2126,7 @@
               "stat_g10": 20.0,
               "data_warning": null,
               "leg_prob_used": 0.8,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "RB",
               "recommended_stake_usd": null
@@ -2209,8 +2209,8 @@
               "g10": 39.0,
               "stat_g10": 39.0,
               "data_warning": null,
-              "leg_prob_used": 0.99,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_used": 0.8,
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "DJ",
               "recommended_stake_usd": null
@@ -2360,7 +2360,7 @@
               "stat_g10": 31.0,
               "data_warning": null,
               "leg_prob_used": 0.8,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "RB",
               "recommended_stake_usd": null
@@ -2444,7 +2444,7 @@
               "stat_g10": 25.0,
               "data_warning": null,
               "leg_prob_used": 0.99,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "RB",
               "recommended_stake_usd": null
@@ -2528,7 +2528,7 @@
               "stat_g10": 26.0,
               "data_warning": null,
               "leg_prob_used": 0.8,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "RB",
               "recommended_stake_usd": null
@@ -2612,7 +2612,7 @@
               "stat_g10": 20.0,
               "data_warning": null,
               "leg_prob_used": 0.8,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "RB",
               "recommended_stake_usd": null
@@ -2695,8 +2695,8 @@
               "g10": 39.0,
               "stat_g10": 39.0,
               "data_warning": null,
-              "leg_prob_used": 0.99,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_used": 0.8,
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "DJ",
               "recommended_stake_usd": null
@@ -2780,7 +2780,7 @@
               "stat_g10": 4.0,
               "data_warning": null,
               "leg_prob_used": 0.8,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "DM",
               "recommended_stake_usd": null
@@ -2927,8 +2927,8 @@
               "g10": 39.0,
               "stat_g10": 39.0,
               "data_warning": null,
-              "leg_prob_used": 0.99,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_used": 0.8,
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "DJ",
               "recommended_stake_usd": null
@@ -2991,8 +2991,8 @@
               "usage_boost": 0.0,
               "usage_boost_reason": "",
               "data_warning": null,
-              "leg_prob_used": 0.8942,
-              "leg_prob_source": "hit_rate",
+              "leg_prob_used": 0.99,
+              "leg_prob_source": "l5_over_proxy",
               "image_url": null,
               "initials": "CK",
               "recommended_stake_usd": null
