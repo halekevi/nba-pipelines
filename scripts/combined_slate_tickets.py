@@ -11337,17 +11337,17 @@ def main():
 # ── Web render helper ─────────────────────────────────────────────────────────
 
 _SPORT_ACCENT: dict[str, str] = {
-    "NBA":    "#1A5276",
-    "CBB":    "#1E8449",
-    "NHL":    "#1A3A5C",
-    "SOCCER": "#1A5C2E",
-    "TENNIS": "#4A6741",
-    "MLB":    "#922B21",
-    "WCBB":   "#4A235A",
-    "NBA1Q":  "#1F618D",
-    "NBA1H":  "#117A65",
-    "CROSS":  "#6C3483",
-    "MIX":    "#6C3483",
+    "NBA":    "#36A2FF",
+    "CBB":    "#2ECC71",
+    "NHL":    "#9B59FF",
+    "SOCCER": "#7DFF6B",
+    "TENNIS": "#F39C12",
+    "MLB":    "#FF5A5F",
+    "WCBB":   "#FF66CC",
+    "NBA1Q":  "#00E5FF",
+    "NBA1H":  "#1ABC9C",
+    "CROSS":  "#C77DFF",
+    "MIX":    "#C77DFF",
 }
 
 _PICK_COLOR: dict[str, str] = {
