@@ -105,6 +105,16 @@
       "confirmed_at": "2026-04-13"
     },
     {
+      "entry_type": "flex",
+      "n_legs": 6,
+      "mix": {"goblin": 6, "standard": 0, "demon": 0},
+      "sweep_payout_x": 25.0,
+      "min_payout_x": 2.5,
+      "source": "pp_observed",
+      "confirmed_at": "2026-04-29",
+      "notes": "Observed all-Goblin 6-leg Flex: 1st place 25x, minimum guarantee 2.5x."
+    },
+    {
       "entry_type": "power",
       "n_legs": 3,
       "mix": {"goblin": 1, "standard": 2, "demon": 0},
@@ -138,6 +148,17 @@
     },
     {
       "entry_type": "power",
+      "n_legs": 2,
+      "mix": {"goblin": 2, "standard": 0, "demon": 0},
+      "goblin_distances": [1, 1],
+      "sweep_payout_x": 3.0,
+      "min_payout_x": 1.7,
+      "source": "pp_observed",
+      "confirmed_at": "2026-04-29",
+      "notes": "Observed on live MLB slip: 2-leg all Goblin Power showed 1st place 3x and minimum guarantee 1.7x (To Win $34 on $20)."
+    },
+    {
+      "entry_type": "power",
       "n_legs": 3,
       "mix": {"goblin": 2, "standard": 1, "demon": 0},
       "goblin_distances": [1, 1],
@@ -156,6 +177,16 @@
       "source": "pp_observed",
       "confirmed_at": "2026-04-29",
       "notes": "Observed 4-leg Power with 1 Goblin (distance 0) and 3 Standard pays 2.25x minimum guarantee, 10x sweep."
+    },
+    {
+      "entry_type": "power",
+      "n_legs": 6,
+      "mix": {"goblin": 6, "standard": 0, "demon": 0},
+      "sweep_payout_x": 37.5,
+      "min_payout_x": 5.0,
+      "source": "pp_observed",
+      "confirmed_at": "2026-04-29",
+      "notes": "Observed all-Goblin 6-leg Power: 1st place 37.5x, minimum guarantee 5x."
     }
   ]
 }

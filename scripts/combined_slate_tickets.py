@@ -924,6 +924,36 @@ def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
     return False
 
 
+def _ticket_meets_min_web_payout(ticket: dict) -> bool:
+    """Require at least one known payout multiplier >= MIN_WEB_PAYOUT_X."""
+    payout_vals: list[float] = []
+    pay = ticket.get("payout")
+    if isinstance(pay, dict):
+        for k in ("sweep_payout_x", "sweep_payout", "min_payout_x", "payout"):
+            v = pay.get(k)
+            if v is None:
+                continue
+            try:
+                vf = float(v)
+                if math.isfinite(vf):
+                    payout_vals.append(vf)
+            except (TypeError, ValueError):
+                pass
+    for k in ("power_payout", "flex_payout", "base_power_payout"):
+        v = ticket.get(k)
+        if v is None:
+            continue
+        try:
+            vf = float(v)
+            if math.isfinite(vf):
+                payout_vals.append(vf)
+        except (TypeError, ValueError):
+            pass
+    if not payout_vals:
+        return False
+    return max(payout_vals) >= float(MIN_WEB_PAYOUT_X)
+
+
 def _ticket_primary_sport(ticket: dict) -> str:
     legs = list(ticket.get("legs") or [])
     sports = {
@@ -1034,9 +1064,15 @@ def filter_web_tickets_for_ui(payload: dict, *, require_positive_ev: bool) -> di
             continue
         tickets_in = list(g.get("tickets") or [])
         if require_positive_ev:
-            kept = [t for t in tickets_in if isinstance(t, dict) and _ticket_passes_positive_ev_gate(t)]
+            kept = [
+                t
+                for t in tickets_in
+                if isinstance(t, dict)
+                and _ticket_passes_positive_ev_gate(t)
+                and _ticket_meets_min_web_payout(t)
+            ]
         else:
-            kept = [t for t in tickets_in if isinstance(t, dict)]
+            kept = [t for t in tickets_in if isinstance(t, dict) and _ticket_meets_min_web_payout(t)]
         if not kept:
             continue
         ng = dict(g)
@@ -1893,6 +1929,9 @@ MIN_TICKET_EV_BY_LEGS: dict[int, float] = {
 
 # /tickets: hide slips at or below this modeled all-hit win prob (clutter / lottery tickets).
 MIN_WEB_DISPLAY_EST_WIN_PROB: float = 0.06
+
+# /tickets: hard floor for displayed/generated slip payout multipliers.
+MIN_WEB_PAYOUT_X: float = 3.0
 
 # /tickets page target volumes per sport after EV gate.
 WEB_TICKET_TEMPLATE_BY_LEGS: dict[int, int] = {
@@ -5688,6 +5727,22 @@ def _load_step8_board_like(
             hr = hr / 100.0
         df["hit_rate"] = hr
 
+    # NBA1Q can overstate hit_rate on tiny windows (e.g., 5/5 => 100%).
+    l5o = pd.to_numeric(df.get("l5_over", np.nan), errors="coerce")
+    l5u = pd.to_numeric(df.get("l5_under", np.nan), errors="coerce")
+    l5n = l5o.add(l5u, fill_value=0)
+    hits = np.where(
+        df["direction"].astype(str).str.upper().eq("UNDER").to_numpy(),
+        l5u.to_numpy(dtype=float, copy=True),
+        l5o.to_numpy(dtype=float, copy=True),
+    )
+    prior_p = 0.55
+    prior_n = 15.0
+    shrunk = (hits + prior_p * prior_n) / (l5n.to_numpy(dtype=float, copy=True) + prior_n)
+    use_shrink = (l5n > 0) & (l5n <= 10) & np.isfinite(shrunk)
+    df.loc[use_shrink, "hit_rate"] = shrunk[use_shrink.to_numpy()]
+    df["hit_rate"] = pd.to_numeric(df["hit_rate"], errors="coerce").clip(lower=0.35, upper=0.92)
+
     # Still no usable hit rate (common when line-hit columns aren't wired yet).
     # Use a mild rank_score-based proxy so tier/rank ticket gates still run.
     hr_series = pd.to_numeric(df["hit_rate"], errors="coerce")
@@ -6019,6 +6074,41 @@ def load_wcbb(path: str) -> pd.DataFrame:
             hr = hr / 100.0
         df["hit_rate"] = hr
 
+    # NBA1H can overstate hit_rate on tiny windows (e.g., 5/5 => 100%).
+    l5o = pd.to_numeric(df.get("l5_over", np.nan), errors="coerce")
+    l5u = pd.to_numeric(df.get("l5_under", np.nan), errors="coerce")
+    l5n = l5o.add(l5u, fill_value=0)
+    hits = np.where(
+        df["direction"].astype(str).str.upper().eq("UNDER").to_numpy(),
+        l5u.to_numpy(dtype=float, copy=True),
+        l5o.to_numpy(dtype=float, copy=True),
+    )
+    prior_p = 0.55
+    prior_n = 15.0
+    shrunk = (hits + prior_p * prior_n) / (l5n.to_numpy(dtype=float, copy=True) + prior_n)
+    use_shrink = (l5n > 0) & (l5n <= 10) & np.isfinite(shrunk)
+    df.loc[use_shrink, "hit_rate"] = shrunk[use_shrink.to_numpy()]
+    df["hit_rate"] = pd.to_numeric(df["hit_rate"], errors="coerce").clip(lower=0.35, upper=0.92)
+
+    # NBA split boards can show extreme 5/5 streaks; shrink tiny-window rates so UI/tickets
+    # do not overstate confidence (e.g., 100% from only 5 samples).
+    l5o = pd.to_numeric(df.get("l5_over", np.nan), errors="coerce")
+    l5u = pd.to_numeric(df.get("l5_under", np.nan), errors="coerce")
+    l5n = l5o.add(l5u, fill_value=0)
+    hits = np.where(
+        df["direction"].astype(str).str.upper().eq("UNDER").to_numpy(),
+        l5u.to_numpy(dtype=float, copy=True),
+        l5o.to_numpy(dtype=float, copy=True),
+    )
+    # Strong prior toward 55% over a 15-game pseudo sample.
+    prior_p = 0.55
+    prior_n = 15.0
+    shrunk = (hits + prior_p * prior_n) / (l5n.to_numpy(dtype=float, copy=True) + prior_n)
+    hr_now = pd.to_numeric(df["hit_rate"], errors="coerce")
+    use_shrink = (l5n > 0) & (l5n <= 10) & np.isfinite(shrunk)
+    df.loc[use_shrink, "hit_rate"] = shrunk[use_shrink.to_numpy()]
+    df["hit_rate"] = pd.to_numeric(df["hit_rate"], errors="coerce").clip(lower=0.35, upper=0.92)
+
     # Still no usable hit rate (common on current Soccer pipeline when game logs are empty).
     # Use a mild rank_score-based proxy so tier/rank ticket gates still run; re-run step5 when HRs exist.
     hr_series = pd.to_numeric(df["hit_rate"], errors="coerce")
@@ -6170,6 +6260,25 @@ def load_mlb(path: str) -> pd.DataFrame:
         if hr.dropna().max() is not None and hr.dropna().max() > 1.5:
             hr = hr / 100.0
         df["hit_rate"] = hr
+
+    # NBA split boards can show extreme 5/5 streaks; shrink tiny-window rates so UI/tickets
+    # do not overstate confidence (e.g., 100% from only 5 samples).
+    l5o = pd.to_numeric(df.get("l5_over", np.nan), errors="coerce")
+    l5u = pd.to_numeric(df.get("l5_under", np.nan), errors="coerce")
+    l5n = l5o.add(l5u, fill_value=0)
+    hits = np.where(
+        df["direction"].astype(str).str.upper().eq("UNDER").to_numpy(),
+        l5u.to_numpy(dtype=float, copy=True),
+        l5o.to_numpy(dtype=float, copy=True),
+    )
+    # Strong prior toward 55% over a 15-game pseudo sample.
+    prior_p = 0.55
+    prior_n = 15.0
+    shrunk = (hits + prior_p * prior_n) / (l5n.to_numpy(dtype=float, copy=True) + prior_n)
+    hr_now = pd.to_numeric(df["hit_rate"], errors="coerce")
+    use_shrink = (l5n > 0) & (l5n <= 10) & np.isfinite(shrunk)
+    df.loc[use_shrink, "hit_rate"] = shrunk[use_shrink.to_numpy()]
+    df["hit_rate"] = pd.to_numeric(df["hit_rate"], errors="coerce").clip(lower=0.35, upper=0.92)
 
     # Still no usable hit rate (common on current Soccer pipeline when game logs are empty).
     # Use a mild rank_score-based proxy so tier/rank ticket gates still run; re-run step5 when HRs exist.
@@ -6323,6 +6432,22 @@ def load_nba1q(path: str) -> pd.DataFrame:
             hr = hr / 100.0
         df["hit_rate"] = hr
 
+    # NBA1Q: shrink tiny-window streak rates (e.g., 5/5) toward a prior.
+    l5o = pd.to_numeric(df.get("l5_over", np.nan), errors="coerce")
+    l5u = pd.to_numeric(df.get("l5_under", np.nan), errors="coerce")
+    l5n = l5o.add(l5u, fill_value=0)
+    hits = np.where(
+        df["direction"].astype(str).str.upper().eq("UNDER").to_numpy(),
+        l5u.to_numpy(dtype=float, copy=True),
+        l5o.to_numpy(dtype=float, copy=True),
+    )
+    prior_p = 0.55
+    prior_n = 15.0
+    shrunk = (hits + prior_p * prior_n) / (l5n.to_numpy(dtype=float, copy=True) + prior_n)
+    use_shrink = (l5n > 0) & (l5n <= 10) & np.isfinite(shrunk)
+    df.loc[use_shrink, "hit_rate"] = shrunk[use_shrink.to_numpy()]
+    df["hit_rate"] = pd.to_numeric(df["hit_rate"], errors="coerce").clip(lower=0.35, upper=0.92)
+
     # Still no usable hit rate (common on current Soccer pipeline when game logs are empty).
     # Use a mild rank_score-based proxy so tier/rank ticket gates still run; re-run step5 when HRs exist.
     hr_series = pd.to_numeric(df["hit_rate"], errors="coerce")
@@ -6472,6 +6597,22 @@ def load_nba1h(path: str) -> pd.DataFrame:
         if hr.dropna().max() is not None and hr.dropna().max() > 1.5:
             hr = hr / 100.0
         df["hit_rate"] = hr
+
+    # NBA1H: shrink tiny-window streak rates (e.g., 5/5) toward a prior.
+    l5o = pd.to_numeric(df.get("l5_over", np.nan), errors="coerce")
+    l5u = pd.to_numeric(df.get("l5_under", np.nan), errors="coerce")
+    l5n = l5o.add(l5u, fill_value=0)
+    hits = np.where(
+        df["direction"].astype(str).str.upper().eq("UNDER").to_numpy(),
+        l5u.to_numpy(dtype=float, copy=True),
+        l5o.to_numpy(dtype=float, copy=True),
+    )
+    prior_p = 0.55
+    prior_n = 15.0
+    shrunk = (hits + prior_p * prior_n) / (l5n.to_numpy(dtype=float, copy=True) + prior_n)
+    use_shrink = (l5n > 0) & (l5n <= 10) & np.isfinite(shrunk)
+    df.loc[use_shrink, "hit_rate"] = shrunk[use_shrink.to_numpy()]
+    df["hit_rate"] = pd.to_numeric(df["hit_rate"], errors="coerce").clip(lower=0.35, upper=0.92)
 
     # Still no usable hit rate (common on current Soccer pipeline when game logs are empty).
     # Use a mild rank_score-based proxy so tier/rank ticket gates still run; re-run step5 when HRs exist.

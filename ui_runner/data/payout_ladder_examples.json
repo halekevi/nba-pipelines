@@ -1,25 +1,25 @@
 {
-  "generated_at": "2026-04-26T00:22:03.925321+00:00",
+  "generated_at": "2026-04-29T14:37:53.430725+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
           "line": 2.5,
-          "standard_line": 3.0,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -32,20 +32,20 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
           "line": 2.5,
-          "standard_line": 3.0,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -58,20 +58,20 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
           "line": 2.5,
-          "standard_line": 3.0,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -84,20 +84,20 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
           "line": 2.5,
-          "standard_line": 3.0,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -110,20 +110,20 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
           "line": 2.5,
-          "standard_line": 3.0,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -136,20 +136,20 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
           "line": 2.5,
-          "standard_line": 3.0,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -162,30 +162,30 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
           "line": 2.5,
-          "standard_line": 3.0,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -198,30 +198,30 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
           "line": 2.5,
-          "standard_line": 3.0,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -234,30 +234,30 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
           "line": 2.5,
-          "standard_line": 3.0,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -270,30 +270,30 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
           "line": 2.5,
-          "standard_line": 3.0,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -306,30 +306,30 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
           "line": 2.5,
-          "standard_line": 3.0,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -342,30 +342,30 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
           "line": 2.5,
-          "standard_line": 3.0,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -378,34 +378,34 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
           "line": 2.5,
-          "standard_line": 3.0,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Brad Stuver",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
+          "player": "Duncan Robinson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.5
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -414,44 +414,44 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
+          "line": 4.0,
+          "standard_line": 4.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
+          "player": "Duncan Robinson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -460,44 +460,44 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
+          "line": 4.0,
+          "standard_line": 4.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
+          "player": "Duncan Robinson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -506,44 +506,44 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
+          "line": 4.0,
+          "standard_line": 4.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
+          "player": "Duncan Robinson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -552,44 +552,44 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
+          "line": 4.0,
+          "standard_line": 4.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
+          "player": "Duncan Robinson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -598,44 +598,44 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
+          "line": 4.0,
+          "standard_line": 4.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
+          "player": "Duncan Robinson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -644,44 +644,44 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
+          "player": "Marcus Smart",
+          "prop_type": "Assists",
+          "line": 2.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
+          "line": 4.0,
+          "standard_line": 4.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
+          "player": "Duncan Robinson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -690,898 +690,44 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Brad Stuver",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.5
-        }
-      ]
-    },
-    {
-      "composition": "4S+1G+0D",
-      "goblin_delta": 0.5,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
+          "player": "Marcus Smart",
           "prop_type": "Assists",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
           "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 0.5,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        }
-      ]
-    },
-    {
-      "composition": "4S+1G+0D",
-      "goblin_delta": 1.0,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
+          "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Assists",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 1.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        }
-      ]
-    },
-    {
-      "composition": "4S+1G+0D",
-      "goblin_delta": 1.5,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Assists",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 1.5,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        }
-      ]
-    },
-    {
-      "composition": "4S+1G+0D",
-      "goblin_delta": 2.0,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Assists",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        }
-      ]
-    },
-    {
-      "composition": "4S+1G+0D",
-      "goblin_delta": 2.5,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Assists",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 2.5,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        }
-      ]
-    },
-    {
-      "composition": "4S+1G+0D",
-      "goblin_delta": 3.0,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Assists",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 3.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        }
-      ]
-    },
-    {
-      "composition": "3S+2G+0D",
-      "goblin_delta": 2.0,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Brad Stuver",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.5
-        }
-      ]
-    },
-    {
-      "composition": "5S+1G+0D",
-      "goblin_delta": 0.5,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Assists",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Daniss Jenkins",
-          "prop_type": "FG Attempted",
-          "line": 6.0,
-          "standard_line": 6.0,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebounds",
           "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 0.5,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        }
-      ]
-    },
-    {
-      "composition": "5S+1G+0D",
-      "goblin_delta": 1.0,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Assists",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Daniss Jenkins",
-          "prop_type": "FG Attempted",
-          "line": 6.0,
-          "standard_line": 6.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 1.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        }
-      ]
-    },
-    {
-      "composition": "5S+1G+0D",
-      "goblin_delta": 1.5,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Assists",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Daniss Jenkins",
-          "prop_type": "FG Attempted",
-          "line": 6.0,
-          "standard_line": 6.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 1.5,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        }
-      ]
-    },
-    {
-      "composition": "5S+1G+0D",
-      "goblin_delta": 2.0,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Assists",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Daniss Jenkins",
-          "prop_type": "FG Attempted",
-          "line": 6.0,
-          "standard_line": 6.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        }
-      ]
-    },
-    {
-      "composition": "5S+1G+0D",
-      "goblin_delta": 2.5,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Assists",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Daniss Jenkins",
-          "prop_type": "FG Attempted",
-          "line": 6.0,
-          "standard_line": 6.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 2.5,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        }
-      ]
-    },
-    {
-      "composition": "5S+1G+0D",
-      "goblin_delta": 3.0,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Assists",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Daniss Jenkins",
-          "prop_type": "FG Attempted",
-          "line": 6.0,
-          "standard_line": 6.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
-          "pick_type": "Goblin",
-          "delta": 3.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        }
-      ]
-    },
-    {
-      "composition": "4S+2G+0D",
-      "goblin_delta": 2.0,
-      "legs": [
-        {
-          "player": "Jordan Clarkson",
-          "prop_type": "Two Pointers Made",
-          "line": 1.5,
-          "standard_line": 1.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Bruce Brown",
-          "prop_type": "Pts+Rebs",
-          "line": 8.5,
-          "standard_line": 8.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Ayo Dosunmu",
-          "prop_type": "Points",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Assists",
-          "line": 3.0,
-          "standard_line": 3.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jonathan Bond",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Brad Stuver",
-          "prop_type": "Goalie Saves",
-          "line": 2.5,
-          "standard_line": 3.0,
+          "player": "Duncan Robinson",
+          "prop_type": "Points",
+          "line": 0.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.5
+          "hit_rate": 0.6625
         }
       ]
     }
