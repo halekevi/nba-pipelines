@@ -10717,6 +10717,40 @@ def main():
                 break
         return chosen if len(chosen) == int(n_legs) else []
 
+    def _select_cross_sport_unique_rows(pool_df: pd.DataFrame, n_legs: int) -> list[dict]:
+        rows = _select_top_unique_rows(pool_df, n_legs)
+        if len(rows) < int(n_legs):
+            return []
+        sports = {str(r.get("sport", "")).strip().upper() for r in rows if str(r.get("sport", "")).strip()}
+        if len(sports) >= 2:
+            return rows
+        # Force at least one leg from a second sport while preserving uniqueness rules.
+        base_sport = str(rows[0].get("sport", "")).strip().upper() if rows else ""
+        players = {str(r.get("player", "")).strip().lower() for r in rows}
+        player_props = {
+            f"{str(r.get('player', '')).strip().lower()}::{_norm_prop_label(r.get('prop_type', ''))}"
+            for r in rows
+        }
+        replacement: dict | None = None
+        for _, row in pool_df.iterrows():
+            rd = row.to_dict()
+            sp = str(rd.get("sport", "")).strip().upper()
+            if not sp or sp == base_sport:
+                continue
+            p = str(rd.get("player", "")).strip().lower()
+            if not p or p in players:
+                continue
+            pp = f"{p}::{_norm_prop_label(rd.get('prop_type', ''))}"
+            if pp in player_props:
+                continue
+            replacement = rd
+            break
+        if replacement is None:
+            return []
+        out = list(rows[:-1]) + [replacement]
+        out_sports = {str(r.get("sport", "")).strip().upper() for r in out if str(r.get("sport", "")).strip()}
+        return out if len(out) == int(n_legs) and len(out_sports) >= 2 else []
+
     def _ev_tag(ticket: dict) -> str:
         ev_mult = float(ticket.get("ev_power") or 0.0)
         if ev_mult >= 1.50:
@@ -10760,13 +10794,13 @@ def main():
             return
         max_n = min(int(len(pool_df)), 6)
         for n_legs in range(2, max_n + 1):
-            rows = _select_top_unique_rows(pool_df, n_legs)
+            rows = (
+                _select_cross_sport_unique_rows(pool_df, n_legs)
+                if require_multi_sport
+                else _select_top_unique_rows(pool_df, n_legs)
+            )
             if len(rows) < n_legs:
                 continue
-            if require_multi_sport:
-                sports = {str(r.get("sport", "")).strip().upper() for r in rows if str(r.get("sport", "")).strip()}
-                if len(sports) < 2:
-                    continue
             tickets = []
             p_ticket = _build_mode_ticket(rows, sport_label, "power")
             if p_ticket is not None:
