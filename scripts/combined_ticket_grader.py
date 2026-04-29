@@ -1685,6 +1685,23 @@ def main():
         soccer_void = load_injury_void_keys(
             _inj_csv(args.soccer_injuries, Path(args.soccer_actuals), "SOCCER"), "SOCCER"
         )
+    # Soccer DNP heuristic:
+    # If a team's match is present in actuals but the ticketed player is absent from all
+    # parsed rows for that team, treat NO_ACTUAL as a void leg (leg removed / cashout style).
+    # This prevents one non-participant from stalling whole-ticket settlement as NO_ACTUAL.
+    soccer_team_players: Dict[str, Set[str]] = {}
+    soccer_players_all: Set[str] = set()
+    if not soccer_act.empty:
+        for _tm, _grp in soccer_act.groupby("team_norm", dropna=False):
+            tm = _inj_canon_team("SOCCER", _tm)
+            if not tm:
+                continue
+            players = {str(v or "").strip() for v in _grp["player_norm"].tolist() if str(v or "").strip()}
+            if not players:
+                continue
+            soccer_team_players[tm] = players
+            soccer_players_all |= players
+    soccer_teams_seen: Set[str] = set(soccer_team_players.keys())
     tennis_void: Set[Tuple[str, str]] = set()
 
     # ticket sheets (workbook) or JSON snapshot (same legs as --write-web output)
@@ -1750,6 +1767,10 @@ def main():
         elif sp == "SOCCER":
             tm = _inj_canon_team("SOCCER", row["team"])
             if pl and tm and (pl, tm) in soccer_void:
+                return "VOID"
+            if pl and tm and (tm in soccer_teams_seen) and (pl not in soccer_team_players.get(tm, set())):
+                return "VOID"
+            if pl and soccer_players_all and (pl not in soccer_players_all):
                 return "VOID"
         elif sp == "TENNIS":
             tm = _inj_canon_team("TENNIS", row["team"])

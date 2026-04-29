@@ -940,9 +940,16 @@ def _ticket_rank_tuple(ticket: dict) -> tuple[float, int, float]:
     pay = ticket.get("payout")
     ev = None
     rec = ""
+    payout_conf = 0.0
     if isinstance(pay, dict):
         ev = pay.get("ev")
         rec = str(pay.get("recommendation") or "").strip().upper()
+        try:
+            pc = float(pay.get("payout_confidence_score"))
+            if math.isfinite(pc):
+                payout_conf = pc
+        except (TypeError, ValueError):
+            payout_conf = 0.0
     if ev is None:
         ev = ticket.get("est_ev")
     try:
@@ -958,7 +965,7 @@ def _ticket_rank_tuple(ticket: dict) -> tuple[float, int, float]:
             winf = -1e9
     except (TypeError, ValueError):
         winf = -1e9
-    return (evf, rec_rank, winf)
+    return (payout_conf, evf, rec_rank, winf)
 
 
 def _apply_web_ticket_template(groups: list[dict]) -> list[dict]:
@@ -1889,10 +1896,11 @@ MIN_WEB_DISPLAY_EST_WIN_PROB: float = 0.06
 
 # /tickets page target volumes per sport after EV gate.
 WEB_TICKET_TEMPLATE_BY_LEGS: dict[int, int] = {
-    6: 3,
-    5: 4,
-    4: 6,
-    3: 8,
+    6: 6,
+    5: 8,
+    4: 12,
+    3: 12,
+    2: 12,
 }
 
 # Cap sorted candidate pool size per leg count (top rows by ticket sort) to bound greedy work.
@@ -7595,45 +7603,17 @@ def build_tickets(
     player_ticket_counts: dict[str, int] | None = None,
 ) -> list:
     """
-    Smart ticket builder with quality filters per leg count.
+    Exhaustive combination builder (dedupe-first, no quality gates).
 
-    Key improvements vs original:
-    - Per-leg min hit rate floor (longer tickets require higher floor)
-    - Tier floor per leg count for longer tickets (5/6-leg = Tier A/B only)
-    - Tickets sorted by est_win_prob DESC then avg_rank_score (optimises for actual wins)
-    - require_mix still enforced for cross-sport sheets
+    This intentionally avoids min hit-rate / tier / EV filters so we can generate
+    large candidate sets for downstream ML and hit-rate analysis.
     """
     pool = pool.copy().reset_index(drop=True)
-    tickets = []
-
-    # ── Per-leg-count quality filters ─────────────────────────────────────────
-    _lim = leg_min_hit_by_n or LEG_MIN_HIT_RATE
-    min_hr = float(_lim.get(n_legs, LEG_MIN_HIT_RATE.get(n_legs, 0.55)))
-    if "sport" in pool.columns and len(pool) > 0:
-        su = pool["sport"].dropna().astype(str).str.upper().str.strip().unique()
-        if len(su) == 1 and su[0] == "NHL":
-            nhl_cap = NHL_LEG_MIN_HIT_RATE.get(int(n_legs))
-            if nhl_cap is not None:
-                min_hr = max(0.52, float(nhl_cap))
-        if len(su) == 1 and su[0] == "SOCCER":
-            soc_cap = SOCCER_LEG_MIN_HIT_RATE.get(int(n_legs))
-            if soc_cap is not None:
-                min_hr = max(float(min_hr), float(soc_cap))
-    ok_tiers = POWER_MIN_TIER.get(n_legs, ["A", "B", "C", "D"])
-
-    # Apply hit rate floor to this pool
-    if "hit_rate" in pool.columns:
-        pool = pool[pool["hit_rate"].fillna(0) >= min_hr].copy()
-
-    # Apply tier floor for 4+ leg power-style tickets (POWER_MIN_TIER)
-    if n_legs >= 4 and "tier" in pool.columns:
-        pool = pool[pool["tier"].isin(ok_tiers)].copy()
-
-    pool = pool.reset_index(drop=True)
+    if len(pool) < int(n_legs):
+        return []
 
     has_sport_col = "sport" in pool.columns
-    sports_available = pool["sport"].dropna().unique().tolist() if has_sport_col else []
-    can_mix = require_mix and has_sport_col and len(sports_available) >= 2
+    can_mix = require_mix and has_sport_col and pool["sport"].nunique(dropna=True) >= 2
 
     eligible = (
         _attach_ticket_pick_order(pool, ticket_sort_mode)
@@ -7641,151 +7621,74 @@ def build_tickets(
         .reset_index(drop=True)
     )
     eligible = _trim_pool_by_leg_count(eligible, n_legs)
-    max_fantasy = MAX_FANTASY_LEGS.get(n_legs, n_legs)
+    if len(eligible) < int(n_legs):
+        return []
 
-    for _ in range(max_tickets * 5):
-        if len(tickets) >= max_tickets:
+    # Pick a bounded top-K subset that still yields many combinations.
+    target_combo_count = max(int(max_tickets) * 80, int(max_tickets))
+    max_k = min(len(eligible), 120)
+    k = max(int(n_legs), min(20, max_k))
+    while k < max_k and math.comb(k, int(n_legs)) < target_combo_count:
+        k += 1
+    candidates = [r for _, r in eligible.head(k).iterrows()]
+
+    seen_ticket_keys: set[frozenset] = set()
+    tickets: list[dict] = []
+    # Hard scan cap to avoid pathological runtimes.
+    scan_cap = max(20_000, int(max_tickets) * 8_000)
+    scanned = 0
+
+    for combo in itertools.combinations(candidates, int(n_legs)):
+        scanned += 1
+        if scanned > scan_cap:
             break
-
-        ticket_rows = []
-        ticket_players = set()
-        sports_in_ticket = set()
-        fantasy_count = 0
-        prop_type_counts: Counter[str] = Counter()
-
+        rows = list(combo)
         if can_mix:
-            for sport in sports_available:
-                sport_pool = eligible[eligible["sport"] == sport]
-                for _, row in sport_pool.iterrows():
-                    player = str(row.get("player", "")).strip().lower()
-                    if player and player not in ticket_players:
-                        if not _can_add_row_with_prop_cap(row, prop_type_counts):
-                            continue
-                        ticket_rows.append(row)
-                        ticket_players.add(player)
-                        sports_in_ticket.add(sport)
-                        prop_type_counts[_ticket_prop_token(row)] += 1
-                        break
-
-            for _, row in eligible.iterrows():
-                if len(ticket_rows) == n_legs:
-                    break
-                player = str(row.get("player", "")).strip().lower()
-                if player and player not in ticket_players:
-                    if _is_fantasy_prop(row) and fantasy_count >= max_fantasy:
-                        continue
-                    if not _can_add_row_with_prop_cap(row, prop_type_counts):
-                        continue
-                    ticket_rows.append(row)
-                    ticket_players.add(player)
-                    sports_in_ticket.add(row.get("sport", ""))
-                    prop_type_counts[_ticket_prop_token(row)] += 1
-                    if _is_fantasy_prop(row):
-                        fantasy_count += 1
-        else:
-            for _, row in eligible.iterrows():
-                if len(ticket_rows) == n_legs:
-                    break
-                player = str(row.get("player", "")).strip().lower()
-                if player and player not in ticket_players:
-
-                    if _is_fantasy_prop(row) and fantasy_count >= max_fantasy:
-                        continue
-                    if not _can_add_row_with_prop_cap(row, prop_type_counts):
-                        continue
-
-                    ticket_rows.append(row)
-                    ticket_players.add(player)
-                    prop_type_counts[_ticket_prop_token(row)] += 1
-                    if _is_fantasy_prop(row):
-                        fantasy_count += 1
-
-        # If diversity cap was too strict to fill a ticket, backfill best remaining legs.
-        if len(ticket_rows) < n_legs:
-            for _, row in eligible.iterrows():
-                if len(ticket_rows) == n_legs:
-                    break
-                player = str(row.get("player", "")).strip().lower()
-                if player and player not in ticket_players:
-                    if not _can_add_row_with_prop_cap(row, prop_type_counts):
-                        continue
-                    ticket_rows.append(row)
-                    ticket_players.add(player)
-                    sports_in_ticket.add(row.get("sport", ""))
-                    prop_type_counts[_ticket_prop_token(row)] += 1
-
-        if len(ticket_rows) == n_legs:
-            if can_mix and len(sports_in_ticket) < 2:
-                if len(eligible) > 1:
-                    eligible = eligible.iloc[1:].reset_index(drop=True)
+            sports = {str(r.get("sport", "")).strip().upper() for r in rows if str(r.get("sport", "")).strip()}
+            if len(sports) < 2:
                 continue
 
-            if can_mix:
-                ticket_rows = sorted(
-                    ticket_rows,
-                    key=lambda r: (str(r.get("sport", "")), -float(r.get("rank_score", 0) or 0)),
-                )
+        key = frozenset(_leg_fp_tuple(r) for r in rows)
+        if key in seen_ticket_keys:
+            continue
+        if not _ticket_cap_can_add(rows, player_ticket_counts):
+            continue
 
-            key = frozenset(
-                (str(r.get("player", "")) + "|" + str(r.get("prop_type", ""))).strip() for r in ticket_rows
-            )
+        hrs = [float(r.get("hit_rate", 0.5) or 0.5) for r in rows]
+        rss = [float(r.get("rank_score", 0) or 0) for r in rows]
+        leg_probs = [_resolve_leg_prob(r) for r in rows]
+        prob_srcs = [src for _, src in leg_probs]
+        avg_hr = float(np.mean(hrs)) if hrs else 0.0
+        avg_rs = float(np.mean(rss)) if rss else 0.0
+        cmult, caudit = _correlation_multiplier_and_audit(rows)
+        ep = win_prob(leg_probs, n_legs) * cmult
+        pout = PAYOUT.get(n_legs, {"power": 0, "flex": 0})
+        adj_power = calc_adjusted_payout(pout["power"], rows)
+        adj_flex = calc_adjusted_payout(pout["flex"], rows)
+        ev_power = ep * adj_power
 
-            if key not in [t["key"] for t in tickets]:
-                hrs = []
-                rss = []
-                prob_srcs = []
-                for r in ticket_rows:
-                    hrs.append(float(r.get("hit_rate", 0.5) or 0.5))
-                    rss.append(float(r.get("rank_score", 0) or 0))
-                    _p, _src = _resolve_leg_prob(r)
-                    prob_srcs.append(_src)
-                avg_hr = float(np.mean(hrs)) if hrs else 0.0
-                avg_rs = float(np.mean(rss)) if rss else 0.0
-                leg_probs = [_resolve_leg_prob(r) for r in ticket_rows]  # [(p, src), ...]
-                cmult, caudit = _correlation_multiplier_and_audit(ticket_rows)
-                ep = win_prob(leg_probs, n_legs) * cmult
-                pout = PAYOUT.get(n_legs, {"power": 0, "flex": 0})
+        tickets.append(
+            {
+                "key": key,
+                "rows": rows,
+                "avg_hit_rate": avg_hr,
+                "avg_rank_score": avg_rs,
+                "est_win_prob": ep,
+                "power_payout": adj_power,
+                "flex_payout": adj_flex,
+                "base_power_payout": pout["power"],
+                "payout_multiplier": round(adj_power / pout["power"], 4) if pout["power"] else 1.0,
+                "ev_power": round(ev_power, 4),
+                "kelly_units": round(kelly_fraction(ep, adj_power, fraction=0.25), 2),
+                "n_legs": n_legs,
+                "leg_prob_sources": ",".join(sorted(set(prob_srcs))),
+                "correlation_multiplier": cmult,
+                "correlation_audit": caudit,
+            }
+        )
+        seen_ticket_keys.add(key)
+        _ticket_cap_register(rows, player_ticket_counts)
 
-                # Adjust payouts for Goblin (reduces) and Demon (boosts)
-                adj_power = calc_adjusted_payout(pout["power"], ticket_rows)
-                adj_flex  = calc_adjusted_payout(pout["flex"],  ticket_rows)
-
-                # EV gate: skip tickets with negative expected value
-                ev_power = ep * adj_power
-                if ev_power < min_ev_for_ticket(n_legs):
-                    continue
-                if prioritize_ticket_hit and ep < float(MIN_PRIORITIZE_MODELED_POWER_WIN_PROB):
-                    continue
-                if not _ticket_cap_can_add(ticket_rows, player_ticket_counts):
-                    continue
-
-                tickets.append(
-                    {
-                        "key": key,
-                        "rows": ticket_rows,
-                        "avg_hit_rate": avg_hr,
-                        "avg_rank_score": avg_rs,
-                        "est_win_prob": ep,
-                        "power_payout": adj_power,
-                        "flex_payout":  adj_flex,
-                        "base_power_payout": pout["power"],  # kept for reference
-                        "payout_multiplier": round(adj_power / pout["power"], 4) if pout["power"] else 1.0,
-                        "ev_power": round(ev_power, 4),
-                        "kelly_units": round(kelly_fraction(ep, adj_power, fraction=0.25), 2),
-                        "n_legs": n_legs,
-                        "leg_prob_sources": ",".join(sorted(set(prob_srcs))),
-                        "correlation_multiplier": cmult,
-                        "correlation_audit": caudit,
-                    }
-                )
-                _ticket_cap_register(ticket_rows, player_ticket_counts)
-
-        if len(eligible) > n_legs:
-            eligible = eligible.iloc[1:].reset_index(drop=True)
-        else:
-            break
-
-    # Sort by win probability first, then rank score — optimises for actual wins.
     tickets.sort(key=lambda x: (-x["est_win_prob"], -x["avg_rank_score"]))
     return _rerank_tickets_live(tickets, max_tickets=max_tickets)
 
@@ -7803,186 +7706,87 @@ def build_mixed_picktype_tickets(
     ticket_sort_mode: str = "rank",
     player_ticket_counts: dict[str, int] | None = None,
 ) -> list:
-    """
-    Deterministic ticket builder that enforces a minimum number of Standard legs,
-    while allowing remaining legs from Standard+Goblin pool.
-
-    - Avoids duplicate players
-    - Uses rank_score descending
-    - Generates variety by sliding a start offset window
-    """
+    """Exhaustive combination builder with a minimum Standard-leg constraint."""
     pool_df = pool_df.copy()
-    if "rank_score" not in pool_df.columns or "pick_type" not in pool_df.columns:
+    if "rank_score" not in pool_df.columns or "pick_type" not in pool_df.columns or len(pool_df) < int(n_legs):
         return []
 
-    std_raw = pool_df[pool_df["pick_type"] == "Standard"]
-    gob_raw = pool_df[pool_df["pick_type"] == "Goblin"]
-    std = (
-        _attach_ticket_pick_order(std_raw, ticket_sort_mode)
-        .sort_values(["__ts_pri", "__ts_sec"], ascending=[False, False], na_position="last")
-    )
-    gob = (
-        _attach_ticket_pick_order(gob_raw, ticket_sort_mode)
-        .sort_values(["__ts_pri", "__ts_sec"], ascending=[False, False], na_position="last")
-    )
-
-    if min_leg_hit_rate is not None and min_leg_hit_rate > 0 and "hit_rate" in std.columns:
-        thr = float(min_leg_hit_rate)
-        if "sport" in pool_df.columns and len(pool_df) > 0:
-            su0 = str(pool_df["sport"].iloc[0]).strip().upper()
-            if su0 == "NHL":
-                nhl_cap = NHL_LEG_MIN_HIT_RATE.get(int(n_legs))
-                thr = max(0.52, float(nhl_cap)) if nhl_cap is not None else max(0.52, thr)
-            elif su0 in ("SOCCER", "SOC"):
-                soc_cap = SOCCER_LEG_MIN_HIT_RATE.get(int(n_legs))
-                if soc_cap is not None:
-                    thr = max(thr, float(soc_cap))
-        std = std[pd.to_numeric(std["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
-        gob = gob[pd.to_numeric(gob["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
-
-    cap = int(MAX_TICKET_POOL_ROWS_BY_LEG_COUNT.get(int(n_legs), 50_000))
-    if len(std) > cap:
-        std = std.iloc[:cap].copy()
-    if len(gob) > cap:
-        gob = gob.iloc[:cap].copy()
-
-    if len(std) < min_standard:
+    std_available = int((pool_df["pick_type"] == "Standard").sum())
+    if std_available < int(min_standard):
         return []
 
-    tickets = []
-    std_start = 0
-    gob_start = 0
-    max_fantasy = MAX_FANTASY_LEGS.get(n_legs, n_legs)
-    attempts = 0
-    max_attempts = max_tickets * 50
+    eligible = (
+        _attach_ticket_pick_order(pool_df, ticket_sort_mode)
+        .sort_values(["__ts_pri", "__ts_sec"], ascending=[False, False], na_position="last")
+        .reset_index(drop=True)
+    )
+    eligible = _trim_pool_by_leg_count(eligible, n_legs)
+    if len(eligible) < int(n_legs):
+        return []
 
-    while len(tickets) < max_tickets and attempts < max_attempts:
-        attempts += 1
-        legs = []
-        used_players = set()
-        fantasy_count = 0
-        prop_type_counts: Counter[str] = Counter()
+    target_combo_count = max(int(max_tickets) * 100, int(max_tickets))
+    max_k = min(len(eligible), 120)
+    k = max(int(n_legs), min(24, max_k))
+    while k < max_k and math.comb(k, int(n_legs)) < target_combo_count:
+        k += 1
+    candidates = [r for _, r in eligible.head(k).iterrows()]
 
-        # 1) Required Standards first
-        for _, r in std.iloc[std_start:].iterrows():
-            if sum(1 for x in legs if str(x.get("pick_type", "")) == "Standard") >= min_standard:
-                break
-            p = str(r.get("player", "")).strip().lower()
-            if p and p not in used_players:
-                if _is_fantasy_prop(r) and fantasy_count >= max_fantasy:
-                    continue
-                if not _can_add_row_with_prop_cap(r, prop_type_counts):
-                    continue
-                legs.append(r)
-                used_players.add(p)
-                prop_type_counts[_ticket_prop_token(r)] += 1
-                if _is_fantasy_prop(r):
-                    fantasy_count += 1
+    tickets: list[dict] = []
+    seen_ticket_keys: set[frozenset] = set()
+    scan_cap = max(30_000, int(max_tickets) * 10_000)
+    scanned = 0
 
-        # 2) Fill remaining legs by best rank_score from (gob slice + std slice)
-        combined_ranked = pd.concat([gob.iloc[gob_start:], std.iloc[std_start:]], ignore_index=True)
-        combined_ranked = (
-            _attach_ticket_pick_order(combined_ranked, ticket_sort_mode)
-            .sort_values(["__ts_pri", "__ts_sec"], ascending=[False, False], na_position="last")
+    for combo in itertools.combinations(candidates, int(n_legs)):
+        scanned += 1
+        if scanned > scan_cap:
+            break
+        rows = list(combo)
+        std_count = sum(1 for r in rows if str(r.get("pick_type", "")) == "Standard")
+        if std_count < int(min_standard):
+            continue
+
+        key = frozenset(_leg_fp_tuple(r) for r in rows)
+        if key in seen_ticket_keys:
+            continue
+        if not _ticket_cap_can_add(rows, player_ticket_counts):
+            continue
+
+        hrs = [float(r.get("hit_rate", 0.5) or 0.5) for r in rows]
+        rss = [float(r.get("rank_score", 0) or 0) for r in rows]
+        leg_probs = [_resolve_leg_prob(r) for r in rows]
+        prob_srcs = [src for _, src in leg_probs]
+        avg_hr = float(np.mean(hrs)) if hrs else 0.0
+        avg_rs = float(np.mean(rss)) if rss else 0.0
+        cmult, caudit = _correlation_multiplier_and_audit(rows)
+        ep = win_prob(leg_probs, n_legs) * cmult
+        pout = PAYOUT.get(n_legs, {"power": 0, "flex": 0})
+        adj_power = calc_adjusted_payout(pout["power"], rows)
+        adj_flex = calc_adjusted_payout(pout["flex"], rows)
+        ev_power = ep * adj_power
+
+        tickets.append(
+            {
+                "key": key,
+                "rows": rows,
+                "avg_hit_rate": avg_hr,
+                "avg_rank_score": avg_rs,
+                "est_win_prob": ep,
+                "power_payout": adj_power,
+                "flex_payout": adj_flex,
+                "base_power_payout": pout["power"],
+                "payout_multiplier": round(adj_power / pout["power"], 4) if pout["power"] else 1.0,
+                "ev_power": round(ev_power, 4),
+                "kelly_units": round(kelly_fraction(ep, adj_power, fraction=0.25), 2),
+                "n_legs": n_legs,
+                "leg_prob_sources": ",".join(sorted(set(prob_srcs))),
+                "correlation_multiplier": cmult,
+                "correlation_audit": caudit,
+            }
         )
+        seen_ticket_keys.add(key)
+        _ticket_cap_register(rows, player_ticket_counts)
 
-        for _, r in combined_ranked.iterrows():
-            if len(legs) >= n_legs:
-                break
-            p = str(r.get("player", "")).strip().lower()
-            if p and p not in used_players:
-                if _is_fantasy_prop(r) and fantasy_count >= max_fantasy:
-                    continue
-                if not _can_add_row_with_prop_cap(r, prop_type_counts):
-                    continue
-                legs.append(r)
-                used_players.add(p)
-                prop_type_counts[_ticket_prop_token(r)] += 1
-                if _is_fantasy_prop(r):
-                    fantasy_count += 1
-
-        # Backfill if diversity cap prevented filling all required legs.
-        if len(legs) < n_legs:
-            for _, r in combined_ranked.iterrows():
-                if len(legs) >= n_legs:
-                    break
-                p = str(r.get("player", "")).strip().lower()
-                if p and p not in used_players:
-                    if not _can_add_row_with_prop_cap(r, prop_type_counts):
-                        continue
-                    legs.append(r)
-                    used_players.add(p)
-                    prop_type_counts[_ticket_prop_token(r)] += 1
-
-        if len(legs) == n_legs:
-            std_count = sum(1 for x in legs if str(x.get("pick_type", "")) == "Standard")
-            if std_count >= min_standard:
-                hrs = [float(x.get("hit_rate", 0.5) or 0.5) for x in legs]
-                rss = [float(x.get("rank_score", 0) or 0) for x in legs]
-                leg_probs = []
-                prob_srcs = []
-                for x in legs:
-                    _p, _src = _resolve_leg_prob(x)
-                    leg_probs.append((_p, _src))
-                    prob_srcs.append(_src)
-                avg_hr = float(np.mean(hrs)) if hrs else 0.0
-                avg_rs = float(np.mean(rss)) if rss else 0.0
-                cmult, caudit = _correlation_multiplier_and_audit(legs)
-                ep = win_prob(leg_probs, n_legs) * cmult
-                pout = PAYOUT.get(n_legs, {"power": 0, "flex": 0})
-
-                # Adjust payouts for Goblin/Demon legs
-                adj_power = calc_adjusted_payout(pout["power"], legs)
-                adj_flex  = calc_adjusted_payout(pout["flex"],  legs)
-
-                # EV gate
-                ev_power = ep * adj_power
-                if ev_power < min_ev_for_ticket(n_legs):
-                    std_start = min(std_start + 1, max(len(std) - 1, 0))
-                    if len(gob) > 0:
-                        gob_start = min(gob_start + 1, max(len(gob) - 1, 0))
-                    continue
-                if prioritize_ticket_hit and ep < float(MIN_PRIORITIZE_MODELED_POWER_WIN_PROB):
-                    std_start = min(std_start + 1, max(len(std) - 1, 0))
-                    if len(gob) > 0:
-                        gob_start = min(gob_start + 1, max(len(gob) - 1, 0))
-                    continue
-
-                key = frozenset((str(x.get("player", "")) + "|" + str(x.get("prop_type", ""))).strip() for x in legs)
-                if key not in [t["key"] for t in tickets]:
-                    if not _ticket_cap_can_add(legs, player_ticket_counts):
-                        std_start = min(std_start + 1, max(len(std) - 1, 0))
-                        if len(gob) > 0:
-                            gob_start = min(gob_start + 1, max(len(gob) - 1, 0))
-                        continue
-                    tickets.append(
-                        {
-                            "key": key,
-                            "rows": legs,
-                            "avg_hit_rate": avg_hr,
-                            "avg_rank_score": avg_rs,
-                            "est_win_prob": ep,
-                            "power_payout": adj_power,
-                            "flex_payout":  adj_flex,
-                            "base_power_payout": pout["power"],
-                            "payout_multiplier": round(adj_power / pout["power"], 4) if pout["power"] else 1.0,
-                            "ev_power": round(ev_power, 4),
-                            "kelly_units": round(kelly_fraction(ep, adj_power, fraction=0.25), 2),
-                            "n_legs": n_legs,
-                            "leg_prob_sources": ",".join(sorted(set(prob_srcs))),
-                            "correlation_multiplier": cmult,
-                            "correlation_audit": caudit,
-                        }
-                    )
-                    _ticket_cap_register(legs, player_ticket_counts)
-
-        # Slide window to create different combos
-        if len(std) > 0:
-            std_start = min(std_start + 1, max(len(std) - 1, 0))
-        if len(gob) > 0:
-            gob_start = min(gob_start + 1, max(len(gob) - 1, 0))
-
-    tickets.sort(key=lambda x: (-x["avg_rank_score"], -x["avg_hit_rate"]))
+    tickets.sort(key=lambda x: (-x["est_win_prob"], -x["avg_rank_score"]))
     return _rerank_tickets_live(tickets, max_tickets=max_tickets)
 
 
@@ -9460,6 +9264,12 @@ def main():
         action="store_true",
         help="Print empirical payout debug for power tickets (base, goblin dists/factors, total adj, sweep).",
     )
+    ap.add_argument(
+        "--no-diversity-prune",
+        action="store_true",
+        dest="no_diversity_prune",
+        help="Keep all generated ticket groups after dedupe (skip jaccard + diversity pruning).",
+    )
 
     args = ap.parse_args()
     global PAYOUT_DEBUG
@@ -10737,19 +10547,22 @@ def main():
         f"  [dedupe] ticket groups: {_n_groups_before_dedupe} -> {_n_groups_after_dedupe} "
         f"({_n_groups_before_dedupe - _n_groups_after_dedupe} duplicate leg sets removed)"
     )
-    _jg_max = float(_diversity_cfg.get("max_jaccard_overlap", 0.55))
-    all_ticket_groups, _jg_b, _jg_a = enforce_group_jaccard_diversity(
-        all_ticket_groups,
-        max_jaccard_overlap=_jg_max,
-    )
-    if _jg_b != _jg_a:
-        print(
-            f"  [dedupe-jaccard] ticket groups: {_jg_b} -> {_jg_a} "
-            f"({_jg_b - _jg_a} high-overlap groups removed; max_jaccard={_jg_max:.2f})"
+    if bool(args.no_diversity_prune):
+        print("  [diversity] skipped (--no-diversity-prune)")
+    else:
+        _jg_max = float(_diversity_cfg.get("max_jaccard_overlap", 0.55))
+        all_ticket_groups, _jg_b, _jg_a = enforce_group_jaccard_diversity(
+            all_ticket_groups,
+            max_jaccard_overlap=_jg_max,
         )
-    if bool(_diversity_cfg.get("enabled", True)):
-        all_ticket_groups = _apply_diversity_filter_to_ticket_groups(all_ticket_groups, _diversity_cfg)
-        print(f"  [diversity] groups after filter: {len(all_ticket_groups)}")
+        if _jg_b != _jg_a:
+            print(
+                f"  [dedupe-jaccard] ticket groups: {_jg_b} -> {_jg_a} "
+                f"({_jg_b - _jg_a} high-overlap groups removed; max_jaccard={_jg_max:.2f})"
+            )
+        if bool(_diversity_cfg.get("enabled", True)):
+            all_ticket_groups = _apply_diversity_filter_to_ticket_groups(all_ticket_groups, _diversity_cfg)
+            print(f"  [diversity] groups after filter: {len(all_ticket_groups)}")
     # Diversity can drop every 3-leg group while leaving 4+ — re-check so /tickets always has Flex 3 when 4+ exists.
     apply_guaranteed_flex3_backfill_from_four_plus(all_ticket_groups, counters, wb)
     _post_slips = sum(len(t[1]) for t in all_ticket_groups)
@@ -10857,18 +10670,21 @@ def main():
             final_groups, _fg_b, _fg_a = dedupe_ticket_groups_by_leg_set(final_groups)
             if _fg_b != _fg_a:
                 print(f"  [dedupe] FINAL fallback groups: {_fg_b} -> {_fg_a}")
-            final_groups, _fj_b, _fj_a = enforce_group_jaccard_diversity(
-                final_groups,
-                max_jaccard_overlap=float(_diversity_cfg.get("max_jaccard_overlap", 0.55)),
-            )
-            if _fj_b != _fj_a:
-                print(
-                    f"  [dedupe-jaccard] FINAL fallback groups: {_fj_b} -> {_fj_a} "
-                    f"(max_jaccard={float(_diversity_cfg.get('max_jaccard_overlap', 0.55)):.2f})"
+            if bool(args.no_diversity_prune):
+                print("  [diversity] FINAL fallback skipped (--no-diversity-prune)")
+            else:
+                final_groups, _fj_b, _fj_a = enforce_group_jaccard_diversity(
+                    final_groups,
+                    max_jaccard_overlap=float(_diversity_cfg.get("max_jaccard_overlap", 0.55)),
                 )
-            if bool(_diversity_cfg.get("enabled", True)):
-                final_groups = _apply_diversity_filter_to_ticket_groups(final_groups, _diversity_cfg)
-                print(f"  [diversity] FINAL fallback groups: {len(final_groups)}")
+                if _fj_b != _fj_a:
+                    print(
+                        f"  [dedupe-jaccard] FINAL fallback groups: {_fj_b} -> {_fj_a} "
+                        f"(max_jaccard={float(_diversity_cfg.get('max_jaccard_overlap', 0.55)):.2f})"
+                    )
+                if bool(_diversity_cfg.get("enabled", True)):
+                    final_groups = _apply_diversity_filter_to_ticket_groups(final_groups, _diversity_cfg)
+                    print(f"  [diversity] FINAL fallback groups: {len(final_groups)}")
             payload = ticket_groups_to_payload(
                 final_groups,
                 args.date,

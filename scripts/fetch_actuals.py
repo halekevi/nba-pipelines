@@ -312,6 +312,13 @@ SOCCER_LEAGUES = [
     ("mex.1",  "Liga MX"),
     # sau.1 (Saudi Pro League): ESPN scoreboard/summary often 400 — skip; no reliable boxscore.
     ("aus.1",  "A-League"),
+    # CONMEBOL club competitions — needed for South American clubs appearing on PP boards.
+    ("conmebol.libertadores", "CONMEBOL Libertadores"),
+    ("conmebol.sudamericana", "CONMEBOL Sudamericana"),
+    ("conmebol.recopa", "CONMEBOL Recopa"),
+    # Major domestic cups with frequent overlaps vs PP soccer boards.
+    ("arg.copa", "Copa Argentina"),
+    ("bra.copa_do_brazil", "Copa do Brasil"),
     ("uefa.champions", "UCL"),
     ("uefa.europa",    "UEL"),
 ]
@@ -630,6 +637,7 @@ def parse_nhl_boxscore(box):
                             "team": t_abbr,
                             "prop_type": "Goalie Saves",
                             "actual": round(float(sv), 1),
+                            "source": "espn",
                         })
                     if ga is not None:
                         rows.append({
@@ -637,6 +645,7 @@ def parse_nhl_boxscore(box):
                             "team": t_abbr,
                             "prop_type": "Goals Allowed",
                             "actual": round(float(ga), 1),
+                            "source": "espn",
                         })
                     continue
 
@@ -691,6 +700,7 @@ def parse_nhl_boxscore(box):
                         "team":      t_abbr,
                         "prop_type": prop_type,
                         "actual":    round(float(actual), 1),
+                        "source":    "espn",
                     }
                     for col, val in raw.items():
                         row[col] = round(float(val), 1) if val is not None else None
@@ -812,6 +822,8 @@ def fetch_nhl(date_str: str, adjacent_days: int = 1):
 
     df = pd.DataFrame(all_rows)
     df["actual"] = pd.to_numeric(df["actual"], errors="coerce")
+    if "source" not in df.columns:
+        df["source"] = "espn"
     df = (df.sort_values("actual", ascending=False)
             .drop_duplicates(subset=["player", "team", "prop_type"], keep="first"))
 
@@ -819,10 +831,43 @@ def fetch_nhl(date_str: str, adjacent_days: int = 1):
     # exposes (notably Hits and Faceoffs Won).
     nhl_api_df = fetch_nhl_api_enrichment(date_str)
     if not nhl_api_df.empty:
-        df = pd.concat([df, nhl_api_df], ignore_index=True)
-        df["actual"] = pd.to_numeric(df["actual"], errors="coerce")
-        df = (df.sort_values("actual", ascending=False)
-                .drop_duplicates(subset=["player", "team", "prop_type"], keep="first"))
+        merged_raw = pd.concat([df, nhl_api_df], ignore_index=True)
+        merged_raw["actual"] = pd.to_numeric(merged_raw["actual"], errors="coerce")
+        # Source conflict audit: same player/team/prop present in both sources with
+        # materially different actuals. This catches feed/mapping divergences.
+        conflict_keys: set[tuple[str, str, str]] = set()
+        if {"player", "team", "prop_type", "source", "actual"}.issubset(merged_raw.columns):
+            grouped = merged_raw.groupby(["player", "team", "prop_type"], dropna=False)
+            for (pl, tm, pt), g in grouped:
+                srcs = {str(x).strip().lower() for x in g["source"].dropna().tolist()}
+                if not {"espn", "nhl_api"}.issubset(srcs):
+                    continue
+                lo = pd.to_numeric(g["actual"], errors="coerce").min()
+                hi = pd.to_numeric(g["actual"], errors="coerce").max()
+                if pd.notna(lo) and pd.notna(hi) and float(abs(hi - lo)) >= 0.5:
+                    conflict_keys.add((str(pl), str(tm), str(pt)))
+        if conflict_keys:
+            print(f"  [NHL source-audit] conflicts detected: {len(conflict_keys)} keys (|espn-nhl_api| >= 0.5)")
+
+        df = merged_raw.copy()
+        df["source_conflict"] = df.apply(
+            lambda r: 1 if (str(r.get("player")), str(r.get("team")), str(r.get("prop_type"))) in conflict_keys else 0,
+            axis=1,
+        )
+        if "source" not in df.columns:
+            df["source"] = "espn"
+        prop_norm = df["prop_type"].astype(str).str.strip().str.lower()
+        src = df["source"].astype(str).str.strip().str.lower()
+        prefer_api = prop_norm.isin({"shots on goal", "goalie saves", "time on ice"})
+        src_rank = pd.Series(0, index=df.index)
+        src_rank = src_rank + (src.eq("nhl_api") & prefer_api).astype(int) * 10
+        src_rank = src_rank + src.eq("nhl_api").astype(int)
+        df = (
+            df.assign(_src_rank=src_rank)
+            .sort_values(["_src_rank", "actual"], ascending=[False, False])
+            .drop_duplicates(subset=["player", "team", "prop_type"], keep="first")
+            .drop(columns=["_src_rank"], errors="ignore")
+        )
         print(f"  NHL API enrichment rows merged: {len(nhl_api_df)}")
 
     print(f"\n  Total: {len(df)} NHL player-prop actuals")
@@ -907,6 +952,7 @@ def _nhl_player_rows_from_team_block(team_block, team_abbr):
                 "team": team_abbr,
                 "prop_type": prop_type,
                 "actual": round(float(actual), 1),
+                "source": "nhl_api",
             })
 
     for p in team_block.get("goalies", []) or []:
@@ -927,6 +973,7 @@ def _nhl_player_rows_from_team_block(team_block, team_abbr):
                 "team": team_abbr,
                 "prop_type": "Goalie Saves",
                 "actual": round(float(saves), 1),
+                "source": "nhl_api",
             })
         if ga is not None:
             rows.append({
@@ -934,6 +981,7 @@ def _nhl_player_rows_from_team_block(team_block, team_abbr):
                 "team": team_abbr,
                 "prop_type": "Goals Allowed",
                 "actual": round(float(ga), 1),
+                "source": "nhl_api",
             })
 
     return rows
