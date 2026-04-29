@@ -925,7 +925,7 @@ def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
 
 
 def _ticket_meets_min_web_payout(ticket: dict) -> bool:
-    """Require at least one known payout multiplier >= MIN_WEB_PAYOUT_X."""
+    """Require all known payout multipliers to be >= MIN_WEB_PAYOUT_X."""
     payout_vals: list[float] = []
     pay = ticket.get("payout")
     if isinstance(pay, dict):
@@ -951,7 +951,7 @@ def _ticket_meets_min_web_payout(ticket: dict) -> bool:
             pass
     if not payout_vals:
         return False
-    return max(payout_vals) >= float(MIN_WEB_PAYOUT_X)
+    return min(payout_vals) >= float(MIN_WEB_PAYOUT_X)
 
 
 def _ticket_primary_sport(ticket: dict) -> str:
@@ -1422,6 +1422,16 @@ def _norm_prop_label(v: object) -> str:
     s = s.replace("_", " ")
     s = re.sub(r"\s+", " ", s)
     return s
+
+
+def _fantasy_prop_mask(df: pd.DataFrame) -> pd.Series:
+    """True for rows that should be excluded as fantasy props."""
+    mask = pd.Series([False] * len(df), index=df.index)
+    for col in ("prop_type", "prop", "prop_name"):
+        if col in df.columns:
+            txt = df[col].astype(str).str.lower()
+            mask |= txt.str.contains("fantasy", na=False)
+    return mask
 
 
 def _line_bucket_label(v: object) -> str:
@@ -4949,6 +4959,16 @@ def write_web_outputs(
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
     print(f"[OK] Web JSON  -> {json_path}")
+    # Keep docs JSON in sync for static/GitHub Pages views that read ui_runner/docs.
+    try:
+        outdir_p = Path(outdir).resolve()
+        docs_json = outdir_p.parent / "docs" / "tickets_latest.json"
+        docs_json.parent.mkdir(parents=True, exist_ok=True)
+        with open(docs_json, "w", encoding="utf-8") as f:
+            json.dump(payload, f, indent=2, ensure_ascii=False)
+        print(f"[OK] Docs JSON -> {docs_json}")
+    except Exception as exc:
+        print(f"[WARN] Docs JSON sync skipped: {exc}")
     print("  (Graded eval HTML) Run: py -3.14 scripts/build_ticket_eval.py --date <YYYY-MM-DD>")
 
 
@@ -6920,6 +6940,7 @@ def filter_eligible(
     if "prop_type" in df.columns:
         prop_norm = df["prop_type"].apply(_norm_prop_label)
         mask &= ~prop_norm.isin(TICKET_EXCLUDED_PROPS)
+    mask &= ~_fantasy_prop_mask(df)
     # Only hard-exclude rows that truly cannot be ticketed.
     if "void_reason" in df.columns:
         vs = df["void_reason"]
@@ -7034,7 +7055,7 @@ def build_single_structure_ticket(
         df = df[df["tier"].astype(str).str.upper().isin(allowed_tiers)]
 
     prop_norm = df["prop_type"].apply(_norm_prop_label) if "prop_type" in df.columns else pd.Series([""] * len(df))
-    excl_mask = prop_norm.isin(TICKET_EXCLUDED_PROPS)
+    excl_mask = prop_norm.isin(TICKET_EXCLUDED_PROPS) | _fantasy_prop_mask(df)
     if counters is not None:
         fantasy_mask = prop_norm.str.contains("fantasy", na=False)
         counters["fantasy_excluded_count"] += int((excl_mask & fantasy_mask).sum())
@@ -7244,7 +7265,7 @@ def build_structure_ticket_variants(
         df = df[df["tier"].astype(str).str.upper().isin(allowed_tiers)]
 
     prop_norm = df["prop_type"].apply(_norm_prop_label) if "prop_type" in df.columns else pd.Series([""] * len(df))
-    excl_mask = prop_norm.isin(TICKET_EXCLUDED_PROPS)
+    excl_mask = prop_norm.isin(TICKET_EXCLUDED_PROPS) | _fantasy_prop_mask(df)
     df = df[~excl_mask].copy()
 
     if flow in ("power", "standard"):
