@@ -3223,7 +3223,7 @@ async function loadCombinedFromMergedJson() {
   const tbody = document.getElementById('stb-combined');
   try {
     await loadSlateData();
-    const res = await fetch('/api/slate-sport/combined', {cache: 'no-store'});
+    const res = await fetch('slate_sport_combined.json', {cache:'no-store'});
     const d = await res.json();
     const rows = Array.isArray(d.rows) ? d.rows : [];
     if (!rows.length) {

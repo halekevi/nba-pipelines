@@ -30,6 +30,34 @@ def _read_template_json_date(templates_dir: Path) -> str:
     return ""
 
 
+def _merged_combined_rows_for_mobile(sports_payload: dict) -> list:
+    """All sport rows merged + sorted by rank_score (matches app /api/slate-sport/combined)."""
+    out = []
+    for sk, rows in (sports_payload or {}).items():
+        key = str(sk).strip().lower()
+        if key == "combined":
+            continue
+        if not isinstance(rows, list):
+            continue
+        for r in rows:
+            if not isinstance(r, dict):
+                continue
+            row = dict(r)
+            if not str(row.get("sport") or "").strip():
+                row["sport"] = str(sk).strip().upper()
+            out.append(row)
+
+    def _rank(x):
+        try:
+            v = x.get("rank_score")
+            return float(v) if v is not None else float("-inf")
+        except (TypeError, ValueError):
+            return float("-inf")
+
+    out.sort(key=_rank, reverse=True)
+    return out
+
+
 def _build_mobile_sport_breakdown(templates_dir):
     stats = {s: {"decided": 0, "paid": 0, "net_dollars": 0.0} for s in SPORT_BREAKDOWN_ORDER}
     for gp in sorted(templates_dir.glob("graded_props_*.json")):
@@ -317,6 +345,12 @@ def generate_bundle():
                 content = content.replace(
                     "fetch('/api/slate-excel', {cache: 'no-store'})",
                     "fetch('slate_excel.json', {cache: 'no-store'})"
+                )
+                # Combined slate JSON (no Railway — mobile/www only).
+                content = re.sub(
+                    r"fetch\(\s*['\"]/api/slate-sport/combined['\"]\s*,\s*\{\s*cache\s*:\s*['\"]no-store['\"]\s*\}\s*\)",
+                    "fetch('slate_sport_combined.json', {cache:'no-store'})",
+                    content,
                 )
             elif dest_name == "income.html":
                 # Jinja strips can leave invalid JS in static bundle.
@@ -664,6 +698,12 @@ def generate_bundle():
                 json.dumps({"ok": True, "sport": sport_key, "rows": safe_rows}, ensure_ascii=True),
                 encoding="utf-8"
             )
+
+        merged_combined = _merged_combined_rows_for_mobile(sports_payload)
+        (MOBILE_WWW_DIR / "slate_sport_combined.json").write_text(
+            json.dumps({"ok": True, "sport": "combined", "rows": merged_combined}, ensure_ascii=True),
+            encoding="utf-8"
+        )
 
         # Static replacement for /api/pipeline/status (used by home status cards).
         slate_date = _read_template_json_date(TEMPLATES_DIR) or str(
