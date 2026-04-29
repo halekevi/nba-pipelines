@@ -1077,6 +1077,7 @@ def filter_web_tickets_for_ui(
     *,
     require_positive_ev: bool,
     apply_template_cap: bool = False,
+    discard_tracker: "DiscardTracker | None" = None,
 ) -> dict:
     """Build /tickets JSON groups: optional positive-EV gate, then optional WEB_TICKET_TEMPLATE quotas."""
     groups_in = list(payload.get("groups") or [])
@@ -1085,20 +1086,31 @@ def filter_web_tickets_for_ui(
         if not isinstance(g, dict):
             continue
         tickets_in = list(g.get("tickets") or [])
+        sport_key = _group_sport(str(g.get("group_name") or "")) or "ALL"
         if require_positive_ev:
-            kept = [
-                t
-                for t in tickets_in
-                if isinstance(t, dict)
-                and _ticket_passes_positive_ev_gate(t)
-                and _ticket_meets_min_web_payout(t, group_name=str(g.get("group_name") or ""))
-            ]
+            kept = []
+            for t in tickets_in:
+                if not isinstance(t, dict):
+                    continue
+                if not _ticket_passes_positive_ev_gate(t):
+                    if discard_tracker is not None:
+                        discard_tracker.log_count(sport_key, "web_ev_gate_fail", 1)
+                    continue
+                if not _ticket_meets_min_web_payout(t, group_name=str(g.get("group_name") or "")):
+                    if discard_tracker is not None:
+                        discard_tracker.log_count(sport_key, "payout_below_3x", 1)
+                    continue
+                kept.append(t)
         else:
-            kept = [
-                t
-                for t in tickets_in
-                if isinstance(t, dict) and _ticket_meets_min_web_payout(t, group_name=str(g.get("group_name") or ""))
-            ]
+            kept = []
+            for t in tickets_in:
+                if not isinstance(t, dict):
+                    continue
+                if not _ticket_meets_min_web_payout(t, group_name=str(g.get("group_name") or "")):
+                    if discard_tracker is not None:
+                        discard_tracker.log_count(sport_key, "payout_below_3x", 1)
+                    continue
+                kept.append(t)
         if not kept:
             continue
         ng = dict(g)
@@ -2662,14 +2674,36 @@ def _resolve_leg_prob(row: pd.Series) -> tuple[float, str]:
     direction = str(
         row.get("bet_direction") or row.get("direction_used") or row.get("direction") or "OVER"
     ).strip().upper()
-    if direction == "UNDER":
-        hr_raw = row.get("under_hit_rate")
-        if hr_raw is None or str(hr_raw).strip() == "":
-            hr_raw = row.get("hit_rate")
-    else:
-        hr_raw = row.get("over_hit_rate")
-        if hr_raw is None or str(hr_raw).strip() == "":
-            hr_raw = row.get("hit_rate")
+
+    def _directional_hr_raw() -> tuple[Any, str]:
+        """Resolve direction-aware hit rate with safe fallbacks."""
+        if direction == "UNDER":
+            u = row.get("under_hit_rate")
+            if u is not None and str(u).strip() != "":
+                return u, "under_hit_rate"
+            o = row.get("over_hit_rate")
+            if o is not None and str(o).strip() != "":
+                try:
+                    ov = float(o)
+                    if ov > 1.0:
+                        ov = ov / 100.0
+                    if math.isfinite(ov):
+                        return 1.0 - ov, "over_hit_rate_inverted"
+                except (TypeError, ValueError):
+                    pass
+            l5u = pd.to_numeric(row.get("l5_under"), errors="coerce")
+            if pd.notna(l5u):
+                return float(l5u) / 5.0, "l5_under_proxy"
+            return row.get("hit_rate"), "hit_rate_fallback"
+        o = row.get("over_hit_rate")
+        if o is not None and str(o).strip() != "":
+            return o, "over_hit_rate"
+        l5o = pd.to_numeric(row.get("l5_over"), errors="coerce")
+        if pd.notna(l5o):
+            return float(l5o) / 5.0, "l5_over_proxy"
+        return row.get("hit_rate"), "hit_rate_fallback"
+
+    hr_raw, hr_source = _directional_hr_raw()
 
     try:
         if hr_raw is not None and isinstance(hr_raw, float) and (math.isnan(hr_raw) or not math.isfinite(hr_raw)):
@@ -2708,7 +2742,7 @@ def _resolve_leg_prob(row: pd.Series) -> tuple[float, str]:
             if hit_prob > 1.0:
                 hit_prob = hit_prob / 100.0
             hit_prob = max(0.50, min(0.99, hit_prob))
-            return hit_prob, "hit_rate"
+            return hit_prob, hr_source
         except (TypeError, ValueError):
             pass
 
@@ -4952,6 +4986,7 @@ def write_web_outputs(
     require_positive_ev: bool = True,
     merge_existing_for_date: bool = False,
     apply_template_cap: bool = False,
+    discard_tracker: DiscardTracker | None = None,
 ):
     """Write tickets_latest.json for /tickets; graded HTML is build_ticket_eval.py → ticket_eval_<date>.html."""
     os.makedirs(outdir, exist_ok=True)
@@ -4960,6 +4995,7 @@ def write_web_outputs(
         payload,
         require_positive_ev=require_positive_ev,
         apply_template_cap=apply_template_cap,
+        discard_tracker=discard_tracker,
     )
     if not require_positive_ev:
         print("  [web] EV gate OFF — JSON includes top slips per sport/leg-count (workbook pool, template caps)")
@@ -6939,6 +6975,104 @@ def add_prop_quality_score(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+class DiscardTracker:
+    """Track discard counts by sport and reason."""
+
+    def __init__(self) -> None:
+        self.records: defaultdict[str, defaultdict[str, int]] = defaultdict(lambda: defaultdict(int))
+
+    def log_df(self, df_slice: pd.DataFrame | None, reason: str, *, sport_col: str = "sport", default_sport: str = "ALL") -> None:
+        if df_slice is None or len(df_slice) == 0:
+            return
+        if sport_col in df_slice.columns:
+            for sport, grp in df_slice.groupby(sport_col, dropna=False):
+                key = str(sport).strip().upper() if str(sport).strip() else default_sport
+                self.records[key][reason] += int(len(grp))
+        else:
+            self.records[default_sport][reason] += int(len(df_slice))
+
+    def log_count(self, sport: str, reason: str, count: int) -> None:
+        n = int(count)
+        if n <= 0:
+            return
+        key = str(sport).strip().upper() if str(sport).strip() else "ALL"
+        self.records[key][reason] += n
+
+    def report(self) -> str:
+        lines: list[str] = []
+        for sport in sorted(self.records.keys()):
+            lines.append(f"\n  [{sport}]")
+            sport_total = int(sum(self.records[sport].values()))
+            rows = sorted(self.records[sport].items(), key=lambda kv: (-kv[1], kv[0]))
+            for reason, count in rows:
+                pct = (100.0 * float(count) / float(sport_total)) if sport_total > 0 else 0.0
+                lines.append(f"    {reason:<36} {count:>5} ({pct:>4.0f}%)")
+        return "\n".join(lines)
+
+    def to_dict(self) -> dict[str, dict[str, int]]:
+        return {sport: dict(reasons) for sport, reasons in self.records.items()}
+
+
+class FunnelTracker:
+    """Track survivor counts by stage and sport."""
+
+    def __init__(self) -> None:
+        self.stages: list[str] = []
+        self.snapshots: dict[str, defaultdict[str, int]] = {}
+
+    def checkpoint_df(
+        self,
+        label: str,
+        df: pd.DataFrame | None,
+        *,
+        sport_col: str = "sport",
+        default_sport: str = "ALL",
+    ) -> None:
+        if label not in self.snapshots:
+            self.snapshots[label] = defaultdict(int)
+            self.stages.append(label)
+        if df is None:
+            return
+        n_all = int(len(df))
+        self.snapshots[label]["ALL"] += n_all
+        if n_all == 0:
+            return
+        if sport_col in df.columns:
+            for sport, grp in df.groupby(sport_col, dropna=False):
+                key = str(sport).strip().upper() if str(sport).strip() else default_sport
+                self.snapshots[label][key] += int(len(grp))
+        else:
+            key = str(default_sport).strip().upper() if str(default_sport).strip() else "ALL"
+            self.snapshots[label][key] += n_all
+
+    def report(self) -> str:
+        if not self.stages:
+            return "  (no funnel checkpoints recorded)"
+        sports = sorted({s for snap in self.snapshots.values() for s in snap.keys() if s != "ALL"})
+        rows: list[str] = []
+        for sport in ["ALL", *sports]:
+            rows.append(f"\n  [{sport}]")
+            base = int(self.snapshots[self.stages[0]].get(sport, 0))
+            prev = None
+            for i, stage in enumerate(self.stages):
+                cur = int(self.snapshots.get(stage, {}).get(sport, 0))
+                if i == 0:
+                    rows.append(f"    {'INPUT':<34} {cur:>5}")
+                else:
+                    drop = max(0, int(prev or 0) - cur)
+                    pct = (100.0 * float(cur) / float(base)) if base > 0 else 0.0
+                    drop_txt = f"(-{drop})" if drop > 0 else "(+0)"
+                    rows.append(f"    {stage:<34} {cur:>5}  {drop_txt:>6}  [{pct:>3.0f}% of input]")
+                prev = cur
+        return "\n".join(rows)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "stages": list(self.stages),
+            "snapshots": {k: dict(v) for k, v in self.snapshots.items()},
+        }
+
+
 # ── Filter eligible props for tickets ─────────────────────────────────────────
 def filter_eligible(
     df: pd.DataFrame,
@@ -6950,30 +7084,58 @@ def filter_eligible(
     *,
     allow_strong_l5_bypass: bool = True,
     min_prop_quality: float = -1.0,
+    discard_tracker: DiscardTracker | None = None,
+    funnel_tracker: FunnelTracker | None = None,
+    discard_sport: str = "",
 ):
     df = add_prop_quality_score(df)
     mask = pd.Series([True] * len(df), index=df.index)
+    sport_hint = str(discard_sport or "").strip().upper() or "ALL"
+    if funnel_tracker is not None:
+        funnel_tracker.checkpoint_df("input", df, default_sport=sport_hint)
+
+    def _apply_gate(cond: pd.Series, reason: str, stage: str) -> None:
+        nonlocal mask
+        cond = cond.fillna(False)
+        dropped = df[mask & ~cond]
+        if discard_tracker is not None and len(dropped) > 0:
+            if "sport" in dropped.columns:
+                discard_tracker.log_df(dropped, reason)
+            else:
+                discard_tracker.log_count(sport_hint, reason, int(len(dropped)))
+        mask &= cond
+        if funnel_tracker is not None:
+            funnel_tracker.checkpoint_df(stage, df[mask], default_sport=sport_hint)
+
     MIN_SAMPLE_FOR_TICKET = 4
     if "l5_games" in df.columns:
-        mask &= pd.to_numeric(df["l5_games"], errors="coerce").fillna(0) >= MIN_SAMPLE_FOR_TICKET
+        _apply_gate(
+            pd.to_numeric(df["l5_games"], errors="coerce").fillna(0) >= MIN_SAMPLE_FOR_TICKET,
+            "min_sample_fail",
+            "after_min_sample",
+        )
     elif "sample_n" in df.columns:
-        mask &= pd.to_numeric(df["sample_n"], errors="coerce").fillna(0) >= MIN_SAMPLE_FOR_TICKET
+        _apply_gate(
+            pd.to_numeric(df["sample_n"], errors="coerce").fillna(0) >= MIN_SAMPLE_FOR_TICKET,
+            "min_sample_fail",
+            "after_min_sample",
+        )
     if "prop_type" in df.columns:
         prop_norm = df["prop_type"].apply(_norm_prop_label)
-        mask &= ~prop_norm.isin(TICKET_EXCLUDED_PROPS)
-    mask &= ~_fantasy_prop_mask(df)
+        _apply_gate(~prop_norm.isin(TICKET_EXCLUDED_PROPS), "prop_banned", "after_prop_ban")
+    _apply_gate(~_fantasy_prop_mask(df), "fantasy_score_excluded", "after_fantasy_score")
     # Only hard-exclude rows that truly cannot be ticketed.
     if "void_reason" in df.columns:
         vs = df["void_reason"]
         void_str = vs.astype(str).str.strip()
-        mask &= ~void_str.eq("NO_PROJECTION_OR_LINE")
+        _apply_gate(~void_str.eq("NO_PROJECTION_OR_LINE"), "no_projection_or_line", "after_projection_line")
     # MLB reliability gate: keep thin-sample props in slate visibility, but do not
     # ticket inflated rows explicitly tagged by step5 (e.g., THIN_SAMPLE_5g_raw_100%).
     if "sport" in df.columns and "reliability_note" in df.columns:
         sp = df["sport"].astype(str).str.upper().str.strip()
         rel = df["reliability_note"].astype(str).str.upper()
         thin_inflated = sp.eq("MLB") & rel.str.contains("THIN_SAMPLE_", na=False)
-        mask &= ~thin_inflated
+        _apply_gate(~thin_inflated, "mlb_thin_sample_reliability", "after_mlb_thin_sample")
     # MLB: thin-sample blended pitcher props are allowed in slate views but excluded
     # from ticket pools to avoid overconfident long-leg construction.
     if {"sport", "hit_rate_status", "prop_type"}.issubset(df.columns):
@@ -6985,17 +7147,21 @@ def filter_eligible(
             regex=True,
             na=False,
         )
-        mask &= ~(sp.eq("MLB") & hs.str.startswith("BLENDED_N") & pitch_kw)
+        _apply_gate(
+            ~(sp.eq("MLB") & hs.str.startswith("BLENDED_N") & pitch_kw),
+            "mlb_blended_pitcher_excluded",
+            "after_mlb_blended_pitcher",
+        )
     l5_o = pd.to_numeric(df.get("l5_over"), errors="coerce").fillna(0)
     l5_u = pd.to_numeric(df.get("l5_under"), errors="coerce").fillna(0)
     strong_l5 = (l5_o >= 4) | (l5_u >= 4)
     # Ticket creation now relies on directional L5 consistency rather than hit_rate.
     # Keep min_hit_rate argument for compatibility, but do not hard-gate by it.
-    mask &= strong_l5
+    _apply_gate(strong_l5, "l5_directional_fail", "after_l5_directional")
     if min_edge > 0:
-        mask &= _directional_edge_series(df).fillna(0) >= min_edge
+        _apply_gate(_directional_edge_series(df).fillna(0) >= min_edge, "edge_below_min", "after_edge")
     if min_rank is not None and "rank_score" in df.columns:
-        mask &= df["rank_score"].fillna(-99) >= min_rank
+        _apply_gate(df["rank_score"].fillna(-99) >= min_rank, "rank_below_min", "after_rank")
     if tiers and "tier" in df.columns:
         tier_set = {str(t).upper() for t in tiers}
         tier_s = df["tier"].astype(str).str.upper().str.strip()
@@ -7004,13 +7170,13 @@ def filter_eligible(
         if "D" not in tier_set and "prop_type" in df.columns:
             attempt_ok = _is_attempt_prop_series(df["prop_type"])
             tier_ok = tier_ok | ((tier_s == "D") & attempt_ok)
-        mask &= tier_ok
+        _apply_gate(tier_ok, "tier_excluded", "after_tier")
     if pick_types and "pick_type" in df.columns:
-        mask &= df["pick_type"].isin(pick_types)
+        _apply_gate(df["pick_type"].isin(pick_types), "pick_type_not_allowed", "after_pick_type")
     if "prop_quality_score" in df.columns:
         pq = pd.to_numeric(df["prop_quality_score"], errors="coerce").fillna(0.0)
         pq_min = _prop_quality_min_threshold_series(df, float(min_prop_quality))
-        mask &= pq >= pq_min
+        _apply_gate(pq >= pq_min, "prop_quality_below_floor", "after_prop_quality")
     return df[mask].copy()
 
 
@@ -9859,6 +10025,9 @@ def main():
     # the model's highest-confidence CBB Goblin props enter tickets.
     CBB_GOBLIN_MIN_RANK = 5.0   # tune this up/down based on graded results
 
+    discard_tracker = DiscardTracker()
+    funnel_tracker = FunnelTracker()
+
     def pool(df, pt=None):
         if df is None or len(df) == 0:
             return df
@@ -10068,7 +10237,6 @@ def main():
         if sport == "CBB" and pt is not None and pt == ["Goblin"]:
             effective_min_rank = max(args.min_rank or 0, CBB_GOBLIN_MIN_RANK)
 
-        # Exclude Demon from all pools
         if pt is not None:
             effective_pick_types = pt
         else:
@@ -10087,7 +10255,11 @@ def main():
             effective_pick_types,
             allow_strong_l5_bypass=(sport != "SOCCER"),
             min_prop_quality=float(args.min_prop_quality),
+            discard_tracker=discard_tracker,
+            funnel_tracker=(funnel_tracker if pt is None else None),
+            discard_sport=sport,
         )
+        discard_tracker.log_count(str(sport), "final_pool_kept", int(len(pooled)))
         gob_n = std_n = dem_n = 0
         if pooled is not None and "pick_type" in pooled.columns:
             pt_u = pooled["pick_type"].astype(str).str.upper().str.strip()
@@ -10884,6 +11056,7 @@ def main():
             require_positive_ev=_web_ev,
             merge_existing_for_date=bool(args.merge_web_latest),
             apply_template_cap=bool(args.web_template_cap),
+            discard_tracker=discard_tracker,
         )
         # nfl: pass None until combined loads NFL step8; keep key "nfl": [] in slate_latest.json for UI.
         nfl = None
@@ -10901,6 +11074,7 @@ def main():
                 require_positive_ev=_web_ev,
                 merge_existing_for_date=bool(args.merge_web_latest),
                 apply_template_cap=bool(args.web_template_cap),
+                discard_tracker=discard_tracker,
             )
         # Avoid Windows console codepage issues with unicode checkmarks.
         print("[OK] Web outputs complete.")
@@ -10926,6 +11100,31 @@ def main():
     print(f"[TICKETS] Def tier filtered      : {int(counters['def_tier_filtered_count'])} props removed")
     print(f"[TICKETS] Prop ban list filtered : {int(counters['ban_list_filtered_count'])} props removed")
     print(f"[TICKETS] Total eligible props   : {int(counters['total_eligible_count'])} props used")
+    print("\n[TICKETS] -- DISCARD REASON REPORT ---------------------------")
+    rep = discard_tracker.report().strip()
+    print(rep if rep else "  (no discard data captured)")
+    print("\n[TICKETS] -- FILTER FUNNEL (SURVIVAL BY STAGE) --------------")
+    frep = funnel_tracker.report().strip()
+    print(frep if frep else "  (no funnel checkpoints recorded)")
+    try:
+        discard_out = os.path.join(REPO_ROOT, "ui_runner", "data", "discard_report_latest.json")
+        os.makedirs(os.path.dirname(discard_out), exist_ok=True)
+        with open(discard_out, "w", encoding="utf-8") as _f:
+            json.dump(
+                {
+                    "build_date": str(args.date),
+                    "generated_at": datetime.now(timezone.utc).isoformat(),
+                    "discards": discard_tracker.to_dict(),
+                    "funnel": funnel_tracker.to_dict(),
+                    "final_pool_size": int(counters.get("total_eligible_count", 0)),
+                },
+                _f,
+                indent=2,
+                ensure_ascii=False,
+            )
+        print(f"[TICKETS] Discard sidecar        : {discard_out}")
+    except Exception as _dex:
+        print(f"[TICKETS] Discard sidecar WARN   : {_dex}")
     print("[TICKETS] ----------------------------------------------------")
 
 

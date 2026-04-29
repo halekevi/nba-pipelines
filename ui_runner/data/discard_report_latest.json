@@ -1,0 +1,111 @@
+{
+  "build_date": "2026-04-29",
+  "generated_at": "2026-04-29T18:03:50.841258+00:00",
+  "discards": {
+    "NHL": {
+      "fantasy_score_excluded": 42,
+      "l5_directional_fail": 125,
+      "tier_excluded": 16,
+      "prop_quality_below_floor": 318,
+      "final_pool_kept": 5
+    },
+    "NBA": {
+      "prop_banned": 390,
+      "l5_directional_fail": 1673,
+      "tier_excluded": 692,
+      "prop_quality_below_floor": 71,
+      "final_pool_kept": 380,
+      "payout_below_3x": 56
+    },
+    "SOCCER": {
+      "l5_directional_fail": 4,
+      "final_pool_kept": 195,
+      "prop_quality_below_floor": 3
+    },
+    "TENNIS": {
+      "l5_directional_fail": 60
+    },
+    "CROSS": {
+      "payout_below_3x": 1
+    }
+  },
+  "funnel": {
+    "stages": [
+      "input",
+      "after_prop_ban",
+      "after_fantasy_score",
+      "after_l5_directional",
+      "after_tier",
+      "after_pick_type",
+      "after_prop_quality",
+      "after_projection_line",
+      "after_mlb_thin_sample",
+      "after_mlb_blended_pitcher"
+    ],
+    "snapshots": {
+      "input": {
+        "ALL": 3974,
+        "NHL": 506,
+        "NBA": 3401,
+        "SOCCER": 7,
+        "TENNIS": 60
+      },
+      "after_prop_ban": {
+        "ALL": 3584,
+        "NHL": 506,
+        "NBA": 3011,
+        "SOCCER": 7,
+        "TENNIS": 60
+      },
+      "after_fantasy_score": {
+        "ALL": 3542,
+        "NHL": 464,
+        "NBA": 3011,
+        "SOCCER": 7,
+        "TENNIS": 60
+      },
+      "after_l5_directional": {
+        "ALL": 1680,
+        "NHL": 339,
+        "NBA": 1338,
+        "SOCCER": 3
+      },
+      "after_tier": {
+        "ALL": 972,
+        "NHL": 323,
+        "NBA": 646,
+        "SOCCER": 3
+      },
+      "after_pick_type": {
+        "ALL": 972,
+        "NHL": 323,
+        "NBA": 646,
+        "SOCCER": 3
+      },
+      "after_prop_quality": {
+        "ALL": 580,
+        "NHL": 5,
+        "NBA": 575
+      },
+      "after_projection_line": {
+        "ALL": 2124,
+        "NBA": 2058,
+        "SOCCER": 6,
+        "TENNIS": 60
+      },
+      "after_mlb_thin_sample": {
+        "ALL": 1008,
+        "NBA": 953,
+        "NHL": 54,
+        "SOCCER": 1
+      },
+      "after_mlb_blended_pitcher": {
+        "ALL": 1008,
+        "NBA": 953,
+        "NHL": 54,
+        "SOCCER": 1
+      }
+    }
+  },
+  "final_pool_size": 570
+}
