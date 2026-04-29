@@ -14,6 +14,22 @@ def _normalize_sport_label(raw):
     return aliases.get(s, s)
 
 
+def _read_template_json_date(templates_dir: Path) -> str:
+    """Prefer tickets_latest date (matches /api/slate-display-date), then slate_latest."""
+    for name in ("tickets_latest.json", "slate_latest.json"):
+        p = templates_dir / name
+        if not p.exists():
+            continue
+        try:
+            data = json.loads(p.read_text(encoding="utf-8"))
+            ds = str((data or {}).get("date") or "").strip()[:10]
+            if len(ds) == 10 and ds[4] == "-" and ds[7] == "-":
+                return ds
+        except Exception:
+            continue
+    return ""
+
+
 def _build_mobile_sport_breakdown(templates_dir):
     stats = {s: {"decided": 0, "paid": 0, "net_dollars": 0.0} for s in SPORT_BREAKDOWN_ORDER}
     for gp in sorted(templates_dir.glob("graded_props_*.json")):
@@ -53,6 +69,44 @@ def _build_mobile_sport_breakdown(templates_dir):
             }
         )
     return {"ok": True, "rows": rows, "source": "graded_props_json"}
+
+
+def _extract_series_from_row(row):
+    actual = row.get("actual_series")
+    line = row.get("line_series")
+    if isinstance(actual, list) and actual:
+        actual_vals = []
+        for v in actual:
+            try:
+                actual_vals.append(float(v))
+            except Exception:
+                pass
+        line_vals = []
+        if isinstance(line, list):
+            for v in line:
+                try:
+                    line_vals.append(float(v))
+                except Exception:
+                    pass
+        return actual_vals, line_vals
+
+    # Fallback for pipeline rows carrying G1..G10 and line_G1..line_G10.
+    actual_vals = []
+    line_vals = []
+    for i in range(1, 11):
+        av = row.get(f"g{i}")
+        lv = row.get(f"line_g{i}")
+        try:
+            if av is not None:
+                actual_vals.append(float(av))
+        except Exception:
+            pass
+        try:
+            if lv is not None:
+                line_vals.append(float(lv))
+        except Exception:
+            pass
+    return actual_vals, line_vals
 
 
 def process_template(file_path, templates_dir):
@@ -250,9 +304,11 @@ def generate_bundle():
                     "fetch('/api/slate', {cache: 'no-store'})",
                     "fetch('slate_latest.json', {cache: 'no-store'})"
                 )
-                content = content.replace(
-                    'fetch("/api/pipeline/status", {cache:\'no-store\'})',
-                    "fetch('pipeline_status.json', {cache:'no-store'})"
+                # Pipeline status: template spacing varies — use regex so replacement always applies.
+                content = re.sub(
+                    r'fetch\(\s*"/api/pipeline/status"\s*,\s*\{\s*cache\s*:\s*[\'"]no-store[\'"]\s*\}\s*\)',
+                    "fetch('pipeline_status.json', {cache:'no-store'})",
+                    content,
                 )
                 content = content.replace(
                     'fetch(`/api/slate-sport/${encodeURIComponent(sport)}`, {cache: \'no-store\'})',
@@ -566,6 +622,7 @@ def generate_bundle():
                         hit_pct = float(hit_rate) * 100.0
                 except Exception:
                     hit_pct = None
+                actual_series, line_series = _extract_series_from_row(r)
                 mobile_picks.append({
                     "sport": str(sport_key).upper(),
                     "initials": initials,
@@ -587,8 +644,8 @@ def generate_bundle():
                     "l10_under": r.get("l10_under"),
                     "l5_avg": r.get("l5_avg"),
                     "season_avg": r.get("season_avg"),
-                    "actual_series": r.get("actual_series"),
-                    "line_series": r.get("line_series"),
+                    "actual_series": actual_series,
+                    "line_series": line_series,
                     "game_time": r.get("game_time"),
                 })
 
@@ -609,9 +666,11 @@ def generate_bundle():
             )
 
         # Static replacement for /api/pipeline/status (used by home status cards).
-        slate_date = str((slate_payload.get("date") if isinstance(slate_payload, dict) else "") or "").strip()
+        slate_date = _read_template_json_date(TEMPLATES_DIR) or str(
+            (slate_payload.get("date") if isinstance(slate_payload, dict) else "") or ""
+        ).strip()[:10]
         modified = f"{slate_date} 12:00:00" if slate_date else ""
-        status_sports = ["nba", "nba1h", "nba1q", "cbb", "nhl", "soccer", "mlb", "nfl", "tennis", "combined"]
+        status_sports = ["nba", "nba1h", "nba1q", "cbb", "nhl", "soccer", "mlb", "nfl", "tennis", "wnba", "combined"]
         status_payload = {}
         for s in status_sports:
             exists = bool((sports_payload.get(s) if isinstance(sports_payload, dict) else []) or (s == "combined" and sports_payload))
@@ -654,6 +713,13 @@ def generate_bundle():
             json.dumps({"sheets": {"combined": {"columns": combined_columns, "rows": combined_rows}}}, ensure_ascii=True),
             encoding="utf-8"
         )
+
+    # Same date field as /api/slate-display-date — bundled apps cannot call the API offline.
+    _ymd = _read_template_json_date(TEMPLATES_DIR)
+    (MOBILE_WWW_DIR / "slate_display_date.json").write_text(
+        json.dumps({"date": _ymd}, ensure_ascii=True),
+        encoding="utf-8",
+    )
 
     # Copy local grade history data for offline/mobile P&L page.
     src_grade_history = DATA_DIR / "grade_history.json"

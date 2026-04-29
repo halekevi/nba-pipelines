@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" data-ui-build="{{ ui_build_id|default('', true) }}" data-deploy-sha="{{ deploy_git_sha|default('', true) }}">
+<html lang="en" data-theme="dark" data-ui-build="" data-deploy-sha="">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>
 <script>(function(){try{var t=localStorage.getItem('proporacle-theme')||localStorage.getItem('theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');document.documentElement.classList.add('light-theme');}}catch(e){}})();</script>
 <meta name="theme-color" content="#050505"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="proporacle-build" content="{{ ui_build_id|default('', true) }}"/>
+<meta name="proporacle-build" content=""/>
 <meta property="og:title" content="PropOracle — Home"/>
 <title>PropOracle — Home</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="/static/global-scrollbar.css?v=20260416"/>
-<link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260419perf2"/>
-<link rel="stylesheet" href="/static/proporacle-mobile-schema.css?v=20260430schemapage"/>
+<link rel="stylesheet" href="static/global-scrollbar.css?v=20260416"/>
+<link rel="stylesheet" href="static/light-theme-dim-overrides.css?v=20260419perf2"/>
+<link rel="stylesheet" href="static/proporacle-mobile-schema.css?v=20260430schemapage"/>
 <style>
 :root{
   /* Hybrid liquid-glass palette */
@@ -955,9 +955,9 @@ body::before{
 }
 
 </style>
-<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260430schemapage"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260430schemapage"/>
-<link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
+<link rel="stylesheet" href="static/nav-mobile-shared.css?v=20260430schemapage"/>
+<link rel="stylesheet" href="static/mobile-content-width.css?v=20260430schemapage"/>
+<link rel="stylesheet" href="static/site-nav-datetime.css?v=20260408"/>
 </head>
 <body>
 
@@ -972,8 +972,51 @@ body::before{
 <div class="mesh-bg" aria-hidden="true"></div>
 <div class="grain-layer" aria-hidden="true"></div>
 
-{% set nav_active = 'home' %}
-{% include '_site_nav.html' %}
+
+
+
+
+<nav class="snav glass-card">
+  <div class="nav-accent"></div>
+  <a class="snav-brand" href="index.html">
+    <div class="hybrid-logo">
+      <img src="static/proporacle-logo-v3.png?v=20260404b" alt="PropOracle" class="logo-icon" loading="lazy">
+      <span class="nav-brand brand-wordmark"><span class="wb-first">Prop</span><span class="oracle-word gold-shimmer">Oracle</span></span>
+    </div>
+  </a>
+  <ul class="snav-links nav-links" id="nav-links">
+    <li><a href="index.html" class=""><span class="ni ni-ctrl"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L1 5.5V13h4V9h4v4h4V5.5L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/></svg></span> Home</a></li>
+    <li><a href="tickets.html" class=""><span class="ni ni-tick"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="3" width="11" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 6h11" stroke="currentColor" stroke-width="1" stroke-dasharray="2 1.5"/><circle cx="4" cy="9" r="1" fill="currentColor"/><circle cx="7" cy="9" r="1" fill="currentColor"/><circle cx="10" cy="9" r="1" fill="currentColor"/></svg></span> Tickets</a></li>
+    <li><a href="grades.html" class="" title="Ticket evaluation hub"><span class="ni ni-grade"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 10.5L5.5 7l2.5 2.5L11 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect x="1.5" y="1.5" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/></svg></span> Grades</a></li>
+    <li><a href="income.html" class=""><span class="ni ni-grade"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 11V5M5 11V2M8 11V7M11 11V4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span> Income</a></li>
+    <li><a href="payout.html" class=""><span class="ni ni-pay"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 3.5v7M5 5.5c0-.8.9-1.5 2-1.5s2 .7 2 1.5-1 1.3-2 1.5-2 .7-2 1.5.9 1.5 2 1.5 2-.7 2-1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span> Payouts</a></li>
+  </ul>
+  <div class="snav-right">
+    <button class="theme-toggle theme-switch" type="button" id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle theme">
+      <span class="tt-icon tt-moon">🌙</span>
+      <span class="tt-icon tt-sun" style="display:none">☀️</span>
+    </button>
+    <div class="nav-live-cluster">
+      <div class="live-pill"><div class="live-dot"></div><span class="live-pill-brand">PropOracle</span> &nbsp;·&nbsp; </div>
+      <div class="nav-datetime-block" title="Slate date (top) and your device date & time (updates every second)">
+        <div class="nav-slate-date" id="slate-date">—</div>
+        <div class="nav-sync-line">
+          <span id="nav-local-datetime" class="nav-local-datetime">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="hamburger" type="button" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html" class="">🏠 Home</a>
+  <a href="tickets.html" class="">🎟 Tickets</a>
+  <a href="grades.html" class="" title="Ticket evaluation hub">✏️ Grades</a>
+  <a href="income.html" class="">📈 Income</a>
+  <a href="payout.html" class="">💰 Payouts</a>
+</div>
+
 
 <div class="shell">
 
@@ -1919,7 +1962,7 @@ body::before{
     <div class="sec-header">
       <div class="sec-title">Top <span style="color:var(--accent)">Edges</span></div>
       <div class="sec-line"></div>
-      <a href="/tickets" class="edges-see-all">See All Picks ↗</a>
+      <a href="tickets.html" class="edges-see-all">See All Picks ↗</a>
     </div>
     <p class="edge-source-note">Pulled from ticket legs in the latest slip JSON. Cards show model <strong>hit %</strong> (not the same as L5 vs line). Within each group, picks are ordered by <strong>edge</strong> (highest first).</p>
     <div id="top-edges-debug-tag" class="edge-source-note" style="font-size:10px;opacity:.9;margin-top:-8px;margin-bottom:10px;">Build debug: loading...</div>
@@ -1998,7 +2041,7 @@ body::before{
 
 </div>
 
-<script src="/static/site-nav-chrome.js?v=20260412" defer></script>
+<script src="static/site-nav-chrome.js?v=20260412" defer></script>
 <script>
 // ── Real PLAYER_DATA (last 10 games) ──────────────────────
 let ALL_SLATE = [];
@@ -2231,7 +2274,7 @@ async function loadSlateData() {
       }
     };
     try {
-      const res = await fetch("/api/slate", {cache: 'no-store'});
+      const res = await fetch('slate_latest.json', {cache: 'no-store'});
       if (!res.ok) throw new Error("HTTP " + res.status);
       const d = await res.json();
       applySlatePayload(d);
@@ -2375,7 +2418,7 @@ function sportDisplayLabel(rawSport) {
 
 async function refreshStatus() {
   try {
-    const res=await fetch("/api/pipeline/status", {cache:'no-store'}); if(!res.ok) return;
+    const res=await fetch('pipeline_status.json', {cache:'no-store'}); if(!res.ok) return;
     const d=await res.json();
     applyStatusCard("nba",      d.nba?.slate,      "NBA Slate");
     applyStatusCard("nba1h",    d.nba1h?.slate,    "NBA 1H Slate");
@@ -2971,7 +3014,7 @@ async function fetchSlateSport(sport, opts = {}) {
     await loadSlateData();
     let rows = [];
   try {
-      const res = await fetch(`/api/slate-sport/${encodeURIComponent(sport)}`, {cache: 'no-store'});
+      const res = await fetch(`slate_sport_${encodeURIComponent(sport)}.json`, {cache: 'no-store'});
     if (res.ok) {
       const d = await res.json();
         rows = Array.isArray(d.rows) ? d.rows : [];
@@ -3194,7 +3237,7 @@ async function loadSlateExcel() {
   if (!_slateExcelPromise) {
     _slateExcelPromise = (async () => {
       try {
-        const r = await fetch('/api/slate-excel', {cache: 'no-store'});
+        const r = await fetch('slate_excel.json', {cache: 'no-store'});
         const d = await r.json();
         const sh = d.sheets && d.sheets.combined;
         if (sh && sh.columns && sh.rows && sh.rows.length) {
