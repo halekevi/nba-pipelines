@@ -1055,8 +1055,13 @@ def _apply_web_ticket_template(groups: list[dict]) -> list[dict]:
     return out_groups
 
 
-def filter_web_tickets_for_ui(payload: dict, *, require_positive_ev: bool) -> dict:
-    """Build /tickets JSON groups: optional positive-EV gate, then WEB_TICKET_TEMPLATE quotas."""
+def filter_web_tickets_for_ui(
+    payload: dict,
+    *,
+    require_positive_ev: bool,
+    apply_template_cap: bool = False,
+) -> dict:
+    """Build /tickets JSON groups: optional positive-EV gate, then optional WEB_TICKET_TEMPLATE quotas."""
     groups_in = list(payload.get("groups") or [])
     out_groups: list[dict] = []
     for g in groups_in:
@@ -1078,15 +1083,20 @@ def filter_web_tickets_for_ui(payload: dict, *, require_positive_ev: bool) -> di
         ng = dict(g)
         ng["tickets"] = kept
         out_groups.append(ng)
-    out_groups = _apply_web_ticket_template(out_groups)
+    if apply_template_cap:
+        out_groups = _apply_web_ticket_template(out_groups)
     out = dict(payload)
     out["groups"] = out_groups
     return out
 
 
-def filter_positive_ev_tickets_payload(payload: dict) -> dict:
+def filter_positive_ev_tickets_payload(payload: dict, *, apply_template_cap: bool = False) -> dict:
     """Only persist / show slips that pass _ticket_passes_positive_ev_gate; drop empty groups."""
-    return filter_web_tickets_for_ui(payload, require_positive_ev=True)
+    return filter_web_tickets_for_ui(
+        payload,
+        require_positive_ev=True,
+        apply_template_cap=apply_template_cap,
+    )
 
 
 def print_positive_ev_gate_report(gated_preview: dict) -> None:
@@ -2498,10 +2508,10 @@ def _attach_ticket_pick_order(df: pd.DataFrame, mode: str) -> pd.DataFrame:
         h2h_over = pd.to_numeric(out.get("h2h_over_pct", nan_s), errors="coerce")
         h2h_gp = pd.to_numeric(out.get("h2h_gp", nan_s), errors="coerce")
         edge = pd.to_numeric(out.get("edge", nan_s), errors="coerce")
-        hr = pd.to_numeric(out.get("hit_rate", nan_s), errors="coerce")
         mlp = pd.to_numeric(out.get("ml_prob", nan_s), errors="coerce")
 
-        pri = hr.where(hr.notna(), mlp).fillna(rs_p).fillna(DEFAULT_LEG_PROB_FALLBACK)
+        # Do not anchor ticket ordering on hit_rate.
+        pri = mlp.where(mlp.notna(), rs_p).fillna(DEFAULT_LEG_PROB_FALLBACK)
 
         side_l5 = np.where(direction.eq("UNDER"), l5_under, l5_over)
         side_l10 = np.where(direction.eq("UNDER"), l10_under, l10_over)
@@ -2543,9 +2553,10 @@ def _attach_ticket_pick_order(df: pd.DataFrame, mode: str) -> pd.DataFrame:
         pri = pri + np.where(valid_h2h & under_mask & (h2h_over <= 0.40), 0.03, 0.0)
         pri = pri + np.where(valid_h2h & under_mask & (h2h_over >= 0.60), -0.03, 0.0)
 
-        # Edge last, with directional sign handling and capped influence
+        # Edge last, with directional sign handling:
+        # OVER: higher edge is better; UNDER: lower (more negative) edge is better.
         edge_adj = pd.Series(np.where(over_mask, edge, -edge), index=out.index)
-        edge_adj = pd.to_numeric(edge_adj, errors="coerce").fillna(0.0).clip(-0.30, 0.30) / 10.0
+        edge_adj = pd.to_numeric(edge_adj, errors="coerce").fillna(0.0).clip(-12.0, 12.0) / 40.0
         pri = pri + edge_adj
 
         # Explicitly deprioritize Demon as requested.
@@ -4903,11 +4914,22 @@ def merge_web_payloads_by_group(new_payload: dict[str, Any], old_payload: dict[s
     return merged
 
 
-def write_web_outputs(payload, outdir: str, *, require_positive_ev: bool = True, merge_existing_for_date: bool = False):
+def write_web_outputs(
+    payload,
+    outdir: str,
+    *,
+    require_positive_ev: bool = True,
+    merge_existing_for_date: bool = False,
+    apply_template_cap: bool = False,
+):
     """Write tickets_latest.json for /tickets; graded HTML is build_ticket_eval.py → ticket_eval_<date>.html."""
     os.makedirs(outdir, exist_ok=True)
     json_path = os.path.join(outdir, "tickets_latest.json")
-    payload = filter_web_tickets_for_ui(payload, require_positive_ev=require_positive_ev)
+    payload = filter_web_tickets_for_ui(
+        payload,
+        require_positive_ev=require_positive_ev,
+        apply_template_cap=apply_template_cap,
+    )
     if not require_positive_ev:
         print("  [web] EV gate OFF — JSON includes top slips per sport/leg-count (workbook pool, template caps)")
     if merge_existing_for_date and os.path.isfile(json_path):
@@ -6796,6 +6818,19 @@ def _edge_magnitude_series(df: pd.DataFrame) -> pd.Series:
     return pd.to_numeric(df.get("edge", np.nan), errors="coerce").abs()
 
 
+def _directional_edge_series(df: pd.DataFrame) -> pd.Series:
+    """
+    Direction-aware edge score where larger is better for both sides:
+    - OVER:  uses +edge
+    - UNDER: uses -edge
+    """
+    if df is None or len(df) == 0:
+        return pd.Series(dtype=float)
+    edge = pd.to_numeric(df.get("edge", np.nan), errors="coerce")
+    direction = df.get("direction", pd.Series("", index=df.index)).astype(str).str.upper().str.strip()
+    return pd.Series(np.where(direction.eq("UNDER"), -edge, edge), index=df.index)
+
+
 PROP_QUALITY_MIN_BY_SPORT: dict[str, float] = {
     "NBA": 0.58,
     "NBA1Q": 0.58,
@@ -6912,14 +6947,11 @@ def filter_eligible(
     l5_o = pd.to_numeric(df.get("l5_over"), errors="coerce").fillna(0)
     l5_u = pd.to_numeric(df.get("l5_under"), errors="coerce").fillna(0)
     strong_l5 = (l5_o >= 4) | (l5_u >= 4)
-    if min_hit_rate > 0 and "hit_rate" in df.columns:
-        hr_ok = df["hit_rate"].fillna(0) >= min_hit_rate
-        if allow_strong_l5_bypass:
-            mask &= hr_ok | strong_l5
-        else:
-            mask &= hr_ok
+    # Ticket creation now relies on directional L5 consistency rather than hit_rate.
+    # Keep min_hit_rate argument for compatibility, but do not hard-gate by it.
+    mask &= strong_l5
     if min_edge > 0:
-        mask &= _edge_magnitude_series(df).fillna(0) >= min_edge
+        mask &= _directional_edge_series(df).fillna(0) >= min_edge
     if min_rank is not None and "rank_score" in df.columns:
         mask &= df["rank_score"].fillna(-99) >= min_rank
     if tiers and "tier" in df.columns:
@@ -7045,24 +7077,16 @@ def build_single_structure_ticket(
     under_df = df[dirs == "UNDER"].copy()
 
     if flow == "standard":
-        # Standard: OVER + UNDER for NHL and Soccer; others remain OVER-first.
-        cand = (
-            pd.concat([over_df, under_df], ignore_index=True)
-            if sport_up in ("NHL", "SOCCER", "SOC")
-            else over_df.copy()
-        )
+        # Standard: allow both directions; directional edge ranking picks best side.
+        cand = pd.concat([over_df, under_df], ignore_index=True)
     elif flow == "power":
-        # Power: OVER only unless not enough OVER legs; NHL keeps UNDER candidates.
-        if sport_up == "NHL":
-            cand = pd.concat([over_df, under_df], ignore_index=True)
-        else:
-            cand = over_df if len(over_df) >= n_legs else pd.concat([over_df, under_df], ignore_index=True)
+        # Power: allow both directions; directional edge ranking picks best side.
+        cand = pd.concat([over_df, under_df], ignore_index=True)
     else:
-        # Flex: UNDER only for explicitly allowed props and strong hit-rate history.
+        # Flex: allow UNDER when directional L5 supports it.
         if not under_df.empty:
-            up = under_df["prop_type"].apply(_norm_prop_label)
-            uhr = pd.to_numeric(under_df.get("hit_rate", 0), errors="coerce").fillna(0.0)
-            under_df = under_df[(up.isin(UNDER_ALLOWED_PROPS)) & (uhr >= 0.65)].copy()
+            l5_u = pd.to_numeric(under_df.get("l5_under", 0), errors="coerce").fillna(0.0)
+            under_df = under_df[l5_u >= 4].copy()
         cand = pd.concat([over_df, under_df], ignore_index=True)
 
     if cand.empty:
@@ -7124,22 +7148,7 @@ def build_single_structure_ticket(
                 cand.loc[use, "hit_rate"] = proxy.loc[use]
                 print("  [TENNIS GATE TRACE] build_single_structure_ticket hit_rate proxy=blended_score applied")
 
-    if min_leg_hit_rate is not None and float(min_leg_hit_rate) > 0 and "hit_rate" in cand.columns:
-        thr = float(min_leg_hit_rate)
-        if sport_up == "MLB":
-            thr = max(thr, float(MLB_LEG_MIN_HIT_RATE.get(int(n_legs), thr)))
-        if sport_up == "NHL":
-            # NHL structured pool should use sport caps, not the global strict floor.
-            nhl_cap = NHL_LEG_MIN_HIT_RATE.get(int(n_legs))
-            thr = max(0.52, float(nhl_cap)) if nhl_cap is not None else max(0.52, thr)
-        if sport_up in ("SOCCER", "SOC"):
-            soc_cap = SOCCER_LEG_MIN_HIT_RATE.get(int(n_legs))
-            if soc_cap is not None:
-                thr = max(thr, float(soc_cap))
-        if sport_up == "TENNIS":
-            tn_cap = TENNIS_LEG_MIN_HIT_RATE.get(int(n_legs))
-            thr = max(0.50, float(tn_cap)) if tn_cap is not None else max(0.50, thr)
-        cand = cand[pd.to_numeric(cand["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
+    # No per-leg hit_rate floor in ticket construction.
     if cand.empty:
         return None
 
@@ -7156,16 +7165,16 @@ def build_single_structure_ticket(
         counters["total_eligible_count"] += int(len(cand))
 
     cand = _attach_ticket_pick_order(cand, ticket_sort_mode)
-    cand["__over_pref"] = cand.get("direction", "").astype(str).str.upper().eq("OVER").astype(int)
+    cand["__dir_edge"] = _directional_edge_series(cand).fillna(0.0)
     bonus = cand["prop_type"].apply(_prop_priority_bonus) if "prop_type" in cand.columns else 0.0
     cand["__score_adj"] = cand["__ts_pri"] + bonus
     if flow == "standard":
         cand = cand.sort_values(
-            ["__over_pref", "__ts_pri", "__ts_sec"], ascending=[False, False, False], na_position="last"
+            ["__dir_edge", "__ts_pri", "__ts_sec"], ascending=[False, False, False], na_position="last"
         )
     else:
         cand = cand.sort_values(
-            ["__over_pref", "__score_adj", "__ts_sec"], ascending=[False, False, False], na_position="last"
+            ["__dir_edge", "__score_adj", "__ts_sec"], ascending=[False, False, False], na_position="last"
         )
 
     tg_starts = max(1, int(ticket_gen_starts))
@@ -7269,21 +7278,13 @@ def build_structure_ticket_variants(
     under_df = df[dirs == "UNDER"].copy()
 
     if flow == "standard":
-        cand = (
-            pd.concat([over_df, under_df], ignore_index=True)
-            if sport_up in ("NHL", "SOCCER", "SOC")
-            else over_df.copy()
-        )
+        cand = pd.concat([over_df, under_df], ignore_index=True)
     elif flow == "power":
-        if sport_up == "NHL":
-            cand = pd.concat([over_df, under_df], ignore_index=True)
-        else:
-            cand = over_df if len(over_df) >= n_legs else pd.concat([over_df, under_df], ignore_index=True)
+        cand = pd.concat([over_df, under_df], ignore_index=True)
     else:
         if not under_df.empty:
-            up = under_df["prop_type"].apply(_norm_prop_label)
-            uhr = pd.to_numeric(under_df.get("hit_rate", 0), errors="coerce").fillna(0.0)
-            under_df = under_df[(up.isin(UNDER_ALLOWED_PROPS)) & (uhr >= 0.65)].copy()
+            l5_u = pd.to_numeric(under_df.get("l5_under", 0), errors="coerce").fillna(0.0)
+            under_df = under_df[l5_u >= 4].copy()
         cand = pd.concat([over_df, under_df], ignore_index=True)
 
     if cand.empty:
@@ -7337,21 +7338,7 @@ def build_structure_ticket_variants(
                 use = m0 & proxy.notna()
                 cand.loc[use, "hit_rate"] = proxy.loc[use]
 
-    if min_leg_hit_rate is not None and float(min_leg_hit_rate) > 0 and "hit_rate" in cand.columns:
-        thr = float(min_leg_hit_rate)
-        if sport_up == "MLB":
-            thr = max(thr, float(MLB_LEG_MIN_HIT_RATE.get(int(n_legs), thr)))
-        if sport_up == "NHL":
-            nhl_cap = NHL_LEG_MIN_HIT_RATE.get(int(n_legs))
-            thr = max(0.52, float(nhl_cap)) if nhl_cap is not None else max(0.52, thr)
-        if sport_up in ("SOCCER", "SOC"):
-            soc_cap = SOCCER_LEG_MIN_HIT_RATE.get(int(n_legs))
-            if soc_cap is not None:
-                thr = max(thr, float(soc_cap))
-        if sport_up == "TENNIS":
-            tn_cap = TENNIS_LEG_MIN_HIT_RATE.get(int(n_legs))
-            thr = max(0.50, float(tn_cap)) if tn_cap is not None else max(0.50, thr)
-        cand = cand[pd.to_numeric(cand["hit_rate"], errors="coerce").fillna(0) >= thr].copy()
+    # No per-leg hit_rate floor in ticket construction.
     if cand.empty:
         return []
 
@@ -7368,16 +7355,16 @@ def build_structure_ticket_variants(
         counters["total_eligible_count"] += int(len(cand))
 
     cand = _attach_ticket_pick_order(cand, ticket_sort_mode)
-    cand["__over_pref"] = cand.get("direction", "").astype(str).str.upper().eq("OVER").astype(int)
+    cand["__dir_edge"] = _directional_edge_series(cand).fillna(0.0)
     bonus = cand["prop_type"].apply(_prop_priority_bonus) if "prop_type" in cand.columns else 0.0
     cand["__score_adj"] = cand["__ts_pri"] + bonus
     if flow == "standard":
         cand = cand.sort_values(
-            ["__over_pref", "__ts_pri", "__ts_sec"], ascending=[False, False, False], na_position="last"
+            ["__dir_edge", "__ts_pri", "__ts_sec"], ascending=[False, False, False], na_position="last"
         )
     else:
         cand = cand.sort_values(
-            ["__over_pref", "__score_adj", "__ts_sec"], ascending=[False, False, False], na_position="last"
+            ["__dir_edge", "__score_adj", "__ts_sec"], ascending=[False, False, False], na_position="last"
         )
 
     tg_starts = max(1, int(ticket_gen_starts))
@@ -8011,10 +7998,11 @@ def build_final_web_ticket_groups(
                 na=False,
             )
             mask &= ~(sp.eq("MLB") & hs.str.startswith("BLENDED_N") & pitch_kw)
-        if min_hit_rate > 0 and "hit_rate" in df.columns:
-            mask &= df["hit_rate"].fillna(0) >= min_hit_rate
+        l5_o = pd.to_numeric(df.get("l5_over"), errors="coerce").fillna(0)
+        l5_u = pd.to_numeric(df.get("l5_under"), errors="coerce").fillna(0)
+        mask &= (l5_o >= 4) | (l5_u >= 4)
         if min_edge > 0:
-            mask &= _edge_magnitude_series(df).fillna(0) >= min_edge
+            mask &= _directional_edge_series(df).fillna(0) >= min_edge
         if min_rank is not None and "rank_score" in df.columns:
             mask &= df["rank_score"].fillna(-99) >= min_rank
         return df[mask].copy()
@@ -9408,8 +9396,16 @@ def main():
     ap.add_argument(
         "--no-diversity-prune",
         action="store_true",
+        default=True,
         dest="no_diversity_prune",
         help="Keep all generated ticket groups after dedupe (skip jaccard + diversity pruning).",
+    )
+    ap.add_argument(
+        "--web-template-cap",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        dest="web_template_cap",
+        help="Apply per-sport leg-count template quotas to /tickets JSON. Default off for full deduped coverage.",
     )
 
     args = ap.parse_args()
@@ -9982,12 +9978,7 @@ def main():
                 f"UNDER kept={_under_kept}/{_under_total} removed={_under_total - _under_kept}"
             )
 
-        # MLB: pitching props are OVER-only in ticket pools (reduce variance).
-        if sport == "MLB" and {"direction", "prop_type"}.issubset(filtered_df.columns):
-            _dir = filtered_df["direction"].astype(str).str.upper().str.strip()
-            _prop = filtered_df["prop_type"].apply(_norm_prop_label)
-            _pitch_under = _dir.eq("UNDER") & _prop.isin(MLB_PITCHING_OVER_ONLY_PROPS)
-            filtered_df = filtered_df[~_pitch_under].copy()
+        # MLB: allow both OVER and UNDER; directional edge + L5 consistency now controls selection.
 
         # Tennis: OVER only for Aces + Games Won; other props keep both directions.
         if sport == "TENNIS" and {"direction", "prop_type"}.issubset(filtered_df.columns):
@@ -10784,7 +10775,10 @@ def main():
             n_groups = len(payload["groups"])
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
             print(f"  Web payload: {n_groups} groups, {n_slips} slips (workbook — all sports).")
-            gated_preview = filter_positive_ev_tickets_payload(payload)
+            gated_preview = filter_positive_ev_tickets_payload(
+                payload,
+                apply_template_cap=bool(args.web_template_cap),
+            )
             print_positive_ev_gate_report(gated_preview)
         else:
             print("  WARNING: workbook produced 0 groups — falling back to FINAL builder.")
@@ -10836,7 +10830,10 @@ def main():
             n_groups = len(payload["groups"])
             n_slips = sum(len(g["tickets"]) for g in payload["groups"])
             print(f"  Web payload: {n_groups} groups, {n_slips} slips (FINAL fallback).")
-            gated_preview = filter_positive_ev_tickets_payload(payload)
+            gated_preview = filter_positive_ev_tickets_payload(
+                payload,
+                apply_template_cap=bool(args.web_template_cap),
+            )
             print_positive_ev_gate_report(gated_preview)
         _web_ev = not bool(args.no_web_ev_gate)
         write_web_outputs(
@@ -10844,6 +10841,7 @@ def main():
             args.web_outdir,
             require_positive_ev=_web_ev,
             merge_existing_for_date=bool(args.merge_web_latest),
+            apply_template_cap=bool(args.web_template_cap),
         )
         # nfl: pass None until combined loads NFL step8; keep key "nfl": [] in slate_latest.json for UI.
         nfl = None
@@ -10860,6 +10858,7 @@ def main():
                 outdir=".",
                 require_positive_ev=_web_ev,
                 merge_existing_for_date=bool(args.merge_web_latest),
+                apply_template_cap=bool(args.web_template_cap),
             )
         # Avoid Windows console codepage issues with unicode checkmarks.
         print("[OK] Web outputs complete.")
