@@ -1985,6 +1985,7 @@ MIN_WEB_DISPLAY_EST_WIN_PROB: float = 0.06
 
 # /tickets: hard floor for displayed/generated slip payout multipliers.
 MIN_WEB_PAYOUT_X: float = 3.0
+DEBUG_PAYOUT_DIAGNOSTIC: bool = os.getenv("PROPORACLE_DEBUG_PAYOUT", "false").lower() == "true"
 
 # /tickets page target volumes per sport after EV gate.
 WEB_TICKET_TEMPLATE_BY_LEGS: dict[int, int] = {
@@ -10680,6 +10681,7 @@ def main():
 
     _group_counts_by_size: dict[str, Counter[int]] = defaultdict(Counter)
     _zero_ticket_reasons: dict[str, str] = {}
+    _diag_24: list[dict[str, Any]] = []
 
     def _pick_norm(v: Any) -> str:
         return str(v or "").strip().upper()
@@ -10789,6 +10791,69 @@ def main():
             r["l5_under_raw"] = r.get("l5_under")
         return t
 
+    def _diagnose_2_4(group_prefix: str, sport_label: str, pool_df: pd.DataFrame, require_multi_sport: bool = False) -> None:
+        if not DEBUG_PAYOUT_DIAGNOSTIC:
+            return
+        for n_legs in (2, 3, 4):
+            entry: dict[str, Any] = {
+                "group_prefix": str(group_prefix),
+                "sport_label": str(sport_label),
+                "size": int(n_legs),
+                "attempted": False,
+                "reason": "",
+                "best_mode": "",
+                "best_payout": 0.0,
+                "power_payout": 0.0,
+                "flex_payout": 0.0,
+            }
+            if pool_df is None or len(pool_df) < n_legs:
+                entry["reason"] = f"insufficient_pool (pool={0 if pool_df is None else len(pool_df)})"
+                _diag_24.append(entry)
+                continue
+            rows = (
+                _select_cross_sport_unique_rows(pool_df, n_legs)
+                if require_multi_sport
+                else _select_top_unique_rows(pool_df, n_legs)
+            )
+            if len(rows) < n_legs:
+                entry["reason"] = "dedupe_collision"
+                _diag_24.append(entry)
+                continue
+            entry["attempted"] = True
+            t_power = _finalize_structure_ticket_dict(
+                rows,
+                "power",
+                sport_label,
+                "power",
+                len(rows),
+                None,
+                False,
+            )
+            t_flex = _finalize_structure_ticket_dict(
+                rows,
+                "flex",
+                sport_label,
+                "flex",
+                len(rows),
+                None,
+                False,
+            )
+            p_pow = float((t_power or {}).get("power_payout") or 0.0)
+            p_flex = float((t_flex or {}).get("flex_payout") or 0.0)
+            entry["power_payout"] = p_pow
+            entry["flex_payout"] = p_flex
+            if p_pow >= p_flex:
+                entry["best_mode"] = "power"
+                entry["best_payout"] = p_pow
+            else:
+                entry["best_mode"] = "flex"
+                entry["best_payout"] = p_flex
+            if (p_pow >= float(MIN_WEB_PAYOUT_X)) or (p_flex >= float(MIN_WEB_PAYOUT_X)):
+                entry["reason"] = "passes"
+            else:
+                entry["reason"] = "payout_below_3x"
+            _diag_24.append(entry)
+
     def _emit_groups_for_pool(group_prefix: str, sport_label: str, pool_df: pd.DataFrame, bg_hdr: str, require_multi_sport: bool = False) -> None:
         if pool_df is None or len(pool_df) < 2:
             return
@@ -10852,6 +10917,9 @@ def main():
             gob_pool = pd.DataFrame(columns=s_pool.columns)
         mix_pool = s_pool.copy()
         print(f"  [handoff] {sport_label} std={len(std_pool)} gob={len(gob_pool)} mix={len(mix_pool)}")
+        _diagnose_2_4(f"{sport_label} Standard", sport_label, std_pool)
+        _diagnose_2_4(f"{sport_label} Goblin", sport_label, gob_pool)
+        _diagnose_2_4(f"{sport_label} Mixed", sport_label, mix_pool)
         bg = _header_for_sport(sport_label)
         _emit_groups_for_pool(f"{sport_label} Standard", sport_label, std_pool, bg)
         _emit_groups_for_pool(f"{sport_label} Goblin", sport_label, gob_pool, bg)
@@ -10869,6 +10937,9 @@ def main():
         x_std = x_all[x_pt.eq("STANDARD")].copy()
         x_gob = x_all[x_pt.eq("GOBLIN")].copy()
         x_mix = x_all.copy()
+        _diagnose_2_4("X-Sport Standard", "MIX", x_std, require_multi_sport=True)
+        _diagnose_2_4("X-Sport Goblin", "MIX", x_gob, require_multi_sport=True)
+        _diagnose_2_4("X-Sport Mixed", "MIX", x_mix, require_multi_sport=True)
         _emit_groups_for_pool("X-Sport Standard", "MIX", x_std, C["hdr_mix"], require_multi_sport=True)
         _emit_groups_for_pool("X-Sport Goblin", "MIX", x_gob, C["hdr_mix"], require_multi_sport=True)
         _emit_groups_for_pool("X-Sport Mixed", "MIX", x_mix, C["hdr_mix"], require_multi_sport=True)
@@ -10885,6 +10956,26 @@ def main():
         print("\n[Zero-Ticket Sports]")
         for sname in sorted(_zero_ticket_reasons.keys()):
             print(f"  {sname}: {_zero_ticket_reasons[sname]}")
+    if DEBUG_PAYOUT_DIAGNOSTIC and _diag_24:
+        print("\n[2-4 LEG REJECT DIAGNOSTIC]")
+        for d in sorted(_diag_24, key=lambda x: (str(x.get("group_prefix", "")), int(x.get("size", 0)))):
+            gp = str(d.get("group_prefix", ""))
+            sz = int(d.get("size", 0))
+            attempted = bool(d.get("attempted", False))
+            reason = str(d.get("reason", ""))
+            mode = str(d.get("best_mode", ""))
+            best = float(d.get("best_payout", 0.0))
+            pp = float(d.get("power_payout", 0.0))
+            fp = float(d.get("flex_payout", 0.0))
+            if reason == "passes":
+                print(f"  {gp} {sz}-Leg: PASSES (attempted={attempted}, power={pp:.2f}x, flex={fp:.2f}x)")
+            elif reason == "payout_below_3x":
+                print(
+                    f"  {gp} {sz}-Leg: payout_below_3x "
+                    f"(attempted={attempted}, best={best:.2f}x {mode}, power={pp:.2f}x, flex={fp:.2f}x)"
+                )
+            else:
+                print(f"  {gp} {sz}-Leg: {reason} (attempted={attempted})")
 
     print("Writing slate sheets...")
     # Strict-mode guardrail: fail if mixed dates survived filtering.
