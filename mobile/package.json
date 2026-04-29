@@ -1,9 +1,11 @@
 {
   "name": "proporacle-mobile",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Capacitor shell: by default loads bundled mobile/www in the APK; optional remote URL via PROPORACLE_SERVER_URL + sync:remote.",
   "scripts": {
+    "bundle:www": "cd .. && python scripts/generate_mobile_bundle.py",
+    "bundle:android": "npm run bundle:www && npm run sync:bundle",
     "cap": "cap",
     "copy": "cap copy",
     "copy:android": "cap copy android",
