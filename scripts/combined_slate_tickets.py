@@ -7773,11 +7773,11 @@ def apply_full_slate_signal_columns(df: pd.DataFrame) -> pd.DataFrame:
     if df is None or df.empty:
         return df
     out = df.copy()
-
-    def _one(row: pd.Series) -> pd.Series:
-        return pd.Series(excel_signal_columns_from_leg(row.to_dict()))
-
-    sig = out.apply(_one, axis=1)
+    # Avoid DataFrame.apply(axis=1): it materializes a Series per row and is very slow here (~3k+ legs).
+    sig = pd.DataFrame(
+        (excel_signal_columns_from_leg(r) for r in out.to_dict(orient="records")),
+        index=out.index,
+    )
     return pd.concat([out, sig], axis=1)
 
 
@@ -9614,6 +9614,15 @@ def main():
         help="Write tickets_latest.json for web/Railway (graded HTML via build_ticket_eval.py)",
     )
     ap.add_argument(
+        "--long-leg-supplement",
+        action="store_true",
+        help=(
+            "After slate sheets, run build_final_web_ticket_groups for leg sizes 4–6 (adds extra Excel sheets). "
+            "Very slow on large pools; main ticket emission already includes 4–6 leg groups for JSON. "
+            "Default: skipped when --write-web is set; always runs when building workbook without --write-web."
+        ),
+    )
+    ap.add_argument(
         "--no-web-ev-gate",
         action="store_true",
         dest="no_web_ev_gate",
@@ -11151,7 +11160,10 @@ def main():
     _prio_hit = False
     _ticket_sort = "edge"
     long_leg_sizes = [n for n in leg_sizes_runtime if n >= 4]
-    if long_leg_sizes:
+    _run_long_leg_supplement = bool(long_leg_sizes) and (
+        bool(getattr(args, "long_leg_supplement", False)) or not bool(args.write_web)
+    )
+    if _run_long_leg_supplement:
         nhl_lg = pool(nhl) if nhl is not None and len(nhl) > 0 else None
         soc_lg = pool(soccer) if soccer is not None and len(soccer) > 0 else None
         ten_lg = pool(tennis) if tennis is not None and len(tennis) > 0 else None
@@ -11179,6 +11191,11 @@ def main():
             write_ticket_sheet(wb, tix, sname, C["hdr_sum"], label=display)
             all_ticket_groups.append((display, tix, _bg))
         print(f"  [long-legs] added {len(final_long)} long-leg sheet(s) for leg sizes {long_leg_sizes}")
+    elif long_leg_sizes and bool(args.write_web):
+        print(
+            f"  [long-legs] skipped (--write-web default; main emission already has 4–6 leg tickets). "
+            f"Pass --long-leg-supplement to add the slow extra workbook pass for sizes {long_leg_sizes}."
+        )
 
     _pre_slips = sum(len(t[1]) for t in all_ticket_groups)
     _lc_groups_pre: Counter[int] = Counter()
@@ -12019,6 +12036,86 @@ def _tickets_generator_filter_html(filters: dict) -> str:
 </div>'''
 
 
+def _group_max_ev_for_ui_cap(group: dict) -> float:
+    best = float("-inf")
+    for t in group.get("tickets") or []:
+        if not isinstance(t, dict):
+            continue
+        for key in ("ev_power", "est_ev"):
+            v = t.get(key)
+            if v is None:
+                continue
+            try:
+                vf = float(v)
+                if math.isfinite(vf):
+                    best = max(best, vf)
+            except (TypeError, ValueError):
+                pass
+        p = t.get("payout")
+        if isinstance(p, dict) and p.get("ev") is not None:
+            try:
+                vf = float(p["ev"])
+                if math.isfinite(vf):
+                    best = max(best, vf)
+            except (TypeError, ValueError):
+                pass
+    return float(best) if math.isfinite(best) else 0.0
+
+
+def _parse_ui_group_bucket(group_name: str) -> tuple[str, str, int] | None:
+    """Return (sport_key, Standard|Goblin|Mixed, n_legs) for exhaustive group names."""
+    gn = (group_name or "").strip()
+    m = re.match(r"^(.+?)\s+(Standard|Goblin|Mixed)\s+(\d+)-Leg", gn, flags=re.I)
+    if not m:
+        return None
+    sport_raw = m.group(1).strip()
+    pool = str(m.group(2) or "").strip().title()
+    n = int(m.group(3))
+    su = sport_raw.upper()
+    sport_key = "X-Sport" if su.startswith("X-SPORT") else sport_raw.upper()
+    return (sport_key, pool, n)
+
+
+def _cap_ticket_groups_for_ui(groups: list, max_per_bucket: int) -> tuple[list, int, int]:
+    """
+    Keep the top ``max_per_bucket`` groups per (sport, pick-type bucket, n_legs) by max slip EV.
+    Groups that do not match the name pattern are kept. Full JSON is unchanged; this is HTML-only.
+    """
+    if max_per_bucket <= 0 or not groups:
+        return list(groups), len(groups), len(groups)
+    buckets: dict[tuple[str, str, int], list[tuple[float, int, dict]]] = defaultdict(list)
+    unbucketed: list[dict] = []
+    for i, g in enumerate(groups):
+        if not isinstance(g, dict):
+            continue
+        gn = str(g.get("group_name") or "")
+        b = _parse_ui_group_bucket(gn)
+        ev = _group_max_ev_for_ui_cap(g)
+        if b is None:
+            unbucketed.append(g)
+            continue
+        buckets[b].append((ev, i, g))
+    out: list[dict] = []
+    for _b, items in buckets.items():
+        items.sort(key=lambda x: (-x[0], x[1]))
+        out.extend([t[2] for t in items[:max_per_bucket]])
+    out.extend(unbucketed)
+
+    def _orig_order(g: dict) -> int:
+        try:
+            return groups.index(g)
+        except ValueError:
+            return 0
+
+    out.sort(
+        key=lambda g: (
+            _ticket_group_sort_rank(str(g.get("group_name") or "")),
+            _orig_order(g),
+        )
+    )
+    return out, len(groups), len(out)
+
+
 def render_tickets_body_html(
     payload: dict,
     *,
@@ -12039,7 +12136,24 @@ def render_tickets_body_html(
     date_declared_raw = (payload.get("date") or "").strip()
     date_declared = date_declared_raw[:10] if len(date_declared_raw) >= 10 else date_declared_raw
     generated_at = payload.get("generated_at") or ""
-    groups = payload.get("groups") or []
+    groups_all = list(payload.get("groups") or [])
+    _ui_cap_raw = os.getenv("PROPORACLE_TICKETS_UI_MAX_GROUPS_PER_BUCKET", "10").strip()
+    try:
+        _ui_cap = int(_ui_cap_raw) if _ui_cap_raw else 0
+    except ValueError:
+        _ui_cap = 10
+    _ui_cap_note = ""
+    if _ui_cap > 0:
+        groups, _n_g_full, _n_g_show = _cap_ticket_groups_for_ui(groups_all, _ui_cap)
+        if _n_g_show < _n_g_full:
+            _ui_cap_note = (
+                f' &nbsp;·&nbsp; <span style="opacity:.85;font-size:12px;">Showing {_n_g_show} of {_n_g_full} groups '
+                f"(top {_ui_cap} per sport / pick-type / size by EV; full list in "
+                f'<a href="/tickets_latest.json" style="color:var(--cyan);">JSON</a> '
+                f"or set PROPORACLE_TICKETS_UI_MAX_GROUPS_PER_BUCKET=0)</span>"
+            )
+    else:
+        groups = groups_all
     n_slips = sum(len(g.get("tickets") or []) for g in groups)
     n_groups = len(groups)
 
@@ -12083,7 +12197,7 @@ def render_tickets_body_html(
             return None
         return max(counts.items(), key=lambda kv: (kv[1], kv[0]))[0]
 
-    date_from_legs = _modal_slate_date_from_legs(payload)
+    date_from_legs = _modal_slate_date_from_legs({**payload, "groups": groups_all})
     # Header date should reflect the pipeline target date (file date),
     # not the surviving leg subset date after sport-specific fallbacks.
     date_str = date_declared or date_from_legs or "Today"
@@ -12110,6 +12224,7 @@ def render_tickets_body_html(
         )
     else:
         counts_line = f"{n_groups} groups &nbsp;·&nbsp; {n_slips} slips"
+    counts_line += _ui_cap_note
     parts.append(f'''
 <div class="hero tickets-hero" style="margin-bottom:24px;">
   <div class="hero-copy">
