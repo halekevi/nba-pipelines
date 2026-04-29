@@ -6922,18 +6922,28 @@ def _directional_edge_series(df: pd.DataFrame) -> pd.Series:
     return pd.Series(np.where(direction.eq("UNDER"), -edge, edge), index=df.index)
 
 
-PROP_QUALITY_MIN_BY_SPORT: dict[str, float] = {
-    "NBA": 0.60,
-    "NBA1Q": 0.60,
-    "NBA1H": 0.60,
-    "CBB": 0.60,
-    "WCBB": 0.60,
-    "MLB": 0.35,
-    "NHL": 0.35,
-    "SOCCER": 0.35,
-    "SOC": 0.35,
-    "TENNIS": 0.35,
+PROP_QUALITY_MIN_BY_SPORT: dict[str, dict[str, float] | float] = {
+    "NBA": {"over": 0.60, "under": 0.35},
+    "NBA1Q": {"over": 0.60, "under": 0.35},
+    "NBA1H": {"over": 0.60, "under": 0.35},
+    "CBB": {"over": 0.60, "under": 0.35},
+    "WCBB": {"over": 0.60, "under": 0.35},
+    "MLB": {"over": 0.35, "under": 0.35},
+    "NHL": {"over": 0.35, "under": 0.35},
+    "SOCCER": {"over": 0.35, "under": 0.35},
+    "SOC": {"over": 0.35, "under": 0.35},
+    "TENNIS": {"over": 0.35, "under": 0.35},
 }
+
+
+def _prop_quality_floor_over_under(sport: str) -> tuple[float, float]:
+    spec = PROP_QUALITY_MIN_BY_SPORT.get(str(sport).strip().upper(), 0.58)
+    if isinstance(spec, dict):
+        o = float(spec.get("over", 0.58))
+        u = float(spec.get("under", spec.get("over", 0.58)))
+        return o, u
+    fv = float(spec)
+    return fv, fv
 
 
 def _prop_quality_min_threshold_series(df: pd.DataFrame, min_prop_quality: float) -> pd.Series:
@@ -6942,8 +6952,13 @@ def _prop_quality_min_threshold_series(df: pd.DataFrame, min_prop_quality: float
     if min_prop_quality >= 0:
         return pd.Series(float(min_prop_quality), index=df.index)
     sp = df.get("sport", pd.Series("", index=df.index)).astype(str).str.upper().str.strip()
-    th = sp.map(PROP_QUALITY_MIN_BY_SPORT).fillna(0.58)
-    return pd.to_numeric(th, errors="coerce").fillna(0.58)
+    d = df.get("direction", pd.Series("", index=df.index)).astype(str).str.upper().str.strip()
+    is_under = d.isin({"UNDER", "LOWER"})
+    over_map = {k: _prop_quality_floor_over_under(k)[0] for k in sp.unique()}
+    under_map = {k: _prop_quality_floor_over_under(k)[1] for k in sp.unique()}
+    ov_th = sp.map(over_map).fillna(0.58)
+    un_th = sp.map(under_map).fillna(0.58)
+    return pd.Series(np.where(is_under, un_th, ov_th), index=df.index, dtype=float)
 
 
 def add_prop_quality_score(df: pd.DataFrame) -> pd.DataFrame:
@@ -6951,6 +6966,11 @@ def add_prop_quality_score(df: pd.DataFrame) -> pd.DataFrame:
     if df is None or len(df) == 0:
         return df
     out = df.copy()
+
+    direction_u = (
+        out.get("direction", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
+    )
+    is_under_side = direction_u.isin({"UNDER", "LOWER"})
 
     hr = pd.to_numeric(out.get("hit_rate"), errors="coerce")
     hr = hr.apply(_to_prob_0_1)
@@ -6960,9 +6980,12 @@ def add_prop_quality_score(df: pd.DataFrame) -> pd.DataFrame:
     l5_side = np.maximum(l5o, l5u)
     l5_side_rate = np.clip(l5_side / 5.0, 0.0, 1.0)
     hr = hr.fillna(pd.Series(l5_side_rate, index=out.index))
+    # Direction-aware: sheet hit_rate is OVER-side rate; UNDER legs use implied under-side rate.
+    hr_eff = pd.Series(np.where(is_under_side, 1.0 - hr, hr), index=out.index).clip(0.0, 1.0)
+    out["effective_hit_rate"] = hr_eff
 
-    edge = _edge_magnitude_series(out).fillna(0.0)
-    edge_norm = np.clip(edge / 15.0, 0.0, 1.0)
+    edge_dir = _directional_edge_series(out).fillna(0.0)
+    edge_norm = np.clip(np.abs(edge_dir) / 15.0, 0.0, 1.0)
 
     rs = pd.to_numeric(out.get("rank_score"), errors="coerce")
     rank_prob = rs.apply(lambda x: _rank_score_to_prob(float(x)) if pd.notna(x) else np.nan).fillna(0.5)
@@ -6973,7 +6996,7 @@ def add_prop_quality_score(df: pd.DataFrame) -> pd.DataFrame:
     tier_norm = tier_raw.map({"A": 1.00, "B": 0.86, "C": 0.70, "D": 0.45}).fillna(0.55)
 
     score = (
-        0.33 * hr
+        0.33 * hr_eff
         + 0.22 * edge_norm
         + 0.20 * rank_prob
         + 0.15 * sample_strength
@@ -7189,7 +7212,8 @@ def filter_eligible(
         _apply_gate(pq >= pq_min, "prop_quality_below_floor", "after_prop_quality")
     out = df[mask].copy()
     if len(out) > 0:
-        edge_s = pd.to_numeric(out.get("edge"), errors="coerce").fillna(-1e9)
+        out["effective_edge"] = _directional_edge_series(out)
+        edge_s = pd.to_numeric(out["effective_edge"], errors="coerce").fillna(-1e9)
         win_s = pd.to_numeric(out.get("win_probability"), errors="coerce")
         if not isinstance(win_s, pd.Series):
             win_s = pd.Series([np.nan] * len(out), index=out.index)
@@ -10330,7 +10354,7 @@ def main():
         if pooled is not None and len(pooled) > 0 and "prop_quality_score" in pooled.columns:
             pq = pd.to_numeric(pooled["prop_quality_score"], errors="coerce")
             avg_pq = float(pq.mean()) if pq.notna().any() else float("nan")
-            sport_pq_floor = float(PROP_QUALITY_MIN_BY_SPORT.get(sport, 0.58))
+            sport_pq_floor, _ = _prop_quality_floor_over_under(str(sport))
             active_floor = float(args.min_prop_quality) if float(args.min_prop_quality) >= 0 else sport_pq_floor
             print(f"         quality: avg_pq={avg_pq:.3f} floor={active_floor:.2f}")
         if sport in ("NHL", "SOCCER") and demon_candidates is not None and demon_passed is not None:
@@ -10854,38 +10878,100 @@ def main():
                 entry["reason"] = "payout_below_3x"
             _diag_24.append(entry)
 
+    def _multi_sport_fix_indices(work: pd.DataFrame, sel_idx: list[int], used: set[int]) -> list[int] | None:
+        """If selection is single-sport, try swapping the last leg for an unused other-sport row."""
+        if len(sel_idx) < 2:
+            return sel_idx
+        rows = [work.iloc[i] for i in sel_idx]
+        sports = {str(r.get("sport", "")).strip().upper() for r in rows if str(r.get("sport", "")).strip()}
+        if len(sports) >= 2:
+            return sel_idx
+        base_sport = str(rows[0].get("sport", "")).strip().upper()
+        # Replacement must use a player not already on the ticket (same as _select_cross_sport_unique_rows).
+        players = {str(r.get("player", "")).strip().lower() for r in rows}
+        player_props = {
+            f"{str(r.get('player', '')).strip().lower()}::{_norm_prop_label(r.get('prop_type', ''))}"
+            for r in rows
+        }
+        for j in range(len(work)):
+            if j in used or j in sel_idx:
+                continue
+            row = work.iloc[j]
+            sp = str(row.get("sport", "")).strip().upper()
+            if not sp or sp == base_sport:
+                continue
+            p = str(row.get("player", "")).strip().lower()
+            if not p or p in players:
+                continue
+            pp = f"{p}::{_norm_prop_label(row.get('prop_type', ''))}"
+            if pp in player_props:
+                continue
+            return sel_idx[:-1] + [j]
+        return None
+
     def _emit_groups_for_pool(group_prefix: str, sport_label: str, pool_df: pd.DataFrame, bg_hdr: str, require_multi_sport: bool = False) -> None:
+        """Exhaust the pool: repeated greedy N-leg tickets (unique player + unique player+prop), edge order."""
         if pool_df is None or len(pool_df) < 2:
             return
-        max_n = min(int(len(pool_df)), 6)
+        work = pool_df.reset_index(drop=True)
+        max_n = min(int(len(work)), 6)
         for n_legs in range(2, max_n + 1):
-            rows = (
-                _select_cross_sport_unique_rows(pool_df, n_legs)
-                if require_multi_sport
-                else _select_top_unique_rows(pool_df, n_legs)
-            )
-            if len(rows) < n_legs:
-                continue
-            tickets = []
-            p_ticket = _build_mode_ticket(rows, sport_label, "power")
-            if p_ticket is not None:
-                tickets.append(p_ticket)
-            f_ticket = _build_mode_ticket(rows, sport_label, "flex")
-            if f_ticket is not None:
-                tickets.append(f_ticket)
-            if not tickets:
-                continue
-            display = f"{group_prefix} {n_legs}-Leg"
-            sname = _excel_ticket_sheet_title_unique(display, wb.sheetnames)
-            write_ticket_sheet(wb, tickets, sname, bg_hdr, label=display)
-            all_ticket_groups.append((display, tickets, None))
-            _group_counts_by_size[group_prefix][n_legs] += 1
-            print(
-                f"  {display}: {len(tickets)} ticket(s) | "
-                f"Power {float(tickets[0].get('power_payout') or 0.0):.2f}x / "
-                f"Flex {float(tickets[0].get('flex_payout') or 0.0):.2f}x | "
-                f"EV {str(tickets[0].get('ev_tag', ''))}"
-            )
+            used: set[int] = set()
+            ticket_num = 0
+            while True:
+                sel_idx: list[int] = []
+                players: set[str] = set()
+                player_props: set[str] = set()
+                for i in range(len(work)):
+                    if i in used:
+                        continue
+                    row = work.iloc[i]
+                    p = str(row.get("player", "")).strip().lower()
+                    if not p or p in players:
+                        continue
+                    pp = f"{p}::{_norm_prop_label(row.get('prop_type', ''))}"
+                    if pp in player_props:
+                        continue
+                    sel_idx.append(i)
+                    players.add(p)
+                    player_props.add(pp)
+                    if len(sel_idx) >= n_legs:
+                        break
+                if len(sel_idx) < n_legs:
+                    break
+                if require_multi_sport:
+                    fixed = _multi_sport_fix_indices(work, sel_idx, used)
+                    if fixed is None:
+                        for i in sel_idx:
+                            used.add(i)
+                        continue
+                    sel_idx = fixed
+                rows = [work.iloc[i].to_dict() for i in sel_idx]
+                tickets: list[dict] = []
+                p_ticket = _build_mode_ticket(rows, sport_label, "power")
+                if p_ticket is not None:
+                    tickets.append(p_ticket)
+                f_ticket = _build_mode_ticket(rows, sport_label, "flex")
+                if f_ticket is not None:
+                    tickets.append(f_ticket)
+                if not tickets:
+                    for i in sel_idx:
+                        used.add(i)
+                    continue
+                ticket_num += 1
+                display = f"{group_prefix} {n_legs}-Leg #{ticket_num}"
+                sname = _excel_ticket_sheet_title_unique(display, wb.sheetnames)
+                write_ticket_sheet(wb, tickets, sname, bg_hdr, label=display)
+                all_ticket_groups.append((display, tickets, None))
+                _group_counts_by_size[group_prefix][n_legs] += 1
+                print(
+                    f"  {display}: {len(tickets)} slip(s) | "
+                    f"Power {float(tickets[0].get('power_payout') or 0.0):.2f}x / "
+                    f"Flex {float(tickets[0].get('flex_payout') or 0.0):.2f}x | "
+                    f"EV {str(tickets[0].get('ev_tag', ''))}"
+                )
+                for i in sel_idx:
+                    used.add(i)
 
     sport_pool_map: list[tuple[str, pd.DataFrame | None]] = [
         ("NBA", nba_pool),
@@ -10952,6 +11038,28 @@ def main():
             print(f"  {gname}: {dict(sorted(_group_counts_by_size[gname].items()))}")
     else:
         print("  (no ticket groups generated)")
+    print("\n[Exhaustive: prop-type mix across emitted ticket legs]")
+    _leg_props_by_sport: dict[str, Counter[str]] = defaultdict(Counter)
+    _leg_props_all: Counter[str] = Counter()
+    for _gname, _tickets, _ in all_ticket_groups:
+        _sk = _group_sport(str(_gname)) or "ALL"
+        for _t in _tickets:
+            _legs = list(_t.get("legs") or _t.get("rows") or [])
+            for _leg in _legs:
+                if not isinstance(_leg, dict):
+                    continue
+                _pt = str(_leg.get("prop_type") or "").strip()
+                if _pt:
+                    _leg_props_by_sport[_sk][_pt] += 1
+                    _leg_props_all[_pt] += 1
+    if _leg_props_all:
+        for _sk in sorted(_leg_props_by_sport.keys()):
+            _top = _leg_props_by_sport[_sk].most_common(12)
+            _n_dist = len(_leg_props_by_sport[_sk])
+            print(f"  {_sk}: {_n_dist} prop types | top {dict(_top)}")
+        print(f"  ALL sports: {len(_leg_props_all)} distinct | top {dict(_leg_props_all.most_common(15))}")
+    else:
+        print("  (no legs to summarize)")
     if _zero_ticket_reasons:
         print("\n[Zero-Ticket Sports]")
         for sname in sorted(_zero_ticket_reasons.keys()):
@@ -11481,6 +11589,8 @@ def _group_sport(group_name: str) -> str:
     if "NBA/CBB" in name or "NBA+CBB" in name or "NBA-CBB" in name:
         return "CROSS"
     if name.startswith("CROSS") or name.startswith("MIX"):
+        return "CROSS"
+    if name.startswith("X-SPORT") or "X-SPORT" in name:
         return "CROSS"
     for sp in ("NBA1Q", "NBA1H", "WCBB", "TENNIS", "SOCCER", "NHL", "MLB", "CBB", "NBA"):
         if sp in name:
