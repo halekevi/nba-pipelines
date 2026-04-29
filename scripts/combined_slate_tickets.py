@@ -2247,6 +2247,19 @@ NHL_LEG_MIN_HIT_RATE = {
 # Soccer OVER legs have materially weaker realized performance; require stronger edge or drop.
 # TODO: confirm 0.60 vs 0.65 once post-fix Soccer graded sample grows.
 SOCCER_OVER_MIN_EDGE = 0.60
+
+DIRECTIONAL_HR_THRESHOLDS: dict[str, dict[str, float]] = {
+    "NBA": {"over": 0.70, "under": 0.30},
+    "NBA1Q": {"over": 0.65, "under": 0.35},
+    "NBA1H": {"over": 0.65, "under": 0.35},
+    "NHL": {"over": 0.65, "under": 0.35},
+    "MLB": {"over": 0.60, "under": 0.40},
+    "TENNIS": {"over": 0.60, "under": 0.40},
+    "SOCCER": {"over": 0.60, "under": 0.40},
+    "CBB": {"over": 0.65, "under": 0.35},
+    "WCBB": {"over": 0.65, "under": 0.35},
+}
+DEFAULT_DIRECTIONAL_THRESHOLD: dict[str, float] = {"over": 0.65, "under": 0.35}
 MLB_MAX_LEGS = 4
 MLB_PITCHING_OVER_ONLY_PROPS = {"strikeouts", "hits allowed"}
 
@@ -7019,17 +7032,11 @@ class FunnelTracker:
     def __init__(self) -> None:
         self.stage_order: list[str] = [
             "input",
-            "after_min_sample",
             "after_prop_ban",
             "after_fantasy_score",
-            "after_projection_line",
-            "after_mlb_thin_sample",
-            "after_mlb_blended_pitcher",
-            "after_l5_directional",
-            "after_edge",
-            "after_rank",
-            "after_tier",
+            "after_directional_l5_hr",
             "after_pick_type",
+            "after_void_reason",
             "after_prop_quality",
         ]
         self.stages: list[str] = []
@@ -7051,6 +7058,10 @@ class FunnelTracker:
         n_all = int(len(df))
         self.snapshots[label]["ALL"] += n_all
         if n_all == 0:
+            key = str(default_sport).strip().upper() if str(default_sport).strip() else "ALL"
+            # Preserve explicit 0 checkpoint so funnel reports true stage drop to zero
+            # instead of carrying forward prior-stage counts for this sport.
+            self.snapshots[label][key] = int(self.snapshots[label].get(key, 0))
             return
         if sport_col in df.columns:
             for sport, grp in df.groupby(sport_col, dropna=False):
@@ -7112,6 +7123,32 @@ def filter_eligible(
     funnel_tracker: FunnelTracker | None = None,
     discard_sport: str = "",
 ):
+    def apply_directional_l5_hr(
+        in_df: pd.DataFrame,
+        thresholds: dict[str, dict[str, float]],
+        default: dict[str, float],
+    ) -> pd.DataFrame:
+        if in_df is None or len(in_df) == 0:
+            return pd.DataFrame(columns=getattr(in_df, "columns", []))
+        result: list[pd.DataFrame] = []
+        sport_series = in_df.get("sport", pd.Series([""] * len(in_df), index=in_df.index)).astype(str).str.upper().str.strip()
+        for sport, grp in in_df.groupby(sport_series):
+            t = thresholds.get(str(sport).upper(), default)
+            l5_over = pd.to_numeric(grp.get("l5_over"), errors="coerce").fillna(0)
+            l5_under = pd.to_numeric(grp.get("l5_under"), errors="coerce").fillna(0)
+            hit_rate = pd.to_numeric(grp.get("hit_rate"), errors="coerce")
+            dir_s = grp.get("direction", pd.Series([""] * len(grp), index=grp.index)).astype(str).str.upper().str.strip()
+            over_dir = dir_s.isin({"OVER", "HIGHER"})
+            under_dir = dir_s.isin({"UNDER", "LOWER"})
+            over_pass = over_dir & (l5_over >= 4) & (hit_rate >= float(t.get("over", default["over"])))
+            under_pass = under_dir & (l5_under >= 4) & (hit_rate <= float(t.get("under", default["under"])))
+            passed = grp[over_pass | under_pass]
+            if len(passed) > 0:
+                result.append(passed)
+        if not result:
+            return in_df.iloc[0:0].copy()
+        return pd.concat(result, axis=0)
+
     df = add_prop_quality_score(df)
     mask = pd.Series([True] * len(df), index=df.index)
     sport_hint = str(discard_sport or "").strip().upper() or "ALL"
@@ -7131,87 +7168,44 @@ def filter_eligible(
         if funnel_tracker is not None:
             funnel_tracker.checkpoint_df(stage, df[mask], default_sport=sport_hint)
 
-    MIN_SAMPLE_FOR_TICKET = 4
-    if "l5_games" in df.columns:
-        _apply_gate(
-            pd.to_numeric(df["l5_games"], errors="coerce").fillna(0) >= MIN_SAMPLE_FOR_TICKET,
-            "min_sample_fail",
-            "after_min_sample",
-        )
-    elif "sample_n" in df.columns:
-        _apply_gate(
-            pd.to_numeric(df["sample_n"], errors="coerce").fillna(0) >= MIN_SAMPLE_FOR_TICKET,
-            "min_sample_fail",
-            "after_min_sample",
-        )
     if "prop_type" in df.columns:
         prop_norm = df["prop_type"].apply(_norm_prop_label)
         _apply_gate(~prop_norm.isin(TICKET_EXCLUDED_PROPS), "prop_banned", "after_prop_ban")
     _apply_gate(~_fantasy_prop_mask(df), "fantasy_score_excluded", "after_fantasy_score")
-    # Only hard-exclude rows that truly cannot be ticketed.
+    before_dir = df[mask].copy()
+    after_dir = apply_directional_l5_hr(before_dir, DIRECTIONAL_HR_THRESHOLDS, DEFAULT_DIRECTIONAL_THRESHOLD)
+    dir_cond = pd.Series(df.index.isin(after_dir.index), index=df.index)
+    _apply_gate(dir_cond, "directional_l5_hr_fail", "after_directional_l5_hr")
+    if pick_types and "pick_type" in df.columns:
+        _apply_gate(df["pick_type"].isin(pick_types), "pick_type_not_allowed", "after_pick_type")
     if "void_reason" in df.columns:
         vs = df["void_reason"]
         void_str = vs.astype(str).str.strip()
-        _apply_gate(~void_str.eq("NO_PROJECTION_OR_LINE"), "no_projection_or_line", "after_projection_line")
-    # MLB reliability gate: keep thin-sample props in slate visibility, but do not
-    # ticket inflated rows explicitly tagged by step5 (e.g., THIN_SAMPLE_5g_raw_100%).
-    if "sport" in df.columns and "reliability_note" in df.columns:
-        sp = df["sport"].astype(str).str.upper().str.strip()
-        rel = df["reliability_note"].astype(str).str.upper()
-        thin_inflated = sp.eq("MLB") & rel.str.contains("THIN_SAMPLE_", na=False)
-        _apply_gate(~thin_inflated, "mlb_thin_sample_reliability", "after_mlb_thin_sample")
-    # MLB: thin-sample blended pitcher props are allowed in slate views but excluded
-    # from ticket pools to avoid overconfident long-leg construction.
-    if {"sport", "hit_rate_status", "prop_type"}.issubset(df.columns):
-        sp = df["sport"].astype(str).str.upper().str.strip()
-        hs = df["hit_rate_status"].astype(str).str.upper()
-        pp = df["prop_type"].astype(str).str.lower()
-        pitch_kw = pp.str.contains(
-            "strikeout|pitching out|earned run|walks allowed|hits allowed|pitches thrown|innings",
-            regex=True,
-            na=False,
-        )
-        _apply_gate(
-            ~(sp.eq("MLB") & hs.str.startswith("BLENDED_N") & pitch_kw),
-            "mlb_blended_pitcher_excluded",
-            "after_mlb_blended_pitcher",
-        )
-    l5_o = pd.to_numeric(df.get("l5_over"), errors="coerce").fillna(0)
-    l5_u = pd.to_numeric(df.get("l5_under"), errors="coerce").fillna(0)
-    strong_l5 = (l5_o >= 4) | (l5_u >= 4)
-    # Ticket creation now relies on directional L5 consistency rather than hit_rate.
-    # Keep min_hit_rate argument for compatibility, but do not hard-gate by it.
-    _apply_gate(strong_l5, "l5_directional_fail", "after_l5_directional")
-    if min_edge > 0:
-        _apply_gate(_directional_edge_series(df).fillna(0) >= min_edge, "edge_below_min", "after_edge")
-    if min_rank is not None and "rank_score" in df.columns:
-        _apply_gate(df["rank_score"].fillna(-99) >= min_rank, "rank_below_min", "after_rank")
-    if tiers and "tier" in df.columns:
-        tier_set = {str(t).upper() for t in tiers}
-        tier_s = df["tier"].astype(str).str.upper().str.strip()
-        tier_ok = tier_s.isin(tier_set)
-        # Attempt props can pass Tier-D exclusion if they satisfy hit-rate/edge gates.
-        if "D" not in tier_set and "prop_type" in df.columns:
-            attempt_ok = _is_attempt_prop_series(df["prop_type"])
-            tier_ok = tier_ok | ((tier_s == "D") & attempt_ok)
-        killed_tier = df[mask & ~tier_ok].copy()
-        _apply_gate(tier_ok, "tier_excluded", "after_tier")
-        if len(killed_tier) > 0 and {"direction", "tier"}.issubset(killed_tier.columns):
-            print(f"\n[TIER GATE] dropped rows - direction x tier ({sport_hint}):")
-            tier_xtab = pd.crosstab(
-                killed_tier["direction"].astype(str).str.upper().str.strip(),
-                killed_tier["tier"].astype(str).str.upper().str.strip(),
-                dropna=False,
-            )
-            if len(tier_xtab) > 0:
-                print(tier_xtab.to_string())
-    if pick_types and "pick_type" in df.columns:
-        _apply_gate(df["pick_type"].isin(pick_types), "pick_type_not_allowed", "after_pick_type")
+        _apply_gate(~void_str.eq("NO_PROJECTION_OR_LINE"), "no_projection_or_line", "after_void_reason")
     if "prop_quality_score" in df.columns:
         pq = pd.to_numeric(df["prop_quality_score"], errors="coerce").fillna(0.0)
         pq_min = _prop_quality_min_threshold_series(df, float(min_prop_quality))
         _apply_gate(pq >= pq_min, "prop_quality_below_floor", "after_prop_quality")
-    return df[mask].copy()
+    out = df[mask].copy()
+    if len(out) > 0:
+        edge_s = pd.to_numeric(out.get("edge"), errors="coerce").fillna(-1e9)
+        win_s = pd.to_numeric(out.get("win_probability"), errors="coerce")
+        if not isinstance(win_s, pd.Series):
+            win_s = pd.Series([np.nan] * len(out), index=out.index)
+        if not win_s.notna().any():
+            win_s = pd.to_numeric(out.get("ml_prob"), errors="coerce")
+            if not isinstance(win_s, pd.Series):
+                win_s = pd.Series([np.nan] * len(out), index=out.index)
+        if not win_s.notna().any():
+            win_s = pd.to_numeric(out.get("hit_rate"), errors="coerce")
+            if not isinstance(win_s, pd.Series):
+                win_s = pd.Series([np.nan] * len(out), index=out.index)
+        win_s = win_s.fillna(0.0)
+        out = out.assign(_edge_sort=edge_s, _win_sort=win_s).sort_values(
+            ["_edge_sort", "_win_sort"], ascending=[False, False]
+        )
+        out = out.drop(columns=["_edge_sort", "_win_sort"], errors="ignore")
+    return out
 
 
 # Per-sport ticket structures: n_legs, pick pool (goblin vs standard), and
@@ -9866,23 +9860,25 @@ def main():
             wcbb = None
 
     mlb = None
-    if args.mlb:
+    mlb_path = str(args.mlb or "").strip() or (DEFAULT_MLB_PATH if os.path.exists(DEFAULT_MLB_PATH) else "")
+    if mlb_path:
         try:
-            mlb = load_mlb(args.mlb)
+            mlb = load_mlb(mlb_path)
             mlb = enforce_target_date(
                 mlb, "MLB", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
             )
             mlb = attach_standard_refs(mlb)
             print(f"  {len(mlb)} MLB props loaded")
-            _load_audit_row("MLB", args.mlb, mlb)
+            _load_audit_row("MLB", mlb_path, mlb)
         except Exception as e:
             print(f"  WARNING: Could not load MLB file: {e}")
             mlb = None
 
     nba1q = None
-    if args.nba1q:
+    nba1q_path = str(args.nba1q or "").strip() or (DEFAULT_NBA1Q_PATH if os.path.exists(DEFAULT_NBA1Q_PATH) else "")
+    if nba1q_path:
         try:
-            nba1q = load_nba1q(args.nba1q)
+            nba1q = load_nba1q(nba1q_path)
             nba1q = attach_standard_refs(nba1q)
             print(f"  {len(nba1q)} NBA1Q props loaded")
         except Exception as e:
@@ -9890,9 +9886,10 @@ def main():
             nba1q = None
 
     nba1h = None
-    if args.nba1h:
+    nba1h_path = str(args.nba1h or "").strip() or (DEFAULT_NBA1H_PATH if os.path.exists(DEFAULT_NBA1H_PATH) else "")
+    if nba1h_path:
         try:
-            nba1h = load_nba1h(args.nba1h)
+            nba1h = load_nba1h(nba1h_path)
             nba1h = attach_standard_refs(nba1h)
             print(f"  {len(nba1h)} NBA1H props loaded")
         except Exception as e:
@@ -10115,6 +10112,18 @@ def main():
             m_nhl, nhl_sog_ex_n, nhl_fc_ex_n, nhl_leg_ex_n = _nhl_ticket_pool_exclusion_mask(filtered_df)
             filtered_df = filtered_df[~(m_mlb | m_nhl)].copy()
             filtered_df, rel_ex_n = _apply_reliability_pool_filter(filtered_df, reliability_index)
+        # Normalize pick types for assembly compatibility.
+        # Some sheets provide blank/variant labels; treat unknowns as Standard so
+        # post-filter survivors can still participate in ticket building.
+        if "pick_type" in filtered_df.columns:
+            _pt_u = filtered_df["pick_type"].astype(str).str.strip().str.upper()
+            filtered_df["pick_type"] = np.where(
+                _pt_u.eq("GOBLIN"),
+                "Goblin",
+                np.where(_pt_u.eq("DEMON"), "Demon", "Standard"),
+            )
+        else:
+            filtered_df["pick_type"] = "Standard"
         if mlb_ex_n:
             print(f"  [pool] Excluded {mlb_ex_n} MLB legs (home_runs/stolen_bases)")
         if rel_ex_n:
@@ -10284,10 +10293,7 @@ def main():
             effective_pick_types = pt
         else:
             effective_pick_types = list(pick_types if pick_types else ["Goblin", "Standard"])
-            if sport in ("NHL", "SOCCER") and "Demon" not in effective_pick_types:
-                effective_pick_types.append("Demon")
-            if sport not in ("NHL", "SOCCER"):
-                effective_pick_types = [p for p in effective_pick_types if p != "Demon"]
+        effective_pick_types = [p for p in effective_pick_types if str(p).strip().lower() in {"goblin", "standard"}]
 
         use_funnel = (pt is None) and (sport not in funnel_seen_sports)
         pooled = filter_eligible(
@@ -10672,152 +10678,179 @@ def main():
             print(f"  WARNING: {sport_label} Goblin 3-Leg unavailable (strict filters).")
             generated_tickets.setdefault(sport_label, {})["goblin3"] = None
 
-    _prio_hit = bool(args.prioritize_ticket_hit)
-    _ticket_sort = str(args.ticket_candidate_sort)
-    _tg_starts = int(args.ticket_gen_starts)
-    add_structured_sport_tickets(
-        pool(nba),
-        "NBA",
-        C["hdr_nba"],
-        "NBA",
-        min_leg_hit_rate=structured_min_leg_hr,
-        prioritize_ticket_hit=_prio_hit,
-        ticket_sort_mode=_ticket_sort,
-        ticket_gen_starts=_tg_starts,
-        ticket_variant_count=int(args.nba_structured_variants),
-    )
-    add_structured_sport_tickets(
-        pool(cbb),
-        "CBB",
-        C["hdr_cbb"],
-        "CBB",
-        min_leg_hit_rate=structured_min_leg_hr,
-        prioritize_ticket_hit=_prio_hit,
-        ticket_sort_mode=_ticket_sort,
-        ticket_gen_starts=_tg_starts,
-    )
-    if nhl is not None and len(nhl) > 0:
-        add_structured_sport_tickets(
-            pool(nhl),
-            "NHL",
-            C["hdr_nhl"],
-            "NHL",
-            min_leg_hit_rate=nhl_structured_min_leg_hr,
-            prioritize_ticket_hit=_prio_hit,
-            ticket_sort_mode=_ticket_sort,
-            ticket_gen_starts=_tg_starts,
-        )
-    if soccer is not None and len(soccer) > 0:
-        add_structured_sport_tickets(
-            pool(soccer),
-            "Soccer",
-            C["hdr_soccer"],
-            "Soccer",
-            min_leg_hit_rate=structured_min_leg_hr,
-            prioritize_ticket_hit=_prio_hit,
-            ticket_sort_mode=_ticket_sort,
-            ticket_gen_starts=_tg_starts,
-        )
-    if tennis is not None and len(tennis) > 0:
-        add_structured_sport_tickets(
-            pool(tennis),
-            "Tennis",
-            C["hdr_tennis"],
-            "Tennis",
-            min_leg_hit_rate=tennis_structured_min_leg_hr,
-            prioritize_ticket_hit=_prio_hit,
-            ticket_sort_mode=_ticket_sort,
-            ticket_gen_starts=_tg_starts,
-        )
-    if mlb is not None and len(mlb) > 0:
-        add_structured_sport_tickets(
-            mlb_pool,
-            "MLB",
-            C["hdr_mlb"],
-            "MLB",
-            min_leg_hit_rate=structured_min_leg_hr,
-            prioritize_ticket_hit=_prio_hit,
-            ticket_sort_mode=_ticket_sort,
-            ticket_gen_starts=_tg_starts,
-        )
-    if nba1q is not None and len(nba1q) > 0:
-        add_structured_sport_tickets(
-            pool(nba1q),
-            "NBA1Q",
-            C["hdr_nba1q"],
-            "NBA1Q",
-            min_leg_hit_rate=structured_min_leg_hr,
-            prioritize_ticket_hit=_prio_hit,
-            ticket_sort_mode=_ticket_sort,
-            ticket_gen_starts=_tg_starts,
-        )
-    if nba1h is not None and len(nba1h) > 0:
-        add_structured_sport_tickets(
-            pool(nba1h),
-            "NBA1H",
-            C["hdr_nba1h"],
-            "NBA1H",
-            min_leg_hit_rate=structured_min_leg_hr,
-            prioritize_ticket_hit=_prio_hit,
-            ticket_sort_mode=_ticket_sort,
-            ticket_gen_starts=_tg_starts,
-        )
+    _group_counts_by_size: dict[str, Counter[int]] = defaultdict(Counter)
+    _zero_ticket_reasons: dict[str, str] = {}
 
-    _cross_pools = [
+    def _pick_norm(v: Any) -> str:
+        return str(v or "").strip().upper()
+
+    def _header_for_sport(sport_label: str) -> str:
+        sm = {
+            "NBA": C["hdr_nba"],
+            "CBB": C["hdr_cbb"],
+            "NHL": C["hdr_nhl"],
+            "SOCCER": C["hdr_soccer"],
+            "TENNIS": C["hdr_tennis"],
+            "MLB": C["hdr_mlb"],
+            "NBA1Q": C["hdr_nba1q"],
+            "NBA1H": C["hdr_nba1h"],
+            "WCBB": C["hdr_wcbb"],
+        }
+        return sm.get(str(sport_label).upper(), C["hdr_sum"])
+
+    def _select_top_unique_rows(pool_df: pd.DataFrame, n_legs: int) -> list[dict]:
+        chosen: list[dict] = []
+        players: set[str] = set()
+        player_props: set[str] = set()
+        for _, row in pool_df.iterrows():
+            rd = row.to_dict()
+            p = str(rd.get("player", "")).strip().lower()
+            if not p or p in players:
+                continue
+            pp = f"{p}::{_norm_prop_label(rd.get('prop_type', ''))}"
+            if pp in player_props:
+                continue
+            chosen.append(rd)
+            players.add(p)
+            player_props.add(pp)
+            if len(chosen) >= int(n_legs):
+                break
+        return chosen if len(chosen) == int(n_legs) else []
+
+    def _ev_tag(ticket: dict) -> str:
+        ev_mult = float(ticket.get("ev_power") or 0.0)
+        if ev_mult >= 1.50:
+            return "STRONG"
+        if ev_mult >= 1.15:
+            return "OK"
+        if ev_mult >= 0.80:
+            return "MARGINAL"
+        return "SKIP"
+
+    def _build_mode_ticket(rows: list[dict], sport_label: str, mode: str) -> dict | None:
+        flow = "flex" if mode == "flex" else "power"
+        structure = "flex" if mode == "flex" else "power"
+        t = _finalize_structure_ticket_dict(
+            rows,
+            structure,
+            sport_label,
+            flow,
+            len(rows),
+            None,
+            False,
+        )
+        if t is None:
+            return None
+        if mode == "power" and float(t.get("power_payout") or 0.0) < float(MIN_WEB_PAYOUT_X):
+            return None
+        if mode == "flex" and float(t.get("flex_payout") or 0.0) < float(MIN_WEB_PAYOUT_X):
+            return None
+        t["ticket_type"] = "Flex" if mode == "flex" else "Power Play"
+        t["ev_tag"] = _ev_tag(t)
+        for r in t.get("rows", []):
+            wp, _ = _resolve_leg_prob(pd.Series(r))
+            r["win_probability"] = round(float(wp), 4)
+            r["hit_rate_raw"] = r.get("hit_rate")
+            r["l5_over_raw"] = r.get("l5_over")
+            r["l5_under_raw"] = r.get("l5_under")
+        return t
+
+    def _emit_groups_for_pool(group_prefix: str, sport_label: str, pool_df: pd.DataFrame, bg_hdr: str, require_multi_sport: bool = False) -> None:
+        if pool_df is None or len(pool_df) < 2:
+            return
+        max_n = min(int(len(pool_df)), 6)
+        for n_legs in range(2, max_n + 1):
+            rows = _select_top_unique_rows(pool_df, n_legs)
+            if len(rows) < n_legs:
+                continue
+            if require_multi_sport:
+                sports = {str(r.get("sport", "")).strip().upper() for r in rows if str(r.get("sport", "")).strip()}
+                if len(sports) < 2:
+                    continue
+            tickets = []
+            p_ticket = _build_mode_ticket(rows, sport_label, "power")
+            if p_ticket is not None:
+                tickets.append(p_ticket)
+            f_ticket = _build_mode_ticket(rows, sport_label, "flex")
+            if f_ticket is not None:
+                tickets.append(f_ticket)
+            if not tickets:
+                continue
+            display = f"{group_prefix} {n_legs}-Leg"
+            sname = _excel_ticket_sheet_title_unique(display, wb.sheetnames)
+            write_ticket_sheet(wb, tickets, sname, bg_hdr, label=display)
+            all_ticket_groups.append((display, tickets, None))
+            _group_counts_by_size[group_prefix][n_legs] += 1
+            print(
+                f"  {display}: {len(tickets)} ticket(s) | "
+                f"Power {float(tickets[0].get('power_payout') or 0.0):.2f}x / "
+                f"Flex {float(tickets[0].get('flex_payout') or 0.0):.2f}x | "
+                f"EV {str(tickets[0].get('ev_tag', ''))}"
+            )
+
+    sport_pool_map: list[tuple[str, pd.DataFrame | None]] = [
         ("NBA", nba_pool),
         ("CBB", cbb_pool),
-        ("WCBB", pool(wcbb) if wcbb is not None and len(wcbb) > 0 else None),
         ("NHL", pool(nhl) if nhl is not None and len(nhl) > 0 else None),
-        ("Soccer", pool(soccer) if soccer is not None and len(soccer) > 0 else None),
-        ("Tennis", pool(tennis) if tennis is not None and len(tennis) > 0 else None),
+        ("SOCCER", pool(soccer) if soccer is not None and len(soccer) > 0 else None),
+        ("TENNIS", pool(tennis) if tennis is not None and len(tennis) > 0 else None),
         ("MLB", mlb_pool),
         ("NBA1Q", pool(nba1q) if nba1q is not None and len(nba1q) > 0 else None),
         ("NBA1H", pool(nba1h) if nba1h is not None and len(nba1h) > 0 else None),
+        ("WCBB", pool(wcbb) if wcbb is not None and len(wcbb) > 0 else None),
     ]
-    cross_bundle = build_cross_pipeline_ticket_bundle(
-        _cross_pools,
-        max_legs=CROSS_PIPELINE_MAX_LEGS,
-        ticket_sort_mode=_ticket_sort,
-        player_ticket_counts=counters["player_ticket_counts"],
-    )
-    mix_keys = ("cross_pipeline_standard", "cross_pipeline_goblin", "cross_pipeline_mix")
-    generated_tickets.setdefault("MIX", {})
-    for k in mix_keys:
-        generated_tickets["MIX"][k] = None
+    sports_to_build = [s for s, _ in sport_pool_map]
+    eligible_sports = [s for s, df_ in sport_pool_map if df_ is not None and len(df_) > 0]
+    print(f"  [handoff] sports in eligible pool: {eligible_sports}")
+    print(f"  [handoff] sports in assembly loop: {sports_to_build}")
 
-    def _mix_key_for_cross_ticket(ticket: dict) -> str:
-        ttype = str(ticket.get("ticket_type", ""))
-        if ttype == "Cross-Pipeline Standard":
-            return "cross_pipeline_standard"
-        if ttype == "Cross-Pipeline Goblin":
-            return "cross_pipeline_goblin"
-        return "cross_pipeline_mix"
+    for sport_label, sdf in sport_pool_map:
+        if sdf is None or len(sdf) == 0:
+            _zero_ticket_reasons[sport_label] = "empty eligible pool"
+            continue
+        s_pool = sdf.copy()
+        if "pick_type" in s_pool.columns:
+            pt = s_pool["pick_type"].astype(str).str.upper().str.strip()
+            std_pool = s_pool[pt.eq("STANDARD")].copy()
+            gob_pool = s_pool[pt.eq("GOBLIN")].copy()
+        else:
+            std_pool = pd.DataFrame(columns=s_pool.columns)
+            gob_pool = pd.DataFrame(columns=s_pool.columns)
+        mix_pool = s_pool.copy()
+        print(f"  [handoff] {sport_label} std={len(std_pool)} gob={len(gob_pool)} mix={len(mix_pool)}")
+        bg = _header_for_sport(sport_label)
+        _emit_groups_for_pool(f"{sport_label} Standard", sport_label, std_pool, bg)
+        _emit_groups_for_pool(f"{sport_label} Goblin", sport_label, gob_pool, bg)
+        _emit_groups_for_pool(f"{sport_label} Mixed", sport_label, mix_pool, bg)
+        made = sum(_group_counts_by_size.get(f"{sport_label} Standard", Counter()).values()) + sum(
+            _group_counts_by_size.get(f"{sport_label} Goblin", Counter()).values()
+        ) + sum(_group_counts_by_size.get(f"{sport_label} Mixed", Counter()).values())
+        if made == 0:
+            _zero_ticket_reasons[sport_label] = "no 2-6 leg ticket passed uniqueness/payout constraints"
 
-    if cross_bundle:
-        for display, cross_ticket in cross_bundle:
-            xs = _excel_ticket_sheet_title_unique(display, wb.sheetnames)
-            write_ticket_sheet(
-                wb,
-                [cross_ticket],
-                xs,
-                C["hdr_mix"],
-                label=str(cross_ticket.get("ticket_type", "Cross-Pipeline")),
-            )
-            all_ticket_groups.append((display, [cross_ticket], None))
-            print(
-                f"  {display}: 1 ticket ({cross_ticket['n_legs']} legs, max {CROSS_PIPELINE_MAX_LEGS})"
-            )
-            gk = _mix_key_for_cross_ticket(cross_ticket)
-            generated_tickets["MIX"][gk] = {
-                "legs": [
-                    f"{x.get('sport', '')}:{x.get('player', '')} {x.get('prop_type', '')}"
-                    for x in cross_ticket.get("rows", [])
-                ]
-            }
+    x_frames = [df for _, df in sport_pool_map if df is not None and len(df) > 0]
+    if x_frames:
+        x_all = pd.concat(x_frames, ignore_index=True)
+        x_pt = x_all["pick_type"].astype(str).str.upper().str.strip() if "pick_type" in x_all.columns else pd.Series([""] * len(x_all))
+        x_std = x_all[x_pt.eq("STANDARD")].copy()
+        x_gob = x_all[x_pt.eq("GOBLIN")].copy()
+        x_mix = x_all.copy()
+        _emit_groups_for_pool("X-Sport Standard", "MIX", x_std, C["hdr_mix"], require_multi_sport=True)
+        _emit_groups_for_pool("X-Sport Goblin", "MIX", x_gob, C["hdr_mix"], require_multi_sport=True)
+        _emit_groups_for_pool("X-Sport Mixed", "MIX", x_mix, C["hdr_mix"], require_multi_sport=True)
     else:
-        print(
-            "  WARNING: Cross-pipeline tickets skipped (need ≥2 pipelines with eligible props per slip)."
-        )
+        _zero_ticket_reasons["X-SPORT"] = "no eligible rows for cross-sport pool"
+
+    print("\n[Ticket Group Counts]")
+    if _group_counts_by_size:
+        for gname in sorted(_group_counts_by_size.keys()):
+            print(f"  {gname}: {dict(sorted(_group_counts_by_size[gname].items()))}")
+    else:
+        print("  (no ticket groups generated)")
+    if _zero_ticket_reasons:
+        print("\n[Zero-Ticket Sports]")
+        for sname in sorted(_zero_ticket_reasons.keys()):
+            print(f"  {sname}: {_zero_ticket_reasons[sname]}")
 
     print("Writing slate sheets...")
     # Strict-mode guardrail: fail if mixed dates survived filtering.
@@ -10882,6 +10915,8 @@ def main():
     if nba1h is not None and len(nba1h) > 0:
         write_slate_sheet(wb, nba1h, "NBA1H Slate", C["hdr_nba1h"], "NBA1H")
 
+    _prio_hit = False
+    _ticket_sort = "edge"
     long_leg_sizes = [n for n in leg_sizes_runtime if n >= 4]
     if long_leg_sizes:
         nhl_lg = pool(nhl) if nhl is not None and len(nhl) > 0 else None
