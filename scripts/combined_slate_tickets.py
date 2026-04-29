@@ -924,12 +924,24 @@ def _ticket_passes_positive_ev_gate(ticket: dict) -> bool:
     return False
 
 
-def _ticket_meets_min_web_payout(ticket: dict) -> bool:
-    """Require all known payout multipliers to be >= MIN_WEB_PAYOUT_X."""
+def _ticket_meets_min_web_payout(ticket: dict, *, group_name: str = "") -> bool:
+    """Require selected ticket-mode payout multipliers to be >= MIN_WEB_PAYOUT_X."""
     payout_vals: list[float] = []
     pay = ticket.get("payout")
+    mode = ""
     if isinstance(pay, dict):
-        for k in ("sweep_payout_x", "sweep_payout", "min_payout_x", "payout"):
+        mode = str(pay.get("ticket_type") or pay.get("entry_type") or "").strip().lower()
+    if mode not in {"power", "flex"}:
+        gn = str(group_name or "").strip().lower()
+        mode = "flex" if "flex" in gn else "power"
+
+    if isinstance(pay, dict):
+        pay_keys = (
+            ("min_payout_x", "payout")
+            if mode == "flex"
+            else ("sweep_payout_x", "sweep_payout", "min_payout_x", "payout")
+        )
+        for k in pay_keys:
             v = pay.get(k)
             if v is None:
                 continue
@@ -939,7 +951,12 @@ def _ticket_meets_min_web_payout(ticket: dict) -> bool:
                     payout_vals.append(vf)
             except (TypeError, ValueError):
                 pass
-    for k in ("power_payout", "flex_payout", "base_power_payout"):
+    ticket_keys = (
+        ("flex_payout",)
+        if mode == "flex"
+        else ("power_payout", "base_power_payout")
+    )
+    for k in ticket_keys:
         v = ticket.get(k)
         if v is None:
             continue
@@ -1074,10 +1091,14 @@ def filter_web_tickets_for_ui(
                 for t in tickets_in
                 if isinstance(t, dict)
                 and _ticket_passes_positive_ev_gate(t)
-                and _ticket_meets_min_web_payout(t)
+                and _ticket_meets_min_web_payout(t, group_name=str(g.get("group_name") or ""))
             ]
         else:
-            kept = [t for t in tickets_in if isinstance(t, dict) and _ticket_meets_min_web_payout(t)]
+            kept = [
+                t
+                for t in tickets_in
+                if isinstance(t, dict) and _ticket_meets_min_web_payout(t, group_name=str(g.get("group_name") or ""))
+            ]
         if not kept:
             continue
         ng = dict(g)
