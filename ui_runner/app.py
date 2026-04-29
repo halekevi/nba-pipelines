@@ -61,6 +61,7 @@ if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))  # monorepo bootstrap until `pip install -e .`
 
 from utils.prop_reconcile import reconcile_props_history_dict
+from scripts.payout_leg_resolver import PayoutLegResolver
 
 UI_DIR        = Path(__file__).resolve().parent         # all UI assets live here (ui_runner/)
 CONFIG_PATH   = UI_DIR / "commands.json"
@@ -92,6 +93,7 @@ PAYOUT_SAMPLES_DIR = DATA_ROOT / "payout_samples"
 PAYOUT_LOG_PATH = PAYOUT_SAMPLES_DIR / "payout_log_hand.csv"
 PAYOUT_OBS_PATH = DATA_ROOT / "payout_observations.csv"
 PAYOUT_LADDER_LOG_PATH = UI_DIR / "data" / "payout_ladder_log.csv"
+PAYOUT_TICKET_LEGS_PATH = UI_DIR / "data" / "payout_ticket_legs.csv"
 PAYOUT_LADDER_EXAMPLES_PATH = UI_DIR / "data" / "payout_ladder_examples.json"
 
 # Pipeline output paths (used by status + slate endpoints)
@@ -119,6 +121,8 @@ MLB_TICKETS   = MLB_DIR / "mlb_best_tickets.xlsx"
 TENNIS_DIR    = BASE_DIR / "Tennis"
 # Same pattern as Soccer/MLB: run_daily.ps1 copies outputs → sport root for Railway.
 TENNIS_SLATE  = TENNIS_DIR / "step8_tennis_direction_clean.xlsx"
+WNBA_DIR      = BASE_DIR / "WNBA"
+WNBA_SLATE    = WNBA_DIR / "step8_wnba_direction.xlsx"
 NFL_DIR       = BASE_DIR / "NFL"
 # NFL step8 target: same convention as NHL — sport folder + outputs/ (not repo-root outputs/).
 # Pipeline should write: NFL/outputs/step8_nfl_direction_clean.xlsx
@@ -753,8 +757,39 @@ _SLATE_SPORT_UI_KEYS = frozenset(
         "l5_over",
         "l5_under",
         "game_time",
+        "sport",
     }
 )
+
+
+def _merged_combined_slim_rows(payload: dict) -> list[dict[str, Any]]:
+    """All sports from slate_latest (or ticket_eval when selected), Full Slate–style merge for COMBINED."""
+    sports = (payload or {}).get("sports") or {}
+    out: list[dict[str, Any]] = []
+    for k, v in sports.items():
+        sk = str(k).strip().lower()
+        if sk == "combined":
+            continue
+        if not isinstance(v, list):
+            continue
+        for r in v:
+            if not isinstance(r, dict):
+                continue
+            slim = _slim_slate_sport_row(r)
+            if "sport" not in slim:
+                lab = str(r.get("sport") or "").strip().upper()
+                slim["sport"] = lab or sk.upper()
+            out.append(slim)
+
+    def _rank(x: dict[str, Any]) -> float:
+        v = x.get("rank_score")
+        try:
+            return float(v) if v is not None else float("-inf")
+        except (TypeError, ValueError):
+            return float("-inf")
+
+    out.sort(key=_rank, reverse=True)
+    return out
 
 
 def _slim_slate_sport_cell(key: str, v: Any) -> Any:
@@ -1091,6 +1126,63 @@ _PAYOUT_LADDER_FIELDS = [
     "source",
     "notes",
 ]
+
+_PAYOUT_TICKET_LEG_FIELDS = [
+    "date",
+    "ticket_id",
+    "slip_type",
+    "stake",
+    "payout_to_win",
+    "power_payout_x",
+    "sport",
+    "leg_slot",
+    "player",
+    "prop",
+    "line",
+    "direction",
+    "pick_type",
+    "source",
+    "notes",
+    "delta_quality",
+    "matched_snapshot_path",
+    "matched_standard_line",
+    "delta_method",
+    "delta",
+]
+
+_PAYOUT_LEG_RESOLVER: PayoutLegResolver | None = None
+
+
+def _get_payout_leg_resolver() -> PayoutLegResolver:
+    global _PAYOUT_LEG_RESOLVER
+    if _PAYOUT_LEG_RESOLVER is None:
+        _PAYOUT_LEG_RESOLVER = PayoutLegResolver(BASE_DIR)
+    return _PAYOUT_LEG_RESOLVER
+
+
+def _append_csv_with_schema_upgrade(path: Path, fieldnames: list[str], row: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if not path.exists():
+        with path.open("w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=fieldnames)
+            w.writeheader()
+            w.writerow({k: row.get(k, "") for k in fieldnames})
+        return
+
+    existing_rows: list[dict[str, Any]] = []
+    existing_fields: list[str] = []
+    with path.open("r", newline="", encoding="utf-8") as f:
+        rdr = csv.DictReader(f)
+        existing_fields = list(rdr.fieldnames or [])
+        for r in rdr:
+            existing_rows.append(dict(r))
+    merged_fields = list(dict.fromkeys(existing_fields + fieldnames))
+    existing_rows.append({k: row.get(k, "") for k in merged_fields})
+    with path.open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=merged_fields)
+        w.writeheader()
+        for r in existing_rows:
+            w.writerow({k: r.get(k, "") for k in merged_fields})
 
 
 def _safe_float(v: Any, default: float = 0.0) -> float:
@@ -1630,8 +1722,58 @@ def api_payout_log_save():
         if not exists:
             w.writeheader()
         w.writerow(row)
+    # Per-leg payout lineage logging (additive/backward compatible).
+    date_str = row["date"]
+    ticket_id = str(body.get("ticket_id") or f"pp_{date_str}_{uuid.uuid4().hex[:8]}").strip()
+    slip_type = str(body.get("slip_type") or "power").strip().lower()
+    sport_hint = str(body.get("sport") or "NHL").strip() or "NHL"
+    resolver = _get_payout_leg_resolver()
+    resolved_legs: list[dict[str, Any]] = []
+    for i, leg in enumerate(legs, start=1):
+        leg_sport = str(leg.get("sport") or sport_hint).strip() or sport_hint
+        line_val = _safe_num_or_none(leg.get("line"))
+        res = resolver.resolve_leg(
+            date=date_str,
+            sport=leg_sport,
+            player=str(leg.get("player") or ""),
+            prop=str(leg.get("prop_type") or leg.get("prop") or ""),
+            direction=str(leg.get("direction") or ""),
+            played_line=line_val,
+            pick_type=str(leg.get("pick_type") or "Standard"),
+        )
+        if line_val is not None and _normalize_leg_pick_type(leg.get("pick_type")) in {"Goblin", "Demon"}:
+            cur_delta = _safe_num_or_none(leg.get("delta"))
+            if (cur_delta is None or cur_delta <= 0) and _safe_num_or_none(res.get("delta")) is not None:
+                leg["delta"] = res.get("delta")
+        leg_row = {
+            "date": date_str,
+            "ticket_id": ticket_id,
+            "slip_type": slip_type,
+            "stake": str(body.get("entry_amount") or body.get("stake") or "").strip(),
+            "payout_to_win": str(body.get("payout_to_win") or "").strip(),
+            "power_payout_x": row.get("power_payout_x", ""),
+            "sport": leg_sport,
+            "leg_slot": str(i),
+            "player": str(leg.get("player") or "").strip(),
+            "prop": str(leg.get("prop_type") or leg.get("prop") or "").strip(),
+            "line": "" if line_val is None else str(line_val),
+            "direction": str(leg.get("direction") or "").strip().upper(),
+            "pick_type": _normalize_leg_pick_type(leg.get("pick_type")),
+            "source": row.get("source", ""),
+            "notes": row.get("notes", ""),
+            "delta_quality": str(res.get("delta_quality") or ""),
+            "matched_snapshot_path": str(res.get("matched_snapshot_path") or ""),
+            "matched_standard_line": (
+                "" if _safe_num_or_none(res.get("matched_standard_line")) is None else str(res.get("matched_standard_line"))
+            ),
+            "delta_method": str(res.get("delta_method") or ""),
+            "delta": "" if _safe_num_or_none(leg.get("delta")) is None else str(_safe_num_or_none(leg.get("delta"))),
+        }
+        _append_csv_with_schema_upgrade(PAYOUT_TICKET_LEGS_PATH, _PAYOUT_TICKET_LEG_FIELDS, leg_row)
+        resolved_legs.append(leg_row)
+
     total = len(_read_payout_ladder_rows())
-    return jsonify({"ok": True, "saved": row, "total_rows": total})
+    return jsonify({"ok": True, "saved": row, "total_rows": total, "ticket_id": ticket_id, "legs_resolved": resolved_legs})
 
 
 @app.get("/payout/ladder")
@@ -2641,6 +2783,12 @@ def api_pipeline_status():
         TENNIS_SLATE,
         TENNIS_DIR / "outputs" / "step8_tennis_direction_clean.xlsx",
     )
+    wnba_slate_p = _resolve_outputs_artifact(
+        days,
+        "step8_wnba_direction_{d}.xlsx",
+        WNBA_SLATE,
+        WNBA_DIR / "step8_wnba_direction.xlsx",
+    )
     nfl_slate_p = _resolve_outputs_artifact(
         days,
         "step8_nfl_direction_clean_{d}.xlsx",
@@ -2708,6 +2856,9 @@ def api_pipeline_status():
         },
         "tennis": {
             "slate": _sport_slate_status(tennis_slate_p, "tennis", slate_counts, slate_disk_info, status_js_ts, card_disp),
+        },
+        "wnba": {
+            "slate": _sport_slate_status(wnba_slate_p, "wnba", slate_counts, slate_disk_info, status_js_ts, card_disp),
         },
         "nfl": {
             "slate": _sport_slate_status(nfl_slate_p, "nfl", slate_counts, slate_disk_info, status_js_ts, card_disp),
@@ -3670,6 +3821,36 @@ def api_slate():
     tickets_path = TEMPLATES_DIR / "tickets_latest.json"
 
     def _build_picks():
+        slate_history_map: dict[tuple[str, str, str, str], tuple[list[float], list[float]]] = {}
+        if _template_json_available("slate_latest.json"):
+            try:
+                slate_data = read_json_cached(TEMPLATES_DIR / "slate_latest.json")
+                sports = (slate_data or {}).get("sports") or {}
+                if isinstance(sports, dict):
+                    for raw_sport, rows in sports.items():
+                        if not isinstance(rows, list):
+                            continue
+                        sport_norm = str(raw_sport or "").strip().upper()
+                        for row in rows:
+                            if not isinstance(row, dict):
+                                continue
+                            player_norm = str(row.get("player") or "").strip().lower()
+                            prop_norm = str(row.get("prop") or row.get("prop_type") or "").strip().lower()
+                            dir_norm = str(row.get("dir") or row.get("direction") or "OVER").strip().upper()
+                            line_val = row.get("line")
+                            try:
+                                line_norm = f"{float(line_val):.3f}"
+                            except (TypeError, ValueError):
+                                line_norm = str(line_val or "").strip()
+                            key = (sport_norm, player_norm, prop_norm, f"{dir_norm}|{line_norm}")
+                            if key in slate_history_map:
+                                continue
+                            actual_series, line_series = _extract_history_series(row)
+                            if actual_series:
+                                slate_history_map[key] = (actual_series, line_series)
+            except Exception:
+                slate_history_map = {}
+
         if not _template_json_available("tickets_latest.json"):
             base: dict[str, Any] = {"picks": [], "generated_at": None, "date": None}
         else:
@@ -3696,6 +3877,20 @@ def api_slate():
                             if ho is not None:
                                 l10_under = 10 - ho
                         actual_series, line_series = _extract_history_series(leg)
+                        if not actual_series and slate_history_map:
+                            sport_norm = str(leg.get("sport") or "").strip().upper()
+                            player_norm = str(leg.get("player") or "").strip().lower()
+                            prop_norm = str(leg.get("prop_type") or "").strip().lower()
+                            dir_norm = str(leg.get("direction") or "OVER").strip().upper()
+                            line_val = leg.get("line")
+                            try:
+                                line_norm = f"{float(line_val):.3f}"
+                            except (TypeError, ValueError):
+                                line_norm = str(line_val or "").strip()
+                            hist_key = (sport_norm, player_norm, prop_norm, f"{dir_norm}|{line_norm}")
+                            backfill = slate_history_map.get(hist_key)
+                            if backfill:
+                                actual_series, line_series = backfill
                         picks.append(
                             {
                                 "sport": leg.get("sport", ""),
@@ -3774,12 +3969,16 @@ def api_slate_sport():
 def api_slate_sport_single(sport: str):
     """
     Per-sport lazy slate endpoint for the home explorer.
-    Reads slate_latest.json and returns one slimmed sport slice.
+    Uses the same source as /api/slate-sport (slate_latest.json or ticket_eval per SLATE_SPORT_SOURCE).
+    sport=combined returns the merged Full Slate (all sports).
     """
-    if not _template_json_available("slate_latest.json"):
+    if not (
+        _template_json_available("slate_latest.json")
+        or _template_json_available("ticket_eval_slate_latest.json")
+    ):
         return jsonify(
             {
-                "error": "No slate JSON — run pipeline (slate_latest.json)",
+                "error": "No slate JSON — run pipeline (slate_latest.json) or build_ticket_eval.py",
                 "sport": str(sport or "").strip().lower(),
                 "rows": [],
             }
@@ -3789,9 +3988,22 @@ def api_slate_sport_single(sport: str):
     if not sport_key:
         return jsonify({"error": "missing sport key", "sport": sport_key, "rows": []}), 400
 
+    try:
+        _selected_slate_sport_payload()
+    except ValueError as e:
+        return jsonify({"error": str(e), "sport": sport_key, "rows": []}), 404
+
     def _build():
-        payload = read_json_cached(TEMPLATES_DIR / "slate_latest.json")
+        payload = _selected_slate_sport_payload()
         sports = (payload or {}).get("sports") or {}
+        if sport_key == "combined":
+            slim_rows = _merged_combined_slim_rows(payload)
+            return {
+                "date": payload.get("date"),
+                "generated_at": payload.get("generated_at"),
+                "sport": sport_key,
+                "rows": slim_rows,
+            }
         rows = sports.get(sport_key) or []
         # Match existing UI behavior: CBB card combines cbb + wcbb rows.
         if sport_key == "cbb":
@@ -3833,6 +4045,7 @@ def api_slate_excel():
             "NHL Slate":   "nhl",
             "Soccer Slate":"soccer",
             "Tennis Slate": "tennis",
+            "WNBA Slate":  "wnba",
             "WCBB Slate":  "wcbb",
             "MLB Slate":   "mlb",
             "NFL Slate":   "nfl",
