@@ -2417,21 +2417,34 @@ function sportDisplayLabel(rawSport) {
 }
 
 async function refreshStatus() {
+  let d = null;
   try {
-    const res=await fetch('pipeline_status.json', {cache:'no-store'}); if(!res.ok) return;
-    const d=await res.json();
-    applyStatusCard("nba",      d.nba?.slate,      "NBA Slate");
-    applyStatusCard("nba1h",    d.nba1h?.slate,    "NBA 1H Slate");
-    applyStatusCard("nba1q",    d.nba1q?.slate,    "NBA 1Q Slate");
-    applyStatusCard("cbb",      d.cbb?.slate,      "CBB Slate");
-    applyStatusCard("nhl",      d.nhl?.slate,      "NHL Slate");
-    applyStatusCard("soccer",   d.soccer?.slate,   "Soccer Slate");
-    applyStatusCard("mlb",      d.mlb?.slate,      "MLB Slate");
-    applyStatusCard("nfl",      d.nfl?.slate,      "NFL Slate");
-    applyStatusCard("tennis",   d.tennis?.slate,   "Tennis Slate");
-    applyStatusCard("wnba",     d.wnba?.slate,     "WNBA Slate");
-    applyStatusCard("combined", d.combined?.slate, "Combined Tickets");
-  } catch {}
+    const res = await fetch('pipeline_status.json', {cache:'no-store'});
+    if (res.ok) d = await res.json();
+  } catch (e) {}
+  // Bundled / Capacitor WebView: no API — use static file from mobile/www (see generate_mobile_bundle.py).
+  if (!d) {
+    try {
+      const r2 = await fetch("pipeline_status.json", { cache: "no-store" });
+      if (r2.ok) d = await r2.json();
+    } catch (e2) {}
+  }
+  const statusIds = ["nba", "nba1h", "nba1q", "cbb", "nhl", "soccer", "mlb", "nfl", "tennis", "wnba", "combined"];
+  if (!d) {
+    for (const id of statusIds) applyStatusCard(id, { exists: false, modified: "" }, "");
+    return;
+  }
+  applyStatusCard("nba",      d.nba?.slate,      "NBA Slate");
+  applyStatusCard("nba1h",    d.nba1h?.slate,    "NBA 1H Slate");
+  applyStatusCard("nba1q",    d.nba1q?.slate,    "NBA 1Q Slate");
+  applyStatusCard("cbb",      d.cbb?.slate,      "CBB Slate");
+  applyStatusCard("nhl",      d.nhl?.slate,      "NHL Slate");
+  applyStatusCard("soccer",   d.soccer?.slate,   "Soccer Slate");
+  applyStatusCard("mlb",      d.mlb?.slate,      "MLB Slate");
+  applyStatusCard("nfl",      d.nfl?.slate,      "NFL Slate");
+  applyStatusCard("tennis",   d.tennis?.slate,   "Tennis Slate");
+  applyStatusCard("wnba",     d.wnba?.slate,     "WNBA Slate");
+  applyStatusCard("combined", d.combined?.slate, "Combined Tickets");
 }
 setInterval(refreshStatus, 60000);
 refreshStatus();
