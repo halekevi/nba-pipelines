@@ -2873,12 +2873,72 @@ const SLATE_STATE = {};   // sort + filter state per sport
 const RENDER_SCHEDULED = {};
 const RENDER_TOKEN = {};
 const MOBILE_TABLE_QUERY = window.matchMedia('(max-width: 900px)');
+const L5_FILTER_MIN_HITS = 4;
 
 const SPORTS = ['nba','nba1h','nba1q','cbb','nhl','soccer','mlb','nfl','tennis','wnba'];
 SPORTS.forEach(s => {
-  SLATE_STATE[s] = { sortKey: 'rank_score', sortDir: -1, search: '', dir: null, pick: null, tier: null };
+  SLATE_STATE[s] = { sortKey: 'rank_score', sortDir: -1, search: '', dir: null, pick: null, tier: null, l5: null };
 });
-SLATE_STATE['combined'] = { sortKey: 'Rank Score', sortDir: -1, search: '', dir: null, pick: null, tier: null };
+SLATE_STATE['combined'] = { sortKey: 'Rank Score', sortDir: -1, search: '', dir: null, pick: null, tier: null, l5: null };
+
+function _l5HitCount(val) {
+  if (val == null) return null;
+  if (typeof val === 'number' && Number.isFinite(val)) {
+    if (val <= 1) return Math.max(0, Math.min(5, Math.round(val * 5)));
+    return Math.max(0, Math.min(5, Math.round(val)));
+  }
+  const s = String(val).trim();
+  if (!s) return null;
+  const frac = s.match(/^(\d+(?:\.\d+)?)\s*\/\s*5$/);
+  if (frac) {
+    const n = Number(frac[1]);
+    return Number.isFinite(n) ? Math.max(0, Math.min(5, Math.round(n))) : null;
+  }
+  const n = Number(s);
+  if (!Number.isFinite(n)) return null;
+  if (n <= 1) return Math.max(0, Math.min(5, Math.round(n * 5)));
+  return Math.max(0, Math.min(5, Math.round(n)));
+}
+
+function _passesL5FilterForObjectRow(row, l5Mode) {
+  if (!l5Mode) return true;
+  if (l5Mode === 'OVER') return (_l5HitCount(row?.l5_over) ?? -1) >= L5_FILTER_MIN_HITS;
+  if (l5Mode === 'UNDER') return (_l5HitCount(row?.l5_under) ?? -1) >= L5_FILTER_MIN_HITS;
+  return true;
+}
+
+function injectSlateL5Buttons() {
+  document.querySelectorAll('.slate-toolbar').forEach((bar) => {
+    const input = bar.querySelector('.slate-filter-input[id^="sf-"]');
+    if (!input) return;
+    const sport = String(input.id || '').replace(/^sf-/, '');
+    if (!sport) return;
+    if (bar.querySelector(`#sfb-${sport}-l5over`)) return;
+
+    const overBtn = document.createElement('button');
+    overBtn.className = 'slate-filter-btn';
+    overBtn.id = `sfb-${sport}-l5over`;
+    overBtn.type = 'button';
+    overBtn.textContent = 'L5 OVER';
+    overBtn.onclick = () => toggleL5Filter(sport, 'OVER', overBtn);
+
+    const underBtn = document.createElement('button');
+    underBtn.className = 'slate-filter-btn';
+    underBtn.id = `sfb-${sport}-l5under`;
+    underBtn.type = 'button';
+    underBtn.textContent = 'L5 UNDER';
+    underBtn.onclick = () => toggleL5Filter(sport, 'UNDER', underBtn);
+
+    const tierGroup = bar.querySelector('.slate-tier-group');
+    if (tierGroup && tierGroup.parentNode === bar) {
+      bar.insertBefore(overBtn, tierGroup);
+      bar.insertBefore(underBtn, tierGroup);
+    } else {
+      bar.appendChild(overBtn);
+      bar.appendChild(underBtn);
+    }
+  });
+}
 
 const SLATE_COLS = {};  // sport -> array of column names from Excel
 let openSlatePanel = null;
@@ -3040,6 +3100,7 @@ function renderSlateTable(sport) {
       const tv = String(r.tier == null ? '' : r.tier).trim().toUpperCase();
       if (tv !== String(state.tier).toUpperCase()) return false;
     }
+    if (!_passesL5FilterForObjectRow(r, state.l5)) return false;
     return true;
   });
 
@@ -3154,6 +3215,21 @@ function togglePickFilter(sport, pick, btn) {
   scheduleRenderSlateTable(sport);
 }
 
+function toggleL5Filter(sport, mode, btn) {
+  const s = SLATE_STATE[sport];
+  if (!s) return;
+  if (s.l5 === mode) {
+    s.l5 = null;
+    btn?.classList.remove('on');
+  } else {
+    s.l5 = mode;
+    document.getElementById(`sfb-${sport}-l5over`)?.classList.remove('on');
+    document.getElementById(`sfb-${sport}-l5under`)?.classList.remove('on');
+    btn?.classList.add('on');
+  }
+  scheduleRenderSlateTable(sport);
+}
+
 /** Tier chips: optional client filter; default is All (no tier constraint). */
 function setSlateTierFilter(sport, tier, btn) {
   const s = SLATE_STATE[sport];
@@ -3253,6 +3329,8 @@ function renderSlateTableDynamic(sport) {
   const propIdx   = ci('Prop') >= 0 ? ci('Prop') : ci('Stat');
   const teamIdx   = ci('Team');
   const sportIdx  = ci('Sport') >= 0 ? ci('Sport') : -1;
+  const l5OverIdx = ci('L5 Over') >= 0 ? ci('L5 Over') : (ci('L5 O') >= 0 ? ci('L5 O') : -1);
+  const l5UnderIdx = ci('L5 Under') >= 0 ? ci('L5 Under') : (ci('L5 U') >= 0 ? ci('L5 U') : -1);
   const tierIdx   = ci('Tier') >= 0 ? ci('Tier') : -1;
 
   // Filter
@@ -3268,6 +3346,8 @@ function renderSlateTableDynamic(sport) {
       const tv = String(row[tierIdx] == null ? '' : row[tierIdx]).trim().toUpperCase();
       if (tv !== String(state.tier).toUpperCase()) return false;
     }
+    if (state.l5 === 'OVER' && l5OverIdx >= 0 && (_l5HitCount(row[l5OverIdx]) ?? -1) < L5_FILTER_MIN_HITS) return false;
+    if (state.l5 === 'UNDER' && l5UnderIdx >= 0 && (_l5HitCount(row[l5UnderIdx]) ?? -1) < L5_FILTER_MIN_HITS) return false;
     return true;
   });
 
@@ -3355,6 +3435,7 @@ function sortSlateDynamic(sport, key) {
 }
 
 // Keep edge/streak sections populated and warm slate panel with NBA first.
+injectSlateL5Buttons();
 loadSlateData();
 fetchSlateSport('nba');
 window.setTimeout(() => {
