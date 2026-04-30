@@ -4426,7 +4426,14 @@ nav{display:flex;align-items:center;gap:16px;padding:10px 0 12px;border-bottom:1
 .gstat{background:#1a1f2e;border:1px solid var(--border);border-radius:6px;padding:6px 12px;min-width:80px;text-align:center;}
 .gstat-label{font-size:10px;color:rgba(255,255,255,0.92);text-transform:uppercase;letter-spacing:.5px;}
 .gstat-val{font-size:15px;font-weight:700;color:var(--accent);margin-top:2px;}
-.graph-canvas-wrap{flex:1;min-width:260px;max-width:480px;}
+.graph-canvas-wrap,.leg-game-log-wrap{flex:1;min-width:260px;max-width:520px;}
+table.leg-game-log{width:100%;font-size:13px;border-collapse:collapse;}
+table.leg-game-log th{text-align:left;padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.14);color:rgba(255,255,255,0.65);font-size:11px;text-transform:uppercase;letter-spacing:0.06em;}
+table.leg-game-log td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.06);}
+table.leg-game-log tr:last-child td{border-bottom:none;}
+.leg-game-hit{color:#00ff88;font-weight:600;}
+.leg-game-miss{color:#c96a74;font-weight:600;}
+.leg-game-log-empty{margin:0;font-size:12px;color:rgba(255,255,255,0.55);}
 canvas.leg-chart{width:100%!important;height:140px!important;}
 
 /* hero */
@@ -4534,8 +4541,6 @@ html[data-theme="light"] .ticket{
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>PropOracle — Tickets · {date_pretty}</title>
 <style>{CSS}</style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
 </head>
 <body>
 <div id="app">
@@ -4806,32 +4811,7 @@ html[data-theme="light"] .ticket{
                     _pill("Hit Rate",   hr_val,     lambda x: f"{x*100:.0f}%"),
                 ])
 
-                # chart data — reconstruct bar-level data from l5 over/under counts
-                def _hits(over_rate, n):
-                    if over_rate is None:
-                        return "null"
-                    try:
-                        x = float(over_rate)
-                    except (TypeError, ValueError):
-                        return "null"
-                    if not math.isfinite(x):
-                        return "null"
-                    cnt = int(round(x * n)) if x <= 1 else int(x)
-                    cnt = min(cnt, n)
-                    vals = [1] * cnt + [0] * (n - cnt)
-                    return str(vals)
-
-                chart_data = f"""{{
-                  line: {_js_literal_float(line_val)},
-                  l5hits: {_hits(l5_under, 5) if dir_txt == "UNDER" else _hits(l5_over, 5)},
-                  l10hits: {_hits(l10_under, 10) if dir_txt == "UNDER" else _hits(l10_over, 10)},
-                  l5avg: {_js_literal_float(l5_avg)},
-                  seasonAvg: {_js_literal_float(season_avg)},
-                  player: {repr(leg.get('player',''))},
-                  prop: {repr(leg.get('prop_type',''))},
-                  direction: {repr(leg.get('direction',''))}
-                }}"""
-
+                game_log_html = _tickets_leg_game_log_table_html(leg)
                 graph_row = f"""
 <tr class="leg-graph-row" id="{row_id}">
   <td class="leg-graph-cell" colspan="15">
@@ -4840,60 +4820,10 @@ html[data-theme="light"] .ticket{
         <div style="font-size:11px;color:rgba(255,255,255,0.92);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;">{leg.get('player','')} · {leg.get('prop_type','')} · Line {fmt_line(line_val)}</div>
         <div class="graph-stats">{pills}</div>
       </div>
-      <div class="graph-canvas-wrap">
-        <canvas class="leg-chart" id="c-{row_id}"></canvas>
+      <div class="leg-game-log-wrap">
+        {game_log_html}
       </div>
     </div>
-    <script>
-    (function(){{
-      var d = {chart_data};
-      var ctx = document.getElementById('c-{row_id}');
-      if(!ctx||!window.Chart) return;
-      var hits10 = d.l10hits || d.l5hits || [];
-      var labels = hits10.map((_,i)=>'G'+(i+1));
-      var vals = hits10.map(()=>null); // placeholder — show avg lines only
-      // IMPORTANT: do not fabricate stat heights from line values.
-      // We only have hit/miss counts here, so render a truthful binary timeline.
-      var barVals = hits10.map(h => h ? 1 : 0);
-      var colors = hits10.map(h=> h ? '#00F2FF' : '#c96a74');
-      new Chart(ctx, {{
-        type:'bar',
-        data:{{
-          labels: labels,
-          datasets:[{{
-            label:'Hit Timeline',
-            data: barVals,
-            backgroundColor: colors,
-            borderRadius:3,
-            borderSkipped:false
-          }}]
-        }},
-        options:{{
-          responsive:true,
-          maintainAspectRatio:false,
-          plugins:{{
-            legend:{{display:false}},
-            tooltip:{{callbacks:{{label:function(c){{return hits10[c.dataIndex] ? 'Hit' : 'Miss';}}}}}}
-          }},
-          scales:{{
-            x:{{ticks:{{color:'#e8e8e8',font:{{size:10}}}},grid:{{color:'#1a1f2e'}}}},
-            y:{{
-              min: 0,
-              max: 1,
-              ticks:{{
-                stepSize: 1,
-                color:'#e8e8e8',
-                font:{{size:10}},
-                callback: function(v){{ return v === 1 ? 'Hit' : 'Miss'; }}
-              }},
-              grid:{{color:'#1a1f2e'}},
-            }}
-          }},
-          annotation:{{annotations:{{}}}}
-        }}
-      }});
-    }})();
-    </script>
   </td>
 </tr>"""
 
@@ -11573,6 +11503,18 @@ _TICKETS_BUILT_PAYOUT_CSS = """<style>
 .tickets-built .payout-source-exact { color: #4caf50; }
 .tickets-built .payout-source-calibrated { color: #ffc107; }
 .tickets-built .payout-source-fallback { color: #9e9e9e; }
+.tickets-built .leg-game-log-wrap { flex: 1; min-width: 280px; max-width: 560px; }
+.tickets-built table.leg-game-log { width: 100%; font-size: 13px; border-collapse: collapse; }
+.tickets-built table.leg-game-log th {
+  text-align: left; padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.14);
+  color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+  font-family: "Bebas Neue", sans-serif;
+}
+.tickets-built table.leg-game-log td { padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.06); font-family: "Inter", sans-serif; }
+.tickets-built table.leg-game-log tr:last-child td { border-bottom: none; }
+.tickets-built .leg-game-log-empty { margin: 0; font-size: 12px; color: var(--muted); }
+.tickets-built .leg-game-hit { color: #00ff88; font-weight: 600; }
+.tickets-built .leg-game-miss { color: #c96a74; font-weight: 600; }
 </style>"""
 
 
@@ -11902,24 +11844,71 @@ def _tickets_fmt_line_plain(x) -> str:
         return str(x) if x is not None else "—"
 
 
-def _tickets_hits_js_array(over_rate, n: int) -> str:
-    """JS array literal [1,0,...] or null — same reconstruction as render_tickets_html."""
-    if over_rate is None:
-        return "null"
+def _tickets_leg_parse_float(val: Any) -> float | None:
+    if val is None:
+        return None
+    if isinstance(val, str) and not val.strip():
+        return None
     try:
-        x = float(over_rate)
+        xf = float(val)
     except (TypeError, ValueError):
-        return "null"
-    if not math.isfinite(x):
-        return "null"
-    cnt = int(round(x * n)) if x <= 1.0 else int(round(x))
-    cnt = max(0, min(n, cnt))
-    vals = [1] * cnt + [0] * (n - cnt)
-    return str(vals)
+        return None
+    if not math.isfinite(xf):
+        return None
+    return xf
+
+
+def _tickets_leg_game_log_table_html(leg: dict) -> str:
+    """
+    Per-game posted line (line_g*) + actual (stat_g* / g*) — replaces hit/miss bar chart.
+    """
+    dir_u = str(leg.get("direction") or "").strip().upper()
+    rows_html: list[str] = []
+    for gi in range(1, 11):
+        raw_stat = leg.get(f"stat_g{gi}")
+        if raw_stat is None:
+            raw_stat = leg.get(f"g{gi}")
+        act = _tickets_leg_parse_float(raw_stat)
+        ln_raw = leg.get(f"line_g{gi}")
+        if ln_raw is None:
+            ln_raw = leg.get(f"prop_line_g{gi}")
+        line_at_game = _tickets_leg_parse_float(ln_raw)
+        if act is None and line_at_game is None:
+            continue
+        act_disp = _tickets_fmt_line_plain(act) if act is not None else "—"
+        line_disp = _tickets_fmt_line_plain(line_at_game) if line_at_game is not None else "—"
+        res_disp = "—"
+        res_cls = ""
+        if act is not None and line_at_game is not None:
+            if dir_u == "UNDER":
+                ok = act <= line_at_game
+            elif dir_u == "OVER":
+                ok = act >= line_at_game
+            else:
+                ok = act >= line_at_game
+            res_disp = "Hit" if ok else "Miss"
+            res_cls = "leg-game-hit" if ok else "leg-game-miss"
+        rows_html.append(
+            f"<tr><td>{_h('G' + str(gi))}</td><td>{_h(line_disp)}</td><td>{_h(act_disp)}</td>"
+            f'<td class="{res_cls}">{_h(res_disp)}</td></tr>'
+        )
+    if not rows_html:
+        return (
+            '<p class="leg-game-log-empty">No per-game line / actual series saved for this leg '
+            "(stat_g1.. / line_g1..).</p>"
+        )
+    return (
+        '<table class="leg-game-log" role="grid" aria-label="Recent games vs posted line">'
+        "<thead><tr>"
+        "<th>Game</th><th>Posted line</th><th>Actual</th><th>vs pick</th>"
+        "</tr></thead><tbody>"
+        + "".join(rows_html)
+        + "</tbody></table>"
+    )
 
 
 def _tickets_leg_graph_row_html(leg: dict, row_id: str, table_cols: int) -> str:
-    """Expandable Chart.js row for /tickets (tickets_built.html loads Chart.js)."""
+    """Expandable row: stat pills + per-game line/actual table (tickets_built.html)."""
     l5_avg = leg.get("l5_avg")
     season_avg = leg.get("season_avg")
     l5_over = leg.get("l5_over")
@@ -11963,23 +11952,8 @@ def _tickets_leg_graph_row_html(leg: dict, row_id: str, table_cols: int) -> str:
         ]
     )
 
-    l5hits = _tickets_hits_js_array(l5_under if dir_txt == "UNDER" else l5_over, 5)
-    l10hits = _tickets_hits_js_array(l10_under if dir_txt == "UNDER" else l10_over, 10)
-    chart_data = (
-        "{\n"
-        f"  line: {_js_literal_float(line_val)},\n"
-        f"  l5hits: {l5hits},\n"
-        f"  l10hits: {l10hits},\n"
-        f"  l5avg: {_js_literal_float(l5_avg)},\n"
-        f"  seasonAvg: {_js_literal_float(season_avg)},\n"
-        f"  player: {repr(leg.get('player', ''))},\n"
-        f"  prop: {repr(leg.get('prop_type', ''))},\n"
-        f"  direction: {repr(leg.get('direction', ''))}\n"
-        "}"
-    )
-
+    game_log_html = _tickets_leg_game_log_table_html(leg)
     sub = f"{leg.get('player', '')} · {leg.get('prop_type', '')} · Line {_tickets_fmt_line_plain(line_val)}"
-    cid = "c-" + row_id
     return f"""
 <tr class="leg-graph-row" id="{_h(row_id)}">
   <td class="leg-graph-cell" colspan="{table_cols}">
@@ -11988,57 +11962,10 @@ def _tickets_leg_graph_row_html(leg: dict, row_id: str, table_cols: int) -> str:
         <div style="font-size:11px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;">{_h(sub)}</div>
         <div class="graph-stats">{pills}</div>
       </div>
-      <div class="graph-canvas-wrap">
-        <canvas class="leg-chart" id="{_h(cid)}"></canvas>
+      <div class="leg-game-log-wrap">
+        {game_log_html}
       </div>
     </div>
-    <script>
-    (function(){{
-      var d = {chart_data};
-      var ctx = document.getElementById({repr(cid)});
-      if(!ctx||!window.Chart) return;
-      var hits10 = d.l10hits || d.l5hits || [];
-      if (!hits10 || !hits10.length) return;
-      var labels = hits10.map((_,i)=>'G'+(i+1));
-      var barVals = hits10.map(h => h ? 1 : 0);
-      var colors = hits10.map(h=> h ? '#00F2FF' : '#c96a74');
-      new Chart(ctx, {{
-        type:'bar',
-        data:{{
-          labels: labels,
-          datasets:[{{
-            label:'Hit Timeline',
-            data: barVals,
-            backgroundColor: colors,
-            borderRadius:3,
-            borderSkipped:false
-          }}]
-        }},
-        options:{{
-          responsive:true,
-          maintainAspectRatio:false,
-          plugins:{{
-            legend:{{display:false}},
-            tooltip:{{callbacks:{{label:function(c){{return hits10[c.dataIndex] ? 'Hit' : 'Miss';}}}}}}
-          }},
-          scales:{{
-            x:{{ticks:{{color:'#e8e8e8',font:{{size:10}}}},grid:{{color:'#1a1f2e'}}}},
-            y:{{
-              min: 0,
-              max: 1,
-              ticks:{{
-                stepSize: 1,
-                color:'#e8e8e8',
-                font:{{size:10}},
-                callback: function(v){{ return v === 1 ? 'Hit' : 'Miss'; }}
-              }},
-              grid:{{color:'#1a1f2e'}},
-            }}
-          }}
-        }}
-      }});
-    }})();
-    </script>
   </td>
 </tr>"""
 
