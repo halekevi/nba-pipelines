@@ -5,9 +5,9 @@
 #   py -3.14 scripts/build_ticket_eval.py --date YYYY-MM-DD
 # and commit ui_runner/graded_slate/<date>/*.xlsx + ticket_eval_<date>.html (+ tickets_latest.json for /tickets).
 #
-# Nixpacks (default) + Dockerfile (optional): both use scripts/railway_gunicorn.sh → ui_runner.app:app.
-# That script runs scripts/ingest_graded_to_income_db.py --all --purge-demo when graded_props_*.json
-# exists under ui_runner/templates/, so /dashboard/income uses real grades (DB is not in git).
+# Nixpacks (default) + Dockerfile (optional): both use scripts/railway_gunicorn.sh → railway_serve.py → gunicorn.
+# When graded_props_*.json exists under ui_runner/templates/, ingest runs in the background so /ping
+# does not wait (long ingest previously caused Railway healthcheck 503s).
 #
 # If the live site never updates after git push:
 #   - Railway → this service → Settings → Source: repo halekevi/PropORACLE, branch main
