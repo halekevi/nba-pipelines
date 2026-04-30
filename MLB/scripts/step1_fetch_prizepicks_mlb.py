@@ -59,6 +59,8 @@ TRACKABLE_PROPS = {
     "walks",
     "stolen bases",
     "stolenbases",
+    "hitter strikeouts",
+    "hitterstrikeouts",
     "fantasy score",
     "fantasyscore",
     "hits+runs+rbi",
@@ -77,6 +79,8 @@ TRACKABLE_PROPS = {
     "walksallowed",
     "innings pitched",
     "inningspitched",
+    "pitches thrown",
+    "pitchesthrown",
 }
 
 PICKTYPE_MAP = {"standard": "Standard", "goblin": "Goblin", "demon": "Demon"}
@@ -430,6 +434,62 @@ def _write_snapshot(df: pd.DataFrame, target_date: str) -> None:
     latest_path = SNAPSHOT_DIR / SNAPSHOT_LATEST_NAME
     df.to_csv(dated_path, index=False, encoding="utf-8-sig")
     df.to_csv(latest_path, index=False, encoding="utf-8-sig")
+
+
+def _backfill_opp_from_game_context(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Fill opp_team from pp_game_id + team when upstream payload lacks game home/away.
+    Handles both single-team and slash-combo team values.
+    """
+    if df is None or len(df) == 0:
+        return df
+    if "pp_game_id" not in df.columns or "team" not in df.columns:
+        return df
+    if "opp_team" not in df.columns:
+        df["opp_team"] = ""
+
+    out = df.copy()
+    out["pp_game_id"] = out["pp_game_id"].astype(str).str.strip()
+    out["team"] = out["team"].astype(str).str.strip().str.upper()
+    out["opp_team"] = out["opp_team"].fillna("").astype(str).str.strip().str.upper()
+
+    singles = out.copy()
+    singles["team_single"] = singles["team"].str.split("/").str[0].str.strip()
+    valid = singles[singles["pp_game_id"].ne("") & singles["team_single"].ne("")]
+    teams_per_game = (
+        valid.groupby("pp_game_id")["team_single"]
+        .apply(lambda s: sorted({str(v).strip().upper() for v in s if str(v).strip()}))
+        .reset_index()
+    )
+    teams_per_game.columns = ["pp_game_id", "_teams"]
+    two_team = teams_per_game[teams_per_game["_teams"].apply(len) == 2].copy()
+    two_team["_team_a"] = two_team["_teams"].apply(lambda t: t[0])
+    two_team["_team_b"] = two_team["_teams"].apply(lambda t: t[1])
+
+    out = out.merge(two_team[["pp_game_id", "_team_a", "_team_b"]], on="pp_game_id", how="left")
+    needs_opp = out["opp_team"].eq("")
+
+    team_single = out["team"].str.split("/").str[0].str.strip()
+    team_second = out["team"].str.split("/").str[1].fillna("").str.strip()
+    is_combo = out["team"].str.contains("/", regex=False, na=False)
+
+    # Singles
+    out.loc[needs_opp & ~is_combo & team_single.eq(out["_team_a"]), "opp_team"] = out["_team_b"]
+    out.loc[needs_opp & ~is_combo & team_single.eq(out["_team_b"]), "opp_team"] = out["_team_a"]
+
+    # Slash combos: TEAM1/TEAM2 -> OPP1/OPP2
+    combo_ok = needs_opp & is_combo & team_single.ne("") & team_second.ne("")
+    opp1 = out["_team_b"].where(team_single.eq(out["_team_a"]), out["_team_a"])
+    opp2 = out["_team_b"].where(team_second.eq(out["_team_a"]), out["_team_a"])
+    out.loc[combo_ok, "opp_team"] = (
+        opp1.fillna("").astype(str).str.strip().str.upper()
+        + "/"
+        + opp2.fillna("").astype(str).str.strip().str.upper()
+    ).str.strip("/")
+    out.loc[combo_ok, "opp_team"] = out.loc[combo_ok, "opp_team"].replace("/", "")
+
+    out = out.drop(columns=["_team_a", "_team_b", "_teams"], errors="ignore")
+    return out
 
 
 def _attempt_fallback_write(out_path: Path, target_date: str, tz_name: str, reason: str) -> int:
@@ -879,26 +939,8 @@ def main():
     _mstd = df["pick_type"].astype(str).str.lower().eq("standard")
     df.loc[_mstd, "standard_line"] = df.loc[_mstd, "standard_line"].fillna(df.loc[_mstd, "line"])
 
-    # Derive opp_team from game_id groupings when game obj lacks home/away fields
-    df["pp_game_id"] = df["pp_game_id"].astype(str).str.strip()
-    if "opp_team" in df.columns and "pp_game_id" in df.columns and "team" in df.columns:
-        teams_per_game = (
-            df[df["pp_game_id"].ne("") & df["team"].astype(str).str.strip().ne("")]
-            .groupby("pp_game_id")["team"]
-            .apply(lambda s: sorted(s.unique()))
-            .reset_index()
-        )
-        teams_per_game.columns = ["pp_game_id", "_teams"]
-        two_team = teams_per_game[teams_per_game["_teams"].apply(len) == 2].copy()
-        two_team["_team_a"] = two_team["_teams"].apply(lambda t: t[0])
-        two_team["_team_b"] = two_team["_teams"].apply(lambda t: t[1])
-
-        df = df.merge(two_team[["pp_game_id", "_team_a", "_team_b"]], on="pp_game_id", how="left")
-        # fillna("") before eq("") so NaN values (str-cast to "nan") are treated as missing
-        needs_opp = df["opp_team"].fillna("").astype(str).str.strip().eq("")
-        df.loc[needs_opp & (df["team"] == df["_team_a"]), "opp_team"] = df["_team_b"]
-        df.loc[needs_opp & (df["team"] == df["_team_b"]), "opp_team"] = df["_team_a"]
-        df = df.drop(columns=["_team_a", "_team_b", "_teams"], errors="ignore")
+    # Fill missing opponents from game context as a robust fallback.
+    df = _backfill_opp_from_game_context(df)
 
     # Bouncer: remove junk rows
     required = ["projection_id", "player", "team", "prop_type"]
