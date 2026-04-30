@@ -143,6 +143,38 @@ PROP_RELIABILITY_LATEST_PATH = os.path.join(REPO_ROOT, "data", "reports", "prop_
 PROP_STRAT_BOARD_LATEST_PATH = os.path.join(REPO_ROOT, "data", "reports", "prop_stratification_board_latest.json")
 
 
+def _sanitize_for_json(obj: Any) -> Any:
+    """Replace float nan/inf with None so json.dump emits strict JSON null (JavaScript-safe)."""
+    if isinstance(obj, dict):
+        return {k: _sanitize_for_json(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_sanitize_for_json(v) for v in obj]
+    if isinstance(obj, float):
+        return obj if math.isfinite(obj) else None
+    if obj is None or isinstance(obj, (bool, str)):
+        return obj
+    if isinstance(obj, int):
+        return obj
+    try:
+        xf = float(obj)
+    except (TypeError, ValueError):
+        return obj
+    return xf if math.isfinite(xf) else None
+
+
+def _js_literal_float(x: Any) -> str:
+    """Emit a JS literal number or null — never NaN/Infinity (breaks JSON.parse and inline scripts)."""
+    if x is None:
+        return "null"
+    try:
+        xf = float(x)
+    except (TypeError, ValueError):
+        return "null"
+    if not math.isfinite(xf):
+        return "null"
+    return json.dumps(xf)
+
+
 # ── Color palette ─────────────────────────────────────────────────────────────
 C = {
     "hdr": "1C1C1C",
@@ -4140,9 +4172,11 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
 
     os.makedirs(outdir, exist_ok=True)
     out_path = os.path.join(outdir, "slate_latest.json")
+    payload = _sanitize_for_json(payload)
     with open(out_path, "w", encoding="utf-8") as f:
         import json as _json
-        _json.dump(payload, f, ensure_ascii=False, default=str)
+
+        _json.dump(payload, f, ensure_ascii=False, default=str, allow_nan=False)
     print(f"  slate_latest.json -> {out_path}  ({sum(len(v) for v in payload['sports'].values())} props)")
 
 
@@ -4774,18 +4808,25 @@ html[data-theme="light"] .ticket{
 
                 # chart data — reconstruct bar-level data from l5 over/under counts
                 def _hits(over_rate, n):
-                    if over_rate is None: return "null"
-                    cnt = int(round(over_rate * n)) if over_rate <= 1 else int(over_rate)
+                    if over_rate is None:
+                        return "null"
+                    try:
+                        x = float(over_rate)
+                    except (TypeError, ValueError):
+                        return "null"
+                    if not math.isfinite(x):
+                        return "null"
+                    cnt = int(round(x * n)) if x <= 1 else int(x)
                     cnt = min(cnt, n)
-                    vals = [1]*cnt + [0]*(n-cnt)
+                    vals = [1] * cnt + [0] * (n - cnt)
                     return str(vals)
 
                 chart_data = f"""{{
-                  line: {line_val if line_val is not None else 'null'},
+                  line: {_js_literal_float(line_val)},
                   l5hits: {_hits(l5_under, 5) if dir_txt == "UNDER" else _hits(l5_over, 5)},
                   l10hits: {_hits(l10_under, 10) if dir_txt == "UNDER" else _hits(l10_over, 10)},
-                  l5avg: {l5_avg if l5_avg is not None else 'null'},
-                  seasonAvg: {season_avg if season_avg is not None else 'null'},
+                  l5avg: {_js_literal_float(l5_avg)},
+                  seasonAvg: {_js_literal_float(season_avg)},
                   player: {repr(leg.get('player',''))},
                   prop: {repr(leg.get('prop_type',''))},
                   direction: {repr(leg.get('direction',''))}
@@ -5027,8 +5068,9 @@ def write_web_outputs(
                 print("  [web-merge] skipped: existing tickets_latest.json has a different slate date")
         except Exception as exc:
             print(f"  [web-merge] WARN: could not merge existing tickets_latest.json ({exc})")
+    payload = _sanitize_for_json(payload)
     with open(json_path, "w", encoding="utf-8") as f:
-        json.dump(payload, f, indent=2, ensure_ascii=False)
+        json.dump(payload, f, indent=2, ensure_ascii=False, allow_nan=False)
     print(f"[OK] Web JSON  -> {json_path}")
     # Keep docs JSON in sync for static/GitHub Pages views that read ui_runner/docs.
     try:
@@ -5036,7 +5078,7 @@ def write_web_outputs(
         docs_json = outdir_p.parent / "docs" / "tickets_latest.json"
         docs_json.parent.mkdir(parents=True, exist_ok=True)
         with open(docs_json, "w", encoding="utf-8") as f:
-            json.dump(payload, f, indent=2, ensure_ascii=False)
+            json.dump(payload, f, indent=2, ensure_ascii=False, allow_nan=False)
         print(f"[OK] Docs JSON -> {docs_json}")
     except Exception as exc:
         print(f"[WARN] Docs JSON sync skipped: {exc}")
@@ -5056,7 +5098,13 @@ def generate_payout_ladder_examples(payload: dict, out_path: str) -> None:
     if not all_legs:
         os.makedirs(os.path.dirname(out_path), exist_ok=True)
         with open(out_path, "w", encoding="utf-8") as f:
-            json.dump({"generated_at": datetime.now(timezone.utc).isoformat(), "examples": []}, f, ensure_ascii=False, indent=2)
+            json.dump(
+                {"generated_at": datetime.now(timezone.utc).isoformat(), "examples": []},
+                f,
+                ensure_ascii=False,
+                indent=2,
+                allow_nan=False,
+            )
         return
 
     def _num_or_nan(raw: Any) -> float:
@@ -5174,13 +5222,11 @@ def generate_payout_ladder_examples(payload: dict, out_path: str) -> None:
     examples = deduped_examples
 
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    payload_out = _sanitize_for_json(
+        {"generated_at": datetime.now(timezone.utc).isoformat(), "examples": examples}
+    )
     with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(
-            {"generated_at": datetime.now(timezone.utc).isoformat(), "examples": examples},
-            f,
-            ensure_ascii=False,
-            indent=2,
-        )
+        json.dump(payload_out, f, ensure_ascii=False, indent=2, allow_nan=False)
     print(f"[OK] Payout ladder examples -> {out_path}")
 
 
@@ -11864,6 +11910,8 @@ def _tickets_hits_js_array(over_rate, n: int) -> str:
         x = float(over_rate)
     except (TypeError, ValueError):
         return "null"
+    if not math.isfinite(x):
+        return "null"
     cnt = int(round(x * n)) if x <= 1.0 else int(round(x))
     cnt = max(0, min(n, cnt))
     vals = [1] * cnt + [0] * (n - cnt)
@@ -11919,11 +11967,11 @@ def _tickets_leg_graph_row_html(leg: dict, row_id: str, table_cols: int) -> str:
     l10hits = _tickets_hits_js_array(l10_under if dir_txt == "UNDER" else l10_over, 10)
     chart_data = (
         "{\n"
-        f"  line: {line_val if line_val is not None else 'null'},\n"
+        f"  line: {_js_literal_float(line_val)},\n"
         f"  l5hits: {l5hits},\n"
         f"  l10hits: {l10hits},\n"
-        f"  l5avg: {l5_avg if l5_avg is not None else 'null'},\n"
-        f"  seasonAvg: {season_avg if season_avg is not None else 'null'},\n"
+        f"  l5avg: {_js_literal_float(l5_avg)},\n"
+        f"  seasonAvg: {_js_literal_float(season_avg)},\n"
         f"  player: {repr(leg.get('player', ''))},\n"
         f"  prop: {repr(leg.get('prop_type', ''))},\n"
         f"  direction: {repr(leg.get('direction', ''))}\n"
@@ -12472,6 +12520,8 @@ def render_tickets_body_html(
                 line = leg.get("line")
                 std_line = leg.get("standard_line")
                 direction = (leg.get("direction") or "").upper()
+                if direction == "LOWER":
+                    direction = "UNDER"
                 pick_type = (leg.get("pick_type") or "").strip()
                 hit_rate = leg.get("hit_rate")
                 ml_prob = leg.get("ml_prob")
