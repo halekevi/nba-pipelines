@@ -108,7 +108,7 @@ $ok = $true
 # Step 1 — Fetch PrizePicks (league_id=3, WNBA)
 if (-not $SkipFetch) {
     if ($ok) { $ok = Run-Step "WNBA Step 1 - Fetch PrizePicks" $WNBADir ".\step1_fetch_prizepicks.py" `
-        "--league_id 3 --game_mode pickem --per_page 250 --max_pages 10 --sleep 1.2 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --output step1_wnba_props.csv" }
+        "--league_id 3 --playwright --timeout 90 --game_mode pickem --per_page 250 --max_pages 10 --sleep 1.2 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --output step1_wnba_props.csv --date $Date" }
 } else {
     Write-Host "  --> [SkipFetch] Using existing step1_wnba_props.csv" -ForegroundColor DarkGray
 }
@@ -144,11 +144,11 @@ if ($ok) {
     Write-Host ""
     Write-Host "[ COPYING OUTPUTS ]" -ForegroundColor Magenta
 
-    $files = @("step7_wnba_ranked.xlsx","step8_wnba_direction.xlsx","wnba_best_tickets.xlsx")
+    $files = @("step1_wnba_props.csv","step7_wnba_ranked.xlsx","step8_wnba_direction.xlsx","wnba_best_tickets.xlsx")
     foreach ($f in $files) {
         $src = "$WNBADir\$f"
         if (Test-Path $src) {
-            $dst = "$DateDir\wnba_$Date_$f"
+            $dst = Join-Path $DateDir ("wnba_" + $Date + "_" + $f)
             Copy-Item $src $dst -Force
             Write-Host "  Copied: $f" -ForegroundColor Green
         }

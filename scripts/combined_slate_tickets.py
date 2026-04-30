@@ -2317,7 +2317,7 @@ MAX_LEGS_TENNIS = 3
 TENNIS_LEG_MIN_HIT_RATE = {2: 0.55, 3: 0.58, 4: 0.62}
 
 # Pipelines that emit step8 boards into combined slate (reference for docs / tooling).
-ACTIVE_SPORTS = ("NBA", "NHL", "SOCCER", "TENNIS", "MLB", "NBA1H", "NBA1Q", "WCBB")
+ACTIVE_SPORTS = ("NBA", "NHL", "SOCCER", "TENNIS", "WNBA", "MLB", "NBA1H", "NBA1Q", "WCBB")
 # NFL — Phase 1 scaffold only; keep off slate until step8 + historical hit rates exist (Sept 2026).
 # Reference: {"NFL": False}  # activate September 2026 — do not add "NFL" to ACTIVE_SPORTS yet.
 
@@ -11064,6 +11064,7 @@ def main():
         ("NHL", pool(nhl) if nhl is not None and len(nhl) > 0 else None),
         ("SOCCER", pool(soccer) if soccer is not None and len(soccer) > 0 else None),
         ("TENNIS", pool(tennis) if tennis is not None and len(tennis) > 0 else None),
+        ("WNBA", pool(wnba) if wnba is not None and len(wnba) > 0 else None),
         ("MLB", mlb_pool),
         ("NBA1Q", pool(nba1q) if nba1q is not None and len(nba1q) > 0 else None),
         ("NBA1H", pool(nba1h) if nba1h is not None and len(nba1h) > 0 else None),

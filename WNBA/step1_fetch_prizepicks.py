@@ -16,11 +16,11 @@ Run:
 from __future__ import annotations
 
 import argparse
-import json
 import re
 import time
 import random
-from datetime import datetime, timezone
+import sys
+from pathlib import Path
 from typing import Any, Dict, List, Tuple, Set
 
 import pandas as pd
@@ -38,6 +38,10 @@ USER_AGENTS = [
 ]
 
 PICKTYPE_MAP = {"standard": "Standard", "goblin": "Goblin", "demon": "Demon"}
+WNBA_LEAGUE_ID_DEFAULT = "3"
+SNAPSHOT_DIR = Path(__file__).resolve().parent / "outputs" / "step1_snapshots"
+SNAPSHOT_LATEST_NAME = "step1_wnba_props_latest.csv"
+BROWSER_PROFILE_DIR = Path.home() / ".pp_browser_profile"
 
 
 def _make_headers(ua: str) -> dict:
@@ -180,10 +184,158 @@ def fetch_pages(
     return all_data, all_included
 
 
+def fetch_via_playwright_session(league_id: str, timeout_s: int, cdp_url: str = "") -> Tuple[List[dict], List[dict], List[dict]]:
+    from playwright.sync_api import sync_playwright
+    try:
+        from playwright_stealth import stealth_sync  # type: ignore
+    except Exception:
+        stealth_sync = None
+
+    if not BROWSER_PROFILE_DIR.exists():
+        raise RuntimeError(
+            f"Browser profile not found at {BROWSER_PROFILE_DIR}. "
+            "Run MLB/scripts/setup_prizepicks_profile.py after logging into PrizePicks in Chrome."
+        )
+
+    launch_args = [
+        "--no-sandbox",
+        "--disable-blink-features=AutomationControlled",
+        "--disable-dev-shm-usage",
+        "--no-first-run",
+        "--no-default-browser-check",
+        "--window-size=1366,768",
+    ]
+    ctx_kwargs = dict(
+        locale="en-US",
+        timezone_id="America/New_York",
+        viewport={"width": 1366, "height": 768},
+        user_agent=(
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+        ),
+    )
+
+    with sync_playwright() as p:
+        context = None
+        browser = None
+        cdp = (cdp_url or "").strip()
+        if cdp:
+            browser = p.chromium.connect_over_cdp(cdp)
+            if not browser.contexts:
+                raise RuntimeError("CDP browser has no contexts; start Chrome with --remote-debugging-port.")
+            context = browser.contexts[0]
+            page = context.new_page()
+        else:
+            try:
+                context = p.chromium.launch_persistent_context(
+                    user_data_dir=str(BROWSER_PROFILE_DIR),
+                    channel="chrome",
+                    headless=False,
+                    args=launch_args,
+                    **ctx_kwargs,
+                )
+            except Exception:
+                context = p.chromium.launch_persistent_context(
+                    user_data_dir=str(BROWSER_PROFILE_DIR),
+                    headless=False,
+                    args=launch_args,
+                    **ctx_kwargs,
+                )
+            page = context.new_page()
+        if stealth_sync is not None:
+            stealth_sync(page)
+
+        page.set_default_timeout(max(30000, int(timeout_s) * 1000))
+        page.goto("https://app.prizepicks.com/", wait_until="domcontentloaded", timeout=30000)
+        page.wait_for_timeout(4000)
+        page.goto(f"https://app.prizepicks.com/board?league_id={league_id}", wait_until="domcontentloaded", timeout=30000)
+        page.wait_for_timeout(5000)
+
+        leagues = page.evaluate(
+            """async () => {
+                const r = await fetch("https://api.prizepicks.com/leagues", { credentials: "include" });
+                if (!r.ok) return { data: [], status: r.status };
+                return await r.json();
+            }"""
+        )
+
+        payload = page.evaluate(
+            """async ({ leagueId }) => {
+                const url = `https://api.prizepicks.com/projections?league_id=${leagueId}&per_page=250&single_stat=true`;
+                const r = await fetch(url, { credentials: "include" });
+                if (!r.ok) return { data: [], included: [], status: r.status };
+                const j = await r.json();
+                return {
+                    data: Array.isArray(j?.data) ? j.data : [],
+                    included: Array.isArray(j?.included) ? j.included : [],
+                    status: r.status,
+                };
+            }""",
+            {"leagueId": str(league_id)},
+        )
+        if cdp:
+            page.close()
+            browser.close()
+        else:
+            context.close()
+
+    league_rows = list((leagues or {}).get("data") or [])
+    print(f"  [playwright] leagues_status={(leagues or {}).get('status', 200)} rows={len(league_rows)}")
+    print(f"  [playwright] projections_status={(payload or {}).get('status', 200)} rows={len((payload or {}).get('data') or [])}")
+    return (
+        list((payload or {}).get("data") or []),
+        list((payload or {}).get("included") or []),
+        league_rows,
+    )
+
+
+def _read_csv_safe(path: Path) -> pd.DataFrame:
+    try:
+        return pd.read_csv(path, encoding="utf-8-sig")
+    except UnicodeDecodeError:
+        return pd.read_csv(path, encoding="utf-8")
+    except Exception:
+        return pd.DataFrame()
+
+
+def _snapshot_candidates(out_path: Path) -> list[Path]:
+    candidates: list[Path] = []
+    for p in (out_path, SNAPSHOT_DIR / SNAPSHOT_LATEST_NAME):
+        if p.is_file() and p not in candidates:
+            candidates.append(p)
+    if SNAPSHOT_DIR.is_dir():
+        for p in sorted(
+            SNAPSHOT_DIR.glob("step1_wnba_props_*.csv"),
+            key=lambda x: x.stat().st_mtime,
+            reverse=True,
+        ):
+            if p.is_file() and p not in candidates:
+                candidates.append(p)
+    outputs_root = Path(__file__).resolve().parents[1] / "outputs"
+    if outputs_root.is_dir():
+        for p in sorted(outputs_root.glob("*/wnba_*_step1_wnba_props.csv"), key=lambda x: x.stat().st_mtime, reverse=True):
+            if p.is_file() and p not in candidates:
+                candidates.append(p)
+        for p in sorted(outputs_root.glob("*/step1_wnba_props.csv"), key=lambda x: x.stat().st_mtime, reverse=True):
+            if p.is_file() and p not in candidates:
+                candidates.append(p)
+    return candidates
+
+
+def _write_snapshots(df: pd.DataFrame, date_tag: str) -> None:
+    if df is None or df.empty:
+        return
+    SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
+    dated_path = SNAPSHOT_DIR / f"step1_wnba_props_{date_tag}.csv"
+    latest_path = SNAPSHOT_DIR / SNAPSHOT_LATEST_NAME
+    df.to_csv(dated_path, index=False, encoding="utf-8-sig")
+    df.to_csv(latest_path, index=False, encoding="utf-8-sig")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--output",           default="step1_wnba_props.csv")
-    ap.add_argument("--league_id",        default="3")   # WNBA = 3
+    ap.add_argument("--league_id",        default=WNBA_LEAGUE_ID_DEFAULT)   # WNBA = 3 (legacy)
     ap.add_argument("--game_mode",        default="pickem")
     ap.add_argument("--per_page",         type=int,   default=250)
     ap.add_argument("--max_pages",        type=int,   default=20)
@@ -194,27 +346,95 @@ def main():
     ap.add_argument("--max_403_retries",  type=int,   default=3)
     ap.add_argument("--min_rows",         type=int,   default=30)
     ap.add_argument("--min_teams",        type=int,   default=2)
+    ap.add_argument("--date",             default=time.strftime("%Y-%m-%d"))
+    ap.add_argument("--playwright",       action="store_true")
+    ap.add_argument("--cdp",              default="", help="Attach to existing Chrome via CDP URL")
+    ap.add_argument("--timeout",          type=int,   default=90)
+    ap.add_argument("--print-leagues",    action="store_true")
     args = ap.parse_args()
+    out_path = Path(args.output)
+    if not out_path.is_absolute():
+        out_path = Path(__file__).resolve().parent / out_path
+
+    def _fallback_to_existing_csv(reason: str) -> bool:
+        for candidate in _snapshot_candidates(out_path):
+            old = _read_csv_safe(candidate)
+            if old.empty:
+                continue
+            old_rows = len(old)
+            old_teams = old.get("team", pd.Series(dtype=str)).astype(str).replace("", pd.NA).dropna().nunique()
+            if old_rows < max(1, int(args.min_rows)) or old_teams < max(1, int(args.min_teams)):
+                continue
+            old.to_csv(out_path, index=False, encoding="utf-8-sig")
+            print(
+                f"⚠️ {reason}. Using fallback board at {candidate} "
+                f"(rows={old_rows}, teams={old_teams})"
+            )
+            return True
+        return False
 
     print(f"📡 Fetching PrizePicks WNBA | league_id={args.league_id}")
 
-    data, included = fetch_pages(
-        league_id=args.league_id,
-        game_mode=args.game_mode,
-        per_page=args.per_page,
-        max_pages=args.max_pages,
-        sleep=args.sleep,
-        cooldown_seconds=args.cooldown_seconds,
-        max_cooldowns=args.max_cooldowns,
-        jitter_seconds=args.jitter_seconds,
-        max_403_retries=args.max_403_retries,
-    )
+    data: List[dict] = []
+    included: List[dict] = []
+    use_playwright = bool(args.playwright) or bool((args.cdp or "").strip())
+    if use_playwright:
+        try:
+            data, included, leagues = fetch_via_playwright_session(
+                league_id=str(args.league_id).strip(),
+                timeout_s=int(args.timeout),
+                cdp_url=str(args.cdp).strip(),
+            )
+            if args.print_leagues:
+                items = []
+                for o in leagues:
+                    if not isinstance(o, dict):
+                        continue
+                    lid = str(o.get("id", "")).strip()
+                    attr = o.get("attributes") or {}
+                    name = str(attr.get("name") or attr.get("abbr") or "").strip()
+                    if lid and name:
+                        items.append((lid, name))
+                items = sorted(items, key=lambda t: t[0])
+                print("Active leagues:")
+                for lid, name in items:
+                    print(f"  - {lid}: {name}")
+                if not any("wnba" in n.lower() for _, n in items):
+                    print("⚠️ WNBA not present in active leagues payload.")
+        except Exception as e:
+            if _fallback_to_existing_csv(f"playwright fetch failed ({e})"):
+                print("✅ BOARD_OK_FALLBACK")
+                return
+            print(f"❌ Playwright fetch failed and no valid fallback: {e}")
+            sys.exit(1)
+    else:
+        try:
+            data, included = fetch_pages(
+                league_id=args.league_id,
+                game_mode=args.game_mode,
+                per_page=args.per_page,
+                max_pages=args.max_pages,
+                sleep=args.sleep,
+                cooldown_seconds=args.cooldown_seconds,
+                max_cooldowns=args.max_cooldowns,
+                jitter_seconds=args.jitter_seconds,
+                max_403_retries=args.max_403_retries,
+            )
+        except Exception as e:
+            if _fallback_to_existing_csv(f"fetch failed ({e})"):
+                print("✅ BOARD_OK_FALLBACK")
+                return
+            print(f"❌ Fetch failed and no valid fallback: {e}")
+            sys.exit(1)
 
     if not data:
+        if _fallback_to_existing_csv("No projections fetched"):
+            print("✅ BOARD_OK_FALLBACK")
+            return
         cols = ["projection_id","pp_projection_id","player_id","pp_game_id","start_time",
                 "player","image_url","pos","team","opp_team","pp_home_team","pp_away_team",
                 "prop_type","line","pick_type"]
-        pd.DataFrame(columns=cols).to_csv(args.output, index=False)
+        pd.DataFrame(columns=cols).to_csv(out_path, index=False)
         print("❌ No projections fetched. Wrote empty CSV.")
         return
 
@@ -295,11 +515,20 @@ def main():
     if before != after:
         print(f"  Deduped: {before} → {after}")
 
-    df.to_csv(args.output, index=False, encoding="utf-8-sig")
-
     rows_n  = len(df)
     teams_n = df["team"].astype(str).nunique()
-    print(f"✅ Saved → {args.output}  rows={rows_n}  teams={teams_n}")
+
+    if rows_n < args.min_rows or teams_n < args.min_teams:
+        if _fallback_to_existing_csv(
+            f"BOARD_TOO_SMALL (rows={rows_n}, teams={teams_n}; "
+            f"min_rows={args.min_rows}, min_teams={args.min_teams})"
+        ):
+            print("✅ BOARD_OK_FALLBACK")
+            return
+
+    df.to_csv(out_path, index=False, encoding="utf-8-sig")
+    _write_snapshots(df, str(args.date).strip())
+    print(f"✅ Saved → {out_path}  rows={rows_n}  teams={teams_n}")
 
     if rows_n < args.min_rows or teams_n < args.min_teams:
         print(f"⛔ BOARD_TOO_SMALL (need min_rows={args.min_rows}, min_teams={args.min_teams})")
