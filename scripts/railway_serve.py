@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """
-Railway / Docker entry: verify Flask loads, optionally ingest graded JSON in the background, then exec gunicorn.
+Railway / Docker entry: optionally ingest graded JSON in the background, then exec gunicorn.
 
-Running income ingest synchronously before gunicorn blocked PORT until completion; with many
-graded_props_*.json files deploy healthchecks (/ping) timed out with 503.
+We do not import ui_runner.app here: gunicorn loads it in the worker. A pre-import doubled RAM and
+import time and could OOM or exceed Railway's /ping health window.
+
+Income ingest used to run synchronously before gunicorn and blocked PORT until completion.
 """
 from __future__ import annotations
 
@@ -20,13 +22,10 @@ def main() -> None:
     if str(REPO) not in sys.path:
         sys.path.insert(0, str(REPO))
 
-    # Fail fast if the app cannot import (same signal as the old shell check).
-    from ui_runner.app import app as _app  # noqa: F401
-
     port = os.environ.get("PORT", "8080")
     tmpl = REPO / "ui_runner" / "templates"
     ingest_script = REPO / "scripts" / "ingest_graded_to_income_db.py"
-    if tmpl.is_dir() and any(tmpl.glob("graded_props_*.json")) and ingest_script.is_file():
+    if tmpl.is_dir() and next(tmpl.glob("graded_props_*.json"), None) and ingest_script.is_file():
         print(
             "[proporacle] Ingesting graded_props → proporacle_income.db (background; gunicorn starts now)…",
             flush=True,
