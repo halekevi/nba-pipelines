@@ -11,7 +11,26 @@
 3. Add row to `data/payout_ladder.json` with `goblin_distances` field
 4. Re-run: `py -3.14 scripts\combined_slate_tickets.py --write-web`
 
+For Leaderboard/reverted payout screenshots, keep rows in `data/payout_ladder_reverted.json` and run with `--use-reverted-ladder`.
+
 ## Observations
+
+### 6-Leg Power (Leaderboard / Reverted-Payout UI)
+
+| date       | composition | observed_multiplier | notes |
+|------------|-------------|---------------------|-------|
+| 2026-04-30 | likely 0S+6G+0D | 3.0x (`$20 -> $60`) | Screenshot shows "Leaderboard" and "Learn more about lineups with reverted payouts" banner. Treat as special mode; do **not** promote to canonical `payout_ladder.json` without confirming standard (non-reverted) slip context and line deltas. |
+| 2026-04-30 | likely 1S+5G+0D | 4.5x (`$20 -> $90`) | Same caveat: leaderboard/reverted context may override normal ladder payouts. Keep as observation only. |
+| 2026-04-30 | likely mixed 6-leg | 10.5x (`$20 -> $210`) | Same caveat: observation captured from leaderboard view; requires non-reverted counterpart before ladder promotion. |
+
+### 2-Leg Power (1 Standard + 1 Goblin)
+
+| date       | goblin_distances | sweep | min_guarantee | source       | notes |
+|------------|------------------|-------|---------------|--------------|-------|
+| 2026-04-30 | [0]              | 3.0x  | 2.7x          | pp_observed  | Confirmed from live slip UI; promoted as exact distance-keyed row. |
+| 2026-04-30 | [1]              | 3.0x  | 2.5x          | pp_estimated | Added to complete distance-keyed ladder coverage; replace with observed slip when captured. |
+| 2026-04-30 | [2]              | 3.0x  | 2.3x          | pp_estimated | Added to complete distance-keyed ladder coverage; replace with observed slip when captured. |
+| 2026-04-30 | [3]              | 3.0x  | 2.1x          | pp_estimated | Added to complete distance-keyed ladder coverage; replace with observed slip when captured. |
 
 ### 3-Leg All Goblin
 

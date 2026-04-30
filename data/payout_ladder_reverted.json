@@ -1,0 +1,37 @@
+{
+  "version": "1.0",
+  "updated_at": "2026-04-30",
+  "notes": "Leaderboard/reverted payout observations. Keep separate from canonical standard ladder.",
+  "entries": [
+    {
+      "entry_type": "power",
+      "n_legs": 6,
+      "mix": {"goblin": 6, "standard": 0, "demon": 0},
+      "sweep_payout_x": 3.0,
+      "min_payout_x": 3.0,
+      "source": "pp_reverted_observed",
+      "confirmed_at": "2026-04-30",
+      "notes": "Observed on Leaderboard/reverted payout UI: 6-pick power $20 to pay $60 (3.0x)."
+    },
+    {
+      "entry_type": "power",
+      "n_legs": 6,
+      "mix": {"goblin": 5, "standard": 1, "demon": 0},
+      "sweep_payout_x": 4.5,
+      "min_payout_x": 4.5,
+      "source": "pp_reverted_observed",
+      "confirmed_at": "2026-04-30",
+      "notes": "Observed on Leaderboard/reverted payout UI: 6-pick power $20 to pay $90 (4.5x)."
+    },
+    {
+      "entry_type": "power",
+      "n_legs": 6,
+      "mix": {"goblin": 3, "standard": 3, "demon": 0},
+      "sweep_payout_x": 10.5,
+      "min_payout_x": 10.5,
+      "source": "pp_reverted_observed",
+      "confirmed_at": "2026-04-30",
+      "notes": "Observed on Leaderboard/reverted payout UI: 6-pick power $20 to pay $210 (10.5x)."
+    }
+  ]
+}

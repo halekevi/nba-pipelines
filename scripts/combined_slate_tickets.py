@@ -267,7 +267,9 @@ GOBLIN_MIN_FACTOR_SLOPE = 0.074
 GOBLIN_MIN_FACTOR_FLOOR = 0.30
 # Runtime toggle wired from CLI (--debug-payout).
 PAYOUT_DEBUG: bool = False
-PAYOUT_LADDER_PATH = os.path.join(REPO_ROOT, "data", "payout_ladder.json")
+PAYOUT_LADDER_STANDARD_PATH = os.path.join(REPO_ROOT, "data", "payout_ladder.json")
+PAYOUT_LADDER_REVERTED_PATH = os.path.join(REPO_ROOT, "data", "payout_ladder_reverted.json")
+PAYOUT_LADDER_PATH = PAYOUT_LADDER_STANDARD_PATH
 _PAYOUT_LADDER_CACHE: list[dict[str, Any]] | None = None
 # Flex: published ladder (all-standard) aligned with data/payout_ladder.json.
 # Keys are legs correct (n = all hit, n-1 = one miss). Goblin/demon scaling is applied on top.
@@ -306,6 +308,15 @@ def _load_payout_ladder_entries() -> list[dict[str, Any]]:
     except Exception:
         _PAYOUT_LADDER_CACHE = []
     return _PAYOUT_LADDER_CACHE
+
+
+def configure_payout_ladder(*, use_reverted_ladder: bool) -> None:
+    """Switch exact ladder source between standard and reverted payout contexts."""
+    global PAYOUT_LADDER_PATH, _PAYOUT_LADDER_CACHE
+    PAYOUT_LADDER_PATH = (
+        PAYOUT_LADDER_REVERTED_PATH if bool(use_reverted_ladder) else PAYOUT_LADDER_STANDARD_PATH
+    )
+    _PAYOUT_LADDER_CACHE = None
 
 
 def _mix_signature_from_legs(legs: list[dict[str, Any]]) -> dict[str, int]:
@@ -356,6 +367,7 @@ def _lookup_exact_payout_ladder(
     """
     mix_sig = _mix_signature_from_legs(legs)
     gob_sig = _goblin_distance_signature(legs)
+    is_reverted_ladder = os.path.abspath(PAYOUT_LADDER_PATH) == os.path.abspath(PAYOUT_LADDER_REVERTED_PATH)
     specific: list[dict[str, Any]] = []
     generic: list[dict[str, Any]] = []
     for ent in _load_payout_ladder_entries():
@@ -373,6 +385,10 @@ def _lookup_exact_payout_ladder(
                 continue
             req = _ladder_entry_goblin_sig(ent)
             if req is None:
+                # Reverted/Leaderboard payouts are highly delta-sensitive for Goblin legs.
+                # Do not let mix-only wildcard rows over-apply in reverted mode.
+                if is_reverted_ladder and int(mix_sig.get("goblin", 0)) > 0:
+                    continue
                 generic.append(ent)
             elif req == gob_sig:
                 specific.append(ent)
@@ -3897,7 +3913,13 @@ def ticket_groups_to_payload(
 
     _ordered_groups = sorted(
         enumerate(all_ticket_groups),
-        key=lambda ix_t: (_ticket_group_sort_rank(str(ix_t[1][0])), ix_t[0]),
+        key=lambda ix_t: (
+            _ticket_group_sort_rank(str(ix_t[1][0])),
+            _ticket_group_picktype_rank(str(ix_t[1][0])),
+            _ticket_group_leg_count(str(ix_t[1][0])),
+            _ticket_group_serial(str(ix_t[1][0])),
+            ix_t[0],
+        ),
     )
     for _, (group_name, tickets, _bg) in _ordered_groups:
         if not tickets:
@@ -7134,6 +7156,11 @@ def filter_eligible(
         sport_series = in_df.get("sport", pd.Series([""] * len(in_df), index=in_df.index)).astype(str).str.upper().str.strip()
         for sport, grp in in_df.groupby(sport_series):
             t = thresholds.get(str(sport).upper(), default)
+            # Tennis/WNBA boards often have sparse/placeholder L5 directional windows.
+            # Keep them in the candidate pool and rely on downstream ranking/EV gates.
+            if str(sport).upper() in {"TENNIS", "WNBA"}:
+                result.append(grp)
+                continue
             l5_over = pd.to_numeric(grp.get("l5_over"), errors="coerce").fillna(0)
             l5_under = pd.to_numeric(grp.get("l5_under"), errors="coerce").fillna(0)
             hit_rate = pd.to_numeric(grp.get("hit_rate"), errors="coerce")
@@ -9640,6 +9667,15 @@ def main():
         help="Print empirical payout debug for power tickets (base, goblin dists/factors, total adj, sweep).",
     )
     ap.add_argument(
+        "--use-reverted-ladder",
+        action="store_true",
+        default=False,
+        help=(
+            "Use data/payout_ladder_reverted.json for exact payouts (Leaderboard/reverted context). "
+            "Default uses data/payout_ladder.json."
+        ),
+    )
+    ap.add_argument(
         "--no-diversity-prune",
         action="store_true",
         default=True,
@@ -9657,6 +9693,11 @@ def main():
     args = ap.parse_args()
     global PAYOUT_DEBUG
     PAYOUT_DEBUG = bool(args.debug_payout)
+    configure_payout_ladder(use_reverted_ladder=bool(args.use_reverted_ladder))
+    print(
+        f"[payout-ladder] mode={'reverted' if bool(args.use_reverted_ladder) else 'standard'} "
+        f"path={PAYOUT_LADDER_PATH}"
+    )
 
     ds = str(args.date).strip().lower()
     if not ds or ds in ("today", "now"):
@@ -10894,7 +10935,59 @@ def main():
             return sel_idx[:-1] + [j]
         return None
 
-    def _emit_groups_for_pool(group_prefix: str, sport_label: str, pool_df: pd.DataFrame, bg_hdr: str, require_multi_sport: bool = False) -> None:
+    def _mixed_picktype_fix_indices(work: pd.DataFrame, sel_idx: list[int], used: set[int]) -> list[int] | None:
+        """
+        Ensure a "Mixed" ticket has at least one Standard and one Goblin leg.
+        If missing one side, attempt swapping the last leg for an unused row
+        of the missing pick type while preserving unique-player/prop constraints.
+        """
+        if len(sel_idx) < 2:
+            return sel_idx
+        rows = [work.iloc[i] for i in sel_idx]
+
+        def _pt_family(v: Any) -> str:
+            s = str(v or "").strip().upper()
+            if s == "STANDARD":
+                return "STANDARD"
+            if s == "GOBLIN":
+                return "GOBLIN"
+            return s
+
+        pts = {_pt_family(r.get("pick_type")) for r in rows}
+        has_std = "STANDARD" in pts
+        has_gob = "GOBLIN" in pts
+        if has_std and has_gob:
+            return sel_idx
+
+        missing = "GOBLIN" if not has_gob else "STANDARD"
+        players = {str(r.get("player", "")).strip().lower() for r in rows}
+        player_props = {
+            f"{str(r.get('player', '')).strip().lower()}::{_norm_prop_label(r.get('prop_type', ''))}"
+            for r in rows
+        }
+        for j in range(len(work)):
+            if j in used or j in sel_idx:
+                continue
+            row = work.iloc[j]
+            if _pt_family(row.get("pick_type")) != missing:
+                continue
+            p = str(row.get("player", "")).strip().lower()
+            if not p or p in players:
+                continue
+            pp = f"{p}::{_norm_prop_label(row.get('prop_type', ''))}"
+            if pp in player_props:
+                continue
+            return sel_idx[:-1] + [j]
+        return None
+
+    def _emit_groups_for_pool(
+        group_prefix: str,
+        sport_label: str,
+        pool_df: pd.DataFrame,
+        bg_hdr: str,
+        require_multi_sport: bool = False,
+        require_picktype_mix: bool = False,
+    ) -> None:
         """Exhaust the pool: repeated greedy N-leg tickets (unique player + unique player+prop), edge order."""
         if pool_df is None or len(pool_df) < 2:
             return
@@ -10926,6 +11019,13 @@ def main():
                     break
                 if require_multi_sport:
                     fixed = _multi_sport_fix_indices(work, sel_idx, used)
+                    if fixed is None:
+                        for i in sel_idx:
+                            used.add(i)
+                        continue
+                    sel_idx = fixed
+                if require_picktype_mix:
+                    fixed = _mixed_picktype_fix_indices(work, sel_idx, used)
                     if fixed is None:
                         for i in sel_idx:
                             used.add(i)
@@ -10994,7 +11094,7 @@ def main():
         bg = _header_for_sport(sport_label)
         _emit_groups_for_pool(f"{sport_label} Standard", sport_label, std_pool, bg)
         _emit_groups_for_pool(f"{sport_label} Goblin", sport_label, gob_pool, bg)
-        _emit_groups_for_pool(f"{sport_label} Mixed", sport_label, mix_pool, bg)
+        _emit_groups_for_pool(f"{sport_label} Mixed", sport_label, mix_pool, bg, require_picktype_mix=True)
         made = sum(_group_counts_by_size.get(f"{sport_label} Standard", Counter()).values()) + sum(
             _group_counts_by_size.get(f"{sport_label} Goblin", Counter()).values()
         ) + sum(_group_counts_by_size.get(f"{sport_label} Mixed", Counter()).values())
@@ -11013,7 +11113,7 @@ def main():
         _diagnose_2_4("X-Sport Mixed", "MIX", x_mix, require_multi_sport=True)
         _emit_groups_for_pool("X-Sport Standard", "MIX", x_std, C["hdr_mix"], require_multi_sport=True)
         _emit_groups_for_pool("X-Sport Goblin", "MIX", x_gob, C["hdr_mix"], require_multi_sport=True)
-        _emit_groups_for_pool("X-Sport Mixed", "MIX", x_mix, C["hdr_mix"], require_multi_sport=True)
+        _emit_groups_for_pool("X-Sport Mixed", "MIX", x_mix, C["hdr_mix"], require_multi_sport=True, require_picktype_mix=True)
     else:
         _zero_ticket_reasons["X-SPORT"] = "no eligible rows for cross-sport pool"
 
@@ -11622,6 +11722,40 @@ _TICKET_GROUP_SPORT_SORT_ORDER: dict[str, int] = {
 def _ticket_group_sort_rank(group_name: str) -> int:
     sk = _group_sport(group_name)
     return _TICKET_GROUP_SPORT_SORT_ORDER.get(sk, 999)
+
+
+def _ticket_group_picktype_rank(group_name: str) -> int:
+    """Order within a sport: Standard, Goblin, Mixed, then everything else."""
+    name = (group_name or "").upper().replace("\u00a0", " ")
+    if " STANDARD" in name:
+        return 0
+    if " GOBLIN" in name:
+        return 1
+    if " MIXED" in name:
+        return 2
+    return 9
+
+
+def _ticket_group_leg_count(group_name: str) -> int:
+    """Extract N from labels like '... 4-Leg #12' for stable ordering."""
+    m = re.search(r"(\d+)\s*-\s*LEG", str(group_name or ""), flags=re.IGNORECASE)
+    if not m:
+        return 99
+    try:
+        return int(m.group(1))
+    except (TypeError, ValueError):
+        return 99
+
+
+def _ticket_group_serial(group_name: str) -> int:
+    """Extract trailing #number if present."""
+    m = re.search(r"#\s*(\d+)\s*$", str(group_name or ""))
+    if not m:
+        return 999_999
+    try:
+        return int(m.group(1))
+    except (TypeError, ValueError):
+        return 999_999
 
 
 _EV_REC_RANK = {"LOW": 0, "SKIP": 0, "MARGINAL": 1, "OK": 2, "STRONG": 3}
