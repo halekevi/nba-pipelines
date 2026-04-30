@@ -1130,11 +1130,23 @@ def filter_web_tickets_for_ui(
     """Build /tickets JSON groups: optional positive-EV gate, then optional WEB_TICKET_TEMPLATE quotas."""
     groups_in = list(payload.get("groups") or [])
     out_groups: list[dict] = []
+    sport_candidates: dict[str, tuple[tuple[float, int, float], dict, str]] = {}
     for g in groups_in:
         if not isinstance(g, dict):
             continue
+        group_name = str(g.get("group_name") or "")
         tickets_in = list(g.get("tickets") or [])
         sport_key = _group_sport(str(g.get("group_name") or "")) or "ALL"
+        for t in tickets_in:
+            if not isinstance(t, dict):
+                continue
+            sp = _ticket_primary_sport(t)
+            if not sp:
+                continue
+            rnk = _ticket_rank_tuple(t)
+            cur = sport_candidates.get(sp)
+            if cur is None or rnk > cur[0]:
+                sport_candidates[sp] = (rnk, t, group_name)
         if require_positive_ev:
             kept = []
             for t in tickets_in:
@@ -1166,6 +1178,56 @@ def filter_web_tickets_for_ui(
         out_groups.append(ng)
     if apply_template_cap:
         out_groups = _apply_web_ticket_template(out_groups)
+
+    # Keep at least one single-sport ticket visible per sport in /tickets UI.
+    # This prevents strict web gates from hiding entire sports (e.g. NBA1H/SOCCER/WNBA)
+    # when they still have generated candidates in the payload.
+    ensure_cov_raw = os.getenv("PROPORACLE_WEB_ENSURE_SPORT_COVERAGE", "1").strip().lower()
+    ensure_sport_coverage = ensure_cov_raw not in {"0", "false", "no", "off"}
+    if ensure_sport_coverage and sport_candidates:
+        present_sports: set[str] = set()
+        existing_group_names: set[str] = set()
+        for g in out_groups:
+            if not isinstance(g, dict):
+                continue
+            gn = str(g.get("group_name") or "")
+            if gn:
+                existing_group_names.add(gn)
+            for t in list(g.get("tickets") or []):
+                if not isinstance(t, dict):
+                    continue
+                sp = _ticket_primary_sport(t)
+                if sp:
+                    present_sports.add(sp)
+
+        missing = [sp for sp in sport_candidates.keys() if sp not in present_sports]
+        for sp in sorted(missing):
+            _rank, best_ticket, src_group_name = sport_candidates[sp]
+            inserted = False
+            for g in out_groups:
+                if not isinstance(g, dict):
+                    continue
+                if str(g.get("group_name") or "") == src_group_name:
+                    tickets_cur = [t for t in list(g.get("tickets") or []) if isinstance(t, dict)]
+                    if not any(_ticket_primary_sport(t) == sp for t in tickets_cur):
+                        tickets_cur.append(best_ticket)
+                        g["tickets"] = tickets_cur
+                    inserted = True
+                    break
+            if inserted:
+                continue
+
+            # Source group was filtered out; create a minimal sport group with its best ticket.
+            out_groups.append(
+                {
+                    "group_name": src_group_name or f"{sp} Standard",
+                    "n_legs": _ticket_n_legs(best_ticket),
+                    "power_payout": best_ticket.get("power_payout") or best_ticket.get("base_power_payout"),
+                    "flex_payout": best_ticket.get("flex_payout"),
+                    "tickets": [best_ticket],
+                }
+            )
+
     out = dict(payload)
     out["groups"] = out_groups
     return out
@@ -3979,7 +4041,7 @@ def ticket_groups_to_payload(
                 sport_s = str(gv("sport") or t.get("sport") or "").strip()
                 player_s = str(gv("player") or "")
                 team_s = str(gv("team") or "")
-                opp_s = str(gv("opp") or "")
+                opp_s = str(gv("opp") or gv("opp_team") or "").strip()
                 prop_s = str(gv("prop_type") or "")
                 dir_s = str(gv("direction") or "")
                 game_time_s = str(gv("game_time") or "")
@@ -4151,7 +4213,7 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
                 "rank_score": g("rank_score"),
                 "player":     g("player") or "",
                 "team":       g("team") or "",
-                "opp":        g("opp") or "",
+                "opp":        str(g("opp") or g("opp_team") or "").strip(),
                 "prop":       g("prop_type") or g("prop") or "",
                 "pick_type":  g("pick_type") or "",
                 "line":       g("line"),
@@ -6312,6 +6374,14 @@ def load_mlb(path: str) -> pd.DataFrame:
 
     if "opp" not in df.columns:
         df["opp"] = ""
+
+    # Step8 CSV exports often populate opp_team while "Opp" is blank.
+    if "opp_team" in df.columns:
+        om = df["opp"].astype(str).str.strip()
+        om = om.mask(om.str.lower().isin(["nan", "none"]), "")
+        ot = df["opp_team"].astype(str).str.strip()
+        ot = ot.mask(ot.str.lower().isin(["nan", "none"]), "")
+        df["opp"] = np.where(om.ne(""), om, ot)
 
     df = df.loc[:, ~df.columns.duplicated()].copy()
     df["sport"] = "MLB"
