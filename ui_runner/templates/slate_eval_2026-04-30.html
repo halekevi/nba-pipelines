@@ -63,6 +63,12 @@ border:1px solid var(--glass-bd);border-radius:999px;padding:8px 14px;letter-spa
 .matrix-collapsible[open]>summary::before{transform:rotate(90deg)}
 .matrix-body{padding:12px}
 .matrix-summary{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2);margin:0 0 10px}
+.all-sports-collapsible{margin:6px 0 20px;border:1px solid var(--glass-bd);border-radius:14px;background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);box-shadow:0 4px 24px rgba(0,0,0,.18);overflow:hidden}
+.all-sports-collapsible>summary{list-style:none;cursor:pointer;padding:12px 14px;font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.08vw,16px);letter-spacing:2px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:8px}
+.all-sports-collapsible>summary::-webkit-details-marker{display:none}
+.all-sports-collapsible>summary::before{content:'▸';color:var(--gold);transition:transform .15s ease}
+.all-sports-collapsible[open]>summary::before{transform:rotate(90deg)}
+.all-sports-collapsible-body{padding:12px 12px 0}
 .matrix-collapsible tr.matrix-hit td{background:rgba(57,255,110,0.06)}
 .matrix-collapsible tr.matrix-hit td:first-child{border-left:3px solid var(--green)}
 .matrix-collapsible tr.matrix-miss td{background:rgba(255,77,77,0.10)}
@@ -202,6 +208,10 @@ td{padding:8px 8px}
       <div class="sport-meta-count">6,292 TOTAL PROPS</div>
     </div>
 
+    <details class="all-sports-collapsible">
+      <summary>ALL SPORTS DATA</summary>
+      <div class="all-sports-collapsible-body">
+        
     <div class="two-col pick-tier-split">
       <div>
         <div class="section-label">BY PICK TYPE</div>
@@ -1020,6 +1030,9 @@ td{padding:8px 8px}
         <div class="muted-note">No player-prop lines with ≥3 decided props.</div>
       </div>
     </div>
+    
+      </div>
+    </details>
   </div><div class="sport-section">
     <div class="sport-header">
       <div class="sport-label">🏀 NBA</div>
@@ -1027,6 +1040,7 @@ td{padding:8px 8px}
       <div class="sport-meta-count">1,813 TOTAL PROPS</div>
     </div>
 
+    
     <div class="two-col pick-tier-split">
       <div>
         <div class="section-label">BY PICK TYPE</div>
@@ -2053,6 +2067,7 @@ td{padding:8px 8px}
         <div class="muted-note">No player-prop lines with ≥3 decided props.</div>
       </div>
     </div>
+    
   </div><div class="sport-section">
     <div class="sport-header">
       <div class="sport-label">🏒 NHL</div>
@@ -2060,6 +2075,7 @@ td{padding:8px 8px}
       <div class="sport-meta-count">493 TOTAL PROPS</div>
     </div>
 
+    
     <div class="two-col pick-tier-split">
       <div>
         <div class="section-label">BY PICK TYPE</div>
@@ -2354,6 +2370,7 @@ td{padding:8px 8px}
         <div class="muted-note">No player-prop lines with ≥3 decided props.</div>
       </div>
     </div>
+    
   </div><div class="sport-section">
     <div class="sport-header">
       <div class="sport-label">⚽ Soccer</div>
@@ -2361,6 +2378,7 @@ td{padding:8px 8px}
       <div class="sport-meta-count">1,353 TOTAL PROPS</div>
     </div>
 
+    
     <div class="two-col pick-tier-split">
       <div>
         <div class="section-label">BY PICK TYPE</div>
@@ -2604,6 +2622,7 @@ td{padding:8px 8px}
         <div class="muted-note">No player-prop lines with ≥3 decided props.</div>
       </div>
     </div>
+    
   </div><div class="sport-section">
     <div class="sport-header">
       <div class="sport-label">⚾ MLB</div>
@@ -2611,6 +2630,7 @@ td{padding:8px 8px}
       <div class="sport-meta-count">2,633 TOTAL PROPS</div>
     </div>
 
+    
     <div class="two-col pick-tier-split">
       <div>
         <div class="section-label">BY PICK TYPE</div>
@@ -3104,6 +3124,7 @@ td{padding:8px 8px}
         <div class="muted-note">No player-prop lines with ≥3 decided props.</div>
       </div>
     </div>
+    
   </div><div class="sport-section">
     <div class="sport-header">
       <div class="sport-label">📋 TAKEAWAYS</div>
