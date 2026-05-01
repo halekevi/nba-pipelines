@@ -1859,6 +1859,16 @@ function collapseSportsInSlateFrame(frame) {
   const firstMain = doc.querySelector('.main');
   if (!firstMain) return;
 
+  // If report already ships as native <details> sport collapsibles,
+  // keep that structure and only enforce collapsed default state.
+  const nativeSportDetails = sections.filter(
+    sec => sec.tagName === 'DETAILS' && sec.classList.contains('sport-collapsible')
+  );
+  if (nativeSportDetails.length === sections.length) {
+    nativeSportDetails.forEach((sec) => { sec.open = false; });
+    return;
+  }
+
   sections.forEach((sec, idx) => {
     let sportLabel =
       sec.querySelector('.sport-label')?.textContent?.trim() ||

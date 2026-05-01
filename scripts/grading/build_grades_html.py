@@ -1176,20 +1176,23 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
       </div>
     </div>"""
 
-    return f"""<div class="sport-section">
-    <div class="sport-header">
-      <div class="sport-label">{icon} {sport}</div>
-      <div class="sport-header-line"></div>
-      <div class="sport-meta-count">{total_label} TOTAL PROPS</div>
+    return f"""<details class="sport-section sport-collapsible">
+    <summary>
+      <div class="sport-header">
+        <div class="sport-label">{icon} {sport}</div>
+        <div class="sport-header-line"></div>
+        <div class="sport-meta-count">{total_label} TOTAL PROPS</div>
+      </div>
+    </summary>
+    <div class="sport-section-body">
+      {two_col}
+      {matrix_section}
+      {split_section}
+      {def_section}
+      {prop_section}
+      {player_section}
     </div>
-
-    {two_col}
-    {matrix_section}
-    {split_section}
-    {def_section}
-    {prop_section}
-    {player_section}
-  </div>"""
+  </details>"""
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1373,6 +1376,14 @@ border:1px solid var(--glass-bd);border-radius:999px;padding:8px 14px;letter-spa
 .sport-meta-count{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2)}
 .sport-section{margin-bottom:48px;width:100%;max-width:100%;box-sizing:border-box}
 .sport-section:last-child{margin-bottom:0}
+.sport-collapsible{border:1px solid var(--glass-bd);border-radius:14px;padding:12px 14px;background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);box-shadow:0 4px 24px rgba(0,0,0,.18)}
+.sport-collapsible>summary{list-style:none;cursor:pointer}
+.sport-collapsible>summary::-webkit-details-marker{display:none}
+.sport-collapsible>summary::marker{display:none;content:''}
+.sport-collapsible>summary .sport-header{margin-bottom:0}
+.sport-collapsible>summary .sport-label::before{content:'▸ ';color:var(--gold)}
+.sport-collapsible[open]>summary .sport-label::before{content:'▾ '}
+.sport-collapsible .sport-section-body{padding-top:14px}
 .matrix-collapsible{margin:6px 0 20px;border:1px solid var(--glass-bd);border-radius:14px;background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);box-shadow:0 4px 24px rgba(0,0,0,.18);overflow:hidden}
 .matrix-collapsible>summary{list-style:none;cursor:pointer;padding:12px 14px;font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.08vw,16px);letter-spacing:2px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:8px}
 .matrix-collapsible>summary::-webkit-details-marker{display:none}
