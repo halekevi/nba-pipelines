@@ -2401,9 +2401,9 @@ NHL_LEG_MIN_HIT_RATE = {
 SOCCER_OVER_MIN_EDGE = 0.60
 
 DIRECTIONAL_HR_THRESHOLDS: dict[str, dict[str, float]] = {
-    "NBA": {"over": 0.70, "under": 0.30},
-    "NBA1Q": {"over": 0.65, "under": 0.35},
-    "NBA1H": {"over": 0.65, "under": 0.35},
+    "NBA": {"over": 0.70, "under": 0.30, "standard_over_min_edge": 2.45, "standard_under_min_edge": 1.33},
+    "NBA1Q": {"over": 0.65, "under": 0.35, "standard_over_min_edge": 2.45, "standard_under_min_edge": 1.33},
+    "NBA1H": {"over": 0.65, "under": 0.35, "standard_over_min_edge": 2.45, "standard_under_min_edge": 1.33},
     "NHL": {"over": 0.65, "under": 0.35},
     "MLB": {"over": 0.60, "under": 0.40},
     "TENNIS": {"over": 0.60, "under": 0.40},
@@ -2480,6 +2480,14 @@ POWER_MIN_TIER = {
     5: ["A", "B"],         # 5-leg power: Tier A/B only
     6: ["A", "B"],         # 6-leg power: Tier A/B only
 }
+
+# Pick-type tier policy for NBA-family tickets.
+# Keep broad tier eligibility; only hard-exclude Demon OVER.
+# Key: (pick_type, direction) in uppercase.
+ELIGIBLE_TIERS_BY_PICK_TYPE_DIRECTION: dict[tuple[str, str], set[str]] = {
+    ("DEMON", "OVER"): set(),
+}
+TIER_POLICY_SPORTS = {"NBA", "NBA1H", "NBA1Q"}
 
 # Cap fantasy-score concentration per ticket so slips are more diversified.
 MAX_FANTASY_LEGS = {
@@ -7256,6 +7264,34 @@ def filter_eligible(
     funnel_tracker: FunnelTracker | None = None,
     discard_sport: str = "",
 ):
+    def _norm_pick_type(v: Any) -> str:
+        s = str(v or "").strip().upper()
+        if not s:
+            return "STANDARD"
+        if "GOBLIN" in s:
+            return "GOBLIN"
+        if "DEMON" in s:
+            return "DEMON"
+        return "STANDARD"
+
+    def _norm_direction(v: Any) -> str:
+        s = str(v or "").strip().upper()
+        if s in {"UNDER", "LOWER"}:
+            return "UNDER"
+        return "OVER"
+
+    def _passes_picktype_direction_tier_policy(row: pd.Series) -> bool:
+        sport_u = str(row.get("sport", "") or "").strip().upper()
+        if sport_u not in TIER_POLICY_SPORTS:
+            return True
+        pick_u = _norm_pick_type(row.get("pick_type", row.get("Pick Type", "")))
+        dir_u = _norm_direction(row.get("direction", row.get("bet_direction", row.get("direction_used", ""))))
+        tier_u = str(row.get("tier", row.get("Tier", "")) or "").strip().upper()
+        allowed = ELIGIBLE_TIERS_BY_PICK_TYPE_DIRECTION.get((pick_u, dir_u))
+        if allowed is None:
+            return True
+        return tier_u in allowed
+
     def apply_directional_l5_hr(
         in_df: pd.DataFrame,
         thresholds: dict[str, dict[str, float]],
@@ -7314,6 +7350,37 @@ def filter_eligible(
     after_dir = apply_directional_l5_hr(before_dir, DIRECTIONAL_HR_THRESHOLDS, DEFAULT_DIRECTIONAL_THRESHOLD)
     dir_cond = pd.Series(df.index.isin(after_dir.index), index=df.index)
     _apply_gate(dir_cond, "directional_l5_hr_fail", "after_directional_l5_hr")
+    if {"sport", "pick_type", "direction", "edge"}.issubset(df.columns):
+        sport_s = df["sport"].astype(str).str.upper().str.strip()
+        pick_s = df["pick_type"].astype(str).str.upper().str.strip()
+        dir_s = df["direction"].astype(str).str.upper().str.strip()
+        edge_s = pd.to_numeric(df["edge"], errors="coerce")
+        effective_edge = pd.Series(
+            np.where(dir_s.isin({"UNDER", "LOWER"}), -edge_s, edge_s),
+            index=df.index,
+        )
+
+        over_floor = sport_s.map(
+            lambda sp: DIRECTIONAL_HR_THRESHOLDS.get(str(sp).upper(), {}).get("standard_over_min_edge")
+        )
+        cond_std_over = pd.Series([True] * len(df), index=df.index)
+        std_over_mask = pick_s.eq("STANDARD") & dir_s.isin({"OVER", "HIGHER"}) & over_floor.notna()
+        cond_std_over.loc[std_over_mask] = effective_edge.loc[std_over_mask] >= pd.to_numeric(
+            over_floor.loc[std_over_mask], errors="coerce"
+        )
+        _apply_gate(cond_std_over, "standard_over_edge_below_floor", "after_standard_over_edge_floor")
+
+        under_floor = sport_s.map(
+            lambda sp: DIRECTIONAL_HR_THRESHOLDS.get(str(sp).upper(), {}).get("standard_under_min_edge")
+        )
+        cond_std_under = pd.Series([True] * len(df), index=df.index)
+        std_under_mask = pick_s.eq("STANDARD") & dir_s.isin({"UNDER", "LOWER"}) & under_floor.notna()
+        cond_std_under.loc[std_under_mask] = effective_edge.loc[std_under_mask] >= pd.to_numeric(
+            under_floor.loc[std_under_mask], errors="coerce"
+        )
+        _apply_gate(cond_std_under, "standard_under_edge_below_floor", "after_standard_under_edge_floor")
+    policy_cond = df.apply(_passes_picktype_direction_tier_policy, axis=1)
+    _apply_gate(policy_cond, "picktype_direction_tier_policy_fail", "after_picktype_direction_tier_policy")
     if pick_types and "pick_type" in df.columns:
         _apply_gate(df["pick_type"].isin(pick_types), "pick_type_not_allowed", "after_pick_type")
     if "void_reason" in df.columns:
