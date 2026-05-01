@@ -1176,22 +1176,6 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
       </div>
     </div>"""
 
-    section_body = f"""
-    {two_col}
-    {matrix_section}
-    {split_section}
-    {def_section}
-    {prop_section}
-    {player_section}
-    """
-    if sport.strip().upper() == "ALL SPORTS":
-        section_body = f"""<details class="all-sports-collapsible">
-      <summary>ALL SPORTS DATA</summary>
-      <div class="all-sports-collapsible-body">
-        {section_body}
-      </div>
-    </details>"""
-
     return f"""<div class="sport-section">
     <div class="sport-header">
       <div class="sport-label">{icon} {sport}</div>
@@ -1199,7 +1183,12 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
       <div class="sport-meta-count">{total_label} TOTAL PROPS</div>
     </div>
 
-    {section_body}
+    {two_col}
+    {matrix_section}
+    {split_section}
+    {def_section}
+    {prop_section}
+    {player_section}
   </div>"""
 
 
@@ -1391,12 +1380,6 @@ border:1px solid var(--glass-bd);border-radius:999px;padding:8px 14px;letter-spa
 .matrix-collapsible[open]>summary::before{transform:rotate(90deg)}
 .matrix-body{padding:12px}
 .matrix-summary{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2);margin:0 0 10px}
-.all-sports-collapsible{margin:6px 0 20px;border:1px solid var(--glass-bd);border-radius:14px;background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);box-shadow:0 4px 24px rgba(0,0,0,.18);overflow:hidden}
-.all-sports-collapsible>summary{list-style:none;cursor:pointer;padding:12px 14px;font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.08vw,16px);letter-spacing:2px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:8px}
-.all-sports-collapsible>summary::-webkit-details-marker{display:none}
-.all-sports-collapsible>summary::before{content:'▸';color:var(--gold);transition:transform .15s ease}
-.all-sports-collapsible[open]>summary::before{transform:rotate(90deg)}
-.all-sports-collapsible-body{padding:12px 12px 0}
 .matrix-collapsible tr.matrix-hit td{background:rgba(57,255,110,0.06)}
 .matrix-collapsible tr.matrix-hit td:first-child{border-left:3px solid var(--green)}
 .matrix-collapsible tr.matrix-miss td{background:rgba(255,77,77,0.10)}
