@@ -12504,8 +12504,28 @@ def render_tickets_body_html(
             int(ent.get("original_index", 0)),
         )
     )
+    # Build filter pills from the full payload (not just UI-capped groups) so
+    # sports like NBA1H/WNBA remain selectable even when not in today's top-N.
+    prepared_all: list[dict] = []
+    for original_index, group in enumerate(groups_all):
+        tickets = group.get("tickets") or []
+        if not tickets:
+            continue
+        gn = group.get("group_name") or "Tickets"
+        ds, dt, dpk = _ticket_group_filter_slugs(gn)
+        ev_a = _group_ev_data_attr(tickets)
+        prepared_all.append(
+            {
+                "sport": ds,
+                "type": dt,
+                "pick": dpk,
+                "ev": ev_a,
+                "original_index": original_index,
+            }
+        )
     filter_attr_rows = [
-        {"sport": x["sport"], "type": x["type"], "pick": x["pick"], "ev": x["ev"]} for x in prepared
+        {"sport": x["sport"], "type": x["type"], "pick": x["pick"], "ev": x["ev"]}
+        for x in (prepared_all or prepared)
     ]
     parts.append(_tickets_filter_pills_html(filter_attr_rows))
 

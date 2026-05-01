@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-05-01T15:11:01.596552+00:00",
+  "generated_at_utc": "2026-05-01T15:19:34.177930+00:00",
   "date": "2026-05-01",
   "source_output": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\combined_slate_tickets_2026-05-01.xlsx",
   "audit": {
@@ -7,7 +7,7 @@
     "unique_leg_sets": 2116,
     "duplicate_rate": 0.47284504235176883,
     "pair_count": 8054091,
-    "jaccard_mean": 0.003999681397158655,
+    "jaccard_mean": 0.003999688787664861,
     "jaccard_p90": 0.0,
     "jaccard_max": 1.0,
     "by_legs": {
@@ -15,7 +15,7 @@
         "tickets": 940,
         "unique_leg_sets": 470,
         "duplicate_rate": 0.5,
-        "jaccard_mean": 0.002478870686334489,
+        "jaccard_mean": 0.0024818918571892536,
         "jaccard_p90": 0.0,
         "jaccard_max": 1.0
       },
@@ -23,7 +23,7 @@
         "tickets": 842,
         "unique_leg_sets": 491,
         "duplicate_rate": 0.41686460807600945,
-        "jaccard_mean": 0.0033172249979523303,
+        "jaccard_mean": 0.003314400625880851,
         "jaccard_p90": 0.0,
         "jaccard_max": 1.0
       },

@@ -711,9 +711,22 @@ def generate_bundle():
         ).strip()[:10]
         modified = f"{slate_date} 12:00:00" if slate_date else ""
         status_sports = ["nba", "nba1h", "nba1q", "cbb", "nhl", "soccer", "mlb", "nfl", "tennis", "wnba", "combined"]
+        artifact_by_sport = {
+            "nba": TEMPLATES_DIR.parent.parent / "NBA" / "step8_all_direction_clean.xlsx",
+            "nba1h": TEMPLATES_DIR.parent.parent / "NBA" / "step8_nba1h_direction_clean.xlsx",
+            "nba1q": TEMPLATES_DIR.parent.parent / "NBA" / "step8_nba1q_direction_clean.xlsx",
+            "nhl": TEMPLATES_DIR.parent.parent / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
+            "soccer": TEMPLATES_DIR.parent.parent / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
+            "mlb": TEMPLATES_DIR.parent.parent / "MLB" / "step8_mlb_direction_clean.xlsx",
+            "nfl": TEMPLATES_DIR.parent.parent / "NFL" / "outputs" / "step8_nfl_direction_clean.xlsx",
+            "tennis": TEMPLATES_DIR.parent.parent / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
+            "wnba": TEMPLATES_DIR.parent.parent / "WNBA" / "step8_wnba_direction.xlsx",
+        }
         status_payload = {}
         for s in status_sports:
-            exists = bool((sports_payload.get(s) if isinstance(sports_payload, dict) else []) or (s == "combined" and sports_payload))
+            has_rows = bool((sports_payload.get(s) if isinstance(sports_payload, dict) else []))
+            has_artifact = bool(artifact_by_sport.get(s) and artifact_by_sport[s].exists())
+            exists = bool(has_rows or has_artifact or (s == "combined" and sports_payload))
             status_payload[s] = {"slate": {"exists": exists, "modified": modified if exists else ""}}
         (MOBILE_WWW_DIR / "pipeline_status.json").write_text(
             json.dumps(status_payload, ensure_ascii=True, indent=2),

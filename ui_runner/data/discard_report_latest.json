@@ -1,6 +1,6 @@
 {
   "build_date": "2026-05-01",
-  "generated_at": "2026-05-01T15:12:02.789428+00:00",
+  "generated_at": "2026-05-01T15:20:38.149027+00:00",
   "discards": {
     "NHL": {
       "fantasy_score_excluded": 24,
@@ -16,7 +16,7 @@
       "payout_below_3x": 127
     },
     "MLB": {
-      "directional_l5_hr_fail": 1520,
+      "directional_l5_hr_fail": 1524,
       "final_pool_kept": 1123,
       "payout_below_3x": 596
     },
@@ -56,30 +56,30 @@
     ],
     "snapshots": {
       "input": {
-        "ALL": 2728,
+        "ALL": 2730,
         "NHL": 84,
         "NBA": 1289,
-        "MLB": 1069,
+        "MLB": 1071,
         "SOCCER": 0,
         "TENNIS": 58,
         "NBA1Q": 142,
         "NBA1H": 86
       },
       "after_prop_ban": {
-        "ALL": 2548,
+        "ALL": 2550,
         "NHL": 84,
         "NBA": 1140,
-        "MLB": 1069,
+        "MLB": 1071,
         "SOCCER": 0,
         "TENNIS": 54,
         "NBA1Q": 142,
         "NBA1H": 59
       },
       "after_fantasy_score": {
-        "ALL": 2542,
+        "ALL": 2544,
         "NHL": 78,
         "NBA": 1140,
-        "MLB": 1069,
+        "MLB": 1071,
         "SOCCER": 0,
         "TENNIS": 54,
         "NBA1Q": 142,
