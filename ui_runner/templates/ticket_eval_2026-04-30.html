@@ -450,6 +450,8 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
         <div class="manual-filter-row">
           <div class="manual-filter-group">
             <button class="pill sport-nba manual-sport-pill manual-sport-btn" data-manual-sport="NBA" type="button">NBA</button>
+            <button class="pill sport-nba1h manual-sport-pill manual-sport-btn" data-manual-sport="NBA1H" type="button">NBA1H</button>
+            <button class="pill sport-nba1q manual-sport-pill manual-sport-btn" data-manual-sport="NBA1Q" type="button">NBA1Q</button>
             <button class="pill sport-cbb manual-sport-pill manual-sport-btn" data-manual-sport="CBB" type="button">CBB</button>
             <button class="pill sport-nhl manual-sport-pill manual-sport-btn" data-manual-sport="NHL" type="button">NHL</button>
             <button class="pill sport-soccer manual-sport-pill manual-sport-btn" data-manual-sport="SOCCER" type="button">SOC</button>
@@ -512,7 +514,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 
   const state = {
     mode: 'MIXED',
-    selectedSports: new Set(['NBA','CBB','NHL','SOCCER']),
+    selectedSports: new Set(['NBA','NBA1H','NBA1Q','CBB','NHL','SOCCER']),
     // In MIXED, both pick types are enabled; in single-mode, pick one.
     selectedPickTypes: new Set(['Goblin','Standard']),
     minHitRate: 0.70,
@@ -699,6 +701,8 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
     for (const leg of state.activeLegs) {
       const dirCls = leg.direction === 'OVER' ? 'dir-over' : leg.direction === 'UNDER' ? 'dir-under' : '';
       const spClass = leg.sport === 'NBA' ? 'sport-nba'
+        : leg.sport === 'NBA1H' ? 'sport-nba1h'
+        : leg.sport === 'NBA1Q' ? 'sport-nba1q'
         : leg.sport === 'CBB' ? 'sport-cbb'
         : leg.sport === 'NHL' ? 'sport-nhl'
         : leg.sport === 'SOCCER' ? 'sport-soccer'
@@ -764,6 +768,8 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
           ${t.legs.map(l => {
             const dirCls = l.direction === 'OVER' ? 'dir-over' : l.direction === 'UNDER' ? 'dir-under' : '';
             const spClass = l.sport === 'NBA' ? 'sport-nba'
+              : l.sport === 'NBA1H' ? 'sport-nba1h'
+              : l.sport === 'NBA1Q' ? 'sport-nba1q'
               : l.sport === 'CBB' ? 'sport-cbb'
               : l.sport === 'NHL' ? 'sport-nhl'
               : l.sport === 'SOCCER' ? 'sport-soccer'
@@ -873,7 +879,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
     if (state.selectedSports.has(s)) state.selectedSports.delete(s);
     else state.selectedSports.add(s);
     // Keep at least one sport selected for a usable picker.
-    if (state.selectedSports.size === 0) state.selectedSports = new Set(['NBA','CBB','NHL','SOCCER']);
+    if (state.selectedSports.size === 0) state.selectedSports = new Set(['NBA','NBA1H','NBA1Q','CBB','NHL','SOCCER']);
     applySportButtonUI();
     renderPropList();
   }
