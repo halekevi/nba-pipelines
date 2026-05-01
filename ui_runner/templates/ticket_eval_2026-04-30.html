@@ -100,6 +100,7 @@ details.ticket-bucket{margin:0 0 10px;}
 .sport-nba{background:rgba(212,160,23,.12);color:#f0a500;border:1px solid rgba(212,160,23,.35);}
 .sport-nba1h{background:rgba(255,155,86,.12);color:#ffb27d;border:1px solid rgba(255,155,86,.32);}
 .sport-nba1q{background:rgba(255,214,102,.12);color:#ffd87a;border:1px solid rgba(255,214,102,.32);}
+.sport-wnba{background:rgba(255,138,198,.12);color:#ffb0dd;border:1px solid rgba(255,138,198,.32);}
 .sport-cbb{background:rgba(0,229,255,.10);color:#00e5ff;border:1px solid rgba(0,229,255,.32);}
 .sport-wcbb{background:rgba(127,199,217,.10);color:#9fd8e8;border:1px solid rgba(127,199,217,.32);}
 .sport-nhl{background:rgba(186,130,255,.12);color:#c4a5ff;border:1px solid rgba(186,130,255,.38);}
@@ -452,6 +453,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
             <button class="pill sport-nba manual-sport-pill manual-sport-btn" data-manual-sport="NBA" type="button">NBA</button>
             <button class="pill sport-nba1h manual-sport-pill manual-sport-btn" data-manual-sport="NBA1H" type="button">NBA1H</button>
             <button class="pill sport-nba1q manual-sport-pill manual-sport-btn" data-manual-sport="NBA1Q" type="button">NBA1Q</button>
+            <button class="pill sport-wnba manual-sport-pill manual-sport-btn" data-manual-sport="WNBA" type="button">WNBA</button>
             <button class="pill sport-cbb manual-sport-pill manual-sport-btn" data-manual-sport="CBB" type="button">CBB</button>
             <button class="pill sport-nhl manual-sport-pill manual-sport-btn" data-manual-sport="NHL" type="button">NHL</button>
             <button class="pill sport-soccer manual-sport-pill manual-sport-btn" data-manual-sport="SOCCER" type="button">SOC</button>
@@ -514,7 +516,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 
   const state = {
     mode: 'MIXED',
-    selectedSports: new Set(['NBA','NBA1H','NBA1Q','CBB','NHL','SOCCER']),
+    selectedSports: new Set(['NBA','NBA1H','NBA1Q','WNBA','CBB','NHL','SOCCER']),
     // In MIXED, both pick types are enabled; in single-mode, pick one.
     selectedPickTypes: new Set(['Goblin','Standard']),
     minHitRate: 0.70,
@@ -703,6 +705,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
       const spClass = leg.sport === 'NBA' ? 'sport-nba'
         : leg.sport === 'NBA1H' ? 'sport-nba1h'
         : leg.sport === 'NBA1Q' ? 'sport-nba1q'
+        : leg.sport === 'WNBA' ? 'sport-wnba'
         : leg.sport === 'CBB' ? 'sport-cbb'
         : leg.sport === 'NHL' ? 'sport-nhl'
         : leg.sport === 'SOCCER' ? 'sport-soccer'
@@ -770,6 +773,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
             const spClass = l.sport === 'NBA' ? 'sport-nba'
               : l.sport === 'NBA1H' ? 'sport-nba1h'
               : l.sport === 'NBA1Q' ? 'sport-nba1q'
+              : l.sport === 'WNBA' ? 'sport-wnba'
               : l.sport === 'CBB' ? 'sport-cbb'
               : l.sport === 'NHL' ? 'sport-nhl'
               : l.sport === 'SOCCER' ? 'sport-soccer'
@@ -879,7 +883,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
     if (state.selectedSports.has(s)) state.selectedSports.delete(s);
     else state.selectedSports.add(s);
     // Keep at least one sport selected for a usable picker.
-    if (state.selectedSports.size === 0) state.selectedSports = new Set(['NBA','NBA1H','NBA1Q','CBB','NHL','SOCCER']);
+    if (state.selectedSports.size === 0) state.selectedSports = new Set(['NBA','NBA1H','NBA1Q','WNBA','CBB','NHL','SOCCER']);
     applySportButtonUI();
     renderPropList();
   }
