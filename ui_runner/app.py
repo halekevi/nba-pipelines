@@ -2578,7 +2578,10 @@ def _grades_archive_dates_payload(max_dates: int = 40) -> dict[str, Any]:
                 continue
             counts[key] = max(counts.get(key, 0), n)
 
-    ordered = sorted(counts.keys(), reverse=True)[:max_dates]
+    et_today = _eastern_today_ymd()
+    non_future = [d for d in counts.keys() if d <= et_today]
+    ordered_src = non_future if non_future else list(counts.keys())
+    ordered = sorted(ordered_src, reverse=True)[:max_dates]
     return {
         "dates": ordered,
         "row_counts": {d: counts[d] for d in ordered},
@@ -2692,7 +2695,9 @@ def _grade_report_dates_on_disk(which: str) -> list[str]:
                     found.add(m.group(1))
         except OSError:
             continue
-    return sorted(found)
+    et_today = _eastern_today_ymd()
+    non_future = [d for d in found if d <= et_today]
+    return sorted(non_future if non_future else found)
 
 
 @app.get("/api/grades/report_dates")
