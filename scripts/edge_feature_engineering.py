@@ -14,6 +14,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from graded_line_quality_features import add_stratification_columns
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 SPORT_ENCODING = {
@@ -54,6 +56,11 @@ FEATURE_COLUMNS: list[str] = [
     "dir_line_gap_norm",     # normalized (median_actual - line), direction-aware, 0..1
     "opp_hr_historical",     # opponent-specific graded hit rate
     "player_hr_historical",  # player-specific graded hit rate on this prop type
+    # ── Stratification / data-quality (see graded_line_quality_features) ──
+    "line_bucket_encoded",
+    "context_known",
+    "defense_known",
+    "minutes_known",
 ]
 
 
@@ -411,6 +418,8 @@ def build_feature_vector(df: pd.DataFrame, sport: str) -> pd.DataFrame:
         if _new_col not in out.columns:
             out[_new_col] = _neutral
 
+    out = add_stratification_columns(out, df)
+
     return out
 
 
@@ -424,6 +433,7 @@ def apply_ticket_eligibility_voids(df: pd.DataFrame, sport: str) -> pd.DataFrame
     tier_u = out["tier"].astype(str).str.strip().str.upper()
     rec = _direction_series(out)
     pick_u = out.get("pick_type", pd.Series("", index=out.index)).astype(str).str.strip().str.upper()
+    is_standard_pick = pick_u.eq("STANDARD")
     ml_prob = _to_num(out.get("ml_prob", pd.Series(np.nan, index=out.index))).fillna(-1.0)
     def_src = out.get("DEF_TIER", out.get("def_tier", out.get("defense_tier", pd.Series("", index=out.index))))
     def_u = def_src.astype(str).str.strip().str.upper()
@@ -451,7 +461,12 @@ def apply_ticket_eligibility_voids(df: pd.DataFrame, sport: str) -> pd.DataFrame
     )
     void_tier_d = tier_u.eq("D") & ~nba_over_tierd_exception & ~is_under
     void_min = (mt == 0) & (~tier_u.eq("A")) & ~is_under
-    void_nhl_over = rec.eq("OVER") if sp == "NHL" else pd.Series(False, index=out.index)
+    # NHL OVER no longer gets blanket-voided. Keep only genuinely low-confidence OVERs out.
+    void_nhl_over = (
+        rec.eq("OVER") & is_standard_pick & ml_prob.ge(0.0) & ml_prob.lt(0.58)
+        if sp == "NHL"
+        else pd.Series(False, index=out.index)
+    )
 
     # NBA directional guards:
     # - Standard OVERs need stronger model confidence.
@@ -506,7 +521,19 @@ def apply_ticket_eligibility_voids(df: pd.DataFrame, sport: str) -> pd.DataFrame
     for idx in out.index[hit.to_numpy(dtype=bool)]:
         t = tag_ser.loc[idx]
         c = str(vr.loc[idx]).strip()
-        new_vr.loc[idx] = t if not c else f"{c};{t}"
+        if not c:
+            new_vr.loc[idx] = t
+            continue
+        existing = [p for p in c.split(";") if p]
+        incoming = [p for p in t.split(";") if p]
+        merged = []
+        seen = set()
+        for p in (*existing, *incoming):
+            if p in seen:
+                continue
+            seen.add(p)
+            merged.append(p)
+        new_vr.loc[idx] = ";".join(merged)
     out.loc[hit, "eligible"] = 0
     out["void_reason"] = new_vr
     return out

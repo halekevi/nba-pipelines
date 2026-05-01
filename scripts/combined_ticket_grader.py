@@ -1630,6 +1630,7 @@ def main():
 
     nhl_lp = nhl_lpt = None
     soccer_lp = soccer_lpt = None
+    soccer_act = pd.DataFrame()
     tennis_lp = tennis_lpt = None
     if args.nhl_actuals:
         nhl_csv = Path(args.nhl_actuals)

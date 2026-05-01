@@ -103,6 +103,7 @@ NHL_DIR       = BASE_DIR / "NHL"
 SOCCER_DIR    = BASE_DIR / "Soccer"
 MLB_DIR       = BASE_DIR / "MLB"
 NBA_FLAG      = NBA_DIR / "RUN_COMPLETE.flag"
+# ALL sheet includes Standard Line (standard_line) from step8 export — use |Standard Line − Line| for goblin delta / payout ladder keys.
 NBA_SLATE     = NBA_DIR / "step8_all_direction_clean.xlsx"
 NBA1H_SLATE   = NBA_DIR / "step8_nba1h_direction_clean.xlsx"
 NBA1Q_SLATE   = NBA_DIR / "step8_nba1q_direction_clean.xlsx"

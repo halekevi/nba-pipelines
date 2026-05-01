@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-29T17:23:38.792616+00:00",
+  "generated_at": "2026-04-29T23:53:06.557138+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
@@ -7,23 +7,23 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Daniss Jenkins",
+          "player": "Franz Wagner",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -33,23 +33,23 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Daniss Jenkins",
+          "player": "Franz Wagner",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -59,23 +59,23 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Daniss Jenkins",
+          "player": "Franz Wagner",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -85,23 +85,23 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Daniss Jenkins",
+          "player": "Franz Wagner",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -111,23 +111,23 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Daniss Jenkins",
+          "player": "Franz Wagner",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -137,23 +137,23 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Daniss Jenkins",
+          "player": "Franz Wagner",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -163,21 +163,21 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "RJ Barrett",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 22.5,
-          "standard_line": 28.5,
+          "player": "Paolo Banchero",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 6.0,
+          "delta": 4.0,
           "direction": "OVER",
           "hit_rate": 1.0
         }
@@ -189,33 +189,33 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -225,33 +225,33 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -261,33 +261,33 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -297,33 +297,33 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -333,33 +333,33 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -369,33 +369,33 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -405,33 +405,33 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Daniss Jenkins",
+          "player": "Franz Wagner",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Scottie Barnes",
-          "prop_type": "Assists",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "player": "Collin Murray-Boyles",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 14.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -441,31 +441,31 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Daniss Jenkins",
+          "player": "Franz Wagner",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "RJ Barrett",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 22.5,
-          "standard_line": 28.5,
+          "player": "Paolo Banchero",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 6.0,
+          "delta": 4.0,
           "direction": "OVER",
           "hit_rate": 1.0
         }
@@ -477,31 +477,31 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "RJ Barrett",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 22.5,
-          "standard_line": 28.5,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Paolo Banchero",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 6.0,
+          "delta": 4.0,
           "direction": "OVER",
           "hit_rate": 1.0
         }
@@ -513,29 +513,19 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -544,12 +534,22 @@
         {
           "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
+          "line": 7.0,
           "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -559,29 +559,19 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -590,12 +580,22 @@
         {
           "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
+          "line": 7.0,
           "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -605,29 +605,19 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -636,12 +626,22 @@
         {
           "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
+          "line": 7.0,
           "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -651,29 +651,19 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -682,12 +672,22 @@
         {
           "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
+          "line": 7.0,
           "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -697,29 +697,19 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -728,12 +718,22 @@
         {
           "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
+          "line": 7.0,
           "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -743,29 +743,19 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -774,12 +764,22 @@
         {
           "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
+          "line": 7.0,
           "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -789,43 +789,43 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
-          "pick_type": "Goblin",
-          "delta": 2.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Scottie Barnes",
-          "prop_type": "Assists",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Collin Murray-Boyles",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 14.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
         }
       ]
     },
@@ -835,41 +835,41 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "RJ Barrett",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 22.5,
-          "standard_line": 28.5,
+          "player": "Paolo Banchero",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 6.0,
+          "delta": 4.0,
           "direction": "OVER",
           "hit_rate": 1.0
         }
@@ -881,41 +881,41 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "RJ Barrett",
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 22.5,
-          "standard_line": 28.5,
+          "line": 7.0,
+          "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Paolo Banchero",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 6.0,
+          "delta": 4.0,
           "direction": "OVER",
           "hit_rate": 1.0
         }
@@ -927,53 +927,53 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dean Wade",
-          "prop_type": "Pts+Rebs",
-          "line": 5.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Daniss Jenkins",
+          "player": "RJ Barrett",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -983,53 +983,53 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dean Wade",
-          "prop_type": "Pts+Rebs",
-          "line": 5.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Daniss Jenkins",
+          "player": "RJ Barrett",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1039,53 +1039,53 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dean Wade",
-          "prop_type": "Pts+Rebs",
-          "line": 5.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Daniss Jenkins",
+          "player": "RJ Barrett",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1095,53 +1095,53 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dean Wade",
-          "prop_type": "Pts+Rebs",
-          "line": 5.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Daniss Jenkins",
+          "player": "RJ Barrett",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1151,53 +1151,53 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dean Wade",
-          "prop_type": "Pts+Rebs",
-          "line": 5.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Daniss Jenkins",
+          "player": "RJ Barrett",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1207,53 +1207,53 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dean Wade",
-          "prop_type": "Pts+Rebs",
-          "line": 5.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Daniss Jenkins",
+          "player": "RJ Barrett",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1263,29 +1263,19 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1294,22 +1284,32 @@
         {
           "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
+          "line": 7.0,
           "standard_line": 7.0,
-          "pick_type": "Goblin",
-          "delta": 2.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Scottie Barnes",
-          "prop_type": "Assists",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Collin Murray-Boyles",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 14.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1319,29 +1319,19 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1350,20 +1340,30 @@
         {
           "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
+          "line": 7.0,
           "standard_line": 7.0,
-          "pick_type": "Goblin",
-          "delta": 1.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "RJ Barrett",
+          "player": "Franz Wagner",
           "prop_type": "Pts+Rebs+Asts",
           "line": 22.5,
-          "standard_line": 28.5,
+          "standard_line": 23.5,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Paolo Banchero",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 6.0,
+          "delta": 4.0,
           "direction": "OVER",
           "hit_rate": 1.0
         }
@@ -1375,39 +1375,29 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dean Wade",
-          "prop_type": "Pts+Rebs",
-          "line": 5.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1416,10 +1406,20 @@
         {
           "player": "RJ Barrett",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 22.5,
+          "line": 28.5,
           "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Paolo Banchero",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 6.0,
+          "delta": 4.0,
           "direction": "OVER",
           "hit_rate": 1.0
         }
@@ -1431,49 +1431,19 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dean Wade",
-          "prop_type": "Pts+Rebs",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1482,12 +1452,42 @@
         {
           "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
+          "line": 7.0,
           "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "RJ Barrett",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1497,49 +1497,19 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dean Wade",
-          "prop_type": "Pts+Rebs",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1548,12 +1518,42 @@
         {
           "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
+          "line": 7.0,
           "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "RJ Barrett",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1563,49 +1563,19 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dean Wade",
-          "prop_type": "Pts+Rebs",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1614,12 +1584,42 @@
         {
           "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
+          "line": 7.0,
           "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "RJ Barrett",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1629,49 +1629,19 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dean Wade",
-          "prop_type": "Pts+Rebs",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1680,12 +1650,42 @@
         {
           "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
+          "line": 7.0,
           "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "RJ Barrett",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1695,49 +1695,19 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dean Wade",
-          "prop_type": "Pts+Rebs",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1746,12 +1716,42 @@
         {
           "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
+          "line": 7.0,
           "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "RJ Barrett",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1761,49 +1761,19 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dean Wade",
-          "prop_type": "Pts+Rebs",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1812,12 +1782,42 @@
         {
           "player": "Daniss Jenkins",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
+          "line": 7.0,
           "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "RJ Barrett",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1827,63 +1827,63 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dean Wade",
-          "prop_type": "Pts+Rebs",
-          "line": 5.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Daniss Jenkins",
+          "player": "RJ Barrett",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
-          "pick_type": "Goblin",
-          "delta": 2.0,
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Scottie Barnes",
-          "prop_type": "Assists",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Collin Murray-Boyles",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 14.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1893,61 +1893,61 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dean Wade",
-          "prop_type": "Pts+Rebs",
-          "line": 5.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Daniss Jenkins",
+          "player": "RJ Barrett",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 7.0,
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Franz Wagner",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 22.5,
+          "standard_line": 23.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "RJ Barrett",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 22.5,
-          "standard_line": 28.5,
+          "player": "Paolo Banchero",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 6.0,
+          "delta": 4.0,
           "direction": "OVER",
           "hit_rate": 1.0
         }
@@ -1959,61 +1959,61 @@
       "legs": [
         {
           "player": "Austin Reaves",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Assists",
-          "line": 1.5,
-          "standard_line": null,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Dean Wade",
-          "prop_type": "Pts+Rebs",
-          "line": 5.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": null,
+          "player": "Amen Thompson",
+          "prop_type": "Pts+Asts",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
+        },
+        {
+          "player": "Daniss Jenkins",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 7.0,
+          "standard_line": 7.0,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         },
         {
           "player": "RJ Barrett",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 22.5,
+          "line": 28.5,
           "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Paolo Banchero",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 6.0,
+          "delta": 4.0,
           "direction": "OVER",
           "hit_rate": 1.0
         }

@@ -95,11 +95,19 @@ $TennisDir = Join-Path $Root "Tennis"
 $WNBADir   = Join-Path $Root "WNBA"
 $NFLDir    = Join-Path $Root "NFL"
 # WNBA regular season: include in full parallel runs on/after this date (ISO yyyy-MM-dd).
-$WNBA_SEASON_START = "2026-05-08"
+# 2026 opener starts May 1, so keep WNBA active for same-day fresh slates.
+$WNBA_SEASON_START = "2026-05-01"
 $OutDir    = Join-Path $Root "outputs\$Date"
+$CanonicalOutDir = Join-Path $OutDir "canonical"
+$CanonicalPlatformUiDir = Join-Path $CanonicalOutDir "platform_ui"
+$CanonicalMobileAppDir = Join-Path $CanonicalOutDir "mobile_app"
 $WebOutDir = Join-Path $Root "ui_runner\templates"
+$MobileWwwDir = Join-Path $Root "mobile\www"
 
 if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force -Path $OutDir | Out-Null }
+if (-not (Test-Path $CanonicalOutDir)) { New-Item -ItemType Directory -Force -Path $CanonicalOutDir | Out-Null }
+if (-not (Test-Path $CanonicalPlatformUiDir)) { New-Item -ItemType Directory -Force -Path $CanonicalPlatformUiDir | Out-Null }
+if (-not (Test-Path $CanonicalMobileAppDir)) { New-Item -ItemType Directory -Force -Path $CanonicalMobileAppDir | Out-Null }
 
 # -- Encoding -----------------------------------------------------------------
 $env:PYTHONUTF8       = "1"
@@ -584,7 +592,7 @@ function Run-Combined {
     }
 
     # Keep strict date checks for NBA-family slates so /tickets never shows yesterday as today.
-    $CombinedArgs += " --date $Date --allow-cross-date-fallback --output `"$CombinedOut`" --tiers A,B,C,D --min-hit-rate 0.45 --min-edge -0.25 --max-tickets 40 --ticket-gen-starts 64 --nba-structured-variants 8 --ticket-candidate-sort rule --write-web --merge-web-latest --web-outdir `"$WebOutDir`""
+    $CombinedArgs += " --date $Date --allow-cross-date-fallback --output `"$CombinedOut`" --tiers A,B,C,D --min-hit-rate 0.45 --min-edge -0.25 --max-tickets 40 --ticket-gen-starts 64 --nba-structured-variants 8 --ticket-candidate-sort rule --prioritize-ticket-hit --write-web --merge-web-latest --web-outdir `"$WebOutDir`""
     if (-not $WebEvOnly) {
         $CombinedArgs += " --no-web-ev-gate"
     }
@@ -597,15 +605,59 @@ function Run-Combined {
         $stampedCombinedPath = Join-Path $OutDir "combined_slate_tickets_${Date}_$stamp.xlsx"
         Copy-Item $CombinedOut $datedCombinedPath -Force -ErrorAction SilentlyContinue
         Copy-Item $CombinedOut $stampedCombinedPath -Force -ErrorAction SilentlyContinue
+        # Freeze exact daily ticket slate so next-day grader can use a stable artifact.
+        $toGradeTomorrowPath = Join-Path $OutDir "combined_slate_tickets_${Date}_to_grade_tomorrow.xlsx"
+        Copy-Item $CombinedOut $toGradeTomorrowPath -Force -ErrorAction SilentlyContinue
+        # Canonical copies (single source of truth paths for automation).
+        $canonicalCombinedPath = Join-Path $CanonicalOutDir "combined_slate_tickets_$Date.xlsx"
+        $canonicalFrozenPath = Join-Path $CanonicalOutDir "combined_slate_tickets_${Date}_to_grade_tomorrow.xlsx"
+        Copy-Item $CombinedOut $canonicalCombinedPath -Force -ErrorAction SilentlyContinue
+        Copy-Item $CombinedOut $canonicalFrozenPath -Force -ErrorAction SilentlyContinue
         # ML backfill expects dated combined_slate_tickets_YYYY-MM-DD.json archives.
         # Snapshot today's tickets_latest.json into outputs/$Date/ as a dated JSON source.
         $TicketsLatestJson = Join-Path $WebOutDir "tickets_latest.json"
         $DatedTicketsJson  = Join-Path $OutDir "combined_slate_tickets_$Date.json"
+        $CanonicalTicketsJson = Join-Path $CanonicalOutDir "combined_slate_tickets_$Date.json"
         if (Test-Path $TicketsLatestJson) {
             Copy-Item $TicketsLatestJson $DatedTicketsJson -Force -ErrorAction SilentlyContinue
+            Copy-Item $TicketsLatestJson $CanonicalTicketsJson -Force -ErrorAction SilentlyContinue
             Write-Host "  Saved -> $DatedTicketsJson" -ForegroundColor Green
+            Write-Host "  Saved -> $CanonicalTicketsJson" -ForegroundColor Green
         } else {
             Write-Host "  [warn] Missing tickets_latest.json; skipped dated JSON snapshot for ML backfill." -ForegroundColor Yellow
+        }
+        # Canonical platform UI snapshots (templates consumed by web app).
+        foreach ($uiName in @(
+            "tickets_latest.html",
+            "tickets_latest.json",
+            "slate_latest.json",
+            "ticket_eval_$Date.html",
+            "slate_eval_$Date.html",
+            "graded_props_$Date.json"
+        )) {
+            $uiSrc = Join-Path $WebOutDir $uiName
+            $uiDst = Join-Path $CanonicalPlatformUiDir $uiName
+            if (Test-Path $uiSrc) {
+                Copy-Item $uiSrc $uiDst -Force -ErrorAction SilentlyContinue
+                Write-Host "  Saved -> $uiDst" -ForegroundColor Green
+            }
+        }
+        # Canonical mobile app snapshots (bundled mobile/www artifacts).
+        foreach ($mobileName in @(
+            "index.html",
+            "tickets.html",
+            "grades.html",
+            "income.html",
+            "payout.html",
+            "slate_latest.json",
+            "tickets_latest.json"
+        )) {
+            $mobileSrc = Join-Path $MobileWwwDir $mobileName
+            $mobileDst = Join-Path $CanonicalMobileAppDir $mobileName
+            if (Test-Path $mobileSrc) {
+                Copy-Item $mobileSrc $mobileDst -Force -ErrorAction SilentlyContinue
+                Write-Host "  Saved -> $mobileDst" -ForegroundColor Green
+            }
         }
         # Compare this run vs previous stamped run for line movement reporting.
         $prevStamped = Get-ChildItem -Path $OutDir -Filter "combined_slate_tickets_${Date}_*.xlsx" -ErrorAction SilentlyContinue |
@@ -637,6 +689,9 @@ function Run-Combined {
         Remove-Item $CombinedOut -Force -ErrorAction SilentlyContinue
         Write-Host "  Saved -> $datedCombinedPath" -ForegroundColor Green
         Write-Host "  Saved -> $stampedCombinedPath" -ForegroundColor Green
+        Write-Host "  Saved -> $toGradeTomorrowPath" -ForegroundColor Green
+        Write-Host "  Saved -> $canonicalCombinedPath" -ForegroundColor Green
+        Write-Host "  Saved -> $canonicalFrozenPath" -ForegroundColor Green
         if ($RunPayoutEngine) {
             Write-Host "[PAYOUT ENGINE] Fetching exact multipliers from PrizePicks..." -ForegroundColor Magenta
             try {

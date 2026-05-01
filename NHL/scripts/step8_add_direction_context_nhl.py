@@ -24,8 +24,8 @@ Column mapping (Step 7 → Step 8 display):
   rank                 → rank
 
 Usage:
-    py step8_add_direction_context_nhl.py --input outputs/step7_nhl_ranked.xlsx \
-        --output outputs/step8_nhl_direction_clean.xlsx
+    py step8_add_direction_context_nhl.py --input outputs/step7_nhl_ranked.xlsx
+        --output outputs/step8_nhl_direction_clean.xlsx --date YYYY-MM-DD
 """
 
 import argparse
@@ -479,18 +479,15 @@ def main():
         if gs is None or gs == "":
             return False
         try:
-            # openpyxl may hand back a datetime object directly
             if isinstance(gs, datetime):
                 if gs.tzinfo is not None:
                     local_date = gs.astimezone().date()
                 else:
                     local_date = gs.date()
                 return local_date == target_local
-            # String path
             gs_str = str(gs).strip()
             if not gs_str:
                 return False
-            # Try full ISO parse (handles "+00:00" / "Z" suffixes)
             for fmt in (
                 "%Y-%m-%dT%H:%M:%S%z",
                 "%Y-%m-%d %H:%M:%S%z",
@@ -504,7 +501,6 @@ def main():
                     return dt.date() == target_local
                 except ValueError:
                     continue
-            # Fallback: plain date prefix comparison
             return gs_str[:10] == target_str
         except Exception:
             return False
@@ -512,8 +508,6 @@ def main():
     display_rows = [r for r in display_rows if _is_target_date(r.get("game_start", ""))]
     dropped = before_filter - len(display_rows)
     if len(display_rows) == 0 and len(unfiltered) > 0:
-        # NHL PP board often lists games on the next Eastern calendar day vs --date
-        # from the morning pipeline (same pattern as Tennis step8).
         dates_seen = []
         for r in unfiltered:
             d = _game_start_local_date(r.get("game_start", ""))
@@ -525,8 +519,8 @@ def main():
             chosen = future[0] if future else unique[-1]
 
             def _is_chosen_date(gs) -> bool:
-                d = _game_start_local_date(gs)
-                return d is not None and d == chosen
+                d2 = _game_start_local_date(gs)
+                return d2 is not None and d2 == chosen
 
             display_rows = [r for r in unfiltered if _is_chosen_date(r.get("game_start", ""))]
             print(
@@ -534,9 +528,15 @@ def main():
                 f"using nearest slate date {chosen.isoformat()} (>= target when possible) -> {len(display_rows)} rows"
             )
         else:
-            print(f"[DateFilter] Kept {len(display_rows)}/{before_filter} rows for {target_str} (dropped {dropped} future/past rows)")
+            print(
+                f"[DateFilter] Kept {len(display_rows)}/{before_filter} rows for {target_str} "
+                f"(dropped {dropped} future/past rows)"
+            )
     else:
-        print(f"[DateFilter] Kept {len(display_rows)}/{before_filter} rows for {target_str} (dropped {dropped} future/past rows)")
+        print(
+            f"[DateFilter] Kept {len(display_rows)}/{before_filter} rows for {target_str} "
+            f"(dropped {dropped} future/past rows)"
+        )
 
     display_rows.sort(
         key=lambda r: int(r.get("rank") or 9999)

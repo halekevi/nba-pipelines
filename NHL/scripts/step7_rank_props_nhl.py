@@ -29,6 +29,14 @@ import joblib
 import numpy as np
 import pandas as pd
 
+try:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
+
 for _efe_anc in Path(__file__).resolve().parents:
     if (_efe_anc / "scripts" / "edge_feature_engineering.py").is_file():
         _efe_sd = str(_efe_anc / "scripts")
@@ -642,13 +650,13 @@ def _apply_ml_blend(df: pd.DataFrame) -> tuple[pd.Series, pd.Series, pd.Series]:
     feat_path = root / "models" / "prop_model_nhl_features.json"
     existing_score = _to_num(df.get("prop_score", pd.Series(np.nan, index=df.index))).fillna(0.0)
     if not (model_path.exists() and feat_path.exists()):
-        print(f"⚠️  NHL ML model missing at {model_path} — skipping ML blend")
+        print(f"[WARN] NHL ML model missing at {model_path} - skipping ML blend")
         return pd.Series(np.nan, index=df.index), pd.Series(np.nan, index=df.index), existing_score
     try:
         model = joblib.load(model_path)
         model_features = json.loads(feat_path.read_text(encoding="utf-8"))
     except Exception as e:
-        print(f"⚠️  Failed loading NHL ML model: {e} — skipping ML blend")
+        print(f"[WARN] Failed loading NHL ML model: {e} - skipping ML blend")
         return pd.Series(np.nan, index=df.index), pd.Series(np.nan, index=df.index), existing_score
 
     calibrator = None
@@ -681,12 +689,12 @@ def _apply_ml_blend(df: pd.DataFrame) -> tuple[pd.Series, pd.Series, pd.Series]:
         else:
             ml_prob = raw_prob
     except Exception as e:
-        print(f"⚠️  NHL ML inference failed: {e} — skipping ML blend")
+        print(f"[WARN] NHL ML inference failed: {e} - skipping ML blend")
         return pd.Series(np.nan, index=df.index), pd.Series(np.nan, index=df.index), existing_score
 
     ml_edge = ml_prob - 0.5
     final_score = (1.0 - blend_w) * existing_score + blend_w * ml_edge
-    print(f"✅ NHL ML blend applied (weight={blend_w:.2f})")
+    print(f"[OK] NHL ML blend applied (weight={blend_w:.2f})")
     return ml_prob, ml_edge, final_score
 
 
@@ -731,7 +739,7 @@ def main():
             ).fillna(0.0)
         rows = _df_usage.to_dict("records")
     except Exception as e:
-        print(f"⚠️ usage redistribution skipped: {e}")
+        print(f"[WARN] usage redistribution skipped: {e}")
 
     scored = []
     for row in _tqdm(rows, desc="  Scoring props", unit="prop"):

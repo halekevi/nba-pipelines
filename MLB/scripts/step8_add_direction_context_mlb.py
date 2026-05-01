@@ -65,6 +65,7 @@ DIR_UNDER         = "F7C5C5"
 PITCHER_PROPS = {
     "strikeouts", "pitching_outs", "innings_pitched",
     "hits_allowed", "earned_runs", "walks_allowed", "batters_faced",
+    "pitches_thrown",
 }
 
 

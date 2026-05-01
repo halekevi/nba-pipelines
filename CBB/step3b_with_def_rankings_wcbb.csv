@@ -1,0 +1,82 @@
+proj_id,player_id,cbb_player_key,player,player_norm,team_abbr,opp_team_abbr,pp_team,pp_opp_team,pos,prop_type,prop_norm,pick_type,line,start_time,pp_game_id,league_id,team,stat_type,odds_type,duration,line_num,opp_def_rank,opp_def_ppg,opp_def_tier,def_tier,OVERALL_DEF_RANK
+10859044,232538,azzi fudd|CONN,Azzi Fudd,azzi fudd,CONN,UNC,CONN,UNC,G,Points,pts,Demon,24.5,2026-03-27T17:00:00.000-04:00,146672,176,CONN,Points,demon,Full,24.5,92,70.63,Above Avg,Above Avg,92
+10859066,224015,sarah strong|CONN,Sarah Strong,sarah strong,CONN,UNC,CONN,UNC,F,Points,pts,Demon,24.5,2026-03-27T17:00:00.000-04:00,146672,176,CONN,Points,demon,Full,24.5,92,70.63,Above Avg,Above Avg,92
+10859026,298749,nyla harris|UNC,Nyla Harris,nyla harris,UNC,CONN,UNC,CONN,F,Points,pts,Demon,17.5,2026-03-27T17:00:00.000-04:00,146672,176,UNC,Points,demon,Full,17.5,19,66.0,Elite,Elite,19
+10859029,309275,lanie grant|UNC,Lanie Grant,lanie grant,UNC,CONN,UNC,CONN,G,Points,pts,Demon,17.5,2026-03-27T17:00:00.000-04:00,146672,176,UNC,Points,demon,Full,17.5,19,66.0,Elite,Elite,19
+10859035,286568,elina aarnisalo|UNC,Elina Aarnisalo,elina aarnisalo,UNC,CONN,UNC,CONN,G,Points,pts,Demon,17.5,2026-03-27T17:00:00.000-04:00,146672,176,UNC,Points,demon,Full,17.5,19,66.0,Elite,Elite,19
+10859063,309970,blanca quinonez|CONN,Blanca Quiñonez,blanca quinonez,CONN,UNC,CONN,UNC,F,Points,pts,Demon,17.5,2026-03-27T17:00:00.000-04:00,146672,176,CONN,Points,demon,Full,17.5,92,70.63,Above Avg,Above Avg,92
+10859025,298749,nyla harris|UNC,Nyla Harris,nyla harris,UNC,CONN,UNC,CONN,F,Points,pts,Demon,14.5,2026-03-27T17:00:00.000-04:00,146672,176,UNC,Points,demon,Full,14.5,19,66.0,Elite,Elite,19
+10859030,309275,lanie grant|UNC,Lanie Grant,lanie grant,UNC,CONN,UNC,CONN,G,Points,pts,Demon,14.5,2026-03-27T17:00:00.000-04:00,146672,176,UNC,Points,demon,Full,14.5,19,66.0,Elite,Elite,19
+10859036,286568,elina aarnisalo|UNC,Elina Aarnisalo,elina aarnisalo,UNC,CONN,UNC,CONN,G,Points,pts,Demon,14.5,2026-03-27T17:00:00.000-04:00,146672,176,UNC,Points,demon,Full,14.5,19,66.0,Elite,Elite,19
+10859039,279614,indya nivar|UNC,Indya Nivar,indya nivar,UNC,CONN,UNC,CONN,G,Points,pts,Demon,14.5,2026-03-27T17:00:00.000-04:00,146672,176,UNC,Points,demon,Full,14.5,19,66.0,Elite,Elite,19
+10859046,232538,azzi fudd|CONN,Azzi Fudd,azzi fudd,CONN,UNC,CONN,UNC,G,Points,pts,Goblin,14.5,2026-03-27T17:00:00.000-04:00,146672,176,CONN,Points,goblin,Full,14.5,92,70.63,Above Avg,Above Avg,92
+10859062,309970,blanca quinonez|CONN,Blanca Quiñonez,blanca quinonez,CONN,UNC,CONN,UNC,F,Points,pts,Demon,14.5,2026-03-27T17:00:00.000-04:00,146672,176,CONN,Points,demon,Full,14.5,92,70.63,Above Avg,Above Avg,92
+10859064,224015,sarah strong|CONN,Sarah Strong,sarah strong,CONN,UNC,CONN,UNC,F,Points,pts,Goblin,14.5,2026-03-27T17:00:00.000-04:00,146672,176,CONN,Points,goblin,Full,14.5,92,70.63,Above Avg,Above Avg,92
+10859024,298749,nyla harris|UNC,Nyla Harris,nyla harris,UNC,CONN,UNC,CONN,F,Points,pts,Goblin,11.5,2026-03-27T17:00:00.000-04:00,146672,176,UNC,Points,goblin,Full,11.5,19,66.0,Elite,Elite,19
+10859028,309275,lanie grant|UNC,Lanie Grant,lanie grant,UNC,CONN,UNC,CONN,G,Points,pts,Goblin,11.5,2026-03-27T17:00:00.000-04:00,146672,176,UNC,Points,goblin,Full,11.5,19,66.0,Elite,Elite,19
+10859034,286568,elina aarnisalo|UNC,Elina Aarnisalo,elina aarnisalo,UNC,CONN,UNC,CONN,G,Points,pts,Goblin,11.5,2026-03-27T17:00:00.000-04:00,146672,176,UNC,Points,goblin,Full,11.5,19,66.0,Elite,Elite,19
+10859038,279614,indya nivar|UNC,Indya Nivar,indya nivar,UNC,CONN,UNC,CONN,G,Points,pts,Demon,11.5,2026-03-27T17:00:00.000-04:00,146672,176,UNC,Points,demon,Full,11.5,19,66.0,Elite,Elite,19
+10859042,309969,ashlynn shade|CONN,Ashlynn Shade,ashlynn shade,CONN,UNC,CONN,UNC,G,Points,pts,Demon,11.5,2026-03-27T17:00:00.000-04:00,146672,176,CONN,Points,demon,Full,11.5,92,70.63,Above Avg,Above Avg,92
+10859023,298749,nyla harris|UNC,Nyla Harris,nyla harris,UNC,CONN,UNC,CONN,F,Points,pts,Goblin,9.5,2026-03-27T17:00:00.000-04:00,146672,176,UNC,Points,goblin,Full,9.5,19,66.0,Elite,Elite,19
+10859027,309275,lanie grant|UNC,Lanie Grant,lanie grant,UNC,CONN,UNC,CONN,G,Points,pts,Goblin,9.5,2026-03-27T17:00:00.000-04:00,146672,176,UNC,Points,goblin,Full,9.5,19,66.0,Elite,Elite,19
+10859033,286568,elina aarnisalo|UNC,Elina Aarnisalo,elina aarnisalo,UNC,CONN,UNC,CONN,G,Points,pts,Goblin,9.5,2026-03-27T17:00:00.000-04:00,146672,176,UNC,Points,goblin,Full,9.5,19,66.0,Elite,Elite,19
+10859041,309969,ashlynn shade|CONN,Ashlynn Shade,ashlynn shade,CONN,UNC,CONN,UNC,G,Points,pts,Demon,9.5,2026-03-27T17:00:00.000-04:00,146672,176,CONN,Points,demon,Full,9.5,92,70.63,Above Avg,Above Avg,92
+10859061,309970,blanca quinonez|CONN,Blanca Quiñonez,blanca quinonez,CONN,UNC,CONN,UNC,F,Points,pts,Goblin,9.5,2026-03-27T17:00:00.000-04:00,146672,176,CONN,Points,goblin,Full,9.5,92,70.63,Above Avg,Above Avg,92
+10868420,279614,indya nivar|UNC,Indya Nivar,indya nivar,UNC,CONN,UNC,CONN,G,Points,pts,Goblin,9.5,2026-03-27T17:00:00.000-04:00,146672,176,UNC,Points,goblin,Full,9.5,19,66.0,Elite,Elite,19
+10859037,279614,indya nivar|UNC,Indya Nivar,indya nivar,UNC,CONN,UNC,CONN,G,Points,pts,Goblin,7.5,2026-03-27T17:00:00.000-04:00,146672,176,UNC,Points,goblin,Full,7.5,19,66.0,Elite,Elite,19
+10859043,309969,ashlynn shade|CONN,Ashlynn Shade,ashlynn shade,CONN,UNC,CONN,UNC,G,Points,pts,Goblin,5.5,2026-03-27T17:00:00.000-04:00,146672,176,CONN,Points,goblin,Full,5.5,92,70.63,Above Avg,Above Avg,92
+10859324,224708,lauren betts|UCLA,Lauren Betts,lauren betts,UCLA,MINN,UCLA,MINN,C,Points,pts,Demon,24.5,2026-03-27T19:30:00.000-04:00,146685,176,UCLA,Points,demon,Full,24.5,,,,,
+10859691,276427,gianna kneepkens|UCLA,Gianna Kneepkens,gianna kneepkens,UCLA,MINN,UCLA,MINN,G,Points,pts,Demon,19.5,2026-03-27T19:30:00.000-04:00,146685,176,UCLA,Points,demon,Full,19.5,,,,,
+10859694,224709,kiki rice|UCLA,Kiki Rice,kiki rice,UCLA,MINN,UCLA,MINN,G,Points,pts,Demon,19.5,2026-03-27T19:30:00.000-04:00,146685,176,UCLA,Points,demon,Full,19.5,,,,,
+10859257,283785,tori mckinney|MINN,Tori McKinney,tori mckinney,MINN,UCLA,MINN,UCLA,G,Points,pts,Demon,17.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,demon,Full,17.5,121,71.78,Above Avg,Above Avg,121
+10859259,279828,mara braun|MINN,Mara Braun,mara braun,MINN,UCLA,MINN,UCLA,G,Points,pts,Demon,17.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,demon,Full,17.5,121,71.78,Above Avg,Above Avg,121
+10859321,225716,amaya battle|MINN,Amaya Battle,amaya battle,MINN,UCLA,MINN,UCLA,G,Points,pts,Demon,17.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,demon,Full,17.5,121,71.78,Above Avg,Above Avg,121
+10859328,283786,sophie hart|MINN,Sophie Hart,sophie hart,MINN,UCLA,MINN,UCLA,C,Points,pts,Demon,17.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,demon,Full,17.5,121,71.78,Above Avg,Above Avg,121
+10859687,232534,gabriela jaquez|UCLA,Gabriela Jaquez,gabriela jaquez,UCLA,MINN,UCLA,MINN,G,Points,pts,Demon,17.5,2026-03-27T19:30:00.000-04:00,146685,176,UCLA,Points,demon,Full,17.5,,,,,
+10859690,276427,gianna kneepkens|UCLA,Gianna Kneepkens,gianna kneepkens,UCLA,MINN,UCLA,MINN,G,Points,pts,Demon,17.5,2026-03-27T19:30:00.000-04:00,146685,176,UCLA,Points,demon,Full,17.5,,,,,
+10859695,224709,kiki rice|UCLA,Kiki Rice,kiki rice,UCLA,MINN,UCLA,MINN,G,Points,pts,Demon,17.5,2026-03-27T19:30:00.000-04:00,146685,176,UCLA,Points,demon,Full,17.5,,,,,
+10859252,224524,grace grocholski|MINN,Grace Grocholski,grace grocholski,MINN,UCLA,MINN,UCLA,G-F,Points,pts,Demon,14.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,demon,Full,14.5,121,71.78,Above Avg,Above Avg,121
+10859256,283785,tori mckinney|MINN,Tori McKinney,tori mckinney,MINN,UCLA,MINN,UCLA,G,Points,pts,Demon,14.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,demon,Full,14.5,121,71.78,Above Avg,Above Avg,121
+10859258,279828,mara braun|MINN,Mara Braun,mara braun,MINN,UCLA,MINN,UCLA,G,Points,pts,Demon,14.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,demon,Full,14.5,121,71.78,Above Avg,Above Avg,121
+10859320,225716,amaya battle|MINN,Amaya Battle,amaya battle,MINN,UCLA,MINN,UCLA,G,Points,pts,Demon,14.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,demon,Full,14.5,121,71.78,Above Avg,Above Avg,121
+10859326,224708,lauren betts|UCLA,Lauren Betts,lauren betts,UCLA,MINN,UCLA,MINN,C,Points,pts,Goblin,14.5,2026-03-27T19:30:00.000-04:00,146685,176,UCLA,Points,goblin,Full,14.5,,,,,
+10859327,283786,sophie hart|MINN,Sophie Hart,sophie hart,MINN,UCLA,MINN,UCLA,C,Points,pts,Demon,14.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,demon,Full,14.5,121,71.78,Above Avg,Above Avg,121
+10859686,232534,gabriela jaquez|UCLA,Gabriela Jaquez,gabriela jaquez,UCLA,MINN,UCLA,MINN,G,Points,pts,Demon,14.5,2026-03-27T19:30:00.000-04:00,146685,176,UCLA,Points,demon,Full,14.5,,,,,
+10859253,224524,grace grocholski|MINN,Grace Grocholski,grace grocholski,MINN,UCLA,MINN,UCLA,G-F,Points,pts,Demon,11.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,demon,Full,11.5,121,71.78,Above Avg,Above Avg,121
+10859323,225716,amaya battle|MINN,Amaya Battle,amaya battle,MINN,UCLA,MINN,UCLA,G,Points,pts,Goblin,11.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,goblin,Full,11.5,121,71.78,Above Avg,Above Avg,121
+10859688,276427,gianna kneepkens|UCLA,Gianna Kneepkens,gianna kneepkens,UCLA,MINN,UCLA,MINN,G,Points,pts,Goblin,11.5,2026-03-27T19:30:00.000-04:00,146685,176,UCLA,Points,goblin,Full,11.5,,,,,
+10859692,224709,kiki rice|UCLA,Kiki Rice,kiki rice,UCLA,MINN,UCLA,MINN,G,Points,pts,Goblin,11.5,2026-03-27T19:30:00.000-04:00,146685,176,UCLA,Points,goblin,Full,11.5,,,,,
+10859251,224524,grace grocholski|MINN,Grace Grocholski,grace grocholski,MINN,UCLA,MINN,UCLA,G-F,Points,pts,Goblin,9.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,goblin,Full,9.5,121,71.78,Above Avg,Above Avg,121
+10859254,283785,tori mckinney|MINN,Tori McKinney,tori mckinney,MINN,UCLA,MINN,UCLA,G,Points,pts,Goblin,9.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,goblin,Full,9.5,121,71.78,Above Avg,Above Avg,121
+10859260,279828,mara braun|MINN,Mara Braun,mara braun,MINN,UCLA,MINN,UCLA,G,Points,pts,Goblin,9.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,goblin,Full,9.5,121,71.78,Above Avg,Above Avg,121
+10859322,225716,amaya battle|MINN,Amaya Battle,amaya battle,MINN,UCLA,MINN,UCLA,G,Points,pts,Goblin,9.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,goblin,Full,9.5,121,71.78,Above Avg,Above Avg,121
+10859329,283786,sophie hart|MINN,Sophie Hart,sophie hart,MINN,UCLA,MINN,UCLA,C,Points,pts,Goblin,9.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,goblin,Full,9.5,121,71.78,Above Avg,Above Avg,121
+10859684,232534,gabriela jaquez|UCLA,Gabriela Jaquez,gabriela jaquez,UCLA,MINN,UCLA,MINN,G,Points,pts,Goblin,9.5,2026-03-27T19:30:00.000-04:00,146685,176,UCLA,Points,goblin,Full,9.5,,,,,
+10859689,276427,gianna kneepkens|UCLA,Gianna Kneepkens,gianna kneepkens,UCLA,MINN,UCLA,MINN,G,Points,pts,Goblin,9.5,2026-03-27T19:30:00.000-04:00,146685,176,UCLA,Points,goblin,Full,9.5,,,,,
+10859250,224524,grace grocholski|MINN,Grace Grocholski,grace grocholski,MINN,UCLA,MINN,UCLA,G-F,Points,pts,Goblin,7.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,goblin,Full,7.5,121,71.78,Above Avg,Above Avg,121
+10859255,283785,tori mckinney|MINN,Tori McKinney,tori mckinney,MINN,UCLA,MINN,UCLA,G,Points,pts,Goblin,7.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,goblin,Full,7.5,121,71.78,Above Avg,Above Avg,121
+10859330,283786,sophie hart|MINN,Sophie Hart,sophie hart,MINN,UCLA,MINN,UCLA,C,Points,pts,Goblin,7.5,2026-03-27T19:30:00.000-04:00,146685,176,MINN,Points,goblin,Full,7.5,121,71.78,Above Avg,Above Avg,121
+10860162,224411,flau jae johnson|LSU,Flau'jae Johnson,flau jae johnson,LSU,DUKE,LSU,DUKE,G,Points,pts,Demon,24.5,2026-03-27T22:00:00.000-04:00,146673,176,LSU,Points,demon,Full,24.5,3,63.15,Elite,Elite,3
+10860157,233301,toby fournier|DUKE,Toby Fournier,toby fournier,DUKE,LSU,DUKE,LSU,F,Points,pts,Demon,19.5,2026-03-27T22:00:00.000-04:00,146673,176,DUKE,Points,demon,Full,19.5,245,76.33,Avg,Avg,245
+10860161,224411,flau jae johnson|LSU,Flau'jae Johnson,flau jae johnson,LSU,DUKE,LSU,DUKE,G,Points,pts,Demon,19.5,2026-03-27T22:00:00.000-04:00,146673,176,LSU,Points,demon,Full,19.5,3,63.15,Elite,Elite,3
+10860165,276937,milaysia fulwiley|LSU,MiLaysia Fulwiley,milaysia fulwiley,LSU,DUKE,LSU,DUKE,G,Points,pts,Demon,19.5,2026-03-27T22:00:00.000-04:00,146673,176,LSU,Points,demon,Full,19.5,3,63.15,Elite,Elite,3
+10860168,224413,mikaylah williams|LSU,Mikaylah Williams,mikaylah williams,LSU,DUKE,LSU,DUKE,G,Points,pts,Demon,19.5,2026-03-27T22:00:00.000-04:00,146673,176,LSU,Points,demon,Full,19.5,3,63.15,Elite,Elite,3
+10860152,309971,delaney thomas|DUKE,Delaney Thomas,delaney thomas,DUKE,LSU,DUKE,LSU,F,Points,pts,Demon,17.5,2026-03-27T22:00:00.000-04:00,146673,176,DUKE,Points,demon,Full,17.5,245,76.33,Avg,Avg,245
+10860164,276937,milaysia fulwiley|LSU,MiLaysia Fulwiley,milaysia fulwiley,LSU,DUKE,LSU,DUKE,G,Points,pts,Demon,17.5,2026-03-27T22:00:00.000-04:00,146673,176,LSU,Points,demon,Full,17.5,3,63.15,Elite,Elite,3
+10860169,224413,mikaylah williams|LSU,Mikaylah Williams,mikaylah williams,LSU,DUKE,LSU,DUKE,G,Points,pts,Demon,17.5,2026-03-27T22:00:00.000-04:00,146673,176,LSU,Points,demon,Full,17.5,3,63.15,Elite,Elite,3
+10860148,224921,ashlon jackson|DUKE,Ashlon Jackson,ashlon jackson,DUKE,LSU,DUKE,LSU,G,Points,pts,Demon,14.5,2026-03-27T22:00:00.000-04:00,146673,176,DUKE,Points,demon,Full,14.5,245,76.33,Avg,Avg,245
+10860151,309971,delaney thomas|DUKE,Delaney Thomas,delaney thomas,DUKE,LSU,DUKE,LSU,F,Points,pts,Demon,14.5,2026-03-27T22:00:00.000-04:00,146673,176,DUKE,Points,demon,Full,14.5,245,76.33,Avg,Avg,245
+10860155,279829,taina mair|DUKE,Taina Mair,taina mair,DUKE,LSU,DUKE,LSU,G,Points,pts,Demon,14.5,2026-03-27T22:00:00.000-04:00,146673,176,DUKE,Points,demon,Full,14.5,245,76.33,Avg,Avg,245
+10860156,233301,toby fournier|DUKE,Toby Fournier,toby fournier,DUKE,LSU,DUKE,LSU,F,Points,pts,Goblin,14.5,2026-03-27T22:00:00.000-04:00,146673,176,DUKE,Points,goblin,Full,14.5,245,76.33,Avg,Avg,245
+10860154,279829,taina mair|DUKE,Taina Mair,taina mair,DUKE,LSU,DUKE,LSU,G,Points,pts,Demon,11.5,2026-03-27T22:00:00.000-04:00,146673,176,DUKE,Points,demon,Full,11.5,245,76.33,Avg,Avg,245
+10860163,276937,milaysia fulwiley|LSU,MiLaysia Fulwiley,milaysia fulwiley,LSU,DUKE,LSU,DUKE,G,Points,pts,Goblin,11.5,2026-03-27T22:00:00.000-04:00,146673,176,LSU,Points,goblin,Full,11.5,3,63.15,Elite,Elite,3
+10860166,224413,mikaylah williams|LSU,Mikaylah Williams,mikaylah williams,LSU,DUKE,LSU,DUKE,G,Points,pts,Goblin,11.5,2026-03-27T22:00:00.000-04:00,146673,176,LSU,Points,goblin,Full,11.5,3,63.15,Elite,Elite,3
+10860173,309972,zakiyah johnson|LSU,ZaKiyah Johnson,zakiyah johnson,LSU,DUKE,LSU,DUKE,G,Points,pts,Demon,11.5,2026-03-27T22:00:00.000-04:00,146673,176,LSU,Points,demon,Full,11.5,3,63.15,Elite,Elite,3
+10860149,309971,delaney thomas|DUKE,Delaney Thomas,delaney thomas,DUKE,LSU,DUKE,LSU,F,Points,pts,Goblin,9.5,2026-03-27T22:00:00.000-04:00,146673,176,DUKE,Points,goblin,Full,9.5,245,76.33,Avg,Avg,245
+10860174,309972,zakiyah johnson|LSU,ZaKiyah Johnson,zakiyah johnson,LSU,DUKE,LSU,DUKE,G,Points,pts,Demon,9.5,2026-03-27T22:00:00.000-04:00,146673,176,LSU,Points,demon,Full,9.5,3,63.15,Elite,Elite,3
+10868838,224921,ashlon jackson|DUKE,Ashlon Jackson,ashlon jackson,DUKE,LSU,DUKE,LSU,G,Points,pts,Goblin,9.5,2026-03-27T22:00:00.000-04:00,146673,176,DUKE,Points,goblin,Full,9.5,245,76.33,Avg,Avg,245
+10860146,224921,ashlon jackson|DUKE,Ashlon Jackson,ashlon jackson,DUKE,LSU,DUKE,LSU,G,Points,pts,Goblin,7.5,2026-03-27T22:00:00.000-04:00,146673,176,DUKE,Points,goblin,Full,7.5,245,76.33,Avg,Avg,245
+10860150,309971,delaney thomas|DUKE,Delaney Thomas,delaney thomas,DUKE,LSU,DUKE,LSU,F,Points,pts,Goblin,7.5,2026-03-27T22:00:00.000-04:00,146673,176,DUKE,Points,goblin,Full,7.5,245,76.33,Avg,Avg,245
+10860153,279829,taina mair|DUKE,Taina Mair,taina mair,DUKE,LSU,DUKE,LSU,G,Points,pts,Goblin,7.5,2026-03-27T22:00:00.000-04:00,146673,176,DUKE,Points,goblin,Full,7.5,245,76.33,Avg,Avg,245
+10860176,309972,zakiyah johnson|LSU,ZaKiyah Johnson,zakiyah johnson,LSU,DUKE,LSU,DUKE,G,Points,pts,Goblin,7.5,2026-03-27T22:00:00.000-04:00,146673,176,LSU,Points,goblin,Full,7.5,3,63.15,Elite,Elite,3
+10860175,309972,zakiyah johnson|LSU,ZaKiyah Johnson,zakiyah johnson,LSU,DUKE,LSU,DUKE,G,Points,pts,Goblin,5.5,2026-03-27T22:00:00.000-04:00,146673,176,LSU,Points,goblin,Full,5.5,3,63.15,Elite,Elite,3

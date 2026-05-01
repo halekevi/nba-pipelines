@@ -30,6 +30,8 @@ except ImportError:
 
 NHL_LEAGUE_ID = 8
 PER_PAGE = 250
+# PrizePicks occasionally paginates deep on busy slates; stop only after an empty page.
+MAX_PAGES = 40
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
@@ -189,6 +191,39 @@ def parse_rows(data: list, included: list) -> list:
     return rows
 
 
+def _merge_projection_boards(primary: list, secondary: list) -> list:
+    """
+    Union NHL projections from two API game_mode pulls (prizepools vs pickem).
+
+    Historically we only used the first successful mode; boards can differ slightly,
+    so pickem-only rows were silently missing from the slate.
+    Later rows overwrite earlier for the same projection_id (pickem wins over prizepools).
+    """
+    merged: dict[str, dict] = {}
+    for r in primary or []:
+        pid = str((r or {}).get("projection_id") or "").strip()
+        if pid:
+            merged[pid] = r
+    n_add = 0
+    for r in secondary or []:
+        pid = str((r or {}).get("projection_id") or "").strip()
+        if not pid:
+            continue
+        if pid not in merged:
+            n_add += 1
+        merged[pid] = r
+    out = list(merged.values())
+    if out:
+        parts = []
+        if primary:
+            parts.append(f"prizepools={len(primary)}")
+        if secondary:
+            parts.append(f"pickem={len(secondary)}")
+        extra = f" (pickem-only ids: {n_add})" if primary and secondary and n_add else ""
+        print(f"  [merge] {' + '.join(parts)} → unique projections={len(out)}{extra}")
+    return out
+
+
 def fetch_via_requests(game_mode: str) -> list:
     """Try plain requests — works if the endpoint isn't bot-protected."""
     print(f"  Trying requests ({game_mode} mode)...")
@@ -198,7 +233,7 @@ def fetch_via_requests(game_mode: str) -> list:
     all_data, all_included = [], []
     seen_ids = set()
 
-    page_bar = _tqdm(range(1, 20), desc=f"  Fetching pages ({game_mode})", unit="page", leave=True)
+    page_bar = _tqdm(range(1, MAX_PAGES + 1), desc=f"  Fetching pages ({game_mode})", unit="page", leave=True)
     for page in page_bar:
         params = {
             "league_id": NHL_LEAGUE_ID,
@@ -409,12 +444,11 @@ def main():
 
     print(f"📡 Fetching PrizePicks NHL | league_id={NHL_LEAGUE_ID}")
 
-    # Try prizepools first (no browser, fast)
-    rows = fetch_via_requests("prizepools")
-
-    # Then pickem via requests
-    if not rows:
-        rows = fetch_via_requests("pickem")
+    # Pull both game modes and merge — boards can differ; using only the first hit
+    # used to drop pickem-only projections (common symptom: "missing players/props").
+    rows_pp = fetch_via_requests("prizepools")
+    rows_pk = fetch_via_requests("pickem")
+    rows = _merge_projection_boards(rows_pp or [], rows_pk or [])
 
     # Finally Playwright
     if not rows:

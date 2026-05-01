@@ -34,6 +34,18 @@ PITCHER_PROP_KEYWORDS = (
 
 RELIABILITY_PRIOR = 0.55
 
+# Prefer canonical prop_norm so "Hitter Strikeouts" is not treated as a pitcher prop.
+_MLB_PITCHER_PROP_NORMS = frozenset({
+    "strikeouts",
+    "pitching_outs",
+    "innings_pitched",
+    "hits_allowed",
+    "earned_runs",
+    "walks_allowed",
+    "batters_faced",
+    "pitches_thrown",
+})
+
 
 def _get_stat_cols(df: pd.DataFrame, n: int) -> List[str]:
     return [f"stat_g{i}" for i in range(1, n + 1) if f"stat_g{i}" in df.columns]
@@ -57,10 +69,21 @@ def _ensure_cols(df, cols):
             df[c] = np.nan
 
 
-def _is_pitcher_prop(prop_series: pd.Series) -> pd.Series:
-    text = prop_series.astype(str).str.lower()
+def _is_pitcher_prop(df: pd.DataFrame) -> pd.Series:
+    if "prop_norm" in df.columns:
+        return (
+            df["prop_norm"]
+            .astype(str)
+            .str.lower()
+            .str.strip()
+            .isin(_MLB_PITCHER_PROP_NORMS)
+        )
+    text = df["prop_type"].astype(str).str.lower()
     patt = "|".join(PITCHER_PROP_KEYWORDS)
-    return text.str.contains(patt, regex=True, na=False)
+    hit = text.str.contains(patt, regex=True, na=False)
+    # Legacy rows: avoid classifying "Hitter Strikeouts" as pitcher via the word "strikeout".
+    not_hitter_so = ~text.str.contains(r"hitter\s*strikeout", regex=True, na=False)
+    return hit & not_hitter_so
 
 
 def _apply_reliability_gate(df: pd.DataFrame, ok_mask: pd.Series) -> None:
@@ -75,7 +98,7 @@ def _apply_reliability_gate(df: pd.DataFrame, ok_mask: pd.Series) -> None:
 
     n = pd.to_numeric(df.loc[work, "line_games_played_5"], errors="coerce").fillna(0.0)
     raw = pd.to_numeric(df.loc[work, "line_hit_rate_over_ou_5"], errors="coerce")
-    is_pitcher = _is_pitcher_prop(df.loc[work, "prop_type"])
+    is_pitcher = _is_pitcher_prop(df.loc[work])
     min_games = pd.Series(
         np.where(is_pitcher, MLB_MIN_GAMES["pitcher"], MLB_MIN_GAMES["hitter"]),
         index=n.index,

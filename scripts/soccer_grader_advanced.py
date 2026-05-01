@@ -711,18 +711,21 @@ def main() -> None:
         elif legacy_result == "PUSH":
             legacy_push += 1
 
-        # no-data policy: if zero actual and no minutes evidence, VOID rather than MISS
+        # Forward-safe grading policy:
+        # - Missing actual remains VOID.
+        # - actual==0 is a valid observed stat and should grade by direction/line.
+        # - Only mark VOID when feed explicitly says 0 minutes played.
         if pd.isna(actual):
             result, edge = "VOID", np.nan
+            void_reason = "NO_DATA"
             no_data_void_rows += 1
-        elif float(actual) == 0.0 and minutes_played is None:
+        elif minutes_played is not None and float(minutes_played) <= 0:
             result, edge = "VOID", np.nan
-            no_data_void_rows += 1
-        elif float(actual) == 0.0 and float(minutes_played) <= 0:
-            result, edge = "VOID", np.nan
+            void_reason = "DNP"
             no_data_void_rows += 1
         else:
             result, edge = grader.grade_prop(actual, line, direction)
+            void_reason = ""
         
         opp_analysis = grader.get_opponent_analysis(player, opp_team, prop_type, opp_cache)
         
@@ -744,6 +747,7 @@ def main() -> None:
             "direction": direction,
             "tier": tier,
             "result": result,
+            "reason": void_reason,
             "edge": edge,
             "ml_prob": _slate_ml_prob_soccer(slate_row),
             "confidence_score": confidence,

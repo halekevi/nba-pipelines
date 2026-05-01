@@ -1,0 +1,50 @@
+[step1] MLB fetch (playwright) | league_id=2 | attempt 1/3
+  ΓÜá∩╕Å  playwright-stealth not installed ΓÇö run: pip install playwright-stealth --break-system-packages
+≡ƒîÉ Launching Chromium with saved profile: C:\Users\halek\.pp_browser_profile
+  ΓÜá∩╕Å  Profile launch failed (TargetClosedError). Falling back to fresh browser context.
+  Warming fresh context: https://app.prizepicks.com/ ΓÇª
+  Loading https://app.prizepicks.com/board?league_id=2
+  ≡ƒöì PP response: [401] https://api.prizepicks.com/users/current
+  ≡ƒöì PP response: [200] https://api.prizepicks.com/core/streaks/milestones
+  ≡ƒöì PP response: [200] https://api.prizepicks.com/geo/get_location?lat=33.749&lng=-84.388
+  ≡ƒöì PP response: [200] https://api.prizepicks.com/leagues?state_code=&game_mode=pickem
+  ≡ƒöì PP response: [200] https://api.prizepicks.com/trending/7
+  ≡ƒöì PP response: [200] https://api.prizepicks.com/projections?league_id=7&per_page=250&single_stat=true&in_game=true&state_code=GA&game_mode=prizepools
+  ≡ƒöì PP response: [200] https://api.prizepicks.com/games?external_game_ids=NBA_game_fB6qgoO4y8gZkfTkyLVhDFJv%2CNBA_game_pi7fmG68Bnj9I6KYKrehSy5J%2CNBA_game_qhHkKhDwPEHcg3lvfEimlFg5%2CNBA_game_98FeiocaOYy8UPV8DOjy4PAR%2CNBA_game_hFWszWGybxScekC08s38FWfv%2CNBA_game_93giJV4DQBlJUxyFuSTgsmOe%2CNBA_game_VpwUcI4AVTcZhGoJPNFOwPY6%2CNBA_game_BDRfiw6tfijEaaZ4ObwKWbAT&limit=50
+       ΓööΓöÇ not JSON, skipping
+       ΓööΓöÇ not JSON, skipping
+       ΓööΓöÇ not JSON, skipping
+       ΓööΓöÇ not JSON, skipping
+       ΓööΓöÇ not JSON, skipping
+       ΓööΓöÇ not JSON, skipping
+  ≡ƒöì PP response: [200] https://api.prizepicks.com/core/streaks/milestones
+  ≡ƒöì PP response: [401] https://api.prizepicks.com/users/current
+  ≡ƒöì PP response: [200] https://api.prizepicks.com/geo/get_location?lat=33.749&lng=-84.388
+  ≡ƒöì PP response: [200] https://api.prizepicks.com/leagues?state_code=GA&game_mode=prizepools
+  ≡ƒöì PP response: [200] https://api.prizepicks.com/trending/2
+  ≡ƒöì PP response: [200] https://api.prizepicks.com/projections?league_id=2&per_page=250&single_stat=true&in_game=true&state_code=GA&game_mode=prizepools
+  ≡ƒöì PP response: [200] https://api.prizepicks.com/games?external_game_ids=MLB_game_bxLM18O7uZbTECbBlIyWuI6I%2CMLB_game_0WUIT7rY202Aq1WNwZP671SB%2CMLB_game_l4h6OD56Z5jDKSlVenYDxvzX%2CMLB_game_SRopxAXZ4SOH8V2O9fQOSWsu%2CMLB_game_J9vk9QPonpjoGFqlLNTtISry%2CMLB_game_SYUIiDZCsQvD8tIAZwHpe0R%2CMLB_game_P02ZwGJ78Wm85iVf9RDNKxIP%2CMLB_game_bosgWfRJ01QwEILDvrAxCors%2CMLB_game_SnScIyo2yxCW8ePKCRsaDXHh%2CMLB_game_tGDbCkIdd8gHi9kobfe0Pmh5%2CMLB_game_HzO8AFxSEkbkYtu9czDoTss3%2CMLB_game_HaBTmkABHg8zYix6IZWoeaDF&limit=50
+  Γ£ô Captured 4871 projections from https://api.prizepicks.com/projections?league_id=2&per_page=250&single_stat=true&in_game=true&state_code=GA&game_mode=prizepools
+  Γ£ô Captured 12 game objects from /games
+  Γ£à Capture complete.
+  Γ£à Captured on attempt 1
+  Filtered out 2683 non-trackable props (use --all_props to keep all)
+[INFO] MLB step1 fetched=2188 rows; date_filter=2026-04-20 (America/New_York); survived=1862
+[INFO] MLB step1 filtered_game_dates=['2026-04-20']
+
+Γ£à Saved ΓåÆ step1_mlb_props.csv  rows=1862  teams=18
+
+Prop type breakdown:
+prop_type
+Total Bases           677
+Hits                  333
+Runs                  230
+Walks                 167
+Home Runs             132
+Pitcher Strikeouts    100
+Stolen Bases           83
+Hits Allowed           82
+Walks Allowed          37
+Pitching Outs          21
+
+Γ£à BOARD_OK

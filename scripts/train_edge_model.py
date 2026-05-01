@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Train unified XGBoost edge classifier + Platt calibration on graded history.
 
-Uses edge_feature_engineering.build_feature_vector(), which applies play-side edge
-(negate raw projection-line edge for explicit UNDER rows) so the `edge` feature matches
-step7b / prop ML conventions. Retrain after that convention change.
+Uses edge_feature_engineering.build_feature_vector() (play-side edge on rows for step7b
+implied_prob only). The raw ``edge`` column is always excluded from the tree inputs
+(see ALWAYS_EXCLUDE_FROM_EDGE_TRAINING). Retrain after feature-list changes.
 
 Optional: ``--input-csv data/retrain_dataset.csv [--sport NBA] [--dry-run]`` loads
 ``result_binary`` as the label and maps CSV columns for ``build_feature_vector``.
@@ -21,6 +21,7 @@ from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
+from sklearn.isotonic import IsotonicRegression
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import train_test_split
@@ -28,12 +29,19 @@ from xgboost import XGBClassifier
 
 from edge_feature_engineering import (
     FEATURE_COLUMNS,
+    _direction_series,
     build_feature_vector,
     fill_minutes_cv_median_by_sport,
 )
 from edge_ml_bundle import EdgeCalibratedModel
 
 SCRIPT_NAME = "train_edge_model"
+
+# Label-adjacent columns: never use these as tree inputs (raw `edge` / abs_edge still exist on
+# rows for step7b implied_prob + edge_score; they are not read from edge_model_features.json).
+ALWAYS_EXCLUDE_FROM_EDGE_TRAINING: frozenset[str] = frozenset(
+    {"edge", "result_binary", "hit", "outcome"}
+)
 
 _COMBINED_GRADED_DATE = re.compile(r"combined_tickets_graded_(\d{4}-\d{2}-\d{2})", re.IGNORECASE)
 
@@ -400,19 +408,25 @@ def _adapt_retrain_csv_for_feature_pipeline(df: pd.DataFrame) -> pd.DataFrame:
     if "bet_direction" not in out.columns and "direction" in out.columns:
         out["bet_direction"] = out["direction"].astype(str).str.strip().str.upper()
     if "game_date" not in out.columns:
+        gd = pd.Series(pd.NaT, index=out.index)
+        for c in ("graded_date", "slate_date", "event_date", "game_datetime", "created_at", "start_time"):
+            if c in out.columns:
+                t = pd.to_datetime(out[c], errors="coerce")
+                gd = gd.where(gd.notna(), t)
         fd = (
             pd.to_datetime(out["file_date"], errors="coerce")
             if "file_date" in out.columns
             else pd.Series(pd.NaT, index=out.index)
         )
+        gd = gd.where(gd.notna(), fd)
         if "step8_game_date" in out.columns:
             st = out["step8_game_date"].astype(str).str.strip()
             st = st.replace("", pd.NA)
             sg = pd.to_datetime(st, errors="coerce")
-            gd = sg.where(sg.notna(), fd)
-        else:
-            gd = fd
+            gd = sg.where(sg.notna(), gd)
         out["game_date"] = gd
+    else:
+        out["game_date"] = pd.to_datetime(out["game_date"], errors="coerce")
 
     e = pd.to_numeric(out["edge"], errors="coerce") if "edge" in out.columns else pd.Series(np.nan, index=out.index)
     if "edge_score" in out.columns:
@@ -513,6 +527,12 @@ def _to_num_safe(s: pd.Series) -> pd.Series:
 MIN_SPORT_ROWS = 200
 MAX_CLASS_DOMINANCE_PCT = 90.0  # skip if dominant hit class > 90%
 MIN_HOLDOUT_ROWS_PER_SPORT = 50
+
+# Slice isotonic: fit on a stratified subset of TRAIN only (disjoint from holdout `te` used for Platt).
+SLICE_ISOTONIC_MIN_N = 200
+ISO_CALIB_TRAIN_FRAC = 0.15
+# Deactivated in prod: rows may remain in unified training history; do not allocate isotonic calibrators.
+INACTIVE_SPORTS = frozenset({"CBB"})
 
 
 def _hit_class_balance(y: pd.Series) -> tuple[int, int, float]:
@@ -639,9 +659,29 @@ def _infer_event_dates_from_source_paths(paths: pd.Series) -> pd.Series:
     return t1.where(t1.notna(), t2)
 
 
-def _event_date_series_for_raw(raw: pd.DataFrame) -> tuple[pd.Series, str]:
+def _event_date_series_for_raw(
+    raw: pd.DataFrame, *, temporal_date_column: str | None = None
+) -> tuple[pd.Series, str]:
     """Prefer game_date, graded_date, created_at; else slate_date / date / start_time; else _source_path."""
     colmap = {str(c).lower(): c for c in raw.columns}
+    if temporal_date_column:
+        tdc = str(temporal_date_column).strip()
+        if tdc:
+            col: str | None = None
+            if tdc in raw.columns:
+                col = tdc
+            elif tdc.lower() in colmap:
+                col = colmap[tdc.lower()]
+            if col is not None:
+                s = pd.to_datetime(raw[col], errors="coerce")
+                n_ok = int(s.notna().sum())
+                need = max(5, int(len(raw) * 0.02))
+                if n_ok >= need:
+                    return s, str(col)
+                print(
+                    f"[WARN] --temporal-date-column {tdc!r}: only {n_ok}/{len(raw)} parseable dates "
+                    f"(need>={need}); falling back to auto-detect."
+                )
     preferred = ("game_date", "graded_date", "created_at")
     for key in preferred:
         col: str | None = None
@@ -955,6 +995,102 @@ def _run_stress_test_nhl_soccer(root: Path, args: argparse.Namespace) -> str:
     return "A"
 
 
+def _fit_slice_isotonic_calibrators(
+    tr: pd.DataFrame,
+    y_train: pd.Series,
+    features_active: list[str],
+    calibrated: EdgeCalibratedModel,
+    models_dir: Path,
+) -> tuple[list[str], list[str]]:
+    """
+    Fit per-(sport, pick_type, direction) isotonic regressors on Platt probabilities
+    using ``ISO_CALIB_TRAIN_FRAC`` of **train** rows (never the Platt holdout ``te``).
+    Sports in ``INACTIVE_SPORTS`` are skipped (no calibrator keys at inference).
+    """
+    fitted_keys: list[str] = []
+    skipped: list[str] = []
+    if len(tr) < 80:
+        skipped.append("insufficient_train_rows_for_iso_split")
+        joblib.dump(
+            {"calibrators": {}, "min_n": SLICE_ISOTONIC_MIN_N, "fitted_keys": [], "skipped": skipped, "version": 1},
+            models_dir / "edge_slice_calibrators.pkl",
+            compress=3,
+        )
+        return fitted_keys, skipped
+
+    idx_all = np.arange(len(tr))
+    try:
+        _, iso_idx = train_test_split(
+            idx_all,
+            test_size=ISO_CALIB_TRAIN_FRAC,
+            random_state=43,
+            stratify=y_train.astype(int).values,
+        )
+    except ValueError:
+        _, iso_idx = train_test_split(idx_all, test_size=ISO_CALIB_TRAIN_FRAC, random_state=43)
+
+    tr_iso = tr.iloc[iso_idx].copy()
+    if len(tr_iso) < 30:
+        skipped.append("iso_split_too_small")
+        joblib.dump(
+            {"calibrators": {}, "min_n": SLICE_ISOTONIC_MIN_N, "fitted_keys": [], "skipped": skipped, "version": 1},
+            models_dir / "edge_slice_calibrators.pkl",
+            compress=3,
+        )
+        return fitted_keys, skipped
+
+    dirs = _direction_series(tr_iso).astype(str).str.strip().str.upper()
+    pt = tr_iso.get("pick_type", pd.Series("", index=tr_iso.index)).astype(str).str.strip().str.lower()
+    sp = tr_iso["sport"].astype(str).str.strip().str.upper()
+
+    tmp = tr_iso.copy()
+    tmp["_spu"] = sp.values
+    tmp["_ptl"] = pt.values
+    tmp["_dru"] = dirs.values
+
+    calibrators: dict[tuple[str, str, str], IsotonicRegression] = {}
+    for (sp0, pt0, dr0), sub in tmp.groupby(["_spu", "_ptl", "_dru"], sort=False):
+        key = (str(sp0), str(pt0).lower(), str(dr0).upper())
+        if str(key[0]).strip().upper() in INACTIVE_SPORTS:
+            skipped.append(f"{key}:inactive")
+            continue
+        if not key[1]:
+            skipped.append(f"{key}:empty_pick_type")
+            continue
+        n = len(sub)
+        if n < SLICE_ISOTONIC_MIN_N:
+            skipped.append(f"{key}:n={n}")
+            continue
+        Xi = sub[features_active].astype(float)
+        pi = np.asarray(calibrated.predict_proba(Xi)[:, 1], dtype=float)
+        yi = sub["y"].astype(int).values
+        if len(np.unique(yi)) < 2:
+            skipped.append(f"{key}:single_class")
+            continue
+        iso = IsotonicRegression(out_of_bounds="clip", y_min=0.0, y_max=1.0)
+        try:
+            iso.fit(pi, yi)
+        except Exception:
+            skipped.append(f"{key}:fit_failed")
+            continue
+        calibrators[key] = iso
+        fitted_keys.append(f"{key[0]}/{key[1]}/{key[2]}")
+
+    payload = {
+        "calibrators": calibrators,
+        "min_n": SLICE_ISOTONIC_MIN_N,
+        "fitted_keys": fitted_keys,
+        "skipped": skipped,
+        "version": 1,
+    }
+    joblib.dump(payload, models_dir / "edge_slice_calibrators.pkl", compress=3)
+    print(
+        f"\n[Slice isotonic] fitted={len(fitted_keys)} slices "
+        f"(train calib frac={ISO_CALIB_TRAIN_FRAC}, min_n={SLICE_ISOTONIC_MIN_N}); skipped={len(skipped)}"
+    )
+    return fitted_keys, skipped
+
+
 def _train_unified_edge_model(
     root: Path,
     *,
@@ -966,6 +1102,7 @@ def _train_unified_edge_model(
     input_csv: Path | None = None,
     sport_filter: str | None = None,
     dry_run: bool = False,
+    temporal_date_column: str | None = None,
 ) -> None:
     print(f"[PropORACLE-{SCRIPT_NAME}] Starting unified training...")
     models_dir = root / "models"
@@ -974,6 +1111,8 @@ def _train_unified_edge_model(
         "  [config] recursive_outputs=%s dedupe=%s temporal_split=%s exclude_player_hr=%s"
         % (recursive_outputs, dedupe, temporal_split, exclude_player_level_features)
     )
+    if temporal_date_column:
+        print(f"  [config] temporal_date_column={temporal_date_column!r}")
     if input_csv is not None:
         print(f"  [config] input_csv={input_csv} sport_filter={sport_filter!r} dry_run={dry_run}")
     n_combined_files_omitted = 0
@@ -1035,7 +1174,7 @@ def _train_unified_edge_model(
     models_dir.mkdir(parents=True, exist_ok=True)
 
     if temporal_split:
-        dt_ser, col_used = _event_date_series_for_raw(raw)
+        dt_ser, col_used = _event_date_series_for_raw(raw, temporal_date_column=temporal_date_column)
         if not col_used:
             print(
                 "[ERROR] --temporal-split requires parseable dates (game_date, graded_date, "
@@ -1118,6 +1257,15 @@ def _train_unified_edge_model(
             print("[ERROR] Temporal split: insufficient train or test rows.")
             return
         tr, te = df.iloc[:k].copy(), df.iloc[k:].copy()
+        if "_stress_event_dt" in tr.columns and "_stress_event_dt" in te.columns:
+            tr_dt = pd.to_datetime(tr["_stress_event_dt"], errors="coerce")
+            te_dt = pd.to_datetime(te["_stress_event_dt"], errors="coerce")
+            if tr_dt.notna().any() and te_dt.notna().any():
+                print(
+                    "[train_edge_model] temporal holdout: "
+                    f"train n={len(tr)} [{tr_dt.min()} .. {tr_dt.max()}] | "
+                    f"test n={len(te)} [{te_dt.min()} .. {te_dt.max()}]"
+                )
     else:
         strat = df["sport"].astype(str) + "_" + df["direction_encoded"].astype(int).astype(str)
         vc = strat.value_counts()
@@ -1146,16 +1294,27 @@ def _train_unified_edge_model(
     if leak_by_name:
         print(f"\n[WARN] Feature names matching leakage substrings removed: {sorted(leak_by_name)}")
 
+    always_excl = sorted(ALWAYS_EXCLUDE_FROM_EDGE_TRAINING & set(FEATURE_COLUMNS))
+    if always_excl:
+        print(f"\n[Leakage] Always excluded from tree training (label-adjacent): {always_excl}")
+
     leak_confirmed = bool(leak_by_corr or leak_by_name)
-    features_active = [f for f in FEATURE_COLUMNS if f not in leak_by_corr and f not in leak_by_name]
+    features_active = [
+        f
+        for f in FEATURE_COLUMNS
+        if f not in leak_by_corr and f not in leak_by_name and f not in ALWAYS_EXCLUDE_FROM_EDGE_TRAINING
+    ]
     if len(features_active) < 8:
-        print("[WARN] Too few features after leakage removal; restoring full FEATURE_COLUMNS.")
-        features_active = list(FEATURE_COLUMNS)
+        print(
+            "[WARN] Too few features after leakage removal; restoring FEATURE_COLUMNS "
+            "minus always-excluded label-adjacent columns only."
+        )
+        features_active = [f for f in FEATURE_COLUMNS if f not in ALWAYS_EXCLUDE_FROM_EDGE_TRAINING]
         leak_confirmed = False
     elif leak_confirmed:
         print(
             f"\n[Leakage] Confirmed suspects removed from training: "
-            f"sorted({sorted(leak_by_corr | leak_by_name)})"
+            f"{sorted(leak_by_corr | leak_by_name)}"
         )
     else:
         print("\n[Leakage] No |r|>0.5 feature-target correlation on NHL/Soccer train; no name-based removals.")
@@ -1195,6 +1354,10 @@ def _train_unified_edge_model(
     platt_lr = LogisticRegression(C=1e12, max_iter=2000, random_state=42, solver="lbfgs")
     platt_lr.fit(p_hold, y_test)
     calibrated = EdgeCalibratedModel(model, platt_lr)
+
+    iso_fitted, iso_skipped = _fit_slice_isotonic_calibrators(
+        tr, y_train, features_active, calibrated, models_dir
+    )
 
     prob_test = calibrated.predict_proba(X_test)[:, 1]
     auc_overall = float(roc_auc_score(y_test, prob_test))
@@ -1297,14 +1460,23 @@ def _train_unified_edge_model(
         "per_sport_holdout_status": sport_status,
         "scale_pos_weight": spw,
         "feature_columns": features_active,
+        "always_excluded_from_tree_training": sorted(ALWAYS_EXCLUDE_FROM_EDGE_TRAINING & set(FEATURE_COLUMNS)),
         "features_removed_leakage": sorted(leak_by_corr | leak_by_name) if leak_confirmed else [],
         "sports_skipped_quality": {k: quality_skipped_rows[k] for k in sorted(quality_skipped_rows)},
         "leakage_confirmed": bool(leak_confirmed),
         "recursive_outputs_used": recursive_outputs,
         "dedupe_used": dedupe,
         "temporal_split_used": temporal_split,
+        "temporal_date_column": temporal_date_column if temporal_split else None,
         "exclude_player_level_features_used": exclude_player_level_features,
         "combined_graded_file_paths_omitted": int(n_combined_files_omitted),
+        "edge_slice_calibrators_file": "edge_slice_calibrators.pkl",
+        "edge_slice_isotonic_min_n": SLICE_ISOTONIC_MIN_N,
+        "edge_slice_isotonic_train_frac": ISO_CALIB_TRAIN_FRAC,
+        "edge_slice_isotonic_inactive_sports": sorted(INACTIVE_SPORTS),
+        "edge_slice_isotonic_fitted_count": len(iso_fitted),
+        "edge_slice_isotonic_fitted_keys": iso_fitted[:250],
+        "edge_slice_isotonic_skipped": iso_skipped[:400],
     }
     (models_dir / "edge_model_metadata.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
     print(f"\nSaved: edge_model_unified.pkl, edge_model_features.json, edge_model_metadata.json -> {models_dir}")
@@ -1359,7 +1531,21 @@ def main() -> None:
     ap.add_argument(
         "--temporal-split",
         action="store_true",
-        help="Train on oldest 80%% of rows by event date, test on newest 20%% (full unified model).",
+        help=(
+            "Train on oldest 80%% of rows by event date, test on newest 20%% (full unified model). "
+            "Works with graded discovery and with --input-csv when dates are parseable "
+            "(game_date from retrain CSVs, or columns coalesced in _adapt_retrain_csv_for_feature_pipeline). "
+            "Override detection with --temporal-date-column."
+        ),
+    )
+    ap.add_argument(
+        "--temporal-date-column",
+        type=str,
+        default=None,
+        help=(
+            "With --temporal-split only: use this raw column (case-insensitive match) as the event timestamp "
+            "before automatic column selection. Must parse for >= max(5, 2%% of rows) or falls back to auto-detect."
+        ),
     )
     ap.add_argument(
         "--exclude-player-level-features",
@@ -1385,6 +1571,9 @@ def main() -> None:
     )
     args = ap.parse_args()
     root = Path(args.repo_root).resolve()
+
+    if getattr(args, "temporal_date_column", None) and not args.temporal_split:
+        print("[WARN] --temporal-date-column is ignored without --temporal-split.")
 
     input_csv_resolved: Path | None = None
     if args.input_csv is not None:
@@ -1445,6 +1634,7 @@ def main() -> None:
         input_csv=input_csv_resolved,
         sport_filter=args.sport,
         dry_run=args.dry_run,
+        temporal_date_column=str(args.temporal_date_column).strip() if args.temporal_date_column else None,
     )
 
 

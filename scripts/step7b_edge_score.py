@@ -18,7 +18,8 @@ import numpy as np
 import pandas as pd
 
 import edge_ml_bundle  # noqa: F401 — EdgeCalibratedModel pickle root
-from edge_feature_engineering import FEATURE_COLUMNS, build_feature_vector
+from edge_feature_engineering import FEATURE_COLUMNS, _direction_series, build_feature_vector
+from edge_predict_utils import apply_ml_prob_post_calibration
 
 SCRIPT_NAME = "step7b_edge_score"
 
@@ -172,7 +173,11 @@ def main() -> None:
         return
 
     X = df2[feats].astype(float)
-    ml_prob = model.predict_proba(X)[:, 1]
+    p_platt = np.asarray(model.predict_proba(X)[:, 1], dtype=float)
+    dirs_u = _direction_series(df2).astype(str).str.strip().str.upper()
+    pt_l = df2.get("pick_type", pd.Series("", index=df2.index)).astype(str).str.strip().str.lower()
+    mdir = root / "models"
+    ml_prob = apply_ml_prob_post_calibration(p_platt, sp, pt_l, dirs_u, mdir)
     edge_col = pd.to_numeric(df2.get("edge", pd.Series(0.0, index=df2.index)), errors="coerce").fillna(0.0)
     abs_edge_col = pd.to_numeric(df2.get("abs_edge", pd.Series(np.nan, index=df2.index)), errors="coerce")
     edge_mag = abs_edge_col.where(abs_edge_col.notna(), edge_col.abs()).fillna(0.0)
@@ -204,13 +209,14 @@ def main() -> None:
             use_opp_l5 = opp_l5.notna()
             if use_opp_l5.any():
                 comp = pd.Series(np.where(use_opp_l5, (0.70 * comp + 0.30 * opp_l5), comp), index=df2.index)
-    edge_score = pd.Series(ml_prob, index=df2.index) - implied_prob
+    ml_s = pd.Series(ml_prob, index=df2.index, dtype=float)
+    edge_score = ml_s - implied_prob
     if sp in ("NHL", "SOCCER"):
-        blended = 0.15 * pd.Series(ml_prob, index=df2.index) + 0.85 * comp
+        blended = 0.15 * ml_s + 0.85 * comp
     else:
-        blended = 0.3 * pd.Series(ml_prob, index=df2.index) + 0.7 * comp
+        blended = 0.3 * ml_s + 0.7 * comp
 
-    df2["ml_prob"] = ml_prob
+    df2["ml_prob"] = ml_s
     df2["edge_score"] = edge_score.values
     df2["blended_score"] = blended.values
     # Do not re-sort NHL — it uses explicit rank ordering in its step7 output

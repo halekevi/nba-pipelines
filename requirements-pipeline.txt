@@ -9,4 +9,5 @@ curl-cffi>=0.6.0
 openpyxl
 joblib
 scikit-learn
+xgboost>=2.0,<4
 matplotlib>=3.7

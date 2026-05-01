@@ -63,15 +63,17 @@ function Get-CsvDataRowCount([string]$CsvPath) {
 # NBA — append so early fetch rows are preserved when the board fills in
 Write-Host "[LATE_FETCH] Fetching NBA props (append)..."
 $NBADir = Join-Path $Root "NBA"
+# Gentler late-fetch anti-403 settings.
 $nbaArgs = @(
     "--league_id", "7",
     "--game_mode", "pickem",
     "--per_page", "250",
-    "--max_pages", "5",
+    "--max_pages", "3",
+    "--retries", "6",
     "--sleep", "2.0",
-    "--cooldown_seconds", "90",
-    "--max_cooldowns", "3",
-    "--jitter_seconds", "10.0",
+    "--cooldown_seconds", "180",
+    "--max_cooldowns", "4",
+    "--jitter_seconds", "14.0",
     "--append",
     "--output", "data\outputs\step1_pp_props_today.csv"
 )
@@ -134,6 +136,15 @@ $MLBDir = Join-Path $Root "MLB"
 Push-Location $MLBDir
 try {
     & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+        "--max-pages" "5" `
+        "--api-retries" "5" `
+        "--api-session-waves" "3" `
+        "--api-wave-gap-min" "30" `
+        "--api-wave-gap-max" "75" `
+        "--api-403-cooldown-after" "4" `
+        "--api-403-cooldown-seconds" "180" `
+        "--api-403-cooldown-jitter-min" "20" `
+        "--api-403-cooldown-jitter-max" "80" `
         "--append" `
         "--date" "$PipeDate" `
         "--output" "step1_mlb_props.csv"
@@ -141,7 +152,7 @@ try {
         Write-Host "[LATE_FETCH] MLB direct API step1 failed (exit $LASTEXITCODE) - trying Playwright" -ForegroundColor Yellow
         & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
             "--playwright" `
-            "--timeout" "180" `
+            "--timeout" "240" `
             "--append" `
             "--date" "$PipeDate" `
             "--output" "step1_mlb_props.csv"

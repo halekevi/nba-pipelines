@@ -1,7 +1,7 @@
 /**
  * Shared mobile nav: two-row bar (brand + hamburger, then snav-right meta)
  * and fixed flyout. Load proporacle-mobile-schema.css first, then page inline <style>, then this file so these rules win.
- * v=20260430webviewfix — ≤768px hamburger; hide ul#nav-links; flyout above sticky bar.
+ * v=20260430schemapage — ≤768px hamburger; hide ul#nav-links; flyout above sticky bar.
  */
 @media (max-width: 768px) {
   nav.snav,
@@ -60,29 +60,57 @@
   }
 
   .snav-right {
-    order: 3 !important;
-    flex: 1 1 100% !important;
-    width: 100% !important;
+    order: 2 !important;
+    flex: 0 1 auto !important;
+    width: auto !important;
     min-width: 0 !important;
-    margin-left: 0 !important;
-    justify-content: flex-start !important;
+    margin-left: auto !important;
+    justify-content: flex-end !important;
     align-items: center !important;
-    flex-wrap: wrap !important;
-    gap: 10px !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
   }
 
   .nav-live-cluster {
-    flex: 1 1 auto !important;
+    flex: 0 1 auto !important;
     min-width: 0 !important;
-    max-width: 100% !important;
+    max-width: min(68vw, 360px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
   }
 
   .nav-datetime-block {
-    max-width: 100% !important;
+    max-width: min(52vw, 280px) !important;
+    align-items: flex-end !important;
+    text-align: right !important;
+    margin-left: 0 !important;
+    padding-left: 8px !important;
+  }
+
+  .nav-slate-date {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    line-height: 1.15 !important;
+    white-space: nowrap !important;
+    color: rgba(255, 255, 255, 0.94) !important;
   }
 
   .nav-sync-line {
     max-width: 100% !important;
+    justify-content: flex-end !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    color: rgba(255, 255, 255, 0.52) !important;
+  }
+
+  .nav-local-datetime {
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    color: rgba(255, 255, 255, 0.56) !important;
   }
 
   .theme-toggle {

@@ -8,9 +8,10 @@ Pulls last-N game stats from the official MLB Stats API:
 
 Handles:
   - Hitter props: hits, total_bases, home_runs, rbi, runs, walks,
-                  stolen_bases, fantasy_score, hits_runs_rbi, singles, doubles, triples
+                  stolen_bases, fantasy_score, hits_runs_rbi, singles, doubles, triples,
+                  hitter_strikeouts (game log strikeOuts)
   - Pitcher props: strikeouts, pitching_outs, innings_pitched, hits_allowed,
-                   earned_runs, walks_allowed, batters_faced
+                   earned_runs, walks_allowed, batters_faced, pitches_thrown (numberOfPitches)
 
 Outputs:
   step4_mlb_with_stats.csv
@@ -65,6 +66,7 @@ GAMELOG_URL = (
 PITCHER_PROPS = {
     "strikeouts", "pitching_outs", "innings_pitched",
     "hits_allowed", "earned_runs", "walks_allowed", "batters_faced",
+    "pitches_thrown",
 }
 
 
@@ -162,6 +164,7 @@ def derive_hitter_stat(game: dict, prop_norm: str) -> float:
             return default
 
     h  = g("hits",        0)
+    h_so = g("strikeOuts", 0)
     hr = g("homeRuns",    0)
     bb = g("baseOnBalls", 0)
     sb = g("stolenBases", 0)
@@ -179,18 +182,19 @@ def derive_hitter_stat(game: dict, prop_norm: str) -> float:
     hits_r_rbi  = h + r + rbi
 
     mapping = {
-        "hits":           h,
-        "total_bases":    total_bases,
-        "home_runs":      hr,
-        "rbi":            rbi,
-        "runs":           r,
-        "walks":          bb,
-        "stolen_bases":   sb,
-        "fantasy_score":  fantasy,
-        "hits_runs_rbi":  hits_r_rbi,
-        "singles":        sg,
-        "doubles":        d2,
-        "triples":        t3,
+        "hits":                h,
+        "total_bases":         total_bases,
+        "home_runs":           hr,
+        "rbi":                 rbi,
+        "runs":                r,
+        "walks":               bb,
+        "stolen_bases":        sb,
+        "fantasy_score":       fantasy,
+        "hits_runs_rbi":       hits_r_rbi,
+        "singles":             sg,
+        "doubles":             d2,
+        "triples":             t3,
+        "hitter_strikeouts":   h_so,
     }
     return mapping.get(prop_norm, np.nan)
 
@@ -210,7 +214,19 @@ def derive_pitcher_stat(game: dict, prop_norm: str) -> float:
     outs      = _ip_to_outs(ip_str)
     ip_dec    = float(outs) / 3.0 if not np.isnan(outs) else np.nan
 
-    so        = g("strikeOuts",      0)
+    so = g("strikeOuts", 0)
+
+    def _pitch_count() -> float:
+        for key in ("pitchesThrown", "numberOfPitches"):
+            v = s.get(key)
+            try:
+                if v is not None and str(v).strip() not in ("", "-", ".---"):
+                    return float(v)
+            except (TypeError, ValueError):
+                continue
+        return 0.0
+
+    pitches = _pitch_count()
     ha        = g("hits",            0)
     er        = g("earnedRuns",      0)
     bb        = g("baseOnBalls",     0)
@@ -224,6 +240,7 @@ def derive_pitcher_stat(game: dict, prop_norm: str) -> float:
         "earned_runs":     er,
         "walks_allowed":   bb,
         "batters_faced":   bf,
+        "pitches_thrown":  pitches,
     }
     return mapping.get(prop_norm, np.nan)
 
@@ -352,10 +369,11 @@ def update_cache(
 
     prop_list = (
         ["strikeouts", "pitching_outs", "innings_pitched",
-         "hits_allowed", "earned_runs", "walks_allowed", "batters_faced"]
+         "hits_allowed", "earned_runs", "walks_allowed", "batters_faced", "pitches_thrown"]
         if player_type == "pitcher" else
         ["hits", "total_bases", "home_runs", "rbi", "runs", "walks",
-         "stolen_bases", "fantasy_score", "hits_runs_rbi", "singles", "doubles", "triples"]
+         "stolen_bases", "fantasy_score", "hits_runs_rbi", "singles", "doubles", "triples",
+         "hitter_strikeouts"]
     )
     derive_fn = derive_pitcher_stat if player_type == "pitcher" else derive_hitter_stat
 
@@ -382,7 +400,11 @@ def update_cache(
                     continue
                 if prop_norm in ("home_runs", "rbi", "runs", "walks", "stolen_bases") and v > 10:
                     continue
+                if prop_norm == "hitter_strikeouts" and v > 10:
+                    continue
                 if prop_norm in ("strikeouts", "pitching_outs", "batters_faced") and v > 100:
+                    continue
+                if prop_norm == "pitches_thrown" and v > 200:
                     continue
                 if prop_norm in ("innings_pitched",) and v > 15:
                     continue
@@ -477,6 +499,228 @@ def calc_hit_context(vals: List[float], line: float, k: int = 5):
     return over, under, push, hr_all, hr_ou, ur_ou
 
 
+NO_CACHE_POST_REFRESH_CAP = 50
+NO_CACHE_REFRESH_SLEEP_S = 0.3
+
+
+def _row_stat_refresh_keys(row: pd.Series) -> set[tuple[str, str]]:
+    """(mlb_player_id, player_type) pairs used for cache refresh for this slate row."""
+    mlb_id_raw = str(row.get("mlb_player_id", "")).strip()
+    ids = _parse_ids(mlb_id_raw)
+    if not ids:
+        return set()
+    prop = str(row.get("prop_norm", "")).lower().strip()
+    ptype = str(row.get("player_type", "")).lower().strip()
+    if ptype not in ("pitcher", "hitter"):
+        from step2_attach_picktypes_mlb import PITCHER_PROPS
+
+        ptype = "pitcher" if prop in PITCHER_PROPS else "hitter"
+    is_combo = (len(ids) > 1) or (
+        str(row.get("is_combo_player", "")).strip().lower() in ("1", "true", "yes")
+    )
+    if not is_combo:
+        return {(ids[0], ptype)}
+    return {(str(pid), "hitter") for pid in ids}
+
+
+def _db_mirror_player_cache_rows(
+    cache: pd.DataFrame,
+    con,
+    pid: str,
+    season: str,
+) -> None:
+    from datetime import datetime, timezone
+
+    try:
+        fresh = cache.loc[
+            (cache["MLB_PLAYER_ID"].astype(str) == str(pid))
+            & (cache["SEASON"].astype(str) == str(season))
+        ].copy()
+        if fresh.empty:
+            return
+        fresh["STAT_VALUE_NUM"] = pd.to_numeric(fresh["STAT_VALUE"], errors="coerce")
+        ts = datetime.now(timezone.utc).isoformat()
+        rows_db = []
+        for _, r in fresh.iterrows():
+            rows_db.append(
+                {
+                    "mlb_player_id": str(r.get("MLB_PLAYER_ID", "")).strip(),
+                    "season": str(r.get("SEASON", "")).strip(),
+                    "game_date": str(r.get("GAME_DATE", "")).strip()[:10],
+                    "game_id": str(r.get("GAME_ID", "")).strip(),
+                    "player_type": str(r.get("PLAYER_TYPE", "")).strip() or None,
+                    "prop_norm": str(r.get("PROP_NORM", "")).strip(),
+                    "stat_value": float(r["STAT_VALUE_NUM"])
+                    if not pd.isna(r.get("STAT_VALUE_NUM"))
+                    else None,
+                    "updated_at": ts,
+                }
+            )
+        upsert_rows(con, "mlb_gamelog", rows_db)
+    except Exception as e:
+        log_pipeline_health(
+            "mlb.step4_attach_player_stats",
+            "db_mirror_failed",
+            extra={"mlb_player_id": pid, "error": f"{type(e).__name__}: {e}"},
+            start=Path(__file__),
+        )
+
+
+def _process_slate_row_for_stats(
+    idx: int,
+    slate: pd.DataFrame,
+    cache: pd.DataFrame,
+    cache_path: Path,
+    season: str,
+    n_games: int,
+    con,
+    attempted_refresh: dict[tuple[str, str], int],
+    max_refresh_attempts: int,
+    misses: list,
+    *,
+    allow_live_refresh: bool,
+) -> tuple[pd.DataFrame, int]:
+    """Fill stat columns for one slate row. Returns (cache, cache_row_updates)."""
+    row = slate.loc[idx]
+    prop = str(row.get("prop_norm", "")).lower().strip()
+    player = str(row.get("player", "")).strip()
+    team = str(row.get("team", "")).strip()
+    ptype = str(row.get("player_type", "")).lower().strip()
+    mlb_id_raw = str(row.get("mlb_player_id", "")).strip()
+    line = row.get("_line_num", np.nan)
+    try:
+        line = float(line)
+    except Exception:
+        line = np.nan
+
+    ids = _parse_ids(mlb_id_raw)
+    is_combo = (len(ids) > 1) or (
+        str(row.get("is_combo_player", "")).strip().lower() in ("1", "true", "yes")
+    )
+
+    if not ids:
+        slate.at[idx, "stat_status"] = "NO_MLB_PLAYER_ID"
+        misses.append(
+            {
+                "player": player,
+                "team": team,
+                "prop_norm": prop,
+                "line": str(row.get("line", "")),
+                "mlb_player_id": mlb_id_raw,
+            }
+        )
+        return cache, 0
+
+    if ptype not in ("pitcher", "hitter"):
+        from step2_attach_picktypes_mlb import PITCHER_PROPS
+
+        ptype = "pitcher" if prop in PITCHER_PROPS else "hitter"
+
+    cache_updates = 0
+    same_opp_vals: List[float] = []
+
+    if not is_combo:
+        pid = ids[0]
+        cached_vals = get_vals_from_cache(cache, pid, prop, season, n=n_games)
+        if allow_live_refresh:
+            if len(cached_vals) < 3:
+                key = (pid, ptype)
+                attempts = attempted_refresh.get(key, 0)
+            else:
+                attempts = max_refresh_attempts
+
+            if len(cached_vals) < 3 and attempts < max_refresh_attempts:
+                attempted_refresh[key] = attempts + 1
+                cache, added = update_cache(cache, pid, ptype, season, n_games=n_games)
+                if added > 0:
+                    cache_updates += added
+                    save_cache(cache, cache_path)
+                    _db_mirror_player_cache_rows(cache, con, pid, season)
+                cached_vals = get_vals_from_cache(cache, pid, prop, season, n=n_games)
+        else:
+            cached_vals = get_vals_from_cache(cache, pid, prop, season, n=n_games)
+
+        if not cached_vals:
+            slate.at[idx, "stat_status"] = "NO_CACHE_DATA"
+            return cache, cache_updates
+        vals = cached_vals
+        opp_team_code = _infer_opp_team_for_row(slate, idx)
+        opp_team_id = _resolve_team_id(opp_team_code)
+        same_opp_vals = get_vals_vs_opp_from_cache(cache, pid, prop, season, opp_team_id, n=5)
+
+    else:
+        per_player_vals = []
+        any_empty = False
+        for i, pid in enumerate(ids):
+            sub_ptype = "hitter"
+            cv = get_vals_from_cache(cache, pid, prop, season, n=n_games)
+            if allow_live_refresh:
+                if len(cv) < 3:
+                    key = (pid, sub_ptype)
+                    attempts = attempted_refresh.get(key, 0)
+                else:
+                    attempts = max_refresh_attempts
+
+                if len(cv) < 3 and attempts < max_refresh_attempts:
+                    attempted_refresh[key] = attempts + 1
+                    cache, added = update_cache(cache, pid, sub_ptype, season, n_games=n_games)
+                    if added > 0:
+                        cache_updates += added
+                        save_cache(cache, cache_path)
+                    cv = get_vals_from_cache(cache, pid, prop, season, n=n_games)
+            else:
+                cv = get_vals_from_cache(cache, pid, prop, season, n=n_games)
+            if not cv:
+                any_empty = True
+                break
+            per_player_vals.append(cv)
+
+        if any_empty or not per_player_vals:
+            slate.at[idx, "stat_status"] = "NO_CACHE_DATA"
+            return cache, cache_updates
+
+        min_g = min(len(pv) for pv in per_player_vals)
+        vals = [float(sum(pv[i] for pv in per_player_vals)) for i in range(min_g)]
+
+        if not vals:
+            slate.at[idx, "stat_status"] = "INSUFFICIENT_GAMES"
+            return cache, cache_updates
+        same_opp_vals = []
+
+    n = n_games
+    for i in range(1, n + 1):
+        v = vals[i - 1] if (i - 1) < len(vals) else np.nan
+        slate.at[idx, f"stat_g{i}"] = fmt_num(v)
+
+    def avg_k(k: int) -> float:
+        s = vals[:k] if len(vals) >= k else vals
+        return float(np.mean(s)) if s else np.nan
+
+    slate.at[idx, "stat_last5_avg"] = fmt_num(avg_k(5))
+    slate.at[idx, "stat_last10_avg"] = fmt_num(avg_k(10))
+    slate.at[idx, "stat_season_avg"] = fmt_num(float(np.mean(vals)) if vals else np.nan)
+
+    if not np.isnan(line):
+        o5, u5, p5, hr5, hr5_ou, ur5_ou = calc_hit_context(vals, line, k=5)
+        slate.at[idx, "last5_over"] = str(o5)
+        slate.at[idx, "last5_under"] = str(u5)
+        slate.at[idx, "last5_push"] = str(p5)
+        slate.at[idx, "last5_hit_rate"] = fmt_num(hr5)
+        slate.at[idx, "line_hit_rate_over_ou_5"] = fmt_num(hr5_ou)
+        slate.at[idx, "line_hit_rate_under_ou_5"] = fmt_num(ur5_ou)
+
+        _, _, _, _, hr10_ou, ur10_ou = calc_hit_context(vals, line, k=10)
+        slate.at[idx, "line_hit_rate_over_ou_10"] = fmt_num(hr10_ou)
+        slate.at[idx, "line_hit_rate_under_ou_10"] = fmt_num(ur10_ou)
+        if same_opp_vals:
+            _, _, _, _, same_opp_over_ou, _ = calc_hit_context(same_opp_vals, line, k=5)
+            slate.at[idx, "same_opp_games_l5"] = str(int(len(same_opp_vals)))
+            slate.at[idx, "same_opp_over_rate_l5"] = fmt_num(same_opp_over_ou)
+
+    slate.at[idx, "stat_status"] = "OK"
+    return cache, cache_updates
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main() -> None:
@@ -525,163 +769,76 @@ def main() -> None:
 
     print(f"\n→ Attaching stats | rows={len(slate)}")
 
-    for idx, row in slate.iterrows():
-        prop         = str(row.get("prop_norm",     "")).lower().strip()
-        player       = str(row.get("player",        "")).strip()
-        team         = str(row.get("team",          "")).strip()
-        ptype        = str(row.get("player_type",   "")).lower().strip()
-        mlb_id_raw   = str(row.get("mlb_player_id", "")).strip()
-        line         = row.get("_line_num", np.nan)
-        try:
-            line = float(line)
-        except Exception:
-            line = np.nan
-
-        ids      = _parse_ids(mlb_id_raw)
-        is_combo = (len(ids) > 1) or (
-            str(row.get("is_combo_player", "")).strip().lower() in ("1", "true", "yes")
+    for idx, _row in slate.iterrows():
+        cache, du = _process_slate_row_for_stats(
+            idx,
+            slate,
+            cache,
+            cache_path,
+            args.season,
+            N,
+            con,
+            attempted_refresh,
+            max_refresh_attempts,
+            misses,
+            allow_live_refresh=True,
         )
+        cache_updates += du
 
-        if not ids:
-            slate.at[idx, "stat_status"] = "NO_MLB_PLAYER_ID"
-            misses.append({"player": player, "team": team, "prop_norm": prop,
-                           "line": str(row.get("line", "")), "mlb_player_id": mlb_id_raw})
+    no_cache_idx = [
+        i
+        for i in slate.index
+        if str(slate.at[i, "stat_status"]) == "NO_CACHE_DATA"
+        and str(slate.at[i, "mlb_player_id"]).strip() not in ("", "nan", "NaN")
+    ]
+    keys_to_refresh: list[tuple[str, str]] = []
+    seen_refresh: set[tuple[str, str]] = set()
+    for idx in no_cache_idx:
+        for key in _row_stat_refresh_keys(slate.loc[idx]):
+            if key in seen_refresh:
+                continue
+            seen_refresh.add(key)
+            keys_to_refresh.append(key)
+            if len(keys_to_refresh) >= NO_CACHE_POST_REFRESH_CAP:
+                break
+        if len(keys_to_refresh) >= NO_CACHE_POST_REFRESH_CAP:
+            break
+
+    refreshed_keys = set(keys_to_refresh)
+    for pid, ptype in keys_to_refresh:
+        time.sleep(NO_CACHE_REFRESH_SLEEP_S)
+        cache, added = update_cache(cache, pid, ptype, args.season, n_games=N)
+        if added > 0:
+            cache_updates += added
+            save_cache(cache, cache_path)
+            _db_mirror_player_cache_rows(cache, con, pid, args.season)
+
+    for idx in no_cache_idx:
+        cache, du = _process_slate_row_for_stats(
+            idx,
+            slate,
+            cache,
+            cache_path,
+            args.season,
+            N,
+            con,
+            attempted_refresh,
+            max_refresh_attempts,
+            misses,
+            allow_live_refresh=False,
+        )
+        cache_updates += du
+
+    for idx in no_cache_idx:
+        if str(slate.at[idx, "stat_status"]) != "NO_CACHE_DATA":
             continue
-
-        # Infer player_type from prop if missing
-        if ptype not in ("pitcher", "hitter"):
-            from step2_attach_picktypes_mlb import PITCHER_PROPS
-            ptype = "pitcher" if prop in PITCHER_PROPS else "hitter"
-
-        # ── Single player ──
-        if not is_combo:
-            pid = ids[0]
-            cached_vals = get_vals_from_cache(cache, pid, prop, args.season, n=N)
-            if len(cached_vals) < 3:
-                key = (pid, ptype)
-                attempts = attempted_refresh.get(key, 0)
-            else:
-                attempts = max_refresh_attempts
-
-            if len(cached_vals) < 3 and attempts < max_refresh_attempts:
-                attempted_refresh[key] = attempts + 1
-                cache, added = update_cache(cache, pid, ptype, args.season, n_games=N)
-                if added > 0:
-                    cache_updates += added
-                    save_cache(cache, cache_path)
-                    # Mirror newly added cache rows into central DB
-                    try:
-                        from datetime import datetime, timezone
-                        fresh = cache.loc[
-                            (cache["MLB_PLAYER_ID"].astype(str) == str(pid)) &
-                            (cache["SEASON"].astype(str) == str(args.season))
-                        ].copy()
-                        if not fresh.empty:
-                            fresh["STAT_VALUE_NUM"] = pd.to_numeric(fresh["STAT_VALUE"], errors="coerce")
-                            ts = datetime.now(timezone.utc).isoformat()
-                            rows_db = []
-                            for _, r in fresh.iterrows():
-                                rows_db.append({
-                                    "mlb_player_id": str(r.get("MLB_PLAYER_ID", "")).strip(),
-                                    "season": str(r.get("SEASON", "")).strip(),
-                                    "game_date": str(r.get("GAME_DATE", "")).strip()[:10],
-                                    "game_id": str(r.get("GAME_ID", "")).strip(),
-                                    "player_type": str(r.get("PLAYER_TYPE", "")).strip() or None,
-                                    "prop_norm": str(r.get("PROP_NORM", "")).strip(),
-                                    "stat_value": float(r["STAT_VALUE_NUM"]) if not pd.isna(r.get("STAT_VALUE_NUM")) else None,
-                                    "updated_at": ts,
-                                })
-                            upsert_rows(con, "mlb_gamelog", rows_db)
-                    except Exception as e:
-                        log_pipeline_health(
-                            "mlb.step4_attach_player_stats",
-                            "db_mirror_failed",
-                            extra={"mlb_player_id": pid, "error": f"{type(e).__name__}: {e}"},
-                            start=Path(__file__),
-                        )
-                cached_vals = get_vals_from_cache(cache, pid, prop, args.season, n=N)
-
-            if not cached_vals:
-                slate.at[idx, "stat_status"] = "NO_CACHE_DATA"
-                continue
-            vals = cached_vals
-            opp_team_code = _infer_opp_team_for_row(slate, idx)
-            opp_team_id = _resolve_team_id(opp_team_code)
-            same_opp_vals = get_vals_vs_opp_from_cache(
-                cache, pid, prop, args.season, opp_team_id, n=5
-            )
-
-        # ── Combo ──
-        else:
-            p_names = [str(row.get(f"player_{i}", "")).strip() or player for i in range(1, len(ids) + 1)]
-
-            per_player_vals = []
-            any_empty = False
-            for i, pid in enumerate(ids):
-                # Determine player type per player in combo
-                sub_ptype = "hitter"  # combos are always hitter+hitter
-                cv = get_vals_from_cache(cache, pid, prop, args.season, n=N)
-                if len(cv) < 3:
-                    key = (pid, sub_ptype)
-                    attempts = attempted_refresh.get(key, 0)
-                else:
-                    attempts = max_refresh_attempts
-
-                if len(cv) < 3 and attempts < max_refresh_attempts:
-                    attempted_refresh[key] = attempts + 1
-                    cache, added = update_cache(cache, pid, sub_ptype, args.season, n_games=N)
-                    if added > 0:
-                        cache_updates += added
-                        save_cache(cache, cache_path)
-                    cv = get_vals_from_cache(cache, pid, prop, args.season, n=N)
-                if not cv:
-                    any_empty = True
-                    break
-                per_player_vals.append(cv)
-
-            if any_empty or not per_player_vals:
-                slate.at[idx, "stat_status"] = "NO_CACHE_DATA"
-                continue
-
-            min_g = min(len(pv) for pv in per_player_vals)
-            vals  = [float(sum(pv[i] for pv in per_player_vals)) for i in range(min_g)]
-
-            if not vals:
-                slate.at[idx, "stat_status"] = "INSUFFICIENT_GAMES"
-                continue
-            same_opp_vals = []
-
-        # ── Fill output ──
-        for i in range(1, N + 1):
-            v = vals[i - 1] if (i - 1) < len(vals) else np.nan
-            slate.at[idx, f"stat_g{i}"] = fmt_num(v)
-
-        def avg_k(k: int) -> float:
-            s = vals[:k] if len(vals) >= k else vals
-            return float(np.mean(s)) if s else np.nan
-
-        slate.at[idx, "stat_last5_avg"]  = fmt_num(avg_k(5))
-        slate.at[idx, "stat_last10_avg"] = fmt_num(avg_k(10))
-        slate.at[idx, "stat_season_avg"] = fmt_num(float(np.mean(vals)) if vals else np.nan)
-
-        if not np.isnan(line):
-            o5, u5, p5, hr5, hr5_ou, ur5_ou = calc_hit_context(vals, line, k=5)
-            slate.at[idx, "last5_over"]               = str(o5)
-            slate.at[idx, "last5_under"]              = str(u5)
-            slate.at[idx, "last5_push"]               = str(p5)
-            slate.at[idx, "last5_hit_rate"]           = fmt_num(hr5)
-            slate.at[idx, "line_hit_rate_over_ou_5"]  = fmt_num(hr5_ou)
-            slate.at[idx, "line_hit_rate_under_ou_5"] = fmt_num(ur5_ou)
-
-            _, _, _, _, hr10_ou, ur10_ou = calc_hit_context(vals, line, k=10)
-            slate.at[idx, "line_hit_rate_over_ou_10"]  = fmt_num(hr10_ou)
-            slate.at[idx, "line_hit_rate_under_ou_10"] = fmt_num(ur10_ou)
-            if same_opp_vals:
-                _, _, _, _, same_opp_over_ou, _ = calc_hit_context(same_opp_vals, line, k=5)
-                slate.at[idx, "same_opp_games_l5"] = str(int(len(same_opp_vals)))
-                slate.at[idx, "same_opp_over_rate_l5"] = fmt_num(same_opp_over_ou)
-
-        slate.at[idx, "stat_status"] = "OK"
+        row = slate.loc[idx]
+        if not (_row_stat_refresh_keys(row) & refreshed_keys):
+            continue
+        prop = str(row.get("prop_norm", "")).lower().strip()
+        player = str(row.get("player", "")).strip()
+        mlb_id_raw = str(row.get("mlb_player_id", "")).strip()
+        print(f"[MLB step4] cache miss after refresh: {player} | {prop} | id={mlb_id_raw}")
 
     if args.debug_misses and misses:
         pd.DataFrame(misses).drop_duplicates().to_csv(
@@ -696,6 +853,13 @@ def main() -> None:
     print(f"Cache updates: {cache_updates}")
     print("\nstat_status breakdown:")
     print(slate["stat_status"].astype(str).value_counts().to_string())
+    _vc = slate["stat_status"].astype(str).value_counts()
+    _ok = int(_vc.get("OK", 0))
+    _nc = int(_vc.get("NO_CACHE_DATA", 0))
+    _nid = int(_vc.get("NO_MLB_PLAYER_ID", 0))
+    print(
+        f"[MLB step4] stat_attach: OK={_ok} | NO_CACHE_DATA={_nc} | NO_MLB_PLAYER_ID={_nid} | total={len(slate)}"
+    )
     con.close()
 
 

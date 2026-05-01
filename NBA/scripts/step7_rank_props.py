@@ -929,6 +929,47 @@ def _write_xlsx_openpyxl(output_path: str, out: pd.DataFrame, elig_mask: pd.Seri
     wb.save(output_path)
     print(f"✅ Saved → {output_path} (openpyxl, UTF-8 encoded)")
 
+
+def _attach_nba_tier2_strat_columns(out: pd.DataFrame) -> pd.DataFrame:
+    """Graded / stratification: string ``home_away`` + team-based ``rest_bucket`` (``b2b``/``1``/``2``/``3p``)."""
+    o = out.copy()
+    idx = o.index
+    team_col = next((c for c in ("team", "Team", "pp_team") if c in o.columns), None)
+    team = o[team_col].astype(str).str.strip().str.upper() if team_col else pd.Series("", index=idx)
+    home_tm = next((c for c in ("pp_home_team", "home_team", "HOME_TEAM") if c in o.columns), None)
+    away_tm = next((c for c in ("pp_away_team", "away_team", "AWAY_TEAM") if c in o.columns), None)
+    h = o[home_tm].astype(str).str.strip().str.upper() if home_tm else pd.Series("", index=idx)
+    a = o[away_tm].astype(str).str.strip().str.upper() if away_tm else pd.Series("", index=idx)
+    ha = pd.Series("(missing)", index=idx, dtype=str)
+    m_home = team.ne("") & h.ne("") & team.eq(h)
+    m_away = team.ne("") & a.ne("") & team.eq(a)
+    ha = ha.mask(m_home, "HOME").mask(m_away, "AWAY")
+    if "home_away" in o.columns:
+        raw = o["home_away"].astype(str).str.strip().str.upper()
+        ha = ha.mask(ha.eq("(missing)") & raw.str.startswith("H"), "HOME")
+        ha = ha.mask(ha.eq("(missing)") & raw.str.startswith("A") & ~raw.str.startswith("AW"), "AWAY")
+    o["home_away"] = ha
+
+    dr = pd.to_numeric(
+        o.get("days_rest", o.get("rest_days", o.get("team_rest_days", pd.Series(np.nan, index=idx)))),
+        errors="coerce",
+    )
+    b2b_raw = o.get("is_back_to_back", o.get("b2b", o.get("is_b2b", pd.Series(0, index=idx))))
+    if pd.api.types.is_numeric_dtype(b2b_raw):
+        is_b2b = pd.to_numeric(b2b_raw, errors="coerce").fillna(0) >= 1
+    else:
+        bb = b2b_raw.astype(str).str.upper().str.strip()
+        is_b2b = bb.isin(["1", "TRUE", "Y", "YES", "T"])
+    rb = pd.Series("(missing)", index=idx, dtype=str)
+    rb = rb.mask(is_b2b, "b2b")
+    rb = rb.mask(~is_b2b & dr.eq(1), "1")
+    rb = rb.mask(~is_b2b & dr.eq(2), "2")
+    rb = rb.mask(~is_b2b & dr.ge(3), "3p")
+    o["rest_bucket"] = rb
+    o["days_rest"] = dr
+    return o
+
+
 # -------------------- main --------------------
 
 def main() -> None:
@@ -949,6 +990,12 @@ def main() -> None:
 
     print("[PropORACLE-step7_rank_props] Starting...")
     print(f"→ Loading: {args.input}")
+    source_hint = str(args.input or "").lower()
+    sport_for_usage = "NBA"
+    if "nba1q" in source_hint:
+        sport_for_usage = "NBA1Q"
+    elif "nba1h" in source_hint:
+        sport_for_usage = "NBA1H"
     df = pd.read_csv(args.input, dtype=str, encoding="utf-8-sig", 
                      engine='python').fillna("")
     
@@ -967,12 +1014,6 @@ def main() -> None:
             if "game_date" in out.columns and not out["game_date"].dropna().empty
             else pd.Timestamp.today().strftime("%Y-%m-%d")
         )
-        sport_for_usage = "NBA"
-        _hint = str(args.input or "").lower()
-        if "nba1q" in _hint:
-            sport_for_usage = "NBA1Q"
-        elif "nba1h" in _hint:
-            sport_for_usage = "NBA1H"
         out = apply_usage_redistribution(out, sport=sport_for_usage, date=run_date, repo_root=str(_repo_usage))
     except Exception as e:
         print(f"⚠️  usage redistribution skipped: {e}")
@@ -1058,7 +1099,7 @@ def main() -> None:
     out["edge_norm_mag"] = _to_num(out["abs_edge"]) / line_safe
 
     # ── Historical archive features (graceful no-op when no history) ──────────
-    _attach_archive_features(out, "NBA", line_safe)
+    _attach_archive_features(out, sport_for_usage, line_safe)
 
     # ── FORCED OVER / BET DIRECTION ───────────────────────────────────────────
     forced = pick_type_s.isin(["Goblin", "Demon"]).astype(int)
@@ -1447,6 +1488,7 @@ def main() -> None:
     out["rank_score_raw"] = score_raw
     out["rank_score"] = out["rank_score_raw"]
     out["ml_prob"], out["ml_edge"], out["final_score"] = _apply_ml_blend(out, out["rank_score_raw"], args.input)
+    # Keep NBA consistency lookup table for now; historical grade DB is NBA keyed.
     _apply_consistency_grade_scores(out, "NBA")
 
     # Game script risk adjustment
@@ -1474,7 +1516,7 @@ def main() -> None:
         _gd = str(_gd_series.iloc[_i])
         _tm = str(_r.get(_team_col, "") or "").strip()
         _pt = str(_r.get(_prop_gs, "") or "").strip()
-        _gm, _gn = get_game_script_multiplier(_tm, "NBA", _pt, _gd)
+        _gm, _gn = get_game_script_multiplier(_tm, sport_for_usage, _pt, _gd)
         _gmults.append(round(float(_gm), 3))
         _gnotes.append(_gn)
     out["game_script_mult"] = _gmults
@@ -1487,8 +1529,10 @@ def main() -> None:
         _tier_from_score_series(_to_num(out["rank_score"])), index=out.index
     )
     out.loc[~elig_mask, "tier"] = "D"
-    out = build_feature_vector(out, "NBA")
-    out = apply_ticket_eligibility_voids(out, "NBA")
+    out = build_feature_vector(out, sport_for_usage)
+    out = apply_ticket_eligibility_voids(out, sport_for_usage)
+    if str(sport_for_usage).strip().upper() == "NBA":
+        out = _attach_nba_tier2_strat_columns(out)
     out = out.sort_values(by="final_score", ascending=False, na_position="last", kind="mergesort")
 
     # Split here — after all scoring/tier columns are populated

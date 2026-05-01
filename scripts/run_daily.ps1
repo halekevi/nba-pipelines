@@ -145,6 +145,10 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
         "step8_mlb_direction_clean_$RunDate.xlsx",
         "step8_tennis_direction_clean_$RunDate.xlsx"
     )
+    # WNBA: expected from full parallel run on/after season start (see run_pipeline.ps1 $WNBA_SEASON_START).
+    if ($RunDate -ge "2026-05-01") {
+        $required = @($required) + @("step8_wnba_direction_$RunDate.xlsx")
+    }
     # 2026 NCAA: WCBB title Sun Apr 5; men's title Mon Apr 6. Expect no WCBB slate from Apr 6+;
     # no men's CBB slate from Apr 7+ — omit from required outputs so daily does not false-fail.
     if ($RunDate -lt "2026-04-07") {
@@ -156,9 +160,24 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
     # Some sports can intentionally skip writing dated copies while still producing
     # valid root clean files used by combined + Railway.
     $fallbackRoots = @{
+        "step8_nhl_direction_clean_$RunDate.xlsx" = @(
+            (Join-Path $Root "NHL\outputs\step8_nhl_direction_clean.xlsx"),
+            (Join-Path $Root "NHL\step8_nhl_direction_clean.xlsx")
+        )
+        "step8_soccer_direction_clean_$RunDate.xlsx" = @(
+            (Join-Path $Root "Soccer\outputs\step8_soccer_direction_clean.xlsx"),
+            (Join-Path $Root "Soccer\step8_soccer_direction_clean.xlsx")
+        )
         "step8_mlb_direction_clean_$RunDate.xlsx" = @(
             (Join-Path $Root "MLB\outputs\step8_mlb_direction_clean.xlsx"),
             (Join-Path $Root "MLB\step8_mlb_direction_clean.xlsx")
+        )
+        "step8_tennis_direction_clean_$RunDate.xlsx" = @(
+            (Join-Path $Root "Tennis\outputs\step8_tennis_direction_clean.xlsx"),
+            (Join-Path $Root "Tennis\step8_tennis_direction_clean.xlsx")
+        )
+        "step8_wnba_direction_$RunDate.xlsx" = @(
+            (Join-Path $Root "WNBA\step8_wnba_direction.xlsx")
         )
     }
     $missing = @()
@@ -952,6 +971,26 @@ else {
             Write-Log "STEP D1g - Edge quality report: SKIP (script missing)"
         }
 
+        # Trusted prop stratification board (all categories; excludes UNRELIABLE buckets).
+        $stratBoardScript = Join-Path $Root "scripts\build_prop_stratification_board.py"
+        if (Test-Path $stratBoardScript) {
+            try {
+                & py -3.14 -X utf8 $stratBoardScript --out-dir (Join-Path $Root "outputs\$Today") --min-n 30 --top-n 300
+                if ($LASTEXITCODE -eq 0) {
+                    Write-Log "STEP D1g2 - Prop stratification board: OK"
+                }
+                else {
+                    Write-Log "STEP D1g2 - Prop stratification board: WARN (exit $LASTEXITCODE)"
+                }
+            }
+            catch {
+                Write-Log "STEP D1g2 - Prop stratification board: WARN ($($_.Exception.Message))"
+            }
+        }
+        else {
+            Write-Log "STEP D1g2 - Prop stratification board: SKIP (script missing)"
+        }
+
         # Optional PQ control artifact (small pq0 slice) for drift tracking.
         # This does not overwrite tickets_latest/slate_latest and is kept for offline analysis only.
         if ($PqControlPercent -gt 0) {
@@ -1389,14 +1428,16 @@ if ($NowHour -ge 10) {
 
     $NBADir = Join-Path $Root "NBA"
     $lateNbaArgs = @(
+        # Gentler late-fetch anti-403 settings.
         "--league_id", "7",
         "--game_mode", "pickem",
         "--per_page", "250",
-        "--max_pages", "5",
+        "--max_pages", "3",
+        "--retries", "6",
         "--sleep", "2.0",
-        "--cooldown_seconds", "90",
-        "--max_cooldowns", "3",
-        "--jitter_seconds", "10.0",
+        "--cooldown_seconds", "180",
+        "--max_cooldowns", "4",
+        "--jitter_seconds", "14.0",
         "--append",
         "--date", $Today,
         "--output", "data\outputs\step1_pp_props_today.csv"
@@ -1444,6 +1485,15 @@ if ($NowHour -ge 10) {
     Push-Location $MLBDir
     try {
         & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
+            "--max-pages" "5" `
+            "--api-retries" "5" `
+            "--api-session-waves" "3" `
+            "--api-wave-gap-min" "30" `
+            "--api-wave-gap-max" "75" `
+            "--api-403-cooldown-after" "4" `
+            "--api-403-cooldown-seconds" "180" `
+            "--api-403-cooldown-jitter-min" "20" `
+            "--api-403-cooldown-jitter-max" "80" `
             "--append" `
             "--date" "$Today" `
             "--output" "step1_mlb_props.csv"
@@ -1452,7 +1502,7 @@ if ($NowHour -ge 10) {
             Write-Log "[NBA_LATE_FETCH] MLB direct API failed (exit $LASTEXITCODE); trying Playwright"
             & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
                 "--playwright" `
-                "--timeout" "180" `
+                "--timeout" "240" `
                 "--append" `
                 "--date" "$Today" `
                 "--output" "step1_mlb_props.csv"

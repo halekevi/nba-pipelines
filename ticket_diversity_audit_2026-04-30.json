@@ -1,0 +1,56 @@
+{
+  "generated_at_utc": "2026-04-30T23:08:50.824163+00:00",
+  "date": "2026-04-30",
+  "source_output": "tickets_latest.json",
+  "audit": {
+    "tickets": 3232,
+    "unique_leg_sets": 1719,
+    "duplicate_rate": 0.46813118811881194,
+    "pair_count": 5221296,
+    "jaccard_mean": 0.005112733861759966,
+    "jaccard_p90": 0.0,
+    "jaccard_max": 1.0,
+    "by_legs": {
+      "2": {
+        "tickets": 702,
+        "unique_leg_sets": 351,
+        "duplicate_rate": 0.5,
+        "jaccard_mean": 0.003231037467842033,
+        "jaccard_p90": 0.0,
+        "jaccard_max": 1.0
+      },
+      "3": {
+        "tickets": 714,
+        "unique_leg_sets": 428,
+        "duplicate_rate": 0.4005602240896359,
+        "jaccard_mean": 0.004038249240790286,
+        "jaccard_p90": 0.0,
+        "jaccard_max": 1.0
+      },
+      "4": {
+        "tickets": 676,
+        "unique_leg_sets": 354,
+        "duplicate_rate": 0.47633136094674555,
+        "jaccard_mean": 0.0055864667146718425,
+        "jaccard_p90": 0.0,
+        "jaccard_max": 1.0
+      },
+      "5": {
+        "tickets": 605,
+        "unique_leg_sets": 315,
+        "duplicate_rate": 0.47933884297520657,
+        "jaccard_mean": 0.007035978604310935,
+        "jaccard_p90": 0.0,
+        "jaccard_max": 1.0
+      },
+      "6": {
+        "tickets": 535,
+        "unique_leg_sets": 271,
+        "duplicate_rate": 0.4934579439252337,
+        "jaccard_mean": 0.008259005045731918,
+        "jaccard_p90": 0.0,
+        "jaccard_max": 1.0
+      }
+    }
+  }
+}

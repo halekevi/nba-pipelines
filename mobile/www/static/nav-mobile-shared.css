@@ -1,0 +1,154 @@
+/**
+ * Shared mobile nav: two-row bar (brand + hamburger, then snav-right meta)
+ * and fixed flyout. Load proporacle-mobile-schema.css first, then page inline <style>, then this file so these rules win.
+ * v=20260430schemapage — ≤768px hamburger; hide ul#nav-links; flyout above sticky bar.
+ */
+@media (max-width: 768px) {
+  nav.snav,
+  .snav {
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    row-gap: 10px !important;
+    column-gap: 8px !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    padding-top: max(10px, env(safe-area-inset-top, 0px)) !important;
+    padding-bottom: 10px !important;
+    padding-left: max(8px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(8px, env(safe-area-inset-right, 0px)) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    top: 0 !important;
+  }
+
+  .snav .nav-accent {
+    border-radius: 0 !important;
+  }
+
+  .snav-brand {
+    order: 1 !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    margin-right: 8px !important;
+  }
+
+  .snav-brand .logo-icon {
+    width: 36px !important;
+    height: 36px !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
+    object-fit: contain !important;
+  }
+
+  /* Primary nav list (ul carries both .snav-links and .nav-links — see proporacle-page-shell .nav-links:not(.snav-links) fix). */
+  nav.snav ul.snav-links,
+  nav.snav ul.nav-links,
+  nav.snav ul#nav-links,
+  .snav ul.snav-links,
+  .snav ul#nav-links,
+  .snav-links {
+    display: none !important;
+  }
+
+  .snav .hamburger,
+  button.hamburger#hamburger,
+  button#hamburger.hamburger {
+    /* Keep hidden on phone layouts; bottom-tab nav uses direct links. */
+    display: none !important;
+    position: static !important;
+    inset: auto !important;
+  }
+
+  .snav-right {
+    order: 2 !important;
+    flex: 0 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    margin-left: auto !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+  }
+
+  .nav-live-cluster {
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+    max-width: min(68vw, 360px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+  }
+
+  .nav-datetime-block {
+    max-width: min(52vw, 280px) !important;
+    align-items: flex-end !important;
+    text-align: right !important;
+    margin-left: 0 !important;
+    padding-left: 8px !important;
+  }
+
+  .nav-slate-date {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    line-height: 1.15 !important;
+    white-space: nowrap !important;
+    color: rgba(255, 255, 255, 0.94) !important;
+  }
+
+  .nav-sync-line {
+    max-width: 100% !important;
+    justify-content: flex-end !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    color: rgba(255, 255, 255, 0.52) !important;
+  }
+
+  .nav-local-datetime {
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    color: rgba(255, 255, 255, 0.56) !important;
+  }
+
+  .theme-toggle {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    touch-action: manipulation !important;
+  }
+
+  .mobile-menu {
+    z-index: 230 !important;
+    top: calc(env(safe-area-inset-top, 0px) + var(--snav-mobile-stack-h, 118px)) !important;
+    left: 0 !important;
+    right: 0 !important;
+    border-radius: 0 !important;
+    padding-bottom: max(12px, env(safe-area-inset-bottom, 0px)) !important;
+    padding-left: env(safe-area-inset-left, 0px) !important;
+    padding-right: env(safe-area-inset-right, 0px) !important;
+    max-height: min(70vh, calc(100dvh - env(safe-area-inset-top, 0px) - 80px)) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .mobile-menu a {
+    min-height: 48px !important;
+    align-items: center !important;
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+    padding-left: max(20px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(20px, env(safe-area-inset-right, 0px)) !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: rgba(212, 175, 55, 0.12);
+  }
+}
+
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+  .snav,
+  .mobile-menu a,
+  .hamburger span {
+    transition: none !important;
+  }
+}

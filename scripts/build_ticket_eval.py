@@ -50,7 +50,7 @@ TICKET_EVAL_SLATE_JSON = TEMPLATES_DIR / "ticket_eval_slate_latest.json"
 # Ticket source search order: combined_slate_tickets_{date}.xlsx only.
 DATED_TICKET_JSON = "combined_slate_tickets_{date}.json"
 FALLBACK_TICKET_JSON = TEMPLATES_DIR / "tickets_latest.json"
-ALLOWED_TICKET_SPORTS = {"NBA", "CBB", "NHL", "SOCCER", "MLB", "WCBB"}
+ALLOWED_TICKET_SPORTS = {"NBA", "NBA1H", "NBA1Q", "WNBA", "CBB", "NHL", "SOCCER", "MLB", "WCBB"}
 
 _XLSX_HDR_TO_LEG_FIELD: dict[str, str] = {
     "player": "player",
@@ -2103,6 +2103,7 @@ def _build_html(
 .sport-nba{background:rgba(212,160,23,.12);color:#f0a500;border:1px solid rgba(212,160,23,.35);}
 .sport-nba1h{background:rgba(255,155,86,.12);color:#ffb27d;border:1px solid rgba(255,155,86,.32);}
 .sport-nba1q{background:rgba(255,214,102,.12);color:#ffd87a;border:1px solid rgba(255,214,102,.32);}
+.sport-wnba{background:rgba(255,138,198,.12);color:#ffb0dd;border:1px solid rgba(255,138,198,.32);}
 .sport-cbb{background:rgba(0,229,255,.10);color:#00e5ff;border:1px solid rgba(0,229,255,.32);}
 .sport-wcbb{background:rgba(127,199,217,.10);color:#9fd8e8;border:1px solid rgba(127,199,217,.32);}
 .sport-nhl{background:rgba(186,130,255,.12);color:#c4a5ff;border:1px solid rgba(186,130,255,.38);}
@@ -2581,6 +2582,14 @@ def _build_html(
   .manual-tb .manual-filter-group {{
     display:flex;gap:8px;flex-wrap:wrap;align-items:center;
   }}
+  .manual-tb .manual-sport-pill {{
+    /* Keep chips visible on mobile before interaction (was too dim on Android OLED). */
+    opacity:.92;
+    filter:none;
+    border-width:1px;
+    border-style:solid;
+    border-color:rgba(255,255,255,.28);
+  }}
   .manual-tb .manual-slider-row {{
     margin-bottom:10px;
     padding:10px 12px;border:1px solid var(--glass-bd);
@@ -2765,6 +2774,9 @@ def _build_html(
         <div class="manual-filter-row">
           <div class="manual-filter-group">
             <button class="pill sport-nba manual-sport-pill manual-sport-btn" data-manual-sport="NBA" type="button">NBA</button>
+            <button class="pill sport-nba1h manual-sport-pill manual-sport-btn" data-manual-sport="NBA1H" type="button">NBA1H</button>
+            <button class="pill sport-nba1q manual-sport-pill manual-sport-btn" data-manual-sport="NBA1Q" type="button">NBA1Q</button>
+            <button class="pill sport-wnba manual-sport-pill manual-sport-btn" data-manual-sport="WNBA" type="button">WNBA</button>
             <button class="pill sport-cbb manual-sport-pill manual-sport-btn" data-manual-sport="CBB" type="button">CBB</button>
             <button class="pill sport-nhl manual-sport-pill manual-sport-btn" data-manual-sport="NHL" type="button">NHL</button>
             <button class="pill sport-soccer manual-sport-pill manual-sport-btn" data-manual-sport="SOCCER" type="button">SOC</button>
@@ -2827,7 +2839,7 @@ def _build_html(
 
   const state = {{
     mode: 'MIXED',
-    selectedSports: new Set(['NBA','CBB','NHL','SOCCER']),
+    selectedSports: new Set(['NBA','NBA1H','NBA1Q','WNBA','CBB','NHL','SOCCER']),
     // In MIXED, both pick types are enabled; in single-mode, pick one.
     selectedPickTypes: new Set(['Goblin','Standard']),
     minHitRate: 0.70,
@@ -3014,6 +3026,9 @@ def _build_html(
     for (const leg of state.activeLegs) {{
       const dirCls = leg.direction === 'OVER' ? 'dir-over' : leg.direction === 'UNDER' ? 'dir-under' : '';
       const spClass = leg.sport === 'NBA' ? 'sport-nba'
+        : leg.sport === 'NBA1H' ? 'sport-nba1h'
+        : leg.sport === 'NBA1Q' ? 'sport-nba1q'
+        : leg.sport === 'WNBA' ? 'sport-wnba'
         : leg.sport === 'CBB' ? 'sport-cbb'
         : leg.sport === 'NHL' ? 'sport-nhl'
         : leg.sport === 'SOCCER' ? 'sport-soccer'
@@ -3079,6 +3094,9 @@ def _build_html(
           ${{t.legs.map(l => {{
             const dirCls = l.direction === 'OVER' ? 'dir-over' : l.direction === 'UNDER' ? 'dir-under' : '';
             const spClass = l.sport === 'NBA' ? 'sport-nba'
+              : l.sport === 'NBA1H' ? 'sport-nba1h'
+              : l.sport === 'NBA1Q' ? 'sport-nba1q'
+              : l.sport === 'WNBA' ? 'sport-wnba'
               : l.sport === 'CBB' ? 'sport-cbb'
               : l.sport === 'NHL' ? 'sport-nhl'
               : l.sport === 'SOCCER' ? 'sport-soccer'
@@ -3176,9 +3194,11 @@ def _build_html(
     for (const btn of $$('.manual-sport-btn')) {{
       const s = btn.dataset.manualSport;
       const active = state.selectedSports.has(s);
-      // active state uses a stronger border via inline style since we don't own sport CSS here.
-      btn.style.opacity = active ? '1' : '.55';
-      btn.style.filter = active ? 'none' : 'grayscale(0.2)';
+      // Keep inactive chips readable; only mute slightly when not selected.
+      btn.style.opacity = active ? '1' : '.88';
+      btn.style.filter = 'none';
+      btn.style.borderColor = active ? 'rgba(212,175,55,.62)' : 'rgba(255,255,255,.30)';
+      btn.style.boxShadow = active ? '0 0 0 1px rgba(212,175,55,.25), 0 6px 16px rgba(0,0,0,.28)' : 'none';
     }}
   }}
 
@@ -3186,7 +3206,7 @@ def _build_html(
     if (state.selectedSports.has(s)) state.selectedSports.delete(s);
     else state.selectedSports.add(s);
     // Keep at least one sport selected for a usable picker.
-    if (state.selectedSports.size === 0) state.selectedSports = new Set(['NBA','CBB','NHL','SOCCER']);
+    if (state.selectedSports.size === 0) state.selectedSports = new Set(['NBA','NBA1H','NBA1Q','WNBA','CBB','NHL','SOCCER']);
     applySportButtonUI();
     renderPropList();
   }}

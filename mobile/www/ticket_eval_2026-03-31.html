@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ticket Eval — APR 13, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --glass: rgba(255, 255, 255, 0.045);
+  --glass-bd: rgba(255, 255, 255, 0.1);
+  --gold: #d4af37;
+  --gold2: #f0a500;
+  --cyan: #7fc7d9;
+  --accent: #00e5ff;
+  --green: #39ff6e;
+  --red: #ff4d4d;
+  --amber: #fcd34d;
+  --text: rgba(232, 236, 255, 0.95);
+  --muted: rgba(255, 255, 255, 0.52);
+  --slate-400: #94a3b8;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(180deg, #05050f 0%, #0a0a18 45%, #080814 100%);
+  color: var(--text);
+  line-height: 1.5;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: -20%;
+  left: -10%;
+  width: 55%;
+  height: 55%;
+  background: radial-gradient(ellipse, rgba(212, 160, 23, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -20%;
+  right: -10%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(ellipse, rgba(0, 229, 255, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+header, .main { position: relative; z-index: 1; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+header {
+  position: relative;
+  text-align: center;
+  padding: 22px 20px;
+  background: rgba(255, 255, 255, 0.055);
+  backdrop-filter: blur(28px) saturate(185%);
+  -webkit-backdrop-filter: blur(28px) saturate(185%);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.22);
+  border-radius: 0 0 22px 22px;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.logo-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(26px, 4vw, 34px);
+  letter-spacing: 0.14em;
+  background: linear-gradient(to bottom, #f0a500, #d4af37, #f7e08a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.2));
+}
+
+.logo-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.58);
+  margin-top: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.date-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 8px 14px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
+}
+
+.main {
+  max-width: none;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 24px 20px 32px;
+}
+
+.section {
+  margin-bottom: 28px;
+}
+
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(20px, 2.4vw, 26px);
+  font-weight: 400;
+  color: var(--cyan);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 10px;
+  text-shadow: 0 0 22px rgba(0, 229, 255, 0.12);
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.kpi-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(22px) saturate(165%);
+  -webkit-backdrop-filter: blur(22px) saturate(165%);
+  border: 1px solid rgba(212, 175, 55, 0.14);
+  border-radius: 16px;
+  padding: 14px 12px;
+  text-align: center;
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.kpi-card:hover {
+  border-color: rgba(212, 175, 55, 0.28);
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.kpi-val {
+  font-size: clamp(18px, 2.2vw, 22px);
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 6px;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.28);
+}
+
+.kpi-label {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  background: rgba(255, 255, 255, 0.045);
+  backdrop-filter: blur(24px) saturate(175%);
+  -webkit-backdrop-filter: blur(24px) saturate(175%);
+  border: 1px solid var(--glass-bd);
+  border-radius: 18px;
+  margin-bottom: 20px;
+  box-shadow:
+    0 10px 36px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+th {
+  background: rgba(4, 6, 16, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 700;
+  color: var(--cyan);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+td {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover td {
+  background: rgba(212, 175, 55, 0.07);
+}
+
+.badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  backdrop-filter: blur(8px);
+}
+
+.outcome-hit {
+  background: rgba(57, 255, 110, 0.12);
+  color: var(--green);
+  border: 1px solid rgba(57, 255, 110, 0.35);
+}
+
+.outcome-miss {
+  background: rgba(255, 77, 77, 0.12);
+  color: var(--red);
+  border: 1px solid rgba(255, 77, 77, 0.35);
+}
+
+.outcome-push {
+  background: rgba(252, 211, 77, 0.12);
+  color: var(--amber);
+  border: 1px solid rgba(252, 211, 77, 0.3);
+}
+
+.outcome-void {
+  background: rgba(148, 163, 184, 0.1);
+  color: var(--slate-400);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chip {
+  display: inline-block;
+  padding: 3px 7px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.chip-a { background: rgba(110, 231, 183, 0.2); color: #6ee7b7; }
+.chip-b { background: rgba(0, 217, 255, 0.2); color: var(--accent); }
+.chip-c { background: rgba(252, 211, 77, 0.2); color: #fcd34d; }
+.chip-d { background: rgba(148, 163, 184, 0.2); color: var(--slate-400); }
+
+.num { font-family: 'Courier New', monospace; }
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 11px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 40px;
+}
+
+.ticket-row {
+  cursor: pointer;
+  user-select: none;
+}
+
+.ticket-row.winner {
+  background: rgba(57, 255, 110, 0.06);
+}
+
+.ticket-row.winner:hover {
+  background: rgba(57, 255, 110, 0.12);
+}
+
+.profit {
+  font-weight: 600;
+}
+
+.profit.positive {
+  color: var(--green);
+}
+
+.profit.negative {
+  color: var(--red);
+}
+
+.profit.breakeven {
+  color: var(--slate-400);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-title">TICKET EVALUATION</div>
+  <div class="logo-sub">APR 13, 2026</div>
+  <div class="date-badge">📅 APR 13, 2026</div>
+</header>
+
+<div class="main">
+  
+    <div class="section">
+      <div class="section-title">📊 Overview</div>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-val">18</div>
+          <div class="kpi-label">Total Tickets</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">3</div>
+          <div class="kpi-label">Winners</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">16.7%</div>
+          <div class="kpi-label">Win Rate</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">$112.82</div>
+          <div class="kpi-label">Net Profit</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">31.3%</div>
+          <div class="kpi-label">ROI</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">$360.00</div>
+          <div class="kpi-label">Total Staked</div>
+        </div>
+      </div>
+    </div>
+    
+  
+    <div class="section">
+      <div class="section-title">🎫 Ticket Results</div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Sheet</th>
+              <th>#</th>
+              <th>Legs</th>
+              <th>H/M/N</th>
+              <th>Stake</th>
+              <th>Payout</th>
+              <th>Profit</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr class="ticket-row">
+          <td>NBA Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">2/1/0</td>
+          <td class="num">$20.00</td>
+          <td>$0.00</td>
+          <td><span class='profit negative'>$-20.00</span></td>
+          <td><span class="badge outcome-void">LOSE</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NBA Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">1/1/0</td>
+          <td class="num">$20.00</td>
+          <td>$0.00</td>
+          <td><span class='profit negative'>$-20.00</span></td>
+          <td><span class="badge outcome-void">LOSE</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NBA Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">1/0/1</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row winner">
+          <td>NBA1Q Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">3/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$71.12</td>
+          <td><span class='profit positive'>$51.12</span></td>
+          <td><span class="badge outcome-void">WIN</span></td>
+        </tr>
+        
+        <tr class="ticket-row winner">
+          <td>NBA1Q Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">2/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$42.34</td>
+          <td><span class='profit positive'>$22.34</span></td>
+          <td><span class="badge outcome-void">WIN</span></td>
+        </tr>
+        
+        <tr class="ticket-row winner">
+          <td>NBA1Q Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">2/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$60.00</td>
+          <td><span class='profit positive'>$40.00</span></td>
+          <td><span class="badge outcome-void">WIN</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>Soccer Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">0/0/3</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>Soccer Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">0/0/2</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>Soccer Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">0/0/2</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NBA Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">2/1/0</td>
+          <td class="num">$20.00</td>
+          <td>$10.24</td>
+          <td><span class='profit negative'>$-9.76</span></td>
+          <td><span class="badge outcome-void">CASH</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NBA Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">1/1/0</td>
+          <td class="num">$20.00</td>
+          <td>$0.00</td>
+          <td><span class='profit negative'>$-20.00</span></td>
+          <td><span class="badge outcome-void">LOSE</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NBA Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">1/0/1</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NBA1Q Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">3/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$30.72</td>
+          <td><span class='profit positive'>$10.72</span></td>
+          <td><span class="badge outcome-void">CASH</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NBA1Q Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">2/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$38.40</td>
+          <td><span class='profit positive'>$18.40</span></td>
+          <td><span class="badge outcome-void">CASH</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NBA1Q Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">2/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$60.00</td>
+          <td><span class='profit positive'>$40.00</span></td>
+          <td><span class="badge outcome-void">CASH</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>Soccer Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">0/0/3</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>Soccer Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">0/0/2</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>Soccer Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">0/0/2</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+  
+    <div class="section">
+      <div class="section-title">🦵 Leg Details (Sample)</div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Sheet</th>
+              <th>Ticket</th>
+              <th>Leg</th>
+              <th>Player</th>
+              <th>Prop</th>
+              <th>Dir</th>
+              <th>Line</th>
+              <th>Actual</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr>
+          <td>NBA Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td>Daniel Gafford</td>
+          <td>assists</td>
+          <td>OVER</td>
+          <td class="num">0.5</td>
+          <td class="num">0.0</td>
+          <td><span class="badge outcome-miss">✗ MISS</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td>Kris Murray</td>
+          <td>assists</td>
+          <td>OVER</td>
+          <td class="num">0.5</td>
+          <td class="num">6.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td>Daniel Gafford</td>
+          <td>assists</td>
+          <td>OVER</td>
+          <td class="num">0.5</td>
+          <td class="num">0.0</td>
+          <td><span class="badge outcome-miss">✗ MISS</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td>Kris Murray</td>
+          <td>assists</td>
+          <td>OVER</td>
+          <td class="num">0.5</td>
+          <td class="num">6.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td>Sidy Cissoko</td>
+          <td>assists</td>
+          <td>OVER</td>
+          <td class="num">0.5</td>
+          <td class="num">1.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td>Jarrett Allen</td>
+          <td>points</td>
+          <td>OVER</td>
+          <td class="num">11.5</td>
+          <td class="num">18.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td>Sam Merrill</td>
+          <td>rebounds</td>
+          <td>OVER</td>
+          <td class="num">2.5</td>
+          <td class="num">nan</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr>
+          <td>Soccer Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td>Vedat Muriqi</td>
+          <td>shots on target</td>
+          <td>OVER</td>
+          <td class="num">1.5</td>
+          <td class="num">nan</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr>
+          <td>Soccer Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td>Ugurcan Çakir</td>
+          <td>goalie saves</td>
+          <td>OVER</td>
+          <td class="num">1.5</td>
+          <td class="num">nan</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr>
+          <td>Soccer Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td>Vedat Muriqi</td>
+          <td>shots on target</td>
+          <td>OVER</td>
+          <td class="num">1.5</td>
+          <td class="num">nan</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr>
+          <td>Soccer Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td>Ugurcan Çakir</td>
+          <td>goalie saves</td>
+          <td>OVER</td>
+          <td class="num">1.5</td>
+          <td class="num">nan</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr>
+          <td>Soccer Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td>Anders Dreyer</td>
+          <td>shots on target</td>
+          <td>OVER</td>
+          <td class="num">0.5</td>
+          <td class="num">nan</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr>
+          <td>Soccer Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td>Vedat Muriqi</td>
+          <td>shots on target</td>
+          <td>OVER</td>
+          <td class="num">1.5</td>
+          <td class="num">nan</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr>
+          <td>Soccer Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td>Ugurcan Çakir</td>
+          <td>goalie saves</td>
+          <td>OVER</td>
+          <td class="num">1.5</td>
+          <td class="num">nan</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA1Q Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td>Jalen Green</td>
+          <td>assists</td>
+          <td>OVER</td>
+          <td class="num">0.5</td>
+          <td class="num">1.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA1Q Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td>Collin Gillespie</td>
+          <td>assists</td>
+          <td>OVER</td>
+          <td class="num">0.5</td>
+          <td class="num">3.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA1Q Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td>Jalen Green</td>
+          <td>assists</td>
+          <td>OVER</td>
+          <td class="num">0.5</td>
+          <td class="num">1.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA1Q Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td>Collin Gillespie</td>
+          <td>assists</td>
+          <td>OVER</td>
+          <td class="num">0.5</td>
+          <td class="num">3.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA1Q Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td>Brandon Miller</td>
+          <td>assists</td>
+          <td>OVER</td>
+          <td class="num">0.5</td>
+          <td class="num">1.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA1Q Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td>Miles Bridges</td>
+          <td>assists</td>
+          <td>OVER</td>
+          <td class="num">0.5</td>
+          <td class="num">1.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+  <div class="footer">Generated 2026-04-13 21:01:41 — combined_tickets_graded_2026-03-31.xlsx</div>
+</div>
+
+</body>
+</html>

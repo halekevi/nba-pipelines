@@ -5,7 +5,9 @@
 #   - 7:00 PM–1:00 AM  grader every hour (yesterday; games finishing)
 #   - 7:00 AM  initial daily pipeline
 #   - 9:00 AM  refresh + add/remove diff log
+#   - 10:30 AM refresh + add/remove diff log (pre-line-move ticket build)
 #   - 11:00 AM refresh + add/remove diff log
+#   - 1:00 PM  refresh + add/remove diff log
 #
 # Run elevated from the repo you want tasks to use (e.g. H:\...\PropORACLE\scripts).
 # Re-running replaces tasks so paths stay in sync after moving the clone off OneDrive.
@@ -95,11 +97,25 @@ Register-PropTask `
     -ExtraArgs "-RunLabel 9AM"
 
 Register-PropTask `
+    -TaskName "PropOracle - Refresh 1030AM" `
+    -Description "Pre-line-move refresh: build tickets by 10:30 AM." `
+    -ScriptPath $ScriptRefresh `
+    -At "10:30" `
+    -ExtraArgs "-RunLabel 1030AM"
+
+Register-PropTask `
     -TaskName "PropOracle - Refresh 11AM" `
     -Description "Refresh props, update outputs, and log added/removed props." `
     -ScriptPath $ScriptRefresh `
     -At "11:00" `
     -ExtraArgs "-RunLabel 11AM"
+
+Register-PropTask `
+    -TaskName "PropOracle - Refresh 1PM" `
+    -Description "Refresh props, update outputs, and log added/removed props." `
+    -ScriptPath $ScriptRefresh `
+    -At "13:00" `
+    -ExtraArgs "-RunLabel 1PM"
 
 Write-Host ""
 Write-Host "✅ Scheduler tasks registered." -ForegroundColor Green
@@ -109,7 +125,9 @@ foreach ($eg in $EveningGraderTasks) {
 }
 Write-Host "  - PropOracle - Daily 7AM"
 Write-Host "  - PropOracle - Refresh 9AM"
+Write-Host "  - PropOracle - Refresh 1030AM"
 Write-Host "  - PropOracle - Refresh 11AM"
+Write-Host "  - PropOracle - Refresh 1PM"
 Write-Host ""
 Write-Host "Quick checks:"
 Write-Host "  Get-ScheduledTask | Where-Object TaskName -like 'PropOracle -*' | Select-Object TaskName, State"

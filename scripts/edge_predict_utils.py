@@ -19,9 +19,109 @@ import edge_ml_bundle  # noqa: F401 — pickle root
 
 from edge_feature_engineering import (  # type: ignore
     FEATURE_COLUMNS,
+    _direction_series,
     build_feature_vector,
     fill_minutes_cv_median_by_sport,
 )
+
+# Shared with step7b_edge_score. Linear multipliers (provisional; sigmoid slices → isotonic later).
+ML_PROB_CALIBRATION_SCALARS: dict[tuple[str, str, str], float] = {
+    # NBA
+    ("NBA", "standard", "OVER"): 0.55,
+    ("NBA", "goblin", "OVER"): 0.74,
+    ("NBA", "demon", "OVER"): 0.43,
+    # NHL — provisional (thin samples; isotonic pass needed)
+    ("NHL", "standard", "OVER"): 0.65,
+    ("NHL", "standard", "UNDER"): 1.50,
+    ("NHL", "goblin", "OVER"): 0.52,
+    ("NHL", "demon", "OVER"): 2.00,
+    # MLB
+    ("MLB", "standard", "OVER"): 0.62,
+    ("MLB", "goblin", "OVER"): 0.64,
+    ("MLB", "demon", "OVER"): 0.42,
+    # Soccer — step7b sport key is SOCCER (not report label "Soccer")
+    ("SOCCER", "standard", "OVER"): 0.60,
+    ("SOCCER", "goblin", "OVER"): 0.63,
+    ("SOCCER", "demon", "OVER"): 2.00,
+}
+
+_SLICE_CAL_PATH: Path | None = None
+_SLICE_CAL_MTIME: float | None = None
+_SLICE_CAL_BUNDLE: dict | None = None
+
+
+def _load_slice_calibrators(models_dir: Path) -> dict | None:
+    """Load ``edge_slice_calibrators.pkl`` if present; reload when file mtime changes."""
+    global _SLICE_CAL_PATH, _SLICE_CAL_MTIME, _SLICE_CAL_BUNDLE
+    p = models_dir / "edge_slice_calibrators.pkl"
+    if not p.is_file():
+        _SLICE_CAL_PATH, _SLICE_CAL_MTIME, _SLICE_CAL_BUNDLE = None, None, None
+        return None
+    try:
+        mt = float(p.stat().st_mtime)
+    except OSError:
+        return _SLICE_CAL_BUNDLE
+    if _SLICE_CAL_BUNDLE is not None and _SLICE_CAL_PATH == p.resolve() and _SLICE_CAL_MTIME == mt:
+        return _SLICE_CAL_BUNDLE
+    _SLICE_CAL_BUNDLE = joblib.load(p)
+    _SLICE_CAL_PATH = p.resolve()
+    _SLICE_CAL_MTIME = mt
+    return _SLICE_CAL_BUNDLE
+
+
+def apply_ml_prob_post_calibration(
+    p_platt: np.ndarray,
+    sport_norm: str,
+    pick_lower: pd.Series,
+    dir_upper: pd.Series,
+    models_dir: Path,
+) -> np.ndarray:
+    """
+    Post-process Platt-calibrated positive-class probabilities.
+
+    Order: ``p_platt`` → per-slice isotonic (if key in ``edge_slice_calibrators.pkl``)
+    → linear ``ML_PROB_CALIBRATION_SCALARS`` (default 1.0) → clip [0, 1].
+
+    Isotonic regressors are fit on a stratified **train-only** subset (disjoint from the
+    holdout rows used to fit Platt in ``train_edge_model.py``).
+    """
+    p = np.asarray(p_platt, dtype=float).copy()
+    n = len(p)
+    if n == 0:
+        return p
+    spu = str(sport_norm or "").strip().upper()
+    bundle = _load_slice_calibrators(models_dir)
+    cal_map: dict = {}
+    if isinstance(bundle, dict):
+        cal_map = bundle.get("calibrators") or {}
+    if cal_map:
+        ptv = pick_lower.astype(str).str.strip().str.lower()
+        drv = dir_upper.astype(str).str.strip().str.upper()
+        for key, iso in cal_map.items():
+            if not isinstance(key, tuple) or len(key) != 3:
+                continue
+            s0, p0, d0 = str(key[0]).upper(), str(key[1]).lower(), str(key[2]).upper()
+            if s0 != spu:
+                continue
+            m = ptv.eq(p0) & drv.eq(d0)
+            if not bool(m.any()):
+                continue
+            idx = np.where(m.to_numpy())[0]
+            pv = p[idx]
+            try:
+                p[idx] = np.asarray(iso.predict(pv), dtype=float)
+            except Exception:
+                continue
+    adj = np.ones(n, dtype=float)
+    ptv = pick_lower.astype(str).str.strip().str.lower()
+    drv = dir_upper.astype(str).str.strip().str.upper()
+    for (s0, p0, d0), mult in ML_PROB_CALIBRATION_SCALARS.items():
+        if spu != s0:
+            continue
+        m = ptv.eq(p0) & drv.eq(d0)
+        adj[m.to_numpy()] = float(mult)
+    p *= adj
+    return np.clip(p, 0.0, 1.0)
 
 
 def repo_root() -> Path:
@@ -90,7 +190,12 @@ def predict_unified_edge_scores(
     except Exception:
         return None
     X = df2[feats].astype(float)
-    ml_prob = pd.Series(model.predict_proba(X)[:, 1], index=df2.index, dtype=float)
+    spu = str(sport_for_model or "").strip().upper()
+    p_platt = np.asarray(model.predict_proba(X)[:, 1], dtype=float)
+    dirs_u = _direction_series(df2).astype(str).str.strip().str.upper()
+    pt_l = df2.get("pick_type", pd.Series("", index=df2.index)).astype(str).str.strip().str.lower()
+    p_adj = apply_ml_prob_post_calibration(p_platt, spu, pt_l, dirs_u, mdir)
+    ml_prob = pd.Series(p_adj, index=df2.index, dtype=float)
     edge_col = pd.to_numeric(df2.get("edge", pd.Series(0.0, index=df2.index)), errors="coerce").fillna(0.0)
     implied_prob = 1.0 / (1.0 + np.exp(-edge_col.clip(-20, 20)))
     comp = pd.to_numeric(

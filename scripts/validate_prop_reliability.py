@@ -97,7 +97,9 @@ def _reliability_from_stats(decided_n: int, hit_rate: float, zero_rate: float, v
 def build_report(repo_root: Path, min_n: int, overrides_path: Path) -> dict[str, Any]:
     tpl = repo_root / "ui_runner" / "templates"
     rows = _iter_graded_props(tpl)
-    agg: dict[tuple[str, str, str, str], dict[str, float]] = defaultdict(lambda: {"dec": 0.0, "hit": 0.0, "void": 0.0, "zero": 0.0, "actual_n": 0.0})
+    agg: dict[tuple[str, str, str, str], dict[str, float]] = defaultdict(
+        lambda: {"dec": 0.0, "hit": 0.0, "void": 0.0, "zero": 0.0, "actual_n": 0.0, "src_conf": 0.0}
+    )
 
     for r in rows:
         sport = _up(r.get("sport")) or "UNKNOWN"
@@ -110,6 +112,8 @@ def build_report(repo_root: Path, min_n: int, overrides_path: Path) -> dict[str,
             agg[k]["dec"] += 1
             if res == "HIT":
                 agg[k]["hit"] += 1
+            if _up(r.get("actual_source_conflict")) in {"1", "TRUE", "YES"}:
+                agg[k]["src_conf"] += 1
             try:
                 actual = float(r.get("actual_value"))
                 agg[k]["actual_n"] += 1
@@ -129,7 +133,11 @@ def build_report(repo_root: Path, min_n: int, overrides_path: Path) -> dict[str,
         actual_n = int(v["actual_n"])
         zero_rate = float(v["zero"] / actual_n) if actual_n else 0.0
         void_rate = float(v["void"] / max(1.0, (v["void"] + v["dec"])))
+        source_conflict_rate = float(v["src_conf"] / dec) if dec else 0.0
         score, status = _reliability_from_stats(dec, hit_rate, zero_rate, void_rate)
+        if source_conflict_rate >= 0.10:
+            score = max(0.0, score - 0.20)
+            status = "UNRELIABLE" if score < 0.35 else ("WATCHLIST" if score < 0.60 else "RELIABLE")
         out_rows.append(
             {
                 "sport": sport,
@@ -140,6 +148,7 @@ def build_report(repo_root: Path, min_n: int, overrides_path: Path) -> dict[str,
                 "hit_rate": round(hit_rate, 4),
                 "zero_rate": round(zero_rate, 4),
                 "void_rate": round(void_rate, 4),
+                "source_conflict_rate": round(source_conflict_rate, 4),
                 "reliability_score": round(score, 4),
                 "status": status,
             }

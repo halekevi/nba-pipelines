@@ -329,7 +329,28 @@ def _mix_signature_from_legs(legs: list[dict[str, Any]]) -> dict[str, int]:
     return sig
 
 
+def _goblin_line_distance_half_steps(line_distance: float) -> int:
+    """
+    Ladder keys use half-point resolution (0, 0.5, 1, 1.5, …) so 1.0 and 1.5 do not collapse.
+    Internal representation: integer half-steps n where distance in points = n / 2.
+    """
+    try:
+        d = abs(float(line_distance or 0.0))
+        if not math.isfinite(d):
+            d = 0.0
+    except (TypeError, ValueError):
+        d = 0.0
+    return int(round(d * 2.0))
+
+
 def _goblin_distance_signature(legs: list[dict[str, Any]]) -> list[int]:
+    """
+    Sorted half-step ints per Goblin leg; see _goblin_line_distance_half_steps.
+
+    Goblin lines are eased vs standard (delta > 0). Half-steps below 1
+    (i.e. < 0.5 points) clamp to 1 so export noise at 0 still matches the
+    shallowest ladder bucket (0.5 points).
+    """
     out: list[int] = []
     for leg in legs or []:
         pt = str(leg.get("pick_type", "standard")).strip().lower()
@@ -341,19 +362,32 @@ def _goblin_distance_signature(legs: list[dict[str, Any]]) -> list[int]:
                 d = 0.0
         except (TypeError, ValueError):
             d = 0.0
-        out.append(int(round(d)))
+        hs = _goblin_line_distance_half_steps(d)
+        if hs < 1:
+            hs = 1
+        out.append(hs)
     out.sort()
     return out
 
 
+def _ladder_goblin_distance_to_half_steps(raw: Any) -> int:
+    """
+    Parse payout_ladder.json goblin_distances element (e.g. 2, 1.5, 2.0) to half-steps.
+
+    JSON 0 is treated as the shallowest goblin bucket (same half-step as 0.5 points).
+    """
+    h = int(round(float(raw) * 2.0))
+    return max(1, h)
+
+
 def _ladder_entry_goblin_sig(ent: dict[str, Any]) -> list[int] | None:
-    """Return sorted goblin distance signature required by entry, or None if entry matches any."""
+    """Return sorted goblin distance signature in half-steps, or None if entry matches any."""
     if "goblin_distances" not in ent:
         return None
     e_g = ent.get("goblin_distances")
     if not isinstance(e_g, list) or len(e_g) == 0:
         return None
-    return sorted([int(round(float(x))) for x in e_g])
+    return sorted(_ladder_goblin_distance_to_half_steps(x) for x in e_g)
 
 
 def _lookup_exact_payout_ladder(
@@ -364,6 +398,9 @@ def _lookup_exact_payout_ladder(
     """
     Prefer mix + goblin_distances exact rows over mix-only wildcards so
     distance-specific ladder entries beat generic same-mix rows.
+
+    goblin_distances in JSON are in **points** (ints or half-points like 1.5);
+    matching uses half-step ints so 1.0 and 1.5 do not round into the same bucket.
     """
     mix_sig = _mix_signature_from_legs(legs)
     gob_sig = _goblin_distance_signature(legs)
@@ -1031,6 +1068,15 @@ def _ticket_primary_sport(ticket: dict) -> str:
     return next(iter(sports))
 
 
+def _ticket_leg_sports(ticket: dict) -> set[str]:
+    legs = list(ticket.get("legs") or [])
+    return {
+        str(leg.get("sport") or "").strip().upper()
+        for leg in legs
+        if isinstance(leg, dict) and str(leg.get("sport") or "").strip()
+    }
+
+
 def _ticket_rank_tuple(ticket: dict) -> tuple[float, int, float]:
     pay = ticket.get("payout")
     ev = None
@@ -1140,13 +1186,12 @@ def filter_web_tickets_for_ui(
         for t in tickets_in:
             if not isinstance(t, dict):
                 continue
-            sp = _ticket_primary_sport(t)
-            if not sp:
-                continue
             rnk = _ticket_rank_tuple(t)
-            cur = sport_candidates.get(sp)
-            if cur is None or rnk > cur[0]:
-                sport_candidates[sp] = (rnk, t, group_name)
+            leg_sports = _ticket_leg_sports(t)
+            for sp in leg_sports:
+                cur = sport_candidates.get(sp)
+                if cur is None or rnk > cur[0]:
+                    sport_candidates[sp] = (rnk, t, group_name)
         if require_positive_ev:
             kept = []
             for t in tickets_in:
@@ -1193,12 +1238,7 @@ def filter_web_tickets_for_ui(
             gn = str(g.get("group_name") or "")
             if gn:
                 existing_group_names.add(gn)
-            for t in list(g.get("tickets") or []):
-                if not isinstance(t, dict):
-                    continue
-                sp = _ticket_primary_sport(t)
-                if sp:
-                    present_sports.add(sp)
+                present_sports.add(_group_sport(gn))
 
         missing = [sp for sp in sport_candidates.keys() if sp not in present_sports]
         for sp in sorted(missing):
@@ -1207,9 +1247,10 @@ def filter_web_tickets_for_ui(
             for g in out_groups:
                 if not isinstance(g, dict):
                     continue
-                if str(g.get("group_name") or "") == src_group_name:
+                gn = str(g.get("group_name") or "")
+                if gn == src_group_name and _group_sport(gn) == sp:
                     tickets_cur = [t for t in list(g.get("tickets") or []) if isinstance(t, dict)]
-                    if not any(_ticket_primary_sport(t) == sp for t in tickets_cur):
+                    if not any(sp in _ticket_leg_sports(t) for t in tickets_cur):
                         tickets_cur.append(best_ticket)
                         g["tickets"] = tickets_cur
                     inserted = True
@@ -1220,7 +1261,7 @@ def filter_web_tickets_for_ui(
             # Source group was filtered out; create a minimal sport group with its best ticket.
             out_groups.append(
                 {
-                    "group_name": src_group_name or f"{sp} Standard",
+                    "group_name": f"{sp} Coverage",
                     "n_legs": _ticket_n_legs(best_ticket),
                     "power_payout": best_ticket.get("power_payout") or best_ticket.get("base_power_payout"),
                     "flex_payout": best_ticket.get("flex_payout"),
@@ -11610,6 +11651,7 @@ def main():
 
 _SPORT_ACCENT: dict[str, str] = {
     "NBA":    "#36A2FF",
+    "WNBA":   "#FF8AC6",
     "CBB":    "#2ECC71",
     "NHL":    "#9B59FF",
     "SOCCER": "#7DFF6B",
@@ -11768,7 +11810,7 @@ def _group_sport(group_name: str) -> str:
         return "CROSS"
     if name.startswith("X-SPORT") or "X-SPORT" in name:
         return "CROSS"
-    for sp in ("NBA1Q", "NBA1H", "WCBB", "TENNIS", "SOCCER", "NHL", "MLB", "CBB", "NBA"):
+    for sp in ("NBA1Q", "NBA1H", "WNBA", "WCBB", "TENNIS", "SOCCER", "NHL", "MLB", "CBB", "NBA"):
         if sp in name:
             return sp
     return "NBA"
@@ -11779,12 +11821,13 @@ _TICKET_GROUP_SPORT_SORT_ORDER: dict[str, int] = {
     "NBA": 0,
     "NBA1H": 1,
     "NBA1Q": 2,
-    "CBB": 3,
-    "WCBB": 4,
-    "NHL": 5,
-    "SOCCER": 6,
-    "MLB": 7,
-    "TENNIS": 8,
+    "WNBA": 3,
+    "CBB": 4,
+    "WCBB": 5,
+    "NHL": 6,
+    "SOCCER": 7,
+    "MLB": 8,
+    "TENNIS": 9,
     "CROSS": 10_000,
     "MIX": 10_000,
 }
@@ -11980,6 +12023,7 @@ def _tickets_filter_pills_html(attr_rows: list[dict]) -> str:
         "nba",
         "nba1q",
         "nba1h",
+        "wnba",
         "cbb",
         "wcbb",
         "nhl",

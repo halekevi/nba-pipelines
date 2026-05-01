@@ -441,7 +441,8 @@ def main() -> None:
             if args.date
             else _dt.datetime.now(tz=eastern).date().isoformat()
         )
-        repo_root = Path(__file__).resolve().parents[2]
+        # Tennis/scripts -> monorepo root (see tennis_grader.py).
+        repo_root = Path(__file__).resolve().parents[1]
         dated_dir = repo_root / "outputs" / slate_date
         dated_dir.mkdir(parents=True, exist_ok=True)
         dated_xlsx = dated_dir / f"step8_tennis_direction_clean_{slate_date}.xlsx"

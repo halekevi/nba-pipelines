@@ -91,6 +91,18 @@ def _chrono_split_idx(df: pd.DataFrame, date_col: str | None) -> pd.Index:
     return df.index
 
 
+def _strict_chrono_split_idx(df: pd.DataFrame, date_col: str | None) -> pd.Index:
+    if not date_col or date_col not in df.columns:
+        raise RuntimeError("NHL model requires a real date column for temporal split; none found.")
+    dd = pd.to_datetime(df[date_col], errors="coerce")
+    usable = dd.notna().sum()
+    if usable < 50:
+        raise RuntimeError(
+            f"NHL model temporal split blocked: only {usable} rows have valid dates in '{date_col}'."
+        )
+    return dd.sort_values().index
+
+
 def _norm_cat(s: pd.Series) -> pd.Series:
     return s.astype(str).str.strip().str.upper()
 
@@ -465,8 +477,8 @@ def main() -> None:
     train["direction_raw"] = _norm_cat(df["final_direction"])
     train["direction"] = _direction_num(train["direction_raw"]).astype(int)
     train["edge"] = play_side_edge(train["edge"], train["direction"])
-    train["tier"] = _tier_letter_num(df[tier_col]) if tier_col else 2.0
-    train["pick_tier_num"] = _pick_type_tier_num(df[pick_col]) if pick_col else 1.0
+    # Match NHL step7 inference schema exactly: tier is pick-type encoding.
+    train["tier"] = _pick_type_tier_num(df[pick_col]) if pick_col else 1.0
     train["defense_tier"] = _defense_tier_4(df)
     if def_tier_col:
         train["def_tier_raw"] = _norm_cat(df[def_tier_col])
@@ -487,7 +499,6 @@ def main() -> None:
     else:
         train["is_home"] = np.nan
     train["pace_factor"] = _to_num(df[pace_col]) if pace_col else np.nan
-    train["rank"] = _to_num(df[rank_col]) if rank_col else np.nan
     if prop_col:
         prop_raw = _norm_cat(df[prop_col])
     else:
@@ -528,7 +539,6 @@ def main() -> None:
     train["toi_minutes"] = train["toi_minutes"].fillna(0.0)
     train["is_home"] = train["is_home"].fillna(0.5)
     train["pace_factor"] = train["pace_factor"].fillna(0.0)
-    train["rank"] = train["rank"].fillna(0.0)
 
     # Normalize pick types for diagnostics and features.
     if pick_col:
@@ -598,33 +608,27 @@ def main() -> None:
         "hit_rate_l5",
         "hit_rate_l10",
         "hit_rate_l20",
-        "season_hit_rate",
-        "trend_delta",
         "line",
         "direction",
         "tier",
-        "pick_tier_num",
-        "rank",
         "defense_tier",
         "pp_unit",
-        "pace_factor",
         "toi_minutes",
         "goalie_confirmed",
         "is_home",
     ]
     X_base = train[base_cols].copy().fillna(0.0)
     X_prop = pd.get_dummies(train["prop_type"], prefix="prop", dtype=float)
-    X_pick = pd.get_dummies(train["pick_type_norm"], prefix="pick", dtype=float)
-    X = pd.concat([X_base, X_prop, X_pick], axis=1).fillna(0.0)
+    X = pd.concat([X_base, X_prop], axis=1).fillna(0.0)
     # Strict feature pruning: drop missingness artifacts.
     X = X[[c for c in X.columns if c != "prop_nan"]]
     y = train["hit"].astype(int)
 
     # Chronological split to avoid temporal leakage
-    date_col = _first_present(train, ["game_date", "date", "_source_date", "slate_date"])
+    date_col = _first_present(train, ["game_date", "date", "source_date", "_source_date", "slate_date"])
     if date_col:
         print(f"-> Using temporal split on: {date_col}")
-    order = _chrono_split_idx(train, date_col)
+    order = _strict_chrono_split_idx(train, date_col)
     Xo = X.loc[order]
     yo = y.loc[order]
     swo = sw.loc[order]

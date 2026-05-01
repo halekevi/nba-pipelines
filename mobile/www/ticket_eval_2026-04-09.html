@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ticket Eval — APR 11, 2026</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --accent: #00d9ff;
+  --green: #6ee7b7;
+  --red: #fca5a5;
+  --amber: #fcd34d;
+  --blue: #93c5fd;
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-400: #94a3b8;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--slate-900);
+  color: var(--slate-100);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+header {
+  background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(30,41,59,0.95));
+  border-bottom: 2px solid var(--accent);
+  padding: 20px;
+  text-align: center;
+}
+
+.logo-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--accent);
+  letter-spacing: 2px;
+}
+
+.logo-sub {
+  font-size: 12px;
+  color: var(--slate-400);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.date-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 6px 12px;
+  background: var(--slate-700);
+  border: 1px solid var(--slate-600);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--slate-300);
+}
+
+.main {
+  max-width: none;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 8px;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.kpi-card {
+  background: var(--slate-800);
+  border: 1px solid var(--slate-700);
+  border-radius: 6px;
+  padding: 12px;
+  text-align: center;
+}
+
+.kpi-val {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.kpi-label {
+  font-size: 11px;
+  color: var(--slate-400);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  background: var(--slate-800);
+  border: 1px solid var(--slate-700);
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+th {
+  background: var(--slate-700);
+  padding: 10px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--accent);
+  border-bottom: 1px solid var(--slate-600);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--slate-700);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover {
+  background: rgba(0, 217, 255, 0.05);
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.outcome-hit {
+  background: rgba(110, 231, 183, 0.15);
+  color: #6ee7b7;
+}
+
+.outcome-miss {
+  background: rgba(252, 165, 165, 0.15);
+  color: #fca5a5;
+}
+
+.outcome-push {
+  background: rgba(252, 211, 77, 0.15);
+  color: #fcd34d;
+}
+
+.outcome-void {
+  background: rgba(148, 163, 184, 0.15);
+  color: var(--slate-400);
+}
+
+.chip {
+  display: inline-block;
+  padding: 3px 7px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.chip-a { background: rgba(110, 231, 183, 0.2); color: #6ee7b7; }
+.chip-b { background: rgba(0, 217, 255, 0.2); color: var(--accent); }
+.chip-c { background: rgba(252, 211, 77, 0.2); color: #fcd34d; }
+.chip-d { background: rgba(148, 163, 184, 0.2); color: var(--slate-400); }
+
+.num { font-family: 'Courier New', monospace; }
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  color: var(--slate-400);
+  font-size: 11px;
+  border-top: 1px solid var(--slate-700);
+  margin-top: 40px;
+}
+
+.ticket-row {
+  cursor: pointer;
+  user-select: none;
+}
+
+.ticket-row.winner {
+  background: rgba(110, 231, 183, 0.08);
+}
+
+.ticket-row.winner:hover {
+  background: rgba(110, 231, 183, 0.15);
+}
+
+.profit {
+  font-weight: 600;
+}
+
+.profit.positive {
+  color: #6ee7b7;
+}
+
+.profit.negative {
+  color: #fca5a5;
+}
+
+.profit.breakeven {
+  color: var(--slate-400);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-title">TICKET EVALUATION</div>
+  <div class="logo-sub">APR 11, 2026</div>
+  <div class="date-badge">📅 APR 11, 2026</div>
+</header>
+
+<div class="main">
+  
+    <div class="section">
+      <div class="section-title">📊 Overview</div>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-val">38</div>
+          <div class="kpi-label">Total Tickets</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">6</div>
+          <div class="kpi-label">Winners</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">15.8%</div>
+          <div class="kpi-label">Win Rate</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">$432.56</div>
+          <div class="kpi-label">Net Profit</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">56.9%</div>
+          <div class="kpi-label">ROI</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val">$760.00</div>
+          <div class="kpi-label">Total Staked</div>
+        </div>
+      </div>
+    </div>
+    
+  
+    <div class="section">
+      <div class="section-title">🎫 Ticket Results</div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Sheet</th>
+              <th>#</th>
+              <th>Legs</th>
+              <th>H/M/N</th>
+              <th>Stake</th>
+              <th>Payout</th>
+              <th>Profit</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr class="ticket-row">
+          <td>MLB Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">0/0/3</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>MLB Goblin 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">0/0/3</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>MLB Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">0/0/2</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>MLB Pwr Std 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">0/0/3</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>MLB Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">0/0/2</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row winner">
+          <td>NBA Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">2/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$35.56</td>
+          <td><span class='profit positive'>$15.56</span></td>
+          <td><span class="badge outcome-void">WIN</span></td>
+        </tr>
+        
+        <tr class="ticket-row winner">
+          <td>NBA Goblin 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">2/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$35.56</td>
+          <td><span class='profit positive'>$15.56</span></td>
+          <td><span class="badge outcome-void">WIN</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NBA Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">1/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$20.00</td>
+          <td><span class='profit breakeven'>$0.00</span></td>
+          <td><span class="badge outcome-void">REFUND</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NBA Pwr Std 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">2/1/0</td>
+          <td class="num">$20.00</td>
+          <td>$0.00</td>
+          <td><span class='profit negative'>$-20.00</span></td>
+          <td><span class="badge outcome-void">LOSE</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NBA Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">1/1/0</td>
+          <td class="num">$20.00</td>
+          <td>$0.00</td>
+          <td><span class='profit negative'>$-20.00</span></td>
+          <td><span class="badge outcome-void">LOSE</span></td>
+        </tr>
+        
+        <tr class="ticket-row winner">
+          <td>NHL Goblin 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">3/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$120.00</td>
+          <td><span class='profit positive'>$100.00</span></td>
+          <td><span class="badge outcome-void">WIN</span></td>
+        </tr>
+        
+        <tr class="ticket-row winner">
+          <td>NHL Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">2/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$60.00</td>
+          <td><span class='profit positive'>$40.00</span></td>
+          <td><span class="badge outcome-void">WIN</span></td>
+        </tr>
+        
+        <tr class="ticket-row winner">
+          <td>NHL Pwr Std 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">3/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$120.00</td>
+          <td><span class='profit positive'>$100.00</span></td>
+          <td><span class="badge outcome-void">WIN</span></td>
+        </tr>
+        
+        <tr class="ticket-row winner">
+          <td>NHL Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">2/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$60.00</td>
+          <td><span class='profit positive'>$40.00</span></td>
+          <td><span class="badge outcome-void">WIN</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>Soccer Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">0/1/2</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>Soccer Goblin 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">0/1/2</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>Soccer Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">0/1/1</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>Soccer Pwr Std 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">0/1/2</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>Soccer Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">0/1/1</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>MLB Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">0/0/3</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>MLB Goblin 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">0/0/3</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>MLB Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">0/0/2</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>MLB Pwr Std 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">0/0/3</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>MLB Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">0/0/2</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NBA Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">2/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$30.72</td>
+          <td><span class='profit positive'>$10.72</span></td>
+          <td><span class="badge outcome-void">CASH</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NBA Goblin 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">2/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$30.72</td>
+          <td><span class='profit positive'>$10.72</span></td>
+          <td><span class="badge outcome-void">CASH</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NBA Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">1/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$20.00</td>
+          <td><span class='profit breakeven'>$0.00</span></td>
+          <td><span class="badge outcome-void">REFUND</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NBA Pwr Std 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">2/1/0</td>
+          <td class="num">$20.00</td>
+          <td>$20.00</td>
+          <td><span class='profit breakeven'>$0.00</span></td>
+          <td><span class="badge outcome-void">CASH</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NBA Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">1/1/0</td>
+          <td class="num">$20.00</td>
+          <td>$0.00</td>
+          <td><span class='profit negative'>$-20.00</span></td>
+          <td><span class="badge outcome-void">LOSE</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NHL Goblin 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">3/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$60.00</td>
+          <td><span class='profit positive'>$40.00</span></td>
+          <td><span class="badge outcome-void">CASH</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NHL Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">2/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$60.00</td>
+          <td><span class='profit positive'>$40.00</span></td>
+          <td><span class="badge outcome-void">CASH</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NHL Pwr Std 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">3/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$60.00</td>
+          <td><span class='profit positive'>$40.00</span></td>
+          <td><span class="badge outcome-void">CASH</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>NHL Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">2/0/0</td>
+          <td class="num">$20.00</td>
+          <td>$60.00</td>
+          <td><span class='profit positive'>$40.00</span></td>
+          <td><span class="badge outcome-void">CASH</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>Soccer Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">0/1/2</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>Soccer Goblin 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">0/1/2</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>Soccer Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">0/1/1</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>Soccer Pwr Std 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td class="num">0/1/2</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+        <tr class="ticket-row">
+          <td>Soccer Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td class="num">0/1/1</td>
+          <td class="num">$20.00</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="badge outcome-void">⊘ NO ACTUAL</span></td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+  
+    <div class="section">
+      <div class="section-title">🦵 Leg Details (Sample)</div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Sheet</th>
+              <th>Ticket</th>
+              <th>Leg</th>
+              <th>Player</th>
+              <th>Prop</th>
+              <th>Dir</th>
+              <th>Line</th>
+              <th>Actual</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr>
+          <td>NBA Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td>Ja&#x27;Kobe Walter</td>
+          <td>pr</td>
+          <td>OVER</td>
+          <td class="num">9.5</td>
+          <td class="num">12.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td>Isaac Okoro</td>
+          <td>assists</td>
+          <td>OVER</td>
+          <td class="num">0.5</td>
+          <td class="num">nan</td>
+          <td><span class="badge outcome-void">∅ VOID</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td>Sandro Mamukelashvili</td>
+          <td>3-pt made</td>
+          <td>OVER</td>
+          <td class="num">0.5</td>
+          <td class="num">1.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td>Ja&#x27;Kobe Walter</td>
+          <td>pr</td>
+          <td>OVER</td>
+          <td class="num">7.5</td>
+          <td class="num">12.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Flex 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td>Isaac Okoro</td>
+          <td>assists</td>
+          <td>OVER</td>
+          <td class="num">0.5</td>
+          <td class="num">nan</td>
+          <td><span class="badge outcome-void">∅ VOID</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td>Jamal Shead</td>
+          <td>pr</td>
+          <td>OVER</td>
+          <td class="num">14.5</td>
+          <td class="num">12.0</td>
+          <td><span class="badge outcome-miss">✗ MISS</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td>Ja&#x27;Kobe Walter</td>
+          <td>pr</td>
+          <td>OVER</td>
+          <td class="num">11.5</td>
+          <td class="num">12.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Pwr Std 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td>Jamal Shead</td>
+          <td>pr</td>
+          <td>OVER</td>
+          <td class="num">14.5</td>
+          <td class="num">12.0</td>
+          <td><span class="badge outcome-miss">✗ MISS</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Pwr Std 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td>Ja&#x27;Kobe Walter</td>
+          <td>pr</td>
+          <td>OVER</td>
+          <td class="num">11.5</td>
+          <td class="num">12.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Pwr Std 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td>Collin Murray-Boyles</td>
+          <td>points</td>
+          <td>OVER</td>
+          <td class="num">9.5</td>
+          <td class="num">17.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Goblin 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td>Sandro Mamukelashvili</td>
+          <td>3-pt made</td>
+          <td>OVER</td>
+          <td class="num">0.5</td>
+          <td class="num">1.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Goblin 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td>Ja&#x27;Kobe Walter</td>
+          <td>pr</td>
+          <td>OVER</td>
+          <td class="num">7.5</td>
+          <td class="num">12.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NBA Goblin 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td>Isaac Okoro</td>
+          <td>assists</td>
+          <td>OVER</td>
+          <td class="num">0.5</td>
+          <td class="num">nan</td>
+          <td><span class="badge outcome-void">∅ VOID</span></td>
+        </tr>
+        
+        <tr>
+          <td>NHL Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td>Yakov Trenin</td>
+          <td>hits</td>
+          <td>UNDER</td>
+          <td class="num">5.5</td>
+          <td class="num">0.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NHL Power Play 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td>Zach Whitecloud</td>
+          <td>hits</td>
+          <td>UNDER</td>
+          <td class="num">1.5</td>
+          <td class="num">0.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NHL Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td>Yakov Trenin</td>
+          <td>hits</td>
+          <td>UNDER</td>
+          <td class="num">5.5</td>
+          <td class="num">0.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NHL Standard 2-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td>Zach Whitecloud</td>
+          <td>hits</td>
+          <td>UNDER</td>
+          <td class="num">1.5</td>
+          <td class="num">0.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NHL Pwr Std 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">1</td>
+          <td>Mike Matheson</td>
+          <td>blocks</td>
+          <td>UNDER</td>
+          <td class="num">1.5</td>
+          <td class="num">1.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NHL Pwr Std 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">2</td>
+          <td>Yakov Trenin</td>
+          <td>hits</td>
+          <td>UNDER</td>
+          <td class="num">5.5</td>
+          <td class="num">0.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+        <tr>
+          <td>NHL Pwr Std 3-Leg</td>
+          <td class="num">1</td>
+          <td class="num">3</td>
+          <td>Zach Whitecloud</td>
+          <td>hits</td>
+          <td>UNDER</td>
+          <td class="num">1.5</td>
+          <td class="num">0.0</td>
+          <td><span class="badge outcome-hit">✓ HIT</span></td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+  <div class="footer">Generated 2026-04-11 23:56:42 — combined_tickets_graded_2026-04-09.xlsx</div>
+</div>
+
+</body>
+</html>

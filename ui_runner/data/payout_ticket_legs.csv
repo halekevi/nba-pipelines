@@ -1,0 +1,158 @@
+date,ticket_id,slip_type,stake,payout_to_win,power_payout_x,sport,leg_slot,player,prop,line,direction,pick_type,source,notes
+2026-04-28,pp_2026-04-28_001,power,20,100,5,NBA,1,Derrick White,PRA,20.5,LESS,Standard,screenshot_manual,Complete ticket screenshot verified
+2026-04-28,pp_2026-04-28_001,power,20,100,5,NBA,2,De'Aaron Fox,Points,11.5,MORE,Goblin,screenshot_manual,Complete ticket screenshot verified
+2026-04-28,pp_2026-04-28_001,power,20,100,5,NBA,3,Tyrese Maxey,Points,17.5,MORE,Goblin,screenshot_manual,Complete ticket screenshot verified
+2026-04-28,pp_2026-04-28_001,power,20,100,5,NBA,4,Paul George,Points,11.5,MORE,Goblin,screenshot_manual,Complete ticket screenshot verified
+2026-04-28,pp_2026-04-28_001,power,20,100,5,NBA,5,Neemias Queta,Points,5.5,MORE,Goblin,screenshot_manual,Complete ticket screenshot verified
+2026-04-28,pp_2026-04-28_001,power,20,100,5,NBA,6,Jrue Holiday,PRA,19.5,MORE,Goblin,screenshot_manual,Complete ticket screenshot verified
+2026-04-28,pp_2026-04-28_002,power,20,135,6.75,NBA,1,Derrick White,PRA,20.5,LESS,Standard,screenshot_manual,Second complete ticket screenshot verified
+2026-04-28,pp_2026-04-28_002,power,20,135,6.75,NBA,2,De'Aaron Fox,Points,11.5,MORE,Goblin,screenshot_manual,Second complete ticket screenshot verified
+2026-04-28,pp_2026-04-28_002,power,20,135,6.75,NBA,3,Tyrese Maxey,Points,17.5,MORE,Goblin,screenshot_manual,Second complete ticket screenshot verified
+2026-04-28,pp_2026-04-28_002,power,20,135,6.75,NBA,4,Paul George,Points,11.5,MORE,Goblin,screenshot_manual,Second complete ticket screenshot verified
+2026-04-28,pp_2026-04-28_002,power,20,135,6.75,NBA,5,Neemias Queta,Points,5.5,MORE,Goblin,screenshot_manual,Second complete ticket screenshot verified
+2026-04-28,pp_2026-04-28_002,power,20,135,6.75,NBA,6,Quentin Grimes,PRA,9.5,MORE,Goblin,screenshot_manual,Second complete ticket screenshot verified
+2026-04-28,pp_2026-04-28_003,power,20,46,2.3,NHL,1,Jesper Wallstedt,Goalie Saves,22.5,MORE,Goblin,screenshot_manual,NHL screenshot ticket verified
+2026-04-28,pp_2026-04-28_003,power,20,46,2.3,NHL,2,Matt Boldy,SOGs,2.5,MORE,Goblin,screenshot_manual,NHL screenshot ticket verified
+2026-04-28,pp_2026-04-28_003,power,20,46,2.3,NHL,3,Jake Oettinger,Goalie Saves,26.0,MORE,Standard,screenshot_manual,NHL screenshot ticket verified
+2026-04-28,pp_2026-04-28_004,power,20,70,3.5,NBA,1,Jalen Suggs,Blks+Stls,1.5,MORE,Goblin,screenshot_manual,NBA reversion screenshot ticket verified
+2026-04-28,pp_2026-04-28_004,power,20,70,3.5,NBA,2,Franz Wagner,Blks+Stls,1.5,MORE,Goblin,screenshot_manual,NBA reversion screenshot ticket verified
+2026-04-28,pp_2026-04-28_004,power,20,70,3.5,NBA,3,Javonte Green,Blks+Stls,1.5,MORE,Goblin,screenshot_manual,NBA reversion screenshot ticket verified
+2026-04-28,pp_2026-04-28_005,power,20,120,6,NBA,1,Joel Embiid,Pts+Rebs,35.0,MORE,Standard,screenshot_manual,NBA standard 3-leg screenshot ticket verified
+2026-04-28,pp_2026-04-28_005,power,20,120,6,NBA,2,Jaylen Brown,Pts+Rebs,33.0,MORE,Standard,screenshot_manual,NBA standard 3-leg screenshot ticket verified
+2026-04-28,pp_2026-04-28_005,power,20,120,6,NBA,3,Jayson Tatum,Pts+Rebs,34.0,MORE,Standard,screenshot_manual,NBA standard 3-leg screenshot ticket verified
+2026-04-28,pp_2026-04-28_006,power,20,80,4,NBA,1,Joel Embiid,Pts+Rebs,29.5,MORE,Goblin,screenshot_manual,NBA mixed 3-leg screenshot ticket verified
+2026-04-28,pp_2026-04-28_006,power,20,80,4,NBA,2,Jaylen Brown,Pts+Rebs,33.0,MORE,Standard,screenshot_manual,NBA mixed 3-leg screenshot ticket verified
+2026-04-28,pp_2026-04-28_006,power,20,80,4,NBA,3,Jayson Tatum,Pts+Rebs,34.0,MORE,Standard,screenshot_manual,NBA mixed 3-leg screenshot ticket verified
+2026-04-28,pp_2026-04-28_007,power,20,110,5.5,NBA,1,Joel Embiid,Pts+Rebs,33.5,MORE,Goblin,screenshot_manual,NBA mixed 3-leg screenshot ticket verified
+2026-04-28,pp_2026-04-28_007,power,20,110,5.5,NBA,2,Jaylen Brown,Pts+Rebs,33.0,MORE,Standard,screenshot_manual,NBA mixed 3-leg screenshot ticket verified
+2026-04-28,pp_2026-04-28_007,power,20,110,5.5,NBA,3,Jayson Tatum,Pts+Rebs,34.0,MORE,Standard,screenshot_manual,NBA mixed 3-leg screenshot ticket verified
+2026-04-28,pp_2026-04-28_008,power,20,105,5.25,NBA,1,Joel Embiid,Pts+Rebs,32.5,MORE,Goblin,screenshot_manual,NBA mixed 3-leg screenshot ticket verified
+2026-04-28,pp_2026-04-28_008,power,20,105,5.25,NBA,2,Jaylen Brown,Pts+Rebs,33.0,MORE,Standard,screenshot_manual,NBA mixed 3-leg screenshot ticket verified
+2026-04-28,pp_2026-04-28_008,power,20,105,5.25,NBA,3,Jayson Tatum,Pts+Rebs,34.0,MORE,Standard,screenshot_manual,NBA mixed 3-leg screenshot ticket verified
+2026-04-28,pp_2026-04-28_009,power,20,65,3.25,NBA,1,Joel Embiid,Pts+Rebs,29.5,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_009,power,20,65,3.25,NBA,2,Jaylen Brown,Pts+Rebs,29.5,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_009,power,20,65,3.25,NBA,3,Jayson Tatum,Pts+Rebs,34.0,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_010,power,20,85,4.25,NBA,1,Joel Embiid,Pts+Rebs,33.5,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_010,power,20,85,4.25,NBA,2,Jaylen Brown,Pts+Rebs,29.5,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_010,power,20,85,4.25,NBA,3,Jayson Tatum,Pts+Rebs,34.0,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_011,power,20,80,4,NBA,1,Joel Embiid,Pts+Rebs,32.5,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_011,power,20,80,4,NBA,2,Jaylen Brown,Pts+Rebs,29.5,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_011,power,20,80,4,NBA,3,Jayson Tatum,Pts+Rebs,34.0,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_012,power,20,75,3.75,NBA,1,Joel Embiid,Pts+Rebs,29.5,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_012,power,20,75,3.75,NBA,2,Jaylen Brown,Pts+Rebs,33.0,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_012,power,20,75,3.75,NBA,3,Jayson Tatum,Pts+Rebs,33.5,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_013,power,20,70,3.5,NBA,1,Joel Embiid,Pts+Rebs,29.5,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_013,power,20,70,3.5,NBA,2,Jaylen Brown,Pts+Rebs,33.0,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_013,power,20,70,3.5,NBA,3,Jayson Tatum,Pts+Rebs,32.5,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_014,power,20,60,3,NBA,1,Joel Embiid,Pts+Rebs,29.5,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_014,power,20,60,3,NBA,2,Jaylen Brown,Pts+Rebs,33.0,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_014,power,20,60,3,NBA,3,Jayson Tatum,Pts+Rebs,29.5,MORE,Goblin,screenshot_manual,NBA all-goblin variant screenshot ticket verified
+2026-04-28,pp_2026-04-28_015,power,20,180,9,NBA,1,Jayson Tatum,Pts+Rebs,32.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_015,power,20,180,9,NBA,2,Tyrese Maxey,Pts+Rebs,24.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_015,power,20,180,9,NBA,3,Joel Embiid,Pts+Rebs,33.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_015,power,20,180,9,NBA,4,Jaylen Brown,Pts+Rebs,29.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_016,power,20,135,6.75,NBA,1,Jayson Tatum,Pts+Rebs,34.0,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_016,power,20,135,6.75,NBA,2,Tyrese Maxey,Pts+Rebs,26.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_016,power,20,135,6.75,NBA,3,Joel Embiid,Pts+Rebs,33.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_016,power,20,135,6.75,NBA,4,Jaylen Brown,Pts+Rebs,29.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_017,power,20,120,6,NBA,1,Jayson Tatum,Pts+Rebs,34.0,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_017,power,20,120,6,NBA,2,Tyrese Maxey,Pts+Rebs,24.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_017,power,20,120,6,NBA,3,Joel Embiid,Pts+Rebs,33.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_017,power,20,120,6,NBA,4,Jaylen Brown,Pts+Rebs,29.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_018,power,20,110,5.5,NBA,1,Joel Embiid,Pts+Rebs,33.5,MORE,Goblin,screenshot_manual,NBA preferred 4-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_018,power,20,110,5.5,NBA,2,Jaylen Brown,Pts+Rebs,29.5,MORE,Goblin,screenshot_manual,NBA preferred 4-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_018,power,20,110,5.5,NBA,3,Tyrese Maxey,Pts+Rebs,24.5,MORE,Goblin,screenshot_manual,NBA preferred 4-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_018,power,20,110,5.5,NBA,4,Jayson Tatum,Pts+Rebs,33.5,MORE,Goblin,screenshot_manual,NBA preferred 4-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_019,power,20,175,8.75,NBA,1,Joel Embiid,Pts+Rebs,33.5,MORE,Goblin,screenshot_manual,NBA 5-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_019,power,20,175,8.75,NBA,2,Jaylen Brown,Pts+Rebs,29.5,MORE,Goblin,screenshot_manual,NBA 5-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_019,power,20,175,8.75,NBA,3,Tyrese Maxey,Pts+Rebs,24.5,MORE,Goblin,screenshot_manual,NBA 5-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_019,power,20,175,8.75,NBA,4,Jayson Tatum,Pts+Rebs,33.5,MORE,Goblin,screenshot_manual,NBA 5-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_019,power,20,175,8.75,NBA,5,Payton Pritchard,Pts+Rebs,14.5,MORE,Goblin,screenshot_manual,NBA 5-leg all-goblin screenshot ticket verified
+2026-04-28,pp_2026-04-28_020,power,20,185,5.5,NBA,1,CJ McCollum,Points,20.5,MORE,Standard,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_020,power,20,185,5.5,NBA,2,Jalen Johnson,Points,20.5,MORE,Standard,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_020,power,20,185,5.5,NBA,3,Karl-Anthony Towns,Points,20.5,MORE,Standard,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_020,power,20,185,5.5,NBA,4,Jalen Brunson,Points,25.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_021,power,20,110,5.5,NBA,1,Jalen Brunson,Points,25.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_021,power,20,110,5.5,NBA,2,CJ McCollum,Points,18.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_021,power,20,110,5.5,NBA,3,Jalen Johnson,Points,17.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_021,power,20,110,5.5,NBA,4,Karl-Anthony Towns,Points,18.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_022,power,20,95,4.75,NBA,1,Jalen Brunson,Points,24.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_022,power,20,95,4.75,NBA,2,CJ McCollum,Points,17.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_022,power,20,95,4.75,NBA,3,Jalen Johnson,Points,18.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_022,power,20,95,4.75,NBA,4,Karl-Anthony Towns,Points,17.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_023,power,200,1450,7.25,NBA,1,Jalen Brunson,Points,24.5,MORE,Goblin,screenshot_manual,NBA 5-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_023,power,200,1450,7.25,NBA,2,CJ McCollum,Points,17.5,MORE,Goblin,screenshot_manual,NBA 5-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_023,power,200,1450,7.25,NBA,3,Jalen Johnson,Points,18.5,MORE,Goblin,screenshot_manual,NBA 5-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_023,power,200,1450,7.25,NBA,4,Karl-Anthony Towns,Points,17.5,MORE,Goblin,screenshot_manual,NBA 5-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_023,power,200,1450,7.25,NBA,5,Jonathan Kuminga,Points,10.5,MORE,Goblin,screenshot_manual,NBA 5-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_024,power,200,1050,5.25,NBA,1,CJ McCollum,Points,17.5,MORE,Goblin,screenshot_manual,NBA 5-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_024,power,200,1050,5.25,NBA,2,Jalen Johnson,Points,18.5,MORE,Goblin,screenshot_manual,NBA 5-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_024,power,200,1050,5.25,NBA,3,Karl-Anthony Towns,Points,17.5,MORE,Goblin,screenshot_manual,NBA 5-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_024,power,200,1050,5.25,NBA,4,Jonathan Kuminga,Points,7.5,MORE,Goblin,screenshot_manual,NBA 5-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_024,power,200,1050,5.25,NBA,5,Jalen Brunson,Points,23.5,MORE,Goblin,screenshot_manual,NBA 5-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_025,power,200,1850,9.25,NBA,1,Jalen Brunson,Points,23.5,MORE,Goblin,screenshot_manual,NBA 6-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_025,power,200,1850,9.25,NBA,2,CJ McCollum,Points,17.5,MORE,Goblin,screenshot_manual,NBA 6-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_025,power,200,1850,9.25,NBA,3,Jalen Johnson,Points,18.5,MORE,Goblin,screenshot_manual,NBA 6-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_025,power,200,1850,9.25,NBA,4,Karl-Anthony Towns,Points,17.5,MORE,Goblin,screenshot_manual,NBA 6-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_025,power,200,1850,9.25,NBA,5,Jonathan Kuminga,Points,10.5,MORE,Goblin,screenshot_manual,NBA 6-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_025,power,200,1850,9.25,NBA,6,Onyeka Okongwu,Points,9.5,MORE,Goblin,screenshot_manual,NBA 6-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_026,power,20,135,6.75,NBA,1,Karl-Anthony Towns,Points,18.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_026,power,20,135,6.75,NBA,2,Nickeil Alexander-Walker,Points,15.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_026,power,20,135,6.75,NBA,3,Onyeka Okongwu,Points,11.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_026,power,20,135,6.75,NBA,4,Jonathan Kuminga,Points,10.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_027,power,20,115,5.75,NBA,1,Karl-Anthony Towns,Points,18.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_027,power,20,115,5.75,NBA,2,Nickeil Alexander-Walker,Points,15.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_027,power,20,115,5.75,NBA,3,OG Anunoby,Points,15.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_027,power,20,115,5.75,NBA,4,Onyeka Okongwu,Points,11.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_028,power,20,100,5.0,NBA,1,Karl-Anthony Towns,Points,18.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_028,power,20,100,5.0,NBA,2,Nickeil Alexander-Walker,Points,17.5,MORE,Standard,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_028,power,20,100,5.0,NBA,3,OG Anunoby,Points,15.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_028,power,20,100,5.0,NBA,4,Onyeka Okongwu,Points,11.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_029,power,20,95,4.75,NBA,1,Karl-Anthony Towns,Points,18.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_029,power,20,95,4.75,NBA,2,Nickeil Alexander-Walker,Points,16.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_029,power,20,95,4.75,NBA,3,OG Anunoby,Points,11.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_029,power,20,95,4.75,NBA,4,Onyeka Okongwu,Points,11.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_030,power,20,85,4.25,NBA,1,Karl-Anthony Towns,Points,18.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_030,power,20,85,4.25,NBA,2,Nickeil Alexander-Walker,Points,15.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_030,power,20,85,4.25,NBA,3,OG Anunoby,Points,11.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_030,power,20,85,4.25,NBA,4,Onyeka Okongwu,Points,11.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_031,power,20,200,10.0,NBA,1,Karl-Anthony Towns,Points,20.5,MORE,Standard,screenshot_manual,NBA 4-leg all-standard screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_031,power,20,200,10.0,NBA,2,Nickeil Alexander-Walker,Points,17.5,MORE,Standard,screenshot_manual,NBA 4-leg all-standard screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_031,power,20,200,10.0,NBA,3,OG Anunoby,Points,17.5,MORE,Standard,screenshot_manual,NBA 4-leg all-standard screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_031,power,20,200,10.0,NBA,4,Onyeka Okongwu,Points,12.5,MORE,Standard,screenshot_manual,NBA 4-leg all-standard screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_032,power,20,165,8.25,NBA,1,Karl-Anthony Towns,Points,18.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_032,power,20,165,8.25,NBA,2,Nickeil Alexander-Walker,Points,16.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_032,power,20,165,8.25,NBA,3,OG Anunoby,Points,17.5,MORE,Standard,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_032,power,20,165,8.25,NBA,4,Onyeka Okongwu,Points,12.5,MORE,Standard,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_033,power,20,140,7.0,NBA,1,Karl-Anthony Towns,Points,18.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_033,power,20,140,7.0,NBA,2,Nickeil Alexander-Walker,Points,16.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_033,power,20,140,7.0,NBA,3,OG Anunoby,Points,15.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_033,power,20,140,7.0,NBA,4,Onyeka Okongwu,Points,12.5,MORE,Standard,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_034,power,20,105,5.25,NBA,1,Karl-Anthony Towns,Points,17.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_034,power,20,105,5.25,NBA,2,Nickeil Alexander-Walker,Points,15.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_034,power,20,105,5.25,NBA,3,OG Anunoby,Points,14.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_034,power,20,105,5.25,NBA,4,Onyeka Okongwu,Points,12.5,MORE,Standard,screenshot_manual,NBA 4-leg mixed screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_035,power,20,80,4.0,NBA,1,Karl-Anthony Towns,Points,17.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_035,power,20,80,4.0,NBA,2,Nickeil Alexander-Walker,Points,14.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_035,power,20,80,4.0,NBA,3,OG Anunoby,Points,11.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_035,power,20,80,4.0,NBA,4,Onyeka Okongwu,Points,12.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_036,power,20,75,3.75,NBA,1,Karl-Anthony Towns,Points,17.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_036,power,20,75,3.75,NBA,2,Nickeil Alexander-Walker,Points,14.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_036,power,20,75,3.75,NBA,3,OG Anunoby,Points,11.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_036,power,20,75,3.75,NBA,4,Onyeka Okongwu,Points,11.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_037,power,20,70,3.5,NBA,1,Karl-Anthony Towns,Points,17.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_037,power,20,70,3.5,NBA,2,Nickeil Alexander-Walker,Points,14.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_037,power,20,70,3.5,NBA,3,OG Anunoby,Points,11.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_037,power,20,70,3.5,NBA,4,Onyeka Okongwu,Points,10.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_038,power,20,65,3.25,NBA,1,Karl-Anthony Towns,Points,17.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_038,power,20,65,3.25,NBA,2,Nickeil Alexander-Walker,Points,14.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_038,power,20,65,3.25,NBA,3,OG Anunoby,Points,11.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_038,power,20,65,3.25,NBA,4,Onyeka Okongwu,Points,9.5,MORE,Goblin,screenshot_manual,NBA 4-leg all-goblin screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_039,power,20,260,13.0,NBA,1,Karl-Anthony Towns,Points,17.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed goblin+demon screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_039,power,20,260,13.0,NBA,2,Nickeil Alexander-Walker,Points,14.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed goblin+demon screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_039,power,20,260,13.0,NBA,3,OG Anunoby,Points,11.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed goblin+demon screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_039,power,20,260,13.0,NBA,4,Onyeka Okongwu,Points,19.5,MORE,Demon,screenshot_manual,NBA 4-leg mixed goblin+demon screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_040,power,20,1080,54.0,NBA,1,Karl-Anthony Towns,Points,17.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed goblin+demon screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_040,power,20,1080,54.0,NBA,2,Nickeil Alexander-Walker,Points,14.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed goblin+demon screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_040,power,20,1080,54.0,NBA,3,OG Anunoby,Points,24.5,MORE,Demon,screenshot_manual,NBA 4-leg mixed goblin+demon screenshot ticket verified (min guarantee basis)
+2026-04-28,pp_2026-04-28_040,power,20,1080,54.0,NBA,4,Onyeka Okongwu,Points,19.5,MORE,Demon,screenshot_manual,NBA 4-leg mixed goblin+demon screenshot ticket verified (min guarantee basis)

@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "captured_at": "2026-04-30",
+  "capture_source": "prizepicks_app_screenshot",
+  "ticket": {
+    "entry_type": "power",
+    "n_legs": 2,
+    "sport_or_slip_id": "NBA optional",
+    "stake_usd": 20,
+    "to_win_usd": 46,
+    "ui_first_place_multiplier_x": 2.3,
+    "ui_minimum_guarantee_multiplier_x": null,
+    "early_payout_promo": false
+  },
+  "legs": [
+    {
+      "leg_index": 1,
+      "player": "Derrick White",
+      "prop_type": "Assists",
+      "direction": "OVER",
+      "pick_type": "standard",
+      "played_line": 3.5,
+      "standard_line": 3.5,
+      "line_distance": 0.0,
+      "line_distance_half_steps": 0
+    },
+    {
+      "leg_index": 2,
+      "player": "Joel Embiid",
+      "prop_type": "Assists",
+      "direction": "OVER",
+      "pick_type": "goblin",
+      "played_line": 3.5,
+      "standard_line": 5.5,
+      "line_distance": 2.0,
+      "line_distance_half_steps": 4
+    }
+  ],
+  "ladder_lookup_key": {
+    "entry_type": "power",
+    "n_legs": 2,
+    "mix": {"goblin": 1, "standard": 1, "demon": 0},
+    "goblin_distances": [2],
+    "goblin_distances_note": "sorted list in POINTS. Reconcile standard_line from step8 (CSV or ALL sheet Standard Line in step8_all_direction_clean.xlsx). Not from slate JSON alone. Goblin legs never use true 0 delta vs standard."
+  },
+  "ladder_row_proposal": {
+    "sweep_payout_x": 2.3,
+    "min_payout_x": 2.3,
+    "source": "pp_observed",
+    "notes": "Optional: text for payout_ladder.json entry."
+  }
+}

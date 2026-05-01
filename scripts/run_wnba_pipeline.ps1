@@ -132,7 +132,7 @@ if ($ok) { $ok = Run-Step "WNBA Step 7 - Rank Props" $WNBADir ".\step7_rank_prop
     "--input step6_wnba_context.csv --output step7_wnba_ranked.xlsx" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 8 - Direction Context" $WNBADir ".\step8_add_direction_context.py" `
-    "--input step7_wnba_ranked.xlsx --sheet ALL --output step8_wnba_direction.xlsx" }
+    "--input step7_wnba_ranked.xlsx --sheet ALL --output step8_wnba_direction.csv --xlsx step8_wnba_direction.xlsx" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 9 - Build Tickets" $WNBADir ".\step9_build_tickets.py" `
     "--input step8_wnba_direction.xlsx --output wnba_best_tickets.xlsx --min_hit_rate 0.8 --legs 2,3,4" }
@@ -144,7 +144,7 @@ if ($ok) {
     Write-Host ""
     Write-Host "[ COPYING OUTPUTS ]" -ForegroundColor Magenta
 
-    $files = @("step1_wnba_props.csv","step7_wnba_ranked.xlsx","step8_wnba_direction.xlsx","wnba_best_tickets.xlsx")
+    $files = @("step1_wnba_props.csv","step7_wnba_ranked.xlsx","step8_wnba_direction.csv","step8_wnba_direction.xlsx","wnba_best_tickets.xlsx")
     foreach ($f in $files) {
         $src = "$WNBADir\$f"
         if (Test-Path $src) {

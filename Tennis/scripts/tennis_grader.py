@@ -15,10 +15,13 @@ from pathlib import Path
 import pandas as pd
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
-_REPO_ROOT = _SCRIPT_DIR.parents[2]
+# Tennis/scripts -> repo root is one level above ``Tennis/``.
+_REPO_ROOT = _SCRIPT_DIR.parents[1]
 if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
 from tennis_shared import iter_scoreboard_matches, norm_key, norm_tennis_prop
+
+VALID_TENNIS_PROPS = {"aces", "double_faults", "games_won", "sets_won", "match_total_games"}
 
 
 def _actual_key(prop_norm: str) -> str | None:
@@ -40,15 +43,50 @@ def _load_slate(path: Path) -> pd.DataFrame:
     return pd.read_csv(path, dtype=str, encoding="utf-8-sig").fillna("")
 
 
-def _grade(direction: str, line: float, actual: float | None) -> tuple[str, str]:
+def _grade(direction: str, line: float, actual: float | None) -> tuple[str, str, str]:
+    """
+    Returns (result, notes, void_reason_code).
+
+    ``void_reason_code`` is empty for HIT/MISS; for VOID it is aligned with
+    ``validate_unacceptable_voids.py`` defaults (NO_DATA / DNP) where applicable.
+    """
     if actual is None:
-        return "VOID", "NO_MATCH_OR_INCOMPLETE"
+        return "VOID", "NO_MATCH_OR_INCOMPLETE", "NO_DATA"
     d = direction.strip().upper()
     if d == "OVER":
-        return ("HIT", "") if actual >= line else ("MISS", "")
+        return ("HIT", "", "") if actual >= line else ("MISS", "", "")
     if d == "UNDER":
-        return ("HIT", "") if actual < line else ("MISS", "")
-    return "VOID", "NO_DIRECTION"
+        return ("HIT", "", "") if actual < line else ("MISS", "", "")
+    return "VOID", "NO_DIRECTION", "NO_DIRECTION"
+
+
+def _filter_slate_for_grade_date(slate: pd.DataFrame, target: str) -> pd.DataFrame:
+    """Keep rows whose slate game time calendar day matches ``target`` (YYYY-MM-DD) when possible."""
+    for col in ("start_time", "game_time", "game_datetime", "game_date", "slate_date"):
+        if col not in slate.columns:
+            continue
+        s = slate[col].astype(str).str.strip()
+        m = s.str.slice(0, 10) == target
+        if bool(m.any()):
+            return slate.loc[m].copy()
+    return slate
+
+
+_DEF_GRADED_COLS = [
+    "player",
+    "prop_type",
+    "prop_norm",
+    "line",
+    "direction",
+    "actual",
+    "result",
+    "reason",
+    "notes",
+]
+
+
+def _empty_graded() -> pd.DataFrame:
+    return pd.DataFrame(columns=_DEF_GRADED_COLS)
 
 
 def main() -> None:
@@ -86,17 +124,13 @@ def main() -> None:
                 print(f"    - {p}")
         else:
             print(f"  --slate does not exist: {slate_path}")
-        pd.DataFrame(
-            columns=["player", "prop_type", "line", "direction", "actual", "result", "notes"]
-        ).to_excel(out, sheet_name="graded", index=False)
+        _empty_graded().to_excel(out, sheet_name="graded", index=False)
         sys.exit(1)
 
     slate = _load_slate(slate_path)
     if slate.empty:
         print(f"[Tennis grader] ERROR: slate file has no rows: {slate_path}")
-        pd.DataFrame(
-            columns=["player", "prop_type", "line", "direction", "actual", "result", "notes"]
-        ).to_excel(out, sheet_name="graded", index=False)
+        _empty_graded().to_excel(out, sheet_name="graded", index=False)
         sys.exit(1)
 
     # Normalize slate columns
@@ -110,6 +144,18 @@ def main() -> None:
     for a, b in colmap.items():
         if a in slate.columns and b not in slate.columns:
             slate[b] = slate[a]
+
+    n_slate = len(slate)
+    slate_f = _filter_slate_for_grade_date(slate, target)
+    if slate_f.empty and n_slate:
+        print(
+            f"[Tennis grader] WARN: no slate rows matched --date {target} on start_time/game_date; "
+            "grading full slate."
+        )
+        slate_f = slate
+    elif len(slate_f) < n_slate:
+        print(f"[Tennis grader] Date filter {target}: {len(slate_f)}/{n_slate} slate rows")
+    slate = slate_f
 
     by_player_day: dict[str, dict[str, float]] = {}
     for tour in ("ATP", "WTA"):
@@ -129,11 +175,15 @@ def main() -> None:
             }
 
     rows: list[dict[str, object]] = []
+    skipped_non_tennis = 0
     for _, r in slate.iterrows():
         player = str(r.get("player", "")).strip()
         pk = norm_key(player)
         prop_raw = str(r.get("prop_type", "")).strip()
         pnorm = norm_tennis_prop(prop_raw)
+        if pnorm not in VALID_TENNIS_PROPS:
+            skipped_non_tennis += 1
+            continue
         ak = _actual_key(pnorm)
         direction = str(r.get("direction", r.get("final_bet_direction", ""))).strip()
         try:
@@ -144,7 +194,8 @@ def main() -> None:
         actual = None
         if stats is not None and ak:
             actual = stats.get(ak)
-        res, note = _grade(direction, line, actual)
+        res, note, void_reason = _grade(direction, line, actual)
+        note_out = note or ("" if pk in by_player_day else "PLAYER_OR_DATE_NOT_FOUND")
         rows.append(
             {
                 "player": player,
@@ -154,13 +205,18 @@ def main() -> None:
                 "direction": direction,
                 "actual": actual if actual is not None else "",
                 "result": res,
-                "notes": note or ("" if pk in by_player_day else "PLAYER_OR_DATE_NOT_FOUND"),
+                "reason": void_reason if res == "VOID" else "",
+                "notes": note_out,
             }
         )
 
-    df = pd.DataFrame(rows)
+    df = pd.DataFrame(rows) if rows else _empty_graded()
     with pd.ExcelWriter(out, engine="openpyxl") as w:
         df.to_excel(w, sheet_name="graded", index=False)
+        if not df.empty:
+            df.to_excel(w, sheet_name="Box Raw", index=False)
+    if skipped_non_tennis:
+        print(f"[Tennis grader] Skipped non-tennis props: {skipped_non_tennis}")
     print(f"[Tennis grader] Saved -> {out}  rows={len(df)}")
 
 

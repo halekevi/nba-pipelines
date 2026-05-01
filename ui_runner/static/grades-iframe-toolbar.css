@@ -283,13 +283,13 @@ body {
   align-items: center;
   gap: 6px;
   padding: 6px 9px;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 9px;
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: var(--muted2, rgba(255, 255, 255, 0.48));
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   cursor: pointer;
   transition: color 0.2s, border-color 0.2s, box-shadow 0.2s, background 0.2s;
   white-space: nowrap;
@@ -304,9 +304,9 @@ body {
 
 .tab-btn.active {
   color: var(--gold, #f0a500);
-  border-color: rgba(212, 160, 23, 0.4);
+  border-color: rgba(212, 160, 23, 0.55);
   background: rgba(212, 160, 23, 0.12);
-  box-shadow: 0 0 18px rgba(212, 160, 23, 0.12), inset 0 -2px 0 var(--gold2, #d4a017);
+  box-shadow: 0 0 22px rgba(212, 160, 23, 0.15), inset 0 -2px 0 var(--gold2, #d4a017);
 }
 
 .tab-icon {
@@ -334,6 +334,60 @@ body {
   border-top: 1px solid var(--glass-bd, rgba(255, 255, 255, 0.08));
 }
 
+@media (max-width: 900px) {
+  .tabs-bar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto auto;
+    gap: 8px;
+    overflow-x: visible;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 8px clamp(6px, 2vw, 10px);
+    align-items: stretch;
+    justify-items: stretch;
+  }
+
+  .tabs-bar .tab-btn {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 56px;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    white-space: normal;
+    line-height: 1.18;
+    gap: 5px;
+    padding: 8px 6px;
+    font-size: clamp(9px, 2.6vw, 11px);
+    letter-spacing: 0.04em;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+    word-break: break-word;
+    hyphens: none;
+  }
+
+  .tabs-bar .tab-btn.active {
+    border-color: rgba(212, 160, 23, 0.65);
+    box-shadow: 0 0 20px rgba(212, 160, 23, 0.2), inset 0 -2px 0 var(--gold2, #d4a017);
+  }
+
+  .tabs-bar .tab-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 15px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+}
+
 @media (max-width: 768px) {
   .date-bar-right {
     display: none;
@@ -348,7 +402,6 @@ body {
   .tabs-bar {
     padding: 6px 8px;
     min-height: 38px;
-    overflow-x: auto;
   }
 
   .dpill {
@@ -356,9 +409,10 @@ body {
     padding: 6px 9px;
   }
 
-  .tab-btn {
-    font-size: 10px;
-    padding: 7px 9px;
+  .tabs-bar .tab-btn {
+    font-size: clamp(9px, 2.5vw, 11px);
+    min-height: 52px;
+    padding: 7px 5px;
   }
 }
 

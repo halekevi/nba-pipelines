@@ -1,10 +1,10 @@
 {
-  "max_leg_exposure": 4,
-  "max_player_exposure": 8,
+  "max_leg_exposure": 2,
+  "max_player_exposure": 2,
   "void_risk_min_sample": 10,
-  "max_jaccard_overlap": 0.85,
-  "exposure_penalty_weight": 0.1,
-  "overlap_penalty_weight": 0.2,
+  "max_jaccard_overlap": 0.55,
+  "exposure_penalty_weight": 0.25,
+  "overlap_penalty_weight": 0.35,
   "void_penalty_weight": 0.5,
   "enabled": true
 }

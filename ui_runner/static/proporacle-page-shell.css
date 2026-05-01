@@ -1,5 +1,7 @@
 /* Extracted from payout_calculator.html inline <style> — keep in sync when editing that page shell. */
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap');
+/* Mobile web + WebView: tokens + tap/text baseline (also linked on / and /grades). :root --po-mobile-* also in mobile-content-width.css. */
+@import url('proporacle-mobile-schema.css');
 @import url('global-scrollbar.css');
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{

@@ -229,6 +229,8 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
     game_total_bucket = _pick("Game Total Bucket", "game_total_bucket", "OU Bucket", "ou_bucket", "Over Under Bucket", "over_under_bucket", "Total Bucket", "total_bucket")
     game_total = _pick("Game O/U", "game_ou", "Game Total", "game_total", "O/U Total", "ou_total")
     h2h_raw = _pick("H2H", "h2h", "Head To Head", "head_to_head")
+    actual_source = _pick("actual_source", "Actual Source", "actual source")
+    actual_source_conflict = _pick("actual_source_conflict", "Actual Source Conflict", "actual source conflict")
     void_reason = _pick(
         "void_reason",
         "Void Reason",
@@ -271,6 +273,8 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
         "game_total_bucket": game_total_bucket or "",
         "game_total": game_total or "",
         "h2h_raw": h2h_raw or "",
+        "actual_source": actual_source or "",
+        "actual_source_conflict": actual_source_conflict or "",
         "over_under": direction or "—",
         "void_reason": void_reason or "",
         "result": result,

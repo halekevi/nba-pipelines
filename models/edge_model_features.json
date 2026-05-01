@@ -10,7 +10,6 @@
   "hit_rate_L10",
   "avg_L5_vs_line",
   "avg_L10_vs_line",
-  "edge",
   "prop_score",
   "sport_encoded",
   "minutes_tier",
@@ -24,5 +23,9 @@
   "avg_win_margin",
   "dir_line_gap_norm",
   "opp_hr_historical",
-  "player_hr_historical"
+  "player_hr_historical",
+  "line_bucket_encoded",
+  "context_known",
+  "defense_known",
+  "minutes_known"
 ]

@@ -15,22 +15,13 @@
  * PowerShell (remote only):
  *   $env:PROPORACLE_SERVER_URL="https://your-app.up.railway.app"; npm run sync:android
  */
-/** @type {import('@capacitor/cli').CapacitorConfig} */
-const serverUrl = (process.env.PROPORACLE_SERVER_URL || "").trim();
-
 const config = {
   appId: "com.proporacle.app",
   appName: "PropORACLE",
   webDir: "www",
+  // Force bundled APK assets only. Never load remote PROPORACLE_SERVER_URL.
+  // This prevents accidental "web form" rendering from stale env vars.
+  server: { androidScheme: "http" },
 };
-
-if (serverUrl) {
-  const isCleartextLocal = serverUrl.startsWith("http://");
-  config.server = {
-    url: serverUrl,
-    androidScheme: isCleartextLocal ? "http" : "https",
-    cleartext: isCleartextLocal,
-  };
-}
 
 module.exports = config;

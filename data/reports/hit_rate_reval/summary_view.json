@@ -1,0 +1,798 @@
+{
+  "props_overall_direction": [
+    {
+      "direction": "UNDER",
+      "n": 166163,
+      "hits": 98613.0,
+      "hit_rate": 0.5934714707847114
+    },
+    {
+      "direction": "OVER",
+      "n": 349560,
+      "hits": 145082.0,
+      "hit_rate": 0.4150417667925392
+    }
+  ],
+  "props_overall_direction_picktype": [
+    {
+      "direction": "UNDER",
+      "pick_type": "goblin",
+      "n": 4,
+      "hits": 4.0,
+      "hit_rate": 1.0
+    },
+    {
+      "direction": "UNDER",
+      "pick_type": "demon",
+      "n": 357,
+      "hits": 287.0,
+      "hit_rate": 0.803921568627451
+    },
+    {
+      "direction": "UNDER",
+      "pick_type": "Demon",
+      "n": 281,
+      "hits": 196.0,
+      "hit_rate": 0.697508896797153
+    },
+    {
+      "direction": "OVER",
+      "pick_type": "Goblin",
+      "n": 65141,
+      "hits": 42504.0,
+      "hit_rate": 0.6524922859642929
+    },
+    {
+      "direction": "UNDER",
+      "pick_type": "standard",
+      "n": 906,
+      "hits": 570.0,
+      "hit_rate": 0.6291390728476821
+    },
+    {
+      "direction": "UNDER",
+      "pick_type": "Goblin",
+      "n": 719,
+      "hits": 432.0,
+      "hit_rate": 0.6008344923504868
+    },
+    {
+      "direction": "UNDER",
+      "pick_type": NaN,
+      "n": 144266,
+      "hits": 86392.0,
+      "hit_rate": 0.598838257108397
+    },
+    {
+      "direction": "UNDER",
+      "pick_type": "Standard",
+      "n": 19630,
+      "hits": 10732.0,
+      "hit_rate": 0.5467142129393785
+    },
+    {
+      "direction": "OVER",
+      "pick_type": "goblin",
+      "n": 9142,
+      "hits": 4981.0,
+      "hit_rate": 0.544847954495734
+    },
+    {
+      "direction": "OVER",
+      "pick_type": "Standard",
+      "n": 23528,
+      "hits": 11987.0,
+      "hit_rate": 0.509478068684121
+    },
+    {
+      "direction": "OVER",
+      "pick_type": "standard",
+      "n": 1457,
+      "hits": 564.0,
+      "hit_rate": 0.3870967741935484
+    },
+    {
+      "direction": "OVER",
+      "pick_type": NaN,
+      "n": 179847,
+      "hits": 66571.0,
+      "hit_rate": 0.3701535193803622
+    },
+    {
+      "direction": "OVER",
+      "pick_type": "Demon",
+      "n": 26893,
+      "hits": 9548.0,
+      "hit_rate": 0.3550366266314654
+    },
+    {
+      "direction": "OVER",
+      "pick_type": "demon",
+      "n": 43552,
+      "hits": 8927.0,
+      "hit_rate": 0.2049733651726671
+    }
+  ],
+  "props_overall_def_tier": [
+    {
+      "def_tier": "Weak",
+      "n": 23866,
+      "hits": 14145.0,
+      "hit_rate": 0.5926841531886365
+    },
+    {
+      "def_tier": "Above Avg",
+      "n": 28057,
+      "hits": 16152.0,
+      "hit_rate": 0.5756852122464982
+    },
+    {
+      "def_tier": "Avg",
+      "n": 30932,
+      "hits": 17492.0,
+      "hit_rate": 0.5654985128669339
+    },
+    {
+      "def_tier": "elite",
+      "n": 2585,
+      "hits": 1428.0,
+      "hit_rate": 0.5524177949709864
+    },
+    {
+      "def_tier": "Elite",
+      "n": 28273,
+      "hits": 15294.0,
+      "hit_rate": 0.540940119548686
+    },
+    {
+      "def_tier": "weak",
+      "n": 405,
+      "hits": 216.0,
+      "hit_rate": 0.5333333333333333
+    },
+    {
+      "def_tier": "good",
+      "n": 778,
+      "hits": 388.0,
+      "hit_rate": 0.4987146529562982
+    },
+    {
+      "def_tier": "average",
+      "n": 251,
+      "hits": 116.0,
+      "hit_rate": 0.4621513944223107
+    },
+    {
+      "def_tier": "(missing)",
+      "n": 391960,
+      "hits": 176010.0,
+      "hit_rate": 0.4490509235636289
+    },
+    {
+      "def_tier": "WEAK",
+      "n": 2867,
+      "hits": 873.0,
+      "hit_rate": 0.3044994768050226
+    },
+    {
+      "def_tier": "AVERAGE",
+      "n": 2043,
+      "hits": 578.0,
+      "hit_rate": 0.2829172785119921
+    },
+    {
+      "def_tier": "ELITE",
+      "n": 1807,
+      "hits": 507.0,
+      "hit_rate": 0.2805755395683453
+    },
+    {
+      "def_tier": "SOLID",
+      "n": 1899,
+      "hits": 496.0,
+      "hit_rate": 0.2611901000526593
+    }
+  ],
+  "props_overall_minutes_tier": [
+    {
+      "minutes_tier": "Spot",
+      "n": 6,
+      "hits": 4.0,
+      "hit_rate": 0.6666666666666666
+    },
+    {
+      "minutes_tier": "1",
+      "n": 2538,
+      "hits": 1535.0,
+      "hit_rate": 0.6048069345941687
+    },
+    {
+      "minutes_tier": "MEDIUM",
+      "n": 42194,
+      "hits": 24601.0,
+      "hit_rate": 0.583044982698962
+    },
+    {
+      "minutes_tier": "Med",
+      "n": 90,
+      "hits": 50.0,
+      "hit_rate": 0.5555555555555556
+    },
+    {
+      "minutes_tier": "LOW",
+      "n": 5967,
+      "hits": 3313.0,
+      "hit_rate": 0.5552203787497905
+    },
+    {
+      "minutes_tier": "2",
+      "n": 1508,
+      "hits": 806.0,
+      "hit_rate": 0.5344827586206896
+    },
+    {
+      "minutes_tier": "HIGH",
+      "n": 39519,
+      "hits": 21121.0,
+      "hit_rate": 0.5344517826868089
+    },
+    {
+      "minutes_tier": "3",
+      "n": 1505,
+      "hits": 778.0,
+      "hit_rate": 0.5169435215946844
+    },
+    {
+      "minutes_tier": "(missing)",
+      "n": 356067,
+      "hits": 167286.0,
+      "hit_rate": 0.4698160739411403
+    },
+    {
+      "minutes_tier": "UNKNOWN",
+      "n": 13424,
+      "hits": 6000.0,
+      "hit_rate": 0.4469606674612634
+    },
+    {
+      "minutes_tier": "0",
+      "n": 20615,
+      "hits": 8894.0,
+      "hit_rate": 0.4314334222653407
+    },
+    {
+      "minutes_tier": "Low",
+      "n": 25196,
+      "hits": 7420.0,
+      "hit_rate": 0.2944911890776314
+    },
+    {
+      "minutes_tier": "DNP Risk",
+      "n": 7094,
+      "hits": 1887.0,
+      "hit_rate": 0.2659994361432196
+    }
+  ],
+  "props_top_prop_types_n1000": [
+    {
+      "prop": "Fantasy Score",
+      "n": 6396,
+      "hits": 3791.0,
+      "hit_rate": 0.5927141963727329
+    },
+    {
+      "prop": "Rebounds",
+      "n": 11716,
+      "hits": 6890.0,
+      "hit_rate": 0.5880846705360191
+    },
+    {
+      "prop": "3-PT Made",
+      "n": 4380,
+      "hits": 2461.0,
+      "hit_rate": 0.5618721461187215
+    },
+    {
+      "prop": "Pts+Rebs",
+      "n": 12166,
+      "hits": 6801.0,
+      "hit_rate": 0.559016932434654
+    },
+    {
+      "prop": "Pts+Asts",
+      "n": 10211,
+      "hits": 5619.0,
+      "hit_rate": 0.5502889041230046
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "n": 13347,
+      "hits": 7293.0,
+      "hit_rate": 0.5464149247021802
+    },
+    {
+      "prop": "Steals",
+      "n": 5039,
+      "hits": 2727.0,
+      "hit_rate": 0.5411788053185156
+    },
+    {
+      "prop": "Rebs+Asts",
+      "n": 11645,
+      "hits": 6289.0,
+      "hit_rate": 0.5400601116358952
+    },
+    {
+      "prop": "Two Pointers Attempted",
+      "n": 1250,
+      "hits": 669.0,
+      "hit_rate": 0.5352
+    },
+    {
+      "prop": "Two Pointers Made",
+      "n": 1321,
+      "hits": 704.0,
+      "hit_rate": 0.5329295987887964
+    },
+    {
+      "prop": "Free Throws Attempted",
+      "n": 1366,
+      "hits": 717.0,
+      "hit_rate": 0.5248901903367497
+    },
+    {
+      "prop": "Points",
+      "n": 85696,
+      "hits": 44811.0,
+      "hit_rate": 0.5229065533980582
+    }
+  ],
+  "props_nhl_direction_picktype": [
+    {
+      "_sport": "nhl",
+      "direction": "OVER",
+      "pick_type": NaN,
+      "n": 156361,
+      "hits": 57266.0,
+      "hit_rate": 0.366242221525828
+    },
+    {
+      "_sport": "nhl",
+      "direction": "UNDER",
+      "pick_type": NaN,
+      "n": 131137,
+      "hits": 79096.0,
+      "hit_rate": 0.6031554786215942
+    },
+    {
+      "_sport": "nhl",
+      "direction": "OVER",
+      "pick_type": "demon",
+      "n": 6823,
+      "hits": 1484.0,
+      "hit_rate": 0.2174996335922614
+    },
+    {
+      "_sport": "nhl",
+      "direction": "UNDER",
+      "pick_type": "Standard",
+      "n": 1649,
+      "hits": 1363.0,
+      "hit_rate": 0.8265615524560339
+    },
+    {
+      "_sport": "nhl",
+      "direction": "UNDER",
+      "pick_type": "Goblin",
+      "n": 719,
+      "hits": 432.0,
+      "hit_rate": 0.6008344923504868
+    },
+    {
+      "_sport": "nhl",
+      "direction": "OVER",
+      "pick_type": "goblin",
+      "n": 684,
+      "hits": 129.0,
+      "hit_rate": 0.1885964912280701
+    },
+    {
+      "_sport": "nhl",
+      "direction": "UNDER",
+      "pick_type": "standard",
+      "n": 461,
+      "hits": 339.0,
+      "hit_rate": 0.735357917570499
+    },
+    {
+      "_sport": "nhl",
+      "direction": "UNDER",
+      "pick_type": "demon",
+      "n": 357,
+      "hits": 287.0,
+      "hit_rate": 0.803921568627451
+    },
+    {
+      "_sport": "nhl",
+      "direction": "OVER",
+      "pick_type": "Standard",
+      "n": 331,
+      "hits": 75.0,
+      "hit_rate": 0.2265861027190332
+    },
+    {
+      "_sport": "nhl",
+      "direction": "UNDER",
+      "pick_type": "Demon",
+      "n": 281,
+      "hits": 196.0,
+      "hit_rate": 0.697508896797153
+    },
+    {
+      "_sport": "nhl",
+      "direction": "OVER",
+      "pick_type": "standard",
+      "n": 229,
+      "hits": 35.0,
+      "hit_rate": 0.1528384279475982
+    },
+    {
+      "_sport": "nhl",
+      "direction": "OVER",
+      "pick_type": "Demon",
+      "n": 74,
+      "hits": 28.0,
+      "hit_rate": 0.3783783783783784
+    },
+    {
+      "_sport": "nhl",
+      "direction": "UNDER",
+      "pick_type": "goblin",
+      "n": 4,
+      "hits": 4.0,
+      "hit_rate": 1.0
+    }
+  ],
+  "props_nba1q_direction_picktype": [
+    {
+      "_sport": "nba1q",
+      "direction": "OVER",
+      "pick_type": "Demon",
+      "n": 3224,
+      "hits": 2074.0,
+      "hit_rate": 0.6433002481389578
+    },
+    {
+      "_sport": "nba1q",
+      "direction": "OVER",
+      "pick_type": "Goblin",
+      "n": 2692,
+      "hits": 2328.0,
+      "hit_rate": 0.8647845468053492
+    },
+    {
+      "_sport": "nba1q",
+      "direction": "OVER",
+      "pick_type": "Standard",
+      "n": 853,
+      "hits": 658.0,
+      "hit_rate": 0.7713950762016413
+    },
+    {
+      "_sport": "nba1q",
+      "direction": "UNDER",
+      "pick_type": "Standard",
+      "n": 162,
+      "hits": 53.0,
+      "hit_rate": 0.3271604938271605
+    }
+  ],
+  "props_nba1h_direction_picktype": [
+    {
+      "_sport": "nba1h",
+      "direction": "OVER",
+      "pick_type": "Standard",
+      "n": 1272,
+      "hits": 909.0,
+      "hit_rate": 0.714622641509434
+    },
+    {
+      "_sport": "nba1h",
+      "direction": "UNDER",
+      "pick_type": "Standard",
+      "n": 185,
+      "hits": 71.0,
+      "hit_rate": 0.3837837837837838
+    },
+    {
+      "_sport": "nba1h",
+      "direction": "OVER",
+      "pick_type": "Demon",
+      "n": 11,
+      "hits": 5.0,
+      "hit_rate": 0.4545454545454545
+    },
+    {
+      "_sport": "nba1h",
+      "direction": "OVER",
+      "pick_type": "Goblin",
+      "n": 8,
+      "hits": 8.0,
+      "hit_rate": 1.0
+    }
+  ],
+  "tickets_overall_direction": [
+    {
+      "dominant_direction": "OVER",
+      "n": 94,
+      "cashes": 44.0,
+      "avg_net_10": 1.2606382978723405,
+      "cash_rate": 0.4680851063829787
+    },
+    {
+      "dominant_direction": "UNDER",
+      "n": 18,
+      "cashes": 6.0,
+      "avg_net_10": 1.6666666666666667,
+      "cash_rate": 0.3333333333333333
+    }
+  ],
+  "tickets_overall_direction_picktype": [
+    {
+      "dominant_direction": "OVER",
+      "dominant_pick_type": "goblin",
+      "n": 75,
+      "cashes": 36.0,
+      "avg_net_10": 0.1133333333333333,
+      "cash_rate": 0.48
+    },
+    {
+      "dominant_direction": "OVER",
+      "dominant_pick_type": "standard",
+      "n": 19,
+      "cashes": 8.0,
+      "avg_net_10": 5.789473684210527,
+      "cash_rate": 0.4210526315789473
+    },
+    {
+      "dominant_direction": "UNDER",
+      "dominant_pick_type": "standard",
+      "n": 18,
+      "cashes": 6.0,
+      "avg_net_10": 1.6666666666666667,
+      "cash_rate": 0.3333333333333333
+    }
+  ],
+  "tickets_overall_picktype": [
+    {
+      "dominant_pick_type": "goblin",
+      "n": 75,
+      "cashes": 36.0,
+      "avg_net_10": 0.1133333333333333,
+      "cash_rate": 0.48
+    },
+    {
+      "dominant_pick_type": "standard",
+      "n": 37,
+      "cashes": 14.0,
+      "avg_net_10": 3.783783783783784,
+      "cash_rate": 0.3783783783783784
+    }
+  ],
+  "tickets_overall_def_tier": [
+    {
+      "dominant_def_tier": "elite",
+      "n": 12,
+      "cashes": 9.0,
+      "avg_net_10": 0.1916666666666667,
+      "cash_rate": 0.75
+    },
+    {
+      "dominant_def_tier": "Avg",
+      "n": 20,
+      "cashes": 14.0,
+      "avg_net_10": 6.734999999999999,
+      "cash_rate": 0.7
+    },
+    {
+      "dominant_def_tier": "Weak",
+      "n": 19,
+      "cashes": 11.0,
+      "avg_net_10": 8.336842105263159,
+      "cash_rate": 0.5789473684210527
+    },
+    {
+      "dominant_def_tier": "average",
+      "n": 6,
+      "cashes": 3.0,
+      "avg_net_10": -6.216666666666666,
+      "cash_rate": 0.5
+    },
+    {
+      "dominant_def_tier": "Above Avg",
+      "n": 7,
+      "cashes": 2.0,
+      "avg_net_10": -4.0,
+      "cash_rate": 0.2857142857142857
+    },
+    {
+      "dominant_def_tier": "(missing)",
+      "n": 27,
+      "cashes": 7.0,
+      "avg_net_10": -0.1999999999999999,
+      "cash_rate": 0.2592592592592592
+    },
+    {
+      "dominant_def_tier": "ELITE",
+      "n": 12,
+      "cashes": 3.0,
+      "avg_net_10": 0.0,
+      "cash_rate": 0.25
+    },
+    {
+      "dominant_def_tier": "weak",
+      "n": 6,
+      "cashes": 1.0,
+      "avg_net_10": -7.7,
+      "cash_rate": 0.1666666666666666
+    },
+    {
+      "dominant_def_tier": "good",
+      "n": 3,
+      "cashes": 0.0,
+      "avg_net_10": -10.0,
+      "cash_rate": 0.0
+    }
+  ],
+  "tickets_overall_min_tier": [
+    {
+      "dominant_min_tier": "HIGH",
+      "n": 15,
+      "cashes": 13.0,
+      "avg_net_10": 11.02,
+      "cash_rate": 0.8666666666666667
+    },
+    {
+      "dominant_min_tier": "1",
+      "n": 14,
+      "cashes": 7.0,
+      "avg_net_10": -4.914285714285714,
+      "cash_rate": 0.5
+    },
+    {
+      "dominant_min_tier": "(missing)",
+      "n": 60,
+      "cashes": 24.0,
+      "avg_net_10": 1.1566666666666665,
+      "cash_rate": 0.4
+    },
+    {
+      "dominant_min_tier": "DNP Risk",
+      "n": 7,
+      "cashes": 2.0,
+      "avg_net_10": -1.4285714285714286,
+      "cash_rate": 0.2857142857142857
+    },
+    {
+      "dominant_min_tier": "MEDIUM",
+      "n": 16,
+      "cashes": 4.0,
+      "avg_net_10": -0.4624999999999999,
+      "cash_rate": 0.25
+    }
+  ],
+  "tickets_overall_prop_type": [
+    {
+      "dominant_prop_type": "Free Throws Made",
+      "n": 3,
+      "cashes": 3.0,
+      "avg_net_10": 20.0,
+      "cash_rate": 1.0
+    },
+    {
+      "dominant_prop_type": "Pitching Outs",
+      "n": 1,
+      "cashes": 1.0,
+      "avg_net_10": 20.0,
+      "cash_rate": 1.0
+    },
+    {
+      "dominant_prop_type": "3-PT Made",
+      "n": 7,
+      "cashes": 5.0,
+      "avg_net_10": 14.242857142857144,
+      "cash_rate": 0.7142857142857143
+    },
+    {
+      "dominant_prop_type": "Pts+Asts",
+      "n": 6,
+      "cashes": 4.0,
+      "avg_net_10": -0.4166666666666667,
+      "cash_rate": 0.6666666666666666
+    },
+    {
+      "dominant_prop_type": "Pts+Rebs",
+      "n": 7,
+      "cashes": 4.0,
+      "avg_net_10": 0.3428571428571426,
+      "cash_rate": 0.5714285714285714
+    },
+    {
+      "dominant_prop_type": "Points",
+      "n": 24,
+      "cashes": 12.0,
+      "avg_net_10": -6.4750000000000005,
+      "cash_rate": 0.5
+    },
+    {
+      "dominant_prop_type": "Assists",
+      "n": 10,
+      "cashes": 5.0,
+      "avg_net_10": 11.0,
+      "cash_rate": 0.5
+    },
+    {
+      "dominant_prop_type": "Pts+Rebs+Asts",
+      "n": 2,
+      "cashes": 1.0,
+      "avg_net_10": 5.0,
+      "cash_rate": 0.5
+    },
+    {
+      "dominant_prop_type": "Rebounds",
+      "n": 14,
+      "cashes": 6.0,
+      "avg_net_10": 2.1214285714285714,
+      "cash_rate": 0.4285714285714285
+    },
+    {
+      "dominant_prop_type": "Total Bases",
+      "n": 8,
+      "cashes": 3.0,
+      "avg_net_10": 8.75,
+      "cash_rate": 0.375
+    },
+    {
+      "dominant_prop_type": "blocked_shots",
+      "n": 9,
+      "cashes": 3.0,
+      "avg_net_10": 3.333333333333333,
+      "cash_rate": 0.3333333333333333
+    },
+    {
+      "dominant_prop_type": "Shots",
+      "n": 10,
+      "cashes": 3.0,
+      "avg_net_10": -1.5399999999999998,
+      "cash_rate": 0.3
+    },
+    {
+      "dominant_prop_type": "Goalie Saves",
+      "n": 7,
+      "cashes": 0.0,
+      "avg_net_10": -10.0,
+      "cash_rate": 0.0
+    },
+    {
+      "dominant_prop_type": "shots_on_goal",
+      "n": 2,
+      "cashes": 0.0,
+      "avg_net_10": -10.0,
+      "cash_rate": 0.0
+    },
+    {
+      "dominant_prop_type": "Pitcher Strikeouts",
+      "n": 1,
+      "cashes": 0.0,
+      "avg_net_10": -10.0,
+      "cash_rate": 0.0
+    },
+    {
+      "dominant_prop_type": "assists",
+      "n": 1,
+      "cashes": 0.0,
+      "avg_net_10": -10.0,
+      "cash_rate": 0.0
+    }
+  ]
+}

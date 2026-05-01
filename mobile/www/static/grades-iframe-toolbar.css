@@ -1,0 +1,583 @@
+/**
+ * Grades hub: date + slate/ticket tabs when embedded inside slate_eval iframe.
+ * Uses slate_eval CSS variables with rgba fallbacks for older files.
+ * v=20260423gradeboxfit
+ */
+
+/* slate_eval / ticket_eval in a fixed-height iframe: scroll on `html` (Android WebView
+   often fails when `html` is overflow:hidden and `body` is height-locked + max-height). */
+html {
+  height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-y: contain !important;
+}
+body {
+  min-height: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+}
+
+.iframe-shell-toolbar {
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.iframe-shell-toolbar--embedded {
+  padding-top: 0;
+}
+
+.iframe-shell-toolbar--embedded .iframe-shell-head {
+  display: none;
+}
+
+.iframe-shell-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ist-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 24px;
+  letter-spacing: 2px;
+  color: var(--gold2, #d4a017);
+  line-height: 1.1;
+}
+
+.gc-live {
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: var(--cyan, #00e5ff);
+  opacity: 0.92;
+}
+
+.grades-hub-toolbar-host .iframe-shell-toolbar .date-bar,
+.grades-hub-toolbar-host .iframe-shell-toolbar .tabs-bar {
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.date-bar {
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 8px 12px;
+  min-height: 44px;
+  height: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 2;
+  font-family: "Inter", sans-serif;
+  background: var(--glass, rgba(255, 255, 255, 0.03));
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-bd, rgba(255, 255, 255, 0.08));
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.date-bar-label {
+  flex-shrink: 0;
+  font-size: 9px;
+  letter-spacing: 1.05px;
+  color: var(--muted2, rgba(255, 255, 255, 0.48));
+  white-space: nowrap;
+}
+
+.date-pills {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.date-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.dpill {
+  font-size: 10px;
+  letter-spacing: 0.65px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.42);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Inter", sans-serif;
+}
+
+.dpill:hover {
+  color: var(--text, rgba(255, 255, 255, 0.95));
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.dpill.active {
+  color: var(--gold, #f0a500);
+  border-color: rgba(212, 160, 23, 0.55);
+  background: rgba(212, 160, 23, 0.15);
+  box-shadow: 0 0 16px rgba(212, 160, 23, 0.12);
+}
+
+.dpill .dpill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green, #39ff6e);
+  display: none;
+}
+
+.dpill.active .dpill-dot {
+  display: block;
+  box-shadow: 0 0 8px var(--green, #39ff6e);
+}
+
+.date-sep {
+  flex-shrink: 0;
+  width: 1px;
+  height: 22px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.date-nav-btn {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  border: 1px solid var(--glass-bd, rgba(255, 255, 255, 0.08));
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.15s;
+}
+
+.date-nav-btn:hover {
+  color: var(--text, #fff);
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.date-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.date-bar-right {
+  flex-shrink: 0;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.date-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.date-input-label {
+  font-size: 9px;
+  letter-spacing: 0.8px;
+  color: var(--muted2, rgba(255, 255, 255, 0.48));
+}
+
+.date-input {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-bd, rgba(255, 255, 255, 0.08));
+  border-radius: 10px;
+  color: var(--text, #fff);
+  font-size: 10px;
+  padding: 5px 9px;
+  outline: none;
+  width: 144px;
+  font-family: "Inter", sans-serif;
+}
+
+.date-input:focus {
+  border-color: rgba(212, 160, 23, 0.45);
+}
+
+.date-go-btn {
+  font-family: "Inter", sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.8px;
+  padding: 5px 9px;
+  border-radius: 10px;
+  border: 1px solid rgba(212, 160, 23, 0.35);
+  background: rgba(212, 160, 23, 0.1);
+  color: var(--gold, #f0a500);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.date-go-btn:hover {
+  background: rgba(212, 160, 23, 0.18);
+  border-color: rgba(240, 165, 0, 0.55);
+}
+
+.tabs-bar {
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 6px 10px;
+  min-height: 40px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  z-index: 2;
+  position: relative;
+  font-family: "Inter", sans-serif;
+  background: var(--glass, rgba(255, 255, 255, 0.03));
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-bd, rgba(255, 255, 255, 0.08));
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 9px;
+  border-radius: 12px;
+  font-size: 9px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--muted2, rgba(255, 255, 255, 0.48));
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  white-space: nowrap;
+  font-family: "Inter", sans-serif;
+}
+
+.tab-btn:hover {
+  color: var(--text, #fff);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.tab-btn.active {
+  color: var(--gold, #f0a500);
+  border-color: rgba(212, 160, 23, 0.55);
+  background: rgba(212, 160, 23, 0.12);
+  box-shadow: 0 0 22px rgba(212, 160, 23, 0.15), inset 0 -2px 0 var(--gold2, #d4a017);
+}
+
+.tab-icon {
+  width: 14px;
+  height: 14px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.tab-btn.active .tab-icon {
+  filter: drop-shadow(0 0 8px rgba(240, 165, 0, 0.45));
+}
+
+.grades-hub-toolbar-host {
+  flex: 1 1 100%;
+  align-self: stretch;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--glass-bd, rgba(255, 255, 255, 0.08));
+}
+
+@media (max-width: 900px) {
+  .tabs-bar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto auto;
+    gap: 8px;
+    overflow-x: visible;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 8px clamp(6px, 2vw, 10px);
+    align-items: stretch;
+    justify-items: stretch;
+  }
+
+  .tabs-bar .tab-btn {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 56px;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    white-space: normal;
+    line-height: 1.18;
+    gap: 5px;
+    padding: 8px 6px;
+    font-size: clamp(9px, 2.6vw, 11px);
+    letter-spacing: 0.04em;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+    word-break: break-word;
+    hyphens: none;
+  }
+
+  .tabs-bar .tab-btn.active {
+    border-color: rgba(212, 160, 23, 0.65);
+    box-shadow: 0 0 20px rgba(212, 160, 23, 0.2), inset 0 -2px 0 var(--gold2, #d4a017);
+  }
+
+  .tabs-bar .tab-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 15px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .date-bar-right {
+    display: none;
+  }
+
+  .date-bar {
+    padding: 7px 10px;
+    min-height: 42px;
+    overflow-x: auto;
+  }
+
+  .tabs-bar {
+    padding: 6px 8px;
+    min-height: 38px;
+  }
+
+  .dpill {
+    font-size: 10px;
+    padding: 6px 9px;
+  }
+
+  .tabs-bar .tab-btn {
+    font-size: clamp(9px, 2.5vw, 11px);
+    min-height: 52px;
+    padding: 7px 5px;
+  }
+}
+
+/* Match indexGrades.html: hide date + tab row on scroll inside slate iframe */
+.grades-scroll-hide-wrap {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.32s ease, opacity 0.26s ease, margin 0.28s ease;
+}
+.grades-scroll-hide-inner {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.iframe-shell-toolbar.bars-collapsed .grades-scroll-hide-wrap {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  pointer-events: none;
+  margin: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .grades-scroll-hide-wrap {
+    transition: none;
+  }
+}
+
+/* ── Legacy ticket_eval_*.html (Grades → Ticket tab) — glass to match hub / home ──
+   Slate eval pages use header .slate-header-top; old ticket_eval does not. */
+header:not(:has(.slate-header-top)) {
+  background: rgba(255, 255, 255, 0.055) !important;
+  backdrop-filter: blur(28px) saturate(185%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(185%) !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.22) !important;
+  border-radius: 0 0 22px 22px !important;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+  padding: 22px 20px !important;
+}
+
+header:not(:has(.slate-header-top)) .logo-title {
+  background: linear-gradient(to bottom, #f0a500, #d4af37, #f7e08a) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  font-family: "Bebas Neue", sans-serif !important;
+  letter-spacing: 0.14em !important;
+  filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.2));
+}
+
+header:not(:has(.slate-header-top)) .logo-sub {
+  color: rgba(255, 255, 255, 0.58) !important;
+  letter-spacing: 0.2em !important;
+}
+
+header:not(:has(.slate-header-top)) .date-badge {
+  background: rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: blur(16px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 999px !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22) !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main .section-title {
+  font-weight: 600 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #7fc7d9 !important;
+  padding-bottom: 10px !important;
+  text-shadow: 0 0 22px rgba(0, 229, 255, 0.12) !important;
+  letter-spacing: 0.12em !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main .kpi-card {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(22px) saturate(165%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(165%) !important;
+  border: 1px solid rgba(212, 175, 55, 0.14) !important;
+  border-radius: 16px !important;
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main .kpi-card:hover {
+  border-color: rgba(212, 175, 55, 0.28) !important;
+  transform: translateY(-2px) !important;
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main .kpi-val {
+  color: #d4af37 !important;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.28) !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main .kpi-label {
+  color: rgba(255, 255, 255, 0.52) !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main .table-wrapper {
+  background: rgba(255, 255, 255, 0.045) !important;
+  backdrop-filter: blur(24px) saturate(175%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(175%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 18px !important;
+  box-shadow:
+    0 10px 36px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main table th {
+  background: rgba(4, 6, 16, 0.55) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  color: #7fc7d9 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  font-weight: 700 !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main table td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main table tbody tr:hover td {
+  background: rgba(212, 175, 55, 0.07) !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) .main .footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
+body:has(header:not(:has(.slate-header-top))) {
+  background: linear-gradient(180deg, #05050f 0%, #0a0a18 45%, #080814 100%) !important;
+}
+
+[data-theme="light"] body:has(header:not(:has(.slate-header-top))) {
+  background: linear-gradient(180deg, #eef1f6 0%, #e8ecf4 100%) !important;
+}
+
+[data-theme="light"] header:not(:has(.slate-header-top)) {
+  background: rgba(255, 255, 255, 0.72) !important;
+  border-bottom-color: rgba(75, 111, 150, 0.22) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] body:has(header:not(:has(.slate-header-top))) .main .kpi-card {
+  background: rgba(255, 255, 255, 0.82) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] body:has(header:not(:has(.slate-header-top))) .main .table-wrapper {
+  background: rgba(255, 255, 255, 0.78) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] body:has(header:not(:has(.slate-header-top))) .main table th {
+  background: rgba(245, 248, 252, 0.95) !important;
+  color: #2c7fb8 !important;
+}

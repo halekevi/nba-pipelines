@@ -1,0 +1,8 @@
+{
+  "props_decided_n_raw": 515723,
+  "props_invalid_under_gobdem_dropped": 1361,
+  "props_decided_n_after_backfill": 514362,
+  "tickets_decided_n": 112,
+  "ticket_legs_join_rate": 1.0,
+  "ticket_invalid_under_gobdem_legs_backfilled_to_over": 0
+}

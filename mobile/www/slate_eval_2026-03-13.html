@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Slate Eval — MAR 13, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --glass:rgba(255,255,255,0.03);
+  --glass-bd:rgba(255,255,255,0.08);
+  --bg:transparent;
+  --text:rgba(232,236,255,0.95);
+  --muted:#94a3b8;
+  --muted2:rgba(255,255,255,0.48);
+  --gold:#f0a500;
+  --gold2:#d4a017;
+  --cyan:#00e5ff;
+  --green:#39ff6e;
+  --amber:#e8b84a;
+  --red:#ff4d4d;
+  --purple:#c4a5ff;
+  --pending:#666;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:transparent;color:var(--text);min-height:100vh;padding-bottom:24px;font-size:clamp(14px,1.02vw,16px);line-height:1.45}
+h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif}
+body::before{content:'';position:fixed;top:-20%;left:-10%;width:55%;height:55%;background:radial-gradient(ellipse,rgba(212,160,23,.07) 0%,transparent 70%);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;bottom:-20%;right:-10%;width:50%;height:50%;background:radial-gradient(ellipse,rgba(0,229,255,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
+header,.main{position:relative;z-index:1}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:rgba(255,255,255,0.04)}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.14);border-radius:4px}
+
+header{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+border:1px solid var(--glass-bd);border-left:none;border-right:none;border-radius:0;padding:18px 20px;display:flex;flex-direction:column;align-items:stretch;gap:0;
+box-shadow:0 8px 32px rgba(0,0,0,.28)}
+.slate-header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;width:100%}
+.grades-hub-toolbar-host{flex:1 1 100%;align-self:stretch;width:100%;max-width:100%;min-height:0;box-sizing:border-box}
+.logo{display:flex;align-items:center;gap:14px}
+.logo-icon{width:120px;height:120px;object-fit:contain;display:block;filter:drop-shadow(0 0 8px rgba(212,160,23,0.45))}
+@media(max-width:768px){.logo-icon{width:80px;height:80px}}
+.logo-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;background:linear-gradient(to bottom,#f0a500,#d4a017,#f7e08a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo-sub{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);letter-spacing:2.2px;margin-top:2px}
+.date-badge{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2);background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+border:1px solid var(--glass-bd);border-radius:999px;padding:8px 14px;letter-spacing:1.5px}
+.main{max-width:none;width:100%;margin:0;padding:24px 20px;box-sizing:border-box}
+.sport-header{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.sport-label{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;line-height:1;color:var(--gold);text-shadow:0 0 28px rgba(240,165,0,.18)}
+.sport-header-line{flex:1;min-width:80px;height:1px;background:rgba(255,255,255,0.08)}
+.sport-meta-count{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2)}
+.sport-section{margin-bottom:48px;width:100%;max-width:100%;box-sizing:border-box}
+.section-label{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.08vw,16px);color:var(--muted);letter-spacing:2.5px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
+.stat-grid{display:grid;gap:14px;margin-bottom:24px}
+.stat-grid-4{grid-template-columns:repeat(4,1fr)}
+.stat-grid-2{grid-template-columns:repeat(2,1fr)}
+.stat-card{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+border:1px solid var(--glass-bd);border-radius:14px;padding:16px 18px;position:relative;overflow:hidden;transition:border-color .2s,box-shadow .2s;
+box-shadow:0 4px 24px rgba(0,0,0,.22)}
+.stat-card:hover{border-color:rgba(255,255,255,0.12);box-shadow:0 8px 32px rgba(0,0,0,.28)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat-card.green::before{background:linear-gradient(90deg,var(--green),transparent)}
+.stat-card.blue::before{background:linear-gradient(90deg,var(--cyan),transparent)}
+.stat-card.amber::before{background:linear-gradient(90deg,var(--gold),transparent)}
+.stat-card.red::before{background:linear-gradient(90deg,var(--red),transparent)}
+.stat-card.purple::before{background:linear-gradient(90deg,var(--purple),transparent)}
+.stat-label{font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--muted);letter-spacing:2.2px;margin-bottom:8px}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;line-height:1}
+.stat-sub{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2);margin-top:5px}
+.stat-sub strong{font-weight:700}
+.table-wrap{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+border:1px solid var(--glass-bd);border-radius:14px;overflow:hidden;margin-bottom:20px;box-shadow:0 4px 24px rgba(0,0,0,.18)}
+table{width:100%;border-collapse:collapse;font-size:clamp(13px,1.05vw,15px);font-family:'Inter',sans-serif}
+th{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.15vw,16px);letter-spacing:2px;color:var(--muted);padding:10px 12px;text-align:left;
+background:rgba(0,0,0,0.22);backdrop-filter:blur(12px);border-bottom:1px solid var(--glass-bd);white-space:nowrap}
+th.right{text-align:right}
+td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.04)}
+td.right{text-align:right}td.mono{font-family:'Inter',sans-serif;font-size:clamp(13px,1.05vw,15px)}
+.rate-cell{display:flex;align-items:center;gap:10px}
+.rate-bar-bg{flex:1;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.rate-bar-fill{height:100%;border-radius:3px;transition:width .4s}
+.rate-num{font-family:'Inter',sans-serif;font-size:clamp(13px,1.05vw,15px);min-width:48px;text-align:right;flex-shrink:0}
+.chip{display:inline-block;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:.5px;
+background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid var(--glass-bd)}
+.chip-a{background:rgba(57,255,110,.08);color:var(--green);border-color:rgba(57,255,110,.28)}
+.chip-b{background:rgba(0,229,255,.08);color:var(--cyan);border-color:rgba(0,229,255,.28)}
+.chip-c{background:rgba(240,165,0,.08);color:var(--gold);border-color:rgba(240,165,0,.3)}
+.chip-d{background:rgba(255,255,255,.04);color:var(--muted);border-color:var(--glass-bd)}
+.chip-goblin{background:rgba(196,165,255,.10);color:var(--purple);border-color:rgba(196,165,255,.32)}
+.chip-demon{background:rgba(255,77,77,.10);color:var(--red);border-color:rgba(255,77,77,.32)}
+.chip-std{background:rgba(0,229,255,.08);color:var(--cyan);border-color:rgba(0,229,255,.25)}
+.two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-bottom:20px;width:100%;max-width:100%;box-sizing:border-box}
+.three-col{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:20px;width:100%;max-width:100%;box-sizing:border-box}
+.insight-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:24px;width:100%;max-width:100%;box-sizing:border-box;min-width:0}
+.insight-card{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);border-radius:12px;padding:14px 16px;box-shadow:0 4px 20px rgba(0,0,0,.15);min-width:0;box-sizing:border-box}
+.insight-icon{font-size:22px;margin-bottom:8px}
+.insight-title{font-weight:700;font-size:14px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:var(--gold)}
+.insight-body{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2);line-height:1.6}
+.insight-body strong{color:var(--text)}
+tr.player-hit td{background:rgba(57,255,110,0.04)}
+tr.player-hit td:first-child{border-left:3px solid var(--green)}
+tr.player-miss td{background:rgba(255,77,77,0.08)}
+tr.player-miss td:first-child{border-left:3px solid var(--red)}
+tr.player-warn td{background:rgba(240,165,0,0.06)}
+tr.player-warn td:first-child{border-left:3px solid var(--gold)}
+.pos{color:var(--green);font-weight:700}.neg{color:var(--red);font-weight:700}.neu{color:var(--muted2)}
+.alert{border-radius:12px;padding:14px 18px;margin-bottom:20px;border:1px solid;font-size:13px;line-height:1.6;backdrop-filter:blur(16px)}
+.alert-red{background:rgba(255,77,77,.08);border-color:rgba(255,77,77,.35)}
+.alert-green{background:rgba(57,255,110,.08);border-color:rgba(57,255,110,.32)}
+.alert-amber{background:rgba(240,165,0,.08);border-color:rgba(240,165,0,.32)}
+.alert-title{font-family:'Bebas Neue',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;margin-bottom:4px}
+.sub-dir{display:inline-block;margin-right:8px}
+.muted-note{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);padding:14px;text-align:center}
+td.muted{color:var(--muted2)}
+@media(max-width:768px){
+.stat-grid-4,.stat-grid-2{grid-template-columns:repeat(2,1fr)}.two-col,.three-col,.insight-grid{grid-template-columns:1fr}
+body{font-size:clamp(14px,3.2vw,16px)}
+table{font-size:clamp(12px,3.2vw,14px)}
+td.mono{font-size:clamp(12px,3.2vw,14px)}
+.rate-num{font-size:clamp(12px,3.2vw,14px)}
+th{font-size:clamp(12px,3.4vw,14px);padding:8px 8px}
+td{padding:8px 8px}
+.section-label{font-size:clamp(12px,3.2vw,14px)}
+.sport-label{font-size:28px}
+.logo-title{font-size:24px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <img loading="lazy" src="/static/proporacle-logo-v3.png?v=20260320b" alt="propOracle" class="logo-icon"/>
+    <div>
+      <div class="logo-title">SLATE EVALUATION</div>
+      <div class="logo-sub">POST-GAME GRADE REPORT</div>
+    </div>
+  </div>
+  <div class="date-badge">📅 MAR 13, 2026</div>
+</header>
+<div class="main">
+<div class="sport-section">
+    <div class="sport-header">
+      <div class="sport-label">🏀 NBA</div>
+      <div class="sport-header-line"></div>
+      <div class="sport-meta-count">2,169 TOTAL PROPS</div>
+    </div>
+
+    <div class="section-label">OVERALL PERFORMANCE</div>
+    <div class="stat-grid stat-grid-4" style="margin-bottom:20px">
+      <div class="stat-card green">
+        <div class="stat-label">OVERALL HIT RATE</div>
+        <div class="stat-val" style="color:#5ef598">60.1%</div>
+        <div class="stat-sub">962 hits / 1,600 decided</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-label">TOTAL PROPS</div>
+        <div class="stat-val" style="color:var(--cyan)">2,169</div>
+        <div class="stat-sub"><strong>569</strong> voids (26.2%)</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-label">TIER A HIT RATE</div>
+        <div class="stat-val" style="color:var(--green)">72.7%</div>
+        <div class="stat-sub">315 hits / 433 decided</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-label">GOBLIN HIT RATE</div>
+        <div class="stat-val" style="color:var(--green)">69.1%</div>
+        <div class="stat-sub">634 hits / 918 decided</div>
+      </div>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="section-label">BY PICK TYPE</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th><th>HIT RATE</th></tr></thead>
+      <tbody>
+        <tr>
+      <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+      <td class="right mono">918</td>
+      <td class="right mono pos">634</td>
+      <td class="right mono neg">284</td>
+      <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:69.1%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">69.1%</div></div></td>
+    </tr>
+        <tr>
+      <td><span class="chip chip-demon">😈 Demon</span></td>
+      <td class="right mono">186</td>
+      <td class="right mono pos">77</td>
+      <td class="right mono neg">109</td>
+      <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:41.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">41.4%</div></div></td>
+    </tr>
+        <tr>
+          <td><span class="chip chip-std">⭐ Standard</span><div style="font-size:15px;color:var(--muted2);margin-top:6px"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">53.5%</span> (286 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--red)">46.7%</span> (210 dec)</div></div></td>
+          <td class="right mono">496</td>
+          <td class="right mono pos">251</td>
+          <td class="right mono neg">245</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.6%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.6%</div></div></td>
+        </tr>
+      </tbody>
+    </table></div>
+      </div>
+      <div>
+        <div class="section-label">BY TIER</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
+      <tbody><tr class="player-hit">
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td class="right mono">433</td>
+          <td class="right mono pos">315</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:72.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">72.7%</div></div></td>
+        </tr><tr class="player-hit">
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td class="right mono">134</td>
+          <td class="right mono pos">85</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:63.4%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">63.4%</div></div></td>
+        </tr><tr class="player-hit">
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td class="right mono">132</td>
+          <td class="right mono pos">77</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:58.3%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">58.3%</div></div></td>
+        </tr><tr class="player-warn">
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td class="right mono">901</td>
+          <td class="right mono pos">485</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:53.8%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">53.8%</div></div></td>
+        </tr></tbody>
+    </table></div>
+      </div>
+    </div>
+    <div class="section-label">HIT RATE BY OPPONENT DEFENSIVE TIER</div>
+    <div class="table-wrap" style="margin-bottom:20px"><table>
+      <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
+      <tbody><tr class="player-warn">
+          <td><span style="font-weight:700">Elite</span></td>
+          <td class="right mono">521</td>
+          <td class="right mono">265</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.9%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.9%</div></div></td>
+        </tr><tr class="player-hit">
+          <td><span style="font-weight:700">Above Avg</span></td>
+          <td class="right mono">318</td>
+          <td class="right mono">191</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:60.1%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">60.1%</div></div></td>
+        </tr><tr class="player-hit">
+          <td><span style="font-weight:700">Avg</span></td>
+          <td class="right mono">254</td>
+          <td class="right mono">161</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:63.4%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">63.4%</div></div></td>
+        </tr><tr class="player-hit">
+          <td><span style="font-weight:700">Weak</span></td>
+          <td class="right mono">459</td>
+          <td class="right mono">326</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:71.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">71.0%</div></div></td>
+        </tr></tbody>
+    </table></div>
+    <div class="two-col">
+          <div>
+            <div class="section-label">TOP PROP TYPES BY HIT RATE (≥10 DECIDED)</div>
+            <div class="table-wrap"><table>
+      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
+      <tbody><tr class="player-hit">
+          <td class="mono">Pts+Rebs+Asts</td>
+          <td class="right mono">205</td>
+          <td class="right mono pos">135</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:65.9%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">65.9%</div></div></td>
+        </tr><tr class="player-hit">
+          <td class="mono">Steals</td>
+          <td class="right mono">60</td>
+          <td class="right mono pos">39</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:65.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">65.0%</div></div></td>
+        </tr><tr class="player-hit">
+          <td class="mono">Points</td>
+          <td class="right mono">253</td>
+          <td class="right mono pos">162</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:64.0%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">64.0%</div></div></td>
+        </tr><tr class="player-hit">
+          <td class="mono">Pts+Rebs</td>
+          <td class="right mono">225</td>
+          <td class="right mono pos">141</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:62.7%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">62.7%</div></div></td>
+        </tr><tr class="player-hit">
+          <td class="mono">Rebounds</td>
+          <td class="right mono">170</td>
+          <td class="right mono pos">105</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:61.8%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">61.8%</div></div></td>
+        </tr><tr class="player-hit">
+          <td class="mono">3-PT Made</td>
+          <td class="right mono">86</td>
+          <td class="right mono pos">53</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:61.6%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">61.6%</div></div></td>
+        </tr><tr class="player-hit">
+          <td class="mono">Pts+Asts</td>
+          <td class="right mono">183</td>
+          <td class="right mono pos">109</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:59.6%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">59.6%</div></div></td>
+        </tr><tr class="player-hit">
+          <td class="mono">Blks+Stls</td>
+          <td class="right mono">34</td>
+          <td class="right mono pos">20</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:58.8%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">58.8%</div></div></td>
+        </tr><tr class="player-hit">
+          <td class="mono">Assists</td>
+          <td class="right mono">117</td>
+          <td class="right mono pos">65</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:55.6%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">55.6%</div></div></td>
+        </tr><tr class="player-warn">
+          <td class="mono">FG Made</td>
+          <td class="right mono">35</td>
+          <td class="right mono pos">19</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:54.3%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">54.3%</div></div></td>
+        </tr></tbody>
+    </table></div>
+          </div>
+          <div>
+            <div class="section-label">WORST PROP TYPES (≥10 DECIDED)</div>
+            <div class="table-wrap"><table>
+      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
+      <tbody><tr class="player-hit">
+          <td class="mono">Pts+Asts</td>
+          <td class="right mono">183</td>
+          <td class="right mono pos">109</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:59.6%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">59.6%</div></div></td>
+        </tr><tr class="player-hit">
+          <td class="mono">Blks+Stls</td>
+          <td class="right mono">34</td>
+          <td class="right mono pos">20</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:58.8%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">58.8%</div></div></td>
+        </tr><tr class="player-hit">
+          <td class="mono">Assists</td>
+          <td class="right mono">117</td>
+          <td class="right mono pos">65</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:55.6%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">55.6%</div></div></td>
+        </tr><tr class="player-warn">
+          <td class="mono">FG Made</td>
+          <td class="right mono">35</td>
+          <td class="right mono pos">19</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:54.3%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">54.3%</div></div></td>
+        </tr><tr class="player-warn">
+          <td class="mono">Rebs+Asts</td>
+          <td class="right mono">154</td>
+          <td class="right mono pos">83</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:53.9%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">53.9%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Blocked Shots</td>
+          <td class="right mono">30</td>
+          <td class="right mono pos">12</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:40.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">40.0%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Rebounds (Combo)</td>
+          <td class="right mono">13</td>
+          <td class="right mono pos">5</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:38.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">38.5%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Points (Combo)</td>
+          <td class="right mono">26</td>
+          <td class="right mono pos">6</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:23.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">23.1%</div></div></td>
+        </tr></tbody>
+    </table></div>
+          </div>
+        </div>
+    <div class="two-col">
+      <div>
+        <div class="section-label">🏆 TOP NBA PERFORMERS</div>
+        <div class="muted-note">No players with ≥5 decided props.</div>
+      </div>
+      <div>
+        <div class="section-label">💀 WORST NBA PERFORMERS</div>
+        <div class="muted-note">No players with ≥5 decided props.</div>
+      </div>
+    </div>
+  </div><div class="sport-section">
+    <div class="sport-header">
+      <div class="sport-label">🎓 CBB</div>
+      <div class="sport-header-line"></div>
+      <div class="sport-meta-count">2,377 TOTAL PROPS</div>
+    </div>
+
+    <div class="section-label">OVERALL PERFORMANCE</div>
+    <div class="stat-grid stat-grid-4" style="margin-bottom:20px">
+      <div class="stat-card green">
+        <div class="stat-label">OVERALL HIT RATE</div>
+        <div class="stat-val" style="color:var(--gold)">54.2%</div>
+        <div class="stat-sub">1,204 hits / 2,222 decided</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-label">TOTAL PROPS</div>
+        <div class="stat-val" style="color:var(--cyan)">2,377</div>
+        <div class="stat-sub"><strong>155</strong> voids (6.5%)</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-label">TIER A HIT RATE</div>
+        <div class="stat-val" style="color:var(--green)">73.7%</div>
+        <div class="stat-sub">168 hits / 228 decided</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-label">GOBLIN HIT RATE</div>
+        <div class="stat-val" style="color:var(--gold)">55.3%</div>
+        <div class="stat-sub">242 hits / 438 decided</div>
+      </div>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="section-label">BY PICK TYPE</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th><th>HIT RATE</th></tr></thead>
+      <tbody>
+        <tr>
+      <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+      <td class="right mono">438</td>
+      <td class="right mono pos">242</td>
+      <td class="right mono neg">196</td>
+      <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:55.3%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">55.3%</div></div></td>
+    </tr>
+        <tr>
+      <td><span class="chip chip-demon">😈 Demon</span></td>
+      <td class="right mono">0</td>
+      <td class="right mono pos">0</td>
+      <td class="right mono neg">0</td>
+      <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+    </tr>
+        <tr>
+          <td><span class="chip chip-std">⭐ Standard</span><div style="font-size:15px;color:var(--muted2);margin-top:6px"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">46.0%</span> (882 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--green)">61.6%</span> (902 dec)</div></div></td>
+          <td class="right mono">1,784</td>
+          <td class="right mono pos">962</td>
+          <td class="right mono neg">822</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:53.9%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">53.9%</div></div></td>
+        </tr>
+      </tbody>
+    </table></div>
+      </div>
+      <div>
+        <div class="section-label">BY TIER</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
+      <tbody><tr class="player-hit">
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td class="right mono">228</td>
+          <td class="right mono pos">168</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:73.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">73.7%</div></div></td>
+        </tr><tr class="player-hit">
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td class="right mono">324</td>
+          <td class="right mono pos">214</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.0%</div></div></td>
+        </tr><tr class="player-warn">
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td class="right mono">1,192</td>
+          <td class="right mono pos">628</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:52.7%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">52.7%</div></div></td>
+        </tr><tr class="player-miss">
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td class="right mono">478</td>
+          <td class="right mono pos">194</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:40.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">40.6%</div></div></td>
+        </tr></tbody>
+    </table></div>
+      </div>
+    </div>
+    
+    
+    <div class="two-col">
+      <div>
+        <div class="section-label">🏆 TOP CBB PERFORMERS</div>
+        <div class="muted-note">No players with ≥5 decided props.</div>
+      </div>
+      <div>
+        <div class="section-label">💀 WORST CBB PERFORMERS</div>
+        <div class="muted-note">No players with ≥5 decided props.</div>
+      </div>
+    </div>
+  </div><div class="sport-section">
+    <div class="sport-header">
+      <div class="sport-label">🏒 NHL</div>
+      <div class="sport-header-line"></div>
+      <div class="sport-meta-count">405 TOTAL PROPS</div>
+    </div>
+
+    <div class="section-label">OVERALL PERFORMANCE</div>
+    <div class="stat-grid stat-grid-4" style="margin-bottom:20px">
+      <div class="stat-card green">
+        <div class="stat-label">OVERALL HIT RATE</div>
+        <div class="stat-val" style="color:var(--red)">22.8%</div>
+        <div class="stat-sub">73 hits / 320 decided</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-label">TOTAL PROPS</div>
+        <div class="stat-val" style="color:var(--cyan)">405</div>
+        <div class="stat-sub"><strong>85</strong> voids (21.0%)</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-label">TIER A HIT RATE</div>
+        <div class="stat-val" style="color:var(--red)">36.2%</div>
+        <div class="stat-sub">17 hits / 47 decided</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-label">GOBLIN HIT RATE</div>
+        <div class="stat-val" style="color:var(--red)">20.7%</div>
+        <div class="stat-sub">6 hits / 29 decided</div>
+      </div>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="section-label">BY PICK TYPE</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th><th>HIT RATE</th></tr></thead>
+      <tbody>
+        <tr>
+      <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+      <td class="right mono">29</td>
+      <td class="right mono pos">6</td>
+      <td class="right mono neg">23</td>
+      <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:20.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">20.7%</div></div></td>
+    </tr>
+        <tr>
+      <td><span class="chip chip-demon">😈 Demon</span></td>
+      <td class="right mono">254</td>
+      <td class="right mono pos">46</td>
+      <td class="right mono neg">208</td>
+      <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:18.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">18.1%</div></div></td>
+    </tr>
+        <tr>
+          <td><span class="chip chip-std">⭐ Standard</span><div style="font-size:15px;color:var(--muted2);margin-top:6px"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">15.4%</span> (13 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--green)">79.2%</span> (24 dec)</div></div></td>
+          <td class="right mono">37</td>
+          <td class="right mono pos">21</td>
+          <td class="right mono neg">16</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:56.8%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">56.8%</div></div></td>
+        </tr>
+      </tbody>
+    </table></div>
+      </div>
+      <div>
+        <div class="section-label">BY TIER</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
+      <tbody><tr class="player-miss">
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td class="right mono">47</td>
+          <td class="right mono pos">17</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:36.2%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">36.2%</div></div></td>
+        </tr><tr class="player-miss">
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td class="right mono">18</td>
+          <td class="right mono pos">6</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
+        </tr><tr class="player-miss">
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td class="right mono">23</td>
+          <td class="right mono pos">7</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:30.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">30.4%</div></div></td>
+        </tr><tr class="player-miss">
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td class="right mono">232</td>
+          <td class="right mono pos">43</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:18.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">18.5%</div></div></td>
+        </tr></tbody>
+    </table></div>
+      </div>
+    </div>
+    <div class="section-label">HIT RATE BY OPPONENT DEFENSIVE TIER</div>
+    <div class="table-wrap" style="margin-bottom:20px"><table>
+      <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
+      <tbody><tr class="player-miss">
+          <td><span style="font-weight:700">ELITE</span></td>
+          <td class="right mono">75</td>
+          <td class="right mono">21</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:28.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">28.0%</div></div></td>
+        </tr><tr class="player-miss">
+          <td><span style="font-weight:700">WEAK</span></td>
+          <td class="right mono">150</td>
+          <td class="right mono">29</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:19.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">19.3%</div></div></td>
+        </tr><tr class="player-miss">
+          <td><span style="font-weight:700">SOLID</span></td>
+          <td class="right mono">95</td>
+          <td class="right mono">23</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:24.2%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">24.2%</div></div></td>
+        </tr></tbody>
+    </table></div>
+    <div class="two-col">
+          <div>
+            <div class="section-label">TOP PROP TYPES BY HIT RATE (≥10 DECIDED)</div>
+            <div class="table-wrap"><table>
+      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
+      <tbody><tr class="player-hit">
+          <td class="mono">Power Play Points</td>
+          <td class="right mono">27</td>
+          <td class="right mono pos">18</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Blocked Shots</td>
+          <td class="right mono">12</td>
+          <td class="right mono pos">4</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Plus/Minus</td>
+          <td class="right mono">28</td>
+          <td class="right mono pos">9</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:32.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">32.1%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Points</td>
+          <td class="right mono">60</td>
+          <td class="right mono pos">12</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:20.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">20.0%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Assists</td>
+          <td class="right mono">40</td>
+          <td class="right mono pos">6</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:15.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">15.0%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Goals</td>
+          <td class="right mono">55</td>
+          <td class="right mono pos">8</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:14.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">14.5%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Shots On Goal</td>
+          <td class="right mono">77</td>
+          <td class="right mono pos">1</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:1.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">1.3%</div></div></td>
+        </tr></tbody>
+    </table></div>
+          </div>
+          <div>
+            <div class="section-label">WORST PROP TYPES (≥10 DECIDED)</div>
+            <div class="table-wrap"><table>
+      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
+      <tbody><tr class="player-hit">
+          <td class="mono">Power Play Points</td>
+          <td class="right mono">27</td>
+          <td class="right mono pos">18</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Blocked Shots</td>
+          <td class="right mono">12</td>
+          <td class="right mono pos">4</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Plus/Minus</td>
+          <td class="right mono">28</td>
+          <td class="right mono pos">9</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:32.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">32.1%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Points</td>
+          <td class="right mono">60</td>
+          <td class="right mono pos">12</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:20.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">20.0%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Assists</td>
+          <td class="right mono">40</td>
+          <td class="right mono pos">6</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:15.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">15.0%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Goals</td>
+          <td class="right mono">55</td>
+          <td class="right mono pos">8</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:14.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">14.5%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Shots On Goal</td>
+          <td class="right mono">77</td>
+          <td class="right mono pos">1</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:1.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">1.3%</div></div></td>
+        </tr></tbody>
+    </table></div>
+          </div>
+        </div>
+    <div class="two-col">
+      <div>
+        <div class="section-label">🏆 TOP NHL PERFORMERS</div>
+        <div class="muted-note">No players with ≥5 decided props.</div>
+      </div>
+      <div>
+        <div class="section-label">💀 WORST NHL PERFORMERS</div>
+        <div class="muted-note">No players with ≥5 decided props.</div>
+      </div>
+    </div>
+  </div><div class="sport-section">
+    <div class="sport-header">
+      <div class="sport-label">⚽ Soccer</div>
+      <div class="sport-header-line"></div>
+      <div class="sport-meta-count">2,699 TOTAL PROPS</div>
+    </div>
+
+    <div class="section-label">OVERALL PERFORMANCE</div>
+    <div class="stat-grid stat-grid-4" style="margin-bottom:20px">
+      <div class="stat-card green">
+        <div class="stat-label">OVERALL HIT RATE</div>
+        <div class="stat-val" style="color:var(--red)">22.1%</div>
+        <div class="stat-sub">433 hits / 1,957 decided</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-label">TOTAL PROPS</div>
+        <div class="stat-val" style="color:var(--cyan)">2,699</div>
+        <div class="stat-sub"><strong>742</strong> voids (27.5%)</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-label">TIER A HIT RATE</div>
+        <div class="stat-val" style="color:var(--red)">33.1%</div>
+        <div class="stat-sub">178 hits / 538 decided</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-label">GOBLIN HIT RATE</div>
+        <div class="stat-val" style="color:var(--red)">41.8%</div>
+        <div class="stat-sub">150 hits / 359 decided</div>
+      </div>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="section-label">BY PICK TYPE</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th><th>HIT RATE</th></tr></thead>
+      <tbody>
+        <tr>
+      <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+      <td class="right mono">359</td>
+      <td class="right mono pos">150</td>
+      <td class="right mono neg">209</td>
+      <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:41.8%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">41.8%</div></div></td>
+    </tr>
+        <tr>
+      <td><span class="chip chip-demon">😈 Demon</span></td>
+      <td class="right mono">1,472</td>
+      <td class="right mono pos">252</td>
+      <td class="right mono neg">1,220</td>
+      <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:17.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">17.1%</div></div></td>
+    </tr>
+        <tr>
+          <td><span class="chip chip-std">⭐ Standard</span><div style="font-size:15px;color:var(--muted2);margin-top:6px"><div class="sub-dir"><span style="color:var(--cyan);font-size:13px">▲ OVER</span> <span style="color:var(--red)">21.2%</span> (118 dec)</div><div class="sub-dir"><span style="color:var(--gold);font-size:13px">▼ UNDER</span> <span style="color:var(--green)">75.0%</span> (8 dec)</div></div></td>
+          <td class="right mono">126</td>
+          <td class="right mono pos">31</td>
+          <td class="right mono neg">95</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:24.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">24.6%</div></div></td>
+        </tr>
+      </tbody>
+    </table></div>
+      </div>
+      <div>
+        <div class="section-label">BY TIER</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
+      <tbody><tr class="player-miss">
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td class="right mono">538</td>
+          <td class="right mono pos">178</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.1%</div></div></td>
+        </tr><tr class="player-miss">
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td class="right mono">196</td>
+          <td class="right mono pos">49</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:25.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">25.0%</div></div></td>
+        </tr><tr class="player-miss">
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td class="right mono">145</td>
+          <td class="right mono pos">22</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:15.2%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">15.2%</div></div></td>
+        </tr><tr class="player-miss">
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td class="right mono">1,078</td>
+          <td class="right mono pos">184</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:17.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">17.1%</div></div></td>
+        </tr></tbody>
+    </table></div>
+      </div>
+    </div>
+    
+    <div class="two-col">
+          <div>
+            <div class="section-label">TOP PROP TYPES BY HIT RATE (≥10 DECIDED)</div>
+            <div class="table-wrap"><table>
+      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
+      <tbody><tr class="player-hit">
+          <td class="mono">Shots Assisted</td>
+          <td class="right mono">10</td>
+          <td class="right mono pos">7</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:70.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">70.0%</div></div></td>
+        </tr><tr class="player-warn">
+          <td class="mono">Shots On Target</td>
+          <td class="right mono">304</td>
+          <td class="right mono pos">157</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:51.6%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">51.6%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Fouls</td>
+          <td class="right mono">326</td>
+          <td class="right mono pos">98</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:30.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">30.1%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Attempted Dribbles</td>
+          <td class="right mono">12</td>
+          <td class="right mono pos">3</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:25.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">25.0%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Goalie Saves</td>
+          <td class="right mono">70</td>
+          <td class="right mono pos">15</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:21.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">21.4%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Tackles</td>
+          <td class="right mono">175</td>
+          <td class="right mono pos">34</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:19.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">19.4%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Shots</td>
+          <td class="right mono">508</td>
+          <td class="right mono pos">87</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:17.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">17.1%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Goals</td>
+          <td class="right mono">144</td>
+          <td class="right mono pos">14</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.7%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Assists</td>
+          <td class="right mono">146</td>
+          <td class="right mono pos">6</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:4.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">4.1%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Goal + Assist</td>
+          <td class="right mono">196</td>
+          <td class="right mono pos">7</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:3.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">3.6%</div></div></td>
+        </tr></tbody>
+    </table></div>
+          </div>
+          <div>
+            <div class="section-label">WORST PROP TYPES (≥10 DECIDED)</div>
+            <div class="table-wrap"><table>
+      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
+      <tbody><tr class="player-miss">
+          <td class="mono">Goalie Saves</td>
+          <td class="right mono">70</td>
+          <td class="right mono pos">15</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:21.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">21.4%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Tackles</td>
+          <td class="right mono">175</td>
+          <td class="right mono pos">34</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:19.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">19.4%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Shots</td>
+          <td class="right mono">508</td>
+          <td class="right mono pos">87</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:17.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">17.1%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Goals</td>
+          <td class="right mono">144</td>
+          <td class="right mono pos">14</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.7%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Assists</td>
+          <td class="right mono">146</td>
+          <td class="right mono pos">6</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:4.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">4.1%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Goal + Assist</td>
+          <td class="right mono">196</td>
+          <td class="right mono pos">7</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:3.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">3.6%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Passes Attempted</td>
+          <td class="right mono">42</td>
+          <td class="right mono pos">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Clearances</td>
+          <td class="right mono">10</td>
+          <td class="right mono pos">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+        </tr></tbody>
+    </table></div>
+          </div>
+        </div>
+    <div class="two-col">
+      <div>
+        <div class="section-label">🏆 TOP Soccer PERFORMERS</div>
+        <div class="muted-note">No players with ≥5 decided props.</div>
+      </div>
+      <div>
+        <div class="section-label">💀 WORST Soccer PERFORMERS</div>
+        <div class="muted-note">No players with ≥5 decided props.</div>
+      </div>
+    </div>
+  </div><div class="sport-section">
+    <div class="sport-header">
+      <div class="sport-label">📋 TAKEAWAYS</div>
+      <div class="sport-header-line"></div>
+    </div>
+    <div class="alert alert-red"><div class="alert-title">🚨 🏀 NBA Demon Lines — 41.4% on 186 decided</div>Demon hit rate is well below breakeven. Exclude from slips until further notice.</div>
+    <div class="insight-grid"><div class="insight-card">
+      <div class="insight-icon">✅</div>
+      <div class="insight-title">Tier A &amp; Goblin Performance</div>
+      <div class="insight-body">NBA Tier A: <strong>72.7%</strong>. NBA Goblin: <strong>69.1%</strong>. CBB Goblin: <strong>55.3%</strong>.</div>
+    </div>
+<div class="insight-card">
+      <div class="insight-icon">🚨</div>
+      <div class="insight-title">Demon Line Performance</div>
+      <div class="insight-body">NBA Demons: <strong>41.4%</strong>. Demon hit rate is well below breakeven — monitor before including in slips.</div>
+    </div>
+<div class="insight-card">
+      <div class="insight-icon">📋</div>
+      <div class="insight-title">Overall Slate Summary</div>
+      <div class="insight-body">NBA: <strong>60.1%</strong> overall (1,600 decided). CBB: <strong>54.2%</strong> overall (2,222 decided).</div>
+    </div>
+<div class="insight-card">
+      <div class="insight-icon">📈</div>
+      <div class="insight-title">Over vs Under Performance</div>
+      <div class="insight-body">NBA OVERs: <strong>62.2%</strong>. NBA UNDERs: <strong>46.7%</strong>.</div>
+    </div></div>
+  </div>
+  <div class="footer-gen">
+    GENERATED 2026-03-22 09:55 &nbsp;·&nbsp; graded_nba_2026-03-13.xlsx &nbsp;·&nbsp; graded_cbb_2026-03-13.xlsx &nbsp;·&nbsp; graded_nhl_2026-03-13.xlsx &nbsp;·&nbsp; graded_soccer_2026-03-13.xlsx
+  </div>
+</div>
+</body>
+</html>

@@ -15,45 +15,67 @@
       "entry_type": "power",
       "n_legs": 2,
       "mix": {"goblin": 1, "standard": 1, "demon": 0},
-      "sweep_payout_x": 3.0,
-      "min_payout_x": 2.7,
-      "goblin_distances": [0],
+      "sweep_payout_x": 2.2,
+      "min_payout_x": 2.2,
+      "goblin_distances": [1],
       "source": "pp_observed",
       "confirmed_at": "2026-04-30",
-      "notes": "Observed on live 2-leg Power (1 Standard + 1 Goblin) with goblin delta 0.0 from standard line: first place 3x and minimum guarantee 2.7x."
+      "notes": "NBA Apr 2026: Power 2-pick Goblin White 2.5 AST More + Standard Embiid 4.5 AST More; To Win 2.2x ($44/$20). Keyed as goblin_distances [1] assuming standard assists 3.5 on White (|3.5-2.5|=1.0)—re-key if export line_distance differs."
     },
     {
       "entry_type": "power",
       "n_legs": 2,
       "mix": {"goblin": 1, "standard": 1, "demon": 0},
-      "sweep_payout_x": 3.0,
-      "min_payout_x": 2.5,
-      "goblin_distances": [1],
-      "source": "pp_estimated",
+      "sweep_payout_x": 2.1,
+      "min_payout_x": 2.1,
+      "goblin_distances": [2.5],
+      "source": "pp_observed",
       "confirmed_at": "2026-04-30",
-      "notes": "Delta-keyed extension for 1S+1G 2-leg Power at goblin distance 1. Estimated from observed [0]=2.7x and monotonic distance discount."
+      "notes": "NBA Apr 2026: Power 2-pick Goblin Grimes 4.5 PTS + Standard Jones 5.5 PTS; To Win 2.1x ($42/$20). Inferred goblin delta 2.5 vs standard PTS 7 on Grimes (same player ladder to 7 PTS standard in app)."
     },
     {
       "entry_type": "power",
       "n_legs": 2,
       "mix": {"goblin": 1, "standard": 1, "demon": 0},
-      "sweep_payout_x": 3.0,
+      "sweep_payout_x": 2.3,
+      "min_payout_x": 2.3,
+      "goblin_distances": [1.5],
+      "source": "pp_observed",
+      "confirmed_at": "2026-04-30",
+      "notes": "NBA Apr 2026: Goblin Grimes 5.5 PTS + Standard Jones 5.5 PTS; To Win 2.3x ($46/$20). Delta |7-5.5|=1.5 on Grimes."
+    },
+    {
+      "entry_type": "power",
+      "n_legs": 2,
+      "mix": {"goblin": 1, "standard": 1, "demon": 0},
+      "sweep_payout_x": 2.7,
+      "min_payout_x": 2.7,
+      "goblin_distances": [0.5],
+      "source": "pp_observed",
+      "confirmed_at": "2026-04-30",
+      "notes": "NBA Apr 2026: Goblin Grimes 6.5 PTS + Standard Jones 5.5 PTS; To Win 2.7x ($54/$20). Delta |7-6.5|=0.5 on Grimes."
+    },
+    {
+      "entry_type": "power",
+      "n_legs": 2,
+      "mix": {"goblin": 1, "standard": 1, "demon": 0},
+      "sweep_payout_x": 2.3,
       "min_payout_x": 2.3,
       "goblin_distances": [2],
-      "source": "pp_estimated",
+      "source": "pp_observed",
       "confirmed_at": "2026-04-30",
-      "notes": "Delta-keyed extension for 1S+1G 2-leg Power at goblin distance 2. Estimated pending direct slip capture."
+      "notes": "Observed NBA slip Apr 2026: Power 2-pick, Standard White 3.5 AST More + Goblin Embiid 3.5 AST More; UI '2 correct pays 2.3x' ($46 to win on $20). Ladder key uses leg line_distance vs standard (not the printed 3.5 alone); if JSON distance is not 2, re-key this row."
     },
     {
       "entry_type": "power",
       "n_legs": 2,
       "mix": {"goblin": 1, "standard": 1, "demon": 0},
-      "sweep_payout_x": 3.0,
-      "min_payout_x": 2.1,
+      "sweep_payout_x": 2.3,
+      "min_payout_x": 2.3,
       "goblin_distances": [3],
-      "source": "pp_estimated",
+      "source": "pp_observed",
       "confirmed_at": "2026-04-30",
-      "notes": "Delta-keyed extension for 1S+1G 2-leg Power at goblin distance 3. Estimated pending direct slip capture."
+      "notes": "NBA Apr 2026 (MIN vs DEN): Power 2-pick Standard Shannon 13.5 PRA More + Goblin Hardaway 10.5 PRA More; 2 correct pays 2.3x ($46/$20). Same-slate standard Hardaway PRA 13.5 vs goblin 10.5 => |13.5-10.5|=3.0 points on Goblin leg."
     },
     {
       "entry_type": "power",
@@ -115,11 +137,22 @@
       "entry_type": "power",
       "n_legs": 3,
       "mix": {"goblin": 3, "standard": 0, "demon": 0},
-      "sweep_payout_x": 3.75,
+      "sweep_payout_x": 6.0,
       "min_payout_x": 1.6,
       "source": "pp_observed",
-      "confirmed_at": "2026-04-14",
-      "notes": "PP power 3-leg all goblin: To Win / 3-of-3 = 3.75X on $10 (same board). min_payout_x uses PP goblin 3-leg floor until n-1 tier captured."
+      "confirmed_at": "2026-04-30",
+      "notes": "Mix-only wildcard for 3-leg all-Goblin Power. Apr 2026 Details: 1st place 6x ($120/$20), minimum guarantee 3/3 = 1.6x ($32/$20). Entry 1595002479 (OG 11.5 Goblin PTS, Queta 4.5 Goblin PTS, Hauser 4.5 Goblin Pts+Asts). Supersedes earlier 3.75x board capture; delta-specific rows still override when goblin_distances matches."
+    },
+    {
+      "entry_type": "power",
+      "n_legs": 3,
+      "mix": {"goblin": 3, "standard": 0, "demon": 0},
+      "goblin_distances": [3, 3.5, 5],
+      "sweep_payout_x": 6.0,
+      "min_payout_x": 1.6,
+      "source": "pp_observed",
+      "confirmed_at": "2026-04-30",
+      "notes": "Same entry 1595002479. goblin_distances from step8 standard_line vs line (NBA/data/outputs/step8_all_direction.csv, or ALL sheet Standard Line column in step8_all_direction_clean.xlsx after step8 rebuild). OG 11.5 Goblin PTS vs 16.5 => 5.0; Queta 4.5 vs 8.0 => 3.5; Hauser 4.5 Pts+Asts vs 7.5 => 3.0. Sorted [3, 3.5, 5]."
     },
     {
       "entry_type": "flex",
@@ -172,23 +205,23 @@
       "entry_type": "power",
       "n_legs": 2,
       "mix": {"goblin": 2, "standard": 0, "demon": 0},
-      "goblin_distances": [0, 2],
+      "goblin_distances": [0.5, 2],
       "sweep_payout_x": 1.3,
       "min_payout_x": 1.3,
       "source": "pp_observed",
       "confirmed_at": "2026-04-29",
-      "notes": "Observed on live slip: 2-leg all Goblin Power paid 1.3x (To Win $26 on $20 entry), with one deep goblin leg."
+      "notes": "Observed on live slip: 2-leg all Goblin Power paid 1.3x (To Win $26 on $20). Former key [0,2] normalized: no true 0 goblin delta—shallow leg uses 0.5 points; re-key from export when known."
     },
     {
       "entry_type": "power",
       "n_legs": 2,
       "mix": {"goblin": 2, "standard": 0, "demon": 0},
-      "goblin_distances": [0, 0],
+      "goblin_distances": [0.5, 0.5],
       "sweep_payout_x": 3.0,
       "min_payout_x": 1.9,
       "source": "pp_observed",
       "confirmed_at": "2026-04-29",
-      "notes": "Observed on live slip: 2-leg all Goblin Power showed 1st place 3x and minimum guarantee 1.9x."
+      "notes": "Observed on live slip: 2-leg all Goblin Power 1st place 3x, min guarantee 1.9x. Former [0,0] normalized to [0.5,0.5] (shallowest goblin bucket per product rule)."
     },
     {
       "entry_type": "power",
@@ -200,6 +233,17 @@
       "source": "pp_observed",
       "confirmed_at": "2026-04-29",
       "notes": "Observed on live MLB slip: 2-leg all Goblin Power showed 1st place 3x and minimum guarantee 1.7x (To Win $34 on $20)."
+    },
+    {
+      "entry_type": "power",
+      "n_legs": 2,
+      "mix": {"goblin": 2, "standard": 0, "demon": 0},
+      "goblin_distances": [1, 2.5],
+      "sweep_payout_x": 1.9,
+      "min_payout_x": 1.9,
+      "source": "pp_observed",
+      "confirmed_at": "2026-04-30",
+      "notes": "NBA Apr 2026: both Goblin Grimes 4.5 PTS + Jones 4.5 PTS; To Win 1.9x ($38/$20). Keyed [1,2.5] assuming Jones std PTS 5.5 (|5.5-4.5|=1) and Grimes std 7 (|7-4.5|=2.5)—verify from pick export."
     },
     {
       "entry_type": "power",
@@ -215,12 +259,12 @@
       "entry_type": "power",
       "n_legs": 4,
       "mix": {"goblin": 1, "standard": 3, "demon": 0},
-      "goblin_distances": [0],
+      "goblin_distances": [0.5],
       "sweep_payout_x": 10.0,
       "min_payout_x": 2.25,
       "source": "pp_observed",
       "confirmed_at": "2026-04-29",
-      "notes": "Observed 4-leg Power with 1 Goblin (distance 0) and 3 Standard pays 2.25x minimum guarantee, 10x sweep."
+      "notes": "Observed 4-leg Power 1 Goblin + 3 Standard: 10x sweep, 2.25x min guarantee. Former key [0] normalized to [0.5]; confirm true delta from standard_line in export."
     },
     {
       "entry_type": "power",

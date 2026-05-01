@@ -7,6 +7,7 @@ import json
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
+import pandas as pd
 
 
 _HIST_MIN_SEGMENT_N = 30
@@ -297,6 +298,74 @@ def _load_ml_eval_row(repo_root: Path, date_str: str) -> dict[str, Any] | None:
     return None
 
 
+def _load_reliability_summary(repo_root: Path) -> dict[str, Any] | None:
+    p = repo_root / "data" / "reports" / "prop_reliability_latest.json"
+    if not p.exists():
+        return None
+    try:
+        payload = _read_json(p)
+    except Exception:
+        return None
+    if not isinstance(payload, dict):
+        return None
+    summ = payload.get("summary", {}) if isinstance(payload.get("summary"), dict) else {}
+    rows = payload.get("rows", []) if isinstance(payload.get("rows"), list) else []
+    top_unreliable = [r for r in rows if isinstance(r, dict) and _up(r.get("status")) == "UNRELIABLE"]
+    top_unreliable = sorted(top_unreliable, key=lambda x: int(x.get("decided_n", 0)), reverse=True)[:12]
+    return {
+        "summary": summ,
+        "top_unreliable": top_unreliable,
+    }
+
+
+def _cash_rate_from_graded_xlsx(path: Path) -> tuple[int, float | None] | None:
+    if not path.exists():
+        return None
+    try:
+        df = pd.read_excel(path, sheet_name=0)
+    except Exception:
+        return None
+    if df is None or df.empty:
+        return None
+    cols = {str(c).strip().lower(): c for c in df.columns}
+    result_col = cols.get("result")
+    if result_col is None:
+        return None
+    result = df[result_col].astype(str).str.upper().str.strip()
+    decided = result.isin(["HIT", "MISS", "WIN", "LOSS"])
+    if not decided.any():
+        return None
+    n = int(decided.sum())
+    wins = int(result.isin(["HIT", "WIN"]).sum())
+    return n, (wins / n if n else None)
+
+
+def _load_pq_control_summary(repo_root: Path, date_str: str) -> dict[str, Any] | None:
+    out_dir = repo_root / "outputs" / date_str
+    if not out_dir.exists():
+        return None
+    pqauto_path = out_dir / f"combined_tickets_graded_{date_str}.xlsx"
+    pq0_path = out_dir / f"combined_tickets_graded_control_pq0_{date_str}.xlsx"
+    pqauto = _cash_rate_from_graded_xlsx(pqauto_path)
+    pq0 = _cash_rate_from_graded_xlsx(pq0_path)
+    if pqauto is None and pq0 is None:
+        return None
+    auto_n = int(pqauto[0]) if pqauto else 0
+    auto_cash = float(pqauto[1]) if (pqauto and pqauto[1] is not None) else None
+    ctrl_n = int(pq0[0]) if pq0 else 0
+    ctrl_cash = float(pq0[1]) if (pq0 and pq0[1] is not None) else None
+    delta = (auto_cash - ctrl_cash) if (auto_cash is not None and ctrl_cash is not None) else None
+    return {
+        "pqauto_tickets_decided": auto_n,
+        "pq0_tickets_decided": ctrl_n,
+        "pqauto_cash_rate": auto_cash,
+        "pq0_cash_rate": ctrl_cash,
+        "cash_rate_delta": delta,
+        "pqauto_path": str(pqauto_path),
+        "pq0_path": str(pq0_path),
+    }
+
+
 def build_report(repo_root: Path, date_str: str) -> dict[str, Any]:
     graded_props_path = repo_root / "ui_runner" / "templates" / f"graded_props_{date_str}.json"
     if not graded_props_path.exists():
@@ -340,6 +409,8 @@ def build_report(repo_root: Path, date_str: str) -> dict[str, Any]:
     grade_history = _load_grade_history_row(repo_root, date_str)
     ml_eval = _load_ml_eval_row(repo_root, date_str)
     historical = _build_historical_stratification(repo_root)
+    reliability = _load_reliability_summary(repo_root)
+    pq_control = _load_pq_control_summary(repo_root, date_str)
 
     report: dict[str, Any] = {
         "date": date_str,
@@ -365,7 +436,9 @@ def build_report(repo_root: Path, date_str: str) -> dict[str, Any]:
         },
         "ticket_outcomes": None,
         "ticket_model_eval": None,
+        "pq_control_comparison": pq_control,
         "historical_stratification": historical,
+        "prop_reliability": reliability,
     }
 
     if isinstance(grade_history, dict):
@@ -460,6 +533,31 @@ def write_report_files(report: dict[str, Any], out_dir: Path) -> tuple[Path, Pat
     else:
         lines.extend(["", "Ticket model eval: no row for this date in ticket_model_eval_by_date.csv"])
 
+    pqc = report.get("pq_control_comparison")
+    if isinstance(pqc, dict):
+        auto_cash = pqc.get("pqauto_cash_rate")
+        ctrl_cash = pqc.get("pq0_cash_rate")
+        delta = pqc.get("cash_rate_delta")
+        auto_cash_s = f"{float(auto_cash):.4f}" if isinstance(auto_cash, (int, float)) else "n/a"
+        ctrl_cash_s = f"{float(ctrl_cash):.4f}" if isinstance(ctrl_cash, (int, float)) else "n/a"
+        delta_s = f"{float(delta):+.4f}" if isinstance(delta, (int, float)) else "n/a"
+        lines.extend(
+            [
+                "",
+                "PQS control sample (pqauto vs pq0):",
+                f"- pqauto_n={_safe_int(pqc.get('pqauto_tickets_decided'))} pq0_n={_safe_int(pqc.get('pq0_tickets_decided'))} "
+                f"pqauto_cash_rate={auto_cash_s} pq0_cash_rate={ctrl_cash_s} delta={delta_s}",
+            ]
+        )
+    else:
+        lines.extend(
+            [
+                "",
+                "PQS control sample (pqauto vs pq0):",
+                "- pqauto_n=0 pq0_n=0 pqauto_cash_rate=n/a pq0_cash_rate=n/a delta=n/a",
+            ]
+        )
+
     hist = report.get("historical_stratification")
     if isinstance(hist, dict):
         lines.extend(
@@ -487,6 +585,24 @@ def write_report_files(report: dict[str, Any], out_dir: Path) -> tuple[Path, Pat
         for x in hist.get("top_consistent_players", [])[:10]:
             lines.append(
                 f"- {x['player']} | {x['sport']} | {x['prop_type']} {x['direction']} | line={x['line_bucket']} | hit_rate={x['hit_rate']:.4f} n={x['n']}"
+            )
+
+    rel = report.get("prop_reliability")
+    if isinstance(rel, dict):
+        summ = rel.get("summary", {}) if isinstance(rel.get("summary"), dict) else {}
+        lines.extend(
+            [
+                "",
+                "Prop reliability monitor:",
+                f"- reliable={_safe_int(summ.get('reliable_count'))} watchlist={_safe_int(summ.get('watchlist_count'))} unreliable={_safe_int(summ.get('unreliable_count'))} rows={_safe_int(summ.get('rows_total'))}",
+                f"- overrides_applied={_safe_int(summ.get('overrides_applied'))} (defined={_safe_int(summ.get('overrides_defined'))})",
+                "",
+                "Top unreliable buckets by sample:",
+            ]
+        )
+        for x in rel.get("top_unreliable", [])[:10]:
+            lines.append(
+                f"- {x.get('sport','')} | {x.get('prop_type','')} {x.get('direction','')} | line={x.get('line_bucket','')} | n={x.get('decided_n',0)} hit_rate={x.get('hit_rate',0)} zero_rate={x.get('zero_rate',0)} conflict_rate={x.get('source_conflict_rate',0)}"
             )
 
     txt_path.write_text("\n".join(lines) + "\n", encoding="utf-8")

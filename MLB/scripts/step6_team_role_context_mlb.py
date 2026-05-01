@@ -29,6 +29,7 @@ import requests
 PITCHER_PROPS = {
     "strikeouts", "pitching_outs", "innings_pitched",
     "hits_allowed", "earned_runs", "walks_allowed", "batters_faced",
+    "pitches_thrown",
 }
 GAME_FEED_URL = "https://statsapi.mlb.com/api/v1.1/game/{game_id}/feed/live"
 

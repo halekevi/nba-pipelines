@@ -1,0 +1,79 @@
+_sport,prop,direction,pick_type,n,hits,hit_rate
+mlb,Total Bases,OVER,demon,12926,2472.0,0.1912424570632833
+mlb,Runs,OVER,demon,5188,1337.0,0.25771010023130303
+mlb,Hits,OVER,demon,4249,792.0,0.18639679924688163
+mlb,Walks,OVER,demon,3802,1196.0,0.3145712782745923
+mlb,Hits,OVER,goblin,3546,2064.0,0.5820642978003384
+mlb,Home Runs,OVER,demon,3437,362.0,0.1053244108233925
+mlb,Total Bases,OVER,goblin,3404,1971.0,0.5790246768507638
+mlb,Stolen Bases,OVER,demon,1919,225.0,0.11724856696195936
+mlb,Pitcher Strikeouts,OVER,demon,486,104.0,0.2139917695473251
+mlb,Hits Allowed,OVER,demon,410,105.0,0.25609756097560976
+mlb,Total Bases,OVER,standard,397,191.0,0.4811083123425693
+mlb,Pitcher Strikeouts,OVER,goblin,251,152.0,0.6055776892430279
+mlb,Hits Allowed,OVER,goblin,225,151.0,0.6711111111111111
+mlb,Runs,OVER,standard,210,96.0,0.45714285714285713
+mlb,Walks Allowed,OVER,demon,185,59.0,0.31891891891891894
+mlb,Hits,OVER,standard,162,76.0,0.4691358024691358
+mlb,Walks Allowed,OVER,goblin,120,92.0,0.7666666666666667
+mlb,Total Bases,UNDER,standard,119,57.0,0.4789915966386555
+mlb,Pitcher Strikeouts,OVER,standard,109,39.0,0.3577981651376147
+mlb,Runs,OVER,goblin,91,43.0,0.4725274725274725
+mlb,Runs,UNDER,standard,84,46.0,0.5476190476190477
+mlb,Pitching Outs,OVER,demon,73,36.0,0.4931506849315068
+mlb,Pitching Outs,OVER,goblin,62,35.0,0.5645161290322581
+mlb,Hits,UNDER,standard,57,25.0,0.43859649122807015
+mlb,Walks,OVER,standard,50,26.0,0.52
+mlb,Pitcher Strikeouts,UNDER,standard,47,26.0,0.5531914893617021
+mlb,Walks,UNDER,standard,46,24.0,0.5217391304347826
+mlb,Pitching Outs,OVER,standard,41,21.0,0.5121951219512195
+mlb,Hits Allowed,OVER,standard,36,16.0,0.4444444444444444
+mlb,Pitching Outs,UNDER,standard,26,11.0,0.4230769230769231
+mlb,Walks,OVER,goblin,24,10.0,0.4166666666666667
+mlb,Walks Allowed,OVER,standard,23,14.0,0.6086956521739131
+mlb,Hits Allowed,UNDER,standard,17,12.0,0.7058823529411765
+mlb,Walks Allowed,UNDER,standard,13,7.0,0.5384615384615384
+soccer,Shots,OVER,(missing),5605,1861.0,0.3320249776984835
+soccer,Shots,OVER,demon,1583,181.0,0.11433986102337335
+soccer,Fouls,OVER,(missing),1411,363.0,0.25726435152374205
+soccer,Shots On Target,OVER,demon,1225,504.0,0.4114285714285714
+soccer,Goal + Assist,OVER,(missing),1112,477.0,0.4289568345323741
+soccer,Goals,OVER,(missing),876,318.0,0.363013698630137
+soccer,Goal + Assist,OVER,demon,862,197.0,0.228538283062645
+soccer,Tackles,OVER,demon,810,167.0,0.20617283950617285
+soccer,Goalie Saves,OVER,(missing),785,322.0,0.4101910828025478
+soccer,Assists,OVER,(missing),763,220.0,0.28833551769331583
+soccer,Assists,OVER,demon,700,39.0,0.055714285714285716
+soccer,Goals,OVER,demon,630,59.0,0.09365079365079365
+soccer,Shots,OVER,goblin,572,208.0,0.36363636363636365
+soccer,Fouls,OVER,goblin,482,188.0,0.3900414937759336
+soccer,Fouls,OVER,demon,354,59.0,0.16666666666666666
+soccer,Shots On Target,OVER,goblin,180,126.0,0.7
+soccer,Goalie Saves,OVER,demon,145,17.0,0.11724137931034483
+soccer,Passes Attempted,OVER,standard,112,0.0,0.0
+soccer,Goalie Saves,OVER,goblin,106,40.0,0.37735849056603776
+soccer,Shots,UNDER,(missing),96,56.0,0.5833333333333334
+soccer,Goalie Saves,UNDER,(missing),91,49.0,0.5384615384615384
+soccer,Shots,OVER,standard,48,13.0,0.2708333333333333
+soccer,Clearances,OVER,standard,33,1.0,0.030303030303030304
+soccer,Attempted Dribbles,OVER,standard,31,10.0,0.3225806451612903
+soccer,Shots Assisted,OVER,standard,30,19.0,0.6333333333333333
+soccer,Goalie Saves,OVER,standard,30,14.0,0.4666666666666667
+soccer,Goalie Saves,UNDER,standard,27,22.0,0.8148148148148148
+soccer,Shots,UNDER,standard,25,15.0,0.6
+soccer,Goals Allowed,OVER,demon,21,13.0,0.6190476190476191
+soccer,Goals Allowed,OVER,goblin,16,12.0,0.75
+soccer,Tackles,OVER,standard,16,6.0,0.375
+soccer,Tackles,OVER,goblin,13,3.0,0.23076923076923078
+soccer,Crosses,OVER,standard,12,2.0,0.16666666666666666
+soccer,Goals Allowed,OVER,standard,8,8.0,1.0
+soccer,Goal + Assist,OVER,goblin,8,1.0,0.125
+soccer,Shots On Target,OVER,standard,6,5.0,0.8333333333333334
+soccer,Fouls,UNDER,(missing),6,1.0,0.16666666666666666
+soccer,Shots On Target,UNDER,standard,3,2.0,0.6666666666666666
+soccer,Fouls,UNDER,standard,2,2.0,1.0
+soccer,Goals,UNDER,standard,2,2.0,1.0
+soccer,Goal + Assist,OVER,standard,1,1.0,1.0
+soccer,Goal + Assist,UNDER,standard,1,1.0,1.0
+soccer,Goal + Assist,UNDER,(missing),1,0.0,0.0
+soccer,Goals,UNDER,(missing),1,0.0,0.0

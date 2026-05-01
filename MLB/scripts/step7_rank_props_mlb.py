@@ -107,6 +107,7 @@ _PROP_WEIGHTS = {
     "hits_allowed":    0.98,
     "walks_allowed":   0.97,
     "earned_runs":     0.92,   # ER very noisy
+    "pitches_thrown":  1.04,
 
     # Hitter
     "hits":            1.05,
@@ -121,6 +122,7 @@ _PROP_WEIGHTS = {
     "triples":         0.80,   # very rare, high variance
     "home_runs":       0.85,   # HR very high variance
     "fantasy_score":   1.00,
+    "hitter_strikeouts": 0.96,
 }
 
 def _prop_weight(prop_norm: str) -> float:
@@ -138,6 +140,7 @@ _PROP_HIT_RATE_PRIOR = {
     "hits_allowed":    0.530,
     "walks_allowed":   0.520,
     "earned_runs":     0.490,
+    "pitches_thrown":  0.565,
 
     # Hitter
     "hits":            0.570,
@@ -152,6 +155,7 @@ _PROP_HIT_RATE_PRIOR = {
     "doubles":         0.500,
     "triples":         0.450,
     "home_runs":       0.470,
+    "hitter_strikeouts": 0.520,
 }
 
 def _prop_hit_rate_prior(prop_norm: str, direction: str) -> float:
@@ -163,6 +167,8 @@ def _prop_hit_rate_prior(prop_norm: str, direction: str) -> float:
         if key == "home_runs":      return 0.630
         if key == "hits_allowed":   return 0.570
         if key == "triples":        return 0.670
+        if key == "hitter_strikeouts":
+            return 0.580
         return float(1.0 - base)
     return float(base)
 
@@ -421,6 +427,10 @@ def main() -> None:
         "batters faced":      "batters_faced",
         "battersfaced":       "batters_faced",
         "pitcher strikeouts": "strikeouts",
+        "hitter strikeouts":  "hitter_strikeouts",
+        "hitterstrikeouts":   "hitter_strikeouts",
+        "pitches thrown":     "pitches_thrown",
+        "pitchesthrown":      "pitches_thrown",
     }
     out["prop_norm"] = out["prop_norm"].astype(str).str.lower().str.strip().map(
         lambda x: _PROP_NORM_MAP.get(x, x)

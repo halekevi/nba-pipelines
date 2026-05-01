@@ -1,0 +1,181 @@
+{
+  "model_family_name": "PRISM",
+  "model_description": "Pipeline-specific ranking test model family. Production model remains unchanged.",
+  "profiles": {
+    "NBA": {
+      "profile_name": "PRISM-NBA",
+      "selection_gate": {
+        "tier_allow": ["A", "B"],
+        "min_hit_rate": 0.45,
+        "min_edge": -0.25
+      },
+      "ranking_weights": {
+        "p_calibrated": 0.55,
+        "edge_norm": 0.25,
+        "market_norm": 0.15,
+        "context_norm": 0.05,
+        "uncertainty_penalty": -0.10
+      },
+      "signal_weights": {
+        "def_tier": 1.0,
+        "min_tier": 1.0,
+        "l5_alignment": 1.0,
+        "b2b": 1.0,
+        "edge_gt_1": 1.0,
+        "shot_role": 0.5,
+        "usage_role": 0.5
+      },
+      "tier_modifiers": {
+        "market_alignment_weight": 0.35,
+        "recent_form_weight": 0.20,
+        "opponent_context_weight": 0.20,
+        "role_minutes_weight": 0.15,
+        "volatility_weight": 0.10
+      }
+    },
+    "MLB": {
+      "profile_name": "PRISM-MLB",
+      "selection_gate": {
+        "tier_allow": ["A", "B"],
+        "min_hit_rate": 0.45,
+        "min_edge": -0.25
+      },
+      "ranking_weights": {
+        "p_calibrated": 0.60,
+        "edge_norm": 0.25,
+        "market_norm": 0.10,
+        "context_norm": 0.05,
+        "uncertainty_penalty": -0.10
+      },
+      "signal_weights": {
+        "min_tier": 1.0,
+        "l5_alignment": 1.0,
+        "edge_gt_1": 1.0,
+        "pitcher_context": 0.5
+      },
+      "tier_modifiers": {
+        "market_alignment_weight": 0.40,
+        "recent_form_weight": 0.25,
+        "opponent_context_weight": 0.10,
+        "role_minutes_weight": 0.05,
+        "volatility_weight": 0.20
+      }
+    },
+    "NHL": {
+      "profile_name": "PRISM-NHL",
+      "selection_gate": {
+        "tier_allow": ["A", "B"],
+        "min_hit_rate": 0.45,
+        "min_edge": -0.25
+      },
+      "ranking_weights": {
+        "p_calibrated": 0.60,
+        "edge_norm": 0.20,
+        "market_norm": 0.10,
+        "context_norm": 0.10,
+        "uncertainty_penalty": -0.10
+      },
+      "signal_weights": {
+        "def_tier": 1.0,
+        "l5_alignment": 1.0,
+        "edge_gt_1": 1.0,
+        "l5_match_pct": 0.75
+      },
+      "tier_modifiers": {
+        "market_alignment_weight": 0.30,
+        "recent_form_weight": 0.25,
+        "opponent_context_weight": 0.20,
+        "role_minutes_weight": 0.05,
+        "volatility_weight": 0.20
+      }
+    },
+    "Soccer": {
+      "profile_name": "PRISM-Soccer",
+      "selection_gate": {
+        "tier_allow": ["A", "B"],
+        "min_hit_rate": 0.45,
+        "min_edge": -0.25
+      },
+      "ranking_weights": {
+        "p_calibrated": 0.65,
+        "edge_norm": 0.20,
+        "market_norm": 0.10,
+        "context_norm": 0.05,
+        "uncertainty_penalty": -0.10
+      },
+      "signal_weights": {
+        "min_tier": 1.0,
+        "l5_alignment": 1.0,
+        "l10_alignment": 1.0,
+        "edge_gt_1": 1.0
+      },
+      "tier_modifiers": {
+        "market_alignment_weight": 0.35,
+        "recent_form_weight": 0.30,
+        "opponent_context_weight": 0.10,
+        "role_minutes_weight": 0.10,
+        "volatility_weight": 0.15
+      }
+    },
+    "Tennis": {
+      "profile_name": "PRISM-Tennis",
+      "selection_gate": {
+        "tier_allow": ["A", "B"],
+        "min_hit_rate": 0.45,
+        "min_edge": -0.25
+      },
+      "ranking_weights": {
+        "p_calibrated": 0.65,
+        "edge_norm": 0.20,
+        "market_norm": 0.10,
+        "context_norm": 0.05,
+        "uncertainty_penalty": -0.10
+      },
+      "signal_weights": {
+        "def_tier": 0.5,
+        "min_tier": 1.0,
+        "l5_alignment": 1.0,
+        "l10_alignment": 1.0,
+        "edge_gt_1": 1.0
+      },
+      "tier_modifiers": {
+        "market_alignment_weight": 0.40,
+        "recent_form_weight": 0.30,
+        "opponent_context_weight": 0.05,
+        "role_minutes_weight": 0.05,
+        "volatility_weight": 0.20
+      }
+    },
+    "WNBA": {
+      "profile_name": "PRISM-WNBA",
+      "selection_gate": {
+        "tier_allow": ["A", "B"],
+        "min_hit_rate": 0.45,
+        "min_edge": -0.25
+      },
+      "ranking_weights": {
+        "p_calibrated": 0.55,
+        "edge_norm": 0.25,
+        "market_norm": 0.15,
+        "context_norm": 0.05,
+        "uncertainty_penalty": -0.10
+      },
+      "signal_weights": {
+        "def_tier": 1.0,
+        "min_tier": 1.0,
+        "l5_alignment": 1.0,
+        "b2b": 1.0,
+        "edge_gt_1": 1.0,
+        "shot_role": 0.5,
+        "usage_role": 0.5
+      },
+      "tier_modifiers": {
+        "market_alignment_weight": 0.35,
+        "recent_form_weight": 0.20,
+        "opponent_context_weight": 0.20,
+        "role_minutes_weight": 0.15,
+        "volatility_weight": 0.10
+      }
+    }
+  }
+}

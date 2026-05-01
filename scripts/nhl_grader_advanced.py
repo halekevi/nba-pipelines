@@ -113,9 +113,9 @@ def _slate_ml_prob_nhl(row: pd.Series) -> float:
     return float(np.nan)
 
 
-def _build_nhl_actuals_lookup(actuals_df: pd.DataFrame) -> Dict[Tuple[str, str, str], float]:
-    """(folded_player, TEAM, normalized_prop) -> actual"""
-    lut: Dict[Tuple[str, str, str], float] = {}
+def _build_nhl_actuals_lookup(actuals_df: pd.DataFrame) -> Dict[Tuple[str, str, str], tuple[float, str, int]]:
+    """(folded_player, TEAM, normalized_prop) -> (actual, source, source_conflict)."""
+    lut: Dict[Tuple[str, str, str], tuple[float, str, int]] = {}
     for _, row in actuals_df.iterrows():
         pl = fold_player_name(row.get("player", ""))
         tm = str(row.get("team", "")).strip().upper()
@@ -125,7 +125,9 @@ def _build_nhl_actuals_lookup(actuals_df: pd.DataFrame) -> Dict[Tuple[str, str, 
         act = pd.to_numeric(row.get("actual"), errors="coerce")
         if pd.isna(act):
             continue
-        lut[(pl, tm, pk)] = float(act)
+        src = str(row.get("source", "")).strip().lower()
+        src_conf = int(pd.to_numeric(row.get("source_conflict"), errors="coerce") or 0)
+        lut[(pl, tm, pk)] = (float(act), src, src_conf)
     return lut
 
 
@@ -554,10 +556,14 @@ def main() -> None:
             str(team).strip().upper(),
             _normalize_nhl_prop_key(prop_type),
         )
-        actual = actuals_lut.get(lk, np.nan)
+        actual_pack = actuals_lut.get(lk, (np.nan, "", 0))
+        actual = actual_pack[0]
+        actual_source = actual_pack[1]
+        actual_source_conflict = int(actual_pack[2])
         
         # Grade
         result, edge, pct_of_line = grader.grade_prop(actual, line, direction, player_type)
+        void_reason = "NO_DATA" if result == "VOID" else ""
         margin = nhl_signed_margin(actual, line, direction)
 
         # Opponent analysis
@@ -576,12 +582,15 @@ def main() -> None:
             "prop_type": prop_type,
             "line": line,
             "actual": actual,
+            "actual_source": actual_source,
+            "actual_source_conflict": actual_source_conflict,
             "margin": margin,
             "direction": direction,
             "bet_direction": direction,
             "tier": tier,
             "player_type": player_type,
             "result": result,
+            "reason": void_reason,
             "edge": edge,
             "ml_prob": _slate_ml_prob_nhl(slate_row),
             "pct_of_line": pct_of_line,

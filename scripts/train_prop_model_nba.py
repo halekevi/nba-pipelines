@@ -121,6 +121,18 @@ def _chrono_split_idx(df: pd.DataFrame, date_col: str | None) -> pd.Index:
     return df.index
 
 
+def _strict_chrono_split_idx(df: pd.DataFrame, date_col: str | None) -> pd.Index:
+    if not date_col or date_col not in df.columns:
+        raise RuntimeError(f"{SEGMENT_KEY.upper()} requires a valid date column for temporal split.")
+    dd = pd.to_datetime(df[date_col], errors="coerce")
+    usable = dd.notna().sum()
+    if usable < 50:
+        raise RuntimeError(
+            f"{SEGMENT_KEY.upper()} temporal split blocked: only {usable} rows have valid dates in '{date_col}'."
+        )
+    return dd.sort_values().index
+
+
 def _collect_nba_graded_files() -> list[tuple[Path, bool]]:
     """Return (path, is_synthetic) pairs — synthetic props come from SQLite, not Excel."""
     out: list[tuple[Path, bool]] = []
@@ -602,7 +614,10 @@ def main() -> None:
     date_col = _first_present(train, ["game_date", "date", "_source_date", "slate_date"])
     if date_col:
         print(f"-> Using temporal split on: {date_col}")
-    order = _chrono_split_idx(train, date_col)
+    if SEGMENT_KEY in ("nba1q", "nba1h"):
+        order = _strict_chrono_split_idx(train, date_col)
+    else:
+        order = _chrono_split_idx(train, date_col)
     Xo = X.loc[order]
     yo = y.loc[order]
     swo = sw.loc[order]

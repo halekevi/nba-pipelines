@@ -1,5 +1,8 @@
 # PropORACLE Mobile (Capacitor)
 
+**Canonical Android project (this machine):** `H:\halek\ProfileFromC\Desktop\PropORACLE\mobile\android`  
+Always run **`npm run sync:*`**, **`npx cap copy android`**, and Android Studio from the **`H:\halek\ProfileFromC\Desktop\PropORACLE\mobile`** folder so Gradle and `app/src/main/assets/public` stay in sync. If you also have a OneDrive clone, do **not** open `...\OneDrive\...\mobile\android` for builds — use the H: tree, or run **`npm run open:android:studio`** (runs `open-android-studio.ps1`, which `cd`s to that `mobile` path then `cap open android`). Edit `MobileDir` in `open-android-studio.ps1` if you relocate the repo.
+
 Android (and optional iOS) **native shell** around a WebView. There are **two ways** the UI can load:
 
 | Mode | What loads | When to use |

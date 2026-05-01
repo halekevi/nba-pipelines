@@ -57,6 +57,12 @@ STAT_NORM = {
     "saves": "saves",
     "Goals Allowed": "goals_allowed",
     "goals_allowed": "goals_allowed",
+    # PrizePicks label variants → keys expected by step5_add_line_hit_rates_nhl.SKATER_MAP
+    "Plus Minus": "plus/minus",
+    "Plus-Minus": "plus/minus",
+    "+/-": "plus/minus",
+    "Power Play Points": "power_play_points",
+    "power play points": "power_play_points",
 }
 
 # Position classification

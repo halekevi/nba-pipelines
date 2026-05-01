@@ -1,0 +1,372 @@
+_sport,prop,direction,pick_type,n,hits,hit_rate
+cbb,pts,OVER,goblin,1949,1241.0,0.6367367880964597
+cbb,reb,OVER,goblin,1435,878.0,0.6118466898954704
+cbb,pra,OVER,goblin,996,568.0,0.570281124497992
+cbb,pts,OVER,demon,979,255.0,0.2604698672114402
+cbb,reb,OVER,demon,956,212.0,0.2217573221757322
+cbb,ast,OVER,goblin,916,594.0,0.648471615720524
+cbb,pts,OVER,standard,851,402.0,0.47238542890716806
+cbb,pr,UNDER,standard,836,463.0,0.5538277511961722
+cbb,pra,UNDER,standard,782,430.0,0.5498721227621484
+cbb,pts,UNDER,standard,741,379.0,0.5114709851551957
+cbb,stl,OVER,goblin,653,416.0,0.6370597243491577
+cbb,pa,OVER,standard,646,322.0,0.4984520123839009
+cbb,pra,OVER,demon,636,168.0,0.2641509433962264
+cbb,pa,UNDER,standard,633,333.0,0.5260663507109005
+cbb,pra,OVER,standard,605,288.0,0.47603305785123967
+cbb,ast,OVER,demon,590,127.0,0.21525423728813559
+cbb,pr,OVER,standard,581,262.0,0.4509466437177281
+cbb,3pm,OVER,demon,566,123.0,0.21731448763250882
+cbb,ra,UNDER,standard,513,291.0,0.5672514619883041
+cbb,reb,UNDER,standard,475,276.0,0.5810526315789474
+cbb,stl,OVER,demon,468,113.0,0.24145299145299146
+cbb,tov,OVER,goblin,368,223.0,0.6059782608695652
+cbb,ra,OVER,standard,359,155.0,0.43175487465181056
+cbb,reb,OVER,standard,299,114.0,0.38127090301003347
+cbb,fg3m,OVER,goblin,268,169.0,0.6305970149253731
+cbb,fantasy score,OVER,goblin,256,186.0,0.7265625
+cbb,ast,OVER,standard,240,124.0,0.5166666666666667
+cbb,pr,OVER,goblin,231,144.0,0.6233766233766234
+cbb,3pm,OVER,goblin,220,132.0,0.6
+cbb,blk,OVER,goblin,198,114.0,0.5757575757575758
+cbb,stl,OVER,standard,174,91.0,0.5229885057471264
+cbb,blk,OVER,demon,150,33.0,0.22
+cbb,fantasy score,OVER,standard,143,87.0,0.6083916083916084
+cbb,ra,OVER,goblin,131,73.0,0.5572519083969466
+cbb,fantasy score,OVER,demon,126,36.0,0.2857142857142857
+cbb,tov,UNDER,standard,124,76.0,0.6129032258064516
+cbb,tov,OVER,demon,123,48.0,0.3902439024390244
+cbb,ast,UNDER,standard,122,67.0,0.5491803278688525
+cbb,tov,OVER,standard,117,51.0,0.4358974358974359
+cbb,3pm,UNDER,standard,116,69.0,0.5948275862068966
+cbb,fantasy score,UNDER,standard,110,57.0,0.5181818181818182
+cbb,pr,OVER,demon,98,28.0,0.2857142857142857
+cbb,blk,OVER,standard,83,44.0,0.5301204819277109
+cbb,stl,UNDER,standard,65,37.0,0.5692307692307692
+cbb,fg3m,OVER,standard,56,25.0,0.44642857142857145
+cbb,fg3m,UNDER,standard,49,18.0,0.3673469387755102
+cbb,stocks,OVER,standard,48,19.0,0.3958333333333333
+cbb,stocks,OVER,goblin,46,28.0,0.6086956521739131
+cbb,ra,OVER,demon,38,16.0,0.42105263157894735
+cbb,pa,OVER,goblin,36,23.0,0.6388888888888888
+cbb,fantasy,OVER,goblin,34,24.0,0.7058823529411765
+cbb,stocks,OVER,demon,23,8.0,0.34782608695652173
+cbb,fantasy,OVER,standard,22,11.0,0.5
+cbb,stocks,UNDER,standard,16,8.0,0.5
+cbb,blk,UNDER,standard,13,4.0,0.3076923076923077
+cbb,fantasy,UNDER,standard,6,5.0,0.8333333333333334
+cbb,points (combo),UNDER,standard,5,4.0,0.8
+cbb,double-double,OVER,goblin,1,1.0,1.0
+mlb,Total Bases,OVER,demon,12926,2472.0,0.1912424570632833
+mlb,Runs,OVER,demon,5188,1337.0,0.25771010023130303
+mlb,Hits,OVER,demon,4249,792.0,0.18639679924688163
+mlb,Walks,OVER,demon,3802,1196.0,0.3145712782745923
+mlb,Hits,OVER,goblin,3546,2064.0,0.5820642978003384
+mlb,Home Runs,OVER,demon,3437,362.0,0.1053244108233925
+mlb,Total Bases,OVER,goblin,3404,1971.0,0.5790246768507638
+mlb,Stolen Bases,OVER,demon,1919,225.0,0.11724856696195936
+mlb,Pitcher Strikeouts,OVER,demon,486,104.0,0.2139917695473251
+mlb,Hits Allowed,OVER,demon,410,105.0,0.25609756097560976
+mlb,Total Bases,OVER,standard,397,191.0,0.4811083123425693
+mlb,Pitcher Strikeouts,OVER,goblin,251,152.0,0.6055776892430279
+mlb,Hits Allowed,OVER,goblin,225,151.0,0.6711111111111111
+mlb,Runs,OVER,standard,210,96.0,0.45714285714285713
+mlb,Walks Allowed,OVER,demon,185,59.0,0.31891891891891894
+mlb,Hits,OVER,standard,162,76.0,0.4691358024691358
+mlb,Walks Allowed,OVER,goblin,120,92.0,0.7666666666666667
+mlb,Total Bases,UNDER,standard,119,57.0,0.4789915966386555
+mlb,Pitcher Strikeouts,OVER,standard,109,39.0,0.3577981651376147
+mlb,Runs,OVER,goblin,91,43.0,0.4725274725274725
+mlb,Runs,UNDER,standard,84,46.0,0.5476190476190477
+mlb,Pitching Outs,OVER,demon,73,36.0,0.4931506849315068
+mlb,Pitching Outs,OVER,goblin,62,35.0,0.5645161290322581
+mlb,Hits,UNDER,standard,57,25.0,0.43859649122807015
+mlb,Walks,OVER,standard,50,26.0,0.52
+mlb,Pitcher Strikeouts,UNDER,standard,47,26.0,0.5531914893617021
+mlb,Walks,UNDER,standard,46,24.0,0.5217391304347826
+mlb,Pitching Outs,OVER,standard,41,21.0,0.5121951219512195
+mlb,Hits Allowed,OVER,standard,36,16.0,0.4444444444444444
+mlb,Pitching Outs,UNDER,standard,26,11.0,0.4230769230769231
+mlb,Walks,OVER,goblin,24,10.0,0.4166666666666667
+mlb,Walks Allowed,OVER,standard,23,14.0,0.6086956521739131
+mlb,Hits Allowed,UNDER,standard,17,12.0,0.7058823529411765
+mlb,Walks Allowed,UNDER,standard,13,7.0,0.5384615384615384
+nba,Points,OVER,goblin,8373,5632.0,0.6726382419682312
+nba,Pts+Rebs+Asts,OVER,goblin,7185,4533.0,0.6308977035490605
+nba,Pts+Rebs,OVER,goblin,5980,3925.0,0.6563545150501672
+nba,Rebs+Asts,OVER,goblin,5806,3710.0,0.6389941439889769
+nba,Rebounds,OVER,goblin,5296,3504.0,0.6616314199395771
+nba,Pts+Asts,OVER,goblin,4540,2987.0,0.6579295154185022
+nba,Assists,OVER,goblin,3924,2595.0,0.6613149847094801
+nba,3-PT Made,OVER,goblin,2790,1841.0,0.6598566308243727
+nba,Pts+Rebs+Asts,OVER,demon,2373,812.0,0.3421828908554572
+nba,Steals,OVER,goblin,2336,1452.0,0.6215753424657534
+nba,Pts+Rebs+Asts,OVER,standard,2159,1032.0,0.4779990736452061
+nba,Rebs+Asts,OVER,demon,2085,708.0,0.339568345323741
+nba,Pts+Rebs,OVER,standard,2071,1014.0,0.4896185417672622
+nba,Fantasy Score,OVER,goblin,1854,1423.0,0.767529665587918
+nba,Pts+Asts,OVER,standard,1796,873.0,0.4860801781737194
+nba,Points,OVER,standard,1699,827.0,0.48675691583284286
+nba,Fantasy Score,OVER,standard,1501,865.0,0.5762824783477681
+nba,Blks+Stls,OVER,goblin,1466,869.0,0.5927694406548432
+nba,Rebs+Asts,OVER,standard,1316,643.0,0.4886018237082067
+nba,Pts+Rebs,UNDER,standard,1245,632.0,0.5076305220883535
+nba,Points,OVER,demon,1222,416.0,0.3404255319148936
+nba,Rebounds,OVER,standard,1188,566.0,0.4764309764309764
+nba,Points,UNDER,standard,1183,600.0,0.5071851225697379
+nba,Pts+Rebs,OVER,demon,1150,370.0,0.3217391304347826
+nba,Pts+Asts,UNDER,standard,1093,548.0,0.5013723696248856
+nba,3-PT Made,OVER,demon,1085,356.0,0.328110599078341
+nba,Pts+Rebs+Asts,UNDER,standard,1080,533.0,0.4935185185185185
+nba,Pts+Asts,OVER,demon,1054,347.0,0.32922201138519924
+nba,Rebounds,OVER,demon,1046,352.0,0.3365200764818356
+nba,Assists,OVER,demon,1029,387.0,0.3760932944606414
+nba,Points (Combo),UNDER,standard,1027,522.0,0.5082765335929893
+nba,Turnovers,OVER,goblin,944,543.0,0.5752118644067796
+nba,Blocks,UNDER,(missing),864,560.0,0.6481481481481481
+nba,Threes,UNDER,(missing),864,520.0,0.6018518518518519
+nba,Turnovers,UNDER,(missing),864,501.0,0.5798611111111112
+nba,Steals,UNDER,(missing),864,494.0,0.5717592592592593
+nba,FTA,UNDER,(missing),864,484.0,0.5601851851851852
+nba,Pts+Asts,UNDER,(missing),864,476.0,0.5509259259259259
+nba,FG Attempted,UNDER,(missing),864,470.0,0.5439814814814815
+nba,Points,UNDER,(missing),864,468.0,0.5416666666666666
+nba,PRA,UNDER,(missing),864,465.0,0.5381944444444444
+nba,Rebounds,UNDER,(missing),864,458.0,0.5300925925925926
+nba,Assists,UNDER,(missing),864,456.0,0.5277777777777778
+nba,Fantasy Score,UNDER,(missing),864,456.0,0.5277777777777778
+nba,Rebs+Asts,UNDER,(missing),864,451.0,0.5219907407407407
+nba,Rebs+Asts,OVER,(missing),864,413.0,0.47800925925925924
+nba,Assists,OVER,(missing),864,408.0,0.4722222222222222
+nba,Fantasy Score,OVER,(missing),864,408.0,0.4722222222222222
+nba,Rebounds,OVER,(missing),864,406.0,0.4699074074074074
+nba,PRA,OVER,(missing),864,399.0,0.4618055555555556
+nba,Points,OVER,(missing),864,396.0,0.4583333333333333
+nba,FG Attempted,OVER,(missing),864,394.0,0.45601851851851855
+nba,Pts+Asts,OVER,(missing),864,388.0,0.44907407407407407
+nba,FTA,OVER,(missing),864,380.0,0.4398148148148148
+nba,Steals,OVER,(missing),864,370.0,0.42824074074074076
+nba,Turnovers,OVER,(missing),864,363.0,0.4201388888888889
+nba,Threes,OVER,(missing),864,344.0,0.39814814814814814
+nba,Blocks,OVER,(missing),864,304.0,0.35185185185185186
+nba,Pts+Rebs,UNDER,(missing),860,466.0,0.541860465116279
+nba,Pts+Rebs,OVER,(missing),860,394.0,0.45813953488372094
+nba,Blks+Stls,UNDER,(missing),842,465.0,0.5522565320665083
+nba,Blks+Stls,OVER,(missing),842,377.0,0.4477434679334917
+nba,Blocked Shots,OVER,demon,786,278.0,0.35368956743002544
+nba,Fantasy Score,OVER,demon,767,292.0,0.38070404172099087
+nba,Rebs+Asts,UNDER,standard,710,364.0,0.5126760563380282
+nba,Rebounds,UNDER,standard,696,357.0,0.5129310344827587
+nba,FG Attempted,OVER,standard,643,320.0,0.4976671850699845
+nba,FG Attempted,UNDER,standard,634,334.0,0.526813880126183
+nba,Blocked Shots,OVER,goblin,625,393.0,0.6288
+nba,Personal Fouls,OVER,goblin,602,331.0,0.5498338870431894
+nba,Assists,UNDER,standard,564,289.0,0.5124113475177305
+nba,Steals,OVER,demon,554,181.0,0.3267148014440433
+nba,Assists,OVER,standard,549,262.0,0.4772313296903461
+nba,Two Pointers Made,OVER,goblin,518,322.0,0.6216216216216216
+nba,Blks+Stls,OVER,demon,511,187.0,0.3659491193737769
+nba,Double-Double,OVER,demon,467,73.0,0.15631691648822268
+nba,Free Throws Made,OVER,standard,463,232.0,0.5010799136069114
+nba,FG Made,OVER,standard,434,206.0,0.47465437788018433
+nba,Turnovers,OVER,standard,408,205.0,0.5024509803921569
+nba,Two Pointers Attempted,UNDER,standard,408,203.0,0.49754901960784315
+nba,Two Pointers Attempted,OVER,standard,400,229.0,0.5725
+nba,Free Throws Attempted,OVER,standard,390,207.0,0.5307692307692308
+nba,Free Throws Attempted,UNDER,standard,365,194.0,0.5315068493150685
+nba,Fantasy Score,UNDER,standard,356,175.0,0.49157303370786515
+nba,Rebounds (Combo),UNDER,standard,355,200.0,0.5633802816901409
+nba,3-PT Attempted,OVER,goblin,348,190.0,0.5459770114942529
+nba,Free Throws Made,OVER,goblin,345,201.0,0.5826086956521739
+nba,Free Throws Made,OVER,demon,341,159.0,0.4662756598240469
+nba,Assists (Combo),UNDER,standard,335,183.0,0.5462686567164179
+nba,FG Made,UNDER,standard,334,154.0,0.46107784431137727
+nba,Free Throws Attempted,OVER,demon,317,148.0,0.4668769716088328
+nba,Turnovers,OVER,demon,317,126.0,0.39747634069400634
+nba,FG Made,OVER,goblin,316,195.0,0.6170886075949367
+nba,3-PT Attempted,UNDER,standard,303,151.0,0.49834983498349833
+nba,Free Throws Attempted,OVER,goblin,294,168.0,0.5714285714285714
+nba,3-PT Attempted,OVER,standard,291,152.0,0.5223367697594502
+nba,Two Pointers Made,OVER,standard,291,144.0,0.4948453608247423
+nba,Personal Fouls,OVER,demon,285,118.0,0.41403508771929826
+nba,Turnovers,UNDER,standard,261,165.0,0.632183908045977
+nba,Two Pointers Made,UNDER,standard,259,119.0,0.4594594594594595
+nba,Defensive Rebounds,UNDER,standard,256,145.0,0.56640625
+nba,Two Pointers Made,OVER,demon,253,119.0,0.47035573122529645
+nba,Free Throws Made,UNDER,standard,251,120.0,0.47808764940239046
+nba,Offensive Rebounds,UNDER,standard,250,135.0,0.54
+nba,Personal Fouls,UNDER,standard,242,132.0,0.5454545454545454
+nba,3-PT Made,UNDER,standard,239,136.0,0.5690376569037657
+nba,Two Pointers Attempted,OVER,goblin,238,134.0,0.5630252100840336
+nba,3-PT Made,OVER,standard,217,115.0,0.5299539170506913
+nba,Personal Fouls,OVER,standard,217,108.0,0.4976958525345622
+nba,Steals,UNDER,standard,215,137.0,0.6372093023255814
+nba,Steals,OVER,standard,206,93.0,0.45145631067961167
+nba,3-PT Attempted,OVER,demon,205,95.0,0.4634146341463415
+nba,FG Made,OVER,demon,205,88.0,0.4292682926829268
+nba,Two Pointers Attempted,OVER,demon,204,103.0,0.5049019607843137
+nba,Blks+Stls,UNDER,standard,200,99.0,0.495
+nba,Blks+Stls,OVER,standard,176,79.0,0.44886363636363635
+nba,Blocked Shots,OVER,standard,129,57.0,0.4418604651162791
+nba,FG Attempted,OVER,goblin,113,69.0,0.6106194690265486
+nba,Blocked Shots,UNDER,standard,77,42.0,0.5454545454545454
+nba,FG Attempted,OVER,demon,69,36.0,0.5217391304347826
+nba,Points (Combo),OVER,standard,63,39.0,0.6190476190476191
+nba,3-PT Made (Combo),UNDER,standard,63,36.0,0.5714285714285714
+nba,Double-Double,OVER,goblin,40,24.0,0.6
+nba,Offensive Rebounds,OVER,demon,40,12.0,0.3
+nba,3-PT Made (Combo),OVER,standard,37,19.0,0.5135135135135135
+nba,Assists (Combo),OVER,standard,25,12.0,0.48
+nba,Offensive Rebounds,OVER,goblin,22,15.0,0.6818181818181818
+nba,Rebounds (Combo),OVER,standard,21,13.0,0.6190476190476191
+nba,Triple-Double,OVER,demon,21,1.0,0.047619047619047616
+nba,Defensive Rebounds,OVER,goblin,8,3.0,0.375
+nba,Triple-Double,OVER,goblin,4,3.0,0.75
+nba,Double-Double,UNDER,standard,1,1.0,1.0
+nba1h,Points,OVER,standard,576,371.0,0.6440972222222222
+nba1h,Pts+Rebs+Asts,OVER,standard,506,366.0,0.7233201581027668
+nba1h,Fantasy Score,OVER,standard,190,172.0,0.9052631578947369
+nba1h,Points,UNDER,standard,92,45.0,0.4891304347826087
+nba1h,Pts+Rebs+Asts,UNDER,standard,44,17.0,0.38636363636363635
+nba1h,Free Throws Made,UNDER,standard,29,6.0,0.20689655172413793
+nba1h,3-PT Made,UNDER,standard,20,3.0,0.15
+nba1h,3-PT Made,OVER,demon,6,2.0,0.3333333333333333
+nba1h,Free Throws Made,OVER,goblin,5,5.0,1.0
+nba1h,Free Throws Made,OVER,demon,5,3.0,0.6
+nba1h,3-PT Made,OVER,goblin,3,3.0,1.0
+nba1q,Points,OVER,goblin,1734,1467.0,0.8460207612456747
+nba1q,Points,OVER,demon,1437,904.0,0.6290883785664579
+nba1q,Rebounds,OVER,demon,969,577.0,0.5954592363261094
+nba1q,Assists,OVER,demon,815,590.0,0.7239263803680982
+nba1q,Rebounds,OVER,goblin,593,528.0,0.8903878583473862
+nba1q,Points,OVER,standard,547,408.0,0.7458866544789763
+nba1q,Assists,OVER,goblin,354,322.0,0.9096045197740112
+nba1q,Rebounds,OVER,standard,168,131.0,0.7797619047619048
+nba1q,Assists,OVER,standard,138,119.0,0.8623188405797102
+nba1q,Points,UNDER,standard,96,40.0,0.4166666666666667
+nba1q,Rebounds,UNDER,standard,32,11.0,0.34375
+nba1q,3-PT Made,UNDER,standard,15,0.0,0.0
+nba1q,Assists,UNDER,standard,12,2.0,0.16666666666666666
+nba1q,Free Throws Made,OVER,goblin,9,9.0,1.0
+nba1q,Free Throws Made,UNDER,standard,7,0.0,0.0
+nba1q,3-PT Made,OVER,demon,3,3.0,1.0
+nba1q,3-PT Made,OVER,goblin,2,2.0,1.0
+nhl,Assists,UNDER,(missing),32742,20368.0,0.6220756215258689
+nhl,Assists,OVER,(missing),32742,12374.0,0.3779243784741311
+nhl,Goals,UNDER,(missing),32491,20211.0,0.6220491828506356
+nhl,Goals,OVER,(missing),32491,12280.0,0.37795081714936446
+nhl,Points,UNDER,(missing),32179,19859.0,0.6171416140961496
+nhl,Points,OVER,(missing),32179,12320.0,0.38285838590385035
+nhl,Shots,UNDER,(missing),32095,17595.0,0.5482162330581087
+nhl,Shots,OVER,(missing),32095,14500.0,0.45178376694189126
+nhl,points,OVER,(missing),7077,2136.0,0.30182280627384483
+nhl,goals,OVER,(missing),5977,1114.0,0.18638112765601472
+nhl,assists,OVER,(missing),5567,1416.0,0.25435602658523443
+nhl,shots_on_goal,OVER,(missing),5089,0.0,0.0
+nhl,plus/minus,OVER,(missing),2244,822.0,0.3663101604278075
+nhl,Points,OVER,demon,1636,365.0,0.22310513447432762
+nhl,Assists,OVER,demon,1469,281.0,0.191286589516678
+nhl,Shots On Goal,OVER,demon,1330,0.0,0.0
+nhl,Goals,OVER,demon,1186,191.0,0.16104553119730186
+nhl,Power Play Points,OVER,demon,606,460.0,0.759075907590759
+nhl,Shots On Goal,UNDER,standard,546,546.0,1.0
+nhl,Plus/Minus,OVER,demon,509,164.0,0.32220039292730845
+nhl,Points,UNDER,standard,487,355.0,0.728952772073922
+nhl,Shots On Goal,OVER,goblin,462,0.0,0.0
+nhl,Assists,UNDER,standard,450,337.0,0.7488888888888889
+nhl,blocked_shots,OVER,(missing),433,142.0,0.3279445727482679
+nhl,hits,UNDER,(missing),324,324.0,1.0
+nhl,Shots On Goal,OVER,standard,289,0.0,0.0
+nhl,Goals,UNDER,standard,281,224.0,0.797153024911032
+nhl,shots_on_goal,UNDER,(missing),275,275.0,1.0
+nhl,time_on_ice,UNDER,(missing),262,137.0,0.5229007633587787
+nhl,points,UNDER,(missing),206,96.0,0.46601941747572817
+nhl,blocked_shots,UNDER,(missing),200,90.0,0.45
+nhl,Points,OVER,goblin,189,111.0,0.5873015873015873
+nhl,time_on_ice,OVER,(missing),183,82.0,0.44808743169398907
+nhl,faceoffs_won,UNDER,(missing),162,2.0,0.012345679012345678
+nhl,Blocked Shots,OVER,demon,161,51.0,0.3167701863354037
+nhl,Points,OVER,standard,140,78.0,0.5571428571428572
+nhl,Hits,UNDER,standard,114,59.0,0.5175438596491229
+nhl,hits,OVER,(missing),112,0.0,0.0
+nhl,goalie_saves,UNDER,(missing),95,95.0,1.0
+nhl,Time On Ice,UNDER,standard,75,75.0,1.0
+nhl,Blocked Shots,UNDER,standard,70,32.0,0.45714285714285713
+nhl,assists,UNDER,(missing),70,25.0,0.35714285714285715
+nhl,Assists,OVER,standard,64,32.0,0.5
+nhl,Time On Ice,OVER,standard,61,0.0,0.0
+nhl,faceoffs_won,OVER,(missing),59,59.0,1.0
+nhl,goalie_saves,OVER,(missing),57,0.0,0.0
+nhl,goals_allowed,OVER,(missing),56,21.0,0.375
+nhl,Faceoffs Won,UNDER,standard,52,52.0,1.0
+nhl,Assists,OVER,goblin,33,18.0,0.5454545454545454
+nhl,goals_allowed,UNDER,(missing),22,11.0,0.5
+nhl,Plus/Minus,UNDER,standard,18,15.0,0.8333333333333334
+nhl,Power Play Points,UNDER,standard,17,7.0,0.4117647058823529
+nhl,plus/minus,UNDER,(missing),7,5.0,0.7142857142857143
+nhl,goals,UNDER,(missing),7,3.0,0.42857142857142855
+nhl,Goals,OVER,standard,4,0.0,0.0
+nhl,Plus/Minus,OVER,standard,2,0.0,0.0
+soccer,Shots,OVER,(missing),5605,1861.0,0.3320249776984835
+soccer,Shots,OVER,demon,1583,181.0,0.11433986102337335
+soccer,Fouls,OVER,(missing),1411,363.0,0.25726435152374205
+soccer,Shots On Target,OVER,demon,1225,504.0,0.4114285714285714
+soccer,Goal + Assist,OVER,(missing),1112,477.0,0.4289568345323741
+soccer,Goals,OVER,(missing),876,318.0,0.363013698630137
+soccer,Goal + Assist,OVER,demon,862,197.0,0.228538283062645
+soccer,Tackles,OVER,demon,810,167.0,0.20617283950617285
+soccer,Goalie Saves,OVER,(missing),785,322.0,0.4101910828025478
+soccer,Assists,OVER,(missing),763,220.0,0.28833551769331583
+soccer,Assists,OVER,demon,700,39.0,0.055714285714285716
+soccer,Goals,OVER,demon,630,59.0,0.09365079365079365
+soccer,Shots,OVER,goblin,572,208.0,0.36363636363636365
+soccer,Fouls,OVER,goblin,482,188.0,0.3900414937759336
+soccer,Fouls,OVER,demon,354,59.0,0.16666666666666666
+soccer,Shots On Target,OVER,goblin,180,126.0,0.7
+soccer,Goalie Saves,OVER,demon,145,17.0,0.11724137931034483
+soccer,Passes Attempted,OVER,standard,112,0.0,0.0
+soccer,Goalie Saves,OVER,goblin,106,40.0,0.37735849056603776
+soccer,Shots,UNDER,(missing),96,56.0,0.5833333333333334
+soccer,Goalie Saves,UNDER,(missing),91,49.0,0.5384615384615384
+soccer,Shots,OVER,standard,48,13.0,0.2708333333333333
+soccer,Clearances,OVER,standard,33,1.0,0.030303030303030304
+soccer,Attempted Dribbles,OVER,standard,31,10.0,0.3225806451612903
+soccer,Shots Assisted,OVER,standard,30,19.0,0.6333333333333333
+soccer,Goalie Saves,OVER,standard,30,14.0,0.4666666666666667
+soccer,Goalie Saves,UNDER,standard,27,22.0,0.8148148148148148
+soccer,Shots,UNDER,standard,25,15.0,0.6
+soccer,Goals Allowed,OVER,demon,21,13.0,0.6190476190476191
+soccer,Goals Allowed,OVER,goblin,16,12.0,0.75
+soccer,Tackles,OVER,standard,16,6.0,0.375
+soccer,Tackles,OVER,goblin,13,3.0,0.23076923076923078
+soccer,Crosses,OVER,standard,12,2.0,0.16666666666666666
+soccer,Goals Allowed,OVER,standard,8,8.0,1.0
+soccer,Goal + Assist,OVER,goblin,8,1.0,0.125
+soccer,Shots On Target,OVER,standard,6,5.0,0.8333333333333334
+soccer,Fouls,UNDER,(missing),6,1.0,0.16666666666666666
+soccer,Shots On Target,UNDER,standard,3,2.0,0.6666666666666666
+soccer,Fouls,UNDER,standard,2,2.0,1.0
+soccer,Goals,UNDER,standard,2,2.0,1.0
+soccer,Goal + Assist,OVER,standard,1,1.0,1.0
+soccer,Goal + Assist,UNDER,standard,1,1.0,1.0
+soccer,Goal + Assist,UNDER,(missing),1,0.0,0.0
+soccer,Goals,UNDER,(missing),1,0.0,0.0
+wcbb,pts,OVER,demon,44,5.0,0.11363636363636363
+wcbb,pr,OVER,demon,36,6.0,0.16666666666666666
+wcbb,pts,OVER,goblin,30,14.0,0.4666666666666667
+wcbb,pr,OVER,goblin,28,11.0,0.39285714285714285
+wcbb,reb,OVER,demon,24,8.0,0.3333333333333333
+wcbb,pa,OVER,demon,24,2.0,0.08333333333333333
+wcbb,ast,OVER,demon,19,5.0,0.2631578947368421
+wcbb,reb,OVER,goblin,16,13.0,0.8125
+wcbb,fg3m,OVER,demon,14,1.0,0.07142857142857142
+wcbb,pr,OVER,standard,12,2.0,0.16666666666666666
+wcbb,ast,OVER,goblin,9,4.0,0.4444444444444444
+wcbb,pra,OVER,demon,8,2.0,0.25
+wcbb,pa,OVER,standard,7,2.0,0.2857142857142857
+wcbb,pts,OVER,standard,7,2.0,0.2857142857142857
+wcbb,fg3m,OVER,goblin,6,3.0,0.5
+wcbb,pra,OVER,goblin,5,3.0,0.6
+wcbb,pra,OVER,standard,4,2.0,0.5
+wcbb,pa,UNDER,standard,2,1.0,0.5
+wcbb,fg3m,OVER,standard,1,1.0,1.0

@@ -1,0 +1,38 @@
+[step1] MLB fetch (cdp) | league_id=2 | attempt 1/3
+  ΓÜá∩╕Å  playwright-stealth not installed ΓÇö run: pip install playwright-stealth --break-system-packages
+≡ƒîÉ Connecting to existing Chrome via CDP: http://127.0.0.1:9222
+(node:54560) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+  Using browser context[0] (existing session / cookies).
+  Loading https://app.prizepicks.com/board?league_id=2
+
+  ΓÜá∩╕Å  No api.prizepicks.com calls detected at all.
+       Profile may need refreshing: py -3.14 setup_prizepicks_profile.py
+  ΓÜá∩╕Å  Attempt 1 missed intercept.
+
+≡ƒöä Retry 1/2 ΓÇö relaunching in 10s...
+[step1] MLB fetch (cdp) | league_id=2 | attempt 2/3
+  ΓÜá∩╕Å  playwright-stealth not installed ΓÇö run: pip install playwright-stealth --break-system-packages
+≡ƒîÉ Connecting to existing Chrome via CDP: http://127.0.0.1:9222
+(node:53936) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+  Using browser context[0] (existing session / cookies).
+  Loading https://app.prizepicks.com/board?league_id=2
+
+  ΓÜá∩╕Å  No api.prizepicks.com calls detected at all.
+       Profile may need refreshing: py -3.14 setup_prizepicks_profile.py
+  ΓÜá∩╕Å  Attempt 2 missed intercept.
+
+≡ƒöä Retry 2/2 ΓÇö relaunching in 10s...
+[step1] MLB fetch (cdp) | league_id=2 | attempt 3/3
+  ΓÜá∩╕Å  playwright-stealth not installed ΓÇö run: pip install playwright-stealth --break-system-packages
+≡ƒîÉ Connecting to existing Chrome via CDP: http://127.0.0.1:9222
+(node:56344) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+  Using browser context[0] (existing session / cookies).
+  Loading https://app.prizepicks.com/board?league_id=2
+
+  ΓÜá∩╕Å  No api.prizepicks.com calls detected at all.
+       Profile may need refreshing: py -3.14 setup_prizepicks_profile.py
+  ΓÜá∩╕Å  Attempt 3 missed intercept.
+Γ¥î No projections returned after all attempts. Wrote empty CSV.

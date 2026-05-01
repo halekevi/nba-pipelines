@@ -318,6 +318,23 @@ def main() -> None:
     if not out_path.is_absolute():
         out_path = root / out_path
 
+    def _fallback_to_existing_csv(reason: str) -> bool:
+        """Use prior step1 CSV when live fetch is blocked and prior board is usable."""
+        if not out_path.is_file():
+            return False
+        try:
+            old = pd.read_csv(out_path, low_memory=False)
+        except Exception:
+            return False
+        old_rows = len(old)
+        if old_rows < max(1, int(args.min_rows)):
+            return False
+        print(
+            f"[Tennis step1] WARN: {reason}. Using existing board at {out_path} "
+            f"(rows={old_rows})"
+        )
+        return True
+
     candidates = ["14", "20", "7", "9", "12", "15"]
     chosen = str(args.league_id).strip().lower()
     use_id: str
@@ -361,10 +378,16 @@ def main() -> None:
             retries=args.retries,
         )
     except Exception as e:
+        if _fallback_to_existing_csv(f"fetch failed ({e})"):
+            print("[Tennis step1] BOARD_OK_FALLBACK")
+            return
         print(f"[Tennis step1] Fetch failed: {e}")
         sys.exit(1)
 
     if not data:
+        if _fallback_to_existing_csv("no projections returned"):
+            print("[Tennis step1] BOARD_OK_FALLBACK")
+            return
         print("[Tennis step1] No projections returned.")
         sys.exit(1)
 
@@ -415,6 +438,12 @@ def main() -> None:
     print(f"[Tennis step1] Fetched {n_rows} props | tournaments/teams={n_teams} | players={n_players}")
 
     if n_rows < args.min_rows or n_teams < args.min_teams:
+        if _fallback_to_existing_csv(
+            f"board too small (rows={n_rows}, teams={n_teams}; "
+            f"min_rows={args.min_rows}, min_teams={args.min_teams})"
+        ):
+            print("[Tennis step1] BOARD_OK_FALLBACK")
+            return
         print(
             f"[Tennis step1] BOARD_TOO_SMALL (min_rows={args.min_rows}, min_teams={args.min_teams}) — writing CSV and exiting 1"
         )

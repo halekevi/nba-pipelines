@@ -6,10 +6,15 @@ param(
 
 $Root = Split-Path $PSScriptRoot -Parent
 $DateDir = Join-Path $Root "outputs\$Date"
+$CanonicalDateDir = Join-Path $DateDir "canonical"
 
+$TicketsFileFrozenCanonical = Join-Path $CanonicalDateDir "combined_slate_tickets_${Date}_to_grade_tomorrow.xlsx"
+$TicketsFileFrozen = Join-Path $DateDir "combined_slate_tickets_${Date}_to_grade_tomorrow.xlsx"
+$TicketsFileXlsxCanonical = Join-Path $CanonicalDateDir "combined_slate_tickets_$Date.xlsx"
 $TicketsFileXlsx = Join-Path $DateDir "combined_slate_tickets_$Date.xlsx"
+$TicketsFileJsonCanonical = Join-Path $CanonicalDateDir "combined_slate_tickets_$Date.json"
 $TicketsFileJson = Join-Path $DateDir "combined_slate_tickets_$Date.json"
-$TicketsFile = if (Test-Path $TicketsFileXlsx) { $TicketsFileXlsx } elseif (Test-Path $TicketsFileJson) { $TicketsFileJson } else { $TicketsFileXlsx }
+$TicketsFile = if (Test-Path $TicketsFileFrozenCanonical) { $TicketsFileFrozenCanonical } elseif (Test-Path $TicketsFileFrozen) { $TicketsFileFrozen } elseif (Test-Path $TicketsFileXlsxCanonical) { $TicketsFileXlsxCanonical } elseif (Test-Path $TicketsFileXlsx) { $TicketsFileXlsx } elseif (Test-Path $TicketsFileJsonCanonical) { $TicketsFileJsonCanonical } elseif (Test-Path $TicketsFileJson) { $TicketsFileJson } else { $TicketsFileXlsx }
 $NBAActuals  = Join-Path $DateDir "actuals_nba_$Date.csv"
 $NBA1HActuals = Join-Path $DateDir "actuals_nba1h_$Date.csv"
 $NBA2HActuals = Join-Path $DateDir "actuals_nba2h_$Date.csv"
@@ -164,7 +169,7 @@ if (-not (Test-Path $DateDir)) {
 }
 
 # Off-season / deactivated sports: skip fetch + grade and drop stale graded_* for this date (no phantom void rows).
-# Default: college only (CBB/WCBB). NBA 1H / 1Q stay enabled — use static step8 + period actuals as usual.
+# Default: college only (CBB/WCBB). NBA 1H / 1Q stay enabled - use static step8 + period actuals as usual.
 # Re-enable all: set PROPORACLE_GRADER_DISABLED_SPORTS to empty string.
 # Temporarily skip period props: PROPORACLE_GRADER_DISABLED_SPORTS=cbb,wcbb,nba1h,nba1q
 $GraderDisabledSports = @('cbb', 'wcbb')
@@ -465,7 +470,7 @@ else {
 }
 
 if (Test-GraderSportDisabled 'cbb') {
-    Write-Host "Skipping CBB slate grading (sport disabled: cbb — no live lines this season)." -ForegroundColor Yellow
+    Write-Host "Skipping CBB slate grading (sport disabled: cbb - no live lines this season)." -ForegroundColor Yellow
 }
 elseif ((Test-Path $CBBActuals) -and (Test-Path $CBBSlateCsv) -and (Test-Path $CBBFullGraderScript)) {
     Run-Py "Grade CBB Full Slate" $Root $CBBFullGraderScript @(
@@ -587,7 +592,7 @@ if (Test-Path $FetchNBAPeriodActualsScript) {
 }
 
 if (Test-GraderSportDisabled 'nba1h') {
-    Write-Host "Skipping NBA1H grading (sport disabled: nba1h — no live period lines this season)." -ForegroundColor Yellow
+    Write-Host "Skipping NBA1H grading (sport disabled: nba1h - no live period lines this season)." -ForegroundColor Yellow
 }
 elseif ($NBA1HSlateFile -and (Test-Path $NBA1HSlateFile) -and (Test-Path $SlateGraderScript) -and (Test-Path $NBA1HActuals)) {
     Run-Py "Grade NBA1H Slate" $Root $SlateGraderScript @(
@@ -619,7 +624,7 @@ if (-not (Test-GraderSportDisabled 'nba1q')) {
 }
 
 if (Test-GraderSportDisabled 'nba1q') {
-    Write-Host "Skipping NBA1Q grading (sport disabled: nba1q — no live period lines this season)." -ForegroundColor Yellow
+    Write-Host "Skipping NBA1Q grading (sport disabled: nba1q - no live period lines this season)." -ForegroundColor Yellow
 }
 elseif ($NBA1QSlateFile -and (Test-Path $NBA1QSlateFile) -and (Test-Path $SlateGraderScript) -and (Test-Path $NBA1QActuals)) {
     if ($nba1qSlateRowsAfterFilter -eq 0) {
@@ -640,7 +645,7 @@ else {
 }
 
 if (Test-GraderSportDisabled 'wcbb') {
-    Write-Host "Skipping WCBB slate grading (sport disabled: wcbb — no live lines this season)." -ForegroundColor Yellow
+    Write-Host "Skipping WCBB slate grading (sport disabled: wcbb - no live lines this season)." -ForegroundColor Yellow
 }
 elseif ($WCBBSlateFile -and (Test-Path $WCBBSlateFile) -and (Test-Path $SlateGraderScript)) {
     $WCBBActualsForGrade = if (Test-Path $WCBBActuals) { $WCBBActuals } elseif (Test-Path $CBBActuals) { $CBBActuals } else { $null }

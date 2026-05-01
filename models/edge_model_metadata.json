@@ -1,34 +1,34 @@
 {
-  "trained_at": "2026-04-17T01:18:53Z",
-  "trained_at_utc": "2026-04-17T01:18:53.163198+00:00",
-  "training_rows_total": 230107,
+  "trained_at": "2026-04-23T00:40:30Z",
+  "trained_at_utc": "2026-04-23T00:40:30.308374+00:00",
+  "training_rows_total": 63237,
   "rows_per_sport": {
-    "CBB": 21722,
-    "MLB": 29253,
-    "NBA": 105376,
-    "NBA1H": 1418,
-    "NBA1Q": 6460,
-    "NHL": 46310,
-    "SOCCER": 19568
+    "CBB": 11915,
+    "MLB": 2385,
+    "NBA": 27742,
+    "NBA1H": 586,
+    "NBA1Q": 1111,
+    "NHL": 9031,
+    "SOCCER": 10467
   },
-  "roc_auc_overall": 0.8103172650530255,
+  "roc_auc_overall": 0.7265800628149017,
   "roc_auc_per_sport": {
-    "CBB": 0.6211678432131,
-    "MLB": 0.7033351145226737,
-    "NBA": 0.6468216898620547,
-    "NBA1H": 0.7011766030512864,
-    "NBA1Q": 0.7894855336820852,
-    "NHL": 0.974191034295181,
-    "SOCCER": 0.9181552008300216
+    "CBB": 0.6572751586396219,
+    "MLB": 0.7600980838472043,
+    "NBA": 0.6505160394154205,
+    "NBA1H": 0.567816091954023,
+    "NBA1Q": 0.7684588398466183,
+    "NHL": 0.8166815538248257,
+    "SOCCER": 0.7357099727154544
   },
   "roc_auc_per_sport_with_nulls": {
-    "CBB": 0.6211678432131,
-    "MLB": 0.7033351145226737,
-    "NBA": 0.6468216898620547,
-    "NBA1H": 0.7011766030512864,
-    "NBA1Q": 0.7894855336820852,
-    "NHL": 0.974191034295181,
-    "SOCCER": 0.9181552008300216
+    "CBB": 0.6572751586396219,
+    "MLB": 0.7600980838472043,
+    "NBA": 0.6505160394154205,
+    "NBA1H": 0.567816091954023,
+    "NBA1Q": 0.7684588398466183,
+    "NHL": 0.8166815538248257,
+    "SOCCER": 0.7357099727154544
   },
   "per_sport_holdout_status": {
     "CBB": "ok",
@@ -39,7 +39,7 @@
     "NHL": "ok",
     "SOCCER": "ok"
   },
-  "scale_pos_weight": 1.2487637550573656,
+  "scale_pos_weight": 1.4278035858256228,
   "feature_columns": [
     "composite_hit_rate",
     "tier_encoded",
@@ -52,7 +52,6 @@
     "hit_rate_L10",
     "avg_L5_vs_line",
     "avg_L10_vs_line",
-    "edge",
     "prop_score",
     "sport_encoded",
     "minutes_tier",
@@ -66,14 +65,62 @@
     "avg_win_margin",
     "dir_line_gap_norm",
     "opp_hr_historical",
-    "player_hr_historical"
+    "player_hr_historical",
+    "line_bucket_encoded",
+    "context_known",
+    "defense_known",
+    "minutes_known"
   ],
-  "features_removed_leakage": [],
+  "always_excluded_from_tree_training": [
+    "edge"
+  ],
+  "features_removed_leakage": [
+    "edge"
+  ],
   "sports_skipped_quality": {},
-  "leakage_confirmed": false,
+  "leakage_confirmed": true,
   "recursive_outputs_used": true,
   "dedupe_used": true,
   "temporal_split_used": false,
   "exclude_player_level_features_used": false,
-  "combined_graded_file_paths_omitted": 9
+  "combined_graded_file_paths_omitted": 9,
+  "edge_slice_calibrators_file": "edge_slice_calibrators.pkl",
+  "edge_slice_isotonic_min_n": 200,
+  "edge_slice_isotonic_train_frac": 0.15,
+  "edge_slice_isotonic_inactive_sports": [
+    "CBB"
+  ],
+  "edge_slice_isotonic_fitted_count": 6,
+  "edge_slice_isotonic_fitted_keys": [
+    "SOCCER/demon/OVER",
+    "NBA/standard/UNDER",
+    "NBA/demon/OVER",
+    "NBA/standard/OVER",
+    "NBA/goblin/OVER",
+    "MLB/demon/OVER"
+  ],
+  "edge_slice_isotonic_skipped": [
+    "('CBB', 'goblin', 'OVER'):inactive",
+    "('NBA1H', 'standard', 'OVER'):n=37",
+    "('CBB', 'standard', 'UNDER'):inactive",
+    "('NHL', 'standard', 'UNDER'):n=84",
+    "('SOCCER', 'standard', 'OVER'):n=33",
+    "('CBB', 'standard', 'OVER'):inactive",
+    "('SOCCER', 'goblin', 'OVER'):n=68",
+    "('CBB', 'demon', 'OVER'):inactive",
+    "('NBA1Q', 'standard', 'OVER'):n=18",
+    "('NHL', 'demon', 'OVER'):n=10",
+    "('NBA1Q', 'demon', 'OVER'):n=56",
+    "('NBA1Q', 'goblin', 'OVER'):n=33",
+    "('NHL', 'goblin', 'UNDER'):n=21",
+    "('NHL', 'demon', 'UNDER'):n=17",
+    "('MLB', 'standard', 'OVER'):n=9",
+    "('NBA1H', 'standard', 'UNDER'):n=15",
+    "('MLB', 'goblin', 'OVER'):n=37",
+    "('MLB', 'standard', 'UNDER'):n=22",
+    "('NBA1H', 'goblin', 'OVER'):n=1",
+    "('NBA1Q', 'standard', 'UNDER'):n=8",
+    "('NHL', 'standard', 'OVER'):n=5",
+    "('SOCCER', 'standard', 'UNDER'):n=4"
+  ]
 }
