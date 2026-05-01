@@ -56,6 +56,19 @@ border:1px solid var(--glass-bd);border-radius:999px;padding:8px 14px;letter-spa
 .sport-meta-count{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2)}
 .sport-section{margin-bottom:48px;width:100%;max-width:100%;box-sizing:border-box}
 .sport-section:last-child{margin-bottom:0}
+.matrix-collapsible{margin:6px 0 20px;border:1px solid var(--glass-bd);border-radius:14px;background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);box-shadow:0 4px 24px rgba(0,0,0,.18);overflow:hidden}
+.matrix-collapsible>summary{list-style:none;cursor:pointer;padding:12px 14px;font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.08vw,16px);letter-spacing:2px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:8px}
+.matrix-collapsible>summary::-webkit-details-marker{display:none}
+.matrix-collapsible>summary::before{content:'▸';color:var(--gold);transition:transform .15s ease}
+.matrix-collapsible[open]>summary::before{transform:rotate(90deg)}
+.matrix-body{padding:12px}
+.matrix-summary{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2);margin:0 0 10px}
+.matrix-collapsible tr.matrix-hit td{background:rgba(57,255,110,0.06)}
+.matrix-collapsible tr.matrix-hit td:first-child{border-left:3px solid var(--green)}
+.matrix-collapsible tr.matrix-miss td{background:rgba(255,77,77,0.10)}
+.matrix-collapsible tr.matrix-miss td:first-child{border-left:3px solid var(--red)}
+.matrix-collapsible tr.matrix-warn td{background:rgba(240,165,0,0.06)}
+.matrix-collapsible tr.matrix-warn td:first-child{border-left:3px solid var(--gold)}
 .section-label{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.08vw,16px);color:var(--muted);letter-spacing:2.5px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
 .stat-grid{display:grid;gap:14px;margin-bottom:24px;width:100%;max-width:100%;box-sizing:border-box}
@@ -247,6 +260,8 @@ td{padding:8px 8px}
     </table></div>
       </div>
     </div>
+    
+    
     <div class="section-label">HIT RATE BY OPPONENT DEFENSIVE TIER</div>
     <div class="table-wrap" style="margin-bottom:20px"><table>
       <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
@@ -1070,6 +1085,231 @@ td{padding:8px 8px}
     </table></div>
       </div>
     </div>
+    <details class="matrix-collapsible">
+      <summary>Performance Matrix — Pick Type × Tier × Direction</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Showing 10 combinations with ≥ 10 decided props</div>
+        <div class="table-wrap"><table>
+          <thead><tr>
+            <th>PICK TYPE</th><th>TIER</th><th>DIRECTION</th>
+            <th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th>
+            <th>HIT RATE</th><th>BAR</th>
+          </tr></thead>
+          <tbody><tr class="matrix-hit">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono">255</td>
+          <td class="right mono pos">166</td>
+          <td class="right mono neg">89</td>
+          <td class="mono right">65.1%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:65.1%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono">21</td>
+          <td class="right mono pos">13</td>
+          <td class="right mono neg">8</td>
+          <td class="mono right">61.9%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:61.9%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-warn">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">13</td>
+          <td class="right mono pos">7</td>
+          <td class="right mono neg">6</td>
+          <td class="mono right">53.8%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:53.8%;background:var(--gold)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">272</td>
+          <td class="right mono pos">120</td>
+          <td class="right mono neg">152</td>
+          <td class="mono right">44.1%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:44.1%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">19</td>
+          <td class="right mono pos">8</td>
+          <td class="right mono neg">11</td>
+          <td class="mono right">42.1%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:42.1%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">73</td>
+          <td class="right mono pos">48</td>
+          <td class="right mono neg">25</td>
+          <td class="mono right">65.8%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:65.8%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">99</td>
+          <td class="right mono pos">62</td>
+          <td class="right mono neg">37</td>
+          <td class="mono right">62.6%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:62.6%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-warn">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">199</td>
+          <td class="right mono pos">108</td>
+          <td class="right mono neg">91</td>
+          <td class="mono right">54.3%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:54.3%;background:var(--gold)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">452</td>
+          <td class="right mono pos">214</td>
+          <td class="right mono neg">238</td>
+          <td class="mono right">47.3%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:47.3%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">222</td>
+          <td class="right mono pos">80</td>
+          <td class="right mono neg">142</td>
+          <td class="mono right">36.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:36.0%;background:var(--red)"></div></div></td>
+        </tr></tbody>
+        </table></div>
+      </div>
+    </details>
+    <details class="matrix-collapsible">
+      <summary>Pick Type Tier Splits — Goblin/Demon OVER, Standard OVER+UNDER</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Showing 10 combinations with ≥ 10 decided props</div>
+        <div class="three-col">
+          <div>
+          <div class="section-label"><span class="chip chip-goblin">🎃&nbsp;Goblin</span> BY TIER</div>
+          <div class="table-wrap"><table>
+            <thead><tr>
+              <th>TIER</th><th>DIRECTION</th>
+              <th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th>
+              <th class="right">HIT RATE</th><th>BAR</th>
+            </tr></thead>
+            <tbody><tr class="matrix-hit">
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">73</td>
+          <td class="right mono pos">48</td>
+          <td class="right mono neg">25</td>
+          <td class="right mono">65.8%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:65.8%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">99</td>
+          <td class="right mono pos">62</td>
+          <td class="right mono neg">37</td>
+          <td class="right mono">62.6%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:62.6%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-warn">
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">199</td>
+          <td class="right mono pos">108</td>
+          <td class="right mono neg">91</td>
+          <td class="right mono">54.3%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:54.3%;background:var(--gold)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">452</td>
+          <td class="right mono pos">214</td>
+          <td class="right mono neg">238</td>
+          <td class="right mono">47.3%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:47.3%;background:var(--red)"></div></div></td>
+        </tr></tbody>
+          </table></div>
+        </div>
+          <div>
+          <div class="section-label"><span class="chip chip-demon">😈&nbsp;Demon</span> BY TIER</div>
+          <div class="table-wrap"><table>
+            <thead><tr>
+              <th>TIER</th><th>DIRECTION</th>
+              <th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th>
+              <th class="right">HIT RATE</th><th>BAR</th>
+            </tr></thead>
+            <tbody><tr><td><span class="chip chip-std">TIER A</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr><td><span class="chip chip-std">TIER B</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr><td><span class="chip chip-std">TIER C</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-miss">
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">222</td>
+          <td class="right mono pos">80</td>
+          <td class="right mono neg">142</td>
+          <td class="right mono">36.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:36.0%;background:var(--red)"></div></div></td>
+        </tr></tbody>
+          </table></div>
+        </div>
+          <div>
+          <div class="section-label"><span class="chip chip-std">⭐&nbsp;Standard</span> BY TIER</div>
+          <div class="table-wrap"><table>
+            <thead><tr>
+              <th>TIER</th><th>DIRECTION</th>
+              <th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th>
+              <th class="right">HIT RATE</th><th>BAR</th>
+            </tr></thead>
+            <tbody><tr><td><span class="chip chip-std">TIER A</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr><td><span class="chip chip-std">TIER A</span></td><td>▼ UNDER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-warn">
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">13</td>
+          <td class="right mono pos">7</td>
+          <td class="right mono neg">6</td>
+          <td class="right mono">53.8%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:53.8%;background:var(--gold)"></div></div></td>
+        </tr><tr><td><span class="chip chip-std">TIER B</span></td><td>▼ UNDER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-miss">
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">19</td>
+          <td class="right mono pos">8</td>
+          <td class="right mono neg">11</td>
+          <td class="right mono">42.1%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:42.1%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono">21</td>
+          <td class="right mono pos">13</td>
+          <td class="right mono neg">8</td>
+          <td class="right mono">61.9%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:61.9%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">272</td>
+          <td class="right mono pos">120</td>
+          <td class="right mono neg">152</td>
+          <td class="right mono">44.1%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:44.1%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono">255</td>
+          <td class="right mono pos">166</td>
+          <td class="right mono neg">89</td>
+          <td class="right mono">65.1%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:65.1%;background:var(--green)"></div></div></td>
+        </tr></tbody>
+          </table></div>
+        </div>
+        </div>
+      </div>
+    </details>
     <div class="section-label">HIT RATE BY OPPONENT DEFENSIVE TIER</div>
     <div class="table-wrap" style="margin-bottom:20px"><table>
       <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
@@ -1879,6 +2119,8 @@ td{padding:8px 8px}
       </div>
     </div>
     
+    
+    
     <div class="section-label">PROP TYPE BREAKDOWNS</div>
         <div class="three-col">
           <div><div class="section-label">STANDARD — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
@@ -2178,6 +2420,8 @@ td{padding:8px 8px}
       </div>
     </div>
     
+    
+    
     <div class="section-label">PROP TYPE BREAKDOWNS</div>
         <div class="three-col">
           <div><div class="section-label">STANDARD — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
@@ -2425,6 +2669,8 @@ td{padding:8px 8px}
     </table></div>
       </div>
     </div>
+    
+    
     
     <div class="section-label">PROP TYPE BREAKDOWNS</div>
         <div class="three-col">

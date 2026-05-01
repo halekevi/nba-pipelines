@@ -448,6 +448,238 @@ def over_under_lines_html(sub_rows: list[dict]) -> str:
     )
 
 
+def build_pick_tier_direction_matrix_rows(rows: list[dict], min_decided: int = 10) -> list[dict]:
+    """
+    Pick Type × Tier × Direction matrix rows for graded props.
+
+    Rules:
+      - Demon/Goblin: OVER only
+      - Standard: OVER + UNDER
+      - suppress combos with decided < min_decided
+      - sort by hit_rate desc within pick type
+    """
+    def _norm_pick_type(v: object) -> str | None:
+        s = str(v or "").strip().lower()
+        if "goblin" in s:
+            return "Goblin"
+        if "demon" in s:
+            return "Demon"
+        if "standard" in s:
+            return "Standard"
+        return None
+
+    agg: dict[tuple[str, str, str], dict[str, int]] = {}
+    for r in rows:
+        pt = _norm_pick_type(r.get("Pick Type"))
+        if not pt:
+            continue
+        tier = str(r.get("Tier", "") or "").strip().upper()
+        if tier not in ("A", "B", "C", "D"):
+            continue
+        direction = str(r.get("Dir", "") or r.get("Direction", "")).strip().upper()
+        if direction not in ("OVER", "UNDER"):
+            continue
+        if pt in ("Goblin", "Demon") and direction != "OVER":
+            continue
+
+        key = (pt, tier, direction)
+        if key not in agg:
+            agg[key] = {"hits": 0, "misses": 0, "decided": 0}
+
+        result = str(r.get("Result", "") or r.get("Grade", "") or "").strip().upper()
+        if result in ("HIT", "WIN", "1", "TRUE", "YES", "W"):
+            agg[key]["hits"] += 1
+            agg[key]["decided"] += 1
+        elif result in ("MISS", "LOSS", "0", "FALSE", "NO", "L"):
+            agg[key]["misses"] += 1
+            agg[key]["decided"] += 1
+        else:
+            # Pre-aggregated fallback.
+            d = safe_int(r.get("Decided", r.get("decided", 0)))
+            h_ = safe_int(r.get("Hits", r.get("hits", 0)))
+            m_ = safe_int(r.get("Misses", r.get("misses", 0)))
+            if d > 0 or h_ > 0 or m_ > 0:
+                agg[key]["decided"] += d
+                agg[key]["hits"] += h_
+                agg[key]["misses"] += m_
+
+    out: list[dict] = []
+    for (pt, tier, direction), v in agg.items():
+        d = int(v["decided"])
+        h_ = int(v["hits"])
+        m_ = int(v["misses"])
+        if d < int(min_decided):
+            continue
+        hr = (h_ / d * 100.0) if d > 0 else 0.0
+        out.append(
+            {
+                "pick_type": pt,
+                "tier": tier,
+                "direction": direction,
+                "decided": d,
+                "hits": h_,
+                "misses": m_,
+                "hit_rate": hr,
+            }
+        )
+
+    pick_order = {"Standard": 0, "Goblin": 1, "Demon": 2}
+    tier_order = {"A": 0, "B": 1, "C": 2, "D": 3}
+    dir_order = {"OVER": 0, "UNDER": 1}
+    out.sort(
+        key=lambda x: (
+            pick_order.get(str(x["pick_type"]), 99),
+            -float(x["hit_rate"]),
+            tier_order.get(str(x["tier"]), 99),
+            dir_order.get(str(x["direction"]), 99),
+        )
+    )
+    return out
+
+
+def pick_tier_direction_matrix_html(rows: list[dict], min_decided: int = 10) -> str:
+    matrix_rows = build_pick_tier_direction_matrix_rows(rows, min_decided=min_decided)
+    summary = f"Showing {len(matrix_rows)} combinations with ≥ {int(min_decided)} decided props"
+
+    body_rows = ""
+    for r in matrix_rows:
+        hr = float(r["hit_rate"])
+        row_cls = "matrix-hit" if hr >= 60.0 else ("matrix-miss" if hr < 50.0 else "matrix-warn")
+        pt = str(r["pick_type"])
+        pt_chip = {
+            "Goblin": '<span class="chip chip-goblin">🎃\u00a0Goblin</span>',
+            "Demon": '<span class="chip chip-demon">😈\u00a0Demon</span>',
+            "Standard": '<span class="chip chip-std">⭐\u00a0Standard</span>',
+        }.get(pt, h(pt))
+        tier = str(r["tier"]).upper()
+        tier_chip_cls = {"A": "chip-a", "B": "chip-b", "C": "chip-c"}.get(tier, "chip-d")
+        direction = str(r["direction"]).upper()
+        dir_html = (
+            '<span style="color:var(--green);font-size:13px">▲ OVER</span>'
+            if direction == "OVER"
+            else '<span style="color:var(--cyan);font-size:13px">▼ UNDER</span>'
+        )
+        bar_color = "var(--green)" if hr >= 60.0 else ("var(--gold)" if hr >= 50.0 else "var(--red)")
+        bar_html = (
+            f'<div class="rate-bar-bg"><div class="rate-bar-fill" '
+            f'style="width:{max(0.0, min(hr, 100.0)):.1f}%;background:{bar_color}"></div></div>'
+        )
+        body_rows += f"""<tr class="{row_cls}">
+          <td>{pt_chip}</td>
+          <td><span class="chip {tier_chip_cls}">TIER\u00a0{tier}</span></td>
+          <td>{dir_html}</td>
+          <td class="right mono">{fmt_num(r['decided'])}</td>
+          <td class="right mono pos">{fmt_num(r['hits'])}</td>
+          <td class="right mono neg">{fmt_num(r['misses'])}</td>
+          <td class="mono right">{pct(hr)}</td>
+          <td>{bar_html}</td>
+        </tr>"""
+
+    if not body_rows:
+        body_rows = f"""<tr>
+          <td colspan="8" class="muted" style="text-align:center;padding:14px;">
+            No combinations met the decided ≥ {int(min_decided)} threshold.
+          </td>
+        </tr>"""
+
+    return f"""<details class="matrix-collapsible">
+      <summary>Performance Matrix — Pick Type × Tier × Direction</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">{summary}</div>
+        <div class="table-wrap"><table>
+          <thead><tr>
+            <th>PICK TYPE</th><th>TIER</th><th>DIRECTION</th>
+            <th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th>
+            <th>HIT RATE</th><th>BAR</th>
+          </tr></thead>
+          <tbody>{body_rows}</tbody>
+        </table></div>
+      </div>
+    </details>"""
+
+
+def pick_type_tier_direction_split_html(rows: list[dict], min_decided: int = 10) -> str:
+    """
+    User-facing split requested for NBA:
+      - Goblin by Tier A-D (OVER only)
+      - Demon by Tier A-D (OVER only)
+      - Standard by Tier A-D (OVER + UNDER)
+    """
+    matrix_rows = build_pick_tier_direction_matrix_rows(rows, min_decided=min_decided)
+    grouped: dict[str, list[dict]] = {"Goblin": [], "Demon": [], "Standard": []}
+    for r in matrix_rows:
+        pt = str(r.get("pick_type") or "")
+        if pt in grouped:
+            grouped[pt].append(r)
+
+    def _row_block(pt: str, direction: str, tier: str, rec: dict | None) -> str:
+        if rec is None:
+            return (
+                f'<tr><td><span class="chip chip-std">TIER {tier}</span></td>'
+                f'<td>{"▲ OVER" if direction=="OVER" else "▼ UNDER"}</td>'
+                f'<td class="right mono muted">—</td><td class="right mono muted">—</td>'
+                f'<td class="right mono muted">—</td><td class="right mono muted">—</td>'
+                f'<td><span class="muted">—</span></td></tr>'
+            )
+        hr = float(rec["hit_rate"])
+        row_cls = "matrix-hit" if hr >= 60.0 else ("matrix-miss" if hr < 50.0 else "matrix-warn")
+        dir_html = (
+            '<span style="color:var(--green);font-size:13px">▲ OVER</span>'
+            if direction == "OVER"
+            else '<span style="color:var(--cyan);font-size:13px">▼ UNDER</span>'
+        )
+        bar_color = "var(--green)" if hr >= 60.0 else ("var(--gold)" if hr >= 50.0 else "var(--red)")
+        bar_html = (
+            f'<div class="rate-bar-bg"><div class="rate-bar-fill" '
+            f'style="width:{max(0.0, min(hr, 100.0)):.1f}%;background:{bar_color}"></div></div>'
+        )
+        chip_cls = {"A": "chip-a", "B": "chip-b", "C": "chip-c"}.get(tier, "chip-d")
+        return f"""<tr class="{row_cls}">
+          <td><span class="chip {chip_cls}">TIER {tier}</span></td>
+          <td>{dir_html}</td>
+          <td class="right mono">{fmt_num(rec['decided'])}</td>
+          <td class="right mono pos">{fmt_num(rec['hits'])}</td>
+          <td class="right mono neg">{fmt_num(rec['misses'])}</td>
+          <td class="right mono">{pct(rec['hit_rate'])}</td>
+          <td>{bar_html}</td>
+        </tr>"""
+
+    def _table_for(pt: str, dirs: list[str], chip_cls: str, chip_emoji: str) -> str:
+        rows_pt = grouped.get(pt, [])
+        idx = {
+            (str(r.get("tier") or "").upper(), str(r.get("direction") or "").upper()): r
+            for r in rows_pt
+        }
+        body = ""
+        for t in ("A", "B", "C", "D"):
+            for d in dirs:
+                body += _row_block(pt, d, t, idx.get((t, d)))
+        return f"""<div>
+          <div class="section-label"><span class="chip {chip_cls}">{chip_emoji}&nbsp;{pt}</span> BY TIER</div>
+          <div class="table-wrap"><table>
+            <thead><tr>
+              <th>TIER</th><th>DIRECTION</th>
+              <th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th>
+              <th class="right">HIT RATE</th><th>BAR</th>
+            </tr></thead>
+            <tbody>{body}</tbody>
+          </table></div>
+        </div>"""
+
+    total_rows = len(grouped["Goblin"]) + len(grouped["Demon"]) + len(grouped["Standard"])
+    return f"""<details class="matrix-collapsible">
+      <summary>Pick Type Tier Splits — Goblin/Demon OVER, Standard OVER+UNDER</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Showing {total_rows} combinations with ≥ {int(min_decided)} decided props</div>
+        <div class="three-col">
+          {_table_for("Goblin", ["OVER"], "chip-goblin", "🎃")}
+          {_table_for("Demon", ["OVER"], "chip-demon", "😈")}
+          {_table_for("Standard", ["OVER", "UNDER"], "chip-std", "⭐")}
+        </div>
+      </div>
+    </details>"""
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 #  HTML FRAGMENT BUILDERS
 # ══════════════════════════════════════════════════════════════════════════════
@@ -854,6 +1086,8 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
         {tier_table}
       </div>
     </div>"""
+    matrix_section = pick_tier_direction_matrix_html(rows, min_decided=10) if sport.strip().upper() == "NBA" else ""
+    split_section = pick_type_tier_direction_split_html(rows, min_decided=10) if sport.strip().upper() == "NBA" else ""
 
     # ── Def Tier ───────────────────────────────────────────────────────────────
     def_section = def_tier_table(rows)
@@ -950,6 +1184,8 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
     </div>
 
     {two_col}
+    {matrix_section}
+    {split_section}
     {def_section}
     {prop_section}
     {player_section}
@@ -1137,6 +1373,19 @@ border:1px solid var(--glass-bd);border-radius:999px;padding:8px 14px;letter-spa
 .sport-meta-count{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2)}
 .sport-section{margin-bottom:48px;width:100%;max-width:100%;box-sizing:border-box}
 .sport-section:last-child{margin-bottom:0}
+.matrix-collapsible{margin:6px 0 20px;border:1px solid var(--glass-bd);border-radius:14px;background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);box-shadow:0 4px 24px rgba(0,0,0,.18);overflow:hidden}
+.matrix-collapsible>summary{list-style:none;cursor:pointer;padding:12px 14px;font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.08vw,16px);letter-spacing:2px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:8px}
+.matrix-collapsible>summary::-webkit-details-marker{display:none}
+.matrix-collapsible>summary::before{content:'▸';color:var(--gold);transition:transform .15s ease}
+.matrix-collapsible[open]>summary::before{transform:rotate(90deg)}
+.matrix-body{padding:12px}
+.matrix-summary{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2);margin:0 0 10px}
+.matrix-collapsible tr.matrix-hit td{background:rgba(57,255,110,0.06)}
+.matrix-collapsible tr.matrix-hit td:first-child{border-left:3px solid var(--green)}
+.matrix-collapsible tr.matrix-miss td{background:rgba(255,77,77,0.10)}
+.matrix-collapsible tr.matrix-miss td:first-child{border-left:3px solid var(--red)}
+.matrix-collapsible tr.matrix-warn td{background:rgba(240,165,0,0.06)}
+.matrix-collapsible tr.matrix-warn td:first-child{border-left:3px solid var(--gold)}
 .section-label{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.08vw,16px);color:var(--muted);letter-spacing:2.5px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
 .stat-grid{display:grid;gap:14px;margin-bottom:24px;width:100%;max-width:100%;box-sizing:border-box}
