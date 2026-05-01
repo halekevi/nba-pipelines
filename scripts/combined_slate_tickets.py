@@ -12019,6 +12019,11 @@ def _tickets_filter_pills_html(attr_rows: list[dict]) -> str:
         if row.get("ev") == "strong":
             has_strong = True
 
+    # Keep WNBA visible even on slates where no WNBA groups were generated.
+    if "wnba" not in seen_sp:
+        seen_sp.add("wnba")
+        sports_seen.append("wnba")
+
     sport_order = (
         "nba",
         "nba1q",
