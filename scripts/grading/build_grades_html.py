@@ -1017,75 +1017,7 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
         icon = "⚾"
 
     stats  = overall_stats(rows)
-    goblin = pick_type_stats(rows, "goblin")
-
     total_label = fmt_num(stats["total"]) if stats["total"] > 0 else fmt_num(stats["decided"] + stats["voids"])
-
-    # ── By Pick Type ───────────────────────────────────────────────────────────
-    gob_s = pick_type_stats(rows, "goblin")
-    dem_s = pick_type_stats(rows, "demon")
-    std_s = pick_type_stats(rows, "standard")
-
-    gob_rows = rows_for_pick_type(rows, "goblin")
-    dem_rows = rows_for_pick_type(rows, "demon")
-    std_rows = rows_for_pick_type(rows, "standard")
-    gob_ou = over_under_lines_html(gob_rows)
-    dem_ou = over_under_lines_html(dem_rows)
-    std_ou = over_under_lines_html(std_rows)
-
-    pick_table = f"""<div class="table-wrap"><table>
-      <thead><tr><th>TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th><th>HIT RATE</th></tr></thead>
-      <tbody>
-        {pick_type_row("Goblin","🎃", gob_s, gob_ou)}
-        {pick_type_row("Demon","😈",  dem_s, dem_ou)}
-        <tr>
-          <td><span class="chip chip-std">⭐\u00a0Standard</span>{std_ou}</td>
-          <td class="right mono">{fmt_num(std_s['decided'])}</td>
-          <td class="right mono pos">{fmt_num(std_s['hits'])}</td>
-          <td class="right mono neg">{fmt_num(std_s['misses'])}</td>
-          <td>{rate_bar_html(std_s['hit_rate'])}</td>
-        </tr>
-      </tbody>
-    </table></div>"""
-
-    # ── By Tier ────────────────────────────────────────────────────────────────
-    tier_rows_html = ""
-    for t in ["A","B","C","D"]:
-        t_rows = [r for r in rows if str(r.get("Tier","") or "").strip().upper() == t]
-        if not t_rows: continue
-        t_stats = overall_stats(t_rows)
-        if t_stats["decided"] == 0:
-            t_stats = build_agg_from_rows(t_rows, "_tier_x_")
-            if t_stats: t_stats = t_stats[0]; t_stats["hit_rate"] = t_stats.get("hit_rate",0)
-            else: continue
-        d  = t_stats["decided"]
-        h_ = t_stats["hits"]
-        hr = t_stats["hit_rate"]
-        chip_cls = {"A":"chip-a","B":"chip-b","C":"chip-c"}.get(t,"chip-d")
-        row_cls  = "player-hit" if hr>=55 else ("player-miss" if hr<48 else "player-warn")
-        tier_ou = over_under_lines_html(t_rows)
-        tier_rows_html += f"""<tr class="{row_cls}">
-          <td style="vertical-align:top"><span class="chip {chip_cls}">TIER\u00a0{t}</span>{tier_ou}</td>
-          <td class="right mono">{fmt_num(d)}</td>
-          <td class="right mono pos">{fmt_num(h_)}</td>
-          <td>{rate_bar_html(hr)}</td>
-        </tr>"""
-
-    tier_table = f"""<div class="table-wrap"><table>
-      <thead><tr><th>TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody>{tier_rows_html}</tbody>
-    </table></div>"""
-
-    two_col = f"""<div class="two-col pick-tier-split">
-      <div>
-        <div class="section-label">BY PICK TYPE</div>
-        {pick_table}
-      </div>
-      <div>
-        <div class="section-label">BY TIER</div>
-        {tier_table}
-      </div>
-    </div>"""
     matrix_section = pick_tier_direction_matrix_html(rows, min_decided=10) if sport.strip().upper() == "NBA" else ""
     split_section = pick_type_tier_direction_split_html(rows, min_decided=10) if sport.strip().upper() == "NBA" else ""
 
@@ -1185,7 +1117,6 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
       </div>
     </summary>
     <div class="sport-section-body">
-      {two_col}
       {matrix_section}
       {split_section}
       {def_section}
