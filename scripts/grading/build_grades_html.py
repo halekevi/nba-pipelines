@@ -1266,6 +1266,8 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
     nhl_rows    = nhl_rows    or []
     soccer_rows = soccer_rows or []
     mlb_rows    = mlb_rows    or []
+    all_rows = list(nba_rows) + list(cbb_rows) + list(nhl_rows) + list(soccer_rows) + list(mlb_rows)
+    all_section = build_sport_section(all_rows, "ALL SPORTS", "🌐") if all_rows else ""
     nba_section    = build_sport_section(nba_rows,    "NBA",    "🏀") if nba_rows    else ""
     cbb_section    = build_sport_section(cbb_rows,    "CBB",    "🎓") if cbb_rows    else ""
     nhl_section    = build_sport_section(nhl_rows,    "NHL",    "🏒") if nhl_rows    else ""
@@ -1282,7 +1284,7 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
           </div>
         </div>""".replace("{date_str}", date_str)
     else:
-        body_content = nba_section + cbb_section + nhl_section + soccer_section + mlb_section + takeaways
+        body_content = all_section + nba_section + cbb_section + nhl_section + soccer_section + mlb_section + takeaways
 
     return f"""<!DOCTYPE html>
 <html lang="en">
