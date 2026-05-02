@@ -101,7 +101,7 @@ def main() -> None:
     df["rank_score"] = rank_pts
 
     df["ml_prob"] = pd.to_numeric(df["hit_rate"], errors="coerce").clip(0.35, 0.92)
-    df["tier"] = assign_tier_column(df, sport="NFL")
+    df["tier"] = assign_tier_column(df, sport="nfl")
     report_goblin_demon_standard_line_fill(df, "[NFL step7]")
 
     ts = df.get("start_time", df.get("game_time", ""))

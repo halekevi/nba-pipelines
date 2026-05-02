@@ -1557,7 +1557,7 @@ def main() -> None:
         _ranked = rsf[_m].rank(method="average", pct=True)
         out.loc[_m, "cohort_pct"] = _ranked
     out["rank_score"] = 0.5 + 1.5 * _to_num(out["cohort_pct"])
-    out["tier"] = assign_tier_column(out, sport=str(sport_for_usage))
+    out["tier"] = assign_tier_column(out, sport=str(sport_for_usage).lower())
     out.loc[~valid_tier, "tier"] = "D"
     out.loc[~elig_mask, "tier"] = "D"
     report_goblin_demon_standard_line_fill(out, f"[{sport_for_usage} step7]")

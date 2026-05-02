@@ -1124,7 +1124,7 @@ def main() -> None:
 
     out["rank_score"] = out["final_score"]
     out = apply_starter_tier_penalty(out)
-    out["tier"] = assign_tier_column(out, sport="Soccer")
+    out["tier"] = assign_tier_column(out, sport="soccer")
     report_goblin_demon_standard_line_fill(out, "[Soccer step7]")
     print_tier_distribution_by_pick_direction_group(out, label="[Soccer step7]")
     if "recommended_side" not in out.columns:

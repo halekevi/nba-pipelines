@@ -430,7 +430,7 @@ def main():
     _rs_wnba = pd.to_numeric(out["rank_score"], errors="coerce")
     _pct_wnba = _rs_wnba.rank(method="average", pct=True)
     out["ml_prob"] = (0.45 + 0.40 * _pct_wnba.fillna(0.5)).clip(0.35, 0.90)
-    out["tier"] = assign_tier_column(out, sport="WNBA")
+    out["tier"] = assign_tier_column(out, sport="wnba")
     report_goblin_demon_standard_line_fill(out, "[WNBA step7]")
     print_tier_distribution_by_pick_direction_group(out, label="[WNBA step7]")
 

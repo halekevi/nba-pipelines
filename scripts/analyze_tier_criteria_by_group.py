@@ -14,10 +14,42 @@ import pandas as pd
 REPO_ROOT = Path(__file__).resolve().parent.parent
 OUTPUTS_DIR = REPO_ROOT / "outputs"
 
-STEP8_PATHS: dict[str, Path] = {
-    "NBA": REPO_ROOT / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
-    "NBA1H": REPO_ROOT / "Sports" / "NBA" / "step8_nba1h_direction_clean.xlsx",
-    "NBA1Q": REPO_ROOT / "Sports" / "NBA" / "step8_nba1q_direction_clean.xlsx",
+SUPPORTED_SPORTS = ("NBA", "MLB", "NHL", "SOCCER", "WNBA")
+LEGACY_NBA_ONLY = ("NBA", "NBA1H", "NBA1Q")
+
+STEP8_CANDIDATES: dict[str, list[Path]] = {
+    "NBA": [
+        REPO_ROOT / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
+        REPO_ROOT / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
+    ],
+    "NBA1H": [
+        REPO_ROOT / "NBA" / "step8_nba1h_direction_clean.xlsx",
+        REPO_ROOT / "Sports" / "NBA" / "step8_nba1h_direction_clean.xlsx",
+    ],
+    "NBA1Q": [
+        REPO_ROOT / "NBA" / "step8_nba1q_direction_clean.xlsx",
+        REPO_ROOT / "Sports" / "NBA" / "step8_nba1q_direction_clean.xlsx",
+    ],
+    "MLB": [
+        REPO_ROOT / "Sports" / "MLB" / "step8_mlb_direction_clean.xlsx",
+        REPO_ROOT / "Sports" / "MLB" / "outputs" / "step8_mlb_direction_clean.xlsx",
+        REPO_ROOT / "MLB" / "step8_mlb_direction_clean.xlsx",
+    ],
+    "NHL": [
+        REPO_ROOT / "Sports" / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
+        REPO_ROOT / "Sports" / "NHL" / "step8_nhl_direction_clean.xlsx",
+        REPO_ROOT / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
+    ],
+    "SOCCER": [
+        REPO_ROOT / "Sports" / "Soccer" / "step8_soccer_direction_clean.xlsx",
+        REPO_ROOT / "Sports" / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
+        REPO_ROOT / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
+    ],
+    "WNBA": [
+        REPO_ROOT / "Sports" / "WNBA" / "step8_wnba_direction_clean.xlsx",
+        REPO_ROOT / "Sports" / "WNBA" / "step8_wnba_direction.xlsx",
+        REPO_ROOT / "WNBA" / "step8_wnba_direction_clean.xlsx",
+    ],
 }
 
 
@@ -78,19 +110,26 @@ def _pick_col(df: pd.DataFrame, names: list[str]) -> str | None:
 def _load_graded_box_raw(path: Path, sport: str) -> pd.DataFrame:
     if not path.exists():
         return pd.DataFrame()
-    df = pd.read_excel(path, sheet_name="Box Raw")
+    xls = pd.ExcelFile(path)
+    sheet = "Box Raw" if "Box Raw" in xls.sheet_names else xls.sheet_names[0]
+    df = pd.read_excel(path, sheet_name=sheet)
     if df.empty:
         return df
+    def _col_or_nan(cands: list[str]) -> pd.Series:
+        c = _pick_col(df, cands)
+        if c is None:
+            return pd.Series(np.nan, index=df.index)
+        return df[c]
     out = pd.DataFrame(index=df.index)
     out["sport"] = sport
-    out["player"] = df[_pick_col(df, ["player"])].astype(str).str.strip()
-    out["prop_type_norm"] = df[_pick_col(df, ["prop_type_norm", "prop type", "prop"])].apply(_norm_prop)
-    out["pick_type"] = df[_pick_col(df, ["pick_type", "Pick Type"])].apply(_norm_pick_type)
-    out["direction"] = df[_pick_col(df, ["bet_direction", "direction", "Direction"])].apply(_norm_direction)
-    out["line"] = pd.to_numeric(df[_pick_col(df, ["line", "Line"])], errors="coerce")
-    out["tier"] = df[_pick_col(df, ["tier", "Tier"])].astype(str).str.upper().str.strip()
-    out["edge"] = pd.to_numeric(df[_pick_col(df, ["edge", "Edge"])], errors="coerce")
-    out["result_hit"] = df[_pick_col(df, ["result", "Result"])].apply(_result_to_hit)
+    out["player"] = _col_or_nan(["player", "Player"]).astype(str).str.strip()
+    out["prop_type_norm"] = _col_or_nan(["prop_type_norm", "prop type", "prop"]).apply(_norm_prop)
+    out["pick_type"] = _col_or_nan(["pick_type", "Pick Type"]).apply(_norm_pick_type)
+    out["direction"] = _col_or_nan(["bet_direction", "direction", "Direction"]).apply(_norm_direction)
+    out["line"] = pd.to_numeric(_col_or_nan(["line", "Line"]), errors="coerce")
+    out["tier"] = _col_or_nan(["tier", "Tier"]).astype(str).str.upper().str.strip()
+    out["edge"] = pd.to_numeric(_col_or_nan(["edge", "Edge"]), errors="coerce")
+    out["result_hit"] = _col_or_nan(["result", "Result"]).apply(_result_to_hit)
     out = out.dropna(subset=["result_hit", "line"])
     return out
 
@@ -101,16 +140,49 @@ def _load_step8(path: Path, sport: str) -> pd.DataFrame:
     df = pd.read_excel(path)
     if df.empty:
         return df
+    def _col_or_nan(cands: list[str]) -> pd.Series:
+        c = _pick_col(df, cands)
+        if c is None:
+            return pd.Series(np.nan, index=df.index)
+        return df[c]
     out = pd.DataFrame(index=df.index)
     out["sport"] = sport
-    out["player"] = df[_pick_col(df, ["Player", "player"])].astype(str).str.strip()
-    out["prop_type_norm"] = df[_pick_col(df, ["Prop", "prop_type_norm", "prop"])].apply(_norm_prop)
-    out["pick_type"] = df[_pick_col(df, ["Pick Type", "pick_type"])].apply(_norm_pick_type)
-    out["direction"] = df[_pick_col(df, ["Direction", "direction"])].apply(_norm_direction)
-    out["line"] = pd.to_numeric(df[_pick_col(df, ["Line", "line"])], errors="coerce")
-    out["standard_line"] = pd.to_numeric(df[_pick_col(df, ["Standard Line", "standard_line"])], errors="coerce")
-    out["hit_rate"] = pd.to_numeric(df[_pick_col(df, ["Hit Rate (5g)", "hit_rate"])], errors="coerce")
+    out["player"] = _col_or_nan(["Player", "player"]).astype(str).str.strip()
+    out["prop_type_norm"] = _col_or_nan(["Prop", "prop_type_norm", "prop"]).apply(_norm_prop)
+    out["pick_type"] = _col_or_nan(["Pick Type", "pick_type"]).apply(_norm_pick_type)
+    out["direction"] = _col_or_nan(["Direction", "direction"]).apply(_norm_direction)
+    out["line"] = pd.to_numeric(_col_or_nan(["Line", "line"]), errors="coerce")
+    out["standard_line"] = pd.to_numeric(_col_or_nan(["Standard Line", "standard_line"]), errors="coerce")
+    out["hit_rate"] = pd.to_numeric(_col_or_nan(["Hit Rate (5g)", "hit_rate"]), errors="coerce")
+    out["ml_prob"] = pd.to_numeric(_col_or_nan(["ML Prob", "ml_prob"]), errors="coerce")
     return out.dropna(subset=["line"])
+
+
+def _feature_for_group(sport: str, spec: GroupSpec) -> str:
+    """NBA keeps legacy features; other sports evaluate ml_prob directly."""
+    s = str(sport or "").strip().upper()
+    if s in LEGACY_NBA_ONLY:
+        return spec.feature
+    return "ml_prob"
+
+
+def _resolve_step8_path(sport: str) -> Path | None:
+    for p in STEP8_CANDIDATES.get(sport, []):
+        if p.exists():
+            return p
+    return None
+
+
+def _sports_for_flag(sport_flag: str) -> list[str]:
+    s = str(sport_flag).strip().upper()
+    if s == "ALL":
+        return list(SUPPORTED_SPORTS)
+    if s == "NBA":
+        # Backward compatibility: old script always analyzed these together.
+        return list(LEGACY_NBA_ONLY)
+    if s in SUPPORTED_SPORTS:
+        return [s]
+    raise ValueError(f"Unsupported --sport value: {sport_flag}")
 
 
 def _find_best_breakpoint(
@@ -147,8 +219,7 @@ def _find_best_breakpoint(
     return best
 
 
-def analyze(date_str: str, min_n: int) -> pd.DataFrame:
-    sports = ["NBA", "NBA1H", "NBA1Q"]
+def analyze(date_str: str, min_n: int, sports: list[str]) -> pd.DataFrame:
     graded_frames: list[pd.DataFrame] = []
     step8_frames: list[pd.DataFrame] = []
 
@@ -157,9 +228,11 @@ def analyze(date_str: str, min_n: int) -> pd.DataFrame:
         g = _load_graded_box_raw(graded_path, sport)
         if not g.empty:
             graded_frames.append(g)
-        s = _load_step8(STEP8_PATHS[sport], sport)
-        if not s.empty:
-            step8_frames.append(s)
+        step8_path = _resolve_step8_path(sport)
+        if step8_path is not None:
+            s = _load_step8(step8_path, sport)
+            if not s.empty:
+                step8_frames.append(s)
 
     if not graded_frames:
         raise FileNotFoundError(f"No graded Box Raw files found for date {date_str}")
@@ -169,15 +242,13 @@ def analyze(date_str: str, min_n: int) -> pd.DataFrame:
     if not step8.empty:
         merge_keys = ["sport", "player", "prop_type_norm", "pick_type", "direction", "line"]
         step8_dedup = step8.sort_values(["sport", "player"]).drop_duplicates(subset=merge_keys, keep="first")
-        df = graded.merge(
-            step8_dedup[merge_keys + ["standard_line", "hit_rate"]],
-            on=merge_keys,
-            how="left",
-        )
+        cols_keep = merge_keys + [c for c in ("standard_line", "hit_rate", "ml_prob") if c in step8_dedup.columns]
+        df = graded.merge(step8_dedup[cols_keep], on=merge_keys, how="left")
     else:
         df = graded.copy()
         df["standard_line"] = np.nan
         df["hit_rate"] = np.nan
+        df["ml_prob"] = np.nan
 
     df["goblin_distance"] = (pd.to_numeric(df["line"], errors="coerce") - pd.to_numeric(df["standard_line"], errors="coerce")).abs()
     distance_source = "line_vs_standard"
@@ -204,45 +275,102 @@ def analyze(date_str: str, min_n: int) -> pd.DataFrame:
     df["effective_hit_rate"] = np.where(df["direction"].eq("UNDER"), 1.0 - df["hit_rate_01"], df["hit_rate_01"])
 
     rows: list[dict[str, Any]] = []
-    for spec in GROUP_SPECS:
-        grp = df[(df["pick_type"] == spec.pick_type) & (df["direction"] == spec.direction)].copy()
-        n = int(len(grp))
-        if n == 0:
+    for sport in sorted(set(df["sport"].astype(str))):
+        sdf = df[df["sport"].astype(str) == sport].copy()
+        for spec in GROUP_SPECS:
+            grp = sdf[(sdf["pick_type"] == spec.pick_type) & (sdf["direction"] == spec.direction)].copy()
+            feat = _feature_for_group(sport, spec)
+            n = int(len(grp))
+            if n == 0:
+                rows.append(
+                    {
+                        "date": date_str,
+                        "sport": sport,
+                        "group": f"{spec.pick_type} {spec.direction}",
+                        "feature": feat,
+                        "n": 0,
+                        "base_hit_rate": np.nan,
+                        "corr_feature_vs_hit": np.nan,
+                        "best_threshold": np.nan,
+                        "best_n": 0,
+                        "best_hit_rate": np.nan,
+                        "lift_vs_base": np.nan,
+                    }
+                )
+                continue
+            base_hr = float(grp["result_hit"].mean())
+            feature_vals = pd.to_numeric(grp[feat], errors="coerce")
+            corr = float(feature_vals.corr(grp["result_hit"])) if feature_vals.notna().sum() >= 3 else np.nan
+            best = _find_best_breakpoint(grp, feat, higher_is_better=spec.higher_is_better, min_n=min_n)
             rows.append(
                 {
                     "date": date_str,
+                    "sport": sport,
                     "group": f"{spec.pick_type} {spec.direction}",
-                    "feature": spec.feature,
-                    "n": 0,
-                    "base_hit_rate": np.nan,
-                    "corr_feature_vs_hit": np.nan,
-                    "best_threshold": np.nan,
-                    "best_n": 0,
-                    "best_hit_rate": np.nan,
-                    "lift_vs_base": np.nan,
+                    "feature": feat,
+                    "n": n,
+                    "base_hit_rate": base_hr,
+                    "corr_feature_vs_hit": corr,
+                    "best_threshold": best["threshold"],
+                    "best_n": best["n"],
+                    "best_hit_rate": best["hit_rate"],
+                    "lift_vs_base": best["lift"],
+                    "distance_source": distance_source,
                 }
             )
-            continue
-        base_hr = float(grp["result_hit"].mean())
-        feature_vals = pd.to_numeric(grp[spec.feature], errors="coerce")
-        corr = float(feature_vals.corr(grp["result_hit"])) if feature_vals.notna().sum() >= 3 else np.nan
-        best = _find_best_breakpoint(grp, spec.feature, higher_is_better=spec.higher_is_better, min_n=min_n)
-        rows.append(
-            {
-                "date": date_str,
-                "group": f"{spec.pick_type} {spec.direction}",
-                "feature": spec.feature,
-                "n": n,
-                "base_hit_rate": base_hr,
-                "corr_feature_vs_hit": corr,
-                "best_threshold": best["threshold"],
-                "best_n": best["n"],
-                "best_hit_rate": best["hit_rate"],
-                "lift_vs_base": best["lift"],
-                "distance_source": distance_source,
-            }
-        )
     return pd.DataFrame(rows)
+
+
+def soccer_threshold_scan(
+    dates: list[str],
+    thresholds: list[float],
+) -> list[dict[str, Any]]:
+    frames: list[pd.DataFrame] = []
+    for d in dates:
+        graded_path = OUTPUTS_DIR / d / f"graded_soccer_{d}.xlsx"
+        g = _load_graded_box_raw(graded_path, "Soccer")
+        if g.empty:
+            continue
+        s_path = _resolve_step8_path("SOCCER")
+        if s_path is None:
+            continue
+        s = _load_step8(s_path, "Soccer")
+        if s.empty:
+            continue
+        merge_keys = ["sport", "player", "prop_type_norm", "pick_type", "direction", "line"]
+        s = s.sort_values(["sport", "player"]).drop_duplicates(subset=merge_keys, keep="first")
+        m = g.merge(s[merge_keys + ["ml_prob"]], on=merge_keys, how="left")
+        m = m[pd.to_numeric(m["ml_prob"], errors="coerce").notna()].copy()
+        if not m.empty:
+            frames.append(m)
+    if not frames:
+        return []
+    all_df = pd.concat(frames, ignore_index=True)
+    all_df["ml_prob"] = pd.to_numeric(all_df["ml_prob"], errors="coerce")
+    base_hit = float(all_df["result_hit"].mean()) if len(all_df) else float("nan")
+    out: list[dict[str, Any]] = []
+    for pick_type in ("GOBLIN", "DEMON", "STANDARD", "ALL"):
+        sub = all_df if pick_type == "ALL" else all_df[all_df["pick_type"] == pick_type]
+        if sub.empty:
+            continue
+        base_pt = float(sub["result_hit"].mean())
+        for thr in thresholds:
+            cut = sub[sub["ml_prob"] >= thr]
+            n_above = int(len(cut))
+            hit_above = float(cut["result_hit"].mean()) if n_above else float("nan")
+            out.append(
+                {
+                    "pick_type": pick_type,
+                    "threshold": float(thr),
+                    "n_total": int(len(sub)),
+                    "base_hit_rate": base_pt,
+                    "n_above": n_above,
+                    "hit_rate_above": hit_above,
+                    "lift_vs_base": (hit_above - base_pt) if n_above else float("nan"),
+                    "lift_vs_global_base": (hit_above - base_hit) if n_above else float("nan"),
+                }
+            )
+    return out
 
 
 def _parse_date_token(s: str) -> pd.Timestamp:
@@ -276,7 +404,7 @@ def _aggregate_across_dates(df: pd.DataFrame) -> pd.DataFrame:
     if df.empty:
         return df
     rows: list[dict[str, Any]] = []
-    for group, grp in df.groupby("group", dropna=False):
+    for (sport, group), grp in df.groupby(["sport", "group"], dropna=False):
         n_total = int(pd.to_numeric(grp["n"], errors="coerce").fillna(0).sum())
         if n_total <= 0:
             continue
@@ -306,6 +434,7 @@ def _aggregate_across_dates(df: pd.DataFrame) -> pd.DataFrame:
         rows.append(
             {
                 "group": group,
+                "sport": sport,
                 "feature": str(grp["feature"].iloc[0]),
                 "dates": int(grp["date"].nunique()),
                 "n_total": n_total,
@@ -317,12 +446,13 @@ def _aggregate_across_dates(df: pd.DataFrame) -> pd.DataFrame:
                 "corr_feature_vs_hit_median": corr_med,
             }
         )
-    return pd.DataFrame(rows).sort_values(["group"]).reset_index(drop=True)
+    return pd.DataFrame(rows).sort_values(["sport", "group"]).reset_index(drop=True)
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Analyze tier criteria by pick-type + direction group.")
     ap.add_argument("--date", default=pd.Timestamp.now().strftime("%Y-%m-%d"), help="Date in YYYY-MM-DD")
+    ap.add_argument("--sport", default="NBA", choices=["NBA", "MLB", "NHL", "Soccer", "WNBA", "ALL"])
     ap.add_argument("--all-dates", action="store_true", help="Analyze all dates under outputs/YYYY-MM-DD")
     ap.add_argument("--from", dest="from_date", default="", help="Start date inclusive (YYYY-MM-DD)")
     ap.add_argument("--to", dest="to_date", default="", help="End date inclusive (YYYY-MM-DD)")
@@ -332,6 +462,7 @@ def main() -> None:
     ap.add_argument("--min-n", type=int, default=25, help="Minimum sample size for breakpoint candidate")
     ap.add_argument("--output", default="", help="Optional output JSON path")
     args = ap.parse_args()
+    sports = _sports_for_flag(args.sport)
 
     if args.all_dates or args.from_date or args.to_date:
         dates = _discover_dates(args.from_date or None, args.to_date or None)
@@ -341,7 +472,7 @@ def main() -> None:
     all_rows: list[pd.DataFrame] = []
     for d in dates:
         try:
-            r = analyze(d, args.min_n)
+            r = analyze(d, args.min_n, sports)
             if not r.empty:
                 all_rows.append(r)
         except FileNotFoundError:
@@ -360,17 +491,17 @@ def main() -> None:
     pd.options.display.max_columns = 24
     if args.by_date:
         print(
-            f"Tier criteria by-date rows={len(report)} "
+            f"Tier criteria by-date rows={len(report)} sport={args.sport} "
             f"group={args.group or 'ALL'} min_n={args.min_n}"
         )
         if not report.empty:
-            by_date = report.sort_values(["date", "group"]).reset_index(drop=True)
+            by_date = report.sort_values(["date", "sport", "group"]).reset_index(drop=True)
             print(by_date.to_string(index=False))
         else:
             print("No matching rows found for requested by-date view.")
     elif args.all_dates or args.from_date or args.to_date:
         print(
-            f"Tier criteria analysis dates={len(dates)} considered, "
+            f"Tier criteria analysis sport={args.sport} dates={len(dates)} considered, "
             f"rows={len(report)} min_n={args.min_n}"
         )
         if not agg.empty:
@@ -378,8 +509,17 @@ def main() -> None:
         else:
             print("No analyzable rows found in selected date range.")
     else:
-        print(f"Tier criteria analysis date={args.date} min_n={args.min_n}")
+        print(f"Tier criteria analysis sport={args.sport} date={args.date} min_n={args.min_n}")
         print(report.to_string(index=False))
+
+    soccer_scan_rows: list[dict[str, Any]] = []
+    if str(args.sport).strip().lower() == "soccer":
+        scan_thresholds = [0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55]
+        soccer_scan_rows = soccer_threshold_scan(dates, scan_thresholds)
+        if soccer_scan_rows:
+            scan_df = pd.DataFrame(soccer_scan_rows)
+            print("\nSoccer threshold scan (ALL pick types):")
+            print(scan_df[scan_df["pick_type"].eq("ALL")][["threshold", "n_above", "hit_rate_above", "lift_vs_base"]].to_string(index=False))
 
     if args.output:
         out_path = Path(args.output)
@@ -389,6 +529,7 @@ def main() -> None:
         payload = {
             "params": {
                 "date": args.date,
+                "sport": args.sport,
                 "all_dates": bool(args.all_dates),
                 "from": args.from_date or None,
                 "to": args.to_date or None,
@@ -400,6 +541,7 @@ def main() -> None:
             },
             "aggregate": agg.to_dict(orient="records") if not agg.empty else [],
             "per_date_rows": report.to_dict(orient="records") if not report.empty else [],
+            "soccer_threshold_scan": soccer_scan_rows,
         }
         out_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
         print(f"Saved -> {out_path}")

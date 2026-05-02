@@ -832,7 +832,7 @@ def main():
     scored_df["dir_line_gap_norm"] = (_dlg_n.clip(-5.0, 5.0) + 5.0) / 10.0
     scored_df["dir_line_gap_norm"] = scored_df["dir_line_gap_norm"].fillna(0.5)
 
-    scored_df["tier"] = assign_tier_column(scored_df, sport="NHL")
+    scored_df["tier"] = assign_tier_column(scored_df, sport="nhl")
     report_goblin_demon_standard_line_fill(scored_df, "[NHL step7]")
     print_tier_distribution_by_pick_direction_group(scored_df, label="[NHL step7]")
     scored = scored_df.to_dict("records")

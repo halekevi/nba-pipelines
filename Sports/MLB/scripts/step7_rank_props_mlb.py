@@ -635,7 +635,7 @@ def main() -> None:
     out = build_feature_vector(out, "MLB")   # must run before ML inference
     out = _apply_ml_blend_mlb(out)
 
-    out["tier"] = assign_tier_column(out, sport="MLB")
+    out["tier"] = assign_tier_column(out, sport="mlb")
     report_goblin_demon_standard_line_fill(out, "[MLB step7]")
     print_tier_distribution_by_pick_direction_group(out, label="[MLB step7]")
     if "recommended_side" not in out.columns:

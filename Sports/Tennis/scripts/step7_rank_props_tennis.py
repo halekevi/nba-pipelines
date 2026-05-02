@@ -72,7 +72,7 @@ def main() -> None:
     df["blended_score"] = (0.3 * df["ml_prob"] + 0.7 * composite_hit_rate).round(4)
     if "bet_direction" not in df.columns:
         df["bet_direction"] = "OVER"
-    df["tier"] = assign_tier_column(df, sport="Tennis")
+    df["tier"] = assign_tier_column(df, sport="tennis")
     report_goblin_demon_standard_line_fill(df, "[Tennis step7]")
 
     df["void_reason"] = ""

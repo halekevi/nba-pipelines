@@ -12,6 +12,12 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
+DEFAULT_ML_PROB_CUTS = (0.71, 0.65, 0.58)
+SPORT_ML_PROB_CUTS = {
+    "soccer": (0.45, 0.35, 0.25),
+    "default": DEFAULT_ML_PROB_CUTS,
+}
+
 
 def _safe_float_prob(ml_prob: object) -> float:
     if ml_prob is None:
@@ -28,23 +34,24 @@ def _safe_float_prob(ml_prob: object) -> float:
 def _tier_from_ml_scalar(ml_prob: object) -> str:
     """A–D from ml_prob only; NaN / invalid → D."""
     prob = _safe_float_prob(ml_prob)
-    if prob >= 0.71:
+    if prob >= DEFAULT_ML_PROB_CUTS[0]:
         return "A"
-    if prob >= 0.65:
+    if prob >= DEFAULT_ML_PROB_CUTS[1]:
         return "B"
-    if prob >= 0.58:
+    if prob >= DEFAULT_ML_PROB_CUTS[2]:
         return "C"
     return "D"
 
 
-def _tier_from_ml_array(ml_raw: np.ndarray) -> np.ndarray:
+def _tier_from_ml_array(ml_raw: np.ndarray, cuts: tuple[float, float, float]) -> np.ndarray:
     """Vectorized ml_prob tiers; NaN → D."""
+    a_cut, b_cut, c_cut = cuts
     t = np.full(ml_raw.shape, "D", dtype=object)
     fin = np.isfinite(ml_raw)
-    t[fin & (ml_raw >= 0.71)] = "A"
-    m = fin & (ml_raw < 0.71) & (ml_raw >= 0.65)
+    t[fin & (ml_raw >= a_cut)] = "A"
+    m = fin & (ml_raw < a_cut) & (ml_raw >= b_cut)
     t[m] = "B"
-    m = fin & (ml_raw < 0.65) & (ml_raw >= 0.58)
+    m = fin & (ml_raw < b_cut) & (ml_raw >= c_cut)
     t[m] = "C"
     return t
 
@@ -121,7 +128,8 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
       - ``ml_prob_fallback``: Goblin/Demon missing usable distance inputs
       - ``ml_prob``: Standard and other pick types
     """
-    _ = sport
+    sport_key = str(sport or "default").strip().lower()
+    cuts = SPORT_ML_PROB_CUTS.get(sport_key, DEFAULT_ML_PROB_CUTS)
     idx = out.index
     n = len(out)
 
@@ -141,7 +149,7 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
         if mc
         else np.full(n, np.nan, dtype=float)
     )
-    t_ml = _tier_from_ml_array(ml_raw)
+    t_ml = _tier_from_ml_array(ml_raw, cuts)
 
     ln = (
         pd.to_numeric(out[lc], errors="coerce").to_numpy(dtype=float)
