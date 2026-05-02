@@ -215,10 +215,11 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
       <div class="sport-header">
         <div class="sport-label">🌐 ALL SPORTS</div>
         <div class="sport-header-line"></div>
-        <div class="sport-meta-count">5,670 TOTAL PROPS</div>
+        <div class="sport-meta-count">5,662 TOTAL PROPS</div>
       </div>
     </summary>
     <div class="sport-section-body">
+      
       <div class="section-label">HIT RATE BY OPPONENT DEFENSIVE TIER</div>
     <div class="table-wrap" style="margin-bottom:20px"><table>
       <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
@@ -505,11 +506,6 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <div><div class="section-label">OVER — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
       <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
       <tbody><tr class="player-hit">
-          <td class="mono">Assists</td>
-          <td class="right mono">30</td>
-          <td class="right mono pos">25</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:83.3%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">83.3%</div></div></td>
-        </tr><tr class="player-hit">
           <td class="mono">Rebounds</td>
           <td class="right mono">43</td>
           <td class="right mono pos">29</td>
@@ -519,6 +515,11 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <td class="right mono">113</td>
           <td class="right mono pos">73</td>
           <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:64.6%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">64.6%</div></div></td>
+        </tr><tr class="player-hit">
+          <td class="mono">Goalie Saves</td>
+          <td class="right mono">21</td>
+          <td class="right mono pos">13</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:61.9%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">61.9%</div></div></td>
         </tr><tr class="player-warn">
           <td class="mono">Pitches Thrown</td>
           <td class="right mono">66</td>
@@ -925,11 +926,145 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
       <div class="two-col">
       <div>
         <div class="section-label">🏆 MOST CONSISTENT WINNERS (PLAYER + PROP LINE)</div>
-        <div class="muted-note">No player-prop lines with ≥3 decided props.</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>PLAYER</th><th>TEAM</th><th>LINE</th><th class="right">DEC</th><th class="right">H</th><th class="right">M</th><th>RATE</th></tr></thead>
+      <tbody><tr>
+          <td><strong>Tobias Harris</strong></td>
+          <td class="mono muted">DET</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Scottie Barnes</strong></td>
+          <td class="mono muted">TOR</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Fernando Tatis Jr.</strong></td>
+          <td class="mono muted">SD</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Byron Buxton</strong></td>
+          <td class="mono muted">MIN</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Ben Rice</strong></td>
+          <td class="mono muted">NYY</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Julio Rodríguez</strong></td>
+          <td class="mono muted">SEA</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Simeon Woods Richardson</strong></td>
+          <td class="mono muted">MIN</td>
+          <td class="mono" style="color:var(--cyan)">OVER Hits Allowed</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Will Warren</strong></td>
+          <td class="mono muted">NYY</td>
+          <td class="mono" style="color:var(--cyan)">OVER Pitcher Strikeouts</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr></tbody>
+    </table></div>
       </div>
       <div>
         <div class="section-label">💀 MOST INCONSISTENT LINES (PLAYER + PROP LINE)</div>
-        <div class="muted-note">No player-prop lines with ≥3 decided props.</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>PLAYER</th><th>TEAM</th><th>LINE</th><th class="right">DEC</th><th class="right">H</th><th class="right">M</th><th>RATE</th></tr></thead>
+      <tbody><tr>
+          <td><strong>Eury Pérez</strong></td>
+          <td class="mono muted">MIA</td>
+          <td class="mono" style="color:var(--cyan)">OVER Pitcher Strikeouts</td>
+          <td class="right mono">6</td>
+          <td class="right mono pos">3</td>
+          <td class="right mono neg">3</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Alperen Sengun</strong></td>
+          <td class="mono muted">HOU</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Donovan Mitchell</strong></td>
+          <td class="mono muted">CLE</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Austin Reaves</strong></td>
+          <td class="mono muted">LAL</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Paulo Gazzaniga</strong></td>
+          <td class="mono muted">—</td>
+          <td class="mono" style="color:var(--cyan)">OVER Goalie Saves</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Brayan Rocchio</strong></td>
+          <td class="mono muted">CLE</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Nico Hoerner</strong></td>
+          <td class="mono muted">CHC</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Jose Quintana</strong></td>
+          <td class="mono muted">COL</td>
+          <td class="mono" style="color:var(--cyan)">OVER Pitcher Strikeouts</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr></tbody>
+    </table></div>
       </div>
     </div>
     </div>
@@ -938,10 +1073,173 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
       <div class="sport-header">
         <div class="sport-label">🏀 NBA</div>
         <div class="sport-header-line"></div>
-        <div class="sport-meta-count">328 TOTAL PROPS</div>
+        <div class="sport-meta-count">320 TOTAL PROPS</div>
       </div>
     </summary>
     <div class="sport-section-body">
+      <details class="matrix-collapsible">
+      <summary>Performance Matrix — Pick Type × Tier × Direction</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Full grid: Standard A–D (OVER/UNDER), Goblin & Demon A–D (OVER). 8 of 16 cells have ≥ 10 decided; others still listed with counts. Click column headers to sort.</div>
+        <div class="table-wrap"><table class="table-sortable">
+          <thead><tr>
+            <th data-sort-key="pick" title="Sort">PICK TYPE</th>
+            <th data-sort-key="tier" title="Sort">TIER</th>
+            <th data-sort-key="dir" title="Sort">DIRECTION</th>
+            <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+            <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+            <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+            <th data-sort-key="rate" title="Sort">HIT RATE</th>
+            <th data-sort-key="bar" title="Sort">BAR</th>
+          </tr></thead>
+          <tbody><tr class="matrix-hit matrix-sparse">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">7</td>
+          <td class="right mono pos">7</td>
+          <td class="right mono neg">0</td>
+          <td class="mono right">100.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-warn">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">10</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">5</td>
+          <td class="mono right">50.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">16</td>
+          <td class="right mono pos">6</td>
+          <td class="right mono neg">10</td>
+          <td class="mono right">37.5%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:37.5%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">33</td>
+          <td class="right mono pos">16</td>
+          <td class="right mono neg">17</td>
+          <td class="mono right">48.5%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:48.5%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono">10</td>
+          <td class="right mono pos">3</td>
+          <td class="right mono neg">7</td>
+          <td class="mono right">30.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:30.0%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">37</td>
+          <td class="right mono pos">36</td>
+          <td class="right mono neg">1</td>
+          <td class="mono right">97.3%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:97.3%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">19</td>
+          <td class="right mono pos">14</td>
+          <td class="right mono neg">5</td>
+          <td class="mono right">73.7%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:73.7%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit matrix-sparse">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">4</td>
+          <td class="right mono neg">1</td>
+          <td class="mono right">80.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:80.0%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">14</td>
+          <td class="right mono pos">11</td>
+          <td class="right mono neg">3</td>
+          <td class="mono right">78.6%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:78.6%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit matrix-sparse">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">2</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">0</td>
+          <td class="mono right">100.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit matrix-sparse">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">1</td>
+          <td class="right mono pos">1</td>
+          <td class="right mono neg">0</td>
+          <td class="mono right">100.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit matrix-sparse">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">6</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">1</td>
+          <td class="mono right">83.3%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:83.3%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-warn">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">49</td>
+          <td class="right mono pos">27</td>
+          <td class="right mono neg">22</td>
+          <td class="mono right">55.1%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:55.1%;background:var(--gold)"></div></div></td>
+        </tr></tbody>
+        </table></div>
+      </div>
+    </details>
       <div class="section-label">HIT RATE BY OPPONENT DEFENSIVE TIER</div>
     <div class="table-wrap" style="margin-bottom:20px"><table>
       <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
@@ -1373,11 +1671,145 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
       <div class="two-col">
       <div>
         <div class="section-label">🏆 MOST CONSISTENT WINNERS (PLAYER + PROP LINE)</div>
-        <div class="muted-note">No player-prop lines with ≥3 decided props.</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>PLAYER</th><th>TEAM</th><th>LINE</th><th class="right">DEC</th><th class="right">H</th><th class="right">M</th><th>RATE</th></tr></thead>
+      <tbody><tr>
+          <td><strong>Tobias Harris</strong></td>
+          <td class="mono muted">DET</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Scottie Barnes</strong></td>
+          <td class="mono muted">TOR</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Ja&#x27;Kobe Walter</strong></td>
+          <td class="mono muted">TOR</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">4</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Tari Eason</strong></td>
+          <td class="mono muted">HOU</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">4</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Desmond Bane</strong></td>
+          <td class="mono muted">ORL</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">4</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Evan Mobley</strong></td>
+          <td class="mono muted">CLE</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">4</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>RJ Barrett</strong></td>
+          <td class="mono muted">TOR</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">4</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Duncan Robinson</strong></td>
+          <td class="mono muted">DET</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">3</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr></tbody>
+    </table></div>
       </div>
       <div>
         <div class="section-label">💀 MOST INCONSISTENT LINES (PLAYER + PROP LINE)</div>
-        <div class="muted-note">No player-prop lines with ≥3 decided props.</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>PLAYER</th><th>TEAM</th><th>LINE</th><th class="right">DEC</th><th class="right">H</th><th class="right">M</th><th>RATE</th></tr></thead>
+      <tbody><tr>
+          <td><strong>Alperen Sengun</strong></td>
+          <td class="mono muted">HOU</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Donovan Mitchell</strong></td>
+          <td class="mono muted">CLE</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Austin Reaves</strong></td>
+          <td class="mono muted">LAL</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Wendell Carter</strong></td>
+          <td class="mono muted">ORL</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">3</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:60.0%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">60.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Jabari Smith</strong></td>
+          <td class="mono muted">HOU</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">3</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:40.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">40.0%</div></div></td>
+        </tr><tr>
+          <td><strong>James Harden</strong></td>
+          <td class="mono muted">CLE</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">6</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">4</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
+        </tr><tr>
+          <td><strong>Donovan Mitchell</strong></td>
+          <td class="mono muted">CLE</td>
+          <td class="mono" style="color:var(--cyan)">OVER Rebounds</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">1</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
+        </tr><tr>
+          <td><strong>Jalen Duren</strong></td>
+          <td class="mono muted">DET</td>
+          <td class="mono" style="color:var(--cyan)">OVER Points</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">3</td>
+          <td class="right mono neg">1</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:75.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">75.0%</div></div></td>
+        </tr></tbody>
+    </table></div>
       </div>
     </div>
     </div>
@@ -1390,6 +1822,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
       </div>
     </summary>
     <div class="sport-section-body">
+      
       
       <div class="section-label">PROP TYPE BREAKDOWNS</div>
         <div class="three-col">
@@ -1650,11 +2083,145 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
       <div class="two-col">
       <div>
         <div class="section-label">🏆 MOST CONSISTENT WINNERS (PLAYER + PROP LINE)</div>
-        <div class="muted-note">No player-prop lines with ≥3 decided props.</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>PLAYER</th><th>TEAM</th><th>LINE</th><th class="right">DEC</th><th class="right">H</th><th class="right">M</th><th>RATE</th></tr></thead>
+      <tbody><tr>
+          <td><strong>Jack Eichel</strong></td>
+          <td class="mono muted">VGK</td>
+          <td class="mono" style="color:var(--cyan)">OVER points</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">1</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
+        </tr><tr>
+          <td><strong>David Pastrnak</strong></td>
+          <td class="mono muted">BOS</td>
+          <td class="mono" style="color:var(--cyan)">OVER points</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">1</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
+        </tr><tr>
+          <td><strong>Juraj Slafkovský</strong></td>
+          <td class="mono muted">MTL</td>
+          <td class="mono" style="color:var(--cyan)">OVER shots_on_goal</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">0</td>
+          <td class="right mono neg">5</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Nick Schmaltz</strong></td>
+          <td class="mono muted">UTA</td>
+          <td class="mono" style="color:var(--cyan)">OVER shots_on_goal</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">0</td>
+          <td class="right mono neg">4</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Michael Eyssimont</strong></td>
+          <td class="mono muted">BOS</td>
+          <td class="mono" style="color:var(--cyan)">OVER shots_on_goal</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">0</td>
+          <td class="right mono neg">4</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Clayton Keller</strong></td>
+          <td class="mono muted">UTA</td>
+          <td class="mono" style="color:var(--cyan)">OVER shots_on_goal</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">0</td>
+          <td class="right mono neg">4</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Rasmus Dahlin</strong></td>
+          <td class="mono muted">BUF</td>
+          <td class="mono" style="color:var(--cyan)">OVER shots_on_goal</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">0</td>
+          <td class="right mono neg">4</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Mark Stone</strong></td>
+          <td class="mono muted">VGK</td>
+          <td class="mono" style="color:var(--cyan)">OVER shots_on_goal</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">0</td>
+          <td class="right mono neg">4</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+        </tr></tbody>
+    </table></div>
       </div>
       <div>
         <div class="section-label">💀 MOST INCONSISTENT LINES (PLAYER + PROP LINE)</div>
-        <div class="muted-note">No player-prop lines with ≥3 decided props.</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>PLAYER</th><th>TEAM</th><th>LINE</th><th class="right">DEC</th><th class="right">H</th><th class="right">M</th><th>RATE</th></tr></thead>
+      <tbody><tr>
+          <td><strong>Jack Eichel</strong></td>
+          <td class="mono muted">VGK</td>
+          <td class="mono" style="color:var(--cyan)">OVER points</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">1</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
+        </tr><tr>
+          <td><strong>David Pastrnak</strong></td>
+          <td class="mono muted">BOS</td>
+          <td class="mono" style="color:var(--cyan)">OVER points</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">1</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
+        </tr><tr>
+          <td><strong>Juraj Slafkovský</strong></td>
+          <td class="mono muted">MTL</td>
+          <td class="mono" style="color:var(--cyan)">OVER shots_on_goal</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">0</td>
+          <td class="right mono neg">5</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Nick Schmaltz</strong></td>
+          <td class="mono muted">UTA</td>
+          <td class="mono" style="color:var(--cyan)">OVER shots_on_goal</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">0</td>
+          <td class="right mono neg">4</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Michael Eyssimont</strong></td>
+          <td class="mono muted">BOS</td>
+          <td class="mono" style="color:var(--cyan)">OVER shots_on_goal</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">0</td>
+          <td class="right mono neg">4</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Clayton Keller</strong></td>
+          <td class="mono muted">UTA</td>
+          <td class="mono" style="color:var(--cyan)">OVER shots_on_goal</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">0</td>
+          <td class="right mono neg">4</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Rasmus Dahlin</strong></td>
+          <td class="mono muted">BUF</td>
+          <td class="mono" style="color:var(--cyan)">OVER shots_on_goal</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">0</td>
+          <td class="right mono neg">4</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Mark Stone</strong></td>
+          <td class="mono muted">VGK</td>
+          <td class="mono" style="color:var(--cyan)">OVER shots_on_goal</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">0</td>
+          <td class="right mono neg">4</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
+        </tr></tbody>
+    </table></div>
       </div>
     </div>
     </div>
@@ -1668,6 +2235,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
     </summary>
     <div class="sport-section-body">
       
+      
       <div class="section-label">PROP TYPE BREAKDOWNS</div>
         <div class="three-col">
           <div><div class="section-label">STANDARD — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
@@ -1675,8 +2243,49 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
           <div><div class="section-label">DEMON — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
         </div>
         <div class="two-col">
-          <div><div class="section-label">OVER — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
-          <div><div class="section-label">UNDER — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
+          <div><div class="section-label">OVER — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
+      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
+      <tbody><tr class="player-hit">
+          <td class="mono">Goalie Saves</td>
+          <td class="right mono">21</td>
+          <td class="right mono pos">13</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:61.9%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">61.9%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Fouls</td>
+          <td class="right mono">46</td>
+          <td class="right mono pos">12</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:26.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">26.1%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Shots</td>
+          <td class="right mono">178</td>
+          <td class="right mono pos">35</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:19.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">19.7%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Goal + Assist</td>
+          <td class="right mono">46</td>
+          <td class="right mono pos">9</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:19.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">19.6%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Assists</td>
+          <td class="right mono">41</td>
+          <td class="right mono pos">4</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.8%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.8%</div></div></td>
+        </tr><tr class="player-miss">
+          <td class="mono">Goals</td>
+          <td class="right mono">77</td>
+          <td class="right mono pos">7</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.1%</div></div></td>
+        </tr></tbody>
+    </table></div></div>
+          <div><div class="section-label">UNDER — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
+      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
+      <tbody><tr class="player-miss">
+          <td class="mono">Goalie Saves</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">1</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:20.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">20.0%</div></div></td>
+        </tr></tbody>
+    </table></div></div>
         </div>
         <div class="two-col">
           <div><div class="section-label">TIER A — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
@@ -1838,11 +2447,145 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
       <div class="two-col">
       <div>
         <div class="section-label">🏆 MOST CONSISTENT WINNERS (PLAYER + PROP LINE)</div>
-        <div class="muted-note">No player-prop lines with ≥3 decided props.</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>PLAYER</th><th>TEAM</th><th>LINE</th><th class="right">DEC</th><th class="right">H</th><th class="right">M</th><th>RATE</th></tr></thead>
+      <tbody><tr>
+          <td><strong>Wladimiro Falcone</strong></td>
+          <td class="mono muted">—</td>
+          <td class="mono" style="color:var(--cyan)">OVER Goalie Saves</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">3</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Anton Stach</strong></td>
+          <td class="mono muted">—</td>
+          <td class="mono" style="color:var(--cyan)">OVER Shots</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">3</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Vedat Muriqi</strong></td>
+          <td class="mono muted">—</td>
+          <td class="mono" style="color:var(--cyan)">OVER Shots</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">1</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
+        </tr><tr>
+          <td><strong>Ethan Ampadu</strong></td>
+          <td class="mono muted">—</td>
+          <td class="mono" style="color:var(--cyan)">OVER Shots</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">1</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
+        </tr><tr>
+          <td><strong>Leo Román</strong></td>
+          <td class="mono muted">—</td>
+          <td class="mono" style="color:var(--cyan)">OVER Goalie Saves</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">1</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
+        </tr><tr>
+          <td><strong>Ao Tanaka</strong></td>
+          <td class="mono muted">—</td>
+          <td class="mono" style="color:var(--cyan)">OVER Shots</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">1</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
+        </tr><tr>
+          <td><strong>Paulo Gazzaniga</strong></td>
+          <td class="mono muted">—</td>
+          <td class="mono" style="color:var(--cyan)">OVER Goalie Saves</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Ylber Ramadani</strong></td>
+          <td class="mono muted">—</td>
+          <td class="mono" style="color:var(--cyan)">OVER Shots</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">1</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
+        </tr></tbody>
+    </table></div>
       </div>
       <div>
         <div class="section-label">💀 MOST INCONSISTENT LINES (PLAYER + PROP LINE)</div>
-        <div class="muted-note">No player-prop lines with ≥3 decided props.</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>PLAYER</th><th>TEAM</th><th>LINE</th><th class="right">DEC</th><th class="right">H</th><th class="right">M</th><th>RATE</th></tr></thead>
+      <tbody><tr>
+          <td><strong>Paulo Gazzaniga</strong></td>
+          <td class="mono muted">—</td>
+          <td class="mono" style="color:var(--cyan)">OVER Goalie Saves</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Vedat Muriqi</strong></td>
+          <td class="mono muted">—</td>
+          <td class="mono" style="color:var(--cyan)">OVER Shots</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">1</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
+        </tr><tr>
+          <td><strong>Ethan Ampadu</strong></td>
+          <td class="mono muted">—</td>
+          <td class="mono" style="color:var(--cyan)">OVER Shots</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">1</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
+        </tr><tr>
+          <td><strong>Leo Román</strong></td>
+          <td class="mono muted">—</td>
+          <td class="mono" style="color:var(--cyan)">OVER Goalie Saves</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">1</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
+        </tr><tr>
+          <td><strong>Ao Tanaka</strong></td>
+          <td class="mono muted">—</td>
+          <td class="mono" style="color:var(--cyan)">OVER Shots</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">1</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
+        </tr><tr>
+          <td><strong>Ylber Ramadani</strong></td>
+          <td class="mono muted">—</td>
+          <td class="mono" style="color:var(--cyan)">OVER Shots</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">1</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
+        </tr><tr>
+          <td><strong>Pablo Torre</strong></td>
+          <td class="mono muted">—</td>
+          <td class="mono" style="color:var(--cyan)">OVER Shots</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">1</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
+        </tr><tr>
+          <td><strong>Pascal Struijk</strong></td>
+          <td class="mono muted">—</td>
+          <td class="mono" style="color:var(--cyan)">OVER Shots</td>
+          <td class="right mono">3</td>
+          <td class="right mono pos">1</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
+        </tr></tbody>
+    </table></div>
       </div>
     </div>
     </div>
@@ -1855,6 +2598,7 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
       </div>
     </summary>
     <div class="sport-section-body">
+      
       
       <div class="section-label">PROP TYPE BREAKDOWNS</div>
         <div class="three-col">
@@ -2349,11 +3093,145 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
       <div class="two-col">
       <div>
         <div class="section-label">🏆 MOST CONSISTENT WINNERS (PLAYER + PROP LINE)</div>
-        <div class="muted-note">No player-prop lines with ≥3 decided props.</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>PLAYER</th><th>TEAM</th><th>LINE</th><th class="right">DEC</th><th class="right">H</th><th class="right">M</th><th>RATE</th></tr></thead>
+      <tbody><tr>
+          <td><strong>Fernando Tatis Jr.</strong></td>
+          <td class="mono muted">SD</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Byron Buxton</strong></td>
+          <td class="mono muted">MIN</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Ben Rice</strong></td>
+          <td class="mono muted">NYY</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Julio Rodríguez</strong></td>
+          <td class="mono muted">SEA</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Simeon Woods Richardson</strong></td>
+          <td class="mono muted">MIN</td>
+          <td class="mono" style="color:var(--cyan)">OVER Hits Allowed</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Will Warren</strong></td>
+          <td class="mono muted">NYY</td>
+          <td class="mono" style="color:var(--cyan)">OVER Pitcher Strikeouts</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Chase DeLauter</strong></td>
+          <td class="mono muted">CLE</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Brent Rooker</strong></td>
+          <td class="mono muted">ATH</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">5</td>
+          <td class="right mono pos">5</td>
+          <td class="right mono neg">0</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
+        </tr></tbody>
+    </table></div>
       </div>
       <div>
         <div class="section-label">💀 MOST INCONSISTENT LINES (PLAYER + PROP LINE)</div>
-        <div class="muted-note">No player-prop lines with ≥3 decided props.</div>
+        <div class="table-wrap"><table>
+      <thead><tr><th>PLAYER</th><th>TEAM</th><th>LINE</th><th class="right">DEC</th><th class="right">H</th><th class="right">M</th><th>RATE</th></tr></thead>
+      <tbody><tr>
+          <td><strong>Eury Pérez</strong></td>
+          <td class="mono muted">MIA</td>
+          <td class="mono" style="color:var(--cyan)">OVER Pitcher Strikeouts</td>
+          <td class="right mono">6</td>
+          <td class="right mono pos">3</td>
+          <td class="right mono neg">3</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Brayan Rocchio</strong></td>
+          <td class="mono muted">CLE</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Nico Hoerner</strong></td>
+          <td class="mono muted">CHC</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Jose Quintana</strong></td>
+          <td class="mono muted">COL</td>
+          <td class="mono" style="color:var(--cyan)">OVER Pitcher Strikeouts</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Luis Arraez</strong></td>
+          <td class="mono muted">SF</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Alex Bregman</strong></td>
+          <td class="mono muted">CHC</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Ryan O&#x27;Hearn</strong></td>
+          <td class="mono muted">PIT</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr><tr>
+          <td><strong>Alec Bohm</strong></td>
+          <td class="mono muted">PHI</td>
+          <td class="mono" style="color:var(--cyan)">OVER Total Bases</td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">2</td>
+          <td class="right mono neg">2</td>
+          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
+        </tr></tbody>
+    </table></div>
       </div>
     </div>
     </div>

@@ -282,6 +282,50 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
     }
 
 
+def graded_json_prop_to_workbook_row(p: dict) -> dict:
+    """Map graded_props_*.json entry to Excel-style keys for slate HTML builders."""
+    res = str(p.get("result") or p.get("Result") or "").strip().upper()
+    direction = str(p.get("direction") or p.get("Direction") or "").strip().upper()
+    return {
+        "Pick Type": str(p.get("pick_type") or p.get("Pick Type") or ""),
+        "Tier": str(p.get("tier") or p.get("Tier") or ""),
+        "Direction": direction,
+        "Dir": direction,
+        "Result": res,
+        "Grade": res,
+        "Player": str(p.get("player") or p.get("Player") or ""),
+        "Team": str(p.get("team") or p.get("Team") or ""),
+        "Prop Type": str(p.get("prop") or p.get("Prop Type") or ""),
+        "Prop": str(p.get("prop") or p.get("Prop") or ""),
+        "Def Tier": str(p.get("def_tier") or p.get("Def Tier") or ""),
+    }
+
+
+def load_sport_bundles_from_graded_json(path: Path) -> tuple[list[dict], list[dict], list[dict], list[dict], list[dict]]:
+    """Split graded_props JSON into per-sport row lists (workbook-shaped dicts)."""
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    props = raw.get("props") or []
+    nba: list[dict] = []
+    cbb: list[dict] = []
+    nhl: list[dict] = []
+    soccer: list[dict] = []
+    mlb: list[dict] = []
+    for p in props:
+        sport = str(p.get("sport") or "").strip().upper()
+        row = graded_json_prop_to_workbook_row(p)
+        if sport == "NBA":
+            nba.append(row)
+        elif sport == "CBB":
+            cbb.append(row)
+        elif sport == "NHL":
+            nhl.append(row)
+        elif sport == "SOCCER":
+            soccer.append(row)
+        elif sport == "MLB":
+            mlb.append(row)
+    return nba, cbb, nhl, soccer, mlb
+
+
 def export_graded_props_json(
     date_str: str,
     out_dir: Path,
@@ -466,13 +510,16 @@ def build_pick_tier_direction_agg(rows: list[dict]) -> dict[tuple[str, str, str]
     """
     agg: dict[tuple[str, str, str], dict[str, int]] = {}
     for r in rows:
-        pt = _norm_pick_type_matrix(r.get("Pick Type"))
+        pt_raw = r.get("Pick Type") or r.get("pick_type")
+        pt = _norm_pick_type_matrix(pt_raw)
         if not pt:
             continue
-        tier = str(r.get("Tier", "") or "").strip().upper()
+        tier = str(r.get("Tier", "") or r.get("tier", "") or "").strip().upper()
         if tier not in ("A", "B", "C", "D"):
             continue
-        direction = str(r.get("Dir", "") or r.get("Direction", "")).strip().upper()
+        direction = str(
+            r.get("Dir", "") or r.get("Direction", "") or r.get("direction", "")
+        ).strip().upper()
         if direction not in ("OVER", "UNDER"):
             continue
         if pt in ("Goblin", "Demon") and direction != "OVER":
@@ -482,7 +529,9 @@ def build_pick_tier_direction_agg(rows: list[dict]) -> dict[tuple[str, str, str]
         if key not in agg:
             agg[key] = {"hits": 0, "misses": 0, "decided": 0}
 
-        result = str(r.get("Result", "") or r.get("Grade", "") or "").strip().upper()
+        result = str(
+            r.get("Result", "") or r.get("result", "") or r.get("Grade", "") or r.get("grade", "") or ""
+        ).strip().upper()
         if result in ("HIT", "WIN", "1", "TRUE", "YES", "W"):
             agg[key]["hits"] += 1
             agg[key]["decided"] += 1
@@ -1586,6 +1635,17 @@ def main() -> None:
         action="store_true",
         help="Write slate_eval even when no graded xlsx files exist (empty / no-data UI).",
     )
+    parser.add_argument(
+        "--graded-json",
+        type=str,
+        default="",
+        metavar="PATH",
+        help=(
+            "Rebuild slate_eval from graded_props JSON (no xlsx). "
+            "Pass a file path, or 'templates' to use "
+            "ui_runner/templates/graded_props_{date}.json"
+        ),
+    )
     args = parser.parse_args()
 
     # Resolve date
@@ -1594,6 +1654,67 @@ def main() -> None:
     else:
         date_str = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
     print(f"  Date: {date_str}")
+
+    graded_json_arg = (args.graded_json or "").strip()
+    if graded_json_arg:
+        gj = graded_json_arg.lower()
+        if gj == "templates":
+            json_path = ROOT_DIR / "ui_runner" / "templates" / f"graded_props_{date_str}.json"
+        else:
+            json_path = Path(graded_json_arg).resolve()
+        if not json_path.is_file():
+            print(f"  ERROR: graded JSON not found: {json_path}")
+            sys.exit(1)
+        print(f"  Loading from graded JSON: {json_path}")
+        nba_rows, cbb_rows, nhl_rows, soccer_rows, mlb_rows = load_sport_bundles_from_graded_json(
+            json_path
+        )
+        print(
+            f"    NBA {len(nba_rows):,} | CBB {len(cbb_rows):,} | NHL {len(nhl_rows):,} | "
+            f"Soccer {len(soccer_rows):,} | MLB {len(mlb_rows):,}"
+        )
+        nba_rows_merged = nba_rows
+        print("  Building HTML ...", end="", flush=True)
+        html = build_html(
+            date_str,
+            nba_rows_merged,
+            cbb_rows,
+            None,
+            None,
+            nhl_rows=nhl_rows,
+            soccer_rows=soccer_rows,
+            mlb_rows=mlb_rows,
+            nhl_path=None,
+            soccer_path=None,
+            mlb_path=None,
+        )
+        print(f" {len(html):,} bytes")
+        out_name = f"slate_eval_{date_str}.html"
+        if args.out:
+            out_p = Path(args.out).resolve()
+            out_s = str(args.out)
+            if out_p.is_dir() or out_s.endswith("\\") or out_s.endswith("/"):
+                out_p = out_p / out_name
+        else:
+            out_p = ROOT_DIR / "ui_runner" / "templates" / out_name
+        out_p.parent.mkdir(parents=True, exist_ok=True)
+        out_p.write_text(html, encoding="utf-8")
+        print(f"  Saved  -> {out_p}")
+        if json_path.resolve() != (out_p.parent / f"graded_props_{date_str}.json").resolve():
+            json_p = export_graded_props_json(
+                date_str,
+                out_p.parent,
+                [
+                    ("NBA", nba_rows_merged),
+                    ("CBB", cbb_rows),
+                    ("NHL", nhl_rows),
+                    ("Soccer", soccer_rows),
+                    ("MLB", mlb_rows),
+                ],
+            )
+            print(f"  Saved  -> {json_p}")
+        print("  Done.")
+        return
 
     # Resolve file paths
     nba_path: Path | None = None
