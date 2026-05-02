@@ -15,6 +15,10 @@ logger = logging.getLogger(__name__)
 
 PARAMS_PATH = Path(__file__).resolve().parent.parent / "data" / "payout_curve_params.json"
 
+_MAX_WARN_PER_KIND = 5
+_missing_delta_warn_count = 0
+_invalid_delta_warn_count = 0
+
 BASE_POWER = {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 37.5}
 BASE_FLEX = {
     2: {2: 3.0},
@@ -85,24 +89,39 @@ def leg_factor(delta_pct: Optional[float], pick_type: str, params: Optional[dict
     d_scale = float(p.get("D_SCALE", 3.0))
 
     pt_raw = (pick_type or "").strip().lower()
+    global _missing_delta_warn_count, _invalid_delta_warn_count
     if pt_raw == "standard" or delta_pct is None:
         if "goblin" in pt_raw or "demon" in pt_raw:
             if delta_pct is None:
-                logger.warning(
-                    "leg_factor: %s leg missing delta_pct (no standard_line); using factor 1.0",
-                    pick_type,
-                )
+                if _missing_delta_warn_count < _MAX_WARN_PER_KIND:
+                    logger.warning(
+                        "leg_factor: %s leg missing delta_pct (no standard_line); using factor 1.0",
+                        pick_type,
+                    )
+                    _missing_delta_warn_count += 1
+                    if _missing_delta_warn_count == _MAX_WARN_PER_KIND:
+                        logger.warning(
+                            "leg_factor: suppressing further missing delta_pct warnings after %d rows",
+                            _MAX_WARN_PER_KIND,
+                        )
         return 1.0
 
     try:
         d = float(delta_pct)
     except (TypeError, ValueError):
         if "goblin" in pt_raw or "demon" in pt_raw:
-            logger.warning(
-                "leg_factor: invalid delta_pct for %s leg (%r); using 1.0",
-                pick_type,
-                delta_pct,
-            )
+            if _invalid_delta_warn_count < _MAX_WARN_PER_KIND:
+                logger.warning(
+                    "leg_factor: invalid delta_pct for %s leg (%r); using 1.0",
+                    pick_type,
+                    delta_pct,
+                )
+                _invalid_delta_warn_count += 1
+                if _invalid_delta_warn_count == _MAX_WARN_PER_KIND:
+                    logger.warning(
+                        "leg_factor: suppressing further invalid delta_pct warnings after %d rows",
+                        _MAX_WARN_PER_KIND,
+                    )
         return 1.0
 
     if "goblin" in pt_raw:

@@ -1887,6 +1887,9 @@ def main():
 
     modes = ["power", "flex"] if args.mode == "both" else [args.mode]
     ticket_rows = []
+    mismatch_warn_limit = 25
+    mismatch_warn_count = 0
+    mismatch_warn_suppressed = 0
     for mode in modes:
         t = ticket_base.copy()
         payouts_out = []
@@ -1966,13 +1969,17 @@ def main():
                 and float(mult) > 0
                 and abs(float(mult) - est_m) / float(mult) > 0.15
             ):
-                _log.warning(
-                    "Payout mult mismatch ticket=%s mode=%s legacy_applied=%.4f est_curve=%.4f (>15%%)",
-                    tid,
-                    mode,
-                    float(mult),
-                    est_m,
-                )
+                if mismatch_warn_count < mismatch_warn_limit:
+                    _log.warning(
+                        "Payout mult mismatch ticket=%s mode=%s legacy_applied=%.4f est_curve=%.4f (>15%%)",
+                        tid,
+                        mode,
+                        float(mult),
+                        est_m,
+                    )
+                    mismatch_warn_count += 1
+                else:
+                    mismatch_warn_suppressed += 1
 
             est_curve_mults.append(est_m)
             flat_standard_mults.append(flat_std)
@@ -1994,6 +2001,11 @@ def main():
         t["is_cash"] = ((t["payout_status"] == "WIN") | (t["payout_status"] == "WIN_NO_MULT") | (t["payout_status"] == "CASH")).astype(int)
         ticket_rows.append(t)
 
+    if mismatch_warn_suppressed > 0:
+        _log.warning(
+            "Payout mult mismatch warnings suppressed: %d additional rows",
+            mismatch_warn_suppressed,
+        )
     ticket_results = pd.concat(ticket_rows, ignore_index=True)
 
     ticket_bt_df = build_ticket_backtest_dataframe(
