@@ -2251,7 +2251,11 @@ async function loadSlateData() {
       }
     };
     try {
-      const res = await fetch("/api/slate", {cache: 'no-store'});
+      const fetchOpts = { cache: 'no-store' };
+      if (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) {
+        fetchOpts.signal = AbortSignal.timeout(120000);
+      }
+      const res = await fetch("/api/slate", fetchOpts);
       if (!res.ok) throw new Error("HTTP " + res.status);
       const d = await res.json();
       applySlatePayload(d);
@@ -3070,18 +3074,24 @@ async function fetchSlateSport(sport, opts = {}) {
   if (!prefetch || openSlatePanel === sport) showSlateSportLoading(sport, 'Loading slate...');
 
   SLATE_SPORT_FETCH_PROMISES[sport] = (async () => {
-    await loadSlateData();
+    // Warm picks/edges in parallel — do NOT block the slate table on /api/slate (huge/slow on Railway).
+    const slateWarm = loadSlateData().catch((e) => console.warn("loadSlateData (background):", e));
     let rows = [];
-  try {
+    try {
       const res = await fetch(`/api/slate-sport/${encodeURIComponent(sport)}`, {cache: 'no-store'});
-    if (res.ok) {
-      const d = await res.json();
+      if (res.ok) {
+        const d = await res.json();
         rows = Array.isArray(d.rows) ? d.rows : [];
-    }
-    } catch(e) {
+      } else {
+        console.warn(`slate-sport/${sport} HTTP ${res.status}`);
+      }
+    } catch (e) {
       console.warn(`slate-sport/${sport} failed, using tickets fallback:`, e);
     }
-    if (!rows.length) rows = _fallbackSlateRowsFromTickets(sport);
+    if (!rows.length) {
+      await slateWarm;
+      rows = _fallbackSlateRowsFromTickets(sport);
+    }
     _setSlateSportRows(sport, rows);
     SLATE_SPORT_CACHE[sport] = true;
     if (openSlatePanel === sport) scheduleRenderSlateTable(sport);
@@ -3284,7 +3294,7 @@ function ensureFixedCombinedTheadFromNbaTemplate() {
 async function loadCombinedFromMergedJson() {
   const tbody = document.getElementById('stb-combined');
   try {
-    await loadSlateData();
+    void loadSlateData().catch(() => {});
     const res = await fetch('/api/slate-sport/combined', {cache: 'no-store'});
     const d = await res.json();
     const rows = Array.isArray(d.rows) ? d.rows : [];
