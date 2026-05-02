@@ -177,6 +177,7 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
             (Join-Path $Root "Tennis\step8_tennis_direction_clean.xlsx")
         )
         "step8_wnba_direction_$RunDate.xlsx" = @(
+            (Join-Path $Root "WNBA\outputs\$RunDate\step8_wnba_direction_$RunDate.xlsx"),
             (Join-Path $Root "WNBA\step8_wnba_direction.xlsx")
         )
     }
@@ -184,6 +185,11 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
     foreach ($name in $required) {
         $p = Join-Path $outDir $name
         if (Test-Path $p) { continue }
+        # WNBA dated slates are stored under WNBA\outputs\<date>\ (see run_wnba_pipeline.ps1 / run_pipeline.ps1).
+        if ($name -eq "step8_wnba_direction_$RunDate.xlsx") {
+            $wnbaDated = Join-Path $Root "WNBA\outputs\$RunDate\$name"
+            if (Test-Path $wnbaDated) { continue }
+        }
         if ($fallbackRoots.ContainsKey($name)) {
             $resolved = $false
             foreach ($fallback in @($fallbackRoots[$name])) {
@@ -991,6 +997,31 @@ else {
             Write-Log "STEP D1g2 - Prop stratification board: SKIP (script missing)"
         }
 
+        # Prop population state report: current pool states + historical old-vs-new edge-floor backtest.
+        $popStateScript = Join-Path $Root "scripts\build_prop_population_state_report.py"
+        if (Test-Path $popStateScript) {
+            try {
+                Write-Log "STEP D1g3 - Prop population state report: START"
+                & py -3.14 -X utf8 $popStateScript `
+                    --date $Today `
+                    --backtest-from "2026-02-19" `
+                    --backtest-to $Yesterday `
+                    --out-dir (Join-Path $Root "outputs\$Today")
+                if ($LASTEXITCODE -eq 0) {
+                    Write-Log "STEP D1g3 - Prop population state report: OK"
+                }
+                else {
+                    Write-Log "STEP D1g3 - Prop population state report: WARN (exit $LASTEXITCODE)"
+                }
+            }
+            catch {
+                Write-Log "STEP D1g3 - Prop population state report: WARN ($($_.Exception.Message))"
+            }
+        }
+        else {
+            Write-Log "STEP D1g3 - Prop population state report: SKIP (script missing)"
+        }
+
         # Optional PQ control artifact (small pq0 slice) for drift tracking.
         # This does not overwrite tickets_latest/slate_latest and is kept for offline analysis only.
         if ($PqControlPercent -gt 0) {
@@ -1093,6 +1124,51 @@ foreach ($rc in $railwayCopies) {
     }
 }
 Write-Log "STEP D2 - Copy Railway slate files to sport roots: OK"
+
+# =============================================================================
+# STEP D2b — Ensure dated step8 snapshots exist (for historical tier analysis)
+# Keeps true Line + Standard Line boards per day under outputs\<date>\.
+# =============================================================================
+Write-Log "STEP D2b - Dated step8 snapshot backfill: START"
+$todayOutDirForSnapshots = Join-Path $Root "outputs\$Today"
+if (-not (Test-Path $todayOutDirForSnapshots)) {
+    New-Item -ItemType Directory -Path $todayOutDirForSnapshots -Force | Out-Null
+}
+$datedStep8Copies = @(
+    @{
+        SrcCandidates = @(
+            (Join-Path $Root "NBA\data\outputs\step8_all_direction_clean.xlsx"),
+            (Join-Path $Root "NBA\step8_all_direction_clean.xlsx")
+        )
+        Dst = (Join-Path $todayOutDirForSnapshots "step8_nba_direction_clean_$Today.xlsx")
+    },
+    @{
+        SrcCandidates = @((Join-Path $Root "NBA\step8_nba1h_direction_clean.xlsx"))
+        Dst = (Join-Path $todayOutDirForSnapshots "step8_nba1h_direction_clean_$Today.xlsx")
+    },
+    @{
+        SrcCandidates = @((Join-Path $Root "NBA\step8_nba1q_direction_clean.xlsx"))
+        Dst = (Join-Path $todayOutDirForSnapshots "step8_nba1q_direction_clean_$Today.xlsx")
+    }
+)
+foreach ($cp in $datedStep8Copies) {
+    $srcResolved = $null
+    foreach ($cand in @($cp.SrcCandidates)) {
+        if (Test-Path $cand) {
+            $srcResolved = $cand
+            break
+        }
+    }
+    if ($null -ne $srcResolved) {
+        Preserve-ExistingFile -Path $cp.Dst -Reason "pre-STEP D2b dated snapshot copy"
+        Copy-Item -LiteralPath $srcResolved -Destination $cp.Dst -Force
+        Write-Log "STEP D2b - Copied $(Split-Path $srcResolved -Leaf) -> $(Split-Path $cp.Dst -Leaf)"
+    }
+    else {
+        Write-Log "STEP D2b - SKIP (source missing for $(Split-Path $cp.Dst -Leaf))"
+    }
+}
+Write-Log "STEP D2b - Dated step8 snapshot backfill: OK"
 
 # =============================================================================
 # STEP E — Git commit + push

@@ -662,15 +662,23 @@ def _resolve_outputs_artifact(
     days: list[str],
     filename_fmt: str,
     *legacy: Path,
+    extra_roots: list[Path] | None = None,
 ) -> Path:
     """
-    Prefer outputs/{{d}}/filename_fmt.format(d=d), then first existing legacy path.
+    Prefer outputs/{{d}}/filename_fmt.format(d=d), then optional sport folders (e.g. WNBA/outputs),
+    then first existing legacy path.
     filename_fmt example: step8_nba_direction_clean_{d}.xlsx
     """
     for d in days:
-        p = OUTPUTS_ROOT / d / filename_fmt.format(d=d)
+        name = filename_fmt.format(d=d)
+        p = OUTPUTS_ROOT / d / name
         if p.exists():
             return p
+        if extra_roots:
+            for xr in extra_roots:
+                p2 = xr / d / name
+                if p2.exists():
+                    return p2
     for leg in legacy:
         if leg.exists():
             return leg
@@ -2793,7 +2801,7 @@ def api_pipeline_status():
         days,
         "step8_wnba_direction_{d}.xlsx",
         WNBA_SLATE,
-        WNBA_DIR / "step8_wnba_direction.xlsx",
+        extra_roots=[WNBA_DIR / "outputs"],
     )
     nfl_slate_p = _resolve_outputs_artifact(
         days,

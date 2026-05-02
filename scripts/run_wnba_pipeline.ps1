@@ -24,7 +24,8 @@ if ((Split-Path -Leaf $ScriptDir) -eq "scripts") {
     $Root = $ScriptDir
 }
 $WNBADir = "$Root\WNBA"
-$OutRoot = "$Root\outputs"
+# Dated pipeline snapshots live under WNBA\outputs\<yyyy-MM-dd>\ (not repo-root outputs\).
+$WnbaOutputsRoot = Join-Path $WNBADir "outputs"
 
 if (-not $Date) { $Date = Get-Date -Format "yyyy-MM-dd" }
 $StartTime = Get-Date
@@ -91,8 +92,8 @@ if ($RefreshCache) {
     Write-Host ""
 }
 
-# -- Dated output folder ------------------------------------------------------
-$DateDir = "$OutRoot\$Date"
+# -- Dated output folder (under WNBA\outputs\<date>\) -------------------------
+$DateDir = Join-Path $WnbaOutputsRoot $Date
 if (-not (Test-Path $DateDir)) {
     New-Item -ItemType Directory -Force -Path $DateDir | Out-Null
 }
@@ -153,6 +154,13 @@ if ($ok) {
             Write-Host "  Copied: $f" -ForegroundColor Green
         }
     }
+    # Canonical dated artifact expected by scripts/run_daily.ps1 checks.
+    $step8Src = "$WNBADir\step8_wnba_direction.xlsx"
+    if (Test-Path $step8Src) {
+        $step8Dst = Join-Path $DateDir ("step8_wnba_direction_" + $Date + ".xlsx")
+        Copy-Item $step8Src $step8Dst -Force
+        Write-Host "  Copied: $(Split-Path -Leaf $step8Dst)" -ForegroundColor Green
+    }
     $script:ProgressDone = [Math]::Min($script:ProgressDone + 1, $script:ProgressTotal)
     $pct = [int][Math]::Round(($script:ProgressDone / $script:ProgressTotal) * 100, 0)
     Write-Progress -Id 2 -Activity "WNBA Pipeline" -Status "Copy outputs [OK] ($script:ProgressDone/$script:ProgressTotal)" -PercentComplete $pct
@@ -166,7 +174,8 @@ Write-Host ""
 Write-Host "======================================================" -ForegroundColor Cyan
 if ($ok) {
     Write-Host "  WNBA DONE  |  $Date  |  Elapsed: $($Elapsed.ToString('mm\:ss'))" -ForegroundColor Cyan
-    Write-Host "  Outputs → $DateDir" -ForegroundColor Green
+    Write-Host "  Dated copies → $DateDir" -ForegroundColor Green
+    Write-Host "  Canonical slate → $WNBADir (step1 … step9, wnba_best_tickets.xlsx)" -ForegroundColor DarkGray
 } else {
     Write-Host "  WNBA FAILED  |  Check output above" -ForegroundColor Red
 }

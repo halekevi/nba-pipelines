@@ -330,14 +330,16 @@ function Copy-DatedSlateOutput {
     param(
         [string]$SourcePath,
         [string]$DatedFileName,
-        [string]$Label
+        [string]$Label,
+        [string]$OutputDirectory = ""
     )
     if (-not (Test-Path $SourcePath)) { return }
+    $destDir = if ($OutputDirectory) { $OutputDirectory } else { $OutDir }
     try {
-        if (-not (Test-Path $OutDir)) {
-            New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
+        if (-not (Test-Path $destDir)) {
+            New-Item -ItemType Directory -Force -Path $destDir | Out-Null
         }
-        $datedPath = Join-Path $OutDir $DatedFileName
+        $datedPath = Join-Path $destDir $DatedFileName
         Copy-Item -LiteralPath $SourcePath -Destination $datedPath -Force -ErrorAction Stop
         Write-Host "  [$Label] Dated copy -> $datedPath" -ForegroundColor DarkGray
     }
@@ -1451,10 +1453,12 @@ if ($TennisSuccess) {
         -Label "Tennis"
 }
 if ($WNBASuccess) {
+    $wnbaDatedDir = Join-Path $WNBADir "outputs\$Date"
     Copy-DatedSlateOutput `
         -SourcePath (Join-Path $WNBADir "step8_wnba_direction.xlsx") `
         -DatedFileName "step8_wnba_direction_$Date.xlsx" `
-        -Label "WNBA"
+        -Label "WNBA" `
+        -OutputDirectory $wnbaDatedDir
 }
 
 Remove-Job $allJobs -Force -ErrorAction SilentlyContinue
