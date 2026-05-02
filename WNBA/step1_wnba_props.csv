@@ -1,42 +1,28 @@
 ﻿projection_id,pp_projection_id,player_id,pp_game_id,start_time,player,image_url,pos,team,opp_team,pp_home_team,pp_away_team,prop_type,line,pick_type
-11778103,11778103,237851,148416,2026-04-30T19:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,Points,12.5,Standard
-11778091,11778091,237851,148416,2026-04-30T19:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,Assists,5.5,Standard
-11778094,11778094,237851,148416,2026-04-30T19:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,Rebounds,3.5,Demon
-11778104,11778104,237836,148416,2026-04-30T19:00:00.000-04:00,Paige Bueckers,https://static.prizepicks.com/images/players/NBA/Paige_Bueckers_WNBA_player_9Y8nnqPB9PRhUk1Zb4Mlsb5c.webp,G,DAL,,,,Points,13.5,Standard
-11778105,11778105,315762,148416,2026-04-30T19:00:00.000-04:00,Azzi Fudd,https://static.prizepicks.com/images/manual/Azzi.png,G,DAL,,,,Points,10.0,Standard
-11778087,11778087,239174,148416,2026-04-30T19:00:00.000-04:00,Sophie Cunningham,https://static.prizepicks.com/images/players/NBA/Sophie_Cunningham_WNBA_player_cZAeIhZamNbdXKxGLDTtak3Y.webp,G,IND,,,,Points,7.5,Standard
-11778086,11778086,237852,148416,2026-04-30T19:00:00.000-04:00,Kelsey Mitchell,https://static.prizepicks.com/images/players/NBA/Kelsey_Mitchell_WNBA_player_EIjpvNmrTSUtZ3DS46UvarB1.webp,G,IND,,,,Points,13.5,Standard
-11738309,11738309,237851,148416,2026-04-30T19:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,Points,19.5,Demon
-11738317,11738317,237836,148416,2026-04-30T19:00:00.000-04:00,Paige Bueckers,https://static.prizepicks.com/images/players/NBA/Paige_Bueckers_WNBA_player_9Y8nnqPB9PRhUk1Zb4Mlsb5c.webp,G,DAL,,,,Points,19.5,Demon
-11784658,11784658,237852,148416,2026-04-30T19:00:00.000-04:00,Kelsey Mitchell,https://static.prizepicks.com/images/players/NBA/Kelsey_Mitchell_WNBA_player_EIjpvNmrTSUtZ3DS46UvarB1.webp,G,IND,,,,Points,19.5,Demon
-11738308,11738308,237851,148416,2026-04-30T19:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,Points,14.5,Demon
-11738316,11738316,237836,148416,2026-04-30T19:00:00.000-04:00,Paige Bueckers,https://static.prizepicks.com/images/players/NBA/Paige_Bueckers_WNBA_player_9Y8nnqPB9PRhUk1Zb4Mlsb5c.webp,G,DAL,,,,Points,14.5,Demon
-11767808,11767808,315762,148416,2026-04-30T19:00:00.000-04:00,Azzi Fudd,https://static.prizepicks.com/images/manual/Azzi.png,G,DAL,,,,Points,14.5,Demon
-11784657,11784657,237852,148416,2026-04-30T19:00:00.000-04:00,Kelsey Mitchell,https://static.prizepicks.com/images/players/NBA/Kelsey_Mitchell_WNBA_player_EIjpvNmrTSUtZ3DS46UvarB1.webp,G,IND,,,,Points,14.5,Demon
-11738306,11738306,237851,148416,2026-04-30T19:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,Assists,9.5,Demon
-11738307,11738307,237851,148416,2026-04-30T19:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,Points,9.5,Goblin
-11738315,11738315,237836,148416,2026-04-30T19:00:00.000-04:00,Paige Bueckers,https://static.prizepicks.com/images/players/NBA/Paige_Bueckers_WNBA_player_9Y8nnqPB9PRhUk1Zb4Mlsb5c.webp,G,DAL,,,,Points,9.5,Goblin
-11767807,11767807,315762,148416,2026-04-30T19:00:00.000-04:00,Azzi Fudd,https://static.prizepicks.com/images/manual/Azzi.png,G,DAL,,,,Points,9.5,Goblin
-11784659,11784659,237852,148416,2026-04-30T19:00:00.000-04:00,Kelsey Mitchell,https://static.prizepicks.com/images/players/NBA/Kelsey_Mitchell_WNBA_player_EIjpvNmrTSUtZ3DS46UvarB1.webp,G,IND,,,,Points,9.5,Goblin
-11738305,11738305,237851,148416,2026-04-30T19:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,Assists,7.5,Demon
-11738310,11738310,237851,148416,2026-04-30T19:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,Rebounds,5.5,Demon
-11738314,11738314,237836,148416,2026-04-30T19:00:00.000-04:00,Paige Bueckers,https://static.prizepicks.com/images/players/NBA/Paige_Bueckers_WNBA_player_9Y8nnqPB9PRhUk1Zb4Mlsb5c.webp,G,DAL,,,,Assists,5.5,Demon
-11738304,11738304,237851,148416,2026-04-30T19:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,3-PT Made,3.5,Demon
-11739893,11739893,237836,148416,2026-04-30T19:00:00.000-04:00,Paige Bueckers,https://static.prizepicks.com/images/players/NBA/Paige_Bueckers_WNBA_player_9Y8nnqPB9PRhUk1Zb4Mlsb5c.webp,G,DAL,,,,Assists,3.5,Standard
-11784656,11784656,237852,148416,2026-04-30T19:00:00.000-04:00,Kelsey Mitchell,https://static.prizepicks.com/images/players/NBA/Kelsey_Mitchell_WNBA_player_EIjpvNmrTSUtZ3DS46UvarB1.webp,G,IND,,,,3-PT Made,3.5,Demon
-11738303,11738303,237851,148416,2026-04-30T19:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,3-PT Made,2.5,Demon
-11738313,11738313,237836,148416,2026-04-30T19:00:00.000-04:00,Paige Bueckers,https://static.prizepicks.com/images/players/NBA/Paige_Bueckers_WNBA_player_9Y8nnqPB9PRhUk1Zb4Mlsb5c.webp,G,DAL,,,,3-PT Made,2.5,Demon
-11767806,11767806,315762,148416,2026-04-30T19:00:00.000-04:00,Azzi Fudd,https://static.prizepicks.com/images/manual/Azzi.png,G,DAL,,,,3-PT Made,2.5,Demon
-11778088,11778088,237852,148416,2026-04-30T19:00:00.000-04:00,Kelsey Mitchell,https://static.prizepicks.com/images/players/NBA/Kelsey_Mitchell_WNBA_player_EIjpvNmrTSUtZ3DS46UvarB1.webp,G,IND,,,,Assists,2.5,Demon
-11784655,11784655,237852,148416,2026-04-30T19:00:00.000-04:00,Kelsey Mitchell,https://static.prizepicks.com/images/players/NBA/Kelsey_Mitchell_WNBA_player_EIjpvNmrTSUtZ3DS46UvarB1.webp,G,IND,,,,3-PT Made,2.5,Demon
-11792949,11792949,237836,148416,2026-04-30T19:00:00.000-04:00,Paige Bueckers,https://static.prizepicks.com/images/players/NBA/Paige_Bueckers_WNBA_player_9Y8nnqPB9PRhUk1Zb4Mlsb5c.webp,G,DAL,,,,Rebounds,2.5,Standard
-11738312,11738312,237836,148416,2026-04-30T19:00:00.000-04:00,Paige Bueckers,https://static.prizepicks.com/images/players/NBA/Paige_Bueckers_WNBA_player_9Y8nnqPB9PRhUk1Zb4Mlsb5c.webp,G,DAL,,,,3-PT Made,1.5,Demon
-11739892,11739892,237851,148416,2026-04-30T19:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,3-PT Made,1.5,Standard
-11767805,11767805,315762,148416,2026-04-30T19:00:00.000-04:00,Azzi Fudd,https://static.prizepicks.com/images/manual/Azzi.png,G,DAL,,,,3-PT Made,1.5,Demon
-11778089,11778089,237852,148416,2026-04-30T19:00:00.000-04:00,Kelsey Mitchell,https://static.prizepicks.com/images/players/NBA/Kelsey_Mitchell_WNBA_player_EIjpvNmrTSUtZ3DS46UvarB1.webp,G,IND,,,,3-PT Made,1.5,Goblin
-11778090,11778090,239174,148416,2026-04-30T19:00:00.000-04:00,Sophie Cunningham,https://static.prizepicks.com/images/players/NBA/Sophie_Cunningham_WNBA_player_cZAeIhZamNbdXKxGLDTtak3Y.webp,G,IND,,,,3-PT Made,1.5,Demon
-11738311,11738311,237836,148416,2026-04-30T19:00:00.000-04:00,Paige Bueckers,https://static.prizepicks.com/images/players/NBA/Paige_Bueckers_WNBA_player_9Y8nnqPB9PRhUk1Zb4Mlsb5c.webp,G,DAL,,,,3-PT Made,0.5,Goblin
-11767804,11767804,315762,148416,2026-04-30T19:00:00.000-04:00,Azzi Fudd,https://static.prizepicks.com/images/manual/Azzi.png,G,DAL,,,,3-PT Made,0.5,Goblin
+11813988,11813988,316212,155439,2026-05-01T20:00:00.000-04:00,Natasha Howard,https://static.prizepicks.com/images/manual/NatashaHoward.png,F,MIN,,,,Points,10.5,Standard
+11813989,11813989,237839,155439,2026-05-01T20:00:00.000-04:00,Kayla McBride,https://static.prizepicks.com/images/players/NBA/Kayla_McBride_WNBA_player_FvOOuHYyeeqNMo84Z72C7gxi.webp,G,MIN,,,,Points,10.5,Standard
+11813986,11813986,315803,155439,2026-05-01T20:00:00.000-04:00,Brittney Sykes,https://static.prizepicks.com/images/manual/Sykes.png,G,TOR,,,,Points,9.5,Standard
+11813987,11813987,316211,155439,2026-05-01T20:00:00.000-04:00,Lexi Held,https://static.prizepicks.com/images/manual/LexiHeld.png,G,TOR,,,,Points,7.5,Standard
+11813990,11813990,315803,155439,2026-05-01T20:00:00.000-04:00,Brittney Sykes,https://static.prizepicks.com/images/manual/Sykes.png,G,TOR,,,,Assists,2.5,Goblin
+11813991,11813991,237839,155439,2026-05-01T20:00:00.000-04:00,Kayla McBride,https://static.prizepicks.com/images/players/NBA/Kayla_McBride_WNBA_player_FvOOuHYyeeqNMo84Z72C7gxi.webp,G,MIN,,,,Assists,2.5,Standard
+11813993,11813993,237839,155439,2026-05-01T20:00:00.000-04:00,Kayla McBride,https://static.prizepicks.com/images/players/NBA/Kayla_McBride_WNBA_player_FvOOuHYyeeqNMo84Z72C7gxi.webp,G,MIN,,,,3-PT Made,2.5,Demon
+11813992,11813992,315803,155439,2026-05-01T20:00:00.000-04:00,Brittney Sykes,https://static.prizepicks.com/images/manual/Sykes.png,G,TOR,,,,3-PT Made,0.5,Standard
+11814062,11814062,237852,156265,2026-05-02T19:00:00.000-04:00,Kelsey Mitchell,https://static.prizepicks.com/images/players/NBA/Kelsey_Mitchell_WNBA_player_EIjpvNmrTSUtZ3DS46UvarB1.webp,G,IND,,,,Points,13.5,Standard
+11814051,11814051,237851,156265,2026-05-02T19:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,Points,12.5,Standard
+11814077,11814077,239174,156265,2026-05-02T19:00:00.000-04:00,Sophie Cunningham,https://static.prizepicks.com/images/players/NBA/Sophie_Cunningham_WNBA_player_cZAeIhZamNbdXKxGLDTtak3Y.webp,G,IND,,,,Points,6.5,Standard
+11814052,11814052,237851,156265,2026-05-02T19:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,Assists,6.0,Standard
+11814053,11814053,237851,156265,2026-05-02T19:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,Rebounds,3.5,Standard
+11814063,11814063,237852,156265,2026-05-02T19:00:00.000-04:00,Kelsey Mitchell,https://static.prizepicks.com/images/players/NBA/Kelsey_Mitchell_WNBA_player_EIjpvNmrTSUtZ3DS46UvarB1.webp,G,IND,,,,Assists,2.5,Demon
+11814054,11814054,237851,156265,2026-05-02T19:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,3-PT Made,1.5,Standard
+11814064,11814064,237852,156265,2026-05-02T19:00:00.000-04:00,Kelsey Mitchell,https://static.prizepicks.com/images/players/NBA/Kelsey_Mitchell_WNBA_player_EIjpvNmrTSUtZ3DS46UvarB1.webp,G,IND,,,,3-PT Made,1.5,Standard
+11814078,11814078,239174,156265,2026-05-02T19:00:00.000-04:00,Sophie Cunningham,https://static.prizepicks.com/images/players/NBA/Sophie_Cunningham_WNBA_player_cZAeIhZamNbdXKxGLDTtak3Y.webp,G,IND,,,,3-PT Made,1.5,Demon
+11816166,11816166,315793,149151,2026-05-03T15:00:00.000-04:00,Angel Reese,https://static.prizepicks.com/images/manual/AngeelesReese.png,F,ATL,,,,Points,14.5,Demon
+11816168,11816168,315793,149151,2026-05-03T15:00:00.000-04:00,Angel Reese,https://static.prizepicks.com/images/manual/AngeelesReese.png,F,ATL,,,,Rebounds,11.5,Demon
+11816165,11816165,315793,149151,2026-05-03T15:00:00.000-04:00,Angel Reese,https://static.prizepicks.com/images/manual/AngeelesReese.png,F,ATL,,,,Points,9.5,Demon
+11816167,11816167,315793,149151,2026-05-03T15:00:00.000-04:00,Angel Reese,https://static.prizepicks.com/images/manual/AngeelesReese.png,F,ATL,,,,Rebounds,9.5,Demon
+11816170,11816170,315793,149151,2026-05-03T15:00:00.000-04:00,Angel Reese,https://static.prizepicks.com/images/manual/AngeelesReese.png,F,ATL,,,,Rebounds,7.5,Goblin
+11816169,11816169,315793,149151,2026-05-03T15:00:00.000-04:00,Angel Reese,https://static.prizepicks.com/images/manual/AngeelesReese.png,F,ATL,,,,Rebounds,5.5,Goblin
+11816164,11816164,315793,149151,2026-05-03T15:00:00.000-04:00,Angel Reese,https://static.prizepicks.com/images/manual/AngeelesReese.png,F,ATL,,,,Double-Double,0.5,Demon
 11717382,11717382,237847,150439,2026-05-08T19:30:00.000-04:00,Breanna Stewart,https://static.prizepicks.com/images/players/NBA/Breanna_Stewart_WNBA_player_0QbcmrMWR4KgqkSDi1fYPEeZ.webp,F,NYL,,,,Points,24.5,Demon
 11717394,11717394,237848,150439,2026-05-08T19:30:00.000-04:00,Sabrina Ionescu,https://static.prizepicks.com/images/players/NBA/Sabrina_Ionescu_WNBA_player_P26gx0GUbxv35lMVCUU4z5Q5.webp,G,NYL,,,,Points,24.5,Demon
 11717381,11717381,237847,150439,2026-05-08T19:30:00.000-04:00,Breanna Stewart,https://static.prizepicks.com/images/players/NBA/Breanna_Stewart_WNBA_player_0QbcmrMWR4KgqkSDi1fYPEeZ.webp,F,NYL,,,,Points,19.5,Demon
@@ -60,6 +46,7 @@
 11717379,11717379,237847,150439,2026-05-08T19:30:00.000-04:00,Breanna Stewart,https://static.prizepicks.com/images/players/NBA/Breanna_Stewart_WNBA_player_0QbcmrMWR4KgqkSDi1fYPEeZ.webp,F,NYL,,,,Double-Double,0.5,Demon
 11717392,11717392,237848,150439,2026-05-08T19:30:00.000-04:00,Sabrina Ionescu,https://static.prizepicks.com/images/players/NBA/Sabrina_Ionescu_WNBA_player_P26gx0GUbxv35lMVCUU4z5Q5.webp,G,NYL,,,,Double-Double,0.5,Demon
 11717419,11717419,237835,150721,2026-05-09T13:00:00.000-04:00,Arike Ogunbowale,https://static.prizepicks.com/images/players/NBA/Arike_Ogunbowale_WNBA_player_li5EkQnXby20K9Lhu8gX4Ygc.webp,G,DAL,,,,Pts+Asts,29.5,Demon
+11807003,11807003,237852,150721,2026-05-09T13:00:00.000-04:00,Kelsey Mitchell,https://static.prizepicks.com/images/players/NBA/Kelsey_Mitchell_WNBA_player_EIjpvNmrTSUtZ3DS46UvarB1.webp,G,IND,,,,Points,29.5,Demon
 11717416,11717416,237835,150721,2026-05-09T13:00:00.000-04:00,Arike Ogunbowale,https://static.prizepicks.com/images/players/NBA/Arike_Ogunbowale_WNBA_player_li5EkQnXby20K9Lhu8gX4Ygc.webp,G,DAL,,,,Points,24.5,Demon
 11717418,11717418,237835,150721,2026-05-09T13:00:00.000-04:00,Arike Ogunbowale,https://static.prizepicks.com/images/players/NBA/Arike_Ogunbowale_WNBA_player_li5EkQnXby20K9Lhu8gX4Ygc.webp,G,DAL,,,,Pts+Asts,24.5,Demon
 11717434,11717434,237851,150721,2026-05-09T13:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,Points,24.5,Demon
@@ -70,13 +57,13 @@
 11717415,11717415,237835,150721,2026-05-09T13:00:00.000-04:00,Arike Ogunbowale,https://static.prizepicks.com/images/players/NBA/Arike_Ogunbowale_WNBA_player_li5EkQnXby20K9Lhu8gX4Ygc.webp,G,DAL,,,,Points,19.5,Demon
 11717417,11717417,237835,150721,2026-05-09T13:00:00.000-04:00,Arike Ogunbowale,https://static.prizepicks.com/images/players/NBA/Arike_Ogunbowale_WNBA_player_li5EkQnXby20K9Lhu8gX4Ygc.webp,G,DAL,,,,Pts+Asts,19.5,Goblin
 11717424,11717424,315762,150721,2026-05-09T13:00:00.000-04:00,Azzi Fudd,https://static.prizepicks.com/images/manual/Azzi.png,G,DAL,,,,Points,19.5,Demon
-11717435,11717435,237851,150721,2026-05-09T13:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,Points,19.5,Standard
 11717452,11717452,198928,150721,2026-05-09T13:00:00.000-04:00,Maddy Siegrist,https://static.prizepicks.com/images/players/NBA/Maddy_Siegrist_WNBA_player_PvhKfiewQCBz5r4ey5IRM2wR.webp,F,DAL,,,,Points,19.5,Demon
-11717463,11717463,237836,150721,2026-05-09T13:00:00.000-04:00,Paige Bueckers,https://static.prizepicks.com/images/players/NBA/Paige_Bueckers_WNBA_player_9Y8nnqPB9PRhUk1Zb4Mlsb5c.webp,G,DAL,,,,Points,19.5,Standard
+11717435,11717435,237851,150721,2026-05-09T13:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,Points,19.0,Standard
+11717463,11717463,237836,150721,2026-05-09T13:00:00.000-04:00,Paige Bueckers,https://static.prizepicks.com/images/players/NBA/Paige_Bueckers_WNBA_player_9Y8nnqPB9PRhUk1Zb4Mlsb5c.webp,G,DAL,,,,Points,19.0,Standard
 11717422,11717422,315762,150721,2026-05-09T13:00:00.000-04:00,Azzi Fudd,https://static.prizepicks.com/images/manual/Azzi.png,G,DAL,,,,Points,17.5,Demon
 11717433,11717433,237851,150721,2026-05-09T13:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,Points,17.5,Goblin
 11717451,11717451,198928,150721,2026-05-09T13:00:00.000-04:00,Maddy Siegrist,https://static.prizepicks.com/images/players/NBA/Maddy_Siegrist_WNBA_player_PvhKfiewQCBz5r4ey5IRM2wR.webp,F,DAL,,,,Points,17.5,Demon
-11717403,11717403,237853,150721,2026-05-09T13:00:00.000-04:00,Aliyah Boston,https://static.prizepicks.com/images/players/NBA/Aliyah_Boston_WNBA_player_G6uHubog9X1bQPpQo9lPzFr9.webp,C-F,IND,,,,Points,15.5,Standard
+11717403,11717403,237853,150721,2026-05-09T13:00:00.000-04:00,Aliyah Boston,https://static.prizepicks.com/images/players/NBA/Aliyah_Boston_WNBA_player_G6uHubog9X1bQPpQo9lPzFr9.webp,C-F,IND,,,,Points,15.0,Standard
 11717414,11717414,237835,150721,2026-05-09T13:00:00.000-04:00,Arike Ogunbowale,https://static.prizepicks.com/images/players/NBA/Arike_Ogunbowale_WNBA_player_li5EkQnXby20K9Lhu8gX4Ygc.webp,G,DAL,,,,Points,14.5,Goblin
 11717423,11717423,315762,150721,2026-05-09T13:00:00.000-04:00,Azzi Fudd,https://static.prizepicks.com/images/manual/Azzi.png,G,DAL,,,,Points,14.5,Demon
 11717432,11717432,237851,150721,2026-05-09T13:00:00.000-04:00,Caitlin Clark,https://static.prizepicks.com/images/players/NBA/Caitlin_Clark_WNBA_player_QSGioalNHPIX9vjS6b9g2AVO.webp,G,IND,,,,Points,14.5,Goblin

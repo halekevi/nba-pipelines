@@ -155,13 +155,25 @@ def _def_tier_encoded_series(df: pd.DataFrame) -> pd.Series:
     val = np.where(~el & s.eq("B"), 2.0, val)
     val = np.where(~el & s.eq("C"), 1.0, val)
     val = np.where(~el & s.eq("D"), 0.0, val)
+    # Below Avg opponent defense (softer than league avg) — between AVERAGE and WEAK
+    below_avg = ~el & s.str.contains("BELOW", na=False) & ~s.str.contains("ABOVE", na=False)
+    val = np.where(below_avg, 0.5, val)
     val = np.where(~el & s.str.contains("WEAK", na=False), 0.0, val)
     val = np.where(
         ~el & s.str.contains("STRONG|SOLID|GOOD|ABOVE", na=False) & ~s.str.contains("WEAK", na=False),
         2.0,
         val,
     )
-    val = np.where(~el & s.str.contains("AVERAGE|AVG|MID", na=False), 1.0, val)
+    # Plain avg/mid — exclude "above avg" / "below avg" (those match AVG substring)
+    avg_mid = (
+        ~el
+        & ~below_avg
+        & ~s.str.contains("WEAK", na=False)
+        & s.str.contains("AVERAGE|AVG|MID", na=False)
+        & ~s.str.contains("ABOVE", na=False)
+        & ~s.str.contains("BELOW", na=False)
+    )
+    val = np.where(avg_mid, 1.0, val)
     return pd.Series(val, index=df.index)
 
 

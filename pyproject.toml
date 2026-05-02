@@ -1,0 +1,14 @@
+# Local tooling (pytest + ruff). Web deploy still uses requirements.txt + Dockerfile / Railway.
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["proporacle", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = ["E501"]

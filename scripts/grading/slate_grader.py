@@ -52,7 +52,7 @@ C = {
     'over':'D6EAF8','under':'FDEBD0',
     'goblin':'E8D5F5','demon':'FDEDEC','standard':'F2F3F4',
 }
-DEF_TIER_ORDER    = ['Elite','Above Avg','Avg','Weak']
+DEF_TIER_ORDER    = ['Elite', 'Above Avg', 'Avg', 'Below Avg', 'Weak']
 MINUTES_TIER_ORDER= ['HIGH','MEDIUM','LOW','UNKNOWN']
 USAGE_ROLE_ORDER  = ['PRIMARY','SECONDARY','SUPPORT','UNKNOWN']
 SHOT_ROLE_ORDER   = ['HIGH_VOL','MID_VOL','LOW_VOL','UNKNOWN']

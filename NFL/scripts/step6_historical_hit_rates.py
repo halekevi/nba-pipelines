@@ -31,7 +31,7 @@ def main() -> None:
     require_nfl_pipeline_active_or_exit()
 
     ap = argparse.ArgumentParser()
-    ap.add_argument("--input", default="data/outputs/step2_clean_props.csv")
+    ap.add_argument("--input", default="data/outputs/step3_nfl_with_defense.csv")
     ap.add_argument("--output", default="data/outputs/step6_hit_rates.csv")
     args = ap.parse_args()
 

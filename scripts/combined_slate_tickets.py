@@ -117,17 +117,9 @@ DEFAULT_CBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_cbb.xlsx")
 DEFAULT_NBA1H_PATH = os.path.join(REPO_ROOT, "NBA", "step8_nba1h_direction_clean.xlsx")
 DEFAULT_NBA1Q_PATH = os.path.join(REPO_ROOT, "NBA", "step8_nba1q_direction_clean.xlsx")
 DEFAULT_WCBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_wcbb.xlsx")
-_MLB_DATA = os.path.join(REPO_ROOT, "MLB", "data", "outputs", "step8_mlb_direction_clean.xlsx")
-_MLB_ROOT = os.path.join(REPO_ROOT, "MLB", "step8_mlb_direction_clean.xlsx")
-_MLB_OUTSUB = os.path.join(REPO_ROOT, "MLB", "outputs", "step8_mlb_direction_clean.xlsx")
-if os.path.exists(_MLB_DATA):
-    DEFAULT_MLB_PATH = _MLB_DATA
-elif os.path.exists(_MLB_ROOT):
-    DEFAULT_MLB_PATH = _MLB_ROOT
-else:
-    DEFAULT_MLB_PATH = _MLB_OUTSUB
-# CBB deactivated - season over (April 2026)
-DISABLED_SPORTS = {"CBB"}
+DEFAULT_MLB_PATH = os.path.join(REPO_ROOT, "MLB", "step8_mlb_direction_clean.xlsx")
+DEFAULT_NFL_PATH = os.path.join(REPO_ROOT, "NFL", "outputs", "step8_nfl_direction_clean.xlsx")
+DISABLED_SPORTS: set[str] = set()
 _soccer_root = os.path.join(REPO_ROOT, "Soccer", "step8_soccer_direction_clean.xlsx")
 _soccer_outputs = os.path.join(REPO_ROOT, "Soccer", "outputs", "step8_soccer_direction_clean.xlsx")
 if os.path.exists(_soccer_root) and os.path.exists(_soccer_outputs):
@@ -143,15 +135,7 @@ elif os.path.exists(_soccer_outputs):
 else:
     DEFAULT_SOCCER_PATH = _soccer_root
 DEFAULT_TENNIS_PATH = os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis_direction_clean.xlsx")
-_WNBA_DATA = os.path.join(REPO_ROOT, "WNBA", "data", "outputs", "step8_wnba_direction_clean.xlsx")
-_WNBA_ROOT_CLEAN = os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction_clean.xlsx")
-_WNBA_ROOT_LEGACY = os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction.xlsx")
-if os.path.exists(_WNBA_DATA):
-    DEFAULT_WNBA_PATH = _WNBA_DATA
-elif os.path.exists(_WNBA_ROOT_CLEAN):
-    DEFAULT_WNBA_PATH = _WNBA_ROOT_CLEAN
-else:
-    DEFAULT_WNBA_PATH = _WNBA_ROOT_LEGACY
+DEFAULT_WNBA_PATH = os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction.xlsx")
 DEFAULT_NHL_PATH = os.path.join(REPO_ROOT, "NHL", "outputs", "step8_nhl_direction_clean.xlsx")
 DEFAULT_WEB_OUTDIR = os.path.join(REPO_ROOT, "ui_runner", "templates")
 DIVERSITY_CONFIG_PATH = os.path.join(REPO_ROOT, "config", "diversity_config.json")
@@ -228,6 +212,8 @@ C = {
     "mlb": "FDEDEC",
     "nba1q": "D6EAF8",
     "nba1h": "D5F5E3",
+    "hdr_nfl": "5D4037",
+    "nfl": "FFF3E0",
     "mix": "F5EEF8",
     "gold": "F9E79F",
 }
@@ -2436,7 +2422,7 @@ MAX_LEGS_TENNIS = 3
 TENNIS_LEG_MIN_HIT_RATE = {2: 0.55, 3: 0.58, 4: 0.62}
 
 # Pipelines that emit step8 boards into combined slate (reference for docs / tooling).
-ACTIVE_SPORTS = ("NBA", "NHL", "SOCCER", "TENNIS", "WNBA", "MLB", "NBA1H", "NBA1Q", "WCBB")
+ACTIVE_SPORTS = ("NBA", "NHL", "SOCCER", "TENNIS", "WNBA", "MLB", "NBA1H", "NBA1Q", "WCBB", "NFL")
 # NFL — Phase 1 scaffold only; keep off slate until step8 + historical hit rates exist (Sept 2026).
 # Reference: {"NFL": False}  # activate September 2026 — do not add "NFL" to ACTIVE_SPORTS yet.
 
@@ -3855,7 +3841,7 @@ def enforce_target_date(
     # NBA/MLB period boards and Soccer should not silently roll dates.
     sport_u = str(sport).upper()
     fallback_sports = {"TENNIS"}
-    if sport_u in {"NBA", "NBA1Q", "NBA1H", "MLB", "SOCCER", "SOC", "WNBA"}:
+    if sport_u in {"NBA", "NBA1Q", "NBA1H", "MLB", "SOCCER", "SOC", "WNBA", "NFL"}:
         use_date_fallback = False
     else:
         use_date_fallback = allow_cross_date_fallback or (sport_u in fallback_sports)
@@ -6191,10 +6177,21 @@ def load_wnba(path: str) -> pd.DataFrame:
     """WNBA step8 direction workbook (same column contract as other step8 boards)."""
     return _load_step8_board_like(
         path,
-        fallback_filename="step8_wnba_direction_clean.xlsx",
+        fallback_filename="step8_wnba_direction.xlsx",
         sheet_order=("WNBA", "ALL"),
         sport="WNBA",
         log_prefix="load_wnba",
+    )
+
+
+def load_nfl(path: str) -> pd.DataFrame:
+    """NFL step8 direction clean workbook."""
+    return _load_step8_board_like(
+        path,
+        fallback_filename="step8_nfl_direction_clean.xlsx",
+        sheet_order=("NFL", "ALL"),
+        sport="NFL",
+        log_prefix="load_nfl",
     )
 
 
@@ -6945,6 +6942,7 @@ def build_combined_slate(
     mlb: pd.DataFrame = None,
     nba1q: pd.DataFrame = None,
     nba1h: pd.DataFrame = None,
+    nfl: pd.DataFrame = None,
 ) -> pd.DataFrame:
     keep = [
         "sport",
@@ -7011,6 +7009,8 @@ def build_combined_slate(
         frames.append(safe_keep(nba1q, keep))
     if nba1h is not None and len(nba1h) > 0:
         frames.append(safe_keep(nba1h, keep))
+    if nfl is not None and len(nfl) > 0:
+        frames.append(safe_keep(nfl, keep))
     combined = pd.concat(frames, ignore_index=True)
 
     if "rank_score" in combined.columns:
@@ -7881,7 +7881,7 @@ def apply_nba_context_confidence_filter(
     l5_under = pd.to_numeric(out.get("l5_under", 0), errors="coerce").fillna(0)
     l5_sample = l5_over + l5_under
 
-    def_over_good = def_tier.isin(["WEAK", "AVG", "ABOVE AVG", "AVERAGE"])
+    def_over_good = def_tier.isin(["WEAK", "AVG", "ABOVE AVG", "AVERAGE", "BELOW AVG"])
     def_under_good = def_tier.isin(["ELITE", "SOLID"])
     pace_over_good = pace_tier.eq("FAST")
     pace_under_good = pace_tier.isin(["NORMAL", "SLOW"])
@@ -7925,7 +7925,7 @@ def compute_bet_signal_core(leg: dict) -> tuple[int, list[str]]:
             score += 1
             reasons.append("enough recent sample")
 
-        over_def_good = def_tier in {"WEAK", "AVG", "ABOVE AVG", "AVERAGE"}
+        over_def_good = def_tier in {"WEAK", "AVG", "ABOVE AVG", "AVERAGE", "BELOW AVG"}
         under_def_good = def_tier in {"ELITE", "SOLID"}
         if (direction == "OVER" and over_def_good) or (direction == "UNDER" and under_def_good):
             score += 1
@@ -9501,7 +9501,8 @@ def write_ticket_sheet(wb, tickets, sheet_name, bg_hdr, label=""):
 
 # ── Write SUMMARY sheet ───────────────────────────────────────────────────────
 def write_summary(wb, nba, cbb, combined, all_ticket_groups, date_str, thresholds,
-                  nhl=None, soccer=None, tennis=None, wcbb=None, mlb=None, nba1q=None, nba1h=None):
+                  nhl=None, soccer=None, tennis=None, wcbb=None, mlb=None, nba1q=None, nba1h=None,
+                  nfl=None):
     ws = wb.create_sheet("SUMMARY", 0)
     sw(ws, [28, 14, 10, 10, 10, 10, 10, 12, 18])
 
@@ -9582,6 +9583,9 @@ def write_summary(wb, nba, cbb, combined, all_ticket_groups, date_str, threshold
     if nba1h is not None and len(nba1h) > 0:
         elig_nba1h = len(nba1h[nba1h["tier"].isin(["A", "B"])]) if "tier" in nba1h.columns else 0
         row = stat_row(row, "NBA1H Props", len(nba1h), elig_nba1h, C["nba1h"])
+    if nfl is not None and len(nfl) > 0:
+        elig_nfl = len(nfl[nfl["tier"].isin(["A", "B"])]) if "tier" in nfl.columns else 0
+        row = stat_row(row, "NFL Props", len(nfl), elig_nfl, C["nfl"])
     row = stat_row(row, "Combined Slate", len(combined), elig_all)
     row += 1
 
@@ -9662,6 +9666,7 @@ def main():
     ap.add_argument("--mlb", default="", help="MLB step8 direction clean xlsx (optional)")
     ap.add_argument("--nba1q", default="", help="NBA 1st Quarter step8 direction clean xlsx (optional)")
     ap.add_argument("--nba1h", default="", help="NBA 1st Half step8 direction clean xlsx (optional)")
+    ap.add_argument("--nfl", default="", help=f"NFL step8 (default: {DEFAULT_NFL_PATH} when present on disk)")
     ap.add_argument("--output", default="")
     ap.add_argument(
         "--date",
@@ -9963,6 +9968,8 @@ def main():
         args.tennis = DEFAULT_TENNIS_PATH if os.path.isfile(DEFAULT_TENNIS_PATH) else ""
     if not str(args.wnba).strip():
         args.wnba = DEFAULT_WNBA_PATH if os.path.isfile(DEFAULT_WNBA_PATH) else ""
+    if not str(args.nfl).strip():
+        args.nfl = DEFAULT_NFL_PATH if os.path.isfile(DEFAULT_NFL_PATH) else ""
 
     if not args.output:
         args.output = f"combined_slate_tickets_{args.date}.xlsx"
@@ -10141,6 +10148,23 @@ def main():
             print(f"  WARNING: Could not load NBA1H file: {e}")
             nba1h = None
 
+    nfl = None
+    nfl_path = str(args.nfl or "").strip()
+    if nfl_path:
+        try:
+            nfl = load_nfl(nfl_path)
+            nfl = enforce_target_date(
+                nfl, "NFL", args.date, allow_cross_date_fallback=args.allow_cross_date_fallback
+            )
+            nfl = attach_standard_refs(nfl)
+            print(f"  {len(nfl)} NFL props loaded")
+            _load_audit_row("NFL", nfl_path, nfl)
+        except Exception as e:
+            print(f"  WARNING: Could not load NFL file: {e}")
+            nfl = None
+    else:
+        print("  [NFL] skipped (empty --nfl / no default file)")
+
     # ✅ Attach Standard sibling refs AFTER normalized columns exist
     nba = attach_standard_refs(nba)
     cbb = attach_standard_refs(cbb)
@@ -10162,7 +10186,7 @@ def main():
         gd_str = df["game_date"].astype(str).str[:10]
         # NBA boards (full + period) can be posted ahead of the run date.
         # Keep only the nearest future slate date (or latest available if all are past).
-        if sport_label in ("NBA", "NBA1Q", "NBA1H", "WNBA"):
+        if sport_label in ("NBA", "NBA1Q", "NBA1H", "WNBA", "NFL"):
             avail = sorted(gd_str[dated].dropna().unique().tolist())
             if not avail:
                 return df
@@ -10198,7 +10222,7 @@ def main():
         elif sport_label == "Combined" and "sport" in df.columns:
             # Same rule as strict date check: soccer/tennis allow future ET days; other sports must match target.
             su = df["sport"].astype(str).str.upper()
-            is_roll = su.isin(["SOCCER", "TENNIS", "NBA", "NBA1Q", "NBA1H", "WNBA"])
+            is_roll = su.isin(["SOCCER", "TENNIS", "NBA", "NBA1Q", "NBA1H", "WNBA", "NFL"])
             stale = dated & ((gd_str < td) | (~is_roll & (gd_str != td)))
         else:
             stale = dated & (gd_str != td)
@@ -10217,10 +10241,11 @@ def main():
     mlb = drop_stale_rows(mlb, args.date, "MLB")
     nba1q = drop_stale_rows(nba1q, args.date, "NBA1Q")
     nba1h = drop_stale_rows(nba1h, args.date, "NBA1H")
+    nfl = drop_stale_rows(nfl, args.date, "NFL")
 
     # Apply teammate-absence usage redistribution before ticket eligibility filtering.
     nba = apply_usage_redistribution(nba, "NBA", args.date, REPO_ROOT)
-    cbb = apply_usage_redistribution(cbb, "CBB", args.date, REPO_ROOT) if "CBB" not in DISABLED_SPORTS else cbb
+    cbb = apply_usage_redistribution(cbb, "CBB", args.date, REPO_ROOT)
     wcbb = apply_usage_redistribution(wcbb, "WCBB", args.date, REPO_ROOT) if wcbb is not None else wcbb
     nhl = apply_usage_redistribution(nhl, "NHL", args.date, REPO_ROOT) if nhl is not None else nhl
     soccer = apply_usage_redistribution(soccer, "Soccer", args.date, REPO_ROOT) if soccer is not None else soccer
@@ -10229,6 +10254,7 @@ def main():
     mlb = apply_usage_redistribution(mlb, "MLB", args.date, REPO_ROOT) if mlb is not None else mlb
     nba1q = apply_usage_redistribution(nba1q, "NBA1Q", args.date, REPO_ROOT) if nba1q is not None else nba1q
     nba1h = apply_usage_redistribution(nba1h, "NBA1H", args.date, REPO_ROOT) if nba1h is not None else nba1h
+    nfl = apply_usage_redistribution(nfl, "NFL", args.date, REPO_ROOT) if nfl is not None else nfl
 
     nba = drop_demon_over_rows(nba, "NBA")
     cbb = drop_demon_over_rows(cbb, "CBB")
@@ -10240,11 +10266,13 @@ def main():
     mlb = drop_demon_over_rows(mlb, "MLB")
     nba1q = drop_demon_over_rows(nba1q, "NBA1Q")
     nba1h = drop_demon_over_rows(nba1h, "NBA1H")
+    nfl = drop_demon_over_rows(nfl, "NFL")
 
     print("Building combined slate...")
     combined = build_combined_slate(nba, cbb, nhl, soccer,
                                     tennis=tennis,
-                                    wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h)
+                                    wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h,
+                                    nfl=nfl)
     reliability_index = _load_prop_reliability_index()
     if reliability_index:
         print(f"  [reliability] loaded {len(reliability_index)} prop-direction buckets from {PROP_RELIABILITY_LATEST_PATH}")
@@ -10278,6 +10306,7 @@ def main():
     mlb = propagate_alt_book_lines_to_sport_frame(mlb, combined, ("MLB",))
     nba1q = propagate_alt_book_lines_to_sport_frame(nba1q, combined, ("NBA1Q",))
     nba1h = propagate_alt_book_lines_to_sport_frame(nba1h, combined, ("NBA1H",))
+    nfl = propagate_alt_book_lines_to_sport_frame(nfl, combined, ("NFL",))
 
     _n_ud = int(combined["line_underdog"].notna().sum()) if "line_underdog" in combined.columns else 0
     _n_dk = int(combined["line_draftkings"].notna().sum()) if "line_draftkings" in combined.columns else 0
@@ -10290,7 +10319,7 @@ def main():
         )
 
     print(f"  {len(combined)} total props")
-    for s in ("NBA", "NHL", "Soccer", "Tennis", "MLB", "NBA1H", "NBA1Q", "WCBB"):
+    for s in ("NBA", "CBB", "NHL", "Soccer", "Tennis", "MLB", "NBA1H", "NBA1Q", "WCBB", "WNBA", "NFL"):
         n_s = int((combined["sport"] == s).sum()) if "sport" in combined.columns else 0
         if n_s > 0:
             print(f"  Full Slate rows — {s}: {n_s}")
@@ -10523,8 +10552,8 @@ def main():
 
         # Tier floor: exclude Tier D from all pools
         effective_tiers = [t for t in (tiers if tiers else ["A", "B", "C", "D"]) if t != "D"]
-        # NHL / Tennis: strict high-conviction often collapses default tiers to A,B — pool is too small; allow Tier C.
-        if sport in ("NHL", "TENNIS") and bool(args.high_conviction):
+        # NHL / Tennis / NFL: strict high-conviction often collapses default tiers to A,B — pool is too small; allow Tier C.
+        if sport in ("NHL", "TENNIS", "NFL") and bool(args.high_conviction):
             tier_u = {str(x).strip().upper() for x in effective_tiers}
             if "C" not in tier_u:
                 effective_tiers = list(dict.fromkeys([*effective_tiers, "C"]))
@@ -10648,12 +10677,17 @@ def main():
     nba_pool = pool(nba)
     cbb_pool = pool(cbb)
     mlb_pool = pool(mlb)
+    nfl_pool = pool(nfl) if nfl is not None and len(nfl) > 0 else None
     combo_pool = pool(combined)
     mlb_elig = len(mlb_pool) if mlb_pool is not None else 0
+    nfl_elig = len(nfl_pool) if nfl_pool is not None else 0
     _nhl_ticket_pool_n = (
         len(pool(nhl)) if nhl is not None and len(nhl) > 0 else 0
     )
-    print(f"  NBA eligible: {len(nba_pool)} | CBB eligible: {len(cbb_pool)} | MLB eligible: {mlb_elig} | Combined: {len(combo_pool)}")
+    print(
+        f"  NBA eligible: {len(nba_pool)} | CBB eligible: {len(cbb_pool)} | MLB eligible: {mlb_elig} | "
+        f"NFL eligible: {nfl_elig} | Combined: {len(combo_pool)}"
+    )
     print(
         f"  NHL ticket-pool legs (relaxed NHL hit-rate caps + Tier C in strict mode): {_nhl_ticket_pool_n}"
     )
@@ -10941,6 +10975,8 @@ def main():
             "NBA1Q": C["hdr_nba1q"],
             "NBA1H": C["hdr_nba1h"],
             "WCBB": C["hdr_wcbb"],
+            "WNBA": C.get("hdr_nba", C["hdr"]),
+            "NFL": C["hdr_nfl"],
         }
         return sm.get(str(sport_label).upper(), C["hdr_sum"])
 
@@ -11260,6 +11296,7 @@ def main():
         ("TENNIS", pool(tennis) if tennis is not None and len(tennis) > 0 else None),
         ("WNBA", pool(wnba) if wnba is not None and len(wnba) > 0 else None),
         ("MLB", mlb_pool),
+        ("NFL", nfl_pool),
         ("NBA1Q", pool(nba1q) if nba1q is not None and len(nba1q) > 0 else None),
         ("NBA1H", pool(nba1h) if nba1h is not None and len(nba1h) > 0 else None),
         ("WCBB", pool(wcbb) if wcbb is not None and len(wcbb) > 0 else None),
@@ -11390,7 +11427,7 @@ def main():
                 bad = sdf[dated & (gd < td)]
             elif label == "Combined" and "sport" in sdf.columns:
                 su = sdf["sport"].astype(str).str.upper()
-                is_roll = su.isin(["SOCCER", "TENNIS", "NBA", "NBA1Q", "NBA1H", "WNBA"])
+                is_roll = su.isin(["SOCCER", "TENNIS", "NBA", "NBA1Q", "NBA1H", "WNBA", "NFL"])
                 bad = sdf[dated & ((gd < td) | (~is_roll & (gd != td)))]
             else:
                 bad = sdf[dated & (gd != td)]
@@ -11427,6 +11464,8 @@ def main():
         write_slate_sheet(wb, nba1q, "NBA1Q Slate", C["hdr_nba1q"], "NBA1Q")
     if nba1h is not None and len(nba1h) > 0:
         write_slate_sheet(wb, nba1h, "NBA1H Slate", C["hdr_nba1h"], "NBA1H")
+    if nfl is not None and len(nfl) > 0:
+        write_slate_sheet(wb, nfl, "NFL Slate", C["hdr_nfl"], "NFL")
 
     _prio_hit = False
     _ticket_sort = "edge"
@@ -11536,7 +11575,9 @@ def main():
         f"jaccard_p90={float(_div_audit.get('jaccard_p90', 0.0)):.4f}"
     )
     try:
-        _audit_out = Path(args.output).with_name(f"ticket_diversity_audit_{args.date}.json")
+        _audit_dir = Path(REPO_ROOT) / "data" / "reports" / "ticket_diversity"
+        _audit_dir.mkdir(parents=True, exist_ok=True)
+        _audit_out = _audit_dir / f"ticket_diversity_audit_{args.date}.json"
         _audit_payload = {
             "generated_at_utc": datetime.now(timezone.utc).isoformat(),
             "date": str(args.date),
@@ -11561,14 +11602,13 @@ def main():
             enrich_ticket_curve_payouts(_ti, stake_unit=float(args.curve_stake_usd))
 
     write_summary(wb, nba, cbb, combined, all_ticket_groups, args.date, thresholds,
-                  nhl=nhl, soccer=soccer, tennis=tennis, wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h)
+                  nhl=nhl, soccer=soccer, tennis=tennis, wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h,
+                  nfl=nfl)
 
     # Reorder: put SUMMARY + slate sheets at the front
-    # NFL: when combined loads NFL step8, add "NFL Slate" here + write_slate_sheet(..., "NFL Slate", ...),
-    # and keep ui_runner/app.py api_slate_excel sheet_map ("NFL Slate" -> "nfl") in sync.
     desired_first = [
         "SUMMARY", "Full Slate", "NBA Slate", "CBB Slate", "NHL Slate", "Soccer Slate", "Tennis Slate",
-        "WCBB Slate", "MLB Slate", "NBA1Q Slate", "NBA1H Slate",
+        "WCBB Slate", "MLB Slate", "NFL Slate", "NBA1Q Slate", "NBA1H Slate",
     ]
     for sname in reversed(desired_first):
         if sname in wb.sheetnames:
@@ -11660,8 +11700,6 @@ def main():
             apply_template_cap=bool(args.web_template_cap),
             discard_tracker=discard_tracker,
         )
-        # nfl: pass None until combined loads NFL step8; keep key "nfl": [] in slate_latest.json for UI.
-        nfl = None
         write_slate_json(nba, cbb, nhl, soccer, args.date, args.web_outdir,
                          wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h, tennis=tennis, nfl=nfl, wnba=wnba)
         try:

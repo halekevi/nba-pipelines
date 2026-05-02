@@ -10,18 +10,23 @@ Everything assumes the **repository root** is the working directory for `run_pip
 |----------|------|
 | `run_pipeline.ps1` | Master multi-sport pipeline (NBA, CBB, NHL, MLB, Soccer, WNBA, combined tickets) |
 | `main.py` | WSGI shim: re-exports `app` from `ui_runner.app` |
-| `scripts\` | Shared Python utilities, graders, ML training, combined slate builder, ticket eval (`build_ticket_eval.py`), entries harvest (`capture_entries.py`) |
+| `scripts\` | Shared Python utilities, graders, ML training, combined slate builder, ticket eval (`scripts\build_ticket_eval.py`), entries harvest (`capture_entries.py`) |
+| `docs\` | `CHANGELOG.md`, `DESIGN_PRINCIPLES.md`, runbooks (`PROPORACLE_RUN_COMMANDS.md`, this file), `docs\guides\` for long-form setup |
+| `config\` | `requirements-pipeline.txt` (ML/grading/pipeline extra deps — not used by Docker/Railway) |
+| `pyproject.toml` | **Local only:** pytest + ruff settings (replaces root `pytest.ini` / `ruff.toml`). Deploy still uses `requirements.txt` + `Dockerfile` |
 | `docs\guides\` | Long-form setup and status docs (e.g. `BROWSER_FETCH_SETUP.md`, `APP_SYSTEM_STATUS.md`) |
 | `archive\root-text\` | Ad hoc notes, patch snippets, and log copies moved off the repo root |
 | `archive\web_exports\` | Large standalone HTML exports (e.g. old `player_prop_hitrates.html` copies) |
 | `archive\legacy\` | Older root `_archive` tree (dev notes, sample actuals, zips, one-off scripts) — kept for reference |
 | `local\` | **Gitignored** local runtime: put Playwright fallbacks here, e.g. `local\browser_session\` and `local\browser_session_harvest2\` (optional second profile). Legacy root `browser_session*` still works and stays ignored. |
 | `data\db\` | Default location for `MyTicketPerformance.db` (ticket/entries SQLite; `*.db` is gitignored) |
+| `data\reports\ticket_diversity\` | `ticket_diversity_audit_<date>.json` from `combined_slate_tickets.py` (since repo cleanup; no longer written beside `combined_slate_tickets_*.xlsx`) |
+| `data\archive\` | One-off backups moved off the repo root (e.g. stray `tickets_latest_repo_root.json`, `mlb_id_cache_repo_root.csv`) |
 | (avoid at root) | Do not keep sport caches (`mlb_id_cache.csv` → `MLB\`, `nhl_*` → `NHL\` or `NHL\cache\`), `schedule_cache_*.csv` (→ `NBA\`), MLB step CSVs (→ `MLB\outputs\`), or ad-hoc exports — use `archive\` or sport folders |
 
 ### Keep at repository root (hosting / tooling)
 
-Do **not** move these without updating **Docker**, **Railway / Nixpacks**, **Procfile**, and docs: `Dockerfile`, `Procfile`, `railway.toml`, `nixpacks.toml`, `main.py` (Gunicorn `main:app`), `requirements.txt`, `requirements-pipeline.txt`, `run_pipeline.ps1`, `.dockerignore`. Optional PowerShell helpers live under `scripts\` (e.g. `scripts\backfill_ticket_evals.ps1`, `scripts\patch_slateiq.ps1`).
+Do **not** move these without updating **Docker**, **Railway / Nixpacks**, **Procfile**, and docs: `Dockerfile`, `Procfile`, `railway.toml`, `nixpacks.toml`, `main.py` (Gunicorn `main:app`), `requirements.txt`, `run_pipeline.ps1`, `.dockerignore`. Pipeline ML deps live at `config\requirements-pipeline.txt` (install explicitly — not part of the web image).
 | `outputs\<yyyy-MM-dd>\` | Dated run artifacts (copies of combined tickets, quality reports, etc.) |
 | `logs\` | Long-lived logs, `git_push_log.txt` (from optional pipeline git push), and dated debug text from `organize_project_root.ps1` |
 | `ui_runner\` | Flask app (`app.py`), static assets, HTML templates (including generated slate JSON/HTML) |

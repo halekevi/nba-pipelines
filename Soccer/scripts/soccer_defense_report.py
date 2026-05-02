@@ -13,11 +13,21 @@ Usage:
   py soccer_defense_report.py --out soccer_defense_summary.csv
 """
 from __future__ import annotations
-import argparse, time, random
+import argparse
+import sys
+import time
+import random
 from datetime import datetime
+from pathlib import Path
 from typing import Dict, List, Optional
+
 import pandas as pd
 import requests
+
+_ROOT = Path(__file__).resolve().parents[2]
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+from utils.defense_tiers import def_tier_from_overall_rank
 
 ESPN_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -391,13 +401,9 @@ def add_ranks_and_tiers(df: pd.DataFrame) -> pd.DataFrame:
         g.loc[~ok, "OVERALL_DEF_RANK"] = mid
 
         def _tier(r, n=n):
-            if pd.isna(r): return "Avg"
-            r = int(r)
-            if n < 2: return "Avg"
-            if r <= max(1, round(n * 0.25)): return "Elite"
-            if r <= max(1, round(n * 0.50)): return "Above Avg"
-            if r <= max(1, round(n * 0.75)): return "Avg"
-            return "Weak"
+            if n < 2:
+                return "Avg"
+            return def_tier_from_overall_rank(r, n)
 
         g["DEF_TIER"] = g.apply(
             lambda row: "Avg" if gp_num[row.name] < MIN_GP else _tier(row["OVERALL_DEF_RANK"]),

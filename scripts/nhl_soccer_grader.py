@@ -672,7 +672,7 @@ def save_graded(df: pd.DataFrame, out_path: Path, sport: str, date_str: str):
         'over':'D6EAF8','under':'FDEBD0',
         'goblin':'E8D5F5','demon':'FDEDEC','standard':'F2F3F4',
     }
-    DEF_TIER_ORDER     = ['Elite','Above Avg','Avg','Weak']
+    DEF_TIER_ORDER     = ['Elite', 'Above Avg', 'Avg', 'Below Avg', 'Weak']
     MINUTES_TIER_ORDER = ['HIGH','MEDIUM','LOW','UNKNOWN']
     TIER_ORDER         = ['A','B','C','D']
 

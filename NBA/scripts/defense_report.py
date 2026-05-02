@@ -20,11 +20,18 @@ Notes:
 from __future__ import annotations
 
 import argparse
+import sys
 from datetime import datetime
+from pathlib import Path
 from typing import Any
 
 import numpy as np
 import pandas as pd
+
+_ROOT = Path(__file__).resolve().parents[2]
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+from utils.defense_tiers import def_tier_from_overall_rank
 
 from nba_api.stats.endpoints import leaguedashteamstats
 from nba_api.stats.static import teams as static_teams
@@ -190,18 +197,10 @@ def add_ranks_and_tiers(df: pd.DataFrame) -> pd.DataFrame:
         df["OVERALL_DEF_SCORE"] = np.nan
         df["OVERALL_DEF_RANK"] = pd.NA
 
+    _n_teams = len(df)
+
     def tier_from_rank(r) -> str:
-        if pd.isna(r):
-            return "Avg"
-        r = int(r)
-        # 30 teams: 1-7 Elite, 8-14 Above Avg, 15-22 Avg, 23-30 Weak
-        if r <= 7:
-            return "Elite"
-        if r <= 14:
-            return "Above Avg"
-        if r <= 22:
-            return "Avg"
-        return "Weak"
+        return def_tier_from_overall_rank(r, _n_teams)
 
     df["DEF_TIER"] = df["OVERALL_DEF_RANK"].apply(tier_from_rank)
 

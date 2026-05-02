@@ -23,7 +23,7 @@ from edge_predict_utils import apply_ml_prob_post_calibration
 
 SCRIPT_NAME = "step7b_edge_score"
 
-SPORT_ALIASES = {"NBA", "CBB", "NHL", "SOCCER", "MLB", "SOC", "NBA1H", "NBA1Q", "WCBB", "TENNIS"}
+SPORT_ALIASES = {"NBA", "CBB", "NHL", "SOCCER", "MLB", "SOC", "NBA1H", "NBA1Q", "WCBB", "TENNIS", "WNBA", "NFL"}
 
 
 def _repo_root() -> Path:
@@ -92,12 +92,21 @@ def resolve_step7_path(root: Path, sport: str) -> Path | None:
             *candidates,
         ]
     elif sp == "MLB":
-        # Canonical MLB step7 matches NBA/WNBA: MLB/data/outputs/step7_mlb_ranked.xlsx.
+        # Canonical MLB step7 lives under MLB/; avoid picking another sport's xlsx after ZIP checks.
         candidates = [
-            root / "MLB" / "data" / "outputs" / "step7_mlb_ranked.xlsx",
             root / "MLB" / "step7_mlb_ranked.xlsx",
             root / "MLB" / "outputs" / "step7_mlb_ranked.xlsx",
             root / "MLB" / "scripts" / "step7_mlb_ranked.xlsx",
+        ]
+    elif sp == "WNBA":
+        candidates = [
+            root / "WNBA" / "step7_wnba_ranked.xlsx",
+            root / "WNBA" / "outputs" / "step7_wnba_ranked.xlsx",
+        ]
+    elif sp == "NFL":
+        candidates = [
+            root / "NFL" / "outputs" / "step7_nfl_ranked.xlsx",
+            root / "NFL" / "data" / "outputs" / "step7_nfl_ranked.xlsx",
         ]
     for p in candidates:
         if p.is_file() and _is_zip_xlsx(p):
@@ -114,7 +123,7 @@ def _first_sheet(path: Path) -> str:
 def main() -> None:
     print(f"[PropORACLE-{SCRIPT_NAME}] Starting...")
     ap = argparse.ArgumentParser()
-    ap.add_argument("--sport", required=True, help="NBA, CBB, NHL, Soccer, MLB")
+    ap.add_argument("--sport", required=True, help="NBA, WNBA, CBB, NHL, Soccer, MLB, Tennis, …")
     ap.add_argument(
         "--step7-xlsx",
         default="",
@@ -124,6 +133,9 @@ def main() -> None:
     args = ap.parse_args()
     root = Path(args.repo_root).resolve() if args.repo_root else _repo_root()
     sp = _norm_sport(args.sport)
+    # WNBA shares basketball feature geometry + NBA calibration tables with NBA.
+    # NFL uses MLB surrogate encoding until a dedicated bundle exists.
+    feat_sp = "NBA" if sp == "WNBA" else ("MLB" if sp == "NFL" else sp)
     if sp not in SPORT_ALIASES and sp != "SOCCER":
         print(f"[WARN] Unknown sport {args.sport!r}, proceeding with key {sp!r}")
 
@@ -155,9 +167,9 @@ def main() -> None:
         print(f"[WARN] Empty sheet {sheet!r} in {xlsx} — skip.")
         return
 
-    df2 = build_feature_vector(df, sp)
+    df2 = build_feature_vector(df, feat_sp)
     if len(df2) == 0:
-        print(f"[WARN] 0 rows after feature build for {sp} — skip.")
+        print(f"[WARN] 0 rows after feature build for {sp} (feat={feat_sp}) — skip.")
         return
 
     feats = json.loads(feat_path.read_text(encoding="utf-8"))
@@ -178,7 +190,7 @@ def main() -> None:
     dirs_u = _direction_series(df2).astype(str).str.strip().str.upper()
     pt_l = df2.get("pick_type", pd.Series("", index=df2.index)).astype(str).str.strip().str.lower()
     mdir = root / "models"
-    ml_prob = apply_ml_prob_post_calibration(p_platt, sp, pt_l, dirs_u, mdir)
+    ml_prob = apply_ml_prob_post_calibration(p_platt, feat_sp, pt_l, dirs_u, mdir)
     edge_col = pd.to_numeric(df2.get("edge", pd.Series(0.0, index=df2.index)), errors="coerce").fillna(0.0)
     abs_edge_col = pd.to_numeric(df2.get("abs_edge", pd.Series(np.nan, index=df2.index)), errors="coerce")
     edge_mag = abs_edge_col.where(abs_edge_col.notna(), edge_col.abs()).fillna(0.0)
@@ -189,7 +201,7 @@ def main() -> None:
     ).fillna(0.5)
     # Playoff uplift: emphasize short-window same-opponent trend where available.
     # step7 populates l5_vs_same_opp_hit_rate direction-aware (high = supports pick side).
-    if sp == "NBA" and "l5_vs_same_opp_hit_rate" in df2.columns:
+    if feat_sp == "NBA" and "l5_vs_same_opp_hit_rate" in df2.columns:
         opp_l5 = pd.to_numeric(df2["l5_vs_same_opp_hit_rate"], errors="coerce")
         opp_l5 = pd.Series(np.where(opp_l5 > 1.0, opp_l5 / 100.0, opp_l5), index=df2.index)
         playoff = (
@@ -212,7 +224,7 @@ def main() -> None:
                 comp = pd.Series(np.where(use_opp_l5, (0.70 * comp + 0.30 * opp_l5), comp), index=df2.index)
     ml_s = pd.Series(ml_prob, index=df2.index, dtype=float)
     edge_score = ml_s - implied_prob
-    if sp in ("NHL", "SOCCER"):
+    if sp in ("NHL", "SOCCER", "NFL"):
         blended = 0.15 * ml_s + 0.85 * comp
     else:
         blended = 0.3 * ml_s + 0.7 * comp

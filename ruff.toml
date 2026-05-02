@@ -1,7 +1,0 @@
-target-version = "py311"
-line-length = 100
-src = ["proporacle", "tests"]
-
-[lint]
-select = ["E", "F", "I", "W"]
-ignore = ["E501"]

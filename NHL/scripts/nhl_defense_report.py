@@ -9,7 +9,7 @@ and output:
 
 Mirrors the structure of NBA defense_report.py exactly:
   - Composite OVERALL_DEF_RANK (weighted rank-of-ranks, Option B style)
-  - DEF_TIER: Elite / Above Avg / Avg / Weak
+  - DEF_TIER: Elite / Above Avg / Avg / Below Avg / Weak
   - Separate skater-context and goalie-context metrics
 
 Usage:
@@ -27,7 +27,7 @@ Output columns (compatible with NHL_step3_attach_defense_nhl.py):
   opp_wins          - wins
   opp_gp            - games played
   OVERALL_DEF_RANK  - 1 = best defense (composite)
-  DEF_TIER          - Elite / Above Avg / Avg / Weak
+  DEF_TIER          - Elite / Above Avg / Avg / Below Avg / Weak
   def_rank          - rank by GAA alone (matches step3 field name)
   def_tier          - same as DEF_TIER (matches step3 field name)
 
@@ -38,6 +38,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 import time
 import urllib.request
 from datetime import date, datetime
@@ -46,6 +47,11 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
+
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from utils.defense_tiers import def_tier_from_overall_rank
 
 NHL_API   = "https://api.nhle.com/stats/rest/en"
 NHL_WEB   = "https://api-web.nhle.com/v1"
@@ -223,29 +229,21 @@ def add_ranks_and_tiers(df: pd.DataFrame) -> pd.DataFrame:
         df["OVERALL_DEF_SCORE"] = np.nan
         df["OVERALL_DEF_RANK"]  = pd.NA
 
-    # ── DEF_TIER: 32 NHL teams → 1-8 Elite, 9-16 Above Avg, 17-24 Avg, 25-32 Weak ──
+    # ── DEF_TIER: quintiles over n teams (rank 1 = best defense) ──
     def tier_from_rank(r) -> str:
-        if pd.isna(r):
-            return "Avg"
-        r = int(r)
-        q1 = max(1, round(n * 0.25))
-        q2 = max(1, round(n * 0.50))
-        q3 = max(1, round(n * 0.75))
-        if r <= q1:  return "Elite"
-        if r <= q2:  return "Above Avg"
-        if r <= q3:  return "Avg"
-        return "Weak"
+        return def_tier_from_overall_rank(r, n)
 
     df["DEF_TIER"] = df["OVERALL_DEF_RANK"].apply(tier_from_rank)
 
     # ── Legacy field aliases for step3 compatibility ──
     df["def_rank"] = df["opp_gaa_rank"]   # step3 uses def_rank (GAA-based rank)
     df["def_tier"] = df["DEF_TIER"].str.upper().map({
-        "ELITE":     "ELITE",
-        "ABOVE AVG": "SOLID",
-        "AVG":       "AVERAGE",
-        "WEAK":      "WEAK",
-    }).fillna("AVERAGE")                  # step3 uses ELITE/SOLID/AVERAGE/WEAK
+        "ELITE":      "ELITE",
+        "ABOVE AVG":  "SOLID",
+        "AVG":        "AVERAGE",
+        "BELOW AVG":  "WEAK",
+        "WEAK":       "WEAK",
+    }).fillna("AVERAGE")                  # step3 coarse buckets; Below Avg → softer matchup
 
     return df
 

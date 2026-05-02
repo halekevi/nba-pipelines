@@ -10,7 +10,10 @@ from collections import defaultdict
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-TICKETS = REPO / "tickets_latest.json"
+# Canonical web artifact (combined_slate_tickets --write-web); fallback for old layouts.
+_TICKETS_PRIMARY = REPO / "ui_runner" / "templates" / "tickets_latest.json"
+_TICKETS_FALLBACK = REPO / "data" / "archive" / "tickets_latest_repo_root.json"
+TICKETS = _TICKETS_PRIMARY if _TICKETS_PRIMARY.exists() else _TICKETS_FALLBACK
 
 
 def mix_and_deltas(legs: list) -> tuple[dict[str, int], list[float]]:
@@ -36,6 +39,12 @@ def mix_and_deltas(legs: list) -> tuple[dict[str, int], list[float]]:
 
 
 def main() -> None:
+    if not TICKETS.exists():
+        raise SystemExit(
+            "Missing tickets JSON. Run combined_slate with --write-web, or place tickets_latest.json at:\n"
+            f"  {_TICKETS_PRIMARY}\n"
+            f"(optional fallback: {_TICKETS_FALLBACK})"
+        )
     data = json.loads(TICKETS.read_text(encoding="utf-8"))
     groups = data.get("groups") or []
 

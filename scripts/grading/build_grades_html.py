@@ -167,7 +167,6 @@ def load_graded(path: Path) -> list[dict]:
             if nk.lower() == "pick_type":           nk = "Pick Type"
             if nk.lower() == "tier":                nk = "Tier"
             if nk.lower() == "pick_type":           nk = "Pick Type"
-            if nk.lower() in ("opp_team", "opponent_team"): nk = "Opp"
             nr[nk] = v
         normalized.append(nr)
     return normalized
@@ -218,17 +217,7 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
     line = _pick("Line", "line", "Game Line", "game line", "O/U", "OU Line", "Pick Line")
     pick_type = _pick("Pick Type", "pick type")
     tier = _pick("Tier", "tier")
-    # slate_grader Box Raw uses snake_case headers (e.g. opp_team); step8 clean uses "Opp".
-    opp_team = _pick(
-        "Opp Team",
-        "opp team",
-        "Opp",
-        "opp",
-        "Opponent",
-        "opponent",
-        "opp_team",
-        "opponent_team",
-    )
+    opp_team = _pick("Opp Team", "opp team", "Opp", "opp", "Opponent", "opponent")
     edge = _pick("Edge", "edge", "Edge Score", "edge score")
     ml_prob = _pick("ML Prob", "ml prob", "ml_prob")
     actual_value = _pick("Actual", "actual", "actual_value")
@@ -267,8 +256,7 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
         "sport": sport,
         "player": player,
         "team": team or "—",
-        # Empty string when unknown so clients don't render "TEAM vs —"; UI formats matchup.
-        "opp_team": opp_team or "",
+        "opp_team": opp_team or "—",
         "prop": prop or "—",
         "line": line or "—",
         "direction": direction or "—",
@@ -845,7 +833,16 @@ def def_tier_table(rows: list[dict]) -> str:
     if not dt_agg:
         return ""
     # Sort by a defined order
-    order = {"elite":0,"above avg":1,"avg":2,"average":2,"weak":3,"very weak":4}
+    order = {
+        "elite": 0,
+        "above avg": 1,
+        "avg": 2,
+        "average": 2,
+        "below avg": 3,
+        "below average": 3,
+        "weak": 4,
+        "very weak": 5,
+    }
     dt_agg.sort(key=lambda x: order.get(x["key"].lower().replace("🟢","").replace("🟡","").replace("🔴","").strip(), 99))
 
     def _norm_def_tier_early(x: str) -> str:
@@ -1086,7 +1083,7 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
 
         by_def = f"""<div class="two-col">
           <div><div class="section-label">VS ELITE/ABOVE AVG DEF — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if _norm_def_tier_for_split(r.get("Def Tier","")) in ("elite","above avg")], min_decided=5)}</div>
-          <div><div class="section-label">VS AVG/WEAK DEF — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if _norm_def_tier_for_split(r.get("Def Tier","")) in ("avg","average","weak","very weak")], min_decided=5)}</div>
+          <div><div class="section-label">VS AVG / BELOW AVG / WEAK DEF — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if _norm_def_tier_for_split(r.get("Def Tier","")) in ("avg","average","below avg","below average","weak","very weak")], min_decided=5)}</div>
         </div>"""
 
         prop_section = f"""<div class="section-label">PROP TYPE BREAKDOWNS</div>

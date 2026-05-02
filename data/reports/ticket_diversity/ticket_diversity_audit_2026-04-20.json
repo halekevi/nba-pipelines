@@ -1,0 +1,56 @@
+{
+  "generated_at_utc": "2026-04-30T05:52:11.842214+00:00",
+  "date": "2026-04-20",
+  "source_output": "combined_slate_tickets_2026-04-20.xlsx",
+  "audit": {
+    "tickets": 332,
+    "unique_leg_sets": 166,
+    "duplicate_rate": 0.5,
+    "pair_count": 54946,
+    "jaccard_mean": 0.03315528104229738,
+    "jaccard_p90": 0.0,
+    "jaccard_max": 1.0,
+    "by_legs": {
+      "2": {
+        "tickets": 98,
+        "unique_leg_sets": 49,
+        "duplicate_rate": 0.5,
+        "jaccard_mean": 0.018163966617574863,
+        "jaccard_p90": 0.0,
+        "jaccard_max": 1.0
+      },
+      "3": {
+        "tickets": 76,
+        "unique_leg_sets": 38,
+        "duplicate_rate": 0.5,
+        "jaccard_mean": 0.027228070175438594,
+        "jaccard_p90": 0.0,
+        "jaccard_max": 1.0
+      },
+      "4": {
+        "tickets": 62,
+        "unique_leg_sets": 31,
+        "duplicate_rate": 0.5,
+        "jaccard_mean": 0.0370224874719851,
+        "jaccard_p90": 0.0,
+        "jaccard_max": 1.0
+      },
+      "5": {
+        "tickets": 54,
+        "unique_leg_sets": 27,
+        "duplicate_rate": 0.5,
+        "jaccard_mean": 0.04422481780972347,
+        "jaccard_p90": 0.1111111111111111,
+        "jaccard_max": 1.0
+      },
+      "6": {
+        "tickets": 42,
+        "unique_leg_sets": 21,
+        "duplicate_rate": 0.5,
+        "jaccard_mean": 0.0560819745488735,
+        "jaccard_p90": 0.09090909090909091,
+        "jaccard_max": 1.0
+      }
+    }
+  }
+}

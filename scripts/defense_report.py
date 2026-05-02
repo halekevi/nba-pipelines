@@ -10,8 +10,7 @@ Sources tried in order:
   2. cdn.espn.com       /core/wnba/standings      (opponent pts per game)
   3. site.api.espn.com  /summary scoreboard scan  (compute opp pts from box scores)
 
-Defense ranking: dynamic N_TEAMS
-  Tier cutoffs: top ~23% Elite | ~46% Above Avg | ~69% Avg | rest Weak
+Defense ranking: dynamic N_TEAMS — quintiles → Elite / Above Avg / Avg / Below Avg / Weak
 
 Run:
   py -3.14 defense_report.py --season 2026 --out wnba_defense_summary.csv
@@ -22,13 +21,20 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 import time
 import random
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import numpy as np
 import pandas as pd
 import requests
+
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+from utils.defense_tiers import def_tier_from_overall_rank
 
 ESPN_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
@@ -208,19 +214,7 @@ def rank_series(s: pd.Series, ascending: bool) -> pd.Series:
 
 
 def tier_from_rank(r, n_teams: int) -> str:
-    if pd.isna(r):
-        return "Avg"
-    r = int(r)
-    top3 = max(1, round(n_teams * 0.23))
-    top6 = max(2, round(n_teams * 0.46))
-    top9 = max(3, round(n_teams * 0.69))
-    if r <= top3:
-        return "Elite"
-    if r <= top6:
-        return "Above Avg"
-    if r <= top9:
-        return "Avg"
-    return "Weak"
+    return def_tier_from_overall_rank(r, n_teams)
 
 
 # ---------------------------------------------------------------------------

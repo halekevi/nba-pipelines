@@ -5,7 +5,7 @@ This file defines the primary scripts to run and maintain. Prefer these over mac
 ## Daily production pipeline
 
 - `run_pipeline.ps1` - top-level daily orchestration entrypoint.
-- `scripts/run_daily.ps1` - core daily data pipeline (non-NFL/CBB capable flow when inputs are present).
+- `scripts/run_daily.ps1` - core daily data pipeline (includes WNBA via `run_pipeline.ps1`; NFL/CBB are season/input-gated).
 - `scripts/run_post_pipeline_grader.ps1` - post-pipeline grading follow-up.
 
 ## Ticket generation and grading
@@ -28,7 +28,7 @@ This file defines the primary scripts to run and maintain. Prefer these over mac
 
 ## Sport-specific helpers still in active use
 
-- `scripts/run_wnba_pipeline.ps1`
+- `scripts/run_wnba_pipeline.ps1` (steps 1–8 + **step7b** edge overlay like NBA, then step9 local tickets; writes `step8_wnba_direction_clean.xlsx` and copies to `WNBA/data/outputs/` for `Run-Combined`)
 - `scripts/run_wnba_grader.ps1`
 - `Soccer/scripts/run_soccer_pipeline.ps1`
 - `Tennis/scripts/tennis_light_pipeline.py`

@@ -3,7 +3,9 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import re
+import sys
 from collections import Counter
 from pathlib import Path
 from typing import Any
@@ -11,17 +13,24 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from build_ticket_eval import (
-    _dated_candidates,
-    _filter_payload_groups,
-    _leg_grade,
-    _load_actuals_indices,
-    _load_tickets,
-    _match_leg_to_row_multi,
-    _ticket_eval_money_outcome,
-    _ticket_is_flex_play_structure,
-    resolve_ticket_eval_graded_merge_dates,
-)
+_SCRIPTS = Path(__file__).resolve().parent
+_bte = _SCRIPTS / "build_ticket_eval.py"
+_spec = importlib.util.spec_from_file_location("build_ticket_eval", _bte)
+if _spec is None or _spec.loader is None:
+    raise ImportError(f"Cannot load build_ticket_eval from {_bte}")
+_bte_mod = importlib.util.module_from_spec(_spec)
+sys.modules["build_ticket_eval"] = _bte_mod
+_spec.loader.exec_module(_bte_mod)
+
+_dated_candidates = _bte_mod._dated_candidates
+_filter_payload_groups = _bte_mod._filter_payload_groups
+_leg_grade = _bte_mod._leg_grade
+_load_actuals_indices = _bte_mod._load_actuals_indices
+_load_tickets = _bte_mod._load_tickets
+_match_leg_to_row_multi = _bte_mod._match_leg_to_row_multi
+_ticket_eval_money_outcome = _bte_mod._ticket_eval_money_outcome
+_ticket_is_flex_play_structure = _bte_mod._ticket_is_flex_play_structure
+resolve_ticket_eval_graded_merge_dates = _bte_mod.resolve_ticket_eval_graded_merge_dates
 
 
 ROOT = Path(__file__).resolve().parent.parent

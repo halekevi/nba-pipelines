@@ -1,29 +1,29 @@
 {
-  "generated_at": "2026-05-01T15:20:38.141595+00:00",
+  "generated_at": "2026-05-01T19:20:39.066796+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Marcus Smart",
+          "player": "Anthony Black",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -32,24 +32,24 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Marcus Smart",
+          "player": "Anthony Black",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -58,24 +58,24 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marcus Smart",
+          "player": "Anthony Black",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -84,24 +84,24 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marcus Smart",
+          "player": "Anthony Black",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -110,24 +110,24 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Marcus Smart",
+          "player": "Anthony Black",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -136,24 +136,24 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Marcus Smart",
+          "player": "Anthony Black",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -162,24 +162,24 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Marcus Smart",
+          "player": "Anthony Black",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 24.5,
-          "standard_line": 29.5,
+          "player": "Brady Singer",
+          "prop_type": "Pitches Thrown",
+          "line": 86.5,
+          "standard_line": 93.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 7.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6125
         }
       ]
     },
@@ -188,34 +188,34 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -224,34 +224,34 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -260,34 +260,34 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -296,34 +296,34 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -332,34 +332,34 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -368,34 +368,34 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -404,34 +404,34 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marcus Smart",
+          "player": "Anthony Black",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Duncan Robinson",
-          "prop_type": "Points",
-          "line": 8.5,
-          "standard_line": 9.5,
+          "player": "Rui Hachimura",
+          "prop_type": "3-PT Made",
+          "line": 0.5,
+          "standard_line": 1.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -440,34 +440,34 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marcus Smart",
+          "player": "Anthony Black",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 24.5,
-          "standard_line": 29.5,
+          "player": "Brady Singer",
+          "prop_type": "Pitches Thrown",
+          "line": 86.5,
+          "standard_line": 93.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 7.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6125
         }
       ]
     },
@@ -476,34 +476,34 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 24.5,
-          "standard_line": 29.5,
-          "pick_type": "Demon",
-          "delta": 5.0,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Brady Singer",
+          "prop_type": "Pitches Thrown",
+          "line": 86.5,
+          "standard_line": 93.5,
+          "pick_type": "Demon",
+          "delta": 7.0,
+          "direction": "OVER",
+          "hit_rate": 0.6125
         }
       ]
     },
@@ -512,44 +512,44 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -558,44 +558,44 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -604,44 +604,44 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -650,44 +650,44 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -696,44 +696,44 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -742,44 +742,44 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -788,44 +788,44 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Duncan Robinson",
-          "prop_type": "Points",
-          "line": 8.5,
-          "standard_line": 9.5,
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Rui Hachimura",
+          "prop_type": "3-PT Made",
+          "line": 0.5,
+          "standard_line": 1.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     },
@@ -834,44 +834,44 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
-          "pick_type": "Goblin",
-          "delta": 1.5,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 24.5,
-          "standard_line": 29.5,
-          "pick_type": "Demon",
-          "delta": 5.0,
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
+          "pick_type": "Goblin",
+          "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 1.0
+        },
+        {
+          "player": "Brady Singer",
+          "prop_type": "Pitches Thrown",
+          "line": 86.5,
+          "standard_line": 93.5,
+          "pick_type": "Demon",
+          "delta": 7.0,
+          "direction": "OVER",
+          "hit_rate": 0.6125
         }
       ]
     },
@@ -880,44 +880,44 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 24.5,
-          "standard_line": 29.5,
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Brady Singer",
+          "prop_type": "Pitches Thrown",
+          "line": 86.5,
+          "standard_line": 93.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 7.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6125
         }
       ]
     },
@@ -926,34 +926,14 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
-        },
-        {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Sandro Mamukelashvili",
@@ -966,14 +946,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Brandon Ingram",
+          "prop_type": "Points",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -982,34 +982,14 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
-        },
-        {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Sandro Mamukelashvili",
@@ -1022,14 +1002,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Brandon Ingram",
+          "prop_type": "Points",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1038,34 +1038,14 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
-        },
-        {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Sandro Mamukelashvili",
@@ -1078,14 +1058,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Brandon Ingram",
+          "prop_type": "Points",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1094,34 +1094,14 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
-        },
-        {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Sandro Mamukelashvili",
@@ -1134,14 +1114,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Brandon Ingram",
+          "prop_type": "Points",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1150,34 +1150,14 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
-        },
-        {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Sandro Mamukelashvili",
@@ -1190,14 +1170,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Brandon Ingram",
+          "prop_type": "Points",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1206,34 +1206,14 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
-        },
-        {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Sandro Mamukelashvili",
@@ -1246,14 +1226,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Brandon Ingram",
+          "prop_type": "Points",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1262,54 +1262,54 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Duncan Robinson",
-          "prop_type": "Points",
-          "line": 8.5,
-          "standard_line": 9.5,
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Rui Hachimura",
+          "prop_type": "3-PT Made",
+          "line": 0.5,
+          "standard_line": 1.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1318,54 +1318,54 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
         },
         {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
+          "player": "Sandro Mamukelashvili",
+          "prop_type": "Pts+Rebs",
+          "line": 8.5,
+          "standard_line": 8.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 24.5,
-          "standard_line": 29.5,
+          "player": "Brady Singer",
+          "prop_type": "Pitches Thrown",
+          "line": 86.5,
+          "standard_line": 93.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 7.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6125
         }
       ]
     },
@@ -1374,34 +1374,14 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
-        },
-        {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Sandro Mamukelashvili",
@@ -1414,14 +1394,34 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Cade Cunningham",
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Brandon Ingram",
           "prop_type": "Points",
-          "line": 24.5,
-          "standard_line": 29.5,
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Brady Singer",
+          "prop_type": "Pitches Thrown",
+          "line": 86.5,
+          "standard_line": 93.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 7.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6125
         }
       ]
     },
@@ -1430,34 +1430,14 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
-        },
-        {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Sandro Mamukelashvili",
@@ -1470,24 +1450,44 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Collin Murray-Boyles",
-          "prop_type": "Pts+Asts",
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Brandon Ingram",
+          "prop_type": "Points",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jamal Cain",
+          "prop_type": "Pts+Rebs+Asts",
           "line": 13.5,
           "standard_line": 13.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1496,34 +1496,14 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
-        },
-        {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Sandro Mamukelashvili",
@@ -1536,24 +1516,44 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Collin Murray-Boyles",
-          "prop_type": "Pts+Asts",
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Brandon Ingram",
+          "prop_type": "Points",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jamal Cain",
+          "prop_type": "Pts+Rebs+Asts",
           "line": 13.5,
           "standard_line": 13.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1562,34 +1562,14 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
-        },
-        {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Sandro Mamukelashvili",
@@ -1602,24 +1582,44 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Collin Murray-Boyles",
-          "prop_type": "Pts+Asts",
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Brandon Ingram",
+          "prop_type": "Points",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jamal Cain",
+          "prop_type": "Pts+Rebs+Asts",
           "line": 13.5,
           "standard_line": 13.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1628,34 +1628,14 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
-        },
-        {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Sandro Mamukelashvili",
@@ -1668,24 +1648,44 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Collin Murray-Boyles",
-          "prop_type": "Pts+Asts",
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Brandon Ingram",
+          "prop_type": "Points",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jamal Cain",
+          "prop_type": "Pts+Rebs+Asts",
           "line": 13.5,
           "standard_line": 13.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1694,34 +1694,14 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
-        },
-        {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Sandro Mamukelashvili",
@@ -1734,24 +1714,44 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Collin Murray-Boyles",
-          "prop_type": "Pts+Asts",
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Brandon Ingram",
+          "prop_type": "Points",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jamal Cain",
+          "prop_type": "Pts+Rebs+Asts",
           "line": 13.5,
           "standard_line": 13.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1760,34 +1760,14 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
-        },
-        {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Sandro Mamukelashvili",
@@ -1800,24 +1780,44 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Collin Murray-Boyles",
-          "prop_type": "Pts+Asts",
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Brandon Ingram",
+          "prop_type": "Points",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jamal Cain",
+          "prop_type": "Pts+Rebs+Asts",
           "line": 13.5,
           "standard_line": 13.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1826,34 +1826,14 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
-        },
-        {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Sandro Mamukelashvili",
@@ -1866,24 +1846,44 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Duncan Robinson",
+          "player": "Brandon Ingram",
           "prop_type": "Points",
-          "line": 8.5,
-          "standard_line": 9.5,
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Rui Hachimura",
+          "prop_type": "3-PT Made",
+          "line": 0.5,
+          "standard_line": 1.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1892,34 +1892,14 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
-        },
-        {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Sandro Mamukelashvili",
@@ -1932,24 +1912,44 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Rebs+Asts",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Brandon Ingram",
+          "prop_type": "Points",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jabari Smith",
+          "prop_type": "Rebounds",
+          "line": 4.5,
+          "standard_line": 7.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 24.5,
-          "standard_line": 29.5,
+          "player": "Brady Singer",
+          "prop_type": "Pitches Thrown",
+          "line": 86.5,
+          "standard_line": 93.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 7.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6125
         }
       ]
     },
@@ -1958,34 +1958,14 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.0,
-          "standard_line": 17.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
           "player": "Anthony Black",
-          "prop_type": "Pts+Asts",
-          "line": 16.5,
-          "standard_line": 16.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 20.5,
+          "standard_line": 20.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "UNDER",
           "hit_rate": 0.2
-        },
-        {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Asts",
-          "line": 12.5,
-          "standard_line": 12.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Sandro Mamukelashvili",
@@ -1998,24 +1978,44 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Collin Murray-Boyles",
-          "prop_type": "Pts+Asts",
+          "player": "Reed Sheppard",
+          "prop_type": "Pts+Rebs",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Brandon Ingram",
+          "prop_type": "Points",
+          "line": 18.5,
+          "standard_line": 18.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jamal Cain",
+          "prop_type": "Pts+Rebs+Asts",
           "line": 13.5,
           "standard_line": 13.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 24.5,
-          "standard_line": 29.5,
+          "player": "Brady Singer",
+          "prop_type": "Pitches Thrown",
+          "line": 86.5,
+          "standard_line": 93.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 7.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6125
         }
       ]
     }

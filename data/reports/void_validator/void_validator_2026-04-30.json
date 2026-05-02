@@ -11,9 +11,9 @@
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-30\\graded_nba_2026-04-30.xlsx",
       "status": "ok",
-      "rows": 1813,
-      "void_rows": 177,
-      "acceptable_void_rows": 177,
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
       "unacceptable_void_rows": 0
     },
     {
