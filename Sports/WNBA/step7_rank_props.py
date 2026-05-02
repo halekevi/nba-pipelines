@@ -35,7 +35,11 @@ import pandas as pd
 _WNBA_REPO = Path(__file__).resolve().parents[2]
 if str(_WNBA_REPO) not in sys.path:
     sys.path.insert(0, str(_WNBA_REPO))
-from utils.group_rank_tier import assign_tier_column, print_tier_distribution_by_pick_direction_group  # noqa: E402
+from utils.group_rank_tier import (  # noqa: E402
+    assign_tier_column,
+    print_tier_distribution_by_pick_direction_group,
+    report_goblin_demon_standard_line_fill,
+)
 
 
 def _to_num(s):
@@ -427,6 +431,7 @@ def main():
     _pct_wnba = _rs_wnba.rank(method="average", pct=True)
     out["ml_prob"] = (0.45 + 0.40 * _pct_wnba.fillna(0.5)).clip(0.35, 0.90)
     out["tier"] = assign_tier_column(out, sport="WNBA")
+    report_goblin_demon_standard_line_fill(out, "[WNBA step7]")
     print_tier_distribution_by_pick_direction_group(out, label="[WNBA step7]")
 
     with pd.ExcelWriter(args.output, engine="openpyxl") as w:

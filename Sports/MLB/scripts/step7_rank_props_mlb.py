@@ -35,6 +35,7 @@ if str(_MLB_REPO_ROOT) not in sys.path:
 from utils.group_rank_tier import (  # noqa: E402
     assign_tier_column,
     print_tier_distribution_by_pick_direction_group,
+    report_goblin_demon_standard_line_fill,
 )
 
 # ── step_archive lazy import ──────────────────────────────────────────────────
@@ -635,6 +636,7 @@ def main() -> None:
     out = _apply_ml_blend_mlb(out)
 
     out["tier"] = assign_tier_column(out, sport="MLB")
+    report_goblin_demon_standard_line_fill(out, "[MLB step7]")
     print_tier_distribution_by_pick_direction_group(out, label="[MLB step7]")
     if "recommended_side" not in out.columns:
         out["recommended_side"] = out["bet_direction"]

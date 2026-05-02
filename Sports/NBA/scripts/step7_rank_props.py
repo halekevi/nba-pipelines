@@ -54,6 +54,7 @@ from utils.defense_tiers import normalize_def_tier_label  # noqa: E402
 from utils.group_rank_tier import (  # noqa: E402
     assign_tier_column,
     print_tier_distribution_by_pick_direction_group,
+    report_goblin_demon_standard_line_fill,
 )
 
 try:
@@ -1556,10 +1557,11 @@ def main() -> None:
         _ranked = rsf[_m].rank(method="average", pct=True)
         out.loc[_m, "cohort_pct"] = _ranked
     out["rank_score"] = 0.5 + 1.5 * _to_num(out["cohort_pct"])
-    out["tier"] = assign_tier_column(out, sport="NBA")
+    out["tier"] = assign_tier_column(out, sport=str(sport_for_usage))
     out.loc[~valid_tier, "tier"] = "D"
     out.loc[~elig_mask, "tier"] = "D"
-    print_tier_distribution_by_pick_direction_group(out, label="[NBA step7]")
+    report_goblin_demon_standard_line_fill(out, f"[{sport_for_usage} step7]")
+    print_tier_distribution_by_pick_direction_group(out, label=f"[{sport_for_usage} step7]")
     out = build_feature_vector(out, sport_for_usage)
     out = apply_ticket_eligibility_voids(out, sport_for_usage)
     if str(sport_for_usage).strip().upper() == "NBA":

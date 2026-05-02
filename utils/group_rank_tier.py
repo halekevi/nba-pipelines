@@ -2,6 +2,9 @@
 Per-group A/B/C/D rank tier assignment (Goblin/Demon vs line distance, Standard vs ml_prob).
 
 Cut points from backtest artifact data/reports/tier_criteria.json (commit 20b961f1).
+
+When Goblin/Demon rows lack standard_line (common on Soccer alt-only slates), tier falls back
+to the same ml_prob cuts as Standard so tiers remain informative.
 """
 
 from __future__ import annotations
@@ -20,6 +23,30 @@ def _safe_float_prob(ml_prob: object) -> float:
     if np.isnan(v):
         return 0.0
     return v
+
+
+def _tier_from_ml_scalar(ml_prob: object) -> str:
+    """A–D from ml_prob only; NaN / invalid → D."""
+    prob = _safe_float_prob(ml_prob)
+    if prob >= 0.71:
+        return "A"
+    if prob >= 0.65:
+        return "B"
+    if prob >= 0.58:
+        return "C"
+    return "D"
+
+
+def _tier_from_ml_array(ml_raw: np.ndarray) -> np.ndarray:
+    """Vectorized ml_prob tiers; NaN → D."""
+    t = np.full(ml_raw.shape, "D", dtype=object)
+    fin = np.isfinite(ml_raw)
+    t[fin & (ml_raw >= 0.71)] = "A"
+    m = fin & (ml_raw < 0.71) & (ml_raw >= 0.65)
+    t[m] = "B"
+    m = fin & (ml_raw < 0.65) & (ml_raw >= 0.58)
+    t[m] = "C"
+    return t
 
 
 def _tier_from_group(
@@ -42,50 +69,40 @@ def _tier_from_group(
         pt = "standard"
     _ = (direction or "").strip().upper()
 
+    std_ok = standard_line is not None and not (
+        isinstance(standard_line, float) and np.isnan(standard_line)
+    )
+    try:
+        ln = float(line)
+        ln_ok = np.isfinite(ln)
+    except (TypeError, ValueError):
+        ln_ok = False
+
     if pt == "goblin":
-        if standard_line is None or (isinstance(standard_line, float) and np.isnan(standard_line)):
+        if std_ok and ln_ok:
+            dist = abs(float(ln) - float(standard_line))
+            if dist >= 3.5:
+                return "A"
+            if dist >= 2.0:
+                return "B"
+            if dist >= 1.0:
+                return "C"
             return "D"
-        try:
-            ln = float(line)
-        except (TypeError, ValueError):
-            return "D"
-        if np.isnan(ln):
-            return "D"
-        dist = abs(ln - float(standard_line))
-        if dist >= 3.5:
-            return "A"
-        if dist >= 2.0:
-            return "B"
-        if dist >= 1.0:
-            return "C"
-        return "D"
+        return _tier_from_ml_scalar(ml_prob)
 
     if pt == "demon":
-        if standard_line is None or (isinstance(standard_line, float) and np.isnan(standard_line)):
+        if std_ok and ln_ok:
+            dist = abs(float(ln) - float(standard_line))
+            if dist <= 1.0:
+                return "A"
+            if dist <= 3.0:
+                return "B"
+            if dist <= 6.0:
+                return "C"
             return "D"
-        try:
-            ln = float(line)
-        except (TypeError, ValueError):
-            return "D"
-        if np.isnan(ln):
-            return "D"
-        dist = abs(ln - float(standard_line))
-        if dist <= 1.0:
-            return "A"
-        if dist <= 3.0:
-            return "B"
-        if dist <= 6.0:
-            return "C"
-        return "D"
+        return _tier_from_ml_scalar(ml_prob)
 
-    prob = _safe_float_prob(ml_prob)
-    if prob >= 0.71:
-        return "A"
-    if prob >= 0.65:
-        return "B"
-    if prob >= 0.58:
-        return "C"
-    return "D"
+    return _tier_from_ml_scalar(ml_prob)
 
 
 def _first_col(df: pd.DataFrame, names: list[str]) -> str | None:
@@ -97,10 +114,12 @@ def _first_col(df: pd.DataFrame, names: list[str]) -> str | None:
 
 def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
     """
-    Resolve common column names and return tier labels (vectorized).
+    Resolve common column names; set ``tier`` and ``tier_source`` on ``out`` (vectorized).
 
-    Goblin/Demon: abs(line - standard_line) with group-specific cut directions.
-    All other pick types: ml_prob thresholds (Standard-only slates, Tennis, etc.).
+    tier_source:
+      - ``distance``: Goblin/Demon with valid standard_line and line
+      - ``ml_prob_fallback``: Goblin/Demon missing usable distance inputs
+      - ``ml_prob``: Standard and other pick types
     """
     _ = sport
     idx = out.index
@@ -117,12 +136,12 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
     is_gob = pt_lower.str.contains("gob", regex=False).to_numpy() & ~is_dem
     is_non_gd = ~(is_gob | is_dem)
 
-    ml = (
+    ml_raw = (
         pd.to_numeric(out[mc], errors="coerce").to_numpy(dtype=float)
         if mc
         else np.full(n, np.nan, dtype=float)
     )
-    ml = np.where(np.isfinite(ml), ml, 0.0)
+    t_ml = _tier_from_ml_array(ml_raw)
 
     ln = (
         pd.to_numeric(out[lc], errors="coerce").to_numpy(dtype=float)
@@ -137,31 +156,62 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
 
     dist = np.abs(ln - sl)
     tier = np.full(n, "D", dtype=object)
+    tier_src = np.full(n, "ml_prob", dtype=object)
 
-    t_std = np.where(
-        ml >= 0.71,
-        "A",
-        np.where(ml >= 0.65, "B", np.where(ml >= 0.58, "C", "D")),
-    )
-    tier[is_non_gd] = t_std[is_non_gd]
+    tier[is_non_gd] = t_ml[is_non_gd]
 
-    g_ok = is_gob & np.isfinite(ln) & np.isfinite(sl)
-    t_gob = np.where(
+    has_gd_dist = is_gob & np.isfinite(sl) & np.isfinite(ln)
+    t_gob_d = np.where(
         dist >= 3.5,
         "A",
         np.where(dist >= 2.0, "B", np.where(dist >= 1.0, "C", "D")),
     )
-    tier[g_ok] = t_gob[g_ok]
+    tier[has_gd_dist] = t_gob_d[has_gd_dist]
+    tier_src[has_gd_dist] = "distance"
 
-    d_ok = is_dem & np.isfinite(ln) & np.isfinite(sl)
-    t_dem = np.where(
+    gob_fb = is_gob & ~has_gd_dist
+    tier[gob_fb] = t_ml[gob_fb]
+    tier_src[gob_fb] = "ml_prob_fallback"
+
+    has_dd_dist = is_dem & np.isfinite(sl) & np.isfinite(ln)
+    t_dem_d = np.where(
         dist <= 1.0,
         "A",
         np.where(dist <= 3.0, "B", np.where(dist <= 6.0, "C", "D")),
     )
-    tier[d_ok] = t_dem[d_ok]
+    tier[has_dd_dist] = t_dem_d[has_dd_dist]
+    tier_src[has_dd_dist] = "distance"
 
+    dem_fb = is_dem & ~has_dd_dist
+    tier[dem_fb] = t_ml[dem_fb]
+    tier_src[dem_fb] = "ml_prob_fallback"
+
+    out["tier_source"] = pd.Series(tier_src, index=idx, dtype=str)
     return pd.Series(tier, index=idx, dtype=str)
+
+
+def report_goblin_demon_standard_line_fill(df: pd.DataFrame, tag: str) -> None:
+    """Log Goblin/Demon standard_line fill rate; warn when distance tiers are rarely available."""
+    pc = _first_col(df, ["pick_type", "Pick Type"])
+    sc = _first_col(df, ["standard_line", "Standard Line"])
+    if not pc or not sc:
+        return
+    pt = df[pc].astype(str).str.lower()
+    gd_mask = pt.str.contains("gob", regex=False) | pt.str.contains("dem", regex=False)
+    gd_rows = df.loc[gd_mask]
+    if len(gd_rows) == 0:
+        return
+    filled = int(pd.to_numeric(gd_rows[sc], errors="coerce").notna().sum())
+    total = len(gd_rows)
+    pct = filled / total
+    if pct < 0.50:
+        print(
+            f"{tag} WARNING: Goblin/Demon standard_line fill rate "
+            f"{filled}/{total} ({pct:.0%}) — distance tiers unavailable for many rows, "
+            f"using ml_prob fallback for {total - filled} rows"
+        )
+    else:
+        print(f"{tag} Goblin/Demon standard_line fill: {filled}/{total} ({pct:.0%})")
 
 
 def print_tier_distribution_by_pick_direction_group(

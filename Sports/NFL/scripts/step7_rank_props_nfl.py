@@ -26,7 +26,7 @@ _REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 from utils.defense_tiers import def_tier_from_overall_rank
-from utils.group_rank_tier import assign_tier_column
+from utils.group_rank_tier import assign_tier_column, report_goblin_demon_standard_line_fill
 
 
 def _num(s: pd.Series) -> pd.Series:
@@ -102,6 +102,7 @@ def main() -> None:
 
     df["ml_prob"] = pd.to_numeric(df["hit_rate"], errors="coerce").clip(0.35, 0.92)
     df["tier"] = assign_tier_column(df, sport="NFL")
+    report_goblin_demon_standard_line_fill(df, "[NFL step7]")
 
     ts = df.get("start_time", df.get("game_time", ""))
     df["start_time"] = ts

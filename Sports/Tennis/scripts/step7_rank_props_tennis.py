@@ -16,7 +16,7 @@ _SCRIPT_DIR = Path(__file__).resolve().parent
 _TENNIS_REPO = Path(__file__).resolve().parents[3]
 if str(_TENNIS_REPO) not in sys.path:
     sys.path.insert(0, str(_TENNIS_REPO))
-from utils.group_rank_tier import assign_tier_column  # noqa: E402
+from utils.group_rank_tier import assign_tier_column, report_goblin_demon_standard_line_fill  # noqa: E402
 
 
 def main() -> None:
@@ -73,6 +73,7 @@ def main() -> None:
     if "bet_direction" not in df.columns:
         df["bet_direction"] = "OVER"
     df["tier"] = assign_tier_column(df, sport="Tennis")
+    report_goblin_demon_standard_line_fill(df, "[Tennis step7]")
 
     df["void_reason"] = ""
     bad = (

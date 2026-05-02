@@ -44,7 +44,11 @@ from edge_feature_engineering import apply_ticket_eligibility_voids, build_featu
 _REPO_SOC = Path(__file__).resolve().parents[3]
 if str(_REPO_SOC) not in sys.path:
     sys.path.insert(0, str(_REPO_SOC))
-from utils.group_rank_tier import assign_tier_column, print_tier_distribution_by_pick_direction_group  # noqa: E402
+from utils.group_rank_tier import (  # noqa: E402
+    assign_tier_column,
+    print_tier_distribution_by_pick_direction_group,
+    report_goblin_demon_standard_line_fill,
+)
 
 _sa_scripts_dir = str(Path(__file__).resolve().parents[3] / "scripts")
 try:
@@ -1121,6 +1125,7 @@ def main() -> None:
     out["rank_score"] = out["final_score"]
     out = apply_starter_tier_penalty(out)
     out["tier"] = assign_tier_column(out, sport="Soccer")
+    report_goblin_demon_standard_line_fill(out, "[Soccer step7]")
     print_tier_distribution_by_pick_direction_group(out, label="[Soccer step7]")
     if "recommended_side" not in out.columns:
         out["recommended_side"] = out["bet_direction"]

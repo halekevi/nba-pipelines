@@ -33,7 +33,11 @@ _NHL_REPO = Path(__file__).resolve().parents[3]
 if str(_NHL_REPO) not in sys.path:
     sys.path.insert(0, str(_NHL_REPO))
 from utils.defense_tiers import normalize_def_tier_label
-from utils.group_rank_tier import assign_tier_column, print_tier_distribution_by_pick_direction_group
+from utils.group_rank_tier import (
+    assign_tier_column,
+    print_tier_distribution_by_pick_direction_group,
+    report_goblin_demon_standard_line_fill,
+)
 
 try:
     if hasattr(sys.stdout, "reconfigure"):
@@ -449,19 +453,6 @@ def score_prop(row: dict) -> float:
     return round(total, 5)
 
 
-def assign_tier(score: float, sample: float) -> str:
-    if sample < MIN_SAMPLE:
-        return "D"
-    if score >= 0.78:
-        return "A"
-    elif score >= 0.65:
-        return "B"
-    elif score >= 0.50:
-        return "C"
-    else:
-        return "D"
-
-
 def _to_num(s: pd.Series) -> pd.Series:
     return pd.to_numeric(s, errors="coerce")
 
@@ -842,6 +833,7 @@ def main():
     scored_df["dir_line_gap_norm"] = scored_df["dir_line_gap_norm"].fillna(0.5)
 
     scored_df["tier"] = assign_tier_column(scored_df, sport="NHL")
+    report_goblin_demon_standard_line_fill(scored_df, "[NHL step7]")
     print_tier_distribution_by_pick_direction_group(scored_df, label="[NHL step7]")
     scored = scored_df.to_dict("records")
     scored.sort(key=lambda x: -safe_float(x.get("prop_score", 0)))
