@@ -2359,65 +2359,6 @@ def _iter_props_history_db_paths():
     return sorted(cache.glob("*_props_history.db"))
 
 
-def _graded_props_json_paths_sorted() -> list[Path]:
-    """Committed graded prop bundles (Railway has these; data/cache/*.db is gitignored)."""
-    if not TEMPLATES_DIR.is_dir():
-        return []
-    return sorted(TEMPLATES_DIR.glob("graded_props_*.json"))
-
-
-def _rows_ml_from_graded_props_json() -> list[tuple[float, float | None, str]]:
-    """
-    (ml_prob, edge, result) for HIT/MISS rows with ml_prob — same shape as props_history
-    calibration query. ml_prob may be 0–1 or percent; edge may be fraction or percent points.
-    """
-    rows: list[tuple[float, float | None, str]] = []
-    for path in _graded_props_json_paths_sorted():
-        try:
-            data = json.loads(path.read_text(encoding="utf-8-sig"))
-        except Exception:
-            continue
-        for p in data.get("props") or []:
-            res = str(p.get("result") or "").strip().upper()
-            if res not in ("HIT", "MISS"):
-                continue
-            raw_ml = p.get("ml_prob")
-            if raw_ml is None or (isinstance(raw_ml, str) and not str(raw_ml).strip()):
-                continue
-            try:
-                ml = float(raw_ml)
-            except (TypeError, ValueError):
-                continue
-            raw_edge = p.get("edge")
-            edge_f: float | None = None
-            if raw_edge is not None and str(raw_edge).strip() != "":
-                try:
-                    edge_f = float(raw_edge)
-                except (TypeError, ValueError):
-                    edge_f = None
-            rows.append((ml, edge_f, res))
-    return rows
-
-
-def _rows_ml_from_props_history_sqlite() -> list[tuple[float, float | None, str]]:
-    rows: list[tuple[float, float | None, str]] = []
-    for dbp in _iter_props_history_db_paths():
-        try:
-            conn = sqlite3.connect(str(dbp))
-            cur = conn.execute(
-                "SELECT ml_prob, edge, result FROM props_history "
-                "WHERE result IN ('HIT','MISS') AND ml_prob IS NOT NULL"
-            )
-            rows.extend((float(r[0]), r[1], str(r[2])) for r in cur.fetchall())
-            conn.close()
-        except Exception:
-            try:
-                conn.close()
-            except Exception:
-                pass
-    return rows
-
-
 def _ensure_props_history_void_reason_column(conn: sqlite3.Connection) -> None:
     """Older props_history DBs lack void_reason; add it so SELECT lists stay valid."""
     try:
@@ -2428,133 +2369,6 @@ def _ensure_props_history_void_reason_column(conn: sqlite3.Connection) -> None:
             conn.commit()
     except Exception:
         pass
-
-
-def _grades_insights_payload() -> dict:
-    """
-    Calibration + edge buckets: prefer committed graded_props_*.json (deployed on Railway);
-    fall back to data/cache/*_props_history.db when JSON yields no ml_prob rows (local archives).
-    CLV breakdowns still use clv_log in props_history DBs when present.
-    """
-    rows_ml = _rows_ml_from_graded_props_json()
-    if not rows_ml:
-        rows_ml = _rows_ml_from_props_history_sqlite()
-
-    cal_bins: list[tuple[int, int, str]] = [
-        (50, 55, "50-55%"),
-        (55, 60, "55-60%"),
-        (60, 65, "60-65%"),
-        (65, 70, "65-70%"),
-        (70, 75, "70-75%"),
-        (75, 80, "75-80%"),
-        (80, 85, "80-85%"),
-        (85, 90, "85-90%"),
-        (90, 101, "90-100%"),
-    ]
-    cal_agg = {label: {"hits": 0, "n": 0} for _lo, _hi, label in cal_bins}
-    for ml, _e, res in rows_ml:
-        pct = float(ml) * 100.0 if float(ml) <= 1.0 else float(ml)
-        pct = max(0.0, min(100.0, pct))
-        hit = 1 if res.upper() == "HIT" else 0
-        for lo, hi, label in cal_bins:
-            if lo <= pct < hi:
-                cal_agg[label]["n"] += 1
-                cal_agg[label]["hits"] += hit
-                break
-
-    calibration = []
-    for _lo, _hi, label in cal_bins:
-        v = cal_agg[label]
-        if v["n"] == 0:
-            calibration.append({"bucket": label, "n": 0, "hit_rate": None})
-        else:
-            calibration.append({"bucket": label, "n": v["n"], "hit_rate": round(v["hits"] / v["n"], 4)})
-
-    edge_bins = {"0-3%": {"hits": 0, "n": 0}, "3-6%": {"hits": 0, "n": 0}, "6%+": {"hits": 0, "n": 0}}
-    for ml, edge, res in rows_ml:
-        if edge is None:
-            continue
-        try:
-            ef = float(edge)
-        except (TypeError, ValueError):
-            continue
-        if abs(ef) > 1.5:
-            ef = ef / 100.0
-        aef = abs(ef)
-        if aef < 0.03:
-            bk = "0-3%"
-        elif aef < 0.06:
-            bk = "3-6%"
-        else:
-            bk = "6%+"
-        edge_bins[bk]["n"] += 1
-        edge_bins[bk]["hits"] += 1 if res.upper() == "HIT" else 0
-
-    edge_roi = []
-    for k, v in edge_bins.items():
-        if v["n"] == 0:
-            edge_roi.append({"bucket": k, "n": 0, "hit_rate": None})
-        else:
-            edge_roi.append({"bucket": k, "n": v["n"], "hit_rate": round(v["hits"] / v["n"], 4)})
-
-    clv_by_sport = []
-    clv_by_prop_type: list[dict] = []
-    clv_by_tier: list[dict] = []
-    for dbp in _iter_props_history_db_paths():
-        sport_key = dbp.stem.replace("_props_history", "").upper()
-        try:
-            conn = sqlite3.connect(str(dbp))
-            row = conn.execute(
-                "SELECT AVG(clv_delta), COUNT(*) FROM clv_log WHERE clv_delta IS NOT NULL"
-            ).fetchone()
-            if row and row[1] and row[0] is not None:
-                clv_by_sport.append(
-                    {"sport": sport_key, "avg_clv": round(float(row[0]), 6), "n": int(row[1])}
-                )
-            for q, key in (
-                (
-                    "SELECT prop_type, AVG(clv_delta), COUNT(*) AS n FROM clv_log "
-                    "WHERE clv_delta IS NOT NULL AND prop_type IS NOT NULL AND TRIM(prop_type) != '' "
-                    "GROUP BY prop_type ORDER BY n DESC LIMIT 12",
-                    "prop_type",
-                ),
-                (
-                    "SELECT tier, AVG(clv_delta), COUNT(*) AS n FROM clv_log "
-                    "WHERE clv_delta IS NOT NULL AND tier IS NOT NULL AND TRIM(tier) != '' "
-                    "GROUP BY tier ORDER BY n DESC LIMIT 12",
-                    "tier",
-                ),
-            ):
-                try:
-                    cur = conn.execute(q)
-                    for r in cur.fetchall():
-                        label = str(r[0])
-                        entry = {
-                            "sport": sport_key,
-                            key: label,
-                            "avg_clv": round(float(r[1]), 6) if r[1] is not None else None,
-                            "n": int(r[2]),
-                        }
-                        if key == "prop_type":
-                            clv_by_prop_type.append(entry)
-                        else:
-                            clv_by_tier.append(entry)
-                except Exception:
-                    pass
-            conn.close()
-        except Exception:
-            try:
-                conn.close()
-            except Exception:
-                pass
-
-    return {
-        "calibration": calibration,
-        "edge_bucket_hit_rate": edge_roi,
-        "clv_by_sport": clv_by_sport,
-        "clv_by_prop_type": clv_by_prop_type,
-        "clv_by_tier": clv_by_tier,
-    }
 
 
 def _grades_props_payload(date_str: str) -> dict[str, Any]:
@@ -2690,12 +2504,6 @@ def _grades_archive_dates_payload(max_dates: int = 40) -> dict[str, Any]:
         "dates": ordered,
         "row_counts": {d: counts[d] for d in ordered},
     }
-
-
-@app.get("/api/grades/insights")
-def api_grades_insights():
-    """JSON for Grades hub: calibration, CLV by sport, edge-bucket hit rates (from props_history + clv_log)."""
-    return jsonify(_grades_insights_payload())
 
 
 @app.get("/api/grades/props")
@@ -4260,93 +4068,31 @@ def api_full_slate():
     return resp
 
 
-_COMBINED_SLATE_XLSX_RE = re.compile(r"^combined_slate_tickets_(\d{4}-\d{2}-\d{2})")
-
-
-def _combined_slate_date_from_filename(path: Path) -> str | None:
-    m = _COMBINED_SLATE_XLSX_RE.match(path.name)
-    return m.group(1) if m else None
-
-
-def _all_combined_slate_ticket_xlsx_paths() -> list[Path]:
-    """Every combined_slate_tickets_*.xlsx under repo root and outputs/{{date}}/."""
-    seen: set[Path] = set()
-    out: list[Path] = []
-    try:
-        for p in BASE_DIR.glob("combined_slate_tickets_*.xlsx"):
-            if not p.is_file():
-                continue
-            r = p.resolve()
-            if r in seen:
-                continue
-            seen.add(r)
-            out.append(p)
-    except OSError:
-        pass
-    out_root = OUTPUTS_ROOT
-    if out_root.is_dir():
-        try:
-            for day_dir in out_root.iterdir():
-                if not day_dir.is_dir():
-                    continue
-                try:
-                    for p in day_dir.glob("combined_slate_tickets_*.xlsx"):
-                        if not p.is_file():
-                            continue
-                        r = p.resolve()
-                        if r in seen:
-                            continue
-                        seen.add(r)
-                        out.append(p)
-                except OSError:
-                    continue
-        except OSError:
-            pass
-    return out
-
-
 def _find_combined_excel() -> "tuple[Path | None, str | None]":
-    """Pick combined_slate_tickets_*.xlsx for UI Full Slate: today (ET) newest mtime, else tickets date, else newest file."""
-    candidates = _all_combined_slate_ticket_xlsx_paths()
-    if not candidates:
-        return None, None
-
-    def _newest(paths: list[Path]) -> Path:
-        return max(paths, key=lambda p: p.stat().st_mtime)
-
-    today_et = datetime.now(ZoneInfo("America/New_York")).date().strftime("%Y-%m-%d")
-    today_paths = [p for p in candidates if _combined_slate_date_from_filename(p) == today_et]
-    if today_paths:
-        best = _newest(today_paths)
-        return best, today_et
-
-    pref = ""
+    """Return (path, date_str) for the most recent combined_slate_tickets_*.xlsx."""
     try:
         tj = read_json_cached(TEMPLATES_DIR / "tickets_latest.json")
         pref = str((tj or {}).get("date") or "")[:10]
     except Exception:
-        pass
-    if len(pref) == 10:
-        pref_paths = [p for p in candidates if _combined_slate_date_from_filename(p) == pref]
-        if pref_paths:
-            best = _newest(pref_paths)
-            return best, pref
-
-    envd = (os.environ.get("PROPORACLE_SLATE_DATE", "").strip() or "")[:10]
-    if len(envd) == 10:
-        env_paths = [p for p in candidates if _combined_slate_date_from_filename(p) == envd]
-        if env_paths:
-            best = _newest(env_paths)
-            return best, envd
-
+        pref = ""
     for d in _slate_day_candidates(pref if len(pref) == 10 else None):
-        day_paths = [p for p in candidates if _combined_slate_date_from_filename(p) == d]
-        if day_paths:
-            best = _newest(day_paths)
-            return best, d
-
-    best = _newest(candidates)
-    return best, _combined_slate_date_from_filename(best)
+        out_d = BASE_DIR / "outputs" / d
+        candidates: list[Path] = [
+            out_d / f"combined_slate_tickets_{d}.xlsx",
+            COMBINED_OUT / f"combined_slate_tickets_{d}.xlsx",
+        ]
+        seen: set[Path] = set(candidates)
+        if out_d.is_dir():
+            for g in out_d.glob(f"combined_slate_tickets_{d}*.xlsx"):
+                if g not in seen:
+                    seen.add(g); candidates.append(g)
+        for g in BASE_DIR.glob(f"combined_slate_tickets_{d}*.xlsx"):
+            if g not in seen:
+                seen.add(g); candidates.append(g)
+        for p in candidates:
+            if p.exists():
+                return p, d
+    return None, None
 
 
 # ──────────────────────────────────────────────────────────────────────────────

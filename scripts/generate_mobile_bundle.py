@@ -290,7 +290,7 @@ def generate_bundle():
       return _origFetch('grades_report_dates.json', init);
     }
     if (path.includes('/api/grades/insights')) {
-      return _origFetch('grades_insights.json', init);
+      return _jsonResp({ calibration: [], clv_by_sport: [], edge_bucket_hit_rate: [], clv_by_prop_type: [], clv_by_tier: [] });
     }
     if (path.includes('/api/grades/archive_dates')) {
       return _origFetch('grades_archive_dates.json', init);
@@ -610,19 +610,6 @@ def generate_bundle():
             "ok": True,
             "dates": sorted(set(graded_props_dates), reverse=True),
             "row_counts": archive_row_counts,
-        }, ensure_ascii=True, indent=2),
-        encoding="utf-8"
-    )
-
-    # Minimal insights payload so CLV/Calibration panel always renders in bundle mode.
-    (MOBILE_WWW_DIR / "grades_insights.json").write_text(
-        json.dumps({
-            "ok": True,
-            "calibration": [],
-            "clv_by_sport": [],
-            "edge_bucket_hit_rate": [],
-            "clv_by_prop_type": [],
-            "clv_by_tier": [],
         }, ensure_ascii=True, indent=2),
         encoding="utf-8"
     )

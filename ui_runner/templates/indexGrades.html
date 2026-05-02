@@ -235,16 +235,6 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .iframe-shell--ticket-tab .iframe-shell-toolbar{padding-bottom:0;gap:4px;}
 .iframe-shell--ticket-tab .iframe-shell-stage{margin-top:-1px;}
 .grades-analytics-wrap{position:absolute;inset:0;overflow:auto;padding:20px 24px 36px;z-index:4;background:transparent;}
-.grades-analytics-stack{width:100%;max-width:none;margin:0;display:flex;flex-direction:column;gap:14px;}
-.grades-analytics-context{
-  padding:8px 12px;
-  border-radius:14px;
-  font-size:12px;
-  color:var(--muted2);
-  line-height:1.25;
-}
-.grades-analytics-context strong{color:var(--text-primary);}
-.grades-analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;width:100%;}
 .insights-card.insights-card-empty{display:none !important;}
 .grades-props-inner{width:100%;max-width:none;margin:0;}
 .props-eval-toolbar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-top:12px;margin-bottom:14px;}
@@ -301,8 +291,6 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .insights-table-host table{width:100%;border-collapse:collapse;font-size:clamp(15px,1.02vw,17px);}
 .insights-table-host th,.insights-table-host td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--border);}
 .insights-table-host th{color:var(--muted2);font-weight:600;font-size:clamp(13px,0.92vw,15px);text-transform:uppercase;letter-spacing:0.06em;}
-.ins-bar-wrap{margin-top:6px;background:rgba(0,0,0,0.28);border-radius:6px;height:8px;overflow:hidden;max-width:100%;}
-.ins-bar{height:100%;background:linear-gradient(90deg,var(--cyan),var(--accent-gold));border-radius:6px;transition:width .4s ease;}
 .grade-frame.loading{opacity:0;}
 
 /* loading */
@@ -339,7 +327,6 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 .empty-state[hidden],
 #empty-state[hidden],
 #ticket-empty-state[hidden]{display:none !important;visibility:hidden !important;pointer-events:none !important;z-index:-1 !important;}
-#analytics-panel[hidden],
 #props-eval-panel[hidden]{display:none !important;visibility:hidden !important;pointer-events:none !important;}
 .empty-icon{font-size:56px;opacity:.45;filter:drop-shadow(0 0 12px rgba(0,229,255,0.15));}
 .empty-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:4px;color:var(--text-primary);text-shadow:0 0 40px rgba(212,160,23,0.12);}
@@ -534,7 +521,6 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
     padding-right:max(12px, env(safe-area-inset-right, 0px));
     padding-bottom:max(22px, env(safe-area-inset-bottom, 0px));
   }
-  .grades-analytics-grid{grid-template-columns:minmax(0, 1fr) !important;}
 }
 
 /* Portrait ≥769px: extra tab chrome (below 769px the 2×2 grid block owns tab sizing) */
@@ -571,7 +557,6 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   .grades-analytics-wrap{
     padding:10px max(10px, env(safe-area-inset-right, 0px)) max(14px, env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px));
   }
-  .grades-analytics-grid{grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)) !important;}
 }
 
 /* Landscape ≥769px: compact tab row (narrow ≤768 uses 2×2 from main 768 block) */
@@ -1207,9 +1192,6 @@ select option,
             <button type="button" class="tab-btn" id="tab-tickets" onclick="window.parent.switchTab('tickets')">
               <span class="tab-icon">🎟</span>TICKET EVALUATION
             </button>
-            <button type="button" class="tab-btn" id="tab-analytics" onclick="window.parent.switchTab('analytics')">
-              <span class="tab-icon">📈</span>CLV &amp; CALIBRATION
-            </button>
           </div>
         </div>
       </div>
@@ -1235,38 +1217,6 @@ select option,
   </div>
   <iframe class="grade-frame" id="grade-frame" src="about:blank" title="Grade Report"></iframe>
   <iframe class="grade-frame" id="ticket-frame" src="about:blank" title="Ticket Evaluation" style="display:none;"></iframe>
-  <div id="analytics-panel" class="grades-analytics-wrap" hidden aria-label="CLV and calibration insights">
-    <div class="grades-analytics-stack">
-    <div class="grades-analytics-context glass-insights" id="insights-context">Loading analytics context…</div>
-    <div class="grades-analytics-grid">
-      <div class="insights-card glass-insights" id="ins-card-cal">
-        <h3 class="insights-card-title">Predicted probability vs outcome</h3>
-        <p class="insights-card-sub">Buckets from archived <code>props_history.ml_prob</code> vs graded HIT rate.</p>
-        <div id="ins-cal" class="insights-table-host" data-empty-message="No archived probability rows yet. Run the grader + archive step to populate <code>props_history</code>."></div>
-      </div>
-      <div class="insights-card glass-insights" id="ins-card-clv">
-        <h3 class="insights-card-title">Average CLV by sport</h3>
-        <p class="insights-card-sub">From <code>clv_log</code> (closing − open implied), when odds columns were archived.</p>
-        <div id="ins-clv" class="insights-table-host" data-empty-message="No CLV archive rows yet. Archive a graded slate with odds columns to populate <code>clv_log</code>."></div>
-      </div>
-      <div class="insights-card glass-insights" id="ins-card-edge">
-        <h3 class="insights-card-title">Edge magnitude vs hit rate</h3>
-        <p class="insights-card-sub">Absolute edge buckets (treats |edge| &gt; 1.5 as percentage points / 100).</p>
-        <div id="ins-edge" class="insights-table-host" data-empty-message="No edge rows yet. Run grader + archive to populate edge calibration."></div>
-      </div>
-      <div class="insights-card glass-insights" id="ins-card-clv-prop">
-        <h3 class="insights-card-title">CLV by prop type</h3>
-        <p class="insights-card-sub">Top prop types by volume in <code>clv_log</code> (per sport).</p>
-        <div id="ins-clv-prop" class="insights-table-host" data-empty-message="No CLV prop-type rows yet."></div>
-      </div>
-      <div class="insights-card glass-insights" id="ins-card-clv-tier">
-        <h3 class="insights-card-title">CLV by tier</h3>
-        <p class="insights-card-sub">Archived tier labels when present on graded rows.</p>
-        <div id="ins-clv-tier" class="insights-table-host" data-empty-message="No CLV tier rows yet."></div>
-      </div>
-    </div>
-    </div>
-  </div>
   <div id="props-eval-panel" class="grades-analytics-wrap grades-props-wrap" hidden aria-label="Graded props by report date">
     <div class="grades-props-inner">
       <div class="glass-insights props-eval-intro">
@@ -1355,10 +1305,6 @@ const TICKET_EVAL_URL_TEMPLATE = '/grades/ticket_eval_{date}.html';
   }
 
   function activeScrollWin() {
-    const ap = document.getElementById('analytics-panel');
-    if (ap && !ap.hidden) {
-      return { win: window, key: 'a' };
-    }
     const pe = document.getElementById('props-eval-panel');
     if (pe && !pe.hidden) {
       return { win: window, key: 'p' };
@@ -1962,139 +1908,6 @@ function collapseSportsInTicketFrame(frame) {
   });
 }
 
-// ─── GRADES INSIGHTS (CLV + calibration API) ─────────────────────────────────
-function _insightsBarPct(hitRate) {
-  if (hitRate == null || Number.isNaN(hitRate)) return 0;
-  return Math.min(100, Math.round(hitRate * 100));
-}
-
-function _insightsCountRows(rows) {
-  if (!Array.isArray(rows) || !rows.length) return 0;
-  let n = 0;
-  rows.forEach((r) => {
-    const v = Number((r || {}).n);
-    if (Number.isFinite(v) && v > 0) n += v;
-  });
-  return n;
-}
-
-function _setInsightsCardEmpty(host, isEmpty) {
-  if (!host) return;
-  const card = host.closest('.insights-card');
-  if (card) card.classList.toggle('insights-card-empty', Boolean(isEmpty));
-}
-
-function _renderInsightsContext(meta) {
-  const el = document.getElementById('insights-context');
-  if (!el) return;
-  if (meta && meta.error) {
-    el.innerHTML = '<strong>Insights unavailable.</strong> ' + escProps(meta.error);
-    return;
-  }
-  const ds = currentDateStr || gradesEl('date-jump')?.value || '—';
-  const totalCards = 5;
-  const cardsWithData = Number(meta?.cardsWithData || 0);
-  const calN = Number(meta?.calN || 0);
-  const edgeN = Number(meta?.edgeN || 0);
-  const clvN = Number(meta?.clvN || 0);
-  const refreshed = new Date().toLocaleString();
-  const status = cardsWithData === 0
-    ? 'No archived analytics data yet.'
-    : `${cardsWithData}/${totalCards} analytics cards have data.`;
-  el.innerHTML =
-    '<strong>Analytics context</strong> · Date: <strong>' + escProps(ds) + '</strong> · ' +
-    status + ' Calibration N: <strong>' + calN + '</strong> · ' +
-    'Edge N: <strong>' + edgeN + '</strong> · ' +
-    'CLV N: <strong>' + clvN + '</strong> · Refreshed: <strong>' + escProps(refreshed) + '</strong>';
-}
-
-function _renderInsightsTable(host, rows, cols) {
-  if (!host) return;
-  if (!rows || !rows.length) {
-    const msg = host.dataset.emptyMessage || 'No archived rows yet.';
-    host.innerHTML = '<p class="insights-card-sub">' + msg + '</p>';
-    _setInsightsCardEmpty(host, true);
-    return;
-  }
-  _setInsightsCardEmpty(host, false);
-  let h = '<table><thead><tr>';
-  cols.forEach((c) => { h += `<th>${c.label}</th>`; });
-  h += '</tr></thead><tbody>';
-  rows.forEach((row) => {
-    h += '<tr>';
-    cols.forEach((c) => {
-      const v = row[c.key];
-      if (c.bar) {
-        const pct = _insightsBarPct(v);
-        h += `<td><div>${v == null ? '—' : (typeof v === 'number' ? (c.pct ? (v * 100).toFixed(1) + '%' : v.toFixed(4)) : v)}</div><div class="ins-bar-wrap"><div class="ins-bar" style="width:${pct}%"></div></div></td>`;
-      } else {
-        h += `<td>${v == null ? '—' : v}</td>`;
-      }
-    });
-    h += '</tr>';
-  });
-  h += '</tbody></table>';
-  host.innerHTML = h;
-}
-
-async function loadGradesInsights() {
-  const elCal = document.getElementById('ins-cal');
-  const elClv = document.getElementById('ins-clv');
-  const elEdge = document.getElementById('ins-edge');
-  const elClvProp = document.getElementById('ins-clv-prop');
-  const elClvTier = document.getElementById('ins-clv-tier');
-  [elCal, elClv, elEdge, elClvProp, elClvTier].forEach((el) => { if (el) el.innerHTML = '<p class="insights-card-sub">Loading…</p>'; });
-  try {
-    const res = await fetch('/api/grades/insights', { cache: 'no-cache' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const d = await res.json();
-    _renderInsightsTable(elCal, d.calibration || [], [
-      { key: 'bucket', label: 'Bucket' },
-      { key: 'n', label: 'N' },
-      { key: 'hit_rate', label: 'Hit rate', bar: true, pct: true },
-    ]);
-    _renderInsightsTable(elClv, d.clv_by_sport || [], [
-      { key: 'sport', label: 'Sport' },
-      { key: 'n', label: 'N' },
-      { key: 'avg_clv', label: 'Avg CLV (Δ implied)' },
-    ]);
-    _renderInsightsTable(elEdge, d.edge_bucket_hit_rate || [], [
-      { key: 'bucket', label: '|Edge|' },
-      { key: 'n', label: 'N' },
-      { key: 'hit_rate', label: 'Hit rate', bar: true, pct: true },
-    ]);
-    const elClvProp = document.getElementById('ins-clv-prop');
-    const elClvTier = document.getElementById('ins-clv-tier');
-    _renderInsightsTable(elClvProp, d.clv_by_prop_type || [], [
-      { key: 'sport', label: 'Sport' },
-      { key: 'prop_type', label: 'Prop' },
-      { key: 'n', label: 'N' },
-      { key: 'avg_clv', label: 'Avg CLV' },
-    ]);
-    _renderInsightsTable(elClvTier, d.clv_by_tier || [], [
-      { key: 'sport', label: 'Sport' },
-      { key: 'tier', label: 'Tier' },
-      { key: 'n', label: 'N' },
-      { key: 'avg_clv', label: 'Avg CLV' },
-    ]);
-    const calN = _insightsCountRows(d.calibration || []);
-    const edgeN = _insightsCountRows(d.edge_bucket_hit_rate || []);
-    const clvN = _insightsCountRows(d.clv_by_sport || []);
-    const cardsWithData = [
-      calN > 0,
-      clvN > 0,
-      edgeN > 0,
-      _insightsCountRows(d.clv_by_prop_type || []) > 0,
-      _insightsCountRows(d.clv_by_tier || []) > 0,
-    ].filter(Boolean).length;
-    _renderInsightsContext({ calN, edgeN, clvN, cardsWithData });
-  } catch (e) {
-    const msg = 'Could not load insights (' + (e && e.message ? e.message : e) + ').';
-    [elCal, elClv, elEdge, document.getElementById('ins-clv-prop'), document.getElementById('ins-clv-tier')].forEach((el) => { if (el) el.innerHTML = '<p class="insights-card-sub">' + msg + '</p>'; });
-    _renderInsightsContext({ error: msg });
-  }
-}
-
 // ─── PROP EVALUATION (archived props_history) ─────────────────────────────────
 function escProps(s) {
   if (s == null || s === '') return '—';
@@ -2138,35 +1951,14 @@ function propsEvalOutcomeRank(result) {
   if (ru === 'MISS' || ru === 'LOSS' || ru === 'LOSE') return 2;
   return 3;
 }
-function fillPropsSportFilter(rows, sportsHint) {
+function fillPropsSportFilter(rows) {
   const sel = document.getElementById('props-filter-sport');
   if (!sel) return;
   const cur = sel.value;
-  const fromRows = [...new Set(rows.map(function (r) { return String(r.sport || '').toUpperCase(); }).filter(Boolean))];
-  const hint = Array.isArray(sportsHint)
-    ? sportsHint.map(function (s) { return String(s || '').toUpperCase().trim(); }).filter(Boolean)
-    : [];
-  const sports = [...new Set(fromRows.concat(hint))].sort();
+  const sports = [...new Set(rows.map(function (r) { return String(r.sport || '').toUpperCase(); }).filter(Boolean))].sort();
   sel.innerHTML = '<option value="">All sports</option>' +
     sports.map(function (s) { return '<option value="' + escProps(s) + '">' + escProps(s) + '</option>'; }).join('');
   if (cur && sports.indexOf(cur) >= 0) sel.value = cur;
-}
-/** Team vs opponent; strips placeholder dashes so we do not show "BAL vs —" (e.g. MLB Box Raw). */
-function formatPropEvalMatchup(r) {
-  var rawOpp = (r.opp_team != null && r.opp_team !== '') ? r.opp_team : r.opp;
-  function tok(x) {
-    var s = String(x == null ? '' : x).trim();
-    if (!s) return '';
-    var norm = s.replace(/\u2013|\u2014/g, '-').trim();
-    if (norm === '-' || norm === '—' || norm.toUpperCase() === 'N/A' || norm.toUpperCase() === 'NA' || norm.toUpperCase() === 'TBD') return '';
-    return s;
-  }
-  var t = tok(r.team);
-  var o = tok(rawOpp);
-  if (t && o) return t + ' vs ' + o;
-  if (t) return t;
-  if (o) return o;
-  return '—';
 }
 function renderPropsEvalCards(rows) {
   const grid = document.getElementById('props-eval-grid');
@@ -2202,7 +1994,7 @@ function renderPropsEvalCards(rows) {
       '<div class="prop-eval-meta">' + escProps(r.sport) + ' · ' + escProps(r.pick_type || '') + (r.tier ? (' · Tier ' + escProps(r.tier)) : '') + '</div>' +
       '<div class="prop-eval-line">' + escProps(r.prop_type) + ' ' + (dir === 'OVER' ? '▲' : dir === 'UNDER' ? '▼' : '') + ' ' + escProps(dir) + linePart + '</div>' +
       '<div class="prop-eval-meta" style="margin-top:10px;">' +
-        escProps(formatPropEvalMatchup(r)) +
+        ((r.team || r.opp_team) ? escProps([r.team, r.opp_team].filter(Boolean).join(' vs ')) : '—') +
       '</div>' +
       '<div class="prop-eval-meta">Edge ' + escProps(edgeS) + ' · ML ' + escProps(mlS) + '</div>' +
       ((r.void_reason && String(r.void_reason).trim() && !(ru === 'HIT' || ru === 'MISS' || ru === 'PUSH')) ?
@@ -2300,7 +2092,7 @@ async function loadGradesProps(dateStr) {
           ? 'Ticket legs from ticket_eval_' + dateStr + '.html (subset). Run build_grades_html / backfill_graded_props_json and push graded_props_' + dateStr + '.json for every slate prop.'
           : 'Source: graded_props_' + dateStr + '.json';
       }
-      fillPropsSportFilter(window._propsEvalCache, jd.sports);
+      fillPropsSportFilter(window._propsEvalCache);
       applyPropsEvalFilters();
       return;
     }
@@ -2309,7 +2101,7 @@ async function loadGradesProps(dateStr) {
     if (!res.ok) throw new Error(d.error || res.statusText);
     window._propsEvalCache = d.props || [];
     window._propsEvalStats = { n_hit: d.n_hit, n_miss: d.n_miss, n: d.n };
-    fillPropsSportFilter(window._propsEvalCache, d.sports);
+    fillPropsSportFilter(window._propsEvalCache);
     if (foot) {
       var t = '';
       if (d.truncated) t += 'Showing first ' + d.n_returned + ' of ' + d.n + ' rows. ';
@@ -2358,7 +2150,6 @@ function refreshControlsSummary() {
   const titleEl = gradesEl('iframe-shell-title');
   if (titleEl) {
     if (activeTab === 'tickets') titleEl.textContent = 'Ticket evaluation';
-    else if (activeTab === 'analytics') titleEl.textContent = 'CLV & calibration';
     else if (activeTab === 'props') titleEl.textContent = 'Prop evaluation';
     else titleEl.textContent = 'Slate evaluation';
   }
@@ -2366,7 +2157,6 @@ function refreshControlsSummary() {
   const ds = currentDateStr || gradesEl('date-jump')?.value || '';
   let tab = 'Slate';
   if (activeTab === 'tickets') tab = 'Tickets';
-  else if (activeTab === 'analytics') tab = 'Insights';
   else if (activeTab === 'props') tab = 'Props';
   el.textContent = ds ? `${ds} · ${tab}` : tab;
 }
@@ -2380,16 +2170,12 @@ function switchTab(tab) {
   const ts = gradesEl('tab-slate');
   const tp = gradesEl('tab-props');
   const tt = gradesEl('tab-tickets');
-  const ta = gradesEl('tab-analytics');
   if (ts) ts.classList.toggle('active', tab === 'slate');
   if (tp) tp.classList.toggle('active', tab === 'props');
   if (tt) tt.classList.toggle('active', tab === 'tickets');
-  if (ta) ta.classList.toggle('active', tab === 'analytics');
-  const ap = document.getElementById('analytics-panel');
   const pe = document.getElementById('props-eval-panel');
   document.getElementById('grade-frame').style.display   = tab === 'slate'   ? 'block' : 'none';
   document.getElementById('ticket-frame').style.display  = tab === 'tickets' ? 'block' : 'none';
-  if (ap) ap.hidden = tab !== 'analytics';
   if (pe) pe.hidden = tab !== 'props';
   document.getElementById('ticket-empty-state').hidden = true;
 
@@ -2397,16 +2183,7 @@ function switchTab(tab) {
     window.resetGradesBarsScrollState();
   } catch (_e) {}
 
-  if (tab === 'analytics') {
-    hideGradesHubLoadOverlay();
-    document.getElementById('empty-state').hidden = true;
-    loadGradesInsights();
-    setTimeout(() => {
-      try {
-        window.setupGradesBarsScrollHide();
-      } catch (_e) {}
-    }, 0);
-  } else if (tab === 'props') {
+  if (tab === 'props') {
     hideGradesHubLoadOverlay();
     document.getElementById('empty-state').hidden = true;
     const ds = currentDateStr || gradesEl('date-jump')?.value || yesterdayStr();
