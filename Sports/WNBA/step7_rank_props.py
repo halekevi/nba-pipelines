@@ -411,10 +411,11 @@ def main():
         * out["prop_weight"].astype(float).fillna(1.0)
         * out["reliability_mult"].astype(float).fillna(1.0)
     )
-    # Direction-aware edge gate (matches NBA step7): use edge_adj_dr, not raw projection-line edge.
+    # Direction-aware edge gate (matches NBA step7). Standard UNDER has no edge gate.
     _eadr = pd.to_numeric(out["edge_adj_dr"], errors="coerce").fillna(-999.0)
     _is_dem = out["pick_type"].astype(str).str.lower().str.contains("dem")
-    score = score.where(elig_mask & ((_eadr > 0.0) | _is_dem), np.nan)
+    _is_std_under = (out["pick_type"].apply(_norm_pick_type) == "Standard") & out["bet_direction"].astype(str).str.upper().str.strip().eq("UNDER")
+    score = score.where(elig_mask & ((_eadr > 0.0) | _is_dem | _is_std_under), np.nan)
 
     out["rank_score"] = score
     out["tier"]       = out["rank_score"].apply(_tier_from_score)

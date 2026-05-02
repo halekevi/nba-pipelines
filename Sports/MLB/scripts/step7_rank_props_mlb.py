@@ -614,10 +614,11 @@ def main() -> None:
     _series_mult.loc[_series_hr >= 0.70] = 1.10
     _series_mult.loc[_series_hr <= 0.30] = 0.90
     score = score * _series_mult
-    # Direction-aware edge gate (matches NBA step7): good UNDERs have edge_adj < 0 but edge_adj_dr > 0.
+    # Direction-aware edge gate (matches NBA step7). Standard UNDER has no edge gate.
     _eadr = pd.to_numeric(out["edge_adj_dr"], errors="coerce").fillna(-999.0)
     _is_dem = out["pick_type"].astype(str).str.lower().str.contains("dem")
-    score = score.where(elig_mask & ((_eadr > 0.0) | _is_dem), np.nan)
+    _is_std_under = (out["pick_type"].astype(str) == "Standard") & out["bet_direction"].astype(str).str.upper().str.strip().eq("UNDER")
+    score = score.where(elig_mask & ((_eadr > 0.0) | _is_dem | _is_std_under), np.nan)
 
     out["rank_score"] = score
 

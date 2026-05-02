@@ -1114,12 +1114,11 @@ def main():
     raw_score = raw_score * np.where(ast_non_pg, CBB_AST_NON_PG_05_SCORE_MULT, 1.0)
     raw_score = raw_score * np.where(tourney_pts, CBB_TOURNAMENT_POINTS_SCORE_MULT, 1.0)
 
-    # Direction-aware edge gate (same idea as NBA step7): rank_score only when the
-    # play-side adjusted edge is positive. Raw edge_adj = proj - line is negative for
-    # good UNDERs; edge_adj_dr already flips sign for UNDER.
+    # Direction-aware edge gate (same idea as NBA step7). Standard UNDER has no edge gate.
     _eadr = pd.to_numeric(out["edge_adj_dr"], errors="coerce").fillna(-999.0)
     _is_dem = pick_type.apply(lambda x: _norm_pick_type(x) == "Demon")
-    _edge_ok = (_eadr > 0.0) | _is_dem
+    _is_std_under = pick_type.apply(lambda x: _norm_pick_type(x) == "Standard") & out["bet_direction"].astype(str).str.upper().str.strip().eq("UNDER")
+    _edge_ok = (_eadr > 0.0) | _is_dem | _is_std_under
     # Zero out ineligible rows or non-favorable-edge rows (Demon exempt — scored on other signals)
     score = raw_score.where(elig_mask & _edge_ok, other=np.nan)
 
