@@ -12145,9 +12145,9 @@ def _tickets_filter_pills_html(attr_rows: list[dict]) -> str:
         if row.get("ev") == "strong":
             has_strong = True
 
-    # Keep WNBA and Soccer filter pills visible even when no groups were generated for that sport
+    # Keep MLB, WNBA, and Soccer filter pills visible even when no groups were generated for that sport
     # (primary /tickets UI is driven by this bar; users expect the sport control to always exist).
-    for _sp in ("wnba", "soccer"):
+    for _sp in ("mlb", "wnba", "soccer"):
         if _sp not in seen_sp:
             seen_sp.add(_sp)
             sports_seen.append(_sp)
