@@ -46,6 +46,7 @@ param(
 
 $ErrorActionPreference = "Continue"
 $Root = Split-Path $PSScriptRoot -Parent
+$SportsRoot = Join-Path $Root "Sports"
 
 # Ensure local cache folder exists
 # (excluded from OneDrive, must be created locally)
@@ -161,23 +162,23 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
     # valid root clean files used by combined + Railway.
     $fallbackRoots = @{
         "step8_nhl_direction_clean_$RunDate.xlsx" = @(
-            (Join-Path $Root "NHL\outputs\step8_nhl_direction_clean.xlsx"),
-            (Join-Path $Root "NHL\step8_nhl_direction_clean.xlsx")
+            (Join-Path $SportsRoot "NHL\outputs\step8_nhl_direction_clean.xlsx"),
+            (Join-Path $SportsRoot "NHL\step8_nhl_direction_clean.xlsx")
         )
         "step8_soccer_direction_clean_$RunDate.xlsx" = @(
-            (Join-Path $Root "Soccer\outputs\step8_soccer_direction_clean.xlsx"),
-            (Join-Path $Root "Soccer\step8_soccer_direction_clean.xlsx")
+            (Join-Path $SportsRoot "Soccer\outputs\step8_soccer_direction_clean.xlsx"),
+            (Join-Path $SportsRoot "Soccer\step8_soccer_direction_clean.xlsx")
         )
         "step8_mlb_direction_clean_$RunDate.xlsx" = @(
-            (Join-Path $Root "MLB\outputs\step8_mlb_direction_clean.xlsx"),
-            (Join-Path $Root "MLB\step8_mlb_direction_clean.xlsx")
+            (Join-Path $SportsRoot "MLB\outputs\step8_mlb_direction_clean.xlsx"),
+            (Join-Path $SportsRoot "MLB\step8_mlb_direction_clean.xlsx")
         )
         "step8_tennis_direction_clean_$RunDate.xlsx" = @(
-            (Join-Path $Root "Tennis\outputs\step8_tennis_direction_clean.xlsx"),
-            (Join-Path $Root "Tennis\step8_tennis_direction_clean.xlsx")
+            (Join-Path $SportsRoot "Tennis\outputs\step8_tennis_direction_clean.xlsx"),
+            (Join-Path $SportsRoot "Tennis\step8_tennis_direction_clean.xlsx")
         )
         "step8_wnba_direction_$RunDate.xlsx" = @(
-            (Join-Path $Root "WNBA\step8_wnba_direction.xlsx")
+            (Join-Path $SportsRoot "WNBA\step8_wnba_direction.xlsx")
         )
     }
     $missing = @()
@@ -1029,14 +1030,14 @@ else {
                     $controlOut = Join-Path $outDir "combined_slate_tickets_control_pq0_$Today.xlsx"
                     $controlTickets = [Math]::Max(1, [Math]::Min($PqControlMaxTickets, [int][Math]::Floor(40 * ($PqControlPercent / 100.0))))
                     $candidate = @{
-                        nba = @((Join-Path $Root "outputs\$Today\step8_nba_direction_clean_$Today.xlsx"), (Join-Path $Root "NBA\data\outputs\step8_all_direction_clean.xlsx"))
-                        nhl = @((Join-Path $Root "outputs\$Today\step8_nhl_direction_clean_$Today.xlsx"), (Join-Path $Root "NHL\outputs\step8_nhl_direction_clean.xlsx"))
-                        soccer = @((Join-Path $Root "outputs\$Today\step8_soccer_direction_clean_$Today.xlsx"), (Join-Path $Root "Soccer\outputs\step8_soccer_direction_clean.xlsx"))
-                        mlb = @((Join-Path $Root "outputs\$Today\step8_mlb_direction_clean_$Today.xlsx"), (Join-Path $Root "MLB\step8_mlb_direction_clean.xlsx"), (Join-Path $Root "MLB\outputs\step8_mlb_direction_clean.xlsx"))
-                        tennis = @((Join-Path $Root "outputs\$Today\step8_tennis_direction_clean_$Today.xlsx"), (Join-Path $Root "Tennis\outputs\step8_tennis_direction_clean.xlsx"))
-                        nba1q = @((Join-Path $Root "outputs\$Today\step8_nba1q_direction_clean_$Today.xlsx"), (Join-Path $Root "NBA\step8_nba1q_direction_clean.xlsx"))
-                        nba1h = @((Join-Path $Root "outputs\$Today\step8_nba1h_direction_clean_$Today.xlsx"), (Join-Path $Root "NBA\step8_nba1h_direction_clean.xlsx"))
-                        cbb = @((Join-Path $Root "CBB\step6_ranked_cbb.xlsx"))
+                        nba = @((Join-Path $Root "outputs\$Today\step8_nba_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "NBA\data\outputs\step8_all_direction_clean.xlsx"))
+                        nhl = @((Join-Path $Root "outputs\$Today\step8_nhl_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "NHL\outputs\step8_nhl_direction_clean.xlsx"))
+                        soccer = @((Join-Path $Root "outputs\$Today\step8_soccer_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "Soccer\outputs\step8_soccer_direction_clean.xlsx"))
+                        mlb = @((Join-Path $Root "outputs\$Today\step8_mlb_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "MLB\step8_mlb_direction_clean.xlsx"), (Join-Path $SportsRoot "MLB\outputs\step8_mlb_direction_clean.xlsx"))
+                        tennis = @((Join-Path $Root "outputs\$Today\step8_tennis_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "Tennis\outputs\step8_tennis_direction_clean.xlsx"))
+                        nba1q = @((Join-Path $Root "outputs\$Today\step8_nba1q_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "NBA\step8_nba1q_direction_clean.xlsx"))
+                        nba1h = @((Join-Path $Root "outputs\$Today\step8_nba1h_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "NBA\step8_nba1h_direction_clean.xlsx"))
+                        cbb = @((Join-Path $SportsRoot "CBB\step6_ranked_cbb.xlsx"))
                     }
                     $resolved = @{}
                     foreach ($k in $candidate.Keys) {
@@ -1131,17 +1132,17 @@ if (-not (Test-Path $todayOutDirForSnapshots)) {
 $datedStep8Copies = @(
     @{
         SrcCandidates = @(
-            (Join-Path $Root "NBA\data\outputs\step8_all_direction_clean.xlsx"),
-            (Join-Path $Root "NBA\step8_all_direction_clean.xlsx")
+            (Join-Path $SportsRoot "NBA\data\outputs\step8_all_direction_clean.xlsx"),
+            (Join-Path $SportsRoot "NBA\step8_all_direction_clean.xlsx")
         )
         Dst = (Join-Path $todayOutDirForSnapshots "step8_nba_direction_clean_$Today.xlsx")
     },
     @{
-        SrcCandidates = @((Join-Path $Root "NBA\step8_nba1h_direction_clean.xlsx"))
+        SrcCandidates = @((Join-Path $SportsRoot "NBA\step8_nba1h_direction_clean.xlsx"))
         Dst = (Join-Path $todayOutDirForSnapshots "step8_nba1h_direction_clean_$Today.xlsx")
     },
     @{
-        SrcCandidates = @((Join-Path $Root "NBA\step8_nba1q_direction_clean.xlsx"))
+        SrcCandidates = @((Join-Path $SportsRoot "NBA\step8_nba1q_direction_clean.xlsx"))
         Dst = (Join-Path $todayOutDirForSnapshots "step8_nba1q_direction_clean_$Today.xlsx")
     }
 )
@@ -1496,7 +1497,7 @@ if ($NowHour -ge 10) {
     Write-Host "[LATE_FETCH] Re-fetching all sports (append only, no overwrites)..." -ForegroundColor Cyan
     Write-Log "[NBA_LATE_FETCH] Hour=$NowHour >= 10: late slate refresh (all sports step1 --append + full pipeline -SkipFetch)"
 
-    $NBADir = Join-Path $Root "NBA"
+    $NBADir = Join-Path $SportsRoot "NBA"
     $lateNbaArgs = @(
         # Gentler late-fetch anti-403 settings.
         "--league_id", "7",
@@ -1524,7 +1525,7 @@ if ($NowHour -ge 10) {
         Write-Log "[NBA_LATE_FETCH] WARN: NBA step1 exit $LASTEXITCODE"
     }
 
-    $NHLDir = Join-Path $Root "NHL"
+    $NHLDir = Join-Path $SportsRoot "NHL"
     Push-Location $NHLDir
     try {
         & py -3.14 ".\scripts\step1_fetch_prizepicks_nhl.py" "--append" "--output" "outputs\step1_nhl_props.csv"
@@ -1537,7 +1538,7 @@ if ($NowHour -ge 10) {
         Write-Log "[NBA_LATE_FETCH] WARN: NHL step1 exit $LASTEXITCODE"
     }
 
-    $SoccerDir = Join-Path $Root "Soccer"
+    $SoccerDir = Join-Path $SportsRoot "Soccer"
     Push-Location $SoccerDir
     try {
         & py -3.14 ".\scripts\step1_fetch_prizepicks_soccer.py" "--append" "--date" "$Today" "--output" "outputs\step1_soccer_props.csv"
@@ -1551,7 +1552,7 @@ if ($NowHour -ge 10) {
     }
 
     Write-Host "[MLB] Fetching MLB props (direct API first; Playwright fallback)..." -ForegroundColor Cyan
-    $MLBDir = Join-Path $Root "MLB"
+    $MLBDir = Join-Path $SportsRoot "MLB"
     Push-Location $MLBDir
     try {
         & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `

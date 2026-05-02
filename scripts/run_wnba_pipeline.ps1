@@ -23,9 +23,9 @@ if ((Split-Path -Leaf $ScriptDir) -eq "scripts") {
 } else {
     $Root = $ScriptDir
 }
-$SportsRoot = Join-Path $Root "Sports"
-$WNBADir = Join-Path $SportsRoot "WNBA"
-$OutRoot = "$Root\outputs"
+# Canonical sport tree (matches run_pipeline.ps1 $SportsRoot\WNBA).
+$WNBADir = Join-Path $Root "Sports\WNBA"
+$OutRoot = Join-Path $Root "outputs"
 
 if (-not $Date) { $Date = Get-Date -Format "yyyy-MM-dd" }
 $StartTime = Get-Date
@@ -214,3 +214,7 @@ Write-Host "======================================================" -ForegroundC
 Write-Host ""
 Write-Progress -Id 2 -Activity "WNBA Pipeline" -Completed
 
+if ($ok) {
+    exit 0
+}
+exit 1

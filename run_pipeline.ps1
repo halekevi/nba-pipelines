@@ -89,6 +89,7 @@ $Root = $PSScriptRoot
 if ((Split-Path -Leaf $Root) -eq "scripts") {
     $Root = Split-Path -Parent $Root
 }
+# All sport trees live under <repo>\Sports\ (not repo root).
 $SportsRoot = Join-Path $Root "Sports"
 $NBADir    = Join-Path $SportsRoot "NBA"
 $CBBDir    = Join-Path $SportsRoot "CBB"
@@ -556,6 +557,13 @@ function Run-Combined {
     $soccerFile = "$SoccerDir\outputs\step8_soccer_direction_clean.xlsx"
     $tennisFile = "$TennisDir\outputs\step8_tennis_direction_clean.xlsx"
     $wnbaFile   = Join-Path $WNBADir "step8_wnba_direction.xlsx"
+    if (-not (Test-Path $wnbaFile)) {
+        $wnbaClean = Join-Path $WNBADir "step8_wnba_direction_clean.xlsx"
+        if (Test-Path $wnbaClean) {
+            $wnbaFile = $wnbaClean
+            Write-Host "  [WNBA] Using step8_wnba_direction_clean.xlsx for combined" -ForegroundColor DarkGray
+        }
+    }
     $mlbFile    = "$MLBDir\step8_mlb_direction_clean.xlsx"
     $nba1qFile  = "$NBADir\step8_nba1q_direction_clean.xlsx"
     $nba1hFile  = "$NBADir\step8_nba1h_direction_clean.xlsx"
@@ -770,7 +778,14 @@ if ($WNBAOnly) {
     } else {
         & $wnbaPs1 -Date $Date
     }
+    $wnbaOk = ($LASTEXITCODE -eq 0)
+    if ($wnbaOk) {
+        Run-Combined "after WNBA"
+    } else {
+        Write-Host "  [WNBA] Skipping combined (pipeline reported failure)." -ForegroundColor Yellow
+    }
     Print-Done
+    if (-not $wnbaOk) { exit 1 }
     exit
 }
 
