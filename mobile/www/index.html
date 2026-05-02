@@ -2733,7 +2733,7 @@ function buildEdgeCard(p, idx) {
       <div class="edge-row edge-row-top">
         <div class="edge-avatar ${dc}">${p.initials}</div>
         <div class="edge-val">
-          <div class="edge-num edge-badge ${dc}">${es}${p.edge.toFixed(2)}</div>
+          <div class="edge-num edge-badge ${dc}">${fmtEdgePick(p)}</div>
           <div class="edge-mini">${hitPct}% · L${p.line}</div>
         </div>
       </div>
@@ -2771,7 +2771,7 @@ function buildEdgeCard(p, idx) {
       </div>
       <div class="expand-stats">
         <div class="expand-stat"><div class="expand-stat-lbl">HIT RATE</div><div class="expand-stat-val" style="color:${hitColor}">${hitPct}%</div></div>
-        <div class="expand-stat"><div class="expand-stat-lbl">EDGE</div><div class="expand-stat-val" style="color:var(--accent)">${es}${p.edge.toFixed(2)}</div></div>
+        <div class="expand-stat"><div class="expand-stat-lbl">EDGE</div><div class="expand-stat-val" style="color:var(--accent)">${fmtEdgePick(p)}</div></div>
         <div class="expand-stat"><div class="expand-stat-lbl">PICK TYPE</div><div class="expand-stat-val" style="color:var(--cyan);font-size:clamp(11px,1.3vw,15px);">${p.pick}</div></div>
       </div>
     </div>`;
@@ -2999,7 +2999,7 @@ function streakCard(p, n) {
       <div style="text-align:right;flex-shrink:0;">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:${hc};line-height:1;">${hits}/${n}</div>
         <div style="font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:1px;">L${n} ${p.dir}</div>
-        <div style="font-size:10px;color:var(--accent);margin-top:2px;">${es}${p.edge.toFixed(2)} edge</div>
+        <div style="font-size:10px;color:var(--accent);margin-top:2px;">${fmtEdgePick(p)} edge</div>
       </div>
     </div>
     <div style="margin:8px 0 10px;">${spark}</div>
