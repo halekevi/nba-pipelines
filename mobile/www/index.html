@@ -236,8 +236,8 @@ body::after{content:'';position:fixed;inset:0;
 .scard-icon.wnba{background:rgba(255,105,180,.1);border:1px solid rgba(255,105,180,.28);}
 .scard-icon.combined{background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.2);}
 .scard-body{flex:1;}
-.scard-title{font-size:9px;font-family:"Inter",sans-serif;font-weight:600;color:var(--muted);letter-spacing:2.5px;margin-bottom:6px;text-transform:uppercase;}
-.scard-val{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--text);letter-spacing:1px;}
+.scard-title{font-size:12px;font-family:"Inter",sans-serif;font-weight:600;color:var(--muted);letter-spacing:2.5px;margin-bottom:6px;text-transform:uppercase;}
+.scard-val{font-family:'Inter',sans-serif;font-size:12px;color:var(--text);letter-spacing:.02em;}
 .scard-sub{font-size:10px;color:var(--muted2);margin-top:3px;}
 .sbadge{font-size:9px;font-family:"Inter",sans-serif;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.5px;}
 .sbadge.fresh{background:rgba(125,255,203,.12);color:var(--green);border:1px solid rgba(125,255,203,.25);}
@@ -1085,9 +1085,9 @@ body::before{
     width:100%;
     margin:0;
     text-align:left;
-    font-size:clamp(17px,2.1vw,23px);
+    font-size:12px;
     line-height:1.22;
-    letter-spacing:.03em;
+    letter-spacing:.02em;
     white-space:pre-line;
     word-break:break-word;
     font-family:'Inter',sans-serif;
@@ -1352,7 +1352,7 @@ body::before{
     .slate-panel-header-row .scard-head{gap:6px;}
     .slate-panel-header-row .scard-head .scard-icon{width:30px;height:30px;min-height:30px;border-radius:8px;}
     .slate-panel-header-row .scard-head .db-icon{width:16px;height:16px;}
-    .slate-panel-header-row .scard-head .scard-title{font-size:8px;letter-spacing:1.8px;}
+    .slate-panel-header-row .scard-head .scard-title{font-size:12px;letter-spacing:1.8px;}
     /* Move freshness badge near date row so sport labels have room. */
     .slate-panel-header-row .sbadge{
       font-size:7px;
@@ -1365,7 +1365,7 @@ body::before{
     }
     .slate-panel-header-row .scard-toggle{font-size:12px;}
     .slate-panel-header-row .scard-val{
-      font-size:clamp(14px,3.2vw,17px);
+      font-size:12px;
       line-height:1.15;
       padding-right:56px;
       font-family:'Inter',sans-serif;
@@ -1375,7 +1375,7 @@ body::before{
     /* Date cards: keep date on one line and visually match title typography. */
     .slate-panel-header-row .scard.fresh .scard-val,
     .slate-panel-header-row .scard.stale .scard-val{
-      font-size:8px;
+      font-size:12px;
       letter-spacing:0;
       line-height:1;
       white-space:nowrap;
