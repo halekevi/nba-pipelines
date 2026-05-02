@@ -381,7 +381,25 @@ if ((Test-Path $ExtractNbaSlateScript) -and (Test-Path $DateDir)) {
         )
     }
 }
+
+# Full Slate on combined_slate_tickets has the full NBA ticket pool (~1k+ rows). step8 date-filter
+# often leaves only a handful — export NBA rows so Prop Evaluation matches the ticket workbook.
+$ExportNbaFullSlateScript = Join-Path $Root "scripts\export_nba_full_slate_for_grader.py"
+$NbaFullSlateForGrade = Join-Path $DateDir "nba_full_slate_for_grade_$Date.xlsx"
+if ((Test-Path $ExportNbaFullSlateScript) -and (Test-Path $DateDir)) {
+    $combinedCandidates = @(Get-ChildItem -LiteralPath $DateDir -Filter "combined_slate_tickets_${Date}*.xlsx" -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending)
+    if ($combinedCandidates.Count -gt 0) {
+        $pickCombined = $combinedCandidates[0].FullName
+        Run-Py "Export NBA Full Slate for grader ($Date)" $Root $ExportNbaFullSlateScript @(
+            "--input", $pickCombined,
+            "--output", $NbaFullSlateForGrade,
+            "--date", $Date
+        )
+    }
+}
+
 $NBASlateFile = Resolve-FirstExisting @(
+    $NbaFullSlateForGrade,
     $NBAExtractOut,
     $NBAStep8Dated,
     $NBAStep8Static,

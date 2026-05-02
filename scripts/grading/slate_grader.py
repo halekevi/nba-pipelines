@@ -167,6 +167,7 @@ def _row_bet_direction(row) -> str:
         "bet_direction",
         "final_bet_direction",
         "Direction",
+        "Dir",
         "direction",
         "recommended_side",
     )
@@ -352,7 +353,7 @@ def _coalesce_line_from_projection(df):
 
 def load_nba(path: str) -> pd.DataFrame:
     xls = pd.ExcelFile(path, engine="openpyxl")
-    preferred = ["ALL", "Box Raw", "Props", "Sheet1"]
+    preferred = ["ALL", "Full Slate", "Box Raw", "Props", "Sheet1"]
     sheet = next((s for s in preferred if s in xls.sheet_names), xls.sheet_names[0])
     if sheet != "ALL":
         print(f"⚠️ NBA: sheet 'ALL' not found in {os.path.basename(path)}. Using sheet='{sheet}'.")
@@ -361,6 +362,10 @@ def load_nba(path: str) -> pd.DataFrame:
 
     # --- Normalize column names from PipelineA output ---
     df.columns = [str(c).strip() for c in df.columns]
+
+    if sheet == "Full Slate" and "Sport" in df.columns:
+        su = df["Sport"].astype(str).str.strip().str.upper()
+        df = df.loc[su == "NBA"].copy()
 
     df = df.rename(columns={
     "Player": "player",
@@ -442,8 +447,8 @@ def filter_nba_slate_by_grade_date(df: pd.DataFrame, date_str: str) -> pd.DataFr
         target = pd.to_datetime(date_str).date()
     except Exception:
         return df
-    row_days = ts.dt.date
-    mask = row_days == target
+    # PrizePicks / ticket exports often omit year (MM/DD HH:MM) — match month+day only
+    mask = (ts.dt.month == target.month) & (ts.dt.day == target.day) & ts.notna()
     if not mask.any():
         if ts.notna().sum() == 0:
             print(
