@@ -9,13 +9,30 @@ $SportsRoot = Join-Path $Root "Sports"
 $DateDir = Join-Path $Root "outputs\$Date"
 $CanonicalDateDir = Join-Path $DateDir "canonical"
 
-$TicketsFileFrozenCanonical = Join-Path $CanonicalDateDir "combined_slate_tickets_${Date}_to_grade_tomorrow.xlsx"
-$TicketsFileFrozen = Join-Path $DateDir "combined_slate_tickets_${Date}_to_grade_tomorrow.xlsx"
+# Canonical ticket workbook only (no _to_grade_tomorrow / HHmmss variants from pipeline).
 $TicketsFileXlsxCanonical = Join-Path $CanonicalDateDir "combined_slate_tickets_$Date.xlsx"
 $TicketsFileXlsx = Join-Path $DateDir "combined_slate_tickets_$Date.xlsx"
 $TicketsFileJsonCanonical = Join-Path $CanonicalDateDir "combined_slate_tickets_$Date.json"
 $TicketsFileJson = Join-Path $DateDir "combined_slate_tickets_$Date.json"
-$TicketsFile = if (Test-Path $TicketsFileFrozenCanonical) { $TicketsFileFrozenCanonical } elseif (Test-Path $TicketsFileFrozen) { $TicketsFileFrozen } elseif (Test-Path $TicketsFileXlsxCanonical) { $TicketsFileXlsxCanonical } elseif (Test-Path $TicketsFileXlsx) { $TicketsFileXlsx } elseif (Test-Path $TicketsFileJsonCanonical) { $TicketsFileJsonCanonical } elseif (Test-Path $TicketsFileJson) { $TicketsFileJson } else { $TicketsFileXlsx }
+function Resolve-TicketsWorkbook {
+    param([string]$Dir, [string]$GradeDate)
+    if (-not (Test-Path -LiteralPath $Dir)) { return $null }
+    $exact = Join-Path $Dir "combined_slate_tickets_$GradeDate.xlsx"
+    if (Test-Path -LiteralPath $exact) { return $exact }
+    $cands = @(Get-ChildItem -LiteralPath $Dir -Filter "combined_slate_tickets_${GradeDate}*.xlsx" -ErrorAction SilentlyContinue |
+        Where-Object {
+            $n = $_.Name.ToLowerInvariant()
+            $n -notmatch '_to_grade_tomorrow' -and $n -notmatch 'control_pq0' -and $n -notmatch '\.bak_'
+        })
+    if ($cands.Count -eq 0) { return $null }
+    ($cands | Sort-Object Length -Descending | Select-Object -First 1).FullName
+}
+$TicketsFileResolved = $null
+foreach ($d in @($CanonicalDateDir, $DateDir)) {
+    $TicketsFileResolved = Resolve-TicketsWorkbook -Dir $d -GradeDate $Date
+    if ($TicketsFileResolved) { break }
+}
+$TicketsFile = if ($TicketsFileResolved) { $TicketsFileResolved } elseif (Test-Path $TicketsFileJsonCanonical) { $TicketsFileJsonCanonical } elseif (Test-Path $TicketsFileJson) { $TicketsFileJson } else { $TicketsFileXlsx }
 $NBAActuals  = Join-Path $DateDir "actuals_nba_$Date.csv"
 $NBA1HActuals = Join-Path $DateDir "actuals_nba1h_$Date.csv"
 $NBA2HActuals = Join-Path $DateDir "actuals_nba2h_$Date.csv"
@@ -387,9 +404,9 @@ if ((Test-Path $ExtractNbaSlateScript) -and (Test-Path $DateDir)) {
 $ExportNbaFullSlateScript = Join-Path $Root "scripts\export_nba_full_slate_for_grader.py"
 $NbaFullSlateForGrade = Join-Path $DateDir "nba_full_slate_for_grade_$Date.xlsx"
 if ((Test-Path $ExportNbaFullSlateScript) -and (Test-Path $DateDir)) {
-    $combinedCandidates = @(Get-ChildItem -LiteralPath $DateDir -Filter "combined_slate_tickets_${Date}*.xlsx" -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending)
-    if ($combinedCandidates.Count -gt 0) {
-        $pickCombined = $combinedCandidates[0].FullName
+    $pickCombined = Resolve-TicketsWorkbook -Dir $DateDir -GradeDate $Date
+    if (-not $pickCombined) { $pickCombined = Resolve-TicketsWorkbook -Dir $CanonicalDateDir -GradeDate $Date }
+    if ($pickCombined) {
         Run-Py "Export NBA Full Slate for grader ($Date)" $Root $ExportNbaFullSlateScript @(
             "--input", $pickCombined,
             "--output", $NbaFullSlateForGrade,
@@ -815,7 +832,7 @@ else {
 # =============================
 # Run Combined Ticket Grader
 # =============================
-if (-not (Test-Path $TicketsFileXlsx) -and -not (Test-Path $TicketsFileJson)) {
+if (-not (Test-Path -LiteralPath $TicketsFile)) {
     Write-Host "Tickets file not found (no combined_slate_tickets .xlsx or .json for $Date)" -ForegroundColor Yellow
 }
 elseif (-not (Test-Path $NBAActuals)) {

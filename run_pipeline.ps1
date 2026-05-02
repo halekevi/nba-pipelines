@@ -625,18 +625,10 @@ function Run-Combined {
 
     if ($okC) {
         $datedCombinedPath = Join-Path $OutDir "combined_slate_tickets_$Date.xlsx"
-        $stamp = Get-Date -Format "HHmmss"
-        $stampedCombinedPath = Join-Path $OutDir "combined_slate_tickets_${Date}_$stamp.xlsx"
         Copy-Item $CombinedOut $datedCombinedPath -Force -ErrorAction SilentlyContinue
-        Copy-Item $CombinedOut $stampedCombinedPath -Force -ErrorAction SilentlyContinue
-        # Freeze exact daily ticket slate so next-day grader can use a stable artifact.
-        $toGradeTomorrowPath = Join-Path $OutDir "combined_slate_tickets_${Date}_to_grade_tomorrow.xlsx"
-        Copy-Item $CombinedOut $toGradeTomorrowPath -Force -ErrorAction SilentlyContinue
-        # Canonical copies (single source of truth paths for automation).
+        # Canonical copy only (no HHmmss-stamped or _to_grade_tomorrow duplicates — they confused ticket eval resolvers).
         $canonicalCombinedPath = Join-Path $CanonicalOutDir "combined_slate_tickets_$Date.xlsx"
-        $canonicalFrozenPath = Join-Path $CanonicalOutDir "combined_slate_tickets_${Date}_to_grade_tomorrow.xlsx"
         Copy-Item $CombinedOut $canonicalCombinedPath -Force -ErrorAction SilentlyContinue
-        Copy-Item $CombinedOut $canonicalFrozenPath -Force -ErrorAction SilentlyContinue
         # ML backfill expects dated combined_slate_tickets_YYYY-MM-DD.json archives.
         # Snapshot today's tickets_latest.json into outputs/$Date/ as a dated JSON source.
         $TicketsLatestJson = Join-Path $WebOutDir "tickets_latest.json"
@@ -683,39 +675,11 @@ function Run-Combined {
                 Write-Host "  Saved -> $mobileDst" -ForegroundColor Green
             }
         }
-        # Compare this run vs previous stamped run for line movement reporting.
-        $prevStamped = Get-ChildItem -Path $OutDir -Filter "combined_slate_tickets_${Date}_*.xlsx" -ErrorAction SilentlyContinue |
-            Where-Object { $_.FullName -ne $stampedCombinedPath } |
-            Sort-Object LastWriteTime -Descending |
-            Select-Object -First 1
-        if ($prevStamped) {
-            $compareOutDir = Join-Path $OutDir ("compare_" + (Get-Date -Format "HHmmss"))
-            $compareScript = Join-Path $Root "scripts\compare_combined_slate_runs.py"
-            if (Test-Path $compareScript) {
-                Write-Host "  [Compare] Previous run: $($prevStamped.Name)" -ForegroundColor DarkGray
-                $cmpCmd = "py -3.14 `"$compareScript`" --old `"$($prevStamped.FullName)`" --new `"$stampedCombinedPath`" --outdir `"$compareOutDir`""
-                Write-Host "        CMD: $cmpCmd" -ForegroundColor DarkGray
-                $cmpOut = Invoke-Expression $cmpCmd 2>&1
-                $cmpExit = $LASTEXITCODE
-                foreach ($line in $cmpOut) { Write-Host "        $line" -ForegroundColor DarkGray }
-                if ($cmpExit -eq 0) {
-                    Write-Host "  [Compare] Report -> $compareOutDir" -ForegroundColor Green
-                } else {
-                    Write-Host "  [Compare] WARN: compare script exit $cmpExit" -ForegroundColor Yellow
-                }
-            } else {
-                Write-Host "  [Compare] WARN: missing scripts\compare_combined_slate_runs.py" -ForegroundColor Yellow
-            }
-        } else {
-            Write-Host "  [Compare] No previous stamped run found for $Date (skipping compare this run)." -ForegroundColor DarkGray
-        }
+        # Line-movement compare previously used HHmmss-stamped pairs; removed with stamped artifacts.
 
         Remove-Item $CombinedOut -Force -ErrorAction SilentlyContinue
         Write-Host "  Saved -> $datedCombinedPath" -ForegroundColor Green
-        Write-Host "  Saved -> $stampedCombinedPath" -ForegroundColor Green
-        Write-Host "  Saved -> $toGradeTomorrowPath" -ForegroundColor Green
         Write-Host "  Saved -> $canonicalCombinedPath" -ForegroundColor Green
-        Write-Host "  Saved -> $canonicalFrozenPath" -ForegroundColor Green
         if ($RunPayoutEngine) {
             Write-Host "[PAYOUT ENGINE] Fetching exact multipliers from PrizePicks..." -ForegroundColor Magenta
             try {
