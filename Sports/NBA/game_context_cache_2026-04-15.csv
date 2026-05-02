@@ -1,0 +1,7 @@
+team,opp_team,game_total,spread,implied_team_total,blowout_risk,low_total_flag,pace_tier,odds_source
+PHI/ORL,,222.5,-2.5,112.5,False,False,NORMAL,live
+PHI,ORL,222.5,-2.5,112.5,False,False,NORMAL,live
+ORL,PHI,222.5,2.5,110.0,False,False,NORMAL,live
+LAC/GSW,,221.5,-5.5,113.5,False,False,NORMAL,live
+LAC,GSW,221.5,-5.5,113.5,False,False,NORMAL,live
+GSW,LAC,221.5,5.5,108.0,False,False,NORMAL,live

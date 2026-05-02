@@ -25,13 +25,14 @@ param(
 
 $ErrorActionPreference = "Stop"
 $Root = Split-Path $PSScriptRoot -Parent
+$SportsRoot = Join-Path $Root "Sports"
 
 if ($Date -notmatch "^\d{4}-\d{2}-\d{2}$") {
     Write-Error "Use -Date YYYY-MM-DD"
 }
 
 $PyRetier = Join-Path $Root "scripts\re_apply_nba_tiers_from_step7.py"
-$Step8 = Join-Path $Root "NBA\scripts\step8_add_direction_context.py"
+$Step8 = Join-Path $Root "Sports\NBA\scripts\step8_add_direction_context.py"
 $Grader = Join-Path $Root "scripts\run_grader.ps1"
 
 foreach ($p in @($PyRetier, $Step8, $Grader)) {
@@ -42,7 +43,7 @@ foreach ($p in @($PyRetier, $Step8, $Grader)) {
 
 Write-Host "=== Re-tier NBA (no fetch) — slate $Date ===" -ForegroundColor Cyan
 
-Set-Location (Join-Path $Root "NBA")
+Set-Location (Join-Path $SportsRoot "NBA")
 try {
     if (-not $TierAllRowsInWorkbook) {
         & py -3.14 -X utf8 $PyRetier "--only-date" $Date
@@ -67,9 +68,9 @@ finally {
     Set-Location $Root
 }
 
-$srcClean = Join-Path $Root "NBA\data\outputs\step8_all_direction_clean.xlsx"
+$srcClean = Join-Path $Root "Sports\NBA\data\outputs\step8_all_direction_clean.xlsx"
 foreach ($dst in @(
-        (Join-Path $Root "NBA\step8_all_direction_clean.xlsx"),
+        (Join-Path $Root "Sports\NBA\step8_all_direction_clean.xlsx"),
         (Join-Path $Root "outputs\$Date\step8_nba_direction_clean_$Date.xlsx")
     )) {
     if (-not (Test-Path $srcClean)) {

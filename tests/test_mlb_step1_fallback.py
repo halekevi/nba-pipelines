@@ -11,7 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 def _load_mlb_step1() -> object:
-    path = REPO_ROOT / "MLB" / "scripts" / "step1_fetch_prizepicks_mlb.py"
+    path = REPO_ROOT / "Sports" / "MLB" / "scripts" / "step1_fetch_prizepicks_mlb.py"
     spec = importlib.util.spec_from_file_location("mlb_step1_test_mod", path)
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)

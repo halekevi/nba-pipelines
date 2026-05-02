@@ -1,0 +1,7 @@
+team,opp_team,game_total,spread,implied_team_total,blowout_risk,low_total_flag,pace_tier,odds_source
+ORL/CHA,,218.5,9.5,104.5,True,False,NORMAL,live
+ORL,CHA,,,,False,False,UNKNOWN,fallback
+CHA,ORL,,,,False,False,UNKNOWN,fallback
+PHX,GSW,,,,False,False,UNKNOWN,fallback
+PHX/GSW,,213.5,17.5,98.0,True,True,SLOW,live
+GSW,PHX,,,,False,False,UNKNOWN,fallback

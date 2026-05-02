@@ -1,0 +1,12 @@
+team,opp_team,game_total,spread,implied_team_total,blowout_risk,low_total_flag,pace_tier,odds_source
+SAC,CHA,230.5,17.5,106.5,True,False,FAST,live
+CHA,SAC,230.5,-17.5,124.0,True,False,FAST,live
+CHA/SAC,,230.5,-17.5,124.0,True,False,FAST,live
+NYK/NOP,,232.5,-8.5,120.5,False,False,FAST,live
+NYK,NOP,232.5,-8.5,120.5,False,False,FAST,live
+NOP,NYK,232.5,8.5,112.0,False,False,FAST,live
+ORL,CLE,229.5,10.5,109.5,True,False,FAST,live
+CLE,ORL,229.5,-10.5,120.0,True,False,FAST,live
+DEN,PHX,234.5,-4.5,119.5,False,False,FAST,live
+PHX/DEN,,234.5,4.5,115.0,False,False,FAST,live
+PHX,DEN,234.5,4.5,115.0,False,False,FAST,live

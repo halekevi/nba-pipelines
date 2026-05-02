@@ -441,14 +441,14 @@ def main() -> None:
             if args.date
             else _dt.datetime.now(tz=eastern).date().isoformat()
         )
-        # Tennis/scripts -> monorepo root (see tennis_grader.py).
-        repo_root = Path(__file__).resolve().parents[1]
+        # Sports/Tennis/scripts -> monorepo root (see tennis_grader.py).
+        repo_root = Path(__file__).resolve().parents[3]
         dated_dir = repo_root / "outputs" / slate_date
         dated_dir.mkdir(parents=True, exist_ok=True)
         dated_xlsx = dated_dir / f"step8_tennis_direction_clean_{slate_date}.xlsx"
         xp = Path(xlsx_path)
         if not xp.is_file():
-            xp = repo_root / "Tennis" / str(xlsx_path).replace("\\", "/").lstrip("./")
+            xp = repo_root / "Sports" / "Tennis" / str(xlsx_path).replace("\\", "/").lstrip("./")
         if xp.is_file():
             shutil.copy2(xp, dated_xlsx)
             print(f"[Tennis step8] Dated clean workbook -> {dated_xlsx}")

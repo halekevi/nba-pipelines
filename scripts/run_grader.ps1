@@ -30,7 +30,7 @@ $SoccerActuals  = Join-Path $DateDir "actuals_soccer_$Date.csv"
 $TennisActuals  = Join-Path $DateDir "actuals_tennis_$Date.csv"
 $FetchActualsScript = Join-Path $Root "scripts\fetch_actuals.py"
 $FetchTennisActualsScript = Join-Path $Root "scripts\fetch_tennis_actuals.py"
-$TennisGraderScript = Join-Path $Root "Tennis\scripts\tennis_grader.py"
+$TennisGraderScript = Join-Path $Root "Sports\Tennis\scripts\tennis_grader.py"
 $FetchNBAPeriodActualsScript = Join-Path $Root "scripts\fetch_nba_period_actuals.py"
 $BuildNBA1QHistoryScript = Join-Path $Root "scripts\build_nba1q_history_db.py"
 $SlateGraderScript = Join-Path $Root "scripts\grading\slate_grader.py"
@@ -42,7 +42,7 @@ $VoidValidatorScript = Join-Path $Root "scripts\validate_unacceptable_voids.py"
 $BuildGradesHtmlScript = Join-Path $Root "scripts\grading\build_grades_html.py"
 $BackfillGradedPropsJsonScript = Join-Path $Root "scripts\backfill_graded_props_json.py"
 $IngestGradedIncomeScript     = Join-Path $Root "scripts\ingest_graded_to_income_db.py"
-$NBABacktestScript = Join-Path $Root "NBA\scripts\backtest_nba.py"
+$NBABacktestScript = Join-Path $Root "Sports\NBA\scripts\backtest_nba.py"
 # Prefer build_ticket_eval.py (multi-date graded merge from leg game_time); fallback to legacy HTML-only builder.
 $TicketEvalBuilderScript = Join-Path $Root "scripts\build_ticket_eval.py"
 if (-not (Test-Path $TicketEvalBuilderScript)) {
@@ -281,8 +281,8 @@ if (Test-Path $FetchActualsScript) {
 
     if (Test-Path $TennisGraderScript) {
         $TennisStep8Dated = Join-Path $DateDir "step8_tennis_direction_clean_$Date.xlsx"
-        $TennisStep8Static = Join-Path $Root "Tennis\outputs\step8_tennis_direction_clean.xlsx"
-        $TennisStep8Csv = Join-Path $Root "Tennis\outputs\step8_tennis_direction.csv"
+        $TennisStep8Static = Join-Path $Root "Sports\Tennis\outputs\step8_tennis_direction_clean.xlsx"
+        $TennisStep8Csv = Join-Path $Root "Sports\Tennis\outputs\step8_tennis_direction.csv"
         $TennisSlateFile = Resolve-FirstExisting @($TennisStep8Dated, $TennisStep8Static, $TennisStep8Csv)
         if (-not $TennisSlateFile) {
             Write-Host "Skipping Tennis grader (no step8 tennis slate; build Tennis pipeline or place step8 under outputs\$Date or Tennis\outputs)." -ForegroundColor Yellow
@@ -368,8 +368,8 @@ else {
 # Grade NBA/CBB + Build HTML
 # =============================
 $NBAStep8Dated = Join-Path $DateDir "step8_nba_direction_clean_$Date.xlsx"
-$NBAStep8Static = Join-Path $Root "NBA\data\outputs\step8_all_direction_clean.xlsx"
-$NBAStep8Static2 = Join-Path $Root "NBA\step8_all_direction_clean.xlsx"
+$NBAStep8Static = Join-Path $Root "Sports\NBA\data\outputs\step8_all_direction_clean.xlsx"
+$NBAStep8Static2 = Join-Path $Root "Sports\NBA\step8_all_direction_clean.xlsx"
 $NBASlateFile = Resolve-FirstExisting @(
     (Join-Path $DateDir "nba_slate_extracted_$Date.xlsx"),
     $NBAStep8Dated,
@@ -379,12 +379,12 @@ $NBASlateFile = Resolve-FirstExisting @(
 if ($NBASlateFile) { Write-Host "[GRADER] NBA slate: $(Split-Path $NBASlateFile -Leaf)" -ForegroundColor Cyan }
 $CBBSlateXlsx = Resolve-FirstExisting @(
     (Join-Path $DateDir "step6_ranked_cbb_$Date.xlsx"),
-    (Join-Path $Root "CBB\step6_ranked_cbb.xlsx")
+    (Join-Path $Root "Sports\CBB\step6_ranked_cbb.xlsx")
 )
 $CBBSlateCsv = Join-Path $DateDir "cbb_slate_extracted_$Date.csv"
 $NHLStep8Dated = Join-Path $DateDir "step8_nhl_direction_clean_$Date.xlsx"
-$NHLStep8Static = Join-Path $Root "NHL\outputs\step8_nhl_direction_clean.xlsx"
-$NHLStep8Static2 = Join-Path $Root "NHL\step8_nhl_direction_clean.xlsx"
+$NHLStep8Static = Join-Path $Root "Sports\NHL\outputs\step8_nhl_direction_clean.xlsx"
+$NHLStep8Static2 = Join-Path $Root "Sports\NHL\step8_nhl_direction_clean.xlsx"
 $NHLSlateFile = Resolve-FirstExisting @(
     $NHLStep8Dated,
     $NHLStep8Static,
@@ -393,8 +393,8 @@ $NHLSlateFile = Resolve-FirstExisting @(
 if ($NHLSlateFile) { Write-Host "[GRADER] NHL slate: $(Split-Path $NHLSlateFile -Leaf)" -ForegroundColor Cyan }
 
 $SoccerStep8Dated = Join-Path $DateDir "step8_soccer_direction_clean_$Date.xlsx"
-$SoccerStep8Static = Join-Path $Root "Soccer\outputs\step8_soccer_direction_clean.xlsx"
-$SoccerStep8Static2 = Join-Path $Root "Soccer\step8_soccer_direction_clean.xlsx"
+$SoccerStep8Static = Join-Path $Root "Sports\Soccer\outputs\step8_soccer_direction_clean.xlsx"
+$SoccerStep8Static2 = Join-Path $Root "Sports\Soccer\step8_soccer_direction_clean.xlsx"
 $SoccerSlateFile = Resolve-FirstExisting @(
     $SoccerStep8Dated,
     $SoccerStep8Static,
@@ -405,8 +405,8 @@ $SoccerSlateFile = Resolve-FirstExisting @(
 $ExtractNbaSlateScript = Join-Path $Root "scripts\extract_nba_slate_for_grade_date.py"
 $DatedNBA1HPath = Join-Path $DateDir "step8_nba1h_direction_clean_$Date.xlsx"
 $DatedNBA1QPath = Join-Path $DateDir "step8_nba1q_direction_clean_$Date.xlsx"
-$RootNBA1HPath = Join-Path $Root "NBA\step8_nba1h_direction_clean.xlsx"
-$RootNBA1QPath = Join-Path $Root "NBA\step8_nba1q_direction_clean.xlsx"
+$RootNBA1HPath = Join-Path $Root "Sports\NBA\step8_nba1h_direction_clean.xlsx"
+$RootNBA1QPath = Join-Path $Root "Sports\NBA\step8_nba1q_direction_clean.xlsx"
 if ((Test-Path $ExtractNbaSlateScript) -and (Test-Path $DateDir)) {
     if (-not (Test-Path $DatedNBA1HPath) -and (Test-Path $RootNBA1HPath)) {
         Run-Py "Extract NBA1H slate for $Date" $Root $ExtractNbaSlateScript @(
@@ -422,15 +422,15 @@ if ((Test-Path $ExtractNbaSlateScript) -and (Test-Path $DateDir)) {
 
 $NBA1HSlateFile = Resolve-FirstExisting @(
     $DatedNBA1HPath,
-    (Join-Path $Root "NBA\step8_nba1h_direction_clean.xlsx")
+    (Join-Path $Root "Sports\NBA\step8_nba1h_direction_clean.xlsx")
 )
 $NBA1QSlateFile = Resolve-FirstExisting @(
     $DatedNBA1QPath,
-    (Join-Path $Root "NBA\step8_nba1q_direction_clean.xlsx")
+    (Join-Path $Root "Sports\NBA\step8_nba1q_direction_clean.xlsx")
 )
 $WCBBSlateFile = Resolve-FirstExisting @(
     (Join-Path $DateDir "step6_ranked_wcbb_$Date.xlsx"),
-    (Join-Path $Root "CBB\step6_ranked_wcbb.xlsx")
+    (Join-Path $Root "Sports\CBB\step6_ranked_wcbb.xlsx")
 )
 if ($SoccerSlateFile -and (Test-Path $SoccerSlateFile)) {
     Write-Host "[GRADER] Soccer slate: $(Split-Path $SoccerSlateFile -Leaf)" -ForegroundColor Cyan
@@ -452,12 +452,12 @@ if ((Test-Path $NBAActuals) -and (Test-Path $NBASlateFile) -and (Test-Path $Slat
         Run-Py "Backtest NBA (Daily)" $Root $NBABacktestScript @(
             "--slate", $NBASlateFile,
             "--actuals", $NBAActuals,
-            "--out-dir", (Join-Path $Root "NBA\data\outputs")
+            "--out-dir", (Join-Path $Root "Sports\NBA\data\outputs")
         )
 
         Run-Py "Backtest NBA (All Historical Actuals)" $Root $NBABacktestScript @(
             "--slate", $NBASlateFile,
-            "--out-dir", (Join-Path $Root "NBA\data\outputs"),
+            "--out-dir", (Join-Path $Root "Sports\NBA\data\outputs"),
             "--batch-actuals-glob", "**/actuals_nba*.csv"
         )
     }
@@ -537,8 +537,8 @@ if (Test-Path $MlbGradeDateScript) {
 }
 else {
     $MLBStep8Dated = Join-Path $DateDir "step8_mlb_direction_clean_$Date.xlsx"
-    $MLBStep8Static = Join-Path $Root "MLB\outputs\step8_mlb_direction_clean.xlsx"
-    $MLBStep8Static2 = Join-Path $Root "MLB\step8_mlb_direction_clean.xlsx"
+    $MLBStep8Static = Join-Path $Root "Sports\MLB\outputs\step8_mlb_direction_clean.xlsx"
+    $MLBStep8Static2 = Join-Path $Root "Sports\MLB\step8_mlb_direction_clean.xlsx"
     $MLBSlateFile = Resolve-FirstExisting @(
         $MLBStep8Dated,
         $MLBStep8Static,

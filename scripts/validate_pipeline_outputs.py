@@ -167,22 +167,22 @@ def main() -> int:
     repo_root = args.repo_root.strip() or os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     d = args.date
 
-    cbb_dated = os.path.join(repo_root, "CBB", "outputs", d, "step6_ranked_cbb.xlsx")
-    cbb_fallback = os.path.join(repo_root, "CBB", "step6_ranked_cbb.xlsx")
+    cbb_dated = os.path.join(repo_root, "Sports", "CBB", "outputs", d, "step6_ranked_cbb.xlsx")
+    cbb_fallback = os.path.join(repo_root, "Sports", "CBB", "step6_ranked_cbb.xlsx")
     cbb_path = cbb_dated if os.path.exists(cbb_dated) else cbb_fallback
 
-    wcbb_dated = os.path.join(repo_root, "CBB", "outputs", d, "step6_ranked_wcbb.xlsx")
-    wcbb_fallback = os.path.join(repo_root, "CBB", "step6_ranked_wcbb.xlsx")
+    wcbb_dated = os.path.join(repo_root, "Sports", "CBB", "outputs", d, "step6_ranked_wcbb.xlsx")
+    wcbb_fallback = os.path.join(repo_root, "Sports", "CBB", "step6_ranked_wcbb.xlsx")
     wcbb_path = wcbb_dated if os.path.exists(wcbb_dated) else wcbb_fallback
 
     sources = [
-        SourceDef("NBA", os.path.join(repo_root, "NBA", "data", "outputs", "step8_all_direction_clean.xlsx"), "ALL", True),
+        SourceDef("NBA", os.path.join(repo_root, "Sports", "NBA", "data", "outputs", "step8_all_direction_clean.xlsx"), "ALL", True),
         SourceDef("CBB", cbb_path, "ALL", True),
-        SourceDef("NHL", os.path.join(repo_root, "NHL", "outputs", "step8_nhl_direction_clean.xlsx"), "All Props", False),
-        SourceDef("Soccer", os.path.join(repo_root, "Soccer", "outputs", "step8_soccer_direction_clean.xlsx"), "ALL", False),
-        SourceDef("MLB", os.path.join(repo_root, "MLB", "step8_mlb_direction_clean.xlsx"), "ALL", False),
-        SourceDef("NBA1Q", os.path.join(repo_root, "NBA", "step8_nba1q_direction_clean.xlsx"), "ALL", False),
-        SourceDef("NBA1H", os.path.join(repo_root, "NBA", "step8_nba1h_direction_clean.xlsx"), "ALL", False),
+        SourceDef("NHL", os.path.join(repo_root, "Sports", "NHL", "outputs", "step8_nhl_direction_clean.xlsx"), "All Props", False),
+        SourceDef("Soccer", os.path.join(repo_root, "Sports", "Soccer", "outputs", "step8_soccer_direction_clean.xlsx"), "ALL", False),
+        SourceDef("MLB", os.path.join(repo_root, "Sports", "MLB", "step8_mlb_direction_clean.xlsx"), "ALL", False),
+        SourceDef("NBA1Q", os.path.join(repo_root, "Sports", "NBA", "step8_nba1q_direction_clean.xlsx"), "ALL", False),
+        SourceDef("NBA1H", os.path.join(repo_root, "Sports", "NBA", "step8_nba1h_direction_clean.xlsx"), "ALL", False),
         SourceDef("WCBB", wcbb_path, "ALL", False),
     ]
 

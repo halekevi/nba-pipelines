@@ -1,0 +1,17 @@
+team,opp_team,game_total,spread,implied_team_total,blowout_risk,low_total_flag,pace_tier,odds_source
+CHA,IND,235.5,-15.5,125.5,True,False,FAST,live
+IND,CHA,235.5,15.5,110.0,True,False,FAST,live
+PHI/MIN,,233.5,-2.5,118.0,False,False,FAST,live
+PHI,MIN,233.5,-2.5,118.0,False,False,FAST,live
+MIN,PHI,233.5,2.5,115.5,False,False,FAST,live
+ATL,BRK,225.5,-15.5,120.5,True,False,NORMAL,live
+BKN,ATL,225.5,15.5,105.0,True,False,NORMAL,live
+NYK,CHI,236.5,-15.5,126.0,True,False,FAST,live
+CHI,NYK,236.5,15.5,110.5,True,False,FAST,live
+HOU,UTA,232.5,-17.5,125.0,True,False,FAST,live
+UTA,HOU,232.5,17.5,107.5,True,False,FAST,live
+BOS,MIL,216.5,-16.5,116.5,True,False,NORMAL,live
+MIL,BOS,216.5,16.5,100.0,True,False,NORMAL,live
+TOR,,232.5,-13.5,123.0,True,False,FAST,live
+ORL,DAL,236.5,-6.5,121.5,False,False,FAST,live
+DAL,ORL,236.5,6.5,115.0,False,False,FAST,live

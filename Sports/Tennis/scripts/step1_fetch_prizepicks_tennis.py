@@ -29,8 +29,8 @@ try:
 except Exception:
     pass
 
-# Tennis/scripts -> repo root is parents[2].
-REPO_ROOT = Path(__file__).resolve().parents[2]
+# Tennis/scripts -> repo root is parents[3].
+REPO_ROOT = Path(__file__).resolve().parents[3]
 
 LEAGUES_URL = "https://api.prizepicks.com/leagues"
 

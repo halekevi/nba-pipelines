@@ -30,28 +30,28 @@ import combined_slate_tickets as _cst  # noqa: E402
 
 SPORT_CFG = {
     "NBA": {
-        "step8": ROOT / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
-        "step1": ROOT / "NBA" / "data" / "outputs" / "step1_pp_props_today.csv",
+        "step8": ROOT / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
+        "step1": ROOT / "Sports" / "NBA" / "data" / "outputs" / "step1_pp_props_today.csv",
         "top_n": 15,
     },
     "NHL": {
-        "step8": ROOT / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
-        "step1": ROOT / "NHL" / "outputs" / "step1_nhl_props.csv",
+        "step8": ROOT / "Sports" / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
+        "step1": ROOT / "Sports" / "NHL" / "outputs" / "step1_nhl_props.csv",
         "top_n": 10,
     },
     "Soccer": {
-        "step8": ROOT / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
-        "step1": ROOT / "Soccer" / "outputs" / "step1_soccer_props.csv",
+        "step8": ROOT / "Sports" / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
+        "step1": ROOT / "Sports" / "Soccer" / "outputs" / "step1_soccer_props.csv",
         "top_n": 10,
     },
     "Tennis": {
-        "step8": ROOT / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
-        "step1": ROOT / "Tennis" / "outputs" / "step1_tennis_props.csv",
+        "step8": ROOT / "Sports" / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
+        "step1": ROOT / "Sports" / "Tennis" / "outputs" / "step1_tennis_props.csv",
         "top_n": 10,
     },
     "MLB": {
-        "step8": ROOT / "MLB" / "step8_mlb_direction_clean.xlsx",
-        "step1": ROOT / "MLB" / "step1_mlb_props.csv",
+        "step8": ROOT / "Sports" / "MLB" / "step8_mlb_direction_clean.xlsx",
+        "step1": ROOT / "Sports" / "MLB" / "step1_mlb_props.csv",
         "top_n": 10,
     },
 }

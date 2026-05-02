@@ -229,10 +229,10 @@ def load_players_from_graded_workbooks() -> list[tuple[str, str]]:
 def load_players_from_step8_slates() -> list[tuple[str, str]]:
     out: list[tuple[str, str]] = []
     patterns: list[tuple[Path, str]] = [
-        (REPO_ROOT / "NBA" / "data" / "outputs", "NBA"),
-        (REPO_ROOT / "CBB", "CBB"),
-        (REPO_ROOT / "Soccer" / "outputs", "Soccer"),
-        (REPO_ROOT / "NHL", "NHL"),
+        (REPO_ROOT / "Sports" / "NBA" / "data" / "outputs", "NBA"),
+        (REPO_ROOT / "Sports" / "CBB", "CBB"),
+        (REPO_ROOT / "Sports" / "Soccer" / "outputs", "Soccer"),
+        (REPO_ROOT / "Sports" / "NHL", "NHL"),
     ]
     globs = ("step8_*direction_clean*.xlsx", "step8_*direction*.xlsx", "*step8*clean*.xlsx")
     for base, sport in patterns:

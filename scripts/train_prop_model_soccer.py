@@ -102,8 +102,8 @@ def _collect_soccer_graded_files() -> list[Path]:
     paths: list[Path] = []
     for pat in (
         ROOT / "outputs",
-        ROOT / "Soccer",
-        ROOT / "Soccer" / "outputs",
+        ROOT / "Sports" / "Soccer",
+        ROOT / "Sports" / "Soccer" / "outputs",
     ):
         if pat.is_dir():
             paths.extend(pat.rglob("graded_soccer*.xlsx"))

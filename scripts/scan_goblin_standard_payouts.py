@@ -33,7 +33,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
 SAMPLES_DIR = ROOT / "data" / "payout_samples"
-DEFAULT_STEP1 = ROOT / "NBA" / "data" / "outputs" / "step1_pp_props_today.csv"
+DEFAULT_STEP1 = ROOT / "Sports" / "NBA" / "data" / "outputs" / "step1_pp_props_today.csv"
 
 # Reuse CDP + slip helpers (same module as payout collection).
 import collect_payout_data as cpd

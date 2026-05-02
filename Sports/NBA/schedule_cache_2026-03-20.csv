@@ -1,0 +1,13 @@
+team,days_rest,b2b_flag,home_away
+NYK,2,False,AWAY
+DEN,0,True,HOME
+MEM,0,True,HOME
+MIN,0,True,HOME
+BOS,1,False,AWAY
+HOU,0,True,HOME
+ATL,0,True,AWAY
+TOR,0,True,AWAY
+GSW,1,False,AWAY
+POR,1,False,AWAY
+BKN,99,False,UNKNOWN
+DET,0,True,HOME

@@ -78,31 +78,31 @@ DIR_COL_ALIASES = ["Dir", "DIR", "dir", "Direction", "DIRECTION"]
 # Ticket legs with sport NBA1H / NBA1Q / WCBB must match rows from these files, not full-game NBA/CBB only.
 SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
     "NBA": [
-        REPO_ROOT / "NBA" / "step8_all_direction_clean.xlsx",
-        REPO_ROOT / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
+        REPO_ROOT / "Sports" / "NBA" / "step8_all_direction_clean.xlsx",
+        REPO_ROOT / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
     ],
     "NBA1H": [
-        REPO_ROOT / "NBA" / "step8_nba1h_direction_clean.xlsx",
+        REPO_ROOT / "Sports" / "NBA" / "step8_nba1h_direction_clean.xlsx",
     ],
     "NBA1Q": [
-        REPO_ROOT / "NBA" / "step8_nba1q_direction_clean.xlsx",
+        REPO_ROOT / "Sports" / "NBA" / "step8_nba1q_direction_clean.xlsx",
     ],
     "CBB": [
-        REPO_ROOT / "CBB" / "step6_ranked_cbb.xlsx",
+        REPO_ROOT / "Sports" / "CBB" / "step6_ranked_cbb.xlsx",
     ],
     "WCBB": [
-        REPO_ROOT / "CBB" / "step6_ranked_wcbb.xlsx",
+        REPO_ROOT / "Sports" / "CBB" / "step6_ranked_wcbb.xlsx",
     ],
     "NHL": [
-        REPO_ROOT / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
-        REPO_ROOT / "NHL" / "step8_nhl_direction_clean.xlsx",
+        REPO_ROOT / "Sports" / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
+        REPO_ROOT / "Sports" / "NHL" / "step8_nhl_direction_clean.xlsx",
     ],
     "SOCCER": [
-        REPO_ROOT / "Soccer" / "step8_soccer_direction_clean.xlsx",
-        REPO_ROOT / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
+        REPO_ROOT / "Sports" / "Soccer" / "step8_soccer_direction_clean.xlsx",
+        REPO_ROOT / "Sports" / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
     ],
     "MLB": [
-        REPO_ROOT / "MLB" / "step8_mlb_direction_clean.xlsx",
+        REPO_ROOT / "Sports" / "MLB" / "step8_mlb_direction_clean.xlsx",
     ],
 }
 

@@ -15,9 +15,9 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 OUTPUTS_DIR = REPO_ROOT / "outputs"
 
 STEP8_PATHS: dict[str, Path] = {
-    "NBA": REPO_ROOT / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
-    "NBA1H": REPO_ROOT / "NBA" / "step8_nba1h_direction_clean.xlsx",
-    "NBA1Q": REPO_ROOT / "NBA" / "step8_nba1q_direction_clean.xlsx",
+    "NBA": REPO_ROOT / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
+    "NBA1H": REPO_ROOT / "Sports" / "NBA" / "step8_nba1h_direction_clean.xlsx",
+    "NBA1Q": REPO_ROOT / "Sports" / "NBA" / "step8_nba1q_direction_clean.xlsx",
 }
 
 

@@ -22,16 +22,16 @@ def find_player_rows(df: pd.DataFrame, player_col: str, first: str, last: str) -
 
 
 def load_nba() -> pd.DataFrame:
-    p = ROOT / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx"
+    p = ROOT / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx"
     if not p.exists():
-        p = ROOT / "NBA" / "step8_all_direction_clean.xlsx"
+        p = ROOT / "Sports" / "NBA" / "step8_all_direction_clean.xlsx"
     return pd.read_excel(p, sheet_name="ALL", engine="openpyxl")
 
 
 def load_mlb() -> pd.DataFrame:
     for p in (
-        ROOT / "MLB" / "step8_mlb_direction_clean.xlsx",
-        ROOT / "MLB" / "outputs" / "step8_mlb_direction_clean.xlsx",
+        ROOT / "Sports" / "MLB" / "step8_mlb_direction_clean.xlsx",
+        ROOT / "Sports" / "MLB" / "outputs" / "step8_mlb_direction_clean.xlsx",
     ):
         if p.exists():
             return pd.read_excel(p, sheet_name="ALL", engine="openpyxl")
@@ -39,7 +39,7 @@ def load_mlb() -> pd.DataFrame:
 
 
 def load_cbb() -> pd.DataFrame:
-    p = ROOT / "CBB" / "step6_ranked_cbb.xlsx"
+    p = ROOT / "Sports" / "CBB" / "step6_ranked_cbb.xlsx"
     if not p.exists():
         return pd.DataFrame()
     return pd.read_excel(p, sheet_name="ALL", engine="openpyxl")

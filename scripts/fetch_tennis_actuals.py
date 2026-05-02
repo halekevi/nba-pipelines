@@ -15,7 +15,7 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
-_TENNIS_SCRIPTS = ROOT / "Tennis" / "scripts"
+_TENNIS_SCRIPTS = ROOT / "Sports" / "Tennis" / "scripts"
 if str(_TENNIS_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_TENNIS_SCRIPTS))
 

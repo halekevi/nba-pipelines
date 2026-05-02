@@ -35,15 +35,15 @@ def _load_step8_nba_family(today: str) -> pd.DataFrame:
     candidates: dict[str, list[Path]] = {
         "NBA": [
             OUTPUTS_DIR / today / f"step8_nba_direction_clean_{today}.xlsx",
-            REPO_ROOT / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
+            REPO_ROOT / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
         ],
         "NBA1H": [
             OUTPUTS_DIR / today / f"step8_nba1h_direction_clean_{today}.xlsx",
-            REPO_ROOT / "NBA" / "step8_nba1h_direction_clean.xlsx",
+            REPO_ROOT / "Sports" / "NBA" / "step8_nba1h_direction_clean.xlsx",
         ],
         "NBA1Q": [
             OUTPUTS_DIR / today / f"step8_nba1q_direction_clean_{today}.xlsx",
-            REPO_ROOT / "NBA" / "step8_nba1q_direction_clean.xlsx",
+            REPO_ROOT / "Sports" / "NBA" / "step8_nba1q_direction_clean.xlsx",
         ],
     }
     rename_map = {

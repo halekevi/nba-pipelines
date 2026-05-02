@@ -777,7 +777,7 @@ def _apply_step7b_nhl_soccer_ml_cap() -> None:
         return
     old = "    blended = 0.3 * pd.Series(ml_prob, index=df2.index) + 0.7 * comp\n"
     new = (
-        "    if sp in (\"NHL\", \"SOCCER\"):\n"
+        "    if sp in (\"Sports\NHL\", \"SOCCER\"):\n"
         "        blended = 0.15 * pd.Series(ml_prob, index=df2.index) + 0.85 * comp\n"
         "    else:\n"
         "        blended = 0.3 * pd.Series(ml_prob, index=df2.index) + 0.7 * comp\n"

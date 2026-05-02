@@ -8,11 +8,11 @@
   Then run:  .\run_pipeline.ps1  (or  .\run_pipeline.ps1 -SkipFetch  to reuse step1 fetches)
 
   Refreshes:
-    - NBA   -> NBA/data/cache/defense_team_summary.csv
-    - WNBA  -> WNBA/wnba_defense_summary.csv
-    - MLB   -> MLB/mlb_defense_summary.csv   (statsapi team pitching + DEF_TIER)
-    - NHL   -> NHL/cache/nhl_defense_summary.csv
-    - Soccer-> Soccer/cache/soccer_defense_summary.csv
+    - NBA   -> Sports/NBA/data/cache/defense_team_summary.csv
+    - WNBA  -> Sports/WNBA/wnba_defense_summary.csv
+    - MLB   -> Sports/MLB/mlb_defense_summary.csv   (statsapi team pitching + DEF_TIER)
+    - NHL   -> Sports/NHL/cache/nhl_defense_summary.csv
+    - Soccer-> Sports/Soccer/cache/soccer_defense_summary.csv
 
   NFL defense rankings are produced by NFL step4 (run via full NFL or parallel pipeline).
   CBB uses CBB reference CSVs (separate from this script).
@@ -23,6 +23,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $Root = $PSScriptRoot
+$SportsRoot = Join-Path $Root "Sports"
 
 $env:PYTHONUTF8 = "1"
 $env:PYTHONIOENCODING = "utf-8"
@@ -63,13 +64,13 @@ Write-Host ""
 $ok = $true
 try {
     Invoke-DefenseStep "NBA defense_team_summary (nba_api)" `
-        (Join-Path $Root "NBA") `
+        (Join-Path $SportsRoot "NBA") `
         ".\scripts\defense_report.py" `
         "--season 2025-26 --out data\cache\defense_team_summary.csv"
 
     if (-not $SkipWNBA) {
         Invoke-DefenseStep "WNBA wnba_defense_summary (ESPN)" `
-            (Join-Path $Root "WNBA") `
+            (Join-Path $SportsRoot "WNBA") `
             ".\defense_report.py" `
             "--season 2026 --out wnba_defense_summary.csv"
     } else {
@@ -77,17 +78,17 @@ try {
     }
 
     Invoke-DefenseStep "MLB mlb_defense_summary (MLB Stats API)" `
-        (Join-Path $Root "MLB") `
+        (Join-Path $SportsRoot "MLB") `
         ".\scripts\mlb_defense_report.py" `
         "--out mlb_defense_summary.csv"
 
     Invoke-DefenseStep "NHL nhl_defense_summary (NHL API)" `
-        (Join-Path $Root "NHL") `
+        (Join-Path $SportsRoot "NHL") `
         ".\scripts\nhl_defense_report.py" `
         "--out cache\nhl_defense_summary.csv"
 
     Invoke-DefenseStep "Soccer soccer_defense_summary (ESPN)" `
-        (Join-Path $Root "Soccer") `
+        (Join-Path $SportsRoot "Soccer") `
         ".\scripts\soccer_defense_report.py" `
         "--out cache\soccer_defense_summary.csv"
 } catch {

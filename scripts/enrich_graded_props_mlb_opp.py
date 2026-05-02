@@ -160,7 +160,7 @@ def main() -> None:
     )
     args = ap.parse_args()
 
-    primary = Path(args.step8_csv) if args.step8_csv.strip() else ROOT / "MLB" / "step8_mlb_direction.csv"
+    primary = Path(args.step8_csv) if args.step8_csv.strip() else ROOT / "Sports" / "MLB" / "step8_mlb_direction.csv"
     extra_paths: list[Path] = [primary]
 
     json_files: list[Path]

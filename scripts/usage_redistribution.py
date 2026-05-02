@@ -291,10 +291,10 @@ def apply_usage_redistribution(
 
 
 def _load_test_slate(repo_root: Path) -> pd.DataFrame:
-    csv_path = repo_root / "NBA" / "data" / "outputs" / "step8_all_direction.csv"
+    csv_path = repo_root / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction.csv"
     if csv_path.exists():
         return pd.read_csv(csv_path, low_memory=False).fillna("")
-    xlsx_path = repo_root / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx"
+    xlsx_path = repo_root / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx"
     if xlsx_path.exists():
         return pd.read_excel(xlsx_path, sheet_name=0).fillna("")
     return pd.DataFrame()

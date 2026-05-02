@@ -47,7 +47,7 @@ for _efe_anc in Path(__file__).resolve().parents:
         break
 from edge_feature_engineering import apply_ticket_eligibility_voids, build_feature_vector  # noqa: E402
 try:
-    _playoff_sd = str(Path(__file__).resolve().parents[2] / "scripts")
+    _playoff_sd = str(Path(__file__).resolve().parents[3] / "scripts")
     if _playoff_sd not in sys.path:
         sys.path.insert(0, _playoff_sd)
     from playoff_config import NBA_PLAYOFF_TEAMS  # noqa: E402
@@ -71,7 +71,7 @@ def _repo_root_pc() -> Path:
     for anc in here.parents:
         if (anc / "scripts" / "build_player_consistency.py").is_file():
             return anc
-    return here.parents[2]
+    return here.parents[3]
 
 
 def _load_bpc_pc():
@@ -240,7 +240,7 @@ def _is_playoff_matchup_series(out: pd.DataFrame) -> pd.Series:
 
 
 # ── step_archive lazy import ──────────────────────────────────────────────────
-_sa_scripts_dir = str(Path(__file__).resolve().parents[2] / "scripts")
+_sa_scripts_dir = str(Path(__file__).resolve().parents[3] / "scripts")
 try:
     if _sa_scripts_dir not in sys.path:
         sys.path.insert(0, _sa_scripts_dir)
@@ -436,7 +436,7 @@ _RELIABILITY_MAP = {
 }
 
 def _repo_root_ml_nba() -> Path:
-    return Path(__file__).resolve().parents[2]
+    return Path(__file__).resolve().parents[3]
 
 
 _sd_ml_nba = str(_repo_root_ml_nba() / "scripts")
@@ -771,7 +771,7 @@ def _meta_adjust_ml_prob(
 
 
 def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, source_hint: str = "") -> tuple[pd.Series, pd.Series, pd.Series]:
-    root = Path(__file__).resolve().parents[2]
+    root = Path(__file__).resolve().parents[3]
     source_key = str(source_hint).lower()
     model_keys = ["nba"]
     if "nba1h" in source_key:
@@ -1003,7 +1003,7 @@ def main() -> None:
     for col in df.select_dtypes(include=['object']).columns:
         df[col] = df[col].astype(str)
     out = df.copy()
-    _repo_usage = Path(__file__).resolve().parents[2]
+    _repo_usage = Path(__file__).resolve().parents[3]
     _sd_usage = str(_repo_usage / "scripts")
     if _sd_usage not in _sys_pc.path:
         _sys_pc.path.insert(0, _sd_usage)
@@ -1428,7 +1428,7 @@ def main() -> None:
     blowout_penalty= np.where(out.get("blowout_risk", pd.Series(False, index=out.index)).astype(str).str.lower() == "true", -0.10, 0.0)
     low_total_pen  = np.where(out.get("low_total_flag", pd.Series(False, index=out.index)).astype(str).str.lower() == "true", -0.10, 0.0)
 
-    _repo_inj = Path(__file__).resolve().parents[2]
+    _repo_inj = Path(__file__).resolve().parents[3]
     _sd_inj = _repo_inj / "scripts"
     if str(_sd_inj) not in _sys_pc.path:
         _sys_pc.path.insert(0, str(_sd_inj))

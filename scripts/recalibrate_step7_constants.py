@@ -49,28 +49,28 @@ class TargetSpec:
 TARGETS: dict[str, TargetSpec] = {
     "NBA": TargetSpec(
         sport="NBA",
-        file_path=REPO_ROOT / "NBA" / "scripts" / "step7_rank_props.py",
+        file_path=REPO_ROOT / "Sports" / "NBA" / "scripts" / "step7_rank_props.py",
         weight_const="_PROP_WEIGHTS",
         over_prior_const="_PROP_HR_PRIOR_OVER",
         under_const="_PROP_HR_PRIOR_UNDER_OVERRIDE",
     ),
     "CBB": TargetSpec(
         sport="CBB",
-        file_path=REPO_ROOT / "CBB" / "scripts" / "pipeline" / "step6_rank_props_cbb.py",
+        file_path=REPO_ROOT / "Sports" / "CBB" / "scripts" / "pipeline" / "step6_rank_props_cbb.py",
         weight_const="_PROP_WEIGHTS",
         over_prior_const="_PROP_HIT_RATE_PRIOR",
         under_const=None,
     ),
     "NHL": TargetSpec(
         sport="NHL",
-        file_path=REPO_ROOT / "NHL" / "scripts" / "step7_rank_props_nhl.py",
+        file_path=REPO_ROOT / "Sports" / "NHL" / "scripts" / "step7_rank_props_nhl.py",
         weight_const="STAT_STABILITY",
         over_prior_const=None,
         under_const=None,
     ),
     "Soccer": TargetSpec(
         sport="Soccer",
-        file_path=REPO_ROOT / "Soccer" / "scripts" / "step7_rank_props_soccer.py",
+        file_path=REPO_ROOT / "Sports" / "Soccer" / "scripts" / "step7_rank_props_soccer.py",
         weight_const="_PROP_WEIGHTS",
         over_prior_const="_PROP_HIT_RATE_PRIOR",
         under_const=None,

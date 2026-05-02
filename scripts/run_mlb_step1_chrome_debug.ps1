@@ -29,6 +29,7 @@ param(
 
 $ErrorActionPreference = "Continue"
 $Root = Split-Path $PSScriptRoot -Parent
+$SportsRoot = Join-Path $Root "Sports"
 Set-Location $Root
 
 $env:PYTHONUTF8 = "1"
@@ -72,13 +73,13 @@ if (-not $targetDate) {
 
 $outPath = $Output.Trim()
 if (-not $outPath) {
-    $outPath = Join-Path $Root "MLB\step1_mlb_props.csv"
+    $outPath = Join-Path $Root "Sports\MLB\step1_mlb_props.csv"
 }
 elseif (-not [System.IO.Path]::IsPathRooted($outPath)) {
     $outPath = Join-Path $Root $outPath
 }
 
-$MLBDir = Join-Path $Root "MLB"
+$MLBDir = Join-Path $SportsRoot "MLB"
 Write-Host "[MLB CDP] Using $CdpUrl | date=$targetDate | output=$outPath" -ForegroundColor Cyan
 
 Push-Location $MLBDir

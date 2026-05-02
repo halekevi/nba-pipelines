@@ -311,7 +311,7 @@ def _snapshot_candidates(out_path: Path) -> list[Path]:
         ):
             if p.is_file() and p not in candidates:
                 candidates.append(p)
-    repo_outputs = Path(__file__).resolve().parents[1] / "outputs"
+    repo_outputs = Path(__file__).resolve().parents[2] / "outputs"
     wnba_outputs = Path(__file__).resolve().parent / "outputs"
     for outputs_root in (repo_outputs, wnba_outputs):
         if not outputs_root.is_dir():

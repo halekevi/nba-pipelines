@@ -104,8 +104,8 @@ def _collect_cbb_graded_files() -> list[Path]:
     paths: list[Path] = []
     for pat in (
         ROOT / "outputs",
-        ROOT / "CBB",
-        ROOT / "CBB" / "outputs",
+        ROOT / "Sports" / "CBB",
+        ROOT / "Sports" / "CBB" / "outputs",
     ):
         if pat.is_dir():
             paths.extend(pat.rglob("graded_cbb*.xlsx"))

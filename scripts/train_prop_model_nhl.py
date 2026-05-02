@@ -54,7 +54,7 @@ FEATURES_PATH = MODEL_DIR / "prop_model_nhl_features.json"
 BLEND_PATH = MODEL_DIR / "prop_model_nhl_blend_weight.json"
 CALIB_PATH = MODEL_DIR / "prop_model_nhl_calibrator.pkl"
 METRICS_PATH = MODEL_DIR / "prop_model_nhl_metrics.json"
-LATEST_TEST_RESULTS_PATH = ROOT / "NHL" / "data" / "outputs" / "latest_nhl_test_results.xlsx"
+LATEST_TEST_RESULTS_PATH = ROOT / "Sports" / "NHL" / "data" / "outputs" / "latest_nhl_test_results.xlsx"
 METADATA_PATH = MODEL_DIR / "prop_model_nhl_metadata.json"
 
 DATE_RE = re.compile(r"graded_nhl_(?:synthetic_)?(\d{4}-\d{2}-\d{2})\.xlsx$", re.I)
@@ -151,7 +151,7 @@ def _pick_direction_col(df: pd.DataFrame, decided_mask: pd.Series) -> str | None
 
 def _collect_nhl_graded_files() -> list[tuple[Path, bool]]:
     out: list[tuple[Path, bool]] = []
-    for base in (ROOT / "outputs", ROOT / "NHL", ROOT / "NHL" / "outputs"):
+    for base in (ROOT / "outputs", ROOT / "Sports" / "NHL", ROOT / "Sports" / "NHL" / "outputs"):
         if not base.is_dir():
             continue
         for p in base.rglob("graded_nhl*.xlsx"):

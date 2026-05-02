@@ -22,7 +22,7 @@ if str(_SCRIPT_DIR) not in sys.path:
 
 from _nfl_pipeline_active import require_nfl_pipeline_active_or_exit
 
-_REPO_ROOT = Path(__file__).resolve().parents[2]
+_REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 from utils.defense_tiers import def_tier_from_overall_rank

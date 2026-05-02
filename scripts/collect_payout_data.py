@@ -107,8 +107,8 @@ def _line_key(v: Any) -> str:
 
 
 def load_nba_legs(top_n: int = 30) -> list[dict]:
-    step8 = ROOT / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx"
-    step1 = ROOT / "NBA" / "data" / "outputs" / "step1_pp_props_today.csv"
+    step8 = ROOT / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx"
+    step1 = ROOT / "Sports" / "NBA" / "data" / "outputs" / "step1_pp_props_today.csv"
     if not step8.exists() or not step1.exists():
         raise FileNotFoundError("Missing NBA step8/step1 files.")
 

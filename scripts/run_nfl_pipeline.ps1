@@ -23,7 +23,8 @@ if ((Split-Path -Leaf $ScriptDir) -eq "scripts") {
 } else {
     $Root = $ScriptDir
 }
-$NFLDir = Join-Path $Root "NFL"
+$SportsRoot = Join-Path $Root "Sports"
+$NFLDir = Join-Path $SportsRoot "NFL"
 $nflOutCanon = Join-Path $NFLDir "outputs"
 if (-not (Test-Path $nflOutCanon)) {
     New-Item -ItemType Directory -Force -Path $nflOutCanon | Out-Null

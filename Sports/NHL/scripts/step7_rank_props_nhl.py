@@ -46,7 +46,7 @@ for _efe_anc in Path(__file__).resolve().parents:
 from edge_feature_engineering import apply_ticket_eligibility_voids, build_feature_vector  # noqa: E402
 
 # ── step_archive lazy import ──────────────────────────────────────────────────
-_sa_scripts_dir = str(Path(__file__).resolve().parents[2] / "scripts")
+_sa_scripts_dir = str(Path(__file__).resolve().parents[3] / "scripts")
 try:
     if _sa_scripts_dir not in sys.path:
         sys.path.insert(0, _sa_scripts_dir)
@@ -69,7 +69,7 @@ def _repo_root_pc_nhl() -> Path:
     for anc in here.parents:
         if (anc / "scripts" / "build_player_consistency.py").is_file():
             return anc
-    return here.parents[2]
+    return here.parents[3]
 
 
 def _load_bpc_pc_nhl():
@@ -366,7 +366,7 @@ MIN_SAMPLE = 5  # Minimum games to be rankable
 
 
 def _repo_root_ml_nhl() -> Path:
-    return Path(__file__).resolve().parents[2]
+    return Path(__file__).resolve().parents[3]
 
 
 _sd_ml_nhl = str(_repo_root_ml_nhl() / "scripts")
@@ -645,7 +645,7 @@ def _build_nhl_ml_X(df: pd.DataFrame, model_features: list[str]) -> pd.DataFrame
 
 
 def _apply_ml_blend(df: pd.DataFrame) -> tuple[pd.Series, pd.Series, pd.Series]:
-    root = Path(__file__).resolve().parents[2]
+    root = Path(__file__).resolve().parents[3]
     model_path = root / "models" / "prop_model_nhl.pkl"
     feat_path = root / "models" / "prop_model_nhl_features.json"
     existing_score = _to_num(df.get("prop_score", pd.Series(np.nan, index=df.index))).fillna(0.0)
@@ -725,7 +725,7 @@ def main():
 
     rows = read_csv(args.input)
     try:
-        _repo_usage = Path(__file__).resolve().parents[2]
+        _repo_usage = Path(__file__).resolve().parents[3]
         _sd_usage = str(_repo_usage / "scripts")
         if _sd_usage not in sys.path:
             sys.path.insert(0, _sd_usage)

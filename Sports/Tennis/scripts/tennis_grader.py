@@ -15,8 +15,8 @@ from pathlib import Path
 import pandas as pd
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
-# Tennis/scripts -> repo root is one level above ``Tennis/``.
-_REPO_ROOT = _SCRIPT_DIR.parents[1]
+# Sports/Tennis/scripts -> monorepo root.
+_REPO_ROOT = _SCRIPT_DIR.parents[3]
 if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
 from tennis_shared import iter_scoreboard_matches, norm_key, norm_tennis_prop

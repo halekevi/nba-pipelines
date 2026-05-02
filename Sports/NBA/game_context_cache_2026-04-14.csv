@@ -1,0 +1,7 @@
+team,opp_team,game_total,spread,implied_team_total,blowout_risk,low_total_flag,pace_tier,odds_source
+MIA,CHA,228.5,5.5,111.5,False,False,FAST,live
+CHA,MIA,228.5,-5.5,117.0,False,False,FAST,live
+CHA/MIA,,228.5,-5.5,117.0,False,False,FAST,live
+POR,PHX,217.5,3.5,107.0,False,False,NORMAL,live
+PHX,POR,217.5,-3.5,110.5,False,False,NORMAL,live
+PHX/POR,,217.5,-3.5,110.5,False,False,NORMAL,live

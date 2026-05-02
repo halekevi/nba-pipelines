@@ -44,25 +44,25 @@ def _sport_catalog() -> list[SportPaths]:
         SportPaths(
             "NBA",
             "NBA",
-            (REPO_ROOT / "NBA" / "data" / "outputs" / "step8_all_direction.csv",),
+            (REPO_ROOT / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction.csv",),
         ),
         SportPaths(
             "NHL",
             "NHL",
-            (REPO_ROOT / "NHL" / "outputs" / "step8_nhl_direction_clean.csv",),
+            (REPO_ROOT / "Sports" / "NHL" / "outputs" / "step8_nhl_direction_clean.csv",),
         ),
         SportPaths(
             "SOCCER",
             "Soccer",
             (
-                REPO_ROOT / "Soccer" / "step8_soccer_direction.csv",
-                REPO_ROOT / "Soccer" / "scripts" / "step8_soccer_direction.csv",
+                REPO_ROOT / "Sports" / "Soccer" / "step8_soccer_direction.csv",
+                REPO_ROOT / "Sports" / "Soccer" / "scripts" / "step8_soccer_direction.csv",
             ),
         ),
         SportPaths(
             "MLB",
             "MLB",
-            (REPO_ROOT / "MLB" / "step8_mlb_direction.csv",),
+            (REPO_ROOT / "Sports" / "MLB" / "step8_mlb_direction.csv",),
         ),
     ]
 

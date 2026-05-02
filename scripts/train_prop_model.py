@@ -24,7 +24,7 @@ FEATURES_PATH = MODEL_DIR / "prop_model_nba_features.json"
 
 def _find_db_candidates() -> list[Path]:
     candidates: list[Path] = []
-    for base in (ROOT, ROOT / "data", ROOT / "NBA" / "data"):
+    for base in (ROOT, ROOT / "data", ROOT / "Sports" / "NBA" / "data"):
         if base.exists():
             candidates.extend(base.rglob("*.db"))
     uniq: list[Path] = []

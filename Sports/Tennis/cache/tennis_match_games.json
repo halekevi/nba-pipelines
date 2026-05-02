@@ -1,0 +1,5232 @@
+{
+"2362": [
+{
+"espn_athlete_id": "2362",
+"player": "Quentin Halys",
+"player_key": "quentin halys",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T13:00Z",
+"games_won": 19.0,
+"match_total_games": 33.0,
+"opponent": "Matteo Arnaldi",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2362",
+"player": "Quentin Halys",
+"player_key": "quentin halys",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T09:05Z",
+"games_won": 8.0,
+"match_total_games": 20.0,
+"opponent": "Emilio Nava",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3772": [
+{
+"espn_athlete_id": "3772",
+"player": "Emilio Nava",
+"player_key": "emilio nava",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T12:00Z",
+"games_won": 12.0,
+"match_total_games": 18.0,
+"opponent": "David Goffin",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3772",
+"player": "Emilio Nava",
+"player_key": "emilio nava",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T11:05Z",
+"games_won": 15.0,
+"match_total_games": 34.0,
+"opponent": "Jiri Lehecka",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "3772",
+"player": "Emilio Nava",
+"player_key": "emilio nava",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T09:05Z",
+"games_won": 19.0,
+"match_total_games": 35.0,
+"opponent": "David Goffin",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3772",
+"player": "Emilio Nava",
+"player_key": "emilio nava",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T09:05Z",
+"games_won": 12.0,
+"match_total_games": 20.0,
+"opponent": "Quentin Halys",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"3471": [
+{
+"espn_athlete_id": "3471",
+"player": "Aleksandar Vukic",
+"player_key": "aleksandar vukic",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T08:30Z",
+"games_won": 14.0,
+"match_total_games": 32.0,
+"opponent": "Otto Virtanen",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "3471",
+"player": "Aleksandar Vukic",
+"player_key": "aleksandar vukic",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T09:10Z",
+"games_won": 6.0,
+"match_total_games": 18.0,
+"opponent": "Pedro Martinez",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"2623": [
+{
+"espn_athlete_id": "2623",
+"player": "Pedro Martinez",
+"player_key": "pedro martinez",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T09:10Z",
+"games_won": 11.0,
+"match_total_games": 25.0,
+"opponent": "Juan Manuel Cerundolo",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "2623",
+"player": "Pedro Martinez",
+"player_key": "pedro martinez",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T09:10Z",
+"games_won": 12.0,
+"match_total_games": 18.0,
+"opponent": "Aleksandar Vukic",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2688": [
+{
+"espn_athlete_id": "2688",
+"player": "Hugo Nys",
+"player_key": "hugo nys",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T09:10Z",
+"games_won": 6.0,
+"match_total_games": 18.0,
+"opponent": "Juan Manuel Cerundolo",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"4008": [
+{
+"espn_athlete_id": "4008",
+"player": "Juan Manuel Cerundolo",
+"player_key": "juan manuel cerundolo",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T11:30Z",
+"games_won": 13.0,
+"match_total_games": 19.0,
+"opponent": "Giulio Zeppieri",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "4008",
+"player": "Juan Manuel Cerundolo",
+"player_key": "juan manuel cerundolo",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T15:25Z",
+"games_won": 10.0,
+"match_total_games": 27.0,
+"opponent": "Valentin Vacherot",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "4008",
+"player": "Juan Manuel Cerundolo",
+"player_key": "juan manuel cerundolo",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T09:10Z",
+"games_won": 14.0,
+"match_total_games": 25.0,
+"opponent": "Pedro Martinez",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "4008",
+"player": "Juan Manuel Cerundolo",
+"player_key": "juan manuel cerundolo",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T09:10Z",
+"games_won": 12.0,
+"match_total_games": 18.0,
+"opponent": "Hugo Nys",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"1733": [
+{
+"espn_athlete_id": "1733",
+"player": "Roberto Bautista Agut",
+"player_key": "roberto bautista agut",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T11:35Z",
+"games_won": 12.0,
+"match_total_games": 26.0,
+"opponent": "Alexander Shevchenko",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "1733",
+"player": "Roberto Bautista Agut",
+"player_key": "roberto bautista agut",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T10:50Z",
+"games_won": 12.0,
+"match_total_games": 19.0,
+"opponent": "Benjamin Bonzi",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2355": [
+{
+"espn_athlete_id": "2355",
+"player": "Benjamin Bonzi",
+"player_key": "benjamin bonzi",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T10:00Z",
+"games_won": 5.0,
+"match_total_games": 17.0,
+"opponent": "Jesper de Jong",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "2355",
+"player": "Benjamin Bonzi",
+"player_key": "benjamin bonzi",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T10:50Z",
+"games_won": 7.0,
+"match_total_games": 19.0,
+"opponent": "Roberto Bautista Agut",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"1360": [
+{
+"espn_athlete_id": "1360",
+"player": "David Goffin",
+"player_key": "david goffin",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T12:00Z",
+"games_won": 6.0,
+"match_total_games": 18.0,
+"opponent": "Emilio Nava",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "1360",
+"player": "David Goffin",
+"player_key": "david goffin",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T09:05Z",
+"games_won": 16.0,
+"match_total_games": 35.0,
+"opponent": "Emilio Nava",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "1360",
+"player": "David Goffin",
+"player_key": "david goffin",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T11:00Z",
+"games_won": 14.0,
+"match_total_games": 26.0,
+"opponent": "Ignacio Buse",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"11226": [
+{
+"espn_athlete_id": "11226",
+"player": "Ignacio Buse",
+"player_key": "ignacio buse",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T11:00Z",
+"games_won": 12.0,
+"match_total_games": 26.0,
+"opponent": "David Goffin",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"2498": [
+{
+"espn_athlete_id": "2498",
+"player": "Nikoloz Basilashvili",
+"player_key": "nikoloz basilashvili",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T08:30Z",
+"games_won": 16.0,
+"match_total_games": 31.0,
+"opponent": "Ethan Quinn",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "2498",
+"player": "Nikoloz Basilashvili",
+"player_key": "nikoloz basilashvili",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T09:05Z",
+"games_won": 5.0,
+"match_total_games": 18.0,
+"opponent": "Cristian Garin",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "2498",
+"player": "Nikoloz Basilashvili",
+"player_key": "nikoloz basilashvili",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T11:05Z",
+"games_won": 12.0,
+"match_total_games": 18.0,
+"opponent": "Jan-Lennard Struff",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2337": [
+{
+"espn_athlete_id": "2337",
+"player": "Jan-Lennard Struff",
+"player_key": "janlennard struff",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T11:05Z",
+"games_won": 6.0,
+"match_total_games": 18.0,
+"opponent": "Nikoloz Basilashvili",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3897": [
+{
+"espn_athlete_id": "3897",
+"player": "Jesper de Jong",
+"player_key": "jesper de jong",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T10:00Z",
+"games_won": 12.0,
+"match_total_games": 17.0,
+"opponent": "Benjamin Bonzi",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3897",
+"player": "Jesper de Jong",
+"player_key": "jesper de jong",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T11:10Z",
+"games_won": 12.0,
+"match_total_games": 26.0,
+"opponent": "Cristian Garin",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"2228": [
+{
+"espn_athlete_id": "2228",
+"player": "Cristian Garin",
+"player_key": "cristian garin",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T10:25Z",
+"games_won": 15.0,
+"match_total_games": 32.0,
+"opponent": "Alexander Zverev",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "2228",
+"player": "Cristian Garin",
+"player_key": "cristian garin",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T12:35Z",
+"games_won": 12.0,
+"match_total_games": 18.0,
+"opponent": "Matteo Arnaldi",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2228",
+"player": "Cristian Garin",
+"player_key": "cristian garin",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T09:05Z",
+"games_won": 13.0,
+"match_total_games": 18.0,
+"opponent": "Nikoloz Basilashvili",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2228",
+"player": "Cristian Garin",
+"player_key": "cristian garin",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T11:10Z",
+"games_won": 14.0,
+"match_total_games": 26.0,
+"opponent": "Jesper de Jong",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"10044": [
+{
+"espn_athlete_id": "10044",
+"player": "Francisco Comesana",
+"player_key": "francisco comesana",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T16:10Z",
+"games_won": 14.0,
+"match_total_games": 29.0,
+"opponent": "Flavio Cobolli",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "10044",
+"player": "Francisco Comesana",
+"player_key": "francisco comesana",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T10:45Z",
+"games_won": 13.0,
+"match_total_games": 20.0,
+"opponent": "Ethan Quinn",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "10044",
+"player": "Francisco Comesana",
+"player_key": "francisco comesana",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T11:15Z",
+"games_won": 12.0,
+"match_total_games": 15.0,
+"opponent": "Romain Arneodo",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"1867": [
+{
+"espn_athlete_id": "1867",
+"player": "Romain Arneodo",
+"player_key": "romain arneodo",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T11:15Z",
+"games_won": 3.0,
+"match_total_games": 15.0,
+"opponent": "Francisco Comesana",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"4099": [
+{
+"espn_athlete_id": "4099",
+"player": "Otto Virtanen",
+"player_key": "otto virtanen",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T08:30Z",
+"games_won": 18.0,
+"match_total_games": 32.0,
+"opponent": "Aleksandar Vukic",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "4099",
+"player": "Otto Virtanen",
+"player_key": "otto virtanen",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T12:35Z",
+"games_won": 11.0,
+"match_total_games": 26.0,
+"opponent": "Ethan Quinn",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"11383": [
+{
+"espn_athlete_id": "11383",
+"player": "Ethan Quinn",
+"player_key": "ethan quinn",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T08:30Z",
+"games_won": 15.0,
+"match_total_games": 31.0,
+"opponent": "Nikoloz Basilashvili",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "11383",
+"player": "Ethan Quinn",
+"player_key": "ethan quinn",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T11:45Z",
+"games_won": 5.0,
+"match_total_games": 17.0,
+"opponent": "Terence Atmane",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "11383",
+"player": "Ethan Quinn",
+"player_key": "ethan quinn",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T10:45Z",
+"games_won": 7.0,
+"match_total_games": 20.0,
+"opponent": "Francisco Comesana",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "11383",
+"player": "Ethan Quinn",
+"player_key": "ethan quinn",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T12:35Z",
+"games_won": 15.0,
+"match_total_games": 26.0,
+"opponent": "Otto Virtanen",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"11757": [
+{
+"espn_athlete_id": "11757",
+"player": "Alexander Blockx",
+"player_key": "alexander blockx",
+"tour": "ATP",
+"match_date_utc": "2026-04-09T14:30Z",
+"games_won": 11.0,
+"match_total_games": 25.0,
+"opponent": "Alex de Minaur",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "11757",
+"player": "Alexander Blockx",
+"player_key": "alexander blockx",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T15:40Z",
+"games_won": 12.0,
+"match_total_games": 18.0,
+"opponent": "Flavio Cobolli",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "11757",
+"player": "Alexander Blockx",
+"player_key": "alexander blockx",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T14:20Z",
+"games_won": 16.0,
+"match_total_games": 29.0,
+"opponent": "Denis Shapovalov",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "11757",
+"player": "Alexander Blockx",
+"player_key": "alexander blockx",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T11:05Z",
+"games_won": 13.0,
+"match_total_games": 21.0,
+"opponent": "Damir Dzumhur",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "11757",
+"player": "Alexander Blockx",
+"player_key": "alexander blockx",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T12:35Z",
+"games_won": 13.0,
+"match_total_games": 21.0,
+"opponent": "Francesco Maestrelli",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"7599": [
+{
+"espn_athlete_id": "7599",
+"player": "Francesco Maestrelli",
+"player_key": "francesco maestrelli",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T08:30Z",
+"games_won": 9.0,
+"match_total_games": 22.0,
+"opponent": "Daniel Merida",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "7599",
+"player": "Francesco Maestrelli",
+"player_key": "francesco maestrelli",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T12:35Z",
+"games_won": 8.0,
+"match_total_games": 21.0,
+"opponent": "Alexander Blockx",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3793": [
+{
+"espn_athlete_id": "3793",
+"player": "Matteo Arnaldi",
+"player_key": "matteo arnaldi",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T13:00Z",
+"games_won": 14.0,
+"match_total_games": 33.0,
+"opponent": "Quentin Halys",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "3793",
+"player": "Matteo Arnaldi",
+"player_key": "matteo arnaldi",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T12:35Z",
+"games_won": 6.0,
+"match_total_games": 18.0,
+"opponent": "Cristian Garin",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "3793",
+"player": "Matteo Arnaldi",
+"player_key": "matteo arnaldi",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T12:10Z",
+"games_won": 12.0,
+"match_total_games": 30.0,
+"opponent": "Alexandre Muller",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "3793",
+"player": "Matteo Arnaldi",
+"player_key": "matteo arnaldi",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T13:25Z",
+"games_won": 14.0,
+"match_total_games": 25.0,
+"opponent": "Vit Kopriva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"3809": [
+{
+"espn_athlete_id": "3809",
+"player": "Vit Kopriva",
+"player_key": "vit kopriva",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T13:25Z",
+"games_won": 11.0,
+"match_total_games": 25.0,
+"opponent": "Matteo Arnaldi",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"3308": [
+{
+"espn_athlete_id": "3308",
+"player": "Alexandre Muller",
+"player_key": "alexandre muller",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T10:00Z",
+"games_won": 12.0,
+"match_total_games": 16.0,
+"opponent": "Max Alcala Gurri",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3308",
+"player": "Alexandre Muller",
+"player_key": "alexandre muller",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T13:10Z",
+"games_won": 5.0,
+"match_total_games": 17.0,
+"opponent": "Corentin Moutet",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "3308",
+"player": "Alexandre Muller",
+"player_key": "alexandre muller",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T12:10Z",
+"games_won": 18.0,
+"match_total_games": 30.0,
+"opponent": "Matteo Arnaldi",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3308",
+"player": "Alexandre Muller",
+"player_key": "alexandre muller",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T14:05Z",
+"games_won": 13.0,
+"match_total_games": 22.0,
+"opponent": "Jan Choinski",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2720": [
+{
+"espn_athlete_id": "2720",
+"player": "Jan Choinski",
+"player_key": "jan choinski",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T09:00Z",
+"games_won": 14.0,
+"match_total_games": 30.0,
+"opponent": "Marc-Andrea Huesler",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "2720",
+"player": "Jan Choinski",
+"player_key": "jan choinski",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T14:05Z",
+"games_won": 9.0,
+"match_total_games": 22.0,
+"opponent": "Alexandre Muller",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"13829": [
+{
+"espn_athlete_id": "13829",
+"player": "Nicolai Budkov Kjaer",
+"player_key": "nicolai budkov kjaer",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T10:00Z",
+"games_won": 14.0,
+"match_total_games": 30.0,
+"opponent": "Marco Trungelliti",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "13829",
+"player": "Nicolai Budkov Kjaer",
+"player_key": "nicolai budkov kjaer",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T15:45Z",
+"games_won": 11.0,
+"match_total_games": 25.0,
+"opponent": "Damir Dzumhur",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"1842": [
+{
+"espn_athlete_id": "1842",
+"player": "Damir Dzumhur",
+"player_key": "damir dzumhur",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T09:00Z",
+"games_won": 9.0,
+"match_total_games": 22.0,
+"opponent": "Vitaliy Sachko",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "1842",
+"player": "Damir Dzumhur",
+"player_key": "damir dzumhur",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T11:20Z",
+"games_won": 3.0,
+"match_total_games": 15.0,
+"opponent": "Fabian Marozsan",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "1842",
+"player": "Damir Dzumhur",
+"player_key": "damir dzumhur",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T11:05Z",
+"games_won": 8.0,
+"match_total_games": 21.0,
+"opponent": "Alexander Blockx",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "1842",
+"player": "Damir Dzumhur",
+"player_key": "damir dzumhur",
+"tour": "ATP",
+"match_date_utc": "2026-04-04T15:45Z",
+"games_won": 14.0,
+"match_total_games": 25.0,
+"opponent": "Nicolai Budkov Kjaer",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"8710": [
+{
+"espn_athlete_id": "8710",
+"player": "Alexander Shevchenko",
+"player_key": "alexander shevchenko",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T10:30Z",
+"games_won": 13.0,
+"match_total_games": 22.0,
+"opponent": "Diego Dedura",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "8710",
+"player": "Alexander Shevchenko",
+"player_key": "alexander shevchenko",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T10:40Z",
+"games_won": 4.0,
+"match_total_games": 16.0,
+"opponent": "Marin Cilic",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "8710",
+"player": "Alexander Shevchenko",
+"player_key": "alexander shevchenko",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T11:35Z",
+"games_won": 14.0,
+"match_total_games": 26.0,
+"opponent": "Roberto Bautista Agut",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2874": [
+{
+"espn_athlete_id": "2874",
+"player": "Miomir Kecmanovic",
+"player_key": "miomir kecmanovic",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T11:40Z",
+"games_won": 14.0,
+"match_total_games": 31.0,
+"opponent": "Cameron Norrie",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"2366": [
+{
+"espn_athlete_id": "2366",
+"player": "Cameron Norrie",
+"player_key": "cameron norrie",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T14:40Z",
+"games_won": 14.0,
+"match_total_games": 29.0,
+"opponent": "Alex de Minaur",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "2366",
+"player": "Cameron Norrie",
+"player_key": "cameron norrie",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T11:40Z",
+"games_won": 17.0,
+"match_total_games": 31.0,
+"opponent": "Miomir Kecmanovic",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"3319": [
+{
+"espn_athlete_id": "3319",
+"player": "Tallon Griekspoor",
+"player_key": "tallon griekspoor",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T14:45Z",
+"games_won": 12.0,
+"match_total_games": 30.0,
+"opponent": "Gael Monfils",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"242": [
+{
+"espn_athlete_id": "242",
+"player": "Gael Monfils",
+"player_key": "gael monfils",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T13:15Z",
+"games_won": 8.0,
+"match_total_games": 20.0,
+"opponent": "Alexander Bublik",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "242",
+"player": "Gael Monfils",
+"player_key": "gael monfils",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T14:45Z",
+"games_won": 18.0,
+"match_total_games": 30.0,
+"opponent": "Tallon Griekspoor",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2970": [
+{
+"espn_athlete_id": "2970",
+"player": "Alejandro Tabilo",
+"player_key": "alejandro tabilo",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T09:10Z",
+"games_won": 15.0,
+"match_total_games": 32.0,
+"opponent": "Jiri Lehecka",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "2970",
+"player": "Alejandro Tabilo",
+"player_key": "alejandro tabilo",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T15:05Z",
+"games_won": 12.0,
+"match_total_games": 19.0,
+"opponent": "Marton Fucsovics",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"1862": [
+{
+"espn_athlete_id": "1862",
+"player": "Marton Fucsovics",
+"player_key": "marton fucsovics",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T15:05Z",
+"games_won": 7.0,
+"match_total_games": 19.0,
+"opponent": "Alejandro Tabilo",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3085": [
+{
+"espn_athlete_id": "3085",
+"player": "Ugo Humbert",
+"player_key": "ugo humbert",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T10:20Z",
+"games_won": 3.0,
+"match_total_games": 15.0,
+"opponent": "Jannik Sinner",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "3085",
+"player": "Ugo Humbert",
+"player_key": "ugo humbert",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T17:20Z",
+"games_won": 13.0,
+"match_total_games": 21.0,
+"opponent": "Moise Kouame",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"15473": [
+{
+"espn_athlete_id": "15473",
+"player": "Moise Kouame",
+"player_key": "moise kouame",
+"tour": "ATP",
+"match_date_utc": "2026-04-05T17:20Z",
+"games_won": 8.0,
+"match_total_games": 21.0,
+"opponent": "Ugo Humbert",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"2367": [
+{
+"espn_athlete_id": "2367",
+"player": "Karen Khachanov",
+"player_key": "karen khachanov",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T09:10Z",
+"games_won": 7.0,
+"match_total_games": 20.0,
+"opponent": "Arthur Rinderknech",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3511": [
+{
+"espn_athlete_id": "3511",
+"player": "Arthur Rinderknech",
+"player_key": "arthur rinderknech",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T10:45Z",
+"games_won": 14.0,
+"match_total_games": 31.0,
+"opponent": "Joao Fonseca",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "3511",
+"player": "Arthur Rinderknech",
+"player_key": "arthur rinderknech",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T09:10Z",
+"games_won": 13.0,
+"match_total_games": 20.0,
+"opponent": "Karen Khachanov",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"4115": [
+{
+"espn_athlete_id": "4115",
+"player": "Nuno Borges",
+"player_key": "nuno borges",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T09:10Z",
+"games_won": 11.0,
+"match_total_games": 24.0,
+"opponent": "Andrey Rublev",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"2642": [
+{
+"espn_athlete_id": "2642",
+"player": "Andrey Rublev",
+"player_key": "andrey rublev",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T09:10Z",
+"games_won": 5.0,
+"match_total_games": 17.0,
+"opponent": "Zizou Bergs",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "2642",
+"player": "Andrey Rublev",
+"player_key": "andrey rublev",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T09:10Z",
+"games_won": 13.0,
+"match_total_games": 24.0,
+"opponent": "Nuno Borges",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"1266": [
+{
+"espn_athlete_id": "1266",
+"player": "Adrian Mannarino",
+"player_key": "adrian mannarino",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T10:55Z",
+"games_won": 7.0,
+"match_total_games": 19.0,
+"opponent": "Zizou Bergs",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3356": [
+{
+"espn_athlete_id": "3356",
+"player": "Zizou Bergs",
+"player_key": "zizou bergs",
+"tour": "ATP",
+"match_date_utc": "2026-04-09T09:10Z",
+"games_won": 7.0,
+"match_total_games": 20.0,
+"opponent": "Alexander Zverev",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "3356",
+"player": "Zizou Bergs",
+"player_key": "zizou bergs",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T09:10Z",
+"games_won": 12.0,
+"match_total_games": 17.0,
+"opponent": "Andrey Rublev",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3356",
+"player": "Zizou Bergs",
+"player_key": "zizou bergs",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T10:55Z",
+"games_won": 12.0,
+"match_total_games": 19.0,
+"opponent": "Adrian Mannarino",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"264": [
+{
+"espn_athlete_id": "264",
+"player": "Stan Wawrinka",
+"player_key": "stan wawrinka",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T11:05Z",
+"games_won": 10.0,
+"match_total_games": 24.0,
+"opponent": "Sebastian Baez",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3340": [
+{
+"espn_athlete_id": "3340",
+"player": "Sebastian Baez",
+"player_key": "sebastian baez",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T11:45Z",
+"games_won": 4.0,
+"match_total_games": 16.0,
+"opponent": "Carlos Alcaraz",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "3340",
+"player": "Sebastian Baez",
+"player_key": "sebastian baez",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T11:05Z",
+"games_won": 14.0,
+"match_total_games": 24.0,
+"opponent": "Stan Wawrinka",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"3754": [
+{
+"espn_athlete_id": "3754",
+"player": "Jiri Lehecka",
+"player_key": "jiri lehecka",
+"tour": "ATP",
+"match_date_utc": "2026-04-09T12:55Z",
+"games_won": 7.0,
+"match_total_games": 20.0,
+"opponent": "Alexander Bublik",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "3754",
+"player": "Jiri Lehecka",
+"player_key": "jiri lehecka",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T09:10Z",
+"games_won": 17.0,
+"match_total_games": 32.0,
+"opponent": "Alejandro Tabilo",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3754",
+"player": "Jiri Lehecka",
+"player_key": "jiri lehecka",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T11:05Z",
+"games_won": 19.0,
+"match_total_games": 34.0,
+"opponent": "Emilio Nava",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2869": [
+{
+"espn_athlete_id": "2869",
+"player": "Stefanos Tsitsipas",
+"player_key": "stefanos tsitsipas",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T13:20Z",
+"games_won": 9.0,
+"match_total_games": 22.0,
+"opponent": "Francisco Cerundolo",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3700": [
+{
+"espn_athlete_id": "3700",
+"player": "Francisco Cerundolo",
+"player_key": "francisco cerundolo",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T12:05Z",
+"games_won": 9.0,
+"match_total_games": 22.0,
+"opponent": "Tomas Machac",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "3700",
+"player": "Francisco Cerundolo",
+"player_key": "francisco cerundolo",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T13:20Z",
+"games_won": 13.0,
+"match_total_games": 22.0,
+"opponent": "Stefanos Tsitsipas",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"3811": [
+{
+"espn_athlete_id": "3811",
+"player": "Tomas Machac",
+"player_key": "tomas machac",
+"tour": "ATP",
+"match_date_utc": "2026-04-09T11:20Z",
+"games_won": 11.0,
+"match_total_games": 29.0,
+"opponent": "Jannik Sinner",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "3811",
+"player": "Tomas Machac",
+"player_key": "tomas machac",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T12:05Z",
+"games_won": 13.0,
+"match_total_games": 22.0,
+"opponent": "Francisco Cerundolo",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3811",
+"player": "Tomas Machac",
+"player_key": "tomas machac",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T13:30Z",
+"games_won": 13.0,
+"match_total_games": 26.0,
+"opponent": "Daniel Altmaier",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"3203": [
+{
+"espn_athlete_id": "3203",
+"player": "Daniel Altmaier",
+"player_key": "daniel altmaier",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T13:30Z",
+"games_won": 13.0,
+"match_total_games": 26.0,
+"opponent": "Tomas Machac",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"2860": [
+{
+"espn_athlete_id": "2860",
+"player": "Denis Shapovalov",
+"player_key": "denis shapovalov",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T14:20Z",
+"games_won": 13.0,
+"match_total_games": 29.0,
+"opponent": "Alexander Blockx",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"3885": [
+{
+"espn_athlete_id": "3885",
+"player": "Gabriel Diallo",
+"player_key": "gabriel diallo",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T14:25Z",
+"games_won": 5.0,
+"match_total_games": 17.0,
+"opponent": "Joao Fonseca",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"11745": [
+{
+"espn_athlete_id": "11745",
+"player": "Joao Fonseca",
+"player_key": "joao fonseca",
+"tour": "ATP",
+"match_date_utc": "2026-04-10T09:10Z",
+"games_won": 15.0,
+"match_total_games": 34.0,
+"opponent": "Alexander Zverev",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "11745",
+"player": "Joao Fonseca",
+"player_key": "joao fonseca",
+"tour": "ATP",
+"match_date_utc": "2026-04-09T09:10Z",
+"games_won": 12.0,
+"match_total_games": 17.0,
+"opponent": "Matteo Berrettini",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "11745",
+"player": "Joao Fonseca",
+"player_key": "joao fonseca",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T10:45Z",
+"games_won": 17.0,
+"match_total_games": 31.0,
+"opponent": "Arthur Rinderknech",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "11745",
+"player": "Joao Fonseca",
+"player_key": "joao fonseca",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T14:25Z",
+"games_won": 12.0,
+"match_total_games": 17.0,
+"opponent": "Gabriel Diallo",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"9376": [
+{
+"espn_athlete_id": "9376",
+"player": "Valentin Vacherot",
+"player_key": "valentin vacherot",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T13:40Z",
+"games_won": 8.0,
+"match_total_games": 20.0,
+"opponent": "Carlos Alcaraz",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "9376",
+"player": "Valentin Vacherot",
+"player_key": "valentin vacherot",
+"tour": "ATP",
+"match_date_utc": "2026-04-10T15:30Z",
+"games_won": 15.0,
+"match_total_games": 28.0,
+"opponent": "Alex de Minaur",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "9376",
+"player": "Valentin Vacherot",
+"player_key": "valentin vacherot",
+"tour": "ATP",
+"match_date_utc": "2026-04-09T16:25Z",
+"games_won": 18.0,
+"match_total_games": 32.0,
+"opponent": "Hubert Hurkacz",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "9376",
+"player": "Valentin Vacherot",
+"player_key": "valentin vacherot",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T15:55Z",
+"games_won": 14.0,
+"match_total_games": 25.0,
+"opponent": "Lorenzo Musetti",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "9376",
+"player": "Valentin Vacherot",
+"player_key": "valentin vacherot",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T15:25Z",
+"games_won": 17.0,
+"match_total_games": 27.0,
+"opponent": "Juan Manuel Cerundolo",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"7602": [
+{
+"espn_athlete_id": "7602",
+"player": "Flavio Cobolli",
+"player_key": "flavio cobolli",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T15:40Z",
+"games_won": 6.0,
+"match_total_games": 18.0,
+"opponent": "Alexander Blockx",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "7602",
+"player": "Flavio Cobolli",
+"player_key": "flavio cobolli",
+"tour": "ATP",
+"match_date_utc": "2026-04-06T16:10Z",
+"games_won": 15.0,
+"match_total_games": 29.0,
+"opponent": "Francisco Comesana",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"7833": [
+{
+"espn_athlete_id": "7833",
+"player": "Luciano Darderi",
+"player_key": "luciano darderi",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T09:05Z",
+"games_won": 14.0,
+"match_total_games": 32.0,
+"opponent": "Hubert Hurkacz",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"2726": [
+{
+"espn_athlete_id": "2726",
+"player": "Hubert Hurkacz",
+"player_key": "hubert hurkacz",
+"tour": "ATP",
+"match_date_utc": "2026-04-09T16:25Z",
+"games_won": 14.0,
+"match_total_games": 32.0,
+"opponent": "Valentin Vacherot",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "2726",
+"player": "Hubert Hurkacz",
+"player_key": "hubert hurkacz",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T16:30Z",
+"games_won": 12.0,
+"match_total_games": 17.0,
+"opponent": "Fabian Marozsan",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2726",
+"player": "Hubert Hurkacz",
+"player_key": "hubert hurkacz",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T09:05Z",
+"games_won": 18.0,
+"match_total_games": 32.0,
+"opponent": "Luciano Darderi",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"1287": [
+{
+"espn_athlete_id": "1287",
+"player": "Grigor Dimitrov",
+"player_key": "grigor dimitrov",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T09:10Z",
+"games_won": 13.0,
+"match_total_games": 27.0,
+"opponent": "Tomas Martin Etcheverry",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"3739": [
+{
+"espn_athlete_id": "3739",
+"player": "Tomas Martin Etcheverry",
+"player_key": "tomas martin etcheverry",
+"tour": "ATP",
+"match_date_utc": "2026-04-09T13:40Z",
+"games_won": 10.0,
+"match_total_games": 26.0,
+"opponent": "Carlos Alcaraz",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "3739",
+"player": "Tomas Martin Etcheverry",
+"player_key": "tomas martin etcheverry",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T14:15Z",
+"games_won": 15.0,
+"match_total_games": 26.0,
+"opponent": "Terence Atmane",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3739",
+"player": "Tomas Martin Etcheverry",
+"player_key": "tomas martin etcheverry",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T09:10Z",
+"games_won": 14.0,
+"match_total_games": 27.0,
+"opponent": "Grigor Dimitrov",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"3623": [
+{
+"espn_athlete_id": "3623",
+"player": "Jannik Sinner",
+"player_key": "jannik sinner",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T11:40Z",
+"games_won": 12.0,
+"match_total_games": 17.0,
+"opponent": "Alexander Zverev",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3623",
+"player": "Jannik Sinner",
+"player_key": "jannik sinner",
+"tour": "ATP",
+"match_date_utc": "2026-04-10T12:15Z",
+"games_won": 12.0,
+"match_total_games": 19.0,
+"opponent": "Felix Auger-Aliassime",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3623",
+"player": "Jannik Sinner",
+"player_key": "jannik sinner",
+"tour": "ATP",
+"match_date_utc": "2026-04-09T11:20Z",
+"games_won": 18.0,
+"match_total_games": 29.0,
+"opponent": "Tomas Machac",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3623",
+"player": "Jannik Sinner",
+"player_key": "jannik sinner",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T10:20Z",
+"games_won": 12.0,
+"match_total_games": 15.0,
+"opponent": "Ugo Humbert",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"464": [
+{
+"espn_athlete_id": "464",
+"player": "Marin Cilic",
+"player_key": "marin cilic",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T13:35Z",
+"games_won": 9.0,
+"match_total_games": 22.0,
+"opponent": "Felix Auger-Aliassime",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "464",
+"player": "Marin Cilic",
+"player_key": "marin cilic",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T10:40Z",
+"games_won": 12.0,
+"match_total_games": 16.0,
+"opponent": "Alexander Shevchenko",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"9213": [
+{
+"espn_athlete_id": "9213",
+"player": "Fabian Marozsan",
+"player_key": "fabian marozsan",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T16:30Z",
+"games_won": 5.0,
+"match_total_games": 17.0,
+"opponent": "Hubert Hurkacz",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "9213",
+"player": "Fabian Marozsan",
+"player_key": "fabian marozsan",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T11:20Z",
+"games_won": 12.0,
+"match_total_games": 15.0,
+"opponent": "Damir Dzumhur",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"10638": [
+{
+"espn_athlete_id": "10638",
+"player": "Terence Atmane",
+"player_key": "terence atmane",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T14:15Z",
+"games_won": 11.0,
+"match_total_games": 26.0,
+"opponent": "Tomas Martin Etcheverry",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "10638",
+"player": "Terence Atmane",
+"player_key": "terence atmane",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T11:45Z",
+"games_won": 12.0,
+"match_total_games": 17.0,
+"opponent": "Ethan Quinn",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"3782": [
+{
+"espn_athlete_id": "3782",
+"player": "Carlos Alcaraz",
+"player_key": "carlos alcaraz",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T13:40Z",
+"games_won": 12.0,
+"match_total_games": 20.0,
+"opponent": "Valentin Vacherot",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3782",
+"player": "Carlos Alcaraz",
+"player_key": "carlos alcaraz",
+"tour": "ATP",
+"match_date_utc": "2026-04-10T14:05Z",
+"games_won": 12.0,
+"match_total_games": 15.0,
+"opponent": "Alexander Bublik",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3782",
+"player": "Carlos Alcaraz",
+"player_key": "carlos alcaraz",
+"tour": "ATP",
+"match_date_utc": "2026-04-09T13:40Z",
+"games_won": 16.0,
+"match_total_games": 26.0,
+"opponent": "Tomas Martin Etcheverry",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3782",
+"player": "Carlos Alcaraz",
+"player_key": "carlos alcaraz",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T11:45Z",
+"games_won": 12.0,
+"match_total_games": 16.0,
+"opponent": "Sebastian Baez",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2989": [
+{
+"espn_athlete_id": "2989",
+"player": "Casper Ruud",
+"player_key": "casper ruud",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T13:40Z",
+"games_won": 13.0,
+"match_total_games": 21.0,
+"opponent": "Corentin Moutet",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2989",
+"player": "Casper Ruud",
+"player_key": "casper ruud",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T12:50Z",
+"games_won": 12.0,
+"match_total_games": 19.0,
+"opponent": "Alexei Popyrin",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2862": [
+{
+"espn_athlete_id": "2862",
+"player": "Alexei Popyrin",
+"player_key": "alexei popyrin",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T12:50Z",
+"games_won": 7.0,
+"match_total_games": 19.0,
+"opponent": "Casper Ruud",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"2886": [
+{
+"espn_athlete_id": "2886",
+"player": "Corentin Moutet",
+"player_key": "corentin moutet",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T13:40Z",
+"games_won": 8.0,
+"match_total_games": 21.0,
+"opponent": "Casper Ruud",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "2886",
+"player": "Corentin Moutet",
+"player_key": "corentin moutet",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T13:10Z",
+"games_won": 12.0,
+"match_total_games": 17.0,
+"opponent": "Alexandre Muller",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2865": [
+{
+"espn_athlete_id": "2865",
+"player": "Alexander Bublik",
+"player_key": "alexander bublik",
+"tour": "ATP",
+"match_date_utc": "2026-04-10T14:05Z",
+"games_won": 3.0,
+"match_total_games": 15.0,
+"opponent": "Carlos Alcaraz",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "2865",
+"player": "Alexander Bublik",
+"player_key": "alexander bublik",
+"tour": "ATP",
+"match_date_utc": "2026-04-09T12:55Z",
+"games_won": 13.0,
+"match_total_games": 20.0,
+"opponent": "Jiri Lehecka",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2865",
+"player": "Alexander Bublik",
+"player_key": "alexander bublik",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T13:15Z",
+"games_won": 12.0,
+"match_total_games": 20.0,
+"opponent": "Gael Monfils",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2651": [
+{
+"espn_athlete_id": "2651",
+"player": "Alex de Minaur",
+"player_key": "alex de minaur",
+"tour": "ATP",
+"match_date_utc": "2026-04-10T15:30Z",
+"games_won": 13.0,
+"match_total_games": 28.0,
+"opponent": "Valentin Vacherot",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "2651",
+"player": "Alex de Minaur",
+"player_key": "alex de minaur",
+"tour": "ATP",
+"match_date_utc": "2026-04-09T14:30Z",
+"games_won": 14.0,
+"match_total_games": 25.0,
+"opponent": "Alexander Blockx",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2651",
+"player": "Alex de Minaur",
+"player_key": "alex de minaur",
+"tour": "ATP",
+"match_date_utc": "2026-04-07T14:40Z",
+"games_won": 15.0,
+"match_total_games": 29.0,
+"opponent": "Cameron Norrie",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2622": [
+{
+"espn_athlete_id": "2622",
+"player": "Matteo Berrettini",
+"player_key": "matteo berrettini",
+"tour": "ATP",
+"match_date_utc": "2026-04-09T09:10Z",
+"games_won": 5.0,
+"match_total_games": 17.0,
+"opponent": "Joao Fonseca",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "2622",
+"player": "Matteo Berrettini",
+"player_key": "matteo berrettini",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T09:10Z",
+"games_won": 12.0,
+"match_total_games": 12.0,
+"opponent": "Daniil Medvedev",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2383": [
+{
+"espn_athlete_id": "2383",
+"player": "Daniil Medvedev",
+"player_key": "daniil medvedev",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T09:10Z",
+"games_won": 0.0,
+"match_total_games": 12.0,
+"opponent": "Matteo Berrettini",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"2375": [
+{
+"espn_athlete_id": "2375",
+"player": "Alexander Zverev",
+"player_key": "alexander zverev",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T11:40Z",
+"games_won": 5.0,
+"match_total_games": 17.0,
+"opponent": "Jannik Sinner",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "2375",
+"player": "Alexander Zverev",
+"player_key": "alexander zverev",
+"tour": "ATP",
+"match_date_utc": "2026-04-10T09:10Z",
+"games_won": 19.0,
+"match_total_games": 34.0,
+"opponent": "Joao Fonseca",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2375",
+"player": "Alexander Zverev",
+"player_key": "alexander zverev",
+"tour": "ATP",
+"match_date_utc": "2026-04-09T09:10Z",
+"games_won": 13.0,
+"match_total_games": 20.0,
+"opponent": "Zizou Bergs",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2375",
+"player": "Alexander Zverev",
+"player_key": "alexander zverev",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T10:25Z",
+"games_won": 17.0,
+"match_total_games": 32.0,
+"opponent": "Cristian Garin",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"3209": [
+{
+"espn_athlete_id": "3209",
+"player": "Felix Auger-Aliassime",
+"player_key": "felix augeraliassime",
+"tour": "ATP",
+"match_date_utc": "2026-04-10T12:15Z",
+"games_won": 7.0,
+"match_total_games": 19.0,
+"opponent": "Jannik Sinner",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "3209",
+"player": "Felix Auger-Aliassime",
+"player_key": "felix augeraliassime",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T13:35Z",
+"games_won": 13.0,
+"match_total_games": 22.0,
+"opponent": "Marin Cilic",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"3764": [
+{
+"espn_athlete_id": "3764",
+"player": "Lorenzo Musetti",
+"player_key": "lorenzo musetti",
+"tour": "ATP",
+"match_date_utc": "2026-04-08T15:55Z",
+"games_won": 11.0,
+"match_total_games": 25.0,
+"opponent": "Valentin Vacherot",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"4026": [
+{
+"espn_athlete_id": "4026",
+"player": "Vitaliy Sachko",
+"player_key": "vitaliy sachko",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T09:00Z",
+"games_won": 13.0,
+"match_total_games": 22.0,
+"opponent": "Damir Dzumhur",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"3481": [
+{
+"espn_athlete_id": "3481",
+"player": "Marc-Andrea Huesler",
+"player_key": "marcandrea huesler",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T09:00Z",
+"games_won": 16.0,
+"match_total_games": 30.0,
+"opponent": "Jan Choinski",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"10071": [
+{
+"espn_athlete_id": "10071",
+"player": "Ugo Blanchet",
+"player_key": "ugo blanchet",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T09:30Z",
+"games_won": 7.0,
+"match_total_games": 19.0,
+"opponent": "Marko Topo",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"8447": [
+{
+"espn_athlete_id": "8447",
+"player": "Marko Topo",
+"player_key": "marko topo",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T09:30Z",
+"games_won": 12.0,
+"match_total_games": 19.0,
+"opponent": "Ugo Blanchet",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"14709": [
+{
+"espn_athlete_id": "14709",
+"player": "Diego Dedura",
+"player_key": "diego dedura",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T10:30Z",
+"games_won": 9.0,
+"match_total_games": 22.0,
+"opponent": "Alexander Shevchenko",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"8621": [
+{
+"espn_athlete_id": "8621",
+"player": "Arthur Fery",
+"player_key": "arthur fery",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T11:00Z",
+"games_won": 8.0,
+"match_total_games": 21.0,
+"opponent": "Max Hans Rehberg",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"7930": [
+{
+"espn_athlete_id": "7930",
+"player": "Max Hans Rehberg",
+"player_key": "max hans rehberg",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T11:00Z",
+"games_won": 13.0,
+"match_total_games": 21.0,
+"opponent": "Arthur Fery",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2635": [
+{
+"espn_athlete_id": "2635",
+"player": "Alex Molcan",
+"player_key": "alex molcan",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T12:00Z",
+"games_won": 12.0,
+"match_total_games": 25.0,
+"opponent": "Roberto Carballes Baena",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2012": [
+{
+"espn_athlete_id": "2012",
+"player": "Roberto Carballes Baena",
+"player_key": "roberto carballes baena",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T12:00Z",
+"games_won": 13.0,
+"match_total_games": 25.0,
+"opponent": "Alex Molcan",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"10239": [
+{
+"espn_athlete_id": "10239",
+"player": "Daniel Merida",
+"player_key": "daniel merida",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T08:30Z",
+"games_won": 13.0,
+"match_total_games": 22.0,
+"opponent": "Francesco Maestrelli",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2278": [
+{
+"espn_athlete_id": "2278",
+"player": "Marco Trungelliti",
+"player_key": "marco trungelliti",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T10:00Z",
+"games_won": 16.0,
+"match_total_games": 30.0,
+"opponent": "Nicolai Budkov Kjaer",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"10318": [
+{
+"espn_athlete_id": "10318",
+"player": "Max Alcala Gurri",
+"player_key": "max alcala gurri",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T10:00Z",
+"games_won": 4.0,
+"match_total_games": 16.0,
+"opponent": "Alexandre Muller",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3765": [
+{
+"espn_athlete_id": "3765",
+"player": "Giulio Zeppieri",
+"player_key": "giulio zeppieri",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T11:30Z",
+"games_won": 6.0,
+"match_total_games": 19.0,
+"opponent": "Juan Manuel Cerundolo",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"14547": [
+{
+"espn_athlete_id": "14547",
+"player": "Alejo Sanchez Quilez",
+"player_key": "alejo sanchez quilez",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T11:30Z",
+"games_won": 8.0,
+"match_total_games": 20.0,
+"opponent": "Sebastian Ofner",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3304": [
+{
+"espn_athlete_id": "3304",
+"player": "Sebastian Ofner",
+"player_key": "sebastian ofner",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T11:30Z",
+"games_won": 12.0,
+"match_total_games": 20.0,
+"opponent": "Alejo Sanchez Quilez",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"11755": [
+{
+"espn_athlete_id": "11755",
+"player": "Vilius Gaubas",
+"player_key": "vilius gaubas",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T13:00Z",
+"games_won": 10.0,
+"match_total_games": 23.0,
+"opponent": "Hamad Medjedovic",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"8325": [
+{
+"espn_athlete_id": "8325",
+"player": "Hamad Medjedovic",
+"player_key": "hamad medjedovic",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T13:00Z",
+"games_won": 13.0,
+"match_total_games": 23.0,
+"opponent": "Vilius Gaubas",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"10958": [
+{
+"espn_athlete_id": "10958",
+"player": "Patrick Kypson",
+"player_key": "patrick kypson",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T13:00Z",
+"games_won": 12.0,
+"match_total_games": 17.0,
+"opponent": "Arthur Gea",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"10427": [
+{
+"espn_athlete_id": "10427",
+"player": "Arthur Gea",
+"player_key": "arthur gea",
+"tour": "ATP",
+"match_date_utc": "2026-04-11T13:00Z",
+"games_won": 5.0,
+"match_total_games": 17.0,
+"opponent": "Patrick Kypson",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"2848": [
+{
+"espn_athlete_id": "2848",
+"player": "Oceane Dodin",
+"player_key": "oceane dodin",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T09:05Z",
+"games_won": 18.0,
+"match_total_games": 32.0,
+"opponent": "Kathinka von Deichmann",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2848",
+"player": "Oceane Dodin",
+"player_key": "oceane dodin",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T09:05Z",
+"games_won": 4.0,
+"match_total_games": 16.0,
+"opponent": "Katie Volynets",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3746": [
+{
+"espn_athlete_id": "3746",
+"player": "Katie Volynets",
+"player_key": "katie volynets",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T14:20Z",
+"games_won": 13.0,
+"match_total_games": 28.0,
+"opponent": "Donna Vekic",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "3746",
+"player": "Katie Volynets",
+"player_key": "katie volynets",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T09:05Z",
+"games_won": 15.0,
+"match_total_games": 27.0,
+"opponent": "Dominika Salkova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3746",
+"player": "Katie Volynets",
+"player_key": "katie volynets",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T09:05Z",
+"games_won": 12.0,
+"match_total_games": 16.0,
+"opponent": "Oceane Dodin",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"6570": [
+{
+"espn_athlete_id": "6570",
+"player": "Alina Charaeva",
+"player_key": "alina charaeva",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T11:00Z",
+"games_won": 12.0,
+"match_total_games": 20.0,
+"opponent": "Mina Hodzic",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "6570",
+"player": "Alina Charaeva",
+"player_key": "alina charaeva",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T09:05Z",
+"games_won": 12.0,
+"match_total_games": 25.0,
+"opponent": "Maria Timofeeva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"10501": [
+{
+"espn_athlete_id": "10501",
+"player": "Maria Timofeeva",
+"player_key": "maria timofeeva",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T09:20Z",
+"games_won": 13.0,
+"match_total_games": 19.0,
+"opponent": "Yara Bartashevich",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "10501",
+"player": "Maria Timofeeva",
+"player_key": "maria timofeeva",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T09:05Z",
+"games_won": 7.0,
+"match_total_games": 19.0,
+"opponent": "Tamara Korpatsch",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "10501",
+"player": "Maria Timofeeva",
+"player_key": "maria timofeeva",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T09:05Z",
+"games_won": 13.0,
+"match_total_games": 25.0,
+"opponent": "Alina Charaeva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"3836": [
+{
+"espn_athlete_id": "3836",
+"player": "Jule Niemeier",
+"player_key": "jule niemeier",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T12:35Z",
+"games_won": 6.0,
+"match_total_games": 19.0,
+"opponent": "Anna-Lena Friedsam",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "3836",
+"player": "Jule Niemeier",
+"player_key": "jule niemeier",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T10:30Z",
+"games_won": 5.0,
+"match_total_games": 17.0,
+"opponent": "Tamara Korpatsch",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3040": [
+{
+"espn_athlete_id": "3040",
+"player": "Tamara Korpatsch",
+"player_key": "tamara korpatsch",
+"tour": "WTA",
+"match_date_utc": "2026-04-09T17:45Z",
+"games_won": 3.0,
+"match_total_games": 15.0,
+"opponent": "Anastasia Potapova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "3040",
+"player": "Tamara Korpatsch",
+"player_key": "tamara korpatsch",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T11:45Z",
+"games_won": 16.0,
+"match_total_games": 27.0,
+"opponent": "Jaqueline Cristian",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3040",
+"player": "Tamara Korpatsch",
+"player_key": "tamara korpatsch",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T09:05Z",
+"games_won": 12.0,
+"match_total_games": 19.0,
+"opponent": "Maria Timofeeva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "3040",
+"player": "Tamara Korpatsch",
+"player_key": "tamara korpatsch",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T10:30Z",
+"games_won": 12.0,
+"match_total_games": 17.0,
+"opponent": "Jule Niemeier",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"7436": [
+{
+"espn_athlete_id": "7436",
+"player": "Dominika Salkova",
+"player_key": "dominika salkova",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T16:45Z",
+"games_won": 12.0,
+"match_total_games": 13.0,
+"opponent": "Yasmine Mansouri",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "7436",
+"player": "Dominika Salkova",
+"player_key": "dominika salkova",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T09:05Z",
+"games_won": 12.0,
+"match_total_games": 27.0,
+"opponent": "Katie Volynets",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "7436",
+"player": "Dominika Salkova",
+"player_key": "dominika salkova",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T11:10Z",
+"games_won": 12.0,
+"match_total_games": 16.0,
+"opponent": "Madison Brengle",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"445": [
+{
+"espn_athlete_id": "445",
+"player": "Madison Brengle",
+"player_key": "madison brengle",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T11:10Z",
+"games_won": 4.0,
+"match_total_games": 16.0,
+"opponent": "Dominika Salkova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"2040": [
+{
+"espn_athlete_id": "2040",
+"player": "Donna Vekic",
+"player_key": "donna vekic",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T15:40Z",
+"games_won": 6.0,
+"match_total_games": 18.0,
+"opponent": "Anastasia Potapova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "2040",
+"player": "Donna Vekic",
+"player_key": "donna vekic",
+"tour": "WTA",
+"match_date_utc": "2026-04-10T18:15Z",
+"games_won": 13.0,
+"match_total_games": 22.0,
+"opponent": "Karolina Pliskova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2040",
+"player": "Donna Vekic",
+"player_key": "donna vekic",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T14:20Z",
+"games_won": 15.0,
+"match_total_games": 28.0,
+"opponent": "Katie Volynets",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2040",
+"player": "Donna Vekic",
+"player_key": "donna vekic",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T11:25Z",
+"games_won": 17.0,
+"match_total_games": 33.0,
+"opponent": "Iryna Shymanovich",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2040",
+"player": "Donna Vekic",
+"player_key": "donna vekic",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T12:10Z",
+"games_won": 12.0,
+"match_total_games": 18.0,
+"opponent": "Carole Monnet",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"5299": [
+{
+"espn_athlete_id": "5299",
+"player": "Carole Monnet",
+"player_key": "carole monnet",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T15:25Z",
+"games_won": 13.0,
+"match_total_games": 29.0,
+"opponent": "Gabriela Knutson",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "5299",
+"player": "Carole Monnet",
+"player_key": "carole monnet",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T12:10Z",
+"games_won": 6.0,
+"match_total_games": 18.0,
+"opponent": "Donna Vekic",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"2403": [
+{
+"espn_athlete_id": "2403",
+"player": "Iryna Shymanovich",
+"player_key": "iryna shymanovich",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T12:45Z",
+"games_won": 12.0,
+"match_total_games": 17.0,
+"opponent": "Diana Martynov",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2403",
+"player": "Iryna Shymanovich",
+"player_key": "iryna shymanovich",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T11:25Z",
+"games_won": 16.0,
+"match_total_games": 33.0,
+"opponent": "Donna Vekic",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "2403",
+"player": "Iryna Shymanovich",
+"player_key": "iryna shymanovich",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T12:20Z",
+"games_won": 13.0,
+"match_total_games": 21.0,
+"opponent": "Victoria Jimenez Kasintseva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"7778": [
+{
+"espn_athlete_id": "7778",
+"player": "Victoria Jimenez Kasintseva",
+"player_key": "victoria jimenez kasintseva",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T11:25Z",
+"games_won": 6.0,
+"match_total_games": 18.0,
+"opponent": "Vera Zvonareva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "7778",
+"player": "Victoria Jimenez Kasintseva",
+"player_key": "victoria jimenez kasintseva",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T12:20Z",
+"games_won": 8.0,
+"match_total_games": 21.0,
+"opponent": "Iryna Shymanovich",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"2411": [
+{
+"espn_athlete_id": "2411",
+"player": "Anhelina Kalinina",
+"player_key": "anhelina kalinina",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T13:30Z",
+"games_won": 17.0,
+"match_total_games": 25.0,
+"opponent": "Panna Udvardy",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2411",
+"player": "Anhelina Kalinina",
+"player_key": "anhelina kalinina",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T10:50Z",
+"games_won": 5.0,
+"match_total_games": 17.0,
+"opponent": "Aliaksandra Sasnovich",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "2411",
+"player": "Anhelina Kalinina",
+"player_key": "anhelina kalinina",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T13:40Z",
+"games_won": 12.0,
+"match_total_games": 20.0,
+"opponent": "Anna-Lena Friedsam",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2506": [
+{
+"espn_athlete_id": "2506",
+"player": "Anna-Lena Friedsam",
+"player_key": "annalena friedsam",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T12:35Z",
+"games_won": 13.0,
+"match_total_games": 19.0,
+"opponent": "Jule Niemeier",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2506",
+"player": "Anna-Lena Friedsam",
+"player_key": "annalena friedsam",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T13:40Z",
+"games_won": 8.0,
+"match_total_games": 20.0,
+"opponent": "Anhelina Kalinina",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"6929": [
+{
+"espn_athlete_id": "6929",
+"player": "Linda Fruhvirtova",
+"player_key": "linda fruhvirtova",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T14:20Z",
+"games_won": 1.0,
+"match_total_games": 13.0,
+"opponent": "Aliaksandra Sasnovich",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"1809": [
+{
+"espn_athlete_id": "1809",
+"player": "Aliaksandra Sasnovich",
+"player_key": "aliaksandra sasnovich",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T09:05Z",
+"games_won": 12.0,
+"match_total_games": 17.0,
+"opponent": "Julia Stusek",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "1809",
+"player": "Aliaksandra Sasnovich",
+"player_key": "aliaksandra sasnovich",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T18:45Z",
+"games_won": 8.0,
+"match_total_games": 20.0,
+"opponent": "Karolina Pliskova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "1809",
+"player": "Aliaksandra Sasnovich",
+"player_key": "aliaksandra sasnovich",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T10:50Z",
+"games_won": 12.0,
+"match_total_games": 17.0,
+"opponent": "Anhelina Kalinina",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "1809",
+"player": "Aliaksandra Sasnovich",
+"player_key": "aliaksandra sasnovich",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T14:20Z",
+"games_won": 12.0,
+"match_total_games": 13.0,
+"opponent": "Linda Fruhvirtova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2764": [
+{
+"espn_athlete_id": "2764",
+"player": "Dalma Galfi",
+"player_key": "dalma galfi",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T12:20Z",
+"games_won": 12.0,
+"match_total_games": 18.0,
+"opponent": "Alycia Parks",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"5309": [
+{
+"espn_athlete_id": "5309",
+"player": "Alycia Parks",
+"player_key": "alycia parks",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T10:40Z",
+"games_won": 13.0,
+"match_total_games": 22.0,
+"opponent": "Eva Bennemann",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "5309",
+"player": "Alycia Parks",
+"player_key": "alycia parks",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T12:20Z",
+"games_won": 6.0,
+"match_total_games": 18.0,
+"opponent": "Dalma Galfi",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"2748": [
+{
+"espn_athlete_id": "2748",
+"player": "Elena-Gabriela Ruse",
+"player_key": "elenagabriela ruse",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T13:45Z",
+"games_won": 5.0,
+"match_total_games": 17.0,
+"opponent": "Mirra Andreeva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "2748",
+"player": "Elena-Gabriela Ruse",
+"player_key": "elenagabriela ruse",
+"tour": "WTA",
+"match_date_utc": "2026-04-10T11:05Z",
+"games_won": 16.0,
+"match_total_games": 27.0,
+"opponent": "Jelena Ostapenko",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2748",
+"player": "Elena-Gabriela Ruse",
+"player_key": "elenagabriela ruse",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T10:05Z",
+"games_won": 16.0,
+"match_total_games": 30.0,
+"opponent": "Dayana Yastremska",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2748",
+"player": "Elena-Gabriela Ruse",
+"player_key": "elenagabriela ruse",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T16:35Z",
+"games_won": 14.0,
+"match_total_games": 26.0,
+"opponent": "Katie Boulter",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2054": [
+{
+"espn_athlete_id": "2054",
+"player": "Katie Boulter",
+"player_key": "katie boulter",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T16:35Z",
+"games_won": 12.0,
+"match_total_games": 26.0,
+"opponent": "Elena-Gabriela Ruse",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"2346": [
+{
+"espn_athlete_id": "2346",
+"player": "Tatjana Maria",
+"player_key": "tatjana maria",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T16:40Z",
+"games_won": 16.0,
+"match_total_games": 30.0,
+"opponent": "Sloane Stephens",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"1472": [
+{
+"espn_athlete_id": "1472",
+"player": "Sloane Stephens",
+"player_key": "sloane stephens",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T16:55Z",
+"games_won": 6.0,
+"match_total_games": 18.0,
+"opponent": "Mirra Andreeva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "1472",
+"player": "Sloane Stephens",
+"player_key": "sloane stephens",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T16:40Z",
+"games_won": 14.0,
+"match_total_games": 30.0,
+"opponent": "Tatjana Maria",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"3380": [
+{
+"espn_athlete_id": "3380",
+"player": "Ann Li",
+"player_key": "ann li",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T10:05Z",
+"games_won": 14.0,
+"match_total_games": 31.0,
+"opponent": "Dayana Yastremska",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"3142": [
+{
+"espn_athlete_id": "3142",
+"player": "Dayana Yastremska",
+"player_key": "dayana yastremska",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T10:05Z",
+"games_won": 14.0,
+"match_total_games": 30.0,
+"opponent": "Elena-Gabriela Ruse",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "3142",
+"player": "Dayana Yastremska",
+"player_key": "dayana yastremska",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T10:05Z",
+"games_won": 17.0,
+"match_total_games": 31.0,
+"opponent": "Ann Li",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2737": [
+{
+"espn_athlete_id": "2737",
+"player": "Jaqueline Cristian",
+"player_key": "jaqueline cristian",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T11:45Z",
+"games_won": 11.0,
+"match_total_games": 27.0,
+"opponent": "Tamara Korpatsch",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"1774": [
+{
+"espn_athlete_id": "1774",
+"player": "Sorana Cirstea",
+"player_key": "sorana cirstea",
+"tour": "WTA",
+"match_date_utc": "2026-04-10T13:45Z",
+"games_won": 14.0,
+"match_total_games": 31.0,
+"opponent": "Mirra Andreeva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "1774",
+"player": "Sorana Cirstea",
+"player_key": "sorana cirstea",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T12:30Z",
+"games_won": 12.0,
+"match_total_games": 18.0,
+"opponent": "Sinja Kraus",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"7797": [
+{
+"espn_athlete_id": "7797",
+"player": "Sinja Kraus",
+"player_key": "sinja kraus",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T12:30Z",
+"games_won": 6.0,
+"match_total_games": 18.0,
+"opponent": "Sorana Cirstea",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"10830": [
+{
+"espn_athlete_id": "10830",
+"player": "Lilli Tagger",
+"player_key": "lilli tagger",
+"tour": "WTA",
+"match_date_utc": "2026-04-10T16:20Z",
+"games_won": 6.0,
+"match_total_games": 19.0,
+"opponent": "Anastasia Potapova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "10830",
+"player": "Lilli Tagger",
+"player_key": "lilli tagger",
+"tour": "WTA",
+"match_date_utc": "2026-04-09T14:05Z",
+"games_won": 13.0,
+"match_total_games": 21.0,
+"opponent": "Liudmila Samsonova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "10830",
+"player": "Lilli Tagger",
+"player_key": "lilli tagger",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T14:20Z",
+"games_won": 13.0,
+"match_total_games": 23.0,
+"opponent": "Paula Badosa",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2731": [
+{
+"espn_athlete_id": "2731",
+"player": "Paula Badosa",
+"player_key": "paula badosa",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T14:20Z",
+"games_won": 10.0,
+"match_total_games": 23.0,
+"opponent": "Lilli Tagger",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"7759": [
+{
+"espn_athlete_id": "7759",
+"player": "Alexandra Eala",
+"player_key": "alexandra eala",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T12:55Z",
+"games_won": 9.0,
+"match_total_games": 22.0,
+"opponent": "Jelena Ostapenko",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "7759",
+"player": "Alexandra Eala",
+"player_key": "alexandra eala",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T16:45Z",
+"games_won": 12.0,
+"match_total_games": 19.0,
+"opponent": "Julia Grabher",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2599": [
+{
+"espn_athlete_id": "2599",
+"player": "Julia Grabher",
+"player_key": "julia grabher",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T16:45Z",
+"games_won": 7.0,
+"match_total_games": 19.0,
+"opponent": "Alexandra Eala",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"740": [
+{
+"espn_athlete_id": "740",
+"player": "Karolina Pliskova",
+"player_key": "karolina pliskova",
+"tour": "WTA",
+"match_date_utc": "2026-04-10T18:15Z",
+"games_won": 9.0,
+"match_total_games": 22.0,
+"opponent": "Donna Vekic",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "740",
+"player": "Karolina Pliskova",
+"player_key": "karolina pliskova",
+"tour": "WTA",
+"match_date_utc": "2026-04-09T16:25Z",
+"games_won": 12.0,
+"match_total_games": 16.0,
+"opponent": "Ekaterina Alexandrova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "740",
+"player": "Karolina Pliskova",
+"player_key": "karolina pliskova",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T18:45Z",
+"games_won": 12.0,
+"match_total_games": 20.0,
+"opponent": "Aliaksandra Sasnovich",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2195": [
+{
+"espn_athlete_id": "2195",
+"player": "Jelena Ostapenko",
+"player_key": "jelena ostapenko",
+"tour": "WTA",
+"match_date_utc": "2026-04-10T11:05Z",
+"games_won": 11.0,
+"match_total_games": 27.0,
+"opponent": "Elena-Gabriela Ruse",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "2195",
+"player": "Jelena Ostapenko",
+"player_key": "jelena ostapenko",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T12:55Z",
+"games_won": 13.0,
+"match_total_games": 22.0,
+"opponent": "Alexandra Eala",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"3000": [
+{
+"espn_athlete_id": "3000",
+"player": "Panna Udvardy",
+"player_key": "panna udvardy",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T13:30Z",
+"games_won": 8.0,
+"match_total_games": 25.0,
+"opponent": "Anhelina Kalinina",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"707": [
+{
+"espn_athlete_id": "707",
+"player": "Zhang Shuai",
+"player_key": "zhang shuai",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T14:55Z",
+"games_won": 8.0,
+"match_total_games": 20.0,
+"opponent": "Anastasia Potapova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"2971": [
+{
+"espn_athlete_id": "2971",
+"player": "Anastasia Potapova",
+"player_key": "anastasia potapova",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T15:40Z",
+"games_won": 12.0,
+"match_total_games": 18.0,
+"opponent": "Donna Vekic",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2971",
+"player": "Anastasia Potapova",
+"player_key": "anastasia potapova",
+"tour": "WTA",
+"match_date_utc": "2026-04-10T16:20Z",
+"games_won": 13.0,
+"match_total_games": 19.0,
+"opponent": "Lilli Tagger",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2971",
+"player": "Anastasia Potapova",
+"player_key": "anastasia potapova",
+"tour": "WTA",
+"match_date_utc": "2026-04-09T17:45Z",
+"games_won": 12.0,
+"match_total_games": 15.0,
+"opponent": "Tamara Korpatsch",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "2971",
+"player": "Anastasia Potapova",
+"player_key": "anastasia potapova",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T14:55Z",
+"games_won": 12.0,
+"match_total_games": 20.0,
+"opponent": "Zhang Shuai",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"9820": [
+{
+"espn_athlete_id": "9820",
+"player": "Mirra Andreeva",
+"player_key": "mirra andreeva",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T13:45Z",
+"games_won": 12.0,
+"match_total_games": 17.0,
+"opponent": "Elena-Gabriela Ruse",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "9820",
+"player": "Mirra Andreeva",
+"player_key": "mirra andreeva",
+"tour": "WTA",
+"match_date_utc": "2026-04-10T13:45Z",
+"games_won": 17.0,
+"match_total_games": 31.0,
+"opponent": "Sorana Cirstea",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "9820",
+"player": "Mirra Andreeva",
+"player_key": "mirra andreeva",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T16:55Z",
+"games_won": 12.0,
+"match_total_games": 18.0,
+"opponent": "Sloane Stephens",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"3840": [
+{
+"espn_athlete_id": "3840",
+"player": "Liudmila Samsonova",
+"player_key": "liudmila samsonova",
+"tour": "WTA",
+"match_date_utc": "2026-04-09T14:05Z",
+"games_won": 8.0,
+"match_total_games": 21.0,
+"opponent": "Lilli Tagger",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3182": [
+{
+"espn_athlete_id": "3182",
+"player": "Ekaterina Alexandrova",
+"player_key": "ekaterina alexandrova",
+"tour": "WTA",
+"match_date_utc": "2026-04-09T16:25Z",
+"games_won": 4.0,
+"match_total_games": 16.0,
+"opponent": "Karolina Pliskova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"4263": [
+{
+"espn_athlete_id": "4263",
+"player": "Miriana Tona",
+"player_key": "miriana tona",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T09:55Z",
+"games_won": 4.0,
+"match_total_games": 16.0,
+"opponent": "Caroline Werner",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "4263",
+"player": "Miriana Tona",
+"player_key": "miriana tona",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T09:05Z",
+"games_won": 12.0,
+"match_total_games": 15.0,
+"opponent": "Carlota Corte",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"17813": [
+{
+"espn_athlete_id": "17813",
+"player": "Carlota Corte",
+"player_key": "carlota corte",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T09:05Z",
+"games_won": 3.0,
+"match_total_games": 15.0,
+"opponent": "Miriana Tona",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"17814": [
+{
+"espn_athlete_id": "17814",
+"player": "Carlota Lujan Jecalo",
+"player_key": "carlota lujan jecalo",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T09:05Z",
+"games_won": 4.0,
+"match_total_games": 16.0,
+"opponent": "Selena Janicijevic",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3839": [
+{
+"espn_athlete_id": "3839",
+"player": "Selena Janicijevic",
+"player_key": "selena janicijevic",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T14:20Z",
+"games_won": 4.0,
+"match_total_games": 16.0,
+"opponent": "Ekaterina Kazionova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "3839",
+"player": "Selena Janicijevic",
+"player_key": "selena janicijevic",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T13:35Z",
+"games_won": 16.0,
+"match_total_games": 33.0,
+"opponent": "Oksana Selekhmeteva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "3839",
+"player": "Selena Janicijevic",
+"player_key": "selena janicijevic",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T08:35Z",
+"games_won": 2.0,
+"match_total_games": 14.0,
+"opponent": "Elina Avanesyan",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "3839",
+"player": "Selena Janicijevic",
+"player_key": "selena janicijevic",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T09:05Z",
+"games_won": 12.0,
+"match_total_games": 16.0,
+"opponent": "Carlota Lujan Jecalo",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"10677": [
+{
+"espn_athlete_id": "10677",
+"player": "Carmen Lopez Martinez",
+"player_key": "carmen lopez martinez",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T09:10Z",
+"games_won": 3.0,
+"match_total_games": 15.0,
+"opponent": "Sara Saito",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"13679": [
+{
+"espn_athlete_id": "13679",
+"player": "Sara Saito",
+"player_key": "sara saito",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T10:40Z",
+"games_won": 8.0,
+"match_total_games": 20.0,
+"opponent": "Lina Gjorcheska",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "13679",
+"player": "Sara Saito",
+"player_key": "sara saito",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T08:40Z",
+"games_won": 12.0,
+"match_total_games": 14.0,
+"opponent": "Cristina Diaz Adrover",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "13679",
+"player": "Sara Saito",
+"player_key": "sara saito",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T09:10Z",
+"games_won": 12.0,
+"match_total_games": 15.0,
+"opponent": "Carmen Lopez Martinez",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"4234": [
+{
+"espn_athlete_id": "4234",
+"player": "Yvonne Cavalle-Reimers",
+"player_key": "yvonne cavallereimers",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T10:25Z",
+"games_won": 6.0,
+"match_total_games": 18.0,
+"opponent": "Polona Hercog",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"1095": [
+{
+"espn_athlete_id": "1095",
+"player": "Polona Hercog",
+"player_key": "polona hercog",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T08:35Z",
+"games_won": 13.0,
+"match_total_games": 20.0,
+"opponent": "Carlota Martinez Cirez",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "1095",
+"player": "Polona Hercog",
+"player_key": "polona hercog",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T10:25Z",
+"games_won": 12.0,
+"match_total_games": 18.0,
+"opponent": "Yvonne Cavalle-Reimers",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"17097": [
+{
+"espn_athlete_id": "17097",
+"player": "Cristina Diaz Adrover",
+"player_key": "cristina diaz adrover",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T08:40Z",
+"games_won": 2.0,
+"match_total_games": 14.0,
+"opponent": "Sara Saito",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "17097",
+"player": "Cristina Diaz Adrover",
+"player_key": "cristina diaz adrover",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T10:35Z",
+"games_won": 16.0,
+"match_total_games": 30.0,
+"opponent": "Mina Hodzic",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"5352": [
+{
+"espn_athlete_id": "5352",
+"player": "Mina Hodzic",
+"player_key": "mina hodzic",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T11:00Z",
+"games_won": 8.0,
+"match_total_games": 20.0,
+"opponent": "Alina Charaeva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "5352",
+"player": "Mina Hodzic",
+"player_key": "mina hodzic",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T10:35Z",
+"games_won": 14.0,
+"match_total_games": 30.0,
+"opponent": "Cristina Diaz Adrover",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"5607": [
+{
+"espn_athlete_id": "5607",
+"player": "Carlota Martinez Cirez",
+"player_key": "carlota martinez cirez",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T08:35Z",
+"games_won": 7.0,
+"match_total_games": 20.0,
+"opponent": "Polona Hercog",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "5607",
+"player": "Carlota Martinez Cirez",
+"player_key": "carlota martinez cirez",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T10:55Z",
+"games_won": 12.0,
+"match_total_games": 15.0,
+"opponent": "Nadiia Kolb",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"4246": [
+{
+"espn_athlete_id": "4246",
+"player": "Nadiia Kolb",
+"player_key": "nadiia kolb",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T10:55Z",
+"games_won": 3.0,
+"match_total_games": 15.0,
+"opponent": "Carlota Martinez Cirez",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"5868": [
+{
+"espn_athlete_id": "5868",
+"player": "Elina Avanesyan",
+"player_key": "elina avanesyan",
+"tour": "WTA",
+"match_date_utc": "2026-04-10T13:30Z",
+"games_won": 6.0,
+"match_total_games": 18.0,
+"opponent": "Ane Mintegi Del Olmo",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "5868",
+"player": "Elina Avanesyan",
+"player_key": "elina avanesyan",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T11:05Z",
+"games_won": 12.0,
+"match_total_games": 17.0,
+"opponent": "Francesca Jones",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "5868",
+"player": "Elina Avanesyan",
+"player_key": "elina avanesyan",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T13:05Z",
+"games_won": 13.0,
+"match_total_games": 22.0,
+"opponent": "Andrea Lazaro Garcia",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "5868",
+"player": "Elina Avanesyan",
+"player_key": "elina avanesyan",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T08:35Z",
+"games_won": 12.0,
+"match_total_games": 14.0,
+"opponent": "Selena Janicijevic",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "5868",
+"player": "Elina Avanesyan",
+"player_key": "elina avanesyan",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T11:55Z",
+"games_won": 12.0,
+"match_total_games": 19.0,
+"opponent": "Ekaterina Kazionova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"4792": [
+{
+"espn_athlete_id": "4792",
+"player": "Ekaterina Kazionova",
+"player_key": "ekaterina kazionova",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T14:20Z",
+"games_won": 12.0,
+"match_total_games": 16.0,
+"opponent": "Selena Janicijevic",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "4792",
+"player": "Ekaterina Kazionova",
+"player_key": "ekaterina kazionova",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T11:55Z",
+"games_won": 7.0,
+"match_total_games": 19.0,
+"opponent": "Elina Avanesyan",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3582": [
+{
+"espn_athlete_id": "3582",
+"player": "Momoko Kobori",
+"player_key": "momoko kobori",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T16:00Z",
+"games_won": 3.0,
+"match_total_games": 15.0,
+"opponent": "Veronika Podrez",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "3582",
+"player": "Momoko Kobori",
+"player_key": "momoko kobori",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T13:35Z",
+"games_won": 7.0,
+"match_total_games": 20.0,
+"opponent": "Caroline Werner",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"4384": [
+{
+"espn_athlete_id": "4384",
+"player": "Caroline Werner",
+"player_key": "caroline werner",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T08:40Z",
+"games_won": 10.0,
+"match_total_games": 23.0,
+"opponent": "Nikola Bartunkova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "4384",
+"player": "Caroline Werner",
+"player_key": "caroline werner",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T09:55Z",
+"games_won": 12.0,
+"match_total_games": 16.0,
+"opponent": "Miriana Tona",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "4384",
+"player": "Caroline Werner",
+"player_key": "caroline werner",
+"tour": "WTA",
+"match_date_utc": "2026-04-05T13:35Z",
+"games_won": 13.0,
+"match_total_games": 20.0,
+"opponent": "Momoko Kobori",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"3286": [
+{
+"espn_athlete_id": "3286",
+"player": "Jessika Ponchet",
+"player_key": "jessika ponchet",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T09:35Z",
+"games_won": 3.0,
+"match_total_games": 15.0,
+"opponent": "Polina Kudermetova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "3286",
+"player": "Jessika Ponchet",
+"player_key": "jessika ponchet",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T10:00Z",
+"games_won": 13.0,
+"match_total_games": 20.0,
+"opponent": "Nuria Brancaccio",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"5168": [
+{
+"espn_athlete_id": "5168",
+"player": "Nuria Brancaccio",
+"player_key": "nuria brancaccio",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T10:00Z",
+"games_won": 7.0,
+"match_total_games": 20.0,
+"opponent": "Jessika Ponchet",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"2179": [
+{
+"espn_athlete_id": "2179",
+"player": "Mayar Sherif",
+"player_key": "mayar sherif",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T10:35Z",
+"games_won": 6.0,
+"match_total_games": 19.0,
+"opponent": "Polina Kudermetova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"6413": [
+{
+"espn_athlete_id": "6413",
+"player": "Polina Kudermetova",
+"player_key": "polina kudermetova",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T09:10Z",
+"games_won": 7.0,
+"match_total_games": 21.0,
+"opponent": "Lisa Pigato",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "6413",
+"player": "Polina Kudermetova",
+"player_key": "polina kudermetova",
+"tour": "WTA",
+"match_date_utc": "2026-04-10T11:25Z",
+"games_won": 13.0,
+"match_total_games": 22.0,
+"opponent": "Oksana Selekhmeteva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "6413",
+"player": "Polina Kudermetova",
+"player_key": "polina kudermetova",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T09:35Z",
+"games_won": 12.0,
+"match_total_games": 15.0,
+"opponent": "Jessika Ponchet",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "6413",
+"player": "Polina Kudermetova",
+"player_key": "polina kudermetova",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T10:35Z",
+"games_won": 13.0,
+"match_total_games": 19.0,
+"opponent": "Mayar Sherif",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"1955": [
+{
+"espn_athlete_id": "1955",
+"player": "Elizabeth Mandlik",
+"player_key": "elizabeth mandlik",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T11:40Z",
+"games_won": 18.0,
+"match_total_games": 36.0,
+"opponent": "Francesca Jones",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"7815": [
+{
+"espn_athlete_id": "7815",
+"player": "Francesca Jones",
+"player_key": "francesca jones",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T11:05Z",
+"games_won": 5.0,
+"match_total_games": 17.0,
+"opponent": "Elina Avanesyan",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "7815",
+"player": "Francesca Jones",
+"player_key": "francesca jones",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T11:40Z",
+"games_won": 18.0,
+"match_total_games": 36.0,
+"opponent": "Elizabeth Mandlik",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"4546": [
+{
+"espn_athlete_id": "4546",
+"player": "Irene Burillo",
+"player_key": "irene burillo",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T15:35Z",
+"games_won": 4.0,
+"match_total_games": 16.0,
+"opponent": "Ane Mintegi Del Olmo",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"6343": [
+{
+"espn_athlete_id": "6343",
+"player": "Ane Mintegi Del Olmo",
+"player_key": "ane mintegi del olmo",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T13:15Z",
+"games_won": 7.0,
+"match_total_games": 19.0,
+"opponent": "Marina Bassols Ribera",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "6343",
+"player": "Ane Mintegi Del Olmo",
+"player_key": "ane mintegi del olmo",
+"tour": "WTA",
+"match_date_utc": "2026-04-10T13:30Z",
+"games_won": 12.0,
+"match_total_games": 18.0,
+"opponent": "Elina Avanesyan",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "6343",
+"player": "Ane Mintegi Del Olmo",
+"player_key": "ane mintegi del olmo",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T11:05Z",
+"games_won": 15.0,
+"match_total_games": 24.0,
+"opponent": "Nikola Bartunkova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "6343",
+"player": "Ane Mintegi Del Olmo",
+"player_key": "ane mintegi del olmo",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T15:35Z",
+"games_won": 12.0,
+"match_total_games": 16.0,
+"opponent": "Irene Burillo",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"17823": [
+{
+"espn_athlete_id": "17823",
+"player": "Carmen Gallardo Guevara",
+"player_key": "carmen gallardo guevara",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T16:05Z",
+"games_won": 13.0,
+"match_total_games": 30.0,
+"opponent": "Yuan Yue",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"2916": [
+{
+"espn_athlete_id": "2916",
+"player": "Yuan Yue",
+"player_key": "yuan yue",
+"tour": "WTA",
+"match_date_utc": "2026-04-09T09:05Z",
+"games_won": 14.0,
+"match_total_games": 27.0,
+"opponent": "Marina Bassols Ribera",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "2916",
+"player": "Yuan Yue",
+"player_key": "yuan yue",
+"tour": "WTA",
+"match_date_utc": "2026-04-06T16:05Z",
+"games_won": 17.0,
+"match_total_games": 30.0,
+"opponent": "Carmen Gallardo Guevara",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"7804": [
+{
+"espn_athlete_id": "7804",
+"player": "Nikola Bartunkova",
+"player_key": "nikola bartunkova",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T11:05Z",
+"games_won": 9.0,
+"match_total_games": 24.0,
+"opponent": "Ane Mintegi Del Olmo",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "7804",
+"player": "Nikola Bartunkova",
+"player_key": "nikola bartunkova",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T08:40Z",
+"games_won": 13.0,
+"match_total_games": 23.0,
+"opponent": "Caroline Werner",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"14946": [
+{
+"espn_athlete_id": "14946",
+"player": "Elena Pridankina",
+"player_key": "elena pridankina",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T08:40Z",
+"games_won": 6.0,
+"match_total_games": 18.0,
+"opponent": "Laura Samson",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"15069": [
+{
+"espn_athlete_id": "15069",
+"player": "Laura Samson",
+"player_key": "laura samson",
+"tour": "WTA",
+"match_date_utc": "2026-04-09T09:10Z",
+"games_won": 11.0,
+"match_total_games": 27.0,
+"opponent": "Lisa Pigato",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+},
+{
+"espn_athlete_id": "15069",
+"player": "Laura Samson",
+"player_key": "laura samson",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T08:40Z",
+"games_won": 12.0,
+"match_total_games": 18.0,
+"opponent": "Elena Pridankina",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"3031": [
+{
+"espn_athlete_id": "3031",
+"player": "Lina Gjorcheska",
+"player_key": "lina gjorcheska",
+"tour": "WTA",
+"match_date_utc": "2026-04-10T13:25Z",
+"games_won": 6.0,
+"match_total_games": 18.0,
+"opponent": "Lisa Pigato",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "3031",
+"player": "Lina Gjorcheska",
+"player_key": "lina gjorcheska",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T10:40Z",
+"games_won": 12.0,
+"match_total_games": 20.0,
+"opponent": "Sara Saito",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"9169": [
+{
+"espn_athlete_id": "9169",
+"player": "Alina Korneeva",
+"player_key": "alina korneeva",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T11:20Z",
+"games_won": 12.0,
+"match_total_games": 18.0,
+"opponent": "Maria Garcia Cid",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"17822": [
+{
+"espn_athlete_id": "17822",
+"player": "Maria Garcia Cid",
+"player_key": "maria garcia cid",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T11:20Z",
+"games_won": 6.0,
+"match_total_games": 18.0,
+"opponent": "Alina Korneeva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"8411": [
+{
+"espn_athlete_id": "8411",
+"player": "Lisa Pigato",
+"player_key": "lisa pigato",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T09:10Z",
+"games_won": 14.0,
+"match_total_games": 21.0,
+"opponent": "Polina Kudermetova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "8411",
+"player": "Lisa Pigato",
+"player_key": "lisa pigato",
+"tour": "WTA",
+"match_date_utc": "2026-04-10T13:25Z",
+"games_won": 12.0,
+"match_total_games": 18.0,
+"opponent": "Lina Gjorcheska",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "8411",
+"player": "Lisa Pigato",
+"player_key": "lisa pigato",
+"tour": "WTA",
+"match_date_utc": "2026-04-09T09:10Z",
+"games_won": 16.0,
+"match_total_games": 27.0,
+"opponent": "Laura Samson",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "8411",
+"player": "Lisa Pigato",
+"player_key": "lisa pigato",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T11:35Z",
+"games_won": 16.0,
+"match_total_games": 27.0,
+"opponent": "Darja Semenistaja",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"6769": [
+{
+"espn_athlete_id": "6769",
+"player": "Darja Semenistaja",
+"player_key": "darja semenistaja",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T11:35Z",
+"games_won": 11.0,
+"match_total_games": 27.0,
+"opponent": "Lisa Pigato",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"5937": [
+{
+"espn_athlete_id": "5937",
+"player": "Elvina Kalieva",
+"player_key": "elvina kalieva",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T14:25Z",
+"games_won": 17.0,
+"match_total_games": 26.0,
+"opponent": "Astrid Lew Yan Foon",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "5937",
+"player": "Elvina Kalieva",
+"player_key": "elvina kalieva",
+"tour": "WTA",
+"match_date_utc": "2026-04-10T09:10Z",
+"games_won": 5.0,
+"match_total_games": 17.0,
+"opponent": "Marina Bassols Ribera",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "5937",
+"player": "Elvina Kalieva",
+"player_key": "elvina kalieva",
+"tour": "WTA",
+"match_date_utc": "2026-04-09T09:10Z",
+"games_won": 13.0,
+"match_total_games": 20.0,
+"opponent": "Whitney Osuigwe",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "5937",
+"player": "Elvina Kalieva",
+"player_key": "elvina kalieva",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T12:25Z",
+"games_won": 16.0,
+"match_total_games": 30.0,
+"opponent": "Robin Montgomery",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"6723": [
+{
+"espn_athlete_id": "6723",
+"player": "Robin Montgomery",
+"player_key": "robin montgomery",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T12:25Z",
+"games_won": 14.0,
+"match_total_games": 30.0,
+"opponent": "Elvina Kalieva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"4291": [
+{
+"espn_athlete_id": "4291",
+"player": "Andrea Lazaro Garcia",
+"player_key": "andrea lazaro garcia",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T13:05Z",
+"games_won": 9.0,
+"match_total_games": 22.0,
+"opponent": "Elina Avanesyan",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3388": [
+{
+"espn_athlete_id": "3388",
+"player": "Simona Waltert",
+"player_key": "simona waltert",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T13:50Z",
+"games_won": 11.0,
+"match_total_games": 26.0,
+"opponent": "Whitney Osuigwe",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"3406": [
+{
+"espn_athlete_id": "3406",
+"player": "Whitney Osuigwe",
+"player_key": "whitney osuigwe",
+"tour": "WTA",
+"match_date_utc": "2026-04-09T09:10Z",
+"games_won": 7.0,
+"match_total_games": 20.0,
+"opponent": "Elvina Kalieva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "3406",
+"player": "Whitney Osuigwe",
+"player_key": "whitney osuigwe",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T13:50Z",
+"games_won": 15.0,
+"match_total_games": 26.0,
+"opponent": "Simona Waltert",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"17105": [
+{
+"espn_athlete_id": "17105",
+"player": "Carol Young Suh Lee",
+"player_key": "carol young suh lee",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T16:35Z",
+"games_won": 7.0,
+"match_total_games": 20.0,
+"opponent": "Oksana Selekhmeteva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "17105",
+"player": "Carol Young Suh Lee",
+"player_key": "carol young suh lee",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T14:55Z",
+"games_won": 14.0,
+"match_total_games": 25.0,
+"opponent": "Arantxa Rus",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"810": [
+{
+"espn_athlete_id": "810",
+"player": "Arantxa Rus",
+"player_key": "arantxa rus",
+"tour": "WTA",
+"match_date_utc": "2026-04-07T14:55Z",
+"games_won": 11.0,
+"match_total_games": 25.0,
+"opponent": "Carol Young Suh Lee",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"6571": [
+{
+"espn_athlete_id": "6571",
+"player": "Oksana Selekhmeteva",
+"player_key": "oksana selekhmeteva",
+"tour": "WTA",
+"match_date_utc": "2026-04-10T11:25Z",
+"games_won": 9.0,
+"match_total_games": 22.0,
+"opponent": "Polina Kudermetova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+},
+{
+"espn_athlete_id": "6571",
+"player": "Oksana Selekhmeteva",
+"player_key": "oksana selekhmeteva",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T16:35Z",
+"games_won": 13.0,
+"match_total_games": 20.0,
+"opponent": "Carol Young Suh Lee",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "6571",
+"player": "Oksana Selekhmeteva",
+"player_key": "oksana selekhmeteva",
+"tour": "WTA",
+"match_date_utc": "2026-04-08T13:35Z",
+"games_won": 17.0,
+"match_total_games": 33.0,
+"opponent": "Selena Janicijevic",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"8690": [
+{
+"espn_athlete_id": "8690",
+"player": "Marina Bassols Ribera",
+"player_key": "marina bassols ribera",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T13:15Z",
+"games_won": 12.0,
+"match_total_games": 19.0,
+"opponent": "Ane Mintegi Del Olmo",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "8690",
+"player": "Marina Bassols Ribera",
+"player_key": "marina bassols ribera",
+"tour": "WTA",
+"match_date_utc": "2026-04-10T09:10Z",
+"games_won": 12.0,
+"match_total_games": 17.0,
+"opponent": "Elvina Kalieva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+},
+{
+"espn_athlete_id": "8690",
+"player": "Marina Bassols Ribera",
+"player_key": "marina bassols ribera",
+"tour": "WTA",
+"match_date_utc": "2026-04-09T09:05Z",
+"games_won": 13.0,
+"match_total_games": 27.0,
+"opponent": "Yuan Yue",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2180": [
+{
+"espn_athlete_id": "2180",
+"player": "Kathinka von Deichmann",
+"player_key": "kathinka von deichmann",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T09:05Z",
+"games_won": 14.0,
+"match_total_games": 32.0,
+"opponent": "Oceane Dodin",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"14907": [
+{
+"espn_athlete_id": "14907",
+"player": "Julia Stusek",
+"player_key": "julia stusek",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T09:05Z",
+"games_won": 5.0,
+"match_total_games": 17.0,
+"opponent": "Aliaksandra Sasnovich",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"17826": [
+{
+"espn_athlete_id": "17826",
+"player": "Eva Bennemann",
+"player_key": "eva bennemann",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T10:40Z",
+"games_won": 9.0,
+"match_total_games": 22.0,
+"opponent": "Alycia Parks",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"328": [
+{
+"espn_athlete_id": "328",
+"player": "Vera Zvonareva",
+"player_key": "vera zvonareva",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T11:25Z",
+"games_won": 12.0,
+"match_total_games": 18.0,
+"opponent": "Victoria Jimenez Kasintseva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2027": [
+{
+"espn_athlete_id": "2027",
+"player": "Viktoriya Tomova",
+"player_key": "viktoriya tomova",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T14:00Z",
+"games_won": 12.0,
+"match_total_games": 17.0,
+"opponent": "Amandine Hesse",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"1272": [
+{
+"espn_athlete_id": "1272",
+"player": "Amandine Hesse",
+"player_key": "amandine hesse",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T14:00Z",
+"games_won": 5.0,
+"match_total_games": 17.0,
+"opponent": "Viktoriya Tomova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"17827": [
+{
+"espn_athlete_id": "17827",
+"player": "Victoria Pohle",
+"player_key": "victoria pohle",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T14:15Z",
+"games_won": 7.0,
+"match_total_games": 19.0,
+"opponent": "Zeynep Sonmez",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"5604": [
+{
+"espn_athlete_id": "5604",
+"player": "Zeynep Sonmez",
+"player_key": "zeynep sonmez",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T14:15Z",
+"games_won": 12.0,
+"match_total_games": 19.0,
+"opponent": "Victoria Pohle",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"13314": [
+{
+"espn_athlete_id": "13314",
+"player": "Gabriela Knutson",
+"player_key": "gabriela knutson",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T15:25Z",
+"games_won": 16.0,
+"match_total_games": 29.0,
+"opponent": "Carole Monnet",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"2692": [
+{
+"espn_athlete_id": "2692",
+"player": "Chloe Paquet",
+"player_key": "chloe paquet",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T08:10Z",
+"games_won": 12.0,
+"match_total_games": 13.0,
+"opponent": "Tiphanie Lemaitre",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"13746": [
+{
+"espn_athlete_id": "13746",
+"player": "Tiphanie Lemaitre",
+"player_key": "tiphanie lemaitre",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T08:10Z",
+"games_won": 1.0,
+"match_total_games": 13.0,
+"opponent": "Chloe Paquet",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3909": [
+{
+"espn_athlete_id": "3909",
+"player": "Jessica Pieri",
+"player_key": "jessica pieri",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T08:20Z",
+"games_won": 16.0,
+"match_total_games": 30.0,
+"opponent": "Oceane Babel",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"6147": [
+{
+"espn_athlete_id": "6147",
+"player": "Oceane Babel",
+"player_key": "oceane babel",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T08:20Z",
+"games_won": 14.0,
+"match_total_games": 30.0,
+"opponent": "Jessica Pieri",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"8198": [
+{
+"espn_athlete_id": "8198",
+"player": "Yara Bartashevich",
+"player_key": "yara bartashevich",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T09:20Z",
+"games_won": 6.0,
+"match_total_games": 19.0,
+"opponent": "Maria Timofeeva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"5252": [
+{
+"espn_athlete_id": "5252",
+"player": "Manon Leonard",
+"player_key": "manon leonard",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T11:20Z",
+"games_won": 9.0,
+"match_total_games": 21.0,
+"opponent": "Wang Xinyu",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"3387": [
+{
+"espn_athlete_id": "3387",
+"player": "Wang Xinyu",
+"player_key": "wang xinyu",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T11:20Z",
+"games_won": 12.0,
+"match_total_games": 21.0,
+"opponent": "Manon Leonard",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"14631": [
+{
+"espn_athlete_id": "14631",
+"player": "Diana Martynov",
+"player_key": "diana martynov",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T12:45Z",
+"games_won": 5.0,
+"match_total_games": 17.0,
+"opponent": "Iryna Shymanovich",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3330": [
+{
+"espn_athlete_id": "3330",
+"player": "Harmony Tan",
+"player_key": "harmony tan",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T13:05Z",
+"games_won": 12.0,
+"match_total_games": 15.0,
+"opponent": "Alice Robbe",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"4908": [
+{
+"espn_athlete_id": "4908",
+"player": "Alice Robbe",
+"player_key": "alice robbe",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T13:05Z",
+"games_won": 3.0,
+"match_total_games": 15.0,
+"opponent": "Harmony Tan",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"14632": [
+{
+"espn_athlete_id": "14632",
+"player": "Astrid Lew Yan Foon",
+"player_key": "astrid lew yan foon",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T14:25Z",
+"games_won": 9.0,
+"match_total_games": 26.0,
+"opponent": "Elvina Kalieva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 1.0
+}
+],
+"14080": [
+{
+"espn_athlete_id": "14080",
+"player": "Veronika Podrez",
+"player_key": "veronika podrez",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T16:00Z",
+"games_won": 12.0,
+"match_total_games": 15.0,
+"opponent": "Momoko Kobori",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"5109": [
+{
+"espn_athlete_id": "5109",
+"player": "Yasmine Mansouri",
+"player_key": "yasmine mansouri",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T16:45Z",
+"games_won": 1.0,
+"match_total_games": 13.0,
+"opponent": "Dominika Salkova",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+],
+"3845": [
+{
+"espn_athlete_id": "3845",
+"player": "Julie Belgraver",
+"player_key": "julie belgraver",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T17:00Z",
+"games_won": 13.0,
+"match_total_games": 21.0,
+"opponent": "Mariia Kozyreva",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 2.0
+}
+],
+"15341": [
+{
+"espn_athlete_id": "15341",
+"player": "Mariia Kozyreva",
+"player_key": "mariia kozyreva",
+"tour": "WTA",
+"match_date_utc": "2026-04-11T17:00Z",
+"games_won": 8.0,
+"match_total_games": 21.0,
+"opponent": "Julie Belgraver",
+"aces": 0.0,
+"double_faults": 0.0,
+"sets_won": 0.0
+}
+]
+}

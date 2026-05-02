@@ -53,7 +53,7 @@ Write-Host ""
 Write-Host "=== Re-tier NBA slate: $Date ===" -ForegroundColor Cyan
 Write-Host ""
 
-$Step1Out = Join-Path $Root "NBA\data\outputs\step1_pp_props_today.csv"
+$Step1Out = Join-Path $Root "Sports\NBA\data\outputs\step1_pp_props_today.csv"
 if ($Step1Archive) {
     if (-not (Test-Path -LiteralPath $Step1Archive)) {
         Write-Error "Step1Archive not found: $Step1Archive"
@@ -75,8 +75,8 @@ if ($SkipFetch) {
 
 & pwsh @argsPipe
 # run_pipeline.ps1 often ends with plain `exit` (code 0) even when the NBA block printed FAILED — verify outputs.
-$runFlag = Join-Path $Root "NBA\RUN_COMPLETE.flag"
-$step7   = Join-Path $Root "NBA\data\outputs\step7_ranked_props.xlsx"
+$runFlag = Join-Path $Root "Sports\NBA\RUN_COMPLETE.flag"
+$step7   = Join-Path $Root "Sports\NBA\data\outputs\step7_ranked_props.xlsx"
 if (-not (Test-Path -LiteralPath $runFlag) -or -not (Test-Path -LiteralPath $step7)) {
     Write-Error @"
 NBA pipeline did not complete successfully (missing RUN_COMPLETE.flag and/or step7_ranked_props.xlsx).
@@ -106,8 +106,8 @@ function Copy-FirstStep8 {
 }
 
 $nbaMain = Copy-FirstStep8 @(
-    (Join-Path $Root "NBA\data\outputs\step8_all_direction_clean.xlsx"),
-    (Join-Path $Root "NBA\step8_all_direction_clean.xlsx")
+    (Join-Path $Root "Sports\NBA\data\outputs\step8_all_direction_clean.xlsx"),
+    (Join-Path $Root "Sports\NBA\step8_all_direction_clean.xlsx")
 ) (Join-Path $OutDir "step8_nba_direction_clean_$Date.xlsx")
 
 if (-not $nbaMain) {
@@ -116,16 +116,16 @@ if (-not $nbaMain) {
 Write-Host "[OK] Dated NBA slate -> outputs\$Date\step8_nba_direction_clean_$Date.xlsx (from $(Split-Path $nbaMain -Leaf))" -ForegroundColor Green
 
 $h1 = Copy-FirstStep8 @(
-    (Join-Path $Root "NBA\step8_nba1h_direction_clean.xlsx"),
-    (Join-Path $Root "NBA\data\outputs\step8_nba1h_direction_clean.xlsx")
+    (Join-Path $Root "Sports\NBA\step8_nba1h_direction_clean.xlsx"),
+    (Join-Path $Root "Sports\NBA\data\outputs\step8_nba1h_direction_clean.xlsx")
 ) (Join-Path $OutDir "step8_nba1h_direction_clean_$Date.xlsx")
 if ($h1) {
     Write-Host "[OK] NBA1H snapshot -> step8_nba1h_direction_clean_$Date.xlsx" -ForegroundColor DarkGray
 }
 
 $q1 = Copy-FirstStep8 @(
-    (Join-Path $Root "NBA\step8_nba1q_direction_clean.xlsx"),
-    (Join-Path $Root "NBA\data\outputs\step8_nba1q_direction_clean.xlsx")
+    (Join-Path $Root "Sports\NBA\step8_nba1q_direction_clean.xlsx"),
+    (Join-Path $Root "Sports\NBA\data\outputs\step8_nba1q_direction_clean.xlsx")
 ) (Join-Path $OutDir "step8_nba1q_direction_clean_$Date.xlsx")
 if ($q1) {
     Write-Host "[OK] NBA1Q snapshot -> step8_nba1q_direction_clean_$Date.xlsx" -ForegroundColor DarkGray

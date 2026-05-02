@@ -50,7 +50,7 @@ def _proba_pos(model, X: pd.DataFrame) -> np.ndarray:
 
 
 def run_nba(df: pd.DataFrame, model, feats: list[str]) -> tuple[np.ndarray, np.ndarray]:
-    nba_scripts = ROOT / "NBA" / "scripts"
+    nba_scripts = ROOT / "Sports" / "NBA" / "scripts"
     if str(nba_scripts) not in sys.path:
         sys.path.insert(0, str(nba_scripts))
     import step7_rank_props as s7  # noqa: WPS433
@@ -66,7 +66,7 @@ def run_nba(df: pd.DataFrame, model, feats: list[str]) -> tuple[np.ndarray, np.n
 
 
 def run_nhl(df: pd.DataFrame, model, feats: list[str]) -> tuple[np.ndarray, np.ndarray]:
-    nhl_scripts = ROOT / "NHL" / "scripts"
+    nhl_scripts = ROOT / "Sports" / "NHL" / "scripts"
     if str(nhl_scripts) not in sys.path:
         sys.path.insert(0, str(nhl_scripts))
     import step7_rank_props_nhl as s7  # noqa: WPS433
@@ -83,7 +83,7 @@ def run_nhl(df: pd.DataFrame, model, feats: list[str]) -> tuple[np.ndarray, np.n
 
 
 def run_cbb(df: pd.DataFrame, model, feats: list[str]) -> tuple[np.ndarray, np.ndarray]:
-    cbb_p = ROOT / "CBB" / "scripts" / "pipeline"
+    cbb_p = ROOT / "Sports" / "CBB" / "scripts" / "pipeline"
     if str(cbb_p) not in sys.path:
         sys.path.insert(0, str(cbb_p))
     import step6_rank_props_cbb as s6  # noqa: WPS433
@@ -129,7 +129,7 @@ def run_cbb(df: pd.DataFrame, model, feats: list[str]) -> tuple[np.ndarray, np.n
 
 
 def run_soccer(df: pd.DataFrame, model, feats: list[str], n_teams: int) -> tuple[np.ndarray, np.ndarray]:
-    soc_scripts = ROOT / "Soccer" / "scripts"
+    soc_scripts = ROOT / "Sports" / "Soccer" / "scripts"
     if str(soc_scripts) not in sys.path:
         sys.path.insert(0, str(soc_scripts))
     import step7_rank_props_soccer as s7  # noqa: WPS433

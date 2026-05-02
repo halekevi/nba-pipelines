@@ -1,0 +1,13 @@
+team,days_rest,b2b_flag,home_away
+IND,1,False,AWAY
+LAL,0,True,AWAY
+WAS,99,False,UNKNOWN
+HOU,0,True,HOME
+BOS,0,True,AWAY
+BKN,99,False,UNKNOWN
+NYK,2,False,HOME
+GSW,0,True,HOME
+PHI,1,False,AWAY
+TOR,1,False,HOME
+MIA,1,False,AWAY
+CHI,1,False,AWAY

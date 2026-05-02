@@ -17,7 +17,7 @@ def _load_pp_api(*, env_impersonate: str | None) -> object:
     else:
         os.environ["PROPORACLE_CURL_IMPERSONATE"] = env_impersonate
     name = f"pp_api_test_{env_impersonate or 'default'}"
-    path = REPO_ROOT / "NBA" / "scripts" / "step1_fetch_prizepicks_api.py"
+    path = REPO_ROOT / "Sports" / "NBA" / "scripts" / "step1_fetch_prizepicks_api.py"
     spec = importlib.util.spec_from_file_location(name, path)
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)

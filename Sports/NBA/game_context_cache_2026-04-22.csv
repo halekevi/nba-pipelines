@@ -1,0 +1,7 @@
+team,opp_team,game_total,spread,implied_team_total,blowout_risk,low_total_flag,pace_tier,odds_source
+DET,ORL,218.5,-8.5,113.5,False,False,NORMAL,live
+DET/ORL,,218.5,-8.5,113.5,False,False,NORMAL,live
+ORL,DET,218.5,8.5,105.0,False,False,NORMAL,live
+OKC,PHX,215.5,-17.5,116.5,True,False,NORMAL,live
+OKC/PHX,,215.5,-17.5,116.5,True,False,NORMAL,live
+PHX,OKC,215.5,17.5,99.0,True,False,NORMAL,live

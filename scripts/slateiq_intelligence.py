@@ -25,8 +25,8 @@ import os
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-CACHE_PATH = str(REPO_ROOT / "NBA" / "data" / "cache" / "espn_boxscores_cache.csv")
-OUT_DIR = str(REPO_ROOT / "NBA" / "data" / "cache")
+CACHE_PATH = str(REPO_ROOT / "Sports" / "NBA" / "data" / "cache" / "espn_boxscores_cache.csv")
+OUT_DIR = str(REPO_ROOT / "Sports" / "NBA" / "data" / "cache")
 
 # Props we care about and their display names
 PROPS = {

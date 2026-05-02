@@ -11,7 +11,8 @@ param(
 
 $ErrorActionPreference = "Continue"
 $Root    = Split-Path -Parent $MyInvocation.MyCommand.Definition
-$WNBADir = "$Root\WNBA"
+$SportsRoot = Join-Path $Root "Sports"
+$WNBADir = Join-Path $SportsRoot "WNBA"
 $OutRoot = "$Root\outputs"
 
 if (-not $Date) { $Date = (Get-Date).AddDays(-1).ToString("yyyy-MM-dd") }

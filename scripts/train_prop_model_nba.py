@@ -142,7 +142,7 @@ def _collect_nba_graded_files() -> list[tuple[Path, bool]]:
         patterns = ("graded_nba1h*.xlsx",)
     else:
         patterns = ("graded_nba*.xlsx",)
-    for base in (ROOT / "outputs", ROOT / "NBA", ROOT / "NBA" / "outputs"):
+    for base in (ROOT / "outputs", ROOT / "Sports" / "NBA", ROOT / "Sports" / "NBA" / "outputs"):
         if not base.is_dir():
             continue
         for pat in patterns:

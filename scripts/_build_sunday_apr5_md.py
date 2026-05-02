@@ -48,12 +48,12 @@ def _pick_cross_game(
 
 def main() -> None:
     nba = pd.read_excel(
-        ROOT / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
+        ROOT / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
         sheet_name="ALL",
         engine="openpyxl",
     )
-    mlb = pd.read_excel(ROOT / "MLB" / "step8_mlb_direction_clean.xlsx", sheet_name="ALL", engine="openpyxl")
-    cbb = pd.read_excel(ROOT / "CBB" / "step6_ranked_cbb.xlsx", sheet_name="ALL", engine="openpyxl")
+    mlb = pd.read_excel(ROOT / "Sports" / "MLB" / "step8_mlb_direction_clean.xlsx", sheet_name="ALL", engine="openpyxl")
+    cbb = pd.read_excel(ROOT / "Sports" / "CBB" / "step6_ranked_cbb.xlsx", sheet_name="ALL", engine="openpyxl")
 
     def nba_gob():
         g = nba[

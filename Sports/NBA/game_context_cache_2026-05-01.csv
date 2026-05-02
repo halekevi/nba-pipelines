@@ -1,0 +1,10 @@
+team,opp_team,game_total,spread,implied_team_total,blowout_risk,low_total_flag,pace_tier,odds_source
+DET,ORL,209.5,-3.5,106.5,False,True,SLOW,live
+ORL/DET,,209.5,3.5,103.0,False,True,SLOW,live
+ORL,DET,209.5,3.5,103.0,False,True,SLOW,live
+TOR,CLE,218.5,3.5,107.5,False,False,NORMAL,live
+TOR/CLE,,218.5,3.5,107.5,False,False,NORMAL,live
+CLE,TOR,218.5,-3.5,111.0,False,False,NORMAL,live
+HOU,LAL,206.5,-3.5,105.0,False,True,SLOW,live
+LAL,HOU,206.5,3.5,101.5,False,True,SLOW,live
+HOU/LAL,,206.5,-3.5,105.0,False,True,SLOW,live

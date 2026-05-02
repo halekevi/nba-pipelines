@@ -89,20 +89,20 @@ def step8_path_for_sport(sport: str, date_str: str) -> Path | None:
     candidates: list[Path] = {
         "NBA": [
             od / f"step8_all_direction_clean_{date_str}.xlsx",
-            ROOT / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
+            ROOT / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
         ],
         "NHL": [
             od / f"step8_nhl_direction_clean_{date_str}.xlsx",
-            ROOT / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
+            ROOT / "Sports" / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
         ],
         "Soccer": [
             od / f"step8_soccer_direction_clean_{date_str}.xlsx",
-            ROOT / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
+            ROOT / "Sports" / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
         ],
         "MLB": [
             od / f"step8_mlb_direction_clean_{date_str}.xlsx",
-            ROOT / "MLB" / "step8_mlb_direction_clean.xlsx",
-            ROOT / "MLB" / "outputs" / "step8_mlb_direction_clean.xlsx",
+            ROOT / "Sports" / "MLB" / "step8_mlb_direction_clean.xlsx",
+            ROOT / "Sports" / "MLB" / "outputs" / "step8_mlb_direction_clean.xlsx",
         ],
     }.get(sport, [])
     for p in candidates:
@@ -113,10 +113,10 @@ def step8_path_for_sport(sport: str, date_str: str) -> Path | None:
 
 def step1_path_for_sport(sport: str) -> Path | None:
     p = {
-        "NBA": ROOT / "NBA" / "data" / "outputs" / "step1_pp_props_today.csv",
-        "NHL": ROOT / "NHL" / "outputs" / "step1_nhl_props.csv",
-        "Soccer": ROOT / "Soccer" / "outputs" / "step1_soccer_props.csv",
-        "MLB": ROOT / "MLB" / "step1_mlb_props.csv",
+        "NBA": ROOT / "Sports" / "NBA" / "data" / "outputs" / "step1_pp_props_today.csv",
+        "NHL": ROOT / "Sports" / "NHL" / "outputs" / "step1_nhl_props.csv",
+        "Soccer": ROOT / "Sports" / "Soccer" / "outputs" / "step1_soccer_props.csv",
+        "MLB": ROOT / "Sports" / "MLB" / "step1_mlb_props.csv",
     }.get(sport)
     return p if p and p.is_file() else None
 

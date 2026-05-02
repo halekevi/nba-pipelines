@@ -258,7 +258,7 @@ def _fetch_actuals_csv(
     id_cache_path: Path,
     update_id_cache: bool,
 ) -> Tuple[pd.DataFrame, Dict[str, str], int, int, int]:
-    mlb_scripts = REPO_ROOT / "MLB" / "scripts"
+    mlb_scripts = REPO_ROOT / "Sports" / "MLB" / "scripts"
     sys.path.insert(0, str(mlb_scripts))
     s2 = importlib.import_module("step2_attach_picktypes_mlb")
     s4 = importlib.import_module("step4_attach_player_stats_mlb")
@@ -424,7 +424,7 @@ def main() -> None:
     )
     ap.add_argument(
         "--id-cache",
-        default=str(REPO_ROOT / "MLB" / "mlb_id_cache.csv"),
+        default=str(REPO_ROOT / "Sports" / "MLB" / "mlb_id_cache.csv"),
         help="step2 ID cache (player_norm, mlb_player_id)",
     )
     ap.add_argument("--season", default="", help="Season year (default: year of --date)")
@@ -460,7 +460,7 @@ def main() -> None:
 
     slate_path = Path(args.slate) if args.slate else out_dir / f"step8_mlb_direction_clean_{d}.xlsx"
     if not slate_path.is_file():
-        fb = REPO_ROOT / "MLB" / "step8_mlb_direction_clean.xlsx"
+        fb = REPO_ROOT / "Sports" / "MLB" / "step8_mlb_direction_clean.xlsx"
         if fb.is_file():
             print(f"  Slate not at {slate_path}; using {fb}")
             slate_path = fb

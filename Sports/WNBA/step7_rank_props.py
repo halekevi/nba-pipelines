@@ -266,7 +266,7 @@ def main():
 
     df  = pd.read_csv(args.input, dtype=str, encoding="utf-8-sig").fillna("")
     out = df.copy()
-    REPO_ROOT = Path(__file__).resolve().parents[1]
+    REPO_ROOT = Path(__file__).resolve().parents[2]
     _sd_usage = str(REPO_ROOT / "scripts")
     if _sd_usage not in sys.path:
         sys.path.insert(0, _sd_usage)

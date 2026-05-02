@@ -34,7 +34,7 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 
 # Ensure repo root is on sys.path so top-level helpers import from any cwd.
-_PROPORACLE_ROOT = Path(__file__).resolve().parents[2]
+_PROPORACLE_ROOT = Path(__file__).resolve().parents[3]
 if str(_PROPORACLE_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROPORACLE_ROOT))
 

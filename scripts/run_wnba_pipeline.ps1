@@ -23,7 +23,8 @@ if ((Split-Path -Leaf $ScriptDir) -eq "scripts") {
 } else {
     $Root = $ScriptDir
 }
-$WNBADir = "$Root\WNBA"
+$SportsRoot = Join-Path $Root "Sports"
+$WNBADir = Join-Path $SportsRoot "WNBA"
 $OutRoot = "$Root\outputs"
 
 if (-not $Date) { $Date = Get-Date -Format "yyyy-MM-dd" }

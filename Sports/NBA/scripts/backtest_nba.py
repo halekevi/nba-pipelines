@@ -173,17 +173,17 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Backtest NBA ranked props against actuals.")
     ap.add_argument(
         "--slate",
-        default="NBA/data/outputs/step8_all_direction.csv",
+        default="data/outputs/step8_all_direction.csv",
         help="Path to ranked slate CSV (step8 recommended).",
     )
     ap.add_argument(
         "--actuals",
-        default="NBA/data/inputs/actuals_nba_2026-02-24.csv",
+        default="data/inputs/actuals_nba_2026-02-24.csv",
         help="Path to actuals CSV with columns: player, team, prop_type, actual",
     )
     ap.add_argument(
         "--out-dir",
-        default="NBA/data/outputs",
+        default="data/outputs",
         help="Directory where backtest outputs are saved.",
     )
     ap.add_argument(
@@ -210,7 +210,7 @@ def main() -> None:
         raise ValueError(f"Slate missing required columns: {missing_slate}")
     # Batch mode: run multiple actuals files against the same slate.
     if args.batch_actuals_glob:
-        root = Path(__file__).resolve().parents[2]
+        root = Path(__file__).resolve().parents[3]
         actuals_files = sorted(root.glob(args.batch_actuals_glob))
         if not actuals_files:
             raise FileNotFoundError(f"No files matched --batch-actuals-glob={args.batch_actuals_glob}")

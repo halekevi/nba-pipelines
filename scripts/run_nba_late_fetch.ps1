@@ -12,6 +12,7 @@ param(
 
 $ErrorActionPreference = "Continue"
 $Root = Split-Path $PSScriptRoot -Parent
+$SportsRoot = Join-Path $Root "Sports"
 Set-Location $Root
 
 $env:PYTHONUTF8 = "1"
@@ -62,7 +63,7 @@ function Get-CsvDataRowCount([string]$CsvPath) {
 
 # NBA — append so early fetch rows are preserved when the board fills in
 Write-Host "[LATE_FETCH] Fetching NBA props (append)..."
-$NBADir = Join-Path $Root "NBA"
+$NBADir = Join-Path $SportsRoot "NBA"
 # Gentler late-fetch anti-403 settings.
 $nbaArgs = @(
     "--league_id", "7",
@@ -90,7 +91,7 @@ if ($LASTEXITCODE -ne 0) {
 
 # NHL — append (semantic dedupe in script)
 Write-Host "[LATE_FETCH] Fetching NHL props (append)..."
-$NHLDir = Join-Path $Root "NHL"
+$NHLDir = Join-Path $SportsRoot "NHL"
 Push-Location $NHLDir
 try {
     & py -3.14 ".\scripts\step1_fetch_prizepicks_nhl.py" "--append" "--output" "outputs\step1_nhl_props.csv"
@@ -104,7 +105,7 @@ if ($LASTEXITCODE -ne 0) {
 
 # Soccer
 Write-Host "[LATE_FETCH] Fetching Soccer props (append)..."
-$SoccerDir = Join-Path $Root "Soccer"
+$SoccerDir = Join-Path $SportsRoot "Soccer"
 Push-Location $SoccerDir
 try {
     & py -3.14 ".\scripts\step1_fetch_prizepicks_soccer.py" "--append" "--output" "outputs\step1_soccer_props.csv"
@@ -132,7 +133,7 @@ try {
 
 # MLB - direct API first (avoids bot-check hangs), then Playwright fallback
 Write-Host "[LATE_FETCH] Fetching MLB props (append; direct API then Playwright if needed)..." -ForegroundColor Cyan
-$MLBDir = Join-Path $Root "MLB"
+$MLBDir = Join-Path $SportsRoot "MLB"
 Push-Location $MLBDir
 try {
     & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
@@ -175,7 +176,7 @@ if ($LASTEXITCODE -ne 0) {
 # $NFLActive = (Get-Date) -ge [DateTime]"2026-09-07"
 # if ($NFLActive) {
 #     Write-Host "[LATE_FETCH] Fetching NFL props (append)..."
-#     $NFLDir = Join-Path $Root "NFL"
+#     $NFLDir = Join-Path $SportsRoot "NFL"
 #     Push-Location $NFLDir
 #     try {
 #         & py -3.14 ".\scripts\step1_fetch_prizepicks_nfl.py" "--append" "--output" "data\outputs\step1_pp_props_today.csv"
@@ -206,11 +207,11 @@ if ($NoOverwrite) {
         (Join-Path $Root "ui_runner\templates\slate_eval_$today.html"),
         (Join-Path $Root "ui_runner\templates\ticket_eval_$today.html"),
         (Join-Path $Root "ui_runner\templates\graded_props_$today.json"),
-        (Join-Path $Root "NBA\step8_all_direction_clean.xlsx"),
-        (Join-Path $Root "Soccer\step8_soccer_direction_clean.xlsx"),
-        (Join-Path $Root "MLB\data\outputs\step8_mlb_direction_clean.xlsx"),
-        (Join-Path $Root "MLB\step8_mlb_direction_clean.xlsx"),
-        (Join-Path $Root "Tennis\step8_tennis_direction_clean.xlsx")
+        (Join-Path $Root "Sports\NBA\step8_all_direction_clean.xlsx"),
+        (Join-Path $Root "Sports\Soccer\step8_soccer_direction_clean.xlsx"),
+        (Join-Path $Root "Sports\MLB\data\outputs\step8_mlb_direction_clean.xlsx"),
+        (Join-Path $Root "Sports\MLB\step8_mlb_direction_clean.xlsx"),
+        (Join-Path $Root "Sports\Tennis\step8_tennis_direction_clean.xlsx")
     )
     foreach ($pt in $preserveTargets) {
         Preserve-ExistingFile -Path $pt -Reason "pre-LATE_FETCH pipeline snapshot"

@@ -19,7 +19,7 @@ from pathlib import Path
 import pandas as pd
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DB_PATH = REPO_ROOT / "NBA" / "data" / "cache" / "proporacle_ref.db"
+DB_PATH = REPO_ROOT / "Sports" / "NBA" / "data" / "cache" / "proporacle_ref.db"
 ACTUALS_GLOBS = (
     "actuals_nba1q_*.csv",
     "actuals_nba2q_*.csv",

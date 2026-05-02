@@ -14,6 +14,8 @@ $ScriptPath = $MyInvocation.MyCommand.Path
 if (-not $ScriptPath) { $ScriptPath = $PSCommandPath }
 $ScriptDir = Split-Path -Parent $ScriptPath
 $Root = Split-Path -Parent $ScriptDir
+$SportsRoot = Join-Path $Root "Sports"
+$WNBADir = Join-Path $SportsRoot "WNBA"
 
 $ChromePath = "C:\Program Files\Google\Chrome\Application\chrome.exe"
 $DebugUrl = "http://127.0.0.1:$Port"
@@ -56,4 +58,4 @@ if ($exitCode -ne 0) {
     exit $exitCode
 }
 
-Write-Host "[WNBA] Done. Default output is WNBA/step1_wnba_props.csv (pipeline uses WNBA/data/outputs/step1_wnba_props.csv)." -ForegroundColor Green
+Write-Host "[WNBA] Done. Default output is Sports/WNBA/step1_wnba_props.csv (pipeline uses Sports/WNBA/data/outputs/step1_wnba_props.csv)." -ForegroundColor Green

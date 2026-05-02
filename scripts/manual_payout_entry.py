@@ -72,8 +72,8 @@ def is_combo_player_or_prop(player: Any, prop: Any) -> bool:
 def find_nba_step8_excel() -> Path:
     candidates: list[Path] = []
     for sub in (
-        ROOT / "NBA" / "outputs",
-        ROOT / "NBA" / "data" / "outputs",
+        ROOT / "Sports" / "NBA" / "outputs",
+        ROOT / "Sports" / "NBA" / "data" / "outputs",
     ):
         if not sub.is_dir():
             continue

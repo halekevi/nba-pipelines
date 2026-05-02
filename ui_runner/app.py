@@ -97,11 +97,11 @@ PAYOUT_TICKET_LEGS_PATH = UI_DIR / "data" / "payout_ticket_legs.csv"
 PAYOUT_LADDER_EXAMPLES_PATH = UI_DIR / "data" / "payout_ladder_examples.json"
 
 # Pipeline output paths (used by status + slate endpoints)
-NBA_DIR       = BASE_DIR / "NBA"
-CBB_DIR       = BASE_DIR / "CBB"
-NHL_DIR       = BASE_DIR / "NHL"
-SOCCER_DIR    = BASE_DIR / "Soccer"
-MLB_DIR       = BASE_DIR / "MLB"
+NBA_DIR       = BASE_DIR / "Sports" / "NBA"
+CBB_DIR       = BASE_DIR / "Sports" / "CBB"
+NHL_DIR       = BASE_DIR / "Sports" / "NHL"
+SOCCER_DIR    = BASE_DIR / "Sports" / "Soccer"
+MLB_DIR       = BASE_DIR / "Sports" / "MLB"
 NBA_FLAG      = NBA_DIR / "RUN_COMPLETE.flag"
 # ALL sheet includes Standard Line (standard_line) from step8 export — use |Standard Line − Line| for goblin delta / payout ladder keys.
 NBA_SLATE     = NBA_DIR / "step8_all_direction_clean.xlsx"
@@ -119,12 +119,12 @@ SOCCER_SLATE  = SOCCER_DIR / "step8_soccer_direction_clean.xlsx"
 SOCCER_TICKETS= SOCCER_DIR / "soccer_best_tickets.xlsx"
 MLB_SLATE     = MLB_DIR / "step8_mlb_direction_clean.xlsx"
 MLB_TICKETS   = MLB_DIR / "mlb_best_tickets.xlsx"
-TENNIS_DIR    = BASE_DIR / "Tennis"
+TENNIS_DIR    = BASE_DIR / "Sports" / "Tennis"
 # Same pattern as Soccer/MLB: run_daily.ps1 copies outputs → sport root for Railway.
 TENNIS_SLATE  = TENNIS_DIR / "step8_tennis_direction_clean.xlsx"
-WNBA_DIR      = BASE_DIR / "WNBA"
+WNBA_DIR      = BASE_DIR / "Sports" / "WNBA"
 WNBA_SLATE    = WNBA_DIR / "step8_wnba_direction.xlsx"
-NFL_DIR       = BASE_DIR / "NFL"
+NFL_DIR       = BASE_DIR / "Sports" / "NFL"
 # NFL step8 target: same convention as NHL — sport folder + outputs/ (not repo-root outputs/).
 # Pipeline should write: NFL/outputs/step8_nfl_direction_clean.xlsx
 NFL_SLATE     = NFL_DIR / "outputs" / "step8_nfl_direction_clean.xlsx"

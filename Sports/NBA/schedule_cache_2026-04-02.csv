@@ -1,0 +1,10 @@
+team,days_rest,b2b_flag,home_away
+DET,0,True,HOME
+POR,0,True,HOME
+OKC,1,False,HOME
+LAL,0,True,AWAY
+PHX,1,False,AWAY
+CHA,1,False,HOME
+MIN,1,False,AWAY
+CLE,0,True,AWAY
+NOP,3,False,AWAY

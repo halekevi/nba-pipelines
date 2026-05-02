@@ -1,0 +1,9 @@
+team,opp_team,game_total,spread,implied_team_total,blowout_risk,low_total_flag,pace_tier,odds_source
+MIA,WAS,249.5,-16.5,133.0,True,False,FAST,live
+MIA/WAS,,249.5,-16.5,133.0,True,False,FAST,live
+WAS,MIA,249.5,16.5,116.5,True,False,FAST,live
+DEN,SAS,242.5,2.5,120.0,False,False,FAST,live
+SAS,DEN,242.5,-2.5,122.5,False,False,FAST,live
+DEN/SAS,,242.5,2.5,120.0,False,False,FAST,live
+PHI,DET,227.5,1.5,113.0,False,False,NORMAL,live
+DET,PHI,227.5,-1.5,114.5,False,False,NORMAL,live

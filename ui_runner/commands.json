@@ -3,7 +3,7 @@
   "pipelines": {
     "nba": {
       "label": "NBA Pipeline",
-      "workdir": "NBA",
+      "workdir": "Sports/NBA",
       "commands": [
         {
           "id": "nba_step1",
@@ -212,7 +212,7 @@
     },
     "cbb": {
       "label": "CBB Pipeline",
-      "workdir": "CBB",
+      "workdir": "Sports/CBB",
       "commands": [
         {
           "id": "cbb_step1",
@@ -351,13 +351,13 @@
             "-3.14",
             ".\\scripts\\combined_slate_tickets.py",
             "--nba",
-            "NBA\\step8_all_direction_clean.xlsx",
+            "Sports\NBA\\step8_all_direction_clean.xlsx",
             "--cbb",
             "CBB2\\step6_ranked_cbb.xlsx",
             "--nhl",
-            "NHL\\outputs\\step8_nhl_direction_clean.xlsx",
+            "Sports\NHL\\outputs\\step8_nhl_direction_clean.xlsx",
             "--soccer",
-            "Soccer\\outputs\\step8_soccer_direction_clean.xlsx",
+            "Sports\Soccer\\outputs\\step8_soccer_direction_clean.xlsx",
             "--date",
             "{TODAY}",
             "--output",
@@ -507,7 +507,7 @@
     },
     "nhl": {
       "label": "NHL Pipeline",
-      "workdir": "NHL",
+      "workdir": "Sports/NHL",
       "commands": [
         {
           "id": "nhl_step1",
@@ -675,7 +675,7 @@
     },
     "mlb": {
       "label": "MLB Pipeline",
-      "workdir": "MLB",
+      "workdir": "Sports/MLB",
       "commands": [
         {
           "id": "mlb_step1",
@@ -829,7 +829,7 @@
     },
     "wcbb": {
       "label": "WCBB Pipeline",
-      "workdir": "CBB",
+      "workdir": "Sports/CBB",
       "commands": [
         {
           "id": "wcbb_step1",
@@ -962,7 +962,7 @@
     },
     "nba1h": {
       "label": "NBA 1H Pipeline",
-      "workdir": "NBA",
+      "workdir": "Sports/NBA",
       "commands": [
         {
           "id": "nba1h_step1",
@@ -1123,7 +1123,7 @@
     },
     "nba1q": {
       "label": "NBA 1Q Pipeline",
-      "workdir": "NBA",
+      "workdir": "Sports/NBA",
       "commands": [
         {
           "id": "nba1q_step1",
@@ -1284,7 +1284,7 @@
     },
     "soccer": {
       "label": "Soccer Pipeline",
-      "workdir": "Soccer",
+      "workdir": "Sports/Soccer",
       "commands": [
         {
           "id": "soccer_step1",
@@ -1463,7 +1463,7 @@
     },
     "wnba": {
       "label": "WNBA Pipeline",
-      "workdir": "WNBA",
+      "workdir": "Sports/WNBA",
       "commands": [
         {
           "id": "wnba_step1",

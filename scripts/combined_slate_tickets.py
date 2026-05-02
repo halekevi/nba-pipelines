@@ -112,16 +112,16 @@ _TICKET_MODEL = None
 _TICKET_MODEL_BUCKETS: dict[str, Any] = {}
 _TICKET_MODEL_FEATURES: list[str] = []
 
-DEFAULT_NBA_PATH = os.path.join(REPO_ROOT, "NBA", "data", "outputs", "step8_all_direction_clean.xlsx")
-DEFAULT_CBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_cbb.xlsx")
-DEFAULT_NBA1H_PATH = os.path.join(REPO_ROOT, "NBA", "step8_nba1h_direction_clean.xlsx")
-DEFAULT_NBA1Q_PATH = os.path.join(REPO_ROOT, "NBA", "step8_nba1q_direction_clean.xlsx")
-DEFAULT_WCBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_wcbb.xlsx")
-DEFAULT_MLB_PATH = os.path.join(REPO_ROOT, "MLB", "step8_mlb_direction_clean.xlsx")
-DEFAULT_NFL_PATH = os.path.join(REPO_ROOT, "NFL", "outputs", "step8_nfl_direction_clean.xlsx")
+DEFAULT_NBA_PATH = os.path.join(REPO_ROOT, "Sports", "NBA", "data", "outputs", "step8_all_direction_clean.xlsx")
+DEFAULT_CBB_PATH = os.path.join(REPO_ROOT, "Sports", "CBB", "step6_ranked_cbb.xlsx")
+DEFAULT_NBA1H_PATH = os.path.join(REPO_ROOT, "Sports", "NBA", "step8_nba1h_direction_clean.xlsx")
+DEFAULT_NBA1Q_PATH = os.path.join(REPO_ROOT, "Sports", "NBA", "step8_nba1q_direction_clean.xlsx")
+DEFAULT_WCBB_PATH = os.path.join(REPO_ROOT, "Sports", "CBB", "step6_ranked_wcbb.xlsx")
+DEFAULT_MLB_PATH = os.path.join(REPO_ROOT, "Sports", "MLB", "step8_mlb_direction_clean.xlsx")
+DEFAULT_NFL_PATH = os.path.join(REPO_ROOT, "Sports", "NFL", "outputs", "step8_nfl_direction_clean.xlsx")
 DISABLED_SPORTS: set[str] = set()
-_soccer_root = os.path.join(REPO_ROOT, "Soccer", "step8_soccer_direction_clean.xlsx")
-_soccer_outputs = os.path.join(REPO_ROOT, "Soccer", "outputs", "step8_soccer_direction_clean.xlsx")
+_soccer_root = os.path.join(REPO_ROOT, "Sports", "Soccer", "step8_soccer_direction_clean.xlsx")
+_soccer_outputs = os.path.join(REPO_ROOT, "Sports", "Soccer", "outputs", "step8_soccer_direction_clean.xlsx")
 if os.path.exists(_soccer_root) and os.path.exists(_soccer_outputs):
     DEFAULT_SOCCER_PATH = (
         _soccer_root
@@ -134,9 +134,9 @@ elif os.path.exists(_soccer_outputs):
     DEFAULT_SOCCER_PATH = _soccer_outputs
 else:
     DEFAULT_SOCCER_PATH = _soccer_root
-DEFAULT_TENNIS_PATH = os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis_direction_clean.xlsx")
-DEFAULT_WNBA_PATH = os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction.xlsx")
-DEFAULT_NHL_PATH = os.path.join(REPO_ROOT, "NHL", "outputs", "step8_nhl_direction_clean.xlsx")
+DEFAULT_TENNIS_PATH = os.path.join(REPO_ROOT, "Sports", "Tennis", "outputs", "step8_tennis_direction_clean.xlsx")
+DEFAULT_WNBA_PATH = os.path.join(REPO_ROOT, "Sports", "WNBA", "step8_wnba_direction.xlsx")
+DEFAULT_NHL_PATH = os.path.join(REPO_ROOT, "Sports", "NHL", "outputs", "step8_nhl_direction_clean.xlsx")
 DEFAULT_WEB_OUTDIR = os.path.join(REPO_ROOT, "ui_runner", "templates")
 DIVERSITY_CONFIG_PATH = os.path.join(REPO_ROOT, "config", "diversity_config.json")
 PROP_RELIABILITY_LATEST_PATH = os.path.join(REPO_ROOT, "data", "reports", "prop_reliability_latest.json")
