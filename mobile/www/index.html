@@ -1964,7 +1964,7 @@ body::before{
       <div class="sec-line"></div>
       <a href="tickets.html" class="edges-see-all">See All Picks ↗</a>
     </div>
-    <p class="edge-source-note">Pulled from ticket legs in the latest slip JSON. Cards show model <strong>hit %</strong> (not the same as L5 vs line). Within each group, picks are ordered by <strong>edge</strong> (highest first).</p>
+    <p class="edge-source-note">Pulled from the <strong>Full Slate</strong> (same source as Slate Explorer <strong>Combined</strong>: combined workbook when present, otherwise merged <code>slate_latest.json</code>). If those are unavailable, falls back to deduped legs from <code>tickets_latest.json</code> or bundled <code>slate_latest.json</code>. Cards use pipeline <strong>L5/L10</strong> when present; <strong>hit %</strong> fills gaps. Ordered by <strong>edge</strong> (highest first).</p>
     <div id="top-edges-debug-tag" class="edge-source-note" style="font-size:10px;opacity:.9;margin-top:-8px;margin-bottom:10px;">Build debug: loading...</div>
 
     <div class="sub-header" style="color:var(--green);">
@@ -2047,6 +2047,7 @@ body::before{
 let ALL_SLATE = [];
 const PLAYER_DATA = {};
 let SLATE_DEBUG_META = { source: "", generated_at: "", date: "" };
+let SLATE_CARDS_POPULATED = false;
 
 function playerSeriesKey(name, line, prop="", sport="") {
   const n = String(name || "").trim().toLowerCase();
@@ -2237,58 +2238,214 @@ function getUnderStreakSeries(p, n, hits) {
   });
 }
 
+function seedPlayerDataFromCardPicks(picks) {
+  for (const p of picks || []) {
+    if (!p || !p.player) continue;
+    const lineNum = Number(p.line);
+    const spread = (Number.isFinite(lineNum) ? lineNum : 0) * 0.35;
+    const avgRaw = p.l5_avg ?? p.season_avg ?? p.line;
+    const avgN = Number(avgRaw);
+    const avg = Number.isFinite(avgN) ? avgN : (Number.isFinite(lineNum) ? lineNum : 0);
+    const pk = playerSeriesKey(p.player, p.line, p.prop, p.sport);
+    if (PLAYER_DATA[pk]) continue;
+    let s = 0;
+    for (const c of p.player) s = (s * 31 + c.charCodeAt(0)) % 1000;
+    PLAYER_DATA[pk] = Array.from({length: 10}, (_, i) => {
+      s = (s * 9301 + 49297) % 233280;
+      return Math.max(0, Math.round((avg + ((s / 233280) - 0.5) * spread * 2) * 4) / 4);
+    });
+  }
+}
+
+function mergePlayerDataFromTicketLegs(picks) {
+  for (const p of picks || []) {
+    if (!p || !p.player) continue;
+    const prop = p.prop || p.prop_type || "";
+    const pk = playerSeriesKey(p.player, p.line, prop, p.sport);
+    if (PLAYER_DATA[pk]) continue;
+    const lineNum = Number(p.line);
+    const spread = (Number.isFinite(lineNum) ? lineNum : 0) * 0.35;
+    const avgRaw = p.l5_avg ?? p.season_avg ?? p.line;
+    const avgN = Number(avgRaw);
+    const avg = Number.isFinite(avgN) ? avgN : (Number.isFinite(lineNum) ? lineNum : 0);
+    let s = 0;
+    for (const c of p.player) s = (s * 31 + c.charCodeAt(0)) % 1000;
+    PLAYER_DATA[pk] = Array.from({length: 10}, (_, i) => {
+      s = (s * 9301 + 49297) % 233280;
+      return Math.max(0, Math.round((avg + ((s / 233280) - 0.5) * spread * 2) * 4) / 4);
+    });
+  }
+}
+
+function picksFromSlateLatestJson(data) {
+  if (!data || typeof data !== "object") {
+    return { picks: [], date: "", generated_at: "", source: "slate_latest" };
+  }
+  const sports = data.sports || {};
+  const picks = [];
+  const seen = new Set();
+  for (const rawKey of Object.keys(sports)) {
+    const rows = sports[rawKey];
+    if (!Array.isArray(rows)) continue;
+    const sportLabel = String(rawKey).trim().toUpperCase();
+    for (const row of rows) {
+      if (!row || typeof row !== "object") continue;
+      const player = row.player || "";
+      const prop = row.prop || row.prop_type || "";
+      const dirv = String(row.dir || row.direction || "OVER").trim().toUpperCase() || "OVER";
+      const line = row.line;
+      const key = `${player}|${prop}|${dirv}|${line}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      let l5_under = row.l5_under;
+      if (l5_under == null && row.l5_over != null) {
+        const ho = streakHits(row.l5_over, 5);
+        if (ho != null) l5_under = 5 - ho;
+      }
+      let l10_under = row.l10_under;
+      if (l10_under == null && row.l10_over != null) {
+        const ho = streakHits(row.l10_over, 10);
+        if (ho != null) l10_under = 10 - ho;
+      }
+      let hr = Number(row.hit_rate != null ? row.hit_rate : 0);
+      if (!Number.isFinite(hr)) hr = 0;
+      let edge = Number(row.edge != null ? row.edge : 0);
+      if (!Number.isFinite(edge)) edge = 0;
+      const hitPct = hr <= 1 ? Math.round(hr * 100) : Math.round(hr);
+      picks.push({
+        sport: sportLabel,
+        initials: row.initials || "",
+        player,
+        prop,
+        line,
+        pick: row.pick_type || "Standard",
+        dir: dirv,
+        hit: hitPct,
+        edge,
+        l5_over: row.l5_over,
+        l5_under,
+        l10_over: row.l10_over,
+        l10_under,
+        l5_avg: row.l5_avg,
+        season_avg: row.season_avg || row.szn_avg,
+        actual_series: row.actual_series,
+        line_series: row.line_series,
+      });
+    }
+  }
+  picks.sort((a, b) => Math.abs(Number(b.edge) || 0) - Math.abs(Number(a.edge) || 0));
+  const cap = 2500;
+  const capped = picks.length > cap ? picks.slice(0, cap) : picks;
+  return {
+    picks: capped,
+    date: String(data.date || ""),
+    generated_at: String(data.generated_at || ""),
+    source: "slate_latest",
+  };
+}
+
+async function loadHomeCardsFromFullSlate() {
+  try {
+    const fetchOpts = { cache: "no-store" };
+    if (typeof AbortSignal !== "undefined" && AbortSignal.timeout) {
+      fetchOpts.signal = AbortSignal.timeout(120000);
+    }
+    const r = await fetch("/api/slate-excel", fetchOpts);
+    if (r.ok) {
+      const d = await r.json();
+      const sh = d.sheets && d.sheets.combined;
+      if (sh && sh.columns && sh.rows && sh.rows.length) {
+        SLATE_DEBUG_META = {
+          source: "combined_excel",
+          generated_at: "",
+          date: String(d.date || ""),
+        };
+        if (syncCardsFromCombinedSheet(sh.columns, sh.rows)) return;
+      }
+    }
+    const r2 = await fetch("/api/slate-sport/combined", fetchOpts);
+    if (r2.ok) {
+      const d2 = await r2.json();
+      const rows = Array.isArray(d2.rows) ? d2.rows : [];
+      if (rows.length) {
+        SLATE_DEBUG_META = {
+          source: "slate_latest_combined",
+          generated_at: String(d2.generated_at || ""),
+          date: String(d2.date || ""),
+        };
+        if (syncCardsFromCombinedRows(rows)) return;
+      }
+    }
+  } catch (e) {
+    console.warn("loadHomeCardsFromFullSlate:", e);
+  }
+}
+
 async function loadSlateData() {
   if (slateDataPromise) return slateDataPromise;
   slateDataPromise = (async () => {
+    await loadHomeCardsFromFullSlate();
     const applySlatePayload = (d) => {
-      SLATE_DEBUG_META = {
+      const ticketMeta = {
         source: String(d?.source || ""),
         generated_at: String(d?.generated_at || ""),
-        date: String(d?.date || "")
+        date: String(d?.date || ""),
       };
-      ALL_SLATE = (d.picks || []).map(p => ({
-        sport: p.sport, initials: p.initials, player: p.player,
-        prop: p.prop, line: p.line, pick: p.pick,
-        dir: p.dir, hit: p.hit, edge: p.edge,
-        l5_over: p.l5_over,
-        l5_under: p.l5_under != null ? p.l5_under : resolvedUnderHits(p, 5),
-        l10_over: p.l10_over,
-        l10_under: p.l10_under != null ? p.l10_under : resolvedUnderHits(p, 10),
-        l5_avg: p.l5_avg, season_avg: p.season_avg,
-        actual_series: p.actual_series,
-        line_series: p.line_series,
-      }));
-      for (const p of (d.picks || [])) {
-        if (p.player) {
-          const avg = p.l5_avg ?? p.season_avg ?? p.line;
-          const spread = p.line * 0.35;
-          const pk = playerSeriesKey(p.player, p.line, p.prop, p.sport);
-          if (PLAYER_DATA[pk]) continue;
-          let s = 0;
-          for (let c of p.player) s = (s * 31 + c.charCodeAt(0)) % 1000;
-          PLAYER_DATA[pk] = Array.from({length: 10}, (_, i) => {
-            s = (s * 9301 + 49297) % 233280;
-            return Math.max(0, Math.round((avg + ((s / 233280) - 0.5) * spread * 2) * 4) / 4);
-          });
+      if (!SLATE_CARDS_POPULATED) {
+        SLATE_DEBUG_META = ticketMeta;
+        ALL_SLATE = (d.picks || []).map(p => ({
+          sport: p.sport, initials: p.initials, player: p.player,
+          prop: p.prop, line: p.line, pick: p.pick,
+          dir: p.dir, hit: p.hit, edge: p.edge,
+          l5_over: p.l5_over,
+          l5_under: p.l5_under != null ? p.l5_under : resolvedUnderHits(p, 5),
+          l10_over: p.l10_over,
+          l10_under: p.l10_under != null ? p.l10_under : resolvedUnderHits(p, 10),
+          l5_avg: p.l5_avg, season_avg: p.season_avg,
+          actual_series: p.actual_series,
+          line_series: p.line_series,
+        }));
+        for (const p of (d.picks || [])) {
+          if (p.player) {
+            const avg = p.l5_avg ?? p.season_avg ?? p.line;
+            const spread = p.line * 0.35;
+            const pk = playerSeriesKey(p.player, p.line, p.prop, p.sport);
+            if (PLAYER_DATA[pk]) continue;
+            let s = 0;
+            for (let c of p.player) s = (s * 31 + c.charCodeAt(0)) % 1000;
+            PLAYER_DATA[pk] = Array.from({length: 10}, (_, i) => {
+              s = (s * 9301 + 49297) % 233280;
+              return Math.max(0, Math.round((avg + ((s / 233280) - 0.5) * spread * 2) * 4) / 4);
+            });
+          }
         }
+      } else {
+        if (!SLATE_DEBUG_META.date && ticketMeta.date) SLATE_DEBUG_META.date = ticketMeta.date;
+        mergePlayerDataFromTicketLegs(d.picks || []);
       }
     };
     try {
-      const res = await fetch('slate_latest.json', {cache: 'no-store'});
+      const fetchOpts = { cache: "no-store" };
+      if (typeof AbortSignal !== "undefined" && AbortSignal.timeout) {
+        fetchOpts.signal = AbortSignal.timeout(120000);
+      }
+      const res = await fetch("/api/slate", fetchOpts);
       if (!res.ok) throw new Error("HTTP " + res.status);
       const d = await res.json();
       applySlatePayload(d);
     } catch (err) {
       console.warn("loadSlateData failed:", err);
-      try {
-        // Bundled mobile fallback: use local static slate payload when API endpoints are unavailable.
-        const fb = await fetch("slate_latest.json", { cache: "no-store" });
-        if (fb.ok) {
-          const d = await fb.json();
-          applySlatePayload(d);
+      if (!SLATE_CARDS_POPULATED) {
+        try {
+          const fb = await fetch("slate_latest.json", { cache: "no-store" });
+          if (fb.ok) {
+            const raw = await fb.json();
+            const d = Array.isArray(raw.picks) ? raw : picksFromSlateLatestJson(raw);
+            applySlatePayload(d);
+          }
+        } catch (fbErr) {
+          console.warn("loadSlateData fallback failed:", fbErr);
         }
-      } catch (fbErr) {
-        console.warn("loadSlateData fallback failed:", fbErr);
       }
     }
     if (typeof window.applyHeroSlateDate === "function") {
@@ -2808,7 +2965,7 @@ function renderTopEdgesDebugTag() {
   const seriesLen = Array.isArray(austin?.actual_series) ? austin.actual_series.length : 0;
   const src = SLATE_DEBUG_META.source || "unknown";
   const dt = SLATE_DEBUG_META.date || "n/a";
-  el.textContent = `Build debug: src=${src} date=${dt} AustinStdOverLine=${line} actual_series_len=${seriesLen}`;
+  el.textContent = `Build debug: src=${src} date=${dt} n=${ALL_SLATE.length} AustinStdOverLine=${line} actual_series_len=${seriesLen}`;
 }
 
 // ── Streak card (shared for L5 and L10) ───────────────────
@@ -3084,7 +3241,7 @@ function _v(row, keys) {
 }
 
 function syncCardsFromCombinedRows(rows) {
-  if (!Array.isArray(rows) || !rows.length) return;
+  if (!Array.isArray(rows) || !rows.length) return false;
   const mapped = rows.map((r) => ({
     sport: _v(r, ["sport", "Sport"]),
     initials: _v(r, ["initials", "Initials"]),
@@ -3104,14 +3261,17 @@ function syncCardsFromCombinedRows(rows) {
     actual_series: _v(r, ["actual_series", "Actual Series"]),
     line_series: _v(r, ["line_series", "Line Series"]),
   })).filter((p) => p.player && p.prop && Number.isFinite(p.edge));
-  if (!mapped.length) return;
+  if (!mapped.length) return false;
   ALL_SLATE = mapped;
+  SLATE_CARDS_POPULATED = true;
+  seedPlayerDataFromCardPicks(mapped);
   renderEdges();
   renderStreaks();
+  return true;
 }
 
 function syncCardsFromCombinedSheet(columns, rows) {
-  if (!Array.isArray(columns) || !Array.isArray(rows) || !rows.length) return;
+  if (!Array.isArray(columns) || !Array.isArray(rows) || !rows.length) return false;
   const ci = (name) => columns.indexOf(name);
   const idx = {
     sport: ci("Sport"),
@@ -3152,10 +3312,13 @@ function syncCardsFromCombinedSheet(columns, rows) {
     actual_series: get(r, idx.actual_series),
     line_series: get(r, idx.line_series),
   })).filter((p) => p.player && p.prop && Number.isFinite(p.edge));
-  if (!mapped.length) return;
+  if (!mapped.length) return false;
   ALL_SLATE = mapped;
+  SLATE_CARDS_POPULATED = true;
+  seedPlayerDataFromCardPicks(mapped);
   renderEdges();
   renderStreaks();
+  return true;
 }
 
 async function fetchSlateSport(sport, opts = {}) {
@@ -3168,13 +3331,13 @@ async function fetchSlateSport(sport, opts = {}) {
   SLATE_SPORT_FETCH_PROMISES[sport] = (async () => {
     await loadSlateData();
     let rows = [];
-  try {
+    try {
       const res = await fetch(`slate_sport_${encodeURIComponent(sport)}.json`, {cache: 'no-store'});
-    if (res.ok) {
-      const d = await res.json();
+      if (res.ok) {
+        const d = await res.json();
         rows = Array.isArray(d.rows) ? d.rows : [];
-    }
-    } catch(e) {
+      }
+    } catch (e) {
       console.warn(`slate-sport/${sport} failed, using tickets fallback:`, e);
     }
     if (!rows.length) rows = _fallbackSlateRowsFromTickets(sport);
