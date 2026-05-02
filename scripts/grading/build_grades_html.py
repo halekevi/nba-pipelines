@@ -448,6 +448,152 @@ def over_under_lines_html(sub_rows: list[dict]) -> str:
     )
 
 
+def _norm_pick_type_matrix(v: object) -> str | None:
+    s = str(v or "").strip().lower()
+    if "goblin" in s:
+        return "Goblin"
+    if "demon" in s:
+        return "Demon"
+    if "standard" in s:
+        return "Standard"
+    return None
+
+
+def build_pick_tier_direction_agg(rows: list[dict]) -> dict[tuple[str, str, str], dict[str, int]]:
+    """
+    Accumulate decided / hits / misses per (pick type, tier A-D, direction).
+    Goblin/Demon: OVER only; Standard: OVER + UNDER.
+    """
+    agg: dict[tuple[str, str, str], dict[str, int]] = {}
+    for r in rows:
+        pt = _norm_pick_type_matrix(r.get("Pick Type"))
+        if not pt:
+            continue
+        tier = str(r.get("Tier", "") or "").strip().upper()
+        if tier not in ("A", "B", "C", "D"):
+            continue
+        direction = str(r.get("Dir", "") or r.get("Direction", "")).strip().upper()
+        if direction not in ("OVER", "UNDER"):
+            continue
+        if pt in ("Goblin", "Demon") and direction != "OVER":
+            continue
+
+        key = (pt, tier, direction)
+        if key not in agg:
+            agg[key] = {"hits": 0, "misses": 0, "decided": 0}
+
+        result = str(r.get("Result", "") or r.get("Grade", "") or "").strip().upper()
+        if result in ("HIT", "WIN", "1", "TRUE", "YES", "W"):
+            agg[key]["hits"] += 1
+            agg[key]["decided"] += 1
+        elif result in ("MISS", "LOSS", "0", "FALSE", "NO", "L"):
+            agg[key]["misses"] += 1
+            agg[key]["decided"] += 1
+        else:
+            d = safe_int(r.get("Decided", r.get("decided", 0)))
+            h_ = safe_int(r.get("Hits", r.get("hits", 0)))
+            m_ = safe_int(r.get("Misses", r.get("misses", 0)))
+            if d > 0 or h_ > 0 or m_ > 0:
+                agg[key]["decided"] += d
+                agg[key]["hits"] += h_
+                agg[key]["misses"] += m_
+    return agg
+
+
+def _canonical_pick_tier_direction_keys() -> list[tuple[str, str, str]]:
+    """Fixed display order: Standard (A-D × O/U), Goblin (A-D OVER), Demon (A-D OVER)."""
+    keys: list[tuple[str, str, str]] = []
+    for tier in ("A", "B", "C", "D"):
+        keys.append(("Standard", tier, "OVER"))
+        keys.append(("Standard", tier, "UNDER"))
+    for tier in ("A", "B", "C", "D"):
+        keys.append(("Goblin", tier, "OVER"))
+    for tier in ("A", "B", "C", "D"):
+        keys.append(("Demon", tier, "OVER"))
+    return keys
+
+
+def pick_tier_direction_matrix_html(rows: list[dict], min_decided: int = 10) -> str:
+    agg = build_pick_tier_direction_agg(rows)
+    keys = _canonical_pick_tier_direction_keys()
+    n_ge = sum(1 for k in keys if int(agg.get(k, {}).get("decided", 0)) >= int(min_decided))
+    summary = (
+        f"Full grid: Standard A–D (OVER/UNDER), Goblin & Demon A–D (OVER). "
+        f"{n_ge} of {len(keys)} cells have ≥ {int(min_decided)} decided; others still listed with counts. "
+        f"Click column headers to sort."
+    )
+
+    body_rows = ""
+    for pt, tier, direction in keys:
+        v = agg.get((pt, tier, direction), {"hits": 0, "misses": 0, "decided": 0})
+        d = int(v["decided"])
+        h_ = int(v["hits"])
+        m_ = int(v["misses"])
+        pt_chip = {
+            "Goblin": '<span class="chip chip-goblin">🎃\u00a0Goblin</span>',
+            "Demon": '<span class="chip chip-demon">😈\u00a0Demon</span>',
+            "Standard": '<span class="chip chip-std">⭐\u00a0Standard</span>',
+        }.get(pt, h(pt))
+        tier_u = str(tier).upper()
+        tier_chip_cls = {"A": "chip-a", "B": "chip-b", "C": "chip-c"}.get(tier_u, "chip-d")
+        dir_html = (
+            '<span style="color:var(--green);font-size:13px">▲ OVER</span>'
+            if direction == "OVER"
+            else '<span style="color:var(--cyan);font-size:13px">▼ UNDER</span>'
+        )
+        if d <= 0:
+            body_rows += f"""<tr class="matrix-empty">
+          <td>{pt_chip}</td>
+          <td><span class="chip {tier_chip_cls}">TIER\u00a0{tier_u}</span></td>
+          <td>{dir_html}</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr>"""
+            continue
+        hr = (h_ / d * 100.0) if d > 0 else 0.0
+        row_cls = "matrix-hit" if hr >= 60.0 else ("matrix-miss" if hr < 50.0 else "matrix-warn")
+        if d < int(min_decided):
+            row_cls += " matrix-sparse"
+        bar_color = "var(--green)" if hr >= 60.0 else ("var(--gold)" if hr >= 50.0 else "var(--red)")
+        bar_html = (
+            f'<div class="rate-bar-bg"><div class="rate-bar-fill" '
+            f'style="width:{max(0.0, min(hr, 100.0)):.1f}%;background:{bar_color}"></div></div>'
+        )
+        body_rows += f"""<tr class="{row_cls}">
+          <td>{pt_chip}</td>
+          <td><span class="chip {tier_chip_cls}">TIER\u00a0{tier_u}</span></td>
+          <td>{dir_html}</td>
+          <td class="right mono">{fmt_num(d)}</td>
+          <td class="right mono pos">{fmt_num(h_)}</td>
+          <td class="right mono neg">{fmt_num(m_)}</td>
+          <td class="mono right">{pct(hr)}</td>
+          <td>{bar_html}</td>
+        </tr>"""
+
+    return f"""<details class="matrix-collapsible">
+      <summary>Performance Matrix — Pick Type × Tier × Direction</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">{summary}</div>
+        <div class="table-wrap"><table class="table-sortable">
+          <thead><tr>
+            <th data-sort-key="pick" title="Sort">PICK TYPE</th>
+            <th data-sort-key="tier" title="Sort">TIER</th>
+            <th data-sort-key="dir" title="Sort">DIRECTION</th>
+            <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+            <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+            <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+            <th data-sort-key="rate" title="Sort">HIT RATE</th>
+            <th data-sort-key="bar" title="Sort">BAR</th>
+          </tr></thead>
+          <tbody>{body_rows}</tbody>
+        </table></div>
+      </div>
+    </details>"""
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 #  HTML FRAGMENT BUILDERS
 # ══════════════════════════════════════════════════════════════════════════════
@@ -795,6 +941,9 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
 
     stats  = overall_stats(rows)
     total_label = fmt_num(stats["total"]) if stats["total"] > 0 else fmt_num(stats["decided"] + stats["voids"])
+    matrix_section = (
+        pick_tier_direction_matrix_html(rows, min_decided=10) if sport.strip().upper() == "NBA" else ""
+    )
 
     # ── Def Tier ───────────────────────────────────────────────────────────────
     def_section = def_tier_table(rows)
@@ -892,6 +1041,7 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
       </div>
     </summary>
     <div class="sport-section-body">
+      {matrix_section}
       {def_section}
       {prop_section}
       {player_section}
