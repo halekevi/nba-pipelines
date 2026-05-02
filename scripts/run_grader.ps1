@@ -834,7 +834,12 @@ else {
         $GraderArgs += @("--cbb_actuals", $CBBActuals)
     }
     else {
-        Write-Host "CBB actuals not found (continuing without CBB): $CBBActuals" -ForegroundColor Yellow
+        if ((Test-GraderSportDisabled 'cbb') -or (Test-GraderSportDisabled 'wcbb')) {
+            Write-Host "CBB/WCBB disabled for this run (off-season); skipping CBB actuals." -ForegroundColor DarkYellow
+        }
+        else {
+            Write-Host "CBB actuals not found (continuing without CBB): $CBBActuals" -ForegroundColor Yellow
+        }
     }
     if (Test-Path $NBA1HActuals) {
         $GraderArgs += @("--nba1h_actuals", $NBA1HActuals)
