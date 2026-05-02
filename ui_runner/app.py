@@ -117,22 +117,20 @@ NHL_SLATE     = NHL_DIR / "outputs" / "step8_nhl_direction_clean.xlsx"
 NHL_TICKETS   = NHL_DIR / "outputs" / "nhl_best_tickets.xlsx"
 SOCCER_SLATE  = SOCCER_DIR / "step8_soccer_direction_clean.xlsx"
 SOCCER_TICKETS= SOCCER_DIR / "soccer_best_tickets.xlsx"
-MLB_SLATE     = MLB_DIR / "data" / "outputs" / "step8_mlb_direction_clean.xlsx"
+MLB_SLATE     = MLB_DIR / "step8_mlb_direction_clean.xlsx"
 MLB_TICKETS   = MLB_DIR / "mlb_best_tickets.xlsx"
 TENNIS_DIR    = BASE_DIR / "Tennis"
-# Same pattern as Soccer: run_daily.ps1 copies clean step8 to sport root for Railway. MLB clean primary: MLB/data/outputs/.
+# Same pattern as Soccer/MLB: run_daily.ps1 copies outputs → sport root for Railway.
 TENNIS_SLATE  = TENNIS_DIR / "step8_tennis_direction_clean.xlsx"
 WNBA_DIR      = BASE_DIR / "WNBA"
-# Same as NBA: clean step8 under data/outputs; root-level names kept as legacy.
-WNBA_SLATE    = WNBA_DIR / "data" / "outputs" / "step8_wnba_direction_clean.xlsx"
+WNBA_SLATE    = WNBA_DIR / "step8_wnba_direction.xlsx"
 NFL_DIR       = BASE_DIR / "NFL"
 # NFL step8 target: same convention as NHL — sport folder + outputs/ (not repo-root outputs/).
 # Pipeline should write: NFL/outputs/step8_nfl_direction_clean.xlsx
 NFL_SLATE     = NFL_DIR / "outputs" / "step8_nfl_direction_clean.xlsx"
 COMBINED_OUT  = BASE_DIR  # combined_slate_tickets_YYYY-MM-DD.xlsx may live here or under outputs/
 OUTPUTS_ROOT  = BASE_DIR / "outputs"
-# CBB deactivated - season over (April 2026)
-DISABLED_SPORTS = {"cbb"}
+DISABLED_SPORTS: set[str] = set()
 
 app = Flask(
     __name__,
@@ -663,23 +661,15 @@ def _resolve_outputs_artifact(
     days: list[str],
     filename_fmt: str,
     *legacy: Path,
-    extra_roots: list[Path] | None = None,
 ) -> Path:
     """
-    Prefer outputs/{{d}}/filename_fmt.format(d=d), then optional sport folders (e.g. WNBA/outputs),
-    then first existing legacy path.
+    Prefer outputs/{{d}}/filename_fmt.format(d=d), then first existing legacy path.
     filename_fmt example: step8_nba_direction_clean_{d}.xlsx
     """
     for d in days:
-        name = filename_fmt.format(d=d)
-        p = OUTPUTS_ROOT / d / name
+        p = OUTPUTS_ROOT / d / filename_fmt.format(d=d)
         if p.exists():
             return p
-        if extra_roots:
-            for xr in extra_roots:
-                p2 = xr / d / name
-                if p2.exists():
-                    return p2
     for leg in legacy:
         if leg.exists():
             return leg
@@ -2212,11 +2202,19 @@ def api_graded_props():
     if not path.exists():
         legs = _props_from_ticket_eval_html(date_q)
         if legs:
+            sports_tv = sorted(
+                {
+                    str(l.get("sport") or "").strip().upper()
+                    for l in legs
+                    if str(l.get("sport") or "").strip()
+                }
+            )
             return jsonify(
                 {
                     "date": date_q,
                     "count": len(legs),
                     "props": legs,
+                    "sports": sports_tv,
                     "source": "ticket_eval_html",
                     "note": "Ticket legs only (subset). Deploy graded_props JSON for full slate props.",
                 }
@@ -2251,6 +2249,13 @@ def api_graded_props():
             out = dict(data)
             out["props"] = props_out
             out["count"] = len(props_out)
+            out["sports"] = sorted(
+                {
+                    str(p.get("sport") or "").strip().upper()
+                    for p in props_out
+                    if isinstance(p, dict) and str(p.get("sport") or "").strip()
+                }
+            )
             return jsonify(out)
         return jsonify({"error": "invalid_shape", "detail": "expected object"}), 500
     except Exception as exc:
@@ -2521,9 +2526,17 @@ def _grades_props_payload(date_str: str) -> dict[str, Any]:
         )
     )
     n_total = len(props)
+    sports_distinct = sorted(
+        {
+            str(p.get("sport") or "").strip().upper()
+            for p in props
+            if str(p.get("sport") or "").strip()
+        }
+    )
     n_hit = sum(1 for p in props if str(p.get("result") or "").upper() == "HIT")
     n_miss = sum(1 for p in props if str(p.get("result") or "").upper() == "MISS")
-    cap = 8000
+    # Large MLB slates sorted before NBA/WNBA lexically; a low cap hid entire sports from the UI.
+    cap = 50000
     truncated = n_total > cap
     if truncated:
         props = props[:cap]
@@ -2535,6 +2548,7 @@ def _grades_props_payload(date_str: str) -> dict[str, Any]:
         "n_miss": n_miss,
         "n_other": max(0, n_total - n_hit - n_miss),
         "truncated": truncated,
+        "sports": sports_distinct,
         "props": props,
     }
     if from_bundle:
@@ -2791,14 +2805,7 @@ def api_pipeline_status():
     wcbb_slate_p = _resolve_outputs_artifact(days, "step6_ranked_wcbb_{d}.xlsx", WCBB_SLATE)
     nhl_slate_p = _resolve_outputs_artifact(days, "step8_nhl_direction_clean_{d}.xlsx", NHL_SLATE)
     soccer_slate_p = _resolve_outputs_artifact(days, "step8_soccer_direction_clean_{d}.xlsx", SOCCER_SLATE)
-    mlb_slate_p = _resolve_outputs_artifact(
-        days,
-        "step8_mlb_direction_clean_{d}.xlsx",
-        MLB_SLATE,
-        MLB_DIR / "step8_mlb_direction_clean.xlsx",
-        MLB_DIR / "outputs" / "step8_mlb_direction_clean.xlsx",
-        extra_roots=[MLB_DIR / "outputs"],
-    )
+    mlb_slate_p = _resolve_outputs_artifact(days, "step8_mlb_direction_clean_{d}.xlsx", MLB_SLATE)
     tennis_slate_p = _resolve_outputs_artifact(
         days,
         "step8_tennis_direction_clean_{d}.xlsx",
@@ -2809,9 +2816,7 @@ def api_pipeline_status():
         days,
         "step8_wnba_direction_{d}.xlsx",
         WNBA_SLATE,
-        WNBA_DIR / "step8_wnba_direction_clean.xlsx",
         WNBA_DIR / "step8_wnba_direction.xlsx",
-        extra_roots=[WNBA_DIR / "outputs"],
     )
     nfl_slate_p = _resolve_outputs_artifact(
         days,

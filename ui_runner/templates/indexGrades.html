@@ -2138,11 +2138,15 @@ function propsEvalOutcomeRank(result) {
   if (ru === 'MISS' || ru === 'LOSS' || ru === 'LOSE') return 2;
   return 3;
 }
-function fillPropsSportFilter(rows) {
+function fillPropsSportFilter(rows, sportsHint) {
   const sel = document.getElementById('props-filter-sport');
   if (!sel) return;
   const cur = sel.value;
-  const sports = [...new Set(rows.map(function (r) { return String(r.sport || '').toUpperCase(); }).filter(Boolean))].sort();
+  const fromRows = [...new Set(rows.map(function (r) { return String(r.sport || '').toUpperCase(); }).filter(Boolean))];
+  const hint = Array.isArray(sportsHint)
+    ? sportsHint.map(function (s) { return String(s || '').toUpperCase().trim(); }).filter(Boolean)
+    : [];
+  const sports = [...new Set(fromRows.concat(hint))].sort();
   sel.innerHTML = '<option value="">All sports</option>' +
     sports.map(function (s) { return '<option value="' + escProps(s) + '">' + escProps(s) + '</option>'; }).join('');
   if (cur && sports.indexOf(cur) >= 0) sel.value = cur;
@@ -2296,7 +2300,7 @@ async function loadGradesProps(dateStr) {
           ? 'Ticket legs from ticket_eval_' + dateStr + '.html (subset). Run build_grades_html / backfill_graded_props_json and push graded_props_' + dateStr + '.json for every slate prop.'
           : 'Source: graded_props_' + dateStr + '.json';
       }
-      fillPropsSportFilter(window._propsEvalCache);
+      fillPropsSportFilter(window._propsEvalCache, jd.sports);
       applyPropsEvalFilters();
       return;
     }
@@ -2305,7 +2309,7 @@ async function loadGradesProps(dateStr) {
     if (!res.ok) throw new Error(d.error || res.statusText);
     window._propsEvalCache = d.props || [];
     window._propsEvalStats = { n_hit: d.n_hit, n_miss: d.n_miss, n: d.n };
-    fillPropsSportFilter(window._propsEvalCache);
+    fillPropsSportFilter(window._propsEvalCache, d.sports);
     if (foot) {
       var t = '';
       if (d.truncated) t += 'Showing first ' + d.n_returned + ' of ' + d.n + ' rows. ';
