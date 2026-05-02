@@ -161,6 +161,18 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
     # Some sports can intentionally skip writing dated copies while still producing
     # valid root clean files used by combined + Railway.
     $fallbackRoots = @{
+        # NBA: run_pipeline + step8 also copy dated slates, but a silent Copy-Item miss should not
+        # hard-fail the daily if the clean root xlsx in Sports\NBA is present (grader/combined use it).
+        "step8_nba_direction_clean_$RunDate.xlsx" = @(
+            (Join-Path $SportsRoot "NBA\data\outputs\step8_all_direction_clean.xlsx"),
+            (Join-Path $SportsRoot "NBA\step8_all_direction_clean.xlsx")
+        )
+        "step8_nba1h_direction_clean_$RunDate.xlsx" = @(
+            (Join-Path $SportsRoot "NBA\step8_nba1h_direction_clean.xlsx")
+        )
+        "step8_nba1q_direction_clean_$RunDate.xlsx" = @(
+            (Join-Path $SportsRoot "NBA\step8_nba1q_direction_clean.xlsx")
+        )
         "step8_nhl_direction_clean_$RunDate.xlsx" = @(
             (Join-Path $SportsRoot "NHL\outputs\step8_nhl_direction_clean.xlsx"),
             (Join-Path $SportsRoot "NHL\step8_nhl_direction_clean.xlsx")

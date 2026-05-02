@@ -323,8 +323,13 @@ function Run-NBAPeriodPipeline {
     if ($ok) { $ok = Run-Step "${tagLower} Step 8 - Direction Context"      $NBADir (Join-Path $SportsRoot "NBA\scripts\step8_add_direction_context.py") "--input $step7 --sheet ALL --output $step8Csv --xlsx $step8Xlsx --date $Date" }
 
     if ($ok -and (Test-Path (Join-Path $NBADir $step8Xlsx))) {
-        Copy-Item (Join-Path $NBADir $step8Xlsx) $datedOut -Force -ErrorAction SilentlyContinue
-        Write-Host "  [$tagLower] Dated copy -> $datedOut" -ForegroundColor DarkGray
+        try {
+            Copy-Item (Join-Path $NBADir $step8Xlsx) $datedOut -Force -ErrorAction Stop
+            Write-Host "  [$tagLower] Dated copy -> $datedOut" -ForegroundColor DarkGray
+        }
+        catch {
+            Write-Host "  [$tagLower] WARN: could not copy dated slate to $datedOut : $_" -ForegroundColor Yellow
+        }
     }
     if ($ok) { Write-Host "  $tagLower complete." -ForegroundColor Green } else { Write-Host "  $tagLower FAILED." -ForegroundColor Red }
     return $ok
@@ -982,6 +987,12 @@ if ($NBAOnly) {
     if ($ok) { $ok = Run-Step "NBA Step 7 - Rank Props"              $NBADir ".\scripts\step7_rank_props.py"                    "--input data\outputs\step6d_with_h2h.csv --output data\outputs\step7_ranked_props.xlsx" }
     if ($ok) { Invoke-PropOracleStep7b "NBA" }
     if ($ok) { $ok = Run-Step "NBA Step 8 - Direction Context"       $NBADir (Join-Path $SportsRoot "NBA\scripts\step8_add_direction_context.py")         "--input data\outputs\step7_ranked_props.xlsx --sheet ALL --output data\outputs\step8_all_direction.csv --date $Date" }
+    if ($ok) {
+        $nbaMainStep8 = Join-Path $NBADir "data\outputs\step8_all_direction_clean.xlsx"
+        if (Test-Path $nbaMainStep8) {
+            Copy-DatedSlateOutput -SourcePath $nbaMainStep8 -DatedFileName "step8_nba_direction_clean_$Date.xlsx" -Label "NBA"
+        }
+    }
     if ($ok) { $ok = Run-NBAPeriodPipeline -Tag "nba1h" -LeagueId "84"  -SkipFetchStep:$SkipFetch }
     if ($ok) { $ok = Run-NBAPeriodPipeline -Tag "nba1q" -LeagueId "192" -SkipFetchStep:$SkipFetch }
 
@@ -1549,6 +1560,12 @@ if (-not $mlbStep1Health.ok) {
     $MLBSuccess = $false
 } else {
     $MLBSuccess = $MLBSuccess -and $true
+}
+
+# Dated NBA main step8 for run_grader (avoids empty grades after the live workbook rolls to the next slate day).
+$nbaMainStep8Parallel = Join-Path $NBADir "data\outputs\step8_all_direction_clean.xlsx"
+if (Test-Path $nbaMainStep8Parallel) {
+    Copy-DatedSlateOutput -SourcePath $nbaMainStep8Parallel -DatedFileName "step8_nba_direction_clean_$Date.xlsx" -Label "NBA"
 }
 
 # NBA period sub-slates are required by daily checks and combined defaults.
