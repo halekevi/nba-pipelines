@@ -58,7 +58,7 @@
     },
     {
       "direction": "UNDER",
-      "pick_type": NaN,
+      "pick_type": null,
       "n": 144266,
       "hits": 86392.0,
       "hit_rate": 0.598838257108397
@@ -93,7 +93,7 @@
     },
     {
       "direction": "OVER",
-      "pick_type": NaN,
+      "pick_type": null,
       "n": 179847,
       "hits": 66571.0,
       "hit_rate": 0.3701535193803622
@@ -351,7 +351,7 @@
     {
       "_sport": "nhl",
       "direction": "OVER",
-      "pick_type": NaN,
+      "pick_type": null,
       "n": 156361,
       "hits": 57266.0,
       "hit_rate": 0.366242221525828
@@ -359,7 +359,7 @@
     {
       "_sport": "nhl",
       "direction": "UNDER",
-      "pick_type": NaN,
+      "pick_type": null,
       "n": 131137,
       "hits": 79096.0,
       "hit_rate": 0.6031554786215942

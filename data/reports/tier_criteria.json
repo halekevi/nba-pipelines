@@ -234,10 +234,10 @@
       "n": 15,
       "base_hit_rate": 0.4,
       "corr_feature_vs_hit": 0.18438515819196977,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -337,11 +337,11 @@
       "feature": "effective_edge",
       "n": 14,
       "base_hit_rate": 1.0,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -350,11 +350,11 @@
       "feature": "tier_distance_score",
       "n": 1184,
       "base_hit_rate": 0.7255067567567568,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -363,11 +363,11 @@
       "feature": "tier_distance_score",
       "n": 363,
       "base_hit_rate": 0.38292011019283745,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -402,11 +402,11 @@
       "feature": "tier_distance_score",
       "n": 1110,
       "base_hit_rate": 0.6459459459459459,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -415,11 +415,11 @@
       "feature": "tier_distance_score",
       "n": 317,
       "base_hit_rate": 0.42902208201892744,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -506,11 +506,11 @@
       "feature": "tier_distance_score",
       "n": 816,
       "base_hit_rate": 0.625,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -519,11 +519,11 @@
       "feature": "tier_distance_score",
       "n": 1256,
       "base_hit_rate": 0.267515923566879,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -531,13 +531,13 @@
       "group": "STANDARD OVER",
       "feature": "effective_edge",
       "n": 0,
-      "base_hit_rate": NaN,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "base_hit_rate": null,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
-      "distance_source": NaN
+      "best_hit_rate": null,
+      "lift_vs_base": null,
+      "distance_source": null
     },
     {
       "date": "2026-03-09",
@@ -545,11 +545,11 @@
       "feature": "effective_edge",
       "n": 486,
       "base_hit_rate": 0.49382716049382713,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -559,10 +559,10 @@
       "n": 1751,
       "base_hit_rate": 0.6413478012564249,
       "corr_feature_vs_hit": -0.4614478106240348,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -571,11 +571,11 @@
       "feature": "tier_distance_score",
       "n": 738,
       "base_hit_rate": 0.3265582655826558,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -610,11 +610,11 @@
       "feature": "tier_distance_score",
       "n": 431,
       "base_hit_rate": 0.5359628770301624,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -623,11 +623,11 @@
       "feature": "tier_distance_score",
       "n": 653,
       "base_hit_rate": 0.21898928024502298,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -635,13 +635,13 @@
       "group": "STANDARD OVER",
       "feature": "effective_edge",
       "n": 0,
-      "base_hit_rate": NaN,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "base_hit_rate": null,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
-      "distance_source": NaN
+      "best_hit_rate": null,
+      "lift_vs_base": null,
+      "distance_source": null
     },
     {
       "date": "2026-03-11",
@@ -649,11 +649,11 @@
       "feature": "effective_edge",
       "n": 292,
       "base_hit_rate": 0.6472602739726028,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -767,10 +767,10 @@
       "n": 1151,
       "base_hit_rate": 0.6785403996524761,
       "corr_feature_vs_hit": 0.17359126870735342,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -779,11 +779,11 @@
       "feature": "tier_distance_score",
       "n": 351,
       "base_hit_rate": 0.38746438746438744,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -818,11 +818,11 @@
       "feature": "tier_distance_score",
       "n": 1115,
       "base_hit_rate": 0.6322869955156951,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -831,11 +831,11 @@
       "feature": "tier_distance_score",
       "n": 238,
       "base_hit_rate": 0.3235294117647059,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -870,11 +870,11 @@
       "feature": "tier_distance_score",
       "n": 685,
       "base_hit_rate": 0.6510948905109489,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -883,11 +883,11 @@
       "feature": "tier_distance_score",
       "n": 181,
       "base_hit_rate": 0.3370165745856354,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -922,11 +922,11 @@
       "feature": "tier_distance_score",
       "n": 1378,
       "base_hit_rate": 0.6516690856313497,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -935,11 +935,11 @@
       "feature": "tier_distance_score",
       "n": 551,
       "base_hit_rate": 0.47186932849364793,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1079,10 +1079,10 @@
       "n": 974,
       "base_hit_rate": 0.6540041067761807,
       "corr_feature_vs_hit": -0.0903963529713285,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1091,11 +1091,11 @@
       "feature": "tier_distance_score",
       "n": 299,
       "base_hit_rate": 0.3311036789297659,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1130,11 +1130,11 @@
       "feature": "tier_distance_score",
       "n": 1574,
       "base_hit_rate": 0.6512071156289708,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1143,11 +1143,11 @@
       "feature": "tier_distance_score",
       "n": 347,
       "base_hit_rate": 0.40057636887608067,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1183,10 +1183,10 @@
       "n": 734,
       "base_hit_rate": 0.6049046321525886,
       "corr_feature_vs_hit": 0.3093991727546566,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1195,11 +1195,11 @@
       "feature": "tier_distance_score",
       "n": 131,
       "base_hit_rate": 0.2748091603053435,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1274,10 +1274,10 @@
       "n": 15,
       "base_hit_rate": 0.7333333333333333,
       "corr_feature_vs_hit": -0.46743949385928246,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1351,11 +1351,11 @@
       "feature": "tier_distance_score",
       "n": 820,
       "base_hit_rate": 0.3573170731707317,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1442,11 +1442,11 @@
       "feature": "tier_distance_score",
       "n": 2123,
       "base_hit_rate": 0.6467263306641545,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1455,11 +1455,11 @@
       "feature": "tier_distance_score",
       "n": 621,
       "base_hit_rate": 0.4363929146537842,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1497,8 +1497,8 @@
       "corr_feature_vs_hit": -0.08928824717096018,
       "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1510,8 +1510,8 @@
       "corr_feature_vs_hit": -0.1688434107516988,
       "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1520,11 +1520,11 @@
       "feature": "effective_edge",
       "n": 2,
       "base_hit_rate": 0.5,
-      "corr_feature_vs_hit": NaN,
+      "corr_feature_vs_hit": null,
       "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1533,11 +1533,11 @@
       "feature": "effective_edge",
       "n": 5,
       "base_hit_rate": 0.0,
-      "corr_feature_vs_hit": NaN,
+      "corr_feature_vs_hit": null,
       "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1547,10 +1547,10 @@
       "n": 1492,
       "base_hit_rate": 0.6441018766756033,
       "corr_feature_vs_hit": -0.1080844252917792,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1559,11 +1559,11 @@
       "feature": "tier_distance_score",
       "n": 361,
       "base_hit_rate": 0.34349030470914127,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1612,10 +1612,10 @@
       "n": 523,
       "base_hit_rate": 0.42638623326959846,
       "corr_feature_vs_hit": -0.7559289460184545,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1715,11 +1715,11 @@
       "feature": "tier_distance_score",
       "n": 542,
       "base_hit_rate": 0.47601476014760147,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1820,10 +1820,10 @@
       "n": 402,
       "base_hit_rate": 0.31094527363184077,
       "corr_feature_vs_hit": 0.0,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1859,10 +1859,10 @@
       "n": 643,
       "base_hit_rate": 0.6998444790046656,
       "corr_feature_vs_hit": 0.5970223141259935,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1871,11 +1871,11 @@
       "feature": "tier_distance_score",
       "n": 213,
       "base_hit_rate": 0.3615023474178404,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1911,10 +1911,10 @@
       "n": 1632,
       "base_hit_rate": 0.678921568627451,
       "corr_feature_vs_hit": 0.32081782572786643,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1923,11 +1923,11 @@
       "feature": "tier_distance_score",
       "n": 551,
       "base_hit_rate": 0.3738656987295826,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -1976,10 +1976,10 @@
       "n": 286,
       "base_hit_rate": 0.43356643356643354,
       "corr_feature_vs_hit": 0.7372097807744856,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -2027,11 +2027,11 @@
       "feature": "tier_distance_score",
       "n": 382,
       "base_hit_rate": 0.3507853403141361,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -2132,10 +2132,10 @@
       "n": 207,
       "base_hit_rate": 0.28502415458937197,
       "corr_feature_vs_hit": -0.38435305739290365,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -2171,10 +2171,10 @@
       "n": 1519,
       "base_hit_rate": 0.6142198815009875,
       "corr_feature_vs_hit": 0.03673591791853225,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -2183,11 +2183,11 @@
       "feature": "tier_distance_score",
       "n": 421,
       "base_hit_rate": 0.5201900237529691,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -2275,10 +2275,10 @@
       "n": 510,
       "base_hit_rate": 0.7313725490196078,
       "corr_feature_vs_hit": 0.09003530075820249,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -2288,10 +2288,10 @@
       "n": 174,
       "base_hit_rate": 0.42528735632183906,
       "corr_feature_vs_hit": -0.7302967433402215,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -2433,8 +2433,8 @@
       "corr_feature_vs_hit": -0.30678599553894814,
       "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -2443,11 +2443,11 @@
       "feature": "tier_distance_score",
       "n": 74,
       "base_hit_rate": 0.5135135135135135,
-      "corr_feature_vs_hit": NaN,
+      "corr_feature_vs_hit": null,
       "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -2459,8 +2459,8 @@
       "corr_feature_vs_hit": -0.10152735936249177,
       "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -2469,11 +2469,11 @@
       "feature": "effective_edge",
       "n": 12,
       "base_hit_rate": 0.16666666666666666,
-      "corr_feature_vs_hit": NaN,
+      "corr_feature_vs_hit": null,
       "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -2509,10 +2509,10 @@
       "n": 26,
       "base_hit_rate": 0.6923076923076923,
       "corr_feature_vs_hit": 0.3792885700746606,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -2521,11 +2521,11 @@
       "feature": "effective_edge",
       "n": 1,
       "base_hit_rate": 0.0,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -2548,10 +2548,10 @@
       "n": 365,
       "base_hit_rate": 0.3589041095890411,
       "corr_feature_vs_hit": 0.42640143271122083,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -2704,10 +2704,10 @@
       "n": 296,
       "base_hit_rate": 0.42905405405405406,
       "corr_feature_vs_hit": 0.44114528720194346,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -2808,10 +2808,10 @@
       "n": 360,
       "base_hit_rate": 0.3638888888888889,
       "corr_feature_vs_hit": 0.1556997888323046,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -2912,10 +2912,10 @@
       "n": 347,
       "base_hit_rate": 0.3515850144092219,
       "corr_feature_vs_hit": 0.3304093002275449,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -3005,8 +3005,8 @@
       "corr_feature_vs_hit": -0.07484811885651194,
       "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -3018,8 +3018,8 @@
       "corr_feature_vs_hit": 0.7637626158259733,
       "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -3031,8 +3031,8 @@
       "corr_feature_vs_hit": 0.21400808544685337,
       "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -3041,11 +3041,11 @@
       "feature": "effective_edge",
       "n": 6,
       "base_hit_rate": 0.6666666666666666,
-      "corr_feature_vs_hit": NaN,
+      "corr_feature_vs_hit": null,
       "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "line_vs_standard"
     },
     {
@@ -3093,11 +3093,11 @@
       "feature": "effective_edge",
       "n": 10,
       "base_hit_rate": 0.3,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     }
   ]

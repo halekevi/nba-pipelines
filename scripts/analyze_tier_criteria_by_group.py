@@ -3,12 +3,37 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 import pandas as pd
+
+
+def _json_sanitize(o: Any) -> Any:
+    """Recursively replace NaN/Inf with None so json.dumps emits strict JSON null (RFC 8259)."""
+    if o is None or isinstance(o, (str, bool, int)):
+        return o
+    if isinstance(o, float):
+        return None if (math.isnan(o) or math.isinf(o)) else o
+    if isinstance(o, dict):
+        return {str(k): _json_sanitize(v) for k, v in o.items()}
+    if isinstance(o, (list, tuple)):
+        return [_json_sanitize(v) for v in o]
+    if isinstance(o, (np.integer,)):
+        return int(o)
+    if isinstance(o, (np.floating,)):
+        x = float(o)
+        return None if (math.isnan(x) or math.isinf(x)) else x
+    if isinstance(o, np.ndarray):
+        return _json_sanitize(o.tolist())
+    return o
+
+
+def _dump_strict_json(obj: Any, *, indent: int = 2) -> str:
+    return json.dumps(_json_sanitize(obj), indent=indent, ensure_ascii=False, allow_nan=False)
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -759,7 +784,7 @@ def main() -> None:
             "ml_prob_threshold_scan": scan_rows,
             "soccer_threshold_scan": scan_rows if str(args.sport).strip().upper() == "SOCCER" else [],
         }
-        out_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        out_path.write_text(_dump_strict_json(payload), encoding="utf-8")
         print(f"Saved -> {out_path}")
 
 

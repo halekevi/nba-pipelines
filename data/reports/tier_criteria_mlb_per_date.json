@@ -179,10 +179,10 @@
       "n": 18,
       "base_hit_rate": 0.4444444444444444,
       "corr_feature_vs_hit": 0.7706637001296627,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -193,10 +193,10 @@
       "n": 22,
       "base_hit_rate": 0.45454545454545453,
       "corr_feature_vs_hit": 0.7392480304129867,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -235,10 +235,10 @@
       "n": 19,
       "base_hit_rate": 0.3157894736842105,
       "corr_feature_vs_hit": 0.2686916411702495,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -249,10 +249,10 @@
       "n": 21,
       "base_hit_rate": 0.42857142857142855,
       "corr_feature_vs_hit": 0.5105901617690569,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -291,10 +291,10 @@
       "n": 21,
       "base_hit_rate": 0.38095238095238093,
       "corr_feature_vs_hit": 0.27194158054556555,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -305,10 +305,10 @@
       "n": 24,
       "base_hit_rate": 0.4583333333333333,
       "corr_feature_vs_hit": 0.3188202409169725,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -346,11 +346,11 @@
       "feature": "ml_prob",
       "n": 6,
       "base_hit_rate": 0.3333333333333333,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -360,11 +360,11 @@
       "feature": "ml_prob",
       "n": 3,
       "base_hit_rate": 0.0,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -403,10 +403,10 @@
       "n": 22,
       "base_hit_rate": 0.45454545454545453,
       "corr_feature_vs_hit": -0.6941171282654642,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -417,10 +417,10 @@
       "n": 24,
       "base_hit_rate": 0.5416666666666666,
       "corr_feature_vs_hit": 0.07257762587539947,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -459,10 +459,10 @@
       "n": 27,
       "base_hit_rate": 0.4074074074074074,
       "corr_feature_vs_hit": 0.32621367312489397,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -473,10 +473,10 @@
       "n": 40,
       "base_hit_rate": 0.45,
       "corr_feature_vs_hit": 0.7026925114785034,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -515,10 +515,10 @@
       "n": 26,
       "base_hit_rate": 0.5384615384615384,
       "corr_feature_vs_hit": 0.04760199521994184,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -529,10 +529,10 @@
       "n": 30,
       "base_hit_rate": 0.4666666666666667,
       "corr_feature_vs_hit": 0.44712914577324947,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -571,10 +571,10 @@
       "n": 18,
       "base_hit_rate": 0.5,
       "corr_feature_vs_hit": 0.7486598397535481,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -585,10 +585,10 @@
       "n": 20,
       "base_hit_rate": 0.4,
       "corr_feature_vs_hit": 0.6314453424149536,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -627,10 +627,10 @@
       "n": 22,
       "base_hit_rate": 0.5,
       "corr_feature_vs_hit": 0.5800854436058649,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -640,11 +640,11 @@
       "feature": "ml_prob",
       "n": 23,
       "base_hit_rate": 0.6956521739130435,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -683,10 +683,10 @@
       "n": 18,
       "base_hit_rate": 0.5555555555555556,
       "corr_feature_vs_hit": 0.766583918135878,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -697,10 +697,10 @@
       "n": 25,
       "base_hit_rate": 0.48,
       "corr_feature_vs_hit": -0.19991815920846348,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -738,11 +738,11 @@
       "feature": "ml_prob",
       "n": 15,
       "base_hit_rate": 0.6,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -751,13 +751,13 @@
       "group": "STANDARD UNDER",
       "feature": "ml_prob",
       "n": 0,
-      "base_hit_rate": NaN,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "base_hit_rate": null,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
-      "distance_source": NaN
+      "best_hit_rate": null,
+      "lift_vs_base": null,
+      "distance_source": null
     },
     {
       "date": "2026-04-10",
@@ -795,10 +795,10 @@
       "n": 60,
       "base_hit_rate": 0.5166666666666667,
       "corr_feature_vs_hit": -0.40378578493443296,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -807,13 +807,13 @@
       "group": "STANDARD UNDER",
       "feature": "ml_prob",
       "n": 0,
-      "base_hit_rate": NaN,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "base_hit_rate": null,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
-      "distance_source": NaN
+      "best_hit_rate": null,
+      "lift_vs_base": null,
+      "distance_source": null
     },
     {
       "date": "2026-04-11",
@@ -851,10 +851,10 @@
       "n": 46,
       "base_hit_rate": 0.41304347826086957,
       "corr_feature_vs_hit": 0.35312374118342277,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -863,13 +863,13 @@
       "group": "STANDARD UNDER",
       "feature": "ml_prob",
       "n": 0,
-      "base_hit_rate": NaN,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "base_hit_rate": null,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
-      "distance_source": NaN
+      "best_hit_rate": null,
+      "lift_vs_base": null,
+      "distance_source": null
     },
     {
       "date": "2026-04-12",
@@ -907,10 +907,10 @@
       "n": 39,
       "base_hit_rate": 0.41025641025641024,
       "corr_feature_vs_hit": 0.7030576117860233,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -919,13 +919,13 @@
       "group": "STANDARD UNDER",
       "feature": "ml_prob",
       "n": 0,
-      "base_hit_rate": NaN,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "base_hit_rate": null,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
-      "distance_source": NaN
+      "best_hit_rate": null,
+      "lift_vs_base": null,
+      "distance_source": null
     },
     {
       "date": "2026-04-13",
@@ -963,10 +963,10 @@
       "n": 44,
       "base_hit_rate": 0.5681818181818182,
       "corr_feature_vs_hit": -0.22090403856387839,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -975,13 +975,13 @@
       "group": "STANDARD UNDER",
       "feature": "ml_prob",
       "n": 0,
-      "base_hit_rate": NaN,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "base_hit_rate": null,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
-      "distance_source": NaN
+      "best_hit_rate": null,
+      "lift_vs_base": null,
+      "distance_source": null
     },
     {
       "date": "2026-04-14",
@@ -1019,10 +1019,10 @@
       "n": 155,
       "base_hit_rate": 0.4774193548387097,
       "corr_feature_vs_hit": 0.0877536903003726,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1031,13 +1031,13 @@
       "group": "STANDARD UNDER",
       "feature": "ml_prob",
       "n": 0,
-      "base_hit_rate": NaN,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "base_hit_rate": null,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
-      "distance_source": NaN
+      "best_hit_rate": null,
+      "lift_vs_base": null,
+      "distance_source": null
     },
     {
       "date": "2026-04-15",
@@ -1075,10 +1075,10 @@
       "n": 94,
       "base_hit_rate": 0.4574468085106383,
       "corr_feature_vs_hit": -0.8010097329390286,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1087,13 +1087,13 @@
       "group": "STANDARD UNDER",
       "feature": "ml_prob",
       "n": 0,
-      "base_hit_rate": NaN,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "base_hit_rate": null,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
-      "distance_source": NaN
+      "best_hit_rate": null,
+      "lift_vs_base": null,
+      "distance_source": null
     },
     {
       "date": "2026-04-16",
@@ -1130,11 +1130,11 @@
       "feature": "ml_prob",
       "n": 62,
       "base_hit_rate": 0.46774193548387094,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1143,13 +1143,13 @@
       "group": "STANDARD UNDER",
       "feature": "ml_prob",
       "n": 0,
-      "base_hit_rate": NaN,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "base_hit_rate": null,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
-      "distance_source": NaN
+      "best_hit_rate": null,
+      "lift_vs_base": null,
+      "distance_source": null
     },
     {
       "date": "2026-04-17",
@@ -1187,10 +1187,10 @@
       "n": 60,
       "base_hit_rate": 0.4166666666666667,
       "corr_feature_vs_hit": -0.5081478736345181,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1199,13 +1199,13 @@
       "group": "STANDARD UNDER",
       "feature": "ml_prob",
       "n": 0,
-      "base_hit_rate": NaN,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "base_hit_rate": null,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
-      "distance_source": NaN
+      "best_hit_rate": null,
+      "lift_vs_base": null,
+      "distance_source": null
     },
     {
       "date": "2026-04-18",
@@ -1243,10 +1243,10 @@
       "n": 82,
       "base_hit_rate": 0.4878048780487805,
       "corr_feature_vs_hit": -0.03467456247630285,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1257,10 +1257,10 @@
       "n": 85,
       "base_hit_rate": 0.5058823529411764,
       "corr_feature_vs_hit": 0.08035855122283446,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1299,10 +1299,10 @@
       "n": 45,
       "base_hit_rate": 0.3111111111111111,
       "corr_feature_vs_hit": 0.557079766388547,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1311,13 +1311,13 @@
       "group": "STANDARD UNDER",
       "feature": "ml_prob",
       "n": 0,
-      "base_hit_rate": NaN,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "base_hit_rate": null,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
-      "distance_source": NaN
+      "best_hit_rate": null,
+      "lift_vs_base": null,
+      "distance_source": null
     },
     {
       "date": "2026-04-20",
@@ -1355,10 +1355,10 @@
       "n": 77,
       "base_hit_rate": 0.5194805194805194,
       "corr_feature_vs_hit": -0.04830887948844846,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1367,13 +1367,13 @@
       "group": "STANDARD UNDER",
       "feature": "ml_prob",
       "n": 0,
-      "base_hit_rate": NaN,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "base_hit_rate": null,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
-      "distance_source": NaN
+      "best_hit_rate": null,
+      "lift_vs_base": null,
+      "distance_source": null
     },
     {
       "date": "2026-04-21",
@@ -1411,10 +1411,10 @@
       "n": 47,
       "base_hit_rate": 0.46808510638297873,
       "corr_feature_vs_hit": 0.5575050564252572,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1425,10 +1425,10 @@
       "n": 81,
       "base_hit_rate": 0.6296296296296297,
       "corr_feature_vs_hit": -0.15416065513303473,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1467,10 +1467,10 @@
       "n": 73,
       "base_hit_rate": 0.5205479452054794,
       "corr_feature_vs_hit": 0.3235375535643126,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1481,10 +1481,10 @@
       "n": 78,
       "base_hit_rate": 0.5512820512820513,
       "corr_feature_vs_hit": -0.2548823729053563,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1522,11 +1522,11 @@
       "feature": "ml_prob",
       "n": 49,
       "base_hit_rate": 0.46938775510204084,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1537,10 +1537,10 @@
       "n": 49,
       "base_hit_rate": 0.3469387755102041,
       "corr_feature_vs_hit": -0.08125155776725025,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1579,10 +1579,10 @@
       "n": 65,
       "base_hit_rate": 0.5538461538461539,
       "corr_feature_vs_hit": 0.12696270186356853,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1593,10 +1593,10 @@
       "n": 57,
       "base_hit_rate": 0.43859649122807015,
       "corr_feature_vs_hit": 0.11940109601103738,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1635,10 +1635,10 @@
       "n": 53,
       "base_hit_rate": 0.5471698113207547,
       "corr_feature_vs_hit": -0.1580461835595498,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1649,10 +1649,10 @@
       "n": 83,
       "base_hit_rate": 0.5060240963855421,
       "corr_feature_vs_hit": 0.31115515949948186,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1691,10 +1691,10 @@
       "n": 54,
       "base_hit_rate": 0.5,
       "corr_feature_vs_hit": -0.09884562071277803,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1705,10 +1705,10 @@
       "n": 94,
       "base_hit_rate": 0.44680851063829785,
       "corr_feature_vs_hit": 0.262111064578436,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1747,10 +1747,10 @@
       "n": 34,
       "base_hit_rate": 0.5588235294117647,
       "corr_feature_vs_hit": 0.01455761976177009,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1761,10 +1761,10 @@
       "n": 35,
       "base_hit_rate": 0.6571428571428571,
       "corr_feature_vs_hit": -0.8135852080578457,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1803,10 +1803,10 @@
       "n": 83,
       "base_hit_rate": 0.43373493975903615,
       "corr_feature_vs_hit": -0.2067855185404798,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1817,10 +1817,10 @@
       "n": 95,
       "base_hit_rate": 0.5263157894736842,
       "corr_feature_vs_hit": 0.23050519955843152,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1859,10 +1859,10 @@
       "n": 71,
       "base_hit_rate": 0.4084507042253521,
       "corr_feature_vs_hit": -0.07003521929737799,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1873,10 +1873,10 @@
       "n": 108,
       "base_hit_rate": 0.5277777777777778,
       "corr_feature_vs_hit": -0.24321407932469347,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1915,10 +1915,10 @@
       "n": 129,
       "base_hit_rate": 0.4806201550387597,
       "corr_feature_vs_hit": -0.007431947624662382,
-      "best_threshold": NaN,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
+      "best_hit_rate": null,
+      "lift_vs_base": null,
       "distance_source": "abs_edge_proxy"
     },
     {
@@ -1927,13 +1927,13 @@
       "group": "STANDARD UNDER",
       "feature": "ml_prob",
       "n": 0,
-      "base_hit_rate": NaN,
-      "corr_feature_vs_hit": NaN,
-      "best_threshold": NaN,
+      "base_hit_rate": null,
+      "corr_feature_vs_hit": null,
+      "best_threshold": null,
       "best_n": 0,
-      "best_hit_rate": NaN,
-      "lift_vs_base": NaN,
-      "distance_source": NaN
+      "best_hit_rate": null,
+      "lift_vs_base": null,
+      "distance_source": null
     },
     {
       "date": "2026-05-01",
