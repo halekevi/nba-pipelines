@@ -33,6 +33,7 @@ _MLB_REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_MLB_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_MLB_REPO_ROOT))
 from utils.group_rank_tier import (  # noqa: E402
+    _resolve_ml_prob_cuts,
     assign_tier_column,
     print_tier_distribution_by_pick_direction_group,
     report_goblin_demon_standard_line_fill,
@@ -635,7 +636,13 @@ def main() -> None:
     out = build_feature_vector(out, "MLB")   # must run before ML inference
     out = _apply_ml_blend_mlb(out)
 
-    out["tier"] = assign_tier_column(out, sport="mlb")
+    _mlb_slug = "mlb"
+    out["tier"] = assign_tier_column(out, sport=_mlb_slug)
+    _dc = _resolve_ml_prob_cuts(_mlb_slug, "demon")
+    print(
+        f"[MLB step7] tier ml_prob: sport_slug={_mlb_slug!r}; "
+        f"Demon fallback A/B/C cuts = {_dc[0]}/{_dc[1]}/{_dc[2]}"
+    )
     report_goblin_demon_standard_line_fill(out, "[MLB step7]")
     print_tier_distribution_by_pick_direction_group(out, label="[MLB step7]")
     if "recommended_side" not in out.columns:

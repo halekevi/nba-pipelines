@@ -1,10 +1,11 @@
 """
 Per-group A/B/C/D rank tier assignment (Goblin/Demon vs line distance, Standard vs ml_prob).
 
-Cut points from backtest artifact data/reports/tier_criteria.json (commit 20b961f1).
+Default cut points from backtest artifact data/reports/tier_criteria.json (commit 20b961f1).
+MLB Demon ml_prob fallback cuts from data/reports/tier_criteria_mlb_per_date.json (commit 25e0bd78).
 
 When Goblin/Demon rows lack standard_line (common on Soccer alt-only slates), tier falls back
-to the same ml_prob cuts as Standard so tiers remain informative.
+to ml_prob cuts (sport- and group-specific where configured).
 """
 
 from __future__ import annotations
@@ -12,11 +13,31 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-DEFAULT_ML_PROB_CUTS = (0.71, 0.65, 0.58)
-SPORT_ML_PROB_CUTS = {
-    "soccer": (0.45, 0.35, 0.25),
-    "default": DEFAULT_ML_PROB_CUTS,
+# Default A/B/C thresholds on ml_prob (Standard, and sports without overrides).
+DEFAULT_ML_PROB_CUTS: tuple[float, float, float] = (0.71, 0.65, 0.58)
+
+# Format: sport_slug → {group: (A_cut, B_cut, C_cut)} | (A_cut, B_cut, C_cut)
+# Plain tuple → all groups for that sport. Dict → group-specific; missing groups → DEFAULT.
+SPORT_ML_PROB_CUTS: dict[str, tuple[float, float, float] | dict[str, tuple[float, float, float]]] = {
+    "soccer": (0.45, 0.35, 0.25),  # all groups; soccer base rates are low
+    "mlb": {
+        "demon": (0.65, 0.60, 0.58),  # calibrated from 48,772-leg per-date scan
+        # goblin and standard fall back to DEFAULT (0.71, 0.65, 0.58)
+    },
 }
+
+
+def _resolve_ml_prob_cuts(sport: str, pick_type: str | None) -> tuple[float, float, float]:
+    sport_key = (sport or "").strip().lower()
+    sport_entry = SPORT_ML_PROB_CUTS.get(sport_key)
+    if sport_entry is None:
+        return DEFAULT_ML_PROB_CUTS
+    if isinstance(sport_entry, tuple):
+        return sport_entry
+    if isinstance(sport_entry, dict):
+        pt_key = (pick_type or "").lower()
+        return sport_entry.get(pt_key, DEFAULT_ML_PROB_CUTS)
+    return DEFAULT_ML_PROB_CUTS
 
 
 def _safe_float_prob(ml_prob: object) -> float:
@@ -31,21 +52,24 @@ def _safe_float_prob(ml_prob: object) -> float:
     return v
 
 
-def _tier_from_ml_scalar(ml_prob: object) -> str:
+def _tier_from_ml_scalar(
+    ml_prob: object, a_cut: float, b_cut: float, c_cut: float
+) -> str:
     """A–D from ml_prob only; NaN / invalid → D."""
     prob = _safe_float_prob(ml_prob)
-    if prob >= DEFAULT_ML_PROB_CUTS[0]:
+    if prob >= a_cut:
         return "A"
-    if prob >= DEFAULT_ML_PROB_CUTS[1]:
+    if prob >= b_cut:
         return "B"
-    if prob >= DEFAULT_ML_PROB_CUTS[2]:
+    if prob >= c_cut:
         return "C"
     return "D"
 
 
-def _tier_from_ml_array(ml_raw: np.ndarray, cuts: tuple[float, float, float]) -> np.ndarray:
+def _tier_from_ml_array(
+    ml_raw: np.ndarray, a_cut: float, b_cut: float, c_cut: float
+) -> np.ndarray:
     """Vectorized ml_prob tiers; NaN → D."""
-    a_cut, b_cut, c_cut = cuts
     t = np.full(ml_raw.shape, "D", dtype=object)
     fin = np.isfinite(ml_raw)
     t[fin & (ml_raw >= a_cut)] = "A"
@@ -62,10 +86,13 @@ def _tier_from_group(
     ml_prob: float,
     line: float,
     standard_line: float | None,
+    *,
+    sport: str = "",
 ) -> str:
     """
     Assign rank tier A–D based on pick_type × direction group.
-    Cuts derived from analyze_tier_criteria_by_group backtest (20b961f1).
+    Cuts derived from analyze_tier_criteria_by_group backtest (20b961f1);
+    MLB Demon ml_prob fallback from tier_criteria_mlb_per_date (25e0bd78).
     """
     pt_raw = (pick_type or "").strip().lower()
     if "dem" in pt_raw:
@@ -75,6 +102,7 @@ def _tier_from_group(
     else:
         pt = "standard"
     _ = (direction or "").strip().upper()
+    cuts = _resolve_ml_prob_cuts(sport, pt)
 
     std_ok = standard_line is not None and not (
         isinstance(standard_line, float) and np.isnan(standard_line)
@@ -84,10 +112,11 @@ def _tier_from_group(
         ln_ok = np.isfinite(ln)
     except (TypeError, ValueError):
         ln_ok = False
+        ln = float("nan")
 
     if pt == "goblin":
         if std_ok and ln_ok:
-            dist = abs(float(ln) - float(standard_line))
+            dist = abs(ln - float(standard_line))
             if dist >= 3.5:
                 return "A"
             if dist >= 2.0:
@@ -95,11 +124,11 @@ def _tier_from_group(
             if dist >= 1.0:
                 return "C"
             return "D"
-        return _tier_from_ml_scalar(ml_prob)
+        return _tier_from_ml_scalar(ml_prob, *cuts)
 
     if pt == "demon":
         if std_ok and ln_ok:
-            dist = abs(float(ln) - float(standard_line))
+            dist = abs(ln - float(standard_line))
             if dist <= 1.0:
                 return "A"
             if dist <= 3.0:
@@ -107,9 +136,9 @@ def _tier_from_group(
             if dist <= 6.0:
                 return "C"
             return "D"
-        return _tier_from_ml_scalar(ml_prob)
+        return _tier_from_ml_scalar(ml_prob, *cuts)
 
-    return _tier_from_ml_scalar(ml_prob)
+    return _tier_from_ml_scalar(ml_prob, *cuts)
 
 
 def _first_col(df: pd.DataFrame, names: list[str]) -> str | None:
@@ -128,8 +157,6 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
       - ``ml_prob_fallback``: Goblin/Demon missing usable distance inputs
       - ``ml_prob``: Standard and other pick types
     """
-    sport_key = str(sport or "default").strip().lower()
-    cuts = SPORT_ML_PROB_CUTS.get(sport_key, DEFAULT_ML_PROB_CUTS)
     idx = out.index
     n = len(out)
 
@@ -149,7 +176,12 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
         if mc
         else np.full(n, np.nan, dtype=float)
     )
-    t_ml = _tier_from_ml_array(ml_raw, cuts)
+    c_std = _resolve_ml_prob_cuts(sport, "standard")
+    c_gob = _resolve_ml_prob_cuts(sport, "goblin")
+    c_dem = _resolve_ml_prob_cuts(sport, "demon")
+    t_std = _tier_from_ml_array(ml_raw, *c_std)
+    t_gob_fb = _tier_from_ml_array(ml_raw, *c_gob)
+    t_dem_fb = _tier_from_ml_array(ml_raw, *c_dem)
 
     ln = (
         pd.to_numeric(out[lc], errors="coerce").to_numpy(dtype=float)
@@ -166,7 +198,7 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
     tier = np.full(n, "D", dtype=object)
     tier_src = np.full(n, "ml_prob", dtype=object)
 
-    tier[is_non_gd] = t_ml[is_non_gd]
+    tier[is_non_gd] = t_std[is_non_gd]
 
     has_gd_dist = is_gob & np.isfinite(sl) & np.isfinite(ln)
     t_gob_d = np.where(
@@ -178,7 +210,7 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
     tier_src[has_gd_dist] = "distance"
 
     gob_fb = is_gob & ~has_gd_dist
-    tier[gob_fb] = t_ml[gob_fb]
+    tier[gob_fb] = t_gob_fb[gob_fb]
     tier_src[gob_fb] = "ml_prob_fallback"
 
     has_dd_dist = is_dem & np.isfinite(sl) & np.isfinite(ln)
@@ -191,7 +223,7 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
     tier_src[has_dd_dist] = "distance"
 
     dem_fb = is_dem & ~has_dd_dist
-    tier[dem_fb] = t_ml[dem_fb]
+    tier[dem_fb] = t_dem_fb[dem_fb]
     tier_src[dem_fb] = "ml_prob_fallback"
 
     out["tier_source"] = pd.Series(tier_src, index=idx, dtype=str)
