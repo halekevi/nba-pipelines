@@ -448,29 +448,25 @@ def over_under_lines_html(sub_rows: list[dict]) -> str:
     )
 
 
-def build_pick_tier_direction_matrix_rows(rows: list[dict], min_decided: int = 10) -> list[dict]:
-    """
-    Pick Type × Tier × Direction matrix rows for graded props.
+def _norm_pick_type_matrix(v: object) -> str | None:
+    s = str(v or "").strip().lower()
+    if "goblin" in s:
+        return "Goblin"
+    if "demon" in s:
+        return "Demon"
+    if "standard" in s:
+        return "Standard"
+    return None
 
-    Rules:
-      - Demon/Goblin: OVER only
-      - Standard: OVER + UNDER
-      - suppress combos with decided < min_decided
-      - sort by hit_rate desc within pick type
-    """
-    def _norm_pick_type(v: object) -> str | None:
-        s = str(v or "").strip().lower()
-        if "goblin" in s:
-            return "Goblin"
-        if "demon" in s:
-            return "Demon"
-        if "standard" in s:
-            return "Standard"
-        return None
 
+def build_pick_tier_direction_agg(rows: list[dict]) -> dict[tuple[str, str, str], dict[str, int]]:
+    """
+    Accumulate decided / hits / misses per (pick type, tier A-D, direction).
+    Goblin/Demon: OVER only; Standard: OVER + UNDER.
+    """
     agg: dict[tuple[str, str, str], dict[str, int]] = {}
     for r in rows:
-        pt = _norm_pick_type(r.get("Pick Type"))
+        pt = _norm_pick_type_matrix(r.get("Pick Type"))
         if not pt:
             continue
         tier = str(r.get("Tier", "") or "").strip().upper()
@@ -494,7 +490,6 @@ def build_pick_tier_direction_matrix_rows(rows: list[dict], min_decided: int = 1
             agg[key]["misses"] += 1
             agg[key]["decided"] += 1
         else:
-            # Pre-aggregated fallback.
             d = safe_int(r.get("Decided", r.get("decided", 0)))
             h_ = safe_int(r.get("Hits", r.get("hits", 0)))
             m_ = safe_int(r.get("Misses", r.get("misses", 0)))
@@ -502,63 +497,65 @@ def build_pick_tier_direction_matrix_rows(rows: list[dict], min_decided: int = 1
                 agg[key]["decided"] += d
                 agg[key]["hits"] += h_
                 agg[key]["misses"] += m_
+    return agg
 
-    out: list[dict] = []
-    for (pt, tier, direction), v in agg.items():
-        d = int(v["decided"])
-        h_ = int(v["hits"])
-        m_ = int(v["misses"])
-        if d < int(min_decided):
-            continue
-        hr = (h_ / d * 100.0) if d > 0 else 0.0
-        out.append(
-            {
-                "pick_type": pt,
-                "tier": tier,
-                "direction": direction,
-                "decided": d,
-                "hits": h_,
-                "misses": m_,
-                "hit_rate": hr,
-            }
-        )
 
-    pick_order = {"Standard": 0, "Goblin": 1, "Demon": 2}
-    tier_order = {"A": 0, "B": 1, "C": 2, "D": 3}
-    dir_order = {"OVER": 0, "UNDER": 1}
-    out.sort(
-        key=lambda x: (
-            pick_order.get(str(x["pick_type"]), 99),
-            -float(x["hit_rate"]),
-            tier_order.get(str(x["tier"]), 99),
-            dir_order.get(str(x["direction"]), 99),
-        )
-    )
-    return out
+def _canonical_pick_tier_direction_keys() -> list[tuple[str, str, str]]:
+    """Fixed display order: Standard (A-D × O/U), Goblin (A-D OVER), Demon (A-D OVER)."""
+    keys: list[tuple[str, str, str]] = []
+    for tier in ("A", "B", "C", "D"):
+        keys.append(("Standard", tier, "OVER"))
+        keys.append(("Standard", tier, "UNDER"))
+    for tier in ("A", "B", "C", "D"):
+        keys.append(("Goblin", tier, "OVER"))
+    for tier in ("A", "B", "C", "D"):
+        keys.append(("Demon", tier, "OVER"))
+    return keys
 
 
 def pick_tier_direction_matrix_html(rows: list[dict], min_decided: int = 10) -> str:
-    matrix_rows = build_pick_tier_direction_matrix_rows(rows, min_decided=min_decided)
-    summary = f"Showing {len(matrix_rows)} combinations with ≥ {int(min_decided)} decided props"
+    agg = build_pick_tier_direction_agg(rows)
+    keys = _canonical_pick_tier_direction_keys()
+    n_ge = sum(1 for k in keys if int(agg.get(k, {}).get("decided", 0)) >= int(min_decided))
+    summary = (
+        f"Full grid: Standard A–D (OVER/UNDER), Goblin & Demon A–D (OVER). "
+        f"{n_ge} of {len(keys)} cells have ≥ {int(min_decided)} decided; others still listed with counts."
+    )
 
     body_rows = ""
-    for r in matrix_rows:
-        hr = float(r["hit_rate"])
-        row_cls = "matrix-hit" if hr >= 60.0 else ("matrix-miss" if hr < 50.0 else "matrix-warn")
-        pt = str(r["pick_type"])
+    for pt, tier, direction in keys:
+        v = agg.get((pt, tier, direction), {"hits": 0, "misses": 0, "decided": 0})
+        d = int(v["decided"])
+        h_ = int(v["hits"])
+        m_ = int(v["misses"])
         pt_chip = {
             "Goblin": '<span class="chip chip-goblin">🎃\u00a0Goblin</span>',
             "Demon": '<span class="chip chip-demon">😈\u00a0Demon</span>',
             "Standard": '<span class="chip chip-std">⭐\u00a0Standard</span>',
         }.get(pt, h(pt))
-        tier = str(r["tier"]).upper()
-        tier_chip_cls = {"A": "chip-a", "B": "chip-b", "C": "chip-c"}.get(tier, "chip-d")
-        direction = str(r["direction"]).upper()
+        tier_u = str(tier).upper()
+        tier_chip_cls = {"A": "chip-a", "B": "chip-b", "C": "chip-c"}.get(tier_u, "chip-d")
         dir_html = (
             '<span style="color:var(--green);font-size:13px">▲ OVER</span>'
             if direction == "OVER"
             else '<span style="color:var(--cyan);font-size:13px">▼ UNDER</span>'
         )
+        if d <= 0:
+            body_rows += f"""<tr class="matrix-empty">
+          <td>{pt_chip}</td>
+          <td><span class="chip {tier_chip_cls}">TIER\u00a0{tier_u}</span></td>
+          <td>{dir_html}</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr>"""
+            continue
+        hr = (h_ / d * 100.0) if d > 0 else 0.0
+        row_cls = "matrix-hit" if hr >= 60.0 else ("matrix-miss" if hr < 50.0 else "matrix-warn")
+        if d < int(min_decided):
+            row_cls += " matrix-sparse"
         bar_color = "var(--green)" if hr >= 60.0 else ("var(--gold)" if hr >= 50.0 else "var(--red)")
         bar_html = (
             f'<div class="rate-bar-bg"><div class="rate-bar-fill" '
@@ -566,20 +563,13 @@ def pick_tier_direction_matrix_html(rows: list[dict], min_decided: int = 10) -> 
         )
         body_rows += f"""<tr class="{row_cls}">
           <td>{pt_chip}</td>
-          <td><span class="chip {tier_chip_cls}">TIER\u00a0{tier}</span></td>
+          <td><span class="chip {tier_chip_cls}">TIER\u00a0{tier_u}</span></td>
           <td>{dir_html}</td>
-          <td class="right mono">{fmt_num(r['decided'])}</td>
-          <td class="right mono pos">{fmt_num(r['hits'])}</td>
-          <td class="right mono neg">{fmt_num(r['misses'])}</td>
+          <td class="right mono">{fmt_num(d)}</td>
+          <td class="right mono pos">{fmt_num(h_)}</td>
+          <td class="right mono neg">{fmt_num(m_)}</td>
           <td class="mono right">{pct(hr)}</td>
           <td>{bar_html}</td>
-        </tr>"""
-
-    if not body_rows:
-        body_rows = f"""<tr>
-          <td colspan="8" class="muted" style="text-align:center;padding:14px;">
-            No combinations met the decided ≥ {int(min_decided)} threshold.
-          </td>
         </tr>"""
 
     return f"""<details class="matrix-collapsible">
@@ -605,17 +595,24 @@ def pick_type_tier_direction_split_html(rows: list[dict], min_decided: int = 10)
       - Demon by Tier A-D (OVER only)
       - Standard by Tier A-D (OVER + UNDER)
     """
-    matrix_rows = build_pick_tier_direction_matrix_rows(rows, min_decided=min_decided)
-    grouped: dict[str, list[dict]] = {"Goblin": [], "Demon": [], "Standard": []}
-    for r in matrix_rows:
-        pt = str(r.get("pick_type") or "")
-        if pt in grouped:
-            grouped[pt].append(r)
+    agg = build_pick_tier_direction_agg(rows)
+    grid = _canonical_pick_tier_direction_keys()
+    n_ge = sum(1 for k in grid if int(agg.get(k, {}).get("decided", 0)) >= int(min_decided))
+
+    def _rec_for(pt: str, tier: str, direction: str) -> dict | None:
+        v = agg.get((pt, tier, direction), {"decided": 0, "hits": 0, "misses": 0})
+        d = int(v["decided"])
+        if d <= 0:
+            return None
+        h_ = int(v["hits"])
+        m_ = int(v["misses"])
+        hr = (h_ / d * 100.0) if d > 0 else 0.0
+        return {"decided": d, "hits": h_, "misses": m_, "hit_rate": hr}
 
     def _row_block(pt: str, direction: str, tier: str, rec: dict | None) -> str:
         if rec is None:
             return (
-                f'<tr><td><span class="chip chip-std">TIER {tier}</span></td>'
+                f'<tr class="matrix-empty"><td><span class="chip chip-std">TIER {tier}</span></td>'
                 f'<td>{"▲ OVER" if direction=="OVER" else "▼ UNDER"}</td>'
                 f'<td class="right mono muted">—</td><td class="right mono muted">—</td>'
                 f'<td class="right mono muted">—</td><td class="right mono muted">—</td>'
@@ -623,6 +620,8 @@ def pick_type_tier_direction_split_html(rows: list[dict], min_decided: int = 10)
             )
         hr = float(rec["hit_rate"])
         row_cls = "matrix-hit" if hr >= 60.0 else ("matrix-miss" if hr < 50.0 else "matrix-warn")
+        if int(rec["decided"]) < int(min_decided):
+            row_cls += " matrix-sparse"
         dir_html = (
             '<span style="color:var(--green);font-size:13px">▲ OVER</span>'
             if direction == "OVER"
@@ -645,15 +644,10 @@ def pick_type_tier_direction_split_html(rows: list[dict], min_decided: int = 10)
         </tr>"""
 
     def _table_for(pt: str, dirs: list[str], chip_cls: str, chip_emoji: str) -> str:
-        rows_pt = grouped.get(pt, [])
-        idx = {
-            (str(r.get("tier") or "").upper(), str(r.get("direction") or "").upper()): r
-            for r in rows_pt
-        }
         body = ""
         for t in ("A", "B", "C", "D"):
             for d in dirs:
-                body += _row_block(pt, d, t, idx.get((t, d)))
+                body += _row_block(pt, d, t, _rec_for(pt, t, d))
         return f"""<div>
           <div class="section-label"><span class="chip {chip_cls}">{chip_emoji}&nbsp;{pt}</span> BY TIER</div>
           <div class="table-wrap"><table>
@@ -666,11 +660,10 @@ def pick_type_tier_direction_split_html(rows: list[dict], min_decided: int = 10)
           </table></div>
         </div>"""
 
-    total_rows = len(grouped["Goblin"]) + len(grouped["Demon"]) + len(grouped["Standard"])
     return f"""<details class="matrix-collapsible">
       <summary>Pick Type Tier Splits — Goblin/Demon OVER, Standard OVER+UNDER</summary>
       <div class="matrix-body">
-        <div class="matrix-summary">Showing {total_rows} combinations with ≥ {int(min_decided)} decided props</div>
+        <div class="matrix-summary">Full A–D per pick type ({len(grid)} matrix cells). {n_ge} cells with ≥ {int(min_decided)} decided.</div>
         <div class="three-col">
           {_table_for("Goblin", ["OVER"], "chip-goblin", "🎃")}
           {_table_for("Demon", ["OVER"], "chip-demon", "😈")}
@@ -1347,6 +1340,8 @@ border:1px solid var(--glass-bd);border-radius:999px;padding:8px 14px;letter-spa
 .matrix-collapsible tr.matrix-miss td:first-child{border-left:3px solid var(--red)}
 .matrix-collapsible tr.matrix-warn td{background:rgba(240,165,0,0.06)}
 .matrix-collapsible tr.matrix-warn td:first-child{border-left:3px solid var(--gold)}
+.matrix-collapsible tr.matrix-empty td,.matrix-collapsible tr.matrix-sparse td{opacity:.88}
+.matrix-collapsible tr.matrix-sparse td:first-child{border-left:3px dashed rgba(255,255,255,0.12)}
 .section-label{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.08vw,16px);color:var(--muted);letter-spacing:2.5px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
 .stat-grid{display:grid;gap:14px;margin-bottom:24px;width:100%;max-width:100%;box-sizing:border-box}
