@@ -2734,9 +2734,14 @@ function renderEdges() {
     const pct = topEdgeL5HitPct(p, dir);
     return Number.isFinite(pct) && pct >= 80;
   };
-  const overPrimary = pickPrimaryLineRows(overRows).filter((p) => passesEdgeL5Gate(p, "OVER"));
-  const stdO = overPrimary.filter((p) => !isGoblinPick(p));
-  const gobO = overPrimary.filter((p) => isGoblinPick(p));
+  const overPrimaryGated = pickPrimaryLineRows(overRows).filter((p) => passesEdgeL5Gate(p, "OVER"));
+  const overPrimaryAll = pickPrimaryLineRows(overRows);
+  const stdO = (overPrimaryGated.filter((p) => !isGoblinPick(p)).length
+    ? overPrimaryGated.filter((p) => !isGoblinPick(p))
+    : overPrimaryAll.filter((p) => !isGoblinPick(p)));
+  const gobO = (overPrimaryGated.filter((p) => isGoblinPick(p)).length
+    ? overPrimaryGated.filter((p) => isGoblinPick(p))
+    : overPrimaryAll.filter((p) => isGoblinPick(p)));
   const byEdgeDesc = (a, b) => num(b.edge) - num(a.edge);
   stdO.sort(byEdgeDesc);
   gobO.sort(byEdgeDesc);
@@ -2754,8 +2759,9 @@ function renderEdges() {
     ].join("|");
     if (!underByKey.has(k)) underByKey.set(k, row);
   }
-  const underRows = pickPrimaryLineRows(underSourceRows.map((x) => x.disp))
-    .filter((disp) => passesEdgeL5Gate(disp, "UNDER"))
+  const underPrimaryAll = pickPrimaryLineRows(underSourceRows.map((x) => x.disp));
+  const underPrimaryGated = underPrimaryAll.filter((disp) => passesEdgeL5Gate(disp, "UNDER"));
+  const underRows = (underPrimaryGated.length ? underPrimaryGated : underPrimaryAll)
     .map((disp) => {
       const k = [
         String(disp.sport || "").trim().toUpperCase(),
@@ -2872,19 +2878,19 @@ function renderStreaks() {
 
   const l5all = [...ALL_SLATE]
     .map(p => ({...p, h: streakHits(realHits(p, 5), 5)}))
-    .filter(p => p.h !== null && p.h >= 4)
+    .filter(p => p.h !== null && p.h >= 3)
     .sort((a, b) => b.h - a.h);
 
   const l5O = l5all.filter(p => String(p.dir || "").trim().toUpperCase() === "OVER");
-  const l5U = underStreakRows(5, 4);
+  const l5U = underStreakRows(5, 3);
 
   const l10all = [...ALL_SLATE]
     .map(p => ({...p, h: streakHits(realHits(p, 10), 10)}))
-    .filter(p => p.h !== null && p.h >= 8)
+    .filter(p => p.h !== null && p.h >= 6)
     .sort((a, b) => b.h - a.h);
 
   const l10O = l10all.filter(p => String(p.dir || "").trim().toUpperCase() === "OVER");
-  const l10U = underStreakRows(10, 8);
+  const l10U = underStreakRows(10, 6);
 
   const none = msg => `<div style="padding:14px 0;font-size:11px;color:var(--muted2);letter-spacing:1px;">${msg}</div>`;
 
