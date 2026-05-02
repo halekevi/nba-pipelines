@@ -625,10 +625,16 @@ function Run-Combined {
 
     if ($okC) {
         $datedCombinedPath = Join-Path $OutDir "combined_slate_tickets_$Date.xlsx"
+        # REMOVED: HHmmss snapshot caused resolver ambiguity in build_ticket_eval.py.
+        # No downstream consumer used this file. Use --slate override if a specific
+        # snapshot is needed for debugging.
         Copy-Item $CombinedOut $datedCombinedPath -Force -ErrorAction SilentlyContinue
-        # Canonical copy only (no HHmmss-stamped or _to_grade_tomorrow duplicates — they confused ticket eval resolvers).
+        $toGradeTomorrowPath = Join-Path $OutDir "combined_slate_tickets_${Date}_to_grade_tomorrow.xlsx"
+        Copy-Item $CombinedOut $toGradeTomorrowPath -Force -ErrorAction SilentlyContinue
         $canonicalCombinedPath = Join-Path $CanonicalOutDir "combined_slate_tickets_$Date.xlsx"
+        $canonicalFrozenPath = Join-Path $CanonicalOutDir "combined_slate_tickets_${Date}_to_grade_tomorrow.xlsx"
         Copy-Item $CombinedOut $canonicalCombinedPath -Force -ErrorAction SilentlyContinue
+        Copy-Item $CombinedOut $canonicalFrozenPath -Force -ErrorAction SilentlyContinue
         # ML backfill expects dated combined_slate_tickets_YYYY-MM-DD.json archives.
         # Snapshot today's tickets_latest.json into outputs/$Date/ as a dated JSON source.
         $TicketsLatestJson = Join-Path $WebOutDir "tickets_latest.json"
@@ -675,11 +681,14 @@ function Run-Combined {
                 Write-Host "  Saved -> $mobileDst" -ForegroundColor Green
             }
         }
-        # Line-movement compare previously used HHmmss-stamped pairs; removed with stamped artifacts.
+        # REMOVED: depended on HHmmss snapshot (see above). Re-implement using
+        # tickets_latest.json diff if count-compare is needed in future.
 
         Remove-Item $CombinedOut -Force -ErrorAction SilentlyContinue
         Write-Host "  Saved -> $datedCombinedPath" -ForegroundColor Green
+        Write-Host "  Saved -> $toGradeTomorrowPath" -ForegroundColor Green
         Write-Host "  Saved -> $canonicalCombinedPath" -ForegroundColor Green
+        Write-Host "  Saved -> $canonicalFrozenPath" -ForegroundColor Green
         if ($RunPayoutEngine) {
             Write-Host "[PAYOUT ENGINE] Fetching exact multipliers from PrizePicks..." -ForegroundColor Magenta
             try {

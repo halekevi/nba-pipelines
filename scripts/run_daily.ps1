@@ -219,7 +219,7 @@ try { [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 } catch { }
 
 Write-Log "======== Daily run start (Today=$Today, Yesterday=$Yesterday) ========"
 Write-Log "Ticket model mode: $TicketModelModeEffective (weight=$TicketModelWeight, top_n=$TicketModelTopN)"
-Write-Log "PQS control slice: DISABLED (STEP D1h; was ${PqControlPercent}% / cap=$PqControlMaxTickets — control_pq0 xlsx collided with ticket workbook resolution)"
+Write-Log "PQS control slice: ${PqControlPercent}% (cap=$PqControlMaxTickets, pq=0.0, artifacts only)"
 if ($NoOverwrite) {
     Write-Log "NO-OVERWRITE mode enabled (existing files are preserved to *.bak_YYYYMMDD_HHMMSS before updates)"
 }
@@ -1029,13 +1029,76 @@ else {
             Write-Log "STEP D1g3 - Prop population state report: SKIP (script missing)"
         }
 
-        # DISABLED — STEP D1h (PQ control / control_pq0):
-        # Previously ran combined_slate_tickets.py a second time to
-        #   outputs\$Today\combined_slate_tickets_control_pq0_$Today.xlsx
-        # That file sat next to the canonical workbook and was picked up by glob resolvers
-        # (build_ticket_eval / grader), often the smaller run. Re-enable only if a dedicated
-        # consumer uses an explicit --slate path, or write under outputs\<date>\analysis\ only.
-        Write-Log "STEP D1h - PQ control slice: SKIP (disabled; see comment above)"
+        # Optional PQ control artifact (small pq0 slice) for drift tracking.
+        # This does not overwrite tickets_latest/slate_latest and is kept for offline analysis only.
+        if ($PqControlPercent -gt 0) {
+            $combinedScript = Join-Path $Root "scripts\combined_slate_tickets.py"
+            if (Test-Path $combinedScript) {
+                try {
+                    $outDir = Join-Path $Root "outputs\$Today"
+                    if (-not (Test-Path $outDir)) {
+                        New-Item -ItemType Directory -Path $outDir -Force | Out-Null
+                    }
+                    $controlOut = Join-Path $outDir "combined_slate_tickets_control_pq0_$Today.xlsx"
+                    $controlTickets = [Math]::Max(1, [Math]::Min($PqControlMaxTickets, [int][Math]::Floor(40 * ($PqControlPercent / 100.0))))
+                    $candidate = @{
+                        nba = @((Join-Path $Root "outputs\$Today\step8_nba_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "NBA\data\outputs\step8_all_direction_clean.xlsx"))
+                        nhl = @((Join-Path $Root "outputs\$Today\step8_nhl_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "NHL\outputs\step8_nhl_direction_clean.xlsx"))
+                        soccer = @((Join-Path $Root "outputs\$Today\step8_soccer_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "Soccer\outputs\step8_soccer_direction_clean.xlsx"))
+                        mlb = @((Join-Path $Root "outputs\$Today\step8_mlb_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "MLB\step8_mlb_direction_clean.xlsx"), (Join-Path $SportsRoot "MLB\outputs\step8_mlb_direction_clean.xlsx"))
+                        tennis = @((Join-Path $Root "outputs\$Today\step8_tennis_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "Tennis\outputs\step8_tennis_direction_clean.xlsx"))
+                        nba1q = @((Join-Path $Root "outputs\$Today\step8_nba1q_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "NBA\step8_nba1q_direction_clean.xlsx"))
+                        nba1h = @((Join-Path $Root "outputs\$Today\step8_nba1h_direction_clean_$Today.xlsx"), (Join-Path $SportsRoot "NBA\step8_nba1h_direction_clean.xlsx"))
+                        cbb = @((Join-Path $SportsRoot "CBB\step6_ranked_cbb.xlsx"))
+                    }
+                    $resolved = @{}
+                    foreach ($k in $candidate.Keys) {
+                        foreach ($p in $candidate[$k]) {
+                            if (Test-Path $p) { $resolved[$k] = $p; break }
+                        }
+                    }
+                    if (-not $resolved.ContainsKey("nba")) {
+                        Write-Log "STEP D1h - PQ control slice: SKIP (NBA step8 missing)"
+                    }
+                    else {
+                        $controlArgs = @(
+                            "-3.14", "-X", "utf8", $combinedScript,
+                            "--date", $Today,
+                            "--nba", $resolved["nba"],
+                            "--output", $controlOut,
+                            "--tiers", "A,B,C,D",
+                            "--min-hit-rate", "0.45",
+                            "--min-edge", "-0.25",
+                            "--max-tickets", "$controlTickets",
+                            "--ticket-gen-starts", "32",
+                            "--nba-structured-variants", "4",
+                            "--min-prop-quality", "0.0"
+                        )
+                        foreach ($opt in @("nhl", "soccer", "mlb", "tennis", "nba1q", "nba1h", "cbb")) {
+                            if ($resolved.ContainsKey($opt)) {
+                                $controlArgs += @("--$opt", $resolved[$opt])
+                            }
+                        }
+                        & py @controlArgs
+                        if ($LASTEXITCODE -eq 0 -and (Test-Path $controlOut)) {
+                            Write-Log "STEP D1h - PQ control slice: OK -> $controlOut"
+                        }
+                        else {
+                            Write-Log "STEP D1h - PQ control slice: WARN (exit $LASTEXITCODE)"
+                        }
+                    }
+                }
+                catch {
+                    Write-Log "STEP D1h - PQ control slice: WARN ($($_.Exception.Message))"
+                }
+            }
+            else {
+                Write-Log "STEP D1h - PQ control slice: SKIP (combined_slate_tickets.py missing)"
+            }
+        }
+        else {
+            Write-Log "STEP D1h - PQ control slice: SKIP (disabled; PROPORACLE_PQ_CONTROL_PERCENT<=0)"
+        }
     }
     catch {
         Write-Log "STEP D1 - Ticket model refresh/eval: WARN (exception: $($_.Exception.Message))"
