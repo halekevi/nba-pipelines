@@ -54,6 +54,7 @@ if str(_PROPORACLE_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROPORACLE_ROOT))
 
 from scripts.db_utils import ensure_wnba_schema, log_pipeline_health, open_db, upsert_rows
+from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
 
 ESPN_HEADERS = {
     "User-Agent": (
@@ -473,6 +474,12 @@ def main():
     if cache.empty:
         print("⚠️ Cache empty — writing slate with no stats attached")
         slate.to_csv(args.out, index=False, encoding="utf-8-sig")
+        copy_pipeline_output_to_dated_dirs(
+            output_path=args.out,
+            df=slate,
+            sport_dir_name="WNBA",
+            repo_root=_PROPORACLE_ROOT,
+        )
         return
 
     # Filter cache to season + date range
@@ -587,6 +594,12 @@ def main():
         out[k] = v
 
     out.to_csv(args.out, index=False, encoding="utf-8-sig")
+    copy_pipeline_output_to_dated_dirs(
+        output_path=args.out,
+        df=out,
+        sport_dir_name="WNBA",
+        repo_root=_PROPORACLE_ROOT,
+    )
     print(f"✅ Saved → {args.out}  rows={len(out)}")
 
     if misses and args.debug_misses:

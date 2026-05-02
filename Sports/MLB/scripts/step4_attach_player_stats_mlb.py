@@ -44,6 +44,7 @@ if str(_PROPORACLE_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROPORACLE_ROOT))
 
 from scripts.db_utils import ensure_mlb_schema, log_pipeline_health, open_db, upsert_rows
+from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
 
 COMBO_SEP = "|"
 
@@ -848,6 +849,12 @@ def main() -> None:
 
     slate.drop(columns=["_line_num"], errors="ignore", inplace=True)
     slate.to_csv(args.output, index=False, encoding="utf-8-sig")
+    copy_pipeline_output_to_dated_dirs(
+        output_path=args.output,
+        df=slate,
+        sport_dir_name="MLB",
+        repo_root=_PROPORACLE_ROOT,
+    )
 
     print(f"\n✅ Saved → {args.output}")
     print(f"Cache updates: {cache_updates}")

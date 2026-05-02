@@ -14,9 +14,18 @@ Usage:
 import argparse
 import csv
 import json
+import sys
 import time
 import urllib.request
 from datetime import datetime
+from pathlib import Path
+
+import pandas as pd
+
+_REPO_ROOT = Path(__file__).resolve().parents[3]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
 try:
     from tqdm import tqdm as _tqdm
 except ImportError:
@@ -250,6 +259,13 @@ def main():
         results.append(row)
 
     write_csv(results, args.output)
+    df_out = pd.read_csv(args.output, low_memory=False, encoding="utf-8-sig")
+    copy_pipeline_output_to_dated_dirs(
+        output_path=args.output,
+        df=df_out,
+        sport_dir_name="NHL",
+        repo_root=_REPO_ROOT,
+    )
 
     # Print tier summary
     tiers = {}

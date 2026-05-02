@@ -32,6 +32,11 @@ for _ in range(6):
     _here = _here.parent
 from step4_db_reader import open_db, attach_stats, db_summary, DB_PATH
 
+_REPO_ROOT = Path(__file__).resolve().parents[3]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
+
 
 def main():
     ap = argparse.ArgumentParser()
@@ -100,6 +105,12 @@ def main():
             print(f"Wrote misses → {args.debug_misses}")
 
     slate.to_csv(args.output, index=False, encoding="utf-8-sig")
+    copy_pipeline_output_to_dated_dirs(
+        output_path=args.output,
+        df=slate,
+        sport_dir_name="Soccer",
+        repo_root=_REPO_ROOT,
+    )
     unresolved = slate[slate[id_col].astype(str).str.strip() == ""].copy()
     if not unresolved.empty:
         if "start_time" in unresolved.columns and unresolved["start_time"].astype(str).str.strip().ne("").any():

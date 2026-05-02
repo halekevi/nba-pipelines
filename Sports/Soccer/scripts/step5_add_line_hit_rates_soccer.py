@@ -15,10 +15,16 @@ from __future__ import annotations
 
 import argparse
 import sys
+from pathlib import Path
 from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
+
+_REPO_ROOT = Path(__file__).resolve().parents[3]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
 
 
 def _get_stat_cols(df: pd.DataFrame, n: int) -> List[str]:
@@ -145,6 +151,12 @@ def main() -> None:
             df.loc[ok10, "line_hit_rate_under_ou_10"] = urou10.values
 
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
+    copy_pipeline_output_to_dated_dirs(
+        output_path=args.output,
+        df=df,
+        sport_dir_name="Soccer",
+        repo_root=_REPO_ROOT,
+    )
     if df.empty:
         print("❌ [PropOracle-Soccer-S5] Output is empty — aborting.")
         sys.exit(1)

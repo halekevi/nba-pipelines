@@ -10,8 +10,16 @@ CBB Step 6:
 
 from __future__ import annotations
 import argparse
-import pandas as pd
+import sys
+from pathlib import Path
+
 import numpy as np
+import pandas as pd
+
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
 
 
 # ----------------------------
@@ -127,6 +135,12 @@ def main():
     # -----------------------------------
 
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
+    copy_pipeline_output_to_dated_dirs(
+        output_path=args.output,
+        df=df,
+        sport_dir_name="WNBA",
+        repo_root=_REPO_ROOT,
+    )
     print(f"✅ Saved → {args.output}")
     print(f"Rows: {len(df)}")
 

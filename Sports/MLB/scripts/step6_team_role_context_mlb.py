@@ -22,9 +22,17 @@ Run:
 from __future__ import annotations
 
 import argparse
+import sys
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import requests
+
+_REPO_ROOT = Path(__file__).resolve().parents[3]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
 
 PITCHER_PROPS = {
     "strikeouts", "pitching_outs", "innings_pitched",
@@ -304,6 +312,12 @@ def main() -> None:
     )
 
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
+    copy_pipeline_output_to_dated_dirs(
+        output_path=args.output,
+        df=df,
+        sport_dir_name="MLB",
+        repo_root=_REPO_ROOT,
+    )
     print(f"✅ Saved → {args.output}  rows={len(df)}")
     print("minutes_tier:",       df["minutes_tier"].value_counts().to_dict())
     print("batting_order_tier:", df["batting_order_tier"].value_counts().to_dict())
