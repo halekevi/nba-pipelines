@@ -1515,14 +1515,13 @@ def main() -> None:
         * _to_num(out["reliability_mult"]).fillna(1.0)
     )
 
-    # Hard edge gate: keep rows where edge favors the play (same sign as edge_adj_dr).
-    # Raw edge_adj = projection_adj - line is >0 for OVER-style math only; UNDER wins
-    # when projection is below line, so edge_adj < 0 even for excellent unders.
+    # Edge gate: require edge_adj_dr > 0 so the projection favors the play direction.
+    # Standard UNDER has no edge gate — rank/tier the full eligible std_under cohort on the
+    # composite score (Goblin/Demon and Standard OVER still gated).
     edge_gate = _to_num(out["edge_adj_dr"]).fillna(-999.0) > 0.0
-    # Standard UNDER: still rank within std_under for A–D tiers. A strict edge-only gate
-    # left almost every eligible UNDER with NaN score → all Tier D in grades/matrix.
-    is_std_under_for_tier = pick_type_s.eq("Standard") & bet_is_under
-    score_raw = score_raw.where(elig_mask & (edge_gate | is_std_under_for_tier), np.nan)
+    is_standard_under = pick_type_s.eq("Standard") & bet_is_under
+    score_kept = elig_mask & (is_standard_under | edge_gate)
+    score_raw = score_raw.where(score_kept, np.nan)
 
     out["l5_support_mod"] = pd.Series(l5_support_mod, index=out.index)
     out["rank_score_raw"] = score_raw
