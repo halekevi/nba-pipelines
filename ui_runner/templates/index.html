@@ -3100,6 +3100,54 @@ function syncCardsFromCombinedRows(rows) {
   renderStreaks();
 }
 
+function syncCardsFromCombinedSheet(columns, rows) {
+  if (!Array.isArray(columns) || !Array.isArray(rows) || !rows.length) return;
+  const ci = (name) => columns.indexOf(name);
+  const idx = {
+    sport: ci("Sport"),
+    initials: ci("Initials"),
+    player: ci("Player"),
+    prop: ci("Prop"),
+    line: ci("Line"),
+    pick: ci("Pick Type") >= 0 ? ci("Pick Type") : ci("Pick"),
+    dir: ci("Dir") >= 0 ? ci("Dir") : ci("Direction"),
+    hit: ci("Hit %") >= 0 ? ci("Hit %") : (ci("Hit") >= 0 ? ci("Hit") : ci("Hit Rate")),
+    edge: ci("Edge"),
+    l5_over: ci("L5 Over") >= 0 ? ci("L5 Over") : ci("L5 O"),
+    l5_under: ci("L5 Under") >= 0 ? ci("L5 Under") : ci("L5 U"),
+    l10_over: ci("L10 Over") >= 0 ? ci("L10 Over") : ci("L10 O"),
+    l10_under: ci("L10 Under") >= 0 ? ci("L10 Under") : ci("L10 U"),
+    l5_avg: ci("L5 Avg"),
+    season_avg: ci("Season Avg"),
+    actual_series: ci("Actual Series"),
+    line_series: ci("Line Series"),
+  };
+  const get = (row, i) => (i >= 0 ? row[i] : null);
+  const mapped = rows.map((r) => ({
+    sport: get(r, idx.sport),
+    initials: get(r, idx.initials),
+    player: get(r, idx.player),
+    prop: get(r, idx.prop),
+    line: Number(get(r, idx.line)),
+    pick: get(r, idx.pick),
+    dir: get(r, idx.dir),
+    hit: get(r, idx.hit),
+    edge: Number(get(r, idx.edge)),
+    l5_over: get(r, idx.l5_over),
+    l5_under: get(r, idx.l5_under),
+    l10_over: get(r, idx.l10_over),
+    l10_under: get(r, idx.l10_under),
+    l5_avg: get(r, idx.l5_avg),
+    season_avg: get(r, idx.season_avg),
+    actual_series: get(r, idx.actual_series),
+    line_series: get(r, idx.line_series),
+  })).filter((p) => p.player && p.prop && Number.isFinite(p.edge));
+  if (!mapped.length) return;
+  ALL_SLATE = mapped;
+  renderEdges();
+  renderStreaks();
+}
+
 async function fetchSlateSport(sport, opts = {}) {
   if (sport === 'combined') return;
   if (SLATE_SPORT_CACHE[sport] && Array.isArray(SLATE_DATA[sport])) return;
@@ -3363,6 +3411,7 @@ async function loadSlateExcel() {
         if (sh && sh.columns && sh.rows && sh.rows.length) {
           SLATE_COLS.combined = sh.columns;
           SLATE_DATA.combined = sh.rows;
+          syncCardsFromCombinedSheet(sh.columns, sh.rows);
           scheduleRenderSlateTable('combined');
           return;
         }
