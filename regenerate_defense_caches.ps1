@@ -10,11 +10,11 @@
   Refreshes:
     - NBA   -> NBA/data/cache/defense_team_summary.csv
     - WNBA  -> WNBA/wnba_defense_summary.csv
+    - MLB   -> MLB/mlb_defense_summary.csv   (statsapi team pitching + DEF_TIER)
     - NHL   -> NHL/cache/nhl_defense_summary.csv
     - Soccer-> Soccer/cache/soccer_defense_summary.csv
 
   NFL defense rankings are produced by NFL step4 (run via full NFL or parallel pipeline).
-  MLB uses MLB/mlb_defense_summary.csv (manual / external refresh if that file is updated).
   CBB uses CBB reference CSVs (separate from this script).
 #>
 param(
@@ -75,6 +75,11 @@ try {
     } else {
         Write-Host "  [skip] WNBA (-SkipWNBA)" -ForegroundColor DarkGray
     }
+
+    Invoke-DefenseStep "MLB mlb_defense_summary (MLB Stats API)" `
+        (Join-Path $Root "MLB") `
+        ".\scripts\mlb_defense_report.py" `
+        "--out mlb_defense_summary.csv"
 
     Invoke-DefenseStep "NHL nhl_defense_summary (NHL API)" `
         (Join-Path $Root "NHL") `
