@@ -2734,14 +2734,9 @@ function renderEdges() {
     const pct = topEdgeL5HitPct(p, dir);
     return Number.isFinite(pct) && pct >= 80;
   };
-  const overPrimaryGated = pickPrimaryLineRows(overRows).filter((p) => passesEdgeL5Gate(p, "OVER"));
-  const overPrimaryAll = pickPrimaryLineRows(overRows);
-  const stdO = (overPrimaryGated.filter((p) => !isGoblinPick(p)).length
-    ? overPrimaryGated.filter((p) => !isGoblinPick(p))
-    : overPrimaryAll.filter((p) => !isGoblinPick(p)));
-  const gobO = (overPrimaryGated.filter((p) => isGoblinPick(p)).length
-    ? overPrimaryGated.filter((p) => isGoblinPick(p))
-    : overPrimaryAll.filter((p) => isGoblinPick(p)));
+  const overPrimary = pickPrimaryLineRows(overRows).filter((p) => passesEdgeL5Gate(p, "OVER"));
+  const stdO = overPrimary.filter((p) => !isGoblinPick(p));
+  const gobO = overPrimary.filter((p) => isGoblinPick(p));
   const byEdgeDesc = (a, b) => num(b.edge) - num(a.edge);
   stdO.sort(byEdgeDesc);
   gobO.sort(byEdgeDesc);
@@ -2759,9 +2754,8 @@ function renderEdges() {
     ].join("|");
     if (!underByKey.has(k)) underByKey.set(k, row);
   }
-  const underPrimaryAll = pickPrimaryLineRows(underSourceRows.map((x) => x.disp));
-  const underPrimaryGated = underPrimaryAll.filter((disp) => passesEdgeL5Gate(disp, "UNDER"));
-  const underRows = (underPrimaryGated.length ? underPrimaryGated : underPrimaryAll)
+  const underRows = pickPrimaryLineRows(underSourceRows.map((x) => x.disp))
+    .filter((disp) => passesEdgeL5Gate(disp, "UNDER"))
     .map((disp) => {
       const k = [
         String(disp.sport || "").trim().toUpperCase(),
@@ -2878,19 +2872,19 @@ function renderStreaks() {
 
   const l5all = [...ALL_SLATE]
     .map(p => ({...p, h: streakHits(realHits(p, 5), 5)}))
-    .filter(p => p.h !== null && p.h >= 3)
+    .filter(p => p.h !== null && p.h >= 4)
     .sort((a, b) => b.h - a.h);
 
   const l5O = l5all.filter(p => String(p.dir || "").trim().toUpperCase() === "OVER");
-  const l5U = underStreakRows(5, 3);
+  const l5U = underStreakRows(5, 4);
 
   const l10all = [...ALL_SLATE]
     .map(p => ({...p, h: streakHits(realHits(p, 10), 10)}))
-    .filter(p => p.h !== null && p.h >= 6)
+    .filter(p => p.h !== null && p.h >= 8)
     .sort((a, b) => b.h - a.h);
 
   const l10O = l10all.filter(p => String(p.dir || "").trim().toUpperCase() === "OVER");
-  const l10U = underStreakRows(10, 6);
+  const l10U = underStreakRows(10, 8);
 
   const none = msg => `<div style="padding:14px 0;font-size:11px;color:var(--muted2);letter-spacing:1px;">${msg}</div>`;
 
@@ -3070,6 +3064,40 @@ function _setSlateSportRows(sport, rows) {
   delete SLATE_COLS[sport];
   SLATE_DATA[sport] = Array.isArray(rows) ? rows : [];
   SLATE_DATA[sport].sort((a,b) => Math.abs(b?.edge||0) - Math.abs(a?.edge||0));
+}
+
+function _v(row, keys) {
+  for (const k of keys) {
+    if (row && row[k] !== undefined && row[k] !== null) return row[k];
+  }
+  return null;
+}
+
+function syncCardsFromCombinedRows(rows) {
+  if (!Array.isArray(rows) || !rows.length) return;
+  const mapped = rows.map((r) => ({
+    sport: _v(r, ["sport", "Sport"]),
+    initials: _v(r, ["initials", "Initials"]),
+    player: _v(r, ["player", "Player"]),
+    prop: _v(r, ["prop", "Prop"]),
+    line: Number(_v(r, ["line", "Line"])),
+    pick: _v(r, ["pick_type", "pick", "Pick Type", "Pick"]),
+    dir: _v(r, ["dir", "direction", "Dir", "Direction"]),
+    hit: _v(r, ["hit", "hit_rate", "Hit", "Hit Rate"]),
+    edge: Number(_v(r, ["edge", "Edge"])),
+    l5_over: _v(r, ["l5_over", "L5 Over", "L5 O"]),
+    l5_under: _v(r, ["l5_under", "L5 Under", "L5 U"]),
+    l10_over: _v(r, ["l10_over", "L10 Over", "L10 O"]),
+    l10_under: _v(r, ["l10_under", "L10 Under", "L10 U"]),
+    l5_avg: _v(r, ["l5_avg", "L5 Avg"]),
+    season_avg: _v(r, ["season_avg", "Season Avg"]),
+    actual_series: _v(r, ["actual_series", "Actual Series"]),
+    line_series: _v(r, ["line_series", "Line Series"]),
+  })).filter((p) => p.player && p.prop && Number.isFinite(p.edge));
+  if (!mapped.length) return;
+  ALL_SLATE = mapped;
+  renderEdges();
+  renderStreaks();
 }
 
 async function fetchSlateSport(sport, opts = {}) {
@@ -3312,6 +3340,7 @@ async function loadCombinedFromMergedJson() {
     SLATE_STATE.combined.sortKey = 'rank_score';
     ensureFixedCombinedTheadFromNbaTemplate();
     _setSlateSportRows('combined', rows);
+    syncCardsFromCombinedRows(rows);
     scheduleRenderSlateTable('combined');
   } catch (e) {
     console.warn('combined json fallback failed:', e);
