@@ -321,20 +321,23 @@ def analyze(date_str: str, min_n: int, sports: list[str]) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def soccer_threshold_scan(
+def ml_prob_threshold_scan(
+    sport: str,
     dates: list[str],
     thresholds: list[float],
 ) -> list[dict[str, Any]]:
+    """Merge graded history with step8 ml_prob; scan hit rates above each threshold (>=)."""
+    sport_u = str(sport).strip().upper()
     frames: list[pd.DataFrame] = []
     for d in dates:
-        graded_path = OUTPUTS_DIR / d / f"graded_soccer_{d}.xlsx"
-        g = _load_graded_box_raw(graded_path, "Soccer")
+        graded_path = OUTPUTS_DIR / d / f"graded_{sport_u.lower()}_{d}.xlsx"
+        g = _load_graded_box_raw(graded_path, sport_u)
         if g.empty:
             continue
-        s_path = _resolve_step8_path("SOCCER")
+        s_path = _resolve_step8_path(sport_u)
         if s_path is None:
             continue
-        s = _load_step8(s_path, "Soccer")
+        s = _load_step8(s_path, sport_u)
         if s.empty:
             continue
         merge_keys = ["sport", "player", "prop_type_norm", "pick_type", "direction", "line"]
@@ -512,13 +515,17 @@ def main() -> None:
         print(f"Tier criteria analysis sport={args.sport} date={args.date} min_n={args.min_n}")
         print(report.to_string(index=False))
 
-    soccer_scan_rows: list[dict[str, Any]] = []
-    if str(args.sport).strip().lower() == "soccer":
-        scan_thresholds = [0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55]
-        soccer_scan_rows = soccer_threshold_scan(dates, scan_thresholds)
-        if soccer_scan_rows:
-            scan_df = pd.DataFrame(soccer_scan_rows)
-            print("\nSoccer threshold scan (ALL pick types):")
+    scan_rows: list[dict[str, Any]] = []
+    sport_scan = str(args.sport).strip().upper()
+    if sport_scan in {"SOCCER", "MLB", "NHL", "WNBA"}:
+        if sport_scan == "SOCCER":
+            scan_thresholds = [0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55]
+        else:
+            scan_thresholds = [0.50, 0.52, 0.54, 0.56, 0.58, 0.60, 0.62, 0.65, 0.68, 0.71, 0.74]
+        scan_rows = ml_prob_threshold_scan(sport_scan, dates, scan_thresholds)
+        if scan_rows:
+            scan_df = pd.DataFrame(scan_rows)
+            print(f"\n{sport_scan} ml_prob threshold scan (ALL pick types):")
             print(scan_df[scan_df["pick_type"].eq("ALL")][["threshold", "n_above", "hit_rate_above", "lift_vs_base"]].to_string(index=False))
 
     if args.output:
@@ -541,7 +548,8 @@ def main() -> None:
             },
             "aggregate": agg.to_dict(orient="records") if not agg.empty else [],
             "per_date_rows": report.to_dict(orient="records") if not report.empty else [],
-            "soccer_threshold_scan": soccer_scan_rows,
+            "ml_prob_threshold_scan": scan_rows,
+            "soccer_threshold_scan": scan_rows if str(args.sport).strip().upper() == "SOCCER" else [],
         }
         out_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
         print(f"Saved -> {out_path}")
