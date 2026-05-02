@@ -78,31 +78,31 @@ DIR_COL_ALIASES = ["Dir", "DIR", "dir", "Direction", "DIRECTION"]
 # Ticket legs with sport NBA1H / NBA1Q / WCBB must match rows from these files, not full-game NBA/CBB only.
 SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
     "NBA": [
-        REPO_ROOT / "Sports" / "NBA" / "step8_all_direction_clean.xlsx",
-        REPO_ROOT / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
+        REPO_ROOT / "NBA" / "step8_all_direction_clean.xlsx",
+        REPO_ROOT / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
     ],
     "NBA1H": [
-        REPO_ROOT / "Sports" / "NBA" / "step8_nba1h_direction_clean.xlsx",
+        REPO_ROOT / "NBA" / "step8_nba1h_direction_clean.xlsx",
     ],
     "NBA1Q": [
-        REPO_ROOT / "Sports" / "NBA" / "step8_nba1q_direction_clean.xlsx",
+        REPO_ROOT / "NBA" / "step8_nba1q_direction_clean.xlsx",
     ],
     "CBB": [
-        REPO_ROOT / "Sports" / "CBB" / "step6_ranked_cbb.xlsx",
+        REPO_ROOT / "CBB" / "step6_ranked_cbb.xlsx",
     ],
     "WCBB": [
-        REPO_ROOT / "Sports" / "CBB" / "step6_ranked_wcbb.xlsx",
+        REPO_ROOT / "CBB" / "step6_ranked_wcbb.xlsx",
     ],
     "NHL": [
-        REPO_ROOT / "Sports" / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
-        REPO_ROOT / "Sports" / "NHL" / "step8_nhl_direction_clean.xlsx",
+        REPO_ROOT / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
+        REPO_ROOT / "NHL" / "step8_nhl_direction_clean.xlsx",
     ],
     "SOCCER": [
-        REPO_ROOT / "Sports" / "Soccer" / "step8_soccer_direction_clean.xlsx",
-        REPO_ROOT / "Sports" / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
+        REPO_ROOT / "Soccer" / "step8_soccer_direction_clean.xlsx",
+        REPO_ROOT / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
     ],
     "MLB": [
-        REPO_ROOT / "Sports" / "MLB" / "step8_mlb_direction_clean.xlsx",
+        REPO_ROOT / "MLB" / "step8_mlb_direction_clean.xlsx",
     ],
 }
 
@@ -1667,6 +1667,8 @@ def _load_tickets(path: Path, arg_date: str) -> dict[str, Any]:
 
 def _group_is_allowed(group_name: str) -> bool:
     n = str(group_name or "").strip()
+    # combined_slate_tickets workbook tabs often end with " #1", " #2", … after the N-Leg label.
+    n = re.sub(r"\s+#\d+\s*$", "", n).strip()
     m = re.match(
         r"^([A-Za-z0-9]+)\s+((?:Power Play|Flex|Standard|Pwr Std|Goblin)\s+\d-Leg)$",
         n,
