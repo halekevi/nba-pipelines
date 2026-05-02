@@ -1771,6 +1771,29 @@ function blurCalcLine(id,field,el){
   renderCalcLegs();
 }
 
+/** Leg card subtitle: Standard → posted line (market); Goblin/Demon → played line with optional std reference. */
+function legPostedLineDescription(leg){
+  const std=String(leg.stdLine||'').trim();
+  const pld=String(leg.playedLine||'').trim();
+  if(leg.type==='standard'){
+    const posted=std||pld;
+    return posted?` · Posted line ${posted} (standard)`:'';
+  }
+  if(leg.type==='goblin'){
+    if(std&&pld)return` · Std ${std} · Goblin line ${pld}`;
+    if(pld)return` · Goblin line ${pld}`;
+    if(std)return` · Std ${std}`;
+    return '';
+  }
+  if(leg.type==='demon'){
+    if(std&&pld)return` · Std ${std} · Demon line ${pld}`;
+    if(pld)return` · Demon line ${pld}`;
+    if(std)return` · Std ${std}`;
+    return '';
+  }
+  return '';
+}
+
 function renderCalcLegs(){
   const c=document.getElementById('calc-leg-list');
   c.classList.add('calc-leg-grid');
@@ -1785,7 +1808,7 @@ function renderCalcLegs(){
     const bl=isG?'rgba(125,255,203,.35)':isD?'rgba(255,127,159,.35)':'rgba(127,199,217,.25)';
     const icon=isG?'🎃':isD?'😈':'⭐';
     const badge=isG?'goblin':isD?'demon':'standard';
-    const meta=`${leg.sport} · ${leg.prop} · Std:${leg.stdLine||'—'}${!isS&&leg.playedLine?' → '+leg.playedLine:''} · Hit:${leg.hitProb}%`;
+    const meta=`${leg.sport} · ${leg.prop}${legPostedLineDescription(leg)} · Hit:${leg.hitProb}%`;
     let deltaPill='';
     if(!isS&&leg.stdLine&&leg.playedLine){const s=parseFloat(leg.stdLine),p=parseFloat(leg.playedLine);if(!isNaN(s)&&!isNaN(p)){const pct=Math.round((p/s)*1000)/10;deltaPill=`<span class="delta-pill ${isG?'dp-gob':'dp-dem'}">${pct}% of std · ${isG?'▼ easier':'▲ harder'}</span>`;}}
     const sportSel=SPORT_OPTS.map(s=>`<option${s===leg.sport?' selected':''}>${s}</option>`).join('');
@@ -2016,7 +2039,27 @@ function refreshLogSummary(){
   const flex=logSlipIsFlex();
   const flexRef=flex&&FLEX_BASE[n]?FLEX_BASE[n][n-1]:null;
   if(!n){sEl.style.display='none';return;}
-  const ll=logLegs.map((l,i)=>{const col=l.type==='goblin'?'var(--goblin)':l.type==='demon'?'var(--demon)':'var(--std)';const icon=l.type==='goblin'?'🎃':l.type==='demon'?'😈':'⭐';const std=parseFloat(l.stdLine),pld=parseFloat(l.playedLine);const lp=(!isNaN(std)&&!isNaN(pld)&&l.type!=='standard')?` <span style="color:${col}">${l.stdLine}→${l.playedLine} (${Math.round((pld/std)*1000)/1000})</span>`:l.stdLine?` Line: ${l.stdLine}`:'';return `<div>${icon} <span style="color:${col}">${l.player||`Leg ${i+1}`}</span> · ${l.sport} ${l.prop}${lp}</div>`;}).join('');
+  const ll=logLegs.map((l,i)=>{
+    const col=l.type==='goblin'?'var(--goblin)':l.type==='demon'?'var(--demon)':'var(--std)';
+    const icon=l.type==='goblin'?'🎃':l.type==='demon'?'😈':'⭐';
+    const stdS=String(l.stdLine||'').trim();
+    const pldS=String(l.playedLine||'').trim();
+    let lp='';
+    if(l.type==='standard'){
+      const posted=stdS||pldS;
+      if(posted)lp=` <span style="color:${col}">Posted line ${posted}</span>`;
+    }else if(l.type==='goblin'){
+      if(stdS&&pldS)lp=` <span style="color:${col}">Std ${stdS} · Goblin line ${pldS}</span>`;
+      else if(pldS)lp=` <span style="color:${col}">Goblin line ${pldS}</span>`;
+      else if(stdS)lp=` <span style="color:var(--muted)">Std ${stdS}</span>`;
+    }else if(l.type==='demon'){
+      if(stdS&&pldS)lp=` <span style="color:${col}">Std ${stdS} · Demon line ${pldS}</span>`;
+      else if(pldS)lp=` <span style="color:${col}">Demon line ${pldS}</span>`;
+      else if(stdS)lp=` <span style="color:var(--muted)">Std ${stdS}</span>`;
+    }
+    if(!lp&&stdS)lp=` <span style="color:var(--muted)">Posted line ${stdS}</span>`;
+    return `<div>${icon} <span style="color:${col}">${l.player||`Leg ${i+1}`}</span> · ${l.sport} ${l.prop}${lp}</div>`;
+  }).join('');
   let pl='';if(bm&&am&&!isNaN(am)){const sh=((am/bm)-1)*100;pl=`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">Base: <strong>${bm}x</strong> → Actual: <strong style="color:${sCol(sh)}">${am}x</strong> · <span style="color:${sCol(sh)}">${sh>=0?'+':''}${sh.toFixed(1)}%</span> vs all-standard${flex?' sweep':''}</div>`;}
   if(flex&&flexRef!=null&&!isNaN(mg)){const sh2=((mg/flexRef)-1)*100;pl+=`<div style="margin-top:8px">Flex ref (miss 1): <strong>${flexRef}x</strong> → Logged min guar: <strong style="color:${sCol(sh2)}">${mg}x</strong> · <span style="color:${sCol(sh2)}">${sh2>=0?'+':''}${sh2.toFixed(1)}%</span></div>`;}
   else if(flex&&flexRef!=null){pl+=`<div style="margin-top:8px;font-size:10px;color:var(--muted)">Ref (n−1)/n standard: <strong>${flexRef}x</strong> — enter min guarantee above to compare.</div>`;}
