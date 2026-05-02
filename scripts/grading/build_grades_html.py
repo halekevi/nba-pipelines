@@ -1267,6 +1267,16 @@ def find_graded_file(sport: str, date_str: str) -> Path | None:
     return None
 
 
+def load_merged_nba_graded_rows(date_str: str) -> list[dict]:
+    """Full-game NBA plus NBA1Q/NBA1H graded workbooks, merged for one NBA bucket in Prop Evaluation."""
+    rows: list[dict] = []
+    for key in ("nba", "nba1q", "nba1h"):
+        p = find_graded_file(key, date_str)
+        if p:
+            rows.extend(load_graded(p))
+    return rows
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 #  FULL HTML
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1599,6 +1609,13 @@ def main() -> None:
         if nhl_path:
             print(f"  Auto-detected NHL: {nhl_path}")
 
+    nba1q_path: Path | None = find_graded_file("nba1q", date_str)
+    if nba1q_path:
+        print(f"  Auto-detected NBA1Q: {nba1q_path}")
+    nba1h_path: Path | None = find_graded_file("nba1h", date_str)
+    if nba1h_path:
+        print(f"  Auto-detected NBA1H: {nba1h_path}")
+
     soccer_path: Path | None = None
     if args.soccer:
         soccer_path = Path(args.soccer).resolve()
@@ -1621,7 +1638,7 @@ def main() -> None:
         if mlb_path:
             print(f"  Auto-detected MLB: {mlb_path}")
 
-    if not nba_path and not cbb_path and not nhl_path and not soccer_path and not mlb_path:
+    if not nba_path and not nba1q_path and not nba1h_path and not cbb_path and not nhl_path and not soccer_path and not mlb_path:
         if args.allow_empty:
             print("  NOTE: No graded files; emitting empty slate eval (--allow-empty).")
         else:
@@ -1635,6 +1652,17 @@ def main() -> None:
         print(f"  Loading NBA: {nba_path.name} ...", end="", flush=True)
         nba_rows = load_graded(nba_path)
         print(f" {len(nba_rows):,} rows")
+    nba1q_rows: list[dict] = []
+    if nba1q_path:
+        print(f"  Loading NBA1Q: {nba1q_path.name} ...", end="", flush=True)
+        nba1q_rows = load_graded(nba1q_path)
+        print(f" {len(nba1q_rows):,} rows")
+    nba1h_rows: list[dict] = []
+    if nba1h_path:
+        print(f"  Loading NBA1H: {nba1h_path.name} ...", end="", flush=True)
+        nba1h_rows = load_graded(nba1h_path)
+        print(f" {len(nba1h_rows):,} rows")
+    nba_rows_merged = [*nba_rows, *nba1q_rows, *nba1h_rows]
     if cbb_path:
         print(f"  Loading CBB: {cbb_path.name} ...", end="", flush=True)
         cbb_rows = load_graded(cbb_path)
@@ -1684,7 +1712,7 @@ def main() -> None:
         date_str,
         out_p.parent,
         [
-            ("NBA", nba_rows),
+            ("NBA", nba_rows_merged),
             ("CBB", cbb_rows),
             ("NHL", nhl_rows),
             ("Soccer", soccer_rows),
