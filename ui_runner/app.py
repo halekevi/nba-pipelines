@@ -4242,31 +4242,93 @@ def api_full_slate():
     return resp
 
 
+_COMBINED_SLATE_XLSX_RE = re.compile(r"^combined_slate_tickets_(\d{4}-\d{2}-\d{2})")
+
+
+def _combined_slate_date_from_filename(path: Path) -> str | None:
+    m = _COMBINED_SLATE_XLSX_RE.match(path.name)
+    return m.group(1) if m else None
+
+
+def _all_combined_slate_ticket_xlsx_paths() -> list[Path]:
+    """Every combined_slate_tickets_*.xlsx under repo root and outputs/{{date}}/."""
+    seen: set[Path] = set()
+    out: list[Path] = []
+    try:
+        for p in BASE_DIR.glob("combined_slate_tickets_*.xlsx"):
+            if not p.is_file():
+                continue
+            r = p.resolve()
+            if r in seen:
+                continue
+            seen.add(r)
+            out.append(p)
+    except OSError:
+        pass
+    out_root = OUTPUTS_ROOT
+    if out_root.is_dir():
+        try:
+            for day_dir in out_root.iterdir():
+                if not day_dir.is_dir():
+                    continue
+                try:
+                    for p in day_dir.glob("combined_slate_tickets_*.xlsx"):
+                        if not p.is_file():
+                            continue
+                        r = p.resolve()
+                        if r in seen:
+                            continue
+                        seen.add(r)
+                        out.append(p)
+                except OSError:
+                    continue
+        except OSError:
+            pass
+    return out
+
+
 def _find_combined_excel() -> "tuple[Path | None, str | None]":
-    """Return (path, date_str) for the most recent combined_slate_tickets_*.xlsx."""
+    """Pick combined_slate_tickets_*.xlsx for UI Full Slate: today (ET) newest mtime, else tickets date, else newest file."""
+    candidates = _all_combined_slate_ticket_xlsx_paths()
+    if not candidates:
+        return None, None
+
+    def _newest(paths: list[Path]) -> Path:
+        return max(paths, key=lambda p: p.stat().st_mtime)
+
+    today_et = datetime.now(ZoneInfo("America/New_York")).date().strftime("%Y-%m-%d")
+    today_paths = [p for p in candidates if _combined_slate_date_from_filename(p) == today_et]
+    if today_paths:
+        best = _newest(today_paths)
+        return best, today_et
+
+    pref = ""
     try:
         tj = read_json_cached(TEMPLATES_DIR / "tickets_latest.json")
         pref = str((tj or {}).get("date") or "")[:10]
     except Exception:
-        pref = ""
+        pass
+    if len(pref) == 10:
+        pref_paths = [p for p in candidates if _combined_slate_date_from_filename(p) == pref]
+        if pref_paths:
+            best = _newest(pref_paths)
+            return best, pref
+
+    envd = (os.environ.get("PROPORACLE_SLATE_DATE", "").strip() or "")[:10]
+    if len(envd) == 10:
+        env_paths = [p for p in candidates if _combined_slate_date_from_filename(p) == envd]
+        if env_paths:
+            best = _newest(env_paths)
+            return best, envd
+
     for d in _slate_day_candidates(pref if len(pref) == 10 else None):
-        out_d = BASE_DIR / "outputs" / d
-        candidates: list[Path] = [
-            out_d / f"combined_slate_tickets_{d}.xlsx",
-            COMBINED_OUT / f"combined_slate_tickets_{d}.xlsx",
-        ]
-        seen: set[Path] = set(candidates)
-        if out_d.is_dir():
-            for g in out_d.glob(f"combined_slate_tickets_{d}*.xlsx"):
-                if g not in seen:
-                    seen.add(g); candidates.append(g)
-        for g in BASE_DIR.glob(f"combined_slate_tickets_{d}*.xlsx"):
-            if g not in seen:
-                seen.add(g); candidates.append(g)
-        for p in candidates:
-            if p.exists():
-                return p, d
-    return None, None
+        day_paths = [p for p in candidates if _combined_slate_date_from_filename(p) == d]
+        if day_paths:
+            best = _newest(day_paths)
+            return best, d
+
+    best = _newest(candidates)
+    return best, _combined_slate_date_from_filename(best)
 
 
 # ──────────────────────────────────────────────────────────────────────────────
