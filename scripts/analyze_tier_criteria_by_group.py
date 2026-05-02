@@ -173,6 +173,28 @@ def _resolve_step8_path(sport: str) -> Path | None:
     return None
 
 
+def _graded_workbook_candidates(sport: str, date_str: str) -> list[Path]:
+    """Candidate graded Box Raw paths under outputs/<date>/ (first match wins)."""
+    sport_u = str(sport).strip().upper()
+    base = OUTPUTS_DIR / date_str
+    if sport_u == "WNBA":
+        # Canonical graded_* pattern + WNBA grader output (run_wnba_grader.ps1).
+        return [
+            base / f"graded_wnba_{date_str}.xlsx",
+            base / f"wnba_graded_{date_str}.xlsx",
+        ]
+    if sport_u == "SOCCER":
+        return [base / f"graded_soccer_{date_str}.xlsx"]
+    return [base / f"graded_{sport_u.lower()}_{date_str}.xlsx"]
+
+
+def _first_existing_graded_path(sport: str, date_str: str) -> Path | None:
+    for p in _graded_workbook_candidates(sport, date_str):
+        if p.exists():
+            return p
+    return None
+
+
 def _sports_for_flag(sport_flag: str) -> list[str]:
     s = str(sport_flag).strip().upper()
     if s == "ALL":
@@ -224,8 +246,8 @@ def analyze(date_str: str, min_n: int, sports: list[str]) -> pd.DataFrame:
     step8_frames: list[pd.DataFrame] = []
 
     for sport in sports:
-        graded_path = OUTPUTS_DIR / date_str / f"graded_{sport.lower()}_{date_str}.xlsx"
-        g = _load_graded_box_raw(graded_path, sport)
+        graded_path = _first_existing_graded_path(sport, date_str)
+        g = _load_graded_box_raw(graded_path, sport) if graded_path is not None else pd.DataFrame()
         if not g.empty:
             graded_frames.append(g)
         step8_path = _resolve_step8_path(sport)
@@ -326,12 +348,17 @@ def ml_prob_threshold_scan(
     dates: list[str],
     thresholds: list[float],
 ) -> list[dict[str, Any]]:
-    """Merge graded history with step8 ml_prob; scan hit rates above each threshold (>=)."""
+    """Merge graded history with step8 ml_prob; scan hit rates above each threshold (>=).
+
+    Rows are emitted for pick_type in GOBLIN, DEMON, STANDARD, and ALL (pooled).
+    """
     sport_u = str(sport).strip().upper()
     frames: list[pd.DataFrame] = []
     for d in dates:
-        graded_path = OUTPUTS_DIR / d / f"graded_{sport_u.lower()}_{d}.xlsx"
-        g = _load_graded_box_raw(graded_path, sport_u)
+        gp = _first_existing_graded_path(sport_u, d)
+        if gp is None:
+            continue
+        g = _load_graded_box_raw(gp, sport_u)
         if g.empty:
             continue
         s_path = _resolve_step8_path(sport_u)
@@ -374,6 +401,29 @@ def ml_prob_threshold_scan(
                 }
             )
     return out
+
+
+def _print_ml_prob_threshold_scan(
+    scan_df: pd.DataFrame,
+    *,
+    sport_label: str,
+    by_pick_type: bool,
+) -> None:
+    cols = ["threshold", "n_total", "base_hit_rate", "n_above", "hit_rate_above", "lift_vs_base"]
+    if by_pick_type:
+        order = ("GOBLIN", "DEMON", "STANDARD", "ALL")
+        for pt in order:
+            sub = scan_df[scan_df["pick_type"].eq(pt)]
+            if sub.empty:
+                continue
+            print(f"\n{sport_label} ml_prob threshold scan — {pt} (n_total={int(sub['n_total'].iloc[0])}):")
+            print(sub[cols].to_string(index=False))
+    else:
+        sub = scan_df[scan_df["pick_type"].eq("ALL")]
+        if sub.empty:
+            return
+        print(f"\n{sport_label} ml_prob threshold scan (ALL pick types):")
+        print(sub[["threshold", "n_above", "hit_rate_above", "lift_vs_base"]].to_string(index=False))
 
 
 def _parse_date_token(s: str) -> pd.Timestamp:
@@ -464,6 +514,11 @@ def main() -> None:
     ap.add_argument("--min-n-per-day", type=int, default=0, help="Optional minimum per-date group sample size (n)")
     ap.add_argument("--min-n", type=int, default=25, help="Minimum sample size for breakpoint candidate")
     ap.add_argument("--output", default="", help="Optional output JSON path")
+    ap.add_argument(
+        "--threshold-scan-pick-types",
+        action="store_true",
+        help="With ml_prob threshold scan sports, print GOBLIN / DEMON / STANDARD / ALL tables (not pooled-only).",
+    )
     args = ap.parse_args()
     sports = _sports_for_flag(args.sport)
 
@@ -524,9 +579,11 @@ def main() -> None:
             scan_thresholds = [0.50, 0.52, 0.54, 0.56, 0.58, 0.60, 0.62, 0.65, 0.68, 0.71, 0.74]
         scan_rows = ml_prob_threshold_scan(sport_scan, dates, scan_thresholds)
         if scan_rows:
-            scan_df = pd.DataFrame(scan_rows)
-            print(f"\n{sport_scan} ml_prob threshold scan (ALL pick types):")
-            print(scan_df[scan_df["pick_type"].eq("ALL")][["threshold", "n_above", "hit_rate_above", "lift_vs_base"]].to_string(index=False))
+            _print_ml_prob_threshold_scan(
+                pd.DataFrame(scan_rows),
+                sport_label=sport_scan,
+                by_pick_type=bool(args.threshold_scan_pick_types),
+            )
 
     if args.output:
         out_path = Path(args.output)
@@ -545,6 +602,7 @@ def main() -> None:
                 "group": args.group or None,
                 "by_date": bool(args.by_date),
                 "min_n_per_day": int(args.min_n_per_day),
+                "threshold_scan_pick_types": bool(args.threshold_scan_pick_types),
             },
             "aggregate": agg.to_dict(orient="records") if not agg.empty else [],
             "per_date_rows": report.to_dict(orient="records") if not report.empty else [],
