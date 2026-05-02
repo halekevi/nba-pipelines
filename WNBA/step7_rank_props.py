@@ -262,6 +262,7 @@ def main():
     ap.add_argument("--input",  default="step6_wnba_context.csv")
     ap.add_argument("--output", default="step7_wnba_ranked.xlsx")
     args = ap.parse_args()
+    Path(args.output).parent.mkdir(parents=True, exist_ok=True)
 
     df  = pd.read_csv(args.input, dtype=str, encoding="utf-8-sig").fillna("")
     out = df.copy()

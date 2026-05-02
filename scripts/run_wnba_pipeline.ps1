@@ -24,7 +24,9 @@ if ((Split-Path -Leaf $ScriptDir) -eq "scripts") {
     $Root = $ScriptDir
 }
 $WNBADir = "$Root\WNBA"
-# Dated pipeline snapshots live under WNBA\outputs\<yyyy-MM-dd>\ (not repo-root outputs\).
+# Same pattern as NBA: intermediates under <sport>\data\outputs\; dated step8 copies come from
+# step8_add_direction_context.py (outputs\<date>\ + WNBA\outputs\<date>\). Tickets stay at WNBA root (cf. NBA\best_tickets.xlsx).
+$DataOut = Join-Path $WNBADir "data\outputs"
 $WnbaOutputsRoot = Join-Path $WNBADir "outputs"
 
 if (-not $Date) { $Date = Get-Date -Format "yyyy-MM-dd" }
@@ -92,7 +94,11 @@ if ($RefreshCache) {
     Write-Host ""
 }
 
-# -- Dated output folder (under WNBA\outputs\<date>\) -------------------------
+# -- Ensure output dirs --------------------------------------------------------
+if (-not (Test-Path $DataOut)) {
+    New-Item -ItemType Directory -Force -Path $DataOut | Out-Null
+}
+# Dated snapshots (step1, step7, csv, tickets): WNBA\outputs\<yyyy-MM-dd>\
 $DateDir = Join-Path $WnbaOutputsRoot $Date
 if (-not (Test-Path $DateDir)) {
     New-Item -ItemType Directory -Force -Path $DateDir | Out-Null
@@ -109,34 +115,34 @@ $ok = $true
 # Step 1 — Fetch PrizePicks (league_id=3, WNBA)
 if (-not $SkipFetch) {
     if ($ok) { $ok = Run-Step "WNBA Step 1 - Fetch PrizePicks" $WNBADir ".\step1_fetch_prizepicks.py" `
-        "--league_id 3 --playwright --timeout 90 --game_mode pickem --per_page 250 --max_pages 10 --sleep 1.2 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --output step1_wnba_props.csv --date $Date" }
+        "--league_id 3 --playwright --timeout 90 --game_mode pickem --per_page 250 --max_pages 10 --sleep 1.2 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --output data\outputs\step1_wnba_props.csv --date $Date" }
 } else {
-    Write-Host "  --> [SkipFetch] Using existing step1_wnba_props.csv" -ForegroundColor DarkGray
+    Write-Host "  --> [SkipFetch] Using existing data\outputs\step1_wnba_props.csv" -ForegroundColor DarkGray
 }
 
 if ($ok) { $ok = Run-Step "WNBA Step 2 - Attach Pick Types" $WNBADir ".\step2_attach_picktypes.py" `
-    "--input step1_wnba_props.csv --output step2_wnba_picktypes.csv" }
+    "--input data\outputs\step1_wnba_props.csv --output data\outputs\step2_wnba_picktypes.csv" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 3 - Attach Defense" $WNBADir ".\step3_attach_defense.py" `
-    "--input step2_wnba_picktypes.csv --defense wnba_defense_summary.csv --output step3_wnba_defense.csv" }
+    "--input data\outputs\step2_wnba_picktypes.csv --defense wnba_defense_summary.csv --output data\outputs\step3_wnba_defense.csv" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 4 - Player Stats (ESPN)" $WNBADir ".\step4_fetch_player_stats.py" `
-    "--slate step3_wnba_defense.csv --out step4_wnba_stats.csv --season 2026 --date $Date --days 35 --cache wnba_espn_cache.csv --sleep 0.8 --retries 4 --timeout 30 --debug-misses wnba_no_espn_debug.csv" }
+    "--slate data\outputs\step3_wnba_defense.csv --out data\outputs\step4_wnba_stats.csv --season 2026 --date $Date --days 35 --cache wnba_espn_cache.csv --sleep 0.8 --retries 4 --timeout 30 --debug-misses wnba_no_espn_debug.csv" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 5 - Line Hit Rates" $WNBADir ".\step5_add_line_hit_rates.py" `
-    "--input step4_wnba_stats.csv --output step5_wnba_hitrates.csv" }
+    "--input data\outputs\step4_wnba_stats.csv --output data\outputs\step5_wnba_hitrates.csv" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 6 - Team Role Context" $WNBADir ".\step6_team_role_context.py" `
-    "--input step5_wnba_hitrates.csv --output step6_wnba_context.csv" }
+    "--input data\outputs\step5_wnba_hitrates.csv --output data\outputs\step6_wnba_context.csv" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 7 - Rank Props" $WNBADir ".\step7_rank_props.py" `
-    "--input step6_wnba_context.csv --output step7_wnba_ranked.xlsx" }
+    "--input data\outputs\step6_wnba_context.csv --output data\outputs\step7_wnba_ranked.xlsx" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 8 - Direction Context" $WNBADir ".\step8_add_direction_context.py" `
-    "--input step7_wnba_ranked.xlsx --sheet ALL --output step8_wnba_direction.csv --xlsx step8_wnba_direction.xlsx" }
+    "--input data\outputs\step7_wnba_ranked.xlsx --sheet ALL --output data\outputs\step8_wnba_direction.csv --date $Date" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 9 - Build Tickets" $WNBADir ".\step9_build_tickets.py" `
-    "--input step8_wnba_direction.xlsx --output wnba_best_tickets.xlsx --min_hit_rate 0.8 --legs 2,3,4" }
+    "--input data\outputs\step8_wnba_direction_clean.xlsx --output wnba_best_tickets.xlsx --min_hit_rate 0.8 --legs 2,3,4" }
 
 # =============================================================================
 #  COPY OUTPUTS TO DATED FOLDER
@@ -145,21 +151,21 @@ if ($ok) {
     Write-Host ""
     Write-Host "[ COPYING OUTPUTS ]" -ForegroundColor Magenta
 
-    $files = @("step1_wnba_props.csv","step7_wnba_ranked.xlsx","step8_wnba_direction.csv","step8_wnba_direction.xlsx","wnba_best_tickets.xlsx")
-    foreach ($f in $files) {
-        $src = "$WNBADir\$f"
+    # Step8 dated XLSX is emitted by step8_add_direction_context.py (same as NBA). Snapshot intermediates + tickets here.
+    $files = @(
+        "data\outputs\step1_wnba_props.csv",
+        "data\outputs\step7_wnba_ranked.xlsx",
+        "data\outputs\step8_wnba_direction.csv",
+        "wnba_best_tickets.xlsx"
+    )
+    foreach ($rel in $files) {
+        $src = Join-Path $WNBADir $rel
         if (Test-Path $src) {
-            $dst = Join-Path $DateDir ("wnba_" + $Date + "_" + $f)
+            $leaf = Split-Path -Leaf $rel
+            $dst = Join-Path $DateDir ("wnba_" + $Date + "_" + $leaf)
             Copy-Item $src $dst -Force
-            Write-Host "  Copied: $f" -ForegroundColor Green
+            Write-Host "  Copied: $leaf" -ForegroundColor Green
         }
-    }
-    # Canonical dated artifact expected by scripts/run_daily.ps1 checks.
-    $step8Src = "$WNBADir\step8_wnba_direction.xlsx"
-    if (Test-Path $step8Src) {
-        $step8Dst = Join-Path $DateDir ("step8_wnba_direction_" + $Date + ".xlsx")
-        Copy-Item $step8Src $step8Dst -Force
-        Write-Host "  Copied: $(Split-Path -Leaf $step8Dst)" -ForegroundColor Green
     }
     $script:ProgressDone = [Math]::Min($script:ProgressDone + 1, $script:ProgressTotal)
     $pct = [int][Math]::Round(($script:ProgressDone / $script:ProgressTotal) * 100, 0)
@@ -174,8 +180,8 @@ Write-Host ""
 Write-Host "======================================================" -ForegroundColor Cyan
 if ($ok) {
     Write-Host "  WNBA DONE  |  $Date  |  Elapsed: $($Elapsed.ToString('mm\:ss'))" -ForegroundColor Cyan
-    Write-Host "  Dated copies → $DateDir" -ForegroundColor Green
-    Write-Host "  Canonical slate → $WNBADir (step1 … step9, wnba_best_tickets.xlsx)" -ForegroundColor DarkGray
+    Write-Host "  Dated snapshots → $DateDir" -ForegroundColor Green
+    Write-Host "  Slate/workbooks → $DataOut  |  Tickets → $WNBADir\wnba_best_tickets.xlsx" -ForegroundColor DarkGray
 } else {
     Write-Host "  WNBA FAILED  |  Check output above" -ForegroundColor Red
 }

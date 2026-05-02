@@ -1489,7 +1489,7 @@
             "--jitter_seconds",
             "10.0",
             "--output",
-            "step1_wnba_props.csv"
+            "data/outputs/step1_wnba_props.csv"
           ]
         },
         {
@@ -1500,9 +1500,9 @@
             "-3.14",
             ".\\step2_attach_picktypes.py",
             "--input",
-            "step1_wnba_props.csv",
+            "data/outputs/step1_wnba_props.csv",
             "--output",
-            "step2_wnba_picktypes.csv"
+            "data/outputs/step2_wnba_picktypes.csv"
           ]
         },
         {
@@ -1513,11 +1513,11 @@
             "-3.14",
             ".\\step3_attach_defense.py",
             "--input",
-            "step2_wnba_picktypes.csv",
+            "data/outputs/step2_wnba_picktypes.csv",
             "--defense",
             "wnba_defense_summary.csv",
             "--output",
-            "step3_wnba_defense.csv"
+            "data/outputs/step3_wnba_defense.csv"
           ]
         },
         {
@@ -1528,9 +1528,9 @@
             "-3.14",
             ".\\step4_fetch_player_stats.py",
             "--slate",
-            "step3_wnba_defense.csv",
+            "data/outputs/step3_wnba_defense.csv",
             "--out",
-            "step4_wnba_stats.csv",
+            "data/outputs/step4_wnba_stats.csv",
             "--season",
             "2026",
             "--date",
@@ -1557,9 +1557,9 @@
             "-3.14",
             ".\\step5_add_line_hit_rates.py",
             "--input",
-            "step4_wnba_stats.csv",
+            "data/outputs/step4_wnba_stats.csv",
             "--output",
-            "step5_wnba_hitrates.csv"
+            "data/outputs/step5_wnba_hitrates.csv"
           ]
         },
         {
@@ -1570,9 +1570,9 @@
             "-3.14",
             ".\\step6_team_role_context.py",
             "--input",
-            "step5_wnba_hitrates.csv",
+            "data/outputs/step5_wnba_hitrates.csv",
             "--output",
-            "step6_wnba_context.csv"
+            "data/outputs/step6_wnba_context.csv"
           ]
         },
         {
@@ -1583,9 +1583,9 @@
             "-3.14",
             ".\\step7_rank_props.py",
             "--input",
-            "step6_wnba_context.csv",
+            "data/outputs/step6_wnba_context.csv",
             "--output",
-            "step7_wnba_ranked.xlsx"
+            "data/outputs/step7_wnba_ranked.xlsx"
           ]
         },
         {
@@ -1596,11 +1596,13 @@
             "-3.14",
             ".\\step8_add_direction_context.py",
             "--input",
-            "step7_wnba_ranked.xlsx",
+            "data/outputs/step7_wnba_ranked.xlsx",
             "--sheet",
             "ALL",
             "--output",
-            "step8_wnba_direction.xlsx"
+            "data/outputs/step8_wnba_direction.csv",
+            "--date",
+            "{TODAY}"
           ]
         },
         {
@@ -1611,7 +1613,7 @@
             "-3.14",
             ".\\step9_build_tickets.py",
             "--input",
-            "step8_wnba_direction.xlsx",
+            "data/outputs/step8_wnba_direction_clean.xlsx",
             "--output",
             "wnba_best_tickets.xlsx",
             "--min_hit_rate",

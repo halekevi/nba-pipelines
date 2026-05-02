@@ -17,12 +17,40 @@ Run:
 from __future__ import annotations
 
 import argparse
+import shutil
+from datetime import date
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 import os
+
+
+def _copy_dated_step8_wnba(output_xlsx_path: str, slate_date: str) -> None:
+    """Mirror NBA step8: publish dated clean XLSX under outputs/<slate>/ and WNBA/outputs/<slate>/.
+
+    slate_date is pipeline --Date (YYYY-MM-DD).
+    """
+    src = Path(output_xlsx_path)
+    if not src.is_file():
+        return
+    d = (slate_date or "").strip()
+    if not d:
+        d = date.today().isoformat()
+    repo_root = Path(__file__).resolve().parent.parent
+    dated_name = f"step8_wnba_direction_{d}.xlsx"
+    for dated_dir in (repo_root / "outputs" / d, repo_root / "WNBA" / "outputs" / d):
+        try:
+            dated_dir.mkdir(parents=True, exist_ok=True)
+            dated_path = dated_dir / dated_name
+            shutil.copy2(src, dated_path)
+            print(f"[WNBA step8] Dated copy -> {dated_path}")
+        except Exception as e:
+            print(f"[WNBA step8] WARN: dated copy failed ({dated_dir}): {e}")
+
 
 def _norm_pick_type(x: str) -> str:
     t = (str(x) if x is not None else "").strip().lower()
@@ -169,7 +197,14 @@ def main() -> None:
     ap.add_argument("--sheet", default="ALL")
     ap.add_argument("--output", default="step8_all_direction.csv")
     ap.add_argument("--xlsx", default="")  # optional override for xlsx path
+    ap.add_argument(
+        "--date",
+        default="",
+        help="Slate date YYYY-MM-DD (for dated snapshot copies; same as pipeline -Date)",
+    )
     args = ap.parse_args()
+
+    Path(args.output).parent.mkdir(parents=True, exist_ok=True)
 
     print(f"→ Loading: {args.input} (sheet={args.sheet})")
     df = pd.read_excel(args.input, sheet_name=args.sheet, dtype=str).fillna("")
@@ -209,7 +244,9 @@ def main() -> None:
 
     # Save clean XLSX
     xlsx_path = args.xlsx if args.xlsx else args.output.replace(".csv", "_clean.xlsx")
+    Path(xlsx_path).parent.mkdir(parents=True, exist_ok=True)
     build_clean_xlsx(out, xlsx_path)
+    _copy_dated_step8_wnba(xlsx_path, (args.date or "").strip())
 
 if __name__ == "__main__":
     main()

@@ -358,6 +358,7 @@ def main():
     out_path = Path(args.output)
     if not out_path.is_absolute():
         out_path = Path(__file__).resolve().parent / out_path
+    out_path.parent.mkdir(parents=True, exist_ok=True)
 
     def _fallback_to_existing_csv(reason: str) -> bool:
         for candidate in _snapshot_candidates(out_path):

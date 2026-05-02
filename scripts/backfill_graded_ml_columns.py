@@ -43,7 +43,7 @@ STEP8_TEMPLATES: dict[str, str] = {
     "nba": "step8_nba_direction_clean_{d}.xlsx",
     "nba1q": "step8_nba1q_direction_clean_{d}.xlsx",
     "nba1h": "step8_nba1h_direction_clean_{d}.xlsx",
-    "wnba": "step8_wnba_direction_clean_{d}.xlsx",
+    "wnba": "step8_wnba_direction_{d}.xlsx",
     "nhl": "step8_nhl_direction_clean_{d}.xlsx",
     "soccer": "step8_soccer_direction_clean_{d}.xlsx",
     "mlb": "step8_mlb_direction_clean_{d}.xlsx",
@@ -168,7 +168,6 @@ def resolve_merge_source(root: Path, sport_key: str, dates: list[str]) -> Path |
             "nba": root / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
             "nba1q": root / "NBA" / "step8_nba1q_direction_clean.xlsx",
             "nba1h": root / "NBA" / "step8_nba1h_direction_clean.xlsx",
-            "wnba": root / "WNBA" / "step8_wnba_direction_clean.xlsx",
             "nhl": root / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
             "soccer": root / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
             "mlb": root / "MLB" / "step8_mlb_direction_clean.xlsx",
@@ -176,6 +175,14 @@ def resolve_merge_source(root: Path, sport_key: str, dates: list[str]) -> Path |
         lp = leg.get(sk)
         if lp and lp.is_file():
             return lp
+        if sk == "wnba":
+            for p in (
+                root / "WNBA" / "data" / "outputs" / "step8_wnba_direction_clean.xlsx",
+                root / "WNBA" / "step8_wnba_direction_clean.xlsx",
+                root / "WNBA" / "step8_wnba_direction.xlsx",
+            ):
+                if p.is_file():
+                    return p
     if sk == "cbb":
         cbb_paths: list[Path] = []
         for d in dates:

@@ -135,7 +135,15 @@ elif os.path.exists(_soccer_outputs):
 else:
     DEFAULT_SOCCER_PATH = _soccer_root
 DEFAULT_TENNIS_PATH = os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis_direction_clean.xlsx")
-DEFAULT_WNBA_PATH = os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction.xlsx")
+_WNBA_DATA = os.path.join(REPO_ROOT, "WNBA", "data", "outputs", "step8_wnba_direction_clean.xlsx")
+_WNBA_ROOT_CLEAN = os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction_clean.xlsx")
+_WNBA_ROOT_LEGACY = os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction.xlsx")
+if os.path.exists(_WNBA_DATA):
+    DEFAULT_WNBA_PATH = _WNBA_DATA
+elif os.path.exists(_WNBA_ROOT_CLEAN):
+    DEFAULT_WNBA_PATH = _WNBA_ROOT_CLEAN
+else:
+    DEFAULT_WNBA_PATH = _WNBA_ROOT_LEGACY
 DEFAULT_NHL_PATH = os.path.join(REPO_ROOT, "NHL", "outputs", "step8_nhl_direction_clean.xlsx")
 DEFAULT_WEB_OUTDIR = os.path.join(REPO_ROOT, "ui_runner", "templates")
 DIVERSITY_CONFIG_PATH = os.path.join(REPO_ROOT, "config", "diversity_config.json")
@@ -6175,7 +6183,7 @@ def load_wnba(path: str) -> pd.DataFrame:
     """WNBA step8 direction workbook (same column contract as other step8 boards)."""
     return _load_step8_board_like(
         path,
-        fallback_filename="step8_wnba_direction.xlsx",
+        fallback_filename="step8_wnba_direction_clean.xlsx",
         sheet_order=("WNBA", "ALL"),
         sport="WNBA",
         log_prefix="load_wnba",

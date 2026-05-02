@@ -56,4 +56,4 @@ if ($exitCode -ne 0) {
     exit $exitCode
 }
 
-Write-Host "[WNBA] Done. Check WNBA/step1_wnba_props.csv for output." -ForegroundColor Green
+Write-Host "[WNBA] Done. Default output is WNBA/step1_wnba_props.csv (pipeline uses WNBA/data/outputs/step1_wnba_props.csv)." -ForegroundColor Green

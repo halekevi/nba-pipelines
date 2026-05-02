@@ -548,12 +548,26 @@ function Run-Combined {
             Write-Host "  [NBA] Using fallback step8: $nbaFile" -ForegroundColor DarkGray
         }
     }
+    $wnbaFile = Join-Path $WNBADir "data\outputs\step8_wnba_direction_clean.xlsx"
+    if (-not (Test-Path $wnbaFile)) {
+        $wnbaAlt = Join-Path $WNBADir "step8_wnba_direction_clean.xlsx"
+        if (Test-Path $wnbaAlt) {
+            $wnbaFile = $wnbaAlt
+            Write-Host "  [WNBA] Using fallback step8: $wnbaFile" -ForegroundColor DarkGray
+        }
+    }
+    if (-not (Test-Path $wnbaFile)) {
+        $wnbaAlt2 = Join-Path $WNBADir "step8_wnba_direction.xlsx"
+        if (Test-Path $wnbaAlt2) {
+            $wnbaFile = $wnbaAlt2
+            Write-Host "  [WNBA] Using fallback step8: $wnbaFile" -ForegroundColor DarkGray
+        }
+    }
     # CBB deactivated - season over (April 2026)
     $cbbFile    = "$CBBDir\step6_ranked_cbb.xlsx"
     $nhlFile    = "$NHLDir\outputs\step8_nhl_direction_clean.xlsx"
     $soccerFile = "$SoccerDir\outputs\step8_soccer_direction_clean.xlsx"
     $tennisFile = "$TennisDir\outputs\step8_tennis_direction_clean.xlsx"
-    $wnbaFile   = Join-Path $WNBADir "step8_wnba_direction.xlsx"
     $mlbFile    = "$MLBDir\step8_mlb_direction_clean.xlsx"
     $nba1qFile  = "$NBADir\step8_nba1q_direction_clean.xlsx"
     $nba1hFile  = "$NBADir\step8_nba1h_direction_clean.xlsx"
@@ -1426,7 +1440,12 @@ $MLBSuccess    = Test-Path (Join-Path $MLBDir    "step8_mlb_direction_clean.xlsx
 $TennisSuccess = Test-Path (Join-Path $TennisDir "outputs\step8_tennis_direction_clean.xlsx")
 $WNBASuccess = $false
 if ($wnbaParallel) {
-    $WNBASuccess = Test-Path (Join-Path $WNBADir "step8_wnba_direction.xlsx")
+    $WNBASuccess = @(
+        (Join-Path $WNBADir "data\outputs\step8_wnba_direction_clean.xlsx"),
+        (Join-Path $WNBADir "step8_wnba_direction_clean.xlsx"),
+        (Join-Path $WNBADir "step8_wnba_direction.xlsx")
+    ) | Where-Object { Test-Path $_ } | Select-Object -First 1
+    $WNBASuccess = [bool]$WNBASuccess
 }
 $mlbStep1Health = Get-MLBStep1DateHealth -CsvPath (Join-Path $MLBDir "step1_mlb_props.csv") -TargetDate $Date
 if (-not $mlbStep1Health.ok) {
@@ -1452,14 +1471,7 @@ if ($TennisSuccess) {
         -DatedFileName "step8_tennis_direction_clean_$Date.xlsx" `
         -Label "Tennis"
 }
-if ($WNBASuccess) {
-    $wnbaDatedDir = Join-Path $WNBADir "outputs\$Date"
-    Copy-DatedSlateOutput `
-        -SourcePath (Join-Path $WNBADir "step8_wnba_direction.xlsx") `
-        -DatedFileName "step8_wnba_direction_$Date.xlsx" `
-        -Label "WNBA" `
-        -OutputDirectory $wnbaDatedDir
-}
+# WNBA dated step8 copies are produced inside WNBA\step8_add_direction_context.py (same pattern as NBA).
 
 Remove-Job $allJobs -Force -ErrorAction SilentlyContinue
 if ($NBASuccess) { New-Item -ItemType File -Force -Path (Join-Path $NBADir "RUN_COMPLETE.flag") | Out-Null }

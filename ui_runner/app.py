@@ -123,7 +123,8 @@ TENNIS_DIR    = BASE_DIR / "Tennis"
 # Same pattern as Soccer/MLB: run_daily.ps1 copies outputs → sport root for Railway.
 TENNIS_SLATE  = TENNIS_DIR / "step8_tennis_direction_clean.xlsx"
 WNBA_DIR      = BASE_DIR / "WNBA"
-WNBA_SLATE    = WNBA_DIR / "step8_wnba_direction.xlsx"
+# Same as NBA: clean step8 under data/outputs; root-level names kept as legacy.
+WNBA_SLATE    = WNBA_DIR / "data" / "outputs" / "step8_wnba_direction_clean.xlsx"
 NFL_DIR       = BASE_DIR / "NFL"
 # NFL step8 target: same convention as NHL — sport folder + outputs/ (not repo-root outputs/).
 # Pipeline should write: NFL/outputs/step8_nfl_direction_clean.xlsx
@@ -2801,6 +2802,8 @@ def api_pipeline_status():
         days,
         "step8_wnba_direction_{d}.xlsx",
         WNBA_SLATE,
+        WNBA_DIR / "step8_wnba_direction_clean.xlsx",
+        WNBA_DIR / "step8_wnba_direction.xlsx",
         extra_roots=[WNBA_DIR / "outputs"],
     )
     nfl_slate_p = _resolve_outputs_artifact(

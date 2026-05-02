@@ -178,6 +178,8 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
         )
         "step8_wnba_direction_$RunDate.xlsx" = @(
             (Join-Path $Root "WNBA\outputs\$RunDate\step8_wnba_direction_$RunDate.xlsx"),
+            (Join-Path $Root "WNBA\data\outputs\step8_wnba_direction_clean.xlsx"),
+            (Join-Path $Root "WNBA\step8_wnba_direction_clean.xlsx"),
             (Join-Path $Root "WNBA\step8_wnba_direction.xlsx")
         )
     }
