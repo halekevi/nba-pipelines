@@ -211,13 +211,24 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
     player = _pick("Player", "player", "Name", "name")
     if not player:
         return None
-    team = _pick("Team", "team")
+    team = _pick("Team", "team", "team_abbr")
     prop = _pick("Prop Type", "prop type", "Prop", "prop", "Pick", "pick")
     direction = _pick("Dir", "dir", "Direction", "direction").upper()
     line = _pick("Line", "line", "Game Line", "game line", "O/U", "OU Line", "Pick Line")
     pick_type = _pick("Pick Type", "pick type")
     tier = _pick("Tier", "tier")
-    opp_team = _pick("Opp Team", "opp team", "Opp", "opp", "Opponent", "opponent")
+    # slate_grader Box Raw uses snake_case opp_team; legacy sheets use Opp / Opp Team.
+    opp_team = _pick(
+        "opp_team",
+        "Opp Team",
+        "opp team",
+        "Opp",
+        "opp",
+        "Opponent",
+        "opponent",
+        "opp_team_abbr",
+        "pp_opp_team",
+    )
     edge = _pick("Edge", "edge", "Edge Score", "edge score")
     ml_prob = _pick("ML Prob", "ml prob", "ml_prob")
     actual_value = _pick("Actual", "actual", "actual_value")
@@ -256,7 +267,7 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
         "sport": sport,
         "player": player,
         "team": team or "—",
-        "opp_team": opp_team or "—",
+        "opp_team": opp_team or "",
         "prop": prop or "—",
         "line": line or "—",
         "direction": direction or "—",
@@ -280,50 +291,6 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
         "result": result,
         "pp_projection_id": proj_id or "",
     }
-
-
-def graded_json_prop_to_workbook_row(p: dict) -> dict:
-    """Map graded_props_*.json entry to Excel-style keys for slate HTML builders."""
-    res = str(p.get("result") or p.get("Result") or "").strip().upper()
-    direction = str(p.get("direction") or p.get("Direction") or "").strip().upper()
-    return {
-        "Pick Type": str(p.get("pick_type") or p.get("Pick Type") or ""),
-        "Tier": str(p.get("tier") or p.get("Tier") or ""),
-        "Direction": direction,
-        "Dir": direction,
-        "Result": res,
-        "Grade": res,
-        "Player": str(p.get("player") or p.get("Player") or ""),
-        "Team": str(p.get("team") or p.get("Team") or ""),
-        "Prop Type": str(p.get("prop") or p.get("Prop Type") or ""),
-        "Prop": str(p.get("prop") or p.get("Prop") or ""),
-        "Def Tier": str(p.get("def_tier") or p.get("Def Tier") or ""),
-    }
-
-
-def load_sport_bundles_from_graded_json(path: Path) -> tuple[list[dict], list[dict], list[dict], list[dict], list[dict]]:
-    """Split graded_props JSON into per-sport row lists (workbook-shaped dicts)."""
-    raw = json.loads(path.read_text(encoding="utf-8"))
-    props = raw.get("props") or []
-    nba: list[dict] = []
-    cbb: list[dict] = []
-    nhl: list[dict] = []
-    soccer: list[dict] = []
-    mlb: list[dict] = []
-    for p in props:
-        sport = str(p.get("sport") or "").strip().upper()
-        row = graded_json_prop_to_workbook_row(p)
-        if sport == "NBA":
-            nba.append(row)
-        elif sport == "CBB":
-            cbb.append(row)
-        elif sport == "NHL":
-            nhl.append(row)
-        elif sport == "SOCCER":
-            soccer.append(row)
-        elif sport == "MLB":
-            mlb.append(row)
-    return nba, cbb, nhl, soccer, mlb
 
 
 def export_graded_props_json(
@@ -510,16 +477,13 @@ def build_pick_tier_direction_agg(rows: list[dict]) -> dict[tuple[str, str, str]
     """
     agg: dict[tuple[str, str, str], dict[str, int]] = {}
     for r in rows:
-        pt_raw = r.get("Pick Type") or r.get("pick_type")
-        pt = _norm_pick_type_matrix(pt_raw)
+        pt = _norm_pick_type_matrix(r.get("Pick Type"))
         if not pt:
             continue
-        tier = str(r.get("Tier", "") or r.get("tier", "") or "").strip().upper()
+        tier = str(r.get("Tier", "") or "").strip().upper()
         if tier not in ("A", "B", "C", "D"):
             continue
-        direction = str(
-            r.get("Dir", "") or r.get("Direction", "") or r.get("direction", "")
-        ).strip().upper()
+        direction = str(r.get("Dir", "") or r.get("Direction", "")).strip().upper()
         if direction not in ("OVER", "UNDER"):
             continue
         if pt in ("Goblin", "Demon") and direction != "OVER":
@@ -529,9 +493,7 @@ def build_pick_tier_direction_agg(rows: list[dict]) -> dict[tuple[str, str, str]
         if key not in agg:
             agg[key] = {"hits": 0, "misses": 0, "decided": 0}
 
-        result = str(
-            r.get("Result", "") or r.get("result", "") or r.get("Grade", "") or r.get("grade", "") or ""
-        ).strip().upper()
+        result = str(r.get("Result", "") or r.get("Grade", "") or "").strip().upper()
         if result in ("HIT", "WIN", "1", "TRUE", "YES", "W"):
             agg[key]["hits"] += 1
             agg[key]["decided"] += 1
@@ -568,8 +530,7 @@ def pick_tier_direction_matrix_html(rows: list[dict], min_decided: int = 10) -> 
     n_ge = sum(1 for k in keys if int(agg.get(k, {}).get("decided", 0)) >= int(min_decided))
     summary = (
         f"Full grid: Standard A–D (OVER/UNDER), Goblin & Demon A–D (OVER). "
-        f"{n_ge} of {len(keys)} cells have ≥ {int(min_decided)} decided; others still listed with counts. "
-        f"Click column headers to sort."
+        f"{n_ge} of {len(keys)} cells have ≥ {int(min_decided)} decided; others still listed with counts."
     )
 
     body_rows = ""
@@ -639,6 +600,95 @@ def pick_tier_direction_matrix_html(rows: list[dict], min_decided: int = 10) -> 
           </tr></thead>
           <tbody>{body_rows}</tbody>
         </table></div>
+      </div>
+    </details>"""
+
+
+def pick_type_tier_direction_split_html(rows: list[dict], min_decided: int = 10) -> str:
+    """
+    User-facing split requested for NBA:
+      - Goblin by Tier A-D (OVER only)
+      - Demon by Tier A-D (OVER only)
+      - Standard by Tier A-D (OVER + UNDER)
+    """
+    agg = build_pick_tier_direction_agg(rows)
+    grid = _canonical_pick_tier_direction_keys()
+    n_ge = sum(1 for k in grid if int(agg.get(k, {}).get("decided", 0)) >= int(min_decided))
+
+    def _rec_for(pt: str, tier: str, direction: str) -> dict | None:
+        v = agg.get((pt, tier, direction), {"decided": 0, "hits": 0, "misses": 0})
+        d = int(v["decided"])
+        if d <= 0:
+            return None
+        h_ = int(v["hits"])
+        m_ = int(v["misses"])
+        hr = (h_ / d * 100.0) if d > 0 else 0.0
+        return {"decided": d, "hits": h_, "misses": m_, "hit_rate": hr}
+
+    def _row_block(pt: str, direction: str, tier: str, rec: dict | None) -> str:
+        if rec is None:
+            return (
+                f'<tr class="matrix-empty"><td><span class="chip chip-std">TIER {tier}</span></td>'
+                f'<td>{"▲ OVER" if direction=="OVER" else "▼ UNDER"}</td>'
+                f'<td class="right mono muted">—</td><td class="right mono muted">—</td>'
+                f'<td class="right mono muted">—</td><td class="right mono muted">—</td>'
+                f'<td><span class="muted">—</span></td></tr>'
+            )
+        hr = float(rec["hit_rate"])
+        row_cls = "matrix-hit" if hr >= 60.0 else ("matrix-miss" if hr < 50.0 else "matrix-warn")
+        if int(rec["decided"]) < int(min_decided):
+            row_cls += " matrix-sparse"
+        dir_html = (
+            '<span style="color:var(--green);font-size:13px">▲ OVER</span>'
+            if direction == "OVER"
+            else '<span style="color:var(--cyan);font-size:13px">▼ UNDER</span>'
+        )
+        bar_color = "var(--green)" if hr >= 60.0 else ("var(--gold)" if hr >= 50.0 else "var(--red)")
+        bar_html = (
+            f'<div class="rate-bar-bg"><div class="rate-bar-fill" '
+            f'style="width:{max(0.0, min(hr, 100.0)):.1f}%;background:{bar_color}"></div></div>'
+        )
+        chip_cls = {"A": "chip-a", "B": "chip-b", "C": "chip-c"}.get(tier, "chip-d")
+        return f"""<tr class="{row_cls}">
+          <td><span class="chip {chip_cls}">TIER {tier}</span></td>
+          <td>{dir_html}</td>
+          <td class="right mono">{fmt_num(rec['decided'])}</td>
+          <td class="right mono pos">{fmt_num(rec['hits'])}</td>
+          <td class="right mono neg">{fmt_num(rec['misses'])}</td>
+          <td class="right mono">{pct(rec['hit_rate'])}</td>
+          <td>{bar_html}</td>
+        </tr>"""
+
+    def _table_for(pt: str, dirs: list[str], chip_cls: str, chip_emoji: str) -> str:
+        body = ""
+        for t in ("A", "B", "C", "D"):
+            for d in dirs:
+                body += _row_block(pt, d, t, _rec_for(pt, t, d))
+        return f"""<div>
+          <div class="section-label"><span class="chip {chip_cls}">{chip_emoji}&nbsp;{pt}</span> BY TIER</div>
+          <div class="table-wrap"><table class="table-sortable">
+            <thead><tr>
+              <th data-sort-key="tier" title="Sort">TIER</th>
+              <th data-sort-key="dir" title="Sort">DIRECTION</th>
+              <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+              <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+              <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+              <th class="right" data-sort-key="rate" title="Sort">HIT RATE</th>
+              <th data-sort-key="bar" title="Sort">BAR</th>
+            </tr></thead>
+            <tbody>{body}</tbody>
+          </table></div>
+        </div>"""
+
+    return f"""<details class="matrix-collapsible">
+      <summary>Pick Type Tier Splits — Goblin/Demon OVER, Standard OVER+UNDER</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Full A–D per pick type ({len(grid)} matrix cells). {n_ge} cells with ≥ {int(min_decided)} decided.</div>
+        <div class="three-col">
+          {_table_for("Goblin", ["OVER"], "chip-goblin", "🎃")}
+          {_table_for("Demon", ["OVER"], "chip-demon", "😈")}
+          {_table_for("Standard", ["OVER", "UNDER"], "chip-std", "⭐")}
+        </div>
       </div>
     </details>"""
 
@@ -990,9 +1040,8 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
 
     stats  = overall_stats(rows)
     total_label = fmt_num(stats["total"]) if stats["total"] > 0 else fmt_num(stats["decided"] + stats["voids"])
-    matrix_section = (
-        pick_tier_direction_matrix_html(rows, min_decided=10) if sport.strip().upper() == "NBA" else ""
-    )
+    matrix_section = pick_tier_direction_matrix_html(rows, min_decided=10) if sport.strip().upper() == "NBA" else ""
+    split_section = pick_type_tier_direction_split_html(rows, min_decided=10) if sport.strip().upper() == "NBA" else ""
 
     # ── Def Tier ───────────────────────────────────────────────────────────────
     def_section = def_tier_table(rows)
@@ -1091,6 +1140,7 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
     </summary>
     <div class="sport-section-body">
       {matrix_section}
+      {split_section}
       {def_section}
       {prop_section}
       {player_section}
@@ -1635,17 +1685,6 @@ def main() -> None:
         action="store_true",
         help="Write slate_eval even when no graded xlsx files exist (empty / no-data UI).",
     )
-    parser.add_argument(
-        "--graded-json",
-        type=str,
-        default="",
-        metavar="PATH",
-        help=(
-            "Rebuild slate_eval from graded_props JSON (no xlsx). "
-            "Pass a file path, or 'templates' to use "
-            "ui_runner/templates/graded_props_{date}.json"
-        ),
-    )
     args = parser.parse_args()
 
     # Resolve date
@@ -1654,67 +1693,6 @@ def main() -> None:
     else:
         date_str = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
     print(f"  Date: {date_str}")
-
-    graded_json_arg = (args.graded_json or "").strip()
-    if graded_json_arg:
-        gj = graded_json_arg.lower()
-        if gj == "templates":
-            json_path = ROOT_DIR / "ui_runner" / "templates" / f"graded_props_{date_str}.json"
-        else:
-            json_path = Path(graded_json_arg).resolve()
-        if not json_path.is_file():
-            print(f"  ERROR: graded JSON not found: {json_path}")
-            sys.exit(1)
-        print(f"  Loading from graded JSON: {json_path}")
-        nba_rows, cbb_rows, nhl_rows, soccer_rows, mlb_rows = load_sport_bundles_from_graded_json(
-            json_path
-        )
-        print(
-            f"    NBA {len(nba_rows):,} | CBB {len(cbb_rows):,} | NHL {len(nhl_rows):,} | "
-            f"Soccer {len(soccer_rows):,} | MLB {len(mlb_rows):,}"
-        )
-        nba_rows_merged = nba_rows
-        print("  Building HTML ...", end="", flush=True)
-        html = build_html(
-            date_str,
-            nba_rows_merged,
-            cbb_rows,
-            None,
-            None,
-            nhl_rows=nhl_rows,
-            soccer_rows=soccer_rows,
-            mlb_rows=mlb_rows,
-            nhl_path=None,
-            soccer_path=None,
-            mlb_path=None,
-        )
-        print(f" {len(html):,} bytes")
-        out_name = f"slate_eval_{date_str}.html"
-        if args.out:
-            out_p = Path(args.out).resolve()
-            out_s = str(args.out)
-            if out_p.is_dir() or out_s.endswith("\\") or out_s.endswith("/"):
-                out_p = out_p / out_name
-        else:
-            out_p = ROOT_DIR / "ui_runner" / "templates" / out_name
-        out_p.parent.mkdir(parents=True, exist_ok=True)
-        out_p.write_text(html, encoding="utf-8")
-        print(f"  Saved  -> {out_p}")
-        if json_path.resolve() != (out_p.parent / f"graded_props_{date_str}.json").resolve():
-            json_p = export_graded_props_json(
-                date_str,
-                out_p.parent,
-                [
-                    ("NBA", nba_rows_merged),
-                    ("CBB", cbb_rows),
-                    ("NHL", nhl_rows),
-                    ("Soccer", soccer_rows),
-                    ("MLB", mlb_rows),
-                ],
-            )
-            print(f"  Saved  -> {json_p}")
-        print("  Done.")
-        return
 
     # Resolve file paths
     nba_path: Path | None = None

@@ -2004,7 +2004,7 @@ function formatPropEvalMatchup(r) {
     var s = String(x == null ? '' : x).trim();
     if (!s) return '';
     var norm = s.replace(/\u2013|\u2014/g, '-').trim();
-    if (norm === '-' || norm === '—' || norm.toUpperCase() === 'N/A' || norm.toUpperCase() === 'NA' || norm.toUpperCase() === 'TBD') return '';
+    if (norm === '-' || norm === '—' || /^-+$/.test(norm) || norm.toUpperCase() === 'N/A' || norm.toUpperCase() === 'NA' || norm.toUpperCase() === 'TBD') return '';
     return s;
   }
   var t = tok(r.team);
