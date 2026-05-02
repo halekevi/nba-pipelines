@@ -20,6 +20,7 @@ import argparse
 import shutil
 from datetime import date
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import numpy as np
 import pandas as pd
@@ -27,6 +28,17 @@ from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 import os
+
+_ET = ZoneInfo("America/New_York")
+
+
+def _start_times_et(s: pd.Series) -> pd.Series:
+    return pd.to_datetime(s, utc=True, errors="coerce").dt.tz_convert(_ET)
+
+
+def _format_et_clock(et: pd.Series) -> pd.Series:
+    clk = et.dt.strftime("%I:%M %p")
+    return clk.str.replace(r"^0(\d:)", r"\1", regex=True)
 
 
 def _copy_dated_step8_wnba(output_xlsx_path: str, slate_date: str) -> None:
@@ -107,7 +119,7 @@ def write_sheet(wb, name, data):
 
     col_widths = {
         'Tier': 6, 'Rank Score': 10, 'Player': 18, 'Pos': 6,
-        'Team': 6, 'Opp': 6, 'Game Time': 10,
+        'Team': 6, 'Opp': 6, 'Game Date': 12, 'Game Time': 10,
         'Prop': 16, 'Pick Type': 10, 'Line': 7,
         'Direction': 9, 'Edge': 7, 'Projection': 10,
         'ML Prob': 9, 'Edge Score': 10, 'Blended Score': 12,
@@ -125,11 +137,19 @@ def write_sheet(wb, name, data):
 
 def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
     df2 = df.copy()
-    df2['game_time'] = pd.to_datetime(df2.get('start_time', ''), errors='coerce').dt.strftime('%-I:%M %p')
+    if "start_time" in df2.columns:
+        et = _start_times_et(df2["start_time"])
+        df2["game_date"] = et.dt.strftime("%Y-%m-%d").where(et.notna(), "")
+        df2["game_time"] = _format_et_clock(et)
+    else:
+        if "game_date" not in df2.columns:
+            df2["game_date"] = ""
+        if "game_time" not in df2.columns:
+            df2["game_time"] = ""
 
     keep = [
         'tier', 'rank_score',
-        'player', 'pos', 'team', 'opp_team', 'game_time',
+        'player', 'pos', 'team', 'opp_team', 'game_date', 'game_time',
         'prop_type', 'pick_type', 'line',
         'final_bet_direction',
         'edge', 'projection',
@@ -164,7 +184,8 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
 
     rename = {
         'tier': 'Tier', 'rank_score': 'Rank Score',
-        'player': 'Player', 'pos': 'Pos', 'team': 'Team', 'opp_team': 'Opp', 'game_time': 'Game Time',
+        'player': 'Player', 'pos': 'Pos', 'team': 'Team', 'opp_team': 'Opp',
+        'game_date': 'Game Date', 'game_time': 'Game Time',
         'prop_type': 'Prop', 'pick_type': 'Pick Type', 'line': 'Line',
         'final_bet_direction': 'Direction',
         'edge': 'Edge', 'projection': 'Projection',
@@ -232,6 +253,12 @@ def main() -> None:
 
     out["final_bet_direction"] = final_dir
     out["final_dir_reason"] = reason
+
+    if "start_time" in out.columns:
+        et = _start_times_et(out["start_time"])
+        out["game_date"] = et.dt.strftime("%Y-%m-%d").where(et.notna(), "")
+    else:
+        out["game_date"] = ""
 
     # Save full CSV
     out.to_csv(args.output, index=False, encoding="utf-8-sig")

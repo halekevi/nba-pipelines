@@ -25,6 +25,7 @@ COL_MAP: list[tuple[str, str]] = [
     ("Rank Score", "Rank Score"),
     ("Team", "Team"),
     ("Opp", "Opp"),
+    ("Game Date", "Game Date"),
     ("Game Time", "Game Time"),
     ("Prop", "Prop"),
     ("Pick Type", "Pick Type"),
@@ -55,9 +56,23 @@ def _pick_input(path_or_glob: str) -> Path:
 
 
 def _filter_grade_date(df: pd.DataFrame, date_str: str) -> pd.DataFrame:
-    """Match grade date to Game Time. Full Slate often uses 'MM/DD HH:MM' with no year."""
+    """Match grade date to Game Date (preferred) or Game Time (MM/DD often has no year)."""
     if not date_str or df.empty:
         return df
+    ds = str(date_str).strip()[:10]
+    if "Game Date" in df.columns:
+        gd = df["Game Date"].astype(str).str.strip().str[:10]
+        nonempty = gd.ne("") & gd.ne("nan") & gd.ne("None")
+        if nonempty.any():
+            mask = gd.eq(ds) & nonempty
+            if mask.any():
+                print(f"INFO: Game Date filter ({date_str}): kept {int(mask.sum())}/{len(df)} rows")
+                return df.loc[mask].copy()
+            print(
+                f"WARN: Game Date filter for {date_str}: 0 rows — export empty.",
+                file=sys.stderr,
+            )
+            return df.iloc[0:0].copy()
     col = None
     for c in ("Game Time", "game_time", "game_start"):
         if c in df.columns:

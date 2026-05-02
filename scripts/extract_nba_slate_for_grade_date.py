@@ -36,8 +36,8 @@ def main() -> None:
     xls = pd.ExcelFile(inp, engine="openpyxl")
     sheet = "ALL" if "ALL" in xls.sheet_names else xls.sheet_names[0]
     df = pd.read_excel(inp, sheet_name=sheet, engine="openpyxl")
-    if "Game Time" not in df.columns:
-        print(f"SKIP: no 'Game Time' column in {inp.name}", file=sys.stderr)
+    if "Game Time" not in df.columns and "Game Date" not in df.columns:
+        print(f"SKIP: no 'Game Time' or 'Game Date' column in {inp.name}", file=sys.stderr)
         sys.exit(0)
 
     try:
@@ -46,8 +46,14 @@ def main() -> None:
         print(f"SKIP: bad --grade-date {args.grade_date!r}", file=sys.stderr)
         sys.exit(0)
 
-    row_days = _game_dates(df["Game Time"])
-    mask = row_days == target
+    ds = str(args.grade_date).strip()[:10]
+    if "Game Date" in df.columns:
+        gd = df["Game Date"].astype(str).str.strip().str[:10]
+        nonempty = gd.ne("") & gd.ne("nan") & gd.ne("None")
+        mask = gd.eq(ds) & nonempty
+    else:
+        row_days = _game_dates(df["Game Time"])
+        mask = row_days == target
     sub = df.loc[mask].copy()
     if sub.empty:
         print(f"INFO: 0 rows on {target} in {inp.name} — not writing {outp.name}")

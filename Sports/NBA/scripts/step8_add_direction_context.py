@@ -27,11 +27,23 @@ from openpyxl.utils import get_column_letter
 import os
 from datetime import date, datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
 except Exception:
     pass
+
+_ET = ZoneInfo("America/New_York")
+
+
+def _start_times_et(s: pd.Series) -> pd.Series:
+    return pd.to_datetime(s, utc=True, errors="coerce").dt.tz_convert(_ET)
+
+
+def _format_et_clock(et: pd.Series) -> pd.Series:
+    clk = et.dt.strftime("%I:%M %p")
+    return clk.str.replace(r"^0(\d:)", r"\1", regex=True)
 
 
 def _copy_dated_step8_nba(output_xlsx_path: str, slate_date: str) -> None:
@@ -118,7 +130,7 @@ def write_sheet(wb, name, data):
 
     col_widths = {
         'Tier': 6, 'Rank Score': 10, 'Player': 18, 'Pos': 6,
-        'Team': 6, 'Opp': 6, 'Game Time': 10,
+        'Team': 6, 'Opp': 6, 'Game Date': 12, 'Game Time': 10,
         'Prop': 16, 'Pick Type': 10, 'Line': 7, 'Standard Line': 12,
         'Direction': 9, 'Edge': 7, 'Abs Edge': 8, 'Projection': 10,
         'Hit Rate (5g)': 12, 'Last 5 Avg': 10, 'Season Avg': 10,
@@ -153,7 +165,15 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
     if "abs_edge" not in df2.columns and "edge" in df2.columns:
         df2["abs_edge"] = pd.to_numeric(df2["edge"], errors="coerce").abs()
 
-    df2['game_time'] = pd.to_datetime(df2.get('start_time', ''), errors='coerce').dt.strftime('%-I:%M %p')
+    if "start_time" in df2.columns:
+        et = _start_times_et(df2["start_time"])
+        df2["game_date"] = et.dt.strftime("%Y-%m-%d").where(et.notna(), "")
+        df2["game_time"] = _format_et_clock(et)
+    else:
+        if "game_date" not in df2.columns:
+            df2["game_date"] = ""
+        if "game_time" not in df2.columns:
+            df2["game_time"] = ""
     hint = (source_hint or "").lower()
     is_period_slate = ("nba1q" in hint) or ("nba1h" in hint)
 
@@ -327,7 +347,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
 
     keep = [
         'tier', 'rank_score',
-        'player', 'pos', 'team', 'opp_team', 'game_time',
+        'player', 'pos', 'team', 'opp_team', 'game_date', 'game_time',
         'prop_type', 'pick_type', 'line', 'standard_line',
         'final_bet_direction',
         'edge', 'abs_edge', 'projection',
@@ -383,7 +403,8 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
 
     rename = {
         'tier': 'Tier', 'rank_score': 'Rank Score',
-        'player': 'Player', 'pos': 'Pos', 'team': 'Team', 'opp_team': 'Opp', 'game_time': 'Game Time',
+        'player': 'Player', 'pos': 'Pos', 'team': 'Team', 'opp_team': 'Opp',
+        'game_date': 'Game Date', 'game_time': 'Game Time',
         'prop_type': 'Prop', 'pick_type': 'Pick Type', 'line': 'Line',
         'standard_line': 'Standard Line',
         'final_bet_direction': 'Direction',
@@ -492,9 +513,9 @@ def main() -> None:
     # Keep only rows for target slate date when start_time is available.
     # This prevents stale historical slates from leaking into today's output.
     if "start_time" in out.columns:
-        target_date = (args.date or datetime.now().strftime("%Y-%m-%d")).strip()
-        start_dt = pd.to_datetime(out["start_time"], errors="coerce")
-        start_dates = start_dt.dt.strftime("%Y-%m-%d")
+        target_date = (args.date or datetime.now(_ET).strftime("%Y-%m-%d")).strip()
+        start_dt_et = pd.to_datetime(out["start_time"], utc=True, errors="coerce").dt.tz_convert(_ET)
+        start_dates = start_dt_et.dt.strftime("%Y-%m-%d")
         keep_mask = start_dates.eq(target_date)
         kept = int(keep_mask.sum())
         total = len(out)
@@ -515,6 +536,12 @@ def main() -> None:
         else:
             print(f"[DateFilter] Kept {kept}/{total} rows for {target_date} (dropped {total - kept} rows)")
         out = out.loc[keep_mask].copy()
+
+    if "start_time" in out.columns:
+        et = _start_times_et(out["start_time"])
+        out["game_date"] = et.dt.strftime("%Y-%m-%d").where(et.notna(), "")
+    else:
+        out["game_date"] = ""
 
     if "edge" not in out.columns:
         proj = pd.to_numeric(out.get("projection", ""), errors="coerce")

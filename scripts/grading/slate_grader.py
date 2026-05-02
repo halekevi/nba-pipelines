@@ -378,6 +378,7 @@ def load_nba(path: str) -> pd.DataFrame:
     "Pos": "pos",
     "Tier": "tier",
     "Game Time": "game_time",
+    "Game Date": "game_date",
     "Rank Score": "rank_score",
     "Edge": "edge",
     "Projection": "projection",
@@ -435,6 +436,25 @@ def filter_nba_slate_by_grade_date(df: pd.DataFrame, date_str: str) -> pd.DataFr
     """
     if not date_str or not len(df):
         return df
+    ds = str(date_str).strip()[:10]
+    if "game_date" in df.columns:
+        gd = df["game_date"].astype(str).str.strip().str[:10]
+        nonempty = gd.ne("") & gd.ne("nan") & gd.ne("None") & gd.ne("<NA>")
+        if nonempty.any():
+            mask = gd.eq(ds) & nonempty
+            if mask.any():
+                print(f"  INFO: Slate date filter ({date_str}) [game_date]: kept {int(mask.sum())}/{len(df)} rows")
+                return df.loc[mask].copy()
+            print(
+                f"  WARN: Date filter {date_str} on 'game_date': 0 rows match -- "
+                f"graded workbook will be empty (slate is for other day(s))."
+            )
+            print(
+                "  HINT: Use run_grader.ps1 -Date <ET slate calendar date>, "
+                "or place that day's step8 workbook under outputs\\<date>\\ for extraction."
+            )
+            return df.iloc[0:0].copy()
+
     col = None
     for c in ("game_time", "game_start", "fetched_at"):
         if c in df.columns:
