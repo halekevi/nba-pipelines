@@ -1686,9 +1686,9 @@ def main() -> None:
         mlb_rows = load_graded(mlb_path)
         print(f" {len(mlb_rows):,} rows")
 
-    # Build HTML
+    # Build HTML (use merged NBA so 1Q/1H rows appear in Slate Evaluation, not only in JSON)
     print("  Building HTML ...", end="", flush=True)
-    html = build_html(date_str, nba_rows, cbb_rows, nba_path, cbb_path,
+    html = build_html(date_str, nba_rows_merged, cbb_rows, nba_path, cbb_path,
                       nhl_rows=nhl_rows, soccer_rows=soccer_rows, mlb_rows=mlb_rows,
                       nhl_path=nhl_path, soccer_path=soccer_path, mlb_path=mlb_path)
     print(f" {len(html):,} bytes")

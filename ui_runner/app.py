@@ -4500,6 +4500,8 @@ def _normalize_sport_label(raw: Any) -> str:
         "NCAAB": "CBB",
         "WCBB": "CBB",
         "NCAAF": "NFL",
+        "NBA1Q": "NBA",
+        "NBA1H": "NBA",
     }
     return aliases.get(s, s)
 
