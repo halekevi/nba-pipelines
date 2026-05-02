@@ -38,7 +38,6 @@ STEP8_CANDIDATES: dict[str, list[Path]] = {
     "NHL": [
         REPO_ROOT / "Sports" / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
         REPO_ROOT / "Sports" / "NHL" / "step8_nhl_direction_clean.xlsx",
-        REPO_ROOT / "Sports" / "NHL" / "step8_nhl_direction_clean.csv",
         REPO_ROOT / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
     ],
     "SOCCER": [
@@ -171,9 +170,8 @@ def _load_graded_box_raw(path: Path, sport: str) -> pd.DataFrame:
 def _load_step8(path: Path, sport: str) -> pd.DataFrame:
     if not path.exists():
         return pd.DataFrame()
-    suf = path.suffix.lower()
-    if suf == ".csv":
-        df = pd.read_csv(path, encoding="utf-8-sig", low_memory=False)
+    if path.suffix.lower() == ".csv":
+        df = pd.read_csv(path, low_memory=False)
     else:
         df = pd.read_excel(path)
     if df.empty:
@@ -188,9 +186,7 @@ def _load_step8(path: Path, sport: str) -> pd.DataFrame:
     out["player"] = _col_or_nan(["Player", "player"]).astype(str).str.strip()
     out["prop_type_norm"] = _col_or_nan(list(_PROP_COLS_STEP8)).apply(_norm_prop)
     out["pick_type"] = _col_or_nan(["Pick Type", "pick_type"]).apply(_norm_pick_type)
-    out["direction"] = _col_or_nan(
-        ["final_bet_direction", "Direction", "direction", "bet_direction", "recommended_side"]
-    ).apply(_norm_direction)
+    out["direction"] = _col_or_nan(["Direction", "direction"]).apply(_norm_direction)
     out["line"] = pd.to_numeric(_col_or_nan(["Line", "line"]), errors="coerce")
     out["standard_line"] = pd.to_numeric(_col_or_nan(["Standard Line", "standard_line"]), errors="coerce")
     out["hit_rate"] = pd.to_numeric(_col_or_nan(["Hit Rate (5g)", "hit_rate"]), errors="coerce")
@@ -206,39 +202,59 @@ def _feature_for_group(sport: str, spec: GroupSpec) -> str:
     return "ml_prob"
 
 
-def _sport_step8_glob_token(sport_u: str) -> str:
+def _sport_slug_for_step8(sport_u: str) -> str:
+    """Lowercase token expected inside archived step8 filenames (nhl, mlb, soccer, wnba)."""
     s = str(sport_u).strip().upper()
     if s == "SOCCER":
         return "soccer"
     return s.lower()
 
 
-def _find_per_date_step8(day_dir: Path, sport_u: str) -> Path | None:
-    """Pick first step8 artifact under outputs/<date>/ for this sport (.xlsx / .csv)."""
-    if not day_dir.is_dir():
-        return None
-    tok = _sport_step8_glob_token(sport_u)
-    ordered: list[Path] = []
-    for pattern in (f"step8_{tok}*.xlsx", f"step8_{tok}*.csv"):
-        ordered.extend(sorted(day_dir.glob(pattern)))
-    if not ordered:
-        for pattern in (f"step8_*{tok}*.xlsx", f"step8_*{tok}*.csv"):
-            ordered.extend(sorted(day_dir.glob(pattern)))
-    seen: set[str] = set()
-    for p in ordered:
-        key = str(p.resolve())
-        if p.is_file() and key not in seen:
-            seen.add(key)
-            return p
-    return None
-
-
-def _resolve_step8_workspace_snapshot(sport: str) -> Path | None:
+def _workspace_step8_path(sport: str) -> Path | None:
     sport_u = str(sport).strip().upper()
     for p in STEP8_CANDIDATES.get(sport_u, []):
         if p.exists():
             return p
     return None
+
+
+def _find_per_date_step8_file(sport: str, date_str: str) -> Path | None:
+    """First matching step8 workbook under outputs/<date>/ (and outputs/<date>/archive/)."""
+    sport_u = str(sport).strip().upper()
+    slug = _sport_slug_for_step8(sport_u)
+    root = OUTPUTS_DIR / date_str
+    if not root.is_dir():
+        return None
+    candidates: list[Path] = []
+    for sub in (root, root / "archive"):
+        if not sub.is_dir():
+            continue
+        try:
+            for p in sub.iterdir():
+                if not p.is_file():
+                    continue
+                name_l = p.name.lower()
+                if not name_l.startswith("step8_"):
+                    continue
+                if slug not in name_l:
+                    continue
+                if p.suffix.lower() not in (".xlsx", ".xls", ".csv"):
+                    continue
+                candidates.append(p)
+        except OSError:
+            continue
+    if not candidates:
+        return None
+
+    def _sort_key(p: Path) -> tuple[int, int, int, str]:
+        # Prefer date-folder root over archive, "clean" in name, xlsx over csv, stable name.
+        in_archive = 1 if p.parent.name.lower() == "archive" else 0
+        clean = 0 if "clean" in p.name.lower() else 1
+        is_xlsx = 0 if p.suffix.lower() == ".xlsx" else 1
+        return (in_archive, clean, is_xlsx, p.name.lower())
+
+    candidates.sort(key=_sort_key)
+    return candidates[0]
 
 
 def _resolve_step8_path(
@@ -247,42 +263,17 @@ def _resolve_step8_path(
     *,
     per_date: bool = False,
 ) -> Path | None:
-    """Resolve step8 path for merges.
-
-    When ``per_date`` is True and ``date`` is YYYY-MM-DD, prefer
-    ``outputs/<date>/step8_<sport>*.xlsx|csv`` (and loose ``step8_*<sport>*`` variants),
-    then fall back to the workspace snapshot with a warning if nothing matches.
-
-    When ``per_date`` is False (default), only the workspace snapshot is used
-    (legacy behavior).
-    """
+    """Resolve step8 path: optional per-date archive under outputs/<date>/, else workspace snapshot."""
     sport_u = str(sport).strip().upper()
-    d = (date or "").strip()[:10]
-    if per_date and len(d) == 10:
-        found = _find_per_date_step8(OUTPUTS_DIR / d, sport_u)
+    if per_date and date:
+        found = _find_per_date_step8_file(sport_u, str(date).strip())
         if found is not None:
             return found
-        snap = _resolve_step8_workspace_snapshot(sport_u)
-        if snap is not None:
-            print(
-                f"[analyzer] WARNING: no per-date step8 for {sport_u} {d}, using snapshot",
-                flush=True,
-            )
-        return snap
-    return _resolve_step8_workspace_snapshot(sport_u)
-
-
-def count_per_date_step8_archives(sport: str, dates: list[str]) -> int:
-    """How many calendar folders in ``dates`` contain a matching per-date step8 file."""
-    sport_u = str(sport).strip().upper()
-    n = 0
-    for raw in dates:
-        d = str(raw).strip()[:10]
-        if len(d) != 10:
-            continue
-        if _find_per_date_step8(OUTPUTS_DIR / d, sport_u) is not None:
-            n += 1
-    return n
+        print(
+            f"[analyzer] WARNING: no per-date step8 for {sport_u} {date}, using snapshot",
+            flush=True,
+        )
+    return _workspace_step8_path(sport_u)
 
 
 def _graded_workbook_candidates(sport: str, date_str: str) -> list[Path]:
@@ -353,13 +344,7 @@ def _find_best_breakpoint(
     return best
 
 
-def analyze(
-    date_str: str,
-    min_n: int,
-    sports: list[str],
-    *,
-    step8_per_date: bool = False,
-) -> pd.DataFrame:
+def analyze(date_str: str, min_n: int, sports: list[str]) -> pd.DataFrame:
     graded_frames: list[pd.DataFrame] = []
     step8_frames: list[pd.DataFrame] = []
 
@@ -368,7 +353,7 @@ def analyze(
         g = _load_graded_box_raw(graded_path, sport) if graded_path is not None else pd.DataFrame()
         if not g.empty:
             graded_frames.append(g)
-        step8_path = _resolve_step8_path(sport, date_str, per_date=step8_per_date)
+        step8_path = _resolve_step8_path(sport)
         if step8_path is not None:
             s = _load_step8(step8_path, sport)
             if not s.empty:
@@ -472,21 +457,14 @@ def ml_prob_threshold_scan(
 
     Rows are emitted for pick_type in GOBLIN, DEMON, STANDARD, and ALL (pooled).
 
-    When ``step8_per_date`` is False (default), only the workspace step8 snapshot is used
-    for every graded date (legacy behavior). Historical legs not on that board will not
-    get ``ml_prob``.
-
-    When ``step8_per_date`` is True, each graded date first uses ``outputs/<date>/step8_*``
-    for that sport (see :func:`_resolve_step8_path`), then falls back to the snapshot with
-    a warning if no archived file exists.
+    With ``step8_per_date=False`` (default), uses a single workspace step8 snapshot — same as
+    historical behavior. With ``step8_per_date=True``, uses ``outputs/<date>/step8_*`` when
+    present so each graded date merges against that slate's board.
     """
     sport_u = str(sport).strip().upper()
     frames: list[pd.DataFrame] = []
-    meta: dict[str, Any] = {
-        "step8_per_date": bool(step8_per_date),
-        "dates_total": int(len(dates)),
-        "dates_with_per_date_step8_file": count_per_date_step8_archives(sport_u, dates),
-    }
+    dates_with_graded = 0
+    per_date_step8_hits = 0
     for d in dates:
         gp = _first_existing_graded_path(sport_u, d)
         if gp is None:
@@ -494,7 +472,19 @@ def ml_prob_threshold_scan(
         g = _load_graded_box_raw(gp, sport_u)
         if g.empty:
             continue
-        s_path = _resolve_step8_path(sport_u, d, per_date=step8_per_date)
+        dates_with_graded += 1
+        if step8_per_date:
+            s_path = _find_per_date_step8_file(sport_u, d)
+            if s_path is not None:
+                per_date_step8_hits += 1
+            else:
+                print(
+                    f"[analyzer] WARNING: no per-date step8 for {sport_u} {d}, using snapshot",
+                    flush=True,
+                )
+                s_path = _workspace_step8_path(sport_u)
+        else:
+            s_path = _workspace_step8_path(sport_u)
         if s_path is None:
             continue
         s = _load_step8(s_path, sport_u)
@@ -506,6 +496,11 @@ def ml_prob_threshold_scan(
         m = m[pd.to_numeric(m["ml_prob"], errors="coerce").notna()].copy()
         if not m.empty:
             frames.append(m)
+    meta: dict[str, Any] = {
+        "step8_per_date": bool(step8_per_date),
+        "dates_with_graded": int(dates_with_graded),
+        "per_date_step8_hits": int(per_date_step8_hits),
+    }
     if not frames:
         return [], meta
     all_df = pd.concat(frames, ignore_index=True)
@@ -655,10 +650,7 @@ def main() -> None:
     ap.add_argument(
         "--step8-per-date",
         action="store_true",
-        help=(
-            "For each graded date, prefer outputs/<date>/step8_*.{xlsx,csv} over the workspace snapshot. "
-            "Falls back to snapshot with a warning if no per-date file exists."
-        ),
+        help="For each graded date, prefer outputs/<date>/step8_*.{xlsx,csv} over the workspace snapshot.",
     )
     args = ap.parse_args()
     sports = _sports_for_flag(args.sport)
@@ -671,7 +663,7 @@ def main() -> None:
     all_rows: list[pd.DataFrame] = []
     for d in dates:
         try:
-            r = analyze(d, args.min_n, sports, step8_per_date=bool(args.step8_per_date))
+            r = analyze(d, args.min_n, sports)
             if not r.empty:
                 all_rows.append(r)
         except FileNotFoundError:
@@ -725,23 +717,20 @@ def main() -> None:
             scan_thresholds,
             step8_per_date=bool(args.step8_per_date),
         )
+        if args.step8_per_date:
+            n_hit = int(scan_meta.get("per_date_step8_hits", 0))
+            m_dates = int(scan_meta.get("dates_with_graded", 0))
+            print(
+                f"[analyzer] step8 source: per-date ({n_hit} matched / {m_dates} dates with graded)",
+                flush=True,
+            )
+        else:
+            print("[analyzer] step8 source: snapshot only (--step8-per-date not set)", flush=True)
         if scan_rows:
             _print_ml_prob_threshold_scan(
                 pd.DataFrame(scan_rows),
                 sport_label=sport_scan,
                 by_pick_type=bool(args.threshold_scan_pick_types),
-            )
-        if scan_meta.get("step8_per_date"):
-            n_arch = int(scan_meta.get("dates_with_per_date_step8_file") or 0)
-            m_tot = int(scan_meta.get("dates_total") or len(dates))
-            print(
-                f"[analyzer] step8 source: per-date ({n_arch} matched / {m_tot} dates)",
-                flush=True,
-            )
-        else:
-            print(
-                "[analyzer] step8 source: snapshot only (--step8-per-date not set)",
-                flush=True,
             )
 
     if args.output:
@@ -763,10 +752,10 @@ def main() -> None:
                 "min_n_per_day": int(args.min_n_per_day),
                 "threshold_scan_pick_types": bool(args.threshold_scan_pick_types),
                 "step8_per_date": bool(args.step8_per_date),
-                "step8_threshold_scan_meta": scan_meta,
             },
             "aggregate": agg.to_dict(orient="records") if not agg.empty else [],
             "per_date_rows": report.to_dict(orient="records") if not report.empty else [],
+            "ml_prob_threshold_scan_meta": scan_meta,
             "ml_prob_threshold_scan": scan_rows,
             "soccer_threshold_scan": scan_rows if str(args.sport).strip().upper() == "SOCCER" else [],
         }
