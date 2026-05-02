@@ -917,11 +917,10 @@ def write_dashboard(wb,df,sport,date_str):
     c.alignment=Alignment(horizontal='center',vertical='center')
     ws.row_dimensions[1].height=28
     d=drc(df)
-    # Headline quality metrics exclude Tier D (keep Tier D rows in Box Raw / detail sheets).
+    # Headline OVERALL includes all tiers A–D (same rows as Box Raw).
     if 'tier' in df.columns:
-        tier_u = df['tier'].astype(str).str.upper().str.strip()
-        df_headline = df[tier_u.ne('D')].copy()
-        headline_label = 'Full Slate (A+B+C)'
+        df_headline = df.copy()
+        headline_label = 'Full Slate (A–D)'
     else:
         df_headline = df
         headline_label = 'Full Slate'
@@ -1044,14 +1043,9 @@ def main():
     if args.actuals:
         print(f'Applying actuals from {args.actuals}...')
         df=apply_actuals(df,args.actuals)
-        headline_df = df
-        if 'tier' in df.columns:
-            tier_u = df['tier'].astype(str).str.upper().str.strip()
-            headline_df = df[tier_u.ne('D')].copy()
-        decided=headline_df[headline_df['result'].isin(['HIT','MISS'])]
+        decided=df[df['result'].isin(['HIT','MISS'])]
         hits=(decided['result']=='HIT').sum()
-        extra = " (A+B+C only)" if len(headline_df) != len(df) else ""
-        print(f'  Graded{extra}: {len(decided)} decided — {hits} HIT / {len(decided)-hits} MISS')
+        print(f'  Graded: {len(decided)} decided — {hits} HIT / {len(decided)-hits} MISS')
     else:
         df['result']='PENDING'; df['void_reason_grade']=''; df['margin']=np.nan
         df['actual']=np.nan; df['result_sign']=0
