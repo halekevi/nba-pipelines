@@ -25,16 +25,16 @@ from pathlib import Path
 
 
 def _copy_dated_step8_mlb(output_xlsx_path: str, slate_date: str) -> None:
-    """Publish dated clean XLSX to repo outputs/<slate>/ and MLB/outputs/<slate>/ (matches NBA + WNBA pattern)."""
+    """Publish dated clean XLSX to repo outputs/<slate>/ and Sports/MLB/outputs/<slate>/ (matches NBA + WNBA pattern)."""
     src = Path(output_xlsx_path)
     if not src.is_file():
         return
     d = (slate_date or "").strip()
     if not d:
         d = date.today().isoformat()
-    repo_root = Path(__file__).resolve().parent.parent.parent
+    repo_root = Path(__file__).resolve().parents[3]
     dated_name = f"step8_mlb_direction_clean_{d}.xlsx"
-    for dated_dir in (repo_root / "outputs" / d, repo_root / "MLB" / "outputs" / d):
+    for dated_dir in (repo_root / "outputs" / d, repo_root / "Sports" / "MLB" / "outputs" / d):
         try:
             dated_dir.mkdir(parents=True, exist_ok=True)
             dated_path = dated_dir / dated_name

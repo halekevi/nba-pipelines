@@ -328,7 +328,7 @@ def main():
     try:
         import sys as _sys
         from pathlib import Path as _Path
-        _sys.path.insert(0, str(_Path(__file__).resolve().parent.parent.parent / "scripts"))
+        _sys.path.insert(0, str(_Path(__file__).resolve().parents[3] / "scripts"))
         from defense_db import write_defense_to_db
         write_defense_to_db(df, sport="nhl")
     except Exception as _e:

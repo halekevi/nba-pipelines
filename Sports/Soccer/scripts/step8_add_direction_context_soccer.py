@@ -36,7 +36,7 @@ def _copy_dated_step8_soccer(output_xlsx_path: str) -> None:
     if not src.is_file():
         return
     today = date.today().isoformat()
-    repo_root = Path(__file__).resolve().parent.parent.parent
+    repo_root = Path(__file__).resolve().parents[3]
     dated_dir = repo_root / "outputs" / today
     try:
         dated_dir.mkdir(parents=True, exist_ok=True)

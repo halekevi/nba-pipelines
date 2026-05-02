@@ -45,7 +45,7 @@ def _copy_dated_step8_nba(output_xlsx_path: str, slate_date: str) -> None:
     d = (slate_date or "").strip()
     if not d:
         d = date.today().isoformat()
-    repo_root = Path(__file__).resolve().parent.parent.parent
+    repo_root = Path(__file__).resolve().parents[3]
     dated_dir = repo_root / "outputs" / d
     src_name = src.name.lower()
     if "nba1q" in src_name:
