@@ -167,6 +167,7 @@ def load_graded(path: Path) -> list[dict]:
             if nk.lower() == "pick_type":           nk = "Pick Type"
             if nk.lower() == "tier":                nk = "Tier"
             if nk.lower() == "pick_type":           nk = "Pick Type"
+            if nk.lower() in ("opp_team", "opponent_team"): nk = "Opp"
             nr[nk] = v
         normalized.append(nr)
     return normalized
@@ -217,7 +218,17 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
     line = _pick("Line", "line", "Game Line", "game line", "O/U", "OU Line", "Pick Line")
     pick_type = _pick("Pick Type", "pick type")
     tier = _pick("Tier", "tier")
-    opp_team = _pick("Opp Team", "opp team", "Opp", "opp", "Opponent", "opponent")
+    # slate_grader Box Raw uses snake_case headers (e.g. opp_team); step8 clean uses "Opp".
+    opp_team = _pick(
+        "Opp Team",
+        "opp team",
+        "Opp",
+        "opp",
+        "Opponent",
+        "opponent",
+        "opp_team",
+        "opponent_team",
+    )
     edge = _pick("Edge", "edge", "Edge Score", "edge score")
     ml_prob = _pick("ML Prob", "ml prob", "ml_prob")
     actual_value = _pick("Actual", "actual", "actual_value")
@@ -256,7 +267,8 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
         "sport": sport,
         "player": player,
         "team": team or "—",
-        "opp_team": opp_team or "—",
+        # Empty string when unknown so clients don't render "TEAM vs —"; UI formats matchup.
+        "opp_team": opp_team or "",
         "prop": prop or "—",
         "line": line or "—",
         "direction": direction or "—",

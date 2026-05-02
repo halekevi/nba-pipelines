@@ -2180,6 +2180,23 @@ function fillPropsSportFilter(rows) {
     sports.map(function (s) { return '<option value="' + escProps(s) + '">' + escProps(s) + '</option>'; }).join('');
   if (cur && sports.indexOf(cur) >= 0) sel.value = cur;
 }
+/** Team vs opponent; strips placeholder dashes so we do not show "BAL vs —" (e.g. MLB Box Raw). */
+function formatPropEvalMatchup(r) {
+  var rawOpp = (r.opp_team != null && r.opp_team !== '') ? r.opp_team : r.opp;
+  function tok(x) {
+    var s = String(x == null ? '' : x).trim();
+    if (!s) return '';
+    var norm = s.replace(/\u2013|\u2014/g, '-').trim();
+    if (norm === '-' || norm === '—' || norm.toUpperCase() === 'N/A' || norm.toUpperCase() === 'NA' || norm.toUpperCase() === 'TBD') return '';
+    return s;
+  }
+  var t = tok(r.team);
+  var o = tok(rawOpp);
+  if (t && o) return t + ' vs ' + o;
+  if (t) return t;
+  if (o) return o;
+  return '—';
+}
 function renderPropsEvalCards(rows) {
   const grid = document.getElementById('props-eval-grid');
   if (!grid) return;
@@ -2214,7 +2231,7 @@ function renderPropsEvalCards(rows) {
       '<div class="prop-eval-meta">' + escProps(r.sport) + ' · ' + escProps(r.pick_type || '') + (r.tier ? (' · Tier ' + escProps(r.tier)) : '') + '</div>' +
       '<div class="prop-eval-line">' + escProps(r.prop_type) + ' ' + (dir === 'OVER' ? '▲' : dir === 'UNDER' ? '▼' : '') + ' ' + escProps(dir) + linePart + '</div>' +
       '<div class="prop-eval-meta" style="margin-top:10px;">' +
-        ((r.team || r.opp_team) ? escProps([r.team, r.opp_team].filter(Boolean).join(' vs ')) : '—') +
+        escProps(formatPropEvalMatchup(r)) +
       '</div>' +
       '<div class="prop-eval-meta">Edge ' + escProps(edgeS) + ' · ML ' + escProps(mlS) + '</div>' +
       ((r.void_reason && String(r.void_reason).trim() && !(ru === 'HIT' || ru === 'MISS' || ru === 'PUSH')) ?
