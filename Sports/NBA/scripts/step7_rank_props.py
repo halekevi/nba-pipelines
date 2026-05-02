@@ -1519,7 +1519,10 @@ def main() -> None:
     # Raw edge_adj = projection_adj - line is >0 for OVER-style math only; UNDER wins
     # when projection is below line, so edge_adj < 0 even for excellent unders.
     edge_gate = _to_num(out["edge_adj_dr"]).fillna(-999.0) > 0.0
-    score_raw = score_raw.where(elig_mask & edge_gate, np.nan)
+    # Standard UNDER: still rank within std_under for A–D tiers. A strict edge-only gate
+    # left almost every eligible UNDER with NaN score → all Tier D in grades/matrix.
+    is_std_under_for_tier = pick_type_s.eq("Standard") & bet_is_under
+    score_raw = score_raw.where(elig_mask & (edge_gate | is_std_under_for_tier), np.nan)
 
     out["l5_support_mod"] = pd.Series(l5_support_mod, index=out.index)
     out["rank_score_raw"] = score_raw
