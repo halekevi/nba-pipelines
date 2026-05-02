@@ -29,6 +29,11 @@ import joblib
 import numpy as np
 import pandas as pd
 
+_NHL_REPO = Path(__file__).resolve().parents[3]
+if str(_NHL_REPO) not in sys.path:
+    sys.path.insert(0, str(_NHL_REPO))
+from utils.defense_tiers import normalize_def_tier_label
+
 try:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -335,13 +340,19 @@ STAT_STABILITY = {
     "fantasy_score": 0.88,
 }
 
-# Defense tier adjustments for OVER hit rate
+# Defense tier adjustments for OVER hit rate (canonical 5-bucket labels)
 DEF_TIER_BOOST = {
-    "WEAK":    +0.04,    # easiest opp = small boost to over
-    "AVERAGE": +0.00,
-    "SOLID":   -0.02,
-    "ELITE":   -0.05,    # hardest opp = penalize over
+    "Weak":      +0.04,
+    "Below Avg": +0.02,
+    "Avg":       +0.00,
+    "Above Avg": -0.02,
+    "Elite":     -0.05,
 }
+
+
+def _nhl_def_tier_canon(raw: object) -> str:
+    t = normalize_def_tier_label(raw)
+    return t if t else "Avg"
 
 # Scoring tier adjustments
 SCORING_TIER_BOOST = {
@@ -412,7 +423,7 @@ def score_prop(row: dict) -> float:
     base_score = confidence * stab
 
     # Defense adjustment (applies to OVER on skater props; reverse for UNDER)
-    def_tier = row.get("def_tier", "AVERAGE")
+    def_tier = _nhl_def_tier_canon(row.get("def_tier", ""))
     def_adj = DEF_TIER_BOOST.get(def_tier, 0.0)
     if recommended_side == "UNDER":
         def_adj = -def_adj  # Under benefits from tougher defense
@@ -506,26 +517,13 @@ def _normalize_nhl_prop_ml(raw: str) -> str:
     return re.sub(r"[^a-z0-9]+", "_", x).strip("_") or "unknown"
 
 
+_NHL_ML_DEF_ORD = {"Weak": 0.0, "Below Avg": 1.0, "Avg": 2.0, "Above Avg": 3.0, "Elite": 4.0}
+
+
 def _nhl_ml_defense_tier_4(df: pd.DataFrame) -> pd.Series:
     dt = _first_present_nhl_ml(df, ["def_tier", "defense_tier", "DEF_TIER"])
     if dt:
-        s = df[dt].astype(str).str.strip().str.lower()
-        return pd.Series(
-            np.where(
-                s.str.contains("weak"),
-                0,
-                np.where(
-                    s.str.contains("avg|average"),
-                    1,
-                    np.where(
-                        s.str.contains("good|solid|above"),
-                        2,
-                        np.where(s.str.contains("elite|strong"), 3, 1),
-                    ),
-                ),
-            ),
-            index=df.index,
-        ).astype(float)
+        return df[dt].map(lambda v: _NHL_ML_DEF_ORD.get(normalize_def_tier_label(v), 2.0)).astype(float)
     rk = _first_present_nhl_ml(df, ["def_rank", "opp_def_rank"])
     if rk:
         r = _to_num(df[rk]).fillna(16.0)

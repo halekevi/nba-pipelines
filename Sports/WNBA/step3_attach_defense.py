@@ -8,9 +8,8 @@ Identical logic to NBA step3 — left-merge on opp_team vs defense CSV.
 Defense file: wnba_defense_summary.csv
   Must include TEAM_ABBREVIATION (or team_abbr) + OVERALL_DEF_RANK + DEF_TIER.
 
-Key difference from NBA: WNBA has 13 teams (not 30).
-Tier cutoffs in defense_report_wnba.py use 13-team scale:
-  1-3 Elite | 4-6 Above Avg | 7-9 Avg | 10-13 Weak
+Key difference from NBA: WNBA has fewer teams; ``wnba_defense_summary.csv`` uses
+``utils.defense_tiers`` quintiles on the active team count (same 5 labels as NBA).
 
 Run:
   py -3.14 step3_attach_defense.py \
@@ -124,6 +123,14 @@ def main():
     tail   = ["is_combo_player"] if "is_combo_player" in out.columns else []
     middle = [c for c in out.columns if c not in set(front+tail)]
     out    = out[front + middle + tail]
+
+    _dt_col = "DEF_TIER" if "DEF_TIER" in out.columns else ("def_tier" if "def_tier" in out.columns else None)
+    if _dt_col:
+        _chk = out[[_dt_col]].rename(columns={_dt_col: "def_tier"})
+        _m = _chk["def_tier"].astype(str).str.strip().ne("")
+        if _m.any():
+            assert_def_tier_column(_chk.loc[_m], "def_tier", allow_empty=False)
+        print(f"[WNBA step3] {format_def_tier_counts(_chk, 'def_tier')}")
 
     out.to_csv(args.output, index=False, encoding="utf-8-sig")
     print(f"✅ Saved → {args.output}  rows={len(out)}")

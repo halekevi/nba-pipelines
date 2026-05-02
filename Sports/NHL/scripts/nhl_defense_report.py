@@ -235,15 +235,9 @@ def add_ranks_and_tiers(df: pd.DataFrame) -> pd.DataFrame:
 
     df["DEF_TIER"] = df["OVERALL_DEF_RANK"].apply(tier_from_rank)
 
-    # ── Legacy field aliases for step3 compatibility ──
+    # ── Field aliases for step3 / CSV consumers (canonical 5 labels on both) ──
     df["def_rank"] = df["opp_gaa_rank"]   # step3 uses def_rank (GAA-based rank)
-    df["def_tier"] = df["DEF_TIER"].str.upper().map({
-        "ELITE":      "ELITE",
-        "ABOVE AVG":  "SOLID",
-        "AVG":        "AVERAGE",
-        "BELOW AVG":  "WEAK",
-        "WEAK":       "WEAK",
-    }).fillna("AVERAGE")                  # step3 coarse buckets; Below Avg → softer matchup
+    df["def_tier"] = df["DEF_TIER"]
 
     return df
 

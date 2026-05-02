@@ -684,7 +684,7 @@ def main():
 
     # By Def Tier
     if def_tier_col:
-        tier_order = ["Elite", "Above Avg", "Avg", "Weak", ""]
+        tier_order = ["Elite", "Above Avg", "Avg", "Below Avg", "Weak", ""]
         tier_block = build_summary_block(out, def_tier_col, tier_order, "Def Tier")
         summary_blocks.append(("By Def Tier", tier_block))
 
@@ -745,7 +745,13 @@ def main():
         "result_miss":"FFE74C3C",
         "result_void":"FF717D7E",
     }
-    _DEF_COLORS  = {"Elite":_C["def_elite"],"Above Avg":_C["def_above"],"Avg":_C["def_avg"],"Weak":_C["def_weak"]}
+    _DEF_COLORS  = {
+        "Elite":_C["def_elite"],
+        "Above Avg":_C["def_above"],
+        "Avg":_C["def_avg"],
+        "Below Avg":_C["tier_d"],
+        "Weak":_C["def_weak"],
+    }
     _TIER_COLORS = {"A":_C["tier_a"],"B":_C["tier_b"],"C":_C["tier_c"],"D":_C["tier_d"]}
     _PT_COLORS   = {"Goblin":_C["goblin"],"Demon":_C["demon"],"Standard":_C["standard"]}
 

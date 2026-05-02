@@ -46,6 +46,12 @@ for _efe_anc in Path(__file__).resolve().parents:
             sys.path.insert(0, _efe_sd)
         break
 from edge_feature_engineering import apply_ticket_eligibility_voids, build_feature_vector  # noqa: E402
+
+_repo_nba7 = Path(__file__).resolve().parents[3]
+if str(_repo_nba7) not in sys.path:
+    sys.path.insert(0, str(_repo_nba7))
+from utils.defense_tiers import normalize_def_tier_label  # noqa: E402
+
 try:
     _playoff_sd = str(Path(__file__).resolve().parents[3] / "scripts")
     if _playoff_sd not in sys.path:
@@ -574,43 +580,18 @@ def _nba_pos_wing_big_for_ast_penalty(pos_raw: object) -> bool:
     return any(tok in p for tok in ("SF", "PF", "C")) or p == "F" or "/F" in p or "F/" in p
 
 
+_NBA_ML_DEF_ORD = {"Weak": 0.0, "Below Avg": 1.0, "Avg": 2.0, "Above Avg": 3.0, "Elite": 4.0}
+
+
 def _nba_ml_defense_tier_4(out: pd.DataFrame) -> pd.Series:
     idx = out.index
     if "defense_tier" in out.columns:
-        s = out["defense_tier"].astype(str).str.strip().str.lower()
-        return pd.Series(
-            np.where(
-                s.str.contains("weak"),
-                0,
-                np.where(
-                    s.str.contains("avg|average|mid|med"),
-                    1,
-                    np.where(
-                        s.str.contains("good|solid|above"),
-                        2,
-                        np.where(s.str.contains("elite|strong"), 3, 1),
-                    ),
-                ),
-            ),
-            index=idx,
+        return out["defense_tier"].map(
+            lambda v: _NBA_ML_DEF_ORD.get(normalize_def_tier_label(v), 2.0)
         ).astype(float)
     if "def_tier" in out.columns:
-        s = out["def_tier"].astype(str).str.strip().str.lower()
-        return pd.Series(
-            np.where(
-                s.str.contains("weak"),
-                0,
-                np.where(
-                    s.str.contains("avg|average|mid|med"),
-                    1,
-                    np.where(
-                        s.str.contains("good|solid|above"),
-                        2,
-                        np.where(s.str.contains("elite|strong"), 3, 1),
-                    ),
-                ),
-            ),
-            index=idx,
+        return out["def_tier"].map(
+            lambda v: _NBA_ML_DEF_ORD.get(normalize_def_tier_label(v), 2.0)
         ).astype(float)
     if "OVERALL_DEF_RANK" in out.columns:
         r = _to_num(out["OVERALL_DEF_RANK"]).fillna(15.0)
@@ -1515,13 +1496,11 @@ def main() -> None:
         * _to_num(out["reliability_mult"]).fillna(1.0)
     )
 
-    # Edge gate: require edge_adj_dr > 0 so the projection favors the play direction.
-    # Standard UNDER has no edge gate — rank/tier the full eligible std_under cohort on the
-    # composite score (Goblin/Demon and Standard OVER still gated).
+    # Hard edge gate: keep rows where edge favors the play (same sign as edge_adj_dr).
+    # Raw edge_adj = projection_adj - line is >0 for OVER-style math only; UNDER wins
+    # when projection is below line, so edge_adj < 0 even for excellent unders.
     edge_gate = _to_num(out["edge_adj_dr"]).fillna(-999.0) > 0.0
-    is_standard_under = pick_type_s.eq("Standard") & bet_is_under
-    score_kept = elig_mask & (is_standard_under | edge_gate)
-    score_raw = score_raw.where(score_kept, np.nan)
+    score_raw = score_raw.where(elig_mask & edge_gate, np.nan)
 
     out["l5_support_mod"] = pd.Series(l5_support_mod, index=out.index)
     out["rank_score_raw"] = score_raw

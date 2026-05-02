@@ -33,6 +33,7 @@ _repo_root_cbb = Path(__file__).resolve().parents[4]
 if str(_repo_root_cbb) not in sys.path:
     sys.path.insert(0, str(_repo_root_cbb))
 from utils.cbb_tourney_metadata import CBB_TOURNEY_2026
+from utils.defense_tiers import def_tier_from_overall_rank
 from utils.optional_ml_context import optional_context_features
 
 # CBB/WCBB ML is poorly calibrated at the top (frequent 0.99x on props that are not that certain).
@@ -450,24 +451,15 @@ def _reliability_mult(pick_type: str) -> float:
 
 
 
-def rank_to_tier(rank, n_teams):
-    """Map numeric defense rank to tier using percentile bands (rank 1 = best)."""
-    try:
-        r = float(rank)
-        nt = float(n_teams)
-        if nt <= 0 or np.isnan(r) or np.isnan(nt):
-            return ""
-    except (TypeError, ValueError):
-        return ""
-    pct = r / nt
-    if pct <= 0.25:
-        return "elite"
-    elif pct <= 0.50:
-        return "good"
-    elif pct <= 0.75:
-        return "average"
-    else:
-        return "weak"
+def _cbb_def_tier_ml_ordinal(lbl: str) -> float:
+    s = str(lbl or "").strip().lower()
+    return {
+        "weak": 0.0,
+        "below avg": 0.5,
+        "avg": 1.0,
+        "above avg": 1.5,
+        "elite": 2.0,
+    }.get(s, 1.0)
 
 
 def _infer_cbb_n_teams(out: pd.DataFrame) -> float:
@@ -536,14 +528,8 @@ def _ml_defense_tier_series(out: pd.DataFrame, n_teams: float) -> pd.Series:
     def _to_ml_tier(r):
         if pd.isna(r):
             return 1.0
-        lbl = rank_to_tier(float(r), float(n_teams))
-        if lbl == "weak":
-            return 0.0
-        if lbl == "average":
-            return 1.0
-        if lbl in ("good", "elite"):
-            return 2.0
-        return 1.0
+        lbl = def_tier_from_overall_rank(float(r), int(max(float(n_teams), 1.0)))
+        return _cbb_def_tier_ml_ordinal(lbl)
 
     return _to_num(out[col]).apply(_to_ml_tier)
 
@@ -916,7 +902,7 @@ def main():
         mid_rank = (n_teams + 1.0) / 2.0
         nt = int(n_teams) if not pd.isna(n_teams) else 362
         tier_strs = def_rank_num.apply(
-            lambda r: rank_to_tier(r, nt) if pd.notna(r) else ""
+            lambda r: def_tier_from_overall_rank(r, nt) if pd.notna(r) else ""
         )
         out["def_tier"] = tier_strs
         out["opp_def_tier"] = tier_strs

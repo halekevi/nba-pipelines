@@ -88,6 +88,7 @@ from usage_redistribution import apply_usage_redistribution
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
+from utils.defense_tiers import normalize_def_tier_label
 from utils.kelly_staking import fractional_kelly, leg_edge_pct_for_kelly
 from utils.cbb_tourney_metadata import CBB_AP_TOP25_2026, CBB_TOURNEY_2026
 from utils.goblin_demon_multiplier import (
@@ -98,6 +99,15 @@ from utils.goblin_demon_multiplier import (
 from utils.ticket_diversity import apply_diversity_filter
 
 _log_slate = logging.getLogger("combined_slate_tickets")
+
+
+def _norm_def_tier_cell_upper(raw: object) -> str:
+    """Canonical def tier label, uppercased for legacy comparisons (maps SOLID → ABOVE AVG, etc.)."""
+    base = normalize_def_tier_label(raw)
+    if base:
+        return base.upper()
+    s = str(raw or "").strip()
+    return s.upper()
 TICKET_MODEL_PATH = os.path.join(REPO_ROOT, "models", "ticket_model.pkl")
 TICKET_MODEL_2LEG_PATH = os.path.join(REPO_ROOT, "models", "ticket_model_2leg.pkl")
 TICKET_MODEL_3LEG_PATH = os.path.join(REPO_ROOT, "models", "ticket_model_3leg.pkl")
@@ -2713,7 +2723,8 @@ def _attach_ticket_pick_order(df: pd.DataFrame, mode: str) -> pd.DataFrame:
         # 7) Edge as a smaller tie-breaker
         direction = out.get("direction", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
         pick_type = out.get("pick_type", pd.Series("Standard", index=out.index)).astype(str).str.upper().str.strip()
-        def_tier = out.get("def_tier", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
+        def_tier_raw = out.get("def_tier", pd.Series("", index=out.index))
+        def_tier = def_tier_raw.map(_norm_def_tier_cell_upper)
         min_tier = out.get("min_tier", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
         role = (
             out.get("usage_role", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
@@ -2751,10 +2762,10 @@ def _attach_ticket_pick_order(df: pd.DataFrame, mode: str) -> pd.DataFrame:
         under_mask = direction.eq("UNDER")
 
         # Defense directional preference
-        pri = pri + np.where(over_mask & def_tier.isin(["WEAK"]), 0.05, 0.0)
-        pri = pri + np.where(over_mask & def_tier.isin(["ABOVE AVG", "ELITE", "SOLID"]), -0.03, 0.0)
-        pri = pri + np.where(under_mask & def_tier.isin(["ELITE", "ABOVE AVG", "SOLID"]), 0.04, 0.0)
-        pri = pri + np.where(under_mask & def_tier.isin(["WEAK"]), -0.04, 0.0)
+        pri = pri + np.where(over_mask & def_tier.eq("WEAK"), 0.05, 0.0)
+        pri = pri + np.where(over_mask & def_tier.isin(["ABOVE AVG", "ELITE"]), -0.03, 0.0)
+        pri = pri + np.where(under_mask & def_tier.isin(["ELITE", "ABOVE AVG"]), 0.04, 0.0)
+        pri = pri + np.where(under_mask & def_tier.eq("WEAK"), -0.04, 0.0)
 
         # Minutes directional preference
         pri = pri + np.where(over_mask & min_tier.isin(["HIGH"]), 0.04, 0.0)
@@ -7879,7 +7890,7 @@ def apply_nba_context_confidence_filter(
         return out
 
     direction = out.get("direction", pd.Series("", index=out.index)).astype(str).str.upper()
-    def_tier = out.get("def_tier", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
+    def_tier = out.get("def_tier", pd.Series("", index=out.index)).map(_norm_def_tier_cell_upper)
     pace_tier = out.get("pace_tier", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
 
     l5_over = pd.to_numeric(out.get("l5_over", 0), errors="coerce").fillna(0)
@@ -7887,7 +7898,7 @@ def apply_nba_context_confidence_filter(
     l5_sample = l5_over + l5_under
 
     def_over_good = def_tier.isin(["WEAK", "AVG", "ABOVE AVG", "AVERAGE", "BELOW AVG"])
-    def_under_good = def_tier.isin(["ELITE", "SOLID"])
+    def_under_good = def_tier.isin(["ELITE", "ABOVE AVG"])
     pace_over_good = pace_tier.eq("FAST")
     pace_under_good = pace_tier.isin(["NORMAL", "SLOW"])
 
@@ -7915,7 +7926,7 @@ def compute_bet_signal_core(leg: dict) -> tuple[int, list[str]]:
     """
     sport = str(leg.get("sport", "") or "").upper()
     direction = str(leg.get("direction", "") or "").upper()
-    def_tier = str(leg.get("def_tier", "") or "").upper().strip()
+    def_tier = _norm_def_tier_cell_upper(leg.get("def_tier", ""))
     pace_tier = str(leg.get("pace_tier", "") or "").upper().strip()
     l5o = _signal_float(leg.get("l5_over"))
     l5u = _signal_float(leg.get("l5_under"))
@@ -7931,7 +7942,7 @@ def compute_bet_signal_core(leg: dict) -> tuple[int, list[str]]:
             reasons.append("enough recent sample")
 
         over_def_good = def_tier in {"WEAK", "AVG", "ABOVE AVG", "AVERAGE", "BELOW AVG"}
-        under_def_good = def_tier in {"ELITE", "SOLID"}
+        under_def_good = def_tier in {"ELITE", "ABOVE AVG"}
         if (direction == "OVER" and over_def_good) or (direction == "UNDER" and under_def_good):
             score += 1
             reasons.append(f"defense supports {direction}")
@@ -10424,7 +10435,7 @@ def main():
         # - OVER + Elite defense tier: -0.03
         if {"direction", "def_tier"}.issubset(filtered_df.columns):
             ddir = filtered_df["direction"].astype(str).str.upper().str.strip()
-            dtier = filtered_df["def_tier"].astype(str).str.upper().str.strip()
+            dtier = filtered_df["def_tier"].map(_norm_def_tier_cell_upper)
             def_bonus = pd.Series(0.0, index=filtered_df.index)
             def_bonus = def_bonus + (((ddir == "OVER") & dtier.eq("ABOVE AVG")).astype(float) * 0.05)
             def_bonus = def_bonus + (((ddir == "UNDER") & dtier.eq("ELITE")).astype(float) * 0.05)

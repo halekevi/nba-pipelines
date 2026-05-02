@@ -23,9 +23,15 @@ from __future__ import annotations
 
 import argparse
 import sys
+from pathlib import Path
 from typing import List, Optional, Tuple
 
 import pandas as pd
+
+_SOC_REPO = Path(__file__).resolve().parents[3]
+if str(_SOC_REPO) not in sys.path:
+    sys.path.insert(0, str(_SOC_REPO))
+from utils.defense_tiers import assert_def_tier_column, format_def_tier_counts
 
 
 def _col(df: pd.DataFrame, candidates: List[str]) -> Optional[str]:
@@ -332,6 +338,14 @@ def main() -> None:
     tail   = ["is_combo_player"] if "is_combo_player" in out.columns else []
     middle = [c for c in out.columns if c not in set(front + tail)]
     out    = out[front + middle + tail]
+
+    _dt_col = "DEF_TIER" if "DEF_TIER" in out.columns else ("def_tier" if "def_tier" in out.columns else None)
+    if _dt_col:
+        _chk = out[[_dt_col]].rename(columns={_dt_col: "def_tier"})
+        _m = _chk["def_tier"].astype(str).str.strip().ne("")
+        if _m.any():
+            assert_def_tier_column(_chk.loc[_m], "def_tier", allow_empty=False)
+        print(f"[Soccer step3] {format_def_tier_counts(_chk, 'def_tier')}")
 
     out.to_csv(args.output, index=False, encoding="utf-8-sig")
     print(f"✅ Saved → {args.output}")

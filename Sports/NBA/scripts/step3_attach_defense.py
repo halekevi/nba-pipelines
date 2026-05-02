@@ -18,7 +18,15 @@ Run:
 from __future__ import annotations
 
 import argparse
+import sys
+from pathlib import Path
+
 import pandas as pd
+
+_NBA_REPO = Path(__file__).resolve().parents[3]
+if str(_NBA_REPO) not in sys.path:
+    sys.path.insert(0, str(_NBA_REPO))
+from utils.defense_tiers import assert_def_tier_column, format_def_tier_counts
 
 
 TEAM_ALIAS_FIX = {
@@ -84,6 +92,14 @@ def main():
     if unmatched:
         print(f"  ⚠️  Unmatched opp teams: {sorted(unmatched)}")
         print(f"     Check TEAM_ALIAS_FIX or refresh defense_team_summary.csv")
+
+    _dt_col = "DEF_TIER" if "DEF_TIER" in df.columns else ("def_tier" if "def_tier" in df.columns else None)
+    if _dt_col:
+        _chk = df[[_dt_col]].rename(columns={_dt_col: "def_tier"})
+        _m = _chk["def_tier"].astype(str).str.strip().ne("")
+        if _m.any():
+            assert_def_tier_column(_chk.loc[_m], "def_tier", allow_empty=False)
+        print(f"[NBA step3] {format_def_tier_counts(_chk, 'def_tier')}")
 
     df.to_csv(args.output, index=False, encoding="utf-8-sig")
     print(f"✅ Saved → {args.output}  rows={len(df)}")

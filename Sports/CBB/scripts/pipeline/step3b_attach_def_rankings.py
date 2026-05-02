@@ -1,6 +1,19 @@
 #!/usr/bin/env python3
 import argparse
+import sys
+from pathlib import Path
+
 import pandas as pd
+
+_REPO = Path(__file__).resolve().parents[4]
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+from utils.defense_tiers import (  # noqa: E402
+    assert_def_tier_column,
+    def_tier_from_overall_rank,
+    format_def_tier_counts,
+    normalize_def_tier_label,
+)
 
 # Mapping from PrizePicks team abbreviations -> sr_name in cbb_def_rankings.csv
 ABBR_TO_SR = {
@@ -161,26 +174,6 @@ def norm_key(x) -> str:
     return str(x).strip().upper()
 
 
-def rank_to_tier(rank) -> str:
-    """
-    Derive a defensive tier from a numeric rank.
-    CBB has ~360 teams; lower rank = better defense (rank 1 = best).
-    Buckets mirror the NBA pipeline tiers: Elite / Above Avg / Avg / Weak.
-    """
-    try:
-        r = float(rank)
-    except (TypeError, ValueError):
-        return ""
-    if r <= 72:
-        return "Elite"
-    elif r <= 144:
-        return "Above Avg"
-    elif r <= 252:
-        return "Avg"
-    else:
-        return "Weak"
-
-
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--input",   required=True)
@@ -261,6 +254,13 @@ def main():
     # Also normalise ABBR_TO_SR values to uppercase for lookup
     abbr_map = {k: v.upper().replace("&AMP;", "&") for k, v in ABBR_TO_SR.items()}
 
+    _n_teams_cbb = 362
+    if rank_col and rank_col in def_df.columns:
+        _rnum_all = pd.to_numeric(def_df[rank_col], errors="coerce")
+        _mx = _rnum_all.max()
+        if pd.notna(_mx) and float(_mx) > 0:
+            _n_teams_cbb = int(max(float(_mx), float(len(def_df))))
+
     # Alternate DB spellings tried when primary name misses
     ABBR_ALTERNATES = {
         'PV':   ['PRAIRIE VIEW', 'PRAIRIE VIEW A&M'],
@@ -312,9 +312,11 @@ def main():
         else:
             rank_val = payload["rank"]
             tier_val = payload["tier"]
-            # ── FIX: if the defense file has no tier column, derive it from rank ──
-            if not tier_val:
-                tier_val = rank_to_tier(rank_val)
+            rnum = pd.to_numeric(rank_val, errors="coerce")
+            if pd.notna(rnum):
+                tier_val = def_tier_from_overall_rank(int(rnum), _n_teams_cbb)
+            elif tier_val:
+                tier_val = normalize_def_tier_label(tier_val) or str(tier_val).strip()
             opp_ranks.append(rank_val)
             opp_ppg.append(payload["ppg"])
             opp_tiers.append(tier_val)
@@ -324,6 +326,11 @@ def main():
     df["opp_def_tier"]     = opp_tiers
     df["def_tier"]         = opp_tiers
     df["OVERALL_DEF_RANK"] = opp_ranks
+
+    _dt_mask = df["def_tier"].astype(str).str.strip().ne("") & df["def_tier"].notna()
+    if _dt_mask.any():
+        assert_def_tier_column(df.loc[_dt_mask], "def_tier", allow_empty=False)
+    print(f"[CBB step3b] {format_def_tier_counts(df, 'def_tier')}")
 
     _rank_num = pd.to_numeric(df["OVERALL_DEF_RANK"], errors="coerce")
     miss_mask = _rank_num.isna()

@@ -15,10 +15,22 @@ NOTE: Fetches live data from the NHL Stats API (no key needed).
 import argparse
 import csv
 import json
+import sys
 import time
+
+import pandas as pd
 import urllib.request
 from datetime import datetime
 from pathlib import Path
+
+_NHL_ROOT = Path(__file__).resolve().parents[3]
+if str(_NHL_ROOT) not in sys.path:
+    sys.path.insert(0, str(_NHL_ROOT))
+from utils.defense_tiers import (  # noqa: E402
+    assert_def_tier_column,
+    def_tier_from_overall_rank,
+    format_def_tier_counts,
+)
 try:
     from tqdm import tqdm as _tqdm
 except ImportError:
@@ -115,26 +127,16 @@ def fetch_team_defense_stats() -> dict:
 
 def build_defense_tier(teams: dict) -> dict:
     """
-    Rank teams 1-32 by goals-against avg (lower GAA = better defense).
-    Assign tier: ELITE / SOLID / AVERAGE / WEAK
-    Always uses fixed 32-team thresholds so tier labels are stable regardless
-    of how many teams appear in today's slate.
+    Rank teams by goals-against avg (lower GAA = better defense).
+    Quintile labels: Elite / Above Avg / Avg / Below Avg / Weak (same as utils.defense_tiers).
     """
     sorted_teams = sorted(teams.items(), key=lambda x: x[1].get("opp_gaa", 3.0))
     n_total = len(sorted_teams)
+    n_pool = max(n_total, 1)
     tiers = {}
     for i, (abbrev, _) in enumerate(sorted_teams):
         rank = i + 1
-        # Fixed quartile thresholds based on full 32-team league
-        pct = rank / max(n_total, 32)
-        if pct <= 0.25:
-            tier = "ELITE"
-        elif pct <= 0.50:
-            tier = "SOLID"
-        elif pct <= 0.75:
-            tier = "AVERAGE"
-        else:
-            tier = "WEAK"
+        tier = def_tier_from_overall_rank(rank, n_pool)
         tiers[abbrev] = {"def_rank": rank, "def_tier": tier}
     return tiers
 
@@ -256,6 +258,12 @@ def main():
 
     if not_found:
         print(f"  Could not find defense stats for: {sorted(not_found)}")
+
+    _df_chk = pd.DataFrame(results)
+    if "def_tier" in _df_chk.columns:
+        _non_empty = _df_chk["def_tier"].astype(str).str.strip().ne("")
+        assert_def_tier_column(_df_chk.loc[_non_empty], "def_tier", allow_empty=False)
+        print(f"[NHL step3] {format_def_tier_counts(_df_chk, 'def_tier')}")
 
     write_csv(results, args.output)
 
