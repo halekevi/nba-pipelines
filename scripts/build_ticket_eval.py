@@ -31,6 +31,7 @@ import logging
 import math
 import re
 import sys
+import zipfile
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Sequence
@@ -47,7 +48,7 @@ from player_name_norm import fold_player_name as _fold_player_name  # noqa: E402
 TEMPLATES_DIR = REPO_ROOT / "ui_runner" / "templates"
 TICKET_EVAL_SLATE_JSON = TEMPLATES_DIR / "ticket_eval_slate_latest.json"
 
-# Ticket source search order: combined_slate_tickets_{date}.xlsx only.
+# Ticket source: combined_slate_tickets*{date}*.xlsx under outputs/<date>/ (see find_ticket_json).
 DATED_TICKET_JSON = "combined_slate_tickets_{date}.json"
 FALLBACK_TICKET_JSON = TEMPLATES_DIR / "tickets_latest.json"
 ALLOWED_TICKET_SPORTS = {"NBA", "NBA1H", "NBA1Q", "WNBA", "CBB", "NHL", "SOCCER", "MLB", "WCBB"}
@@ -1358,20 +1359,78 @@ def debug_report(
     print("=== end debug ===\n")
 
 
-def find_ticket_json(arg_date: str) -> Path | None:
-    """Resolve ticket file from combined_slate_tickets_{date}.xlsx only."""
-    px = REPO_ROOT / f"combined_slate_tickets_{arg_date}.xlsx"
-    if px.is_file():
-        return px
-    # Daily pipeline writes combined tickets under outputs/YYYY-MM-DD/ (not always copied to root).
+def _xlsx_sheet_count_fast(path: Path) -> int:
+    """Worksheet count without loading full workbook (OOXML zip)."""
+    try:
+        with zipfile.ZipFile(path, "r") as z:
+            return sum(
+                1
+                for n in z.namelist()
+                if n.startswith("xl/worksheets/sheet") and n.endswith(".xml")
+            )
+    except (OSError, zipfile.BadZipFile):
+        return 0
+
+
+def _collect_ticket_workbook_candidates(arg_date: str) -> list[Path]:
+    """All plausible combined_slate_tickets workbooks for this slate date."""
+    seen: set[str] = set()
+    out: list[Path] = []
+
+    def add(p: Path) -> None:
+        if not p.is_file():
+            return
+        key = str(p.resolve())
+        if key in seen:
+            return
+        seen.add(key)
+        out.append(p.resolve())
+
+    add(REPO_ROOT / f"combined_slate_tickets_{arg_date}.xlsx")
+    add(REPO_ROOT / f"combined_slate_tickets_{arg_date}.strict.xlsx")
+
     out_dir = REPO_ROOT / "outputs" / arg_date
-    p_out = out_dir / f"combined_slate_tickets_{arg_date}.xlsx"
-    if p_out.is_file():
-        return p_out
-    p_out_strict = out_dir / f"combined_slate_tickets_{arg_date}.strict.xlsx"
-    if p_out_strict.is_file():
-        return p_out_strict
-    return None
+    if out_dir.is_dir():
+        add(out_dir / f"combined_slate_tickets_{arg_date}.xlsx")
+        add(out_dir / f"combined_slate_tickets_{arg_date}.strict.xlsx")
+        for p in sorted(out_dir.glob("*.xlsx")):
+            low = p.name.lower()
+            if "combined_slate_tickets" not in low:
+                continue
+            if arg_date not in p.name:
+                continue
+            # Local pipeline backups — never auto-pick over the main exports.
+            if ".bak_" in low:
+                continue
+            add(p)
+    return out
+
+
+def find_ticket_json(
+    arg_date: str, override: Path | None = None
+) -> Path | None:
+    """
+    Resolve the ticket workbook for this slate date.
+
+    Prefer (when multiple exist under outputs/<date>/):
+    - Never use ``*_to_grade_tomorrow*`` if any other candidate exists (that export omits many ticket tabs).
+    - Otherwise pick the workbook with the **most worksheets** (full combined slate vs. trimmed run).
+    """
+    if override is not None:
+        p = override.expanduser().resolve()
+        return p if p.is_file() else None
+
+    candidates = _collect_ticket_workbook_candidates(arg_date)
+    if not candidates:
+        return None
+
+    non_tomorrow = [
+        p
+        for p in candidates
+        if "_to_grade_tomorrow" not in p.stem.lower()
+    ]
+    pool = non_tomorrow if non_tomorrow else candidates
+    return max(pool, key=_xlsx_sheet_count_fast)
 
 
 def _player_initials(name: str) -> str:
@@ -3343,6 +3402,18 @@ def main() -> int:
         default="",
         help="Ignored; output is always ui_runner/templates/ticket_eval_{--date}.html.",
     )
+    ap.add_argument(
+        "--tickets",
+        default="",
+        metavar="PATH",
+        help="Use this combined_slate_tickets *.xlsx instead of auto-resolving under outputs/<date>/.",
+    )
+    ap.add_argument(
+        "--slate",
+        default="",
+        metavar="PATH",
+        help="Alias for --tickets (same path override).",
+    )
     args = ap.parse_args()
     if args.date:
         arg_date = args.date.strip()
@@ -3354,11 +3425,17 @@ def main() -> int:
 
     sport_candidates = _dated_candidates(arg_date)
 
-    tpath = find_ticket_json(arg_date)
+    override_raw = (args.tickets or args.slate or "").strip()
+    override_path = Path(override_raw).resolve() if override_raw else None
+
+    tpath = find_ticket_json(arg_date, override=override_path)
     if not tpath:
-        print(
-            "ERROR: No ticket file found (combined_slate_tickets_{date}.xlsx)."
-        )
+        if override_raw:
+            print(f"ERROR: Ticket workbook not found: {override_raw}")
+        else:
+            print(
+                "ERROR: No ticket file found (combined_slate_tickets*{date}*.xlsx under outputs/<date>/)."
+            )
         return 1
 
     try:
@@ -3377,8 +3454,8 @@ def main() -> int:
     if leg_game_dates_for_log and not parsed_leg_dates:
         infer_note = " (inferred next day; ticket file has no leg game_time column)"
     print(
-        f"[TICKET EVAL] Slate date: {arg_date}; leg game_time dates: "
-        f"{leg_game_dates_for_log or '[]'}{infer_note}; "
+        f"[TICKET EVAL] Slate date: {arg_date}; ticket workbook: {tpath.name}; "
+        f"leg game_time dates: {leg_game_dates_for_log or '[]'}{infer_note}; "
         f"graded workbook merge order: {graded_merge_dates}"
     )
 
