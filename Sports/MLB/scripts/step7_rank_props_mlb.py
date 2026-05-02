@@ -29,6 +29,14 @@ for _efe_anc in Path(__file__).resolve().parents:
         break
 from edge_feature_engineering import apply_ticket_eligibility_voids, build_feature_vector  # noqa: E402
 
+_MLB_REPO_ROOT = Path(__file__).resolve().parents[3]
+if str(_MLB_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_MLB_REPO_ROOT))
+from utils.group_rank_tier import (  # noqa: E402
+    assign_tier_column,
+    print_tier_distribution_by_pick_direction_group,
+)
+
 # ── step_archive lazy import ──────────────────────────────────────────────────
 _sa_scripts_dir = str(Path(__file__).resolve().parents[3] / "scripts")
 try:
@@ -626,7 +634,8 @@ def main() -> None:
     out = build_feature_vector(out, "MLB")   # must run before ML inference
     out = _apply_ml_blend_mlb(out)
 
-    out["tier"] = out["rank_score"].apply(_tier_from_score)
+    out["tier"] = assign_tier_column(out, sport="MLB")
+    print_tier_distribution_by_pick_direction_group(out, label="[MLB step7]")
     if "recommended_side" not in out.columns:
         out["recommended_side"] = out["bet_direction"]
     out = apply_ticket_eligibility_voids(out, "MLB")

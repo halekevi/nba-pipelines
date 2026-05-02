@@ -32,6 +32,11 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+_WNBA_REPO = Path(__file__).resolve().parents[2]
+if str(_WNBA_REPO) not in sys.path:
+    sys.path.insert(0, str(_WNBA_REPO))
+from utils.group_rank_tier import assign_tier_column, print_tier_distribution_by_pick_direction_group  # noqa: E402
+
 
 def _to_num(s):
     return pd.to_numeric(s, errors="coerce")
@@ -418,7 +423,11 @@ def main():
     score = score.where(elig_mask & ((_eadr > 0.0) | _is_dem | _is_std_under), np.nan)
 
     out["rank_score"] = score
-    out["tier"]       = out["rank_score"].apply(_tier_from_score)
+    _rs_wnba = pd.to_numeric(out["rank_score"], errors="coerce")
+    _pct_wnba = _rs_wnba.rank(method="average", pct=True)
+    out["ml_prob"] = (0.45 + 0.40 * _pct_wnba.fillna(0.5)).clip(0.35, 0.90)
+    out["tier"] = assign_tier_column(out, sport="WNBA")
+    print_tier_distribution_by_pick_direction_group(out, label="[WNBA step7]")
 
     with pd.ExcelWriter(args.output, engine="openpyxl") as w:
         out.to_excel(w, sheet_name="ALL", index=False)

@@ -33,6 +33,7 @@ _NHL_REPO = Path(__file__).resolve().parents[3]
 if str(_NHL_REPO) not in sys.path:
     sys.path.insert(0, str(_NHL_REPO))
 from utils.defense_tiers import normalize_def_tier_label
+from utils.group_rank_tier import assign_tier_column, print_tier_distribution_by_pick_direction_group
 
 try:
     if hasattr(sys.stdout, "reconfigure"):
@@ -840,10 +841,8 @@ def main():
     scored_df["dir_line_gap_norm"] = (_dlg_n.clip(-5.0, 5.0) + 5.0) / 10.0
     scored_df["dir_line_gap_norm"] = scored_df["dir_line_gap_norm"].fillna(0.5)
 
-    scored_df["tier"] = scored_df.apply(
-        lambda r: assign_tier(safe_float(r.get("prop_score", 0)), safe_float(r.get("sample_L10", 0))),
-        axis=1,
-    )
+    scored_df["tier"] = assign_tier_column(scored_df, sport="NHL")
+    print_tier_distribution_by_pick_direction_group(scored_df, label="[NHL step7]")
     scored = scored_df.to_dict("records")
     scored.sort(key=lambda x: -safe_float(x.get("prop_score", 0)))
 

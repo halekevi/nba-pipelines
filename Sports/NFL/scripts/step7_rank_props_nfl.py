@@ -26,6 +26,7 @@ _REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 from utils.defense_tiers import def_tier_from_overall_rank
+from utils.group_rank_tier import assign_tier_column
 
 
 def _num(s: pd.Series) -> pd.Series:
@@ -99,15 +100,8 @@ def main() -> None:
     df["prop_score"] = rank_pts
     df["rank_score"] = rank_pts
 
-    df["tier"] = "C"
-    try:
-        q = df["rank_score"].rank(method="first", ascending=False, pct=True)
-        df.loc[q <= 0.25, "tier"] = "A"
-        df.loc[(q > 0.25) & (q <= 0.55), "tier"] = "B"
-        df.loc[(q > 0.55) & (q <= 0.85), "tier"] = "C"
-        df.loc[q > 0.85, "tier"] = "D"
-    except Exception:
-        pass
+    df["ml_prob"] = pd.to_numeric(df["hit_rate"], errors="coerce").clip(0.35, 0.92)
+    df["tier"] = assign_tier_column(df, sport="NFL")
 
     ts = df.get("start_time", df.get("game_time", ""))
     df["start_time"] = ts

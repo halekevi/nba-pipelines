@@ -41,6 +41,11 @@ for _efe_anc in Path(__file__).resolve().parents:
 from edge_feature_engineering import apply_ticket_eligibility_voids, build_feature_vector  # noqa: E402
 
 # ── step_archive lazy import ──────────────────────────────────────────────────
+_REPO_SOC = Path(__file__).resolve().parents[3]
+if str(_REPO_SOC) not in sys.path:
+    sys.path.insert(0, str(_REPO_SOC))
+from utils.group_rank_tier import assign_tier_column, print_tier_distribution_by_pick_direction_group  # noqa: E402
+
 _sa_scripts_dir = str(Path(__file__).resolve().parents[3] / "scripts")
 try:
     if _sa_scripts_dir not in sys.path:
@@ -1115,10 +1120,8 @@ def main() -> None:
 
     out["rank_score"] = out["final_score"]
     out = apply_starter_tier_penalty(out)
-    out["tier"]       = out.apply(
-        lambda r: _tier_from_score_by_picktype(r["rank_score"], str(r.get("pick_type", "Standard"))),
-        axis=1
-    )
+    out["tier"] = assign_tier_column(out, sport="Soccer")
+    print_tier_distribution_by_pick_direction_group(out, label="[Soccer step7]")
     if "recommended_side" not in out.columns:
         out["recommended_side"] = out["bet_direction"]
     out = apply_position_prop_gates(out)

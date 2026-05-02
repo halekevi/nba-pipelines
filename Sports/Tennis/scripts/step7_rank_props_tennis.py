@@ -13,6 +13,10 @@ import numpy as np
 import pandas as pd
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
+_TENNIS_REPO = Path(__file__).resolve().parents[3]
+if str(_TENNIS_REPO) not in sys.path:
+    sys.path.insert(0, str(_TENNIS_REPO))
+from utils.group_rank_tier import assign_tier_column  # noqa: E402
 
 
 def main() -> None:
@@ -55,17 +59,6 @@ def main() -> None:
     df["composite_hit_rate"] = composite_hit_rate
     df["composite_score"] = composite_score
 
-    def tier_for(cs: float) -> str:
-        if cs >= 1.25:
-            return "A"
-        if cs >= 0.75:
-            return "B"
-        if cs >= 0.40:
-            return "C"
-        return "D"
-
-    df["tier"] = [tier_for(float(composite_score.iat[i])) for i in range(len(df))]
-
     line = pd.to_numeric(df.get("line", df.get("line_score", np.nan)), errors="coerce")
     l5 = pd.to_numeric(df.get("stat_last5_avg", np.nan), errors="coerce")
     seas = pd.to_numeric(df.get("stat_season_avg", np.nan), errors="coerce")
@@ -77,6 +70,9 @@ def main() -> None:
     df["edge_score"] = (df["edge"].astype(float).abs().clip(0, 8) / 8.0 * 10.0).round(4)
     df["rank_score"] = (composite_score * 4.0).clip(0.0, 10.0).round(4)
     df["blended_score"] = (0.3 * df["ml_prob"] + 0.7 * composite_hit_rate).round(4)
+    if "bet_direction" not in df.columns:
+        df["bet_direction"] = "OVER"
+    df["tier"] = assign_tier_column(df, sport="Tennis")
 
     df["void_reason"] = ""
     bad = (
