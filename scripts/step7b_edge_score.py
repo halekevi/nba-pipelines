@@ -92,8 +92,9 @@ def resolve_step7_path(root: Path, sport: str) -> Path | None:
             *candidates,
         ]
     elif sp == "MLB":
-        # Canonical MLB step7 lives under MLB/; avoid picking another sport's xlsx after ZIP checks.
+        # Canonical MLB step7 matches NBA/WNBA: MLB/data/outputs/step7_mlb_ranked.xlsx.
         candidates = [
+            root / "MLB" / "data" / "outputs" / "step7_mlb_ranked.xlsx",
             root / "MLB" / "step7_mlb_ranked.xlsx",
             root / "MLB" / "outputs" / "step7_mlb_ranked.xlsx",
             root / "MLB" / "scripts" / "step7_mlb_ranked.xlsx",

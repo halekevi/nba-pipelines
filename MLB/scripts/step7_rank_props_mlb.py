@@ -375,6 +375,7 @@ def main() -> None:
     ap.add_argument("--output",  default="MLB/scripts/step7_mlb_ranked.xlsx")
     ap.add_argument("--n_teams", type=int, default=30)
     args = ap.parse_args()
+    Path(args.output).parent.mkdir(parents=True, exist_ok=True)
 
     print("[PropORACLE-step7_rank_props_mlb] Starting...")
     print(f"→ Loading: {args.input}")

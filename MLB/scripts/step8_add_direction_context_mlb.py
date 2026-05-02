@@ -25,7 +25,7 @@ from pathlib import Path
 
 
 def _copy_dated_step8_mlb(output_xlsx_path: str, slate_date: str) -> None:
-    """Copy clean XLSX to outputs/<slate>/step8_mlb_direction_clean_<slate>.xlsx (matches NBA step8)."""
+    """Publish dated clean XLSX to repo outputs/<slate>/ and MLB/outputs/<slate>/ (matches NBA + WNBA pattern)."""
     src = Path(output_xlsx_path)
     if not src.is_file():
         return
@@ -33,14 +33,15 @@ def _copy_dated_step8_mlb(output_xlsx_path: str, slate_date: str) -> None:
     if not d:
         d = date.today().isoformat()
     repo_root = Path(__file__).resolve().parent.parent.parent
-    dated_dir = repo_root / "outputs" / d
-    try:
-        dated_dir.mkdir(parents=True, exist_ok=True)
-        dated_path = dated_dir / f"step8_mlb_direction_clean_{d}.xlsx"
-        shutil.copy2(src, dated_path)
-        print(f"[MLB step8] Dated copy -> {dated_path}")
-    except Exception as e:
-        print(f"[MLB step8] WARN: dated copy failed: {e}")
+    dated_name = f"step8_mlb_direction_clean_{d}.xlsx"
+    for dated_dir in (repo_root / "outputs" / d, repo_root / "MLB" / "outputs" / d):
+        try:
+            dated_dir.mkdir(parents=True, exist_ok=True)
+            dated_path = dated_dir / dated_name
+            shutil.copy2(src, dated_path)
+            print(f"[MLB step8] Dated copy -> {dated_path}")
+        except Exception as e:
+            print(f"[MLB step8] WARN: dated copy failed ({dated_dir}): {e}")
 
 
 def _norm_pick_type(x: str) -> str:
@@ -273,6 +274,8 @@ def main() -> None:
     )
     args = ap.parse_args()
 
+    Path(args.output).parent.mkdir(parents=True, exist_ok=True)
+
     print(f"Loading: {args.input} (sheet={args.sheet})")
     df  = pd.read_excel(args.input, sheet_name=args.sheet, dtype=str).fillna("")
     if df.empty:
@@ -310,6 +313,7 @@ def main() -> None:
         print("tier:", out["tier"].value_counts().to_dict())
 
     xlsx_path = args.xlsx if args.xlsx else args.output.replace(".csv", "_clean.xlsx")
+    Path(xlsx_path).parent.mkdir(parents=True, exist_ok=True)
     build_clean_xlsx(out, xlsx_path)
     _copy_dated_step8_mlb(xlsx_path, (args.date or "").strip())
 

@@ -169,6 +169,7 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
             (Join-Path $Root "Soccer\step8_soccer_direction_clean.xlsx")
         )
         "step8_mlb_direction_clean_$RunDate.xlsx" = @(
+            (Join-Path $Root "MLB\data\outputs\step8_mlb_direction_clean.xlsx"),
             (Join-Path $Root "MLB\outputs\step8_mlb_direction_clean.xlsx"),
             (Join-Path $Root "MLB\step8_mlb_direction_clean.xlsx")
         )
@@ -191,6 +192,10 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
         if ($name -eq "step8_wnba_direction_$RunDate.xlsx") {
             $wnbaDated = Join-Path $Root "WNBA\outputs\$RunDate\$name"
             if (Test-Path $wnbaDated) { continue }
+        }
+        if ($name -eq "step8_mlb_direction_clean_$RunDate.xlsx") {
+            $mlbDated = Join-Path $Root "MLB\outputs\$RunDate\$name"
+            if (Test-Path $mlbDated) { continue }
         }
         if ($fallbackRoots.ContainsKey($name)) {
             $resolved = $false
@@ -1040,7 +1045,7 @@ else {
                         nba = @((Join-Path $Root "outputs\$Today\step8_nba_direction_clean_$Today.xlsx"), (Join-Path $Root "NBA\data\outputs\step8_all_direction_clean.xlsx"))
                         nhl = @((Join-Path $Root "outputs\$Today\step8_nhl_direction_clean_$Today.xlsx"), (Join-Path $Root "NHL\outputs\step8_nhl_direction_clean.xlsx"))
                         soccer = @((Join-Path $Root "outputs\$Today\step8_soccer_direction_clean_$Today.xlsx"), (Join-Path $Root "Soccer\outputs\step8_soccer_direction_clean.xlsx"))
-                        mlb = @((Join-Path $Root "outputs\$Today\step8_mlb_direction_clean_$Today.xlsx"), (Join-Path $Root "MLB\step8_mlb_direction_clean.xlsx"), (Join-Path $Root "MLB\outputs\step8_mlb_direction_clean.xlsx"))
+                        mlb = @((Join-Path $Root "outputs\$Today\step8_mlb_direction_clean_$Today.xlsx"), (Join-Path $Root "MLB\data\outputs\step8_mlb_direction_clean.xlsx"), (Join-Path $Root "MLB\step8_mlb_direction_clean.xlsx"), (Join-Path $Root "MLB\outputs\step8_mlb_direction_clean.xlsx"))
                         tennis = @((Join-Path $Root "outputs\$Today\step8_tennis_direction_clean_$Today.xlsx"), (Join-Path $Root "Tennis\outputs\step8_tennis_direction_clean.xlsx"))
                         nba1q = @((Join-Path $Root "outputs\$Today\step8_nba1q_direction_clean_$Today.xlsx"), (Join-Path $Root "NBA\step8_nba1q_direction_clean.xlsx"))
                         nba1h = @((Join-Path $Root "outputs\$Today\step8_nba1h_direction_clean_$Today.xlsx"), (Join-Path $Root "NBA\step8_nba1h_direction_clean.xlsx"))
@@ -1110,6 +1115,7 @@ Write-Log "STEP D2 - Copy Railway slate files to sport roots: START"
 $railwayCopies = @(
     @{ Src = "NBA\data\outputs\step8_all_direction_clean.xlsx"; Dst = "NBA\step8_all_direction_clean.xlsx" },
     @{ Src = "Soccer\outputs\step8_soccer_direction_clean.xlsx"; Dst = "Soccer\step8_soccer_direction_clean.xlsx" },
+    @{ Src = "MLB\data\outputs\step8_mlb_direction_clean.xlsx"; Dst = "MLB\step8_mlb_direction_clean.xlsx" },
     @{ Src = "MLB\outputs\step8_mlb_direction_clean.xlsx"; Dst = "MLB\step8_mlb_direction_clean.xlsx" },
     @{ Src = "Tennis\outputs\step8_tennis_direction_clean.xlsx"; Dst = "Tennis\step8_tennis_direction_clean.xlsx" }
 )
@@ -1241,6 +1247,7 @@ else {
             "NBA\step8_nba1h_direction_clean.xlsx",
             "NBA\step8_nba1q_direction_clean.xlsx",
             "Soccer\step8_soccer_direction_clean.xlsx",
+            "MLB\data\outputs\step8_mlb_direction_clean.xlsx",
             "MLB\step8_mlb_direction_clean.xlsx",
             "Tennis\step8_tennis_direction_clean.xlsx",
             # CBB deactivated - season over (April 2026)
@@ -1574,7 +1581,7 @@ if ($NowHour -ge 10) {
             "--api-403-cooldown-jitter-max" "80" `
             "--append" `
             "--date" "$Today" `
-            "--output" "step1_mlb_props.csv"
+            "--output" "data/outputs/step1_mlb_props.csv"
         if ($LASTEXITCODE -ne 0) {
             Write-Warning "[NBA_LATE_FETCH] MLB direct API step1 failed (exit $LASTEXITCODE) - trying Playwright"
             Write-Log "[NBA_LATE_FETCH] MLB direct API failed (exit $LASTEXITCODE); trying Playwright"
@@ -1583,14 +1590,14 @@ if ($NowHour -ge 10) {
                 "--timeout" "240" `
                 "--append" `
                 "--date" "$Today" `
-                "--output" "step1_mlb_props.csv"
+                "--output" "data/outputs/step1_mlb_props.csv"
         }
     }
     finally {
         Pop-Location
     }
     if ($LASTEXITCODE -ne 0) {
-        $mlbOut = Join-Path $MLBDir "step1_mlb_props.csv"
+        $mlbOut = Join-Path $MLBDir "data\outputs\step1_mlb_props.csv"
         $mlbRows = Get-CsvDataRowCount -CsvPath $mlbOut
         if ($mlbRows -gt 0) {
             Write-Warning "[NBA_LATE_FETCH] MLB step1 failed (exit $LASTEXITCODE), but fallback rows are present ($mlbRows) - continuing"

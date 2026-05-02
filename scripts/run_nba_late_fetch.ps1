@@ -147,7 +147,7 @@ try {
         "--api-403-cooldown-jitter-max" "80" `
         "--append" `
         "--date" "$PipeDate" `
-        "--output" "step1_mlb_props.csv"
+        "--output" "data/outputs/step1_mlb_props.csv"
     if ($LASTEXITCODE -ne 0) {
         Write-Host "[LATE_FETCH] MLB direct API step1 failed (exit $LASTEXITCODE) - trying Playwright" -ForegroundColor Yellow
         & py -3.14 -u ".\scripts\step1_fetch_prizepicks_mlb.py" `
@@ -155,14 +155,14 @@ try {
             "--timeout" "240" `
             "--append" `
             "--date" "$PipeDate" `
-            "--output" "step1_mlb_props.csv"
+            "--output" "data/outputs/step1_mlb_props.csv"
     }
 }
 finally {
     Pop-Location
 }
 if ($LASTEXITCODE -ne 0) {
-    $mlbOut = Join-Path $MLBDir "step1_mlb_props.csv"
+    $mlbOut = Join-Path $MLBDir "data\outputs\step1_mlb_props.csv"
     $mlbRows = Get-CsvDataRowCount -CsvPath $mlbOut
     if ($mlbRows -gt 0) {
         Write-Host "[LATE_FETCH] MLB step1 failed but fallback rows are present ($mlbRows) - continuing" -ForegroundColor Yellow
@@ -208,6 +208,7 @@ if ($NoOverwrite) {
         (Join-Path $Root "ui_runner\templates\graded_props_$today.json"),
         (Join-Path $Root "NBA\step8_all_direction_clean.xlsx"),
         (Join-Path $Root "Soccer\step8_soccer_direction_clean.xlsx"),
+        (Join-Path $Root "MLB\data\outputs\step8_mlb_direction_clean.xlsx"),
         (Join-Path $Root "MLB\step8_mlb_direction_clean.xlsx"),
         (Join-Path $Root "Tennis\step8_tennis_direction_clean.xlsx")
     )

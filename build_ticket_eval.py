@@ -76,7 +76,9 @@ SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
         REPO_ROOT / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
     ],
     "MLB": [
+        REPO_ROOT / "MLB" / "data" / "outputs" / "step8_mlb_direction_clean.xlsx",
         REPO_ROOT / "MLB" / "step8_mlb_direction_clean.xlsx",
+        REPO_ROOT / "MLB" / "outputs" / "step8_mlb_direction_clean.xlsx",
     ],
 }
 

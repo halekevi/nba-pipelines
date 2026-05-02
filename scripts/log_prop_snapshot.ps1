@@ -81,11 +81,13 @@ function Get-Diff([string[]]$Before, [string[]]$After) {
     }
 }
 
+$mlbStep1Snap = Join-Path $Root "MLB\data\outputs\step1_mlb_props.csv"
+if (-not (Test-Path $mlbStep1Snap)) { $mlbStep1Snap = Join-Path $Root "MLB\step1_mlb_props.csv" }
 $sportFiles = @{
     NBA = Join-Path $Root "NBA\data\outputs\step1_pp_props_today.csv"
     NHL = Join-Path $Root "NHL\outputs\step1_nhl_props.csv"
     Soccer = Join-Path $Root "Soccer\outputs\step1_soccer_props.csv"
-    MLB = Join-Path $Root "MLB\step1_mlb_props.csv"
+    MLB = $mlbStep1Snap
 }
 
 $current = @{}

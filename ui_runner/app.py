@@ -117,10 +117,10 @@ NHL_SLATE     = NHL_DIR / "outputs" / "step8_nhl_direction_clean.xlsx"
 NHL_TICKETS   = NHL_DIR / "outputs" / "nhl_best_tickets.xlsx"
 SOCCER_SLATE  = SOCCER_DIR / "step8_soccer_direction_clean.xlsx"
 SOCCER_TICKETS= SOCCER_DIR / "soccer_best_tickets.xlsx"
-MLB_SLATE     = MLB_DIR / "step8_mlb_direction_clean.xlsx"
+MLB_SLATE     = MLB_DIR / "data" / "outputs" / "step8_mlb_direction_clean.xlsx"
 MLB_TICKETS   = MLB_DIR / "mlb_best_tickets.xlsx"
 TENNIS_DIR    = BASE_DIR / "Tennis"
-# Same pattern as Soccer/MLB: run_daily.ps1 copies outputs → sport root for Railway.
+# Same pattern as Soccer: run_daily.ps1 copies clean step8 to sport root for Railway. MLB clean primary: MLB/data/outputs/.
 TENNIS_SLATE  = TENNIS_DIR / "step8_tennis_direction_clean.xlsx"
 WNBA_DIR      = BASE_DIR / "WNBA"
 # Same as NBA: clean step8 under data/outputs; root-level names kept as legacy.
@@ -2791,7 +2791,14 @@ def api_pipeline_status():
     wcbb_slate_p = _resolve_outputs_artifact(days, "step6_ranked_wcbb_{d}.xlsx", WCBB_SLATE)
     nhl_slate_p = _resolve_outputs_artifact(days, "step8_nhl_direction_clean_{d}.xlsx", NHL_SLATE)
     soccer_slate_p = _resolve_outputs_artifact(days, "step8_soccer_direction_clean_{d}.xlsx", SOCCER_SLATE)
-    mlb_slate_p = _resolve_outputs_artifact(days, "step8_mlb_direction_clean_{d}.xlsx", MLB_SLATE)
+    mlb_slate_p = _resolve_outputs_artifact(
+        days,
+        "step8_mlb_direction_clean_{d}.xlsx",
+        MLB_SLATE,
+        MLB_DIR / "step8_mlb_direction_clean.xlsx",
+        MLB_DIR / "outputs" / "step8_mlb_direction_clean.xlsx",
+        extra_roots=[MLB_DIR / "outputs"],
+    )
     tennis_slate_p = _resolve_outputs_artifact(
         days,
         "step8_tennis_direction_clean_{d}.xlsx",

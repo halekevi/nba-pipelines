@@ -718,13 +718,19 @@ def generate_bundle():
             _wnba_art = _wnba_dir / "step8_wnba_direction_clean.xlsx"
         if not _wnba_art.is_file():
             _wnba_art = _wnba_dir / "step8_wnba_direction.xlsx"
+        _mlb_dir = _root / "MLB"
+        _mlb_art = _mlb_dir / "data" / "outputs" / "step8_mlb_direction_clean.xlsx"
+        if not _mlb_art.is_file():
+            _mlb_art = _mlb_dir / "step8_mlb_direction_clean.xlsx"
+        if not _mlb_art.is_file():
+            _mlb_art = _mlb_dir / "outputs" / "step8_mlb_direction_clean.xlsx"
         artifact_by_sport = {
             "nba": _root / "NBA" / "step8_all_direction_clean.xlsx",
             "nba1h": _root / "NBA" / "step8_nba1h_direction_clean.xlsx",
             "nba1q": _root / "NBA" / "step8_nba1q_direction_clean.xlsx",
             "nhl": _root / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
             "soccer": _root / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
-            "mlb": _root / "MLB" / "step8_mlb_direction_clean.xlsx",
+            "mlb": _mlb_art,
             "nfl": _root / "NFL" / "outputs" / "step8_nfl_direction_clean.xlsx",
             "tennis": _root / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
             "wnba": _wnba_art,

@@ -264,9 +264,9 @@ def write_summary_sheet(wb, all_ticket_sets: list) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--input",        default="MLB/scripts/step8_mlb_direction_clean.xlsx")
+    ap.add_argument("--input",        default="data/outputs/step8_mlb_direction_clean.xlsx")
     ap.add_argument("--sheet",        default="Tier A")
-    ap.add_argument("--output",       default="MLB/scripts/mlb_best_tickets.xlsx")
+    ap.add_argument("--output",       default="mlb_best_tickets.xlsx")
     ap.add_argument("--min_hit_rate", type=float, default=0.65)
     ap.add_argument("--max_tickets",  type=int,   default=10)
     ap.add_argument("--legs",         default="2,3,4")

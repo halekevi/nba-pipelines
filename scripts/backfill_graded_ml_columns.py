@@ -170,7 +170,6 @@ def resolve_merge_source(root: Path, sport_key: str, dates: list[str]) -> Path |
             "nba1h": root / "NBA" / "step8_nba1h_direction_clean.xlsx",
             "nhl": root / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
             "soccer": root / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
-            "mlb": root / "MLB" / "step8_mlb_direction_clean.xlsx",
         }
         lp = leg.get(sk)
         if lp and lp.is_file():
@@ -180,6 +179,14 @@ def resolve_merge_source(root: Path, sport_key: str, dates: list[str]) -> Path |
                 root / "WNBA" / "data" / "outputs" / "step8_wnba_direction_clean.xlsx",
                 root / "WNBA" / "step8_wnba_direction_clean.xlsx",
                 root / "WNBA" / "step8_wnba_direction.xlsx",
+            ):
+                if p.is_file():
+                    return p
+        if sk == "mlb":
+            for p in (
+                root / "MLB" / "data" / "outputs" / "step8_mlb_direction_clean.xlsx",
+                root / "MLB" / "step8_mlb_direction_clean.xlsx",
+                root / "MLB" / "outputs" / "step8_mlb_direction_clean.xlsx",
             ):
                 if p.is_file():
                     return p

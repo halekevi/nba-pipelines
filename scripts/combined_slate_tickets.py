@@ -117,7 +117,15 @@ DEFAULT_CBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_cbb.xlsx")
 DEFAULT_NBA1H_PATH = os.path.join(REPO_ROOT, "NBA", "step8_nba1h_direction_clean.xlsx")
 DEFAULT_NBA1Q_PATH = os.path.join(REPO_ROOT, "NBA", "step8_nba1q_direction_clean.xlsx")
 DEFAULT_WCBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_wcbb.xlsx")
-DEFAULT_MLB_PATH = os.path.join(REPO_ROOT, "MLB", "step8_mlb_direction_clean.xlsx")
+_MLB_DATA = os.path.join(REPO_ROOT, "MLB", "data", "outputs", "step8_mlb_direction_clean.xlsx")
+_MLB_ROOT = os.path.join(REPO_ROOT, "MLB", "step8_mlb_direction_clean.xlsx")
+_MLB_OUTSUB = os.path.join(REPO_ROOT, "MLB", "outputs", "step8_mlb_direction_clean.xlsx")
+if os.path.exists(_MLB_DATA):
+    DEFAULT_MLB_PATH = _MLB_DATA
+elif os.path.exists(_MLB_ROOT):
+    DEFAULT_MLB_PATH = _MLB_ROOT
+else:
+    DEFAULT_MLB_PATH = _MLB_OUTSUB
 # CBB deactivated - season over (April 2026)
 DISABLED_SPORTS = {"CBB"}
 _soccer_root = os.path.join(REPO_ROOT, "Soccer", "step8_soccer_direction_clean.xlsx")
