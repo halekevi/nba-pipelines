@@ -273,6 +273,27 @@ def derive_leg_type(pick_type_cell: str) -> str:
     return "Standard"
 
 
+def _norm_rank_tier_cell(val) -> str:
+    """
+    Rank Score tier from the slate **Tier** column → single letter A/B/C/D.
+
+    Defense quality labels (Elite, Above Avg, Avg, …) must not be stored here;
+    they belong in ``def_tier`` (slate **Def Tier** column).
+    """
+    if val is None or (isinstance(val, float) and pd.isna(val)):
+        return ""
+    s = str(val).strip().upper()
+    if not s:
+        return ""
+    s = re.sub(r"^TIER\s*", "", s).strip()
+    if s in ("A", "B", "C", "D"):
+        return s
+    m = re.match(r"^([ABCD])\b", s)
+    if m:
+        return m.group(1)
+    return ""
+
+
 def parse_ticket_sheet(tickets_xlsx: Path, sheet_name: str) -> pd.DataFrame:
     df = pd.read_excel(tickets_xlsx, sheet_name=sheet_name, dtype=object)
     if df.empty:
@@ -301,6 +322,8 @@ def parse_ticket_sheet(tickets_xlsx: Path, sheet_name: str) -> pd.DataFrame:
     idx_line = col_idx.get("line", 6)
     idx_dir = col_idx.get("dir", 7)
     idx_pick_type = col_idx.get("pick type", 5)
+    # Rank tier (A–D) vs opponent defense tier (Elite / Above Avg / …) — different columns.
+    idx_tier = col_idx.get("tier", -1)
     idx_def_tier = col_idx.get("def tier", 15)
     idx_sport = col_idx.get("sport", 22)
     idx_ml_prob = col_idx.get("ml prob", None)
@@ -355,6 +378,7 @@ def parse_ticket_sheet(tickets_xlsx: Path, sheet_name: str) -> pd.DataFrame:
         idx_line = _col("line", fallback=idx_line)
         idx_dir = _col("dir", fallback=idx_dir)
         idx_pick_type = _col("pick type", fallback=idx_pick_type)
+        idx_tier = _col("tier", fallback=idx_tier)
         idx_def_tier = _col("def tier", fallback=idx_def_tier)
         idx_sport = _col("sport", fallback=idx_sport)
         _mp = _col("ml prob", fallback=-1)
@@ -377,7 +401,14 @@ def parse_ticket_sheet(tickets_xlsx: Path, sheet_name: str) -> pd.DataFrame:
             line = df.iloc[k, idx_line] if df.shape[1] > idx_line else np.nan
             direction = df.iloc[k, idx_dir] if df.shape[1] > idx_dir else ""
             pick_type = df.iloc[k, idx_pick_type] if df.shape[1] > idx_pick_type else ""
-            tier = df.iloc[k, idx_def_tier] if df.shape[1] > idx_def_tier else ""
+            rank_tier = ""
+            if idx_tier >= 0 and df.shape[1] > idx_tier:
+                rank_tier = _norm_rank_tier_cell(df.iloc[k, idx_tier])
+            def_tier_cell = ""
+            if idx_def_tier >= 0 and df.shape[1] > idx_def_tier:
+                _dt = df.iloc[k, idx_def_tier]
+                if not pd.isna(_dt):
+                    def_tier_cell = str(_dt).strip()
             sport = df.iloc[k, idx_sport] if df.shape[1] > idx_sport else ""
             ml_prob = df.iloc[k, idx_ml_prob] if (idx_ml_prob is not None and df.shape[1] > idx_ml_prob) else np.nan
             std_line = np.nan
@@ -405,7 +436,8 @@ def parse_ticket_sheet(tickets_xlsx: Path, sheet_name: str) -> pd.DataFrame:
                 "sport": str(sport).strip().upper() if not pd.isna(sport) else "",
                 "pick_type": str(pick_type) if not pd.isna(pick_type) else "",
                 "leg_type": leg_type,
-                "tier": str(tier) if not pd.isna(tier) else "",
+                "tier": rank_tier,
+                "def_tier": def_tier_cell,
                 "ml_prob": pd.to_numeric(ml_prob, errors="coerce"),
                 "standard_line": float(std_line) if pd.notna(std_line) else np.nan,
             })
@@ -438,7 +470,9 @@ def parse_tickets_from_combined_json(path: Path) -> pd.DataFrame:
                 if pd.isna(line_num):
                     continue
                 pick_type = str(leg.get("pick_type") or "")
-                tier = leg.get("min_tier") or leg.get("tier") or ""
+                raw_rank = leg.get("tier") or leg.get("Tier") or leg.get("min_tier") or ""
+                rank_tier = _norm_rank_tier_cell(raw_rank)
+                def_tier_j = leg.get("def_tier") or leg.get("Def Tier") or ""
                 std_ln = pd.to_numeric(leg.get("standard_line"), errors="coerce")
                 rows.append(
                     {
@@ -454,7 +488,8 @@ def parse_tickets_from_combined_json(path: Path) -> pd.DataFrame:
                         "sport": str(leg.get("sport") or "").strip().upper(),
                         "pick_type": pick_type,
                         "leg_type": derive_leg_type(pick_type),
-                        "tier": str(tier) if tier is not None else "",
+                        "tier": rank_tier,
+                        "def_tier": str(def_tier_j).strip() if def_tier_j is not None else "",
                         "ml_prob": pd.to_numeric(leg.get("ml_prob"), errors="coerce"),
                         "standard_line": float(std_ln) if pd.notna(std_ln) else np.nan,
                     }
