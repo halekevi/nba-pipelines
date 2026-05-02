@@ -576,11 +576,16 @@ def pick_tier_direction_matrix_html(rows: list[dict], min_decided: int = 10) -> 
       <summary>Performance Matrix — Pick Type × Tier × Direction</summary>
       <div class="matrix-body">
         <div class="matrix-summary">{summary}</div>
-        <div class="table-wrap"><table>
+        <div class="table-wrap"><table class="table-sortable">
           <thead><tr>
-            <th>PICK TYPE</th><th>TIER</th><th>DIRECTION</th>
-            <th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th>
-            <th>HIT RATE</th><th>BAR</th>
+            <th data-sort-key="pick" title="Sort">PICK TYPE</th>
+            <th data-sort-key="tier" title="Sort">TIER</th>
+            <th data-sort-key="dir" title="Sort">DIRECTION</th>
+            <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+            <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+            <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+            <th data-sort-key="rate" title="Sort">HIT RATE</th>
+            <th data-sort-key="bar" title="Sort">BAR</th>
           </tr></thead>
           <tbody>{body_rows}</tbody>
         </table></div>
@@ -650,11 +655,15 @@ def pick_type_tier_direction_split_html(rows: list[dict], min_decided: int = 10)
                 body += _row_block(pt, d, t, _rec_for(pt, t, d))
         return f"""<div>
           <div class="section-label"><span class="chip {chip_cls}">{chip_emoji}&nbsp;{pt}</span> BY TIER</div>
-          <div class="table-wrap"><table>
+          <div class="table-wrap"><table class="table-sortable">
             <thead><tr>
-              <th>TIER</th><th>DIRECTION</th>
-              <th class="right">DECIDED</th><th class="right">HITS</th><th class="right">MISSES</th>
-              <th class="right">HIT RATE</th><th>BAR</th>
+              <th data-sort-key="tier" title="Sort">TIER</th>
+              <th data-sort-key="dir" title="Sort">DIRECTION</th>
+              <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+              <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+              <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+              <th class="right" data-sort-key="rate" title="Sort">HIT RATE</th>
+              <th data-sort-key="bar" title="Sort">BAR</th>
             </tr></thead>
             <tbody>{body}</tbody>
           </table></div>
@@ -1451,6 +1460,114 @@ td{padding:8px 8px}
 .two-col.pick-tier-split .table-wrap td{vertical-align:top}
 .two-col.pick-tier-split .table-wrap th{white-space:normal;word-break:normal;line-height:1.2}
 }
+th[data-sort-key]{cursor:pointer;user-select:none;position:relative;padding-right:1.35em}
+th[data-sort-key]:hover{color:var(--text)}
+th[data-sort-key]:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;border-radius:4px}
+th.sort-active.sort-asc::after{content:'\\25B2';font-size:0.55em;opacity:0.9;position:absolute;right:6px;top:50%;transform:translateY(-50%);letter-spacing:0}
+th.sort-active.sort-desc::after{content:'\\25BC';font-size:0.55em;opacity:0.9;position:absolute;right:6px;top:50%;transform:translateY(-50%);letter-spacing:0}
+"""
+
+
+TABLE_SORT_JS = """
+<script>
+(function () {
+  function pickOrder(tr, c) {
+    var t = (tr.cells[c].textContent || "").toLowerCase();
+    if (t.indexOf("goblin") >= 0) return 2;
+    if (t.indexOf("demon") >= 0) return 3;
+    if (t.indexOf("standard") >= 0) return 1;
+    return 0;
+  }
+  function tierOrder(tr, c) {
+    var m = (tr.cells[c].textContent || "").match(/TIER\\s*([ABCD])/i);
+    if (!m) return 0;
+    return "ABCD".indexOf(m[1].toUpperCase()) + 1;
+  }
+  function dirOrder(tr, c) {
+    var t = tr.cells[c].textContent || "";
+    if (/OVER/i.test(t)) return 1;
+    if (/UNDER/i.test(t)) return 2;
+    return 0;
+  }
+  function numCell(tr, c) {
+    var t = (tr.cells[c].textContent || "").trim().replace(/,/g, "");
+    if (t === "\\u2014" || t === "-" || t === "") return null;
+    var n = parseInt(t, 10);
+    return isNaN(n) ? null : n;
+  }
+  function pctCell(tr, c) {
+    var t = (tr.cells[c].textContent || "").trim();
+    if (t === "\\u2014" || t === "-" || t === "") return null;
+    var m = t.match(/([\\d.]+)\\s*%/);
+    if (m) return parseFloat(m[1]);
+    return null;
+  }
+  function barPct(tr, c) {
+    var td = tr.cells[c];
+    var fill = td.querySelector(".rate-bar-fill");
+    if (fill && fill.style && fill.style.width) {
+      var w = parseFloat(fill.style.width);
+      if (!isNaN(w)) return w;
+    }
+    return pctCell(tr, c);
+  }
+  var extractors = {
+    pick: pickOrder,
+    tier: tierOrder,
+    dir: dirOrder,
+    decided: numCell,
+    hits: numCell,
+    misses: numCell,
+    rate: pctCell,
+    bar: barPct
+  };
+  function cmp(a, b, key, col, dir) {
+    var ex = extractors[key];
+    if (!ex) return 0;
+    var va = ex(a, col);
+    var vb = ex(b, col);
+    if (va === null && vb === null) return 0;
+    if (va === null) return 1;
+    if (vb === null) return -1;
+    if (va < vb) return -dir;
+    if (va > vb) return dir;
+    return 0;
+  }
+  function initTable(table) {
+    var ths = table.querySelectorAll("thead th[data-sort-key]");
+    ths.forEach(function (th) {
+      th.setAttribute("tabindex", "0");
+      th.setAttribute("role", "button");
+      var col = th.cellIndex;
+      var key = th.getAttribute("data-sort-key");
+      function applySort() {
+        var prevCol = parseInt(table.getAttribute("data-sort-col") || "-1", 10);
+        var prevDir = parseInt(table.getAttribute("data-sort-dir") || "1", 10);
+        var dir = prevCol === col ? -prevDir : 1;
+        table.setAttribute("data-sort-col", String(col));
+        table.setAttribute("data-sort-dir", String(dir));
+        table.querySelectorAll("thead th.sort-active").forEach(function (x) {
+          x.classList.remove("sort-active", "sort-asc", "sort-desc");
+        });
+        th.classList.add("sort-active", dir === 1 ? "sort-asc" : "sort-desc");
+        var tbody = table.querySelector("tbody");
+        if (!tbody) return;
+        var rows = Array.prototype.slice.call(tbody.querySelectorAll("tr"));
+        rows.sort(function (r1, r2) { return cmp(r1, r2, key, col, dir); });
+        rows.forEach(function (r) { tbody.appendChild(r); });
+      }
+      th.addEventListener("click", applySort);
+      th.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          applySort();
+        }
+      });
+    });
+  }
+  document.querySelectorAll("table.table-sortable").forEach(initTable);
+})();
+</script>
 """
 
 
@@ -1525,6 +1642,7 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
 <div class="main">
 {body_content}
 </div>
+{TABLE_SORT_JS}
 </body>
 </html>"""
 
