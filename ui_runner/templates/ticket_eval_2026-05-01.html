@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>
+<script>(function(){try{var t=localStorage.getItem('proporacle-theme')||localStorage.getItem('theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');document.documentElement.classList.add('light-theme');}}catch(e){}})();</script>
+<meta name="theme-color" content="#050505"/>
+<title>Ticket Eval — 2026-05-01</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260418nav"/>
+<link rel="stylesheet" href="/static/site-nav-unified.css?v=20260408"/>
+<link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260418nav"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260423navcenter"/>
+<link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
+<style>
+
+body.ticket-eval-page{
+  font-family:'Inter',system-ui,sans-serif !important;
+  color:var(--text, rgba(255,255,255,0.92));
+}
+body.ticket-eval-page{
+  --glass: var(--card-bg, rgba(26,26,46,0.92));
+  --glass-bd: var(--border, rgba(255,255,255,0.08));
+  --gold: var(--accent, #d4af37);
+  --gold2: #d4a017;
+  --pending: #888;
+}
+:is([data-theme='light'], html.light-theme) .ticket-bucket{
+  background:rgba(255,255,255,0.52);
+  border-color:rgba(0,0,0,0.1);
+  box-shadow:0 2px 16px rgba(0,0,0,0.06);
+}
+:is([data-theme='light'], html.light-theme) .ticket-bucket > summary{color:#b8860b;}
+:is([data-theme='light'], html.light-theme) .ticket-bucket-meta{color:rgba(0,0,0,0.45);}
+:is([data-theme='light'], html.light-theme) .ticket-bucket.sb-default{border-left-color:rgba(0,0,0,0.15);}
+
+h1,h2,h3,h4,h5,h6{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
+.bebas{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;}
+.stats-bar{position:-webkit-sticky;position:sticky;top:72px;z-index:175;margin:0 auto 8px;width:100%;max-width:min(1920px,98vw);padding:14px clamp(16px,2.5vw,28px);transition:top .28s ease,box-shadow .22s ease;background:linear-gradient(180deg,rgba(10,10,18,.92),rgba(8,8,14,.88)),var(--glass);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--glass-bd);border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,.35);}body.ticket-eval-page .grade-eval-summary:has(+ .stats-bar){margin-bottom:0;padding-bottom:8px;border-bottom:none;border-radius:16px 16px 0 0;box-shadow:none;}body.ticket-eval-page .grade-eval-summary:has(+ .stats-bar)+.stats-bar{margin-top:-1px;border-top:none;border-radius:0 0 18px 18px;padding-top:11px;box-shadow:0 8px 32px rgba(0,0,0,.35);}
+.sum-row{display:flex;flex-wrap:wrap;gap:18px 36px;align-items:center;justify-content:center;}
+.sum-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:88px;}
+.sum-val{font-family:'Inter',sans-serif;font-size:clamp(22px,2.6vw,30px);font-weight:700;color:var(--gold);text-shadow:0 0 20px rgba(240,165,0,.25);}
+.sum-val.green{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.35);}
+.sum-val.red{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.35);}
+.sum-val.pend{color:var(--pending);text-shadow:none;}
+.sum-val.void{color:var(--gold2);text-shadow:none;}
+.sum-val-sm{font-size:clamp(18px,2.1vw,24px)!important;}
+.sum-lab{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2.2px;color:var(--muted);text-align:center;line-height:1.2;max-width:11em;}
+.wrap.ticket-eval-main{width:100%;max-width:min(1920px,98vw);margin:0 auto;padding:2px clamp(14px,2.5vw,32px) 0;}
+.ticket-sections-wrap{padding-top:2px;}
+details.ticket-bucket{margin:0 0 10px;}
+.ticket-sections-wrap > details.ticket-bucket:first-child{margin-top:0;}
+.sec{margin-top:22px;}
+.ticket-sections-wrap > section.sec:first-of-type,.ticket-bucket-body > section.sec:first-of-type{margin-top:8px;}
+.sec-head{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,3.2vw,40px);color:var(--gold);margin-bottom:8px;padding-bottom:14px;border-bottom:1px solid var(--glass-bd);letter-spacing:3px;text-shadow:0 0 24px rgba(240,165,0,.2);}
+.ticket-card{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid var(--glass-bd);border-radius:14px;margin-bottom:22px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.35);}
+.ticket-card.card-warning{border-color:rgba(240,165,0,.55);box-shadow:0 0 0 1px rgba(240,165,0,.22),0 8px 32px rgba(0,0,0,.35);}
+.ticket-warning-note{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.4px;color:#ffd87a;background:rgba(240,165,0,.08);border-top:1px solid rgba(240,165,0,.3);padding:8px 14px;}
+.ticket-card.all-hit{background:rgba(57,255,110,0.06);border-color:rgba(57,255,110,.42);box-shadow:0 0 28px rgba(57,255,110,.14),0 8px 32px rgba(0,0,0,.3);}
+.ticket-card.card-missed{background:rgba(255,77,77,0.06);border:1px solid rgba(255,77,77,0.35);box-shadow:0 0 24px rgba(255,77,77,0.12),0 0 1px rgba(255,77,77,0.4),0 8px 32px rgba(0,0,0,.28);position:relative;}
+.ticket-card.card-missed::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:#ff4d4d;box-shadow:0 0 14px rgba(255,77,77,0.45);z-index:2;border-radius:14px 14px 0 0;pointer-events:none;}
+.thdr{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;padding:18px clamp(14px,2vw,24px);border-bottom:1px solid var(--glass-bd);background:rgba(0,0,0,.18);backdrop-filter:blur(12px);}
+.thdr .tn{font-size:clamp(24px,2.8vw,32px);font-family:'Bebas Neue',sans-serif;letter-spacing:2px;color:var(--gold);}
+.thdr .tg{font-family:'Inter',sans-serif;font-size:clamp(12px,1.35vw,15px);color:var(--muted);letter-spacing:0.5px;line-height:1.35;}
+.payout{font-family:'Inter',sans-serif;font-size:clamp(13px,1.4vw,16px);color:var(--cyan);}
+.banner{font-family:'Bebas Neue',sans-serif;font-size:clamp(11px,1.2vw,13px);letter-spacing:2px;padding:8px 18px;border-radius:999px;font-weight:700;background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);}
+.banner.hit{color:var(--green);border-color:rgba(57,255,110,.45);box-shadow:0 0 16px rgba(57,255,110,.15);}
+.banner.miss{color:var(--red);border-color:rgba(255,77,77,.5);box-shadow:0 0 16px rgba(255,77,77,.12);}
+.banner.pend{color:var(--pending);border-color:rgba(255,255,255,.12);}
+.banner.void{color:var(--gold2);border-color:rgba(240,165,0,.35);}
+.legrow{font-family:'Inter',sans-serif;display:grid;grid-template-columns:56px 92px minmax(120px,1fr) 44px minmax(240px,1.45fr) minmax(108px,1fr) minmax(96px,1fr) minmax(76px,.85fr);gap:12px;align-items:center;padding:14px clamp(14px,2vw,22px);font-size:clamp(13px,1.45vw,16px);line-height:1.35;border-bottom:1px solid rgba(255,255,255,.06);border-left:3px solid transparent;}
+.leg-head{font-family:'Bebas Neue',sans-serif;display:grid;grid-template-columns:56px 92px minmax(120px,1fr) 44px minmax(240px,1.45fr) minmax(108px,1fr) minmax(96px,1fr) minmax(76px,.85fr);gap:12px;align-items:end;padding:6px clamp(14px,2vw,22px) 8px;font-size:10px;letter-spacing:2px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.12);}
+.leg-head-lab{line-height:1.2;}
+.legrow:last-child{border-bottom:none;}
+.legrow.leg-hit{background:rgba(57,255,110,0.04);border-left-color:var(--green);}
+.legrow.leg-miss{background:rgba(255,77,77,0.10);border-left:4px solid #ff4d4d;box-shadow:0 0 0 1px rgba(255,77,77,0.4),inset 0 0 20px rgba(255,77,77,0.06);}
+.legrow.leg-miss .pl-miss{color:#ff4d4d;font-weight:700;text-shadow:0 0 8px rgba(255,77,77,0.35);}
+.legrow.leg-miss .pl-line{display:flex;align-items:center;flex-wrap:wrap;gap:8px;}
+.miss-tag{font-family:'Bebas Neue',sans-serif;display:inline-flex;align-items:center;background:rgba(255,77,77,0.15);border:1px solid #ff4d4d;color:#ff4d4d;font-size:9px;letter-spacing:2px;padding:2px 8px;border-radius:20px;line-height:1;vertical-align:middle;}
+.legrow.leg-miss .badge.miss{width:44px;height:44px;min-width:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:clamp(22px,2.5vw,28px);line-height:1;background:rgba(255,77,77,0.25);border:2px solid #ff4d4d;box-shadow:0 0 12px rgba(255,77,77,0.6);color:#ff4d4d;text-shadow:none;}
+.legrow.leg-miss .leg-extra.val-miss{color:#ff4d4d;font-weight:700;}
+.legrow.leg-miss .miss-leg-cell{color:#ff5c5c!important;font-weight:700;}
+.legrow.leg-miss .leg-prop-col.miss-leg-cell > div:first-child{color:#ff7a7a!important;font-weight:800;}
+.legrow.leg-miss .leg-prop-col .meta-muted{color:rgba(255,170,170,.95)!important;font-weight:600;}
+.legrow.leg-miss .miss-leg-cell .dir-over,.legrow.leg-miss .miss-leg-cell .dir-under{color:#ffc9c9!important;font-weight:800;}
+.legrow.leg-miss > div:nth-child(2) .pill{box-shadow:0 0 0 1px rgba(255,90,90,.55),0 0 12px rgba(255,60,60,.2);}
+.legrow.leg-pend{background:transparent;border-left-color:transparent;}
+.legrow.leg-pend .pl-pend,.legrow.leg-pend .meta-muted{color:var(--pending)!important;}
+.legrow.leg-pend .pill{background:rgba(255,255,255,0.04)!important;border-color:rgba(255,255,255,0.1)!important;color:var(--pending)!important;}
+.legrow.leg-void{background:rgba(240,165,0,0.04);border-left-color:rgba(240,165,0,.55);}
+.legrow.leg-void .pl-void,.legrow.leg-void .meta-muted{color:var(--gold2)!important;}
+.legrow.leg-void .pill{background:rgba(240,165,0,0.07)!important;border-color:rgba(240,165,0,0.28)!important;color:var(--gold2)!important;}
+.badge{font-size:clamp(28px,3.2vw,36px);line-height:1;text-align:center;}
+.badge.hit{color:var(--green);text-shadow:0 0 14px rgba(57,255,110,.6);}
+.badge.miss{color:var(--red);text-shadow:0 0 14px rgba(255,77,77,.55);}
+.badge.pend{color:var(--pending);text-shadow:none;}
+.badge.void{color:var(--gold2);text-shadow:none;}
+.pill{font-family:'Bebas Neue',sans-serif;font-size:clamp(10px,1.1vw,12px);letter-spacing:1.2px;padding:5px 12px;border-radius:999px;text-transform:uppercase;}
+
+.sport-nba{background:rgba(212,160,23,.12);color:#f0a500;border:1px solid rgba(212,160,23,.35);}
+.sport-nba1h{background:rgba(255,155,86,.12);color:#ffb27d;border:1px solid rgba(255,155,86,.32);}
+.sport-nba1q{background:rgba(255,214,102,.12);color:#ffd87a;border:1px solid rgba(255,214,102,.32);}
+.sport-wnba{background:rgba(255,138,198,.12);color:#ffb0dd;border:1px solid rgba(255,138,198,.32);}
+.sport-cbb{background:rgba(0,229,255,.10);color:#00e5ff;border:1px solid rgba(0,229,255,.32);}
+.sport-wcbb{background:rgba(127,199,217,.10);color:#9fd8e8;border:1px solid rgba(127,199,217,.32);}
+.sport-nhl{background:rgba(186,130,255,.12);color:#c4a5ff;border:1px solid rgba(186,130,255,.38);}
+.sport-soccer{background:rgba(240,165,0,.10);color:#e8b84a;border:1px solid rgba(240,165,0,.34);}
+.sport-mlb{background:rgba(255,121,121,.12);color:#ff9a9a;border:1px solid rgba(255,121,121,.32);}
+.sport-default{background:rgba(255,255,255,.04);color:#888;border:1px solid rgba(255,255,255,.1);}
+
+.tier{font-family:'Bebas Neue',sans-serif;width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:clamp(13px,1.4vw,15px);letter-spacing:0;background:rgba(255,255,255,0.05);color:var(--gold);border:1px solid var(--glass-bd);backdrop-filter:blur(12px);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);}
+.pl-hit{color:var(--green);text-shadow:0 0 8px rgba(57,255,110,.4);}
+.pl-miss{color:var(--red);}
+.pl-pend{color:var(--pending);}
+.pl-void{color:var(--gold2);}
+.dir-over{color:var(--cyan);font-weight:700;}
+.dir-under{color:var(--gold);font-weight:700;}
+.meta-muted{font-family:'Inter',sans-serif;color:var(--muted);font-size:clamp(11px,1.2vw,13px);margin-top:3px;}
+.slate-kicker{font-family:'Inter',sans-serif;font-size:clamp(11px,1.2vw,13px);letter-spacing:3px;color:var(--muted);margin:0 0 6px;}
+.pl-hit,.pl-pend{font-size:1em;font-weight:600;}
+.warning-chip{display:inline-flex;align-items:center;margin-left:8px;padding:2px 8px;border-radius:999px;border:1px solid rgba(240,165,0,.4);background:rgba(240,165,0,.12);color:#ffd87a;font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.6px;cursor:help;}
+.grade-eval-summary{max-width:min(1920px,98vw);margin:0 auto 8px;padding:10px 16px;border-radius:16px;border:1px solid var(--glass-bd);background:rgba(0,0,0,.22);font-family:'Inter',sans-serif;font-size:13px;line-height:1.55;color:var(--text);}
+.grade-eval-summary-empty{color:var(--muted);font-size:12px;}
+.grade-eval-summary-line1{font-weight:700;color:var(--gold);margin-bottom:6px;}
+.grade-eval-summary-line2{display:flex;flex-wrap:wrap;gap:12px 22px;margin-bottom:4px;}
+.grade-eval-summary-line3{color:var(--muted);margin-bottom:4px;}
+.grade-eval-summary-line4{color:var(--cyan);font-weight:600;}
+.ticket-grade-payout{margin:0;padding:14px clamp(14px,2vw,22px) 16px;border-top:1px solid var(--glass-bd);background:rgba(0,0,0,.12);}
+.grade-result{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:clamp(16px,1.8vw,20px);padding:10px 14px;border-radius:10px;margin-bottom:6px;display:inline-block;}
+.grade-result-sub{font-size:11px;color:var(--muted);margin:-2px 0 10px;font-family:'Inter',sans-serif;}
+.grade-result-sweep{background:gold;color:#000;}
+.grade-result-win{background:#00ff88;color:#000;}
+.grade-result-min_guarantee{background:#88ccff;color:#000;}
+.grade-result-loss{background:#ff4444;color:#fff;}
+.grade-result-void{background:rgba(140,140,150,.35);color:#f2f2f4;border:1px solid rgba(255,255,255,.12);}
+.grade-result-void_loss{background:rgba(240,165,0,.2);color:#ffe6a8;border:1px solid rgba(240,165,0,.45);}
+.grade-payout-table{width:100%;border-collapse:collapse;font-size:clamp(12px,1.25vw,14px);margin-bottom:10px;}
+.grade-payout-table th,.grade-payout-table td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;}
+.grade-payout-table th{color:var(--muted);font-weight:600;font-size:11px;letter-spacing:1px;}
+.grade-entry-line{font-size:12px;color:var(--gold2);font-family:'Inter',sans-serif;}
+.grade-payout-pending{font-size:12px;color:var(--pending);padding:8px 0;}
+.grade-ticket-result{font-family:'Inter',sans-serif;font-size:clamp(11px,1.2vw,13px);letter-spacing:.3px;}
+.grade-ticket-result.won{color:var(--green);}
+.grade-ticket-result.lost{color:var(--red);}
+.grade-ticket-result.void-slip{color:var(--gold2);}
+.grade-ticket-result.void-loss{color:#ffd87a;}
+.grade-ticket-result-label{opacity:.85;font-weight:600;}
+html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!important;}html.ticket-eval-embed-grades .snav,html.ticket-eval-embed-grades #mobile-menu{display:none!important;}html.ticket-eval-embed-grades body > .grade-eval-summary{margin-top:0!important;}html.ticket-eval-embed-grades .stats-bar{top:0!important;}html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;padding-top:9px!important;}
+</style>
+<script>try{if(window.self!==window.top)document.documentElement.classList.add("ticket-eval-embed-grades");}catch(e){}</script>
+</head>
+<body class="ticket-eval-page">
+<nav class="snav glass-card">
+  <div class="nav-accent"></div>
+  <a class="snav-brand" href="/">
+    <div class="hybrid-logo">
+      <img src="/static/proporacle-logo-v3.png?v=20260404b" alt="PropOracle" class="logo-icon" loading="lazy">
+      <span class="nav-brand brand-wordmark"><span class="wb-first">Prop</span><span class="oracle-word gold-shimmer">Oracle</span></span>
+    </div>
+  </a>
+  <ul class="snav-links nav-links" id="nav-links">
+    <li><a href="/" class=""><span class="ni ni-ctrl"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L1 5.5V13h4V9h4v4h4V5.5L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/></svg></span> Home</a></li>
+    <li><a href="/tickets" class=""><span class="ni ni-tick"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="3" width="11" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 6h11" stroke="currentColor" stroke-width="1" stroke-dasharray="2 1.5"/><circle cx="4" cy="9" r="1" fill="currentColor"/><circle cx="7" cy="9" r="1" fill="currentColor"/><circle cx="10" cy="9" r="1" fill="currentColor"/></svg></span> Tickets</a></li>
+    <li><a href="/grades" class="active" title="Ticket evaluation hub"><span class="ni ni-grade"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 10.5L5.5 7l2.5 2.5L11 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect x="1.5" y="1.5" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/></svg></span> Grades</a></li>
+    <li><a href="/income" class=""><span class="ni ni-grade"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 11V5M5 11V2M8 11V7M11 11V4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span> Income</a></li>
+    <li><a href="/payout" class=""><span class="ni ni-pay"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 3.5v7M5 5.5c0-.8.9-1.5 2-1.5s2 .7 2 1.5-1 1.3-2 1.5-2 .7-2 1.5.9 1.5 2 1.5 2-.7 2-1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span> Payouts</a></li>
+  </ul>
+  <div class="snav-right">
+    <button class="theme-toggle theme-switch" type="button" id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle theme">
+      <span class="tt-icon tt-moon">🌙</span>
+      <span class="tt-icon tt-sun" style="display:none">☀️</span>
+    </button>
+    <div class="nav-live-cluster">
+      <div class="live-pill"><div class="live-dot"></div><span class="live-pill-brand">PropOracle</span> &nbsp;·&nbsp; LIVE</div>
+      <div class="nav-datetime-block" title="Slate date (top) and your device date & time (updates every second)">
+        <div class="nav-slate-date" id="slate-date">—</div>
+        <div class="nav-sync-line">
+          <span id="nav-local-datetime" class="nav-local-datetime">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="hamburger" type="button" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/" class="">🏠 Home</a>
+  <a href="/tickets" class="">🎟 Tickets</a>
+  <a href="/grades" class="active" title="Ticket evaluation hub">✏️ Grades</a>
+  <a href="/income" class="">📈 Income</a>
+  <a href="/payout" class="">💰 Payouts</a>
+</div>
+<div class="grade-eval-summary grade-eval-summary-empty"><div>Date: 2026-05-01 · No fully graded tickets for payout summary (ungraded, all-void, or none).</div></div>
+<div class="stats-bar">
+<div class="sum-row">
+<div class="sum-item"><div class="sum-val">0.0%</div><div class="sum-lab">TICKET HIT RATE</div></div>
+<div class="sum-item"><div class="sum-val green">0</div><div class="sum-lab">HITS</div></div>
+<div class="sum-item"><div class="sum-val red">0</div><div class="sum-lab">MISSES</div></div>
+<div class="sum-item"><div class="sum-val void">0</div><div class="sum-lab">VOID/PUSH</div></div>
+<div class="sum-item"><div class="sum-val pend">0</div><div class="sum-lab">UNGRADED</div></div>
+<div class="sum-item"><div class="sum-val">0</div><div class="sum-lab">PERFECT TICKETS</div></div>
+<div class="sum-item"><div class="sum-val green">0</div><div class="sum-lab">PAID TIX</div></div>
+<div class="sum-item"><div class="sum-val red">0</div><div class="sum-lab">NO PAYOUT</div></div>
+<div class="sum-item"><div class="sum-val sum-val-sm pend">—</div><div class="sum-lab">NET @ $10/TKT</div></div>
+<div class="sum-item"><div class="sum-val sum-val-sm pend">—</div><div class="sum-lab">ROI (FLAT $10)</div></div>
+<div class="sum-item"><div class="sum-val sum-val-sm">0</div><div class="sum-lab">TOTAL LEGS</div></div>
+</div></div>
+<div class="wrap ticket-eval-main">
+<p class="slate-kicker">SLATE DATE · 2026-05-01</p>
+<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-05-01/graded_*.xlsx</code>. <strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss.</p>
+<div class="ticket-sections-wrap">
+</div>
+
+<style>
+  /* Manual Ticket Builder additions (kept isolated so existing UI stays intact) */
+  .manual-tb .sport-header {
+    display:flex;align-items:center;gap:12px;
+    margin:0 auto 14px;cursor:pointer;user-select:none;
+  }
+  .manual-tb .sport-header-line {
+    flex:1;height:1px;background:linear-gradient(90deg,var(--bd2),transparent);
+  }
+  .manual-tb .manual-mode-wrap {
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  }
+  .manual-tb .manual-mode-btn {
+    font-size:10px;letter-spacing:1px;
+    padding:6px 10px;border-radius:20px;
+    cursor:pointer;color:var(--muted);
+    border:1px solid var(--border);
+    background:var(--bg2);
+    transition:all .15s;
+    font-family:'Inter',sans-serif;
+    text-transform:uppercase;
+  }
+  .manual-tb .manual-mode-btn:hover {
+    color:var(--text);
+    border-color:var(--bd2);
+  }
+  .manual-tb .manual-mode-btn.active {
+    color:var(--accent);
+    border-color:var(--accent);
+    background:rgba(200,255,0,.06);
+  }
+
+  .manual-tb .manual-grid {
+    display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;
+  }
+  .manual-tb .manual-left, .manual-tb .manual-right {
+    flex:1;min-width:320px;
+  }
+  @media(max-width:768px) {
+    .manual-tb .manual-left, .manual-tb .manual-right { min-width:100%; }
+  }
+
+  .manual-tb .manual-filter-row {
+    display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:10px;
+  }
+  .manual-tb .manual-filter-group {
+    display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  }
+  .manual-tb .manual-sport-pill {
+    /* Keep chips visible on mobile before interaction (was too dim on Android OLED). */
+    opacity:.92;
+    filter:none;
+    border-width:1px;
+    border-style:solid;
+    border-color:rgba(255,255,255,.28);
+  }
+  .manual-tb .manual-slider-row {
+    margin-bottom:10px;
+    padding:10px 12px;border:1px solid var(--glass-bd);
+    border-radius:14px;background:rgba(255,255,255,0.02);
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  }
+  .manual-tb .manual-slider-row label {
+    font-family:'Inter',sans-serif;
+    color:var(--muted);font-size:12px;
+  }
+  .manual-tb input[type="range"] {
+    width:min(320px,80vw);
+  }
+
+  .manual-tb .chip {
+    font-family:'Bebas Neue',sans-serif;
+    display:inline-flex;align-items:center;justify-content:center;
+    border-radius:8px;padding:4px 10px;
+    font-size:11px;font-weight:700;letter-spacing:.5px;
+    border:1px solid transparent;
+    user-select:none;
+    background:rgba(255,255,255,0.04);
+    color:var(--muted);
+  }
+  .manual-tb .chip-goblin { background:rgba(196,165,255,.10);color:var(--purple);border-color:rgba(196,165,255,.32); }
+  .manual-tb .chip-std    { background:rgba(0,229,255,.08);color:var(--cyan);border-color:rgba(0,229,255,.25); }
+  .manual-tb .chip-dup    { background:rgba(255,77,77,.10);color:var(--red);border-color:rgba(255,77,77,.32); }
+
+  .manual-tb .manual-prop-list {
+    max-height:520px;overflow-y:auto;
+    border:1px solid var(--glass-bd);
+    background:rgba(255,255,255,0.02);
+    border-radius:16px;padding:12px;
+  }
+  .manual-tb .manual-prop-row {
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:14px;padding:10px 10px;
+    margin-bottom:10px;background:rgba(255,255,255,0.02);
+    cursor:pointer;
+  }
+  .manual-tb .manual-prop-row:hover { border-color:rgba(255,255,255,0.12); }
+  .manual-tb .manual-prop-row.dup {
+    opacity:.55;cursor:not-allowed;
+    border-color:rgba(255,77,77,.35);
+  }
+  .manual-tb .manual-prop-main {
+    min-width:240px;flex:1;
+  }
+  .manual-tb .manual-prop-name {
+    font-family:'Inter',sans-serif;font-size:13px;color:var(--text);
+  }
+  .manual-tb .manual-prop-sub {
+    font-family:'Inter',sans-serif;font-size:11px;color:var(--muted);margin-top:2px;
+  }
+  .manual-tb .manual-prop-metric {
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);
+  }
+  .manual-tb .manual-prop-rank {
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--cyan);
+  }
+
+  /* rbar (reused for hit-rate visualization) */
+  .rbar{display:flex;align-items:center;gap:6px;min-width:96px;}
+  .rbar-bg{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;}
+  .rbar-fill{height:100%;border-radius:4px;}
+  .rbar-num{font-size:10px;width:52px;text-align:right;flex-shrink:0;color:var(--muted2);}
+
+  .manual-tb .manual-active-card {
+    border:1px solid var(--glass-bd);
+    border-radius:16px;background:rgba(255,255,255,0.02);
+    padding:12px;
+  }
+  .manual-tb .manual-stats-row {
+    display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:flex-start;margin-bottom:10px;
+  }
+  .manual-tb .manual-stat {
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);
+  }
+  .manual-tb .manual-stat strong {
+    color:var(--text);font-family:'Inter',sans-serif;
+  }
+  .manual-tb .manual-warning {
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--amber);
+    border:1px solid rgba(200,160,60,.35);background:rgba(200,160,60,.08);
+    padding:6px 10px;border-radius:999px;display:flex;align-items:center;gap:8px;
+  }
+
+  .manual-tb .manual-active-legs {
+    display:flex;flex-direction:column;gap:10px;margin-bottom:12px;
+  }
+  .manual-tb .manual-active-leg {
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:10px;
+    background:rgba(255,255,255,0.02);
+  }
+  .manual-tb .manual-remove-btn {
+    margin-left:auto;
+    border:1px solid rgba(255,255,255,0.12);
+    background:rgba(255,255,255,0.04);
+    color:var(--muted);
+    font-family:'Inter',sans-serif;
+    border-radius:10px;
+    padding:6px 10px;cursor:pointer;
+    transition:all .15s;
+  }
+  .manual-tb .manual-remove-btn:hover {
+    color:var(--text);border-color:rgba(255,255,255,0.22);
+  }
+
+  .manual-tb .manual-actions {
+    display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;
+  }
+  .manual-tb .manual-action-btn {
+    border:1px solid rgba(255,255,255,0.14);
+    background:rgba(255,255,255,0.05);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    border-radius:14px;
+    padding:10px 14px;cursor:pointer;
+    transition:all .15s;
+  }
+  .manual-tb .manual-action-btn:hover {
+    border-color:rgba(255,255,255,0.24);
+    transform:translateY(-1px);
+  }
+  .manual-tb .manual-action-btn.primary {
+    border-color:rgba(212,175,55,.45);
+    background:rgba(212,175,55,.08);
+    color:var(--gold);
+  }
+  .manual-tb .manual-action-btn:disabled {
+    opacity:.45;cursor:not-allowed;transform:none;
+  }
+
+  .manual-tb .manual-locked-list {
+    display:flex;flex-direction:column;gap:14px;
+  }
+  .manual-tb .manual-locked-card {
+    border:1px solid var(--glass-bd);
+    border-radius:16px;background:rgba(255,255,255,0.02);
+    overflow:hidden;
+  }
+  .manual-tb .manual-locked-hdr {
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.06);
+  }
+  .manual-tb .manual-locked-legs {
+    padding:12px 14px;display:flex;flex-direction:column;gap:8px;
+  }
+  .manual-tb .manual-locked-leg {
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);
+  }
+  .manual-tb .manual-locked-leg .player {
+    color:var(--text);
+    font-size:13px;
+  }
+  .manual-tb .manual-locked-x {
+    margin-left:auto;
+    border:1px solid rgba(255,255,255,0.12);
+    background:rgba(255,255,255,0.04);
+    color:var(--muted);
+    border-radius:10px;
+    padding:6px 10px;cursor:pointer;
+  }
+</style>
+
+<details class="ticket-bucket sb-default manual-tb" open>
+  <summary>
+    <span>🎯 Manual Ticket Builder</span>
+    <span class="manual-mode-wrap">
+      <button class="manual-mode-btn active" data-manual-mode="MIXED" type="button">MIXED</button>
+      <button class="manual-mode-btn" data-manual-mode="GOBLIN" type="button">GOBLIN ONLY</button>
+      <button class="manual-mode-btn" data-manual-mode="STANDARD" type="button">STANDARD ONLY</button>
+    </span>
+  </summary>
+
+  <div class="ticket-bucket-body">
+    <div class="manual-grid">
+      <div class="manual-left">
+        <div class="manual-filter-row">
+          <div class="manual-filter-group">
+            <button class="pill sport-nba manual-sport-pill manual-sport-btn" data-manual-sport="NBA" type="button">NBA</button>
+            <button class="pill sport-nba1h manual-sport-pill manual-sport-btn" data-manual-sport="NBA1H" type="button">NBA1H</button>
+            <button class="pill sport-nba1q manual-sport-pill manual-sport-btn" data-manual-sport="NBA1Q" type="button">NBA1Q</button>
+            <button class="pill sport-wnba manual-sport-pill manual-sport-btn" data-manual-sport="WNBA" type="button">WNBA</button>
+            <button class="pill sport-cbb manual-sport-pill manual-sport-btn" data-manual-sport="CBB" type="button">CBB</button>
+            <button class="pill sport-nhl manual-sport-pill manual-sport-btn" data-manual-sport="NHL" type="button">NHL</button>
+            <button class="pill sport-soccer manual-sport-pill manual-sport-btn" data-manual-sport="SOCCER" type="button">SOC</button>
+          </div>
+        </div>
+
+        <div class="manual-filter-row" style="margin-top:-4px;">
+          <div class="manual-filter-group">
+            <button class="chip chip-goblin manual-pick-type-btn" data-manual-pick-type="Goblin" type="button">🎃 Goblin</button>
+            <button class="chip chip-std manual-pick-type-btn" data-manual-pick-type="Standard" type="button">⭐ Standard</button>
+          </div>
+        </div>
+
+        <div class="manual-slider-row">
+          <label for="manual-hit-rate-slider">Min hit-rate: <strong id="manual-hit-rate-label">70%</strong></label>
+          <input id="manual-hit-rate-slider" type="range" min="60" max="100" value="70" step="1" />
+        </div>
+
+        <div class="manual-prop-list" id="manual-prop-list" aria-live="polite"></div>
+      </div>
+
+      <div class="manual-right">
+        <div class="manual-active-card">
+          <div class="manual-stats-row">
+            <div class="manual-stat">Legs: <strong id="manual-leg-count">0</strong></div>
+            <div class="manual-stat">Avg hit-rate: <strong id="manual-avg-hit-rate">0.0%</strong></div>
+            <div class="manual-stat">Est. win prob: <strong id="manual-win-prob">0.0%</strong></div>
+            <div class="manual-stat">Avg edge: <strong id="manual-avg-edge">0.00</strong></div>
+            <div id="manual-corr-warning" style="margin-left:auto;display:none;" class="manual-warning">⚠ Correlation: same team + game</div>
+          </div>
+
+          <div class="manual-active-legs" id="manual-active-legs"></div>
+
+          <div class="manual-actions">
+            <button id="manual-auto-build" class="manual-action-btn" type="button">⚡ Auto-Build</button>
+            <button id="manual-clear" class="manual-action-btn" type="button">Clear</button>
+            <button id="manual-lock" class="manual-action-btn primary" type="button" disabled>Lock Ticket</button>
+          </div>
+
+          <div class="sec" style="margin-top:0;">
+            <h2 class="sec-head bebas" style="margin-bottom:10px;font-size:clamp(24px,2.8vw,34px);">Locked Tickets</h2>
+            <div class="manual-locked-list" id="manual-locked-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</details>
+
+<script>
+  window.SLATE_DATA = [];
+</script>
+
+<script>
+(function(){
+  const $ = (sel, root=document) => root.querySelector(sel);
+  const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+  const props = Array.isArray(window.SLATE_DATA) ? window.SLATE_DATA : [];
+
+  const state = {
+    mode: 'MIXED',
+    selectedSports: new Set(['NBA','NBA1H','NBA1Q','WNBA','CBB','NHL','SOCCER']),
+    // In MIXED, both pick types are enabled; in single-mode, pick one.
+    selectedPickTypes: new Set(['Goblin','Standard']),
+    minHitRate: 0.70,
+    activeLegs: [],
+    lockedTickets: [],
+    // Auto-build targets current leg count target default 3.
+    targetLegs: 3,
+    maxLegs: 6,
+    // Cache for re-render efficiency
+    activePlayers: new Set()
+  };
+
+  function legKey(leg){
+    const lt = [leg.sport, leg.player, leg.team, leg.opp, leg.prop_type, leg.pick_type, leg.direction, leg.line, leg.game_time];
+    return lt.map(x => (x===null||x===undefined)? '' : String(x)).join('||');
+  }
+
+  function gameKeyNorm(leg){
+    const team = leg.team || '';
+    const opp = leg.opp || '';
+    const teams = [team, opp].sort().join('-');
+    const gt = leg.game_time || '';
+    return `${leg.sport}|${teams}|${gt}`;
+  }
+
+  function corrKeyTeamGame(leg){
+    // Correlation warning: two legs share the same team+game (same sport/team/game-time).
+    return `${leg.sport}|${leg.team}|${gameKeyNorm(leg)}`;
+  }
+
+  function formatPct(x){
+    const v = Number(x);
+    if (!isFinite(v)) return '0.0%';
+    return `${(v*100).toFixed(1)}%`;
+  }
+
+  function fmt2(x){
+    const v = Number(x);
+    if (!isFinite(v)) return '0.00';
+    return v.toFixed(2);
+  }
+
+  function hitColor(pct){
+    // pct is 0..100
+    if (pct >= 65) return 'var(--green)';
+    if (pct >= 50) return 'var(--amber)';
+    return 'var(--red)';
+  }
+
+  function rbarHTML(hitRate){
+    const hr = (hitRate===null||hitRate===undefined)? 0 : Number(hitRate);
+    const pct = Math.max(0, Math.min(100, hr*100));
+    const bc = hitColor(pct);
+    const tc = bc;
+    return `
+      <div class="rbar" aria-label="Hit rate ${pct.toFixed(1)}%">
+        <div class="rbar-bg"><div class="rbar-fill" style="width:${pct.toFixed(1)}%;background:${bc}"></div></div>
+        <span class="rbar-num" style="color:${tc}">${pct.toFixed(1)}%</span>
+      </div>`;
+  }
+
+  function filteredProps(){
+    const m = state.mode;
+    // Mode gate (pick types)
+    const allowedPickTypes = state.selectedPickTypes;
+    const allowedSports = state.selectedSports;
+    const minHr = state.minHitRate;
+
+    return props
+      .filter(p => allowedSports.has(p.sport))
+      .filter(p => allowedPickTypes.has(p.pick_type))
+      .filter(p => (p.hit_rate===null||p.hit_rate===undefined) ? false : Number(p.hit_rate) >= minHr)
+      .sort((a,b) => {
+        const ha = Number(a.hit_rate||0), hb = Number(b.hit_rate||0);
+        if (hb !== ha) return hb - ha;
+        const ra = Number(a.rank_score||-1), rb = Number(b.rank_score||-1);
+        return rb - ra;
+      });
+  }
+
+  function renderPropList(){
+    const list = $('#manual-prop-list');
+    if (!list) return;
+    const fp = filteredProps();
+
+    const sportShort = (s) => s === 'SOCCER' ? 'SOC' : s;
+    const modePick = state.mode;
+
+    list.innerHTML = '';
+    if (!fp.length) {
+      list.innerHTML = `<div style="color:var(--muted);font-family:'Inter',sans-serif;font-size:12px;padding:8px;">No props match filters.</div>`;
+      return;
+    }
+
+    for (const leg of fp) {
+      const dup = state.activePlayers.has(leg.player);
+      const pickChip = leg.pick_type === 'Goblin'
+        ? `<span class="chip chip-goblin">${leg.pick_type}</span>`
+        : `<span class="chip chip-std">${leg.pick_type}</span>`;
+
+      const dupChip = dup ? `<span class="chip chip-dup">DUP</span>` : '';
+      const dirCls = leg.direction === 'OVER' ? 'dir-over' : leg.direction === 'UNDER' ? 'dir-under' : '';
+
+      const lineStr = (leg.line===null||leg.line===undefined) ? '—' : String(leg.line);
+      const edgeStr = fmt2(leg.edge);
+      const rankStr = (leg.rank_score===null||leg.rank_score===undefined) ? '—' : Number(leg.rank_score).toFixed(2);
+      const hitBar = rbarHTML(leg.hit_rate);
+
+      const row = document.createElement('div');
+      row.className = 'manual-prop-row' + (dup ? ' dup' : '');
+      row.setAttribute('role','button');
+      row.setAttribute('tabindex','0');
+      row.setAttribute('aria-disabled', dup ? 'true' : 'false');
+
+      row.innerHTML = `
+        <div class="manual-prop-main">
+          <div class="manual-prop-name">${leg.player}</div>
+          <div class="manual-prop-sub">${leg.team} · ${leg.prop_type}</div>
+        </div>
+        <div class="manual-prop-metric">
+          <div style="color:var(--text);font-family:'Inter',sans-serif;font-size:12px;">${lineStr} <span class="${dirCls}">${leg.direction || ''}</span></div>
+          <div style="margin-top:4px;">${pickChip} ${dupChip}</div>
+        </div>
+        <div class="manual-prop-metric" style="min-width:120px;">${hitBar}</div>
+        <div class="manual-prop-metric">Edge: <span style="color:var(--text);font-size:12px;">${edgeStr}</span></div>
+        <div class="manual-prop-rank">Rank: <span>${rankStr}</span></div>
+      `;
+
+      const key = legKey(leg);
+      row.dataset.legKey = key;
+      row.addEventListener('click', () => {
+        if (dup) return;
+        if (state.activeLegs.length >= state.maxLegs) return;
+        addLegToActive(leg);
+      });
+      row.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') row.click();
+      });
+
+      list.appendChild(row);
+    }
+  }
+
+  function computeCorrelation(){
+    if (state.activeLegs.length < 2) return false;
+    const counts = new Map();
+    for (const leg of state.activeLegs) {
+      const k = corrKeyTeamGame(leg);
+      counts.set(k, (counts.get(k) || 0) + 1);
+    }
+    for (const [,c] of counts) if (c > 1) return true;
+    return false;
+  }
+
+  function updateActiveStats(){
+    const n = state.activeLegs.length;
+    $('#manual-leg-count').textContent = String(n);
+
+    if (n === 0) {
+      $('#manual-avg-hit-rate').textContent = '0.0%';
+      $('#manual-win-prob').textContent = '0.0%';
+      $('#manual-avg-edge').textContent = '0.00';
+      $('#manual-corr-warning').style.display = 'none';
+      $('#manual-lock').disabled = true;
+      return;
+    }
+
+    const avgHit = state.activeLegs.reduce((s,l)=>s+Number(l.hit_rate||0),0) / n;
+    const winProb = state.activeLegs.reduce((p,l)=>p*(Number(l.hit_rate||0)),1);
+    const avgEdge = state.activeLegs.reduce((s,l)=>s+Number(l.edge||0),0) / n;
+
+    $('#manual-avg-hit-rate').textContent = `${(avgHit*100).toFixed(1)}%`;
+    $('#manual-win-prob').textContent = `${(winProb*100).toFixed(1)}%`;
+    $('#manual-avg-edge').textContent = fmt2(avgEdge);
+    $('#manual-corr-warning').style.display = computeCorrelation() ? '' : 'none';
+
+    $('#manual-lock').disabled = n < 2;
+  }
+
+  function renderActiveLegs(){
+    const cont = $('#manual-active-legs');
+    if (!cont) return;
+    cont.innerHTML = '';
+    for (const leg of state.activeLegs) {
+      const dirCls = leg.direction === 'OVER' ? 'dir-over' : leg.direction === 'UNDER' ? 'dir-under' : '';
+      const spClass = leg.sport === 'NBA' ? 'sport-nba'
+        : leg.sport === 'NBA1H' ? 'sport-nba1h'
+        : leg.sport === 'NBA1Q' ? 'sport-nba1q'
+        : leg.sport === 'WNBA' ? 'sport-wnba'
+        : leg.sport === 'CBB' ? 'sport-cbb'
+        : leg.sport === 'NHL' ? 'sport-nhl'
+        : leg.sport === 'SOCCER' ? 'sport-soccer'
+        : 'sport-default';
+
+      const tierTxt = leg.pick_type === 'Goblin' ? 'G' : 'S';
+      const key = legKey(leg);
+
+      const row = document.createElement('div');
+      row.className = 'manual-active-leg';
+      row.innerHTML = `
+        <span class="pill ${spClass}">${leg.sport}</span>
+        <span class="player" style="font-family:'Inter',sans-serif;color:var(--text);font-size:13px;">${leg.player}</span>
+        <span style="color:var(--muted);font-size:12px;">${leg.prop_type}</span>
+        <span style="margin-left:auto;color:var(--text);font-size:12px;font-family:'Inter',sans-serif;">
+          ${leg.line} <span class="${dirCls}">${leg.direction}</span>
+        </span>
+        <span style="display:flex;align-items:center;gap:8px;">
+          <span class="chip ${leg.pick_type==='Goblin' ? 'chip-goblin' : 'chip-std'}">${leg.pick_type}</span>
+        </span>
+        <button type="button" class="manual-remove-btn" data-remove-leg="${key}">✕</button>
+      `;
+      cont.appendChild(row);
+    }
+
+    // Wire remove buttons after DOM creation
+    $$('button.manual-remove-btn', cont).forEach(btn => {
+      btn.addEventListener('click', () => {
+        const k = btn.dataset.removeLeg;
+        state.activeLegs = state.activeLegs.filter(l => legKey(l) !== k);
+        state.activePlayers = new Set(state.activeLegs.map(l => l.player));
+        renderActiveLegs();
+        renderLockedTicketsHeaderOnly();
+        renderPropList();
+        updateActiveStats();
+      });
+    });
+  }
+
+  function renderLockedTicketsHeaderOnly(){
+    // placeholder hook (kept for future extension)
+    // We intentionally keep it simple to avoid interfering with existing logic.
+  }
+
+  function renderLockedTickets(){
+    const cont = $('#manual-locked-list');
+    if (!cont) return;
+    cont.innerHTML = '';
+    state.lockedTickets.forEach((t, idx) => {
+      const winProbPct = (t.winProb*100).toFixed(1);
+      const avgEdge = t.avgEdge;
+      const card = document.createElement('div');
+      card.className = 'manual-locked-card';
+      card.innerHTML = `
+        <div class="manual-locked-hdr">
+          <span class="tn bebas">Manual #${idx+1}</span>
+          <span class="tg" style="color:var(--muted);font-family:'Inter',sans-serif;font-size:12px;">${t.legs.length} legs</span>
+          <span class="payout" style="margin-left:0;">Est. win prob: ${winProbPct}%</span>
+          <span class="payout" style="margin-left:12px;">Avg edge: ${fmt2(avgEdge)}</span>
+          <button type="button" class="manual-locked-x" data-remove-ticket="${idx}">✕</button>
+        </div>
+        <div class="manual-locked-legs">
+          ${t.legs.map(l => {
+            const dirCls = l.direction === 'OVER' ? 'dir-over' : l.direction === 'UNDER' ? 'dir-under' : '';
+            const spClass = l.sport === 'NBA' ? 'sport-nba'
+              : l.sport === 'NBA1H' ? 'sport-nba1h'
+              : l.sport === 'NBA1Q' ? 'sport-nba1q'
+              : l.sport === 'WNBA' ? 'sport-wnba'
+              : l.sport === 'CBB' ? 'sport-cbb'
+              : l.sport === 'NHL' ? 'sport-nhl'
+              : l.sport === 'SOCCER' ? 'sport-soccer'
+              : 'sport-default';
+            return `
+              <div class="manual-locked-leg">
+                <span class="pill ${spClass}">${l.sport}</span>
+                <span class="player">${l.player}</span>
+                <span style="color:var(--muted);">${l.prop_type}</span>
+                <span style="color:var(--text);">${l.line} <span class="${dirCls}">${l.direction}</span></span>
+                <span class="chip ${l.pick_type==='Goblin' ? 'chip-goblin' : 'chip-std'}">${l.pick_type}</span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+      cont.appendChild(card);
+    });
+
+    // remove wiring
+    $$('button.manual-locked-x', cont).forEach(btn => {
+      btn.addEventListener('click', () => {
+        const i = Number(btn.dataset.removeTicket);
+        state.lockedTickets.splice(i, 1);
+        renderLockedTickets();
+      });
+    });
+  }
+
+  function addLegToActive(leg){
+    const player = leg.player;
+    if (!player) return;
+    if (state.activePlayers.has(player)) return;
+    if (state.activeLegs.length >= state.maxLegs) return;
+
+    state.activeLegs.push(leg);
+    state.activePlayers.add(player);
+
+    renderActiveLegs();
+    renderPropList();
+    updateActiveStats();
+  }
+
+  function clearActive(){
+    state.activeLegs = [];
+    state.activePlayers = new Set();
+    renderActiveLegs();
+    renderPropList();
+    updateActiveStats();
+  }
+
+  function lockActive(){
+    if (state.activeLegs.length < 2) return;
+    const winProb = state.activeLegs.reduce((p,l)=>p*(Number(l.hit_rate||0)),1);
+    const avgEdge = state.activeLegs.reduce((s,l)=>s+Number(l.edge||0),0) / state.activeLegs.length;
+
+    state.lockedTickets.push({
+      legs: state.activeLegs.slice(),
+      winProb: winProb,
+      avgEdge: avgEdge
+    });
+
+    clearActive();
+    renderLockedTickets();
+  }
+
+  function applyModeToPickTypes(){
+    const mode = state.mode;
+    if (mode === 'GOBLIN') {
+      state.selectedPickTypes = new Set(['Goblin']);
+    } else if (mode === 'STANDARD') {
+      state.selectedPickTypes = new Set(['Standard']);
+    } else {
+      state.selectedPickTypes = new Set(['Goblin','Standard']);
+    }
+
+    // Update pick-type button visibility/disabled
+    for (const btn of $$('.manual-pick-type-btn')) {
+      const pt = btn.dataset.manualPickType;
+      const show = state.selectedPickTypes.has(pt);
+      btn.style.display = show ? '' : 'none';
+    }
+  }
+
+  function setMode(newMode){
+    state.mode = newMode;
+    const modeBtns = $$('.manual-mode-btn');
+    modeBtns.forEach(b => b.classList.toggle('active', b.dataset.manualMode === newMode));
+    applyModeToPickTypes();
+    renderPropList();
+    updateActiveStats();
+  }
+
+  function applySportButtonUI(){
+    for (const btn of $$('.manual-sport-btn')) {
+      const s = btn.dataset.manualSport;
+      const active = state.selectedSports.has(s);
+      // Keep inactive chips readable; only mute slightly when not selected.
+      btn.style.opacity = active ? '1' : '.88';
+      btn.style.filter = 'none';
+      btn.style.borderColor = active ? 'rgba(212,175,55,.62)' : 'rgba(255,255,255,.30)';
+      btn.style.boxShadow = active ? '0 0 0 1px rgba(212,175,55,.25), 0 6px 16px rgba(0,0,0,.28)' : 'none';
+    }
+  }
+
+  function toggleSport(s){
+    if (state.selectedSports.has(s)) state.selectedSports.delete(s);
+    else state.selectedSports.add(s);
+    // Keep at least one sport selected for a usable picker.
+    if (state.selectedSports.size === 0) state.selectedSports = new Set(['NBA','NBA1H','NBA1Q','WNBA','CBB','NHL','SOCCER']);
+    applySportButtonUI();
+    renderPropList();
+  }
+
+  function autoBuild(){
+    const activeCount = state.activeLegs.length;
+    if (activeCount >= state.maxLegs) return;
+
+    // Target leg count for auto-build is the current target (default 3).
+    const needed = Math.max(0, Math.min(state.maxLegs, state.targetLegs) - activeCount);
+    if (needed <= 0) return;
+
+    const candidates = filteredProps()
+      .filter(c => !state.activePlayers.has(c.player));
+
+    if (!candidates.length) return;
+
+    // Sort by hit_rate desc then rank_score desc
+    candidates.sort((a,b) => {
+      const ha = Number(a.hit_rate||0), hb = Number(b.hit_rate||0);
+      if (hb !== ha) return hb - ha;
+      const ra = Number(a.rank_score||-1), rb = Number(b.rank_score||-1);
+      return rb - ra;
+    });
+
+    const chosen = [];
+    const usedGames = new Set();
+
+    // Pass 1: one per game where possible
+    for (const c of candidates) {
+      if (chosen.length >= needed) break;
+      const gk = gameKeyNorm(c);
+      if (usedGames.has(gk)) continue;
+      usedGames.add(gk);
+      chosen.push(c);
+    }
+
+    // Pass 2: fill remaining even if same game
+    for (const c of candidates) {
+      if (chosen.length >= needed) break;
+      const already = chosen.some(x => x.player === c.player);
+      if (already) continue;
+      chosen.push(c);
+    }
+
+    for (const c of chosen.slice(0, needed)) addLegToActive(c);
+  }
+
+  // ── Wire UI ─────────────────────────────────────────────────────────────────
+  for (const btn of $$('.manual-mode-btn')) {
+    btn.addEventListener('click', () => setMode(btn.dataset.manualMode));
+  }
+  for (const btn of $$('.manual-sport-btn')) {
+    btn.addEventListener('click', () => toggleSport(btn.dataset.manualSport));
+  }
+  for (const btn of $$('.manual-pick-type-btn')) {
+    btn.addEventListener('click', () => {
+      // In single-mode, pick-type buttons are hidden; only MIXED makes them clickable.
+      if (state.mode !== 'MIXED') return;
+      const pt = btn.dataset.manualPickType;
+      if (state.selectedPickTypes.has(pt)) state.selectedPickTypes.delete(pt);
+      else state.selectedPickTypes.add(pt);
+      if (state.selectedPickTypes.size === 0) state.selectedPickTypes = new Set(['Goblin','Standard']);
+      applyModeToPickTypes();
+      renderPropList();
+    });
+  }
+
+  const slider = $('#manual-hit-rate-slider');
+  slider.addEventListener('input', () => {
+    const v = Number(slider.value);
+    $('#manual-hit-rate-label').textContent = `${v}%`;
+    state.minHitRate = v / 100;
+    renderPropList();
+  });
+
+  $('#manual-auto-build').addEventListener('click', autoBuild);
+  $('#manual-clear').addEventListener('click', clearActive);
+  $('#manual-lock').addEventListener('click', lockActive);
+
+  // Initial UI
+  applyModeToPickTypes();
+  applySportButtonUI();
+  renderActiveLegs();
+  renderLockedTickets();
+  updateActiveStats();
+  renderPropList();
+})();
+</script>
+        
+</div>
+<script src="/static/site-nav-chrome.js?v=20260412" defer></script>
+</body></html>
