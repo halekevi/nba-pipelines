@@ -841,6 +841,7 @@ _SLATE_SPORT_UI_KEYS = frozenset(
         "line",
         "dir",
         "edge",
+        "projection",
         "hit_rate",
         "l5_over",
         "l5_under",
@@ -896,7 +897,7 @@ def _slim_slate_sport_cell(key: str, v: Any) -> Any:
             return round(float(v), 4)
         if key == "hit_rate":
             return round(float(v), 6)
-        if key in ("line", "l5_over", "l5_under"):
+        if key in ("line", "l5_over", "l5_under", "projection"):
             fv = float(v)
             if fv.is_integer():
                 return int(fv)
@@ -1280,6 +1281,21 @@ def _safe_float(v: Any, default: float = 0.0) -> float:
         return f if math.isfinite(f) else default
     except (TypeError, ValueError):
         return default
+
+
+def _pick_projection_from_mapping(row: Dict[str, Any]) -> Optional[float]:
+    """Model projection for UI charts (slate rows + ticket legs)."""
+    for key in ("projection", "standard_projection", "Projection"):
+        v = row.get(key)
+        if v is None or v == "":
+            continue
+        try:
+            f = float(v)
+            if math.isfinite(f):
+                return f
+        except (TypeError, ValueError):
+            continue
+    return None
 
 
 def _normalize_leg_pick_type(raw: Any) -> str:
@@ -3884,6 +3900,7 @@ def _picks_payload_from_slate_latest() -> dict[str, Any] | None:
                     "dir": str(dirv).strip().upper() or "OVER",
                     "hit": round(hr * 100),
                     "edge": edge,
+                    "projection": _pick_projection_from_mapping(row),
                     "l5_over": l5_over,
                     "l5_under": l5_under,
                     "l10_over": l10_over,
@@ -3996,6 +4013,7 @@ def api_slate():
                                 "dir": leg.get("direction", "OVER"),
                                 "hit": round((leg.get("hit_rate") or 0) * 100),
                                 "edge": leg.get("edge") or 0,
+                                "projection": _pick_projection_from_mapping(leg),
                                 "l5_over": l5_over,
                                 "l5_under": l5_under,
                                 "l10_over": l10_over,
