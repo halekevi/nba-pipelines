@@ -38,7 +38,6 @@ STEP8_CANDIDATES: dict[str, list[Path]] = {
     "NHL": [
         REPO_ROOT / "Sports" / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
         REPO_ROOT / "Sports" / "NHL" / "step8_nhl_direction_clean.xlsx",
-        REPO_ROOT / "Sports" / "NHL" / "step8_nhl_direction_clean.csv",
         REPO_ROOT / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
     ],
     "SOCCER": [
@@ -87,7 +86,40 @@ def _norm_direction(v: Any) -> str:
 
 
 def _norm_prop(v: Any) -> str:
-    return str(v or "").strip().lower()
+    try:
+        if v is None or (isinstance(v, float) and np.isnan(v)):
+            return ""
+    except TypeError:
+        pass
+    if pd.isna(v):
+        return ""
+    s = str(v).strip().lower()
+    if s in ("nan", "none", "nat", ""):
+        return ""
+    return s
+
+
+# Column resolution order for stat/prop text (NHL step8 uses prop_type; NBA-style boards use Prop).
+_PROP_COLS_GRADED: tuple[str, ...] = (
+    "prop_type_norm",
+    "prop_type",
+    "prop_display",
+    "prop display",
+    "Prop",
+    "stat_norm",
+    "prop type",
+    "prop",
+)
+_PROP_COLS_STEP8: tuple[str, ...] = (
+    "Prop",
+    "prop_type_norm",
+    "prop_type",
+    "prop_display",
+    "prop display",
+    "prop_norm",
+    "stat_norm",
+    "prop",
+)
 
 
 def _result_to_hit(v: Any) -> float | None:
@@ -124,7 +156,7 @@ def _load_graded_box_raw(path: Path, sport: str) -> pd.DataFrame:
     out = pd.DataFrame(index=df.index)
     out["sport"] = sport
     out["player"] = _col_or_nan(["player", "Player"]).astype(str).str.strip()
-    out["prop_type_norm"] = _col_or_nan(["prop_type_norm", "prop type", "prop"]).apply(_norm_prop)
+    out["prop_type_norm"] = _col_or_nan(list(_PROP_COLS_GRADED)).apply(_norm_prop)
     out["pick_type"] = _col_or_nan(["pick_type", "Pick Type"]).apply(_norm_pick_type)
     out["direction"] = _col_or_nan(["bet_direction", "direction", "Direction"]).apply(_norm_direction)
     out["line"] = pd.to_numeric(_col_or_nan(["line", "Line"]), errors="coerce")
@@ -138,11 +170,7 @@ def _load_graded_box_raw(path: Path, sport: str) -> pd.DataFrame:
 def _load_step8(path: Path, sport: str) -> pd.DataFrame:
     if not path.exists():
         return pd.DataFrame()
-    suf = path.suffix.lower()
-    if suf == ".csv":
-        df = pd.read_csv(path, encoding="utf-8-sig", low_memory=False)
-    else:
-        df = pd.read_excel(path)
+    df = pd.read_excel(path)
     if df.empty:
         return df
     def _col_or_nan(cands: list[str]) -> pd.Series:
@@ -153,14 +181,9 @@ def _load_step8(path: Path, sport: str) -> pd.DataFrame:
     out = pd.DataFrame(index=df.index)
     out["sport"] = sport
     out["player"] = _col_or_nan(["Player", "player"]).astype(str).str.strip()
-    # NHL/MLB CSV use prop_type / prop_norm; Excel exports use "Prop".
-    out["prop_type_norm"] = _col_or_nan(
-        ["Prop", "prop_norm", "prop_type", "prop_type_norm", "stat_norm", "prop"]
-    ).apply(_norm_prop)
+    out["prop_type_norm"] = _col_or_nan(list(_PROP_COLS_STEP8)).apply(_norm_prop)
     out["pick_type"] = _col_or_nan(["Pick Type", "pick_type"]).apply(_norm_pick_type)
-    out["direction"] = _col_or_nan(
-        ["final_bet_direction", "Direction", "direction", "bet_direction", "recommended_side"]
-    ).apply(_norm_direction)
+    out["direction"] = _col_or_nan(["Direction", "direction"]).apply(_norm_direction)
     out["line"] = pd.to_numeric(_col_or_nan(["Line", "line"]), errors="coerce")
     out["standard_line"] = pd.to_numeric(_col_or_nan(["Standard Line", "standard_line"]), errors="coerce")
     out["hit_rate"] = pd.to_numeric(_col_or_nan(["Hit Rate (5g)", "hit_rate"]), errors="coerce")
@@ -176,44 +199,9 @@ def _feature_for_group(sport: str, spec: GroupSpec) -> str:
     return "ml_prob"
 
 
-def _resolve_step8_path(sport: str, date_str: str | None = None) -> Path | None:
-    """Prefer outputs/<date>/step8_* for the graded slate; else repo snapshot (.xlsx/.csv)."""
-    sport_u = str(sport).strip().upper()
-    d = (date_str or "").strip()[:10]
-    if len(d) == 10:
-        od = OUTPUTS_DIR / d
-        dated: list[Path] = []
-        if sport_u == "MLB":
-            dated = [
-                od / f"step8_mlb_direction_clean_{d}.xlsx",
-                od / f"step8_mlb_direction_{d}.xlsx",
-            ]
-        elif sport_u == "NHL":
-            dated = [
-                od / f"step8_nhl_direction_clean_{d}.xlsx",
-                od / f"step8_nhl_direction_{d}.xlsx",
-            ]
-        elif sport_u == "SOCCER":
-            dated = [
-                od / f"step8_soccer_direction_clean_{d}.xlsx",
-                od / f"step8_soccer_direction_{d}.xlsx",
-            ]
-        elif sport_u == "WNBA":
-            dated = [
-                od / f"step8_wnba_direction_clean_{d}.xlsx",
-                od / f"step8_wnba_direction_{d}.xlsx",
-            ]
-        elif sport_u in LEGACY_NBA_ONLY or sport_u == "NBA":
-            dated = [
-                od / f"step8_all_direction_clean_{d}.xlsx",
-                od / f"step8_nba_direction_clean_{d}.xlsx",
-                od / f"step8_all_direction_{d}.xlsx",
-            ]
-        for p in dated:
-            if p.is_file():
-                return p
-    for p in STEP8_CANDIDATES.get(sport_u, []):
-        if p.is_file():
+def _resolve_step8_path(sport: str) -> Path | None:
+    for p in STEP8_CANDIDATES.get(sport, []):
+        if p.exists():
             return p
     return None
 
@@ -295,7 +283,7 @@ def analyze(date_str: str, min_n: int, sports: list[str]) -> pd.DataFrame:
         g = _load_graded_box_raw(graded_path, sport) if graded_path is not None else pd.DataFrame()
         if not g.empty:
             graded_frames.append(g)
-        step8_path = _resolve_step8_path(sport, date_str)
+        step8_path = _resolve_step8_path(sport)
         if step8_path is not None:
             s = _load_step8(step8_path, sport)
             if not s.empty:
@@ -396,6 +384,11 @@ def ml_prob_threshold_scan(
     """Merge graded history with step8 ml_prob; scan hit rates above each threshold (>=).
 
     Rows are emitted for pick_type in GOBLIN, DEMON, STANDARD, and ALL (pooled).
+
+    Limitation: ``_resolve_step8_path`` is a single workspace snapshot (latest step8), not one
+    file per ``dates`` entry. Only legs whose merge keys exist on that snapshot get ``ml_prob``.
+    For date-faithful backtests, point the loader at archived step8/step7 under
+    ``outputs/<date>/`` when those artifacts exist.
     """
     sport_u = str(sport).strip().upper()
     frames: list[pd.DataFrame] = []
@@ -406,7 +399,7 @@ def ml_prob_threshold_scan(
         g = _load_graded_box_raw(gp, sport_u)
         if g.empty:
             continue
-        s_path = _resolve_step8_path(sport_u, d)
+        s_path = _resolve_step8_path(sport_u)
         if s_path is None:
             continue
         s = _load_step8(s_path, sport_u)
