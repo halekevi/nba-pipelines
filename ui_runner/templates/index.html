@@ -236,8 +236,8 @@ body::after{content:'';position:fixed;inset:0;
 .scard-icon.wnba{background:rgba(255,105,180,.1);border:1px solid rgba(255,105,180,.28);}
 .scard-icon.combined{background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.2);}
 .scard-body{flex:1;}
-.scard-title{font-size:12px;font-family:"Inter",sans-serif;font-weight:600;color:var(--muted);letter-spacing:2.5px;margin-bottom:6px;text-transform:uppercase;}
-.scard-val{font-family:'Inter',sans-serif;font-size:12px;color:var(--text);letter-spacing:.02em;}
+.scard-title{font-size:9px;font-family:"Inter",sans-serif;font-weight:600;color:var(--muted);letter-spacing:2.5px;margin-bottom:6px;text-transform:uppercase;}
+.scard-val{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--text);letter-spacing:1px;}
 .scard-sub{font-size:10px;color:var(--muted2);margin-top:3px;}
 .sbadge{font-size:9px;font-family:"Inter",sans-serif;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.5px;}
 .sbadge.fresh{background:rgba(125,255,203,.12);color:var(--green);border:1px solid rgba(125,255,203,.25);}
@@ -1042,9 +1042,9 @@ body::before{
     width:100%;
     margin:0;
     text-align:left;
-    font-size:12px;
+    font-size:clamp(17px,2.1vw,23px);
     line-height:1.22;
-    letter-spacing:.02em;
+    letter-spacing:.03em;
     white-space:pre-line;
     word-break:break-word;
     font-family:'Inter',sans-serif;
@@ -1309,7 +1309,7 @@ body::before{
     .slate-panel-header-row .scard-head{gap:6px;}
     .slate-panel-header-row .scard-head .scard-icon{width:30px;height:30px;min-height:30px;border-radius:8px;}
     .slate-panel-header-row .scard-head .db-icon{width:16px;height:16px;}
-    .slate-panel-header-row .scard-head .scard-title{font-size:12px;letter-spacing:1.8px;}
+    .slate-panel-header-row .scard-head .scard-title{font-size:8px;letter-spacing:1.8px;}
     /* Move freshness badge near date row so sport labels have room. */
     .slate-panel-header-row .sbadge{
       font-size:7px;
@@ -1322,7 +1322,7 @@ body::before{
     }
     .slate-panel-header-row .scard-toggle{font-size:12px;}
     .slate-panel-header-row .scard-val{
-      font-size:12px;
+      font-size:clamp(14px,3.2vw,17px);
       line-height:1.15;
       padding-right:56px;
       font-family:'Inter',sans-serif;
@@ -1332,7 +1332,7 @@ body::before{
     /* Date cards: keep date on one line and visually match title typography. */
     .slate-panel-header-row .scard.fresh .scard-val,
     .slate-panel-header-row .scard.stale .scard-val{
-      font-size:12px;
+      font-size:8px;
       letter-spacing:0;
       line-height:1;
       white-space:nowrap;
@@ -2005,6 +2005,26 @@ let ALL_SLATE = [];
 const PLAYER_DATA = {};
 let SLATE_DEBUG_META = { source: "", generated_at: "", date: "" };
 
+function fmtEdgeCell(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n.toFixed(2) : "—";
+}
+
+/** Edge text for cards: match legacy OVER “+” prefix when non-negative. */
+function fmtEdgePick(p) {
+  const n = Number(p && p.edge);
+  if (!Number.isFinite(n)) return "—";
+  const over = String(p.dir || "").toUpperCase() === "OVER";
+  if (over) return (n >= 0 ? "+" : "") + n.toFixed(2);
+  return n.toFixed(2);
+}
+
+/** Avoid crashes when pipeline rows omit sport (breaks .toLowerCase / tier CSS). */
+function safeSportKey(p) {
+  const s = String((p && p.sport != null) ? p.sport : "nba").trim().toLowerCase();
+  return s || "nba";
+}
+
 function playerSeriesKey(name, line, prop="", sport="") {
   const n = String(name || "").trim().toLowerCase();
   const p = String(prop || "").trim().toLowerCase();
@@ -2408,12 +2428,16 @@ refreshStatus();
 
 // ── SVG chart (full) — premium area chart ──────────────────
 function makeSVG(data, line, isOver, W=260, H=100, lineSeries=null) {
+  if (!data || data.length === 0) {
+    return `<div style="height:100px;display:flex;align-items:center;justify-content:center;color:var(--muted2);font-size:11px;border:1px dashed rgba(255,255,255,.12);border-radius:10px;">No chart data</div>`;
+  }
   const pL=32,pR=10,pT=14,pB=22, cW=W-pL-pR, cH=H-pT-pB;
   const lineVals = Array.isArray(lineSeries) && lineSeries.length === data.length ? lineSeries : Array.from({length:data.length},()=>line);
   const allVals = [...data, ...lineVals];
   const pad=Math.max((Math.max(...allVals)-Math.min(...allVals))*0.18, Number(line||0)*0.08);
   const mn=Math.min(...allVals)-pad, mx=Math.max(...allVals)+pad, R=mx-mn||1;
-  const px=(v,i)=>pL+(i/(data.length-1))*cW;
+  const xDenom = Math.max(1, data.length - 1);
+  const px=(v,i)=>pL+(i/xDenom)*cW;
   const py=v=>pT+cH-((v-mn)/R)*cH;
   const actualColor='#22d3ee', lineColor='#f39c12';
   const uid='ch'+Math.random().toString(36).slice(2,7);
@@ -2473,6 +2497,9 @@ function makeSVG(data, line, isOver, W=260, H=100, lineSeries=null) {
 
 // ── SVG sparkline (streak cards) — premium ────────────────
 function makeSparkSVG(data, line, isOver, W=150, H=48) {
+  if (!data || data.length === 0) {
+    return `<svg viewBox="0 0 ${W} ${H}" style="overflow:visible;width:100%;height:auto;opacity:.35"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="var(--muted2)" font-size="10">—</text></svg>`;
+  }
   const dMin = Math.min(...data), dMax = Math.max(...data);
   const span = dMax - dMin;
   const linePad = Math.max(Math.abs(Number(line) || 0) * 0.1, 0.14);
@@ -2480,7 +2507,8 @@ function makeSparkSVG(data, line, isOver, W=150, H=48) {
   if (!Number.isFinite(pad) || pad < linePad * 0.45) pad = linePad * 0.45;
   if (span === 0) pad = linePad;
   const mn = Math.min(dMin, line) - pad, mx = Math.max(dMax, line) + pad, R = mx - mn || 1;
-  const px=(v,i)=>4+(i/(data.length-1))*(W-8);
+  const denom = Math.max(1, data.length - 1);
+  const px=(v,i)=>4+(i/denom)*(W-8);
   const py=v=>H-4-((v-mn)/R)*(H-10);
   const hc=isOver?'#2ecc71':'#f39c12', mc='#e74c3c';
   const uid='sp'+Math.random().toString(36).slice(2,7);
@@ -2518,9 +2546,10 @@ let openCard = null;
 let EDGE_DISPLAY_PICK = {};
 
 function buildEdgeCard(p, idx) {
-  const isOver=p.dir==="OVER", dc=isOver?"over":"under", es=isOver?"+":"";
-  const sc=`sp-${p.sport.toLowerCase()}`, pc=p.pick==="Goblin"?"pick-goblin":"pick-standard";
+  const isOver=p.dir==="OVER", dc=isOver?"over":"under";
+  const sc=`sp-${safeSportKey(p)}`, pc=p.pick==="Goblin"?"pick-goblin":"pick-standard";
   const sportLabel = sportDisplayLabel(p.sport);
+  const edgeDisp = fmtEdgePick(p);
   const hitDisplay = topEdgeL5HitPct(p);
   const hitPct = Number.isFinite(hitDisplay) ? hitDisplay : 0;
   const hc=hitPct>=90?"var(--green)":hitPct>=75?"var(--amber)":"var(--red)";
@@ -2571,7 +2600,7 @@ function buildEdgeCard(p, idx) {
       </div>
       <div class="expand-stats">
         <div class="expand-stat"><div class="expand-stat-lbl">HIT RATE</div><div class="expand-stat-val" style="color:${hitColor}">${hitPct}%</div></div>
-        <div class="expand-stat"><div class="expand-stat-lbl">EDGE</div><div class="expand-stat-val" style="color:var(--accent)">${es}${p.edge.toFixed(2)}</div></div>
+        <div class="expand-stat"><div class="expand-stat-lbl">EDGE</div><div class="expand-stat-val" style="color:var(--accent)">${edgeDisp}</div></div>
         <div class="expand-stat"><div class="expand-stat-lbl">PICK TYPE</div><div class="expand-stat-val" style="color:var(--cyan);font-size:clamp(11px,1.3vw,15px);">${p.pick}</div></div>
       </div>
     </div>`;
@@ -2682,6 +2711,7 @@ function renderEdges() {
   const os=document.getElementById("over-edges-standard");
   const og=document.getElementById("over-edges-goblin");
   const us=document.getElementById("under-edges-standard");
+  if (!os || !og) return;
   os.innerHTML=""; og.innerHTML="";
   if (us) us.innerHTML="";
   EDGE_DISPLAY_PICK = {};
@@ -2775,11 +2805,10 @@ function streakCard(p, n) {
   const pct=Math.round((hits/n)*100);
   const data = isOver ? getOverStreakSlice(p, n) : getUnderStreakSeries(p, n, hits);
   const spark=makeSparkSVG(data,p.line,isOver);
-  const sc=`sp-${p.sport.toLowerCase()}`, pc=p.pick==="Goblin"?"pick-goblin":"pick-standard";
+  const sc=`sp-${safeSportKey(p)}`, pc=p.pick==="Goblin"?"pick-goblin":"pick-standard";
   const sportLabel = sportDisplayLabel(p.sport);
   const hc=isOver?"var(--green)":"var(--amber)";
   const bc=isOver?"rgba(125,255,203,.3)":"rgba(255,192,107,.3)";
-  const es=isOver?"+":"";
   const pctCol=pct===100?"var(--green)":pct>=80?"var(--amber)":"var(--red)";
   // fire/ice emoji based on streak quality
   const badge=hits===n?(isOver?"🔥 PERFECT":"❄️ PERFECT"):hits>=(n*0.8)?(isOver?"🔥 HOT":"❄️ COLD"):"";
@@ -2799,7 +2828,7 @@ function streakCard(p, n) {
       <div style="text-align:right;flex-shrink:0;">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:${hc};line-height:1;">${hits}/${n}</div>
         <div style="font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:1px;">L${n} ${p.dir}</div>
-        <div style="font-size:10px;color:var(--accent);margin-top:2px;">${es}${p.edge.toFixed(2)} edge</div>
+        <div style="font-size:10px;color:var(--accent);margin-top:2px;">${fmtEdgePick(p)} edge</div>
       </div>
     </div>
     <div style="margin:8px 0 10px;">${spark}</div>
@@ -3435,15 +3464,25 @@ function sortSlateDynamic(sport, key) {
 }
 
 // Keep edge/streak sections populated and warm slate panel with NBA first.
-injectSlateL5Buttons();
-loadSlateData();
-fetchSlateSport('nba');
-window.setTimeout(() => {
-  if (!SLATE_SPORT_CACHE.soccer) fetchSlateSport('soccer', {prefetch: true});
-  if (!SLATE_SPORT_CACHE.mlb) fetchSlateSport('mlb', {prefetch: true});
-  if (!SLATE_SPORT_CACHE.tennis) fetchSlateSport('tennis', {prefetch: true});
-  if (!SLATE_SPORT_CACHE.wnba) fetchSlateSport('wnba', {prefetch: true});
-}, 3000);
+(function bootHomeSlateUi() {
+  try {
+    injectSlateL5Buttons();
+    loadSlateData();
+    fetchSlateSport('nba');
+    window.setTimeout(() => {
+      try {
+        if (!SLATE_SPORT_CACHE.soccer) fetchSlateSport('soccer', {prefetch: true});
+        if (!SLATE_SPORT_CACHE.mlb) fetchSlateSport('mlb', {prefetch: true});
+        if (!SLATE_SPORT_CACHE.tennis) fetchSlateSport('tennis', {prefetch: true});
+        if (!SLATE_SPORT_CACHE.wnba) fetchSlateSport('wnba', {prefetch: true});
+      } catch (e2) {
+        console.warn("prefetch slate sports:", e2);
+      }
+    }, 3000);
+  } catch (e) {
+    console.error("home slate UI boot:", e);
+  }
+})();
 </script>
 
 <script>

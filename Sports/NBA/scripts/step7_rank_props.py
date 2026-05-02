@@ -479,6 +479,23 @@ def _tier_from_score_series(score: pd.Series) -> pd.Series:
            np.where(score >= 0.40, "C", "D")))
 
 
+# Standard OVER / Standard UNDER / Goblin / Demon each use their own percentile scale (no mixed bucket).
+_RANK_COHORTS = ("std_over", "std_under", "goblin", "demon")
+_COHORT_SORT_ORDER = {"std_over": 0, "std_under": 1, "goblin": 2, "demon": 3}
+
+
+def _tier_from_cohort_pct(pct: pd.Series) -> pd.Series:
+    p = _to_num(pct).clip(0.0, 1.0)
+    return pd.Series(
+        np.where(
+            p >= 0.85,
+            "A",
+            np.where(p >= 0.55, "B", np.where(p >= 0.25, "C", "D")),
+        ),
+        index=pct.index,
+    )
+
+
 def _defense_tier_feature(out: pd.DataFrame) -> pd.Series:
     if "defense_tier" in out.columns:
         s = out["defense_tier"].astype(str).str.strip().str.lower()
@@ -1209,6 +1226,23 @@ def main() -> None:
 
     elig_mask = eligible.eq(1)
 
+    # ── RANK COHORT (per-scale grading; no mixed/global bucket) ──────────────
+    _bet_u = pd.Series(bet_dir, index=out.index).astype(str).str.upper().str.strip()
+    _rc = np.where(
+        pick_type_s.eq("Goblin"),
+        "goblin",
+        np.where(
+            pick_type_s.eq("Demon"),
+            "demon",
+            np.where(
+                pick_type_s.eq("Standard") & _bet_u.eq("UNDER"),
+                "std_under",
+                "std_over",
+            ),
+        ),
+    )
+    out["rank_cohort"] = pd.Series(_rc, index=out.index, dtype=str)
+
     # ── VECTORIZED EDGE TRANSFORM ─────────────────────────────────────────────
     # Legacy magnitude transform (avoids punishing UNDER rows for negative raw edge_norm).
     out["edge_dr"] = _edge_transform_series(_to_num(out["edge_norm_mag"]))
@@ -1376,26 +1410,29 @@ def main() -> None:
     avg_vs_line = avg_vs_line.where(total_avl_w > 0.1, 0.0)
     out["avg_vs_line"] = avg_vs_line
 
-    # ── Z-SCORE (direction-aware) ─────────────────────────────────────────────
+    # ── Z-SCORE (within rank_cohort among eligible; fallback: global eligible) ─
+    # direction_aware is ignored — OVER/UNDER Standard are separate cohorts.
+    _rc_s = out["rank_cohort"].astype(str)
+
     def zcol(s: pd.Series, direction_aware: bool = False) -> pd.Series:
+        _ = direction_aware  # cohort z replaces legacy OVER/UNDER pooling
         x = pd.to_numeric(s, errors="coerce")
-        result = pd.Series(0.0, index=x.index)
-        if direction_aware and "bet_direction" in out.columns:
-            for direction in ("OVER", "UNDER"):
-                dir_mask = elig_mask & (out["bet_direction"].astype(str).str.upper() == direction)
-                if dir_mask.sum() < 2:
-                    continue
-                mu = x[dir_mask].mean()
-                sd = x[dir_mask].std()
-                if pd.notna(sd) and float(sd) > 1e-9:
-                    z_vals = (x[dir_mask] - mu) / sd
-                    result.loc[dir_mask.index[dir_mask]] = z_vals.values
-            return result
-        mu = x[elig_mask].mean()
-        sd = x[elig_mask].std()
-        if pd.notna(sd) and float(sd) > 1e-9:
-            return (x - mu) / sd
-        return result
+        result = pd.Series(np.nan, dtype=float, index=x.index)
+        for cohort in _RANK_COHORTS:
+            cm = elig_mask & _rc_s.eq(cohort)
+            if cm.sum() < 2:
+                continue
+            mu = float(x[cm].mean())
+            sd = float(x[cm].std())
+            if np.isfinite(sd) and sd > 1e-9:
+                result.loc[cm] = (x[cm] - mu) / sd
+        mu_g = float(x[elig_mask].mean()) if elig_mask.any() else 0.0
+        sd_g = float(x[elig_mask].std()) if elig_mask.sum() >= 2 else np.nan
+        if np.isfinite(sd_g) and sd_g > 1e-9:
+            fallback = (x - mu_g) / sd_g
+        else:
+            fallback = pd.Series(0.0, index=x.index)
+        return result.fillna(fallback).fillna(0.0)
 
     out["edge_z"]        = zcol(out["edge_norm_mag"], direction_aware=False)
     out["line_hit_z"]    = zcol(out["line_hit_rate"],   direction_aware=True)
@@ -1523,17 +1560,34 @@ def main() -> None:
     out["game_script_note"] = _gnotes
     out["final_score"] = _to_num(out["final_score"]).astype(float) * pd.Series(_gmults, dtype=float).values
     out["rank_score_final"] = out["final_score"]
-    # Keep downstream compatibility: rank_score remains the final ranking value.
-    out["rank_score"] = out["rank_score_final"]
-    out["tier"] = pd.Series(
-        _tier_from_score_series(_to_num(out["rank_score"])), index=out.index
-    )
+    # Tier / rank_score: percentile within rank_cohort (composite is rank_score_final).
+    rsf = _to_num(out["rank_score_final"])
+    valid_tier = elig_mask & rsf.notna()
+    out["cohort_pct"] = np.nan
+    for _coh in _RANK_COHORTS:
+        _m = valid_tier & out["rank_cohort"].astype(str).eq(_coh)
+        if not _m.any():
+            continue
+        _ranked = rsf[_m].rank(method="average", pct=True)
+        out.loc[_m, "cohort_pct"] = _ranked
+    out["rank_score"] = 0.5 + 1.5 * _to_num(out["cohort_pct"])
+    out["tier"] = _tier_from_cohort_pct(out["cohort_pct"])
+    out.loc[~valid_tier, "tier"] = "D"
     out.loc[~elig_mask, "tier"] = "D"
     out = build_feature_vector(out, sport_for_usage)
     out = apply_ticket_eligibility_voids(out, sport_for_usage)
     if str(sport_for_usage).strip().upper() == "NBA":
         out = _attach_nba_tier2_strat_columns(out)
-    out = out.sort_values(by="final_score", ascending=False, na_position="last", kind="mergesort")
+    out["_cohort_sort"] = (
+        out["rank_cohort"].astype(str).map(_COHORT_SORT_ORDER).fillna(99)
+    )
+    out = out.sort_values(
+        by=["_cohort_sort", "rank_score"],
+        ascending=[True, False],
+        na_position="last",
+        kind="mergesort",
+    )
+    out = out.drop(columns=["_cohort_sort"], errors="ignore")
 
     # Split here — after all scoring/tier columns are populated
     dropped_df = out.loc[drop_mask].copy()
@@ -1586,9 +1640,16 @@ def main() -> None:
     vr = out_active.loc[~elig_mask_active, "void_reason"].value_counts()
     print(vr.to_string() if len(vr) else "(none)")
     print()
-    print("Score percentiles (eligible):")
+    print("rank_score percentiles (eligible, all cohorts pooled — informational):")
     rs = _to_num(out_active.loc[elig_mask_active, "rank_score"])
     print(rs.quantile([0.50, 0.70, 0.80, 0.85, 0.90, 0.95]).round(3).to_string())
+    print()
+    print("cohort_pct coverage by rank_cohort (eligible):")
+    _ea = out_active.loc[elig_mask_active]
+    if len(_ea) and "rank_cohort" in _ea.columns and "cohort_pct" in _ea.columns:
+        for _c in _RANK_COHORTS:
+            _sub = _ea[_ea["rank_cohort"].astype(str).eq(_c)]
+            print(f"  {_c}: n={len(_sub)}")
 
 
 if __name__ == "__main__":

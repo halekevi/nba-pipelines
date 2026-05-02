@@ -711,29 +711,16 @@ def generate_bundle():
         ).strip()[:10]
         modified = f"{slate_date} 12:00:00" if slate_date else ""
         status_sports = ["nba", "nba1h", "nba1q", "cbb", "nhl", "soccer", "mlb", "nfl", "tennis", "wnba", "combined"]
-        _root = TEMPLATES_DIR.parent.parent
-        _wnba_dir = _root / "WNBA"
-        _wnba_art = _wnba_dir / "data" / "outputs" / "step8_wnba_direction_clean.xlsx"
-        if not _wnba_art.is_file():
-            _wnba_art = _wnba_dir / "step8_wnba_direction_clean.xlsx"
-        if not _wnba_art.is_file():
-            _wnba_art = _wnba_dir / "step8_wnba_direction.xlsx"
-        _mlb_dir = _root / "MLB"
-        _mlb_art = _mlb_dir / "data" / "outputs" / "step8_mlb_direction_clean.xlsx"
-        if not _mlb_art.is_file():
-            _mlb_art = _mlb_dir / "step8_mlb_direction_clean.xlsx"
-        if not _mlb_art.is_file():
-            _mlb_art = _mlb_dir / "outputs" / "step8_mlb_direction_clean.xlsx"
         artifact_by_sport = {
-            "nba": _root / "NBA" / "step8_all_direction_clean.xlsx",
-            "nba1h": _root / "NBA" / "step8_nba1h_direction_clean.xlsx",
-            "nba1q": _root / "NBA" / "step8_nba1q_direction_clean.xlsx",
-            "nhl": _root / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
-            "soccer": _root / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
-            "mlb": _mlb_art,
-            "nfl": _root / "NFL" / "outputs" / "step8_nfl_direction_clean.xlsx",
-            "tennis": _root / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
-            "wnba": _wnba_art,
+            "nba": TEMPLATES_DIR.parent.parent / "NBA" / "step8_all_direction_clean.xlsx",
+            "nba1h": TEMPLATES_DIR.parent.parent / "NBA" / "step8_nba1h_direction_clean.xlsx",
+            "nba1q": TEMPLATES_DIR.parent.parent / "NBA" / "step8_nba1q_direction_clean.xlsx",
+            "nhl": TEMPLATES_DIR.parent.parent / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
+            "soccer": TEMPLATES_DIR.parent.parent / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
+            "mlb": TEMPLATES_DIR.parent.parent / "Sports" / "MLB" / "step8_mlb_direction_clean.xlsx",
+            "nfl": TEMPLATES_DIR.parent.parent / "NFL" / "outputs" / "step8_nfl_direction_clean.xlsx",
+            "tennis": TEMPLATES_DIR.parent.parent / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
+            "wnba": TEMPLATES_DIR.parent.parent / "WNBA" / "step8_wnba_direction.xlsx",
         }
         status_payload = {}
         for s in status_sports:

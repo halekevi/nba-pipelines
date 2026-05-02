@@ -1,7 +1,7 @@
 #requires -Version 5.1
 <#
 .SYNOPSIS
-  Point PropOracle scheduled tasks at a new repo root (e.g. after moving clone to H:).
+  Point PropOracle scheduled tasks at a new repo root (e.g. after moving the clone).
 
 .DESCRIPTION
   Run in elevated PowerShell. Replaces OldRepoRoot in each task's action arguments and
@@ -11,10 +11,14 @@
   Use this script for orphaned tasks (PropORACLE_*, etc.) that Register_Daily_Task.ps1 does not touch.
 #>
 param(
-    [string]$NewRepoRoot = "H:\halek\ProfileFromC\Desktop\PropORACLE",
+    [string]$NewRepoRoot = "",
     [string]$OldRepoRoot = "C:\Users\halek\OneDrive\Desktop\PropORACLE",
     [switch]$WhatIf
 )
+
+if ([string]::IsNullOrWhiteSpace($NewRepoRoot)) {
+    $NewRepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
+}
 
 $ErrorActionPreference = "Stop"
 # Dry-run is safe without elevation; applying changes requires admin for Set-ScheduledTask.

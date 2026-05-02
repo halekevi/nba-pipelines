@@ -40,7 +40,7 @@ def check_capacitor_config(mobile_dir, expected_url):
         return False, str(e)
 
 def check_paths(root_dir):
-    """Checks if critical paths exist on the H: drive."""
+    """Checks if critical paths exist under the repo root."""
     paths_to_check = [
         "ui_runner/app.py",
         "mobile/capacitor.config.js",
@@ -54,8 +54,16 @@ def check_paths(root_dir):
         results.append((p, exists))
     return results
 
+
+def _repo_root() -> Path:
+    env = (os.environ.get("PROPORACLE_REPO_ROOT") or "").strip()
+    if env:
+        return Path(env).expanduser().resolve()
+    return Path(__file__).resolve().parents[1]
+
+
 if __name__ == "__main__":
-    root = "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE"
+    root = str(_repo_root())
     mobile = os.path.join(root, "mobile")
     # Physical device on LAN: set PROPORACLE_HEALTH_URL=http://<PC_LAN_IP>:5173
     # Android Studio emulator: use http://10.0.2.2:5173 (host loopback)
@@ -83,11 +91,8 @@ if __name__ == "__main__":
         status = "[OK]" if exists else "[FAIL]"
         print(f"{status} Path: {p}")
 
-    # 4. Environment Check
-    if root.lower().startswith("h:"):
-        print(f"[OK] Running from H: drive: {root}")
-    else:
-        print(f"[WARNING] Not running from H: drive? Root: {root}")
+    # 4. Repo root (informational; pipelines write under outputs/, data/, etc. relative to this tree)
+    print(f"[INFO] Repo root: {root}")
 
     if any(not r[1] for r in path_results) or not is_up or not cap_ok:
         print("\nHealth check FAILED. Please address the issues above.")

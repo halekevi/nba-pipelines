@@ -21,6 +21,7 @@ if sys.platform == "win32":
 import gzip
 import io
 import json
+import logging
 import math
 import re
 import statistics
@@ -64,12 +65,35 @@ from utils.prop_reconcile import reconcile_props_history_dict
 from scripts.payout_leg_resolver import PayoutLegResolver
 
 UI_DIR        = Path(__file__).resolve().parent         # all UI assets live here (ui_runner/)
-CONFIG_PATH   = UI_DIR / "commands.json"
+_cfg_json_env = (os.environ.get("PROPORACLE_COMMANDS_JSON") or "").strip()
+if _cfg_json_env:
+    _cfg_p = Path(_cfg_json_env).expanduser()
+    CONFIG_PATH = _cfg_p.resolve() if _cfg_p.is_absolute() else (BASE_DIR / _cfg_p).resolve()
+else:
+    CONFIG_PATH = UI_DIR / "commands.json"
 TEMPLATES_DIR = UI_DIR / "templates"
 ARCHIVE_DIR   = TEMPLATES_DIR / "archive"
 STATIC_DIR    = UI_DIR / "static"
 # Bundled graded-prop exports for deploy hosts without data/cache/*_props_history.db (see scripts/export_grades_props_bundle.py).
 GRADES_PROPS_EXPORT_DIR = UI_DIR / "data" / "grades_props"
+
+
+def resolve_repo_root(config: Optional[dict] = None) -> Path:
+    """
+    Subprocess working-directory root and {REPO_ROOT} token.
+
+    Precedence: PROPORACLE_REPO_ROOT env -> commands.json ``repo_root`` if set ->
+    parent of ``ui_runner/`` (``BASE_DIR``). Pipelines should write only under
+    that tree (e.g. ``outputs/``), not hard-coded drive letters.
+    """
+    raw = (os.environ.get("PROPORACLE_REPO_ROOT") or "").strip()
+    if raw:
+        return Path(raw).expanduser().resolve()
+    if config and isinstance(config, dict):
+        cfg = (config.get("repo_root") or "").strip()
+        if cfg:
+            return Path(cfg).expanduser().resolve()
+    return BASE_DIR.resolve()
 
 
 def _persistent_data_root() -> Path:
@@ -89,6 +113,22 @@ def _persistent_data_root() -> Path:
 
 
 DATA_ROOT = _persistent_data_root()
+
+
+def _sport_dir(sports_subdir: str) -> Path:
+    """Prefer Sports/<subdir>/ (canonical pipeline layout); fall back to repo-root folder."""
+    under_sports = BASE_DIR / "Sports" / sports_subdir
+    legacy = BASE_DIR / sports_subdir
+    return under_sports if under_sports.is_dir() else legacy
+
+
+def _first_existing_file(candidates: list[Path]) -> Path:
+    for p in candidates:
+        if p.is_file():
+            return p
+    return candidates[0]
+
+
 PAYOUT_SAMPLES_DIR = DATA_ROOT / "payout_samples"
 PAYOUT_LOG_PATH = PAYOUT_SAMPLES_DIR / "payout_log_hand.csv"
 PAYOUT_OBS_PATH = DATA_ROOT / "payout_observations.csv"
@@ -97,11 +137,11 @@ PAYOUT_TICKET_LEGS_PATH = UI_DIR / "data" / "payout_ticket_legs.csv"
 PAYOUT_LADDER_EXAMPLES_PATH = UI_DIR / "data" / "payout_ladder_examples.json"
 
 # Pipeline output paths (used by status + slate endpoints)
-NBA_DIR       = BASE_DIR / "Sports" / "NBA"
-CBB_DIR       = BASE_DIR / "Sports" / "CBB"
-NHL_DIR       = BASE_DIR / "Sports" / "NHL"
-SOCCER_DIR    = BASE_DIR / "Sports" / "Soccer"
-MLB_DIR       = BASE_DIR / "Sports" / "MLB"
+NBA_DIR       = BASE_DIR / "NBA"
+CBB_DIR       = BASE_DIR / "CBB"
+NHL_DIR       = BASE_DIR / "NHL"
+SOCCER_DIR    = _sport_dir("Soccer")
+MLB_DIR       = _sport_dir("MLB")
 NBA_FLAG      = NBA_DIR / "RUN_COMPLETE.flag"
 # ALL sheet includes Standard Line (standard_line) from step8 export — use |Standard Line − Line| for goblin delta / payout ladder keys.
 NBA_SLATE     = NBA_DIR / "step8_all_direction_clean.xlsx"
@@ -115,16 +155,26 @@ WCBB_SLATE    = CBB_DIR / "step6_ranked_wcbb.xlsx"
 # NHL pipeline writes under NHL/outputs/ (same as run_pipeline.ps1).
 NHL_SLATE     = NHL_DIR / "outputs" / "step8_nhl_direction_clean.xlsx"
 NHL_TICKETS   = NHL_DIR / "outputs" / "nhl_best_tickets.xlsx"
-SOCCER_SLATE  = SOCCER_DIR / "step8_soccer_direction_clean.xlsx"
-SOCCER_TICKETS= SOCCER_DIR / "soccer_best_tickets.xlsx"
-MLB_SLATE     = MLB_DIR / "step8_mlb_direction_clean.xlsx"
+SOCCER_SLATE = _first_existing_file(
+    [
+        SOCCER_DIR / "outputs" / "step8_soccer_direction_clean.xlsx",
+        SOCCER_DIR / "step8_soccer_direction_clean.xlsx",
+    ]
+)
+SOCCER_TICKETS = SOCCER_DIR / "soccer_best_tickets.xlsx"
+MLB_SLATE = _first_existing_file(
+    [
+        MLB_DIR / "step8_mlb_direction_clean.xlsx",
+        MLB_DIR / "outputs" / "step8_mlb_direction_clean.xlsx",
+    ]
+)
 MLB_TICKETS   = MLB_DIR / "mlb_best_tickets.xlsx"
-TENNIS_DIR    = BASE_DIR / "Sports" / "Tennis"
+TENNIS_DIR    = BASE_DIR / "Tennis"
 # Same pattern as Soccer/MLB: run_daily.ps1 copies outputs → sport root for Railway.
 TENNIS_SLATE  = TENNIS_DIR / "step8_tennis_direction_clean.xlsx"
-WNBA_DIR      = BASE_DIR / "Sports" / "WNBA"
+WNBA_DIR      = BASE_DIR / "WNBA"
 WNBA_SLATE    = WNBA_DIR / "step8_wnba_direction.xlsx"
-NFL_DIR       = BASE_DIR / "Sports" / "NFL"
+NFL_DIR       = BASE_DIR / "NFL"
 # NFL step8 target: same convention as NHL — sport folder + outputs/ (not repo-root outputs/).
 # Pipeline should write: NFL/outputs/step8_nfl_direction_clean.xlsx
 NFL_SLATE     = NFL_DIR / "outputs" / "step8_nfl_direction_clean.xlsx"
@@ -132,10 +182,16 @@ COMBINED_OUT  = BASE_DIR  # combined_slate_tickets_YYYY-MM-DD.xlsx may live here
 OUTPUTS_ROOT  = BASE_DIR / "outputs"
 DISABLED_SPORTS: set[str] = set()
 
+# Always expose ui_runner/static — landing pages depend on /static/*.css (blank UI if unset).
+try:
+    STATIC_DIR.mkdir(parents=True, exist_ok=True)
+except OSError:
+    pass
+
 app = Flask(
     __name__,
     template_folder=str(TEMPLATES_DIR),
-    static_folder=str(STATIC_DIR) if STATIC_DIR.exists() else None,
+    static_folder=str(STATIC_DIR),
 )
 
 try:
@@ -154,7 +210,7 @@ except ImportError:
     _APP_USES_FLASK_COMPRESS = False
 
 # Visible on every response (curl -I); bump when you need to confirm Railway shipped new code.
-_UI_BUILD_ID = "2026-04-19-payout-volume"
+_UI_BUILD_ID = "2026-05-02-railway-commands-json"
 
 
 def _deploy_git_sha_short() -> str:
@@ -224,17 +280,56 @@ LOCK = threading.Lock()
 # ──────────────────────────────────────────────────────────────────────────────
 # Helpers
 # ──────────────────────────────────────────────────────────────────────────────
-_config_cache: Optional[dict] = None
+_commands_cfg_log = logging.getLogger("PropORACLE.commands_json")
+# (cached dict, signature of CONFIG_PATH on disk) — signature change forces reload (add file, edit, mtime change).
+_config_bundle: Optional[tuple[dict[str, Any], tuple[Any, ...]]] = None
+
+# When commands.json is absent or invalid, UI/API still respond (pipeline buttons empty until fixed).
+_DEFAULT_COMMANDS_CONFIG: dict[str, Any] = {
+    "_repo_root_comment": "Add ui_runner/commands.json from the repo; repo_root '' uses auto base dir.",
+    "repo_root": "",
+    "pipelines": {},
+}
+
+
+def _commands_path_signature() -> tuple[Any, ...]:
+    """Identity for cache invalidation: path state + mtime when the file exists."""
+    if not CONFIG_PATH.exists():
+        return ("missing", str(CONFIG_PATH))
+    try:
+        return ("ok", CONFIG_PATH.stat().st_mtime, str(CONFIG_PATH))
+    except OSError as exc:
+        return ("err", str(CONFIG_PATH), str(exc))
 
 
 def load_config() -> dict:
-    global _config_cache
-    if _config_cache is not None:
-        return _config_cache
+    global _config_bundle
+    sig = _commands_path_signature()
+    if _config_bundle is not None:
+        data, old_sig = _config_bundle
+        if old_sig == sig:
+            return data
+
     if not CONFIG_PATH.exists():
-        raise FileNotFoundError(f"commands.json not found at: {CONFIG_PATH}")
-    _config_cache = json.loads(CONFIG_PATH.read_text(encoding="utf-8-sig"))
-    return _config_cache
+        _commands_cfg_log.warning("commands.json missing at %s — using empty pipeline config", CONFIG_PATH)
+        out = dict(_DEFAULT_COMMANDS_CONFIG)
+        out["_config_status"] = "missing_file"
+        _config_bundle = (out, sig)
+        return out
+    try:
+        raw = CONFIG_PATH.read_text(encoding="utf-8-sig")
+        parsed = json.loads(raw)
+        if not isinstance(parsed, dict):
+            raise ValueError("commands.json must contain a JSON object at the root")
+        _config_bundle = (parsed, sig)
+        return parsed
+    except Exception as exc:
+        _commands_cfg_log.exception("commands.json invalid (%s)", CONFIG_PATH)
+        out = dict(_DEFAULT_COMMANDS_CONFIG)
+        out["_config_status"] = "invalid_json"
+        out["_config_error"] = str(exc)
+        _config_bundle = (out, sig)
+        return out
 
 
 _json_file_cache: dict[str, dict[str, Any]] = {}
@@ -559,17 +654,10 @@ def resolve_command(config: dict, pipeline_name: str, command_id: str) -> Dict[s
 def subst_tokens(cmd: List[str], config: Optional[dict] = None) -> List[str]:
     today     = datetime.now().strftime("%Y-%m-%d")
     now_ts    = datetime.now().strftime("%Y-%m-%d_%H%M%S")
-    repo_root = ""
-    if config and isinstance(config, dict):
-        repo_root = (
-            str(Path(config.get("repo_root", "")).resolve())
-            if config.get("repo_root") else ""
-        )
+    repo_root = str(resolve_repo_root(config))
     out: List[str] = []
     for x in cmd:
-        y = x.replace("{TODAY}", today).replace("{NOW}", now_ts)
-        if repo_root:
-            y = y.replace("{REPO_ROOT}", repo_root)
+        y = x.replace("{TODAY}", today).replace("{NOW}", now_ts).replace("{REPO_ROOT}", repo_root)
         out.append(y)
     return out
 
@@ -930,10 +1018,11 @@ def _sport_slate_status(
 # ──────────────────────────────────────────────────────────────────────────────
 @app.get("/")
 def home():
+    _pipe_cfg = load_config()
     resp = make_response(
         render_template(
             "index.html",
-            config=load_config(),
+            config=_pipe_cfg,
             ui_build_id=_UI_BUILD_ID,
             deploy_git_sha=(os.environ.get("RAILWAY_GIT_COMMIT_SHA") or os.environ.get("GIT_COMMIT") or "")[:40],
         )
@@ -2202,19 +2291,11 @@ def api_graded_props():
     if not path.exists():
         legs = _props_from_ticket_eval_html(date_q)
         if legs:
-            sports_tv = sorted(
-                {
-                    str(l.get("sport") or "").strip().upper()
-                    for l in legs
-                    if str(l.get("sport") or "").strip()
-                }
-            )
             return jsonify(
                 {
                     "date": date_q,
                     "count": len(legs),
                     "props": legs,
-                    "sports": sports_tv,
                     "source": "ticket_eval_html",
                     "note": "Ticket legs only (subset). Deploy graded_props JSON for full slate props.",
                 }
@@ -2249,13 +2330,6 @@ def api_graded_props():
             out = dict(data)
             out["props"] = props_out
             out["count"] = len(props_out)
-            out["sports"] = sorted(
-                {
-                    str(p.get("sport") or "").strip().upper()
-                    for p in props_out
-                    if isinstance(p, dict) and str(p.get("sport") or "").strip()
-                }
-            )
             return jsonify(out)
         return jsonify({"error": "invalid_shape", "detail": "expected object"}), 500
     except Exception as exc:
@@ -2526,17 +2600,9 @@ def _grades_props_payload(date_str: str) -> dict[str, Any]:
         )
     )
     n_total = len(props)
-    sports_distinct = sorted(
-        {
-            str(p.get("sport") or "").strip().upper()
-            for p in props
-            if str(p.get("sport") or "").strip()
-        }
-    )
     n_hit = sum(1 for p in props if str(p.get("result") or "").upper() == "HIT")
     n_miss = sum(1 for p in props if str(p.get("result") or "").upper() == "MISS")
-    # Large MLB slates sorted before NBA/WNBA lexically; a low cap hid entire sports from the UI.
-    cap = 50000
+    cap = 8000
     truncated = n_total > cap
     if truncated:
         props = props[:cap]
@@ -2548,7 +2614,6 @@ def _grades_props_payload(date_str: str) -> dict[str, Any]:
         "n_miss": n_miss,
         "n_other": max(0, n_total - n_hit - n_miss),
         "truncated": truncated,
-        "sports": sports_distinct,
         "props": props,
     }
     if from_bundle:
@@ -2947,7 +3012,7 @@ def api_run():
 
     try:
         config      = load_config()
-        repo_root   = Path(config["repo_root"]).expanduser().resolve()
+        repo_root   = resolve_repo_root(config)
         cmd_def     = resolve_command(config, pipeline, command_id)
         workdir_rel = (config["pipelines"][pipeline].get("workdir") or "").strip()
         workdir     = (repo_root / workdir_rel).resolve()

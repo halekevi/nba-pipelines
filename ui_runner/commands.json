@@ -1,9 +1,10 @@
 {
-  "repo_root": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE",
+  "_repo_root_comment": "Empty = repo root is auto (parent of ui_runner/). Override with PROPORACLE_REPO_ROOT env or set repo_root to an absolute path.",
+  "repo_root": "",
   "pipelines": {
     "nba": {
       "label": "NBA Pipeline",
-      "workdir": "Sports/NBA",
+      "workdir": "NBA",
       "commands": [
         {
           "id": "nba_step1",
@@ -11,7 +12,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step1_fetch_prizepicks_api.py",
+            "./scripts/step1_fetch_prizepicks_api.py",
             "--league_id",
             "7",
             "--game_mode",
@@ -38,7 +39,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step2_attach_picktypes.py",
+            "./scripts/step2_attach_picktypes.py",
             "--input",
             "step1_pp_props_today.csv",
             "--output",
@@ -51,11 +52,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step3_attach_defense.py",
+            "./scripts/step3_attach_defense.py",
             "--input",
             "step2_with_picktypes.csv",
             "--defense",
-            "data\\cache\\defense_team_summary.csv",
+            "data/cache/defense_team_summary.csv",
             "--output",
             "step3_with_defense.csv"
           ]
@@ -66,7 +67,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step4_attach_player_stats_espn_cache.py",
+            "./scripts/step4_attach_player_stats_espn_cache.py",
             "--slate",
             "step3_with_defense.csv",
             "--out",
@@ -103,7 +104,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step5_add_line_hit_rates.py",
+            "./scripts/step5_add_line_hit_rates.py",
             "--input",
             "step4_with_stats.csv",
             "--output",
@@ -116,7 +117,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step6_team_role_context.py",
+            "./scripts/step6_team_role_context.py",
             "--input",
             "step5_with_hit_rates.csv",
             "--output",
@@ -129,7 +130,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step7_rank_props.py",
+            "./scripts/step7_rank_props.py",
             "--input",
             "step6_with_team_role_context.csv",
             "--output",
@@ -142,7 +143,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step8_add_direction_context.py",
+            "./scripts/step8_add_direction_context.py",
             "--input",
             "step7_ranked_props.xlsx",
             "--sheet",
@@ -157,7 +158,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step9_build_tickets.py",
+            "./scripts/step9_build_tickets.py",
             "--input",
             "step8_all_direction_clean.xlsx",
             "--output",
@@ -191,7 +192,7 @@
             "-ExecutionPolicy",
             "Bypass",
             "-File",
-            "..\\run_pipeline.ps1",
+            "../run_pipeline.ps1",
             "-NBAOnly",
             "-RefreshCache"
           ]
@@ -212,7 +213,7 @@
     },
     "cbb": {
       "label": "CBB Pipeline",
-      "workdir": "Sports/CBB",
+      "workdir": "CBB",
       "commands": [
         {
           "id": "cbb_step1",
@@ -220,9 +221,9 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\pipeline\\step1_pp_cbb_scraper.py",
+            "./scripts/pipeline/step1_pp_cbb_scraper.py",
             "--out",
-            "outputs\\{TODAY}\\step1_cbb.csv"
+            "outputs/{TODAY}/step1_cbb.csv"
           ]
         },
         {
@@ -231,11 +232,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\pipeline\\step2_normalize.py",
+            "./scripts/pipeline/step2_normalize.py",
             "--input",
-            "outputs\\{TODAY}\\step1_cbb.csv",
+            "outputs/{TODAY}/step1_cbb.csv",
             "--output",
-            "outputs\\{TODAY}\\step2_cbb.csv"
+            "outputs/{TODAY}/step2_cbb.csv"
           ]
         },
         {
@@ -244,13 +245,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\pipeline\\step3b_attach_def_rankings.py",
+            "./scripts/pipeline/step3b_attach_def_rankings.py",
             "--input",
-            "outputs\\{TODAY}\\step2_cbb.csv",
+            "outputs/{TODAY}/step2_cbb.csv",
             "--defense",
-            "data\\reference\\cbb_def_rankings.csv",
+            "data/reference/cbb_def_rankings.csv",
             "--output",
-            "outputs\\{TODAY}\\step3b_with_def_rankings_cbb.csv"
+            "outputs/{TODAY}/step3b_with_def_rankings_cbb.csv"
           ]
         },
         {
@@ -259,11 +260,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\pipeline\\step5a_attach_espn_ids.py",
+            "./scripts/pipeline/step5a_attach_espn_ids.py",
             "--input",
-            "outputs\\{TODAY}\\step3b_with_def_rankings_cbb.csv",
+            "outputs/{TODAY}/step3b_with_def_rankings_cbb.csv",
             "--output",
-            "outputs\\{TODAY}\\step3_cbb.csv",
+            "outputs/{TODAY}/step3_cbb.csv",
             "--master",
             "data/reference/ncaa_mbb_athletes_master.csv"
           ]
@@ -274,13 +275,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\pipeline\\step5b_attach_boxscore_stats.py",
+            "./scripts/pipeline/step5b_attach_boxscore_stats.py",
             "--input",
-            "outputs\\{TODAY}\\step3_cbb.csv",
+            "outputs/{TODAY}/step3_cbb.csv",
             "--output",
-            "outputs\\{TODAY}\\step5b_cbb.csv",
+            "outputs/{TODAY}/step5b_cbb.csv",
             "--cache",
-            "data\\cache\\cbb_boxscore_cache.csv",
+            "data/cache/cbb_boxscore_cache.csv",
             "--days",
             "90",
             "--workers",
@@ -293,15 +294,15 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\pipeline\\step6_rank_props_cbb.py",
+            "./scripts/pipeline/step6_rank_props_cbb.py",
             "--input",
-            "outputs\\{TODAY}\\step5b_cbb.csv",
+            "outputs/{TODAY}/step5b_cbb.csv",
             "--output",
-            "outputs\\{TODAY}\\step6_ranked_cbb.xlsx",
+            "outputs/{TODAY}/step6_ranked_cbb.xlsx",
             "--date",
             "{TODAY}",
             "--cache",
-            "data\\cache\\cbb_boxscore_cache.csv"
+            "data/cache/cbb_boxscore_cache.csv"
           ]
         },
         {
@@ -333,7 +334,7 @@
             "-ExecutionPolicy",
             "Bypass",
             "-File",
-            "..\\run_pipeline.ps1",
+            "../run_pipeline.ps1",
             "-CBBOnly"
           ]
         }
@@ -349,26 +350,26 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\combined_slate_tickets.py",
+            "./scripts/combined_slate_tickets.py",
             "--nba",
-            "Sports\NBA\\step8_all_direction_clean.xlsx",
+            "NBA/step8_all_direction_clean.xlsx",
             "--cbb",
-            "CBB2\\step6_ranked_cbb.xlsx",
+            "CBB2/step6_ranked_cbb.xlsx",
             "--nhl",
-            "Sports\NHL\\outputs\\step8_nhl_direction_clean.xlsx",
+            "NHL/outputs/step8_nhl_direction_clean.xlsx",
             "--soccer",
-            "Sports\Soccer\\outputs\\step8_soccer_direction_clean.xlsx",
+            "Soccer/outputs/step8_soccer_direction_clean.xlsx",
             "--date",
             "{TODAY}",
             "--output",
-            "outputs\\{TODAY}\\combined_slate_{TODAY}.xlsx",
+            "outputs/{TODAY}/combined_slate_{TODAY}.xlsx",
             "--tiers",
             "A,B,C,D",
             "--max-tickets",
             "5",
             "--write-web",
             "--web-outdir",
-            "ui_runner\\templates"
+            "ui_runner/templates"
           ]
         },
         {
@@ -453,7 +454,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\slate_grader.py"
+            "./slate_grader.py"
           ]
         },
         {
@@ -462,7 +463,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\grade_cbb_full_slate.py"
+            "./grade_cbb_full_slate.py"
           ]
         },
         {
@@ -471,7 +472,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\combined_ticket_grader.py"
+            "./combined_ticket_grader.py"
           ]
         },
         {
@@ -480,7 +481,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\fetch_actuals.py"
+            "./fetch_actuals.py"
           ]
         },
         {
@@ -489,7 +490,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\fetch_cbb_actuals_by_date.py"
+            "./fetch_cbb_actuals_by_date.py"
           ]
         },
         {
@@ -507,7 +508,7 @@
     },
     "nhl": {
       "label": "NHL Pipeline",
-      "workdir": "Sports/NHL",
+      "workdir": "NHL",
       "commands": [
         {
           "id": "nhl_step1",
@@ -515,9 +516,9 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step1_fetch_prizepicks_nhl.py",
+            "./scripts/step1_fetch_prizepicks_nhl.py",
             "--output",
-            "outputs\\step1_nhl_props.csv"
+            "outputs/step1_nhl_props.csv"
           ]
         },
         {
@@ -526,11 +527,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step2_attach_picktypes_nhl.py",
+            "./scripts/step2_attach_picktypes_nhl.py",
             "--input",
-            "outputs\\step1_nhl_props.csv",
+            "outputs/step1_nhl_props.csv",
             "--output",
-            "outputs\\step2_nhl_picktypes.csv"
+            "outputs/step2_nhl_picktypes.csv"
           ]
         },
         {
@@ -539,11 +540,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step3_attach_defense_nhl.py",
+            "./scripts/step3_attach_defense_nhl.py",
             "--input",
-            "outputs\\step2_nhl_picktypes.csv",
+            "outputs/step2_nhl_picktypes.csv",
             "--output",
-            "outputs\\step3_nhl_with_defense.csv"
+            "outputs/step3_nhl_with_defense.csv"
           ]
         },
         {
@@ -552,13 +553,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step4_attach_player_stats_nhl.py",
+            "./scripts/step4_attach_player_stats_nhl.py",
             "--input",
-            "outputs\\step3_nhl_with_defense.csv",
+            "outputs/step3_nhl_with_defense.csv",
             "--cache",
-            "cache\\nhl_stats_cache.csv",
+            "cache/nhl_stats_cache.csv",
             "--output",
-            "outputs\\step4_nhl_with_stats.csv",
+            "outputs/step4_nhl_with_stats.csv",
             "--max-games",
             "30"
           ]
@@ -569,13 +570,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step5_add_line_hit_rates_nhl.py",
+            "./scripts/step5_add_line_hit_rates_nhl.py",
             "--input",
-            "outputs\\step4_nhl_with_stats.csv",
+            "outputs/step4_nhl_with_stats.csv",
             "--output",
-            "outputs\\step5_nhl_hit_rates.csv",
+            "outputs/step5_nhl_hit_rates.csv",
             "--gamelog-cache",
-            "cache\\nhl_gamelog_cache.json"
+            "cache/nhl_gamelog_cache.json"
           ]
         },
         {
@@ -584,11 +585,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step6_team_role_context_nhl.py",
+            "./scripts/step6_team_role_context_nhl.py",
             "--input",
-            "outputs\\step5_nhl_hit_rates.csv",
+            "outputs/step5_nhl_hit_rates.csv",
             "--output",
-            "outputs\\step6_nhl_role_context.csv"
+            "outputs/step6_nhl_role_context.csv"
           ]
         },
         {
@@ -597,11 +598,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step7_rank_props_nhl.py",
+            "./scripts/step7_rank_props_nhl.py",
             "--input",
-            "outputs\\step6_nhl_role_context.csv",
+            "outputs/step6_nhl_role_context.csv",
             "--output",
-            "outputs\\step7_nhl_ranked.xlsx"
+            "outputs/step7_nhl_ranked.xlsx"
           ]
         },
         {
@@ -610,11 +611,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step8_add_direction_context_nhl.py",
+            "./scripts/step8_add_direction_context_nhl.py",
             "--input",
-            "outputs\\step7_nhl_ranked.xlsx",
+            "outputs/step7_nhl_ranked.xlsx",
             "--output",
-            "outputs\\step8_nhl_direction_clean.xlsx"
+            "outputs/step8_nhl_direction_clean.xlsx"
           ]
         },
         {
@@ -623,11 +624,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step9_build_tickets_nhl.py",
+            "./scripts/step9_build_tickets_nhl.py",
             "--input",
-            "outputs\\step8_nhl_direction_clean.xlsx",
+            "outputs/step8_nhl_direction_clean.xlsx",
             "--output",
-            "outputs\\nhl_best_tickets.xlsx",
+            "outputs/nhl_best_tickets.xlsx",
             "--min_hit_rate",
             "0.7",
             "--legs",
@@ -667,7 +668,7 @@
             "-ExecutionPolicy",
             "Bypass",
             "-File",
-            "..\\run_pipeline.ps1",
+            "../run_pipeline.ps1",
             "-NHLOnly"
           ]
         }
@@ -675,7 +676,7 @@
     },
     "mlb": {
       "label": "MLB Pipeline",
-      "workdir": "Sports/MLB",
+      "workdir": "MLB",
       "commands": [
         {
           "id": "mlb_step1",
@@ -683,10 +684,10 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step1_fetch_prizepicks_mlb.py",
+            "./scripts/step1_fetch_prizepicks_mlb.py",
             "--gentle",
             "--output",
-            "outputs\\step1_mlb_props.csv"
+            "outputs/step1_mlb_props.csv"
           ]
         },
         {
@@ -695,11 +696,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step2_attach_picktypes_mlb.py",
+            "./scripts/step2_attach_picktypes_mlb.py",
             "--input",
-            "outputs\\step1_mlb_props.csv",
+            "outputs/step1_mlb_props.csv",
             "--output",
-            "outputs\\step2_mlb_picktypes.csv"
+            "outputs/step2_mlb_picktypes.csv"
           ]
         },
         {
@@ -708,13 +709,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step3_attach_defense_mlb.py",
+            "./scripts/step3_attach_defense_mlb.py",
             "--input",
-            "outputs\\step2_mlb_picktypes.csv",
+            "outputs/step2_mlb_picktypes.csv",
             "--defense",
-            "outputs\\mlb_defense_summary.csv",
+            "outputs/mlb_defense_summary.csv",
             "--output",
-            "outputs\\step3_mlb_with_defense.csv"
+            "outputs/step3_mlb_with_defense.csv"
           ]
         },
         {
@@ -723,13 +724,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step4_attach_player_stats_mlb.py",
+            "./scripts/step4_attach_player_stats_mlb.py",
             "--input",
-            "outputs\\step3_mlb_with_defense.csv",
+            "outputs/step3_mlb_with_defense.csv",
             "--cache",
-            "outputs\\mlb_stats_cache.csv",
+            "outputs/mlb_stats_cache.csv",
             "--output",
-            "outputs\\step4_mlb_with_stats.csv",
+            "outputs/step4_mlb_with_stats.csv",
             "--season",
             "2025"
           ]
@@ -740,11 +741,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step5_add_line_hit_rates_mlb.py",
+            "./scripts/step5_add_line_hit_rates_mlb.py",
             "--input",
-            "outputs\\step4_mlb_with_stats.csv",
+            "outputs/step4_mlb_with_stats.csv",
             "--output",
-            "outputs\\step5_mlb_hit_rates.csv"
+            "outputs/step5_mlb_hit_rates.csv"
           ]
         },
         {
@@ -753,11 +754,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step6_team_role_context_mlb.py",
+            "./scripts/step6_team_role_context_mlb.py",
             "--input",
-            "outputs\\step5_mlb_hit_rates.csv",
+            "outputs/step5_mlb_hit_rates.csv",
             "--output",
-            "outputs\\step6_mlb_role_context.csv"
+            "outputs/step6_mlb_role_context.csv"
           ]
         },
         {
@@ -766,11 +767,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step7_rank_props_mlb.py",
+            "./scripts/step7_rank_props_mlb.py",
             "--input",
-            "outputs\\step6_mlb_role_context.csv",
+            "outputs/step6_mlb_role_context.csv",
             "--output",
-            "outputs\\step7_mlb_ranked.xlsx"
+            "outputs/step7_mlb_ranked.xlsx"
           ]
         },
         {
@@ -779,13 +780,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step8_add_direction_context_mlb.py",
+            "./scripts/step8_add_direction_context_mlb.py",
             "--input",
-            "outputs\\step7_mlb_ranked.xlsx",
+            "outputs/step7_mlb_ranked.xlsx",
             "--output",
-            "outputs\\step8_mlb_direction.csv",
+            "outputs/step8_mlb_direction.csv",
             "--xlsx",
-            "outputs\\step8_mlb_direction_clean.xlsx"
+            "outputs/step8_mlb_direction_clean.xlsx"
           ]
         },
         {
@@ -821,7 +822,7 @@
             "-ExecutionPolicy",
             "Bypass",
             "-File",
-            "..\\run_pipeline.ps1",
+            "../run_pipeline.ps1",
             "-MLBOnly"
           ]
         }
@@ -829,7 +830,7 @@
     },
     "wcbb": {
       "label": "WCBB Pipeline",
-      "workdir": "Sports/CBB",
+      "workdir": "CBB",
       "commands": [
         {
           "id": "wcbb_step1",
@@ -837,11 +838,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\pipeline\\step1_pp_cbb_scraper.py",
+            "./scripts/pipeline/step1_pp_cbb_scraper.py",
             "--league_id",
             "176",
             "--out",
-            "outputs\\{TODAY}\\step1_wcbb.csv"
+            "outputs/{TODAY}/step1_wcbb.csv"
           ]
         },
         {
@@ -850,11 +851,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\pipeline\\step2_normalize.py",
+            "./scripts/pipeline/step2_normalize.py",
             "--input",
-            "outputs\\{TODAY}\\step1_wcbb.csv",
+            "outputs/{TODAY}/step1_wcbb.csv",
             "--output",
-            "outputs\\{TODAY}\\step2_wcbb.csv"
+            "outputs/{TODAY}/step2_wcbb.csv"
           ]
         },
         {
@@ -863,13 +864,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\pipeline\\step3b_attach_def_rankings.py",
+            "./scripts/pipeline/step3b_attach_def_rankings.py",
             "--input",
-            "outputs\\{TODAY}\\step2_wcbb.csv",
+            "outputs/{TODAY}/step2_wcbb.csv",
             "--defense",
-            "data\\reference\\cbb_def_rankings.csv",
+            "data/reference/cbb_def_rankings.csv",
             "--output",
-            "outputs\\{TODAY}\\step3b_with_def_rankings_wcbb.csv"
+            "outputs/{TODAY}/step3b_with_def_rankings_wcbb.csv"
           ]
         },
         {
@@ -878,11 +879,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\pipeline\\step5a_attach_espn_ids.py",
+            "./scripts/pipeline/step5a_attach_espn_ids.py",
             "--input",
-            "outputs\\{TODAY}\\step3b_with_def_rankings_wcbb.csv",
+            "outputs/{TODAY}/step3b_with_def_rankings_wcbb.csv",
             "--output",
-            "outputs\\{TODAY}\\step3_wcbb.csv",
+            "outputs/{TODAY}/step3_wcbb.csv",
             "--master",
             "data/reference/ncaa_mbb_athletes_master.csv"
           ]
@@ -893,13 +894,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\pipeline\\step5b_attach_boxscore_stats.py",
+            "./scripts/pipeline/step5b_attach_boxscore_stats.py",
             "--input",
-            "outputs\\{TODAY}\\step3_wcbb.csv",
+            "outputs/{TODAY}/step3_wcbb.csv",
             "--output",
-            "outputs\\{TODAY}\\step5b_wcbb.csv",
+            "outputs/{TODAY}/step5b_wcbb.csv",
             "--cache",
-            "data\\cache\\wcbb_boxscore_cache.csv",
+            "data/cache/wcbb_boxscore_cache.csv",
             "--days",
             "21",
             "--workers",
@@ -914,15 +915,15 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\pipeline\\step6_rank_props_cbb.py",
+            "./scripts/pipeline/step6_rank_props_cbb.py",
             "--input",
-            "outputs\\{TODAY}\\step5b_wcbb.csv",
+            "outputs/{TODAY}/step5b_wcbb.csv",
             "--output",
-            "outputs\\{TODAY}\\step6_ranked_wcbb.xlsx",
+            "outputs/{TODAY}/step6_ranked_wcbb.xlsx",
             "--date",
             "{TODAY}",
             "--cache",
-            "data\\cache\\wcbb_boxscore_cache.csv"
+            "data/cache/wcbb_boxscore_cache.csv"
           ]
         },
         {
@@ -954,7 +955,7 @@
             "-ExecutionPolicy",
             "Bypass",
             "-File",
-            "..\\run_pipeline.ps1",
+            "../run_pipeline.ps1",
             "-CBBOnly"
           ]
         }
@@ -962,7 +963,7 @@
     },
     "nba1h": {
       "label": "NBA 1H Pipeline",
-      "workdir": "Sports/NBA",
+      "workdir": "NBA",
       "commands": [
         {
           "id": "nba1h_step1",
@@ -970,7 +971,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step1_fetch_prizepicks_api.py",
+            "./scripts/step1_fetch_prizepicks_api.py",
             "--league_id",
             "84",
             "--game_mode",
@@ -997,7 +998,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step2_attach_picktypes.py",
+            "./scripts/step2_attach_picktypes.py",
             "--input",
             "step1_nba1h_props.csv",
             "--output",
@@ -1010,11 +1011,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step3_attach_defense.py",
+            "./scripts/step3_attach_defense.py",
             "--input",
             "step2_nba1h_picktypes.csv",
             "--defense",
-            "data\\cache\\defense_team_summary.csv",
+            "data/cache/defense_team_summary.csv",
             "--output",
             "step3_nba1h_with_defense.csv"
           ]
@@ -1025,7 +1026,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step4_attach_player_stats_espn_cache.py",
+            "./scripts/step4_attach_player_stats_espn_cache.py",
             "--slate",
             "step3_nba1h_with_defense.csv",
             "--out",
@@ -1040,7 +1041,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step5_add_line_hit_rates.py",
+            "./scripts/step5_add_line_hit_rates.py",
             "--input",
             "step4_nba1h_with_stats.csv",
             "--output",
@@ -1053,7 +1054,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step6_team_role_context.py",
+            "./scripts/step6_team_role_context.py",
             "--input",
             "step5_nba1h_with_hit_rates.csv",
             "--output",
@@ -1066,7 +1067,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step7_rank_props.py",
+            "./scripts/step7_rank_props.py",
             "--input",
             "step6_nba1h_with_team_role_context.csv",
             "--output",
@@ -1079,7 +1080,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step8_add_direction_context.py",
+            "./scripts/step8_add_direction_context.py",
             "--input",
             "step7_nba1h_ranked_props.xlsx",
             "--sheet",
@@ -1094,7 +1095,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step9_build_tickets.py",
+            "./scripts/step9_build_tickets.py",
             "--input",
             "step8_nba1h_direction_clean.xlsx",
             "--output",
@@ -1123,7 +1124,7 @@
     },
     "nba1q": {
       "label": "NBA 1Q Pipeline",
-      "workdir": "Sports/NBA",
+      "workdir": "NBA",
       "commands": [
         {
           "id": "nba1q_step1",
@@ -1131,7 +1132,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step1_fetch_prizepicks_api.py",
+            "./scripts/step1_fetch_prizepicks_api.py",
             "--league_id",
             "192",
             "--game_mode",
@@ -1158,7 +1159,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step2_attach_picktypes.py",
+            "./scripts/step2_attach_picktypes.py",
             "--input",
             "step1_nba1q_props.csv",
             "--output",
@@ -1171,11 +1172,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step3_attach_defense.py",
+            "./scripts/step3_attach_defense.py",
             "--input",
             "step2_nba1q_picktypes.csv",
             "--defense",
-            "data\\cache\\defense_team_summary.csv",
+            "data/cache/defense_team_summary.csv",
             "--output",
             "step3_nba1q_with_defense.csv"
           ]
@@ -1186,7 +1187,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step4_attach_player_stats_espn_cache.py",
+            "./scripts/step4_attach_player_stats_espn_cache.py",
             "--slate",
             "step3_nba1q_with_defense.csv",
             "--out",
@@ -1201,7 +1202,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step5_add_line_hit_rates.py",
+            "./scripts/step5_add_line_hit_rates.py",
             "--input",
             "step4_nba1q_with_stats.csv",
             "--output",
@@ -1214,7 +1215,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step6_team_role_context.py",
+            "./scripts/step6_team_role_context.py",
             "--input",
             "step5_nba1q_with_hit_rates.csv",
             "--output",
@@ -1227,7 +1228,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step7_rank_props.py",
+            "./scripts/step7_rank_props.py",
             "--input",
             "step6_nba1q_with_team_role_context.csv",
             "--output",
@@ -1240,7 +1241,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step8_add_direction_context.py",
+            "./scripts/step8_add_direction_context.py",
             "--input",
             "step7_nba1q_ranked_props.xlsx",
             "--sheet",
@@ -1255,7 +1256,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step9_build_tickets.py",
+            "./scripts/step9_build_tickets.py",
             "--input",
             "step8_nba1q_direction_clean.xlsx",
             "--output",
@@ -1284,7 +1285,7 @@
     },
     "soccer": {
       "label": "Soccer Pipeline",
-      "workdir": "Sports/Soccer",
+      "workdir": "Soccer",
       "commands": [
         {
           "id": "soccer_step1",
@@ -1292,9 +1293,9 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step1_fetch_prizepicks_soccer.py",
+            "./scripts/step1_fetch_prizepicks_soccer.py",
             "--output",
-            "outputs\\step1_soccer_props.csv"
+            "outputs/step1_soccer_props.csv"
           ]
         },
         {
@@ -1303,15 +1304,15 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step2_attach_picktypes_soccer.py",
+            "./scripts/step2_attach_picktypes_soccer.py",
             "--input",
-            "outputs\\step1_soccer_props.csv",
+            "outputs/step1_soccer_props.csv",
             "--output",
-            "outputs\\step2_soccer_picktypes.csv",
+            "outputs/step2_soccer_picktypes.csv",
             "--idcache",
-            "cache\\soccer_espn_id_cache.csv",
+            "cache/soccer_espn_id_cache.csv",
             "--rostercache",
-            "cache\\soccer_roster_cache.csv"
+            "cache/soccer_roster_cache.csv"
           ]
         },
         {
@@ -1320,13 +1321,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step3_attach_defense_soccer.py",
+            "./scripts/step3_attach_defense_soccer.py",
             "--input",
-            "outputs\\step2_soccer_picktypes.csv",
+            "outputs/step2_soccer_picktypes.csv",
             "--defense",
-            "cache\\soccer_defense_summary.csv",
+            "cache/soccer_defense_summary.csv",
             "--output",
-            "outputs\\step3_soccer_with_defense.csv"
+            "outputs/step3_soccer_with_defense.csv"
           ]
         },
         {
@@ -1335,13 +1336,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step4_attach_player_stats_soccer.py",
+            "./scripts/step4_attach_player_stats_soccer.py",
             "--input",
-            "outputs\\step3_soccer_with_defense.csv",
+            "outputs/step3_soccer_with_defense.csv",
             "--cache",
-            "cache\\soccer_stats_cache.csv",
+            "cache/soccer_stats_cache.csv",
             "--output",
-            "outputs\\step4_soccer_with_stats.csv",
+            "outputs/step4_soccer_with_stats.csv",
             "--workers",
             "6"
           ]
@@ -1352,11 +1353,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step5_add_line_hit_rates_soccer.py",
+            "./scripts/step5_add_line_hit_rates_soccer.py",
             "--input",
-            "outputs\\step4_soccer_with_stats.csv",
+            "outputs/step4_soccer_with_stats.csv",
             "--output",
-            "outputs\\step5_soccer_hit_rates.csv",
+            "outputs/step5_soccer_hit_rates.csv",
             "--compute10"
           ]
         },
@@ -1366,11 +1367,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step6_team_role_context_soccer.py",
+            "./scripts/step6_team_role_context_soccer.py",
             "--input",
-            "outputs\\step5_soccer_hit_rates.csv",
+            "outputs/step5_soccer_hit_rates.csv",
             "--output",
-            "outputs\\step6_soccer_role_context.csv"
+            "outputs/step6_soccer_role_context.csv"
           ]
         },
         {
@@ -1379,11 +1380,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step7_rank_props_soccer.py",
+            "./scripts/step7_rank_props_soccer.py",
             "--input",
-            "outputs\\step6_soccer_role_context.csv",
+            "outputs/step6_soccer_role_context.csv",
             "--output",
-            "outputs\\step7_soccer_ranked.xlsx",
+            "outputs/step7_soccer_ranked.xlsx",
             "--n_teams",
             "15"
           ]
@@ -1394,15 +1395,15 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\scripts\\step8_add_direction_context_soccer.py",
+            "./scripts/step8_add_direction_context_soccer.py",
             "--input",
-            "outputs\\step7_soccer_ranked.xlsx",
+            "outputs/step7_soccer_ranked.xlsx",
             "--sheet",
             "ALL",
             "--output",
-            "outputs\\step8_soccer_direction.csv",
+            "outputs/step8_soccer_direction.csv",
             "--xlsx",
-            "outputs\\step8_soccer_direction_clean.xlsx"
+            "outputs/step8_soccer_direction_clean.xlsx"
           ]
         },
         {
@@ -1411,7 +1412,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step9_build_tickets_soccer.py",
+            "./step9_build_tickets_soccer.py",
             "--input",
             "step8_soccer_direction_clean.xlsx",
             "--output",
@@ -1455,7 +1456,7 @@
             "-ExecutionPolicy",
             "Bypass",
             "-File",
-            "..\\run_pipeline.ps1",
+            "../run_pipeline.ps1",
             "-SoccerOnly"
           ]
         }
@@ -1463,7 +1464,7 @@
     },
     "wnba": {
       "label": "WNBA Pipeline",
-      "workdir": "Sports/WNBA",
+      "workdir": "WNBA",
       "commands": [
         {
           "id": "wnba_step1",
@@ -1471,7 +1472,7 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step1_fetch_prizepicks.py",
+            "./step1_fetch_prizepicks.py",
             "--league_id",
             "3",
             "--game_mode",
@@ -1489,7 +1490,7 @@
             "--jitter_seconds",
             "10.0",
             "--output",
-            "data/outputs/step1_wnba_props.csv"
+            "step1_wnba_props.csv"
           ]
         },
         {
@@ -1498,11 +1499,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step2_attach_picktypes.py",
+            "./step2_attach_picktypes.py",
             "--input",
-            "data/outputs/step1_wnba_props.csv",
+            "step1_wnba_props.csv",
             "--output",
-            "data/outputs/step2_wnba_picktypes.csv"
+            "step2_wnba_picktypes.csv"
           ]
         },
         {
@@ -1511,13 +1512,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step3_attach_defense.py",
+            "./step3_attach_defense.py",
             "--input",
-            "data/outputs/step2_wnba_picktypes.csv",
+            "step2_wnba_picktypes.csv",
             "--defense",
             "wnba_defense_summary.csv",
             "--output",
-            "data/outputs/step3_wnba_defense.csv"
+            "step3_wnba_defense.csv"
           ]
         },
         {
@@ -1526,11 +1527,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step4_fetch_player_stats.py",
+            "./step4_fetch_player_stats.py",
             "--slate",
-            "data/outputs/step3_wnba_defense.csv",
+            "step3_wnba_defense.csv",
             "--out",
-            "data/outputs/step4_wnba_stats.csv",
+            "step4_wnba_stats.csv",
             "--season",
             "2026",
             "--date",
@@ -1555,11 +1556,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step5_add_line_hit_rates.py",
+            "./step5_add_line_hit_rates.py",
             "--input",
-            "data/outputs/step4_wnba_stats.csv",
+            "step4_wnba_stats.csv",
             "--output",
-            "data/outputs/step5_wnba_hitrates.csv"
+            "step5_wnba_hitrates.csv"
           ]
         },
         {
@@ -1568,11 +1569,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step6_team_role_context.py",
+            "./step6_team_role_context.py",
             "--input",
-            "data/outputs/step5_wnba_hitrates.csv",
+            "step5_wnba_hitrates.csv",
             "--output",
-            "data/outputs/step6_wnba_context.csv"
+            "step6_wnba_context.csv"
           ]
         },
         {
@@ -1581,11 +1582,11 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step7_rank_props.py",
+            "./step7_rank_props.py",
             "--input",
-            "data/outputs/step6_wnba_context.csv",
+            "step6_wnba_context.csv",
             "--output",
-            "data/outputs/step7_wnba_ranked.xlsx"
+            "step7_wnba_ranked.xlsx"
           ]
         },
         {
@@ -1594,15 +1595,13 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step8_add_direction_context.py",
+            "./step8_add_direction_context.py",
             "--input",
-            "data/outputs/step7_wnba_ranked.xlsx",
+            "step7_wnba_ranked.xlsx",
             "--sheet",
             "ALL",
             "--output",
-            "data/outputs/step8_wnba_direction.csv",
-            "--date",
-            "{TODAY}"
+            "step8_wnba_direction.xlsx"
           ]
         },
         {
@@ -1611,9 +1610,9 @@
           "cmd": [
             "py",
             "-3.14",
-            ".\\step9_build_tickets.py",
+            "./step9_build_tickets.py",
             "--input",
-            "data/outputs/step8_wnba_direction_clean.xlsx",
+            "step8_wnba_direction.xlsx",
             "--output",
             "wnba_best_tickets.xlsx",
             "--min_hit_rate",
@@ -1657,7 +1656,7 @@
             "-ExecutionPolicy",
             "Bypass",
             "-File",
-            "..\\run_wnba_pipeline.ps1"
+            "../run_wnba_pipeline.ps1"
           ]
         },
         {
@@ -1668,7 +1667,7 @@
             "-ExecutionPolicy",
             "Bypass",
             "-File",
-            "..\\run_wnba_pipeline.ps1",
+            "../run_wnba_pipeline.ps1",
             "-RefreshCache"
           ]
         }

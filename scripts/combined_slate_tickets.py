@@ -112,31 +112,36 @@ _TICKET_MODEL = None
 _TICKET_MODEL_BUCKETS: dict[str, Any] = {}
 _TICKET_MODEL_FEATURES: list[str] = []
 
-DEFAULT_NBA_PATH = os.path.join(REPO_ROOT, "Sports", "NBA", "data", "outputs", "step8_all_direction_clean.xlsx")
-DEFAULT_CBB_PATH = os.path.join(REPO_ROOT, "Sports", "CBB", "step6_ranked_cbb.xlsx")
-DEFAULT_NBA1H_PATH = os.path.join(REPO_ROOT, "Sports", "NBA", "step8_nba1h_direction_clean.xlsx")
-DEFAULT_NBA1Q_PATH = os.path.join(REPO_ROOT, "Sports", "NBA", "step8_nba1q_direction_clean.xlsx")
-DEFAULT_WCBB_PATH = os.path.join(REPO_ROOT, "Sports", "CBB", "step6_ranked_wcbb.xlsx")
-DEFAULT_MLB_PATH = os.path.join(REPO_ROOT, "Sports", "MLB", "step8_mlb_direction_clean.xlsx")
-DEFAULT_NFL_PATH = os.path.join(REPO_ROOT, "Sports", "NFL", "outputs", "step8_nfl_direction_clean.xlsx")
-DISABLED_SPORTS: set[str] = set()
-_soccer_root = os.path.join(REPO_ROOT, "Sports", "Soccer", "step8_soccer_direction_clean.xlsx")
-_soccer_outputs = os.path.join(REPO_ROOT, "Sports", "Soccer", "outputs", "step8_soccer_direction_clean.xlsx")
-if os.path.exists(_soccer_root) and os.path.exists(_soccer_outputs):
-    DEFAULT_SOCCER_PATH = (
-        _soccer_root
-        if os.path.getsize(_soccer_root) >= os.path.getsize(_soccer_outputs)
-        else _soccer_outputs
-    )
-elif os.path.exists(_soccer_root):
-    DEFAULT_SOCCER_PATH = _soccer_root
-elif os.path.exists(_soccer_outputs):
-    DEFAULT_SOCCER_PATH = _soccer_outputs
+DEFAULT_NBA_PATH = os.path.join(REPO_ROOT, "NBA", "data", "outputs", "step8_all_direction_clean.xlsx")
+DEFAULT_CBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_cbb.xlsx")
+DEFAULT_NBA1H_PATH = os.path.join(REPO_ROOT, "NBA", "step8_nba1h_direction_clean.xlsx")
+DEFAULT_NBA1Q_PATH = os.path.join(REPO_ROOT, "NBA", "step8_nba1q_direction_clean.xlsx")
+DEFAULT_WCBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_wcbb.xlsx")
+# Canonical layout: Sports/<league>/outputs/… (run_pipeline.ps1). Legacy: repo-root <league>/.
+_sports_mlb = os.path.join(REPO_ROOT, "Sports", "MLB", "step8_mlb_direction_clean.xlsx")
+_root_mlb = os.path.join(REPO_ROOT, "MLB", "step8_mlb_direction_clean.xlsx")
+if os.path.exists(_sports_mlb):
+    DEFAULT_MLB_PATH = _sports_mlb
+elif os.path.exists(_root_mlb):
+    DEFAULT_MLB_PATH = _root_mlb
 else:
-    DEFAULT_SOCCER_PATH = _soccer_root
-DEFAULT_TENNIS_PATH = os.path.join(REPO_ROOT, "Sports", "Tennis", "outputs", "step8_tennis_direction_clean.xlsx")
-DEFAULT_WNBA_PATH = os.path.join(REPO_ROOT, "Sports", "WNBA", "step8_wnba_direction.xlsx")
-DEFAULT_NHL_PATH = os.path.join(REPO_ROOT, "Sports", "NHL", "outputs", "step8_nhl_direction_clean.xlsx")
+    DEFAULT_MLB_PATH = _sports_mlb
+DEFAULT_NFL_PATH = os.path.join(REPO_ROOT, "NFL", "outputs", "step8_nfl_direction_clean.xlsx")
+DISABLED_SPORTS: set[str] = set()
+_soccer_candidates = [
+    os.path.join(REPO_ROOT, "Sports", "Soccer", "outputs", "step8_soccer_direction_clean.xlsx"),
+    os.path.join(REPO_ROOT, "Sports", "Soccer", "step8_soccer_direction_clean.xlsx"),
+    os.path.join(REPO_ROOT, "Soccer", "outputs", "step8_soccer_direction_clean.xlsx"),
+    os.path.join(REPO_ROOT, "Soccer", "step8_soccer_direction_clean.xlsx"),
+]
+_soccer_existing = [p for p in _soccer_candidates if os.path.exists(p)]
+if _soccer_existing:
+    DEFAULT_SOCCER_PATH = max(_soccer_existing, key=lambda p: os.path.getsize(p))
+else:
+    DEFAULT_SOCCER_PATH = _soccer_candidates[0]
+DEFAULT_TENNIS_PATH = os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis_direction_clean.xlsx")
+DEFAULT_WNBA_PATH = os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction.xlsx")
+DEFAULT_NHL_PATH = os.path.join(REPO_ROOT, "NHL", "outputs", "step8_nhl_direction_clean.xlsx")
 DEFAULT_WEB_OUTDIR = os.path.join(REPO_ROOT, "ui_runner", "templates")
 DIVERSITY_CONFIG_PATH = os.path.join(REPO_ROOT, "config", "diversity_config.json")
 PROP_RELIABILITY_LATEST_PATH = os.path.join(REPO_ROOT, "data", "reports", "prop_reliability_latest.json")
@@ -12140,10 +12145,12 @@ def _tickets_filter_pills_html(attr_rows: list[dict]) -> str:
         if row.get("ev") == "strong":
             has_strong = True
 
-    # Keep WNBA visible even on slates where no WNBA groups were generated.
-    if "wnba" not in seen_sp:
-        seen_sp.add("wnba")
-        sports_seen.append("wnba")
+    # Keep WNBA and Soccer filter pills visible even when no groups were generated for that sport
+    # (primary /tickets UI is driven by this bar; users expect the sport control to always exist).
+    for _sp in ("wnba", "soccer"):
+        if _sp not in seen_sp:
+            seen_sp.add(_sp)
+            sports_seen.append(_sp)
 
     sport_order = (
         "nba",
@@ -12233,27 +12240,11 @@ def _tickets_leg_parse_float(val: Any) -> float | None:
     return xf
 
 
-def _tickets_leg_fallback_posted_line(leg: dict) -> float | None:
-    """
-    When line_g1..10 are not stored (common), use the slip line so Hit/Miss vs pick matches
-    Standard vs Goblin/Demon semantics: market (`standard_line`) vs played `line`.
-    """
-    pt = str(leg.get("pick_type") or "").strip().lower()
-    std = _tickets_leg_parse_float(leg.get("standard_line"))
-    ln = _tickets_leg_parse_float(leg.get("line"))
-    if pt == "goblin" or pt == "demon":
-        return ln if ln is not None else std
-    if std is not None:
-        return std
-    return ln
-
-
 def _tickets_leg_game_log_table_html(leg: dict) -> str:
     """
     Per-game posted line (line_g*) + actual (stat_g* / g*) — replaces hit/miss bar chart.
     """
     dir_u = str(leg.get("direction") or "").strip().upper()
-    fallback_ln = _tickets_leg_fallback_posted_line(leg)
     rows_html: list[str] = []
     for gi in range(1, 11):
         raw_stat = leg.get(f"stat_g{gi}")
@@ -12264,8 +12255,6 @@ def _tickets_leg_game_log_table_html(leg: dict) -> str:
         if ln_raw is None:
             ln_raw = leg.get(f"prop_line_g{gi}")
         line_at_game = _tickets_leg_parse_float(ln_raw)
-        if line_at_game is None and act is not None and fallback_ln is not None:
-            line_at_game = fallback_ln
         if act is None and line_at_game is None:
             continue
         act_disp = _tickets_fmt_line_plain(act) if act is not None else "—"

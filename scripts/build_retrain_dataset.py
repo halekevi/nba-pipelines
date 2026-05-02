@@ -147,10 +147,10 @@ def load_step8_sport(root: Path, sport: str) -> pd.DataFrame | None:
         return pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
     if sport_u == "MLB":
         for p in (
-            root / "MLB" / "data" / "outputs" / "step8_mlb_direction_clean.xlsx",
-            root / "MLB" / "data" / "outputs" / "step8_mlb_direction.csv",
-            root / "MLB" / "step8_mlb_direction_clean.xlsx",
-            root / "MLB" / "step8_mlb_direction.csv",
+            root / "Sports" / "MLB" / "data" / "outputs" / "step8_mlb_direction_clean.xlsx",
+            root / "Sports" / "MLB" / "data" / "outputs" / "step8_mlb_direction.csv",
+            root / "Sports" / "MLB" / "step8_mlb_direction_clean.xlsx",
+            root / "Sports" / "MLB" / "step8_mlb_direction.csv",
         ):
             if not p.is_file():
                 continue

@@ -184,9 +184,9 @@ def resolve_merge_source(root: Path, sport_key: str, dates: list[str]) -> Path |
                     return p
         if sk == "mlb":
             for p in (
-                root / "MLB" / "data" / "outputs" / "step8_mlb_direction_clean.xlsx",
-                root / "MLB" / "step8_mlb_direction_clean.xlsx",
-                root / "MLB" / "outputs" / "step8_mlb_direction_clean.xlsx",
+                root / "Sports" / "MLB" / "data" / "outputs" / "step8_mlb_direction_clean.xlsx",
+                root / "Sports" / "MLB" / "step8_mlb_direction_clean.xlsx",
+                root / "Sports" / "MLB" / "outputs" / "step8_mlb_direction_clean.xlsx",
             ):
                 if p.is_file():
                     return p
