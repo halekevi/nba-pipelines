@@ -12233,11 +12233,27 @@ def _tickets_leg_parse_float(val: Any) -> float | None:
     return xf
 
 
+def _tickets_leg_fallback_posted_line(leg: dict) -> float | None:
+    """
+    When line_g1..10 are not stored (common), use the slip line so Hit/Miss vs pick matches
+    Standard vs Goblin/Demon semantics: market (`standard_line`) vs played `line`.
+    """
+    pt = str(leg.get("pick_type") or "").strip().lower()
+    std = _tickets_leg_parse_float(leg.get("standard_line"))
+    ln = _tickets_leg_parse_float(leg.get("line"))
+    if pt == "goblin" or pt == "demon":
+        return ln if ln is not None else std
+    if std is not None:
+        return std
+    return ln
+
+
 def _tickets_leg_game_log_table_html(leg: dict) -> str:
     """
     Per-game posted line (line_g*) + actual (stat_g* / g*) — replaces hit/miss bar chart.
     """
     dir_u = str(leg.get("direction") or "").strip().upper()
+    fallback_ln = _tickets_leg_fallback_posted_line(leg)
     rows_html: list[str] = []
     for gi in range(1, 11):
         raw_stat = leg.get(f"stat_g{gi}")
@@ -12248,6 +12264,8 @@ def _tickets_leg_game_log_table_html(leg: dict) -> str:
         if ln_raw is None:
             ln_raw = leg.get(f"prop_line_g{gi}")
         line_at_game = _tickets_leg_parse_float(ln_raw)
+        if line_at_game is None and act is not None and fallback_ln is not None:
+            line_at_game = fallback_ln
         if act is None and line_at_game is None:
             continue
         act_disp = _tickets_fmt_line_plain(act) if act is not None else "—"
