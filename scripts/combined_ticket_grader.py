@@ -92,6 +92,7 @@ from utils.goblin_demon_multiplier import (  # noqa: E402
     load_params as gd_load_params,
     ticket_multiplier as gd_ticket_multiplier,
 )
+from player_name_norm import fold_player_name  # noqa: E402
 
 _log = logging.getLogger("combined_ticket_grader")
 
@@ -128,17 +129,8 @@ def strip_norm(s: str) -> str:
 
 
 def player_norm(s: str) -> str:
-    """
-    Normalize player names for cross-source matching.
-    Examples: "Jabari Smith" ~= "Jabari Smith Jr."
-    """
-    p = strip_norm(s)
-    p = p.replace(".", " ")
-    p = re.sub(r"\s+", " ", p).strip()
-    parts = [x for x in p.split(" ") if x]
-    suffixes = {"jr", "sr", "ii", "iii", "iv", "v"}
-    parts = [x for x in parts if x not in suffixes]
-    return " ".join(parts)
+    """Same folding as slate grader / ticket eval (diacritics, Jr/Sr, particles)."""
+    return fold_player_name(s)
 
 
 def pick_category_from_cell(pick_type: str) -> str:

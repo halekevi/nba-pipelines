@@ -1,13 +1,16 @@
 """
 Shared player-name folding for MLB grader, ticket eval, and NBA/CBB slate grader.
 
-NFKD + strip combining marks (Jesús → jesus), dots → spaces, Jr./Sr./II–V dropped.
-Keeps actuals ↔ slate ↔ ticket JSON keys aligned.
+Delegates diacritic + suffix stripping to ``utils.player_name_utils.normalize_player_name``,
+then lowercases, drops stray dots, and removes surname particles for long names
+(e.g. Tristan da Silva vs Tristan Silva).
 """
+
 from __future__ import annotations
 
 import re
-import unicodedata
+
+from utils.player_name_utils import normalize_player_name as _ascii_player_name
 
 # Surname particles (lowercased). ESPN/box scores often keep "da/de/dos" while books list "First Last"
 # only — e.g. Tristan da Silva vs Tristan Silva. Drop these only when they appear as middle token(s)
@@ -20,8 +23,7 @@ def fold_player_name(s) -> str:
         return ""
     if isinstance(s, float) and s != s:  # NaN
         return ""
-    t = unicodedata.normalize("NFKD", str(s).strip())
-    t = "".join(c for c in t if not unicodedata.combining(c))
+    t = _ascii_player_name(s)
     p = t.lower().replace(".", " ")
     p = re.sub(r"\s+", " ", p)
     suffixes = {"jr", "sr", "ii", "iii", "iv", "v"}

@@ -205,6 +205,8 @@ def grade(row, actual):
     m = round(actual_f - line if direction == "OVER" else line - actual_f, 2)
     return result, None, m
 
+# "quarters with 3+ points" has no ESPN box aggregate here (needs per-quarter PBP — Option A).
+# Kept self-mapped so diagnostics list it explicitly; actuals will not carry rows until implemented.
 PROP_NORM_MAP={
     # short code aliases (common in CBB pipeline files)
     'pts':'points',
@@ -245,6 +247,7 @@ PROP_NORM_MAP={
     # Other
     'offensive rebounds':'offensive rebounds','defensive rebounds':'defensive rebounds',
     'personal fouls':'personal fouls','fantasy score':'fantasy score',
+    'quarters with 3+ points':'quarters with 3+ points',
     # Milestone yes/no (actuals from box: 1.0 / 0.0 vs typical 0.5 line)
     'double double':'double double','triple double':'triple double',
     'double-double':'double double','triple-double':'triple double',
@@ -661,9 +664,70 @@ def _split_combo_players(player_str: str) -> list[str]:
                 return parts
     return []
 
+
+_INJURY_STATUSES_DNP: frozenset[str] = frozenset(("Out", "Day-To-Day", "Injured Reserve"))
+
+
+def _extract_date_from_actuals_filename(name: str) -> str:
+    m = re.search(r"(\d{4}-\d{2}-\d{2})", str(name))
+    return m.group(1) if m else ""
+
+
+def _load_nba_injury_dnp_keys(actuals_path: str) -> frozenset[tuple[str, str]]:
+    """(norm_player_key, team_upper) for NBA injury rows marked Out / DTD / IR (same as ticket eval)."""
+    p = Path(actuals_path)
+    ds = _extract_date_from_actuals_filename(p.name)
+    if not ds:
+        return frozenset()
+    inj_path = p.parent / f"injuries_nba_{ds}.csv"
+    if not inj_path.is_file():
+        return frozenset()
+    try:
+        inj = pd.read_csv(inj_path)
+    except Exception:
+        return frozenset()
+    keys: set[tuple[str, str]] = set()
+    for _, r in inj.iterrows():
+        if str(r.get("sport", "")).strip().upper() != "NBA":
+            continue
+        st = str(r.get("injury_status", "")).strip()
+        if st not in _INJURY_STATUSES_DNP:
+            continue
+        pl = norm_player_key(str(r.get("player", "") or ""))
+        tm = str(r.get("team", "") or "").strip().upper()
+        if pl and tm:
+            keys.add((pl, tm))
+    return frozenset(keys)
+
+
+def _injury_confirms_dnp_for_row(
+    player_str: object, team_u: str, dnp_keys: frozenset[tuple[str, str]]
+) -> bool:
+    if not dnp_keys or not team_u:
+        return False
+    parts = _split_combo_players(str(player_str or ""))
+    targets = parts if len(parts) >= 2 else [str(player_str or "").strip()]
+    for raw in targets:
+        if not raw:
+            continue
+        pl = norm_player_key(raw)
+        if not pl:
+            continue
+        if (pl, team_u) in dnp_keys:
+            return True
+        hits = [k for k in dnp_keys if k[0] == pl]
+        if len(hits) == 1:
+            return True
+    return False
+
+
 def apply_actuals(df, actuals_path):
     act = pd.read_csv(actuals_path)
     act_map = _build_actuals_lookup(act)
+    apath = str(actuals_path or "")
+    dnp_keys: frozenset[tuple[str, str]] = frozenset()
+    if "nba" in apath.lower() and "actuals" in apath.lower():
+        dnp_keys = _load_nba_injury_dnp_keys(apath)
 
     df["player_key"] = (
         df["player"].astype(str).apply(norm_player_key)
@@ -732,6 +796,11 @@ def apply_actuals(df, actuals_path):
             results.append("VOID")
             margins.append(np.nan)
             tail = str(vr or "").strip()
+            team_u = str(row.get("team", "") or "").strip().upper()
+            if tail == "NO_ACTUAL" and dnp_keys and _injury_confirms_dnp_for_row(
+                row.get("player", ""), team_u, dnp_keys
+            ):
+                tail = "INJURY_REPORT_DNP"
             if upstream and tail:
                 void_reasons.append(f"{upstream}; {tail}")
             elif upstream:

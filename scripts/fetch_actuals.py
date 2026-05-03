@@ -24,10 +24,20 @@ Quarter / half splits: scripts/fetch_nba_period_actuals.py (--segment 1Q|2Q|3Q|4
 
 import argparse
 import re
+import sys
 import requests
 import pandas as pd
 import time
 from datetime import date, timedelta
+from pathlib import Path
+
+_SCRIPTS_DIR = Path(__file__).resolve().parent
+_REPO_ROOT = _SCRIPTS_DIR.parent
+for _p in (_SCRIPTS_DIR, _REPO_ROOT):
+    if str(_p) not in sys.path:
+        sys.path.insert(0, str(_p))
+
+from utils.player_name_utils import normalize_player_name  # noqa: E402
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -100,6 +110,9 @@ def parse_stats(player_name, t_abbr, stat_map):
             + blk * 3.0
             - tov * 1.0
         )
+
+    # TODO(Option A): "Quarters with 3+ Points" needs per-quarter PBP scoring splits
+    # (see fetch_nba_period_actuals.py). Not emitted here — those legs stay NO_ACTUAL until implemented.
 
     prop_map = {
         'Points':                 pts,
@@ -219,6 +232,7 @@ def parse_boxscore(box):
                     stat_map['2PM'] = tw_m
                     stat_map['2PA'] = tw_a
 
+                # "Quarters with 3+ Points" is not in ESPN per-game stat lines here — unsupported (Option B).
                 label_aliases = {
                     '3PM':  ['3PM', 'FG3M', '3FGM'],
                     '3PA':  ['3PA', 'FG3A', '3FGA'],
@@ -407,6 +421,61 @@ def fetch_events_for_date(sport_path, date_str, is_cbb=False):
     return all_events
 
 
+# ── NBA duo combo rows (PlayerA + PlayerB) ───────────────────────────────────
+_NBA_COMBO_SUM_SPECS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("Pts+Rebs+Asts", ("Points", "Rebounds", "Assists")),
+    ("PRA", ("Points", "Rebounds", "Assists")),
+    ("Pts+Rebs", ("Points", "Rebounds")),
+    ("Pts+Asts", ("Points", "Assists")),
+    ("Rebs+Asts", ("Rebounds", "Assists")),
+    ("Blks+Stls", ("Blocked Shots", "Steals")),
+)
+
+
+def _nba_combo_component_sum(team: str, player: str, comps: tuple[str, ...], base: pd.DataFrame) -> float | None:
+    total = 0.0
+    for cp in comps:
+        sel = base.loc[
+            (base["team"] == team) & (base["player"] == player) & (base["prop_type"] == cp),
+            "actual",
+        ]
+        if sel.empty:
+            return None
+        v = pd.to_numeric(sel.iloc[0], errors="coerce")
+        if pd.isna(v):
+            return None
+        total += float(v)
+    return total
+
+
+def append_nba_duo_combo_actual_rows(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Add synthetic actuals rows with player = 'A + B' / 'B + A' so slate combo strings
+    resolve in the grader lookup. If either player lacks a component stat, no row is added.
+    """
+    if df.empty or not {"player", "team", "prop_type", "actual"}.issubset(df.columns):
+        return df
+    extra: list[dict] = []
+    for team in df["team"].dropna().astype(str).unique():
+        players = sorted(df.loc[df["team"] == team, "player"].dropna().astype(str).unique().tolist())
+        for i, pa in enumerate(players):
+            for pb in players[i + 1 :]:
+                for combo_label, comps in _NBA_COMBO_SUM_SPECS:
+                    sa = _nba_combo_component_sum(team, pa, comps, df)
+                    sb = _nba_combo_component_sum(team, pb, comps, df)
+                    if sa is None or sb is None:
+                        continue
+                    val = round(float(sa + sb), 1)
+                    extra.append({"player": f"{pa} + {pb}", "team": team, "prop_type": combo_label, "actual": val})
+                    extra.append({"player": f"{pb} + {pa}", "team": team, "prop_type": combo_label, "actual": val})
+    if not extra:
+        return df
+    tail = pd.DataFrame(extra)
+    out = pd.concat([df, tail], ignore_index=True)
+    out["actual"] = pd.to_numeric(out["actual"], errors="coerce")
+    return out
+
+
 # ── Main sport fetch ──────────────────────────────────────────────────────────
 def fetch_sport(sport_path, date_str, window=2):
     from datetime import datetime as _dt, timedelta as _td
@@ -491,12 +560,24 @@ def fetch_sport(sport_path, date_str, window=2):
         return pd.DataFrame(), reason
 
     df = pd.DataFrame(all_rows)
+    if "player" in df.columns:
+        df["player"] = df["player"].astype(str).map(normalize_player_name)
 
     # Deduplicate per player+team+prop_type — keep highest actual value
     # (guards against a player appearing on multiple date pages)
-    df['actual'] = pd.to_numeric(df['actual'], errors='coerce')
-    df = (df.sort_values('actual', ascending=False)
-            .drop_duplicates(subset=['player', 'team', 'prop_type'], keep='first'))
+    df["actual"] = pd.to_numeric(df["actual"], errors="coerce")
+    df = (
+        df.sort_values("actual", ascending=False)
+        .drop_duplicates(subset=["player", "team", "prop_type"], keep="first")
+    )
+
+    if sport_path == "nba" and len(df):
+        df = append_nba_duo_combo_actual_rows(df)
+        df["actual"] = pd.to_numeric(df["actual"], errors="coerce")
+        df = (
+            df.sort_values("actual", ascending=False)
+            .drop_duplicates(subset=["player", "team", "prop_type"], keep="first")
+        )
 
     print(f"\n  Total: {len(df)} player-prop actuals across {len(graded_event_ids)} games")
     return df, "ok"

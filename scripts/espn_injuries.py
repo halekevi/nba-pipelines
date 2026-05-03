@@ -21,6 +21,8 @@ from typing import Dict, List, Optional, Set, Tuple
 import pandas as pd
 import requests
 
+from player_name_norm import fold_player_name
+
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -273,7 +275,7 @@ def load_injury_void_keys(csv_path: str | Path, sport_for_team: str) -> Set[Tupl
     df = pd.read_csv(p, dtype=str).fillna("")
     out: Set[Tuple[str, str]] = set()
     for _, r in df.iterrows():
-        pl = strip_norm(r.get("player", ""))
+        pl = fold_player_name(r.get("player", ""))
         tm = canon_team_abbr(sport_for_team, r.get("team", ""))
         if pl and tm:
             out.add((pl, tm))
@@ -314,7 +316,7 @@ def penalty_series_for_slate(
         return pd.Series(0.0, index=df.index, dtype=float)
     penalties = []
     for _, r in df.iterrows():
-        pl = strip_norm(r.get(player_col, ""))
+        pl = fold_player_name(r.get(player_col, ""))
         tm = canon_team_abbr(sport, r.get(team_col, ""))
         penalties.append(float(pmap.get((pl, tm), 0.0)))
     return pd.Series(penalties, index=df.index, dtype=float)
