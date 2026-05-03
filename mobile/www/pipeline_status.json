@@ -19,8 +19,8 @@
   },
   "cbb": {
     "slate": {
-      "exists": false,
-      "modified": ""
+      "exists": true,
+      "modified": "2026-05-03 17:02:48"
     }
   },
   "nhl": {
@@ -38,7 +38,7 @@
   "mlb": {
     "slate": {
       "exists": true,
-      "modified": "2026-05-03 12:00:00"
+      "modified": "2026-05-03 17:15:49"
     }
   },
   "nfl": {
@@ -55,14 +55,14 @@
   },
   "wnba": {
     "slate": {
-      "exists": false,
-      "modified": ""
+      "exists": true,
+      "modified": "2026-05-03 20:41:40"
     }
   },
   "combined": {
     "slate": {
       "exists": true,
-      "modified": "2026-05-03 12:00:00"
+      "modified": "2026-05-03 20:44:02"
     }
   }
 }

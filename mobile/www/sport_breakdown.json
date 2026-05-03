@@ -10,17 +10,17 @@
     },
     {
       "sport": "MLB",
-      "decided": 72658,
-      "paid": 21657,
-      "win_rate": 0.29806765944562197,
-      "net_dollars": -293440.0
+      "decided": 72723,
+      "paid": 21666,
+      "win_rate": 0.2979250030939318,
+      "net_dollars": -293910.0
     },
     {
       "sport": "SOCCER",
-      "decided": 32393,
-      "paid": 7988,
-      "win_rate": 0.24659648689531688,
-      "net_dollars": -164170.0
+      "decided": 32502,
+      "paid": 8004,
+      "win_rate": 0.24626176850655343,
+      "net_dollars": -164940.0
     },
     {
       "sport": "TENNIS",
