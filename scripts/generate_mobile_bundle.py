@@ -2,8 +2,22 @@ import os
 import shutil
 import re
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 import combined_slate_tickets
+
+
+def _first_existing_path(candidates):
+    for p in candidates:
+        if p is not None and Path(p).exists():
+            return Path(p)
+    return None
+
+
+def _mtime_utc_string(path: Path | None) -> str:
+    if path is None or not path.exists():
+        return ""
+    return datetime.fromtimestamp(path.stat().st_mtime, tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
 SPORT_BREAKDOWN_ORDER = ("NBA", "MLB", "SOCCER", "TENNIS", "NHL")
 
@@ -696,25 +710,59 @@ def generate_bundle():
         slate_date = _read_template_json_date(TEMPLATES_DIR) or str(
             (slate_payload.get("date") if isinstance(slate_payload, dict) else "") or ""
         ).strip()[:10]
-        modified = f"{slate_date} 12:00:00" if slate_date else ""
+        modified_default = f"{slate_date} 12:00:00" if slate_date else ""
         status_sports = ["nba", "nba1h", "nba1q", "cbb", "nhl", "soccer", "mlb", "nfl", "tennis", "wnba", "combined"]
+        R = ROOT_DIR
+        combined_candidates = list(R.glob("combined_slate_tickets_*.xlsx"))
+        _out_root = R / "outputs"
+        if _out_root.is_dir():
+            combined_candidates.extend(_out_root.glob("*/combined_slate_tickets_*.xlsx"))
+        combined_artifact = (
+            max(combined_candidates, key=lambda p: p.stat().st_mtime) if combined_candidates else None
+        )
         artifact_by_sport = {
-            "nba": TEMPLATES_DIR.parent.parent / "NBA" / "step8_all_direction_clean.xlsx",
-            "nba1h": TEMPLATES_DIR.parent.parent / "NBA" / "step8_nba1h_direction_clean.xlsx",
-            "nba1q": TEMPLATES_DIR.parent.parent / "NBA" / "step8_nba1q_direction_clean.xlsx",
-            "nhl": TEMPLATES_DIR.parent.parent / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
-            "soccer": TEMPLATES_DIR.parent.parent / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
-            "mlb": TEMPLATES_DIR.parent.parent / "Sports" / "MLB" / "step8_mlb_direction_clean.xlsx",
-            "nfl": TEMPLATES_DIR.parent.parent / "NFL" / "outputs" / "step8_nfl_direction_clean.xlsx",
-            "tennis": TEMPLATES_DIR.parent.parent / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
-            "wnba": TEMPLATES_DIR.parent.parent / "WNBA" / "step8_wnba_direction.xlsx",
+            "nba": R / "NBA" / "step8_all_direction_clean.xlsx",
+            "nba1h": R / "NBA" / "step8_nba1h_direction_clean.xlsx",
+            "nba1q": R / "NBA" / "step8_nba1q_direction_clean.xlsx",
+            "cbb": _first_existing_path(
+                [R / "Sports" / "CBB" / "step6_ranked_cbb.xlsx", R / "CBB" / "step6_ranked_cbb.xlsx"]
+            ),
+            "nhl": R / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
+            "soccer": R / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
+            "mlb": _first_existing_path(
+                [
+                    R / "Sports" / "MLB" / "step8_mlb_direction_clean.xlsx",
+                    R / "Sports" / "MLB" / "outputs" / "step8_mlb_direction_clean.xlsx",
+                ]
+            ),
+            "nfl": R / "NFL" / "outputs" / "step8_nfl_direction_clean.xlsx",
+            "tennis": R / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
+            "wnba": _first_existing_path(
+                [
+                    R / "Sports" / "WNBA" / "step8_wnba_direction_clean.xlsx",
+                    R / "Sports" / "WNBA" / "step8_wnba_direction.xlsx",
+                    R / "WNBA" / "step8_wnba_direction_clean.xlsx",
+                    R / "WNBA" / "step8_wnba_direction.xlsx",
+                ]
+            ),
         }
         status_payload = {}
         for s in status_sports:
+            art = combined_artifact if s == "combined" else artifact_by_sport.get(s)
             has_rows = bool((sports_payload.get(s) if isinstance(sports_payload, dict) else []))
-            has_artifact = bool(artifact_by_sport.get(s) and artifact_by_sport[s].exists())
-            exists = bool(has_rows or has_artifact or (s == "combined" and sports_payload))
-            status_payload[s] = {"slate": {"exists": exists, "modified": modified if exists else ""}}
+            has_artifact = bool(art and art.exists())
+            exists = bool(
+                has_rows
+                or has_artifact
+                or (s == "combined" and isinstance(sports_payload, dict) and bool(sports_payload))
+            )
+            mod_str = ""
+            if exists:
+                if has_artifact:
+                    mod_str = _mtime_utc_string(art)
+                elif modified_default:
+                    mod_str = modified_default
+            status_payload[s] = {"slate": {"exists": exists, "modified": mod_str}}
         (MOBILE_WWW_DIR / "pipeline_status.json").write_text(
             json.dumps(status_payload, ensure_ascii=True, indent=2),
             encoding="utf-8"
