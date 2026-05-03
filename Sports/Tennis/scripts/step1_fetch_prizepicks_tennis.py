@@ -100,10 +100,17 @@ def list_leagues_and_print(*, retries: int = 5) -> None:
 
 
 def _load_nba_step1():
-    p = REPO_ROOT / "NBA" / "scripts" / "step1_fetch_prizepicks_api.py"
+    candidates = [
+        REPO_ROOT / "Sports" / "NBA" / "scripts" / "step1_fetch_prizepicks_api.py",
+        REPO_ROOT / "NBA" / "scripts" / "step1_fetch_prizepicks_api.py",
+    ]
+    p = next((c for c in candidates if c.exists()), candidates[0])
     spec = importlib.util.spec_from_file_location("nba_pp_fetch", p)
     if spec is None or spec.loader is None:
-        raise RuntimeError(f"Cannot load NBA step1 from {p}")
+        raise RuntimeError(
+            "Cannot load NBA step1 API helper. Tried: "
+            + ", ".join(str(c) for c in candidates)
+        )
     m = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(m)
     return m

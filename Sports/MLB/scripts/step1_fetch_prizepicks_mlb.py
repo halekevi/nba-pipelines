@@ -323,10 +323,17 @@ def parse_rows(data: List[dict], included: List[dict]) -> List[dict]:
 def _load_prizepicks_api_module():
     """Load NBA direct-API fetcher from repo (shared PrizePicks JSONAPI client)."""
     root = Path(__file__).resolve().parents[3]
-    path = root / "NBA" / "scripts" / "step1_fetch_prizepicks_api.py"
+    candidates = [
+        root / "Sports" / "NBA" / "scripts" / "step1_fetch_prizepicks_api.py",
+        root / "NBA" / "scripts" / "step1_fetch_prizepicks_api.py",
+    ]
+    path = next((c for c in candidates if c.exists()), candidates[0])
     spec = importlib.util.spec_from_file_location("pp_fetch_api_mlb", path)
     if spec is None or spec.loader is None:
-        raise RuntimeError(f"Cannot load API module spec from {path}")
+        raise RuntimeError(
+            "Cannot load API module spec. Tried: "
+            + ", ".join(str(c) for c in candidates)
+        )
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod

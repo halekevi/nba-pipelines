@@ -1,29 +1,29 @@
 {
-  "generated_at": "2026-05-03T16:43:48.318645+00:00",
+  "generated_at": "2026-05-03T17:23:43.711812+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -32,24 +32,24 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -58,24 +58,24 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -84,24 +84,24 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -110,24 +110,24 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -136,24 +136,24 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -162,24 +162,24 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Davey Grant",
-          "prop_type": "Significant Strikes",
-          "line": 54.5,
-          "standard_line": 65.5,
+          "player": "Desmond Bane",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
-          "delta": 11.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.54
+          "hit_rate": 0.8
         }
       ]
     },
@@ -188,34 +188,34 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -224,34 +224,34 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -260,34 +260,34 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -296,34 +296,34 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -332,34 +332,34 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -368,34 +368,34 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -404,34 +404,34 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Duncan Robinson",
+          "player": "Tobias Harris",
           "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "line": 16.5,
+          "standard_line": 17.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         }
       ]
     },
@@ -440,34 +440,34 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Davey Grant",
-          "prop_type": "Significant Strikes",
-          "line": 54.5,
-          "standard_line": 65.5,
+          "player": "Desmond Bane",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
-          "delta": 11.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.54
+          "hit_rate": 0.8
         }
       ]
     },
@@ -476,34 +476,34 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Davey Grant",
-          "prop_type": "Significant Strikes",
-          "line": 54.5,
-          "standard_line": 65.5,
+          "player": "Desmond Bane",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
-          "delta": 11.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.54
+          "hit_rate": 0.8
         }
       ]
     },
@@ -512,44 +512,44 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -558,44 +558,44 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -604,44 +604,44 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -650,44 +650,44 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -696,44 +696,44 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -742,44 +742,44 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -788,44 +788,44 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Duncan Robinson",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "player": "Jakob Poeltl",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 5.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -834,44 +834,44 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Davey Grant",
-          "prop_type": "Significant Strikes",
-          "line": 54.5,
-          "standard_line": 65.5,
+          "player": "Desmond Bane",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
-          "delta": 11.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.54
+          "hit_rate": 0.8
         }
       ]
     },
@@ -880,44 +880,44 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Davey Grant",
-          "prop_type": "Significant Strikes",
-          "line": 54.5,
-          "standard_line": 65.5,
+          "player": "Desmond Bane",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
-          "delta": 11.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.54
+          "hit_rate": 0.8
         }
       ]
     },
@@ -926,54 +926,54 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Jamal Shead",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Collin Murray-Boyles",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 21.5,
+          "standard_line": 21.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -982,54 +982,54 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Jamal Shead",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Collin Murray-Boyles",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 21.5,
+          "standard_line": 21.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1038,54 +1038,54 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Jamal Shead",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Collin Murray-Boyles",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 21.5,
+          "standard_line": 21.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1094,54 +1094,54 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Jamal Shead",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Collin Murray-Boyles",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 21.5,
+          "standard_line": 21.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1150,54 +1150,54 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Jamal Shead",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Collin Murray-Boyles",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 21.5,
+          "standard_line": 21.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1206,54 +1206,54 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Jamal Shead",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Collin Murray-Boyles",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 21.5,
+          "standard_line": 21.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1262,54 +1262,54 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Duncan Robinson",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "player": "Jakob Poeltl",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 5.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1318,54 +1318,54 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Davey Grant",
-          "prop_type": "Significant Strikes",
-          "line": 54.5,
-          "standard_line": 65.5,
+          "player": "Desmond Bane",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
-          "delta": 11.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.54
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1374,54 +1374,54 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Jamal Shead",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Collin Murray-Boyles",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 21.5,
+          "standard_line": 21.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Davey Grant",
-          "prop_type": "Significant Strikes",
-          "line": 54.5,
-          "standard_line": 65.5,
+          "player": "Desmond Bane",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
-          "delta": 11.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.54
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1430,64 +1430,64 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Jamal Shead",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
           "player": "Collin Murray-Boyles",
-          "prop_type": "Rebounds",
-          "line": 0.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 21.5,
+          "standard_line": 21.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Wendell Carter",
+          "prop_type": "Pts+Asts",
+          "line": 9.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1496,64 +1496,64 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Jamal Shead",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
           "player": "Collin Murray-Boyles",
-          "prop_type": "Rebounds",
-          "line": 0.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 21.5,
+          "standard_line": 21.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Wendell Carter",
+          "prop_type": "Pts+Asts",
+          "line": 9.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1562,64 +1562,64 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Jamal Shead",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
           "player": "Collin Murray-Boyles",
-          "prop_type": "Rebounds",
-          "line": 0.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 21.5,
+          "standard_line": 21.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Wendell Carter",
+          "prop_type": "Pts+Asts",
+          "line": 9.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1628,64 +1628,64 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Jamal Shead",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
           "player": "Collin Murray-Boyles",
-          "prop_type": "Rebounds",
-          "line": 0.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 21.5,
+          "standard_line": 21.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Wendell Carter",
+          "prop_type": "Pts+Asts",
+          "line": 9.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1694,64 +1694,64 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Jamal Shead",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
           "player": "Collin Murray-Boyles",
-          "prop_type": "Rebounds",
-          "line": 0.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 21.5,
+          "standard_line": 21.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Wendell Carter",
+          "prop_type": "Pts+Asts",
+          "line": 9.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1760,64 +1760,64 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Jamal Shead",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
           "player": "Collin Murray-Boyles",
-          "prop_type": "Rebounds",
-          "line": 0.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 21.5,
+          "standard_line": 21.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Wendell Carter",
+          "prop_type": "Pts+Asts",
+          "line": 9.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1826,64 +1826,64 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Jamal Shead",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Collin Murray-Boyles",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 21.5,
+          "standard_line": 21.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Duncan Robinson",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 2.5,
+          "player": "Jakob Poeltl",
+          "prop_type": "Rebounds",
+          "line": 3.5,
+          "standard_line": 5.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1892,64 +1892,64 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Jamal Shead",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
+          "player": "Collin Murray-Boyles",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 21.5,
+          "standard_line": 21.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Ja'Kobe Walter",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Davey Grant",
-          "prop_type": "Significant Strikes",
-          "line": 54.5,
-          "standard_line": 65.5,
+          "player": "Desmond Bane",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
-          "delta": 11.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.54
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1958,64 +1958,64 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Isaiah Stewart",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Sandro Mamukelashvili",
-          "prop_type": "Points",
-          "line": 0.5,
-          "standard_line": 0.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 24.5,
+          "standard_line": 24.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Duren",
-          "prop_type": "Points",
-          "line": 3.0,
-          "standard_line": 3.0,
+          "player": "Evan Mobley",
+          "prop_type": "Pts+Asts",
+          "line": 19.5,
+          "standard_line": 19.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
-        },
-        {
-          "player": "Jamal Shead",
-          "prop_type": "Points",
-          "line": 1.5,
-          "standard_line": null,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
           "player": "Collin Murray-Boyles",
-          "prop_type": "Rebounds",
-          "line": 0.5,
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 21.5,
+          "standard_line": 21.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Wendell Carter",
+          "prop_type": "Pts+Asts",
+          "line": 9.5,
           "standard_line": null,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.6625
+          "hit_rate": 0.8
         },
         {
-          "player": "Davey Grant",
-          "prop_type": "Significant Strikes",
-          "line": 54.5,
-          "standard_line": 65.5,
+          "player": "Desmond Bane",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 19.5,
           "pick_type": "Demon",
-          "delta": 11.0,
+          "delta": 5.0,
           "direction": "OVER",
-          "hit_rate": 0.54
+          "hit_rate": 0.8
         }
       ]
     }
