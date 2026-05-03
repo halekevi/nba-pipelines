@@ -12,6 +12,8 @@
 #    .\run_pipeline.ps1 -SoccerOnly            # Soccer only + Combined
 #    .\run_pipeline.ps1 -TennisOnly           # Tennis (light pipeline) + Combined
 #    .\run_pipeline.ps1 -WNBAOnly              # WNBA only (delegates to scripts\run_wnba_pipeline.ps1)
+#    .\run_pipeline.ps1 -WNBAOnly -WNBACdp http://127.0.0.1:9222   # PrizePicks via Chrome CDP (DataDome)
+#  WNBA CDP env (optional): PROPORACLE_PP_CDP or PRIZEPICKS_CDP — used when -WNBACdp omitted.
 #    .\run_pipeline.ps1 -NFLOnly               # NFL only (delegates to scripts\run_nfl_pipeline.ps1) + Combined
 #    .\run_pipeline.ps1 -ForceWNBA           # Include WNBA in full parallel run before season start (QA)
 #    .\run_pipeline.ps1 -CombinedOnly          # Re-run combined + web tickets (multi-sport /tickets JSON)
@@ -59,13 +61,23 @@ param(
     [int]$CacheAgeDays = 7,
     # By default /tickets JSON includes MLB/NHL/Soccer slips (not only strict positive-EV + Tennis).
     # Pass -WebEvOnly to restore the stricter web JSON filter.
-    [switch]$WebEvOnly
+    [switch]$WebEvOnly,
+    # Chrome CDP URL for WNBA step1 (PrizePicks); parallel WNBA job receives this explicitly (env may not propagate).
+    [string]$WNBACdp = ""
 )
 
 $ErrorActionPreference = "Continue"
 
 if (-not $OddsApiKey) {
     $OddsApiKey = [string]$env:ODDS_API_KEY
+}
+
+$WNBACdp = $WNBACdp.Trim()
+if (-not $WNBACdp) { $WNBACdp = [string]$env:PROPORACLE_PP_CDP }
+if (-not $WNBACdp) { $WNBACdp = [string]$env:PRIZEPICKS_CDP }
+$WNBACdp = $WNBACdp.Trim()
+if ($WNBACdp) {
+    Write-Host "  [WNBA] CDP for step1 fetch: $WNBACdp" -ForegroundColor DarkGray
 }
 
 # -- Date ---------------------------------------------------------------------
@@ -719,15 +731,11 @@ if ($WNBAOnly) {
         Write-Host "  ERROR: WNBA runner not found: $wnbaPs1" -ForegroundColor Red
         exit 1
     }
-    if ($RefreshCache -and $SkipFetch) {
-        & $wnbaPs1 -Date $Date -RefreshCache -SkipFetch
-    } elseif ($RefreshCache) {
-        & $wnbaPs1 -Date $Date -RefreshCache
-    } elseif ($SkipFetch) {
-        & $wnbaPs1 -Date $Date -SkipFetch
-    } else {
-        & $wnbaPs1 -Date $Date
-    }
+    $wnbaInvoke = @{ Date = $Date }
+    if ($RefreshCache) { $wnbaInvoke["RefreshCache"] = $true }
+    if ($SkipFetch) { $wnbaInvoke["SkipFetch"] = $true }
+    if ($WNBACdp) { $wnbaInvoke["Cdp"] = $WNBACdp }
+    & $wnbaPs1 @wnbaInvoke
     $wnbaOk = ($LASTEXITCODE -eq 0)
     if ($wnbaOk) {
         Run-Combined "after WNBA"
@@ -1358,7 +1366,7 @@ $MLBJob = Start-Job -ScriptBlock {
 $WNBAJob = $null
 if ($wnbaParallel) {
     $WNBAJob = Start-Job -ScriptBlock {
-        param($RepoRoot, $PipelineDate, $SkipFetchFlag, $RefreshCacheFlag)
+        param($RepoRoot, $PipelineDate, $SkipFetchFlag, $RefreshCacheFlag, $WnbaCdp)
         $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
         $wnbaPs1 = Join-Path $RepoRoot "scripts\run_wnba_pipeline.ps1"
         if (-not (Test-Path -LiteralPath $wnbaPs1)) {
@@ -1367,15 +1375,11 @@ if ($wnbaParallel) {
         }
         Push-Location $RepoRoot
         try {
-            if ($RefreshCacheFlag -and $SkipFetchFlag) {
-                & $wnbaPs1 -Date $PipelineDate -RefreshCache -SkipFetch
-            } elseif ($RefreshCacheFlag) {
-                & $wnbaPs1 -Date $PipelineDate -RefreshCache
-            } elseif ($SkipFetchFlag) {
-                & $wnbaPs1 -Date $PipelineDate -SkipFetch
-            } else {
-                & $wnbaPs1 -Date $PipelineDate
-            }
+            $wnbaInvoke = @{ Date = $PipelineDate }
+            if ($RefreshCacheFlag) { $wnbaInvoke["RefreshCache"] = $true }
+            if ($SkipFetchFlag) { $wnbaInvoke["SkipFetch"] = $true }
+            if ($WnbaCdp) { $wnbaInvoke["Cdp"] = $WnbaCdp }
+            & $wnbaPs1 @wnbaInvoke
             if ($LASTEXITCODE -ne 0) {
                 Write-Output "[WNBA] WARN runner exit $LASTEXITCODE"
             }
@@ -1386,7 +1390,7 @@ if ($wnbaParallel) {
         } finally {
             Pop-Location
         }
-    } -ArgumentList $Root, $Date, [bool]$SkipFetch, [bool]$RefreshCache
+    } -ArgumentList $Root, $Date, [bool]$SkipFetch, [bool]$RefreshCache, $WNBACdp
 }
 
 # -- NFL Job ------------------------------------------------------------------

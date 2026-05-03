@@ -6,11 +6,14 @@
 #    .\run_wnba_pipeline.ps1 -Date 2026-07-15   # Specify date
 #    .\run_wnba_pipeline.ps1 -RefreshCache      # Wipe ESPN cache + rebuild
 #    .\run_wnba_pipeline.ps1 -SkipFetch         # Use existing step1 output
+#    .\run_wnba_pipeline.ps1 -Cdp http://127.0.0.1:9222   # Chrome CDP after DataDome solve
+#  Env (optional): PROPORACLE_PP_CDP or PRIZEPICKS_CDP — same as -Cdp when -Cdp omitted.
 # ============================================================
 param(
     [string]$Date         = "",
     [switch]$RefreshCache,
-    [switch]$SkipFetch
+    [switch]$SkipFetch,
+    [string]$Cdp          = ""
 )
 
 $ErrorActionPreference = "Continue"
@@ -28,6 +31,13 @@ $WNBADir = Join-Path $Root "Sports\WNBA"
 $OutRoot = Join-Path $Root "outputs"
 
 if (-not $Date) { $Date = Get-Date -Format "yyyy-MM-dd" }
+$Cdp = $Cdp.Trim()
+if (-not $Cdp) { $Cdp = [string]$env:PROPORACLE_PP_CDP }
+if (-not $Cdp) { $Cdp = [string]$env:PRIZEPICKS_CDP }
+$Cdp = $Cdp.Trim()
+if ($Cdp) {
+    Write-Host "  [WNBA step1] CDP attach: $Cdp" -ForegroundColor DarkGray
+}
 $StartTime = Get-Date
 $script:ProgressDone = 0
 $script:ProgressTotal = if ($SkipFetch) { 9 } else { 10 }  # 9 pipeline/copy stages + optional fetch
@@ -108,8 +118,9 @@ $ok = $true
 
 # Step 1 — Fetch PrizePicks (league_id=3, WNBA)
 if (-not $SkipFetch) {
-    if ($ok) { $ok = Run-Step "WNBA Step 1 - Fetch PrizePicks" $WNBADir ".\step1_fetch_prizepicks.py" `
-        "--league_id 3 --playwright --timeout 90 --game_mode pickem --per_page 250 --max_pages 10 --sleep 1.2 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --output step1_wnba_props.csv --date $Date" }
+    $step1Args = "--league_id 3 --playwright --timeout 90 --game_mode pickem --per_page 250 --max_pages 10 --sleep 1.2 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --output step1_wnba_props.csv --date $Date"
+    if ($Cdp) { $step1Args += " --cdp $Cdp" }
+    if ($ok) { $ok = Run-Step "WNBA Step 1 - Fetch PrizePicks" $WNBADir ".\step1_fetch_prizepicks.py" $step1Args }
 } else {
     Write-Host "  --> [SkipFetch] Using existing step1_wnba_props.csv" -ForegroundColor DarkGray
 }
