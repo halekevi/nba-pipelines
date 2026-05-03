@@ -530,6 +530,17 @@ def _attempt_fallback_write(out_path: Path, target_date: str, tz_name: str, reas
 
 # ─── Playwright fetch — fully headless, no manual window ──────────────────────
 
+# CDP USAGE — DataDome bypass procedure:
+# 1. Start Chrome with --remote-debugging-port=9222 using a profile
+#    that has valid PrizePicks cookies (e.g. --profile-directory=Default).
+# 2. Open app.prizepicks.com in that window. If DataDome shows a
+#    "press and hold" challenge, solve it manually until the board loads.
+# 3. Browse normally for ~1 min if challenges repeat (lets risk scoring settle).
+# 4. Without closing Chrome, run this script with --cdp http://127.0.0.1:9222
+# 5. Confirm log shows projections_status=200 and no BOARD_OK_FALLBACK.
+# The in-page fetch() inherits the authenticated session and DataDome trust
+# from the open tab — closing or relaunching Chrome resets that trust.
+
 def fetch_via_playwright(timeout_s: int = 90, cdp_url: str | None = None) -> Tuple[List[dict], List[dict]]:
     """
     Either launch Chromium (saved ~/.pp_browser_profile when present) or attach

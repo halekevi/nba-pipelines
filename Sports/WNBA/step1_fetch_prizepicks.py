@@ -23,6 +23,7 @@ import random
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Tuple, Set
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 import requests
@@ -401,6 +402,17 @@ def fetch_pages(
     return all_data, all_included
 
 
+# CDP USAGE — DataDome bypass procedure:
+# 1. Start Chrome with --remote-debugging-port=9222 using a profile
+#    that has valid PrizePicks cookies (e.g. --profile-directory=Default).
+# 2. Open app.prizepicks.com in that window. If DataDome shows a
+#    "press and hold" challenge, solve it manually until the board loads.
+# 3. Browse normally for ~1 min if challenges repeat (lets risk scoring settle).
+# 4. Without closing Chrome, run this script with --cdp http://127.0.0.1:9222
+# 5. Confirm log shows projections_status=200 and no BOARD_OK_FALLBACK.
+# The in-page fetch() inherits the authenticated session and DataDome trust
+# from the open tab — closing or relaunching Chrome resets that trust.
+
 def fetch_via_playwright_session(league_id: str, timeout_s: int, cdp_url: str = "") -> Tuple[List[dict], List[dict], List[dict]]:
     from playwright.sync_api import sync_playwright
 
@@ -507,6 +519,47 @@ def fetch_via_playwright_session(league_id: str, timeout_s: int, cdp_url: str = 
     )
 
 
+_ET = ZoneInfo("America/New_York")
+
+
+def _wnba_start_time_to_et_date_str(ser: pd.Series) -> pd.Series:
+    """PrizePicks ISO start_time -> YYYY-MM-DD in America/New_York; empty if unparseable."""
+    dt = pd.to_datetime(ser.astype(str).str.strip().replace("", pd.NA), utc=True, errors="coerce")
+    et = dt.dt.tz_convert(_ET)
+    return et.dt.strftime("%Y-%m-%d").fillna("").astype(str)
+
+
+def _apply_wnba_slate_date(df: pd.DataFrame, args: Any) -> pd.DataFrame:
+    """Filter to --date (ET) when enabled; add game_date (parsed start_time or slate day)."""
+    if df is None or df.empty:
+        return df
+    df = df.copy()
+    if "start_time" not in df.columns:
+        df["start_time"] = ""
+    slate = str(args.date).strip()[:10]
+    cal = _wnba_start_time_to_et_date_str(df["start_time"])
+    if not bool(getattr(args, "no_slate_filter", False)) and slate:
+        keep = cal.eq(slate)
+        n0 = len(df)
+        df = df.loc[keep].copy().reset_index(drop=True)
+        n1 = len(df)
+        if n0 != n1:
+            print(
+                f"  [slate-date] kept {n1}/{n0} rows for slate {slate} "
+                f"(start_time ET calendar must match --date)"
+            )
+    cal = _wnba_start_time_to_et_date_str(df["start_time"])
+    df["game_date"] = cal.where(cal.str.len() > 0, slate)
+    return df
+
+
+def _postprocess_fallback_out_csv(out_path: Path, args: Any) -> None:
+    df = _read_csv_safe(out_path)
+    df = _apply_wnba_slate_date(df, args)
+    df.to_csv(out_path, index=False, encoding="utf-8-sig")
+    _write_snapshots(df, str(args.date).strip())
+
+
 def _read_csv_safe(path: Path) -> pd.DataFrame:
     try:
         return pd.read_csv(path, encoding="utf-8-sig")
@@ -568,6 +621,11 @@ def main():
     ap.add_argument("--min_rows",         type=int,   default=30)
     ap.add_argument("--min_teams",        type=int,   default=2)
     ap.add_argument("--date",             default=time.strftime("%Y-%m-%d"))
+    ap.add_argument(
+        "--no-slate-filter",
+        action="store_true",
+        help="Keep all PrizePicks rows (multi-day board). Default: keep rows for --date ET calendar only.",
+    )
     ap.add_argument("--playwright",       action="store_true")
     ap.add_argument("--cdp",              default="", help="Attach to existing Chrome via CDP URL")
     ap.add_argument("--timeout",          type=int,   default=90)
@@ -625,6 +683,7 @@ def main():
                     print("⚠️ WNBA not present in active leagues payload.")
         except Exception as e:
             if _fallback_to_existing_csv(f"playwright fetch failed ({e})"):
+                _postprocess_fallback_out_csv(out_path, args)
                 print("✅ BOARD_OK_FALLBACK")
                 return
             print(f"❌ Playwright fetch failed and no valid fallback: {e}")
@@ -644,6 +703,7 @@ def main():
             )
         except Exception as e:
             if _fallback_to_existing_csv(f"fetch failed ({e})"):
+                _postprocess_fallback_out_csv(out_path, args)
                 print("✅ BOARD_OK_FALLBACK")
                 return
             print(f"❌ Fetch failed and no valid fallback: {e}")
@@ -651,9 +711,11 @@ def main():
 
     if not data:
         if _fallback_to_existing_csv("No projections fetched"):
+            _postprocess_fallback_out_csv(out_path, args)
             print("✅ BOARD_OK_FALLBACK")
             return
         cols = ["projection_id","pp_projection_id","player_id","pp_game_id","start_time",
+                "game_date",
                 "player","image_url","pos","team","opp_team","pp_home_team","pp_away_team",
                 "prop_type","line","pick_type"]
         pd.DataFrame(columns=cols).to_csv(out_path, index=False)
@@ -737,6 +799,8 @@ def main():
     if before != after:
         print(f"  Deduped: {before} → {after}")
 
+    df = _apply_wnba_slate_date(df, args)
+
     rows_n  = len(df)
     teams_n = df["team"].astype(str).nunique()
 
@@ -745,6 +809,7 @@ def main():
             f"BOARD_TOO_SMALL (rows={rows_n}, teams={teams_n}; "
             f"min_rows={args.min_rows}, min_teams={args.min_teams})"
         ):
+            _postprocess_fallback_out_csv(out_path, args)
             print("✅ BOARD_OK_FALLBACK")
             return
 
