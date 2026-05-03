@@ -52,9 +52,12 @@ def _copy_dated_step8_wnba(output_xlsx_path: str, slate_date: str) -> None:
     d = (slate_date or "").strip()
     if not d:
         d = date.today().isoformat()
-    repo_root = Path(__file__).resolve().parent.parent
+    repo_root = Path(__file__).resolve().parents[2]
     dated_name = f"step8_wnba_direction_{d}.xlsx"
-    for dated_dir in (repo_root / "outputs" / d, repo_root / "WNBA" / "outputs" / d):
+    for dated_dir in (
+        repo_root / "outputs" / d,
+        repo_root / "Sports" / "WNBA" / "outputs" / d,
+    ):
         try:
             dated_dir.mkdir(parents=True, exist_ok=True)
             dated_path = dated_dir / dated_name
@@ -139,8 +142,16 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str):
     df2 = df.copy()
     if "start_time" in df2.columns:
         et = _start_times_et(df2["start_time"])
-        df2["game_date"] = et.dt.strftime("%Y-%m-%d").where(et.notna(), "")
+        parsed_gd = et.dt.strftime("%Y-%m-%d").where(et.notna(), "").astype(str).str.strip()
+        prev = df2.get("game_date", pd.Series([""] * len(df2))).astype(str).str.strip().str[:10]
+        prev_ok = prev.str.match(r"^\d{4}-\d{2}-\d{2}$", na=False)
         df2["game_time"] = _format_et_clock(et)
+        # Prefer ET calendar from start_time when parseable; stale step1 game_date must not override.
+        df2["game_date"] = np.where(
+            parsed_gd.str.len() > 0,
+            parsed_gd,
+            np.where(prev_ok, prev, ""),
+        )
     else:
         if "game_date" not in df2.columns:
             df2["game_date"] = ""
@@ -254,11 +265,18 @@ def main() -> None:
     out["final_bet_direction"] = final_dir
     out["final_dir_reason"] = reason
 
+    slate_d = str(args.date or "").strip()[:10]
+    if len(slate_d) < 10:
+        slate_d = ""
+    from_start = pd.Series([""] * len(out), index=out.index, dtype=object)
     if "start_time" in out.columns:
         et = _start_times_et(out["start_time"])
-        out["game_date"] = et.dt.strftime("%Y-%m-%d").where(et.notna(), "")
-    else:
-        out["game_date"] = ""
+        from_start = et.dt.strftime("%Y-%m-%d").where(et.notna(), "").astype(str).str.strip()
+    prev_gd = out.get("game_date", pd.Series([""] * len(out))).astype(str).str.strip().str[:10]
+    prev_ok = prev_gd.str.match(r"^\d{4}-\d{2}-\d{2}$", na=False)
+    merged = from_start.where(from_start.str.len() > 0, prev_gd.where(prev_ok, ""))
+    merged = merged.where(merged.str.len() > 0, slate_d)
+    out["game_date"] = merged.fillna("")
 
     # Save full CSV
     out.to_csv(args.output, index=False, encoding="utf-8-sig")

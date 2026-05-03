@@ -537,7 +537,7 @@ def _wnba_start_time_to_et_date_str(ser: pd.Series) -> pd.Series:
 
 
 def _apply_wnba_slate_date(df: pd.DataFrame, args: Any, *, skip_row_filter: bool = False) -> pd.DataFrame:
-    """Optionally filter to --date (ET); always add game_date (parsed start_time ET, else slate day)."""
+    """Optionally filter to --date (ET); set game_date for downstream + combined_slate_tickets."""
     if df is None or df.empty:
         return df
     df = df.copy()
@@ -560,7 +560,17 @@ def _apply_wnba_slate_date(df: pd.DataFrame, args: Any, *, skip_row_filter: bool
                 f"(start_time ET calendar must match --date)"
             )
     cal = _wnba_start_time_to_et_date_str(df["start_time"])
-    df["game_date"] = cal.where(cal.str.len() > 0, slate)
+    if skip_row_filter and slate:
+        # Full PrizePicks board spans multiple ET calendar days. combined_slate_tickets keeps rows
+        # where game_date == pipeline --date; anchor to that date so props are not dropped there.
+        # True tip-off remains in start_time for audits and ESPN alignment.
+        df["game_date"] = slate
+        print(
+            f"  [slate-date] full board: game_date anchored to pipeline date {slate!r} "
+            f"(start_time still carries ET tip-off)"
+        )
+    else:
+        df["game_date"] = cal.where(cal.str.len() > 0, slate)
     return df
 
 
