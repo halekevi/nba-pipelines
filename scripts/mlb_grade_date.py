@@ -291,6 +291,8 @@ def _fetch_actuals_csv(
 
     target_date = pd.Timestamp(d).date()
     log_cache: Dict[Tuple[str, str], List[dict]] = {}
+    # One log line per (mlb_id, hitting|pitching) when +1 day fallback is used
+    fallback_logged: Set[Tuple[str, str]] = set()
 
     def get_splits(player_id: str, group: str) -> List[dict]:
         k = (player_id, group)
@@ -298,17 +300,40 @@ def _fetch_actuals_csv(
             log_cache[k] = s4.fetch_game_log(player_id, group, season)
         return log_cache[k]
 
-    def split_for_date(player_id: str, ptype: str) -> Optional[dict]:
+    def split_for_date(player_id: str, ptype: str, player_name: str) -> Optional[dict]:
+        """Pick game-log split for slate date ``d``. Prefer exact calendar date; if none,
+        accept logs dated the next calendar day (Stats API local dates vs slate ET night games).
+        """
         group = "pitching" if ptype == "pitcher" else "hitting"
-        for sp in get_splits(player_id, group):
+        splits = get_splits(player_id, group)
+        dated: List[Tuple[date, dict]] = []
+        for sp in splits:
             gd = str(sp.get("date") or "").strip()
             if not gd:
                 continue
             try:
-                if pd.to_datetime(gd).date() == target_date:
-                    return sp
+                log_d = pd.to_datetime(gd).date()
             except Exception:
                 continue
+            dated.append((log_d, sp))
+        if not dated:
+            return None
+        exact = [sp for log_d, sp in dated if log_d == target_date]
+        if exact:
+            return exact[0]
+        next_d = target_date + timedelta(days=1)
+        fallback = [sp for log_d, sp in dated if log_d == next_d]
+        if fallback:
+            sp = fallback[0]
+            log_date_used = str(sp.get("date") or next_d.isoformat())
+            fk = (player_id, group)
+            if fk not in fallback_logged:
+                fallback_logged.add(fk)
+                print(
+                    f"  [MLB actuals] date fallback: {player_name} log_date={log_date_used} "
+                    f"used for slate_date={d}"
+                )
+            return sp
         return None
 
     out_rows: Dict[Tuple[str, str], dict] = {}
@@ -337,7 +362,7 @@ def _fetch_actuals_csv(
             bad_prop += 1
             continue
 
-        spl = split_for_date(mlb_id, ptype)
+        spl = split_for_date(mlb_id, ptype, player)
         if spl is None:
             no_game += 1
             continue
