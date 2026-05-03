@@ -1848,6 +1848,16 @@ function collapseSportsInSlateFrame(frame) {
   const firstMain = doc.querySelector('.main');
   if (!firstMain) return;
 
+  // If report already ships as native <details> sport collapsibles,
+  // keep that structure and only enforce collapsed default state.
+  const nativeSportDetails = sections.filter(
+    sec => sec.tagName === 'DETAILS' && sec.classList.contains('sport-collapsible')
+  );
+  if (nativeSportDetails.length === sections.length) {
+    nativeSportDetails.forEach((sec) => { sec.open = false; });
+    return;
+  }
+
   sections.forEach((sec, idx) => {
     let sportLabel =
       sec.querySelector('.sport-label')?.textContent?.trim() ||
@@ -1858,9 +1868,8 @@ function collapseSportsInSlateFrame(frame) {
 
     const details = doc.createElement('details');
     details.className = 'grades-sport-bucket';
-    // Keep buckets open everywhere: collapsed mobile buckets hid grades and, on some
-    // WebViews, sat below a broken inner scroll — looked like a large empty band.
-    details.open = true;
+    // Default collapsed so the page loads compactly.
+    details.open = false;
 
     const summary = doc.createElement('summary');
     const title = doc.createElement('span');
@@ -1917,7 +1926,8 @@ function collapseSportsInTicketFrame(frame) {
   groups.forEach((groupSecs, key) => {
     const details = doc.createElement('details');
     details.className = 'grades-sport-bucket';
-    if (idx === 0 && !_mobTk) details.open = true;
+    // Default collapsed for all groups on load.
+    details.open = false;
     idx += 1;
 
     const summary = doc.createElement('summary');
@@ -1984,20 +1994,16 @@ function propsEvalOutcomeRank(result) {
   if (ru === 'MISS' || ru === 'LOSS' || ru === 'LOSE') return 2;
   return 3;
 }
-function fillPropsSportFilter(rows, sportsHint) {
+function fillPropsSportFilter(rows) {
   const sel = document.getElementById('props-filter-sport');
   if (!sel) return;
   const cur = sel.value;
-  const fromRows = [...new Set(rows.map(function (r) { return String(r.sport || '').toUpperCase(); }).filter(Boolean))];
-  const hint = Array.isArray(sportsHint)
-    ? sportsHint.map(function (s) { return String(s || '').toUpperCase().trim(); }).filter(Boolean)
-    : [];
-  const sports = [...new Set(fromRows.concat(hint))].sort();
+  const sports = [...new Set(rows.map(function (r) { return String(r.sport || '').toUpperCase(); }).filter(Boolean))].sort();
   sel.innerHTML = '<option value="">All sports</option>' +
     sports.map(function (s) { return '<option value="' + escProps(s) + '">' + escProps(s) + '</option>'; }).join('');
   if (cur && sports.indexOf(cur) >= 0) sel.value = cur;
 }
-/** Team vs opponent; strips placeholder dashes so we do not show "BAL vs —" (e.g. MLB Box Raw). */
+/** Team vs opponent; strips placeholders so we do not show "NYY vs —" when opp is missing in JSON. */
 function formatPropEvalMatchup(r) {
   var rawOpp = (r.opp_team != null && r.opp_team !== '') ? r.opp_team : r.opp;
   function tok(x) {
@@ -2146,7 +2152,7 @@ async function loadGradesProps(dateStr) {
           ? 'Ticket legs from ticket_eval_' + dateStr + '.html (subset). Run build_grades_html / backfill_graded_props_json and push graded_props_' + dateStr + '.json for every slate prop.'
           : 'Source: graded_props_' + dateStr + '.json';
       }
-      fillPropsSportFilter(window._propsEvalCache, jd.sports);
+      fillPropsSportFilter(window._propsEvalCache);
       applyPropsEvalFilters();
       return;
     }
@@ -2155,7 +2161,7 @@ async function loadGradesProps(dateStr) {
     if (!res.ok) throw new Error(d.error || res.statusText);
     window._propsEvalCache = d.props || [];
     window._propsEvalStats = { n_hit: d.n_hit, n_miss: d.n_miss, n: d.n };
-    fillPropsSportFilter(window._propsEvalCache, d.sports);
+    fillPropsSportFilter(window._propsEvalCache);
     if (foot) {
       var t = '';
       if (d.truncated) t += 'Showing first ' + d.n_returned + ' of ' + d.n + ' rows. ';

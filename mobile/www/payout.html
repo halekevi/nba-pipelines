@@ -1814,6 +1814,7 @@ function blurCalcLine(id,field,el){
   renderCalcLegs();
 }
 
+/** Leg card subtitle: Standard → posted line (market); Goblin/Demon → played line with optional std reference. */
 function legPostedLineDescription(leg){
   const std=String(leg.stdLine||'').trim();
   const pld=String(leg.playedLine||'').trim();

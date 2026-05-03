@@ -236,8 +236,8 @@ body::after{content:'';position:fixed;inset:0;
 .scard-icon.wnba{background:rgba(255,105,180,.1);border:1px solid rgba(255,105,180,.28);}
 .scard-icon.combined{background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.2);}
 .scard-body{flex:1;}
-.scard-title{font-size:12px;font-family:"Inter",sans-serif;font-weight:600;color:var(--muted);letter-spacing:2.5px;margin-bottom:6px;text-transform:uppercase;}
-.scard-val{font-family:'Inter',sans-serif;font-size:12px;color:var(--text);letter-spacing:.02em;}
+.scard-title{font-size:9px;font-family:"Inter",sans-serif;font-weight:600;color:var(--muted);letter-spacing:2.5px;margin-bottom:6px;text-transform:uppercase;}
+.scard-val{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--text);letter-spacing:1px;}
 .scard-sub{font-size:10px;color:var(--muted2);margin-top:3px;}
 .sbadge{font-size:9px;font-family:"Inter",sans-serif;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.5px;}
 .sbadge.fresh{background:rgba(125,255,203,.12);color:var(--green);border:1px solid rgba(125,255,203,.25);}
@@ -1085,9 +1085,9 @@ body::before{
     width:100%;
     margin:0;
     text-align:left;
-    font-size:12px;
+    font-size:clamp(17px,2.1vw,23px);
     line-height:1.22;
-    letter-spacing:.02em;
+    letter-spacing:.03em;
     white-space:pre-line;
     word-break:break-word;
     font-family:'Inter',sans-serif;
@@ -1352,7 +1352,7 @@ body::before{
     .slate-panel-header-row .scard-head{gap:6px;}
     .slate-panel-header-row .scard-head .scard-icon{width:30px;height:30px;min-height:30px;border-radius:8px;}
     .slate-panel-header-row .scard-head .db-icon{width:16px;height:16px;}
-    .slate-panel-header-row .scard-head .scard-title{font-size:12px;letter-spacing:1.8px;}
+    .slate-panel-header-row .scard-head .scard-title{font-size:8px;letter-spacing:1.8px;}
     /* Move freshness badge near date row so sport labels have room. */
     .slate-panel-header-row .sbadge{
       font-size:7px;
@@ -1365,7 +1365,7 @@ body::before{
     }
     .slate-panel-header-row .scard-toggle{font-size:12px;}
     .slate-panel-header-row .scard-val{
-      font-size:12px;
+      font-size:clamp(14px,3.2vw,17px);
       line-height:1.15;
       padding-right:56px;
       font-family:'Inter',sans-serif;
@@ -1375,7 +1375,7 @@ body::before{
     /* Date cards: keep date on one line and visually match title typography. */
     .slate-panel-header-row .scard.fresh .scard-val,
     .slate-panel-header-row .scard.stale .scard-val{
-      font-size:12px;
+      font-size:8px;
       letter-spacing:0;
       line-height:1;
       white-space:nowrap;
@@ -1964,7 +1964,7 @@ body::before{
       <div class="sec-line"></div>
       <a href="tickets.html" class="edges-see-all">See All Picks ↗</a>
     </div>
-    <p class="edge-source-note">Pulled from the <strong>Full Slate</strong> (same source as Slate Explorer <strong>Combined</strong>: combined workbook when present, otherwise merged <code>slate_latest.json</code>). If those are unavailable, falls back to deduped legs from <code>tickets_latest.json</code> or bundled <code>slate_latest.json</code>. Cards use pipeline <strong>L5/L10</strong> when present; <strong>hit %</strong> fills gaps. Ordered by <strong>edge</strong> (highest first).</p>
+    <p class="edge-source-note">Pulled from the <strong>Full Slate</strong> (same source as Slate Explorer <strong>Combined</strong>: combined workbook when present, otherwise merged <code>slate_latest.json</code>). If those are unavailable, falls back to deduped legs from <code>tickets_latest.json</code>. Cards use pipeline <strong>L5/L10</strong> when present; <strong>hit %</strong> fills gaps. Ordered by <strong>edge</strong> (highest first).</p>
     <div id="top-edges-debug-tag" class="edge-source-note" style="font-size:10px;opacity:.9;margin-top:-8px;margin-bottom:10px;">Build debug: loading...</div>
 
     <div class="sub-header" style="color:var(--green);">
@@ -2047,7 +2047,40 @@ body::before{
 let ALL_SLATE = [];
 const PLAYER_DATA = {};
 let SLATE_DEBUG_META = { source: "", generated_at: "", date: "" };
+/** True after Full Slate rows successfully mapped into ALL_SLATE (Excel or merged JSON). */
 let SLATE_CARDS_POPULATED = false;
+
+function fmtEdgeCell(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n.toFixed(2) : "—";
+}
+
+/** Edge text for cards: match legacy OVER “+” prefix when non-negative. */
+function fmtEdgePick(p) {
+  const n = Number(p && p.edge);
+  if (!Number.isFinite(n)) return "—";
+  const over = String(p.dir || "").toUpperCase() === "OVER";
+  if (over) return (n >= 0 ? "+" : "") + n.toFixed(2);
+  return n.toFixed(2);
+}
+
+/** Model-projected stat (step8 projection). Fallback: line + edge. */
+function projectedStatForPick(p) {
+  if (!p) return null;
+  const raw = p.projection ?? p.proj ?? p.Projected;
+  const pj = Number(raw);
+  if (Number.isFinite(pj)) return pj;
+  const line = Number(p.line);
+  const edge = Number(p.edge);
+  if (Number.isFinite(line) && Number.isFinite(edge)) return line + edge;
+  return Number.isFinite(line) ? line : null;
+}
+
+/** Avoid crashes when pipeline rows omit sport (breaks .toLowerCase / tier CSS). */
+function safeSportKey(p) {
+  const s = String((p && p.sport != null) ? p.sport : "nba").trim().toLowerCase();
+  return s || "nba";
+}
 
 function playerSeriesKey(name, line, prop="", sport="") {
   const n = String(name || "").trim().toLowerCase();
@@ -2121,25 +2154,6 @@ function topEdgeL5HitPct(p, dirOverride = "") {
   const empirical = empiricalHitPctForPick({ ...p, dir: d }, 5);
   if (Number.isFinite(empirical)) return empirical;
   return pctFromValue(p?.hit);
-}
-
-function projectedStatForPick(p) {
-  if (!p) return null;
-  const raw = p.projection ?? p.proj ?? p.Projected;
-  const pj = Number(raw);
-  if (Number.isFinite(pj)) return pj;
-  const line = Number(p.line);
-  const edge = Number(p.edge);
-  if (Number.isFinite(line) && Number.isFinite(edge)) return line + edge;
-  return Number.isFinite(line) ? line : null;
-}
-
-function fmtEdgePick(p) {
-  const n = Number(p && p.edge);
-  if (!Number.isFinite(n)) return "—";
-  const over = String(p.dir || "").toUpperCase() === "OVER";
-  if (over) return (n >= 0 ? "+" : "") + n.toFixed(2);
-  return n.toFixed(2);
 }
 
 /** Pipeline often sends L5/L10 as a rate in [0,1] (e.g. 0.8 = 4/5), not always integer counts. */
@@ -2456,8 +2470,8 @@ async function loadSlateData() {
       }
     };
     try {
-      const fetchOpts = { cache: "no-store" };
-      if (typeof AbortSignal !== "undefined" && AbortSignal.timeout) {
+      const fetchOpts = { cache: 'no-store' };
+      if (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) {
         fetchOpts.signal = AbortSignal.timeout(120000);
       }
       const res = await fetch("/api/slate", fetchOpts);
@@ -2639,12 +2653,16 @@ refreshStatus();
 
 // ── SVG chart (full) — premium area chart ──────────────────
 function makeSVG(data, line, isOver, W=260, H=100, lineSeries=null) {
+  if (!data || data.length === 0) {
+    return `<div style="height:100px;display:flex;align-items:center;justify-content:center;color:var(--muted2);font-size:11px;border:1px dashed rgba(255,255,255,.12);border-radius:10px;">No chart data</div>`;
+  }
   const pL=32,pR=10,pT=14,pB=22, cW=W-pL-pR, cH=H-pT-pB;
   const lineVals = Array.isArray(lineSeries) && lineSeries.length === data.length ? lineSeries : Array.from({length:data.length},()=>line);
   const allVals = [...data, ...lineVals];
   const pad=Math.max((Math.max(...allVals)-Math.min(...allVals))*0.18, Number(line||0)*0.08);
   const mn=Math.min(...allVals)-pad, mx=Math.max(...allVals)+pad, R=mx-mn||1;
-  const px=(v,i)=>pL+(i/(data.length-1))*cW;
+  const xDenom = Math.max(1, data.length - 1);
+  const px=(v,i)=>pL+(i/xDenom)*cW;
   const py=v=>pT+cH-((v-mn)/R)*cH;
   const actualColor='#22d3ee', lineColor='#f39c12';
   const uid='ch'+Math.random().toString(36).slice(2,7);
@@ -2703,6 +2721,7 @@ function makeSVG(data, line, isOver, W=260, H=100, lineSeries=null) {
 }
 
 // ── SVG sparkline (streak cards) — premium ────────────────
+/** Orange dashed line = model projection when `projRef` set; hit dots still vs book `line`. */
 function makeSparkSVG(data, line, isOver, W=150, H=48, projRef=null) {
   if (!data || data.length === 0) {
     return `<svg viewBox="0 0 ${W} ${H}" style="overflow:visible;width:100%;height:auto;opacity:.35"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="var(--muted2)" font-size="10">—</text></svg>`;
@@ -2756,8 +2775,9 @@ let EDGE_DISPLAY_PICK = {};
 
 function buildEdgeCard(p, idx) {
   const isOver=p.dir==="OVER", dc=isOver?"over":"under";
-  const sc=`sp-${p.sport.toLowerCase()}`, pc=p.pick==="Goblin"?"pick-goblin":"pick-standard";
+  const sc=`sp-${safeSportKey(p)}`, pc=p.pick==="Goblin"?"pick-goblin":"pick-standard";
   const sportLabel = sportDisplayLabel(p.sport);
+  const edgeDisp = fmtEdgePick(p);
   const hitDisplay = topEdgeL5HitPct(p);
   const hitPct = Number.isFinite(hitDisplay) ? hitDisplay : 0;
   const hc=hitPct>=90?"var(--green)":hitPct>=75?"var(--amber)":"var(--red)";
@@ -2770,7 +2790,7 @@ function buildEdgeCard(p, idx) {
       <div class="edge-row edge-row-top">
         <div class="edge-avatar ${dc}">${p.initials}</div>
         <div class="edge-val">
-          <div class="edge-num edge-badge ${dc}">${fmtEdgePick(p)}</div>
+          <div class="edge-num edge-badge ${dc}">${edgeDisp}</div>
           <div class="edge-mini">${hitPct}% · L${p.line}</div>
         </div>
       </div>
@@ -2808,7 +2828,7 @@ function buildEdgeCard(p, idx) {
       </div>
       <div class="expand-stats">
         <div class="expand-stat"><div class="expand-stat-lbl">HIT RATE</div><div class="expand-stat-val" style="color:${hitColor}">${hitPct}%</div></div>
-        <div class="expand-stat"><div class="expand-stat-lbl">EDGE</div><div class="expand-stat-val" style="color:var(--accent)">${fmtEdgePick(p)}</div></div>
+        <div class="expand-stat"><div class="expand-stat-lbl">EDGE</div><div class="expand-stat-val" style="color:var(--accent)">${edgeDisp}</div></div>
         <div class="expand-stat"><div class="expand-stat-lbl">PICK TYPE</div><div class="expand-stat-val" style="color:var(--cyan);font-size:clamp(11px,1.3vw,15px);">${p.pick}</div></div>
       </div>
     </div>`;
@@ -2921,6 +2941,7 @@ function renderEdges() {
   const os=document.getElementById("over-edges-standard");
   const og=document.getElementById("over-edges-goblin");
   const us=document.getElementById("under-edges-standard");
+  if (!os || !og) return;
   os.innerHTML=""; og.innerHTML="";
   if (us) us.innerHTML="";
   EDGE_DISPLAY_PICK = {};
@@ -3014,11 +3035,10 @@ function streakCard(p, n) {
   const pct=Math.round((hits/n)*100);
   const data = streakSparkData(p, n, isOver, hits);
   const spark=makeSparkSVG(data,p.line,isOver,150,48,projectedStatForPick(p));
-  const sc=`sp-${p.sport.toLowerCase()}`, pc=p.pick==="Goblin"?"pick-goblin":"pick-standard";
+  const sc=`sp-${safeSportKey(p)}`, pc=p.pick==="Goblin"?"pick-goblin":"pick-standard";
   const sportLabel = sportDisplayLabel(p.sport);
   const hc=isOver?"var(--green)":"var(--amber)";
   const bc=isOver?"rgba(125,255,203,.3)":"rgba(255,192,107,.3)";
-  const es=isOver?"+":"";
   const pctCol=pct===100?"var(--green)":pct>=80?"var(--amber)":"var(--red)";
   // fire/ice emoji based on streak quality
   const badge=hits===n?(isOver?"🔥 PERFECT":"❄️ PERFECT"):hits>=(n*0.8)?(isOver?"🔥 HOT":"❄️ COLD"):"";
@@ -3371,18 +3391,24 @@ async function fetchSlateSport(sport, opts = {}) {
   if (!prefetch || openSlatePanel === sport) showSlateSportLoading(sport, 'Loading slate...');
 
   SLATE_SPORT_FETCH_PROMISES[sport] = (async () => {
-    await loadSlateData();
+    // Warm picks/edges in parallel — do NOT block the slate table on /api/slate (huge/slow on Railway).
+    const slateWarm = loadSlateData().catch((e) => console.warn("loadSlateData (background):", e));
     let rows = [];
     try {
       const res = await fetch(`slate_sport_${encodeURIComponent(sport)}.json`, {cache: 'no-store'});
       if (res.ok) {
         const d = await res.json();
         rows = Array.isArray(d.rows) ? d.rows : [];
+      } else {
+        console.warn(`slate-sport/${sport} HTTP ${res.status}`);
       }
     } catch (e) {
       console.warn(`slate-sport/${sport} failed, using tickets fallback:`, e);
     }
-    if (!rows.length) rows = _fallbackSlateRowsFromTickets(sport);
+    if (!rows.length) {
+      await slateWarm;
+      rows = _fallbackSlateRowsFromTickets(sport);
+    }
     _setSlateSportRows(sport, rows);
     SLATE_SPORT_CACHE[sport] = true;
     if (openSlatePanel === sport) scheduleRenderSlateTable(sport);
@@ -3585,7 +3611,7 @@ function ensureFixedCombinedTheadFromNbaTemplate() {
 async function loadCombinedFromMergedJson() {
   const tbody = document.getElementById('stb-combined');
   try {
-    await loadSlateData();
+    void loadSlateData().catch(() => {});
     const res = await fetch('slate_sport_combined.json', {cache:'no-store'});
     const d = await res.json();
     const rows = Array.isArray(d.rows) ? d.rows : [];
@@ -3767,15 +3793,25 @@ function sortSlateDynamic(sport, key) {
 }
 
 // Keep edge/streak sections populated and warm slate panel with NBA first.
-injectSlateL5Buttons();
-loadSlateData();
-fetchSlateSport('nba');
-window.setTimeout(() => {
-  if (!SLATE_SPORT_CACHE.soccer) fetchSlateSport('soccer', {prefetch: true});
-  if (!SLATE_SPORT_CACHE.mlb) fetchSlateSport('mlb', {prefetch: true});
-  if (!SLATE_SPORT_CACHE.tennis) fetchSlateSport('tennis', {prefetch: true});
-  if (!SLATE_SPORT_CACHE.wnba) fetchSlateSport('wnba', {prefetch: true});
-}, 3000);
+(function bootHomeSlateUi() {
+  try {
+    injectSlateL5Buttons();
+    loadSlateData();
+    fetchSlateSport('nba');
+    window.setTimeout(() => {
+      try {
+        if (!SLATE_SPORT_CACHE.soccer) fetchSlateSport('soccer', {prefetch: true});
+        if (!SLATE_SPORT_CACHE.mlb) fetchSlateSport('mlb', {prefetch: true});
+        if (!SLATE_SPORT_CACHE.tennis) fetchSlateSport('tennis', {prefetch: true});
+        if (!SLATE_SPORT_CACHE.wnba) fetchSlateSport('wnba', {prefetch: true});
+      } catch (e2) {
+        console.warn("prefetch slate sports:", e2);
+      }
+    }, 3000);
+  } catch (e) {
+    console.error("home slate UI boot:", e);
+  }
+})();
 </script>
 
 <script>
