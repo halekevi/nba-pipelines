@@ -28,6 +28,7 @@ import argparse
 import html
 import json
 import logging
+from collections import Counter
 import math
 import re
 import sys
@@ -602,6 +603,39 @@ def _fmt_ungraded_sample(leg: dict[str, Any], row: dict[str, Any], line_f: float
     )
 
 
+def _fmt_no_row_match_sample(
+    leg: dict[str, Any],
+    indices: dict[str, tuple[dict, dict]],
+) -> str:
+    """Leg line + normalized join keys + optional NBA-family prop hints from the index."""
+    pl = str(leg.get("player") or "?").strip()
+    pt_disp = str(leg.get("prop_type") or "?").strip()
+    dr = str(leg.get("direction") or "?").strip()
+    sp = str(leg.get("sport") or "").strip().upper()
+    try:
+        lf = float(leg.get("line")) if leg.get("line") is not None else None
+    except (TypeError, ValueError):
+        lf = None
+    pn = _norm_player_name(leg.get("player") or "")
+    pk = _prop_match_key_from_display(str(leg.get("prop_type") or ""))
+    dk = str(leg.get("direction") or "").strip().upper()
+    base = (
+        f"{pl} | prop={pt_disp} | norm_prop_key={pk!r} | {dk} | line={lf} | sport={sp}"
+    )
+    hints: list[str] = []
+    for bkt in _leg_match_buckets(sp):
+        if bkt not in ("NBA", "NBA1H", "NBA1Q"):
+            continue
+        _, pairs = indices.get(bkt, ({}, {}))
+        prop_keys = sorted({pt for (p0, pt) in pairs.keys() if p0 == pn})
+        if prop_keys:
+            hints.append(f"{bkt} index props for this player ({len(prop_keys)}): {', '.join(prop_keys[:24])}")
+            break
+    if hints:
+        return base + "  →  " + hints[0]
+    return base + "  →  (player not found in index buckets for NBA/NBA1H/NBA1Q)"
+
+
 def _graded_merge_manifest_row_counts(graded_merge_dates: list[str]) -> list[tuple[Path, int]]:
     """
     Distinct graded workbook paths in merge order (per date: bundle dir then outputs dir),
@@ -648,6 +682,7 @@ def debug_ungraded_report(
     buckets: dict[str, list[tuple[dict[str, Any], dict[str, Any], float | None]]] = {
         k: [] for k in bucket_order
     }
+    no_row_match: list[dict[str, Any]] = []
 
     total_legs = 0
     for grp in payload.get("groups") or []:
@@ -656,6 +691,7 @@ def debug_ungraded_report(
                 total_legs += 1
                 row = _match_leg_to_row_multi(leg, indices)
                 if not row:
+                    no_row_match.append(leg)
                     continue
                 line = leg.get("line")
                 try:
@@ -677,17 +713,43 @@ def debug_ungraded_report(
                 label = _ungraded_debug_bucket(row, line_f, actual, direction, graw, vnote)
                 buckets[label].append((leg, row, line_f))
 
-    n_ungraded = sum(len(buckets[k]) for k in bucket_order)
-    if n_ungraded == 0:
+    n_ungraded_matched = sum(len(buckets[k]) for k in bucket_order)
+    n_no_row = len(no_row_match)
+    n_ungraded_total = n_ungraded_matched + n_no_row
+    if n_ungraded_total == 0:
         print(f"[debug-ungraded] No UNGRADED legs — all {total_legs} legs resolved.")
     else:
-        print(f"[debug-ungraded] UNGRADED breakdown ({n_ungraded} total):")
+        if n_no_row:
+
+            def _nba_family_sport(leg: dict[str, Any]) -> bool:
+                s = str(leg.get("sport") or "").upper().replace(" ", "")
+                return s in ("NBA", "NBA1H", "NBA1Q", "WNBA")
+
+            c_sp = Counter(str(leg.get("sport") or "?") for leg in no_row_match)
+            nba_family = sum(c_sp.get(s, 0) for s in c_sp if _nba_family_sport({"sport": s}))
+            print(
+                f"[debug-ungraded] NO_ROW_MATCH: {n_no_row} legs (no step8/graded index row) — "
+                f"by sport: {dict(c_sp)}  |  NBA+1H+1Q+WNBA: {nba_family}"
+            )
+            nba_samples = [leg for leg in no_row_match if _nba_family_sport(leg)][:12]
+            for leg in nba_samples:
+                print(f"      {_fmt_no_row_match_sample(leg, indices)}")
+            other_samples = [leg for leg in no_row_match if not _nba_family_sport(leg)][:5]
+            for leg in other_samples:
+                print(f"      {_fmt_no_row_match_sample(leg, indices)}")
+        print(f"[debug-ungraded] UNGRADED with matched graded/step8 row ({n_ungraded_matched} total):")
         label_width = max(len(l) for l in bucket_order)
         for key in bucket_order:
             rows = buckets[key]
             cnt = len(rows)
             pad = " " * (label_width - len(key))
-            print(f"  {key}{pad} : {cnt:5d}", end="")
+            nba_cnt = sum(
+                1
+                for leg, _, __ in rows
+                if str(leg.get("sport") or "").upper().replace(" ", "") in ("NBA", "NBA1H", "NBA1Q", "WNBA")
+            )
+            nba_tag = f"  [NBA fam: {nba_cnt}]" if nba_cnt else ""
+            print(f"  {key}{pad} : {cnt:5d}{nba_tag}", end="")
             if cnt:
                 print(f"  (sample: {_fmt_ungraded_sample(rows[0][0], rows[0][1], rows[0][2])})")
                 for leg, r, lf in rows[1:3]:
@@ -3655,8 +3717,9 @@ def main() -> int:
         "--debug-ungraded",
         action="store_true",
         help=(
-            "After building ticket eval, print a breakdown of all UNGRADED legs by root cause "
-            "(grade_raw, void_note, missing actual/line on matched row)."
+            "After building ticket eval, print UNGRADED breakdown: legs with NO index row match "
+            "(join failures; NBA samples show normalized prop key + props available for player), "
+            "then legs that matched a row but stayed UNGRADED (VOID_PENDING, missing actual, etc.)."
         ),
     )
     ap.add_argument(
