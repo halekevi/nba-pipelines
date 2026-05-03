@@ -43,6 +43,10 @@ from dateutil.parser import parse as _parse_datetime_guess
 REPO_ROOT = Path(__file__).resolve().parent.parent
 _log = logging.getLogger(__name__)
 _SCRIPTS = REPO_ROOT / "scripts"
+# Repo root first so ``player_name_norm`` → ``utils.player_name_utils`` resolves when launched as
+# ``py scripts/build_ticket_eval.py`` (sys.path[0] is only ``scripts/`` by default).
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 if str(_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS))
 from player_name_norm import fold_player_name as _fold_player_name  # noqa: E402
