@@ -447,6 +447,75 @@ def _leg_grade(
     return "UNGRADED"
 
 
+def _load_nba_injury_dnp_keys(merge_dates: Sequence[str]) -> frozenset[tuple[str, str]]:
+    """
+    (player_lower, team_upper) from injuries_nba_YYYY-MM-DD.csv for players listed
+    Out or Day-To-Day (ESPN game injury report; correlates with missing box score rows).
+    """
+    keys: set[tuple[str, str]] = set()
+    for gd in merge_dates:
+        ds = str(gd).strip()
+        if not re.match(r"^\d{4}-\d{2}-\d{2}$", ds):
+            continue
+        p = REPO_ROOT / "outputs" / ds / f"injuries_nba_{ds}.csv"
+        if not p.is_file():
+            continue
+        try:
+            df = pd.read_csv(p)
+        except Exception:
+            continue
+        for _, r in df.iterrows():
+            if str(r.get("sport", "")).strip().upper() != "NBA":
+                continue
+            st = str(r.get("injury_status", "")).strip()
+            if st not in ("Out", "Day-To-Day"):
+                continue
+            pl = _norm_player_name(str(r.get("player", "") or ""))
+            tm = str(r.get("team", "") or "").strip().upper()
+            if pl and tm:
+                keys.add((pl, tm))
+    return frozenset(keys)
+
+
+def _resolve_void_pending_if_injury_dnp(
+    grade: str,
+    leg: dict[str, Any],
+    actual: Any,
+    line_f: float | None,
+    graw: str,
+    vnote: str,
+    dnp_keys: frozenset[tuple[str, str]],
+) -> str:
+    """
+    When graded row is VOID + NO_ACTUAL (ticket eval shows UNGRADED / void-pending),
+    treat as a resolved VOID if the player appears on the NBA injuries sidecar as Out/Day-To-Day.
+    """
+    if grade != "UNGRADED" or not dnp_keys:
+        return grade
+    sp = str(leg.get("sport") or "").strip().upper().replace(" ", "")
+    if sp not in ("NBA",):
+        return grade
+    g = (graw or "").strip().upper()
+    if g not in ("VOID", "PUSH", "N/A", "NA"):
+        return grade
+    vn = str(vnote or "").strip().upper()
+    if vn not in _VOID_PENDING_VOID_NOTES:
+        return grade
+    if _finite_line_actual(actual, line_f):
+        return grade
+    pl = _norm_player_name(str(leg.get("player") or ""))
+    if not pl:
+        return grade
+    tm = str(leg.get("team") or "").strip().upper()
+    if (pl, tm) in dnp_keys:
+        return "VOID"
+    # Exact team missing on leg — accept single unambiguous match for this player on this slate date.
+    hits = [k for k in dnp_keys if k[0] == pl]
+    if len(hits) == 1:
+        return "VOID"
+    return grade
+
+
 _VOID_PENDING_VOID_NOTES: frozenset[str] = frozenset(
     ("NO_ACTUAL", "MISSING_ACTUAL", "PENDING", "TBD", "UNKNOWN")
 )
@@ -551,6 +620,7 @@ def debug_ungraded_report(
 ) -> None:
     """Print UNGRADED leg counts by observational bucket and graded source row counts."""
     indices = _load_actuals_indices(sport_candidates, graded_merge_dates)
+    nba_injury_dnp = _load_nba_injury_dnp_keys(graded_merge_dates)
     bucket_order = (
         "MISSING_ACTUAL",
         "MISSING_LINE",
@@ -583,6 +653,9 @@ def debug_ungraded_report(
                 if row.get("line") is not None and line_f is None:
                     line_f = row["line"]
                 grade = _leg_grade(actual, line_f, direction, graw, vnote)
+                grade = _resolve_void_pending_if_injury_dnp(
+                    grade, leg, actual, line_f, graw, vnote, nba_injury_dnp
+                )
                 if grade != "UNGRADED":
                     continue
                 label = _ungraded_debug_bucket(row, line_f, actual, direction, graw, vnote)
@@ -2138,6 +2211,7 @@ def _build_html(
 ) -> tuple[str, dict[str, Any] | None]:
     groups = payload.get("groups") or []
     indices = _load_actuals_indices(sport_candidates, graded_merge_dates)
+    nba_injury_dnp = _load_nba_injury_dnp_keys(graded_merge_dates)
 
     all_legs: list[tuple[dict, dict | None, str]] = []
     tickets_flat: list[dict] = []
@@ -2161,6 +2235,9 @@ def _build_html(
                 if row and row.get("line") is not None and line_f is None:
                     line_f = row["line"]
                 grade = _leg_grade(actual, line_f, direction, graw, vnote)
+                grade = _resolve_void_pending_if_injury_dnp(
+                    grade, leg, actual, line_f, graw, vnote, nba_injury_dnp
+                )
                 all_legs.append((leg, row, grade))
 
     total_legs = len(all_legs)
@@ -2203,6 +2280,7 @@ def _build_html(
             if row and row.get("line") is not None and lf is None:
                 lf = row["line"]
             g = _leg_grade(act, lf, d, gr, vn)
+            g = _resolve_void_pending_if_injury_dnp(g, leg, act, lf, gr, vn, nba_injury_dnp)
             gs.append(g)
         tno = t.get("ticket_no", "?")
         t["_leg_grades_cache"] = gs
