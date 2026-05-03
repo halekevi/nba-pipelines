@@ -32,7 +32,10 @@ API_URL   = "https://api.prizepicks.com/projections"
 WARMUP_URL = "https://api.prizepicks.com/leagues"
 
 # PrizePicks / Cloudflare: optional browser TLS impersonation (same env as NBA step1).
-_CURL_IMPERSONATE = (os.environ.get("PROPORACLE_CURL_IMPERSONATE") or "chrome120").strip()
+# WNBA default is chrome131 (not NBA's chrome120): confirmed working with curl_cffi 0.15.0 on this stack.
+# chrome132 is not supported by curl_cffi 0.15.0 impersonate — upgrade curl_cffi to use newer tokens.
+# Override with PROPORACLE_CURL_IMPERSONATE if needed.
+_CURL_IMPERSONATE = (os.environ.get("PROPORACLE_CURL_IMPERSONATE") or "chrome131").strip()
 try:
     from curl_cffi.requests import Session as _CurlCffiSession
 
@@ -227,6 +230,9 @@ def _rotate_session_headers(session: Any) -> None:
 
 PICKTYPE_MAP = {"standard": "Standard", "goblin": "Goblin", "demon": "Demon"}
 WNBA_LEAGUE_ID_DEFAULT = "3"
+# When the API returns a full board, skip ET --date row pruning in step1 (write all rows + game_date).
+# Downstream steps enforce slate scope once game_date / start_time alignment is stable.
+FULL_BOARD_PRE_SLATE_MIN = 100
 SNAPSHOT_DIR = Path(__file__).resolve().parent / "outputs" / "step1_snapshots"
 SNAPSHOT_LATEST_NAME = "step1_wnba_props_latest.csv"
 BROWSER_PROFILE_DIR = Path.home() / ".pp_browser_profile"
@@ -530,8 +536,8 @@ def _wnba_start_time_to_et_date_str(ser: pd.Series) -> pd.Series:
     return et.dt.strftime("%Y-%m-%d").fillna("").astype(str)
 
 
-def _apply_wnba_slate_date(df: pd.DataFrame, args: Any) -> pd.DataFrame:
-    """Filter to --date (ET) when enabled; add game_date (parsed start_time or slate day)."""
+def _apply_wnba_slate_date(df: pd.DataFrame, args: Any, *, skip_row_filter: bool = False) -> pd.DataFrame:
+    """Optionally filter to --date (ET); always add game_date (parsed start_time ET, else slate day)."""
     if df is None or df.empty:
         return df
     df = df.copy()
@@ -539,7 +545,11 @@ def _apply_wnba_slate_date(df: pd.DataFrame, args: Any) -> pd.DataFrame:
         df["start_time"] = ""
     slate = str(args.date).strip()[:10]
     cal = _wnba_start_time_to_et_date_str(df["start_time"])
-    if not bool(getattr(args, "no_slate_filter", False)) and slate:
+    if (
+        not skip_row_filter
+        and not bool(getattr(args, "no_slate_filter", False))
+        and slate
+    ):
         keep = cal.eq(slate)
         n0 = len(df)
         df = df.loc[keep].copy().reset_index(drop=True)
@@ -736,7 +746,14 @@ def main():
     if before != after:
         print(f"  Deduped: {before} → {after}")
 
-    df = _apply_wnba_slate_date(df, args)
+    n_pre_slate = len(df)
+    skip_slate_row_filter = n_pre_slate >= FULL_BOARD_PRE_SLATE_MIN
+    if skip_slate_row_filter:
+        print(
+            f"  [slate-date] skipping ET date row filter (rows={n_pre_slate} >= {FULL_BOARD_PRE_SLATE_MIN}); "
+            "writing full API board — downstream may filter by game_date"
+        )
+    df = _apply_wnba_slate_date(df, args, skip_row_filter=skip_slate_row_filter)
 
     rows_n  = len(df)
     teams_n = df["team"].astype(str).nunique()
