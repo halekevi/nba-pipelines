@@ -16,6 +16,7 @@ Run:
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import time
 import random
@@ -29,13 +30,199 @@ import requests
 API_URL   = "https://api.prizepicks.com/projections"
 WARMUP_URL = "https://api.prizepicks.com/leagues"
 
-USER_AGENTS = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0",
+# PrizePicks / Cloudflare: optional browser TLS impersonation (same env as NBA step1).
+_CURL_IMPERSONATE = (os.environ.get("PROPORACLE_CURL_IMPERSONATE") or "chrome120").strip()
+try:
+    from curl_cffi.requests import Session as _CurlCffiSession
+
+    _CURL_CFFI_AVAILABLE = True
+except ImportError:
+    _CurlCffiSession = None  # type: ignore[misc, assignment]
+    _CURL_CFFI_AVAILABLE = False
+
+_HTTP_BACKEND_LOGGED = False
+
+
+def _new_http_session() -> Any:
+    if _CURL_CFFI_AVAILABLE and _CurlCffiSession is not None:
+        return _CurlCffiSession(impersonate=_CURL_IMPERSONATE)
+    return requests.Session()
+
+
+def _log_http_backend_once() -> None:
+    global _HTTP_BACKEND_LOGGED
+    if _HTTP_BACKEND_LOGGED:
+        return
+    _HTTP_BACKEND_LOGGED = True
+    if _CURL_CFFI_AVAILABLE:
+        print(f"  [PP] HTTP transport: curl_cffi impersonate={_CURL_IMPERSONATE!r} (browser TLS/JA3)")
+    else:
+        print(
+            "  [PP] HTTP transport: requests (install curl-cffi for Cloudflare-resistant TLS; "
+            "pip install curl-cffi)"
+        )
+
+
+# Cohesive browser profiles (copied from Sports/NBA/scripts/step1_fetch_prizepicks_api.py).
+_BROWSER_PROFILES: List[Dict[str, str]] = [
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/120.0.0.0 Safari/537.36"
+        ),
+        "Sec-Ch-Ua": '"Google Chrome";v="120", "Chromium";v="120", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"Windows"',
+    },
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/120.0.0.0 Safari/537.36"
+        ),
+        "Sec-Ch-Ua": '"Google Chrome";v="120", "Chromium";v="120", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"macOS"',
+    },
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/131.0.0.0 Safari/537.36"
+        ),
+        "Sec-Ch-Ua": '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"Windows"',
+    },
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/132.0.0.0 Safari/537.36"
+        ),
+        "Sec-Ch-Ua": '"Google Chrome";v="132", "Chromium";v="132", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"Windows"',
+    },
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/131.0.0.0 Safari/537.36"
+        ),
+        "Sec-Ch-Ua": '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"macOS"',
+    },
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0"
+        ),
+        "Sec-Ch-Ua": '"Microsoft Edge";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"Windows"',
+    },
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/130.0.0.0 Safari/537.36"
+        ),
+        "Sec-Ch-Ua": '"Google Chrome";v="130", "Chromium";v="130", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"Windows"',
+    },
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/133.0.0.0 Safari/537.36"
+        ),
+        "Sec-Ch-Ua": '"Google Chrome";v="133", "Chromium";v="133", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"Windows"',
+    },
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/133.0.0.0 Safari/537.36"
+        ),
+        "Sec-Ch-Ua": '"Google Chrome";v="133", "Chromium";v="133", "Not_A Brand";v="24"',
+        "Sec-Ch-Ua-Mobile": "?0",
+        "Sec-Ch-Ua-Platform": '"macOS"',
+    },
 ]
+
+
+def _tls_chrome_major_from_impersonate() -> int | None:
+    m = re.search(r"(?i)chrome[_-]?(\d+)", _CURL_IMPERSONATE)
+    if not m:
+        return None
+    try:
+        return int(m.group(1))
+    except ValueError:
+        return None
+
+
+def _profiles_for_current_transport() -> List[Dict[str, str]]:
+    if not _CURL_CFFI_AVAILABLE:
+        return list(_BROWSER_PROFILES)
+    major = _tls_chrome_major_from_impersonate()
+    if major is None:
+        return list(_BROWSER_PROFILES)
+    needle = f"Chrome/{major}."
+    edge_needle = f"Edg/{major}."
+    matched = [
+        p
+        for p in _BROWSER_PROFILES
+        if needle in p.get("User-Agent", "") or edge_needle in p.get("User-Agent", "")
+    ]
+    if not matched:
+        raise RuntimeError(
+            f"No User-Agent profile for curl_cffi impersonate={_CURL_IMPERSONATE!r} "
+            f"(expected Chrome/{major}. or Edg/{major}. in _BROWSER_PROFILES)."
+        )
+    return matched
+
+
+def _validate_client_hints_match_tls(browser_profile_headers: Dict[str, str]) -> None:
+    if not _CURL_CFFI_AVAILABLE:
+        return
+    major = _tls_chrome_major_from_impersonate()
+    if major is None:
+        return
+    ua = browser_profile_headers.get("User-Agent", "")
+    if f"Chrome/{major}." not in ua and f"Edg/{major}." not in ua:
+        raise RuntimeError(
+            f"PrizePicks client-hint/TLS mismatch: impersonate={_CURL_IMPERSONATE!r} "
+            f"requires User-Agent containing Chrome/{major}. or Edg/{major}.; got {ua[:160]!r}"
+        )
+
+
+def _browser_headers_from_profile(profile: Dict[str, str]) -> Dict[str, str]:
+    return {
+        **profile,
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Referer": "https://app.prizepicks.com/",
+        "Origin": "https://app.prizepicks.com",
+        "Connection": "keep-alive",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-site",
+        "Priority": "u=1, i",
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache",
+    }
+
+
+def _random_browser_headers() -> Dict[str, str]:
+    pool = _profiles_for_current_transport()
+    headers = _browser_headers_from_profile(random.choice(pool))
+    _validate_client_hints_match_tls(headers)
+    return headers
+
+
+def _rotate_session_headers(session: Any) -> None:
+    session.headers.clear()
+    session.headers.update(_random_browser_headers())
+
 
 PICKTYPE_MAP = {"standard": "Standard", "goblin": "Goblin", "demon": "Demon"}
 WNBA_LEAGUE_ID_DEFAULT = "3"
@@ -43,34 +230,54 @@ SNAPSHOT_DIR = Path(__file__).resolve().parent / "outputs" / "step1_snapshots"
 SNAPSHOT_LATEST_NAME = "step1_wnba_props_latest.csv"
 BROWSER_PROFILE_DIR = Path.home() / ".pp_browser_profile"
 
+# aligned with MLB step1 DataDome bypass (Playwright persistent / fresh context)
+LAUNCH_ARGS = [
+    "--no-sandbox",
+    "--disable-blink-features=AutomationControlled",
+    "--start-maximized",
+    "--disable-infobars",
+    "--disable-dev-shm-usage",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--window-size=1920,1080",
+]
 
-def _make_headers(ua: str) -> dict:
-    return {
-        "User-Agent": ua,
-        "Accept": "application/json, text/plain, */*",
-        "Accept-Language": "en-US,en;q=0.9",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Origin": "https://app.prizepicks.com",
-        "Referer": "https://app.prizepicks.com/board",
-        "Sec-Ch-Ua": '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
-        "Sec-Ch-Ua-Mobile": "?0",
-        "Sec-Ch-Ua-Platform": '"Windows"',
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "same-site",
-        "Connection": "keep-alive",
-        "Cache-Control": "no-cache",
-        "Pragma": "no-cache",
-    }
+# Omit user_agent: Playwright real Chromium UA must match TLS fingerprint (DataDome). — MLB step1
+CTX_KWARGS = dict(
+    locale="en-US",
+    timezone_id="America/New_York",
+    geolocation={"latitude": 33.7490, "longitude": -84.3880},  # Atlanta, GA — aligned with MLB step1 DataDome bypass
+    permissions=["geolocation", "notifications"],
+    color_scheme="dark",
+    extra_http_headers={
+        "accept-language": "en-US,en;q=0.9",
+        "sec-ch-ua-platform": '"Windows"',
+    },
+)
 
 
-def _warm_session(session: requests.Session, ua: str) -> None:
+def _warm_session(session: Any) -> None:
     try:
-        r = session.get(WARMUP_URL, headers=_make_headers(ua), timeout=15)
+        r = session.get(WARMUP_URL, timeout=15)
         print(f"  🌐 Session warmed ({r.status_code})")
         time.sleep(random.uniform(1.5, 3.0))
     except Exception as e:
         print(f"  ⚠️ Warmup failed: {e} — continuing")
+
+
+def _align_cdp_context_for_datadome(context: Any) -> None:
+    """aligned with MLB step1 DataDome bypass — real Chrome CDP contexts skip CTX_KWARGS; set geo explicitly."""
+    try:
+        context.grant_permissions(
+            ["geolocation", "notifications"],
+            origin="https://app.prizepicks.com",
+        )
+    except Exception:
+        pass
+    try:
+        context.set_geolocation({"latitude": 33.7490, "longitude": -84.3880})
+    except Exception:
+        pass
 
 
 def _safe_get(d: dict, path: List[str], default=""):
@@ -115,10 +322,10 @@ def fetch_pages(
     stop_paging = False
     seen_ids: Set[str] = set()
 
-    session = requests.Session()
-    ua = random.choice(USER_AGENTS)
-    headers = _make_headers(ua)
-    _warm_session(session, ua)
+    _log_http_backend_once()
+    session = _new_http_session()
+    _rotate_session_headers(session)
+    _warm_session(session)
 
     for page in range(1, max_pages + 1):
         if stop_paging:
@@ -132,7 +339,7 @@ def fetch_pages(
             "page[size]": int(per_page),
         }
         for attempt in range(1, 9):
-            r = session.get(API_URL, headers=headers, params=params, timeout=30)
+            r = session.get(API_URL, params=params, timeout=30)
 
             if r.status_code == 429:
                 cooldowns_used += 1
@@ -151,12 +358,22 @@ def fetch_pages(
                     print(f"🛑 403 persists. Stopping early.")
                     stop_paging = True
                     break
+                try:
+                    session.cookies.clear()
+                except Exception:
+                    pass
+                if forbidden_retries >= 2:
+                    print(f"⏸️ 403 retry {forbidden_retries}/{max_403_retries}: rotating TLS-matched browser profile…")
+                    _rotate_session_headers(session)
+                else:
+                    print(
+                        f"⏸️ 403 retry {forbidden_retries}/{max_403_retries}: "
+                        "same client fingerprint; cookies cleared only"
+                    )
                 backoff = forbidden_backoff_base * (2 ** (forbidden_retries - 1)) + random.uniform(2, 8)
-                print(f"⏸️ 403 retry {forbidden_retries}/{max_403_retries}: sleeping {backoff:.1f}s...")
+                print(f"⏸️ sleeping {backoff:.1f}s...")
                 time.sleep(backoff)
-                ua = random.choice(USER_AGENTS)
-                headers = _make_headers(ua)
-                _warm_session(session, ua)
+                _warm_session(session)
                 continue
 
             if r.status_code >= 500:
@@ -186,10 +403,25 @@ def fetch_pages(
 
 def fetch_via_playwright_session(league_id: str, timeout_s: int, cdp_url: str = "") -> Tuple[List[dict], List[dict], List[dict]]:
     from playwright.sync_api import sync_playwright
+
+    _apply_stealth_fn = None
     try:
-        from playwright_stealth import stealth_sync  # type: ignore
-    except Exception:
-        stealth_sync = None
+        from playwright_stealth import stealth_sync as _stealth_sync_legacy  # type: ignore
+
+        def _apply_stealth_fn(page):  # type: ignore[no-redef]
+            _stealth_sync_legacy(page)
+
+        print("  🛡️  playwright-stealth loaded (legacy stealth_sync)")
+    except ImportError:
+        try:
+            from playwright_stealth import Stealth  # type: ignore
+
+            def _apply_stealth_fn(page):  # type: ignore[no-redef]
+                Stealth().apply_stealth_sync(page)
+
+            print("  🛡️  playwright-stealth loaded (Stealth v2 API)")
+        except ImportError:
+            print("  ⚠️  playwright-stealth not installed — run: py -3.14 -m pip install playwright-stealth")
 
     if not BROWSER_PROFILE_DIR.exists():
         raise RuntimeError(
@@ -197,53 +429,39 @@ def fetch_via_playwright_session(league_id: str, timeout_s: int, cdp_url: str = 
             "Run MLB/scripts/setup_prizepicks_profile.py after logging into PrizePicks in Chrome."
         )
 
-    launch_args = [
-        "--no-sandbox",
-        "--disable-blink-features=AutomationControlled",
-        "--disable-dev-shm-usage",
-        "--no-first-run",
-        "--no-default-browser-check",
-        "--window-size=1366,768",
-    ]
-    ctx_kwargs = dict(
-        locale="en-US",
-        timezone_id="America/New_York",
-        viewport={"width": 1366, "height": 768},
-        user_agent=(
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-        ),
-    )
-
     with sync_playwright() as p:
         context = None
         browser = None
         cdp = (cdp_url or "").strip()
         if cdp:
+            print(f"🌐 Connecting to existing Chrome via CDP: {cdp}")
             browser = p.chromium.connect_over_cdp(cdp)
             if not browser.contexts:
                 raise RuntimeError("CDP browser has no contexts; start Chrome with --remote-debugging-port.")
             context = browser.contexts[0]
+            print("  Using browser context[0] (existing session / cookies).")
+            # aligned with MLB step1 DataDome bypass — do not override UA; grant Atlanta geo on attached context.
+            _align_cdp_context_for_datadome(context)
             page = context.new_page()
         else:
             try:
                 context = p.chromium.launch_persistent_context(
                     user_data_dir=str(BROWSER_PROFILE_DIR),
                     channel="chrome",
-                    headless=False,
-                    args=launch_args,
-                    **ctx_kwargs,
+                    headless=False,  # aligned with MLB step1 DataDome bypass
+                    args=LAUNCH_ARGS,
+                    **CTX_KWARGS,
                 )
             except Exception:
                 context = p.chromium.launch_persistent_context(
                     user_data_dir=str(BROWSER_PROFILE_DIR),
                     headless=False,
-                    args=launch_args,
-                    **ctx_kwargs,
+                    args=LAUNCH_ARGS,
+                    **CTX_KWARGS,
                 )
             page = context.new_page()
-        if stealth_sync is not None:
-            stealth_sync(page)
+        if _apply_stealth_fn is not None:
+            _apply_stealth_fn(page)
 
         page.set_default_timeout(max(30000, int(timeout_s) * 1000))
         page.goto("https://app.prizepicks.com/", wait_until="domcontentloaded", timeout=30000)
