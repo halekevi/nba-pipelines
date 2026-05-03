@@ -196,8 +196,8 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="sum-item"><div class="sum-val">44.4%</div><div class="sum-lab">TICKET HIT RATE</div></div>
 <div class="sum-item"><div class="sum-val green">268</div><div class="sum-lab">HITS</div></div>
 <div class="sum-item"><div class="sum-val red">153</div><div class="sum-lab">MISSES</div></div>
-<div class="sum-item"><div class="sum-val void">22</div><div class="sum-lab">VOID/PUSH</div></div>
-<div class="sum-item"><div class="sum-val pend">360</div><div class="sum-lab">UNGRADED</div></div>
+<div class="sum-item"><div class="sum-val void">12</div><div class="sum-lab">VOID/PUSH</div></div>
+<div class="sum-item"><div class="sum-val pend">370</div><div class="sum-lab">UNGRADED</div></div>
 <div class="sum-item"><div class="sum-val">20</div><div class="sum-lab">PERFECT TICKETS</div></div>
 <div class="sum-item"><div class="sum-val green">20</div><div class="sum-lab">PAID TIX</div></div>
 <div class="sum-item"><div class="sum-val red">25</div><div class="sum-lab">NO PAYOUT</div></div>
@@ -207,7 +207,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 </div></div>
 <div class="wrap ticket-eval-main">
 <p class="slate-kicker">SLATE DATE · 2026-05-02</p>
-<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-05-02/graded_*.xlsx</code>. <strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss. <strong>UNGRADED (360 legs):</strong> the matched graded row still has no actual or HIT/MISS—often unfinished games, voids, or grading before final stats. Re-run the grader after games; on hosts without <code>outputs/2026-05-02/</code>, commit workbooks under <code>ui_runner/graded_slate/2026-05-02/</code> before rebuilding this page. </p>
+<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-05-02/graded_*.xlsx</code>. <strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss. <strong>UNGRADED (370 legs):</strong> the matched graded row still has no actual or HIT/MISS—often unfinished games, voids, or grading before final stats. Re-run the grader after games; on hosts without <code>outputs/2026-05-02/</code>, commit workbooks under <code>ui_runner/graded_slate/2026-05-02/</code> before rebuilding this page. </p>
 <div class="ticket-sections-wrap">
 <details class="ticket-bucket sb-nba" open>
 <summary><span>NBA</span><span class="ticket-bucket-meta">21 sections · 33 tickets</span></summary>
@@ -1833,14 +1833,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-nhl">NHL</span></div>
-<div class="pl-void">Owen Tippett</div>
+<div class="pl-pend">Owen Tippett</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>hits</div><div class="meta-muted">PHI vs CAR</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -1864,14 +1864,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-nhl">NHL</span></div>
-<div class="pl-void">Owen Tippett</div>
+<div class="pl-pend">Owen Tippett</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>hits</div><div class="meta-muted">PHI vs CAR</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
 <div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
@@ -2217,14 +2217,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-nhl">NHL</span></div>
-<div class="pl-void">Owen Tippett</div>
+<div class="pl-pend">Owen Tippett</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>hits</div><div class="meta-muted">PHI vs CAR</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
 <div class="legrow leg-pend">
@@ -2258,14 +2258,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-nhl">NHL</span></div>
-<div class="pl-void">Owen Tippett</div>
+<div class="pl-pend">Owen Tippett</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>hits</div><div class="meta-muted">PHI vs CAR</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
 <div class="legrow leg-pend">
@@ -2553,14 +2553,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-nhl">NHL</span></div>
-<div class="pl-void">Owen Tippett</div>
+<div class="pl-pend">Owen Tippett</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>hits</div><div class="meta-muted">PHI vs CAR</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
 <div class="legrow leg-pend">
@@ -2604,14 +2604,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-nhl">NHL</span></div>
-<div class="pl-void">Owen Tippett</div>
+<div class="pl-pend">Owen Tippett</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>hits</div><div class="meta-muted">PHI vs CAR</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
 <div class="legrow leg-pend">
@@ -2865,14 +2865,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-nhl">NHL</span></div>
-<div class="pl-void">Owen Tippett</div>
+<div class="pl-pend">Owen Tippett</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>hits</div><div class="meta-muted">PHI vs CAR</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
 <div class="legrow leg-pend">
@@ -2926,14 +2926,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-nhl">NHL</span></div>
-<div class="pl-void">Owen Tippett</div>
+<div class="pl-pend">Owen Tippett</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>hits</div><div class="meta-muted">PHI vs CAR</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
 <div class="legrow leg-pend">
@@ -3113,14 +3113,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-nhl">NHL</span></div>
-<div class="pl-void">Owen Tippett</div>
+<div class="pl-pend">Owen Tippett</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>hits</div><div class="meta-muted">PHI vs CAR</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
 <div class="legrow leg-pend">
@@ -3184,14 +3184,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-nhl">NHL</span></div>
-<div class="pl-void">Owen Tippett</div>
+<div class="pl-pend">Owen Tippett</div>
 <div class="tier">S</div>
 <div class="leg-prop-col"><div>hits</div><div class="meta-muted">PHI vs CAR</div></div>
 <div class="leg-extra">3.5 <span class="dir-under">UNDER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">-0.5</div>
 </div>
 <div class="legrow leg-pend">
