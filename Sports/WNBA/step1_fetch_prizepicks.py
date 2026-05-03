@@ -409,7 +409,8 @@ def fetch_pages(
 #    "press and hold" challenge, solve it manually until the board loads.
 # 3. Browse normally for ~1 min if challenges repeat (lets risk scoring settle).
 # 4. Without closing Chrome, run this script with --cdp http://127.0.0.1:9222
-# 5. Confirm log shows projections_status=200 and no BOARD_OK_FALLBACK.
+# 5. Confirm log shows projections_status=200. On failure the script exits
+#    non-zero (no stale snapshot fallback).
 # The in-page fetch() inherits the authenticated session and DataDome trust
 # from the open tab — closing or relaunching Chrome resets that trust.
 
@@ -553,49 +554,6 @@ def _apply_wnba_slate_date(df: pd.DataFrame, args: Any) -> pd.DataFrame:
     return df
 
 
-def _postprocess_fallback_out_csv(out_path: Path, args: Any) -> None:
-    df = _read_csv_safe(out_path)
-    df = _apply_wnba_slate_date(df, args)
-    df.to_csv(out_path, index=False, encoding="utf-8-sig")
-    _write_snapshots(df, str(args.date).strip())
-
-
-def _read_csv_safe(path: Path) -> pd.DataFrame:
-    try:
-        return pd.read_csv(path, encoding="utf-8-sig")
-    except UnicodeDecodeError:
-        return pd.read_csv(path, encoding="utf-8")
-    except Exception:
-        return pd.DataFrame()
-
-
-def _snapshot_candidates(out_path: Path) -> list[Path]:
-    candidates: list[Path] = []
-    for p in (out_path, SNAPSHOT_DIR / SNAPSHOT_LATEST_NAME):
-        if p.is_file() and p not in candidates:
-            candidates.append(p)
-    if SNAPSHOT_DIR.is_dir():
-        for p in sorted(
-            SNAPSHOT_DIR.glob("step1_wnba_props_*.csv"),
-            key=lambda x: x.stat().st_mtime,
-            reverse=True,
-        ):
-            if p.is_file() and p not in candidates:
-                candidates.append(p)
-    repo_outputs = Path(__file__).resolve().parents[2] / "outputs"
-    wnba_outputs = Path(__file__).resolve().parent / "outputs"
-    for outputs_root in (repo_outputs, wnba_outputs):
-        if not outputs_root.is_dir():
-            continue
-        for p in sorted(outputs_root.glob("*/wnba_*_step1_wnba_props.csv"), key=lambda x: x.stat().st_mtime, reverse=True):
-            if p.is_file() and p not in candidates:
-                candidates.append(p)
-        for p in sorted(outputs_root.glob("*/step1_wnba_props.csv"), key=lambda x: x.stat().st_mtime, reverse=True):
-            if p.is_file() and p not in candidates:
-                candidates.append(p)
-    return candidates
-
-
 def _write_snapshots(df: pd.DataFrame, date_tag: str) -> None:
     if df is None or df.empty:
         return
@@ -636,23 +594,6 @@ def main():
         out_path = Path(__file__).resolve().parent / out_path
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    def _fallback_to_existing_csv(reason: str) -> bool:
-        for candidate in _snapshot_candidates(out_path):
-            old = _read_csv_safe(candidate)
-            if old.empty:
-                continue
-            old_rows = len(old)
-            old_teams = old.get("team", pd.Series(dtype=str)).astype(str).replace("", pd.NA).dropna().nunique()
-            if old_rows < max(1, int(args.min_rows)) or old_teams < max(1, int(args.min_teams)):
-                continue
-            old.to_csv(out_path, index=False, encoding="utf-8-sig")
-            print(
-                f"⚠️ {reason}. Using fallback board at {candidate} "
-                f"(rows={old_rows}, teams={old_teams})"
-            )
-            return True
-        return False
-
     print(f"📡 Fetching PrizePicks WNBA | league_id={args.league_id}")
 
     data: List[dict] = []
@@ -682,11 +623,12 @@ def main():
                 if not any("wnba" in n.lower() for _, n in items):
                     print("⚠️ WNBA not present in active leagues payload.")
         except Exception as e:
-            if _fallback_to_existing_csv(f"playwright fetch failed ({e})"):
-                _postprocess_fallback_out_csv(out_path, args)
-                print("✅ BOARD_OK_FALLBACK")
-                return
-            print(f"❌ Playwright fetch failed and no valid fallback: {e}")
+            print(f"❌ FETCH_FAILED: Playwright fetch failed: {e}")
+            print(
+                "❌ No projections returned (403 or error). Solve the DataDome challenge in CDP Chrome "
+                "and retry with --cdp http://127.0.0.1:9222, or fix HTTP/Playwright. "
+                "Do not use stale on-disk step1 in production."
+            )
             sys.exit(1)
     else:
         try:
@@ -702,25 +644,20 @@ def main():
                 max_403_retries=args.max_403_retries,
             )
         except Exception as e:
-            if _fallback_to_existing_csv(f"fetch failed ({e})"):
-                _postprocess_fallback_out_csv(out_path, args)
-                print("✅ BOARD_OK_FALLBACK")
-                return
-            print(f"❌ Fetch failed and no valid fallback: {e}")
+            print(f"❌ FETCH_FAILED: HTTP fetch failed: {e}")
+            print(
+                "❌ Solve DataDome / auth (e.g. CDP with --cdp). "
+                "Do not use stale on-disk step1 in production."
+            )
             sys.exit(1)
 
     if not data:
-        if _fallback_to_existing_csv("No projections fetched"):
-            _postprocess_fallback_out_csv(out_path, args)
-            print("✅ BOARD_OK_FALLBACK")
-            return
-        cols = ["projection_id","pp_projection_id","player_id","pp_game_id","start_time",
-                "game_date",
-                "player","image_url","pos","team","opp_team","pp_home_team","pp_away_team",
-                "prop_type","line","pick_type"]
-        pd.DataFrame(columns=cols).to_csv(out_path, index=False)
-        print("❌ No projections fetched. Wrote empty CSV.")
-        return
+        print(
+            "❌ FETCH_FAILED: No projections returned (403 or empty API payload). "
+            "Solve the DataDome challenge in CDP Chrome and retry with --cdp, or fix HTTP. "
+            "Do not use stale on-disk step1 in production."
+        )
+        sys.exit(1)
 
     inc = _included_index(included)
     rows: List[dict] = []
@@ -805,13 +742,12 @@ def main():
     teams_n = df["team"].astype(str).nunique()
 
     if rows_n < args.min_rows or teams_n < args.min_teams:
-        if _fallback_to_existing_csv(
-            f"BOARD_TOO_SMALL (rows={rows_n}, teams={teams_n}; "
-            f"min_rows={args.min_rows}, min_teams={args.min_teams})"
-        ):
-            _postprocess_fallback_out_csv(out_path, args)
-            print("✅ BOARD_OK_FALLBACK")
-            return
+        print(
+            f"❌ FETCH_FAILED: BOARD_TOO_SMALL after slate filter "
+            f"(rows={rows_n}, teams={teams_n}; need min_rows={args.min_rows}, min_teams={args.min_teams}). "
+            "Stale snapshot fallback is disabled — fix fetch or --date / --no-slate-filter."
+        )
+        sys.exit(1)
 
     df.to_csv(out_path, index=False, encoding="utf-8-sig")
     _write_snapshots(df, str(args.date).strip())
