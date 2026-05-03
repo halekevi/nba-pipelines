@@ -13,6 +13,8 @@
 #    .\run_pipeline.ps1 -TennisOnly           # Tennis (light pipeline) + Combined
 #    .\run_pipeline.ps1 -WNBAOnly              # WNBA only (delegates to scripts\run_wnba_pipeline.ps1)
 #    .\run_pipeline.ps1 -WNBAOnly -WNBACdp http://127.0.0.1:9222   # PrizePicks via Chrome CDP (DataDome)
+#  WNBA / combined contract: step1 chrome131 + full-board game_date anchor; step8 preserves it;
+#  scripts\run_wnba_pipeline.ps1 publishes step8 clean to outputs/<date>/ after step8 (before step9).
 #  WNBA CDP env (optional): PROPORACLE_PP_CDP or PRIZEPICKS_CDP — used when -WNBACdp omitted.
 #    .\run_pipeline.ps1 -NFLOnly               # NFL only (delegates to scripts\run_nfl_pipeline.ps1) + Combined
 #    .\run_pipeline.ps1 -ForceWNBA           # Include WNBA in full parallel run before season start (QA)

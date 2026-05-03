@@ -8,6 +8,11 @@
 #    .\run_wnba_pipeline.ps1 -SkipFetch         # Use existing step1 output
 #    .\run_wnba_pipeline.ps1 -Cdp http://127.0.0.1:9222   # Chrome CDP after DataDome solve
 #  Env (optional): PROPORACLE_PP_CDP or PRIZEPICKS_CDP — same as -Cdp when -Cdp omitted.
+#
+#  Combined / game_date contract (2026-05): step1 anchors full-board game_date to --date;
+#  step8 must not overwrite with start_time ET (see step8_add_direction_context.py). After step8,
+#  Publish-WnbaStep8CleanArtifacts copies clean XLSX to outputs/<date>/ and Sports/WNBA/data/outputs
+#  so Run-Combined always sees fresh WNBA even if step9 fails.
 # ============================================================
 param(
     [string]$Date         = "",
@@ -94,6 +99,23 @@ function Run-Step {
     }
 }
 
+function Publish-WnbaStep8CleanArtifacts {
+    $step8Clean = Join-Path $WNBADir "step8_wnba_direction_clean.xlsx"
+    if (-not (Test-Path -LiteralPath $step8Clean)) {
+        Write-Host "  [WNBA publish] skip — no step8_wnba_direction_clean.xlsx" -ForegroundColor DarkGray
+        return
+    }
+    $dataOut = Join-Path $WNBADir "data\outputs"
+    if (-not (Test-Path $dataOut)) {
+        New-Item -ItemType Directory -Force -Path $dataOut | Out-Null
+    }
+    Copy-Item $step8Clean (Join-Path $dataOut "step8_wnba_direction_clean.xlsx") -Force
+    Write-Host "  [WNBA publish] Canonical -> data\outputs\step8_wnba_direction_clean.xlsx" -ForegroundColor DarkGray
+    $step8Dst = Join-Path $DateDir ("step8_wnba_direction_clean_" + $Date + ".xlsx")
+    Copy-Item $step8Clean $step8Dst -Force
+    Write-Host "  [WNBA publish] Combined dated input -> $(Split-Path -Leaf $step8Dst)" -ForegroundColor DarkGray
+}
+
 # -- Cache management ---------------------------------------------------------
 if ($RefreshCache) {
     Write-Host "  [Cache] Wiping WNBA ESPN cache..." -ForegroundColor Yellow
@@ -123,6 +145,7 @@ if (-not $SkipFetch) {
     if ($ok) { $ok = Run-Step "WNBA Step 1 - Fetch PrizePicks" $WNBADir ".\step1_fetch_prizepicks.py" $step1Args }
 } else {
     Write-Host "  --> [SkipFetch] Using existing step1_wnba_props.csv" -ForegroundColor DarkGray
+    Write-Host "  [WNBA] If combined dropped WNBA rows, re-run step1 once (no SkipFetch) after board/game_date policy changes." -ForegroundColor DarkYellow
 }
 
 if ($ok) { $ok = Run-Step "WNBA Step 2 - Attach Pick Types" $WNBADir ".\step2_attach_picktypes.py" `
@@ -166,6 +189,7 @@ if ($ok) {
 
 if ($ok) { $ok = Run-Step "WNBA Step 8 - Direction Context" $WNBADir ".\step8_add_direction_context.py" `
     "--input step7_wnba_ranked.xlsx --sheet ALL --output step8_wnba_direction.csv --xlsx step8_wnba_direction_clean.xlsx --date $Date" }
+if ($ok) { Publish-WnbaStep8CleanArtifacts }
 
 if ($ok) { $ok = Run-Step "WNBA Step 9 - Build Tickets" $WNBADir ".\step9_build_tickets.py" `
     "--input step8_wnba_direction_clean.xlsx --output wnba_best_tickets.xlsx --min_hit_rate 0.8 --legs 2,3,4" }
@@ -185,24 +209,6 @@ if ($ok) {
             Copy-Item $src $dst -Force
             Write-Host "  Copied: $f" -ForegroundColor Green
         }
-    }
-    # Canonical combined path: WNBA\data\outputs\step8_wnba_direction_clean.xlsx (matches Run-Combined)
-    $dataOut = Join-Path $WNBADir "data\outputs"
-    if (-not (Test-Path $dataOut)) {
-        New-Item -ItemType Directory -Force -Path $dataOut | Out-Null
-    }
-    $step8Clean = "$WNBADir\step8_wnba_direction_clean.xlsx"
-    if (Test-Path $step8Clean) {
-        Copy-Item $step8Clean (Join-Path $dataOut "step8_wnba_direction_clean.xlsx") -Force
-        Write-Host "  [WNBA] Canonical -> data\outputs\step8_wnba_direction_clean.xlsx" -ForegroundColor DarkGray
-    }
-    # Dated snapshot name for run_daily / audits (clean workbook)
-    $step8Src = $step8Clean
-    if (-not (Test-Path $step8Src)) { $step8Src = "$WNBADir\step8_wnba_direction.xlsx" }
-    if (Test-Path $step8Src) {
-        $step8Dst = Join-Path $DateDir ("step8_wnba_direction_clean_" + $Date + ".xlsx")
-        Copy-Item $step8Src $step8Dst -Force
-        Write-Host "  Copied: $(Split-Path -Leaf $step8Dst)" -ForegroundColor Green
     }
     $script:ProgressDone = [Math]::Min($script:ProgressDone + 1, $script:ProgressTotal)
     $pct = [int][Math]::Round(($script:ProgressDone / $script:ProgressTotal) * 100, 0)
