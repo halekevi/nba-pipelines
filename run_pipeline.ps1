@@ -548,55 +548,12 @@ function Run-Combined {
     # Clean up any stale root-level combined_slate_tickets files from previous runs
     Get-ChildItem -Path $Root -Filter "combined_slate_tickets_*.xlsx" | Remove-Item -Force -ErrorAction SilentlyContinue
 
-    $nbaFile    = "$NBADir\data\outputs\step8_all_direction_clean.xlsx"
-    if (-not (Test-Path $nbaFile)) {
-        $nbaAlt = Join-Path $NBADir "step8_all_direction_clean.xlsx"
-        if (Test-Path $nbaAlt) {
-            $nbaFile = $nbaAlt
-            Write-Host "  [NBA] Using fallback step8: $nbaFile" -ForegroundColor DarkGray
-        }
-    }
-    # CBB deactivated - season over (April 2026)
-    $cbbFile    = "$CBBDir\step6_ranked_cbb.xlsx"
-    $nhlFile    = "$NHLDir\outputs\step8_nhl_direction_clean.xlsx"
-    $soccerFile = "$SoccerDir\outputs\step8_soccer_direction_clean.xlsx"
-    $tennisFile = "$TennisDir\outputs\step8_tennis_direction_clean.xlsx"
-    $wnbaFile   = Join-Path $WNBADir "step8_wnba_direction.xlsx"
-    if (-not (Test-Path $wnbaFile)) {
-        $wnbaClean = Join-Path $WNBADir "step8_wnba_direction_clean.xlsx"
-        if (Test-Path $wnbaClean) {
-            $wnbaFile = $wnbaClean
-            Write-Host "  [WNBA] Using step8_wnba_direction_clean.xlsx for combined" -ForegroundColor DarkGray
-        }
-    }
-    $mlbFile    = "$MLBDir\step8_mlb_direction_clean.xlsx"
-    $nba1qFile  = "$NBADir\step8_nba1q_direction_clean.xlsx"
-    $nba1hFile  = "$NBADir\step8_nba1h_direction_clean.xlsx"
-
-    if (-not (Test-Path $nbaFile)) {
-        Write-Host "  WARNING: NBA step8 not found -- combined will run with 0 NBA props (other sports only)" -ForegroundColor Yellow
-    }
+    Write-Host "  [combined] Step8 inputs: auto-resolve in combined_slate_tickets.py (outputs\$Date\ + Sports\...)" -ForegroundColor DarkGray
 
     Invoke-AltBookFetches
 
     $CombinedOut  = Join-Path $Root "combined_slate_tickets_$Date.xlsx"
-    $CombinedArgs  = "--nba `"$nbaFile`""
-    $nflCanon = Join-Path $NFLDir "outputs\step8_nfl_direction_clean.xlsx"
-    $nflAlt = Join-Path $NFLDir "data\outputs\step8_nfl_direction_clean.xlsx"
-    $nflFile = if (Test-Path $nflCanon) { $nflCanon } elseif (Test-Path $nflAlt) { $nflAlt } else { $nflCanon }
-    if (Test-Path $cbbFile) {
-        $CombinedArgs += " --cbb `"$cbbFile`""
-        Write-Host "  [+] CBB" -ForegroundColor DarkGray
-    }
-
-    if (Test-Path $nhlFile)    { $CombinedArgs += " --nhl `"$nhlFile`"";       Write-Host "  [+] NHL"    -ForegroundColor DarkGray }
-    if (Test-Path $soccerFile) { $CombinedArgs += " --soccer `"$soccerFile`""; Write-Host "  [+] Soccer" -ForegroundColor DarkGray }
-    if (Test-Path $tennisFile) { $CombinedArgs += " --tennis `"$tennisFile`""; Write-Host "  [+] Tennis" -ForegroundColor DarkGray }
-    if (Test-Path $wnbaFile)  { $CombinedArgs += " --wnba `"$wnbaFile`"";     Write-Host "  [+] WNBA"   -ForegroundColor DarkGray }
-    if (Test-Path $nflFile)    { $CombinedArgs += " --nfl `"$nflFile`"";       Write-Host "  [+] NFL"    -ForegroundColor DarkGray }
-    if (Test-Path $mlbFile)    { $CombinedArgs += " --mlb `"$mlbFile`"";       Write-Host "  [+] MLB"    -ForegroundColor DarkGray }
-    if (Test-Path $nba1qFile)  { $CombinedArgs += " --nba1q `"$nba1qFile`"";   Write-Host "  [+] NBA1Q"  -ForegroundColor DarkGray }
-    if (Test-Path $nba1hFile)  { $CombinedArgs += " --nba1h `"$nba1hFile`"";   Write-Host "  [+] NBA1H"  -ForegroundColor DarkGray }
+    $CombinedArgs = ""
 
     if ($UseAltBooks -and -not $SkipAltBooks) {
         $UdCsv = Join-Path $OutDir "underdog_props.csv"
@@ -620,10 +577,12 @@ function Run-Combined {
     if (-not $WebEvOnly) {
         $CombinedArgs += " --no-web-ev-gate"
     }
+    $CombinedArgs = $CombinedArgs.Trim()
 
     $okC = Run-Step "Combined Slate + Tickets" $Root ".\scripts\combined_slate_tickets.py" $CombinedArgs
 
     if ($okC) {
+        [void](Run-Step "Generate mobile bundle" $Root ".\scripts\generate_mobile_bundle.py" "")
         $datedCombinedPath = Join-Path $OutDir "combined_slate_tickets_$Date.xlsx"
         # REMOVED: HHmmss snapshot caused resolver ambiguity in build_ticket_eval.py.
         # No downstream consumer used this file. Use --slate override if a specific

@@ -122,37 +122,181 @@ _TICKET_MODEL = None
 _TICKET_MODEL_BUCKETS: dict[str, Any] = {}
 _TICKET_MODEL_FEATURES: list[str] = []
 
-DEFAULT_NBA_PATH = os.path.join(REPO_ROOT, "NBA", "data", "outputs", "step8_all_direction_clean.xlsx")
-DEFAULT_CBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_cbb.xlsx")
-DEFAULT_NBA1H_PATH = os.path.join(REPO_ROOT, "NBA", "step8_nba1h_direction_clean.xlsx")
-DEFAULT_NBA1Q_PATH = os.path.join(REPO_ROOT, "NBA", "step8_nba1q_direction_clean.xlsx")
-DEFAULT_WCBB_PATH = os.path.join(REPO_ROOT, "CBB", "step6_ranked_wcbb.xlsx")
-# Canonical layout: Sports/<league>/outputs/… (run_pipeline.ps1). Legacy: repo-root <league>/.
-_sports_mlb = os.path.join(REPO_ROOT, "Sports", "MLB", "step8_mlb_direction_clean.xlsx")
-_root_mlb = os.path.join(REPO_ROOT, "MLB", "step8_mlb_direction_clean.xlsx")
-if os.path.exists(_sports_mlb):
-    DEFAULT_MLB_PATH = _sports_mlb
-elif os.path.exists(_root_mlb):
-    DEFAULT_MLB_PATH = _root_mlb
-else:
-    DEFAULT_MLB_PATH = _sports_mlb
-DEFAULT_NFL_PATH = os.path.join(REPO_ROOT, "NFL", "outputs", "step8_nfl_direction_clean.xlsx")
+# Primary layout: Sports/<league>/… and outputs/<slate-date>/step8_*_<date>.xlsx (run_pipeline / dated exports).
+# Defaults are applied in apply_default_sport_inputs() after --date is resolved.
+DEFAULT_NBA_PATH = os.path.join(REPO_ROOT, "Sports", "NBA", "data", "outputs", "step8_all_direction_clean.xlsx")
+DEFAULT_CBB_PATH = os.path.join(REPO_ROOT, "Sports", "CBB", "step6_ranked_cbb.xlsx")
+DEFAULT_NBA1H_PATH = os.path.join(REPO_ROOT, "Sports", "NBA", "step8_nba1h_direction_clean.xlsx")
+DEFAULT_NBA1Q_PATH = os.path.join(REPO_ROOT, "Sports", "NBA", "step8_nba1q_direction_clean.xlsx")
+DEFAULT_WCBB_PATH = os.path.join(REPO_ROOT, "Sports", "CBB", "step6_ranked_wcbb.xlsx")
+DEFAULT_MLB_PATH = os.path.join(REPO_ROOT, "Sports", "MLB", "step8_mlb_direction_clean.xlsx")
+DEFAULT_NFL_PATH = os.path.join(REPO_ROOT, "Sports", "NFL", "outputs", "step8_nfl_direction_clean.xlsx")
 DISABLED_SPORTS: set[str] = set()
-_soccer_candidates = [
-    os.path.join(REPO_ROOT, "Sports", "Soccer", "outputs", "step8_soccer_direction_clean.xlsx"),
-    os.path.join(REPO_ROOT, "Sports", "Soccer", "step8_soccer_direction_clean.xlsx"),
-    os.path.join(REPO_ROOT, "Soccer", "outputs", "step8_soccer_direction_clean.xlsx"),
-    os.path.join(REPO_ROOT, "Soccer", "step8_soccer_direction_clean.xlsx"),
-]
-_soccer_existing = [p for p in _soccer_candidates if os.path.exists(p)]
-if _soccer_existing:
-    DEFAULT_SOCCER_PATH = max(_soccer_existing, key=lambda p: os.path.getsize(p))
-else:
-    DEFAULT_SOCCER_PATH = _soccer_candidates[0]
+DEFAULT_SOCCER_PATH = os.path.join(REPO_ROOT, "Sports", "Soccer", "outputs", "step8_soccer_direction_clean.xlsx")
 DEFAULT_TENNIS_PATH = os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis_direction_clean.xlsx")
-DEFAULT_WNBA_PATH = os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction.xlsx")
-DEFAULT_NHL_PATH = os.path.join(REPO_ROOT, "NHL", "outputs", "step8_nhl_direction_clean.xlsx")
+DEFAULT_WNBA_PATH = os.path.join(REPO_ROOT, "Sports", "WNBA", "step8_wnba_direction.xlsx")
+DEFAULT_NHL_PATH = os.path.join(REPO_ROOT, "Sports", "NHL", "outputs", "step8_nhl_direction_clean.xlsx")
 DEFAULT_WEB_OUTDIR = os.path.join(REPO_ROOT, "ui_runner", "templates")
+
+
+def _outputs_dir_for_date(date_str: str) -> str:
+    d = str(date_str).strip()[:10]
+    return os.path.join(REPO_ROOT, "outputs", d)
+
+
+def _first_existing_path(*candidates: str) -> str:
+    for p in candidates:
+        if p and os.path.isfile(p):
+            return str(p)
+    return ""
+
+
+def _required_placeholder(*candidates: str) -> str:
+    """First existing path, else first non-empty candidate (for clear load errors / validation)."""
+    hit = _first_existing_path(*candidates)
+    if hit:
+        return hit
+    for p in candidates:
+        if p:
+            return str(p)
+    return ""
+
+
+def apply_default_sport_inputs(args: argparse.Namespace) -> None:
+    """
+    Fill empty --sport paths. Order: outputs/<date>/step8_*_<date>.xlsx, then Sports/*, then legacy repo-root paths.
+    Optional sports stay empty when nothing exists on disk.
+    """
+    d = str(args.date).strip()[:10]
+    out = _outputs_dir_for_date(d)
+
+    if not str(args.nba).strip():
+        args.nba = _required_placeholder(
+            os.path.join(out, f"step8_nba_direction_clean_{d}.xlsx"),
+            os.path.join(REPO_ROOT, "Sports", "NBA", "data", "outputs", "step8_all_direction_clean.xlsx"),
+            os.path.join(REPO_ROOT, "NBA", "data", "outputs", "step8_all_direction_clean.xlsx"),
+        )
+
+    if not str(args.cbb).strip():
+        args.cbb = _required_placeholder(
+            os.path.join(REPO_ROOT, "Sports", "CBB", "step6_ranked_cbb.xlsx"),
+            os.path.join(REPO_ROOT, "CBB", "step6_ranked_cbb.xlsx"),
+        )
+
+    if not str(args.wcbb).strip():
+        args.wcbb = _first_existing_path(
+            os.path.join(REPO_ROOT, "Sports", "CBB", "step6_ranked_wcbb.xlsx"),
+            os.path.join(REPO_ROOT, "CBB", "step6_ranked_wcbb.xlsx"),
+        )
+
+    if not str(args.nhl).strip():
+        args.nhl = _first_existing_path(
+            os.path.join(out, f"step8_nhl_direction_clean_{d}.xlsx"),
+            os.path.join(REPO_ROOT, "Sports", "NHL", "outputs", "step8_nhl_direction_clean.xlsx"),
+            os.path.join(REPO_ROOT, "NHL", "outputs", "step8_nhl_direction_clean.xlsx"),
+        )
+
+    if not str(args.soccer).strip():
+        args.soccer = _first_existing_path(
+            os.path.join(out, f"step8_soccer_direction_clean_{d}.xlsx"),
+            os.path.join(REPO_ROOT, "Sports", "Soccer", "outputs", "step8_soccer_direction_clean.xlsx"),
+            os.path.join(REPO_ROOT, "Soccer", "outputs", "step8_soccer_direction_clean.xlsx"),
+            os.path.join(REPO_ROOT, "Soccer", "step8_soccer_direction_clean.xlsx"),
+        )
+
+    if not str(args.tennis).strip():
+        args.tennis = _first_existing_path(
+            os.path.join(out, f"step8_tennis_direction_clean_{d}.xlsx"),
+            os.path.join(REPO_ROOT, "Sports", "Tennis", "outputs", "step8_tennis_direction_clean.xlsx"),
+            os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis_direction_clean.xlsx"),
+        )
+
+    if not str(args.wnba).strip():
+        args.wnba = _first_existing_path(
+            os.path.join(out, f"step8_wnba_direction_{d}.xlsx"),
+            os.path.join(out, f"step8_wnba_direction_clean_{d}.xlsx"),
+            os.path.join(REPO_ROOT, "Sports", "WNBA", "step8_wnba_direction.xlsx"),
+            os.path.join(REPO_ROOT, "Sports", "WNBA", "step8_wnba_direction_clean.xlsx"),
+            os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction.xlsx"),
+            os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction_clean.xlsx"),
+        )
+
+    if not str(args.mlb).strip():
+        args.mlb = _first_existing_path(
+            os.path.join(out, f"step8_mlb_direction_clean_{d}.xlsx"),
+            os.path.join(REPO_ROOT, "Sports", "MLB", "step8_mlb_direction_clean.xlsx"),
+            os.path.join(REPO_ROOT, "MLB", "step8_mlb_direction_clean.xlsx"),
+        )
+
+    if not str(args.nba1q).strip():
+        args.nba1q = _first_existing_path(
+            os.path.join(out, f"step8_nba1q_direction_clean_{d}.xlsx"),
+            os.path.join(REPO_ROOT, "Sports", "NBA", "step8_nba1q_direction_clean.xlsx"),
+            os.path.join(REPO_ROOT, "NBA", "step8_nba1q_direction_clean.xlsx"),
+        )
+
+    if not str(args.nba1h).strip():
+        args.nba1h = _first_existing_path(
+            os.path.join(out, f"step8_nba1h_direction_clean_{d}.xlsx"),
+            os.path.join(REPO_ROOT, "Sports", "NBA", "step8_nba1h_direction_clean.xlsx"),
+            os.path.join(REPO_ROOT, "NBA", "step8_nba1h_direction_clean.xlsx"),
+        )
+
+    if not str(args.nfl).strip():
+        args.nfl = _first_existing_path(
+            os.path.join(out, f"step8_nfl_direction_clean_{d}.xlsx"),
+            os.path.join(REPO_ROOT, "Sports", "NFL", "outputs", "step8_nfl_direction_clean.xlsx"),
+            os.path.join(REPO_ROOT, "Sports", "NFL", "data", "outputs", "step8_nfl_direction_clean.xlsx"),
+            os.path.join(REPO_ROOT, "NFL", "outputs", "step8_nfl_direction_clean.xlsx"),
+            os.path.join(REPO_ROOT, "NFL", "data", "outputs", "step8_nfl_direction_clean.xlsx"),
+        )
+
+
+def print_combined_slate_input_paths(args: argparse.Namespace) -> None:
+    """Echo resolved inputs so missing step8 files are obvious before loading."""
+
+    def _rel(p: str) -> str:
+        p = str(p or "").strip()
+        if not p:
+            return ""
+        try:
+            return os.path.relpath(p, REPO_ROOT)
+        except ValueError:
+            return p
+
+    def _line(label: str, path: str, *, optional: bool) -> None:
+        p = str(path or "").strip()
+        if optional and not p:
+            print(f"  {label:<7} (none) [optional — skipped]")
+            return
+        if not p:
+            print(f"  {label:<7} (none) [MISSING]")
+            return
+        exists = os.path.isfile(p)
+        rel = _rel(p)
+        if optional:
+            tag = "[EXISTS]" if exists else "[MISSING — skipped]"
+        else:
+            tag = "[EXISTS]" if exists else "[MISSING — expect load warning]"
+        print(f"  {label:<7} {rel} {tag}")
+
+    print("[combined_slate] Input paths:")
+    _line("NBA", args.nba, optional=False)
+    if "CBB" in DISABLED_SPORTS:
+        print("  CBB     (season deactivated — skipped)")
+    else:
+        _line("CBB", args.cbb, optional=False)
+    _line("WCBB", args.wcbb, optional=True)
+    _line("NBA1Q", args.nba1q, optional=True)
+    _line("NBA1H", args.nba1h, optional=True)
+    _line("MLB", args.mlb, optional=True)
+    _line("NHL", args.nhl, optional=True)
+    _line("Soccer", args.soccer, optional=True)
+    _line("Tennis", args.tennis, optional=True)
+    _line("WNBA", args.wnba, optional=True)
+    _line("NFL", args.nfl, optional=True)
+
+
 DIVERSITY_CONFIG_PATH = os.path.join(REPO_ROOT, "config", "diversity_config.json")
 PROP_RELIABILITY_LATEST_PATH = os.path.join(REPO_ROOT, "data", "reports", "prop_reliability_latest.json")
 PROP_STRAT_BOARD_LATEST_PATH = os.path.join(REPO_ROOT, "data", "reports", "prop_stratification_board_latest.json")
@@ -9651,38 +9795,60 @@ def main():
     ap.add_argument(
         "--nba",
         default="",
-        help=f"NBA step8_all_direction_clean.xlsx (default: {DEFAULT_NBA_PATH})",
+        help=(
+            "NBA step8 xlsx. When omitted: outputs/<date>/step8_nba_direction_clean_<date>.xlsx if present, "
+            f"else {DEFAULT_NBA_PATH}"
+        ),
     )
     ap.add_argument(
         "--cbb",
         default="",
-        help=f"CBB step6_ranked_cbb.xlsx (default: {DEFAULT_CBB_PATH})",
+        help=f"CBB step6_ranked_cbb.xlsx. When omitted: {DEFAULT_CBB_PATH} (legacy CBB\\ fallback).",
     )
     ap.add_argument(
         "--nhl",
-        default=DEFAULT_NHL_PATH,
-        help=f"NHL step8 (default: {DEFAULT_NHL_PATH})",
+        default="",
+        help=(
+            "NHL step8. When omitted: outputs/<date>/step8_nhl_direction_clean_<date>.xlsx, "
+            f"then {DEFAULT_NHL_PATH}"
+        ),
     )
     ap.add_argument(
         "--soccer",
         default="",
-        help=f"Soccer step8 (default: {DEFAULT_SOCCER_PATH})",
+        help=(
+            "Soccer step8. When omitted: outputs/<date>/step8_soccer_direction_clean_<date>.xlsx, "
+            f"then {DEFAULT_SOCCER_PATH}"
+        ),
     )
     ap.add_argument(
         "--tennis",
         default="",
-        help=f"Tennis step8 (default: {DEFAULT_TENNIS_PATH})",
+        help=(
+            "Tennis step8. When omitted: outputs/<date>/step8_tennis_direction_clean_<date>.xlsx, "
+            f"then {DEFAULT_TENNIS_PATH}"
+        ),
     )
     ap.add_argument(
         "--wnba",
         default="",
-        help=f"WNBA step8 (default: {DEFAULT_WNBA_PATH} when present on disk)",
+        help=(
+            "WNBA step8. When omitted: outputs/<date>/step8_wnba_direction_<date>.xlsx (or _clean_), "
+            f"then {DEFAULT_WNBA_PATH}"
+        ),
     )
     ap.add_argument("--wcbb", default="", help="WCBB step8 direction clean xlsx (optional)")
     ap.add_argument("--mlb", default="", help="MLB step8 direction clean xlsx (optional)")
     ap.add_argument("--nba1q", default="", help="NBA 1st Quarter step8 direction clean xlsx (optional)")
     ap.add_argument("--nba1h", default="", help="NBA 1st Half step8 direction clean xlsx (optional)")
-    ap.add_argument("--nfl", default="", help=f"NFL step8 (default: {DEFAULT_NFL_PATH} when present on disk)")
+    ap.add_argument(
+        "--nfl",
+        default="",
+        help=(
+            "NFL step8. When omitted: outputs/<date>/step8_nfl_direction_clean_<date>.xlsx, "
+            f"then {DEFAULT_NFL_PATH}"
+        ),
+    )
     ap.add_argument("--output", default="")
     ap.add_argument(
         "--date",
@@ -9972,20 +10138,7 @@ def main():
     print(f"[NHL TRACE] NHL structured_min_leg_hr_override={nhl_structured_min_leg_hr}")
     print(f"[TENNIS TRACE] Tennis structured_min_leg_hr_override={tennis_structured_min_leg_hr}")
 
-    if not str(args.nba).strip():
-        args.nba = DEFAULT_NBA_PATH
-    if not str(args.cbb).strip():
-        args.cbb = DEFAULT_CBB_PATH
-    if not str(args.nhl).strip():
-        args.nhl = DEFAULT_NHL_PATH
-    if not str(args.soccer).strip():
-        args.soccer = DEFAULT_SOCCER_PATH
-    if not str(args.tennis).strip():
-        args.tennis = DEFAULT_TENNIS_PATH if os.path.isfile(DEFAULT_TENNIS_PATH) else ""
-    if not str(args.wnba).strip():
-        args.wnba = DEFAULT_WNBA_PATH if os.path.isfile(DEFAULT_WNBA_PATH) else ""
-    if not str(args.nfl).strip():
-        args.nfl = DEFAULT_NFL_PATH if os.path.isfile(DEFAULT_NFL_PATH) else ""
+    apply_default_sport_inputs(args)
 
     if not args.output:
         args.output = f"combined_slate_tickets_{args.date}.xlsx"
@@ -10004,6 +10157,8 @@ def main():
         elif os.path.isfile(_auto_dk_nba):
             args.draftkings_csv = _auto_dk_nba
             print(f"  [alt-books] Using DraftKings CSV: {_auto_dk_nba}")
+
+    print_combined_slate_input_paths(args)
 
     tiers = [t.strip() for t in args.tiers.split(",") if t.strip()]
     pick_types = [p.strip() for p in args.pick_types.split(",") if p.strip()]
@@ -10128,7 +10283,7 @@ def main():
             wcbb = None
 
     mlb = None
-    mlb_path = str(args.mlb or "").strip() or (DEFAULT_MLB_PATH if os.path.exists(DEFAULT_MLB_PATH) else "")
+    mlb_path = str(args.mlb or "").strip()
     if mlb_path:
         try:
             mlb = load_mlb(mlb_path)
