@@ -447,17 +447,23 @@ def _leg_grade(
     return "UNGRADED"
 
 
-def _load_nba_injury_dnp_keys(merge_dates: Sequence[str]) -> frozenset[tuple[str, str]]:
+_INJURY_STATUSES_DNP: frozenset[str] = frozenset(("Out", "Day-To-Day", "Injured Reserve"))
+
+
+def _load_injury_dnp_keys(sport: str, merge_dates: Sequence[str]) -> frozenset[tuple[str, str]]:
     """
-    (player_lower, team_upper) from injuries_nba_YYYY-MM-DD.csv for players listed
-    Out or Day-To-Day (ESPN game injury report; correlates with missing box score rows).
+    (player_lower, team_upper) from injuries_<sport>_YYYY-MM-DD.csv for rows whose
+    injury_status is Out, Day-To-Day, or Injured Reserve (ESPN injury report).
+    ``sport`` is the CSV ``sport`` column value, e.g. NBA or NHL.
     """
+    sport_u = str(sport or "").strip().upper()
     keys: set[tuple[str, str]] = set()
+    slug = sport_u.lower()
     for gd in merge_dates:
         ds = str(gd).strip()
         if not re.match(r"^\d{4}-\d{2}-\d{2}$", ds):
             continue
-        p = REPO_ROOT / "outputs" / ds / f"injuries_nba_{ds}.csv"
+        p = REPO_ROOT / "outputs" / ds / f"injuries_{slug}_{ds}.csv"
         if not p.is_file():
             continue
         try:
@@ -465,16 +471,24 @@ def _load_nba_injury_dnp_keys(merge_dates: Sequence[str]) -> frozenset[tuple[str
         except Exception:
             continue
         for _, r in df.iterrows():
-            if str(r.get("sport", "")).strip().upper() != "NBA":
+            if str(r.get("sport", "")).strip().upper() != sport_u:
                 continue
             st = str(r.get("injury_status", "")).strip()
-            if st not in ("Out", "Day-To-Day"):
+            if st not in _INJURY_STATUSES_DNP:
                 continue
             pl = _norm_player_name(str(r.get("player", "") or ""))
             tm = str(r.get("team", "") or "").strip().upper()
             if pl and tm:
                 keys.add((pl, tm))
     return frozenset(keys)
+
+
+def _injury_dnp_by_sport(merge_dates: Sequence[str]) -> dict[str, frozenset[tuple[str, str]]]:
+    """NBA + NHL sidecars used to resolve VOID+missing-actual legs when injury report confirms DNP."""
+    return {
+        "NBA": _load_injury_dnp_keys("NBA", merge_dates),
+        "NHL": _load_injury_dnp_keys("NHL", merge_dates),
+    }
 
 
 def _resolve_void_pending_if_injury_dnp(
@@ -484,22 +498,25 @@ def _resolve_void_pending_if_injury_dnp(
     line_f: float | None,
     graw: str,
     vnote: str,
-    dnp_keys: frozenset[tuple[str, str]],
+    injury_dnp_by_sport: dict[str, frozenset[tuple[str, str]]],
 ) -> str:
     """
-    When graded row is VOID + NO_ACTUAL (ticket eval shows UNGRADED / void-pending),
-    treat as a resolved VOID if the player appears on the NBA injuries sidecar as Out/Day-To-Day.
+    When graded row is VOID with no usable actual (ticket eval shows UNGRADED / void-pending),
+    treat as a resolved VOID if the player appears on injuries_nba / injuries_nhl for that date
+    as Out, Day-To-Day, or Injured Reserve.
     """
-    if grade != "UNGRADED" or not dnp_keys:
+    if grade != "UNGRADED":
         return grade
     sp = str(leg.get("sport") or "").strip().upper().replace(" ", "")
-    if sp not in ("NBA",):
+    dnp_keys = injury_dnp_by_sport.get(sp)
+    if not dnp_keys:
         return grade
     g = (graw or "").strip().upper()
     if g not in ("VOID", "PUSH", "N/A", "NA"):
         return grade
     vn = str(vnote or "").strip().upper()
-    if vn not in _VOID_PENDING_VOID_NOTES:
+    # Match _leg_grade VOID branch: pending when void_note empty or in NO_ACTUAL/PENDING set.
+    if vn and vn not in _VOID_PENDING_VOID_NOTES:
         return grade
     if _finite_line_actual(actual, line_f):
         return grade
@@ -509,7 +526,6 @@ def _resolve_void_pending_if_injury_dnp(
     tm = str(leg.get("team") or "").strip().upper()
     if (pl, tm) in dnp_keys:
         return "VOID"
-    # Exact team missing on leg — accept single unambiguous match for this player on this slate date.
     hits = [k for k in dnp_keys if k[0] == pl]
     if len(hits) == 1:
         return "VOID"
@@ -620,7 +636,7 @@ def debug_ungraded_report(
 ) -> None:
     """Print UNGRADED leg counts by observational bucket and graded source row counts."""
     indices = _load_actuals_indices(sport_candidates, graded_merge_dates)
-    nba_injury_dnp = _load_nba_injury_dnp_keys(graded_merge_dates)
+    injury_dnp_by_sport = _injury_dnp_by_sport(graded_merge_dates)
     bucket_order = (
         "MISSING_ACTUAL",
         "MISSING_LINE",
@@ -654,7 +670,7 @@ def debug_ungraded_report(
                     line_f = row["line"]
                 grade = _leg_grade(actual, line_f, direction, graw, vnote)
                 grade = _resolve_void_pending_if_injury_dnp(
-                    grade, leg, actual, line_f, graw, vnote, nba_injury_dnp
+                    grade, leg, actual, line_f, graw, vnote, injury_dnp_by_sport
                 )
                 if grade != "UNGRADED":
                     continue
@@ -2211,7 +2227,7 @@ def _build_html(
 ) -> tuple[str, dict[str, Any] | None]:
     groups = payload.get("groups") or []
     indices = _load_actuals_indices(sport_candidates, graded_merge_dates)
-    nba_injury_dnp = _load_nba_injury_dnp_keys(graded_merge_dates)
+    injury_dnp_by_sport = _injury_dnp_by_sport(graded_merge_dates)
 
     all_legs: list[tuple[dict, dict | None, str]] = []
     tickets_flat: list[dict] = []
@@ -2236,7 +2252,7 @@ def _build_html(
                     line_f = row["line"]
                 grade = _leg_grade(actual, line_f, direction, graw, vnote)
                 grade = _resolve_void_pending_if_injury_dnp(
-                    grade, leg, actual, line_f, graw, vnote, nba_injury_dnp
+                    grade, leg, actual, line_f, graw, vnote, injury_dnp_by_sport
                 )
                 all_legs.append((leg, row, grade))
 
@@ -2280,7 +2296,7 @@ def _build_html(
             if row and row.get("line") is not None and lf is None:
                 lf = row["line"]
             g = _leg_grade(act, lf, d, gr, vn)
-            g = _resolve_void_pending_if_injury_dnp(g, leg, act, lf, gr, vn, nba_injury_dnp)
+            g = _resolve_void_pending_if_injury_dnp(g, leg, act, lf, gr, vn, injury_dnp_by_sport)
             gs.append(g)
         tno = t.get("ticket_no", "?")
         t["_leg_grades_cache"] = gs
