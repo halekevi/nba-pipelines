@@ -67,6 +67,8 @@ import argparse
 import csv
 from datetime import datetime, timezone
 import json
+import os
+import tempfile
 import logging
 import re
 import sys
@@ -199,6 +201,52 @@ def prop_norm_from_label(prop: str) -> str:
         return "match_total_games"
     if p == "total games" or p.startswith("total games"):
         return "match_total_games"
+
+    # MLB — ``prop`` values in actuals_mlb_*.csv are compact lowercase (no separators), e.g.
+    # hits, totalbases, hitterstrikeouts. Fold ticket labels to the same keys.
+    _MLB_PROP_KEYS = frozenset(
+        {
+            "hits",
+            "hitsallowed",
+            "hitterstrikeouts",
+            "homeruns",
+            "pitcherstrikeouts",
+            "pitchesthrown",
+            "pitchingouts",
+            "runs",
+            "stolenbases",
+            "totalbases",
+            "walks",
+            "walksallowed",
+        }
+    )
+    mlb_fold = re.sub(r"[^a-z0-9]", "", p)
+    if mlb_fold in _MLB_PROP_KEYS:
+        return mlb_fold
+    if "runs scored" in p:
+        return "runs"
+    if "hits allowed" in p:
+        return "hitsallowed"
+    if "walks allowed" in p:
+        return "walksallowed"
+    if "hitter strikeout" in p or "batter strikeout" in p:
+        return "hitterstrikeouts"
+    if "pitcher strikeout" in p:
+        return "pitcherstrikeouts"
+    if "pitching out" in p:
+        return "pitchingouts"
+    if "pitches thrown" in p or "pitch count" in p:
+        return "pitchesthrown"
+    if "stolen base" in p or p == "steals":
+        return "stolenbases"
+    if "home run" in p or p in ("hr", "hrs"):
+        return "homeruns"
+    if "total base" in p:
+        return "totalbases"
+    if p in ("hits", "hit"):
+        return "hits"
+    if p in ("walks", "walk") and "allowed" not in p:
+        return "walks"
 
     if "pts+reb+ast" in p or p == "pra":
         return "pra"
@@ -919,7 +967,8 @@ def lookup_actual(sport: str, player: str, team: str, prop_norm: str,
                   nba1q_lpt=None, nba1q_lp=None,
                   nhl_lpt=None, nhl_lp=None,
                   soccer_lpt=None, soccer_lp=None,
-                  tennis_lpt=None, tennis_lp=None) -> float:
+                  tennis_lpt=None, tennis_lp=None,
+                  mlb_lpt=None, mlb_lp=None) -> float:
     sport = (sport or "").upper()
     if sport == "WCBB":
         sport = "CBB"
@@ -1003,6 +1052,17 @@ def lookup_actual(sport: str, player: str, team: str, prop_norm: str,
         key1 = (player_n, prop_norm)
         if key1 in tennis_lp:
             return float(tennis_lp[key1][0]["actual"])
+        return np.nan
+
+    if sport == "MLB":
+        if mlb_lpt is None or mlb_lp is None:
+            return np.nan
+        key2 = (player_n, team_n, prop_norm)
+        if key2 in mlb_lpt:
+            return float(mlb_lpt[key2][0]["actual"])
+        key1 = (player_n, prop_norm)
+        if key1 in mlb_lp:
+            return float(mlb_lp[key1][0]["actual"])
         return np.nan
 
     return np.nan
@@ -1589,6 +1649,7 @@ def main():
     ap.add_argument("--nhl_actuals", default="", help="actuals_nhl_YYYY-MM-DD.csv (optional, for NHL legs)")
     ap.add_argument("--soccer_actuals", default="", help="actuals_soccer_YYYY-MM-DD.csv (optional, for Soccer legs)")
     ap.add_argument("--tennis_actuals", default="", help="actuals_tennis_YYYY-MM-DD.csv (optional, for Tennis legs)")
+    ap.add_argument("--mlb_actuals", default="", help="actuals_mlb_YYYY-MM-DD.csv (optional, for MLB legs)")
     ap.add_argument("--nba_injuries", default="", help="injuries_nba CSV (optional; defaults next to nba actuals)")
     ap.add_argument("--cbb_injuries", default="", help="injuries_cbb CSV (optional)")
     ap.add_argument("--nhl_injuries", default="", help="injuries_nhl CSV (optional)")
@@ -1667,6 +1728,7 @@ def main():
     soccer_lp = soccer_lpt = None
     soccer_act = pd.DataFrame()
     tennis_lp = tennis_lpt = None
+    mlb_lp = mlb_lpt = None
     if args.nhl_actuals:
         nhl_csv = Path(args.nhl_actuals)
         nhl_act = prep_actuals(nhl_csv, "NHL")
@@ -1679,6 +1741,23 @@ def main():
         tennis_csv = Path(args.tennis_actuals)
         tennis_act = prep_actuals(tennis_csv, "TENNIS")
         tennis_lp, tennis_lpt = build_lookup(tennis_act)
+
+    mlb_actuals_path = Path(str(args.mlb_actuals or "").strip())
+    if mlb_actuals_path.is_file():
+        df_mlb = pd.read_csv(mlb_actuals_path, dtype=str).fillna("")
+        if "prop" in df_mlb.columns and "prop_type" not in df_mlb.columns:
+            df_mlb = df_mlb.rename(columns={"prop": "prop_type"})
+        fd, tmp_nm = tempfile.mkstemp(
+            prefix="actuals_mlb_norm_", suffix=".csv", dir=str(mlb_actuals_path.parent)
+        )
+        os.close(fd)
+        tmp_csv = Path(tmp_nm)
+        try:
+            df_mlb.to_csv(tmp_csv, index=False)
+            mlb_act = prep_actuals(tmp_csv, "MLB")
+            mlb_lp, mlb_lpt = build_lookup(mlb_act)
+        finally:
+            tmp_csv.unlink(missing_ok=True)
 
     # Grade latency tracker (one row per actuals file)
     grade_ts = datetime.now(timezone.utc)
@@ -1697,6 +1776,8 @@ def main():
         _append_grade_latency_row(ROOT, grade_date, "SOCCER", Path(args.soccer_actuals), grade_ts)
     if args.tennis_actuals:
         _append_grade_latency_row(ROOT, grade_date, "TENNIS", Path(args.tennis_actuals), grade_ts)
+    if mlb_actuals_path.is_file():
+        _append_grade_latency_row(ROOT, grade_date, "MLB", mlb_actuals_path, grade_ts)
 
     from espn_injuries import (  # noqa: E402
         canon_team_abbr as _inj_canon_team,
@@ -1778,6 +1859,7 @@ def main():
             nhl_lpt=nhl_lpt, nhl_lp=nhl_lp,
             soccer_lpt=soccer_lpt, soccer_lp=soccer_lp,
             tennis_lpt=tennis_lpt, tennis_lp=tennis_lp,
+            mlb_lpt=mlb_lpt, mlb_lp=mlb_lp,
         ),
         axis=1,
     )
@@ -1887,9 +1969,6 @@ def main():
 
     modes = ["power", "flex"] if args.mode == "both" else [args.mode]
     ticket_rows = []
-    mismatch_warn_limit = 25
-    mismatch_warn_count = 0
-    mismatch_warn_suppressed = 0
     for mode in modes:
         t = ticket_base.copy()
         payouts_out = []
@@ -1969,17 +2048,13 @@ def main():
                 and float(mult) > 0
                 and abs(float(mult) - est_m) / float(mult) > 0.15
             ):
-                if mismatch_warn_count < mismatch_warn_limit:
-                    _log.warning(
-                        "Payout mult mismatch ticket=%s mode=%s legacy_applied=%.4f est_curve=%.4f (>15%%)",
-                        tid,
-                        mode,
-                        float(mult),
-                        est_m,
-                    )
-                    mismatch_warn_count += 1
-                else:
-                    mismatch_warn_suppressed += 1
+                _log.warning(
+                    "Payout mult mismatch ticket=%s mode=%s legacy_applied=%.4f est_curve=%.4f (>15%%)",
+                    tid,
+                    mode,
+                    float(mult),
+                    est_m,
+                )
 
             est_curve_mults.append(est_m)
             flat_standard_mults.append(flat_std)
@@ -2001,11 +2076,6 @@ def main():
         t["is_cash"] = ((t["payout_status"] == "WIN") | (t["payout_status"] == "WIN_NO_MULT") | (t["payout_status"] == "CASH")).astype(int)
         ticket_rows.append(t)
 
-    if mismatch_warn_suppressed > 0:
-        _log.warning(
-            "Payout mult mismatch warnings suppressed: %d additional rows",
-            mismatch_warn_suppressed,
-        )
     ticket_results = pd.concat(ticket_rows, ignore_index=True)
 
     ticket_bt_df = build_ticket_backtest_dataframe(
