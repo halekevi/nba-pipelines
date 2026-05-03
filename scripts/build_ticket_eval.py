@@ -447,6 +447,178 @@ def _leg_grade(
     return "UNGRADED"
 
 
+_VOID_PENDING_VOID_NOTES: frozenset[str] = frozenset(
+    ("NO_ACTUAL", "MISSING_ACTUAL", "PENDING", "TBD", "UNKNOWN")
+)
+
+
+def _scalar_missing_for_ungraded_debug(v: Any) -> bool:
+    """True if *stored row* actual/line is absent or placeholder (not a usable number)."""
+    if v is None:
+        return True
+    if isinstance(v, float) and (math.isnan(v) or math.isinf(v)):
+        return True
+    if isinstance(v, str):
+        s = v.strip()
+        if not s or s in ("—", "-", "\u2014"):
+            return True
+    return False
+
+
+def _ungraded_debug_bucket(
+    row: dict[str, Any],
+    line_f: float | None,
+    actual_eff: Any,
+    direction: str,
+    graw: str,
+    vnote: str,
+) -> str:
+    """
+    Single bucket label for an UNGRADED leg (does not reimplement _leg_grade; observational).
+    Uses matched row fields for actual/line presence; effective line/actual for VOID_PENDING
+    mirror _leg_grade's VOID branch.
+    """
+    d = str(direction or "").strip().upper()
+    g = (graw or "").strip().upper()
+    vn = str(vnote or "").strip().upper()
+
+    if d not in ("OVER", "UNDER"):
+        return "AMBIGUOUS_DIRECTION"
+
+    if g in ("VOID", "PUSH", "N/A", "NA"):
+        if not _finite_line_actual(actual_eff, line_f) and (
+            not vn or vn in _VOID_PENDING_VOID_NOTES
+        ):
+            return "VOID_PENDING"
+
+    if not str(graw or "").strip():
+        return "BLANK_GRADE"
+
+    if _scalar_missing_for_ungraded_debug(row.get("actual")):
+        return "MISSING_ACTUAL"
+
+    if _scalar_missing_for_ungraded_debug(row.get("line")):
+        return "MISSING_LINE"
+
+    return "OTHER"
+
+
+def _fmt_ungraded_sample(leg: dict[str, Any], row: dict[str, Any], line_f: float | None) -> str:
+    pl = str(leg.get("player") or "?").strip()
+    pt = str(leg.get("prop_type") or "?").strip()
+    dr = str(leg.get("direction") or "?").strip()
+    sp = str(leg.get("sport") or "?").strip()
+    act = row.get("actual")
+    gr = row.get("grade_raw")
+    vn = row.get("void_note")
+    return (
+        f"{pl} | {pt} | {dr} | line={line_f} | actual={act} | "
+        f"grade_raw={gr!r} | void_note={vn!r} | sport={sp}"
+    )
+
+
+def _graded_merge_manifest_row_counts(graded_merge_dates: list[str]) -> list[tuple[Path, int]]:
+    """
+    Distinct graded workbook paths in merge order (per date: bundle dir then outputs dir),
+    with row counts from _normalize_workbook_rows (same bulk ingest as graded overlays).
+    """
+    seen: set[str] = set()
+    out: list[tuple[Path, int]] = []
+    for gd in graded_merge_dates:
+        gd = str(gd).strip()
+        if not gd:
+            continue
+        for base in (_graded_slate_bundle_dir(gd), REPO_ROOT / "outputs" / gd):
+            if not base.is_dir():
+                continue
+            for path in _graded_xlsx_in_dir(base):
+                key = str(path.resolve())
+                if key in seen:
+                    continue
+                seen.add(key)
+                try:
+                    n = len(_normalize_workbook_rows(path))
+                except Exception:
+                    n = 0
+                out.append((path, n))
+    return out
+
+
+def debug_ungraded_report(
+    payload: dict[str, Any],
+    sport_candidates: dict[str, list[Path]],
+    graded_merge_dates: list[str],
+) -> None:
+    """Print UNGRADED leg counts by observational bucket and graded source row counts."""
+    indices = _load_actuals_indices(sport_candidates, graded_merge_dates)
+    bucket_order = (
+        "MISSING_ACTUAL",
+        "MISSING_LINE",
+        "VOID_PENDING",
+        "BLANK_GRADE",
+        "AMBIGUOUS_DIRECTION",
+        "OTHER",
+    )
+    buckets: dict[str, list[tuple[dict[str, Any], dict[str, Any], float | None]]] = {
+        k: [] for k in bucket_order
+    }
+
+    total_legs = 0
+    for grp in payload.get("groups") or []:
+        for tix in grp.get("tickets") or []:
+            for leg in tix.get("legs") or []:
+                total_legs += 1
+                row = _match_leg_to_row_multi(leg, indices)
+                if not row:
+                    continue
+                line = leg.get("line")
+                try:
+                    line_f = float(line) if line is not None else None
+                except (TypeError, ValueError):
+                    line_f = None
+                direction = str(leg.get("direction") or "").strip().upper()
+                actual = row["actual"]
+                graw = row["grade_raw"] if row else ""
+                vnote = row.get("void_note", "") if row else ""
+                if row.get("line") is not None and line_f is None:
+                    line_f = row["line"]
+                grade = _leg_grade(actual, line_f, direction, graw, vnote)
+                if grade != "UNGRADED":
+                    continue
+                label = _ungraded_debug_bucket(row, line_f, actual, direction, graw, vnote)
+                buckets[label].append((leg, row, line_f))
+
+    n_ungraded = sum(len(buckets[k]) for k in bucket_order)
+    if n_ungraded == 0:
+        print(f"[debug-ungraded] No UNGRADED legs — all {total_legs} legs resolved.")
+    else:
+        print(f"[debug-ungraded] UNGRADED breakdown ({n_ungraded} total):")
+        label_width = max(len(l) for l in bucket_order)
+        for key in bucket_order:
+            rows = buckets[key]
+            cnt = len(rows)
+            pad = " " * (label_width - len(key))
+            print(f"  {key}{pad} : {cnt:5d}", end="")
+            if cnt:
+                print(f"  (sample: {_fmt_ungraded_sample(rows[0][0], rows[0][1], rows[0][2])})")
+                for leg, r, lf in rows[1:3]:
+                    print(f"      {_fmt_ungraded_sample(leg, r, lf)}")
+            else:
+                print()
+
+    print("[debug-ungraded] Graded index sources (distinct paths; rows = normalize_workbook_rows):")
+    manifest = _graded_merge_manifest_row_counts(graded_merge_dates)
+    if not manifest:
+        print("  (none)")
+    else:
+        for path, nrows in manifest:
+            try:
+                rel = path.relative_to(REPO_ROOT)
+            except ValueError:
+                rel = path
+            print(f"  {rel!s:<48} : {nrows:6d} rows")
+
+
 def _ticket_is_flex_play_structure(group_name: str, n_legs: int) -> bool:
     """PrizePicks-style flex slips (3+ legs): one miss can still cash at the flex multiplier."""
     if n_legs < 3:
@@ -3386,6 +3558,14 @@ def main() -> int:
         help="Print ticket JSON path, payload date, outputs/graded files, Excel headers, sample leg matches; then build.",
     )
     ap.add_argument(
+        "--debug-ungraded",
+        action="store_true",
+        help=(
+            "After building ticket eval, print a breakdown of all UNGRADED legs by root cause "
+            "(grade_raw, void_note, missing actual/line on matched row)."
+        ),
+    )
+    ap.add_argument(
         "--game-date",
         action="append",
         default=None,
@@ -3481,6 +3661,10 @@ def main() -> int:
 
     print(f"Wrote {out_dated}")
     print("  (Serve /tickets from tickets_latest.json; graded view: Grades → Ticket evaluation.)")
+
+    if args.debug_ungraded:
+        debug_ungraded_report(payload, sport_candidates, graded_merge_dates)
+
     return 0
 
 
