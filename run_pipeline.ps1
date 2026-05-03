@@ -184,6 +184,13 @@ function Run-Step {
     }
 }
 
+# Rebuild mobile/www from ui_runner/templates (slate + tickets JSON, pipeline_status, etc.).
+# Called from Run-Combined after every successful combined_slate_tickets.py — all entry points
+# (-CombinedOnly, *Only + combined, full parallel) funnel through Run-Combined.
+function Invoke-PropOracleMobileBundle {
+    return (Run-Step "Generate mobile bundle" $Root ".\scripts\generate_mobile_bundle.py" "")
+}
+
 function Invoke-MLBStep1Fetch {
     param(
         [string]$WorkDir,
@@ -582,7 +589,6 @@ function Run-Combined {
     $okC = Run-Step "Combined Slate + Tickets" $Root ".\scripts\combined_slate_tickets.py" $CombinedArgs
 
     if ($okC) {
-        [void](Run-Step "Generate mobile bundle" $Root ".\scripts\generate_mobile_bundle.py" "")
         $datedCombinedPath = Join-Path $OutDir "combined_slate_tickets_$Date.xlsx"
         # REMOVED: HHmmss snapshot caused resolver ambiguity in build_ticket_eval.py.
         # No downstream consumer used this file. Use --slate override if a specific
@@ -623,6 +629,11 @@ function Run-Combined {
                 Write-Host "  Saved -> $uiDst" -ForegroundColor Green
             }
         }
+        # Mobile bundle: must follow combined + template writes so slate_latest / tickets_latest match.
+        $bundleOk = Invoke-PropOracleMobileBundle
+        if (-not $bundleOk) {
+            Write-Host "  [mobile] WARN: generate_mobile_bundle.py failed — mobile/www may be stale." -ForegroundColor Yellow
+        }
         # Canonical mobile app snapshots (bundled mobile/www artifacts).
         foreach ($mobileName in @(
             "index.html",
@@ -631,7 +642,9 @@ function Run-Combined {
             "income.html",
             "payout.html",
             "slate_latest.json",
-            "tickets_latest.json"
+            "tickets_latest.json",
+            "pipeline_status.json",
+            "slate_display_date.json"
         )) {
             $mobileSrc = Join-Path $MobileWwwDir $mobileName
             $mobileDst = Join-Path $CanonicalMobileAppDir $mobileName
