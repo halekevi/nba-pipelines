@@ -816,8 +816,8 @@ else {
 # =============================
 # Run Combined Ticket Grader
 # =============================
-if (-not (Test-Path $TicketsFileXlsx) -and -not (Test-Path $TicketsFileJson)) {
-    Write-Host "Tickets file not found (no combined_slate_tickets .xlsx or .json for $Date)" -ForegroundColor Yellow
+if (-not (Test-Path $TicketsFile)) {
+    Write-Host "Tickets file not found (no combined_slate_tickets source for $Date)" -ForegroundColor Yellow
 }
 elseif (-not (Test-Path $NBAActuals)) {
     Write-Host "NBA actuals not found: $NBAActuals" -ForegroundColor Yellow
@@ -826,8 +826,13 @@ elseif (-not (Test-Path $CombinedTicketGrader)) {
     Write-Host "Combined ticket grader script not found!" -ForegroundColor Red
 }
 else {
+    $CanonicalJson = Join-Path $CanonicalDateDir "combined_slate_tickets_$Date.json"
+    $TicketsArg = if (Test-Path $CanonicalJson) { $CanonicalJson } else { $TicketsFile }
+    if ($TicketsArg -eq $CanonicalJson) {
+        Write-Host "[GRADER] Using canonical JSON tickets fast path: $CanonicalJson" -ForegroundColor DarkGray
+    }
     $GraderArgs = @(
-        "--tickets", $TicketsFile,
+        "--tickets", $TicketsArg,
         "--nba_actuals", $NBAActuals,
         "--out", (Join-Path $DateDir "combined_tickets_graded_$Date.xlsx")
     )
