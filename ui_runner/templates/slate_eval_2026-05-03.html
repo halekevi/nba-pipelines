@@ -219,8 +219,326 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
       </div>
     </summary>
     <div class="sport-section-body">
-      
-      
+      <details class="matrix-collapsible">
+      <summary>Performance Matrix — Pick Type × Tier × Direction</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Full grid: Standard A–D (OVER/UNDER), Goblin & Demon A–D (OVER). 13 of 16 cells have ≥ 10 decided; others still listed with counts.</div>
+        <div class="table-wrap"><table class="table-sortable">
+          <thead><tr>
+            <th data-sort-key="pick" title="Sort">PICK TYPE</th>
+            <th data-sort-key="tier" title="Sort">TIER</th>
+            <th data-sort-key="dir" title="Sort">DIRECTION</th>
+            <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+            <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+            <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+            <th data-sort-key="rate" title="Sort">HIT RATE</th>
+            <th data-sort-key="bar" title="Sort">BAR</th>
+          </tr></thead>
+          <tbody><tr class="matrix-warn">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">57</td>
+          <td class="right mono pos">32</td>
+          <td class="right mono neg">25</td>
+          <td class="mono right">56.1%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:56.1%;background:var(--gold)"></div></div></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">14</td>
+          <td class="right mono pos">9</td>
+          <td class="right mono neg">5</td>
+          <td class="mono right">64.3%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:64.3%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono">15</td>
+          <td class="right mono pos">12</td>
+          <td class="right mono neg">3</td>
+          <td class="mono right">80.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:80.0%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-warn">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">381</td>
+          <td class="right mono pos">197</td>
+          <td class="right mono neg">184</td>
+          <td class="mono right">51.7%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:51.7%;background:var(--gold)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono">161</td>
+          <td class="right mono pos">79</td>
+          <td class="right mono neg">82</td>
+          <td class="mono right">49.1%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:49.1%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">167</td>
+          <td class="right mono pos">134</td>
+          <td class="right mono neg">33</td>
+          <td class="mono right">80.2%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:80.2%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">169</td>
+          <td class="right mono pos">121</td>
+          <td class="right mono neg">48</td>
+          <td class="mono right">71.6%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:71.6%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">187</td>
+          <td class="right mono pos">122</td>
+          <td class="right mono neg">65</td>
+          <td class="mono right">65.2%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:65.2%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">885</td>
+          <td class="right mono pos">559</td>
+          <td class="right mono neg">326</td>
+          <td class="mono right">63.2%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:63.2%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">183</td>
+          <td class="right mono pos">49</td>
+          <td class="right mono neg">134</td>
+          <td class="mono right">26.8%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:26.8%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">136</td>
+          <td class="right mono pos">26</td>
+          <td class="right mono neg">110</td>
+          <td class="mono right">19.1%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:19.1%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">20</td>
+          <td class="right mono pos">4</td>
+          <td class="right mono neg">16</td>
+          <td class="mono right">20.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:20.0%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">2,456</td>
+          <td class="right mono pos">519</td>
+          <td class="right mono neg">1,937</td>
+          <td class="mono right">21.1%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:21.1%;background:var(--red)"></div></div></td>
+        </tr></tbody>
+        </table></div>
+      </div>
+    </details>
+      <details class="matrix-collapsible">
+      <summary>Pick Type Tier Splits — Goblin/Demon OVER, Standard OVER+UNDER</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Full A–D per pick type (16 matrix cells). 13 cells with ≥ 10 decided.</div>
+        <div class="three-col">
+          <div>
+          <div class="section-label"><span class="chip chip-goblin">🎃&nbsp;Goblin</span> BY TIER</div>
+          <div class="table-wrap"><table class="table-sortable">
+            <thead><tr>
+              <th data-sort-key="tier" title="Sort">TIER</th>
+              <th data-sort-key="dir" title="Sort">DIRECTION</th>
+              <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+              <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+              <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+              <th class="right" data-sort-key="rate" title="Sort">HIT RATE</th>
+              <th data-sort-key="bar" title="Sort">BAR</th>
+            </tr></thead>
+            <tbody><tr class="matrix-hit">
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">167</td>
+          <td class="right mono pos">134</td>
+          <td class="right mono neg">33</td>
+          <td class="right mono">80.2%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:80.2%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">169</td>
+          <td class="right mono pos">121</td>
+          <td class="right mono neg">48</td>
+          <td class="right mono">71.6%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:71.6%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">187</td>
+          <td class="right mono pos">122</td>
+          <td class="right mono neg">65</td>
+          <td class="right mono">65.2%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:65.2%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">885</td>
+          <td class="right mono pos">559</td>
+          <td class="right mono neg">326</td>
+          <td class="right mono">63.2%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:63.2%;background:var(--green)"></div></div></td>
+        </tr></tbody>
+          </table></div>
+        </div>
+          <div>
+          <div class="section-label"><span class="chip chip-demon">😈&nbsp;Demon</span> BY TIER</div>
+          <div class="table-wrap"><table class="table-sortable">
+            <thead><tr>
+              <th data-sort-key="tier" title="Sort">TIER</th>
+              <th data-sort-key="dir" title="Sort">DIRECTION</th>
+              <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+              <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+              <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+              <th class="right" data-sort-key="rate" title="Sort">HIT RATE</th>
+              <th data-sort-key="bar" title="Sort">BAR</th>
+            </tr></thead>
+            <tbody><tr class="matrix-miss">
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">183</td>
+          <td class="right mono pos">49</td>
+          <td class="right mono neg">134</td>
+          <td class="right mono">26.8%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:26.8%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">136</td>
+          <td class="right mono pos">26</td>
+          <td class="right mono neg">110</td>
+          <td class="right mono">19.1%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:19.1%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">20</td>
+          <td class="right mono pos">4</td>
+          <td class="right mono neg">16</td>
+          <td class="right mono">20.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:20.0%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">2,456</td>
+          <td class="right mono pos">519</td>
+          <td class="right mono neg">1,937</td>
+          <td class="right mono">21.1%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:21.1%;background:var(--red)"></div></div></td>
+        </tr></tbody>
+          </table></div>
+        </div>
+          <div>
+          <div class="section-label"><span class="chip chip-std">⭐&nbsp;Standard</span> BY TIER</div>
+          <div class="table-wrap"><table class="table-sortable">
+            <thead><tr>
+              <th data-sort-key="tier" title="Sort">TIER</th>
+              <th data-sort-key="dir" title="Sort">DIRECTION</th>
+              <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+              <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+              <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+              <th class="right" data-sort-key="rate" title="Sort">HIT RATE</th>
+              <th data-sort-key="bar" title="Sort">BAR</th>
+            </tr></thead>
+            <tbody><tr class="matrix-warn">
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">57</td>
+          <td class="right mono pos">32</td>
+          <td class="right mono neg">25</td>
+          <td class="right mono">56.1%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:56.1%;background:var(--gold)"></div></div></td>
+        </tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER A</span></td><td>▼ UNDER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER B</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER B</span></td><td>▼ UNDER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-hit">
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">14</td>
+          <td class="right mono pos">9</td>
+          <td class="right mono neg">5</td>
+          <td class="right mono">64.3%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:64.3%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono">15</td>
+          <td class="right mono pos">12</td>
+          <td class="right mono neg">3</td>
+          <td class="right mono">80.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:80.0%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-warn">
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">381</td>
+          <td class="right mono pos">197</td>
+          <td class="right mono neg">184</td>
+          <td class="right mono">51.7%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:51.7%;background:var(--gold)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono">161</td>
+          <td class="right mono pos">79</td>
+          <td class="right mono neg">82</td>
+          <td class="right mono">49.1%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:49.1%;background:var(--red)"></div></div></td>
+        </tr></tbody>
+          </table></div>
+        </div>
+        </div>
+      </div>
+    </details>
       <div class="section-label">HIT RATE BY OPPONENT DEFENSIVE TIER</div>
     <div class="table-wrap" style="margin-bottom:20px"><table>
       <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
@@ -2041,8 +2359,222 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
       </div>
     </summary>
     <div class="sport-section-body">
-      
-      
+      <details class="matrix-collapsible">
+      <summary>Performance Matrix — Pick Type × Tier × Direction</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Full grid: Standard A–D (OVER/UNDER), Goblin & Demon A–D (OVER). 0 of 16 cells have ≥ 10 decided; others still listed with counts.</div>
+        <div class="table-wrap"><table class="table-sortable">
+          <thead><tr>
+            <th data-sort-key="pick" title="Sort">PICK TYPE</th>
+            <th data-sort-key="tier" title="Sort">TIER</th>
+            <th data-sort-key="dir" title="Sort">DIRECTION</th>
+            <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+            <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+            <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+            <th data-sort-key="rate" title="Sort">HIT RATE</th>
+            <th data-sort-key="bar" title="Sort">BAR</th>
+          </tr></thead>
+          <tbody><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr></tbody>
+        </table></div>
+      </div>
+    </details>
+      <details class="matrix-collapsible">
+      <summary>Pick Type Tier Splits — Goblin/Demon OVER, Standard OVER+UNDER</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Full A–D per pick type (16 matrix cells). 0 cells with ≥ 10 decided.</div>
+        <div class="three-col">
+          <div>
+          <div class="section-label"><span class="chip chip-goblin">🎃&nbsp;Goblin</span> BY TIER</div>
+          <div class="table-wrap"><table class="table-sortable">
+            <thead><tr>
+              <th data-sort-key="tier" title="Sort">TIER</th>
+              <th data-sort-key="dir" title="Sort">DIRECTION</th>
+              <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+              <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+              <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+              <th class="right" data-sort-key="rate" title="Sort">HIT RATE</th>
+              <th data-sort-key="bar" title="Sort">BAR</th>
+            </tr></thead>
+            <tbody><tr class="matrix-empty"><td><span class="chip chip-std">TIER A</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER B</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER C</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER D</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr></tbody>
+          </table></div>
+        </div>
+          <div>
+          <div class="section-label"><span class="chip chip-demon">😈&nbsp;Demon</span> BY TIER</div>
+          <div class="table-wrap"><table class="table-sortable">
+            <thead><tr>
+              <th data-sort-key="tier" title="Sort">TIER</th>
+              <th data-sort-key="dir" title="Sort">DIRECTION</th>
+              <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+              <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+              <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+              <th class="right" data-sort-key="rate" title="Sort">HIT RATE</th>
+              <th data-sort-key="bar" title="Sort">BAR</th>
+            </tr></thead>
+            <tbody><tr class="matrix-empty"><td><span class="chip chip-std">TIER A</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER B</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER C</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER D</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr></tbody>
+          </table></div>
+        </div>
+          <div>
+          <div class="section-label"><span class="chip chip-std">⭐&nbsp;Standard</span> BY TIER</div>
+          <div class="table-wrap"><table class="table-sortable">
+            <thead><tr>
+              <th data-sort-key="tier" title="Sort">TIER</th>
+              <th data-sort-key="dir" title="Sort">DIRECTION</th>
+              <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+              <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+              <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+              <th class="right" data-sort-key="rate" title="Sort">HIT RATE</th>
+              <th data-sort-key="bar" title="Sort">BAR</th>
+            </tr></thead>
+            <tbody><tr class="matrix-empty"><td><span class="chip chip-std">TIER A</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER A</span></td><td>▼ UNDER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER B</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER B</span></td><td>▼ UNDER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER C</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER C</span></td><td>▼ UNDER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER D</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER D</span></td><td>▼ UNDER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr></tbody>
+          </table></div>
+        </div>
+        </div>
+      </div>
+    </details>
       
       <div class="section-label">PROP TYPE BREAKDOWNS</div>
         <div class="three-col">
@@ -2272,8 +2804,222 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
       </div>
     </summary>
     <div class="sport-section-body">
-      
-      
+      <details class="matrix-collapsible">
+      <summary>Performance Matrix — Pick Type × Tier × Direction</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Full grid: Standard A–D (OVER/UNDER), Goblin & Demon A–D (OVER). 0 of 16 cells have ≥ 10 decided; others still listed with counts.</div>
+        <div class="table-wrap"><table class="table-sortable">
+          <thead><tr>
+            <th data-sort-key="pick" title="Sort">PICK TYPE</th>
+            <th data-sort-key="tier" title="Sort">TIER</th>
+            <th data-sort-key="dir" title="Sort">DIRECTION</th>
+            <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+            <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+            <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+            <th data-sort-key="rate" title="Sort">HIT RATE</th>
+            <th data-sort-key="bar" title="Sort">BAR</th>
+          </tr></thead>
+          <tbody><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr></tbody>
+        </table></div>
+      </div>
+    </details>
+      <details class="matrix-collapsible">
+      <summary>Pick Type Tier Splits — Goblin/Demon OVER, Standard OVER+UNDER</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Full A–D per pick type (16 matrix cells). 0 cells with ≥ 10 decided.</div>
+        <div class="three-col">
+          <div>
+          <div class="section-label"><span class="chip chip-goblin">🎃&nbsp;Goblin</span> BY TIER</div>
+          <div class="table-wrap"><table class="table-sortable">
+            <thead><tr>
+              <th data-sort-key="tier" title="Sort">TIER</th>
+              <th data-sort-key="dir" title="Sort">DIRECTION</th>
+              <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+              <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+              <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+              <th class="right" data-sort-key="rate" title="Sort">HIT RATE</th>
+              <th data-sort-key="bar" title="Sort">BAR</th>
+            </tr></thead>
+            <tbody><tr class="matrix-empty"><td><span class="chip chip-std">TIER A</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER B</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER C</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER D</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr></tbody>
+          </table></div>
+        </div>
+          <div>
+          <div class="section-label"><span class="chip chip-demon">😈&nbsp;Demon</span> BY TIER</div>
+          <div class="table-wrap"><table class="table-sortable">
+            <thead><tr>
+              <th data-sort-key="tier" title="Sort">TIER</th>
+              <th data-sort-key="dir" title="Sort">DIRECTION</th>
+              <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+              <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+              <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+              <th class="right" data-sort-key="rate" title="Sort">HIT RATE</th>
+              <th data-sort-key="bar" title="Sort">BAR</th>
+            </tr></thead>
+            <tbody><tr class="matrix-empty"><td><span class="chip chip-std">TIER A</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER B</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER C</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER D</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr></tbody>
+          </table></div>
+        </div>
+          <div>
+          <div class="section-label"><span class="chip chip-std">⭐&nbsp;Standard</span> BY TIER</div>
+          <div class="table-wrap"><table class="table-sortable">
+            <thead><tr>
+              <th data-sort-key="tier" title="Sort">TIER</th>
+              <th data-sort-key="dir" title="Sort">DIRECTION</th>
+              <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+              <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+              <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+              <th class="right" data-sort-key="rate" title="Sort">HIT RATE</th>
+              <th data-sort-key="bar" title="Sort">BAR</th>
+            </tr></thead>
+            <tbody><tr class="matrix-empty"><td><span class="chip chip-std">TIER A</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER A</span></td><td>▼ UNDER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER B</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER B</span></td><td>▼ UNDER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER C</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER C</span></td><td>▼ UNDER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER D</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER D</span></td><td>▼ UNDER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr></tbody>
+          </table></div>
+        </div>
+        </div>
+      </div>
+    </details>
       
       <div class="section-label">PROP TYPE BREAKDOWNS</div>
         <div class="three-col">
@@ -2485,8 +3231,318 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
       </div>
     </summary>
     <div class="sport-section-body">
-      
-      
+      <details class="matrix-collapsible">
+      <summary>Performance Matrix — Pick Type × Tier × Direction</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Full grid: Standard A–D (OVER/UNDER), Goblin & Demon A–D (OVER). 11 of 16 cells have ≥ 10 decided; others still listed with counts.</div>
+        <div class="table-wrap"><table class="table-sortable">
+          <thead><tr>
+            <th data-sort-key="pick" title="Sort">PICK TYPE</th>
+            <th data-sort-key="tier" title="Sort">TIER</th>
+            <th data-sort-key="dir" title="Sort">DIRECTION</th>
+            <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+            <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+            <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+            <th data-sort-key="rate" title="Sort">HIT RATE</th>
+            <th data-sort-key="bar" title="Sort">BAR</th>
+          </tr></thead>
+          <tbody><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-empty">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">13</td>
+          <td class="right mono pos">9</td>
+          <td class="right mono neg">4</td>
+          <td class="mono right">69.2%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:69.2%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono">15</td>
+          <td class="right mono pos">12</td>
+          <td class="right mono neg">3</td>
+          <td class="mono right">80.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:80.0%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-warn">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">57</td>
+          <td class="right mono pos">33</td>
+          <td class="right mono neg">24</td>
+          <td class="mono right">57.9%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:57.9%;background:var(--gold)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-std">⭐ Standard</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono">97</td>
+          <td class="right mono pos">44</td>
+          <td class="right mono neg">53</td>
+          <td class="mono right">45.4%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:45.4%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">21</td>
+          <td class="right mono pos">16</td>
+          <td class="right mono neg">5</td>
+          <td class="mono right">76.2%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:76.2%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit matrix-sparse">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">4</td>
+          <td class="right mono neg">0</td>
+          <td class="mono right">100.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">56</td>
+          <td class="right mono pos">41</td>
+          <td class="right mono neg">15</td>
+          <td class="mono right">73.2%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:73.2%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-goblin">🎃 Goblin</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">698</td>
+          <td class="right mono pos">442</td>
+          <td class="right mono neg">256</td>
+          <td class="mono right">63.3%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:63.3%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">147</td>
+          <td class="right mono pos">33</td>
+          <td class="right mono neg">114</td>
+          <td class="mono right">22.4%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:22.4%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">133</td>
+          <td class="right mono pos">25</td>
+          <td class="right mono neg">108</td>
+          <td class="mono right">18.8%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:18.8%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">20</td>
+          <td class="right mono pos">4</td>
+          <td class="right mono neg">16</td>
+          <td class="mono right">20.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:20.0%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-demon">😈 Demon</span></td>
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">2,317</td>
+          <td class="right mono pos">463</td>
+          <td class="right mono neg">1,854</td>
+          <td class="mono right">20.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:20.0%;background:var(--red)"></div></div></td>
+        </tr></tbody>
+        </table></div>
+      </div>
+    </details>
+      <details class="matrix-collapsible">
+      <summary>Pick Type Tier Splits — Goblin/Demon OVER, Standard OVER+UNDER</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Full A–D per pick type (16 matrix cells). 11 cells with ≥ 10 decided.</div>
+        <div class="three-col">
+          <div>
+          <div class="section-label"><span class="chip chip-goblin">🎃&nbsp;Goblin</span> BY TIER</div>
+          <div class="table-wrap"><table class="table-sortable">
+            <thead><tr>
+              <th data-sort-key="tier" title="Sort">TIER</th>
+              <th data-sort-key="dir" title="Sort">DIRECTION</th>
+              <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+              <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+              <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+              <th class="right" data-sort-key="rate" title="Sort">HIT RATE</th>
+              <th data-sort-key="bar" title="Sort">BAR</th>
+            </tr></thead>
+            <tbody><tr class="matrix-hit">
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">21</td>
+          <td class="right mono pos">16</td>
+          <td class="right mono neg">5</td>
+          <td class="right mono">76.2%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:76.2%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit matrix-sparse">
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">4</td>
+          <td class="right mono pos">4</td>
+          <td class="right mono neg">0</td>
+          <td class="right mono">100.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">56</td>
+          <td class="right mono pos">41</td>
+          <td class="right mono neg">15</td>
+          <td class="right mono">73.2%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:73.2%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">698</td>
+          <td class="right mono pos">442</td>
+          <td class="right mono neg">256</td>
+          <td class="right mono">63.3%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:63.3%;background:var(--green)"></div></div></td>
+        </tr></tbody>
+          </table></div>
+        </div>
+          <div>
+          <div class="section-label"><span class="chip chip-demon">😈&nbsp;Demon</span> BY TIER</div>
+          <div class="table-wrap"><table class="table-sortable">
+            <thead><tr>
+              <th data-sort-key="tier" title="Sort">TIER</th>
+              <th data-sort-key="dir" title="Sort">DIRECTION</th>
+              <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+              <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+              <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+              <th class="right" data-sort-key="rate" title="Sort">HIT RATE</th>
+              <th data-sort-key="bar" title="Sort">BAR</th>
+            </tr></thead>
+            <tbody><tr class="matrix-miss">
+          <td><span class="chip chip-a">TIER A</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">147</td>
+          <td class="right mono pos">33</td>
+          <td class="right mono neg">114</td>
+          <td class="right mono">22.4%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:22.4%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-b">TIER B</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">133</td>
+          <td class="right mono pos">25</td>
+          <td class="right mono neg">108</td>
+          <td class="right mono">18.8%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:18.8%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">20</td>
+          <td class="right mono pos">4</td>
+          <td class="right mono neg">16</td>
+          <td class="right mono">20.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:20.0%;background:var(--red)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">2,317</td>
+          <td class="right mono pos">463</td>
+          <td class="right mono neg">1,854</td>
+          <td class="right mono">20.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:20.0%;background:var(--red)"></div></div></td>
+        </tr></tbody>
+          </table></div>
+        </div>
+          <div>
+          <div class="section-label"><span class="chip chip-std">⭐&nbsp;Standard</span> BY TIER</div>
+          <div class="table-wrap"><table class="table-sortable">
+            <thead><tr>
+              <th data-sort-key="tier" title="Sort">TIER</th>
+              <th data-sort-key="dir" title="Sort">DIRECTION</th>
+              <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+              <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+              <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+              <th class="right" data-sort-key="rate" title="Sort">HIT RATE</th>
+              <th data-sort-key="bar" title="Sort">BAR</th>
+            </tr></thead>
+            <tbody><tr class="matrix-empty"><td><span class="chip chip-std">TIER A</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER A</span></td><td>▼ UNDER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER B</span></td><td>▲ OVER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-empty"><td><span class="chip chip-std">TIER B</span></td><td>▼ UNDER</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td class="right mono muted">—</td><td><span class="muted">—</span></td></tr><tr class="matrix-hit">
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">13</td>
+          <td class="right mono pos">9</td>
+          <td class="right mono neg">4</td>
+          <td class="right mono">69.2%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:69.2%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-hit">
+          <td><span class="chip chip-c">TIER C</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono">15</td>
+          <td class="right mono pos">12</td>
+          <td class="right mono neg">3</td>
+          <td class="right mono">80.0%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:80.0%;background:var(--green)"></div></div></td>
+        </tr><tr class="matrix-warn">
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--green);font-size:13px">▲ OVER</span></td>
+          <td class="right mono">57</td>
+          <td class="right mono pos">33</td>
+          <td class="right mono neg">24</td>
+          <td class="right mono">57.9%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:57.9%;background:var(--gold)"></div></div></td>
+        </tr><tr class="matrix-miss">
+          <td><span class="chip chip-d">TIER D</span></td>
+          <td><span style="color:var(--cyan);font-size:13px">▼ UNDER</span></td>
+          <td class="right mono">97</td>
+          <td class="right mono pos">44</td>
+          <td class="right mono neg">53</td>
+          <td class="right mono">45.4%</td>
+          <td><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:45.4%;background:var(--red)"></div></div></td>
+        </tr></tbody>
+          </table></div>
+        </div>
+        </div>
+      </div>
+    </details>
       
       <div class="section-label">PROP TYPE BREAKDOWNS</div>
         <div class="three-col">

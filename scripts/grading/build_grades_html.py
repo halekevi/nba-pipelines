@@ -606,7 +606,7 @@ def pick_tier_direction_matrix_html(rows: list[dict], min_decided: int = 10) -> 
 
 def pick_type_tier_direction_split_html(rows: list[dict], min_decided: int = 10) -> str:
     """
-    User-facing split requested for NBA:
+    User-facing split used for every sport section:
       - Goblin by Tier A-D (OVER only)
       - Demon by Tier A-D (OVER only)
       - Standard by Tier A-D (OVER + UNDER)
@@ -1040,8 +1040,9 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
 
     stats  = overall_stats(rows)
     total_label = fmt_num(stats["total"]) if stats["total"] > 0 else fmt_num(stats["decided"] + stats["voids"])
-    matrix_section = pick_tier_direction_matrix_html(rows, min_decided=10) if sport.strip().upper() == "NBA" else ""
-    split_section = pick_type_tier_direction_split_html(rows, min_decided=10) if sport.strip().upper() == "NBA" else ""
+    # Apply the pick-type x tier analysis uniformly across all sport sections.
+    matrix_section = pick_tier_direction_matrix_html(rows, min_decided=10)
+    split_section = pick_type_tier_direction_split_html(rows, min_decided=10)
 
     # ── Def Tier ───────────────────────────────────────────────────────────────
     def_section = def_tier_table(rows)

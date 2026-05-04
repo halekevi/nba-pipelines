@@ -62,6 +62,8 @@ $WCBBGradedFile = Join-Path $DateDir "graded_wcbb_$Date.xlsx"
 $TennisGradedFile = Join-Path $DateDir "graded_tennis_$Date.xlsx"
 $EvalHtmlFile = Join-Path $DateDir "slate_eval_$Date.html"
 $TemplatesDir = Join-Path $Root "ui_runner\templates"
+# Local mobile bundle (grades.html loads slate_eval_{date}.html + graded_props_{date}.json from here).
+$MobileWwwDir = Join-Path $Root "mobile\www"
 
 # Max size for graded_slate git copies (avoid huge Excel in repo).
 $GradedSlateMaxBytes = 5 * 1024 * 1024
@@ -744,6 +746,19 @@ if (Test-Path $BuildGradesHtmlScript) {
 
     if (($HtmlArgs -contains "--nba") -or ($HtmlArgs -contains "--cbb") -or ($HtmlArgs -contains "--nhl") -or ($HtmlArgs -contains "--soccer") -or ($HtmlArgs -contains "--mlb")) {
         Run-Py "Build Grades HTML" $Root $BuildGradesHtmlScript $HtmlArgs
+        # Keep mobile/www in sync with ui_runner/templates (Grades iframe uses same-dir slate_eval_*.html).
+        if (Test-Path -LiteralPath $MobileWwwDir) {
+            $seSrc = Join-Path $TemplatesDir "slate_eval_$Date.html"
+            $gpSrc = Join-Path $TemplatesDir "graded_props_$Date.json"
+            if (Test-Path $seSrc) {
+                Copy-Item -LiteralPath $seSrc -Destination (Join-Path $MobileWwwDir "slate_eval_$Date.html") -Force -ErrorAction SilentlyContinue
+                Write-Host "[GRADER] Mobile copy: slate_eval_$Date.html -> mobile\www\" -ForegroundColor DarkGray
+            }
+            if (Test-Path $gpSrc) {
+                Copy-Item -LiteralPath $gpSrc -Destination (Join-Path $MobileWwwDir "graded_props_$Date.json") -Force -ErrorAction SilentlyContinue
+                Write-Host "[GRADER] Mobile copy: graded_props_$Date.json -> mobile\www\" -ForegroundColor DarkGray
+            }
+        }
     }
     else {
         Write-Host "Skipping HTML build (no graded workbook found)." -ForegroundColor Yellow
@@ -894,6 +909,10 @@ if (Test-Path $TicketEvalBuilderScript) {
             }
         }
         Run-Py "Build Ticket Eval HTML" $Root $TicketEvalBuilderScript $TeArgs
+        if ((Test-Path -LiteralPath $MobileWwwDir) -and (Test-Path -LiteralPath $TicketEvalOut)) {
+            Copy-Item -LiteralPath $TicketEvalOut -Destination (Join-Path $MobileWwwDir "ticket_eval_$Date.html") -Force -ErrorAction SilentlyContinue
+            Write-Host "[GRADER] Mobile copy: ticket_eval_$Date.html -> mobile\www\" -ForegroundColor DarkGray
+        }
         Write-Host "[GRADER] Ticket eval merges graded_* for slate date and each leg game_time date (see build_ticket_eval log)." -ForegroundColor DarkGray
     }
     else {
