@@ -304,6 +304,11 @@ def parse_boxscore(
                     dk = (str(event_id or ""), str(t_abbr or "").upper(), fold_player_name(pl_norm))
                     if dk not in seen_dnp:
                         seen_dnp.add(dk)
+                        st_out = (
+                            dnp_status
+                            if "DNP" in dnp_status.upper()
+                            else f"DNP-{dnp_status.strip()}"
+                        )
                         dnp_rows.append(
                             {
                                 "date": date_str,
@@ -311,10 +316,10 @@ def parse_boxscore(
                                 "event_id": str(event_id or ""),
                                 "team": str(t_abbr or "").strip().upper(),
                                 "player": pl_norm,
-                                "injury_status": dnp_status,
+                                "injury_status": st_out,
                                 "injury_type": "DNP",
                                 "injury_type_desc": "From box score",
-                                "injury_detail": dnp_status,
+                                "injury_detail": st_out,
                                 "injury_side": "",
                                 "rank_penalty": -0.45,
                             }
