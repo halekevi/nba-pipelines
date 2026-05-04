@@ -530,7 +530,9 @@ def pick_tier_direction_matrix_html(rows: list[dict], min_decided: int = 10) -> 
     n_ge = sum(1 for k in keys if int(agg.get(k, {}).get("decided", 0)) >= int(min_decided))
     summary = (
         f"Full grid: Standard A–D (OVER/UNDER), Goblin & Demon A–D (OVER). "
-        f"{n_ge} of {len(keys)} cells have ≥ {int(min_decided)} decided; others still listed with counts."
+        f"{n_ge} of {len(keys)} cells have ≥ {int(min_decided)} decided; others still listed with counts. "
+        f"Note: Standard Tier B may show no decided props when ml_prob is compressed below tier thresholds "
+        f"(e.g., B cut ≥ 0.65) — “—” cells are expected until calibration / a retrain restores spread."
     )
 
     body_rows = ""
@@ -683,7 +685,7 @@ def pick_type_tier_direction_split_html(rows: list[dict], min_decided: int = 10)
     return f"""<details class="matrix-collapsible">
       <summary>Pick Type Tier Splits — Goblin/Demon OVER, Standard OVER+UNDER</summary>
       <div class="matrix-body">
-        <div class="matrix-summary">Full A–D per pick type ({len(grid)} matrix cells). {n_ge} cells with ≥ {int(min_decided)} decided.</div>
+        <div class="matrix-summary">Full A–D per pick type ({len(grid)} matrix cells). {n_ge} cells with ≥ {int(min_decided)} decided. Note: Standard Tier B may be structurally sparse when ml_prob is compressed below tier thresholds — “—” is not a missing-data bug.</div>
         <div class="three-col">
           {_table_for("Goblin", ["OVER"], "chip-goblin", "🎃")}
           {_table_for("Demon", ["OVER"], "chip-demon", "😈")}
