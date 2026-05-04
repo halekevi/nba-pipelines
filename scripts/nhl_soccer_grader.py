@@ -38,7 +38,8 @@ NHL_SLATE_MAP = {
     "team":          "team",
     "opp":           "opp_team",
     "Game Date":     "slate_game_date",
-    "game_date":     "slate_game_date",
+    # Lowercase `game_date` is kept on NHL step8 XLSX for tooling; only map title case to avoid
+    # duplicate rename targets when both columns are present.
     "tier":          "tier",
     "def_tier":      "def_tier",
     "direction":     "bet_direction",
@@ -250,6 +251,10 @@ def load_slate(path: Path, sport: str, grade_date: str = None) -> pd.DataFrame:
     else:
         df = df.rename(columns={k: v for k, v in col_map.items() if k in df.columns})
 
+    # NHL CSV slates may only have lowercase `game_date` (no title-case column).
+    if sport == "NHL" and "slate_game_date" not in df.columns and "game_date" in df.columns:
+        df = df.rename(columns={"game_date": "slate_game_date"})
+
     # Ensure pick_type exists (NHL step8 doesn't have it — derive from edge/tier)
     if "pick_type" not in df.columns:
         if "tier" in df.columns:
@@ -359,23 +364,26 @@ def load_slate(path: Path, sport: str, grade_date: str = None) -> pd.DataFrame:
                 if n1 < n0:
                     print(f"  [{label}] Date filter {want}: kept {n1}/{n0} slate rows (Game Date)")
 
-    # NHL: strict ET calendar-day filter when slate_game_date is populated.
-    # If the filter would remove everything, keep the full slate (same guard pattern as MLB).
+    # NHL: ET calendar-day filter when slate_game_date is populated (mirror MLB: keep unknown dates).
     if sport == "NHL" and grade_date and "slate_game_date" in df.columns:
         want = str(grade_date).strip()[:10]
         raw = pd.to_datetime(df["slate_game_date"], errors="coerce")
-        day = raw.dt.strftime("%Y-%m-%d")
-        mask = day == want
-        n0 = len(df)
-        n_match = int(mask.sum())
-        if n_match > 0:
-            df = df.loc[mask].copy()
-            n1 = len(df)
-            print(f"  [NHL grader] Date filter: kept {n1}/{n0} rows for {want} (slate_game_date)")
-        else:
-            print(
-                f"  [NHL grader] WARN: date filter for {want} = 0 rows — keeping full slate ({n0} rows)"
-            )
+        if raw.notna().any():
+            day = raw.dt.strftime("%Y-%m-%d")
+            ok = day == want
+            unk = raw.isna()
+            n0 = len(df)
+            sub = df.loc[ok | unk].copy()
+            n1 = len(sub)
+            if n1 == 0 and n0 > 0:
+                print(
+                    f"  [NHL grader] WARN: date filter {want} would remove all {n0} rows — "
+                    f"keeping full slate (no rows match that calendar day)"
+                )
+            else:
+                df = sub
+                if n1 < n0:
+                    print(f"  [NHL grader] Date filter ({want}): kept {n1}/{n0} rows")
 
     return df
 

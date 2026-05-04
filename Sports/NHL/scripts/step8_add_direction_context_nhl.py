@@ -175,10 +175,33 @@ COLUMN_ALIASES = {
     "pp_pts_per_game":  ["pp_pts_per_game"],
     "toi_avg_L10":      ["toi_avg_L10"],
     "toi_per_game_api": ["toi_per_game_api"],
-    "game_start":       ["game_start"],
+    "game_start":       ["game_start", "start_time", "Game Time"],
     "game_script_mult": ["game_script_mult"],
     "game_script_note": ["game_script_note"],
 }
+
+# Ordered like NBA/MLB ET pipelines: prefer full timestamps; time-only columns may not parse.
+_GAME_TS_FALLBACK = ["game_start", "start_time", "Game Time"]
+
+
+def _first_game_timestamp_raw(raw: dict, available_cols: set):
+    """First column value that yields an ET calendar date; else first non-empty candidate."""
+    for c in _GAME_TS_FALLBACK:
+        if c not in available_cols:
+            continue
+        v = raw.get(c)
+        if v in (None, ""):
+            continue
+        d_et, _ = _nhl_game_date_time_et(v)
+        if d_et:
+            return v
+    for c in _GAME_TS_FALLBACK:
+        if c not in available_cols:
+            continue
+        v = raw.get(c)
+        if v not in (None, ""):
+            return v
+    return None
 
 
 def resolve(row: dict, canonical: str, available_cols: set) -> str:
@@ -212,11 +235,7 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
     def r(key):
         return resolve(raw, key, available_cols)
 
-    gs_raw = None
-    for c in COLUMN_ALIASES.get("game_start", ["game_start"]):
-        if c in available_cols and raw.get(c) not in (None, ""):
-            gs_raw = raw.get(c)
-            break
+    gs_raw = _first_game_timestamp_raw(raw, available_cols)
     game_date_et, game_time_et = _nhl_game_date_time_et(gs_raw)
 
     direction = r("direction") or "OVER"
@@ -343,8 +362,8 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         "Game Date":        game_date_et,
         # Lowercase alias for downstream tooling / CSV consumers (mirrors other sports pipelines).
         "game_date":        game_date_et,
-        "Game Time":        game_time_et or r("game_start"),
-        "game_start":       r("game_start"),
+        "Game Time":        game_time_et or (str(gs_raw) if gs_raw not in (None, "") else r("game_start")),
+        "game_start":       (str(gs_raw) if gs_raw not in (None, "") else r("game_start")),
         "game_script_mult": (
             fmt_num(raw.get("game_script_mult"), 3)
             if raw.get("game_script_mult") not in (None, "")
@@ -407,10 +426,9 @@ def write_xlsx(rows: list[dict], path: str):
         openpyxl.Workbook().save(path)
         return
 
-    # XLSX is primarily human-facing; keep a single calendar-date column ("Game Date").
-    # `game_date` is still written to CSV for downstream tooling, but duplicating it in XLSX
-    # creates duplicate headers after grader rename maps both -> slate_game_date.
-    rows_xlsx = [{k: v for k, v in r.items() if k != "game_date"} for r in rows]
+    # Human + machine calendar columns; grader maps only "Game Date" -> slate_game_date
+    # so lowercase `game_date` can coexist in the XLSX (dated copy included).
+    rows_xlsx = list(rows)
     headers = list(rows_xlsx[0].keys())
     wb = openpyxl.Workbook()
 
