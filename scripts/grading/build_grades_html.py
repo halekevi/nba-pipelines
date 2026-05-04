@@ -758,18 +758,17 @@ def def_tier_table(rows: list[dict]) -> str:
     dt_agg = build_agg_from_rows(rows, "Def Tier")
     if not dt_agg:
         return ""
-    # Sort by a defined order
-    order = {
-        "elite": 0,
-        "above avg": 1,
-        "avg": 2,
-        "average": 2,
-        "below avg": 3,
-        "below average": 3,
-        "weak": 4,
-        "very weak": 5,
+    TIER_ORDER = ["Elite", "Above Avg", "Avg", "Below Avg", "Weak"]
+    TIER_ALIASES = {
+        "elite": "Elite",
+        "above avg": "Above Avg",
+        "avg": "Avg",
+        "average": "Avg",
+        "below avg": "Below Avg",
+        "below average": "Below Avg",
+        "weak": "Weak",
+        "very weak": "Weak",
     }
-    dt_agg.sort(key=lambda x: order.get(x["key"].lower().replace("🟢","").replace("🟡","").replace("🔴","").strip(), 99))
 
     def _norm_def_tier_early(x: str) -> str:
         return (
@@ -781,20 +780,32 @@ def def_tier_table(rows: list[dict]) -> str:
             .strip()
         )
 
-    rows_html = ""
+    stats_by_tier: dict[str, dict] = {}
     for d in dt_agg:
-        if d["decided"] == 0: continue
-        dkey0 = _norm_def_tier_early(d["key"])
-        sub_main = [r for r in rows if _norm_def_tier_early(r.get("Def Tier", "")) == dkey0]
+        key = TIER_ALIASES.get(_norm_def_tier_early(d["key"]))
+        if key:
+            stats_by_tier[key] = d
+
+    rows_html = ""
+    for tier_label in TIER_ORDER:
+        d = stats_by_tier.get(tier_label, {"key": tier_label, "decided": 0, "hits": 0, "hit_rate": 0})
+        dkey0 = _norm_def_tier_early(tier_label)
+        sub_main = [r for r in rows if TIER_ALIASES.get(_norm_def_tier_early(r.get("Def Tier", "")), "") == tier_label]
         ou_main = over_under_lines_html(sub_main)
+        if int(d.get("decided", 0)) <= 0:
+            rows_html += f"""<tr class="matrix-empty">
+          <td style="vertical-align:top"><span style="font-weight:700">{h(tier_label)}</span>{ou_main}</td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+        </tr>"""
+            continue
         rows_html += f"""<tr class="{'player-hit' if d['hit_rate']>=55 else ('player-miss' if d['hit_rate']<48 else 'player-warn')}">
           <td style="vertical-align:top"><span style="font-weight:700">{h(d['key'])}</span>{ou_main}</td>
           <td class="right mono">{fmt_num(d['decided'])}</td>
           <td class="right mono">{fmt_num(d['hits'])}</td>
           <td>{rate_bar_html(d['hit_rate'])}</td>
         </tr>"""
-    if not rows_html:
-        return ""
     # Breakdown matrices inside each defense tier (pick type + ticket tier)
     def _norm_def_tier(x: str) -> str:
         return (
@@ -816,13 +827,10 @@ def def_tier_table(rows: list[dict]) -> str:
     detail_rows_tier = ""
     detail_rows_std_dir = ""
     picktype_by_tier: dict[str, list[dict]] = {"goblin": [], "standard": [], "demon": []}
-    for d in dt_agg:
-        if d["decided"] == 0:
-            continue
-        dkey = _norm_def_tier(d["key"])
-        sub = [r for r in rows if _norm_def_tier(r.get("Def Tier", "")) == dkey]
-        if not sub:
-            continue
+    for tier_label in TIER_ORDER:
+        d = stats_by_tier.get(tier_label, {"key": tier_label, "decided": 0, "hits": 0, "hit_rate": 0})
+        dkey = _norm_def_tier(tier_label)
+        sub = [r for r in rows if TIER_ALIASES.get(_norm_def_tier(r.get("Def Tier", "")), "") == tier_label]
 
         gob = pick_type_stats(sub, "goblin")
         std = pick_type_stats(sub, "standard")
@@ -840,15 +848,16 @@ def def_tier_table(rows: list[dict]) -> str:
         std_over = overall_stats(std_over_rows) if std_over_rows else {"decided": 0, "hit_rate": 0}
         std_under = overall_stats(std_under_rows) if std_under_rows else {"decided": 0, "hit_rate": 0}
 
-        detail_rows_pt += f"""<tr>
+        detail_rows_pt += f"""<tr class="{'matrix-empty' if int(d.get('decided', 0)) <= 0 else ''}">
           <td><strong>{h(d["key"])}</strong></td>
           <td class="mono" style="vertical-align:top">{_stats_cell(gob)}{over_under_lines_html(rows_for_pick_type(sub, "goblin"))}</td>
           <td class="mono" style="vertical-align:top">{_stats_cell(std)}{over_under_lines_html(rows_for_pick_type(sub, "standard"))}</td>
           <td class="mono" style="vertical-align:top">{_stats_cell(dem)}{over_under_lines_html(rows_for_pick_type(sub, "demon"))}</td>
         </tr>"""
-        picktype_by_tier["goblin"].append({"def_tier": d["key"], **gob})
-        picktype_by_tier["standard"].append({"def_tier": d["key"], **std})
-        picktype_by_tier["demon"].append({"def_tier": d["key"], **dem})
+        if int(d.get("decided", 0)) > 0:
+            picktype_by_tier["goblin"].append({"def_tier": d["key"], **gob})
+            picktype_by_tier["standard"].append({"def_tier": d["key"], **std})
+            picktype_by_tier["demon"].append({"def_tier": d["key"], **dem})
 
         t_cells = []
         for t in ("A", "B", "C", "D"):
@@ -858,11 +867,11 @@ def def_tier_table(rows: list[dict]) -> str:
                 f'<td class="mono" style="vertical-align:top">{_stats_cell(t_stats)}'
                 f"{over_under_lines_html(t_rows)}</td>"
             )
-        detail_rows_tier += f"""<tr>
+        detail_rows_tier += f"""<tr class="{'matrix-empty' if int(d.get('decided', 0)) <= 0 else ''}">
           <td><strong>{h(d["key"])}</strong></td>
           {''.join(t_cells)}
         </tr>"""
-        detail_rows_std_dir += f"""<tr>
+        detail_rows_std_dir += f"""<tr class="{'matrix-empty' if int(d.get('decided', 0)) <= 0 else ''}">
           <td><strong>{h(d["key"])}</strong></td>
           <td class="mono">{_stats_cell(std_over)}</td>
           <td class="mono">{_stats_cell(std_under)}</td>
