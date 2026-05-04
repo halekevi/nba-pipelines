@@ -1,0 +1,525 @@
+{
+  "params": {
+    "sport": "NBA",
+    "all_dates": true,
+    "step8_per_date": true,
+    "dates_considered": [
+      "2026-03-25",
+      "2026-03-26",
+      "2026-03-27",
+      "2026-03-28",
+      "2026-03-29",
+      "2026-03-30",
+      "2026-03-31",
+      "2026-04-01",
+      "2026-04-02",
+      "2026-04-03",
+      "2026-04-04",
+      "2026-04-05",
+      "2026-04-06",
+      "2026-04-07",
+      "2026-04-08",
+      "2026-04-09",
+      "2026-04-10",
+      "2026-04-14",
+      "2026-04-15",
+      "2026-04-17",
+      "2026-04-18",
+      "2026-04-21",
+      "2026-04-22",
+      "2026-04-23",
+      "2026-04-24",
+      "2026-04-25",
+      "2026-04-26",
+      "2026-04-27",
+      "2026-04-28",
+      "2026-04-29",
+      "2026-05-02",
+      "2026-05-03"
+    ]
+  },
+  "ml_prob_threshold_scan_meta": {
+    "step8_per_date": true,
+    "dates_with_graded": 32,
+    "per_date_step8_hits": 32,
+    "source": "direct_full_game_nba_scan"
+  },
+  "ml_prob_threshold_scan": [
+    {
+      "pick_type": "GOBLIN",
+      "threshold": 0.4,
+      "n_total": 30561,
+      "base_hit_rate": 0.651025817218023,
+      "n_above": 29439,
+      "hit_rate_above": 0.6544719589659975,
+      "lift_vs_base": 0.0034461417479745293
+    },
+    {
+      "pick_type": "GOBLIN",
+      "threshold": 0.42,
+      "n_total": 30561,
+      "base_hit_rate": 0.651025817218023,
+      "n_above": 29192,
+      "hit_rate_above": 0.6551795012332146,
+      "lift_vs_base": 0.004153684015191561
+    },
+    {
+      "pick_type": "GOBLIN",
+      "threshold": 0.44,
+      "n_total": 30561,
+      "base_hit_rate": 0.651025817218023,
+      "n_above": 28970,
+      "hit_rate_above": 0.6556782878840179,
+      "lift_vs_base": 0.0046524706659949455
+    },
+    {
+      "pick_type": "GOBLIN",
+      "threshold": 0.46,
+      "n_total": 30561,
+      "base_hit_rate": 0.651025817218023,
+      "n_above": 28816,
+      "hit_rate_above": 0.6560591338145475,
+      "lift_vs_base": 0.005033316596524506
+    },
+    {
+      "pick_type": "GOBLIN",
+      "threshold": 0.48,
+      "n_total": 30561,
+      "base_hit_rate": 0.651025817218023,
+      "n_above": 28523,
+      "hit_rate_above": 0.6567331627107948,
+      "lift_vs_base": 0.005707345492771854
+    },
+    {
+      "pick_type": "GOBLIN",
+      "threshold": 0.5,
+      "n_total": 30561,
+      "base_hit_rate": 0.651025817218023,
+      "n_above": 28373,
+      "hit_rate_above": 0.6571740739435379,
+      "lift_vs_base": 0.006148256725514889
+    },
+    {
+      "pick_type": "GOBLIN",
+      "threshold": 0.52,
+      "n_total": 30561,
+      "base_hit_rate": 0.651025817218023,
+      "n_above": 28183,
+      "hit_rate_above": 0.6577014512294646,
+      "lift_vs_base": 0.006675634011441556
+    },
+    {
+      "pick_type": "GOBLIN",
+      "threshold": 0.54,
+      "n_total": 30561,
+      "base_hit_rate": 0.651025817218023,
+      "n_above": 27464,
+      "hit_rate_above": 0.6580978735799592,
+      "lift_vs_base": 0.0070720563619361965
+    },
+    {
+      "pick_type": "GOBLIN",
+      "threshold": 0.56,
+      "n_total": 30561,
+      "base_hit_rate": 0.651025817218023,
+      "n_above": 27015,
+      "hit_rate_above": 0.6586340921710161,
+      "lift_vs_base": 0.007608274952993099
+    },
+    {
+      "pick_type": "GOBLIN",
+      "threshold": 0.58,
+      "n_total": 30561,
+      "base_hit_rate": 0.651025817218023,
+      "n_above": 26027,
+      "hit_rate_above": 0.6600069158950321,
+      "lift_vs_base": 0.008981098677009136
+    },
+    {
+      "pick_type": "GOBLIN",
+      "threshold": 0.6,
+      "n_total": 30561,
+      "base_hit_rate": 0.651025817218023,
+      "n_above": 25767,
+      "hit_rate_above": 0.6598750339581635,
+      "lift_vs_base": 0.008849216740140498
+    },
+    {
+      "pick_type": "GOBLIN",
+      "threshold": 0.62,
+      "n_total": 30561,
+      "base_hit_rate": 0.651025817218023,
+      "n_above": 24197,
+      "hit_rate_above": 0.66173492581725,
+      "lift_vs_base": 0.010709108599227024
+    },
+    {
+      "pick_type": "GOBLIN",
+      "threshold": 0.65,
+      "n_total": 30561,
+      "base_hit_rate": 0.651025817218023,
+      "n_above": 22853,
+      "hit_rate_above": 0.6656018903426246,
+      "lift_vs_base": 0.01457607312460163
+    },
+    {
+      "pick_type": "DEMON",
+      "threshold": 0.4,
+      "n_total": 8867,
+      "base_hit_rate": 0.37092590504116385,
+      "n_above": 5091,
+      "hit_rate_above": 0.35965429188764486,
+      "lift_vs_base": -0.011271613153518989
+    },
+    {
+      "pick_type": "DEMON",
+      "threshold": 0.42,
+      "n_total": 8867,
+      "base_hit_rate": 0.37092590504116385,
+      "n_above": 4929,
+      "hit_rate_above": 0.35991073240008115,
+      "lift_vs_base": -0.011015172641082704
+    },
+    {
+      "pick_type": "DEMON",
+      "threshold": 0.44,
+      "n_total": 8867,
+      "base_hit_rate": 0.37092590504116385,
+      "n_above": 3713,
+      "hit_rate_above": 0.3622407756531107,
+      "lift_vs_base": -0.008685129388053159
+    },
+    {
+      "pick_type": "DEMON",
+      "threshold": 0.46,
+      "n_total": 8867,
+      "base_hit_rate": 0.37092590504116385,
+      "n_above": 3492,
+      "hit_rate_above": 0.3582474226804124,
+      "lift_vs_base": -0.012678482360751475
+    },
+    {
+      "pick_type": "DEMON",
+      "threshold": 0.48,
+      "n_total": 8867,
+      "base_hit_rate": 0.37092590504116385,
+      "n_above": 3376,
+      "hit_rate_above": 0.35515402843601895,
+      "lift_vs_base": -0.015771876605144897
+    },
+    {
+      "pick_type": "DEMON",
+      "threshold": 0.5,
+      "n_total": 8867,
+      "base_hit_rate": 0.37092590504116385,
+      "n_above": 3181,
+      "hit_rate_above": 0.35366237032379755,
+      "lift_vs_base": -0.017263534717366302
+    },
+    {
+      "pick_type": "DEMON",
+      "threshold": 0.52,
+      "n_total": 8867,
+      "base_hit_rate": 0.37092590504116385,
+      "n_above": 3079,
+      "hit_rate_above": 0.3517375771354336,
+      "lift_vs_base": -0.019188327905730274
+    },
+    {
+      "pick_type": "DEMON",
+      "threshold": 0.54,
+      "n_total": 8867,
+      "base_hit_rate": 0.37092590504116385,
+      "n_above": 2997,
+      "hit_rate_above": 0.3510176843510177,
+      "lift_vs_base": -0.01990822069014614
+    },
+    {
+      "pick_type": "DEMON",
+      "threshold": 0.56,
+      "n_total": 8867,
+      "base_hit_rate": 0.37092590504116385,
+      "n_above": 2826,
+      "hit_rate_above": 0.3457183297947629,
+      "lift_vs_base": -0.025207575246400937
+    },
+    {
+      "pick_type": "DEMON",
+      "threshold": 0.58,
+      "n_total": 8867,
+      "base_hit_rate": 0.37092590504116385,
+      "n_above": 2683,
+      "hit_rate_above": 0.34364517331345507,
+      "lift_vs_base": -0.027280731727708785
+    },
+    {
+      "pick_type": "DEMON",
+      "threshold": 0.6,
+      "n_total": 8867,
+      "base_hit_rate": 0.37092590504116385,
+      "n_above": 2581,
+      "hit_rate_above": 0.34250290585044557,
+      "lift_vs_base": -0.02842299919071828
+    },
+    {
+      "pick_type": "DEMON",
+      "threshold": 0.62,
+      "n_total": 8867,
+      "base_hit_rate": 0.37092590504116385,
+      "n_above": 2512,
+      "hit_rate_above": 0.34076433121019106,
+      "lift_vs_base": -0.030161573830972788
+    },
+    {
+      "pick_type": "DEMON",
+      "threshold": 0.65,
+      "n_total": 8867,
+      "base_hit_rate": 0.37092590504116385,
+      "n_above": 2457,
+      "hit_rate_above": 0.34065934065934067,
+      "lift_vs_base": -0.03026656438182318
+    },
+    {
+      "pick_type": "STANDARD",
+      "threshold": 0.4,
+      "n_total": 17895,
+      "base_hit_rate": 0.5170159262363789,
+      "n_above": 14852,
+      "hit_rate_above": 0.5143415028279019,
+      "lift_vs_base": -0.0026744234084770113
+    },
+    {
+      "pick_type": "STANDARD",
+      "threshold": 0.42,
+      "n_total": 17895,
+      "base_hit_rate": 0.5170159262363789,
+      "n_above": 14563,
+      "hit_rate_above": 0.5144544393325551,
+      "lift_vs_base": -0.002561486903823851
+    },
+    {
+      "pick_type": "STANDARD",
+      "threshold": 0.44,
+      "n_total": 17895,
+      "base_hit_rate": 0.5170159262363789,
+      "n_above": 14247,
+      "hit_rate_above": 0.5137221871271145,
+      "lift_vs_base": -0.0032937391092644486
+    },
+    {
+      "pick_type": "STANDARD",
+      "threshold": 0.46,
+      "n_total": 17895,
+      "base_hit_rate": 0.5170159262363789,
+      "n_above": 13641,
+      "hit_rate_above": 0.5133787845465875,
+      "lift_vs_base": -0.0036371416897914566
+    },
+    {
+      "pick_type": "STANDARD",
+      "threshold": 0.48,
+      "n_total": 17895,
+      "base_hit_rate": 0.5170159262363789,
+      "n_above": 13105,
+      "hit_rate_above": 0.5118657001144601,
+      "lift_vs_base": -0.005150226121918844
+    },
+    {
+      "pick_type": "STANDARD",
+      "threshold": 0.5,
+      "n_total": 17895,
+      "base_hit_rate": 0.5170159262363789,
+      "n_above": 11669,
+      "hit_rate_above": 0.5100694146884909,
+      "lift_vs_base": -0.006946511547888057
+    },
+    {
+      "pick_type": "STANDARD",
+      "threshold": 0.52,
+      "n_total": 17895,
+      "base_hit_rate": 0.5170159262363789,
+      "n_above": 10651,
+      "hit_rate_above": 0.5107501643038213,
+      "lift_vs_base": -0.0062657619325576785
+    },
+    {
+      "pick_type": "STANDARD",
+      "threshold": 0.54,
+      "n_total": 17895,
+      "base_hit_rate": 0.5170159262363789,
+      "n_above": 10128,
+      "hit_rate_above": 0.5096761453396524,
+      "lift_vs_base": -0.007339780896726489
+    },
+    {
+      "pick_type": "STANDARD",
+      "threshold": 0.56,
+      "n_total": 17895,
+      "base_hit_rate": 0.5170159262363789,
+      "n_above": 7760,
+      "hit_rate_above": 0.5177835051546392,
+      "lift_vs_base": 0.0007675789182602921
+    },
+    {
+      "pick_type": "STANDARD",
+      "threshold": 0.58,
+      "n_total": 17895,
+      "base_hit_rate": 0.5170159262363789,
+      "n_above": 7348,
+      "hit_rate_above": 0.5183723462166576,
+      "lift_vs_base": 0.0013564199802786892
+    },
+    {
+      "pick_type": "STANDARD",
+      "threshold": 0.6,
+      "n_total": 17895,
+      "base_hit_rate": 0.5170159262363789,
+      "n_above": 6922,
+      "hit_rate_above": 0.5161802947125108,
+      "lift_vs_base": -0.0008356315238681189
+    },
+    {
+      "pick_type": "STANDARD",
+      "threshold": 0.62,
+      "n_total": 17895,
+      "base_hit_rate": 0.5170159262363789,
+      "n_above": 6420,
+      "hit_rate_above": 0.5130841121495328,
+      "lift_vs_base": -0.003931814086846175
+    },
+    {
+      "pick_type": "STANDARD",
+      "threshold": 0.65,
+      "n_total": 17895,
+      "base_hit_rate": 0.5170159262363789,
+      "n_above": 6060,
+      "hit_rate_above": 0.5102310231023103,
+      "lift_vs_base": -0.006784903134068654
+    },
+    {
+      "pick_type": "ALL",
+      "threshold": 0.4,
+      "n_total": 57323,
+      "base_hit_rate": 0.565863614953858,
+      "n_above": 49382,
+      "hit_rate_above": 0.5819326880239764,
+      "lift_vs_base": 0.0160690730701184
+    },
+    {
+      "pick_type": "ALL",
+      "threshold": 0.42,
+      "n_total": 57323,
+      "base_hit_rate": 0.565863614953858,
+      "n_above": 48684,
+      "hit_rate_above": 0.5831895489277792,
+      "lift_vs_base": 0.017325933973921237
+    },
+    {
+      "pick_type": "ALL",
+      "threshold": 0.44,
+      "n_total": 57323,
+      "base_hit_rate": 0.565863614953858,
+      "n_above": 46930,
+      "hit_rate_above": 0.5893671425527381,
+      "lift_vs_base": 0.02350352759888019
+    },
+    {
+      "pick_type": "ALL",
+      "threshold": 0.46,
+      "n_total": 57323,
+      "base_hit_rate": 0.565863614953858,
+      "n_above": 45949,
+      "hit_rate_above": 0.5910683583973536,
+      "lift_vs_base": 0.02520474344349566
+    },
+    {
+      "pick_type": "ALL",
+      "threshold": 0.48,
+      "n_total": 57323,
+      "base_hit_rate": 0.565863614953858,
+      "n_above": 45004,
+      "hit_rate_above": 0.5919251622078038,
+      "lift_vs_base": 0.026061547253945827
+    },
+    {
+      "pick_type": "ALL",
+      "threshold": 0.5,
+      "n_total": 57323,
+      "base_hit_rate": 0.565863614953858,
+      "n_above": 43223,
+      "hit_rate_above": 0.5951229669388983,
+      "lift_vs_base": 0.02925935198504037
+    },
+    {
+      "pick_type": "ALL",
+      "threshold": 0.52,
+      "n_total": 57323,
+      "base_hit_rate": 0.565863614953858,
+      "n_above": 41913,
+      "hit_rate_above": 0.5978813256030349,
+      "lift_vs_base": 0.03201771064917691
+    },
+    {
+      "pick_type": "ALL",
+      "threshold": 0.54,
+      "n_total": 57323,
+      "base_hit_rate": 0.565863614953858,
+      "n_above": 40589,
+      "hit_rate_above": 0.59838872600951,
+      "lift_vs_base": 0.032525111055652034
+    },
+    {
+      "pick_type": "ALL",
+      "threshold": 0.56,
+      "n_total": 57323,
+      "base_hit_rate": 0.565863614953858,
+      "n_above": 37601,
+      "hit_rate_above": 0.6060477114970346,
+      "lift_vs_base": 0.04018409654317667
+    },
+    {
+      "pick_type": "ALL",
+      "threshold": 0.58,
+      "n_total": 57323,
+      "base_hit_rate": 0.565863614953858,
+      "n_above": 36058,
+      "hit_rate_above": 0.6076044151089911,
+      "lift_vs_base": 0.04174080015513315
+    },
+    {
+      "pick_type": "ALL",
+      "threshold": 0.6,
+      "n_total": 57323,
+      "base_hit_rate": 0.565863614953858,
+      "n_above": 35270,
+      "hit_rate_above": 0.608449106889708,
+      "lift_vs_base": 0.04258549193585004
+    },
+    {
+      "pick_type": "ALL",
+      "threshold": 0.62,
+      "n_total": 57323,
+      "base_hit_rate": 0.565863614953858,
+      "n_above": 33129,
+      "hit_rate_above": 0.6085906607503999,
+      "lift_vs_base": 0.04272704579654196
+    },
+    {
+      "pick_type": "ALL",
+      "threshold": 0.65,
+      "n_total": 57323,
+      "base_hit_rate": 0.565863614953858,
+      "n_above": 31370,
+      "hit_rate_above": 0.610137073637233,
+      "lift_vs_base": 0.044273458683375067
+    }
+  ],
+  "decision": {
+    "date": "2026-05-04",
+    "outcome": "NO_CUTS_APPLIED",
+    "reason": "NBA Standard ml_prob has no predictive signal (max lift +0.1pp at 0.58 across 17,895 rows / 32 dates). NBA Demon ml_prob is negatively correlated with hit rate. Do not add NBA entry to SPORT_ML_PROB_CUTS until after model retrain (~May 16). Standard Tier A/B/C will remain sparse on NBA until model produces better probability spread.",
+    "retrain_target": "2026-05-16",
+    "baseline_auc": 0.7266,
+    "revisit_when": "post-retrain, run same scan with --from 2026-05-02"
+  }
+}
