@@ -200,20 +200,22 @@ def main() -> None:
 
     if not slate_path.exists():
         raise FileNotFoundError(f"Slate file not found: {slate_path}")
-    if not actuals_path.exists():
-        raise FileNotFoundError(f"Actuals file not found: {actuals_path}")
 
     slate = _ensure_required_columns(_read_table(slate_path), is_actuals=False)
     key_cols = ["player", "team", "prop_type"]
     missing_slate = [c for c in key_cols + ["line"] if c not in slate.columns]
     if missing_slate:
         raise ValueError(f"Slate missing required columns: {missing_slate}")
-    # Batch mode: run multiple actuals files against the same slate.
+    # Batch mode: run multiple actuals files against the same slate (ignore default --actuals path).
     if args.batch_actuals_glob:
         root = Path(__file__).resolve().parents[3]
         actuals_files = sorted(root.glob(args.batch_actuals_glob))
         if not actuals_files:
-            raise FileNotFoundError(f"No files matched --batch-actuals-glob={args.batch_actuals_glob}")
+            print(
+                f"[backtest_nba] SKIP batch backtest: no files matched "
+                f"--batch-actuals-glob={args.batch_actuals_glob}"
+            )
+            return
 
         rows: list[dict] = []
         for p in actuals_files:
@@ -228,6 +230,10 @@ def main() -> None:
         print(f"Batch backtest complete. Files tested: {len(actuals_files)}")
         print(f"Saved: {batch_out}")
         print(batch_df.to_string(index=False))
+        return
+
+    if not actuals_path.exists():
+        print(f"[backtest_nba] SKIP daily backtest: actuals file not found: {actuals_path}")
         return
 
     actuals = _ensure_required_columns(_read_table(actuals_path), is_actuals=True)
