@@ -6,9 +6,14 @@ Outputs:
   data/retrain_dataset.csv              — decided props + step8 features (left join)
   data/retrain_dataset_graded_only.csv  — decided props from JSON only (baseline)
 
+  With ``--output PATH``, writes the joined CSV to PATH and graded-only to
+  ``<stem>_graded_only<suffix>`` beside it. Use ``--from YYYY-MM-DD`` to keep only
+  graded_props rows whose file_date is on/after that day (e.g. post tier overhaul).
+
 Usage:
   py -3.14 scripts/build_retrain_dataset.py
   py -3.14 scripts/build_retrain_dataset.py --repo-root .
+  py -3.14 scripts/build_retrain_dataset.py --from 2026-05-02 --output data/training/retrain_post_tier.csv
 """
 
 from __future__ import annotations
@@ -277,6 +282,20 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--repo-root", type=Path, default=None, help="PropORACLE repo root (default: parent of scripts/)")
     ap.add_argument("--verbose", action="store_true", help="Log each (sport, file_date) join group")
+    ap.add_argument(
+        "--from",
+        dest="from_date",
+        default="",
+        metavar="YYYY-MM-DD",
+        help="Minimum graded_props file_date (inclusive). Empty = all dates.",
+    )
+    ap.add_argument(
+        "--output",
+        type=Path,
+        default=None,
+        help="Joined CSV path (default: <repo>/data/retrain_dataset.csv). "
+        "Graded-only baseline is <stem>_graded_only<suffix> next to this file.",
+    )
     args = ap.parse_args()
     root = _repo_root(args.repo_root)
     templates = root / "ui_runner" / "templates"
@@ -291,6 +310,16 @@ def main() -> int:
     df["result_u"] = df["result"].astype(str).str.strip().str.upper()
     decided = df[df["result_u"].isin(("HIT", "MISS"))].copy()
     decided["result_binary"] = (decided["result_u"] == "HIT").astype(int)
+
+    from_s = str(args.from_date or "").strip()[:10]
+    if from_s and len(from_s) == 10:
+        before = len(decided)
+        fd = decided["file_date"].astype(str).str.strip().str[:10]
+        decided = decided.loc[fd >= from_s].copy()
+        print(f"[filter] --from {from_s}: kept {len(decided):,}/{before:,} decided rows")
+        if decided.empty:
+            print("No rows left after --from filter.", file=sys.stderr)
+            return 1
 
     graded_only_cols = [
         "file_date",
@@ -316,7 +345,13 @@ def main() -> int:
         if c not in decided.columns:
             decided[c] = ""
     graded_out = decided[[c for c in graded_only_cols if c in decided.columns]]
-    graded_path = data_dir / "retrain_dataset_graded_only.csv"
+    if args.output is not None:
+        out_path = Path(args.output).expanduser().resolve()
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        graded_path = out_path.with_name(out_path.stem + "_graded_only" + out_path.suffix)
+    else:
+        out_path = data_dir / "retrain_dataset.csv"
+        graded_path = data_dir / "retrain_dataset_graded_only.csv"
     graded_out.to_csv(graded_path, index=False, encoding="utf-8-sig")
     print(f"Wrote {graded_path}  rows={len(graded_out):,}")
 
@@ -441,7 +476,6 @@ def main() -> int:
         joined_parts.append(m)
 
     out_df = pd.concat(joined_parts, ignore_index=True) if joined_parts else decided
-    out_path = data_dir / "retrain_dataset.csv"
     out_df.to_csv(out_path, index=False, encoding="utf-8-sig")
     print(f"Wrote {out_path}  rows={len(out_df):,}")
 
