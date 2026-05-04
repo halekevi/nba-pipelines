@@ -1473,6 +1473,46 @@ def _prop_match_key_from_display(raw: str) -> str:
     return re.sub(r"[^a-z0-9]", "", _norm_prop_type(str(raw).strip()))
 
 
+def _row_has_finite_actual_value(actual: object) -> bool:
+    if actual is None:
+        return False
+    if isinstance(actual, float) and (pd.isna(actual) or math.isnan(actual) or math.isinf(actual)):
+        return False
+    try:
+        float(actual)
+        return True
+    except (TypeError, ValueError):
+        return False
+
+
+def _enrich_matched_row_with_sibling_actual(
+    pl: str,
+    pt: str,
+    row: dict[str, Any],
+    pair_buckets: dict[tuple[str, str], list[dict]],
+) -> dict[str, Any]:
+    """
+    Pre-game step8 rows often keep a line (e.g. Goblin 16.5) that never appears in graded Box Raw
+    after the slate is cut to ranked tiers, so the triple index still resolves to a row with no
+    actual/result. Any other row for the same player + prop (different line) shares the same
+    box-score stat — reuse that actual so _leg_grade can use the ticket leg line (same as
+    combined_ticket_grader's CSV lookup).
+    """
+    if _row_has_finite_actual_value(row.get("actual")):
+        return row
+    for alt in pair_buckets.get((pl, pt), []):
+        if not _row_has_finite_actual_value(alt.get("actual")):
+            continue
+        try:
+            val = float(alt["actual"])
+        except (TypeError, ValueError):
+            continue
+        merged = dict(row)
+        merged["actual"] = val
+        return merged
+    return row
+
+
 def _match_leg_in_index(
     leg: dict[str, Any],
     triple: dict[tuple[str, str, str], dict],
@@ -1489,17 +1529,20 @@ def _match_leg_in_index(
     except (TypeError, ValueError):
         leg_line = None
 
+    def _fin(r: dict[str, Any]) -> dict[str, Any]:
+        return _enrich_matched_row_with_sibling_actual(pl, pt, r, pair_buckets)
+
     # Try exact 4-tuple (player, prop, direction, line) — most specific.
     if leg_line is not None:
         line_key = round(leg_line, 2)
         hit = triple.get((pl, pt, dr, line_key))
         if hit:
-            return hit
+            return _fin(hit)
 
     # Try 3-tuple without line (legacy / no-line rows).
     hit = triple.get((pl, pt, dr, None))
     if hit:
-        return hit
+        return _fin(hit)
 
     cands = pair_buckets.get((pl, pt))
     if not cands:
@@ -1510,19 +1553,19 @@ def _match_leg_in_index(
         for r in cands:
             if r["direction"] == dr and r.get("line") is not None:
                 if abs(float(r["line"]) - leg_line) < 0.01:
-                    return r
+                    return _fin(r)
 
     # Pass 2: direction match only.
     for r in cands:
         if r["direction"] == dr:
-            return r
+            return _fin(r)
 
     if len(cands) == 1:
-        return cands[0]
+        return _fin(cands[0])
     for r in cands:
         if r["direction"] == dr or not r["direction"]:
-            return r
-    return cands[0]
+            return _fin(r)
+    return _fin(cands[0])
 
 
 def _match_leg_to_row_multi(
