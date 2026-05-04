@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -195,10 +196,17 @@ def _load_graded_box_raw(path: Path, sport: str) -> pd.DataFrame:
 def _load_step8(path: Path, sport: str) -> pd.DataFrame:
     if not path.exists():
         return pd.DataFrame()
-    if path.suffix.lower() == ".csv":
-        df = pd.read_csv(path, low_memory=False)
-    else:
-        df = pd.read_excel(path)
+    try:
+        if path.suffix.lower() == ".csv":
+            df = pd.read_csv(path, low_memory=False)
+        else:
+            df = pd.read_excel(path)
+    except (EOFError, zipfile.BadZipFile) as exc:
+        print(
+            f"[analyzer] WARNING: unreadable step8 workbook for {sport} at {path} ({type(exc).__name__}); skipping",
+            flush=True,
+        )
+        return pd.DataFrame()
     if df.empty:
         return df
     def _col_or_nan(cands: list[str]) -> pd.Series:
@@ -261,6 +269,10 @@ def _find_per_date_step8_file(sport: str, date_str: str) -> Path | None:
                 name_l = p.name.lower()
                 if not name_l.startswith("step8_"):
                     continue
+                if sport_u == "NBA":
+                    # Full-game NBA scans should never ingest period files.
+                    if any(tok in name_l for tok in ("nba1h", "nba1q", "nba2h", "nba2q", "nba3q", "nba4q")):
+                        continue
                 if slug not in name_l:
                     continue
                 if p.suffix.lower() not in (".xlsx", ".xls", ".csv"):
@@ -271,12 +283,17 @@ def _find_per_date_step8_file(sport: str, date_str: str) -> Path | None:
     if not candidates:
         return None
 
-    def _sort_key(p: Path) -> tuple[int, int, int, str]:
+    def _sort_key(p: Path) -> tuple[int, int, int, int, str]:
         # Prefer date-folder root over archive, "clean" in name, xlsx over csv, stable name.
         in_archive = 1 if p.parent.name.lower() == "archive" else 0
+        nba_exact = 1
+        if sport_u == "NBA":
+            name_l = p.name.lower()
+            if ("step8_nba_direction_clean_" in name_l) or ("step8_nba_direction_" in name_l):
+                nba_exact = 0
         clean = 0 if "clean" in p.name.lower() else 1
         is_xlsx = 0 if p.suffix.lower() == ".xlsx" else 1
-        return (in_archive, clean, is_xlsx, p.name.lower())
+        return (in_archive, nba_exact, clean, is_xlsx, p.name.lower())
 
     candidates.sort(key=_sort_key)
     return candidates[0]
