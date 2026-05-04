@@ -33,3 +33,6 @@ builder = "NIXPACKS"
 startCommand = "sh scripts/railway_gunicorn.sh"
 healthcheckPath = "/ping"
 healthcheckTimeout = 180
+
+# cache-bust: 2026-05-04 13:29 — force Nixpacks rebuild (slate_eval templates)
+
