@@ -16,6 +16,10 @@
 
   Run from repo root is NOT required; script cds to repo root automatically.
 
+  Run this script in a foreground PowerShell session so it can finish. If you use
+  Start-Process, add -Wait; otherwise exit_code 0 only means the launcher returned,
+  not that the backfill completed.
+
 .PARAMETER StartDate
   Inclusive yyyy-MM-dd (default 2026-04-21).
 
@@ -32,19 +36,26 @@
   If any date lacks outputs\<date>\step8_nba_direction_clean_<date>.xlsx, warn but continue.
   Without this switch, the script exits with code 2 when any date is missing (unless -DryRun).
 
+.PARAMETER IncludeWNBACaches
+  When set, runs regenerate_defense_caches.ps1 without -SkipWNBA (includes WNBA ESPN step).
+  Default skips WNBA during cache refresh so a flaky WNBA fetch does not fail the whole backfill.
+
 .EXAMPLE
   .\scripts\backfill_def_tier_reslate.ps1
 .EXAMPLE
   .\scripts\backfill_def_tier_reslate.ps1 -DryRun
 .EXAMPLE
   .\scripts\backfill_def_tier_reslate.ps1 -AllowMissingStep8
+.EXAMPLE
+  .\scripts\backfill_def_tier_reslate.ps1 -AllowMissingStep8 -IncludeWNBACaches
 #>
 param(
     [string]$StartDate = "2026-04-21",
     [string]$EndDate = "2026-05-04",
     [switch]$SkipDefenseCaches,
     [switch]$DryRun,
-    [switch]$AllowMissingStep8
+    [switch]$AllowMissingStep8,
+    [switch]$IncludeWNBACaches
 )
 
 $ErrorActionPreference = "Stop"
@@ -100,8 +111,16 @@ if (-not $SkipDefenseCaches) {
         throw "Missing $cacheScript"
     }
     Write-Host ""
-    Write-Host "[defense] Running regenerate_defense_caches.ps1 ..." -ForegroundColor Magenta
-    & $cacheScript
+    if ($IncludeWNBACaches) {
+        Write-Host "[defense] Running regenerate_defense_caches.ps1 (includes WNBA) ..." -ForegroundColor Magenta
+        & $cacheScript
+    } else {
+        Write-Host "[defense] Running regenerate_defense_caches.ps1 -SkipWNBA ..." -ForegroundColor Magenta
+        & $cacheScript -SkipWNBA
+    }
+    if ($LASTEXITCODE -ne 0) {
+        throw "regenerate_defense_caches.ps1 failed (exit $LASTEXITCODE)"
+    }
 }
 
 $runPipeline = Join-Path $Root "run_pipeline.ps1"
