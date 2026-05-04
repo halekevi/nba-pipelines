@@ -37,6 +37,8 @@ NHL_SLATE_MAP = {
     "player":        "player",
     "team":          "team",
     "opp":           "opp_team",
+    "Game Date":     "slate_game_date",
+    "game_date":     "slate_game_date",
     "tier":          "tier",
     "def_tier":      "def_tier",
     "direction":     "bet_direction",
@@ -335,8 +337,8 @@ def load_slate(path: Path, sport: str, grade_date: str = None) -> pd.DataFrame:
                 except Exception as exc:
                     print(f"  [DateFilter] Could not parse '{game_time_col}': {exc} — skipping filter")
 
-    # ── MLB: keep rows for the grade calendar day when Game Date is populated ─
-    if sport == "MLB" and grade_date and "slate_game_date" in df.columns:
+    # ── MLB / NHL: keep rows for the grade calendar day when Game Date is populated ─
+    if sport in ("MLB", "NHL") and grade_date and "slate_game_date" in df.columns:
         want = str(grade_date).strip()[:10]
         raw = pd.to_datetime(df["slate_game_date"], errors="coerce")
         if raw.notna().any():
@@ -346,15 +348,16 @@ def load_slate(path: Path, sport: str, grade_date: str = None) -> pd.DataFrame:
             n0 = len(df)
             sub = df.loc[ok | unk].copy()
             n1 = len(sub)
+            label = "MLB" if sport == "MLB" else "NHL"
             if n1 == 0 and n0 > 0:
                 print(
-                    f"  [MLB] WARNING: Date filter {want} would remove all {n0} rows; "
+                    f"  [{label}] WARNING: Date filter {want} would remove all {n0} rows; "
                     f"keeping full slate (no rows match that calendar day)"
                 )
             else:
                 df = sub
                 if n1 < n0:
-                    print(f"  [MLB] Date filter {want}: kept {n1}/{n0} slate rows (Game Date)")
+                    print(f"  [{label}] Date filter {want}: kept {n1}/{n0} slate rows (Game Date)")
 
     return df
 

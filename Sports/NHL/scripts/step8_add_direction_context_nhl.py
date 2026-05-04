@@ -32,8 +32,10 @@ import argparse
 import csv
 import shutil
 import openpyxl
-from datetime import date, datetime, timezone
+import pandas as pd
+from datetime import date, datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 try:
     from tqdm import tqdm as _tqdm
 except ImportError:
@@ -88,6 +90,33 @@ def fmt_num(val, digits=2) -> str:
     if f == 0.0 and (val is None or str(val).strip() == ""):
         return ""
     return f"{f:.{digits}f}"
+
+
+_ET = ZoneInfo("America/New_York")
+
+
+def _nhl_game_date_time_et(game_start_val) -> tuple[str, str]:
+    """Calendar date (YYYY-MM-DD) and clock string in America/New_York (mirrors NBA step8)."""
+    if game_start_val is None or str(game_start_val).strip() == "":
+        return "", ""
+    ts = pd.to_datetime(game_start_val, utc=True, errors="coerce")
+    if pd.isna(ts):
+        t2 = pd.to_datetime(str(game_start_val).strip(), errors="coerce")
+        if pd.isna(t2):
+            return "", ""
+        if t2.tzinfo is None:
+            t2 = t2.tz_localize("UTC", ambiguous="NaT", nonexistent="shift_forward")
+            if pd.isna(t2):
+                return "", ""
+        ts = t2
+    if ts.tzinfo is None:
+        ts = ts.tz_localize("UTC")
+    et = ts.tz_convert(_ET)
+    d = et.strftime("%Y-%m-%d")
+    clk = et.strftime("%I:%M %p")
+    if clk.startswith("0"):
+        clk = clk[1:]
+    return d, clk
 
 
 # ── Column name resolution (handles upstream naming variants) ─────────────────
@@ -178,6 +207,13 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
     """Build a clean, fully-populated display row from a raw Step 7 row."""
     def r(key):
         return resolve(raw, key, available_cols)
+
+    gs_raw = None
+    for c in COLUMN_ALIASES.get("game_start", ["game_start"]):
+        if c in available_cols and raw.get(c) not in (None, ""):
+            gs_raw = raw.get(c)
+            break
+    game_date_et, game_time_et = _nhl_game_date_time_et(gs_raw)
 
     direction = r("direction") or "OVER"
 
@@ -299,7 +335,9 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         "edge_score":       fmt_num(r("edge_score"), 4),
         "blended_score":    fmt_num(r("blended_score"), 4),
         "pick_type":        r("pick_type"),
-        # Game info
+        # Game info — ET calendar + wall clock (grader / MLB-style slate_game_date filter)
+        "Game Date":        game_date_et,
+        "Game Time":        game_time_et or r("game_start"),
         "game_start":       r("game_start"),
         "game_script_mult": (
             fmt_num(raw.get("game_script_mult"), 3)
@@ -426,7 +464,7 @@ def main():
 
     display_rows = [build_display_row(r, available_cols) for r in _tqdm(raw_rows, desc="  Building display rows", unit="prop")]
 
-    # ── Date filter: keep only target slate date games ───────────────────────
+    # ── Date filter: keep only target slate date games (ET calendar via Game Date) ─
     ds = str(args.date).strip()[:10] if args.date and str(args.date).strip() else ""
     target_local = (
         datetime.strptime(ds, "%Y-%m-%d").date() if ds else date.today()
@@ -471,10 +509,8 @@ def main():
 
     def _is_target_date(gs) -> bool:
         """
-        Accept game_start as a datetime object, a timezone-aware string, or a
-        plain date string.  Always compare against the *local* calendar date so
-        that UTC-midnight NHL games (e.g. 2026-03-13T00:00:00+00:00 = March 12
-        ET) are not accidentally dropped.
+        Legacy fallback when ``Game Date`` is empty: compare game_start to target
+        using the machine local calendar (older behavior).
         """
         if gs is None or gs == "":
             return False
@@ -505,27 +541,40 @@ def main():
         except Exception:
             return False
 
-    display_rows = [r for r in display_rows if _is_target_date(r.get("game_start", ""))]
+    def _row_matches_target(r: dict) -> bool:
+        gd = str(r.get("Game Date", "")).strip()
+        if gd:
+            return gd == target_str
+        return _is_target_date(r.get("game_start", ""))
+
+    display_rows = [r for r in display_rows if _row_matches_target(r)]
     dropped = before_filter - len(display_rows)
     if len(display_rows) == 0 and len(unfiltered) > 0:
-        dates_seen = []
+        dates_seen: list[str] = []
         for r in unfiltered:
-            d = _game_start_local_date(r.get("game_start", ""))
-            if d is not None:
-                dates_seen.append(d)
+            gd = str(r.get("Game Date", "")).strip()
+            if gd:
+                dates_seen.append(gd)
+            else:
+                d = _game_start_local_date(r.get("game_start", ""))
+                if d is not None:
+                    dates_seen.append(d.isoformat())
         if dates_seen:
             unique = sorted(set(dates_seen))
-            future = [d for d in unique if d >= target_local]
+            future = [d for d in unique if d >= target_str]
             chosen = future[0] if future else unique[-1]
 
-            def _is_chosen_date(gs) -> bool:
-                d2 = _game_start_local_date(gs)
-                return d2 is not None and d2 == chosen
+            def _is_chosen_row(row: dict) -> bool:
+                gd = str(row.get("Game Date", "")).strip()
+                if gd:
+                    return gd == chosen
+                d2 = _game_start_local_date(row.get("game_start", ""))
+                return d2 is not None and d2.isoformat() == chosen
 
-            display_rows = [r for r in unfiltered if _is_chosen_date(r.get("game_start", ""))]
+            display_rows = [r for r in unfiltered if _is_chosen_row(r)]
             print(
                 f"[DateFilter] Kept 0/{before_filter} for {target_str}; "
-                f"using nearest slate date {chosen.isoformat()} (>= target when possible) -> {len(display_rows)} rows"
+                f"using nearest slate date {chosen} (>= target when possible) -> {len(display_rows)} rows"
             )
         else:
             print(
