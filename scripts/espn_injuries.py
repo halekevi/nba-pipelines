@@ -290,7 +290,7 @@ def injury_rank_penalty_map(csv_path: str | Path, sport_for_team: str) -> Dict[T
     df = pd.read_csv(p, dtype=str).fillna("")
     agg: Dict[Tuple[str, str], float] = {}
     for _, r in df.iterrows():
-        pl = strip_norm(r.get("player", ""))
+        pl = fold_player_name(r.get("player", ""))
         tm = canon_team_abbr(sport_for_team, r.get("team", ""))
         if not pl or not tm:
             continue

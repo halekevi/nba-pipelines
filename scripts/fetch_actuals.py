@@ -37,6 +37,7 @@ for _p in (_SCRIPTS_DIR, _REPO_ROOT):
     if str(_p) not in sys.path:
         sys.path.insert(0, str(_p))
 
+from player_name_norm import fold_player_name  # noqa: E402
 from utils.player_name_utils import normalize_player_name  # noqa: E402
 
 HEADERS = {
@@ -175,93 +176,224 @@ def parse_stats(player_name, t_abbr, stat_map):
 
 
 # ── Parse ESPN box score JSON ─────────────────────────────────────────────────
-def parse_boxscore(box):
-    rows = []
-    for bteam in box.get('boxscore', {}).get('players', []):
-        t_abbr_raw = bteam.get('team', {}).get('abbreviation', '')
-        # Normalize ESPN abbrev to match slate/PrizePicks abbreviations
+def _nba_box_dnp_status(athlete: dict, stats: list) -> str | None:
+    """
+    Return a human-readable DNP status for the injuries sidecar when the athlete
+    was on the game roster but did not record box stats (coach's decision, injury DNP, etc.).
+    """
+    stats = stats or []
+    reason = str(athlete.get("notPlayedReason") or athlete.get("reason") or "").strip()
+    did = bool(athlete.get("didNotPlay"))
+
+    for s in stats:
+        if isinstance(s, str) and "DNP" in s.upper():
+            t = " ".join(s.split())
+            if t:
+                return t
+    if reason and "DNP" in reason.upper():
+        return reason
+    if did:
+        return reason if reason else "DNP"
+    return None
+
+
+def parse_boxscore(
+    box: dict,
+    *,
+    date_str: str = "",
+    event_id: str = "",
+    collect_dnp: bool = False,
+) -> tuple[list, list[dict]]:
+    """
+    Returns (stat_rows, dnp_sidecar_rows). dnp_sidecar_rows are only populated when
+    collect_dnp is True (NBA path) — merged into injuries_nba_<date>.csv after ESPN injury fetch.
+    """
+    rows: list = []
+    dnp_rows: list[dict] = []
+    seen_dnp: set[tuple[str, str, str]] = set()
+
+    for bteam in box.get("boxscore", {}).get("players", []):
+        t_abbr_raw = bteam.get("team", {}).get("abbreviation", "")
         t_abbr = ESPN_TO_SLATE_ABBREV.get(t_abbr_raw, t_abbr_raw)
-        for stat_group in bteam.get('statistics', []):
-            labels = stat_group.get('labels', [])
-            for athlete in stat_group.get('athletes', []):
-                player_name = athlete.get('athlete', {}).get('displayName', '')
-                stats = athlete.get('stats', [])
-                if not stats or all(s in ('--', '', None) for s in stats):
+        for stat_group in bteam.get("statistics", []):
+            labels = stat_group.get("labels", [])
+            for athlete in stat_group.get("athletes", []):
+                ainfo = athlete.get("athlete") or {}
+                player_raw = str(ainfo.get("displayName", "") or "").strip()
+                stats = athlete.get("stats") or []
+
+                emitted_stats = False
+                if stats and not all(s in ("--", "", None) for s in stats):
+                    stat_map = {}
+                    raw_map = {}
+                    for label, val in zip(labels, stats):
+                        raw_map[label] = val
+                        try:
+                            stat_map[label] = float(val)
+                        except (ValueError, TypeError):
+                            pass
+
+                    def _parse_made_att(x):
+                        try:
+                            s = str(x).strip()
+                        except Exception:
+                            return None, None
+                        m2 = re.match(r"^(\d+)\s*[-/]\s*(\d+)$", s)
+                        if not m2:
+                            return None, None
+                        return float(m2.group(1)), float(m2.group(2))
+
+                    fg_m, fg_a = _parse_made_att(
+                        raw_map.get("FG") or raw_map.get("FGM-A") or raw_map.get("FGMA"))
+                    if fg_m is not None:
+                        stat_map["FGM"] = fg_m
+                        stat_map["FGA"] = fg_a
+
+                    t3_m, t3_a = _parse_made_att(
+                        raw_map.get("3PT") or raw_map.get("3FG") or raw_map.get("3PTM-A"))
+                    if t3_m is not None:
+                        stat_map["3PM"] = t3_m
+                        stat_map["3PA"] = t3_a
+
+                    ft_m, ft_a = _parse_made_att(raw_map.get("FT") or raw_map.get("FTM-A"))
+                    if ft_m is not None:
+                        stat_map["FTM"] = ft_m
+                        stat_map["FTA"] = ft_a
+
+                    tw_m, tw_a = _parse_made_att(
+                        raw_map.get("2PT") or raw_map.get("2FG") or raw_map.get("2PTM-A"))
+                    if tw_m is not None:
+                        stat_map["2PM"] = tw_m
+                        stat_map["2PA"] = tw_a
+
+                    label_aliases = {
+                        "3PM": ["3PM", "FG3M", "3FGM"],
+                        "3PA": ["3PA", "FG3A", "3FGA"],
+                        "FGM": ["FGM"],
+                        "FGA": ["FGA"],
+                        "FTM": ["FTM"],
+                        "FTA": ["FTA"],
+                        "PTS": ["PTS"],
+                        "REB": ["REB", "TREB"],
+                        "AST": ["AST"],
+                        "BLK": ["BLK"],
+                        "STL": ["STL"],
+                        "TO": ["TO", "TOV"],
+                        "PF": ["PF", "FOULS"],
+                        "OREB": ["OREB"],
+                        "DREB": ["DREB"],
+                        "MIN": ["MIN"],
+                    }
+                    normalized = {}
+                    for canon, aliases in label_aliases.items():
+                        for alias in aliases:
+                            if alias in stat_map:
+                                normalized[canon] = stat_map[alias]
+                                break
+
+                    if normalized:
+                        rows.extend(parse_stats(player_raw, t_abbr, normalized))
+                        emitted_stats = True
+
+                if emitted_stats:
                     continue
 
-                stat_map = {}
-                raw_map  = {}
-                for label, val in zip(labels, stats):
-                    raw_map[label] = val
-                    try:
-                        stat_map[label] = float(val)
-                    except (ValueError, TypeError):
-                        pass
+                dnp_status = _nba_box_dnp_status(athlete, stats)
+                if collect_dnp and dnp_status and player_raw:
+                    pl_norm = normalize_player_name(player_raw)
+                    dk = (str(event_id or ""), str(t_abbr or "").upper(), fold_player_name(pl_norm))
+                    if dk not in seen_dnp:
+                        seen_dnp.add(dk)
+                        dnp_rows.append(
+                            {
+                                "date": date_str,
+                                "sport": "NBA",
+                                "event_id": str(event_id or ""),
+                                "team": str(t_abbr or "").strip().upper(),
+                                "player": pl_norm,
+                                "injury_status": dnp_status,
+                                "injury_type": "DNP",
+                                "injury_type_desc": "From box score",
+                                "injury_detail": dnp_status,
+                                "injury_side": "",
+                                "rank_penalty": -0.45,
+                            }
+                        )
+    return rows, dnp_rows
 
-                def _parse_made_att(x):
-                    try:
-                        s = str(x).strip()
-                    except Exception:
-                        return None, None
-                    m2 = re.match(r"^(\d+)\s*[-/]\s*(\d+)$", s)
-                    if not m2:
-                        return None, None
-                    return float(m2.group(1)), float(m2.group(2))
 
-                fg_m, fg_a = _parse_made_att(
-                    raw_map.get('FG') or raw_map.get('FGM-A') or raw_map.get('FGMA'))
-                if fg_m is not None:
-                    stat_map['FGM'] = fg_m
-                    stat_map['FGA'] = fg_a
+def merge_nba_box_dnp_into_injuries_csv(
+    dnp_rows: list[dict],
+    date_str: str,
+    actuals_output: str | Path,
+) -> int:
+    """
+    Append box-score DNP rows to injuries_nba_<date>.csv. Does not remove or overwrite
+    existing ESPN injury-report rows; skips when (fold_player_name(player), team) already present.
+    """
+    if not dnp_rows:
+        return 0
+    try:
+        from espn_injuries import injuries_csv_path_for_actuals
+    except ImportError:
+        return 0
 
-                t3_m, t3_a = _parse_made_att(
-                    raw_map.get('3PT') or raw_map.get('3FG') or raw_map.get('3PTM-A'))
-                if t3_m is not None:
-                    stat_map['3PM'] = t3_m
-                    stat_map['3PA'] = t3_a
+    inj_path = injuries_csv_path_for_actuals(actuals_output, "NBA")
+    inj_path.parent.mkdir(parents=True, exist_ok=True)
 
-                ft_m, ft_a = _parse_made_att(
-                    raw_map.get('FT') or raw_map.get('FTM-A'))
-                if ft_m is not None:
-                    stat_map['FTM'] = ft_m
-                    stat_map['FTA'] = ft_a
+    if inj_path.is_file():
+        try:
+            existing = pd.read_csv(inj_path, dtype=str).fillna("")
+        except Exception:
+            existing = pd.DataFrame()
+    else:
+        existing = pd.DataFrame()
 
-                tw_m, tw_a = _parse_made_att(
-                    raw_map.get('2PT') or raw_map.get('2FG') or raw_map.get('2PTM-A'))
-                if tw_m is not None:
-                    stat_map['2PM'] = tw_m
-                    stat_map['2PA'] = tw_a
+    cols = [
+        "date",
+        "sport",
+        "event_id",
+        "team",
+        "player",
+        "injury_status",
+        "injury_type",
+        "injury_type_desc",
+        "injury_detail",
+        "injury_side",
+        "rank_penalty",
+    ]
+    for c in cols:
+        if c not in existing.columns:
+            existing[c] = ""
 
-                # "Quarters with 3+ Points" is not in ESPN per-game stat lines here — unsupported (Option B).
-                label_aliases = {
-                    '3PM':  ['3PM', 'FG3M', '3FGM'],
-                    '3PA':  ['3PA', 'FG3A', '3FGA'],
-                    'FGM':  ['FGM'],
-                    'FGA':  ['FGA'],
-                    'FTM':  ['FTM'],
-                    'FTA':  ['FTA'],
-                    'PTS':  ['PTS'],
-                    'REB':  ['REB', 'TREB'],
-                    'AST':  ['AST'],
-                    'BLK':  ['BLK'],
-                    'STL':  ['STL'],
-                    'TO':   ['TO', 'TOV'],
-                    'PF':   ['PF', 'FOULS'],
-                    'OREB': ['OREB'],
-                    'DREB': ['DREB'],
-                    'MIN':  ['MIN'],
-                }
-                normalized = {}
-                for canon, aliases in label_aliases.items():
-                    for alias in aliases:
-                        if alias in stat_map:
-                            normalized[canon] = stat_map[alias]
-                            break
+    occupied: set[tuple[str, str]] = set()
+    for _, r in existing.iterrows():
+        if str(r.get("sport", "")).strip().upper() != "NBA":
+            continue
+        pl = fold_player_name(str(r.get("player", "") or ""))
+        tm = str(r.get("team", "") or "").strip().upper()
+        if pl and tm:
+            occupied.add((pl, tm))
 
-                if not normalized:
-                    continue
-                rows.extend(parse_stats(player_name, t_abbr, normalized))
-    return rows
+    appended = 0
+    new_frames = []
+    for rec in dnp_rows:
+        pl = fold_player_name(str(rec.get("player", "") or ""))
+        tm = str(rec.get("team", "") or "").strip().upper()
+        if not pl or not tm or (pl, tm) in occupied:
+            continue
+        occupied.add((pl, tm))
+        rec = dict(rec)
+        rec["date"] = date_str
+        rec["sport"] = "NBA"
+        new_frames.append(pd.DataFrame([rec]))
+        appended += 1
+
+    if not new_frames:
+        return 0
+    merged = pd.concat([existing, *new_frames], ignore_index=True)
+    merged.to_csv(inj_path, index=False)
+    return appended
 
 
 # ── Conference group IDs for ESPN CBB scoreboard ─────────────────────────────
@@ -517,7 +649,8 @@ def fetch_sport(sport_path, date_str, window=2):
 
     print(f"\n  Grand total unique events to process: {len(events)}")
 
-    all_rows         = []
+    all_rows = []
+    all_box_dnp: list[dict] = []
     graded_event_ids = set()
 
     for event in events:
@@ -550,14 +683,20 @@ def fetch_sport(sport_path, date_str, window=2):
             print(f"    ERROR fetching box score: {e}")
             continue
 
-        rows = parse_boxscore(box)
-        all_rows.extend(rows)
-        print(f"    -> {len(rows)} stat rows")
+        stat_rows, dnp_part = parse_boxscore(
+            box,
+            date_str=date_str,
+            event_id=str(event_id),
+            collect_dnp=(sport_path == "nba"),
+        )
+        all_rows.extend(stat_rows)
+        all_box_dnp.extend(dnp_part)
+        print(f"    -> {len(stat_rows)} stat rows")
 
     if not all_rows:
         # Distinguish "no games on slate" vs "games not final yet" for downstream stubs.
         reason = "no_games" if len(events) == 0 else "pending"
-        return pd.DataFrame(), reason
+        return pd.DataFrame(), reason, all_box_dnp
 
     df = pd.DataFrame(all_rows)
     if "player" in df.columns:
@@ -580,7 +719,7 @@ def fetch_sport(sport_path, date_str, window=2):
         )
 
     print(f"\n  Total: {len(df)} player-prop actuals across {len(graded_event_ids)} games")
-    return df, "ok"
+    return df, "ok", all_box_dnp
 
 
 
@@ -1499,6 +1638,7 @@ def main():
     print(f"\n=== {args.sport} actuals for {args.date} ===\n")
 
     empty_reason = "pending"
+    nba_box_dnp: list[dict] = []
     if args.sport == 'NHL':
         w = max(0, int(args.nhl_window))
         df = fetch_nhl(args.date, adjacent_days=w)
@@ -1511,7 +1651,7 @@ def main():
             sport_path = "mens-college-basketball"
         else:
             sport_path = "womens-college-basketball" if args.sport == "WCBB" else "mens-college-basketball"
-        df, empty_reason = fetch_sport(sport_path, args.date, window=args.window)
+        df, empty_reason, nba_box_dnp = fetch_sport(sport_path, args.date, window=args.window)
 
     if df.empty:
         # Always write a header-only stub so downstream grading never skips due to
@@ -1519,6 +1659,10 @@ def main():
         stub = pd.DataFrame(columns=["player", "team", "prop_type", "actual"])
         stub.to_csv(args.output, index=False)
         _export_injuries_sidecar(args)
+        if args.sport == "NBA" and nba_box_dnp:
+            n_merged = merge_nba_box_dnp_into_injuries_csv(nba_box_dnp, args.date, args.output)
+            if n_merged:
+                print(f"  Box-score DNP merged into injuries sidecar (+{n_merged} row(s))")
         if empty_reason == "no_games":
             print(f"\nNo games scheduled — wrote empty actuals stub -> {args.output}")
         else:
@@ -1528,6 +1672,10 @@ def main():
 
     df.to_csv(args.output, index=False)
     _export_injuries_sidecar(args)
+    if args.sport == "NBA" and nba_box_dnp:
+        n_merged = merge_nba_box_dnp_into_injuries_csv(nba_box_dnp, args.date, args.output)
+        if n_merged:
+            print(f"  Box-score DNP merged into injuries sidecar (+{n_merged} row(s))")
     print(f"\nSaved -> {args.output}  ({len(df)} rows)")
     print(f"\nProp types extracted: {sorted(df['prop_type'].unique().tolist())}")
 

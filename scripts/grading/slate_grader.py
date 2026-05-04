@@ -668,13 +668,22 @@ def _split_combo_players(player_str: str) -> list[str]:
 _INJURY_STATUSES_DNP: frozenset[str] = frozenset(("Out", "Day-To-Day", "Injured Reserve"))
 
 
+def _injury_status_marks_dnp(st: object) -> bool:
+    s = str(st or "").strip()
+    if not s:
+        return False
+    if s in _INJURY_STATUSES_DNP:
+        return True
+    return s.upper().startswith("DNP")
+
+
 def _extract_date_from_actuals_filename(name: str) -> str:
     m = re.search(r"(\d{4}-\d{2}-\d{2})", str(name))
     return m.group(1) if m else ""
 
 
 def _load_nba_injury_dnp_keys(actuals_path: str) -> frozenset[tuple[str, str]]:
-    """(norm_player_key, team_upper) for NBA injury rows marked Out / DTD / IR (same as ticket eval)."""
+    """(norm_player_key, team_upper) for NBA injury/DNP rows (Out, DTD, IR, or DNP-* from box score)."""
     p = Path(actuals_path)
     ds = _extract_date_from_actuals_filename(p.name)
     if not ds:
@@ -690,8 +699,9 @@ def _load_nba_injury_dnp_keys(actuals_path: str) -> frozenset[tuple[str, str]]:
     for _, r in inj.iterrows():
         if str(r.get("sport", "")).strip().upper() != "NBA":
             continue
+        typ = str(r.get("injury_type", "")).strip().upper()
         st = str(r.get("injury_status", "")).strip()
-        if st not in _INJURY_STATUSES_DNP:
+        if typ != "DNP" and not _injury_status_marks_dnp(st):
             continue
         pl = norm_player_key(str(r.get("player", "") or ""))
         tm = str(r.get("team", "") or "").strip().upper()

@@ -455,10 +455,19 @@ def _leg_grade(
 _INJURY_STATUSES_DNP: frozenset[str] = frozenset(("Out", "Day-To-Day", "Injured Reserve"))
 
 
+def _injury_status_marks_dnp(st: object) -> bool:
+    s = str(st or "").strip()
+    if not s:
+        return False
+    if s in _INJURY_STATUSES_DNP:
+        return True
+    return s.upper().startswith("DNP")
+
+
 def _load_injury_dnp_keys(sport: str, merge_dates: Sequence[str]) -> frozenset[tuple[str, str]]:
     """
     (player_lower, team_upper) from injuries_<sport>_YYYY-MM-DD.csv for rows whose
-    injury_status is Out, Day-To-Day, or Injured Reserve (ESPN injury report).
+    injury_status is Out, Day-To-Day, Injured Reserve (ESPN injury report), or DNP-* (from box score).
     ``sport`` is the CSV ``sport`` column value, e.g. NBA or NHL.
     """
     sport_u = str(sport or "").strip().upper()
@@ -478,8 +487,9 @@ def _load_injury_dnp_keys(sport: str, merge_dates: Sequence[str]) -> frozenset[t
         for _, r in df.iterrows():
             if str(r.get("sport", "")).strip().upper() != sport_u:
                 continue
+            typ = str(r.get("injury_type", "")).strip().upper()
             st = str(r.get("injury_status", "")).strip()
-            if st not in _INJURY_STATUSES_DNP:
+            if typ != "DNP" and not _injury_status_marks_dnp(st):
                 continue
             pl = _norm_player_name(str(r.get("player", "") or ""))
             tm = str(r.get("team", "") or "").strip().upper()
