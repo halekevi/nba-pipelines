@@ -21,9 +21,16 @@ Run:
 from __future__ import annotations
 
 import argparse
+import sys
+from pathlib import Path
 from typing import List, Optional, Tuple
 
 import pandas as pd
+
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from utils.defense_tiers import assert_def_tier_column, format_def_tier_counts
 
 
 def _col(df: pd.DataFrame, candidates: List[str]) -> Optional[str]:

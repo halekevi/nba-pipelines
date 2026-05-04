@@ -1,0 +1,69 @@
+{
+  "date": "2026-05-02",
+  "accepted_void_tokens": [
+    "NO_DATA",
+    "DNP",
+    "NO_ACTUAL",
+    "NO_LINE",
+    "PUSH"
+  ],
+  "summary_rows": [
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-02\\graded_nba_2026-05-02.xlsx",
+      "status": "ok",
+      "rows": 727,
+      "void_rows": 142,
+      "acceptable_void_rows": 142,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-02\\graded_nhl_2026-05-02.xlsx",
+      "status": "ok",
+      "rows": 282,
+      "void_rows": 44,
+      "acceptable_void_rows": 44,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-02\\graded_mlb_2026-05-02.xlsx",
+      "status": "ok",
+      "rows": 3937,
+      "void_rows": 599,
+      "acceptable_void_rows": 599,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-02\\graded_soccer_2026-05-02.xlsx",
+      "status": "ok",
+      "rows": 8798,
+      "void_rows": 4190,
+      "acceptable_void_rows": 4190,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-02\\graded_nba1h_2026-05-02.xlsx",
+      "status": "ok",
+      "rows": 39,
+      "void_rows": 20,
+      "acceptable_void_rows": 20,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-02\\graded_nba1q_2026-05-02.xlsx",
+      "status": "ok",
+      "rows": 93,
+      "void_rows": 37,
+      "acceptable_void_rows": 37,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-02\\graded_tennis_2026-05-02.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    }
+  ],
+  "unacceptable_count": 0
+}

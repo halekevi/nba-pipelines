@@ -331,6 +331,26 @@ def _make_session(session_jitter: Tuple[float, float] | None = None) -> Any:
     return s
 
 
+def _hard_reset_session(
+    session: Any,
+    *,
+    reason: str,
+    jitter: Tuple[float, float] = (2.0, 6.5),
+) -> None:
+    """Aggressive anti-403 reset: close pooled sockets, clear cookies, rotate profile, short cooloff."""
+    print(f"    [session-reset] {reason}")
+    try:
+        session.close()
+    except Exception:
+        pass
+    try:
+        session.cookies.clear()
+    except Exception:
+        pass
+    _rotate_session_headers(session)
+    time.sleep(random.uniform(*jitter))
+
+
 def _api_get(
     session: Any,
     url: str,
@@ -341,6 +361,7 @@ def _api_get(
     forbid_cooldown_threshold: int = 3,
     forbid_cooldown_seconds: float = 90.0,
     forbid_cooldown_jitter: Tuple[float, float] = (12.0, 40.0),
+    forbid_max_cooldown_windows: int = 3,
 ) -> dict:
     """
     GET with session headers (cohesive UA + Sec-CH-UA). Builds query string manually
@@ -362,6 +383,7 @@ def _api_get(
 
     last_exc = None
     consecutive_403 = 0
+    cooldown_windows = 0
     for attempt in range(1, retries + 1):
         try:
             if attempt > 1:
@@ -402,11 +424,28 @@ def _api_get(
                 print(f"    [403] Backing off {wait:.1f}s before retry")
                 time.sleep(wait)
                 if consecutive_403 >= max(1, int(forbid_cooldown_threshold)):
+                    cooldown_windows += 1
                     cd_lo, cd_hi = forbid_cooldown_jitter
-                    cooldown_wait = max(15.0, float(forbid_cooldown_seconds)) + random.uniform(cd_lo, cd_hi)
-                    print(f"    [403] Cooldown window hit ({consecutive_403} consecutive). Sleeping {cooldown_wait:.1f}s")
+                    cooldown_scale = 1.0 + max(0, cooldown_windows - 1) * 0.35
+                    cooldown_wait = (
+                        max(15.0, float(forbid_cooldown_seconds)) * cooldown_scale
+                        + random.uniform(cd_lo, cd_hi)
+                    )
+                    print(
+                        f"    [403] Cooldown window hit ({consecutive_403} consecutive, "
+                        f"window {cooldown_windows}/{max(1, int(forbid_max_cooldown_windows))}). "
+                        f"Sleeping {cooldown_wait:.1f}s"
+                    )
                     time.sleep(cooldown_wait)
+                    _hard_reset_session(
+                        session,
+                        reason="Consecutive 403 threshold reached; rebuilding pooled connection fingerprint",
+                    )
                     consecutive_403 = 0
+                    if cooldown_windows >= max(1, int(forbid_max_cooldown_windows)):
+                        raise RuntimeError(
+                            f"HTTP_403_COOLDOWNS_EXHAUSTED: {url} after {cooldown_windows} cooldown windows"
+                        )
                 continue
 
             if r.status_code >= 500:
@@ -454,6 +493,7 @@ def fetch_projections(
     forbid_cooldown_threshold: int = 3,
     forbid_cooldown_seconds: float = 90.0,
     forbid_cooldown_jitter: Tuple[float, float] = (12.0, 40.0),
+    forbid_max_cooldown_windows: int = 3,
 ) -> Tuple[List[dict], List[dict]]:
     """
     Fetch all projections + included sideloads from PrizePicks API.
@@ -512,6 +552,7 @@ def fetch_projections(
                 forbid_cooldown_threshold=forbid_cooldown_threshold,
                 forbid_cooldown_seconds=forbid_cooldown_seconds,
                 forbid_cooldown_jitter=forbid_cooldown_jitter,
+                forbid_max_cooldown_windows=forbid_max_cooldown_windows,
             )
             break
         except RuntimeError as e:
@@ -551,6 +592,7 @@ def fetch_projections(
                 forbid_cooldown_threshold=forbid_cooldown_threshold,
                 forbid_cooldown_seconds=forbid_cooldown_seconds,
                 forbid_cooldown_jitter=forbid_cooldown_jitter,
+                forbid_max_cooldown_windows=forbid_max_cooldown_windows,
             )
             new_data = payload.get("data") or []
             new_inc  = payload.get("included") or []
@@ -566,6 +608,47 @@ def fetch_projections(
             links = payload.get("links") or {}
             if not new_data:
                 break
+        except RuntimeError as e:
+            msg = str(e)
+            if "HTTP_403_COOLDOWNS_EXHAUSTED" in msg:
+                print(f"  [WARN] Page {page} hit repeated 403 cooldown limits; opening fresh session and retrying once.")
+                try:
+                    try:
+                        session.close()
+                    except Exception:
+                        pass
+                    session = _make_session(session_jitter=(2.0, 6.0))
+                    payload = _api_get(
+                        session,
+                        next_url,
+                        {},
+                        retries=max(2, retries - 1),
+                        forbid_cooldown_threshold=forbid_cooldown_threshold,
+                        forbid_cooldown_seconds=forbid_cooldown_seconds,
+                        forbid_cooldown_jitter=forbid_cooldown_jitter,
+                        forbid_max_cooldown_windows=max(1, forbid_max_cooldown_windows - 1),
+                    )
+                    new_data = payload.get("data") or []
+                    new_inc = payload.get("included") or []
+                    added = 0
+                    for obj in new_data:
+                        oid = str(obj.get("id", ""))
+                        if oid not in seen_ids:
+                            all_data.append(obj)
+                            seen_ids.add(oid)
+                            added += 1
+                    all_included.extend(new_inc)
+                    print(f"    page {page} retry → {len(new_data)} projections ({added} new)")
+                    links = payload.get("links") or {}
+                    if not new_data:
+                        break
+                    page += 1
+                    continue
+                except Exception as retry_e:
+                    print(f"  [WARN] Page {page} retry failed: {retry_e} — stopping pagination")
+                    break
+            print(f"  [WARN] Page {page} failed: {e} — stopping pagination")
+            break
         except Exception as e:
             print(f"  [WARN] Page {page} failed: {e} — stopping pagination")
             break
@@ -732,6 +815,10 @@ def main() -> None:
             per_page=args.per_page,
             max_pages=args.max_pages,
             retries=args.retries,
+            forbid_cooldown_threshold=max(1, int(args.max_cooldowns)),
+            forbid_cooldown_seconds=max(15.0, float(args.cooldown_seconds)),
+            forbid_cooldown_jitter=(max(1.0, float(args.jitter_seconds) * 0.8), max(2.0, float(args.jitter_seconds) * 2.2)),
+            forbid_max_cooldown_windows=max(1, int(args.max_cooldowns)),
         )
     except Exception as e:
         print(f"❌ Fetch failed: {e}")

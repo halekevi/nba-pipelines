@@ -213,12 +213,12 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
 
     if not str(args.wnba).strip():
         args.wnba = _first_existing_path(
-            os.path.join(out, f"step8_wnba_direction_{d}.xlsx"),
             os.path.join(out, f"step8_wnba_direction_clean_{d}.xlsx"),
-            os.path.join(REPO_ROOT, "Sports", "WNBA", "step8_wnba_direction.xlsx"),
+            os.path.join(out, f"step8_wnba_direction_{d}.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "WNBA", "step8_wnba_direction_clean.xlsx"),
-            os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction.xlsx"),
+            os.path.join(REPO_ROOT, "Sports", "WNBA", "step8_wnba_direction.xlsx"),
             os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction_clean.xlsx"),
+            os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction.xlsx"),
         )
 
     if not str(args.mlb).strip():
@@ -3980,7 +3980,13 @@ def enforce_target_date(
 
     out = df.copy()
     target_year = int(str(target_date)[:4])
-    out["game_date"] = _extract_game_dates(out["game_time"], target_year)
+    parsed = _extract_game_dates(out["game_time"], target_year)
+    if "game_date" in out.columns:
+        ts = pd.to_datetime(out["game_date"], errors="coerce")
+        existing = ts.dt.strftime("%Y-%m-%d").where(ts.notna(), other=pd.NA)
+        out["game_date"] = parsed.combine_first(existing)
+    else:
+        out["game_date"] = parsed
 
     counts = out["game_date"].value_counts(dropna=True)
     if not counts.empty:
@@ -5990,6 +5996,7 @@ def _load_step8_board_like(
         "Team":             "team",
         "Opp":              "opp",
         "Game Time":        "game_time",
+        "Game Date":        "game_date",
         "Prop":             "prop_type",
         "Pick Type":        "pick_type",
         "Line":             "line",
@@ -7098,6 +7105,7 @@ def build_combined_slate(
     nhl: pd.DataFrame = None,
     soccer: pd.DataFrame = None,
     tennis: pd.DataFrame = None,
+    wnba: pd.DataFrame = None,
     wcbb: pd.DataFrame = None,
     mlb: pd.DataFrame = None,
     nba1q: pd.DataFrame = None,
@@ -7161,6 +7169,8 @@ def build_combined_slate(
         frames.append(safe_keep(soccer, keep))
     if tennis is not None and len(tennis) > 0:
         frames.append(safe_keep(tennis, keep))
+    if wnba is not None and len(wnba) > 0:
+        frames.append(safe_keep(wnba, keep))
     if wcbb is not None and len(wcbb) > 0:
         frames.append(safe_keep(wcbb, keep))
     if mlb is not None and len(mlb) > 0:
@@ -10442,6 +10452,7 @@ def main():
     print("Building combined slate...")
     combined = build_combined_slate(nba, cbb, nhl, soccer,
                                     tennis=tennis,
+                                    wnba=wnba,
                                     wcbb=wcbb, mlb=mlb, nba1q=nba1q, nba1h=nba1h,
                                     nfl=nfl)
     reliability_index = _load_prop_reliability_index()
@@ -10473,6 +10484,7 @@ def main():
     nhl = propagate_alt_book_lines_to_sport_frame(nhl, combined, ("NHL",))
     soccer = propagate_alt_book_lines_to_sport_frame(soccer, combined, ("Soccer",))
     tennis = propagate_alt_book_lines_to_sport_frame(tennis, combined, ("Tennis",))
+    wnba = propagate_alt_book_lines_to_sport_frame(wnba, combined, ("WNBA",))
     wcbb = propagate_alt_book_lines_to_sport_frame(wcbb, combined, ("WCBB",))
     mlb = propagate_alt_book_lines_to_sport_frame(mlb, combined, ("MLB",))
     nba1q = propagate_alt_book_lines_to_sport_frame(nba1q, combined, ("NBA1Q",))

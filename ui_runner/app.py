@@ -35,7 +35,7 @@ import urllib.request
 from urllib.parse import quote
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Sequence
 from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
@@ -166,14 +166,31 @@ MLB_SLATE = _first_existing_file(
     [
         MLB_DIR / "step8_mlb_direction_clean.xlsx",
         MLB_DIR / "outputs" / "step8_mlb_direction_clean.xlsx",
+        MLB_DIR / "data" / "outputs" / "step8_mlb_direction_clean.xlsx",
+        MLB_DIR / "scripts" / "step8_mlb_direction_clean.xlsx",
     ]
 )
-MLB_TICKETS   = MLB_DIR / "mlb_best_tickets.xlsx"
+MLB_TICKETS = _first_existing_file(
+    [
+        MLB_DIR / "mlb_best_tickets.xlsx",
+        MLB_DIR / "outputs" / "mlb_best_tickets.xlsx",
+        MLB_DIR / "scripts" / "mlb_best_tickets.xlsx",
+    ]
+)
 TENNIS_DIR    = BASE_DIR / "Tennis"
 # Same pattern as Soccer/MLB: run_daily.ps1 copies outputs → sport root for Railway.
 TENNIS_SLATE  = TENNIS_DIR / "step8_tennis_direction_clean.xlsx"
-WNBA_DIR      = BASE_DIR / "WNBA"
-WNBA_SLATE    = WNBA_DIR / "step8_wnba_direction.xlsx"
+WNBA_DIR = _sport_dir("WNBA")
+WNBA_SLATE = _first_existing_file(
+    [
+        WNBA_DIR / "step8_wnba_direction_clean.xlsx",
+        WNBA_DIR / "step8_wnba_direction.xlsx",
+        WNBA_DIR / "data" / "outputs" / "step8_wnba_direction_clean.xlsx",
+        BASE_DIR / "WNBA" / "data" / "outputs" / "step8_wnba_direction_clean.xlsx",
+        BASE_DIR / "WNBA" / "step8_wnba_direction_clean.xlsx",
+        BASE_DIR / "WNBA" / "step8_wnba_direction.xlsx",
+    ]
+)
 NFL_DIR       = BASE_DIR / "NFL"
 # NFL step8 target: same convention as NHL — sport folder + outputs/ (not repo-root outputs/).
 # Pipeline should write: NFL/outputs/step8_nfl_direction_clean.xlsx
@@ -747,24 +764,31 @@ def _slate_day_candidates(preferred_date: str | None) -> list[str]:
 
 def _resolve_outputs_artifact(
     days: list[str],
-    filename_fmt: str,
+    filename_fmt: str | Sequence[str],
     *legacy: Path,
 ) -> Path:
     """
     Prefer outputs/{{d}}/filename_fmt.format(d=d), then first existing legacy path.
     filename_fmt example: step8_nba_direction_clean_{d}.xlsx
+    When a list is passed, try each pattern per day (first hit wins).
     """
+    fmts: list[str]
+    if isinstance(filename_fmt, str):
+        fmts = [filename_fmt]
+    else:
+        fmts = list(filename_fmt)
     for d in days:
-        p = OUTPUTS_ROOT / d / filename_fmt.format(d=d)
-        if p.exists():
-            return p
+        for fmt in fmts:
+            p = OUTPUTS_ROOT / d / fmt.format(d=d)
+            if p.exists():
+                return p
     for leg in legacy:
         if leg.exists():
             return leg
     if legacy:
         return legacy[0]
     d0 = days[0] if days else datetime.now(ZoneInfo("America/New_York")).date().strftime("%Y-%m-%d")
-    return OUTPUTS_ROOT / d0 / filename_fmt.format(d=d0)
+    return OUTPUTS_ROOT / d0 / fmts[0].format(d=d0)
 
 
 def _count_slate_sport_rows(payload: dict) -> int:
@@ -2703,8 +2727,12 @@ def api_pipeline_status():
     )
     wnba_slate_p = _resolve_outputs_artifact(
         days,
-        "step8_wnba_direction_{d}.xlsx",
+        [
+            "step8_wnba_direction_clean_{d}.xlsx",
+            "step8_wnba_direction_{d}.xlsx",
+        ],
         WNBA_SLATE,
+        WNBA_DIR / "step8_wnba_direction_clean.xlsx",
         WNBA_DIR / "step8_wnba_direction.xlsx",
     )
     nfl_slate_p = _resolve_outputs_artifact(

@@ -3,24 +3,24 @@
   "rows": [
     {
       "sport": "NBA",
-      "decided": 107491,
-      "paid": 59953,
-      "win_rate": 0.5577490208482571,
-      "net_dollars": 124150.0
+      "decided": 108882,
+      "paid": 60745,
+      "win_rate": 0.5578975404566411,
+      "net_dollars": 126080.0
     },
     {
       "sport": "MLB",
-      "decided": 72723,
-      "paid": 21666,
-      "win_rate": 0.2979250030939318,
-      "net_dollars": -293910.0
+      "decided": 76640,
+      "paid": 22920,
+      "win_rate": 0.2990605427974948,
+      "net_dollars": -308000.0
     },
     {
       "sport": "SOCCER",
-      "decided": 32502,
-      "paid": 8004,
-      "win_rate": 0.24626176850655343,
-      "net_dollars": -164940.0
+      "decided": 35662,
+      "paid": 8432,
+      "win_rate": 0.23644215130951712,
+      "net_dollars": -187980.0
     },
     {
       "sport": "TENNIS",
@@ -31,10 +31,10 @@
     },
     {
       "sport": "NHL",
-      "decided": 49087,
-      "paid": 13058,
-      "win_rate": 0.2660174791696376,
-      "net_dollars": -229710.0
+      "decided": 49295,
+      "paid": 13083,
+      "win_rate": 0.2654021706055381,
+      "net_dollars": -231290.0
     }
   ],
   "source": "graded_props_json"
