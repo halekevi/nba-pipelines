@@ -1,6 +1,7 @@
 [
   "composite_hit_rate",
   "tier_encoded",
+  "tier_era",
   "pick_type_encoded",
   "direction_encoded",
   "line_score",
