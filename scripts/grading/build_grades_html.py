@@ -606,95 +606,6 @@ def pick_tier_direction_matrix_html(rows: list[dict], min_decided: int = 10) -> 
     </details>"""
 
 
-def pick_type_tier_direction_split_html(rows: list[dict], min_decided: int = 10) -> str:
-    """
-    User-facing split used for every sport section:
-      - Goblin by Tier A-D (OVER only)
-      - Demon by Tier A-D (OVER only)
-      - Standard by Tier A-D (OVER + UNDER)
-    """
-    agg = build_pick_tier_direction_agg(rows)
-    grid = _canonical_pick_tier_direction_keys()
-    n_ge = sum(1 for k in grid if int(agg.get(k, {}).get("decided", 0)) >= int(min_decided))
-
-    def _rec_for(pt: str, tier: str, direction: str) -> dict | None:
-        v = agg.get((pt, tier, direction), {"decided": 0, "hits": 0, "misses": 0})
-        d = int(v["decided"])
-        if d <= 0:
-            return None
-        h_ = int(v["hits"])
-        m_ = int(v["misses"])
-        hr = (h_ / d * 100.0) if d > 0 else 0.0
-        return {"decided": d, "hits": h_, "misses": m_, "hit_rate": hr}
-
-    def _row_block(pt: str, direction: str, tier: str, rec: dict | None) -> str:
-        if rec is None:
-            return (
-                f'<tr class="matrix-empty"><td><span class="chip chip-std">TIER {tier}</span></td>'
-                f'<td>{"▲ OVER" if direction=="OVER" else "▼ UNDER"}</td>'
-                f'<td class="right mono muted">—</td><td class="right mono muted">—</td>'
-                f'<td class="right mono muted">—</td><td class="right mono muted">—</td>'
-                f'<td><span class="muted">—</span></td></tr>'
-            )
-        hr = float(rec["hit_rate"])
-        row_cls = "matrix-hit" if hr >= 60.0 else ("matrix-miss" if hr < 50.0 else "matrix-warn")
-        if int(rec["decided"]) < int(min_decided):
-            row_cls += " matrix-sparse"
-        dir_html = (
-            '<span style="color:var(--green);font-size:13px">▲ OVER</span>'
-            if direction == "OVER"
-            else '<span style="color:var(--cyan);font-size:13px">▼ UNDER</span>'
-        )
-        bar_color = "var(--green)" if hr >= 60.0 else ("var(--gold)" if hr >= 50.0 else "var(--red)")
-        bar_html = (
-            f'<div class="rate-bar-bg"><div class="rate-bar-fill" '
-            f'style="width:{max(0.0, min(hr, 100.0)):.1f}%;background:{bar_color}"></div></div>'
-        )
-        chip_cls = {"A": "chip-a", "B": "chip-b", "C": "chip-c"}.get(tier, "chip-d")
-        return f"""<tr class="{row_cls}">
-          <td><span class="chip {chip_cls}">TIER {tier}</span></td>
-          <td>{dir_html}</td>
-          <td class="right mono">{fmt_num(rec['decided'])}</td>
-          <td class="right mono pos">{fmt_num(rec['hits'])}</td>
-          <td class="right mono neg">{fmt_num(rec['misses'])}</td>
-          <td class="right mono">{pct(rec['hit_rate'])}</td>
-          <td>{bar_html}</td>
-        </tr>"""
-
-    def _table_for(pt: str, dirs: list[str], chip_cls: str, chip_emoji: str) -> str:
-        body = ""
-        for t in ("A", "B", "C", "D"):
-            for d in dirs:
-                body += _row_block(pt, d, t, _rec_for(pt, t, d))
-        return f"""<div>
-          <div class="section-label"><span class="chip {chip_cls}">{chip_emoji}&nbsp;{pt}</span> BY TIER</div>
-          <div class="table-wrap"><table class="table-sortable">
-            <thead><tr>
-              <th data-sort-key="tier" title="Sort">TIER</th>
-              <th data-sort-key="dir" title="Sort">DIRECTION</th>
-              <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
-              <th class="right" data-sort-key="hits" title="Sort">HITS</th>
-              <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
-              <th class="right" data-sort-key="rate" title="Sort">HIT RATE</th>
-              <th data-sort-key="bar" title="Sort">BAR</th>
-            </tr></thead>
-            <tbody>{body}</tbody>
-          </table></div>
-        </div>"""
-
-    return f"""<details class="matrix-collapsible">
-      <summary>Pick Type Tier Splits — Goblin/Demon OVER, Standard OVER+UNDER</summary>
-      <div class="matrix-body">
-        <div class="matrix-summary">Full A–D per pick type ({len(grid)} matrix cells). {n_ge} cells with ≥ {int(min_decided)} decided. Note: Standard Tier B may be structurally sparse when ml_prob is compressed below tier thresholds — “—” is not a missing-data bug.</div>
-        <div class="three-col">
-          {_table_for("Goblin", ["OVER"], "chip-goblin", "🎃")}
-          {_table_for("Demon", ["OVER"], "chip-demon", "😈")}
-          {_table_for("Standard", ["OVER", "UNDER"], "chip-std", "⭐")}
-        </div>
-      </div>
-    </details>"""
-
-
 # ══════════════════════════════════════════════════════════════════════════════
 #  HTML FRAGMENT BUILDERS
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1042,9 +953,8 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
 
     stats  = overall_stats(rows)
     total_label = fmt_num(stats["total"]) if stats["total"] > 0 else fmt_num(stats["decided"] + stats["voids"])
-    # Apply the pick-type x tier analysis uniformly across all sport sections.
+    # Apply the pick-type x tier matrix uniformly across all sport sections.
     matrix_section = pick_tier_direction_matrix_html(rows, min_decided=10)
-    split_section = pick_type_tier_direction_split_html(rows, min_decided=10)
 
     # ── Def Tier ───────────────────────────────────────────────────────────────
     def_section = def_tier_table(rows)
@@ -1143,7 +1053,6 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
     </summary>
     <div class="sport-section-body">
       {matrix_section}
-      {split_section}
       {def_section}
       {prop_section}
       {player_section}
