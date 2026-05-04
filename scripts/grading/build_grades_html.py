@@ -916,28 +916,31 @@ def def_tier_table(rows: list[dict]) -> str:
       {_picktype_sorted_table("demon", "DEMON")}
     </div>"""
 
-        detail_tables = f"""<div class="two-col" style="margin-top:12px">
+        detail_tables = f"""<div class="insight-card def-tier-breakdown-card" style="margin-top:12px;margin-bottom:12px">
+      <div class="section-label" style="margin-bottom:14px">DEF TIER BREAKDOWN</div>
+      <div class="two-col pick-tier-split" style="margin-top:0;margin-bottom:12px">
       <div>
-        <div class="section-label">DEF TIER BREAKDOWN — BY PICK TYPE</div>
+        <div class="section-label" style="font-size:clamp(12px,1vw,14px);letter-spacing:2px;margin-bottom:12px">BY PICK TYPE</div>
         <div class="table-wrap"><table>
           <thead><tr><th>DEF TIER</th><th>GOBLIN</th><th>STANDARD</th><th>DEMON</th></tr></thead>
           <tbody>{detail_rows_pt}</tbody>
         </table></div>
       </div>
       <div>
-        <div class="section-label">DEF TIER BREAKDOWN — BY TIER (A/B/C/D)</div>
+        <div class="section-label" style="font-size:clamp(12px,1vw,14px);letter-spacing:2px;margin-bottom:12px">BY TIER (A/B/C/D)</div>
         <div class="table-wrap"><table>
           <thead><tr><th>DEF TIER</th><th>TIER A</th><th>TIER B</th><th>TIER C</th><th>TIER D</th></tr></thead>
           <tbody>{detail_rows_tier}</tbody>
         </table></div>
       </div>
     </div>
-    <div style="margin-top:12px">
-      <div class="section-label">DEF TIER BREAKDOWN — STANDARD (OVER/UNDER)</div>
-      <div class="table-wrap"><table>
+      <div>
+        <div class="section-label" style="font-size:clamp(12px,1vw,14px);letter-spacing:2px;margin-bottom:12px">STANDARD — OVER / UNDER</div>
+        <div class="table-wrap"><table>
         <thead><tr><th>DEF TIER</th><th>STANDARD OVER</th><th>STANDARD UNDER</th></tr></thead>
         <tbody>{detail_rows_std_dir}</tbody>
       </table></div>
+    </div>
     </div>
     {split_picktype_tables}"""
 
