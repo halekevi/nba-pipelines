@@ -497,6 +497,7 @@ def _prepare_features(df: pd.DataFrame, *, skip_median_fill: bool = False) -> pd
 
     enc_cols = (
         "tier_encoded",
+        "tier_era",
         "pick_type_encoded",
         "direction_encoded",
         "def_tier_encoded",
@@ -777,7 +778,7 @@ def _apply_step7b_nhl_soccer_ml_cap() -> None:
         return
     old = "    blended = 0.3 * pd.Series(ml_prob, index=df2.index) + 0.7 * comp\n"
     new = (
-        "    if sp in (\"Sports\NHL\", \"SOCCER\"):\n"
+        "    if sp in (\"NHL\", \"SOCCER\"):\n"
         "        blended = 0.15 * pd.Series(ml_prob, index=df2.index) + 0.85 * comp\n"
         "    else:\n"
         "        blended = 0.3 * pd.Series(ml_prob, index=df2.index) + 0.7 * comp\n"

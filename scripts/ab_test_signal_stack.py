@@ -92,7 +92,7 @@ def _build_joined_dataset(root: Path, sports: list[str]) -> pd.DataFrame:
             parts.append(g)
             continue
 
-        s8 = _canon_step8(_prepare_step8(s8_raw))
+        s8 = _canon_step8(_prepare_step8(s8_raw, anchor_file_date=str(file_date)))
         s8 = s8.drop_duplicates(subset=["_n_player", "_n_prop", "_n_line", "_n_pick", "_n_dir"], keep="first")
 
         g["_n_player"] = g["player"].map(player_join_key)

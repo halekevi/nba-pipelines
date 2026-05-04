@@ -34,6 +34,9 @@ if str(_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS))
 from grading.slate_grader import norm_player_key, norm_prop_key  # noqa: E402
 
+# Per-group tier overhaul (commit a1b24e77). Graded `file_date` on/after this uses new tier semantics.
+TIER_OVERHAUL_DATE = "2026-05-02"
+
 STEP8_FEATURE_COLS = [
     "blended_score",
     "edge_score",
@@ -68,7 +71,11 @@ def normalize_line(v: Any) -> str:
 
 
 def normalize_pick_type(s: Any) -> str:
-    return str(s or "").strip().casefold()
+    """Graded JSON often uses em dash for Standard pick type; step8 uses ``standard``."""
+    raw = str(s or "").strip()
+    if raw in ("", "—", "–", "-", "NaN", "nan", "None", "none"):
+        return "standard"
+    return raw.casefold()
 
 
 def normalize_direction(s: Any) -> str:
@@ -79,19 +86,45 @@ def _repo_root(arg: Path | None) -> Path:
     return Path(arg).resolve() if arg else Path(__file__).resolve().parent.parent
 
 
-def _game_date_series(df: pd.DataFrame) -> pd.Series:
+def _game_date_series(df: pd.DataFrame, anchor_file_date: str | None = None) -> pd.Series:
+    """Normalize calendar day for step8 rows.
+
+    Soccer (and some exports) only have ``Game Time`` like ``05/02 7:30 PM`` with no year;
+    pandas may parse that as year 0001. When ``anchor_file_date`` is ``YYYY-MM-DD``, remap
+    those implausible years to the anchor year so the ±1d slate filter matches ``file_date``.
+    """
     ts = None
     if "game_date" in df.columns:
         ts = pd.to_datetime(df["game_date"], errors="coerce")
     elif "start_time" in df.columns:
         ts = pd.to_datetime(df["start_time"], errors="coerce")
+    elif "game_start" in df.columns:
+        ts = pd.to_datetime(df["game_start"], errors="coerce")
     elif "Game Time" in df.columns:
         ts = pd.to_datetime(df["Game Time"], errors="coerce")
     if ts is None:
         return pd.Series(pd.NaT, index=df.index)
     if getattr(ts.dt, "tz", None) is not None:
         ts = ts.dt.tz_convert("UTC").dt.tz_localize(None)
-    return ts.dt.normalize()
+    ts = ts.dt.normalize()
+    d = str(anchor_file_date or "").strip()[:10]
+    if len(d) == 10:
+        anchor = pd.to_datetime(d, errors="coerce")
+        if pd.notna(anchor):
+            y = int(anchor.year)
+            bad = ts.notna() & (ts.dt.year < 1900)
+            if bad.any():
+                sub = ts.loc[bad]
+                ts = ts.copy()
+                ts.loc[bad] = pd.to_datetime(
+                    {
+                        "year": np.repeat(y, int(bad.sum())),
+                        "month": sub.dt.month.to_numpy(),
+                        "day": sub.dt.day.to_numpy(),
+                    },
+                    errors="coerce",
+                ).dt.normalize()
+    return ts
 
 
 def _step8_prop_series(df: pd.DataFrame) -> pd.Series:
@@ -102,10 +135,11 @@ def _step8_prop_series(df: pd.DataFrame) -> pd.Series:
 
 
 def _step8_direction_series(df: pd.DataFrame) -> pd.Series:
-    if "final_bet_direction" in df.columns:
-        return df["final_bet_direction"]
-    if "bet_direction" in df.columns:
-        return df["bet_direction"]
+    """NHL / many CSV exports use lowercase ``direction`` (not ``Direction``)."""
+    lower = {str(c).lower(): c for c in df.columns}
+    for key in ("final_bet_direction", "bet_direction", "direction"):
+        if key in lower:
+            return df[lower[key]]
     if "Direction" in df.columns:
         return df["Direction"]
     return pd.Series([""] * len(df), index=df.index)
@@ -165,6 +199,9 @@ def load_step8_sport(root: Path, sport: str) -> pd.DataFrame | None:
         return None
     if sport_u == "NHL":
         for p in (
+            root / "Sports" / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
+            root / "Sports" / "NHL" / "step8_nhl_direction_clean.csv",
+            root / "Sports" / "NHL" / "data" / "outputs" / "step8_nhl_direction.csv",
             root / "NHL" / "data" / "outputs" / "step8_nhl_direction.csv",
             root / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
             root / "NHL" / "outputs" / "step8_nhl_direction.csv",
@@ -177,13 +214,19 @@ def load_step8_sport(root: Path, sport: str) -> pd.DataFrame | None:
         return None
     if sport_u == "SOCCER" or sport == "Soccer":
         for p in (
+            root / "Sports" / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
+            root / "Sports" / "Soccer" / "step8_soccer_direction.csv",
+            root / "Sports" / "Soccer" / "outputs" / "step8_soccer_direction.csv",
             root / "Soccer" / "step8_soccer_direction.csv",
             root / "Soccer" / "outputs" / "step8_soccer_direction.csv",
         ):
-            if p.is_file():
-                df = pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
-                if len(df) > 0:
-                    return df
+            if not p.is_file():
+                continue
+            if p.suffix.lower() == ".xlsx":
+                return pd.read_excel(p, engine="openpyxl")
+            df = pd.read_csv(p, encoding="utf-8-sig", low_memory=False)
+            if len(df) > 0:
+                return df
         return None
     return None
 
@@ -250,7 +293,7 @@ def player_join_key(s: Any) -> str:
     return str(norm_player_key(s) or "").casefold().strip()
 
 
-def _prepare_step8(df: pd.DataFrame) -> pd.DataFrame:
+def _prepare_step8(df: pd.DataFrame, anchor_file_date: str | None = None) -> pd.DataFrame:
     out = _canonicalize_step8_columns(df.copy())
     out["_n_player"] = out["player"].map(player_join_key) if "player" in out.columns else ""
     out["_n_prop"] = _step8_prop_series(out).map(prop_join_key)
@@ -258,7 +301,7 @@ def _prepare_step8(df: pd.DataFrame) -> pd.DataFrame:
     pt = _pick_col(out, ("pick_type", "Pick Type"))
     out["_n_pick"] = pt.map(normalize_pick_type)
     out["_n_dir"] = _step8_direction_series(out).map(normalize_direction)
-    out["_game_d"] = _game_date_series(out)
+    out["_game_d"] = _game_date_series(out, anchor_file_date=anchor_file_date)
     return out
 
 
@@ -345,6 +388,8 @@ def main() -> int:
         if c not in decided.columns:
             decided[c] = ""
     graded_out = decided[[c for c in graded_only_cols if c in decided.columns]]
+    fdg = graded_out["file_date"].astype(str).str.strip().str[:10]
+    graded_out["tier_era"] = (fdg >= TIER_OVERHAUL_DATE).astype(int)
     if args.output is not None:
         out_path = Path(args.output).expanduser().resolve()
         out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -387,7 +432,7 @@ def main() -> int:
             st["graded_decided"] += n_grad
             continue
 
-        s8 = _prepare_step8(s8_raw)
+        s8 = _prepare_step8(s8_raw, anchor_file_date=str(file_date))
         fd = pd.to_datetime(file_date, errors="coerce").normalize()
         _dd = (s8["_game_d"] - fd).abs()
         date_mask = s8["_game_d"].notna() & (_dd <= pd.Timedelta(days=1))
@@ -405,10 +450,20 @@ def main() -> int:
             st["graded_decided"] += n_grad
             continue
 
-        s8 = s8.drop_duplicates(
-            subset=["_n_player", "_n_prop", "_n_line", "_n_pick", "_n_dir", "_game_d"],
-            keep="first",
-        )
+        # graded_props JSON often omits PP pick type (em dash → ``standard``) while step8 has
+        # goblin/demon. Join without pick_type for NHL/Soccer so step8 scores attach.
+        sk_u = str(sk).upper()
+        loose_pick = sk_u in ("NHL", "SOCCER")
+        if loose_pick:
+            sort_col = "rank_score" if "rank_score" in s8.columns else ("blended_score" if "blended_score" in s8.columns else None)
+            if sort_col:
+                s8 = s8.sort_values(sort_col, ascending=False, na_position="last")
+            s8 = s8.drop_duplicates(subset=["_n_player", "_n_prop", "_n_line", "_n_dir"], keep="first")
+        else:
+            s8 = s8.drop_duplicates(
+                subset=["_n_player", "_n_prop", "_n_line", "_n_pick", "_n_dir", "_game_d"],
+                keep="first",
+            )
 
         g["_n_player"] = g["player"].map(player_join_key)
         g["_n_prop"] = g["prop"].map(prop_join_key)
@@ -417,21 +472,18 @@ def main() -> int:
         g["_n_dir"] = g["direction"].map(normalize_direction)
         g["_file_d"] = pd.to_datetime(g["file_date"], errors="coerce").dt.normalize()
 
-        feat_cols = [
-            "_n_player",
-            "_n_prop",
-            "_n_line",
-            "_n_pick",
-            "_n_dir",
-            "_game_d",
-        ] + [c for c in STEP8_FEATURE_COLS if c in s8.columns]
-        feat = s8[feat_cols].copy()
-        if "ml_prob" in s8.columns:
+        merge_on = ["_n_player", "_n_prop", "_n_line", "_n_pick", "_n_dir"]
+        if loose_pick:
+            merge_on = ["_n_player", "_n_prop", "_n_line", "_n_dir"]
+        feat_cols = merge_on + ["_game_d"] + [c for c in STEP8_FEATURE_COLS if c in s8.columns]
+        feat_cols = list(dict.fromkeys(feat_cols))
+        feat = s8[[c for c in feat_cols if c in s8.columns]].copy()
+        if "ml_prob" in s8.columns and "ml_prob" not in feat.columns:
             feat["_s8_ml_prob"] = pd.to_numeric(s8["ml_prob"], errors="coerce")
 
         m = g.merge(
             feat,
-            on=["_n_player", "_n_prop", "_n_line", "_n_pick", "_n_dir"],
+            on=merge_on,
             how="left",
         )
         for c in STEP8_FEATURE_COLS:
@@ -476,6 +528,8 @@ def main() -> int:
         joined_parts.append(m)
 
     out_df = pd.concat(joined_parts, ignore_index=True) if joined_parts else decided
+    fd_all = out_df["file_date"].astype(str).str.strip().str[:10]
+    out_df["tier_era"] = (fd_all >= TIER_OVERHAUL_DATE).astype(int)
     out_df.to_csv(out_path, index=False, encoding="utf-8-sig")
     print(f"Wrote {out_path}  rows={len(out_df):,}")
 

@@ -31,6 +31,7 @@ SPORT_ENCODING = {
 FEATURE_COLUMNS: list[str] = [
     "composite_hit_rate",
     "tier_encoded",
+    "tier_era",
     "pick_type_encoded",
     "direction_encoded",
     "line_score",
@@ -395,6 +396,9 @@ def build_feature_vector(df: pd.DataFrame, sport: str) -> pd.DataFrame:
 
     out["composite_hit_rate"] = comp
     out["tier_encoded"] = tier_e
+    # 0 = pre per-group tier overhaul, 1 = post (see build_retrain_dataset.TIER_OVERHAUL_DATE). Default 0 at inference.
+    era = _to_num(_first_col(out, ("tier_era",))).fillna(0.0).clip(0.0, 1.0)
+    out["tier_era"] = era
     out["pick_type_encoded"] = pick_e
     out["direction_encoded"] = dir_e
     out["line_score"] = line_score
