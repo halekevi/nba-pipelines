@@ -348,6 +348,41 @@ def nhl_signed_margin(actual, line, direction: str) -> float:
     return round(line_f - actual_f, 2)
 
 
+def _filter_nhl_step8_slate_by_et_calendar_day(
+    slate: pd.DataFrame, grade_date: str
+) -> pd.DataFrame:
+    """
+    Keep step8 rows for the grade ET calendar day (same rules as
+    scripts.nhl_soccer_grader.load_slate for NHL). Rows with missing dates are kept
+    when any slate_game_date-like values exist; zero-row guard keeps full slate.
+    """
+    want = str(grade_date).strip()[:10]
+    date_col = next(
+        (c for c in ("Game Date", "game_date", "slate_game_date") if c in slate.columns),
+        None,
+    )
+    if date_col is None:
+        return slate
+    raw = pd.to_datetime(slate[date_col], errors="coerce")
+    if not raw.notna().any():
+        return slate
+    day = raw.dt.strftime("%Y-%m-%d")
+    ok = day == want
+    unk = raw.isna()
+    n0 = len(slate)
+    sub = slate.loc[ok | unk].copy()
+    n1 = len(sub)
+    if n1 == 0 and n0 > 0:
+        print(
+            f"  [NHL grader] WARN: date filter {want} would remove all {n0} rows — "
+            f"keeping full slate (no rows match that calendar day)"
+        )
+        return slate
+    if n1 < n0:
+        print(f"  [NHL grader] Date filter ({want}): kept {n1}/{n0} rows")
+    return sub
+
+
 # ── ADVANCED ANALYTICS ────────────────────────────────────────────────────────
 
 class NHLAnalytics:
@@ -512,6 +547,8 @@ def main() -> None:
     except Exception as e:
         print(f"❌ Failed to load data: {e}")
         sys.exit(1)
+
+    slate = _filter_nhl_step8_slate_by_et_calendar_day(slate, args.date)
     
     # Load optional opponent cache
     opp_cache = None
