@@ -58,17 +58,28 @@ param(
     [switch]$ForceAll,
     [switch]$SkipDailyGrader,
     [switch]$RunPayoutEngine,
+    # Skip Soccer defense refresh network fetch (use cached cache\soccer_defense_summary.csv).
+    [switch]$SkipDefenseRefresh,
+    # Used by scripts/run_daily.ps1 to execute sport pipelines in STEP C
+    # and defer combined generation to STEP D.
+    [switch]$SkipCombined,
+    # Used by scripts/run_daily.ps1 so git push is only handled once there.
+    [switch]$SkipPush,
     [switch]$UseAltBooks,
     [switch]$SkipAltBooks,
     [int]$CacheAgeDays = 7,
     # By default /tickets JSON includes MLB/NHL/Soccer slips (not only strict positive-EV + Tennis).
     # Pass -WebEvOnly to restore the stricter web JSON filter.
     [switch]$WebEvOnly,
+    # Compatibility flag passed by run_daily combined-only invocation.
+    # Intentionally no-op here; ticket quality warnings are handled inside downstream scripts.
+    [switch]$DQWarnOnly,
     # Chrome CDP URL for WNBA step1 (PrizePicks); parallel WNBA job receives this explicitly (env may not propagate).
     [string]$WNBACdp = ""
 )
 
 $ErrorActionPreference = "Continue"
+$script:CombinedRanThisSession = $false
 
 if (-not $OddsApiKey) {
     $OddsApiKey = [string]$env:ODDS_API_KEY
@@ -561,6 +572,15 @@ function Invoke-AltBookFetches {
 # -- Helper: run combined, auto-detect all sports on disk ---------------------
 function Run-Combined {
     param([string]$Reason = "")
+    if ($SkipCombined) {
+        Write-Host "  [pipeline] Skipping combined (-SkipCombined)" -ForegroundColor DarkGray
+        return $true
+    }
+    if ($script:CombinedRanThisSession) {
+        Write-Host "  [pipeline] Skipping duplicate Run-Combined call" -ForegroundColor DarkGray
+        return $true
+    }
+    $script:CombinedRanThisSession = $true
     Write-Host ""
     $label = if ($Reason) { "[ COMBINED SLATE -- $Reason ]" } else { "[ COMBINED SLATE ]" }
     Write-Host $label -ForegroundColor Magenta
@@ -691,7 +711,11 @@ function Run-Combined {
                 Pop-Location
             }
         }
-        Run-GitPush
+        if ($SkipPush) {
+            Write-Host "  [git] Skipping push (-SkipPush)" -ForegroundColor DarkGray
+        } else {
+            Run-GitPush
+        }
         try {
             Run-PostPipelineGrader
         } catch {
@@ -840,7 +864,13 @@ if ($SoccerOnly) {
     $ok = $true
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "Soccer Step 1 - Fetch PrizePicks" $SoccerDir ".\scripts\step1_fetch_prizepicks_soccer.py" "--output outputs\step1_soccer_props.csv --date $Date" } } else { Write-Host "  [Soccer] Skipping step1 fetch -- using existing outputs\step1_soccer_props.csv" -ForegroundColor DarkGray }
     if ($ok) { $ok = Run-Step "Soccer Step 2 - Attach Pick Types"  $SoccerDir ".\scripts\step2_attach_picktypes_soccer.py"       "--input outputs\step1_soccer_props.csv --output outputs\step2_soccer_picktypes.csv" }
-    if ($ok) { $ok = Run-Step "Soccer Defense Refresh"             $SoccerDir ".\scripts\soccer_defense_report.py"               "--out cache\soccer_defense_summary.csv" }
+    if ($ok) {
+        if ($SkipDefenseRefresh) {
+            Write-Host "  [Soccer] Skipping defense refresh (-SkipDefenseRefresh) — using cache\\soccer_defense_summary.csv" -ForegroundColor DarkGray
+        } else {
+            $ok = Run-Step "Soccer Defense Refresh"             $SoccerDir ".\scripts\soccer_defense_report.py"               "--out cache\soccer_defense_summary.csv"
+        }
+    }
     if ($ok) { $ok = Run-Step "Soccer Step 3 - Attach Defense"     $SoccerDir ".\scripts\step3_attach_defense_soccer.py"         "--input outputs\step2_soccer_picktypes.csv --defense cache\soccer_defense_summary.csv --output outputs\step3_soccer_with_defense.csv" }
     if ($ok) { $ok = Run-Step "Soccer Step 4 - Player Stats"       $SoccerDir ".\scripts\step4_attach_player_stats_soccer.py"    "--input outputs\step3_soccer_with_defense.csv --output outputs\step4_soccer_with_stats.csv" }
     if ($ok) { $ok = Run-Step "Soccer Step 5 - Line Hit Rates"     $SoccerDir ".\scripts\step5_add_line_hit_rates_soccer.py"     "--input outputs\step4_soccer_with_stats.csv --output outputs\step5_soccer_hit_rates.csv --compute10" }
@@ -1152,7 +1182,7 @@ $NHLJob = Start-Job -ScriptBlock {
 
 # -- Soccer Job ---------------------------------------------------------------
 $SoccerJob = Start-Job -ScriptBlock {
-    param($SoccerDir, $Date, $SkipFetch, $RepoRoot)
+    param($SoccerDir, $Date, $SkipFetch, $RepoRoot, $SkipDefenseRefresh)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
     function Run-Step-Job {
         param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
@@ -1189,7 +1219,13 @@ $SoccerJob = Start-Job -ScriptBlock {
     $ok = $true
     if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "Soccer Step 1 - Fetch PrizePicks" $SoccerDir ".\scripts\step1_fetch_prizepicks_soccer.py" "--output outputs\step1_soccer_props.csv --date $Date" } } else { Write-Output "[Soccer] Skipping step1 fetch" }
     if ($ok) { $ok = Run-Step-Job "Soccer Step 2 - Attach Pick Types"  $SoccerDir ".\scripts\step2_attach_picktypes_soccer.py"       "--input outputs\step1_soccer_props.csv --output outputs\step2_soccer_picktypes.csv" }
-    if ($ok) { $ok = Run-Step-Job "Soccer Defense Refresh"             $SoccerDir ".\scripts\soccer_defense_report.py"               "--out cache\soccer_defense_summary.csv" }
+    if ($ok) {
+        if ($SkipDefenseRefresh) {
+            Write-Output "[Soccer] Skipping defense refresh (-SkipDefenseRefresh)"
+        } else {
+            $ok = Run-Step-Job "Soccer Defense Refresh"             $SoccerDir ".\scripts\soccer_defense_report.py"               "--out cache\soccer_defense_summary.csv"
+        }
+    }
     if ($ok) { $ok = Run-Step-Job "Soccer Step 3 - Attach Defense"     $SoccerDir ".\scripts\step3_attach_defense_soccer.py"         "--input outputs\step2_soccer_picktypes.csv --defense cache\soccer_defense_summary.csv --output outputs\step3_soccer_with_defense.csv" }
     if ($ok) { $ok = Run-Step-Job "Soccer Step 4 - Player Stats"       $SoccerDir ".\scripts\step4_attach_player_stats_soccer.py"    "--input outputs\step3_soccer_with_defense.csv --output outputs\step4_soccer_with_stats.csv" }
     if ($ok) { $ok = Run-Step-Job "Soccer Step 5 - Line Hit Rates"     $SoccerDir ".\scripts\step5_add_line_hit_rates_soccer.py"     "--input outputs\step4_soccer_with_stats.csv --output outputs\step5_soccer_hit_rates.csv --compute10" }
@@ -1198,7 +1234,7 @@ $SoccerJob = Start-Job -ScriptBlock {
     if ($ok) { Invoke-Step7b-Job "Soccer" $RepoRoot }
     if ($ok) { $ok = Run-Step-Job "Soccer Step 8 - Direction Context"  $SoccerDir (Join-Path $RepoRoot "Sports\Soccer\scripts\step8_add_direction_context_soccer.py")  "--input outputs\step7_soccer_ranked.xlsx --sheet ALL --output outputs\step8_soccer_direction.csv --xlsx outputs\step8_soccer_direction_clean.xlsx --date $Date" }
     return $ok
-} -ArgumentList $SoccerDir, $Date, $SkipFetch, $Root
+} -ArgumentList $SoccerDir, $Date, $SkipFetch, $Root, [bool]$SkipDefenseRefresh
 
 # -- Tennis Job ---------------------------------------------------------------
 $TennisJob = Start-Job -ScriptBlock {
