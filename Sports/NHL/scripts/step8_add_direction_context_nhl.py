@@ -46,16 +46,20 @@ from openpyxl.styles import Font, PatternFill, Alignment
 from openpyxl.utils import get_column_letter
 
 
-def _copy_dated_step8_nhl(output_xlsx_path: str) -> None:
+def _copy_dated_step8_nhl(output_xlsx_path: str, slate_date: str | None = None) -> None:
     src = Path(output_xlsx_path)
     if not src.is_file():
         return
-    today = date.today().isoformat()
+    ds = str(slate_date or "").strip()[:10]
+    try:
+        dated_key = datetime.strptime(ds, "%Y-%m-%d").date().isoformat() if ds else date.today().isoformat()
+    except Exception:
+        dated_key = date.today().isoformat()
     repo_root = Path(__file__).resolve().parents[3]
-    dated_dir = repo_root / "outputs" / today
+    dated_dir = repo_root / "outputs" / dated_key
     try:
         dated_dir.mkdir(parents=True, exist_ok=True)
-        dated_path = dated_dir / f"step8_nhl_direction_clean_{today}.xlsx"
+        dated_path = dated_dir / f"step8_nhl_direction_clean_{dated_key}.xlsx"
         shutil.copy2(src, dated_path)
         print(f"[NHL step8] Dated copy -> {dated_path}")
     except Exception as e:
@@ -337,6 +341,8 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         "pick_type":        r("pick_type"),
         # Game info — ET calendar + wall clock (grader / MLB-style slate_game_date filter)
         "Game Date":        game_date_et,
+        # Lowercase alias for downstream tooling / CSV consumers (mirrors other sports pipelines).
+        "game_date":        game_date_et,
         "Game Time":        game_time_et or r("game_start"),
         "game_start":       r("game_start"),
         "game_script_mult": (
@@ -401,22 +407,26 @@ def write_xlsx(rows: list[dict], path: str):
         openpyxl.Workbook().save(path)
         return
 
-    headers = list(rows[0].keys())
+    # XLSX is primarily human-facing; keep a single calendar-date column ("Game Date").
+    # `game_date` is still written to CSV for downstream tooling, but duplicating it in XLSX
+    # creates duplicate headers after grader rename maps both -> slate_game_date.
+    rows_xlsx = [{k: v for k, v in r.items() if k != "game_date"} for r in rows]
+    headers = list(rows_xlsx[0].keys())
     wb = openpyxl.Workbook()
 
     ws_all = wb.active
     ws_all.title = "All Props"
-    _write_sheet(ws_all, rows, headers)
+    _write_sheet(ws_all, rows_xlsx, headers)
 
-    skaters = [r for r in rows if str(r.get("player_role", "")).upper() == "SKATER"]
+    skaters = [r for r in rows_xlsx if str(r.get("player_role", "")).upper() == "SKATER"]
     if skaters:
         _write_sheet(wb.create_sheet("Skaters"), skaters, headers)
 
-    goalies = [r for r in rows if str(r.get("player_role", "")).upper() == "GOALIE"]
+    goalies = [r for r in rows_xlsx if str(r.get("player_role", "")).upper() == "GOALIE"]
     if goalies:
         _write_sheet(wb.create_sheet("Goalies"), goalies, headers)
 
-    a_rows = [r for r in rows if str(r.get("tier", "")).upper() == "A"]
+    a_rows = [r for r in rows_xlsx if str(r.get("tier", "")).upper() == "A"]
     if a_rows:
         _write_sheet(wb.create_sheet("A-Tier Best"), a_rows, headers)
 
@@ -509,40 +519,16 @@ def main():
 
     def _is_target_date(gs) -> bool:
         """
-        Legacy fallback when ``Game Date`` is empty: compare game_start to target
-        using the machine local calendar (older behavior).
+        Fallback when ``Game Date`` / ``game_date`` is empty: compare ``game_start``
+        using the ET calendar date (mirrors NBA step8 behavior; avoids local-midnight skew).
         """
-        if gs is None or gs == "":
-            return False
-        try:
-            if isinstance(gs, datetime):
-                if gs.tzinfo is not None:
-                    local_date = gs.astimezone().date()
-                else:
-                    local_date = gs.date()
-                return local_date == target_local
-            gs_str = str(gs).strip()
-            if not gs_str:
-                return False
-            for fmt in (
-                "%Y-%m-%dT%H:%M:%S%z",
-                "%Y-%m-%d %H:%M:%S%z",
-                "%Y-%m-%dT%H:%M:%S",
-                "%Y-%m-%d %H:%M:%S",
-            ):
-                try:
-                    dt = datetime.strptime(gs_str[:25], fmt)
-                    if dt.tzinfo is not None:
-                        return dt.astimezone().date() == target_local
-                    return dt.date() == target_local
-                except ValueError:
-                    continue
-            return gs_str[:10] == target_str
-        except Exception:
-            return False
+        d_et, _t_et = _nhl_game_date_time_et(gs)
+        if d_et:
+            return d_et == target_str
+        return False
 
     def _row_matches_target(r: dict) -> bool:
-        gd = str(r.get("Game Date", "")).strip()
+        gd = str(r.get("Game Date", "") or r.get("game_date", "")).strip()
         if gd:
             return gd == target_str
         return _is_target_date(r.get("game_start", ""))
@@ -552,22 +538,29 @@ def main():
     if len(display_rows) == 0 and len(unfiltered) > 0:
         dates_seen: list[str] = []
         for r in unfiltered:
-            gd = str(r.get("Game Date", "")).strip()
+            gd = str(r.get("Game Date", "") or r.get("game_date", "")).strip()
             if gd:
                 dates_seen.append(gd)
             else:
-                d = _game_start_local_date(r.get("game_start", ""))
-                if d is not None:
-                    dates_seen.append(d.isoformat())
+                d_et, _t_et = _nhl_game_date_time_et(r.get("game_start", ""))
+                if d_et:
+                    dates_seen.append(d_et)
+                else:
+                    d = _game_start_local_date(r.get("game_start", ""))
+                    if d is not None:
+                        dates_seen.append(d.isoformat())
         if dates_seen:
             unique = sorted(set(dates_seen))
             future = [d for d in unique if d >= target_str]
             chosen = future[0] if future else unique[-1]
 
             def _is_chosen_row(row: dict) -> bool:
-                gd = str(row.get("Game Date", "")).strip()
+                gd = str(row.get("Game Date", "") or row.get("game_date", "")).strip()
                 if gd:
                     return gd == chosen
+                d_et, _t_et = _nhl_game_date_time_et(row.get("game_start", ""))
+                if d_et:
+                    return d_et == chosen
                 d2 = _game_start_local_date(row.get("game_start", ""))
                 return d2 is not None and d2.isoformat() == chosen
 
@@ -603,7 +596,7 @@ def main():
         write_xlsx(display_rows, xlsx_out)
         xlsx_final = xlsx_out
 
-    _copy_dated_step8_nhl(xlsx_final)
+    _copy_dated_step8_nhl(xlsx_final, slate_date=target_str)
 
     # ── Console summary ───────────────────────────────────────────────────────
     tier_counts = {}

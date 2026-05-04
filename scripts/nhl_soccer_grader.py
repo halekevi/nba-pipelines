@@ -338,7 +338,7 @@ def load_slate(path: Path, sport: str, grade_date: str = None) -> pd.DataFrame:
                     print(f"  [DateFilter] Could not parse '{game_time_col}': {exc} — skipping filter")
 
     # ── MLB / NHL: keep rows for the grade calendar day when Game Date is populated ─
-    if sport in ("MLB", "NHL") and grade_date and "slate_game_date" in df.columns:
+    if sport == "MLB" and grade_date and "slate_game_date" in df.columns:
         want = str(grade_date).strip()[:10]
         raw = pd.to_datetime(df["slate_game_date"], errors="coerce")
         if raw.notna().any():
@@ -348,7 +348,7 @@ def load_slate(path: Path, sport: str, grade_date: str = None) -> pd.DataFrame:
             n0 = len(df)
             sub = df.loc[ok | unk].copy()
             n1 = len(sub)
-            label = "MLB" if sport == "MLB" else "NHL"
+            label = "MLB"
             if n1 == 0 and n0 > 0:
                 print(
                     f"  [{label}] WARNING: Date filter {want} would remove all {n0} rows; "
@@ -358,6 +358,24 @@ def load_slate(path: Path, sport: str, grade_date: str = None) -> pd.DataFrame:
                 df = sub
                 if n1 < n0:
                     print(f"  [{label}] Date filter {want}: kept {n1}/{n0} slate rows (Game Date)")
+
+    # NHL: strict ET calendar-day filter when slate_game_date is populated.
+    # If the filter would remove everything, keep the full slate (same guard pattern as MLB).
+    if sport == "NHL" and grade_date and "slate_game_date" in df.columns:
+        want = str(grade_date).strip()[:10]
+        raw = pd.to_datetime(df["slate_game_date"], errors="coerce")
+        day = raw.dt.strftime("%Y-%m-%d")
+        mask = day == want
+        n0 = len(df)
+        n_match = int(mask.sum())
+        if n_match > 0:
+            df = df.loc[mask].copy()
+            n1 = len(df)
+            print(f"  [NHL grader] Date filter: kept {n1}/{n0} rows for {want} (slate_game_date)")
+        else:
+            print(
+                f"  [NHL grader] WARN: date filter for {want} = 0 rows — keeping full slate ({n0} rows)"
+            )
 
     return df
 
