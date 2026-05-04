@@ -748,9 +748,11 @@ def main() -> None:
     scan_rows: list[dict[str, Any]] = []
     scan_meta: dict[str, Any] = {}
     sport_scan = str(args.sport).strip().upper()
-    if sport_scan in {"SOCCER", "MLB", "NHL", "WNBA"}:
+    if sport_scan in {"SOCCER", "MLB", "NHL", "WNBA", "NBA"}:
         if sport_scan == "SOCCER":
             scan_thresholds = [0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55]
+        elif sport_scan == "NBA":
+            scan_thresholds = [0.40, 0.42, 0.44, 0.46, 0.48, 0.50, 0.52, 0.54, 0.56, 0.58, 0.60, 0.62, 0.65]
         else:
             scan_thresholds = [0.50, 0.52, 0.54, 0.56, 0.58, 0.60, 0.62, 0.65, 0.68, 0.71, 0.74]
         scan_rows, scan_meta = ml_prob_threshold_scan(
