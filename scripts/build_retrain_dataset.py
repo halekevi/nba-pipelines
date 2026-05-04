@@ -32,7 +32,11 @@ import pandas as pd
 _SCRIPTS = Path(__file__).resolve().parent
 if str(_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS))
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
 from grading.slate_grader import norm_player_key, norm_prop_key  # noqa: E402
+from utils.graded_schema import coverage_report, normalize_graded_df, recover_direction_if_missing  # noqa: E402
 
 # Per-group tier overhaul (commit a1b24e77). Graded `file_date` on/after this uses new tier semantics.
 TIER_OVERHAUL_DATE = "2026-05-02"
@@ -321,6 +325,78 @@ def load_all_graded_props(templates_dir: Path) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def _pick_graded_sheet(xl: pd.ExcelFile) -> str | None:
+    names = list(xl.sheet_names)
+    if not names:
+        return None
+    if "Box Raw" in names:
+        return "Box Raw"
+    if "GRADED" in names:
+        return "GRADED"
+    for s in names:
+        try:
+            probe = pd.read_excel(xl, sheet_name=s, nrows=5)
+        except Exception:
+            continue
+        cols = {str(c).lower() for c in probe.columns}
+        if "result" in cols or "actual_status" in cols:
+            return s
+    return names[0]
+
+
+def _load_graded_workbook_rows(root: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """
+    Returns (before_df, after_df) for graded workbook schema coverage.
+    before_df only includes canonical columns if already present.
+    after_df applies alias normalization and direction recovery.
+    """
+    paths = sorted((root / "outputs").glob("*/graded_*.xlsx"))
+    before_frames: list[pd.DataFrame] = []
+    after_frames: list[pd.DataFrame] = []
+    canonical_fields = ["direction", "def_tier", "minutes_tier", "pick_type", "tier", "result"]
+
+    for p in paths:
+        try:
+            xl = pd.ExcelFile(p)
+            sheet = _pick_graded_sheet(xl)
+            if not sheet:
+                continue
+            df = pd.read_excel(p, sheet_name=sheet)
+        except Exception:
+            continue
+        if df is None or df.empty:
+            continue
+
+        raw = df.copy()
+        raw["source_file"] = p.name
+        for f in canonical_fields:
+            if f not in raw.columns:
+                raw[f] = np.nan
+        before_frames.append(raw[canonical_fields + ["source_file"]].copy())
+
+        norm = normalize_graded_df(df.copy())
+        norm = recover_direction_if_missing(norm)
+        if "result" in norm.columns:
+            ru = norm["result"].astype(str).str.strip().str.upper()
+            norm = norm.loc[ru.isin(("HIT", "MISS")) | ru.isin(("WIN", "LOSS", "WON", "LOSE"))].copy()
+        norm["source_file"] = p.name
+        for f in canonical_fields:
+            if f not in norm.columns:
+                norm[f] = np.nan
+        after_frames.append(norm[canonical_fields + ["source_file", "direction_source"]].copy())
+
+    before_df = pd.concat(before_frames, ignore_index=True) if before_frames else pd.DataFrame(columns=canonical_fields)
+    after_df = pd.concat(after_frames, ignore_index=True) if after_frames else pd.DataFrame(columns=canonical_fields)
+    return before_df, after_df
+
+
+def _print_field_coverage(prefix: str, report: dict[str, dict[str, Any]]) -> None:
+    print(prefix)
+    for f in ("direction", "def_tier", "minutes_tier", "pick_type", "tier", "result"):
+        r = report.get(f, {"known": 0, "total": 0, "pct": 0.0})
+        print(f"  {f:12}: {r['known']:,} / {r['total']:,} ({r['pct']:.1f}%)")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--repo-root", type=Path, default=None, help="PropORACLE repo root (default: parent of scripts/)")
@@ -344,6 +420,12 @@ def main() -> int:
     templates = root / "ui_runner" / "templates"
     data_dir = root / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
+
+    before_cov_df, after_cov_df = _load_graded_workbook_rows(root)
+    before_cov = coverage_report(before_cov_df)
+    after_cov = coverage_report(after_cov_df)
+    _print_field_coverage("[retrain] Field coverage across all graded workbooks (before normalization):", before_cov)
+    _print_field_coverage("[retrain] Field coverage across all graded workbooks (after normalization):", after_cov)
 
     df = load_all_graded_props(templates_dir=templates)
     if df.empty:

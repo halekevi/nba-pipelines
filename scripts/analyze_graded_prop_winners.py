@@ -12,10 +12,16 @@ from __future__ import annotations
 
 import argparse
 import re
+import sys
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+from utils.graded_schema import normalize_graded_df, recover_direction_if_missing  # noqa: E402
 
 
 def _repo_root() -> Path:
@@ -169,7 +175,7 @@ def load_unified(roots: list[Path]) -> pd.DataFrame:
             continue
         if df is None or len(df) == 0:
             continue
-        df = df.copy()
+        df = recover_direction_if_missing(normalize_graded_df(df.copy()))
         df["_sport"] = sp
         df["_source_file"] = p.name
         df["_slate_date"] = _slate_date_from_path(p)
