@@ -391,6 +391,33 @@ def build_agg_from_rows(rows: list[dict], key_col: str) -> list[dict]:
         return result
 
 
+_DEF_TIER_LABEL_ALIASES: dict[str, str] = {
+    "elite": "Elite",
+    "above avg": "Above Avg",
+    "avg": "Avg",
+    "average": "Avg",
+    "below avg": "Below Avg",
+    "below average": "Below Avg",
+    "weak": "Weak",
+    "very weak": "Weak",
+}
+
+DEF_TIER_LABEL_ORDER: list[str] = ["Elite", "Above Avg", "Avg", "Below Avg", "Weak"]
+
+
+def normalize_def_tier_label(raw: object) -> str | None:
+    """Map raw Def Tier cell text to a canonical tier label, or None if unknown."""
+    s = (
+        str(raw or "")
+        .lower()
+        .replace("🟢", "")
+        .replace("🟡", "")
+        .replace("🔴", "")
+        .strip()
+    )
+    return _DEF_TIER_LABEL_ALIASES.get(s)
+
+
 def overall_stats(rows: list[dict]) -> dict:
     """Compute overall summary from graded rows."""
     total = len(rows)
@@ -754,43 +781,110 @@ def player_table(rows: list[dict], top: bool, min_decided: int = 5, limit: int =
     </table></div>"""
 
 
+def pick_type_def_tier_cards_html(rows: list[dict], min_decided: int = 1) -> str:
+    """
+    Four cards: Goblin/OVER, Demon/OVER, Standard/OVER, Standard/UNDER × all five def tiers.
+    Replaces the old BY PICK TYPE + BY TIER (A–D) + Standard O/U matrices.
+    """
+    if not rows:
+        return ""
+    groups: list[tuple[str, str, str]] = [
+        ("goblin", "OVER", "GOBLIN × DEF TIER"),
+        ("demon", "OVER", "DEMON × DEF TIER"),
+        ("standard", "OVER", "STANDARD OVER × DEF TIER"),
+        ("standard", "UNDER", "STANDARD UNDER × DEF TIER"),
+    ]
+
+    def _row_matches_pick_dir(r: dict, pick_kw: str, direction: str) -> bool:
+        if pick_kw not in str(r.get("Pick Type", "") or "").lower():
+            return False
+        d = str(r.get("Dir", "") or r.get("Direction", "")).strip().upper()
+        return d == direction.upper()
+
+    def _one_card(pick_kw: str, direction: str, title: str) -> str:
+        by_label: dict[str, dict] = {}
+        for tl in DEF_TIER_LABEL_ORDER:
+            sub = [
+                r
+                for r in rows
+                if _row_matches_pick_dir(r, pick_kw, direction)
+                and normalize_def_tier_label(r.get("Def Tier")) == tl
+            ]
+            by_label[tl] = overall_stats(sub)
+
+        nonempty = [(tl, by_label[tl]) for tl in DEF_TIER_LABEL_ORDER if int(by_label[tl].get("decided", 0)) > 0]
+        empty = [(tl, by_label[tl]) for tl in DEF_TIER_LABEL_ORDER if int(by_label[tl].get("decided", 0)) == 0]
+        nonempty.sort(key=lambda x: float(x[1].get("hit_rate", 0)), reverse=True)
+        ordered = nonempty + empty
+
+        body = ""
+        for tl, st in ordered:
+            d = int(st.get("decided", 0))
+            h_ = int(st.get("hits", 0))
+            hr = float(st.get("hit_rate", 0))
+            if d <= 0:
+                body += f"""<tr class="matrix-empty">
+          <td><strong>{h(tl)}</strong></td>
+          <td class="right mono muted">—</td>
+          <td class="right mono muted">—</td>
+          <td class="mono right muted">—</td>
+          <td><span class="muted">—</span></td>
+        </tr>"""
+                continue
+            row_cls = "player-hit" if hr >= 55 else ("player-miss" if hr < 48 else "player-warn")
+            if d < int(min_decided):
+                row_cls += " matrix-sparse"
+            col_txt = rate_color(hr)
+            bar_c = "var(--green)" if hr >= 60.0 else ("var(--gold)" if hr >= 50.0 else "var(--red)")
+            bar_w = min(hr, 100.0)
+            body += f"""<tr class="{row_cls}">
+          <td><strong>{h(tl)}</strong></td>
+          <td class="right mono">{fmt_num(d)}</td>
+          <td class="right mono pos">{fmt_num(h_)}</td>
+          <td class="mono right" style="color:{col_txt};font-weight:700">{pct(hr)}</td>
+          <td><div class="rate-bar-bg" style="min-width:64px"><div class="rate-bar-fill" style="width:{bar_w:.1f}%;background:{bar_c}"></div></div></td>
+        </tr>"""
+
+        return f"""<div class="insight-card def-tier-pick-card">
+      <div class="insight-title" style="margin-bottom:10px">{h(title)}</div>
+      <div class="table-wrap" style="margin-bottom:0">
+        <table>
+          <thead><tr>
+            <th>DEF TIER</th>
+            <th class="right">DECIDED</th>
+            <th class="right">HITS</th>
+            <th class="right">HIT RATE</th>
+            <th>BAR</th>
+          </tr></thead>
+          <tbody>{body}</tbody>
+        </table>
+      </div>
+    </div>"""
+
+    cards = "".join(_one_card(pk, dr, ttl) for pk, dr, ttl in groups)
+    return f"""<div class="def-tier-breakdown-section" style="margin-top:12px;margin-bottom:12px;width:100%;max-width:100%;box-sizing:border-box">
+  <div class="section-label" style="margin-bottom:12px">DEF TIER BREAKDOWN</div>
+  <div class="def-tier-pick-cards-grid">
+    {cards}
+  </div>
+</div>"""
+
+
 def def_tier_table(rows: list[dict]) -> str:
     dt_agg = build_agg_from_rows(rows, "Def Tier")
     if not dt_agg:
         return ""
-    TIER_ORDER = ["Elite", "Above Avg", "Avg", "Below Avg", "Weak"]
-    TIER_ALIASES = {
-        "elite": "Elite",
-        "above avg": "Above Avg",
-        "avg": "Avg",
-        "average": "Avg",
-        "below avg": "Below Avg",
-        "below average": "Below Avg",
-        "weak": "Weak",
-        "very weak": "Weak",
-    }
-
-    def _norm_def_tier_early(x: str) -> str:
-        return (
-            str(x or "")
-            .lower()
-            .replace("🟢", "")
-            .replace("🟡", "")
-            .replace("🔴", "")
-            .strip()
-        )
 
     stats_by_tier: dict[str, dict] = {}
     for d in dt_agg:
-        key = TIER_ALIASES.get(_norm_def_tier_early(d["key"]))
+        key = normalize_def_tier_label(d.get("key"))
         if key:
             stats_by_tier[key] = d
 
     rows_html = ""
-    for tier_label in TIER_ORDER:
+    for tier_label in DEF_TIER_LABEL_ORDER:
         d = stats_by_tier.get(tier_label, {"key": tier_label, "decided": 0, "hits": 0, "hit_rate": 0})
-        dkey0 = _norm_def_tier_early(tier_label)
-        sub_main = [r for r in rows if TIER_ALIASES.get(_norm_def_tier_early(r.get("Def Tier", "")), "") == tier_label]
+        sub_main = [r for r in rows if normalize_def_tier_label(r.get("Def Tier", "")) == tier_label]
         ou_main = over_under_lines_html(sub_main)
         if int(d.get("decided", 0)) <= 0:
             rows_html += f"""<tr class="matrix-empty">
@@ -806,79 +900,22 @@ def def_tier_table(rows: list[dict]) -> str:
           <td class="right mono">{fmt_num(d['hits'])}</td>
           <td>{rate_bar_html(d['hit_rate'])}</td>
         </tr>"""
-    # Breakdown matrices inside each defense tier (pick type + ticket tier)
-    def _norm_def_tier(x: str) -> str:
-        return (
-            str(x or "")
-            .lower()
-            .replace("🟢", "")
-            .replace("🟡", "")
-            .replace("🔴", "")
-            .strip()
-        )
-
-    def _stats_cell(s: dict[str, float]) -> str:
-        if not s or s.get("decided", 0) == 0:
-            return "—"
-        col = rate_color(s.get("hit_rate", 0))
-        return f'<span style="color:{col};font-weight:700">{pct(s["hit_rate"])}</span> <span class="muted-note" style="font-size:12px;padding:0">({fmt_num(s["decided"])})</span>'
-
-    detail_rows_pt = ""
-    detail_rows_tier = ""
-    detail_rows_std_dir = ""
     picktype_by_tier: dict[str, list[dict]] = {"goblin": [], "standard": [], "demon": []}
-    for tier_label in TIER_ORDER:
+    for tier_label in DEF_TIER_LABEL_ORDER:
         d = stats_by_tier.get(tier_label, {"key": tier_label, "decided": 0, "hits": 0, "hit_rate": 0})
-        dkey = _norm_def_tier(tier_label)
-        sub = [r for r in rows if TIER_ALIASES.get(_norm_def_tier(r.get("Def Tier", "")), "") == tier_label]
+        sub = [r for r in rows if normalize_def_tier_label(r.get("Def Tier", "")) == tier_label]
 
         gob = pick_type_stats(sub, "goblin")
         std = pick_type_stats(sub, "standard")
         dem = pick_type_stats(sub, "demon")
-        std_over_rows = [
-            r for r in sub
-            if "standard" in str(r.get("Pick Type", "")).lower()
-            and str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "OVER"
-        ]
-        std_under_rows = [
-            r for r in sub
-            if "standard" in str(r.get("Pick Type", "")).lower()
-            and str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "UNDER"
-        ]
-        std_over = overall_stats(std_over_rows) if std_over_rows else {"decided": 0, "hit_rate": 0}
-        std_under = overall_stats(std_under_rows) if std_under_rows else {"decided": 0, "hit_rate": 0}
-
-        detail_rows_pt += f"""<tr class="{'matrix-empty' if int(d.get('decided', 0)) <= 0 else ''}">
-          <td><strong>{h(d["key"])}</strong></td>
-          <td class="mono" style="vertical-align:top">{_stats_cell(gob)}{over_under_lines_html(rows_for_pick_type(sub, "goblin"))}</td>
-          <td class="mono" style="vertical-align:top">{_stats_cell(std)}{over_under_lines_html(rows_for_pick_type(sub, "standard"))}</td>
-          <td class="mono" style="vertical-align:top">{_stats_cell(dem)}{over_under_lines_html(rows_for_pick_type(sub, "demon"))}</td>
-        </tr>"""
         if int(d.get("decided", 0)) > 0:
             picktype_by_tier["goblin"].append({"def_tier": d["key"], **gob})
             picktype_by_tier["standard"].append({"def_tier": d["key"], **std})
             picktype_by_tier["demon"].append({"def_tier": d["key"], **dem})
 
-        t_cells = []
-        for t in ("A", "B", "C", "D"):
-            t_rows = [r for r in sub if str(r.get("Tier", "") or "").strip().upper() == t]
-            t_stats = overall_stats(t_rows) if t_rows else {"decided": 0, "hit_rate": 0}
-            t_cells.append(
-                f'<td class="mono" style="vertical-align:top">{_stats_cell(t_stats)}'
-                f"{over_under_lines_html(t_rows)}</td>"
-            )
-        detail_rows_tier += f"""<tr class="{'matrix-empty' if int(d.get('decided', 0)) <= 0 else ''}">
-          <td><strong>{h(d["key"])}</strong></td>
-          {''.join(t_cells)}
-        </tr>"""
-        detail_rows_std_dir += f"""<tr class="{'matrix-empty' if int(d.get('decided', 0)) <= 0 else ''}">
-          <td><strong>{h(d["key"])}</strong></td>
-          <td class="mono">{_stats_cell(std_over)}</td>
-          <td class="mono">{_stats_cell(std_under)}</td>
-        </tr>"""
-
     detail_tables = ""
-    if detail_rows_pt or detail_rows_tier or detail_rows_std_dir:
+    if dt_agg:
+
         def _picktype_sorted_table(kind: str, label: str) -> str:
             rows_k = [x for x in picktype_by_tier.get(kind, []) if x.get("decided", 0) > 0]
             if not rows_k:
@@ -888,11 +925,11 @@ def def_tier_table(rows: list[dict]) -> str:
             for r in rows_k:
                 hr = float(r.get("hit_rate", 0))
                 row_cls = "player-hit" if hr >= 55 else ("player-miss" if hr < 48 else "player-warn")
-                dtk = _norm_def_tier(str(r.get("def_tier", "")))
+                canon = str(r.get("def_tier", "")).strip()
                 slice_ou = [
                     x
                     for x in rows
-                    if _norm_def_tier(x.get("Def Tier", "")) == dtk
+                    if normalize_def_tier_label(x.get("Def Tier", "")) == canon
                     and kind.lower() in str(x.get("Pick Type", "") or "").lower()
                 ]
                 ou_line = over_under_lines_html(slice_ou)
@@ -916,32 +953,7 @@ def def_tier_table(rows: list[dict]) -> str:
       {_picktype_sorted_table("demon", "DEMON")}
     </div>"""
 
-        detail_tables = f"""<div class="insight-card def-tier-breakdown-card" style="margin-top:12px;margin-bottom:12px">
-      <div class="section-label" style="margin-bottom:14px">DEF TIER BREAKDOWN</div>
-      <div class="two-col pick-tier-split" style="margin-top:0;margin-bottom:12px">
-      <div>
-        <div class="section-label" style="font-size:clamp(12px,1vw,14px);letter-spacing:2px;margin-bottom:12px">BY PICK TYPE</div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>DEF TIER</th><th>GOBLIN</th><th>STANDARD</th><th>DEMON</th></tr></thead>
-          <tbody>{detail_rows_pt}</tbody>
-        </table></div>
-      </div>
-      <div>
-        <div class="section-label" style="font-size:clamp(12px,1vw,14px);letter-spacing:2px;margin-bottom:12px">BY TIER (A/B/C/D)</div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>DEF TIER</th><th>TIER A</th><th>TIER B</th><th>TIER C</th><th>TIER D</th></tr></thead>
-          <tbody>{detail_rows_tier}</tbody>
-        </table></div>
-      </div>
-    </div>
-      <div>
-        <div class="section-label" style="font-size:clamp(12px,1vw,14px);letter-spacing:2px;margin-bottom:12px">STANDARD — OVER / UNDER</div>
-        <div class="table-wrap"><table>
-        <thead><tr><th>DEF TIER</th><th>STANDARD OVER</th><th>STANDARD UNDER</th></tr></thead>
-        <tbody>{detail_rows_std_dir}</tbody>
-      </table></div>
-    </div>
-    </div>
+        detail_tables = f"""{pick_type_def_tier_cards_html(rows)}
     {split_picktype_tables}"""
 
     return f"""<div class="section-label">HIT RATE BY OPPONENT DEFENSIVE TIER</div>
@@ -1336,6 +1348,9 @@ background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid va
 /* Last card is alone on its row when count is 1,4,7,… — span full width instead of a narrow left column */
 .insight-grid>.insight-card:last-child:nth-child(3n+1){grid-column:1 / -1}
 .insight-card{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);border-radius:12px;padding:14px 16px;box-shadow:0 4px 20px rgba(0,0,0,.15);min-width:0;box-sizing:border-box}
+.def-tier-pick-cards-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:0;width:100%;max-width:100%;box-sizing:border-box;align-items:stretch}
+.def-tier-pick-card{margin-bottom:0}
+.def-tier-breakdown-section{width:100%;max-width:100%;box-sizing:border-box}
 .insight-icon{font-size:22px;margin-bottom:8px}
 .insight-title{font-weight:700;font-size:14px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:var(--gold)}
 .insight-body{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2);line-height:1.6}
@@ -1359,6 +1374,7 @@ td.muted{color:var(--muted2)}
 .stat-grid{justify-items:start;justify-content:start}
 .stat-grid-4,.stat-grid-2{grid-template-columns:repeat(auto-fill,minmax(min(100%,9rem),max-content))}
 .two-col,.three-col{grid-template-columns:1fr}
+.def-tier-pick-cards-grid{grid-template-columns:1fr;gap:12px}
 .insight-grid{display:grid;grid-template-columns:1fr;gap:14px;width:100%;max-width:100%}
 .insight-grid>.insight-card:last-child:nth-child(3n+1){grid-column:auto}
 .insight-card{width:100%;max-width:100%;min-width:0}
