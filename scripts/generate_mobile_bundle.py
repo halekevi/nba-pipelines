@@ -739,6 +739,7 @@ def generate_bundle():
             "tennis": R / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
             "wnba": _first_existing_path(
                 [
+                    R / "Sports" / "WNBA" / "outputs" / "step8_wnba_direction_clean.xlsx",
                     R / "Sports" / "WNBA" / "step8_wnba_direction_clean.xlsx",
                     R / "Sports" / "WNBA" / "step8_wnba_direction.xlsx",
                     R / "WNBA" / "step8_wnba_direction_clean.xlsx",
@@ -815,6 +816,14 @@ def generate_bundle():
         mobile_data_dir = MOBILE_WWW_DIR / "data"
         mobile_data_dir.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src_grade_history, mobile_data_dir / "grade_history.json")
+    else:
+        mobile_data_dir = MOBILE_WWW_DIR / "data"
+        mobile_data_dir.mkdir(parents=True, exist_ok=True)
+
+    # WNBA step8 clean workbook for mobile/offline consumers.
+    src_wnba_step8 = ROOT_DIR / "Sports" / "WNBA" / "outputs" / "step8_wnba_direction_clean.xlsx"
+    if src_wnba_step8.exists():
+        shutil.copy2(src_wnba_step8, mobile_data_dir / "step8_wnba_direction_clean.xlsx")
 
     # Payout tab offline/mobile dependency.
     src_payout_rate_cards = DATA_DIR / "payout_rate_cards.json"

@@ -113,6 +113,10 @@ function Publish-WnbaStep8CleanArtifacts {
     }
     Copy-Item $step8Clean (Join-Path $dataOut "step8_wnba_direction_clean.xlsx") -Force
     Write-Host "  [WNBA publish] Canonical -> data\outputs\step8_wnba_direction_clean.xlsx" -ForegroundColor DarkGray
+    # Keep legacy canonical path synchronized to avoid stale reads by older consumers.
+    $legacyCanonical = Join-Path $WNBADir "step8_wnba_direction_clean.xlsx"
+    Copy-Item $step8Clean $legacyCanonical -Force
+    Write-Host "  [WNBA publish] Canonical -> step8_wnba_direction_clean.xlsx" -ForegroundColor DarkGray
     $step8Dst = Join-Path $DateDir ("step8_wnba_direction_clean_" + $Date + ".xlsx")
     Copy-Item $step8Clean $step8Dst -Force
     Write-Host "  [WNBA publish] Combined dated input -> $(Split-Path -Leaf $step8Dst)" -ForegroundColor DarkGray
