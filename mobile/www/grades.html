@@ -1315,6 +1315,10 @@ select option,
 //   Same dir: slate_eval_{date}.html  (relative)
 //
 const REPORT_URL_TEMPLATE = 'slate_eval_{date}.html';
+/** Every load gets a unique URL so iframe/browsers/CDNs cannot serve a stale slate_eval after deploy. */
+function slateEvalUrl(dateStr) {
+  return REPORT_URL_TEMPLATE.replace('{date}', dateStr) + '?cb=' + Date.now();
+}
 const TICKET_EVAL_URL_TEMPLATE = 'ticket_eval_{date}.html';
 
 (function gradesIframeDebug(){
@@ -2432,7 +2436,7 @@ function computeVisibleReportDateCount(){
 
 // ─── PROBE: check if a slate_eval file exists for a date ──────────────────────
 async function probeDate(dateStr){
-  const url = REPORT_URL_TEMPLATE.replace('{date}', dateStr);
+  const url = slateEvalUrl(dateStr);
   try {
     const res = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
     if (res.ok) return true;
@@ -2654,7 +2658,7 @@ function loadDate(dateStr){
 
   renderPills();
 
-  const url = REPORT_URL_TEMPLATE.replace('{date}', dateStr);
+  const url = slateEvalUrl(dateStr);
 
   // Set iframe src
   frame.onload = function(){

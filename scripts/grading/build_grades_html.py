@@ -639,7 +639,7 @@ def _def_tier_combined_subgrid_table(rows: list[dict], min_decided: int = 10) ->
     table_html = f"""<style>
 .def-tier-subgrid-table tbody tr.def-subgrid-data-row:hover td {{ background:{bg_sec}; }}
 </style>
-<div class="def-tier-combined-wrap" style="overflow-x:auto;padding:0.5rem 0">
+<div class="table-wrap">
 <table class="def-tier-subgrid-table" style="min-width:920px;border-collapse:collapse;font-size:12px;width:100%">
   <thead>
     <tr>
@@ -947,17 +947,21 @@ def def_tier_table(rows: list[dict], min_decided: int = 10) -> str:
     if not dt_agg:
         return ""
     combined_subgrid, n_sub_ge = _def_tier_combined_subgrid_table(rows, min_decided=min_decided)
-    return f"""<div style="margin-top:12px">
-      <div class="section-label">DEF TIER BREAKDOWN — PICK TYPE × RANK TIER (COMBINED)</div>
-      <p style="font-size:12px;color:var(--muted2);margin:4px 0 10px;line-height:1.45">
-        Rows = opponent def tier. Columns = pick type × rank tier (A–D).
-        Goblin/Demon = OVER only. Standard split OVER/UNDER.
-        {n_sub_ge} of 80 opponent-tier × column cells have ≥ {int(min_decided)} decided; others still list rates when 1 ≤ n &lt; {int(min_decided)}.
-        <strong>—</strong> = no decided props in that bucket.
-        Note: Standard Tier B may be structurally sparse when ml_prob is compressed below tier thresholds — “—” is expected until calibration / a retrain restores spread.
-      </p>
-      {combined_subgrid}
-    </div>"""
+    # Same shell as Performance Matrix (pick_tier_direction_matrix_html): matrix-collapsible + matrix-body + matrix-summary + table-wrap inside subgrid.
+    intro = (
+        f"Rows = opponent def tier. Columns = pick type × rank tier (A–D). "
+        f"Goblin/Demon = OVER only. Standard split OVER/UNDER. "
+        f"{n_sub_ge} of 80 opponent-tier × column cells have ≥ {int(min_decided)} decided; others still list rates when 1 ≤ n &lt; {int(min_decided)}. "
+        f"<strong>—</strong> = no decided props in that bucket. "
+        f"Note: Standard Tier B may be structurally sparse when ml_prob is compressed below tier thresholds — “—” is expected until calibration / a retrain restores spread."
+    )
+    return f"""<details class="matrix-collapsible">
+      <summary>DEF TIER BREAKDOWN — PICK TYPE × RANK TIER (COMBINED)</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">{intro}</div>
+        {combined_subgrid}
+      </div>
+    </details>"""
 
 
 # ══════════════════════════════════════════════════════════════════════════════
