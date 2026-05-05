@@ -23,7 +23,9 @@ DEFAULT_ML_PROB_CUTS: tuple[float, float, float] = (0.71, 0.65, 0.58)
 SPORT_ML_PROB_CUTS: dict[str, tuple[float, float, float] | dict[str, tuple[float, float, float]]] = {
     "soccer": (0.45, 0.35, 0.25),  # all groups; soccer base rates are low
     "mlb": {
-        "demon": (0.65, 0.60, 0.58),  # calibrated from 48,772-leg per-date scan
+        # Demon fallback when standard_line missing; post-prop-model threshold scan (2026-05)
+        # validated ~+0.15 lift at >=0.65, ~+0.11 at >=0.58 — see tier_criteria_mlb_per_date.json decision_notes
+        "demon": (0.65, 0.60, 0.58),
         # Same MLB probability scale as Demon fallback; DEFAULT (0.71,…) yields ~zero Standard A’s.
         "standard": (0.58, 0.52, 0.47),
         "goblin": (0.58, 0.52, 0.47),  # distance fallback when no standard_line; same scale as Standard
@@ -40,6 +42,7 @@ def _resolve_ml_prob_cuts(sport: str, pick_type: str | None) -> tuple[float, flo
         return sport_entry
     if isinstance(sport_entry, dict):
         pt_key = (pick_type or "").lower()
+        # MLB/SPORT_ML_PROB_CUTS dict keys (standard, goblin, demon) are explicit; missing key → DEFAULT
         return sport_entry.get(pt_key, DEFAULT_ML_PROB_CUTS)
     return DEFAULT_ML_PROB_CUTS
 

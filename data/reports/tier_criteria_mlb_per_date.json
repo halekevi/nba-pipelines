@@ -88,6 +88,9 @@
     "threshold_scan_pick_types": true,
     "step8_per_date": true
   },
+  "decision_notes": {
+    "mlb_demon_cuts_confirmed": "(0.65, 0.60, 0.58) validated by post-prop-model scan — lift +0.15 at >=0.65, +0.11 at >=0.58"
+  },
   "aggregate": [
     {
       "group": "DEMON OVER",
