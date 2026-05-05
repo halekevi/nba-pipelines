@@ -10,7 +10,11 @@ param(
 )
 
 $ErrorActionPreference = "Continue"
-$Root    = Split-Path -Parent $MyInvocation.MyCommand.Definition
+$ScriptHere = $MyInvocation.MyCommand.Path
+if (-not $ScriptHere) { $ScriptHere = $PSCommandPath }
+$ScriptDir  = Split-Path -Parent $ScriptHere
+# Repo root when this file is .../scripts/run_wnba_grader.ps1
+$Root = if ((Split-Path -Leaf $ScriptDir) -eq "scripts") { Split-Path -Parent $ScriptDir } else { $ScriptDir }
 $SportsRoot = Join-Path $Root "Sports"
 $WNBADir = Join-Path $SportsRoot "WNBA"
 $OutRoot = "$Root\outputs"
@@ -52,7 +56,7 @@ function Run-Py {
 
 # Output paths
 $WNBAActuals   = "$DateDir\actuals_wnba_$Date.csv"
-$WNBATickets   = "$WNBADir\wnba_best_tickets.xlsx"
+$WNBATickets   = "$WNBADir\outputs\wnba_best_tickets.xlsx"
 $WNBAGraded    = "$DateDir\wnba_graded_$Date.xlsx"
 
 # =============================================================================

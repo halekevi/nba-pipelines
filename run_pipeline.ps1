@@ -1538,7 +1538,9 @@ $TennisSuccess = Test-Path (Join-Path $TennisDir "outputs\step8_tennis_direction
 $NFLSuccess    = (Test-Path (Join-Path $NFLDir "outputs\step8_nfl_direction_clean.xlsx")) -or (Test-Path (Join-Path $NFLDir "data\outputs\step8_nfl_direction_clean.xlsx"))
 $WNBASuccess = $false
 if ($wnbaParallel) {
-    $WNBASuccess = Test-Path (Join-Path $WNBADir "step8_wnba_direction.xlsx")
+    $wnbaStep8Clean = Join-Path $WNBADir "outputs\step8_wnba_direction_clean.xlsx"
+    $wnbaStep8Legacy = Join-Path $WNBADir "step8_wnba_direction_clean.xlsx"
+    $WNBASuccess = (Test-Path -LiteralPath $wnbaStep8Clean) -or (Test-Path -LiteralPath $wnbaStep8Legacy)
 }
 $mlbStep1Health = Get-MLBStep1DateHealth -CsvPath (Join-Path $MLBDir "step1_mlb_props.csv") -TargetDate $Date
 if (-not $mlbStep1Health.ok) {
@@ -1570,12 +1572,7 @@ if ($TennisSuccess) {
         -DatedFileName "step8_tennis_direction_clean_$Date.xlsx" `
         -Label "Tennis"
 }
-if ($WNBASuccess) {
-    Copy-DatedSlateOutput `
-        -SourcePath (Join-Path $WNBADir "step8_wnba_direction.xlsx") `
-        -DatedFileName "step8_wnba_direction_$Date.xlsx" `
-        -Label "WNBA"
-}
+# WNBA dated step8 mirror: scripts/run_wnba_pipeline.ps1 Publish-WnbaStep8CleanArtifacts (clean only).
 
 Remove-Job $allJobs -Force -ErrorAction SilentlyContinue
 if ($NBASuccess) { New-Item -ItemType File -Force -Path (Join-Path $NBADir "RUN_COMPLETE.flag") | Out-Null }

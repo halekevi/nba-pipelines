@@ -17,8 +17,6 @@ Run:
 from __future__ import annotations
 
 import argparse
-import shutil
-from datetime import date
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -42,29 +40,13 @@ def _format_et_clock(et: pd.Series) -> pd.Series:
 
 
 def _copy_dated_step8_wnba(output_xlsx_path: str, slate_date: str) -> None:
-    """Mirror NBA step8: publish dated clean XLSX under outputs/<slate>/ and WNBA/outputs/<slate>/.
+    """Dated mirror of clean step8 is handled in scripts/run_wnba_pipeline.ps1 (Publish-WnbaStep8CleanArtifacts).
 
-    slate_date is pipeline --Date (YYYY-MM-DD).
+    Avoid writing step1–7 or extra step8 copies into repo ``outputs/<date>/`` from Python; that script
+    publishes ``outputs/<date>/step8_wnba_direction_clean_<date>.xlsx`` and ``data/outputs/`` only.
     """
-    src = Path(output_xlsx_path)
-    if not src.is_file():
-        return
-    d = (slate_date or "").strip()
-    if not d:
-        d = date.today().isoformat()
-    repo_root = Path(__file__).resolve().parents[2]
-    dated_name = f"step8_wnba_direction_{d}.xlsx"
-    for dated_dir in (
-        repo_root / "outputs" / d,
-        repo_root / "Sports" / "WNBA" / "outputs" / d,
-    ):
-        try:
-            dated_dir.mkdir(parents=True, exist_ok=True)
-            dated_path = dated_dir / dated_name
-            shutil.copy2(src, dated_path)
-            print(f"[WNBA step8] Dated copy -> {dated_path}")
-        except Exception as e:
-            print(f"[WNBA step8] WARN: dated copy failed ({dated_dir}): {e}")
+    _ = (output_xlsx_path, slate_date)
+    return
 
 
 def _norm_pick_type(x: str) -> str:

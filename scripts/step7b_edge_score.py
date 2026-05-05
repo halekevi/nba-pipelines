@@ -101,8 +101,10 @@ def resolve_step7_path(root: Path, sport: str) -> Path | None:
         ]
     elif sp == "WNBA":
         candidates = [
-            root / "WNBA" / "step7_wnba_ranked.xlsx",
+            root / "Sports" / "WNBA" / "outputs" / "step7_wnba_ranked.xlsx",
+            root / "Sports" / "WNBA" / "step7_wnba_ranked.xlsx",
             root / "WNBA" / "outputs" / "step7_wnba_ranked.xlsx",
+            root / "WNBA" / "step7_wnba_ranked.xlsx",
         ]
     elif sp == "NFL":
         candidates = [

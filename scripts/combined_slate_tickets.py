@@ -134,7 +134,7 @@ DEFAULT_NFL_PATH = os.path.join(REPO_ROOT, "Sports", "NFL", "outputs", "step8_nf
 DISABLED_SPORTS: set[str] = set()
 DEFAULT_SOCCER_PATH = os.path.join(REPO_ROOT, "Sports", "Soccer", "outputs", "step8_soccer_direction_clean.xlsx")
 DEFAULT_TENNIS_PATH = os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis_direction_clean.xlsx")
-DEFAULT_WNBA_PATH = os.path.join(REPO_ROOT, "Sports", "WNBA", "step8_wnba_direction.xlsx")
+DEFAULT_WNBA_PATH = os.path.join(REPO_ROOT, "Sports", "WNBA", "outputs", "step8_wnba_direction_clean.xlsx")
 DEFAULT_NHL_PATH = os.path.join(REPO_ROOT, "Sports", "NHL", "outputs", "step8_nhl_direction_clean.xlsx")
 DEFAULT_WEB_OUTDIR = os.path.join(REPO_ROOT, "ui_runner", "templates")
 
@@ -215,6 +215,8 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
         args.wnba = _first_existing_path(
             os.path.join(out, f"step8_wnba_direction_clean_{d}.xlsx"),
             os.path.join(out, f"step8_wnba_direction_{d}.xlsx"),
+            os.path.join(REPO_ROOT, "Sports", "WNBA", "outputs", "step8_wnba_direction_clean.xlsx"),
+            os.path.join(REPO_ROOT, "Sports", "WNBA", "outputs", "step8_wnba_direction.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "WNBA", "step8_wnba_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "WNBA", "step8_wnba_direction.xlsx"),
             os.path.join(REPO_ROOT, "WNBA", "step8_wnba_direction_clean.xlsx"),
@@ -9843,8 +9845,8 @@ def main():
         "--wnba",
         default="",
         help=(
-            "WNBA step8. When omitted: outputs/<date>/step8_wnba_direction_<date>.xlsx (or _clean_), "
-            f"then {DEFAULT_WNBA_PATH}"
+            "WNBA step8. When omitted: outputs/<date>/step8_wnba_direction_clean_<date>.xlsx, "
+            f"then Sports/WNBA/outputs/step8_wnba_direction_clean.xlsx; legacy paths still tried. Default constant: {DEFAULT_WNBA_PATH}"
         ),
     )
     ap.add_argument("--wcbb", default="", help="WCBB step8 direction clean xlsx (optional)")
