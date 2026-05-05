@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-05T12:04:46.864911+00:00",
+  "generated_at": "2026-05-05T15:21:44.248465+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
@@ -16,14 +16,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -42,14 +42,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -68,14 +68,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -94,14 +94,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -120,14 +120,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -146,14 +146,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -198,24 +198,24 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -234,24 +234,24 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -270,24 +270,24 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -306,24 +306,24 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -342,24 +342,24 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -378,24 +378,24 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -414,24 +414,24 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Donovan Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
+        },
+        {
+          "player": "Rui Hachimura",
+          "prop_type": "Rebs+Asts",
+          "line": 3.5,
+          "standard_line": 4.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     },
@@ -450,14 +450,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
           "player": "Cade Cunningham",
@@ -486,14 +486,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
           "player": "Cade Cunningham",
@@ -522,6 +522,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -532,24 +542,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "LeBron James",
-          "prop_type": "Pts+Asts",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -568,6 +568,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -578,24 +588,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "LeBron James",
-          "prop_type": "Pts+Asts",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -614,6 +614,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -624,24 +634,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "LeBron James",
-          "prop_type": "Pts+Asts",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -660,6 +660,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -670,24 +680,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "LeBron James",
-          "prop_type": "Pts+Asts",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -706,6 +706,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -716,24 +726,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "LeBron James",
-          "prop_type": "Pts+Asts",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -752,6 +752,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -762,24 +772,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "LeBron James",
-          "prop_type": "Pts+Asts",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -798,34 +798,34 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Donovan Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
+        },
+        {
+          "player": "Rui Hachimura",
+          "prop_type": "Rebs+Asts",
+          "line": 3.5,
+          "standard_line": 4.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     },
@@ -844,24 +844,24 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Jaylon Tyson",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
           "player": "Cade Cunningham",
@@ -890,6 +890,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -898,16 +908,6 @@
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
-        },
-        {
-          "player": "LeBron James",
-          "prop_type": "Pts+Asts",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Cade Cunningham",
@@ -936,6 +936,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -956,24 +966,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Rebs",
-          "line": 15.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
           "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -992,6 +992,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -1012,24 +1022,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Rebs",
-          "line": 15.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
           "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1048,6 +1048,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -1068,24 +1078,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Rebs",
-          "line": 15.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
           "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1104,6 +1104,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -1124,24 +1134,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Rebs",
-          "line": 15.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
           "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1160,6 +1160,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -1180,24 +1190,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Rebs",
-          "line": 15.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
           "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1216,6 +1216,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -1236,24 +1246,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Rebs",
-          "line": 15.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
           "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1272,6 +1272,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -1282,34 +1292,24 @@
           "hit_rate": 1.0
         },
         {
-          "player": "LeBron James",
-          "prop_type": "Pts+Asts",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Rebs+Asts",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 1.0
-        },
-        {
-          "player": "Donovan Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 6.5,
-          "standard_line": 8.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         }
       ]
     },
@@ -1328,6 +1328,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -1338,24 +1348,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "LeBron James",
-          "prop_type": "Pts+Asts",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
           "player": "Cade Cunningham",
@@ -1384,6 +1384,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -1402,16 +1412,6 @@
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
-        },
-        {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Rebs",
-          "line": 15.5,
-          "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
         },
         {
           "player": "Cade Cunningham",
@@ -1440,6 +1440,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -1470,24 +1480,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs",
-          "line": 13.0,
-          "standard_line": 13.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1506,6 +1506,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -1536,24 +1546,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs",
-          "line": 13.0,
-          "standard_line": 13.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1572,6 +1572,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -1602,24 +1612,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs",
-          "line": 13.0,
-          "standard_line": 13.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1638,6 +1638,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -1668,24 +1678,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs",
-          "line": 13.0,
-          "standard_line": 13.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1704,6 +1704,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -1734,24 +1744,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs",
-          "line": 13.0,
-          "standard_line": 13.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1770,6 +1770,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -1800,24 +1810,14 @@
           "hit_rate": 1.0
         },
         {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs",
-          "line": 13.0,
-          "standard_line": 13.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1836,6 +1836,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -1856,34 +1866,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Rebs",
-          "line": 15.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
           "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Donovan Mitchell",
-          "prop_type": "Rebs+Asts",
-          "line": 6.5,
-          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
+        },
+        {
+          "player": "Rui Hachimura",
+          "prop_type": "Rebs+Asts",
+          "line": 3.5,
+          "standard_line": 4.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1902,6 +1902,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -1922,24 +1932,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Rui Hachimura",
-          "prop_type": "Pts+Rebs",
-          "line": 15.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
           "standard_line": 15.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kennard",
-          "prop_type": "Rebounds",
-          "line": 1.5,
-          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
           "player": "Cade Cunningham",
@@ -1968,6 +1968,16 @@
           "hit_rate": 1.0
         },
         {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
           "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
@@ -1996,16 +2006,6 @@
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 1.0
-        },
-        {
-          "player": "Marcus Smart",
-          "prop_type": "Pts+Rebs",
-          "line": 13.0,
-          "standard_line": 13.0,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         },
         {
           "player": "Cade Cunningham",

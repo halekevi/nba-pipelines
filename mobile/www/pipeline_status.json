@@ -20,7 +20,7 @@
   "cbb": {
     "slate": {
       "exists": true,
-      "modified": "2026-05-05 11:44:44"
+      "modified": "2026-05-05 15:03:30"
     }
   },
   "nhl": {
@@ -38,7 +38,7 @@
   "mlb": {
     "slate": {
       "exists": true,
-      "modified": "2026-04-08 11:43:03"
+      "modified": "2026-05-05 15:18:04"
     }
   },
   "nfl": {
@@ -62,7 +62,7 @@
   "combined": {
     "slate": {
       "exists": true,
-      "modified": "2026-05-05 12:17:44"
+      "modified": "2026-05-05 15:21:35"
     }
   }
 }

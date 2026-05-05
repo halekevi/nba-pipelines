@@ -170,6 +170,16 @@ def main() -> None:
         print(f"[WARN] Empty sheet {sheet!r} in {xlsx} — skip.")
         return
 
+    preserve_cols = [
+        "minutes_tier",
+        "shot_role",
+        "usage_role",
+        "min_player_avg",
+        "fga_player_avg",
+        "pts_player_avg",
+    ]
+    preserved = {c: df[c].copy() for c in preserve_cols if c in df.columns}
+
     df2 = build_feature_vector(df, feat_sp)
     if len(df2) == 0:
         print(f"[WARN] 0 rows after feature build for {sp} (feat={feat_sp}) — skip.")
@@ -235,6 +245,10 @@ def main() -> None:
     df2["ml_prob"] = ml_s
     df2["edge_score"] = edge_score.values
     df2["blended_score"] = blended.values
+    # Restore context labels for downstream UI exports after model inference.
+    for c, s in preserved.items():
+        if len(s) == len(df2):
+            df2[c] = s.values
     # Do not re-sort NHL — it uses explicit rank ordering in its step7 output
     if sp.upper() != "NHL":
         df2 = df2.sort_values("blended_score", ascending=False, na_position="last", kind="mergesort")

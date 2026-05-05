@@ -115,6 +115,27 @@ def _parse_minutes(s: str) -> float:
     return pd.to_numeric(txt, errors="coerce")
 
 
+def _norm_stat_key(k: str) -> str:
+    return re.sub(r"[^a-z0-9]", "", str(k or "").lower())
+
+
+def _build_stat_map(raw_keys: List[str], raw_stats: List[str]) -> Dict[str, str]:
+    out: Dict[str, str] = {}
+    for k, v in zip(raw_keys, raw_stats):
+        kk = _norm_stat_key(k)
+        if kk:
+            out[kk] = str(v)
+    return out
+
+
+def _first_stat(stat_map: Dict[str, str], aliases: List[str]) -> str:
+    for a in aliases:
+        aa = _norm_stat_key(a)
+        if aa in stat_map:
+            return stat_map[aa]
+    return ""
+
+
 def _is_allstar(dt: datetime) -> bool:
     d = dt.strftime("%Y-%m-%d")
     for start, end in ALLSTAR_BREAKS:
@@ -194,17 +215,18 @@ def parse_boxscore(summary: dict) -> pd.DataFrame:
             if not raw_stats or did_not_play:
                 continue
 
-            stat_map: Dict[str, str] = {}
-            for k, v in zip(keys, raw_stats):
-                stat_map[k] = str(v)
-
-            def _g(k: str) -> str:
-                return stat_map.get(k, stat_map.get(k.lower(), ""))
+            stat_map = _build_stat_map(keys, raw_stats)
 
             # Parse shooting: ESPN returns "FGM-FGA", "3PM-3PA", "FTM-FTA"
-            fgm, fga   = _parse_made_att(_g("FG") or _g("FGM-FGA"))
-            fg3m, fg3a = _parse_made_att(_g("3PT") or _g("3PM-3PA"))
-            ftm, fta   = _parse_made_att(_g("FT") or _g("FTM-FTA"))
+            fgm, fga = _parse_made_att(
+                _first_stat(stat_map, ["FG", "FGM-FGA", "fieldGoalsMade-fieldGoalsAttempted"])
+            )
+            fg3m, fg3a = _parse_made_att(
+                _first_stat(stat_map, ["3PT", "3PM-3PA", "threePointFieldGoalsMade-threePointFieldGoalsAttempted"])
+            )
+            ftm, fta = _parse_made_att(
+                _first_stat(stat_map, ["FT", "FTM-FTA", "freeThrowsMade-freeThrowsAttempted"])
+            )
             fg2m = (fgm - fg3m) if not (np.isnan(fgm) or np.isnan(fg3m)) else np.nan
             fg2a = (fga - fg3a) if not (np.isnan(fga) or np.isnan(fg3a)) else np.nan
 
@@ -215,13 +237,13 @@ def parse_boxscore(summary: dict) -> pd.DataFrame:
                 "PLAYER_NAME":      ath_name,
                 "PLAYER_NORM":      ath_norm,
                 "TEAM":             team_abbr,
-                "MIN":              _parse_minutes(_g("MIN")),
-                "PTS":              pd.to_numeric(_g("PTS"), errors="coerce"),
-                "REB":              pd.to_numeric(_g("REB") or _g("DREB"), errors="coerce"),
-                "AST":              pd.to_numeric(_g("AST"), errors="coerce"),
-                "STL":              pd.to_numeric(_g("STL"), errors="coerce"),
-                "BLK":              pd.to_numeric(_g("BLK"), errors="coerce"),
-                "TO":               pd.to_numeric(_g("TO") or _g("TOV"), errors="coerce"),
+                "MIN":              _parse_minutes(_first_stat(stat_map, ["MIN", "minutes"])),
+                "PTS":              pd.to_numeric(_first_stat(stat_map, ["PTS", "points"]), errors="coerce"),
+                "REB":              pd.to_numeric(_first_stat(stat_map, ["REB", "rebounds", "DREB", "defensiveRebounds"]), errors="coerce"),
+                "AST":              pd.to_numeric(_first_stat(stat_map, ["AST", "assists"]), errors="coerce"),
+                "STL":              pd.to_numeric(_first_stat(stat_map, ["STL", "steals"]), errors="coerce"),
+                "BLK":              pd.to_numeric(_first_stat(stat_map, ["BLK", "blocks"]), errors="coerce"),
+                "TO":               pd.to_numeric(_first_stat(stat_map, ["TO", "TOV", "turnovers"]), errors="coerce"),
                 "FGM":              fgm,  "FGA":  fga,
                 "FG3M":             fg3m, "FG3A": fg3a,
                 "FG2M":             fg2m, "FG2A": fg2a,
@@ -310,7 +332,7 @@ def derive_stat(df: pd.DataFrame, prop_norm: str) -> pd.Series:
     if p == "fga":                      return fga
     if p == "fgm":                      return fgm
     if p in ("fg3a","3pta"):            return fg3a
-    if p in ("fg3m","3ptm"):            return fg3m
+    if p in ("fg3m","3ptm","3ptmade","3pt made","3pm"): return fg3m
     if p in ("fg2a","2pta"):            return fg2a
     if p in ("fg2m","2ptm"):            return fg2m
     if p in ("fta","freethrowsattempted"): return fta
@@ -359,6 +381,7 @@ def main():
 
     print(f"→ Loading slate: {args.slate}")
     slate = pd.read_csv(args.slate, dtype=str, encoding="utf-8-sig").fillna("")
+    prop_vals = sorted({str(v).strip().lower() for v in slate.get("prop_norm", slate.get("prop_type", "")).astype(str).tolist() if str(v).strip()})
 
     # Central DB (WNBA boxscores) — always attempt to keep it updated
     db_path = Path(args.db) if args.db else None
@@ -384,8 +407,14 @@ def main():
         fetch_dates.append(d)
 
     existing_events: set = set()
+    incomplete_events: set = set()
     if not cache.empty and "event_id" in cache.columns:
         existing_events = set(cache["event_id"].astype(str).unique())
+        if "PTS" in cache.columns:
+            cache["_pts_num"] = pd.to_numeric(cache["PTS"], errors="coerce")
+            grouped = cache.groupby(cache["event_id"].astype(str))["_pts_num"].apply(lambda s: int(s.notna().sum()))
+            incomplete_events = set(grouped[grouped <= 0].index.tolist())
+            cache = cache.drop(columns=["_pts_num"], errors="ignore")
 
     new_rows: List[dict] = []
     events_fetched = events_skipped = 0
@@ -399,7 +428,7 @@ def main():
             continue
 
         for eid in event_ids:
-            if eid in existing_events:
+            if eid in existing_events and eid not in incomplete_events:
                 continue
             try:
                 url     = SUMMARY_URL.format(event_id=eid)
@@ -467,6 +496,8 @@ def main():
 
     if new_rows:
         new_df = pd.DataFrame(new_rows)
+        if incomplete_events:
+            cache = cache[~cache["event_id"].astype(str).isin(incomplete_events)].copy()
         cache  = pd.concat([cache, new_df], ignore_index=True) if not cache.empty else new_df
         cache.to_csv(cache_path, index=False, encoding="utf-8-sig")
         print(f"Cache updated → {cache_path}  ({len(cache)} rows)")
@@ -605,6 +636,10 @@ def main():
     if misses and args.debug_misses:
         pd.DataFrame(misses).to_csv(args.debug_misses, index=False)
         print(f"  Debug misses → {args.debug_misses} ({len(misses)} rows)")
+
+    cache_cols = list(cache_filt.columns) if not cache_filt.empty else list(cache.columns)
+    print("  [diag] step1 prop_norm values:", prop_vals[:20], ("..." if len(prop_vals) > 20 else ""))
+    print("  [diag] ESPN cache columns:", cache_cols[:25], ("..." if len(cache_cols) > 25 else ""))
 
     filled = int(pd.to_numeric(out.get("stat_last5_avg",""), errors="coerce").notna().sum())
     print(f"  stat_last5_avg filled: {filled}/{len(out)}")

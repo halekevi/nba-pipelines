@@ -1,25 +1,25 @@
 {
-  "generated_at": "2026-05-04T15:23:47.211007+00:00",
+  "generated_at": "2026-05-05T15:21:44.248465+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -32,20 +32,20 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -58,20 +58,20 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -84,20 +84,20 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -110,20 +110,20 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -136,20 +136,20 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -162,24 +162,24 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Naz Reid",
-          "prop_type": "Pts+Asts",
-          "line": 9.5,
-          "standard_line": 14.5,
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -188,30 +188,30 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -224,30 +224,30 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -260,30 +260,30 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -296,30 +296,30 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -332,30 +332,30 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -368,30 +368,30 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -404,34 +404,34 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 23.5,
-          "standard_line": 24.5,
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
+        },
+        {
+          "player": "Rui Hachimura",
+          "prop_type": "Rebs+Asts",
+          "line": 3.5,
+          "standard_line": 4.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     },
@@ -440,34 +440,34 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
-          "prop_type": "Pts+Asts",
-          "line": 9.5,
-          "standard_line": 14.5,
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -476,34 +476,34 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Naz Reid",
+          "player": "Marcus Smart",
           "prop_type": "Pts+Asts",
-          "line": 9.5,
-          "standard_line": 14.5,
-          "pick_type": "Demon",
-          "delta": 5.0,
+          "line": 12.5,
+          "standard_line": 12.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
+        },
+        {
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.5,
+          "pick_type": "Demon",
+          "delta": 4.0,
+          "direction": "OVER",
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -512,40 +512,40 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -558,40 +558,40 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -604,40 +604,40 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -650,40 +650,40 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -696,40 +696,40 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -742,40 +742,40 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -788,44 +788,44 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 23.5,
-          "standard_line": 24.5,
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
+        },
+        {
+          "player": "Rui Hachimura",
+          "prop_type": "Rebs+Asts",
+          "line": 3.5,
+          "standard_line": 4.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     },
@@ -834,44 +834,44 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
-          "prop_type": "Pts+Asts",
-          "line": 9.5,
-          "standard_line": 14.5,
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -880,44 +880,44 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Naz Reid",
-          "prop_type": "Pts+Asts",
-          "line": 9.5,
-          "standard_line": 14.5,
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -926,38 +926,38 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
-          "prop_type": "Pts+Rebs",
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
@@ -966,10 +966,10 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -982,38 +982,38 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
-          "prop_type": "Pts+Rebs",
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
@@ -1022,10 +1022,10 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -1038,38 +1038,38 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
-          "prop_type": "Pts+Rebs",
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
@@ -1078,10 +1078,10 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -1094,38 +1094,38 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
-          "prop_type": "Pts+Rebs",
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
@@ -1134,10 +1134,10 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1150,38 +1150,38 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
-          "prop_type": "Pts+Rebs",
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
@@ -1190,10 +1190,10 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -1206,38 +1206,38 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
-          "prop_type": "Pts+Rebs",
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
@@ -1246,10 +1246,10 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -1262,54 +1262,54 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
-          "pick_type": "Goblin",
-          "delta": 2.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
+          "player": "Jalen Williams",
           "prop_type": "Points",
-          "line": 23.5,
-          "standard_line": 24.5,
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
+        },
+        {
+          "player": "Rui Hachimura",
+          "prop_type": "Rebs+Asts",
+          "line": 3.5,
+          "standard_line": 4.5,
+          "pick_type": "Goblin",
+          "delta": 2.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1318,54 +1318,54 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
-          "prop_type": "Pts+Asts",
-          "line": 9.5,
-          "standard_line": 14.5,
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1374,38 +1374,38 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
-          "prop_type": "Pts+Rebs",
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
@@ -1414,14 +1414,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
-          "prop_type": "Pts+Asts",
-          "line": 9.5,
-          "standard_line": 14.5,
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1430,38 +1430,38 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
-          "prop_type": "Pts+Rebs",
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
@@ -1470,20 +1470,20 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -1496,38 +1496,38 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
-          "prop_type": "Pts+Rebs",
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
@@ -1536,20 +1536,20 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -1562,38 +1562,38 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
-          "prop_type": "Pts+Rebs",
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
@@ -1602,20 +1602,20 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -1628,38 +1628,38 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
-          "prop_type": "Pts+Rebs",
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
@@ -1668,20 +1668,20 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1694,38 +1694,38 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
-          "prop_type": "Pts+Rebs",
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
@@ -1734,20 +1734,20 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -1760,38 +1760,38 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
-          "prop_type": "Pts+Rebs",
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
@@ -1800,20 +1800,20 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -1826,38 +1826,38 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
-          "prop_type": "Pts+Rebs",
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
@@ -1866,24 +1866,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Assists",
-          "line": 2.5,
-          "standard_line": 4.0,
+          "player": "Rui Hachimura",
+          "prop_type": "Rebs+Asts",
+          "line": 3.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1892,38 +1892,38 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
-          "prop_type": "Pts+Rebs",
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
@@ -1932,24 +1932,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Devin Vassell",
-          "prop_type": "Rebs+Asts",
-          "line": 4.5,
-          "standard_line": 6.5,
+          "player": "Jalen Williams",
+          "prop_type": "Points",
+          "line": 14.5,
+          "standard_line": 15.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Naz Reid",
-          "prop_type": "Pts+Asts",
-          "line": 9.5,
-          "standard_line": 14.5,
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1958,38 +1958,38 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "OG Anunoby",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 25.5,
-          "standard_line": 25.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Asts",
+          "line": 12.5,
+          "standard_line": 12.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Luke Kornet",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
           "line": 10.5,
           "standard_line": 10.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Joel Embiid",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 40.5,
-          "standard_line": 41.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tyrese Maxey",
-          "prop_type": "Pts+Rebs",
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
@@ -1998,24 +1998,24 @@
           "hit_rate": 0.8
         },
         {
-          "player": "De'Aaron Fox",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Naz Reid",
-          "prop_type": "Pts+Asts",
-          "line": 9.5,
-          "standard_line": 14.5,
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 7.5,
           "pick_type": "Demon",
-          "delta": 5.0,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 0.6625
         }
       ]
     }

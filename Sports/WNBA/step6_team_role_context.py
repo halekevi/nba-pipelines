@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """
-step6_cbb_team_role_context.py
+step6_team_role_context.py  (WNBA)
 
-CBB Step 6:
-- Adds minutes / shot / usage tiers
-- Merges team roles (role_*) from Step10
-- Merges defense context from Step11
+WNBA Step 6:
+- Adds minutes / shot / usage tiers for downstream ranking context
+- Uses available stat columns from Step 4/5
 """
 
 from __future__ import annotations
@@ -27,21 +26,30 @@ from utils.pipeline_dated_outputs import copy_pipeline_output_to_dated_dirs
 # ----------------------------
 
 def tier_minutes(x):
-    if pd.isna(x): return "UNKNOWN"
-    if x <= 20: return "LOW"
-    if x <= 30: return "MEDIUM"
+    if pd.isna(x):
+        return "UNKNOWN"
+    if x < 24:
+        return "LOW"
+    if x < 32:
+        return "MED"
     return "HIGH"
 
 def tier_shots(x):
-    if pd.isna(x): return "UNKNOWN"
-    if x <= 8: return "LOW_VOL"
-    if x <= 14: return "MID_VOL"
+    if pd.isna(x):
+        return "UNKNOWN"
+    if x < 8:
+        return "LOW_VOL"
+    if x < 14:
+        return "MID_VOL"
     return "HIGH_VOL"
 
 def tier_usage(x):
-    if pd.isna(x): return "UNKNOWN"
-    if x <= 10: return "SUPPORT"
-    if x <= 18: return "SECONDARY"
+    if pd.isna(x):
+        return "UNKNOWN"
+    if x < 7:
+        return "SUPPORT"
+    if x < 13:
+        return "SECONDARY"
     return "PRIMARY"
 
 
@@ -64,18 +72,31 @@ def main():
     # Basic tiers (already in Step5 stats)
     # -----------------------------------
 
-    # Collect all new columns into a dict and concat once to avoid
-    # DataFrame fragmentation warnings on wide DataFrames (95+ cols)
-    last5 = pd.to_numeric(df.get("stat_last5_avg"), errors="coerce")
-    new_cols = pd.DataFrame({
-        "min_player_avg": last5,
-        "fga_player_avg": last5,
-        "pts_player_avg": last5,
-        "minutes_tier":   last5.apply(tier_minutes),
-        "shot_role":      last5.apply(tier_shots),
-        "usage_role":     last5.apply(tier_usage),
-    }, index=df.index)
-    df = pd.concat([df, new_cols], axis=1).copy()
+    # WNBA boards mainly include pts/ast/reb/3ptmade/stl/blk. Use last5 + season
+    # values from step4 as role signals (minutes metric falls back to season stat
+    # signal when explicit minutes are unavailable).
+    def _num_series(name: str) -> pd.Series:
+        if name in df.columns:
+            return pd.to_numeric(df[name], errors="coerce")
+        return pd.Series(np.nan, index=df.index, dtype=float)
+
+    last5 = _num_series("stat_last5_avg")
+    season = _num_series("stat_season_avg")
+    line = _num_series("line")
+    min_signal = _num_series("min_player_avg")
+    min_signal = min_signal.where(min_signal.notna(), season.where(season.notna(), last5))
+    shot_signal = last5.where(last5.notna(), season.where(season.notna(), line))
+    usage_signal = season.where(season.notna(), last5.where(last5.notna(), line))
+    new_cols = {
+        "min_player_avg": min_signal,
+        "fga_player_avg": shot_signal,
+        "pts_player_avg": usage_signal,
+        "minutes_tier":   min_signal.apply(tier_minutes),
+        "shot_role":      shot_signal.apply(tier_shots),
+        "usage_role":     usage_signal.apply(tier_usage),
+    }
+    for c, s in new_cols.items():
+        df[c] = s
 
     # -----------------------------------
     # Merge Team Roles (Step10)
