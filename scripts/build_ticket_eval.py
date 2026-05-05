@@ -2689,6 +2689,10 @@ def _build_html(
         ".ticket-sections-wrap > details.ticket-bucket:first-child{margin-top:0;}",
         ".sec{margin-top:22px;}",
         ".ticket-sections-wrap > section.sec:first-of-type,.ticket-bucket-body > section.sec:first-of-type{margin-top:8px;}",
+        # Hide any stray unstyled disclosure rows rendered outside the card wrapper.
+        ".ticket-eval-main > details:not(.ticket-bucket){display:none!important;}",
+        ".ticket-eval-main > summary{display:none!important;}",
+        ".ticket-sections-wrap ~ details.ticket-bucket:not(.manual-tb){display:none!important;}",
         ".sec-head{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,3.2vw,40px);color:var(--gold);margin-bottom:8px;padding-bottom:14px;"
         "border-bottom:1px solid var(--glass-bd);letter-spacing:3px;text-shadow:0 0 24px rgba(240,165,0,.2);}",
         ".ticket-card{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);"
