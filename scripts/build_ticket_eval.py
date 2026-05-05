@@ -2398,6 +2398,11 @@ def _build_html(
     perfect = 0
     money_wins = 0
     money_losses = 0
+    sport_ticket_summary: dict[str, dict[str, int]] = {
+        "NBA": {"wins": 0, "losses": 0},
+        "NHL": {"wins": 0, "losses": 0},
+        "WNBA": {"wins": 0, "losses": 0},
+    }
     for t in tickets_flat:
         gname = str(t.get("_group_name") or "Group")
         legs = t.get("legs") or []
@@ -2429,13 +2434,37 @@ def _build_html(
             continue
         if all(x == "VOID" for x in gs):
             continue
-        if _ticket_pays_money(gname, gs):
+        pays_money = _ticket_pays_money(gname, gs)
+        bucket = _sport_key(_ticket_group_bucket(gname))
+        sport_rollup = None
+        if bucket in ("NBA", "NBA1H", "NBA1Q"):
+            sport_rollup = "NBA"
+        elif bucket == "NHL":
+            sport_rollup = "NHL"
+        elif bucket == "WNBA":
+            sport_rollup = "WNBA"
+
+        if pays_money:
             money_wins += 1
+            if sport_rollup:
+                sport_ticket_summary[sport_rollup]["wins"] += 1
         else:
             money_losses += 1
+            if sport_rollup:
+                sport_ticket_summary[sport_rollup]["losses"] += 1
 
     ticket_decided = money_wins + money_losses
     ticket_pct = (100.0 * money_wins / ticket_decided) if ticket_decided else 0.0
+
+    def _ticket_win_rate_pct(label: str) -> float | None:
+        w = int(sport_ticket_summary.get(label, {}).get("wins", 0))
+        l = int(sport_ticket_summary.get(label, {}).get("losses", 0))
+        d = w + l
+        return (100.0 * w / d) if d > 0 else None
+
+    nba_ticket_pct = _ticket_win_rate_pct("NBA")
+    nhl_ticket_pct = _ticket_win_rate_pct("NHL")
+    wnba_ticket_pct = _ticket_win_rate_pct("WNBA")
 
     pay_summary_rows: list[dict[str, Any]] = []
     for t in tickets_flat:
@@ -2727,6 +2756,22 @@ def _build_html(
         '<div class="stats-bar">',
         '<div class="sum-row">',
         f'<div class="sum-item"><div class="sum-val">{ticket_pct:.1f}%</div><div class="sum-lab">TICKET HIT RATE</div></div>',
+        (
+            f'<div class="sum-item"><div class="sum-val">{nba_ticket_pct:.1f}%</div><div class="sum-lab">NBA TKT WIN RATE</div></div>'
+            if nba_ticket_pct is not None
+            else '<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">NBA TKT WIN RATE</div></div>'
+        ),
+        (
+            f'<div class="sum-item"><div class="sum-val">{nhl_ticket_pct:.1f}%</div><div class="sum-lab">NHL TKT WIN RATE</div></div>'
+            if nhl_ticket_pct is not None
+            else '<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">NHL TKT WIN RATE</div></div>'
+        ),
+        (
+            f'<div class="sum-item"><div class="sum-val">{wnba_ticket_pct:.1f}%</div><div class="sum-lab">WNBA TKT WIN RATE</div></div>'
+            if wnba_ticket_pct is not None
+            else '<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">WNBA TKT WIN RATE</div></div>'
+        ),
+        f'<div class="sum-item"><div class="sum-val">{ticket_pct:.1f}%</div><div class="sum-lab">ALL GENERATED WIN RATE</div></div>',
         f'<div class="sum-item"><div class="sum-val green">{hits}</div><div class="sum-lab">HITS</div></div>',
         f'<div class="sum-item"><div class="sum-val red">{misses}</div><div class="sum-lab">MISSES</div></div>',
         f'<div class="sum-item"><div class="sum-val void">{voids}</div><div class="sum-lab">VOID/PUSH</div></div>',
