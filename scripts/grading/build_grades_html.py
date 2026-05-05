@@ -1048,30 +1048,6 @@ def def_tier_table(rows: list[dict], min_decided: int = 10) -> str:
     }
     dt_agg.sort(key=lambda x: order.get(x["key"].lower().replace("🟢","").replace("🟡","").replace("🔴","").strip(), 99))
 
-    def _norm_def_tier_early(x: str) -> str:
-        return (
-            str(x or "")
-            .lower()
-            .replace("🟢", "")
-            .replace("🟡", "")
-            .replace("🔴", "")
-            .strip()
-        )
-
-    rows_html = ""
-    for d in dt_agg:
-        if d["decided"] == 0: continue
-        dkey0 = _norm_def_tier_early(d["key"])
-        sub_main = [r for r in rows if _norm_def_tier_early(r.get("Def Tier", "")) == dkey0]
-        ou_main = over_under_lines_html(sub_main)
-        rows_html += f"""<tr class="{'player-hit' if d['hit_rate']>=55 else ('player-miss' if d['hit_rate']<48 else 'player-warn')}">
-          <td style="vertical-align:top"><span style="font-weight:700">{h(d['key'])}</span>{ou_main}</td>
-          <td class="right mono">{fmt_num(d['decided'])}</td>
-          <td class="right mono">{fmt_num(d['hits'])}</td>
-          <td>{rate_bar_html(d['hit_rate'])}</td>
-        </tr>"""
-    if not rows_html:
-        return ""
     # Breakdown matrices inside each defense tier (pick type + ticket tier)
     def _norm_def_tier(x: str) -> str:
         return (
@@ -1186,12 +1162,7 @@ def def_tier_table(rows: list[dict], min_decided: int = 10) -> str:
     </div>
     {split_picktype_tables}"""
 
-    return f"""<div class="section-label">HIT RATE BY OPPONENT DEFENSIVE TIER</div>
-    <div class="table-wrap" style="margin-bottom:20px"><table>
-      <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody>{rows_html}</tbody>
-    </table></div>
-    {detail_tables}"""
+    return detail_tables or ""
 
 
 # ══════════════════════════════════════════════════════════════════════════════
