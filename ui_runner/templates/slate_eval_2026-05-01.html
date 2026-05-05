@@ -79,6 +79,29 @@ border:1px solid var(--glass-bd);border-radius:999px;padding:8px 14px;letter-spa
 .matrix-collapsible tr.matrix-warn td:first-child{border-left:3px solid var(--gold)}
 .matrix-collapsible tr.matrix-empty td,.matrix-collapsible tr.matrix-sparse td{opacity:.88}
 .matrix-collapsible tr.matrix-sparse td:first-child{border-left:3px dashed rgba(255,255,255,0.12)}
+.pbw-controls{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 14px}
+.pbw-control{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,0.2);border:1px solid var(--glass-bd);border-radius:10px;padding:6px 10px}
+.pbw-control label{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2)}
+.pbw-control select{background:#0f1324;color:var(--text);border:1px solid var(--glass-bd);border-radius:8px;padding:6px 8px;font-size:12px}
+.pbw-tabs{display:flex;gap:8px;margin-bottom:12px}
+.pbw-tab-btn{background:rgba(255,255,255,0.04);border:1px solid var(--glass-bd);border-radius:10px;padding:8px 12px;color:var(--muted);font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;cursor:pointer}
+.pbw-tab-btn.active{color:var(--text);border-color:rgba(255,255,255,0.25)}
+.pbw-tab-panel{display:none}
+.pbw-tab-panel.active{display:block}
+.pbw-pt-header{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--gold);padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.1);margin:16px 0 10px;text-transform:uppercase}
+.pbw-tier-title{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2);letter-spacing:1px;margin:8px 0}
+.pbw-tier-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.pbw-panel-title{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1.4px;margin-bottom:6px}
+.pbw-panel-title.best{color:#0F6E56}
+.pbw-panel-title.worst{color:#993C1D}
+.pbw-mini-bar{height:6px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
+.pbw-mini-bar-fill{height:100%}
+.pbw-heatmap-wrap{overflow:auto;border:1px solid var(--glass-bd);border-radius:12px}
+.pbw-heatmap{width:100%;border-collapse:separate;border-spacing:0}
+.pbw-heatmap th,.pbw-heatmap td{padding:10px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:center}
+.pbw-heatmap th:first-child,.pbw-heatmap td:first-child{position:sticky;left:0;background:#0f1324;text-align:left;z-index:1}
+.pbw-cell-rate{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px}
+.pbw-cell-dec{font-size:11px;color:rgba(0,0,0,0.65)}
 .section-label{font-family:'Bebas Neue',sans-serif;font-size:clamp(14px,1.08vw,16px);color:var(--muted);letter-spacing:2.5px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08)}
 .stat-grid{display:grid;gap:14px;margin-bottom:24px;width:100%;max-width:100%;box-sizing:border-box}
@@ -152,6 +175,7 @@ td.muted{color:var(--muted2)}
 .stat-grid{justify-items:start;justify-content:start}
 .stat-grid-4,.stat-grid-2{grid-template-columns:repeat(auto-fill,minmax(min(100%,9rem),max-content))}
 .two-col,.three-col{grid-template-columns:1fr}
+.pbw-tier-grid{grid-template-columns:1fr}
 .insight-grid{display:grid;grid-template-columns:1fr;gap:14px;width:100%;max-width:100%}
 .insight-grid>.insight-card:last-child:nth-child(3n+1){grid-column:auto}
 .insight-card{width:100%;max-width:100%;min-width:0}
@@ -407,547 +431,13 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
 </div>
       </div>
     </details>
-      <div class="section-label">PROP TYPE BREAKDOWNS</div>
-        <div class="three-col">
-          <div><div class="section-label">STANDARD — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">6</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Pts+Rebs+Asts</td>
-          <td class="right mono">14</td>
-          <td class="right mono pos">8</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:57.1%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">57.1%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Runs</td>
-          <td class="right mono">21</td>
-          <td class="right mono pos">11</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:52.4%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">52.4%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">25</td>
-          <td class="right mono pos">13</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:52.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">52.0%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Points</td>
-          <td class="right mono">48</td>
-          <td class="right mono pos">24</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Hits</td>
-          <td class="right mono">16</td>
-          <td class="right mono pos">7</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:43.8%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">43.8%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">32</td>
-          <td class="right mono pos">12</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:37.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">37.5%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Walks</td>
-          <td class="right mono">8</td>
-          <td class="right mono pos">2</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:25.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">25.0%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">GOBLIN — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Assists</td>
-          <td class="right mono">11</td>
-          <td class="right mono pos">10</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:90.9%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">90.9%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Points</td>
-          <td class="right mono">42</td>
-          <td class="right mono pos">36</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:85.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">85.7%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">21</td>
-          <td class="right mono pos">18</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:85.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">85.7%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Runs</td>
-          <td class="right mono">11</td>
-          <td class="right mono pos">7</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:63.6%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">63.6%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Hits</td>
-          <td class="right mono">185</td>
-          <td class="right mono pos">116</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:62.7%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">62.7%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">192</td>
-          <td class="right mono pos">117</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:60.9%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">60.9%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">165</td>
-          <td class="right mono pos">93</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:56.4%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">56.4%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">DEMON — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Assists</td>
-          <td class="right mono">16</td>
-          <td class="right mono pos">14</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:87.5%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">87.5%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Points</td>
-          <td class="right mono">26</td>
-          <td class="right mono pos">14</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:53.8%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">53.8%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">16</td>
-          <td class="right mono pos">7</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:43.8%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">43.8%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Runs</td>
-          <td class="right mono">285</td>
-          <td class="right mono pos">72</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:25.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">25.3%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Walks</td>
-          <td class="right mono">201</td>
-          <td class="right mono pos">49</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:24.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">24.4%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">709</td>
-          <td class="right mono pos">137</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:19.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">19.3%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">240</td>
-          <td class="right mono pos">45</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:18.8%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">18.8%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Hits</td>
-          <td class="right mono">244</td>
-          <td class="right mono pos">37</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:15.2%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">15.2%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">OVER — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Assists</td>
-          <td class="right mono">30</td>
-          <td class="right mono pos">25</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:83.3%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">83.3%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">plus/minus</td>
-          <td class="right mono">5</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:80.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">80.0%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">43</td>
-          <td class="right mono pos">29</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:67.4%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">67.4%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Points</td>
-          <td class="right mono">113</td>
-          <td class="right mono pos">73</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:64.6%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">64.6%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Pts+Rebs+Asts</td>
-          <td class="right mono">12</td>
-          <td class="right mono pos">6</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">points</td>
-          <td class="right mono">22</td>
-          <td class="right mono pos">10</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:45.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">45.5%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Hits</td>
-          <td class="right mono">434</td>
-          <td class="right mono pos">154</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:35.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">35.5%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">assists</td>
-          <td class="right mono">17</td>
-          <td class="right mono pos">6</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:35.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">35.3%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">UNDER — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">14</td>
-          <td class="right mono pos">10</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:71.4%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">71.4%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Hits</td>
-          <td class="right mono">11</td>
-          <td class="right mono pos">6</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:54.5%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">54.5%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">14</td>
-          <td class="right mono pos">7</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Runs</td>
-          <td class="right mono">9</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:44.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">44.4%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Walks</td>
-          <td class="right mono">6</td>
-          <td class="right mono pos">2</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">3-PT Made</td>
-          <td class="right mono">5</td>
-          <td class="right mono pos">0</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">TIER A — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">16</td>
-          <td class="right mono pos">16</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Points</td>
-          <td class="right mono">22</td>
-          <td class="right mono pos">21</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:95.5%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">95.5%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Assists</td>
-          <td class="right mono">10</td>
-          <td class="right mono pos">8</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:80.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">80.0%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Goalie Saves</td>
-          <td class="right mono">10</td>
-          <td class="right mono pos">7</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:70.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">70.0%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Hits</td>
-          <td class="right mono">175</td>
-          <td class="right mono pos">100</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:57.1%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">57.1%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">189</td>
-          <td class="right mono pos">102</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:54.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">54.0%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Shots</td>
-          <td class="right mono">37</td>
-          <td class="right mono pos">19</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:51.4%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">51.4%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">153</td>
-          <td class="right mono pos">75</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:49.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">49.0%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">TIER B — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Points</td>
-          <td class="right mono">18</td>
-          <td class="right mono pos">13</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:72.2%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">72.2%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Hits</td>
-          <td class="right mono">24</td>
-          <td class="right mono pos">16</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">7</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:57.1%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">57.1%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">30</td>
-          <td class="right mono pos">16</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:53.3%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">53.3%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Assists</td>
-          <td class="right mono">6</td>
-          <td class="right mono pos">3</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Runs</td>
-          <td class="right mono">7</td>
-          <td class="right mono pos">3</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:42.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">42.9%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Walks</td>
-          <td class="right mono">5</td>
-          <td class="right mono pos">2</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:40.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">40.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">81</td>
-          <td class="right mono pos">14</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:17.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">17.3%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">TIER C — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Assists</td>
-          <td class="right mono">5</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:80.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">80.0%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">points</td>
-          <td class="right mono">12</td>
-          <td class="right mono pos">8</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">27</td>
-          <td class="right mono pos">14</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:51.9%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">51.9%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Runs</td>
-          <td class="right mono">10</td>
-          <td class="right mono pos">5</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Points</td>
-          <td class="right mono">17</td>
-          <td class="right mono pos">8</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:47.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">47.1%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">assists</td>
-          <td class="right mono">11</td>
-          <td class="right mono pos">5</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:45.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">45.5%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Goals</td>
-          <td class="right mono">5</td>
-          <td class="right mono pos">2</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:40.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">40.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">37</td>
-          <td class="right mono pos">14</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:37.8%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">37.8%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">TIER D — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Pts+Rebs+Asts</td>
-          <td class="right mono">12</td>
-          <td class="right mono pos">8</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Points</td>
-          <td class="right mono">59</td>
-          <td class="right mono pos">32</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:54.2%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">54.2%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">16</td>
-          <td class="right mono pos">6</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:37.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">37.5%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Goalie Saves</td>
-          <td class="right mono">12</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Runs</td>
-          <td class="right mono">269</td>
-          <td class="right mono pos">76</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:28.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">28.3%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Assists</td>
-          <td class="right mono">50</td>
-          <td class="right mono pos">14</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:28.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">28.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">points</td>
-          <td class="right mono">8</td>
-          <td class="right mono pos">2</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:25.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">25.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Walks</td>
-          <td class="right mono">194</td>
-          <td class="right mono pos">48</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:24.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">24.7%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">VS ELITE/ABOVE AVG DEF — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Assists</td>
-          <td class="right mono">27</td>
-          <td class="right mono pos">24</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:88.9%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">88.9%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">36</td>
-          <td class="right mono pos">24</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Pts+Rebs+Asts</td>
-          <td class="right mono">12</td>
-          <td class="right mono pos">8</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Points</td>
-          <td class="right mono">96</td>
-          <td class="right mono pos">62</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:64.6%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">64.6%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">3-PT Made</td>
-          <td class="right mono">5</td>
-          <td class="right mono pos">0</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">VS AVG / BELOW AVG / WEAK DEF — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">7</td>
-          <td class="right mono pos">5</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:71.4%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">71.4%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Points</td>
-          <td class="right mono">20</td>
-          <td class="right mono pos">12</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:60.0%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">60.0%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-        </div>
-        <div class="two-col">
-          <div>
-            <div class="section-label">OVERALL TOP PROP TYPES BY HIT RATE (≥10 DECIDED)</div>
-            <div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">43</td>
-          <td class="right mono pos">29</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:67.4%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">67.4%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Points</td>
-          <td class="right mono">116</td>
-          <td class="right mono pos">74</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:63.8%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">63.8%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Pts+Rebs+Asts</td>
-          <td class="right mono">14</td>
-          <td class="right mono pos">8</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:57.1%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">57.1%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Goalie Saves</td>
-          <td class="right mono">26</td>
-          <td class="right mono pos">14</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:53.8%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">53.8%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">points</td>
-          <td class="right mono">23</td>
-          <td class="right mono pos">10</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:43.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">43.5%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Assists</td>
-          <td class="right mono">71</td>
-          <td class="right mono pos">29</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:40.8%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">40.8%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Hits</td>
-          <td class="right mono">445</td>
-          <td class="right mono pos">160</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:36.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">36.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">assists</td>
-          <td class="right mono">17</td>
-          <td class="right mono pos">6</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:35.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">35.3%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">430</td>
-          <td class="right mono pos">151</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:35.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">35.1%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">933</td>
-          <td class="right mono pos">266</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:28.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">28.5%</div></div></td>
-        </tr></tbody>
-    </table></div>
-          </div>
-          <div>
-            <div class="section-label">OVERALL WORST PROP TYPES (≥10 DECIDED)</div>
-            <div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-miss">
-          <td class="mono">Fouls</td>
-          <td class="right mono">46</td>
-          <td class="right mono pos">12</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:26.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">26.1%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Walks</td>
-          <td class="right mono">213</td>
-          <td class="right mono pos">54</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:25.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">25.4%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Shots</td>
-          <td class="right mono">181</td>
-          <td class="right mono pos">38</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:21.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">21.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Goal + Assist</td>
-          <td class="right mono">46</td>
-          <td class="right mono pos">9</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:19.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">19.6%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Home Runs</td>
-          <td class="right mono">182</td>
-          <td class="right mono pos">18</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.9%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Goals</td>
-          <td class="right mono">77</td>
-          <td class="right mono pos">7</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.1%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Stolen Bases</td>
-          <td class="right mono">118</td>
-          <td class="right mono pos">9</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:7.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">7.6%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">shots_on_goal</td>
-          <td class="right mono">34</td>
-          <td class="right mono pos">1</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:2.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">2.9%</div></div></td>
-        </tr></tbody>
-    </table></div>
-          </div>
-        </div>
+      <details class="matrix-collapsible prop-breakdown-widget" open>
+      <summary>PROP TYPE BREAKDOWNS</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Interactive Best/Worst and heatmap views across pick type, tier, and prop type. Filters apply to both tabs.</div>
+        <div class="pbw-root" data-prop-breakdown-rows='[{&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 5}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 7, &quot;hits&quot;: 7}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 8, &quot;hits&quot;: 8}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 3, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 6}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 4}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 3, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 5}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 4}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 8, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 5}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 5}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 11, &quot;hits&quot;: 6}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 4}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 15, &quot;hits&quot;: 8}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 7, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 4}, {&quot;prop&quot;: &quot;3-PT Made&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;3-PT Made&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 3, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;3-PT Made&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Pts+Rebs+Asts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Pts+Rebs+Asts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Pts+Rebs+Asts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Pts+Rebs+Asts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Pts+Rebs+Asts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Pts+Rebs+Asts&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;shots_on_goal&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;blocked_shots&quot;, &quot;pt&quot;: &quot;Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;goalie_saves&quot;, &quot;pt&quot;: &quot;Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;faceoffs_won&quot;, &quot;pt&quot;: &quot;Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;time_on_ice&quot;, &quot;pt&quot;: &quot;Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;plus/minus&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;shots_on_goal&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 21, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;points&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 12, &quot;hits&quot;: 8}, {&quot;prop&quot;: &quot;shots_on_goal&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;time_on_ice&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;shots_on_goal&quot;, &quot;pt&quot;: &quot;Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;plus/minus&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;assists&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;assists&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 11, &quot;hits&quot;: 5}, {&quot;prop&quot;: &quot;points&quot;, &quot;pt&quot;: &quot;Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;goals_allowed&quot;, &quot;pt&quot;: &quot;Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;goals&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 14, &quot;hits&quot;: 4}, {&quot;prop&quot;: &quot;points&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;points&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 8, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;assists&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;shots_on_goal&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;faceoffs_won&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;goalie_saves&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;goalie_saves&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;goals&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;faceoffs_won&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;blocked_shots&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 156, &quot;hits&quot;: 98}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 159, &quot;hits&quot;: 99}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 128, &quot;hits&quot;: 73}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 10, &quot;hits&quot;: 6}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 30, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Walks&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 3, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 23, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 16, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Walks&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 8, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 21, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 3, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 57, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 20, &quot;hits&quot;: 14}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 16, &quot;hits&quot;: 7}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 25, &quot;hits&quot;: 13}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Walks&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Walks&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 19, &quot;hits&quot;: 11}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 9, &quot;hits&quot;: 6}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Walks&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 4}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 3, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 8, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Walks&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 12, &quot;hits&quot;: 7}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 618, &quot;hits&quot;: 132}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 264, &quot;hits&quot;: 72}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Walks&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 193, &quot;hits&quot;: 48}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 217, &quot;hits&quot;: 44}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 228, &quot;hits&quot;: 36}, {&quot;prop&quot;: &quot;Walks&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Home Runs&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 182, &quot;hits&quot;: 18}, {&quot;prop&quot;: &quot;Stolen Bases&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 118, &quot;hits&quot;: 9}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}]'></div>
+      </div>
+    </details>
       <div class="two-col">
       <div>
         <div class="section-label">🏆 MOST CONSISTENT WINNERS (PLAYER + PROP LINE)</div>
@@ -1156,287 +646,13 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
 </div>
       </div>
     </details>
-      <div class="section-label">PROP TYPE BREAKDOWNS</div>
-        <div class="three-col">
-          <div><div class="section-label">STANDARD — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">6</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Pts+Rebs+Asts</td>
-          <td class="right mono">14</td>
-          <td class="right mono pos">8</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:57.1%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">57.1%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Points</td>
-          <td class="right mono">48</td>
-          <td class="right mono pos">24</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">3-PT Made</td>
-          <td class="right mono">5</td>
-          <td class="right mono pos">0</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">GOBLIN — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Assists</td>
-          <td class="right mono">11</td>
-          <td class="right mono pos">10</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:90.9%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">90.9%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Points</td>
-          <td class="right mono">42</td>
-          <td class="right mono pos">36</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:85.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">85.7%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">21</td>
-          <td class="right mono pos">18</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:85.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">85.7%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">DEMON — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Assists</td>
-          <td class="right mono">16</td>
-          <td class="right mono pos">14</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:87.5%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">87.5%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Points</td>
-          <td class="right mono">26</td>
-          <td class="right mono pos">14</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:53.8%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">53.8%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">16</td>
-          <td class="right mono pos">7</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:43.8%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">43.8%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">OVER — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Assists</td>
-          <td class="right mono">30</td>
-          <td class="right mono pos">25</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:83.3%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">83.3%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">43</td>
-          <td class="right mono pos">29</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:67.4%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">67.4%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Points</td>
-          <td class="right mono">113</td>
-          <td class="right mono pos">73</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:64.6%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">64.6%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Pts+Rebs+Asts</td>
-          <td class="right mono">12</td>
-          <td class="right mono pos">6</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">UNDER — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-miss">
-          <td class="mono">3-PT Made</td>
-          <td class="right mono">5</td>
-          <td class="right mono pos">0</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">TIER A — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">16</td>
-          <td class="right mono pos">16</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Assists</td>
-          <td class="right mono">8</td>
-          <td class="right mono pos">8</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:100.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">100.0%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Points</td>
-          <td class="right mono">22</td>
-          <td class="right mono pos">21</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:95.5%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">95.5%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">TIER B — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Points</td>
-          <td class="right mono">18</td>
-          <td class="right mono pos">13</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:72.2%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">72.2%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">7</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:57.1%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">57.1%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">TIER C — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Assists</td>
-          <td class="right mono">5</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:80.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">80.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Points</td>
-          <td class="right mono">17</td>
-          <td class="right mono pos">8</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:47.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">47.1%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">TIER D — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Assists</td>
-          <td class="right mono">13</td>
-          <td class="right mono pos">10</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:76.9%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">76.9%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Pts+Rebs+Asts</td>
-          <td class="right mono">12</td>
-          <td class="right mono pos">8</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Points</td>
-          <td class="right mono">59</td>
-          <td class="right mono pos">32</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:54.2%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">54.2%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">16</td>
-          <td class="right mono pos">6</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:37.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">37.5%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">3-PT Made</td>
-          <td class="right mono">6</td>
-          <td class="right mono pos">1</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:16.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">16.7%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">VS ELITE/ABOVE AVG DEF — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Assists</td>
-          <td class="right mono">27</td>
-          <td class="right mono pos">24</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:88.9%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">88.9%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">36</td>
-          <td class="right mono pos">24</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Pts+Rebs+Asts</td>
-          <td class="right mono">12</td>
-          <td class="right mono pos">8</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Points</td>
-          <td class="right mono">96</td>
-          <td class="right mono pos">62</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:64.6%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">64.6%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">3-PT Made</td>
-          <td class="right mono">5</td>
-          <td class="right mono pos">0</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">VS AVG / BELOW AVG / WEAK DEF — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">7</td>
-          <td class="right mono pos">5</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:71.4%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">71.4%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Points</td>
-          <td class="right mono">20</td>
-          <td class="right mono pos">12</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:60.0%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">60.0%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-        </div>
-        <div class="two-col">
-          <div>
-            <div class="section-label">OVERALL TOP PROP TYPES BY HIT RATE (≥10 DECIDED)</div>
-            <div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Assists</td>
-          <td class="right mono">30</td>
-          <td class="right mono pos">25</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:83.3%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">83.3%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">43</td>
-          <td class="right mono pos">29</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:67.4%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">67.4%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Points</td>
-          <td class="right mono">116</td>
-          <td class="right mono pos">74</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:63.8%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">63.8%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Pts+Rebs+Asts</td>
-          <td class="right mono">14</td>
-          <td class="right mono pos">8</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:57.1%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">57.1%</div></div></td>
-        </tr></tbody>
-    </table></div>
-          </div>
-          <div>
-            <div class="section-label">OVERALL WORST PROP TYPES (≥10 DECIDED)</div>
-            <div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Assists</td>
-          <td class="right mono">30</td>
-          <td class="right mono pos">25</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:83.3%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">83.3%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Rebounds</td>
-          <td class="right mono">43</td>
-          <td class="right mono pos">29</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:67.4%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">67.4%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Points</td>
-          <td class="right mono">116</td>
-          <td class="right mono pos">74</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:63.8%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">63.8%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Pts+Rebs+Asts</td>
-          <td class="right mono">14</td>
-          <td class="right mono pos">8</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:57.1%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">57.1%</div></div></td>
-        </tr></tbody>
-    </table></div>
-          </div>
-        </div>
+      <details class="matrix-collapsible prop-breakdown-widget" open>
+      <summary>PROP TYPE BREAKDOWNS</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Interactive Best/Worst and heatmap views across pick type, tier, and prop type. Filters apply to both tabs.</div>
+        <div class="pbw-root" data-prop-breakdown-rows='[{&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 5}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 7, &quot;hits&quot;: 7}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 8, &quot;hits&quot;: 8}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 3, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 6}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 4}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 3, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 5}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 4}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 8, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 5}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 5}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 11, &quot;hits&quot;: 6}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 4}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 15, &quot;hits&quot;: 8}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 7, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Assists&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 4}, {&quot;prop&quot;: &quot;3-PT Made&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;3-PT Made&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 3, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Rebounds&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;3-PT Made&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Pts+Rebs+Asts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Pts+Rebs+Asts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Pts+Rebs+Asts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Pts+Rebs+Asts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Pts+Rebs+Asts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Points&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;elite&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Pts+Rebs+Asts&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;above_avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 2}]'></div>
+      </div>
+    </details>
       <div class="two-col">
       <div>
         <div class="section-label">🏆 MOST CONSISTENT WINNERS (PLAYER + PROP LINE)</div>
@@ -1621,166 +837,13 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
       </div>
     </details>
       
-      <div class="section-label">PROP TYPE BREAKDOWNS</div>
-        <div class="three-col">
-          <div><div class="section-label">STANDARD — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
-          <div><div class="section-label">GOBLIN — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
-          <div><div class="section-label">DEMON — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">OVER — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">plus/minus</td>
-          <td class="right mono">5</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:80.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">80.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">points</td>
-          <td class="right mono">22</td>
-          <td class="right mono pos">10</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:45.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">45.5%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">assists</td>
-          <td class="right mono">17</td>
-          <td class="right mono pos">6</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:35.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">35.3%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">goals</td>
-          <td class="right mono">15</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:26.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">26.7%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">blocked_shots</td>
-          <td class="right mono">5</td>
-          <td class="right mono pos">1</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:20.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">20.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">shots_on_goal</td>
-          <td class="right mono">33</td>
-          <td class="right mono pos">0</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">UNDER — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No prop types with ≥5 decided.</div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">TIER A — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-miss">
-          <td class="mono">shots_on_goal</td>
-          <td class="right mono">7</td>
-          <td class="right mono pos">1</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:14.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">14.3%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">TIER B — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No prop types with ≥5 decided.</div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">TIER C — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">points</td>
-          <td class="right mono">12</td>
-          <td class="right mono pos">8</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">assists</td>
-          <td class="right mono">11</td>
-          <td class="right mono pos">5</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:45.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">45.5%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">goals</td>
-          <td class="right mono">14</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:28.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">28.6%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">TIER D — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-miss">
-          <td class="mono">points</td>
-          <td class="right mono">8</td>
-          <td class="right mono pos">2</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:25.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">25.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">blocked_shots</td>
-          <td class="right mono">5</td>
-          <td class="right mono pos">1</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:20.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">20.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">shots_on_goal</td>
-          <td class="right mono">21</td>
-          <td class="right mono pos">0</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">assists</td>
-          <td class="right mono">5</td>
-          <td class="right mono pos">0</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">VS ELITE/ABOVE AVG DEF — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
-          <div><div class="section-label">VS AVG / BELOW AVG / WEAK DEF — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
-        </div>
-        <div class="two-col">
-          <div>
-            <div class="section-label">OVERALL TOP PROP TYPES BY HIT RATE (≥10 DECIDED)</div>
-            <div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-miss">
-          <td class="mono">points</td>
-          <td class="right mono">23</td>
-          <td class="right mono pos">10</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:43.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">43.5%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">assists</td>
-          <td class="right mono">17</td>
-          <td class="right mono pos">6</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:35.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">35.3%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">goals</td>
-          <td class="right mono">15</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:26.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">26.7%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">shots_on_goal</td>
-          <td class="right mono">34</td>
-          <td class="right mono pos">1</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:2.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">2.9%</div></div></td>
-        </tr></tbody>
-    </table></div>
-          </div>
-          <div>
-            <div class="section-label">OVERALL WORST PROP TYPES (≥10 DECIDED)</div>
-            <div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-miss">
-          <td class="mono">points</td>
-          <td class="right mono">23</td>
-          <td class="right mono pos">10</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:43.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">43.5%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">assists</td>
-          <td class="right mono">17</td>
-          <td class="right mono pos">6</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:35.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">35.3%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">goals</td>
-          <td class="right mono">15</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:26.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">26.7%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">shots_on_goal</td>
-          <td class="right mono">34</td>
-          <td class="right mono pos">1</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:2.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">2.9%</div></div></td>
-        </tr></tbody>
-    </table></div>
-          </div>
-        </div>
+      <details class="matrix-collapsible prop-breakdown-widget" open>
+      <summary>PROP TYPE BREAKDOWNS</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Interactive Best/Worst and heatmap views across pick type, tier, and prop type. Filters apply to both tabs.</div>
+        <div class="pbw-root" data-prop-breakdown-rows='[{&quot;prop&quot;: &quot;shots_on_goal&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;blocked_shots&quot;, &quot;pt&quot;: &quot;Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;goalie_saves&quot;, &quot;pt&quot;: &quot;Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;faceoffs_won&quot;, &quot;pt&quot;: &quot;Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;time_on_ice&quot;, &quot;pt&quot;: &quot;Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;plus/minus&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;shots_on_goal&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 21, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;points&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 12, &quot;hits&quot;: 8}, {&quot;prop&quot;: &quot;shots_on_goal&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;time_on_ice&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;shots_on_goal&quot;, &quot;pt&quot;: &quot;Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;plus/minus&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;assists&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;assists&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 11, &quot;hits&quot;: 5}, {&quot;prop&quot;: &quot;points&quot;, &quot;pt&quot;: &quot;Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;goals_allowed&quot;, &quot;pt&quot;: &quot;Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;goals&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 14, &quot;hits&quot;: 4}, {&quot;prop&quot;: &quot;points&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;points&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 8, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;assists&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;shots_on_goal&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;faceoffs_won&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;goalie_saves&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;goalie_saves&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;goals&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;faceoffs_won&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;blocked_shots&quot;, &quot;pt&quot;: &quot;Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 1}]'></div>
+      </div>
+    </details>
       <div class="two-col">
       <div>
         <div class="section-label">🏆 MOST CONSISTENT WINNERS (PLAYER + PROP LINE)</div>
@@ -1965,173 +1028,13 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
       </div>
     </details>
       
-      <div class="section-label">PROP TYPE BREAKDOWNS</div>
-        <div class="three-col">
-          <div><div class="section-label">STANDARD — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
-          <div><div class="section-label">GOBLIN — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
-          <div><div class="section-label">DEMON — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">OVER — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
-          <div><div class="section-label">UNDER — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">TIER A — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Goalie Saves</td>
-          <td class="right mono">10</td>
-          <td class="right mono pos">7</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:70.0%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">70.0%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Shots</td>
-          <td class="right mono">37</td>
-          <td class="right mono pos">19</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:51.4%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">51.4%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Fouls</td>
-          <td class="right mono">8</td>
-          <td class="right mono pos">3</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:37.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">37.5%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Goals</td>
-          <td class="right mono">16</td>
-          <td class="right mono pos">0</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:0.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">0.0%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">TIER B — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No prop types with ≥5 decided.</div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">TIER C — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-miss">
-          <td class="mono">Goals</td>
-          <td class="right mono">5</td>
-          <td class="right mono pos">2</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:40.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">40.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Shots</td>
-          <td class="right mono">7</td>
-          <td class="right mono pos">2</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:28.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">28.6%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">TIER D — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-miss">
-          <td class="mono">Goalie Saves</td>
-          <td class="right mono">12</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Goal + Assist</td>
-          <td class="right mono">41</td>
-          <td class="right mono pos">9</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:22.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">22.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Fouls</td>
-          <td class="right mono">32</td>
-          <td class="right mono pos">7</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:21.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">21.9%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Shots</td>
-          <td class="right mono">133</td>
-          <td class="right mono pos">16</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:12.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">12.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Assists</td>
-          <td class="right mono">37</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:10.8%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">10.8%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Goals</td>
-          <td class="right mono">52</td>
-          <td class="right mono pos">5</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.6%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">VS ELITE/ABOVE AVG DEF — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
-          <div><div class="section-label">VS AVG / BELOW AVG / WEAK DEF — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
-        </div>
-        <div class="two-col">
-          <div>
-            <div class="section-label">OVERALL TOP PROP TYPES BY HIT RATE (≥10 DECIDED)</div>
-            <div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-warn">
-          <td class="mono">Goalie Saves</td>
-          <td class="right mono">26</td>
-          <td class="right mono pos">14</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:53.8%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">53.8%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Fouls</td>
-          <td class="right mono">46</td>
-          <td class="right mono pos">12</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:26.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">26.1%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Shots</td>
-          <td class="right mono">181</td>
-          <td class="right mono pos">38</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:21.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">21.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Goal + Assist</td>
-          <td class="right mono">46</td>
-          <td class="right mono pos">9</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:19.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">19.6%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Assists</td>
-          <td class="right mono">41</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.8%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.8%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Goals</td>
-          <td class="right mono">77</td>
-          <td class="right mono pos">7</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.1%</div></div></td>
-        </tr></tbody>
-    </table></div>
-          </div>
-          <div>
-            <div class="section-label">OVERALL WORST PROP TYPES (≥10 DECIDED)</div>
-            <div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-warn">
-          <td class="mono">Goalie Saves</td>
-          <td class="right mono">26</td>
-          <td class="right mono pos">14</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:53.8%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">53.8%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Fouls</td>
-          <td class="right mono">46</td>
-          <td class="right mono pos">12</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:26.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">26.1%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Shots</td>
-          <td class="right mono">181</td>
-          <td class="right mono pos">38</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:21.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">21.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Goal + Assist</td>
-          <td class="right mono">46</td>
-          <td class="right mono pos">9</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:19.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">19.6%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Assists</td>
-          <td class="right mono">41</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.8%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.8%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Goals</td>
-          <td class="right mono">77</td>
-          <td class="right mono pos">7</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.1%</div></div></td>
-        </tr></tbody>
-    </table></div>
-          </div>
-        </div>
+      <details class="matrix-collapsible prop-breakdown-widget" open>
+      <summary>PROP TYPE BREAKDOWNS</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Interactive Best/Worst and heatmap views across pick type, tier, and prop type. Filters apply to both tabs.</div>
+        <div class="pbw-root" data-prop-breakdown-rows='[]'></div>
+      </div>
+    </details>
       <div class="two-col">
       <div>
         <div class="section-label">🏆 MOST CONSISTENT WINNERS (PLAYER + PROP LINE)</div>
@@ -2316,386 +1219,13 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
       </div>
     </details>
       
-      <div class="section-label">PROP TYPE BREAKDOWNS</div>
-        <div class="three-col">
-          <div><div class="section-label">STANDARD — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-warn">
-          <td class="mono">Runs</td>
-          <td class="right mono">21</td>
-          <td class="right mono pos">11</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:52.4%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">52.4%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">25</td>
-          <td class="right mono pos">13</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:52.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">52.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Hits</td>
-          <td class="right mono">16</td>
-          <td class="right mono pos">7</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:43.8%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">43.8%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">32</td>
-          <td class="right mono pos">12</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:37.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">37.5%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Walks</td>
-          <td class="right mono">8</td>
-          <td class="right mono pos">2</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:25.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">25.0%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">GOBLIN — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Runs</td>
-          <td class="right mono">11</td>
-          <td class="right mono pos">7</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:63.6%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">63.6%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Hits</td>
-          <td class="right mono">185</td>
-          <td class="right mono pos">116</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:62.7%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">62.7%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">192</td>
-          <td class="right mono pos">117</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:60.9%;background:#5ef598"></div></div><div class="rate-num" style="color:var(--green)">60.9%</div></div></td>
-        </tr><tr class="player-hit">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">165</td>
-          <td class="right mono pos">93</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:56.4%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">56.4%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">DEMON — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-miss">
-          <td class="mono">Runs</td>
-          <td class="right mono">285</td>
-          <td class="right mono pos">72</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:25.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">25.3%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Walks</td>
-          <td class="right mono">201</td>
-          <td class="right mono pos">49</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:24.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">24.4%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">709</td>
-          <td class="right mono pos">137</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:19.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">19.3%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">240</td>
-          <td class="right mono pos">45</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:18.8%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">18.8%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Hits</td>
-          <td class="right mono">244</td>
-          <td class="right mono pos">37</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:15.2%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">15.2%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Home Runs</td>
-          <td class="right mono">182</td>
-          <td class="right mono pos">18</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.9%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Stolen Bases</td>
-          <td class="right mono">118</td>
-          <td class="right mono pos">9</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:7.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">7.6%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">OVER — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-miss">
-          <td class="mono">Hits</td>
-          <td class="right mono">434</td>
-          <td class="right mono pos">154</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:35.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">35.5%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">416</td>
-          <td class="right mono pos">141</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.9%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">919</td>
-          <td class="right mono pos">259</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:28.2%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">28.2%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Runs</td>
-          <td class="right mono">308</td>
-          <td class="right mono pos">86</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:27.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">27.9%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Walks</td>
-          <td class="right mono">207</td>
-          <td class="right mono pos">52</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:25.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">25.1%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Home Runs</td>
-          <td class="right mono">182</td>
-          <td class="right mono pos">18</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.9%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Stolen Bases</td>
-          <td class="right mono">118</td>
-          <td class="right mono pos">9</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:7.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">7.6%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">UNDER — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">14</td>
-          <td class="right mono pos">10</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:71.4%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">71.4%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Hits</td>
-          <td class="right mono">11</td>
-          <td class="right mono pos">6</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:54.5%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">54.5%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">14</td>
-          <td class="right mono pos">7</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Runs</td>
-          <td class="right mono">9</td>
-          <td class="right mono pos">4</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:44.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">44.4%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Walks</td>
-          <td class="right mono">6</td>
-          <td class="right mono pos">2</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">TIER A — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Hits</td>
-          <td class="right mono">175</td>
-          <td class="right mono pos">100</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:57.1%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">57.1%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">189</td>
-          <td class="right mono pos">102</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:54.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">54.0%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">153</td>
-          <td class="right mono pos">75</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:49.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">49.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Walks</td>
-          <td class="right mono">11</td>
-          <td class="right mono pos">3</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:27.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">27.3%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Runs</td>
-          <td class="right mono">31</td>
-          <td class="right mono pos">6</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:19.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">19.4%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">TIER B — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-hit">
-          <td class="mono">Hits</td>
-          <td class="right mono">24</td>
-          <td class="right mono pos">16</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:66.7%;background:var(--green)"></div></div><div class="rate-num" style="color:var(--green)">66.7%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">30</td>
-          <td class="right mono pos">16</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:53.3%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">53.3%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Runs</td>
-          <td class="right mono">7</td>
-          <td class="right mono pos">3</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:42.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">42.9%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Walks</td>
-          <td class="right mono">5</td>
-          <td class="right mono pos">2</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:40.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">40.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">81</td>
-          <td class="right mono pos">14</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:17.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">17.3%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">TIER C — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-warn">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">27</td>
-          <td class="right mono pos">14</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:51.9%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">51.9%</div></div></td>
-        </tr><tr class="player-warn">
-          <td class="mono">Runs</td>
-          <td class="right mono">10</td>
-          <td class="right mono pos">5</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:50.0%;background:var(--gold)"></div></div><div class="rate-num" style="color:var(--gold)">50.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">37</td>
-          <td class="right mono pos">14</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:37.8%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">37.8%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Hits</td>
-          <td class="right mono">15</td>
-          <td class="right mono pos">5</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:33.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">33.3%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-          <div><div class="section-label">TIER D — TOP PROP TYPES (≥5 DECIDED)</div><div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-miss">
-          <td class="mono">Runs</td>
-          <td class="right mono">269</td>
-          <td class="right mono pos">76</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:28.3%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">28.3%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Walks</td>
-          <td class="right mono">194</td>
-          <td class="right mono pos">48</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:24.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">24.7%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">626</td>
-          <td class="right mono pos">136</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:21.7%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">21.7%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">220</td>
-          <td class="right mono pos">46</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:20.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">20.9%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Hits</td>
-          <td class="right mono">231</td>
-          <td class="right mono pos">39</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:16.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">16.9%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Home Runs</td>
-          <td class="right mono">182</td>
-          <td class="right mono pos">18</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.9%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Stolen Bases</td>
-          <td class="right mono">118</td>
-          <td class="right mono pos">9</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:7.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">7.6%</div></div></td>
-        </tr></tbody>
-    </table></div></div>
-        </div>
-        <div class="two-col">
-          <div><div class="section-label">VS ELITE/ABOVE AVG DEF — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
-          <div><div class="section-label">VS AVG / BELOW AVG / WEAK DEF — TOP PROP TYPES (≥5 DECIDED)</div><div class="muted-note">No rows for this split.</div></div>
-        </div>
-        <div class="two-col">
-          <div>
-            <div class="section-label">OVERALL TOP PROP TYPES BY HIT RATE (≥10 DECIDED)</div>
-            <div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-miss">
-          <td class="mono">Hits</td>
-          <td class="right mono">445</td>
-          <td class="right mono pos">160</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:36.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">36.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">430</td>
-          <td class="right mono pos">151</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:35.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">35.1%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">933</td>
-          <td class="right mono pos">266</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:28.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">28.5%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Runs</td>
-          <td class="right mono">317</td>
-          <td class="right mono pos">90</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:28.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">28.4%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Walks</td>
-          <td class="right mono">213</td>
-          <td class="right mono pos">54</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:25.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">25.4%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Home Runs</td>
-          <td class="right mono">182</td>
-          <td class="right mono pos">18</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.9%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Stolen Bases</td>
-          <td class="right mono">118</td>
-          <td class="right mono pos">9</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:7.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">7.6%</div></div></td>
-        </tr></tbody>
-    </table></div>
-          </div>
-          <div>
-            <div class="section-label">OVERALL WORST PROP TYPES (≥10 DECIDED)</div>
-            <div class="table-wrap"><table>
-      <thead><tr><th>PROP TYPE</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
-      <tbody><tr class="player-miss">
-          <td class="mono">Hits</td>
-          <td class="right mono">445</td>
-          <td class="right mono pos">160</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:36.0%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">36.0%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Hitter Strikeouts</td>
-          <td class="right mono">430</td>
-          <td class="right mono pos">151</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:35.1%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">35.1%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Total Bases</td>
-          <td class="right mono">933</td>
-          <td class="right mono pos">266</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:28.5%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">28.5%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Runs</td>
-          <td class="right mono">317</td>
-          <td class="right mono pos">90</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:28.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">28.4%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Walks</td>
-          <td class="right mono">213</td>
-          <td class="right mono pos">54</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:25.4%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">25.4%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Home Runs</td>
-          <td class="right mono">182</td>
-          <td class="right mono pos">18</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:9.9%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">9.9%</div></div></td>
-        </tr><tr class="player-miss">
-          <td class="mono">Stolen Bases</td>
-          <td class="right mono">118</td>
-          <td class="right mono pos">9</td>
-          <td><div class="rate-cell"><div class="rate-bar-bg"><div class="rate-bar-fill" style="width:7.6%;background:var(--red)"></div></div><div class="rate-num" style="color:var(--red)">7.6%</div></div></td>
-        </tr></tbody>
-    </table></div>
-          </div>
-        </div>
+      <details class="matrix-collapsible prop-breakdown-widget" open>
+      <summary>PROP TYPE BREAKDOWNS</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Interactive Best/Worst and heatmap views across pick type, tier, and prop type. Filters apply to both tabs.</div>
+        <div class="pbw-root" data-prop-breakdown-rows='[{&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 156, &quot;hits&quot;: 98}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 159, &quot;hits&quot;: 99}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 128, &quot;hits&quot;: 73}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 10, &quot;hits&quot;: 6}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 30, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Walks&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 3, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 23, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 16, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Walks&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 8, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;A&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 21, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 3, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 57, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 20, &quot;hits&quot;: 14}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 16, &quot;hits&quot;: 7}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 25, &quot;hits&quot;: 13}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Walks&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Walks&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;B&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 19, &quot;hits&quot;: 11}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 9, &quot;hits&quot;: 6}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Walks&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 4}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 3, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 8, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 5, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Walks&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 12, &quot;hits&quot;: 7}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;C&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 618, &quot;hits&quot;: 132}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 264, &quot;hits&quot;: 72}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 6, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 4, &quot;hits&quot;: 3}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Runs&quot;, &quot;pt&quot;: &quot;Standard Over&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Walks&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 193, &quot;hits&quot;: 48}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 2, &quot;hits&quot;: 2}, {&quot;prop&quot;: &quot;Hitter Strikeouts&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 217, &quot;hits&quot;: 44}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 228, &quot;hits&quot;: 36}, {&quot;prop&quot;: &quot;Walks&quot;, &quot;pt&quot;: &quot;Standard Under&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 0}, {&quot;prop&quot;: &quot;Home Runs&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 182, &quot;hits&quot;: 18}, {&quot;prop&quot;: &quot;Stolen Bases&quot;, &quot;pt&quot;: &quot;Demon&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 118, &quot;hits&quot;: 9}, {&quot;prop&quot;: &quot;Total Bases&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}, {&quot;prop&quot;: &quot;Hits&quot;, &quot;pt&quot;: &quot;Goblin&quot;, &quot;tier&quot;: &quot;D&quot;, &quot;def&quot;: &quot;avg&quot;, &quot;decided&quot;: 1, &quot;hits&quot;: 1}]'></div>
+      </div>
+    </details>
       <div class="two-col">
       <div>
         <div class="section-label">🏆 MOST CONSISTENT WINNERS (PLAYER + PROP LINE)</div>
@@ -2833,6 +1363,149 @@ th.sort-active.sort-desc::after{content:'\25BC';font-size:0.55em;opacity:0.9;pos
     });
   }
   document.querySelectorAll("table.table-sortable").forEach(initTable);
+})();
+</script>
+
+
+<script>
+(function () {
+  const PT_ORDER = ["Standard Over","Standard Under","Goblin","Demon","Over","Under"];
+  const TIER_ORDER = ["A","B","C","D"];
+  const HEAT_COLS = ["A","B","C","D","Overall"];
+  function pct(hits, decided) { return decided > 0 ? (hits / decided * 100) : null; }
+  function esc(s){ return String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function parseRows(root){
+    try { return JSON.parse(root.getAttribute("data-prop-breakdown-rows") || "[]"); }
+    catch { return []; }
+  }
+  function cellColor(v){
+    if (v == null) return "#1b1f2f";
+    const stops = [[0,"#F09595"],[28,"#FAC775"],[42,"#D3D1C7"],[55,"#9FE1CB"],[68,"#1D9E75"],[100,"#085041"]];
+    if (v <= stops[0][0]) return stops[0][1];
+    for (let i=1;i<stops.length;i++){
+      const [x2,c2] = stops[i], [x1,c1] = stops[i-1];
+      if (v <= x2){
+        const t = (v-x1)/(x2-x1);
+        const a = [c1.slice(1,3),c1.slice(3,5),c1.slice(5,7)].map(h=>parseInt(h,16));
+        const b = [c2.slice(1,3),c2.slice(3,5),c2.slice(5,7)].map(h=>parseInt(h,16));
+        const m = a.map((n,j)=>Math.round(n + (b[j]-n)*t));
+        return "#" + m.map(n=>n.toString(16).padStart(2,"0")).join("");
+      }
+    }
+    return "#085041";
+  }
+  function textColor(v){ return (v != null && (v < 30 || v > 65)) ? "#fff" : "#141414"; }
+  function filterRows(rows, minDecided, tierFilter, ptFilter){
+    return rows.filter(r => (r.decided || 0) >= minDecided)
+      .filter(r => tierFilter === "ALL" || r.tier === tierFilter)
+      .filter(r => ptFilter === "ALL" || r.pt === ptFilter);
+  }
+  function render(root){
+    const rows = parseRows(root);
+    if (!rows.length){ root.innerHTML = '<div class="muted-note">No prop breakdown rows available.</div>'; return; }
+    root.innerHTML = `
+      <div class="pbw-controls">
+        <div class="pbw-control"><label>Min decided</label><select data-k="minDec"><option value="5">≥5</option><option value="10">≥10</option><option value="20">≥20</option></select></div>
+        <div class="pbw-control"><label>Show tiers</label><select data-k="tier"><option value="ALL">All tiers</option><option value="A">Tier A</option><option value="B">Tier B</option><option value="C">Tier C</option><option value="D">Tier D</option></select></div>
+        <div class="pbw-control"><label>Show pick types</label><select data-k="pt"><option value="ALL">All</option>${PT_ORDER.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join("")}</select></div>
+      </div>
+      <div class="pbw-tabs">
+        <button class="pbw-tab-btn active" data-tab="bw">Best / Worst</button>
+        <button class="pbw-tab-btn" data-tab="hm">Heatmap</button>
+      </div>
+      <div class="pbw-tab-panel active" data-tab-panel="bw"></div>
+      <div class="pbw-tab-panel" data-tab-panel="hm"></div>
+    `;
+    const controls = {
+      minDec: root.querySelector('select[data-k="minDec"]'),
+      tier: root.querySelector('select[data-k="tier"]'),
+      pt: root.querySelector('select[data-k="pt"]'),
+    };
+    function redraw(){
+      const minDec = parseInt(controls.minDec.value, 10) || 5;
+      const tierFilter = controls.tier.value;
+      const ptFilter = controls.pt.value;
+      const filtered = filterRows(rows, minDec, tierFilter, ptFilter);
+      const bwPanel = root.querySelector('[data-tab-panel="bw"]');
+      const hmPanel = root.querySelector('[data-tab-panel="hm"]');
+      let bwHtml = "";
+      const ptList = ptFilter === "ALL" ? PT_ORDER : [ptFilter];
+      ptList.forEach(pt => {
+        const ptRows = filtered.filter(r => r.pt === pt);
+        if (!ptRows.length) return;
+        bwHtml += `<div class="pbw-pt-header">${esc(pt)}</div>`;
+        TIER_ORDER.forEach(tier => {
+          if (tierFilter !== "ALL" && tier !== tierFilter) return;
+          const tierRows = ptRows.filter(r => r.tier === tier);
+          if (!tierRows.length) return;
+          const byProp = {};
+          tierRows.forEach(r => {
+            const p = String(r.prop || "Unknown");
+            if (!byProp[p]) byProp[p] = {prop:p,decided:0,hits:0};
+            byProp[p].decided += Number(r.decided || 0);
+            byProp[p].hits += Number(r.hits || 0);
+          });
+          const props = Object.values(byProp).map(x => ({...x, rate: pct(x.hits, x.decided)}))
+            .filter(x => x.decided >= minDec)
+            .sort((a,b) => (b.rate - a.rate) || (b.decided - a.decided));
+          if (!props.length) return;
+          const best = props.slice(0,5);
+          const worst = [...props].sort((a,b)=>(a.rate-b.rate) || (b.decided-a.decided)).slice(0,5);
+          function panel(title, cls, rows, barColor){
+            return `<div><div class="pbw-panel-title ${cls}">${title}</div><div class="table-wrap"><table><thead><tr><th>PROP</th><th class="right">DEC</th><th>HIT%</th></tr></thead><tbody>${
+              rows.map(r=>`<tr><td class="mono">${esc(r.prop)}</td><td class="right mono">${r.decided}</td><td><div class="rate-cell"><div class="rate-num" style="min-width:52px">${(r.rate||0).toFixed(1)}%</div><div class="pbw-mini-bar"><div class="pbw-mini-bar-fill" style="width:${Math.max(0,Math.min(100,r.rate||0)).toFixed(1)}%;background:${barColor}"></div></div></div></td></tr>`).join("")
+            }</tbody></table></div></div>`;
+          }
+          bwHtml += `<div class="pbw-tier-title">TIER ${tier}</div><div class="pbw-tier-grid">${
+            panel("Best Props","best",best,"#0F6E56") + panel("Worst Props","worst",worst,"#c35736")
+          }</div>`;
+        });
+      });
+      bwPanel.innerHTML = bwHtml || '<div class="muted-note">No qualifying rows for current filters.</div>';
+
+      const byPropTier = {};
+      filtered.forEach(r => {
+        const p = String(r.prop || "Unknown");
+        if (!byPropTier[p]) byPropTier[p] = {A:{d:0,h:0},B:{d:0,h:0},C:{d:0,h:0},D:{d:0,h:0},Overall:{d:0,h:0}};
+        const t = String(r.tier || "");
+        if (TIER_ORDER.includes(t)){
+          byPropTier[p][t].d += Number(r.decided || 0);
+          byPropTier[p][t].h += Number(r.hits || 0);
+          byPropTier[p].Overall.d += Number(r.decided || 0);
+          byPropTier[p].Overall.h += Number(r.hits || 0);
+        }
+      });
+      const propRows = Object.entries(byPropTier)
+        .map(([prop, d]) => ({prop, d, overallRate: pct(d.Overall.h, d.Overall.d)}))
+        .filter(x => x.d.Overall.d >= minDec)
+        .sort((a,b)=>(b.overallRate||-1)-(a.overallRate||-1));
+      let hmHtml = `<div class="pbw-heatmap-wrap"><table class="pbw-heatmap"><thead><tr><th>PROP</th>${HEAT_COLS.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>`;
+      propRows.forEach(r => {
+        hmHtml += `<tr><td class="mono">${esc(r.prop)}</td>`;
+        HEAT_COLS.forEach(c => {
+          const d = r.d[c];
+          const rate = pct(d.h, d.d);
+          if (!d.d){
+            hmHtml += `<td style="background:#141929;color:#80869a">—</td>`;
+          } else {
+            hmHtml += `<td style="background:${cellColor(rate)};color:${textColor(rate)}"><div class="pbw-cell-rate">${rate.toFixed(1)}%</div><div class="pbw-cell-dec">n=${d.d}</div></td>`;
+          }
+        });
+        hmHtml += `</tr>`;
+      });
+      hmHtml += `</tbody></table></div>`;
+      hmPanel.innerHTML = propRows.length ? hmHtml : '<div class="muted-note">No heatmap rows for current filters.</div>';
+    }
+    Object.values(controls).forEach(el => el.addEventListener("change", redraw));
+    root.querySelectorAll(".pbw-tab-btn").forEach(btn => {
+      btn.addEventListener("click", function(){
+        root.querySelectorAll(".pbw-tab-btn").forEach(x=>x.classList.toggle("active", x===btn));
+        root.querySelectorAll(".pbw-tab-panel").forEach(p=>p.classList.toggle("active", p.getAttribute("data-tab-panel") === btn.getAttribute("data-tab")));
+      });
+    });
+    redraw();
+  }
+  document.querySelectorAll(".pbw-root").forEach(render);
 })();
 </script>
 
