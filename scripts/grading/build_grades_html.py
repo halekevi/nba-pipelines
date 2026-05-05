@@ -404,6 +404,57 @@ _DEF_TIER_LABEL_ALIASES: dict[str, str] = {
 
 DEF_TIER_LABEL_ORDER: list[str] = ["Elite", "Above Avg", "Avg", "Below Avg", "Weak"]
 
+# Column headers seen across NBA/NHL/MLB/Soccer graded exports — normalize to "Def Tier" for aggregation.
+_DEF_TIER_ROW_KEYS: tuple[str, ...] = (
+    "Def Tier",
+    "def_tier",
+    "Opp Def Tier",
+    "Defense Tier",
+    "opp_def_tier",
+)
+
+
+def def_tier_value_from_row(r: dict) -> object:
+    """Return the defensive-tier cell from a graded row (supports alternate column names)."""
+    for key in _DEF_TIER_ROW_KEYS:
+        v = r.get(key)
+        if v is None:
+            continue
+        s = str(v).strip()
+        if s and s.lower() not in ("none", "nan"):
+            return v
+    return ""
+
+
+def normalize_rows_def_tier_column(rows: list[dict]) -> list[dict]:
+    """
+    Copy rows so `Def Tier` is filled when the workbook only had def_tier / Opp Def Tier / etc.
+    Used for every sport section and ALL SPORTS so DEF TIER breakdown aggregates reliably.
+    """
+    out: list[dict] = []
+    for r in rows:
+        if str(r.get("Def Tier", "") or "").strip():
+            out.append(r)
+            continue
+        v = None
+        for key in _DEF_TIER_ROW_KEYS[1:]:
+            if key not in r:
+                continue
+            t = r.get(key)
+            if t is None:
+                continue
+            s = str(t).strip()
+            if s and s.lower() not in ("none", "nan"):
+                v = t
+                break
+        if v is not None:
+            nr = dict(r)
+            nr["Def Tier"] = v
+            out.append(nr)
+        else:
+            out.append(r)
+    return out
+
 
 def normalize_def_tier_label(raw: object) -> str | None:
     """Map raw Def Tier cell text to a canonical tier label, or None if unknown."""
@@ -808,7 +859,7 @@ def pick_type_def_tier_cards_html(rows: list[dict], min_decided: int = 1) -> str
                 r
                 for r in rows
                 if _row_matches_pick_dir(r, pick_kw, direction)
-                and normalize_def_tier_label(r.get("Def Tier")) == tl
+                and normalize_def_tier_label(def_tier_value_from_row(r)) == tl
             ]
             by_label[tl] = overall_stats(sub)
 
@@ -871,9 +922,13 @@ def pick_type_def_tier_cards_html(rows: list[dict], min_decided: int = 1) -> str
 
 
 def def_tier_table(rows: list[dict]) -> str:
-    dt_agg = build_agg_from_rows(rows, "Def Tier")
-    if not dt_agg:
+    """
+    Opponent defensive tier summary + four pick-type × def-tier cards + sorted pick-type tables.
+    Emitted for every sport block and ALL SPORTS whenever there are graded rows (even if Def Tier is blank).
+    """
+    if not rows:
         return ""
+    dt_agg = build_agg_from_rows(rows, "Def Tier")
 
     stats_by_tier: dict[str, dict] = {}
     for d in dt_agg:
@@ -884,7 +939,7 @@ def def_tier_table(rows: list[dict]) -> str:
     rows_html = ""
     for tier_label in DEF_TIER_LABEL_ORDER:
         d = stats_by_tier.get(tier_label, {"key": tier_label, "decided": 0, "hits": 0, "hit_rate": 0})
-        sub_main = [r for r in rows if normalize_def_tier_label(r.get("Def Tier", "")) == tier_label]
+        sub_main = [r for r in rows if normalize_def_tier_label(def_tier_value_from_row(r)) == tier_label]
         ou_main = over_under_lines_html(sub_main)
         if int(d.get("decided", 0)) <= 0:
             rows_html += f"""<tr class="matrix-empty">
@@ -903,7 +958,7 @@ def def_tier_table(rows: list[dict]) -> str:
     picktype_by_tier: dict[str, list[dict]] = {"goblin": [], "standard": [], "demon": []}
     for tier_label in DEF_TIER_LABEL_ORDER:
         d = stats_by_tier.get(tier_label, {"key": tier_label, "decided": 0, "hits": 0, "hit_rate": 0})
-        sub = [r for r in rows if normalize_def_tier_label(r.get("Def Tier", "")) == tier_label]
+        sub = [r for r in rows if normalize_def_tier_label(def_tier_value_from_row(r)) == tier_label]
 
         gob = pick_type_stats(sub, "goblin")
         std = pick_type_stats(sub, "standard")
@@ -913,33 +968,30 @@ def def_tier_table(rows: list[dict]) -> str:
             picktype_by_tier["standard"].append({"def_tier": d["key"], **std})
             picktype_by_tier["demon"].append({"def_tier": d["key"], **dem})
 
-    detail_tables = ""
-    if dt_agg:
-
-        def _picktype_sorted_table(kind: str, label: str) -> str:
-            rows_k = [x for x in picktype_by_tier.get(kind, []) if x.get("decided", 0) > 0]
-            if not rows_k:
-                return ""
-            rows_k.sort(key=lambda x: (x.get("hit_rate", 0), x.get("decided", 0)), reverse=True)
-            body = ""
-            for r in rows_k:
-                hr = float(r.get("hit_rate", 0))
-                row_cls = "player-hit" if hr >= 55 else ("player-miss" if hr < 48 else "player-warn")
-                canon = str(r.get("def_tier", "")).strip()
-                slice_ou = [
-                    x
-                    for x in rows
-                    if normalize_def_tier_label(x.get("Def Tier", "")) == canon
-                    and kind.lower() in str(x.get("Pick Type", "") or "").lower()
-                ]
-                ou_line = over_under_lines_html(slice_ou)
-                body += f"""<tr class="{row_cls}">
+    def _picktype_sorted_table(kind: str, label: str) -> str:
+        rows_k = [x for x in picktype_by_tier.get(kind, []) if x.get("decided", 0) > 0]
+        if not rows_k:
+            return ""
+        rows_k.sort(key=lambda x: (x.get("hit_rate", 0), x.get("decided", 0)), reverse=True)
+        body = ""
+        for r in rows_k:
+            hr = float(r.get("hit_rate", 0))
+            row_cls = "player-hit" if hr >= 55 else ("player-miss" if hr < 48 else "player-warn")
+            canon = str(r.get("def_tier", "")).strip()
+            slice_ou = [
+                x
+                for x in rows
+                if normalize_def_tier_label(def_tier_value_from_row(x)) == canon
+                and kind.lower() in str(x.get("Pick Type", "") or "").lower()
+            ]
+            ou_line = over_under_lines_html(slice_ou)
+            body += f"""<tr class="{row_cls}">
           <td style="vertical-align:top"><strong>{h(str(r.get("def_tier", "")))}</strong>{ou_line}</td>
           <td class="right mono">{fmt_num(r.get("decided", 0))}</td>
           <td class="right mono pos">{fmt_num(r.get("hits", 0))}</td>
           <td>{rate_bar_html(hr)}</td>
         </tr>"""
-            return f"""<div>
+        return f"""<div>
         <div class="section-label">DEF TIER BREAKDOWN — {label} (SORTED)</div>
         <div class="table-wrap"><table>
           <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
@@ -947,13 +999,13 @@ def def_tier_table(rows: list[dict]) -> str:
         </table></div>
       </div>"""
 
-        split_picktype_tables = f"""<div class="three-col" style="margin-top:12px">
+    split_picktype_tables = f"""<div class="three-col" style="margin-top:12px">
       {_picktype_sorted_table("goblin", "GOBLIN")}
       {_picktype_sorted_table("standard", "STANDARD")}
       {_picktype_sorted_table("demon", "DEMON")}
     </div>"""
 
-        detail_tables = f"""{pick_type_def_tier_cards_html(rows)}
+    detail_tables = f"""{pick_type_def_tier_cards_html(rows)}
     {split_picktype_tables}"""
 
     return f"""<div class="section-label">HIT RATE BY OPPONENT DEFENSIVE TIER</div>
@@ -971,6 +1023,9 @@ def def_tier_table(rows: list[dict]) -> str:
 def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
     if not rows:
         return ""
+
+    # Unified Def Tier column for NBA/CBB/NHL/Soccer/MLB exports (ALL SPORTS + per-sport blocks).
+    rows = normalize_rows_def_tier_column(rows)
 
     if sport.strip().upper() == "MLB" and (not (icon or "").strip() or (icon or "").strip().upper() == "MLB"):
         icon = "⚾"
@@ -1032,8 +1087,8 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
             return str(x or "").lower().replace("🟢","").replace("🟡","").replace("🔴","").strip()
 
         by_def = f"""<div class="two-col">
-          <div><div class="section-label">VS ELITE/ABOVE AVG DEF — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if _norm_def_tier_for_split(r.get("Def Tier","")) in ("elite","above avg")], min_decided=5)}</div>
-          <div><div class="section-label">VS AVG / BELOW AVG / WEAK DEF — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if _norm_def_tier_for_split(r.get("Def Tier","")) in ("avg","average","below avg","below average","weak","very weak")], min_decided=5)}</div>
+          <div><div class="section-label">VS ELITE/ABOVE AVG DEF — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if _norm_def_tier_for_split(def_tier_value_from_row(r)) in ("elite","above avg")], min_decided=5)}</div>
+          <div><div class="section-label">VS AVG / BELOW AVG / WEAK DEF — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if _norm_def_tier_for_split(def_tier_value_from_row(r)) in ("avg","average","below avg","below average","weak","very weak")], min_decided=5)}</div>
         </div>"""
 
         prop_section = f"""<div class="section-label">PROP TYPE BREAKDOWNS</div>
