@@ -3,6 +3,8 @@ Per-group A/B/C/D rank tier assignment (Goblin/Demon vs line distance, Standard 
 
 Default cut points from backtest artifact data/reports/tier_criteria.json (commit 20b961f1).
 MLB Demon ml_prob fallback cuts from data/reports/tier_criteria_mlb_per_date.json (commit 25e0bd78).
+MLB Standard (+ Goblin fallback) cuts are lower than DEFAULT: MLB prop_model + calibrator outputs are
+compressed vs NBA-scale probs — DEFAULT A_cut 0.71 produced no Standard tier-A rows.
 
 When Goblin/Demon rows lack standard_line (common on Soccer alt-only slates), tier falls back
 to ml_prob cuts (sport- and group-specific where configured).
@@ -22,7 +24,9 @@ SPORT_ML_PROB_CUTS: dict[str, tuple[float, float, float] | dict[str, tuple[float
     "soccer": (0.45, 0.35, 0.25),  # all groups; soccer base rates are low
     "mlb": {
         "demon": (0.65, 0.60, 0.58),  # calibrated from 48,772-leg per-date scan
-        # goblin and standard fall back to DEFAULT (0.71, 0.65, 0.58)
+        # Same MLB probability scale as Demon fallback; DEFAULT (0.71,…) yields ~zero Standard A’s.
+        "standard": (0.58, 0.52, 0.47),
+        "goblin": (0.58, 0.52, 0.47),  # distance fallback when no standard_line; same scale as Standard
     },
 }
 

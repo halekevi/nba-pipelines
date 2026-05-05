@@ -391,84 +391,6 @@ def build_agg_from_rows(rows: list[dict], key_col: str) -> list[dict]:
         return result
 
 
-_DEF_TIER_LABEL_ALIASES: dict[str, str] = {
-    "elite": "Elite",
-    "above avg": "Above Avg",
-    "avg": "Avg",
-    "average": "Avg",
-    "below avg": "Below Avg",
-    "below average": "Below Avg",
-    "weak": "Weak",
-    "very weak": "Weak",
-}
-
-DEF_TIER_LABEL_ORDER: list[str] = ["Elite", "Above Avg", "Avg", "Below Avg", "Weak"]
-
-# Column headers seen across NBA/NHL/MLB/Soccer graded exports — normalize to "Def Tier" for aggregation.
-_DEF_TIER_ROW_KEYS: tuple[str, ...] = (
-    "Def Tier",
-    "def_tier",
-    "Opp Def Tier",
-    "Defense Tier",
-    "opp_def_tier",
-)
-
-
-def def_tier_value_from_row(r: dict) -> object:
-    """Return the defensive-tier cell from a graded row (supports alternate column names)."""
-    for key in _DEF_TIER_ROW_KEYS:
-        v = r.get(key)
-        if v is None:
-            continue
-        s = str(v).strip()
-        if s and s.lower() not in ("none", "nan"):
-            return v
-    return ""
-
-
-def normalize_rows_def_tier_column(rows: list[dict]) -> list[dict]:
-    """
-    Copy rows so `Def Tier` is filled when the workbook only had def_tier / Opp Def Tier / etc.
-    Used for every sport section and ALL SPORTS so DEF TIER breakdown aggregates reliably.
-    """
-    out: list[dict] = []
-    for r in rows:
-        if str(r.get("Def Tier", "") or "").strip():
-            out.append(r)
-            continue
-        v = None
-        for key in _DEF_TIER_ROW_KEYS[1:]:
-            if key not in r:
-                continue
-            t = r.get(key)
-            if t is None:
-                continue
-            s = str(t).strip()
-            if s and s.lower() not in ("none", "nan"):
-                v = t
-                break
-        if v is not None:
-            nr = dict(r)
-            nr["Def Tier"] = v
-            out.append(nr)
-        else:
-            out.append(r)
-    return out
-
-
-def normalize_def_tier_label(raw: object) -> str | None:
-    """Map raw Def Tier cell text to a canonical tier label, or None if unknown."""
-    s = (
-        str(raw or "")
-        .lower()
-        .replace("🟢", "")
-        .replace("🟡", "")
-        .replace("🔴", "")
-        .strip()
-    )
-    return _DEF_TIER_LABEL_ALIASES.get(s)
-
-
 def overall_stats(rows: list[dict]) -> dict:
     """Compute overall summary from graded rows."""
     total = len(rows)
@@ -684,6 +606,95 @@ def pick_tier_direction_matrix_html(rows: list[dict], min_decided: int = 10) -> 
     </details>"""
 
 
+def pick_type_tier_direction_split_html(rows: list[dict], min_decided: int = 10) -> str:
+    """
+    User-facing split used for every sport section:
+      - Goblin by Tier A-D (OVER only)
+      - Demon by Tier A-D (OVER only)
+      - Standard by Tier A-D (OVER + UNDER)
+    """
+    agg = build_pick_tier_direction_agg(rows)
+    grid = _canonical_pick_tier_direction_keys()
+    n_ge = sum(1 for k in grid if int(agg.get(k, {}).get("decided", 0)) >= int(min_decided))
+
+    def _rec_for(pt: str, tier: str, direction: str) -> dict | None:
+        v = agg.get((pt, tier, direction), {"decided": 0, "hits": 0, "misses": 0})
+        d = int(v["decided"])
+        if d <= 0:
+            return None
+        h_ = int(v["hits"])
+        m_ = int(v["misses"])
+        hr = (h_ / d * 100.0) if d > 0 else 0.0
+        return {"decided": d, "hits": h_, "misses": m_, "hit_rate": hr}
+
+    def _row_block(pt: str, direction: str, tier: str, rec: dict | None) -> str:
+        if rec is None:
+            return (
+                f'<tr class="matrix-empty"><td><span class="chip chip-std">TIER {tier}</span></td>'
+                f'<td>{"▲ OVER" if direction=="OVER" else "▼ UNDER"}</td>'
+                f'<td class="right mono muted">—</td><td class="right mono muted">—</td>'
+                f'<td class="right mono muted">—</td><td class="right mono muted">—</td>'
+                f'<td><span class="muted">—</span></td></tr>'
+            )
+        hr = float(rec["hit_rate"])
+        row_cls = "matrix-hit" if hr >= 60.0 else ("matrix-miss" if hr < 50.0 else "matrix-warn")
+        if int(rec["decided"]) < int(min_decided):
+            row_cls += " matrix-sparse"
+        dir_html = (
+            '<span style="color:var(--green);font-size:13px">▲ OVER</span>'
+            if direction == "OVER"
+            else '<span style="color:var(--cyan);font-size:13px">▼ UNDER</span>'
+        )
+        bar_color = "var(--green)" if hr >= 60.0 else ("var(--gold)" if hr >= 50.0 else "var(--red)")
+        bar_html = (
+            f'<div class="rate-bar-bg"><div class="rate-bar-fill" '
+            f'style="width:{max(0.0, min(hr, 100.0)):.1f}%;background:{bar_color}"></div></div>'
+        )
+        chip_cls = {"A": "chip-a", "B": "chip-b", "C": "chip-c"}.get(tier, "chip-d")
+        return f"""<tr class="{row_cls}">
+          <td><span class="chip {chip_cls}">TIER {tier}</span></td>
+          <td>{dir_html}</td>
+          <td class="right mono">{fmt_num(rec['decided'])}</td>
+          <td class="right mono pos">{fmt_num(rec['hits'])}</td>
+          <td class="right mono neg">{fmt_num(rec['misses'])}</td>
+          <td class="right mono">{pct(rec['hit_rate'])}</td>
+          <td>{bar_html}</td>
+        </tr>"""
+
+    def _table_for(pt: str, dirs: list[str], chip_cls: str, chip_emoji: str) -> str:
+        body = ""
+        for t in ("A", "B", "C", "D"):
+            for d in dirs:
+                body += _row_block(pt, d, t, _rec_for(pt, t, d))
+        return f"""<div>
+          <div class="section-label"><span class="chip {chip_cls}">{chip_emoji}&nbsp;{pt}</span> BY TIER</div>
+          <div class="table-wrap"><table class="table-sortable">
+            <thead><tr>
+              <th data-sort-key="tier" title="Sort">TIER</th>
+              <th data-sort-key="dir" title="Sort">DIRECTION</th>
+              <th class="right" data-sort-key="decided" title="Sort">DECIDED</th>
+              <th class="right" data-sort-key="hits" title="Sort">HITS</th>
+              <th class="right" data-sort-key="misses" title="Sort">MISSES</th>
+              <th class="right" data-sort-key="rate" title="Sort">HIT RATE</th>
+              <th data-sort-key="bar" title="Sort">BAR</th>
+            </tr></thead>
+            <tbody>{body}</tbody>
+          </table></div>
+        </div>"""
+
+    return f"""<details class="matrix-collapsible">
+      <summary>Pick Type Tier Splits — Goblin/Demon OVER, Standard OVER+UNDER</summary>
+      <div class="matrix-body">
+        <div class="matrix-summary">Full A–D per pick type ({len(grid)} matrix cells). {n_ge} cells with ≥ {int(min_decided)} decided. Note: Standard Tier B may be structurally sparse when ml_prob is compressed below tier thresholds — “—” is not a missing-data bug.</div>
+        <div class="three-col">
+          {_table_for("Goblin", ["OVER"], "chip-goblin", "🎃")}
+          {_table_for("Demon", ["OVER"], "chip-demon", "😈")}
+          {_table_for("Standard", ["OVER", "UNDER"], "chip-std", "⭐")}
+        </div>
+      </div>
+    </details>"""
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 #  HTML FRAGMENT BUILDERS
 # ══════════════════════════════════════════════════════════════════════════════
@@ -832,166 +843,143 @@ def player_table(rows: list[dict], top: bool, min_decided: int = 5, limit: int =
     </table></div>"""
 
 
-def pick_type_def_tier_cards_html(rows: list[dict], min_decided: int = 1) -> str:
-    """
-    Four cards: Goblin/OVER, Demon/OVER, Standard/OVER, Standard/UNDER × all five def tiers.
-    Replaces the old BY PICK TYPE + BY TIER (A–D) + Standard O/U matrices.
-    """
-    if not rows:
-        return ""
-    groups: list[tuple[str, str, str]] = [
-        ("goblin", "OVER", "GOBLIN × DEF TIER"),
-        ("demon", "OVER", "DEMON × DEF TIER"),
-        ("standard", "OVER", "STANDARD OVER × DEF TIER"),
-        ("standard", "UNDER", "STANDARD UNDER × DEF TIER"),
-    ]
-
-    def _row_matches_pick_dir(r: dict, pick_kw: str, direction: str) -> bool:
-        if pick_kw not in str(r.get("Pick Type", "") or "").lower():
-            return False
-        d = str(r.get("Dir", "") or r.get("Direction", "")).strip().upper()
-        return d == direction.upper()
-
-    def _one_card(pick_kw: str, direction: str, title: str) -> str:
-        by_label: dict[str, dict] = {}
-        for tl in DEF_TIER_LABEL_ORDER:
-            sub = [
-                r
-                for r in rows
-                if _row_matches_pick_dir(r, pick_kw, direction)
-                and normalize_def_tier_label(def_tier_value_from_row(r)) == tl
-            ]
-            by_label[tl] = overall_stats(sub)
-
-        nonempty = [(tl, by_label[tl]) for tl in DEF_TIER_LABEL_ORDER if int(by_label[tl].get("decided", 0)) > 0]
-        empty = [(tl, by_label[tl]) for tl in DEF_TIER_LABEL_ORDER if int(by_label[tl].get("decided", 0)) == 0]
-        nonempty.sort(key=lambda x: float(x[1].get("hit_rate", 0)), reverse=True)
-        ordered = nonempty + empty
-
-        body = ""
-        for tl, st in ordered:
-            d = int(st.get("decided", 0))
-            h_ = int(st.get("hits", 0))
-            hr = float(st.get("hit_rate", 0))
-            if d <= 0:
-                body += f"""<tr class="matrix-empty">
-          <td><strong>{h(tl)}</strong></td>
-          <td class="right mono muted">—</td>
-          <td class="right mono muted">—</td>
-          <td class="mono right muted">—</td>
-          <td><span class="muted">—</span></td>
-        </tr>"""
-                continue
-            row_cls = "player-hit" if hr >= 55 else ("player-miss" if hr < 48 else "player-warn")
-            if d < int(min_decided):
-                row_cls += " matrix-sparse"
-            col_txt = rate_color(hr)
-            bar_c = "var(--green)" if hr >= 60.0 else ("var(--gold)" if hr >= 50.0 else "var(--red)")
-            bar_w = min(hr, 100.0)
-            body += f"""<tr class="{row_cls}">
-          <td><strong>{h(tl)}</strong></td>
-          <td class="right mono">{fmt_num(d)}</td>
-          <td class="right mono pos">{fmt_num(h_)}</td>
-          <td class="mono right" style="color:{col_txt};font-weight:700">{pct(hr)}</td>
-          <td><div class="rate-bar-bg" style="min-width:64px"><div class="rate-bar-fill" style="width:{bar_w:.1f}%;background:{bar_c}"></div></div></td>
-        </tr>"""
-
-        return f"""<div class="insight-card def-tier-pick-card">
-      <div class="insight-title" style="margin-bottom:10px">{h(title)}</div>
-      <div class="table-wrap" style="margin-bottom:0">
-        <table>
-          <thead><tr>
-            <th>DEF TIER</th>
-            <th class="right">DECIDED</th>
-            <th class="right">HITS</th>
-            <th class="right">HIT RATE</th>
-            <th>BAR</th>
-          </tr></thead>
-          <tbody>{body}</tbody>
-        </table>
-      </div>
-    </div>"""
-
-    cards = "".join(_one_card(pk, dr, ttl) for pk, dr, ttl in groups)
-    return f"""<div class="def-tier-breakdown-section" style="margin-top:12px;margin-bottom:12px;width:100%;max-width:100%;box-sizing:border-box">
-  <div class="section-label" style="margin-bottom:12px">DEF TIER BREAKDOWN</div>
-  <div class="def-tier-pick-cards-grid">
-    {cards}
-  </div>
-</div>"""
-
-
 def def_tier_table(rows: list[dict]) -> str:
-    """
-    Opponent defensive tier summary + four pick-type × def-tier cards + sorted pick-type tables.
-    Emitted for every sport block and ALL SPORTS whenever there are graded rows (even if Def Tier is blank).
-    """
-    if not rows:
-        return ""
     dt_agg = build_agg_from_rows(rows, "Def Tier")
+    if not dt_agg:
+        return ""
+    # Sort by a defined order
+    order = {
+        "elite": 0,
+        "above avg": 1,
+        "avg": 2,
+        "average": 2,
+        "below avg": 3,
+        "below average": 3,
+        "weak": 4,
+        "very weak": 5,
+    }
+    dt_agg.sort(key=lambda x: order.get(x["key"].lower().replace("🟢","").replace("🟡","").replace("🔴","").strip(), 99))
 
-    stats_by_tier: dict[str, dict] = {}
-    for d in dt_agg:
-        key = normalize_def_tier_label(d.get("key"))
-        if key:
-            stats_by_tier[key] = d
+    def _norm_def_tier_early(x: str) -> str:
+        return (
+            str(x or "")
+            .lower()
+            .replace("🟢", "")
+            .replace("🟡", "")
+            .replace("🔴", "")
+            .strip()
+        )
 
     rows_html = ""
-    for tier_label in DEF_TIER_LABEL_ORDER:
-        d = stats_by_tier.get(tier_label, {"key": tier_label, "decided": 0, "hits": 0, "hit_rate": 0})
-        sub_main = [r for r in rows if normalize_def_tier_label(def_tier_value_from_row(r)) == tier_label]
+    for d in dt_agg:
+        if d["decided"] == 0: continue
+        dkey0 = _norm_def_tier_early(d["key"])
+        sub_main = [r for r in rows if _norm_def_tier_early(r.get("Def Tier", "")) == dkey0]
         ou_main = over_under_lines_html(sub_main)
-        if int(d.get("decided", 0)) <= 0:
-            rows_html += f"""<tr class="matrix-empty">
-          <td style="vertical-align:top"><span style="font-weight:700">{h(tier_label)}</span>{ou_main}</td>
-          <td class="right mono muted">—</td>
-          <td class="right mono muted">—</td>
-          <td class="mono right muted">—</td>
-        </tr>"""
-            continue
         rows_html += f"""<tr class="{'player-hit' if d['hit_rate']>=55 else ('player-miss' if d['hit_rate']<48 else 'player-warn')}">
           <td style="vertical-align:top"><span style="font-weight:700">{h(d['key'])}</span>{ou_main}</td>
           <td class="right mono">{fmt_num(d['decided'])}</td>
           <td class="right mono">{fmt_num(d['hits'])}</td>
           <td>{rate_bar_html(d['hit_rate'])}</td>
         </tr>"""
+    if not rows_html:
+        return ""
+    # Breakdown matrices inside each defense tier (pick type + ticket tier)
+    def _norm_def_tier(x: str) -> str:
+        return (
+            str(x or "")
+            .lower()
+            .replace("🟢", "")
+            .replace("🟡", "")
+            .replace("🔴", "")
+            .strip()
+        )
+
+    def _stats_cell(s: dict[str, float]) -> str:
+        if not s or s.get("decided", 0) == 0:
+            return "—"
+        col = rate_color(s.get("hit_rate", 0))
+        return f'<span style="color:{col};font-weight:700">{pct(s["hit_rate"])}</span> <span class="muted-note" style="font-size:12px;padding:0">({fmt_num(s["decided"])})</span>'
+
+    combined_def_breakdown_rows = ""
+    detail_rows_std_dir = ""
     picktype_by_tier: dict[str, list[dict]] = {"goblin": [], "standard": [], "demon": []}
-    for tier_label in DEF_TIER_LABEL_ORDER:
-        d = stats_by_tier.get(tier_label, {"key": tier_label, "decided": 0, "hits": 0, "hit_rate": 0})
-        sub = [r for r in rows if normalize_def_tier_label(def_tier_value_from_row(r)) == tier_label]
+    for d in dt_agg:
+        if d["decided"] == 0:
+            continue
+        dkey = _norm_def_tier(d["key"])
+        sub = [r for r in rows if _norm_def_tier(r.get("Def Tier", "")) == dkey]
+        if not sub:
+            continue
 
         gob = pick_type_stats(sub, "goblin")
         std = pick_type_stats(sub, "standard")
         dem = pick_type_stats(sub, "demon")
-        if int(d.get("decided", 0)) > 0:
-            picktype_by_tier["goblin"].append({"def_tier": d["key"], **gob})
-            picktype_by_tier["standard"].append({"def_tier": d["key"], **std})
-            picktype_by_tier["demon"].append({"def_tier": d["key"], **dem})
+        std_over_rows = [
+            r for r in sub
+            if "standard" in str(r.get("Pick Type", "")).lower()
+            and str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "OVER"
+        ]
+        std_under_rows = [
+            r for r in sub
+            if "standard" in str(r.get("Pick Type", "")).lower()
+            and str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "UNDER"
+        ]
+        std_over = overall_stats(std_over_rows) if std_over_rows else {"decided": 0, "hit_rate": 0}
+        std_under = overall_stats(std_under_rows) if std_under_rows else {"decided": 0, "hit_rate": 0}
 
-    def _picktype_sorted_table(kind: str, label: str) -> str:
-        rows_k = [x for x in picktype_by_tier.get(kind, []) if x.get("decided", 0) > 0]
-        if not rows_k:
-            return ""
-        rows_k.sort(key=lambda x: (x.get("hit_rate", 0), x.get("decided", 0)), reverse=True)
-        body = ""
-        for r in rows_k:
-            hr = float(r.get("hit_rate", 0))
-            row_cls = "player-hit" if hr >= 55 else ("player-miss" if hr < 48 else "player-warn")
-            canon = str(r.get("def_tier", "")).strip()
-            slice_ou = [
-                x
-                for x in rows
-                if normalize_def_tier_label(def_tier_value_from_row(x)) == canon
-                and kind.lower() in str(x.get("Pick Type", "") or "").lower()
-            ]
-            ou_line = over_under_lines_html(slice_ou)
-            body += f"""<tr class="{row_cls}">
+        picktype_by_tier["goblin"].append({"def_tier": d["key"], **gob})
+        picktype_by_tier["standard"].append({"def_tier": d["key"], **std})
+        picktype_by_tier["demon"].append({"def_tier": d["key"], **dem})
+
+        t_cells: list[str] = []
+        for t in ("A", "B", "C", "D"):
+            t_rows = [r for r in sub if str(r.get("Tier", "") or "").strip().upper() == t]
+            t_stats = overall_stats(t_rows) if t_rows else {"decided": 0, "hit_rate": 0}
+            t_cells.append(
+                f'<td class="mono" style="vertical-align:top">{_stats_cell(t_stats)}'
+                f"{over_under_lines_html(t_rows)}</td>"
+            )
+
+        combined_def_breakdown_rows += f"""<tr>
+          <td><strong>{h(d["key"])}</strong></td>
+          <td class="mono" style="vertical-align:top">{_stats_cell(gob)}{over_under_lines_html(rows_for_pick_type(sub, "goblin"))}</td>
+          <td class="mono" style="vertical-align:top">{_stats_cell(std)}{over_under_lines_html(rows_for_pick_type(sub, "standard"))}</td>
+          <td class="mono" style="vertical-align:top">{_stats_cell(dem)}{over_under_lines_html(rows_for_pick_type(sub, "demon"))}</td>
+          {''.join(t_cells)}
+        </tr>"""
+        detail_rows_std_dir += f"""<tr>
+          <td><strong>{h(d["key"])}</strong></td>
+          <td class="mono">{_stats_cell(std_over)}</td>
+          <td class="mono">{_stats_cell(std_under)}</td>
+        </tr>"""
+
+    detail_tables = ""
+    if combined_def_breakdown_rows or detail_rows_std_dir:
+        def _picktype_sorted_table(kind: str, label: str) -> str:
+            rows_k = [x for x in picktype_by_tier.get(kind, []) if x.get("decided", 0) > 0]
+            if not rows_k:
+                return ""
+            rows_k.sort(key=lambda x: (x.get("hit_rate", 0), x.get("decided", 0)), reverse=True)
+            body = ""
+            for r in rows_k:
+                hr = float(r.get("hit_rate", 0))
+                row_cls = "player-hit" if hr >= 55 else ("player-miss" if hr < 48 else "player-warn")
+                dtk = _norm_def_tier(str(r.get("def_tier", "")))
+                slice_ou = [
+                    x
+                    for x in rows
+                    if _norm_def_tier(x.get("Def Tier", "")) == dtk
+                    and kind.lower() in str(x.get("Pick Type", "") or "").lower()
+                ]
+                ou_line = over_under_lines_html(slice_ou)
+                body += f"""<tr class="{row_cls}">
           <td style="vertical-align:top"><strong>{h(str(r.get("def_tier", "")))}</strong>{ou_line}</td>
           <td class="right mono">{fmt_num(r.get("decided", 0))}</td>
           <td class="right mono pos">{fmt_num(r.get("hits", 0))}</td>
           <td>{rate_bar_html(hr)}</td>
         </tr>"""
-        return f"""<div>
+            return f"""<div>
         <div class="section-label">DEF TIER BREAKDOWN — {label} (SORTED)</div>
         <div class="table-wrap"><table>
           <thead><tr><th>DEF TIER</th><th class="right">DECIDED</th><th class="right">HITS</th><th>HIT RATE</th></tr></thead>
@@ -999,13 +987,35 @@ def def_tier_table(rows: list[dict]) -> str:
         </table></div>
       </div>"""
 
-    split_picktype_tables = f"""<div class="three-col" style="margin-top:12px">
+        split_picktype_tables = f"""<div class="three-col" style="margin-top:12px">
       {_picktype_sorted_table("goblin", "GOBLIN")}
       {_picktype_sorted_table("standard", "STANDARD")}
       {_picktype_sorted_table("demon", "DEMON")}
     </div>"""
 
-    detail_tables = f"""{pick_type_def_tier_cards_html(rows)}
+        detail_tables = f"""<div style="margin-top:12px">
+      <div class="section-label">DEF TIER BREAKDOWN — PICK TYPE × RANK TIER (COMBINED)</div>
+      <p style="font-size:12px;color:var(--muted2);margin:4px 0 10px;line-height:1.45">
+        One row per opponent def tier. Columns <strong>Goblin–Demon</strong> are pick-type slices;
+        columns <strong>Tier A–D</strong> are rank-tier slices (same props can appear in both groupings).
+        Scroll horizontally on small screens.
+      </p>
+      <div class="table-wrap" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="min-width:920px">
+          <thead><tr>
+            <th>DEF TIER</th>
+            <th>GOBLIN</th><th>STANDARD</th><th>DEMON</th>
+            <th>TIER A</th><th>TIER B</th><th>TIER C</th><th>TIER D</th>
+          </tr></thead>
+          <tbody>{combined_def_breakdown_rows}</tbody>
+        </table></div>
+    </div>
+    <div style="margin-top:12px">
+      <div class="section-label">DEF TIER BREAKDOWN — STANDARD (OVER/UNDER)</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>DEF TIER</th><th>STANDARD OVER</th><th>STANDARD UNDER</th></tr></thead>
+        <tbody>{detail_rows_std_dir}</tbody>
+      </table></div>
+    </div>
     {split_picktype_tables}"""
 
     return f"""<div class="section-label">HIT RATE BY OPPONENT DEFENSIVE TIER</div>
@@ -1024,16 +1034,14 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
     if not rows:
         return ""
 
-    # Unified Def Tier column for NBA/CBB/NHL/Soccer/MLB exports (ALL SPORTS + per-sport blocks).
-    rows = normalize_rows_def_tier_column(rows)
-
     if sport.strip().upper() == "MLB" and (not (icon or "").strip() or (icon or "").strip().upper() == "MLB"):
         icon = "⚾"
 
     stats  = overall_stats(rows)
     total_label = fmt_num(stats["total"]) if stats["total"] > 0 else fmt_num(stats["decided"] + stats["voids"])
-    # Apply the pick-type x tier matrix uniformly across all sport sections.
+    # Apply the pick-type x tier analysis uniformly across all sport sections.
     matrix_section = pick_tier_direction_matrix_html(rows, min_decided=10)
+    split_section = pick_type_tier_direction_split_html(rows, min_decided=10)
 
     # ── Def Tier ───────────────────────────────────────────────────────────────
     def_section = def_tier_table(rows)
@@ -1087,8 +1095,8 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
             return str(x or "").lower().replace("🟢","").replace("🟡","").replace("🔴","").strip()
 
         by_def = f"""<div class="two-col">
-          <div><div class="section-label">VS ELITE/ABOVE AVG DEF — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if _norm_def_tier_for_split(def_tier_value_from_row(r)) in ("elite","above avg")], min_decided=5)}</div>
-          <div><div class="section-label">VS AVG / BELOW AVG / WEAK DEF — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if _norm_def_tier_for_split(def_tier_value_from_row(r)) in ("avg","average","below avg","below average","weak","very weak")], min_decided=5)}</div>
+          <div><div class="section-label">VS ELITE/ABOVE AVG DEF — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if _norm_def_tier_for_split(r.get("Def Tier","")) in ("elite","above avg")], min_decided=5)}</div>
+          <div><div class="section-label">VS AVG / BELOW AVG / WEAK DEF — TOP PROP TYPES (≥5 DECIDED)</div>{_prop_table_for_subset([r for r in rows if _norm_def_tier_for_split(r.get("Def Tier","")) in ("avg","average","below avg","below average","weak","very weak")], min_decided=5)}</div>
         </div>"""
 
         prop_section = f"""<div class="section-label">PROP TYPE BREAKDOWNS</div>
@@ -1132,6 +1140,7 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
     </summary>
     <div class="sport-section-body">
       {matrix_section}
+      {split_section}
       {def_section}
       {prop_section}
       {player_section}
@@ -1143,85 +1152,131 @@ def build_sport_section(rows: list[dict], sport: str, icon: str) -> str:
 #  TAKEAWAYS / INSIGHTS
 # ══════════════════════════════════════════════════════════════════════════════
 
-def build_takeaways(nba_rows: list[dict], cbb_rows: list[dict]) -> str:
-    insights = []
-    alerts   = []
+def _takeaway_sport_snippets(
+    bundles: list[tuple[str, list[dict]]],
+) -> str:
+    """One-line per sport hit rate for the takeaway summary (only sports with decided props)."""
+    parts: list[str] = []
+    for label, rows in bundles:
+        if not rows:
+            continue
+        st = overall_stats(rows)
+        if st["decided"] <= 0:
+            continue
+        parts.append(f"<strong>{h(label)}</strong>: {pct(st['hit_rate'])} ({fmt_num(st['decided'])} dec)")
+    return (" · ".join(parts)) if parts else ""
 
-    def add_insight(icon, title, body):
+
+def build_takeaways(
+    nba_rows: list[dict],
+    cbb_rows: list[dict],
+    nhl_rows: list[dict] | None = None,
+    soccer_rows: list[dict] | None = None,
+    mlb_rows: list[dict] | None = None,
+) -> str:
+    """
+    Insight cards at the bottom of slate_eval. Uses **all loaded sports** so Railway /grades
+    shows combined takeaways (not NBA-only) when MLB/NHL/Soccer are graded without NBA.
+    """
+    nhl_rows = nhl_rows or []
+    soccer_rows = soccer_rows or []
+    mlb_rows = mlb_rows or []
+
+    all_rows: list[dict] = (
+        list(nba_rows) + list(cbb_rows) + list(nhl_rows) + list(soccer_rows) + list(mlb_rows)
+    )
+
+    insights: list[str] = []
+    alerts: list[str] = []
+
+    def add_insight(icon: str, title: str, body: str) -> None:
         insights.append(f"""<div class="insight-card">
       <div class="insight-icon">{icon}</div>
       <div class="insight-title">{h(title)}</div>
       <div class="insight-body">{body}</div>
     </div>""")
 
-    # NBA insights
-    if nba_rows:
-        nba_stats = overall_stats(nba_rows)
-        nba_tier_a = tier_a_stats(nba_rows)
-        nba_goblin = pick_type_stats(nba_rows, "goblin")
-        nba_demon  = pick_type_stats(nba_rows, "demon")
-        nba_std    = pick_type_stats(nba_rows, "standard")
+    if not all_rows:
+        add_insight("📊", "No Data", "No graded props found for this date.")
+        insights_html = "\n".join(insights)
+        return f"""<div class="sport-section">
+    <div class="sport-header">
+      <div class="sport-label">📋 TAKEAWAYS</div>
+      <div class="sport-header-line"></div>
+    </div>
+    <div class="insight-grid">{insights_html}</div>
+  </div>"""
 
-        # Tier A + Goblin
-        if nba_tier_a["decided"] > 0 or nba_goblin["decided"] > 0:
-            ta_str = f"NBA Tier A: <strong>{pct(nba_tier_a['hit_rate'])}</strong>." if nba_tier_a["decided"] > 0 else ""
-            gb_str = f" NBA Goblin: <strong>{pct(nba_goblin['hit_rate'])}</strong>." if nba_goblin["decided"] > 0 else ""
-            if cbb_rows:
-                cbb_gob = pick_type_stats(cbb_rows, "goblin")
-                if cbb_gob["decided"] > 0:
-                    gb_str += f" CBB Goblin: <strong>{pct(cbb_gob['hit_rate'])}</strong>."
-            if nba_tier_a["hit_rate"] >= 60 or nba_goblin["hit_rate"] >= 58:
-                add_insight("✅", "Tier A & Goblin Performance", ta_str + gb_str)
-            else:
-                add_insight("⚠️", "Tier A & Goblin Performance", ta_str + gb_str)
+    all_stats = overall_stats(all_rows)
+    bundles = [
+        ("NBA", nba_rows),
+        ("CBB", cbb_rows),
+        ("NHL", nhl_rows),
+        ("Soccer", soccer_rows),
+        ("MLB", mlb_rows),
+    ]
+    sport_line = _takeaway_sport_snippets(bundles)
 
-        # Demon alert
-        if nba_demon["decided"] > 0:
-            demon_str = f"NBA Demons: <strong>{pct(nba_demon['hit_rate'])}</strong>."
-            if cbb_rows:
-                cbb_dem = pick_type_stats(cbb_rows, "demon")
-                if cbb_dem["decided"] > 0:
-                    demon_str += f" CBB Demons: <strong>{pct(cbb_dem['hit_rate'])}</strong>."
-            if nba_demon["hit_rate"] < 45:
-                add_insight("🚨", "Demon Line Performance", demon_str + " Demon hit rate is well below breakeven — monitor before including in slips.")
-                alerts.append(f'<div class="alert alert-red"><div class="alert-title">🚨 {sport_label("NBA")} Demon Lines — {pct(nba_demon["hit_rate"])} on {fmt_num(nba_demon["decided"])} decided</div>Demon hit rate is well below breakeven. Exclude from slips until further notice.</div>')
-            else:
-                add_insight("📊", "Demon Line Performance", demon_str + " Monitor demon performance before including in slips.")
+    # ── Combined overall summary (all sports) ─────────────────────────────
+    add_insight(
+        "📋",
+        "Overall Slate Summary (all sports)",
+        f"Combined: <strong>{pct(all_stats['hit_rate'])}</strong> on "
+        f"{fmt_num(all_stats['decided'])} decided props."
+        + (f"<br/><span style=\"opacity:0.92\">{sport_line}</span>" if sport_line else ""),
+    )
 
-        # Overall summary
-        cbb_str = ""
-        if cbb_rows:
-            cbb_s = overall_stats(cbb_rows)
-            cbb_str = f" CBB: <strong>{pct(cbb_s['hit_rate'])}</strong> overall ({fmt_num(cbb_s['decided'])} decided)."
-        add_insight("📋", "Overall Slate Summary",
-            f"NBA: <strong>{pct(nba_stats['hit_rate'])}</strong> overall ({fmt_num(nba_stats['decided'])} decided).{cbb_str}")
+    # Tier A + Goblin — aggregated across every sport in the slate
+    ta_all = tier_a_stats(all_rows)
+    gb_all = pick_type_stats(all_rows, "goblin")
+    if ta_all["decided"] > 0 or gb_all["decided"] > 0:
+        ta_str = f"Tier A: <strong>{pct(ta_all['hit_rate'])}</strong> ({fmt_num(ta_all['decided'])} dec)." if ta_all["decided"] > 0 else ""
+        gb_str = f" Goblin: <strong>{pct(gb_all['hit_rate'])}</strong> ({fmt_num(gb_all['decided'])} dec)." if gb_all["decided"] > 0 else ""
+        body = (ta_str + " " + gb_str).strip()
+        if ta_all["hit_rate"] >= 60 or (gb_all["decided"] > 0 and gb_all["hit_rate"] >= 58):
+            add_insight("✅", "Tier A & Goblin (all sports)", body)
+        else:
+            add_insight("⚠️", "Tier A & Goblin (all sports)", body)
 
-        # Over vs Under (last card often sits alone in a 3-col grid — span full row via CSS)
-        nba_over = overall_stats(
-            [r for r in nba_rows if str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "OVER"]
-        )
-        nba_under = overall_stats(
-            [r for r in nba_rows if str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "UNDER"]
-        )
-        if nba_over["decided"] > 0 and nba_under["decided"] > 0:
+    # Demon — all sports
+    dem_all = pick_type_stats(all_rows, "demon")
+    if dem_all["decided"] > 0:
+        demon_str = f"Demons (all sports): <strong>{pct(dem_all['hit_rate'])}</strong> on {fmt_num(dem_all['decided'])} decided."
+        if dem_all["hit_rate"] < 45:
             add_insight(
-                "📈",
-                "Over vs Under Performance",
-                f"NBA OVERs: <strong>{pct(nba_over['hit_rate'])}</strong>. NBA UNDERs: <strong>{pct(nba_under['hit_rate'])}</strong>.",
+                "🚨",
+                "Demon Line Performance (all sports)",
+                demon_str + " Demon hit rate is well below breakeven — monitor before including in slips.",
+            )
+            alerts.append(
+                f'<div class="alert alert-red"><div class="alert-title">🚨 Demon lines (all sports) — '
+                f'{pct(dem_all["hit_rate"])} on {fmt_num(dem_all["decided"])} decided</div>'
+                f"Demon hit rate is well below breakeven. Exclude from slips until further notice.</div>"
+            )
+        else:
+            add_insight(
+                "📊",
+                "Demon Line Performance (all sports)",
+                demon_str + " Monitor demon performance before including in slips.",
             )
 
-    # Worst NBA players (alerts)
-    if nba_rows:
-        for r in nba_rows:
-            player = str(r.get("Player","") or "").strip()
-            result = str(r.get("Result","") or r.get("Grade","") or "").strip().upper()
-            # individual bad performers flagged in alerts
-
-    if not insights:
-        add_insight("📊","No Data","No graded props found for this date.")
+    # Over vs Under — all sports (matches ALL SPORTS matrix scope)
+    over_all = overall_stats(
+        [r for r in all_rows if str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "OVER"]
+    )
+    under_all = overall_stats(
+        [r for r in all_rows if str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "UNDER"]
+    )
+    if over_all["decided"] > 0 and under_all["decided"] > 0:
+        add_insight(
+            "📈",
+            "Over vs Under (all sports)",
+            f"OVERs: <strong>{pct(over_all['hit_rate'])}</strong> ({fmt_num(over_all['decided'])} dec). "
+            f"UNDERs: <strong>{pct(under_all['hit_rate'])}</strong> ({fmt_num(under_all['decided'])} dec).",
+        )
 
     insights_html = "\n".join(insights)
-    alerts_html   = "\n".join(alerts)
+    alerts_html = "\n".join(alerts)
 
     return f"""<div class="sport-section">
     <div class="sport-header">
@@ -1234,7 +1289,9 @@ def build_takeaways(nba_rows: list[dict], cbb_rows: list[dict]) -> str:
 
 
 def sport_label(s: str) -> str:
-    return {"NBA":"🏀 NBA","CBB":"🎓 CBB"}.get(s.upper(), s)
+    return {"NBA": "🏀 NBA", "CBB": "🎓 CBB", "NHL": "🏒 NHL", "MLB": "⚾ MLB", "SOCCER": "⚽ Soccer"}.get(
+        s.upper(), s
+    )
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1403,9 +1460,6 @@ background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);border:1px solid va
 /* Last card is alone on its row when count is 1,4,7,… — span full width instead of a narrow left column */
 .insight-grid>.insight-card:last-child:nth-child(3n+1){grid-column:1 / -1}
 .insight-card{background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--glass-bd);border-radius:12px;padding:14px 16px;box-shadow:0 4px 20px rgba(0,0,0,.15);min-width:0;box-sizing:border-box}
-.def-tier-pick-cards-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:0;width:100%;max-width:100%;box-sizing:border-box;align-items:stretch}
-.def-tier-pick-card{margin-bottom:0}
-.def-tier-breakdown-section{width:100%;max-width:100%;box-sizing:border-box}
 .insight-icon{font-size:22px;margin-bottom:8px}
 .insight-title{font-weight:700;font-size:14px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:var(--gold)}
 .insight-body{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted2);line-height:1.6}
@@ -1429,7 +1483,6 @@ td.muted{color:var(--muted2)}
 .stat-grid{justify-items:start;justify-content:start}
 .stat-grid-4,.stat-grid-2{grid-template-columns:repeat(auto-fill,minmax(min(100%,9rem),max-content))}
 .two-col,.three-col{grid-template-columns:1fr}
-.def-tier-pick-cards-grid{grid-template-columns:1fr;gap:12px}
 .insight-grid{display:grid;grid-template-columns:1fr;gap:14px;width:100%;max-width:100%}
 .insight-grid>.insight-card:last-child:nth-child(3n+1){grid-column:auto}
 .insight-card{width:100%;max-width:100%;min-width:0}
@@ -1601,7 +1654,13 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
     nhl_section    = build_sport_section(nhl_rows,    "NHL",    "🏒") if nhl_rows    else ""
     soccer_section = build_sport_section(soccer_rows, "Soccer", "⚽") if soccer_rows else ""
     mlb_section    = build_sport_section(mlb_rows,    "MLB",    "⚾") if mlb_rows    else ""
-    takeaways   = build_takeaways(nba_rows, cbb_rows)
+    takeaways = build_takeaways(
+        nba_rows,
+        cbb_rows,
+        nhl_rows=nhl_rows,
+        soccer_rows=soccer_rows,
+        mlb_rows=mlb_rows,
+    )
 
     if not nba_section and not cbb_section and not nhl_section and not soccer_section and not mlb_section:
         body_content = """<div style="text-align:center;padding:60px 20px;font-family:'Inter',sans-serif">

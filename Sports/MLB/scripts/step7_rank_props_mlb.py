@@ -639,9 +639,11 @@ def main() -> None:
     _mlb_slug = "mlb"
     out["tier"] = assign_tier_column(out, sport=_mlb_slug)
     _dc = _resolve_ml_prob_cuts(_mlb_slug, "demon")
+    _sc = _resolve_ml_prob_cuts(_mlb_slug, "standard")
     print(
         f"[MLB step7] tier ml_prob: sport_slug={_mlb_slug!r}; "
-        f"Demon fallback A/B/C cuts = {_dc[0]}/{_dc[1]}/{_dc[2]}"
+        f"Demon fallback A/B/C = {_dc[0]}/{_dc[1]}/{_dc[2]}; "
+        f"Standard A/B/C = {_sc[0]}/{_sc[1]}/{_sc[2]}"
     )
     report_goblin_demon_standard_line_fill(out, "[MLB step7]")
     print_tier_distribution_by_pick_direction_group(out, label="[MLB step7]")
