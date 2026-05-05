@@ -315,6 +315,68 @@ def export_graded_props_json(
     return out
 
 
+def export_analysis_tabs_xlsx(
+    date_str: str,
+    out_dir: Path,
+    rows: list[dict],
+) -> Path:
+    """
+    Export core analysis tables used on Grades page into workbook tabs:
+      - Performance Matrix (Pick Type × Tier × Direction)
+      - DEF TIER BREAKDOWN (combined grid with % + decided counts)
+    """
+    wb = openpyxl.Workbook()
+
+    # Sheet 1: Performance Matrix
+    ws = wb.active
+    ws.title = "Performance Matrix"
+    ws.append(["Pick Type", "Tier", "Direction", "Decided", "Hits", "Misses", "Hit Rate %"])
+
+    agg = build_pick_tier_direction_agg(rows)
+    for pt, tier, direction in _canonical_pick_tier_direction_keys():
+        v = agg.get((pt, tier, direction), {"hits": 0, "misses": 0, "decided": 0})
+        d = int(v.get("decided", 0) or 0)
+        h_ = int(v.get("hits", 0) or 0)
+        m_ = int(v.get("misses", 0) or 0)
+        hr = round((h_ / d * 100.0), 1) if d > 0 else None
+        ws.append([pt, f"TIER {tier}", direction, d, h_, m_, hr])
+
+    # Sheet 2: DEF TIER BREAKDOWN
+    ws2 = wb.create_sheet("DEF TIER BREAKDOWN")
+    groups: tuple[tuple[str, str, str], ...] = (
+        ("Goblin OVER", "Goblin", "OVER"),
+        ("Demon OVER", "Demon", "OVER"),
+        ("Std OVER", "Standard", "OVER"),
+        ("Std UNDER", "Standard", "UNDER"),
+    )
+    ranks = ("A", "B", "C", "D")
+    canon_defs = ("Elite", "Above Avg", "Avg", "Below Avg", "Weak", "Total")
+
+    hdr: list[str] = ["Def Tier"]
+    for glabel, _pick, _direction in groups:
+        for rk in ranks:
+            hdr.append(f"{glabel} {rk} %")
+            hdr.append(f"{glabel} {rk} Decided")
+    ws2.append(hdr)
+
+    for def_label in canon_defs:
+        canon = None if def_label == "Total" else def_label
+        row_out: list[Any] = [def_label]
+        for _glabel, pick, direction in groups:
+            for rk in ranks:
+                cell_rows = _rows_for_def_subgrid_cell(rows, canon, pick, direction, rk)
+                st = overall_stats(cell_rows)
+                d = int(st.get("decided", 0) or 0)
+                hr = round(float(st.get("hit_rate", 0.0) or 0.0), 1) if d > 0 else None
+                row_out.append(hr)
+                row_out.append(d)
+        ws2.append(row_out)
+
+    out = out_dir / f"graded_analysis_tabs_{date_str}.xlsx"
+    wb.save(out)
+    return out
+
+
 def _norm_def_label(v: Any) -> str:
     t = _cell_str(v).lower()
     if not t:
@@ -2070,6 +2132,9 @@ def main() -> None:
         ],
     )
     print(f"  Saved  -> {json_p}")
+    all_rows = [*nba_rows_merged, *cbb_rows, *nhl_rows, *soccer_rows, *mlb_rows]
+    tabs_p = export_analysis_tabs_xlsx(date_str, out_p.parent, all_rows)
+    print(f"  Saved  -> {tabs_p}")
     print("  Done.")
 
 
