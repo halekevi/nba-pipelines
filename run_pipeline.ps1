@@ -187,7 +187,8 @@ function Run-Step {
         [string]$Label,
         [string]$Dir,
         [string]$Script,
-        [string]$Arguments = ""
+        [string]$Arguments = "",
+        [int]$TimeoutSeconds = 0
     )
     Write-Host "  --> $Label" -ForegroundColor Yellow
     Push-Location $Dir
@@ -197,8 +198,35 @@ function Run-Step {
         $env:PYTHONIOENCODING = "utf-8"
         $cmd = if ($Arguments) { "py -3.14 `"$Script`" $Arguments" } else { "py -3.14 `"$Script`"" }
         Write-Host "        CMD: $cmd" -ForegroundColor DarkGray
-        $output = Invoke-Expression $cmd 2>&1
-        $exit   = $LASTEXITCODE
+        if ($TimeoutSeconds -gt 0) {
+            Write-Host "        Timeout: ${TimeoutSeconds}s" -ForegroundColor DarkGray
+            $job = Start-Job -ScriptBlock {
+                param($Command, $WorkingDir)
+                Set-Location $WorkingDir
+                $env:PYTHONUTF8       = "1"
+                $env:PYTHONIOENCODING = "utf-8"
+                $output = Invoke-Expression $Command 2>&1
+                $exit   = $LASTEXITCODE
+                [pscustomobject]@{
+                    Output = $output
+                    Exit   = $exit
+                }
+            } -ArgumentList $cmd, (Get-Location).Path
+            $completed = Wait-Job -Job $job -Timeout $TimeoutSeconds
+            if (-not $completed) {
+                Stop-Job -Job $job -ErrorAction SilentlyContinue
+                Remove-Job -Job $job -Force -ErrorAction SilentlyContinue
+                Write-Host "      FAILED (timeout after ${TimeoutSeconds}s)" -ForegroundColor Red
+                return $false
+            }
+            $result = Receive-Job -Job $job
+            Remove-Job -Job $job -Force -ErrorAction SilentlyContinue
+            $output = @($result.Output)
+            $exit   = [int]$result.Exit
+        } else {
+            $output = Invoke-Expression $cmd 2>&1
+            $exit   = $LASTEXITCODE
+        }
         foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
         if ($exit -ne 0) { Write-Host "      FAILED (exit $exit)" -ForegroundColor Red; return $false }
         Write-Host "      OK" -ForegroundColor Green; return $true
@@ -842,7 +870,7 @@ if ($MLBOnly) {
     }
     if ($ok) { $ok = Run-Step "MLB Step 2 - Attach Pick Types"  $MLBDir ".\scripts\step2_attach_picktypes_mlb.py"       "--input step1_mlb_props.csv --output step2_mlb_picktypes.csv --id_lookup_timeout_s 6 --id_lookup_retries 2 --id_lookup_budget_s 180" }
     if ($ok) { $ok = Run-Step "MLB Step 3 - Attach Defense"     $MLBDir ".\scripts\step3_attach_defense_mlb.py"         "--input step2_mlb_picktypes.csv --defense mlb_defense_summary.csv --output step3_mlb_with_defense.csv" }
-    if ($ok) { $ok = Run-Step "MLB Step 4 - Player Stats"       $MLBDir ".\scripts\step4_attach_player_stats_mlb.py"    "--input step3_mlb_with_defense.csv --cache mlb_stats_cache.csv --output step4_mlb_with_stats.csv --season 2025" }
+    if ($ok) { $ok = Run-Step "MLB Step 4 - Player Stats"       $MLBDir ".\scripts\step4_attach_player_stats_mlb.py"    "--input step3_mlb_with_defense.csv --cache mlb_stats_cache.csv --output step4_mlb_with_stats.csv --season 2025" -TimeoutSeconds 1200 }
     if ($ok) { $ok = Run-Step "MLB Step 5 - Line Hit Rates"     $MLBDir ".\scripts\step5_add_line_hit_rates_mlb.py"     "--input step4_mlb_with_stats.csv --output step5_mlb_hit_rates.csv" }
     if ($ok) { $ok = Run-Step "MLB Step 6 - Team Role Context"  $MLBDir ".\scripts\step6_team_role_context_mlb.py"      "--input step5_mlb_hit_rates.csv --output step6_mlb_role_context.csv" }
     if ($ok) { $ok = Run-Step "MLB Step 7 - Rank Props"         $MLBDir ".\scripts\step7_rank_props_mlb.py"             "--input step6_mlb_role_context.csv --output step7_mlb_ranked.xlsx" }
