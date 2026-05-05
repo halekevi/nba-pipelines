@@ -1,29 +1,29 @@
 {
-  "generated_at": "2026-05-05T03:29:32.709456+00:00",
+  "generated_at": "2026-05-05T03:56:22.151204+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Jalen Green",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -32,24 +32,24 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Jalen Green",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -58,24 +58,24 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Jalen Green",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -84,24 +84,24 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Jalen Green",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -110,24 +110,24 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Jalen Green",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -136,24 +136,24 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Jalen Green",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -162,24 +162,24 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Paul George",
+          "player": "Paolo Banchero",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 17.5,
+          "line": 17.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 6.0,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -188,30 +188,30 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Austin Reaves",
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -224,30 +224,30 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Austin Reaves",
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -260,30 +260,30 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Austin Reaves",
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -296,30 +296,30 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Austin Reaves",
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -332,30 +332,30 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Austin Reaves",
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -368,30 +368,30 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Austin Reaves",
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -404,30 +404,30 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Jalen Green",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Scoot Henderson",
-          "prop_type": "Pts+Rebs",
-          "line": 16.5,
-          "standard_line": 17.5,
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -440,34 +440,34 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Jalen Green",
+          "prop_type": "Rebs+Asts",
+          "line": 5.5,
+          "standard_line": 8.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Paul George",
+          "player": "Paolo Banchero",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 17.5,
+          "line": 17.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 6.0,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -476,34 +476,34 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Austin Reaves",
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
+          "player": "Paolo Banchero",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 21.5,
+          "pick_type": "Demon",
+          "delta": 4.0,
           "direction": "OVER",
           "hit_rate": 1.0
-        },
-        {
-          "player": "Paul George",
-          "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 17.5,
-          "pick_type": "Demon",
-          "delta": 6.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         }
       ]
     },
@@ -512,40 +512,40 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Austin Reaves",
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Amen Thompson",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
+          "line": 40.5,
+          "standard_line": 40.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
+          "direction": "UNDER",
+          "hit_rate": 0.0
         },
         {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -558,40 +558,40 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Austin Reaves",
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Amen Thompson",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
+          "line": 40.5,
+          "standard_line": 40.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
+          "direction": "UNDER",
+          "hit_rate": 0.0
         },
         {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -604,40 +604,40 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Austin Reaves",
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Amen Thompson",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
+          "line": 40.5,
+          "standard_line": 40.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
+          "direction": "UNDER",
+          "hit_rate": 0.0
         },
         {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -650,40 +650,40 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Austin Reaves",
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Amen Thompson",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
+          "line": 40.5,
+          "standard_line": 40.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
+          "direction": "UNDER",
+          "hit_rate": 0.0
         },
         {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -696,40 +696,40 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Austin Reaves",
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Amen Thompson",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
+          "line": 40.5,
+          "standard_line": 40.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
+          "direction": "UNDER",
+          "hit_rate": 0.0
         },
         {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -742,40 +742,40 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Austin Reaves",
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Amen Thompson",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
+          "line": 40.5,
+          "standard_line": 40.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
+          "direction": "UNDER",
+          "hit_rate": 0.0
         },
         {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -788,40 +788,40 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Austin Reaves",
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Scoot Henderson",
-          "prop_type": "Pts+Rebs",
-          "line": 16.5,
-          "standard_line": 17.5,
+          "player": "Devin Booker",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -834,44 +834,44 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Austin Reaves",
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
+          "player": "Paolo Banchero",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 17.5,
+          "line": 17.5,
+          "standard_line": 21.5,
           "pick_type": "Demon",
-          "delta": 6.0,
+          "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -880,44 +880,44 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Austin Reaves",
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Amen Thompson",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
+          "line": 40.5,
+          "standard_line": 40.5,
           "pick_type": "Standard",
           "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Paolo Banchero",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 21.5,
+          "pick_type": "Demon",
+          "delta": 4.0,
           "direction": "OVER",
           "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Paul George",
-          "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 17.5,
-          "pick_type": "Demon",
-          "delta": 6.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
         }
       ]
     },
@@ -926,50 +926,50 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaxson Hayes",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Evan Mobley",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "line": 40.5,
+          "standard_line": 40.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Asts",
+          "line": 7.5,
+          "standard_line": 7.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -982,50 +982,50 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaxson Hayes",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Evan Mobley",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "line": 40.5,
+          "standard_line": 40.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Asts",
+          "line": 7.5,
+          "standard_line": 7.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -1038,50 +1038,50 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaxson Hayes",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Evan Mobley",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "line": 40.5,
+          "standard_line": 40.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Asts",
+          "line": 7.5,
+          "standard_line": 7.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -1094,50 +1094,50 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaxson Hayes",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Evan Mobley",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "line": 40.5,
+          "standard_line": 40.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Asts",
+          "line": 7.5,
+          "standard_line": 7.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1150,50 +1150,50 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaxson Hayes",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Evan Mobley",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "line": 40.5,
+          "standard_line": 40.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Asts",
+          "line": 7.5,
+          "standard_line": 7.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -1206,50 +1206,50 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaxson Hayes",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Evan Mobley",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "line": 40.5,
+          "standard_line": 40.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Asts",
+          "line": 7.5,
+          "standard_line": 7.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -1262,50 +1262,50 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Austin Reaves",
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Amen Thompson",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
+          "line": 40.5,
+          "standard_line": 40.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
+          "direction": "UNDER",
+          "hit_rate": 0.0
         },
         {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Scoot Henderson",
-          "prop_type": "Pts+Rebs",
-          "line": 16.5,
-          "standard_line": 17.5,
+          "player": "Devin Booker",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1318,159 +1318,17 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
-          "pick_type": "Goblin",
-          "delta": 1.5,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Paul George",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 17.5,
-          "pick_type": "Demon",
-          "delta": 6.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        }
-      ]
-    },
-    {
-      "composition": "4S+0G+1D",
-      "goblin_delta": null,
-      "legs": [
-        {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
+          "line": 28.5,
+          "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaxson Hayes",
-          "prop_type": "Points",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Paul George",
-          "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 17.5,
-          "pick_type": "Demon",
-          "delta": 6.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        }
-      ]
-    },
-    {
-      "composition": "5S+1G+0D",
-      "goblin_delta": 0.5,
-      "legs": [
-        {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaxson Hayes",
-          "prop_type": "Points",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jrue Holiday",
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
           "line": 27.5,
           "standard_line": 27.5,
@@ -1480,10 +1338,152 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Evan Mobley",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "line": 40.5,
+          "standard_line": 40.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Paolo Banchero",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 21.5,
+          "pick_type": "Demon",
+          "delta": 4.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "4S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Nikola Jokić",
+          "prop_type": "Pts+Asts",
+          "line": 40.5,
+          "standard_line": 40.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Asts",
+          "line": 7.5,
+          "standard_line": 7.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Paolo Banchero",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 21.5,
+          "pick_type": "Demon",
+          "delta": 4.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "5S+1G+0D",
+      "goblin_delta": 0.5,
+      "legs": [
+        {
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Nikola Jokić",
+          "prop_type": "Pts+Asts",
+          "line": 40.5,
+          "standard_line": 40.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Asts",
+          "line": 7.5,
+          "standard_line": 7.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Dillon Brooks",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 25.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -1496,47 +1496,17 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaxson Hayes",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 28.5,
+          "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jrue Holiday",
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
           "line": 27.5,
           "standard_line": 27.5,
@@ -1546,10 +1516,40 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Evan Mobley",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "line": 40.5,
+          "standard_line": 40.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Asts",
+          "line": 7.5,
+          "standard_line": 7.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Dillon Brooks",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 25.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -1562,47 +1562,17 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaxson Hayes",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 28.5,
+          "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jrue Holiday",
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
           "line": 27.5,
           "standard_line": 27.5,
@@ -1612,10 +1582,40 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Evan Mobley",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "line": 40.5,
+          "standard_line": 40.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Asts",
+          "line": 7.5,
+          "standard_line": 7.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Dillon Brooks",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 25.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -1628,47 +1628,17 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaxson Hayes",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 28.5,
+          "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jrue Holiday",
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
           "line": 27.5,
           "standard_line": 27.5,
@@ -1678,10 +1648,40 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Evan Mobley",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "line": 40.5,
+          "standard_line": 40.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Asts",
+          "line": 7.5,
+          "standard_line": 7.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Dillon Brooks",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 25.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1694,47 +1694,17 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaxson Hayes",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 28.5,
+          "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jrue Holiday",
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
           "line": 27.5,
           "standard_line": 27.5,
@@ -1744,10 +1714,40 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Evan Mobley",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "line": 40.5,
+          "standard_line": 40.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Asts",
+          "line": 7.5,
+          "standard_line": 7.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Dillon Brooks",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 25.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -1760,47 +1760,17 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaxson Hayes",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 28.5,
+          "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Jrue Holiday",
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
           "line": 27.5,
           "standard_line": 27.5,
@@ -1810,10 +1780,40 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Evan Mobley",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "line": 40.5,
+          "standard_line": 40.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Asts",
+          "line": 7.5,
+          "standard_line": 7.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Dillon Brooks",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 25.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -1826,60 +1826,60 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaxson Hayes",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 27.5,
+          "standard_line": 27.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Evan Mobley",
+          "player": "Nikola Jokić",
           "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
+          "line": 40.5,
+          "standard_line": 40.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Asts",
+          "line": 7.5,
+          "standard_line": 7.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Scoot Henderson",
-          "prop_type": "Pts+Rebs",
-          "line": 16.5,
-          "standard_line": 17.5,
+          "player": "Devin Booker",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1892,113 +1892,17 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaxson Hayes",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 5.5,
-          "standard_line": 5.5,
+          "line": 28.5,
+          "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
+          "direction": "UNDER",
+          "hit_rate": 0.2
         },
         {
-          "player": "Evan Mobley",
-          "prop_type": "Pts+Asts",
-          "line": 18.5,
-          "standard_line": 19.5,
-          "pick_type": "Goblin",
-          "delta": 1.5,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Paul George",
-          "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 17.5,
-          "pick_type": "Demon",
-          "delta": 6.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        }
-      ]
-    },
-    {
-      "composition": "5S+0G+1D",
-      "goblin_delta": null,
-      "legs": [
-        {
-          "player": "Austin Reaves",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 21.5,
-          "standard_line": 21.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Amen Thompson",
-          "prop_type": "Pts+Asts",
-          "line": 22.5,
-          "standard_line": 22.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 1.0
-        },
-        {
-          "player": "Luke Kornet",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 10.5,
-          "standard_line": 10.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jaxson Hayes",
-          "prop_type": "Points",
-          "line": 5.5,
-          "standard_line": 5.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Jrue Holiday",
+          "player": "Jalen Green",
           "prop_type": "Pts+Rebs+Asts",
           "line": 27.5,
           "standard_line": 27.5,
@@ -2008,14 +1912,110 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Paul George",
-          "prop_type": "Points",
-          "line": 11.5,
-          "standard_line": 17.5,
-          "pick_type": "Demon",
-          "delta": 6.0,
+          "player": "Nikola Jokić",
+          "prop_type": "Pts+Asts",
+          "line": 40.5,
+          "standard_line": 40.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Asts",
+          "line": 7.5,
+          "standard_line": 7.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
+        },
+        {
+          "player": "Tristan Silva",
+          "prop_type": "Points",
+          "line": 2.5,
+          "standard_line": 3.5,
+          "pick_type": "Goblin",
+          "delta": 1.5,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Paolo Banchero",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 21.5,
+          "pick_type": "Demon",
+          "delta": 4.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        }
+      ]
+    },
+    {
+      "composition": "5S+0G+1D",
+      "goblin_delta": null,
+      "legs": [
+        {
+          "player": "Cade Cunningham",
+          "prop_type": "Points",
+          "line": 28.5,
+          "standard_line": 28.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.2
+        },
+        {
+          "player": "Jalen Green",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 27.5,
+          "standard_line": 27.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Nikola Jokić",
+          "prop_type": "Pts+Asts",
+          "line": 40.5,
+          "standard_line": 40.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "UNDER",
+          "hit_rate": 0.0
+        },
+        {
+          "player": "Isaiah Joe",
+          "prop_type": "Pts+Asts",
+          "line": 7.5,
+          "standard_line": 7.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Dillon Brooks",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 24.5,
+          "standard_line": 25.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 0.8
+        },
+        {
+          "player": "Paolo Banchero",
+          "prop_type": "Points",
+          "line": 17.5,
+          "standard_line": 21.5,
+          "pick_type": "Demon",
+          "delta": 4.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
         }
       ]
     }
