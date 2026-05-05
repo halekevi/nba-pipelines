@@ -1719,8 +1719,11 @@ ATTEMPT_PROPS = {
     "two pointers attempted",
 }
 
-TIER1_PROPS = {"points", "pts+rebs+asts", "pts+rebs", "pts+asts", "rebounds"}
-TIER2_PROPS = {"assists", "3-pt made", "rebs+asts"}
+# Keep priority tiers focused on single-stat regular props.
+# Combo props are still allowed (unless otherwise excluded) but should not get
+# an extra priority bonus versus regular markets.
+TIER1_PROPS = {"points", "rebounds"}
+TIER2_PROPS = {"assists", "3-pt made"}
 TIER3_PROPS = {"steals", "blocked shots", "turnovers", "free throws made"}
 
 UNDER_ALLOWED_PROPS = {"free throws attempted", "turnovers"}

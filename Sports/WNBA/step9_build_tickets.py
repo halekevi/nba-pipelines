@@ -385,6 +385,14 @@ def main():
     df = df[pd.to_numeric(df['Hit Rate (5g)'], errors='coerce') >= args.min_hit_rate].copy()
     print(f"  Props with hit rate >= {args.min_hit_rate}: {len(df)}")
 
+    # Remove fantasy markets from ticket generation.
+    if 'Prop' in df.columns:
+        before = len(df)
+        df = df[~df['Prop'].astype(str).str.contains('fantasy', case=False, na=False)].copy()
+        dropped = before - len(df)
+        if dropped:
+            print(f"  Removed fantasy props: {dropped}")
+
     # Deduplicate - best rank score per player+prop+line
     df = df.sort_values('Rank Score', ascending=False).drop_duplicates(subset=['Player','Prop','Line','Direction'])
 

@@ -411,8 +411,9 @@ _PROP_WEIGHTS = {
     "fg3m":  1.03, "fg3a":  0.88, "fg2m":  1.01,
     "fg2a":  0.92, "fgm":   0.99, "fga":   0.99,
     "ftm":   1.01, "fta":   0.98, "tov":   0.94,
-    "pf":    0.85, "pr":    1.01, "pa":    1.01,
-    "pra":   0.99, "ra":    1.02, "fantasy": 0.75,
+    # Combo markets normalized to regular-prop weight (no combo overweighting).
+    "pf":    0.85, "pr":    1.00, "pa":    1.00,
+    "pra":   1.00, "ra":    1.00, "fantasy": 0.75,
 }
 
 def _prop_weight(prop_norm: str) -> float:

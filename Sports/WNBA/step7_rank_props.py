@@ -75,10 +75,11 @@ _PROP_WEIGHTS = {
     "ftm":                   1.01,
     "fta":                   0.98,
     "tov":                   0.94,
-    "pr":                    1.01,
-    "pa":                    1.01,
-    "ra":                    1.02,
-    "pra":                   0.99,
+    # Combo markets normalized to regular-prop weight (no combo overweighting).
+    "pr":                    1.00,
+    "pa":                    1.00,
+    "ra":                    1.00,
+    "pra":                   1.00,
     "fantasy":               0.91,
 }
 
