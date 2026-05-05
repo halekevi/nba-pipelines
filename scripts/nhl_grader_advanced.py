@@ -581,7 +581,8 @@ def main() -> None:
         )
         direction = _resolve_direction_from_slate_row(slate_row)
         tier = slate_row.get("tier", "D")
-        
+        def_tier = slate_row.get("DEF_TIER", slate_row.get("def_tier", slate_row.get("Def Tier", "")))
+
         # Determine player type
         player_type = "goalie" if any(
             x in str(prop_type).lower() for x in ["saves", "ga", "shutout"]
@@ -625,6 +626,7 @@ def main() -> None:
             "direction": direction,
             "bet_direction": direction,
             "tier": tier,
+            "def_tier": def_tier,
             "player_type": player_type,
             "result": result,
             "reason": void_reason,

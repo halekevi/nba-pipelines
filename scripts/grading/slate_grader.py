@@ -950,6 +950,239 @@ def write_def_rank_bucket_sheet(wb, df):
             continue
         ri = write_dir_subrows(ws, ri, sub, b, C['alt'] if ri % 2 == 0 else C['white'])
 
+# ── Performance Matrix sheet ─────────────────────────────────────────────────
+def write_performance_matrix(wb, df):
+    """Pick Type × Tier × Direction matrix with hit rates.
+    Standard: all tiers, OVER + UNDER.  Goblin/Demon: all tiers, OVER only.
+    Cells with 0 decided props show '—'.
+    """
+    ws = wb.create_sheet('Performance Matrix')
+    d = drc(df)
+
+    col_headers = ['Pick Type', 'Tier', 'Direction', 'Total', 'Decided', 'Hits', 'Misses', 'Hit Rate']
+    widths      = [14, 7, 11, 8, 9, 7, 8, 12]
+    sw(ws, widths)
+    for ci, h in enumerate(col_headers, 1):
+        hc(ws, 1, ci, h, bg=C['hdr'])
+    ws.row_dimensions[1].height = 20
+    ws.freeze_panes = 'A2'
+
+    def _matrix_row(ri, pick_type, tier, direction, sub):
+        pt_bg = {'Goblin': C['goblin'], 'Demon': C['demon'], 'Standard': C['standard']}.get(pick_type, C['white'])
+        dir_bg = C['over'] if direction == 'OVER' else (C['under'] if direction == 'UNDER' else pt_bg)
+        bg = dir_bg
+
+        if direction in ('OVER', 'UNDER'):
+            sub2 = sub[sub[d].str.upper() == direction]
+        else:
+            sub2 = sub
+
+        # Direct count for all pick types (hit_rate() excludes Demons; matrix should show them)
+        decided_sub = sub2[sub2['result'].isin(['HIT', 'MISS'])]
+        dec_v = len(decided_sub)
+        h_v = int((decided_sub['result'] == 'HIT').sum())
+        m_v = int((decided_sub['result'] == 'MISS').sum())
+        hr_v = h_v / dec_v if dec_v > 0 else np.nan
+        total_v = len(sub2)
+
+        dc(ws, ri, 1, pick_type, bg=bg, bold=True, align='left')
+        dc(ws, ri, 2, f'Tier {tier}', bg=bg, bold=True)
+        dc(ws, ri, 3, direction, bg=bg, bold=True)
+        dc(ws, ri, 4, total_v, bg=bg)
+        dc(ws, ri, 5, dec_v, bg=bg)
+
+        if dec_v == 0:
+            dc(ws, ri, 6, '—', bg='DDDDDD')
+            dc(ws, ri, 7, '—', bg='DDDDDD')
+            dc(ws, ri, 8, '—', bg='DDDDDD')
+        else:
+            dc(ws, ri, 6, h_v, bg=bg)
+            dc(ws, ri, 7, m_v, bg=bg)
+            pct_cell(ws, ri, 8, hr_v)
+        return ri + 1
+
+    ri = 2
+    # Header row for Standard
+    if 'pick_type' in df.columns:
+        hc(ws, ri, 1, '⭐ STANDARD', bg=C['hdr2'])
+        for ci in range(2, 9): dc(ws, ri, ci, '', bg=C['hdr2'])
+        ri += 1
+        std = df[df['pick_type'] == 'Standard'] if 'pick_type' in df.columns else df
+        for t in TIER_ORDER:
+            tsub = std[std['tier'].astype(str).str.upper() == t] if 'tier' in std.columns else std
+            for direction in ('OVER', 'UNDER'):
+                ri = _matrix_row(ri, 'Standard', t, direction, tsub)
+
+        ri += 1  # spacer
+        hc(ws, ri, 1, '🎃 GOBLIN', bg=C['hdr3'])
+        for ci in range(2, 9): dc(ws, ri, ci, '', bg=C['hdr3'])
+        ri += 1
+        gob = df[df['pick_type'] == 'Goblin'] if 'pick_type' in df.columns else pd.DataFrame()
+        for t in TIER_ORDER:
+            tsub = gob[gob['tier'].astype(str).str.upper() == t] if 'tier' in gob.columns else gob
+            ri = _matrix_row(ri, 'Goblin', t, 'OVER', tsub)
+
+        ri += 1  # spacer
+        hc(ws, ri, 1, '😈 DEMON', bg=C['hdr5'])
+        for ci in range(2, 9): dc(ws, ri, ci, '', bg=C['hdr5'])
+        ri += 1
+        dem = df[df['pick_type'] == 'Demon'] if 'pick_type' in df.columns else pd.DataFrame()
+        for t in TIER_ORDER:
+            tsub = dem[dem['tier'].astype(str).str.upper() == t] if 'tier' in dem.columns else dem
+            ri = _matrix_row(ri, 'Demon', t, 'OVER', tsub)
+
+    # Total row (direct count — includes all pick types)
+    ri += 1
+    dec_df = df[df['result'].isin(['HIT', 'MISS'])]
+    dec_tot = len(dec_df)
+    h_tot = int((dec_df['result'] == 'HIT').sum())
+    m_tot = int((dec_df['result'] == 'MISS').sum())
+    hr_tot = h_tot / dec_tot if dec_tot > 0 else np.nan
+    hc(ws, ri, 1, 'TOTAL', bg=C['hdr'])
+    dc(ws, ri, 2, '', bg=C['hdr'])
+    dc(ws, ri, 3, 'ALL', bg=C['hdr'], bold=True)
+    dc(ws, ri, 4, len(df), bg=C['hdr'], bold=True)
+    dc(ws, ri, 5, dec_tot, bg=C['hdr'], bold=True)
+    dc(ws, ri, 6, h_tot, bg=C['hdr'], bold=True)
+    dc(ws, ri, 7, m_tot, bg=C['hdr'], bold=True)
+    pct_cell(ws, ri, 8, hr_tot)
+
+
+# ── Def Tier × Performance cross-tab sheet ────────────────────────────────────
+def write_def_tier_crosstab(wb, df):
+    """Cross-tab: Def Tier rows vs (Pick Type × Rank Tier) columns.
+    Column groups: Goblin OVER A-D | Demon OVER A-D | Std OVER A-D | Std UNDER A-D
+    Each cell: "XX% (n)" where n=decided, colored by hit rate. '—' when no decided.
+    """
+    if 'def_tier' not in df.columns or 'tier' not in df.columns:
+        return
+    d = drc(df)
+
+    ws = wb.create_sheet('Def Tier x Performance')
+
+    # Column definitions: (group_label, pick_type, tier, direction)
+    GROUPS = [
+        ('Goblin OVER', 'Goblin', None, 'OVER'),
+        ('Demon OVER',  'Demon',  None, 'OVER'),
+        ('Std OVER',    'Standard', None, 'OVER'),
+        ('Std UNDER',   'Standard', None, 'UNDER'),
+    ]
+    GROUP_BGS = [C['goblin'], C['demon'], C['over'], C['under']]
+    G_BGS = [C['hdr3'], C['hdr5'], C['hdr2'], C['hdr4']]
+
+    # col layout: col1 = Def Tier label; then 4 groups × 4 tiers = 16 data cols
+    col1_w = 14
+    data_w = 13
+    num_groups = len(GROUPS)
+    tiers = TIER_ORDER
+
+    # Set column widths
+    ws.column_dimensions['A'].width = col1_w
+    for ci in range(2, 2 + num_groups * len(tiers)):
+        ws.column_dimensions[get_column_letter(ci)].width = data_w
+
+    # Row 1: Group headers (merged across 4 tiers each)
+    ws.merge_cells(start_row=1, start_column=1, end_row=2, end_column=1)
+    c = ws.cell(row=1, column=1, value='Def Tier')
+    c.font = Font(bold=True, color='FFFFFF', name='Arial', size=9)
+    c.fill = PatternFill('solid', start_color=C['hdr'])
+    c.alignment = Alignment(horizontal='center', vertical='center')
+    c.border = bdr()
+    ws.row_dimensions[1].height = 18
+    ws.row_dimensions[2].height = 18
+
+    for gi, (glabel, pt, _, direction) in enumerate(GROUPS):
+        start_col = 2 + gi * len(tiers)
+        end_col = start_col + len(tiers) - 1
+        ws.merge_cells(start_row=1, start_column=start_col, end_row=1, end_column=end_col)
+        c = ws.cell(row=1, column=start_col, value=glabel)
+        c.font = Font(bold=True, color='FFFFFF', name='Arial', size=9)
+        c.fill = PatternFill('solid', start_color=G_BGS[gi])
+        c.alignment = Alignment(horizontal='center', vertical='center')
+        c.border = bdr()
+
+    # Row 2: Tier sub-headers (skip col 1 — it's part of the A1:A2 merge)
+    for gi in range(num_groups):
+        for ti, t in enumerate(tiers):
+            col = 2 + gi * len(tiers) + ti
+            c = ws.cell(row=2, column=col, value=f'Tier {t}')
+            c.font = Font(bold=True, color='FFFFFF', name='Arial', size=9)
+            c.fill = PatternFill('solid', start_color=G_BGS[gi])
+            c.alignment = Alignment(horizontal='center', vertical='center')
+            c.border = bdr()
+
+    ws.freeze_panes = 'A3'
+
+    def _cell_val(sub, pt, direction, tier):
+        """Return (hr, decided) for the given filter intersection. Direct count — includes Demon."""
+        s = sub
+        if pt and 'pick_type' in s.columns:
+            s = s[s['pick_type'] == pt]
+        if direction and d in s.columns:
+            s = s[s[d].str.upper() == direction]
+        if tier and 'tier' in s.columns:
+            s = s[s['tier'].astype(str).str.upper() == tier]
+        dec_s = s[s['result'].isin(['HIT', 'MISS'])]
+        dec_v = len(dec_s)
+        h_v = int((dec_s['result'] == 'HIT').sum())
+        hr_v = h_v / dec_v if dec_v > 0 else np.nan
+        return hr_v, dec_v
+
+    def _fmt(hr_v, dec_v):
+        if dec_v == 0:
+            return '—', 'DDDDDD'
+        pct_str = f"{hr_v:.0%}" if not (isinstance(hr_v, float) and np.isnan(hr_v)) else '?'
+        return f"{pct_str}\n({dec_v})", hr_bg(hr_v)
+
+    # Data rows
+    all_def_tiers = [t for t in DEF_TIER_ORDER if t in df['def_tier'].dropna().unique()]
+    other_tiers   = [t for t in df['def_tier'].dropna().unique() if t not in DEF_TIER_ORDER]
+    row_tiers = all_def_tiers + other_tiers
+
+    for ri_off, dt in enumerate(row_tiers):
+        ri = 3 + ri_off
+        ws.row_dimensions[ri].height = 28
+        sub = df[df['def_tier'] == dt]
+        row_bg = C['alt'] if ri_off % 2 == 0 else C['white']
+        c = ws.cell(row=ri, column=1, value=dt)
+        c.font = Font(bold=True, name='Arial', size=9)
+        c.fill = PatternFill('solid', start_color=row_bg)
+        c.alignment = Alignment(horizontal='left', vertical='center')
+        c.border = bdr()
+
+        for gi, (glabel, pt, _, direction) in enumerate(GROUPS):
+            for ti, t in enumerate(tiers):
+                col = 2 + gi * len(tiers) + ti
+                hr_v, dec_v = _cell_val(sub, pt, direction, t)
+                val, bg = _fmt(hr_v, dec_v)
+                cell = ws.cell(row=ri, column=col, value=val)
+                cell.font = Font(bold=(dec_v > 0), name='Arial', size=9,
+                                 color='FFFFFF' if dec_v > 0 else '999999')
+                cell.fill = PatternFill('solid', start_color=bg)
+                cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+                cell.border = bdr()
+
+    # Total row
+    ri_tot = 3 + len(row_tiers)
+    ws.row_dimensions[ri_tot].height = 28
+    c = ws.cell(row=ri_tot, column=1, value='Total')
+    c.font = Font(bold=True, color='FFFFFF', name='Arial', size=9)
+    c.fill = PatternFill('solid', start_color=C['hdr'])
+    c.alignment = Alignment(horizontal='left', vertical='center')
+    c.border = bdr()
+
+    for gi, (glabel, pt, _, direction) in enumerate(GROUPS):
+        for ti, t in enumerate(tiers):
+            col = 2 + gi * len(tiers) + ti
+            hr_v, dec_v = _cell_val(df, pt, direction, t)
+            val, bg = _fmt(hr_v, dec_v)
+            cell = ws.cell(row=ri_tot, column=col, value=val)
+            cell.font = Font(bold=True, name='Arial', size=9, color='FFFFFF' if dec_v > 0 else '999999')
+            cell.fill = PatternFill('solid', start_color=bg)
+            cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+            cell.border = bdr()
+
+
 # ── Box Raw sheet ─────────────────────────────────────────────────────────────
 def write_raw(wb,df):
     ws=wb.create_sheet('Box Raw')
@@ -1144,8 +1377,10 @@ def main():
         write_flat_breakdown(wb,breakdown(df,'abs_edge_bucket'),'By Edge Bucket','abs_edge_bucket',C['hdr'])
     write_tier_dir_sheet(wb,df,'By Minutes Tier','minutes_tier',MINUTES_TIER_ORDER,C['hdr6'])
     write_tier_dir_sheet(wb,df,'By Def Tier','def_tier',DEF_TIER_ORDER,C['hdr5'])
-    write_def_rank_bucket_sheet(wb, df)  # NEW
+    write_def_rank_bucket_sheet(wb, df)
     write_tier_dir_sheet(wb,df,'By Player Role','usage_role',USAGE_ROLE_ORDER,C['hdr7'])
+    write_performance_matrix(wb, df)
+    write_def_tier_crosstab(wb, df)
     write_tier_dir_sheet(wb,df,'By Shot Role','shot_role',SHOT_ROLE_ORDER,C['hdr8'])
 
     vr_col='void_reason' if 'void_reason' in df.columns else 'void_reason_grade'

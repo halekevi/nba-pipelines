@@ -697,6 +697,7 @@ def main() -> None:
         if not direction:
             direction = "OVER"
         tier = slate_row.get("tier", "D")
+        def_tier = slate_row.get("DEF_TIER", slate_row.get("def_tier", slate_row.get("Def Tier", "")))
 
         actual = lookup_soccer_actual(actuals_lut, player, prop_type, team)
         minutes_played = lookup_soccer_minutes(minutes_lut, player, team)
@@ -746,6 +747,7 @@ def main() -> None:
             "margin": margin,
             "direction": direction,
             "tier": tier,
+            "def_tier": def_tier,
             "result": result,
             "reason": void_reason,
             "edge": edge,
