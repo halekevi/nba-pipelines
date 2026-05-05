@@ -138952,17 +138952,9 @@
       "prop": "Points",
       "pt": "Demon",
       "tier": "C",
-      "def": "weak",
-      "decided": 40,
-      "hits": 40
-    },
-    {
-      "prop": "Points",
-      "pt": "Demon",
-      "tier": "C",
       "def": "avg",
-      "decided": 8,
-      "hits": 6
+      "decided": 2,
+      "hits": 0
     },
     {
       "prop": "Pts+Asts",
@@ -139016,25 +139008,17 @@
       "prop": "Rebounds",
       "pt": "Demon",
       "tier": "C",
-      "def": "weak",
-      "decided": 14,
-      "hits": 11
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Demon",
-      "tier": "C",
-      "def": "avg",
-      "decided": 3,
-      "hits": 3
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Demon",
-      "tier": "C",
       "def": "above_avg",
       "decided": 1,
       "hits": 1
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Demon",
+      "tier": "C",
+      "def": "weak",
+      "decided": 2,
+      "hits": 0
     },
     {
       "prop": "Rebs+Asts",
@@ -139120,476 +139104,116 @@
       "prop": "3-PT Made",
       "pt": "Demon",
       "tier": "D",
+      "def": "elite",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "3-PT Made",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "avg",
+      "decided": 4,
+      "hits": 3
+    },
+    {
+      "prop": "3-PT Made",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "weak",
+      "decided": 11,
+      "hits": 5
+    },
+    {
+      "prop": "3-PT Made",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Assists",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "elite",
+      "decided": 8,
+      "hits": 3
+    },
+    {
+      "prop": "Assists",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "avg",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "Assists",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 10,
+      "hits": 6
+    },
+    {
+      "prop": "Assists",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "weak",
+      "decided": 6,
+      "hits": 2
+    },
+    {
+      "prop": "Blks+Stls",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "elite",
+      "decided": 3,
+      "hits": 2
+    },
+    {
+      "prop": "Blks+Stls",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 6,
+      "hits": 3
+    },
+    {
+      "prop": "Blks+Stls",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "avg",
+      "decided": 8,
+      "hits": 2
+    },
+    {
+      "prop": "Blks+Stls",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "weak",
+      "decided": 3,
+      "hits": 2
+    },
+    {
+      "prop": "Blocked Shots",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "Blocked Shots",
+      "pt": "Demon",
+      "tier": "D",
       "def": "avg",
       "decided": 6,
-      "hits": 4
-    },
-    {
-      "prop": "3-PT Made",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "elite",
-      "decided": 10,
-      "hits": 5
-    },
-    {
-      "prop": "3-PT Made",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "weak",
-      "decided": 16,
-      "hits": 6
-    },
-    {
-      "prop": "3-PT Made",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 11,
-      "hits": 3
-    },
-    {
-      "prop": "Assists",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "weak",
-      "decided": 94,
-      "hits": 70
-    },
-    {
-      "prop": "Assists",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "avg",
-      "decided": 61,
-      "hits": 48
-    },
-    {
-      "prop": "Assists",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "elite",
-      "decided": 50,
-      "hits": 32
-    },
-    {
-      "prop": "Assists",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 72,
-      "hits": 44
-    },
-    {
-      "prop": "Blks+Stls",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "weak",
-      "decided": 10,
-      "hits": 5
-    },
-    {
-      "prop": "Blks+Stls",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "avg",
-      "decided": 11,
-      "hits": 2
-    },
-    {
-      "prop": "Blks+Stls",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 10,
-      "hits": 5
-    },
-    {
-      "prop": "Blks+Stls",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "elite",
-      "decided": 3,
-      "hits": 2
+      "hits": 1
     },
     {
       "prop": "Blocked Shots",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 8,
-      "hits": 3
-    },
-    {
-      "prop": "Blocked Shots",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "avg",
-      "decided": 8,
-      "hits": 3
-    },
-    {
-      "prop": "Blocked Shots",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "weak",
-      "decided": 10,
-      "hits": 3
-    },
-    {
-      "prop": "Blocked Shots",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "elite",
-      "decided": 12,
-      "hits": 5
-    },
-    {
-      "prop": "FG Attempted",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "elite",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "FG Attempted",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "weak",
-      "decided": 2,
-      "hits": 0
-    },
-    {
-      "prop": "FG Attempted",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "FG Made",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "elite",
-      "decided": 3,
-      "hits": 2
-    },
-    {
-      "prop": "FG Made",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "avg",
-      "decided": 3,
-      "hits": 2
-    },
-    {
-      "prop": "FG Made",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 4,
-      "hits": 4
-    },
-    {
-      "prop": "FG Made",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "weak",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Free Throws Attempted",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "avg",
-      "decided": 3,
-      "hits": 1
-    },
-    {
-      "prop": "Free Throws Attempted",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 4,
-      "hits": 0
-    },
-    {
-      "prop": "Free Throws Attempted",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "weak",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Free Throws Made",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 4,
-      "hits": 2
-    },
-    {
-      "prop": "Free Throws Made",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "avg",
-      "decided": 2,
-      "hits": 0
-    },
-    {
-      "prop": "Free Throws Made",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "elite",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Personal Fouls",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "avg",
-      "decided": 11,
-      "hits": 5
-    },
-    {
-      "prop": "Personal Fouls",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "weak",
-      "decided": 10,
-      "hits": 3
-    },
-    {
-      "prop": "Personal Fouls",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 8,
-      "hits": 2
-    },
-    {
-      "prop": "Personal Fouls",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "elite",
-      "decided": 5,
-      "hits": 3
-    },
-    {
-      "prop": "Points",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "weak",
-      "decided": 97,
-      "hits": 74
-    },
-    {
-      "prop": "Points",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 143,
-      "hits": 115
-    },
-    {
-      "prop": "Points",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "elite",
-      "decided": 84,
-      "hits": 58
-    },
-    {
-      "prop": "Points",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "avg",
-      "decided": 107,
-      "hits": 89
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "weak",
-      "decided": 12,
-      "hits": 4
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "elite",
-      "decided": 16,
-      "hits": 4
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "avg",
-      "decided": 13,
-      "hits": 6
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 11,
-      "hits": 3
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "elite",
-      "decided": 13,
-      "hits": 4
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "weak",
-      "decided": 11,
-      "hits": 1
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 11,
-      "hits": 5
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "avg",
-      "decided": 10,
-      "hits": 4
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "weak",
-      "decided": 34,
-      "hits": 7
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "elite",
-      "decided": 32,
-      "hits": 12
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "avg",
-      "decided": 22,
-      "hits": 6
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 48,
-      "hits": 12
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "avg",
-      "decided": 69,
-      "hits": 52
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "weak",
-      "decided": 82,
-      "hits": 55
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 83,
-      "hits": 65
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "elite",
-      "decided": 53,
-      "hits": 38
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "avg",
-      "decided": 20,
-      "hits": 4
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "weak",
-      "decided": 29,
-      "hits": 9
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "elite",
-      "decided": 22,
-      "hits": 10
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 37,
-      "hits": 9
-    },
-    {
-      "prop": "Steals",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "weak",
-      "decided": 9,
-      "hits": 2
-    },
-    {
-      "prop": "Steals",
-      "pt": "Demon",
-      "tier": "D",
-      "def": "avg",
-      "decided": 5,
-      "hits": 1
-    },
-    {
-      "prop": "Steals",
       "pt": "Demon",
       "tier": "D",
       "def": "elite",
@@ -139597,20 +139221,372 @@
       "hits": 1
     },
     {
-      "prop": "Steals",
+      "prop": "Blocked Shots",
       "pt": "Demon",
       "tier": "D",
-      "def": "above_avg",
-      "decided": 6,
+      "def": "weak",
+      "decided": 5,
+      "hits": 2
+    },
+    {
+      "prop": "FG Attempted",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "elite",
+      "decided": 1,
       "hits": 1
     },
     {
-      "prop": "Turnovers",
+      "prop": "FG Attempted",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "weak",
+      "decided": 2,
+      "hits": 0
+    },
+    {
+      "prop": "FG Attempted",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "avg",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "FG Made",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "elite",
+      "decided": 3,
+      "hits": 2
+    },
+    {
+      "prop": "FG Made",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "avg",
+      "decided": 3,
+      "hits": 2
+    },
+    {
+      "prop": "FG Made",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 4,
+      "hits": 4
+    },
+    {
+      "prop": "FG Made",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "weak",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Free Throws Attempted",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "avg",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Free Throws Attempted",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 4,
+      "hits": 0
+    },
+    {
+      "prop": "Free Throws Attempted",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "weak",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Free Throws Made",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "Free Throws Made",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "avg",
+      "decided": 2,
+      "hits": 0
+    },
+    {
+      "prop": "Free Throws Made",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "elite",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Personal Fouls",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "avg",
+      "decided": 11,
+      "hits": 5
+    },
+    {
+      "prop": "Personal Fouls",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "weak",
+      "decided": 10,
+      "hits": 3
+    },
+    {
+      "prop": "Personal Fouls",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 8,
+      "hits": 2
+    },
+    {
+      "prop": "Personal Fouls",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "elite",
+      "decided": 5,
+      "hits": 3
+    },
+    {
+      "prop": "Points",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 11,
+      "hits": 4
+    },
+    {
+      "prop": "Points",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "elite",
+      "decided": 3,
+      "hits": 2
+    },
+    {
+      "prop": "Points",
       "pt": "Demon",
       "tier": "D",
       "def": "weak",
       "decided": 8,
+      "hits": 4
+    },
+    {
+      "prop": "Points",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "avg",
+      "decided": 9,
+      "hits": 4
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "avg",
+      "decided": 7,
+      "hits": 5
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "weak",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 7,
       "hits": 3
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "elite",
+      "decided": 4,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "elite",
+      "decided": 4,
+      "hits": 3
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 5,
+      "hits": 4
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "weak",
+      "decided": 5,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "avg",
+      "decided": 7,
+      "hits": 3
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 22,
+      "hits": 9
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "elite",
+      "decided": 12,
+      "hits": 4
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "avg",
+      "decided": 13,
+      "hits": 6
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "weak",
+      "decided": 11,
+      "hits": 4
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "elite",
+      "decided": 4,
+      "hits": 0
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 6,
+      "hits": 2
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "avg",
+      "decided": 6,
+      "hits": 1
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "weak",
+      "decided": 6,
+      "hits": 1
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "elite",
+      "decided": 10,
+      "hits": 1
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 17,
+      "hits": 6
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "avg",
+      "decided": 8,
+      "hits": 3
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "weak",
+      "decided": 11,
+      "hits": 4
+    },
+    {
+      "prop": "Steals",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "elite",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Steals",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "avg",
+      "decided": 4,
+      "hits": 1
+    },
+    {
+      "prop": "Steals",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 3,
+      "hits": 0
+    },
+    {
+      "prop": "Steals",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "weak",
+      "decided": 3,
+      "hits": 1
     },
     {
       "prop": "Turnovers",
@@ -139618,6 +139594,14 @@
       "tier": "D",
       "def": "avg",
       "decided": 4,
+      "hits": 3
+    },
+    {
+      "prop": "Turnovers",
+      "pt": "Demon",
+      "tier": "D",
+      "def": "weak",
+      "decided": 5,
       "hits": 3
     },
     {
@@ -139704,25 +139688,17 @@
       "prop": "3-PT Made",
       "pt": "Goblin",
       "tier": "A",
-      "def": "weak",
-      "decided": 26,
-      "hits": 18
-    },
-    {
-      "prop": "3-PT Made",
-      "pt": "Goblin",
-      "tier": "A",
-      "def": "avg",
-      "decided": 11,
-      "hits": 9
-    },
-    {
-      "prop": "3-PT Made",
-      "pt": "Goblin",
-      "tier": "A",
       "def": "elite",
-      "decided": 3,
-      "hits": 2
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "3-PT Made",
+      "pt": "Goblin",
+      "tier": "A",
+      "def": "weak",
+      "decided": 19,
+      "hits": 14
     },
     {
       "prop": "3-PT Made",
@@ -139733,35 +139709,43 @@
       "hits": 5
     },
     {
-      "prop": "Assists",
+      "prop": "3-PT Made",
       "pt": "Goblin",
       "tier": "A",
-      "def": "weak",
-      "decided": 31,
-      "hits": 25
+      "def": "avg",
+      "decided": 9,
+      "hits": 7
     },
     {
       "prop": "Assists",
       "pt": "Goblin",
       "tier": "A",
       "def": "elite",
-      "decided": 6,
-      "hits": 4
+      "decided": 3,
+      "hits": 1
     },
     {
       "prop": "Assists",
       "pt": "Goblin",
       "tier": "A",
-      "def": "above_avg",
-      "decided": 26,
-      "hits": 19
+      "def": "weak",
+      "decided": 22,
+      "hits": 18
     },
     {
       "prop": "Assists",
       "pt": "Goblin",
       "tier": "A",
       "def": "avg",
-      "decided": 12,
+      "decided": 10,
+      "hits": 9
+    },
+    {
+      "prop": "Assists",
+      "pt": "Goblin",
+      "tier": "A",
+      "def": "above_avg",
+      "decided": 14,
       "hits": 11
     },
     {
@@ -139872,33 +139856,33 @@
       "prop": "Points",
       "pt": "Goblin",
       "tier": "A",
-      "def": "weak",
-      "decided": 129,
-      "hits": 109
-    },
-    {
-      "prop": "Points",
-      "pt": "Goblin",
-      "tier": "A",
       "def": "elite",
-      "decided": 9,
-      "hits": 6
+      "decided": 4,
+      "hits": 3
     },
     {
       "prop": "Points",
       "pt": "Goblin",
       "tier": "A",
       "def": "avg",
-      "decided": 74,
-      "hits": 67
+      "decided": 36,
+      "hits": 29
     },
     {
       "prop": "Points",
       "pt": "Goblin",
       "tier": "A",
       "def": "above_avg",
-      "decided": 27,
-      "hits": 21
+      "decided": 23,
+      "hits": 19
+    },
+    {
+      "prop": "Points",
+      "pt": "Goblin",
+      "tier": "A",
+      "def": "weak",
+      "decided": 58,
+      "hits": 42
     },
     {
       "prop": "Pts+Asts",
@@ -139936,14 +139920,6 @@
       "prop": "Pts+Rebs",
       "pt": "Goblin",
       "tier": "A",
-      "def": "weak",
-      "decided": 42,
-      "hits": 26
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Goblin",
-      "tier": "A",
       "def": "avg",
       "decided": 23,
       "hits": 20
@@ -139963,6 +139939,14 @@
       "def": "above_avg",
       "decided": 10,
       "hits": 9
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Goblin",
+      "tier": "A",
+      "def": "weak",
+      "decided": 37,
+      "hits": 24
     },
     {
       "prop": "Pts+Rebs+Asts",
@@ -140000,33 +139984,33 @@
       "prop": "Rebounds",
       "pt": "Goblin",
       "tier": "A",
-      "def": "weak",
-      "decided": 65,
-      "hits": 44
+      "def": "avg",
+      "decided": 21,
+      "hits": 16
     },
     {
       "prop": "Rebounds",
       "pt": "Goblin",
       "tier": "A",
       "def": "above_avg",
-      "decided": 16,
-      "hits": 12
+      "decided": 9,
+      "hits": 7
     },
     {
       "prop": "Rebounds",
       "pt": "Goblin",
       "tier": "A",
-      "def": "avg",
-      "decided": 41,
-      "hits": 36
+      "def": "weak",
+      "decided": 33,
+      "hits": 17
     },
     {
       "prop": "Rebounds",
       "pt": "Goblin",
       "tier": "A",
       "def": "elite",
-      "decided": 4,
-      "hits": 3
+      "decided": 1,
+      "hits": 0
     },
     {
       "prop": "Rebs+Asts",
@@ -140065,24 +140049,24 @@
       "pt": "Goblin",
       "tier": "A",
       "def": "weak",
-      "decided": 33,
-      "hits": 24
+      "decided": 24,
+      "hits": 18
     },
     {
       "prop": "Steals",
       "pt": "Goblin",
       "tier": "A",
       "def": "avg",
-      "decided": 18,
-      "hits": 13
+      "decided": 13,
+      "hits": 9
     },
     {
       "prop": "Steals",
       "pt": "Goblin",
       "tier": "A",
       "def": "elite",
-      "decided": 7,
-      "hits": 6
+      "decided": 4,
+      "hits": 4
     },
     {
       "prop": "Steals",
@@ -140160,68 +140144,20 @@
       "prop": "3-PT Made",
       "pt": "Goblin",
       "tier": "B",
-      "def": "elite",
-      "decided": 6,
-      "hits": 3
-    },
-    {
-      "prop": "3-PT Made",
-      "pt": "Goblin",
-      "tier": "B",
       "def": "above_avg",
-      "decided": 6,
-      "hits": 5
-    },
-    {
-      "prop": "3-PT Made",
-      "pt": "Goblin",
-      "tier": "B",
-      "def": "weak",
-      "decided": 4,
-      "hits": 3
-    },
-    {
-      "prop": "3-PT Made",
-      "pt": "Goblin",
-      "tier": "B",
-      "def": "avg",
       "decided": 3,
       "hits": 2
     },
     {
-      "prop": "Assists",
-      "pt": "Goblin",
-      "tier": "B",
-      "def": "above_avg",
-      "decided": 4,
-      "hits": 2
-    },
-    {
-      "prop": "Assists",
-      "pt": "Goblin",
-      "tier": "B",
-      "def": "weak",
-      "decided": 15,
-      "hits": 14
-    },
-    {
-      "prop": "Assists",
-      "pt": "Goblin",
-      "tier": "B",
-      "def": "avg",
-      "decided": 14,
-      "hits": 7
-    },
-    {
-      "prop": "Assists",
+      "prop": "3-PT Made",
       "pt": "Goblin",
       "tier": "B",
       "def": "elite",
-      "decided": 5,
-      "hits": 4
+      "decided": 3,
+      "hits": 1
     },
     {
-      "prop": "Blks+Stls",
+      "prop": "3-PT Made",
       "pt": "Goblin",
       "tier": "B",
       "def": "avg",
@@ -140229,7 +140165,39 @@
       "hits": 2
     },
     {
-      "prop": "Blks+Stls",
+      "prop": "3-PT Made",
+      "pt": "Goblin",
+      "tier": "B",
+      "def": "weak",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Assists",
+      "pt": "Goblin",
+      "tier": "B",
+      "def": "elite",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Assists",
+      "pt": "Goblin",
+      "tier": "B",
+      "def": "above_avg",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Assists",
+      "pt": "Goblin",
+      "tier": "B",
+      "def": "avg",
+      "decided": 7,
+      "hits": 3
+    },
+    {
+      "prop": "Assists",
       "pt": "Goblin",
       "tier": "B",
       "def": "weak",
@@ -140243,6 +140211,14 @@
       "def": "above_avg",
       "decided": 1,
       "hits": 0
+    },
+    {
+      "prop": "Blks+Stls",
+      "pt": "Goblin",
+      "tier": "B",
+      "def": "weak",
+      "decided": 2,
+      "hits": 2
     },
     {
       "prop": "Blocked Shots",
@@ -140288,36 +140264,28 @@
       "prop": "Points",
       "pt": "Goblin",
       "tier": "B",
+      "def": "elite",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "Points",
+      "pt": "Goblin",
+      "tier": "B",
       "def": "above_avg",
-      "decided": 79,
-      "hits": 71
+      "decided": 14,
+      "hits": 11
     },
     {
       "prop": "Points",
       "pt": "Goblin",
       "tier": "B",
       "def": "avg",
-      "decided": 27,
-      "hits": 20
+      "decided": 7,
+      "hits": 3
     },
     {
       "prop": "Points",
-      "pt": "Goblin",
-      "tier": "B",
-      "def": "weak",
-      "decided": 27,
-      "hits": 17
-    },
-    {
-      "prop": "Points",
-      "pt": "Goblin",
-      "tier": "B",
-      "def": "elite",
-      "decided": 30,
-      "hits": 23
-    },
-    {
-      "prop": "Pts+Asts",
       "pt": "Goblin",
       "tier": "B",
       "def": "weak",
@@ -140328,41 +140296,33 @@
       "prop": "Pts+Asts",
       "pt": "Goblin",
       "tier": "B",
-      "def": "above_avg",
-      "decided": 14,
-      "hits": 9
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Goblin",
-      "tier": "B",
       "def": "elite",
-      "decided": 4,
-      "hits": 4
+      "decided": 1,
+      "hits": 1
     },
     {
       "prop": "Pts+Asts",
       "pt": "Goblin",
       "tier": "B",
-      "def": "avg",
-      "decided": 6,
-      "hits": 3
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Goblin",
-      "tier": "B",
       "def": "above_avg",
-      "decided": 16,
-      "hits": 13
+      "decided": 12,
+      "hits": 8
     },
     {
-      "prop": "Pts+Rebs",
+      "prop": "Pts+Asts",
       "pt": "Goblin",
       "tier": "B",
       "def": "avg",
       "decided": 5,
-      "hits": 3
+      "hits": 2
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Goblin",
+      "tier": "B",
+      "def": "weak",
+      "decided": 9,
+      "hits": 6
     },
     {
       "prop": "Pts+Rebs",
@@ -140376,17 +140336,25 @@
       "prop": "Pts+Rebs",
       "pt": "Goblin",
       "tier": "B",
-      "def": "weak",
-      "decided": 9,
-      "hits": 4
+      "def": "above_avg",
+      "decided": 14,
+      "hits": 11
     },
     {
-      "prop": "Pts+Rebs+Asts",
+      "prop": "Pts+Rebs",
+      "pt": "Goblin",
+      "tier": "B",
+      "def": "avg",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Rebs",
       "pt": "Goblin",
       "tier": "B",
       "def": "weak",
-      "decided": 22,
-      "hits": 13
+      "decided": 9,
+      "hits": 4
     },
     {
       "prop": "Pts+Rebs+Asts",
@@ -140413,52 +140381,44 @@
       "hits": 6
     },
     {
-      "prop": "Rebounds",
-      "pt": "Goblin",
-      "tier": "B",
-      "def": "above_avg",
-      "decided": 19,
-      "hits": 16
-    },
-    {
-      "prop": "Rebounds",
+      "prop": "Pts+Rebs+Asts",
       "pt": "Goblin",
       "tier": "B",
       "def": "weak",
-      "decided": 23,
-      "hits": 14
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Goblin",
-      "tier": "B",
-      "def": "avg",
-      "decided": 24,
-      "hits": 18
+      "decided": 17,
+      "hits": 11
     },
     {
       "prop": "Rebounds",
       "pt": "Goblin",
       "tier": "B",
       "def": "elite",
-      "decided": 8,
-      "hits": 7
+      "decided": 2,
+      "hits": 1
     },
     {
-      "prop": "Rebs+Asts",
+      "prop": "Rebounds",
       "pt": "Goblin",
       "tier": "B",
       "def": "above_avg",
-      "decided": 8,
+      "decided": 6,
+      "hits": 4
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Goblin",
+      "tier": "B",
+      "def": "avg",
+      "decided": 9,
       "hits": 6
     },
     {
-      "prop": "Rebs+Asts",
+      "prop": "Rebounds",
       "pt": "Goblin",
       "tier": "B",
       "def": "weak",
-      "decided": 10,
-      "hits": 7
+      "decided": 7,
+      "hits": 4
     },
     {
       "prop": "Rebs+Asts",
@@ -140472,32 +140432,32 @@
       "prop": "Rebs+Asts",
       "pt": "Goblin",
       "tier": "B",
+      "def": "above_avg",
+      "decided": 4,
+      "hits": 3
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Goblin",
+      "tier": "B",
       "def": "avg",
       "decided": 5,
       "hits": 4
     },
     {
-      "prop": "Steals",
+      "prop": "Rebs+Asts",
       "pt": "Goblin",
       "tier": "B",
       "def": "weak",
       "decided": 8,
-      "hits": 5
-    },
-    {
-      "prop": "Steals",
-      "pt": "Goblin",
-      "tier": "B",
-      "def": "above_avg",
-      "decided": 9,
-      "hits": 7
+      "hits": 6
     },
     {
       "prop": "Steals",
       "pt": "Goblin",
       "tier": "B",
       "def": "avg",
-      "decided": 5,
+      "decided": 2,
       "hits": 2
     },
     {
@@ -140505,7 +140465,23 @@
       "pt": "Goblin",
       "tier": "B",
       "def": "elite",
-      "decided": 6,
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Steals",
+      "pt": "Goblin",
+      "tier": "B",
+      "def": "above_avg",
+      "decided": 3,
+      "hits": 2
+    },
+    {
+      "prop": "Steals",
+      "pt": "Goblin",
+      "tier": "B",
+      "def": "weak",
+      "decided": 3,
       "hits": 2
     },
     {
@@ -140531,30 +140507,6 @@
       "def": "weak",
       "decided": 1,
       "hits": 0
-    },
-    {
-      "prop": "pra",
-      "pt": "Goblin",
-      "tier": "B",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "pts",
-      "pt": "Goblin",
-      "tier": "B",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "reb",
-      "pt": "Goblin",
-      "tier": "B",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
     },
     {
       "prop": "—",
@@ -140584,15 +140536,7 @@
       "prop": "3-PT Made",
       "pt": "Goblin",
       "tier": "C",
-      "def": "above_avg",
-      "decided": 9,
-      "hits": 6
-    },
-    {
-      "prop": "3-PT Made",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "weak",
+      "def": "avg",
       "decided": 3,
       "hits": 1
     },
@@ -140600,15 +140544,31 @@
       "prop": "3-PT Made",
       "pt": "Goblin",
       "tier": "C",
-      "def": "avg",
-      "decided": 5,
-      "hits": 2
+      "def": "weak",
+      "decided": 1,
+      "hits": 1
     },
     {
-      "prop": "3-PT Made",
+      "prop": "Assists",
+      "pt": "Goblin",
+      "tier": "C",
+      "def": "above_avg",
+      "decided": 6,
+      "hits": 5
+    },
+    {
+      "prop": "Assists",
       "pt": "Goblin",
       "tier": "C",
       "def": "elite",
+      "decided": 2,
+      "hits": 2
+    },
+    {
+      "prop": "Assists",
+      "pt": "Goblin",
+      "tier": "C",
+      "def": "weak",
       "decided": 2,
       "hits": 1
     },
@@ -140616,39 +140576,15 @@
       "prop": "Assists",
       "pt": "Goblin",
       "tier": "C",
-      "def": "elite",
-      "decided": 7,
-      "hits": 7
-    },
-    {
-      "prop": "Assists",
-      "pt": "Goblin",
-      "tier": "C",
       "def": "avg",
-      "decided": 7,
-      "hits": 5
-    },
-    {
-      "prop": "Assists",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "above_avg",
-      "decided": 16,
-      "hits": 15
-    },
-    {
-      "prop": "Assists",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "weak",
-      "decided": 6,
-      "hits": 5
+      "decided": 2,
+      "hits": 2
     },
     {
       "prop": "Blks+Stls",
       "pt": "Goblin",
       "tier": "C",
-      "def": "elite",
+      "def": "above_avg",
       "decided": 5,
       "hits": 4
     },
@@ -140657,16 +140593,8 @@
       "pt": "Goblin",
       "tier": "C",
       "def": "weak",
-      "decided": 4,
+      "decided": 2,
       "hits": 1
-    },
-    {
-      "prop": "Blks+Stls",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "above_avg",
-      "decided": 5,
-      "hits": 4
     },
     {
       "prop": "Blks+Stls",
@@ -140675,14 +140603,6 @@
       "def": "avg",
       "decided": 1,
       "hits": 0
-    },
-    {
-      "prop": "Blocked Shots",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "weak",
-      "decided": 2,
-      "hits": 2
     },
     {
       "prop": "Free Throws Attempted",
@@ -140712,48 +140632,32 @@
       "prop": "Points",
       "pt": "Goblin",
       "tier": "C",
-      "def": "avg",
-      "decided": 17,
-      "hits": 9
-    },
-    {
-      "prop": "Points",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "weak",
-      "decided": 31,
-      "hits": 18
-    },
-    {
-      "prop": "Points",
-      "pt": "Goblin",
-      "tier": "C",
       "def": "above_avg",
-      "decided": 52,
-      "hits": 37
+      "decided": 11,
+      "hits": 7
     },
     {
       "prop": "Points",
       "pt": "Goblin",
       "tier": "C",
       "def": "elite",
-      "decided": 25,
-      "hits": 22
+      "decided": 1,
+      "hits": 0
     },
     {
-      "prop": "Pts+Asts",
+      "prop": "Points",
       "pt": "Goblin",
       "tier": "C",
       "def": "avg",
-      "decided": 8,
-      "hits": 4
+      "decided": 3,
+      "hits": 1
     },
     {
-      "prop": "Pts+Asts",
+      "prop": "Points",
       "pt": "Goblin",
       "tier": "C",
       "def": "weak",
-      "decided": 9,
+      "decided": 7,
       "hits": 5
     },
     {
@@ -140773,116 +140677,108 @@
       "hits": 0
     },
     {
+      "prop": "Pts+Asts",
+      "pt": "Goblin",
+      "tier": "C",
+      "def": "weak",
+      "decided": 5,
+      "hits": 4
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Goblin",
+      "tier": "C",
+      "def": "avg",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Goblin",
+      "tier": "C",
+      "def": "elite",
+      "decided": 5,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Goblin",
+      "tier": "C",
+      "def": "above_avg",
+      "decided": 9,
+      "hits": 8
+    },
+    {
       "prop": "Pts+Rebs",
       "pt": "Goblin",
       "tier": "C",
       "def": "avg",
-      "decided": 6,
-      "hits": 3
+      "decided": 3,
+      "hits": 2
     },
     {
       "prop": "Pts+Rebs",
       "pt": "Goblin",
       "tier": "C",
       "def": "weak",
+      "decided": 5,
+      "hits": 2
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Goblin",
+      "tier": "C",
+      "def": "elite",
+      "decided": 4,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Goblin",
+      "tier": "C",
+      "def": "above_avg",
       "decided": 14,
+      "hits": 11
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Goblin",
+      "tier": "C",
+      "def": "avg",
+      "decided": 6,
       "hits": 5
     },
     {
-      "prop": "Pts+Rebs",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "above_avg",
-      "decided": 11,
-      "hits": 9
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "elite",
-      "decided": 7,
-      "hits": 2
-    },
-    {
       "prop": "Pts+Rebs+Asts",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "weak",
-      "decided": 33,
-      "hits": 18
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "avg",
-      "decided": 13,
-      "hits": 9
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "elite",
-      "decided": 6,
-      "hits": 2
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "above_avg",
-      "decided": 14,
-      "hits": 11
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "above_avg",
-      "decided": 20,
-      "hits": 11
-    },
-    {
-      "prop": "Rebounds",
       "pt": "Goblin",
       "tier": "C",
       "def": "weak",
       "decided": 16,
-      "hits": 9
+      "hits": 10
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Goblin",
+      "tier": "C",
+      "def": "above_avg",
+      "decided": 6,
+      "hits": 3
     },
     {
       "prop": "Rebounds",
       "pt": "Goblin",
       "tier": "C",
       "def": "avg",
-      "decided": 8,
-      "hits": 5
+      "decided": 2,
+      "hits": 2
     },
     {
       "prop": "Rebounds",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "elite",
-      "decided": 14,
-      "hits": 12
-    },
-    {
-      "prop": "Rebs+Asts",
       "pt": "Goblin",
       "tier": "C",
       "def": "weak",
-      "decided": 15,
-      "hits": 9
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "avg",
-      "decided": 8,
-      "hits": 3
+      "decided": 7,
+      "hits": 6
     },
     {
       "prop": "Rebs+Asts",
@@ -140896,25 +140792,25 @@
       "prop": "Rebs+Asts",
       "pt": "Goblin",
       "tier": "C",
+      "def": "avg",
+      "decided": 5,
+      "hits": 3
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Goblin",
+      "tier": "C",
       "def": "above_avg",
       "decided": 8,
       "hits": 3
     },
     {
-      "prop": "Steals",
+      "prop": "Rebs+Asts",
       "pt": "Goblin",
       "tier": "C",
-      "def": "above_avg",
+      "def": "weak",
       "decided": 7,
       "hits": 5
-    },
-    {
-      "prop": "Steals",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "elite",
-      "decided": 3,
-      "hits": 1
     },
     {
       "prop": "Steals",
@@ -140965,70 +140861,6 @@
       "hits": 1
     },
     {
-      "prop": "ast",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "avg",
-      "decided": 3,
-      "hits": 1
-    },
-    {
-      "prop": "ast",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "elite",
-      "decided": 3,
-      "hits": 2
-    },
-    {
-      "prop": "pra",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "avg",
-      "decided": 4,
-      "hits": 0
-    },
-    {
-      "prop": "pts",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "avg",
-      "decided": 4,
-      "hits": 2
-    },
-    {
-      "prop": "reb",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "reb",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "elite",
-      "decided": 2,
-      "hits": 0
-    },
-    {
-      "prop": "stl",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "avg",
-      "decided": 3,
-      "hits": 3
-    },
-    {
-      "prop": "stl",
-      "pt": "Goblin",
-      "tier": "C",
-      "def": "elite",
-      "decided": 1,
-      "hits": 0
-    },
-    {
       "prop": "—",
       "pt": "Goblin",
       "tier": "C",
@@ -141072,2049 +140904,1849 @@
       "prop": "3-PT Made",
       "pt": "Goblin",
       "tier": "D",
-      "def": "elite",
-      "decided": 10,
-      "hits": 7
+      "def": "above_avg",
+      "decided": 6,
+      "hits": 4
     },
     {
       "prop": "3-PT Made",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "avg",
+      "decided": 5,
+      "hits": 4
+    },
+    {
+      "prop": "3-PT Made",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "elite",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "3-PT Made",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "weak",
+      "decided": 2,
+      "hits": 2
+    },
+    {
+      "prop": "Assists",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 11,
+      "hits": 6
+    },
+    {
+      "prop": "Assists",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "elite",
+      "decided": 5,
+      "hits": 2
+    },
+    {
+      "prop": "Assists",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "avg",
+      "decided": 14,
+      "hits": 6
+    },
+    {
+      "prop": "Assists",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "weak",
+      "decided": 8,
+      "hits": 4
+    },
+    {
+      "prop": "Blks+Stls",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "elite",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Blks+Stls",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "avg",
+      "decided": 5,
+      "hits": 3
+    },
+    {
+      "prop": "Blks+Stls",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "weak",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "Blks+Stls",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 6,
+      "hits": 4
+    },
+    {
+      "prop": "Blocked Shots",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Blocked Shots",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "elite",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Blocked Shots",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "weak",
+      "decided": 2,
+      "hits": 2
+    },
+    {
+      "prop": "Blocked Shots",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "avg",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "FG Attempted",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "FG Attempted",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "avg",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "FG Made",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 3,
+      "hits": 2
+    },
+    {
+      "prop": "FG Made",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "elite",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "FG Made",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "avg",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "FG Made",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "weak",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Free Throws Attempted",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "weak",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "Free Throws Made",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "avg",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Free Throws Made",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Personal Fouls",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "avg",
+      "decided": 9,
+      "hits": 7
+    },
+    {
+      "prop": "Personal Fouls",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 6,
+      "hits": 4
+    },
+    {
+      "prop": "Personal Fouls",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "weak",
+      "decided": 6,
+      "hits": 2
+    },
+    {
+      "prop": "Personal Fouls",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "elite",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Points",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "elite",
+      "decided": 11,
+      "hits": 2
+    },
+    {
+      "prop": "Points",
       "pt": "Goblin",
       "tier": "D",
       "def": "above_avg",
       "decided": 21,
-      "hits": 13
-    },
-    {
-      "prop": "3-PT Made",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "weak",
-      "decided": 17,
       "hits": 12
     },
     {
-      "prop": "3-PT Made",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "avg",
-      "decided": 8,
-      "hits": 5
-    },
-    {
-      "prop": "Assists",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "weak",
-      "decided": 22,
-      "hits": 13
-    },
-    {
-      "prop": "Assists",
+      "prop": "Points",
       "pt": "Goblin",
       "tier": "D",
       "def": "avg",
       "decided": 18,
-      "hits": 7
+      "hits": 9
     },
     {
-      "prop": "Assists",
+      "prop": "Points",
       "pt": "Goblin",
       "tier": "D",
-      "def": "above_avg",
-      "decided": 49,
-      "hits": 33
+      "def": "weak",
+      "decided": 14,
+      "hits": 9
     },
     {
-      "prop": "Assists",
+      "prop": "Pts+Asts",
       "pt": "Goblin",
       "tier": "D",
       "def": "elite",
-      "decided": 24,
-      "hits": 14
-    },
-    {
-      "prop": "Blks+Stls",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "avg",
-      "decided": 6,
+      "decided": 8,
       "hits": 3
     },
     {
-      "prop": "Blks+Stls",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "weak",
-      "decided": 10,
-      "hits": 7
-    },
-    {
-      "prop": "Blks+Stls",
+      "prop": "Pts+Asts",
       "pt": "Goblin",
       "tier": "D",
       "def": "above_avg",
-      "decided": 25,
-      "hits": 13
-    },
-    {
-      "prop": "Blks+Stls",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "elite",
-      "decided": 3,
-      "hits": 2
-    },
-    {
-      "prop": "Blocked Shots",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "weak",
-      "decided": 5,
+      "decided": 11,
       "hits": 5
     },
     {
-      "prop": "Blocked Shots",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 7,
-      "hits": 4
-    },
-    {
-      "prop": "Blocked Shots",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "elite",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Blocked Shots",
+      "prop": "Pts+Asts",
       "pt": "Goblin",
       "tier": "D",
       "def": "avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "FG Attempted",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "FG Attempted",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "FG Made",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 3,
-      "hits": 2
-    },
-    {
-      "prop": "FG Made",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "elite",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "FG Made",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "FG Made",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "weak",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Free Throws Attempted",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "weak",
       "decided": 4,
       "hits": 2
     },
     {
-      "prop": "Free Throws Made",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Free Throws Made",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Personal Fouls",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "avg",
-      "decided": 9,
-      "hits": 7
-    },
-    {
-      "prop": "Personal Fouls",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 6,
-      "hits": 4
-    },
-    {
-      "prop": "Personal Fouls",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "weak",
-      "decided": 6,
-      "hits": 2
-    },
-    {
-      "prop": "Personal Fouls",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "elite",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Points",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "avg",
-      "decided": 34,
-      "hits": 18
-    },
-    {
-      "prop": "Points",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 82,
-      "hits": 44
-    },
-    {
-      "prop": "Points",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "elite",
-      "decided": 42,
-      "hits": 28
-    },
-    {
-      "prop": "Points",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "weak",
-      "decided": 35,
-      "hits": 22
-    },
-    {
       "prop": "Pts+Asts",
       "pt": "Goblin",
       "tier": "D",
       "def": "weak",
-      "decided": 42,
-      "hits": 21
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 24,
-      "hits": 10
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "avg",
-      "decided": 16,
-      "hits": 7
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "elite",
-      "decided": 31,
-      "hits": 18
+      "decided": 8,
+      "hits": 6
     },
     {
       "prop": "Pts+Rebs",
       "pt": "Goblin",
       "tier": "D",
       "def": "elite",
-      "decided": 38,
-      "hits": 24
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "weak",
-      "decided": 37,
-      "hits": 22
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "avg",
-      "decided": 23,
-      "hits": 10
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 26,
-      "hits": 12
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "avg",
-      "decided": 34,
-      "hits": 10
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "weak",
-      "decided": 48,
-      "hits": 24
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 67,
-      "hits": 25
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "elite",
-      "decided": 51,
-      "hits": 34
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "weak",
-      "decided": 27,
-      "hits": 15
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "elite",
-      "decided": 35,
-      "hits": 24
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "avg",
-      "decided": 23,
-      "hits": 10
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 48,
-      "hits": 30
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "avg",
-      "decided": 36,
-      "hits": 11
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "weak",
-      "decided": 44,
-      "hits": 24
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 60,
-      "hits": 33
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "elite",
-      "decided": 37,
-      "hits": 24
-    },
-    {
-      "prop": "Steals",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "avg",
-      "decided": 5,
-      "hits": 2
-    },
-    {
-      "prop": "Steals",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "elite",
-      "decided": 5,
-      "hits": 3
-    },
-    {
-      "prop": "Steals",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 9,
-      "hits": 5
-    },
-    {
-      "prop": "Turnovers",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "weak",
       "decided": 7,
-      "hits": 4
+      "hits": 1
     },
     {
-      "prop": "Turnovers",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "elite",
-      "decided": 16,
-      "hits": 10
-    },
-    {
-      "prop": "Turnovers",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "avg",
-      "decided": 6,
-      "hits": 4
-    },
-    {
-      "prop": "Turnovers",
+      "prop": "Pts+Rebs",
       "pt": "Goblin",
       "tier": "D",
       "def": "above_avg",
       "decided": 15,
-      "hits": 5
-    },
-    {
-      "prop": "Two Pointers Attempted",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Two Pointers Attempted",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "weak",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Two Pointers Attempted",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Two Pointers Made",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 5,
-      "hits": 2
-    },
-    {
-      "prop": "Two Pointers Made",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "elite",
-      "decided": 3,
-      "hits": 2
-    },
-    {
-      "prop": "Two Pointers Made",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "weak",
-      "decided": 4,
-      "hits": 1
-    },
-    {
-      "prop": "Two Pointers Made",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "reb",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "—",
-      "pt": "Goblin",
-      "tier": "D",
-      "def": "elite",
-      "decided": 10,
-      "hits": 3
-    },
-    {
-      "prop": "assists",
-      "pt": "Over",
-      "tier": "B",
-      "def": "avg",
-      "decided": 2,
-      "hits": 2
-    },
-    {
-      "prop": "points",
-      "pt": "Over",
-      "tier": "B",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "assists",
-      "pt": "Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "plus/minus",
-      "pt": "Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "points",
-      "pt": "Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 8,
       "hits": 7
     },
     {
-      "prop": "assists",
-      "pt": "Over",
+      "prop": "Pts+Rebs",
+      "pt": "Goblin",
       "tier": "D",
       "def": "avg",
-      "decided": 135,
-      "hits": 39
-    },
-    {
-      "prop": "goals",
-      "pt": "Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 187,
-      "hits": 37
-    },
-    {
-      "prop": "plus/minus",
-      "pt": "Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 74,
-      "hits": 36
-    },
-    {
-      "prop": "points",
-      "pt": "Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 175,
-      "hits": 65
-    },
-    {
-      "prop": "3-PT Made",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "weak",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "3-PT Made",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "elite",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Assists",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "elite",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Assists",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "weak",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Blocked Shots",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "weak",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "FG Attempted",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "weak",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "FG Attempted",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "avg",
-      "decided": 2,
-      "hits": 2
-    },
-    {
-      "prop": "FG Made",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "above_avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Fantasy Score",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "weak",
-      "decided": 24,
-      "hits": 18
-    },
-    {
-      "prop": "Fantasy Score",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "elite",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Fantasy Score",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "above_avg",
-      "decided": 4,
-      "hits": 3
-    },
-    {
-      "prop": "Fantasy Score",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "avg",
-      "decided": 8,
-      "hits": 7
-    },
-    {
-      "prop": "Free Throws Attempted",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "avg",
-      "decided": 3,
-      "hits": 2
-    },
-    {
-      "prop": "Free Throws Attempted",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "weak",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Free Throws Made",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "avg",
-      "decided": 3,
-      "hits": 3
-    },
-    {
-      "prop": "Free Throws Made",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "weak",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Points",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "weak",
-      "decided": 25,
-      "hits": 22
-    },
-    {
-      "prop": "Points",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "avg",
-      "decided": 16,
-      "hits": 14
-    },
-    {
-      "prop": "Points",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "above_avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Points",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "elite",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "weak",
-      "decided": 4,
-      "hits": 2
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "avg",
-      "decided": 4,
-      "hits": 2
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "weak",
-      "decided": 6,
-      "hits": 3
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "above_avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "avg",
-      "decided": 3,
-      "hits": 2
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "elite",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "weak",
-      "decided": 3,
-      "hits": 1
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "weak",
-      "decided": 8,
-      "hits": 7
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "avg",
-      "decided": 3,
-      "hits": 1
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "weak",
-      "decided": 3,
-      "hits": 1
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "above_avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Turnovers",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "weak",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Two Pointers Attempted",
-      "pt": "Standard Over",
-      "tier": "A",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "3-PT Made",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "weak",
-      "decided": 2,
-      "hits": 0
-    },
-    {
-      "prop": "Assists",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "avg",
-      "decided": 2,
-      "hits": 2
-    },
-    {
-      "prop": "Assists",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "weak",
-      "decided": 2,
-      "hits": 2
-    },
-    {
-      "prop": "Assists",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "elite",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Blks+Stls",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "elite",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "FG Attempted",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "weak",
-      "decided": 3,
-      "hits": 3
-    },
-    {
-      "prop": "FG Attempted",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "FG Attempted",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "elite",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Fantasy Score",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "avg",
-      "decided": 17,
-      "hits": 17
-    },
-    {
-      "prop": "Fantasy Score",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "weak",
-      "decided": 17,
-      "hits": 13
-    },
-    {
-      "prop": "Fantasy Score",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "above_avg",
-      "decided": 7,
-      "hits": 5
-    },
-    {
-      "prop": "Free Throws Attempted",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "above_avg",
-      "decided": 2,
-      "hits": 0
-    },
-    {
-      "prop": "Free Throws Attempted",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Free Throws Made",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "elite",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Points",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "weak",
-      "decided": 17,
-      "hits": 14
-    },
-    {
-      "prop": "Points",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "avg",
-      "decided": 20,
-      "hits": 19
-    },
-    {
-      "prop": "Points",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "above_avg",
-      "decided": 8,
-      "hits": 8
-    },
-    {
-      "prop": "Points",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "elite",
-      "decided": 3,
-      "hits": 3
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "elite",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "above_avg",
-      "decided": 3,
-      "hits": 1
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "avg",
-      "decided": 4,
-      "hits": 3
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "weak",
-      "decided": 3,
-      "hits": 1
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "elite",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "above_avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "avg",
-      "decided": 3,
-      "hits": 1
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "weak",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "weak",
-      "decided": 3,
-      "hits": 2
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "avg",
-      "decided": 3,
-      "hits": 3
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "weak",
-      "decided": 6,
-      "hits": 5
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "avg",
-      "decided": 2,
-      "hits": 2
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "above_avg",
-      "decided": 10,
-      "hits": 9
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "elite",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "weak",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Steals",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "elite",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Steals",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "weak",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Turnovers",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "weak",
-      "decided": 3,
-      "hits": 1
-    },
-    {
-      "prop": "—",
-      "pt": "Standard Over",
-      "tier": "B",
-      "def": "elite",
-      "decided": 3,
-      "hits": 3
-    },
-    {
-      "prop": "Assists",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "weak",
-      "decided": 9,
-      "hits": 7
-    },
-    {
-      "prop": "Assists",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 4,
-      "hits": 3
-    },
-    {
-      "prop": "Assists",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "above_avg",
-      "decided": 4,
-      "hits": 3
-    },
-    {
-      "prop": "Blocked Shots",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "elite",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "FG Attempted",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "FG Attempted",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "weak",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "FG Made",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "weak",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Fantasy Score",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "weak",
-      "decided": 9,
-      "hits": 9
-    },
-    {
-      "prop": "Fantasy Score",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 24,
-      "hits": 15
-    },
-    {
-      "prop": "Fantasy Score",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "above_avg",
-      "decided": 23,
-      "hits": 20
-    },
-    {
-      "prop": "Fantasy Score",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "elite",
-      "decided": 13,
-      "hits": 11
-    },
-    {
-      "prop": "Free Throws Attempted",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Free Throws Attempted",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "above_avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Free Throws Attempted",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "weak",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Free Throws Made",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "weak",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Free Throws Made",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "above_avg",
-      "decided": 2,
-      "hits": 2
-    },
-    {
-      "prop": "Points",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "above_avg",
-      "decided": 17,
-      "hits": 16
-    },
-    {
-      "prop": "Points",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "elite",
-      "decided": 6,
-      "hits": 5
-    },
-    {
-      "prop": "Points",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 20,
-      "hits": 18
-    },
-    {
-      "prop": "Points",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "weak",
-      "decided": 17,
-      "hits": 13
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "above_avg",
-      "decided": 2,
-      "hits": 0
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "weak",
-      "decided": 5,
+      "decided": 11,
       "hits": 4
     },
     {
       "prop": "Pts+Rebs",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "above_avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "weak",
-      "decided": 5,
-      "hits": 3
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "C",
+      "pt": "Goblin",
+      "tier": "D",
       "def": "weak",
       "decided": 8,
-      "hits": 7
+      "hits": 5
     },
     {
       "prop": "Pts+Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 11,
-      "hits": 10
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "C",
+      "pt": "Goblin",
+      "tier": "D",
       "def": "elite",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "above_avg",
-      "decided": 4,
-      "hits": 2
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "weak",
       "decided": 9,
       "hits": 3
     },
     {
-      "prop": "Rebounds",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "elite",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "above_avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "above_avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 4,
-      "hits": 3
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "weak",
-      "decided": 4,
-      "hits": 2
-    },
-    {
-      "prop": "Steals",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "weak",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Turnovers",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "weak",
-      "decided": 3,
-      "hits": 2
-    },
-    {
-      "prop": "Two Pointers Attempted",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "ast",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "pa",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "pra",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "pts",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "ra",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "tov",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "—",
-      "pt": "Standard Over",
-      "tier": "C",
-      "def": "elite",
-      "decided": 15,
-      "hits": 5
-    },
-    {
-      "prop": "3-PT Attempted",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 3,
-      "hits": 2
-    },
-    {
-      "prop": "3-PT Attempted",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "weak",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "3-PT Attempted",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "elite",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "3-PT Attempted",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "3-PT Made",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 3,
-      "hits": 1
-    },
-    {
-      "prop": "3-PT Made",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Assists",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "weak",
-      "decided": 4,
-      "hits": 3
-    },
-    {
-      "prop": "Assists",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 13,
-      "hits": 6
-    },
-    {
-      "prop": "Assists",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "elite",
-      "decided": 3,
-      "hits": 2
-    },
-    {
-      "prop": "Assists",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 4,
-      "hits": 1
-    },
-    {
-      "prop": "Blks+Stls",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "elite",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Blks+Stls",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 3,
-      "hits": 1
-    },
-    {
-      "prop": "Blks+Stls",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 4,
-      "hits": 2
-    },
-    {
-      "prop": "Blocked Shots",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 3,
-      "hits": 0
-    },
-    {
-      "prop": "Blocked Shots",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "elite",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Blocked Shots",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "weak",
-      "decided": 2,
-      "hits": 0
-    },
-    {
-      "prop": "FG Attempted",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "elite",
-      "decided": 3,
-      "hits": 0
-    },
-    {
-      "prop": "FG Attempted",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 6,
-      "hits": 2
-    },
-    {
-      "prop": "FG Attempted",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 5,
-      "hits": 0
-    },
-    {
-      "prop": "FG Attempted",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "weak",
-      "decided": 4,
-      "hits": 1
-    },
-    {
-      "prop": "FG Made",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "elite",
-      "decided": 3,
-      "hits": 1
-    },
-    {
-      "prop": "FG Made",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 4,
-      "hits": 2
-    },
-    {
-      "prop": "FG Made",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 3,
-      "hits": 0
-    },
-    {
-      "prop": "FG Made",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "weak",
-      "decided": 5,
-      "hits": 2
-    },
-    {
-      "prop": "Fantasy Score",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "elite",
-      "decided": 11,
-      "hits": 4
-    },
-    {
-      "prop": "Fantasy Score",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 17,
-      "hits": 12
-    },
-    {
-      "prop": "Fantasy Score",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 5,
-      "hits": 2
-    },
-    {
-      "prop": "Fantasy Score",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "weak",
-      "decided": 3,
-      "hits": 2
-    },
-    {
-      "prop": "Free Throws Attempted",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "elite",
-      "decided": 3,
-      "hits": 1
-    },
-    {
-      "prop": "Free Throws Attempted",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Free Throws Attempted",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 4,
-      "hits": 2
-    },
-    {
-      "prop": "Free Throws Attempted",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "weak",
-      "decided": 5,
-      "hits": 4
-    },
-    {
-      "prop": "Free Throws Made",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 4,
-      "hits": 4
-    },
-    {
-      "prop": "Free Throws Made",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 3,
-      "hits": 1
-    },
-    {
-      "prop": "Free Throws Made",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "elite",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Free Throws Made",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "weak",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Points",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "weak",
-      "decided": 28,
-      "hits": 16
-    },
-    {
-      "prop": "Points",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "elite",
-      "decided": 34,
-      "hits": 18
-    },
-    {
-      "prop": "Points",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 63,
-      "hits": 45
-    },
-    {
-      "prop": "Points",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 34,
-      "hits": 27
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 12,
-      "hits": 5
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "elite",
-      "decided": 13,
-      "hits": 6
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 28,
-      "hits": 13
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "weak",
-      "decided": 12,
-      "hits": 5
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "weak",
-      "decided": 20,
-      "hits": 6
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "elite",
-      "decided": 15,
-      "hits": 6
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 29,
-      "hits": 8
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 11,
-      "hits": 5
-    },
-    {
       "prop": "Pts+Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "weak",
-      "decided": 58,
-      "hits": 33
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "elite",
-      "decided": 37,
-      "hits": 22
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 71,
-      "hits": 44
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 55,
-      "hits": 41
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "elite",
-      "decided": 11,
-      "hits": 9
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "weak",
-      "decided": 13,
-      "hits": 2
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 22,
-      "hits": 11
-    },
-    {
-      "prop": "Rebounds",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 12,
-      "hits": 7
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 11,
-      "hits": 6
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Standard Over",
+      "pt": "Goblin",
       "tier": "D",
       "def": "above_avg",
       "decided": 22,
       "hits": 8
     },
     {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "avg",
+      "decided": 16,
+      "hits": 3
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "weak",
+      "decided": 7,
+      "hits": 5
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "elite",
+      "decided": 10,
+      "hits": 5
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 18,
+      "hits": 12
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "avg",
+      "decided": 12,
+      "hits": 8
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "weak",
+      "decided": 6,
+      "hits": 4
+    },
+    {
       "prop": "Rebs+Asts",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "elite",
+      "decided": 10,
+      "hits": 6
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 15,
+      "hits": 7
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "avg",
+      "decided": 24,
+      "hits": 9
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "weak",
+      "decided": 9,
+      "hits": 7
+    },
+    {
+      "prop": "Steals",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 5,
+      "hits": 3
+    },
+    {
+      "prop": "Steals",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "avg",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Turnovers",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 6,
+      "hits": 4
+    },
+    {
+      "prop": "Turnovers",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "elite",
+      "decided": 5,
+      "hits": 3
+    },
+    {
+      "prop": "Turnovers",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "avg",
+      "decided": 4,
+      "hits": 3
+    },
+    {
+      "prop": "Turnovers",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "weak",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "Two Pointers Attempted",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "avg",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Two Pointers Attempted",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "weak",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Two Pointers Attempted",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Two Pointers Made",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 5,
+      "hits": 2
+    },
+    {
+      "prop": "Two Pointers Made",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "elite",
+      "decided": 3,
+      "hits": 2
+    },
+    {
+      "prop": "Two Pointers Made",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "weak",
+      "decided": 4,
+      "hits": 1
+    },
+    {
+      "prop": "Two Pointers Made",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "avg",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "—",
+      "pt": "Goblin",
+      "tier": "D",
+      "def": "elite",
+      "decided": 10,
+      "hits": 3
+    },
+    {
+      "prop": "3-PT Made",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "weak",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "3-PT Made",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "elite",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Assists",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "elite",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Assists",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "weak",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Blocked Shots",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "weak",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "FG Attempted",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "weak",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "FG Attempted",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "avg",
+      "decided": 2,
+      "hits": 2
+    },
+    {
+      "prop": "FG Made",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "above_avg",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Fantasy Score",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "elite",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Fantasy Score",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "above_avg",
+      "decided": 4,
+      "hits": 3
+    },
+    {
+      "prop": "Fantasy Score",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "avg",
+      "decided": 8,
+      "hits": 7
+    },
+    {
+      "prop": "Fantasy Score",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "weak",
+      "decided": 14,
+      "hits": 8
+    },
+    {
+      "prop": "Free Throws Attempted",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "avg",
+      "decided": 3,
+      "hits": 2
+    },
+    {
+      "prop": "Free Throws Attempted",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "weak",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Free Throws Made",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "avg",
+      "decided": 3,
+      "hits": 3
+    },
+    {
+      "prop": "Free Throws Made",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "weak",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Points",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "above_avg",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Points",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "elite",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Points",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "avg",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "Points",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "weak",
+      "decided": 3,
+      "hits": 2
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "avg",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "weak",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "avg",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "weak",
+      "decided": 6,
+      "hits": 3
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "above_avg",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "avg",
+      "decided": 3,
+      "hits": 2
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "elite",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "weak",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "avg",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "weak",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "weak",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "above_avg",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Turnovers",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "weak",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Two Pointers Attempted",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "avg",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "3-PT Made",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "weak",
+      "decided": 2,
+      "hits": 0
+    },
+    {
+      "prop": "Assists",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "elite",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Blks+Stls",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "elite",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "FG Attempted",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "weak",
+      "decided": 3,
+      "hits": 3
+    },
+    {
+      "prop": "FG Attempted",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "avg",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "FG Attempted",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "elite",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Fantasy Score",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "above_avg",
+      "decided": 5,
+      "hits": 3
+    },
+    {
+      "prop": "Fantasy Score",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "weak",
+      "decided": 11,
+      "hits": 8
+    },
+    {
+      "prop": "Fantasy Score",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "avg",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Free Throws Attempted",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "above_avg",
+      "decided": 2,
+      "hits": 0
+    },
+    {
+      "prop": "Free Throws Attempted",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "avg",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Free Throws Made",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "elite",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Points",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "elite",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Points",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "avg",
+      "decided": 3,
+      "hits": 2
+    },
+    {
+      "prop": "Points",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "weak",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "elite",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "above_avg",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "avg",
+      "decided": 4,
+      "hits": 3
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "weak",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "elite",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "above_avg",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "avg",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "weak",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "avg",
+      "decided": 3,
+      "hits": 3
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "weak",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "weak",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "elite",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "weak",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Steals",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "elite",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Steals",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "weak",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Turnovers",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "weak",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "—",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "elite",
+      "decided": 3,
+      "hits": 3
+    },
+    {
+      "prop": "Assists",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "avg",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Assists",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "weak",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Blocked Shots",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "elite",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "FG Attempted",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "avg",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "FG Attempted",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "weak",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "FG Made",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "weak",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Fantasy Score",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "elite",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Fantasy Score",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "above_avg",
+      "decided": 9,
+      "hits": 6
+    },
+    {
+      "prop": "Fantasy Score",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "avg",
+      "decided": 7,
+      "hits": 1
+    },
+    {
+      "prop": "Fantasy Score",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "weak",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Free Throws Attempted",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "avg",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Free Throws Attempted",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "above_avg",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Free Throws Attempted",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "weak",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Free Throws Made",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "weak",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Free Throws Made",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "above_avg",
+      "decided": 2,
+      "hits": 2
+    },
+    {
+      "prop": "Points",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "above_avg",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Points",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "avg",
+      "decided": 2,
+      "hits": 2
+    },
+    {
+      "prop": "Points",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "weak",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "above_avg",
+      "decided": 2,
+      "hits": 0
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "avg",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "weak",
+      "decided": 5,
+      "hits": 4
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "avg",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "above_avg",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "weak",
+      "decided": 5,
+      "hits": 3
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "elite",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "above_avg",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "avg",
+      "decided": 3,
+      "hits": 2
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "weak",
+      "decided": 3,
+      "hits": 2
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "above_avg",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "weak",
+      "decided": 6,
+      "hits": 1
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "avg",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "above_avg",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "avg",
+      "decided": 4,
+      "hits": 3
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "weak",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "Steals",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "weak",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Turnovers",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "weak",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Two Pointers Attempted",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "avg",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "—",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "elite",
+      "decided": 15,
+      "hits": 5
+    },
+    {
+      "prop": "3-PT Attempted",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 3,
+      "hits": 2
+    },
+    {
+      "prop": "3-PT Attempted",
       "pt": "Standard Over",
       "tier": "D",
       "def": "weak",
-      "decided": 16,
-      "hits": 7
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "3-PT Attempted",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "elite",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "3-PT Attempted",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "3-PT Made",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "3-PT Made",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Assists",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "elite",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Assists",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 9,
+      "hits": 2
+    },
+    {
+      "prop": "Assists",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 4,
+      "hits": 1
+    },
+    {
+      "prop": "Assists",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "weak",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Blks+Stls",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "elite",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Blks+Stls",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Blks+Stls",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "Blocked Shots",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 3,
+      "hits": 0
+    },
+    {
+      "prop": "Blocked Shots",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "elite",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Blocked Shots",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "weak",
+      "decided": 2,
+      "hits": 0
+    },
+    {
+      "prop": "FG Attempted",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "elite",
+      "decided": 3,
+      "hits": 0
+    },
+    {
+      "prop": "FG Attempted",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 6,
+      "hits": 2
+    },
+    {
+      "prop": "FG Attempted",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 5,
+      "hits": 0
+    },
+    {
+      "prop": "FG Attempted",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "weak",
+      "decided": 4,
+      "hits": 1
+    },
+    {
+      "prop": "FG Made",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "elite",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "FG Made",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "FG Made",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 3,
+      "hits": 0
+    },
+    {
+      "prop": "FG Made",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "weak",
+      "decided": 5,
+      "hits": 2
+    },
+    {
+      "prop": "Fantasy Score",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "elite",
+      "decided": 4,
+      "hits": 1
+    },
+    {
+      "prop": "Fantasy Score",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Fantasy Score",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 4,
+      "hits": 1
+    },
+    {
+      "prop": "Fantasy Score",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "weak",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Free Throws Attempted",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "elite",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Free Throws Attempted",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Free Throws Attempted",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "Free Throws Attempted",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "weak",
+      "decided": 5,
+      "hits": 4
+    },
+    {
+      "prop": "Free Throws Made",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 4,
+      "hits": 4
+    },
+    {
+      "prop": "Free Throws Made",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Free Throws Made",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "elite",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Free Throws Made",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "weak",
+      "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Points",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 19,
+      "hits": 12
+    },
+    {
+      "prop": "Points",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "elite",
+      "decided": 6,
+      "hits": 1
+    },
+    {
+      "prop": "Points",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "weak",
+      "decided": 8,
+      "hits": 4
+    },
+    {
+      "prop": "Points",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 4,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "elite",
+      "decided": 6,
+      "hits": 2
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 20,
+      "hits": 10
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 8,
+      "hits": 4
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "weak",
+      "decided": 9,
+      "hits": 5
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 18,
+      "hits": 6
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "elite",
+      "decided": 6,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "weak",
+      "decided": 10,
+      "hits": 6
+    },
+    {
+      "prop": "Pts+Rebs",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 5,
+      "hits": 3
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "elite",
+      "decided": 6,
+      "hits": 2
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 21,
+      "hits": 9
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 8,
+      "hits": 3
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "weak",
+      "decided": 15,
+      "hits": 6
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 13,
+      "hits": 6
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 8,
+      "hits": 5
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "weak",
+      "decided": 4,
+      "hits": 1
+    },
+    {
+      "prop": "Rebounds",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "elite",
+      "decided": 3,
+      "hits": 2
     },
     {
       "prop": "Rebs+Asts",
       "pt": "Standard Over",
       "tier": "D",
       "def": "elite",
-      "decided": 5,
-      "hits": 3
+      "decided": 3,
+      "hits": 1
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 16,
+      "hits": 6
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "avg",
+      "decided": 10,
+      "hits": 6
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "weak",
+      "decided": 14,
+      "hits": 7
     },
     {
       "prop": "Steals",
@@ -143128,24 +142760,16 @@
       "prop": "Turnovers",
       "pt": "Standard Over",
       "tier": "D",
-      "def": "weak",
-      "decided": 9,
-      "hits": 3
-    },
-    {
-      "prop": "Turnovers",
-      "pt": "Standard Over",
-      "tier": "D",
       "def": "above_avg",
-      "decided": 11,
-      "hits": 4
+      "decided": 2,
+      "hits": 1
     },
     {
       "prop": "Turnovers",
       "pt": "Standard Over",
       "tier": "D",
       "def": "avg",
-      "decided": 7,
+      "decided": 6,
       "hits": 3
     },
     {
@@ -143153,8 +142777,16 @@
       "pt": "Standard Over",
       "tier": "D",
       "def": "elite",
-      "decided": 3,
-      "hits": 2
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Turnovers",
+      "pt": "Standard Over",
+      "tier": "D",
+      "def": "weak",
+      "decided": 2,
+      "hits": 1
     },
     {
       "prop": "Two Pointers Attempted",
@@ -143202,62 +142834,6 @@
       "tier": "D",
       "def": "weak",
       "decided": 3,
-      "hits": 1
-    },
-    {
-      "prop": "pa",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "pr",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "pra",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "pra",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "elite",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "pts",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 2,
-      "hits": 0
-    },
-    {
-      "prop": "stl",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "stocks",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 1,
       "hits": 1
     },
     {
@@ -143269,122 +142845,10 @@
       "hits": 11
     },
     {
-      "prop": "Steals",
-      "pt": "Standard Under",
-      "tier": "A",
-      "def": "above_avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "fg3m",
-      "pt": "Standard Under",
-      "tier": "B",
-      "def": "elite",
-      "decided": 1,
-      "hits": 0
-    },
-    {
       "prop": "Free Throws Made",
       "pt": "Standard Under",
       "tier": "C",
       "def": "above_avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Steals",
-      "pt": "Standard Under",
-      "tier": "C",
-      "def": "above_avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Steals",
-      "pt": "Standard Under",
-      "tier": "C",
-      "def": "weak",
-      "decided": 2,
-      "hits": 2
-    },
-    {
-      "prop": "fg3m",
-      "pt": "Standard Under",
-      "tier": "C",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "fg3m",
-      "pt": "Standard Under",
-      "tier": "C",
-      "def": "elite",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "pa",
-      "pt": "Standard Under",
-      "tier": "C",
-      "def": "elite",
-      "decided": 3,
-      "hits": 1
-    },
-    {
-      "prop": "pr",
-      "pt": "Standard Under",
-      "tier": "C",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "pr",
-      "pt": "Standard Under",
-      "tier": "C",
-      "def": "elite",
-      "decided": 2,
-      "hits": 2
-    },
-    {
-      "prop": "pra",
-      "pt": "Standard Under",
-      "tier": "C",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "pra",
-      "pt": "Standard Under",
-      "tier": "C",
-      "def": "elite",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "pts",
-      "pt": "Standard Under",
-      "tier": "C",
-      "def": "elite",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "ra",
-      "pt": "Standard Under",
-      "tier": "C",
-      "def": "elite",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "reb",
-      "pt": "Standard Under",
-      "tier": "C",
-      "def": "elite",
       "decided": 1,
       "hits": 1
     },
@@ -143424,22 +142888,6 @@
       "prop": "3-PT Made",
       "pt": "Standard Under",
       "tier": "D",
-      "def": "elite",
-      "decided": 3,
-      "hits": 2
-    },
-    {
-      "prop": "3-PT Made",
-      "pt": "Standard Under",
-      "tier": "D",
-      "def": "weak",
-      "decided": 11,
-      "hits": 7
-    },
-    {
-      "prop": "3-PT Made",
-      "pt": "Standard Under",
-      "tier": "D",
       "def": "avg",
       "decided": 2,
       "hits": 0
@@ -143450,6 +142898,14 @@
       "tier": "D",
       "def": "above_avg",
       "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "3-PT Made",
+      "pt": "Standard Under",
+      "tier": "D",
+      "def": "weak",
+      "decided": 4,
       "hits": 1
     },
     {
@@ -143464,33 +142920,33 @@
       "prop": "Assists",
       "pt": "Standard Under",
       "tier": "D",
-      "def": "elite",
-      "decided": 5,
-      "hits": 3
-    },
-    {
-      "prop": "Assists",
-      "pt": "Standard Under",
-      "tier": "D",
       "def": "weak",
-      "decided": 9,
-      "hits": 3
-    },
-    {
-      "prop": "Assists",
-      "pt": "Standard Under",
-      "tier": "D",
-      "def": "avg",
-      "decided": 8,
-      "hits": 5
+      "decided": 6,
+      "hits": 1
     },
     {
       "prop": "Assists",
       "pt": "Standard Under",
       "tier": "D",
       "def": "above_avg",
-      "decided": 5,
-      "hits": 3
+      "decided": 4,
+      "hits": 2
+    },
+    {
+      "prop": "Assists",
+      "pt": "Standard Under",
+      "tier": "D",
+      "def": "avg",
+      "decided": 7,
+      "hits": 4
+    },
+    {
+      "prop": "Assists",
+      "pt": "Standard Under",
+      "tier": "D",
+      "def": "elite",
+      "decided": 2,
+      "hits": 1
     },
     {
       "prop": "Assists (Combo)",
@@ -143505,8 +142961,8 @@
       "pt": "Standard Under",
       "tier": "D",
       "def": "above_avg",
-      "decided": 4,
-      "hits": 4
+      "decided": 2,
+      "hits": 2
     },
     {
       "prop": "Blks+Stls",
@@ -143522,22 +142978,6 @@
       "tier": "D",
       "def": "elite",
       "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Blocked Shots",
-      "pt": "Standard Under",
-      "tier": "D",
-      "def": "weak",
-      "decided": 5,
-      "hits": 1
-    },
-    {
-      "prop": "Blocked Shots",
-      "pt": "Standard Under",
-      "tier": "D",
-      "def": "elite",
-      "decided": 2,
       "hits": 1
     },
     {
@@ -143808,57 +143248,49 @@
       "prop": "Pts+Asts",
       "pt": "Standard Under",
       "tier": "D",
-      "def": "weak",
-      "decided": 23,
-      "hits": 10
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Standard Under",
-      "tier": "D",
-      "def": "elite",
-      "decided": 4,
-      "hits": 4
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Standard Under",
-      "tier": "D",
-      "def": "above_avg",
-      "decided": 12,
-      "hits": 9
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Standard Under",
-      "tier": "D",
       "def": "avg",
       "decided": 8,
       "hits": 3
     },
     {
+      "prop": "Pts+Asts",
+      "pt": "Standard Under",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Standard Under",
+      "tier": "D",
+      "def": "weak",
+      "decided": 16,
+      "hits": 7
+    },
+    {
+      "prop": "Pts+Asts",
+      "pt": "Standard Under",
+      "tier": "D",
+      "def": "elite",
+      "decided": 1,
+      "hits": 1
+    },
+    {
       "prop": "Pts+Rebs",
       "pt": "Standard Under",
       "tier": "D",
       "def": "weak",
-      "decided": 24,
-      "hits": 13
+      "decided": 17,
+      "hits": 10
     },
     {
       "prop": "Pts+Rebs",
       "pt": "Standard Under",
       "tier": "D",
       "def": "above_avg",
-      "decided": 13,
-      "hits": 8
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Standard Under",
-      "tier": "D",
-      "def": "elite",
-      "decided": 4,
-      "hits": 3
+      "decided": 5,
+      "hits": 2
     },
     {
       "prop": "Pts+Rebs",
@@ -143869,28 +143301,28 @@
       "hits": 8
     },
     {
+      "prop": "Pts+Rebs",
+      "pt": "Standard Under",
+      "tier": "D",
+      "def": "elite",
+      "decided": 1,
+      "hits": 1
+    },
+    {
       "prop": "Pts+Rebs+Asts",
       "pt": "Standard Under",
       "tier": "D",
       "def": "weak",
-      "decided": 21,
-      "hits": 9
+      "decided": 14,
+      "hits": 6
     },
     {
       "prop": "Pts+Rebs+Asts",
       "pt": "Standard Under",
       "tier": "D",
       "def": "above_avg",
-      "decided": 12,
-      "hits": 10
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Standard Under",
-      "tier": "D",
-      "def": "elite",
-      "decided": 4,
-      "hits": 2
+      "decided": 1,
+      "hits": 1
     },
     {
       "prop": "Pts+Rebs+Asts",
@@ -143899,6 +143331,14 @@
       "def": "avg",
       "decided": 10,
       "hits": 5
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Standard Under",
+      "tier": "D",
+      "def": "elite",
+      "decided": 1,
+      "hits": 1
     },
     {
       "prop": "Rebounds",
@@ -143944,25 +143384,17 @@
       "prop": "Rebs+Asts",
       "pt": "Standard Under",
       "tier": "D",
-      "def": "above_avg",
-      "decided": 4,
-      "hits": 3
+      "def": "weak",
+      "decided": 10,
+      "hits": 4
     },
     {
       "prop": "Rebs+Asts",
       "pt": "Standard Under",
       "tier": "D",
       "def": "avg",
-      "decided": 6,
-      "hits": 4
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Standard Under",
-      "tier": "D",
-      "def": "weak",
-      "decided": 11,
-      "hits": 4
+      "decided": 5,
+      "hits": 3
     },
     {
       "prop": "Rebs+Asts",
@@ -143970,6 +143402,14 @@
       "tier": "D",
       "def": "elite",
       "decided": 2,
+      "hits": 1
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Standard Under",
+      "tier": "D",
+      "def": "above_avg",
+      "decided": 1,
       "hits": 1
     },
     {
@@ -144000,17 +143440,17 @@
       "prop": "Turnovers",
       "pt": "Standard Under",
       "tier": "D",
-      "def": "above_avg",
-      "decided": 9,
-      "hits": 5
+      "def": "avg",
+      "decided": 2,
+      "hits": 0
     },
     {
       "prop": "Turnovers",
       "pt": "Standard Under",
       "tier": "D",
-      "def": "avg",
+      "def": "above_avg",
       "decided": 2,
-      "hits": 0
+      "hits": 1
     },
     {
       "prop": "Turnovers",
@@ -144059,46 +143499,6 @@
       "def": "weak",
       "decided": 6,
       "hits": 3
-    },
-    {
-      "prop": "ast",
-      "pt": "Standard Under",
-      "tier": "D",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "pa",
-      "pt": "Standard Under",
-      "tier": "D",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "pr",
-      "pt": "Standard Under",
-      "tier": "D",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "pra",
-      "pt": "Standard Under",
-      "tier": "D",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "ra",
-      "pt": "Standard Under",
-      "tier": "D",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
     },
     {
       "prop": "—",

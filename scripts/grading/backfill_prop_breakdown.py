@@ -2,203 +2,244 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import sys
-from dataclasses import dataclass
+from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
-SCRIPT_DIR = Path(__file__).resolve().parent
-ROOT_DIR = SCRIPT_DIR.parent.parent
-TEMPLATES_DIR = ROOT_DIR / "ui_runner" / "templates"
-GRADED_SLATE_DIR = ROOT_DIR / "ui_runner" / "graded_slate"
-MOBILE_WWW_DATA_DIR = ROOT_DIR / "mobile" / "www" / "data"
-ARCHIVE_DATES_PATH = ROOT_DIR / "mobile" / "www" / "grades_archive_dates.json"
-BUILD_SCRIPT = SCRIPT_DIR / "build_grades_html.py"
+ROOT = Path(__file__).resolve().parents[2]
+GRADED_SLATE_DIR = ROOT / "ui_runner" / "graded_slate"
+TEMPLATES_DIR = ROOT / "ui_runner" / "templates"
+MOBILE_WWW_DIR = ROOT / "mobile" / "www"
+BUILD_SCRIPT = ROOT / "scripts" / "grading" / "build_grades_html.py"
 
-sys.path.insert(0, str(SCRIPT_DIR))
-import build_grades_html as bgh  # noqa: E402
+DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+SENTINEL_DATE = "2098-12-31"
 
 
-@dataclass
-class DateResult:
-    date: str
-    status: str
-    note: str = ""
+def is_date_folder(name: str) -> bool:
+    return bool(DATE_RE.match(name)) and name != SENTINEL_DATE
 
 
-def read_archive_dates() -> list[str]:
-    try:
-        payload = json.loads(ARCHIVE_DATES_PATH.read_text(encoding="utf-8"))
-    except Exception as exc:
-        raise RuntimeError(f"Could not read archive dates: {ARCHIVE_DATES_PATH} ({exc})") from exc
-    dates = payload.get("dates")
-    if not isinstance(dates, list):
-        raise RuntimeError("grades_archive_dates.json missing 'dates' list")
-    out = [str(d).strip() for d in dates if str(d).strip()]
-    out.sort()
-    return out
+def graded_props_path_for_date(date_str: str) -> Path:
+    by_folder = GRADED_SLATE_DIR / date_str / f"graded_props_{date_str}.json"
+    if by_folder.exists():
+        return by_folder
+    return TEMPLATES_DIR / f"graded_props_{date_str}.json"
 
 
-def graded_props_name(date_str: str) -> str:
-    return f"graded_props_{date_str}.json"
+def discover_dates() -> list[str]:
+    dates: set[str] = set()
+
+    if GRADED_SLATE_DIR.exists():
+        for p in GRADED_SLATE_DIR.iterdir():
+            if p.is_dir() and is_date_folder(p.name):
+                gp = p / f"graded_props_{p.name}.json"
+                if gp.exists():
+                    dates.add(p.name)
+
+    for p in TEMPLATES_DIR.glob("graded_props_*.json"):
+        m = re.match(r"graded_props_(\d{4}-\d{2}-\d{2})\.json$", p.name)
+        if not m:
+            continue
+        d = m.group(1)
+        if is_date_folder(d):
+            dates.add(d)
+
+    return sorted(dates)
 
 
-def slate_eval_name(date_str: str) -> str:
-    return f"slate_eval_{date_str}.html"
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
-def read_props_rows(path: Path) -> list[dict[str, Any]]:
-    try:
-        payload = json.loads(path.read_text(encoding="utf-8"))
-    except Exception:
-        return []
-    props = payload.get("props")
-    if not isinstance(props, list):
-        return []
-    return [p for p in props if isinstance(p, dict)]
+def normalize_def(raw: Any) -> str:
+    s = str(raw or "").strip().lower().replace("🟢", "").replace("🟡", "").replace("🔴", "")
+    s = s.replace(" ", "_")
+    if s in {"elite"}:
+        return "elite"
+    if s in {"above_avg", "above_average"}:
+        return "above_avg"
+    if s in {"avg", "average"}:
+        return "avg"
+    if s in {"below_avg", "below_average"}:
+        return "below_avg"
+    if s in {"weak", "very_weak"}:
+        return "weak"
+    return "avg"
 
 
-def write_prop_breakdown_rows(path: Path, rows: list[dict[str, Any]], dry_run: bool) -> None:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-    payload["prop_breakdown_rows"] = rows
+def normalize_tier(raw: Any) -> str:
+    t = str(raw or "").strip().upper()
+    return t if t in {"A", "B", "C", "D"} else ""
+
+
+def normalize_pt(pick_type: Any, direction: Any, over_under: Any) -> str:
+    pt = str(pick_type or "").strip().lower()
+    side = str(direction or over_under or "").strip().lower()
+
+    if "standard" in pt:
+        if "under" in side:
+            return "Standard Under"
+        return "Standard Over"
+    if "goblin" in pt:
+        return "Goblin"
+    if "demon" in pt:
+        return "Demon"
+    if "under" in side:
+        return "Under"
+    return "Over"
+
+
+def is_hit(row: dict[str, Any]) -> bool:
+    r = str(row.get("result", "") or row.get("Result", "")).strip().upper()
+    return r in {"HIT", "WIN", "W", "1", "TRUE", "YES"}
+
+
+def is_miss(row: dict[str, Any]) -> bool:
+    r = str(row.get("result", "") or row.get("Result", "")).strip().upper()
+    return r in {"MISS", "LOSS", "L", "0", "FALSE", "NO"}
+
+
+def build_prop_breakdown_rows(cumulative_props: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    agg: dict[tuple[str, str, str, str], dict[str, int]] = defaultdict(lambda: {"decided": 0, "hits": 0})
+
+    for row in cumulative_props:
+        if not isinstance(row, dict):
+            continue
+        if not (is_hit(row) or is_miss(row)):
+            continue
+
+        prop = str(row.get("prop") or row.get("Prop") or "").strip()
+        if not prop:
+            continue
+
+        pt = normalize_pt(row.get("pick_type"), row.get("direction"), row.get("over_under"))
+        tier = normalize_tier(row.get("tier"))
+        if not tier:
+            continue
+        dfn = normalize_def(row.get("def_tier"))
+
+        key = (prop, pt, tier, dfn)
+        agg[key]["decided"] += 1
+        if is_hit(row):
+            agg[key]["hits"] += 1
+
+    rows: list[dict[str, Any]] = []
+    for (prop, pt, tier, dfn), v in agg.items():
+        rows.append(
+            {
+                "prop": prop,
+                "pt": pt,
+                "tier": tier,
+                "def": dfn,
+                "decided": int(v["decided"]),
+                "hits": int(v["hits"]),
+            }
+        )
+    rows.sort(key=lambda r: (r["prop"], r["pt"], r["tier"], r["def"]))
+    return rows
+
+
+def write_json(path: Path, payload: dict[str, Any], dry_run: bool) -> None:
     if dry_run:
         return
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-def candidate_json_paths(date_str: str) -> list[Path]:
-    name = graded_props_name(date_str)
-    paths: list[Path] = [TEMPLATES_DIR / name]
-    if (GRADED_SLATE_DIR / date_str / name).exists():
-        paths.append(GRADED_SLATE_DIR / date_str / name)
-    if (MOBILE_WWW_DATA_DIR / name).exists():
-        paths.append(MOBILE_WWW_DATA_DIR / name)
-    # De-dup while preserving order
-    seen: set[str] = set()
-    out: list[Path] = []
-    for p in paths:
-        k = str(p.resolve()) if p.exists() else str(p)
-        if k in seen:
-            continue
-        seen.add(k)
-        out.append(p)
-    return out
-
-
-def run_build_for_date(date_str: str, dry_run: bool) -> tuple[bool, str]:
-    cmd = [
-        sys.executable,
-        str(BUILD_SCRIPT),
-        "--date",
-        date_str,
-        "--out",
-        str(TEMPLATES_DIR),
-        "--allow-empty",
-    ]
-    if dry_run:
-        return True, "dry-run build skipped"
-    proc = subprocess.run(cmd, cwd=str(ROOT_DIR), capture_output=True, text=True)
+def run_build_html(date_str: str, dry_run: bool, no_html: bool) -> tuple[bool, str]:
+    if dry_run or no_html:
+        return True, "skipped"
+    cmd = [sys.executable, str(BUILD_SCRIPT), "--date", date_str]
+    proc = subprocess.run(cmd, cwd=str(ROOT), capture_output=True, text=True)
     if proc.returncode != 0:
-        err = (proc.stderr or proc.stdout or "").strip()
-        return False, err[-4000:]
+        msg = (proc.stderr or proc.stdout or "").strip()
+        return False, msg[-2000:]
     return True, "ok"
 
 
-def validate_outputs(date_str: str) -> tuple[bool, str]:
-    gp = TEMPLATES_DIR / graded_props_name(date_str)
-    html = TEMPLATES_DIR / slate_eval_name(date_str)
-    if not gp.exists():
-        return False, "missing graded props json"
-    if not html.exists():
-        return False, "missing slate eval html"
-    try:
-        payload = json.loads(gp.read_text(encoding="utf-8"))
-    except Exception as exc:
-        return False, f"invalid json: {exc}"
-    pbr = payload.get("prop_breakdown_rows")
-    if not isinstance(pbr, list) or len(pbr) <= 0:
-        return False, "prop_breakdown_rows missing or empty"
-    text = html.read_text(encoding="utf-8", errors="ignore")
-    if "Best / Worst" not in text or "Heatmap" not in text:
-        return False, "widget tab markup missing"
-    if "STANDARD — TOP PROP TYPES" in text or "OVERALL WORST PROP TYPES" in text:
-        return False, "legacy card markup still present"
-    return True, "ok"
-
-
-def process_dates(dates: list[str], dry_run: bool) -> list[DateResult]:
-    results: list[DateResult] = []
-    cumulative_props: list[dict[str, Any]] = []
-
-    for date_str in dates:
-        ok, note = run_build_for_date(date_str, dry_run=dry_run)
-        if not ok:
-            results.append(DateResult(date=date_str, status="error", note=f"build failed: {note}"))
-            continue
-
-        t_path = TEMPLATES_DIR / graded_props_name(date_str)
-        if not t_path.exists():
-            results.append(DateResult(date=date_str, status="skip", note="no graded props file after build"))
-            continue
-
-        current_props = read_props_rows(t_path)
-        if not current_props:
-            results.append(DateResult(date=date_str, status="skip", note="graded props has no rows"))
-            continue
-
-        cumulative_props.extend(current_props)
-        pbr = bgh.build_prop_breakdown_rows(cumulative_props)
-        targets = [p for p in candidate_json_paths(date_str) if p.exists()]
-        if not targets:
-            results.append(DateResult(date=date_str, status="skip", note="no target json paths exist"))
-            continue
-        try:
-            for p in targets:
-                write_prop_breakdown_rows(p, pbr, dry_run=dry_run)
-        except Exception as exc:
-            results.append(DateResult(date=date_str, status="error", note=f"write failed: {exc}"))
-            continue
-
-        if dry_run:
-            results.append(DateResult(date=date_str, status="success", note=f"dry-run; rows={len(pbr)}"))
-            continue
-
-        valid_ok, valid_note = validate_outputs(date_str)
-        if not valid_ok:
-            results.append(DateResult(date=date_str, status="error", note=f"validation failed: {valid_note}"))
-            continue
-        results.append(DateResult(date=date_str, status="success", note=f"rows={len(pbr)}"))
-    return results
+def remove_if_exists(path: Path, dry_run: bool) -> bool:
+    if not path.exists():
+        return False
+    if dry_run:
+        return True
+    if path.is_dir():
+        for sub in sorted(path.rglob("*"), reverse=True):
+            if sub.is_file() or sub.is_symlink():
+                sub.unlink(missing_ok=True)
+            elif sub.is_dir():
+                sub.rmdir()
+        path.rmdir()
+    else:
+        path.unlink(missing_ok=True)
+    return True
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Backfill prop_breakdown_rows and widget HTML across graded dates.")
-    parser.add_argument("--date", type=str, default="", help="Optional single date YYYY-MM-DD")
-    parser.add_argument("--dry-run", action="store_true", help="Validate and print actions without writing")
+    parser = argparse.ArgumentParser(description="Backfill prop_breakdown_rows across historical graded dates.")
+    parser.add_argument("--date", default="", help="Optional single date YYYY-MM-DD")
+    parser.add_argument("--dry-run", action="store_true", help="Print actions without writing")
+    parser.add_argument("--no-html", action="store_true", help="Skip build_grades_html regeneration")
     args = parser.parse_args()
 
-    all_dates = read_archive_dates()
+    # Cleanup sentinels / accidental duplicate path.
+    removed_sentinel_dir = remove_if_exists(GRADED_SLATE_DIR / SENTINEL_DATE, args.dry_run)
+    removed_nested_templates = remove_if_exists(ROOT / "ui_runner" / "ui_runner", args.dry_run)
+
+    # Optional sentinel files in active outputs.
+    remove_if_exists(TEMPLATES_DIR / f"graded_props_{SENTINEL_DATE}.json", args.dry_run)
+    remove_if_exists(TEMPLATES_DIR / f"slate_eval_{SENTINEL_DATE}.html", args.dry_run)
+    remove_if_exists(MOBILE_WWW_DIR / f"graded_props_{SENTINEL_DATE}.json", args.dry_run)
+    remove_if_exists(MOBILE_WWW_DIR / f"slate_eval_{SENTINEL_DATE}.html", args.dry_run)
+
     if args.date:
         dates = [args.date.strip()]
     else:
-        dates = all_dates
+        dates = discover_dates()
 
-    results = process_dates(dates, dry_run=args.dry_run)
-    counts = {"success": 0, "skip": 0, "error": 0}
-    for r in results:
-        counts[r.status] = counts.get(r.status, 0) + 1
-        print(f"[{r.status.upper():7}] {r.date} :: {r.note}")
+    if not dates:
+        print("No dates discovered.")
+        return
 
-    print("")
+    cumulative: list[dict[str, Any]] = []
+    for d in dates:
+        path = graded_props_path_for_date(d)
+        if not path.exists():
+            print(f"{d} | rows_added=0 | status=missing_json ({path})")
+            continue
+
+        payload = load_json(path)
+        props = payload.get("props")
+        if not isinstance(props, list):
+            print(f"{d} | rows_added=0 | status=invalid_props")
+            continue
+
+        cumulative.extend([p for p in props if isinstance(p, dict)])
+        pbr = build_prop_breakdown_rows(cumulative)
+
+        payload["prop_breakdown_rows"] = pbr
+        write_json(path, payload, args.dry_run)
+
+        # Mirror to mobile/www if present there.
+        mobile_path = MOBILE_WWW_DIR / path.name
+        if mobile_path.exists():
+            mobile_payload = load_json(mobile_path)
+            mobile_payload["prop_breakdown_rows"] = pbr
+            write_json(mobile_path, mobile_payload, args.dry_run)
+
+        ok, note = run_build_html(d, args.dry_run, args.no_html)
+        status = "ok" if ok else f"html_error: {note}"
+        print(f"{d} | rows_added={len(pbr)} | status={status}")
+
     print(
-        f"Summary: success={counts.get('success', 0)} "
-        f"skip={counts.get('skip', 0)} error={counts.get('error', 0)} total={len(results)}"
+        "cleanup | sentinel_dir_removed={} | nested_ui_runner_removed={}".format(
+            removed_sentinel_dir,
+            removed_nested_templates,
+        )
     )
-    if counts.get("error", 0) > 0:
-        sys.exit(1)
 
 
 if __name__ == "__main__":
     main()
-
