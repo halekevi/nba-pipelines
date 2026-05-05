@@ -522,14 +522,26 @@ def _resolve_void_pending_if_injury_dnp(
     """
     if grade != "UNGRADED":
         return grade
-    sp = str(leg.get("sport") or "").strip().upper().replace(" ", "")
-    dnp_keys = injury_dnp_by_sport.get(sp)
+    sport_u = str(leg.get("sport") or "").strip().upper().replace(" ", "")
+    prop_u = _prop_match_key_from_display(str(leg.get("prop_type") or ""))
+    g = (graw or "").strip().upper()
+    vn = str(vnote or "").strip().upper()
+    # NHL player "hits" frequently arrives as a provider-side VOID without a numeric
+    # player actual in the graded workbook. Resolve these to VOID so ticket payout
+    # can settle instead of lingering in UNGRADED/void-pending.
+    if (
+        sport_u == "NHL"
+        and prop_u in {"hits"}
+        and g in ("VOID", "PUSH", "N/A", "NA")
+        and not _finite_line_actual(actual, line_f)
+        and (not vn or vn in _VOID_PENDING_VOID_NOTES)
+    ):
+        return "VOID"
+    dnp_keys = injury_dnp_by_sport.get(sport_u)
     if not dnp_keys:
         return grade
-    g = (graw or "").strip().upper()
     if g not in ("VOID", "PUSH", "N/A", "NA"):
         return grade
-    vn = str(vnote or "").strip().upper()
     # Match _leg_grade VOID branch: pending when void_note empty or in NO_ACTUAL/PENDING set.
     if vn and vn not in _VOID_PENDING_VOID_NOTES:
         return grade
@@ -1532,12 +1544,38 @@ def _match_leg_in_index(
     def _fin(r: dict[str, Any]) -> dict[str, Any]:
         return _enrich_matched_row_with_sibling_actual(pl, pt, r, pair_buckets)
 
+    def _row_quality_score(r: dict[str, Any]) -> tuple[int, int, int]:
+        """
+        Prefer fully graded rows over stale pregame slate rows when multiple
+        candidates match the same player/prop/direction.
+        """
+        has_actual = 1 if _row_has_finite_actual_value(r.get("actual")) else 0
+        has_grade = 1 if _cell_looks_like_grade_outcome(str(r.get("grade_raw") or "")) else 0
+        has_void_note = 1 if str(r.get("void_note") or "").strip() else 0
+        return (has_actual, has_grade, has_void_note)
+
     # Try exact 4-tuple (player, prop, direction, line) — most specific.
     if leg_line is not None:
         line_key = round(leg_line, 2)
+        exact_matches: list[dict[str, Any]] = []
         hit = triple.get((pl, pt, dr, line_key))
         if hit:
-            return _fin(hit)
+            exact_matches.append(hit)
+        cands = pair_buckets.get((pl, pt)) or []
+        for r in cands:
+            if r.get("direction") != dr:
+                continue
+            rv = r.get("line")
+            if rv is None:
+                continue
+            try:
+                if abs(float(rv) - leg_line) < 0.01:
+                    exact_matches.append(r)
+            except (TypeError, ValueError):
+                continue
+        if exact_matches:
+            best = max(exact_matches, key=_row_quality_score)
+            return _fin(best)
 
     # Try 3-tuple without line (legacy / no-line rows).
     hit = triple.get((pl, pt, dr, None))
@@ -1548,24 +1586,20 @@ def _match_leg_in_index(
     if not cands:
         return None
 
-    # Pass 1: direction + line exact match (most precise).
-    if leg_line is not None:
-        for r in cands:
-            if r["direction"] == dr and r.get("line") is not None:
-                if abs(float(r["line"]) - leg_line) < 0.01:
-                    return _fin(r)
-
-    # Pass 2: direction match only.
-    for r in cands:
-        if r["direction"] == dr:
-            return _fin(r)
+    # Pass 1 fallback: direction match only, but choose best graded-quality row.
+    dir_matches = [r for r in cands if r.get("direction") == dr]
+    if dir_matches:
+        best = max(dir_matches, key=_row_quality_score)
+        return _fin(best)
 
     if len(cands) == 1:
         return _fin(cands[0])
-    for r in cands:
-        if r["direction"] == dr or not r["direction"]:
-            return _fin(r)
-    return _fin(cands[0])
+    ambig_matches = [r for r in cands if (r.get("direction") == dr or not r.get("direction"))]
+    if ambig_matches:
+        best = max(ambig_matches, key=_row_quality_score)
+        return _fin(best)
+    best = max(cands, key=_row_quality_score)
+    return _fin(best)
 
 
 def _match_leg_to_row_multi(
@@ -2159,6 +2193,7 @@ def _filter_payload_groups(payload: dict[str, Any], debug: bool = False) -> dict
             except (TypeError, ValueError):
                 min_legs = 0
         filtered_tickets: list[dict[str, Any]] = []
+        seen_ticket_signatures: set[str] = set()
         for t in g.get("tickets") or []:
             legs: list[dict[str, Any]] = []
             for leg in (t.get("legs") or []):
@@ -2182,6 +2217,28 @@ def _filter_payload_groups(payload: dict[str, Any], debug: bool = False) -> dict
                     flush=True,
                 )
                 continue
+            # De-dupe duplicate ticket variants with identical leg sets.
+            sig_items: list[str] = []
+            for leg in legs:
+                sig_items.append(
+                    "|".join(
+                        [
+                            str(leg.get("sport") or "").strip().upper(),
+                            _norm_player_name(str(leg.get("player") or "")),
+                            _prop_match_key_from_display(str(leg.get("prop_type") or "")),
+                            str(leg.get("direction") or "").strip().upper(),
+                            str(leg.get("line")),
+                            str(leg.get("team") or "").strip().upper(),
+                            str(leg.get("opp") or "").strip().upper(),
+                        ]
+                    )
+                )
+            sig = "||".join(sorted(sig_items))
+            if sig in seen_ticket_signatures:
+                if debug:
+                    print(f"[DEBUG] Dropping duplicate ticket in {gname}", flush=True)
+                continue
+            seen_ticket_signatures.add(sig)
             t2 = dict(t)
             t2["legs"] = legs
             filtered_tickets.append(t2)
