@@ -1,25 +1,25 @@
 {
-  "generated_at": "2026-05-05T03:56:22.151204+00:00",
+  "generated_at": "2026-05-05T12:04:46.864911+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Green",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": 8.0,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
@@ -32,20 +32,20 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Green",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": 8.0,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
@@ -58,20 +58,20 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Green",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": 8.0,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
@@ -84,20 +84,20 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Green",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": 8.0,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -110,20 +110,20 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Green",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": 8.0,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
@@ -136,20 +136,20 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Green",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": 8.0,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
@@ -162,24 +162,24 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Paolo Banchero",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 21.5,
+          "line": 3.5,
+          "standard_line": 7.5,
           "pick_type": "Demon",
           "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -188,34 +188,34 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -224,34 +224,34 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -260,34 +260,34 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -296,34 +296,34 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -332,34 +332,34 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -368,34 +368,34 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -404,30 +404,30 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Green",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": 8.0,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -440,34 +440,34 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Green",
-          "prop_type": "Rebs+Asts",
-          "line": 5.5,
-          "standard_line": 8.0,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
           "hit_rate": 1.0
         },
         {
-          "player": "Paolo Banchero",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 21.5,
+          "line": 3.5,
+          "standard_line": 7.5,
           "pick_type": "Demon",
           "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -476,34 +476,34 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Paolo Banchero",
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 21.5,
+          "line": 3.5,
+          "standard_line": 7.5,
           "pick_type": "Demon",
           "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -512,44 +512,44 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -558,44 +558,44 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -604,44 +604,44 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -650,44 +650,44 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -696,44 +696,44 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -742,44 +742,44 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -788,40 +788,40 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Devin Booker",
-          "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": 4.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -834,44 +834,44 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Paolo Banchero",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 21.5,
+          "line": 3.5,
+          "standard_line": 7.5,
           "pick_type": "Demon",
           "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -880,44 +880,44 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
-          "line": 28.5,
-          "standard_line": 28.5,
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 1.0
         },
         {
-          "player": "Jalen Green",
+          "player": "Jaylon Tyson",
           "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
+          "line": 28.5,
+          "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Paolo Banchero",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 21.5,
+          "line": 3.5,
+          "standard_line": 7.5,
           "pick_type": "Demon",
           "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -926,54 +926,54 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Isaiah Joe",
-          "prop_type": "Pts+Asts",
-          "line": 7.5,
-          "standard_line": 7.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -982,54 +982,54 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Isaiah Joe",
-          "prop_type": "Pts+Asts",
-          "line": 7.5,
-          "standard_line": 7.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1038,54 +1038,54 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Isaiah Joe",
-          "prop_type": "Pts+Asts",
-          "line": 7.5,
-          "standard_line": 7.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1094,54 +1094,54 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Isaiah Joe",
-          "prop_type": "Pts+Asts",
-          "line": 7.5,
-          "standard_line": 7.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1150,54 +1150,54 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Isaiah Joe",
-          "prop_type": "Pts+Asts",
-          "line": 7.5,
-          "standard_line": 7.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1206,54 +1206,54 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Isaiah Joe",
-          "prop_type": "Pts+Asts",
-          "line": 7.5,
-          "standard_line": 7.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1262,50 +1262,50 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Devin Booker",
-          "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": 4.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1318,54 +1318,54 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Paolo Banchero",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 21.5,
+          "line": 3.5,
+          "standard_line": 7.5,
           "pick_type": "Demon",
           "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1374,54 +1374,54 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Isaiah Joe",
-          "prop_type": "Pts+Asts",
-          "line": 7.5,
-          "standard_line": 7.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Paolo Banchero",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 21.5,
+          "line": 3.5,
+          "standard_line": 7.5,
           "pick_type": "Demon",
           "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1430,64 +1430,64 @@
       "goblin_delta": 0.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 0.8
         },
         {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Rebs",
+          "line": 13.0,
+          "standard_line": 13.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Isaiah Joe",
-          "prop_type": "Pts+Asts",
-          "line": 7.5,
-          "standard_line": 7.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Dillon Brooks",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 25.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1496,64 +1496,64 @@
       "goblin_delta": 1.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 0.8
         },
         {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Rebs",
+          "line": 13.0,
+          "standard_line": 13.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Isaiah Joe",
-          "prop_type": "Pts+Asts",
-          "line": 7.5,
-          "standard_line": 7.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Dillon Brooks",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 25.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1562,64 +1562,64 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 0.8
         },
         {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Rebs",
+          "line": 13.0,
+          "standard_line": 13.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Isaiah Joe",
-          "prop_type": "Pts+Asts",
-          "line": 7.5,
-          "standard_line": 7.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Dillon Brooks",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 25.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1628,64 +1628,64 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 0.8
         },
         {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Rebs",
+          "line": 13.0,
+          "standard_line": 13.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Isaiah Joe",
-          "prop_type": "Pts+Asts",
-          "line": 7.5,
-          "standard_line": 7.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Dillon Brooks",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 25.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1694,64 +1694,64 @@
       "goblin_delta": 2.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 0.8
         },
         {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Rebs",
+          "line": 13.0,
+          "standard_line": 13.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Isaiah Joe",
-          "prop_type": "Pts+Asts",
-          "line": 7.5,
-          "standard_line": 7.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Dillon Brooks",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 25.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1760,64 +1760,64 @@
       "goblin_delta": 3.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 0.8
         },
         {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Rebs",
+          "line": 13.0,
+          "standard_line": 13.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Isaiah Joe",
-          "prop_type": "Pts+Asts",
-          "line": 7.5,
-          "standard_line": 7.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Dillon Brooks",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 25.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         }
       ]
     },
@@ -1826,60 +1826,60 @@
       "goblin_delta": 2.0,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Isaiah Joe",
-          "prop_type": "Pts+Asts",
-          "line": 7.5,
-          "standard_line": 7.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Devin Booker",
-          "prop_type": "Rebounds",
-          "line": 2.5,
-          "standard_line": 4.5,
+          "player": "Donovan Mitchell",
+          "prop_type": "Rebs+Asts",
+          "line": 6.5,
+          "standard_line": 8.5,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1892,64 +1892,64 @@
       "goblin_delta": 1.5,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
-        },
-        {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Isaiah Joe",
-          "prop_type": "Pts+Asts",
-          "line": 7.5,
-          "standard_line": 7.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Tristan Silva",
-          "prop_type": "Points",
-          "line": 2.5,
-          "standard_line": 3.5,
+          "player": "Luke Kennard",
+          "prop_type": "Rebounds",
+          "line": 1.5,
+          "standard_line": 2.5,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 0.8
+          "hit_rate": 1.0
         },
         {
-          "player": "Paolo Banchero",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 21.5,
+          "line": 3.5,
+          "standard_line": 7.5,
           "pick_type": "Demon",
           "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     },
@@ -1958,64 +1958,64 @@
       "goblin_delta": null,
       "legs": [
         {
-          "player": "Cade Cunningham",
-          "prop_type": "Points",
+          "player": "Tobias Harris",
+          "prop_type": "Pts+Rebs",
+          "line": 22.5,
+          "standard_line": 22.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Jaylon Tyson",
+          "prop_type": "Pts+Rebs+Asts",
+          "line": 10.5,
+          "standard_line": 10.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "LeBron James",
+          "prop_type": "Pts+Asts",
           "line": 28.5,
           "standard_line": 28.5,
           "pick_type": "Standard",
           "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.2
+          "direction": "OVER",
+          "hit_rate": 0.8
         },
         {
-          "player": "Jalen Green",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 27.5,
-          "standard_line": 27.5,
+          "player": "Rui Hachimura",
+          "prop_type": "Pts+Rebs",
+          "line": 15.5,
+          "standard_line": 15.5,
+          "pick_type": "Standard",
+          "delta": 0.0,
+          "direction": "OVER",
+          "hit_rate": 1.0
+        },
+        {
+          "player": "Marcus Smart",
+          "prop_type": "Pts+Rebs",
+          "line": 13.0,
+          "standard_line": 13.0,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Nikola Jokić",
-          "prop_type": "Pts+Asts",
-          "line": 40.5,
-          "standard_line": 40.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "UNDER",
-          "hit_rate": 0.0
-        },
-        {
-          "player": "Isaiah Joe",
-          "prop_type": "Pts+Asts",
-          "line": 7.5,
-          "standard_line": 7.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Dillon Brooks",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 24.5,
-          "standard_line": 25.5,
-          "pick_type": "Standard",
-          "delta": 0.0,
-          "direction": "OVER",
-          "hit_rate": 0.8
-        },
-        {
-          "player": "Paolo Banchero",
+          "player": "Cade Cunningham",
           "prop_type": "Points",
-          "line": 17.5,
-          "standard_line": 21.5,
+          "line": 3.5,
+          "standard_line": 7.5,
           "pick_type": "Demon",
           "delta": 4.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.6625
         }
       ]
     }
