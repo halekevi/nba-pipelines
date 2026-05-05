@@ -132,11 +132,15 @@ $CanonicalOutDir = Join-Path $OutDir "canonical"
 $CanonicalPlatformUiDir = Join-Path $CanonicalOutDir "platform_ui"
 $CanonicalMobileAppDir = Join-Path $CanonicalOutDir "mobile_app"
 $WebOutDir = Join-Path $Root "ui_runner\templates"
+$UiDataDir = Join-Path $Root "ui_runner\data"
+$UiDataBackupsDir = Join-Path $UiDataDir "backups"
 $MobileWwwDir = Join-Path $Root "mobile\www"
 
 if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force -Path $OutDir | Out-Null }
 if (-not (Test-Path $CanonicalOutDir)) { New-Item -ItemType Directory -Force -Path $CanonicalOutDir | Out-Null }
 if (-not (Test-Path $CanonicalPlatformUiDir)) { New-Item -ItemType Directory -Force -Path $CanonicalPlatformUiDir | Out-Null }
+if (-not (Test-Path $UiDataDir)) { New-Item -ItemType Directory -Force -Path $UiDataDir | Out-Null }
+if (-not (Test-Path $UiDataBackupsDir)) { New-Item -ItemType Directory -Force -Path $UiDataBackupsDir | Out-Null }
 if (-not (Test-Path $CanonicalMobileAppDir)) { New-Item -ItemType Directory -Force -Path $CanonicalMobileAppDir | Out-Null }
 
 # -- Encoding -----------------------------------------------------------------
@@ -662,16 +666,17 @@ function Run-Combined {
         $canonicalFrozenPath = Join-Path $CanonicalOutDir "combined_slate_tickets_${Date}_to_grade_tomorrow.xlsx"
         Copy-Item $CombinedOut $canonicalCombinedPath -Force -ErrorAction SilentlyContinue
         Copy-Item $CombinedOut $canonicalFrozenPath -Force -ErrorAction SilentlyContinue
-        # ML backfill expects dated combined_slate_tickets_YYYY-MM-DD.json archives.
-        # Snapshot today's tickets_latest.json into outputs/$Date/ as a dated JSON source.
+        # Snapshot today's tickets_latest.json into ui_runner/data as dated JSON source.
         $TicketsLatestJson = Join-Path $WebOutDir "tickets_latest.json"
-        $DatedTicketsJson  = Join-Path $OutDir "combined_slate_tickets_$Date.json"
-        $CanonicalTicketsJson = Join-Path $CanonicalOutDir "combined_slate_tickets_$Date.json"
+        $DatedTicketsJson  = Join-Path $UiDataDir "combined_slate_tickets_$Date.json"
         if (Test-Path $TicketsLatestJson) {
+            if (Test-Path $DatedTicketsJson) {
+                $stamp = Get-Date -Format "yyyyMMdd_HHmmss"
+                $backupPath = Join-Path $UiDataBackupsDir "combined_slate_tickets_${Date}.bak_$stamp.json"
+                Copy-Item $DatedTicketsJson $backupPath -Force -ErrorAction SilentlyContinue
+            }
             Copy-Item $TicketsLatestJson $DatedTicketsJson -Force -ErrorAction SilentlyContinue
-            Copy-Item $TicketsLatestJson $CanonicalTicketsJson -Force -ErrorAction SilentlyContinue
             Write-Host "  Saved -> $DatedTicketsJson" -ForegroundColor Green
-            Write-Host "  Saved -> $CanonicalTicketsJson" -ForegroundColor Green
         } else {
             Write-Host "  [warn] Missing tickets_latest.json; skipped dated JSON snapshot for ML backfill." -ForegroundColor Yellow
         }

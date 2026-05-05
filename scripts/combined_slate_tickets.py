@@ -301,7 +301,7 @@ def print_combined_slate_input_paths(args: argparse.Namespace) -> None:
 
 DIVERSITY_CONFIG_PATH = os.path.join(REPO_ROOT, "config", "diversity_config.json")
 PROP_RELIABILITY_LATEST_PATH = os.path.join(REPO_ROOT, "data", "reports", "prop_reliability_latest.json")
-PROP_STRAT_BOARD_LATEST_PATH = os.path.join(REPO_ROOT, "data", "reports", "prop_stratification_board_latest.json")
+PROP_STRAT_BOARD_LATEST_PATH = os.path.join(REPO_ROOT, "ui_runner", "data", "prop_stratification_board_latest.json")
 
 
 def _sanitize_for_json(obj: Any) -> Any:

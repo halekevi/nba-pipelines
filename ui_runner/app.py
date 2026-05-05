@@ -2744,10 +2744,12 @@ def api_pipeline_status():
     udq_p = _resolve_outputs_artifact(days, "upstream_data_quality_{d}.csv")
 
     combined_candidates: list[Path] = []
+    ui_data_dir = BASE_DIR / "ui_runner" / "data"
     for d in days:
         out_d = BASE_DIR / "outputs" / d
         combined_candidates.extend(BASE_DIR.glob(f"combined_slate_tickets_{d}*.xlsx"))
         combined_candidates.extend(BASE_DIR.glob(f"combined_slate_tickets_{d}*.json"))
+        combined_candidates.extend(ui_data_dir.glob(f"combined_slate_tickets_{d}*.json"))
         if out_d.is_dir():
             combined_candidates.extend(out_d.glob(f"combined_slate_tickets_{d}*.xlsx"))
             combined_candidates.extend(out_d.glob(f"combined_slate_tickets_{d}*.json"))

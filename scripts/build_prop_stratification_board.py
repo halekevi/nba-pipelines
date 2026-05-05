@@ -157,12 +157,12 @@ def build_board(repo_root: Path, min_n: int, top_n: int) -> dict[str, Any]:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Build trusted prop stratification board from graded props history.")
-    ap.add_argument("--out-dir", default="", help="Output dir (default: data/reports/)")
+    ap.add_argument("--out-dir", default="", help="Output dir (default: ui_runner/data/)")
     ap.add_argument("--min-n", type=int, default=30)
     ap.add_argument("--top-n", type=int, default=200)
     args = ap.parse_args()
     root = _repo_root()
-    out_dir = Path(args.out_dir) if args.out_dir else (root / "data" / "reports")
+    out_dir = Path(args.out_dir) if args.out_dir else (root / "ui_runner" / "data")
     out_dir.mkdir(parents=True, exist_ok=True)
     board = build_board(root, int(args.min_n), int(args.top_n))
     js = out_dir / "prop_stratification_board_latest.json"

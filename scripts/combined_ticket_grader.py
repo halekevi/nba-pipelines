@@ -638,6 +638,7 @@ def _load_ticket_json_leg_probs(repo_root: Path, tickets_xlsx: Path) -> dict[tup
     date_str = m.group(1) if m else ""
     candidates: list[Path] = []
     if date_str:
+        candidates.append(repo_root / "ui_runner" / "data" / f"combined_slate_tickets_{date_str}.json")
         candidates.append(repo_root / "outputs" / date_str / f"combined_slate_tickets_{date_str}.json")
         candidates.append(repo_root / f"combined_slate_tickets_{date_str}.json")
     candidates.append(tickets_xlsx.with_suffix(".json"))
@@ -678,6 +679,7 @@ def _load_ticket_json_ticket_objectives(repo_root: Path, tickets_xlsx: Path) -> 
     date_str = m.group(1) if m else ""
     candidates: list[Path] = []
     if date_str:
+        candidates.append(repo_root / "ui_runner" / "data" / f"combined_slate_tickets_{date_str}.json")
         candidates.append(repo_root / "outputs" / date_str / f"combined_slate_tickets_{date_str}.json")
         candidates.append(repo_root / f"combined_slate_tickets_{date_str}.json")
     candidates.append(tickets_xlsx.with_suffix(".json"))
@@ -714,6 +716,7 @@ def _load_combined_slate_payload(repo_root: Path, tickets_path: Path) -> Optiona
     if tickets_path.suffix.lower() == ".json":
         candidates.append(tickets_path)
     if date_str:
+        candidates.append(repo_root / "ui_runner" / "data" / f"combined_slate_tickets_{date_str}.json")
         candidates.append(repo_root / "outputs" / date_str / f"combined_slate_tickets_{date_str}.json")
         candidates.append(repo_root / f"combined_slate_tickets_{date_str}.json")
     candidates.append(tickets_path.with_suffix(".json"))

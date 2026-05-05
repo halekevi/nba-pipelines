@@ -295,10 +295,10 @@ def main() -> None:
     ap.add_argument("--date", required=True, help="Run date YYYY-MM-DD for current population snapshot")
     ap.add_argument("--backtest-from", default="", help="Historical backtest start date YYYY-MM-DD")
     ap.add_argument("--backtest-to", default="", help="Historical backtest end date YYYY-MM-DD")
-    ap.add_argument("--out-dir", default="", help="Output directory (default: outputs/<date>)")
+    ap.add_argument("--out-dir", default="", help="Output directory (default: ui_runner/data/reports)")
     args = ap.parse_args()
 
-    out_dir = Path(args.out_dir) if args.out_dir else (OUTPUTS_DIR / args.date)
+    out_dir = Path(args.out_dir) if args.out_dir else (REPO_ROOT / "ui_runner" / "data" / "reports")
     if not out_dir.is_absolute():
         out_dir = REPO_ROOT / out_dir
     out_dir.mkdir(parents=True, exist_ok=True)

@@ -789,7 +789,11 @@ else {
     $ticketEvalSummaryPath = Join-Path $Root "data\ml\ticket_model_eval_summary_latest.json"
     $ticketEvalByDatePath = Join-Path $Root "data\ml\ticket_model_eval_by_date.csv"
     $ticketEvalHistoryPath = Join-Path $Root "data\ml\ticket_model_eval_history.csv"
-    $ticketRunReportPath = Join-Path $Root "outputs\$Today\ticket_model_eval_report_$Today.json"
+    $uiDataDir = Join-Path $Root "ui_runner\data"
+    $uiReportsDir = Join-Path $uiDataDir "reports"
+    if (-not (Test-Path $uiDataDir)) { New-Item -ItemType Directory -Path $uiDataDir -Force | Out-Null }
+    if (-not (Test-Path $uiReportsDir)) { New-Item -ItemType Directory -Path $uiReportsDir -Force | Out-Null }
+    $ticketRunReportPath = Join-Path $uiReportsDir "ticket_model_eval_report_$Today.json"
     $dataMlDir = Join-Path $Root "data\ml"
     if (-not (Test-Path $dataMlDir)) {
         New-Item -ItemType Directory -Path $dataMlDir -Force | Out-Null
@@ -988,7 +992,7 @@ else {
         $stratBoardScript = Join-Path $Root "scripts\build_prop_stratification_board.py"
         if (Test-Path $stratBoardScript) {
             try {
-                & py -3.14 -X utf8 $stratBoardScript --out-dir (Join-Path $Root "outputs\$Today") --min-n 30 --top-n 300
+                & py -3.14 -X utf8 $stratBoardScript --out-dir $uiDataDir --min-n 30 --top-n 300
                 if ($LASTEXITCODE -eq 0) {
                     Write-Log "STEP D1g2 - Prop stratification board: OK"
                 }
@@ -1013,7 +1017,7 @@ else {
                     --date $Today `
                     --backtest-from "2026-02-19" `
                     --backtest-to $Yesterday `
-                    --out-dir (Join-Path $Root "outputs\$Today")
+                    --out-dir $uiReportsDir
                 if ($LASTEXITCODE -eq 0) {
                     Write-Log "STEP D1g3 - Prop population state report: OK"
                 }

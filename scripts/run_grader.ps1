@@ -15,7 +15,8 @@ $TicketsFileXlsxCanonical = Join-Path $CanonicalDateDir "combined_slate_tickets_
 $TicketsFileXlsx = Join-Path $DateDir "combined_slate_tickets_$Date.xlsx"
 $TicketsFileJsonCanonical = Join-Path $CanonicalDateDir "combined_slate_tickets_$Date.json"
 $TicketsFileJson = Join-Path $DateDir "combined_slate_tickets_$Date.json"
-$TicketsFile = if (Test-Path $TicketsFileFrozenCanonical) { $TicketsFileFrozenCanonical } elseif (Test-Path $TicketsFileFrozen) { $TicketsFileFrozen } elseif (Test-Path $TicketsFileXlsxCanonical) { $TicketsFileXlsxCanonical } elseif (Test-Path $TicketsFileXlsx) { $TicketsFileXlsx } elseif (Test-Path $TicketsFileJsonCanonical) { $TicketsFileJsonCanonical } elseif (Test-Path $TicketsFileJson) { $TicketsFileJson } else { $TicketsFileXlsx }
+$TicketsFileJsonUiData = Join-Path $Root "ui_runner\data\combined_slate_tickets_$Date.json"
+$TicketsFile = if (Test-Path $TicketsFileFrozenCanonical) { $TicketsFileFrozenCanonical } elseif (Test-Path $TicketsFileFrozen) { $TicketsFileFrozen } elseif (Test-Path $TicketsFileXlsxCanonical) { $TicketsFileXlsxCanonical } elseif (Test-Path $TicketsFileXlsx) { $TicketsFileXlsx } elseif (Test-Path $TicketsFileJsonUiData) { $TicketsFileJsonUiData } elseif (Test-Path $TicketsFileJsonCanonical) { $TicketsFileJsonCanonical } elseif (Test-Path $TicketsFileJson) { $TicketsFileJson } else { $TicketsFileXlsx }
 $NBAActuals  = Join-Path $DateDir "actuals_nba_$Date.csv"
 $NBA1HActuals = Join-Path $DateDir "actuals_nba1h_$Date.csv"
 $NBA2HActuals = Join-Path $DateDir "actuals_nba2h_$Date.csv"
@@ -841,10 +842,10 @@ elseif (-not (Test-Path $CombinedTicketGrader)) {
     Write-Host "Combined ticket grader script not found!" -ForegroundColor Red
 }
 else {
-    $CanonicalJson = Join-Path $CanonicalDateDir "combined_slate_tickets_$Date.json"
-    $TicketsArg = if (Test-Path $CanonicalJson) { $CanonicalJson } else { $TicketsFile }
-    if ($TicketsArg -eq $CanonicalJson) {
-        Write-Host "[GRADER] Using canonical JSON tickets fast path: $CanonicalJson" -ForegroundColor DarkGray
+    $UiDataJson = Join-Path $Root "ui_runner\data\combined_slate_tickets_$Date.json"
+    $TicketsArg = if (Test-Path $UiDataJson) { $UiDataJson } else { $TicketsFile }
+    if ($TicketsArg -eq $UiDataJson) {
+        Write-Host "[GRADER] Using ui_runner/data JSON tickets fast path: $UiDataJson" -ForegroundColor DarkGray
     }
     $GraderArgs = @(
         "--tickets", $TicketsArg,
