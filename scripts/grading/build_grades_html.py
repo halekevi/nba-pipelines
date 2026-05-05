@@ -470,6 +470,194 @@ def _norm_pick_type_matrix(v: object) -> str | None:
     return None
 
 
+def normalize_def_tier_label(raw: object) -> str | None:
+    """
+    Map a Def Tier cell to canonical buckets: Elite, Above Avg, Avg, Below Avg, Weak.
+    Returns None if the value cannot be mapped (row excluded from tier rows, still eligible for Total).
+    """
+    s = (
+        str(raw or "")
+        .lower()
+        .replace("🟢", "")
+        .replace("🟡", "")
+        .replace("🔴", "")
+        .strip()
+    )
+    if not s:
+        return None
+    if "below" in s and "avg" in s:
+        return "Below Avg"
+    if "above" in s and "avg" in s:
+        return "Above Avg"
+    if "elite" in s:
+        return "Elite"
+    if "weak" in s:
+        return "Weak"
+    if s in ("avg", "average"):
+        return "Avg"
+    return None
+
+
+def normalize_bet_direction(raw: object) -> str | None:
+    t = str(raw or "").strip().upper()
+    for ch in ("\u25b2", "\u25bc", "\u2191", "\u2193", "▲", "▼"):
+        t = t.replace(ch, "")
+    t = re.sub(r"\s+", " ", t).strip()
+    if "UNDER" in t:
+        return "UNDER"
+    if "OVER" in t:
+        return "OVER"
+    return None
+
+
+def _rows_for_def_subgrid_cell(
+    rows: list[dict],
+    canon_def: str | None,
+    pick: str,
+    direction: str,
+    rank: str,
+) -> list[dict]:
+    """Filter props for one COMBINED subgrid cell. canon_def None = no def-tier filter (Total row)."""
+    out: list[dict] = []
+    for r in rows:
+        if canon_def is not None:
+            if normalize_def_tier_label(r.get("Def Tier")) != canon_def:
+                continue
+        pt = _norm_pick_type_matrix(r.get("Pick Type"))
+        if pt != pick:
+            continue
+        bd = normalize_bet_direction(r.get("Dir") or r.get("Direction"))
+        if bd != direction:
+            continue
+        rk = str(r.get("Tier", "") or "").strip().upper()
+        if rk != rank:
+            continue
+        out.append(r)
+    return out
+
+
+def _subgrid_hit_color_hex(hit_rate: float) -> str:
+    if hit_rate >= 65.0:
+        return "#1D9E75"
+    if hit_rate >= 50.0:
+        return "#BA7517"
+    return "#A32D2D"
+
+
+def _def_tier_combined_subgrid_table(rows: list[dict], min_decided: int = 10) -> tuple[str, int]:
+    """
+    DEF TIER BREAKDOWN — pick type × rank tier (16 data cols + label col).
+    Rows: five canonical def tiers + Total. Two-row header.
+    Returns (html_fragment, count of cells with decided >= min_decided among 5×16 tier cells).
+    """
+    canon_defs = ("Elite", "Above Avg", "Avg", "Below Avg", "Weak")
+    groups: tuple[tuple[str, str, str], ...] = (
+        ("Goblin OVER", "Goblin", "OVER"),
+        ("Demon OVER", "Demon", "OVER"),
+        ("Std OVER", "Standard", "OVER"),
+        ("Std UNDER", "Standard", "UNDER"),
+    )
+    ranks = ("A", "B", "C", "D")
+
+    mute = "var(--color-text-tertiary, var(--muted2))"
+    br_sec = "var(--color-border-secondary, rgba(255,255,255,0.14))"
+    br_ter = "var(--color-border-tertiary, rgba(255,255,255,0.08))"
+    bg_sec = "var(--color-background-secondary, rgba(255,255,255,0.04))"
+
+    def _cell_td(stats: dict, col_idx: int) -> str:
+        """col_idx 1..16 — determines group boundary borders."""
+        within = (col_idx - 1) % 4
+        bl = f"border-left:1.5px solid {br_sec}" if within == 0 else f"border-left:0.5px solid {br_ter}"
+        base = (
+            f'padding:6px 8px;text-align:center;font-size:12px;vertical-align:middle;{bl}'
+        )
+        d = int(stats.get("decided", 0) or 0)
+        if d <= 0:
+            return f'<td style="{base};color:{mute}">—</td>'
+        hr = float(stats.get("hit_rate", 0.0))
+        col = _subgrid_hit_color_hex(hr)
+        pct_s = f"{hr:.0f}%"
+        return (
+            f'<td style="{base}">'
+            f'<span style="color:{col};font-weight:700">{pct_s}</span>'
+            f'<span style="font-size:10px;color:{mute};display:block;margin-top:1px">({fmt_num(d)})</span>'
+            f"</td>"
+        )
+
+    n_ge = 0
+    body_rows = ""
+    for def_label in canon_defs:
+        row_cells = ""
+        col_idx = 1
+        for _gh, pick, direction in groups:
+            for rank in ranks:
+                cell_rows = _rows_for_def_subgrid_cell(rows, def_label, pick, direction, rank)
+                st = overall_stats(cell_rows)
+                if int(st.get("decided", 0)) >= int(min_decided):
+                    n_ge += 1
+                row_cells += _cell_td(st, col_idx)
+                col_idx += 1
+        body_rows += (
+            f'<tr class="def-subgrid-data-row">'
+            f'<td style="padding:6px 8px;text-align:left;font-weight:500;font-size:12px;border-left:none">{def_label}</td>'
+            f"{row_cells}</tr>"
+        )
+
+    total_cells = ""
+    tcol_idx = 1
+    for _gh, pick, direction in groups:
+        for rank in ranks:
+            cell_rows = _rows_for_def_subgrid_cell(rows, None, pick, direction, rank)
+            st = overall_stats(cell_rows)
+            total_cells += _cell_td(st, tcol_idx)
+            tcol_idx += 1
+
+    body_rows += (
+        f'<tr style="background:{bg_sec};font-weight:500">'
+        f'<td style="padding:6px 8px;text-align:left;font-size:12px;font-weight:500;border-left:none">Total</td>'
+        f"{total_cells}</tr>"
+    )
+
+    hdr2 = ""
+    for gi, (_glabel, _p, _d) in enumerate(groups):
+        for ri, rank in enumerate(ranks):
+            col_idx = gi * 4 + ri + 1
+            group_idx = (col_idx - 1) // 4
+            within = (col_idx - 1) % 4
+            bl = f"border-left:1.5px solid {br_sec}" if within == 0 else f"border-left:0.5px solid {br_ter}"
+            hdr2 += (
+                f'<th style="padding:4px 6px;font-size:10px;font-weight:500;color:{mute};{bl}">{rank}</th>'
+            )
+
+    hdr1_cells = ""
+    for glabel, _p, _d in groups:
+        hdr1_cells += (
+            f'<th colspan="4" style="padding:6px 8px;font-size:11px;color:var(--color-text-secondary, var(--muted));'
+            f"text-align:center;font-weight:500;border-left:1.5px solid {br_sec}\">{h(glabel)}</th>"
+        )
+
+    table_html = f"""<style>
+.def-tier-subgrid-table tbody tr.def-subgrid-data-row:hover td {{ background:{bg_sec}; }}
+</style>
+<div class="def-tier-combined-wrap" style="overflow-x:auto;padding:0.5rem 0">
+<table class="def-tier-subgrid-table" style="min-width:920px;border-collapse:collapse;font-size:12px;width:100%">
+  <thead>
+    <tr>
+      <th rowspan="2" style="padding:6px 8px;text-align:left;font-size:11px;font-weight:600;border-left:none;vertical-align:bottom">Def Tier</th>
+      {hdr1_cells}
+    </tr>
+    <tr>
+      {hdr2}
+    </tr>
+  </thead>
+  <tbody>
+    {body_rows}
+  </tbody>
+</table>
+</div>"""
+    return table_html, n_ge
+
+
 def build_pick_tier_direction_agg(rows: list[dict]) -> dict[tuple[str, str, str], dict[str, int]]:
     """
     Accumulate decided / hits / misses per (pick type, tier A-D, direction).
@@ -843,7 +1031,7 @@ def player_table(rows: list[dict], top: bool, min_decided: int = 5, limit: int =
     </table></div>"""
 
 
-def def_tier_table(rows: list[dict]) -> str:
+def def_tier_table(rows: list[dict], min_decided: int = 10) -> str:
     dt_agg = build_agg_from_rows(rows, "Def Tier")
     if not dt_agg:
         return ""
@@ -901,7 +1089,8 @@ def def_tier_table(rows: list[dict]) -> str:
         col = rate_color(s.get("hit_rate", 0))
         return f'<span style="color:{col};font-weight:700">{pct(s["hit_rate"])}</span> <span class="muted-note" style="font-size:12px;padding:0">({fmt_num(s["decided"])})</span>'
 
-    combined_def_breakdown_rows = ""
+    combined_subgrid, n_sub_ge = _def_tier_combined_subgrid_table(rows, min_decided=min_decided)
+
     detail_rows_std_dir = ""
     picktype_by_tier: dict[str, list[dict]] = {"goblin": [], "standard": [], "demon": []}
     for d in dt_agg:
@@ -918,12 +1107,12 @@ def def_tier_table(rows: list[dict]) -> str:
         std_over_rows = [
             r for r in sub
             if "standard" in str(r.get("Pick Type", "")).lower()
-            and str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "OVER"
+            and normalize_bet_direction(r.get("Dir") or r.get("Direction")) == "OVER"
         ]
         std_under_rows = [
             r for r in sub
             if "standard" in str(r.get("Pick Type", "")).lower()
-            and str(r.get("Dir", "") or r.get("Direction", "")).strip().upper() == "UNDER"
+            and normalize_bet_direction(r.get("Dir") or r.get("Direction")) == "UNDER"
         ]
         std_over = overall_stats(std_over_rows) if std_over_rows else {"decided": 0, "hit_rate": 0}
         std_under = overall_stats(std_under_rows) if std_under_rows else {"decided": 0, "hit_rate": 0}
@@ -932,22 +1121,6 @@ def def_tier_table(rows: list[dict]) -> str:
         picktype_by_tier["standard"].append({"def_tier": d["key"], **std})
         picktype_by_tier["demon"].append({"def_tier": d["key"], **dem})
 
-        t_cells: list[str] = []
-        for t in ("A", "B", "C", "D"):
-            t_rows = [r for r in sub if str(r.get("Tier", "") or "").strip().upper() == t]
-            t_stats = overall_stats(t_rows) if t_rows else {"decided": 0, "hit_rate": 0}
-            t_cells.append(
-                f'<td class="mono" style="vertical-align:top">{_stats_cell(t_stats)}'
-                f"{over_under_lines_html(t_rows)}</td>"
-            )
-
-        combined_def_breakdown_rows += f"""<tr>
-          <td><strong>{h(d["key"])}</strong></td>
-          <td class="mono" style="vertical-align:top">{_stats_cell(gob)}{over_under_lines_html(rows_for_pick_type(sub, "goblin"))}</td>
-          <td class="mono" style="vertical-align:top">{_stats_cell(std)}{over_under_lines_html(rows_for_pick_type(sub, "standard"))}</td>
-          <td class="mono" style="vertical-align:top">{_stats_cell(dem)}{over_under_lines_html(rows_for_pick_type(sub, "demon"))}</td>
-          {''.join(t_cells)}
-        </tr>"""
         detail_rows_std_dir += f"""<tr>
           <td><strong>{h(d["key"])}</strong></td>
           <td class="mono">{_stats_cell(std_over)}</td>
@@ -955,7 +1128,7 @@ def def_tier_table(rows: list[dict]) -> str:
         </tr>"""
 
     detail_tables = ""
-    if combined_def_breakdown_rows or detail_rows_std_dir:
+    if combined_subgrid or detail_rows_std_dir:
         def _picktype_sorted_table(kind: str, label: str) -> str:
             rows_k = [x for x in picktype_by_tier.get(kind, []) if x.get("decided", 0) > 0]
             if not rows_k:
@@ -996,18 +1169,13 @@ def def_tier_table(rows: list[dict]) -> str:
         detail_tables = f"""<div style="margin-top:12px">
       <div class="section-label">DEF TIER BREAKDOWN — PICK TYPE × RANK TIER (COMBINED)</div>
       <p style="font-size:12px;color:var(--muted2);margin:4px 0 10px;line-height:1.45">
-        One row per opponent def tier. Columns <strong>Goblin–Demon</strong> are pick-type slices;
-        columns <strong>Tier A–D</strong> are rank-tier slices (same props can appear in both groupings).
-        Scroll horizontally on small screens.
+        Rows = opponent def tier. Columns = pick type × rank tier (A–D).
+        Goblin/Demon = OVER only. Standard split OVER/UNDER.
+        {n_sub_ge} of 80 opponent-tier × column cells have ≥ {int(min_decided)} decided; others still list rates when 1 ≤ n &lt; {int(min_decided)}.
+        <strong>—</strong> = no decided props in that bucket.
+        Note: Standard Tier B may be structurally sparse when ml_prob is compressed below tier thresholds — “—” is expected until calibration / a retrain restores spread.
       </p>
-      <div class="table-wrap" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="min-width:920px">
-          <thead><tr>
-            <th>DEF TIER</th>
-            <th>GOBLIN</th><th>STANDARD</th><th>DEMON</th>
-            <th>TIER A</th><th>TIER B</th><th>TIER C</th><th>TIER D</th>
-          </tr></thead>
-          <tbody>{combined_def_breakdown_rows}</tbody>
-        </table></div>
+      {combined_subgrid}
     </div>
     <div style="margin-top:12px">
       <div class="section-label">DEF TIER BREAKDOWN — STANDARD (OVER/UNDER)</div>
