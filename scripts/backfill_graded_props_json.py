@@ -23,25 +23,20 @@ from build_grades_html import (  # noqa: E402
     export_graded_props_json,
     find_graded_file,
     load_graded,
-    load_merged_nba_graded_rows,
+    nba_family_bundles_for_json,
 )
 
 ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 
 def backfill_one_date(date_str: str, templates: Path) -> bool:
-    nba_rows = load_merged_nba_graded_rows(date_str)
+    bundles: list[tuple[str, list[dict]]] = []
+    bundles.extend(nba_family_bundles_for_json(date_str))
     cbb_path = find_graded_file("cbb", date_str)
     nhl_path = find_graded_file("nhl", date_str)
     soccer_path = find_graded_file("soccer", date_str)
     mlb_path = find_graded_file("mlb", date_str)
 
-    if not any([nba_rows, cbb_path, nhl_path, soccer_path, mlb_path]):
-        return False
-
-    bundles: list[tuple[str, list[dict]]] = []
-    if nba_rows:
-        bundles.append(("NBA", nba_rows))
     if cbb_path:
         bundles.append(("CBB", load_graded(cbb_path)))
     if nhl_path:
@@ -50,6 +45,9 @@ def backfill_one_date(date_str: str, templates: Path) -> bool:
         bundles.append(("Soccer", load_graded(soccer_path)))
     if mlb_path:
         bundles.append(("MLB", load_graded(mlb_path)))
+
+    if not bundles:
+        return False
 
     out = export_graded_props_json(date_str, templates, bundles)
     n_total = sum(len(rows) for _, rows in bundles)

@@ -1466,13 +1466,23 @@ def find_graded_file(sport: str, date_str: str) -> Path | None:
 
 
 def load_merged_nba_graded_rows(date_str: str) -> list[dict]:
-    """Full-game NBA plus NBA1Q/NBA1H graded workbooks, merged for one NBA bucket in Prop Evaluation."""
+    """Merge NBA + NBA1Q + NBA1H rows (single list) for slate HTML that shows one NBA section."""
     rows: list[dict] = []
     for key in ("nba", "nba1q", "nba1h"):
         p = find_graded_file(key, date_str)
         if p:
             rows.extend(load_graded(p))
     return rows
+
+
+def nba_family_bundles_for_json(date_str: str) -> list[tuple[str, list[dict]]]:
+    """Separate bundles so graded_props JSON carries NBA vs NBA1Q vs NBA1H sport labels."""
+    bundles: list[tuple[str, list[dict]]] = []
+    for key, label in (("nba", "NBA"), ("nba1q", "NBA1Q"), ("nba1h", "NBA1H")):
+        p = find_graded_file(key, date_str)
+        if p:
+            bundles.append((label, load_graded(p)))
+    return bundles
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -2196,17 +2206,22 @@ def main() -> None:
     out_p.write_text(html, encoding="utf-8")
     print(f"  Saved  -> {out_p}")
 
-    json_p = export_graded_props_json(
-        date_str,
-        out_p.parent,
-        [
-            ("NBA", nba_rows_merged),
-            ("CBB", cbb_rows),
-            ("NHL", nhl_rows),
-            ("Soccer", soccer_rows),
-            ("MLB", mlb_rows),
-        ],
-    )
+    json_bundles: list[tuple[str, list[dict]]] = []
+    if nba_rows:
+        json_bundles.append(("NBA", nba_rows))
+    if nba1q_rows:
+        json_bundles.append(("NBA1Q", nba1q_rows))
+    if nba1h_rows:
+        json_bundles.append(("NBA1H", nba1h_rows))
+    if cbb_rows:
+        json_bundles.append(("CBB", cbb_rows))
+    if nhl_rows:
+        json_bundles.append(("NHL", nhl_rows))
+    if soccer_rows:
+        json_bundles.append(("Soccer", soccer_rows))
+    if mlb_rows:
+        json_bundles.append(("MLB", mlb_rows))
+    json_p = export_graded_props_json(date_str, out_p.parent, json_bundles)
     print(f"  Saved  -> {json_p}")
     all_rows = [*nba_rows_merged, *cbb_rows, *nhl_rows, *soccer_rows, *mlb_rows]
     tabs_p = export_analysis_tabs_xlsx(date_str, out_p.parent, all_rows)

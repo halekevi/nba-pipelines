@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -24,6 +25,9 @@ OUTPUTS = _REPO / "outputs"
 OUT_CSV_DEFAULT = (
     _REPO / "data" / "reports" / "graded_stratification" / "shortlist_a_audit_latest.csv"
 )
+
+_GRADED_PROPS_DATE = re.compile(r"graded_props_(\d{4}-\d{2}-\d{2})\.json$", re.I)
+_NBA1Q_FILE_DATE = re.compile(r"graded_nba1q_(\d{4}-\d{2}-\d{2})\.xlsx$", re.I)
 
 # Same eight rows as shortlist_a_focus.csv (thresholds from that file).
 SHORTLIST: list[dict] = [
@@ -113,6 +117,8 @@ def _norm_pick(raw) -> str:
 def _load_graded_props_frames(templates_dir: Path) -> pd.DataFrame:
     rows = []
     for path in sorted(templates_dir.glob("graded_props_*.json")):
+        m = _GRADED_PROPS_DATE.match(path.name)
+        fdate = m.group(1) if m else ""
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
         except Exception:
@@ -120,10 +126,13 @@ def _load_graded_props_frames(templates_dir: Path) -> pd.DataFrame:
         for p in data.get("props") or []:
             rows.append(
                 {
+                    "_fdate": fdate,
                     "sport": str(p.get("sport") or "").strip(),
                     "pick_type": p.get("pick_type"),
                     "direction": str(p.get("direction") or p.get("over_under") or "").strip().upper(),
                     "prop": str(p.get("prop") or "").strip(),
+                    "line": str(p.get("line") or "").strip(),
+                    "player": str(p.get("player") or "").strip(),
                     "ml_prob": p.get("ml_prob"),
                     "result": str(p.get("result") or "").strip().upper(),
                     "void_reason": str(p.get("void_reason") or "").strip(),
@@ -141,6 +150,8 @@ def _load_nba1q_frames(outputs_dir: Path) -> pd.DataFrame:
     paths = sorted(outputs_dir.rglob("graded_nba1q_*.xlsx"))
     parts = []
     for path in paths:
+        m = _NBA1Q_FILE_DATE.search(path.name)
+        fdate = m.group(1) if m else ""
         try:
             raw = pd.read_excel(path, sheet_name="Box Raw")
         except Exception:
@@ -149,16 +160,21 @@ def _load_nba1q_frames(outputs_dir: Path) -> pd.DataFrame:
             continue
         sub = pd.DataFrame(
             {
+                "_fdate": fdate,
                 "sport": "NBA1Q",
+                "player": raw.get("player"),
                 "pick_type": raw.get("pick_type"),
                 "direction": raw.get("bet_direction", raw.get("direction")),
                 "prop": raw.get("prop_type_norm", raw.get("prop")),
+                "line": raw.get("line"),
                 "ml_prob": raw.get("ml_prob"),
                 "result": raw.get("result"),
             }
         )
+        sub["player"] = sub["player"].astype(str).str.strip()
         sub["direction"] = sub["direction"].astype(str).str.strip().str.upper()
         sub["prop"] = sub["prop"].astype(str).str.strip()
+        sub["line"] = sub["line"].apply(lambda x: str(x).strip() if pd.notna(x) else "")
         sub["result"] = sub["result"].astype(str).str.strip().str.upper()
         sub["ml_prob"] = pd.to_numeric(sub["ml_prob"], errors="coerce")
         sub["pick_norm"] = sub["pick_type"].map(_norm_pick)
@@ -208,10 +224,32 @@ def _slice_metrics(sub: pd.DataFrame, threshold: float) -> dict:
     }
 
 
+def _dedupe_nba1q_overlap(df: pd.DataFrame) -> pd.DataFrame:
+    """Prefer NBA1Q JSON/xlsx row over a duplicate NBA row for same slate date + prop key."""
+    if df.empty or "_fdate" not in df.columns:
+        return df
+    if "player" not in df.columns:
+        return df
+    tmp = df.copy()
+    tmp["_line_k"] = tmp.get("line", pd.Series([""] * len(tmp))).astype(str).str.strip()
+    sport_rank = tmp["sport"].astype(str).str.upper().map(
+        lambda s: 0 if s == "NBA1Q" else 1 if s == "NBA" else 2
+    )
+    tmp = tmp.assign(_sr=sport_rank).sort_values(
+        ["_fdate", "player", "prop", "_line_k", "direction", "_sr"],
+        ascending=[True, True, True, True, True, True],
+    )
+    dedup_cols = ["_fdate", "player", "prop", "_line_k", "direction"]
+    if all(c in tmp.columns for c in dedup_cols):
+        tmp = tmp.drop_duplicates(subset=dedup_cols, keep="first")
+    return tmp.drop(columns=["_sr", "_line_k"], errors="ignore")
+
+
 def run(templates_dir: Path, outputs_dir: Path, out_csv: Path) -> pd.DataFrame:
     gp = _load_graded_props_frames(templates_dir)
     n1 = _load_nba1q_frames(outputs_dir)
     combined = pd.concat([gp, n1], ignore_index=True) if len(n1) else gp
+    combined = _dedupe_nba1q_overlap(combined)
 
     out_rows = []
     for row in SHORTLIST:
