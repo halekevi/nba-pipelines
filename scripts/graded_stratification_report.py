@@ -251,10 +251,19 @@ def _calibration_rows(
 
 def _group_min_threshold_rows(df: pd.DataFrame, min_group_n: int = 120) -> pd.DataFrame:
     """
-    Recommend ml_prob minimum thresholds by sport x pick_type x direction x prop.
+    Recommend ml_prob minimum thresholds by sport x pipeline x pick_type x tier x direction x prop.
     This does not gate or retier rows; it is an analysis output only.
     """
-    need = ["sport_disp", "pick_type_base", "direction", "prop", "ml_prob", "result_binary"]
+    need = [
+        "sport_disp",
+        "pipeline_group",
+        "pick_type_base",
+        "tier_group",
+        "direction",
+        "prop",
+        "ml_prob",
+        "result_binary",
+    ]
     for c in need:
         if c not in df.columns:
             return pd.DataFrame()
@@ -271,7 +280,10 @@ def _group_min_threshold_rows(df: pd.DataFrame, min_group_n: int = 120) -> pd.Da
         return 0.0
 
     out_rows: list[dict[str, object]] = []
-    for (sp, pt, d, prop), g in sub.groupby(["sport_disp", "pick_type_base", "direction", "prop"], dropna=False):
+    for (sp, pipe, pt, tr, d, prop), g in sub.groupby(
+        ["sport_disp", "pipeline_group", "pick_type_base", "tier_group", "direction", "prop"],
+        dropna=False,
+    ):
         n = int(len(g))
         if n < int(min_group_n):
             continue
@@ -296,7 +308,9 @@ def _group_min_threshold_rows(df: pd.DataFrame, min_group_n: int = 120) -> pd.Da
         out_rows.append(
             {
                 "sport": str(sp),
+                "pipeline": str(pipe),
                 "pick_type": str(pt),
+                "tier": str(tr),
                 "direction": str(d),
                 "prop": str(prop),
                 "n_total": n,
@@ -355,7 +369,20 @@ def run(
         return
 
     decided["sport_disp"] = decided["_sport"].map(_sport_display)
+    if "pipeline" in decided.columns:
+        decided["pipeline_group"] = decided["pipeline"].astype(str).str.strip().replace("", "(missing)")
+    elif "pipeline_name" in decided.columns:
+        decided["pipeline_group"] = decided["pipeline_name"].astype(str).str.strip().replace("", "(missing)")
+    else:
+        # Fallback: pipeline label aligns with sport export when no explicit pipeline column exists.
+        decided["pipeline_group"] = decided["sport_disp"].astype(str).str.strip()
     decided["pick_type_base"] = _pick_type_base(decided.get("pick_type", pd.Series("", index=decided.index)))
+    decided["tier_group"] = (
+        decided.get("tier", pd.Series("", index=decided.index))
+        .astype(str)
+        .str.strip()
+        .replace({"": "(missing)", "nan": "(missing)", "None": "(missing)", "<NA>": "(missing)"})
+    )
     decided["pick_type_group"] = _pick_type_dir_group(
         decided["pick_type_base"],
         decided.get("direction", pd.Series("", index=decided.index)),
@@ -369,7 +396,16 @@ def run(
     else:
         decided["result_binary"] = decided.get("is_hit", np.nan)
 
-    gcols = ["sport_disp", "prop", "direction", "pick_type_group", "def_tier_norm", "line_bucket"]
+    gcols = [
+        "sport_disp",
+        "pipeline_group",
+        "tier_group",
+        "prop",
+        "direction",
+        "pick_type_group",
+        "def_tier_norm",
+        "line_bucket",
+    ]
     gcols = [c for c in gcols if c in decided.columns]
     hit_tbl = (
         decided.groupby(gcols, dropna=False)
@@ -406,10 +442,15 @@ def run(
             .reset_index()
             .rename(columns={"gap": "avg_calibration_gap"})
         )
+        # Replicate calibration gap across pipeline/tier slices of the same core group.
+        tkeys = ["sport", "pipeline", "pick_type", "tier", "direction", "prop"]
+        if not threshold_rows.empty:
+            base_keys = threshold_rows[tkeys].drop_duplicates()
+            cal_gap = base_keys.merge(cal_gap, on=["sport", "pick_type", "direction", "prop"], how="left")
         threshold_rows = threshold_rows.merge(
             cal_gap,
             how="left",
-            on=["sport", "pick_type", "direction", "prop"],
+            on=tkeys,
         )
         gap = pd.to_numeric(threshold_rows.get("avg_calibration_gap"), errors="coerce").fillna(0.0)
         sp = threshold_rows["sport"].astype(str).str.upper().str.strip()
@@ -505,7 +546,7 @@ h1,h2 {{ font-weight: 600; }}
 {_html_escape_df(cal_flag)}
 
 <h2>Recommended group minimum ml_prob (analysis only)</h2>
-<p class="note">Global tiers are unchanged; this is a per-group recommendation table by sport × pick_type × direction × prop.</p>
+<p class="note">Global tiers are unchanged; this is a per-group recommendation table by sport × pipeline × pick_type × tier × direction × prop.</p>
 {_html_escape_df(threshold_rows)}
 
 <h2>Tier A (all three known-rates ≥ 0.99)</h2>
