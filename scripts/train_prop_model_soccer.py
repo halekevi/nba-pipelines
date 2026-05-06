@@ -66,7 +66,8 @@ METRICS_PATH = MODEL_DIR / "prop_model_soccer_metrics.json"
 SYNTHETIC_RATIO_CAP = 1.0
 REAL_ONLY_MODE = True
 
-DATE_RE = re.compile(r"graded_soccer_(\d{4}-\d{2}-\d{2})\.xlsx$", re.I)
+# Date embedded in graded workbook filename (allow suffixes before .xlsx).
+DATE_RE = re.compile(r"graded_soccer_(\d{4}-\d{2}-\d{2})", re.I)
 
 
 def blend_weight_for_n(n: int) -> float:
@@ -92,10 +93,44 @@ def _to_num(s: pd.Series) -> pd.Series:
 def _chrono_split_idx(df: pd.DataFrame, date_col: str | None) -> pd.Index:
     if date_col and date_col in df.columns:
         dd = pd.to_datetime(df[date_col], errors="coerce")
-        if dd.notna().any():
-            return dd.sort_values().index
+        n_ok = int(dd.notna().sum())
+        if n_ok > 0:
+            if n_ok < max(50, int(0.5 * len(df))):
+                print(
+                    f"[WARN] [ML] Date column {date_col!r} only {n_ok}/{len(df)} parseable — "
+                    "chronological split may be weak."
+                )
+            return dd.sort_values(na_position="last").index
     print("[WARN] [ML] No usable date column found - using index order (no shuffle).")
     return df.index
+
+
+def _date_boundary_train_mask(
+    split_dates: pd.Series, *, train_frac: float = 0.8, min_test_rows: int = 50
+) -> tuple[pd.Series | None, str]:
+    """
+    True = training row. Splits on calendar time so entire game days stay in train or test
+    (avoids same-day leakage from an 80% row cut through one slate date).
+    """
+    dd = pd.to_datetime(split_dates, errors="coerce")
+    valid = dd.dropna()
+    if valid.empty:
+        return None, "all_nat"
+    uniq = pd.Index(valid.unique()).sort_values()
+    if len(uniq) < 2:
+        return None, "single_unique_date"
+    n_tr = max(1, int(len(uniq) * train_frac))
+    n_tr = min(n_tr, len(uniq) - 1)
+    last_tr = uniq[n_tr - 1]
+    is_tr = dd.isna() | (dd <= last_tr)
+    n_te = int((~is_tr).sum())
+    if n_te < min_test_rows:
+        return None, f"test_too_small_n={n_te}"
+    note = (
+        f"train_days={n_tr} test_days={len(uniq) - n_tr} "
+        f"last_train={pd.Timestamp(last_tr).date()} first_test={pd.Timestamp(uniq[n_tr]).date()}"
+    )
+    return is_tr, note
 
 
 def _collect_soccer_graded_files() -> list[Path]:
@@ -354,7 +389,22 @@ def main() -> None:
     train = train.dropna(subset=["edge"])
     train["hit_rate_l10"] = train["hit_rate_l10"].fillna(0.5)
 
-    dates = df.loc[train.index, "_source_date"].astype(str)
+    # File-level grade date (must live on train for temporal split — was only on df before).
+    train["_source_date"] = df.loc[train.index, "_source_date"].astype(str)
+    file_dates = pd.to_datetime(train["_source_date"], errors="coerce")
+    row_date_col = _first_present(
+        df,
+        ["game_date", "Game Date", "slate_game_date", "slate_date", "Game_Date", "GAME_DATE"],
+    )
+    if row_date_col:
+        row_dates = pd.to_datetime(df.loc[train.index, row_date_col], errors="coerce")
+        train["_split_date"] = row_dates.fillna(file_dates)
+        if row_dates.notna().sum() >= max(1, int(0.2 * len(train))):
+            print(f"-> Row-level dates from {row_date_col!r}, filled gaps from filename date")
+    else:
+        train["_split_date"] = file_dates
+
+    dates = train["_source_date"].astype(str)
     dr = dates[dates.str.match(r"\d{4}-\d{2}-\d{2}")]
     if len(dr):
         print(f"-> Date range (from filenames): {dr.min()} .. {dr.max()}")
@@ -393,17 +443,35 @@ def main() -> None:
     else:
         sw = np.where(df.loc[train.index, "_synthetic"].to_numpy() > 0, 0.7, 1.0)
 
-    date_col = _first_present(train, ["game_date", "date", "source_date", "_source_date", "slate_date"])
+    date_col = _first_present(
+        train, ["_split_date", "game_date", "date", "source_date", "_source_date", "slate_date"]
+    )
     if date_col:
         print(f"-> Using temporal split on: {date_col}")
     order = _chrono_split_idx(train, date_col)
     Xo = X.loc[order]
     yo = y.loc[order]
     swo = sw[np.asarray([X.index.get_loc(i) for i in order], dtype=int)]
-    split_idx = int(len(Xo) * 0.80)
-    X_train, X_test = Xo.iloc[:split_idx], Xo.iloc[split_idx:]
-    y_train, y_test = yo.iloc[:split_idx], yo.iloc[split_idx:]
-    sw_train, _sw_test = swo[:split_idx], swo[split_idx:]
+    d_ord = pd.to_datetime(train.loc[Xo.index, "_split_date"], errors="coerce")
+    is_tr, split_note = _date_boundary_train_mask(d_ord, train_frac=0.8, min_test_rows=50)
+    split_method = "date_boundary"
+    if is_tr is None:
+        split_method = "row_fraction_fallback"
+        print(
+            f"[WARN] [ML] Date-boundary split unavailable ({split_note}) — "
+            "falling back to 80% ordered-row split."
+        )
+        split_idx = int(len(Xo) * 0.80)
+        X_train, X_test = Xo.iloc[:split_idx], Xo.iloc[split_idx:]
+        y_train, y_test = yo.iloc[:split_idx], yo.iloc[split_idx:]
+        sw_train, _sw_test = swo[:split_idx], swo[split_idx:]
+        split_note = f"row_fraction_fallback:{split_note}"
+    else:
+        print(f"-> {split_note}")
+        tr = is_tr.to_numpy()
+        X_train, X_test = Xo.loc[tr], Xo.loc[~tr]
+        y_train, y_test = yo.loc[tr], yo.loc[~tr]
+        sw_train, _sw_test = swo[tr], swo[~tr]
 
     if n < 500:
         base_model = XGBClassifier(
@@ -466,6 +534,8 @@ def main() -> None:
                 "brier_raw": None if np.isnan(brier_raw) else float(brier_raw),
                 "n_train": int(len(X_train)),
                 "n_test": int(len(X_test)),
+                "split_method": split_method,
+                "split_detail": split_note,
                 "real_only_mode": REAL_ONLY_MODE,
                 "timestamp": ts,
             },
