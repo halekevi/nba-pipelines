@@ -329,6 +329,12 @@ def _group_min_threshold_rows(df: pd.DataFrame, min_group_n: int = 120) -> pd.Da
 
 _TIER_ORDER: dict[str, int] = {"D": 0, "C": 1, "B": 2, "A": 3}
 _TIER_BY_SCORE: dict[int, str] = {v: k for k, v in _TIER_ORDER.items()}
+_N_GATES: tuple[int, int, int] = (600, 350, 200)
+_LIFT_GATES: tuple[float, float, float] = (0.03, 0.02, 0.00)
+# Direction-separated Standard profiles (requested): OVER vs UNDER are evaluated independently.
+_HIT_GATES_GOBLIN: tuple[float, float, float] = (0.72, 0.68, 0.62)
+_HIT_GATES_STANDARD_OVER: tuple[float, float, float] = (0.73, 0.69, 0.63)
+_HIT_GATES_STANDARD_UNDER: tuple[float, float, float] = (0.71, 0.67, 0.61)
 
 
 def _tier_from_gates(
@@ -336,17 +342,17 @@ def _tier_from_gates(
     recommended_hit_rate: float,
     lift_vs_base: float,
     *,
-    hit_shift: float = 0.0,
+    hit_gates: tuple[float, float, float] = _HIT_GATES_GOBLIN,
 ) -> str:
     """Return best tier achieved under configured gates."""
     n = float(pd.to_numeric(recommended_n, errors="coerce") or 0.0)
     hr = float(pd.to_numeric(recommended_hit_rate, errors="coerce") or 0.0)
     lift = float(pd.to_numeric(lift_vs_base, errors="coerce") or 0.0)
-    if n >= 600 and hr >= (0.72 + hit_shift) and lift >= 0.03:
+    if n >= _N_GATES[0] and hr >= hit_gates[0] and lift >= _LIFT_GATES[0]:
         return "A"
-    if n >= 350 and hr >= (0.68 + hit_shift) and lift >= 0.02:
+    if n >= _N_GATES[1] and hr >= hit_gates[1] and lift >= _LIFT_GATES[1]:
         return "B"
-    if n >= 200 and hr >= (0.62 + hit_shift) and lift >= 0.00:
+    if n >= _N_GATES[2] and hr >= hit_gates[2] and lift >= _LIFT_GATES[2]:
         return "C"
     return "D"
 
@@ -368,6 +374,7 @@ def _apply_tier_gate_recommendations(threshold_rows: pd.DataFrame) -> pd.DataFra
     out["gate_tier_target"] = "D"
     out["gate_action"] = "HOLD"
     out["gate_tier_proposed"] = out["tier"]
+    out["gate_profile"] = ""
     out["gate_notes"] = ""
     out["demon_floor_action"] = ""
 
@@ -377,17 +384,29 @@ def _apply_tier_gate_recommendations(threshold_rows: pd.DataFrame) -> pd.DataFra
 
     # Goblin / Standard gate targets.
     for idx, r in out.loc[~is_demon].iterrows():
-        hit_shift = 0.01 if str(r.get("pick_type", "")).upper() == "STANDARD" else 0.0
+        pt = str(r.get("pick_type", "")).upper().strip()
+        dr = str(r.get("direction", "")).upper().strip()
+        if pt == "STANDARD":
+            if dr == "UNDER":
+                hit_gates = _HIT_GATES_STANDARD_UNDER
+                gate_profile = "STANDARD_UNDER"
+            else:
+                hit_gates = _HIT_GATES_STANDARD_OVER
+                gate_profile = "STANDARD_OVER"
+        else:
+            hit_gates = _HIT_GATES_GOBLIN
+            gate_profile = "GOBLIN"
         target = _tier_from_gates(
             r.get("recommended_n"),
             r.get("recommended_hit_rate"),
             r.get("lift_vs_base"),
-            hit_shift=hit_shift,
+            hit_gates=hit_gates,
         )
         cur = str(r.get("tier", "D")).upper().strip()
         cur_s = _TIER_ORDER.get(cur, 0)
         tgt_s = _TIER_ORDER.get(target, 0)
         out.at[idx, "gate_tier_target"] = target
+        out.at[idx, "gate_profile"] = gate_profile
         if not str(r.get("policy_status", "")).upper().strip() == "OK":
             out.at[idx, "gate_action"] = "HOLD"
             out.at[idx, "gate_tier_proposed"] = cur
@@ -416,6 +435,7 @@ def _apply_tier_gate_recommendations(threshold_rows: pd.DataFrame) -> pd.DataFra
         out.at[idx, "gate_tier_target"] = cur if cur in _TIER_ORDER else "D"
         out.at[idx, "gate_tier_proposed"] = cur if cur in _TIER_ORDER else "D"
         out.at[idx, "gate_action"] = "DEMON_KEEP"
+        out.at[idx, "gate_profile"] = "DEMON_KEEP"
         if str(r.get("policy_status", "")).upper().strip() != "OK":
             out.at[idx, "demon_floor_action"] = "HOLDOUT"
             out.at[idx, "gate_notes"] = "demon_no_retier_holdout"
