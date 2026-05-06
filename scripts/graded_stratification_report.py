@@ -327,6 +327,114 @@ def _group_min_threshold_rows(df: pd.DataFrame, min_group_n: int = 120) -> pd.Da
     return out.sort_values(["lift_vs_base", "n_total"], ascending=[False, False]).reset_index(drop=True)
 
 
+_TIER_ORDER: dict[str, int] = {"D": 0, "C": 1, "B": 2, "A": 3}
+_TIER_BY_SCORE: dict[int, str] = {v: k for k, v in _TIER_ORDER.items()}
+
+
+def _tier_from_gates(
+    recommended_n: float,
+    recommended_hit_rate: float,
+    lift_vs_base: float,
+    *,
+    hit_shift: float = 0.0,
+) -> str:
+    """Return best tier achieved under configured gates."""
+    n = float(pd.to_numeric(recommended_n, errors="coerce") or 0.0)
+    hr = float(pd.to_numeric(recommended_hit_rate, errors="coerce") or 0.0)
+    lift = float(pd.to_numeric(lift_vs_base, errors="coerce") or 0.0)
+    if n >= 600 and hr >= (0.72 + hit_shift) and lift >= 0.03:
+        return "A"
+    if n >= 350 and hr >= (0.68 + hit_shift) and lift >= 0.02:
+        return "B"
+    if n >= 200 and hr >= (0.62 + hit_shift) and lift >= 0.00:
+        return "C"
+    return "D"
+
+
+def _apply_tier_gate_recommendations(threshold_rows: pd.DataFrame) -> pd.DataFrame:
+    """
+    Add actionable gate recommendations per group:
+    - Goblin/Standard: one-step promote/demote suggestions from A/B/C/D gates
+    - Demon: keep tier unchanged; floor-only suggestion (apply/watch/hold)
+    """
+    if threshold_rows.empty:
+        return threshold_rows
+    out = threshold_rows.copy()
+    for c in ("n_total", "recommended_n", "recommended_hit_rate", "lift_vs_base"):
+        out[c] = pd.to_numeric(out.get(c), errors="coerce")
+    out["tier"] = out.get("tier", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
+    out["pick_type"] = out.get("pick_type", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
+    out["policy_status"] = out.get("policy_status", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
+    out["gate_tier_target"] = "D"
+    out["gate_action"] = "HOLD"
+    out["gate_tier_proposed"] = out["tier"]
+    out["gate_notes"] = ""
+    out["demon_floor_action"] = ""
+
+    is_demon = out["pick_type"].eq("DEMON")
+    is_standard = out["pick_type"].eq("STANDARD")
+    is_ok = out["policy_status"].eq("OK")
+
+    # Goblin / Standard gate targets.
+    for idx, r in out.loc[~is_demon].iterrows():
+        hit_shift = 0.01 if str(r.get("pick_type", "")).upper() == "STANDARD" else 0.0
+        target = _tier_from_gates(
+            r.get("recommended_n"),
+            r.get("recommended_hit_rate"),
+            r.get("lift_vs_base"),
+            hit_shift=hit_shift,
+        )
+        cur = str(r.get("tier", "D")).upper().strip()
+        cur_s = _TIER_ORDER.get(cur, 0)
+        tgt_s = _TIER_ORDER.get(target, 0)
+        out.at[idx, "gate_tier_target"] = target
+        if not str(r.get("policy_status", "")).upper().strip() == "OK":
+            out.at[idx, "gate_action"] = "HOLD"
+            out.at[idx, "gate_tier_proposed"] = cur
+            out.at[idx, "gate_notes"] = "policy_status_not_ok"
+            continue
+        if tgt_s > cur_s:
+            # One-step promotion per cycle.
+            prop_s = min(cur_s + 1, tgt_s)
+            out.at[idx, "gate_action"] = "PROMOTE_1"
+            out.at[idx, "gate_tier_proposed"] = _TIER_BY_SCORE[prop_s]
+            out.at[idx, "gate_notes"] = "meets_higher_tier_gates"
+        elif tgt_s < cur_s:
+            # One-step demotion per cycle.
+            prop_s = max(cur_s - 1, tgt_s)
+            out.at[idx, "gate_action"] = "DEMOTE_1"
+            out.at[idx, "gate_tier_proposed"] = _TIER_BY_SCORE[prop_s]
+            out.at[idx, "gate_notes"] = "below_current_tier_gates"
+        else:
+            out.at[idx, "gate_action"] = "HOLD"
+            out.at[idx, "gate_tier_proposed"] = cur
+            out.at[idx, "gate_notes"] = "at_target"
+
+    # Demon: keep tier unchanged, floor-only recommendation buckets.
+    for idx, r in out.loc[is_demon].iterrows():
+        cur = str(r.get("tier", "D")).upper().strip()
+        out.at[idx, "gate_tier_target"] = cur if cur in _TIER_ORDER else "D"
+        out.at[idx, "gate_tier_proposed"] = cur if cur in _TIER_ORDER else "D"
+        out.at[idx, "gate_action"] = "DEMON_KEEP"
+        if str(r.get("policy_status", "")).upper().strip() != "OK":
+            out.at[idx, "demon_floor_action"] = "HOLDOUT"
+            out.at[idx, "gate_notes"] = "demon_no_retier_holdout"
+            continue
+        rn = float(pd.to_numeric(r.get("recommended_n"), errors="coerce") or 0.0)
+        floor = pd.to_numeric(r.get("recommended_min_ml_prob"), errors="coerce")
+        if rn >= 500 and pd.notna(floor):
+            out.at[idx, "demon_floor_action"] = "APPLY_FLOOR"
+            out.at[idx, "gate_notes"] = "demon_floor_confident"
+        elif rn >= 300:
+            out.at[idx, "demon_floor_action"] = "WATCHLIST"
+            out.at[idx, "gate_notes"] = "demon_floor_watchlist"
+        else:
+            out.at[idx, "demon_floor_action"] = "HOLD"
+            out.at[idx, "gate_notes"] = "demon_floor_thin_sample"
+
+    return out
+
+
 def _html_escape_df(tab: pd.DataFrame, max_rows: int = 50) -> str:
     if tab.empty:
         return "<p>(no rows)</p>"
@@ -498,6 +606,7 @@ def run(
         threshold_rows.loc[blocked, "recommended_n"] = threshold_rows.loc[blocked, "n_total"]
         threshold_rows.loc[blocked, "recommended_hit_rate"] = threshold_rows.loc[blocked, "base_hit_rate"]
         threshold_rows.loc[blocked, "lift_vs_base"] = 0.0
+    threshold_rows = _apply_tier_gate_recommendations(threshold_rows)
     threshold_rows.to_csv(out_dir / "graded_group_min_thresholds.csv", index=False)
 
     tier_a = hit_tbl[
