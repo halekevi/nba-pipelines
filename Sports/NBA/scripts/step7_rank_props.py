@@ -382,15 +382,15 @@ _PROP_WEIGHTS = {
 # Used in prop_hr_z scoring signal. Old values were based on season-long prior;
 # these reflect actual pipeline output hit rates by prop type OVER direction.
 _PROP_HR_PRIOR_OVER = {
-    "fantasy": 0.560,
-    "pts": 0.580,
-    "pr": 0.565,
-    "reb": 0.580,
+    "fantasy": 0.480,
+    "pts": 0.500,
+    "pr": 0.490,
+    "reb": 0.500,
     "ra": 0.479,
-    "ast": 0.555,
+    "ast": 0.480,
     "fga": 0.510,
-    "pra": 0.545,
-    "pa": 0.550,
+    "pra": 0.470,
+    "pa": 0.480,
     "fgm": 0.510,
     "fg2m": 0.510,
     "twopointersmade": 0.510,
@@ -402,8 +402,8 @@ _PROP_HR_PRIOR_OVER = {
     "fg3a": 0.490,
     "3ptattempted": 0.490,
     "stocks": 0.510,
-    "stl": 0.530,
-    "fg3m": 0.520,
+    "stl": 0.450,
+    "fg3m": 0.440,
     "3ptmade": 0.520,
     "ftm": 0.510,
     "freethrowsmade": 0.510,
@@ -435,7 +435,7 @@ _PROP_HR_PRIOR_UNDER_OVERRIDE = {
     "pts": 0.541,
     "pr": 0.541,
     "pra": 0.537,
-    "fantasy": 0.330,
+    "fantasy": 0.410,
     "pf": 0.518,
     "personalfouls": 0.518,
 }
@@ -542,6 +542,13 @@ def _normalize_nba_prop_ml(raw: str) -> str:
     x_compact = re.sub(r"\s+", "", x)
     if not x:
         return "unknown"
+    if (
+        "double-double" in x
+        or "double double" in x
+        or x_compact == "doubledouble"
+        or "doubledouble" in x_compact
+    ):
+        return "double_double"
     if "pts+reb+ast" in x_compact or x_compact == "pra" or "pra" in x.split():
         return "pra"
     if "pts+asts" in x_compact or "ptsasts" in x_compact or "points+assists" in x_compact:
@@ -773,6 +780,70 @@ def _meta_adjust_ml_prob(
         return base_ml_prob
 
 
+def _apply_demon_prob_sanity_caps(
+    out: pd.DataFrame,
+    ml_prob: pd.Series,
+    model_key_used: str,
+) -> pd.Series:
+    """
+    Guardrail for historically unstable Demon OVER groups.
+    Keeps ML signal but prevents extreme probabilities on slices that repeatedly
+    show large calibration gaps in graded data.
+    """
+    idx = out.index
+    prob = pd.to_numeric(ml_prob, errors="coerce").fillna(0.5).clip(0.001, 0.999)
+
+    dir_s = out.get("bet_direction", pd.Series("OVER", index=idx)).astype(str).str.upper().str.strip()
+    pt_s = out.get("pick_type", pd.Series("Standard", index=idx)).astype(str).str.lower().str.strip()
+    is_demon_over = dir_s.eq("OVER") & pt_s.str.contains("demon", regex=False)
+
+    prop_s = (
+        out.get("prop_norm", out.get("prop_type", pd.Series("unknown", index=idx)))
+        .astype(str)
+        .map(_normalize_nba_prop_ml)
+    )
+
+    hr = pd.to_numeric(out.get("hit_rate", pd.Series(np.nan, index=idx)), errors="coerce")
+    hr = pd.Series(np.where(hr > 1.0, hr / 100.0, hr), index=idx, dtype=float).clip(0.01, 0.99)
+    hr = hr.fillna(0.50)
+
+    caps = pd.Series(np.nan, index=idx, dtype=float)
+
+    if str(model_key_used).lower() == "nba1q":
+        nba1q_core = prop_s.isin({"points", "rebounds", "assists"})
+        # Keep these near empirical range; they were materially overconfident in calibration.
+        caps.loc[is_demon_over & nba1q_core] = (
+            (hr + 0.08).clip(lower=0.58, upper=0.80).loc[is_demon_over & nba1q_core]
+        )
+    else:
+        nba_demon_core = prop_s.isin(
+            {
+                "double_double",
+                "pra",
+                "points",
+                "rebs_asts",
+                "pts_rebs",
+                "pts_asts",
+                "fantasy_score",
+            }
+        )
+        core_mask = is_demon_over & nba_demon_core
+        if core_mask.any():
+            caps.loc[core_mask] = (hr + 0.10).clip(lower=0.26, upper=0.72).loc[core_mask]
+            dd_mask = core_mask & prop_s.eq("double_double")
+            if dd_mask.any():
+                caps.loc[dd_mask] = (hr + 0.05).clip(lower=0.20, upper=0.45).loc[dd_mask]
+
+    has_cap = caps.notna()
+    if not has_cap.any():
+        return prob
+    adj = pd.Series(np.where(has_cap, np.minimum(prob, caps), prob), index=idx, dtype=float).clip(0.001, 0.999)
+    changed = int((adj < prob - 1e-12).sum())
+    if changed:
+        print(f"✅ Demon sanity cap applied (model={model_key_used}): {changed} rows")
+    return adj
+
+
 def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, source_hint: str = "") -> tuple[pd.Series, pd.Series, pd.Series]:
     root = Path(__file__).resolve().parents[3]
     source_key = str(source_hint).lower()
@@ -851,6 +922,7 @@ def _apply_ml_blend(out: pd.DataFrame, existing_score: pd.Series, source_hint: s
         )
 
     ml_prob = _meta_adjust_ml_prob(out, ml_prob, model_key_used, root)
+    ml_prob = _apply_demon_prob_sanity_caps(out, ml_prob, model_key_used)
     idx_ml = out.index
     prop_ml = (
         out.get("prop_norm", out.get("prop_type", pd.Series("unknown", index=idx_ml)))

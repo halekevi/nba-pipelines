@@ -1,1 +1,11 @@
-sport_disp,prop,direction,pick_type,line_bucket,n,hits,mean_ml,context_known_rate,defense_known_rate,minutes_known_rate,hit_rate
+sport_disp,prop,direction,pick_type_group,def_tier_norm,line_bucket,n,hits,mean_ml,context_known_rate,defense_known_rate,minutes_known_rate,hit_rate
+NBA,Turnovers,OVER,Standard OVER,Weak,micro,27,15.0,0.7036734374526434,1.0,1.0,1.0,0.5555555555555556
+NBA,Pts+Rebs+Asts,OVER,Goblin,Avg,mid,22,16.0,0.7117833333333333,1.0,1.0,1.0,0.7272727272727273
+NBA,Pts+Rebs+Asts,OVER,Goblin,Below Avg,xl,15,11.0,0.6158111111111111,1.0,1.0,1.0,0.7333333333333333
+NBA1H,Fantasy Score,OVER,Standard OVER,Above Avg,high,34,32.0,0.9142999721411459,1.0,1.0,1.0,0.9411764705882353
+NBA1H,Fantasy Score,OVER,Standard OVER,Avg,high,30,25.0,0.913525681889889,1.0,1.0,1.0,0.8333333333333334
+NBA1H,Fantasy Score,OVER,Standard OVER,Weak,xl,30,29.0,0.912705523985572,1.0,1.0,1.0,0.9666666666666667
+NBA1H,Fantasy Score,OVER,Standard OVER,Avg,xl,24,24.0,0.9128178156573784,1.0,1.0,1.0,1.0
+NBA1H,Fantasy Score,OVER,Standard OVER,Above Avg,xl,19,17.0,0.915979941117249,1.0,1.0,1.0,0.8947368421052632
+NBA1H,Fantasy Score,OVER,Standard OVER,Elite,xl,18,16.0,0.9133971981305002,1.0,1.0,1.0,0.8888888888888888
+NBA1H,Fantasy Score,OVER,Standard OVER,Elite,high,15,12.0,0.9107683421032056,1.0,1.0,1.0,0.8

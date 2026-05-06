@@ -16,7 +16,7 @@ Usage:
 """
 from __future__ import annotations
 import argparse, sys, re
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 try:
@@ -38,8 +38,7 @@ NHL_SLATE_MAP = {
     "team":          "team",
     "opp":           "opp_team",
     "Game Date":     "slate_game_date",
-    # Lowercase `game_date` is kept on NHL step8 XLSX for tooling; only map title case to avoid
-    # duplicate rename targets when both columns are present.
+    "game_date":     "slate_game_date",
     "tier":          "tier",
     "def_tier":      "def_tier",
     "direction":     "bet_direction",
@@ -251,25 +250,52 @@ def load_slate(path: Path, sport: str, grade_date: str = None) -> pd.DataFrame:
     else:
         df = df.rename(columns={k: v for k, v in col_map.items() if k in df.columns})
 
-    # NHL CSV slates may only have lowercase `game_date` (no title-case column).
-    if sport == "NHL" and "slate_game_date" not in df.columns and "game_date" in df.columns:
-        df = df.rename(columns={"game_date": "slate_game_date"})
+    # Ensure pick_type exists and is usable.
+    # Some historical NHL/Soccer files include pick_type but leave rows blank/(missing).
+    def _derive_pick_type(row):
+        tier = str(row.get("tier", "")).strip().upper()
+        edge_raw = row.get("edge", row.get("ml_edge", row.get("blended_score", 0.5)))
+        edge = float(edge_raw) if pd.notna(edge_raw) else 0.5
+        hr_raw = row.get("hit_rate", row.get("Hit Rate (10g)", np.nan))
+        ml_raw = row.get("ml_prob", np.nan)
+        bs_raw = row.get("blended_score", np.nan)
+        p_candidates = []
+        for v in (ml_raw, hr_raw, bs_raw):
+            try:
+                fv = float(v)
+            except Exception:
+                continue
+            if pd.notna(fv):
+                p_candidates.append(fv)
+        if p_candidates:
+            p = max(0.01, min(0.99, p_candidates[0]))
+            # If modeled/empirical win probability is already strong, avoid auto-demoting to Demon
+            # just because tier is sparse/noisy in historical NHL/Soccer exports.
+            if p >= 0.70:
+                return "goblin"
+            if p >= 0.55:
+                return "standard"
+        if tier == "A" and edge >= 0.48:
+            return "goblin"
+        if tier in ("A", "B"):
+            return "standard"
+        return "demon"
 
-    # Ensure pick_type exists (NHL step8 doesn't have it — derive from edge/tier)
     if "pick_type" not in df.columns:
         if "tier" in df.columns:
-            def _pick_type(row):
-                tier = str(row.get("tier","")).upper()
-                edge = float(row.get("edge", 0.5)) if pd.notna(row.get("edge")) else 0.5
-                if tier == "A" and edge >= 0.48: return "goblin"
-                if tier in ("A","B"):            return "standard"
-                return "demon"
-            df["pick_type"] = df.apply(_pick_type, axis=1)
+            df["pick_type"] = df.apply(_derive_pick_type, axis=1)
         else:
             df["pick_type"] = "standard"
     else:
         # Normalize existing pick_type to lowercase for consistent matching
-        df["pick_type"] = df["pick_type"].astype(str).str.lower()
+        pt = df["pick_type"].astype(str).str.strip().str.lower()
+        invalid = pt.isin({"", "nan", "none", "null", "(missing)", "-", "—"})
+        if "tier" in df.columns and invalid.any():
+            df.loc[invalid, "pick_type"] = df.loc[invalid].apply(_derive_pick_type, axis=1)
+            pt = df["pick_type"].astype(str).str.strip().str.lower()
+        else:
+            pt = pt.mask(invalid, "standard")
+        df["pick_type"] = pt
 
     # Normalize bet_direction to OVER/UNDER
     if sport == "SOCCER":
@@ -345,7 +371,10 @@ def load_slate(path: Path, sport: str, grade_date: str = None) -> pd.DataFrame:
     # ── MLB / NHL: keep rows for the grade calendar day when Game Date is populated ─
     if sport == "MLB" and grade_date and "slate_game_date" in df.columns:
         want = str(grade_date).strip()[:10]
-        raw = pd.to_datetime(df["slate_game_date"], errors="coerce")
+        sg = df["slate_game_date"]
+        if isinstance(sg, pd.DataFrame):
+            sg = sg.iloc[:, 0]
+        raw = pd.to_datetime(sg, errors="coerce")
         if raw.notna().any():
             day = raw.dt.strftime("%Y-%m-%d")
             ok = day == want
@@ -364,26 +393,26 @@ def load_slate(path: Path, sport: str, grade_date: str = None) -> pd.DataFrame:
                 if n1 < n0:
                     print(f"  [{label}] Date filter {want}: kept {n1}/{n0} slate rows (Game Date)")
 
-    # NHL: ET calendar-day filter when slate_game_date is populated (mirror MLB: keep unknown dates).
+    # NHL: strict ET calendar-day filter when slate_game_date is populated.
+    # If the filter would remove everything, keep the full slate (same guard pattern as MLB).
     if sport == "NHL" and grade_date and "slate_game_date" in df.columns:
         want = str(grade_date).strip()[:10]
-        raw = pd.to_datetime(df["slate_game_date"], errors="coerce")
-        if raw.notna().any():
-            day = raw.dt.strftime("%Y-%m-%d")
-            ok = day == want
-            unk = raw.isna()
-            n0 = len(df)
-            sub = df.loc[ok | unk].copy()
-            n1 = len(sub)
-            if n1 == 0 and n0 > 0:
-                print(
-                    f"  [NHL grader] WARN: date filter {want} would remove all {n0} rows — "
-                    f"keeping full slate (no rows match that calendar day)"
-                )
-            else:
-                df = sub
-                if n1 < n0:
-                    print(f"  [NHL grader] Date filter ({want}): kept {n1}/{n0} rows")
+        sg = df["slate_game_date"]
+        if isinstance(sg, pd.DataFrame):
+            sg = sg.iloc[:, 0]
+        raw = pd.to_datetime(sg, errors="coerce")
+        day = raw.dt.strftime("%Y-%m-%d")
+        mask = day == want
+        n0 = len(df)
+        n_match = int(mask.sum())
+        if n_match > 0:
+            df = df.loc[mask].copy()
+            n1 = len(df)
+            print(f"  [NHL grader] Date filter: kept {n1}/{n0} rows for {want} (slate_game_date)")
+        else:
+            print(
+                f"  [NHL grader] WARN: date filter for {want} = 0 rows — keeping full slate ({n0} rows)"
+            )
 
     return df
 
@@ -405,6 +434,18 @@ def load_actuals(path: Path) -> pd.DataFrame:
     df.columns = [c.strip() for c in df.columns]
     print(f"  Actuals: {len(df)} rows, cols: {list(df.columns)}")
     return df
+
+
+def _nhl_ppp_coverage(graded_df: pd.DataFrame) -> tuple[int, int]:
+    """Return (total_ppp_rows, rows_with_actuals) for NHL Power Play Points."""
+    if "prop_type_norm" not in graded_df.columns or "actual" not in graded_df.columns:
+        return 0, 0
+    ppp = graded_df[
+        graded_df["prop_type_norm"].astype(str).str.lower().eq("power play points")
+    ]
+    if ppp.empty:
+        return 0, 0
+    return int(len(ppp)), int(ppp["actual"].notna().sum())
 
 def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFrame:
     """Match slate props to actuals and assign HIT/MISS/VOID."""
@@ -448,6 +489,7 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
     # 2) by normalised name (fallback for NHL or when ID missing)
     act_by_id:   dict[str, list] = {}
     act_by_name: dict[str, list] = {}
+    act_by_team_last: dict[tuple[str, str], list] = {}
     has_id_col = "espn_player_id" in actuals.columns
 
     for _, row in actuals.iterrows():
@@ -463,6 +505,14 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
         if name not in act_by_name:
             act_by_name[name] = []
         act_by_name[name].append(row)
+        # NHL fallback index: (team, last_name) to bridge full-name vs initial-name feeds.
+        team_key = str(row.get("team", "") or "").strip().upper()
+        last = str(name).split()[-1] if str(name).split() else ""
+        if team_key and last:
+            k = (team_key, last)
+            if k not in act_by_team_last:
+                act_by_team_last[k] = []
+            act_by_team_last[k].append(row)
 
     hits = misses = voids = pushes = 0
 
@@ -589,7 +639,14 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
 
     for idx, srow in slate.iterrows():
         sname = _norm_name_mlb(srow.get("player", "")) if sport == "MLB" else _norm_name(srow.get("player", ""))
-        sprop = _norm_prop(srow.get("prop_type_norm", srow.get("prop_type_raw","")))
+        # Prefer raw pipeline prop key when available (e.g., NHL `power_play_points`);
+        # display labels can collapse distinct stats (e.g., into generic "Points").
+        sprop_src = (
+            srow.get("prop_type_raw")
+            if pd.notna(srow.get("prop_type_raw"))
+            else srow.get("prop_type_norm", srow.get("prop_display", ""))
+        )
+        sprop = _norm_prop(sprop_src)
         sline = first_numeric_in_slate_row(
             srow,
             (
@@ -619,22 +676,26 @@ def grade(slate: pd.DataFrame, actuals: pd.DataFrame, sport: str) -> pd.DataFram
         if sport == "SOCCER" and s_eid_valid and s_eid in act_by_id:
             candidates = act_by_id[s_eid]
             matched = _find_prop_match(candidates, sprop, sport)
-            # If still no prop match but only one candidate, use it
-            if matched is None and len(candidates) == 1:
-                matched = candidates[0]
 
         # ── PASS 2: name match fallback ───────────────────────────────────────
         if matched is None:
             if sname not in act_by_name:
+                candidates = []
+            else:
+                candidates = act_by_name[sname]
+            matched = _find_prop_match(candidates, sprop, sport)
+            # NHL fallback: team + last-name key for initial-name feeds (e.g. J. Eichel vs Jack Eichel).
+            if matched is None and sport == "NHL":
+                team_key = str(srow.get("team", "") or "").strip().upper()
+                s_last = str(sname).split()[-1] if str(sname).split() else ""
+                if team_key and s_last:
+                    candidates2 = act_by_team_last.get((team_key, s_last), [])
+                    matched = _find_prop_match(candidates2, sprop, sport)
+            if matched is None:
                 voids += 1
                 continue
-            candidates = act_by_name[sname]
-            matched = _find_prop_match(candidates, sprop, sport)
-            if matched is None and len(candidates) == 1:
-                matched = candidates[0]
-            # MLB often has many props per player — never guess which stat row to use.
-            elif matched is None and candidates and sport != "MLB":
-                matched = candidates[0]
+            # Never guess to the first candidate when prop does not match.
+            # Wrong-stat joins silently corrupt grading and calibration outputs.
 
         if matched is None or pd.isna(matched["_val"]):
             voids += 1
@@ -1080,7 +1141,48 @@ def main():
 
     print(f"  Slate rows: {len(slate):,}")
 
-    graded = grade(slate, actuals, sport)
+    # NHL safety net: if same-day actuals map poorly (common around overnight slates),
+    # compare against next-day actuals and use whichever gives stronger PPP coverage.
+    if sport == "NHL":
+        graded_base = grade(slate, actuals, sport)
+        base_total, base_nonnull = _nhl_ppp_coverage(graded_base)
+
+        try:
+            dt = datetime.strptime(date_str, "%Y-%m-%d").date()
+            next_date = (dt + timedelta(days=1)).strftime("%Y-%m-%d")
+        except Exception:
+            next_date = ""
+
+        graded = graded_base
+        if next_date:
+            next_candidates = [act_p.with_name(f"actuals_nhl_{next_date}.csv")]
+            # Also support per-date output layout: outputs/YYYY-MM-DD/actuals_nhl_YYYY-MM-DD.csv
+            if act_p.parent.name == date_str and act_p.parent.parent.name == "outputs":
+                next_candidates.append(
+                    act_p.parent.parent / next_date / f"actuals_nhl_{next_date}.csv"
+                )
+            next_act = next((p for p in next_candidates if p.exists()), None)
+            if next_act is not None:
+                print(f"  [NHL grader] evaluating next-day actuals fallback: {next_act}")
+                actuals_next = load_actuals(next_act)
+                graded_next = grade(slate, actuals_next, sport)
+                next_total, next_nonnull = _nhl_ppp_coverage(graded_next)
+                # Prefer higher PPP actual coverage; break ties by more total PPP rows.
+                if (next_nonnull > base_nonnull) or (
+                    next_nonnull == base_nonnull and next_total > base_total
+                ):
+                    print(
+                        "  [NHL grader] using next-day actuals fallback "
+                        f"({base_nonnull}/{base_total} -> {next_nonnull}/{next_total} PPP actual coverage)"
+                    )
+                    graded = graded_next
+                else:
+                    print(
+                        "  [NHL grader] keeping same-day actuals "
+                        f"({base_nonnull}/{base_total} PPP actual coverage)"
+                    )
+    else:
+        graded = grade(slate, actuals, sport)
     save_graded(graded, out_path, sport, date_str)
     print(f"  Done.\n")
 

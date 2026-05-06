@@ -104,6 +104,41 @@ def _pick_type_norm(s: pd.Series) -> pd.Series:
     return s.astype(str).str.strip().str.lower()
 
 
+def _pick_type_base(raw: pd.Series) -> pd.Series:
+    s = raw.astype(str).str.strip().str.lower()
+    out = pd.Series("(missing)", index=raw.index, dtype=str)
+    out.loc[s.isin(["goblin"])] = "Goblin"
+    out.loc[s.isin(["demon"])] = "Demon"
+    out.loc[s.isin(["standard", "std", "—", "-", "–", "", "nan", "none", "null"])] = "Standard"
+    return out
+
+
+def _pick_type_dir_group(pick_base: pd.Series, direction: pd.Series) -> pd.Series:
+    d = direction.astype(str).str.strip().str.upper()
+    out = pick_base.copy()
+    std = pick_base.eq("Standard")
+    out.loc[std & d.eq("OVER")] = "Standard OVER"
+    out.loc[std & d.eq("UNDER")] = "Standard UNDER"
+    out.loc[std & ~d.isin(["OVER", "UNDER"])] = "Standard (unknown dir)"
+    return out
+
+
+def _normalize_def_tier(raw: pd.Series) -> pd.Series:
+    s = raw.astype(str).str.strip().str.lower()
+    out = pd.Series("(missing)", index=raw.index, dtype=str)
+    elite = {"elite", "el", "top", "strongest"}
+    above = {"above avg", "above average", "above_avg", "good", "solid", "plus"}
+    avg = {"avg", "average", "neutral", "mid", "medium"}
+    below = {"below avg", "below average", "below_avg", "poor"}
+    weak = {"weak", "bottom", "bad"}
+    out.loc[s.isin(elite)] = "Elite"
+    out.loc[s.isin(above)] = "Above Avg"
+    out.loc[s.isin(avg)] = "Avg"
+    out.loc[s.isin(below)] = "Below Avg"
+    out.loc[s.isin(weak)] = "Weak"
+    return out
+
+
 def _attach_features_via_build_vector(decided: pd.DataFrame) -> pd.DataFrame:
     """Adds line_bucket*, context_known, defense_known, minutes_known when stack is present."""
     if (
@@ -177,46 +212,105 @@ def _calibration_rows(
     if calibration_curve is None or df.empty or "ml_prob" not in df.columns:
         return pd.DataFrame(rows), pd.DataFrame(flagged)
 
-    need = ["result_binary", "ml_prob", "sport_disp", "direction", "pick_type"]
+    need = ["result_binary", "ml_prob", "sport_disp", "direction", "pick_type_base", "prop"]
     for c in need:
         if c not in df.columns:
             return pd.DataFrame(rows), pd.DataFrame(flagged)
 
     sub = df[df["result_binary"].notna() & df["ml_prob"].notna()].copy()
-    sports = ["NBA", "NHL", "MLB", "Soccer"]
-    for sp in sports:
-        for pick_type in ["standard", "goblin", "demon"]:
-            mask = (sub["sport_disp"] == sp) & (_pick_type_norm(sub["pick_type"]) == pick_type)
-            slice_df = sub.loc[mask]
-            if len(slice_df) < min_stratum:
-                continue
-            for direction in sorted(slice_df["direction"].astype(str).str.upper().unique()):
-                dmask = slice_df["direction"].astype(str).str.upper().eq(direction)
-                ddf = slice_df.loc[dmask]
-                if len(ddf) < min_stratum:
-                    continue
-                y = ddf["result_binary"].to_numpy(dtype=float)
-                p = ddf["ml_prob"].to_numpy(dtype=float)
-                try:
-                    prob_true, prob_pred = calibration_curve(y, p, n_bins=10, strategy="quantile")
-                except TypeError:
-                    prob_true, prob_pred = calibration_curve(y, p, n_bins=10)
-                for i, (t, pr) in enumerate(zip(prob_true, prob_pred)):
-                    gap = abs(float(pr) - float(t))
-                    row = {
-                        "sport": sp,
-                        "direction": direction,
-                        "pick_type": pick_type,
-                        "bin_index": i,
-                        "mean_pred": float(pr),
-                        "mean_true": float(t),
-                        "gap": gap,
-                        "n_stratum": len(ddf),
-                    }
-                    rows.append(row)
-                    if gap > flag_eps:
-                        flagged.append({**row, "flagged": True})
+    # Keep calibration policy slices on explicit pick types only.
+    sub = sub[sub["pick_type_base"].astype(str) != "(missing)"].copy()
+    grouped = sub.groupby(["sport_disp", "pick_type_base", "direction", "prop"], dropna=False)
+    for (sp, pick_type, direction, prop), ddf in grouped:
+        if len(ddf) < min_stratum:
+            continue
+        y = ddf["result_binary"].to_numpy(dtype=float)
+        p = ddf["ml_prob"].to_numpy(dtype=float)
+        try:
+            prob_true, prob_pred = calibration_curve(y, p, n_bins=10, strategy="quantile")
+        except TypeError:
+            prob_true, prob_pred = calibration_curve(y, p, n_bins=10)
+        for i, (t, pr) in enumerate(zip(prob_true, prob_pred)):
+            gap = abs(float(pr) - float(t))
+            row = {
+                "sport": str(sp),
+                "direction": str(direction),
+                "pick_type": str(pick_type),
+                "prop": str(prop),
+                "bin_index": i,
+                "mean_pred": float(pr),
+                "mean_true": float(t),
+                "gap": gap,
+                "n_stratum": len(ddf),
+            }
+            rows.append(row)
+            if gap > flag_eps:
+                flagged.append({**row, "flagged": True})
     return pd.DataFrame(rows), pd.DataFrame(flagged)
+
+
+def _group_min_threshold_rows(df: pd.DataFrame, min_group_n: int = 120) -> pd.DataFrame:
+    """
+    Recommend ml_prob minimum thresholds by sport x pick_type x direction x prop.
+    This does not gate or retier rows; it is an analysis output only.
+    """
+    need = ["sport_disp", "pick_type_base", "direction", "prop", "ml_prob", "result_binary"]
+    for c in need:
+        if c not in df.columns:
+            return pd.DataFrame()
+    sub = df[df["ml_prob"].notna() & df["result_binary"].notna()].copy()
+    # Do not recommend policy thresholds for slices with unknown pick_type.
+    sub = sub[sub["pick_type_base"].astype(str) != "(missing)"].copy()
+    def _threshold_floor(sport: str, pick_type: str, direction: str) -> float:
+        sp = str(sport or "").strip().upper()
+        pt = str(pick_type or "").strip().upper()
+        dr = str(direction or "").strip().upper()
+        # Demon OVER in low-scoring sports can produce unrealistically tiny floors from noisy bins.
+        if dr == "OVER" and pt == "DEMON" and sp in {"SOCCER", "NHL"}:
+            return 0.10
+        return 0.0
+
+    out_rows: list[dict[str, object]] = []
+    for (sp, pt, d, prop), g in sub.groupby(["sport_disp", "pick_type_base", "direction", "prop"], dropna=False):
+        n = int(len(g))
+        if n < int(min_group_n):
+            continue
+        base_hr = float(g["result_binary"].mean())
+        qvals = np.quantile(g["ml_prob"].to_numpy(dtype=float), [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7])
+        floor = _threshold_floor(sp, pt, d)
+        qvals = [max(float(x), floor) for x in qvals]
+        best_thr = None
+        best_hr = base_hr
+        best_n = n
+        min_keep = max(25, int(round(0.15 * n)))
+        for thr in sorted(set(float(x) for x in qvals)):
+            kept = g[g["ml_prob"] >= thr]
+            nk = int(len(kept))
+            if nk < min_keep:
+                continue
+            hr = float(kept["result_binary"].mean())
+            if hr > best_hr + 1e-12 or (abs(hr - best_hr) <= 1e-12 and nk > best_n):
+                best_thr = thr
+                best_hr = hr
+                best_n = nk
+        out_rows.append(
+            {
+                "sport": str(sp),
+                "pick_type": str(pt),
+                "direction": str(d),
+                "prop": str(prop),
+                "n_total": n,
+                "base_hit_rate": base_hr,
+                "recommended_min_ml_prob": (max(float(best_thr), floor) if best_thr is not None else None),
+                "recommended_n": best_n,
+                "recommended_hit_rate": best_hr,
+                "lift_vs_base": (best_hr - base_hr) if best_thr is not None else 0.0,
+            }
+        )
+    if not out_rows:
+        return pd.DataFrame()
+    out = pd.DataFrame(out_rows)
+    return out.sort_values(["lift_vs_base", "n_total"], ascending=[False, False]).reset_index(drop=True)
 
 
 def _html_escape_df(tab: pd.DataFrame, max_rows: int = 50) -> str:
@@ -244,6 +338,7 @@ def run(
     min_cell_n: int,
     min_cal_stratum: int,
     cal_flag_eps: float,
+    min_threshold_group_n: int,
 ) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     if load_unified is None or normalize_decided is None:
@@ -260,6 +355,12 @@ def run(
         return
 
     decided["sport_disp"] = decided["_sport"].map(_sport_display)
+    decided["pick_type_base"] = _pick_type_base(decided.get("pick_type", pd.Series("", index=decided.index)))
+    decided["pick_type_group"] = _pick_type_dir_group(
+        decided["pick_type_base"],
+        decided.get("direction", pd.Series("", index=decided.index)),
+    )
+    decided["def_tier_norm"] = _normalize_def_tier(decided.get("def_tier", pd.Series("", index=decided.index)))
     decided["home_away"] = _home_away_series(decided)
     decided = _attach_features_via_build_vector(decided)
 
@@ -268,7 +369,7 @@ def run(
     else:
         decided["result_binary"] = decided.get("is_hit", np.nan)
 
-    gcols = ["sport_disp", "prop", "direction", "pick_type", "line_bucket"]
+    gcols = ["sport_disp", "prop", "direction", "pick_type_group", "def_tier_norm", "line_bucket"]
     gcols = [c for c in gcols if c in decided.columns]
     hit_tbl = (
         decided.groupby(gcols, dropna=False)
@@ -297,6 +398,66 @@ def run(
     )
     cal_all.to_csv(out_dir / "graded_calibration_bins.csv", index=False)
     cal_flag.to_csv(out_dir / "graded_calibration_flagged.csv", index=False)
+    threshold_rows = _group_min_threshold_rows(decided, min_group_n=min_threshold_group_n)
+    if not threshold_rows.empty and not cal_all.empty:
+        cal_gap = (
+            cal_all.groupby(["sport", "pick_type", "direction", "prop"], dropna=False)["gap"]
+            .mean()
+            .reset_index()
+            .rename(columns={"gap": "avg_calibration_gap"})
+        )
+        threshold_rows = threshold_rows.merge(
+            cal_gap,
+            how="left",
+            on=["sport", "pick_type", "direction", "prop"],
+        )
+        gap = pd.to_numeric(threshold_rows.get("avg_calibration_gap"), errors="coerce").fillna(0.0)
+        sp = threshold_rows["sport"].astype(str).str.upper().str.strip()
+        pt = threshold_rows["pick_type"].astype(str).str.upper().str.strip()
+        dr = threshold_rows["direction"].astype(str).str.upper().str.strip()
+        prop = threshold_rows["prop"].astype(str).str.upper().str.strip()
+        blocked_known = (
+            ((sp == "NBA1Q") & (pt == "DEMON") & (dr == "OVER") & prop.isin({"POINTS", "REBOUNDS", "ASSISTS"}))
+            | ((sp == "NHL") & (pt == "DEMON") & (dr == "OVER") & (prop == "POWER PLAY POINTS"))
+            | (
+                (sp == "SOCCER")
+                & (pt == "DEMON")
+                & (dr == "OVER")
+                & prop.isin({"SHOTS ON TARGET", "TACKLES"})
+            )
+            | (
+                (sp == "NBA")
+                & (pt == "DEMON")
+                & (dr == "OVER")
+                & prop.isin(
+                    {
+                        "DOUBLE-DOUBLE",
+                        "PRA",
+                        "PTS+REBS+ASTS",
+                        "POINTS",
+                        "REBS+ASTS",
+                        "PTS+REBS",
+                        "PTS+ASTS",
+                        "FANTASY SCORE",
+                    }
+                )
+            )
+            | (
+                (sp == "SOCCER")
+                & (pt == "(MISSING)")
+                & (dr == "OVER")
+                & prop.isin({"GOALS", "GOAL + ASSIST", "ASSISTS"})
+            )
+        )
+        # Keep a high-gap fail-safe, but avoid globally suppressing most groups.
+        blocked_gap = gap >= 0.45
+        blocked = blocked_known | blocked_gap
+        threshold_rows["policy_status"] = np.where(blocked, "HOLDOUT_RECALIBRATE", "OK")
+        threshold_rows.loc[blocked, "recommended_min_ml_prob"] = np.nan
+        threshold_rows.loc[blocked, "recommended_n"] = threshold_rows.loc[blocked, "n_total"]
+        threshold_rows.loc[blocked, "recommended_hit_rate"] = threshold_rows.loc[blocked, "base_hit_rate"]
+        threshold_rows.loc[blocked, "lift_vs_base"] = 0.0
+    threshold_rows.to_csv(out_dir / "graded_group_min_thresholds.csv", index=False)
 
     tier_a = hit_tbl[
         (hit_tbl["context_known_rate"] >= 0.99)
@@ -343,6 +504,10 @@ h1,h2 {{ font-weight: 600; }}
 <h2>Calibration bins flagged (|pred - true| &gt; {cal_flag_eps})</h2>
 {_html_escape_df(cal_flag)}
 
+<h2>Recommended group minimum ml_prob (analysis only)</h2>
+<p class="note">Global tiers are unchanged; this is a per-group recommendation table by sport × pick_type × direction × prop.</p>
+{_html_escape_df(threshold_rows)}
+
 <h2>Tier A (all three known-rates ≥ 0.99)</h2>
 {_html_escape_df(tier_a, max_rows=40)}
 
@@ -355,6 +520,7 @@ h1,h2 {{ font-weight: 600; }}
 
     print(f"Wrote {path_main} rows={len(hit_tbl)}")
     print(f"Wrote calibration: {out_dir / 'graded_calibration_bins.csv'} flagged={len(cal_flag)}")
+    print(f"Wrote threshold recommendations: {out_dir / 'graded_group_min_thresholds.csv'} rows={len(threshold_rows)}")
     print(f"Wrote {out_dir / 'graded_stratification_report.html'}")
 
 
@@ -376,6 +542,12 @@ def main() -> None:
     ap.add_argument("--min-cell-n", type=int, default=15, help="Min rows per stratification cell")
     ap.add_argument("--min-cal-stratum", type=int, default=100, help="Min rows for calibration_curve slice")
     ap.add_argument("--cal-flag-eps", type=float, default=0.08, help="Flag calibration bin if gap exceeds this")
+    ap.add_argument(
+        "--min-threshold-group-n",
+        type=int,
+        default=120,
+        help="Min rows for group-specific threshold recommendation rows.",
+    )
     args = ap.parse_args()
     root = _repo_root()
     roots = list(args.roots) if args.roots else []
@@ -383,7 +555,14 @@ def main() -> None:
         if rel not in roots:
             roots.append(rel)
     out_dir = args.out_dir or (root / "data" / "reports" / "graded_stratification")
-    run(roots, out_dir, min_cell_n=args.min_cell_n, min_cal_stratum=args.min_cal_stratum, cal_flag_eps=args.cal_flag_eps)
+    run(
+        roots,
+        out_dir,
+        min_cell_n=args.min_cell_n,
+        min_cal_stratum=args.min_cal_stratum,
+        cal_flag_eps=args.cal_flag_eps,
+        min_threshold_group_n=args.min_threshold_group_n,
+    )
 
 
 if __name__ == "__main__":
