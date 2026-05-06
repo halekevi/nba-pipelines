@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "2026-05-06T12:14:01.603717+00:00",
+  "created_at_utc": "2026-05-06T12:36:50.404044+00:00",
   "input_csv": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\data\\ml\\ticket_training_dataset.csv",
   "model_path": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\models\\ticket_model.pkl",
   "features_path": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\models\\ticket_model_features.json",
