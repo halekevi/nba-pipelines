@@ -186,6 +186,49 @@ def _cell_str(v: Any) -> str:
     return s
 
 
+def _derive_soccer_pick_type(
+    tier: str,
+    edge_s: str,
+    ml_prob_s: str,
+    hit_rate_s: str,
+    blended_s: str,
+) -> str:
+    """
+    When Soccer step8 omits pick_type, infer Goblin / Standard / Demon from tier + scores
+    (same spirit as scripts.nhl_soccer_grader.load_slate).
+    """
+    tier_u = str(tier or "").strip().upper()
+
+    def _to_float(v) -> float | None:
+        if v is None:
+            return None
+        s = str(v).strip().replace("%", "")
+        if s.lower() in ("", "nan", "none"):
+            return None
+        try:
+            x = float(s)
+            return x / 100.0 if x > 1.0 else x
+        except (TypeError, ValueError):
+            return None
+
+    edge = _to_float(edge_s)
+    ml_p = _to_float(ml_prob_s)
+    hr = _to_float(hit_rate_s)
+    bs = _to_float(blended_s)
+    p_candidates = [x for x in (ml_p, hr, bs) if x is not None]
+    if p_candidates:
+        p = max(0.01, min(0.99, float(p_candidates[0])))
+        if p >= 0.70:
+            return "Goblin"
+        if p >= 0.55:
+            return "Standard"
+    if tier_u == "A" and edge is not None and edge >= 0.48:
+        return "Goblin"
+    if tier_u in ("A", "B"):
+        return "Standard"
+    return "Demon"
+
+
 def _norm_result_display(row: dict) -> str:
     r = _cell_str(row.get("Result") or row.get("Grade")).upper()
     if r in ("HIT", "WIN", "1", "TRUE", "YES", "W"):
@@ -212,11 +255,27 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
     if not player:
         return None
     team = _pick("Team", "team", "team_abbr")
-    prop = _pick("Prop Type", "prop type", "Prop", "prop", "Pick", "pick")
-    direction = _pick("Dir", "dir", "Direction", "direction").upper()
+    prop = _pick("Prop Type", "prop type", "prop_type_norm", "prop_type", "Prop", "prop", "Pick", "pick")
+    direction = _pick(
+        "Dir",
+        "dir",
+        "Direction",
+        "direction",
+        "bet_direction",
+        "final_bet_direction",
+        "recommended_side",
+    ).upper()
     line = _pick("Line", "line", "Game Line", "game line", "O/U", "OU Line", "Pick Line")
-    pick_type = _pick("Pick Type", "pick type")
+    pick_type = _pick("Pick Type", "pick type", "pick_type")
     tier = _pick("Tier", "tier")
+    hit_rate_for_pick = _pick(
+        "Hit Rate",
+        "hit_rate",
+        "Hit Rate (5g)",
+        "Hit Rate (10g)",
+        "composite_hr",
+    )
+    blended_for_pick = _pick("Blended Score", "blended_score", "Blended")
     # slate_grader Box Raw uses snake_case opp_team; legacy sheets use Opp / Opp Team.
     opp_team = _pick(
         "opp_team",
@@ -263,6 +322,23 @@ def prop_row_for_api(row: dict, sport: str) -> dict[str, str] | None:
             void_reason = "NO_DATA"
         elif not vr_up:
             void_reason = "NO_DATA"
+    # Normalize pick_type labels so downstream analytics don't split by casing/spelling.
+    pt_raw = str(pick_type or "").strip().lower()
+    if pt_raw in ("goblin",):
+        pick_type = "Goblin"
+    elif pt_raw in ("demon",):
+        pick_type = "Demon"
+    elif pt_raw in ("standard", "std"):
+        pick_type = "Standard"
+    elif pt_raw in ("—", "-", "–", "", "nan", "none", "null"):
+        pick_type = "—"
+        if sport_up == "SOCCER" and tier:
+            inferred = _derive_soccer_pick_type(
+                tier, edge, ml_prob, hit_rate_for_pick, blended_for_pick
+            )
+            if inferred:
+                pick_type = inferred
+
     return {
         "sport": sport,
         "player": player,

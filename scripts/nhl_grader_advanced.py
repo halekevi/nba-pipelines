@@ -52,8 +52,8 @@ sys.stdout.reconfigure(encoding="utf-8")
 import argparse
 import re
 from pathlib import Path
-from datetime import datetime
-from typing import Dict, List, Tuple
+from datetime import datetime, timedelta
+from typing import Dict, List, Optional, Tuple
 import json
 
 import numpy as np
@@ -113,9 +113,21 @@ def _slate_ml_prob_nhl(row: pd.Series) -> float:
     return float(np.nan)
 
 
-def _build_nhl_actuals_lookup(actuals_df: pd.DataFrame) -> Dict[Tuple[str, str, str], tuple[float, str, int]]:
-    """(folded_player, TEAM, normalized_prop) -> (actual, source, source_conflict)."""
+def _lastname_token(folded_player: str) -> str:
+    """Last token of a folded name — aligns 'j eichel' and 'jack eichel' on 'eichel'."""
+    parts = str(folded_player or "").split()
+    return parts[-1] if parts else ""
+
+
+def _build_nhl_actuals_lookup(
+    actuals_df: pd.DataFrame,
+) -> Tuple[Dict[Tuple[str, str, str], tuple[float, str, int]], Dict[Tuple[str, str, str], tuple[float, str, int]]]:
+    """
+    Primary: (folded_player, TEAM, normalized_prop) -> (actual, source, source_conflict).
+    Fallback: (TEAM, last_name_token, normalized_prop) for initial-vs-full-name feeds.
+    """
     lut: Dict[Tuple[str, str, str], tuple[float, str, int]] = {}
+    team_last: Dict[Tuple[str, str, str], tuple[float, str, int]] = {}
     for _, row in actuals_df.iterrows():
         pl = fold_player_name(row.get("player", ""))
         tm = str(row.get("team", "")).strip().upper()
@@ -127,8 +139,141 @@ def _build_nhl_actuals_lookup(actuals_df: pd.DataFrame) -> Dict[Tuple[str, str, 
             continue
         src = str(row.get("source", "")).strip().lower()
         src_conf = int(pd.to_numeric(row.get("source_conflict"), errors="coerce") or 0)
-        lut[(pl, tm, pk)] = (float(act), src, src_conf)
-    return lut
+        pack = (float(act), src, src_conf)
+        lut[(pl, tm, pk)] = pack
+        ln = _lastname_token(pl)
+        if ln:
+            team_last[(tm, ln, pk)] = pack
+    return lut, team_last
+
+
+def _resolve_actual_pack(
+    actuals_lut: Dict[Tuple[str, str, str], tuple[float, str, int]],
+    team_last_lut: Dict[Tuple[str, str, str], tuple[float, str, int]],
+    player: str,
+    team: str,
+    prop_type: str,
+) -> tuple[float, str, int]:
+    tm_u = str(team).strip().upper()
+    pk = _normalize_nhl_prop_key(prop_type)
+    pl_fold = fold_player_name(player)
+    pack = actuals_lut.get((pl_fold, tm_u, pk))
+    if pack is None:
+        ln = _lastname_token(pl_fold)
+        if ln:
+            pack = team_last_lut.get((tm_u, ln, pk))
+    if pack is None:
+        return np.nan, "", 0
+    return pack
+
+
+def _nhl_ppp_actual_nonnull(graded_df: pd.DataFrame) -> Tuple[int, int]:
+    """(rows_with_non_null_actual, total_power_play_points_rows)."""
+    if graded_df.empty or "prop_type" not in graded_df.columns:
+        return 0, 0
+    keys = graded_df["prop_type"].map(_normalize_nhl_prop_key)
+    mask = keys == "power_play_points"
+    sub = graded_df.loc[mask]
+    if sub.empty:
+        return 0, 0
+    nn = int(sub["actual"].notna().sum())
+    return nn, int(len(sub))
+
+
+def _read_csv_flexible(path: Path) -> pd.DataFrame:
+    for enc in ("utf-8-sig", "utf-8", "latin-1", "cp1252"):
+        try:
+            return pd.read_csv(path, encoding=enc, low_memory=False)
+        except Exception:
+            continue
+    return pd.DataFrame()
+
+
+def run_nhl_grading_core(
+    slate: pd.DataFrame,
+    actuals_df: pd.DataFrame,
+    opp_cache: Optional[pd.DataFrame],
+    date_str: str,
+) -> pd.DataFrame:
+    """Grade every slate row; shared by same-day and next-day actuals trials."""
+    actuals_lut, team_last_lut = _build_nhl_actuals_lookup(actuals_df)
+    print(f"  Actuals lookup keys: {len(actuals_lut)} (+ team×lastname fallback {len(team_last_lut)})")
+
+    grader = NHLGrader(opp_cache=opp_cache)
+    graded: List[dict] = []
+
+    for _, slate_row in slate.iterrows():
+        player = slate_row.get("player", "")
+        team = slate_row.get("team", "")
+        opp_team = slate_row.get(
+            "opponent", slate_row.get("opp_team", slate_row.get("opp", ""))
+        )
+        prop_type = slate_row.get("prop_type", "")
+        line = first_numeric_in_slate_row(
+            slate_row, ("line", "Line", "line_score", "LINE")
+        )
+        direction = _resolve_direction_from_slate_row(slate_row)
+        tier = slate_row.get("tier", "D")
+        def_tier = slate_row.get(
+            "DEF_TIER", slate_row.get("def_tier", slate_row.get("Def Tier", ""))
+        )
+
+        player_type = (
+            "goalie"
+            if any(x in str(prop_type).lower() for x in ["saves", "ga", "shutout"])
+            else "skater"
+        )
+
+        actual, actual_source, actual_source_conflict = _resolve_actual_pack(
+            actuals_lut, team_last_lut, player, team, prop_type
+        )
+
+        result, edge, pct_of_line = grader.grade_prop(actual, line, direction, player_type)
+        void_reason = "NO_DATA" if result == "VOID" else ""
+        margin = nhl_signed_margin(actual, line, direction)
+
+        opp_analysis = grader.get_opponent_analysis(player, opp_team, prop_type)
+
+        confidence = grader.compute_confidence_score(
+            result,
+            edge if not pd.isna(edge) else 0,
+            tier,
+            opp_analysis,
+            player_type,
+            sample_size=opp_analysis.get("opp_games", 0),
+        )
+
+        graded.append(
+            {
+                "player": player,
+                "team": team,
+                "opponent": opp_team,
+                "prop_type": prop_type,
+                "line": line,
+                "actual": actual,
+                "actual_source": actual_source,
+                "actual_source_conflict": actual_source_conflict,
+                "margin": margin,
+                "direction": direction,
+                "bet_direction": direction,
+                "tier": tier,
+                "def_tier": def_tier,
+                "player_type": player_type,
+                "result": result,
+                "reason": void_reason,
+                "edge": edge,
+                "ml_prob": _slate_ml_prob_nhl(slate_row),
+                "pct_of_line": pct_of_line,
+                "confidence_score": confidence,
+                "opp_avg": opp_analysis["opp_avg"],
+                "opp_games": opp_analysis["opp_games"],
+                "opp_trend": opp_analysis["opp_trend"],
+            }
+        )
+
+    graded_df = pd.DataFrame(graded)
+    print(f"  Graded: {len(graded_df)} props (date {date_str})")
+    return graded_df
 
 
 # ── NHL CONFIGURATION ─────────────────────────────────────────────────────────
@@ -542,105 +687,61 @@ def main() -> None:
     print("[NHL Grader] Loading data...")
     
     try:
-        actuals = pd.read_csv(args.actuals, encoding="utf-8")
         slate = pd.read_excel(args.slate)
     except Exception as e:
-        print(f"❌ Failed to load data: {e}")
+        print(f"❌ Failed to load slate: {e}")
         sys.exit(1)
 
     slate = _filter_nhl_step8_slate_by_et_calendar_day(slate, args.date)
-    
+
     # Load optional opponent cache
     opp_cache = None
     if args.opp_cache and Path(args.opp_cache).exists():
         try:
             opp_cache = pd.read_csv(args.opp_cache, encoding="utf-8")
             print(f"  Opponent cache: {len(opp_cache)} rows")
-        except:
+        except Exception:
             print("⚠️  Could not load opponent cache")
-    
-    print(f"  Actuals: {len(actuals)} rows")
+
     print(f"  Slate: {len(slate)} rows")
 
-    actuals_lut = _build_nhl_actuals_lookup(actuals)
-    print(f"  Actuals lookup keys: {len(actuals_lut)}")
-    
-    # ── GRADE PROPS ───────────────────────────────────────────────────────
-    print("[NHL Grader] Grading props...")
-    
-    grader = NHLGrader(opp_cache=opp_cache)
-    graded = []
-    
-    for _, slate_row in slate.iterrows():
-        player = slate_row.get("player", "")
-        team = slate_row.get("team", "")
-        opp_team = slate_row.get("opponent", slate_row.get("opp_team", slate_row.get("opp", "")))
-        prop_type = slate_row.get("prop_type", "")
-        line = first_numeric_in_slate_row(
-            slate_row, ("line", "Line", "line_score", "LINE")
-        )
-        direction = _resolve_direction_from_slate_row(slate_row)
-        tier = slate_row.get("tier", "D")
-        def_tier = slate_row.get("DEF_TIER", slate_row.get("def_tier", slate_row.get("Def Tier", "")))
+    act_path = Path(args.actuals)
+    actuals_primary = _read_csv_flexible(act_path)
+    if actuals_primary.empty:
+        print(f"❌ Failed to read actuals: {act_path}")
+        sys.exit(1)
 
-        # Determine player type
-        player_type = "goalie" if any(
-            x in str(prop_type).lower() for x in ["saves", "ga", "shutout"]
-        ) else "skater"
-        
-        # Find actual — slate uses snake_case props; actuals CSV uses Title Case labels
-        lk = (
-            fold_player_name(player),
-            str(team).strip().upper(),
-            _normalize_nhl_prop_key(prop_type),
-        )
-        actual_pack = actuals_lut.get(lk, (np.nan, "", 0))
-        actual = actual_pack[0]
-        actual_source = actual_pack[1]
-        actual_source_conflict = int(actual_pack[2])
-        
-        # Grade
-        result, edge, pct_of_line = grader.grade_prop(actual, line, direction, player_type)
-        void_reason = "NO_DATA" if result == "VOID" else ""
-        margin = nhl_signed_margin(actual, line, direction)
+    print("[NHL Grader] Grading props (same-day actuals)...")
+    print(f"  Actuals: {len(actuals_primary)} rows <- {act_path.name}")
+    graded_df = run_nhl_grading_core(slate, actuals_primary, opp_cache, args.date)
 
-        # Opponent analysis
-        opp_analysis = grader.get_opponent_analysis(player, opp_team, prop_type)
-        
-        # Confidence score
-        confidence = grader.compute_confidence_score(
-            result, edge if not pd.isna(edge) else 0, tier,
-            opp_analysis, player_type, sample_size=opp_analysis.get("opp_games", 0)
-        )
-        
-        graded.append({
-            "player": player,
-            "team": team,
-            "opponent": opp_team,
-            "prop_type": prop_type,
-            "line": line,
-            "actual": actual,
-            "actual_source": actual_source,
-            "actual_source_conflict": actual_source_conflict,
-            "margin": margin,
-            "direction": direction,
-            "bet_direction": direction,
-            "tier": tier,
-            "def_tier": def_tier,
-            "player_type": player_type,
-            "result": result,
-            "reason": void_reason,
-            "edge": edge,
-            "ml_prob": _slate_ml_prob_nhl(slate_row),
-            "pct_of_line": pct_of_line,
-            "confidence_score": confidence,
-            "opp_avg": opp_analysis["opp_avg"],
-            "opp_games": opp_analysis["opp_games"],
-            "opp_trend": opp_analysis["opp_trend"],
-        })
-    
-    graded_df = pd.DataFrame(graded)
-    print(f"  Graded: {len(graded_df)} props")
+    # Overnight slates: if PPP actual coverage is weak, try next calendar day's actuals file.
+    try:
+        dt = datetime.strptime(args.date, "%Y-%m-%d").date()
+        next_date = (dt + timedelta(days=1)).strftime("%Y-%m-%d")
+    except Exception:
+        next_date = ""
+    if next_date:
+        next_candidates = [act_path.with_name(f"actuals_nhl_{next_date}.csv")]
+        if act_path.parent.name == args.date and act_path.parent.parent.name == "outputs":
+            next_candidates.append(
+                act_path.parent.parent / next_date / f"actuals_nhl_{next_date}.csv"
+            )
+        next_act = next((p for p in next_candidates if p.exists()), None)
+        if next_act is not None:
+            actuals_next = _read_csv_flexible(next_act)
+            if not actuals_next.empty:
+                nn0, tot0 = _nhl_ppp_actual_nonnull(graded_df)
+                print(f"  [NHL] PPP actual coverage (same-day): {nn0}/{tot0}")
+                print(f"  [NHL] Trying next-day actuals: {next_act}")
+                graded_next = run_nhl_grading_core(slate, actuals_next, opp_cache, next_date)
+                nn1, tot1 = _nhl_ppp_actual_nonnull(graded_next)
+                print(f"  [NHL] PPP actual coverage (next-day): {nn1}/{tot1}")
+                if (nn1 > nn0) or (nn1 == nn0 and tot1 > tot0):
+                    graded_df = graded_next
+                    print("  [NHL] Using next-day actuals (better PPP mapping).")
+                else:
+                    print("  [NHL] Keeping same-day actuals.")
     if graded_df.empty:
         print("  No props graded -- skipping analytics")
         xlsx_path = output_dir / f"graded_nhl_{args.date}.xlsx"

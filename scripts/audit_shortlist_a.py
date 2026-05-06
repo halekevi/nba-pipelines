@@ -94,9 +94,12 @@ SHORTLIST: list[dict] = [
 ]
 
 
+MIN_KEPT_RELIABLE = 400  # Below this, threshold lift is often noisy; interpret cautiously.
+
+
 def _norm_pick(raw) -> str:
     t = str(raw or "").strip().lower()
-    if t in ("", "nan", "none", "null", "—", "-", "(missing)"):
+    if t in ("", "nan", "none", "null", "—", "–", "-", "(missing)"):
         return ""
     if t in ("standard", "std"):
         return "standard"
@@ -186,6 +189,12 @@ def _slice_metrics(sub: pd.DataFrame, threshold: float) -> dict:
     void_n = int(sub["result"].eq("VOID").sum())
     pending = int((~sub["result"].isin(["HIT", "MISS", "VOID", "PUSH"])).sum())
 
+    notes = []
+    if kept_n and kept_n < MIN_KEPT_RELIABLE:
+        notes.append(f"kept_n<{MIN_KEPT_RELIABLE}_noisy_lift")
+    if void_n > base_n * 0.25 and base_n > 50:
+        notes.append("high_void_share")
+
     return {
         "base_n": base_n,
         "base_hit_rate": base_hr,
@@ -195,6 +204,7 @@ def _slice_metrics(sub: pd.DataFrame, threshold: float) -> dict:
         "kept_pct_of_decided": kept_pct,
         "void_n": void_n,
         "non_standard_result_n": pending,
+        "audit_notes": ";".join(notes),
     }
 
 
