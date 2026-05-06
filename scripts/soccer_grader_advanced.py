@@ -266,6 +266,8 @@ def _soccer_prop_aliases(prop_norm: str) -> list[str]:
         out.append(_norm_soccer_prop("Goal + Assist"))
     if pr == "shots on target":
         out.append(_norm_soccer_prop("Shots On Target"))
+    if pr in ("total shots", "shots total", "total shot"):
+        out.append(_norm_soccer_prop("Shots"))
     # De-dupe preserving order
     seen: set[str] = set()
     uniq: list[str] = []

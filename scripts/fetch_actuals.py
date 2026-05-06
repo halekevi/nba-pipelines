@@ -614,7 +614,7 @@ def append_nba_duo_combo_actual_rows(df: pd.DataFrame) -> pd.DataFrame:
 
 
 # ── Main sport fetch ──────────────────────────────────────────────────────────
-def fetch_sport(sport_path, date_str, window=2):
+def fetch_sport(sport_path, date_str, window=2, nba_extra_days: int = 0):
     from datetime import datetime as _dt, timedelta as _td
 
     is_college = "college" in sport_path
@@ -630,6 +630,18 @@ def fetch_sport(sport_path, date_str, window=2):
         ]
         print(f"CBB mode: conference-by-conference fetch across {window*2+1}-day window "
               f"({fetch_dates[0]} → {fetch_dates[-1]})")
+    elif sport_path == "nba" and nba_extra_days > 0:
+        # ESPN often splits the same US "slate night" across two calendar dates on the
+        # scoreboard API (e.g. 2026-04-24 returns 3 games while 2026-04-25 holds the
+        # rest). Merge completed games from --date through +nba_extra_days.
+        fetch_dates = [
+            (target_dt + _td(days=d)).strftime("%Y-%m-%d")
+            for d in range(0, nba_extra_days + 1)
+        ]
+        print(
+            f"NBA mode: fetching scoreboards for {', '.join(fetch_dates)} "
+            f"(primary {date_str} + {nba_extra_days} following day(s))"
+        )
     else:
         fetch_dates = [date_str]
         if is_college:
@@ -1150,6 +1162,12 @@ def _nhl_player_rows_from_team_block(team_block, team_abbr):
         ppp = _num(p.get("powerPlayPoints"))
         if ppp is None:
             ppp = _num(p.get("ppPoints"))
+        if ppp is None:
+            # NHL API often provides split PP stats instead of a direct PPP field.
+            ppg = _num(p.get("powerPlayGoals"))
+            ppa = _num(p.get("powerPlayAssists"))
+            if ppg is not None or ppa is not None:
+                ppp = float(ppg or 0.0) + float(ppa or 0.0)
         toi_raw = p.get("toi") or p.get("iceTime") or p.get("timeOnIce")
         toi_min = _nhl_toi_to_minutes(toi_raw)
 
@@ -1632,6 +1650,10 @@ def main():
     ap.add_argument('--soccer-window', default=1, type=int,
                     help='Soccer only: also fetch completed games for the following N calendar days after '
                          '--date (default: 1). Use 0 for single calendar day only.')
+    ap.add_argument('--nba-window', default=1, type=int,
+                    help='NBA only: also fetch scoreboards for the following N calendar days after --date '
+                         '(default: 1) so games ESPN indexes on the next day are included. Use 0 for '
+                         'single calendar day only.')
     args = ap.parse_args()
 
     if not args.date:
@@ -1656,7 +1678,10 @@ def main():
             sport_path = "mens-college-basketball"
         else:
             sport_path = "womens-college-basketball" if args.sport == "WCBB" else "mens-college-basketball"
-        df, empty_reason, nba_box_dnp = fetch_sport(sport_path, args.date, window=args.window)
+        nba_x = max(0, int(args.nba_window)) if args.sport == "NBA" else 0
+        df, empty_reason, nba_box_dnp = fetch_sport(
+            sport_path, args.date, window=args.window, nba_extra_days=nba_x
+        )
 
     if df.empty:
         # Always write a header-only stub so downstream grading never skips due to
