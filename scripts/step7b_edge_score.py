@@ -56,43 +56,31 @@ def resolve_step7_path(root: Path, sport: str) -> Path | None:
     sp = _norm_sport(sport)
     raw_sp = str(sport or "").strip().upper()
     sl = sp.lower()
-    candidates: list[Path] = [
-        root / sp / "outputs" / f"step7_{sl}_ranked.xlsx",
-        root / "NBA" / "data" / "outputs" / "step7_ranked_props.xlsx",
-        root / "NBA" / "outputs" / "step7_nba_ranked.xlsx",
-        root / "NBA" / "data" / "outputs" / "step7_nba1q_ranked_props.xlsx",
-        root / "NBA" / "data" / "outputs" / "step7_nba1h_ranked_props.xlsx",
-        root / "NBA" / "step7_nba1q_ranked_props.xlsx",
-        root / "NBA" / "step7_nba1h_ranked_props.xlsx",
-        root / "NHL" / f"step7_nhl_ranked.xlsx",
-        root / "NHL" / "outputs" / f"step7_{sl}_ranked.xlsx",
-        root / "Soccer" / "outputs" / "step7_soccer_ranked.xlsx",
-        root / "Soccer" / "step7_soccer_ranked.xlsx",
-        root / "Tennis" / "outputs" / "step7_tennis_ranked.xlsx",
-        root / "CBB" / "outputs" / f"step7_{sl}_ranked.xlsx",
-        root / "CBB" / "outputs" / "step6_ranked_cbb.xlsx",
-        root / "CBB" / "step6_ranked_cbb.xlsx",
-    ]
+    Sr = root / "Sports"
+    candidates: list[Path] = []
+
     if raw_sp == "NBA1Q":
         candidates = [
+            Sr / "NBA" / "data" / "outputs" / "step7_nba1q_ranked_props.xlsx",
+            Sr / "NBA" / "step7_nba1q_ranked_props.xlsx",
             root / "NBA" / "data" / "outputs" / "step7_nba1q_ranked_props.xlsx",
             root / "NBA" / "step7_nba1q_ranked_props.xlsx",
-            *candidates,
         ]
     elif raw_sp == "NBA1H":
         candidates = [
+            Sr / "NBA" / "data" / "outputs" / "step7_nba1h_ranked_props.xlsx",
+            Sr / "NBA" / "step7_nba1h_ranked_props.xlsx",
             root / "NBA" / "data" / "outputs" / "step7_nba1h_ranked_props.xlsx",
             root / "NBA" / "step7_nba1h_ranked_props.xlsx",
-            *candidates,
         ]
     elif raw_sp == "WCBB":
         candidates = [
+            Sr / "CBB" / "outputs" / "step6_ranked_wcbb.xlsx",
+            Sr / "CBB" / "step6_ranked_wcbb.xlsx",
             root / "CBB" / "step6_ranked_wcbb.xlsx",
             root / "CBB" / "outputs" / "step6_ranked_wcbb.xlsx",
-            *candidates,
         ]
     elif sp == "MLB":
-        # Canonical MLB step7 lives under Sports/MLB/.
         mlb_root = root / "Sports" / "MLB"
         candidates = [
             mlb_root / "step7_mlb_ranked.xlsx",
@@ -101,8 +89,8 @@ def resolve_step7_path(root: Path, sport: str) -> Path | None:
         ]
     elif sp == "WNBA":
         candidates = [
-            root / "Sports" / "WNBA" / "outputs" / "step7_wnba_ranked.xlsx",
-            root / "Sports" / "WNBA" / "step7_wnba_ranked.xlsx",
+            Sr / "WNBA" / "outputs" / "step7_wnba_ranked.xlsx",
+            Sr / "WNBA" / "step7_wnba_ranked.xlsx",
             root / "WNBA" / "outputs" / "step7_wnba_ranked.xlsx",
             root / "WNBA" / "step7_wnba_ranked.xlsx",
         ]
@@ -111,6 +99,47 @@ def resolve_step7_path(root: Path, sport: str) -> Path | None:
             root / "NFL" / "outputs" / "step7_nfl_ranked.xlsx",
             root / "NFL" / "data" / "outputs" / "step7_nfl_ranked.xlsx",
         ]
+    elif sp == "NHL":
+        candidates = [
+            Sr / "NHL" / f"step7_{sl}_ranked.xlsx",
+            Sr / "NHL" / "outputs" / f"step7_{sl}_ranked.xlsx",
+            root / "NHL" / f"step7_{sl}_ranked.xlsx",
+            root / "NHL" / "outputs" / f"step7_{sl}_ranked.xlsx",
+        ]
+    elif sp == "SOCCER":
+        candidates = [
+            Sr / "Soccer" / "outputs" / "step7_soccer_ranked.xlsx",
+            Sr / "Soccer" / "step7_soccer_ranked.xlsx",
+            root / "Soccer" / "outputs" / "step7_soccer_ranked.xlsx",
+            root / "Soccer" / "step7_soccer_ranked.xlsx",
+        ]
+    elif sp == "TENNIS":
+        candidates = [
+            Sr / "Tennis" / "outputs" / "step7_tennis_ranked.xlsx",
+            root / "Tennis" / "outputs" / "step7_tennis_ranked.xlsx",
+        ]
+    elif sp == "CBB":
+        candidates = [
+            Sr / "CBB" / "outputs" / f"step7_{sl}_ranked.xlsx",
+            Sr / "CBB" / "outputs" / "step6_ranked_cbb.xlsx",
+            Sr / "CBB" / "step6_ranked_cbb.xlsx",
+            root / "CBB" / "outputs" / f"step7_{sl}_ranked.xlsx",
+            root / "CBB" / "outputs" / "step6_ranked_cbb.xlsx",
+            root / "CBB" / "step6_ranked_cbb.xlsx",
+        ]
+    elif sp == "NBA" and raw_sp == "NBA":
+        candidates = [
+            Sr / "NBA" / "data" / "outputs" / "step7_ranked_props.xlsx",
+            Sr / "NBA" / "outputs" / "step7_nba_ranked.xlsx",
+            root / "NBA" / "data" / "outputs" / "step7_ranked_props.xlsx",
+            root / "NBA" / "outputs" / "step7_nba_ranked.xlsx",
+        ]
+    else:
+        candidates = [
+            root / sp / "outputs" / f"step7_{sl}_ranked.xlsx",
+            Sr / sp / "outputs" / f"step7_{sl}_ranked.xlsx",
+        ]
+
     for p in candidates:
         if p.is_file() and _is_zip_xlsx(p):
             return p
@@ -157,7 +186,9 @@ def main() -> None:
         if xlsx is None:
             print(f"[WARN] --step7-xlsx not found: {p}")
     if xlsx is None:
-        xlsx = resolve_step7_path(root, sp)
+        # Pass raw sport label so NBA1Q / NBA1H resolve to the correct step7 workbook
+        # (_norm_sport maps those to NBA for feature geometry only).
+        xlsx = resolve_step7_path(root, str(args.sport).strip().upper())
     if xlsx is None:
         print(f"[WARN] No step7 workbook found for sport={sp} — skip.")
         return

@@ -53,6 +53,8 @@ def load_box_raw_paths(root: Path) -> list[tuple[Path, str | None]]:
             sport = "nhl"
         elif "soccer" in n:
             sport = "soccer"
+        elif "tennis" in n:
+            sport = "tennis"
         elif "mlb" in n:
             sport = "mlb"
         rows.append((p, sport))

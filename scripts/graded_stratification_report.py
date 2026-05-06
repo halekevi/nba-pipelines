@@ -455,6 +455,310 @@ def _apply_tier_gate_recommendations(threshold_rows: pd.DataFrame) -> pd.DataFra
     return out
 
 
+def _segment_tiering_scores(
+    decided: pd.DataFrame,
+    threshold_rows: pd.DataFrame,
+    cal_all: pd.DataFrame,
+) -> pd.DataFrame:
+    """
+    Build independent tiering scorecards for:
+    Goblin, Demon, Standard OVER, Standard UNDER.
+    """
+    if decided.empty:
+        return pd.DataFrame()
+
+    base = decided.copy()
+    base["pick_type_group"] = _pick_type_dir_group(
+        _pick_type_base(base.get("pick_type", pd.Series("", index=base.index))),
+        base.get("direction", pd.Series("", index=base.index)),
+    )
+    keep_segments = {"Goblin", "Demon", "Standard OVER", "Standard UNDER"}
+    base = base[base["pick_type_group"].isin(keep_segments)].copy()
+    if base.empty:
+        return pd.DataFrame()
+
+    seg = (
+        base.groupby(["sport_disp", "pick_type_group"], dropna=False)
+        .agg(
+            n_total=("is_hit", "size"),
+            hit_rate=("is_hit", "mean"),
+            mean_ml_prob=("ml_prob", "mean"),
+        )
+        .reset_index()
+    )
+
+    # Aggregate calibration gap by market segment.
+    cal_seg = pd.DataFrame(columns=["sport_disp", "pick_type_group", "avg_cal_gap"])
+    if not cal_all.empty:
+        c = cal_all.copy()
+        c["sport_disp"] = c.get("sport", "").astype(str)
+        c["pick_type_group"] = c.get("pick_type", "").astype(str).str.upper().str.strip()
+        c["direction"] = c.get("direction", "").astype(str).str.upper().str.strip()
+        c["pick_type_group"] = np.where(
+            c["pick_type_group"].eq("STANDARD"),
+            "Standard " + c["direction"].replace({"": "(unknown dir)"}),
+            c["pick_type_group"].str.title(),
+        )
+        c = c[c["pick_type_group"].isin(keep_segments)].copy()
+        if not c.empty:
+            cal_seg = (
+                c.groupby(["sport_disp", "pick_type_group"], dropna=False)["gap"]
+                .mean()
+                .reset_index()
+                .rename(columns={"gap": "avg_cal_gap"})
+            )
+
+    # Aggregate threshold-policy signal by market segment.
+    pol_seg = pd.DataFrame(columns=["sport_disp", "pick_type_group", "avg_lift", "ok_rate"])
+    if not threshold_rows.empty:
+        t = threshold_rows.copy()
+        t["sport_disp"] = t.get("sport", "").astype(str)
+        t["pick_type"] = t.get("pick_type", "").astype(str).str.upper().str.strip()
+        t["direction"] = t.get("direction", "").astype(str).str.upper().str.strip()
+        t["pick_type_group"] = np.where(
+            t["pick_type"].eq("STANDARD"),
+            "Standard " + t["direction"].replace({"": "(unknown dir)"}),
+            t["pick_type"].str.title(),
+        )
+        t = t[t["pick_type_group"].isin(keep_segments)].copy()
+        if not t.empty:
+            t["ok_flag"] = t.get("policy_status", "").astype(str).str.upper().eq("OK").astype(float)
+            t["n_total"] = pd.to_numeric(t.get("n_total"), errors="coerce").fillna(0.0)
+            t["lift_vs_base"] = pd.to_numeric(t.get("lift_vs_base"), errors="coerce").fillna(0.0)
+            grouped = []
+            for (sp, pg), d in t.groupby(["sport_disp", "pick_type_group"], dropna=False):
+                w = d["n_total"].to_numpy(dtype=float)
+                wt = float(np.nansum(w))
+                if wt <= 0:
+                    avg_lift = float(d["lift_vs_base"].mean()) if len(d) else 0.0
+                    ok_rate = float(d["ok_flag"].mean()) if len(d) else 0.0
+                else:
+                    avg_lift = float(np.nansum(d["lift_vs_base"].to_numpy(dtype=float) * w) / wt)
+                    ok_rate = float(np.nansum(d["ok_flag"].to_numpy(dtype=float) * w) / wt)
+                grouped.append(
+                    {
+                        "sport_disp": sp,
+                        "pick_type_group": pg,
+                        "avg_lift": avg_lift,
+                        "ok_rate": ok_rate,
+                    }
+                )
+            pol_seg = pd.DataFrame(grouped)
+
+    out = seg.merge(cal_seg, on=["sport_disp", "pick_type_group"], how="left").merge(
+        pol_seg, on=["sport_disp", "pick_type_group"], how="left"
+    )
+    out["avg_cal_gap"] = pd.to_numeric(out.get("avg_cal_gap"), errors="coerce").fillna(0.0)
+    out["avg_lift"] = pd.to_numeric(out.get("avg_lift"), errors="coerce").fillna(0.0)
+    out["ok_rate"] = pd.to_numeric(out.get("ok_rate"), errors="coerce").fillna(0.0)
+
+    def rate_row(r: pd.Series) -> str:
+        seg_name = str(r.get("pick_type_group", ""))
+        n = float(r.get("n_total", 0.0))
+        hr = float(r.get("hit_rate", 0.0))
+        gap = float(r.get("avg_cal_gap", 0.0))
+        lift = float(r.get("avg_lift", 0.0))
+        ok_rate = float(r.get("ok_rate", 0.0))
+
+        if seg_name == "Demon":
+            # Demon is intentionally hard to hit; judge more by lift and policy consistency.
+            if n >= 600 and lift >= 0.015 and gap <= 0.24 and ok_rate >= 0.70:
+                return "A"
+            if n >= 350 and lift >= 0.008 and gap <= 0.30 and ok_rate >= 0.60:
+                return "B"
+            if n >= 150 and lift >= 0.000 and gap <= 0.36 and ok_rate >= 0.45:
+                return "C"
+            return "D"
+
+        if seg_name == "Goblin":
+            # Goblin should keep a high floor; calibration matters but is secondary to hit-rate floor.
+            if n >= 600 and hr >= 0.62 and gap <= 0.24 and ok_rate >= 0.70:
+                return "A"
+            if n >= 350 and hr >= 0.57 and gap <= 0.30 and ok_rate >= 0.60:
+                return "B"
+            if n >= 150 and hr >= 0.52 and gap <= 0.36 and ok_rate >= 0.45:
+                return "C"
+            return "D"
+
+        # Standard OVER / Standard UNDER: target stable, calibrated near coin-flip.
+        dist = abs(hr - 0.50)
+        if n >= 600 and dist <= 0.08 and gap <= 0.24 and ok_rate >= 0.70:
+            return "A"
+        if n >= 350 and dist <= 0.12 and gap <= 0.30 and ok_rate >= 0.60:
+            return "B"
+        if n >= 150 and dist <= 0.16 and gap <= 0.36 and ok_rate >= 0.45:
+            return "C"
+        return "D"
+
+    out["segment_rating"] = out.apply(rate_row, axis=1)
+
+    # Ensure every pick-type segment uses a full A/B/C/D ladder by adding
+    # a relative tier computed within each segment across sports.
+    # This keeps the absolute rating above, but guarantees an explicit ABCD
+    # stratification view even when absolute gates cluster in one bucket.
+    out["segment_score"] = 0.0
+    for idx, r in out.iterrows():
+        seg_name = str(r.get("pick_type_group", ""))
+        hr = float(r.get("hit_rate", 0.0))
+        gap = float(r.get("avg_cal_gap", 0.0))
+        lift = float(r.get("avg_lift", 0.0))
+        ok_rate = float(r.get("ok_rate", 0.0))
+        n = float(r.get("n_total", 0.0))
+        n_factor = min(1.0, n / 5000.0)
+        if seg_name == "Demon":
+            # Demon: prioritize lift + policy stability, mildly penalize calibration gap.
+            score = (1.8 * lift) + (0.9 * ok_rate) - (0.45 * gap) + (0.2 * n_factor)
+        elif seg_name == "Goblin":
+            # Goblin: prioritize sustained hit floor + policy stability.
+            score = (1.3 * hr) + (0.8 * ok_rate) + (0.35 * lift) - (0.35 * gap) + (0.15 * n_factor)
+        else:
+            # Standard OVER/UNDER: prioritize calibrated near-coinflip behavior.
+            dist = abs(hr - 0.50)
+            score = (1.0 - dist) + (0.8 * ok_rate) + (0.35 * lift) - (0.45 * gap) + (0.15 * n_factor)
+        out.at[idx, "segment_score"] = float(score)
+
+    def _abcd_by_rank(group: pd.DataFrame) -> pd.Series:
+        g = group.copy()
+        n = len(g)
+        if n <= 1:
+            return pd.Series(["A"] * n, index=g.index)
+        if n == 2:
+            labs = ["A", "C"]
+        elif n == 3:
+            labs = ["A", "B", "D"]
+        else:
+            labs = ["A", "B", "C", "D"]
+        # Higher score => better tier
+        order = g["segment_score"].rank(method="first", ascending=False)
+        q = pd.qcut(order, q=len(labs), labels=labs, duplicates="drop")
+        return pd.Series(q.astype(str).values, index=g.index)
+
+    out["segment_tier_abcd"] = (
+        out.groupby("pick_type_group", group_keys=False).apply(_abcd_by_rank)
+    )
+    out = out.sort_values(["sport_disp", "pick_type_group"]).reset_index(drop=True)
+    return out
+
+
+def _prop_type_tiers(decided: pd.DataFrame, min_group_n: int = 30) -> pd.DataFrame:
+    """
+    Tier props by: prop_type x hit_rate x L5 over/under x edge x consistency.
+    """
+    if decided.empty:
+        return pd.DataFrame()
+
+    d = decided.copy()
+    d["sport_disp"] = d.get("sport_disp", d.get("_sport", "")).astype(str)
+    if "prop" in d.columns:
+        d["prop_type_label"] = d["prop"].astype(str).str.strip()
+    elif "prop_type" in d.columns:
+        d["prop_type_label"] = d["prop_type"].astype(str).str.strip()
+    else:
+        d["prop_type_label"] = "(missing)"
+    d["pick_type_group"] = _pick_type_dir_group(
+        _pick_type_base(d.get("pick_type", pd.Series("", index=d.index))),
+        d.get("direction", pd.Series("", index=d.index)),
+    )
+    keep_segments = {"Goblin", "Demon", "Standard OVER", "Standard UNDER"}
+    d = d[d["pick_type_group"].isin(keep_segments)].copy()
+    if d.empty:
+        return pd.DataFrame()
+
+    d["is_hit"] = pd.to_numeric(d.get("is_hit"), errors="coerce")
+    d["edge"] = pd.to_numeric(d.get("edge"), errors="coerce")
+    d["edge_abs"] = d["edge"].abs()
+
+    # Try to recover date ordering for L5 from common date columns or file names.
+    if "_date" in d.columns:
+        d["_tier_date"] = pd.to_datetime(d["_date"], errors="coerce")
+    elif "date" in d.columns:
+        d["_tier_date"] = pd.to_datetime(d["date"], errors="coerce")
+    else:
+        d["_tier_date"] = pd.NaT
+        if "_file" in d.columns:
+            ds = (
+                d["_file"]
+                .astype(str)
+                .str.extract(r"(\d{4}-\d{2}-\d{2})", expand=False)
+            )
+            d["_tier_date"] = pd.to_datetime(ds, errors="coerce")
+
+    key_cols = ["sport_disp", "prop_type_label", "pick_type_group"]
+    rows: list[dict[str, object]] = []
+    for keys, g in d.groupby(key_cols, dropna=False):
+        g2 = g[g["is_hit"].notna()].copy()
+        n = int(len(g2))
+        if n < int(min_group_n):
+            continue
+        hit_rate = float(g2["is_hit"].mean())
+        edge_mean = float(g2["edge_abs"].mean()) if g2["edge_abs"].notna().any() else 0.0
+        # Binary consistency: 1.0 means stable outcomes, 0.0 means highly variable.
+        std = float(g2["is_hit"].std(ddof=0)) if n > 1 else 0.0
+        consistency = float(max(0.0, min(1.0, 1.0 - (2.0 * std))))
+
+        g3 = g2.sort_values("_tier_date", na_position="last")
+        l5 = g3["is_hit"].tail(5)
+        l5_hit_rate = float(l5.mean()) if len(l5) else hit_rate
+
+        rows.append(
+            {
+                "sport_disp": keys[0],
+                "prop_type": keys[1],
+                "pick_type_group": keys[2],
+                "n_total": n,
+                "hit_rate": hit_rate,
+                "l5_hit_rate": l5_hit_rate,
+                "edge_abs_mean": edge_mean,
+                "consistency": consistency,
+            }
+        )
+
+    out = pd.DataFrame(rows)
+    if out.empty:
+        return out
+
+    # Normalize metrics within each pick-type segment for fair ranking.
+    norm_cols = ["hit_rate", "l5_hit_rate", "edge_abs_mean", "consistency"]
+    for col in norm_cols:
+        out[f"{col}_norm"] = 0.0
+    for seg, g in out.groupby("pick_type_group", dropna=False):
+        idx = g.index
+        for col in norm_cols:
+            v = pd.to_numeric(g[col], errors="coerce")
+            lo, hi = float(v.min()), float(v.max())
+            if np.isfinite(lo) and np.isfinite(hi) and hi > lo:
+                out.loc[idx, f"{col}_norm"] = ((v - lo) / (hi - lo)).astype(float)
+            else:
+                out.loc[idx, f"{col}_norm"] = 0.5
+
+    # Weighted score: your requested components.
+    out["tier_score"] = (
+        (0.35 * out["hit_rate_norm"])
+        + (0.30 * out["l5_hit_rate_norm"])
+        + (0.20 * out["edge_abs_mean_norm"])
+        + (0.15 * out["consistency_norm"])
+    )
+
+    def _abcd_rank(group: pd.DataFrame) -> pd.Series:
+        g = group.copy()
+        n = len(g)
+        if n <= 1:
+            return pd.Series(["A"] * n, index=g.index)
+        if n == 2:
+            labs = ["A", "C"]
+        elif n == 3:
+            labs = ["A", "B", "D"]
+        else:
+            labs = ["A", "B", "C", "D"]
+        order = g["tier_score"].rank(method="first", ascending=False)
+        q = pd.qcut(order, q=len(labs), labels=labs, duplicates="drop")
+        return pd.Series(q.astype(str).values, index=g.index)
+
+    out["tier_abcd"] = out.groupby("pick_type_group", group_keys=False).apply(_abcd_rank)
+    out = out.sort_values(["pick_type_group", "tier_score"], ascending=[True, False]).reset_index(drop=True)
+    return out
+
+
 def _html_escape_df(tab: pd.DataFrame, max_rows: int = 50) -> str:
     if tab.empty:
         return "<p>(no rows)</p>"
@@ -628,6 +932,10 @@ def run(
         threshold_rows.loc[blocked, "lift_vs_base"] = 0.0
     threshold_rows = _apply_tier_gate_recommendations(threshold_rows)
     threshold_rows.to_csv(out_dir / "graded_group_min_thresholds.csv", index=False)
+    segment_tiers = _segment_tiering_scores(decided, threshold_rows, cal_all)
+    segment_tiers.to_csv(out_dir / "graded_segment_tiering_scores.csv", index=False)
+    prop_type_tiers = _prop_type_tiers(decided, min_group_n=max(15, min_cell_n))
+    prop_type_tiers.to_csv(out_dir / "graded_prop_type_tiers.csv", index=False)
 
     tier_a = hit_tbl[
         (hit_tbl["context_known_rate"] >= 0.99)
@@ -678,6 +986,14 @@ h1,h2 {{ font-weight: 600; }}
 <p class="note">Global tiers are unchanged; this is a per-group recommendation table by sport × pipeline × pick_type × tier × direction × prop.</p>
 {_html_escape_df(threshold_rows)}
 
+<h2>Independent market segment ratings</h2>
+<p class="note">Each sport is scored independently for Goblin, Demon, Standard OVER, and Standard UNDER with segment-specific metrics and thresholds.</p>
+{_html_escape_df(segment_tiers)}
+
+<h2>Prop-type tiering by requested metrics</h2>
+<p class="note">Tiered by prop_type × hit_rate × L5 directional hit_rate × edge × consistency, independently within each pick-type segment.</p>
+{_html_escape_df(prop_type_tiers)}
+
 <h2>Tier A (all three known-rates ≥ 0.99)</h2>
 {_html_escape_df(tier_a, max_rows=40)}
 
@@ -691,6 +1007,8 @@ h1,h2 {{ font-weight: 600; }}
     print(f"Wrote {path_main} rows={len(hit_tbl)}")
     print(f"Wrote calibration: {out_dir / 'graded_calibration_bins.csv'} flagged={len(cal_flag)}")
     print(f"Wrote threshold recommendations: {out_dir / 'graded_group_min_thresholds.csv'} rows={len(threshold_rows)}")
+    print(f"Wrote segment ratings: {out_dir / 'graded_segment_tiering_scores.csv'} rows={len(segment_tiers)}")
+    print(f"Wrote prop-type tiers: {out_dir / 'graded_prop_type_tiers.csv'} rows={len(prop_type_tiers)}")
     print(f"Wrote {out_dir / 'graded_stratification_report.html'}")
 
 
