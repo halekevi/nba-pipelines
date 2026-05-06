@@ -205,8 +205,7 @@ def grade(row, actual):
     m = round(actual_f - line if direction == "OVER" else line - actual_f, 2)
     return result, None, m
 
-# "quarters with 3+ points" has no ESPN box aggregate here (needs per-quarter PBP — Option A).
-# Kept self-mapped so diagnostics list it explicitly; actuals will not carry rows until implemented.
+# Quarter milestone props: actuals come from ESPN PBP in fetch_actuals.parse_nba_quarter_milestone_rows.
 PROP_NORM_MAP={
     # short code aliases (common in CBB pipeline files)
     'pts':'points',
@@ -248,6 +247,7 @@ PROP_NORM_MAP={
     'offensive rebounds':'offensive rebounds','defensive rebounds':'defensive rebounds',
     'personal fouls':'personal fouls','fantasy score':'fantasy score',
     'quarters with 3+ points':'quarters with 3+ points',
+    'quarters with 5+ points':'quarters with 5+ points',
     # Milestone yes/no (actuals from box: 1.0 / 0.0 vs typical 0.5 line)
     'double double':'double double','triple double':'triple double',
     'double-double':'double double','triple-double':'triple double',

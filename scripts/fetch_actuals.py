@@ -20,11 +20,15 @@ Fixes vs previous version:
   - Double Double / Triple Double actuals (1.0/0.0) from PTS/REB/AST/STL/BLK >= 10 rules
 
 Quarter / half splits: scripts/fetch_nba_period_actuals.py (--segment 1Q|2Q|3Q|4Q|1H|2H; --sport CBB for college).
+
+"Quarters with 3+ / 5+ Points" are derived from ESPN regulation (Q1–Q4) play-by-play scoring
+on the same summary/core endpoints as the box score (not available as a flat box aggregate).
 """
 
 import argparse
 import re
 import sys
+from collections import defaultdict
 import requests
 import pandas as pd
 import time
@@ -111,9 +115,6 @@ def parse_stats(player_name, t_abbr, stat_map):
             + blk * 3.0
             - tov * 1.0
         )
-
-    # TODO(Option A): "Quarters with 3+ Points" needs per-quarter PBP scoring splits
-    # (see fetch_nba_period_actuals.py). Not emitted here — those legs stay NO_ACTUAL until implemented.
 
     prop_map = {
         'Points':                 pts,
@@ -325,6 +326,138 @@ def parse_boxscore(
                             }
                         )
     return rows, dnp_rows
+
+
+def _nba_athlete_id_to_player_team(box: dict) -> dict[str, tuple[str, str]]:
+    """Map ESPN athlete id -> (displayName, slate team abbr) from summary boxscore."""
+    out: dict[str, tuple[str, str]] = {}
+    for bteam in box.get("boxscore", {}).get("players", []):
+        t_abbr_raw = bteam.get("team", {}).get("abbreviation", "")
+        t_abbr = ESPN_TO_SLATE_ABBREV.get(t_abbr_raw, t_abbr_raw)
+        for stat_group in bteam.get("statistics", []):
+            for athlete in stat_group.get("athletes", []):
+                a = athlete.get("athlete", {}) or {}
+                aid = str(a.get("id", "")).strip()
+                name = str(a.get("displayName", "")).strip()
+                if aid and name:
+                    out[aid] = (name, t_abbr)
+    return out
+
+
+def _nba_plays_from_summary(box: dict, event_id: str) -> list:
+    """Plays array from game summary JSON, or ESPN core play-by-play XHR if missing."""
+    gp = box.get("gamepackageJSON")
+    if isinstance(gp, dict) and isinstance(gp.get("plays"), list):
+        return gp["plays"]
+    if isinstance(box.get("plays"), list):
+        return box["plays"]
+    eid = str(event_id or "").strip()
+    if not eid:
+        return []
+    try:
+        url = f"https://cdn.espn.com/core/nba/playbyplay?gameId={eid}&xhr=1"
+        r = requests.get(url, headers=HEADERS, timeout=25)
+        r.raise_for_status()
+        payload = r.json() or {}
+        gp2 = payload.get("gamepackageJSON", {}) or {}
+        pl = gp2.get("plays") or []
+        return pl if isinstance(pl, list) else []
+    except Exception:
+        return []
+
+
+def _nba_regulation_period_points_from_plays(plays: list) -> dict[str, dict[int, float]]:
+    """
+    Per athlete ESPN id: points scored in each regulation quarter (1–4) from PBP.
+    Mirrors scoring attribution in fetch_nba_period_actuals._parse_game_period_stats.
+    """
+    acc: dict[str, dict[int, float]] = defaultdict(lambda: defaultdict(float))
+
+    def add_pts(aid: str, pnum: int, pts: float) -> None:
+        if not aid or pnum < 1 or pnum > 4 or pts <= 0:
+            return
+        acc[aid][pnum] += float(pts)
+
+    for play in plays:
+        if not isinstance(play, dict):
+            continue
+        pnum = int((play.get("period") or {}).get("number") or 0)
+        if pnum < 1 or pnum > 4:
+            continue
+
+        text = str(play.get("text", "") or "")
+        ltxt = text.lower()
+        participants = [
+            str((p.get("athlete") or {}).get("id", "")).strip()
+            for p in (play.get("participants") or [])
+            if isinstance(p, dict)
+        ]
+        participants = [p for p in participants if p]
+        primary = participants[0] if participants else ""
+
+        if "free throw" in ltxt:
+            if primary:
+                add_pts(primary, pnum, 1.0 if "makes free throw" in ltxt else 0.0)
+            continue
+
+        made = " makes " in f" {ltxt} "
+        missed = " misses " in f" {ltxt} "
+        if not (made or missed):
+            continue
+        if "free throw" in ltxt:
+            continue
+
+        is_shot = bool(play.get("shootingPlay")) or any(
+            k in ltxt for k in ("jumper", "jumpshot", "layup", "dunk", "hook shot", "tip shot", "shot")
+        )
+        if not is_shot or not primary:
+            continue
+
+        if not made:
+            continue
+
+        is_three = ("three point" in ltxt) or ("3-point" in ltxt)
+        score_val = play.get("scoreValue")
+        try:
+            pts = float(score_val)
+        except (TypeError, ValueError):
+            pts = 3.0 if is_three else 2.0
+        add_pts(primary, pnum, pts)
+
+    return acc
+
+
+def parse_nba_quarter_milestone_rows(box: dict, event_id: str = "") -> list[dict]:
+    """
+    Build actuals rows for PrizePicks-style regulation quarter scoring props using ESPN PBP.
+    Emits 0.0–4.0 for every player listed in the boxscore roster.
+    """
+    athlete_meta = _nba_athlete_id_to_player_team(box)
+    if not athlete_meta:
+        return []
+
+    plays = _nba_plays_from_summary(box, event_id)
+    acc = _nba_regulation_period_points_from_plays(plays)
+
+    rows: list[dict] = []
+    for aid, (player_name, team_abbr) in athlete_meta.items():
+        per = acc.get(aid, {})
+        n_ge_3 = sum(1 for q in (1, 2, 3, 4) if float(per.get(q, 0.0)) >= 3.0)
+        n_ge_5 = sum(1 for q in (1, 2, 3, 4) if float(per.get(q, 0.0)) >= 5.0)
+        pl_norm = normalize_player_name(player_name)
+        for prop_type, val in (
+            ("Quarters with 3+ Points", float(n_ge_3)),
+            ("Quarters with 5+ Points", float(n_ge_5)),
+        ):
+            rows.append(
+                {
+                    "player": pl_norm,
+                    "team": team_abbr,
+                    "prop_type": prop_type,
+                    "actual": round(val, 1),
+                }
+            )
+    return rows
 
 
 def merge_nba_box_dnp_into_injuries_csv(
@@ -707,8 +840,13 @@ def fetch_sport(sport_path, date_str, window=2, nba_extra_days: int = 0):
             collect_dnp=(sport_path == "nba"),
         )
         all_rows.extend(stat_rows)
+        if sport_path == "nba":
+            qmile = parse_nba_quarter_milestone_rows(box, event_id=str(event_id))
+            all_rows.extend(qmile)
+            print(f"    -> {len(stat_rows)} stat rows (+{len(qmile)} quarter-milestone)")
+        else:
+            print(f"    -> {len(stat_rows)} stat rows")
         all_box_dnp.extend(dnp_part)
-        print(f"    -> {len(stat_rows)} stat rows")
 
     if not all_rows:
         # Distinguish "no games on slate" vs "games not final yet" for downstream stubs.
