@@ -65,6 +65,26 @@ def main():
 
     # Normalize team keys in both frames
     df["opp_team"] = df["opp_team"].apply(norm_team)
+
+    # Combo props: step2 leaves opp_team blank. Player_1 is on team_1, player_2 on team_2
+    # (same game). Use team_2 as the defense team_1 faces (same as singles opp).
+    if "is_combo_player" in df.columns and "team_1" in df.columns and "team_2" in df.columns:
+        icp = pd.to_numeric(df["is_combo_player"], errors="coerce").fillna(0).astype(int).eq(1)
+        blank_opp = df["opp_team"].isna() | df["opp_team"].astype(str).str.strip().isin(["", "nan", "None"])
+        for idx in df.index[icp & blank_opp]:
+            t1 = norm_team(df.at[idx, "team_1"])
+            t2 = norm_team(df.at[idx, "team_2"])
+            if t1 and t2 and t1 != t2:
+                df.at[idx, "opp_team"] = t2
+            elif "pp_home_team" in df.columns and "pp_away_team" in df.columns:
+                ph = norm_team(df.at[idx, "pp_home_team"])
+                pa = norm_team(df.at[idx, "pp_away_team"])
+                if t1 and ph and pa:
+                    if t1 == ph:
+                        df.at[idx, "opp_team"] = pa
+                    elif t1 == pa:
+                        df.at[idx, "opp_team"] = ph
+
     d["TEAM_ABBREVIATION"] = d["TEAM_ABBREVIATION"].apply(norm_team)
 
     # Also normalize defense with aliases so both sides match
@@ -92,6 +112,9 @@ def main():
     if unmatched:
         print(f"  ⚠️  Unmatched opp teams: {sorted(unmatched)}")
         print(f"     Check TEAM_ALIAS_FIX or refresh defense_team_summary.csv")
+
+    if "def_tier" in df.columns and "DEF_TIER" not in df.columns:
+        df = df.rename(columns={"def_tier": "DEF_TIER"})
 
     _dt_col = "DEF_TIER" if "DEF_TIER" in df.columns else ("def_tier" if "def_tier" in df.columns else None)
     if _dt_col:

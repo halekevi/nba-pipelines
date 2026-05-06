@@ -77,14 +77,22 @@ def main():
     # Now also runs when the column exists but has blank values (e.g. unicode
     # player names like Luka Dončić, Nikola Jokić that upstream step2 couldn't
     # resolve via nba_api but whose ESPN IDs are in the DB).
-    _needs_bridge = (
-        id_col == "nba_player_id"
+    _has_espn_col = "ESPN_ATHLETE_ID" in slate.columns
+    _any_empty_espn = (not _has_espn_col) or (
+        slate["ESPN_ATHLETE_ID"].astype(str).str.strip().eq("").any()
+    )
+    _icp = pd.to_numeric(slate.get("is_combo_player", 0), errors="coerce").fillna(0).astype(int).eq(1)
+    _pipe_pid = slate.get("nba_player_id", pd.Series("", index=slate.index)).astype(str).str.contains("|", na=False)
+    _combo_gaps = (
+        "player_1" in slate.columns
+        and "player_2" in slate.columns
+        and (_icp | _pipe_pid).any()
         and (
-            "ESPN_ATHLETE_ID" not in slate.columns
-            or (slate.get("ESPN_ATHLETE_ID", pd.Series(dtype=str))
-                   .astype(str).str.strip().eq("").any())
+            not _has_espn_col
+            or (_icp & slate["ESPN_ATHLETE_ID"].astype(str).str.strip().eq("")).any()
         )
     )
+    _needs_bridge = (id_col == "nba_player_id" and _any_empty_espn) or _combo_gaps
     if _needs_bridge:
         print("→ Building ESPN ID bridge from DB (player name lookup)...")
         rows = con.execute(
@@ -183,6 +191,27 @@ def main():
             slate.loc[blank_mask, "ESPN_ATHLETE_ID"] = (
                 slate.loc[blank_mask, "player"].str.strip().map(_resolve_name)
             )
+
+        # Combo rows: `player` is "A + B" so the map above leaves ESPN blank.
+        # Step2 provides player_1 / player_2 — build "espn1|espn2" for get_vals_combo().
+        _icp = pd.to_numeric(slate.get("is_combo_player", 0), errors="coerce").fillna(0).astype(int).eq(1)
+        _pipe = slate.get("nba_player_id", pd.Series("", index=slate.index)).astype(str).str.contains("|", na=False)
+        _combo_like = _icp | _pipe
+        _still_blank = slate["ESPN_ATHLETE_ID"].astype(str).str.strip().eq("")
+        if (
+            _combo_like.any()
+            and _still_blank.any()
+            and "player_1" in slate.columns
+            and "player_2" in slate.columns
+        ):
+            for idx in slate.index[_combo_like & _still_blank]:
+                p1 = str(slate.at[idx, "player_1"]).strip()
+                p2 = str(slate.at[idx, "player_2"]).strip()
+                if not p1 or not p2:
+                    continue
+                e1, e2 = _resolve_name(p1), _resolve_name(p2)
+                if e1 and e2:
+                    slate.at[idx, "ESPN_ATHLETE_ID"] = f"{e1}|{e2}"
 
         no_id   = slate[slate["ESPN_ATHLETE_ID"].astype(str).str.strip().eq("")]["player"].unique()
         bridged = slate["ESPN_ATHLETE_ID"].astype(str).str.strip().ne("").sum()
