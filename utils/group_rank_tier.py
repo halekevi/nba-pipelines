@@ -15,8 +15,11 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-# Default A/B/C thresholds on ml_prob (Standard, and sports without overrides).
+# Default A/B/C thresholds on ml_prob (sports without overrides).
 DEFAULT_ML_PROB_CUTS: tuple[float, float, float] = (0.71, 0.65, 0.58)
+# Direction-separated Standard profiles.
+DEFAULT_STANDARD_OVER_CUTS: tuple[float, float, float] = (0.73, 0.69, 0.63)
+DEFAULT_STANDARD_UNDER_CUTS: tuple[float, float, float] = (0.71, 0.67, 0.61)
 
 # Format: sport_slug → {group: (A_cut, B_cut, C_cut)} | (A_cut, B_cut, C_cut)
 # Plain tuple → all groups for that sport. Dict → group-specific; missing groups → DEFAULT.
@@ -29,6 +32,15 @@ SPORT_ML_PROB_CUTS: dict[str, tuple[float, float, float] | dict[str, tuple[float
         # Same MLB probability scale as Demon fallback; DEFAULT (0.71,…) yields ~zero Standard A’s.
         "standard": (0.58, 0.52, 0.47),
         "goblin": (0.58, 0.52, 0.47),  # distance fallback when no standard_line; same scale as Standard
+    },
+}
+
+# Optional Standard direction overrides by sport.
+SPORT_STANDARD_DIRECTION_CUTS: dict[str, dict[str, tuple[float, float, float]]] = {
+    # MLB standard probabilities are compressed vs NBA-scale outputs.
+    "mlb": {
+        "OVER": (0.58, 0.52, 0.47),
+        "UNDER": (0.56, 0.50, 0.45),
     },
 }
 
@@ -45,6 +57,17 @@ def _resolve_ml_prob_cuts(sport: str, pick_type: str | None) -> tuple[float, flo
         # MLB/SPORT_ML_PROB_CUTS dict keys (standard, goblin, demon) are explicit; missing key → DEFAULT
         return sport_entry.get(pt_key, DEFAULT_ML_PROB_CUTS)
     return DEFAULT_ML_PROB_CUTS
+
+
+def _resolve_standard_direction_cuts(sport: str, direction: str | None) -> tuple[float, float, float]:
+    sport_key = (sport or "").strip().lower()
+    d = (direction or "").strip().upper()
+    sp = SPORT_STANDARD_DIRECTION_CUTS.get(sport_key, {})
+    if d in sp:
+        return sp[d]
+    if d == "UNDER":
+        return DEFAULT_STANDARD_UNDER_CUTS
+    return DEFAULT_STANDARD_OVER_CUTS
 
 
 def _safe_float_prob(ml_prob: object) -> float:
@@ -145,7 +168,7 @@ def _tier_from_group(
             return "D"
         return _tier_from_ml_scalar(ml_prob, *cuts)
 
-    return _tier_from_ml_scalar(ml_prob, *cuts)
+    return _tier_from_ml_scalar(ml_prob, *_resolve_standard_direction_cuts(sport, direction))
 
 
 def _first_col(df: pd.DataFrame, names: list[str]) -> str | None:
@@ -171,6 +194,7 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
     mc = _first_col(out, ["ml_prob"])
     lc = _first_col(out, ["line", "Line", "line_score"])
     sc = _first_col(out, ["standard_line", "Standard Line"])
+    dc = _first_col(out, ["bet_direction", "Direction", "direction", "recommended_side"])
 
     pt_s = out[pc].astype(str) if pc else pd.Series("Standard", index=idx)
     pt_lower = pt_s.str.strip().str.lower()
@@ -187,8 +211,17 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
     c_gob = _resolve_ml_prob_cuts(sport, "goblin")
     c_dem = _resolve_ml_prob_cuts(sport, "demon")
     t_std = _tier_from_ml_array(ml_raw, *c_std)
+    c_std_over = _resolve_standard_direction_cuts(sport, "OVER")
+    c_std_under = _resolve_standard_direction_cuts(sport, "UNDER")
+    t_std_over = _tier_from_ml_array(ml_raw, *c_std_over)
+    t_std_under = _tier_from_ml_array(ml_raw, *c_std_under)
     t_gob_fb = _tier_from_ml_array(ml_raw, *c_gob)
     t_dem_fb = _tier_from_ml_array(ml_raw, *c_dem)
+    dr = (
+        out[dc].astype(str).str.upper().str.strip().to_numpy()
+        if dc
+        else np.full(n, "OVER", dtype=object)
+    )
 
     ln = (
         pd.to_numeric(out[lc], errors="coerce").to_numpy(dtype=float)
@@ -205,7 +238,10 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
     tier = np.full(n, "D", dtype=object)
     tier_src = np.full(n, "ml_prob", dtype=object)
 
-    tier[is_non_gd] = t_std[is_non_gd]
+    std_over = is_non_gd & (dr != "UNDER")
+    std_under = is_non_gd & (dr == "UNDER")
+    tier[std_over] = t_std_over[std_over]
+    tier[std_under] = t_std_under[std_under]
 
     has_gd_dist = is_gob & np.isfinite(sl) & np.isfinite(ln)
     t_gob_d = np.where(
