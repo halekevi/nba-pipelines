@@ -1,6 +1,6 @@
 {
   "build_date": "2026-05-06",
-  "generated_at": "2026-05-06T05:15:42.831584+00:00",
+  "generated_at": "2026-05-06T13:06:10.172268+00:00",
   "discards": {
     "NHL": {
       "fantasy_score_excluded": 8,
@@ -9,13 +9,13 @@
       "payout_below_3x": 38
     },
     "NBA": {
-      "prop_banned": 167,
-      "directional_l5_hr_fail": 810,
-      "standard_over_edge_below_floor": 44,
+      "prop_banned": 168,
+      "directional_l5_hr_fail": 882,
+      "standard_over_edge_below_floor": 46,
       "standard_under_edge_below_floor": 4,
-      "prop_quality_below_floor": 46,
+      "prop_quality_below_floor": 76,
       "final_pool_kept": 263,
-      "payout_below_3x": 68
+      "payout_below_3x": 70
     },
     "NBA1H": {
       "prop_banned": 52,
@@ -24,22 +24,22 @@
       "final_pool_kept": 6
     },
     "NBA1Q": {
-      "directional_l5_hr_fail": 48,
-      "standard_over_edge_below_floor": 7,
-      "prop_quality_below_floor": 3,
-      "final_pool_kept": 58,
-      "payout_below_3x": 77
+      "directional_l5_hr_fail": 47,
+      "standard_over_edge_below_floor": 4,
+      "prop_quality_below_floor": 8,
+      "final_pool_kept": 27,
+      "payout_below_3x": 29
     },
     "SOCCER": {
-      "directional_l5_hr_fail": 6,
+      "directional_l5_hr_fail": 12,
       "final_pool_kept": 298
     },
     "TENNIS": {
       "final_pool_kept": 35,
-      "payout_below_3x": 85
+      "payout_below_3x": 87
     },
     "CROSS": {
-      "payout_below_3x": 38
+      "payout_below_3x": 9
     }
   },
   "funnel": {
@@ -57,85 +57,85 @@
     ],
     "snapshots": {
       "input": {
-        "ALL": 1961,
+        "ALL": 2039,
         "NHL": 97,
-        "NBA": 1603,
+        "NBA": 1708,
         "NBA1H": 107,
-        "NBA1Q": 116,
-        "SOCCER": 3,
+        "NBA1Q": 86,
+        "SOCCER": 6,
         "TENNIS": 35
       },
       "after_prop_ban": {
-        "ALL": 1742,
+        "ALL": 1819,
         "NHL": 97,
-        "NBA": 1436,
+        "NBA": 1540,
         "NBA1H": 55,
-        "NBA1Q": 116,
-        "SOCCER": 3,
+        "NBA1Q": 86,
+        "SOCCER": 6,
         "TENNIS": 35
       },
       "after_fantasy_score": {
-        "ALL": 1738,
+        "ALL": 1815,
         "NHL": 93,
-        "NBA": 1436,
+        "NBA": 1540,
         "NBA1H": 55,
-        "NBA1Q": 116,
-        "SOCCER": 3,
+        "NBA1Q": 86,
+        "SOCCER": 6,
         "TENNIS": 35
       },
       "after_directional_l5_hr": {
-        "ALL": 802,
+        "ALL": 805,
         "NHL": 66,
-        "NBA": 626,
+        "NBA": 658,
         "TENNIS": 35,
-        "NBA1Q": 68,
+        "NBA1Q": 39,
         "NBA1H": 7
       },
       "after_standard_over_edge_floor": {
-        "ALL": 750,
+        "ALL": 754,
         "NHL": 66,
-        "NBA": 582,
+        "NBA": 612,
         "TENNIS": 35,
-        "NBA1Q": 61,
+        "NBA1Q": 35,
         "NBA1H": 6
       },
       "after_standard_under_edge_floor": {
-        "ALL": 746,
+        "ALL": 750,
         "NHL": 66,
-        "NBA": 578,
+        "NBA": 608,
         "TENNIS": 35,
-        "NBA1Q": 61,
+        "NBA1Q": 35,
         "NBA1H": 6
       },
       "after_picktype_direction_tier_policy": {
-        "ALL": 746,
+        "ALL": 750,
         "NHL": 66,
-        "NBA": 578,
+        "NBA": 608,
         "TENNIS": 35,
-        "NBA1Q": 61,
+        "NBA1Q": 35,
         "NBA1H": 6
       },
       "after_pick_type": {
-        "ALL": 746,
+        "ALL": 750,
         "NHL": 66,
-        "NBA": 578,
+        "NBA": 608,
         "TENNIS": 35,
-        "NBA1Q": 61,
+        "NBA1Q": 35,
         "NBA1H": 6
       },
       "after_prop_quality": {
-        "ALL": 697,
+        "ALL": 666,
         "NHL": 66,
         "NBA": 532,
         "TENNIS": 35,
-        "NBA1Q": 58,
+        "NBA1Q": 27,
         "NBA1H": 6
       },
       "after_void_reason": {
-        "ALL": 391,
-        "NBA": 289,
+        "ALL": 380,
+        "NBA": 304,
         "TENNIS": 35,
-        "NBA1Q": 61,
+        "NBA1Q": 35,
         "NBA1H": 6
       }
     }

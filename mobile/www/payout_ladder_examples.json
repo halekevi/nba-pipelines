@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-06T05:15:42.827333+00:00",
+  "generated_at": "2026-05-06T13:06:10.168090+00:00",
   "examples": [
     {
       "composition": "1S+1G+0D",
@@ -7,23 +7,23 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -33,23 +33,23 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -59,23 +59,23 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -85,23 +85,23 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -111,23 +111,23 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -137,23 +137,23 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -163,9 +163,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -189,9 +189,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -208,14 +208,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -225,9 +225,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -244,14 +244,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -261,9 +261,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -280,14 +280,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -297,9 +297,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -316,14 +316,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -333,9 +333,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -352,14 +352,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -369,9 +369,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -388,14 +388,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -405,29 +405,29 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 14.5,
-          "standard_line": 15.5,
+          "player": "Jordan Clarkson",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 5.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -441,23 +441,23 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
           "player": "Josh Hart",
@@ -477,9 +477,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -513,9 +513,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -542,14 +542,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -559,9 +559,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -588,14 +588,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -605,9 +605,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -634,14 +634,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -651,9 +651,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -680,14 +680,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -697,9 +697,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -726,14 +726,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -743,9 +743,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -772,14 +772,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -789,9 +789,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -808,20 +808,20 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 14.5,
-          "standard_line": 15.5,
+          "player": "Jordan Clarkson",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 5.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -835,9 +835,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -854,14 +854,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
           "player": "Josh Hart",
@@ -881,9 +881,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -927,9 +927,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -966,14 +966,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -983,9 +983,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1022,14 +1022,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1039,9 +1039,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1078,14 +1078,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1095,9 +1095,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1134,14 +1134,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1151,9 +1151,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1190,14 +1190,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1207,9 +1207,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1246,14 +1246,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1263,9 +1263,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1292,20 +1292,20 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 14.5,
-          "standard_line": 15.5,
+          "player": "Jordan Clarkson",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 5.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1319,9 +1319,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1348,14 +1348,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
           "player": "Josh Hart",
@@ -1375,9 +1375,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1431,9 +1431,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1480,14 +1480,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 0.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1497,9 +1497,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1546,14 +1546,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1563,9 +1563,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1612,14 +1612,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1629,9 +1629,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1678,14 +1678,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1695,9 +1695,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1744,14 +1744,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1761,9 +1761,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1810,14 +1810,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 3.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         }
       ]
     },
@@ -1827,9 +1827,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1866,20 +1866,20 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
-          "player": "Karl-Anthony Towns",
-          "prop_type": "Rebs+Asts",
-          "line": 14.5,
-          "standard_line": 15.5,
+          "player": "Jordan Clarkson",
+          "prop_type": "Points",
+          "line": 3.5,
+          "standard_line": 5.0,
           "pick_type": "Goblin",
           "delta": 2.0,
           "direction": "OVER",
@@ -1893,9 +1893,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
@@ -1932,14 +1932,14 @@
           "hit_rate": 0.8
         },
         {
-          "player": "Julian Champagnie",
-          "prop_type": "Points",
-          "line": 6.5,
-          "standard_line": 8.5,
+          "player": "Devin Vassell",
+          "prop_type": "Rebounds",
+          "line": 2.5,
+          "standard_line": 4.0,
           "pick_type": "Goblin",
           "delta": 1.5,
           "direction": "OVER",
-          "hit_rate": 1.0
+          "hit_rate": 0.8
         },
         {
           "player": "Josh Hart",
@@ -1959,9 +1959,9 @@
       "legs": [
         {
           "player": "Ayo Dosunmu",
-          "prop_type": "Pts+Rebs+Asts",
-          "line": 17.5,
-          "standard_line": 17.5,
+          "prop_type": "Points",
+          "line": 11.5,
+          "standard_line": 11.5,
           "pick_type": "Standard",
           "delta": 0.0,
           "direction": "OVER",
