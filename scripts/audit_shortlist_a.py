@@ -40,9 +40,9 @@ SHORTLIST: list[dict] = [
         "threshold": 0.1109,
     },
     {
-        "label": "Soccer (missing pick_type) OVER Shots",
+        "label": "Soccer OVER Shots (all pick types; legacy 'missing PT' now inferred in JSON)",
         "sport": "Soccer",
-        "pick": "missing",
+        "pick": "any",
         "direction": "OVER",
         "props": ("Shots",),
         "threshold": 0.3768,
@@ -187,6 +187,8 @@ def _load_nba1q_frames(outputs_dir: Path) -> pd.DataFrame:
 def _pick_mask(df: pd.DataFrame, pick_key: str) -> pd.Series:
     if pick_key == "missing":
         return df["pick_norm"].eq("")
+    if pick_key == "any":
+        return pd.Series(True, index=df.index)
     return df["pick_norm"].eq(pick_key)
 
 
