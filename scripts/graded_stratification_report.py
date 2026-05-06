@@ -6,6 +6,10 @@ Tier 1: hit rates by (sport, prop, direction, pick_type, line_bucket) plus
 context_known / defense_known / minutes_known. Goblin/Demon UNDER rows are
 dropped (invalid market side).
 
+Segment and prop-type tier scores blend every discoverable numeric graded/pipeline
+column (IDs, labels, and outcomes excluded) with min–max normalization within
+market segment, not only hit rate / edge / L5 / consistency.
+
 Calibration: per (sport, direction, pick_type) with n>=100, decile bins on
 ml_prob vs result_binary; flag bins where |mean_pred - mean_true| > 0.08.
 
@@ -198,6 +202,108 @@ def _drop_invalid_goblin_demon_under(df: pd.DataFrame) -> pd.DataFrame:
 def _result_binary(s: pd.Series) -> pd.Series:
     u = s.astype(str).str.strip().str.upper()
     return pd.Series(np.where(u == "HIT", 1.0, np.where(u == "MISS", 0.0, np.nan)), index=s.index)
+
+
+_TIER_SIGNAL_LABEL_BLOCKLIST = frozenset(
+    {
+        "is_hit",
+        "result",
+        "result_u",
+        "result_binary",
+        "prop",
+        "prop_type",
+        "prop_type_norm",
+        "prop_norm",
+        "pick_type",
+        "pick_type_base",
+        "pick_type_group",
+        "direction",
+        "bet_direction",
+        "final_bet_direction",
+        "tier",
+        "tier_group",
+        "def_tier",
+        "def_tier_norm",
+        "minutes_tier",
+        "pipeline",
+        "pipeline_name",
+        "pipeline_group",
+        "sport_disp",
+        "sport",
+        "_sport",
+        "home_away",
+        "h2h_bucket",
+        "role",
+        "line_bucket",
+        "prop_type_label",
+        "void_reason",
+        "description",
+        "game_start",
+        "start_time",
+        "fetched_at",
+        "hits",
+        "n",
+    }
+)
+
+
+def _is_blocked_tier_signal_column(name: str) -> bool:
+    nl = str(name).strip().lower()
+    if not nl or nl in _TIER_SIGNAL_LABEL_BLOCKLIST:
+        return True
+    if nl.startswith("_"):
+        return True
+    if nl.endswith("_id") or nl.endswith("_ids"):
+        return True
+    if "url" in nl or "slug" in nl or "token" in nl:
+        return True
+    return False
+
+
+def _discover_tier_numeric_columns(
+    df: pd.DataFrame,
+    *,
+    min_nonnull_frac: float = 0.05,
+    min_nunique: int = 2,
+) -> list[str]:
+    """
+    Numeric pipeline / graded columns to blend into tier scores (row-level).
+    Excludes labels, IDs, and outcome columns.
+    """
+    if df.empty:
+        return []
+    n = len(df)
+    out: list[str] = []
+    for c in df.columns:
+        if _is_blocked_tier_signal_column(c):
+            continue
+        s = pd.to_numeric(df[c], errors="coerce")
+        if float(s.notna().sum()) / float(n) < float(min_nonnull_frac):
+            continue
+        if int(s.nunique(dropna=True)) < int(min_nunique):
+            continue
+        out.append(str(c))
+    return sorted(out)
+
+
+def _minmax_norm_series_by_group(
+    df: pd.DataFrame,
+    value_col: str,
+    group_col: str,
+) -> pd.Series:
+    """Per-group min–max to [0,1]; degenerate groups -> 0.5."""
+    out = pd.Series(0.5, index=df.index, dtype=float)
+    if value_col not in df.columns or group_col not in df.columns:
+        return out
+    v = pd.to_numeric(df[value_col], errors="coerce")
+    for gval, idx in df.groupby(group_col, dropna=False).groups.items():
+        sub = v.loc[idx]
+        lo, hi = float(np.nanmin(sub.to_numpy(dtype=float))), float(np.nanmax(sub.to_numpy(dtype=float)))
+        if not np.isfinite(lo) or not np.isfinite(hi) or hi <= lo:
+            out.loc[idx] = 0.5
+        else:
+            out.loc[idx] = ((sub - lo) / (hi - lo)).clip(0.0, 1.0)
+    return out
 
 
 def _calibration_rows(
@@ -477,15 +583,20 @@ def _segment_tiering_scores(
     if base.empty:
         return pd.DataFrame()
 
-    seg = (
-        base.groupby(["sport_disp", "pick_type_group"], dropna=False)
-        .agg(
-            n_total=("is_hit", "size"),
-            hit_rate=("is_hit", "mean"),
-            mean_ml_prob=("ml_prob", "mean"),
-        )
-        .reset_index()
-    )
+    agg_map: dict[str, tuple[str, str]] = {
+        "n_total": ("is_hit", "size"),
+        "hit_rate": ("is_hit", "mean"),
+        "mean_ml_prob": ("ml_prob", "mean"),
+    }
+    # Blend every discoverable numeric stat (row-level) into segment scoring.
+    extra_sig = [
+        c
+        for c in _discover_tier_numeric_columns(base)
+        if c != "ml_prob" and c in base.columns
+    ]
+    for c in extra_sig:
+        agg_map[f"sig_mean__{c}"] = (c, "mean")
+    seg = base.groupby(["sport_disp", "pick_type_group"], dropna=False).agg(**agg_map).reset_index()
 
     # Aggregate calibration gap by market segment.
     cal_seg = pd.DataFrame(columns=["sport_disp", "pick_type_group", "avg_cal_gap"])
@@ -552,6 +663,19 @@ def _segment_tiering_scores(
     out["avg_lift"] = pd.to_numeric(out.get("avg_lift"), errors="coerce").fillna(0.0)
     out["ok_rate"] = pd.to_numeric(out.get("ok_rate"), errors="coerce").fillna(0.0)
 
+    sig_cols = [c for c in out.columns if str(c).startswith("sig_mean__")]
+    out["stat_signal_composite"] = 0.0
+    if sig_cols:
+        norm_sum = pd.Series(0.0, index=out.index, dtype=float)
+        norm_cnt = pd.Series(0.0, index=out.index, dtype=float)
+        tmp_sig = out[["pick_type_group"] + sig_cols].copy()
+        for c in sig_cols:
+            nn = _minmax_norm_series_by_group(tmp_sig, c, "pick_type_group")
+            norm_sum = norm_sum + nn.fillna(0.5)
+            norm_cnt = norm_cnt + 1.0
+        out["stat_signal_composite"] = np.where(norm_cnt > 0, norm_sum / norm_cnt, 0.0)
+    out["segment_signal_n_features"] = int(len(sig_cols))
+
     def rate_row(r: pd.Series) -> str:
         seg_name = str(r.get("pick_type_group", ""))
         n = float(r.get("n_total", 0.0))
@@ -597,6 +721,7 @@ def _segment_tiering_scores(
     # This keeps the absolute rating above, but guarantees an explicit ABCD
     # stratification view even when absolute gates cluster in one bucket.
     out["segment_score"] = 0.0
+    comp_series = pd.to_numeric(out["stat_signal_composite"], errors="coerce").fillna(0.0)
     for idx, r in out.iterrows():
         seg_name = str(r.get("pick_type_group", ""))
         hr = float(r.get("hit_rate", 0.0))
@@ -605,6 +730,7 @@ def _segment_tiering_scores(
         ok_rate = float(r.get("ok_rate", 0.0))
         n = float(r.get("n_total", 0.0))
         n_factor = min(1.0, n / 5000.0)
+        stat_c = float(comp_series.loc[idx])
         if seg_name == "Demon":
             # Demon: prioritize lift + policy stability, mildly penalize calibration gap.
             score = (1.8 * lift) + (0.9 * ok_rate) - (0.45 * gap) + (0.2 * n_factor)
@@ -615,6 +741,8 @@ def _segment_tiering_scores(
             # Standard OVER/UNDER: prioritize calibrated near-coinflip behavior.
             dist = abs(hr - 0.50)
             score = (1.0 - dist) + (0.8 * ok_rate) + (0.35 * lift) - (0.45 * gap) + (0.15 * n_factor)
+        # Mean of min–max-normalized discoverable numeric stats (full graded/pipeline surface).
+        score += 0.40 * stat_c
         out.at[idx, "segment_score"] = float(score)
 
     def _abcd_by_rank(group: pd.DataFrame) -> pd.Series:
@@ -642,7 +770,9 @@ def _segment_tiering_scores(
 
 def _prop_type_tiers(decided: pd.DataFrame, min_group_n: int = 30) -> pd.DataFrame:
     """
-    Tier props by: prop_type x hit_rate x L5 over/under x edge x consistency.
+    Tier prop types using every discoverable numeric graded/pipeline column:
+    per-group means, min–max normalized within pick_type_group, then tier_score
+    is the unweighted mean of those normalized signals (plus legacy diagnostics).
     """
     if decided.empty:
         return pd.DataFrame()
@@ -683,6 +813,7 @@ def _prop_type_tiers(decided: pd.DataFrame, min_group_n: int = 30) -> pd.DataFra
             )
             d["_tier_date"] = pd.to_datetime(ds, errors="coerce")
 
+    feat_cols = _discover_tier_numeric_columns(d)
     key_cols = ["sport_disp", "prop_type_label", "pick_type_group"]
     rows: list[dict[str, object]] = []
     for keys, g in d.groupby(key_cols, dropna=False):
@@ -692,7 +823,6 @@ def _prop_type_tiers(decided: pd.DataFrame, min_group_n: int = 30) -> pd.DataFra
             continue
         hit_rate = float(g2["is_hit"].mean())
         edge_mean = float(g2["edge_abs"].mean()) if g2["edge_abs"].notna().any() else 0.0
-        # Binary consistency: 1.0 means stable outcomes, 0.0 means highly variable.
         std = float(g2["is_hit"].std(ddof=0)) if n > 1 else 0.0
         consistency = float(max(0.0, min(1.0, 1.0 - (2.0 * std))))
 
@@ -700,44 +830,63 @@ def _prop_type_tiers(decided: pd.DataFrame, min_group_n: int = 30) -> pd.DataFra
         l5 = g3["is_hit"].tail(5)
         l5_hit_rate = float(l5.mean()) if len(l5) else hit_rate
 
-        rows.append(
-            {
-                "sport_disp": keys[0],
-                "prop_type": keys[1],
-                "pick_type_group": keys[2],
-                "n_total": n,
-                "hit_rate": hit_rate,
-                "l5_hit_rate": l5_hit_rate,
-                "edge_abs_mean": edge_mean,
-                "consistency": consistency,
-            }
-        )
+        row: dict[str, object] = {
+            "sport_disp": keys[0],
+            "prop_type": keys[1],
+            "pick_type_group": keys[2],
+            "n_total": n,
+            "hit_rate": hit_rate,
+            "l5_hit_rate": l5_hit_rate,
+            "edge_abs_mean": edge_mean,
+            "consistency": consistency,
+        }
+        for c in feat_cols:
+            if c not in g2.columns:
+                continue
+            row[f"_m_{c}"] = float(pd.to_numeric(g2[c], errors="coerce").mean())
+        rows.append(row)
 
     out = pd.DataFrame(rows)
     if out.empty:
         return out
 
-    # Normalize metrics within each pick-type segment for fair ranking.
-    norm_cols = ["hit_rate", "l5_hit_rate", "edge_abs_mean", "consistency"]
-    for col in norm_cols:
-        out[f"{col}_norm"] = 0.0
-    for seg, g in out.groupby("pick_type_group", dropna=False):
-        idx = g.index
-        for col in norm_cols:
-            v = pd.to_numeric(g[col], errors="coerce")
-            lo, hi = float(v.min()), float(v.max())
-            if np.isfinite(lo) and np.isfinite(hi) and hi > lo:
-                out.loc[idx, f"{col}_norm"] = ((v - lo) / (hi - lo)).astype(float)
-            else:
-                out.loc[idx, f"{col}_norm"] = 0.5
+    norm_names: list[str] = []
+    for c in feat_cols:
+        mc = f"_m_{c}"
+        if mc not in out.columns:
+            continue
+        nn = _minmax_norm_series_by_group(out, mc, "pick_type_group")
+        ncol = f"_nm_{c}"
+        out[ncol] = nn
+        norm_names.append(ncol)
 
-    # Weighted score: your requested components.
-    out["tier_score"] = (
-        (0.35 * out["hit_rate_norm"])
-        + (0.30 * out["l5_hit_rate_norm"])
-        + (0.20 * out["edge_abs_mean_norm"])
-        + (0.15 * out["consistency_norm"])
-    )
+    if norm_names:
+        out["tier_score"] = out[norm_names].mean(axis=1, skipna=True)
+        out["prop_tier_signal_n_features"] = len(norm_names)
+    else:
+        # Fallback: legacy four-metric blend when no numeric pipeline columns survive discovery.
+        norm_cols = ["hit_rate", "l5_hit_rate", "edge_abs_mean", "consistency"]
+        for col in norm_cols:
+            out[f"{col}_norm"] = 0.0
+        for _, g in out.groupby("pick_type_group", dropna=False):
+            idx = g.index
+            for col in norm_cols:
+                v = pd.to_numeric(g[col], errors="coerce")
+                lo, hi = float(v.min()), float(v.max())
+                if np.isfinite(lo) and np.isfinite(hi) and hi > lo:
+                    out.loc[idx, f"{col}_norm"] = ((v - lo) / (hi - lo)).astype(float)
+                else:
+                    out.loc[idx, f"{col}_norm"] = 0.5
+        out["tier_score"] = (
+            (0.35 * out["hit_rate_norm"])
+            + (0.30 * out["l5_hit_rate_norm"])
+            + (0.20 * out["edge_abs_mean_norm"])
+            + (0.15 * out["consistency_norm"])
+        )
+        out["prop_tier_signal_n_features"] = 0
+
+    drop_internal = [c for c in out.columns if c.startswith("_m_") or c.startswith("_nm_")]
+    out = out.drop(columns=drop_internal, errors="ignore")
 
     def _abcd_rank(group: pd.DataFrame) -> pd.Series:
         g = group.copy()
