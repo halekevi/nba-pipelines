@@ -396,8 +396,24 @@ def _nba_regulation_period_points_from_plays(plays: list) -> dict[str, dict[int,
         primary = participants[0] if participants else ""
 
         if "free throw" in ltxt:
-            if primary:
-                add_pts(primary, pnum, 1.0 if "makes free throw" in ltxt else 0.0)
+            if not primary:
+                continue
+            ft_miss = "misses free throw" in ltxt or (
+                " misses " in f" {ltxt} " and "free throw" in ltxt and "makes" not in ltxt
+            )
+            if ft_miss:
+                continue
+            ft_make = "makes free throw" in ltxt or (
+                " makes " in f" {ltxt} " and "free throw" in ltxt
+            )
+            if ft_make:
+                try:
+                    pts_ft = float(play.get("scoreValue"))
+                except (TypeError, ValueError):
+                    pts_ft = 1.0
+                if pts_ft <= 0:
+                    pts_ft = 1.0
+                add_pts(primary, pnum, pts_ft)
             continue
 
         made = " makes " in f" {ltxt} "
@@ -476,7 +492,7 @@ def merge_nba_box_dnp_into_injuries_csv(
     except ImportError:
         return 0
 
-    inj_path = injuries_csv_path_for_actuals(actuals_output, "NBA")
+    inj_path = injuries_csv_path_for_actuals(actuals_output, "NBA", date_hint=date_str)
     inj_path.parent.mkdir(parents=True, exist_ok=True)
 
     if inj_path.is_file():
@@ -1767,7 +1783,7 @@ def _export_injuries_sidecar(args) -> None:
     except ImportError:
         return
     try:
-        outp = injuries_csv_path_for_actuals(args.output, args.sport)
+        outp = injuries_csv_path_for_actuals(args.output, args.sport, date_hint=args.date)
         n = write_injuries_for_date(args.sport, args.date, outp)
         print(f"  Injury report saved -> {outp}  ({n} rows)")
     except Exception as e:

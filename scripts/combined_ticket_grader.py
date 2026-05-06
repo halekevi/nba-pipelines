@@ -1783,7 +1783,7 @@ def main():
     def _inj_csv(explicit: str, act_csv: Path, sport: str) -> Path:
         if explicit and str(explicit).strip():
             return Path(str(explicit).strip())
-        return injuries_csv_path_for_actuals(act_csv, sport)
+        return injuries_csv_path_for_actuals(act_csv, sport, date_hint=grade_date)
 
     nba_void = load_injury_void_keys(_inj_csv(args.nba_injuries, nba_csv, "NBA"), "NBA")
     cbb_void: Set[Tuple[str, str]] = set()

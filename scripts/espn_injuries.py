@@ -251,8 +251,18 @@ def write_injuries_for_date(sport_literal: str, date_str: str, output_path: str 
     return len(df)
 
 
-def injuries_csv_path_for_actuals(actuals_path: str | Path, sport_literal: str) -> Path:
-    """Derive injuries path from actuals_nba_YYYY-MM-DD.csv -> injuries_nba_*.csv"""
+def injuries_csv_path_for_actuals(
+    actuals_path: str | Path,
+    sport_literal: str,
+    *,
+    date_hint: str | None = None,
+) -> Path:
+    """Derive injuries path from actuals_nba_YYYY-MM-DD.csv -> injuries_nba_*.csv.
+
+    When ``actuals_path`` does not follow the usual ``actuals_<sport>_<date>.csv`` name,
+    pass ``date_hint='YYYY-MM-DD'`` (e.g. fetch_actuals ``--date``) so the sidecar is still
+    ``injuries_nba_<date>.csv`` next to the actuals file.
+    """
     p = Path(actuals_path)
     stem = p.name
     m = {
@@ -264,7 +274,13 @@ def injuries_csv_path_for_actuals(actuals_path: str | Path, sport_literal: str) 
     }[sport_literal.upper()]
     if stem.startswith(m[0]):
         return p.parent / (m[1] + stem[len(m[0]) :])
-    return p.parent / f"injuries_{sport_literal.lower()}_{stem.split('_')[-1]}"
+    ds = (date_hint or "").strip()[:10]
+    if re.match(r"^\d{4}-\d{2}-\d{2}$", ds):
+        return p.parent / f"{m[1]}{ds}.csv"
+    dm = re.search(r"(\d{4}-\d{2}-\d{2})", stem)
+    if dm:
+        return p.parent / f"{m[1]}{dm.group(1)}.csv"
+    return p.parent / f"injuries_{sport_literal.lower()}_{stem}"
 
 
 def load_injury_void_keys(csv_path: str | Path, sport_for_team: str) -> Set[Tuple[str, str]]:
