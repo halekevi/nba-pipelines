@@ -19,7 +19,10 @@ import pandas as pd
 DEFAULT_ML_PROB_CUTS: tuple[float, float, float] = (0.71, 0.65, 0.58)
 # Direction-separated Standard profiles.
 DEFAULT_STANDARD_OVER_CUTS: tuple[float, float, float] = (0.73, 0.69, 0.63)
-DEFAULT_STANDARD_UNDER_CUTS: tuple[float, float, float] = (0.71, 0.67, 0.61)
+# UNDER confidence is evaluated on (1 - ml_prob). In practice this distribution is
+# more compressed than OVER, so use a lower default profile to avoid collapsing most
+# Standard UNDER rows into Tier D.
+DEFAULT_STANDARD_UNDER_CUTS: tuple[float, float, float] = (0.58, 0.52, 0.50)
 
 # Format: sport_slug → {group: (A_cut, B_cut, C_cut)} | (A_cut, B_cut, C_cut)
 # Plain tuple → all groups for that sport. Dict → group-specific; missing groups → DEFAULT.
@@ -42,6 +45,24 @@ SPORT_STANDARD_DIRECTION_CUTS: dict[str, dict[str, tuple[float, float, float]]] 
         "OVER": (0.58, 0.52, 0.47),
         "UNDER": (0.56, 0.50, 0.45),
     },
+}
+
+# Targeted prop-type tier nudges for persistent, segment-specific reversals.
+# Negative shift = tougher (A->B->C->D), positive = easier.
+SPORT_PROP_TIER_ADJUSTMENTS: dict[str, list[dict[str, object]]] = {
+    "mlb": [
+        # Demon K ladders have shown Tier-A underperforming lower tiers on graded audits.
+        {"pick_type": "demon", "direction": "OVER", "prop_keys": {"hitter strikeouts"}, "shift": -1},
+    ],
+    "nba": [
+        # Combo props are more volatile; keep rank tiers slightly more conservative.
+        {"pick_type": "demon", "direction": "OVER", "prop_keys": {"pts+rebs+asts", "pts+rebs", "pts+asts", "rebs+asts"}, "shift": -1},
+        {"pick_type": "standard", "direction": "OVER", "prop_keys": {"pts+rebs+asts"}, "shift": -1},
+        # Highly volatile NBA demon props: push further down tiers.
+        {"pick_type": "demon", "direction": "OVER", "prop_keys": {"double-double", "quarterswith3+pts", "quarterswith3+points"}, "shift": -2},
+        # Additional conservative nudge for noisy standard-over combo buckets.
+        {"pick_type": "standard", "direction": "OVER", "prop_keys": {"pts+rebs", "pts+asts", "rebs+asts"}, "shift": -1},
+    ],
 }
 
 
@@ -168,7 +189,11 @@ def _tier_from_group(
             return "D"
         return _tier_from_ml_scalar(ml_prob, *cuts)
 
-    return _tier_from_ml_scalar(ml_prob, *_resolve_standard_direction_cuts(sport, direction))
+    d = (direction or "").strip().upper()
+    std_prob = _safe_float_prob(ml_prob)
+    if d == "UNDER":
+        std_prob = 1.0 - std_prob
+    return _tier_from_ml_scalar(std_prob, *_resolve_standard_direction_cuts(sport, direction))
 
 
 def _first_col(df: pd.DataFrame, names: list[str]) -> str | None:
@@ -176,6 +201,55 @@ def _first_col(df: pd.DataFrame, names: list[str]) -> str | None:
         if n in df.columns:
             return n
     return None
+
+
+_TIER_ORDER = np.array(["A", "B", "C", "D"], dtype=object)
+
+
+def _normalize_prop_key(v: object) -> str:
+    s = str(v or "").strip().lower()
+    s = s.replace("points", "pts").replace("rebounds", "rebs").replace("assists", "asts")
+    s = s.replace(" + ", "+").replace(" ", "")
+    return s
+
+
+def _shift_tier_values(base: np.ndarray, mask: np.ndarray, shift: int) -> np.ndarray:
+    if shift == 0 or not np.any(mask):
+        return base
+    out = base.copy()
+    tier_to_idx = {"A": 0, "B": 1, "C": 2, "D": 3}
+    for i in np.where(mask)[0]:
+        t = str(out[i]).upper()
+        idx = tier_to_idx.get(t, 3)
+        out[i] = _TIER_ORDER[min(3, max(0, idx - int(shift)))]
+    return out
+
+
+def apply_prop_tier_adjustments(
+    tier: pd.Series,
+    pick_type: pd.Series,
+    direction: pd.Series,
+    prop_type: pd.Series,
+    *,
+    sport: str = "",
+) -> pd.Series:
+    """Apply sport-specific prop tier shifts on top of existing tier labels."""
+    out = tier.astype(str).str.upper().str.strip().to_numpy()
+    pt_arr = pick_type.astype(str).str.lower().str.strip().to_numpy()
+    dr_arr = direction.astype(str).str.upper().str.strip().to_numpy()
+    prop_keys = prop_type.map(_normalize_prop_key).to_numpy()
+    sport_rules = SPORT_PROP_TIER_ADJUSTMENTS.get(str(sport or "").strip().lower(), [])
+    for rule in sport_rules:
+        pt_rule = str(rule.get("pick_type", "")).strip().lower()
+        dr_rule = str(rule.get("direction", "")).strip().upper()
+        pset = {str(x).strip().lower().replace(" ", "") for x in (rule.get("prop_keys") or set())}
+        shift = int(rule.get("shift", 0) or 0)
+        if not pset or shift == 0:
+            continue
+        mask = (np.char.find(pt_arr.astype(str), pt_rule) >= 0) & (dr_arr == dr_rule) & np.isin(prop_keys, list(pset))
+        if np.any(mask):
+            out = _shift_tier_values(out, mask, shift)
+    return pd.Series(out, index=tier.index, dtype=str)
 
 
 def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
@@ -195,6 +269,7 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
     lc = _first_col(out, ["line", "Line", "line_score"])
     sc = _first_col(out, ["standard_line", "Standard Line"])
     dc = _first_col(out, ["bet_direction", "Direction", "direction", "recommended_side"])
+    prc = _first_col(out, ["prop_type_norm", "prop_type", "Prop Type", "Prop", "prop"])
 
     pt_s = out[pc].astype(str) if pc else pd.Series("Standard", index=idx)
     pt_lower = pt_s.str.strip().str.lower()
@@ -214,7 +289,10 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
     c_std_over = _resolve_standard_direction_cuts(sport, "OVER")
     c_std_under = _resolve_standard_direction_cuts(sport, "UNDER")
     t_std_over = _tier_from_ml_array(ml_raw, *c_std_over)
-    t_std_under = _tier_from_ml_array(ml_raw, *c_std_under)
+    # Standard UNDER should be tiered on side-aligned probability.
+    # In flows where ml_prob tracks OVER likelihood, UNDER strength is (1 - ml_prob).
+    ml_under = np.where(np.isfinite(ml_raw), 1.0 - ml_raw, np.nan)
+    t_std_under = _tier_from_ml_array(ml_under, *c_std_under)
     t_gob_fb = _tier_from_ml_array(ml_raw, *c_gob)
     t_dem_fb = _tier_from_ml_array(ml_raw, *c_dem)
     dr = (
@@ -268,6 +346,25 @@ def assign_tier_column(out: pd.DataFrame, *, sport: str = "") -> pd.Series:
     dem_fb = is_dem & ~has_dd_dist
     tier[dem_fb] = t_dem_fb[dem_fb]
     tier_src[dem_fb] = "ml_prob_fallback"
+
+    # Apply sport/prop targeted adjustments after baseline tier assignment.
+    sport_rules = SPORT_PROP_TIER_ADJUSTMENTS.get(str(sport or "").strip().lower(), [])
+    if sport_rules and prc:
+        tier_before = tier.copy()
+        tier = apply_prop_tier_adjustments(
+            pd.Series(tier, index=idx, dtype=str),
+            pd.Series(pt_lower.to_numpy(), index=idx, dtype=str),
+            pd.Series(dr, index=idx, dtype=str),
+            out[prc].astype(str),
+            sport=str(sport or "").strip().lower(),
+        ).to_numpy()
+        changed_mask = np.array([str(a) != str(b) for a, b in zip(tier_before, tier)], dtype=bool)
+        if np.any(changed_mask):
+            tier_src[changed_mask] = np.where(
+                tier_src[changed_mask] == "distance",
+                "distance+prop_adjust",
+                "ml_prob+prop_adjust",
+            )
 
     out["tier_source"] = pd.Series(tier_src, index=idx, dtype=str)
     return pd.Series(tier, index=idx, dtype=str)

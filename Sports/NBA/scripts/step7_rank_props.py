@@ -474,6 +474,7 @@ BLEND_WEIGHTS: dict[str, float] = {
 _PLAYER_PREFIX_BY_PROP = {
     "fga": "fga", "fgm": "fgm", "fg2a": "fg2a", "fg2m": "fg2m",
     "fg3a": "fg3a", "fg3m": "fg3m", "fta": "fta", "ftm": "ftm",
+    "oreb": "oreb", "dreb": "dreb",
 }
 
 _COMBO_CORRECTIONS = {"pr": 1.05, "pa": 1.06, "ra": 1.08, "pra": 1.07, "fantasy": 0.92}
@@ -1115,6 +1116,8 @@ def main() -> None:
         "free throws made": "ftm", "free throws attempted": "fta",
         "freethrowsmade": "ftm", "freethrowsattempted": "fta",
         "ft made": "ftm", "ft attempted": "fta", "ftm": "ftm", "fta": "fta",
+        "offensive rebounds": "oreb", "off rebounds": "oreb", "oreb": "oreb",
+        "defensive rebounds": "dreb", "def rebounds": "dreb", "dreb": "dreb",
         "fg attempted": "fga", "fg made": "fgm",
         "field goals attempted": "fga", "field goals made": "fgm",
         "fga": "fga", "fgm": "fgm",

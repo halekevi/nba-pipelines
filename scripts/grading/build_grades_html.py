@@ -26,12 +26,20 @@ from __future__ import annotations
 import argparse
 import html as html_lib
 import json
+import numpy as np
 import re
 import sys
 from collections import defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+import pandas as pd
+from utils.group_rank_tier import apply_prop_tier_adjustments, assign_tier_column
 
 # ── openpyxl guard ────────────────────────────────────────────────────────────
 try:
@@ -122,7 +130,7 @@ def _sheet_header_has_margin(ws) -> bool:
     return any(str(c or "").strip().lower() == "margin" for c in row0)
 
 
-def load_graded(path: Path) -> list[dict]:
+def load_graded(path: Path, sport: str = "") -> list[dict]:
     """
     Load graded workbook rows for Prop Evaluation / HTML.
 
@@ -169,6 +177,57 @@ def load_graded(path: Path) -> list[dict]:
             if nk.lower() == "pick_type":           nk = "Pick Type"
             nr[nk] = v
         normalized.append(nr)
+    # Recompute display tiers for historical files:
+    # 1) Standard rows from directional ml_prob
+    # 2) Prop-type targeted adjustments from existing tier labels
+    if normalized:
+        sport_key = str(sport or "").strip().lower()
+        ndf = pd.DataFrame(normalized)
+        pick_series = ndf.get("Pick Type", ndf.get("pick_type", pd.Series("Standard", index=ndf.index)))
+        dir_series = ndf.get("Direction", ndf.get("Dir", ndf.get("direction", pd.Series("OVER", index=ndf.index))))
+        ml_series = pd.to_numeric(ndf.get("ML Prob", ndf.get("ml_prob", pd.Series(np.nan, index=ndf.index))), errors="coerce")
+        line_series = pd.to_numeric(ndf.get("Line", ndf.get("line", ndf.get("line_score", pd.Series(np.nan, index=ndf.index)))), errors="coerce")
+        std_line_series = pd.to_numeric(ndf.get("Standard Line", ndf.get("standard_line", pd.Series(np.nan, index=ndf.index))), errors="coerce")
+        prop_series = ndf.get(
+            "Prop Type",
+            ndf.get("prop_type_norm", ndf.get("prop_type", ndf.get("Prop", pd.Series("", index=ndf.index)))),
+        )
+        work = pd.DataFrame(
+            {
+                "pick_type": pick_series,
+                "bet_direction": dir_series,
+                "ml_prob": ml_series,
+                "line": line_series,
+                "standard_line": std_line_series,
+                "prop_type_norm": prop_series,
+            }
+        )
+        tier_series = ndf.get("Tier", pd.Series("D", index=ndf.index)).astype(str)
+
+        # Standard recompute only when ml_prob exists (keeps legacy Goblin/Demon
+        # distance-based tiers intact in historical graded workbooks).
+        std_mask = pick_series.astype(str).str.strip().str.lower().eq("standard") & ml_series.notna()
+        if std_mask.any():
+            try:
+                recalculated = assign_tier_column(work, sport=sport_key).astype(str)
+                tier_series.loc[std_mask] = recalculated.loc[std_mask].values
+            except Exception as e:
+                print(f"  WARN: standard tier recompute skipped for {path.name} ({type(e).__name__}: {e})")
+
+        # Apply targeted prop-type tier shifts on top of existing/recomputed tiers.
+        try:
+            tier_series = apply_prop_tier_adjustments(
+                tier_series,
+                pick_series.astype(str),
+                dir_series.astype(str),
+                prop_series.astype(str),
+                sport=sport_key,
+            )
+        except Exception as e:
+            print(f"  WARN: prop tier adjustments skipped for {path.name} ({type(e).__name__}: {e})")
+
+        ndf["Tier"] = tier_series.astype(str).values
+        normalized = ndf.to_dict(orient="records")
     return normalized
 
 
@@ -2148,40 +2207,40 @@ def main() -> None:
     cbb_rows: list[dict] = []
     if nba_path:
         print(f"  Loading NBA: {nba_path.name} ...", end="", flush=True)
-        nba_rows = load_graded(nba_path)
+        nba_rows = load_graded(nba_path, "nba")
         print(f" {len(nba_rows):,} rows")
     nba1q_rows: list[dict] = []
     if nba1q_path:
         print(f"  Loading NBA1Q: {nba1q_path.name} ...", end="", flush=True)
-        nba1q_rows = load_graded(nba1q_path)
+        nba1q_rows = load_graded(nba1q_path, "nba1q")
         print(f" {len(nba1q_rows):,} rows")
     nba1h_rows: list[dict] = []
     if nba1h_path:
         print(f"  Loading NBA1H: {nba1h_path.name} ...", end="", flush=True)
-        nba1h_rows = load_graded(nba1h_path)
+        nba1h_rows = load_graded(nba1h_path, "nba1h")
         print(f" {len(nba1h_rows):,} rows")
     nba_rows_merged = [*nba_rows, *nba1q_rows, *nba1h_rows]
     if cbb_path:
         print(f"  Loading CBB: {cbb_path.name} ...", end="", flush=True)
-        cbb_rows = load_graded(cbb_path)
+        cbb_rows = load_graded(cbb_path, "cbb")
         print(f" {len(cbb_rows):,} rows")
 
     nhl_rows: list[dict] = []
     if nhl_path:
         print(f"  Loading NHL: {nhl_path.name} ...", end="", flush=True)
-        nhl_rows = load_graded(nhl_path)
+        nhl_rows = load_graded(nhl_path, "nhl")
         print(f" {len(nhl_rows):,} rows")
 
     soccer_rows: list[dict] = []
     if soccer_path:
         print(f"  Loading Soccer: {soccer_path.name} ...", end="", flush=True)
-        soccer_rows = load_graded(soccer_path)
+        soccer_rows = load_graded(soccer_path, "soccer")
         print(f" {len(soccer_rows):,} rows")
 
     mlb_rows: list[dict] = []
     if mlb_path:
         print(f"  Loading MLB: {mlb_path.name} ...", end="", flush=True)
-        mlb_rows = load_graded(mlb_path)
+        mlb_rows = load_graded(mlb_path, "mlb")
         print(f" {len(mlb_rows):,} rows")
 
     # Build HTML (use merged NBA so 1Q/1H rows appear in Slate Evaluation, not only in JSON)
