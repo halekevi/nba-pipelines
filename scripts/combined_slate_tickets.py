@@ -122,7 +122,8 @@ _TICKET_MODEL = None
 _TICKET_MODEL_BUCKETS: dict[str, Any] = {}
 _TICKET_MODEL_FEATURES: list[str] = []
 
-# Primary layout: Sports/<league>/… and outputs/<slate-date>/step8_*_<date>.xlsx (run_pipeline / dated exports).
+# Primary layout: outputs/<slate-date>/<sport>/... (canonical runtime),
+# plus outputs/<slate-date>/step8_*_<date>.xlsx (dated exports).
 # Defaults are applied in apply_default_sport_inputs() after --date is resolved.
 DEFAULT_NBA_PATH = os.path.join(REPO_ROOT, "Sports", "NBA", "data", "outputs", "step8_all_direction_clean.xlsx")
 DEFAULT_CBB_PATH = os.path.join(REPO_ROOT, "Sports", "CBB", "step6_ranked_cbb.xlsx")
@@ -164,7 +165,9 @@ def _required_placeholder(*candidates: str) -> str:
 
 def apply_default_sport_inputs(args: argparse.Namespace) -> None:
     """
-    Fill empty --sport paths. Order: outputs/<date>/step8_*_<date>.xlsx, then Sports/*, then legacy repo-root paths.
+    Fill empty --sport paths. Order: outputs/<date>/step8_*_<date>.xlsx (dated publish),
+    then outputs/<date>/<sport>/ copies from the daily pipeline, then Sports/* canonical paths,
+    then legacy repo-root paths.
     Optional sports stay empty when nothing exists on disk.
     """
     d = str(args.date).strip()[:10]
@@ -173,12 +176,14 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
     if not str(args.nba).strip():
         args.nba = _required_placeholder(
             os.path.join(out, f"step8_nba_direction_clean_{d}.xlsx"),
+            os.path.join(out, "nba", "step8_all_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "NBA", "data", "outputs", "step8_all_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "NBA", "data", "outputs", "step8_all_direction_clean.xlsx"),
         )
 
     if not str(args.cbb).strip():
         args.cbb = _required_placeholder(
+            os.path.join(out, "cbb", "step6_ranked_cbb.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "CBB", "step6_ranked_cbb.xlsx"),
             os.path.join(REPO_ROOT, "CBB", "step6_ranked_cbb.xlsx"),
         )
@@ -192,6 +197,8 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
     if not str(args.nhl).strip():
         args.nhl = _first_existing_path(
             os.path.join(out, f"step8_nhl_direction_clean_{d}.xlsx"),
+            os.path.join(out, "nhl", "step8_nhl_direction_clean.xlsx"),
+            os.path.join(REPO_ROOT, "Sports", "NHL", "step8_nhl_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "NHL", "outputs", "step8_nhl_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "NHL", "outputs", "step8_nhl_direction_clean.xlsx"),
         )
@@ -199,6 +206,7 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
     if not str(args.soccer).strip():
         args.soccer = _first_existing_path(
             os.path.join(out, f"step8_soccer_direction_clean_{d}.xlsx"),
+            os.path.join(out, "soccer", "step8_soccer_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "Soccer", "outputs", "step8_soccer_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Soccer", "outputs", "step8_soccer_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Soccer", "step8_soccer_direction_clean.xlsx"),
@@ -207,6 +215,7 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
     if not str(args.tennis).strip():
         args.tennis = _first_existing_path(
             os.path.join(out, f"step8_tennis_direction_clean_{d}.xlsx"),
+            os.path.join(out, "tennis", "step8_tennis_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "Tennis", "outputs", "step8_tennis_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis_direction_clean.xlsx"),
         )
@@ -226,6 +235,7 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
     if not str(args.mlb).strip():
         args.mlb = _first_existing_path(
             os.path.join(out, f"step8_mlb_direction_clean_{d}.xlsx"),
+            os.path.join(out, "mlb", "step8_mlb_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "MLB", "step8_mlb_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "MLB", "step8_mlb_direction_clean.xlsx"),
         )
@@ -233,6 +243,7 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
     if not str(args.nba1q).strip():
         args.nba1q = _first_existing_path(
             os.path.join(out, f"step8_nba1q_direction_clean_{d}.xlsx"),
+            os.path.join(out, "nba1q", "step8_nba1q_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "NBA", "step8_nba1q_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "NBA", "step8_nba1q_direction_clean.xlsx"),
         )
@@ -240,6 +251,7 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
     if not str(args.nba1h).strip():
         args.nba1h = _first_existing_path(
             os.path.join(out, f"step8_nba1h_direction_clean_{d}.xlsx"),
+            os.path.join(out, "nba1h", "step8_nba1h_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "NBA", "step8_nba1h_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "NBA", "step8_nba1h_direction_clean.xlsx"),
         )
@@ -247,6 +259,7 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
     if not str(args.nfl).strip():
         args.nfl = _first_existing_path(
             os.path.join(out, f"step8_nfl_direction_clean_{d}.xlsx"),
+            os.path.join(out, "nfl", "step8_nfl_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "NFL", "outputs", "step8_nfl_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "NFL", "data", "outputs", "step8_nfl_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "NFL", "outputs", "step8_nfl_direction_clean.xlsx"),
