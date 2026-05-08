@@ -1,46 +1,45 @@
 {
   "date": "2026-05-08",
   "current_population": {
-    "input_rows": 1302,
+    "input_rows": 1621,
     "old": {
-      "eligible_rows": 412,
+      "eligible_rows": 389,
       "counts_by_group": {
-        "GOBLIN_OVER": 289,
-        "STANDARD_OVER": 51,
-        "STANDARD_UNDER": 72
+        "GOBLIN_OVER": 330,
+        "STANDARD_OVER": 54,
+        "STANDARD_UNDER": 5
       },
       "counts_by_sport_group": {
         "NBA": {
-          "GOBLIN_OVER": 221,
-          "STANDARD_OVER": 26,
-          "STANDARD_UNDER": 67
-        },
-        "NBA1H": {
+          "GOBLIN_OVER": 260,
           "STANDARD_OVER": 17,
           "STANDARD_UNDER": 4
         },
-        "NBA1Q": {
-          "GOBLIN_OVER": 68,
-          "STANDARD_OVER": 8,
+        "NBA1H": {
+          "STANDARD_OVER": 22,
           "STANDARD_UNDER": 1
+        },
+        "NBA1Q": {
+          "GOBLIN_OVER": 70,
+          "STANDARD_OVER": 15
         }
       },
       "discard_reasons": {
         "NBA": {
-          "prop_banned": 96,
-          "directional_l5_hr_fail": 583,
-          "standard_over_edge_below_floor": 5,
+          "prop_banned": 138,
+          "directional_l5_hr_fail": 827,
+          "standard_over_edge_below_floor": 4,
           "picktype_direction_tier_policy_fail": 25,
-          "prop_quality_below_floor": 53
+          "prop_quality_below_floor": 65
         },
         "NBA1H": {
-          "prop_banned": 20,
-          "directional_l5_hr_fail": 25
+          "prop_banned": 26,
+          "directional_l5_hr_fail": 33,
+          "standard_over_edge_below_floor": 1
         },
         "NBA1Q": {
-          "directional_l5_hr_fail": 62,
-          "standard_over_edge_below_floor": 2,
-          "picktype_direction_tier_policy_fail": 17,
+          "directional_l5_hr_fail": 77,
+          "picktype_direction_tier_policy_fail": 34,
           "prop_quality_below_floor": 2
         }
       },
@@ -59,110 +58,108 @@
         ],
         "snapshots": {
           "input": {
-            "ALL": 1302,
-            "NBA": 1076,
-            "NBA1H": 66,
-            "NBA1Q": 160
+            "ALL": 1621,
+            "NBA": 1340,
+            "NBA1H": 83,
+            "NBA1Q": 198
           },
           "after_prop_ban": {
-            "ALL": 1186,
-            "NBA": 980,
-            "NBA1H": 46,
-            "NBA1Q": 160
+            "ALL": 1457,
+            "NBA": 1202,
+            "NBA1H": 57,
+            "NBA1Q": 198
           },
           "after_fantasy_score": {
-            "ALL": 1186,
-            "NBA": 980,
-            "NBA1H": 46,
-            "NBA1Q": 160
+            "ALL": 1457,
+            "NBA": 1202,
+            "NBA1H": 57,
+            "NBA1Q": 198
           },
           "after_directional_l5_hr": {
-            "ALL": 516,
-            "NBA": 397,
-            "NBA1H": 21,
-            "NBA1Q": 98
+            "ALL": 520,
+            "NBA": 375,
+            "NBA1H": 24,
+            "NBA1Q": 121
           },
           "after_standard_over_edge_floor": {
-            "ALL": 509,
-            "NBA": 392,
-            "NBA1H": 21,
-            "NBA1Q": 96
+            "ALL": 515,
+            "NBA": 371,
+            "NBA1H": 23,
+            "NBA1Q": 121
           },
           "after_standard_under_edge_floor": {
-            "ALL": 509,
-            "NBA": 392,
-            "NBA1H": 21,
-            "NBA1Q": 96
+            "ALL": 515,
+            "NBA": 371,
+            "NBA1H": 23,
+            "NBA1Q": 121
           },
           "after_picktype_direction_tier_policy": {
-            "ALL": 467,
-            "NBA": 367,
-            "NBA1H": 21,
-            "NBA1Q": 79
+            "ALL": 456,
+            "NBA": 346,
+            "NBA1H": 23,
+            "NBA1Q": 87
           },
           "after_pick_type": {
-            "ALL": 467,
-            "NBA": 367,
-            "NBA1H": 21,
-            "NBA1Q": 79
+            "ALL": 456,
+            "NBA": 346,
+            "NBA1H": 23,
+            "NBA1Q": 87
           },
           "after_void_reason": {
-            "ALL": 467,
-            "NBA": 367,
-            "NBA1H": 21,
-            "NBA1Q": 79
+            "ALL": 456,
+            "NBA": 346,
+            "NBA1H": 23,
+            "NBA1Q": 87
           },
           "after_prop_quality": {
-            "ALL": 412,
-            "NBA": 314,
-            "NBA1H": 21,
-            "NBA1Q": 77
+            "ALL": 389,
+            "NBA": 281,
+            "NBA1H": 23,
+            "NBA1Q": 85
           }
         }
       }
     },
     "new": {
-      "eligible_rows": 370,
+      "eligible_rows": 366,
       "counts_by_group": {
-        "GOBLIN_OVER": 289,
-        "STANDARD_OVER": 38,
-        "STANDARD_UNDER": 43
+        "GOBLIN_OVER": 330,
+        "STANDARD_OVER": 35,
+        "STANDARD_UNDER": 1
       },
       "counts_by_sport_group": {
         "NBA": {
-          "GOBLIN_OVER": 221,
-          "STANDARD_OVER": 23,
-          "STANDARD_UNDER": 41
+          "GOBLIN_OVER": 260,
+          "STANDARD_OVER": 14,
+          "STANDARD_UNDER": 1
         },
         "NBA1H": {
-          "STANDARD_OVER": 13,
-          "STANDARD_UNDER": 1
+          "STANDARD_OVER": 18
         },
         "NBA1Q": {
-          "GOBLIN_OVER": 68,
-          "STANDARD_OVER": 2,
-          "STANDARD_UNDER": 1
+          "GOBLIN_OVER": 70,
+          "STANDARD_OVER": 3
         }
       },
       "discard_reasons": {
         "NBA": {
-          "prop_banned": 96,
-          "directional_l5_hr_fail": 583,
-          "standard_over_edge_below_floor": 23,
-          "standard_under_edge_below_floor": 26,
+          "prop_banned": 138,
+          "directional_l5_hr_fail": 827,
+          "standard_over_edge_below_floor": 30,
+          "standard_under_edge_below_floor": 3,
           "picktype_direction_tier_policy_fail": 25,
-          "prop_quality_below_floor": 38
+          "prop_quality_below_floor": 42
         },
         "NBA1H": {
-          "prop_banned": 20,
-          "directional_l5_hr_fail": 25,
-          "standard_over_edge_below_floor": 4,
-          "standard_under_edge_below_floor": 3
+          "prop_banned": 26,
+          "directional_l5_hr_fail": 33,
+          "standard_over_edge_below_floor": 5,
+          "standard_under_edge_below_floor": 1
         },
         "NBA1Q": {
-          "directional_l5_hr_fail": 62,
-          "standard_over_edge_below_floor": 8,
-          "picktype_direction_tier_policy_fail": 17,
+          "directional_l5_hr_fail": 77,
+          "standard_over_edge_below_floor": 12,
+          "picktype_direction_tier_policy_fail": 34,
           "prop_quality_below_floor": 2
         }
       },
@@ -181,64 +178,64 @@
         ],
         "snapshots": {
           "input": {
-            "ALL": 1302,
-            "NBA": 1076,
-            "NBA1H": 66,
-            "NBA1Q": 160
+            "ALL": 1621,
+            "NBA": 1340,
+            "NBA1H": 83,
+            "NBA1Q": 198
           },
           "after_prop_ban": {
-            "ALL": 1186,
-            "NBA": 980,
-            "NBA1H": 46,
-            "NBA1Q": 160
+            "ALL": 1457,
+            "NBA": 1202,
+            "NBA1H": 57,
+            "NBA1Q": 198
           },
           "after_fantasy_score": {
-            "ALL": 1186,
-            "NBA": 980,
-            "NBA1H": 46,
-            "NBA1Q": 160
+            "ALL": 1457,
+            "NBA": 1202,
+            "NBA1H": 57,
+            "NBA1Q": 198
           },
           "after_directional_l5_hr": {
-            "ALL": 516,
-            "NBA": 397,
-            "NBA1H": 21,
-            "NBA1Q": 98
+            "ALL": 520,
+            "NBA": 375,
+            "NBA1H": 24,
+            "NBA1Q": 121
           },
           "after_standard_over_edge_floor": {
-            "ALL": 481,
-            "NBA": 374,
-            "NBA1H": 17,
-            "NBA1Q": 90
+            "ALL": 473,
+            "NBA": 345,
+            "NBA1H": 19,
+            "NBA1Q": 109
           },
           "after_standard_under_edge_floor": {
-            "ALL": 452,
-            "NBA": 348,
-            "NBA1H": 14,
-            "NBA1Q": 90
+            "ALL": 469,
+            "NBA": 342,
+            "NBA1H": 18,
+            "NBA1Q": 109
           },
           "after_picktype_direction_tier_policy": {
             "ALL": 410,
-            "NBA": 323,
-            "NBA1H": 14,
-            "NBA1Q": 73
+            "NBA": 317,
+            "NBA1H": 18,
+            "NBA1Q": 75
           },
           "after_pick_type": {
             "ALL": 410,
-            "NBA": 323,
-            "NBA1H": 14,
-            "NBA1Q": 73
+            "NBA": 317,
+            "NBA1H": 18,
+            "NBA1Q": 75
           },
           "after_void_reason": {
             "ALL": 410,
-            "NBA": 323,
-            "NBA1H": 14,
-            "NBA1Q": 73
+            "NBA": 317,
+            "NBA1H": 18,
+            "NBA1Q": 75
           },
           "after_prop_quality": {
-            "ALL": 370,
-            "NBA": 285,
-            "NBA1H": 14,
-            "NBA1Q": 71
+            "ALL": 366,
+            "NBA": 275,
+            "NBA1H": 18,
+            "NBA1Q": 73
           }
         }
       }
