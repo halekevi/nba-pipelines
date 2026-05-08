@@ -3,6 +3,6 @@
 	"appName": "PropORACLE",
 	"webDir": "www",
 	"server": {
-		"androidScheme": "http"
+		"androidScheme": "https"
 	}
 }

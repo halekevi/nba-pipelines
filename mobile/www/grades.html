@@ -1972,11 +1972,11 @@ function collapseSportsInTicketFrame(frame) {
 
   // Reinsert after intro/meta copy if present.
   const intro = wrap.querySelector(':scope > p.meta-muted');
-  let anchor = intro ? intro.nextSibling : wrap.firstChild;
 
   // Detach all sections before rebuilding.
   sections.forEach(sec => sec.parentNode && sec.parentNode.removeChild(sec));
 
+  const frag = doc.createDocumentFragment();
   let idx = 0;
   const _mobTk = gradesFrameMobileLayout();
   groups.forEach((groupSecs, key) => {
@@ -2001,10 +2001,16 @@ function collapseSportsInTicketFrame(frame) {
     body.className = 'grades-sport-bucket-body';
     details.appendChild(body);
 
-    if (anchor) wrap.insertBefore(details, anchor);
-    else wrap.appendChild(details);
+    frag.appendChild(details);
     groupSecs.forEach(sec => body.appendChild(sec));
   });
+
+  // IMPORTANT: do not insert before a stale anchor node that may have been detached above.
+  if (intro && intro.parentNode === wrap) {
+    wrap.insertBefore(frag, intro.nextSibling);
+  } else {
+    wrap.appendChild(frag);
+  }
 }
 
 // ─── PROP EVALUATION (archived props_history) ─────────────────────────────────

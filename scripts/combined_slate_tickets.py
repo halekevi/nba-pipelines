@@ -12085,6 +12085,46 @@ _TICKETS_BUILT_PAYOUT_CSS = """<style>
 .tickets-built .leg-game-log-empty { margin: 0; font-size: 12px; color: var(--muted); }
 .tickets-built .leg-game-hit { color: #00ff88; font-weight: 600; }
 .tickets-built .leg-game-miss { color: #c96a74; font-weight: 600; }
+.tickets-built .ticket-filter-sort-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 6px;
+}
+.tickets-built .ticket-filter-sort-label {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.tickets-built .ticket-filter-sort {
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(12,16,26,0.9);
+  color: var(--text);
+  font-size: 12px;
+  padding: 5px 12px;
+}
+.tickets-built .ticket-filter-bar-action.active {
+  border-color: rgba(255, 86, 86, 0.45);
+  color: #ff8a8a;
+}
+.tickets-built .ticket-group-section.group-rec-strong .ticket-group-header { border-left: 4px solid #00ff88; }
+.tickets-built .ticket-group-section.group-rec-ok .ticket-group-header { border-left: 4px solid #f0a500; }
+.tickets-built .ticket-group-section.group-rec-marginal .ticket-group-header { border-left: 4px solid #ff9f43; }
+.tickets-built .ticket-group-section.group-rec-skip .ticket-group-header { border-left: 4px solid #ff5c5c; opacity: 0.78; }
+.tickets-built .best-ticket-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  font-size: 13px;
+}
+.tickets-built .best-ticket-row:last-child { border-bottom: 0; }
+.tickets-built .best-ticket-name { color: var(--text); font-weight: 600; }
+.tickets-built .best-ticket-meta { font-size: 12px; }
 </style>"""
 
 
@@ -12355,6 +12395,25 @@ def _group_ev_badge_summary_html(tickets: list) -> str:
     return f'<span class="group-ev-badge {ev_cls}">EV {_fmt(evf, 2)} — {_h(rec)}</span>'
 
 
+def _group_hit_rate_score(tickets: list) -> float:
+    vals: list[float] = []
+    for t in tickets:
+        if not isinstance(t, dict):
+            continue
+        v = t.get("avg_hit_rate")
+        if v is None:
+            continue
+        try:
+            vf = float(v)
+        except (TypeError, ValueError):
+            continue
+        if math.isfinite(vf):
+            vals.append(vf)
+    if not vals:
+        return 0.0
+    return float(sum(vals) / len(vals))
+
+
 def _tickets_filter_pills_html(attr_rows: list[dict]) -> str:
     """Dynamic filter bar from group-derived slugs (sport / power / flex / goblin / demon / strong)."""
     sports_seen: list[str] = []
@@ -12439,6 +12498,21 @@ def _tickets_filter_pills_html(attr_rows: list[dict]) -> str:
         )
     )
     chunks.append('<span class="ticket-filter-bar-spacer" aria-hidden="true"></span>')
+    chunks.append(
+        '<label class="ticket-filter-sort-wrap" for="ticket-sort-select">'
+        '<span class="ticket-filter-sort-label">Sort</span>'
+        '<select id="ticket-sort-select" class="ticket-filter-sort">'
+        '<option value="ev_desc" selected>EV ↓</option>'
+        '<option value="ev_asc">EV ↑</option>'
+        '<option value="group">Group #</option>'
+        '<option value="hit_rate">Hit Rate</option>'
+        '</select>'
+        '</label>'
+    )
+    chunks.append(
+        '<button type="button" class="ticket-filter-bar-action active" id="toggle-skip" '
+        'style="border-radius:999px;" aria-pressed="true">HIDE SKIP</button>'
+    )
     chunks.append('<button type="button" class="ticket-filter-bar-action" id="expand-all" style="border-radius:999px;">EXPAND ALL</button>')
     chunks.append('<button type="button" class="ticket-filter-bar-action" id="collapse-all" style="border-radius:999px;">COLLAPSE ALL</button>')
     chunks.append("</div>")
@@ -12857,6 +12931,8 @@ def render_tickets_body_html(
                 "type": dt,
                 "pick": dpk,
                 "ev": ev_a,
+                "ev_score": _group_max_ev_for_ui_cap(group),
+                "hit_score": _group_hit_rate_score(tickets),
                 "original_index": original_index,
                 "payout_confidence": pc_max,
             }
@@ -12864,7 +12940,8 @@ def render_tickets_body_html(
 
     prepared.sort(
         key=lambda ent: (
-            _ticket_group_sort_rank(str(ent["group"].get("group_name") or "")),
+            -float(ent.get("ev_score", 0.0)),
+            -float(ent.get("payout_confidence", 0.0)),
             int(ent.get("original_index", 0)),
         )
     )
@@ -12884,6 +12961,7 @@ def render_tickets_body_html(
                 "type": dt,
                 "pick": dpk,
                 "ev": ev_a,
+                "ev_score": _group_max_ev_for_ui_cap(group),
                 "original_index": original_index,
             }
         )
@@ -12892,6 +12970,35 @@ def render_tickets_body_html(
         for x in (prepared_all or prepared)
     ]
     parts.append(_tickets_filter_pills_html(filter_attr_rows))
+
+    top_groups = [
+        e for e in prepared
+        if str(e.get("ev") or "").lower() not in {"skip", "low"}
+    ]
+    top_groups.sort(
+        key=lambda e: (
+            -float(e.get("ev_score") or 0.0),
+            -float(e.get("payout_confidence") or 0.0),
+        )
+    )
+    if top_groups:
+        top_rows: list[str] = []
+        for e in top_groups[:5]:
+            g = e["group"]
+            gn = str(g.get("group_name") or "Tickets")
+            ev_score = float(e.get("ev_score") or 0.0)
+            rec = str(e.get("ev") or "").upper() or "OK"
+            rec_cls = "ev-strong" if rec == "STRONG" else ("ev-ok" if rec == "OK" else "ev-marginal")
+            top_rows.append(
+                f'<div class="best-ticket-row"><span class="best-ticket-name">{_h(gn)}</span>'
+                f'<span class="best-ticket-meta {_h(rec_cls)}">{_h(rec)} · EV {_fmt(ev_score, 2)}×</span></div>'
+            )
+        parts.append(
+            '<div class="filter-pill" style="margin-top:8px;">'
+            '<div style="font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;">Today&apos;s Best</div>'
+            + "".join(top_rows)
+            + "</div>"
+        )
 
     for ent in prepared:
         group = ent["group"]
@@ -12916,11 +13023,14 @@ def render_tickets_body_html(
         d_type = ent["type"]
         d_pick = ent["pick"]
         d_ev = ent["ev"]
+        d_ev_score = float(ent.get("ev_score") or 0.0)
+        d_hit_score = float(ent.get("hit_score") or 0.0)
         d_pc = float(ent.get("payout_confidence") or 0.0)
         d_oi = int(ent.get("original_index", 0))
+        rec_cls = d_ev if d_ev in ("strong", "ok", "marginal", "low", "skip") else "skip"
 
         parts.append(f'''
-<div class="ticket-group-section collapsed" data-sport="{_h(d_sport)}" data-type="{_h(d_type)}" data-pick="{_h(d_pick)}" data-ev="{_h(d_ev)}" data-payout-confidence="{_fmt(d_pc, 2)}" data-original-index="{d_oi}">
+<div class="ticket-group-section collapsed group-rec-{_h(rec_cls)}" data-sport="{_h(d_sport)}" data-type="{_h(d_type)}" data-pick="{_h(d_pick)}" data-ev="{_h(d_ev)}" data-ev-score="{_fmt(d_ev_score, 4)}" data-hit-score="{_fmt(d_hit_score, 4)}" data-payout-confidence="{_fmt(d_pc, 2)}" data-original-index="{d_oi}">
   <div class="ticket-group-header collapsible-header" role="button" tabindex="0" aria-expanded="false">
     <span class="group-title" style="color:{accent};">{_h(group_name)}</span>
     <span class="group-meta">{group_meta_html}</span>
@@ -13285,52 +13395,104 @@ def render_tickets_body_html(
     });
   });
 
+  var activeFilter = 'all';
+  var sortMode = 'ev_desc';
+  var hideSkip = true;
+
+  function parseNum(el, attr){
+    var raw = (el.getAttribute(attr) || '').trim();
+    var n = parseFloat(raw);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function sortGroups(groups){
+    if(sortMode === 'group'){
+      groups.sort(function(a,b){
+        return parseNum(a, 'data-original-index') - parseNum(b, 'data-original-index');
+      });
+      return;
+    }
+    if(sortMode === 'ev_asc'){
+      groups.sort(function(a,b){ return parseNum(a, 'data-ev-score') - parseNum(b, 'data-ev-score'); });
+      return;
+    }
+    if(sortMode === 'hit_rate'){
+      groups.sort(function(a,b){ return parseNum(b, 'data-hit-score') - parseNum(a, 'data-hit-score'); });
+      return;
+    }
+    groups.sort(function(a,b){ return parseNum(b, 'data-ev-score') - parseNum(a, 'data-ev-score'); });
+  }
+
+  function matchesFilter(group, filter){
+    if(filter === 'all') return true;
+    if(filter === 'top-payout') return true;
+    var ds = (group.getAttribute('data-sport') || '').toLowerCase();
+    var dt = (group.getAttribute('data-type') || '').toLowerCase();
+    var dp = (group.getAttribute('data-pick') || '').toLowerCase();
+    var de = (group.getAttribute('data-ev') || '').toLowerCase();
+    return ds === filter || dt === filter || dp === filter || de === filter;
+  }
+
+  function applyGroupView(){
+    var shell = document.querySelector('.tickets-built.shell');
+    if(!shell) return;
+    var bar = shell.querySelector('.ticket-filter-bar');
+    var allGroups = Array.from(shell.querySelectorAll('.ticket-group-section'));
+    var visible = allGroups.filter(function(g){
+      if(!matchesFilter(g, activeFilter)) return false;
+      if(hideSkip){
+        var rec = (g.getAttribute('data-ev') || '').toLowerCase();
+        if(rec === 'skip' || rec === 'low') return false;
+      }
+      return true;
+    });
+
+    if(activeFilter === 'top-payout'){
+      visible.sort(function(a,b){
+        return parseNum(b, 'data-payout-confidence') - parseNum(a, 'data-payout-confidence');
+      });
+      visible = visible.slice(0, 3);
+    } else {
+      sortGroups(visible);
+    }
+
+    allGroups.forEach(function(g){ g.style.display = 'none'; });
+    var frag = document.createDocumentFragment();
+    visible.forEach(function(g){ g.style.display = ''; frag.appendChild(g); });
+    if(bar){
+      shell.insertBefore(frag, bar.nextSibling);
+    } else {
+      shell.appendChild(frag);
+    }
+  }
+
   document.querySelectorAll('.ticket-filter-pill').forEach(function(pill){
     pill.addEventListener('click', function(){
       document.querySelectorAll('.ticket-filter-pill').forEach(function(p){ p.classList.remove('active'); });
       pill.classList.add('active');
-      var filter = (pill.getAttribute('data-filter') || '').toLowerCase();
-      var shell = document.querySelector('.tickets-built.shell');
-      if(filter === 'all' && shell){
-        var barA = shell.querySelector('.ticket-filter-bar');
-        var allg = Array.from(shell.querySelectorAll('.ticket-group-section'));
-        allg.sort(function(a,b){
-          return parseInt(a.getAttribute('data-original-index')||'0',10) - parseInt(b.getAttribute('data-original-index')||'0',10);
-        });
-        var anchor = barA ? barA.nextSibling : null;
-        allg.forEach(function(g){
-          shell.insertBefore(g, anchor);
-          anchor = g.nextSibling;
-        });
-        allg.forEach(function(g){ g.style.display = ''; });
-        return;
-      }
-      if(filter === 'top-payout' && shell){
-        var barT = shell.querySelector('.ticket-filter-bar');
-        var allt = Array.from(shell.querySelectorAll('.ticket-group-section'));
-        allt.forEach(function(g){ g.style.display = 'none'; });
-        var ranked = allt.map(function(g){
-          return { el: g, sc: parseFloat(g.getAttribute('data-payout-confidence') || '0') || 0 };
-        }).sort(function(a,b){ return b.sc - a.sc; });
-        var top3 = ranked.slice(0, 3);
-        if(barT && top3.length){
-          var frag = document.createDocumentFragment();
-          top3.forEach(function(x){ frag.appendChild(x.el); });
-          shell.insertBefore(frag, barT.nextSibling);
-        }
-        top3.forEach(function(x){ x.el.style.display = ''; });
-        return;
-      }
-      document.querySelectorAll('.ticket-group-section').forEach(function(group){
-        var ds = (group.getAttribute('data-sport') || '').toLowerCase();
-        var dt = (group.getAttribute('data-type') || '').toLowerCase();
-        var dp = (group.getAttribute('data-pick') || '').toLowerCase();
-        var de = (group.getAttribute('data-ev') || '').toLowerCase();
-        var matches = ds === filter || dt === filter || dp === filter || de === filter;
-        group.style.display = matches ? '' : 'none';
-      });
+      activeFilter = (pill.getAttribute('data-filter') || '').toLowerCase();
+      applyGroupView();
     });
   });
+
+  var sortSel = document.getElementById('ticket-sort-select');
+  if(sortSel){
+    sortSel.addEventListener('change', function(){
+      sortMode = (sortSel.value || 'ev_desc').toLowerCase();
+      applyGroupView();
+    });
+  }
+
+  var tSkip = document.getElementById('toggle-skip');
+  if(tSkip){
+    tSkip.addEventListener('click', function(){
+      hideSkip = !hideSkip;
+      tSkip.classList.toggle('active', hideSkip);
+      tSkip.setAttribute('aria-pressed', hideSkip ? 'true' : 'false');
+      tSkip.textContent = hideSkip ? 'HIDE SKIP' : 'SHOW SKIP';
+      applyGroupView();
+    });
+  }
 
   function toggleSectionCollapsed(section){
     if(!section) return;
@@ -13381,6 +13543,7 @@ def render_tickets_body_html(
       });
     }
     collapseAllGroups();
+    applyGroupView();
   })();
 })();
 </script>''')

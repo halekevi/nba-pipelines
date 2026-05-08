@@ -11,7 +11,7 @@
     "copy:android": "cap copy android",
     "sync": "cap sync",
     "sync:android": "cap sync android",
-    "sync:bundle": "PowerShell -NoProfile -ExecutionPolicy Bypass -Command \"Remove-Item Env:\\PROPORACLE_SERVER_URL -ErrorAction SilentlyContinue; npm run sync:android\"",
+    "sync:bundle": "PowerShell -NoProfile -ExecutionPolicy Bypass -Command \"Remove-Item Env:\\PROPORACLE_SERVER_URL -ErrorAction SilentlyContinue; Remove-Item -Path 'android/app/src/main/assets/public' -Recurse -Force -ErrorAction SilentlyContinue; npm run copy:android\"",
     "sync:remote": "PowerShell -NoProfile -ExecutionPolicy Bypass -Command \"$u = [Environment]::GetEnvironmentVariable('PROPORACLE_SERVER_URL','Process'); if ([string]::IsNullOrWhiteSpace($u)) { throw 'Set PROPORACLE_SERVER_URL to your https Railway URL, then run npm run sync:remote again.' }; if (-not ($u.StartsWith('https://'))) { throw 'Remote UI must use https://' }; npm run sync:android\"",
     "sync:url": "PowerShell -NoProfile -ExecutionPolicy Bypass -Command \"$u=$env:npm_config_url; if (-not $u) { throw 'Usage: npm run sync:url --url=http://IP:PORT'; }; $env:PROPORACLE_SERVER_URL=$u; npm run sync:android\"",
     "sync:dev": "PowerShell -NoProfile -ExecutionPolicy Bypass -Command \"$env:PROPORACLE_SERVER_URL='http://10.0.0.207:5173'; npm run sync:android\"",

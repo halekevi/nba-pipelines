@@ -21,7 +21,9 @@ const config = {
   webDir: "www",
   // Force bundled APK assets only. Never load remote PROPORACLE_SERVER_URL.
   // This prevents accidental "web form" rendering from stale env vars.
-  server: { androidScheme: "http" },
+  server: {
+    androidScheme: "https"
+  },
 };
 
 module.exports = config;
