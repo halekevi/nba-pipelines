@@ -2635,7 +2635,12 @@ function syncGradeFrameHeight(frame) {
       const bottom = (el.offsetTop || 0) + (el.offsetHeight || 0);
       if (bottom > maxBottom) maxBottom = bottom;
     });
-    const h = Math.ceil(maxBottom + 24);
+    const h = Math.max(
+      Math.ceil(maxBottom + 24),
+      doc.body ? doc.body.scrollHeight || 0 : 0,
+      doc.documentElement ? doc.documentElement.scrollHeight || 0 : 0,
+      300
+    );
     if (h > 0) {
       const px = Math.ceil(h) + 'px';
       frame.style.height = px;
