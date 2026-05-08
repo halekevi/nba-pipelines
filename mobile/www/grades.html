@@ -2667,9 +2667,35 @@ function syncGradeFrameHeight(frame) {
   try {
     const doc = frame.contentDocument;
     if (!doc || !doc.documentElement) return;
-    const h = Math.max(
+    const rootH = Math.max(
       doc.documentElement.scrollHeight || 0,
       doc.body ? doc.body.scrollHeight || 0 : 0
+    );
+    // Trim dead space: anchor to the furthest meaningful content block bottom.
+    let contentBottom = 0;
+    const contentSelectors = [
+      '.main',
+      '.wrap',
+      '.ticket-sections-wrap',
+      '.grades-analytics-wrap',
+      '.grade-eval-summary',
+      '.stats-bar',
+      '.sec',
+      '.sport-section',
+      '.insight-grid',
+      '.filter-pill'
+    ];
+    const nodes = doc.querySelectorAll(contentSelectors.join(','));
+    nodes.forEach(function (el) {
+      const rect = el.getBoundingClientRect();
+      if (!rect || rect.height <= 0) return;
+      const top = rect.top + (doc.defaultView?.scrollY || 0);
+      const bottom = top + rect.height;
+      if (bottom > contentBottom) contentBottom = bottom;
+    });
+    const h = Math.max(
+      rootH,
+      contentBottom > 0 ? Math.ceil(contentBottom + 20) : 0
     );
     if (h > 0) {
       const px = Math.ceil(h) + 'px';
