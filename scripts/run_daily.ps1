@@ -1632,6 +1632,29 @@ else {
     Write-Log "[NBA_LATE_FETCH] Hour=$NowHour < 10: skipped (scheduled late fetch runs separately)"
 }
 
+# =============================================================================
+# STEP G — Mobile data push
+# =============================================================================
+Write-Log "STEP G - Mobile data push: START"
+$pushMobileScript = Join-Path $Root "scripts\push_mobile_data.py"
+if (Test-Path $pushMobileScript) {
+    try {
+        & py -3.14 $pushMobileScript
+        if ($LASTEXITCODE -eq 0) {
+            Write-Log "STEP G - Mobile data push: OK"
+        }
+        else {
+            Write-Log "STEP G - Mobile data push: WARN (exit $LASTEXITCODE)"
+        }
+    }
+    catch {
+        Write-Log "STEP G - Mobile data push: WARN ($($_.Exception.Message))"
+    }
+}
+else {
+    Write-Log "STEP G - Mobile data push: SKIP (script missing)"
+}
+
 $dur = (Get-Date) - $script:DailyStart
 Write-Log "Daily run complete. Duration: $([int]$dur.TotalMinutes)m $([int]$dur.Seconds)s"
 if ($WeeklyAnalysis -and $script:WeeklyAnalysisReport) {

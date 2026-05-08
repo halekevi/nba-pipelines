@@ -340,32 +340,55 @@ def generate_bundle():
                 # Home page slate data must come from bundled JSON in offline/mobile mode.
                 content = content.replace(
                     'fetch("/api/slate", {cache: \'no-store\'})',
-                    "fetch('slate_latest.json', {cache: 'no-store'})"
+                    "fetch_smart('slate_latest.json')"
                 )
                 content = content.replace(
                     "fetch('/api/slate', {cache: 'no-store'})",
-                    "fetch('slate_latest.json', {cache: 'no-store'})"
+                    "fetch_smart('slate_latest.json')"
                 )
                 # Pipeline status: template spacing varies — use regex so replacement always applies.
                 content = re.sub(
                     r'fetch\(\s*"/api/pipeline/status"\s*,\s*\{\s*cache\s*:\s*[\'"]no-store[\'"]\s*\}\s*\)',
-                    "fetch('pipeline_status.json', {cache:'no-store'})",
+                    "fetch_smart('pipeline_status.json')",
                     content,
                 )
                 content = content.replace(
                     'fetch(`/api/slate-sport/${encodeURIComponent(sport)}`, {cache: \'no-store\'})',
-                    "fetch(`slate_sport_${encodeURIComponent(sport)}.json`, {cache: 'no-store'})"
+                    "fetch_smart(`slate_sport_${encodeURIComponent(sport)}.json`)"
                 )
                 content = content.replace(
                     "fetch('/api/slate-excel', {cache: 'no-store'})",
-                    "fetch('slate_excel.json', {cache: 'no-store'})"
+                    "fetch_smart('slate_excel.json')"
                 )
                 # Combined slate JSON (no Railway — mobile/www only).
                 content = re.sub(
                     r"fetch\(\s*['\"]/api/slate-sport/combined['\"]\s*,\s*\{\s*cache\s*:\s*['\"]no-store['\"]\s*\}\s*\)",
-                    "fetch('slate_sport_combined.json', {cache:'no-store'})",
+                    "fetch_smart('slate_sport_combined.json')",
                     content,
                 )
+
+                # Inject fetch_smart and fetch logic for remote-priority
+                smart_fetch_js = """
+<script>
+async function fetch_smart(localPath) {
+  // If we have a remote override URL for this file type, prefer it
+  let remoteUrl = null;
+  if (localPath === 'slate_latest.json' && window.SLATE_JSON_URL) remoteUrl = window.SLATE_JSON_URL;
+  if (localPath === 'tickets_latest.json' && window.TICKETS_JSON_URL) remoteUrl = window.TICKETS_JSON_URL;
+
+  if (remoteUrl) {
+    try {
+      const resp = await fetch(remoteUrl, { cache: 'no-store' });
+      if (resp.ok) return resp;
+    } catch (e) {
+      console.warn("SmartFetch remote failed, falling back to local:", localPath, e);
+    }
+  }
+  return fetch(localPath, { cache: 'no-store' });
+}
+</script>
+"""
+                content = content.replace("<head>", f"<head>\n{smart_fetch_js}")
             elif dest_name == "income.html":
                 # Jinja strips can leave invalid JS in static bundle.
                 content = re.sub(r"const\s+points\s*=\s*;", "const points = [];", content)
