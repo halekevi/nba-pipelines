@@ -1408,7 +1408,10 @@ function gradesFetchSignal(ms) {
     }
     const slate = document.getElementById('grade-frame');
     if (slate && slate.style.display !== 'none') {
-      return { win: window, key: 's' };
+      try {
+        const sw = slate.contentWindow;
+        if (sw) return { win: sw, key: 's' };
+      } catch (_e) {}
     }
     return { win: window, key: 'w' };
   }
@@ -2287,10 +2290,15 @@ function refreshControlsSummary() {
   el.textContent = ds ? `${ds} · ${tab}` : tab;
 }
 function switchTab(tab) {
-  activeTab = tab;
   const gradeFrame = document.getElementById('grade-frame');
   const ticketFrame = document.getElementById('ticket-frame');
-  if (!gradeFrame || !ticketFrame) return;
+  if (!gradeFrame || !ticketFrame) {
+    try {
+      refreshControlsSummary();
+    } catch (_e) {}
+    return;
+  }
+  activeTab = tab;
   if (tab !== 'tickets') {
     tearDownTicketFrameResizeObservers();
   }
@@ -2440,10 +2448,9 @@ function applyTicketEvalGradesEmbed(doc) {
 async function probeTicketEval(dateStr) {
   const url = TICKET_EVAL_URL_TEMPLATE.replace('{date}', dateStr);
   try {
-    const res = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
+    const res = await fetch(url, { method: 'HEAD', cache: 'no-cache', signal: gradesFetchSignal(15000) });
     if (res.ok) return true;
-    // Some CDN/proxy stacks answer GET but not HEAD (405/501/404); try GET once.
-    const res2 = await fetch(url, { method: 'GET', cache: 'no-cache' });
+    const res2 = await fetch(url, { method: 'GET', cache: 'no-cache', signal: gradesFetchSignal(15000) });
     return res2.ok;
   } catch (e) {
     return false;
@@ -2545,11 +2552,11 @@ function computeVisibleReportDateCount(){
 // ─── PROBE: check if a slate_eval file exists for a date ──────────────────────
 async function probeDate(dateStr){
   const url = slateEvalUrl(dateStr);
+  const sig = gradesFetchSignal(15000);
   try {
-    const res = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
+    const res = await fetch(url, { method: 'HEAD', cache: 'no-cache', signal: sig });
     if (res.ok) return true;
-    // Some mobile browsers / proxies / CDNs omit or break HEAD while GET works (blank iframe if we bail here).
-    const res2 = await fetch(url, { method: 'GET', cache: 'no-cache' });
+    const res2 = await fetch(url, { method: 'GET', cache: 'no-cache', signal: gradesFetchSignal(15000) });
     return res2.ok;
   } catch (e) {
     return false;
@@ -2956,6 +2963,7 @@ function loadDate(dateStr){
   const frame = document.getElementById('grade-frame');
   const overlay = document.getElementById('load-overlay');
   const emptyState = document.getElementById('empty-state');
+  if (!frame) return;
 
   clearGradesSlateLoadWatch();
   tearDownGradeFrameResizeObservers();
@@ -2965,14 +2973,17 @@ function loadDate(dateStr){
   } catch (_sd) {}
 
   // Show loading
-  overlay.classList.remove('hidden');
-  overlay.removeAttribute('aria-hidden');
-  overlay.style.removeProperty('display');
-  overlay.style.removeProperty('visibility');
-  overlay.style.removeProperty('pointer-events');
-  emptyState.hidden = true;
+  if (overlay) {
+    overlay.classList.remove('hidden');
+    overlay.removeAttribute('aria-hidden');
+    overlay.style.removeProperty('display');
+    overlay.style.removeProperty('visibility');
+    overlay.style.removeProperty('pointer-events');
+  }
+  if (emptyState) emptyState.hidden = true;
   frame.classList.add('loading');
-  document.getElementById('load-date-text').textContent = dateStr;
+  const ldtEl = document.getElementById('load-date-text');
+  if (ldtEl) ldtEl.textContent = dateStr;
 
   renderPills();
 
@@ -2999,8 +3010,9 @@ function loadDate(dateStr){
   };
   frame.onerror = function(){
     finishGradesSlateLoadUI();
-    emptyState.hidden = false;
-    document.getElementById('empty-date').textContent = dateStr;
+    if (emptyState) emptyState.hidden = false;
+    const ed = document.getElementById('empty-date');
+    if (ed) ed.textContent = dateStr;
   };
 
   // Use a short timeout to detect 404s via probe
@@ -3009,8 +3021,9 @@ function loadDate(dateStr){
       slateReportMissing = true;
       frame.src = 'about:blank';
       finishGradesSlateLoadUI();
-      emptyState.hidden = false;
-      document.getElementById('empty-date').textContent = dateStr;
+      if (emptyState) emptyState.hidden = false;
+      const ed2 = document.getElementById('empty-date');
+      if (ed2) ed2.textContent = dateStr;
     } else {
       slateReportMissing = false;
       let sameDoc = false;
