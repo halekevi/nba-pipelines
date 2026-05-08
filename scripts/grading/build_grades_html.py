@@ -2071,13 +2071,6 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
 <body>
 <header>
   <div class="slate-header-top">
-    <div class="logo">
-      <img src="/static/proporacle-logo-v3.png?v=20260320b" alt="PropORACLE logo" class="logo-icon"/>
-      <div>
-        <div class="logo-title">SLATE EVALUATION</div>
-        <div class="logo-sub">POST-GAME GRADE REPORT</div>
-      </div>
-    </div>
     <div class="date-badge">📅 {h(display_date)}</div>
   </div>
   <div id="proporacle-grades-toolbar-host" class="grades-hub-toolbar-host"></div>
