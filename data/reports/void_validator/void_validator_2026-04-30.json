@@ -19,17 +19,17 @@
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-30\\graded_nhl_2026-04-30.xlsx",
       "status": "ok",
-      "rows": 493,
-      "void_rows": 86,
-      "acceptable_void_rows": 86,
+      "rows": 518,
+      "void_rows": 410,
+      "acceptable_void_rows": 410,
       "unacceptable_void_rows": 0
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-30\\graded_mlb_2026-04-30.xlsx",
       "status": "ok",
-      "rows": 2633,
-      "void_rows": 148,
-      "acceptable_void_rows": 148,
+      "rows": 2927,
+      "void_rows": 431,
+      "acceptable_void_rows": 431,
       "unacceptable_void_rows": 0
     },
     {

@@ -1,0 +1,5 @@
+team,days_rest,b2b_flag,home_away
+MIN,0,True,HOME
+NYK,1,False,AWAY
+PHI,1,False,HOME
+SAS,0,True,AWAY

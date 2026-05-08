@@ -11,25 +11,25 @@
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-03\\graded_nba_2026-05-03.xlsx",
       "status": "ok",
-      "rows": 1234,
-      "void_rows": 127,
-      "acceptable_void_rows": 127,
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
       "unacceptable_void_rows": 0
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-03\\graded_nhl_2026-05-03.xlsx",
       "status": "ok",
-      "rows": 236,
-      "void_rows": 28,
-      "acceptable_void_rows": 28,
+      "rows": 518,
+      "void_rows": 518,
+      "acceptable_void_rows": 518,
       "unacceptable_void_rows": 0
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-03\\graded_mlb_2026-05-03.xlsx",
       "status": "ok",
-      "rows": 3744,
-      "void_rows": 163,
-      "acceptable_void_rows": 163,
+      "rows": 2927,
+      "void_rows": 102,
+      "acceptable_void_rows": 102,
       "unacceptable_void_rows": 0
     },
     {
@@ -43,9 +43,9 @@
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-03\\graded_nba1h_2026-05-03.xlsx",
       "status": "ok",
-      "rows": 64,
-      "void_rows": 26,
-      "acceptable_void_rows": 26,
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
       "unacceptable_void_rows": 0
     },
     {

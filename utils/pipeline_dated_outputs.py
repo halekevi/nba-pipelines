@@ -1,8 +1,9 @@
 """
-Copy pipeline CSV outputs into dated folders under outputs/<YYYY-MM-DD>/ and
-Sports/<Sport>/outputs/<YYYY-MM-DD>/ so step7+ can be re-run without hunting
-canonical paths. Slate date = earliest merged game_date/start_time in the frame
-(same idea as MLB step7 / step8 dated copies).
+Copy pipeline outputs into the canonical dated folder under outputs/<YYYY-MM-DD>/.
+
+Historically this also mirrored files into Sports/<Sport>/outputs/<YYYY-MM-DD>/,
+which created duplicate dated artifacts across two trees. Canonical dated storage
+is now root outputs only.
 """
 
 from __future__ import annotations
@@ -62,11 +63,7 @@ def copy_pipeline_output_to_dated_dirs(
     sport_dir_name: str,
     repo_root: Path,
 ) -> None:
-    """
-    After writing ``output_path``, copy the file into:
-      {repo_root}/outputs/{date}/{basename}
-      {repo_root}/Sports/{sport_dir_name}/outputs/{date}/{basename}
-    """
+    """After writing ``output_path``, copy the file into {repo_root}/outputs/{date}/{basename}."""
     src = Path(output_path).resolve()
     if not src.is_file():
         return
@@ -74,11 +71,11 @@ def copy_pipeline_output_to_dated_dirs(
     if not slate_date:
         return
     name = src.name
-    for base in (repo_root / "outputs" / slate_date, repo_root / "Sports" / sport_dir_name / "outputs" / slate_date):
-        try:
-            base.mkdir(parents=True, exist_ok=True)
-            dest = base / name
-            shutil.copy2(src, dest)
-            print(f"[pipeline] Dated copy -> {dest}")
-        except OSError as e:
-            print(f"[pipeline] WARN: dated copy failed ({base}): {e}")
+    base = repo_root / "outputs" / slate_date
+    try:
+        base.mkdir(parents=True, exist_ok=True)
+        dest = base / name
+        shutil.copy2(src, dest)
+        print(f"[pipeline] Dated copy -> {dest}")
+    except OSError as e:
+        print(f"[pipeline] WARN: dated copy failed ({base}): {e}")

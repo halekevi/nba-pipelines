@@ -1,0 +1,69 @@
+{
+  "date": "2026-04-21",
+  "accepted_void_tokens": [
+    "NO_DATA",
+    "DNP",
+    "NO_ACTUAL",
+    "NO_LINE",
+    "PUSH"
+  ],
+  "summary_rows": [
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-21\\graded_nba_2026-04-21.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-21\\graded_nhl_2026-04-21.xlsx",
+      "status": "ok",
+      "rows": 518,
+      "void_rows": 407,
+      "acceptable_void_rows": 407,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-21\\graded_mlb_2026-04-21.xlsx",
+      "status": "ok",
+      "rows": 2927,
+      "void_rows": 286,
+      "acceptable_void_rows": 286,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-21\\graded_soccer_2026-04-21.xlsx",
+      "status": "ok",
+      "rows": 321,
+      "void_rows": 141,
+      "acceptable_void_rows": 141,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-21\\graded_nba1h_2026-04-21.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-21\\graded_nba1q_2026-04-21.xlsx",
+      "status": "ok",
+      "rows": 256,
+      "void_rows": 67,
+      "acceptable_void_rows": 67,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-21\\graded_tennis_2026-04-21.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    }
+  ],
+  "unacceptable_count": 0
+}

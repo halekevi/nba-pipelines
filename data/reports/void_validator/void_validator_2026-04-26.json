@@ -11,25 +11,25 @@
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-26\\graded_nba_2026-04-26.xlsx",
       "status": "ok",
-      "rows": 2382,
-      "void_rows": 224,
-      "acceptable_void_rows": 224,
+      "rows": 2375,
+      "void_rows": 217,
+      "acceptable_void_rows": 217,
       "unacceptable_void_rows": 0
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-26\\graded_nhl_2026-04-26.xlsx",
       "status": "ok",
-      "rows": 245,
-      "void_rows": 34,
-      "acceptable_void_rows": 34,
+      "rows": 518,
+      "void_rows": 410,
+      "acceptable_void_rows": 410,
       "unacceptable_void_rows": 0
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-26\\graded_mlb_2026-04-26.xlsx",
       "status": "ok",
-      "rows": 3483,
-      "void_rows": 384,
-      "acceptable_void_rows": 384,
+      "rows": 2927,
+      "void_rows": 458,
+      "acceptable_void_rows": 458,
       "unacceptable_void_rows": 0
     },
     {
@@ -44,24 +44,24 @@
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-26\\graded_nba1h_2026-04-26.xlsx",
       "status": "ok",
       "rows": 20,
-      "void_rows": 20,
-      "acceptable_void_rows": 20,
+      "void_rows": 5,
+      "acceptable_void_rows": 5,
       "unacceptable_void_rows": 0
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-26\\graded_nba1q_2026-04-26.xlsx",
       "status": "ok",
       "rows": 326,
-      "void_rows": 326,
-      "acceptable_void_rows": 326,
+      "void_rows": 128,
+      "acceptable_void_rows": 128,
       "unacceptable_void_rows": 0
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-26\\graded_tennis_2026-04-26.xlsx",
       "status": "ok",
-      "rows": 0,
-      "void_rows": 0,
-      "acceptable_void_rows": 0,
+      "rows": 150,
+      "void_rows": 150,
+      "acceptable_void_rows": 150,
       "unacceptable_void_rows": 0
     }
   ],

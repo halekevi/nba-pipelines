@@ -1,0 +1,69 @@
+{
+  "date": "2026-05-07",
+  "accepted_void_tokens": [
+    "NO_DATA",
+    "DNP",
+    "NO_ACTUAL",
+    "NO_LINE",
+    "PUSH"
+  ],
+  "summary_rows": [
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-07\\graded_nba_2026-05-07.xlsx",
+      "status": "ok",
+      "rows": 1356,
+      "void_rows": 78,
+      "acceptable_void_rows": 78,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-07\\graded_nhl_2026-05-07.xlsx",
+      "status": "ok",
+      "rows": 244,
+      "void_rows": 3,
+      "acceptable_void_rows": 3,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-07\\graded_mlb_2026-05-07.xlsx",
+      "status": "ok",
+      "rows": 995,
+      "void_rows": 43,
+      "acceptable_void_rows": 43,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-07\\graded_soccer_2026-05-07.xlsx",
+      "status": "ok",
+      "rows": 10,
+      "void_rows": 2,
+      "acceptable_void_rows": 2,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-07\\graded_nba1h_2026-05-07.xlsx",
+      "status": "ok",
+      "rows": 50,
+      "void_rows": 23,
+      "acceptable_void_rows": 23,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-07\\graded_nba1q_2026-05-07.xlsx",
+      "status": "ok",
+      "rows": 166,
+      "void_rows": 52,
+      "acceptable_void_rows": 52,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-07\\graded_tennis_2026-05-07.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    }
+  ],
+  "unacceptable_count": 0
+}

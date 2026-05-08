@@ -34,6 +34,18 @@ try:
 except Exception:
     pass
 
+_repo = Path(__file__).resolve().parent
+for _ in range(10):
+    if (_repo / "utils" / "step8_edge_direction.py").is_file():
+        if str(_repo) not in sys.path:
+            sys.path.insert(0, str(_repo))
+        break
+    _repo = _repo.parent
+else:
+    raise RuntimeError("Could not locate repo root with utils/step8_edge_direction.py")
+
+from utils.step8_edge_direction import reconcile_signed_edge_abs_dataframe
+
 _ET = ZoneInfo("America/New_York")
 
 
@@ -137,7 +149,7 @@ def write_sheet(wb, name, data):
         'L5 Over': 8, 'L5 Under': 8,
         'Def Rank': 9, 'Def Tier': 10,
         'Min Tier': 9, 'Shot Role': 10, 'Usage Role': 10,
-        'ML Prob': 9, 'Edge Score': 10, 'Blended Score': 12,
+        'ML Prob': 9,
         'Void Reason': 20,
     }
     for ci, h in enumerate(headers, 1):
@@ -352,8 +364,6 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'final_bet_direction',
         'edge', 'abs_edge', 'projection',
         'ml_prob',
-        'edge_score',
-        'blended_score',
         'line_hit_rate_over_ou_5',
         'stat_last5_avg', 'stat_season_avg',
         'last5_over', 'last5_under',
@@ -364,7 +374,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         # ── Intel layer (step6e) ──────────────────────────────────────────
         'intel_season_avg', 'intel_l5_avg', 'intel_l10_avg',
         'intel_season_hit_rate', 'intel_cushion', 'intel_cv_pct',
-        'intel_opp_vs_league_pct', 'intel_l5_vs_season',
+        'intel_l5_vs_season',
         'intel_season_games',
         # ── Full game log (g1-g10) and H2H ───────────────────────────────
         'stat_g1', 'stat_g2', 'stat_g3', 'stat_g4', 'stat_g5',
@@ -382,9 +392,9 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
             df2[c] = np.nan
     clean = df2[keep].copy()
 
-    for col in ['rank_score', 'edge', 'abs_edge', 'projection', 'ml_prob', 'edge_score', 'blended_score', 'line_hit_rate_over_ou_5']:
+    for col in ['rank_score', 'edge', 'abs_edge', 'projection', 'ml_prob', 'line_hit_rate_over_ou_5']:
         if col in clean.columns:
-            rnd = 4 if col in ('ml_prob', 'edge_score', 'blended_score') else 2
+            rnd = 4 if col == 'ml_prob' else 2
             clean[col] = pd.to_numeric(clean[col], errors='coerce').round(rnd)
     if 'standard_line' in clean.columns:
         clean['standard_line'] = pd.to_numeric(clean['standard_line'], errors='coerce').round(2)
@@ -410,8 +420,6 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'final_bet_direction': 'Direction',
         'edge': 'Edge', 'abs_edge': 'Abs Edge', 'projection': 'Projection',
         'ml_prob': 'ML Prob',
-        'edge_score': 'Edge Score',
-        'blended_score': 'Blended Score',
         'line_hit_rate_over_ou_5': 'Hit Rate (5g)',
         'stat_last5_avg': 'Last 5 Avg', 'stat_season_avg': 'Season Avg',
         'last5_over': 'L5 Over', 'last5_under': 'L5 Under',
@@ -426,7 +434,6 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str, source_hint: str = ""):
         'intel_season_hit_rate':   'Season Hit%',
         'intel_cushion':           'Cushion',
         'intel_cv_pct':            'CV%',
-        'intel_opp_vs_league_pct': 'Opp vs Avg%',
         'intel_l5_vs_season':      'L5 vs Season',
         'intel_season_games':      'Season GP',
         # Game log
@@ -543,13 +550,9 @@ def main() -> None:
     else:
         out["game_date"] = ""
 
-    if "edge" not in out.columns:
-        proj = pd.to_numeric(out.get("projection", ""), errors="coerce")
-        line = pd.to_numeric(out.get("line", ""), errors="coerce")
-        out["edge"] = (proj - line)
-
+    reconcile_signed_edge_abs_dataframe(out)
     edge = pd.to_numeric(out["edge"], errors="coerce")
-    abs_edge = edge.abs()
+    abs_edge = pd.to_numeric(out["abs_edge"], errors="coerce")
 
     pick_type = out.get("pick_type", "Standard").astype(str).apply(_norm_pick_type)
     forced = pick_type.isin(["Goblin", "Demon"])

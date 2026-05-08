@@ -1814,7 +1814,12 @@ def main():
         args.date = (date.today() - timedelta(days=1)).strftime('%Y-%m-%d')
     if not args.output:
         slug = "wcbb" if args.sport == "WCBB" else args.sport.lower()
-        args.output = f"actuals_{slug}_{args.date}.csv"
+        # Default to dated pipeline layout (outputs/YYYY-MM-DD/actuals_<sport>_YYYY-MM-DD.csv)
+        # so manual runs don't drop files at repo root.
+        args.output = str(_REPO_ROOT / "outputs" / args.date / f"actuals_{slug}_{args.date}.csv")
+    out_path = Path(args.output)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    args.output = str(out_path)
 
     print(f"\n=== {args.sport} actuals for {args.date} ===\n")
 

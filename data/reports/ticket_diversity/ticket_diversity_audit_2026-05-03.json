@@ -1,53 +1,53 @@
 {
-  "generated_at_utc": "2026-05-03T20:49:46.201223+00:00",
+  "generated_at_utc": "2026-05-05T07:53:08.036605+00:00",
   "date": "2026-05-03",
   "source_output": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\combined_slate_tickets_2026-05-03.xlsx",
   "audit": {
-    "tickets": 2492,
-    "unique_leg_sets": 1350,
-    "duplicate_rate": 0.4582664526484751,
-    "pair_count": 3103786,
-    "jaccard_mean": 0.00513930269134075,
+    "tickets": 946,
+    "unique_leg_sets": 539,
+    "duplicate_rate": 0.43023255813953487,
+    "pair_count": 446985,
+    "jaccard_mean": 0.011914969626302221,
     "jaccard_p90": 0.0,
     "jaccard_max": 1.0,
     "by_legs": {
       "2": {
-        "tickets": 602,
-        "unique_leg_sets": 301,
+        "tickets": 196,
+        "unique_leg_sets": 98,
         "duplicate_rate": 0.5,
-        "jaccard_mean": 0.0033001475945406604,
+        "jaccard_mean": 0.011128553985696843,
         "jaccard_p90": 0.0,
         "jaccard_max": 1.0
       },
       "3": {
-        "tickets": 466,
-        "unique_leg_sets": 284,
-        "duplicate_rate": 0.3905579399141631,
-        "jaccard_mean": 0.004103558078360792,
+        "tickets": 151,
+        "unique_leg_sets": 98,
+        "duplicate_rate": 0.3509933774834437,
+        "jaccard_mean": 0.011196467991169978,
         "jaccard_p90": 0.0,
         "jaccard_max": 1.0
       },
       "4": {
-        "tickets": 472,
-        "unique_leg_sets": 256,
-        "duplicate_rate": 0.4576271186440678,
-        "jaccard_mean": 0.0058687147535252905,
+        "tickets": 184,
+        "unique_leg_sets": 115,
+        "duplicate_rate": 0.375,
+        "jaccard_mean": 0.011788797248526401,
         "jaccard_p90": 0.0,
         "jaccard_max": 1.0
       },
       "5": {
-        "tickets": 473,
-        "unique_leg_sets": 261,
-        "duplicate_rate": 0.4482029598308668,
-        "jaccard_mean": 0.006671926483712057,
+        "tickets": 204,
+        "unique_leg_sets": 115,
+        "duplicate_rate": 0.4362745098039216,
+        "jaccard_mean": 0.01490596238495398,
         "jaccard_p90": 0.0,
         "jaccard_max": 1.0
       },
       "6": {
-        "tickets": 479,
-        "unique_leg_sets": 248,
-        "duplicate_rate": 0.48225469728601256,
-        "jaccard_mean": 0.008148961825117694,
+        "tickets": 211,
+        "unique_leg_sets": 113,
+        "duplicate_rate": 0.46445497630331756,
+        "jaccard_mean": 0.0159768299104792,
         "jaccard_p90": 0.0,
         "jaccard_max": 1.0
       }

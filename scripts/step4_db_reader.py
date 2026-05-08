@@ -145,12 +145,15 @@ _NHL_PROP_MAP = {
     "plus/minus":              "plus_minus",
     "plus_minus":              "plus_minus",
     "power play points":       "pp_points",
+    "power_play_points":       "pp_points",
     "pp_points":               "pp_points",
     "faceoffs won":            "faceoffs_won",
     "faceoffs_won":            "faceoffs_won",
     "time on ice":             "toi",
+    "time_on_ice":             "toi",
     "toi":                     "toi",
     "goalie saves":            "shots_on_goal",   # GK: shots_on_goal = saves in NHL context
+    "goalie_saves":            "shots_on_goal",
     "saves":                   "shots_on_goal",
     "goals allowed":           "goals",           # for opposing team context — rare
     "goals_allowed":           "goals",

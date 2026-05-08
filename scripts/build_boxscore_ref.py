@@ -726,20 +726,42 @@ NHL_STAT_MAP = {
     "assists":       ["A", "ASSISTS"],
     "points":        ["PTS", "P"],
     "shots_on_goal": ["SOG", "S", "SHOTS"],
-    "hits":          ["HIT", "HITS"],
+    "hits":          ["HIT", "HITS", "HT"],       # ESPN returns "HT"
     "blocked_shots": ["BS", "BKS", "BLOCKED"],
     "pim":           ["PIM"],
     "plus_minus":    ["PLUSMINUS", "+/-"],
-    "pp_points":     ["PPP"],
-    "faceoffs_won":  ["FOW"],
+    # Power-play points often appear as PPP, or split into PPG/PPA.
+    "pp_points":     ["PPP", "PPPTS", "POWERPLAYPOINTS"],
+    "pp_goals":      ["PPG", "POWERPLAYGOALS"],
+    "pp_assists":    ["PPA", "POWERPLAYASSISTS"],
+    "faceoffs_won":  ["FOW", "FW"],               # ESPN returns "FW"
     "toi":           ["TOI"],
 }
+
+
+def _parse_toi(v) -> float | None:
+    """Convert ESPN TOI string 'MM:SS' to decimal minutes, or float passthrough."""
+    if v is None:
+        return None
+    s = str(v).strip()
+    if ":" in s:
+        parts = s.split(":", 1)
+        try:
+            return int(parts[0]) + int(parts[1]) / 60.0
+        except (ValueError, TypeError):
+            return None
+    try:
+        return float(s)
+    except (ValueError, TypeError):
+        return None
 
 
 def _nhl_stat(lmap, key):
     for alias in NHL_STAT_MAP.get(key, [key.upper()]):
         norm = re.sub(r"[^A-Z0-9]", "", alias.upper())
         if norm in lmap:
+            if key == "toi":
+                return _parse_toi(lmap[norm])
             try:
                 return float(lmap[norm])
             except (ValueError, TypeError):
@@ -774,6 +796,11 @@ def _parse_nhl_boxscore(box: dict, event_id: str, game_date: str,
                 pim = _nhl_stat(lmap, "pim")
                 pm  = _nhl_stat(lmap, "plus_minus")
                 ppp = _nhl_stat(lmap, "pp_points")
+                if ppp is None:
+                    ppg = _nhl_stat(lmap, "pp_goals")
+                    ppa = _nhl_stat(lmap, "pp_assists")
+                    if ppg is not None or ppa is not None:
+                        ppp = float(ppg or 0.0) + float(ppa or 0.0)
                 fow = _nhl_stat(lmap, "faceoffs_won")
                 toi = _nhl_stat(lmap, "toi")
 

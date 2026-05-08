@@ -164,6 +164,27 @@ def get_game_log_values(nhl_id: str, stat_norm: str, role: str, season: str, max
     return _get_game_log_values_one(raw, stat_norm, role, season, max_games)
 
 
+def _row_stat_g_values(row: dict, max_games: int = 30) -> list[float]:
+    """
+    Read precomputed rolling game values from step4 (stat_g1..stat_gN).
+    step4 is already stat-normalized per row and is the most reliable source
+    for recent-window hit-rate consistency shown in downstream UI.
+    """
+    vals: list[float] = []
+    for i in range(1, max_games + 1):
+        k = f"stat_g{i}"
+        if k not in row:
+            break
+        raw = row.get(k, "")
+        if raw in ("", None):
+            continue
+        try:
+            vals.append(float(raw))
+        except Exception:
+            continue
+    return vals
+
+
 def compute_hit_rate(values: list[float], line: float, window: int | None = None) -> tuple[float, int, int]:
     """Returns (hit_rate_over, sample_size, over_count)."""
     subset = values[:window] if window else values
@@ -249,16 +270,22 @@ def main():
             results.append(row)
             continue
 
-        cache_key = f"{nhl_id}:{stat_norm}:{args.season}"
-        if cache_key in gamelog_cache:
-            values = gamelog_cache[cache_key]
-            bar.set_postfix(cached=True, fetched=fetched)
+        # Prefer step4 in-row game values when present. This avoids NHL API
+        # stat sparsity issues (e.g., hits returning all-zero logs for skaters).
+        values = _row_stat_g_values(row, args.max_games)
+        if len(values) >= 3:
+            bar.set_postfix(source="step4", fetched=fetched)
         else:
-            bar.set_postfix(fetching=row.get('player_name','')[:15], fetched=fetched)
-            values = get_game_log_values(nhl_id, stat_norm, role, args.season, args.max_games)
-            gamelog_cache[cache_key] = values
-            fetched += 1
-            time.sleep(0.2)
+            cache_key = f"{nhl_id}:{stat_norm}:{args.season}"
+            if cache_key in gamelog_cache:
+                values = gamelog_cache[cache_key]
+                bar.set_postfix(cached=True, fetched=fetched)
+            else:
+                bar.set_postfix(fetching=row.get('player_name','')[:15], fetched=fetched)
+                values = get_game_log_values(nhl_id, stat_norm, role, args.season, args.max_games)
+                gamelog_cache[cache_key] = values
+                fetched += 1
+                time.sleep(0.2)
 
         hr_L5, s5, over_L5 = compute_hit_rate(values, line, 5)
         hr_L10, s10, over_L10 = compute_hit_rate(values, line, 10)

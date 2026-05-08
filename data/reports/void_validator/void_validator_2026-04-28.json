@@ -11,25 +11,25 @@
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-28\\graded_nba_2026-04-28.xlsx",
       "status": "ok",
-      "rows": 1951,
-      "void_rows": 147,
-      "acceptable_void_rows": 147,
+      "rows": 1943,
+      "void_rows": 139,
+      "acceptable_void_rows": 139,
       "unacceptable_void_rows": 0
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-28\\graded_nhl_2026-04-28.xlsx",
       "status": "ok",
-      "rows": 683,
-      "void_rows": 112,
-      "acceptable_void_rows": 112,
+      "rows": 518,
+      "void_rows": 410,
+      "acceptable_void_rows": 410,
       "unacceptable_void_rows": 0
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-28\\graded_mlb_2026-04-28.xlsx",
       "status": "ok",
-      "rows": 3649,
-      "void_rows": 186,
-      "acceptable_void_rows": 186,
+      "rows": 2927,
+      "void_rows": 151,
+      "acceptable_void_rows": 151,
       "unacceptable_void_rows": 0
     },
     {

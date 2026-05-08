@@ -287,9 +287,10 @@ if (Test-Path $FetchActualsScript) {
 
     if (Test-Path $TennisGraderScript) {
         $TennisStep8Dated = Join-Path $DateDir "step8_tennis_direction_clean_$Date.xlsx"
+        $TennisStep8Canonical = Join-Path $DateDir "tennis\step8_tennis_direction_clean.xlsx"
         $TennisStep8Static = Join-Path $SportsRoot "Tennis\outputs\step8_tennis_direction_clean.xlsx"
         $TennisStep8Csv = Join-Path $SportsRoot "Tennis\outputs\step8_tennis_direction.csv"
-        $TennisSlateFile = Resolve-FirstExisting @($TennisStep8Dated, $TennisStep8Static, $TennisStep8Csv)
+        $TennisSlateFile = Resolve-FirstExisting @($TennisStep8Canonical, $TennisStep8Dated, $TennisStep8Static, $TennisStep8Csv)
         if (-not $TennisSlateFile) {
             Write-Host "Skipping Tennis grader (no step8 tennis slate; build Tennis pipeline or place step8 under outputs\$Date or Tennis\outputs)." -ForegroundColor Yellow
         }
@@ -374,6 +375,7 @@ else {
 # Grade NBA/CBB + Build HTML
 # =============================
 $NBAStep8Dated = Join-Path $DateDir "step8_nba_direction_clean_$Date.xlsx"
+$NBAStep8Canonical = Join-Path $DateDir "nba\step8_all_direction_clean.xlsx"
 $NBAExtractOut = Join-Path $DateDir "nba_slate_extracted_$Date.xlsx"
 $NBAStep8Static = Join-Path $SportsRoot "NBA\data\outputs\step8_all_direction_clean.xlsx"
 $NBAStep8Static2 = Join-Path $SportsRoot "NBA\step8_all_direction_clean.xlsx"
@@ -406,20 +408,24 @@ if ((Test-Path $ExportNbaFullSlateScript) -and (Test-Path $DateDir)) {
 $NBASlateFile = Resolve-FirstExisting @(
     $NbaFullSlateForGrade,
     $NBAExtractOut,
+    $NBAStep8Canonical,
     $NBAStep8Dated,
     $NBAStep8Static,
     $NBAStep8Static2
 )
 if ($NBASlateFile) { Write-Host "[GRADER] NBA slate: $(Split-Path $NBASlateFile -Leaf)" -ForegroundColor Cyan }
 $CBBSlateXlsx = Resolve-FirstExisting @(
+    (Join-Path $DateDir "cbb\step6_ranked_cbb.xlsx"),
     (Join-Path $DateDir "step6_ranked_cbb_$Date.xlsx"),
     (Join-Path $SportsRoot "CBB\step6_ranked_cbb.xlsx")
 )
 $CBBSlateCsv = Join-Path $DateDir "cbb_slate_extracted_$Date.csv"
 $NHLStep8Dated = Join-Path $DateDir "step8_nhl_direction_clean_$Date.xlsx"
+$NHLStep8Canonical = Join-Path $DateDir "nhl\step8_nhl_direction_clean.xlsx"
 $NHLStep8Static = Join-Path $SportsRoot "NHL\outputs\step8_nhl_direction_clean.xlsx"
 $NHLStep8Static2 = Join-Path $SportsRoot "NHL\step8_nhl_direction_clean.xlsx"
 $NHLSlateFile = Resolve-FirstExisting @(
+    $NHLStep8Canonical,
     $NHLStep8Dated,
     $NHLStep8Static,
     $NHLStep8Static2
@@ -427,9 +433,11 @@ $NHLSlateFile = Resolve-FirstExisting @(
 if ($NHLSlateFile) { Write-Host "[GRADER] NHL slate: $(Split-Path $NHLSlateFile -Leaf)" -ForegroundColor Cyan }
 
 $SoccerStep8Dated = Join-Path $DateDir "step8_soccer_direction_clean_$Date.xlsx"
+$SoccerStep8Canonical = Join-Path $DateDir "soccer\step8_soccer_direction_clean.xlsx"
 $SoccerStep8Static = Join-Path $SportsRoot "Soccer\outputs\step8_soccer_direction_clean.xlsx"
 $SoccerStep8Static2 = Join-Path $SportsRoot "Soccer\step8_soccer_direction_clean.xlsx"
 $SoccerSlateFile = Resolve-FirstExisting @(
+    $SoccerStep8Canonical,
     $SoccerStep8Dated,
     $SoccerStep8Static,
     $SoccerStep8Static2
@@ -438,8 +446,8 @@ $SoccerSlateFile = Resolve-FirstExisting @(
 # Build dated NBA1H/1Q slates from root workbook when archive missing (filters by Game Time == $Date).
 $DatedNBA1HPath = Join-Path $DateDir "step8_nba1h_direction_clean_$Date.xlsx"
 $DatedNBA1QPath = Join-Path $DateDir "step8_nba1q_direction_clean_$Date.xlsx"
-$RootNBA1HPath = Join-Path $SportsRoot "NBA\step8_nba1h_direction_clean.xlsx"
-$RootNBA1QPath = Join-Path $SportsRoot "NBA\step8_nba1q_direction_clean.xlsx"
+$RootNBA1HPath = Resolve-FirstExisting @((Join-Path $DateDir "nba1h\step8_nba1h_direction_clean.xlsx"), (Join-Path $SportsRoot "NBA\step8_nba1h_direction_clean.xlsx"))
+$RootNBA1QPath = Resolve-FirstExisting @((Join-Path $DateDir "nba1q\step8_nba1q_direction_clean.xlsx"), (Join-Path $SportsRoot "NBA\step8_nba1q_direction_clean.xlsx"))
 if ((Test-Path $ExtractNbaSlateScript) -and (Test-Path $DateDir)) {
     if (-not (Test-Path $DatedNBA1HPath) -and (Test-Path $RootNBA1HPath)) {
         Run-Py "Extract NBA1H slate for $Date" $Root $ExtractNbaSlateScript @(

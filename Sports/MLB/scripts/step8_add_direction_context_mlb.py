@@ -15,13 +15,27 @@ from __future__ import annotations
 
 import argparse
 import shutil
+import sys
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 from openpyxl import Workbook
+
+_REPO = Path(__file__).resolve().parent
+for _ in range(10):
+    if (_REPO / "utils" / "step8_edge_direction.py").is_file():
+        if str(_REPO) not in sys.path:
+            sys.path.insert(0, str(_REPO))
+        break
+    _REPO = _REPO.parent
+else:
+    raise RuntimeError("Could not locate repo root with utils/step8_edge_direction.py")
+
+from utils.step8_edge_direction import reconcile_signed_edge_abs_dataframe
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 from datetime import date
-from pathlib import Path
 
 
 def _copy_dated_step8_mlb(output_xlsx_path: str, slate_date: str) -> None:
@@ -190,6 +204,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     for col in [
         "rank_score",
         "edge",
+        "abs_edge",
         "projection",
         "ml_prob",
         "edge_score",
@@ -218,7 +233,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "slate_game_date": "Game Date",
         "prop_type": "Prop", "pick_type": "Pick Type", "line": "Line",
         "final_bet_direction": "Direction",
-        "edge": "Edge", "projection": "Projection",
+        "edge": "Edge", "abs_edge": "Abs Edge", "projection": "Projection",
         "ml_prob": "ML Prob",
         "edge_score": "Edge Score",
         "blended_score": "Blended Score",
@@ -282,13 +297,10 @@ def main() -> None:
         raise SystemExit("ERROR [PropOracle-MLB-S8] Empty input from step7; aborting.")
     out = df.copy()
 
-    if "edge" not in out.columns:
-        proj = pd.to_numeric(out.get("projection", ""), errors="coerce")
-        line = pd.to_numeric(out.get("line",        ""), errors="coerce")
-        out["edge"] = proj - line
+    reconcile_signed_edge_abs_dataframe(out)
 
     edge     = pd.to_numeric(out["edge"], errors="coerce")
-    abs_edge = edge.abs()
+    abs_edge = pd.to_numeric(out["abs_edge"], errors="coerce")
 
     pick_type = out.get("pick_type", "Standard").astype(str).apply(_norm_pick_type)
     forced    = pick_type.isin(["Goblin", "Demon"])

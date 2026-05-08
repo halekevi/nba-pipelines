@@ -11,10 +11,8 @@
 #
 #  Combined / game_date contract (2026-05): step1 anchors full-board game_date to --date;
 #  step8 must not overwrite with start_time ET (see step8_add_direction_context.py). After step8,
-#  Publish-WnbaStep8CleanArtifacts copies clean XLSX to outputs/<date>/ and Sports/WNBA/data/outputs
-#  so Run-Combined always sees fresh WNBA even if step9 fails.
-#  Steps 1–7 (+ step8/st9 intermediates) write under Sports/WNBA/outputs/ — only the dated step8 clean
-#  mirror lands in repo outputs/<date>/ (no step1–7 copies to outputs/<date>/).
+#  Publish-WnbaStep8CleanArtifacts mirrors clean XLSX to outputs/<date>/ for dated consumers.
+#  Canonical runtime outputs now live under outputs/<date>/wnba/.
 # ============================================================
 param(
     [string]$Date         = "",
@@ -102,21 +100,11 @@ function Run-Step {
 }
 
 function Publish-WnbaStep8CleanArtifacts {
-    $step8Clean = Join-Path $WNBADir "outputs\step8_wnba_direction_clean.xlsx"
+    $step8Clean = Join-Path $WnbaRunOutDir "step8_wnba_direction_clean.xlsx"
     if (-not (Test-Path -LiteralPath $step8Clean)) {
         Write-Host "  [WNBA publish] skip — no step8_wnba_direction_clean.xlsx" -ForegroundColor DarkGray
         return
     }
-    $dataOut = Join-Path $WNBADir "data\outputs"
-    if (-not (Test-Path $dataOut)) {
-        New-Item -ItemType Directory -Force -Path $dataOut | Out-Null
-    }
-    Copy-Item $step8Clean (Join-Path $dataOut "step8_wnba_direction_clean.xlsx") -Force
-    Write-Host "  [WNBA publish] Canonical -> data\outputs\step8_wnba_direction_clean.xlsx" -ForegroundColor DarkGray
-    # Keep legacy canonical path synchronized to avoid stale reads by older consumers.
-    $legacyCanonical = Join-Path $WNBADir "step8_wnba_direction_clean.xlsx"
-    Copy-Item $step8Clean $legacyCanonical -Force
-    Write-Host "  [WNBA publish] Canonical -> step8_wnba_direction_clean.xlsx" -ForegroundColor DarkGray
     $step8Dst = Join-Path $DateDir ("step8_wnba_direction_clean_" + $Date + ".xlsx")
     Copy-Item $step8Clean $step8Dst -Force
     Write-Host "  [WNBA publish] Combined dated input -> $(Split-Path -Leaf $step8Dst)" -ForegroundColor DarkGray
@@ -135,10 +123,10 @@ $DateDir = "$OutRoot\$Date"
 if (-not (Test-Path $DateDir)) {
     New-Item -ItemType Directory -Force -Path $DateDir | Out-Null
 }
-# Intermediate step files (step1–7, step8/st9 working outputs) live here — not under outputs/<date>/
-$WnbaMid = Join-Path $WNBADir "outputs"
-if (-not (Test-Path $WnbaMid)) {
-    New-Item -ItemType Directory -Force -Path $WnbaMid | Out-Null
+# Canonical WNBA runtime output folder.
+$WnbaRunOutDir = Join-Path $DateDir "wnba"
+if (-not (Test-Path $WnbaRunOutDir)) {
+    New-Item -ItemType Directory -Force -Path $WnbaRunOutDir | Out-Null
 }
 
 # =============================================================================
@@ -151,31 +139,31 @@ $ok = $true
 
 # Step 1 — Fetch PrizePicks (league_id=3, WNBA)
 if (-not $SkipFetch) {
-    $step1Args = "--league_id 3 --playwright --timeout 90 --game_mode pickem --per_page 250 --max_pages 10 --sleep 1.2 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --output outputs\step1_wnba_props.csv --date $Date"
+    $step1Args = "--league_id 3 --playwright --timeout 90 --game_mode pickem --per_page 250 --max_pages 10 --sleep 1.2 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --output `"$WnbaRunOutDir\step1_wnba_props.csv`" --date $Date"
     if ($Cdp) { $step1Args += " --cdp $Cdp" }
     if ($ok) { $ok = Run-Step "WNBA Step 1 - Fetch PrizePicks" $WNBADir ".\step1_fetch_prizepicks.py" $step1Args }
 } else {
-    Write-Host "  --> [SkipFetch] Using existing outputs\step1_wnba_props.csv" -ForegroundColor DarkGray
+    Write-Host "  --> [SkipFetch] Using existing $WnbaRunOutDir\step1_wnba_props.csv" -ForegroundColor DarkGray
     Write-Host "  [WNBA] If combined dropped WNBA rows, re-run step1 once (no SkipFetch) after board/game_date policy changes." -ForegroundColor DarkYellow
 }
 
 if ($ok) { $ok = Run-Step "WNBA Step 2 - Attach Pick Types" $WNBADir ".\step2_attach_picktypes.py" `
-    "--input outputs\step1_wnba_props.csv --output outputs\step2_wnba_picktypes.csv" }
+    "--input `"$WnbaRunOutDir\step1_wnba_props.csv`" --output `"$WnbaRunOutDir\step2_wnba_picktypes.csv`"" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 3 - Attach Defense" $WNBADir ".\step3_attach_defense.py" `
-    "--input outputs\step2_wnba_picktypes.csv --defense wnba_defense_summary.csv --output outputs\step3_wnba_defense.csv" }
+    "--input `"$WnbaRunOutDir\step2_wnba_picktypes.csv`" --defense wnba_defense_summary.csv --output `"$WnbaRunOutDir\step3_wnba_defense.csv`"" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 4 - Player Stats (ESPN)" $WNBADir ".\step4_fetch_player_stats.py" `
-    "--slate outputs\step3_wnba_defense.csv --out outputs\step4_wnba_stats.csv --season 2026 --date $Date --days 35 --cache wnba_espn_cache.csv --sleep 0.8 --retries 4 --timeout 30 --debug-misses wnba_no_espn_debug.csv" }
+    "--slate `"$WnbaRunOutDir\step3_wnba_defense.csv`" --out `"$WnbaRunOutDir\step4_wnba_stats.csv`" --season 2026 --date $Date --days 35 --cache wnba_espn_cache.csv --sleep 0.8 --retries 4 --timeout 30 --debug-misses wnba_no_espn_debug.csv" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 5 - Line Hit Rates" $WNBADir ".\step5_add_line_hit_rates.py" `
-    "--input outputs\step4_wnba_stats.csv --output outputs\step5_wnba_hitrates.csv" }
+    "--input `"$WnbaRunOutDir\step4_wnba_stats.csv`" --output `"$WnbaRunOutDir\step5_wnba_hitrates.csv`"" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 6 - Team Role Context" $WNBADir ".\step6_team_role_context.py" `
-    "--input outputs\step5_wnba_hitrates.csv --output outputs\step6_wnba_context.csv" }
+    "--input `"$WnbaRunOutDir\step5_wnba_hitrates.csv`" --output `"$WnbaRunOutDir\step6_wnba_context.csv`"" }
 
 if ($ok) { $ok = Run-Step "WNBA Step 7 - Rank Props" $WNBADir ".\step7_rank_props.py" `
-    "--input outputs\step6_wnba_context.csv --output outputs\step7_wnba_ranked.xlsx" }
+    "--input `"$WnbaRunOutDir\step6_wnba_context.csv`" --output `"$WnbaRunOutDir\step7_wnba_ranked.xlsx`"" }
 
 # Step 7b — same unified edge overlay as NBA/NHL/Soccer (non-fatal on failure)
 if ($ok) {
@@ -184,7 +172,7 @@ if ($ok) {
         Write-Host "  --> WNBA Step 7b - Unified edge score (ml_prob / edge_score)" -ForegroundColor Yellow
         Push-Location $Root
         try {
-            & py -3.14 $Step7bScript --sport WNBA --step7-xlsx "$WnbaMid\step7_wnba_ranked.xlsx" --repo-root $Root
+            & py -3.14 $Step7bScript --sport WNBA --step7-xlsx "$WnbaRunOutDir\step7_wnba_ranked.xlsx" --repo-root $Root
             if ($LASTEXITCODE -ne 0) {
                 Write-Host "      step7b WARN (exit $LASTEXITCODE) — continuing" -ForegroundColor Yellow
             } else {
@@ -199,11 +187,11 @@ if ($ok) {
 }
 
 if ($ok) { $ok = Run-Step "WNBA Step 8 - Direction Context" $WNBADir ".\step8_add_direction_context.py" `
-    "--input outputs\step7_wnba_ranked.xlsx --sheet ALL --output outputs\step8_wnba_direction.csv --xlsx outputs\step8_wnba_direction_clean.xlsx --date $Date" }
+    "--input `"$WnbaRunOutDir\step7_wnba_ranked.xlsx`" --sheet ALL --output `"$WnbaRunOutDir\step8_wnba_direction.csv`" --xlsx `"$WnbaRunOutDir\step8_wnba_direction_clean.xlsx`" --date $Date" }
 if ($ok) { Publish-WnbaStep8CleanArtifacts }
 
 if ($ok) { $ok = Run-Step "WNBA Step 9 - Build Tickets" $WNBADir ".\step9_build_tickets.py" `
-    "--input outputs\step8_wnba_direction_clean.xlsx --output outputs\wnba_best_tickets.xlsx --min_hit_rate 0.8 --legs 2,3,4" }
+    "--input `"$WnbaRunOutDir\step8_wnba_direction_clean.xlsx`" --output `"$WnbaRunOutDir\wnba_best_tickets.xlsx`" --min_hit_rate 0.8 --legs 2,3,4" }
 
 # =============================================================================
 #  SUMMARY
@@ -213,7 +201,7 @@ Write-Host ""
 Write-Host "======================================================" -ForegroundColor Cyan
 if ($ok) {
     Write-Host "  WNBA DONE  |  $Date  |  Elapsed: $($Elapsed.ToString('mm\:ss'))" -ForegroundColor Cyan
-    Write-Host "  Intermediates → $WnbaMid  |  Dated step8 clean mirror → $DateDir" -ForegroundColor Green
+    Write-Host "  Canonical runtime → $WnbaRunOutDir  |  Dated step8 mirror → $DateDir" -ForegroundColor Green
 } else {
     Write-Host "  WNBA FAILED  |  Check output above" -ForegroundColor Red
 }

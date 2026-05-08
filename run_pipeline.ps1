@@ -37,6 +37,13 @@
 #  Prefer .\run_pipeline.ps1 from repo root; this copy under scripts\ is equivalent.
 #  After combined + git push, runs scripts\run_grader.ps1 for (pipeline date - 1 day)
 #  and pushes slate_eval_*.html / ticket_eval_*.html for that slate date.
+#
+# ENTRY POINTS
+#   Full daily run  : scripts\run_daily.ps1 [-Date YYYY-MM-DD]
+#     STEP C calls  : run_pipeline.ps1 -Date $Today -ForceAll -SkipCombined -SkipPush
+#     STEP D calls  : run_pipeline.ps1 -Date $Today -CombinedOnly -DQWarnOnly
+#   Manual rebuild  : .\run_pipeline.ps1 -Date YYYY-MM-DD [-CombinedOnly]
+#
 # ============================================================
 param(
     [string]$Date       = "",
@@ -46,6 +53,8 @@ param(
     [switch]$CBBOnly,
     [switch]$NHLOnly,
     [switch]$MLBOnly,
+    # Fast MLB verification mode: run MLB through Step 4 and exit.
+    [switch]$MLBVerify,
     [switch]$SoccerOnly,
     [switch]$TennisOnly,
     [switch]$WNBAOnly,
@@ -106,6 +115,11 @@ if (-not $Date) {
     }
 }
 
+if ($MLBVerify -and -not $MLBOnly) {
+    Write-Host "  [MLBVerify] Enabling -MLBOnly automatically." -ForegroundColor DarkGray
+    $MLBOnly = $true
+}
+
 $StartTime = Get-Date
 
 # -- Paths --------------------------------------------------------------------
@@ -128,6 +142,15 @@ $NFLDir    = Join-Path $SportsRoot "NFL"
 # 2026 opener starts May 1, so keep WNBA active for same-day fresh slates.
 $WNBA_SEASON_START = "2026-05-01"
 $OutDir    = Join-Path $Root "outputs\$Date"
+$NBARunOutDir = Join-Path $OutDir "nba"
+$NBA1HRunOutDir = Join-Path $OutDir "nba1h"
+$NBA1QRunOutDir = Join-Path $OutDir "nba1q"
+$NHLRunOutDir = Join-Path $OutDir "nhl"
+$SoccerRunOutDir = Join-Path $OutDir "soccer"
+$TennisRunOutDir = Join-Path $OutDir "tennis"
+$MLBRunOutDir = Join-Path $OutDir "mlb"
+$NFLRunOutDir = Join-Path $OutDir "nfl"
+$CBBRunOutDir = Join-Path $OutDir "cbb"
 $CanonicalOutDir = Join-Path $OutDir "canonical"
 $CanonicalPlatformUiDir = Join-Path $CanonicalOutDir "platform_ui"
 $CanonicalMobileAppDir = Join-Path $CanonicalOutDir "mobile_app"
@@ -137,6 +160,15 @@ $UiDataBackupsDir = Join-Path $UiDataDir "backups"
 $MobileWwwDir = Join-Path $Root "mobile\www"
 
 if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force -Path $OutDir | Out-Null }
+if (-not (Test-Path $NBARunOutDir)) { New-Item -ItemType Directory -Force -Path $NBARunOutDir | Out-Null }
+if (-not (Test-Path $NBA1HRunOutDir)) { New-Item -ItemType Directory -Force -Path $NBA1HRunOutDir | Out-Null }
+if (-not (Test-Path $NBA1QRunOutDir)) { New-Item -ItemType Directory -Force -Path $NBA1QRunOutDir | Out-Null }
+if (-not (Test-Path $NHLRunOutDir)) { New-Item -ItemType Directory -Force -Path $NHLRunOutDir | Out-Null }
+if (-not (Test-Path $SoccerRunOutDir)) { New-Item -ItemType Directory -Force -Path $SoccerRunOutDir | Out-Null }
+if (-not (Test-Path $TennisRunOutDir)) { New-Item -ItemType Directory -Force -Path $TennisRunOutDir | Out-Null }
+if (-not (Test-Path $MLBRunOutDir)) { New-Item -ItemType Directory -Force -Path $MLBRunOutDir | Out-Null }
+if (-not (Test-Path $NFLRunOutDir)) { New-Item -ItemType Directory -Force -Path $NFLRunOutDir | Out-Null }
+if (-not (Test-Path $CBBRunOutDir)) { New-Item -ItemType Directory -Force -Path $CBBRunOutDir | Out-Null }
 if (-not (Test-Path $CanonicalOutDir)) { New-Item -ItemType Directory -Force -Path $CanonicalOutDir | Out-Null }
 if (-not (Test-Path $CanonicalPlatformUiDir)) { New-Item -ItemType Directory -Force -Path $CanonicalPlatformUiDir | Out-Null }
 if (-not (Test-Path $UiDataDir)) { New-Item -ItemType Directory -Force -Path $UiDataDir | Out-Null }
@@ -251,21 +283,22 @@ function Invoke-PropOracleMobileBundle {
 function Invoke-MLBStep1Fetch {
     param(
         [string]$WorkDir,
-        [string]$PipelineDate
+        [string]$PipelineDate,
+        [string]$OutputPath = "step1_mlb_props.csv"
     )
     Write-Host "  --> MLB Step 1 - Fetch PrizePicks (direct API, then Playwright if needed)" -ForegroundColor Yellow
     Push-Location $WorkDir
     try {
         $env:PYTHONUTF8       = "1"
         $env:PYTHONIOENCODING = "utf-8"
-        $cmd1 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --date `"$PipelineDate`" --output step1_mlb_props.csv"
+        $cmd1 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --date `"$PipelineDate`" --output `"$OutputPath`" --api-retries 2 --api-session-waves 1 --api-wave-gap-min 8 --api-wave-gap-max 15 --api-403-cooldown-after 2 --api-403-cooldown-seconds 20 --api-403-cooldown-jitter-min 4 --api-403-cooldown-jitter-max 10"
         Write-Host "        CMD: $cmd1" -ForegroundColor DarkGray
         $output = Invoke-Expression $cmd1 2>&1
         $exit   = $LASTEXITCODE
         foreach ($line in $output) { Write-Host "        $line" -ForegroundColor DarkGray }
         if ($exit -ne 0) {
             Write-Host "      MLB direct API failed (exit $exit); trying Playwright..." -ForegroundColor Yellow
-            $cmd2 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --playwright --timeout 180 --date `"$PipelineDate`" --output step1_mlb_props.csv"
+            $cmd2 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --playwright --timeout 120 --retries 1 --retry_delay 5 --date `"$PipelineDate`" --output `"$OutputPath`""
             Write-Host "        CMD: $cmd2" -ForegroundColor DarkGray
             $output = Invoke-Expression $cmd2 2>&1
             $exit   = $LASTEXITCODE
@@ -308,6 +341,7 @@ function Get-MLBStep1DateHealth {
 function Clear-MLBGeneratedOutputs {
     param([string]$BaseDir)
     foreach ($p in @(
+        "step1_mlb_props.csv",
         "step2_mlb_picktypes.csv",
         "step3_mlb_with_defense.csv",
         "step4_mlb_with_stats.csv",
@@ -337,15 +371,17 @@ function Run-NBAPeriodPipeline {
     Write-Host ""
     Write-Host ('[ NBA PERIOD PIPELINE: ' + $tagLower + ' ]') -ForegroundColor Magenta
 
-    $step1 = "step1_${tagLower}_props.csv"
-    $step2 = "step2_${tagLower}_picktypes.csv"
-    $step3 = "step3_${tagLower}_with_defense.csv"
-    $step4 = "step4_${tagLower}_with_stats.csv"
-    $step5 = "step5_${tagLower}_with_hit_rates.csv"
-    $step6 = "step6_${tagLower}_with_team_role_context.csv"
-    $step7 = "step7_${tagLower}_ranked_props.xlsx"
-    $step8Csv = "step8_${tagLower}_direction.csv"
-    $step8Xlsx = "step8_${tagLower}_direction_clean.xlsx"
+    $periodOutDir = Join-Path $OutDir $tagLower
+    if (-not (Test-Path $periodOutDir)) { New-Item -ItemType Directory -Force -Path $periodOutDir | Out-Null }
+    $step1 = Join-Path $periodOutDir "step1_${tagLower}_props.csv"
+    $step2 = Join-Path $periodOutDir "step2_${tagLower}_picktypes.csv"
+    $step3 = Join-Path $periodOutDir "step3_${tagLower}_with_defense.csv"
+    $step4 = Join-Path $periodOutDir "step4_${tagLower}_with_stats.csv"
+    $step5 = Join-Path $periodOutDir "step5_${tagLower}_with_hit_rates.csv"
+    $step6 = Join-Path $periodOutDir "step6_${tagLower}_with_team_role_context.csv"
+    $step7 = Join-Path $periodOutDir "step7_${tagLower}_ranked_props.xlsx"
+    $step8Csv = Join-Path $periodOutDir "step8_${tagLower}_direction.csv"
+    $step8Xlsx = Join-Path $periodOutDir "step8_${tagLower}_direction_clean.xlsx"
     $datedOut = Join-Path $OutDir "step8_${tagLower}_direction_clean_${Date}.xlsx"
 
     $ok = $true
@@ -363,7 +399,7 @@ function Run-NBAPeriodPipeline {
                 if ($joined -match "No projections returned") {
                     Write-Host "      No live $tagLower board right now — clearing stale period files and skipping." -ForegroundColor DarkGray
                     foreach ($stale in @($step2, $step3, $step4, $step5, $step6, $step7, $step8Csv, $step8Xlsx)) {
-                        Remove-Item (Join-Path $NBADir $stale) -Force -ErrorAction SilentlyContinue
+                        Remove-Item $stale -Force -ErrorAction SilentlyContinue
                     }
                     Remove-Item $datedOut -Force -ErrorAction SilentlyContinue
                     return $true
@@ -386,9 +422,9 @@ function Run-NBAPeriodPipeline {
     if ($ok) { $ok = Run-Step "${tagLower} Step 7 - Rank Props"             $NBADir ".\scripts\step7_rank_props.py"                     "--input $step6 --output $step7" }
     if ($ok) { $ok = Run-Step "${tagLower} Step 8 - Direction Context"      $NBADir (Join-Path $SportsRoot "NBA\scripts\step8_add_direction_context.py") "--input $step7 --sheet ALL --output $step8Csv --xlsx $step8Xlsx --date $Date" }
 
-    if ($ok -and (Test-Path (Join-Path $NBADir $step8Xlsx))) {
+    if ($ok -and (Test-Path $step8Xlsx)) {
         try {
-            Copy-Item (Join-Path $NBADir $step8Xlsx) $datedOut -Force -ErrorAction Stop
+            Copy-Item $step8Xlsx $datedOut -Force -ErrorAction Stop
             Write-Host "  [$tagLower] Dated copy -> $datedOut" -ForegroundColor DarkGray
         }
         catch {
@@ -836,15 +872,15 @@ if ($NHLOnly) {
     Write-Host "[ NHL PIPELINE ]" -ForegroundColor Magenta
     Write-Host ""
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "NHL Step 1 - Fetch PrizePicks" $NHLDir ".\scripts\step1_fetch_prizepicks_nhl.py"         "--output outputs\step1_nhl_props.csv" } } else { Write-Host "  [NHL] Skipping step1 fetch -- using existing outputs\step1_nhl_props.csv" -ForegroundColor DarkGray }
-    if ($ok) { $ok = Run-Step "NHL Step 2 - Attach Pick Types"  $NHLDir ".\scripts\step2_attach_picktypes_nhl.py"       "--input outputs\step1_nhl_props.csv --output outputs\step2_nhl_picktypes.csv" }
-    if ($ok) { $ok = Run-Step "NHL Step 3 - Attach Defense"     $NHLDir ".\scripts\step3_attach_defense_nhl.py"         "--input outputs\step2_nhl_picktypes.csv --output outputs\step3_nhl_with_defense.csv" }
-    if ($ok) { $ok = Run-Step "NHL Step 4 - Player Stats"       $NHLDir ".\scripts\step4_attach_player_stats_nhl.py"    "--input outputs\step3_nhl_with_defense.csv --output outputs\step4_nhl_with_stats.csv" }
-    if ($ok) { $ok = Run-Step "NHL Step 5 - Line Hit Rates"     $NHLDir ".\scripts\step5_add_line_hit_rates_nhl.py"     "--input outputs\step4_nhl_with_stats.csv --output outputs\step5_nhl_hit_rates.csv --gamelog-cache cache\nhl_gamelog_cache.json" }
-    if ($ok) { $ok = Run-Step "NHL Step 6 - Team Role Context"  $NHLDir ".\scripts\step6_team_role_context_nhl.py"      "--input outputs\step5_nhl_hit_rates.csv --output outputs\step6_nhl_role_context.csv" }
-    if ($ok) { $ok = Run-Step "NHL Step 7 - Rank Props"         $NHLDir ".\scripts\step7_rank_props_nhl.py"             "--input outputs\step6_nhl_role_context.csv --output outputs\step7_nhl_ranked.xlsx" }
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "NHL Step 1 - Fetch PrizePicks" $NHLDir ".\scripts\step1_fetch_prizepicks_nhl.py"         "--output `"$NHLRunOutDir\step1_nhl_props.csv`"" } } else { Write-Host "  [NHL] Skipping step1 fetch -- using existing $NHLRunOutDir\step1_nhl_props.csv" -ForegroundColor DarkGray }
+    if ($ok) { $ok = Run-Step "NHL Step 2 - Attach Pick Types"  $NHLDir ".\scripts\step2_attach_picktypes_nhl.py"       "--input `"$NHLRunOutDir\step1_nhl_props.csv`" --output `"$NHLRunOutDir\step2_nhl_picktypes.csv`"" }
+    if ($ok) { $ok = Run-Step "NHL Step 3 - Attach Defense"     $NHLDir ".\scripts\step3_attach_defense_nhl.py"         "--input `"$NHLRunOutDir\step2_nhl_picktypes.csv`" --output `"$NHLRunOutDir\step3_nhl_with_defense.csv`"" }
+    if ($ok) { $ok = Run-Step "NHL Step 4 - Player Stats"       $NHLDir ".\scripts\step4_attach_player_stats_nhl.py"    "--input `"$NHLRunOutDir\step3_nhl_with_defense.csv`" --output `"$NHLRunOutDir\step4_nhl_with_stats.csv`"" }
+    if ($ok) { $ok = Run-Step "NHL Step 5 - Line Hit Rates"     $NHLDir ".\scripts\step5_add_line_hit_rates_nhl.py"     "--input `"$NHLRunOutDir\step4_nhl_with_stats.csv`" --output `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --gamelog-cache cache\nhl_gamelog_cache.json" }
+    if ($ok) { $ok = Run-Step "NHL Step 6 - Team Role Context"  $NHLDir ".\scripts\step6_team_role_context_nhl.py"      "--input `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --output `"$NHLRunOutDir\step6_nhl_role_context.csv`"" }
+    if ($ok) { $ok = Run-Step "NHL Step 7 - Rank Props"         $NHLDir ".\scripts\step7_rank_props_nhl.py"             "--input `"$NHLRunOutDir\step6_nhl_role_context.csv`" --output `"$NHLRunOutDir\step7_nhl_ranked.xlsx`"" }
     if ($ok) { Invoke-PropOracleStep7b "NHL" }
-    if ($ok) { $ok = Run-Step "NHL Step 8 - Direction Context"  $NHLDir (Join-Path $SportsRoot "NHL\scripts\step8_add_direction_context_nhl.py")  "--input outputs\step7_nhl_ranked.xlsx --output outputs\step8_nhl_direction_clean.xlsx --date $Date" }
+    if ($ok) { $ok = Run-Step "NHL Step 8 - Direction Context"  $NHLDir (Join-Path $SportsRoot "NHL\scripts\step8_add_direction_context_nhl.py")  "--input `"$NHLRunOutDir\step7_nhl_ranked.xlsx`" --output `"$NHLRunOutDir\step8_nhl_direction_clean.xlsx`" --date $Date" }
     Write-Host ""
     if ($ok) { Write-Host "  NHL complete." -ForegroundColor Green } else { Write-Host "  NHL FAILED." -ForegroundColor Red }
     if ($ok) { Run-Combined "after NHL" }
@@ -860,27 +896,46 @@ if ($MLBOnly) {
     Write-Host ""
     $ok = $true
     if (-not $SkipFetch) {
-        Clear-MLBGeneratedOutputs -BaseDir $MLBDir
-        if ($ok) { $ok = Invoke-MLBStep1Fetch -WorkDir $MLBDir -PipelineDate $Date }
+        Clear-MLBGeneratedOutputs -BaseDir $MLBRunOutDir
+        if ($ok) { $ok = Invoke-MLBStep1Fetch -WorkDir $MLBDir -PipelineDate $Date -OutputPath "$MLBRunOutDir\step1_mlb_props.csv" }
         if ($ok) {
-            $mlbStep1Health = Get-MLBStep1DateHealth -CsvPath (Join-Path $MLBDir "step1_mlb_props.csv") -TargetDate $Date
+            $mlbStep1Health = Get-MLBStep1DateHealth -CsvPath (Join-Path $MLBRunOutDir "step1_mlb_props.csv") -TargetDate $Date
             if (-not $mlbStep1Health.ok) {
                 Write-Host "  [MLB] Step1 date health failed ($($mlbStep1Health.reason)); clearing MLB outputs to avoid stale carry-over." -ForegroundColor Yellow
-                Clear-MLBGeneratedOutputs -BaseDir $MLBDir
+                Clear-MLBGeneratedOutputs -BaseDir $MLBRunOutDir
                 $ok = $false
             }
         }
     } else {
-        Write-Host "  [MLB] Skipping step1 fetch -- using existing step1_mlb_props.csv" -ForegroundColor DarkGray
+        Write-Host "  [MLB] Skipping step1 fetch -- using existing $MLBRunOutDir\step1_mlb_props.csv" -ForegroundColor DarkGray
     }
-    if ($ok) { $ok = Run-Step "MLB Step 2 - Attach Pick Types"  $MLBDir ".\scripts\step2_attach_picktypes_mlb.py"       "--input step1_mlb_props.csv --output step2_mlb_picktypes.csv --id_lookup_timeout_s 6 --id_lookup_retries 2 --id_lookup_budget_s 180" }
-    if ($ok) { $ok = Run-Step "MLB Step 3 - Attach Defense"     $MLBDir ".\scripts\step3_attach_defense_mlb.py"         "--input step2_mlb_picktypes.csv --defense mlb_defense_summary.csv --output step3_mlb_with_defense.csv" }
-    if ($ok) { $ok = Run-Step "MLB Step 4 - Player Stats"       $MLBDir ".\scripts\step4_attach_player_stats_mlb.py"    "--input step3_mlb_with_defense.csv --cache mlb_stats_cache.csv --output step4_mlb_with_stats.csv --season 2025" -TimeoutSeconds 1200 }
-    if ($ok) { $ok = Run-Step "MLB Step 5 - Line Hit Rates"     $MLBDir ".\scripts\step5_add_line_hit_rates_mlb.py"     "--input step4_mlb_with_stats.csv --output step5_mlb_hit_rates.csv" }
-    if ($ok) { $ok = Run-Step "MLB Step 6 - Team Role Context"  $MLBDir ".\scripts\step6_team_role_context_mlb.py"      "--input step5_mlb_hit_rates.csv --output step6_mlb_role_context.csv" }
-    if ($ok) { $ok = Run-Step "MLB Step 7 - Rank Props"         $MLBDir ".\scripts\step7_rank_props_mlb.py"             "--input step6_mlb_role_context.csv --output step7_mlb_ranked.xlsx" }
+    if ($ok) { $ok = Run-Step "MLB Step 2 - Attach Pick Types"  $MLBDir ".\scripts\step2_attach_picktypes_mlb.py"       "--input `"$MLBRunOutDir\step1_mlb_props.csv`" --output `"$MLBRunOutDir\step2_mlb_picktypes.csv`" --id_lookup_timeout_s 6 --id_lookup_retries 2 --id_lookup_budget_s 180" }
+    if ($ok) { $ok = Run-Step "MLB Step 3 - Attach Defense"     $MLBDir ".\scripts\step3_attach_defense_mlb.py"         "--input `"$MLBRunOutDir\step2_mlb_picktypes.csv`" --defense mlb_defense_summary.csv --output `"$MLBRunOutDir\step3_mlb_with_defense.csv`"" }
+    if ($ok) { $ok = Run-Step "MLB Step 4 - Player Stats"       $MLBDir ".\scripts\step4_attach_player_stats_mlb.py"    "--input `"$MLBRunOutDir\step3_mlb_with_defense.csv`" --cache mlb_stats_cache.csv --output `"$MLBRunOutDir\step4_mlb_with_stats.csv`" --season 2025" -TimeoutSeconds 1200 }
+    if ($ok -and $MLBVerify) {
+        Write-Host ""
+        Write-Host "  [MLBVerify] Step 1-4 completed. Health summary:" -ForegroundColor Cyan
+        foreach ($name in @("step1_mlb_props.csv", "step2_mlb_picktypes.csv", "step3_mlb_with_defense.csv", "step4_mlb_with_stats.csv")) {
+            $p = Join-Path $MLBRunOutDir $name
+            if (Test-Path $p) {
+                $rows = 0
+                try { $rows = (Import-Csv -Path $p).Count } catch { $rows = -1 }
+                $rowsText = if ($rows -ge 0) { "$rows rows" } else { "rows=unreadable" }
+                Write-Host "    OK  $name  ($rowsText)" -ForegroundColor DarkGray
+            } else {
+                Write-Host "    MISS $name" -ForegroundColor Yellow
+            }
+        }
+        Write-Host ""
+        Write-Host "  MLB verify complete (stopped after Step 4)." -ForegroundColor Green
+        Print-Done
+        exit
+    }
+    if ($ok) { $ok = Run-Step "MLB Step 5 - Line Hit Rates"     $MLBDir ".\scripts\step5_add_line_hit_rates_mlb.py"     "--input `"$MLBRunOutDir\step4_mlb_with_stats.csv`" --output `"$MLBRunOutDir\step5_mlb_hit_rates.csv`"" }
+    if ($ok) { $ok = Run-Step "MLB Step 6 - Team Role Context"  $MLBDir ".\scripts\step6_team_role_context_mlb.py"      "--input `"$MLBRunOutDir\step5_mlb_hit_rates.csv`" --output `"$MLBRunOutDir\step6_mlb_role_context.csv`"" }
+    if ($ok) { $ok = Run-Step "MLB Step 7 - Rank Props"         $MLBDir ".\scripts\step7_rank_props_mlb.py"             "--input `"$MLBRunOutDir\step6_mlb_role_context.csv`" --output `"$MLBRunOutDir\step7_mlb_ranked.xlsx`"" }
     if ($ok) { Invoke-PropOracleStep7b "MLB" }
-    if ($ok) { $ok = Run-Step "MLB Step 8 - Direction Context"  $MLBDir (Join-Path $SportsRoot "MLB\scripts\step8_add_direction_context_mlb.py")  "--input step7_mlb_ranked.xlsx --output step8_mlb_direction.csv --xlsx step8_mlb_direction_clean.xlsx --date $Date" }
+    if ($ok) { $ok = Run-Step "MLB Step 8 - Direction Context"  $MLBDir (Join-Path $SportsRoot "MLB\scripts\step8_add_direction_context_mlb.py")  "--input `"$MLBRunOutDir\step7_mlb_ranked.xlsx`" --output `"$MLBRunOutDir\step8_mlb_direction.csv`" --xlsx `"$MLBRunOutDir\step8_mlb_direction_clean.xlsx`" --date $Date" }
     Write-Host ""
     if ($ok) { Write-Host "  MLB complete." -ForegroundColor Green } else { Write-Host "  MLB FAILED." -ForegroundColor Red }
     if ($ok) { Run-Combined "after MLB" }
@@ -895,8 +950,8 @@ if ($SoccerOnly) {
     Write-Host "[ SOCCER PIPELINE ]" -ForegroundColor Magenta
     Write-Host ""
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "Soccer Step 1 - Fetch PrizePicks" $SoccerDir ".\scripts\step1_fetch_prizepicks_soccer.py" "--output outputs\step1_soccer_props.csv --date $Date" } } else { Write-Host "  [Soccer] Skipping step1 fetch -- using existing outputs\step1_soccer_props.csv" -ForegroundColor DarkGray }
-    if ($ok) { $ok = Run-Step "Soccer Step 2 - Attach Pick Types"  $SoccerDir ".\scripts\step2_attach_picktypes_soccer.py"       "--input outputs\step1_soccer_props.csv --output outputs\step2_soccer_picktypes.csv" }
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "Soccer Step 1 - Fetch PrizePicks" $SoccerDir ".\scripts\step1_fetch_prizepicks_soccer.py" "--output `"$SoccerRunOutDir\step1_soccer_props.csv`" --date $Date" } } else { Write-Host "  [Soccer] Skipping step1 fetch -- using existing $SoccerRunOutDir\step1_soccer_props.csv" -ForegroundColor DarkGray }
+    if ($ok) { $ok = Run-Step "Soccer Step 2 - Attach Pick Types"  $SoccerDir ".\scripts\step2_attach_picktypes_soccer.py"       "--input `"$SoccerRunOutDir\step1_soccer_props.csv`" --output `"$SoccerRunOutDir\step2_soccer_picktypes.csv`"" }
     if ($ok) {
         if ($SkipDefenseRefresh) {
             Write-Host "  [Soccer] Skipping defense refresh (-SkipDefenseRefresh) — using cache\\soccer_defense_summary.csv" -ForegroundColor DarkGray
@@ -904,13 +959,13 @@ if ($SoccerOnly) {
             $ok = Run-Step "Soccer Defense Refresh"             $SoccerDir ".\scripts\soccer_defense_report.py"               "--out cache\soccer_defense_summary.csv"
         }
     }
-    if ($ok) { $ok = Run-Step "Soccer Step 3 - Attach Defense"     $SoccerDir ".\scripts\step3_attach_defense_soccer.py"         "--input outputs\step2_soccer_picktypes.csv --defense cache\soccer_defense_summary.csv --output outputs\step3_soccer_with_defense.csv" }
-    if ($ok) { $ok = Run-Step "Soccer Step 4 - Player Stats"       $SoccerDir ".\scripts\step4_attach_player_stats_soccer.py"    "--input outputs\step3_soccer_with_defense.csv --output outputs\step4_soccer_with_stats.csv" }
-    if ($ok) { $ok = Run-Step "Soccer Step 5 - Line Hit Rates"     $SoccerDir ".\scripts\step5_add_line_hit_rates_soccer.py"     "--input outputs\step4_soccer_with_stats.csv --output outputs\step5_soccer_hit_rates.csv --compute10" }
-    if ($ok) { $ok = Run-Step "Soccer Step 6 - Team Role Context"  $SoccerDir ".\scripts\step6_team_role_context_soccer.py"      "--input outputs\step5_soccer_hit_rates.csv --output outputs\step6_soccer_role_context.csv" }
-    if ($ok) { $ok = Run-Step "Soccer Step 7 - Rank Props"         $SoccerDir ".\scripts\step7_rank_props_soccer.py"             "--input outputs\step6_soccer_role_context.csv --output outputs\step7_soccer_ranked.xlsx" }
+    if ($ok) { $ok = Run-Step "Soccer Step 3 - Attach Defense"     $SoccerDir ".\scripts\step3_attach_defense_soccer.py"         "--input `"$SoccerRunOutDir\step2_soccer_picktypes.csv`" --defense cache\soccer_defense_summary.csv --output `"$SoccerRunOutDir\step3_soccer_with_defense.csv`"" }
+    if ($ok) { $ok = Run-Step "Soccer Step 4 - Player Stats"       $SoccerDir ".\scripts\step4_attach_player_stats_soccer.py"    "--input `"$SoccerRunOutDir\step3_soccer_with_defense.csv`" --output `"$SoccerRunOutDir\step4_soccer_with_stats.csv`"" }
+    if ($ok) { $ok = Run-Step "Soccer Step 5 - Line Hit Rates"     $SoccerDir ".\scripts\step5_add_line_hit_rates_soccer.py"     "--input `"$SoccerRunOutDir\step4_soccer_with_stats.csv`" --output `"$SoccerRunOutDir\step5_soccer_hit_rates.csv`" --compute10" }
+    if ($ok) { $ok = Run-Step "Soccer Step 6 - Team Role Context"  $SoccerDir ".\scripts\step6_team_role_context_soccer.py"      "--input `"$SoccerRunOutDir\step5_soccer_hit_rates.csv`" --output `"$SoccerRunOutDir\step6_soccer_role_context.csv`"" }
+    if ($ok) { $ok = Run-Step "Soccer Step 7 - Rank Props"         $SoccerDir ".\scripts\step7_rank_props_soccer.py"             "--input `"$SoccerRunOutDir\step6_soccer_role_context.csv`" --output `"$SoccerRunOutDir\step7_soccer_ranked.xlsx`"" }
     if ($ok) { Invoke-PropOracleStep7b "Soccer" }
-    if ($ok) { $ok = Run-Step "Soccer Step 8 - Direction Context"  $SoccerDir (Join-Path $SportsRoot "Soccer\scripts\step8_add_direction_context_soccer.py")  "--input outputs\step7_soccer_ranked.xlsx --sheet ALL --output outputs\step8_soccer_direction.csv --xlsx outputs\step8_soccer_direction_clean.xlsx --date $Date" }
+    if ($ok) { $ok = Run-Step "Soccer Step 8 - Direction Context"  $SoccerDir (Join-Path $SportsRoot "Soccer\scripts\step8_add_direction_context_soccer.py")  "--input `"$SoccerRunOutDir\step7_soccer_ranked.xlsx`" --sheet ALL --output `"$SoccerRunOutDir\step8_soccer_direction.csv`" --xlsx `"$SoccerRunOutDir\step8_soccer_direction_clean.xlsx`" --date $Date" }
     Write-Host ""
     if ($ok) { Write-Host "  Soccer complete." -ForegroundColor Green } else { Write-Host "  Soccer FAILED." -ForegroundColor Red }
     if ($ok) { Run-Combined "after Soccer" }
@@ -926,21 +981,21 @@ if ($TennisOnly) {
     Write-Host ""
     $ok = $true
     if (-not $SkipFetch) {
-        if ($ok) { $ok = Run-Step "Tennis Step 1 - Fetch PrizePicks" $TennisDir ".\scripts\step1_fetch_prizepicks_tennis.py" "--output outputs\step1_tennis_props.csv" }
+        if ($ok) { $ok = Run-Step "Tennis Step 1 - Fetch PrizePicks" $TennisDir ".\scripts\step1_fetch_prizepicks_tennis.py" "--output `"$TennisRunOutDir\step1_tennis_props.csv`"" }
     } else {
-        Write-Host "  [Tennis] Skipping step1 fetch -- using existing outputs\step1_tennis_props.csv" -ForegroundColor DarkGray
+        Write-Host "  [Tennis] Skipping step1 fetch -- using existing $TennisRunOutDir\step1_tennis_props.csv" -ForegroundColor DarkGray
     }
-    if ($ok) { $ok = Run-Step "Tennis Step 2 - Attach Pick Types" $TennisDir ".\scripts\step2_attach_picktypes_tennis.py" "--input outputs\step1_tennis_props.csv --output outputs\step2_tennis_picktypes.csv" }
-    if ($ok) { $ok = Run-Step "Tennis Step 3 - Defense Stub" $TennisDir ".\scripts\step3_defense_rankings_tennis.py" "--input outputs\step2_tennis_picktypes.csv --output outputs\step3_tennis_with_defense.csv" }
-    if ($ok) { $ok = Run-Step "Tennis Step 4 - Player Stats + History" $TennisDir ".\scripts\step4_attach_player_stats_tennis.py" "--input outputs\step3_tennis_with_defense.csv --output outputs\step4_tennis_with_stats.csv" }
-    if ($ok) { $ok = Run-Step "Tennis Step 5 - Hit Rates" $TennisDir ".\scripts\step5_compute_hitrates_tennis.py" "--input outputs\step4_tennis_with_stats.csv --output outputs\step5_tennis_hit_rates.csv --compute10" }
-    if ($ok) { $ok = Run-Step "Tennis Step 6 - Context" $TennisDir ".\scripts\step6_add_context_tennis.py" "--input outputs\step5_tennis_hit_rates.csv --output outputs\step6_tennis_role_context.csv" }
-    if ($ok) { $ok = Run-Step "Tennis Step 7 - Rank Props" $TennisDir ".\scripts\step7_rank_props_tennis.py" "--input outputs\step6_tennis_role_context.csv --output outputs\step7_tennis_ranked.xlsx" }
+    if ($ok) { $ok = Run-Step "Tennis Step 2 - Attach Pick Types" $TennisDir ".\scripts\step2_attach_picktypes_tennis.py" "--input `"$TennisRunOutDir\step1_tennis_props.csv`" --output `"$TennisRunOutDir\step2_tennis_picktypes.csv`"" }
+    if ($ok) { $ok = Run-Step "Tennis Step 3 - Defense Stub" $TennisDir ".\scripts\step3_defense_rankings_tennis.py" "--input `"$TennisRunOutDir\step2_tennis_picktypes.csv`" --output `"$TennisRunOutDir\step3_tennis_with_defense.csv`"" }
+    if ($ok) { $ok = Run-Step "Tennis Step 4 - Player Stats + History" $TennisDir ".\scripts\step4_attach_player_stats_tennis.py" "--input `"$TennisRunOutDir\step3_tennis_with_defense.csv`" --output `"$TennisRunOutDir\step4_tennis_with_stats.csv`"" }
+    if ($ok) { $ok = Run-Step "Tennis Step 5 - Hit Rates" $TennisDir ".\scripts\step5_compute_hitrates_tennis.py" "--input `"$TennisRunOutDir\step4_tennis_with_stats.csv`" --output `"$TennisRunOutDir\step5_tennis_hit_rates.csv`" --compute10" }
+    if ($ok) { $ok = Run-Step "Tennis Step 6 - Context" $TennisDir ".\scripts\step6_add_context_tennis.py" "--input `"$TennisRunOutDir\step5_tennis_hit_rates.csv`" --output `"$TennisRunOutDir\step6_tennis_role_context.csv`"" }
+    if ($ok) { $ok = Run-Step "Tennis Step 7 - Rank Props" $TennisDir ".\scripts\step7_rank_props_tennis.py" "--input `"$TennisRunOutDir\step6_tennis_role_context.csv`" --output `"$TennisRunOutDir\step7_tennis_ranked.xlsx`"" }
     if ($ok) { Invoke-PropOracleStep7b "Tennis" }
-    if ($ok) { $ok = Run-Step "Tennis Step 8 - Direction Context" $TennisDir (Join-Path $SportsRoot "Tennis\scripts\step8_add_direction_context_tennis.py") "--input outputs\step7_tennis_ranked.xlsx --sheet ALL --output outputs\step8_tennis_direction.csv --xlsx outputs\step8_tennis_direction_clean.xlsx --date $Date" }
+    if ($ok) { $ok = Run-Step "Tennis Step 8 - Direction Context" $TennisDir (Join-Path $SportsRoot "Tennis\scripts\step8_add_direction_context_tennis.py") "--input `"$TennisRunOutDir\step7_tennis_ranked.xlsx`" --sheet ALL --output `"$TennisRunOutDir\step8_tennis_direction.csv`" --xlsx `"$TennisRunOutDir\step8_tennis_direction_clean.xlsx`" --date $Date" }
     if ($ok) {
         Copy-DatedSlateOutput `
-            -SourcePath (Join-Path $TennisDir "outputs\step8_tennis_direction_clean.xlsx") `
+            -SourcePath (Join-Path $TennisRunOutDir "step8_tennis_direction_clean.xlsx") `
             -DatedFileName "step8_tennis_direction_clean_$Date.xlsx" `
             -Label "Tennis"
     }
@@ -958,12 +1013,12 @@ if ($CBBOnly) {
     Write-Host "[ CBB PIPELINE ]" -ForegroundColor Magenta
     Write-Host ""
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "CBB Step 1 - Fetch PrizePicks"      $CBBDir ".\scripts\pipeline\step1_pp_cbb_scraper.py"      "--out step1_cbb.csv" } } else { Write-Host "  [CBB] Skipping step1 fetch -- using existing step1_cbb.csv" -ForegroundColor DarkGray }
-    if ($ok) { $ok = Run-Step "CBB Step 2 - Normalize"               $CBBDir ".\scripts\pipeline\step2_normalize.py"                            "--input step1_cbb.csv --output step2_cbb.csv" }
-    if ($ok) { $ok = Run-Step "CBB Step 3 - Attach Defense Rankings" $CBBDir ".\scripts\pipeline\step3b_attach_def_rankings.py"                 "--input step2_cbb.csv --defense data\reference\cbb_def_rankings.csv --output step3b_with_def_rankings_cbb.csv" }
-    if ($ok) { $ok = Run-Step "CBB Step 4 - Attach ESPN IDs"         $CBBDir ".\scripts\pipeline\step5a_attach_espn_ids.py"                     "--input step3b_with_def_rankings_cbb.csv --output step3_cbb.csv --master data/reference/ncaa_mbb_athletes_master.csv" }
-    if ($ok) { $ok = Run-Step "CBB Step 5 - Boxscore Stats"          $CBBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input step3_cbb.csv --output step5b_cbb.csv" }
-    if ($ok) { $ok = Run-Step "CBB Step 6 - Rank Props"              $CBBDir ".\scripts\pipeline\step6_rank_props_cbb.py"                       "--input step5b_cbb.csv --output step6_ranked_cbb.xlsx" }
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "CBB Step 1 - Fetch PrizePicks"      $CBBDir ".\scripts\pipeline\step1_pp_cbb_scraper.py"      "--out `"$CBBRunOutDir\step1_cbb.csv`"" } } else { Write-Host "  [CBB] Skipping step1 fetch -- using existing $CBBRunOutDir\step1_cbb.csv" -ForegroundColor DarkGray }
+    if ($ok) { $ok = Run-Step "CBB Step 2 - Normalize"               $CBBDir ".\scripts\pipeline\step2_normalize.py"                            "--input `"$CBBRunOutDir\step1_cbb.csv`" --output `"$CBBRunOutDir\step2_cbb.csv`"" }
+    if ($ok) { $ok = Run-Step "CBB Step 3 - Attach Defense Rankings" $CBBDir ".\scripts\pipeline\step3b_attach_def_rankings.py"                 "--input `"$CBBRunOutDir\step2_cbb.csv`" --defense data\reference\cbb_def_rankings.csv --output `"$CBBRunOutDir\step3b_with_def_rankings_cbb.csv`"" }
+    if ($ok) { $ok = Run-Step "CBB Step 4 - Attach ESPN IDs"         $CBBDir ".\scripts\pipeline\step5a_attach_espn_ids.py"                     "--input `"$CBBRunOutDir\step3b_with_def_rankings_cbb.csv`" --output `"$CBBRunOutDir\step3_cbb.csv`" --master data/reference/ncaa_mbb_athletes_master.csv" }
+    if ($ok) { $ok = Run-Step "CBB Step 5 - Boxscore Stats"          $CBBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input `"$CBBRunOutDir\step3_cbb.csv`" --output `"$CBBRunOutDir\step5b_cbb.csv`"" }
+    if ($ok) { $ok = Run-Step "CBB Step 6 - Rank Props"              $CBBDir ".\scripts\pipeline\step6_rank_props_cbb.py"                       "--input `"$CBBRunOutDir\step5b_cbb.csv`" --output `"$CBBRunOutDir\step6_ranked_cbb.xlsx`"" }
     if ($ok) { Invoke-PropOracleStep7b "CBB" }
     Write-Host ""
     if ($ok) { Write-Host "  CBB complete." -ForegroundColor Green } else { Write-Host "  CBB FAILED." -ForegroundColor Red }
@@ -992,21 +1047,21 @@ if ($NBAOnly) {
     }
 
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "NBA Step 1 - Fetch PrizePicks"    $NBADir ".\scripts\step1_fetch_prizepicks_api.py"             "--league_id 7 --game_mode pickem --per_page 250 --max_pages 5 --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --replace --output data\outputs\step1_pp_props_today.csv --date $Date" } } else { Write-Host "  [NBA] Skipping step1 fetch -- using existing data\outputs\step1_pp_props_today.csv" -ForegroundColor DarkGray }
-    if ($ok) { $ok = Run-Step "NBA Step 2 - Attach Pick Types"       $NBADir ".\scripts\step2_attach_picktypes.py"               "--input data\outputs\step1_pp_props_today.csv --output data\outputs\step2_with_picktypes.csv" }
-    if ($ok) { $ok = Run-Step "NBA Step 3 - Attach Defense"          $NBADir ".\scripts\step3_attach_defense.py"                 "--input data\outputs\step2_with_picktypes.csv --defense data\cache\defense_team_summary.csv --output data\outputs\step3_with_defense.csv" }
-    if ($ok) { $ok = Run-Step "NBA Step 4 - Player Stats (ESPN)"     $NBADir ".\scripts\step4_attach_player_stats_espn_cache.py" "--slate data\outputs\step3_with_defense.csv --out data\outputs\step4_with_stats.csv" }
-    if ($ok) { $ok = Run-Step "NBA Step 5 - Line Hit Rates"          $NBADir ".\scripts\step5_add_line_hit_rates.py"             "--input data\outputs\step4_with_stats.csv --output data\outputs\step5_with_hit_rates.csv" }
-    if ($ok) { $ok = Run-Step "NBA Step 6 - Team Role Context"       $NBADir ".\scripts\step6_team_role_context.py"              "--input data\outputs\step5_with_hit_rates.csv --output data\outputs\step6_with_team_role_context.csv" }
-    if ($ok) { $ok = Run-Step "NBA Step 6a - Opponent H2H Stats"     $NBADir ".\scripts\step6a_attach_opponent_stats_NBA.py"     "--input data\outputs\step6_with_team_role_context.csv --output data\outputs\step6a_with_opp_stats.csv" }
-    if ($ok) { $ok = Run-Step "NBA Step 6b - Game Context (Vegas)"   $NBADir ".\scripts\step6b_attach_game_context.py"          "--input data\outputs\step6a_with_opp_stats.csv --output data\outputs\step6b_with_game_context.csv --api_key `"$OddsApiKey`" --date $Date --cache `"game_context_cache_$Date.csv`"" }
-    if ($ok) { $ok = Run-Step "NBA Step 6c - Schedule Flags (B2B)"   $NBADir ".\scripts\step6c_schedule_flags.py"               "--input data\outputs\step6b_with_game_context.csv --output data\outputs\step6c_with_schedule_flags.csv --date $Date --cache `"schedule_cache_$Date.csv`"" }
-    if ($ok) { $ok = Run-Step "NBA Step 6d - H2H Matchup Stats"      $NBADir ".\scripts\step6d_attach_h2h_matchups.py"          "--input data\outputs\step6c_with_schedule_flags.csv --output data\outputs\step6d_with_h2h.csv" }
-    if ($ok) { $ok = Run-Step "NBA Step 7 - Rank Props"              $NBADir ".\scripts\step7_rank_props.py"                    "--input data\outputs\step6d_with_h2h.csv --output data\outputs\step7_ranked_props.xlsx" }
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step "NBA Step 1 - Fetch PrizePicks"    $NBADir ".\scripts\step1_fetch_prizepicks_api.py"             "--league_id 7 --game_mode pickem --per_page 250 --max_pages 5 --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --replace --output `"$NBARunOutDir\step1_pp_props_today.csv`" --date $Date" } } else { Write-Host "  [NBA] Skipping step1 fetch -- using existing $NBARunOutDir\step1_pp_props_today.csv" -ForegroundColor DarkGray }
+    if ($ok) { $ok = Run-Step "NBA Step 2 - Attach Pick Types"       $NBADir ".\scripts\step2_attach_picktypes.py"               "--input `"$NBARunOutDir\step1_pp_props_today.csv`" --output `"$NBARunOutDir\step2_with_picktypes.csv`"" }
+    if ($ok) { $ok = Run-Step "NBA Step 3 - Attach Defense"          $NBADir ".\scripts\step3_attach_defense.py"                 "--input `"$NBARunOutDir\step2_with_picktypes.csv`" --defense data\cache\defense_team_summary.csv --output `"$NBARunOutDir\step3_with_defense.csv`"" }
+    if ($ok) { $ok = Run-Step "NBA Step 4 - Player Stats (ESPN)"     $NBADir ".\scripts\step4_attach_player_stats_espn_cache.py" "--slate `"$NBARunOutDir\step3_with_defense.csv`" --out `"$NBARunOutDir\step4_with_stats.csv`"" }
+    if ($ok) { $ok = Run-Step "NBA Step 5 - Line Hit Rates"          $NBADir ".\scripts\step5_add_line_hit_rates.py"             "--input `"$NBARunOutDir\step4_with_stats.csv`" --output `"$NBARunOutDir\step5_with_hit_rates.csv`"" }
+    if ($ok) { $ok = Run-Step "NBA Step 6 - Team Role Context"       $NBADir ".\scripts\step6_team_role_context.py"              "--input `"$NBARunOutDir\step5_with_hit_rates.csv`" --output `"$NBARunOutDir\step6_with_team_role_context.csv`"" }
+    if ($ok) { $ok = Run-Step "NBA Step 6a - Opponent H2H Stats"     $NBADir ".\scripts\step6a_attach_opponent_stats_NBA.py"     "--input `"$NBARunOutDir\step6_with_team_role_context.csv`" --output `"$NBARunOutDir\step6a_with_opp_stats.csv`"" }
+    if ($ok) { $ok = Run-Step "NBA Step 6b - Game Context (Vegas)"   $NBADir ".\scripts\step6b_attach_game_context.py"          "--input `"$NBARunOutDir\step6a_with_opp_stats.csv`" --output `"$NBARunOutDir\step6b_with_game_context.csv`" --api_key `"$OddsApiKey`" --date $Date --cache `"game_context_cache_$Date.csv`"" }
+    if ($ok) { $ok = Run-Step "NBA Step 6c - Schedule Flags (B2B)"   $NBADir ".\scripts\step6c_schedule_flags.py"               "--input `"$NBARunOutDir\step6b_with_game_context.csv`" --output `"$NBARunOutDir\step6c_with_schedule_flags.csv`" --date $Date --cache `"schedule_cache_$Date.csv`"" }
+    if ($ok) { $ok = Run-Step "NBA Step 6d - H2H Matchup Stats"      $NBADir ".\scripts\step6d_attach_h2h_matchups.py"          "--input `"$NBARunOutDir\step6c_with_schedule_flags.csv`" --output `"$NBARunOutDir\step6d_with_h2h.csv`"" }
+    if ($ok) { $ok = Run-Step "NBA Step 7 - Rank Props"              $NBADir ".\scripts\step7_rank_props.py"                    "--input `"$NBARunOutDir\step6d_with_h2h.csv`" --output `"$NBARunOutDir\step7_ranked_props.xlsx`"" }
     if ($ok) { Invoke-PropOracleStep7b "NBA" }
-    if ($ok) { $ok = Run-Step "NBA Step 8 - Direction Context"       $NBADir (Join-Path $SportsRoot "NBA\scripts\step8_add_direction_context.py")         "--input data\outputs\step7_ranked_props.xlsx --sheet ALL --output data\outputs\step8_all_direction.csv --date $Date" }
+    if ($ok) { $ok = Run-Step "NBA Step 8 - Direction Context"       $NBADir (Join-Path $SportsRoot "NBA\scripts\step8_add_direction_context.py")         "--input `"$NBARunOutDir\step7_ranked_props.xlsx`" --sheet ALL --output `"$NBARunOutDir\step8_all_direction.csv`" --date $Date" }
     if ($ok) {
-        $nbaMainStep8 = Join-Path $NBADir "data\outputs\step8_all_direction_clean.xlsx"
+        $nbaMainStep8 = Join-Path $NBARunOutDir "step8_all_direction_clean.xlsx"
         if (Test-Path $nbaMainStep8) {
             Copy-DatedSlateOutput -SourcePath $nbaMainStep8 -DatedFileName "step8_nba_direction_clean_$Date.xlsx" -Label "NBA"
         }
@@ -1066,7 +1121,7 @@ Write-Host ""
 
 # -- NBA Job ------------------------------------------------------------------
 $NBAJob = Start-Job -ScriptBlock {
-    param($NBADir, $Date, $OddsApiKey, $SkipFetch, $RepoRoot)
+    param($NBADir, $Date, $OddsApiKey, $SkipFetch, $RepoRoot, $NBARunOutDir)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
     function Run-Step-Job {
         param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
@@ -1101,25 +1156,25 @@ $NBAJob = Start-Job -ScriptBlock {
         finally { Pop-Location }
     }
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "NBA Step 1 - Fetch PrizePicks"    $NBADir ".\scripts\step1_fetch_prizepicks_api.py"             "--league_id 7 --game_mode pickem --per_page 250 --max_pages 5 --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --replace --output data\outputs\step1_pp_props_today.csv --date $Date" } } else { Write-Output "[NBA] Skipping step1 fetch" }
-    if ($ok) { $ok = Run-Step-Job "NBA Step 2 - Attach Pick Types"       $NBADir ".\scripts\step2_attach_picktypes.py"               "--input data\outputs\step1_pp_props_today.csv --output data\outputs\step2_with_picktypes.csv" }
-    if ($ok) { $ok = Run-Step-Job "NBA Step 3 - Attach Defense"          $NBADir ".\scripts\step3_attach_defense.py"                 "--input data\outputs\step2_with_picktypes.csv --defense data\cache\defense_team_summary.csv --output data\outputs\step3_with_defense.csv" }
-    if ($ok) { $ok = Run-Step-Job "NBA Step 4 - Player Stats (ESPN)"     $NBADir ".\scripts\step4_attach_player_stats_espn_cache.py" "--slate data\outputs\step3_with_defense.csv --out data\outputs\step4_with_stats.csv" }
-    if ($ok) { $ok = Run-Step-Job "NBA Step 5 - Line Hit Rates"          $NBADir ".\scripts\step5_add_line_hit_rates.py"             "--input data\outputs\step4_with_stats.csv --output data\outputs\step5_with_hit_rates.csv" }
-    if ($ok) { $ok = Run-Step-Job "NBA Step 6 - Team Role Context"       $NBADir ".\scripts\step6_team_role_context.py"              "--input data\outputs\step5_with_hit_rates.csv --output data\outputs\step6_with_team_role_context.csv" }
-    if ($ok) { $ok = Run-Step-Job "NBA Step 6a - Opponent H2H Stats"     $NBADir ".\scripts\step6a_attach_opponent_stats_NBA.py"     "--input data\outputs\step6_with_team_role_context.csv --output data\outputs\step6a_with_opp_stats.csv" }
-    if ($ok) { $ok = Run-Step-Job "NBA Step 6b - Game Context (Vegas)"   $NBADir ".\scripts\step6b_attach_game_context.py"          "--input data\outputs\step6a_with_opp_stats.csv --output data\outputs\step6b_with_game_context.csv --api_key `"$OddsApiKey`" --date $Date --cache `"game_context_cache_$Date.csv`"" }
-    if ($ok) { $ok = Run-Step-Job "NBA Step 6c - Schedule Flags (B2B)"   $NBADir ".\scripts\step6c_schedule_flags.py"               "--input data\outputs\step6b_with_game_context.csv --output data\outputs\step6c_with_schedule_flags.csv --date $Date --cache `"schedule_cache_$Date.csv`"" }
-    if ($ok) { $ok = Run-Step-Job "NBA Step 6d - H2H Matchup Stats"      $NBADir ".\scripts\step6d_attach_h2h_matchups.py"          "--input data\outputs\step6c_with_schedule_flags.csv --output data\outputs\step6d_with_h2h.csv" }
-    if ($ok) { $ok = Run-Step-Job "NBA Step 7 - Rank Props"              $NBADir ".\scripts\step7_rank_props.py"                    "--input data\outputs\step6d_with_h2h.csv --output data\outputs\step7_ranked_props.xlsx" }
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "NBA Step 1 - Fetch PrizePicks"    $NBADir ".\scripts\step1_fetch_prizepicks_api.py"             "--league_id 7 --game_mode pickem --per_page 250 --max_pages 5 --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --replace --output `"$NBARunOutDir\step1_pp_props_today.csv`" --date $Date" } } else { Write-Output "[NBA] Skipping step1 fetch" }
+    if ($ok) { $ok = Run-Step-Job "NBA Step 2 - Attach Pick Types"       $NBADir ".\scripts\step2_attach_picktypes.py"               "--input `"$NBARunOutDir\step1_pp_props_today.csv`" --output `"$NBARunOutDir\step2_with_picktypes.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "NBA Step 3 - Attach Defense"          $NBADir ".\scripts\step3_attach_defense.py"                 "--input `"$NBARunOutDir\step2_with_picktypes.csv`" --defense data\cache\defense_team_summary.csv --output `"$NBARunOutDir\step3_with_defense.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "NBA Step 4 - Player Stats (ESPN)"     $NBADir ".\scripts\step4_attach_player_stats_espn_cache.py" "--slate `"$NBARunOutDir\step3_with_defense.csv`" --out `"$NBARunOutDir\step4_with_stats.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "NBA Step 5 - Line Hit Rates"          $NBADir ".\scripts\step5_add_line_hit_rates.py"             "--input `"$NBARunOutDir\step4_with_stats.csv`" --output `"$NBARunOutDir\step5_with_hit_rates.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "NBA Step 6 - Team Role Context"       $NBADir ".\scripts\step6_team_role_context.py"              "--input `"$NBARunOutDir\step5_with_hit_rates.csv`" --output `"$NBARunOutDir\step6_with_team_role_context.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "NBA Step 6a - Opponent H2H Stats"     $NBADir ".\scripts\step6a_attach_opponent_stats_NBA.py"     "--input `"$NBARunOutDir\step6_with_team_role_context.csv`" --output `"$NBARunOutDir\step6a_with_opp_stats.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "NBA Step 6b - Game Context (Vegas)"   $NBADir ".\scripts\step6b_attach_game_context.py"          "--input `"$NBARunOutDir\step6a_with_opp_stats.csv`" --output `"$NBARunOutDir\step6b_with_game_context.csv`" --api_key `"$OddsApiKey`" --date $Date --cache `"game_context_cache_$Date.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "NBA Step 6c - Schedule Flags (B2B)"   $NBADir ".\scripts\step6c_schedule_flags.py"               "--input `"$NBARunOutDir\step6b_with_game_context.csv`" --output `"$NBARunOutDir\step6c_with_schedule_flags.csv`" --date $Date --cache `"schedule_cache_$Date.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "NBA Step 6d - H2H Matchup Stats"      $NBADir ".\scripts\step6d_attach_h2h_matchups.py"          "--input `"$NBARunOutDir\step6c_with_schedule_flags.csv`" --output `"$NBARunOutDir\step6d_with_h2h.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "NBA Step 7 - Rank Props"              $NBADir ".\scripts\step7_rank_props.py"                    "--input `"$NBARunOutDir\step6d_with_h2h.csv`" --output `"$NBARunOutDir\step7_ranked_props.xlsx`"" }
     if ($ok) { Invoke-Step7b-Job "NBA" $RepoRoot }
-    if ($ok) { $ok = Run-Step-Job "NBA Step 8 - Direction Context"       $NBADir (Join-Path $RepoRoot "Sports\NBA\scripts\step8_add_direction_context.py")         "--input data\outputs\step7_ranked_props.xlsx --sheet ALL --output data\outputs\step8_all_direction.csv --date $Date" }
+    if ($ok) { $ok = Run-Step-Job "NBA Step 8 - Direction Context"       $NBADir (Join-Path $RepoRoot "Sports\NBA\scripts\step8_add_direction_context.py")         "--input `"$NBARunOutDir\step7_ranked_props.xlsx`" --sheet ALL --output `"$NBARunOutDir\step8_all_direction.csv`" --date $Date" }
     return $ok
-} -ArgumentList $NBADir, $Date, $OddsApiKey, $SkipFetch, $Root
+} -ArgumentList $NBADir, $Date, $OddsApiKey, $SkipFetch, $Root, $NBARunOutDir
 
 # -- CBB Job ------------------------------------------------------------------
 $CBBJob = Start-Job -ScriptBlock {
-    param($CBBDir, $Date, $SkipFetch, $RepoRoot)
+    param($CBBDir, $Date, $SkipFetch, $RepoRoot, $CBBRunOutDir)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
     function Run-Step-Job {
         param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
@@ -1154,19 +1209,19 @@ $CBBJob = Start-Job -ScriptBlock {
         finally { Pop-Location }
     }
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "CBB Step 1 - Fetch PrizePicks"      $CBBDir ".\scripts\pipeline\step1_pp_cbb_scraper.py"      "--out step1_cbb.csv" } } else { Write-Output "[CBB] Skipping step1 fetch" }
-    if ($ok) { $ok = Run-Step-Job "CBB Step 2 - Normalize"               $CBBDir ".\scripts\pipeline\step2_normalize.py"                            "--input step1_cbb.csv --output step2_cbb.csv" }
-    if ($ok) { $ok = Run-Step-Job "CBB Step 3 - Attach Defense Rankings" $CBBDir ".\scripts\pipeline\step3b_attach_def_rankings.py"                 "--input step2_cbb.csv --defense data\reference\cbb_def_rankings.csv --output step3b_with_def_rankings_cbb.csv" }
-    if ($ok) { $ok = Run-Step-Job "CBB Step 4 - Attach ESPN IDs"         $CBBDir ".\scripts\pipeline\step5a_attach_espn_ids.py"                     "--input step3b_with_def_rankings_cbb.csv --output step3_cbb.csv --master data/reference/ncaa_mbb_athletes_master.csv" }
-    if ($ok) { $ok = Run-Step-Job "CBB Step 5 - Boxscore Stats"          $CBBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input step3_cbb.csv --output step5b_cbb.csv" }
-    if ($ok) { $ok = Run-Step-Job "CBB Step 6 - Rank Props"              $CBBDir ".\scripts\pipeline\step6_rank_props_cbb.py"                       "--input step5b_cbb.csv --output step6_ranked_cbb.xlsx" }
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "CBB Step 1 - Fetch PrizePicks"      $CBBDir ".\scripts\pipeline\step1_pp_cbb_scraper.py"      "--out `"$CBBRunOutDir\step1_cbb.csv`"" } } else { Write-Output "[CBB] Skipping step1 fetch" }
+    if ($ok) { $ok = Run-Step-Job "CBB Step 2 - Normalize"               $CBBDir ".\scripts\pipeline\step2_normalize.py"                            "--input `"$CBBRunOutDir\step1_cbb.csv`" --output `"$CBBRunOutDir\step2_cbb.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "CBB Step 3 - Attach Defense Rankings" $CBBDir ".\scripts\pipeline\step3b_attach_def_rankings.py"                 "--input `"$CBBRunOutDir\step2_cbb.csv`" --defense data\reference\cbb_def_rankings.csv --output `"$CBBRunOutDir\step3b_with_def_rankings_cbb.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "CBB Step 4 - Attach ESPN IDs"         $CBBDir ".\scripts\pipeline\step5a_attach_espn_ids.py"                     "--input `"$CBBRunOutDir\step3b_with_def_rankings_cbb.csv`" --output `"$CBBRunOutDir\step3_cbb.csv`" --master data/reference/ncaa_mbb_athletes_master.csv" }
+    if ($ok) { $ok = Run-Step-Job "CBB Step 5 - Boxscore Stats"          $CBBDir ".\scripts\pipeline\step5b_attach_boxscore_stats.py"               "--input `"$CBBRunOutDir\step3_cbb.csv`" --output `"$CBBRunOutDir\step5b_cbb.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "CBB Step 6 - Rank Props"              $CBBDir ".\scripts\pipeline\step6_rank_props_cbb.py"                       "--input `"$CBBRunOutDir\step5b_cbb.csv`" --output `"$CBBRunOutDir\step6_ranked_cbb.xlsx`"" }
     if ($ok) { Invoke-Step7b-Job "CBB" $RepoRoot }
     return $ok
-} -ArgumentList $CBBDir, $Date, $SkipFetch, $Root
+} -ArgumentList $CBBDir, $Date, $SkipFetch, $Root, $CBBRunOutDir
 
 # -- NHL Job ------------------------------------------------------------------
 $NHLJob = Start-Job -ScriptBlock {
-    param($NHLDir, $SkipFetch, $RepoRoot, $Date)
+    param($NHLDir, $SkipFetch, $RepoRoot, $Date, $NHLRunOutDir)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
     function Run-Step-Job {
         param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
@@ -1201,21 +1256,21 @@ $NHLJob = Start-Job -ScriptBlock {
         finally { Pop-Location }
     }
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "NHL Step 1 - Fetch PrizePicks" $NHLDir ".\scripts\step1_fetch_prizepicks_nhl.py"        "--output outputs\step1_nhl_props.csv" } } else { Write-Output "[NHL] Skipping step1 fetch" }
-    if ($ok) { $ok = Run-Step-Job "NHL Step 2 - Attach Pick Types"  $NHLDir ".\scripts\step2_attach_picktypes_nhl.py"       "--input outputs\step1_nhl_props.csv --output outputs\step2_nhl_picktypes.csv" }
-    if ($ok) { $ok = Run-Step-Job "NHL Step 3 - Attach Defense"     $NHLDir ".\scripts\step3_attach_defense_nhl.py"         "--input outputs\step2_nhl_picktypes.csv --output outputs\step3_nhl_with_defense.csv" }
-    if ($ok) { $ok = Run-Step-Job "NHL Step 4 - Player Stats"       $NHLDir ".\scripts\step4_attach_player_stats_nhl.py"    "--input outputs\step3_nhl_with_defense.csv --output outputs\step4_nhl_with_stats.csv" }
-    if ($ok) { $ok = Run-Step-Job "NHL Step 5 - Line Hit Rates"     $NHLDir ".\scripts\step5_add_line_hit_rates_nhl.py"     "--input outputs\step4_nhl_with_stats.csv --output outputs\step5_nhl_hit_rates.csv --gamelog-cache cache\nhl_gamelog_cache.json" }
-    if ($ok) { $ok = Run-Step-Job "NHL Step 6 - Team Role Context"  $NHLDir ".\scripts\step6_team_role_context_nhl.py"      "--input outputs\step5_nhl_hit_rates.csv --output outputs\step6_nhl_role_context.csv" }
-    if ($ok) { $ok = Run-Step-Job "NHL Step 7 - Rank Props"         $NHLDir ".\scripts\step7_rank_props_nhl.py"             "--input outputs\step6_nhl_role_context.csv --output outputs\step7_nhl_ranked.xlsx" }
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "NHL Step 1 - Fetch PrizePicks" $NHLDir ".\scripts\step1_fetch_prizepicks_nhl.py"        "--output `"$NHLRunOutDir\step1_nhl_props.csv`"" } } else { Write-Output "[NHL] Skipping step1 fetch" }
+    if ($ok) { $ok = Run-Step-Job "NHL Step 2 - Attach Pick Types"  $NHLDir ".\scripts\step2_attach_picktypes_nhl.py"       "--input `"$NHLRunOutDir\step1_nhl_props.csv`" --output `"$NHLRunOutDir\step2_nhl_picktypes.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "NHL Step 3 - Attach Defense"     $NHLDir ".\scripts\step3_attach_defense_nhl.py"         "--input `"$NHLRunOutDir\step2_nhl_picktypes.csv`" --output `"$NHLRunOutDir\step3_nhl_with_defense.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "NHL Step 4 - Player Stats"       $NHLDir ".\scripts\step4_attach_player_stats_nhl.py"    "--input `"$NHLRunOutDir\step3_nhl_with_defense.csv`" --output `"$NHLRunOutDir\step4_nhl_with_stats.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "NHL Step 5 - Line Hit Rates"     $NHLDir ".\scripts\step5_add_line_hit_rates_nhl.py"     "--input `"$NHLRunOutDir\step4_nhl_with_stats.csv`" --output `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --gamelog-cache cache\nhl_gamelog_cache.json" }
+    if ($ok) { $ok = Run-Step-Job "NHL Step 6 - Team Role Context"  $NHLDir ".\scripts\step6_team_role_context_nhl.py"      "--input `"$NHLRunOutDir\step5_nhl_hit_rates.csv`" --output `"$NHLRunOutDir\step6_nhl_role_context.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "NHL Step 7 - Rank Props"         $NHLDir ".\scripts\step7_rank_props_nhl.py"             "--input `"$NHLRunOutDir\step6_nhl_role_context.csv`" --output `"$NHLRunOutDir\step7_nhl_ranked.xlsx`"" }
     if ($ok) { Invoke-Step7b-Job "NHL" $RepoRoot }
-    if ($ok) { $ok = Run-Step-Job "NHL Step 8 - Direction Context"  $NHLDir (Join-Path $RepoRoot "Sports\NHL\scripts\step8_add_direction_context_nhl.py")  "--input outputs\step7_nhl_ranked.xlsx --output outputs\step8_nhl_direction_clean.xlsx --date $Date" }
+    if ($ok) { $ok = Run-Step-Job "NHL Step 8 - Direction Context"  $NHLDir (Join-Path $RepoRoot "Sports\NHL\scripts\step8_add_direction_context_nhl.py")  "--input `"$NHLRunOutDir\step7_nhl_ranked.xlsx`" --output `"$NHLRunOutDir\step8_nhl_direction_clean.xlsx`" --date $Date" }
     return $ok
-} -ArgumentList $NHLDir, $SkipFetch, $Root, $Date
+} -ArgumentList $NHLDir, $SkipFetch, $Root, $Date, $NHLRunOutDir
 
 # -- Soccer Job ---------------------------------------------------------------
 $SoccerJob = Start-Job -ScriptBlock {
-    param($SoccerDir, $Date, $SkipFetch, $RepoRoot, $SkipDefenseRefresh)
+    param($SoccerDir, $Date, $SkipFetch, $RepoRoot, $SkipDefenseRefresh, $SoccerRunOutDir)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
     function Run-Step-Job {
         param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
@@ -1250,8 +1305,8 @@ $SoccerJob = Start-Job -ScriptBlock {
         finally { Pop-Location }
     }
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "Soccer Step 1 - Fetch PrizePicks" $SoccerDir ".\scripts\step1_fetch_prizepicks_soccer.py" "--output outputs\step1_soccer_props.csv --date $Date" } } else { Write-Output "[Soccer] Skipping step1 fetch" }
-    if ($ok) { $ok = Run-Step-Job "Soccer Step 2 - Attach Pick Types"  $SoccerDir ".\scripts\step2_attach_picktypes_soccer.py"       "--input outputs\step1_soccer_props.csv --output outputs\step2_soccer_picktypes.csv" }
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "Soccer Step 1 - Fetch PrizePicks" $SoccerDir ".\scripts\step1_fetch_prizepicks_soccer.py" "--output `"$SoccerRunOutDir\step1_soccer_props.csv`" --date $Date" } } else { Write-Output "[Soccer] Skipping step1 fetch" }
+    if ($ok) { $ok = Run-Step-Job "Soccer Step 2 - Attach Pick Types"  $SoccerDir ".\scripts\step2_attach_picktypes_soccer.py"       "--input `"$SoccerRunOutDir\step1_soccer_props.csv`" --output `"$SoccerRunOutDir\step2_soccer_picktypes.csv`"" }
     if ($ok) {
         if ($SkipDefenseRefresh) {
             Write-Output "[Soccer] Skipping defense refresh (-SkipDefenseRefresh)"
@@ -1259,19 +1314,19 @@ $SoccerJob = Start-Job -ScriptBlock {
             $ok = Run-Step-Job "Soccer Defense Refresh"             $SoccerDir ".\scripts\soccer_defense_report.py"               "--out cache\soccer_defense_summary.csv"
         }
     }
-    if ($ok) { $ok = Run-Step-Job "Soccer Step 3 - Attach Defense"     $SoccerDir ".\scripts\step3_attach_defense_soccer.py"         "--input outputs\step2_soccer_picktypes.csv --defense cache\soccer_defense_summary.csv --output outputs\step3_soccer_with_defense.csv" }
-    if ($ok) { $ok = Run-Step-Job "Soccer Step 4 - Player Stats"       $SoccerDir ".\scripts\step4_attach_player_stats_soccer.py"    "--input outputs\step3_soccer_with_defense.csv --output outputs\step4_soccer_with_stats.csv" }
-    if ($ok) { $ok = Run-Step-Job "Soccer Step 5 - Line Hit Rates"     $SoccerDir ".\scripts\step5_add_line_hit_rates_soccer.py"     "--input outputs\step4_soccer_with_stats.csv --output outputs\step5_soccer_hit_rates.csv --compute10" }
-    if ($ok) { $ok = Run-Step-Job "Soccer Step 6 - Team Role Context"  $SoccerDir ".\scripts\step6_team_role_context_soccer.py"      "--input outputs\step5_soccer_hit_rates.csv --output outputs\step6_soccer_role_context.csv" }
-    if ($ok) { $ok = Run-Step-Job "Soccer Step 7 - Rank Props"         $SoccerDir ".\scripts\step7_rank_props_soccer.py"             "--input outputs\step6_soccer_role_context.csv --output outputs\step7_soccer_ranked.xlsx" }
+    if ($ok) { $ok = Run-Step-Job "Soccer Step 3 - Attach Defense"     $SoccerDir ".\scripts\step3_attach_defense_soccer.py"         "--input `"$SoccerRunOutDir\step2_soccer_picktypes.csv`" --defense cache\soccer_defense_summary.csv --output `"$SoccerRunOutDir\step3_soccer_with_defense.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "Soccer Step 4 - Player Stats"       $SoccerDir ".\scripts\step4_attach_player_stats_soccer.py"    "--input `"$SoccerRunOutDir\step3_soccer_with_defense.csv`" --output `"$SoccerRunOutDir\step4_soccer_with_stats.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "Soccer Step 5 - Line Hit Rates"     $SoccerDir ".\scripts\step5_add_line_hit_rates_soccer.py"     "--input `"$SoccerRunOutDir\step4_soccer_with_stats.csv`" --output `"$SoccerRunOutDir\step5_soccer_hit_rates.csv`" --compute10" }
+    if ($ok) { $ok = Run-Step-Job "Soccer Step 6 - Team Role Context"  $SoccerDir ".\scripts\step6_team_role_context_soccer.py"      "--input `"$SoccerRunOutDir\step5_soccer_hit_rates.csv`" --output `"$SoccerRunOutDir\step6_soccer_role_context.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "Soccer Step 7 - Rank Props"         $SoccerDir ".\scripts\step7_rank_props_soccer.py"             "--input `"$SoccerRunOutDir\step6_soccer_role_context.csv`" --output `"$SoccerRunOutDir\step7_soccer_ranked.xlsx`"" }
     if ($ok) { Invoke-Step7b-Job "Soccer" $RepoRoot }
-    if ($ok) { $ok = Run-Step-Job "Soccer Step 8 - Direction Context"  $SoccerDir (Join-Path $RepoRoot "Sports\Soccer\scripts\step8_add_direction_context_soccer.py")  "--input outputs\step7_soccer_ranked.xlsx --sheet ALL --output outputs\step8_soccer_direction.csv --xlsx outputs\step8_soccer_direction_clean.xlsx --date $Date" }
+    if ($ok) { $ok = Run-Step-Job "Soccer Step 8 - Direction Context"  $SoccerDir (Join-Path $RepoRoot "Sports\Soccer\scripts\step8_add_direction_context_soccer.py")  "--input `"$SoccerRunOutDir\step7_soccer_ranked.xlsx`" --sheet ALL --output `"$SoccerRunOutDir\step8_soccer_direction.csv`" --xlsx `"$SoccerRunOutDir\step8_soccer_direction_clean.xlsx`" --date $Date" }
     return $ok
-} -ArgumentList $SoccerDir, $Date, $SkipFetch, $Root, [bool]$SkipDefenseRefresh
+} -ArgumentList $SoccerDir, $Date, $SkipFetch, $Root, [bool]$SkipDefenseRefresh, $SoccerRunOutDir
 
 # -- Tennis Job ---------------------------------------------------------------
 $TennisJob = Start-Job -ScriptBlock {
-    param($TennisDir, $Date, $SkipFetch, $RepoRoot)
+    param($TennisDir, $Date, $SkipFetch, $RepoRoot, $TennisRunOutDir)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
     function Run-Step-Job {
         param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
@@ -1306,22 +1361,22 @@ $TennisJob = Start-Job -ScriptBlock {
         finally { Pop-Location }
     }
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "Tennis Step 1 - Fetch PrizePicks" $TennisDir ".\scripts\step1_fetch_prizepicks_tennis.py" "--output outputs\step1_tennis_props.csv" } } else { Write-Output "[Tennis] Skipping step1 fetch" }
-    if ($ok) { $ok = Run-Step-Job "Tennis Step 2 - Attach Pick Types" $TennisDir ".\scripts\step2_attach_picktypes_tennis.py" "--input outputs\step1_tennis_props.csv --output outputs\step2_tennis_picktypes.csv" }
-    if ($ok) { $ok = Run-Step-Job "Tennis Step 3 - Defense Stub" $TennisDir ".\scripts\step3_defense_rankings_tennis.py" "--input outputs\step2_tennis_picktypes.csv --output outputs\step3_tennis_with_defense.csv" }
-    if ($ok) { $ok = Run-Step-Job "Tennis Step 4 - Player Stats + History" $TennisDir ".\scripts\step4_attach_player_stats_tennis.py" "--input outputs\step3_tennis_with_defense.csv --output outputs\step4_tennis_with_stats.csv" }
-    if ($ok) { $ok = Run-Step-Job "Tennis Step 5 - Hit Rates" $TennisDir ".\scripts\step5_compute_hitrates_tennis.py" "--input outputs\step4_tennis_with_stats.csv --output outputs\step5_tennis_hit_rates.csv --compute10" }
-    if ($ok) { $ok = Run-Step-Job "Tennis Step 6 - Context" $TennisDir ".\scripts\step6_add_context_tennis.py" "--input outputs\step5_tennis_hit_rates.csv --output outputs\step6_tennis_role_context.csv" }
-    if ($ok) { $ok = Run-Step-Job "Tennis Step 7 - Rank Props" $TennisDir ".\scripts\step7_rank_props_tennis.py" "--input outputs\step6_tennis_role_context.csv --output outputs\step7_tennis_ranked.xlsx" }
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "Tennis Step 1 - Fetch PrizePicks" $TennisDir ".\scripts\step1_fetch_prizepicks_tennis.py" "--output `"$TennisRunOutDir\step1_tennis_props.csv`"" } } else { Write-Output "[Tennis] Skipping step1 fetch" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 2 - Attach Pick Types" $TennisDir ".\scripts\step2_attach_picktypes_tennis.py" "--input `"$TennisRunOutDir\step1_tennis_props.csv`" --output `"$TennisRunOutDir\step2_tennis_picktypes.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 3 - Defense Stub" $TennisDir ".\scripts\step3_defense_rankings_tennis.py" "--input `"$TennisRunOutDir\step2_tennis_picktypes.csv`" --output `"$TennisRunOutDir\step3_tennis_with_defense.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 4 - Player Stats + History" $TennisDir ".\scripts\step4_attach_player_stats_tennis.py" "--input `"$TennisRunOutDir\step3_tennis_with_defense.csv`" --output `"$TennisRunOutDir\step4_tennis_with_stats.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 5 - Hit Rates" $TennisDir ".\scripts\step5_compute_hitrates_tennis.py" "--input `"$TennisRunOutDir\step4_tennis_with_stats.csv`" --output `"$TennisRunOutDir\step5_tennis_hit_rates.csv`" --compute10" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 6 - Context" $TennisDir ".\scripts\step6_add_context_tennis.py" "--input `"$TennisRunOutDir\step5_tennis_hit_rates.csv`" --output `"$TennisRunOutDir\step6_tennis_role_context.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 7 - Rank Props" $TennisDir ".\scripts\step7_rank_props_tennis.py" "--input `"$TennisRunOutDir\step6_tennis_role_context.csv`" --output `"$TennisRunOutDir\step7_tennis_ranked.xlsx`"" }
     if ($ok) { Invoke-Step7b-Job "Tennis" $RepoRoot }
-    if ($ok) { $ok = Run-Step-Job "Tennis Step 8 - Direction Context" $TennisDir (Join-Path $RepoRoot "Sports\Tennis\scripts\step8_add_direction_context_tennis.py") "--input outputs\step7_tennis_ranked.xlsx --sheet ALL --output outputs\step8_tennis_direction.csv --xlsx outputs\step8_tennis_direction_clean.xlsx --date $Date" }
+    if ($ok) { $ok = Run-Step-Job "Tennis Step 8 - Direction Context" $TennisDir (Join-Path $RepoRoot "Sports\Tennis\scripts\step8_add_direction_context_tennis.py") "--input `"$TennisRunOutDir\step7_tennis_ranked.xlsx`" --sheet ALL --output `"$TennisRunOutDir\step8_tennis_direction.csv`" --xlsx `"$TennisRunOutDir\step8_tennis_direction_clean.xlsx`" --date $Date" }
     return $ok
-} -ArgumentList $TennisDir, $Date, $SkipFetch, $Root
+} -ArgumentList $TennisDir, $Date, $SkipFetch, $Root, $TennisRunOutDir
 
 # -- MLB Job ------------------------------------------------------------------
 # MLB activated April 2026
 $MLBJob = Start-Job -ScriptBlock {
-    param($MLBDir, $Date, $SkipFetch, $RepoRoot)
+    param($MLBDir, $Date, $SkipFetch, $RepoRoot, $MLBRunOutDir)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
     function Run-Step-Job {
         param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
@@ -1338,17 +1393,17 @@ $MLBJob = Start-Job -ScriptBlock {
         } finally { Pop-Location }
     }
     function Invoke-MLBStep1Fetch-Job {
-        param([string]$Dir, [string]$PipelineDate)
+        param([string]$Dir, [string]$PipelineDate, [string]$OutputPath)
         Write-Output "[MLB] --> MLB Step 1 - Fetch PrizePicks (direct API, then Playwright if needed)"
         Push-Location $Dir
         try {
-            $cmd1 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --date `"$PipelineDate`" --output step1_mlb_props.csv"
+            $cmd1 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --date `"$PipelineDate`" --output `"$OutputPath`" --api-retries 2 --api-session-waves 1 --api-wave-gap-min 8 --api-wave-gap-max 15 --api-403-cooldown-after 2 --api-403-cooldown-seconds 20 --api-403-cooldown-jitter-min 4 --api-403-cooldown-jitter-max 10"
             Write-Output "        CMD: $cmd1"
             $output = Invoke-Expression $cmd1 2>&1; $exit = $LASTEXITCODE
             foreach ($line in $output) { Write-Output "        $line" }
             if ($exit -ne 0) {
                 Write-Output "[MLB] Direct API failed (exit $exit); trying Playwright"
-                $cmd2 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --playwright --timeout 180 --date `"$PipelineDate`" --output step1_mlb_props.csv"
+                $cmd2 = "py -3.14 -u `".\scripts\step1_fetch_prizepicks_mlb.py`" --playwright --timeout 120 --retries 1 --retry_delay 5 --date `"$PipelineDate`" --output `"$OutputPath`""
                 Write-Output "        CMD: $cmd2"
                 $output = Invoke-Expression $cmd2 2>&1; $exit = $LASTEXITCODE
                 foreach ($line in $output) { Write-Output "        $line" }
@@ -1389,12 +1444,16 @@ $MLBJob = Start-Job -ScriptBlock {
             $match = $rows | Where-Object { (($_.game_date | ForEach-Object { "$_".Trim() })) -eq $TargetDate }
         } elseif ($rows[0].PSObject.Properties.Name -contains "start_time") {
             $match = $rows | Where-Object { "$($_.start_time)".Length -ge 10 -and "$($_.start_time)".Substring(0, 10) -eq $TargetDate }
+        } else {
+            return @{ ok = $false; reason = "missing_date_columns" }
         }
-        return @{ ok = ($match.Count -gt 0); reason = (if ($match.Count -gt 0) { "ok" } else { "date_mismatch" }) }
+        $reason = if ($match.Count -gt 0) { "ok" } else { "date_mismatch" }
+        return @{ ok = ($match.Count -gt 0); reason = $reason }
     }
     function Clear-MLBGeneratedOutputs-Job {
         param([string]$BaseDir)
         foreach ($p in @(
+            "step1_mlb_props.csv",
             "step2_mlb_picktypes.csv",
             "step3_mlb_with_defense.csv",
             "step4_mlb_with_stats.csv",
@@ -1409,29 +1468,29 @@ $MLBJob = Start-Job -ScriptBlock {
     }
     $ok = $true
     if (-not $SkipFetch) {
-        Clear-MLBGeneratedOutputs-Job -BaseDir $MLBDir
-        if ($ok) { $ok = Invoke-MLBStep1Fetch-Job -Dir $MLBDir -PipelineDate $Date }
+        Clear-MLBGeneratedOutputs-Job -BaseDir $MLBRunOutDir
+        if ($ok) { $ok = Invoke-MLBStep1Fetch-Job -Dir $MLBDir -PipelineDate $Date -OutputPath "$MLBRunOutDir\step1_mlb_props.csv" }
         if ($ok) {
-            $health = Get-MLBStep1DateHealth-Job -CsvPath (Join-Path $MLBDir "step1_mlb_props.csv") -TargetDate $Date
+            $health = Get-MLBStep1DateHealth-Job -CsvPath (Join-Path $MLBRunOutDir "step1_mlb_props.csv") -TargetDate $Date
             if (-not $health.ok) {
                 Write-Output "[MLB] Step1 date health failed ($($health.reason)); clearing MLB outputs to avoid stale carry-over."
-                Clear-MLBGeneratedOutputs-Job -BaseDir $MLBDir
+                Clear-MLBGeneratedOutputs-Job -BaseDir $MLBRunOutDir
                 $ok = $false
             }
         }
     } else {
         Write-Output "[MLB] Skipping step1 fetch"
     }
-    if ($ok) { $ok = Run-Step-Job "MLB Step 2 - Attach Pick Types"  $MLBDir ".\scripts\step2_attach_picktypes_mlb.py"       "--input step1_mlb_props.csv --output step2_mlb_picktypes.csv --id_lookup_timeout_s 6 --id_lookup_retries 2 --id_lookup_budget_s 180" }
-    if ($ok) { $ok = Run-Step-Job "MLB Step 3 - Attach Defense"     $MLBDir ".\scripts\step3_attach_defense_mlb.py"         "--input step2_mlb_picktypes.csv --defense mlb_defense_summary.csv --output step3_mlb_with_defense.csv" }
-    if ($ok) { $ok = Run-Step-Job "MLB Step 4 - Player Stats"       $MLBDir ".\scripts\step4_attach_player_stats_mlb.py"    "--input step3_mlb_with_defense.csv --cache mlb_stats_cache.csv --output step4_mlb_with_stats.csv --season 2025" }
-    if ($ok) { $ok = Run-Step-Job "MLB Step 5 - Line Hit Rates"     $MLBDir ".\scripts\step5_add_line_hit_rates_mlb.py"     "--input step4_mlb_with_stats.csv --output step5_mlb_hit_rates.csv" }
-    if ($ok) { $ok = Run-Step-Job "MLB Step 6 - Team Role Context"  $MLBDir ".\scripts\step6_team_role_context_mlb.py"      "--input step5_mlb_hit_rates.csv --output step6_mlb_role_context.csv" }
-    if ($ok) { $ok = Run-Step-Job "MLB Step 7 - Rank Props"         $MLBDir ".\scripts\step7_rank_props_mlb.py"             "--input step6_mlb_role_context.csv --output step7_mlb_ranked.xlsx" }
+    if ($ok) { $ok = Run-Step-Job "MLB Step 2 - Attach Pick Types"  $MLBDir ".\scripts\step2_attach_picktypes_mlb.py"       "--input `"$MLBRunOutDir\step1_mlb_props.csv`" --output `"$MLBRunOutDir\step2_mlb_picktypes.csv`" --id_lookup_timeout_s 6 --id_lookup_retries 2 --id_lookup_budget_s 180" }
+    if ($ok) { $ok = Run-Step-Job "MLB Step 3 - Attach Defense"     $MLBDir ".\scripts\step3_attach_defense_mlb.py"         "--input `"$MLBRunOutDir\step2_mlb_picktypes.csv`" --defense mlb_defense_summary.csv --output `"$MLBRunOutDir\step3_mlb_with_defense.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "MLB Step 4 - Player Stats"       $MLBDir ".\scripts\step4_attach_player_stats_mlb.py"    "--input `"$MLBRunOutDir\step3_mlb_with_defense.csv`" --cache mlb_stats_cache.csv --output `"$MLBRunOutDir\step4_mlb_with_stats.csv`" --season 2025" }
+    if ($ok) { $ok = Run-Step-Job "MLB Step 5 - Line Hit Rates"     $MLBDir ".\scripts\step5_add_line_hit_rates_mlb.py"     "--input `"$MLBRunOutDir\step4_mlb_with_stats.csv`" --output `"$MLBRunOutDir\step5_mlb_hit_rates.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "MLB Step 6 - Team Role Context"  $MLBDir ".\scripts\step6_team_role_context_mlb.py"      "--input `"$MLBRunOutDir\step5_mlb_hit_rates.csv`" --output `"$MLBRunOutDir\step6_mlb_role_context.csv`"" }
+    if ($ok) { $ok = Run-Step-Job "MLB Step 7 - Rank Props"         $MLBDir ".\scripts\step7_rank_props_mlb.py"             "--input `"$MLBRunOutDir\step6_mlb_role_context.csv`" --output `"$MLBRunOutDir\step7_mlb_ranked.xlsx`"" }
     if ($ok) { Invoke-Step7b-Job "MLB" $RepoRoot }
-    if ($ok) { $ok = Run-Step-Job "MLB Step 8 - Direction Context"  $MLBDir (Join-Path $RepoRoot "Sports\MLB\scripts\step8_add_direction_context_mlb.py")  "--input step7_mlb_ranked.xlsx --output step8_mlb_direction.csv --xlsx step8_mlb_direction_clean.xlsx --date $Date" }
+    if ($ok) { $ok = Run-Step-Job "MLB Step 8 - Direction Context"  $MLBDir (Join-Path $RepoRoot "Sports\MLB\scripts\step8_add_direction_context_mlb.py")  "--input `"$MLBRunOutDir\step7_mlb_ranked.xlsx`" --output `"$MLBRunOutDir\step8_mlb_direction.csv`" --xlsx `"$MLBRunOutDir\step8_mlb_direction_clean.xlsx`" --date $Date" }
     return $ok
-} -ArgumentList $MLBDir, $Date, $SkipFetch, $Root
+} -ArgumentList $MLBDir, $Date, $SkipFetch, $Root, $MLBRunOutDir
 
 # -- WNBA Job (parallel full run from $WNBA_SEASON_START; optional -ForceWNBA) ---
 $WNBAJob = $null
@@ -1466,7 +1525,7 @@ if ($wnbaParallel) {
 
 # -- NFL Job ------------------------------------------------------------------
 $NFLJob = Start-Job -ScriptBlock {
-    param($NFLDir, $Date, $SkipFetch, $RepoRoot, $DefenseSeason)
+    param($NFLDir, $Date, $SkipFetch, $RepoRoot, $DefenseSeason, $NFLRunOutDir)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
     $env:NFL_PIPELINE_ACTIVE = "1"
     $nflOutD = Join-Path $NFLDir "outputs"
@@ -1506,16 +1565,16 @@ $NFLJob = Start-Job -ScriptBlock {
         finally { Pop-Location }
     }
     $ok = $true
-    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "NFL Step 1 - Fetch PrizePicks" $NFLDir ".\scripts\step1_fetch_prizepicks_nfl.py" "--output data\outputs\step1_pp_props_today.csv --date $Date" } } else { Write-Output "[NFL] Skipping step1 fetch" }
+    if (-not $SkipFetch) { if ($ok) { $ok = Run-Step-Job "NFL Step 1 - Fetch PrizePicks" $NFLDir ".\scripts\step1_fetch_prizepicks_nfl.py" "--output `"$NFLRunOutDir\step1_pp_props_today.csv`" --date $Date" } } else { Write-Output "[NFL] Skipping step1 fetch" }
     if ($ok) { $ok = Run-Step-Job "NFL Step 2 - Clean Props" $NFLDir ".\scripts\step2_clean_props.py" "" }
     if ($ok) { $ok = Run-Step-Job "NFL Step 4 - Defense Rankings" $NFLDir ".\scripts\step4_defense_rankings.py" "--season $DefenseSeason --output data\defense_rankings.csv" }
     if ($ok) { $ok = Run-Step-Job "NFL Step 3 - Merge Defense" $NFLDir ".\scripts\step3_merge_defense_nfl.py" "" }
     if ($ok) { $ok = Run-Step-Job "NFL Step 6 - Hit Rates" $NFLDir ".\scripts\step6_historical_hit_rates.py" "" }
-    if ($ok) { $ok = Run-Step-Job "NFL Step 7 - Rank Props" $NFLDir ".\scripts\step7_rank_props_nfl.py" "--output outputs\step7_nfl_ranked.xlsx" }
+    if ($ok) { $ok = Run-Step-Job "NFL Step 7 - Rank Props" $NFLDir ".\scripts\step7_rank_props_nfl.py" "--output `"$NFLRunOutDir\step7_nfl_ranked.xlsx`"" }
     if ($ok) { Invoke-Step7b-Job "NFL" $RepoRoot }
-    if ($ok) { $ok = Run-Step-Job "NFL Step 8 - Direction Context" $NFLDir ".\scripts\step8_add_direction_context_nfl.py" "--date $Date" }
+    if ($ok) { $ok = Run-Step-Job "NFL Step 8 - Direction Context" $NFLDir ".\scripts\step8_add_direction_context_nfl.py" "--date $Date --output `"$NFLRunOutDir\step8_nfl_direction_clean.xlsx`"" }
     return $ok
-} -ArgumentList $NFLDir, $Date, $SkipFetch, $Root, 2025
+} -ArgumentList $NFLDir, $Date, $SkipFetch, $Root, 2025, $NFLRunOutDir
 
 # -- Wait + stream output -----------------------------------------------------
 $allJobs = @($NBAJob, $CBBJob, $NHLJob, $SoccerJob, $TennisJob, $MLBJob, $NFLJob, $WNBAJob) | Where-Object { $_ -ne $null }
@@ -1562,30 +1621,30 @@ foreach ($job in $allJobs) {
 }
 
 # -- Results ------------------------------------------------------------------
-$NBASuccess    = Test-Path (Join-Path $NBADir    "data\outputs\step8_all_direction_clean.xlsx")
-$CBBSuccess    = Test-Path (Join-Path $CBBDir "step6_ranked_cbb.xlsx")
-$NHLSuccess    = Test-Path (Join-Path $NHLDir    "outputs\step8_nhl_direction_clean.xlsx")
-$SoccerSuccess = Test-Path (Join-Path $SoccerDir "outputs\step8_soccer_direction_clean.xlsx")
-$MLBSuccess    = Test-Path (Join-Path $MLBDir    "step8_mlb_direction_clean.xlsx")
-$TennisSuccess = Test-Path (Join-Path $TennisDir "outputs\step8_tennis_direction_clean.xlsx")
-$NFLSuccess    = (Test-Path (Join-Path $NFLDir "outputs\step8_nfl_direction_clean.xlsx")) -or (Test-Path (Join-Path $NFLDir "data\outputs\step8_nfl_direction_clean.xlsx"))
+$NBASuccess    = Test-Path (Join-Path $NBARunOutDir "step8_all_direction_clean.xlsx")
+$CBBSuccess    = Test-Path (Join-Path $CBBRunOutDir "step6_ranked_cbb.xlsx")
+$NHLSuccess    = Test-Path (Join-Path $NHLRunOutDir "step8_nhl_direction_clean.xlsx")
+$SoccerSuccess = Test-Path (Join-Path $SoccerRunOutDir "step8_soccer_direction_clean.xlsx")
+$MLBSuccess    = Test-Path (Join-Path $MLBRunOutDir "step8_mlb_direction_clean.xlsx")
+$TennisSuccess = Test-Path (Join-Path $TennisRunOutDir "step8_tennis_direction_clean.xlsx")
+$NFLSuccess    = Test-Path (Join-Path $NFLRunOutDir "step8_nfl_direction_clean.xlsx")
 $WNBASuccess = $false
 if ($wnbaParallel) {
-    $wnbaStep8Clean = Join-Path $WNBADir "outputs\step8_wnba_direction_clean.xlsx"
+    $wnbaStep8Clean = Join-Path $OutDir "wnba\step8_wnba_direction_clean.xlsx"
     $wnbaStep8Legacy = Join-Path $WNBADir "step8_wnba_direction_clean.xlsx"
     $WNBASuccess = (Test-Path -LiteralPath $wnbaStep8Clean) -or (Test-Path -LiteralPath $wnbaStep8Legacy)
 }
-$mlbStep1Health = Get-MLBStep1DateHealth -CsvPath (Join-Path $MLBDir "step1_mlb_props.csv") -TargetDate $Date
+$mlbStep1Health = Get-MLBStep1DateHealth -CsvPath (Join-Path $MLBRunOutDir "step1_mlb_props.csv") -TargetDate $Date
 if (-not $mlbStep1Health.ok) {
     Write-Host "  [MLB] stale/invalid step1 for $Date ($($mlbStep1Health.reason)); clearing MLB outputs from this run." -ForegroundColor Yellow
-    Clear-MLBGeneratedOutputs -BaseDir $MLBDir
+    Clear-MLBGeneratedOutputs -BaseDir $MLBRunOutDir
     $MLBSuccess = $false
 } else {
     $MLBSuccess = $MLBSuccess -and $true
 }
 
 # Dated NBA main step8 for run_grader (avoids empty grades after the live workbook rolls to the next slate day).
-$nbaMainStep8Parallel = Join-Path $NBADir "data\outputs\step8_all_direction_clean.xlsx"
+$nbaMainStep8Parallel = Join-Path $NBARunOutDir "step8_all_direction_clean.xlsx"
 if (Test-Path $nbaMainStep8Parallel) {
     Copy-DatedSlateOutput -SourcePath $nbaMainStep8Parallel -DatedFileName "step8_nba_direction_clean_$Date.xlsx" -Label "NBA"
 }
@@ -1601,7 +1660,7 @@ $NBASuccess = $NBASuccess -and $NBA1HSuccess -and $NBA1QSuccess
 
 if ($TennisSuccess) {
     Copy-DatedSlateOutput `
-        -SourcePath (Join-Path $TennisDir "outputs\step8_tennis_direction_clean.xlsx") `
+        -SourcePath (Join-Path $TennisRunOutDir "step8_tennis_direction_clean.xlsx") `
         -DatedFileName "step8_tennis_direction_clean_$Date.xlsx" `
         -Label "Tennis"
 }

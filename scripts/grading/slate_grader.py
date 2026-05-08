@@ -30,6 +30,7 @@ from utils.slate_fields import (  # noqa: E402
     first_numeric_in_slate_row,
     first_over_under_in_slate_row,
 )
+from utils.group_rank_tier import assign_tier_column  # noqa: E402
 
 
 def _def_rank_bucket(x):
@@ -1328,6 +1329,43 @@ def write_dashboard(wb,df,sport,date_str):
             sub=df[df['usage_role']==role]
             row=simple_row(row,role,sub); row=dir_rows(row,sub)
 
+# ── Tier normalization for historical graded slates ───────────────────────────
+def _recompute_standard_tiers_from_directional_ml_prob(df: pd.DataFrame, sport: str) -> pd.DataFrame:
+    """
+    Recompute Standard tier labels from directional ml_prob when available.
+
+    Older graded slates can carry pre-fix tier assignments where Standard UNDER
+    rows were bucketed from non-directional probabilities. This keeps grading UI
+    and matrix outputs aligned with current tiering logic.
+    """
+    if "tier" not in df.columns or "ml_prob" not in df.columns or "pick_type" not in df.columns:
+        return df
+    dcol = drc(df)
+    if dcol not in df.columns:
+        return df
+
+    try:
+        recalculated = assign_tier_column(df.copy(), sport=str(sport or "").lower())
+    except Exception as e:
+        print(f"[tier-recompute] WARN: skipped ({type(e).__name__}: {e})")
+        return df
+
+    pt = df["pick_type"].astype(str).str.strip().str.lower()
+    dr = df[dcol].astype(str).str.strip().str.upper()
+    ml = pd.to_numeric(df["ml_prob"], errors="coerce")
+    mask = pt.eq("standard") & dr.isin(["OVER", "UNDER"]) & ml.notna()
+    if not mask.any():
+        return df
+
+    old_tier = df.loc[mask, "tier"].astype(str).str.strip().str.upper()
+    new_tier = recalculated.loc[mask].astype(str).str.strip().str.upper()
+    changed = int((old_tier != new_tier).sum())
+    if changed:
+        df.loc[mask, "tier"] = new_tier.values
+        print(f"[tier-recompute] Standard tiers updated: {changed} rows")
+    return df
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 def main():
     ap=argparse.ArgumentParser()
@@ -1362,6 +1400,8 @@ def main():
         df['result']='PENDING'; df['void_reason_grade']=''; df['margin']=np.nan
         df['actual']=np.nan; df['result_sign']=0
         print('  No actuals — PENDING slate')
+
+    df = _recompute_standard_tiers_from_directional_ml_prob(df, args.sport)
 
     if "pp_projection_id" not in df.columns and "projection_id" in df.columns:
         df["pp_projection_id"] = df["projection_id"]

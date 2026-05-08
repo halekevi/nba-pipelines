@@ -11,49 +11,49 @@
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-23\\graded_nba_2026-04-23.xlsx",
       "status": "ok",
-      "rows": 1798,
-      "void_rows": 214,
-      "acceptable_void_rows": 214,
+      "rows": 1790,
+      "void_rows": 206,
+      "acceptable_void_rows": 206,
       "unacceptable_void_rows": 0
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-23\\graded_nhl_2026-04-23.xlsx",
       "status": "ok",
-      "rows": 639,
-      "void_rows": 63,
-      "acceptable_void_rows": 63,
+      "rows": 518,
+      "void_rows": 385,
+      "acceptable_void_rows": 385,
       "unacceptable_void_rows": 0
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-23\\graded_mlb_2026-04-23.xlsx",
       "status": "ok",
-      "rows": 2022,
-      "void_rows": 197,
-      "acceptable_void_rows": 197,
+      "rows": 2927,
+      "void_rows": 479,
+      "acceptable_void_rows": 479,
       "unacceptable_void_rows": 0
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-23\\graded_soccer_2026-04-23.xlsx",
       "status": "ok",
       "rows": 1585,
-      "void_rows": 1054,
-      "acceptable_void_rows": 1054,
+      "void_rows": 1056,
+      "acceptable_void_rows": 1056,
       "unacceptable_void_rows": 0
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-23\\graded_nba1h_2026-04-23.xlsx",
       "status": "ok",
       "rows": 109,
-      "void_rows": 109,
-      "acceptable_void_rows": 109,
+      "void_rows": 58,
+      "acceptable_void_rows": 58,
       "unacceptable_void_rows": 0
     },
     {
       "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-04-23\\graded_nba1q_2026-04-23.xlsx",
       "status": "ok",
       "rows": 225,
-      "void_rows": 225,
-      "acceptable_void_rows": 225,
+      "void_rows": 84,
+      "acceptable_void_rows": 84,
       "unacceptable_void_rows": 0
     },
     {

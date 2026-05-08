@@ -156,3 +156,15 @@ date,ticket_id,slip_type,stake,payout_to_win,power_payout_x,sport,leg_slot,playe
 2026-04-28,pp_2026-04-28_040,power,20,1080,54.0,NBA,2,Nickeil Alexander-Walker,Points,14.5,MORE,Goblin,screenshot_manual,NBA 4-leg mixed goblin+demon screenshot ticket verified (min guarantee basis)
 2026-04-28,pp_2026-04-28_040,power,20,1080,54.0,NBA,3,OG Anunoby,Points,24.5,MORE,Demon,screenshot_manual,NBA 4-leg mixed goblin+demon screenshot ticket verified (min guarantee basis)
 2026-04-28,pp_2026-04-28_040,power,20,1080,54.0,NBA,4,Onyeka Okongwu,Points,19.5,MORE,Demon,screenshot_manual,NBA 4-leg mixed goblin+demon screenshot ticket verified (min guarantee basis)
+2026-05-08,pp_2026-05-08_001,power,20,370,18.5,NBA,1,Miles McBride,FG Attempted,9.5,LESS,Standard,screenshot_manual,PrizePicks 6-pick Power screenshot logged manually
+2026-05-08,pp_2026-05-08_001,power,20,370,18.5,NBA,2,VJ Edgecombe,Pts+Asts,11.5,MORE,Goblin,screenshot_manual,PrizePicks 6-pick Power screenshot logged manually
+2026-05-08,pp_2026-05-08_001,power,20,370,18.5,NBA,3,Anthony Edwards,FG Attempted,18.5,LESS,Standard,screenshot_manual,PrizePicks 6-pick Power screenshot logged manually
+2026-05-08,pp_2026-05-08_001,power,20,370,18.5,NBA,4,Julius Randle,Pts+Asts,23.5,LESS,Standard,screenshot_manual,PrizePicks 6-pick Power screenshot logged manually
+2026-05-08,pp_2026-05-08_001,power,20,370,18.5,NBA,5,Stephon Castle,Pts+Asts,19.5,MORE,Goblin,screenshot_manual,PrizePicks 6-pick Power screenshot logged manually
+2026-05-08,pp_2026-05-08_001,power,20,370,18.5,NBA,6,Victor Wembanyama,Pts+Asts,29.5,LESS,Standard,screenshot_manual,PrizePicks 6-pick Power screenshot logged manually
+2026-05-08,pp_2026-05-08_002,power,20,390,19.5,NBA,1,Josh Hart,Pts+Rebs,21.5,LESS,Standard,screenshot_manual,PrizePicks 6-pick Power screenshot logged manually
+2026-05-08,pp_2026-05-08_002,power,20,390,19.5,NBA,2,Miles McBride,Pts+Rebs,13.5,LESS,Standard,screenshot_manual,PrizePicks 6-pick Power screenshot logged manually
+2026-05-08,pp_2026-05-08_002,power,20,390,19.5,NBA,3,OG Anunoby,Pts+Rebs,21.5,MORE,Standard,screenshot_manual,PrizePicks 6-pick Power screenshot logged manually
+2026-05-08,pp_2026-05-08_002,power,20,390,19.5,NBA,4,Tyrese Maxey,Pts+Rebs,23.5,MORE,Goblin,screenshot_manual,PrizePicks 6-pick Power screenshot logged manually
+2026-05-08,pp_2026-05-08_002,power,20,390,19.5,NBA,5,VJ Edgecombe,Pts+Rebs,14.5,MORE,Goblin,screenshot_manual,PrizePicks 6-pick Power screenshot logged manually
+2026-05-08,pp_2026-05-08_002,power,20,390,19.5,NBA,6,Victor Wembanyama,Pts+Rebs,38.5,LESS,Standard,screenshot_manual,PrizePicks 6-pick Power screenshot logged manually

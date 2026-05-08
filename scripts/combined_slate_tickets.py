@@ -165,9 +165,7 @@ def _required_placeholder(*candidates: str) -> str:
 
 def apply_default_sport_inputs(args: argparse.Namespace) -> None:
     """
-    Fill empty --sport paths. Order: outputs/<date>/step8_*_<date>.xlsx (dated publish),
-    then outputs/<date>/<sport>/ copies from the daily pipeline, then Sports/* canonical paths,
-    then legacy repo-root paths.
+    Fill empty --sport paths. Order: outputs/<date>/step8_*_<date>.xlsx, then Sports/*, then legacy repo-root paths.
     Optional sports stay empty when nothing exists on disk.
     """
     d = str(args.date).strip()[:10]
@@ -175,8 +173,8 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
 
     if not str(args.nba).strip():
         args.nba = _required_placeholder(
-            os.path.join(out, f"step8_nba_direction_clean_{d}.xlsx"),
             os.path.join(out, "nba", "step8_all_direction_clean.xlsx"),
+            os.path.join(out, f"step8_nba_direction_clean_{d}.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "NBA", "data", "outputs", "step8_all_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "NBA", "data", "outputs", "step8_all_direction_clean.xlsx"),
         )
@@ -196,17 +194,16 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
 
     if not str(args.nhl).strip():
         args.nhl = _first_existing_path(
-            os.path.join(out, f"step8_nhl_direction_clean_{d}.xlsx"),
             os.path.join(out, "nhl", "step8_nhl_direction_clean.xlsx"),
-            os.path.join(REPO_ROOT, "Sports", "NHL", "step8_nhl_direction_clean.xlsx"),
+            os.path.join(out, f"step8_nhl_direction_clean_{d}.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "NHL", "outputs", "step8_nhl_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "NHL", "outputs", "step8_nhl_direction_clean.xlsx"),
         )
 
     if not str(args.soccer).strip():
         args.soccer = _first_existing_path(
-            os.path.join(out, f"step8_soccer_direction_clean_{d}.xlsx"),
             os.path.join(out, "soccer", "step8_soccer_direction_clean.xlsx"),
+            os.path.join(out, f"step8_soccer_direction_clean_{d}.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "Soccer", "outputs", "step8_soccer_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Soccer", "outputs", "step8_soccer_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Soccer", "step8_soccer_direction_clean.xlsx"),
@@ -214,8 +211,8 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
 
     if not str(args.tennis).strip():
         args.tennis = _first_existing_path(
-            os.path.join(out, f"step8_tennis_direction_clean_{d}.xlsx"),
             os.path.join(out, "tennis", "step8_tennis_direction_clean.xlsx"),
+            os.path.join(out, f"step8_tennis_direction_clean_{d}.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "Tennis", "outputs", "step8_tennis_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Tennis", "outputs", "step8_tennis_direction_clean.xlsx"),
         )
@@ -234,32 +231,32 @@ def apply_default_sport_inputs(args: argparse.Namespace) -> None:
 
     if not str(args.mlb).strip():
         args.mlb = _first_existing_path(
-            os.path.join(out, f"step8_mlb_direction_clean_{d}.xlsx"),
             os.path.join(out, "mlb", "step8_mlb_direction_clean.xlsx"),
+            os.path.join(out, f"step8_mlb_direction_clean_{d}.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "MLB", "step8_mlb_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "MLB", "step8_mlb_direction_clean.xlsx"),
         )
 
     if not str(args.nba1q).strip():
         args.nba1q = _first_existing_path(
-            os.path.join(out, f"step8_nba1q_direction_clean_{d}.xlsx"),
             os.path.join(out, "nba1q", "step8_nba1q_direction_clean.xlsx"),
+            os.path.join(out, f"step8_nba1q_direction_clean_{d}.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "NBA", "step8_nba1q_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "NBA", "step8_nba1q_direction_clean.xlsx"),
         )
 
     if not str(args.nba1h).strip():
         args.nba1h = _first_existing_path(
-            os.path.join(out, f"step8_nba1h_direction_clean_{d}.xlsx"),
             os.path.join(out, "nba1h", "step8_nba1h_direction_clean.xlsx"),
+            os.path.join(out, f"step8_nba1h_direction_clean_{d}.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "NBA", "step8_nba1h_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "NBA", "step8_nba1h_direction_clean.xlsx"),
         )
 
     if not str(args.nfl).strip():
         args.nfl = _first_existing_path(
-            os.path.join(out, f"step8_nfl_direction_clean_{d}.xlsx"),
             os.path.join(out, "nfl", "step8_nfl_direction_clean.xlsx"),
+            os.path.join(out, f"step8_nfl_direction_clean_{d}.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "NFL", "outputs", "step8_nfl_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "Sports", "NFL", "data", "outputs", "step8_nfl_direction_clean.xlsx"),
             os.path.join(REPO_ROOT, "NFL", "outputs", "step8_nfl_direction_clean.xlsx"),
@@ -4454,6 +4451,7 @@ def write_slate_json(nba, cbb, nhl, soccer, date_str, outdir,
                 "line":       g("line"),
                 "dir":        g("direction") or g("dir") or "",
                 "edge":       g("edge"),
+                "abs_edge":   g("abs_edge"),
                 "hit_rate":   g("hit_rate"),
                 "l5_over":    g("l5_over"),
                 "l5_under":   g("l5_under"),
@@ -5914,7 +5912,12 @@ def load_nhl(path: str) -> pd.DataFrame:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
     if "edge" not in df.columns:
-        df["edge"] = 0.0
+        df["edge"] = np.nan
+    df["edge"] = pd.to_numeric(df["edge"], errors="coerce")
+    if "abs_edge" not in df.columns:
+        df["abs_edge"] = np.nan
+    df["abs_edge"] = pd.to_numeric(df["abs_edge"], errors="coerce")
+    df["abs_edge"] = df["abs_edge"].where(df["abs_edge"].notna(), df["edge"].abs())
 
     # Faceoff wins are currently not sourced with reliable per-player counts
     # in our actuals pipeline; exclude until a stable source is added.
@@ -6020,6 +6023,7 @@ def _load_step8_board_like(
         "Line":             "line",
         "Direction":        "direction",
         "Edge":             "edge",
+        "Abs Edge":         "abs_edge",
         "Projection":       "projection",
         "ESPN ID":          "espn_player_id",
         "Hit Rate (5g)":    "hit_rate",
@@ -6115,6 +6119,8 @@ def _load_step8_board_like(
         "l10_over",
         "l10_under",
         "projection",
+        "edge",
+        "abs_edge",
     ]:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
@@ -6205,7 +6211,12 @@ def _load_step8_board_like(
     df["season_avg"] = pd.to_numeric(df["season_avg"], errors="coerce").combine_first(df["l5_avg"]).combine_first(proj)
 
     if "edge" not in df.columns:
-        df["edge"] = 0.0
+        df["edge"] = np.nan
+    df["edge"] = pd.to_numeric(df["edge"], errors="coerce")
+    if "abs_edge" not in df.columns:
+        df["abs_edge"] = np.nan
+    df["abs_edge"] = pd.to_numeric(df["abs_edge"], errors="coerce")
+    df["abs_edge"] = df["abs_edge"].where(df["abs_edge"].notna(), df["edge"].abs())
 
     if "espn_player_id" in df.columns:
         df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
@@ -6402,6 +6413,7 @@ def load_wcbb(path: str) -> pd.DataFrame:
         "Line":             "line",
         "Direction":        "direction",
         "Edge":             "edge",
+        "Abs Edge":         "abs_edge",
         "Projection":       "projection",
         "ESPN ID":          "espn_player_id",
         "Hit Rate (5g)":    "hit_rate",
@@ -6544,7 +6556,12 @@ def load_wcbb(path: str) -> pd.DataFrame:
         )
 
     if "edge" not in df.columns:
-        df["edge"] = 0.0
+        df["edge"] = np.nan
+    df["edge"] = pd.to_numeric(df["edge"], errors="coerce")
+    if "abs_edge" not in df.columns:
+        df["abs_edge"] = np.nan
+    df["abs_edge"] = pd.to_numeric(df["abs_edge"], errors="coerce")
+    df["abs_edge"] = df["abs_edge"].where(df["abs_edge"].notna(), df["edge"].abs())
 
     if "espn_player_id" in df.columns:
         df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
@@ -6577,6 +6594,7 @@ def load_mlb(path: str) -> pd.DataFrame:
         "Line":             "line",
         "Direction":        "direction",
         "Edge":             "edge",
+        "Abs Edge":         "abs_edge",
         "Projection":       "projection",
         "ESPN ID":          "espn_player_id",
         "Hit Rate (5g)":    "hit_rate",
@@ -6723,7 +6741,12 @@ def load_mlb(path: str) -> pd.DataFrame:
         )
 
     if "edge" not in df.columns:
-        df["edge"] = 0.0
+        df["edge"] = np.nan
+    df["edge"] = pd.to_numeric(df["edge"], errors="coerce")
+    if "abs_edge" not in df.columns:
+        df["abs_edge"] = np.nan
+    df["abs_edge"] = pd.to_numeric(df["abs_edge"], errors="coerce")
+    df["abs_edge"] = df["abs_edge"].where(df["abs_edge"].notna(), df["edge"].abs())
 
     if "espn_player_id" in df.columns:
         df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
@@ -6755,6 +6778,7 @@ def load_nba1q(path: str) -> pd.DataFrame:
         "Line":             "line",
         "Direction":        "direction",
         "Edge":             "edge",
+        "Abs Edge":         "abs_edge",
         "Projection":       "projection",
         "ESPN ID":          "espn_player_id",
         "ML Prob":          "ml_prob",
@@ -6891,7 +6915,12 @@ def load_nba1q(path: str) -> pd.DataFrame:
         )
 
     if "edge" not in df.columns:
-        df["edge"] = 0.0
+        df["edge"] = np.nan
+    df["edge"] = pd.to_numeric(df["edge"], errors="coerce")
+    if "abs_edge" not in df.columns:
+        df["abs_edge"] = np.nan
+    df["abs_edge"] = pd.to_numeric(df["abs_edge"], errors="coerce")
+    df["abs_edge"] = df["abs_edge"].where(df["abs_edge"].notna(), df["edge"].abs())
 
     if "espn_player_id" in df.columns:
         df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)
@@ -6923,6 +6952,7 @@ def load_nba1h(path: str) -> pd.DataFrame:
         "Line":             "line",
         "Direction":        "direction",
         "Edge":             "edge",
+        "Abs Edge":         "abs_edge",
         "Projection":       "projection",
         "ESPN ID":          "espn_player_id",
         "ML Prob":          "ml_prob",
@@ -7057,7 +7087,12 @@ def load_nba1h(path: str) -> pd.DataFrame:
         )
 
     if "edge" not in df.columns:
-        df["edge"] = 0.0
+        df["edge"] = np.nan
+    df["edge"] = pd.to_numeric(df["edge"], errors="coerce")
+    if "abs_edge" not in df.columns:
+        df["abs_edge"] = np.nan
+    df["abs_edge"] = pd.to_numeric(df["abs_edge"], errors="coerce")
+    df["abs_edge"] = df["abs_edge"].where(df["abs_edge"].notna(), df["edge"].abs())
 
     if "espn_player_id" in df.columns:
         df["espn_player_id"] = df["espn_player_id"].apply(_clean_id)

@@ -131,6 +131,9 @@ def main():
     middle = [c for c in out.columns if c not in set(front+tail)]
     out    = out[front + middle + tail]
 
+    if "def_tier" in out.columns and "DEF_TIER" not in out.columns:
+        out = out.rename(columns={"def_tier": "DEF_TIER"})
+
     _dt_col = "DEF_TIER" if "DEF_TIER" in out.columns else ("def_tier" if "def_tier" in out.columns else None)
     if _dt_col:
         _chk = out[[_dt_col]].rename(columns={_dt_col: "def_tier"})

@@ -1,0 +1,255 @@
+[WARN] Dropping partial ticket in NBA Standard 2-Leg #38: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Standard 2-Leg #38: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Standard 3-Leg #25: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Standard 3-Leg #25: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Standard 4-Leg #19: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Standard 4-Leg #19: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Standard 5-Leg #15: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Standard 5-Leg #15: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Standard 6-Leg #13: 5 legs < required 6
+[WARN] Dropping partial ticket in NBA Standard 6-Leg #13: 5 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #3: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #3: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #5: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #5: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #6: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #6: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #7: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #7: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #10: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #10: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #11: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #11: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #15: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #15: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #16: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #16: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #2: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #8: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #9: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #10: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #12: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #13: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #13: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #14: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #14: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #15: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #16: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #19: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #21: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #24: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #24: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #25: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #25: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #26: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #26: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #27: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #27: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #28: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #28: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #3: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #3: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #8: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #9: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #9: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #10: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #10: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #11: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #11: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #12: 2 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #13: 2 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #13: 2 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #14: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #14: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #15: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #15: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #18: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #18: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #19: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #19: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #21: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #21: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #22: 2 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #22: 2 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #23: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #23: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #24: 1 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #24: 1 legs < required 4
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #2: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #5: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #9: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #10: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #12: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #12: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #13: 3 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #13: 3 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #14: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #14: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #15: 3 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #15: 3 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #16: 3 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #16: 3 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #17: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #17: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #18: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #18: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #20: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #20: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #21: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #22: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #22: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #23: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #23: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #24: 3 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #24: 3 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #25: 2 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #25: 2 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #26: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #26: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #2: 3 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #2: 3 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #5: 5 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #5: 5 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #9: 5 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #9: 5 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #10: 5 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #10: 5 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #12: 5 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #13: 4 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #13: 4 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #14: 5 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #14: 5 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #15: 3 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #15: 3 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #16: 5 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #16: 5 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #17: 4 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #17: 4 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #19: 4 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #19: 4 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #20: 5 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #20: 5 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #22: 3 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #22: 3 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #23: 3 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #23: 3 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #24: 5 legs < required 6
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #24: 5 legs < required 6
+[WARN] Dropping partial ticket in NBA1Q Standard 2-Leg #4: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Standard 2-Leg #4: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Standard 2-Leg #7: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Standard 2-Leg #7: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Standard 3-Leg #3: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Standard 3-Leg #3: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Standard 3-Leg #5: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Standard 3-Leg #5: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Standard 4-Leg #2: 1 legs < required 4
+[WARN] Dropping partial ticket in NBA1Q Standard 4-Leg #2: 1 legs < required 4
+[WARN] Dropping partial ticket in NBA1Q Standard 4-Leg #3: 1 legs < required 4
+[WARN] Dropping partial ticket in NBA1Q Standard 4-Leg #3: 1 legs < required 4
+[WARN] Dropping partial ticket in NBA1Q Standard 5-Leg #2: 1 legs < required 5
+[WARN] Dropping partial ticket in NBA1Q Standard 5-Leg #2: 1 legs < required 5
+[WARN] Dropping partial ticket in NBA1Q Standard 5-Leg #3: 1 legs < required 5
+[WARN] Dropping partial ticket in NBA1Q Standard 5-Leg #3: 1 legs < required 5
+[WARN] Dropping partial ticket in NBA1Q Standard 6-Leg #2: 2 legs < required 6
+[WARN] Dropping partial ticket in NBA1Q Standard 6-Leg #2: 2 legs < required 6
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #3: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #3: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #6: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #6: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #8: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #8: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #9: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #9: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #11: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #11: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #12: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #12: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #14: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #14: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #15: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #15: 1 legs < required 2
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #3: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #3: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #4: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #6: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #6: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #7: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #7: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #8: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #8: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #9: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #9: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #10: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #10: 2 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #11: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #11: 1 legs < required 3
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #2: 1 legs < required 4
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #4: 2 legs < required 4
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #4: 2 legs < required 4
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #6: 1 legs < required 4
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #6: 1 legs < required 4
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #7: 2 legs < required 4
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #7: 2 legs < required 4
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #8: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #8: 3 legs < required 4
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #9: 1 legs < required 4
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #9: 1 legs < required 4
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #10: 1 legs < required 4
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #10: 1 legs < required 4
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #3: 1 legs < required 5
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #5: 2 legs < required 5
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #5: 2 legs < required 5
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #7: 2 legs < required 5
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #7: 2 legs < required 5
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #8: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #8: 4 legs < required 5
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #9: 2 legs < required 5
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #9: 2 legs < required 5
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #3: 1 legs < required 6
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #3: 1 legs < required 6
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #4: 2 legs < required 6
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #4: 2 legs < required 6
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #6: 3 legs < required 6
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #6: 3 legs < required 6
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #7: 4 legs < required 6
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #7: 4 legs < required 6
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #8: 1 legs < required 6
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #8: 1 legs < required 6
+[TICKET EVAL] Slate date: 2026-05-01; ticket workbook: combined_slate_tickets_control_pq0_2026-05-01.xlsx; leg game_time dates: ['2026-05-02'] (inferred next day; ticket file has no leg game_time column); graded workbook merge order: ['2026-05-01', '2026-05-02']
+  ticket_eval_slate_latest.json -> home slate cards (/api/slate-sport when SLATE_SPORT_SOURCE=auto)
+  Appended grade history -> data/grade_history.json (2026-05-01)
+Wrote H:\halek\ProfileFromC\Desktop\PropORACLE\ui_runner\templates\ticket_eval_2026-05-01.html
+  (Serve /tickets from tickets_latest.json; graded view: Grades ΓåÆ Ticket evaluation.)
+[debug-ungraded] UNGRADED breakdown (1675 total):
+  MISSING_ACTUAL      :     0
+  MISSING_LINE        :     0
+  VOID_PENDING        :  1675  (sample: Brandon Ingram | Points | UNDER | line=18.5 | actual=None | grade_raw='VOID' | void_note='NO_ACTUAL' | sport=NBA)
+      Brandon Ingram | Points | UNDER | line=18.5 | actual=None | grade_raw='VOID' | void_note='NO_ACTUAL' | sport=NBA
+      Brandon Ingram | FG Attempted | UNDER | line=15.5 | actual=None | grade_raw='VOID' | void_note='NO_ACTUAL' | sport=NBA
+  BLANK_GRADE         :     0
+  AMBIGUOUS_DIRECTION :     0
+  OTHER               :     0
+[debug-ungraded] Graded index sources (distinct paths; rows = normalize_workbook_rows):
+  ui_runner\graded_slate\2026-05-01\graded_mlb_2026-05-01.xlsx :   4006 rows
+  ui_runner\graded_slate\2026-05-01\graded_nba_2026-05-01.xlsx :   1730 rows
+  ui_runner\graded_slate\2026-05-01\graded_nhl_2026-05-01.xlsx :    666 rows
+  ui_runner\graded_slate\2026-05-01\graded_soccer_2026-05-01.xlsx :    739 rows
+  outputs\2026-05-01\graded_mlb_2026-05-01.xlsx    :   4006 rows
+  outputs\2026-05-01\graded_nba1h_2026-05-01.xlsx  :    148 rows
+  outputs\2026-05-01\graded_nba1q_2026-05-01.xlsx  :    303 rows
+  outputs\2026-05-01\graded_nba_2026-05-01.xlsx    :   1730 rows
+  outputs\2026-05-01\graded_nhl_2026-05-01.xlsx    :    666 rows
+  outputs\2026-05-01\graded_soccer_2026-05-01.xlsx :    739 rows
+  outputs\2026-05-01\graded_tennis_2026-05-01.xlsx :      0 rows
+  ui_runner\graded_slate\2026-05-02\graded_mlb_2026-05-02.xlsx :   4003 rows
+  ui_runner\graded_slate\2026-05-02\graded_nba_2026-05-02.xlsx :    659 rows
+  ui_runner\graded_slate\2026-05-02\graded_nhl_2026-05-02.xlsx :    282 rows
+  ui_runner\graded_slate\2026-05-02\graded_soccer_2026-05-02.xlsx :   8798 rows
+  outputs\2026-05-02\graded_mlb_2026-05-02.xlsx    :   4003 rows
+  outputs\2026-05-02\graded_nba1h_2026-05-02.xlsx  :     96 rows
+  outputs\2026-05-02\graded_nba1q_2026-05-02.xlsx  :    153 rows
+  outputs\2026-05-02\graded_nba_2026-05-02.xlsx    :    659 rows
+  outputs\2026-05-02\graded_nhl_2026-05-02.xlsx    :    282 rows
+  outputs\2026-05-02\graded_soccer_2026-05-02.xlsx :   8798 rows
+  outputs\2026-05-02\graded_tennis_2026-05-02.xlsx :      0 rows

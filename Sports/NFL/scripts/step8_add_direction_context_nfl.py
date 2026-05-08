@@ -15,6 +15,7 @@ import sys
 from datetime import date
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
@@ -106,6 +107,25 @@ def main() -> None:
             "L5 Under": l5u,
             "Def Tier": dtr,
         }
+    )
+
+    pt_low = clean["Pick Type"].astype(str).str.strip().str.lower()
+    forced_rows = pt_low.isin(("goblin", "demon"))
+    ln = pd.to_numeric(clean["Line"], errors="coerce")
+    pj = pd.to_numeric(clean["Projection"], errors="coerce")
+    has_pl = ln.notna() & pj.notna()
+    prev_edge = pd.to_numeric(clean["Edge"], errors="coerce")
+    signed_gap = pj - ln
+    clean["Edge"] = signed_gap.where(has_pl, prev_edge).round(2)
+    clean["Abs Edge"] = pd.to_numeric(clean["Edge"], errors="coerce").abs().round(2)
+
+    d_prev = clean["Direction"].astype(str).str.upper().str.strip().replace("", "OVER")
+    e_num = pd.to_numeric(clean["Edge"], errors="coerce")
+    from_side = np.where(e_num >= 0, "OVER", "UNDER")
+    clean["Direction"] = np.where(
+        forced_rows.to_numpy(),
+        "OVER",
+        np.where(has_pl.to_numpy(), from_side, d_prev.to_numpy()),
     )
 
     out_path = Path(args.output)

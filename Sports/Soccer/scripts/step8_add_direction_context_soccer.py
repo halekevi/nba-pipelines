@@ -17,13 +17,26 @@ from __future__ import annotations
 import argparse
 import shutil
 import sys
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
+
+_REPO = Path(__file__).resolve().parent
+for _ in range(10):
+    if (_REPO / "utils" / "step8_edge_direction.py").is_file():
+        if str(_REPO) not in sys.path:
+            sys.path.insert(0, str(_REPO))
+        break
+    _REPO = _REPO.parent
+else:
+    raise RuntimeError("Could not locate repo root with utils/step8_edge_direction.py")
+
+from utils.step8_edge_direction import reconcile_signed_edge_abs_dataframe
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 from datetime import date
-from pathlib import Path
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
@@ -147,7 +160,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "espn_player_id",
         "prop_type", "pick_type", "line",
         "final_bet_direction",
-        "edge", "projection",
+        "edge", "abs_edge", "projection",
         "ml_prob",
         "edge_score",
         "blended_score",
@@ -173,6 +186,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     for col in [
         "rank_score",
         "edge",
+        "abs_edge",
         "projection",
         "ml_prob",
         "edge_score",
@@ -202,7 +216,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "espn_player_id": "ESPN ID",
         "prop_type": "Prop", "pick_type": "Pick Type", "line": "Line",
         "final_bet_direction": "Direction",
-        "edge": "Edge", "projection": "Projection",
+        "edge": "Edge", "abs_edge": "Abs Edge", "projection": "Projection",
         "ml_prob": "ML Prob",
         "edge_score": "Edge Score",
         "blended_score": "Blended Score",
@@ -329,13 +343,10 @@ def main() -> None:
             still_blank = out["opp_team"].astype(str).str.strip().isin(["", "nan", "None", "null"])
             out.loc[still_blank, "opp_team"] = "UNKNOWN_OPP"
 
-    if "edge" not in out.columns:
-        proj = pd.to_numeric(out.get("projection", ""), errors="coerce")
-        line = pd.to_numeric(out.get("line",        ""), errors="coerce")
-        out["edge"] = proj - line
+    reconcile_signed_edge_abs_dataframe(out)
 
     edge     = pd.to_numeric(out["edge"], errors="coerce")
-    abs_edge = edge.abs()
+    abs_edge = pd.to_numeric(out["abs_edge"], errors="coerce")
 
     pick_type = out.get("pick_type", "Standard").astype(str).apply(_norm_pick_type)
     step7_dir = out.get("bet_direction", pd.Series("", index=out.index)).astype(str).str.upper().str.strip()
@@ -355,8 +366,38 @@ def main() -> None:
         np.where(has_edge & (abs_edge < 0.03), "MODEL_TIEBREAK_DIFF<0.03", ""),
         index=out.index
     )
-    # Preserve step7 direction for Standard rows so valid Standard UNDERs survive into step8.
-    std_from_step7 = pick_type.eq("Standard") & step7_dir.isin(["OVER", "UNDER"])
+    # Preserve step7 direction for Standard rows when it matches reconciled projection − line.
+    # Option B: if bet_direction contradicts signed edge, ignore pass-through (model_dir wins).
+    # If projection and line both parse but edge is NaN, reconciliation failed to fill — do not
+    # silently fall back to Step 7 (distinct audit reason).
+    proj_num = (
+        pd.to_numeric(out["projection"], errors="coerce")
+        if "projection" in out.columns
+        else pd.Series(np.nan, index=out.index)
+    )
+    line_num = (
+        pd.to_numeric(out["line"], errors="coerce")
+        if "line" in out.columns
+        else pd.Series(np.nan, index=out.index)
+    )
+    has_parseable_proj_line = proj_num.notna() & line_num.notna()
+
+    step7_pick = pick_type.eq("Standard") & step7_dir.isin(["OVER", "UNDER"])
+    under_aligns = step7_dir.eq("UNDER") & (edge < 0)
+    over_aligns = step7_dir.eq("OVER") & (edge >= 0)
+    step7_matches_reconciled = under_aligns | over_aligns
+    edge_missing = edge.isna()
+
+    blocked_step7_conflict = step7_pick & (~edge_missing) & (~step7_matches_reconciled)
+    blocked_recon_nan_gap = step7_pick & edge_missing & has_parseable_proj_line
+
+    reason = reason.where(~blocked_step7_conflict, "STANDARD_STEP7_BLOCKED_RECON_MISMATCH")
+    reason = reason.where(~blocked_recon_nan_gap, "STANDARD_STEP7_BLOCKED_EDGE_NA_FINITE_PROJ_LINE")
+
+    std_from_step7 = step7_pick & (
+        (edge_missing & ~has_parseable_proj_line)
+        | ((~edge_missing) & step7_matches_reconciled)
+    )
     final_dir = final_dir.where(~std_from_step7, step7_dir)
     reason = reason.where(~std_from_step7, "STANDARD_PASS_THROUGH_STEP7")
 

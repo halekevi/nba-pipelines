@@ -23,6 +23,18 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+
+_REPO = Path(__file__).resolve().parent
+for _ in range(10):
+    if (_REPO / "utils" / "step8_edge_direction.py").is_file():
+        if str(_REPO) not in sys.path:
+            sys.path.insert(0, str(_REPO))
+        break
+    _REPO = _REPO.parent
+else:
+    raise RuntimeError("Could not locate repo root with utils/step8_edge_direction.py")
+
+from utils.step8_edge_direction import reconcile_signed_edge_abs_dataframe
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
@@ -127,13 +139,56 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     except Exception:
         df2["game_time"] = pd.to_datetime(df2.get("start_time", ""), errors="coerce").dt.strftime("%m/%d %H:%M")
 
+    # Fill presentation-facing columns with safe fallbacks so the clean workbook
+    # is populated even when historical stat cache coverage is sparse.
+    hr5 = pd.to_numeric(df2.get("line_hit_rate_over_ou_5", np.nan), errors="coerce")
+    hr10 = pd.to_numeric(df2.get("line_hit_rate_over_ou_10", np.nan), errors="coerce").fillna(hr5).fillna(0.50)
+    df2["line_hit_rate_over_ou_10"] = hr10
+
+    proj = pd.to_numeric(df2.get("projection", np.nan), errors="coerce")
+    df2["stat_last5_avg"] = pd.to_numeric(df2.get("stat_last5_avg", np.nan), errors="coerce").fillna(proj)
+    df2["stat_season_avg"] = pd.to_numeric(df2.get("stat_season_avg", np.nan), errors="coerce").fillna(df2["stat_last5_avg"])
+    df2["stat_last10_avg"] = pd.to_numeric(df2.get("stat_last10_avg", np.nan), errors="coerce").fillna(df2["stat_last5_avg"])
+
+    l5_over = pd.to_numeric(df2.get("last5_over", np.nan), errors="coerce")
+    l5_under = pd.to_numeric(df2.get("last5_under", np.nan), errors="coerce")
+    # Approximate L5 split from hr5 when explicit counts are absent.
+    l5_over_fallback = (hr5.fillna(0.5) * 5.0).round().clip(0, 5)
+    l5_under_fallback = (5 - l5_over_fallback).clip(0, 5)
+    df2["last5_over"] = l5_over.fillna(l5_over_fallback)
+    df2["last5_under"] = l5_under.fillna(l5_under_fallback)
+
+    if "OVERALL_DEF_RANK" not in df2.columns:
+        df2["OVERALL_DEF_RANK"] = "N/A"
+    else:
+        df2["OVERALL_DEF_RANK"] = df2["OVERALL_DEF_RANK"].replace("", np.nan).fillna("N/A")
+    if "DEF_TIER" not in df2.columns:
+        df2["DEF_TIER"] = "N/A"
+    else:
+        df2["DEF_TIER"] = df2["DEF_TIER"].replace("", np.nan).fillna("N/A")
+
+    for gcol in [f"stat_g{i}" for i in range(1, 11)]:
+        if gcol not in df2.columns:
+            df2[gcol] = "—"
+        else:
+            df2[gcol] = df2[gcol].replace("", np.nan).fillna("—")
+
+    if "avg_minutes" in df2.columns:
+        df2["avg_minutes"] = pd.to_numeric(df2["avg_minutes"], errors="coerce").fillna(0).round(1)
+    else:
+        df2["avg_minutes"] = 0.0
+    if "game_script_note" not in df2.columns:
+        df2["game_script_note"] = "N/A"
+    else:
+        df2["game_script_note"] = df2["game_script_note"].replace("", np.nan).fillna("N/A")
+
     keep = [
         "tier", "rank_score",
         "player", "pos", "position_group", "team", "opp_team", "league", "game_time",
         "espn_player_id",
         "prop_type", "pick_type", "line",
         "final_bet_direction",
-        "edge", "projection",
+        "edge", "abs_edge", "projection",
         "ml_prob",
         "edge_score",
         "blended_score",
@@ -159,6 +214,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
     for col in [
         "rank_score",
         "edge",
+        "abs_edge",
         "projection",
         "ml_prob",
         "edge_score",
@@ -188,7 +244,7 @@ def build_clean_xlsx(df: pd.DataFrame, xlsx_path: str) -> None:
         "espn_player_id": "ESPN ID",
         "prop_type": "Prop", "pick_type": "Pick Type", "line": "Line",
         "final_bet_direction": "Direction",
-        "edge": "Edge", "projection": "Projection",
+        "edge": "Edge", "abs_edge": "Abs Edge", "projection": "Projection",
         "ml_prob": "ML Prob",
         "edge_score": "Edge Score",
         "blended_score": "Blended Score",
@@ -316,13 +372,10 @@ def main() -> None:
             still_blank = out["opp_team"].astype(str).str.strip().isin(["", "nan", "None", "null"])
             out.loc[still_blank, "opp_team"] = "UNKNOWN_OPP"
 
-    if "edge" not in out.columns:
-        proj = pd.to_numeric(out.get("projection", ""), errors="coerce")
-        line = pd.to_numeric(out.get("line",        ""), errors="coerce")
-        out["edge"] = proj - line
+    reconcile_signed_edge_abs_dataframe(out)
 
     edge     = pd.to_numeric(out["edge"], errors="coerce")
-    abs_edge = edge.abs()
+    abs_edge = pd.to_numeric(out["abs_edge"], errors="coerce")
 
     pick_type = out.get("pick_type", "Standard").astype(str).apply(_norm_pick_type)
 

@@ -865,6 +865,7 @@ _SLATE_SPORT_UI_KEYS = frozenset(
         "line",
         "dir",
         "edge",
+        "abs_edge",
         "projection",
         "hit_rate",
         "l5_over",
@@ -917,7 +918,7 @@ def _slim_slate_sport_cell(key: str, v: Any) -> Any:
     if isinstance(v, (int, float)):
         if isinstance(v, float) and (math.isnan(v) or math.isinf(v)):
             return None
-        if key in ("edge", "rank_score"):
+        if key in ("edge", "rank_score", "abs_edge"):
             return round(float(v), 4)
         if key == "hit_rate":
             return round(float(v), 6)
@@ -941,6 +942,23 @@ def _slim_slate_sport_row(r: dict) -> dict:
             continue
         slim[kk] = cv
     return slim
+
+
+def _api_slate_pick_abs_edge(record: dict[str, Any]) -> float:
+    """|edge| for /api/slate picks; prefer pipeline abs_edge when present."""
+    ae = record.get("abs_edge")
+    if ae is not None:
+        try:
+            fv = float(ae)
+            if not (math.isnan(fv) or math.isinf(fv)):
+                return round(fv, 4)
+        except (TypeError, ValueError):
+            pass
+    try:
+        ef = float(record.get("edge") or 0.0)
+    except (TypeError, ValueError):
+        ef = 0.0
+    return round(abs(ef), 4)
 
 
 def _slim_slate_sport_payload(payload: dict) -> dict:
@@ -3751,7 +3769,7 @@ def _picks_payload_from_slate_latest() -> dict[str, Any] | None:
             )
     if not picks:
         return None
-    picks.sort(key=lambda p: abs(float(p.get("edge") or 0.0)), reverse=True)
+    picks.sort(key=lambda p: _api_slate_pick_abs_edge(p), reverse=True)
     # Cap: full slate can be 10k+ rows; hero table + edges only need top props by |edge|.
     _max = 2500
     if len(picks) > _max:
@@ -3840,6 +3858,7 @@ def api_slate():
                             backfill = slate_history_map.get(hist_key)
                             if backfill:
                                 actual_series, line_series = backfill
+                        abs_edge_leg = _api_slate_pick_abs_edge(leg)
                         picks.append(
                             {
                                 "sport": leg.get("sport", ""),
@@ -3851,6 +3870,7 @@ def api_slate():
                                 "dir": leg.get("direction", "OVER"),
                                 "hit": round((leg.get("hit_rate") or 0) * 100),
                                 "edge": leg.get("edge") or 0,
+                                "abs_edge": abs_edge_leg,
                                 "projection": _pick_projection_from_mapping(leg),
                                 "l5_over": l5_over,
                                 "l5_under": l5_under,
@@ -3862,7 +3882,7 @@ def api_slate():
                                 "line_series": line_series,
                             }
                         )
-            picks.sort(key=lambda p: abs(float(p.get("edge") or 0)), reverse=True)
+            picks.sort(key=lambda p: _api_slate_pick_abs_edge(p), reverse=True)
             base = {
                 "picks": picks,
                 "generated_at": data.get("generated_at"),

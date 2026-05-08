@@ -1,0 +1,707 @@
+﻿sport,prop,tier,pick_type,decided,hits,misses,hit_rate
+MLB,Total Bases,D,Demon,19788,4026,15762,0.2035
+CBB,—,D,Demon,18553,4481,14072,0.2415
+SOCCER,Shots,D,—,9010,1550,7460,0.172
+MLB,Runs,D,Demon,8157,2160,5997,0.2648
+NHL,points,D,—,7954,2316,5638,0.2912
+CBB,—,C,Standard,7915,4197,3718,0.5303
+MLB,Hits,D,Demon,6984,1360,5624,0.1947
+NHL,goals,D,—,6394,1189,5205,0.186
+NHL,assists,D,—,6363,1570,4793,0.2467
+NHL,shots_on_goal,D,—,6216,100,6116,0.0161
+MLB,Walks,D,Demon,6049,1761,4288,0.2911
+MLB,Home Runs,D,Demon,5638,655,4983,0.1162
+CBB,—,C,Goblin,5175,3079,2096,0.595
+NBA,Pts+Rebs+Asts,D,Goblin,4122,2522,1600,0.6118
+NBA,Points,D,Goblin,4028,2636,1392,0.6544
+NBA,Rebs+Asts,D,Goblin,3551,2165,1386,0.6097
+CBB,—,D,Standard,3435,1626,1809,0.4734
+MLB,Total Bases,A,Goblin,3431,2079,1352,0.6059
+MLB,Stolen Bases,D,Demon,3377,352,3025,0.1042
+SOCCER,Goal + Assist,D,—,3249,544,2705,0.1674
+NBA,Pts+Rebs+Asts,D,Standard,3225,1676,1549,0.5197
+SOCCER,Goals,D,—,3189,457,2732,0.1433
+NBA,Points,D,Standard,3113,1596,1517,0.5127
+MLB,Hits,A,Goblin,3032,1833,1199,0.6046
+NBA,Pts+Rebs,D,Goblin,2998,1866,1132,0.6224
+NBA,Points,A,Goblin,2972,2263,709,0.7614
+MLB,Hitter Strikeouts,D,Demon,2885,607,2278,0.2104
+CBB,—,D,Goblin,2868,1661,1207,0.5791
+SOCCER,Fouls,D,—,2822,467,2355,0.1655
+SOCCER,Assists,D,—,2771,335,2436,0.1209
+NBA,Points,D,Demon,2750,1305,1445,0.4745
+SOCCER,Shots,A,—,2733,1224,1509,0.4479
+NBA,Pts+Rebs,D,Standard,2700,1334,1366,0.4941
+CBB,—,A,Goblin,2591,1669,922,0.6442
+NBA,Rebounds,D,Goblin,2418,1524,894,0.6303
+NHL,plus/minus,D,—,2405,880,1525,0.3659
+NBA,Pts+Asts,D,Goblin,2376,1464,912,0.6162
+NBA,Pts+Rebs+Asts,D,Demon,2298,784,1514,0.3412
+NBA,Pts+Asts,D,Standard,2287,1166,1121,0.5098
+CBB,—,B,Standard,2227,1177,1050,0.5285
+CBB,—,B,Goblin,2167,1384,783,0.6387
+NBA,Rebs+Asts,D,Demon,2115,698,1417,0.33
+NBA,Rebounds,D,Demon,2100,915,1185,0.4357
+NBA,Points,C,Goblin,2027,1391,636,0.6862
+MLB,Hits,D,Goblin,1878,1056,822,0.5623
+NBA,Points,B,Goblin,1873,1383,490,0.7384
+NBA,Assists,D,Demon,1841,905,936,0.4916
+NBA,Rebounds,A,Goblin,1791,1408,383,0.7862
+NBA,Rebs+Asts,D,Standard,1777,894,883,0.5031
+NBA,Assists,D,Goblin,1760,1077,683,0.6119
+NBA,Rebounds,D,Standard,1667,812,855,0.4871
+NHL,Points,D,Demon,1501,320,1181,0.2132
+NBA,Pts+Rebs+Asts,C,Goblin,1424,899,525,0.6313
+NHL,Assists,D,Demon,1377,256,1121,0.1859
+SOCCER,Shots,B,—,1373,439,934,0.3197
+MLB,Hitter Strikeouts,A,Goblin,1338,800,538,0.5979
+NBA,Fantasy Score,D,Standard,1332,739,593,0.5548
+CBB,—,A,Standard,1316,734,582,0.5578
+MLB,Total Bases,D,Goblin,1310,714,596,0.545
+NBA,Assists,A,Goblin,1281,978,303,0.7635
+NBA,Pts+Rebs,D,Demon,1205,383,822,0.3178
+NBA,Pts+Rebs,A,Goblin,1194,849,345,0.7111
+NBA,Pts+Rebs,C,Goblin,1194,790,404,0.6616
+NHL,Goals,D,Demon,1183,205,978,0.1733
+NBA,Rebounds,C,Goblin,1168,774,394,0.6627
+NHL,Shots On Goal,D,Demon,1163,13,1150,0.0112
+NBA,FG Attempted,D,Standard,1126,579,547,0.5142
+SOCCER,Shots,D,Demon,1105,104,1001,0.0941
+NBA,3-PT Made,D,Goblin,1100,687,413,0.6245
+NBA,3-PT Made,D,Demon,1088,361,727,0.3318
+NBA,Points (Combo),D,Standard,1084,562,522,0.5185
+NBA,Steals,A,Goblin,1073,716,357,0.6673
+NBA,Pts+Asts,D,Demon,1054,355,699,0.3368
+NBA,Assists,D,Standard,1017,524,493,0.5152
+NBA,Pts+Rebs+Asts,A,Goblin,995,679,316,0.6824
+NBA,Rebs+Asts,A,Goblin,994,680,314,0.6841
+NBA,Rebounds,B,Goblin,976,705,271,0.7223
+MLB,Total Bases,B,Demon,912,137,775,0.1502
+NBA,Pts+Asts,C,Goblin,909,598,311,0.6579
+NBA,Rebs+Asts,C,Goblin,906,594,312,0.6556
+NBA,3-PT Made,A,Goblin,904,635,269,0.7024
+NBA,FG Made,D,Standard,874,424,450,0.4851
+NBA,Pts+Rebs+Asts,B,Goblin,872,565,307,0.6479
+NBA,Pts+Asts,A,Goblin,842,602,240,0.715
+NBA,Blks+Stls,D,Goblin,828,463,365,0.5592
+NBA,Points,C,Standard,825,478,347,0.5794
+SOCCER,Goalie Saves,D,—,818,213,605,0.2604
+NBA,Pts+Rebs,B,Goblin,807,518,289,0.6419
+NHL,shots_on_goal,C,—,804,175,629,0.2177
+SOCCER,Shots On Target,D,Demon,800,274,526,0.3425
+NBA,Two Pointers Attempted,D,Standard,776,408,368,0.5258
+NBA,Assists,C,Goblin,775,527,248,0.68
+NBA,Blocked Shots,D,Demon,771,256,515,0.332
+SOCCER,Goalie Saves,A,—,768,338,430,0.4401
+NBA,Fantasy Score,D,Goblin,703,524,179,0.7454
+NBA,3-PT Attempted,D,Standard,700,367,333,0.5243
+NBA,Assists,B,Goblin,687,490,197,0.7132
+NBA,Turnovers,D,Goblin,667,395,272,0.5922
+NBA,Free Throws Made,D,Standard,665,307,358,0.4617
+NBA,Steals,D,Goblin,639,352,287,0.5509
+SOCCER,Shots,C,—,635,175,460,0.2756
+NHL,Shots On Goal,A,Standard,632,432,200,0.6835
+NBA,Pts+Asts,B,Goblin,622,427,195,0.6865
+NBA,Double-Double,D,Demon,620,96,524,0.1548
+NHL,Power Play Points,D,Demon,606,458,148,0.7558
+MLB,Total Bases,A,Demon,604,162,442,0.2682
+NHL,blocked_shots,D,—,603,174,429,0.2886
+NBA,Free Throws Attempted,D,Standard,600,327,273,0.545
+SOCCER,Goal + Assist,D,Demon,587,127,460,0.2164
+MLB,Hits,B,Goblin,567,373,194,0.6578
+NBA,Steals,D,Demon,564,177,387,0.3138
+NBA,Rebs+Asts,B,Goblin,547,369,178,0.6746
+NBA,Personal Fouls,D,Goblin,542,296,246,0.5461
+NBA,Two Pointers Made,D,Standard,533,266,267,0.4991
+NBA,Blks+Stls,D,Demon,525,193,332,0.3676
+NBA,Turnovers,D,Standard,524,268,256,0.5115
+SOCCER,Assists,D,Demon,512,25,487,0.0488
+MLB,Total Bases,B,Goblin,511,321,190,0.6282
+SOCCER,Goals,D,Demon,490,41,449,0.0837
+MLB,Hits Allowed,D,Demon,488,121,367,0.248
+NBA,Pts+Rebs+Asts,C,Standard,480,265,215,0.5521
+SOCCER,Goal + Assist,A,—,471,182,289,0.3864
+NHL,Points,A,Standard,469,347,122,0.7399
+NBA,Personal Fouls,D,Standard,465,237,228,0.5097
+NBA,3-PT Made,D,Standard,465,199,266,0.428
+CBB,reb,C,Goblin,436,266,170,0.6101
+CBB,pts,C,Goblin,436,255,181,0.5849
+SOCCER,Fouls,A,—,436,119,317,0.2729
+NBA,3-PT Made,B,Goblin,435,305,130,0.7011
+NBA,Points,A,Standard,435,283,152,0.6506
+NHL,Plus/Minus,D,Demon,429,145,284,0.338
+NBA,Fantasy Score,A,Goblin,423,343,80,0.8109
+NBA,Points,B,Standard,422,264,158,0.6256
+MLB,Hitter Strikeouts,B,Goblin,422,253,169,0.5995
+NBA,Personal Fouls,D,Demon,421,178,243,0.4228
+CBB,—,C,Demon,421,146,275,0.3468
+NBA,Rebounds (Combo),D,Standard,419,237,182,0.5656
+NBA,Assists (Combo),D,Standard,419,227,192,0.5418
+NBA,3-PT Made,C,Goblin,409,258,151,0.6308
+MLB,Total Bases,C,Goblin,409,244,165,0.5966
+NBA,Pts+Rebs,C,Standard,407,202,205,0.4963
+NBA,Two Pointers Made,D,Goblin,405,214,191,0.5284
+MLB,Pitcher Strikeouts,D,Demon,404,98,306,0.2426
+NHL,Shots On Goal,A,Goblin,403,28,375,0.0695
+NHL,Assists,A,Standard,401,303,98,0.7556
+NBA,Steals,B,Goblin,399,251,148,0.6291
+NBA,Fantasy Score,D,Demon,395,184,211,0.4658
+SOCCER,Fouls,C,—,391,96,295,0.2455
+NBA,Turnovers,D,Demon,377,154,223,0.4085
+NHL,points,C,—,372,180,192,0.4839
+CBB,pts,C,Standard,372,178,194,0.4785
+NBA,Pts+Asts,C,Standard,361,173,188,0.4792
+SOCCER,Tackles,A,Demon,360,80,280,0.2222
+NBA,Fantasy Score,A,Standard,350,240,110,0.6857
+MLB,Total Bases,D,Standard,349,160,189,0.4585
+MLB,Runs,A,Demon,347,48,299,0.1383
+NBA,Blks+Stls,D,Standard,345,172,173,0.4986
+NBA,Blocked Shots,D,Goblin,336,200,136,0.5952
+NBA,Free Throws Made,D,Demon,333,150,183,0.4505
+NBA,3-PT Attempted,D,Goblin,323,174,149,0.5387
+CBB,pr,C,Standard,318,170,148,0.5346
+NBA,FG Made,D,Goblin,315,191,124,0.6063
+CBB,ast,C,Goblin,314,211,103,0.672
+NBA,Steals,C,Goblin,312,180,132,0.5769
+SOCCER,Shots,A,Goblin,310,147,163,0.4742
+MLB,Hitter Strikeouts,A,Demon,307,34,273,0.1107
+NBA,Free Throws Attempted,D,Demon,305,128,177,0.4197
+SOCCER,Goal + Assist,C,—,305,59,246,0.1934
+CBB,pts,A,Goblin,304,199,105,0.6546
+CBB,pts,B,Goblin,298,198,100,0.6644
+CBB,pra,C,Standard,298,154,144,0.5168
+MLB,Hitter Strikeouts,D,Goblin,297,172,125,0.5791
+SOCCER,Shots,A,Demon,291,52,239,0.1787
+NBA,Rebounds,C,Standard,290,152,138,0.5241
+CBB,pa,C,Standard,288,155,133,0.5382
+NBA,Two Pointers Made,D,Demon,283,132,151,0.4664
+NBA,Fantasy Score,C,Goblin,277,218,59,0.787
+SOCCER,Shots On Target,A,Demon,277,160,117,0.5776
+NBA,Defensive Rebounds,D,Standard,277,147,130,0.5307
+MLB,Runs,D,Standard,276,135,141,0.4891
+SOCCER,Assists,A,—,276,45,231,0.163
+NBA,Offensive Rebounds,D,Standard,267,145,122,0.5431
+SOCCER,Shots,D,Goblin,260,60,200,0.2308
+NBA,Fantasy Score,C,Standard,256,178,78,0.6953
+NHL,time_on_ice,D,—,256,114,142,0.4453
+MLB,Walks Allowed,D,Demon,254,72,182,0.2835
+SOCCER,Fouls,D,Demon,254,39,215,0.1535
+MLB,Hits,C,Goblin,252,158,94,0.627
+SOCCER,Fouls,A,Goblin,252,117,135,0.4643
+SOCCER,Goal + Assist,B,—,251,85,166,0.3386
+CBB,pra,C,Goblin,246,135,111,0.5488
+NBA,FG Made,D,Demon,242,107,135,0.4421
+NBA,Free Throws Attempted,D,Goblin,240,134,106,0.5583
+SOCCER,Tackles,B,Demon,240,43,197,0.1792
+SOCCER,Goals,A,—,239,76,163,0.318
+NBA,Steals,D,Standard,238,125,113,0.5252
+NBA,Blks+Stls,C,Goblin,237,137,100,0.5781
+SOCCER,Fouls,B,—,229,47,182,0.2052
+MLB,Total Bases,A,Standard,227,117,110,0.5154
+NBA,Pts+Asts,A,Standard,226,115,111,0.5088
+NBA,Two Pointers Attempted,D,Demon,225,111,114,0.4933
+NBA,Blks+Stls,A,Goblin,224,145,79,0.6473
+NBA,Two Pointers Attempted,D,Goblin,223,125,98,0.5605
+SOCCER,Goalie Saves,B,—,223,80,143,0.3587
+NHL,time_on_ice,C,—,222,128,94,0.5766
+CBB,ra,C,Standard,217,119,98,0.5484
+SOCCER,Assists,C,—,217,18,199,0.0829
+NBA,Blks+Stls,B,Goblin,216,141,75,0.6528
+NBA,Pts+Rebs+Asts,A,Standard,216,116,100,0.537
+NBA,3-PT Attempted,D,Demon,215,93,122,0.4326
+CBB,pts,D,Standard,213,88,125,0.4131
+NBA,Pts+Rebs,A,Standard,211,108,103,0.5118
+CBB,reb,C,Standard,210,116,94,0.5524
+MLB,Pitcher Strikeouts,B,Demon,206,28,178,0.1359
+MLB,Hits,A,Demon,206,21,185,0.1019
+NBA,Points,C,Demon,205,138,67,0.6732
+SOCCER,Fouls,D,Goblin,205,61,144,0.2976
+NBA,Free Throws Made,D,Goblin,204,113,91,0.5539
+NHL,Power Play Points,A,Goblin,204,39,165,0.1912
+CBB,stl,C,Goblin,202,124,78,0.6139
+NBA,Fantasy Score,B,Standard,200,138,62,0.69
+NBA,Pts+Rebs+Asts,B,Standard,198,104,94,0.5253
+MLB,Total Bases,C,Demon,197,51,146,0.2589
+NHL,faceoffs_won,A,—,197,6,191,0.0305
+NBA,3-PT Made (Combo),D,Standard,193,96,97,0.4974
+NHL,assists,C,—,193,63,130,0.3264
+CBB,pra,D,Standard,192,88,104,0.4583
+CBB,pa,D,Standard,186,79,107,0.4247
+MLB,Total Bases,C,Standard,185,68,117,0.3676
+CBB,ra,D,Standard,184,98,86,0.5326
+NBA,Rebs+Asts,C,Standard,184,95,89,0.5163
+CBB,reb,D,Goblin,183,115,68,0.6284
+NHL,goals,C,—,182,37,145,0.2033
+CBB,fg3m,C,Goblin,181,108,73,0.5967
+NHL,Points,C,Demon,181,89,92,0.4917
+NBA,Blocked Shots,D,Standard,178,83,95,0.4663
+MLB,Hitter Strikeouts,C,Standard,177,93,84,0.5254
+NBA,Pts+Rebs,B,Standard,176,91,85,0.517
+NHL,blocked_shots,B,—,176,79,97,0.4489
+NHL,Points,A,Goblin,175,114,61,0.6514
+CBB,pr,D,Standard,174,76,98,0.4368
+NHL,points,A,—,174,51,123,0.2931
+NBA,Rebounds,A,Standard,173,115,58,0.6647
+NBA,Pts+Asts,B,Standard,173,82,91,0.474
+SOCCER,Goals,C,—,169,35,134,0.2071
+SOCCER,Goal + Assist,A,Demon,166,35,131,0.2108
+MLB,Pitcher Strikeouts,D,Goblin,164,102,62,0.622
+NHL,hits,A,—,162,162,0,1.0
+NHL,Goals,A,Standard,161,129,32,0.8012
+NHL,Shots On Goal,B,Standard,161,98,63,0.6087
+NHL,Blocked Shots,D,Demon,161,51,110,0.3168
+NBA,Assists,C,Standard,157,99,58,0.6306
+CBB,reb,D,Standard,152,69,83,0.4539
+NHL,hits,B,—,146,146,0,1.0
+NHL,Plus/Minus,A,Goblin,146,78,68,0.5342
+MLB,Total Bases,B,Standard,140,70,70,0.5
+SOCCER,Tackles,C,Demon,138,34,104,0.2464
+NBA,Rebounds,B,Standard,136,92,44,0.6765
+MLB,Hits Allowed,D,Goblin,136,88,48,0.6471
+NBA,FG Attempted,C,Standard,134,66,68,0.4925
+SOCCER,Goals,B,—,133,30,103,0.2256
+MLB,Hits,D,Standard,131,72,59,0.5496
+MLB,Pitcher Strikeouts,A,Goblin,130,86,44,0.6615
+NBA,Blocked Shots,A,Goblin,130,77,53,0.5923
+MLB,Hitter Strikeouts,C,Goblin,129,83,46,0.6434
+NBA,Turnovers,C,Goblin,128,74,54,0.5781
+SOCCER,Goalie Saves,C,—,128,44,84,0.3438
+NHL,Goals,C,Demon,125,79,46,0.632
+CBB,—,—,Demon,124,25,99,0.2016
+MLB,Walks,A,Demon,124,25,99,0.2016
+NHL,shots_on_goal,B,—,122,44,78,0.3607
+NBA,Assists,C,Demon,121,103,18,0.8512
+NHL,Assists,C,Demon,121,56,65,0.4628
+NHL,Goals,B,Standard,120,93,27,0.775
+NBA,FG Attempted,D,Goblin,118,73,45,0.6186
+NHL,Points,B,Standard,118,67,51,0.5678
+MLB,Runs,A,Goblin,118,62,56,0.5254
+CBB,pr,B,Standard,117,58,59,0.4957
+NHL,shots_on_goal,A,—,117,34,83,0.2906
+CBB,pra,D,Goblin,113,57,56,0.5044
+MLB,Runs,C,Standard,113,44,69,0.3894
+MLB,Hits Allowed,A,Goblin,112,72,40,0.6429
+MLB,Pitcher Strikeouts,D,Standard,112,60,52,0.5357
+NHL,Hits,A,Standard,112,59,53,0.5268
+NBA,Blocked Shots,B,Goblin,111,77,34,0.6937
+SOCCER,Assists,B,—,111,33,78,0.2973
+NHL,hits,D,—,111,7,104,0.0631
+NHL,goals,A,—,110,11,99,0.1
+CBB,pra,B,Goblin,109,72,37,0.6606
+NBA,Rebounds,C,Demon,109,71,38,0.6514
+NHL,Shots On Goal,C,Demon,108,9,99,0.0833
+NHL,goalie_saves,A,—,107,107,0,1.0
+CBB,reb,B,Goblin,107,69,38,0.6449
+CBB,pra,B,Standard,107,54,53,0.5047
+NHL,blocked_shots,A,—,107,47,60,0.4393
+SOCCER,Shots On Target,A,Goblin,106,83,23,0.783
+CBB,ast,C,Standard,106,65,41,0.6132
+NHL,Assists,B,Standard,106,61,45,0.5755
+NBA,Fantasy Score,B,Goblin,105,84,21,0.8
+NBA,FG Attempted,A,Standard,105,58,47,0.5524
+NHL,goalie_saves,D,—,105,9,96,0.0857
+MLB,Hits,C,Standard,104,47,57,0.4519
+NHL,plus/minus,C,—,103,44,59,0.4272
+NBA,Blocked Shots,C,Goblin,102,70,32,0.6863
+NBA,Rebs+Asts,A,Standard,102,51,51,0.5
+SOCCER,Shots,C,Demon,102,12,90,0.1176
+CBB,pts,D,Goblin,101,70,31,0.6931
+SOCCER,Assists,A,Demon,101,8,93,0.0792
+NBA,Turnovers,B,Goblin,100,61,39,0.61
+MLB,Runs,B,Standard,100,49,51,0.49
+NBA,FG Attempted,D,Demon,99,44,55,0.4444
+NHL,Blocked Shots,A,Goblin,98,76,22,0.7755
+MLB,Pitcher Strikeouts,C,Goblin,96,58,38,0.6042
+MLB,Runs,D,Goblin,96,47,49,0.4896
+MLB,Hits,A,Standard,96,40,56,0.4167
+CBB,pts,B,Standard,95,45,50,0.4737
+NBA,Free Throws Made,C,Standard,94,53,41,0.5638
+NBA,Free Throws Attempted,C,Standard,93,42,51,0.4516
+SOCCER,Goals,A,Demon,92,15,77,0.163
+NBA,Assists,A,Standard,90,69,21,0.7667
+NBA,Turnovers,A,Goblin,89,59,30,0.6629
+CBB,pa,B,Standard,88,50,38,0.5682
+NHL,goals_allowed,D,—,88,35,53,0.3977
+MLB,Runs,C,Demon,87,33,54,0.3793
+MLB,Walks Allowed,D,Goblin,85,64,21,0.7529
+CBB,tov,C,Goblin,85,48,37,0.5647
+SOCCER,Shots,B,Demon,85,13,72,0.1529
+NHL,faceoffs_won,D,—,84,84,0,1.0
+NBA,Assists,B,Demon,83,77,6,0.9277
+CBB,ast,D,Goblin,81,48,33,0.5926
+NBA,Two Pointers Made,C,Goblin,80,49,31,0.6125
+MLB,Pitcher Strikeouts,A,Demon,80,23,57,0.2875
+CBB,ast,B,Goblin,79,50,29,0.6329
+NBA,Steals,C,Standard,79,46,33,0.5823
+NBA,Assists,B,Standard,79,43,36,0.5443
+NBA,Free Throws Attempted,A,Standard,78,41,37,0.5256
+SOCCER,Shots On Target,B,Demon,78,39,39,0.5
+NBA,FG Attempted,B,Standard,77,45,32,0.5844
+CBB,ast,D,Standard,77,30,47,0.3896
+NHL,assists,A,—,77,16,61,0.2078
+SOCCER,Goalie Saves,D,Demon,77,4,73,0.0519
+NHL,Assists,A,Goblin,75,56,19,0.7467
+NBA,Free Throws Made,A,Goblin,75,46,29,0.6133
+SOCCER,Shots On Target,D,Goblin,74,43,31,0.5811
+NHL,Shots On Goal,A,Demon,73,43,30,0.589
+CBB,pra,A,Goblin,73,42,31,0.5753
+CBB,tov,D,Goblin,72,46,26,0.6389
+NBA,Turnovers,C,Standard,72,41,31,0.5694
+SOCCER,Tackles,D,Demon,72,10,62,0.1389
+SOCCER,Shots On Target,C,Demon,70,31,39,0.4429
+NHL,points,B,—,70,30,40,0.4286
+NBA,Rebs+Asts,B,Standard,69,37,32,0.5362
+NHL,Shots On Goal,B,Goblin,69,1,68,0.0145
+MLB,Hits,B,Standard,68,39,29,0.5735
+MLB,Hitter Strikeouts,B,Standard,68,35,33,0.5147
+MLB,Walks,D,Standard,68,34,34,0.5
+NBA,Two Pointers Attempted,C,Standard,67,46,21,0.6866
+CBB,—,—,Goblin,67,39,28,0.5821
+NHL,Blocked Shots,A,Standard,67,31,36,0.4627
+CBB,pr,C,Goblin,66,43,23,0.6515
+NBA,Free Throws Made,B,Standard,66,38,28,0.5758
+NHL,Plus/Minus,C,Demon,66,23,43,0.3485
+NBA,Blks+Stls,C,Standard,65,36,29,0.5538
+CBB,fg3m,C,Standard,65,27,38,0.4154
+SOCCER,Goal + Assist,C,Demon,65,17,48,0.2615
+NBA,3-PT Made,C,Standard,64,37,27,0.5781
+CBB,—,—,Standard,63,36,27,0.5714
+NHL,Assists,A,Demon,62,48,14,0.7742
+NBA,Steals,A,Standard,62,26,36,0.4194
+CBB,tov,D,Standard,61,28,33,0.459
+NHL,Goals,A,Demon,60,48,12,0.8
+CBB,stl,C,Standard,60,35,25,0.5833
+NHL,Points,A,Demon,59,45,14,0.7627
+NBA,Points,A,Demon,59,40,19,0.678
+NBA,Free Throws Made,C,Goblin,59,38,21,0.6441
+MLB,Pitcher Strikeouts,A,Standard,59,25,34,0.4237
+NBA,Steals,B,Standard,58,32,26,0.5517
+CBB,blk,C,Goblin,58,30,28,0.5172
+MLB,Runs,A,Standard,58,28,30,0.4828
+SOCCER,Assists,C,Demon,58,3,55,0.0517
+CBB,stl,B,Goblin,57,40,17,0.7018
+CBB,fg3m,D,Goblin,57,37,20,0.6491
+NBA,Free Throws Attempted,B,Standard,57,31,26,0.5439
+SOCCER,Goalie Saves,A,Goblin,57,30,27,0.5263
+NBA,3-PT Attempted,C,Standard,57,29,28,0.5088
+NBA,FG Made,C,Standard,57,26,31,0.4561
+NBA,Pts+Rebs+Asts,C,Demon,57,22,35,0.386
+NHL,goals,B,—,57,12,45,0.2105
+MLB,Pitching Outs,D,Demon,56,23,33,0.4107
+NHL,Shots On Goal,B,Demon,56,5,51,0.0893
+NBA,Double-Double,D,Goblin,55,34,21,0.6182
+NBA,Rebounds,A,Demon,55,32,23,0.5818
+NBA,Two Pointers Made,A,Goblin,54,34,20,0.6296
+NBA,FG Made,C,Goblin,54,33,21,0.6111
+MLB,Walks,B,Standard,53,28,25,0.5283
+NHL,Points,B,Demon,53,23,30,0.434
+NHL,Faceoffs Won,A,Standard,52,52,0,1.0
+CBB,tov,C,Standard,52,30,22,0.5769
+NBA,Turnovers,B,Standard,52,30,22,0.5769
+NBA,Two Pointers Made,B,Goblin,51,33,18,0.6471
+MLB,Hitter Strikeouts,D,Standard,51,22,29,0.4314
+NBA,Free Throws Made,A,Standard,50,23,27,0.46
+SOCCER,Fouls,A,Demon,50,13,37,0.26
+CBB,fg3m,B,Goblin,49,34,15,0.6939
+NHL,Hits,A,Goblin,49,31,18,0.6327
+NBA,Points,B,Demon,49,19,30,0.3878
+NBA,Offensive Rebounds,D,Demon,49,14,35,0.2857
+SOCCER,Goalie Saves,D,Goblin,49,10,39,0.2041
+CBB,pr,A,Goblin,48,31,17,0.6458
+NHL,Time On Ice,A,Standard,48,31,17,0.6458
+NBA,Personal Fouls,C,Goblin,48,27,21,0.5625
+SOCCER,Goalie Saves,A,Demon,48,10,38,0.2083
+CBB,pra,A,Standard,47,26,21,0.5532
+CBB,stl,D,Standard,47,26,21,0.5532
+MLB,Walks,C,Standard,47,22,25,0.4681
+NHL,Goals,A,Goblin,46,43,3,0.9348
+NHL,Time On Ice,B,Standard,46,24,22,0.5217
+MLB,Hits Allowed,D,Standard,45,25,20,0.5556
+CBB,pr,A,Standard,45,23,22,0.5111
+SOCCER,Passes Attempted,A,Standard,45,0,45,0.0
+MLB,Walks Allowed,D,Standard,44,25,19,0.5682
+SOCCER,Goal + Assist,B,Demon,44,18,26,0.4091
+NBA,Free Throws Attempted,C,Goblin,43,33,10,0.7674
+SOCCER,Shots,A,Standard,42,17,25,0.4048
+MLB,Hits Allowed,C,Goblin,41,31,10,0.7561
+CBB,fantasy,C,Goblin,41,29,12,0.7073
+MLB,Walks Allowed,A,Goblin,40,27,13,0.675
+CBB,pr,B,Goblin,40,26,14,0.65
+CBB,reb,A,Goblin,40,26,14,0.65
+NBA,3-PT Attempted,C,Goblin,40,24,16,0.6
+NBA,Points (Combo),C,Standard,40,21,19,0.525
+CBB,fg3m,D,Standard,40,17,23,0.425
+MLB,Runs,B,Demon,40,16,24,0.4
+NHL,Time On Ice,C,Standard,39,18,21,0.4615
+NBA,Personal Fouls,C,Standard,39,17,22,0.4359
+NHL,Shots On Goal,C,Standard,39,14,25,0.359
+NHL,time_on_ice,A,—,39,11,28,0.2821
+NHL,Time On Ice,A,Goblin,38,38,0,1.0
+NBA,Assists,A,Demon,38,31,7,0.8158
+SOCCER,Goalie Saves,A,Standard,38,24,14,0.6316
+MLB,Pitching Outs,D,Goblin,37,21,16,0.5676
+NBA,Free Throws Made,B,Goblin,37,19,18,0.5135
+NBA,Fantasy Score,C,Demon,37,18,19,0.4865
+NHL,time_on_ice,B,—,37,18,19,0.4865
+NBA,Rebs+Asts,C,Demon,37,14,23,0.3784
+NHL,assists,B,—,37,14,23,0.3784
+SOCCER,Fouls,C,Demon,37,7,30,0.1892
+NHL,Goals,B,Demon,36,28,8,0.7778
+NHL,Points,C,Standard,36,17,19,0.4722
+CBB,ra,D,Goblin,35,24,11,0.6857
+CBB,stl,D,Goblin,34,23,11,0.6765
+NBA,Two Pointers Made,C,Standard,34,15,19,0.4412
+NBA,Free Throws Attempted,C,Demon,34,12,22,0.3529
+MLB,Hits Allowed,B,Demon,34,4,30,0.1176
+NHL,Points,B,Goblin,33,21,12,0.6364
+MLB,Walks,A,Goblin,33,19,14,0.5758
+MLB,Hitter Strikeouts,A,Standard,33,16,17,0.4848
+MLB,Hits Allowed,A,Standard,32,20,12,0.625
+NBA,Two Pointers Attempted,A,Standard,32,18,14,0.5625
+NBA,Two Pointers Attempted,B,Standard,32,18,14,0.5625
+CBB,pa,A,Standard,32,17,15,0.5312
+NBA,Pts+Asts,C,Demon,32,15,17,0.4688
+NBA,Turnovers,A,Standard,31,19,12,0.6129
+CBB,fantasy,D,Standard,31,15,16,0.4839
+NBA,Free Throws Made,C,Demon,31,11,20,0.3548
+NBA,Two Pointers Attempted,C,Goblin,30,19,11,0.6333
+NBA,Steals,C,Demon,30,7,23,0.2333
+NBA,Points (Combo),A,Standard,29,19,10,0.6552
+CBB,pts,A,Standard,29,14,15,0.4828
+NBA,3-PT Made,B,Standard,29,13,16,0.4483
+MLB,Pitching Outs,D,Standard,29,11,18,0.3793
+SOCCER,Assists,B,Demon,29,3,26,0.1034
+NBA,Triple-Double,D,Demon,29,1,28,0.0345
+SOCCER,Goals,C,Demon,29,1,28,0.0345
+SOCCER,Passes Attempted,B,Standard,29,0,29,0.0
+NBA,Rebounds,B,Demon,28,20,8,0.7143
+CBB,fantasy,C,Standard,28,17,11,0.6071
+CBB,blk,C,Standard,28,16,12,0.5714
+NBA,Personal Fouls,B,Goblin,28,16,12,0.5714
+NBA,Blocked Shots,C,Standard,28,15,13,0.5357
+NBA,Fantasy Score,B,Demon,28,15,13,0.5357
+MLB,Pitcher Strikeouts,B,Standard,28,12,16,0.4286
+MLB,Walks,B,Demon,28,12,16,0.4286
+NHL,Plus/Minus,B,Demon,28,12,16,0.4286
+MLB,Pitching Outs,B,Demon,27,17,10,0.6296
+MLB,Walks,A,Standard,27,16,11,0.5926
+MLB,Walks,D,Goblin,27,15,12,0.5556
+MLB,Hits Allowed,A,Demon,27,13,14,0.4815
+NBA,3-PT Made,A,Standard,27,11,16,0.4074
+MLB,Walks,C,Demon,27,9,18,0.3333
+MLB,Hits Allowed,B,Goblin,26,22,4,0.8462
+NBA,Two Pointers Made,B,Standard,26,20,6,0.7692
+MLB,Pitching Outs,A,Standard,26,15,11,0.5769
+NBA,Personal Fouls,A,Goblin,26,15,11,0.5769
+CBB,blk,D,Standard,26,14,12,0.5385
+NBA,Blks+Stls,B,Standard,26,13,13,0.5
+CBB,fantasy,B,Goblin,25,19,6,0.76
+NBA,Offensive Rebounds,D,Goblin,25,18,7,0.72
+NBA,Pts+Rebs+Asts,B,Demon,25,11,14,0.44
+SOCCER,Fouls,B,Goblin,25,10,15,0.4
+NHL,Power Play Points,A,Demon,25,5,20,0.2
+NBA,Free Throws Attempted,B,Goblin,24,16,8,0.6667
+NBA,Two Pointers Attempted,A,Goblin,24,16,8,0.6667
+NHL,Assists,B,Demon,24,13,11,0.5417
+NBA,Free Throws Attempted,A,Goblin,24,12,12,0.5
+SOCCER,Shots,D,Standard,24,8,16,0.3333
+NHL,Faceoffs Won,A,Goblin,23,23,0,1.0
+NBA,Two Pointers Made,A,Standard,23,15,8,0.6522
+CBB,ast,A,Goblin,23,14,9,0.6087
+NBA,Rebs+Asts,A,Demon,23,13,10,0.5652
+NHL,Plus/Minus,A,Demon,23,11,12,0.4783
+NHL,plus/minus,B,—,23,9,14,0.3913
+SOCCER,Passes Attempted,D,Standard,23,0,23,0.0
+NBA,3-PT Made,C,Demon,22,11,11,0.5
+NBA,Blocked Shots,B,Standard,22,11,11,0.5
+NHL,goalie_saves,C,—,22,0,22,0.0
+CBB,ra,B,Standard,21,10,11,0.4762
+NBA,Rebs+Asts,B,Demon,21,8,13,0.381
+MLB,Pitching Outs,A,Goblin,20,13,7,0.65
+NBA,Points (Combo),B,Standard,20,11,9,0.55
+NHL,Points,C,Goblin,20,11,9,0.55
+NBA,FG Made,A,Goblin,20,8,12,0.4
+CBB,stocks,C,Goblin,19,12,7,0.6316
+MLB,Walks,B,Goblin,19,11,8,0.5789
+CBB,ra,C,Goblin,19,10,9,0.5263
+MLB,Pitcher Strikeouts,C,Standard,19,10,9,0.5263
+NBA,FG Made,B,Standard,19,10,9,0.5263
+SOCCER,Goals,B,Demon,19,2,17,0.1053
+NHL,Shots On Goal,C,Goblin,19,0,19,0.0
+NBA,FG Made,B,Goblin,18,13,5,0.7222
+CBB,blk,B,Goblin,18,12,6,0.6667
+NBA,FG Attempted,C,Goblin,18,10,8,0.5556
+MLB,Hits,B,Demon,18,8,10,0.4444
+MLB,Walks Allowed,A,Demon,18,6,12,0.3333
+NHL,plus/minus,A,—,18,5,13,0.2778
+MLB,Pitcher Strikeouts,C,Demon,18,2,16,0.1111
+CBB,stocks,D,Standard,17,9,8,0.5294
+NBA,FG Made,A,Standard,17,9,8,0.5294
+NHL,Power Play Points,A,Standard,17,7,10,0.4118
+NBA,Pts+Rebs,B,Demon,17,6,11,0.3529
+MLB,Walks Allowed,B,Goblin,16,13,3,0.8125
+NBA,3-PT Attempted,B,Goblin,16,11,5,0.6875
+NBA,Free Throws Attempted,B,Demon,16,9,7,0.5625
+NBA,Two Pointers Attempted,B,Goblin,16,9,7,0.5625
+NBA,3-PT Attempted,A,Standard,16,7,9,0.4375
+CBB,pr,D,Goblin,16,6,10,0.375
+NBA,Free Throws Made,B,Demon,16,6,10,0.375
+SOCCER,Attempted Dribbles,D,Standard,16,6,10,0.375
+NBA,Pts+Rebs,C,Demon,16,5,11,0.3125
+SOCCER,Goals Allowed,A,Goblin,15,11,4,0.7333
+SOCCER,Shots Assisted,D,Standard,15,11,4,0.7333
+SOCCER,Goals Allowed,C,Demon,15,10,5,0.6667
+NBA,Blks+Stls,A,Standard,15,6,9,0.4
+CBB,blk,D,Goblin,15,5,10,0.3333
+SOCCER,Passes Attempted,C,Standard,15,0,15,0.0
+NBA,Blocked Shots,C,Demon,14,6,8,0.4286
+SOCCER,Attempted Dribbles,B,Standard,14,3,11,0.2143
+CBB,pa,C,Goblin,13,9,4,0.6923
+NBA,FG Attempted,B,Goblin,13,9,4,0.6923
+NBA,Fantasy Score,A,Demon,13,6,7,0.4615
+NBA,Personal Fouls,B,Standard,13,6,7,0.4615
+SOCCER,Shots Assisted,B,Standard,13,6,7,0.4615
+MLB,Runs,B,Goblin,13,5,8,0.3846
+NBA,3-PT Attempted,B,Standard,13,4,9,0.3077
+SOCCER,Clearances,B,Standard,13,1,12,0.0769
+SOCCER,Goalie Saves,B,Demon,13,1,12,0.0769
+SOCCER,Fouls,B,Demon,13,0,13,0.0
+MLB,Walks Allowed,C,Goblin,12,11,1,0.9167
+MLB,Runs,C,Goblin,12,8,4,0.6667
+NBA,Blocked Shots,A,Standard,12,7,5,0.5833
+CBB,stocks,C,Standard,12,5,7,0.4167
+MLB,Pitching Outs,B,Goblin,12,3,9,0.25
+SOCCER,Tackles,A,Goblin,12,3,9,0.25
+CBB,pa,B,Goblin,11,8,3,0.7273
+NBA,Assists (Combo),C,Standard,11,8,3,0.7273
+NHL,Plus/Minus,B,Standard,11,7,4,0.6364
+NBA,Assists (Combo),B,Standard,11,6,5,0.5455
+NBA,Steals,A,Demon,11,6,5,0.5455
+NBA,Pts+Asts,B,Demon,11,4,7,0.3636
+MLB,Walks Allowed,B,Standard,11,3,8,0.2727
+MLB,Pitching Outs,A,Demon,10,9,1,0.9
+CBB,fg3m,A,Goblin,10,8,2,0.8
+SOCCER,Goalie Saves,D,Standard,10,7,3,0.7
+NHL,faceoffs_won,B,—,10,1,9,0.1
+NHL,Plus/Minus,A,Standard,9,8,1,0.8889
+NBA,Pts+Rebs,A,Demon,9,6,3,0.6667
+NBA,Defensive Rebounds,D,Goblin,9,4,5,0.4444
+NBA,Pts+Rebs+Asts,A,Demon,9,4,5,0.4444
+NBA,Blks+Stls,C,Demon,9,3,6,0.3333
+MLB,Hits Allowed,B,Standard,9,2,7,0.2222
+NBA,Two Pointers Made,C,Demon,8,6,2,0.75
+NBA,3-PT Attempted,A,Goblin,8,5,3,0.625
+CBB,reb,B,Standard,8,3,5,0.375
+NBA,Steals,B,Demon,8,1,7,0.125
+SOCCER,Clearances,D,Standard,8,0,8,0.0
+CBB,stl,A,Goblin,7,5,2,0.7143
+NBA,FG Made,A,Demon,7,5,2,0.7143
+NBA,FG Made,C,Demon,7,5,2,0.7143
+NHL,Assists,C,Standard,7,5,2,0.7143
+CBB,fg3m,B,Standard,7,4,3,0.5714
+CBB,pa,A,Goblin,7,4,3,0.5714
+NBA,FG Attempted,A,Goblin,7,4,3,0.5714
+NBA,Free Throws Made,A,Demon,7,3,4,0.4286
+SOCCER,Goalie Saves,C,Demon,7,2,5,0.2857
+SOCCER,Tackles,B,Standard,7,2,5,0.2857
+SOCCER,Clearances,C,Standard,7,0,7,0.0
+NHL,hits,C,—,6,6,0,1.0
+SOCCER,Goals Allowed,B,Standard,6,6,0,1.0
+NBA,3-PT Made (Combo),B,Standard,6,5,1,0.8333
+NBA,3-PT Made,B,Demon,6,4,2,0.6667
+CBB,pa,D,Goblin,6,3,3,0.5
+SOCCER,Shots,B,Standard,6,3,3,0.5
+MLB,Pitching Outs,C,Goblin,6,2,4,0.3333
+NHL,goalie_saves,B,—,6,2,4,0.3333
+NHL,goals_allowed,A,—,6,2,4,0.3333
+SOCCER,Crosses,B,Standard,6,1,5,0.1667
+SOCCER,Crosses,D,Standard,6,1,5,0.1667
+MLB,Walks Allowed,B,Demon,6,0,6,0.0
+CBB,points (combo),D,Standard,5,4,1,0.8
+NBA,Assists (Combo),A,Standard,5,4,1,0.8
+SOCCER,Shots On Target,A,Standard,5,4,1,0.8
+NBA,Rebounds (Combo),B,Standard,5,3,2,0.6
+NHL,Assists,B,Goblin,5,3,2,0.6
+NHL,Power Play Points,C,Demon,5,2,3,0.4
+SOCCER,Goalie Saves,C,Standard,5,2,3,0.4
+SOCCER,Clearances,A,Standard,5,0,5,0.0
+CBB,ra,A,Standard,4,4,0,1.0
+MLB,Walks Allowed,C,Standard,4,4,0,1.0
+NHL,Blocked Shots,A,Demon,4,4,0,1.0
+CBB,stocks,D,Goblin,4,3,1,0.75
+NBA,3-PT Made (Combo),A,Standard,4,3,1,0.75
+NBA,Double-Double,D,Standard,4,3,1,0.75
+NBA,Triple-Double,D,Goblin,4,3,1,0.75
+SOCCER,Goalie Saves,B,Standard,4,3,1,0.75
+MLB,Pitcher Strikeouts,B,Goblin,4,2,2,0.5
+NHL,Points,D,Standard,4,2,2,0.5
+NHL,goals_allowed,C,—,4,2,2,0.5
+NBA,Pts+Asts,A,Demon,4,1,3,0.25
+SOCCER,Goal + Assist,A,Goblin,4,1,3,0.25
+SOCCER,Tackles,D,Standard,4,1,3,0.25
+SOCCER,Goal + Assist,D,Goblin,4,0,4,0.0
+SOCCER,Tackles,C,Standard,3,3,0,1.0
+NBA,Personal Fouls,A,Standard,3,2,1,0.6667
+NBA,Triple-Double,D,Standard,3,2,1,0.6667
+NHL,Shots On Goal,D,Standard,3,2,1,0.6667
+NHL,Time On Ice,D,Standard,3,2,1,0.6667
+SOCCER,Shots On Target,B,Standard,3,2,1,0.6667
+MLB,Hits Allowed,C,Demon,3,1,2,0.3333
+NBA,3-PT Made (Combo),C,Standard,3,1,2,0.3333
+NBA,Blocked Shots,B,Demon,3,1,2,0.3333
+NBA,Free Throws Attempted,A,Demon,3,1,2,0.3333
+NBA,Rebounds (Combo),C,Standard,3,1,2,0.3333
+NBA,Two Pointers Attempted,A,Demon,3,1,2,0.3333
+NHL,Blocked Shots,D,Standard,3,1,2,0.3333
+NHL,Goals,C,Standard,3,1,2,0.3333
+NBA,3-PT Made,A,Demon,3,0,3,0.0
+NBA,Blks+Stls,B,Demon,3,0,3,0.0
+NBA,Rebounds (Combo),A,Standard,3,0,3,0.0
+SOCCER,Goals Allowed,D,Demon,3,0,3,0.0
+CBB,double-double,D,Goblin,2,2,0,1.0
+NBA,Turnovers,C,Demon,2,2,0,1.0
+NHL,Points,D,Goblin,2,2,0,1.0
+NHL,Time On Ice,D,Demon,2,2,0,1.0
+SOCCER,Fouls,D,Standard,2,2,0,1.0
+SOCCER,Goals Allowed,B,Demon,2,2,0,1.0
+SOCCER,Shots Assisted,C,Standard,2,2,0,1.0
+CBB,reb,A,Standard,2,1,1,0.5
+MLB,Walks Allowed,A,Standard,2,1,1,0.5
+NHL,Assists,C,Goblin,2,1,1,0.5
+SOCCER,Shots,B,Goblin,2,1,1,0.5
+CBB,ra,B,Goblin,2,0,2,0.0
+NBA,Two Pointers Attempted,C,Demon,2,0,2,0.0
+NBA,Two Pointers Made,A,Demon,2,0,2,0.0
+NHL,Hits,D,Demon,2,0,2,0.0
+NHL,Hits,D,Standard,2,0,2,0.0
+SOCCER,Tackles,A,Standard,2,0,2,0.0
+CBB,ast,B,Standard,1,1,0,1.0
+CBB,fantasy,A,Goblin,1,1,0,1.0
+CBB,fantasy,B,Standard,1,1,0,1.0
+CBB,tov,B,Goblin,1,1,0,1.0
+NBA,3-PT Attempted,C,Demon,1,1,0,1.0
+NBA,Defensive Rebounds,D,Demon,1,1,0,1.0
+NBA,FG Attempted,C,Demon,1,1,0,1.0
+NBA,Turnovers,B,Demon,1,1,0,1.0
+NBA,Two Pointers Made,B,Demon,1,1,0,1.0
+NHL,Goals,D,Standard,1,1,0,1.0
+NHL,Hits,C,Demon,1,1,0,1.0
+NHL,Power Play Points,B,Demon,1,1,0,1.0
+SOCCER,Attempted Dribbles,C,Standard,1,1,0,1.0
+SOCCER,Goal + Assist,A,Standard,1,1,0,1.0
+SOCCER,Goal + Assist,C,Standard,1,1,0,1.0
+SOCCER,Goals,A,Standard,1,1,0,1.0
+SOCCER,Goals,D,Standard,1,1,0,1.0
+SOCCER,Goals Allowed,A,Demon,1,1,0,1.0
+SOCCER,Goals Allowed,A,Standard,1,1,0,1.0
+SOCCER,Goals Allowed,B,Goblin,1,1,0,1.0
+SOCCER,Goals Allowed,C,Standard,1,1,0,1.0
+SOCCER,Shots On Target,D,Standard,1,1,0,1.0
+CBB,fantasy,D,Goblin,1,0,1,0.0
+MLB,Hits Allowed,C,Standard,1,0,1,0.0
+MLB,Pitching Outs,B,Standard,1,0,1,0.0
+MLB,Pitching Outs,C,Standard,1,0,1,0.0
+NBA,Blocked Shots,A,Demon,1,0,1,0.0
+NBA,Turnovers,A,Demon,1,0,1,0.0
+SOCCER,Shots,C,Standard,1,0,1,0.0
+SOCCER,Tackles,B,Goblin,1,0,1,0.0

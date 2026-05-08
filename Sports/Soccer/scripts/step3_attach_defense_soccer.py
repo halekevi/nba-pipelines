@@ -332,6 +332,10 @@ def main() -> None:
 
     out = pd.concat([singles, combos], axis=0, ignore_index=True)
 
+    # Normalize lowercase def_tier from DB read-back to canonical uppercase DEF_TIER
+    if "def_tier" in out.columns and "DEF_TIER" not in out.columns:
+        out = out.rename(columns={"def_tier": "DEF_TIER"})
+
     desired_front = ["espn_player_id", "player", "pos", "team", "opp_team",
                      "league", "line", "prop_type", "prop_norm", "pick_type"]
     front  = [c for c in desired_front if c in out.columns]

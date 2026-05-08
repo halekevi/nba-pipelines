@@ -79,7 +79,45 @@ def normalize_pick_type(s: Any) -> str:
     raw = str(s or "").strip()
     if raw in ("", "—", "–", "-", "NaN", "nan", "None", "none"):
         return "standard"
-    return raw.casefold()
+    rf = raw.casefold()
+    if rf in ("std",):
+        return "standard"
+    if rf in ("goblin", "demon", "standard"):
+        return rf
+    return rf
+
+
+def normalize_pick_type_group(pick_type: Any, direction: Any) -> str:
+    pt = normalize_pick_type(pick_type)
+    d = str(direction or "").strip().upper()
+    if pt == "standard":
+        if d == "OVER":
+            return "Standard OVER"
+        if d == "UNDER":
+            return "Standard UNDER"
+        return "Standard (unknown dir)"
+    if pt == "goblin":
+        return "Goblin"
+    if pt == "demon":
+        return "Demon"
+    return "(missing)"
+
+
+def normalize_def_tier(s: Any) -> str:
+    t = str(s or "").strip().casefold()
+    if not t or t in {"nan", "none", "null", "(missing)"}:
+        return "(missing)"
+    if t in {"elite", "el", "top", "strongest"}:
+        return "Elite"
+    if t in {"above avg", "above average", "above_avg", "good", "solid", "plus"}:
+        return "Above Avg"
+    if t in {"avg", "average", "neutral", "mid", "medium"}:
+        return "Avg"
+    if t in {"below avg", "below average", "below_avg", "poor"}:
+        return "Below Avg"
+    if t in {"weak", "bottom", "bad"}:
+        return "Weak"
+    return "(missing)"
 
 
 def normalize_direction(s: Any) -> str:
@@ -470,6 +508,10 @@ def main() -> int:
         if c not in decided.columns:
             decided[c] = ""
     graded_out = decided[[c for c in graded_only_cols if c in decided.columns]]
+    _pt_go = graded_out.get("pick_type", pd.Series("", index=graded_out.index))
+    _dir_go = graded_out.get("direction", pd.Series("", index=graded_out.index))
+    graded_out["pick_type_group"] = [normalize_pick_type_group(pt, d) for pt, d in zip(_pt_go, _dir_go, strict=False)]
+    graded_out["def_tier_norm"] = graded_out.get("def_tier", pd.Series("", index=graded_out.index)).map(normalize_def_tier)
     fdg = graded_out["file_date"].astype(str).str.strip().str[:10]
     graded_out["tier_era"] = (fdg >= TIER_OVERHAUL_DATE).astype(int)
     if args.output is not None:
@@ -610,6 +652,10 @@ def main() -> int:
         joined_parts.append(m)
 
     out_df = pd.concat(joined_parts, ignore_index=True) if joined_parts else decided
+    _pt_out = out_df.get("pick_type", pd.Series("", index=out_df.index))
+    _dir_out = out_df.get("direction", pd.Series("", index=out_df.index))
+    out_df["pick_type_group"] = [normalize_pick_type_group(pt, d) for pt, d in zip(_pt_out, _dir_out, strict=False)]
+    out_df["def_tier_norm"] = out_df.get("def_tier", pd.Series("", index=out_df.index)).map(normalize_def_tier)
     fd_all = out_df["file_date"].astype(str).str.strip().str[:10]
     out_df["tier_era"] = (fd_all >= TIER_OVERHAUL_DATE).astype(int)
     out_df.to_csv(out_path, index=False, encoding="utf-8-sig")

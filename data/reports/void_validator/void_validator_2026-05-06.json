@@ -1,0 +1,69 @@
+{
+  "date": "2026-05-06",
+  "accepted_void_tokens": [
+    "NO_DATA",
+    "DNP",
+    "NO_ACTUAL",
+    "NO_LINE",
+    "PUSH"
+  ],
+  "summary_rows": [
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-06\\graded_nba_2026-05-06.xlsx",
+      "status": "ok",
+      "rows": 1216,
+      "void_rows": 94,
+      "acceptable_void_rows": 94,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-06\\graded_nhl_2026-05-06.xlsx",
+      "status": "ok",
+      "rows": 484,
+      "void_rows": 15,
+      "acceptable_void_rows": 15,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-06\\graded_mlb_2026-05-06.xlsx",
+      "status": "ok",
+      "rows": 3737,
+      "void_rows": 106,
+      "acceptable_void_rows": 106,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-06\\graded_soccer_2026-05-06.xlsx",
+      "status": "ok",
+      "rows": 258,
+      "void_rows": 100,
+      "acceptable_void_rows": 100,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-06\\graded_nba1h_2026-05-06.xlsx",
+      "status": "ok",
+      "rows": 83,
+      "void_rows": 47,
+      "acceptable_void_rows": 47,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-06\\graded_nba1q_2026-05-06.xlsx",
+      "status": "ok",
+      "rows": 198,
+      "void_rows": 71,
+      "acceptable_void_rows": 71,
+      "unacceptable_void_rows": 0
+    },
+    {
+      "file": "H:\\halek\\ProfileFromC\\Desktop\\PropORACLE\\outputs\\2026-05-06\\graded_tennis_2026-05-06.xlsx",
+      "status": "ok",
+      "rows": 0,
+      "void_rows": 0,
+      "acceptable_void_rows": 0,
+      "unacceptable_void_rows": 0
+    }
+  ],
+  "unacceptable_count": 0
+}

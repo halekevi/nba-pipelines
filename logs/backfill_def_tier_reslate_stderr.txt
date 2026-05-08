@@ -1,0 +1,547 @@
+WARN: Game Date filter for 2026-04-21: 0 rows — export empty.
+WARN: 0 NBA rows to export from combined_slate_tickets_2026-04-21_to_grade_tomorrow.xlsx
+Traceback (most recent call last):
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 2268, in <module>
+    main()
+    ~~~~^^
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 1734, in main
+    tennis_act = prep_actuals(tennis_csv, "TENNIS")
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 544, in prep_actuals
+    df = pd.read_csv(csv_path, dtype=str).fillna("")
+         ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 873, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 300, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1645, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1922, in _make_engine
+    return mapping[engine](f, **self.options)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\c_parser_wrapper.py", line 95, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "pandas/_libs/parsers.pyx", line 575, in pandas._libs.parsers.TextReader.__cinit__
+pandas.errors.EmptyDataError: No columns to parse from file
+Traceback (most recent call last):
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 2268, in <module>
+    main()
+    ~~~~^^
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 1734, in main
+    tennis_act = prep_actuals(tennis_csv, "TENNIS")
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 544, in prep_actuals
+    df = pd.read_csv(csv_path, dtype=str).fillna("")
+         ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 873, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 300, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1645, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1922, in _make_engine
+    return mapping[engine](f, **self.options)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\c_parser_wrapper.py", line 95, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "pandas/_libs/parsers.pyx", line 575, in pandas._libs.parsers.TextReader.__cinit__
+pandas.errors.EmptyDataError: No columns to parse from file
+Traceback (most recent call last):
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 2268, in <module>
+    main()
+    ~~~~^^
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 1734, in main
+    tennis_act = prep_actuals(tennis_csv, "TENNIS")
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 544, in prep_actuals
+    df = pd.read_csv(csv_path, dtype=str).fillna("")
+         ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 873, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 300, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1645, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1922, in _make_engine
+    return mapping[engine](f, **self.options)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\c_parser_wrapper.py", line 95, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "pandas/_libs/parsers.pyx", line 575, in pandas._libs.parsers.TextReader.__cinit__
+pandas.errors.EmptyDataError: No columns to parse from file
+[export_nba_full_slate_for_grader] drop_duplicates removed 2 overlapping row(s) (keys=['Player', 'Prop', 'Pick Type', 'Line', 'Direction'])
+Traceback (most recent call last):
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 2268, in <module>
+    main()
+    ~~~~^^
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 1734, in main
+    tennis_act = prep_actuals(tennis_csv, "TENNIS")
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 544, in prep_actuals
+    df = pd.read_csv(csv_path, dtype=str).fillna("")
+         ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 873, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 300, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1645, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1922, in _make_engine
+    return mapping[engine](f, **self.options)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\c_parser_wrapper.py", line 95, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "pandas/_libs/parsers.pyx", line 575, in pandas._libs.parsers.TextReader.__cinit__
+pandas.errors.EmptyDataError: No columns to parse from file
+Traceback (most recent call last):
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 2268, in <module>
+    main()
+    ~~~~^^
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 1734, in main
+    tennis_act = prep_actuals(tennis_csv, "TENNIS")
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 544, in prep_actuals
+    df = pd.read_csv(csv_path, dtype=str).fillna("")
+         ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 873, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 300, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1645, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1922, in _make_engine
+    return mapping[engine](f, **self.options)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\c_parser_wrapper.py", line 95, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "pandas/_libs/parsers.pyx", line 575, in pandas._libs.parsers.TextReader.__cinit__
+pandas.errors.EmptyDataError: No columns to parse from file
+Traceback (most recent call last):
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 2268, in <module>
+    main()
+    ~~~~^^
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 1734, in main
+    tennis_act = prep_actuals(tennis_csv, "TENNIS")
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 544, in prep_actuals
+    df = pd.read_csv(csv_path, dtype=str).fillna("")
+         ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 873, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 300, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1645, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1922, in _make_engine
+    return mapping[engine](f, **self.options)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\c_parser_wrapper.py", line 95, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "pandas/_libs/parsers.pyx", line 575, in pandas._libs.parsers.TextReader.__cinit__
+pandas.errors.EmptyDataError: No columns to parse from file
+2026-05-04 23:39:55 WARNING __main__: [ticket_eval] Banner matched as ticket header but parsed power_payout=0.0 flex_payout=0.0. If PrizePicks changes labels (e.g. PP instead of PWR), update _parse_ticket_banner. sheet='Cross-sport 4-Leg · Std+Gob' col_a='Ticket #1  ·  4-Leg Cross-sport 4-Leg · Std+Gob   ·  Power: 0.0x ($0 to win $100)  ·  Flex: 0.0x  ·  Avg Hit Rate: 61%  ·  Est Win Prob: 27%  ·  EV: 0.00  ·  Avg Rank Score: 4.37  ·  Payout Mult: 0.00x (base 10.0x → adj 0.0x)'
+2026-05-04 23:39:55 WARNING __main__: [ticket_eval] Banner matched as ticket header but parsed power_payout=0.0 flex_payout=0.0. If PrizePicks changes labels (e.g. PP instead of PWR), update _parse_ticket_banner. sheet='Cross-sport 4-Leg · Std+Gob' col_a='Ticket #2  ·  4-Leg Cross-sport 4-Leg · Std+Gob   ·  Power: 0.0x ($0 to win $100)  ·  Flex: 0.0x  ·  Avg Hit Rate: 61%  ·  Est Win Prob: 27%  ·  EV: 0.00  ·  Avg Rank Score: 4.34  ·  Payout Mult: 0.00x (base 10.0x → adj 0.0x)'
+2026-05-04 23:39:55 WARNING __main__: [ticket_eval] Banner matched as ticket header but parsed power_payout=0.0 flex_payout=0.0. If PrizePicks changes labels (e.g. PP instead of PWR), update _parse_ticket_banner. sheet='Cross-sport 4-Leg · Std+Gob' col_a='Ticket #3  ·  4-Leg Cross-sport 4-Leg · Std+Gob   ·  Power: 0.0x ($0 to win $100)  ·  Flex: 0.0x  ·  Avg Hit Rate: 61%  ·  Est Win Prob: 27%  ·  EV: 0.00  ·  Avg Rank Score: 4.34  ·  Payout Mult: 0.00x (base 10.0x → adj 0.0x)'
+2026-05-04 23:39:55 WARNING __main__: [ticket_eval] Banner matched as ticket header but parsed power_payout=0.0 flex_payout=0.0. If PrizePicks changes labels (e.g. PP instead of PWR), update _parse_ticket_banner. sheet='Cross-sport 4-Leg · Std+Gob' col_a='Ticket #4  ·  4-Leg Cross-sport 4-Leg · Std+Gob   ·  Power: 0.0x ($0 to win $100)  ·  Flex: 0.0x  ·  Avg Hit Rate: 61%  ·  Est Win Prob: 27%  ·  EV: 0.00  ·  Avg Rank Score: 4.32  ·  Payout Mult: 0.00x (base 10.0x → adj 0.0x)'
+2026-05-04 23:39:55 WARNING __main__: [ticket_eval] Banner matched as ticket header but parsed power_payout=0.0 flex_payout=0.0. If PrizePicks changes labels (e.g. PP instead of PWR), update _parse_ticket_banner. sheet='Cross-sport 4-Leg · Std+Gob' col_a='Ticket #5  ·  4-Leg Cross-sport 4-Leg · Std+Gob   ·  Power: 0.0x ($0 to win $100)  ·  Flex: 0.0x  ·  Avg Hit Rate: 61%  ·  Est Win Prob: 27%  ·  EV: 0.00  ·  Avg Rank Score: 4.31  ·  Payout Mult: 0.00x (base 10.0x → adj 0.0x)'
+2026-05-04 23:39:55 WARNING __main__: [ticket_eval] Banner matched as ticket header but parsed power_payout=0.0 flex_payout=0.0. If PrizePicks changes labels (e.g. PP instead of PWR), update _parse_ticket_banner. sheet='Cross-sport 6-Leg · Std+Gob' col_a='Ticket #1  ·  6-Leg Cross-sport 6-Leg · Std+Gob   ·  Power: 0.0x ($0 to win $100)  ·  Flex: 0.0x  ·  Avg Hit Rate: 61%  ·  Est Win Prob: 14%  ·  EV: 0.00  ·  Avg Rank Score: 4.27  ·  Payout Mult: 0.00x (base 40.0x → adj 0.0x)'
+2026-05-04 23:39:55 WARNING __main__: [ticket_eval] Banner matched as ticket header but parsed power_payout=0.0 flex_payout=0.0. If PrizePicks changes labels (e.g. PP instead of PWR), update _parse_ticket_banner. sheet='Cross-sport 6-Leg · Std+Gob' col_a='Ticket #2  ·  6-Leg Cross-sport 6-Leg · Std+Gob   ·  Power: 0.0x ($0 to win $100)  ·  Flex: 0.0x  ·  Avg Hit Rate: 61%  ·  Est Win Prob: 14%  ·  EV: 0.00  ·  Avg Rank Score: 4.26  ·  Payout Mult: 0.00x (base 40.0x → adj 0.0x)'
+2026-05-04 23:39:55 WARNING __main__: [ticket_eval] Banner matched as ticket header but parsed power_payout=0.0 flex_payout=0.0. If PrizePicks changes labels (e.g. PP instead of PWR), update _parse_ticket_banner. sheet='Cross-sport 6-Leg · Std+Gob' col_a='Ticket #3  ·  6-Leg Cross-sport 6-Leg · Std+Gob   ·  Power: 0.0x ($0 to win $100)  ·  Flex: 0.0x  ·  Avg Hit Rate: 61%  ·  Est Win Prob: 14%  ·  EV: 0.00  ·  Avg Rank Score: 4.25  ·  Payout Mult: 0.00x (base 40.0x → adj 0.0x)'
+2026-05-04 23:39:55 WARNING __main__: [ticket_eval] Banner matched as ticket header but parsed power_payout=0.0 flex_payout=0.0. If PrizePicks changes labels (e.g. PP instead of PWR), update _parse_ticket_banner. sheet='Cross-sport 6-Leg · Std+Gob' col_a='Ticket #4  ·  6-Leg Cross-sport 6-Leg · Std+Gob   ·  Power: 0.0x ($0 to win $100)  ·  Flex: 0.0x  ·  Avg Hit Rate: 61%  ·  Est Win Prob: 14%  ·  EV: 0.00  ·  Avg Rank Score: 4.25  ·  Payout Mult: 0.00x (base 40.0x → adj 0.0x)'
+2026-05-04 23:39:55 WARNING __main__: [ticket_eval] Banner matched as ticket header but parsed power_payout=0.0 flex_payout=0.0. If PrizePicks changes labels (e.g. PP instead of PWR), update _parse_ticket_banner. sheet='Cross-sport 6-Leg · Std+Gob' col_a='Ticket #5  ·  6-Leg Cross-sport 6-Leg · Std+Gob   ·  Power: 0.0x ($0 to win $100)  ·  Flex: 0.0x  ·  Avg Hit Rate: 61%  ·  Est Win Prob: 14%  ·  EV: 0.00  ·  Avg Rank Score: 4.25  ·  Payout Mult: 0.00x (base 40.0x → adj 0.0x)'
+Traceback (most recent call last):
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 2268, in <module>
+    main()
+    ~~~~^^
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 1734, in main
+    tennis_act = prep_actuals(tennis_csv, "TENNIS")
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 544, in prep_actuals
+    df = pd.read_csv(csv_path, dtype=str).fillna("")
+         ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 873, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 300, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1645, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1922, in _make_engine
+    return mapping[engine](f, **self.options)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\c_parser_wrapper.py", line 95, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "pandas/_libs/parsers.pyx", line 575, in pandas._libs.parsers.TextReader.__cinit__
+pandas.errors.EmptyDataError: No columns to parse from file
+Traceback (most recent call last):
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 2268, in <module>
+    main()
+    ~~~~^^
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 1734, in main
+    tennis_act = prep_actuals(tennis_csv, "TENNIS")
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 544, in prep_actuals
+    df = pd.read_csv(csv_path, dtype=str).fillna("")
+         ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 873, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 300, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1645, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1922, in _make_engine
+    return mapping[engine](f, **self.options)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\c_parser_wrapper.py", line 95, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "pandas/_libs/parsers.pyx", line 575, in pandas._libs.parsers.TextReader.__cinit__
+pandas.errors.EmptyDataError: No columns to parse from file
+Traceback (most recent call last):
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 2268, in <module>
+    main()
+    ~~~~^^
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 1734, in main
+    tennis_act = prep_actuals(tennis_csv, "TENNIS")
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 544, in prep_actuals
+    df = pd.read_csv(csv_path, dtype=str).fillna("")
+         ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 873, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 300, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1645, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1922, in _make_engine
+    return mapping[engine](f, **self.options)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\c_parser_wrapper.py", line 95, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "pandas/_libs/parsers.pyx", line 575, in pandas._libs.parsers.TextReader.__cinit__
+pandas.errors.EmptyDataError: No columns to parse from file
+WARN: 0 NBA rows to export from combined_slate_tickets_2026-04-30.xlsx
+Traceback (most recent call last):
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 2268, in <module>
+    main()
+    ~~~~^^
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 1734, in main
+    tennis_act = prep_actuals(tennis_csv, "TENNIS")
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 544, in prep_actuals
+    df = pd.read_csv(csv_path, dtype=str).fillna("")
+         ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 873, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 300, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1645, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1922, in _make_engine
+    return mapping[engine](f, **self.options)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\c_parser_wrapper.py", line 95, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "pandas/_libs/parsers.pyx", line 575, in pandas._libs.parsers.TextReader.__cinit__
+pandas.errors.EmptyDataError: No columns to parse from file
+WARN: Game Date filter for 2026-05-01: 0 rows — export empty.
+WARN: 0 NBA rows to export from combined_slate_tickets_2026-05-01_to_grade_tomorrow.xlsx
+Traceback (most recent call last):
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 2268, in <module>
+    main()
+    ~~~~^^
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 1734, in main
+    tennis_act = prep_actuals(tennis_csv, "TENNIS")
+  File "H:\halek\ProfileFromC\Desktop\PropORACLE\scripts\combined_ticket_grader.py", line 544, in prep_actuals
+    df = pd.read_csv(csv_path, dtype=str).fillna("")
+         ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 873, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 300, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1645, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\readers.py", line 1922, in _make_engine
+    return mapping[engine](f, **self.options)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\halek\AppData\Local\Programs\Python\Python314\Lib\site-packages\pandas\io\parsers\c_parser_wrapper.py", line 95, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+                   ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "pandas/_libs/parsers.pyx", line 575, in pandas._libs.parsers.TextReader.__cinit__
+pandas.errors.EmptyDataError: No columns to parse from file
+leg_factor: Goblin leg missing delta_pct (no standard_line); using factor 1.0
+leg_factor: Goblin leg missing delta_pct (no standard_line); using factor 1.0
+leg_factor: Goblin leg missing delta_pct (no standard_line); using factor 1.0
+leg_factor: Goblin leg missing delta_pct (no standard_line); using factor 1.0
+leg_factor: Goblin leg missing delta_pct (no standard_line); using factor 1.0
+leg_factor: suppressing further missing delta_pct warnings after 5 rows
+Payout mult mismatch ticket=NBA Goblin 5-Leg #10 | 1 mode=power legacy_applied=8.3642 est_curve=5.2500 (>15%)
+Payout mult mismatch ticket=NBA Goblin 6-Leg #10 | 1 mode=power legacy_applied=13.1737 est_curve=9.8437 (>15%)
+Payout mult mismatch ticket=NBA Goblin 6-Leg #8 | 1 mode=power legacy_applied=13.1737 est_curve=10.6641 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 5-Leg #1 | 1 mode=power legacy_applied=4.1821 est_curve=2.1875 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 5-Leg #3 | 1 mode=power legacy_applied=8.3642 est_curve=7.0000 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 5-Leg #4 | 1 mode=power legacy_applied=4.1821 est_curve=10.0000 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 6-Leg #1 | 1 mode=power legacy_applied=7.0260 est_curve=4.3750 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #11 | 1 mode=power legacy_applied=8.3642 est_curve=12.1333 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #14 | 1 mode=power legacy_applied=8.3642 est_curve=15.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #15 | 1 mode=power legacy_applied=8.3642 est_curve=4.8462 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #6 | 1 mode=power legacy_applied=4.1821 est_curve=6.2135 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #13 | 1 mode=power legacy_applied=13.1737 est_curve=9.8437 (>15%)
+Payout mult mismatch ticket=NBA Goblin 5-Leg #10 | 1 mode=flex legacy_applied=3.2768 est_curve=2.6250 (>15%)
+Payout mult mismatch ticket=NBA Goblin 5-Leg #11 | 1 mode=flex legacy_applied=0.6554 est_curve=1.3846 (>15%)
+Payout mult mismatch ticket=NBA Goblin 5-Leg #3 | 1 mode=flex legacy_applied=0.4915 est_curve=1.2635 (>15%)
+Payout mult mismatch ticket=NBA Goblin 5-Leg #4 | 1 mode=flex legacy_applied=3.2768 est_curve=4.7515 (>15%)
+Payout mult mismatch ticket=NBA Goblin 5-Leg #6 | 1 mode=flex legacy_applied=0.4915 est_curve=0.6703 (>15%)
+Payout mult mismatch ticket=NBA Goblin 5-Leg #7 | 1 mode=flex legacy_applied=0.1311 est_curve=0.2800 (>15%)
+Payout mult mismatch ticket=NBA Goblin 5-Leg #8 | 1 mode=flex legacy_applied=3.2768 est_curve=3.7917 (>15%)
+Payout mult mismatch ticket=NBA Goblin 5-Leg #9 | 1 mode=flex legacy_applied=0.3277 est_curve=0.5000 (>15%)
+Payout mult mismatch ticket=NBA Goblin 6-Leg #1 | 1 mode=flex legacy_applied=0.1049 est_curve=0.1430 (>15%)
+Payout mult mismatch ticket=NBA Goblin 6-Leg #11 | 1 mode=flex legacy_applied=0.1049 est_curve=0.2769 (>15%)
+Payout mult mismatch ticket=NBA Goblin 6-Leg #2 | 1 mode=flex legacy_applied=0.1049 est_curve=0.2644 (>15%)
+Payout mult mismatch ticket=NBA Goblin 6-Leg #3 | 1 mode=flex legacy_applied=0.5243 est_curve=0.6501 (>15%)
+Payout mult mismatch ticket=NBA Goblin 6-Leg #4 | 1 mode=flex legacy_applied=2.6214 est_curve=3.0978 (>15%)
+Payout mult mismatch ticket=NBA Goblin 6-Leg #5 | 1 mode=flex legacy_applied=0.1049 est_curve=0.1278 (>15%)
+Payout mult mismatch ticket=NBA Goblin 6-Leg #6 | 1 mode=flex legacy_applied=0.5243 est_curve=0.6050 (>15%)
+Payout mult mismatch ticket=NBA Goblin 6-Leg #7 | 1 mode=flex legacy_applied=0.1049 est_curve=0.1283 (>15%)
+Payout mult mismatch ticket=NBA Goblin 6-Leg #9 | 1 mode=flex legacy_applied=0.3932 est_curve=0.7500 (>15%)
+Payout mult mismatch ticket=NBA Mixed 6-Leg #1 | 1 mode=flex legacy_applied=0.1311 est_curve=0.1748 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 5-Leg #1 | 1 mode=flex legacy_applied=1.9661 est_curve=1.3125 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 5-Leg #2 | 1 mode=flex legacy_applied=0.4915 est_curve=0.9000 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 5-Leg #4 | 1 mode=flex legacy_applied=1.9661 est_curve=6.0000 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 6-Leg #1 | 1 mode=flex legacy_applied=2.6214 est_curve=2.1875 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 6-Leg #2 | 1 mode=flex legacy_applied=0.5243 est_curve=1.2000 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 6-Leg #3 | 1 mode=flex legacy_applied=2.6214 est_curve=3.5000 (>15%)
+Payout mult mismatch ticket=SOCCER Goblin 5-Leg #2 | 1 mode=flex legacy_applied=0.6554 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=SOCCER Goblin 5-Leg #5 | 1 mode=flex legacy_applied=0.6554 est_curve=1.6667 (>15%)
+Payout mult mismatch ticket=SOCCER Goblin 5-Leg #7 | 1 mode=flex legacy_applied=0.6554 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=SOCCER Goblin 6-Leg #1 | 1 mode=flex legacy_applied=0.1049 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=SOCCER Goblin 6-Leg #2 | 1 mode=flex legacy_applied=0.1049 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=SOCCER Goblin 6-Leg #4 | 1 mode=flex legacy_applied=0.1049 est_curve=0.3333 (>15%)
+Payout mult mismatch ticket=SOCCER Goblin 6-Leg #6 | 1 mode=flex legacy_applied=0.5243 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #11 | 1 mode=flex legacy_applied=3.2768 est_curve=6.0667 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #12 | 1 mode=flex legacy_applied=0.6554 est_curve=0.8750 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #13 | 1 mode=flex legacy_applied=0.3277 est_curve=0.5000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #14 | 1 mode=flex legacy_applied=3.2768 est_curve=7.5000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #15 | 1 mode=flex legacy_applied=3.2768 est_curve=2.4231 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #2 | 1 mode=flex legacy_applied=0.4915 est_curve=0.7305 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #3 | 1 mode=flex legacy_applied=0.4915 est_curve=1.0134 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #6 | 1 mode=flex legacy_applied=1.9661 est_curve=3.7281 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #8 | 1 mode=flex legacy_applied=0.6554 est_curve=0.8575 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #9 | 1 mode=flex legacy_applied=0.4915 est_curve=0.6328 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #1 | 1 mode=flex legacy_applied=6.5536 est_curve=8.5051 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #10 | 1 mode=flex legacy_applied=0.1049 est_curve=0.2333 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #11 | 1 mode=flex legacy_applied=6.5536 est_curve=9.4792 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #12 | 1 mode=flex legacy_applied=0.3932 est_curve=0.7500 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #14 | 1 mode=flex legacy_applied=0.1049 est_curve=0.2769 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #3 | 1 mode=flex legacy_applied=0.1049 est_curve=0.1748 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #4 | 1 mode=flex legacy_applied=0.1049 est_curve=0.1451 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #5 | 1 mode=flex legacy_applied=0.1049 est_curve=0.3369 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #9 | 1 mode=flex legacy_applied=0.1049 est_curve=0.1787 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 6-Leg #1 | 1 mode=flex legacy_applied=0.1311 est_curve=0.2183 (>15%)
+WARN: Game Date filter for 2026-05-03: 0 rows — export empty.
+WARN: 0 NBA rows to export from combined_slate_tickets_2026-05-03_to_grade_tomorrow.xlsx
+leg_factor: Goblin leg missing delta_pct (no standard_line); using factor 1.0
+leg_factor: Goblin leg missing delta_pct (no standard_line); using factor 1.0
+leg_factor: Goblin leg missing delta_pct (no standard_line); using factor 1.0
+leg_factor: Goblin leg missing delta_pct (no standard_line); using factor 1.0
+leg_factor: Goblin leg missing delta_pct (no standard_line); using factor 1.0
+leg_factor: suppressing further missing delta_pct warnings after 5 rows
+Payout mult mismatch ticket=MLB Goblin 6-Leg #26 | 1 mode=power legacy_applied=13.1737 est_curve=37.5000 (>15%)
+Payout mult mismatch ticket=SOCCER Goblin 5-Leg #1 | 1 mode=power legacy_applied=2.5093 est_curve=3.0000 (>15%)
+Payout mult mismatch ticket=SOCCER Goblin 5-Leg #8 | 1 mode=power legacy_applied=4.1821 est_curve=10.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #29 | 1 mode=power legacy_applied=2.9872 est_curve=6.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 6-Leg #26 | 2 mode=power legacy_applied=15.6829 est_curve=18.7500 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #15 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #32 | 1 mode=flex legacy_applied=0.6554 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #34 | 1 mode=flex legacy_applied=0.6554 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #36 | 1 mode=flex legacy_applied=0.6554 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #40 | 1 mode=flex legacy_applied=0.6554 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #45 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #26 | 1 mode=flex legacy_applied=6.5536 est_curve=25.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #30 | 1 mode=flex legacy_applied=0.1049 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #38 | 1 mode=flex legacy_applied=0.5243 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=MLB Mixed 5-Leg #15 | 1 mode=flex legacy_applied=0.1638 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Mixed 5-Leg #19 | 1 mode=flex legacy_applied=0.1638 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=SOCCER Goblin 5-Leg #1 | 1 mode=flex legacy_applied=0.9830 est_curve=1.5000 (>15%)
+Payout mult mismatch ticket=SOCCER Goblin 5-Leg #2 | 1 mode=flex legacy_applied=0.6554 est_curve=1.0000 (>15%)
+Payout mult mismatch ticket=SOCCER Goblin 5-Leg #3 | 1 mode=flex legacy_applied=0.6554 est_curve=0.8571 (>15%)
+Payout mult mismatch ticket=SOCCER Goblin 5-Leg #7 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=SOCCER Goblin 5-Leg #8 | 1 mode=flex legacy_applied=1.9661 est_curve=6.0000 (>15%)
+Payout mult mismatch ticket=SOCCER Goblin 6-Leg #2 | 1 mode=flex legacy_applied=0.1049 est_curve=0.2000 (>15%)
+Payout mult mismatch ticket=SOCCER Goblin 6-Leg #3 | 1 mode=flex legacy_applied=0.1049 est_curve=0.2857 (>15%)
+Payout mult mismatch ticket=SOCCER Goblin 6-Leg #6 | 1 mode=flex legacy_applied=0.1049 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=SOCCER Mixed 5-Leg #1 | 1 mode=flex legacy_applied=0.4096 est_curve=0.5000 (>15%)
+Payout mult mismatch ticket=SOCCER Mixed 5-Leg #2 | 1 mode=flex legacy_applied=2.4576 est_curve=3.0000 (>15%)
+Payout mult mismatch ticket=SOCCER Mixed 5-Leg #3 | 1 mode=flex legacy_applied=0.1638 est_curve=0.2857 (>15%)
+Payout mult mismatch ticket=SOCCER Mixed 6-Leg #1 | 1 mode=flex legacy_applied=0.4915 est_curve=0.7500 (>15%)
+Payout mult mismatch ticket=SOCCER Mixed 6-Leg #2 | 1 mode=flex legacy_applied=0.6554 est_curve=1.0000 (>15%)
+Payout mult mismatch ticket=SOCCER Mixed 6-Leg #3 | 1 mode=flex legacy_applied=0.6554 est_curve=0.8571 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #29 | 1 mode=flex legacy_applied=1.2288 est_curve=3.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 6-Leg #26 | 2 mode=flex legacy_applied=8.1920 est_curve=12.5000 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 6-Leg #45 | 1 mode=flex legacy_applied=0.6554 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 6-Leg #48 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+WARN: Game Date filter for 2026-05-04: 0 rows — export empty.
+WARN: 0 NBA rows to export from combined_slate_tickets_2026-05-04_to_grade_tomorrow.xlsx
+leg_factor: Goblin leg missing delta_pct (no standard_line); using factor 1.0
+leg_factor: Goblin leg missing delta_pct (no standard_line); using factor 1.0
+leg_factor: Goblin leg missing delta_pct (no standard_line); using factor 1.0
+leg_factor: Goblin leg missing delta_pct (no standard_line); using factor 1.0
+leg_factor: Goblin leg missing delta_pct (no standard_line); using factor 1.0
+leg_factor: suppressing further missing delta_pct warnings after 5 rows
+Payout mult mismatch ticket=MLB Goblin 5-Leg #29 | 1 mode=power legacy_applied=8.3642 est_curve=20.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #36 | 1 mode=power legacy_applied=8.3642 est_curve=20.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #40 | 1 mode=power legacy_applied=8.3642 est_curve=20.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #8 | 1 mode=power legacy_applied=8.3642 est_curve=7.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #18 | 1 mode=power legacy_applied=13.1737 est_curve=37.5000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #30 | 1 mode=power legacy_applied=13.1737 est_curve=37.5000 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 5-Leg #1 | 1 mode=power legacy_applied=8.3642 est_curve=0.5145 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 5-Leg #3 | 1 mode=power legacy_applied=8.3642 est_curve=20.0000 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 5-Leg #4 | 1 mode=power legacy_applied=4.1821 est_curve=10.0000 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 6-Leg #1 | 1 mode=power legacy_applied=13.1737 est_curve=0.7383 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 6-Leg #3 | 1 mode=power legacy_applied=7.0260 est_curve=20.0000 (>15%)
+Payout mult mismatch ticket=NBA1Q Mixed 5-Leg #1 | 1 mode=power legacy_applied=9.9574 est_curve=2.3333 (>15%)
+Payout mult mismatch ticket=NBA1Q Mixed 5-Leg #2 | 1 mode=power legacy_applied=11.8541 est_curve=1.0500 (>15%)
+Payout mult mismatch ticket=NBA1Q Mixed 6-Leg #1 | 1 mode=power legacy_applied=18.6702 est_curve=0.8039 (>15%)
+Payout mult mismatch ticket=NBA1Q Mixed 6-Leg #2 | 1 mode=power legacy_applied=15.6829 est_curve=1.5312 (>15%)
+Payout mult mismatch ticket=NBA1Q Mixed 6-Leg #3 | 1 mode=power legacy_applied=18.6702 est_curve=3.5156 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #31 | 1 mode=power legacy_applied=8.3642 est_curve=7.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #35 | 1 mode=power legacy_applied=8.3642 est_curve=2.4500 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #36 | 1 mode=power legacy_applied=8.3642 est_curve=11.1111 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #52 | 1 mode=power legacy_applied=8.3642 est_curve=20.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #45 | 1 mode=power legacy_applied=13.1737 est_curve=37.5000 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #20 | 1 mode=power legacy_applied=9.9574 est_curve=7.7685 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #56 | 1 mode=power legacy_applied=9.9574 est_curve=7.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 6-Leg #47 | 1 mode=power legacy_applied=15.6829 est_curve=13.1250 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #13 | 1 mode=flex legacy_applied=0.6554 est_curve=1.5556 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #15 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #18 | 1 mode=flex legacy_applied=0.6554 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #19 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #21 | 1 mode=flex legacy_applied=0.6554 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #22 | 1 mode=flex legacy_applied=0.6554 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #23 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #24 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #25 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #26 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #29 | 1 mode=flex legacy_applied=3.2768 est_curve=10.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #34 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #35 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #36 | 1 mode=flex legacy_applied=3.2768 est_curve=10.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #4 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #40 | 1 mode=flex legacy_applied=3.2768 est_curve=10.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #5 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #6 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 5-Leg #9 | 1 mode=flex legacy_applied=0.6554 est_curve=1.4286 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #11 | 1 mode=flex legacy_applied=0.5243 est_curve=1.5556 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #15 | 1 mode=flex legacy_applied=0.1049 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #17 | 1 mode=flex legacy_applied=0.1049 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #18 | 1 mode=flex legacy_applied=6.5536 est_curve=25.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #19 | 1 mode=flex legacy_applied=0.1049 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #22 | 1 mode=flex legacy_applied=0.5243 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #24 | 1 mode=flex legacy_applied=0.1049 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #3 | 1 mode=flex legacy_applied=0.5243 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #30 | 1 mode=flex legacy_applied=6.5536 est_curve=25.0000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #33 | 1 mode=flex legacy_applied=0.1049 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #4 | 1 mode=flex legacy_applied=0.1049 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #6 | 1 mode=flex legacy_applied=0.5243 est_curve=0.6300 (>15%)
+Payout mult mismatch ticket=MLB Goblin 6-Leg #7 | 1 mode=flex legacy_applied=6.5536 est_curve=8.7500 (>15%)
+Payout mult mismatch ticket=MLB Mixed 5-Leg #4 | 1 mode=flex legacy_applied=0.8192 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=MLB Mixed 5-Leg #6 | 1 mode=flex legacy_applied=0.8192 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=MLB Mixed 5-Leg #9 | 1 mode=flex legacy_applied=0.8192 est_curve=1.8000 (>15%)
+Payout mult mismatch ticket=MLB Mixed 6-Leg #5 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=MLB Mixed 6-Leg #9 | 1 mode=flex legacy_applied=0.6554 est_curve=1.4286 (>15%)
+Payout mult mismatch ticket=NBA Goblin 5-Leg #10 | 1 mode=flex legacy_applied=0.4915 est_curve=0.6562 (>15%)
+Payout mult mismatch ticket=NBA Goblin 5-Leg #13 | 1 mode=flex legacy_applied=0.1311 est_curve=0.1848 (>15%)
+Payout mult mismatch ticket=NBA Goblin 5-Leg #18 | 1 mode=flex legacy_applied=0.6554 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=NBA Goblin 5-Leg #2 | 1 mode=flex legacy_applied=0.1311 est_curve=0.1092 (>15%)
+Payout mult mismatch ticket=NBA Goblin 5-Leg #6 | 1 mode=flex legacy_applied=0.1311 est_curve=0.1766 (>15%)
+Payout mult mismatch ticket=NBA Goblin 6-Leg #17 | 1 mode=flex legacy_applied=0.1049 est_curve=0.1400 (>15%)
+Payout mult mismatch ticket=NBA Goblin 6-Leg #18 | 1 mode=flex legacy_applied=0.1049 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=NBA Goblin 6-Leg #5 | 1 mode=flex legacy_applied=0.1049 est_curve=0.1270 (>15%)
+Payout mult mismatch ticket=NBA Goblin 6-Leg #6 | 1 mode=flex legacy_applied=0.1049 est_curve=0.0815 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 5-Leg #1 | 1 mode=flex legacy_applied=3.2768 est_curve=0.2572 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 5-Leg #2 | 1 mode=flex legacy_applied=0.6554 est_curve=0.5357 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 5-Leg #3 | 1 mode=flex legacy_applied=3.2768 est_curve=10.0000 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 5-Leg #4 | 1 mode=flex legacy_applied=1.9661 est_curve=6.0000 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 6-Leg #1 | 1 mode=flex legacy_applied=6.5536 est_curve=0.4922 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 6-Leg #2 | 1 mode=flex legacy_applied=0.5243 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=NBA1Q Goblin 6-Leg #3 | 1 mode=flex legacy_applied=2.6214 est_curve=10.0000 (>15%)
+Payout mult mismatch ticket=NBA1Q Mixed 5-Leg #1 | 1 mode=flex legacy_applied=4.0960 est_curve=1.1667 (>15%)
+Payout mult mismatch ticket=NBA1Q Mixed 5-Leg #2 | 1 mode=flex legacy_applied=5.1200 est_curve=0.5250 (>15%)
+Payout mult mismatch ticket=NBA1Q Mixed 5-Leg #3 | 1 mode=flex legacy_applied=0.8192 est_curve=1.2500 (>15%)
+Payout mult mismatch ticket=NBA1Q Mixed 6-Leg #1 | 1 mode=flex legacy_applied=10.2400 est_curve=0.5359 (>15%)
+Payout mult mismatch ticket=NBA1Q Mixed 6-Leg #2 | 1 mode=flex legacy_applied=8.1920 est_curve=1.0208 (>15%)
+Payout mult mismatch ticket=NBA1Q Mixed 6-Leg #3 | 1 mode=flex legacy_applied=10.2400 est_curve=2.3438 (>15%)
+Payout mult mismatch ticket=NHL Mixed 5-Leg #1 | 1 mode=flex legacy_applied=1.6000 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=NHL Mixed 5-Leg #4 | 1 mode=flex legacy_applied=0.3200 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=NHL Mixed 5-Leg #6 | 1 mode=flex legacy_applied=0.3200 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=NHL Mixed 6-Leg #1 | 1 mode=flex legacy_applied=0.3200 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=NHL Mixed 6-Leg #5 | 1 mode=flex legacy_applied=0.3200 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=TENNIS Mixed 5-Leg #3 | 1 mode=flex legacy_applied=1.0240 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=TENNIS Mixed 5-Leg #4 | 1 mode=flex legacy_applied=0.3200 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=TENNIS Mixed 6-Leg #3 | 1 mode=flex legacy_applied=1.2800 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #19 | 1 mode=flex legacy_applied=0.1311 est_curve=0.3667 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #20 | 1 mode=flex legacy_applied=0.1311 est_curve=0.0449 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #23 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #30 | 1 mode=flex legacy_applied=0.1311 est_curve=0.2000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #32 | 1 mode=flex legacy_applied=0.1311 est_curve=0.2400 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #33 | 1 mode=flex legacy_applied=0.1311 est_curve=0.2800 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #34 | 1 mode=flex legacy_applied=0.6554 est_curve=0.3150 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #35 | 1 mode=flex legacy_applied=3.2768 est_curve=1.2250 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #36 | 1 mode=flex legacy_applied=3.2768 est_curve=5.5556 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #41 | 1 mode=flex legacy_applied=0.6554 est_curve=1.5556 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #44 | 1 mode=flex legacy_applied=0.6554 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #47 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #48 | 1 mode=flex legacy_applied=0.6554 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #49 | 1 mode=flex legacy_applied=0.6554 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #51 | 1 mode=flex legacy_applied=0.6554 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #52 | 1 mode=flex legacy_applied=3.2768 est_curve=10.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #53 | 1 mode=flex legacy_applied=0.6554 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 5-Leg #54 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #27 | 1 mode=flex legacy_applied=0.1049 est_curve=0.1400 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #28 | 1 mode=flex legacy_applied=0.5243 est_curve=1.2000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #29 | 1 mode=flex legacy_applied=0.1049 est_curve=0.2800 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #30 | 1 mode=flex legacy_applied=0.5243 est_curve=0.3150 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #31 | 1 mode=flex legacy_applied=0.5243 est_curve=0.2450 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #32 | 1 mode=flex legacy_applied=6.5536 est_curve=9.9206 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #36 | 1 mode=flex legacy_applied=0.1049 est_curve=0.1944 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #41 | 1 mode=flex legacy_applied=0.1049 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #42 | 1 mode=flex legacy_applied=0.1049 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #44 | 1 mode=flex legacy_applied=0.5243 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #45 | 1 mode=flex legacy_applied=6.5536 est_curve=25.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #46 | 1 mode=flex legacy_applied=0.1049 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #48 | 1 mode=flex legacy_applied=0.1049 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #49 | 1 mode=flex legacy_applied=0.1049 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=X-Sport Goblin 6-Leg #50 | 1 mode=flex legacy_applied=0.5243 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #1 | 1 mode=flex legacy_applied=0.1638 est_curve=0.2705 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #16 | 1 mode=flex legacy_applied=0.1638 est_curve=0.1313 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #22 | 1 mode=flex legacy_applied=0.1638 est_curve=0.2109 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #23 | 1 mode=flex legacy_applied=0.8192 est_curve=1.4189 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #25 | 1 mode=flex legacy_applied=0.6144 est_curve=1.0500 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #5 | 1 mode=flex legacy_applied=0.2048 est_curve=0.2827 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #50 | 1 mode=flex legacy_applied=0.1638 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #51 | 1 mode=flex legacy_applied=0.8192 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #53 | 1 mode=flex legacy_applied=0.1638 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #54 | 1 mode=flex legacy_applied=0.8192 est_curve=0.6300 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #55 | 1 mode=flex legacy_applied=0.8192 est_curve=2.0000 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #57 | 1 mode=flex legacy_applied=0.8192 est_curve=1.4286 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #60 | 1 mode=flex legacy_applied=0.1638 est_curve=0.0656 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 5-Leg #61 | 1 mode=flex legacy_applied=0.1638 est_curve=0.3111 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 6-Leg #18 | 1 mode=flex legacy_applied=0.1311 est_curve=0.1648 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 6-Leg #24 | 1 mode=flex legacy_applied=0.1311 est_curve=0.1575 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 6-Leg #28 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 6-Leg #42 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 6-Leg #43 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 6-Leg #44 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 6-Leg #46 | 1 mode=flex legacy_applied=0.1311 est_curve=0.3600 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 6-Leg #51 | 1 mode=flex legacy_applied=0.1311 est_curve=0.3111 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 6-Leg #52 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)
+Payout mult mismatch ticket=X-Sport Mixed 6-Leg #54 | 1 mode=flex legacy_applied=0.1311 est_curve=0.4000 (>15%)

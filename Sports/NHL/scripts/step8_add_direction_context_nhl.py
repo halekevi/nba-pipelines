@@ -238,7 +238,34 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
     gs_raw = _first_game_timestamp_raw(raw, available_cols)
     game_date_et, game_time_et = _nhl_game_date_time_et(gs_raw)
 
-    direction = r("direction") or "OVER"
+    avg_L5     = safe_float(r("avg_L5"))
+    avg_L10    = safe_float(r("avg_L10"))
+    avg_L20    = safe_float(r("avg_L20"))
+    avg_season = safe_float(r("avg_season"))
+    line_val   = safe_float(r("line"))
+
+    pick_pt = str(r("pick_type") or "").strip().upper()
+    forced_od = pick_pt in ("GOBLIN", "DEMON")
+
+    proj_num = None
+    for av in (avg_L5, avg_L10, avg_L20):
+        if av is not None:
+            proj_num = av
+            break
+
+    upstream_dir = str(r("direction") or "").strip().upper()
+    upstream_edge = safe_float(r("edge"))
+
+    signed_e = (proj_num - line_val) if proj_num is not None and line_val is not None else upstream_edge
+
+    if forced_od:
+        direction = "OVER"
+    elif signed_e is not None:
+        direction = "OVER" if signed_e >= 0 else "UNDER"
+    elif upstream_dir in ("OVER", "UNDER"):
+        direction = upstream_dir
+    else:
+        direction = "OVER"
 
     composite_hr = safe_float(r("composite_hr"))
     hr_L5        = safe_float(r("hr_L5"))
@@ -263,12 +290,6 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         hr_L10_adj       = hr_L10       if _has_val(r("hr_L10"))       else ""
         hr_L20_adj       = hr_L20       if _has_val(r("hr_L20"))       else ""
         hr_season_adj    = hr_season    if _has_val(r("hr_season"))    else ""
-
-    avg_L5     = safe_float(r("avg_L5"))
-    avg_L10    = safe_float(r("avg_L10"))
-    avg_L20    = safe_float(r("avg_L20"))
-    avg_season = safe_float(r("avg_season"))
-    line_val   = safe_float(r("line"))
 
     # Gap: rolling avg vs line (how far above/below)
     gap_L5  = round(avg_L5  - line_val, 3) if avg_L5  and line_val else ""
@@ -353,7 +374,10 @@ def build_display_row(raw: dict, available_cols: set) -> dict:
         "toi_per_game_api": fmt_num(r("toi_per_game_api"), 2),
         # Model scores
         "prop_score":       fmt_num(r("prop_score"), 5),
-        "edge":             fmt_num(r("edge"), 4),
+        "edge":             fmt_num(signed_e, 4) if signed_e is not None else fmt_num(r("edge"), 4),
+        "abs_edge":         fmt_num(abs(signed_e), 4) if signed_e is not None else (
+            fmt_num(abs(upstream_edge), 4) if upstream_edge is not None else ""
+        ),
         "ml_prob":          fmt_num(r("ml_prob"), 4),
         "edge_score":       fmt_num(r("edge_score"), 4),
         "blended_score":    fmt_num(r("blended_score"), 4),

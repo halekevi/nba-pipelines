@@ -721,22 +721,57 @@ def generate_bundle():
             max(combined_candidates, key=lambda p: p.stat().st_mtime) if combined_candidates else None
         )
         artifact_by_sport = {
-            "nba": R / "NBA" / "step8_all_direction_clean.xlsx",
-            "nba1h": R / "NBA" / "step8_nba1h_direction_clean.xlsx",
-            "nba1q": R / "NBA" / "step8_nba1q_direction_clean.xlsx",
+            "nba": _first_existing_path(
+                [
+                    R / "outputs" / slate_date / "nba" / "step8_all_direction_clean.xlsx",
+                    R / "Sports" / "NBA" / "data" / "outputs" / "step8_all_direction_clean.xlsx",
+                ]
+            ),
+            "nba1h": _first_existing_path(
+                [
+                    R / "outputs" / slate_date / "nba1h" / "step8_nba1h_direction_clean.xlsx",
+                    R / "Sports" / "NBA" / "step8_nba1h_direction_clean.xlsx",
+                ]
+            ),
+            "nba1q": _first_existing_path(
+                [
+                    R / "outputs" / slate_date / "nba1q" / "step8_nba1q_direction_clean.xlsx",
+                    R / "Sports" / "NBA" / "step8_nba1q_direction_clean.xlsx",
+                ]
+            ),
             "cbb": _first_existing_path(
                 [R / "Sports" / "CBB" / "step6_ranked_cbb.xlsx", R / "CBB" / "step6_ranked_cbb.xlsx"]
             ),
-            "nhl": R / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
-            "soccer": R / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
+            "nhl": _first_existing_path(
+                [
+                    R / "outputs" / slate_date / "nhl" / "step8_nhl_direction_clean.xlsx",
+                    R / "Sports" / "NHL" / "outputs" / "step8_nhl_direction_clean.xlsx",
+                ]
+            ),
+            "soccer": _first_existing_path(
+                [
+                    R / "outputs" / slate_date / "soccer" / "step8_soccer_direction_clean.xlsx",
+                    R / "Sports" / "Soccer" / "outputs" / "step8_soccer_direction_clean.xlsx",
+                ]
+            ),
             "mlb": _first_existing_path(
                 [
                     R / "Sports" / "MLB" / "step8_mlb_direction_clean.xlsx",
                     R / "Sports" / "MLB" / "outputs" / "step8_mlb_direction_clean.xlsx",
                 ]
             ),
-            "nfl": R / "NFL" / "outputs" / "step8_nfl_direction_clean.xlsx",
-            "tennis": R / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
+            "nfl": _first_existing_path(
+                [
+                    R / "outputs" / slate_date / "nfl" / "step8_nfl_direction_clean.xlsx",
+                    R / "Sports" / "NFL" / "outputs" / "step8_nfl_direction_clean.xlsx",
+                ]
+            ),
+            "tennis": _first_existing_path(
+                [
+                    R / "outputs" / slate_date / "tennis" / "step8_tennis_direction_clean.xlsx",
+                    R / "Sports" / "Tennis" / "outputs" / "step8_tennis_direction_clean.xlsx",
+                ]
+            ),
             "wnba": _first_existing_path(
                 [
                     R / "Sports" / "WNBA" / "outputs" / "step8_wnba_direction_clean.xlsx",

@@ -2,6 +2,7 @@
 <#
 .SYNOPSIS
   Forwarder to the canonical multi-sport pipeline at repo root.
+  Thin forwarder — see repo-root run_pipeline.ps1 for full header and ENTRY POINTS docs.
 
 .DESCRIPTION
   Prefer running:  pwsh .\run_pipeline.ps1  from the PropORACLE root.

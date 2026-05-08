@@ -1,0 +1,1028 @@
+[DEBUG] Drop leg in NBA Standard 2-Leg #38: Dean Wade | Points 4.0 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Standard 2-Leg #38: 1 legs < required 2
+[DEBUG] Drop leg in NBA Standard 2-Leg #38: Dean Wade | Points 4.0 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Standard 2-Leg #38: 1 legs < required 2
+[DEBUG] Drop leg in NBA Standard 3-Leg #25: Dean Wade | Points 4.0 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Standard 3-Leg #25: 2 legs < required 3
+[DEBUG] Drop leg in NBA Standard 3-Leg #25: Dean Wade | Points 4.0 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Standard 3-Leg #25: 2 legs < required 3
+[DEBUG] Drop leg in NBA Standard 4-Leg #19: Dean Wade | Points 4.0 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Standard 4-Leg #19: 3 legs < required 4
+[DEBUG] Drop leg in NBA Standard 4-Leg #19: Dean Wade | Points 4.0 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Standard 4-Leg #19: 3 legs < required 4
+[DEBUG] Drop leg in NBA Standard 5-Leg #15: Dean Wade | Points 4.0 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Standard 5-Leg #15: 4 legs < required 5
+[DEBUG] Drop leg in NBA Standard 5-Leg #15: Dean Wade | Points 4.0 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Standard 5-Leg #15: 4 legs < required 5
+[DEBUG] Drop leg in NBA Standard 6-Leg #13: Dean Wade | Points 4.0 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Standard 6-Leg #13: 5 legs < required 6
+[DEBUG] Drop leg in NBA Standard 6-Leg #13: Dean Wade | Points 4.0 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Standard 6-Leg #13: 5 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 2-Leg #3: Jake LaRavia | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #3: 1 legs < required 2
+[DEBUG] Drop leg in NBA Goblin 2-Leg #3: Jake LaRavia | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #3: 1 legs < required 2
+[DEBUG] Drop leg in NBA Goblin 2-Leg #4: James Harden | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 2-Leg #4: LeBron James | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 2-Leg #4: James Harden | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 2-Leg #4: LeBron James | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 2-Leg #5: Josh Okogie | Points 3.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #5: 1 legs < required 2
+[DEBUG] Drop leg in NBA Goblin 2-Leg #5: Josh Okogie | Points 3.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #5: 1 legs < required 2
+[DEBUG] Drop leg in NBA Goblin 2-Leg #6: Alperen Sengun | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #6: 1 legs < required 2
+[DEBUG] Drop leg in NBA Goblin 2-Leg #6: Alperen Sengun | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #6: 1 legs < required 2
+[DEBUG] Drop leg in NBA Goblin 2-Leg #7: Desmond Bane | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #7: 1 legs < required 2
+[DEBUG] Drop leg in NBA Goblin 2-Leg #7: Desmond Bane | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #7: 1 legs < required 2
+[DEBUG] Drop leg in NBA Goblin 2-Leg #10: Paolo Banchero | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #10: 1 legs < required 2
+[DEBUG] Drop leg in NBA Goblin 2-Leg #10: Paolo Banchero | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #10: 1 legs < required 2
+[DEBUG] Drop leg in NBA Goblin 2-Leg #11: Dorian Finney-Smith | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #11: 1 legs < required 2
+[DEBUG] Drop leg in NBA Goblin 2-Leg #11: Dorian Finney-Smith | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #11: 1 legs < required 2
+[DEBUG] Drop leg in NBA Goblin 2-Leg #12: Jarrett Allen | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 2-Leg #12: Rui Hachimura | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 2-Leg #12: Jarrett Allen | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 2-Leg #12: Rui Hachimura | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 2-Leg #15: Dean Wade | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #15: 1 legs < required 2
+[DEBUG] Drop leg in NBA Goblin 2-Leg #15: Dean Wade | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #15: 1 legs < required 2
+[DEBUG] Drop leg in NBA Goblin 2-Leg #16: Scottie Barnes | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #16: 1 legs < required 2
+[DEBUG] Drop leg in NBA Goblin 2-Leg #16: Scottie Barnes | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 2-Leg #16: 1 legs < required 2
+[DEBUG] Drop leg in NBA Goblin 2-Leg #17: Collin Murray-Boyles | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 2-Leg #17: Donovan Mitchell | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 2-Leg #17: Collin Murray-Boyles | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 2-Leg #17: Donovan Mitchell | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 3-Leg #2: Luke Kennard | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA Goblin 3-Leg #2: Dorian Finney-Smith | Points 1.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #2: 1 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #8: Ja'Kobe Walter | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #8: 2 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #9: Jake LaRavia | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #9: 2 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #10: Marcus Smart | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #10: 2 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #12: Dennis Schr├╢der | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #12: 2 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #13: LeBron James | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 3-Leg #13: Josh Okogie | Points 3.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #13: 1 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #13: LeBron James | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 3-Leg #13: Josh Okogie | Points 3.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #13: 1 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #14: Alperen Sengun | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #14: 2 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #14: Alperen Sengun | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #14: 2 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #15: Desmond Bane | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #15: 2 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #16: Anthony Black | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #16: 2 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #19: Tobias Harris | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #19: 2 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #21: Ausar Thompson | Steals 1.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #21: 2 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #24: Dorian Finney-Smith | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA Goblin 3-Leg #24: Jarrett Allen | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #24: 1 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #24: Dorian Finney-Smith | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA Goblin 3-Leg #24: Jarrett Allen | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #24: 1 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #25: Rui Hachimura | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #25: 2 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #25: Rui Hachimura | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #25: 2 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #26: Dean Wade | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #26: 2 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #26: Dean Wade | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #26: 2 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #27: Scottie Barnes | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #27: 2 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #27: Scottie Barnes | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #27: 2 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #28: Collin Murray-Boyles | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 3-Leg #28: Donovan Mitchell | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #28: 1 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 3-Leg #28: Collin Murray-Boyles | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 3-Leg #28: Donovan Mitchell | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 3-Leg #28: 1 legs < required 3
+[DEBUG] Drop leg in NBA Goblin 4-Leg #3: Josh Okogie | Points 2.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #3: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #3: Josh Okogie | Points 2.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #3: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #8: Ja'Kobe Walter | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #8: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #9: Jake LaRavia | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #9: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #9: Jake LaRavia | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #9: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #10: Marcus Smart | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #10: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #10: Marcus Smart | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #10: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #11: Dennis Schr├╢der | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #11: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #11: Dennis Schr├╢der | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #11: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #12: James Harden | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 4-Leg #12: LeBron James | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #12: 2 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #13: Josh Okogie | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA Goblin 4-Leg #13: Alperen Sengun | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #13: 2 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #13: Josh Okogie | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA Goblin 4-Leg #13: Alperen Sengun | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #13: 2 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #14: Desmond Bane | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #14: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #14: Desmond Bane | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #14: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #15: Anthony Black | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #15: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #15: Anthony Black | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #15: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #18: Tobias Harris | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #18: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #18: Tobias Harris | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #18: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #19: Paolo Banchero | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #19: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #19: Paolo Banchero | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #19: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #21: Dorian Finney-Smith | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #21: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #21: Dorian Finney-Smith | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #21: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #22: Jarrett Allen | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 4-Leg #22: Rui Hachimura | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #22: 2 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #22: Jarrett Allen | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 4-Leg #22: Rui Hachimura | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #22: 2 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #23: Dean Wade | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #23: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #23: Dean Wade | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #23: 3 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #24: Scottie Barnes | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 4-Leg #24: Collin Murray-Boyles | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 4-Leg #24: Donovan Mitchell | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #24: 1 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 4-Leg #24: Scottie Barnes | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 4-Leg #24: Collin Murray-Boyles | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 4-Leg #24: Donovan Mitchell | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 4-Leg #24: 1 legs < required 4
+[DEBUG] Drop leg in NBA Goblin 5-Leg #2: Luke Kennard | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #2: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #5: Josh Okogie | Points 2.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #5: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #9: Marcus Smart | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #9: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #10: Tristan da Silva | Points 2.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #10: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #12: Ja'Kobe Walter | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #12: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #12: Ja'Kobe Walter | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #12: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #13: Jake LaRavia | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA Goblin 5-Leg #13: Marcus Smart | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #13: 3 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #13: Jake LaRavia | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA Goblin 5-Leg #13: Marcus Smart | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #13: 3 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #14: Dennis Schr├╢der | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #14: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #14: Dennis Schr├╢der | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #14: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #15: James Harden | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 5-Leg #15: LeBron James | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #15: 3 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #15: James Harden | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 5-Leg #15: LeBron James | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #15: 3 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #16: Josh Okogie | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA Goblin 5-Leg #16: Alperen Sengun | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #16: 3 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #16: Josh Okogie | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA Goblin 5-Leg #16: Alperen Sengun | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #16: 3 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #17: Desmond Bane | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #17: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #17: Desmond Bane | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #17: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #18: Anthony Black | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #18: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #18: Anthony Black | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #18: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #20: Tobias Harris | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #20: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #20: Tobias Harris | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #20: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #21: Paolo Banchero | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #21: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #22: Ausar Thompson | Steals 1.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #22: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #22: Ausar Thompson | Steals 1.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #22: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #23: Dorian Finney-Smith | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #23: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #23: Dorian Finney-Smith | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #23: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #24: Jarrett Allen | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 5-Leg #24: Rui Hachimura | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #24: 3 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #24: Jarrett Allen | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 5-Leg #24: Rui Hachimura | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #24: 3 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #25: Dean Wade | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 5-Leg #25: Scottie Barnes | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 5-Leg #25: Collin Murray-Boyles | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #25: 2 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #25: Dean Wade | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 5-Leg #25: Scottie Barnes | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 5-Leg #25: Collin Murray-Boyles | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #25: 2 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #26: Donovan Mitchell | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #26: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 5-Leg #26: Donovan Mitchell | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 5-Leg #26: 4 legs < required 5
+[DEBUG] Drop leg in NBA Goblin 6-Leg #2: Luke Kennard | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA Goblin 6-Leg #2: Dorian Finney-Smith | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA Goblin 6-Leg #2: Wendell Carter | Points 7.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #2: 3 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #2: Luke Kennard | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA Goblin 6-Leg #2: Dorian Finney-Smith | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA Goblin 6-Leg #2: Wendell Carter | Points 7.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #2: 3 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #5: Josh Okogie | Points 2.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #5: 5 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #5: Josh Okogie | Points 2.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #5: 5 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #9: Marcus Smart | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #9: 5 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #9: Marcus Smart | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #9: 5 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #10: Tristan da Silva | Points 2.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #10: 5 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #10: Tristan da Silva | Points 2.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #10: 5 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #12: Ja'Kobe Walter | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #12: 5 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #13: Jake LaRavia | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA Goblin 6-Leg #13: Marcus Smart | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #13: 4 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #13: Jake LaRavia | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA Goblin 6-Leg #13: Marcus Smart | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #13: 4 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #14: Dennis Schr├╢der | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #14: 5 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #14: Dennis Schr├╢der | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #14: 5 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #15: James Harden | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 6-Leg #15: LeBron James | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 6-Leg #15: Josh Okogie | Points 3.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #15: 3 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #15: James Harden | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 6-Leg #15: LeBron James | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 6-Leg #15: Josh Okogie | Points 3.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #15: 3 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #16: Alperen Sengun | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #16: 5 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #16: Alperen Sengun | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #16: 5 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #17: Desmond Bane | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 6-Leg #17: Anthony Black | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #17: 4 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #17: Desmond Bane | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 6-Leg #17: Anthony Black | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #17: 4 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #19: Tobias Harris | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 6-Leg #19: Paolo Banchero | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #19: 4 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #19: Tobias Harris | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 6-Leg #19: Paolo Banchero | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #19: 4 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #20: Ausar Thompson | Steals 1.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #20: 5 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #20: Ausar Thompson | Steals 1.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #20: 5 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #22: Dorian Finney-Smith | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA Goblin 6-Leg #22: Jarrett Allen | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 6-Leg #22: Rui Hachimura | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #22: 3 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #22: Dorian Finney-Smith | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA Goblin 6-Leg #22: Jarrett Allen | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 6-Leg #22: Rui Hachimura | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #22: 3 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #23: Dean Wade | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 6-Leg #23: Collin Murray-Boyles | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 6-Leg #23: Donovan Mitchell | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #23: 3 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #23: Dean Wade | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 6-Leg #23: Collin Murray-Boyles | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[DEBUG] Drop leg in NBA Goblin 6-Leg #23: Donovan Mitchell | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #23: 3 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #24: Scottie Barnes | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #24: 5 legs < required 6
+[DEBUG] Drop leg in NBA Goblin 6-Leg #24: Scottie Barnes | Steals 0.5 OVER | reason=steals_not_allowed_in_power_play
+[WARN] Dropping partial ticket in NBA Goblin 6-Leg #24: 5 legs < required 6
+[DEBUG] Drop leg in NHL Goblin 2-Leg #1: Clayton Keller | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #1: Nick Suzuki | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #1: Clayton Keller | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #1: Nick Suzuki | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #2: Nikita Kucherov | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #2: Juraj Slafkovsk├╜ | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #2: Nikita Kucherov | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #2: Juraj Slafkovsk├╜ | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #3: Brandon Hagel | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #3: Dylan Guenther | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #3: Brandon Hagel | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #3: Dylan Guenther | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #4: Rasmus Dahlin | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #4: Mitch Marner | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #4: Rasmus Dahlin | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #4: Mitch Marner | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #5: Jack Eichel | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #5: Mark Stone | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #5: Jack Eichel | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 2-Leg #5: Mark Stone | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #1: Clayton Keller | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #1: Nick Suzuki | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #1: Nikita Kucherov | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #1: Clayton Keller | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #1: Nick Suzuki | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #1: Nikita Kucherov | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #2: Juraj Slafkovsk├╜ | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #2: Brandon Hagel | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #2: Dylan Guenther | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #2: Juraj Slafkovsk├╜ | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #2: Brandon Hagel | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #2: Dylan Guenther | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #3: Rasmus Dahlin | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #3: Mitch Marner | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #3: Jack Eichel | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #3: Rasmus Dahlin | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #3: Mitch Marner | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 3-Leg #3: Jack Eichel | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 4-Leg #1: Clayton Keller | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 4-Leg #1: Nick Suzuki | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 4-Leg #1: Nikita Kucherov | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 4-Leg #1: Juraj Slafkovsk├╜ | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 4-Leg #1: Clayton Keller | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 4-Leg #1: Nick Suzuki | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 4-Leg #1: Nikita Kucherov | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 4-Leg #1: Juraj Slafkovsk├╜ | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 4-Leg #2: Brandon Hagel | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 4-Leg #2: Dylan Guenther | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 4-Leg #2: Rasmus Dahlin | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 4-Leg #2: Mitch Marner | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 4-Leg #2: Brandon Hagel | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 4-Leg #2: Dylan Guenther | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 4-Leg #2: Rasmus Dahlin | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 4-Leg #2: Mitch Marner | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #1: Clayton Keller | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #1: Nick Suzuki | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #1: Nikita Kucherov | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #1: Juraj Slafkovsk├╜ | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #1: Brandon Hagel | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #1: Clayton Keller | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #1: Nick Suzuki | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #1: Nikita Kucherov | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #1: Juraj Slafkovsk├╜ | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #1: Brandon Hagel | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #2: Dylan Guenther | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #2: Rasmus Dahlin | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #2: Mitch Marner | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #2: Jack Eichel | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #2: Mark Stone | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #2: Dylan Guenther | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #2: Rasmus Dahlin | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #2: Mitch Marner | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #2: Jack Eichel | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 5-Leg #2: Mark Stone | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 6-Leg #1: Clayton Keller | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 6-Leg #1: Nick Suzuki | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 6-Leg #1: Nikita Kucherov | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 6-Leg #1: Juraj Slafkovsk├╜ | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 6-Leg #1: Brandon Hagel | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 6-Leg #1: Dylan Guenther | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 6-Leg #1: Clayton Keller | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 6-Leg #1: Nick Suzuki | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 6-Leg #1: Nikita Kucherov | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 6-Leg #1: Juraj Slafkovsk├╜ | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 6-Leg #1: Brandon Hagel | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NHL Goblin 6-Leg #1: Dylan Guenther | points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #1: Sandro Mamukelashvili | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #1: James Harden | Points 4.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #1: Sandro Mamukelashvili | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #1: James Harden | Points 4.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #2: Jarrett Allen | Points 2.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #2: Jalen Duren | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #2: Jarrett Allen | Points 2.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #2: Jalen Duren | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #3: Jaxson Hayes | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #3: Sam Merrill | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #3: Jaxson Hayes | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #3: Sam Merrill | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #4: Luke Kennard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 2-Leg #4: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #4: Luke Kennard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 2-Leg #4: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #5: Caris LeVert | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #5: Tobias Harris | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #5: Caris LeVert | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #5: Tobias Harris | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #6: Caris LeVert | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #6: Kevin Durant | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #6: Caris LeVert | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #6: Kevin Durant | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #7: Reed Sheppard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 2-Leg #7: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Standard 2-Leg #7: Reed Sheppard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 2-Leg #7: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #1: Sandro Mamukelashvili | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #1: James Harden | Points 4.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #1: Jarrett Allen | Points 2.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #1: Sandro Mamukelashvili | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #1: James Harden | Points 4.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #1: Jarrett Allen | Points 2.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #2: Jalen Duren | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #2: Jaxson Hayes | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #2: Sam Merrill | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #2: Jalen Duren | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #2: Jaxson Hayes | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #2: Sam Merrill | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #3: Luke Kennard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #3: Caris LeVert | Points 1.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 3-Leg #3: 1 legs < required 3
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #3: Luke Kennard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #3: Caris LeVert | Points 1.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 3-Leg #3: 1 legs < required 3
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #4: Caris LeVert | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #4: Tobias Harris | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #4: Kevin Durant | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #4: Caris LeVert | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #4: Tobias Harris | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #4: Kevin Durant | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #5: Reed Sheppard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #5: Duncan Robinson | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 3-Leg #5: 1 legs < required 3
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #5: Reed Sheppard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 3-Leg #5: Duncan Robinson | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 3-Leg #5: 1 legs < required 3
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #1: Sandro Mamukelashvili | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #1: James Harden | Points 4.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #1: Jarrett Allen | Points 2.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #1: Jalen Duren | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #1: Sandro Mamukelashvili | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #1: James Harden | Points 4.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #1: Jarrett Allen | Points 2.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #1: Jalen Duren | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #2: Jaxson Hayes | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #2: Sam Merrill | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #2: Luke Kennard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 4-Leg #2: 1 legs < required 4
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #2: Jaxson Hayes | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #2: Sam Merrill | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #2: Luke Kennard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 4-Leg #2: 1 legs < required 4
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #3: Caris LeVert | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #3: Tobias Harris | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #3: Kevin Durant | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 4-Leg #3: 1 legs < required 4
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #3: Caris LeVert | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #3: Tobias Harris | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 4-Leg #3: Kevin Durant | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 4-Leg #3: 1 legs < required 4
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #1: Sandro Mamukelashvili | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #1: James Harden | Points 4.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #1: Jarrett Allen | Points 2.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #1: Jalen Duren | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #1: Jaxson Hayes | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #1: Sandro Mamukelashvili | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #1: James Harden | Points 4.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #1: Jarrett Allen | Points 2.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #1: Jalen Duren | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #1: Jaxson Hayes | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #2: Sam Merrill | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #2: Luke Kennard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #2: Caris LeVert | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #2: Tobias Harris | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 5-Leg #2: 1 legs < required 5
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #2: Sam Merrill | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #2: Luke Kennard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #2: Caris LeVert | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #2: Tobias Harris | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 5-Leg #2: 1 legs < required 5
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #3: Caris LeVert | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #3: Kevin Durant | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #3: Reed Sheppard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #3: Duncan Robinson | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 5-Leg #3: 1 legs < required 5
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #3: Caris LeVert | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #3: Kevin Durant | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #3: Reed Sheppard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 5-Leg #3: Duncan Robinson | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 5-Leg #3: 1 legs < required 5
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #1: Sandro Mamukelashvili | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #1: James Harden | Points 4.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #1: Jarrett Allen | Points 2.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #1: Jalen Duren | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #1: Jaxson Hayes | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #1: Sam Merrill | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #1: Sandro Mamukelashvili | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #1: James Harden | Points 4.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #1: Jarrett Allen | Points 2.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #1: Jalen Duren | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #1: Jaxson Hayes | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #1: Sam Merrill | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #2: Luke Kennard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #2: Caris LeVert | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #2: Tobias Harris | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #2: Reed Sheppard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 6-Leg #2: 2 legs < required 6
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #2: Luke Kennard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #2: Caris LeVert | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #2: Tobias Harris | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Standard 6-Leg #2: Reed Sheppard | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Standard 6-Leg #2: 2 legs < required 6
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #1: Collin Murray-Boyles | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #1: Ausar Thompson | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #1: Collin Murray-Boyles | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #1: Ausar Thompson | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #2: Jakob Poeltl | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #2: RJ Barrett | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #2: Jakob Poeltl | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #2: RJ Barrett | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #3: Austin Reaves | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #3: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #3: Austin Reaves | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #3: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #4: Ja'Kobe Walter | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #4: Brandon Ingram | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #4: Ja'Kobe Walter | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #4: Brandon Ingram | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #5: Tari Eason | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #5: Jakob Poeltl | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #5: Tari Eason | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #5: Jakob Poeltl | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #6: Sandro Mamukelashvili | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #6: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #6: Sandro Mamukelashvili | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #6: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #7: Max Strus | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #7: Jalen Duren | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #7: Max Strus | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #7: Jalen Duren | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #8: Jamal Cain | Points 1.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #8: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #8: Jamal Cain | Points 1.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #8: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #9: James Harden | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #9: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #9: James Harden | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #9: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #11: Rui Hachimura | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #11: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #11: Rui Hachimura | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #11: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #12: Jalen Suggs | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #12: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #12: Jalen Suggs | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #12: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #13: Dean Wade | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #13: Evan Mobley | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #13: Dean Wade | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #13: Evan Mobley | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #14: Desmond Bane | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #14: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #14: Desmond Bane | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #14: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #15: Jaxson Hayes | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #15: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Goblin 2-Leg #15: Jaxson Hayes | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 2-Leg #15: 1 legs < required 2
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #1: Marcus Smart | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #1: James Harden | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #1: Jarrett Allen | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #2: Donovan Mitchell | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #2: Collin Murray-Boyles | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #2: Ausar Thompson | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #2: Donovan Mitchell | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #2: Collin Murray-Boyles | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #2: Ausar Thompson | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #3: Jakob Poeltl | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #3: RJ Barrett | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #3: 1 legs < required 3
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #3: Jakob Poeltl | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #3: RJ Barrett | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #3: 1 legs < required 3
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #4: Duncan Robinson | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #4: Austin Reaves | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #4: 1 legs < required 3
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #5: Ja'Kobe Walter | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #5: Brandon Ingram | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #5: Tari Eason | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #5: Ja'Kobe Walter | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #5: Brandon Ingram | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #5: Tari Eason | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #6: Jakob Poeltl | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #6: Sandro Mamukelashvili | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #6: 1 legs < required 3
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #6: Jakob Poeltl | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #6: Sandro Mamukelashvili | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #6: 1 legs < required 3
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #7: Max Strus | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #7: Jalen Duren | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #7: 1 legs < required 3
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #7: Max Strus | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #7: Jalen Duren | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #7: 1 legs < required 3
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #8: Jamal Cain | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #8: James Harden | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #8: 1 legs < required 3
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #8: Jamal Cain | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #8: James Harden | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #8: 1 legs < required 3
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #9: Rui Hachimura | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #9: 2 legs < required 3
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #9: Rui Hachimura | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #9: 2 legs < required 3
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #10: Jalen Suggs | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #10: 2 legs < required 3
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #10: Jalen Suggs | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #10: 2 legs < required 3
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #11: Dean Wade | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #11: Evan Mobley | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #11: 1 legs < required 3
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #11: Dean Wade | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #11: Evan Mobley | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 3-Leg #11: 1 legs < required 3
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #12: Desmond Bane | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #12: Jaxson Hayes | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #12: Anthony Black | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #12: Desmond Bane | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #12: Jaxson Hayes | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 3-Leg #12: Anthony Black | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #1: Jarrett Allen | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #1: Jalen Suggs | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #1: LeBron James | Points 2.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #1: Ja'Kobe Walter | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #2: Duncan Robinson | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #2: LeBron James | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #2: Donovan Mitchell | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #2: 1 legs < required 4
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #3: Collin Murray-Boyles | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #3: Ausar Thompson | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #3: Jakob Poeltl | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #3: RJ Barrett | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #3: Collin Murray-Boyles | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #3: Ausar Thompson | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #3: Jakob Poeltl | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #3: RJ Barrett | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #4: Duncan Robinson | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #4: Austin Reaves | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #4: 2 legs < required 4
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #4: Duncan Robinson | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #4: Austin Reaves | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #4: 2 legs < required 4
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #5: Ja'Kobe Walter | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #5: Brandon Ingram | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #5: Tari Eason | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #5: Jakob Poeltl | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #5: Ja'Kobe Walter | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #5: Brandon Ingram | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #5: Tari Eason | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #5: Jakob Poeltl | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #6: Sandro Mamukelashvili | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #6: Max Strus | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #6: Jalen Duren | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #6: 1 legs < required 4
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #6: Sandro Mamukelashvili | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #6: Max Strus | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #6: Jalen Duren | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #6: 1 legs < required 4
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #7: Jamal Cain | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #7: James Harden | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #7: 2 legs < required 4
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #7: Jamal Cain | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #7: James Harden | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #7: 2 legs < required 4
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #8: Rui Hachimura | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #8: 3 legs < required 4
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #8: Rui Hachimura | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #8: 3 legs < required 4
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #9: Jalen Suggs | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #9: Dean Wade | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #9: Evan Mobley | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #9: 1 legs < required 4
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #9: Jalen Suggs | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #9: Dean Wade | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #9: Evan Mobley | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #9: 1 legs < required 4
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #10: Desmond Bane | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #10: Jaxson Hayes | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #10: Anthony Black | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #10: 1 legs < required 4
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #10: Desmond Bane | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #10: Jaxson Hayes | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 4-Leg #10: Anthony Black | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 4-Leg #10: 1 legs < required 4
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #1: Marcus Smart | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #1: James Harden | Points 2.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #1: Jarrett Allen | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #1: Luke Kennard | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #1: Jalen Duren | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #2: Paolo Banchero | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #2: Marcus Smart | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #2: James Harden | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #2: Jarrett Allen | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #2: Jalen Suggs | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #2: Paolo Banchero | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #2: Marcus Smart | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #2: James Harden | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #2: Jarrett Allen | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #2: Jalen Suggs | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #3: LeBron James | Points 2.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #3: Ja'Kobe Walter | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #3: Duncan Robinson | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #3: Donovan Mitchell | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #3: 1 legs < required 5
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #4: LeBron James | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #4: Collin Murray-Boyles | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #4: Ausar Thompson | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #4: Jakob Poeltl | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #4: RJ Barrett | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #4: LeBron James | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #4: Collin Murray-Boyles | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #4: Ausar Thompson | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #4: Jakob Poeltl | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #4: RJ Barrett | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #5: Duncan Robinson | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #5: Austin Reaves | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #5: Ja'Kobe Walter | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #5: 2 legs < required 5
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #5: Duncan Robinson | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #5: Austin Reaves | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #5: Ja'Kobe Walter | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #5: 2 legs < required 5
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #6: Brandon Ingram | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #6: Tari Eason | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #6: Jakob Poeltl | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #6: Sandro Mamukelashvili | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #6: Max Strus | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #6: Brandon Ingram | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #6: Tari Eason | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #6: Jakob Poeltl | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #6: Sandro Mamukelashvili | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #6: Max Strus | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #7: Jalen Duren | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #7: Jamal Cain | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #7: James Harden | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #7: 2 legs < required 5
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #7: Jalen Duren | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #7: Jamal Cain | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #7: James Harden | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #7: 2 legs < required 5
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #8: Rui Hachimura | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #8: 4 legs < required 5
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #8: Rui Hachimura | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #8: 4 legs < required 5
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #9: Jalen Suggs | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #9: Dean Wade | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #9: Evan Mobley | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #9: 2 legs < required 5
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #9: Jalen Suggs | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #9: Dean Wade | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 5-Leg #9: Evan Mobley | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 5-Leg #9: 2 legs < required 5
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #1: Marcus Smart | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #1: James Harden | Points 2.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #1: Jarrett Allen | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #1: Luke Kennard | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #1: Jalen Duren | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #1: Paolo Banchero | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #2: Marcus Smart | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #2: James Harden | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #2: Jarrett Allen | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #2: Jalen Suggs | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #2: LeBron James | Points 2.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #2: Ja'Kobe Walter | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #2: Marcus Smart | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #2: James Harden | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #2: Jarrett Allen | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #2: Jalen Suggs | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #2: LeBron James | Points 2.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #2: Ja'Kobe Walter | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #3: Duncan Robinson | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #3: LeBron James | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #3: Donovan Mitchell | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #3: Collin Murray-Boyles | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #3: Ausar Thompson | Points 1.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #3: 1 legs < required 6
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #3: Duncan Robinson | Points 0.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #3: LeBron James | Points 3.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #3: Donovan Mitchell | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #3: Collin Murray-Boyles | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #3: Ausar Thompson | Points 1.5 OVER | reason=points_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #3: 1 legs < required 6
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #4: Jakob Poeltl | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #4: RJ Barrett | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #4: Duncan Robinson | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #4: Austin Reaves | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #4: 2 legs < required 6
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #4: Jakob Poeltl | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #4: RJ Barrett | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #4: Duncan Robinson | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #4: Austin Reaves | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #4: 2 legs < required 6
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #5: Ja'Kobe Walter | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #5: Brandon Ingram | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #5: Tari Eason | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #5: Jakob Poeltl | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #5: Sandro Mamukelashvili | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #5: Max Strus | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #5: Ja'Kobe Walter | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #5: Brandon Ingram | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #5: Tari Eason | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #5: Jakob Poeltl | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #5: Sandro Mamukelashvili | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #5: Max Strus | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #6: Jalen Duren | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #6: Jamal Cain | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #6: James Harden | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #6: 3 legs < required 6
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #6: Jalen Duren | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #6: Jamal Cain | Points 1.5 OVER | reason=points_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #6: James Harden | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #6: 3 legs < required 6
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #7: Rui Hachimura | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #7: Dean Wade | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #7: 4 legs < required 6
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #7: Rui Hachimura | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #7: Dean Wade | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #7: 4 legs < required 6
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #8: Jalen Suggs | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #8: Evan Mobley | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #8: Desmond Bane | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #8: Jaxson Hayes | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #8: Anthony Black | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #8: 1 legs < required 6
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #8: Jalen Suggs | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #8: Evan Mobley | Rebounds 1.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #8: Desmond Bane | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #8: Jaxson Hayes | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[DEBUG] Drop leg in NBA1Q Goblin 6-Leg #8: Anthony Black | Rebounds 0.5 OVER | reason=rebounds_over_min_line
+[WARN] Dropping partial ticket in NBA1Q Goblin 6-Leg #8: 1 legs < required 6
+[TICKET EVAL] Slate date: 2026-05-01; ticket workbook: combined_slate_tickets_control_pq0_2026-05-01.xlsx; leg game_time dates: ['2026-05-02'] (inferred next day; ticket file has no leg game_time column); graded workbook merge order: ['2026-05-01', '2026-05-02']
+
+=== build_ticket_eval.py --debug ===
+
+CLI --date:     2026-05-01
+Ticket source:  H:\halek\ProfileFromC\Desktop\PropORACLE\outputs\2026-05-01\combined_slate_tickets_control_pq0_2026-05-01.xlsx
+Payload "date": '2026-05-01'
+Leg game_time dates: (none parsed)
+Graded merge order:  ['2026-05-01', '2026-05-02']
+
+outputs/2026-05-01/ graded_*.xlsx:
+  - outputs\2026-05-01\graded_mlb_2026-05-01.xlsx
+  - outputs\2026-05-01\graded_nba1h_2026-05-01.xlsx
+  - outputs\2026-05-01\graded_nba1q_2026-05-01.xlsx
+  - outputs\2026-05-01\graded_nba_2026-05-01.xlsx
+  - outputs\2026-05-01\graded_nhl_2026-05-01.xlsx
+  - outputs\2026-05-01\graded_soccer_2026-05-01.xlsx
+  - outputs\2026-05-01\graded_tennis_2026-05-01.xlsx
+
+outputs/2026-05-02/ graded_*.xlsx:
+  - outputs\2026-05-02\graded_mlb_2026-05-02.xlsx
+  - outputs\2026-05-02\graded_nba1h_2026-05-02.xlsx
+  - outputs\2026-05-02\graded_nba1q_2026-05-02.xlsx
+  - outputs\2026-05-02\graded_nba_2026-05-02.xlsx
+  - outputs\2026-05-02\graded_nhl_2026-05-02.xlsx
+  - outputs\2026-05-02\graded_soccer_2026-05-02.xlsx
+  - outputs\2026-05-02\graded_tennis_2026-05-02.xlsx
+
+Workbooks used for matching (first existing path per sport; NOT date-specific today):
+  NBA: (no file at any candidate path)
+       tried: NBA\step8_all_direction_clean.xlsx
+       tried: NBA\data\outputs\step8_all_direction_clean.xlsx
+  NBA1H: outputs\2026-05-01\step8_nba1h_direction_clean_2026-05-01.xlsx
+       sheet 'ALL': ['tier', 'rank score', 'player', 'pos', 'team', 'opp', 'game time', 'prop', 'pick type', 'line', 'standard line', 'direction', 'edge', 'abs edge', 'projection', 'ml prob', 'edge score', 'blended score', 'hit rate (5g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'n legs sample'] ...(+39)
+       sheet 'Tier B': ['tier', 'rank score', 'player', 'pos', 'team', 'opp', 'game time', 'prop', 'pick type', 'line', 'standard line', 'direction', 'edge', 'abs edge', 'projection', 'ml prob', 'edge score', 'blended score', 'hit rate (5g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'n legs sample'] ...(+39)
+       sheet 'Tier C': ['tier', 'rank score', 'player', 'pos', 'team', 'opp', 'game time', 'prop', 'pick type', 'line', 'standard line', 'direction', 'edge', 'abs edge', 'projection', 'ml prob', 'edge score', 'blended score', 'hit rate (5g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'n legs sample'] ...(+39)
+       sheet '...': ['(+1 more sheets)']
+  NBA1Q: outputs\2026-05-01\step8_nba1q_direction_clean_2026-05-01.xlsx
+       sheet 'ALL': ['tier', 'rank score', 'player', 'pos', 'team', 'opp', 'game time', 'prop', 'pick type', 'line', 'standard line', 'direction', 'edge', 'abs edge', 'projection', 'ml prob', 'edge score', 'blended score', 'hit rate (5g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'n legs sample'] ...(+39)
+       sheet 'Tier A': ['tier', 'rank score', 'player', 'pos', 'team', 'opp', 'game time', 'prop', 'pick type', 'line', 'standard line', 'direction', 'edge', 'abs edge', 'projection', 'ml prob', 'edge score', 'blended score', 'hit rate (5g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'n legs sample'] ...(+39)
+       sheet 'Tier B': ['tier', 'rank score', 'player', 'pos', 'team', 'opp', 'game time', 'prop', 'pick type', 'line', 'standard line', 'direction', 'edge', 'abs edge', 'projection', 'ml prob', 'edge score', 'blended score', 'hit rate (5g)', 'last 5 avg', 'season avg', 'l5 over', 'l5 under', 'n legs sample'] ...(+39)
+       sheet '...': ['(+2 more sheets)']
+  CBB: (no file at any candidate path)
+       tried: CBB\step6_ranked_cbb.xlsx
+  WCBB: (no file at any candidate path)
+       tried: CBB\step6_ranked_wcbb.xlsx
+  NHL: outputs\2026-05-01\step8_nhl_direction_clean_2026-05-01.xlsx
+       sheet 'All Props': ['rank', 'tier', 'player', 'team', 'opp', 'is_home', 'player_role', 'position_group', 'prop_display', 'prop_type', 'line', 'direction', 'composite_hr', 'hit_rate', 'hr_l5', 'hr_l10', 'hr_l20', 'hr_season', 'sample_l5', 'hit_l5', 'sample_l10', 'hit_l10', 'sample_l20', 'sample_season'] ...(+35)
+       sheet 'Skaters': ['rank', 'tier', 'player', 'team', 'opp', 'is_home', 'player_role', 'position_group', 'prop_display', 'prop_type', 'line', 'direction', 'composite_hr', 'hit_rate', 'hr_l5', 'hr_l10', 'hr_l20', 'hr_season', 'sample_l5', 'hit_l5', 'sample_l10', 'hit_l10', 'sample_l20', 'sample_season'] ...(+35)
+       sheet 'Goalies': ['rank', 'tier', 'player', 'team', 'opp', 'is_home', 'player_role', 'position_group', 'prop_display', 'prop_type', 'line', 'direction', 'composite_hr', 'hit_rate', 'hr_l5', 'hr_l10', 'hr_l20', 'hr_season', 'sample_l5', 'hit_l5', 'sample_l10', 'hit_l10', 'sample_l20', 'sample_season'] ...(+35)
+       sheet '...': ['(+1 more sheets)']
+  SOCCER: outputs\2026-05-01\step8_soccer_direction_clean_2026-05-01.xlsx
+       sheet 'ALL': ['tier', 'rank score', 'player', 'pos', 'pos group', 'team', 'opp', 'league', 'game time', 'espn id', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'ml prob', 'edge score', 'blended score', 'hit rate (5g)', 'hit rate (10g)', 'last 5 avg', 'season avg', 'l5 over'] ...(+21)
+       sheet 'Tier A': ['tier', 'rank score', 'player', 'pos', 'pos group', 'team', 'opp', 'league', 'game time', 'espn id', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'ml prob', 'edge score', 'blended score', 'hit rate (5g)', 'hit rate (10g)', 'last 5 avg', 'season avg', 'l5 over'] ...(+21)
+       sheet 'Tier B': ['tier', 'rank score', 'player', 'pos', 'pos group', 'team', 'opp', 'league', 'game time', 'espn id', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'ml prob', 'edge score', 'blended score', 'hit rate (5g)', 'hit rate (10g)', 'last 5 avg', 'season avg', 'l5 over'] ...(+21)
+       sheet '...': ['(+2 more sheets)']
+  MLB: outputs\2026-05-01\step8_mlb_direction_clean_2026-05-01.xlsx
+       sheet 'ALL': ['tier', 'rank score', 'player', 'pos', 'player type', 'team', 'opp', 'game time', 'game date', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'ml prob', 'edge score', 'blended score', 'hit rate (5g)', 'hit rate status', 'reliability note', 'last 5 avg', 'season avg', 'l5 over'] ...(+7)
+       sheet 'Tier A': ['tier', 'rank score', 'player', 'pos', 'player type', 'team', 'opp', 'game time', 'game date', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'ml prob', 'edge score', 'blended score', 'hit rate (5g)', 'hit rate status', 'reliability note', 'last 5 avg', 'season avg', 'l5 over'] ...(+7)
+       sheet 'Tier B': ['tier', 'rank score', 'player', 'pos', 'player type', 'team', 'opp', 'game time', 'game date', 'prop', 'pick type', 'line', 'direction', 'edge', 'projection', 'ml prob', 'edge score', 'blended score', 'hit rate (5g)', 'hit rate status', 'reliability note', 'last 5 avg', 'season avg', 'l5 over'] ...(+7)
+       sheet '...': ['(+4 more sheets)']
+
+ui_runner/graded_slate/2026-05-01/ (optional; for Railway when outputs/ is absent):
+  - ui_runner\graded_slate\2026-05-01\graded_mlb_2026-05-01.xlsx  -> buckets [MLB]
+  - ui_runner\graded_slate\2026-05-01\graded_nba_2026-05-01.xlsx  -> buckets [NBA]
+  - ui_runner\graded_slate\2026-05-01\graded_nhl_2026-05-01.xlsx  -> buckets [NHL]
+  - ui_runner\graded_slate\2026-05-01\graded_soccer_2026-05-01.xlsx  -> buckets [SOCCER]
+
+ui_runner/graded_slate/2026-05-02/ (optional; for Railway when outputs/ is absent):
+  - ui_runner\graded_slate\2026-05-02\graded_mlb_2026-05-02.xlsx  -> buckets [MLB]
+  - ui_runner\graded_slate\2026-05-02\graded_nba_2026-05-02.xlsx  -> buckets [NBA]
+  - ui_runner\graded_slate\2026-05-02\graded_nhl_2026-05-02.xlsx  -> buckets [NHL]
+  - ui_runner\graded_slate\2026-05-02\graded_soccer_2026-05-02.xlsx  -> buckets [SOCCER]
+
+find_graded_workbook_path() (deploy path first, then outputs/):
+  --- date 2026-05-01 ---
+  graded_nba_2026-05-01.xlsx -> ui_runner\graded_slate\2026-05-01\graded_nba_2026-05-01.xlsx
+  graded_nhl_2026-05-01.xlsx -> ui_runner\graded_slate\2026-05-01\graded_nhl_2026-05-01.xlsx
+  graded_mlb_2026-05-01.xlsx -> ui_runner\graded_slate\2026-05-01\graded_mlb_2026-05-01.xlsx
+  graded_soccer_2026-05-01.xlsx -> ui_runner\graded_slate\2026-05-01\graded_soccer_2026-05-01.xlsx
+  graded_cbb_2026-05-01.xlsx -> (not found)
+  graded_wcbb_2026-05-01.xlsx -> (not found)
+  --- date 2026-05-02 ---
+  graded_nba_2026-05-02.xlsx -> ui_runner\graded_slate\2026-05-02\graded_nba_2026-05-02.xlsx
+  graded_nhl_2026-05-02.xlsx -> ui_runner\graded_slate\2026-05-02\graded_nhl_2026-05-02.xlsx
+  graded_mlb_2026-05-02.xlsx -> ui_runner\graded_slate\2026-05-02\graded_mlb_2026-05-02.xlsx
+  graded_soccer_2026-05-02.xlsx -> ui_runner\graded_slate\2026-05-02\graded_soccer_2026-05-02.xlsx
+  graded_cbb_2026-05-02.xlsx -> (not found)
+  graded_wcbb_2026-05-02.xlsx -> (not found)
+
+Graded workbook(s) merged into indices (per date in merge order; later overwrites keys):
+  outputs/2026-05-01/:
+    - outputs\2026-05-01\graded_mlb_2026-05-01.xlsx  -> buckets [MLB]
+    - outputs\2026-05-01\graded_nba1h_2026-05-01.xlsx  -> buckets [NBA1H]
+    - outputs\2026-05-01\graded_nba1q_2026-05-01.xlsx  -> buckets [NBA1Q]
+    - outputs\2026-05-01\graded_nba_2026-05-01.xlsx  -> buckets [NBA]
+    - outputs\2026-05-01\graded_nhl_2026-05-01.xlsx  -> buckets [NHL]
+    - outputs\2026-05-01\graded_soccer_2026-05-01.xlsx  -> buckets [SOCCER]
+    - outputs\2026-05-01\graded_tennis_2026-05-01.xlsx  -> buckets [?]
+  outputs/2026-05-02/:
+    - outputs\2026-05-02\graded_mlb_2026-05-02.xlsx  -> buckets [MLB]
+    - outputs\2026-05-02\graded_nba1h_2026-05-02.xlsx  -> buckets [NBA1H]
+    - outputs\2026-05-02\graded_nba1q_2026-05-02.xlsx  -> buckets [NBA1Q]
+    - outputs\2026-05-02\graded_nba_2026-05-02.xlsx  -> buckets [NBA]
+    - outputs\2026-05-02\graded_nhl_2026-05-02.xlsx  -> buckets [NHL]
+    - outputs\2026-05-02\graded_soccer_2026-05-02.xlsx  -> buckets [SOCCER]
+    - outputs\2026-05-02\graded_tennis_2026-05-02.xlsx  -> buckets [?]
+
+Index (all buckets): 16,951 triple-keys, 11,256 player+prop buckets (sum per sport)
+  NBA: 2,100 triples, 1,120 pair-buckets
+  NBA1H: 125 triples, 125 pair-buckets
+  NBA1Q: 327 triples, 175 pair-buckets
+  NHL: 947 triples, 647 pair-buckets
+  SOCCER: 9,520 triples, 7,231 pair-buckets
+  MLB: 3,932 triples, 1,958 pair-buckets
+
+Sample legs (match against index above):
+  1. sport='NBA' buckets=[NBA] player='marcus smart' prop_key='ptsrebsasts' prop_type='pts+rebs+asts' direction='OVER' -> MATCH
+      actual=15.0 line=17.0 grade_raw='MISS' dir_in_row='OVER'
+  2. sport='NBA' buckets=[NBA] player='anthony black' prop_key='ptsasts' prop_type='pts+asts' direction='UNDER' -> MATCH
+      actual=9.0 line=16.5 grade_raw='HIT' dir_in_row='UNDER'
+  3. sport='NBA' buckets=[NBA] player='marcus smart' prop_key='ptsrebsasts' prop_type='pts+rebs+asts' direction='OVER' -> MATCH
+      actual=15.0 line=17.0 grade_raw='MISS' dir_in_row='OVER'
+  4. sport='NBA' buckets=[NBA] player='anthony black' prop_key='ptsasts' prop_type='pts+asts' direction='UNDER' -> MATCH
+      actual=9.0 line=16.5 grade_raw='HIT' dir_in_row='UNDER'
+  5. sport='NBA' buckets=[NBA] player='anthony black' prop_key='ptsrebsasts' prop_type='pts+rebs+asts' direction='UNDER' -> MATCH
+      actual=12.0 line=19.5 grade_raw='HIT' dir_in_row='UNDER'
+  6. sport='NBA' buckets=[NBA] player='rui hachimura' prop_key='ptsasts' prop_type='pts+asts' direction='OVER' -> MATCH
+      actual=23.0 line=12.5 grade_raw='HIT' dir_in_row='OVER'
+  7. sport='NBA' buckets=[NBA] player='anthony black' prop_key='ptsrebsasts' prop_type='pts+rebs+asts' direction='UNDER' -> MATCH
+      actual=12.0 line=19.5 grade_raw='HIT' dir_in_row='UNDER'
+  8. sport='NBA' buckets=[NBA] player='rui hachimura' prop_key='ptsasts' prop_type='pts+asts' direction='OVER' -> MATCH
+      actual=23.0 line=12.5 grade_raw='HIT' dir_in_row='OVER'
+
+Total legs in JSON: 4554
+
+Note: Base rows come from SPORT_XLSX_CANDIDATES (pre-game step8 slates) for the slate --date.
+      Graded overlays: merge order ['2026-05-01', '2026-05-02'] (ui_runner/graded_slate/<d>/ then outputs/<d>/ per d).
+=== end debug ===
+
+  ticket_eval_slate_latest.json -> home slate cards (/api/slate-sport when SLATE_SPORT_SOURCE=auto)
+  Appended grade history -> data/grade_history.json (2026-05-01)
+Wrote H:\halek\ProfileFromC\Desktop\PropORACLE\ui_runner\templates\ticket_eval_2026-05-01.html
+  (Serve /tickets from tickets_latest.json; graded view: Grades ΓåÆ Ticket evaluation.)
