@@ -59,6 +59,7 @@ html:has(body.page-grades){
 body.page-grades{
   font-size:clamp(11px,0.82vw,13px);
   line-height:1.35;
+  display:block !important;
   overflow-x:hidden;
   overflow-y:auto !important;
   height:auto !important;
@@ -67,18 +68,21 @@ body.page-grades{
 }
 body.page-grades .grades-page,
 body.page-grades .grades-body{
+  display:block !important;
   overflow:visible !important;
   flex:none !important;
   height:auto !important;
   min-height:unset !important;
 }
 body.page-grades .iframe-shell{
+  display:block !important;
   overflow:visible !important;
   flex:none !important;
   height:auto !important;
   min-height:unset !important;
 }
 body.page-grades .iframe-shell-stage{
+  display:block !important;
   overflow:visible !important;
   position:relative;
   flex:none !important;
@@ -86,7 +90,7 @@ body.page-grades .iframe-shell-stage{
   min-height:unset !important;
 }
 body.page-grades .iframe-shell-stage > .grade-frame{
-  position:relative !important;
+  position:static !important;
   inset:auto !important;
   width:100% !important;
   max-width:100% !important;
