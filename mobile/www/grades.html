@@ -2556,6 +2556,32 @@ async function probeDate(dateStr){
   }
 }
 
+/** Union of date strings from /api/grades/report_dates (and legacy/alternate payload keys). */
+function mergeGradeReportDateLists(j) {
+  if (!j || typeof j !== 'object') return [];
+  var acc = [];
+  function take(key) {
+    var v = j[key];
+    if (Array.isArray(v)) {
+      for (var i = 0; i < v.length; i++) acc.push(v[i]);
+    }
+  }
+  take('slate_eval_dates');
+  take('ticket_eval_dates');
+  take('dates');
+  take('report_dates');
+  var seen = Object.create(null);
+  var out = [];
+  for (var k = 0; k < acc.length; k++) {
+    var s = String(acc[k] == null ? '' : acc[k]).trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(s) || seen[s]) continue;
+    seen[s] = 1;
+    out.push(s);
+  }
+  out.sort();
+  return out;
+}
+
 // ─── DISCOVER available dates ─────────────────────────────────────────────────
 async function discoverDates(){
   // Prefer server-side listing (one request, works when HEAD is flaky behind CDNs).
@@ -2565,14 +2591,15 @@ async function discoverDates(){
       signal: gradesFetchSignal(12000),
     });
     if (res.ok) {
-      const j = await res.json();
-      const slateDs = Array.isArray(j.slate_eval_dates) ? j.slate_eval_dates : [];
-      const ticketDs = Array.isArray(j.ticket_eval_dates) ? j.ticket_eval_dates : [];
-      const ds = Array.from(new Set([].concat(slateDs, ticketDs))).filter(function (x) {
-        return /^\d{4}-\d{2}-\d{2}$/.test(String(x || ''));
-      });
+      var j = null;
+      try {
+        j = await res.json();
+      } catch (_jsonErr) {
+        j = null;
+      }
+      const ds = mergeGradeReportDateLists(j);
       if (ds.length) {
-        return ds.slice().sort();
+        return ds;
       }
     }
   } catch (_e) {}
