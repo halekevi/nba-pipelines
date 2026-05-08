@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>
-<script>(function(){try{var t=localStorage.getItem('proporacle-theme')||localStorage.getItem('theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');document.documentElement.classList.add('light-theme');}}catch(e){}})();</script>
+<script>(function(){try{document.documentElement.classList.add('page-grades-root');var t=localStorage.getItem('proporacle-theme')||localStorage.getItem('theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');document.documentElement.classList.add('light-theme');}}catch(e){}})();</script>
 <meta name="theme-color" content="#050505"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta property="og:title" content="PropOracle — Grades"/>
@@ -55,6 +55,12 @@ html:has(body.page-grades){
   overflow-y:auto !important;
   height:auto !important;
   min-height:100dvh !important;
+}
+html.page-grades-root{
+  height:auto !important;
+  min-height:100dvh !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
 }
 body.page-grades{
   font-size:clamp(11px,0.82vw,13px);
