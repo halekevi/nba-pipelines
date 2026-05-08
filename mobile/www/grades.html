@@ -49,64 +49,15 @@ body{
   position:relative;
   background:linear-gradient(135deg,#0a0a1a 0%,#0d0b1e 50%,#0a0f1a 100%);
 }
-/* Hub scroll: outer document scrolls; slate iframe height follows content (ResizeObserver, never touches src). */
-html:has(body.page-grades){
-  overflow-x:hidden;
-  overflow-y:auto !important;
-  height:auto !important;
-  min-height:100dvh !important;
-}
-html.page-grades-root{
-  height:auto !important;
-  min-height:100dvh !important;
-  overflow-x:hidden !important;
-  overflow-y:auto !important;
+html.page-grades-root,
+html.page-grades-root body.page-grades{
+  display:block!important;
+  height:auto!important;
+  overflow-y:auto!important;
 }
 body.page-grades{
   font-size:clamp(11px,0.82vw,13px);
   line-height:1.35;
-  display:block !important;
-  overflow-x:hidden;
-  overflow-y:auto !important;
-  height:auto !important;
-  min-height:100dvh !important;
-  max-height:none !important;
-}
-body.page-grades .grades-page,
-body.page-grades .grades-body{
-  display:block !important;
-  overflow:visible !important;
-  flex:none !important;
-  height:auto !important;
-  min-height:unset !important;
-}
-body.page-grades .iframe-shell{
-  display:block !important;
-  overflow:visible !important;
-  flex:none !important;
-  height:auto !important;
-  min-height:unset !important;
-}
-body.page-grades .iframe-shell-stage{
-  display:block !important;
-  overflow:visible !important;
-  position:relative;
-  flex:none !important;
-  height:auto !important;
-  min-height:unset !important;
-}
-body.page-grades .iframe-shell-stage > .grade-frame{
-  position:static !important;
-  inset:auto !important;
-  width:100% !important;
-  max-width:100% !important;
-  height:auto !important;
-  min-height:50vh;
-  overflow:visible !important;
-}
-body.page-grades .grade-frame{
-  overflow:visible !important;
-  height:auto !important;
 }
 /* Transparent shell showed hub body::before/::after + .grain-layer under the toolbar strip; slate iframe used transparent body + its own ::before/::after (Grades-only). */
 body.page-grades::before,
@@ -236,12 +187,13 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
 
 /* iframe shell: layout only — no outer “card” so slate header is the sole chrome */
 .iframe-shell{
-  flex:1;min-height:0;min-width:0;width:100%;max-width:100%;
-  display:flex;flex-direction:column;overflow:hidden;
+  display:block;min-height:0;min-width:0;width:100%;max-width:100%;
+  overflow:visible;
   margin-top:0;border:none;border-radius:0;background:transparent;
   box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
 }
 .iframe-shell-toolbar{
+  position:sticky;top:0;z-index:30;
   flex-shrink:0;padding:8px 12px 2px;border-bottom:1px solid var(--glass-panel-border);
   display:flex;flex-direction:column;gap:6px;
   background:rgba(255,255,255,0.02);
@@ -280,8 +232,6 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1.2px;
   color:var(--accent-gold);line-height:1.1;
 }
-/* Tab strip already labels each mode; this span duplicated it (e.g. gold "Ticket evaluation" + tab "TICKET EVALUATION"). */
-body.page-grades .iframe-shell-toolbar .ist-title{display:none!important;}
 .gc-live{font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.6px;color:var(--cyan);opacity:.92;}
 .iframe-shell-toolbar .date-bar,.iframe-shell-toolbar .tabs-bar{margin:0;width:100%;box-sizing:border-box;}
 .grades-toolbar-parent-slot{flex-shrink:0}
@@ -1259,7 +1209,7 @@ select option,
   <div id="grades-toolbar-parent-slot" class="grades-toolbar-parent-slot">
     <div class="iframe-shell-toolbar" id="iframe-shell-toolbar">
       <div class="iframe-shell-head">
-        <span class="ist-title" id="iframe-shell-title" aria-hidden="true">Slate evaluation</span>
+        <span class="ist-title" id="iframe-shell-title">Slate evaluation</span>
         <div class="iframe-shell-head-right">
           <span class="gc-live" id="grades-controls-live" aria-live="polite"></span>
         </div>
@@ -1372,20 +1322,9 @@ select option,
 //   Same dir: slate_eval_{date}.html  (relative)
 //
 const REPORT_URL_TEMPLATE = 'slate_eval_{date}.html';
-/** Path only (probes, same-document checks) — no cache-buster. */
-function slateEvalPath(dateStr) {
-  return REPORT_URL_TEMPLATE.replace('{date}', dateStr);
-}
-/**
- * Full URL for iframe navigation. Pass cacheBust once per intentional load (e.g. Date.now());
- * omit second arg for stable URL. Never append a new ?cb= on resize — that reloads the iframe.
- */
-function slateEvalUrl(dateStr, cacheBust) {
-  const p = slateEvalPath(dateStr);
-  if (cacheBust !== undefined && cacheBust !== null && cacheBust !== '') {
-    return p + '?cb=' + encodeURIComponent(String(cacheBust));
-  }
-  return p;
+/** Every load gets a unique URL so iframe/browsers/CDNs cannot serve a stale slate_eval after deploy. */
+function slateEvalUrl(dateStr) {
+  return REPORT_URL_TEMPLATE.replace('{date}', dateStr) + '?cb=' + Date.now();
 }
 const TICKET_EVAL_URL_TEMPLATE = 'ticket_eval_{date}.html';
 
@@ -1406,7 +1345,7 @@ const TICKET_EVAL_URL_TEMPLATE = 'ticket_eval_{date}.html';
   logFrame('ticket-frame', document.getElementById('ticket-frame'));
 })();
 
-// ─── Hide date + Slate/Ticket bars on scroll (props/tickets: inner frame scroll; slate: hub window scroll) ───
+// ─── Hide date + Slate/Ticket bars on scroll (iframe content scrolls, not the hub body) ───
 (function () {
   let scrollCleanups = [];
   let lastScrollY = 0;
@@ -1429,8 +1368,7 @@ const TICKET_EVAL_URL_TEMPLATE = 'ticket_eval_{date}.html';
       return { win: tick.contentWindow, key: 't' };
     }
     const slate = document.getElementById('grade-frame');
-    if (slate && slate.style.display !== 'none' && slate.contentWindow) {
-      /* Slate tab: hub document scrolls (iframe is auto-height); toolbar hide follows window scroll. */
+    if (slate && slate.style.display !== 'none') {
       return { win: window, key: 's' };
     }
     return { win: window, key: 'w' };
@@ -1989,11 +1927,11 @@ function collapseSportsInTicketFrame(frame) {
 
   // Reinsert after intro/meta copy if present.
   const intro = wrap.querySelector(':scope > p.meta-muted');
+  let anchor = intro ? intro.nextSibling : wrap.firstChild;
 
   // Detach all sections before rebuilding.
   sections.forEach(sec => sec.parentNode && sec.parentNode.removeChild(sec));
 
-  const frag = doc.createDocumentFragment();
   let idx = 0;
   const _mobTk = gradesFrameMobileLayout();
   groups.forEach((groupSecs, key) => {
@@ -2018,16 +1956,10 @@ function collapseSportsInTicketFrame(frame) {
     body.className = 'grades-sport-bucket-body';
     details.appendChild(body);
 
-    frag.appendChild(details);
+    if (anchor) wrap.insertBefore(details, anchor);
+    else wrap.appendChild(details);
     groupSecs.forEach(sec => body.appendChild(sec));
   });
-
-  // IMPORTANT: do not insert before a stale anchor node that may have been detached above.
-  if (intro && intro.parentNode === wrap) {
-    wrap.insertBefore(frag, intro.nextSibling);
-  } else {
-    wrap.appendChild(frag);
-  }
 }
 
 // ─── PROP EVALUATION (archived props_history) ─────────────────────────────────
@@ -2511,7 +2443,7 @@ function computeVisibleReportDateCount(){
 
 // ─── PROBE: check if a slate_eval file exists for a date ──────────────────────
 async function probeDate(dateStr){
-  const url = slateEvalPath(dateStr);
+  const url = slateEvalUrl(dateStr);
   try {
     const res = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
     if (res.ok) return true;
@@ -2652,7 +2584,6 @@ function renderPills(){
   if (bn) bn.disabled = currentDateIdx >= availableDates.length - 1;
 }
 
-// Tear down slate iframe height observer — never tie this to src changes (avoids reload “shake”).
 function tearDownGradeFrameResizeObservers() {
   if (window.__gradesSlateResizeObs) {
     try {
@@ -2667,51 +2598,22 @@ function syncGradeFrameHeight(frame) {
   try {
     const doc = frame.contentDocument;
     if (!doc || !doc.documentElement) return;
-    const rootH = Math.max(
-      doc.documentElement.scrollHeight || 0,
-      doc.body ? doc.body.scrollHeight || 0 : 0
-    );
-    // Trim dead space: anchor to the furthest meaningful content block bottom.
-    let contentBottom = 0;
-    const contentSelectors = [
-      '.main',
-      '.wrap',
-      '.ticket-sections-wrap',
-      '.grades-analytics-wrap',
-      '.grade-eval-summary',
-      '.stats-bar',
-      '.sec',
-      '.sport-section',
-      '.insight-grid',
-      '.filter-pill'
-    ];
-    const nodes = doc.querySelectorAll(contentSelectors.join(','));
+    let maxBottom = 0;
+    const nodes = Array.from(doc.querySelectorAll('body *'));
     nodes.forEach(function (el) {
-      const rect = el.getBoundingClientRect();
-      if (!rect || rect.height <= 0) return;
-      const top = rect.top + (doc.defaultView?.scrollY || 0);
-      const bottom = top + rect.height;
-      if (bottom > contentBottom) contentBottom = bottom;
+      if (!(el instanceof Element)) return;
+      const cs = doc.defaultView ? doc.defaultView.getComputedStyle(el) : null;
+      if (cs && (cs.display === 'none' || cs.visibility === 'hidden')) return;
+      if ((el.offsetHeight || 0) <= 0) return;
+      const bottom = (el.offsetTop || 0) + (el.offsetHeight || 0);
+      if (bottom > maxBottom) maxBottom = bottom;
     });
-    const h = contentBottom > 0 ? Math.ceil(contentBottom + 8) : rootH;
-    if (h > 0) {
-      const px = Math.ceil(h) + 'px';
-      frame.style.height = px;
-      // Push iframe height up the page-grades container chain so parent layout cannot clip it.
-      const stage = frame.closest('.iframe-shell-stage');
-      const shell = frame.closest('.iframe-shell');
-      const gradesBody = frame.closest('.grades-body');
-      const gradesPage = frame.closest('.grades-page');
-      [stage, shell, gradesBody, gradesPage].forEach(function (el) {
-        if (!el) return;
-        el.style.height = px;
-        el.style.minHeight = px;
-      });
-      if (stage) {
-        stage.style.maxHeight = px;
-        stage.style.overflow = 'hidden';
-      }
-    }
+    const h = Math.max(
+      Math.ceil(maxBottom + 24),
+      doc.documentElement ? doc.documentElement.scrollHeight || 0 : 0,
+      300
+    );
+    frame.style.height = Math.ceil(h) + 'px';
   } catch (_e) {}
 }
 
@@ -2721,34 +2623,14 @@ function setupGradeFrameAutoHeight(frame) {
   syncGradeFrameHeight(frame);
   try {
     const doc = frame.contentDocument;
-    if (!doc.body) return;
+    if (!doc || !doc.body) return;
     const ro = new ResizeObserver(function () {
       syncGradeFrameHeight(frame);
     });
     ro.observe(doc.body);
     ro.observe(doc.documentElement);
     window.__gradesSlateResizeObs = ro;
-  } catch (_e) {
-    /* Very old browsers: one-shot best effort */
-  }
-}
-
-function slateFrameShowsSameReport(frame, dateStr) {
-  try {
-    const wantPath = new URL(slateEvalPath(dateStr), window.location.href).pathname;
-    const cur = String(frame.getAttribute('src') || '');
-    if (!cur || cur === 'about:blank') return false;
-    const curPath = new URL(cur, window.location.href).pathname;
-    if (curPath !== wantPath) return false;
-    return !!(
-      frame.contentDocument &&
-      (frame.contentDocument.querySelector('.main,header,.sport-section') ||
-        (frame.contentDocument.body &&
-          frame.contentDocument.body.innerHTML.trim().length >= 40))
-    );
-  } catch (_e) {
-    return false;
-  }
+  } catch (_e) {}
 }
 
 // Slate iframe: WebView sometimes skips `onload` when `src` is unchanged — overlay + .loading would cover the report.
@@ -2802,10 +2684,8 @@ function completeSlateFrameLoad(frame) {
   } catch (_e3) {}
   try {
     requestAnimationFrame(function () {
-      requestAnimationFrame(function () {
-        syncGradeFrameHeight(frame);
-        setupGradeFrameAutoHeight(frame);
-      });
+      syncGradeFrameHeight(frame);
+      setupGradeFrameAutoHeight(frame);
     });
   } catch (_e4) {
     syncGradeFrameHeight(frame);
@@ -2844,8 +2724,7 @@ function loadDate(dateStr){
 
   renderPills();
 
-  const slateNavBust = Date.now();
-  const url = slateEvalUrl(dateStr, slateNavBust);
+  const url = slateEvalUrl(dateStr);
 
   // Set iframe src
   frame.onload = function(){
@@ -2882,7 +2761,19 @@ function loadDate(dateStr){
       document.getElementById('empty-date').textContent = dateStr;
     } else {
       slateReportMissing = false;
-      const sameDoc = slateFrameShowsSameReport(frame, dateStr);
+      let sameDoc = false;
+      try {
+        const abs = new URL(url, window.location.href).href;
+        const cur = String(frame.getAttribute('src') || frame.src || '');
+        sameDoc =
+          (cur === abs || cur.endsWith(url) || abs.endsWith(url.replace(/^\//, ''))) &&
+          frame.contentDocument &&
+          (frame.contentDocument.querySelector('.main,header,.sport-section') ||
+            (frame.contentDocument.body &&
+              frame.contentDocument.body.innerHTML.trim().length >= 40));
+      } catch (_e0) {
+        sameDoc = false;
+      }
       if (sameDoc) {
         completeSlateFrameLoad(frame);
       } else {
