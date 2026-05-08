@@ -1593,6 +1593,9 @@ function ensureFrameCollapseCss(doc) {
         gap:18px!important;
       }
     }
+    /* ticket_eval: `.ticket-eval-main > details:not(.ticket-bucket)` hides stray rows but must not hide
+       hub-injected `details.grades-sport-bucket` (older baked HTML until rebuild). */
+    .wrap.ticket-eval-main > details.grades-sport-bucket{display:block!important;}
     /* Older slate_eval_*.html embed .main{max-width:1100px;margin:auto} and header side margins — content
        stays narrow while the toolbar is full width. Override only on slate-shaped documents (direct header + .main). */
     .grades-sport-bucket{
@@ -2362,6 +2365,7 @@ function applyTicketEvalGradesEmbed(doc) {
     'html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;' +
     'border-radius:0 0 16px 16px!important;padding:9px clamp(12px,2.5vw,26px)!important;margin-bottom:10px!important;}' +
     'html.ticket-eval-embed-grades .wrap.ticket-eval-main{position:relative!important;overflow:visible!important;height:auto!important;min-height:0!important;max-width:100%!important;}' +
+    'html.ticket-eval-embed-grades .wrap.ticket-eval-main > details.grades-sport-bucket{display:block!important;}' +
     'html.ticket-eval-embed-grades .ticket-sections-wrap{overflow:visible!important;min-height:0!important;}';
   doc.head.appendChild(st);
 }

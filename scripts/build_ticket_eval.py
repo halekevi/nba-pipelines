@@ -2694,7 +2694,8 @@ def _build_html(
         ".sec{margin-top:22px;}",
         ".ticket-sections-wrap > section.sec:first-of-type,.ticket-bucket-body > section.sec:first-of-type{margin-top:8px;}",
         # Hide any stray unstyled disclosure rows rendered outside the card wrapper.
-        ".ticket-eval-main > details:not(.ticket-bucket){display:none!important;}",
+        # Hub regroup injects details.grades-sport-bucket as direct children of .ticket-eval-main; keep visible.
+        ".ticket-eval-main > details:not(.ticket-bucket):not(.grades-sport-bucket){display:none!important;}",
         ".ticket-eval-main > summary{display:none!important;}",
         ".ticket-sections-wrap ~ details.ticket-bucket:not(.manual-tb){display:none!important;}",
         ".sec-head{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,3.2vw,40px);color:var(--gold);margin-bottom:8px;padding-bottom:14px;"
