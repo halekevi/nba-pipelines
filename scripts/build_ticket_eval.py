@@ -2811,7 +2811,9 @@ def _build_html(
         "html.ticket-eval-embed-grades .snav,html.ticket-eval-embed-grades #mobile-menu{display:none!important;}"
         "html.ticket-eval-embed-grades body > .grade-eval-summary{margin-top:0!important;}"
         "html.ticket-eval-embed-grades .stats-bar{top:0!important;}"
-        "html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;padding-top:9px!important;}",
+        "html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;padding-top:9px!important;}"
+        "html.ticket-eval-embed-grades .wrap.ticket-eval-main{position:relative!important;overflow:visible!important;height:auto!important;min-height:0!important;max-width:100%!important;}"
+        "html.ticket-eval-embed-grades .ticket-sections-wrap{overflow:visible!important;min-height:0!important;}",
         "</style>",
         '<script>try{if(window.self!==window.top)document.documentElement.classList.add("ticket-eval-embed-grades");}catch(e){}</script>',
         "</head>",
