@@ -2622,7 +2622,10 @@ function syncGradeFrameHeight(frame) {
       doc.documentElement ? doc.documentElement.scrollHeight || 0 : 0,
       300
     );
-    frame.style.height = Math.ceil(h) + 'px';
+    const hPx = Math.ceil(h) + 'px';
+    frame.style.height = hPx;
+    const gradesPage = document.querySelector('.grades-page');
+    if (gradesPage) gradesPage.style.minHeight = hPx;
   } catch (_e) {}
 }
 
