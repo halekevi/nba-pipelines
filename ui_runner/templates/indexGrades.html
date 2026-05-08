@@ -3069,6 +3069,13 @@ window.stepDate = stepDate;
 window.jumpToDate = jumpToDate;
 window.switchTab = switchTab;
 window.loadDate = loadDate;
+/** Debug / recovery: if Promise.race ever rejects, callers can still invoke these. */
+window.__gradesHub = {
+  loadDate: loadDate,
+  discoverDates: discoverDates,
+  switchTab: switchTab,
+  pickBestDefaultGradesDate: pickBestDefaultGradesDate,
+};
 
 document.addEventListener('visibilitychange', function () {
   if (document.visibilityState !== 'visible') return;
@@ -3129,8 +3136,11 @@ window.addEventListener('pageshow', function (ev) {
   if (ldt) ldt.textContent = 'scanning...';
 
   try {
+    // If discoverDates() rejects, Promise.race would reject immediately (timeout never wins).
     const found = await Promise.race([
-      discoverDates(),
+      discoverDates().catch(function () {
+        return [];
+      }),
       new Promise(function (resolve) {
         setTimeout(function () {
           resolve([]);
@@ -3161,9 +3171,13 @@ window.addEventListener('pageshow', function (ev) {
     let pick = qpDate;
     if (!pick) {
       pick = await Promise.race([
-        pickBestDefaultGradesDate(found, yest),
+        pickBestDefaultGradesDate(found, yest).catch(function () {
+          return fallbackPick;
+        }),
         new Promise(function (resolve) {
-          setTimeout(function () { resolve(fallbackPick); }, 6000);
+          setTimeout(function () {
+            resolve(fallbackPick);
+          }, 6000);
         }),
       ]);
     }
@@ -3187,7 +3201,32 @@ window.addEventListener('pageshow', function (ev) {
       hideGradesHubLoadOverlay();
     } catch (_e) {}
   }
-})();
+})().catch(function (err) {
+  try {
+    console.error('[grades hub init]', err);
+  } catch (_log) {}
+  try {
+    var y = yesterdayStr();
+    availableDates = availableDates && availableDates.length ? availableDates : [y];
+    currentDateIdx = 0;
+    renderPills();
+    loadDate(availableDates[0] || y);
+    setTimeout(function () {
+      try {
+        window.setupGradesBarsScrollHide();
+      } catch (_a) {}
+      var qpTab = (new URLSearchParams(window.location.search).get('tab') || '').trim().toLowerCase();
+      if (qpTab === 'tickets' || qpTab === 'props') {
+        try {
+          switchTab(qpTab);
+        } catch (_b) {}
+      }
+    }, 0);
+  } catch (_e2) {}
+  try {
+    hideGradesHubLoadOverlay();
+  } catch (_e3) {}
+});
 
 // Re-fit pill count on viewport changes.
 window.addEventListener('resize', () => {
