@@ -263,6 +263,8 @@ nav.snav .live-pill,nav.snav .live-pill .live-pill-brand{text-transform:none !im
   font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1.2px;
   color:var(--accent-gold);line-height:1.1;
 }
+/* Tab strip already labels each mode; this span duplicated it (e.g. gold "Ticket evaluation" + tab "TICKET EVALUATION"). */
+body.page-grades .iframe-shell-toolbar .ist-title{display:none!important;}
 .gc-live{font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.6px;color:var(--cyan);opacity:.92;}
 .iframe-shell-toolbar .date-bar,.iframe-shell-toolbar .tabs-bar{margin:0;width:100%;box-sizing:border-box;}
 .grades-toolbar-parent-slot{flex-shrink:0}
@@ -1240,7 +1242,7 @@ select option,
   <div id="grades-toolbar-parent-slot" class="grades-toolbar-parent-slot">
     <div class="iframe-shell-toolbar" id="iframe-shell-toolbar">
       <div class="iframe-shell-head">
-        <span class="ist-title" id="iframe-shell-title">Slate evaluation</span>
+        <span class="ist-title" id="iframe-shell-title" aria-hidden="true">Slate evaluation</span>
         <div class="iframe-shell-head-right">
           <span class="gc-live" id="grades-controls-live" aria-live="polite"></span>
         </div>
