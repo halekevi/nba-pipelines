@@ -7711,7 +7711,7 @@
       "line": "11.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "B",
+      "tier": "C",
       "edge": "2.11",
       "ml_prob": "0.3428",
       "actual_value": "9.0",
@@ -9139,7 +9139,7 @@
       "line": "7.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "B",
+      "tier": "C",
       "edge": "0.38",
       "ml_prob": "0.3473",
       "actual_value": "4.0",
@@ -9615,7 +9615,7 @@
       "line": "5.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "B",
+      "tier": "C",
       "edge": "0.33",
       "ml_prob": "0.3421",
       "actual_value": "11.0",
@@ -10399,7 +10399,7 @@
       "line": "5.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "B",
+      "tier": "C",
       "edge": "1.41",
       "ml_prob": "0.4515",
       "actual_value": "6.0",
@@ -11379,7 +11379,7 @@
       "line": "19.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "B",
+      "tier": "C",
       "edge": "2.02",
       "ml_prob": "0.3465",
       "actual_value": "13.0",
@@ -11463,7 +11463,7 @@
       "line": "28.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "B",
+      "tier": "C",
       "edge": "3.39",
       "ml_prob": "0.3423",
       "actual_value": "14.0",
@@ -11519,7 +11519,7 @@
       "line": "12.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "B",
+      "tier": "C",
       "edge": "1.27",
       "ml_prob": "0.3548",
       "actual_value": "5.0",
@@ -13283,7 +13283,7 @@
       "line": "28.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "C",
+      "tier": "D",
       "edge": "4.08",
       "ml_prob": "0.3389",
       "actual_value": "28.0",
@@ -13787,7 +13787,7 @@
       "line": "29.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "C",
+      "tier": "D",
       "edge": "3.08",
       "ml_prob": "0.3386",
       "actual_value": "28.0",
@@ -13871,7 +13871,7 @@
       "line": "12.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "C",
+      "tier": "D",
       "edge": "1.11",
       "ml_prob": "0.3447",
       "actual_value": "9.0",
@@ -14095,7 +14095,7 @@
       "line": "34.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "C",
+      "tier": "D",
       "edge": "1.83",
       "ml_prob": "0.3407",
       "actual_value": "28.0",
@@ -15019,7 +15019,7 @@
       "line": "10.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "C",
+      "tier": "D",
       "edge": "2.66",
       "ml_prob": "0.3449",
       "actual_value": "7.0",
@@ -52091,7 +52091,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "D",
+      "tier": "A",
       "edge": "0.5",
       "ml_prob": "0.5811",
       "actual_value": "0.0",
@@ -55647,7 +55647,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "D",
+      "tier": "B",
       "edge": "1.5",
       "ml_prob": "0.554",
       "actual_value": "0.0",
@@ -55843,7 +55843,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "D",
+      "tier": "B",
       "edge": "0.7",
       "ml_prob": "0.5304",
       "actual_value": "0.0",
@@ -57411,7 +57411,7 @@
       "line": "1.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "B",
+      "tier": "C",
       "edge": "-1.3",
       "ml_prob": "0.4797",
       "actual_value": "1.0",
@@ -57439,7 +57439,7 @@
       "line": "1.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "B",
+      "tier": "C",
       "edge": "-1.5",
       "ml_prob": "0.4797",
       "actual_value": "1.0",
@@ -57887,7 +57887,7 @@
       "line": "1.5",
       "direction": "OVER",
       "pick_type": "Demon",
-      "tier": "B",
+      "tier": "C",
       "edge": "-0.7",
       "ml_prob": "0.4797",
       "actual_value": "0.0",
@@ -58727,7 +58727,7 @@
       "line": "1.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "D",
+      "tier": "C",
       "edge": "0.9",
       "ml_prob": "0.5092",
       "actual_value": "3.0",
@@ -58839,7 +58839,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "D",
+      "tier": "C",
       "edge": "1.3",
       "ml_prob": "0.4784",
       "actual_value": "2.0",
@@ -59231,7 +59231,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "D",
+      "tier": "C",
       "edge": "0.3",
       "ml_prob": "0.4932",
       "actual_value": "2.0",
@@ -59259,7 +59259,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "D",
+      "tier": "C",
       "edge": "0.3",
       "ml_prob": "0.4932",
       "actual_value": "0.0",
@@ -59343,7 +59343,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "D",
+      "tier": "C",
       "edge": "0.1",
       "ml_prob": "0.5163",
       "actual_value": "2.0",
@@ -59399,7 +59399,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "D",
+      "tier": "C",
       "edge": "0.3",
       "ml_prob": "0.5199",
       "actual_value": "1.0",
@@ -59455,7 +59455,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "D",
+      "tier": "C",
       "edge": "0.1",
       "ml_prob": "0.5033",
       "actual_value": "0.0",
@@ -59595,7 +59595,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "C",
+      "tier": "A",
       "edge": "0.3",
       "ml_prob": "0.6534",
       "actual_value": "1.0",
@@ -59623,7 +59623,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "C",
+      "tier": "A",
       "edge": "0.5",
       "ml_prob": "0.6336",
       "actual_value": "0.0",
@@ -59875,7 +59875,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "D",
+      "tier": "B",
       "edge": "0.5",
       "ml_prob": "0.552",
       "actual_value": "1.0",
@@ -77515,7 +77515,7 @@
       "line": "0.5",
       "direction": "OVER",
       "pick_type": "Standard",
-      "tier": "D",
+      "tier": "A",
       "edge": "0.1",
       "ml_prob": "0.606",
       "actual_value": "0.0",
@@ -79097,14 +79097,6 @@
       "hits": 0
     },
     {
-      "prop": "Hitter Strikeouts",
-      "pt": "Demon",
-      "tier": "B",
-      "def": "avg",
-      "decided": 3,
-      "hits": 0
-    },
-    {
       "prop": "Pitcher Strikeouts",
       "pt": "Demon",
       "tier": "B",
@@ -79126,54 +79118,6 @@
       "tier": "B",
       "def": "elite",
       "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Pts+Asts",
-      "pt": "Demon",
-      "tier": "B",
-      "def": "elite",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Pts+Rebs",
-      "pt": "Demon",
-      "tier": "B",
-      "def": "avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Demon",
-      "tier": "B",
-      "def": "avg",
-      "decided": 1,
-      "hits": 1
-    },
-    {
-      "prop": "Pts+Rebs+Asts",
-      "pt": "Demon",
-      "tier": "B",
-      "def": "elite",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Demon",
-      "tier": "B",
-      "def": "avg",
-      "decided": 1,
-      "hits": 0
-    },
-    {
-      "prop": "Rebs+Asts",
-      "pt": "Demon",
-      "tier": "B",
-      "def": "elite",
-      "decided": 2,
       "hits": 1
     },
     {
@@ -79201,6 +79145,14 @@
       "hits": 2
     },
     {
+      "prop": "Hitter Strikeouts",
+      "pt": "Demon",
+      "tier": "C",
+      "def": "avg",
+      "decided": 3,
+      "hits": 0
+    },
+    {
       "prop": "Pitches Thrown",
       "pt": "Demon",
       "tier": "C",
@@ -79217,6 +79169,14 @@
       "hits": 4
     },
     {
+      "prop": "Pts+Asts",
+      "pt": "Demon",
+      "tier": "C",
+      "def": "elite",
+      "decided": 1,
+      "hits": 0
+    },
+    {
       "prop": "Pts+Rebs",
       "pt": "Demon",
       "tier": "C",
@@ -79229,7 +79189,15 @@
       "pt": "Demon",
       "tier": "C",
       "def": "avg",
-      "decided": 3,
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Pts+Rebs+Asts",
+      "pt": "Demon",
+      "tier": "C",
+      "def": "elite",
+      "decided": 1,
       "hits": 0
     },
     {
@@ -79255,6 +79223,14 @@
       "def": "avg",
       "decided": 1,
       "hits": 0
+    },
+    {
+      "prop": "Rebs+Asts",
+      "pt": "Demon",
+      "tier": "C",
+      "def": "elite",
+      "decided": 2,
+      "hits": 1
     },
     {
       "prop": "3-PT Attempted",
@@ -79541,7 +79517,7 @@
       "pt": "Demon",
       "tier": "D",
       "def": "avg",
-      "decided": 5,
+      "decided": 6,
       "hits": 1
     },
     {
@@ -79557,7 +79533,7 @@
       "pt": "Demon",
       "tier": "D",
       "def": "avg",
-      "decided": 9,
+      "decided": 12,
       "hits": 5
     },
     {
@@ -79621,7 +79597,7 @@
       "pt": "Demon",
       "tier": "D",
       "def": "avg",
-      "decided": 6,
+      "decided": 7,
       "hits": 3
     },
     {
@@ -81081,6 +81057,22 @@
       "hits": 1
     },
     {
+      "prop": "Hits",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "avg",
+      "decided": 1,
+      "hits": 0
+    },
+    {
+      "prop": "Hitter Strikeouts",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "avg",
+      "decided": 1,
+      "hits": 1
+    },
+    {
       "prop": "Points",
       "pt": "Standard Over",
       "tier": "A",
@@ -81121,12 +81113,44 @@
       "hits": 3
     },
     {
+      "prop": "Runs",
+      "pt": "Standard Over",
+      "tier": "A",
+      "def": "avg",
+      "decided": 2,
+      "hits": 0
+    },
+    {
+      "prop": "Hitter Strikeouts",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "avg",
+      "decided": 1,
+      "hits": 1
+    },
+    {
+      "prop": "Total Bases",
+      "pt": "Standard Over",
+      "tier": "B",
+      "def": "avg",
+      "decided": 2,
+      "hits": 0
+    },
+    {
+      "prop": "Hits",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "avg",
+      "decided": 3,
+      "hits": 2
+    },
+    {
       "prop": "Hitter Strikeouts",
       "pt": "Standard Over",
       "tier": "C",
       "def": "avg",
       "decided": 1,
-      "hits": 1
+      "hits": 0
     },
     {
       "prop": "Runs",
@@ -81134,7 +81158,15 @@
       "tier": "C",
       "def": "avg",
       "decided": 1,
-      "hits": 0
+      "hits": 1
+    },
+    {
+      "prop": "Total Bases",
+      "pt": "Standard Over",
+      "tier": "C",
+      "def": "avg",
+      "decided": 2,
+      "hits": 2
     },
     {
       "prop": "3-PT Attempted",
@@ -81317,19 +81349,11 @@
       "pt": "Standard Over",
       "tier": "D",
       "def": "avg",
-      "decided": 5,
-      "hits": 2
+      "decided": 1,
+      "hits": 0
     },
     {
       "prop": "Hits Allowed",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
-      "prop": "Hitter Strikeouts",
       "pt": "Standard Over",
       "tier": "D",
       "def": "avg",
@@ -81497,14 +81521,6 @@
       "hits": 5
     },
     {
-      "prop": "Runs",
-      "pt": "Standard Over",
-      "tier": "D",
-      "def": "avg",
-      "decided": 2,
-      "hits": 1
-    },
-    {
       "prop": "Steals",
       "pt": "Standard Over",
       "tier": "D",
@@ -81517,8 +81533,8 @@
       "pt": "Standard Over",
       "tier": "D",
       "def": "avg",
-      "decided": 5,
-      "hits": 2
+      "decided": 1,
+      "hits": 0
     },
     {
       "prop": "Turnovers",

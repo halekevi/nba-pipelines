@@ -2961,6 +2961,41 @@ def api_run():
     return jsonify({"job_id": job_id})
 
 
+@app.post("/api/mobile/upload-data")
+def api_mobile_upload_data():
+    """
+    Securely receive JSON data updates from local PC.
+    Requires X-Mobile-Token header matching PROPORACLE_MOBILE_TOKEN env.
+    """
+    token = os.environ.get("PROPORACLE_MOBILE_TOKEN", "").strip()
+    if not token:
+        return jsonify({"error": "Server PROPORACLE_MOBILE_TOKEN not set"}), 503
+
+    if request.headers.get("X-Mobile-Token") != token:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    data = request.get_json(silent=True)
+    if not data or "filename" not in data or "payload" not in data:
+        return jsonify({"error": "Invalid payload"}), 400
+
+    filename = data["filename"]
+    # Restrict to known safe JSON types
+    if not re.match(r"^[a-z0-9_.-]+\.json$", filename.lower()):
+        return jsonify({"error": "Invalid filename"}), 400
+
+    # Write to templates (which are gzipped/cached by app.py) or persistent root
+    # For live mobile updates, we write to templates so /api/slate etc. see them immediately.
+    target_path = TEMPLATES_DIR / filename
+    try:
+        target_path.write_text(json.dumps(data["payload"]), encoding="utf-8")
+        # Invalidate cache
+        with _JSON_FILE_CACHE_LOCK:
+            _json_file_cache.pop(str(target_path.resolve()), None)
+        return jsonify({"ok": True, "saved": filename})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 # ──────────────────────────────────────────────────────────────────────────────
 # API: Job Status (with step progress for chain jobs)
 # ──────────────────────────────────────────────────────────────────────────────

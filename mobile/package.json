@@ -18,6 +18,7 @@
     "sync:emulator": "PowerShell -NoProfile -ExecutionPolicy Bypass -Command \"$env:PROPORACLE_SERVER_URL='http://10.0.2.2:5173'; npm run sync:android\"",
     "clean:android": "cd android && gradlew.bat clean",
     "clean-deploy:android": "npm run sync:android && npm run clean:android && npm run open:android",
+    "push:data": "cd .. && python scripts/push_mobile_data.py",
     "open:android": "cap open android",
     "open:ios": "cap open ios"
   },
