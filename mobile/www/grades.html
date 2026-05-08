@@ -52,40 +52,38 @@ body{
 /* Hub scroll: outer document scrolls; slate iframe height follows content (ResizeObserver, never touches src). */
 html:has(body.page-grades){
   overflow-x:hidden;
-  overflow-y:auto;
-  height:auto;
-  min-height:100%;
-  min-height:100dvh;
+  overflow-y:auto !important;
+  height:auto !important;
+  min-height:100dvh !important;
 }
 body.page-grades{
   font-size:clamp(11px,0.82vw,13px);
   line-height:1.35;
   overflow-x:hidden;
-  overflow-y:auto;
-  height:auto;
-  min-height:100%;
-  min-height:100dvh;
-  max-height:none;
+  overflow-y:auto !important;
+  height:auto !important;
+  min-height:100dvh !important;
+  max-height:none !important;
 }
 body.page-grades .grades-page,
 body.page-grades .grades-body{
   overflow:visible !important;
   flex:none !important;
   height:auto !important;
-  min-height:0 !important;
+  min-height:unset !important;
 }
 body.page-grades .iframe-shell{
   overflow:visible !important;
   flex:none !important;
   height:auto !important;
-  min-height:240px !important;
+  min-height:unset !important;
 }
 body.page-grades .iframe-shell-stage{
   overflow:visible !important;
   position:relative;
   flex:none !important;
   height:auto !important;
-  min-height:120px !important;
+  min-height:unset !important;
 }
 body.page-grades .iframe-shell-stage > .grade-frame{
   position:relative !important;
@@ -95,6 +93,10 @@ body.page-grades .iframe-shell-stage > .grade-frame{
   height:auto !important;
   min-height:50vh;
   overflow:visible !important;
+}
+body.page-grades .grade-frame{
+  overflow:visible !important;
+  height:auto !important;
 }
 /* Transparent shell showed hub body::before/::after + .grain-layer under the toolbar strip; slate iframe used transparent body + its own ::before/::after (Grades-only). */
 body.page-grades::before,
