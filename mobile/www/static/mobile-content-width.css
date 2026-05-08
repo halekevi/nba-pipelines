@@ -200,20 +200,21 @@
     padding-bottom: 16px !important;
   }
 
-  /* Grades hub: keep a definite viewport column + give the iframe stage the remaining
-     height. Inline indexGrades.css used to set html,body{height:auto} + .iframe-shell
-     min-heights on phones — that prevented flex:1 from filling and left a dark band. */
+  /* Grades hub: outer page scrolls; iframe height is set from slate doc (indexGrades ResizeObserver). */
   html:has(body.page-grades) {
-    height: 100%;
+    height: auto;
     min-height: 100dvh;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   body.page-grades {
     box-sizing: border-box !important;
-    height: 100dvh !important;
+    height: auto !important;
     min-height: 100dvh !important;
-    overflow: hidden !important;
+    max-height: none !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
   }
 
   body.page-grades nav.snav,
@@ -241,7 +242,7 @@
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) !important;
     grid-template-rows: auto minmax(0, 1fr) !important;
-    overflow: hidden !important;
+    overflow: visible !important;
   }
 
   body.page-grades #grades-toolbar-parent-slot,
@@ -258,7 +259,7 @@
     min-width: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
-    overflow: hidden !important;
+    overflow: visible !important;
     position: relative !important;
     align-self: stretch !important;
   }
@@ -286,7 +287,7 @@
   }
 
   body.page-grades .grades-page {
-    overflow: hidden !important;
+    overflow: visible !important;
     padding-left: max(0px, env(safe-area-inset-left, 0px)) !important;
     padding-right: max(0px, env(safe-area-inset-right, 0px)) !important;
     min-height: 0 !important;
