@@ -64,6 +64,16 @@ html.page-grades-root body.page-grades .iframe-shell-stage{
   overflow:visible!important;
   flex:none!important;
 }
+/* Prop tab: #props-eval-panel also uses .grades-analytics-wrap (absolute + overflow:auto + inset:0),
+   which traps scroll inside a short box — let content define page/stage height instead. */
+html.page-grades-root #props-eval-panel{
+  overflow:visible!important;
+  height:auto!important;
+  position:relative!important;
+  inset:auto!important;
+  width:100%!important;
+  max-width:100%!important;
+}
 body.page-grades{
   font-size:clamp(11px,0.82vw,13px);
   line-height:1.35;
@@ -2243,6 +2253,14 @@ function refreshControlsSummary() {
 }
 function switchTab(tab) {
   activeTab = tab;
+  if (tab !== 'props') {
+    try {
+      const st = document.querySelector('.iframe-shell-stage');
+      const sh = document.getElementById('grades-iframe-shell');
+      if (st) st.style.removeProperty('height');
+      if (sh) sh.style.removeProperty('height');
+    } catch (_e) {}
+  }
   const shell = document.getElementById('grades-iframe-shell');
   if (shell) shell.classList.toggle('iframe-shell--ticket-tab', tab === 'tickets');
   if (tab === 'tickets' || tab === 'props') {
@@ -2606,19 +2624,24 @@ function tearDownGradeFrameResizeObservers() {
   }
 }
 
-/** Prop tab uses #props-eval-panel in the hub (not the slate iframe); grow .grades-page from its content. */
+/** Prop tab uses #props-eval-panel in the hub (not the slate iframe); grow stage/shell/page from its content. */
 function syncPropsEvalHeight() {
   if (activeTab !== 'props') return;
   try {
     const panel = document.getElementById('props-eval-panel');
     if (!panel || panel.hidden) return;
-    const rectH = panel.getBoundingClientRect ? Math.ceil(panel.getBoundingClientRect().height) : 0;
-    const h = Math.max(panel.scrollHeight || 0, panel.offsetHeight || 0, rectH, 400);
+    const stage = document.querySelector('.iframe-shell-stage');
+    const shell = document.getElementById('grades-iframe-shell');
+    const gp = document.querySelector('.grades-page');
+    const h = Math.max(panel.scrollHeight || 0, 400);
     const hPx = Math.ceil(h) + 'px';
-    const gradesPage = document.querySelector('.grades-page');
-    if (gradesPage) gradesPage.style.minHeight = hPx;
+    if (stage) stage.style.height = hPx;
+    if (shell) shell.style.height = hPx;
+    if (gp) gp.style.minHeight = hPx;
   } catch (_e) {}
 }
+
+window.syncPropsEvalHeight = syncPropsEvalHeight;
 
 function scheduleSyncPropsEvalHeight() {
   requestAnimationFrame(function () {
