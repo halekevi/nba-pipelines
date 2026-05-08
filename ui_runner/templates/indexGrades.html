@@ -2650,10 +2650,7 @@ function syncGradeFrameHeight(frame) {
       const bottom = top + rect.height;
       if (bottom > contentBottom) contentBottom = bottom;
     });
-    const h = Math.max(
-      rootH,
-      contentBottom > 0 ? Math.ceil(contentBottom + 20) : 0
-    );
+    const h = contentBottom > 0 ? Math.ceil(contentBottom + 8) : rootH;
     if (h > 0) {
       const px = Math.ceil(h) + 'px';
       frame.style.height = px;
@@ -2667,6 +2664,10 @@ function syncGradeFrameHeight(frame) {
         el.style.height = px;
         el.style.minHeight = px;
       });
+      if (stage) {
+        stage.style.maxHeight = px;
+        stage.style.overflow = 'hidden';
+      }
     }
   } catch (_e) {}
 }
