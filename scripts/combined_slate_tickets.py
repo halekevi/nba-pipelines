@@ -65,7 +65,7 @@ import re
 import sys
 import unicodedata
 from collections import Counter, defaultdict
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable, List, Optional
 from zoneinfo import ZoneInfo
@@ -12895,6 +12895,16 @@ def render_tickets_body_html(
     else:
         counts_line = f"{n_groups} groups &nbsp;·&nbsp; {n_slips} slips"
     counts_line += _ui_cap_note
+    graded_results_date = ""
+    try:
+        if len(date_declared) == 10 and date_declared[4] == "-" and date_declared[7] == "-":
+            d_sl = datetime.strptime(date_declared, "%Y-%m-%d").date()
+            graded_results_date = (d_sl - timedelta(days=1)).strftime("%Y-%m-%d")
+    except ValueError:
+        graded_results_date = ""
+    if not graded_results_date:
+        graded_results_date = (datetime.now(timezone.utc).date() - timedelta(days=1)).strftime("%Y-%m-%d")
+    graded_ticket_href = f"/grades?date={graded_results_date}&tab=tickets"
     parts.append(f'''
 <div class="hero tickets-hero" style="margin-bottom:24px;">
   <div class="hero-copy">
@@ -12902,6 +12912,10 @@ def render_tickets_body_html(
     <h1 class="hero-title" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,56px);letter-spacing:0.06em;line-height:1.05;color:var(--text);margin:0;">
       PROP<span class="hero-oracle-em">ORACLE</span>&nbsp;TICKETS
     </h1>
+    <p class="tickets-graded-nav" style="margin:14px 0 0;font-family:'Inter',sans-serif;font-size:13px;color:var(--muted);line-height:1.55;max-width:42rem;">
+      <a href="{graded_ticket_href}" style="color:var(--cyan);text-decoration:underline;text-underline-offset:3px;font-weight:600;">View yesterday&rsquo;s graded tickets &rarr;</a>
+      <span style="opacity:.78;"> Opens Grades for {_h(graded_results_date)} (Ticket Evaluation · HIT/MISS).</span>
+    </p>
   </div>
   <div class="hero-meta-row" role="group" aria-label="Slate summary">
     <span class="hero-meta-date">{_h(date_str)}{date_note_html}</span>

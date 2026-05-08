@@ -3049,6 +3049,11 @@ window.addEventListener('pageshow', function (ev) {
   const dj0 = gradesEl('date-jump');
   if (dj0) dj0.value = yest;
 
+  const params = new URLSearchParams(window.location.search);
+  const qpDateRaw = (params.get('date') || '').trim().slice(0, 10);
+  const qpDate = /^\d{4}-\d{2}-\d{2}$/.test(qpDateRaw) ? qpDateRaw : '';
+  const qpTab = (params.get('tab') || '').trim().toLowerCase();
+
   // Brief “scanning” overlay — starts hidden in HTML so first paint is not a full-screen slab on WebView
   const scanOv = document.getElementById('load-overlay');
   if (scanOv) {
@@ -3063,30 +3068,44 @@ window.addEventListener('pageshow', function (ev) {
   const found = await discoverDates();
   availableDates = found;
 
-  if(found.length === 0){
-    // No files found — try yesterday anyway
-    availableDates = [yest];
-    currentDateIdx = 0;
-    renderPills();
-    loadDate(yest);
+  function finishInitGradesUi() {
     setTimeout(() => {
       try {
         window.setupGradesBarsScrollHide();
       } catch (_e) {}
+      if (qpTab === 'tickets' || qpTab === 'props') {
+        try {
+          switchTab(qpTab);
+        } catch (_e2) {}
+      }
     }, 0);
+  }
+
+  if(found.length === 0){
+    // No files found — try yesterday anyway
+    availableDates = [yest];
+    if (qpDate && !availableDates.includes(qpDate)) {
+      availableDates.push(qpDate);
+      availableDates.sort();
+    }
+    currentDateIdx = Math.max(0, availableDates.indexOf(qpDate || yest));
+    renderPills();
+    loadDate(qpDate || yest);
+    finishInitGradesUi();
     return;
   }
 
+  if (qpDate && !availableDates.includes(qpDate)) {
+    availableDates.push(qpDate);
+    availableDates.sort();
+  }
   // Prefer the newest date that already has decided props (avoids defaulting to today's ungraded slips).
-  const pick = await pickBestDefaultGradesDate(found, yest);
-  currentDateIdx = found.indexOf(pick);
+  const pick = qpDate || await pickBestDefaultGradesDate(found, yest);
+  currentDateIdx = availableDates.indexOf(pick);
+  if (currentDateIdx < 0) currentDateIdx = 0;
   renderPills();
   loadDate(pick);
-  setTimeout(() => {
-    try {
-      window.setupGradesBarsScrollHide();
-    } catch (_e) {}
-  }, 0);
+  finishInitGradesUi();
 })();
 
 // Re-fit pill count on viewport changes.
