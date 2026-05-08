@@ -2672,7 +2672,18 @@ function syncGradeFrameHeight(frame) {
       doc.body ? doc.body.scrollHeight || 0 : 0
     );
     if (h > 0) {
-      frame.style.height = Math.ceil(h) + 'px';
+      const px = Math.ceil(h) + 'px';
+      frame.style.height = px;
+      // Push iframe height up the page-grades container chain so parent layout cannot clip it.
+      const stage = frame.closest('.iframe-shell-stage');
+      const shell = frame.closest('.iframe-shell');
+      const gradesBody = frame.closest('.grades-body');
+      const gradesPage = frame.closest('.grades-page');
+      [stage, shell, gradesBody, gradesPage].forEach(function (el) {
+        if (!el) return;
+        el.style.height = px;
+        el.style.minHeight = px;
+      });
     }
   } catch (_e) {}
 }
