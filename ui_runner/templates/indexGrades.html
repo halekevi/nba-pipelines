@@ -2650,7 +2650,15 @@ function syncGradeFrameHeight(frame) {
       const bottom = top + rect.height;
       if (bottom > contentBottom) contentBottom = bottom;
     });
-    const h = contentBottom > 0 ? Math.ceil(contentBottom + 8) : rootH;
+    const offsetH = Math.max(
+      doc.documentElement ? doc.documentElement.offsetHeight || 0 : 0,
+      doc.body ? doc.body.offsetHeight || 0 : 0
+    );
+    const h = Math.max(
+      offsetH,
+      contentBottom > 0 ? Math.ceil(contentBottom + 8) : 0,
+      rootH
+    );
     if (h > 0) {
       const px = Math.ceil(h) + 'px';
       frame.style.height = px;
@@ -2662,7 +2670,7 @@ function syncGradeFrameHeight(frame) {
       [stage, shell, gradesBody, gradesPage].forEach(function (el) {
         if (!el) return;
         el.style.height = px;
-        el.style.minHeight = px;
+        el.style.minHeight = '';
       });
       if (stage) {
         stage.style.maxHeight = px;
