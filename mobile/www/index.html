@@ -1,6 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark" data-ui-build="" data-deploy-sha="">
 <head>
+
+<script>
+async function fetch_smart(localPath) {
+  // If we have a remote override URL for this file type, prefer it
+  let remoteUrl = null;
+  if (localPath === 'slate_latest.json' && window.SLATE_JSON_URL) remoteUrl = window.SLATE_JSON_URL;
+  if (localPath === 'tickets_latest.json' && window.TICKETS_JSON_URL) remoteUrl = window.TICKETS_JSON_URL;
+
+  if (remoteUrl) {
+    try {
+      const resp = await fetch(remoteUrl, { cache: 'no-store' });
+      if (resp.ok) return resp;
+    } catch (e) {
+      console.warn("SmartFetch remote failed, falling back to local:", localPath, e);
+    }
+  }
+  return fetch(localPath, { cache: 'no-store' });
+}
+</script>
+
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>
 <script>(function(){try{var t=localStorage.getItem('proporacle-theme')||localStorage.getItem('theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light');document.documentElement.classList.add('light-theme');}}catch(e){}})();</script>
@@ -2634,7 +2654,7 @@ function sportDisplayLabel(rawSport) {
 async function refreshStatus() {
   let d = null;
   try {
-    const res = await fetch('pipeline_status.json', {cache:'no-store'});
+    const res = await fetch_smart('pipeline_status.json');
     if (res.ok) d = await res.json();
   } catch (e) {}
   // Bundled / Capacitor WebView: no API — use static file from mobile/www (see generate_mobile_bundle.py).
@@ -3426,7 +3446,7 @@ async function fetchSlateSport(sport, opts = {}) {
     const slateWarm = loadSlateData().catch((e) => console.warn("loadSlateData (background):", e));
     let rows = [];
     try {
-      const res = await fetch(`slate_sport_${encodeURIComponent(sport)}.json`, {cache: 'no-store'});
+      const res = await fetch_smart(`slate_sport_${encodeURIComponent(sport)}.json`);
       if (res.ok) {
         const d = await res.json();
         rows = Array.isArray(d.rows) ? d.rows : [];
@@ -3649,7 +3669,7 @@ async function loadCombinedFromMergedJson() {
     void loadSlateData().catch(() => {});
     let d = null;
     try {
-      const res = await fetch('slate_sport_combined.json', {cache:'no-store'});
+      const res = await fetch_smart('slate_sport_combined.json');
       if (res.ok) d = await res.json();
     } catch (e) {}
     if (!d || !Array.isArray(d.rows) || !d.rows.length) {
@@ -3681,7 +3701,7 @@ async function loadSlateExcel() {
   if (!_slateExcelPromise) {
     _slateExcelPromise = (async () => {
       try {
-        const r = await fetch('slate_excel.json', {cache: 'no-store'});
+        const r = await fetch_smart('slate_excel.json');
         const d = await r.json();
         const sh = d.sheets && d.sheets.combined;
         if (sh && sh.columns && sh.rows && sh.rows.length) {
