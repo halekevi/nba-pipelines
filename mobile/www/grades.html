@@ -2268,6 +2268,9 @@ function refreshControlsSummary() {
 }
 function switchTab(tab) {
   activeTab = tab;
+  const gradeFrame = document.getElementById('grade-frame');
+  const ticketFrame = document.getElementById('ticket-frame');
+  if (!gradeFrame || !ticketFrame) return;
   if (tab !== 'tickets') {
     tearDownTicketFrameResizeObservers();
   }
@@ -2291,10 +2294,11 @@ function switchTab(tab) {
   if (tp) tp.classList.toggle('active', tab === 'props');
   if (tt) tt.classList.toggle('active', tab === 'tickets');
   const pe = document.getElementById('props-eval-panel');
-  document.getElementById('grade-frame').style.display   = tab === 'slate'   ? 'block' : 'none';
-  document.getElementById('ticket-frame').style.display  = tab === 'tickets' ? 'block' : 'none';
+  gradeFrame.style.display = tab === 'slate' ? 'block' : 'none';
+  ticketFrame.style.display = tab === 'tickets' ? 'block' : 'none';
   if (pe) pe.hidden = tab !== 'props';
-  document.getElementById('ticket-empty-state').hidden = true;
+  const tEmpty = document.getElementById('ticket-empty-state');
+  if (tEmpty) tEmpty.hidden = true;
 
   try {
     window.resetGradesBarsScrollState();
@@ -2369,7 +2373,7 @@ function switchTab(tab) {
     } catch (_es) {}
     requestAnimationFrame(() => {
       try {
-        embedGradesToolbarInSlate(document.getElementById('grade-frame'));
+        embedGradesToolbarInSlate(gradeFrame);
       } catch (_e) {}
       try {
         window.resetGradesBarsScrollState();
@@ -3062,7 +3066,6 @@ window.addEventListener('pageshow', function (ev) {
 });
 
 (async function init(){
-  // Set date input default to yesterday
   const yest = yesterdayStr();
   const dj0 = gradesEl('date-jump');
   if (dj0) dj0.value = yest;
@@ -3071,20 +3074,6 @@ window.addEventListener('pageshow', function (ev) {
   const qpDateRaw = (params.get('date') || '').trim().slice(0, 10);
   const qpDate = /^\d{4}-\d{2}-\d{2}$/.test(qpDateRaw) ? qpDateRaw : '';
   const qpTab = (params.get('tab') || '').trim().toLowerCase();
-
-  // Brief “scanning” overlay — starts hidden in HTML so first paint is not a full-screen slab on WebView
-  const scanOv = document.getElementById('load-overlay');
-  if (scanOv) {
-    scanOv.classList.remove('hidden');
-    scanOv.removeAttribute('aria-hidden');
-    scanOv.style.removeProperty('display');
-    scanOv.style.removeProperty('visibility');
-    scanOv.style.removeProperty('pointer-events');
-  }
-  document.getElementById('load-date-text').textContent = 'scanning...';
-
-  const found = await discoverDates();
-  availableDates = found;
 
   function finishInitGradesUi() {
     setTimeout(() => {
@@ -3099,31 +3088,69 @@ window.addEventListener('pageshow', function (ev) {
     }, 0);
   }
 
-  if(found.length === 0){
-    // No files found — try yesterday anyway
-    availableDates = [yest];
+  const scanOv = document.getElementById('load-overlay');
+  if (scanOv) {
+    scanOv.classList.remove('hidden');
+    scanOv.removeAttribute('aria-hidden');
+    scanOv.style.removeProperty('display');
+    scanOv.style.removeProperty('visibility');
+    scanOv.style.removeProperty('pointer-events');
+  }
+  const ldt = document.getElementById('load-date-text');
+  if (ldt) ldt.textContent = 'scanning...';
+
+  try {
+    const found = await discoverDates();
+    availableDates = found;
+
+    if (found.length === 0) {
+      availableDates = [yest];
+      if (qpDate && !availableDates.includes(qpDate)) {
+        availableDates.push(qpDate);
+        availableDates.sort();
+      }
+      currentDateIdx = Math.max(0, availableDates.indexOf(qpDate || yest));
+      renderPills();
+      loadDate(qpDate || yest);
+      finishInitGradesUi();
+      return;
+    }
+
     if (qpDate && !availableDates.includes(qpDate)) {
       availableDates.push(qpDate);
       availableDates.sort();
     }
-    currentDateIdx = Math.max(0, availableDates.indexOf(qpDate || yest));
-    renderPills();
-    loadDate(qpDate || yest);
-    finishInitGradesUi();
-    return;
-  }
 
-  if (qpDate && !availableDates.includes(qpDate)) {
-    availableDates.push(qpDate);
-    availableDates.sort();
+    const fallbackPick = found.includes(yest) ? yest : found[found.length - 1];
+    let pick = qpDate;
+    if (!pick) {
+      pick = await Promise.race([
+        pickBestDefaultGradesDate(found, yest),
+        new Promise(function (resolve) {
+          setTimeout(function () { resolve(fallbackPick); }, 6000);
+        }),
+      ]);
+    }
+    if (!pick || !/^\d{4}-\d{2}-\d{2}$/.test(String(pick))) pick = fallbackPick;
+    currentDateIdx = availableDates.indexOf(pick);
+    if (currentDateIdx < 0) currentDateIdx = 0;
+    renderPills();
+    loadDate(pick);
+    finishInitGradesUi();
+  } catch (_err) {
+    availableDates = qpDate
+      ? [qpDate, yest].filter(function (x, i, a) {
+          return /^\d{4}-\d{2}-\d{2}$/.test(x) && a.indexOf(x) === i;
+        })
+      : [yest];
+    currentDateIdx = 0;
+    renderPills();
+    loadDate(availableDates[0] || yest);
+    finishInitGradesUi();
+    try {
+      hideGradesHubLoadOverlay();
+    } catch (_e) {}
   }
-  // Prefer the newest date that already has decided props (avoids defaulting to today's ungraded slips).
-  const pick = qpDate || await pickBestDefaultGradesDate(found, yest);
-  currentDateIdx = availableDates.indexOf(pick);
-  if (currentDateIdx < 0) currentDateIdx = 0;
-  renderPills();
-  loadDate(pick);
-  finishInitGradesUi();
 })();
 
 // Re-fit pill count on viewport changes.
