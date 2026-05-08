@@ -1347,6 +1347,26 @@ function slateEvalUrl(dateStr) {
 }
 const TICKET_EVAL_URL_TEMPLATE = 'ticket_eval_{date}.html';
 
+/** Bounded fetch: avoids Grades hub stuck on “scanning…” if a proxy/Railway request never completes. */
+function gradesFetchSignal(ms) {
+  try {
+    if (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function') {
+      return AbortSignal.timeout(ms);
+    }
+  } catch (_e) {}
+  try {
+    var c = new AbortController();
+    setTimeout(function () {
+      try {
+        c.abort();
+      } catch (_e2) {}
+    }, ms);
+    return c.signal;
+  } catch (_e3) {
+    return undefined;
+  }
+}
+
 (function gradesIframeDebug(){
   try {
     if (new URLSearchParams(window.location.search).get('debug') !== '1') return;
@@ -2540,7 +2560,10 @@ async function probeDate(dateStr){
 async function discoverDates(){
   // Prefer server-side listing (one request, works when HEAD is flaky behind CDNs).
   try {
-    const res = await fetch('grades_report_dates.json', { cache: 'no-store' });
+    const res = await fetch('/api/grades/report_dates', {
+      cache: 'no-store',
+      signal: gradesFetchSignal(12000),
+    });
     if (res.ok) {
       const j = await res.json();
       const slateDs = Array.isArray(j.slate_eval_dates) ? j.slate_eval_dates : [];
@@ -2573,7 +2596,10 @@ async function discoverDates(){
 // Prefer a default Grades date that already has decided outcomes, not a still-live slate.
 async function _decidedPropsCountForDate(dateStr) {
   try {
-    const res = await fetch('/api/graded-props?date=' + encodeURIComponent(dateStr), { cache: 'no-store' });
+    const res = await fetch('/api/graded-props?date=' + encodeURIComponent(dateStr), {
+      cache: 'no-store',
+      signal: gradesFetchSignal(8000),
+    });
     if (!res.ok) return 0;
     const j = await res.json();
     const props = Array.isArray(j?.props) ? j.props : [];
@@ -2595,7 +2621,10 @@ async function pickBestDefaultGradesDate(found, yest) {
   if (!Array.isArray(found) || !found.length) return yest;
   // Next best: newest ticket_eval date on disk (<= yesterday), even if props archive is sparse.
   try {
-    const rr = await fetch('grades_report_dates.json', { cache: 'no-store' });
+    const rr = await fetch('/api/grades/report_dates', {
+      cache: 'no-store',
+      signal: gradesFetchSignal(10000),
+    });
     if (rr.ok) {
       const rj = await rr.json();
       const tds = Array.isArray(rj?.ticket_eval_dates) ? rj.ticket_eval_dates : [];
@@ -2607,7 +2636,10 @@ async function pickBestDefaultGradesDate(found, yest) {
   } catch (_e0) {}
   // First, prefer the newest date with a recorded ticket-eval payout summary.
   try {
-    const hr = await fetch('/api/grade-history', { cache: 'no-store' });
+    const hr = await fetch('/api/grade-history', {
+      cache: 'no-store',
+      signal: gradesFetchSignal(10000),
+    });
     if (hr.ok) {
       const runs = await hr.json();
       if (Array.isArray(runs) && runs.length) {
@@ -3100,7 +3132,14 @@ window.addEventListener('pageshow', function (ev) {
   if (ldt) ldt.textContent = 'scanning...';
 
   try {
-    const found = await discoverDates();
+    const found = await Promise.race([
+      discoverDates(),
+      new Promise(function (resolve) {
+        setTimeout(function () {
+          resolve([]);
+        }, 25000);
+      }),
+    ]);
     availableDates = found;
 
     if (found.length === 0) {
