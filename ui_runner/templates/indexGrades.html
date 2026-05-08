@@ -2210,6 +2210,9 @@ function refreshControlsSummary() {
 }
 function switchTab(tab) {
   activeTab = tab;
+  if (tab !== 'tickets') {
+    tearDownTicketFrameResizeObservers();
+  }
   if (tab !== 'props') {
     try {
       const st = document.querySelector('.iframe-shell-stage');
@@ -2257,6 +2260,25 @@ function switchTab(tab) {
     document.getElementById('empty-state').hidden = true;
     const ds = currentDateStr || gradesEl('date-jump')?.value || yesterdayStr();
     loadTicketEval(ds);
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        try {
+          const tf = document.getElementById('ticket-frame');
+          const src = tf && (tf.getAttribute('src') || '');
+          if (
+            tf &&
+            activeTab === 'tickets' &&
+            src &&
+            src.indexOf('about:blank') < 0 &&
+            tf.contentDocument &&
+            tf.contentDocument.body
+          ) {
+            syncTicketFrameHeight(tf);
+            setupTicketFrameAutoHeight(tf);
+          }
+        } catch (_e) {}
+      });
+    });
     setTimeout(() => {
       try {
         window.setupGradesBarsScrollHide();
@@ -2368,6 +2390,12 @@ async function loadTicketEval(dateStr) {
     try {
       window.setupGradesBarsScrollHide();
     } catch (_e2) {}
+    try {
+      requestAnimationFrame(function () {
+        syncTicketFrameHeight(tf);
+        setupTicketFrameAutoHeight(tf);
+      });
+    } catch (_e3) {}
   };
   tf.src = url;
 }
@@ -2581,6 +2609,15 @@ function tearDownGradeFrameResizeObservers() {
   }
 }
 
+function tearDownTicketFrameResizeObservers() {
+  if (window.__gradesTicketResizeObs) {
+    try {
+      window.__gradesTicketResizeObs.disconnect();
+    } catch (_e) {}
+    window.__gradesTicketResizeObs = null;
+  }
+}
+
 /** Prop tab uses #props-eval-panel in the hub (not the slate iframe); grow stage/shell/page from its content. */
 function syncPropsEvalHeight() {
   if (activeTab !== 'props') return;
@@ -2650,17 +2687,76 @@ function setupGradeFrameAutoHeight(frame) {
   } catch (_e) {}
 }
 
+/** Ticket tab: #ticket-frame — same height strategy as slate (#grade-frame), plus stage/shell/page chain. */
+function syncTicketFrameHeight(frame) {
+  if (activeTab !== 'tickets') return;
+  if (!frame || frame.id !== 'ticket-frame') return;
+  try {
+    const doc = frame.contentDocument;
+    if (!doc || !doc.documentElement) return;
+    let maxBottom = 0;
+    const nodes = Array.from(doc.querySelectorAll('body *'));
+    nodes.forEach(function (el) {
+      if (!(el instanceof Element)) return;
+      const cs = doc.defaultView ? doc.defaultView.getComputedStyle(el) : null;
+      if (cs && (cs.display === 'none' || cs.visibility === 'hidden')) return;
+      if ((el.offsetHeight || 0) <= 0) return;
+      const bottom = (el.offsetTop || 0) + (el.offsetHeight || 0);
+      if (bottom > maxBottom) maxBottom = bottom;
+    });
+    const h = Math.max(
+      Math.ceil(maxBottom + 24),
+      doc.documentElement ? doc.documentElement.scrollHeight || 0 : 0,
+      300
+    );
+    const hPx = Math.ceil(h) + 'px';
+    frame.style.height = hPx;
+    const stage = document.querySelector('.iframe-shell-stage');
+    const shell = document.getElementById('grades-iframe-shell');
+    const gp = document.querySelector('.grades-page');
+    if (stage) stage.style.height = hPx;
+    if (shell) shell.style.height = hPx;
+    if (gp) gp.style.minHeight = hPx;
+  } catch (_e) {}
+}
+
+window.syncTicketFrameHeight = syncTicketFrameHeight;
+
+function setupTicketFrameAutoHeight(frame) {
+  tearDownTicketFrameResizeObservers();
+  if (!frame) return;
+  syncTicketFrameHeight(frame);
+  try {
+    const doc = frame.contentDocument;
+    if (!doc || !doc.body) return;
+    const ro = new ResizeObserver(function () {
+      syncTicketFrameHeight(frame);
+    });
+    ro.observe(doc.body);
+    ro.observe(doc.documentElement);
+    window.__gradesTicketResizeObs = ro;
+  } catch (_e) {}
+}
+
 window.addEventListener('message', function (e) {
   try {
     const data = e && e.data;
     const msgType = (data && typeof data === 'object') ? data.type : data;
     if (msgType !== 'resizeRequest') return;
-    const frame = document.getElementById('grade-frame');
-    if (!frame || !frame.contentWindow) return;
-    if (e.source && e.source !== frame.contentWindow) return;
-    requestAnimationFrame(function () {
-      syncGradeFrameHeight(frame);
-    });
+    const gradeFrame = document.getElementById('grade-frame');
+    const ticketFrame = document.getElementById('ticket-frame');
+    if (!e.source) return;
+    if (gradeFrame && gradeFrame.contentWindow === e.source && activeTab === 'slate') {
+      requestAnimationFrame(function () {
+        syncGradeFrameHeight(gradeFrame);
+      });
+      return;
+    }
+    if (ticketFrame && ticketFrame.contentWindow === e.source && activeTab === 'tickets') {
+      requestAnimationFrame(function () {
+        syncTicketFrameHeight(ticketFrame);
+      });
+    }
   } catch (_e) {}
 });
 
@@ -2739,6 +2835,7 @@ function loadDate(dateStr){
 
   clearGradesSlateLoadWatch();
   tearDownGradeFrameResizeObservers();
+  tearDownTicketFrameResizeObservers();
   try {
     delete frame.dataset.slateHubLoadDone;
   } catch (_sd) {}
