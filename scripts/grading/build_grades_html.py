@@ -1892,6 +1892,9 @@ PROP_BREAKDOWN_WIDGET_JS = """
     return "#085041";
   }
   function textColor(v){ return (v != null && (v < 30 || v > 65)) ? "#fff" : "#141414"; }
+  function requestParentResize(){
+    try { window.parent.postMessage({ type: "resizeRequest" }, "*"); } catch (_e) {}
+  }
   function filterRows(rows, minDecided, tierFilter, ptFilter){
     return rows.filter(r => (r.decided || 0) >= minDecided)
       .filter(r => tierFilter === "ALL" || r.tier === tierFilter)
@@ -1992,17 +1995,20 @@ PROP_BREAKDOWN_WIDGET_JS = """
       });
       hmHtml += `</tbody></table></div>`;
       hmPanel.innerHTML = propRows.length ? hmHtml : '<div class="muted-note">No heatmap rows for current filters.</div>';
+      requestParentResize();
     }
     Object.values(controls).forEach(el => el.addEventListener("change", redraw));
     root.querySelectorAll(".pbw-tab-btn").forEach(btn => {
       btn.addEventListener("click", function(){
         root.querySelectorAll(".pbw-tab-btn").forEach(x=>x.classList.toggle("active", x===btn));
         root.querySelectorAll(".pbw-tab-panel").forEach(p=>p.classList.toggle("active", p.getAttribute("data-tab-panel") === btn.getAttribute("data-tab")));
+        requestParentResize();
       });
     });
     redraw();
   }
   document.querySelectorAll(".pbw-root").forEach(render);
+  requestParentResize();
 })();
 </script>
 """

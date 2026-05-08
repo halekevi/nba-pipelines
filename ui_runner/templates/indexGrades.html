@@ -2599,6 +2599,20 @@ function setupGradeFrameAutoHeight(frame) {
   } catch (_e) {}
 }
 
+window.addEventListener('message', function (e) {
+  try {
+    const data = e && e.data;
+    const msgType = (data && typeof data === 'object') ? data.type : data;
+    if (msgType !== 'resizeRequest') return;
+    const frame = document.getElementById('grade-frame');
+    if (!frame || !frame.contentWindow) return;
+    if (e.source && e.source !== frame.contentWindow) return;
+    requestAnimationFrame(function () {
+      syncGradeFrameHeight(frame);
+    });
+  } catch (_e) {}
+});
+
 // Slate iframe: WebView sometimes skips `onload` when `src` is unchanged — overlay + .loading would cover the report.
 var __gradesSlateLoadTimeout = null;
 var __gradesSlatePoll = null;
