@@ -2377,6 +2377,19 @@ async function loadHomeCardsFromFullSlate() {
         if (syncCardsFromCombinedRows(rows)) return;
       }
     }
+    const r3 = await fetch("slate_sport_combined.json", fetchOpts);
+    if (r3.ok) {
+      const d3 = await r3.json();
+      const rows = Array.isArray(d3.rows) ? d3.rows : [];
+      if (rows.length) {
+        SLATE_DEBUG_META = {
+          source: "slate_sport_combined_bundle",
+          generated_at: String(d3.generated_at || ""),
+          date: String(d3.date || ""),
+        };
+        if (syncCardsFromCombinedRows(rows)) return;
+      }
+    }
   } catch (e) {
     console.warn("loadHomeCardsFromFullSlate:", e);
   }
@@ -3163,6 +3176,24 @@ let _slateExcelPromise = null; // lazy: only fetches /api/slate-excel when combi
 const SLATE_SPORT_CACHE = {};           // sport -> true once fetched from /api/slate-sport/<sport>
 const SLATE_SPORT_FETCH_PROMISES = {};  // sport -> in-flight promise
 
+/** Capacitor / file:// bundle: no Flask — use JSON siblings from generate_mobile_bundle.py */
+async function fetchBundledSlateSportPayload(sportRaw) {
+  const key = String(sportRaw || "").trim().toLowerCase();
+  if (!key || key === "combined") return null;
+  try {
+    const r = await fetch(`slate_sport_${key}.json`, { cache: "no-store" });
+    if (r.ok) return await r.json();
+  } catch (e) {}
+  return null;
+}
+async function fetchBundledSlateSportCombinedPayload() {
+  try {
+    const r = await fetch("slate_sport_combined.json", { cache: "no-store" });
+    if (r.ok) return await r.json();
+  } catch (e) {}
+  return null;
+}
+
 function scheduleRenderSlateTable(sport) {
   if (RENDER_SCHEDULED[sport]) return;
   RENDER_SCHEDULED[sport] = true;
@@ -3360,7 +3391,11 @@ async function fetchSlateSport(sport, opts = {}) {
         console.warn(`slate-sport/${sport} HTTP ${res.status}`);
       }
     } catch (e) {
-      console.warn(`slate-sport/${sport} failed, using tickets fallback:`, e);
+      console.warn(`slate-sport/${sport} fetch failed, trying bundled JSON:`, e);
+    }
+    if (!rows.length) {
+      const d0 = await fetchBundledSlateSportPayload(sport);
+      if (d0 && Array.isArray(d0.rows)) rows = d0.rows;
     }
     if (!rows.length) {
       await slateWarm;
@@ -3569,9 +3604,15 @@ async function loadCombinedFromMergedJson() {
   const tbody = document.getElementById('stb-combined');
   try {
     void loadSlateData().catch(() => {});
-    const res = await fetch('/api/slate-sport/combined', {cache: 'no-store'});
-    const d = await res.json();
-    const rows = Array.isArray(d.rows) ? d.rows : [];
+    let d = null;
+    try {
+      const res = await fetch('/api/slate-sport/combined', {cache: 'no-store'});
+      if (res.ok) d = await res.json();
+    } catch (e) {}
+    if (!d || !Array.isArray(d.rows) || !d.rows.length) {
+      d = await fetchBundledSlateSportCombinedPayload();
+    }
+    const rows = d && Array.isArray(d.rows) ? d.rows : [];
     if (!rows.length) {
       if (tbody) tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;padding:20px;color:var(--muted2);font-size:10px;">NO COMBINED SLATE (deploy slate_latest.json or run pipeline)</td></tr>`;
       return;
