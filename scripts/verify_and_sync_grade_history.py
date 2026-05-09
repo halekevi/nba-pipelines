@@ -131,7 +131,6 @@ def main() -> int:
         print("\nDry run only. Pass --apply --from <source> to update the bundled template.")
         return 0
 
-    by_label = {label: (path, mt) for label, path, mt in indexed}
     src: Path | None = None
     src_label = ""
 
@@ -146,15 +145,19 @@ def main() -> int:
             print("[verify_and_sync] no readable grade_history.json found.")
             return 1
     else:
-        key = args.from_src
-        if key == "mobile":
-            key = "mobile_www_data"
-        pair = by_label.get(key)
-        if not pair:
+        # Resolve by path so --from data works when it aliases persistent (same resolved path).
+        td = ROOT / "ui_runner" / "templates"
+        path_by_choice: dict[str, Path] = {
+            "mobile": ROOT / "mobile" / "www" / "data" / "grade_history.json",
+            "data": ROOT / "data" / "grade_history.json",
+            "templates": td / "grade_history.json",
+            "persistent": persistent_data_dir(ROOT) / "grade_history.json",
+        }
+        src = path_by_choice[args.from_src]
+        src_label = args.from_src
+        if not src.is_file() or _row_stats(src) is None:
             print(f"[verify_and_sync] --from {args.from_src}: file missing or unreadable.")
             return 1
-        src, _mt = pair
-        src_label = key
 
     dest_t = ROOT / "ui_runner" / "templates" / "grade_history.json"
     dest_t.parent.mkdir(parents=True, exist_ok=True)
