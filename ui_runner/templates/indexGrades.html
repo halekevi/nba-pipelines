@@ -2890,12 +2890,7 @@ function syncTicketFrameHeight(frame) {
     );
     const hPx = Math.ceil(h) + 'px';
     frame.style.height = hPx;
-    const stage = document.querySelector('.iframe-shell-stage');
     const gp = document.querySelector('.grades-page');
-    if (stage) {
-      stage.style.height = hPx;
-      stage.style.minHeight = hPx;
-    }
     if (gp) gp.style.minHeight = hPx;
   } catch (_e) {}
 }
