@@ -2004,6 +2004,16 @@ def main():
             p_prm = gd_load_params()
             factors: List[float] = []
             leg_methods: List[str] = []
+            # Effective per-leg modifier products excluding void / push legs so the smaller
+            # leg-tier base is multiplied by the correct mod for *remaining* legs only.
+            non_void_leg_types: List[str] = []
+            if g_legs is not None:
+                for _, lr in g_legs.iterrows():
+                    res = str(lr.get("leg_result", "")).upper()
+                    if res in ("VOID", "PUSH"):
+                        continue
+                    non_void_leg_types.append(str(lr.get("leg_type", "")))
+            eff_power_mod, eff_flex_mod = leg_modifiers(non_void_leg_types) if non_void_leg_types else (1.0, 1.0)
             if g_legs is not None and n_eff >= 2:
                 for _, lr in g_legs.iterrows():
                     if str(lr.get("leg_result", "")).upper() == "VOID":
@@ -2045,8 +2055,10 @@ def main():
                 pushes=int(r["pushes"]),
                 no_actual=int(r["no_actual"]),
                 voids=int(r["voids"]),
-                power_mod=float(r["power_mod"]),
-                flex_mod=float(r["flex_mod"]),
+                # Use modifiers for *remaining* legs so void → smaller-tier payout
+                # uses the correct per-leg mod product.
+                power_mod=float(eff_power_mod),
+                flex_mod=float(eff_flex_mod),
             )
             payouts_out.append(payout_amt)
             statuses.append(status)

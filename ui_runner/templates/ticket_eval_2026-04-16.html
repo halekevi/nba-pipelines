@@ -7,10 +7,10 @@
 <meta name="theme-color" content="#050505"/>
 <title>Ticket Eval — 2026-04-16</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260430schemapage"/>
+<link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260418nav"/>
 <link rel="stylesheet" href="/static/site-nav-unified.css?v=20260408"/>
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260418nav"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260422ticketscv"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260423navcenter"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 <style>
 
@@ -52,6 +52,9 @@ details.ticket-bucket{margin:0 0 10px;}
 .ticket-sections-wrap > details.ticket-bucket:first-child{margin-top:0;}
 .sec{margin-top:22px;}
 .ticket-sections-wrap > section.sec:first-of-type,.ticket-bucket-body > section.sec:first-of-type{margin-top:8px;}
+.ticket-eval-main > details:not(.ticket-bucket):not(.grades-sport-bucket){display:none!important;}
+.ticket-eval-main > summary{display:none!important;}
+.ticket-sections-wrap ~ details.ticket-bucket:not(.manual-tb){display:none!important;}
 .sec-head{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,3.2vw,40px);color:var(--gold);margin-bottom:8px;padding-bottom:14px;border-bottom:1px solid var(--glass-bd);letter-spacing:3px;text-shadow:0 0 24px rgba(240,165,0,.2);}
 .ticket-card{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid var(--glass-bd);border-radius:14px;margin-bottom:22px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.35);}
 .ticket-card.card-warning{border-color:rgba(240,165,0,.55);box-shadow:0 0 0 1px rgba(240,165,0,.22),0 8px 32px rgba(0,0,0,.35);}
@@ -100,6 +103,7 @@ details.ticket-bucket{margin:0 0 10px;}
 .sport-nba{background:rgba(212,160,23,.12);color:#f0a500;border:1px solid rgba(212,160,23,.35);}
 .sport-nba1h{background:rgba(255,155,86,.12);color:#ffb27d;border:1px solid rgba(255,155,86,.32);}
 .sport-nba1q{background:rgba(255,214,102,.12);color:#ffd87a;border:1px solid rgba(255,214,102,.32);}
+.sport-wnba{background:rgba(255,138,198,.12);color:#ffb0dd;border:1px solid rgba(255,138,198,.32);}
 .sport-cbb{background:rgba(0,229,255,.10);color:#00e5ff;border:1px solid rgba(0,229,255,.32);}
 .sport-wcbb{background:rgba(127,199,217,.10);color:#9fd8e8;border:1px solid rgba(127,199,217,.32);}
 .sport-nhl{background:rgba(186,130,255,.12);color:#c4a5ff;border:1px solid rgba(186,130,255,.38);}
@@ -144,7 +148,7 @@ details.ticket-bucket{margin:0 0 10px;}
 .grade-ticket-result.void-slip{color:var(--gold2);}
 .grade-ticket-result.void-loss{color:#ffd87a;}
 .grade-ticket-result-label{opacity:.85;font-weight:600;}
-html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!important;}html.ticket-eval-embed-grades .snav,html.ticket-eval-embed-grades #mobile-menu{display:none!important;}html.ticket-eval-embed-grades body > .grade-eval-summary{margin-top:0!important;}html.ticket-eval-embed-grades .stats-bar{top:0!important;}html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;padding-top:9px!important;}
+html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!important;}html.ticket-eval-embed-grades .snav,html.ticket-eval-embed-grades #mobile-menu{display:none!important;}html.ticket-eval-embed-grades body > .grade-eval-summary{margin-top:0!important;}html.ticket-eval-embed-grades .stats-bar{top:0!important;}html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;padding-top:9px!important;}html.ticket-eval-embed-grades .wrap.ticket-eval-main{position:relative!important;overflow:visible!important;height:auto!important;min-height:0!important;max-width:100%!important;}html.ticket-eval-embed-grades .ticket-sections-wrap{overflow:visible!important;min-height:0!important;}
 </style>
 <script>try{if(window.self!==window.top)document.documentElement.classList.add("ticket-eval-embed-grades");}catch(e){}</script>
 </head>
@@ -160,9 +164,8 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
   <ul class="snav-links nav-links" id="nav-links">
     <li><a href="/" class=""><span class="ni ni-ctrl"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L1 5.5V13h4V9h4v4h4V5.5L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/></svg></span> Home</a></li>
     <li><a href="/tickets" class=""><span class="ni ni-tick"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="3" width="11" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1.5 6h11" stroke="currentColor" stroke-width="1" stroke-dasharray="2 1.5"/><circle cx="4" cy="9" r="1" fill="currentColor"/><circle cx="7" cy="9" r="1" fill="currentColor"/><circle cx="10" cy="9" r="1" fill="currentColor"/></svg></span> Tickets</a></li>
-    <li><a href="/tickets/ev" class=""><span class="ni ni-grade"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 10.5L5.5 7l2.5 2.5L12 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12h10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span> EV Top20</a></li>
     <li><a href="/grades" class="active" title="Ticket evaluation hub"><span class="ni ni-grade"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 10.5L5.5 7l2.5 2.5L11 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><rect x="1.5" y="1.5" width="11" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3" fill="none"/></svg></span> Grades</a></li>
-    <li><a href="/dashboard/income" class=""><span class="ni ni-grade"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 11V5M5 11V2M8 11V7M11 11V4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span> Income</a></li>
+    <li><a href="/income" class=""><span class="ni ni-grade"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 11V5M5 11V2M8 11V7M11 11V4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span> Income</a></li>
     <li><a href="/payout" class=""><span class="ni ni-pay"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M7 3.5v7M5 5.5c0-.8.9-1.5 2-1.5s2 .7 2 1.5-1 1.3-2 1.5-2 .7-2 1.5.9 1.5 2 1.5 2-.7 2-1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></span> Payouts</a></li>
   </ul>
   <div class="snav-right">
@@ -186,29 +189,36 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="mobile-menu" id="mobile-menu">
   <a href="/" class="">🏠 Home</a>
   <a href="/tickets" class="">🎟 Tickets</a>
-  <a href="/tickets/ev" class="">🔥 EV Top20</a>
   <a href="/grades" class="active" title="Ticket evaluation hub">✏️ Grades</a>
-  <a href="/dashboard/income" class="">📈 Income</a>
+  <a href="/income" class="">📈 Income</a>
   <a href="/payout" class="">💰 Payouts</a>
 </div>
-<div class="grade-eval-summary"><div class="grade-eval-summary-line1">Date: 2026-04-16 · 2 tickets graded</div><div class="grade-eval-summary-line2"><span>✅ Wins: 0</span><span>🛡️ Guarantees: 0</span><span>❌ Losses: 2</span></div><div class="grade-eval-summary-line3">Win rate (W+🛡️): 0% · Avg EV at entry: N/A</div><div class="grade-eval-summary-line4">Total: −$20.00 net on $20 staked ($10/ticket flat) — loss</div></div>
+<div class="grade-eval-summary grade-eval-summary-empty"><div>Date: 2026-04-16 · No fully graded tickets for payout summary (ungraded, all-void, or none).</div></div>
 <div class="stats-bar">
 <div class="sum-row">
 <div class="sum-item"><div class="sum-val">0.0%</div><div class="sum-lab">TICKET HIT RATE</div></div>
+<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">NBA TKT WIN RATE</div></div>
+<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">NBA1Q TKT WIN RATE</div></div>
+<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">NBA1H TKT WIN RATE</div></div>
+<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">NHL TKT WIN RATE</div></div>
+<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">MLB TKT WIN RATE</div></div>
+<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">SOCCER TKT WIN RATE</div></div>
+<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">WNBA TKT WIN RATE</div></div>
+<div class="sum-item"><div class="sum-val">0.0%</div><div class="sum-lab">ALL GENERATED WIN RATE</div></div>
 <div class="sum-item"><div class="sum-val green">2</div><div class="sum-lab">HITS</div></div>
 <div class="sum-item"><div class="sum-val red">0</div><div class="sum-lab">MISSES</div></div>
-<div class="sum-item"><div class="sum-val void">11</div><div class="sum-lab">VOID/PUSH</div></div>
-<div class="sum-item"><div class="sum-val pend">0</div><div class="sum-lab">UNGRADED</div></div>
+<div class="sum-item"><div class="sum-val void">0</div><div class="sum-lab">VOID/PUSH</div></div>
+<div class="sum-item"><div class="sum-val pend">11</div><div class="sum-lab">UNGRADED</div></div>
 <div class="sum-item"><div class="sum-val">0</div><div class="sum-lab">PERFECT TICKETS</div></div>
 <div class="sum-item"><div class="sum-val green">0</div><div class="sum-lab">PAID TIX</div></div>
-<div class="sum-item"><div class="sum-val red">2</div><div class="sum-lab">NO PAYOUT</div></div>
-<div class="sum-item"><div class="sum-val sum-val-sm">-20.00</div><div class="sum-lab">NET @ $10/TKT</div></div>
-<div class="sum-item"><div class="sum-val sum-val-sm">-100.0%</div><div class="sum-lab">ROI (FLAT $10)</div></div>
+<div class="sum-item"><div class="sum-val red">0</div><div class="sum-lab">NO PAYOUT</div></div>
+<div class="sum-item"><div class="sum-val sum-val-sm pend">—</div><div class="sum-lab">NET @ $10/TKT</div></div>
+<div class="sum-item"><div class="sum-val sum-val-sm pend">—</div><div class="sum-lab">ROI (FLAT $10)</div></div>
 <div class="sum-item"><div class="sum-val sum-val-sm">13</div><div class="sum-lab">TOTAL LEGS</div></div>
 </div></div>
 <div class="wrap ticket-eval-main">
 <p class="slate-kicker">SLATE DATE · 2026-04-16</p>
-<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-04-16/graded_*.xlsx</code>. <strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss.</p>
+<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-04-16/graded_*.xlsx</code>. <strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss. <strong>UNGRADED (11 legs):</strong> the matched graded row still has no actual or HIT/MISS—often unfinished games, voids, or grading before final stats. Re-run the grader after games; on hosts without <code>outputs/2026-04-16/</code>, commit workbooks under <code>ui_runner/graded_slate/2026-04-16/</code> before rebuilding this page. </p>
 <div class="ticket-sections-wrap">
 <details class="ticket-bucket sb-soccer" open>
 <summary><span>Soccer</span><span class="ticket-bucket-meta">2 sections · 2 tickets</span></summary>
@@ -220,8 +230,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="tg">Soccer Flex 3-Leg</span>
 <span class="tg">1✓ 0✗ / 3</span>
 <span class="payout">PWR 5.46× · FLEX 2.73×</span>
-<span class="tg grade-ticket-result void-loss">RESULT: ⚠ VOID / NO ACTION <span class="grade-ticket-result-label">(VOID_LOSS)</span></span>
-<span class="banner void">VOID/PUSH</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
 <div class="legrow leg-hit">
@@ -234,27 +243,27 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-hit">4</div>
 <div class="leg-extra">1.75</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
-<div class="pl-void">Dean Henderson</div>
+<div class="pl-pend">Dean Henderson</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Goalie Saves</div><div class="meta-muted">CRYSTAL PALACE vs FIORENTINA</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">3.5</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
-<div class="pl-void">Mike Penders</div>
+<div class="pl-pend">Mike Penders</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Goalie Saves</div><div class="meta-muted">STRASBOURG vs MAINZ</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.75</div>
 </div>
-<div class="ticket-grade-payout"><div class="grade-result grade-result-void_loss">⚠ VOID / NO ACTION</div><div class="grade-result-sub">Voided legs prevented payout (1 hit, 0 miss, 2 void)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>2.73x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>N/A</td><td>❌</td></tr><tr><td>EV at Entry</td><td>N/A — N/A</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
+<div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
 </article>
 </section>
 <section class="sec"><h2 class="sec-head bebas">Soccer Flex 6-Leg</h2>
@@ -264,71 +273,70 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="tg">Soccer Flex 6-Leg</span>
 <span class="tg">0✓ 0✗ / 6</span>
 <span class="payout">PWR 40× · FLEX 25×</span>
-<span class="tg grade-ticket-result void-slip">RESULT: ○ NO CONTEST <span class="grade-ticket-result-label">(NO CONTEST)</span></span>
-<span class="banner void">VOID/PUSH</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
-<div class="pl-void">Paul Nebel</div>
+<div class="pl-pend">Paul Nebel</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Shots</div><div class="meta-muted">MAINZ 05 vs STRASBOURG</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1.25</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
-<div class="pl-void">Dean Henderson</div>
+<div class="pl-pend">Dean Henderson</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Goalie Saves</div><div class="meta-muted">CRYSTAL PALACE vs FIORENTINA</div></div>
 <div class="leg-extra">2.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">3.5</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
-<div class="pl-void">Mike Penders</div>
+<div class="pl-pend">Mike Penders</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Goalie Saves</div><div class="meta-muted">STRASBOURG vs MAINZ</div></div>
 <div class="leg-extra">1.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">2.75</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
-<div class="pl-void">Ismaïla Sarr</div>
+<div class="pl-pend">Ismaïla Sarr</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Shots On Target</div><div class="meta-muted">CRYSTAL PALACE vs FIORENTINA</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">0.83</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
-<div class="pl-void">Adam Wharton</div>
+<div class="pl-pend">Adam Wharton</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Shots</div><div class="meta-muted">CRYSTAL PALACE vs FIORENTINA</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">0.83</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-soccer">SOCCER</span></div>
-<div class="pl-void">Morgan Rogers</div>
+<div class="pl-pend">Morgan Rogers</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Shots On Target</div><div class="meta-muted">ASTON VILLA vs UNKNOWN_OPP</div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1</div>
 </div>
-<div class="ticket-grade-payout"><div class="grade-result grade-result-void">○ NO CONTEST</div><div class="grade-result-sub">All 6 legs void — no graded contest against the board.</div><div class="grade-entry-line">No payout table — slip did not resolve against the board.</div></div>
+<div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
 </article>
 </section>
 </div></details>
@@ -342,38 +350,37 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <span class="tg">MLB Power Play 4-Leg</span>
 <span class="tg">1✓ 0✗ / 4</span>
 <span class="payout">PWR 10× · FLEX 6×</span>
-<span class="tg grade-ticket-result void-loss">RESULT: ⚠ VOID / NO ACTION <span class="grade-ticket-result-label">(VOID_LOSS)</span></span>
-<span class="banner void">VOID/PUSH</span>
+<span class="banner pend">UNGRADED</span>
 </div>
 <div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-mlb">MLB</span></div>
-<div class="pl-void">Bo Bichette<span class="warning-chip" title="NO_ACTUAL">NO_ACTUAL</span></div>
+<div class="pl-pend">Bo Bichette</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Total Bases</div><div class="meta-muted">NYM vs </div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">3.3</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-mlb">MLB</span></div>
-<div class="pl-void">Drake Baldwin<span class="warning-chip" title="NO_ACTUAL">NO_ACTUAL</span></div>
+<div class="pl-pend">Drake Baldwin</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Total Bases</div><div class="meta-muted">ATL vs </div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1.9</div>
 </div>
-<div class="legrow leg-void">
-<div class="badge void">○</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
 <div><span class="pill sport-mlb">MLB</span></div>
-<div class="pl-void">Trea Turner<span class="warning-chip" title="NO_ACTUAL">NO_ACTUAL</span></div>
+<div class="pl-pend">Trea Turner</div>
 <div class="tier">G</div>
 <div class="leg-prop-col"><div>Hits</div><div class="meta-muted">PHI vs </div></div>
 <div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
-<div class="leg-extra pl-void">—</div>
+<div class="leg-extra pl-pend">—</div>
 <div class="leg-extra">1.1</div>
 </div>
 <div class="legrow leg-hit">
@@ -386,7 +393,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="leg-extra pl-hit">3</div>
 <div class="leg-extra">1.1</div>
 </div>
-<div class="ticket-grade-payout"><div class="grade-result grade-result-void_loss">⚠ VOID / NO ACTION</div><div class="grade-result-sub">Voided legs prevented payout (1 hit, 0 miss, 3 void)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>10.00x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>N/A</td><td>❌</td></tr><tr><td>EV at Entry</td><td>N/A — N/A</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
+<div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
 </article>
 </section>
 </div></details>
@@ -439,6 +446,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
   }
   .manual-tb .manual-filter-group {
     display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  }
+  .manual-tb .manual-sport-pill {
+    /* Keep chips visible on mobile before interaction (was too dim on Android OLED). */
+    opacity:.92;
+    filter:none;
+    border-width:1px;
+    border-style:solid;
+    border-color:rgba(255,255,255,.28);
   }
   .manual-tb .manual-slider-row {
     margin-bottom:10px;
@@ -624,6 +639,9 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
         <div class="manual-filter-row">
           <div class="manual-filter-group">
             <button class="pill sport-nba manual-sport-pill manual-sport-btn" data-manual-sport="NBA" type="button">NBA</button>
+            <button class="pill sport-nba1h manual-sport-pill manual-sport-btn" data-manual-sport="NBA1H" type="button">NBA1H</button>
+            <button class="pill sport-nba1q manual-sport-pill manual-sport-btn" data-manual-sport="NBA1Q" type="button">NBA1Q</button>
+            <button class="pill sport-wnba manual-sport-pill manual-sport-btn" data-manual-sport="WNBA" type="button">WNBA</button>
             <button class="pill sport-cbb manual-sport-pill manual-sport-btn" data-manual-sport="CBB" type="button">CBB</button>
             <button class="pill sport-nhl manual-sport-pill manual-sport-btn" data-manual-sport="NHL" type="button">NHL</button>
             <button class="pill sport-soccer manual-sport-pill manual-sport-btn" data-manual-sport="SOCCER" type="button">SOC</button>
@@ -686,7 +704,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 
   const state = {
     mode: 'MIXED',
-    selectedSports: new Set(['NBA','CBB','NHL','SOCCER']),
+    selectedSports: new Set(['NBA','NBA1H','NBA1Q','WNBA','CBB','NHL','SOCCER']),
     // In MIXED, both pick types are enabled; in single-mode, pick one.
     selectedPickTypes: new Set(['Goblin','Standard']),
     minHitRate: 0.70,
@@ -873,6 +891,9 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
     for (const leg of state.activeLegs) {
       const dirCls = leg.direction === 'OVER' ? 'dir-over' : leg.direction === 'UNDER' ? 'dir-under' : '';
       const spClass = leg.sport === 'NBA' ? 'sport-nba'
+        : leg.sport === 'NBA1H' ? 'sport-nba1h'
+        : leg.sport === 'NBA1Q' ? 'sport-nba1q'
+        : leg.sport === 'WNBA' ? 'sport-wnba'
         : leg.sport === 'CBB' ? 'sport-cbb'
         : leg.sport === 'NHL' ? 'sport-nhl'
         : leg.sport === 'SOCCER' ? 'sport-soccer'
@@ -938,6 +959,9 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
           ${t.legs.map(l => {
             const dirCls = l.direction === 'OVER' ? 'dir-over' : l.direction === 'UNDER' ? 'dir-under' : '';
             const spClass = l.sport === 'NBA' ? 'sport-nba'
+              : l.sport === 'NBA1H' ? 'sport-nba1h'
+              : l.sport === 'NBA1Q' ? 'sport-nba1q'
+              : l.sport === 'WNBA' ? 'sport-wnba'
               : l.sport === 'CBB' ? 'sport-cbb'
               : l.sport === 'NHL' ? 'sport-nhl'
               : l.sport === 'SOCCER' ? 'sport-soccer'
@@ -1035,9 +1059,11 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
     for (const btn of $$('.manual-sport-btn')) {
       const s = btn.dataset.manualSport;
       const active = state.selectedSports.has(s);
-      // active state uses a stronger border via inline style since we don't own sport CSS here.
-      btn.style.opacity = active ? '1' : '.55';
-      btn.style.filter = active ? 'none' : 'grayscale(0.2)';
+      // Keep inactive chips readable; only mute slightly when not selected.
+      btn.style.opacity = active ? '1' : '.88';
+      btn.style.filter = 'none';
+      btn.style.borderColor = active ? 'rgba(212,175,55,.62)' : 'rgba(255,255,255,.30)';
+      btn.style.boxShadow = active ? '0 0 0 1px rgba(212,175,55,.25), 0 6px 16px rgba(0,0,0,.28)' : 'none';
     }
   }
 
@@ -1045,7 +1071,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
     if (state.selectedSports.has(s)) state.selectedSports.delete(s);
     else state.selectedSports.add(s);
     // Keep at least one sport selected for a usable picker.
-    if (state.selectedSports.size === 0) state.selectedSports = new Set(['NBA','CBB','NHL','SOCCER']);
+    if (state.selectedSports.size === 0) state.selectedSports = new Set(['NBA','NBA1H','NBA1Q','WNBA','CBB','NHL','SOCCER']);
     applySportButtonUI();
     renderPropList();
   }

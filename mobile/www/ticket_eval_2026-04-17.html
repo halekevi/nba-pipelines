@@ -7,10 +7,10 @@
 <meta name="theme-color" content="#050505"/>
 <title>Ticket Eval — 2026-04-17</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260430schemapage"/>
+<link rel="stylesheet" href="/static/proporacle-page-shell.css?v=20260418nav"/>
 <link rel="stylesheet" href="/static/site-nav-unified.css?v=20260408"/>
 <link rel="stylesheet" href="/static/nav-mobile-shared.css?v=20260418nav"/>
-<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260422ticketscv"/>
+<link rel="stylesheet" href="/static/mobile-content-width.css?v=20260423navcenter"/>
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 <style>
 
@@ -52,6 +52,9 @@ details.ticket-bucket{margin:0 0 10px;}
 .ticket-sections-wrap > details.ticket-bucket:first-child{margin-top:0;}
 .sec{margin-top:22px;}
 .ticket-sections-wrap > section.sec:first-of-type,.ticket-bucket-body > section.sec:first-of-type{margin-top:8px;}
+.ticket-eval-main > details:not(.ticket-bucket):not(.grades-sport-bucket){display:none!important;}
+.ticket-eval-main > summary{display:none!important;}
+.ticket-sections-wrap ~ details.ticket-bucket:not(.manual-tb){display:none!important;}
 .sec-head{font-family:'Bebas Neue',sans-serif;font-size:clamp(30px,3.2vw,40px);color:var(--gold);margin-bottom:8px;padding-bottom:14px;border-bottom:1px solid var(--glass-bd);letter-spacing:3px;text-shadow:0 0 24px rgba(240,165,0,.2);}
 .ticket-card{background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid var(--glass-bd);border-radius:14px;margin-bottom:22px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.35);}
 .ticket-card.card-warning{border-color:rgba(240,165,0,.55);box-shadow:0 0 0 1px rgba(240,165,0,.22),0 8px 32px rgba(0,0,0,.35);}
@@ -100,6 +103,7 @@ details.ticket-bucket{margin:0 0 10px;}
 .sport-nba{background:rgba(212,160,23,.12);color:#f0a500;border:1px solid rgba(212,160,23,.35);}
 .sport-nba1h{background:rgba(255,155,86,.12);color:#ffb27d;border:1px solid rgba(255,155,86,.32);}
 .sport-nba1q{background:rgba(255,214,102,.12);color:#ffd87a;border:1px solid rgba(255,214,102,.32);}
+.sport-wnba{background:rgba(255,138,198,.12);color:#ffb0dd;border:1px solid rgba(255,138,198,.32);}
 .sport-cbb{background:rgba(0,229,255,.10);color:#00e5ff;border:1px solid rgba(0,229,255,.32);}
 .sport-wcbb{background:rgba(127,199,217,.10);color:#9fd8e8;border:1px solid rgba(127,199,217,.32);}
 .sport-nhl{background:rgba(186,130,255,.12);color:#c4a5ff;border:1px solid rgba(186,130,255,.38);}
@@ -144,7 +148,7 @@ details.ticket-bucket{margin:0 0 10px;}
 .grade-ticket-result.void-slip{color:var(--gold2);}
 .grade-ticket-result.void-loss{color:#ffd87a;}
 .grade-ticket-result-label{opacity:.85;font-weight:600;}
-html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!important;}html.ticket-eval-embed-grades .snav,html.ticket-eval-embed-grades #mobile-menu{display:none!important;}html.ticket-eval-embed-grades body > .grade-eval-summary{margin-top:0!important;}html.ticket-eval-embed-grades .stats-bar{top:0!important;}html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;padding-top:9px!important;}
+html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!important;}html.ticket-eval-embed-grades .snav,html.ticket-eval-embed-grades #mobile-menu{display:none!important;}html.ticket-eval-embed-grades body > .grade-eval-summary{margin-top:0!important;}html.ticket-eval-embed-grades .stats-bar{top:0!important;}html.ticket-eval-embed-grades .grade-eval-summary:has(+ .stats-bar)+.stats-bar{top:0!important;margin-top:-1px!important;border-top:none!important;padding-top:9px!important;}html.ticket-eval-embed-grades .wrap.ticket-eval-main{position:relative!important;overflow:visible!important;height:auto!important;min-height:0!important;max-width:100%!important;}html.ticket-eval-embed-grades .ticket-sections-wrap{overflow:visible!important;min-height:0!important;}
 </style>
 <script>try{if(window.self!==window.top)document.documentElement.classList.add("ticket-eval-embed-grades");}catch(e){}</script>
 </head>
@@ -189,25 +193,36 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
   <a href="/income" class="">📈 Income</a>
   <a href="/payout" class="">💰 Payouts</a>
 </div>
-<div class="grade-eval-summary"><div class="grade-eval-summary-line1">Date: 2026-04-17 · 9 tickets graded</div><div class="grade-eval-summary-line2"><span>✅ Wins: 3</span><span>🛡️ Guarantees: 2</span><span>❌ Losses: 4</span></div><div class="grade-eval-summary-line3">Win rate (W+🛡️): 56% · Avg EV at entry: N/A</div><div class="grade-eval-summary-line4">Total: +$14.40 net on $90 staked ($10/ticket flat) — profit</div></div>
+<div class="grade-eval-summary"><div class="grade-eval-summary-line1">Date: 2026-04-17 · 12 tickets graded</div><div class="grade-eval-summary-line2"><span>✅ Wins: 3</span><span>🛡️ Guarantees: 2</span><span>❌ Losses: 7</span></div><div class="grade-eval-summary-line3">Win rate (W+🛡️): 42% · Avg EV at entry: N/A</div><div class="grade-eval-summary-line4">Total: −$15.60 net on $120 staked ($10/ticket flat) — loss</div></div>
 <div class="stats-bar">
 <div class="sum-row">
-<div class="sum-item"><div class="sum-val">55.6%</div><div class="sum-lab">TICKET HIT RATE</div></div>
-<div class="sum-item"><div class="sum-val green">18</div><div class="sum-lab">HITS</div></div>
-<div class="sum-item"><div class="sum-val red">6</div><div class="sum-lab">MISSES</div></div>
+<div class="sum-item"><div class="sum-val">41.7%</div><div class="sum-lab">TICKET HIT RATE</div></div>
+<div class="sum-item"><div class="sum-val">55.6%</div><div class="sum-lab">NBA TKT WIN RATE</div></div>
+<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">NBA1Q TKT WIN RATE</div></div>
+<div class="sum-item"><div class="sum-val">0.0%</div><div class="sum-lab">NBA1H TKT WIN RATE</div></div>
+<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">NHL TKT WIN RATE</div></div>
+<div class="sum-item"><div class="sum-val">0.0%</div><div class="sum-lab">MLB TKT WIN RATE</div></div>
+<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">SOCCER TKT WIN RATE</div></div>
+<div class="sum-item"><div class="sum-val pend">—</div><div class="sum-lab">WNBA TKT WIN RATE</div></div>
+<div class="sum-item"><div class="sum-val">41.7%</div><div class="sum-lab">ALL GENERATED WIN RATE</div></div>
+<div class="sum-item"><div class="sum-val green">24</div><div class="sum-lab">HITS</div></div>
+<div class="sum-item"><div class="sum-val red">10</div><div class="sum-lab">MISSES</div></div>
 <div class="sum-item"><div class="sum-val void">0</div><div class="sum-lab">VOID/PUSH</div></div>
-<div class="sum-item"><div class="sum-val pend">0</div><div class="sum-lab">UNGRADED</div></div>
+<div class="sum-item"><div class="sum-val pend">3</div><div class="sum-lab">UNGRADED</div></div>
 <div class="sum-item"><div class="sum-val">3</div><div class="sum-lab">PERFECT TICKETS</div></div>
 <div class="sum-item"><div class="sum-val green">5</div><div class="sum-lab">PAID TIX</div></div>
-<div class="sum-item"><div class="sum-val red">4</div><div class="sum-lab">NO PAYOUT</div></div>
-<div class="sum-item"><div class="sum-val sum-val-sm">+14.40</div><div class="sum-lab">NET @ $10/TKT</div></div>
-<div class="sum-item"><div class="sum-val sum-val-sm">16.0%</div><div class="sum-lab">ROI (FLAT $10)</div></div>
-<div class="sum-item"><div class="sum-val sum-val-sm">24</div><div class="sum-lab">TOTAL LEGS</div></div>
+<div class="sum-item"><div class="sum-val red">7</div><div class="sum-lab">NO PAYOUT</div></div>
+<div class="sum-item"><div class="sum-val sum-val-sm">-15.60</div><div class="sum-lab">NET @ $10/TKT</div></div>
+<div class="sum-item"><div class="sum-val sum-val-sm">-13.0%</div><div class="sum-lab">ROI (FLAT $10)</div></div>
+<div class="sum-item"><div class="sum-val sum-val-sm">37</div><div class="sum-lab">TOTAL LEGS</div></div>
 </div></div>
 <div class="wrap ticket-eval-main">
 <p class="slate-kicker">SLATE DATE · 2026-04-17</p>
-<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-04-17/graded_*.xlsx</code>. <strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss.</p>
+<p class="meta-muted" style="margin:4px 0 8px;line-height:1.5">Each leg: <strong>Line</strong> + side · <strong>Actual</strong> (box-score stat; — if none exists yet, e.g. rainout/postponed) · <strong>Edge</strong> (model edge, not the result). Graded exports: <code>outputs/2026-04-17/graded_*.xlsx</code>. <strong>Ticket hit rate</strong> = paid ÷ (paid + no payout) among fully graded tickets (all-void slips excluded). Sheets with <strong>Flex</strong> in the title (3+ legs) use flex cash rules: at least n−1 hits and at most one miss. <strong>UNGRADED (3 legs):</strong> the matched graded row still has no actual or HIT/MISS—often unfinished games, voids, or grading before final stats. Re-run the grader after games; on hosts without <code>outputs/2026-04-17/</code>, commit workbooks under <code>ui_runner/graded_slate/2026-04-17/</code> before rebuilding this page. </p>
 <div class="ticket-sections-wrap">
+<details class="ticket-bucket sb-nba" open>
+<summary><span>NBA</span><span class="ticket-bucket-meta">3 sections · 9 tickets</span></summary>
+<div class="ticket-bucket-body">
 <section class="sec"><h2 class="sec-head bebas">NBA Flex 3-Leg</h2>
 <article class="ticket-card card-missed">
 <div class="thdr">
@@ -562,6 +577,219 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 <div class="ticket-grade-payout"><div class="grade-result grade-result-loss">❌ LOSS</div><div class="grade-result-sub">LOSS (2 hit, 1 miss)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>6.00x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>N/A</td><td>❌</td></tr><tr><td>EV at Entry</td><td>N/A — N/A</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
 </article>
 </section>
+</div></details>
+<details class="ticket-bucket sb-mlb">
+<summary><span>MLB</span><span class="ticket-bucket-meta">2 sections · 2 tickets</span></summary>
+<div class="ticket-bucket-body">
+<section class="sec"><h2 class="sec-head bebas">MLB Power Play 4-Leg</h2>
+<article class="ticket-card card-missed">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">MLB Power Play 4-Leg</span>
+<span class="tg">2✓ 2✗ / 4</span>
+<span class="payout">PWR 10× · FLEX 6×</span>
+<span class="tg grade-ticket-result lost">RESULT: ❌ ❌ LOSS <span class="grade-ticket-result-label">(LOSS)</span></span>
+<span class="banner miss">MISSED 2</span>
+</div>
+<div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
+<div><span class="pill sport-mlb">MLB</span></div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Spencer Horwitz</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Bases</div><div class="meta-muted">PIT vs </div></div>
+<div class="leg-extra miss-leg-cell">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">0</div>
+<div class="leg-extra miss-leg-cell">3.1</div>
+</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
+<div><span class="pill sport-mlb">MLB</span></div>
+<div class="pl-hit">Mike Trout</div>
+<div class="tier">G</div>
+<div class="leg-prop-col"><div>Total Bases</div><div class="meta-muted">LAA vs </div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-hit">2</div>
+<div class="leg-extra">2.9</div>
+</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
+<div><span class="pill sport-mlb">MLB</span></div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">José Ramírez</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">G</div>
+<div class="leg-prop-col miss-leg-cell"><div>Hits</div><div class="meta-muted">CLE vs </div></div>
+<div class="leg-extra miss-leg-cell">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">0</div>
+<div class="leg-extra miss-leg-cell">0.7</div>
+</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
+<div><span class="pill sport-mlb">MLB</span></div>
+<div class="pl-hit">Bobby Witt Jr.</div>
+<div class="tier">G</div>
+<div class="leg-prop-col"><div>Hits</div><div class="meta-muted">KC vs </div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-hit">1</div>
+<div class="leg-extra">1.1</div>
+</div>
+<div class="ticket-grade-payout"><div class="grade-result grade-result-loss">❌ LOSS</div><div class="grade-result-sub">LOSS (2 hit, 2 miss)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>10.00x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>N/A</td><td>❌</td></tr><tr><td>EV at Entry</td><td>N/A — N/A</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
+</article>
+</section>
+<section class="sec"><h2 class="sec-head bebas">MLB Pwr Std 3-Leg</h2>
+<article class="ticket-card card-missed">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">MLB Pwr Std 3-Leg</span>
+<span class="tg">2✓ 1✗ / 3</span>
+<span class="payout">PWR 6× · FLEX 3×</span>
+<span class="tg grade-ticket-result lost">RESULT: ❌ ❌ LOSS <span class="grade-ticket-result-label">(LOSS)</span></span>
+<span class="banner miss">MISSED 1</span>
+</div>
+<div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
+<div><span class="pill sport-mlb">MLB</span></div>
+<div class="pl-hit">Michael Massey</div>
+<div class="tier">S</div>
+<div class="leg-prop-col"><div>Total Bases</div><div class="meta-muted">KC vs </div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-hit">2</div>
+<div class="leg-extra">2.7</div>
+</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
+<div><span class="pill sport-mlb">MLB</span></div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">Aaron Judge</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Total Bases</div><div class="meta-muted">NYY vs </div></div>
+<div class="leg-extra miss-leg-cell">1.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">0</div>
+<div class="leg-extra miss-leg-cell">2.9</div>
+</div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
+<div><span class="pill sport-mlb">MLB</span></div>
+<div class="pl-hit">Taylor Trammell</div>
+<div class="tier">S</div>
+<div class="leg-prop-col"><div>Hits</div><div class="meta-muted">HOU vs STL</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-hit">2</div>
+<div class="leg-extra">0.3</div>
+</div>
+<div class="ticket-grade-payout"><div class="grade-result grade-result-loss">❌ LOSS</div><div class="grade-result-sub">LOSS (2 hit, 1 miss)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>6.00x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>N/A</td><td>❌</td></tr><tr><td>EV at Entry</td><td>N/A — N/A</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
+</article>
+</section>
+</div></details>
+<details class="ticket-bucket sb-nba1q">
+<summary><span>NBA1Q</span><span class="ticket-bucket-meta">2 sections · 2 tickets</span></summary>
+<div class="ticket-bucket-body">
+<section class="sec"><h2 class="sec-head bebas">NBA1Q Power Play 2-Leg</h2>
+<article class="ticket-card card-warning">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">NBA1Q Power Play 2-Leg</span>
+<span class="tg">0✓ 0✗ / 2</span>
+<span class="payout">PWR 3× · FLEX 3×</span>
+<span class="banner pend">UNGRADED</span>
+</div>
+<div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba1q">NBA1Q</span></div>
+<div class="pl-pend">Kon Knueppel<span class="warning-chip" title="NBA1Q stats based on limited Q1 history — use with caution">⚠ Limited Data</span></div>
+<div class="tier">G</div>
+<div class="leg-prop-col"><div>Assists</div><div class="meta-muted">CHA vs ORL</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.7</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba1q">NBA1Q</span></div>
+<div class="pl-pend">Brandon Miller<span class="warning-chip" title="NBA1Q stats based on limited Q1 history — use with caution">⚠ Limited Data</span></div>
+<div class="tier">G</div>
+<div class="leg-prop-col"><div>Assists</div><div class="meta-muted">CHA vs ORL</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">1.08</div>
+</div>
+<div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
+</article>
+<div class="ticket-warning-note">⚠ NBA1Q stats based on limited Q1 history - use with caution</div>
+</section>
+<section class="sec"><h2 class="sec-head bebas">NBA1Q Standard 2-Leg</h2>
+<article class="ticket-card card-warning">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">NBA1Q Standard 2-Leg</span>
+<span class="tg">1✓ 0✗ / 2</span>
+<span class="payout">PWR 3× · FLEX 3×</span>
+<span class="banner pend">UNGRADED</span>
+</div>
+<div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
+<div><span class="pill sport-nba1q">NBA1Q</span></div>
+<div class="pl-hit">Jalen Green<span class="warning-chip" title="NBA1Q stats based on limited Q1 history — use with caution">⚠ Limited Data</span></div>
+<div class="tier">S</div>
+<div class="leg-prop-col"><div>Assists</div><div class="meta-muted">PHX vs GSW</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-hit">2</div>
+<div class="leg-extra">0.79</div>
+</div>
+<div class="legrow leg-pend">
+<div class="badge pend">·</div>
+<div><span class="pill sport-nba1q">NBA1Q</span></div>
+<div class="pl-pend">Coby White<span class="warning-chip" title="NBA1Q stats based on limited Q1 history — use with caution">⚠ Limited Data</span></div>
+<div class="tier">S</div>
+<div class="leg-prop-col"><div>Assists</div><div class="meta-muted">CHA vs ORL</div></div>
+<div class="leg-extra">0.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-pend">—</div>
+<div class="leg-extra">0.7</div>
+</div>
+<div class="ticket-grade-payout"><div class="grade-payout-pending">Payout model: awaiting all leg grades</div></div>
+</article>
+<div class="ticket-warning-note">⚠ NBA1Q stats based on limited Q1 history - use with caution</div>
+</section>
+</div></details>
+<details class="ticket-bucket sb-nba1h">
+<summary><span>NBA1H</span><span class="ticket-bucket-meta">1 sections · 1 tickets</span></summary>
+<div class="ticket-bucket-body">
+<section class="sec"><h2 class="sec-head bebas">NBA1H Standard 2-Leg</h2>
+<article class="ticket-card card-missed">
+<div class="thdr">
+<span class="tn bebas">#1</span>
+<span class="tg">NBA1H Standard 2-Leg</span>
+<span class="tg">1✓ 1✗ / 2</span>
+<span class="payout">PWR 3× · FLEX 3×</span>
+<span class="tg grade-ticket-result lost">RESULT: ❌ ❌ LOSS <span class="grade-ticket-result-label">(LOSS)</span></span>
+<span class="banner miss">MISSED 1</span>
+</div>
+<div class="leg-head" aria-hidden="true"><div></div><div></div><div class="leg-head-lab">PLAYER</div><div class="leg-head-lab">T</div><div class="leg-head-lab">PROP</div><div class="leg-head-lab">LINE</div><div class="leg-head-lab">ACTUAL</div><div class="leg-head-lab">EDGE</div></div>
+<div class="legrow leg-hit">
+<div class="badge hit">✓</div>
+<div><span class="pill sport-nba1h">NBA1H</span></div>
+<div class="pl-hit">Jordan Goodwin</div>
+<div class="tier">S</div>
+<div class="leg-prop-col"><div>Pts+Rebs+Asts</div><div class="meta-muted">PHX vs GSW</div></div>
+<div class="leg-extra">7.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra pl-hit">12</div>
+<div class="leg-extra">3.34</div>
+</div>
+<div class="legrow leg-miss">
+<div class="badge miss">✗</div>
+<div><span class="pill sport-nba1h">NBA1H</span></div>
+<div class="pl-miss pl-line miss-leg-cell"><span class="pl-name">LaMelo Ball</span><span class="miss-tag" aria-label="Missed leg">MISSED</span></div>
+<div class="tier miss-leg-cell">S</div>
+<div class="leg-prop-col miss-leg-cell"><div>Points</div><div class="meta-muted">CHA vs ORL</div></div>
+<div class="leg-extra miss-leg-cell">11.5 <span class="dir-over">OVER</span></div>
+<div class="leg-extra val-miss miss-leg-cell">2</div>
+<div class="leg-extra miss-leg-cell">2.7</div>
+</div>
+<div class="ticket-grade-payout"><div class="grade-result grade-result-loss">❌ LOSS</div><div class="grade-result-sub">LOSS (1 hit, 1 miss)</div><table class="grade-payout-table"><tr><th></th><th>Predicted</th><th>Actual</th></tr><tr><td>Payout</td><td>3.00x</td><td>0.00x</td></tr><tr><td>P(Win)</td><td>N/A</td><td>❌</td></tr><tr><td>EV at Entry</td><td>N/A — N/A</td><td>-$10.00 on $10</td></tr></table><div class="grade-entry-line">$10 entry → Lost $10.00</div></div>
+</article>
+</section>
+</div></details>
 </div>
 
 <style>
@@ -611,6 +839,14 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
   }
   .manual-tb .manual-filter-group {
     display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  }
+  .manual-tb .manual-sport-pill {
+    /* Keep chips visible on mobile before interaction (was too dim on Android OLED). */
+    opacity:.92;
+    filter:none;
+    border-width:1px;
+    border-style:solid;
+    border-color:rgba(255,255,255,.28);
   }
   .manual-tb .manual-slider-row {
     margin-bottom:10px;
@@ -796,6 +1032,9 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
         <div class="manual-filter-row">
           <div class="manual-filter-group">
             <button class="pill sport-nba manual-sport-pill manual-sport-btn" data-manual-sport="NBA" type="button">NBA</button>
+            <button class="pill sport-nba1h manual-sport-pill manual-sport-btn" data-manual-sport="NBA1H" type="button">NBA1H</button>
+            <button class="pill sport-nba1q manual-sport-pill manual-sport-btn" data-manual-sport="NBA1Q" type="button">NBA1Q</button>
+            <button class="pill sport-wnba manual-sport-pill manual-sport-btn" data-manual-sport="WNBA" type="button">WNBA</button>
             <button class="pill sport-cbb manual-sport-pill manual-sport-btn" data-manual-sport="CBB" type="button">CBB</button>
             <button class="pill sport-nhl manual-sport-pill manual-sport-btn" data-manual-sport="NHL" type="button">NHL</button>
             <button class="pill sport-soccer manual-sport-pill manual-sport-btn" data-manual-sport="SOCCER" type="button">SOC</button>
@@ -846,7 +1085,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 </details>
 
 <script>
-  window.SLATE_DATA = [{"pick_type": "Goblin", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 4.5, "hit_rate": 0.8, "l5_avg": 7.8, "season_avg": 6.2, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Goblin", "prop_type": "Pts+Rebs", "line": 4.5, "direction": "OVER", "player": "Jamal Cain", "team": "ORL", "opp": "CHA", "edge": 7.1, "hit_rate": 0.8, "l5_avg": 10.8, "season_avg": 11.3, "sport": "NBA", "data_warning": null, "initials": "JC"}, {"pick_type": "Goblin", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Royce O'Neale", "team": "PHX", "opp": "GSW", "edge": 2.2, "hit_rate": 0.8, "l5_avg": 4.8, "season_avg": 4.6, "sport": "NBA", "data_warning": null, "initials": "RO"}, {"pick_type": "Goblin", "prop_type": "Pts+Rebs+Asts", "line": 5.5, "direction": "OVER", "player": "Jamal Cain", "team": "ORL", "opp": "CHA", "edge": 7.5, "hit_rate": 0.8, "l5_avg": 11.8, "season_avg": 12.5, "sport": "NBA", "data_warning": null, "initials": "JC"}, {"pick_type": "Goblin", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 4.5, "hit_rate": 0.8, "l5_avg": 7.8, "season_avg": 6.2, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Goblin", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Royce O'Neale", "team": "PHX", "opp": "GSW", "edge": 2.2, "hit_rate": 0.8, "l5_avg": 4.8, "season_avg": 4.6, "sport": "NBA", "data_warning": null, "initials": "RO"}, {"pick_type": "Goblin", "prop_type": "Points", "line": 9.5, "direction": "OVER", "player": "Brandin Podziemski", "team": "GSW", "opp": "PHX", "edge": 9.7, "hit_rate": 1.0, "l5_avg": 18.8, "season_avg": 19.6, "sport": "NBA", "data_warning": null, "initials": "BP"}, {"pick_type": "Goblin", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 4.5, "hit_rate": 0.8, "l5_avg": 7.8, "season_avg": 6.2, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Goblin", "prop_type": "Pts+Rebs", "line": 4.5, "direction": "OVER", "player": "Jamal Cain", "team": "ORL", "opp": "CHA", "edge": 7.1, "hit_rate": 0.8, "l5_avg": 10.8, "season_avg": 11.3, "sport": "NBA", "data_warning": null, "initials": "JC"}, {"pick_type": "Standard", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Sion James", "team": "CHA", "opp": "ORL", "edge": 1.6, "hit_rate": 1.0, "l5_avg": 4.2, "season_avg": 4.0, "sport": "NBA", "data_warning": null, "initials": "SJ"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs+Asts", "line": 9.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 7.89, "hit_rate": 0.8, "l5_avg": 18.4, "season_avg": 14.1, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs+Asts", "line": 9.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 7.89, "hit_rate": 0.8, "l5_avg": 18.4, "season_avg": 14.1, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Standard", "prop_type": "Rebs+Asts", "line": 2.5, "direction": "OVER", "player": "Tristan Silva", "team": "ORL", "opp": "CHA", "edge": 3.39, "hit_rate": 0.8, "l5_avg": 5.6, "season_avg": 5.3, "sport": "NBA", "data_warning": null, "initials": "TS"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs+Asts", "line": 6.5, "direction": "OVER", "player": "Tristan Silva", "team": "ORL", "opp": "CHA", "edge": 8.16, "hit_rate": 0.8, "l5_avg": 13.2, "season_avg": 14.2, "sport": "NBA", "data_warning": null, "initials": "TS"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs+Asts", "line": 9.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 7.89, "hit_rate": 0.8, "l5_avg": 18.4, "season_avg": 14.1, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs+Asts", "line": 9.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 7.89, "hit_rate": 0.8, "l5_avg": 18.4, "season_avg": 14.1, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs+Asts", "line": 6.5, "direction": "OVER", "player": "Tristan Silva", "team": "ORL", "opp": "CHA", "edge": 8.16, "hit_rate": 0.8, "l5_avg": 13.2, "season_avg": 14.2, "sport": "NBA", "data_warning": null, "initials": "TS"}, {"pick_type": "Standard", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Sion James", "team": "CHA", "opp": "ORL", "edge": 1.6, "hit_rate": 1.0, "l5_avg": 4.2, "season_avg": 4.0, "sport": "NBA", "data_warning": null, "initials": "SJ"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs", "line": 8.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 7.04, "hit_rate": 0.8, "l5_avg": 16.8, "season_avg": 12.8, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs+Asts", "line": 6.5, "direction": "OVER", "player": "Tristan Silva", "team": "ORL", "opp": "CHA", "edge": 8.16, "hit_rate": 0.8, "l5_avg": 13.2, "season_avg": 14.2, "sport": "NBA", "data_warning": null, "initials": "TS"}, {"pick_type": "Standard", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Sion James", "team": "CHA", "opp": "ORL", "edge": 1.6, "hit_rate": 1.0, "l5_avg": 4.2, "season_avg": 4.0, "sport": "NBA", "data_warning": null, "initials": "SJ"}, {"pick_type": "Standard", "prop_type": "Rebs+Asts", "line": 2.5, "direction": "OVER", "player": "Tristan Silva", "team": "ORL", "opp": "CHA", "edge": 3.39, "hit_rate": 0.8, "l5_avg": 5.6, "season_avg": 5.3, "sport": "NBA", "data_warning": null, "initials": "TS"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs+Asts", "line": 9.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 7.89, "hit_rate": 0.8, "l5_avg": 18.4, "season_avg": 14.1, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Standard", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Sion James", "team": "CHA", "opp": "ORL", "edge": 1.6, "hit_rate": 1.0, "l5_avg": 4.2, "season_avg": 4.0, "sport": "NBA", "data_warning": null, "initials": "SJ"}];
+  window.SLATE_DATA = [{"pick_type": "Goblin", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 4.5, "hit_rate": 0.8, "l5_avg": 7.8, "season_avg": 6.2, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Goblin", "prop_type": "Pts+Rebs", "line": 4.5, "direction": "OVER", "player": "Jamal Cain", "team": "ORL", "opp": "CHA", "edge": 7.1, "hit_rate": 0.8, "l5_avg": 10.8, "season_avg": 11.3, "sport": "NBA", "data_warning": null, "initials": "JC"}, {"pick_type": "Goblin", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Royce O'Neale", "team": "PHX", "opp": "GSW", "edge": 2.2, "hit_rate": 0.8, "l5_avg": 4.8, "season_avg": 4.6, "sport": "NBA", "data_warning": null, "initials": "RO"}, {"pick_type": "Goblin", "prop_type": "Pts+Rebs+Asts", "line": 5.5, "direction": "OVER", "player": "Jamal Cain", "team": "ORL", "opp": "CHA", "edge": 7.5, "hit_rate": 0.8, "l5_avg": 11.8, "season_avg": 12.5, "sport": "NBA", "data_warning": null, "initials": "JC"}, {"pick_type": "Goblin", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 4.5, "hit_rate": 0.8, "l5_avg": 7.8, "season_avg": 6.2, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Goblin", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Royce O'Neale", "team": "PHX", "opp": "GSW", "edge": 2.2, "hit_rate": 0.8, "l5_avg": 4.8, "season_avg": 4.6, "sport": "NBA", "data_warning": null, "initials": "RO"}, {"pick_type": "Goblin", "prop_type": "Points", "line": 9.5, "direction": "OVER", "player": "Brandin Podziemski", "team": "GSW", "opp": "PHX", "edge": 9.7, "hit_rate": 1.0, "l5_avg": 18.8, "season_avg": 19.6, "sport": "NBA", "data_warning": null, "initials": "BP"}, {"pick_type": "Goblin", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 4.5, "hit_rate": 0.8, "l5_avg": 7.8, "season_avg": 6.2, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Goblin", "prop_type": "Pts+Rebs", "line": 4.5, "direction": "OVER", "player": "Jamal Cain", "team": "ORL", "opp": "CHA", "edge": 7.1, "hit_rate": 0.8, "l5_avg": 10.8, "season_avg": 11.3, "sport": "NBA", "data_warning": null, "initials": "JC"}, {"pick_type": "Standard", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Sion James", "team": "CHA", "opp": "ORL", "edge": 1.6, "hit_rate": 1.0, "l5_avg": 4.2, "season_avg": 4.0, "sport": "NBA", "data_warning": null, "initials": "SJ"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs+Asts", "line": 9.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 7.89, "hit_rate": 0.8, "l5_avg": 18.4, "season_avg": 14.1, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs+Asts", "line": 9.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 7.89, "hit_rate": 0.8, "l5_avg": 18.4, "season_avg": 14.1, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Standard", "prop_type": "Rebs+Asts", "line": 2.5, "direction": "OVER", "player": "Tristan Silva", "team": "ORL", "opp": "CHA", "edge": 3.39, "hit_rate": 0.8, "l5_avg": 5.6, "season_avg": 5.3, "sport": "NBA", "data_warning": null, "initials": "TS"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs+Asts", "line": 6.5, "direction": "OVER", "player": "Tristan Silva", "team": "ORL", "opp": "CHA", "edge": 8.16, "hit_rate": 0.8, "l5_avg": 13.2, "season_avg": 14.2, "sport": "NBA", "data_warning": null, "initials": "TS"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs+Asts", "line": 9.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 7.89, "hit_rate": 0.8, "l5_avg": 18.4, "season_avg": 14.1, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs+Asts", "line": 9.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 7.89, "hit_rate": 0.8, "l5_avg": 18.4, "season_avg": 14.1, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs+Asts", "line": 6.5, "direction": "OVER", "player": "Tristan Silva", "team": "ORL", "opp": "CHA", "edge": 8.16, "hit_rate": 0.8, "l5_avg": 13.2, "season_avg": 14.2, "sport": "NBA", "data_warning": null, "initials": "TS"}, {"pick_type": "Standard", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Sion James", "team": "CHA", "opp": "ORL", "edge": 1.6, "hit_rate": 1.0, "l5_avg": 4.2, "season_avg": 4.0, "sport": "NBA", "data_warning": null, "initials": "SJ"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs", "line": 8.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 7.04, "hit_rate": 0.8, "l5_avg": 16.8, "season_avg": 12.8, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs+Asts", "line": 6.5, "direction": "OVER", "player": "Tristan Silva", "team": "ORL", "opp": "CHA", "edge": 8.16, "hit_rate": 0.8, "l5_avg": 13.2, "season_avg": 14.2, "sport": "NBA", "data_warning": null, "initials": "TS"}, {"pick_type": "Standard", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Sion James", "team": "CHA", "opp": "ORL", "edge": 1.6, "hit_rate": 1.0, "l5_avg": 4.2, "season_avg": 4.0, "sport": "NBA", "data_warning": null, "initials": "SJ"}, {"pick_type": "Standard", "prop_type": "Rebs+Asts", "line": 2.5, "direction": "OVER", "player": "Tristan Silva", "team": "ORL", "opp": "CHA", "edge": 3.39, "hit_rate": 0.8, "l5_avg": 5.6, "season_avg": 5.3, "sport": "NBA", "data_warning": null, "initials": "TS"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs+Asts", "line": 9.5, "direction": "OVER", "player": "Goga Bitadze", "team": "ORL", "opp": "CHA", "edge": 7.89, "hit_rate": 0.8, "l5_avg": 18.4, "season_avg": 14.1, "sport": "NBA", "data_warning": null, "initials": "GB"}, {"pick_type": "Standard", "prop_type": "Rebounds", "line": 2.5, "direction": "OVER", "player": "Sion James", "team": "CHA", "opp": "ORL", "edge": 1.6, "hit_rate": 1.0, "l5_avg": 4.2, "season_avg": 4.0, "sport": "NBA", "data_warning": null, "initials": "SJ"}, {"pick_type": "Goblin", "prop_type": "Total Bases", "line": 0.5, "direction": "OVER", "player": "Spencer Horwitz", "team": "PIT", "opp": "", "edge": 3.1, "hit_rate": 0.76, "l5_avg": 3.6, "season_avg": 2.2, "sport": "MLB", "data_warning": null, "initials": "SH"}, {"pick_type": "Goblin", "prop_type": "Total Bases", "line": 0.5, "direction": "OVER", "player": "Mike Trout", "team": "LAA", "opp": "", "edge": 2.9, "hit_rate": 0.76, "l5_avg": 3.4, "season_avg": 2.5, "sport": "MLB", "data_warning": null, "initials": "MT"}, {"pick_type": "Goblin", "prop_type": "Hits", "line": 0.5, "direction": "OVER", "player": "José Ramírez", "team": "CLE", "opp": "", "edge": 0.7, "hit_rate": 0.76, "l5_avg": 1.2, "season_avg": 1.1, "sport": "MLB", "data_warning": null, "initials": "JR"}, {"pick_type": "Goblin", "prop_type": "Hits", "line": 0.5, "direction": "OVER", "player": "Bobby Witt Jr.", "team": "KC", "opp": "", "edge": 1.1, "hit_rate": 0.76, "l5_avg": 1.6, "season_avg": 1.5, "sport": "MLB", "data_warning": null, "initials": "BJ"}, {"pick_type": "Standard", "prop_type": "Total Bases", "line": 0.5, "direction": "OVER", "player": "Michael Massey", "team": "KC", "opp": "", "edge": 2.7, "hit_rate": 0.76, "l5_avg": 3.2, "season_avg": 1.8, "sport": "MLB", "data_warning": null, "initials": "MM"}, {"pick_type": "Standard", "prop_type": "Total Bases", "line": 1.5, "direction": "OVER", "player": "Aaron Judge", "team": "NYY", "opp": "", "edge": 2.9, "hit_rate": 0.76, "l5_avg": 4.4, "season_avg": 2.8, "sport": "MLB", "data_warning": null, "initials": "AJ"}, {"pick_type": "Standard", "prop_type": "Hits", "line": 0.5, "direction": "OVER", "player": "Taylor Trammell", "team": "HOU", "opp": "STL", "edge": 0.3, "hit_rate": 0.26, "l5_avg": 0.2, "season_avg": 0.3, "sport": "MLB", "data_warning": null, "initials": "TT"}, {"pick_type": "Goblin", "prop_type": "Assists", "line": 0.5, "direction": "OVER", "player": "Kon Knueppel", "team": "CHA", "opp": "ORL", "edge": 1.7, "hit_rate": 1.0, "l5_avg": 2.2, "season_avg": 2.2, "sport": "NBA1Q", "data_warning": "LIMITED_Q1_HISTORY", "initials": "KK"}, {"pick_type": "Goblin", "prop_type": "Assists", "line": 0.5, "direction": "OVER", "player": "Brandon Miller", "team": "CHA", "opp": "ORL", "edge": 1.08, "hit_rate": 1.0, "l5_avg": 1.6, "season_avg": 1.6, "sport": "NBA1Q", "data_warning": "LIMITED_Q1_HISTORY", "initials": "BM"}, {"pick_type": "Standard", "prop_type": "Assists", "line": 0.5, "direction": "OVER", "player": "Jalen Green", "team": "PHX", "opp": "GSW", "edge": 0.79, "hit_rate": 1.0, "l5_avg": 1.0, "season_avg": 1.6, "sport": "NBA1Q", "data_warning": "LIMITED_Q1_HISTORY", "initials": "JG"}, {"pick_type": "Standard", "prop_type": "Assists", "line": 0.5, "direction": "OVER", "player": "Coby White", "team": "CHA", "opp": "ORL", "edge": 0.7, "hit_rate": 1.0, "l5_avg": 1.2, "season_avg": 1.2, "sport": "NBA1Q", "data_warning": "LIMITED_Q1_HISTORY", "initials": "CW"}, {"pick_type": "Standard", "prop_type": "Pts+Rebs+Asts", "line": 7.5, "direction": "OVER", "player": "Jordan Goodwin", "team": "PHX", "opp": "GSW", "edge": 3.34, "hit_rate": 0.8, "l5_avg": 10.6, "season_avg": 9.7, "sport": "NBA1H", "data_warning": null, "initials": "JG"}, {"pick_type": "Standard", "prop_type": "Points", "line": 11.5, "direction": "OVER", "player": "LaMelo Ball", "team": "CHA", "opp": "ORL", "edge": 2.7, "hit_rate": 0.8, "l5_avg": 15.8, "season_avg": 12.6, "sport": "NBA1H", "data_warning": null, "initials": "LB"}];
 </script>
 
 <script>
@@ -858,7 +1097,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
 
   const state = {
     mode: 'MIXED',
-    selectedSports: new Set(['NBA','CBB','NHL','SOCCER']),
+    selectedSports: new Set(['NBA','NBA1H','NBA1Q','WNBA','CBB','NHL','SOCCER']),
     // In MIXED, both pick types are enabled; in single-mode, pick one.
     selectedPickTypes: new Set(['Goblin','Standard']),
     minHitRate: 0.70,
@@ -1045,6 +1284,9 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
     for (const leg of state.activeLegs) {
       const dirCls = leg.direction === 'OVER' ? 'dir-over' : leg.direction === 'UNDER' ? 'dir-under' : '';
       const spClass = leg.sport === 'NBA' ? 'sport-nba'
+        : leg.sport === 'NBA1H' ? 'sport-nba1h'
+        : leg.sport === 'NBA1Q' ? 'sport-nba1q'
+        : leg.sport === 'WNBA' ? 'sport-wnba'
         : leg.sport === 'CBB' ? 'sport-cbb'
         : leg.sport === 'NHL' ? 'sport-nhl'
         : leg.sport === 'SOCCER' ? 'sport-soccer'
@@ -1110,6 +1352,9 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
           ${t.legs.map(l => {
             const dirCls = l.direction === 'OVER' ? 'dir-over' : l.direction === 'UNDER' ? 'dir-under' : '';
             const spClass = l.sport === 'NBA' ? 'sport-nba'
+              : l.sport === 'NBA1H' ? 'sport-nba1h'
+              : l.sport === 'NBA1Q' ? 'sport-nba1q'
+              : l.sport === 'WNBA' ? 'sport-wnba'
               : l.sport === 'CBB' ? 'sport-cbb'
               : l.sport === 'NHL' ? 'sport-nhl'
               : l.sport === 'SOCCER' ? 'sport-soccer'
@@ -1207,9 +1452,11 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
     for (const btn of $$('.manual-sport-btn')) {
       const s = btn.dataset.manualSport;
       const active = state.selectedSports.has(s);
-      // active state uses a stronger border via inline style since we don't own sport CSS here.
-      btn.style.opacity = active ? '1' : '.55';
-      btn.style.filter = active ? 'none' : 'grayscale(0.2)';
+      // Keep inactive chips readable; only mute slightly when not selected.
+      btn.style.opacity = active ? '1' : '.88';
+      btn.style.filter = 'none';
+      btn.style.borderColor = active ? 'rgba(212,175,55,.62)' : 'rgba(255,255,255,.30)';
+      btn.style.boxShadow = active ? '0 0 0 1px rgba(212,175,55,.25), 0 6px 16px rgba(0,0,0,.28)' : 'none';
     }
   }
 
@@ -1217,7 +1464,7 @@ html.ticket-eval-embed-grades body{padding-top:0!important;padding-bottom:36px!i
     if (state.selectedSports.has(s)) state.selectedSports.delete(s);
     else state.selectedSports.add(s);
     // Keep at least one sport selected for a usable picker.
-    if (state.selectedSports.size === 0) state.selectedSports = new Set(['NBA','CBB','NHL','SOCCER']);
+    if (state.selectedSports.size === 0) state.selectedSports = new Set(['NBA','NBA1H','NBA1Q','WNBA','CBB','NHL','SOCCER']);
     applySportButtonUI();
     renderPropList();
   }

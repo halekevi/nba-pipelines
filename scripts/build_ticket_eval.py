@@ -112,6 +112,9 @@ SPORT_XLSX_CANDIDATES: dict[str, list[Path]] = {
     "MLB": [
         REPO_ROOT / "MLB" / "step8_mlb_direction_clean.xlsx",
     ],
+    "WNBA": [
+        REPO_ROOT / "Sports" / "WNBA" / "step8_wnba_direction_clean.xlsx",
+    ],
 }
 
 
@@ -203,12 +206,20 @@ def _dated_candidates(date_str: str) -> dict[str, list[Path]]:
         "NHL": dated_dir / f"step8_nhl_direction_clean_{date_str}.xlsx",
         "SOCCER": dated_dir / f"step8_soccer_direction_clean_{date_str}.xlsx",
         "MLB": dated_dir / f"step8_mlb_direction_clean_{date_str}.xlsx",
+        "WNBA": dated_dir / f"step8_wnba_direction_clean_{date_str}.xlsx",
     }
     result: dict[str, list[Path]] = {}
     for bucket, live_paths in SPORT_XLSX_CANDIDATES.items():
+        prepend: list[Path] = []
         dated_path = dated_map.get(bucket)
         if dated_path and dated_path.is_file():
-            result[bucket] = [dated_path] + list(live_paths)
+            prepend.append(dated_path)
+        if bucket == "WNBA":
+            alt = dated_dir / "wnba" / "step8_wnba_direction_clean.xlsx"
+            if alt.is_file() and alt not in prepend:
+                prepend.append(alt)
+        if prepend:
+            result[bucket] = prepend + list(live_paths)
         else:
             result[bucket] = list(live_paths)
     return result
@@ -663,7 +674,7 @@ def _fmt_no_row_match_sample(
     )
     hints: list[str] = []
     for bkt in _leg_match_buckets(sp):
-        if bkt not in ("NBA", "NBA1H", "NBA1Q"):
+        if bkt not in ("NBA", "NBA1H", "NBA1Q", "WNBA"):
             continue
         _, pairs = indices.get(bkt, ({}, {}))
         prop_keys = sorted({pt for (p0, pt) in pairs.keys() if p0 == pn})
@@ -672,7 +683,7 @@ def _fmt_no_row_match_sample(
             break
     if hints:
         return base + "  →  " + hints[0]
-    return base + "  →  (player not found in index buckets for NBA/NBA1H/NBA1Q)"
+    return base + "  →  (player not found in index buckets for this sport)"
 
 
 def _graded_merge_manifest_row_counts(graded_merge_dates: list[str]) -> list[tuple[Path, int]]:
@@ -816,6 +827,136 @@ def _ticket_is_flex_play_structure(group_name: str, n_legs: int) -> bool:
     return "flex" in str(group_name or "").strip().lower()
 
 
+# ── Void-aware payout helpers ────────────────────────────────────────────────
+# When a leg voids (DNP, no-action), PrizePicks drops it from the slip and the
+# ticket pays at the next-smaller leg-count tier IF every remaining leg hit.
+# We approximate the platform's banner using the same base/modifier tables the
+# combined-slate grader uses (kept in sync with scripts/combined_ticket_grader.py).
+_POWER_BASE_TIER = {2: 3.0, 3: 6.0, 4: 10.0, 5: 20.0, 6: 37.5}
+_FLEX_BASE_TIER = {
+    3: {3: 3.0, 2: 1.0},
+    4: {4: 6.0, 3: 1.5},
+    5: {5: 10.0, 4: 2.0, 3: 0.4},
+    6: {6: 25.0, 5: 2.0, 4: 0.4},
+}
+_GOBLIN_POWER_DEV = {1: 0.840, 2: 0.747, 3: 0.707}
+_DEMON_POWER_DEV = {1: 1.627, 2: 2.400, 3: 2.720}
+_GOBLIN_FLEX_DEV = {1: 0.800, 2: 0.720, 3: 0.600}
+_DEMON_FLEX_DEV = {1: 1.600, 2: 1.520, 3: 1.560}
+
+
+def _pick_dev_level(pick_type: str) -> int:
+    s = (pick_type or "").strip().lower()
+    m = re.search(r"\+(\d+)", s)
+    if m:
+        try:
+            return max(1, min(3, int(m.group(1))))
+        except (TypeError, ValueError):
+            return 1
+    return 1
+
+
+def _per_leg_power_mod(pick_type: str) -> float:
+    s = (pick_type or "").strip().lower()
+    if s.startswith("goblin"):
+        return _GOBLIN_POWER_DEV.get(_pick_dev_level(pick_type), 0.840)
+    if s.startswith("demon"):
+        return _DEMON_POWER_DEV.get(_pick_dev_level(pick_type), 1.627)
+    return 1.0  # Standard / unknown
+
+
+def _per_leg_flex_mod(pick_type: str) -> float:
+    s = (pick_type or "").strip().lower()
+    if s.startswith("goblin"):
+        return _GOBLIN_FLEX_DEV.get(_pick_dev_level(pick_type), 0.800)
+    if s.startswith("demon"):
+        return _DEMON_FLEX_DEV.get(_pick_dev_level(pick_type), 1.600)
+    return 1.0
+
+
+def _effective_power_multiplier(
+    legs: list[dict[str, Any]],
+    leg_grades: list[str],
+    banner_pow: float,
+    n: int,
+) -> float | None:
+    """When ≥1 legs void, return the equivalent multiplier on the smaller leg tier.
+
+    Calibrates the banner multiplier so platform-specific scaling cancels out:
+      banner_pow ≈ base[n] · (∏ mod_full) · platform_scale
+      effective  ≈ base[eff] · (∏ mod_remaining) · platform_scale
+    """
+    eff = n - sum(1 for g in leg_grades if g == "VOID")
+    if eff < 2:
+        return None
+    if eff == n:
+        return banner_pow
+    base_n = _POWER_BASE_TIER.get(n)
+    base_eff = _POWER_BASE_TIER.get(eff)
+    if not base_n or not base_eff or banner_pow is None or banner_pow <= 0:
+        return None
+    full_mod = 1.0
+    eff_mod = 1.0
+    for leg, g in zip(legs, leg_grades):
+        m = _per_leg_power_mod(str(leg.get("pick_type") or ""))
+        full_mod *= m
+        if g != "VOID":
+            eff_mod *= m
+    if full_mod <= 0:
+        return None
+    return round(banner_pow * (base_eff * eff_mod) / (base_n * full_mod), 4)
+
+
+def _effective_flex_multiplier(
+    legs: list[dict[str, Any]],
+    leg_grades: list[str],
+    banner_flex: float,
+    banner_pow: float,
+    n: int,
+) -> tuple[float | None, str]:
+    """Return (multiplier, kind) for a flex slip after voids.
+
+    kind ∈ {"sweep", "min_guarantee", "power"} so the caller can label the row.
+    Falls back to the void-aware power formula when voids drop the flex below 3 legs.
+    """
+    v = sum(1 for g in leg_grades if g == "VOID")
+    eff = n - v
+    h = sum(1 for g in leg_grades if g == "HIT")
+    m = sum(1 for g in leg_grades if g == "MISS")
+    if eff < 2:
+        return None, "refund"
+    # Once the slip drops below 3 legs, PrizePicks pays it as a power play.
+    if eff < 3:
+        return _effective_power_multiplier(legs, leg_grades, banner_pow, n), "power"
+    if eff == n:
+        return banner_flex, ("sweep" if h == n else "min_guarantee")
+
+    flex_table = _FLEX_BASE_TIER.get(eff)
+    base_table_full = _FLEX_BASE_TIER.get(n)
+    if not flex_table or not base_table_full:
+        return None, "refund"
+    base_full_sweep = base_table_full.get(n, 0.0) or 0.0
+    if base_full_sweep <= 0 or banner_flex is None or banner_flex <= 0:
+        return None, "refund"
+
+    full_mod = 1.0
+    eff_mod = 1.0
+    for leg, g in zip(legs, leg_grades):
+        mm = _per_leg_flex_mod(str(leg.get("pick_type") or ""))
+        full_mod *= mm
+        if g != "VOID":
+            eff_mod *= mm
+    if full_mod <= 0:
+        return None, "refund"
+
+    base_eff = flex_table.get(h, 0.0) or 0.0
+    if base_eff <= 0:
+        return 0.0, "loss"
+    mult = round(banner_flex * (base_eff * eff_mod) / (base_full_sweep * full_mod), 4)
+    kind = "sweep" if h == eff else "min_guarantee"
+    return mult, kind
+
+
 def _safe_float_ticket(x: Any, default: float | None = None) -> float | None:
     if x is None or x == "":
         return default
@@ -871,6 +1012,7 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
     flex = _ticket_is_flex_play_structure(group_name, n)
     banner_pow = _safe_float_ticket(ticket.get("power_payout")) or 0.0
     banner_flex = _safe_float_ticket(ticket.get("flex_payout")) or 0.0
+    legs_for_payout = ticket.get("legs") or []
 
     min_x = _safe_float_ticket(payd.get("payout")) or _safe_float_ticket(payd.get("min_guarantee"))
     if min_x is None or min_x <= 0:
@@ -886,6 +1028,7 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
     if sweep_x is None or sweep_x <= 0:
         sweep_x = float(banner_pow) if banner_pow > 0 else 0.0
 
+    void_paid_as_power = False
     if not paid:
         result = "LOSS"
         emoji = "❌"
@@ -896,7 +1039,31 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
             emoji = "⚠"
             css = "void_loss"
     elif flex:
-        if all_hit:
+        if v > 0 and (n - v) < 3:
+            # Voids dropped flex below 3 legs — pay as void-aware power play.
+            eff_pow = _effective_power_multiplier(legs_for_payout, leg_grades, banner_pow, n)
+            actual = float(eff_pow if eff_pow is not None else 0.0)
+            result = "WIN"
+            emoji = "✅"
+            css = "win"
+            void_paid_as_power = True
+        elif v > 0:
+            # Flex with voids: scale flex payout to remaining-leg tier.
+            mult, kind = _effective_flex_multiplier(legs_for_payout, leg_grades, banner_flex, banner_pow, n)
+            actual = float(mult if mult is not None else 0.0)
+            if kind == "sweep":
+                result = "SWEEP"
+                emoji = "🏆"
+                css = "sweep"
+            elif kind == "min_guarantee":
+                result = "MIN GUARANTEE"
+                emoji = "🛡️"
+                css = "min_guarantee"
+            else:
+                result = "LOSS"
+                emoji = "❌"
+                css = "loss"
+        elif all_hit:
             result = "SWEEP"
             emoji = "🏆"
             css = "sweep"
@@ -907,12 +1074,17 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
             css = "min_guarantee"
             actual = float(min_x)
     else:
-        # Power Play: all legs correct pays the full board (sweep) multiplier on PrizePicks.
+        # Power Play: every effective (non-void) leg correct.
         result = "WIN"
         emoji = "✅"
         css = "win"
-        pay_win = float(sweep_x) if sweep_x > 0 else float(min_x)
-        actual = pay_win
+        if v > 0:
+            eff_pow = _effective_power_multiplier(legs_for_payout, leg_grades, banner_pow, n)
+            actual = float(eff_pow if eff_pow is not None else 0.0)
+            void_paid_as_power = True
+        else:
+            pay_win = float(sweep_x) if sweep_x > 0 else float(min_x)
+            actual = pay_win
 
     pred_pay = _safe_float_ticket(payd.get("payout")) or _safe_float_ticket(payd.get("min_guarantee"))
     if pred_pay is None or pred_pay <= 0:
@@ -955,16 +1127,30 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
 
     h_show = h
     m_show = m
+    eff_legs = n - v
     if result == "MIN GUARANTEE" and n:
-        detail = f"{result} ({h_show}/{n} correct)"
+        if v > 0:
+            detail = f"{result} ({h_show}/{eff_legs} correct after {v} void)"
+        else:
+            detail = f"{result} ({h_show}/{n} correct)"
     elif result == "SWEEP" and n:
-        detail = f"{result} — all {n} legs correct"
+        if v > 0:
+            detail = f"{result} — {eff_legs}-leg slip (1 void dropped) all correct"
+        else:
+            detail = f"{result} — all {n} legs correct"
     elif result == "WIN" and n:
-        detail = f"{result} — all {n} legs correct"
+        if v > 0:
+            tier_note = f"{n}-leg → {eff_legs}-leg"
+            detail = f"{result} — paid as {eff_legs}-leg power ({tier_note}, {v} void)"
+        else:
+            detail = f"{result} — all {n} legs correct"
     elif result == "VOID_LOSS" and n:
         detail = f"Voided legs prevented payout ({h_show} hit, {m_show} miss, {v} void)"
     elif result == "LOSS" and n:
-        detail = f"{result} ({h_show} hit, {m_show} miss)"
+        if v > 0:
+            detail = f"{result} ({h_show} hit, {m_show} miss, {v} void)"
+        else:
+            detail = f"{result} ({h_show} hit, {m_show} miss)"
     else:
         detail = result
 
@@ -984,6 +1170,10 @@ def _ticket_eval_money_outcome(group_name: str, leg_grades: list[str], ticket: d
     }
     if result == "VOID_LOSS":
         out["result_display"] = "VOID / NO ACTION"
+    if v > 0 and result in ("WIN", "SWEEP", "MIN GUARANTEE"):
+        out["void_dropped_legs"] = int(v)
+        out["effective_legs"] = int(eff_legs)
+        out["void_paid_as_power"] = bool(void_paid_as_power)
     return out
 
 
@@ -1030,8 +1220,13 @@ def _append_grade_history(record: dict[str, Any]) -> None:
 
 def _ticket_pays_money(group_name: str, leg_grades: list[str]) -> bool:
     """
-    Cash outcome: power = every leg HIT; flex (sheet title contains 'Flex', 3+ legs) = at most one
-    MISS and at least n-1 HITs (e.g. 2/3 or 3/4). VOID legs are neither HIT nor MISS.
+    Cash outcome with PrizePicks void rule.
+
+    Voids drop off the slip and the ticket pays at the next-smaller leg tier:
+      * Power: every remaining (non-void) leg must HIT, with ≥2 effective legs.
+      * Flex (3+ legs): if effective legs ≥3, allow one MISS at the smaller tier.
+        If voids reduce the slip below 3 effective legs, treat as a power play
+        on the remaining legs.
     Caller must ensure no UNGRADED legs.
     """
     if not leg_grades or any(g == "UNGRADED" for g in leg_grades):
@@ -1039,9 +1234,15 @@ def _ticket_pays_money(group_name: str, leg_grades: list[str]) -> bool:
     n = len(leg_grades)
     h = sum(1 for g in leg_grades if g == "HIT")
     m = sum(1 for g in leg_grades if g == "MISS")
+    v = sum(1 for g in leg_grades if g == "VOID")
+    eff = n - v
+    if eff < 2:
+        return False
     if _ticket_is_flex_play_structure(group_name, n):
-        return m <= 1 and h >= n - 1
-    return all(g == "HIT" for g in leg_grades)
+        if eff < 3:
+            return m == 0 and h == eff
+        return m <= 1 and h >= eff - 1
+    return m == 0 and h == eff
 
 
 def _pick_type_tier(pick_type: str) -> str:
@@ -1104,6 +1305,8 @@ def _bucket_ticket_groups(groups: list[dict[str, Any]]) -> list[tuple[str, list[
 def _leg_match_buckets(sport: str) -> list[str]:
     """
     Order matters: try variant-specific slate first, then parent sport fallback.
+    Legs only search indices for their sport (and declared variants); no broad NBA/CBB
+    fallback — that caused cross-sport name collisions (e.g. MLB vs NBA).
     """
     s = (sport or "").strip().upper().replace(" ", "").replace("-", "")
     if s in ("NBA1H", "NBA_1H"):
@@ -1114,7 +1317,9 @@ def _leg_match_buckets(sport: str) -> list[str]:
         return ["WCBB", "CBB"]
     if s in ("SOC", "MLS", "EPL"):
         return ["SOCCER"]
-    if s in ("NBA", "WNBA"):
+    if s == "WNBA":
+        return ["WNBA"]
+    if s == "NBA":
         return ["NBA"]
     if s == "CBB":
         return ["CBB"]
@@ -1124,7 +1329,7 @@ def _leg_match_buckets(sport: str) -> list[str]:
         return ["SOCCER"]
     if s == "MLB":
         return ["MLB"]
-    return [s, "NBA", "CBB"]
+    return [s] if s else []
 
 
 def _ingest_workbook_rows_into_index(
@@ -1211,6 +1416,7 @@ def _merge_strict_graded_date_workbooks(
         return
     sport_to_bucket = {
         "nba": "NBA",
+        "wnba": "WNBA",
         "cbb": "CBB",
         "nhl": "NHL",
         "soccer": "SOCCER",
@@ -1287,6 +1493,8 @@ def _sport_buckets_for_graded_filename(path: Path) -> list[str]:
         return ["WCBB"]
     if "cbb" in n or "cbb" in s or "ncaab" in n:
         return ["CBB"]
+    if "wnba" in n:
+        return ["WNBA"]
     if "nba1h" in n or "nba_1h" in n:
         return ["NBA1H"]
     if "nba1q" in n or "nba_1q" in n:
@@ -1356,7 +1564,7 @@ def _game_dates_from_ticket_payload(payload: dict[str, Any], slate_date: str) ->
 # combined_slate_tickets_*.xlsx often omits Game Time; evening pipeline slips still target the next
 # calendar day for these books. Used only when no leg game_time / start_time was parsed.
 _TEAM_SPORTS_INFER_NEXT_DAY_GRADED: frozenset[str] = frozenset(
-    {"NBA", "NBA1H", "NBA1Q", "MLB", "NHL", "SOCCER", "CBB", "WCBB"}
+    {"NBA", "NBA1H", "NBA1Q", "WNBA", "MLB", "NHL", "SOCCER", "CBB", "WCBB"}
 )
 
 
@@ -1717,7 +1925,7 @@ def debug_report(
     print("\nfind_graded_workbook_path() (deploy path first, then outputs/):")
     for gd in graded_merge_dates:
         print(f"  --- date {gd} ---")
-        for slug in ("nba", "nhl", "mlb", "soccer", "cbb", "wcbb"):
+        for slug in ("nba", "wnba", "nhl", "mlb", "soccer", "cbb", "wcbb"):
             p = find_graded_workbook_path(slug, gd)
             label = f"graded_{slug}_{gd}.xlsx"
             if p:
