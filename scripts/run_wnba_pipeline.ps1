@@ -70,13 +70,35 @@ Write-Host "======================================================" -ForegroundC
 Write-Host ""
 Write-Progress -Id 2 -Activity "WNBA Pipeline" -Status "Starting..." -PercentComplete 0
 
+function Split-QuotedArgs([string]$s) {
+    if (-not $s) { return @() }
+    $parts = [System.Collections.ArrayList]@()
+    $i = 0
+    while ($i -lt $s.Length) {
+        while ($i -lt $s.Length -and [char]::IsWhiteSpace($s[$i])) { $i++ }
+        if ($i -ge $s.Length) { break }
+        if ($s[$i] -eq [char]34) {
+            $i++
+            $start = $i
+            while ($i -lt $s.Length -and $s[$i] -ne [char]34) { $i++ }
+            [void]$parts.Add($s.Substring($start, [Math]::Max(0, $i - $start)))
+            if ($i -lt $s.Length) { $i++ }
+        } else {
+            $start = $i
+            while ($i -lt $s.Length -and -not [char]::IsWhiteSpace($s[$i])) { $i++ }
+            [void]$parts.Add($s.Substring($start, $i - $start))
+        }
+    }
+    return ,$parts.ToArray()
+}
+
 function Run-Step {
     param([string]$Label, [string]$Dir, [string]$Script, [string]$Arguments = "")
     Write-Host "  --> $Label" -ForegroundColor Yellow
     Push-Location $Dir
     try {
         if ($Arguments) {
-            $argArray = $Arguments -split ' '
+            $argArray = Split-QuotedArgs $Arguments
             $output = & py -3.14 $Script @argArray 2>&1
         } else {
             $output = & py -3.14 $Script 2>&1
