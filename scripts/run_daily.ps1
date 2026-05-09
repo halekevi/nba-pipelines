@@ -146,9 +146,10 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
         "step8_mlb_direction_clean_$RunDate.xlsx",
         "step8_tennis_direction_clean_$RunDate.xlsx"
     )
-    # WNBA: expected from full parallel run on/after season start (see run_pipeline.ps1 $WNBA_SEASON_START).
+    # WNBA: run_wnba_pipeline.ps1 publishes outputs/<date>/step8_wnba_direction_clean_<date>.xlsx
+    # (same basename pattern as other sports' step8_*_direction_clean_<date>.xlsx).
     if ($RunDate -ge "2026-05-01") {
-        $required = @($required) + @("step8_wnba_direction_$RunDate.xlsx")
+        $required = @($required) + @("step8_wnba_direction_clean_$RunDate.xlsx")
     }
     # 2026 NCAA: WCBB title Sun Apr 5; men's title Mon Apr 6. Expect no WCBB slate from Apr 6+;
     # no men's CBB slate from Apr 7+ — omit from required outputs so daily does not false-fail.
@@ -189,8 +190,9 @@ function Get-MissingTodaySlateOutputs([string]$RunDate) {
             (Join-Path $SportsRoot "Tennis\outputs\step8_tennis_direction_clean.xlsx"),
             (Join-Path $SportsRoot "Tennis\step8_tennis_direction_clean.xlsx")
         )
-        "step8_wnba_direction_$RunDate.xlsx" = @(
-            (Join-Path $SportsRoot "WNBA\step8_wnba_direction.xlsx")
+        "step8_wnba_direction_clean_$RunDate.xlsx" = @(
+            (Join-Path $SportsRoot "WNBA\step8_wnba_direction_clean.xlsx"),
+            (Join-Path $SportsRoot "WNBA\outputs\step8_wnba_direction_clean.xlsx")
         )
     }
     $missing = @()
