@@ -36,6 +36,7 @@ def backfill_one_date(date_str: str, templates: Path) -> bool:
     nhl_path = find_graded_file("nhl", date_str)
     soccer_path = find_graded_file("soccer", date_str)
     mlb_path = find_graded_file("mlb", date_str)
+    wnba_path = find_graded_file("wnba", date_str)
 
     if cbb_path:
         bundles.append(("CBB", load_graded(cbb_path)))
@@ -45,6 +46,8 @@ def backfill_one_date(date_str: str, templates: Path) -> bool:
         bundles.append(("Soccer", load_graded(soccer_path)))
     if mlb_path:
         bundles.append(("MLB", load_graded(mlb_path)))
+    if wnba_path:
+        bundles.append(("WNBA", load_graded(wnba_path, "wnba")))
 
     if not bundles:
         return False
