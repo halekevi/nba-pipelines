@@ -61,6 +61,8 @@ $NBA1HGradedFile = Join-Path $DateDir "graded_nba1h_$Date.xlsx"
 $NBA1QGradedFile = Join-Path $DateDir "graded_nba1q_$Date.xlsx"
 $WCBBGradedFile = Join-Path $DateDir "graded_wcbb_$Date.xlsx"
 $TennisGradedFile = Join-Path $DateDir "graded_tennis_$Date.xlsx"
+$WNBAActuals = Join-Path $DateDir "actuals_wnba_$Date.csv"
+$WNBAGradedFile = Join-Path $DateDir "graded_wnba_$Date.xlsx"
 $EvalHtmlFile = Join-Path $DateDir "slate_eval_$Date.html"
 $TemplatesDir = Join-Path $Root "ui_runner\templates"
 # Local mobile bundle (grades.html loads slate_eval_{date}.html + graded_props_{date}.json from here).
@@ -87,6 +89,8 @@ function Copy-PropOracleGradedSlateBundle {
         "graded_nhl_$GradeDate.xlsx",
         "graded_mlb_$GradeDate.xlsx",
         "graded_soccer_$GradeDate.xlsx",
+        "graded_wnba_$GradeDate.xlsx",
+        "graded_tennis_$GradeDate.xlsx",
         "combined_tickets_graded_$GradeDate.xlsx"
     )
 
@@ -276,6 +280,13 @@ if (Test-Path $FetchActualsScript) {
         "--date", $Date,
         "--soccer-window", "1",
         "--output", $SoccerActuals
+    )
+
+    Run-Py "Fetch WNBA Actuals" $Root $FetchActualsScript @(
+        "--sport", "WNBA",
+        "--date", $Date,
+        "--nba-window", "1",
+        "--output", $WNBAActuals
     )
 
     if (Test-Path $FetchTennisActualsScript) {
@@ -600,6 +611,30 @@ else {
     }
 }
 
+$WnbaStep8Dated = Join-Path $DateDir "step8_wnba_direction_clean_$Date.xlsx"
+$WnbaStep8Canonical = Join-Path $DateDir "wnba\step8_wnba_direction_clean.xlsx"
+$WnbaStep8Static = Join-Path $SportsRoot "WNBA\step8_wnba_direction_clean.xlsx"
+$WnbaStep8Static2 = Join-Path $SportsRoot "WNBA\outputs\step8_wnba_direction_clean.xlsx"
+$WNBASlateFile = Resolve-FirstExisting @(
+    $WnbaStep8Canonical,
+    $WnbaStep8Dated,
+    $WnbaStep8Static,
+    $WnbaStep8Static2
+)
+if ($WNBASlateFile) { Write-Host "[GRADER] WNBA slate: $(Split-Path $WNBASlateFile -Leaf)" -ForegroundColor Cyan }
+if ((Test-Path $WNBAActuals) -and $WNBASlateFile -and (Test-Path $WNBASlateFile) -and (Test-Path $SlateGraderScript)) {
+    Run-Py "Grade WNBA Slate" $Root $SlateGraderScript @(
+        "--sport", "WNBA",
+        "--slate", $WNBASlateFile,
+        "--actuals", $WNBAActuals,
+        "--output", $WNBAGradedFile,
+        "--date", $Date
+    )
+}
+else {
+    Write-Host "Skipping WNBA slate grading (missing actuals_wnba, step8 WNBA slate, or slate_grader)." -ForegroundColor Yellow
+}
+
 # NBA 1H / 1Q must use period box scores. Do not fall back to full-game actuals_nba_*.csv
 # (wrong period totals + avoidable NO_ACTUAL voids). Auto-fetch period CSVs when missing.
 if (-not (Test-Path $DateDir)) {
@@ -729,7 +764,8 @@ if (Test-Path $VoidValidatorScript) {
         $SoccerGradedFile,
         $NBA1HGradedFile,
         $NBA1QGradedFile,
-        $TennisGradedFile
+        $TennisGradedFile,
+        $WNBAGradedFile
     )) {
         if ($gf -and (Test-Path $gf)) {
             $VoidArgs += @("--graded", $gf)

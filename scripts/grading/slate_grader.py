@@ -355,7 +355,7 @@ def _coalesce_line_from_projection(df):
     return df
 
 
-def load_nba(path: str) -> pd.DataFrame:
+def load_nba(path: str, sport_code: str = "NBA") -> pd.DataFrame:
     xls = pd.ExcelFile(path, engine="openpyxl")
     preferred = ["ALL", "Full Slate", "Box Raw", "Props", "Sheet1"]
     sheet = next((s for s in preferred if s in xls.sheet_names), xls.sheet_names[0])
@@ -369,7 +369,8 @@ def load_nba(path: str) -> pd.DataFrame:
 
     if sheet == "Full Slate" and "Sport" in df.columns:
         su = df["Sport"].astype(str).str.strip().str.upper()
-        df = df.loc[su == "NBA"].copy()
+        code = str(sport_code or "NBA").strip().upper()
+        df = df.loc[su == code].copy()
 
     df = df.rename(columns={
     "Player": "player",
@@ -1369,7 +1370,7 @@ def _recompute_standard_tiers_from_directional_ml_prob(df: pd.DataFrame, sport: 
 # ── Main ──────────────────────────────────────────────────────────────────────
 def main():
     ap=argparse.ArgumentParser()
-    ap.add_argument('--sport',default='NBA',choices=['NBA','CBB'])
+    ap.add_argument('--sport', default='NBA', choices=['NBA', 'CBB', 'WNBA'])
     ap.add_argument('--slate',default='')
     ap.add_argument('--actuals',default='')
     ap.add_argument('--output',default='')
@@ -1385,8 +1386,11 @@ def main():
     if not args.output: args.output=f'{args.sport.lower()}_graded_{args.date}.xlsx'
 
     print(f'Loading {args.sport} slate...')
-    df=load_nba(args.slate) if args.sport=='NBA' else load_cbb(args.slate)
-    if args.sport == "NBA":
+    if args.sport == "CBB":
+        df = load_cbb(args.slate)
+    else:
+        df = load_nba(args.slate, "WNBA" if args.sport == "WNBA" else "NBA")
+    if args.sport in ("NBA", "WNBA"):
         df = filter_nba_slate_by_grade_date(df, args.date)
     print(f'  {len(df)} props loaded')
 

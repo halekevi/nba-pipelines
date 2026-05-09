@@ -779,7 +779,7 @@ def fetch_sport(sport_path, date_str, window=2, nba_extra_days: int = 0):
         ]
         print(f"CBB mode: conference-by-conference fetch across {window*2+1}-day window "
               f"({fetch_dates[0]} → {fetch_dates[-1]})")
-    elif sport_path == "nba" and nba_extra_days > 0:
+    elif sport_path in ("nba", "wnba") and nba_extra_days > 0:
         # ESPN often splits the same US "slate night" across two calendar dates on the
         # scoreboard API (e.g. 2026-04-24 returns 3 games while 2026-04-25 holds the
         # rest). Merge completed games from --date through +nba_extra_days.
@@ -787,8 +787,9 @@ def fetch_sport(sport_path, date_str, window=2, nba_extra_days: int = 0):
             (target_dt + _td(days=d)).strftime("%Y-%m-%d")
             for d in range(0, nba_extra_days + 1)
         ]
+        lab = "NBA" if sport_path == "nba" else "WNBA"
         print(
-            f"NBA mode: fetching scoreboards for {', '.join(fetch_dates)} "
+            f"{lab} mode: fetching scoreboards for {', '.join(fetch_dates)} "
             f"(primary {date_str} + {nba_extra_days} following day(s))"
         )
     else:
@@ -853,7 +854,7 @@ def fetch_sport(sport_path, date_str, window=2, nba_extra_days: int = 0):
             box,
             date_str=date_str,
             event_id=str(event_id),
-            collect_dnp=(sport_path == "nba"),
+            collect_dnp=(sport_path in ("nba", "wnba")),
         )
         all_rows.extend(stat_rows)
         if sport_path == "nba":
@@ -1793,7 +1794,11 @@ def _export_injuries_sidecar(args) -> None:
 # ── Main ─────────────────────────────────────────────────────────────────────
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--sport',  default='NBA', choices=['NBA', 'CBB', 'WCBB', 'NHL', 'Soccer'])
+    ap.add_argument(
+        '--sport',
+        default='NBA',
+        choices=['NBA', 'CBB', 'WCBB', 'NHL', 'Soccer', 'WNBA'],
+    )
     ap.add_argument('--date',   default='', help='YYYY-MM-DD (default: yesterday)')
     ap.add_argument('--output', default='')
     ap.add_argument('--window', default=2, type=int,
@@ -1805,7 +1810,7 @@ def main():
                     help='Soccer only: also fetch completed games for the following N calendar days after '
                          '--date (default: 1). Use 0 for single calendar day only.')
     ap.add_argument('--nba-window', default=1, type=int,
-                    help='NBA only: also fetch scoreboards for the following N calendar days after --date '
+                    help='NBA / WNBA: also fetch scoreboards for the following N calendar days after --date '
                          '(default: 1) so games ESPN indexes on the next day are included. Use 0 for '
                          'single calendar day only.')
     args = ap.parse_args()
@@ -1830,6 +1835,11 @@ def main():
         df = fetch_nhl(args.date, adjacent_days=w)
     elif args.sport == 'Soccer':
         df = fetch_soccer(args.date, adjacent_days=max(0, int(args.soccer_window)))
+    elif args.sport == "WNBA":
+        w = max(0, int(args.nba_window))
+        df, empty_reason, nba_box_dnp = fetch_sport(
+            "wnba", args.date, window=args.window, nba_extra_days=w
+        )
     else:
         if args.sport == "NBA":
             sport_path = "nba"
@@ -1848,7 +1858,7 @@ def main():
         stub = pd.DataFrame(columns=["player", "team", "prop_type", "actual"])
         stub.to_csv(args.output, index=False)
         _export_injuries_sidecar(args)
-        if args.sport == "NBA" and nba_box_dnp:
+        if args.sport in ("NBA", "WNBA") and nba_box_dnp:
             n_merged = merge_nba_box_dnp_into_injuries_csv(nba_box_dnp, args.date, args.output)
             if n_merged:
                 print(f"  Box-score DNP merged into injuries sidecar (+{n_merged} row(s))")
@@ -1861,7 +1871,7 @@ def main():
 
     df.to_csv(args.output, index=False)
     _export_injuries_sidecar(args)
-    if args.sport == "NBA" and nba_box_dnp:
+    if args.sport in ("NBA", "WNBA") and nba_box_dnp:
         n_merged = merge_nba_box_dnp_into_injuries_csv(nba_box_dnp, args.date, args.output)
         if n_merged:
             print(f"  Box-score DNP merged into injuries sidecar (+{n_merged} row(s))")
