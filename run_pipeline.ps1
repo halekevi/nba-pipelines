@@ -120,6 +120,13 @@ if ($MLBVerify -and -not $MLBOnly) {
     $MLBOnly = $true
 }
 
+# MLB step4 ESPN/cache season: use slate calendar year (2026 slates must not pass --season 2025).
+try {
+    $MLBSeasonYear = ([datetime]::ParseExact($Date, "yyyy-MM-dd", [System.Globalization.CultureInfo]::InvariantCulture)).Year
+} catch {
+    $MLBSeasonYear = (Get-Date).Year
+}
+
 $StartTime = Get-Date
 
 # -- Paths --------------------------------------------------------------------
@@ -911,7 +918,7 @@ if ($MLBOnly) {
     }
     if ($ok) { $ok = Run-Step "MLB Step 2 - Attach Pick Types"  $MLBDir ".\scripts\step2_attach_picktypes_mlb.py"       "--input `"$MLBRunOutDir\step1_mlb_props.csv`" --output `"$MLBRunOutDir\step2_mlb_picktypes.csv`" --id_lookup_timeout_s 6 --id_lookup_retries 2 --id_lookup_budget_s 180" }
     if ($ok) { $ok = Run-Step "MLB Step 3 - Attach Defense"     $MLBDir ".\scripts\step3_attach_defense_mlb.py"         "--input `"$MLBRunOutDir\step2_mlb_picktypes.csv`" --defense mlb_defense_summary.csv --output `"$MLBRunOutDir\step3_mlb_with_defense.csv`"" }
-    if ($ok) { $ok = Run-Step "MLB Step 4 - Player Stats"       $MLBDir ".\scripts\step4_attach_player_stats_mlb.py"    "--input `"$MLBRunOutDir\step3_mlb_with_defense.csv`" --cache mlb_stats_cache.csv --output `"$MLBRunOutDir\step4_mlb_with_stats.csv`" --season 2025" -TimeoutSeconds 1200 }
+    if ($ok) { $ok = Run-Step "MLB Step 4 - Player Stats"       $MLBDir ".\scripts\step4_attach_player_stats_mlb.py"    "--input `"$MLBRunOutDir\step3_mlb_with_defense.csv`" --cache mlb_stats_cache.csv --output `"$MLBRunOutDir\step4_mlb_with_stats.csv`" --season $MLBSeasonYear" -TimeoutSeconds 1200 }
     if ($ok -and $MLBVerify) {
         Write-Host ""
         Write-Host "  [MLBVerify] Step 1-4 completed. Health summary:" -ForegroundColor Cyan
@@ -1109,6 +1116,23 @@ $wnbaParallel = ($ForceWNBA.IsPresent -or ($Date -ge $WNBA_SEASON_START))
 if (-not $wnbaParallel) {
     Write-Host "  [WNBA] Parallel job skipped until $WNBA_SEASON_START (use -ForceWNBA to run early)." -ForegroundColor DarkGray
 }
+
+# Men's CBB: no expected slate on/after 2026-04-07 (align with scripts\run_daily.ps1 Get-MissingTodaySlateOutputs).
+$CBB_PARALLEL_ACTIVE = ($Date -lt "2026-04-07")
+if (-not $CBB_PARALLEL_ACTIVE) {
+    Write-Host "  [CBB] Parallel job skipped (men's season ended; date >= 2026-04-07)." -ForegroundColor DarkGray
+}
+
+# NFL PrizePicks-style board: run Aug–Feb only (off-season roughly Mar–Jul). Adjust if PP adds a summer slate.
+$NFL_PARALLEL_ACTIVE = $true
+try {
+    $dNfl = [datetime]::ParseExact($Date, "yyyy-MM-dd", [System.Globalization.CultureInfo]::InvariantCulture)
+    $NFL_PARALLEL_ACTIVE = ($dNfl.Month -ge 8 -or $dNfl.Month -le 2)
+} catch { }
+if (-not $NFL_PARALLEL_ACTIVE) {
+    Write-Host "  [NFL] Parallel job skipped (off-season for $Date; active months Aug–Feb)." -ForegroundColor DarkGray
+}
+
 $parallelLabel = if ($wnbaParallel) {
     "[ PARALLEL PIPELINE: NBA + CBB + NHL + Soccer + Tennis + MLB + NFL + WNBA ]"
 } else {
@@ -1173,6 +1197,8 @@ $NBAJob = Start-Job -ScriptBlock {
 } -ArgumentList $NBADir, $Date, $OddsApiKey, $SkipFetch, $Root, $NBARunOutDir
 
 # -- CBB Job ------------------------------------------------------------------
+$CBBJob = $null
+if ($CBB_PARALLEL_ACTIVE) {
 $CBBJob = Start-Job -ScriptBlock {
     param($CBBDir, $Date, $SkipFetch, $RepoRoot, $CBBRunOutDir)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
@@ -1218,6 +1244,7 @@ $CBBJob = Start-Job -ScriptBlock {
     if ($ok) { Invoke-Step7b-Job "CBB" $RepoRoot }
     return $ok
 } -ArgumentList $CBBDir, $Date, $SkipFetch, $Root, $CBBRunOutDir
+}
 
 # -- NHL Job ------------------------------------------------------------------
 $NHLJob = Start-Job -ScriptBlock {
@@ -1376,7 +1403,7 @@ $TennisJob = Start-Job -ScriptBlock {
 # -- MLB Job ------------------------------------------------------------------
 # MLB activated April 2026
 $MLBJob = Start-Job -ScriptBlock {
-    param($MLBDir, $Date, $SkipFetch, $RepoRoot, $MLBRunOutDir)
+    param($MLBDir, $Date, $SkipFetch, $RepoRoot, $MLBRunOutDir, $MlbSeasonYear)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
     function Run-Step-Job {
         param([string]$Label,[string]$Dir,[string]$Script,[string]$Arguments="")
@@ -1483,14 +1510,14 @@ $MLBJob = Start-Job -ScriptBlock {
     }
     if ($ok) { $ok = Run-Step-Job "MLB Step 2 - Attach Pick Types"  $MLBDir ".\scripts\step2_attach_picktypes_mlb.py"       "--input `"$MLBRunOutDir\step1_mlb_props.csv`" --output `"$MLBRunOutDir\step2_mlb_picktypes.csv`" --id_lookup_timeout_s 6 --id_lookup_retries 2 --id_lookup_budget_s 180" }
     if ($ok) { $ok = Run-Step-Job "MLB Step 3 - Attach Defense"     $MLBDir ".\scripts\step3_attach_defense_mlb.py"         "--input `"$MLBRunOutDir\step2_mlb_picktypes.csv`" --defense mlb_defense_summary.csv --output `"$MLBRunOutDir\step3_mlb_with_defense.csv`"" }
-    if ($ok) { $ok = Run-Step-Job "MLB Step 4 - Player Stats"       $MLBDir ".\scripts\step4_attach_player_stats_mlb.py"    "--input `"$MLBRunOutDir\step3_mlb_with_defense.csv`" --cache mlb_stats_cache.csv --output `"$MLBRunOutDir\step4_mlb_with_stats.csv`" --season 2025" }
+    if ($ok) { $ok = Run-Step-Job "MLB Step 4 - Player Stats"       $MLBDir ".\scripts\step4_attach_player_stats_mlb.py"    "--input `"$MLBRunOutDir\step3_mlb_with_defense.csv`" --cache mlb_stats_cache.csv --output `"$MLBRunOutDir\step4_mlb_with_stats.csv`" --season $MlbSeasonYear" }
     if ($ok) { $ok = Run-Step-Job "MLB Step 5 - Line Hit Rates"     $MLBDir ".\scripts\step5_add_line_hit_rates_mlb.py"     "--input `"$MLBRunOutDir\step4_mlb_with_stats.csv`" --output `"$MLBRunOutDir\step5_mlb_hit_rates.csv`"" }
     if ($ok) { $ok = Run-Step-Job "MLB Step 6 - Team Role Context"  $MLBDir ".\scripts\step6_team_role_context_mlb.py"      "--input `"$MLBRunOutDir\step5_mlb_hit_rates.csv`" --output `"$MLBRunOutDir\step6_mlb_role_context.csv`"" }
     if ($ok) { $ok = Run-Step-Job "MLB Step 7 - Rank Props"         $MLBDir ".\scripts\step7_rank_props_mlb.py"             "--input `"$MLBRunOutDir\step6_mlb_role_context.csv`" --output `"$MLBRunOutDir\step7_mlb_ranked.xlsx`"" }
     if ($ok) { Invoke-Step7b-Job "MLB" $RepoRoot }
     if ($ok) { $ok = Run-Step-Job "MLB Step 8 - Direction Context"  $MLBDir (Join-Path $RepoRoot "Sports\MLB\scripts\step8_add_direction_context_mlb.py")  "--input `"$MLBRunOutDir\step7_mlb_ranked.xlsx`" --output `"$MLBRunOutDir\step8_mlb_direction.csv`" --xlsx `"$MLBRunOutDir\step8_mlb_direction_clean.xlsx`" --date $Date" }
     return $ok
-} -ArgumentList $MLBDir, $Date, $SkipFetch, $Root, $MLBRunOutDir
+} -ArgumentList $MLBDir, $Date, $SkipFetch, $Root, $MLBRunOutDir, $MLBSeasonYear
 
 # -- WNBA Job (parallel full run from $WNBA_SEASON_START; optional -ForceWNBA) ---
 $WNBAJob = $null
@@ -1524,6 +1551,8 @@ if ($wnbaParallel) {
 }
 
 # -- NFL Job ------------------------------------------------------------------
+$NFLJob = $null
+if ($NFL_PARALLEL_ACTIVE) {
 $NFLJob = Start-Job -ScriptBlock {
     param($NFLDir, $Date, $SkipFetch, $RepoRoot, $DefenseSeason, $NFLRunOutDir)
     $env:PYTHONUTF8 = "1"; $env:PYTHONIOENCODING = "utf-8"
@@ -1575,6 +1604,7 @@ $NFLJob = Start-Job -ScriptBlock {
     if ($ok) { $ok = Run-Step-Job "NFL Step 8 - Direction Context" $NFLDir ".\scripts\step8_add_direction_context_nfl.py" "--date $Date --output `"$NFLRunOutDir\step8_nfl_direction_clean.xlsx`"" }
     return $ok
 } -ArgumentList $NFLDir, $Date, $SkipFetch, $Root, 2025, $NFLRunOutDir
+}
 
 # -- Wait + stream output -----------------------------------------------------
 $allJobs = @($NBAJob, $CBBJob, $NHLJob, $SoccerJob, $TennisJob, $MLBJob, $NFLJob, $WNBAJob) | Where-Object { $_ -ne $null }
@@ -1622,12 +1652,12 @@ foreach ($job in $allJobs) {
 
 # -- Results ------------------------------------------------------------------
 $NBASuccess    = Test-Path (Join-Path $NBARunOutDir "step8_all_direction_clean.xlsx")
-$CBBSuccess    = Test-Path (Join-Path $CBBRunOutDir "step6_ranked_cbb.xlsx")
+$CBBSuccess    = if (-not $CBB_PARALLEL_ACTIVE) { $true } else { Test-Path (Join-Path $CBBRunOutDir "step6_ranked_cbb.xlsx") }
 $NHLSuccess    = Test-Path (Join-Path $NHLRunOutDir "step8_nhl_direction_clean.xlsx")
 $SoccerSuccess = Test-Path (Join-Path $SoccerRunOutDir "step8_soccer_direction_clean.xlsx")
 $MLBSuccess    = Test-Path (Join-Path $MLBRunOutDir "step8_mlb_direction_clean.xlsx")
 $TennisSuccess = Test-Path (Join-Path $TennisRunOutDir "step8_tennis_direction_clean.xlsx")
-$NFLSuccess    = Test-Path (Join-Path $NFLRunOutDir "step8_nfl_direction_clean.xlsx")
+$NFLSuccess    = if (-not $NFL_PARALLEL_ACTIVE) { $true } else { Test-Path (Join-Path $NFLRunOutDir "step8_nfl_direction_clean.xlsx") }
 $WNBASuccess = $false
 if ($wnbaParallel) {
     $wnbaStep8Clean = Join-Path $OutDir "wnba\step8_wnba_direction_clean.xlsx"
@@ -1671,15 +1701,20 @@ if ($NBASuccess) { New-Item -ItemType File -Force -Path (Join-Path $NBADir "RUN_
 
 Write-Host ""
 @(
-    @{ Name="NBA";    Ok=$NBASuccess },
-    @{ Name="CBB";    Ok=$CBBSuccess },
-    @{ Name="NHL";    Ok=$NHLSuccess },
-    @{ Name="Soccer"; Ok=$SoccerSuccess },
-    @{ Name="MLB";    Ok=$MLBSuccess },
-    @{ Name="NFL";    Ok=$NFLSuccess }
+    @{ Name="NBA";    Ok=$NBASuccess; Skip=$false },
+    @{ Name="CBB";    Ok=$CBBSuccess; Skip=(-not $CBB_PARALLEL_ACTIVE) },
+    @{ Name="NHL";    Ok=$NHLSuccess; Skip=$false },
+    @{ Name="Soccer"; Ok=$SoccerSuccess; Skip=$false },
+    @{ Name="MLB";    Ok=$MLBSuccess; Skip=$false },
+    @{ Name="NFL";    Ok=$NFLSuccess; Skip=(-not $NFL_PARALLEL_ACTIVE) }
 ) | ForEach-Object {
-    if ($_.Ok) { Write-Host "  $($_.Name) complete." -ForegroundColor Green }
-    else        { Write-Host "  $($_.Name) FAILED."  -ForegroundColor Red   }
+    if ($_.Skip) {
+        Write-Host "  $($_.Name) skipped (off-season / not required)." -ForegroundColor DarkGray
+    } elseif ($_.Ok) {
+        Write-Host "  $($_.Name) complete." -ForegroundColor Green
+    } else {
+        Write-Host "  $($_.Name) FAILED."  -ForegroundColor Red
+    }
 }
 if ($wnbaParallel) {
     if ($WNBASuccess) { Write-Host "  WNBA complete." -ForegroundColor Green }
