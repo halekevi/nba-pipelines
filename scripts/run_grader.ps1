@@ -753,8 +753,13 @@ if (Test-Path $BuildGradesHtmlScript) {
     if (Test-Path $NHLGradedFile) { $HtmlArgs += @("--nhl", $NHLGradedFile) }
     if (Test-Path $SoccerGradedFile) { $HtmlArgs += @("--soccer", $SoccerGradedFile) }
     if (Test-Path $MLBGradedFile) { $HtmlArgs += @("--mlb", $MLBGradedFile) }
+    $WnbaGradedCanonical = Join-Path $DateDir "graded_wnba_$Date.xlsx"
+    $WnbaGradedAlt = Join-Path $DateDir "wnba_graded_$Date.xlsx"
+    if (Test-Path $WnbaGradedCanonical) { $HtmlArgs += @("--wnba", $WnbaGradedCanonical) }
+    elseif (Test-Path $WnbaGradedAlt) { $HtmlArgs += @("--wnba", $WnbaGradedAlt) }
+    if (Test-Path $TennisGradedFile) { $HtmlArgs += @("--tennis", $TennisGradedFile) }
 
-    if (($HtmlArgs -contains "--nba") -or ($HtmlArgs -contains "--cbb") -or ($HtmlArgs -contains "--nhl") -or ($HtmlArgs -contains "--soccer") -or ($HtmlArgs -contains "--mlb")) {
+    if (($HtmlArgs -contains "--nba") -or ($HtmlArgs -contains "--cbb") -or ($HtmlArgs -contains "--nhl") -or ($HtmlArgs -contains "--soccer") -or ($HtmlArgs -contains "--mlb") -or ($HtmlArgs -contains "--wnba") -or ($HtmlArgs -contains "--tennis")) {
         Run-Py "Build Grades HTML" $Root $BuildGradesHtmlScript $HtmlArgs
         # Keep mobile/www in sync with ui_runner/templates (Grades iframe uses same-dir slate_eval_*.html).
         if (Test-Path -LiteralPath $MobileWwwDir) {

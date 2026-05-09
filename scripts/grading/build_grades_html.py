@@ -1369,6 +1369,8 @@ def build_takeaways(
     nhl_rows: list[dict] | None = None,
     soccer_rows: list[dict] | None = None,
     mlb_rows: list[dict] | None = None,
+    wnba_rows: list[dict] | None = None,
+    tennis_rows: list[dict] | None = None,
 ) -> str:
     """
     Insight cards at the bottom of slate_eval. Uses **all loaded sports** so Railway /grades
@@ -1377,9 +1379,17 @@ def build_takeaways(
     nhl_rows = nhl_rows or []
     soccer_rows = soccer_rows or []
     mlb_rows = mlb_rows or []
+    wnba_rows = wnba_rows or []
+    tennis_rows = tennis_rows or []
 
     all_rows: list[dict] = (
-        list(nba_rows) + list(cbb_rows) + list(nhl_rows) + list(soccer_rows) + list(mlb_rows)
+        list(nba_rows)
+        + list(cbb_rows)
+        + list(nhl_rows)
+        + list(soccer_rows)
+        + list(mlb_rows)
+        + list(wnba_rows)
+        + list(tennis_rows)
     )
 
     insights: list[str] = []
@@ -1410,6 +1420,8 @@ def build_takeaways(
         ("NHL", nhl_rows),
         ("Soccer", soccer_rows),
         ("MLB", mlb_rows),
+        ("WNBA", wnba_rows),
+        ("Tennis", tennis_rows),
     ]
     sport_line = _takeaway_sport_snippets(bundles)
 
@@ -1485,9 +1497,15 @@ def build_takeaways(
 
 
 def sport_label(s: str) -> str:
-    return {"NBA": "🏀 NBA", "CBB": "🎓 CBB", "NHL": "🏒 NHL", "MLB": "⚾ MLB", "SOCCER": "⚽ Soccer"}.get(
-        s.upper(), s
-    )
+    return {
+        "NBA": "🏀 NBA",
+        "CBB": "🎓 CBB",
+        "NHL": "🏒 NHL",
+        "MLB": "⚾ MLB",
+        "SOCCER": "⚽ Soccer",
+        "WNBA": "🏀 WNBA",
+        "TENNIS": "🎾 Tennis",
+    }.get(s.upper(), s)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1495,8 +1513,12 @@ def sport_label(s: str) -> str:
 # ══════════════════════════════════════════════════════════════════════════════
 
 def find_graded_file(sport: str, date_str: str) -> Path | None:
-    """Search common locations for nba_graded_{date}.xlsx or cbb_graded_{date}.xlsx."""
-    pattern = f"graded_{sport.lower()}_{date_str}.xlsx"
+    """Search common locations for graded_* workbooks (WNBA may be wnba_graded_{date}.xlsx)."""
+    sport_l = sport.lower()
+    if sport_l == "wnba":
+        patterns = [f"graded_wnba_{date_str}.xlsx", f"wnba_graded_{date_str}.xlsx"]
+    else:
+        patterns = [f"graded_{sport_l}_{date_str}.xlsx"]
     search_dirs = [
         SCRIPT_DIR,
         SCRIPT_DIR / "outputs",
@@ -1511,16 +1533,21 @@ def find_graded_file(sport: str, date_str: str) -> Path | None:
         ROOT_DIR / "outputs",
         ROOT_DIR,
     ]
-    for d in search_dirs:
-        p = d / pattern
-        if p.exists():
-            return p
+    for pattern in patterns:
+        for d in search_dirs:
+            p = d / pattern
+            if p.exists():
+                return p
     # glob fallback
     for d in search_dirs:
         if d.exists():
-            matches = list(d.glob(f"*{sport.lower()}*graded*{date_str}*.xlsx"))
+            matches = list(d.glob(f"*{sport_l}*graded*{date_str}*.xlsx"))
             if matches:
                 return matches[0]
+            if sport_l == "wnba":
+                matches2 = list(d.glob(f"wnba*graded*{date_str}*.xlsx"))
+                if matches2:
+                    return matches2[0]
     return None
 
 
@@ -2019,6 +2046,8 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
                nhl_rows: list[dict] | None = None,
                soccer_rows: list[dict] | None = None,
                mlb_rows: list[dict] | None = None,
+               wnba_rows: list[dict] | None = None,
+               tennis_rows: list[dict] | None = None,
                nhl_path: Path | None = None,
                soccer_path: Path | None = None,
                mlb_path: Path | None = None) -> str:
@@ -2031,22 +2060,44 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
     nhl_rows    = nhl_rows    or []
     soccer_rows = soccer_rows or []
     mlb_rows    = mlb_rows    or []
-    all_rows = list(nba_rows) + list(cbb_rows) + list(nhl_rows) + list(soccer_rows) + list(mlb_rows)
+    wnba_rows   = wnba_rows   or []
+    tennis_rows = tennis_rows or []
+    all_rows = (
+        list(nba_rows)
+        + list(cbb_rows)
+        + list(nhl_rows)
+        + list(soccer_rows)
+        + list(mlb_rows)
+        + list(wnba_rows)
+        + list(tennis_rows)
+    )
     all_section = build_sport_section(all_rows, "ALL SPORTS", "🌐") if all_rows else ""
     nba_section    = build_sport_section(nba_rows,    "NBA",    "🏀") if nba_rows    else ""
     cbb_section    = build_sport_section(cbb_rows,    "CBB",    "🎓") if cbb_rows    else ""
     nhl_section    = build_sport_section(nhl_rows,    "NHL",    "🏒") if nhl_rows    else ""
     soccer_section = build_sport_section(soccer_rows, "Soccer", "⚽") if soccer_rows else ""
     mlb_section    = build_sport_section(mlb_rows,    "MLB",    "⚾") if mlb_rows    else ""
+    wnba_section   = build_sport_section(wnba_rows,   "WNBA",   "🏀") if wnba_rows   else ""
+    tennis_section = build_sport_section(tennis_rows, "Tennis", "🎾") if tennis_rows else ""
     takeaways = build_takeaways(
         nba_rows,
         cbb_rows,
         nhl_rows=nhl_rows,
         soccer_rows=soccer_rows,
         mlb_rows=mlb_rows,
+        wnba_rows=wnba_rows,
+        tennis_rows=tennis_rows,
     )
 
-    if not nba_section and not cbb_section and not nhl_section and not soccer_section and not mlb_section:
+    if not (
+        nba_section
+        or cbb_section
+        or nhl_section
+        or soccer_section
+        or mlb_section
+        or wnba_section
+        or tennis_section
+    ):
         body_content = """<div style="text-align:center;padding:60px 20px;font-family:'Inter',sans-serif">
           <div style="font-size:32px;margin-bottom:16px">📭</div>
           <div style="font-size:18px;color:rgba(255,255,255,0.55)">No graded data found for this date.</div>
@@ -2055,7 +2106,17 @@ def build_html(date_str: str, nba_rows: list[dict], cbb_rows: list[dict],
           </div>
         </div>""".replace("{date_str}", date_str)
     else:
-        body_content = all_section + nba_section + cbb_section + nhl_section + soccer_section + mlb_section + takeaways
+        body_content = (
+            all_section
+            + nba_section
+            + cbb_section
+            + nhl_section
+            + soccer_section
+            + mlb_section
+            + wnba_section
+            + tennis_section
+            + takeaways
+        )
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -2110,6 +2171,10 @@ def main() -> None:
                         help="Path to soccer_graded_*.xlsx")
     parser.add_argument("--mlb", type=str, default="",
                         help="Path to graded_mlb_*.xlsx")
+    parser.add_argument("--wnba", type=str, default="",
+                        help="Path to graded_wnba_*.xlsx or wnba_graded_*.xlsx")
+    parser.add_argument("--tennis", type=str, default="",
+                        help="Path to graded_tennis_*.xlsx")
     parser.add_argument("--out",  type=str, default="",
                         help="Output path or directory (default: next to this script)")
     parser.add_argument(
@@ -2194,11 +2259,45 @@ def main() -> None:
         if mlb_path:
             print(f"  Auto-detected MLB: {mlb_path}")
 
-    if not nba_path and not nba1q_path and not nba1h_path and not cbb_path and not nhl_path and not soccer_path and not mlb_path:
+    wnba_path: Path | None = None
+    if args.wnba:
+        wnba_path = Path(args.wnba).resolve()
+        if not wnba_path.exists():
+            print(f"  WARNING: WNBA file not found: {wnba_path}")
+            wnba_path = None
+    else:
+        wnba_path = find_graded_file("wnba", date_str)
+        if wnba_path:
+            print(f"  Auto-detected WNBA: {wnba_path}")
+
+    tennis_path: Path | None = None
+    if args.tennis:
+        tennis_path = Path(args.tennis).resolve()
+        if not tennis_path.exists():
+            print(f"  WARNING: Tennis file not found: {tennis_path}")
+            tennis_path = None
+    else:
+        tennis_path = find_graded_file("tennis", date_str)
+        if tennis_path:
+            print(f"  Auto-detected Tennis: {tennis_path}")
+
+    if not (
+        nba_path
+        or nba1q_path
+        or nba1h_path
+        or cbb_path
+        or nhl_path
+        or soccer_path
+        or mlb_path
+        or wnba_path
+        or tennis_path
+    ):
         if args.allow_empty:
             print("  NOTE: No graded files; emitting empty slate eval (--allow-empty).")
         else:
-            print("  ERROR: No graded files found. Specify --nba/--cbb/--nhl/--soccer/--mlb.")
+            print(
+                "  ERROR: No graded files found. Specify --nba/--cbb/--nhl/--soccer/--mlb/--wnba/--tennis."
+            )
             sys.exit(1)
 
     # Load rows
@@ -2242,11 +2341,35 @@ def main() -> None:
         mlb_rows = load_graded(mlb_path, "mlb")
         print(f" {len(mlb_rows):,} rows")
 
+    wnba_rows: list[dict] = []
+    if wnba_path:
+        print(f"  Loading WNBA: {wnba_path.name} ...", end="", flush=True)
+        wnba_rows = load_graded(wnba_path, "wnba")
+        print(f" {len(wnba_rows):,} rows")
+
+    tennis_rows: list[dict] = []
+    if tennis_path:
+        print(f"  Loading Tennis: {tennis_path.name} ...", end="", flush=True)
+        tennis_rows = load_graded(tennis_path, "tennis")
+        print(f" {len(tennis_rows):,} rows")
+
     # Build HTML (use merged NBA so 1Q/1H rows appear in Slate Evaluation, not only in JSON)
     print("  Building HTML ...", end="", flush=True)
-    html = build_html(date_str, nba_rows_merged, cbb_rows, nba_path, cbb_path,
-                      nhl_rows=nhl_rows, soccer_rows=soccer_rows, mlb_rows=mlb_rows,
-                      nhl_path=nhl_path, soccer_path=soccer_path, mlb_path=mlb_path)
+    html = build_html(
+        date_str,
+        nba_rows_merged,
+        cbb_rows,
+        nba_path,
+        cbb_path,
+        nhl_rows=nhl_rows,
+        soccer_rows=soccer_rows,
+        mlb_rows=mlb_rows,
+        wnba_rows=wnba_rows,
+        tennis_rows=tennis_rows,
+        nhl_path=nhl_path,
+        soccer_path=soccer_path,
+        mlb_path=mlb_path,
+    )
     print(f" {len(html):,} bytes")
 
     # Resolve output path
@@ -2279,9 +2402,21 @@ def main() -> None:
         json_bundles.append(("Soccer", soccer_rows))
     if mlb_rows:
         json_bundles.append(("MLB", mlb_rows))
+    if wnba_rows:
+        json_bundles.append(("WNBA", wnba_rows))
+    if tennis_rows:
+        json_bundles.append(("Tennis", tennis_rows))
     json_p = export_graded_props_json(date_str, out_p.parent, json_bundles)
     print(f"  Saved  -> {json_p}")
-    all_rows = [*nba_rows_merged, *cbb_rows, *nhl_rows, *soccer_rows, *mlb_rows]
+    all_rows = [
+        *nba_rows_merged,
+        *cbb_rows,
+        *nhl_rows,
+        *soccer_rows,
+        *mlb_rows,
+        *wnba_rows,
+        *tennis_rows,
+    ]
     tabs_p = export_analysis_tabs_xlsx(date_str, out_p.parent, all_rows)
     print(f"  Saved  -> {tabs_p}")
     print("  Done.")
