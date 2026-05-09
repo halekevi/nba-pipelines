@@ -1,0 +1,225 @@
+{
+  "generated_at": "2026-05-09T19:47:56Z",
+  "rows": [
+    {
+      "size": 2,
+      "bucket": "elite",
+      "n_tickets": 134,
+      "all_hit_count": 127,
+      "avg_joint_pred": 0.9757499999999999,
+      "avg_payout": 2.43,
+      "realized_all_hit_rate": 0.9477611940298507,
+      "wilson_low": 0.8960961509095159,
+      "realized_ev_per_$1": 1.3030597014925376
+    },
+    {
+      "size": 2,
+      "bucket": "premium",
+      "n_tickets": 145,
+      "all_hit_count": 55,
+      "avg_joint_pred": 0.5416579310344828,
+      "avg_payout": 2.654068965517242,
+      "realized_all_hit_rate": 0.3793103448275862,
+      "wilson_low": 0.3044109072377869,
+      "realized_ev_per_$1": 0.006715814506540019
+    },
+    {
+      "size": 2,
+      "bucket": "strong",
+      "n_tickets": 170,
+      "all_hit_count": 71,
+      "avg_joint_pred": 0.41701764705882355,
+      "avg_payout": 2.525823529411765,
+      "realized_all_hit_rate": 0.4176470588235294,
+      "wilson_low": 0.3461319955680449,
+      "realized_ev_per_$1": 0.05490276816609008
+    },
+    {
+      "size": 2,
+      "bucket": "value",
+      "n_tickets": 165,
+      "all_hit_count": 51,
+      "avg_joint_pred": 0.29725090909090907,
+      "avg_payout": 2.727818181818182,
+      "realized_all_hit_rate": 0.3090909090909091,
+      "wilson_low": 0.24359343748041754,
+      "realized_ev_per_$1": -0.1568561983471074
+    },
+    {
+      "size": 3,
+      "bucket": "elite",
+      "n_tickets": 115,
+      "all_hit_count": 106,
+      "avg_joint_pred": 0.9594417391304348,
+      "avg_payout": 4.382782608695653,
+      "realized_all_hit_rate": 0.9217391304347826,
+      "wilson_low": 0.857929739211848,
+      "realized_ev_per_$1": 3.0397822306238194
+    },
+    {
+      "size": 3,
+      "bucket": "premium",
+      "n_tickets": 132,
+      "all_hit_count": 32,
+      "avg_joint_pred": 0.39717121212121215,
+      "avg_payout": 4.958030303030303,
+      "realized_all_hit_rate": 0.24242424242424243,
+      "wilson_low": 0.17727358005868543,
+      "realized_ev_per_$1": 0.2019467401285584
+    },
+    {
+      "size": 3,
+      "bucket": "strong",
+      "n_tickets": 159,
+      "all_hit_count": 39,
+      "avg_joint_pred": 0.2694308176100629,
+      "avg_payout": 4.612138364779875,
+      "realized_all_hit_rate": 0.24528301886792453,
+      "wilson_low": 0.18493497905616552,
+      "realized_ev_per_$1": 0.13127922154978067
+    },
+    {
+      "size": 3,
+      "bucket": "value",
+      "n_tickets": 151,
+      "all_hit_count": 25,
+      "avg_joint_pred": 0.16180596026490066,
+      "avg_payout": 5.2378145695364235,
+      "realized_all_hit_rate": 0.16556291390728478,
+      "wilson_low": 0.11473010180823269,
+      "realized_ev_per_$1": -0.1328121573615192
+    },
+    {
+      "size": 4,
+      "bucket": "elite",
+      "n_tickets": 97,
+      "all_hit_count": 87,
+      "avg_joint_pred": 0.9478381443298969,
+      "avg_payout": 6.56,
+      "realized_all_hit_rate": 0.8969072164948454,
+      "wilson_low": 0.8205406425812511,
+      "realized_ev_per_$1": 4.883711340206186
+    },
+    {
+      "size": 4,
+      "bucket": "premium",
+      "n_tickets": 117,
+      "all_hit_count": 16,
+      "avg_joint_pred": 0.2893786324786325,
+      "avg_payout": 7.688461538461538,
+      "realized_all_hit_rate": 0.13675213675213677,
+      "wilson_low": 0.08596023421342293,
+      "realized_ev_per_$1": 0.051413543721235966
+    },
+    {
+      "size": 4,
+      "bucket": "strong",
+      "n_tickets": 144,
+      "all_hit_count": 25,
+      "avg_joint_pred": 0.17395625,
+      "avg_payout": 7.016111111111111,
+      "realized_all_hit_rate": 0.1736111111111111,
+      "wilson_low": 0.12044851474034471,
+      "realized_ev_per_$1": 0.21807484567901225
+    },
+    {
+      "size": 4,
+      "bucket": "value",
+      "n_tickets": 136,
+      "all_hit_count": 9,
+      "avg_joint_pred": 0.08790955882352941,
+      "avg_payout": 8.348014705882353,
+      "realized_all_hit_rate": 0.0661764705882353,
+      "wilson_low": 0.03520277178641907,
+      "realized_ev_per_$1": -0.4475578503460208
+    },
+    {
+      "size": 5,
+      "bucket": "elite",
+      "n_tickets": 76,
+      "all_hit_count": 66,
+      "avg_joint_pred": 0.883463157894737,
+      "avg_payout": 11.81,
+      "realized_all_hit_rate": 0.868421052631579,
+      "wilson_low": 0.7744567799430049,
+      "realized_ev_per_$1": 9.256052631578948
+    },
+    {
+      "size": 5,
+      "bucket": "premium",
+      "n_tickets": 107,
+      "all_hit_count": 11,
+      "avg_joint_pred": 0.2094289719626168,
+      "avg_payout": 14.247943925233644,
+      "realized_all_hit_rate": 0.102803738317757,
+      "wilson_low": 0.05837857046494141,
+      "realized_ev_per_$1": 0.4647418988557952
+    },
+    {
+      "size": 5,
+      "bucket": "strong",
+      "n_tickets": 126,
+      "all_hit_count": 13,
+      "avg_joint_pred": 0.11195634920634921,
+      "avg_payout": 12.949444444444445,
+      "realized_all_hit_rate": 0.10317460317460317,
+      "wilson_low": 0.06129168658424955,
+      "realized_ev_per_$1": 0.33605379188712514
+    },
+    {
+      "size": 5,
+      "bucket": "value",
+      "n_tickets": 123,
+      "all_hit_count": 5,
+      "avg_joint_pred": 0.047572357723577235,
+      "avg_payout": 15.902439024390244,
+      "realized_all_hit_rate": 0.04065040650406504,
+      "wilson_low": 0.01748609859967352,
+      "realized_ev_per_$1": -0.35355938925242913
+    },
+    {
+      "size": 6,
+      "bucket": "elite",
+      "n_tickets": 68,
+      "all_hit_count": 50,
+      "avg_joint_pred": 0.8287749999999999,
+      "avg_payout": 19.93,
+      "realized_all_hit_rate": 0.7352941176470589,
+      "wilson_low": 0.6199204078287542,
+      "realized_ev_per_$1": 13.654411764705884
+    },
+    {
+      "size": 6,
+      "bucket": "premium",
+      "n_tickets": 104,
+      "all_hit_count": 9,
+      "avg_joint_pred": 0.15070096153846155,
+      "avg_payout": 24.690865384615385,
+      "realized_all_hit_rate": 0.08653846153846154,
+      "wilson_low": 0.04619542485248201,
+      "realized_ev_per_$1": 1.1367095044378699
+    },
+    {
+      "size": 6,
+      "bucket": "strong",
+      "n_tickets": 116,
+      "all_hit_count": 7,
+      "avg_joint_pred": 0.07200689655172414,
+      "avg_payout": 22.308620689655175,
+      "realized_all_hit_rate": 0.0603448275862069,
+      "wilson_low": 0.0295351773943901,
+      "realized_ev_per_$1": 0.3462098692033295
+    },
+    {
+      "size": 6,
+      "bucket": "value",
+      "n_tickets": 104,
+      "all_hit_count": 2,
+      "avg_joint_pred": 0.025625000000000002,
+      "avg_payout": 27.715,
+      "realized_all_hit_rate": 0.019230769230769232,
+      "wilson_low": 0.005289600724056577,
+      "realized_ev_per_$1": -0.4670192307692308
+    }
+  ]
+}

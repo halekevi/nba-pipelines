@@ -1210,6 +1210,89 @@ def serve_tickets_latest_json():
         abort(404)
 
 
+# ── Uniform-bucket tickets (built by scripts/build_uniform_tickets_artifacts.py) ─
+
+_UNIFORM_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+def _uniform_dates_from_disk() -> list[str]:
+    out: list[str] = []
+    for p in TEMPLATES_DIR.glob("uniform_tickets_*.json"):
+        m = re.fullmatch(r"uniform_tickets_(\d{4}-\d{2}-\d{2})\.json", p.name)
+        if m:
+            out.append(m.group(1))
+    return sorted(out, reverse=True)
+
+
+@app.get("/api/uniform-tickets/dates")
+def api_uniform_tickets_dates():
+    """Return the list of slate dates for which uniform-bucket ticket JSON was published."""
+    path = TEMPLATES_DIR / "uniform_tickets_dates.json"
+    if path.exists():
+        try:
+            return _gz_json_response(
+                "uniform-tickets-dates",
+                lambda: read_json_cached(path),
+                ttl=_PIPELINE_JSON_TTL,
+            )
+        except Exception:
+            pass
+    return jsonify({"dates": _uniform_dates_from_disk(), "source": "disk_scan"})
+
+
+@app.get("/api/uniform-tickets/backtest")
+def api_uniform_tickets_backtest():
+    """Return the rolling per-(size, bucket) backtest summary."""
+    path = TEMPLATES_DIR / "uniform_tickets_backtest.json"
+    if not path.exists():
+        return jsonify({"rows": []})
+    try:
+        return _gz_json_response(
+            "uniform-tickets-backtest",
+            lambda: read_json_cached(path),
+            ttl=_PIPELINE_JSON_TTL,
+        )
+    except Exception:
+        return jsonify({"rows": []})
+
+
+@app.get("/api/uniform-tickets/latest")
+def api_uniform_tickets_latest():
+    path = TEMPLATES_DIR / "uniform_tickets_latest.json"
+    if not path.exists():
+        dates = _uniform_dates_from_disk()
+        if not dates:
+            abort(404)
+        path = TEMPLATES_DIR / f"uniform_tickets_{dates[0]}.json"
+        if not path.exists():
+            abort(404)
+    try:
+        return _gz_json_response(
+            "uniform-tickets-latest",
+            lambda: read_json_cached(path),
+            ttl=_PIPELINE_JSON_TTL,
+        )
+    except Exception:
+        abort(404)
+
+
+@app.get("/api/uniform-tickets/<date_str>")
+def api_uniform_tickets_for_date(date_str: str):
+    if not _UNIFORM_DATE_RE.fullmatch(date_str):
+        abort(404)
+    path = TEMPLATES_DIR / f"uniform_tickets_{date_str}.json"
+    if not path.exists():
+        abort(404)
+    try:
+        return _gz_json_response(
+            f"uniform-tickets-{date_str}",
+            lambda: read_json_cached(path),
+            ttl=_PIPELINE_JSON_TTL,
+        )
+    except Exception:
+        abort(404)
+
+
 @app.get("/tickets")
 def page_tickets():
     """

@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="/static/site-nav-datetime.css?v=20260408"/>
 <link rel="stylesheet" href="/static/tickets-built-content.css?v=20260422ticketscv"/>
 <link rel="stylesheet" href="/static/mobile-content-width.css?v=20260430webviewfix"/>
+<link rel="stylesheet" href="/static/uniform-tickets-panel.css?v=20260509utp1"/>
 </head>
 <body class="page-tickets">
 <div class="orb-1" style="position:fixed;top:-12%;left:-6%;width:560px;height:560px;background:radial-gradient(circle,rgba(127,199,217,0.18) 0%,transparent 70%);filter:blur(120px);z-index:0;pointer-events:none;animation:orbP1 20s ease-in-out infinite alternate;"></div>
@@ -33,7 +34,12 @@
 <div id="app" class="page-tickets">
 {# Slips, empirical payout panel (sweep multiplier), and filter pills including TOP PAYOUT are rendered by scripts/combined_slate_tickets.render_tickets_body_html #}
 {{ tickets_body|safe }}
+
+{# Uniform-bucket tickets — collapsible panel rendered just below the live slips. #}
+{% include '_uniform_tickets_panel.html' %}
 </div>
+
+<script src="/static/uniform-tickets-panel.js?v=20260509utp1" defer></script>
 
 <script src="/static/site-nav-chrome.js?v=20260412" defer></script>
 <script>

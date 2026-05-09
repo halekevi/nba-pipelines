@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="/static/global-scrollbar.css?v=20260416"/>
 <link rel="stylesheet" href="/static/light-theme-dim-overrides.css?v=20260419perf2"/>
 <link rel="stylesheet" href="/static/proporacle-mobile-schema.css?v=20260430schemapage"/>
+<link rel="stylesheet" href="/static/uniform-tickets-panel.css?v=20260509utp1"/>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap');
 :root{
@@ -1253,6 +1254,9 @@ select option,
             <button type="button" class="tab-btn" id="tab-tickets" onclick="switchTab('tickets')">
               <span class="tab-icon">🎟</span>TICKET EVALUATION
             </button>
+            <button type="button" class="tab-btn" id="tab-uniform" onclick="switchTab('uniform')">
+              <span class="tab-icon">🎫</span>UNIFORM TICKETS
+            </button>
           </div>
         </div>
       </div>
@@ -1315,6 +1319,9 @@ select option,
       <div class="props-eval-grid" id="props-eval-grid"></div>
       <p class="insights-card-sub" id="props-eval-foot" style="margin-top:8px;"></p>
     </div>
+  </div>
+  <div id="uniform-tickets-panel" class="grades-analytics-wrap" hidden aria-label="Uniform-bucket tickets for the report date">
+    {% include '_uniform_tickets_panel.html' %}
   </div>
   </div><!-- /.iframe-shell-stage -->
 </div>
@@ -2455,13 +2462,17 @@ function switchTab(tab) {
   const ts = gradesEl('tab-slate');
   const tp = gradesEl('tab-props');
   const tt = gradesEl('tab-tickets');
+  const tu = gradesEl('tab-uniform');
   if (ts) ts.classList.toggle('active', tab === 'slate');
   if (tp) tp.classList.toggle('active', tab === 'props');
   if (tt) tt.classList.toggle('active', tab === 'tickets');
+  if (tu) tu.classList.toggle('active', tab === 'uniform');
   const pe = document.getElementById('props-eval-panel');
+  const utp = document.getElementById('uniform-tickets-panel');
   gradeFrame.style.display = tab === 'slate' ? 'block' : 'none';
   ticketFrame.style.display = tab === 'tickets' ? 'block' : 'none';
   if (pe) pe.hidden = tab !== 'props';
+  if (utp) utp.hidden = tab !== 'uniform';
   const tEmpty = document.getElementById('ticket-empty-state');
   if (tEmpty) tEmpty.hidden = true;
 
@@ -2469,7 +2480,13 @@ function switchTab(tab) {
     window.resetGradesBarsScrollState();
   } catch (_e) {}
 
-  if (tab === 'props') {
+  if (tab === 'uniform') {
+    hideGradesHubLoadOverlay();
+    const es0u = document.getElementById('empty-state');
+    if (es0u) es0u.hidden = true;
+    const dsU = currentDateStr || gradesEl('date-jump')?.value || yesterdayStr();
+    syncUniformTicketsDate(dsU);
+  } else if (tab === 'props') {
     hideGradesHubLoadOverlay();
     const es0 = document.getElementById('empty-state');
     if (es0) es0.hidden = true;
@@ -3279,7 +3296,34 @@ function loadDate(dateStr){
   if (activeTab === 'props') {
     loadGradesProps(dateStr);
   }
+  if (activeTab === 'uniform') {
+    syncUniformTicketsDate(dateStr);
+  }
   refreshControlsSummary();
+}
+
+// ─── UNIFORM TICKETS tab integration ──────────────────────────────────────────
+function syncUniformTicketsDate(dateStr) {
+  try {
+    const root = document.querySelector('#uniform-tickets-panel .utp-root');
+    if (!root) return;
+    // Auto-expand the inner panel the first time the tab is opened on Grades.
+    const toggle = root.querySelector('[data-utp="toggle"]');
+    const panel = root.querySelector('.utp-panel');
+    if (toggle && panel && panel.hasAttribute('hidden')) {
+      toggle.click();
+    }
+    if (!dateStr) return;
+    const tryApply = (attempts) => {
+      const ctrl = root.__utp;
+      if (ctrl && typeof ctrl.setDate === 'function') {
+        ctrl.setDate(dateStr);
+        return;
+      }
+      if (attempts > 0) setTimeout(() => tryApply(attempts - 1), 150);
+    };
+    tryApply(20);
+  } catch (_e) {}
 }
 
 // ─── DATE NAV ─────────────────────────────────────────────────────────────────
@@ -3555,6 +3599,7 @@ window.addEventListener('resize', () => {
   obs.observe(document.body, { childList: true, subtree: true });
 })();
 </script>
+<script src="/static/uniform-tickets-panel.js?v=20260509utp1" defer></script>
 
 </body>
 </html>
