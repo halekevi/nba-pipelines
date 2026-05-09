@@ -6,9 +6,9 @@
 #    .\run_wnba_pipeline.ps1 -Date 2026-07-15   # Specify date
 #    .\run_wnba_pipeline.ps1 -RefreshCache      # Wipe ESPN cache + rebuild
 #    .\run_wnba_pipeline.ps1 -SkipFetch         # Use existing step1 output
-#    .\run_wnba_pipeline.ps1 -Cdp http://127.0.0.1:9222   # Chrome CDP after DataDome solve (uses Playwright attach)
-#    .\run_wnba_pipeline.ps1 -UsePlaywright             # Force in-browser fetch (needs PrizePicks Chrome profile)
-#  Default step1 uses the PrizePicks HTTP API (curl_cffi), same as NBA step1 API — no Playwright unless -UsePlaywright or -Cdp.
+#    .\run_wnba_pipeline.ps1 -Cdp http://127.0.0.1:9222   # Fallback: WNBA step1 script (Playwright/CDP); NBA API has no CDP
+#    .\run_wnba_pipeline.ps1 -UsePlaywright             # Fallback: Sports\WNBA\step1_fetch_prizepicks.py (browser)
+#  Default step1 calls Sports\NBA\scripts\step1_fetch_prizepicks_api.py --league_id 3 (same fetch as NBA), output still outputs\<date>\wnba\step1_wnba_props.csv.
 #  Env (optional): PROPORACLE_PP_CDP or PRIZEPICKS_CDP — same as -Cdp when -Cdp omitted.
 #
 #  Combined / game_date contract (2026-05): step1 anchors full-board game_date to --date;
@@ -36,6 +36,7 @@ if ((Split-Path -Leaf $ScriptDir) -eq "scripts") {
 }
 # Canonical sport tree (matches run_pipeline.ps1 $SportsRoot\WNBA).
 $WNBADir = Join-Path $Root "Sports\WNBA"
+$NbaApiStep1 = Join-Path $Root "Sports\NBA\scripts\step1_fetch_prizepicks_api.py"
 $OutRoot = Join-Path $Root "outputs"
 
 if (-not $Date) { $Date = Get-Date -Format "yyyy-MM-dd" }
@@ -143,14 +144,25 @@ Write-Host ""
 
 $ok = $true
 
-# Step 1 — Fetch PrizePicks (league_id=3, WNBA); HTTP API by default (curl_cffi). Use -UsePlaywright for local Chrome profile; -Cdp attaches to solved Chrome (step1 adds CDP only — Python enables Playwright path).
+# Step 1 — PrizePicks: default = NBA API script (league_id 3), same as NBA step1; output paths stay under outputs\<date>\wnba\.
+# Browser/CDP: Sports\WNBA\step1_fetch_prizepicks.py only (NBA API has no Playwright).
 if (-not $SkipFetch) {
-    $step1Args = "--league_id 3 --game_mode pickem --per_page 250 --max_pages 10 --sleep 1.2 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --output `"$WnbaRunOutDir\step1_wnba_props.csv`" --date $Date"
-    if ($UsePlaywright) {
-        $step1Args = "--league_id 3 --playwright --timeout 90 --game_mode pickem --per_page 250 --max_pages 10 --sleep 1.2 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --output `"$WnbaRunOutDir\step1_wnba_props.csv`" --date $Date"
+    if ($UsePlaywright -or $Cdp) {
+        $step1Args = "--league_id 3 --game_mode pickem --per_page 250 --max_pages 10 --sleep 1.2 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --output `"$WnbaRunOutDir\step1_wnba_props.csv`" --date $Date"
+        if ($UsePlaywright) {
+            $step1Args = "--league_id 3 --playwright --timeout 90 --game_mode pickem --per_page 250 --max_pages 10 --sleep 1.2 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --output `"$WnbaRunOutDir\step1_wnba_props.csv`" --date $Date"
+        }
+        if ($Cdp) { $step1Args += " --cdp $Cdp" }
+        if ($ok) { $ok = Run-Step "WNBA Step 1 - Fetch PrizePicks (browser)" $WNBADir ".\step1_fetch_prizepicks.py" $step1Args }
+    } else {
+        if (-not (Test-Path -LiteralPath $NbaApiStep1)) {
+            Write-Host "  ERROR: NBA API fetcher not found: $NbaApiStep1" -ForegroundColor Red
+            $ok = $false
+        } else {
+            $step1Args = "--league_id 3 --game_mode pickem --per_page 250 --max_pages 5 --sleep 2.0 --cooldown_seconds 90 --max_cooldowns 3 --jitter_seconds 10.0 --replace --output `"$WnbaRunOutDir\step1_wnba_props.csv`" --date $Date"
+            if ($ok) { $ok = Run-Step "WNBA Step 1 - Fetch PrizePicks (NBA API, league 3)" $WNBADir $NbaApiStep1 $step1Args }
+        }
     }
-    if ($Cdp) { $step1Args += " --cdp $Cdp" }
-    if ($ok) { $ok = Run-Step "WNBA Step 1 - Fetch PrizePicks" $WNBADir ".\step1_fetch_prizepicks.py" $step1Args }
 } else {
     Write-Host "  --> [SkipFetch] Using existing $WnbaRunOutDir\step1_wnba_props.csv" -ForegroundColor DarkGray
     Write-Host "  [WNBA] If combined dropped WNBA rows, re-run step1 once (no SkipFetch) after board/game_date policy changes." -ForegroundColor DarkYellow

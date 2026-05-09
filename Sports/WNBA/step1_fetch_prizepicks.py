@@ -12,8 +12,9 @@ Run:
   py -3.14 step1_fetch_prizepicks.py
   py -3.14 step1_fetch_prizepicks.py --output step1_wnba_props.csv
 
-scripts/run_wnba_pipeline.ps1 defaults to HTTP (curl_cffi) fetch — no --playwright.
-Use --playwright or --cdp for browser/DataDome bypass when API returns 403.
+scripts/run_wnba_pipeline.ps1 defaults to Sports/NBA/scripts/step1_fetch_prizepicks_api.py
+with --league_id 3 (same as NBA fetch); outputs stay under outputs/<date>/wnba/.
+This script is used for --playwright / --cdp when PrizePicks blocks direct API.
 """
 
 from __future__ import annotations

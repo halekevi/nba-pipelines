@@ -1464,15 +1464,15 @@
     },
     "wnba": {
       "label": "WNBA Pipeline",
-      "workdir": "WNBA",
+      "workdir": "Sports/WNBA",
       "commands": [
         {
           "id": "wnba_step1",
-          "label": "Step 1 — Fetch PrizePicks (WNBA)",
+          "label": "Step 1 — Fetch PrizePicks (WNBA via NBA API, league 3)",
           "cmd": [
             "py",
             "-3.14",
-            "./step1_fetch_prizepicks.py",
+            "../NBA/scripts/step1_fetch_prizepicks_api.py",
             "--league_id",
             "3",
             "--game_mode",
@@ -1480,15 +1480,16 @@
             "--per_page",
             "250",
             "--max_pages",
-            "10",
+            "5",
             "--sleep",
-            "1.2",
+            "2.0",
             "--cooldown_seconds",
             "90",
             "--max_cooldowns",
             "3",
             "--jitter_seconds",
             "10.0",
+            "--replace",
             "--output",
             "step1_wnba_props.csv"
           ]

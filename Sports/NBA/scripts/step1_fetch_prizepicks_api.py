@@ -18,6 +18,10 @@ Strategy:
 
 Outputs: step1_pp_props_today.csv  (same schema as before).
 
+WNBA: scripts/run_wnba_pipeline.ps1 invokes this with ``--league_id 3`` and writes
+``outputs/<date>/wnba/step1_wnba_props.csv``. Browser/CDP fallback stays in
+``Sports/WNBA/step1_fetch_prizepicks.py``.
+
 When --output already exists, this script **merges by default**: rows from this fetch
 replace same projection_id; rows only in the old file (IDs not returned today) are kept.
 Use **--replace** to write **only** this fetch (full overwrite, no carry-over).
