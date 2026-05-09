@@ -58,7 +58,12 @@
     <div data-utp="backtest-wrap" hidden>
       <p class="utp-panel-sub" style="margin-bottom:10px;">
         Rolling per-(size, bucket) joint hit rate and EV on $1 stakes, computed from all
-        graded slates the assembler has touched. Wilson-low is a 95% confidence floor.
+        graded slates the assembler has touched. <strong>PrizePicks void rule:</strong>
+        when ≥1 leg voids (DNP / no action), the slip drops that leg and pays at the
+        next-smaller tier when remaining legs all hit (e.g., 5-leg with 1 void → 4-leg
+        all-hit payout). The <em>Eff Pay</em> column is the average realized multiplier
+        after that adjustment; <em>Wilson Low</em> is the 95% confidence floor on the
+        realized hit rate.
       </p>
       <div data-utp="backtest-host"></div>
     </div>
