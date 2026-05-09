@@ -1349,6 +1349,10 @@ function slateEvalUrl(dateStr) {
   return REPORT_URL_TEMPLATE.replace('{date}', dateStr) + '?cb=' + Date.now();
 }
 const TICKET_EVAL_URL_TEMPLATE = 'ticket_eval_{date}.html';
+/** Keep ticket iframe fresh too (prevents stale/blank cache edge-cases after deploy). */
+function ticketEvalUrl(dateStr) {
+  return TICKET_EVAL_URL_TEMPLATE.replace('{date}', dateStr) + '?cb=' + Date.now();
+}
 
 /** True when slate_eval HTML looks loaded (selectors evolve; avoid false “empty” from narrow checks). */
 function slateIframeDocLooksReady(doc) {
@@ -1364,6 +1368,30 @@ function slateIframeDocLooksReady(doc) {
         '.main, header, .sport-section, .sport-collapsible, .slate-header-top, .logo-title, ' +
           'table.matrix-body, .matrix-collapsible, .stat-card, .insight-grid, .sport-section-body, ' +
           'details.sport-collapsible, .sport-meta-count, .chip-goblin, .mesh-bg'
+      )
+    ) {
+      return true;
+    }
+    const html = (doc.body.innerHTML || '').trim();
+    if (html.length >= 40) return true;
+    const text = (doc.body.innerText || '').trim();
+    if (text.length >= 24) return true;
+  } catch (_e) {}
+  return false;
+}
+
+/** Ticket iframe readiness check with broad selectors (ticket markup evolves often). */
+function ticketIframeDocLooksReady(doc) {
+  if (!doc || !doc.body) return false;
+  try {
+    const title = String(doc.title || '').toLowerCase();
+    if (title.includes('ticket') && title.includes('eval')) {
+      const t = (doc.body.innerText || '').trim();
+      if (t.length >= 12) return true;
+    }
+    if (
+      doc.querySelector(
+        '.ticket-eval-main, .ticket-sections-wrap, details.ticket-bucket, .grade-eval-summary, .stats-bar, table, details'
       )
     ) {
       return true;
@@ -2285,6 +2313,42 @@ async function loadGradesProps(dateStr) {
       fillPropsSportFilter(window._propsEvalCache);
       applyPropsEvalFilters();
       return;
+    }
+    // Some deploys expose graded_props JSON only through /api/grades/page-rows
+    // (flattened rows used by the slate page), without jd.props on /api/graded-props.
+    if (jres.ok && !Array.isArray(jd.props)) {
+      var pageRows = [];
+      var off = 0;
+      var loops = 0;
+      while (loops < 20) {
+        loops += 1;
+        var pRes = await fetch('/api/grades/page-rows?date=' + encodeURIComponent(dateStr) + '&offset=' + off + '&limit=1000', { cache: 'no-store' });
+        if (!pRes.ok) break;
+        var pJson = await pRes.json();
+        var items = Array.isArray(pJson.items) ? pJson.items : [];
+        if (!items.length) break;
+        for (var ii = 0; ii < items.length; ii++) {
+          var row = items[ii] && items[ii].row ? items[ii].row : items[ii];
+          if (row) pageRows.push(row);
+        }
+        if (!pJson.has_more) break;
+        off = Number(pJson.next_offset || (off + items.length));
+      }
+      if (pageRows.length) {
+        const mappedRows = pageRows.map(mapGradedJsonToEvalRow);
+        window._propsEvalCache = mappedRows;
+        var pHit = 0, pMiss = 0;
+        mappedRows.forEach(function (r) {
+          var ru = String(r.result || '').toUpperCase();
+          if (ru === 'HIT') pHit++;
+          else if (ru === 'MISS') pMiss++;
+        });
+        window._propsEvalStats = { n_hit: pHit, n_miss: pMiss, n: mappedRows.length };
+        fillPropsSportFilter(window._propsEvalCache);
+        if (foot) foot.textContent = 'Source: /api/grades/page-rows fallback';
+        applyPropsEvalFilters();
+        return;
+      }
     }
     const res = await fetch('/api/grades/props?date=' + encodeURIComponent(dateStr), { cache: 'no-store' });
     const d = await res.json();
