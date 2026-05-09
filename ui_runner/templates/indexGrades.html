@@ -1495,12 +1495,42 @@ function gradesFetchSignal(ms) {
   };
 })();
 
-/** Toolbar may live in the main document or inside the slate iframe — resolve control ids. */
-function gradesEl(id) {
+/** Resolve id without side effects (used by restore to avoid recursion). */
+function gradesToolbarPickEl(id) {
   const inMain = document.getElementById(id);
   if (inMain) return inMain;
-  const doc = document.getElementById('grade-frame')?.contentDocument;
-  return doc?.getElementById(id) || null;
+  try {
+    const doc = document.getElementById('grade-frame')?.contentDocument;
+    const fromFrame = doc?.getElementById(id);
+    if (fromFrame) return fromFrame;
+  } catch (_e) {}
+  return null;
+}
+
+/** Ids under `#iframe-shell-toolbar` — if missing from both hub + iframe, restore toolbar to parent (iframe may be navigating / blank). */
+const GRADES_TOOLBAR_CONTROL_IDS = new Set([
+  'iframe-shell-toolbar',
+  'date-pills',
+  'date-jump',
+  'btn-prev',
+  'btn-next',
+  'tab-slate',
+  'tab-props',
+  'tab-tickets',
+  'iframe-shell-title',
+  'grades-controls-live',
+  'grades-scroll-hide-wrap',
+]);
+
+/** Toolbar may live in the main document or inside the slate iframe — resolve control ids. */
+function gradesEl(id) {
+  let el = gradesToolbarPickEl(id);
+  if (el) return el;
+  if (!GRADES_TOOLBAR_CONTROL_IDS.has(id)) return null;
+  try {
+    restoreGradesToolbarToParent();
+  } catch (_e2) {}
+  return gradesToolbarPickEl(id);
 }
 
 function getOrCreateToolbarHost(doc) {
@@ -1534,7 +1564,7 @@ function syncToolbarParentSlot() {
 
 function restoreGradesToolbarToParent() {
   const slot = document.getElementById('grades-toolbar-parent-slot');
-  const toolbar = gradesEl('iframe-shell-toolbar');
+  const toolbar = gradesToolbarPickEl('iframe-shell-toolbar');
   if (!slot || !toolbar) return;
   if (toolbar.parentElement === slot) {
     toolbar.classList.remove('iframe-shell-toolbar--embedded');
@@ -2770,10 +2800,6 @@ function syncPropsEvalHeight() {
     const gp = document.querySelector('.grades-page');
     const h = Math.max(panel.scrollHeight || 0, 400);
     const hPx = Math.ceil(h) + 'px';
-    if (stage) {
-      stage.style.height = hPx;
-      stage.style.minHeight = hPx;
-    }
     if (gp) gp.style.minHeight = hPx;
   } catch (_e) {}
 }
@@ -2814,12 +2840,7 @@ function syncGradeFrameHeight(frame) {
     );
     const hPx = Math.ceil(h) + 'px';
     frame.style.height = hPx;
-    const stage = document.querySelector('.iframe-shell-stage');
     const gradesPage = document.querySelector('.grades-page');
-    if (stage) {
-      stage.style.height = hPx;
-      stage.style.minHeight = hPx;
-    }
     if (gradesPage) gradesPage.style.minHeight = hPx;
   } catch (_e) {}
 }
@@ -3175,6 +3196,9 @@ window.addEventListener('pageshow', function (ev) {
 });
 
 (async function init(){
+  try {
+    restoreGradesToolbarToParent();
+  } catch (_e0) {}
   const yest = yesterdayStr();
   const dj0 = gradesEl('date-jump');
   if (dj0) dj0.value = yest;
